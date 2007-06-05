@@ -1,0 +1,61 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<!-- TMPL_IF Name="ok" --> 
+
+<script>
+	listaValues= new Array();
+	listaOptions= new Array();
+	<!-- TMPL_VAR NAME=inicializaciones -->
+	<!-- TMPL_VAR NAME=valores -->
+</script>
+
+<script>
+	function vaciarSelect(oSelect){
+		cant=oSelect.length;
+		for(i=0;i<cant;i++){
+			oSelect.options[0]=null;
+		}
+	}
+
+	function agregarOpcionASelect(oSelect,text,value){
+		var oOption = new Option( text,value );
+		oSelect.options[oSelect.options.length]=oOption;
+	}
+
+	function cambiarListaDependiente(listaPrincipal,listaSecundaria){
+		vaciarSelect(listaSecundaria);
+		agregarOpcionASelect(listaSecundaria,'','');
+		if (listaPrincipal.options[listaPrincipal.selectedIndex].value != ''){
+			listaSecundariaValues= listaValues[listaPrincipal.selectedIndex];
+			listaSecundariaOptions= listaOptions[listaPrincipal.selectedIndex];
+			for (i=0 ; i < listaSecundariaValues.length ; i++){
+				agregarOpcionASelect(listaSecundaria,listaSecundariaOptions[i],listaSecundariaValues[i]);
+			}
+		}
+	}
+
+</script>
+
+<table border=2 cellspacing=0 cellpadding=2>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Campo</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Subcampo</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Descripci&oacute;n</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Tabla Koha</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Campo Koha</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Guardar</th>
+  
+<form  action=/cgi-bin/koha/guardarImportacion.pl method=post >
+  <tr align='center'>
+  <td> <!-- TMPL_VAR NAME=campoiso --></td>
+  <td> <!-- TMPL_VAR NAME=subcampoiso --> </td>
+  <td> <!-- TMPL_VAR NAME=descripcion --> </td>
+  <td> <!-- TMPL_VAR NAME=tablaskoha --> </td>
+  <td><select name="listaSecundaria"></select></td>
+  <td> <input type=submit class="button" value="Guardar Datos " title="Guardar Datos"></td>
+  </tr>
+</form>
+</table>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

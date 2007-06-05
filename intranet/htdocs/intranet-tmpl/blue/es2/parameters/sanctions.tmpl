@@ -1,0 +1,119 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+
+<script language="JavaScript">
+	function borrar(sanctiontypecode, sanctionrulecode){
+		document.frm.sanctiontypecode.value= sanctiontypecode;
+		document.frm.sanctionrulecode.value= sanctionrulecode;
+		document.frm.accion.value= 'delete';
+		document.frm.submit();
+	}
+
+	function agregar(sanctiontypecode){
+		document.frm.sanctiontypecode.value= sanctiontypecode;
+		document.frm.accion.value= 'add';
+		document.frm.submit();
+	}
+
+	function actualizar(){
+		document.frm.accion.value= 'issuestypes';
+		document.frm.submit();
+	}
+</script>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
+	<tr>
+		<td>Tipos de sanciones</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+<br>
+	<form name="frm" method="POST">
+		<input type="hidden" name="accion">
+		<input type="hidden" name="sanctiontypecode">
+		<input type="hidden" name="sanctionrulecode">
+
+<table border=0 cellspacing=0 cellpadding=0 width="80%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+                <td>Tipos de pr&eacute;stamo</td>
+                <td>Categorias de usuario</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+        <tr valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME=issues_types --></td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME=categories --></td>
+                <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="4"></td>
+        </tr>
+</table>
+
+	<br><br>
+<table border=0 cellspacing=0 cellpadding=0 width="80%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+                <td>&nbsp;</td>
+                <td>Tipos de pr&eacute;stamo sobre el que se aplica</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+        </tr>
+                <!-- TMPL_LOOP NAME=issues -->
+        <tr valign="middle">
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="inputFontNormal"><input class="inputFontNormal" type="checkbox" name="issuestypes" value="<!-- TMPL_VAR NAME=issuecode -->" <!-- TMPL_IF Name="checked" -->checked<!-- /TMPL_IF -->></td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME=description --></td>
+ 		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        </tr>
+                <!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="4"></td>
+       	</tr>
+
+	<td colspan="2"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="actualizar();">Guardar</a></FONT></td>
+</table>
+	<br><br>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td>Orden</td>
+                <td>Tipo de usuario</td>
+                <td>Tipo de pr&eacute;stamo</td>
+		<td>D&iacute;as de demora</td>
+                <td>D&iacute;as de sanci&oacute;n</td>
+                <td>Cantidad</td>
+                <td> Eliminar</td>
+		<td width="1%" class="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+        </tr>
+                <!-- TMPL_LOOP NAME=loop_sanctions_types -->
+        <tr valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=order --></td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=desccategory --></td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=descissuetype --></td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=delaydays --></td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=sanctiondays --></td>
+                <td class="inputFontNormal"><!-- TMPL_VAR NAME=amount --></td>
+                <td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('<!-- TMPL_VAR NAME=sanctiontypecode -->','<!-- TMPL_VAR NAME=sanctionrulecode -->');">Eliminar</a></FONT>
+                </td>
+		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        </tr>
+                <!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+
+        <tr>
+        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('<!-- TMPL_VAR NAME=sanctiontypecode -->');">Agregar</a>&nbsp;Orden:<!-- TMPL_VAR NAME=orders -->&nbsp;Cantidad:<!-- TMPL_VAR NAME=amounts -->&nbsp;Regla:<!-- TMPL_VAR NAME=sanctions_rules --></FONT>
+		</td>
+        </tr>
+</table>
+
+<p>Para editar las reglas haga clic <A HREF="/cgi-bin/koha/admin/sanctionrules.pl">aqu&iacute;</a></p>
+
+	</form>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

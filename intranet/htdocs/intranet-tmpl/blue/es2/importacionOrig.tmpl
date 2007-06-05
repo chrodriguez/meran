@@ -1,0 +1,56 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script>
+<!-- TMPL_LOOP NAME=inicializaciones -->
+	<!-- TMPL_VAR NAME=valor -->
+<!-- /TMPL_LOOP -->
+
+function hacerSubmit(){
+//esta funcion recorre todos los checknox y aquellos que fueron tildados, le añede a un input
+//todos los valores asi estos son enviados para el pl
+	var a=new Array();
+	var b=new Array();
+	var longitud = document.importacionIso.elements.length;
+	for (i=0; i < longitud; i++) {
+		if ( document.importacionIso.elements[i].checked){//si esta chequeado
+			a.push(document.importacionIso.elements[i].value);//agrego el id del que esta tildadoi
+			b.push(document.importacionIso.elements[i+1].value)
+		}
+	}
+	document.importacionIso.descripciones.value=a.join();
+ 	document.importacionIso.tablas.value=b.join();
+//	alert( document.importacionIso.descripciones.value);
+	document.importacionIso.submit();
+}
+</script>
+<h1><font color='red'> Debe tildar las descripciones que desea que se guarden</h1></font><br><br>
+<center><table border=2 cellspacing=0 cellpadding=2>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Unidad de informaci&oacute;n</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Campo</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Subcampo</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Descripci&oacute;n</th>
+<th background="/intranet-tmpl/default/es/images/background-mem.gif">Modificar</th>
+<!--<th background="/intranet-tmpl/default/es/images/background-mem.gif">Tabla Koha</th>
+<!-- <th background="/intranet-tmpl/default/es/images/background-mem.gif">Campo Koha</th>-->
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+  <form  action=/cgi-bin/koha/guardarImportacion.pl method=post >
+  <tr align='center'>
+  <td> <!-- TMPL_VAR NAME=ui --> </td>
+  <td> <input type="text" name="campoIso" value="<!-- TMPL_VAR NAME=campoIso -->"> </td>
+  <td> <input type="text" name="subCampoIso" value="<!-- TMPL_VAR NAME=subCampoIso -->"> </td>
+  <td> <textarea cols="30" rows="3" name="descripcion"> <!-- TMPL_VAR NAME=descripcion --> </textarea> </td>
+  <td> <input type=submit class="button" value="Guardar Datos " title="Guardar Datos" <!--onClick='hacerSubmit()'--> </td>
+   <input type="hidden" value="<!-- TMPL_VAR NAME=id -->"  name="id" >
+  </tr>
+	<input type="hidden" value="ok" name="guardarDatos" >
+	</form>
+<!-- /TMPL_LOOP -->
+<tr>
+</table>
+
+<center>
+
+<!-- TMPL_LOOP NAME=indices -->
+	<a href="importacion.pl?code='<!-- TMPL_VAR NAME=campoIso -->'"><!-- TMPL_VAR NAME=campoIso --></a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

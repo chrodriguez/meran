@@ -1,0 +1,53 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="JavaScript">
+        function borrar(sanctionrulecode){
+                document.frm.sanctionrulecode.value= sanctionrulecode;
+                document.frm.accion.value= 'delete';
+                document.frm.submit();
+        }
+                                                                                                                             
+        function agregar(){
+                document.frm.accion.value= 'add';
+                document.frm.submit();
+        }
+</script>
+ <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
+<tr><td>Reglas para sancionar
+</td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+<br>
+	<form method="POST" name="frm">
+	<input type="hidden" name="sanctionrulecode" value="<!-- TMPL_VAR NAME=sanctionrulecode -->">
+	<input type="hidden" name="accion">
+	<table border=0 cellspacing=0 cellpadding=0 width=80%>
+                <tr >	<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+                        <td class="tablaresultadoTitle"><b>D&iacute;as de demora</b></td>
+                        <td class="tablaresultadoTitle"><b>D&iacute;as de sanci&oacute;n</b></td>
+                        <td class="tablaresultadoTitle"><b>Eliminar</b></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+                </tr>
+                <!-- TMPL_LOOP NAME=loop_sanctions_rules -->
+                <tr valign=middle>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                        <td><!-- TMPL_VAR NAME=delaydays --></td>
+                        <td><!-- TMPL_VAR NAME=sanctiondays --></td>
+                        <td>
+				<FONT SIZE=2  face="arial, helvetica">
+				<A HREF="#" onClick="borrar('<!-- TMPL_VAR NAME=sanctionrulecode -->');">Eliminar</a>
+				</FONT>
+			</td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+		<tr>
+			<td colspan="4"><FONT SIZE=2  face="arial, helvetica">
+				<A HREF="#" onClick="agregar();">Agregar</a> D&iacute;as de demora: <input type="text" name="delaydays"> D&iacute;as de sanci&oacute;n: <input type="text" name="sanctiondays">
+			</FONT></td>
+		</tr>
+	</table>
+	</form>
+	<a href="/cgi-bin/koha/admin/sanctions.pl">Volver a Tipos de Sanciones</a>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

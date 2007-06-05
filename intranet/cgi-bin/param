@@ -1,0 +1,334 @@
+actualizarPersonas.pl:for (my $i=0;$i<$input->param->{'oculto'};$i++){
+actualizarPersonas.pl:		($data,$aux)=$input->param->[0];
+actualizarPersonas.pl:my $referer = $input->referer();
+actualizarPersonas.pl:print $input->redirect($referer);
+addanalysisagregar.pl:my $bibnum=$input->param('biblionumber');
+addanalysisagregar.pl:my $bibitemnumber=$input->param('biblioitemnumber');
+addanalysisagregar.pl:# my $bibnumitems=$input->param('bibnumitems');
+addanalysis.pl:my $bibnum=$input->param('bibnum');
+addanalysis.pl:my $bibnumitems=$input->param('bibnumitems');
+addwebsite.pl:my $biblionumber = $input->param('biblionumber');
+addwebsite.pl:    title        => $input->param('title')?$input->param('title'):"",
+addwebsite.pl:    description  => $input->param('description')?$input->param('description'):"",
+addwebsite.pl:    url          => $input->param('url')?$input->param('url'):""
+addwebsite.pl:    print $input->redirect("/catalogue/");
+addwebsite.pl:    print $input->redirect("modwebsites.pl?biblionumber=$biblionumber");
+bookcount.pl:my $itm = $input->param('itm');
+bookcount.pl:my $bi = $input->param('bi');
+bookcount.pl:my $bib = $input->param('bib');
+boraccount.pl:my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+boraccount.pl:my $bornum=$input->param('bornum');
+currency.pl:my @params=$input->param;
+currency.pl:		my $data=$input->param($param);
+currency.pl:print $input->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
+delanalysis.pl:my $bibnum=$input->param('biblionumber');
+delanalysis.pl:my $bibnumitems=$input->param('biblioitemnumber');
+delanalysis.pl:my $timestamp=$input->param('timestamp');
+delanalysis.pl:print $input->redirect("addanalysis.pl?bibnum=$bibnum&bibnumitems=$bibnumitems");
+delbiblio.pl:#print $input->header;
+delbiblio.pl:my $biblio=$input->param('biblio');
+delbiblio.pl:my $from=$input->param('from');
+delbiblio.pl:		print $input->redirect("/cgi-bin/koha/acqui.simple/additem-nomarc.pl?type=intra&biblionumber=$biblio&msg=noempty&noemptycount=$count");}
+delbiblio.pl:	else {print $input->redirect("/cgi-bin/koha/detail.pl?type=intra&bib=$biblio&msg=noempty&count=$count");}
+delbiblio.pl:	print $input->redirect("/cgi-bin/koha/loadmodules.pl?module=search");
+deletebiblioitem.pl:my $biblionumber     = $input->param('biblionumber');
+deletebiblioitem.pl:my $biblioitemnumber = $input->param('biblioitemnumber');
+deletebiblioitem.pl:my $responsable      = $input->param('responsable');
+deletebiblioitem.pl: my $from=$input->param('from');
+deletebiblioitem.pl:    print $input->redirect("/catalogue/");
+deletebiblioitem.pl:    print $input->param("detail.pl?type=intra&bib=$biblionumber");
+deletebiblioitem.pl:        	print $input->redirect("/cgi-bin/koha/moredetail.pl?bi=$biblioitemnumber".$msg); }}
+deletebiblioitem.pl:		else {print $input->redirect("/cgi-bin/koha/acqui.simple/additem-nomarc.pl?type=intra&biblionumber=$biblionumber".$msg); }
+deletebiblioitem.pl:	if ($from eq 'additem'){print $input->redirect("/cgi-bin/koha/acqui.simple/additem-nomarc.pl?type=intra&biblionumber=$biblionumber".$msg); }
+deletebiblioitem.pl:	else { print $input->redirect("detail.pl?type=intra&bib=$biblionumber".$msg);}
+deletemem.pl:#print $input->header;
+deletemem.pl:my $member=$input->param('member');
+deletemem.pl:  print $input->header;
+deletemem.pl:         print $input->redirect("/cgi-bin/koha/members-home.pl");
+deletewebsite.pl:my $biblionumber  = $input->param('biblionumber');
+deletewebsite.pl:my $websitenumber = $input->param('websitenumber');
+deletewebsite.pl:    print $input->redirect("/catalogue/");
+deletewebsite.pl:    print $input->param("modwebsite.pl?biblionumber=$biblionumber");
+deletewebsite.pl:    print $input->redirect("modwebsites.pl?biblionumber=$biblionumber");
+delitem.pl:my $responsable=$input->param('userloggedname');
+delitem.pl:my $bibitemnum=$input->param('bibitemnum');
+delitem.pl:my $biblionumber=$input->param('biblio');
+delitem.pl:#print $input->header;
+delitem.pl:my $item=$input->param('itemnum');
+delitem.pl:my $from=$input->param('from');
+delitem.pl:    print $input->redirect("detail.pl?type=intra&bib=$biblionumber".$msg);}
+delitem.pl:	else{print $input->redirect("/cgi-bin/koha/moredetail.pl?bi=$bibitemnum".$msg); }
+delitem.pl.new:#print $input->header;
+delitem.pl.new:my $item=$input->param('itemnum');
+delitem.pl.new:my $bibitemnum=$input->param('bibitemnum');
+delitem.pl.new:print $input->redirect("/cgi-bin/koha/moredetail.pl?bi=$bibitemnum");
+editanalysis.pl:my $bibnum=$input->param('biblionumber');
+editanalysis.pl:my $bibnumitems=$input->param('biblioitemnumber');
+editanalysis.pl:my $time=$input->param('timestamp');
+groups.pl:my $time=$input->param('time');
+groups.pl:#print $input->header;
+groups.pl:my $branch=$input->param('branch');
+groups.pl:my $printer=$input->param('printer');
+groups.pl:($branch) || ($branch=$input->cookie('branch'));
+groups.pl:($printer) || ($printer=$input->cookie('printer'));
+groups.pl:if ($input->param('selectnewbranchprinter')) {
+groups.pl:my $branchcookie=$input->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y', -path=>'/cgi-bin/koha/');
+groups.pl:my $printercookie=$input->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y', -path=>'/cgi-bin/koha/');
+groups.pl:print $input->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+groups.pl:unless ($input->param('printable')) {
+groups.pl:my $type=$input->param('type');
+groups.pl:if ($input->param('print')) {
+groups.pl:    if ($input->param('groupsselected')) {
+groups.pl:	foreach ($input->param()) {
+groups.pl:		printgroup($group,$input->param('type'));
+groups.pl:if (my $group=$input->param('group')) {
+groups.pl:    if ($input->param('printable')) {
+groups.pl:unless ($input->param('printable')) {
+guardarImportacion.pl:my $theme = $input->param('theme') || "default";
+guardarImportacion.pl:#my $descripciones = $input->param('descripciones');#tomo el string de id's de los campos 
+guardarImportacion.pl:#		my $des =$input->param('descripcion'.$a); ##tomo el texto de la descripcion
+guardarImportacion.pl:my $id =$input->param('id');
+guardarImportacion.pl:my $campoIso=$input->param('campoIso');
+guardarImportacion.pl:my $subCampoIso=$input->param('subCampoIso');
+guardarImportacion.pl:my $descripcion=$input->param('descripcion');
+guardarImportacion.pl:my $campoKoha=$input->param('listaSecundaria');
+guardarImportacion.pl:my $tablaKoha=$input->param('listaPrincipal');
+guardarImportacion.pl:my $orden=$input->param('orden');
+guardarImportacion.pl:my $separador=$input->param('separador');
+guardarImportacion.pl:my $campoK=$input->param('campoK');
+guardarImportacion.pl:print $input->redirect('importacion.pl?campoiso='.$campoIso.'&subcampoiso='.$subCampoIso.'&ok=1&code='.$campoIso);
+imemberentry.pl:my $member=$input->param('bornum');
+imemberentry.pl:my $type=$input->param('type');
+imemberentry.pl:my $branch=$input->param('branch');
+imemberentry.pl:($branch) || ($branch=$input->cookie('branch'));
+importacion.pl:my $theme = $input->param('theme') || "default";
+importacion.pl:my $campoIso = $input->param('code') || ""; 
+importacion.pl:my $ok = $input->param('ok');
+importacion.pl:my $campoiso = $input->param('campoiso');
+importacion.pl:my $subcampoiso = $input->param('subcampoiso');
+importacion.pl:my $branch=$input->param('branch');
+importacion.pl:($branch) || ($branch=$input->cookie('branch'));
+insertanalysisbiblio.pl:my $bibnum=$input->param('bibnum');
+insertanalysisbiblio.pl:my $bibnumitems=$input->param('biblioitemnumber');
+insertanalysisbiblio.pl:my $analyticalauthor=$input->param('analysisauthor');
+insertanalysisbiblio.pl:my $analyticaltitle=$input->param('analysistitle');
+insertanalysisbiblio.pl:print $input->redirect("detail.pl?type=intra&bib=$bibnum");
+insertanalysisbiblio.pl:#print $input->redirect("moredetail.pl?bib=$bibnum&bi=$bibnumitems");
+insertanalysisbiblio.pl:#print $input->redirect("acqui.simple/additem-nomarc.pl?biblionumber=$bibnum")
+insertanalysisbiblio.pl:print $input->redirect("addanalysisagregar.pl?biblionumber=$bibnum&biblioitemnumber=$bibnumitems");
+insertdata.pl:my @names=$input->param;
+insertdata.pl:  $data{$key}=$input->param($key);
+insertdata.pl:print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+insertidata.pl:#print $input->header;
+insertidata.pl:#print $input->Dump;
+insertidata.pl:my @names=$input->param;
+insertidata.pl:  $data{$key}=$input->param($key);
+insertidata.pl:print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+insertjdata.pl:#print $input->header;
+insertjdata.pl:#print $input->Dump;
+insertjdata.pl:my @names=$input->param;
+insertjdata.pl:	$data{$key}=$input->param($key);
+insertjdata.pl:print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+jmemberentry.pl:my $member=$input->param('bornum');
+jmemberentry.pl:my $type=$input->param('type');
+loadmodules.pl:my $module=$input->param('module');
+loadmodules.pl:	my $aq_type = $input->param('acquisitions');
+loadmodules.pl:	my $marc_bool =$input->param('MARC');
+loadmodules.pl:			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+loadmodules.pl:			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+loadmodules.pl:			print $input->redirect("/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl");
+loadmodules.pl:	my $marc_p = $input->param('marc');
+loadmodules.pl:	my $keyword=$input->param('keyword');
+loadmodules.pl:			print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+loadmodules.pl:			print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+mancredit.pl:my $bornum=$input->param('bornum');
+mancredit.pl:my $add=$input->param('add');
+mancredit.pl:  my $itemnum=$input->param('itemnum');
+mancredit.pl:  my $desc=$input->param('desc');
+mancredit.pl:  my $amount=$input->param('amount');
+mancredit.pl:  my $type=$input->param('type');
+mancredit.pl:  print $input->redirect("/cgi-bin/koha/boraccount.pl?bornum=$bornum");
+mancredit.pl:	print $input->header(
+maninvoice.pl:my $bornum=$input->param('bornum');
+maninvoice.pl:my $add=$input->param('add');
+maninvoice.pl:#  print $input->header;
+maninvoice.pl:  my $itemnum=$input->param('itemnum');
+maninvoice.pl:  my $desc=$input->param('desc');
+maninvoice.pl:  my $amount=$input->param('amount');
+maninvoice.pl:  my $type=$input->param('type');
+maninvoice.pl:  print $input->redirect("/cgi-bin/koha/boraccount.pl?bornum=$bornum");
+maninvoice.pl:	print $input->header(
+member2.pl:my $theme = $input->param('theme') || "default";
+member2.pl:my $member=$input->param('member');
+memberentry2.pl:my $member=$input->param('bornum');
+memberentry2.pl:my $type=$input->param('type') || '';
+memberentry2.pl:my $modify=$input->param('modify');
+memberentry2.pl:my $delete=$input->param('delete');
+memberentry2.pl:	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+memberentry2.pl:	my $branchdefecto=$input->param('branch');
+memberentry2.pl:	($branchdefecto) || ($branchdefecto=$input->cookie('branch'));
+memberentry.pl:my $member=$input->param('bornum');
+memberentry.pl:my $type=$input->param('type') || '';
+memberentry.pl:my $modify=$input->param('modify');
+memberentry.pl:my $delete=$input->param('delete');
+memberentry.pl:	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+memberentry.pl:	my $branchdefecto=$input->param('branch');
+memberentry.pl:	($branchdefecto) || ($branchdefecto=$input->cookie('branch'));
+memberentry.pl.orig:my $member=$input->param('bornum');
+memberentry.pl.orig:my $type=$input->param('type') || '';
+memberentry.pl.orig:my $modify=$input->param('modify');
+memberentry.pl.orig:my $delete=$input->param('delete');
+memberentry.pl.orig:	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+member-flags.pl:my $member=$input->param('member');
+member-flags.pl:if ($input->param('newflags')) {
+member-flags.pl:    foreach ($input->param) {
+member-flags.pl:    print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$member");
+member-password.pl:my $theme = $input->param('theme') || "default";
+member-password.pl:my $member=$input->param('member');
+member-password.pl:my $newpassword = $input->param('newpassword');
+member-password.pl:    my $digest=md5_base64($input->param('newpassword'));
+member-password.pl:    my $uid = $input->param('newuserid');
+member.pl:my $theme = $input->param('theme') || "default";
+member.pl:my $member=$input->param('member');
+modbibitem.pl:my $bibitemnum=$input->param('bibitem');
+modbibitem.pl:my $responsable=$input->param('userloggedname');
+modbibitem.pl:my $biblio=$input->param('biblio');
+modbibitem.pl:my $submit=$input->param('submit.x');
+modbibitem.pl:my $from=$input->param('from');
+modbibitem.pl:  print $input->redirect("deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio&responsable=$responsable&from=$from");
+modbibitem.pl:#my $notesinput=$input->textfield(-name=>'Notes', -default=>$data->{'bnotes'}, -size=>20);
+modbib.pl:my $bibnum=$input->param('bibnum');
+modbib.pl:my $submit=$input->param('submit.x');
+modbib.pl:my $from=$input->param('from');
+modbib.pl:  print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum&from=$from");
+modbib.pl.new:my $bibnum=$input->param('bibnum');
+modbib.pl.new:my $submit=$input->param('submit.x');
+modbib.pl.new:  print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum");
+moditem.pl:my $submit=$input->param('delete.x');
+moditem.pl:my $itemnum=$input->param('itemnum');
+moditem.pl:my $bibitemnum=$input->param('bibitemnum');
+moditem.pl:  print $input->redirect("/cgi-bin/koha/delitem.pl?itemnum=$itemnum&bibitemnum=$bibitemnum");
+moditem.pl:my $branch=$input->param('branch');
+moditem.pl:($branch) || ($branch=$input->cookie('branch'));
+moditem.pl:print $input->header(
+modrequest.pl:#print $input->header;
+modrequest.pl:#print $input->Dump;
+modrequest.pl:my @rank=$input->param('rank-request');
+modrequest.pl:my @biblio=$input->param('biblio');
+modrequest.pl:my @borrower=$input->param('borrowernumber');
+modrequest.pl:my @biblioitemnumber=$input->param('biblioitemnumber');
+modrequest.pl:my @timestamp=$input->param('timestamp');
+modrequest.pl:my @branch=$input->param('pickup');
+modrequest.pl:my $from=$input->param('from');
+modrequest.pl:  print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$borrower[0]");
+modrequest.pl:   print $input->redirect("/cgi-bin/koha/request.pl?bib=$biblio[0]");
+modwebsites.pl:my $biblionumber       = $input->param('biblionumber');
+modwebsites.pl:  print $input->redirect("/catalogue/");
+modwebsites.pl:#print $input->header;
+moremeber2.pl:my $bornum=$input->param('bornum');
+moremeber2.pl:my $msgFoto=$input->param('msg');
+moremember2.pl:my $bornum=$input->param('bornum');
+moremember2.pl:my $msgFoto=$input->param('msg');
+moremember.pl:my $bornum=$input->param('bornum');
+moremember.pl:my $msgFoto=$input->param('msg');
+newimember.pl:my $insert=$input->param('insert');
+newimember.pl:my @names=$input->param;
+newimember.pl:  $data{$key}=$input->param($key);
+newjmember.pl:my $insert=$input->param('insert');
+newjmember.pl:my @names=$input->param;
+newjmember.pl:  $data{$key}=$input->param($key);
+newmember2.pl:my @names=$input->param;
+newmember2.pl:  $data{$key}=$input->param($key);
+newmember.pl:my @names=$input->param;
+newmember.pl:  $data{$key}=$input->param($key);
+overdue.pl:my $type=$input->param('type');
+overdue.pl:my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+pay.pl:#print $input->header;
+pay.pl:my $bornum=$input->param('bornum');
+pay.pl:	$bornum=$input->param('bornum0');
+pay.pl:my $user=$input->remote_user;
+pay.pl:my @names=$input->param;
+pay.pl:	my$temp=$input->param($names[$i]);
+pay.pl:		my $amount=$input->param($names[$i+4]);
+pay.pl:		my $bornum=$input->param($names[$i+5]);
+pay.pl:		my $accountno=$input->param($names[$i+6]);
+pay.pl:my $total=$input->param('total');
+pay.pl:#  my $quety=$input->query_string;
+pay.pl:#  print $input->redirect("/cgi-bin/koha/sec/writeoff.pl?$quety");
+pay.pl:	my @name=$input->param;
+pay.pl:		my $test=$input->param($name[$i]);
+pay.pl:		my $accounttype=$input->param("accounttype$value");
+pay.pl:		$bornum=$input->param("bornum$value");
+pay.pl:		my $itemno=$input->param("itemnumber$value");
+pay.pl:		my $amount=$input->param("amount$value");
+pay.pl:			my $accountno=$input->param("accountno$value");
+pay.pl:	$bornum=$input->param('bornum');
+pay.pl:	print $input->redirect("/cgi-bin/koha/pay.pl?bornum=$bornum");
+pay.pl:	my $user=$input->remote_user;
+placerequest.pl:#print $input->header;
+placerequest.pl:my @bibitems=$input->param('biblioitem');
+placerequest.pl:my @reqbib=$input->param('reqbib');
+placerequest.pl:my $biblio=$input->param('biblio');
+placerequest.pl:my $borrower=$input->param('member');
+placerequest.pl:my $notes=$input->param('notes');
+placerequest.pl:my $branch=$input->param('pickup');
+placerequest.pl:my @rank=$input->param('rank-request-'.$input->param('reqbib'));
+placerequest.pl:my $type=$input->param('type');
+placerequest.pl:my $title=$input->param('title');
+placerequest.pl:if ($input->param('request') eq 'any'){
+placerequest.pl:print $input->redirect("request.pl?bib=$biblio");
+plugin_launcher.pl:my $plugin_name=$input->param("plugin_name");
+plugin_launcher.pl:my $plugin_name="value_builder/".$input->param("plugin_name");
+readingrec.pl:my $bornum=$input->param('bornum');
+readingrec.pl:my $order=$input->param('order');
+readingrec.pl:my $limit=$input->param('limit');
+renewscript.pl:#print $input->header;
+renewscript.pl:#print $input->dump;
+renewscript.pl:my @names=$input->param();
+renewscript.pl:    $data{$temp}=$input->param($names[$i]);
+renewscript.pl:my $bornum=$input->param("bornum");
+renewscript.pl:print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
+request.pl:my $bib = $input->param('bib');
+request.pl:my $branch=$input->param('branch');
+request.pl:($branch) || ($branch=$input->cookie('branch'));
+request.pl:print $input->header(
+request.pl.bak:my $bib = $input->param('bib');
+request.pl.bak:my $branch=$input->param('branch');
+request.pl.bak:($branch) || ($branch=$input->cookie('branch'));
+request.pl.bak:print $input->header(
+reservereport.pl:my $time=$input->param('time');
+reservereport.pl:#print $input->header;
+reservereport.xls:#print $input->header;
+row:acqui/updatesupplier.pl:#print $input->header();
+row:acqui/updatesupplier.pl:my $supplier=$input->param('supplier');
+row:acqui/updatesupplier.pl:$data{'id'}=$input->param('id');
+row:acqui/updatesupplier.pl:$data{'name'}=$input->param('company');
+row:acqui/updatesupplier.pl:$data{'postal'}=$input->param('company_postal');
+row:acqui/updatesupplier.pl:my $address=$input->param('physical');
+row:acqui/updatesupplier.pl:$data{'phone'}=$input->param('company_phone');
+row:acqui/updatesupplier.pl:$data{'fax'}=$input->param('company_fax');
+row:acqui/updatesupplier.pl:$data{'url'}=$input->param('website');
+row:acqui/updatesupplier.pl:$data{'contact'}=$input->param('company_contact_name');
+row:acqui/updatesupplier.pl:$data{'contpos'}=$input->param('company_contact_position');
+row:acqui/updatesupplier.pl:$data{'contphone'}=$input->param('contact_phone');
+row:acqui/updatesupplier.pl:$data{'contaltphone'}=$input->param('contact_phone_2');
+row:acqui/updatesupplier.pl:$data{'contfax'}=$input->param('contact_fax');
+row:acqui/updatesupplier.pl:$data{'contemail'}=$input->param('company_email');
+row:acqui/updatesupplier.pl:$data{'contnotes'}=$input->param('notes');
+row:acqui/updatesupplier.pl:$data{'active'}=$input->param('status');
+row:acqui/updatesupplier.pl:$data{'specialty'}=$input->param('publishers_imprints');
+row:acqui/updatesupplier.pl:$data{'listprice'}=$input->param('list_currency');
+row:acqui/updatesupplier.pl:$data{'invoiceprice'}=$input->param('invoice_currency');
+row:acqui/updatesupplier.pl:$data{'gstreg'}=$input->param('gst');
+row:acqui/updatesupplier.pl:$data{'listincgst'}=$input->param('list_gst');
+row:acqui/updatesupplier.pl:$data{'invoiceincgst'}=$input->param('invoice_gst');
+row:acqui/updatesupplier.pl:$data{'discount'}=$input->param('discount');
+row:acqui/updatesupplier.pl:my $id=$input->param('id');
+row:acqui/updatesupplier.pl:#print $input->dump;
+row:acqui/updatesupplier.pl:print $input->redirect("order.pl?supplier=$id");
+row:acqui/acquire.pl:my $id=$input->param('id');
+row:acqui/acquire.pl:my $search=$input->param('recieve');
+row:acqui/acquire.pl:my $invoice=$input->param('invoice');
+row:acqui/acquire.pl:my $freight=$input->param('freight');
+row:acqui/acquire.pl:my $biblio=$input->param('biblio');
+row:acqui/a

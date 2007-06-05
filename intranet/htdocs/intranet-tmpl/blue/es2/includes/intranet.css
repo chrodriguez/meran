@@ -1,0 +1,431 @@
+body {
+	margin : 25px;
+	background-color: #FFFFFF;	
+	font-family: "Trebuchet MS", "Verdana", "Arial" ;
+	font-size: 10px;
+	font-style: normal;
+	color: #000000;
+				 
+}
+.login
+{	font-family: "Trebuchet MS", "Verdana", "Arial" ;
+	font-size: 10px;
+	font-style: normal;
+	color: #330066;				
+}
+.Estilo_Cool {
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10px;
+	position: static;
+	height: auto;
+	width: auto;
+	left: 50%;
+	top: 0100px;
+	right: 50%;
+	bottom: 50%;
+	font-weight: bold;
+
+}
+
+.matchedSmartInputItem {
+font-size:0.8em;
+padding: 5px 10px 1px 5px;
+margin:0;
+cursor:pointer;
+}
+
+.selectedSmartInputItem {
+color:white;
+background-color:#3875D7;
+}
+
+#smartInputResults {
+padding:0;margin:0;
+}
+
+.siwCredit {
+
+margin:0;
+padding:0;
+margin-top:10px;
+font-size:0.7em;
+color:black;
+}
+
+.floater {
+position:absolute;
+bottom:0;
+right:0;
+z-index:2;
+display:none;
+padding:0;
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+
+}
+.wickEnabled
+{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+
+color:black;
+
+}
+.floater td {
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+
+background-color:white;
+border:1px inset #979797;
+color:black;
+}
+
+.Estilo8 {color: #FFFFFF}
+.Estilo9 {
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10px;
+	position: static;
+	height: auto;
+	width: auto;
+	left: 50%;
+	top: 0100px;
+	right: 50%;
+	bottom: 50%;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.Estilo10 {font-size: 9px}
+.Estilo1 {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+.Estilo2 {
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	color: #FFFFFF;
+	font-size: 16px;
+}
+.Estilo3 {
+	font-size: 14px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+.Estilo4 {color: #F3F3F3}
+
+.Estilo15 { 
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	color: black;
+	font-size: 12px
+}
+.entrada{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+        color: black;
+        font-size: 15px
+}
+a:link {
+	color: #000000;
+	text-decoration: none;
+}
+a:visited {
+	color: #991D1D;
+	text-decoration: none;
+}
+a:hover {
+	color: #BC3131;
+	text-decoration: none;
+}
+a:active {
+ 	color: #000000;
+	text-decoration: none;
+}
+tr.final{
+	border-color: #F3F3F3; 
+	background-color: #F3F3F3;
+}
+td.final{
+	background-color: #F3F3F3;
+}
+tr.parametro{
+	border-color: #DFE1E6;
+	background-color:#F3F3F3;
+}
+			
+.lineaPunteada {
+   border: #cccccc; 
+   border-style: dotted; 
+   border-top-width: 0px; 
+   border-right-width: 0px; 
+   border-bottom-width: 1px; 
+   border-left-width: 0px;
+   padding: 2px;
+      }
+.includePNGizquierdo {
+   background : url(backmidleizquierda.png) repeat-y 100%;
+}
+
+.includePNGderecho {
+   background : url(backmedioderecha.png) repeat-y 100%;
+   }
+
+.fondoPixelCeleste {
+   background : url(pixelceleste.png) repeat-x 100%;
+   font-Family : normal Bold Trebuchet MS, Verdana;
+   font-size: 10pt;
+   color: #999999;
+   background-color: transparent;
+   text-align: center;
+	}
+.textoDesarrollo{
+   font-Family : "Trebuchet MS", "Verdana", "Arial";
+   color: #999999;
+   background-color: transparent;
+   text-align: left;
+	}	
+.textoColumnas{
+   font-Family : "Trebuchet MS", "Verdana", "Arial"; 
+   font-size: 8pt;
+   font-weight: bold;
+   border: #cccccc; 
+   border-style: dotted; 
+   border-top-width: 0px; 
+   border-right-width: 0px; 
+   border-bottom-width: 1px; 
+   border-left-width: 0px;
+   padding: 2px;
+   border-left: dotted ;
+   border-right: dotted;
+   text-align: left;
+}
+	
+.textoEdits{
+  font-Family : "Trebuchet MS", "Verdana", "Arial";
+  font-size: 8pt;
+  font-weight: bold;
+  color: #999999;
+
+}
+td.abc{
+  font-Family : "Trebuchet MS", "Verdana", "Arial";
+  font-size: 10pt;
+  font-weight: bold;
+  color: #999999;
+	}	
+
+.tdout{
+background-color: #F4F4F4;
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+color: #000000;
+font-weight: normal;
+border: #333333; 
+   border-style: dotted; 
+   border-top-width: 0px; 
+   border-right-width: 0px; 
+   border-bottom-width: 1px; 
+   border-left-width: 0px;
+   padding: 2px;
+}
+
+
+
+.tdhover{
+background-color: #EBEAEA;
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+color: #000000;
+font-weight: normal;
+border: #333333; 
+   border-style: dotted; 
+   border-top-width: 0px; 
+   border-right-width: 0px; 
+   border-bottom-width: 1px; 
+   border-left-width: 0px;
+   padding: 2px;
+}
+
+/*.tdout a {display:block;background:#F4F4F4;}*/
+.tdout a:link {
+	color: #000000;
+	text-decoration: none;
+}
+.tdout a:visited {
+	color: #000000;
+	text-decoration: none;
+}
+.tdout a:hover {
+	color: #000000;
+	text-decoration: none;
+}
+.tdout a:active {
+	color: #000000;
+	text-decoration: none;
+}
+.tdhover /*a {display:block;background:#CCCCCC;}*/
+.tdhover a:link {
+        color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:visited {
+        color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:hover {
+	color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:active {
+	color: #000000;
+	text-decoration: none;
+		}
+
+.subtitle {
+	   font-weight: bold;	
+	   background : url(../images/pixelceleste.png) repeat-x 100%;
+	   font-Family : normal Trebuchet MS, Verdana;
+	   font-size: 13pt;
+	   color: #ffffff;
+	   background-color: transparent;
+	   text-align: right;
+	   height: 30px;
+		    }
+.tablaresultado th {  
+	font-Family : "Trebuchet MS", "Verdana";
+	color: #ffffff;
+	font-size: 10pt;
+	background-color: transparent;
+	text-align: center;
+        
+	}	
+.tablaresultadoTitle { 
+	font-Family : "Trebuchet MS", "Verdana";
+        color: #ffffff;
+        font-size: 9pt;
+	background: url(../images/medio.png) repeat-x ;
+	background-color:#3c9eb4;
+	/*background-color:#D9E6F6;*/
+	text-align: center;
+	font-weight: bold;
+	}
+								
+.title {
+           font-weight: bold;
+	   /*background : url(../images/pixelceleste.png) repeat-x 100%;*/
+	   font-Family : normal Trebuchet MS, Verdana;
+	   font-size: 14pt;
+	   color: #ffffff;
+	   background-color: transparent;
+	   text-align: left;
+	   height: 30px;
+	   }
+.pagetitle {
+	  font-weight: bold;
+	  font-Family : Trebuchet MS;
+	  font-size : 16pt;
+	  color: #000000;
+	  text-align: left;
+
+	  }
+
+.recuadro{
+	background-color: #666666;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 7pt;
+	color: #F4F4F4;
+	font-weight: bold;
+	
+		}
+		
+.recuadroAyuda{
+        background-color: #F0F0F0;
+	border: #999999;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+		  
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+        font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	}
+							
+
+.inputFont{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+color: #999999;
+font-weight: bold;
+		}
+.inputFontNormal{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+font-size: 10pt;
+color: #000000;
+font-weight: normal;
+overflow:auto;              
+  }
+               
+.lineafinaltabla{
+           background-color:#999999;
+           height:1;
+  
+        }
+
+		
+.lineagruesa{
+	   background-color:#47AACA;
+	   height:4;
+				 
+	}
+
+
+.lineagruesaceleste{
+           background-color:#65C5E0;
+	              height:4;
+
+		              }
+			      
+.texto{
+ font-family: "Trebuchet MS", "Verdana", "Arial";
+ color: #666666;
+ font-size: 12px;		 
+}
+
+td.par{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+color: #000000 ;
+font-size: 10pt; 
+background-color:#F4F4F4;
+}
+td.impar{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+color:#000000;    
+font-size: 10pt;
+background-color:#FFFFFF;  
+}
+
+td.number{
+font-family: "Trebuchet MS", "Verdana", "Arial";
+color: #666666;
+font-size: 10px;
+}
+td.highnumber{
+border-color: #FFFFFF;
+font-weight: bold;
+text-decoration: underline;
+color: #666666;
+font-size: 12px;
+
+}
+			
+.tablemsg{
+        border:0;
+        }
+.fontmsg{
+        text-decoration: none;
+        font-size:10pt;
+        font-family:verdana;
+        color:red;
+	font-weight:bold;
+	
+
+}
+	

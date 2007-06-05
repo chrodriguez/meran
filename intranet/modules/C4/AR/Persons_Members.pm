@@ -1,0 +1,158 @@
+package C4::AR::Persons_Members;
+
+#package para el manejo de Persons y Borrowers realizado para agregar la compatibilidad con Guarani
+#written 3/05/2005 by einar@info.unlp.edu.ar
+
+require Exporter;
+use strict;
+use C4::Context;
+use C4::Search;
+use C4::Circulation::Circ2;
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+@ISA = qw(Exporter);
+@EXPORT = qw(delmember delmembers addmembers sepuedeeliminar checkDocument);
+
+#delmembers recibe un arreglo de personnumbers y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde member2.pl  
+
+
+sub delmembers{
+  my (@member)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+  
+  foreach my $aux (@member){
+  $sth->execute($aux);
+  my $data=$sth->fetchrow_hashref;
+  ### Commeted by Luciano ###
+  #open L, ">>/tmp/tt";
+  #printf L $data->{'borrowernumber'};
+  #close L;
+  ### ###
+  if ($data->{'borrowernumber'}) {
+		delmember($data->{'borrowernumber'});
+	}
+    }
+  $sth->finish;
+  
+  return (1);}
+
+# delmembers recibe un arreglo de personnumbers y lo que hace es habilitarlos en la lista de miembros de la biblioteca, se invoca desde member2.pl  
+
+sub addmembers{
+  my (@member)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+  foreach my $aux (@member){
+  $sth->execute($aux);
+  my $data=$sth->fetchrow_hashref;
+  $data->{'borrowernumber'}=NewBorrowerNumber();
+  my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,studentnumber) values ('$data->{'title'}','$data->{'expiry'}','$data->{'cardnumber'}',
+  '$data->{'sex'}','$data->{'ethnotes'}','$data->{'streetaddress'}','$data->{'faxnumber'}',
+  '$data->{'firstname'}','$data->{'altnotes'}','$data->{'dateofbirth'}','$data->{'contactname'}','$data->{'emailaddress'}','$data->{'textmessaging'}',
+  '$data->{'joining'}','$data->{'streetcity'}','$data->{'altrelationship'}','$data->{'othernames'}',
+  '$data->{'phoneday'}','$data->{'categorycode'}','$data->{'city'}','$data->{'area'}','$data->{'phone'}',
+  '$data->{'borrowernotes'}','$data->{'altphone'}','$data->{'surname'}','$data->{'initials'}',
+  '$data->{'ethnicity'}','$data->{'address'}','$data->{'branchcode'}','$data->{'zipcode'}','$data->{'homezipcode'}',
+   '$data->{'documenttype'}','$data->{'documentnumber'}', '$data->{'studentnumber'}')";
+my $sth2=$dbh->prepare($query);
+  $sth2->execute;
+  $sth2->finish;
+
+  my $sth3=$dbh->prepare("Update persons set borrowernumber=".$data->{'borrowernumber'}." where personnumber=?");
+  $sth3->execute($aux);  
+  $sth3->finish;
+    }
+  $sth->finish;
+
+  
+  return (1);}
+
+#delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
+
+
+sub delmember{
+  my ($member)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($member);
+  my @data=$sth->fetchrow_array;
+  $sth->finish;
+  $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+  $sth->execute(@data);
+  $sth->finish;
+  $sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
+  $sth->execute($member);
+  $sth->finish;
+  $sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
+  $sth->execute($member);
+  $sth->finish;
+  $sth=$dbh->prepare("Update persons set borrowernumber=NULL where borrowernumber=?");
+  $sth->execute($member);
+  $sth->finish;
+  
+  return (1);
+}
+sub addmember{
+  return (1);
+}
+
+# recibe el borrowernumber y devuelve un codigo avisando si se puede o no borrar el borrower
+
+
+sub sepuedeeliminar{
+  my ($member)=@_;
+  my %env;
+  $env{'nottodayissues'}=1;
+  my %member2;
+  $member2{'borrowernumber'}=$member;
+  my $issues=currentissues(\%env,\%member2);
+  my $i=0;
+  foreach (sort keys %$issues) {
+    $i++;
+  }
+  my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
+  $sth->execute($member);
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  my @codigo=(0,0,0,0);
+  if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne '') {
+    $codigo[3]=-1;
+    if ($i > 0) {
+      $codigo[0]=-1; #Items on Issue
+    }
+    if ($flags->{'CHARGES'} ne '') {
+      $codigo[1]=-1; #Deudas con la biblioteca
+    }
+    if ($data ne '') {
+      $codigo[2]=-1; #Guarantees
+    }
+    return @codigo;
+  } else {
+    return (1,1,1,1);
+  }
+}
+
+sub checkDocument{
+  my ($type,$nro,$tipo,$skipCardnumber)=@_;
+  # skipCardnumber is the id of a borrower that must be skipped in this search
+  my $dbh = C4::Context->dbh;
+  my $query= "Select * from $tipo where documentnumber='$nro' and documenttype='$type'";
+  if ($skipCardnumber) {
+    $query.=" and cardnumber <> '$skipCardnumber'";
+  }
+  my $sth=$dbh->prepare($query);
+  $sth->execute();
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  if ($data) {
+    return 1;
+  } else {
+    return 0;
+  }
+}

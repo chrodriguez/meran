@@ -1,0 +1,19 @@
+<!-- TMPL_INCLUDE Name="intranet-top.inc" -->
+
+<CENTER>
+<!-- TMPL_VAR Name="error" -->
+<p> Presione Enviar para forzar el tema <br>
+</CENTER>
+
+<form action="/cgi-bin/koha/updatebiblio.pl" method=post>
+<table border=0 cellspacing=0 cellpadding=5 align="center">
+<!-- TMPL_LOOP Name="dataloop" -->
+	<input type=hidden name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+<!-- /TMPL_LOOP -->
+	<input type=hidden name="Force" value="<!-- TMPL_VAR NAME="substring" -->">
+<TR><TD><input type=submit value="Enviar"></TD></TR>
+</TABLE>
+</form>
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

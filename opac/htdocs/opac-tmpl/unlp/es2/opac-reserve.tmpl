@@ -1,0 +1,157 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+<table align="center" class="top" border="0" width="90%">
+<tr><td align="center">
+
+<!-- TMPL_IF NAME="message" -->
+	<br>
+	<table  cellpadding="5" cellspacing="0" >
+	<tr class="tablemsg" >
+	<td><font class="fontmsg"><b>
+<!-- TMPL_IF NAME="too_much_oweing" -->Disculpe, no puede efectuar reservas porque usted debe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="too_many_reserves" -->Disculpe, usted no puede realizar m&aacute;s de <!-- TMPL_VAR NAME="too_many_reserves" --> reservas. <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="already_reserved" -->Ya tiene una reserva para este grupo.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_items_selected" -->Debe seleccionar al menos un tipo de ejemplar.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->Debe seleccionar una unidad de informaci&oacute;n para el retiro.<br><!-- /TMPL_IF -->
+ <!-- TMPL_IF NAME="cant_reserve" -->No se puede realizar la reserva para la fecha <!-- TMPL_VAR NAME="required_date" -->.<br><!-- /TMPL_IF -->
+ <!-- TMPL_IF NAME="already_issued" -->Ya tiene un ejemplar de este grupo en su poder.<br><!-- /TMPL_IF -->
+
+	</b></font></td></tr></table>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p align="left"> <font class="fonttitulo"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)</font></p>
+	<p> Seleccione de la lista el documento que desea reservar.</p>
+
+<table cellspacing="0" cellpadding="4" border="1" align="center" width="90%">
+<tr bordercolor="#f2f2f2"><td colspan="4"  class="bordetabla"></td></tr>
+        <tr valign="top" bordercolor="#f2f2f2">
+                <td colspan="4" class="impar">
+                        <!-- TMPL_IF name="unititle" --><T&iacute;tulo Informativo:<b> <!-- TMPL_VAR NAME="subtitle" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="subtitle" -->Otro T&iacute;tulo:<b> <!-- TMPL_VAR NAME="unititle" --></b><br><!--
+/TMPL_IF -->
+                        <!-- TMPL_IF name="author" -->Autor:<b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!--
+TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="additional" -->Colaboradores:<b> <!-- TMPL_VAR NAME="additional" --></b><br><!-- /TMPL_IF -->
+                         <!-- TMPL_IF name="cdu" -->CDU :<b> <!-- TMPL_VAR NAME="cdu" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="subject" -->Materia:<b> <!-- TMPL_VAR NAME="subject" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="notes" -->Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="abstract" -->Resumen:<b> <!-- TMPL_VAR NAME="abstract" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="classification" -->Clasificaci&oacute;n:<b> <!-- TMPL_VAR name="classification" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="lccn" -->LCCN:<b> <!-- TMPL_VAR name="lccn" --></b><br><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="url" -->URL:<b> <a href="http://<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a></b><br><!-- /TMPL_IF -->
+
+                </td>
+        </tr>
+
+      <form name="formdate" action="/cgi-bin/koha/opac-reserve.pl" method="post">
+                <input type="hidden" name="item_types_selected" value="1">
+                <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
+                        <tr align=left  class="bordetabla" bordercolor="#f2f2f2">
+                                <th colspan="4">Reservar</th>
+                        </tr>
+
+			<!-- TMPL_LOOP NAME="BITYPES" -->
+				<tr bordercolor="#f2f2f2">
+			<td width="40%" align="left"  class="impar">
+
+		  Volumen:<b> <!-- TMPL_VAR NAME="volume" --></b> &nbsp;&nbsp;
+        	Descripci&oacute;n:<b> <!-- TMPL_VAR NAME="volumeddesc" --></b><br>
+		 P&aacute;ginas:<b> <!-- TMPL_VAR NAME="pages" --></b><br>
+        	Lugar:<b> <!-- TMPL_VAR NAME="place" --> </b>&nbsp;&nbsp;
+        	Editor:<b> <!-- TMPL_VAR NAME="publishercode" --></b>&nbsp;&nbsp;
+        	Fecha:<b> <!-- TMPL_VAR NAME="publicationyear" --></b>
+			</td>
+		      <td width="25%" align="center" valign="top" class="impar">
+                        Reservas en espera:<b> <br>  <!-- TMPL_IF NAME="reserve" --><!-- TMPL_VAR NAME="reserve" --> <!-- /TMPL_IF  --></b></td>  
+			<td width="25%" align="center" valign="top" class="impar">
+			Fechas de devoluci&oacute;n:<b> <br>  <!-- TMPL_IF NAME="issuelist" --><!-- TMPL_VAR NAME="issuelist" --> <!-- /TMPL_IF  --></b></td>	
+			<td width="10%" align="center" class="impar"> 
+					 <!-- TMPL_IF NAME="notforloan" -->
+					 No puede reservarse
+                                        <!-- TMPL_ELSE -->
+					 <input type="radio" name="bibitemtype" value="<!-- TMPL_VAR NAME="bibitem" -->">
+                                        <!-- /TMPL_IF -->
+			</td>
+
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<br>
+		<table border="0" cellspacing="0" cellpadding="0">
+		<tr><td colspan=2>    Unidad de Informaci&oacute;n:
+                <!-- TMPL_VAR NAME="CGIbranch" -->
+		</td></tr>
+				<tr>
+				<td>Reservar en esta fecha:</td>
+				<td>
+			  <input  name="dateselected" value="<!-- TMPL_VAR NAME="todaydate" -->">
+				</td>
+				<td>
+			<script language="javascript">
+        	        	<!-- TMPL_INCLUDE NAME="date-picker.js" -->
+            		</script>
+                                                                                                                             
+		        <a href="javascript:show_calendar('formdate.dateselected');" >
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/calendar.png" alt="Calendario" border=0 >
+			 </a>
+
+				</td>
+			</tr>
+		</table>
+
+	<p>
+
+<a  onMouseOut="swap('conreserve','<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reserva.png')" onMouseOver="swap('conreserve','<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reservabis.png')">
+<input   name="conreserve" id="conreserve" type="image" value="Confirmar Reserva"  src="<!-- TMPL_VAR NAME='themelang' -->/images/confirmar-reserva.png" border="0">
+</a> </p>   
+
+	</form>
+
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+	<p>Por favor confirme si desea reservar un ejemplar de este tipo: </p>
+	<form name="f" action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="place_reserve" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->">
+  		<table border="1">
+			<tr>
+			<th class="bordetabla" >Tipo de Ejemplar</th>
+			<th class="bordetabla" >Volumen</th>
+			<th class="bordetabla" >Descripci&oacute;n</th>
+			</tr>
+                        <!-- TMPL_LOOP NAME="BITYPES" -->
+				<tr>
+
+<!-- TMPL_IF NAME="bibitem" -->
+	
+	<td><input type="hidden" name="bibitemtype" value="<!-- TMPL_VAR NAME="bibitem" -->"><!-- TMPL_VAR NAME="bibitemtype" --></td>
+	<td align="center"  ><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+	<td align="center" ><!-- TMPL_IF NAME="volumeddesc" --><!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+
+<!-- /TMPL_IF -->
+
+	</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		Ser&aacute; retirado de <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
+	<p>Reserva para el d&iacute;a <b><!-- TMPL_VAR NAME="required_date" --> <!-- TMPL_IF NAME="today" --> (Hoy)<!-- /TMPL_IF --></b>. 
+<br>
+
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<input type="hidden" name="rank" value="<!-- TMPL_VAR NAME="rank" -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<p>Nota: para efectuar esta reserva el cargo es de <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<input type="submit" value="Reservar">
+	</form>
+<!-- /TMPL_IF -->
+
+</td> </tr>
+</table>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

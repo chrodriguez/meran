@@ -1,0 +1,123 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<!-- TMPL_IF NAME="norequests" -->
+	<!-- TMPL_ELSE -->
+		<table border=0 cellpadding=10 align=right>
+		<tr>
+			<td>
+			<a class="button" href=addanalysis.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Analiticas</a>
+                        </td>
+                </tr>
+		</table>
+	<!-- /TMPL_IF -->
+	<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+	<!-- TMPL_VAR NAME="class" --></em></font><p>
+ <table border="0" align="center" width="100%">
+
+<tr><td>
+	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+	<!-----------------Registro de libro TABLE--------->
+	<tr valign="top">
+		<td bgcolor="#cccc99" background="/images/background-mem.gif">
+			<b>Registro de libro <!-- TMPL_VAR NAME="biblionumber" --></b>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>	
+
+			<form action="/cgi-bin/koha/modbib.pl" method="post">
+			<table width="100%" border=0 cellspacing=0 cellpadding=0>
+			<tr>
+			<td width="33%">
+				<Input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+				<input type="image" name="submit" value="modify" border="0" src="/intranet-tmpl/default/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0 title="Editar Libro">
+			</td>
+			<td width="33%"><input type="image" name="delete" value="delete" border="0" src="/intranet-tmpl/default/images/edittrash.png" width=32 hspace=0 vspace=0 border=0" title="Borrar Libro"></td>
+			<td width="33%"><a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">MARC</a> </td>
+ 	</TR>
+                       
+		</table>
+			</form>
+			<FONT SIZE=2  face="arial, helvetica">
+		</font>
+		</td>
+	</tr>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- FIXME - The help box overflows on the right. I think this is
+     because it is specified as "width=70%", which the browser
+     interprets as 70% of the width of the browser window. However,
+     leaving out the "width=70%" makes the help box abut the "biblio
+     record" box. I think the fix is to put all three boxes in a
+     table, for layout, and make the help box as wide as it wants to
+     be. -->
+</td></tr>
+<tr><td>
+
+<center>
+
+<TABLE cellspacing=0 border="1" cellpadding=0 width="700" >
+ <tr bgcolor="#cccc99" background="/images/background-mem.gif">
+
+       	<th  width="210" >Grupos</th>
+ 	<th  width="500" >Ejemplares</th>
+
+</tr>
+ <!-- TMPL_LOOP NAME="BIBLIOITEMS" -->
+<tr>
+<td valign="top">
+ 	<table  cellpadding=2 cellspacing="2"  width="210">
+	<tr   bgcolor="#CCCC99">
+	<td background="/images/background-mem.gif">
+
+<form action=/cgi-bin/koha/addanalysis.pl>
+<input type=hidden name=bibnumitems value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+<input type=hidden name=bibnum value=<!-- TMPL_VAR NAME="biblionumber" -->>
+
+
+<INPUT width=15   TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" title="Editar Analitica">
+
+<INPUT width=15  TYPE="image" name="delete"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" title="Borrar Analitica" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?\nCUIDADO, se borrar&aacute;n todos los ejemplares asociados.')) {return true;} else {return false;}">
+                        
+
+</form> </td>
+ <hr>
+	</TABLE>
+</td>
+<td valign="top" > 
+ <table   cellspacing="2" cellpadding="1"  width="500" >
+<tr align="center" cellpadding="3" bgcolor="#CCCC99" >
+
+	<th >Analisis sobre el Autor </th>
+        <th >Analisis del Titulo</th>
+        <th >Parte</th>
+
+</tr>
+	<!-- TMPL_VAR NAME="items" -->
+
+ </TABLE>
+     
+</td>		
+</tr>
+    <!-- /TMPL_LOOP -->
+</TABLE>
+</center>
+</td></tr></table>
+
+
+	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
+<table>	
+	<tr>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<p>
+
+<!-- TMPL_VAR NAME="res" -->
+<br clear=all>
+<p />
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

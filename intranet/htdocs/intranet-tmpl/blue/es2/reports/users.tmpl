@@ -1,0 +1,137 @@
+
+<script language="javascript">
+function hacerSubmit(){
+	document.branches.submit();
+	}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="pagetitle" >Usuarios</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+<br>
+
+<center>
+<form name="branches" action=/cgi-bin/koha/reports/users.pl method=post >
+<table border="0" cellspacing="0" cellpadding="0">
+	
+	<tr class="inputFontNormal">
+		<td>
+			<input type="checkbox" name="chck" value="AN" id="AN">
+			Seleccione el a&ntilde;o: 
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="years" -->
+		</td>
+	</tr>
+
+	<tr class="inputFontNormal">
+		<td>
+			<br><input type="checkbox" name="chck" value="USO" id="USO">
+			Seleccione la cantidad de uso:
+		</td>
+		<td>
+			<br>
+			<select name="usos" id="usos">
+				<option id="MU" value="MU">Mas de un uso</option>
+				<option id="NI" value="NI">Ninguno</option>
+			</select>
+		</td>
+	</tr>
+
+	<tr class="inputFontNormal">
+		<td>
+			<br>Seleccione una unidad de informaci&oacute;n: &nbsp; 
+		</td>
+		<td>
+			 <br><!-- TMPL_VAR NAME=unidades  -->
+		</td>
+	<tr>
+	
+</table>
+	<br><input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
+</form>
+<!-- Miguel 30-03-07 Ver si queda -->
+<p>
+<b>La cantidad de usuarios es : <!-- TMPL_VAR NAME=cantidad --><br>
+   P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> 
+   de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+</p>
+<br>
+
+<!-- TMPL_IF NAME="ok2" -->
+<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="ant" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+<a class="inputFontNormal"href=users.pl?ini=<!-- TMPL_VAR NAME="number" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->> <u><!-- TMPL_VAR name=number --></u> </a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="sig" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+<br>
+</center>
+
+<table border="0" cellspacing="0" cellpadding="0"  width="100%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
+
+		<td><a class="inputFontNormal" href=users.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Apellido</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Nombre</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=streetaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Direcci&oacute;n</a></td>
+		<td><a class="inputFontNormal"  href=users.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Socio</a></td>
+		<td class="inputFontNormal">Ciudad</td>
+		<td><a class="inputFontNormal" href=users.pl?orden=phone&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Telefono</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>E-mail</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=dateenrolled&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Ingreso</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=categoria&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Categoria</a></td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr>
+		<td class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=surname --> </td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=streetaddress --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=cardnumber --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=city --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=phone --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=categoria --></td>
+ 		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+  	</tr>
+
+<!-- /TMPL_LOOP -->
+
+
+	<tr>
+		<td colspan="11">&nbsp;</td>
+	</tr>
+
+</table>
+
+<script language="JavaScript">
+var stringCheckbox= '<!-- TMPL_VAR NAME="chck" -->';
+var checkbox=stringCheckbox.split(",");
+
+for (var i=0; i<checkbox.length; i++){
+	var ch=document.getElementById(checkbox[i]);
+        ch.checked=true;
+	
+}
+
+var usos=document.getElementById('<!-- TMPL_VAR NAME="usos" -->');
+usos.selected=true;
+
+
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

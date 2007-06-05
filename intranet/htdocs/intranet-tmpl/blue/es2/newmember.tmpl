@@ -1,0 +1,284 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->						    
+
+<!-- TMPL_IF Name="OK" -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="pagetitle" >Confirme Registro</td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+
+</table>
+<br>
+<br>	
+<center>
+	<table border=0 cellspacing=0 cellpadding=0 width="70%">
+		
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan="2"><B> NUEVO SOCIO </B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+
+		<tr valign="middle" >
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>	
+			<td class="inputFontNormal"><B>Nombre</B> </td>
+			<td class="inputFontNormal"> <!-- TMPL_VAR Name="name" --> </td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp; </td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			 <td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan="2"><B> DETALLES DEL USUARIO </B> </td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+		<tr valign="middle" >
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>ID de usuario</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="pernum" --></td>	
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<!-- TMPL_IF Name="borrowernumber" -->
+		<tr>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>	Usuario Habilitado nro:</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="borrowernumber" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<!-- /TMPL_IF -->
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Tarjeta de identificaci&oacute;n </B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="cardnum" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                        <td class="inputFontNormal"><B>Legajo </B></td>
+                        <td class="inputFontNormal"><!-- TMPL_VAR Name="studentnumber" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                </tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                        <td class="inputFontNormal"><B>Documento:</B></td>
+                        <td class="inputFontNormal"><!-- TMPL_VAR Name="documenttype" -->&nbsp;  <!-- TMPL_VAR Name="documentnumber" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Categor&iacute;a del usuario</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="memcat" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign=top>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Fecha de incorporaci&oacute;n</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="joindate" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Fecha de caducidad</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="expdate" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Incorporaci&oacute;n a UI</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="branchcode" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Forzar al usuario a cambiar la contrase&ntilde;a</B></td>
+                        <td class="inputFontNormal"><!-- TMPL_IF Name="updatepassword" -->Si      <!-- TMPL_ELSE -->No<!-- /TMPL_IF--></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan=2><B>DETALLES PERSONALES</B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Fecha de Nacimiento</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="dob" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Sexo</B></td>
+			<td class="inputFontNormal"><!-- TMPL_IF Name="sex" -->Male<!-- TMPL_ELSE -->
+			Female<!-- /TMPL_IF --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan=2><B>DIRECCI&Oacute;N DEL USUARIO</B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+
+		<tr valign=top>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Direcci&oacute;n</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="postal" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign=top>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Direcci&oacute;n personal</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="home" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan=2><B>DETALLE DEL CONTACTO DEL USUARIO</B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+
+		<tr valign="middle" >
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Tel&eacute;fono de la casa</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="phone" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Tel&eacute;fono del trabajo </B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="phoneday" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Fax</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="faxnumber" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>E-mail</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="emailaddress" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+                <tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                        <td class="inputFontNormal"><B>Mensajes de texto</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR NAME=textmessaging --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan=2  ><B>DATOS ALTERNATIVOS DEL CONTACTO</B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Nombre</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="contactname" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" >
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Tel&eacute;fono</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="altphone" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Relaci&oacute;n</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="altrelationship" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Notas</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="altnotes" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+		<tr valign="middle" class="tablaresultadoTitle">
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td colspan=2><B>USO DE LA UNIDAD DE INFORMACI&Oacute;N </B></td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+
+		<tr valign="middle" >
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>Notas generales</B></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR Name="bornotes" --></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+
+	</TABLE>
+		
+		<form action="/cgi-bin/koha/insertdata.pl" method=post>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="image" alt="Guardar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="form.submit">
+	
+		</form>
+	</center>
+<!-- TMPL_ELSE -->
+	<h1>ERROR</h1>
+	<h2>En los siguientes campos se produjo un error, o tienen valores prohibidos, o estan en blanco :</h2>
+	
+	<font color="red">
+	<ul>
+	 <!-- TMPL_IF name="document" -->
+        	<li>Ya existe el nro de documento registrado en el sistema </li>
+        <!-- /TMPL_IF -->
+	<!-- TMPL_IF name="documentnumber" -->
+		<li>N&uacute;mero de Documento</li>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF name="cardnumber" -->
+		<li>Tarjeta de identificaci&oacute;n </li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="invalid_cardnumber" -->
+		<li>Tarjeta de identificaci&oacute;n inv&aacute;lida</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="gender" -->
+		<li>G&eacute;nero</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="firstname" -->
+		<li>Nombres</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="surname" -->
+		<li>Apellido</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="address" -->
+		<li>Direcci&oacute;n</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="citycode" -->
+		<li>Ciudad</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="documentUsedByOther" -->
+		<li>Documento utilizado por otro</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="bad_documentnumber" -->                   
+		<li>    N&uacute;mero de documento mal armado. (Deben ser s&oacute;lo d&iacute;gitos)</li>                          
+	<!-- /TMPL_IF -->
+	<ul>
+	</font>
+	
+	<h2>Por favor, presione el bot&oacute;n back y vuelva a intentarlo.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

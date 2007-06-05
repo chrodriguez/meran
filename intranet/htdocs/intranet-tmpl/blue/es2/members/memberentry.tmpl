@@ -1,0 +1,377 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+                <!-- TMPL_ELSE -->
+                       <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
+			   <!-- /TMPL_IF -->
+												
+<!-- <!-- TMPL_INCLUDE NAME="members-top.inc" --> -->
+<script>
+
+	<!-- TMPL_INCLUDE NAME="funcionesAjax2.js" -->
+
+	/*function traerCiudad(idObj, idDiv){
+		//idObj = es el id del objeto que genera el evento
+		//idDiv = es el id del DIV donde se va a poner la info a mostrar
+		console=document.getElementById(idDiv);
+		var newline=document.createTextNode("");
+		console.appendChild(newline);
+		var inputObj = document.getElementById(idObj);
+		var ciudad = inputObj.value;
+		//si se ingreso algo...
+		/*if(ciudad.length > 1){
+			sendRequest("/cgi-bin/koha/searchcity2.pl?param="+ciudad,null,"GET");
+			showSmartInputFloater(console, inputObj);
+		}else{hideSmartInputFloater(console)}*/
+		/*if(ciudad.length > 1){
+			//sendRequest("/cgi-bin/koha/searchcity2.pl?param="+ciudad,null,"GET");
+			ObjDiv = console;
+			remoteFunction("/cgi-bin/koha/searchcity2.pl?param="+ciudad,null,"GET",ObjDiv);
+			showSmartInputFloater(console, inputObj);
+			//showSmartInputFloater(ObjDiv, inputObj);
+		}else{hideSmartInputFloater(console)}
+	}*/
+
+	function traerCiudad(idObj, idDiv){
+		//idObj = es el id del objeto que genera el evento
+		//idDiv = es el id del DIV donde se va a poner la info a mostrar
+		console=document.getElementById(idDiv);
+		ciudad=document.getElementById(idObj).value;
+		//url,param,Httpmethod,idObj, idDiv
+		remoteFunction("/cgi-bin/koha/searchcity2.pl?param="+ciudad,null,"GET",idObj,console);
+		//remoteFunction("/cgi-bin/koha/test.xml",null,"GET",idObj,console);
+	}
+
+	//document.addEventListener("keydown", handleKeyPress, false);
+	document.addEventListener("keyup", handleKeyUp, false);
+	document.addEventListener("mouseup", handleClick, false);
+
+</script>
+
+<style type="text/css">
+  
+.floater23 {
+	position:absolute;
+	bottom:0;
+	right:0;
+	z-index:4;
+	padding:0;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: Black;
+        background-color: white;
+}
+
+.content {
+	position:absolute;
+	bottom:0;
+	right:0;
+	z-index:4;
+	padding:0;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 8pt;
+	color: Black;
+        background-color: white;
+}
+
+</style>
+
+<center>
+
+
+<table id="content" class="content" border=1 cellpadding="0" cellspacing="0">
+	<div id="floater27" nowrap="nowrap"></div>
+</table>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >
+			<!-- TMPL_IF NAME=addAction -->
+			Agregar usuario real
+			<!-- TMPL_ELSE -->
+			Usuarios Reales - Modificar Datos
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+<script language="javascript" type="text/javascript">
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+</script>
+
+<form action="/cgi-bin/koha/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
+	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
+	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
+	<input type=hidden name=typeRegister value="borrowers">
+	<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
+	<input type=hidden name=updtype value="<!-- TMPL_VAR NAME=updtype -->">
+	<input type=hidden name=oldcardnumber value="<!-- TMPL_VAR NAME=cardnumber -->">
+
+<table border=0  width="100%" class="tablaresultado" align="right">
+	<tr valign=top width="100%">
+		
+		<td  width="50%"ALIGN=RIGHT class="inputFontNormal">
+		 	Tarjeta de identificaci&oacute;n * <input type=text class="inputFontNormal"name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
+		</td>
+	</tr>
+
+</table>
+	<br>
+	<br>
+	<br>
+<table width="100%"  cellpadding='0' cellspacing='0'>
+	<tr valign=middle class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
+		<td   width="65%"ALIGN=RIGHT>*
+			<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
+			<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
+			&nbsp; &nbsp;  Fecha de nacimiento (<!-- TMPL_VAR NAME=dateformat -->)
+			<input class="inputFontNormal"type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
+		</td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+</table>
+
+<table width="100%">
+	<tr>
+	    	<td width="10%">&nbsp;</td>
+	    	<td>&nbsp;</td>
+	    	<td  class="inputFontNormal" align="left">
+			<b>Categor&iacute;a del usuario*</b><br>
+                        <!-- TMPL_VAR NAME=catcodepopup -->
+            	</td>
+	    	<td width="5%">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="15%">&nbsp;</td>
+		<td width="35%"class="inputFontNormal" align="left">
+	      		<b> Apellido*</b><br>
+	      		<input  class="inputFontNormal"type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
+		</td>
+		<td width="35%"class="inputFontNormal" align="left">
+			<b> Nombres*</b><br>
+                 	<input  class="inputFontNormal"type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
+		</td>
+		<td width="5%">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="15%">&nbsp;</td>
+	 	<td width="35%"class="inputFontNormal" align="left">
+	 		<b>Tipo*</b><br>
+                	<select  class="inputFontNormal"name=documenttype size=1><!-- TMPL_LOOP NAME=documentloop -->
+                 		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
+                	</select>
+			<input  class="inputFontNormal"type=text name=documentnumber size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
+		</td>
+	 	<td width="35%"class="inputFontNormal" align="left">
+			<b>Legajo</b><br>
+         		<input  class="inputFontNormal" type=text name=studentnumber size=50 value="<!-- TMPL_VAR NAME=studentnumber -->">
+		</td>
+		<td width="5%">&nbsp;</td>
+	</tr>
+</table>
+
+	<br>
+<table width=100%>
+	<tr valign=top >
+		<td   width="60%" class="inputFontNormal">
+			<input  class="inputFontFont"type="checkbox" name="updatepassword"<!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
+		<td>
+			<!-- TMPL_IF name="ethcatpopup" -->
+				<select class="inputFontNormal" name="ethnicity" size=1>
+					<!-- TMPL_LOOP NAME=ethnicityloop -->
+					<option value=<!-- TMPL_VAR NAME=value --><!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=label -->
+					<!-- /TMPL_LOOP -->
+				</select>
+			<!-- /TMPL_IF -->
+		</td>
+		<td >
+			<!-- TMPL_IF NAME=ethcatpopup -->
+				<!-- TMPL_VAR NAME=ethcatpopup -->
+				<input  class="inputFontNormal"type=text name=ethnicnotes size=40 >
+			<!-- TMPL_ELSE -->
+				&nbsp;
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">
+			 <b>Incorporaci&oacute;n a Unidad de Informaci&oacute;n</b>&nbsp;
+          		<!-- TMPL_VAR name="CGIbranch" -->
+		</td>	
+	</tr>
+</table>
+	<br>
+	<br>
+<table width="100%"  cellpadding='0' cellspacing='0'>
+	<tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td COLSPAN=6 width="100%">DIRECCI&Oacute;N DEL USUARIO</td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+
+	<!--<tr valign=top>
+		<td  class="inputFontNormal"><b>Direcci&oacute;n*</b></td>
+		<td  colspan=3 class="inputFontNormal"><b>C&oacute;digo Postal / Ciudad*</b></td>
+		<td  class="inputFontNormal"><b>Incorporaci&oacute;n a Unidad de Informaci&oacute;n</b></td>
+	</tr>-->
+       	<tr valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td>&nbsp;</td>	
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+	
+       	<tr align="center" valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        	<td width="15%">&nbsp;</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+	  		<b>Direcci&oacute;n*</b><br>
+	  		<input  class="inputFontNormal"type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
+		</td>
+		<td width="40%" class="inputFontNormal" align="left" valign="top">
+	 		<b>C&oacute;digo Postal</b><br>
+			<input  class="inputFontNormal"type=text name="zipcode" size=50 value="<!-- TMPL_VAR NAME="zipcode"-->">
+		</td>
+	</tr>
+	<tr>
+	 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        	<td width="15%">&nbsp;</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+  	   		<b>Tel&eacute;fono particular</b><br>
+          		<input class="inputFontNormal"type=text name=phone size=50 value="<!-- TMPL_VAR NAME=phone -->">
+		</td>
+	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
+			<b>Ciudad*</b><br>
+			<!--<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME="dcity" --><!-- TMPL_VAR name="dcity" --> <!-- TMPL_ELSE --> ---- <!-- /TMPL_IF -->">-->
+
+			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="" onKeyUp="traerCiudad('dcity','content')">			
+
+          		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">     
+         
+           		<a onClick="window.open('searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
+           		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>	
+		</td>
+	</tr>
+	<tr>
+	 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        	<td width="15%">&nbsp;</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+	   		<b>Tel&eacute;fono del trabajo</b><br>
+          		<input class="inputFontNormal"type=text name=phoneday size=50 value="<!-- TMPL_VAR NAME=phoneday -->">
+		</td>
+		<td width="40%" class="inputFontNormal" align="left" valign="top">
+	 		<b>C&oacute;digo Postal de origen</b><br>
+          		<input  class="inputFontNormal" type=text name="homezipcode" size=50 value="<!-- TMPL_VAR NAME="homezipcode" -->">
+		</td>
+	</tr>
+	<tr>
+         	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        	<td width="15%">&nbsp;</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+ 			<b>Direcci&oacute;n de origen</b><br>
+          		<input  class="inputFontNormal" type=text name="streetaddress" size=50 value="<!-- TMPL_VAR NAME=streetaddress -->">
+		</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+			<b>Ciudad de origen</b><br>
+          		<input class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" value="<!-- TMPL_IF NAME="dstreetcity" --><!-- TMPL_VAR name="dstreetcity" --> <!-- TMPL_ELSE --> ---- <!-- /TMPL_IF -->">
+          		<input class="inputFontNormal" type=hidden name="streetcity" id="streetcity" value="<!-- TMPL_VAR name="streetcity" -->">
+           		<a  onClick="window.open('searchstreetcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
+           		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>
+		</td>
+        </tr>
+ 	<tr>
+         	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        	<td width="15%">&nbsp;</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">
+        		<b>E-Mail</b><br>
+          		<input class="inputFontNormal"type=text name=emailaddress size=50 value="<!-- TMPL_VAR NAME=emailaddress -->">
+		</td>
+        	<td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
+        </tr>
+	<tr>
+		<td colspan="4">&nbsp;</td>
+	</tr>
+
+	<br>
+	<br>
+<table width="100%" cellpadding='0' cellspacing='0'>
+	<tr valign=middle width="100%" class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td  COLSPAN=6 width="100%">
+			NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N
+		</td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>&nbsp;</tr>
+	<tr valign=top align="center">
+		<td width="5%">&nbsp;</td>
+		<td class="inputFontNormal">
+			<b> Notas</b>
+                	<textarea class="inputFontNormal" name=borrowernotes wrap=physical cols=100 rows=2><!-- TMPL_VAR NAME=borrowernotes --></textarea>
+		</td>
+	</tr>
+</table>
+	<br>
+<table width="30%">
+	<!-- TMPL_IF NAME=modify -->
+	<tr>
+		<td  class="inputFontNormal">
+			<b>Otros </b><br>
+		</td>
+	</tr>
+		<!-- TMPL_LOOP NAME=flagloop -->
+	<tr>
+		<td  class="inputFontNormal">
+			<!-- TMPL_VAR NAME=html -->
+		</td>
+		<td  align="left"class="inputFontNormal">
+			<input class="inputFontNormal" type=radio name="<!-- TMPL_VAR NAME=name -->" value="1" <!-- TMPL_VAR NAME=yes -->>Si
+			<input class="inputFontNormal"type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>No
+		</td>
+	</tr>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+
+</table>
+<br>
+<br>
+<table width=100%>
+	<tr>
+		<td width="50%" align="right">
+                	<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
+                	<a href="#" onClick="form1.submit()" >
+                	<img alt="Guardar" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+                </td>
+
+	        <td  width="25%" align="left"> 
+			<a href="#" onClick="form1.reset()" >
+		 	<img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0">
+			</a>
+		</td>
+		
+		<td  align="left" class="inputFontNormal">
+			<b>(*) Obligatorio</b>
+		</td>
+		
+	
+	</tr>
+</table>
+
+</form>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+        <!-- TMPL_ELSE -->
+	        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+		        <!-- /TMPL_IF -->
+			

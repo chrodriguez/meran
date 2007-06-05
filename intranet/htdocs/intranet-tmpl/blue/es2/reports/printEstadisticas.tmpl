@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Formato de Impresi&oacute;n</title>
+
+</head>
+
+<body>
+
+<table width="90%"  align="center" cellpadding="4" cellspacing="0" border="0">
+	<tr>
+	   	<td align="center" colspan=4>
+        		<font class="titulo" >Biblioteca:</font><br>
+        		<font class="subtitulo">Facultad de Ciencias Econ&oacute;micas</font>
+        	</td>
+		<td align="right" colspan=3>
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
+		</td>
+	</tr>
+
+	<tr> 
+		<td align="center" colspan="7"> <!-- TMPL_VAR NAME="msg" --> 
+                </td> 
+	</tr>
+
+	<tr>
+		<th colspan="5" align="center">Prestamos</th>
+	</tr>
+
+	<tr>
+		<th width="15%"><b>Usuarios</b></th>
+		<th width="15%"><b>Domciliarios</b></th>
+		<th><b>Sala de lectura</b></th>
+		<th><b>Para fotocopia</b></th>
+		<th><b>Especial</b></th>
+
+	</tr>
+
+	<tr>
+		<td>
+			<table>
+				<tr>
+					<th>Prestamos</th>
+					<th>Reservas</th>
+					<th>Renovados</th>
+				</tr>
+			</table>
+		</td>
+		
+		<td>
+			<table>
+				<tr>
+					<th>Total</th>
+					<th>Devueltos</th>
+					<th>Renovados</th>
+				</tr>
+			</table>
+		</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+
+	<tr align="center">
+		<td>
+			<table>
+				<tr align="center">
+					<td class="inputFontNormal" width="5%">
+						<!-- TMPL_VAR NAME="cantUsuPrest" -->
+					</td>
+					<td class="inputFontNormal" width="5%">
+						<!-- TMPL_VAR NAME="cantUsuReser" -->
+					</td>
+					<td class="inputFontNormal" width="5%">
+						<!-- TMPL_VAR NAME="cantUsuRenov" -->
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table>
+				<tr>
+					<td class="inputFontNormal" width="11%">
+						<!-- TMPL_VAR NAME="domiTotal" -->
+					</td>
+					<td class="inputFontNormal" width="15%">
+						<!-- TMPL_VAR NAME="devueltos" -->
+					</td>
+					<td class="inputFontNormal" width="8%">
+						<!-- TMPL_VAR NAME="renovados" -->
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME="sala" --></td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME="foto" --></td>
+		<td class="inputFontNormal"><!-- TMPL_VAR NAME="especial" --></td>
+	</tr>
+
+
+ 	<tr valign=middle>
+        	<td class="lineafinaltabla"  align="left" colspan="9"><hr></td>
+        </tr>
+
+
+	<tr>
+		<td align="center" colspan="7">
+			<a onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+			</a>
+		</td>
+	</tr>
+
+</table>
+</body>
+</html>

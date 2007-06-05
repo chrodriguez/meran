@@ -1,0 +1,296 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+
+<!-- TMPL_IF Name="OK" -->
+	<H1> Confirme Registro </H1>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> NUEVO SOCIO </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nombre</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="name" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> DETALLES DEL USUARIO </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>ID de usuario</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tarjeta de identificaci&oacute;n </B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="cardnum" -->
+			</td>
+		</tr>
+
+	  <tr valign=top bgcolor="white" >
+                        <td>    
+                                <B>Legajo </B>
+                        </td>
+                        <td>    
+                                <!-- TMPL_VAR Name="studentnumber" -->
+                        </td>
+                </tr>
+
+	    <tr valign=top bgcolor="white" >
+                        <td >
+                                <B>Documento: <br> Tipo: </B>
+                        
+                                <!-- TMPL_VAR Name="documenttype" -->
+			</td><td>&nbsp; <br>
+                                <B>N&uacute;mero: </B>
+                                <!-- TMPL_VAR Name="documentnumber" -->
+                        </td>
+
+                </tr>
+
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Categor&iacute;a del usuario</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="memcat" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tarifa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="fee" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fecha de incorporaci&oacute;n</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="joindate" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fecha de caducidad</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="expdate" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Incorporaci&oacute;n a UI</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="branchcode" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Forzar al usuario a cambiar la contrase&ntilde;a</B>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="updatepassword" -->Si
+				<!-- TMPL_ELSE -->No
+				<!-- /TMPL_IF-->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DETALLES PERSONALES</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fecha de Nacimiento</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="dob" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Sexo</B>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="sex" -->
+					Masculino
+				<!-- TMPL_ELSE -->
+					Femenino
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DIRECCI&Oacute;N DEL USUARIO</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Direcci&oacute;n</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="postal" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Direcci&oacute;n personal</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="home" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DETALLE DEL CONTACTO DEL USUARIO</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel&eacute;fono de la casa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel&eacute;fono del trabajo </B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phoneday" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fax</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>E-mail</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>Mensajes de texto</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME=textmessaging -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DATOS ALTERNATIVOS DEL CONTACTO</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Name</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="contactname" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel&eacute;fono</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altphone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Relaci&oacute;n</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Notas</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altnotes" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>USO DE LA UNIDAD DE INFORMACI&Oacute;N </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Notas generales</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornotes" -->
+			</td>
+		</tr>
+		</TABLE><p>
+		<form action="/cgi-bin/koha/insertdata.pl" method=post>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value=Aceptar>
+		</form>
+<!-- TMPL_ELSE -->
+	<h1>ERROR</H1>
+	<p>Los siguientes campos tienen valores prohibidos. Por favor, presione el bot&oacute;n back y vuelva a intentarlo: </p>
+	<!-- TMPL_IF name="documentUsed" -->
+		Ya existe el nro de documento Registrado en el sistema<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="documentUsedByOther" -->
+		El nro de documento ya esta usado por otro usuario<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="documentnumber" -->
+		N&uacute;mero de documento (solo se pueden ingresar caracteres numericos)<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="cardnumber" -->
+		Tarjeta de identificaci&oacute;n <br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="invalid_cardnumber" -->
+		Tarjeta de identificaci&oacute;n inv&aacute;lida<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="gender" -->
+		G&eacute;nero<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="firstname" -->
+		Nombres de pila<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="surname" -->
+		Apellido<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="address" -->
+		Direcci&oacute;n<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="city" -->
+		Ciudad<br/>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

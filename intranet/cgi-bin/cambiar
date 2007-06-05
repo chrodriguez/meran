@@ -1,0 +1,185 @@
+unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
+
+
+acqui.simple/.svn/text-base/additem-nomarc.pl.svn-base:($branch) || ($branch=$input->cookie('branch'));
+
+acqui.simple/additem-nomarc.pl:unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
+admin/.svn/text-base/thesaurus.pl.svn-base:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
+admin/.svn/text-base/thesaurus.pl.svn-base:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&offset=$offset&searchstring=".CGI::escapeHTML($searchstring)."\"></html>";
+admin/.svn/text-base/thesaurus.pl.svn-base:			$row_data{dig} ="<a href=thesaurus.pl?branch=$results->[$i]{'hierarchy'}$results->[$i]{'id'}|&search_category=$search_category>";
+admin/.svn/text-base/thesaurus.pl.svn-base:			$row_data{edit} = "$script_name?op=add_form&branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset&id=".$results->[$i]{'id'};
+admin/.svn/text-base/thesaurus.pl.svn-base:		$template->param(previous => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage");
+admin/.svn/text-base/thesaurus.pl.svn-base:		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
+admin/.svn/text-base/branches.pl.svn-base:    my $sth=$dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
+admin/thesaurus.pl:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
+admin/thesaurus.pl:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&offset=$offset&searchstring=".CGI::escapeHTML($searchstring)."\"></html>";
+admin/thesaurus.pl:			$row_data{dig} ="<a href=thesaurus.pl?branch=$results->[$i]{'hierarchy'}$results->[$i]{'id'}|&search_category=$search_category>";
+admin/thesaurus.pl:			$row_data{edit} = "$script_name?op=add_form&branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset&id=".$results->[$i]{'id'};
+admin/thesaurus.pl:		$template->param(previous => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage");
+admin/thesaurus.pl:		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
+admin/branches.pl:    my $sth=$dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
+circ/selectbranchprinter.pl:my $branch=(split("_",(split(";",$cookie))[0]))[1];
+circ/selectbranchprinter.pl:($branch) || ($branch=$query->cookie('branch'));
+circ/selectbranchprinter.pl:($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+circ/selectbranchprinter.pl:#$branch='';
+circ/selectbranchprinter.pl:my $onebranch=($branchcount==1) ;
+circ/branchtransfers.pl:my $branch=(split("_",(split(";",$cookie))[0]))[1];
+circ/circulation.pl:my $branch=(split("_",(split(";",$cookie))[0]))[1];
+circ/returns.pl.orig:my $branch=(split("_",(split(";",$cookie))[0]))[1];
+Binary file circ/.circulation.pl.swp matches
+groups.pl:my $branch=$input->param('branch');
+groups.pl:($branch) || ($branch=$input->cookie('branch'));
+groups.pl:    $oldbranch=$branch;
+groups.pl:    $branch='';
+imemberentry.pl:my $branch=(split("_",(split(";",$cookie))[0]))[1];
+imemberentry.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+importacionMarc.pl:my $branch=$input->param('branch');
+importacionMarc.pl:unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
+importacionMarc.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+importacion.pl:my $branch=$input->param('branch');
+importacion.pl:unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
+importacion.pl:my $CGIbranch=CGI::scrolling_list( 	-name      => 'branch',
+koha/C4/Accounts2.pm:  my $branch=$env->{'branchcode'};
+koha/C4/Accounts2.pm:#  my $branch=$env->{'branchcode'};
+koha/C4/Biblio.pm:                             homebranch=?,
+koha/C4/Biblio.pm:			$query.=",homebranch=?";
+koha/C4/Biblio.pm:			$query.=",holdingbranch=?";
+koha/C4/Koha.pm:	while (my $branch=$sth->fetchrow_hashref) {
+koha/C4/Koha.pm:    ($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+koha/C4/Search.pm:  biblionumber=? and items.holdingbranch=branches.branchcode";
+koha/C4/Stats.pm:		$branch=$env->{'branchcode'};
+koha/C4/Stock.pm:  my $sth=$dbh->prepare("Select count(*) from items where homebranch='C'");
+koha/C4/Stock.pm:  $sth=$dbh->prepare("Select count(*) from items where homebranch='F'");
+koha/C4/Circulation/Circ2.pm:	# check for branch=*
+koha/bull/subscription-bib-search.pl:	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+koha/groups.pl:my $branch=$input->param('branch');
+koha/groups.pl:($branch) || ($branch=$input->cookie('branch'));
+koha/groups.pl:    $oldbranch=$branch;
+koha/groups.pl:    $branch='';
+koha/modrequest.pl:my @branch=$input->param('pickup');
+koha/placerequest.pl:my $branch=$input->param('pickup');
+koha/request.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+koha/stats.pl:	my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
+koha/stats.pl:		my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
+koha/stats2.pl:    my $branch=Getpaidbranch($data->{'timestamp'});
+koha/updateitem.pl:my $homebranch=checkinp($input->param('Home'));
+koha/acqui/acquire.pl:	my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+koha/acqui/finishreceive.pl:my $branch=$input->param('branch');
+koha/acqui/newbiblio.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+koha/admin/branches.pl:    my $sth=$dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
+koha/admin/issuingrules.pl:$branch="" unless $branch;
+koha/admin/thesaurus.pl:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
+koha/admin/thesaurus.pl:	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&offset=$offset&searchstring=".CGI::escapeHTML($searchstring)."\"></html>";
+koha/admin/thesaurus.pl:			$row_data{dig} ="<a href=thesaurus.pl?branch=$results->[$i]{'hierarchy'}$results->[$i]{'id'}|&search_category=$search_category>";
+koha/admin/thesaurus.pl:			$row_data{edit} = "$script_name?op=add_form&branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset&id=".$results->[$i]{'id'};
+koha/admin/thesaurus.pl:		$template->param(previous => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage");
+koha/admin/thesaurus.pl:		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
+koha/circ/selectbranchprinter.pl:my $branch=$query->param('branch');
+koha/circ/selectbranchprinter.pl:($branch) || ($branch=$query->cookie('branch'));
+koha/circ/selectbranchprinter.pl:($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+koha/circ/selectbranchprinter.pl:#$branch='';
+koha/circ/selectbranchprinter.pl:my $onebranch=($branchcount==1) ;
+koha/koha-tmpl/intranet-tmpl/default/de/help/admin/issuingrules.tmpl:<p>The <b>*</b> have a specific meaning. They mean "any". If you set 21,5 for itemtype=*, borrower category=student, branch=main, then a student can't issue more than 5 items of ANY item type. This "any" box is cumulative with other boxes. It means that 21,5 as itemtype=book, 14,2 as itemtype=CD and 30,6 as itemtype=* (with category=student) means a student can issue up to 5 books, up to 2 CD but a maximum of 6 items (books or CD). In this case the "30 days" in itemtype=* is discarded and the issuing length is calculated on the exact itemtype</p>
+koha/koha-tmpl/intranet-tmpl/default/de/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR NAME="branch" -->&amp;search_category=<!-- TMPL_VAR NAME="category" -->"><!-- TMPL_VAR NAME="string" --></a><br />
+koha/koha-tmpl/intranet-tmpl/default/en/help/admin/issuingrules.tmpl:<p>The <b>*</b> have a specific meaning. They mean "any". If you set 21,5 for itemtype=*, borrower category=student, branch=main, then a student can't issue more than 5 items of ANY item type. This "any" box is cumulative with other boxes. It means that 21,5 as itemtype=book, 14,2 as itemtype=CD and 30,6 as itemtype=* (with category=student) means a student can issue up to 5 books, up to 2 CD but a maximum of 6 items (books or CD). In this case the "30 days" in itemtype=* is discarded and the issuing length is calculated on the exact itemtype</p>
+koha/koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR NAME="branch" -->&amp;search_category=<!-- TMPL_VAR NAME="category" -->"><!-- TMPL_VAR NAME="string" --></a><br />
+koha/koha-tmpl/intranet-tmpl/default/es/circ/circulation.tmpl:				<a href=circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&branch=<TMPL_VAR name="branch">&printer=<TMPL_VAR name="printer">&print=yes>
+koha/koha-tmpl/intranet-tmpl/default/es/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<TMPL_VAR name="branch">&search_category=<TMPL_VAR name="category">"><TMPL_VAR name="string"></a><br />
+koha/koha-tmpl/intranet-tmpl/default/fr/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR NAME="branch" -->&amp;search_category=<!-- TMPL_VAR NAME="category" -->"><!-- TMPL_VAR NAME="string" --></a><br />
+koha/koha-tmpl/intranet-tmpl/default/pl/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
+koha/koha-tmpl/intranet-tmpl/default/zh-TW/circ/circulation.tmpl:				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">  Next Borrower</a>&nbsp;  <a class="button" href="returns.pl">  Returns</a>&nbsp;  <a class="button" href="branchtransfers.pl">  Transfers</a>
+koha/koha-tmpl/intranet-tmpl/default/zh-TW/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
+koha/koha-tmpl/intranet-tmpl/npl/en/help/admin/issuingrules.tmpl:<p>The <b>*</b> have a specific meaning. They mean "any". If you set 21,5 for itemtype=*, borrower category=student, branch=main, then a student can't issue more than 5 items of ANY item type. This "any" box is cumulative with other boxes. It means that 21,5 as itemtype=book, 14,2 as itemtype=CD and 30,6 as itemtype=* (with category=student) means a student can issue up to 5 books, up to 2 CD but a maximum of 6 items (books or CD). In this case the "30 days" in itemtype=* is discarded and the issuing length is calculated on the exact itemtype</p>
+koha/koha-tmpl/intranet-tmpl/npl/en/includes/circ-topmenu.inc:<div id="topmenu"><a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
+koha/koha-tmpl/intranet-tmpl/npl/en/parameters/thesaurus.tmpl:		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
+koha/members/imemberentry.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+koha/members/memberentry.pl:	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+koha/misc/Install.pm:	my $branch='MAIN';
+koha/misc/Install.pm:		$branch=$auto_install->{BranchName};
+koha/misc/Install.pm:			$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
+koha/misc/Install.pm:			$branch=~s/[^A-Za-z0-9\s]//g;
+koha/misc/buildrelease:my $branch=(split(m#/#, $branchdata))[5];
+memberentry2.pl:	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+memberentry.pl:	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+memberentry.pl.orig:	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+moditem.pl:	             $homebranch= $items[$i]->{'homebranch'};}
+moditem.pl:$homebranch=$item->{'homebranch'};
+moditem.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'homebranch',
+modrequest.pl:my @branch=$input->param('pickup');
+param:groups.pl:my $branch=$input->param('branch');
+param:groups.pl:($branch) || ($branch=$input->cookie('branch'));
+param:imemberentry.pl:my $branch=$input->param('branch');
+param:imemberentry.pl:($branch) || ($branch=$input->cookie('branch'));
+param:importacion.pl:my $branch=$input->param('branch');
+param:importacion.pl:($branch) || ($branch=$input->cookie('branch'));
+param:moditem.pl:my $branch=$input->param('branch');
+param:moditem.pl:($branch) || ($branch=$input->cookie('branch'));
+param:modrequest.pl:my @branch=$input->param('pickup');
+param:placerequest.pl:my $branch=$input->param('pickup');
+param:request.pl:my $branch=$input->param('branch');
+param:request.pl:($branch) || ($branch=$input->cookie('branch'));
+param:request.pl.bak:my $branch=$input->param('branch');
+param:request.pl.bak:($branch) || ($branch=$input->cookie('branch'));
+placerequest.pl:my $branch=$input->param('pickup');
+reports/users.pl:my  $branch=$input->param('branch');
+reports/users.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/users.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/prestamos.pl:my $branch=$input->param('branch');
+reports/prestamos.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/prestamos.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/reservas.pl:my  $branch=$input->param('branch');
+reports/reservas.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/reservas.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/reservas.pl:      $branch=$input->param('branch') };
+reports/itemtypes.pl:my $branch=$input->param('branch');
+reports/itemtypes.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/itemtypes.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/estadistica_Anual.pl:my  $branch=$input->param('branch');
+reports/estadistica_Anual.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/estadistica_Anual.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/browser.pl:my $branch=$input->param('branch');
+reports/browser.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/browser.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/browserBiblio.pl:my $branch=$input->param('branch');
+reports/browserBiblio.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/browserBiblio.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/browserItem.pl:my $branch=$input->param('branch');
+reports/browserItem.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/browserItem.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/tipos.pl:my $branch=$input->param('branch');
+reports/tipos.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/tipos.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/analiticas.pl:my $branch=$input->param('branch');
+reports/analiticas.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/analiticas.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/availability.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/availability.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/levels.pl:my $branch=$input->param('branch');
+reports/levels.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/levels.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports/avail_year.pl:my $branch=$input->param('branch');
+reports/avail_year.pl:($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+reports/avail_year.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+reports-home.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'unidadesInformacion',
+request.pl:my $branch=$input->param('branch');
+request.pl:($branch) || ($branch=$input->cookie('branch'));
+request.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+request.pl.bak:my $branch=$input->param('branch');
+request.pl.bak:($branch) || ($branch=$input->cookie('branch'));
+request.pl.bak:my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+stats2.pl:    my $branch=Getpaidbranch($data->{'timestamp'});
+stats.pl:	my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
+stats.pl:		my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
+updateitem.pl:my $homebranch=checkinp($input->param('homebranch'));
+updateitem.pl.orig:my $homebranch=checkinp($input->param('Home'));
+virtual/virtualrequest.pl:my $branch=$input->param('branch');
+virtual/virtualrequest.pl:($branch) || ($branch=$input->cookie('branch'));
+virtual/virtualrequest.pl:my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+virtual/virtualplacerequest.pl:my $branch=$input->param('pickup');
+virtual/virtualreport.pl:my $branch=$input->param('branch');
+virtual/virtualreport.pl:($branch) || ($branch=$input->cookie('branch'));
+virtual/virtualreport.pl:my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+virtual/virtualmodrequest.pl:my $branch=$input->param('branch');
+virtual/virtualmodrequest.pl:	   print $input->redirect("/cgi-bin/koha/virtual/virtualreport.pl?branch=$branch");
+z3950/.svn/text-base/z3950import.pl.svn-base:				 homebranch=> $input->param('homebranch'),
+z3950/z3950import.pl:				 homebranch=> $input->param('homebranch'),

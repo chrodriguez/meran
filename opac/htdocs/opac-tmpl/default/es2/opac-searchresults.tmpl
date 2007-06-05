@@ -1,0 +1,353 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+
+<script language=javascript>
+function todos(){
+var checks=document.getElementsByTagName("input");
+if (checks.length>0){
+for(i=0;i<checks.length;i++)
+{
+if((checks[i].type == "checkbox")&&(checks[i].checked)){checks[i].checked=false}
+                                                        else{checks[i].checked=true}
+}
+}
+}
+
+function mandarArreglo(valores){
+        arreglo= new Array();
+	
+	var checks=document.getElementsByTagName("input");
+	if (checks.length>0){
+	for(i=0;i<checks.length;i++)
+	{
+	if((checks[i].type == "checkbox")&&(checks[i].checked)){ arreglo[arreglo.length]=checks[i].name;}
+	}       
+	}
+        valores.value= arreglo.join("#");
+}
+
+</script>
+
+<table width="100%" align="center" class="top" cellpadding=0 cellspacing=0 border=0 >
+	<tr>
+		<td  class="fontresultado" align="center">
+			&nbsp;  Ha realizado una b&uacute;squeda por:
+			<!-- TMPL_LOOP NAME="AUTORID" -->
+				<b> Autor <!-- TMPL_VAR NAME="completo" --></b>,
+			<!-- /TMPL_LOOP --> 
+
+			<!-- TMPL_LOOP NAME="FORMINPUTS" -->
+				<!-- TMPL_IF EXPR="(field eq 'keyword')" -->
+					<b> T&eacute;rmino de B&uacute;squeda 
+					<!-- TMPL_VAR NAME="value" --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'author')" -->
+					<b> Autor <!-- TMPL_VAR NAME="value" --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'title')" -->
+					<b> T&iacute;tulo 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'subject')||(field eq 'subjectitems')" -->
+					<b> Tema <!-- TMPL_VAR NAME="value"  --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'class')" -->
+					<b> Tipo de Documento <!-- TMPL_VAR NAME="value" --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'itemnumber')" -->
+					<b> C&oacute;digo de Barras 
+					<!-- TMPL_VAR NAME="value" --></b>, 
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_VAR NAME="numrecords" --> resultados encontrados
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+		<table border="0"  align="center">
+			<tr align="center" cellpadding=0 cellspacing=0>
+				<td>
+				<!-- TMPL_IF NAME="displayprev" -->
+				<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
+    				<!-- TMPL_ELSE -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
+    				<!-- /TMPL_IF -->
+				</td>
+	
+				<!-- TMPL_LOOP NAME="numbers" -->
+	
+				<!-- TMPL_IF NAME="highlight" -->
+				<td class="highnumber">	
+				<!-- TMPL_VAR NAME="number" --> 
+				</td>
+				<!-- TMPL_ELSE -->
+
+				<td nowrap class="number"> 
+				<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME=number --></a>
+				</td>
+				<!-- /TMPL_IF -->
+
+				<!-- TMPL_IF NAME="break" -->
+
+        			<tr><!-- PARA SEPARAR LOS NUMEROS!!!!!!! --></tr>
+
+        			<!-- /TMPL_IF -->
+
+    				<!-- /TMPL_LOOP -->
+				<td>
+				<!-- TMPL_IF NAME="displaynext" -->
+				<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
+    				<!-- TMPL_ELSE -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
+    				<!-- /TMPL_IF -->
+				</td>
+			</tr>
+			<tr>
+				<td><br></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="numrecords" -->
+
+	<!-- If we have a subject table -->
+		<!-- TMPL_IF NAME="subjectsearch" -->
+		<table  cellspacing="0" cellpadding="1" align="center">
+		
+
+			<tr class="bordetabla" >	
+			<th colspan="2">Tema</th>
+			</tr>
+			<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+			<tr>
+			<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject ESCAPE="URL" -->"><!-- TMPL_VAR NAME=subject --></a>
+			</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+
+			<tr class="bordetabla">
+			<td align="left">
+			<!-- TMPL_IF NAME="displayprev" -->
+			<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"class="white">Anteriores</a>
+			<!-- TMPL_ELSE -->
+							&nbsp;
+			<!-- /TMPL_IF -->
+			</td>
+			
+			<td align="right">
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"class="white">Siguientes</a>
+			<!-- TMPL_ELSE -->
+							&nbsp;
+			<!-- /TMPL_IF -->
+			</td>	
+
+			</tr>
+	
+		</table>
+
+	<!-- Else we have a list of items -->
+	<!-- TMPL_ELSE -->
+
+
+	<table width="100%"  align="center" cellpadding="4" cellspacing="0" border="1">
+		<tr  class="bordetabla" bordercolor="#f2f2f2">
+
+	<!-- TMPL_IF NAME='loggedinusername' -->	
+		<th><a href="#" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a></th>
+	<!-- /TMPL_IF  -->
+		<th align="center"><a href="/cgi-bin/koha/opac-searchresults.pl?orden=title&startfrom=0<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">T&iacute;tulo</a>&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/ico_helpbordo.png" title="Haga clic sobre el t&iacute;tulo para ver m&aacute;s datos" border=0></th>
+		<th align="center"><a href="/cgi-bin/koha/opac-searchresults.pl?orden=author&startfrom=0<!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">Autor</a>&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/ico_helpbordo.png" title="Haga clic sobre el autor para ver todos sus libros" border=0></th>
+		<th>Edici&oacute;n/A&ntilde;o </th>
+		<th>Disponibilidad</th>
+		<!-- <th>&nbsp</th> -->
+		</tr>
+
+	<!-- Actual Search Results -->
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->	
+		<tr  bordercolor="#f2f2f2">
+	<!-- TMPL_IF NAME='loggedinusername' -->
+		<td class=<!-- TMPL_VAR name="clase" --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR Name="biblionumber"-->" id="<!-- TMPL_VAR NAME=biblionumber -->">
+		</td>
+	<!-- /TMPL_IF  -->
+
+ 	<!-- TMPL_IF NAME="analyticalnumber" -->
+ 		<td class="<!-- TMPL_VAR name="clase" -->"><a class="inputFontNormal" href=/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->&bibnumitems=<!-- TMPL_VAR NAME=biblioitemnumber ESCAPE=URL -->#<!-- TMPL_VAR NAME=analyticalnumber -->><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML --></a>
+		</td>
+		<td class="<!-- TMPL_VAR name="clase" -->">
+		<!-- TMPL_IF name="analyticalauthor" -->
+			<!-- TMPL_LOOP NAME="analyticalauthor" -->
+			<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=opac"><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a><br>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF -->
+		</td>
+
+		<td class="<!-- TMPL_VAR name="clase" -->" class="inputFontNormal" colspan="2"> EN:  <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="autorppal" ESCAPE="URL" -->&type=opac"><!-- TMPL_VAR NAME="apellidoppal" --><!-- TMPL_IF name="nombreppal" -->, <!-- TMPL_VAR NAME="nombreppal" --><!-- /TMPL_IF --></a>. 
+		<a class="inputFontNormal" href=/cgi-bin/koha/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>. <!-- TMPL_VAR NAME="number" --> <!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" -->
+		</td>
+		
+	<!-- TMPL_ELSE -->
+
+		<td class=<!-- TMPL_VAR name="clase" -->><!-- TMPL_IF NAME='title' --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>
+		<td class=<!-- TMPL_VAR name="clase" -->><a class="inputFontNormal" href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="nomCompleto" --></a>
+		</td>
+				
+		<td align="center" class=<!-- TMPL_VAR name="clase" -->> 
+		<!-- TMPL_LOOP NAME="grupos" -->
+		<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" -->(<!-- TMPL_VAR NAME="publicationyear" -->)<!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="volume" -->     t <!-- TMPL_VAR NAME="volume" --><br>
+		<!-- TMPL_ELSE -->&nbsp;<br><!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+ 		</td>
+		<td class=<!-- TMPL_VAR name="clase" -->>
+		<!-- TMPL_LOOP NAME="counts" -->
+ 		<!-- TMPL_VAR NAME="nombre" --> <br> (Para Pr&eacute;stamo:<!-- TMPL_IF name="cantXbranchForLoan" --><!-- TMPL_VAR NAME="cantXbranchForLoan" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->,<br> Para Sala de lectura:<!-- TMPL_IF name="cantXbranchNotForLoan" --> <!-- TMPL_VAR NAME="cantXbranchNotForLoan" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="cantXbranchShared" -->,<br> Compartidos: <!-- TMPL_VAR name="cantXbranchShared" --><!-- /TMPL_IF -->) 
+		<br><br>
+		<!-- /TMPL_LOOP -->
+		</td>
+		</tr>
+		
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+
+		<tr class="bordetabla" border="1">
+		<td colspan="6">
+		<table class="bordetabla" border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			<td align="left">
+			<!-- TMPL_IF NAME="displayprev" -->
+			<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"class="white" >Anteriores</a>
+							
+						<!-- TMPL_ELSE -->
+							&nbsp;
+						<!-- /TMPL_IF -->
+			</td>
+			<td align="right">
+			<!-- TMPL_IF NAME="displaynext" -->
+			<a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"class="white">Siguientes</a>
+						<!-- TMPL_ELSE -->
+							&nbsp;
+						<!-- /TMPL_IF -->
+			</td>
+			</tr>
+		</table>
+		</td>
+		</tr>
+ 	</table>
+	<!-- /TMPL_IF -->
+
+        <table border="0"  align="center"  width="100%" class="top">
+        <tr><td align="center">
+
+<!-- TMPL_IF NAME="subjectsearch" -->
+<!-- TMPL_ELSE -->
+<form name="printform" action="/cgi-bin/koha/opac-print.pl">
+
+
+
+<input TYPE="hidden" VALUE="pdf" NAME="type" >
+<input TYPE="hidden" NAME="orden" value="<!-- TMPL_VAR NAME="orden" -->">
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="numrecords" -->" NAME="num">
+ <!-- TMPL_LOOP NAME="forminputs" -->
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="value" -->" NAME="<!-- TMPL_VAR NAME="field" -->">
+ <!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME='loggedinusername' -->
+<input type="hidden" value="" name="bookmarks" id="bookmarks">
+<a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritosbis.png')">
+<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">
+</a>            
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME='MAIL' -->
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='MAIL' -->" NAME="mail">
+<a  onMouseOut="swap('mail','<!-- TMPL_VAR NAME="themelang" -->/images/mail.png')" onMouseOver="swap('mail','<!-- TMPL_VAR NAME="themelang" -->/images/mailbis.png')">
+<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  src="<!-- TMPL_VAR NAME='themelang' -->/images/mail.png" border="0" title="Enviar Resultados por Mail">
+</a>
+<!-- /TMPL_IF -->
+
+<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+<input onClick="printform.target='_blank';printform.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" b
+order="0" title="Imprimir Resultados">
+</a>
+
+<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
+<input onClick="printform.target='_self'; printform.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+</a>
+</form>
+<!-- /TMPL_IF -->
+
+	</td></tr>
+	<tr><td>
+	<table  border="0"  align="center" >
+	<tr>
+        <td >
+        <!-- TMPL_IF NAME="displayprev" -->
+        <a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
+    <!-- TMPL_ELSE -->
+        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
+    <!-- /TMPL_IF -->
+        </td>
+
+    <!-- TMPL_LOOP NAME="numbers" -->
+                                
+        <!-- TMPL_IF NAME="highlight" -->
+        <td nowrap class="highnumber">  <!-- TMPL_VAR NAME="number" --> </td>
+        <!-- TMPL_ELSE -->
+	<td  class="number"> <a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME=number --></a>
+	</td>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="break" -->
+
+	<tr><!-- PARA SEPARAR LOS NUMEROS!!!!!!! --></tr>
+
+        <!-- /TMPL_IF -->
+
+    	<!-- /TMPL_LOOP -->
+	
+<!-- TMPL_IF NAME="displaynext" -->
+	<td>
+        <a href="/cgi-bin/koha/opac-searchresults.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
+    <!-- TMPL_ELSE -->
+        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
+    <!-- /TMPL_IF -->
+	</td> 
+	</tr> 
+	</table>
+</td></tr></table>
+
+<table width="100%" align="center" class="top">
+	<tr>
+		<td  align="center" class="fontresultado">
+			Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_VAR NAME="endat" --></i></b> de <b><i><!-- TMPL_VAR NAME="numrecords" --></i></b> registros obtenidos.
+	<hr>
+
+<!-- TMPL_ELSE -->
+	<table width="100%" align="center" class="top" cellpadding=0 cellspacing=0 border=0 >
+		<tr>
+			<td align="center" class="fontresultado">
+				B&uacute;squeda sin resultados. <br>
+			<hr>	
+			</td>
+		</tr>
+	</table>
+<!-- /TMPL_IF -->
+ Intentar una nueva <a href="/cgi-bin/koha/opac-search.pl">b&uacute;squeda</a>
+
+	</td></tr>
+	</table>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

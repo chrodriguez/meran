@@ -1,0 +1,52 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script>
+function hacerSubmit(){
+        document.branches.submit();
+        }
+</script>
+
+<center>
+<br><br>
+<p><b>La cantidad de biblio/s es : <!-- TMPL_VAR NAME=cantidad -->
+<!--<br>La cantidad de renglones son :<!-- TMPL_VAR NAME=renglones --> -->
+<br>P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b></p><br>
+<!-- TMPL_IF NAME="ok2" -->
+<a class="inputFontNormal" href=browserBiblio.pl?ini=<!-- TMPL_VAR name="ant" -->&orden=<!-- TMPL_VAR name=orden -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+        <a class="inputFontNormal" href=browserBiblio.pl?ini=<!-- TMPL_VAR NAME=number -->&orden=<!-- TMPL_VAR name=orden -->> <u><!-- TMPL_VAR name=number --></u> </a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+<a class="inputFontNormal" href=browserBiblio.pl?ini=<!-- TMPL_VAR name="sig" -->&orden=<!-- TMPL_VAR name=orden -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<br><br>
+<table border="0" cellspacing="0" cellpadding="0" width="90%">
+<tr class="tablaresultadoTitle">
+<td align="left"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+<td><a href=browserBiblio.pl?orden=author>Autor</a></td>
+<td><a href=browserBiblio.pl?orden=title>T&iacute;tulo</a></td>
+<td><a href=browserBiblio.pl?orden=seriestitle>Serie del titulo</a></td>
+ <td align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+  <tr align="center">
+  <td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;
+  </td>	
+  <td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR 		NAME=authorNombre --> 
+  </td>
+  <td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME="title" ESCAPE=HTML --> </td>
+  <td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME="seriestitle" --> </td>
+  <td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;
+  </td>	
+ </tr>
+<!-- /TMPL_LOOP -->
+</table>
+</center>
+<br><br>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

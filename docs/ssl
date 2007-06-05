@@ -1,0 +1,85 @@
+Listen 443
+<VirtualHost *:443>
+ServerAdmin einar@info.unlp.edu.ar
+DocumentRoot /usr/local/koha/intranet/htdocs
+ServerName localhost
+ScriptAlias /cgi-bin/koha/ "/usr/local/koha/intranet/cgi-bin/"
+
+#<Location /cgi-bin/koha/ >
+#    SetHandler perl-script
+#    PerlResponseHandler ModPerl::Registry
+#    PerlOptions +ParseHeaders
+#    Options +ExecCGI
+#</Location>
+#<Perl>
+#use Carp;
+#</Perl>
+			
+ErrorLog /var/log/koha/koha-error_log
+TransferLog /var/log/koha/koha-access_log
+SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+SetEnv KOHA_CONF "/etc/koha.conf"
+SSLEngine On
+SSLCertificateFile /etc/apache2/ssl/apacheINT.pem
+
+<Directory /usr/local/koha/intranet/ >
+ Order deny,allow
+ Allow from 10.8.0.
+ Allow from 163.10.10.
+ Allow from 163.10.20.
+ Allow from 163.10.17.4
+ Allow from 163.10.17.2
+Allow from 163.10.5.67
+Deny from all
+</Directory>
+
+Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/"
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
+Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
+Order allow,deny
+Allow from all
+</Directory>
+ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
+
+</VirtualHost>
+
+
+#<VirtualHost *:80>
+#ServerAdmin einar@info.unlp.edu.ar
+#ServerName intranet.redes.info.unlp.edu.ar
+#R.ewriteEngine   on
+#RewriteCond     %{SERVER_PORT} ^80$
+#RewriteRule     ^/(.*)$ https://intranet.redes.info.unlp.edu.ar/ [L,R]
+#RewriteLog      "/var/log/koha/rewrite.log"
+#RewriteLogLevel 4
+#
+#Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/"
+#<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/ >
+#Order allow,deny
+#Allow from all
+#</Directory>
+#
+#Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
+#<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
+#Order allow,deny
+#Allow from all
+#</Directory>
+
+#<Directory /usr/local/koha/intranet/ >
+# Order deny,allow
+# Allow from 163.10.10.
+# Allow from 163.10.20.
+# Allow from 163.10.17.4
+# Allow from 163.10.17.2
+# Allow from 163.10.5.67
+# Deny from all
+#</Directory>
+	    
+#ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
+#</VirtualHost>
+

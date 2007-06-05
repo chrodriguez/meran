@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE Name="intranet-top.inc" -->
+
+<Center><h3>Facturaci&oacute;n manual</h3></center>
+<form action=/cgi-bin/koha/maninvoice.pl method=post>
+<table cellpadding=2 cellspacing=0 border=0>
+<input type=hidden name=bornum value="<!-- TMPL_VAR Name="bornum" -->">
+<tr><td><b>ID de Usuario<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+<tr><td><b>Tipo</b></td><Td>
+<select name=type>
+<option value=L>Ejemplar perdido</option>
+<option value=F>Multa</option>
+<option value=A>Comisi&oacute;n por administraci&oacute;n de cuenta</option>
+<option value=N>Nueva Tarjeta de Identificaci&oacute;n</option>
+<option value=M>Diverso</option>
+<option value=REF>Reembolso de efectivo</option>
+</select>
+</td></tr>
+<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>Descripci&oacute;n</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>Cantidad</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value=Agregar></td></tr>
+</table>
+</form>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

@@ -1,0 +1,164 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script>
+function hacerSubmit(){
+        document.branches.submit();
+        }
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="pagetitle" >Pr&eacute;stamos sin devolver</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+<center>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%" >
+	<form name="branches" action=/cgi-bin/koha/reports/prestamos.pl method=post >
+	<tr class="inputFontNormal">
+		<td align="right">    Seleccione estado de prestamo:&nbsp;
+	
+		</td>
+
+		<td>
+			<select name="estado" id="estPrest">
+				<option selected="selected" value="VE" id="VE">Vencidos</option>
+				<option value="NV" id="NV">No vencidos</option>
+				<option value="TO" id="TO">Todos</option>
+			</select>
+		</td>
+	</tr>
+
+	<tr class="inputFontNormal">
+		<td align="right">
+			<br>Seleccione una unidad de informaci&oacute;n:&nbsp;
+		</td>
+		<td>
+			<br><!-- TMPL_VAR NAME=unidades  -->
+		</td>
+	</tr>
+	<tr class="inputFontNormal"  align="center">
+		<td colspan="2">
+			<br><input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
+		</td>
+	</tr>
+	</form>
+</table>
+
+
+<br>
+
+<p class="inputFontNormal">
+La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
+<br>
+<!-- TMPL_IF NAME="ok2" -->
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<!-- TMPL_IF NAME="actual" -->
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->> <u><!-- TMPL_VAR name=number --></u></a>
+	<!-- TMPL_ELSE -->
+        	<u><!-- TMPL_VAR name=number --></u>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+<br>
+
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+ 	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
+	
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->>Apellido</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->> Nombre</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->>N&uacute;mero de socio</a>
+		</th>
+
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->>E-mail</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->>Fecha de prestamo</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->>Fecha de vencimiento</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->>C&oacute;digo de barra</a>
+		</th>
+		<th>
+			<a class="inputFontNormal" href=prestamos.pl?orden=description&branch=<!-- TMPL_VAR NAME=branch -->>Tipo de pr&eacute;stamo</a>
+		</th>
+	
+		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/derecha.png"></td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr align='center'>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=firstname --> 
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=cardnumber --> 
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress -->
+        		<!-- TMPL_ELSE --><a class="inputFontNormal"href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
+        		<!-- /TMPL_IF -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=date_due -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=vencimiento -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=description -->
+		</td>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+
+</table>
+<br>
+
+<a class="inputFontNormal" href="mail.pl?branch=<!-- TMPL_VAR NAME=branch -->&tipo=0">
+<input id="contacto" type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/contactar.png" title="Enviar mail a usuarios con ejemplares atrasados">
+</a>
+</center>
+
+<script>
+	var estado=document.getElementById('<!-- TMPL_VAR NAME="estado" -->');
+	estado.selected=true;
+	if (estado.value == "NV" || estado.value == "TO"){
+		bo=document.getElementById('contacto');
+		bo.style.visibility="hidden";
+	}
+</script>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

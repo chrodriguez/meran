@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE name="intranet-top.inc" -->
+
+<h1>Canasta de compras <!-- TMPL_VAR name="basket" --> for <!-- TMPL_VAR name="name" --></h1><br />
+(Nuestra referencia: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b>, autorizado por: <b><!-- TMPL_VAR name="user" --></b>)<br />
+Ph: <!-- TMPL_VAR name="phone" -->, Fax: <!-- TMPL_VAR name="fax" --><br />
+<!-- TMPL_VAR name="address1" -->, <!-- TMPL_VAR name="address2" --><br />
+<!-- TMPL_VAR name="address3" -->, <!-- TMPL_VAR name="address4" --><br />
+<p>
+<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
+<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
+<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
+<b> Buscar palabra clave o t&iacute;tulo: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+
+</form>
+
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor="#ffdf61">
+		<td width="5%"><b>Orden</b></td>
+		<td width="10%"><b>Isbn</b></td>
+		<td width="30%"><b>T&iacute;tulo</b></td>
+		<td width="20%"><b>Autor</b></td>
+		<td width="8%"><b>Cantidad</b></td>
+	</tr>
+	<!-- TMPL_LOOP name="books_loop" -->
+		<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
+			<td><!-- TMPL_VAR name="ordernumber" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="title" --></td>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="quantity" --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+
+

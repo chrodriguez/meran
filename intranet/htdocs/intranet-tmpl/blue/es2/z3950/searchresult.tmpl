@@ -1,0 +1,52 @@
+<HTML>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/intranet.css">
+<meta http-equiv="Content-Tipo" content="text/html; charset=iso-8859-1">
+<!-- TMPL_IF name="refresh" -->
+	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR name="refresh" -->">
+<!-- /TMPL_IF -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0"><tr><td class="pagetitle" >Resultados de b&uacute;squeda Z39.50</td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr></table>
+
+<br>
+
+<table width="100%" cellpadding="0">
+	<tr valign="middle" align="center">
+	<td class="inpuFontNormal"><b>Ejemplares encontrados</b></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr valign="middle" class="tablaresultadoTitle">
+		<td  align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td><b>T&iacute;tulo</b></td>
+		<td><b>Autor</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>Viene desde</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+		<td align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr valign="middle" class="impar">
+			<td><!-- TMPL_VAR name="title" --></a>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="file" --></td>
+			<td><a href="javascript:Importaci&oacute;n(<!-- TMPL_VAR name="id" -->)">Importaci&oacute;n this biblio</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr><td colspan="8" class="inputFontNormal">No se encontr&oacute; nada</td></tr>
+	<!-- /TMPL_IF -->
+</table>
+<center>
+<br>
+<!-- TMPL_IF name="numberpending" --><b>Quedan <!-- TMPL_VAR name="numberpending" --> requerimientos.</b><!-- /TMPL_IF -->
+<br>
+<script>
+	function Importaci&oacute;n(GetThisOne) {
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
+		self.close();
+		return false;
+	}
+</script>

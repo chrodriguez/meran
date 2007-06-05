@@ -1,0 +1,105 @@
+ <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script>
+function indeterminado(){
+        mod =document.getElementById("modificando").value;
+        window.opener.document.getElementById("d"+mod).value="DESCONOCIDA";
+        window.opener.document.getElementById(mod).value="2500000";
+        window.close();
+}
+function hacerSubmit(){
+	document.place.submit();
+}
+
+function ejecutar(){
+
+        var selectBox = document.getElementById("place").ciudades;
+        id = selectBox.options[selectBox.selectedIndex].value;
+        valor=selectBox.options[selectBox.selectedIndex].text;
+        mod =document.getElementById("modificando").value;
+        window.opener.document.getElementById("d"+mod).value=valor;
+        window.opener.document.getElementById(mod).value=id;
+        window.close();
+}
+
+
+</script>  
+<body>
+ <form action="/cgi-bin/koha/place.pl" method="post" name="place" id="place" >
+
+<input type="hidden" name="modificando" id="modificando" value="<!-- TMPL_VAR NAME="modificando" -->">
+
+<table align="center">
+<tr>
+<td>
+Seleccione el lugar:
+</td>
+</tr>
+
+<tr>
+<td>
+  <!-- TMPL_IF NAME=lista_Paises -->Paises:
+        <!-- TMPL_ELSE --> Pais:
+        <!-- /TMPL_IF  -->
+</td>
+<td>
+	<!-- TMPL_IF NAME=lista_Paises --><!-- TMPL_VAR NAME=lista_Paises -->
+	<!-- TMPL_ELSE --> <!-- TMPL_VAR NAME=pais -->
+	<input  type="hidden" name="paises" value="<!-- TMPL_VAR NAME="codpais" -->">
+	<!-- /TMPL_IF  -->
+</td>
+</tr>
+
+<tr>
+<td>
+  <!-- TMPL_IF NAME=lista_Provincias -->Provincias:
+        <!-- TMPL_ELSE --><!-- TMPL_IF NAME=prov --> Provincia: <!-- /TMPL_IF  -->
+        <!-- /TMPL_IF  -->
+</td>
+<td>
+        <!-- TMPL_IF NAME=lista_Provincias --><!-- TMPL_VAR NAME=lista_Provincias -->
+        <!-- TMPL_ELSE --> <!-- TMPL_VAR NAME=prov -->
+        <input  type="hidden" name="provincias" value="<!-- TMPL_VAR NAME="codprov" -->">
+        <!-- /TMPL_IF  -->
+</td>
+</tr>
+
+<tr>
+<td>
+  <!-- TMPL_IF NAME=lista_Loc -->Localidades:
+        <!-- TMPL_ELSE --><!-- TMPL_IF NAME=localidad --> Localidad: <!-- /TMPL_IF  -->
+        <!-- /TMPL_IF  -->
+</td>
+<td>
+        <!-- TMPL_IF NAME=lista_Loc --><!-- TMPL_VAR NAME=lista_Loc -->
+        <!-- TMPL_ELSE --> <!-- TMPL_VAR NAME=localidad -->
+        <input  type="hidden" name="localidades" value="<!-- TMPL_VAR NAME="codloc" -->">
+        <!-- /TMPL_IF  -->
+</td>
+</tr>
+
+<tr>
+<td>
+  <!-- TMPL_IF NAME=lista_Ciudad -->Ciudades:
+        <!-- TMPL_ELSE --><!-- TMPL_IF NAME=ciudad --> Ciudad: <!-- /TMPL_IF  -->
+        <!-- /TMPL_IF  -->
+</td>
+<td>
+        <!-- TMPL_IF NAME=lista_Ciudad --><!-- TMPL_VAR NAME=lista_Ciudad -->
+        <!-- TMPL_ELSE --> <!-- TMPL_VAR NAME=ciudad -->
+        <input  type="hidden" name="ciudades" value="<!-- TMPL_VAR NAME="codciudad" -->">
+        <!-- /TMPL_IF  -->
+</td>
+</tr>
+
+<tr>
+<td>
+ <a href="javascript:indeterminado()"><input type="button" value="Indeterminado"></a>
+</td>
+<td> 
+<!-- TMPL_IF NAME=lista_Ciudad --> <a href="javascript:ejecutar()"><input type="button" value="Seleccionar"></a> <!-- TMPL_ELSE --><input type="submit" value="Aceptar"> <!-- /TMPL_IF  -->
+</td>
+</tr>
+</table>
+</form>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

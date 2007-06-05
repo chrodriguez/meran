@@ -1,0 +1,87 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="JavaScript" type="text/JavaScript">
+function swap(id,src){
+	document.getElementById(id).src=src;
+}
+</script>
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+	<tr>
+		<td>Administraci&oacute;n de ejemplares</td>
+	</tr>
+        <tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>						
+
+<table border="0" align="left" cellpadding="0" cellspacing="0" width="100%">
+<!-- TMPL_IF name="noitemsfound" -->
+ <tr>
+ 	<td>
+		<font color="red" size="4">No se encontraron ejemplares</font>
+	</td>
+ </tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="websiteadded" -->
+  <tr>
+  	<td >
+		<font color="red" size="4">Sitio Web Biblioitem Added</font>
+	</td>
+  </tr>
+ <!-- /TMPL_IF -->
+
+ <table width="100%">
+ <tr>
+ 	<td >
+		<span class="recuadroAyuda">&nbsp;Para agregar una nueva descripci&oacute;n bibliogr&aacute;fica o un nuevo ejemplar, ingrese el n&uacute;mero de ISBN o ISSN: &nbsp;</span>
+	</td>
+  </tr>
+</table>
+
+<form action="isbnsearch.pl" name="form1">
+<table width="100%">
+  <tr>
+    	<td  width="10%" height="32" align="right">
+		<span class="inputFontNormal">ISBN:</span>
+	</td>
+	
+  	<td  width="25%" class="inputFontNormal" align="right">
+        	<input class="inputFontNormal" type="text" name="isbn">
+        </td>
+
+	<td align="left" width="50%">
+      		<a class="inputFontNormal" href="#" onClick="document.form1.submit();" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-ir.png" border="0"></a>
+  	</td>
+  </tr>
+  <tr>
+  	<td width="10%" align="right"> 
+		<span class="inputFontNormal">T&iacute;tulo:</span>
+	</td>
+  	<td width="25%" align="right">
+        	<input class="inputFontNormal" type="text" name="title">
+	</td>
+	<td width="50%">&nbsp;</td>
+  </tr>
+</table>
+
+</form>
+
+<table width="100%">
+<!-- TMPL_IF NAME="NOTMARC" -->
+  <tr>
+        <td class="recuadroAyuda"><b>
+		<a class="inputFontNormal" href="addbiblio-nomarc.pl" class="button">Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a</a></b>
+	</td>
+  </tr>
+<!-- TMPL_ELSE -->
+  <tr>
+  	<td ><b>
+		<a class="inputFontNormal" href="addbiblio.pl" class="button">Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a</a></b>
+	</td>
+  </tr>
+<!-- /TMPL_IF -->
+</table>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

@@ -1,0 +1,283 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script>
+        function cambioUnidadDeInformacion(){
+                document.unidad.submit();
+        }
+
+function cambiarAction(act)
+	{
+	document.frmTeste.action = act;
+	alert(document.frmTeste.action);
+	}
+</script>
+Seleccione la unidad de informaci&oacute;n que des&eacute;e:
+<form  name="unidad" action=/cgi-bin/koha/virtual/virtualreport.pl method=post >
+        <!-- TMPL_VAR name="CGIbranch" -->
+        <input type="hidden" name="code" value="<!-- TMPL_VAR NAME=code -->">
+</form>
+
+
+<center>
+<h2>Pedidos Pendientes que NO cumplen condici&oacute;n</h2>
+<table >
+<tr>
+<td>
+<table border=2 cellspacing=0 cellpadding=2 width=850>
+        <TR VALIGN=TOP height="40">
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Usuario</b></TD>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>e-mail</b></TD>
+                                                                                                                             
+         <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>T&iacute;tulo</b></TD>
+ 
+<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Ejemplar</b></TD>
+                                                                                                                             
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Volumen</b></TD>
+<td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha de Pedido</b></TD>
+                                                                                                                             
+ <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo</b></TD>
+ <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Deuda</b></TD>
+<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"> </td>
+	
+        </TR>
+
+<!-- TMPL_LOOP NAME=NOCONDITIONLOOP -->
+
+               <tr VALIGN=TOP height="40">
+                                                                 <TD>
+                        <a href=/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+                        </td>
+  <td align="center"><!-- TMPL_IF NAME=emailaddress --> <a href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --></a><!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
+  
+ <td>                                                                                                                        
+<a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=bib ESCAPE=URL -->><!-- TMPL_VAR NAME=title --></a></td> 
+ 
+                         <TD><!-- TMPL_VAR Name="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR Name="description" --> </td>
+                                                                                                                             
+    <td align=center><!-- TMPL_IF Name="volume" --><!-- TMPL_VAR Name="volume" -->: <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+                                                                                                                             
+                        <TD>
+		<!-- TMPL_IF NAME=red --><font color=red><!-- /TMPL_IF -->
+			<!-- TMPL_VAR Name="date" -->
+		<!-- TMPL_IF NAME=red --></font><!-- /TMPL_IF -->
+
+			</td>
+	
+			<td><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+
+  <!-- TMPL_IF name="totaldue" -->
+                       <td><font color=red> Debe: $
+                 	<!-- TMPL_VAR name="totaldue"--></font></td>          
+        <!-- TMPL_ELSE -->      
+                        <td >Sin deuda</td>
+        <!-- /TMPL_IF -->
+
+<td>
+         <form name=t<!-- TMPL_VAR NAME="timestamp" --> action="virtualmodrequest.pl?op=del" method=post>
+
+
+                        <input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+                        <input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+                        <input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+                        <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+                         <input type=hidden name=from value="report">
+                        <input type=hidden name=op value="del">
+
+                    <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+
+
+  <INPUT TYPE="image" name="icon"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" title="Borrar Pedido" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){t<!-- TMPL_VAR NAME="timestamp" -->.submit();} else {return false;}">
+</form>
+        </td>
+
+
+</TR>
+
+<!-- /TMPL_LOOP -->
+</table>
+</td>
+<td>
+
+<form name="con" action="virtualmodrequest.pl"  method=post>
+<input type=hidden name="from" value="report">
+<input type=hidden name=op value="condition">
+<table border=2 cellspacing=0 cellpadding=2>
+<tr height="40">
+  <td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><b>Condiciones</b></td>
+</tr>
+<!-- TMPL_LOOP NAME=NOCONDITIONLOOP -->
+<tr height="40">
+<td ><INPUT type="checkbox" id="conditions" name="COND-<!-- TMPL_VAR Name="timestamp" -->">Cumple</td>
+                         <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+</td>
+</tr>
+
+<tr align=right>
+<td>
+<INPUT type="submit" value="Guardar Condiciones" class="buttonv" onClick="con.submit();" >
+</td>
+</tr>
+</form>
+</table>
+<br><br>
+<h2>Pedidos Pendientes que cumplen condici&oacute;n</h2>
+                                                                                                                                                                                                                                                           
+<table border=2 cellspacing=0 cellpadding=2 width=950>
+        <TR VALIGN=TOP>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Usuario</b></TD>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>e-mail</b></TD>
+                                                                                                                                                                                                                                                           
+         <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>T&iacute;tulo</b></TD>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Autor</b></TD>
+                                                                                                                                                                                                                                                           
+<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Ejemplar</b></TD>
+                                                                                                                                                                                                                                                           
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Volumen</b></TD>
+<td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha de Pedido</b></TD>
+                                                                                                                                                                                                                                                           
+ <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo</b></TD>
+                                                                                                                                                                                                                                                           
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"></td>
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"></td>
+        </TR>
+                                                                                                                                                                                                                                                           
+<!-- TMPL_LOOP NAME=CONDITIONLOOP -->
+                                                                                                                                                                                                                                                           
+               <tr VALIGN=TOP>
+                                                                 <TD>
+                        <a href=/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+                        </td>
+                                                                                                                                                                                                                                                           <td align="center"><!-- TMPL_IF NAME=emailaddress --> <a href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --></a><!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
+
+ 
+ <td>
+<a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=bib ESCAPE=URL -->><!-- TMPL_VAR NAME=title --></a></td>
+                                                                                                                                                                                                                                                           
+<td>
+<a href=/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME=authorhtmlescaped -->&type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><!-- TMPL_VAR NAME=author --></a></td>
+                                                                                                                                                                                                                                                           
+                         <TD><!-- TMPL_VAR Name="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR Name="description" --> </td>
+                                                                                                                                                                                                                                                           
+    <td align=center><!-- TMPL_IF Name="volume" --><!-- TMPL_VAR Name="volume" -->: <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+                                                                                                                                                                                                                                                           
+                        <TD><!-- TMPL_VAR Name="date" --></td>
+                                                                                                                                                                                                                                                           
+                        <td><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+                        <td>
+         <form name=T<!-- TMPL_VAR Name="time" --> action="virtualmodrequest.pl" method=post>
+                                                                                                                                                                                                                                                           
+                        <input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+                        <input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+                        <input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+                        <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+                         <input type=hidden name=from value="report">
+                         <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+                         <input type=hidden name=op value="comp">
+
+<INPUT TYPE="image" name="icon"  VALUE="complete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/ok.png" title="Alta Pedido" onClick="if (window.confirm('&#191;Confirma el alta del pedido?')) {return true;} else {return false;}">
+</form>
+        </td>
+<td>
+         <form name=T<!-- TMPL_VAR Name="time" --> action="virtualmodrequest.pl" method=post>
+                                                                                                                                                                                                                                                           
+                        <input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+                        <input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+                        <input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+                        <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+                         <input type=hidden name=from value="report">
+                    <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+                         <input type=hidden name=op value="del">
+                                                                                                                                                                                                                                                           
+  <INPUT TYPE="image" name="icon"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" title="Borrar Pedido" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?'))
+{return true;} else {return false;}">
+</form>
+        </td>
+</TR>                                                                                                                                                                                                                                                           
+<!-- /TMPL_LOOP -->
+</table>
+<br><br>
+<h2>Pedidos Cumplidos</h2>
+
+<table border=2 cellspacing=0 align="center" width="950">
+        <TR VALIGN=TOP>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Usuario</b></TD>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>e-mail</b></TD>
+
+         <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>T&iacute;tulo</b></TD>
+               <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Autor</b></TD>
+
+<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Ejemplar</b></TD>
+
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Volumen</b></TD>
+<td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha de Pedido</b></TD>
+<td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha de Cumplido</b></TD>
+ <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo</b></TD>
+
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"></td>
+        <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"></td>
+        </TR>
+
+<!-- TMPL_LOOP NAME=COMPLETELOOP -->
+
+               <tr VALIGN=TOP>
+        <form name=T<!-- TMPL_VAR Name="time" --> action=virtualmodrequest.pl method=post>
+
+                        <input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+                        <input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+                        <input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+                        <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+                         <input type=hidden name=from value="report">
+                         <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+                                                                 <TD>
+                        <a href=/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+                        </td>
+ <td align="center"><!-- TMPL_IF NAME=emailaddress --> <a href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --></a><!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
+
+ <td>
+<a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=bib ESCAPE=URL -->><!-- TMPL_VAR NAME=title --></a></td>
+
+<td>
+<a href=/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME=authorhtmlescaped -->&type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><!-- TMPL_VAR NAME=author --></a></td>                                                                                            
+                         <TD><!-- TMPL_VAR Name="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR Name="description" --> </td>
+
+    <td align=center><!-- TMPL_IF Name="volume" --><!-- TMPL_VAR Name="volume" -->: <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+
+                        <TD>  <!-- TMPL_IF NAME=redR --><font color=red><!-- /TMPL_IF -->
+                        	<!-- TMPL_VAR Name="date" -->
+                		<!-- TMPL_IF NAME=redR --></font><!-- /TMPL_IF -->
+			</td>
+
+                	<TD>
+			<!-- TMPL_IF NAME=redC --><font color=red><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR Name="datecomplete" -->
+                	<!-- TMPL_IF NAME=redC --></font><!-- /TMPL_IF -->
+			</td>        
+
+<td><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+<td>
+         <form name=T<!-- TMPL_VAR Name="time" --> action="virtualmodrequest.pl" method=post>
+
+                        <input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+                        <input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+                        <input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+                        <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+                         <input type=hidden name=from value="report">
+                    <input type=hidden name=branch value="<!-- TMPL_VAR Name="branchcode" -->">
+                         <input type=hidden name=op value="aqu">
+
+ <INPUT  TYPE="image" name="icon"  VALUE="complete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/ok.png" title="Entrega Pedido" onClick="if (window.confirm('&#191;Confirma la entrega del pedido?')) {return true;} else {return false;}">
+
+</form>
+        </td>
+		
+		</tr>
+</form>
+
+<!-- /TMPL_LOOP -->
+</table>
+
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

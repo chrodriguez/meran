@@ -1,0 +1,41 @@
+<html>
+<script>
+function indeterminado(){
+        mod =document.getElementById("modificando").value;
+        window.opener.document.getElementById("d"+mod).value="DESCONOCIDA";
+        window.opener.document.getElementById(mod).value="2500000";
+        window.close();
+}
+function hacerSubmit(){
+        document.provincia.submit();
+}
+</script>
+
+<body>
+
+<table>
+<tr>
+<td>
+Seleccione una provincia:<br>
+</td>
+</tr>
+<tr>
+<td>
+
+	<form action="/cgi-bin/koha/localidades.pl" method="post" name="provincia" id="provincia">
+		<!-- TMPL_VAR NAME=lista_Provincias -->
+		<input type="hidden" name="modificando" id="modificando" value="<!-- TMPL_VAR NAME="modificando" -->">
+	</form>
+</td>
+</tr>
+<tr>
+<td>
+<br><br>
+<a href="javascript:indeterminado()">Indeterminado</a>
+<a href="javascript:hacerSubmit()"> Elegir Dpto_Partido</a>
+</td>
+</tr>
+</table>
+</body>
+</html>
+

@@ -1,0 +1,69 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+<form name="ffind" action="/cgi-bin/koha/opac-searchresults.pl" method=post>
+<table border="0" align="center" width="100%" class="top" >
+
+<tr width=100%><td colspan="5"><h4> B&uacute;squeda Avanzada </h4><td></tr>
+<tr>
+        <td width=27% align="right">Autor:</td>
+	<td width=20%> <input type="text" size="25" name="author"></td> <!--puse los width para que quede centrado-->
+	<td width=16% align="right">Diccionario:</td>
+	<td width=37%> <input type="text" size="25" name="dictionary"></td>
+
+</tr>
+<tr>
+ 	<td align="right">T&iacute;tulo:</td>
+	<td> <input type="text"  size="25"   name="title"></td>
+	<td align="right">Materia:</td>
+        <td><input type="text"  size="25"   name="subject"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+ 	<td><input type="radio" name="ttype" value="normal" checked="checked">Normal<input type="radio" name="ttype" value="exacto">Exacto</td>
+	<td align="right">C&oacute;digo de Barras:</td>
+        <td ><input type="text" size="25" name="itemnumber"></td>
+</tr>
+<tr>
+
+	<td align="right">Tipo de Documento:</td>
+	<td>
+        	<select size="1"  name="class">
+        	<option value="">Cualquier</option>
+        	<!-- fetch class list -->
+        	<!-- TMPL_VAR name="classlist" -->
+        	<!-- #include virtual="/includes/cat-class-list.inc" -->
+        	</select>
+        </td>
+<!--
+<!-- TMPL_IF name="virtuallibrary" -->
+  	<td align="right">Biblioteca Virtual:</td>
+	<td> <INPUT TYPE="text" SIZE="25" NAME="virtual"></td>
+<!-- /TMPL_IF -->
+-->
+        <td align="right">Estante Virtual:</td>
+        <td><input type="text"  size="25"   name="shelves">
+        <a href="/cgi-bin/koha/opac-shelves.pl">&nbsp;&nbsp;Ver Todos</a>
+        </td>
+
+<!--	<td align="right">Estante Virtual:</td>
+	<td>
+        	<select size="1"  name="shelfclass">
+        	<option value="">Cualquier</option>
+        	<!-- TMPL_VAR name="listShelf" -->
+        	</select>
+        </td>-->
+</tr>
+<tr>
+	<td colspan="5" align="center">
+	<a  onMouseOut="swap('bus','<!-- TMPL_VAR NAME="themelang" -->/images/search-button.png')" onMouseOver="swap('bus','<!-- TMPL_VAR NAME="themelang" -->/images/search-buttonbis.png')">
+	<input type="image" name="bus" id="bus" src="<!-- TMPL_VAR NAME="themelang" -->/images/search-button.png"  value="Buscar" border="0"></a>
+   <a href="#" onMouseOut="swap('clear','<!-- TMPL_VAR NAME="themelang" -->/images/search-borrar.png')" onMouseOver="swap('clear','<!-- TMPL_VAR NAME="themelang" -->/images/search-borrarbis.png')" onClick="ffind.reset();">
+	<img name="clear" id="clear"  alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/search-borrar.png" border="0"></a>
+
+   <a target="_blank" href="<!-- TMPL_VAR NAME="themelang" -->/help/help.htm" onMouseOut="swap('help','<!-- TMPL_VAR NAME="themelang" -->/images/help.png')" onMouseOver="swap('help','<!-- TMPL_VAR NAME="themelang" -->/images/helpbis.png')">
+        <img alt="Ayuda" src="<!-- TMPL_VAR NAME="themelang" -->/images/help.png" border="0" name="help" id="help"></a>
+
+</tr>
+</table>
+</form>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
