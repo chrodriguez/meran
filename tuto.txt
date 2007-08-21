@@ -1099,7 +1099,6 @@
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/circ/.svn/props/selectbranchprinter.pl.svn-work
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/circ/.svn/text-base/selectbranchprinter.pl.svn-base
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/circ/.svn/wcprops/selectbranchprinter.pl.svn-work
-/home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/detailprint.pl
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/koha-tmpl/intranet-tmpl/default/de/barcodes/printerConfig.tmpl
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/koha-tmpl/intranet-tmpl/default/de/barcodes/.svn/prop-base/printerConfig.tmpl.svn-base
 /home/Revision6SVN/Codigo/kohaP/intranet/cgi-bin/koha/koha-tmpl/intranet-tmpl/default/de/barcodes/.svn/props/printerConfig.tmpl.svn-work
