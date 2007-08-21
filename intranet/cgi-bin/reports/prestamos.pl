@@ -62,7 +62,6 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -defaults  => $branch,
                                         -labels    => \%select_branches,
                                         -size      => 1,
-#                                         -onChange  =>'hacerSubmit()'
                                  );
 #Fin: Por los branches
 my $orden;
@@ -70,7 +69,7 @@ if ( $input->param('orden') eq ""){
 	$orden='cardnumber'}
 else {$orden=$input->param('orden')};
 
-my $estado=$input->param('estado');
+my $estado=$input->param('estado')|| 'TO';
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $ini;
@@ -86,39 +85,10 @@ if (($input->param('ini') eq "")){
 };
 #FIN inicializacion
 
-
-my @resultsdata= prestamos($branch,$orden,$ini,$cantR);#Prestamos sin devolver (vencidos y no vencidos)
-my $cantidad=0; #Cantidad total de prestamos para calcular la cantidad de paginas
-
+my @resultsdata= prestamos($branch,$orden,$ini,$cantR,$estado);#Prestamos sin devolver (vencidos y no vencidos)
+my $cantidad=cantidadPrestamos($branch,$estado);
 
 
-# 21/05/2007 - Para mostrar los prestamos por estado.
-my @result;
-my @datearr = localtime(time);
-my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-if($estado ne "TO"){
-	my $row;
-	foreach $row(@resultsdata){
-		my $flag=Date::Manip::Date_Cmp($row->{'vencimiento'},$hoy);
-
-		if ($estado eq "VE"){
-			if ($flag lt 0){
-				$cantidad=$cantidad + 1;
-				push (@result, $row);
-			}
-		}
-		else{
-			if($flag gt 0 || $flag == 0){
-				$cantidad=$cantidad + 1;
-				push (@result, $row);
-			}
-		}
-	}
-}
-else{
-	@result=@resultsdata;
-	$cantidad=cantidadPrestamos($branch);
-}
 
 
 my @numeros=armarPaginas($cantidad);
@@ -130,14 +100,14 @@ $template->param( paginas   => $paginas,
 		);
 
 if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pageNumber+1;
+        my $sig = $pagActual+1;
         if ($sig <= $paginas){
                  $template->param(
                                 ok    =>'1',
                                 sig   => $sig);
         };
         if ($sig > 2 ){
-                my $ant = $pageNumber-1;
+                my $ant = $pagActual-1;
                 $template->param(
                                 ok2     => '1',
                                 ant     => $ant)}
@@ -145,11 +115,12 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
 
 
 $template->param( 	estado		 => $estado,
-			resultsloop      => \@result,
+			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
 			numeros		 => \@numeros,
-			branch           => $branch
+			branch           => $branch,
+			orden		 => $orden
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

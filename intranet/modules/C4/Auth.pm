@@ -382,6 +382,7 @@ sub checkauth {
 				C4::AR::Reserves::cancelar_reservas(C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
 				#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 				C4::AR::Reserves::cancelar_reservas(C4::AR::Reserves::FindNotRegularUsersWithReserves());
+				C4::AR::Reserves::eliminarReservasVencidas();
 				#Si se logueo correctamente en intranet entonces guardo la fecha
 				$dbh->do("update borrowers set lastlogin=now() where cardnumber = ?", undef, $cardnumber);
 			}

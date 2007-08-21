@@ -597,19 +597,42 @@ sub usuarios{
 
 sub cantidadPrestamos{
 	
-	my ($branch)=@_;
+	my ($branch,$estado)=@_;
         my $dbh = C4::Context->dbh;
-        my $query ="select  count(*)
+        my $query ="select issues.itemnumber as itemnumber
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
+		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
+		    inner join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode='$branch' and returndate is NULL";
         my $sth=$dbh->prepare($query);
         $sth->execute();
-        return($sth->fetchrow_array);
+	my @datearr = localtime(time);
+	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	my $cantidad=0;
+	while (my $data=$sth->fetchrow_hashref){
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+		if ($estado eq "VE"){
+			if ($flag lt 0){
+				$cantidad++;
+			}
+		}
+		elsif($estado eq "NV"){
+			if($flag gt 0 || $flag == 0){
+				$cantidad++;
+			}
+		}
+		else{
+			$cantidad++;
+		}
+        }
+
+        return($cantidad);
 
 }
 
 sub prestamos{
-        my ($branch,$orden,$ini,$fin)=@_;
+        my ($branch,$orden,$ini,$fin,$estado)=@_;
         my $dbh = C4::Context->dbh;
         my @results;
         my $clase='par';
@@ -626,10 +649,15 @@ sub prestamos{
 		    limit  $ini,$fin";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch,$orden);
+	my @datearr = localtime(time);
+	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
                 if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
+		$data->{'clase'}=$clase;
                 if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
-                if ($data->{'emailaddress'} eq "" ){
+		
+
+		if ($data->{'emailaddress'} eq "" ){
 					$data->{'emailaddress'}='-';
 					$data->{'ok'}=1;
 				 };
@@ -637,22 +665,38 @@ sub prestamos{
 		else  { $data->{'returndate'} =  format_date($data->{'returndate'})};
 		$data->{'date_due'}=format_date($data->{'date_due'});
 		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
-                $data->{'clase'}=$clase;
-                push(@results,$data);
+		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+		if ($estado eq "VE"){
+			if ($flag lt 0){
+				push(@results,$data);
+			}
+		}
+		elsif($estado eq "NV"){
+			if($flag gt 0 || $flag == 0){
+				 push(@results,$data);
+			}
+		}
+		else{
+			 push(@results,$data);
+		}
         }
         return (@results);
 }
+
+
 sub cantidadReservas{
 	my ($branch,$tipo)=@_;
         my $dbh = C4::Context->dbh;
         my $query ="select  count(*)
                    from reserves inner join borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
-		   where reserves.branchcode='$branch' AND constrainttype IS NULL";
+		   where constrainttype IS NULL";
 	if($tipo eq "GR"){
 		$query.=" AND itemnumber IS NULL";
 	}
 	elsif($tipo eq "EJ"){
-		$query.=" AND itemnumber IS NOT NULL"
+# 		$query.=" AND reserves.branchcode='$branch' AND itemnumber IS NOT NULL"; 
+# La linea anterior se comento porque cuando una reserva pasa grupo a ejemplar no se guarda el codigo de la biblioteca porque las reservas por grupo no lo hacen, por lo tanto al cambiar de estado la reserva, esto se mantiene.
+		$query.=" AND itemnumber IS NOT NULL";
 	}
         my $sth=$dbh->prepare($query);
         $sth->execute();
@@ -672,18 +716,20 @@ sub reservas{
 		    items.biblionumber AS biblionumber
                     from reserves inner join borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
 		    left join items on (reserves.itemnumber = items.itemnumber )
-		    where reserves.branchcode=? and constrainttype IS NULL ";
+		    where constrainttype IS NULL ";
 	
 	if($tipo eq "GR"){
 		$query.=" AND biblionumber IS NULL";
 	}
 	elsif($tipo eq "EJ"){
-		$query.=" AND biblionumber IS NOT NULL"
+# 		$query.=" AND reserves.branchcode='".$branch."' AND biblionumber IS NOT NULL";
+# La linea anterior se comento porque cuando una reserva pasa grupo a ejemplar no se guarda el codigo de la biblioteca porque las reservas por grupo no lo hacen, por lo tanto al cambiar de estado la reserva, esto se mantiene.
+		$query.=" AND biblionumber IS NOT NULL";
 	}
 	$query.=" order by(?) limit $ini , $fin";
 
         my $sth=$dbh->prepare($query);
-        $sth->execute($branch,$orden);
+	 $sth->execute($orden);
         while (my $data=$sth->fetchrow_hashref){
  		if ($clase eq 'par') {$clase ='impar';} else {$clase='par'};
 		$data->{'reminderdate'}=format_date($data->{'reminderdate'});

@@ -347,7 +347,7 @@ function confirm_devolucion(num,bar,bor) {
 		<!-- TMPL_IF NAME = "datedue" --><!-- TMPL_VAR NAME="datedue" --><!-- TMPL_ELSE -->-------<!-- /TMPL_IF -->
 	    </td>
 	    <td class="impar" align="center">
-		<!-- TMPL_IF NAME = "returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE -->-------<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME = "returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME = "reminderdate" --><!-- TMPL_VAR NAME="reminderdate" --><!-- TMPL_ELSE -->-------<!-- /TMPL_IF --><!-- /TMPL_IF -->
 	    </td>
 
 <!-- TMPL_UNLESS NAME="wthdrawn" --> 

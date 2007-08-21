@@ -26,7 +26,7 @@ use C4::Context;
 
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
-use C4::Date;
+
 use C4::AR::DictionarySearch; #Luciano: Busqueda por diccionario
 use C4::AR::Reserves; 
 use C4::AR::Issues;
@@ -1978,6 +1978,7 @@ sub allitems {
     #Averigua el estado
     my $datedue = '';
     my $returndate = '';
+    my $reminderdate='';
     my $issued=0;
     my $renew=0;	
     my $borr=0;
@@ -2006,6 +2007,7 @@ sub allitems {
     $rsth->execute($data->{'itemnumber'});
     if (my $rdata=$rsth->fetchrow_hashref){
 	$borr=$rdata->{'borrowernumber'};
+	$reminderdate=format_date($rdata->{'reminderdate'});
       if ($type eq "intranet") { 
       $datedue ="Reservado a <STRONG><A href='moremember.pl?bornum=".$rdata->{'borrowernumber'}."'>".$rdata->{'firstname'}." ".$rdata->{'surname'}."</A></STRONG>"; 
       }
@@ -2049,7 +2051,7 @@ sub allitems {
 	    $notforloan2=0;
     }
 		
-    push(@results,{ bulk => $data->{"bulk"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, wthdrawn => $data->{'wthdrawn'}, biblioitemnumber => $bib, itemnumber => $data->{'itemnumber'}, borr => $borr , renew=>$renew} );
+    push(@results,{ bulk => $data->{"bulk"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , reminderdate => $reminderdate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, wthdrawn => $data->{'wthdrawn'}, biblioitemnumber => $bib, itemnumber => $data->{'itemnumber'}, borr => $borr , renew=>$renew} );
 
   $total++;
   }

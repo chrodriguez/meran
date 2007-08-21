@@ -29,7 +29,22 @@ use C4::Date;
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults);
+@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios);
+
+#Obtiene los mail de todos los usuarios
+sub mailDeUsuarios(){
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT emailaddress FROM  borrowers WHERE emailaddress IS NOT NULL AND emailaddress <> ''");
+	$sth->execute();
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data); 
+	}
+	  
+	$sth->finish;
+
+	return(@results);
+}
 
 sub in_array() {
         my $val = shift @_ || return 0;

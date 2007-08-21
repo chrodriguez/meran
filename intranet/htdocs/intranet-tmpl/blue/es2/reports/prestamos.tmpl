@@ -26,10 +26,10 @@ function hacerSubmit(){
 		</td>
 
 		<td>
-			<select name="estado" id="estPrest">
-				<option selected="selected" value="VE" id="VE">Vencidos</option>
+			<select name="estado" id="estado">
+				<option value="VE" id="VE">Vencidos</option>
 				<option value="NV" id="NV">No vencidos</option>
-				<option value="TO" id="TO">Todos</option>
+				<option value="TO" id="TO" selected>Todos</option>
 			</select>
 		</td>
 	</tr>
@@ -57,19 +57,19 @@ function hacerSubmit(){
 La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 <br>
 <!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ant -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
 	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->> <u><!-- TMPL_VAR name=number --></u></a>
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->> <u><!-- TMPL_VAR name=number --></u></a>
 	<!-- TMPL_ELSE -->
         	<u><!-- TMPL_VAR name=number --></u>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+		<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=sig -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
 <!-- /TMPL_IF -->
 <br>
 
@@ -79,29 +79,29 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
 	
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->>Apellido</a>
+			<a class="inputFontNormal" href="prestamos.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->">Apellido</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->> Nombre</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->> Nombre</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->>N&uacute;mero de socio</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->>N&uacute;mero de socio</a>
 		</th>
 
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->>E-mail</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->>E-mail</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->>Fecha de prestamo</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->>Fecha de prestamo</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->>Fecha de vencimiento</a>
+			<a class="inputFontNormal">Fecha de vencimiento</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->>C&oacute;digo de barra</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->>C&oacute;digo de barra</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?orden=description&branch=<!-- TMPL_VAR NAME=branch -->>Tipo de pr&eacute;stamo</a>
+			<a class="inputFontNormal" href=prestamos.pl?orden=description&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->>Tipo de pr&eacute;stamo</a>
 		</th>
 	
 		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/derecha.png"></td>

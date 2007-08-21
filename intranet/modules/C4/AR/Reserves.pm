@@ -76,7 +76,8 @@ FIXME
     &cant_reserves
     &cant_waiting	
     &tiene_reservas 
-    &intercambiar_itemnumber	
+    &intercambiar_itemnumber
+    &eliminarReservasVencidas
 
 );
 
@@ -737,6 +738,38 @@ sub intercambiar_itemnumber{
 
 	my $sth3=$dbh->prepare("commit ");
 	$sth3->execute();
+}
+
+sub eliminarReservasVencidas(){
+	my $dbh = C4::Context->dbh;
+
+	my $sth=$dbh->prepare("SET autocommit=0");
+	$sth->execute();
+	my $query= "SELECT * FROM reserves WHERE constrainttype IS NULL AND reminderdate < NOW() AND itemnumber IS NOT NULL";
+	my $sth=$dbh->prepare($query);
+	$sth->execute();
+	#Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
+	my @resultado;
+	while(my $data=$sth->fetchrow_hashref){
+		my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1 ");
+		$sth1->execute($data->{'biblioitemnumber'});
+		my $data2= $sth1->fetchrow_hashref;
+		if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
+			@resultado= ($data->{'itemnumber'}, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'});
+		}
+		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+		my $sth3=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? ");
+		$sth3->execute($data->{'reservenumber'});
+		if (@resultado){
+		#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
+			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
+			my $sth4=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=? where biblioitemnumber=? and borrowernumber=? ");
+			$sth4->execute($resultado[0], $desde, $fecha,$resultado[1],$resultado[2]);
+			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre);
+		}
+	}
+	my $sth5=$dbh->prepare("commit ");
+	$sth5->execute();
 }
 
 1;
