@@ -645,10 +645,10 @@ sub prestamos{
 		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
 		    inner join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode=? and returndate is NULL
-		    order by (?)
+		    order by ($orden)
 		    limit  $ini,$fin";
         my $sth=$dbh->prepare($query);
-        $sth->execute($branch,$orden);
+        $sth->execute($branch);
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
