@@ -1,6 +1,7 @@
 <!-- TMPL_IF NAME="opac" -->
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <!-- TMPL_ELSE -->
+
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <!-- /TMPL_IF -->
 
@@ -190,6 +191,44 @@
         	<td width="1%">&nbsp;</td>
     	</tr>
 </table>
+
+<!-- TMPL_IF name="sanctions" -->
+<br>
+<TABLE border=0  width="100%"  cellpadding='0' cellspacing='0'>
+<TR VALIGN=middle class="tablaresultadoTitle" width="100%">
+<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+<td width="98%"><B>SANCIONES</TD>
+<td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+</TR>   
+<tr valign="top">
+<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+<td class="inputFontNormal">
+<!-- TMPL_IF NAME="sanctions" -->
+<table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
+<!-- TMPL_LOOP NAME="sanctions" -->
+<tr>     <td>
+<font class="fontmsg">
+<!-- TMPL_IF NAME="description" -->
+<li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF --></font>
+</td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_ELSE -->
+Sin sanciones
+<!-- /TMPL_IF -->
+</td>
+<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+</tr>
+<tr VALIGN=middle  >
+<TD colspan=3 align=right>
+</td>
+</tr>
+</table>
+<!-- /TMPL_IF -->
+
+
+
 
 
     <!-- TMPL_ELSE -->
