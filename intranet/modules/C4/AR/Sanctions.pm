@@ -28,64 +28,53 @@ sub SanctionDays {
 # Retorna la cantidad de dias de sancion que corresponden a una devolucion
 # Si retorna 0 (cero) entonces no corresponde una sancion
 # Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
-  my ($dbh, $returndate, $date_due, $categorycode, $issuecode)=@_;
-  
-#open L,">>/tmp/mono";
-	 my $late=0; #Se devuelve tarde
-	 
-  if (Date_Cmp($date_due, $returndate) >= 0) {
-    #Si es un prestamo especial debe devolverlo antes de una determinada hora
-   if ($issuecode ne 'ES'){return(0);}
-   	else{#Prestamo especial
-		
-	if (Date_Cmp($date_due, $returndate) == 0){#Se tiene que devolver hoy	
-	my $begin = ParseDate(C4::Context->preference("open"));
-	my $end =calc_endES();
-	my $actual=ParseDate("today");
-	if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
-					return(0);}
-						 }else {#Se devuelve antes de la fecha de devolucion
- 						return(0);}
-	
-                
+	my ($dbh, $returndate, $date_due, $categorycode, $issuecode)=@_;
+	my $late=0; #Se devuelve tarde
+	if (Date_Cmp($date_due, $returndate) >= 0) {
+		#Si es un prestamo especial debe devolverlo antes de una determinada hora
+   		if ($issuecode ne 'ES'){return(0);}
+   		else{#Prestamo especial
+			if (Date_Cmp($date_due, $returndate) == 0){#Se tiene que devolver hoy	
+				my $begin = ParseDate(C4::Context->preference("open"));
+				my $end =calc_endES();
+				my $actual=ParseDate("today");
+				if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
+					return(0);
+				}
+			}
+			else {#Se devuelve antes de la fecha de devolucion
+ 				return(0);
+			}
 		}#else ES
 	}#if Date_Cmp
  
 
 #Corresponde una sancion
-  my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? 
- order by sanctiontypesrules.order");
-  $sth->execute($issuecode, $categorycode);
-  my $err;
-  my $delta= &DateCalc($date_due,$returndate,\$err);
-  my $days= &Delta_Format($delta,0,"%dh");
-  
-  
-  #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un día
-  if ($issuecode eq 'ES'){$days++;}
-  #
-  
-  my $daysExceeded= $days;
-  
-  my $amountOfDays= 0;
-  my $i;
+  	my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.order");
+	$sth->execute($issuecode, $categorycode);
+	my $err;
+	my $delta= &DateCalc($date_due,$returndate,\$err);
+	my $days= &Delta_Format($delta,0,"%dh");
 
-  while ((my $res = $sth->fetchrow_hashref) && ($daysExceeded > 0)) {
-	
-	my $amount= $res->{'amount'};
-        my $sanctiondays= $res->{'sanctiondays'};
-        my $delaydays= $res->{'delaydays'};
-	
-	
-	for ($i=0; (($i < $amount) || ($amount==0)) && ($daysExceeded > 0); $i++) {
-		$daysExceeded-= $delaydays;
-		$amountOfDays+= $sanctiondays;	
+	#Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un día
+	if ($issuecode eq 'ES'){$days++;}
+#
+	my $daysExceeded= $days;
+	my $amountOfDays= 0;
+	my $i;
+	my $sanctiondays;
+	#Este while busca el resultado de la consulta que en todo los casos es solo una tupla.
+	while ((my $res = $sth->fetchrow_hashref) && ($daysExceeded > 0)) {
+		my $amount= $res->{'amount'};
+        	my $delaydays= $res->{'delaydays'};
+		$sanctiondays= $res->{'sanctiondays'};
+		for ($i=0; (($i < $amount) || ($amount==0)) && ($daysExceeded > 0); $i++) {
+			$daysExceeded-= $delaydays;
+			$amountOfDays+= $sanctiondays;	
+		}
 	}
-  }	
- 
-
-  $sth->finish;
-  return($amountOfDays);
+	$sth->finish;
+return($days*$sanctiondays);
 }
 
 sub hasSanctions {

@@ -86,7 +86,7 @@ sub devolver{
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SET autocommit=0;");
 	$sth->execute();
-	$sth=$dbh->prepare("select * from issues where itemnumber=?");
+	$sth=$dbh->prepare("select * from issues where itemnumber=? and returndate IS NULL");
 	$sth->execute($itemnumber);
 	my $iteminformation= $sth->fetchrow_hashref;
 	my $returnDate= vencimiento($itemnumber); # tiene que estar aca porque despues ya se marco como devuelto
@@ -142,9 +142,9 @@ sub devolver{
                         my $categorycode= $sth->fetchrow;
                         my $sanctionDays= SanctionDays($dbh, $gmtime, $returnDate, $categorycode, $iteminformation->{'issuecode'});
 
-#open L,'>/tmp/lucho';
-#print L $returnDate.'<--->'.$categorycode.'<--->'.$iteminformation->{'issuecode'}.'<--->'.$sanctionDays;
-#close L;
+# open L,'>/tmp/lucho';
+# print L $returnDate.'<--->'.$categorycode.'<--->'.$iteminformation->{'issuecode'}.'<--->'.$sanctionDays;
+# close L;
 
 
 			if ($sanctionDays) {
