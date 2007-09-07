@@ -63,9 +63,9 @@
 
 <!-- TMPL_ELSE -->
 
-<!-- TMPL_IF NAME="itemnumber" -->
+<!-- TMPL_IF NAME="strItemNumbers" -->
 <form name=frm2 method="post" action="/cgi-bin/koha/circ/returns.pl">
-<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->">
+<input type="hidden" name="strItemNumbers" value="<!-- TMPL_VAR name="strItemNumbers" -->">
 <input type="hidden" name="action" value="<!-- TMPL_VAR name="action" -->">
 
 <table border="1" cellspacing="0" cellpadding="0" width="95%"  align="center" bgcolor="white">
@@ -73,7 +73,12 @@
         <td align="center">
         <table border="0">
         <tr class="tablemsg">
-		<td class="fontmsg"> <b><u><!-- TMPL_IF NAME="return" -->DEVOLUCI&Oacute;N<!-- TMPL_ELSE -->RENOVACI&Oacute;N<!-- /TMPL_IF --></u>:</b> <!-- TMPL_VAR NAME="barcode" -->, <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->, <!-- TMPL_VAR NAME="edition" --><br>
+		<td class="fontmsg"> <b><u><!-- TMPL_IF NAME="return" -->DEVOLUCI&Oacute;N<!-- TMPL_ELSE -->RENOVACI&Oacute;N<!-- /TMPL_IF --></u>:</b> 
+		<!-- TMPL_LOOP NAME="infoTotal" -->
+
+				<!-- TMPL_VAR NAME="barcode" -->, <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->, <!-- TMPL_VAR NAME="edition" --><br>
+
+		<!-- /TMPL_LOOP -->
 		<b><u>USUARIO</u>:</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
         </tr>
         <tr align="center">
@@ -116,6 +121,8 @@
 <!-- TMPL_IF name="issues" -->
 <br>
 <br>
+	<form method="post" action="/cgi-bin/koha/circ/returns.pl" name="formReturn">
+	<input type="hidden" name="accionReturn" value="return">
         <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
                 <tr>
                         <td colspan="10" align="center" class="inputFontNormal">
@@ -124,18 +131,22 @@
                 </tr>
                 <tr class="tablaresultadoTitle">
                 	<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td>Seleccion</td>
                 	<td>T&iacute;tulo</td>
                 	<td>Autor</td>
                 	<td valign="middle">C&oacute;digo de Barras</td>
                 	<td><!--Fecha de--> Pr&eacute;stamo</td>
                 	<td><!--Fecha de--> Vencimiento</td>
                 	<td>Tipo</td>
-			<td>&nbsp;</td> 
+<!-- 			<td>&nbsp;</td>  -->
 			<td>&nbsp;</td>
         		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
                 </tr>
         <!-- TMPL_LOOP name="issues" -->
             <tr>
+		<td class="<!-- TMPL_VAR NAME='clase' -->">
+			<input type="checkbox" name="chkbox" value="<!-- TMPL_VAR NAME='barcode' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
+		</td>
         <td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
                 <td  class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></td>
             <td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_VAR NAME="author" --></td>
@@ -154,8 +165,8 @@
                 </font>
                 </td>
           <td  align="center" class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_VAR NAME="issuetype" --></td>
-        <td class="<!-- TMPL_VAR NAME="clase" -->">
-<a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></a>
+        <!--<td class="<!-- TMPL_VAR NAME="clase" -->">-->
+<!--<a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></a>-->
         </td>
         <td align="center" class="<!-- TMPL_VAR NAME="clase" -->">
         <!-- TMPL_IF NAME="renew" -->
@@ -166,7 +177,13 @@
         <td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
 </tr>
         <!-- /TMPL_LOOP -->
-        </table>
+<tr>
+	<td colspan="10" align="center">
+		<input type="image" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver" onClick="formReturn.submit()">
+	</td>
+</tr>
+</form>
+</table>
 <br>
 <br>
 <!-- /TMPL_IF -->
@@ -553,5 +570,13 @@ Sin sanciones
 <!-- /TMPL_IF -->
 
 </table>
+<script language="JavaScript">
+var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
+var checkbox=stringCheckbox.split(",");
 
+for (var i=0; i<checkbox.length; i++){
+	var ch=document.getElementById(checkbox[i]);
+        ch.checked=true;	
+}
+</script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

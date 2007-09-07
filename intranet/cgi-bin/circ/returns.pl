@@ -48,7 +48,7 @@ my ($template, $borrowernumber, $cookie)
 			flagsrequired => {circulate => 1},
 			});
 
-my $okMensaje;
+my $okMensaje="";
 my $hasdebts=0;
 my $sanction=0;
 my $enddate;
@@ -60,30 +60,50 @@ my $borrowerslist;
 my $barcode = $query->param('barcode');
 my $itemnumber = $query->param('itemnumber');
 
-if ($barcode) {
+#DAMIAN - Para devolver varios items.
+my @chkbox=$query->param('chkbox');
+my @infoTotal;
+my $strItemNumbers=$query->param('strItemNumbers')||"";
+my $loop=scalar(@chkbox);
+my $acc=$query->param('accionReturn');
 
+# if ($barcode) {
+if($loop != 0){#Damian - Para devolver muchos libros a la vez
 # si viene el barcode entonces esta intentando hacer la devolucion o renovacion => se le pregunta por una confirmacion
+	
+	for(my $i=0;$i<$loop;$i++){
+	my $barcode=$chkbox[$i];
 	$iteminfo= getiteminformation( \%env, undef, $barcode);
 	if ($iteminfo) {
 	#Si existe el codigo de barras
 		if ($iteminfo->{'date_due'}) { #FIXME ver la pregunta
 		#Si el libro esta prestado
 			$query->param('borrnumber', $iteminfo->{'borrowernumber'});
-			$iteminfo->{'action'}= $query->param('action');
-			$iteminfo->{'return'}= ($query->param('action') eq 'return');
+			$iteminfo->{'action'}= $acc;
+			$iteminfo->{'barcode'}=$barcode;
+			$iteminfo->{'return'}= ($acc eq 'return');
 			$iteminfo->{'renew'}= ($query->param('action') eq 'renew');
+			$infoTotal[$i]->{'iteminfo'}=$iteminfo;
+			$infoTotal[$i]->{'barcode'}=$barcode;
+			$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
+			$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
+			$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
 		} else {
 		#Si el libro no esta prestado
-			$okMensaje= "El libro con c&oacute;digo de barras $barcode no est&aacute; prestado";
+			$okMensaje.= "El libro con c&oacute;digo de barras $barcode no est&aacute; prestado";
 		}
 	} else {
 	#Si no existe el codigo de barras
-		$okMensaje= "El c&oacute;digo de barras $barcode no existe";
-	} 
-
-} elsif($itemnumber) {
-
+		$okMensaje.= "El c&oacute;digo de barras $barcode no existe";
+	}
+	$infoTotal[$i]->{'okMensaje'}=$okMensaje;
+	}
+} elsif($strItemNumbers ne "") {
+	my @arrayItemNumbers=split(/,/,$strItemNumbers);
 # si viene el itemnumber entonces esta aceptando la confirmacion => hay que hacer la devolucion o la renovacion
+	my $cant=scalar(@arrayItemNumbers);
+	for(my $i=0;$i<$cant;$i++){
+	my $itemnumber= $arrayItemNumbers[$i];
 	$iteminfo= getiteminformation( \%env, $itemnumber);
 	my $action= $query->param('action');
 	$barcode= $iteminfo->{'barcode'};
@@ -91,12 +111,12 @@ if ($barcode) {
 
 	if ($action eq 'return') {
 		my ($returned) = devolver($iteminfo->{'itemnumber'},$iteminfo->{'borrowernumber'});
-		$okMensaje=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto';
+		$okMensaje.=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto<br>';
 	} elsif($action eq 'renew') {
 		my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
-		$okMensaje=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado';
+		$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
 	}
-
+	}
 } else {
 
 	# if there is a list of find borrowers....
@@ -203,9 +223,13 @@ $template->param(
                 title => $iteminfo->{'title'},
 		unititle => $iteminfo->{'unititle'},
                 action => $iteminfo->{'action'},
-                return => $iteminfo->{'return'},
+#                 return => $iteminfo->{'return'},
+		return => $infoTotal[0]->{'iteminfo'}->{'return'},
                 renew => $iteminfo->{'renew'},
 		message => $message,
+		infoTotal=>\@infoTotal,
+		strItemNumbers =>$strItemNumbers,
+		chkbox     =>join(",",@chkbox),
 );
 
 # actually print the page!
