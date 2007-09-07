@@ -151,6 +151,11 @@ if ($bornum) {
 		}
 	}
 
+####Tiene sanciones el usuario?###
+my $sanctions = hasSanctions($bornum);
+$template->param(sanctions       => $sanctions);
+####
+
 } else { # else -- if ($bornum)
 
 	my @values;
