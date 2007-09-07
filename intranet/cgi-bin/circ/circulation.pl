@@ -256,6 +256,7 @@ $template->param(
 		cardnumber => $borrower->{'cardnumber'},
 		barcode => $iteminfo->{'barcode'},
 		edition => $iteminfo->{'number'},
+		volume => $iteminfo->{'volume'},
 		itemnumber => $itemnumber,
 		biblioitemnumber => $iteminfo->{'biblioitemnumber'},	
 		message => $message,
