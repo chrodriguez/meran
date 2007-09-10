@@ -65,38 +65,68 @@ my @chkbox=$query->param('chkbox');
 my @infoTotal;
 my $strItemNumbers=$query->param('strItemNumbers')||"";
 my $loop=scalar(@chkbox);
+my $chkall=$query->param('selectAll');
 my $acc=$query->param('accionReturn');
 
-# if ($barcode) {
-if($loop != 0){#Damian - Para devolver muchos libros a la vez
+if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 # si viene el barcode entonces esta intentando hacer la devolucion o renovacion => se le pregunta por una confirmacion
-	
-	for(my $i=0;$i<$loop;$i++){
-	my $barcode=$chkbox[$i];
-	$iteminfo= getiteminformation( \%env, undef, $barcode);
-	if ($iteminfo) {
+	if(! $barcode){#SE SELECCIONARON MUCHOS ITEMS
+		for(my $i=0;$i<$loop;$i++){
+		my $barcode2=$chkbox[$i];
+		$iteminfo= getiteminformation( \%env, undef, $barcode2);
+		if ($iteminfo) {
 	#Si existe el codigo de barras
-		if ($iteminfo->{'date_due'}) { #FIXME ver la pregunta
+			if ($iteminfo->{'date_due'}) { #FIXME ver la pregunta
 		#Si el libro esta prestado
-			$query->param('borrnumber', $iteminfo->{'borrowernumber'});
-			$iteminfo->{'action'}= $acc;
-			$iteminfo->{'barcode'}=$barcode;
-			$iteminfo->{'return'}= ($acc eq 'return');
-			$iteminfo->{'renew'}= ($query->param('action') eq 'renew');
-			$infoTotal[$i]->{'iteminfo'}=$iteminfo;
-			$infoTotal[$i]->{'barcode'}=$barcode;
-			$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
-			$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
-			$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
-		} else {
+				$query->param('borrnumber', $iteminfo->{'borrowernumber'});
+				$iteminfo->{'action'}= $acc;
+				$iteminfo->{'barcode'}=$barcode2;
+				$iteminfo->{'return'}= ($acc eq 'return');
+				$iteminfo->{'renew'}= ($acc eq 'renew');
+				$infoTotal[$i]->{'iteminfo'}=$iteminfo;
+				$infoTotal[$i]->{'barcode'}=$barcode2;
+				$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
+				$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
+				$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
+			} 
+			else{
 		#Si el libro no esta prestado
 			$okMensaje.= "El libro con c&oacute;digo de barras $barcode no est&aacute; prestado";
-		}
-	} else {
+			}
+		} 
+		else{
 	#Si no existe el codigo de barras
-		$okMensaje.= "El c&oacute;digo de barras $barcode no existe";
+			$okMensaje.= "El c&oacute;digo de barras $barcode no existe";
+		}
+		$infoTotal[$i]->{'okMensaje'}=$okMensaje;
+		}
 	}
-	$infoTotal[$i]->{'okMensaje'}=$okMensaje;
+	else{#Viene un solo barcode, es el ingresado a mano.
+		$iteminfo= getiteminformation( \%env, undef, $barcode);
+		if ($iteminfo) {
+	#Si existe el codigo de barras
+			if ($iteminfo->{'date_due'}) { #FIXME ver la pregunta
+		#Si el libro esta prestado
+				$query->param('borrnumber', $iteminfo->{'borrowernumber'});
+				$iteminfo->{'action'}= $acc;
+				$iteminfo->{'barcode'}=$barcode;
+				$iteminfo->{'return'}= ($acc eq 'return');
+				$iteminfo->{'renew'}= ($acc eq 'renew');
+				$infoTotal[0]->{'iteminfo'}=$iteminfo;
+				$infoTotal[0]->{'barcode'}=$barcode;
+				$infoTotal[0]->{'author'}=$iteminfo->{'author'};
+				$infoTotal[0]->{'title'}=$iteminfo->{'title'};
+				$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
+			} 
+			else{
+		#Si el libro no esta prestado
+			$okMensaje.= "El libro con c&oacute;digo de barras $barcode no est&aacute; prestado";
+			}
+		} 
+		else{
+	#Si no existe el codigo de barras
+			$okMensaje.= "El c&oacute;digo de barras $barcode no existe";
+		}
 	}
 } elsif($strItemNumbers ne "") {
 	my @arrayItemNumbers=split(/,/,$strItemNumbers);
@@ -230,6 +260,7 @@ $template->param(
 		infoTotal=>\@infoTotal,
 		strItemNumbers =>$strItemNumbers,
 		chkbox     =>join(",",@chkbox),
+		chkall  =>$chkall,
 );
 
 # actually print the page!
