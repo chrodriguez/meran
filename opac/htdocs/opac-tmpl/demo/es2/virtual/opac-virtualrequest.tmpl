@@ -1,0 +1,122 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+<div align="center">
+
+<!-- TMPL_IF NAME="message" -->
+	<table  cellpadding="5" cellspacing="0" border="1">
+	<tr bgcolor="#fecc99" >
+	<td><font face="arial, helvetica, sans-serif" color="red" size="+1"><b>
+<!-- TMPL_IF NAME="too_much_oweing" -->Disculpe, no puede efectuar pedidos porque usted debe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
+
+<!-- TMPL_IF Name="tomuchp" -->
+ Ha alcanzado el m&aacute;ximo de <b><!-- TMPL_VAR NAME="maxPrint" --></b>  operaciones de impresi&oacute;n posibles en un per&iacute;odo de  <b><!-- TMPL_VAR NAME="printRenew" --></b> d&iacute;as.
+<br>
+ <!-- /TMPL_IF -->
+<!-- TMPL_IF Name="tomuchc" -->
+Ha alcanzado el m&aacute;ximo de <b><!-- TMPL_VAR NAME="maxCopy" --></b>  operaciones de impresi&oacute;n posibles en un per&iacute;odo de  <b><!-- TMPL_VAR NAME="copyRenew" --></b> d&iacute;as.
+<br>
+ <!-- /TMPL_IF -->
+
+
+	<!-- TMPL_IF NAME="already" -->Ya tiene un pedido para este grupo.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_items_selected" -->Debe seleccionar al menos un tipo de ejemplar.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->Debe seleccionar una unidad de informaci&oacute;n para el retiro.<br><!-- /TMPL_IF -->
+ <!-- TMPL_IF NAME="already_issued" -->Ya tiene un ejemplar de este grupo en su poder.<br><!-- /TMPL_IF -->
+	</b></font></td></tr></table>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p>Realizar pedido por: <font size=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)</font></em> - <b>Registro de libro <!-- TMPL_VAR name="biblionumber" --></b></p>
+	<p> Seleccione de la lista el documento que desea pedir.</p>
+
+	<form name="formdate" action="/cgi-bin/koha/virtual/opac-virtualrequest.pl" method="post">
+		<input type="hidden" name="item_types_selected" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
+		<table border="1">
+			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-vir.bmp">
+				<th>Reservar</th>
+				<th>Volumen</th>
+				<th>Descripci&oacute;n</th>
+				<th>Tipo de Pedido</th>
+				<th>Ubicaci&oacute;n</th>
+
+			</tr>
+			<!-- TMPL_LOOP NAME="BITYPES" -->
+				<tr>
+			<!-- TMPL_IF NAME="CirculationEnabled" -->
+				<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td align="left"  ><input type="radio" name="bibitemtype" value="<!-- TMPL_VAR NAME="bibitem" -->"><!-- TMPL_VAR NAME="bibitemtype" --> </td>
+					<!-- TMPL_ELSE -->
+						<td>No puede reservarse</td>
+					<!-- /TMPL_UNLESS -->
+				<!-- TMPL_ELSE -->
+					<td>No puede reservarse</td>
+		       <!-- /TMPL_IF -->
+					<td align="center"  ><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+<td align="center" ><!-- TMPL_IF NAME="volumeddesc" --><!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+
+   <td align=center><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+
+					<td align="center" ><!-- TMPL_VAR NAME="branchinfo" --></td>
+
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>
+		Por favor seleccione la Unidad de Informaci&oacute;n de la que va a retirar el ejemplar:
+		<!-- TMPL_VAR NAME="CGIbranch" -->
+		</p>
+
+	<p><INPUT type="submit" value="Pedir" class="buttonv" ></p>
+	</form>
+
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+ <font size=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)</font></em> 
+
+	<p>Por favor confirme si desea realizar un pedido de este tipo: </p>
+	<form name="f" action="/cgi-bin/koha/virtual/opac-virtualrequest.pl" method="post">
+		<input type="hidden" name="place_reserve" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->">
+  		<table border="1">
+			<tr>
+			<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-vir.bmp">Tipo de Ejemplar</th>
+			<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-vir.bmp">Volumen</th>
+			<th  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-vir.bmp">Descripci&oacute;n</th>
+			 <th  bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-vir.bmp">Tipo de Pedido</th>	
+		</tr>
+                        <!-- TMPL_LOOP NAME="BITYPES" -->
+				<tr>
+
+<!-- TMPL_IF NAME="bibitem" -->
+	
+	<td><input type="hidden" name="bibitemtype" value="<!-- TMPL_VAR NAME="bibitem" -->"><!-- TMPL_VAR NAME="bibitemtype" --></td>
+	<td align="center"  ><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+	<td align="center" ><!-- TMPL_IF NAME="volumeddesc" --><!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE  -->-<!-- /TMPL_IF  --></td>
+  	 <td align=center><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir
+"  <!-- /TMPL_IF -->> </td>     
+
+<!-- /TMPL_IF -->
+
+	</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		Ser&aacute; retirado de <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
+	<p>Fecha del pedido  <b><!-- TMPL_VAR NAME="required_date" --> <!-- TMPL_IF NAME="today" --> (Hoy)<!-- /TMPL_IF --></b>. 
+<br>
+
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<p>Nota: para efectuar esta reserva el cargo es de <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<input type="submit" value="Realizar Pedido">
+	</form>
+<!-- /TMPL_IF -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
