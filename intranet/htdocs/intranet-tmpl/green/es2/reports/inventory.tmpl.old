@@ -1,0 +1,137 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" ><tr><td>Inventario</td></tr>
+         <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+<center>
+<form method="post" name="form1">
+	<table width="100%" align="left" cellpadding=0 cellspacing=0>
+		<tr>
+			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td class="tablaresultadoTitle" colspan=2>
+				Seleccione los ejemplares que desee verificar
+			</td>
+			<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		</tr>
+		<tr>
+		<td>&nbsp;</td>
+		 <td>&nbsp;</td>
+		 <td>&nbsp;</td
+		 <td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td height=25 valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal">
+				Localizaci&oacute;n del ejemplar entre
+			</td>
+			<td class="inputFontNormal">
+				 <input class="inputFontNormal" type="text" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">&nbsp; y &nbsp;<input  class="inputFontNormal" type="text" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			</td>
+			<td valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<tr>
+			<td height=25 valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal">
+					no visto desde
+			</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			</td>
+			<td valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<tr>
+			<td height=25 valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal">
+					mostrar
+			</td>
+			<td class="inputFontNormal">
+				<input class="inputFontNormal" type="text" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+				&nbsp;&nbsp;<i> ejemplares que comienzan en</i>&nbsp;&nbsp;
+				 <input class="inputFontNormal" type="text" name="offset" value="<!-- TMPL_VAR name="offset" -->">
+			</td>
+			<td valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+		<tr >
+			<td valign="center" class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td align="center" colspan="2">
+		        <a href="#"  onClick="form1.submit()"><img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+			 
+			</td>
+		</tr>
+	</table>
+</form>
+</td></tr>
+<tr><td>
+<form method="post">
+<input type="hidden" name="markseen" value="1">
+<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+<input type="hidden" name="offset" value="<!-- TMPL_VAR name="offset" -->">
+<!-- TMPL_IF name="loop" -->
+<table width="100%" cellspacing=0 cellpadding=0>
+	<tr>
+		<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+
+		<td class="tablaresultadoTitle">Visto</td>
+		<td class="tablaresultadoTitle">C&oacute;digo de Barras</td>
+		<td class="tablaresultadoTitle">Localizaci&oacute;n</td>
+		<td class="tablaresultadoTitle">T&iacute;tulo</td>
+		<td class="tablaresultadoTitle">Autor</td>
+		<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+	<tr valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="inputFontNormal">
+			<input class="inputFontNormal" type="checkbox" name="SEEN-<!-- TMPL_VAR name="itemnumber" -->" value="1">
+		</td>
+		<td class="inputFontNormal">
+			<!-- TMPL_VAR name="barcode" -->
+		</td>
+		<td class="inputFontNormal">
+			<!-- TMPL_VAR name="bulk" -->
+		</td>
+		<td class="inputFontNormal">
+			<!-- TMPL_VAR name="title" -->
+		</td>
+		<td class="inputFontNormal">
+			<!-- TMPL_VAR name="author" -->
+		</td>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<input type="submit" value="Marcado como visto" class="button">
+</form>
+<!-- /TMPL_IF -->
+
+<table>
+<tr>
+	<td>
+		<!-- TMPL_IF name="offset" -->
+		<form method="post">
+			<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+			<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+			<input type="hidden" name="offset" value="<!-- TMPL_VAR name="prevoffset" -->">
+			<input type="submit" value="&lt;&lt;&lt;" class="button">
+		</form>
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<!-- TMPL_IF name="nextoffset" -->
+		<form method="post">
+			<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+			<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+			<input type="hidden" name="offset" value="<!-- TMPL_VAR name="nextoffset" -->">
+			<input type="submit" value="&gt;&gt;&gt;" class="button">
+		</form>
+		<!-- /TMPL_IF -->
+	</td>
+</tr>
+</table>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

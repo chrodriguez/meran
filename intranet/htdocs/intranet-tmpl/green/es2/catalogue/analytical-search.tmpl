@@ -1,0 +1,126 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<center>
+<table border="0"  align="center">
+	<tr>
+		<td  class="fontresultado" align="center" colspan="100%">
+			T&eacute;rmino de b&uacute;squeda: 
+			<!-- TMPL_LOOP NAME="FORMINPUTS" -->
+			<!-- TMPL_IF EXPR="(field eq 'analytical')" -->
+			<b> Anal&iacute;ticas <!-- TMPL_VAR NAME="value" --></b>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+		</td>
+	</tr> 
+	<tr align="center" cellpadding=0 cellspacing=0>
+		<td class="number">
+		<!-- TMPL_IF NAME="displayprev" -->
+			<a href=search.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME=prevstartfrom -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=field -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra><img src="<!-- TMPL_VAR NAME="themelang" -->/images/prev.gif" border="0" alt="P&aacute;gina Anterior" height="9" width="10"></a>
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
+		<!-- /TMPL_IF -->
+		</td>
+		<!-- TMPL_LOOP NAME="numbers" -->
+		<!-- TMPL_IF NAME="highlight" -->
+		<td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
+		<!-- TMPL_ELSE -->
+		<td nowrap class="number">
+			<a href=search.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=field -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra><!-- TMPL_VAR NAME=number --></a>
+		</td>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="break" -->
+	</tr>
+	<tr>
+		<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<td class="number">
+		<!-- TMPL_IF NAME="displaynext" -->
+			<a href=search.pl?orden=<!-- TMPL_VAR NAME="orden" -->&startfrom=<!-- TMPL_VAR NAME=nextstartfrom -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=field -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra><img src="<!-- TMPL_VAR NAME="themelang" -->/images/next.gif" border="0" height="9" width="10" alt="P&aacute;gina Siguiente"></a>
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
+		<!-- /TMPL_IF -->
+		</td>
+	</tr>
+	<tr>
+		<td><br></td>
+	</tr>
+</table>
+																		
+<!-- Resultados de la b&uacute;squeda Table -->
+<!-- TMPL_IF NAME=numrecords -->
+<table border=0 cellspacing=0 cellpadding=0>
+
+	<tr class="tablaresultadoTitle" >
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td align=left width="30%">T&iacute;tulo</td>
+		<td align=left width="22%">Autores </td>
+		<td width="48%">Detalle</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+	</tr>
+
+
+<!-- Actual Resultados de la b&uacute;squeda -->
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+	<tr>
+		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+
+              	<td class="<!-- TMPL_VAR name="clase" -->">
+		<a class="inputFontNormal" href=/cgi-bin/koha/addanalysis.pl?bibnum=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->&bibnumitems=<!-- TMPL_VAR NAME=biblioitemnumber ESCAPE=URL -->#<!-- TMPL_VAR NAME=analyticalnumber -->><!-- TMPL_VAR NAME=analyticaltitle --></a>
+		</td>
+		<td class="<!-- TMPL_VAR name="clase" -->">
+		
+		 <!-- TMPL_IF name="analyticalauthor" -->
+		 <!-- TMPL_LOOP NAME="analyticalauthor" -->
+		 <a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra"><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a><br>
+		  <!-- /TMPL_LOOP -->                                                                <!-- /TMPL_IF -->
+		</td>
+
+		<td class="<!-- TMPL_VAR name="clase" -->" class="inputFontNormal">
+		EN:  <a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="autorppal" ESCAPE="URL" -->&type=intra"><!-- TMPL_VAR NAME="completo" --></a>
+		<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle"  -->:&nbsp;<!-- TMPL_VAR NAME="unititle" ESCAPE=HTML--><!-- /TMPL_IF--></a>
+		&nbsp;<!-- TMPL_VAR NAME="number" --> <!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" -->
+  		</td>
+
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+
+	<tr>
+		<td colspan=6>
+		<table border=0 cellpadding=0 cellspacing=0 width="100%">
+			<tr>
+				<td class="lineagruesa"  align="left" colspan="3"></td>
+			</tr>
+
+			<tr>
+				<td align=left>
+				<!-- TMPL_IF NAME=displayprev -->
+				<a class="inputFontNormal" href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=field -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra>Anteriores</a>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!-- /TMPL_IF -->
+				</td>
+				<td align=right>
+				<!-- TMPL_IF NAME=displaynext -->
+				<a class="inputFontNormal"href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=field -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra>Siguientes</a>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!-- /TMPL_IF -->
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+</table>
+
+<br>
+
+Resultados <b><!-- TMPL_VAR NAME="startfrom" --></b> a <b><!-- TMPL_VAR NAME="endat" --></b> de <b><!-- TMPL_VAR NAME="numrecords" --></b> registros.
+<hr>
+Intentar una nueva <a href=/cgi-bin/koha/catalogue-home.pl>b&uacute;squeda</a>
+
+<!-- TMPL_ELSE -->
+Intentar una nueva <a href=/cgi-bin/koha/catalogue-home.pl>b&uacute;squeda</a>
+<!-- /TMPL_IF -->
+
+ <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

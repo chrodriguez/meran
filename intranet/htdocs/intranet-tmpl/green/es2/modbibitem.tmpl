@@ -1,0 +1,341 @@
+ <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="javascript" type="text/javascript">
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+</script>
+
+<style type="text/css">
+    select { width: 450px; }
+    text {width:450px;}
+</style>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0"><tr><td class="pagetitle" ><a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionumber" -->&type=intra><!-- TMPL_VAR Name="title" ESCAPE=HTML--></a> (<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra"><!-- TMPL_VAR NAME="author" --></a>) </td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td class="inputFont">Modificar descripci&oacute;n bibliogr&aacute;fica:</td></tr>
+<tr><td class="inputFont" align="center"><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="description"--></td></tr>
+</table>
+<form action=updatebibitem.pl name="itemform" method=post>
+
+<input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+
+<table class="tablaresultado" border=0 cellspacing=0 cellpadding=5 align=left width="50%">
+<TR class="tablaresultadoTitle" VALIGN=TOP  bgcolor="99cc33"><TD colspan=2 ><input type=radio name=existing value="no" checked >MODIFICAR REGISTRO </td>
+</tr>
+<td colspan="2" class="inputFontNormal"><b>Nivel Bibliogr&aacute;fico:</b><br>
+<!-- TMPL_VAR NAME="LEVELTYPES" --></td>
+</tr>
+<td  class="inputFontNormal" colspan="2"><b>Tipo de documento:</b><br>
+<!-- TMPL_VAR NAME="CGIitemtype" -->
+</td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Soporte:</b><br>
+ <!-- TMPL_VAR NAME="SUPPORTTYPES" --></td>
+</tr>
+<tr >
+<td  colspan="2" class="inputFontNormal"><b>N&uacute;mero de Edici&oacute;n:</b><br>
+<input class="inputFontNormal" name="number" size="60" value="<!-- TMPL_VAR Name="number" -->" ></td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>A&ntilde;o de Edici&oacute;n:</b><br>
+<input class="inputFontNormal"name="publicationyear" size="60" value="<!-- TMPL_VAR Name="publicationyear" -->"  ></td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Descripci&oacute;n F&iacute;sica:</b><br>
+<input name="pages"class="inputFontNormal" size="60" value="<!-- TMPL_VAR Name="pages" -->" ></td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Tama&ntilde;o:</b><br>
+<input class="inputFontNormal" name="size" size="60" value="<!-- TMPL_VAR Name="size" -->" ></td>
+</tr>
+<tr>
+
+<td colspan="2" class="inputFontNormal"><b>Serie: </b><br>
+<input class="inputFontNormal" name="serie" size="60" value="<!-- TMPL_VAR Name="serie" -->"  ></td>
+</tr>
+
+<tr>
+<td class="inputFontNormal" colspan="2"><b>ISBN</b><br> <textarea class="inputFontNormal" name="isbncode" cols="60" rows="4"><!-- TMPL_LOOP Name="isbnloop" --><!-- TMPL_VAR Name="isbn" -->
+<!-- /TMPL_LOOP--></textarea></td>
+</tr>
+
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Volumen</b><br>
+<input class="inputFontNormal"type=text name=volume value="<!-- TMPL_VAR Name="volume" -->" size=60></td>
+</tr>
+<td colspan="2" class="inputFontNormal"><b>Descripci&oacute;n</b><br>
+<input class="inputFontNormal" type=text name=volumeddesc value="<!-- TMPL_VAR Name="volumeddesc" -->" size=60></td>
+</tr>
+
+
+<tr>
+<td colspan="2" class="inputFontNormal"><b>ISSN:</b><br>
+<input name="issn" size="60" class="inputFontNormal" value="<!-- TMPL_VAR Name="issn" -->"></td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>LCCN:</b><br>
+<input class="inputFontNormal" name="lccn" size="60" value="<!-- TMPL_VAR Name="lccn" -->"></td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Pa&iacute;s:</b> <br>
+<!-- TMPL_VAR NAME="COUNTRYTYPES" --></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2"><b>Idioma:</b> <br>
+<!-- TMPL_VAR NAME="LANGTYPES" --></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2"><b>URL</b><br>
+<input class="inputFontNormal" type="text" name="url" value="<!-- TMPL_VAR Name="url" -->" size="60"></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2"><b>Editor</b><br>
+<textarea class="inputFontNormal" name="publisher" cols="60" rows="4"><!-- TMPL_LOOP Name="publoop" --><!-- TMPL_VAR Name="publisher" -->
+<!-- /TMPL_LOOP--></textarea></td>
+</tr>
+<td class="inputFontNormal" colspan="2"><b>Lugar</b><br>
+<input class="inputFontNormal"type=text name="place" value="<!-- TMPL_VAR Name="place" -->" size="60"></td>
+</tr>
+<td class="inputFontNormal" colspan="2"><b>Ilustraciones</b><br>
+<input type=text class="inputFontNormal"name=illustrations value="<!-- TMPL_VAR Name="illustration" -->" size="60"></td>
+</tr>
+<td class="inputFontNormal"><b>Notas</b><br>
+<textarea class="inputFontNormal" name="notes" cols="60" rows="4"><!-- TMPL_VAR name="bnotes" --></textarea>
+</tr>
+
+<tr class="tablaresultadoTitle">
+<td colspan="2"><b>ESTANTES VIRTUALES</b></td>
+</tr>
+
+<tr>
+<td class="inputFontNormal" colspan="2"><b>Estantes:</b></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2"><!-- TMPL_VAR NAME="BOOKSHELF" --></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2"><b>Subestantes:</b></td>
+</tr>
+<tr>
+<td colspan="2"><select class="inputFontNormal"   name="subshelfbook" id="subshelfbook" size="10"><option></option></select>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="inputFontNormal"><b>Agregar a:</b></td>
+</tr>
+<tr>
+<td class="inputFontNormal" colspan="2">
+<input type="hidden" name="shelfvalues" value="">
+<!-- TMPL_VAR NAME="SHELFS" -->
+</td>
+</tr>
+<tr><td class="inputFontNormal" align="center" colspan="2"> (*) Nuevo Estante<td></tr>
+<tr>
+<script>
+        function cambioUnidadDeInformacion(){
+                document.unidad.submit();
+        }
+
+
+        function hacerSubmit(){
+        //esta funcion recorre todos los checknox y aquellos que fueron tildados, le añede a un input
+        //todos los valores asi estos son enviados para el pl
+                var a=new Array();
+                var b=new Array();
+                var longitud = document.importacionIso.elements.length;
+                for (i=0; i < longitud; i++) {
+                        if ( document.importacionIso.elements[i].checked){//si esta chequeado
+                                a.push(document.importacionIso.elements[i].value);//agrego el id del que esta tildadoi
+                                b.push(document.importacionIso.elements[i+1].value)
+                        }
+   }
+                document.importacionIso.descripciones.value=a.join();
+                document.importacionIso.tablas.value=b.join();
+        //      alert( document.importacionIso.descripciones.value);
+                document.importacionIso.submit();
+        }
+
+
+        listaValues= new Array();
+        listaOptions= new Array();
+        <!-- TMPL_VAR NAME=inicializaciones -->
+        <!-- TMPL_VAR NAME=valores -->
+
+
+        function vaciarSelect(oSelect){
+                cant=oSelect.length;
+                for(i=0;i<cant;i++){
+                        oSelect.options[0]=null;
+                }
+        }
+
+        function agregarOpcionASelect(oSelect,text,value){
+                var oOption = new Option( text,value );
+                oSelect.options[oSelect.options.length]=oOption;
+        }
+
+
+        function cambiarListaDependiente(listaPrincipal,listaSecundaria){
+                vaciarSelect(listaSecundaria);
+                agregarOpcionASelect(listaSecundaria,'','');
+                if (listaPrincipal.options[listaPrincipal.selectedIndex].value != ''){
+                        listaSecundariaValues= listaValues[listaPrincipal.selectedIndex];
+                        listaSecundariaOptions= listaOptions[listaPrincipal.selectedIndex];
+                        for (i=0 ; i < listaSecundariaValues.length ; i++){
+                                agregarOpcionASelect(listaSecundaria,listaSecundariaOptions[i],listaSecundariaValues[i]);
+                        }
+                }
+        }
+function agregarOpcion(oSelect,text,value){
+                var oOption = new Option( text,value );
+                oSelect.options[oSelect.options.length]=oOption;
+
+        }
+
+       function  agregarEstante(s,ss,nw){
+        var shelf='';
+        var value='';
+        if (s.selectedIndex !=-1){
+                        shelf=s.options[s.selectedIndex].text;
+                        value=s.options[s.selectedIndex].value;}
+        var subshelf='';
+        if(ss.selectedIndex!=-1){
+                        subshelf=ss.options[ss.selectedIndex].text;
+                        value=ss.options[ss.selectedIndex].value;}
+
+        if(shelf != ''){
+                        var add=true;
+                        for (i=0 ; i < nw.length ; i++){if (nw.options[i].value == value){add=false;}}
+        if (add){
+                if(subshelf != ''){agregarOpcion(nw,shelf+'->'+subshelf,value);}
+                else{ agregarOpcion(nw,shelf,value);}}
+           }
+        }
+ function  eliminarEstante(nw){
+        var shelf='';
+        var value='';
+        if (nw.selectedIndex !=-1){
+                        nw.options[nw.selectedIndex]=null;}
+        }
+
+function mandarArreglo(lista,valores){
+        arreglo= new Array();
+        for (i=0; i< lista.options.length; i++) {
+                str= lista.options[i].value;
+                arreglo[arreglo.length]= str;
+
+        }
+    valores.value= arreglo.join("#");
+
+}
+
+function agregarNuevo(nw,s,ne){
+        var val=ne.value;
+        if (val != ''){
+        var shelf='';
+        var value='';
+        if (s.selectedIndex !=-1){
+                        shelf=s.options[s.selectedIndex].text;
+                        value=s.options[s.selectedIndex].value;}
+        if (value==''){value='top';}
+        var cmp=val;
+        if(shelf != ''){cmp=shelf+'->'+val;}
+        var add=true;
+        for (i=0 ; i < nw.length ; i++){if ((nw.options[i].text == cmp) || (nw.options[i].text == cmp+' (*)' )){add=false;}}
+
+        if (add){agregarOpcion(nw,cmp+' (*)',val+'@'+value);
+                ne.value='';}
+
+        }}
+</script>
+
+<td align=center colspan="2"><input type="button" onClick="agregarEstante(document.itemform.shelfbook,document.itemform.subshelfbook,document.itemform.newshelfbook);"  name="AddList" value="Agregar a Estante Virtual">
+<input type="button" onClick="eliminarEstante(document.itemform.newshelfbook);"  name="DeleteList" value="Eliminar">
+
+</td></tr>
+<tr>
+<td colspan="2" align="center" class="inputFontNormal" >
+Nuevo Estante:
+<INPUT name="newshelf" size="20" value="<!-- TMPL_VAR Name="newshelf" -->" >
+<input type="button" onClick=" agregarNuevo (document.itemform.newshelfbook,document.itemform.shelfbook,document.itemform.newshelf);"  name="Add" value="Agregar">
+</td>
+</tr>
+
+<input type=hidden name=bibnum value="<!-- TMPL_VAR Name="biblionumber" -->">
+<input type=hidden name=bibitemnum value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
+</table>
+
+
+<img src="/images/holder.gif" width=16 height=500 align=left>
+
+
+
+<!-- TMPL_IF Name="EXISTINGGROUP" -->
+<TABLE  cellspacing=0 cellpadding=5 border=0 class="tablaresultado">
+
+<TR  class="tablaresultadoTitle">
+<TD colspan=5>
+<input class="tablaresultadoTitle"type=radio name="existing" value="yes" >O VINCULAR ITEM A GRUPO EXISTENTE</b>
+</td>
+</tr>
+<tr valign=top>
+<td colspan=5 class="inputFontNormal">
+<select class="inputFontNormal"name="existinggroup"><br>
+<!-- TMPL_LOOP Name="bibitemloop" -->
+<option value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
+<!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="description"-->
+<br>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
+</tr>
+</table>
+ <!-- /TMPL_IF -->
+ <TABLE  cellspacing=0 cellpadding=5 border=0 class="tablaresultado">
+ 
+ 
+<TR VALIGN=TOP>
+<TD class="tablaresultadoTitle" colspan=5 ><b>EJEMPLARES QUE SE VERAN AFECTADOS<br>
+</td>
+</tr>
+<tr valign=top>
+<td class="impar">&nbsp;</td>
+<td class="impar">C&oacute;digo de Barras</td>
+<td class="impar">Localizaci&oacute;n</td>
+<td class="impar">Fecha Vencido</td>
+<td class="impar">&Uacute;ltima vista</td>
+</tr>
+<!-- TMPL_LOOP Name="itemloop" -->
+<tr valign=top class="inputFontNormal">
+<td><input class"inputFontTitle" type=checkbox  name="check_group_<!-- TMPL_VAR Name="barcode" -->"></td>
+<td><a  href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR Name="itemnumber" -->&bib=<!-- TMPL_VAR Name="biblionumber" -->&bi=<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
+<td class="inputFontNormal"><!-- TMPL_VAR Name="holdingbranch" --></td>
+<td></td>
+<td class="inputFontNormal"><!-- TMPL_VAR Name="datelastseen" --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+
+<p>
+<center>
+<a href="#" onClick="mandarArreglo(document.itemform.newshelfbook,document.itemform.shelfvalues);document.itemform.submit();" >
+<img name="save" id="save" alt="Guardar cambios" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+</center>
+
+
+</form>
+<p>
+
+
+ <br clear=all>
+ <p> &nbsp; </p>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+                <!-- TMPL_ELSE -->
+		                            <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+					                                                        <!-- /TMPL_IF -->
+												

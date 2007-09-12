@@ -1,0 +1,152 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/epoch_styles.css ">
+
+<script type="text/javascript">
+<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+
+/*You can also place this code in a separate file and link to it like epoch_classes.js*/
+        var dp_ini,dp_fin;      
+	window.onload = function () {
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+				};
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr><td class="pagetitle" >Registro de Actividades</td></tr>
+	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+
+<br>
+<form  name="unidad"  method=post action="registro.pl">
+	<table border="0" cellspacing="0" cellpadding="0">
+  		<tr>
+      		<!-- Miguel - se saco el calendario viejo - copie el codigo de availability.tmpl -->
+			
+			<td valign= "top" class=inputFontNormal>
+			<input class="inputFontNormal" type="checkbox" name="chkfecha" 
+				<!-- TMPL_IF NAME="chkfecha" -->checked<!-- /TMPL_IF -->>
+			<b>Seleccione para buscar por fecha.</b><br><br>
+			Seleccione una fecha de inicio:<br><br>
+			Seleccione una fecha de Fin:
+			</td>
+
+			<td valign= "top" class=inputFontNormal><br><br>
+			<input id="ini" class="inputFontNormal" name="dateselected" value="
+			<!-- TMPL_IF NAME="fechaInicio" --><!-- TMPL_VAR NAME="dateselected" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" 		border="0" alt="Selecciona una fecha"></a><br><br>
+			<input id="fin" class="inputFontNormal" name="dateselectedEnd" value="
+			<!-- TMPL_IF NAME="fechaFin" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
+			</td>
+
+
+
+			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td rowspan=3 class="inputFontNormal"> <b>Filtrar por:</b> <br>
+				<input id="Alta" class="inputFontNormal" type="radio" name="operacion" value="Alta">&nbsp;Alta
+				&nbsp;&nbsp;&nbsp;
+				<input id="Actualizado" class="inputFontNormal" type="radio" name="operacion" value="Actualizado">&nbsp;Actualizado
+				<input id="Borrado" class="inputFontNormal" type="radio" name="operacion" value="Borrado">&nbsp;Borrado
+				&nbsp;
+				<input id="Ninguno" class="inputFontNormal" type="radio" name="operacion" value="" checked>&nbsp;Ninguno
+				<br><br>
+
+				<input id="Libro" class="inputFontNormal" type="radio" name="tipo" value="Libro">&nbsp;Libro
+	        		&nbsp;
+				<input id="Grupo" class="inputFontNormal" type="radio" name="tipo" value="Grupo">Grupo
+                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="Ejemplar" class="inputFontNormal" type="radio" name="tipo" value="Ejemplar">&nbsp;Ejemplar
+				<input id="Ninguno" class="inputFontNormal" type="radio" name="tipo" value="" checked>&nbsp;Ninguno
+				<br><br>
+
+			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
+
+				<input class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"
+				<!-- TMPL_IF NAME="chkuser" -->checked<!-- /TMPL_IF -->><b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
+
+				<br><br>
+
+				<input class="inputFontNormal" type="checkbox" name="chknum" value="num" 
+				<!-- TMPL_IF NAME="chknum" -->checked<!-- /TMPL_IF -->><b>N&uacute;mero
+
+				desde: <input class="inputFontNormal" type="text" name="numDesde" size="12" 
+				<!-- TMPL_IF NAME="chknum" -->value="<!-- TMPL_VAR NAME= "numDesde" -->"<!-- /TMPL_IF -->>
+				hasta: </b><input class="inputFontNormal" type="text" name="numHasta" size="12" 
+				<!-- TMPL_IF NAME="chknum" -->value="<!-- TMPL_VAR NAME= "numHasta" -->"<!-- /TMPL_IF -->>
+				<br><br>
+				<a  onClick='unidad.submit()'><img   src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+			</td>
+   		</tr>
+	</table>
+</form>
+
+
+
+
+<center>
+<p class="inputFontNormal"> 
+	<b>La cantidad de modificaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
+	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+</p><br>
+
+<!-- TMPL_IF NAME="ok2" -->
+<a class="inputFontNormal" href=registro.pl?ini=<!-- TMPL_VAR name="ant" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&numDesde=<!--TMPL_VAR NAME=numDesde -->&numHasta=<!--TMPL_VAR NAME=numHasta -->&tipo=<!--TMPL_VAR NAME=tipo -->&operacion=<!--TMPL_VAR NAME=operacion -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME=chkuser -->&chknum=<!--TMPL_VAR NAME=chknum -->&user=<!--TMPL_VAR NAME=user -->>
+<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+<a class="inputFontNormal" href=registro.pl?ini=<!-- TMPL_VAR NAME=number -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&numDesde=<!--TMPL_VAR NAME=numDesde -->&numHasta=<!--TMPL_VAR NAME=numHasta -->&tipo=<!--TMPL_VAR NAME=tipo -->&operacion=<!--TMPL_VAR NAME=operacion -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME=chkuser -->&chknum=<!--TMPL_VAR NAME=chknum -->&user=<!--TMPL_VAR NAME=user -->>
+<u><!-- TMPL_VAR name=number --></u></a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+<a class="inputFontNormal" href=registro.pl?ini=<!-- TMPL_VAR name="sig" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&numDesde=<!--TMPL_VAR NAME=numDesde -->&numHasta=<!--TMPL_VAR NAME=numHasta -->&tipo=<!--TMPL_VAR NAME=tipo -->&operacion=<!--TMPL_VAR NAME= operacion -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME= chkuser -->&chknum=<!--TMPL_VAR NAME= chknum -->&user=<!--TMPL_VAR NAME= user -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<script language="javascript">
+var radio1=document.getElementById('<!-- TMPL_VAR NAME="operacion" -->');
+radio1.checked=true;
+</script>
+
+<script language="javascript">
+var radio2=document.getElementById('<!-- TMPL_VAR NAME="tipo" -->');
+radio2.checked=true;
+</script>
+
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<th>Usuario</th>
+		<th>Fecha</th>
+		<th>Operaci&oacute;n</th>
+		<th>Tipo</th>
+		<th>N&uacute;mero</th>
+		<th>Nota</th>
+		<th>Agregar nota</th>
+		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<form  name="modificacion"  method=post action="registro.pl">
+  	<tr align='center'>
+  		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=nomCompleto --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=fecha --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=operacion --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=tipo --></td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href=/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->><!-- TMPL_VAR NAME=numero --></a></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <textarea class="inputFontNormal" name="notas" cols="20" rows="6"><!-- TMPL_VAR NAME=nota --></textarea></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" > <input  src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="modificacion.submit()"> </td>
+ 		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+ 	</tr>
+   	<input type="hidden" value="<!-- TMPL_VAR NAME=idModificacion -->"  name="id" >
+	</form>
+<!-- /TMPL_LOOP -->
+ 	<tr valign=middle>
+        	<td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+</table>
+</center>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

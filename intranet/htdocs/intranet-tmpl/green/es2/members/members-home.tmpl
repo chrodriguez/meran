@@ -1,0 +1,91 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+	<!-- /TMPL_IF -->
+
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Usuarios Reales</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<p>
+<center>
+
+<table>
+	<tr>
+		<td class="inputFontNormal">
+			<form ACTION="/cgi-bin/koha/member.pl" method=post name="formmember">
+				<b>B&uacute;squeda de Usuarios Reales</b>
+				<INPUT class="inputFontNormal" TYPE="text" size=35 name=member>
+		</td>
+		<td>
+ 			<a href="#" onClick="formmember.submit()" ><img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
+		</td>
+ 			</form>
+	</tr>
+</table>
+
+<table>
+<tr>
+<td class="inputFontNormal">
+<p class="recuadroAyuda">
+Tipear el apellido, DNI o legajo del usuario. Presionar buscar.
+</p>
+</td></tr>
+</table>
+</center>
+<br>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="pagetitle">Ver Usuarios</td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+
+</table>
+
+<table border=0 cellspacing=0 cellpadding=10 width="85%" align="center">
+<!--<tr VALIGN=TOP  >
+<tr class="tablaresultadoTitle">
+<td><b>Ver Usuarios</B>
+</td></tr>-->
+
+<TR VALIGN=TOP>
+<TD align="center" class="inputFontNormal">
+
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=a">A</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=b">B</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=c">C</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=d">D</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=e">E</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=f">F</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=g">G</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=h">H</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=i">I</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=j">J</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=k">K</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=l">L</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=m">M</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=n">N</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=o">O</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=p">P</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=q">Q</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=r">R</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=s">S</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=t">T</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=u">U</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=v">V</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=w">W</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=x">X</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=y">Y</a> -
+<A class="inputFontNormal"HREF="/cgi-bin/koha/member.pl?member=z">Z</a>
+</TD></TR></TABLE>
+<P>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+	<!-- /TMPL_IF -->
+

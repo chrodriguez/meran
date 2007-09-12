@@ -1,0 +1,112 @@
+<!-- TMPL_INCLUDE Name="intranet-top.inc" -->
+
+<form action="virtualplacerequest.pl" method=post>
+<input type=hidden name=biblio value="<!-- TMPL_VAR Name="bib" -->">
+<input type=hidden name=type value=str8>
+<input type=hidden name=title value="<!-- TMPL_VAR Name="title" -->">
+<h1>Pedidos:  
+<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->><!-- TMPL_VAR Name="title" --></a>
+<!-- TMPL_VAR Name="author" --></h1><P>
+<p>
+
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+	<TR VALIGN=TOP>
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>ID de Usuario</b></TD>
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha</b></TD>
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Recolectar</b></TD>
+	</TR>
+	<tr VALIGN=TOP  >
+		<td><input type=text size=10 name=member></td>
+		<td><!-- TMPL_VAR Name=date --></td>
+		<td><!-- TMPL_VAR name="CGIbranch" --></td>
+	</tr>
+</table>
+<hr>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+<TR VALIGN=TOP>
+	<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Pedir</b></TD>
+	<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de ejemplar</b></TD>
+	<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Volumen</b></TD>
+	<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Pedido</b></TD>
+
+</TR>
+<!--$bibitemrows-->
+<!-- TMPL_LOOP Name="bibitemloop" -->
+	<tr VALIGN=TOP>
+		<TD>
+			<!-- TMPL_IF Name="itemlost" -->
+				No puede ser seleccionado
+			<!-- TMPL_ELSE -->
+				<input type=radio name=reqbib value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+				<input type=hidden name=biblioitem value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+			<!-- /TMPL_IF -->
+		</td>
+		<TD>
+			<!-- TMPL_VAR Name="description" -->
+		</td>
+		<td align=center>
+			<!-- TMPL_VAR Name="volumeddesc" -->
+		</td>
+		
+		  <td align=center><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+	
+	</tr>
+<!-- /TMPL_LOOP -->
+
+</table>
+<br>
+<INPUT type="submit" value="Pedir"  >
+</form>
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+	<TR VALIGN=TOP>
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp" colspan=7><B>PEDIDOS EXISTENTES </b></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Usuario</b></TD>
+         <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Ejemplar</b></TD>
+
+	<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Volumen</b></TD>
+<td bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Fecha</b></TD>
+
+		<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Unidad de Informaci&oacute;n</b></TD>
+	
+   <td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo</b></TD>
+
+<td  bgcolor="ccccff" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"></td>
+	</TR>
+	<!--$existingreserves-->
+	<!-- TMPL_LOOP Name="requestloop" -->
+		<tr VALIGN=TOP>
+	<form name=T action=virtualmodrequest.pl method=post>
+
+			<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
+			<input type=hidden name=biblio value=<!-- TMPL_VAR Name="bib" -->>
+			<input type=hidden name=biblioitemnumber value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+			<input type=hidden name=timestamp value="<!-- TMPL_VAR NAME="timestamp" -->">
+			<input type=hidden name=op value="del">
+
+			<TD>
+			<a href=/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+			</td>
+			                                                              
+		 	 <TD><!-- TMPL_VAR Name="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR Name="description" --> </td>
+                                                                                                                             
+    <td align=center><!-- TMPL_IF Name="volume" --><!-- TMPL_VAR Name="volume" -->: <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+
+			<TD><!-- TMPL_VAR Name="date" --></td>
+			<TD><!-- TMPL_VAR Name="branchname" --></td>
+			  <td><IMG <!-- TMPL_IF Name="copy" --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
+
+				<td>
+<!-- TMPL_IF Name="complete" -->Cumplido<br>(<!-- TMPL_VAR Name="date_complete" -->) <!-- TMPL_ELSE --> 	<INPUT TYPE="image" name="delete"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" title="Borrar Pedido" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {return true;} else {return false;}"> 
+	<!-- /TMPL_IF -->
+	</td>
+	</form>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<P>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

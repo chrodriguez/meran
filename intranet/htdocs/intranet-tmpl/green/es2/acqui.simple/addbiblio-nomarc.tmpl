@@ -1,0 +1,113 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="javascript" type="text/javascript">
+
+<!-- TMPL_INCLUDE NAME="ajax.js" -->
+<!-- TMPL_INCLUDE NAME="wick.js" -->
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+function cambiarTipo(){
+valor='colaborando como: '+document.getElementById("referenciaColaboradores").value;
+document.getElementById('colaboradores').value +=valor;
+document.getElementById("referenciaColaboradores").value="NULL";
+document.getElementById('colaboradores').focus();
+}
+
+</script>
+
+<table width="100%" align="right" class="pagetitle" border="0" cellpadding="0" cellspacing="0" ><tr><td>Agregar Documento</td>
+</tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+		
+
+<!-- TMPL_IF NAME="ERROR" -->
+<br>
+<center>
+<font color="#FF0000">Por favor, especifique un t&iacute;tulo</font>
+</center>
+<!-- /TMPL_IF -->
+<br>
+<br>
+<!-- Miguel - Saque el Autocomplete del Input, me parece que molesta mucho, ver-->
+<FORM action="savebiblio.pl" method="post" name="f3" AUTOCOMPLETE='off'>
+<input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+
+<table  width="60%" align="center" cellpadding="3" cellspacing="0">
+<tr>
+<td align="right" class="inputFontNormal">Secci&oacute;n Primera: Informaci&oacute;n de Copyright</td></tr>
+
+<tr>
+<td class="inputFontNormal"  valign="top" ><b>Autor:</b><br>
+<INPUT  class="wickEnabled" name="author" id="author" size="107" value="<!-- TMPL_VAR Name="author" -->">
+</td></tr>
+<tr>
+<td class="inputFontNormal"><b>Autores Adicionales:</b><i>&nbsp;(1 por l&iacute;nea)</i><br>
+<textarea  class="wickEnabled" name="additionalauthors" id="additionalauthors" cols="80" rows="3" ><!-- TMPL_VAR Name="additionalauthors" --></textarea></td>
+</tr>
+<tr>
+<td class="inputFontNormal"><strong>Colaboradores:</strong><i>&nbsp;(1 por l&iacute;nea)</i> &nbsp;-&nbsp;
+<!-- TMPL_IF NAME="referenciaColaboradores" -->
+<strong>Funci&oacute;n:</strong>
+<!-- TMPL_VAR Name="referenciaColaboradores" -->
+<!-- /TMPL_IF -->
+<br>
+<textarea  class="wickEnabled" name="colaboradores" id="colaboradores" cols="80" rows="3"><!-- TMPL_VAR Name="colaboradores" --></textarea>
+</td>
+</tr>
+
+<tr>
+<td class="inputFontNormal" ><b>T&iacute;tulo: *</b><br>
+<iNPUT class="inputFontNormal" name="title" size="108" ></td>
+</tr>
+<tr>
+<td class="inputFontNormal" ><b>T&iacute;tulo Informativo:</b><br>
+<INPUT class="inputFontNormal" name="unititle" size="108" ></td>
+</tr>
+<tr>
+<td class="inputFontNormal" ><b>Otros T&iacute;tulos:</b><i>&nbsp;(1 por l&iacute;nea)</i><br>
+<textarea class="inputFontNormal" name="subtitle" cols="106" rows="3"><!-- TMPL_VAR Name="subtitle" --></textarea></td>
+</tr>
+<!-- TMPL_IF NAME="resp" -->
+<tr>
+<td class="inputFontNormal" ><b>Menci&oacute;n de responsabilidad:</b><br>
+<textarea class="inputFontNormal" name="responsability" cols="106" rows="3"><!-- TMPL_VAR Name="responsability" --></textarea>
+</td>
+</tr>
+<!-- /TMPL_IF -->
+<tr>
+<td class="inputFontNormal" ><b>Temas:</b><i>&nbsp;(1 por l&iacute;nea)</i><br>
+<textarea class="wickEnabled" name="subjectheadings" id="subjectheadings" cols="80" rows="3"><!-- TMPL_VAR Name="subjectheadings" --></textarea></td>
+</tr>
+<tr>
+<td class="inputFontNormal" valign="top" ><b>CDU:</b><br>
+<INPUT class="inputFontNormal" name="seriestitle" size="108" value="<!-- TMPL_VAR Name="seriestitle" -->" ></td>
+</tr>
+<tr>
+<td class="inputFontNormal" valign="top" ><b>Notas:</b><br>
+<textarea class="inputFontNormal" cols="106" rows="3" name="notes"><!-- TMPL_VAR Name="notes" --></textarea>
+</tr>
+<tr>
+<td class="inputFontNormal" ><b>Resumen:</b><br>
+<textarea cols="106" rows="3" class="inputFontNormal" name="abstract"><!-- TMPL_VAR Name="abstract" --></textarea></td>
+</tr>
+<tr>
+<td align="right" class="inputFontNormal">
+<b>(*) Obligatorio</b>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
+<input type="submit" style="visibility:hidden" align="center">
+ 	<a href="#" onMouseOut="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png')" onMouseOver="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardarbis.png')" onClick="f3.submit()" >
+	<img name="save" id="save" alt="Guardar cambios" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+</td>
+</tr>
+
+</table>
+
+</FORM>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

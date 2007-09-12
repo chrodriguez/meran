@@ -1,0 +1,414 @@
+		  15349 Query       select borrowernumber from borrowers where cardnumber='kohaadmin'
+		  15349 Query       select lastchangepassword, changepassword from borrowers where borrowernumber='0'
+		  15349 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='keeppasswordalive'
+		LIMIT	1
+
+		  15349 Query       select borrowernumber from borrowers where userid='kohaadmin'
+		  15349 Query       select borrowernumber from borrowers where cardnumber='kohaadmin'
+		  15349 Quit       
+051123 17:21:21	  15350 Connect     kohaadmin@localhost on Econo
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='timeout'
+		LIMIT	1
+
+		  15350 Query       SELECT userid,ip,lasttime FROM sessions WHERE sessionid='24791-1132770778_FCE'
+		  15350 Query       UPDATE sessions SET lasttime='1132777281' WHERE sessionID='24791-1132770778_FCE'
+		  15350 Query       SELECT cardnumber FROM borrowers WHERE userid='kohaadmin'
+		  15350 Query       SELECT flags FROM borrowers WHERE cardnumber='kohaadmin'
+		  15350 Query       SELECT bit, flag, defaulton FROM userflags
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='insecure'
+		LIMIT	1
+
+		  15350 Query       select borrowernumber from borrowers where userid='kohaadmin'
+		  15350 Query       select borrowernumber from borrowers where cardnumber='kohaadmin'
+		  15350 Query       select lastchangepassword, changepassword from borrowers where borrowernumber='0'
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='keeppasswordalive'
+		LIMIT	1
+
+		  15350 Query       SELECT borrowers.* , categories.description AS cat
+					FROM borrowers
+					INNER  JOIN categories ON categories.categorycode = borrowers.categorycode
+					WHERE borrowers.borrowernumber = '13945' 
+		  15350 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15350 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15350 Query       SELECT * FROM issues,biblio,biblioitems,items
+			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+				AND items.biblionumber     = biblio.biblionumber
+				AND issues.itemnumber      = items.itemnumber
+				AND issues.borrowernumber  = '13945'
+				AND issues.returndate is NULL
+				AND issues.date_due < '2005-11-23'
+		  15350 Query       SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
+FROM reserves
+INNER JOIN items ON reserves.itemnumber = items.itemnumber
+INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
+INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
+INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+INNER JOIN branches ON branches.branchcode = reserves.branchcode
+WHERE borrowernumber ='13945' AND reserves.found = 'W' AND cancellationdate IS NULL
+		  15350 Query       select bit,flag from userflags
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='defaultissuetype'
+		LIMIT	1
+
+		  15350 Query       Select * from issues where date_due < now() and returndate is NULL where borrowernumber = '13945'
+		  15350 Query       select * from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where borrowernumber = '13945' and (now() between startdate and enddate) and ((sanctionissuetypes.issuecode = 'DO') or (sanctionissuetypes.issuecode is null))
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='maxreserves'
+		LIMIT	1
+
+		  15350 Query       SELECT biblio.title as rtitle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, reserves.biblioitemnumber as rbiblioitemnumber,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, biblioitems.number as redicion, reserves.itemnumber as ritemnumber, reserves.branchcode as rbranch 			FROM reserves
+			inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
+			INNER JOIN biblio on biblioitems.biblionumber = biblio.biblionumber WHERE  reserves.borrowernumber = 13945
+					and cancellationdate is NULL and
+					(found <> 'F' or found is NULL) and reserves.constrainttype is NULL
+		  15350 Query       Select *, issues.renewals as renewals2
+        from issues left join items  on items.itemnumber=issues.itemnumber
+        inner join  biblioitems on items.biblioitemnumber=biblioitems.biblioitemnumber
+         where borrowernumber='13945'
+        and issues.returndate is NULL order by date_due
+		  15350 Query       SET autocommit=0 
+		  15350 Query       Select * from reserves where itemnumber='9163' 
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='open'
+		LIMIT	1
+
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='close'
+		LIMIT	1
+
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15350 Query       insert into reserves (itemnumber,biblioitemnumber,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) values ('9163','2755','13945','2005-11-23',NOW(),'2005-11-24','FCE')
+		  15350 Query       commit
+		  15350 Query       Select categorycode from borrowers where borrowernumber='13945' 
+		  15350 Query       Select * from issues where date_due < now() and returndate is NULL where borrowernumber = '13945'
+		  15350 Query       select * from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where borrowernumber = '13945' and (now() between startdate and enddate) and ((sanctionissuetypes.issuecode = 'ES') or (sanctionissuetypes.issuecode is null))
+		  15350 Query       Select count(*) as prestamos from issues where returndate is NULL and  borrowernumber='13945' 
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='maxissues'
+		LIMIT	1
+
+		  15350 Query       SET autocommit=0
+		  15350 Query       Select * from reserves where biblioitemnumber='2755' and borrowernumber='13945' for update 
+		  15350 Query       Update reserves set constrainttype='P'  where biblioitemnumber='2755' and borrowernumber='13945' 
+		  15350 Query       Delete from sanctions where reservenumber='50' 
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='daysissue'
+		LIMIT	1
+
+		  15350 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15350 Query       INSERT INTO issues (borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals) VALUES ('13945','9163',NOW(),'FCE','FCE','0') 
+		  15350 Query       Insert into historicCirculation (type,borrowernumber,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values ('issue','13945',NOW(),'2755','9163','FCE') 
+		  15350 Query       commit
+		  15350 Quit       
+051123 17:21:30	  15351 Connect     kohaadmin@localhost on Econo
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='opaclanguages'
+		LIMIT	1
+
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='template'
+		LIMIT	1
+
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='timeout'
+		LIMIT	1
+
+		  15351 Query       SELECT userid,ip,lasttime FROM sessions WHERE sessionid='24791-1132770778_FCE'
+		  15351 Query       UPDATE sessions SET lasttime='1132777290' WHERE sessionID='24791-1132770778_FCE'
+		  15351 Query       SELECT cardnumber FROM borrowers WHERE userid='kohaadmin'
+		  15351 Query       SELECT flags FROM borrowers WHERE cardnumber='kohaadmin'
+		  15351 Query       SELECT bit, flag, defaulton FROM userflags
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='insecure'
+		LIMIT	1
+
+		  15351 Query       select borrowernumber from borrowers where userid='kohaadmin'
+		  15351 Query       select borrowernumber from borrowers where cardnumber='kohaadmin'
+		  15351 Query       select lastchangepassword, changepassword from borrowers where borrowernumber='0'
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='keeppasswordalive'
+		LIMIT	1
+
+		  15351 Query       select borrowernumber from borrowers where userid='kohaadmin'
+		  15351 Query       select borrowernumber from borrowers where cardnumber='kohaadmin'
+		  15351 Query       select branches.*,categorycode from branches inner join branchrelations on branches.branchcode=branchrelations.branchcode
+		  15351 Query       select * from printers
+		  15351 Query       SELECT borrowers.* , categories.description AS cat
+					FROM borrowers
+					INNER  JOIN categories ON categories.categorycode = borrowers.categorycode
+					WHERE borrowers.borrowernumber = '13945' 
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT * FROM issues,biblio,biblioitems,items
+			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+				AND items.biblionumber     = biblio.biblionumber
+				AND issues.itemnumber      = items.itemnumber
+				AND issues.borrowernumber  = '13945'
+				AND issues.returndate is NULL
+				AND issues.date_due < '2005-11-23'
+		  15351 Query       SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
+FROM reserves
+INNER JOIN items ON reserves.itemnumber = items.itemnumber
+INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
+INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
+INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+INNER JOIN branches ON branches.branchcode = reserves.branchcode
+WHERE borrowernumber ='13945' AND reserves.found = 'W' AND cancellationdate IS NULL
+		  15351 Query       select bit,flag from userflags
+		  15351 Query       select * from biblio,items,biblioitems where items.itemnumber='9163' and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber
+		  15351 Query       select date_due, borrowers.borrowernumber, issuecode, categorycode from issues inner join borrowers on issues.borrowernumber = borrowers.borrowernumber where itemnumber='9163' and isnull(returndate)
+		  15351 Query       select * from itemtypes where itemtype='LIB'
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15351 Query       SELECT borrowers.* , categories.description AS cat
+					FROM borrowers
+					INNER  JOIN categories ON categories.categorycode = borrowers.categorycode
+					WHERE borrowers.borrowernumber = '13945' 
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT * FROM issues,biblio,biblioitems,items
+			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+				AND items.biblionumber     = biblio.biblionumber
+				AND issues.itemnumber      = items.itemnumber
+				AND issues.borrowernumber  = '13945'
+				AND issues.returndate is NULL
+				AND issues.date_due < '2005-11-23'
+		  15351 Query       SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
+FROM reserves
+INNER JOIN items ON reserves.itemnumber = items.itemnumber
+INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
+INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
+INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+INNER JOIN branches ON branches.branchcode = reserves.branchcode
+WHERE borrowernumber ='13945' AND reserves.found = 'W' AND cancellationdate IS NULL
+		  15351 Query       select bit,flag from userflags
+		  15351 Query       SELECT borrowers.* , categories.description AS cat
+					FROM borrowers
+					INNER  JOIN categories ON categories.categorycode = borrowers.categorycode
+					WHERE borrowers.borrowernumber = '13945' 
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT SUM(amountoutstanding) AS total
+			FROM accountlines
+		WHERE borrowernumber = '13945'
+			AND amountoutstanding<>0
+		  15351 Query       SELECT * FROM issues,biblio,biblioitems,items
+			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+				AND items.biblionumber     = biblio.biblionumber
+				AND issues.itemnumber      = items.itemnumber
+				AND issues.borrowernumber  = '13945'
+				AND issues.returndate is NULL
+				AND issues.date_due < '2005-11-23'
+		  15351 Query       SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
+FROM reserves
+INNER JOIN items ON reserves.itemnumber = items.itemnumber
+INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
+INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
+INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+INNER JOIN branches ON branches.branchcode = reserves.branchcode
+WHERE borrowernumber ='13945' AND reserves.found = 'W' AND cancellationdate IS NULL
+051123 17:21:31	  15351 Query       select bit,flag from userflags
+		  15351 Query       SELECT issues.timestamp      AS timestamp,
+				issues.date_due       AS date_due,
+				items.biblionumber    AS biblionumber,
+				items.itemnumber    AS itemnumber,
+				items.barcode         AS barcode,
+				items.bulk 		AS bulk,
+				biblio.title          AS title,
+				biblio.author         AS author,
+				biblioitems.dewey     AS dewey,
+				itemtypes.description AS itemtype,
+				biblioitems.volume AS volume,
+				biblioitems.volumeddesc AS volumeddesc, 
+				biblioitems.subclass  AS subclass,
+				biblioitems.biblioitemnumber AS biblioitemnumber,
+				biblioitems.classification AS classification,
+				issuetypes.description AS type
+			FROM issues,items,biblioitems,biblio, itemtypes, issuetypes 
+			WHERE issues.borrowernumber  = '13945'
+			AND issues.issuecode 	   = issuetypes.issuecode
+			AND issues.itemnumber      = items.itemnumber
+			AND items.biblionumber     = biblio.biblionumber
+			AND items.biblioitemnumber = biblioitems.biblioitemnumber
+			AND itemtypes.itemtype     = biblioitems.itemtype
+			AND issues.returndate      IS NULL
+			ORDER BY issues.date_due
+		  15351 Query       Select * from issues where itemnumber='9163'
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='daysissue'
+		LIMIT	1
+
+		  15352 Connect     kohaadmin@localhost on Econo
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='dateformat'
+		LIMIT	1
+
+		  15351 Query       Select * from reserves inner join issues on issues.itemnumber=reserves.itemnumber where reserves.itemnumber='9163' and reserves.borrowernumber='13945' and reserves.constrainttype='P'
+		  15351 Query       Select * from reserves where biblioitemnumber='2755' and itemnumber is NULL order by timestamp limit 1
+		  15351 Query       SELECT description FROM categories WHERE categorycode = 'DO'
+		  15351 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='defaultissuetype'
+		LIMIT	1
+
+		  15351 Query       select * from issuetypes order by description
+		  15351 Query       Select value  from systempreferences where variable='maxissues'
+		  15351 Query       SELECT biblio.title as rtitle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, reserves.biblioitemnumber as rbiblioitemnumber,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, biblioitems.number as redicion, reserves.itemnumber as ritemnumber, reserves.branchcode as rbranch 			FROM reserves
+			inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
+			INNER JOIN biblio on biblioitems.biblionumber = biblio.biblionumber WHERE  reserves.borrowernumber = 13945
+					and cancellationdate is NULL and
+					(found <> 'F' or found is NULL) and reserves.constrainttype is NULL
+		  15351 Quit       
+051123 17:21:34	  15353 Connect     kohaadmin@localhost on Econo
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='opaclanguages'
+		LIMIT	1
+
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='opacthemes'
+		LIMIT	1
+
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='timeout'
+		LIMIT	1
+
+		  15353 Query       select value from systempreferences where variable='ldapenabled'
+		  15353 Query       select password,cardnumber,branchcode from borrowers where userid=NULL
+		  15353 Query       select password,branchcode from borrowers where cardnumber=NULL
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='insecure'
+		LIMIT	1
+
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='marc'
+		LIMIT	1
+
+		  15352 Query       select shelfname from bookshelf  where shelfnumber='102'
+		  15352 Query       select parent from bookshelf  where shelfnumber='102' and type='public'
+		  15352 Query       SELECT               bookshelf.shelfnumber, bookshelf.shelfname,
+                                                        count(shelfcontents.biblioitemnumber) as count
+                                                                FROM            bookshelf
+                                                                LEFT JOIN       shelfcontents
+                                                                ON              bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type='public') and (bookshelf.shelfnumber='98')
+                                                                GROUP BY        bookshelf.shelfnumber order by shelfname
+		  15352 Query       Select count(*) as countShelf FROM bookshelf WHere ( bookshelf.type =  'public' ) AND ( bookshelf.parent ='98' )ORDER  BY shelfname
+		  15352 Query       SELECT biblio.title as title, biblio.biblionumber as biblionumber, biblioitems.biblioitemnumber as biblioitemnumber, biblio.author as author, biblioitems.place as place , biblioitems.number as editor, biblioitems.publicationyear as publicationyear  FROM biblio, biblioitems,shelfcontents WHERE ( shelfnumber ='102' )  and ( shelfcontents.biblioitemnumber = biblioitems.biblioitemnumber ) AND ( biblioitems.biblionumber = biblio.biblionumber )ORDER  BY biblio.title DESC 
+		  15352 Query       SELECT               bookshelf.shelfnumber, bookshelf.shelfname,
+                                                        count(shelfcontents.biblioitemnumber) as count
+                                                                FROM            bookshelf
+                                                                LEFT JOIN       shelfcontents
+                                                                ON              bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type='public') and (bookshelf.parent='102')
+                                                                GROUP BY        bookshelf.shelfnumber order by shelfname
+		  15353 Query       select * from branches order by branchname
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
+    (wthdrawn <> 1 or wthdrawn is NULL)
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch = 'DAQ'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch='DAQ' and notforloan = 1
+		  15353 Query       select count(*) as c from issues,items
+    where items.biblionumber=NULL and returndate is NULL and items.itemnumber=issues.itemnumber and  holdingbranch='DAQ'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch = 'FCE'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch='FCE' and notforloan = 1
+		  15353 Query       select count(*) as c from issues,items
+    where items.biblionumber=NULL and returndate is NULL and items.itemnumber=issues.itemnumber and  holdingbranch='FCE'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch = 'INF'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch='INF' and notforloan = 1
+		  15353 Query       select count(*) as c from issues,items
+    where items.biblionumber=NULL and returndate is NULL and items.itemnumber=issues.itemnumber and  holdingbranch='INF'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch = 'EIN'
+		  15353 Query       select count(*) as c from items where items.biblionumber=NULL and holdingbranch='EIN' and notforloan = 1
+		  15353 Query       select count(*) as c from issues,items
+    where items.biblionumber=NULL and returndate is NULL and items.itemnumber=issues.itemnumber and  holdingbranch='EIN'
+		  15353 Query       select value
+		   from systempreferences
+                   where variable='renglones'
+		  15352 Query       SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
+							count(shelfcontents.biblioitemnumber) as count
+								FROM		bookshelf
+								LEFT JOIN	shelfcontents
+								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type='public') and (bookshelf.parent=0)
+								GROUP BY	bookshelf.shelfnumber order by bookshelf.shelfname ASC limit , 25
+		  15353 Query       SELECT     count(bookshelf.shelfnumber)as count2
+                                                                FROM            bookshelf WHERE bookshelf.type='public' and  bookshelf.parent='0' 
+		  15353 Query       		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='LibraryName'
+		LIMIT	1
+
+		  15353 Quit       

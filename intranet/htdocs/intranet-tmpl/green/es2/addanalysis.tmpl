@@ -1,0 +1,254 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+                <!-- TMPL_ELSE -->
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="BIBLIO_DATA" -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="pagetitle" >
+		<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intra><!-- TMPL_VAR NAME="title" ESCAPE=HTML--></a> 
+		(<!-- TMPL_LOOP NAME="author" --> 
+		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra"><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a>
+		<!-- /TMPL_LOOP -->) 
+		</td>
+	</tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+<br>
+<table border="0" align="center" width="99%" >
+	<tr>
+	<td>
+		<table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
+<!-----------------Registro de libro TABLE--------->
+			<tr valign="top" class="tablaresultadoTitle" height="24">
+			<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td valign="middle">
+				<b>Registro de libro </b><!-- TMPL_VAR NAME="biblionumber" -->
+			</td>
+			<td width="1%" valign="top">
+				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png">
+			</td>
+			</tr>
+			<tr valign="top">
+			<td >&nbsp;</td>
+			<td>
+				<form action="/cgi-bin/koha/modbib.pl" method="post">
+			     <table width="100%" border=0 cellspacing=0 cellpadding=0>
+				<tr>
+				<td align="left">
+				<input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+				<input type="image" name="submit" valuE="modify" border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  hspace=0 vspace=0 border=0 title="Editar Libro">
+				<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png"     hspace=0 vspace=0 border=0  onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {return true;} else {return false;}" title="Borrar Libro">
+				<a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="InputFontNormal"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/MARC.png" border="0"></a> </td>
+				</TR>
+			     </table>
+				</form>
+			</td>
+			<td >&nbsp;</td>
+			</tr>
+
+			<tr>
+			<td>&nbsp;</td>
+			<td class="inputFontNormal" align="left">
+			<!-- TMPL_IF name="unititle" -->
+				T&iacute;tulo Informativo:<b> <!-- TMPL_VAR NAME="unititle" --></b><br>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="subtitle" -->
+				Otro T&iacute;tulo:<b> <!-- TMPL_VAR NAME="subtitle" --></b><br>
+			<!-- /TMPL_IF -->
+			<table cellspacing=0 border="0" cellpadding=0>
+	  		    <tr>
+ 				<td valign="top">Autor:</td>
+				<td>
+			<!-- TMPL_LOOP NAME="author" -->
+				<b><a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra"> &nbsp;<!-- TMPL_VAR NAME="completo" --> </a></b><br>
+			<!-- /TMPL_LOOP -->
+				</td>
+			    </tr>
+			</table>
+
+		<!-- TMPL_IF name="ADDITIONAL" -->
+			<table cellspacing=0 border="0" cellpadding=0>
+	  		    <tr>
+ 				<td valign="top">Autores Adicionales:</td>
+				<td>
+			<!-- TMPL_LOOP NAME="ADDITIONAL" -->
+				<b><a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">&nbsp;<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a></b><br>
+			<!-- /TMPL_LOOP -->
+				</td>
+			    </tr>
+			</table>
+		<!-- /TMPL_IF -->
+
+		<!-- TMPL_IF name="COLABS" -->
+			<table cellspacing=0 border="0" cellpadding=0>
+	  		    <tr>
+ 				<td valign="top">Colaboradores:</td>
+				<td>
+			<!-- TMPL_LOOP NAME="COLABS" -->
+				<b><a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">&nbsp;<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" -->       <!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="tipo" -->)</a></b><br>
+			<!-- /TMPL_LOOP -->
+				</td>
+			    </tr>
+			</table>
+		<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="responsability" -->Menci&oacute;n de responsabilidad:<b> <!-- TMPL_VAR NAME="responsability" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="cdu" -->CDU :<b> <!-- TMPL_VAR NAME="cdu" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="pages" -->Descripci&oacute;n F&iacute;sica:<b> <!-- TMPL_VAR name="pages" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="size" -->Tama&ntilde;o:<b> <!-- TMPL_VAR name="size" --></b><br><!-- /TMPL_IF -->
+<!-- Comentado porq no es de biblio, sino de biblioitem <!-- TMPL_IF name="collection" --><b>Colecci&oacute;n:</b><!-- TMPL_VAR NAME="seriestitle" --><br><!-- /TMPL_IF --> -->
+<!-- TMPL_IF name="subject" -->Tema:<b> 
+<!-- TMPL_LOOP NAME="SUBJECTS" -->                      
+<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
+<!-- /TMPL_LOOP --></b>
+<br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="notes" -->Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="abstract" -->Resumen:<b> <!-- TMPL_VAR NAME="abstract" --></b><br><!-- /TMPL_IF -->
+<!-- No se utiliza mas          <!-- TMPL_IF name="serial" --><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --><br><!-- /TMPL_IF --> -->
+<!-- TMPL_IF name="classification" -->Nivel Bibliogr&aacute;fico:<b> <!-- TMPL_VAR name="classification" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="lccn" -->LCCN:<b> <!-- TMPL_VAR name="lccn" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="url" -->URL:<b> <a href="http://<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a></b><br><!-- /TMPL_IF -->
+</td>
+</tr>																	
+</table>
+<!-- /TMPL_LOOP -->
+</td><td>&nbsp;</td></tr>
+<tr>
+<td>
+<center>
+<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
+<form action=/cgi-bin/koha/modbibitem.pl>
+<input type=hidden name=userloggedname value=<!-- TMPL_VAR NAME="loggedinusername" -->>
+<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+<input type=hidden name=biblio value=<!-- TMPL_VAR NAME="biblionumber" -->>
+
+<!------------------BIBLIO ITEM------------------>
+<TABLE  CELLSPACING=0  CELLPADDING=0 border=0 align=center class="tablaresultado" width="100%">
+<TR VALIGN=TOP class="tablaresultadoTitle">
+<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+<td valign="middle"><B><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="description" --> </b> </TD>
+<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+</TR>
+<tr VALIGN=TOP  >
+<td>&nbsp;</td>
+<TD  class="inputFontNormal" align="left">
+<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" title="Editar Grupo">
+<INPUT TYPE="image" name="delete"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" title="Borrar Grupo" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?\nCUIDADO, se borrar&aacute;n todos los ejemplares asociados.')) {return true;} else {return false;}">
+<br>
+
+Edici&oacute;n:<b> <!-- TMPL_VAR NAME="number" --></b>
+- Lugar:<b> <!-- TMPL_VAR NAME="place" --></b>
+- Editor:<b> <!-- TMPL_VAR NAME="publishercode" --></b><br>
+Fecha:<b> <!-- TMPL_VAR NAME="publicationyear" --></b>
+- Volumen:<b> <!-- TMPL_VAR NAME="volume" --></b>
+- Descripci&oacute;n:<b> <!-- TMPL_VAR NAME="volumeddesc" --></b><br>
+Serie:<b> <!-- TMPL_VAR NAME="seriestitle" --></b>
+- ISBNs:<b> <!-- TMPL_VAR NAME="isbncode" --></b>
+- Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br>
+Tipo de ejemplar:<b> <!-- TMPL_VAR NAME="description" --></b>
+</TD>
+<td>&nbsp;</td>
+</tr>
+<!--</table>-->
+</form>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+</tr>
+<!-- /TMPL_LOOP -->
+<!--<TABLE  CELLSPACING=0  CELLPADDING=0 border=0 align=left width="30%" class="tablaresultado">-->
+<TR  width="100%" class="tablaresultadoTitle">
+<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+
+<td valign="middle">Anal&iacute;ticas</TD>
+<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+</tr>
+
+
+<!-- Aca esta toda la informacion de las Analiticas -->
+<!-- TMPL_LOOP NAME="ANALYSIS" -->
+<tr VALIGN=TOP>
+<td><a name="<!-- TMPL_VAR NAME="analyticalnumber" -->"></a></td>
+<TD width=220 class="inputFontNormal">
+<form method=post>
+<input type=hidden name="analyticalnumber" value="<!-- TMPL_VAR NAME="analyticalnumber" -->">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<INPUT TYPE="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+<input type=hidden name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+<input type=hidden name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" onClick="this.form.action='/cgi-bin/koha/editanalysis.pl'" title="Editar Anal&iacute;tica">
+<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {this.form.action='/cgi-bin/koha/delanalysis.pl'} else {return false}" title="Borrar Analitica"><br>
+
+<!-- TMPL_IF name="analyticalauthor" -->
+	<table cellspacing=0 border="0" cellpadding=0>
+		<tr>
+ 		<td valign="top">Autores:&nbsp;</td>
+		<td>
+	<!-- TMPL_LOOP NAME="analyticalauthor" -->
+		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra"><b><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></b></a><br>
+	<!-- /TMPL_LOOP -->
+		</td>
+		</tr>
+	</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="analyticaltitle" --><br>
+		T&iacute;tulo:<b> <!-- TMPL_VAR NAME="analyticaltitle" --></b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="analyticalunititle" --><br>
+		T&iacute;tulo Informativo:<b> <!-- TMPL_VAR NAME="analyticalunititle" --></b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="subject" --><br>
+		Temas:<b> 
+ 	<!-- TMPL_LOOP NAME="SUBJECTS" -->                      
+ 		<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
+ 	<!-- /TMPL_LOOP --></b><br>
+<!-- /TMPL_IF -->
+																 
+<!-- TMPL_IF name="classification" -->
+		Clasificaci&oacute;n:<b> <!-- TMPL_VAR NAME="classification" --></b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="parts" --><br>
+		Designaci&oacute;n de vol/pag: <b>  <!-- TMPL_VAR NAME="parts" --></b>
+<!-- /TMPL_IF -->
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr width="100%" class="tablaresultadoTitle">
+<td colspan="3">&nbsp;</td>
+</tr>
+</form>
+<!-- /TMPL_LOOP -->
+<td>&nbsp;</td>
+
+<td valign="middle" align="center">
+<br>
+<form method=post>
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+<INPUT TYPE="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+<INPUT TYPE="image" name="submit"  ALT="Agregar Anal&iacute;tica" VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onClick="this.form.target='nuevaventana';this.form.action='/cgi-bin/koha/addanalysisagregar.pl';window.open('', 'nuevaventana','left=120,top=5,width=800,height=800,toolbar=0,scrollbars=yes,resizable=0') " title="Agregar Anal&iacute;tica">
+</form>
+</TD>
+
+</TR>
+</table>
+</center>
+</td></tr>
+</table>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+                <!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- /TMPL_IF -->
+												

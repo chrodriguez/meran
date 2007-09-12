@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>UNIMARC 700-4 builder</title>
+</head>
+<body>
+<p>Select a value for 700 $4. It will be reported to the next 700$8</p>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Publication code </td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1_075" -->
+				<option value="075 - postface" SELECTED>postface</option>
+			<!-- TMPL_ELSE -->
+				<option value="075 - postface">postface</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_651" -->
+				<option value="651 - pub dir" SELECTED>pub dir</option>
+			<!-- TMPL_ELSE -->
+				<option value="651 - pub dir">pub dir</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_440" -->
+				<option value="440 - illustrator" SELECTED>illustrator</option>
+			<!-- TMPL_ELSE -->
+				<option value="440 - illustrator" SELECTED>illustrator</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_080" -->
+				<option value="080 - notes" SELECTED>notes</option>
+			<!-- TMPL_ELSE -->
+				<option value="080 - notes">notes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_730" -->
+				<option value="730 - translator" SELECTED>translator</option>
+			<!-- TMPL_ELSE -->
+				<option value="730 - translator">translator</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		x = document.f_pop.f1.value.split(' - ');
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= x[0];
+		if (<!-- TMPL_VAR name="index2" -->>0) {
+			opener.document.f.field_value[<!-- TMPL_VAR name="index2" -->].value= x[1];
+		}
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

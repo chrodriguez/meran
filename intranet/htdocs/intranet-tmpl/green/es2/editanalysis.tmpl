@@ -1,0 +1,115 @@
+<!-- TMPL_INCLUDE Name="intranet-top.inc" -->
+<script language="javascript" type="text/javascript">
+<!-- TMPL_INCLUDE NAME="ajax.js" -->
+<!-- TMPL_INCLUDE NAME="wick.js" -->
+</script>
+
+<form action="updateanalysisbiblio.pl" method="post" name="f">
+<table CELLSPACING=0  CELLPADDING=0 border=0 align=center class="tablaresultado
+" width="80%">
+<tr valign="top" class="tablaresultadoTitle">
+<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+
+<td  align="center"><b>Editar Anal&iacute;tica del Grupo:</b></td>
+<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+</tr>
+<!-- TMPL_LOOP NAME="ANALYSIS" -->
+<input type=hidden name="analyticalnumber" value="<!-- TMPL_VAR NAME="analyticalnumber" -->">
+<input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<input type="hidden" name="bibnumitems" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+<input type="hidden" name="timestamp" value="<!-- TMPL_VAR NAME="timestamp" -->">
+
+<tr>
+<td>&nbsp;</td>
+<td class="inputFontNormal"><b>Autores:</b><i>&nbsp;(1 por l&iacute;nea)</i><br>
+<textarea class="wickEnabled" name="analysisauthor" id="analysisauthor" cols="50" rows="3"><!-- TMPL_IF name="analyticalauthor" --><!-- TMPL_LOOP NAME="analyticalauthor" --><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF -->
+<!-- /TMPL_LOOP --><!-- /TMPL_IF --></textarea></td>
+<td>&nbsp;</td>
+
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+</tr>
+
+<tr valign="top">
+<td>&nbsp;</td>
+<td class="inputFontNormal"><b>&nbsp; T&iacute;tulo:</b><br>
+<INPUT class="inputFontNormal" name="analysistitle" size="68" value="<!-- TMPL_VAR NAME="analyticaltitle" -->"></td>
+</td>
+<td>&nbsp;</td>
+
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr valign="top">
+<td>&nbsp;</td>
+<td class="inputFontNormal"><b>&nbsp; T&iacute;tulo Informativo:</b><br>
+<INPUT class="inputFontNormal" name="analysisunititle" size="68" value="<!-- TMPL_VAR NAME="analyticalunititle" -->"></td>
+<td>&nbsp;</td>
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+<td class="inputFontNormal" ><b>Temas:</b><i>&nbsp;(1 por l&iacute;nea)</i><br>
+<textarea class="wickEnabled" name="subjectheadings" id="subjectheadings" cols="50" rows="3"><!-- TMPL_IF name="subject" --><!-- TMPL_LOOP NAME="SUBJECTS" --><!-- TMPL_VAR NAME="subject" -->
+<!-- /TMPL_LOOP --><!-- /TMPL_IF --></textarea></td>
+<td>&nbsp;</td>
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td class="inputFontNormal"><b>&nbsp; Clasificaci&oacute;n:</b><br>
+<INPUT class="inputFontNormal" name="classification" size="68"  value="<!-- TMPL_VAR Name='classification' ESCAPE=HTML -->"></td>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr valign="top">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr valign="top">
+<td>&nbsp;</td>
+<td class="inputFontNormal"><b>&nbsp; Designaci&oacute;n de vol/pag: &nbsp;&nbsp;</b><br>
+<textarea class="inputFontNormal" name="parts" rows="3" cols="65" border="0" ><!-- TMPL_VAR Name="parts" ESCAPE=HTML --></textarea></td>
+<td>&nbsp;</td>
+</tr>
+
+<!-- /TMPL_LOOP -->
+<tr>
+<td>&nbsp;</td>
+<td align="center">
+<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="f.submit">
+
+</td>
+<td>&nbsp;</td>
+</tr>
+</form>
+
+
+</table>
+<script>
+function Dopop() {
+        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

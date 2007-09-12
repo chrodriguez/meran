@@ -1,0 +1,258 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script>
+        function swap(id,src){
+	        document.getElementById(id).src=src;
+		        }
+	function _(s) { return s } // dummy function for gettext
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNum(v,maybenull) {
+	var n = new N&uacute;mero(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isDate(f) {
+		var t = Fecha.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.tagfield.value.length==0) {
+			_alertString += "\n- " + _("tag number missing");
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2  = _("Form not submitted because of the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</SCRIPT>
+
+<!-- TMPL_IF name="add_form" -->
+<!---------------------------------------------------------------------------->
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+		<!-- TMPL_IF NAME="heading-modify-tag-p" -->
+		<tr>
+			<td>Modificar Tag</td>
+		</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-add-tag-p" --> 
+		<tr>
+			<td>Agregar Tag</td>
+		</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_VAR name="action" -->
+		<!-- /TMPL_IF -->
+		<tr>
+			<td class="lineagruesa"  align="left" colspan="3"></td>
+		</tr>
+</table>
+	
+<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
+	<input type=hidden name=op value='add_validate'>
+	<table>
+		<tr>
+			<td class="inputFontNormal">Tag</td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="searchfield" --></td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Lib for librarians</td>
+			<td><input class="inputFontNormal"type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Lib for opac</td>
+			<td><input 	class="inputFontNormal"type="text" class="inputFontNormal"name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Repetible</td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="repeatable" --></td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Obligatorio</td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="mandatory" --></td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Valor Autorizado</td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="authorised_value" --> (if you select a value aqu&iacute;, the indicators will be limited to the authorised value list)</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">&nbsp;</td>
+			<td><input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit"></td>
+		</tr>
+	</table>
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="delete_confirm" -->
+<!---------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr valign=top>
+		<td class="inputFontNormal"><b>tag</b></td>
+		<td class="inputFontNormal"><b><!-- TMPL_VAR name="searchfield" --></b></td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">&nbsp;</td>
+		<td class="inputFontNormal"><!-- TMPL_VAR name="liblibrarian" --></td>
+	</tr>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+		<input type=hidden name=op value=delete_confirmed>
+		<input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
+	<tr>
+		<td colspan=2 align=center class="inputFontNormal">CONFIRME BORRADO</td>
+	</tr>
+	<tr>
+		<td><INPUT type=submit value='SI'></form></td>
+		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+			<input type=submit value=NO>
+		    </form>
+		</td>
+	</tr>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirmed" -->
+<!---------------------------------------------------------------------------->
+	Borrado de datos
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<input type=submit value=OK>
+	</form>
+<!-- /TMPL_IF -->
+
+<!---------------------------------------------------------------------------->
+<!-- TMPL_IF name="else" -->
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+	<tr>
+		<td>Administraci&oacute;n de estructura de etiqueta MARC</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<p class="inputFontNormal">NOTA: si cambia el enlace entre un campo MARC y un campo no-MARC, p&iacute;dale a su administrador que corra el script misc/rebuildnonmarc.pl</p>
+
+<table>
+	<tr>
+		<form action='<!-- TMPL_VAR name="script_name" -->' method=post name=form1>
+		<td>
+			<input class="inputFontNormal" type=text name=searchfield value="">
+		</td>
+		<td>
+	 		<a  onClick="form1.reset()" href="#"><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0"></a>
+		</td>
+		</form>
+	</tr>
+</table>
+<!--
+<!-- TMPL_VAR name="searchfield" -->
+NO SE PARA QUE ESTA  -->
+
+<table border=0 cellspacing=0 cellpadding=0>
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td>Tag</td>
+		<td>Lib</td>
+		<td>Repetible</td>
+		<td>Obligatorio</td>
+		<td>Autorizado value</td>
+		<td>Subcampos</td>
+		<td>Editar</td>
+		<td>Eliminar</td>
+		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+	<tr valign=middle>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td width="4%" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><b>
+			<!-- TMPL_VAR name="tagfield" --></b>
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
+			<!-- TMPL_VAR name="liblibrarian" -->
+		</td>
+		<td width="9%" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
+			<!-- TMPL_IF name="repeatable" -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
+			<!-- TMPL_IF name="mandatory" -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
+			<!-- TMPL_VAR name="authorised_value" -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->">
+			<a class="inputFontNormal" href="<!-- TMPL_VAR name="subfield_link" -->">subfields</a>
+		</td>
+		<td width="6%" align="center" class="<!-- TMPL_VAR NAME="clase"-->">
+			<a class="inputFontNormal" href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" ATL="Editar"  hspace=0 vspace=0 border=0></a>
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+			<a class="inputFontNormal" href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+		</td>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+ 	<tr valign=bottom>
+        	<td class="lineafinaltabla"  align="left" colspan="10"></td>
+        </tr>
+
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+<input type=hidden name=op value=add_form>
+</table>
+<br>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post name=form2>
+	<input type=hidden name=op value=add_form>
+<center>	
+
+<table width=100%>
+	<tr>
+		<td width=10% align="left">
+			<!-- TMPL_IF name="isprevpage" -->
+				<a class="inputFontNormal" href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">Anteriores
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
+
+		<td width="80%" align="center">
+		<input type="image" alt="Agregar Etiqueta"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="form2.submit">
+		</td>
+
+		<td width=10% align="right">
+			<!-- TMPL_IF name="nextpage" -->
+				<a class="inputFontNormal"href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">Siguientes
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+</table>
+</center>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

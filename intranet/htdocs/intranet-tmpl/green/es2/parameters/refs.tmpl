@@ -1,0 +1,18 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+Seleccione la tabla de referencia sobre la que quiere trabajar
+<FORM action="referencies.pl" method="post" id="f3" name="f3">
+<input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0">
+	<tr><td align="center"><!-- TMPL_VAR NAME="lista" --></td></tr>
+	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+	<tr>
+<td align="center">
+<input type="submit" style="visibility:hidden" align="center">
+ 	<a href="#" onMouseOut="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png')" onMouseOver="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardarbis.png')" onClick="document.getElementById('f3').submit()" >
+	<img name="save" id="save" alt="Guardar cambios" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+</td>
+</tr>
+</table>
+</FORM>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

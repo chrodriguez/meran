@@ -1,0 +1,41 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<center>
+<!-- TMPL_LOOP NAME="FORMINPUTS" -->
+<!-- TMPL_IF EXPR="(field eq 'signature')" -->
+Ha buscado por <b> Signatura Topogr&aacute;fica:
+<!-- TMPL_VAR NAME=value -->,  </b>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_VAR NAME=numrecords --> resultados encontrados
+<p>
+<!-- Row of numbers corresponding to search result pages -->
+
+<table>
+<tr><td valign="top">
+<ul>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+  <li>
+    <!-- TMPL_IF NAME=direct -->
+      <A HREF="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="keyword" -->
+      <font size="2"><i><!-- TMPL_IF NAME="title" --> (<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="unititle" -->: <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="author" --> - <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->)<!-- /TMPL_IF --></i></font>
+      </A>
+    <!-- TMPL_ELSE -->
+      <A HREF="search.pl?signature=<!-- TMPL_VAR NAME="keyword2" -->&dicdetail=1"><b><!-- TMPL_VAR NAME="keyword" --></b></A>
+    <!-- /TMPL_IF -->
+  </li>
+  <!-- TMPL_IF NAME=jump -->
+	</ul></td><td valign="top"><ul>
+  <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+</ul>
+</td></tr>
+</table>
+
+<br><br>
+
+
+Intentar una nueva <a href=/cgi-bin/koha/catalogue-home.pl>b&uacute;squeda</a>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

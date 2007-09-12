@@ -1,0 +1,191 @@
+                <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="javascript" type="text/javascript">
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+
+function todos(){
+var checks=document.getElementsByTagName("input");
+if (checks.length>0){
+for(i=0;i<checks.length;i++)
+{
+if((checks[i].type == "checkbox")&&(checks[i].checked)){checks[i].checked=false}
+							else{checks[i].checked=true}
+}
+}
+}
+function prueba(){
+var checks=document.getElementsByTagName("input");
+var theStatus=""  ;
+var cant=0;
+if (checks.length>0){
+	theStatus= "Usted esta a punto de "+document.getElementById("accion").value+" a los propietarios de:\n"; 
+	
+for(i=0;i<checks.length;i++)
+{
+if((checks[i].type == "checkbox")&&(checks[i].checked))
+{
+cant++;
+theStatus=theStatus+" -  Tarjeta nro "+ checks[i].id+"\n";
+}
+}
+theStatus=theStatus + "\n\n¿Esta seguro?)";
+if (cant>0){if (confirm (theStatus)){
+			document.getElementById("cantidad").value=cant; 
+			document.form1.submit();}
+}else{ alert ("No selecciono ningun usuario");}
+}}
+
+</script>
+
+<center>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >B&uacute;squeda de Usuarios Potenciales</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+
+<table border=0 cellspacing=0 cellpadding=2 width=90%>
+	<tr>
+<!-- TMPL_IF NAME="ok2" -->
+
+<a class="inputFontNormal" href="/cgi-bin/koha/member2.pl?ini=<!-- TMPL_VAR name="ant" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_LOOP NAME=numeros -->
+        <!-- TMPL_IF NAME="actual" -->
+             <a class="inputFontNormal" href="/cgi-bin/koha/member2.pl?ini=<!-- TMPL_VAR name="number" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"> <u><!-- TMPL_VAR name=number --></u> </a>
+        <!-- TMPL_ELSE -->
+                <u><!-- TMPL_VAR name=number --></u>
+        <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+
+<!-- TMPL_IF NAME="ok" -->
+<a class="inputFontNormal" href="/cgi-bin/koha/member2.pl?ini=<!-- TMPL_VAR name="sig" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+
+<!-- /TMPL_IF -->
+	</tr>
+</table>
+
+<br>
+
+
+<table>
+	<tr>
+		<form action="/cgi-bin/koha/member2.pl" method=post name=formmember>
+  		<td>
+			<input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+		</td>
+ 		<td>
+ 			<a href="#" onClick="formmember.submit()" ><img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
+			
+			<a href="#" onClick="formmember.reset()" ><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0" ></a>
+		</td>
+		</form>
+	</tr>
+</table>
+
+<font class="inputFontNormal">Ha buscado por <!-- TMPL_VAR NAME=member --></font>
+</center>
+
+<form name="form1" action=/cgi-bin/koha/actualizarPersonas.pl method=post>
+
+<table width="100%" cellspacing=0 cellpadding=0>
+  	<tr class="tablaresultadoTitle">
+    		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+    		<td>&nbsp;</td>
+    		<td align="left" width="12%"><a href="/cgi-bin/koha/member2.pl?orden=cardnumber&member=<!-- TMPL_VAR NAME=member -->">Tarjeta de ID</a></td>
+    		<td align="left" width="28%"><a href="/cgi-bin/koha/member2.pl?orden=surname,firstname&member=<!-- TMPL_VAR NAME=member -->">Apellido y Nombres</a></td>
+    		<td align="left" width="15%"><a href="/cgi-bin/koha/member2.pl?orden=documentnumber&member=<!-- TMPL_VAR NAME=member -->">Documento</a></td>
+    		<td align="left"><a href="/cgi-bin/koha/member2.pl?orden=studentnumber&member=<!-- TMPL_VAR NAME=member -->">Legajo</a></td>
+    		<td>Cat.</td>
+    		<td>Estado</td>
+    		<td>¿Habilitado?</td>
+    		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+  	</tr>
+
+	<!-- TMPL_LOOP NAME=resultsloop -->
+      	<tr align="center">
+      		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+     		<td valign="middle" align="center" class="<!-- TMPL_VAR NAME="clase"-->" >
+			<!-- TMPL_IF NAME=nomodificable -->Imposible 
+			<!-- TMPL_ELSE --> <input type=checkbox name="<!-- TMPL_VAR Name="personnumber"-->" id="<!-- TMPL_VAR NAME=documentnumber -->">
+			<!-- /TMPL_IF -->
+		</td>
+		
+      		<td  class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left">
+			<!-- TMPL_VAR NAME=cardnumber -->
+		</td>
+
+      		<td  class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left">
+			<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->
+		</td>
+
+      		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="left">
+			<!-- TMPL_VAR NAME=documenttype -->&nbsp; <!-- TMPL_VAR NAME=documentnumber -->
+		</td>
+
+      		<td align="left" class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal">
+			<!-- TMPL_VAR NAME=studentnumber -->
+		</td>
+ 		<td  class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal">
+			<!-- TMPL_VAR NAME=categorycode-->
+		</td> 
+      		<td class="<!-- TMPL_VAR NAME="clase"-->">
+			<b><!-- TMPL_VAR NAME=regular --></b>
+		</td>
+
+	<!-- TMPL_IF NAME="borrowernumber" -->
+      		<td class="<!-- TMPL_VAR NAME="clase"-->">Si</td>
+    	<!-- TMPL_ELSE -->
+      		<td  class="<!-- TMPL_VAR NAME="clase"-->">No</td>
+    	<!-- /TMPL_IF -->
+
+    		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+    	</tr>
+  	<!-- /TMPL_LOOP -->
+ 
+	<tr valign=bottom>
+        	<td class="lineafinaltabla"  align="left" colspan="12"></td>
+        </tr>
+</table>
+
+
+
+<table>
+	<tr>
+		<td>
+			<input name="cantidad" id="cantidad" type="hidden" value="<!-- TMPL_VAR NAME=modificable -->">
+		</td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">
+			<label for="accion" accesskey="t"></label>
+			<select class="inputFontNormal"id="accion" name="accion">
+				<option value="habilitar" selected="selected">Habilitar Seleccionados</option>
+				<option value="deshabilitar">Deshabilitar Seleccionados</option>
+			</select>
+		</td>
+		<td>
+			<input type="image"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/seleccionar.png"onClick="javascript:prueba()">
+		</td>
+	</tr>
+</table>
+</form>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+            <!-- TMPL_ELSE -->
+                            <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+                                                    <!-- /TMPL_IF -->
+
+
