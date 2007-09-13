@@ -37,10 +37,8 @@ use C4::AR::Persons_Members;
 
 my $input = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrower}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, {borrowers => 1} ,'intranet');
 
 
 #print $input->header;

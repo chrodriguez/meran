@@ -58,7 +58,7 @@ my ($template, $personnumber, $cookie)
 			     query => $input,
                              type => "intranet",
                              authnotrequired => 0,
-                             flagsrequired => {parameters => 1},
+                             flagsrequired => {borrowers => 1},
                          });
 
 #Get the database handle
