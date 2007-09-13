@@ -5,7 +5,57 @@
 			   <!-- /TMPL_IF -->
 												
 <!-- <!-- TMPL_INCLUDE NAME="members-top.inc" --> -->
+<script>
+	function validarInput(campo,error){
+		if(campo.value==""){
+			alert(error);
+			campo.focus();
+			return false;
+		}
+		return true;
+	}
+
+	function chequearCampos(){
+		var i=1;
+		var error="Campo obligatorio vacio, ingrese un valor";
+		var ok=true;
+		for(i;i<6;i++){
+			var campo= document.getElementById(i);
+			if(ok){
+				ok=validarInput(campo,error);
+			}
+		}
+		if(ok){
+			var city=document.getElementById('dcity');
+			ok=validarInput(city,error);
+		}
+		return ok;
+	}
+	
+	function chequearDocumento(){
+		var docInput=document.getElementById('4');
+		var doc = docInput.value.toString();
+		for (var i=0; i<doc.length; i++) {
+			var caracter = doc.charAt(i);
+			if (caracter<"0" || caracter>"9"){
+				alert("Error al ingresar el numero de documento, no es un numero tiene que ser solo digitos");
+				docInput.focus();
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	function mandarForm(){
+		if(chequearCampos() && chequearDocumento()){
+			document.form1.submit();
+		}
+	}
+
+</script>
+
 <center>
+
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
@@ -29,7 +79,7 @@ document.getElementById(id).src=src;
 }
 </script>
 
-<form action="/cgi-bin/koha/newmember.pl" method=post  name="form1">
+<form action="/cgi-bin/koha/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
 	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
 	<input type=hidden name=typeRegister value="borrowers">
@@ -41,7 +91,7 @@ document.getElementById(id).src=src;
 	<tr valign=top width="100%">
 		
 		<td  width="50%"ALIGN=RIGHT class="inputFontNormal">
-		 	Tarjeta de identificaci&oacute;n * <input type=text class="inputFontNormal"name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
+		 	Tarjeta de identificaci&oacute;n * <input id="1" type=text class="inputFontNormal" name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
 		</td>
 	</tr>
 
@@ -77,22 +127,22 @@ document.getElementById(id).src=src;
 		<td width="15%">&nbsp;</td>
 		<td width="35%"class="inputFontNormal" align="left">
 	      		<b> Apellido*</b><br>
-	      		<input  class="inputFontNormal"type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
+	      		<input id="2" class="inputFontNormal"type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
 		</td>
 		<td width="35%"class="inputFontNormal" align="left">
 			<b> Nombres*</b><br>
-                 	<input  class="inputFontNormal"type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
+                 	<input id="3" class="inputFontNormal"type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="15%">&nbsp;</td>
 	 	<td width="35%"class="inputFontNormal" align="left">
-	 		<b>Tipo*</b><br>
-                	<select  class="inputFontNormal"name=documenttype size=1><!-- TMPL_LOOP NAME=documentloop -->
+	 		<b>Documento (solo digitos)*</b><br>
+                	<select  class="inputFontNormal" name=documenttype size=1><!-- TMPL_LOOP NAME=documentloop -->
                  		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
                 	</select>
-			<input  class="inputFontNormal"type=text name=documentnumber size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
+			<input id="4" class="inputFontNormal" type=text name=documentnumber size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
 		</td>
 	 	<td width="35%"class="inputFontNormal" align="left">
 			<b>Legajo</b><br>
@@ -160,7 +210,7 @@ document.getElementById(id).src=src;
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	  		<b>Direcci&oacute;n*</b><br>
-	  		<input  class="inputFontNormal"type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
+	  		<input  id="5" class="inputFontNormal"type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal</b><br>
@@ -176,8 +226,10 @@ document.getElementById(id).src=src;
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad*</b><br>
-			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME="dcity" --><!-- TMPL_VAR name="dcity" --> <!-- TMPL_ELSE --> ---- <!-- /TMPL_IF -->">
-          		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">     
+			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME="dcity" --><!-- TMPL_VAR name="dcity" --> <!-- TMPL_ELSE --><!-- /TMPL_IF -->">
+
+
+          		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">
          
            		<a onClick="window.open('searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
            		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>	
@@ -272,7 +324,7 @@ document.getElementById(id).src=src;
 	<tr>
 		<td width="50%" align="right">
                 	<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-                	<a href="#" onClick="form1.submit()" >
+                	<a href="#" onClick="mandarForm()" >
                 	<img alt="Guardar" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
                 </td>
 
