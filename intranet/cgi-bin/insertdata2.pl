@@ -34,73 +34,44 @@ my $input= new CGI;
 
 #get all the data into a hash
 my @names=$input->param;
-my %data;
+my $data;
 my $keyfld;
 my $keyval;
 my $problems;
 my $env;
 foreach my $key (@names){
-  $data{$key}=$input->param($key);
-  $data{$key}=~ s/\'/\\\'/g;
-  $data{$key}=~ s/\"/\\\"/g;
+  $data->{$key}=$input->param($key);
+  $data->{$key}=~ s/\'/\\\'/g;
+  $data->{$key}=~ s/\"/\\\"/g;
 }
 my $dbh = C4::Context->dbh;
 
 my $queryb="Select * from borrowers where borrowernumber=?";
 my $sthb=$dbh->prepare($queryb);
-$sthb->execute($data{'borrowernumber'});
+$sthb->execute($data->{'borrowernumber'});
 if (my $data2=$sthb->fetchrow_hashref){
-  $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-  $data{'joining'}=format_date_in_iso($data{'joining'});
-  $data{'expiry'}=format_date_in_iso($data{'expiry'});
-  $queryb="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
-  cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
-  streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
-  altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
-  emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
-  altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
-  categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
-  borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-  initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
-  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
-  textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
-  zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}',
-  documenttype = '$data{'documenttype'}',documentnumber='$data{'documentnumber'}',
- studentnumber = '$data{'studentnumber'}' 
- 
-where borrowernumber='$data{'borrowernumber'}'";
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
+  $data->{'joining'}=format_date_in_iso($data->{'joining'});
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
 
+##
+ updateborrower($data); #Se actualiza en borrower
+##
 }
-my $sth2b=$dbh->prepare($queryb);
-$sth2b->execute;
 
 my $query="Select * from persons where personnumber=?";
 my $sth=$dbh->prepare($query);
-$sth->execute($data{'personnumber'});
+$sth->execute($data->{'personnumber'});
 if (my $data2=$sth->fetchrow_hashref){
-  $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-  $data{'joining'}=format_date_in_iso($data{'joining'});
-  $data{'expiry'}=format_date_in_iso($data{'expiry'});
-  $query="update persons set title='$data{'title'}',expiry='$data{'expiry'}',
-  cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
-  streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
-  altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
-  emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
-  altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
-  categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
-  borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-  initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
-  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
-  textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
-  zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}',
-  documenttype = '$data{'documenttype'}',documentnumber='$data{'documentnumber'}',
-  borrowernumber='$data{'borrowernumber'}',
-  studentnumber = '$data{'studentnumber'}' 
-where personnumber='$data{'personnumber'}'";
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
+  $data->{'joining'}=format_date_in_iso($data->{'joining'});
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
 
+  ##
+  updateperson($data); #Se actualiza en person
+  ##
+  
 }
-  my $sth2=$dbh->prepare($query);
-  $sth2->execute;
 
 #Esto iria si se permitiera agregar nuevos usuarios factibles 
 =cut
@@ -144,8 +115,6 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
 }
 =cut
 
-  $sth2->finish;
-  $sth2b->finish;
 $sth->finish;
 $sthb->finish;
 print $input->redirect("/cgi-bin/koha/moremember2.pl?pernum=$data{'personnumber'}");

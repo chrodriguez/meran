@@ -11,7 +11,7 @@ use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
-@EXPORT = qw(delmember delmembers addmembers sepuedeeliminar checkDocument);
+@EXPORT = qw(delmember delmembers addmembers sepuedeeliminar checkDocument addborrower updateborrower addperson updateperson);
 
 #delmembers recibe un arreglo de personnumbers y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde member2.pl  
 
@@ -46,22 +46,10 @@ sub addmembers{
   foreach my $aux (@member){
   $sth->execute($aux);
   my $data=$sth->fetchrow_hashref;
-  $data->{'borrowernumber'}=NewBorrowerNumber();
-  my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
-  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
-  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,studentnumber) values ('$data->{'title'}','$data->{'expiry'}','$data->{'cardnumber'}',
-  '$data->{'sex'}','$data->{'ethnotes'}','$data->{'streetaddress'}','$data->{'faxnumber'}',
-  '$data->{'firstname'}','$data->{'altnotes'}','$data->{'dateofbirth'}','$data->{'contactname'}','$data->{'emailaddress'}','$data->{'textmessaging'}',
-  '$data->{'joining'}','$data->{'streetcity'}','$data->{'altrelationship'}','$data->{'othernames'}',
-  '$data->{'phoneday'}','$data->{'categorycode'}','$data->{'city'}','$data->{'area'}','$data->{'phone'}',
-  '$data->{'borrowernotes'}','$data->{'altphone'}','$data->{'surname'}','$data->{'initials'}',
-  '$data->{'ethnicity'}','$data->{'address'}','$data->{'branchcode'}','$data->{'zipcode'}','$data->{'homezipcode'}',
-   '$data->{'documenttype'}','$data->{'documentnumber'}', '$data->{'studentnumber'}')";
-my $sth2=$dbh->prepare($query);
-  $sth2->execute;
-  $sth2->finish;
 
+  $data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
+
+ #Se actualiza la persona con el borrowernumber
   my $sth3=$dbh->prepare("Update persons set borrowernumber=".$data->{'borrowernumber'}." where personnumber=?");
   $sth3->execute($aux);  
   $sth3->finish;
@@ -156,3 +144,171 @@ sub checkDocument{
     return 0;
   }
 }
+
+
+##############################################################################################################
+
+#addborrober agrega un borrower nuevo
+
+sub addborrower {
+
+my ($data)=@_;
+
+my $dbh = C4::Context->dbh;
+
+$data->{'borrowernumber'}=NewBorrowerNumber();
+
+my $query="insert into borrowers (borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+  	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+    	  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+      	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
+	  lastchangepassword,changepassword,studentnumber)  
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+
+my $sth=$dbh->prepare($query);
+
+##Campos que no pueden ser null 
+## borrowernumber cardnumber documentnumber documenttype 
+## surname firstname streetaddress city 
+## phone branchcode categorycode changepassword initials
+#  unless($data->{'borrowernumber'}){$data->{'borrowernumber'}=' ';}
+# unless($data->{'cardnumber'}){$data->{'cardnumber'}=' ';}
+# unless($data->{'documentnumber'}){$data->{'documentnumber'}=' ';}
+# unless($data->{'documenttype'}){$data->{'documenttype'}=' ';}
+# unless($data->{'surname'}){$data->{'surname'}=' ';}
+# unless($data->{'firstname'}){$data->{'firstname'}=' ';}
+# unless($data->{'streetaddress'}){$data->{'streetaddress'}=' ';}
+# unless($data->{'city'}){$data->{'city'}=' ';}
+# unless($data->{'phone'}){$data->{'phone'}=' ';}
+# unless($data->{'branchcode'}){$data->{'branchcode'}=' ';}
+# unless($data->{'categorycode'}){$data->{'categorycode'}=' ';}
+# unless($data->{'changepassword'}){$data->{'changepassword'}=' ';}
+# unless($data->{'initials'}){$data->{'initials'}=' ';}
+###
+
+$sth->execute($data->{'borrowernumber'},$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+   	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
+	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
+	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
+	$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'});
+  $sth->finish;
+  
+  return ($data->{'borrowernumber'});
+  }
+
+
+#updateborrober actualiza un borrower
+
+sub updateborrower {
+
+my ($data)=@_;
+my $dbh = C4::Context->dbh;
+my $query="Update borrowers set 
+		title=?,expiry=?,cardnumber=?,
+		sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
+		firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
+		textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
+		phoneday=?,categorycode=?,city=?,area=?,phone=?,
+		borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
+		ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
+		branchcode =?,zipcode =?,homezipcode=?,
+		documenttype =?,documentnumber=?,changepassword=?,studentnumber=?
+	  where borrowernumber=?";
+
+my $sth=$dbh->prepare($query);
+
+   $sth->execute($data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+  	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
+	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},		
+	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},$data->{'streetaddress'},
+	$data->{'ethnicity'},$data->{'gna'},$data->{'lost'},$data->{'debarred'},
+	$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'},
+	$data->{'borrowernumber'});
+
+
+   $sth->finish;
+  
+  return (1);
+}
+
+
+#addperson agrega un person nuevo
+
+sub addperson {
+
+my ($data)=@_;
+
+my $dbh = C4::Context->dbh;
+
+
+
+my $query="insert into persons (borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+  	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+    	  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+      	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
+	  lastchangepassword,changepassword,studentnumber)  
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+
+my $sth=$dbh->prepare($query);
+
+$sth->execute($data->{'borrowernumber'},$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+   	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
+	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
+	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
+	$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+		  $data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'});
+  $sth->finish;
+ 
+#Averiguo el id de persona que se inserto
+  my $sth2=$dbh->prepare("Select * from persons where cardnumber=?");
+     $sth2->execute($data->{'cardnumber'});
+  my $person=$sth2->fetchrow_hashref;
+     $sth2->finish;
+  return ($person->{'personnumber'});
+  }
+
+
+#updateperson actualiza un person
+
+sub updateperson {
+
+my ($data)=@_;
+my $dbh = C4::Context->dbh;
+my $query="Update persons set 
+		title=?,expiry=?,cardnumber=?,
+		sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
+		firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
+		textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
+		phoneday=?,categorycode=?,city=?,area=?,phone=?,
+		borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
+		ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
+		branchcode =?,zipcode =?,homezipcode=?,
+		documenttype =?,documentnumber=?,changepassword=?,studentnumber=?,borrowernumber=?
+	  where personnumber=?";
+
+my $sth=$dbh->prepare($query);
+
+   $sth->execute($data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+   	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
+	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
+	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},$data->{'streetaddress'},
+	$data->{'ethnicity'},$data->{'gna'},$data->{'lost'},$data->{'debarred'},
+	$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'},
+	$data->{'borrowernumber'},$data->{'personnumber'});
+
+   $sth->finish;
+  
+  return (1);
+}
+
