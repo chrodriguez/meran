@@ -225,8 +225,8 @@ document.getElementById(id).src=src;
           		<input class="inputFontNormal"type=text name=phone size=50 value="<!-- TMPL_VAR NAME=phone -->">
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>Ciudad*</b><br>
-			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME="dcity" --><!-- TMPL_VAR name="dcity" --> <!-- TMPL_ELSE --><!-- /TMPL_IF -->">
+			<b>Ciudad (Solo lectura)*</b><br>
+			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME="dcity" --><!-- TMPL_VAR name="dcity" --> <!-- TMPL_ELSE --><!-- /TMPL_IF -->" readonly="readonly">
 
 
           		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">
