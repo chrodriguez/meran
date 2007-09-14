@@ -1,0 +1,2 @@
+El archivo koha.conf debe tener permisos de lectura para el usuario del apache
+Agregar a este archivo los cambios en la base de datos

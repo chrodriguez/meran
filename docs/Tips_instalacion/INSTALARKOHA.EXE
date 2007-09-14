@@ -1,0 +1,34 @@
+#!/bin/bash
+#Este script hace todo lo necesario para que Koha funcione con ModPERL incorporado
+#Esta junto a los tres archivos de definicion de virtual host los cuales tienen que ser editados previamente para cambiarles el/los nombres de los virtualhosts
+apt-get install ftp gnupg yaz unzip ncftp lynx libyaz-dev libxml2-dev libssl-dev libwrap0-dev libgd2-xpm-dev libapache2-mod-perl2 apache2
+perl -MCPAN -e 'install "CPAN::Bundle"'
+perl -MCPAN -e 'install "Date::Manip"'
+perl -MCPAN -e 'install "HTML::Template"'
+perl -MCPAN -e 'install "MARC::Record"'
+perl -MCPAN -e 'install "Mail::Sendmail"'
+perl -MCPAN -e 'install "Event"'
+perl -MCPAN -e 'install "Net::Z3950"'
+# Tener en cuenta que para perl-ldap2.33 no hay que decirle que instale modulos adicionales si no queremos mternos en problemas porque hay algunas dependencias que no estan entonces vamos a tener quilombitos
+perl -MCPAN -e 'install "Net::LDAP"'
+perl -MCPAN -e 'install "PDF::Report"'
+
+
+perl -MCPAN -e 'install "GD"'
+#perl -MCPAN -e 'install "Chart"'
+perl -MCPAN -e 'install "HTML::Template::Expr"'
+
+# Para las plantillas de OpenOffice
+perl -MCPAN -e 'install "Archive::Zip"'
+perl -MCPAN -e 'install "OpenOffice::OOCBuilder"'
+cp opac ssl intranet /etc/apache2/sites-availables
+a2ensite opac
+a2ensite ssl
+a2ensite intranet
+a2dissite default
+a2enmod ssl
+a2enmod rewrite
+apache2-ssl-certificate
+mkdir /var/log/koha/
+chown www-data.www-data /var/log/koha
+/etc/init.d/apache2 restart
