@@ -66,7 +66,7 @@ my @infoTotal;
 my $strItemNumbers=$query->param('strItemNumbers')||"";
 my $loop=scalar(@chkbox);
 my $chkall=$query->param('selectAll');
-my $acc=$query->param('accionReturn');
+my $acc=$query->param('accionReturn')||$query->param('action');
 
 if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 # si viene el barcode entonces esta intentando hacer la devolucion o renovacion => se le pregunta por una confirmacion
@@ -101,14 +101,14 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 		$infoTotal[$i]->{'okMensaje'}=$okMensaje;
 		}
 	}
-	else{#Viene un solo barcode, es el ingresado a mano.
+	else{#Viene un solo barcode, es el ingresado a mano o desde la pagina del member.
 		$iteminfo= getiteminformation( \%env, undef, $barcode);
 		if ($iteminfo) {
 	#Si existe el codigo de barras
 			if ($iteminfo->{'date_due'}) { #FIXME ver la pregunta
 		#Si el libro esta prestado
 				$query->param('borrnumber', $iteminfo->{'borrowernumber'});
-				$iteminfo->{'action'}= $acc;
+				$iteminfo->{'action'}= $query->param('action');
 				$iteminfo->{'barcode'}=$barcode;
 				$iteminfo->{'return'}= ($acc eq 'return');
 				$iteminfo->{'renew'}= ($acc eq 'renew');
@@ -253,10 +253,10 @@ $template->param(
                 title => $iteminfo->{'title'},
 		unititle => $iteminfo->{'unititle'},
                 action => $iteminfo->{'action'},
-#                 return => $iteminfo->{'return'},
-		return => $infoTotal[0]->{'iteminfo'}->{'return'},
+		return => $infoTotal[0]->{'iteminfo'}->{'return'},#se modifico para que se pueda devolver varios libros a la vez.
                 renew => $iteminfo->{'renew'},
 		message => $message,
+	#se modifico para que se pueda devolver varios libros a la vez.
 		infoTotal=>\@infoTotal,
 		strItemNumbers =>$strItemNumbers,
 		chkbox     =>join(",",@chkbox),
