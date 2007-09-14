@@ -1763,13 +1763,21 @@ sub ItemInfo {
 	                        }
 
 				
-
+=item
 if ($data->{'notforloan'} eq '1'){
         $datedue="<font color='blue'>Para Sala</font>";
     }
-
-
 =cut
+
+#Miguel 13/07/07 - Se renombro el nombre del campo notforloan a itemnotforloan en la linea 1750
+#se deja la anterior por las dudas
+$data->{'notforloan'}= $data->{'itemnotforloan'};
+#     if ($data->{'notforloan'} eq '1'){
+if ($data->{'itemnotforloan'} eq '1'){
+        $datedue="<font color='blue'>Para Sala</font>";
+}
+
+=item
     if ($datedue eq ''){
 	$datedue="<font color='green'>Disponible</font>";
 	my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});

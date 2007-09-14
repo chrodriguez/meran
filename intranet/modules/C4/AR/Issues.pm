@@ -92,16 +92,23 @@ sub devolver{
 	my $returnDate= vencimiento($itemnumber); # tiene que estar aca porque despues ya se marco como devuelto
 	$sth=$dbh->prepare("Update issues set returndate=NOW() where itemnumber=? and borrowernumber=? and returndate is NULL");
 	$sth->execute($itemnumber,$borrowernumber);
+	#verifico que el item no sea para sala
+	$sth=$dbh->prepare("Select notforloan from items where itemnumber=?");
+	$sth->execute($itemnumber);
+	my $notforloan= $sth->fetchrow_hashref;
+	
 	$sth=$dbh->prepare("Select * from reserves where itemnumber=? and borrowernumber=?");
 	$sth->execute($itemnumber,$borrowernumber);
 	my $data= $sth->fetchrow_hashref;
 	if($data->{'itemnumber'}){
 	#Si la reserva que voy a borrar existia realmente sino hubo un error
-		my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1 ");
-		$sth1->execute($data->{'biblioitemnumber'});
-		my $data2= $sth1->fetchrow_hashref;
-		if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
-			@resultado= ($itemnumber, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'});
+		if($notforloan == 0){#si no es para sala
+			my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1 ");
+			$sth1->execute($data->{'biblioitemnumber'});
+			my $data2= $sth1->fetchrow_hashref;
+			if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
+				@resultado= ($itemnumber, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'});
+			}
 		}
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 		$sth=$dbh->prepare("Delete from reserves where itemnumber=? and borrowernumber=?");

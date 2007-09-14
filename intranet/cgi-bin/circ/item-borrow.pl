@@ -54,7 +54,7 @@ if (!$borrower) { #no existe el usuario
 my @resultado=reservaritem($bornum,$bibit,$itemnumber,$branchcode,1,$issuecode);
 
 
-
+#se hace el prestamo
 if ($resultado[0] eq 0){#quiere decir que dio algun tipo de error
 	if ($resultado[1] eq 5){#quiere decir que el item ya esta reservado
 		if (efectivizar_reserva($bornum,$bibit,$issuecode)) {

@@ -245,6 +245,7 @@ return (1,$resultado,$desde,$fecha,$branch,$apertura,$cierre);
 
 sub reservaritem {
 my ($borrowernumber,$biblioitemnumber,$itemnumber,$branch,$immediateIssue,$issuetype)=@_;
+
 my $dbh = C4::Context->dbh;
 my $resultado;
 $issuetype = $issuetype || C4::Context->preference("defaultissuetype");
@@ -352,6 +353,7 @@ if (($resaux=$sth->fetchrow_hashref)||($sepuede)){ #hay una reserva para el item
 }
 
 #el item no esta reservado por lo que el usuario se lo puede llevar inmediatamente
+#si el item es para sala viene aca
 my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(1,1);
 my $sth2=$dbh->prepare("insert into reserves (itemnumber,biblioitemnumber,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) values (?,?,?,?,NOW(),?,?)");
 $sth2->execute($itemnumber,$biblioitemnumber,$borrowernumber,$desde,$fecha,$branch);
