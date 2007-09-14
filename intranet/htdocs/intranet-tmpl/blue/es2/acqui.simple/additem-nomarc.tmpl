@@ -3,13 +3,10 @@
 <style type="text/css">
     select { width: 350px; }
 </style>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="pagetitle" ><!-- TMPL_VAR NAME="TITLE" ESCAPE=HTML --></td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 
-<!--Tabla que muestra el Tiutlo -->
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr><td class="pagetitle" ><!-- TMPL_VAR NAME="TITLE" ESCAPE=HTML --></td></tr>
-	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
-
 <p>
 <!-- TMPL_IF NAME="NOBARCODE" -->
 <font size="4" color="red">Debe darle al ejemplar un c&oacute;digo de barras.</font>
@@ -32,27 +29,28 @@ C&oacute;digo de barras repetido. Disculpe, no puede utilizar <!-- TMPL_VAR NAME
 <!-- /TMPL_IF -->
 </p>
 
-<!--Tabla arriba izquierda -->
+
 <table align="left" cellpadding="0" cellspacing="0" border="0" width="220" >
 <tr valign="top">
 <td >
-	<a  class="inputFontNormal" href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="BIBNUM" -->" >Registro de ejemplar <!-- TMPL_VAR NAME="BIBNUM" --></a></td>
+<a  class="inputFontNormal" href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="BIBNUM" -->" >Registro de ejemplar <!-- TMPL_VAR NAME="BIBNUM" --></a></td>
 
 </tr>
 <tr><td> 
  <form action="/cgi-bin/koha/modbib.pl" method="post">
- 	<table width="100%" border=0 cellspacing=0 cellpadding=0>
-        	<tr>
-                	<td >
-                        	<input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
-				<input type="hidden" name="from" value="additem">
+                        <table width="100%" border=0 cellspacing=0 cellpadding=0>
+                        <tr>
+                        <td >
+                                <Input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
+				 <Input type="hidden" name="from" value="additem">
                                 <input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"   border=0 title="Editar Libro">
-				<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {return true;} else {return false;}" title="Borrar Ejemplar">
+			<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {return true;} else {return false;}" title="Borrar Ejemplar">
                         </td>
 
-        	</tr>
-	</table>
- </form>
+        </TR>
+
+                </table>
+                        </form>
 </td>
 </tr>
 <tr valign="top">
@@ -60,7 +58,7 @@ C&oacute;digo de barras repetido. Disculpe, no puede utilizar <!-- TMPL_VAR NAME
                         <!-- TMPL_IF name="UNITITLE" --><b>T&iacute;tulo Informativo:</b> <!-- TMPL_VAR NAME="UNITITLE" --><br><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="SUBTITLE" --><b>Otro T&iacute;tulo:</b> <!-- TMPL_VAR NAME="SUBTITLE" --><br><!-- /TMPL_IF -->
                      	<!-- TMPL_LOOP NAME="AUTHOR" --><b>Autor:</b>
-			<br> <a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+<br> <a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
 			<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a><br><!-- /TMPL_LOOP -->
 			<!-- TMPL_IF name="ADDITIONAL" -->
 			<b>Autores Adicionales:</b> <br>
@@ -163,8 +161,6 @@ si queda el nombre del parametro como bulk hay que borrar la linea-->
 <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </table>
-<!--Fin Tabla arriba izquierda -->
-
 <img src="/images/holder.gif" width="16" height="650" align="left">
 
 <center>
@@ -173,8 +169,6 @@ si queda el nombre del parametro como bulk hay que borrar la linea-->
 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 <input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
 
-
-<!-- Esta tabla esta bien-->
 <table  border="0" cellspacing="0" cellpadding="0">
 <tr >
 
@@ -242,70 +236,6 @@ NO disponible <!-- TMPL_VAR Name="Cavails" -->
 
 <tr><td>&nbsp;</td></tr>
 
-<!--</table>-->
-
-<input type="button" onClick="mostrarTabla('tablaAgregarEV')"  value="tablaAgregarEV - Menu 1">
-
-<input type="button" onClick="mostrarTabla('tablaAgregarDB')"  value="tablaAgregarDB - Menu 2">
-
-<br>
-<!--<table border="0" cellspacing="0" cellpadding="0">-->
-
-<script>
-
-//Miguel  Agregado 
- function ocultarTabla(id){
-	mostrado = 0;
-	tabla = document.getElementById(id);
-	tabla.style.display = 'block';
- }
-
-
-function mostrarTabla(id){
-	tabla = document.getElementById(id);
-
-	if(tabla.style.display == 'none'){
-		if(navigator.appName.indexOf("Microsoft") > -1){
-                	var visible = 'block' //para IE
-        	} else {
-                 	var visible = 'table-row'; //para Mozilla
-        	}
-		tabla.style.display = visible;
-	}
-	else 
-	{	//Oculto una tabla
-		tabla.style.display = 'none';
-	}
-}
-
-
-//onLoad= ocultarTabla('tablaAgregarEV');
-
-//Fin Agregado
-
-function getdefaults() 
-{
-clave= new Array();
-valor= new Array();
-<!-- TMPL_LOOP NAME="DEFAULTS" -->
-clave[<!-- TMPL_VAR NAME="orden" -->]='<!-- TMPL_VAR NAME="campo" -->';
-aux=new String("<!-- TMPL_VAR NAME='valor' -->");
-valor[<!-- TMPL_VAR NAME="orden" -->]=aux.replace(/@#@/g,'\n');
-
-<!-- /TMPL_LOOP -->
-
-  for (i=1; i <= clave.length-1; i++) {
-        if(document.getElementById(clave[i])){ document.getElementById(clave[i]).value=valor[i]; }
-	  }
-
-}
-</script>
-
-</table>
-<br>
-<div id="tablaAgregarDB" style="display: none">
-<table border="0" cellspacing="0" cellpadding="0" name="tablaAgregarDB">
-<!--<table id="tablaAgregarDB"  style="display: visible" border="0" cellspacing="0" cellpadding="0" name="tablaAgregarDB">-->
 <tr class="tablaresultadoTitle" >
 <td colspan="2"><b>Agregar a descripci&oacute;n bibliogr&aacute;fica existente:</b></td>
 </tr>
@@ -337,125 +267,91 @@ valor[<!-- TMPL_VAR NAME="orden" -->]=aux.replace(/@#@/g,'\n');
 </tr>
 
 
-<tr>
-	<td class="inputFontNormal">Nivel Bibliogr&aacute;fico:</td>
-	<td class="inputFontNormal"><!-- TMPL_VAR NAME="BIBLIOLEVELS" -->
+<tr >
+<td class="inputFontNormal">Nivel Bibliogr&aacute;fico:</td>
+<td class="inputFontNormal">
+<!-- TMPL_VAR NAME="BIBLIOLEVELS" -->
 </td>
 </tr>
-	<td class="inputFontNormal">Tipo de documento:</td>
-	<td class="inputFontNormal"><!-- TMPL_VAR NAME="ITEMTYPES" -->
+<td class="inputFontNormal">Tipo de documento:</td>
+<td class="inputFontNormal">
+<!-- TMPL_VAR NAME="ITEMTYPES" -->
 </td>
 </tr>
+
+
 <tr>
-	<td class="inputFontNormal">Soporte:</td>
-	<td class="inputFontNormal"> <!-- TMPL_VAR NAME="SUPPORTTYPES" --></td>
+<td class="inputFontNormal">Soporte:</td>
+<td class="inputFontNormal"> <!-- TMPL_VAR NAME="SUPPORTTYPES" --></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">N&uacute;mero de Edici&oacute;n:</td>
-	<td><input class="inputFontNormal" name="number" size="40" value="<!-- TMPL_VAR Name="number" -->" id="number"></td>
+<td class="inputFontNormal">N&uacute;mero de Edici&oacute;n:</td>
+<td><input class="inputFontNormal" name="number" size="40" value="<!-- TMPL_VAR Name="number" -->" id="number"></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Lugar de publicaci&oacute;n:</td>
-	<td><input class="inputFontNormal" name="place" size="40" value="<!-- TMPL_VAR Name="place" -->"  id="place"></td>
+<td class="inputFontNormal">Lugar de publicaci&oacute;n:</td>
+<td><input class="inputFontNormal" name="place" size="40" value="<!-- TMPL_VAR Name="place" -->"  id="place"></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Editor:<br> <i>Un editor por l&iacute;nea</i>  </td>
-	<td><textarea class="inputFontNormal" name="publishercode" id="publishercode" cols="30" rows="6"><!-- TMPL_LOOP Name="publoop"--><!-- TMPL_VAR Name="publisher" --><!-- /TMPL_LOOP--></textarea></td>
+<td class="inputFontNormal">Editor:<br> <i>Un editor por l&iacute;nea</i>  </td>
+<td><textarea class="inputFontNormal" name="publishercode" id="publishercode" cols="30" rows="6"><!-- TMPL_LOOP Name="publoop"--><!-- TMPL_VAR Name="publisher" --><!-- /TMPL_LOOP--></textarea></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">A&ntilde;o de Edici&oacute;n:</td>
-	<td><input class="inputFontNormal" name="publicationyear" id="publicationyear" size="40" value="<!-- TMPL_VAR Name="publicationyear" -->"  ></td>
+<td class="inputFontNormal">A&ntilde;o de Edici&oacute;n:</td>
+<td><input class="inputFontNormal" name="publicationyear" id="publicationyear" size="40" value="<!-- TMPL_VAR Name="publicationyear" -->"  ></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Descripci&oacute;n F&iacute;sica:</td>
-	<td><input class="inputFontNormal" name="pages" id="pages"size="40" value="<!-- TMPL_VAR Name="pages" -->" ></td>
+<td class="inputFontNormal">Descripci&oacute;n F&iacute;sica:</td>
+<td><input class="inputFontNormal" name="pages" id="pages"size="40" value="<!-- TMPL_VAR Name="pages" -->" ></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Tama&ntilde;o:</td>
-	<td><input class="inputFontNormal" name="size" id="size"  size="40" value="<!-- TMPL_VAR Name="size" -->" ></td>
+<td class="inputFontNormal">Tama&ntilde;o:</td>
+<td><input class="inputFontNormal" name="size" id="size"  size="40" value="<!-- TMPL_VAR Name="size" -->" ></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Serie: </td>
-	<td><input class="inputFontNormal" name="serie" id="serie" size="40" value="<!-- TMPL_VAR Name="serie" -->"  ></td>
+<td class="inputFontNormal">Serie: </td>
+<td><input class="inputFontNormal" name="serie" id="serie" size="40" value="<!-- TMPL_VAR Name="serie" -->"  ></td>
 </tr>
 <tr>
 <tr>
-	<td class="inputFontNormal">ISBN:<br> <i>Un isbn por l&iacute;nea</i>  </td>
-	<td><textarea class="inputFontNormal" name="isbncode" id="isbn" cols="30" rows="6"><!-- TMPL_LOOP Name="isbnloop"--><!-- TMPL_VAR Name="isbn" --><!-- /TMPL_LOOP--></textarea></td>
+<td class="inputFontNormal">ISBN:<br> <i>Un isbn por l&iacute;nea</i>  </td>
+<td><textarea class="inputFontNormal" name="isbncode" id="isbn" cols="30" rows="6"><!-- TMPL_LOOP Name="isbnloop"--><!-- TMPL_VAR Name="isbn" --><!-- /TMPL_LOOP--></textarea></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">ISSN:</td>
-	<td><input class="inputFontNormal" name="issn" id="issn" size="40" value="<!-- TMPL_VAR Name="issn" -->"></td>
+<td class="inputFontNormal">ISSN:</td>
+<td><input class="inputFontNormal" name="issn" id="issn" size="40" value="<!-- TMPL_VAR Name="issn" -->"></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">LCCN:</td>
-	<td><input class="inputFontNormal" name="lccn" id="lccn" size="40" value="<!-- TMPL_VAR Name="lccn" -->"></td>
-</tr>
-<tr>
-	<td class="inputFontNormal">Volumen:</td>
-	<td><input name="volume" class="inputFontNormal" id="volume" size="40" value="<!-- TMPL_VAR Name="volume" -->">  </td>
-</tr>
-<tr>
-	<td class="inputFontNormal">Descripci&oacute;n del volumen:</td>
-	<td><input class="inputFontNormal" name="volumeddesc" id="volumeddesc" size="40" value="<!-- TMPL_VAR Name="volumeddesc" -->"></td>
+<td class="inputFontNormal">LCCN:</td>
+<td><input class="inputFontNormal" name="lccn" id="lccn" size="40" value="<!-- TMPL_VAR Name="lccn" -->"></td>
 </tr>
 <tr >
-	<td class="inputFontNormal">Pa&iacute;s: </td>
-	<td class="inputFontNormal"> <!-- TMPL_VAR NAME="COUNTRYTYPES" --></td>
-</tr>
-<tr>
-	<td class="inputFontNormal">
-	Idioma: </td>
-	<td class="inputFontNormal"> <!-- TMPL_VAR NAME="LANGTYPES" --></td>
+<td class="inputFontNormal">Volumen:</td>
+<td><input name="volume" class="inputFontNormal" id="volume" size="40" value="<!-- TMPL_VAR Name="volume" -->">  </td>
 </tr>
 <tr >
-	<td class="inputFontNormal">URL de Sitio Web (<i>Sin http://</i>):</td>
-	<td><INPUT class="inputFontNormal" name="url" id="url" size="40" value="<!-- TMPL_VAR Name="url" -->" ></td>
+<td class="inputFontNormal">Descripci&oacute;n del volumen:</td>
+<td><input class="inputFontNormal" name="volumeddesc" id="volumeddesc" size="40" value="<!-- TMPL_VAR Name="volumeddesc" -->"></td>
 </tr>
-	<td class="inputFontNormal">Notas:</td>
-	<td><textarea class="inputFontNormal" name="notes" id="notes" cols="30" rows="6"><!-- TMPL_VAR Name="bnotes" --></textarea></td>
+<tr >
+<td class="inputFontNormal">Pa&iacute;s: </td>
+<td class="inputFontNormal"> <!-- TMPL_VAR NAME="COUNTRYTYPES" --></td>
+</tr>
+<tr>
+<td class="inputFontNormal">
+Idioma: </td>
+<td class="inputFontNormal"> <!-- TMPL_VAR NAME="LANGTYPES" --></td>
+</tr>
+<tr >
+<td class="inputFontNormal">URL de Sitio Web (<i>Sin http://</i>):</td>
+<td><INPUT class="inputFontNormal" name="url" id="url" size="40" value="<!-- TMPL_VAR Name="url" -->" ></td>
+</tr>
+<td class="inputFontNormal">Notas:</td>
+<td><textarea class="inputFontNormal" name="notes" id="notes" cols="30" rows="6"><!-- TMPL_VAR Name="bnotes" --></textarea></td>
 </tr>
 
 
-<!--<script>
-
-//Miguel  Agregado 
- function ocultarTabla(id){
-	mostrado = 0;
-	tabla = document.getElementById(id);
-	//tabla = document.itemform.tablaAgregarEV;
-
-	//tabla.style.display = 'none';
-	tabla.style.display = 'block';
-	//tabla.style.visibility = 'hidden';
-	//tabla.style.display = "none";
-	//if(tabla.style.display=='block')mostrado = 1;
-	//tablastyle.display='none';
-	//if(mostrado!=1)tabla.style.display='block';
- }
-
-function mostrarTabla(id){
-	tabla = document.getElementById(id);
-
-	if(tabla.style.display == 'none'){
-		if(navigator.appName.indexOf("Microsoft") > -1){
-                	var visible = 'block' //para IE
-        	} else {
-                 	var visible = 'table-row'; //para Mozilla
-        	}
-		tabla.style.display = visible;
-	}
-	else 
-	{
-		tabla.style.display = 'none';
-	}
-}
-
-
-//onLoad= ocultarTabla('tablaAgregarEV');
-
-//Fin Agregado
-
+<script>
 function getdefaults() 
 {
 clave= new Array();
@@ -472,15 +368,16 @@ valor[<!-- TMPL_VAR NAME="orden" -->]=aux.replace(/@#@/g,'\n');
 	  }
 
 }
-</script>-->
+</script>
 
 
-<tr>
-	<td class="inputFontNormal" align=center colspan=2>
-	<input type="button" onClick="getdefaults();"  name="savedefaults" value="Cargar Defaults">
-	<input type="button" onClick="document.itemform.action='savedefaults.pl';document.itemform.submit();"  name="chargedefaults" value="Guardar Defaults">
-	</td>
-</tr>
+<tr><td class="inputFontNormal" align=center colspan=2>
+<input type="button" onClick="getdefaults();"  name="savedefaults" value="Cargar Defaults">
+<input type="button" onClick="document.itemform.action='savedefaults.pl';document.itemform.submit();"  name="chargedefaults" value="Guardar Defaults">
+</td></tr>
+
+
+
 <script>
 
 
@@ -536,40 +433,29 @@ function cambioUnidadDeInformacion(){
         }
 </script>
 
-</table>
-</div>
-<!-- Miguel - Agregue esta tabla-->
-<br>
-<div id="tablaAgregarEV" style="display: none" styleposition =absolute;>
-<table border="0" cellspacing="0" cellpadding="0" name="tablaAgregarEV">
-<!--<table id="tablaAgregarEV" style="display: none" border="0" cellspacing="0" cellpadding="0" name="tablaAgregarEV">-->
-<tr><td>&nbsp;</td>
-</tr>
+<tr><td>&nbsp;</td></tr>
 <tr class="tablaresultadoTitle">
-	<td colspan="2"><b>Agregar a estante virtual existente:</b></td>
+<td colspan="2"><b>Agregar a estante virtual existente:</b></td>
 </tr>
 
 <tr>
-	<td class="inputFontNormal">Estantes:</td>
-	<td class="inputFontNormal"><!-- TMPL_VAR NAME="BOOKSHELF" --></td>
+<td class="inputFontNormal">Estantes:</td>
+<td class="inputFontNormal"><!-- TMPL_VAR NAME="BOOKSHELF" --></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Subestantes:</td>
-	<td>
-		<select class="inputFontNormal" name="subshelfbook" size="10"><option></option>
-		</select>
-	</td>
+<td class="inputFontNormal">Subestantes:</td>
+<td><select class="inputFontNormal" name="subshelfbook" size="10"><option></option></select></td>
 </tr>
 <tr>
-	<td class="inputFontNormal">Agregar a:</td>
-	<td class="inputFontNormal">
-	<input type="hidden" name="shelfvalues" value="">
-	<select name="newshelfbook" class="inputFontNormal" size="10" id="newshelfbook" multiple >
-	<!-- TMPL_LOOP NAME="SHELFS" -->
-	<option></option>
-	<!-- /TMPL_LOOP -->
-	</select>
-	</td>
+<td class="inputFontNormal">Agregar a:</td>
+<td class="inputFontNormal">
+<input type="hidden" name="shelfvalues" value="">
+<select name="newshelfbook" class="inputFontNormal" size="10" id="newshelfbook" multiple >
+<!-- TMPL_LOOP NAME="SHELFS" -->
+<option></option>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
 </tr>
 <tr>
 <script>
@@ -638,39 +524,29 @@ function agregarNuevo(nw,s,ne){
 
 
 </script>
+<td align=center colspan="2"><input type="button" onclick="agregarEstante(document.itemform.shelfbook,document.itemform.subshelfbook,document.itemform.newshelfbook);"  name="AddList" value="Agregar a Estante Virtual">
+<input type="button" onclick="eliminarEstante(document.itemform.newshelfbook);"  name="DeleteList" value="Eliminar">
 
-		<td align=center colspan="2"><input type="button" 			
-		onclick="agregarEstante(document.itemform.shelfbook,document.itemform.subshelfbook,document.itemform.		newshelfbook);"  name="AddList" value="Agregar a Estante Virtual">
-		<input type="button" onclick="eliminarEstante(document.itemform.newshelfbook);"  name="DeleteList" 		value="Eliminar">
-		</td>	
-	</tr>
-	<tr>
-		<td colspan="2" align="center" class="inputFontNormal">
-		Nuevo Estante:
-		<INPUT name="newshelf" size="40" value="<!-- TMPL_VAR Name="newshelf" -->" >
-		<input type="button" onClick=" agregarNuevo 			
-		(document.itemform.newshelfbook,document.itemform.shelfbook,document.itemform.newshelf);" name="Add" value="Agregar">
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="title">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="2" align="center">
-		<input name="tipo" type="hidden" value="">
-		<input type="button" onClick="document.itemform.tipo.value='newgroup';mandarArreglo(document.itemform.newshelfbook,document.itemform.shelfvalues );document.itemform.submit();" value="Confirmar alta de registro">
-		<input type="button" onClick="document.itemform.tipo.value='newvol';mandarArreglo(document.itemform.newshelfbook,document.itemform.shelfvalues );document.itemform.submit();"  value="Agregar nuevo volumen"> 
-		</td>
-	</tr>
-   </table>
-<!--</table>-->
-</div>
-
+</td></tr>
+<tr>
+<td colspan="2" align="center" class="inputFontNormal">
+Nuevo Estante:
+<INPUT name="newshelf" size="40" value="<!-- TMPL_VAR Name="newshelf" -->" >
+<input type="button" onClick=" agregarNuevo (document.itemform.newshelfbook,document.itemform.shelfbook,document.itemform.newshelf);"  name="Add" value="Agregar">
+</td>
+</tr>
+<tr>
+<td colspan="2" class="title">&nbsp;</td>
+</tr>
+<tr>
+<td colspan="2" align="center">
+<input name="tipo" type="hidden" value="">
+<input type="button" onClick="document.itemform.tipo.value='newgroup';mandarArreglo(document.itemform.newshelfbook,document.itemform.shelfvalues );document.itemform.submit();" value="Confirmar alta de registro">
+<input type="button" onClick="document.itemform.tipo.value='newvol';mandarArreglo(document.itemform.newshelfbook,document.itemform.shelfvalues );document.itemform.submit();"  value="Agregar nuevo volumen"> </td>
+</tr>
 </table>
 
 </form>
-
-
 </center>
 
 
