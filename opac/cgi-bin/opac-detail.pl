@@ -15,7 +15,7 @@ my ($template, $borrowernumber, $cookie)
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			     });
-my $viewdetail = C4::Context->preference("viewDetail");
+
 my $biblionumber=$query->param('bib');
 $template->param(biblionumber => $biblionumber);
 
@@ -23,7 +23,6 @@ $template->param(biblionumber => $biblionumber);
 # change back when ive fixed request.pl
 my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 my $dat                                   = &bibdata($biblionumber);
-my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 
@@ -44,6 +43,10 @@ $dat->{'SUBJECTS'} = \@subjects;
 my @autorPPAL= &getautor($dat->{'author'});
 my @autoresAdicionales=&getautoresAdicionales($biblionumber);
 my @colaboradores=&getColaboradores($biblionumber);
+
+$dat->{'author'} = \@autorPPAL;
+$dat->{'ADDITIONAL'}= \@autoresAdicionales;
+$dat->{'COLABS'}=\@colaboradores;
 
 my $norequests = 1;
 my $row = 1;
@@ -77,47 +80,20 @@ my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 my $subjectsarray=\@subjects;
-
-
+#Matias
 my @all=allbibitems($biblionumber,"opac");
 
-#my $allarray=\@all;
-my $i=0;
-foreach my $tmp1 (@all){
-             $all[$i]->{'SUBJECTS'}=  $dat->{'SUBJECTS'};
-             $all[$i]->{'subject'}=  $dat->{'subject'};
-	     $all[$i]->{'author'}= \@autorPPAL;
-	     $all[$i]->{'ADDITIONAL'}=\@autoresAdicionales;
-	     $all[$i]->{'COLABS'}=\@colaboradores;
-     $i++;
-	        } 
 my $allarray=\@all;
-
-foreach my $tmp (@results){
-$template->param(unititle=>$tmp->{'unititle'});
-$template->param(titulo=>$tmp->{'title'});
-
-$template->param(cdu=>$tmp->{'cdu'});
-$template->param(notas=>$tmp->{'notes'});
-$template->param(abstracto=>$tmp->{'abstract'});
-$template->param(clasificacion=>$tmp->{'classification'});
-$template->param(url1=>$tmp->{'url'});
-$template->param(lccn=>$tmp->{'lccn'});
-
-}
-
-if ($viewdetail eq 0) { #si es 0 es para ocultar el campo que en el tmp pregunta si existe el parametro ViewDetail
-$template->param(ViewDetail=> 'SE VE EL CAMPO');
-}
 $template->param(BIBLIOITEMS=>$allarray);
+#
 
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SUBJECTS => $subjectsarray);
 $template->param(SITE_RESULTS => $sitearray,
- 			     CirculationEnabled => C4::Context->preference("circulation"),
- 			     LibraryName => C4::Context->preference("LibraryName"),
+			     CirculationEnabled => C4::Context->preference("circulation"),
+			     LibraryName => C4::Context->preference("LibraryName"),
 			     pagetitle => "Detalle del registro"
 );
 
