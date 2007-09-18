@@ -1725,10 +1725,7 @@ If this is set, it is set to C<One Order>.
 =cut
 #'
 sub ItemInfo {
-open(INFO, '>>/var/log/koha/debug.txt');
     my ($env,$biblionumber,$type) = @_;
-print INFO "entro a ItemInfo \n";
-
     my $dbh   = C4::Context->dbh;
     my $query = "SELECT *,items.notforloan as itemnotforloan FROM items left join  biblio on biblio.biblionumber = items.biblionumber left join  biblioitems on biblioitems.biblioitemnumber = items.biblioitemnumber left join itemtypes on biblioitems.itemtype = itemtypes.itemtype WHERE items.biblionumber = ? ";
   if (($type ne 'intra')){
@@ -1763,24 +1760,13 @@ print INFO "entro a ItemInfo \n";
              $datedue="<font color='orange'>Compartido</font>";
 	         }
     if ($data->{'wthdrawn'} eq '3'){
-               $datedue="<font color='orange'>Extension</font>";
-	                           }
+             $datedue="<font color='orange'>Extension</font>";
+    }
 
 				
-=item
-if ($data->{'notforloan'} eq '1'){
-        $datedue="<font color='blue'>Para Sala</font>";
+   if ($data->{'notforloan'} eq '1'){
+            $datedue="<font color='blue'>Para Sala</font>";
     }
-=cut
-
-#Miguel 13/07/07 - Se renombro el nombre del campo notforloan a itemnotforloan en la linea 1750
-#se deja la anterior por las dudas
-$data->{'notforloan'}= $data->{'itemnotforloan'};
-#     if ($data->{'notforloan'} eq '1'){
-if ($data->{'itemnotforloan'} eq '1'){
-        $datedue="<font color='blue'>Para Sala</font>";
-}
-print(INFO "itemnotforloan ".$data->{'itemnotforloan'}."\n");
 
 =item
     if ($datedue eq ''){
@@ -1841,7 +1827,6 @@ print(INFO "itemnotforloan ".$data->{'itemnotforloan'}."\n");
     }
   }
   $sth2->finish;
-close(INFO);
   return(@results);
 }
 
@@ -2107,8 +2092,6 @@ sub Countreserve{
 
 sub allbibitems {
 #Todos los biblioitems de un biblio
-open(INFO, '>>/var/log/koha/debug.txt');
-print INFO "entro en allbibitems\n";
   my ($bib,$type)=@_;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("SELECT  *
@@ -2195,7 +2178,7 @@ if ($type eq "intranet") {$results[$i]->{'reserves'}= Countreserve($data->{'bibl
 	 $i++;
         }
   $sth->finish;
-close (INFO);
+
   return(@results);
 }
 
