@@ -215,7 +215,7 @@ sub cantidadRenglones{
                    where variable='renglones'";
         my $sth=$dbh->prepare($query);
 	$sth->execute();
-	return($sth->fetchrow_array);        
+	return($sth->fetchrow_array);
 }
 
 #
@@ -223,7 +223,6 @@ sub cantidadRenglones{
 # y en base a eso arma el array con la cantidad de paginas que tiene que quedar como respuesta
 # Paginador
 sub armarPaginas{
-
 	my ($cant,$actual)=@_;
 	my $renglones = cantidadRenglones();
 	my $paginas = 0;
@@ -595,17 +594,21 @@ sub usuarios{
         return (@results);
 }
 
+=item
+cantidadPrestamos
+Cuenta los prestamos segun su estado.
+Acutalmente no se usa!!!!!!!
+=cut
 sub cantidadPrestamos{
-	
 	my ($branch,$estado)=@_;
         my $dbh = C4::Context->dbh;
         my $query ="select issues.itemnumber as itemnumber
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
 		    inner join items on (issues.itemnumber = items.itemnumber)
-                    where issues.branchcode='$branch' and returndate is NULL";
+                    where issues.branchcode=? and returndate is NULL";
         my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($branch);
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	my $cantidad=0;
@@ -626,9 +629,7 @@ sub cantidadPrestamos{
 			$cantidad++;
 		}
         }
-
         return($cantidad);
-
 }
 
 sub prestamos{
@@ -645,15 +646,13 @@ sub prestamos{
 		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
 		    inner join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode=? and returndate is NULL
-		    order by ($orden)
-		    limit  $ini,$fin";
+		    order by ($orden)";
+# 		    limit  $ini,$fin";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
-                if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
-		$data->{'clase'}=$clase;
                 if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
 		
 
@@ -668,19 +667,40 @@ sub prestamos{
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($estado eq "VE"){
 			if ($flag lt 0){
+				if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
+				$data->{'clase'}=$clase;
 				push(@results,$data);
 			}
 		}
 		elsif($estado eq "NV"){
 			if($flag gt 0 || $flag == 0){
-				 push(@results,$data);
+				if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
+				$data->{'clase'}=$clase;
+				push(@results,$data);
 			}
 		}
 		else{
-			 push(@results,$data);
+			if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
+			$data->{'clase'}=$clase;
+			push(@results,$data);
 		}
         }
-        return (@results);
+	my $cantReg=scalar(@results);
+	if( $cantReg > $fin){
+		my $cantFila=$fin-1+$ini;
+		my @results2;
+		if($cantReg < $cantFila ){
+			@results2=@results[$ini..$cantReg];
+		}
+		else{
+			@results2=@results[$ini..$fin-1+$ini];
+		}
+
+		return($cantReg,@results2);
+	}
+        else{
+		return ($cantReg,@results);
+	}
 }
 
 

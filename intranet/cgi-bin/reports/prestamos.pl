@@ -34,7 +34,6 @@ my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/prestamos.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -55,7 +54,6 @@ foreach my $branch (keys %$branches) {
 my $branch=$input->param('branch');
 ($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
 
-
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',
                                         -values    => \@select_branch,
@@ -64,6 +62,7 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -size      => 1,
                                  );
 #Fin: Por los branches
+
 my $orden;
 if ( $input->param('orden') eq ""){
 	$orden='cardnumber'}
@@ -85,10 +84,9 @@ if (($input->param('ini') eq "")){
 };
 #FIN inicializacion
 
-my @resultsdata= prestamos($branch,$orden,$ini,$cantR,$estado);#Prestamos sin devolver (vencidos y no vencidos)
-my $cantidad=cantidadPrestamos($branch,$estado);
+my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado);#Prestamos sin devolver (vencidos y no vencidos)
 
-
+# my $cantidad=cantidadPrestamos($branch,$estado); se saco ya que la otra funcion toma cuenta todos los registro dependiendo el estado del prestamos.
 
 
 my @numeros=armarPaginas($cantidad);
