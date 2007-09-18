@@ -118,16 +118,6 @@ my $bornum = $query->param('borrnumber');
 my $itemnumber = $query->param('itemnumber') || $query->param('ticket');
 my $iteminfo= getiteminformation( \%env, $itemnumber);
 
-# Agregado******************************************************************************
-# Miguel 14-09-07 parece q no funciona la cookie, que es la q setea el $branch
-# para solucionarlo temporalmente agrego esta consulta q trae el brancode del borrower
- my  $sth=$dbh->prepare("Select branchcode from borrowers where borrowernumber=?");
-  $sth->execute($bornum);
- my $data=$sth->fetchrow_hashref;
- $branch= $data->{'branchcode'};
-  $sth->finish;
-# fin Agregado***************************************************************************
-
 if ($iteminfo->{'barcode'} eq ''  && $print eq 'maybe'){
 	$print = 'yes';
 }

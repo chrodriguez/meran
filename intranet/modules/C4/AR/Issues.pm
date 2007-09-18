@@ -102,7 +102,7 @@ sub devolver{
 	my $data= $sth->fetchrow_hashref;
 	if($data->{'itemnumber'}){
 	#Si la reserva que voy a borrar existia realmente sino hubo un error
-		if($notforloan == 0){#si no es para sala
+		if($notforloan->{'notforloan'} == 0){#si no es para sala
 			my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1 ");
 			$sth1->execute($data->{'biblioitemnumber'});
 			my $data2= $sth1->fetchrow_hashref;

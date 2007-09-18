@@ -24,6 +24,7 @@ $template->param(biblionumber => $biblionumber);
 my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 my $dat                                   = &bibdata($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
+#esta consulta no seria necesaria, ya que este resultado no se muestra en el tmpl
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 
 $dat->{'count'}=@items;
@@ -51,13 +52,20 @@ $dat->{'COLABS'}=\@colaboradores;
 my $norequests = 1;
 my $row = 1;
 foreach my $itm (@items) {
-    $norequests = 0 unless $itm->{'notforloan'};
+#     $norequests = 0 unless $itm->{'notforloan'};
+# $norequests = 0 unless $itm->{'itemnotforloan'};
+#si existe un item q no es para sala
+if ($itm->{'itemnotforloan'} == 0){$norequests = 0}
+
+#$itm se modifica dentro del for, pero no se asigna luego
+#creo q esta de mas
     $itm->{$itm->{'publictype'}} = 1;
     if (($row % 2) == 0) {
 	$itm->{'even'} = 1;
     }
     $row++;
 }
+
 
 my @subjects;
 my $subject;
@@ -88,13 +96,15 @@ $template->param(BIBLIOITEMS=>$allarray);
 #
 
 $template->param(BIBLIO_RESULTS => $resultsarray);
+#ITEM_RESULTS no esta en el tmpl, parece q esta de mas
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SUBJECTS => $subjectsarray);
+#SITE_RESULTS no esta en el tmpl, parece q esta de mas
 $template->param(SITE_RESULTS => $sitearray,
-			     CirculationEnabled => C4::Context->preference("circulation"),
-			     LibraryName => C4::Context->preference("LibraryName"),
-			     pagetitle => "Detalle del registro"
+		CirculationEnabled => C4::Context->preference("circulation"),
+		LibraryName => C4::Context->preference("LibraryName"),
+		pagetitle => "Detalle del registro"
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -1725,10 +1725,14 @@ If this is set, it is set to C<One Order>.
 =cut
 #'
 sub ItemInfo {
+open(INFO, '>>/var/log/koha/debug.txt');
     my ($env,$biblionumber,$type) = @_;
+print INFO "entro a ItemInfo \n";
+
     my $dbh   = C4::Context->dbh;
     my $query = "SELECT *,items.notforloan as itemnotforloan FROM items left join  biblio on biblio.biblionumber = items.biblionumber left join  biblioitems on biblioitems.biblioitemnumber = items.biblioitemnumber left join itemtypes on biblioitems.itemtype = itemtypes.itemtype WHERE items.biblionumber = ? ";
-  if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
+  if (($type ne 'intra')){
+# &&(C4::Context->preference("opacUnavail") eq 0)){
     $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
     or items.itemlost is NULL)
     and (wthdrawn <> 1 or wthdrawn is NULL)";
@@ -1755,12 +1759,12 @@ sub ItemInfo {
     if ($data->{'wthdrawn'} eq '1'){
 	$datedue="<font color='red'>Cancelado</font>";
     }
-     if ($data->{'wthdrawn'} eq '2'){
+    if ($data->{'wthdrawn'} eq '2'){
              $datedue="<font color='orange'>Compartido</font>";
 	         }
-  if ($data->{'wthdrawn'} eq '3'){
+    if ($data->{'wthdrawn'} eq '3'){
                $datedue="<font color='orange'>Extension</font>";
-	                        }
+	                           }
 
 				
 =item
@@ -1776,6 +1780,7 @@ $data->{'notforloan'}= $data->{'itemnotforloan'};
 if ($data->{'itemnotforloan'} eq '1'){
         $datedue="<font color='blue'>Para Sala</font>";
 }
+print(INFO "itemnotforloan ".$data->{'itemnotforloan'}."\n");
 
 =item
     if ($datedue eq ''){
@@ -1836,7 +1841,7 @@ if ($data->{'itemnotforloan'} eq '1'){
     }
   }
   $sth2->finish;
-
+close(INFO);
   return(@results);
 }
 
@@ -1971,6 +1976,7 @@ sub allitems {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from items where biblioitemnumber=? ");
   $sth->execute($bib);
+ 
 
   my @results;
 
@@ -1982,6 +1988,7 @@ sub allitems {
   my $shared=0;
   my $total=0;
 
+#se recorren todos los items de biblionumber = $bib, y verifica el estado del item
   while (my $data=$sth->fetchrow_hashref){
     #Averigua el estado
     my $datedue = '';
@@ -1995,15 +2002,18 @@ sub allitems {
     my $isth=$dbh->prepare("SELECT  * FROM issues, borrowers , issuetypes WHERE itemnumber = ? AND returndate IS  NULL  AND issues.borrowernumber = borrowers.borrowernumber AND issuetypes.issuecode=issues.issuecode");
     $isth->execute($data->{'itemnumber'});
     if (my $idata=$isth->fetchrow_hashref){
-	$issued=1;
+    #el item esta prestado	
+	$issued=1;  
+	#me quedo con el usuario
 	$borr=$idata->{'borrowernumber'};
-      if ($type eq "intranet") { 
-      $datedue ="Prestado a <STRONG><A href='moremember.pl?bornum=".$idata->{'borrowernumber'}."'>".$idata->{'firstname'}." ".$idata->{'surname'}."</A><BR>".$idata->{'description'}."</STRONG>";
       
-      }
-      else {$datedue="<b>Prestado<b>";}
+	#si estoy en la intra muestro los datos del usuario que lo tiene
+      	if ($type eq "intranet") { 
+      	$datedue ="Prestado a <STRONG><A href='moremember.pl?bornum=".$idata->{'borrowernumber'}."'>".$idata->{'firstname'}." ".$idata->{'surname'}."</A><BR>".$idata->{'description'}."</STRONG>";
+     	}
+      	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
       $returndate= format_date(vencimiento($data->{'itemnumber'}));
-      $renew = sepuederenovar($borr, $data->{'itemnumber'});
+      $renew = &sepuederenovar2($borr, $data->{'itemnumber'});
       $issue++;
     }
 
@@ -2097,7 +2107,8 @@ sub Countreserve{
 
 sub allbibitems {
 #Todos los biblioitems de un biblio
-
+open(INFO, '>>/var/log/koha/debug.txt');
+print INFO "entro en allbibitems\n";
   my ($bib,$type)=@_;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("SELECT  *
@@ -2119,6 +2130,16 @@ my @results;
 my @resultsItems;
 my $i=0;
  while (my $data=$sth->fetchrow_hashref){
+
+	#los grupos que no tienen libros no se muestran en el OPAC
+	if($type eq "opac"){
+        my $sth2=$dbh->prepare("SELECT  * FROM items WHERE biblioitemnumber =? AND wthdrawn = 0 or wthdrawn is null ");
+        $sth2->execute($data->{'biblioitemnumber'});
+        	if(!$sth2->fetchrow_hashref){
+            		next;
+        	}
+    	}
+
         $results[$i]=$data;
 	$results[$i]->{'publishercode'}= publisherList($results[$i]->{'biblioitemnumber'},$dbh); #agregado por Luciano
 	$results[$i]->{'isbncode'}= isbnList($results[$i]->{'biblioitemnumber'},$dbh); #agregado por Einar
@@ -2132,7 +2153,8 @@ my $i=0;
 
 	$results[$i]->{'notforloan'}= ((($results[$i]->{'fl'}+$results[$i]->{'issue'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
 
-	   if (($type ne 'intranet')&&(C4::Context->preference("opacUnavail") eq 0))
+# 	   if (($type ne 'intranet')&&(C4::Context->preference("opacUnavail") eq 0))
+	if (($type ne 'intranet'))
 	       {
 	       $results[$i]->{'unavailable'}=($results[$i]->{'total'} eq  $results[$i]->{'unav'});
 	       # Para ver si todos los grupos estan deshabilitados
@@ -2173,7 +2195,7 @@ if ($type eq "intranet") {$results[$i]->{'reserves'}= Countreserve($data->{'bibl
 	 $i++;
         }
   $sth->finish;
-
+close (INFO);
   return(@results);
 }
 

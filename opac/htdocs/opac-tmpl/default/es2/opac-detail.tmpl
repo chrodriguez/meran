@@ -177,18 +177,17 @@
 	
 	<br>
 	      <!-- TMPL_IF NAME="CirculationEnabled" -->
-	      		<!-- TMPL_UNLESS NAME="shared" -->
-		       <!-- TMPL_UNLESS NAME="notforloan" -->
+	<!-- si es 0 -->
+ 	      		<!-- TMPL_UNLESS NAME="shared" --> 
                        <!-- TMPL_UNLESS NAME="norequests" -->
   	<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblioitemnumber" ESCAPE=URL -->">
         		<b>Reservar</b>
 			</a></p>  
-			<!-- /TMPL_UNLESS -->
-			<!-- /TMPL_UNLESS -->
+ 			<!-- /TMPL_UNLESS --> 
 			<!-- /TMPL_UNLESS -->
 			
 			 <!-- TMPL_UNLESS NAME="shared" -->
-			<!-- TMPL_IF NAME="notforloan" -->
+			<!-- TMPL_IF NAME="norequests" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
                 	<!-- /TMPL_IF -->
 			<!-- /TMPL_UNLESS -->
@@ -196,7 +195,7 @@
 			   <!-- TMPL_IF NAME="shared" -->
 			    <p align="right"></p>
 			   <!-- /TMPL_IF -->
-									   
+<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
 	      <!-- TMPL_ELSE -->
 			<!-- TMPL_IF NAME="notforloan" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
