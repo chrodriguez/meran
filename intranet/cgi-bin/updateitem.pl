@@ -114,8 +114,7 @@ if($cantunavail eq 0){
 if (($oldwthdrawn ne $wthdrawn)or ($oldnotforloan ne $notforloan)) {changeAvailability($itemnumber,$wthdrawn,$notforloan,$homebranch)};
 my $responsable=$input->param('userloggedname');
 
-
-if ((checkitems(1,$barcode))&&($wthdrawn ne 2)){#Se chequea el barcode  salvo que este compartido
+if ((&checkitemupdate($itemnumber,$barcode) eq 1 )&&($wthdrawn ne 2)){#Se chequea el barcode  salvo que este compartido
 	$msg="&msg=barcodeinuse";
 	}
 else {
