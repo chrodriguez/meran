@@ -2087,8 +2087,16 @@ sub Countreserve{
    return($data->{'reservas'});
 }
 
-
-
+#cuenta las reservas pendientes del grupo
+sub CountreserveGrupo{
+   my ($biblioitemnumber)=@_;
+   my $dbh = C4::Context->dbh;
+   my $sth=$dbh->prepare("SELECT count(*) as reservas from reserves 
+	WHERE  reserves.biblioitemnumber = ? and reserves.constrainttype is NULL  and itemnumber is Null ");
+   $sth->execute($biblioitemnumber);
+   my $data=$sth->fetchrow_hashref;
+   return($data->{'reservas'});
+}
 
 sub allbibitems {
 #Todos los biblioitems de un biblio
@@ -2153,7 +2161,7 @@ my $i=0;
 
 #### Este if estaba comentado los descomente para que devuelva la cantidad de reservas que hay en en grupo.
 if ($type eq "intranet") {$results[$i]->{'reserves'}= Countreserve($data->{'biblioitemnumber'}); }
-##### VER SI ESTA BIEN!!!!!!!!!!!! - Damian - 30/03/2007
+else {$results[$i]->{'reserves'}= CountreserveGrupo($data->{'biblioitemnumber'});}
 
  #MAtias Lenguaje Pais y Soporte
         my $country=getCountry($results[$i]->{'idCountry'});

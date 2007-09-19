@@ -140,8 +140,8 @@ Autores Adicionales: <br>
 	 <!-- /TMPL_LOOP -->
 	 </TABLE>
 
-	      <!-- TMPL_IF NAME="CirculationEnabled" -->
-		       <!-- TMPL_UNLESS NAME="notforloan" -->
+	<!-- TMPL_IF NAME="CirculationEnabled" -->
+		       <!-- TMPL_UNLESS NAME="shared" -->
                        <!-- TMPL_UNLESS NAME="norequests" -->
   	<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblioitemnumber" ESCAPE=URL -->">
         		<b>Reservar</b>
@@ -149,16 +149,17 @@ Autores Adicionales: <br>
 			<!-- /TMPL_UNLESS -->
 			<!-- /TMPL_UNLESS -->
 	
-	<!-- TMPL_IF NAME="notforloan" -->
+			<!-- TMPL_IF NAME="shared" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
                 	<!-- /TMPL_IF -->
-	      <!-- TMPL_ELSE -->
+<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
+	<!-- TMPL_ELSE -->
 			<!-- TMPL_IF NAME="notforloan" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
 			<!-- TMPL_ELSE -->
 			<p align="right"><b>Disponible para Reservar</b></p>
                 	<!-- /TMPL_IF -->
-             <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
 	</td>
         </tr>
 
