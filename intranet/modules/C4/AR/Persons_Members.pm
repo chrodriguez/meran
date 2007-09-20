@@ -232,9 +232,8 @@ my $dbh = C4::Context->dbh;
 my $query="insert into persons (borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
     	  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-      	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
-	  lastchangepassword,studentnumber)  
-	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?)";
+      	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,studentnumber) 
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 my $sth=$dbh->prepare($query);
 
