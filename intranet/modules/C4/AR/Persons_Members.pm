@@ -167,25 +167,6 @@ my $query="insert into borrowers (borrowernumber,title,expiry,cardnumber,sex,eth
 
 my $sth=$dbh->prepare($query);
 
-##Campos que no pueden ser null 
-## borrowernumber cardnumber documentnumber documenttype 
-## surname firstname streetaddress city 
-## phone branchcode categorycode changepassword initials
-#  unless($data->{'borrowernumber'}){$data->{'borrowernumber'}=' ';}
-# unless($data->{'cardnumber'}){$data->{'cardnumber'}=' ';}
-# unless($data->{'documentnumber'}){$data->{'documentnumber'}=' ';}
-# unless($data->{'documenttype'}){$data->{'documenttype'}=' ';}
-# unless($data->{'surname'}){$data->{'surname'}=' ';}
-# unless($data->{'firstname'}){$data->{'firstname'}=' ';}
-# unless($data->{'streetaddress'}){$data->{'streetaddress'}=' ';}
-# unless($data->{'city'}){$data->{'city'}=' ';}
-# unless($data->{'phone'}){$data->{'phone'}=' ';}
-# unless($data->{'branchcode'}){$data->{'branchcode'}=' ';}
-# unless($data->{'categorycode'}){$data->{'categorycode'}=' ';}
-# unless($data->{'changepassword'}){$data->{'changepassword'}=' ';}
-# unless($data->{'initials'}){$data->{'initials'}=' ';}
-###
-
 $sth->execute($data->{'borrowernumber'},$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
    	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
 	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
