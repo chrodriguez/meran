@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+#Repara el caso de las personas que estan habilitadas (estan en borrowers) pero con distinto borrowernumber
 use strict;
 require Exporter;
 use C4::Context;

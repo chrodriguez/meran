@@ -233,8 +233,8 @@ my $query="insert into persons (borrowernumber,title,expiry,cardnumber,sex,ethno
   	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
     	  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
       	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
-	  lastchangepassword,changepassword,studentnumber)  
-	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+	  lastchangepassword,studentnumber)  
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?)";
 
 my $sth=$dbh->prepare($query);
 
@@ -245,7 +245,7 @@ $sth->execute($data->{'borrowernumber'},$data->{'title'},$data->{'expiry'},$data
 	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
 	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
 	$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
-		  $data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'});
+		  $data->{'documenttype'},$data->{'documentnumber'},$data->{'studentnumber'});
   $sth->finish;
  
 #Averiguo el id de persona que se inserto
@@ -272,7 +272,7 @@ my $query="Update persons set
 		borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
 		ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
 		branchcode =?,zipcode =?,homezipcode=?,
-		documenttype =?,documentnumber=?,changepassword=?,studentnumber=?,borrowernumber=?
+		documenttype =?,documentnumber=?,studentnumber=?,borrowernumber=?
 	  where personnumber=?";
 
 my $sth=$dbh->prepare($query);
@@ -285,7 +285,7 @@ my $sth=$dbh->prepare($query);
 	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},$data->{'streetaddress'},
 	$data->{'ethnicity'},$data->{'gna'},$data->{'lost'},$data->{'debarred'},
 	$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
-	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'},
+	$data->{'documenttype'},$data->{'documentnumber'},$data->{'studentnumber'},
 	$data->{'borrowernumber'},$data->{'personnumber'});
 
    $sth->finish;

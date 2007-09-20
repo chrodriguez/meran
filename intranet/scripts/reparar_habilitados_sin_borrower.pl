@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Personas con borrowernumber sin estar en la tabla borrowers
 
 use strict;
 require Exporter;
