@@ -47,13 +47,19 @@ sub addmembers{
   $sth->execute($aux);
   my $data=$sth->fetchrow_hashref;
 
-  $data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
-
- #Se actualiza la persona con el borrowernumber
-  my $sth3=$dbh->prepare("Update persons set borrowernumber=".$data->{'borrowernumber'}." where personnumber=?");
-  $sth3->execute($aux);  
-  $sth3->finish;
+   #Verificar que ya no exista como borrower
+   my $sth2=$dbh->prepare("Select * from borrowers where cardnumber=?");
+   $sth2->execute($data->{'cardnumber'});
+   if (!$sth2->fetchrow_hashref){#no existe, se agrega
+   	$data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
+	#Se actualiza la persona con el borrowernumber
+  	my $sth3=$dbh->prepare("Update persons set borrowernumber=".$data->{'borrowernumber'}." where personnumber=?");
+  	$sth3->execute($aux);  
+  	$sth3->finish;
+	 }
+    $sth2->finish;
     }
+
   $sth->finish;
 
   
@@ -67,7 +73,7 @@ sub delmember{
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
   $sth->execute($member);
-  my @data=$sth->fetchrow_array;
+  if(my @data=$sth->fetchrow_array){#Si existe, se elimina
   $sth->finish;
   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
   $sth->execute(@data);
@@ -81,7 +87,7 @@ sub delmember{
   $sth=$dbh->prepare("Update persons set borrowernumber=NULL where borrowernumber=?");
   $sth->execute($member);
   $sth->finish;
-  
+ } 
   return (1);
 }
 sub addmember{
