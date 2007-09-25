@@ -20,6 +20,7 @@ sub delmembers{
   my (@member)=@_;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+  my $result='';
   
   foreach my $aux (@member){
   $sth->execute($aux);
@@ -29,18 +30,22 @@ sub delmembers{
   #printf L $data->{'borrowernumber'};
   #close L;
   ### ###
-  if ($data->{'borrowernumber'}) {
+  if ($data->{'borrowernumber'}) { # Si no tiene borrowernumber no esta habilitado
 		delmember($data->{'borrowernumber'});
+	}
+	else {
+	$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' NO se encuentra habilitado!!! <br>';
 	}
     }
   $sth->finish;
   
-  return (1);}
+  return ($result);}
 
 # delmembers recibe un arreglo de personnumbers y lo que hace es habilitarlos en la lista de miembros de la biblioteca, se invoca desde member2.pl  
 
 sub addmembers{
   my (@member)=@_;
+  my $result='';
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from persons where personnumber=?");
   foreach my $aux (@member){
@@ -51,11 +56,20 @@ sub addmembers{
    my $sth2=$dbh->prepare("Select * from borrowers where cardnumber=?");
    $sth2->execute($data->{'cardnumber'});
    if (!$sth2->fetchrow_hashref){#no existe, se agrega
+
+	#Se puede habilitar usurios irregulares??
+	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+	if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)){# No es regular y no se puede habilitar regulares
+	 $result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' es IRREGULAR y no puede ser habilitado!!! <br>';
+	}else{
    	$data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
 	#Se actualiza la persona con el borrowernumber
   	my $sth3=$dbh->prepare("Update persons set borrowernumber=".$data->{'borrowernumber'}." where personnumber=?");
   	$sth3->execute($aux);  
   	$sth3->finish;
+	}
+	 } else {
+	 $result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' ya se encuentra habilitado!!! <br>';
 	 }
     $sth2->finish;
     }
@@ -63,7 +77,7 @@ sub addmembers{
   $sth->finish;
 
   
-  return (1);}
+  return ($result);}
 
 #delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
 

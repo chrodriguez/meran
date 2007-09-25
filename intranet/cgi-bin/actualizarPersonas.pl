@@ -21,17 +21,39 @@ my $input = new CGI;
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired);
+my $msg='';
 my @names=$input->param;
 my @data;
 for (my $i=0;$i<$input->param('cantidad');$i++){
-  		push(@data,$names[$i]);#Aca se recuperan los valores de los parametros que voy a modificar, pero como no se cuales van a venir los tengo que recuperar asi.
+ if (($names[$i] ne 'member')&&($names[$i] ne 'cantidad')&&
+     ($names[$i] ne 'accion')&&($names[$i] ne 'number')&&($names[$i] ne 'orden')){  #Quito los parametros no necesarios
+		push(@data,$names[$i]);
+ 
+ 		#Aca se recuperan los valores de los parametros que voy a modificar, 
+ 		#pero como no se cuales van a venir los tengo que recuperar asi.
 		}
+	}
 if ($input->param('accion') eq "habilitar"){
-		addmembers(@data);}
+
+	$msg=addmembers(@data);
+	
+	}
 else{
-	delmembers (@data);}
+	$msg=delmembers (@data);
+	
+	}
+
+
+my $redirect="/cgi-bin/koha/member2.pl";
+
+my $member=$input->param('member');
+my $number=$input->param('number');
+my $orden=$input->param('orden');
+$redirect.="?ini=".$number."&orden=".$orden."&member=".$member;
+
+if($msg ne ''){$redirect.="&msg=".$msg; }
 
 my $referer = $input->referer();
-print $input->redirect("/cgi-bin/koha/members-home2.pl");
+print $input->redirect($redirect);
 
 

@@ -30,7 +30,7 @@ cant++;
 theStatus=theStatus+" -  Tarjeta nro "+ checks[i].id+"\n";
 }
 }
-theStatus=theStatus + "\n\n¿Esta seguro?)";
+theStatus=theStatus + "\n\n¿Esta seguro?";
 if (cant>0){if (confirm (theStatus)){
 			document.getElementById("cantidad").value=cant; 
 			document.form1.submit();}
@@ -50,6 +50,47 @@ if (cant>0){if (confirm (theStatus)){
 	</tr>
 </table>
 
+<br>
+
+<!-- TMPL_IF name="msg" -->
+<center>
+<table border="0" cellpadding="0" cellspacing="0" width="60%">
+<tr class="tablaresultadoTitle">
+<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+<td>Mensajes</td>
+<td width="1%" class="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+</tr>
+<tr>
+<td width="1%">&nbsp;</td>
+<td class="inputFontNormal" align="center">
+<!-- TMPL_VAR name="msg" -->
+</td>
+<td width="1%">&nbsp;</td>
+</tr>
+</table>
+</center>
+<br>
+<!-- /TMPL_IF -->
+
+
+<table>
+	<tr>
+		<form action="/cgi-bin/koha/member2.pl" method=post name=formmember>
+  		<td>
+			<input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+		</td>
+ 		<td>
+ 			<a href="#" onClick="formmember.submit()" ><img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
+			
+			<a href="#" onClick="formmember.reset()" ><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0" ></a>
+		</td>
+		</form>
+	</tr>
+</table>
+
+<font class="inputFontNormal">Ha buscado por <!-- TMPL_VAR NAME=member --></font>
+
+<br>
 <br>
 
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
@@ -76,28 +117,9 @@ if (cant>0){if (confirm (theStatus)){
 <!-- /TMPL_IF -->
 	</tr>
 </table>
-
 <br>
 
-
-<table>
-	<tr>
-		<form action="/cgi-bin/koha/member2.pl" method=post name=formmember>
-  		<td>
-			<input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
-		</td>
- 		<td>
- 			<a href="#" onClick="formmember.submit()" ><img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
-			
-			<a href="#" onClick="formmember.reset()" ><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0" ></a>
-		</td>
-		</form>
-	</tr>
-</table>
-
-<font class="inputFontNormal">Ha buscado por <!-- TMPL_VAR NAME=member --></font>
 </center>
-
 <form name="form1" action=/cgi-bin/koha/actualizarPersonas.pl method=post>
 
 <table width="100%" cellspacing=0 cellpadding=0>
@@ -166,6 +188,10 @@ if (cant>0){if (confirm (theStatus)){
 	<tr>
 		<td>
 			<input name="cantidad" id="cantidad" type="hidden" value="<!-- TMPL_VAR NAME=modificable -->">
+			<input type=hidden id="member" name="member" value="<!-- TMPL_VAR NAME=member -->">
+			<input type=hidden id="number" name="number" value="<!-- TMPL_VAR NAME=number -->">
+			<input type=hidden id="orden" name="orden" value="<!-- TMPL_VAR NAME=orden -->">
+
 		</td>
 	</tr>
 	<tr>

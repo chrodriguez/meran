@@ -142,6 +142,8 @@ if ($regular eq 1){$regular="<font color='green'>Regular</font>";}elsif($regular
   push(@resultsdata, \%row);
 }
 
+if(my $msg=$input->param('msg')){$template->param(msg => $msg)};
+
 $template->param(   orden     => $orden,
 		        count	=> $count, 
 			member          => $member,
