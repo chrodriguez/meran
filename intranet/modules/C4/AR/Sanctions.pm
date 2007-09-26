@@ -58,7 +58,7 @@ sub SanctionDays {
 
 	#Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un día
 	if ($issuecode eq 'ES'){$days++;}
-#
+
 	my $daysExceeded= $days;
 	my $amountOfDays= 0;
 	my $i;

@@ -1961,7 +1961,6 @@ sub allitems {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from items where biblioitemnumber=? ");
   $sth->execute($bib);
- 
 
   my @results;
 

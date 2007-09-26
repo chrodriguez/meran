@@ -149,9 +149,6 @@ sub devolver{
                         my $categorycode= $sth->fetchrow;
                         my $sanctionDays= SanctionDays($dbh, $gmtime, $returnDate, $categorycode, $iteminformation->{'issuecode'});
 
-# open L,'>/tmp/lucho';
-# print L $returnDate.'<--->'.$categorycode.'<--->'.$iteminformation->{'issuecode'}.'<--->'.$sanctionDays;
-# close L;
 
 
 			if ($sanctionDays) {

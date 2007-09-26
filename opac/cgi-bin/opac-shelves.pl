@@ -406,12 +406,14 @@ sub viewshelf {
                 $line{'color'}= $color;
                 $line{'biblioitemnumber'}=$bitemlist{$element}->{'biblioitemnumber'};
                 $line{'title'}=$bitemlist{$element}->{'title'};
-		$line{'unititle'}=$bitemlist{$element}->{'unititle'};
+				$line{'unititle'}=$bitemlist{$element}->{'unititle'};
                 $line{'biblionumber'}=$bitemlist{$element}->{'biblionumber'};
-		##AUTOR###
-		$line{'completo'}=$bitemlist{$element}->{'completo'};
-		$line{'id'}=$bitemlist{$element}->{'id'};
-		#########
+		
+				##AUTOR###
+				$line{'completo'}=$bitemlist{$element}->{'completo'};
+				$line{'id'}=$bitemlist{$element}->{'id'};
+				#########
+
                 $line{'place'}=$bitemlist{$element}->{'place'};
                 $line{'editors'}=$bitemlist{$element}->{'editors'};
 		$bibitem=$bitemlist{$element}->{'biblioitemnumber'};

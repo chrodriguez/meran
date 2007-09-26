@@ -653,6 +653,8 @@ sub prestamos{
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
+               if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
+		 		$data->{'clase'}=$clase;
                 if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
 		
 
@@ -667,21 +669,15 @@ sub prestamos{
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($estado eq "VE"){
 			if ($flag lt 0){
-				if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
-				$data->{'clase'}=$clase;
 				push(@results,$data);
 			}
 		}
 		elsif($estado eq "NV"){
 			if($flag gt 0 || $flag == 0){
-				if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
-				$data->{'clase'}=$clase;
 				push(@results,$data);
 			}
 		}
 		else{
-			if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
-			$data->{'clase'}=$clase;
 			push(@results,$data);
 		}
         }
