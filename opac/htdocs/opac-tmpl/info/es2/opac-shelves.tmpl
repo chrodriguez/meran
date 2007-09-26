@@ -135,15 +135,18 @@ function mandarArreglo(valores){         arreglo= new Array();
                 <td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR Name="biblionumber"-->" id="<!-- TMPL_VAR NAME=biblionumber -->"></td>
 <!-- /TMPL_IF  -->
 	
-<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title --></a></td>
+<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --></a></td>
 
-     <td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME=id -->"><!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a> </td>
+     <td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME=id -->"><!-- TMPL_VAR NAME="completo" --></a> </td>
 
 				<td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><!-- TMPL_IF Name="place" --><!-- TMPL_VAR Name="place" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-                                <td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><!-- TMPL_IF Name="editors" --><!-- TMPL_VAR Name="editors" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-				 <td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><!-- TMPL_IF Name="dispo" --><!-- TMPL_VAR Name="dispo" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-
-
+              	<td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><!-- TMPL_IF Name="editors" --><!-- TMPL_VAR Name="editors" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+				
+				<td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle">
+				<!-- TMPL_LOOP NAME="counts" --><!-- TMPL_VAR NAME="nombre" --> <br> (Para Pr&eacute;stamo:<!-- TMPL_IF name="cantXbranchForLoan" --><!-- TMPL_VAR NAME="cantXbranchForLoan" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->,<br> Para Sala de lectura:<!-- TMPL_IF name="cantXbranchNotForLoan" --> <!-- TMPL_VAR NAME="cantXbranchNotForLoan" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="cantXbranchShared" -->,<br> Compartidos: <!-- TMPL_VAR name="cantXbranchShared" --><!-- /TMPL_IF -->) <br><br>
+				<!-- /TMPL_LOOP -->
+				</td>
 
 			</tr>
 		<!-- /TMPL_LOOP -->
