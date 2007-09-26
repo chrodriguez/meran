@@ -45,8 +45,8 @@ my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn
 if (($shelves) || ($query->param('criteria') eq 'shelves')) {
 	#es una busqueda por estantes virtuales, o avanzada o desde el borde superior de la pantalla
 	if ($query->param('criteria') eq 'shelves'){$shelves=$query->param('searchinc');}
-	print $query->redirect("/cgi-bin/koha/opac-shelves.pl?viewShelfItems=$shelves&startfrom=0");
-	
+	$query->redirect("/cgi-bin/koha/opac-shelves.pl?viewShelfItems=$shelves&startfrom=0");
+	exit;
 } 
 
 
