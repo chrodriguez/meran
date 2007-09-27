@@ -1,5 +1,24 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->						    
+<script>
+function modificarDatos(url,tipo){
+	document.getElementById('type').value=tipo;
+	subirDatos(url);
+} 
 
+function guardarDatos(url){
+	var tipo=document.getElementById('type');
+	if(tipo.value == "Mod"){
+		tipo.value="";
+	}
+	subirDatos(url);
+}
+
+function subirDatos(url){
+	var formulario=document.getElementById('formUsuario');
+	formulario.action=url;
+	formulario.submit;
+}
+</script>
 <!-- TMPL_IF Name="OK" -->
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="pagetitle" >Confirme Registro</td></tr>
 <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
@@ -227,12 +246,13 @@
 
 	</TABLE>
 		
-		<form action="/cgi-bin/koha/insertdata.pl" method=post>
+		
+		<form id="formUsuario" method=post>
 			<!-- TMPL_LOOP NAME=inputsloop -->
-			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type=hidden id="<!-- TMPL_VAR NAME='key' -->" name="<!-- TMPL_VAR NAME='key' -->" value="<!-- TMPL_VAR NAME='value' -->">
 			<!-- /TMPL_LOOP -->
-			<input type="image" alt="Guardar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="form.submit">
-	
+			<input type="image" alt="Guardar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="guardarDatos('/cgi-bin/koha/insertdata.pl')">
+			<input type="image" alt="Volver"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/modificar.png" onclick="modificarDatos('/cgi-bin/koha/memberentry.pl','Mod')">
 		</form>
 	</center>
 <!-- TMPL_ELSE -->

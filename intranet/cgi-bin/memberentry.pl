@@ -48,89 +48,8 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
-
 my $member=$input->param('bornum');
-# if ($member eq ''){
-#	$member=NewBorrowerNumber();
-# }
-my $type=$input->param('type') || '';
-my $modify=$input->param('modify');
-my $delete=$input->param('delete');
-if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
-} else {  # this else goes down the whole script
-	if ($type eq 'Add'){
-		$template->param( addAction => 1);
-	} else {
-		$template->param( addAction =>0);
-	}
-
-	my $data=borrdata('',$member);
-
-	if ($data->{'changepassword'} eq '0'){
-		$template->param( updatepassword => '0');
-	} else {
-		$template->param( updatepassword => '1');
-	}
-
-	if ($type eq 'Add'){
-		$template->param( updtype => 'I');
-	} else {
-		$template->param( updtype => 'M');
-	}
-	my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
-	if ($data->{'sex'} eq 'F'){
-		$template->param(female => 1);
-	}
-	my ($categories,$labels)=ethnicitycategories();
-	my $ethnicitycategoriescount=$#{$categories};
-	my $ethcatpopup;
-	if ($ethnicitycategoriescount>=0) {
-		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
-					-id => 'ethnicity',
-					-values=>$categories,
-					-default=>$data->{'ethnicity'},
-					-labels=>$labels);
-		$template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
-	}
-
-
-	($categories,$labels)=borrowercategories();
-	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
-					-id => 'categorycode',
-					-values=>$categories,
-					-default=>$data->{'categorycode'},
-					-labels=>$labels);
-
-
-	my @relationships = ('trabajo', 'familiar','amigo', 'vecino');
-
-	my @relshipdata;
-	while (@relationships) {
-		my $relship = shift @relationships;
-		my %row = ('relationship' => $relship);
-		if ($data->{'altrelationship'} eq $relship) {
-			$row{'selected'}=' selected';
-		} else {
-			$row{'selected'}='';
-		}
-		push(@relshipdata, \%row);
-	}
-
-        my @documents = ('DNI', 'LC','LE', 'CI', 'PAS');
-
-        my @documentdata;
-        while (@documents) {
-                my $doc = shift @documents;
-                my %row = ('document' => $doc);
-                if ($data->{'documenttype'} eq $doc) {
-                        $row{'selected'}=' selected';
-                } else {
-                        $row{'selected'}='';
-                }
-                push(@documentdata, \%row);
-        }
-
+my $data=borrdata('',$member);
 	# %flags: keys=$data-keys, datas=[formname, HTML-explanation]
 	my %flags = ('gonenoaddress' => ['gna', 'Direcci&oacute;n actualizada'],
 				#'lost'          => ['lost', 'Perdido'],
@@ -152,12 +71,39 @@ if ($delete){
 	push(@flagdata, \%row);
 	}
 
-	if ($modify){
-	$template->param( modify => 1 );
+my ($categories,$labels)=ethnicitycategories();
+	my $ethnicitycategoriescount=$#{$categories};
+	my $ethcatpopup;
+	if ($ethnicitycategoriescount>=0) {
+		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
+					-id => 'ethnicity',
+					-values=>$categories,
+					-default=>$data->{'ethnicity'},
+					-labels=>$labels);
+		$template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
 	}
 
-	#Convert dateofbirth to correct format
-	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+
+	($categories,$labels)=borrowercategories();
+	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
+					-id => 'categorycode',
+					-values=>$categories,
+					-default=>$data->{'categorycode'},
+					-labels=>$labels);
+
+my @documents = ('DNI', 'LC','LE', 'CI', 'PAS');
+
+        my @documentdata;
+        while (@documents) {
+                my $doc = shift @documents;
+                my %row = ('document' => $doc);
+                if ($data->{'documenttype'} eq $doc) {
+                        $row{'selected'}=' selected';
+                } else {
+                        $row{'selected'}='';
+                }
+                push(@documentdata, \%row);
+        }
 
 	my @branches;
 	my @select_branch;
@@ -179,6 +125,120 @@ if ($delete){
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
+
+
+# if ($member eq ''){
+#	$member=NewBorrowerNumber();
+# }
+my $type=$input->param('type') || '';
+my $modify=$input->param('modify');
+my $delete=$input->param('delete');
+if ($delete){
+	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+}
+elsif($type eq 'Mod'){
+	my $adress=$input->param('address');
+	my $firstname=$input->param('firstname');
+	my $surname= $input->param('surname');
+	my $streetaddress= $input->param('streetaddress');
+	my $zipcode = $input->param('zipcode');
+	my $streetcity= $input->param('streetcity');
+	my $dstreetcity= $input->param('dstreetcity');
+	my $homezipcode = $input->param('homezipcode');
+	my $city= $input->param('city');
+	my $dcity=$input->param('dcity');
+	my $phone= $input->param('phone');
+	my $phoneday = $input->param('phoneday');
+	my $emailaddress = $input->param('emailaddress');
+	my $borrowernotes= $input->param('borrowernotes');
+	my $documentnumber= $input->param('documentnumber');
+	my $studentnumber= $input->param('studentnumber');
+	my $dateenrolled= $input->param('dateenrolled');
+	my $expiry = $input->param('expiry');
+	my $cardnumber= $input->param('cardnumber');
+	my $dateofbirth = $input->param('dateofbirth');
+	$template->param(	type 		=> $type,
+				member          => $member,
+				address         => $adress,
+				firstname       => $firstname,
+				surname         => $surname,
+				ethcatpopup	=> $ethcatpopup,
+				catcodepopup	=> $catcodepopup,
+				streetaddress   => $streetaddress,
+				zipcode 	=> $zipcode,
+				streetcity      => $streetcity,
+				dstreetcity     => $dstreetcity,
+				homezipcode 	=> $homezipcode,
+				city		=> $city,
+				dcity           => $dcity,
+				phone           => $phone,
+				phoneday        => $phoneday,
+				emailaddress    => $emailaddress,
+				borrowernotes	=> $borrowernotes,
+                                documentnumber   => $documentnumber,
+				documentloop     => \@documentdata,
+				studentnumber 	 =>$studentnumber,
+# 				"title_".$data->{'title'} => " SELECTED ",
+				dateenrolled	=> $dateenrolled,
+				expiry		=> $expiry,
+				cardnumber	=> $cardnumber,
+				dateofbirth	=> $dateofbirth,
+				dateformat      => display_date_format(),
+			        modify          => $modify,
+				CGIbranch => $CGIbranch);
+	output_html_with_http_headers $input, $cookie, $template->output;
+
+}
+else {  # this else goes down the whole script
+	if ($type eq 'Add'){
+		$template->param( addAction => 1);
+	} else {
+		$template->param( addAction =>0);
+	}
+
+	
+
+	if ($data->{'changepassword'} eq '0'){
+		$template->param( updatepassword => '0');
+	} else {
+		$template->param( updatepassword => '1');
+	}
+
+	if ($type eq 'Add'){
+		$template->param( updtype => 'I');
+	} else {
+		$template->param( updtype => 'M');
+	}
+	my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
+	if ($data->{'sex'} eq 'F'){
+		$template->param(female => 1);
+	}
+	
+
+	my @relationships = ('trabajo', 'familiar','amigo', 'vecino');
+
+	my @relshipdata;
+	while (@relationships) {
+		my $relship = shift @relationships;
+		my %row = ('relationship' => $relship);
+		if ($data->{'altrelationship'} eq $relship) {
+			$row{'selected'}=' selected';
+		} else {
+			$row{'selected'}='';
+		}
+		push(@relshipdata, \%row);
+	}
+
+
+
+	if ($modify){
+	$template->param( modify => 1 );
+	}
+
+	#Convert dateofbirth to correct format
+	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+
+
 
 $data->{'dcity'}=getcity($data->{'city'});
 $data->{'dstreetcity'}=getcity($data->{'streetcity'});
