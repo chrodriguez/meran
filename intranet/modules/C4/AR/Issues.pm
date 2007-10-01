@@ -184,7 +184,7 @@ my $sth=$dbh->prepare("Select * from issues where itemnumber=? and returndate is
 $sth->execute($itemnumber);
 my $data= $sth->fetchrow_hashref;
 if ($data){
-		 my $issuetype=IssueType($data->{'issuecode'}); 
+	my $issuetype=IssueType($data->{'issuecode'}); 
 
 	if ($data->{'renewals'}){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 	 	my $plazo_actual=$issuetype->{'renewdays'};

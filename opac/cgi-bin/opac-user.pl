@@ -115,11 +115,11 @@ foreach my $key (keys %$issues) {
      my  $close = ParseDate(C4::Context->preference("close"));
        if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
        $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
-
-   my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}));
-				  
+open(INFO, ">>/tmp/debug.txt");
+   my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'})); #C4::AR::Issues
+print INFO "entro a calcular vencimiento $df \n";  
     $issue->{'date_fin'} = format_date($df);
-
+close(INFO);
     if (Date::Manip::Date_Cmp($df,$hoy)<0)
   	{ $venc=1;
 	  $issue->{'color'} ='red';
