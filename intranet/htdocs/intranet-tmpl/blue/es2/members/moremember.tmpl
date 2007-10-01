@@ -227,7 +227,7 @@
 	<td colspan=5>
 
 <!-- TMPL_IF NAME="issueloop" -->
-		<form action="renewscript.pl" method=post>
+		<form id="formReturn" action="renewscript.pl" method=post>
 		<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
 		<TABLE  CELLSPACING=0  CELLPADDING=0 border=0  width="100%" >
 			<TR VALIGN=middle>
@@ -235,7 +235,10 @@
 			</TR>
 
 			<TR VALIGN=middle class="tablaresultadoTitle">
-   			<td width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
+   			<td width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td>
+				<input type="checkbox" name="selectAll" id="selectAll" onChange="checkedAll()" <!-- TMPL_IF NAME="chkall"--> checked <!-- /TMPL_IF -->>
+			</td>
   			<td>T&iacute;tulo</td>
   			<td>Autor</td>
   			<td>C. Barra</td>
@@ -244,13 +247,16 @@
   			<td>Pr&eacute;stamo</td>
   			<td>Vencimiento</td>
    			<td>Tipo</td>
-  			<td>Devolver</td>
+<!--   			<td>Devolver</td> -->
   			<td>Renovar</Td>
   			<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 			</tr>
 <!-- TMPL_LOOP NAME="issueloop" -->
 			<tr  class="tope" bordercolor="#f2f2f2">
 			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="<!-- TMPL_VAR NAME='clase' -->">
+				<input type="checkbox" name="chkbox" value="<!-- TMPL_VAR NAME='barcode' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
+			</td>
 			<td width="14%" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE=HTML--><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a></td>
 			<td class="<!-- TMPL_VAR NAME="clase"-->"><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 
@@ -267,12 +273,18 @@
 
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="issuetype" --><font color="<!-- TMPL_VAR NAME="color" -->">         <!-- TMPL_VAR NAME="issuetype" --> </font><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 					  
-			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></td>
+<!-- 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></td> -->
 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_IF NAME="renew" --><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=renew"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/renew.png" title="Renovar"><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->  </td>
 
 			<td class="<!-- TMPL_VAR NAME="clase"-->" height=25 class="impar"></td>
 			</tr>
 <!-- /TMPL_LOOP -->
+			<tr>
+			<td colspan="10" align="center">
+				<input type="hidden" id="action" name="action">
+				<input type="image" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver" onClick="devolverItmes()">
+			</td>
+		</tr>
 		</table>
 		</form>
 <!-- /TMPL_IF -->
@@ -496,6 +508,23 @@ function confirm_deletion() {
 	if (is_confirmed) {
 		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
 	}
+}
+
+function checkedAll(){
+	var chkAll= document.getElementById('selectAll');
+	var arrayInput=document.getElementsByTagName('input');
+	var cant=arrayInput.length-1;
+	for (var i=0; i < cant; i++){
+		if(arrayInput[i].type == 'checkbox' && arrayInput[i].id !='selectAll' ){
+			arrayInput[i].checked=chkAll.checked;
+		}	
+	}
+}
+
+function devolverItmes(){
+	document.getElementById('action').value="return";
+	var formulario=document.getElementById('formReturn').action="circ/returns.pl";
+	formulario.submit;
 }
 </script>
 <!-- endmenu -->
