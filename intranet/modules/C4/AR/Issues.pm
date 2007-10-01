@@ -399,7 +399,7 @@ sub chequeoDeFechas(){
 	my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
 	my $err= "Error con la fecha";
 	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err));#se saco el 2 para que ande bien.
-	my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err));	
+	my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2));#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
 	my $flag = Date_Cmp($desde,$hoy);
 	#comparo la fecha de hoy con el inicio del plazo de renovacion	
 	if (!($flag gt 0)){ 
