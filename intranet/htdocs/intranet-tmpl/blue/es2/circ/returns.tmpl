@@ -66,9 +66,9 @@
 
 <!-- TMPL_IF NAME="strItemNumbers" -->
 <form name=frm2 method="post" action="/cgi-bin/koha/circ/returns.pl">
-<input type="hidden" name="strItemNumbers" value="<!-- TMPL_VAR name="strItemNumbers" -->">
-<input type="hidden" name="action" value="<!-- TMPL_VAR name="action" -->">
-
+<input type="hidden" name="strItemNumbers" value="<!-- TMPL_VAR name='strItemNumbers' -->">
+<input type="hidden" name="action" value="<!-- TMPL_VAR name='action' -->">
+<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
 <table border="1" cellspacing="0" cellpadding="0" width="95%"  align="center" bgcolor="white">
 <tr>
         <td align="center">
@@ -577,7 +577,12 @@ Sin sanciones
 
 </table>
 
+<!-- TMPL_IF name="ticket_string" -->
+	<script>
+		window.open ("receipt.pl<!-- TMPL_VAR name="ticket_string" -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+	</script>
 
+<!-- /TMPL_IF-->
 
 <script language="JavaScript">
 

@@ -40,13 +40,37 @@ my $linecolor1='par';
 my $linecolor2='impar';
 my $query=new CGI;
 #getting the template
-my ($template, $borrowernumber, $cookie)
+my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "circ/returns.tmpl",
 			query => $query,
 			type => "intranet",
 			authnotrequired => 0,
 			flagsrequired => {circulate => 1},
 			});
+
+sub crearTicket(){
+	my ($iteminfo)=@_;
+	my %env;
+	my $bornum=$iteminfo->{'borrowernumber'};
+	my ($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
+	my $ticket_duedate = vencimiento($iteminfo->{'itemnumber'});
+	my $ticket_borrower = $borrower;
+	my $ticket_string =
+		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
+		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
+		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
+		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
+		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
+		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
+		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
+		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
+		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
+		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
+		    "&librarianNumber=" . $loggedinuser;
+
+	my $message="Se renovo; el ejemplar ".$iteminfo->{'barcode'}." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
+	return ($ticket_string);
+}
 
 my $okMensaje="";
 my $hasdebts=0;
@@ -59,6 +83,7 @@ my $message;
 my $borrowerslist;
 my $barcode = $query->param('barcode');
 my $itemnumber = $query->param('itemnumber');
+my $bornum=$query->param('borrnumber');
 
 #DAMIAN - Para devolver varios items.
 my @chkbox=$query->param('chkbox');
@@ -67,6 +92,7 @@ my $strItemNumbers=$query->param('strItemNumbers')||"";
 my $loop=scalar(@chkbox);
 my $chkall=$query->param('selectAll');
 my $acc=$query->param('accionReturn')||$query->param('action');
+my $ticket_string="";
 
 if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 # si viene el barcode entonces esta intentando hacer la devolucion o renovacion => se le pregunta por una confirmacion
@@ -143,8 +169,12 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 		my ($returned) = devolver($iteminfo->{'itemnumber'},$iteminfo->{'borrowernumber'});
 		$okMensaje.=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto<br>';
 	} elsif($action eq 'renew') {
+		
 		my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
 		$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
+		if(1){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET FALTA VARIABLE!!!!!
+			$ticket_string=&crearTicket($iteminfo);
+		}
 	}
 	}
 } else {
@@ -261,6 +291,7 @@ $template->param(
 		strItemNumbers =>$strItemNumbers,
 		chkbox     =>join(",",@chkbox),
 		chkall  =>$chkall,
+		ticket_string => $ticket_string,
 );
 
 # actually print the page!
