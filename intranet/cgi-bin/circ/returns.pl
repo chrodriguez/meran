@@ -67,8 +67,6 @@ sub crearTicket(){
 		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
 		    "&librarianNumber=" . $loggedinuser;
-
-	my $message="Se renovo; el ejemplar ".$iteminfo->{'barcode'}." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
 	return ($ticket_string);
 }
 
@@ -172,7 +170,7 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 		
 		my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
 		$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
-		if(1){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET FALTA VARIABLE!!!!!
+		if(C4::Context->preference("print_renew")){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 			$ticket_string=&crearTicket($iteminfo);
 		}
 	}
