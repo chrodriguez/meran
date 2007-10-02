@@ -46,14 +46,15 @@ my $analyticaltitle=$input->param('analysistitle'); #Titulo
 my $analyticalunititle=$input->param('analysisunititle'); #Subtitulo
 my $subjectheadings=$input->param('subjectheadings'); #TEMA
 my $classification=$input->param('classification');
-my $parts=$input ->param ('parts');
+my $parts=$input->param('parts');
 
 my $ok=0;
-my $string = "El campo Título no puede ser nulo. ";
+my $string = "";
 
 # my @errors;
 if ($analyticaltitle eq ''){
 #  	push @errors,"El campo Título no puede ser nulo";
+    $string = "El campo Título no puede ser nulo. ";
     $ok=1;
 }
 
@@ -66,4 +67,6 @@ my $true='true';
 
 print $input->redirect("addanalysisagregar.pl?reload=$true&biblionumber=$bibnum&biblioitemnumber=$bibnumitems&mensajeError=$string");
 
+
+#output_html_with_http_headers $input, $cookie, $template->output;
 
