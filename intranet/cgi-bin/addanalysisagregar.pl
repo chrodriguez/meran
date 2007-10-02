@@ -43,6 +43,8 @@ my $bibnum=$input->param('biblionumber');
 my $reload=$input->param('reload');
 my $bibitemnumber=$input->param('biblioitemnumber');
 my $reload=$input->param('reload');
+my $mensajeError=$input->param('mensajeError');
+
 my $biblioitemcount;
 my @biblioitems;
 #my $bibnumitems=$input->param('bibnumitems');
@@ -70,6 +72,7 @@ if ($biblioitems[$i]->{'biblioitemnumber'} eq $bibitemnumber){
 $template->param (  biblionumber => $bibnum,
 		    biblioitemnumber => $bibitemnumber,
 		    reload => $reload,
+		    mensajeError => $mensajeError,
                     );
 
 output_html_with_http_headers $input, $cookie, $template->output;

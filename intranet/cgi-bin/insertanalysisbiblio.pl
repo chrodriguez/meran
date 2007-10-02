@@ -47,27 +47,23 @@ my $analyticalunititle=$input->param('analysisunititle'); #Subtitulo
 my $subjectheadings=$input->param('subjectheadings'); #TEMA
 my $classification=$input->param('classification');
 my $parts=$input ->param ('parts');
-&BiblioAnalysisInsert($analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts);
-=cut
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name =>"catalogue/detail.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     });
 
-$template->param ( bib => $bibnum,
-	type => "intra",
-	);
-print $input->redirect("detail.pl?type=intra&bib=$bibnum");
+my $ok=0;
+my $string = "El campo Título no puede ser nulo. ";
 
-=cut
+# my @errors;
+if ($analyticaltitle eq ''){
+#  	push @errors,"El campo Título no puede ser nulo";
+    $ok=1;
+}
+
+if($ok == 0){
+#si esta todo ok inserto
+	&BiblioAnalysisInsert($analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts);
+}
+
 my $true='true';
-#print $input->redirect("moredetail.pl?bib=$bibnum&bi=$bibnumitems");
-#print $input->redirect("acqui.simple/additem-nomarc.pl?biblionumber=$bibnum")
-print $input->redirect("addanalysisagregar.pl?reload=$true&biblionumber=$bibnum&biblioitemnumber=$bibnumitems");
 
+print $input->redirect("addanalysisagregar.pl?reload=$true&biblionumber=$bibnum&biblioitemnumber=$bibnumitems&mensajeError=$string");
 
-#output_html_with_http_headers $input, $cookie, $template->output;
 
