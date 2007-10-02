@@ -13,7 +13,7 @@ document.getElementById(id).src=src;
 <body>
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
 <!--<tr><td>&nbsp;</td></tr>-->
-<tr><!-- TMPL_IF NAME="loggedinusername" -->
+<!--<tr><!-- TMPL_IF NAME="loggedinusername" -->
         <td align="left" valign="middle">
   &nbsp;      Ingres&oacute; como:<b> <!-- TMPL_VAR NAME="loggedinusername" --></b>
 	 <a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','<!-- TMPL_VAR NAME='themelang' -->/images/areamiembros.png ')" onMouseOver="swap('mem','<!-- TMPL_VAR NAME='themelang' -->/images/areamiembrosbis.png ')">
@@ -25,7 +25,7 @@ document.getElementById(id).src=src;
         </a>
        </td>
         <!-- /TMPL_IF -->
-</tr>
+</tr>-->
 <tr><td>&nbsp; </td></tr>
 <tr>
 	<td align="center">
@@ -45,6 +45,21 @@ document.getElementById(id).src=src;
 
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="100%"  border="0">
 <tr align="right">
+	<td>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+	        <td align="left" valign="middle">
+		  &nbsp;      Ingres&oacute; como:<b> <!-- TMPL_VAR NAME="loggedinusername" --></b>
+		           <a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','<!-- TMPL_VAR NAME='themelang' -->/images/areamiembros.png ')" onMouseOver="swap('mem','<!-- TMPL_VAR NAME='themelang' -->/images/areamiembrosbis.png ')">
+			            <img src="<!-- TMPL_VAR NAME='themelang' -->/images/areamiembros.png" id="mem" title="Miembros" hspace=0 cspace=0 border=0 name="mem" align="absmiddle">
+				            </a>
+
+					      <a href="/cgi-bin/koha/opac-main.pl?logout.x=1"  onMouseOut="swap('exit','<!-- TMPL_VAR NAME='themelang' -->/images/exit.png ')" onMouseOver="swap('exit','<!-- TMPL_VAR NAME='themelang' -->/images/exitbis.png ')">
+					      <img src="<!-- TMPL_VAR NAME='themelang' -->/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
+					              </a>
+						             </td>
+							             <!-- /TMPL_IF -->
+
+	</td>
 	<td> <!-- TMPL_INCLUDE NAME="opac-search.inc" --></td>
         <td >&nbsp;</td>
 </tr>
