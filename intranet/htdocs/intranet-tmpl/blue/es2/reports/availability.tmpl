@@ -93,8 +93,16 @@ function hacerSubmit(){
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr align="center">
   	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-  	<td align="left" class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=author --></td>
-  	<td  class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
+  	<td align="left" class="<!-- TMPL_VAR NAME="clase"-->"> 
+		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='id' ESCAPE='URL' -->&type=intra">
+		<!-- TMPL_VAR NAME="author" -->
+		</a>
+	</td>
+  	<td  class="<!-- TMPL_VAR NAME="clase"-->"> 
+		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
+			<!-- TMPL_VAR NAME=title ESCAPE=HTML-->
+		</a>
+	</td>
   	<td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=bulk --> </td>
   	<td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=barcode --> </td>
   	<td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=number --> </td>

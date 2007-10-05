@@ -46,18 +46,22 @@
 
 <!-- TMPL_LOOP Name="results" -->
 <tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->" >
+        <td class="<!-- TMPL_VAR Name='clase' -->" width="1%">&nbsp;</td>
+        <td  align=left class="<!-- TMPL_VAR Name='clase' -->" >
 		<!-- TMPL_VAR Name="barcode" -->
 	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align='center'>
+		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='id' ESCAPE='URL' -->&type=intra">
 		<!-- TMPL_VAR NAME="author" -->
+		</a>
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
+		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
 		<!-- TMPL_VAR NAME="title" ESCAPE=HTML-->
 		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
 			<!-- TMPL_VAR NAME="unititle" -->
 		<!-- /TMPL_IF -->
+		</a>
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
 		<!-- TMPL_VAR NAME="number" -->

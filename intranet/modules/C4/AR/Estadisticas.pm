@@ -186,6 +186,7 @@ sub disponibilidad{
 		if ($clase eq 'par'){$clase='impar'}else{$clase='par'};
 		$data->{'clase'}=$clase;
 		$data->{'date'}=format_date($data->{'date'});
+		$data->{'id'}=$data->{'author'};
 		my $autorPPAL= &getautor($data->{'author'});
                 $data->{'author'}=$autorPPAL->{'completo'};
 		push(@results,$data);
@@ -550,7 +551,7 @@ sub usuarios{
   	my @results;
 
         my $query ="SELECT  b.phone,b.emailaddress,b.dateenrolled,c.description as categoria ,
-		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city
+		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city,b.borrowernumber
                     FROM borrowers b inner join categories c on (b.categorycode = c.categorycode)
  		    WHERE b.branchcode='$branch'";
 

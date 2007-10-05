@@ -88,7 +88,9 @@ foreach my $element (@res) {
 		if($class eq 'par'){$class='impar'}else{$class='par'}; 
                 
 		$line{'barcode'}=$element->{'barcode'};
+		$line{'biblionumber'}=$element->{'biblionumber'};
 		$line{'bulk'}=$element->{'bulk'};
+		$line{'id'}=$element->{'id'};
 		$line{'author'}=$element->{'author'}->{'completo'};
 		$line{'title'}=$element->{'title'};
 		$line{'unititle'}=$element->{'unititle'};

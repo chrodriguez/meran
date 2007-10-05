@@ -198,7 +198,7 @@ sub listitemsforinventory {
 sub listitemsforinventorysigtop {
 	my ($sigtop) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber
+	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblio.biblionumber as biblionumber
 	FROM (
 	(
 	items
@@ -214,6 +214,7 @@ sub listitemsforinventorysigtop {
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
+		$row->{'id'}=$row->{'author'};
 		$row->{'author'}=C4::Search::getautor($row->{'author'});
 		push @results,$row;
 	}
