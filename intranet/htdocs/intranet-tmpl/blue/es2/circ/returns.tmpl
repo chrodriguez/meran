@@ -74,11 +74,27 @@
         <td align="center">
         <table border="0">
         <tr class="tablemsg">
-		<td class="fontmsg"> <b><u><!-- TMPL_IF NAME="return" -->DEVOLUCI&Oacute;N<!-- TMPL_ELSE -->RENOVACI&Oacute;N<!-- /TMPL_IF --></u>:</b><br>
+		<td class="fontmsg">
+			<b><u>
+			<!-- TMPL_IF NAME="return" -->
+				DEVOLUCI&Oacute;N
+			<!-- TMPL_ELSE -->
+				RENOVACI&Oacute;N
+			<!-- /TMPL_IF -->
+			</u>:</b><br>
 		<!-- TMPL_LOOP NAME="infoTotal" -->
-
-				<!-- TMPL_VAR NAME="barcode" -->, <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->, <!-- TMPL_VAR NAME="edition" --><br>
-
+			<!-- TMPL_VAR NAME="barcode" -->
+			<!-- TMPL_IF NAME="author" -->
+				,<!-- TMPL_VAR NAME="author" -->
+			<!-- /TMPL_IF -->
+			,<!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
+			<!-- TMPL_IF NAME="unititle" -->
+				:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="edition" -->
+				,<!-- TMPL_VAR NAME="edition" -->
+			<!-- /TMPL_IF -->
+			<br>
 		<!-- /TMPL_LOOP -->
 		<b><u>USUARIO</u>:</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
         </tr>

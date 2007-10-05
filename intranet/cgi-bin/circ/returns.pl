@@ -111,6 +111,8 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 				$infoTotal[$i]->{'barcode'}=$barcode2;
 				$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
 				$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
+				$infoTotal[$i]->{'unititle'}=$iteminfo->{'unititle'};
+				$infoTotal[$i]->{'edition'}=$iteminfo->{'edition'};
 				$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
 			} 
 			else{
