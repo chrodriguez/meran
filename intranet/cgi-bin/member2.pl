@@ -114,7 +114,7 @@ for (my $i=0; $i < $count; $i++){
 
 my $regular=$results->[$i]{'regular'};
 if ($regular eq 1){$regular="<font color='green'>Regular</font>";}elsif($regular eq 0){$regular="<font color='red'>Irregular</font>";}else{$regular="---";};
-
+if($results->[$i]{'categorycode'} eq 'EG'){$regular="<font color='blue'>Egresado</font>";}
 #  my ($od,$issue,$fines)=boordata2($env,$results->[$i]{'borrowernumber'}); esta funcion averigua sobre prestamos del borrowernumber
   my %row = (
         documentnumber=> $results->[$i]{'documentnumber'},

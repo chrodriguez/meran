@@ -129,6 +129,9 @@ for (my $i=0; $i < $count; $i++){
 	else{
 	if($regular eq 0){$regular="<font color='red'>Irregular</font>";}
 	else{$regular="---";};}
+  
+  if($results->[$i]{'categorycode'} eq 'EG'){$regular="<font color='blue'>Egresado</font>";}
+
   my %row = (
         clase => $background,
         borrowernumber => $results->[$i]{'borrowernumber'},
