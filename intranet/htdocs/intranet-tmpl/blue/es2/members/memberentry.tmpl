@@ -275,8 +275,42 @@ document.getElementById(id).src=src;
 		<td colspan="4">&nbsp;</td>
 	</tr>
 
-	<br>
-	<br>
+<br>
+<table width="100%"  cellpadding='0' cellspacing='0'>
+        <tr valign=middle width="100%"class="tablaresultadoTitle">
+                 <td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+                <td   COLSPAN=6 width="100%" ><B>DATOS ALTERNATIVOS DEL CONTACTO</b></td>
+                <td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+        </tr>
+</table>
+<table width="100%">
+	<tr>
+        	<td width="5%">&nbsp;</td>
+         	<td class="inputFontNormal"  align="right" width="38%">
+           		<b>Apellidos y nombres</b><br>
+           		<input class="inputFontNormal"type=text name=contactname size=50 value="<!-- TMPL_VAR NAME=contactname -->">
+          		<br>
+          		<br>
+           		<b>Tel&eacute;fono</b><br>
+           		<input class="inputFontNormal"type=text name=altphone size=50 value="<!-- TMPL_VAR NAME=altphone -->">
+          		<br>
+          		<br>
+           		<b>Relaci&oacute;n</b><br>
+           		<select class="inputFontNormal"name=altrelationship size=1><!-- TMPL_LOOP NAME=relshiploop -->
+            			<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=relationship -->
+            		<!-- /TMPL_LOOP -->
+           		</select>
+         	</td>
+   		<td class="inputFontNormal" width="41%" align="right">
+          		<b> Notas</b><br>
+          		<textarea class="inputFontNormal" name=altnotes wrap=physical cols=35 rows=5><!-- TMPL_VAR NAME=altnotes --></textarea>
+         	</td>
+         	<td width="10%">&nbsp;</td>
+        </tr>
+        <tr>&nbsp;</tr>
+</table>
+<br>
+
 <table width="100%" cellpadding='0' cellspacing='0'>
 	<tr valign=middle width="100%" class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
