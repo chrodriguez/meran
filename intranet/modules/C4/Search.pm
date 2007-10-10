@@ -2123,10 +2123,10 @@ my $i=0;
 
 	#los grupos que no tienen libros no se muestran en el OPAC
 	if($type eq "opac"){
-        my $sth2=$dbh->prepare("SELECT  * FROM items WHERE biblioitemnumber =? AND wthdrawn = 0 or wthdrawn is null ");
+        my $sth2=$dbh->prepare("SELECT  * FROM items WHERE biblioitemnumber =? AND wthdrawn = 0 or wthdrawn is null or wthdrawn = 7 ");
         $sth2->execute($data->{'biblioitemnumber'});
         	if(!$sth2->fetchrow_hashref){
-            		next;
+           		next;
         	}
     	}
 
@@ -2143,8 +2143,8 @@ my $i=0;
 
 	$results[$i]->{'notforloan'}= ((($results[$i]->{'fl'}+$results[$i]->{'issue'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
 
-# 	   if (($type ne 'intranet')&&(C4::Context->preference("opacUnavail") eq 0))
-	if (($type ne 'intranet'))
+ 	   if (($type ne 'intranet')&&(C4::Context->preference("opacUnavail") eq 0))
+	#if (($type ne 'intranet'))
 	       {
 	       $results[$i]->{'unavailable'}=($results[$i]->{'total'} eq  $results[$i]->{'unav'});
 	       # Para ver si todos los grupos estan deshabilitados
