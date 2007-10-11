@@ -311,8 +311,8 @@ sub getpatroninformation {
 	if ($borrowernumber) {
 		$sth = $dbh->prepare("SELECT borrowers.*,localidades.nombre as cityname , categories.description AS cat
 					FROM borrowers
-					INNER  JOIN categories ON categories.categorycode = borrowers.categorycode
-					INNER JOIN localidades on localidades.localidad=borrowers.city
+					LEFT  JOIN categories ON categories.categorycode = borrowers.categorycode
+					LEFT JOIN localidades on localidades.localidad=borrowers.city
 					WHERE borrowers.borrowernumber = ? ;");
 		$sth->execute($borrowernumber);
 	} elsif ($cardnumber) {
