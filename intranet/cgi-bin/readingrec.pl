@@ -66,7 +66,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{title}=$issues->[$i]->{'title'};
 	$line{unititle}=$issues->[$i]->{'unititle'};
 	$line{author}=$issues->[$i]->{'author'};
-# 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
+ 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
 # Miguel 11-11-07 - Se estaba pasando la fecha de prestamo
  	my $df=C4::Date::format_date_in_iso(vencimiento($issues->[$i]->{'itemnumber'})); #C4::AR::Issues.pm
     	$line{'date_fin'} = format_date($df);

@@ -29,7 +29,9 @@
  	<TD >
                 <b>Ed.</b>
         </TD>
-
+	<TD>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>Préstamo</b></a>
+	</TD>
 	<TD>
 		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>Venc.</b></a>
 	</TD>
@@ -58,7 +60,9 @@
 	<!-- /TMPL_LOOP -->
 
         </td>
-
+	<TD class="<!-- TMPL_VAR NAME="clase"-->">
+		<!-- TMPL_VAR name="date_due" -->&nbsp;
+	</TD>
 	<TD class="<!-- TMPL_VAR NAME="clase"-->">
 		<!-- TMPL_VAR name="date_fin" -->&nbsp;
 	</TD>
