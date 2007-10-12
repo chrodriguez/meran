@@ -62,6 +62,7 @@ sub crearTicket(){
 		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
 		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
+		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
 		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
 		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).

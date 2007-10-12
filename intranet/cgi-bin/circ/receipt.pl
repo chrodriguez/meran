@@ -33,6 +33,7 @@ $args{'bookTitle'} = $query->param('bookTitle');
 $args{'inventory'} = $query->param('inventory');
 $args{'topoSign'} = $query->param('topoSign');
 $args{'barcode'} = $query->param('barcode');
+$args{'volume'} = $query->param('volume');
 $args{'borrowDate'} = $query->param('borrowDate');
 $args{'returnDate'} = $query->param('returnDate');
 $args{'librarian'} = $query->param('librarian');
