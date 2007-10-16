@@ -19,6 +19,21 @@
 		}
 	}
 
+function subirForm(){
+	var formulario=document.getElementById('formReturn');
+	formulario.submit;
+}
+
+function devolverItmes(){
+	document.getElementById('action').value="return";
+	subirForm();
+}
+
+function renovarItems(){
+	document.getElementById('action').value="renew";
+	subirForm();
+}
+
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
@@ -140,7 +155,7 @@
 <br>
 <br>
 <form method="post" action="/cgi-bin/koha/circ/returns.pl"  id="formReturn" name="formReturn">
-	<input type="hidden" name="accionReturn" id="accionReturn" value="return">
+	<input type="hidden" name="action" id="action">
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
         	<tr>
                         <td colspan="10" align="center" class="inputFontNormal">
@@ -158,7 +173,7 @@
                 	<td><!--Fecha de--> Pr&eacute;stamo</td>
                 	<td><!--Fecha de--> Vencimiento</td>
                 	<td>Tipo</td>
-			<td>&nbsp;</td>
+<!-- 			<td>&nbsp;</td> -->
         		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
                 </tr>
         <!-- TMPL_LOOP name="issues" -->
@@ -190,18 +205,19 @@
           		<td  align="center" class="<!-- TMPL_VAR NAME="clase" -->">
 				<!-- TMPL_VAR NAME="issuetype" -->
 			</td>
-        		<td align="center" class="<!-- TMPL_VAR NAME="clase" -->">
+        		<!--<td align="center" class="<!-- TMPL_VAR NAME="clase" -->">
         <!-- TMPL_IF NAME="renew" -->
 				<a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=renew"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/renew.png" title="Renovar"></a>
         <!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-        		</td>
+        		</td>-->
 
         		<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
 		</tr>
         <!-- /TMPL_LOOP -->
 		<tr>
 			<td colspan="10" align="center">
-				<input type="image" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver" onClick="formReturn.submit()">
+				<input type="image" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolverItmes()">
+				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="renovarItems()">
 			</td>
 		</tr>
 </table>

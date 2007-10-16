@@ -248,7 +248,7 @@
   			<td>Vencimiento</td>
    			<td>Tipo</td>
 <!--   			<td>Devolver</td> -->
-  			<td>Renovar</Td>
+<!--   			<td>Renovar</Td> -->
   			<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 			</tr>
 <!-- TMPL_LOOP NAME="issueloop" -->
@@ -274,7 +274,8 @@
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="issuetype" --><font color="<!-- TMPL_VAR NAME="color" -->">         <!-- TMPL_VAR NAME="issuetype" --> </font><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 					  
 <!-- 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></td> -->
-			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_IF NAME="renew" --><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=renew"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/renew.png" title="Renovar"><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->  </td>
+<!-- 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_IF NAME="renew" --><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=renew"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/renew.png" title="Renovar"> -->
+<!-- 			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->  </td> -->
 
 			<td class="<!-- TMPL_VAR NAME="clase"-->" height=25 class="impar"></td>
 			</tr>
@@ -282,7 +283,8 @@
 			<tr>
 			<td colspan="10" align="center">
 				<input type="hidden" id="action" name="action">
-				<input type="image" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver" onClick="devolverItmes()">
+				<input type="image" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolverItmes()">
+				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="renovarItems()">
 			</td>
 		</tr>
 		</table>
@@ -521,11 +523,25 @@ function checkedAll(){
 	}
 }
 
-function devolverItmes(){
-	document.getElementById('action').value="return";
+function subirForm(){
 	var formulario=document.getElementById('formReturn').action="circ/returns.pl";
 	formulario.submit;
 }
+
+function devolverItmes(){
+	document.getElementById('action').value="return";
+// 	var formulario=document.getElementById('formReturn').action="circ/returns.pl";
+// 	formulario.submit;
+	subirForm();
+}
+
+function renovarItems(){
+	document.getElementById('action').value="renew";
+// 	var formulario=document.getElementById('formReturn').action="circ/returns.pl";
+// 	formulario.submit;
+	subirForm();
+}
+
 </script>
 <!-- endmenu -->
 
