@@ -195,6 +195,7 @@
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
+	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->">
 	<input type="hidden" name="notforloan" value="<!-- TMPL_VAR name="notforloan" -->">
 	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
 		<tr class="tablaresultadoTitle">
@@ -305,7 +306,7 @@
         <td align="center">
         <table border="0">
 	<tr class="tablemsg">
-		<td class="fontmsg"><b><u>PR&Eacute;STAMO</u>:</b> <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->, <!-- TMPL_VAR NAME="edition" --> <!-- TMPL_IF NAME="volume" -->, t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --> <br>
+		<td class="fontmsg"><b><u>PR&Eacute;STAMO</u>:</b> <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="edition" -->, <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="volume" -->, t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --> <br>
 		<b><u>USUARIO</u>:</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
 	</tr>
         <tr align="center">
