@@ -171,7 +171,7 @@ sub barcodesbytype {
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber
+	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber,  biblioitems.biblionumber
 	FROM (
 	(
 	items

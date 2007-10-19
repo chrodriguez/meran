@@ -108,6 +108,7 @@ foreach my $element (@res) {
 		$line{'publisher'}=$element->{'publisher'};
 		$line{'publicationyear'}=$element->{'publicationyear'};
 		$line{'number'}=$element->{'number'};
+		$line{'biblionumber'}=$element->{'biblionumber'};
 
 	##Lleno los datos
 	$sheet->set_data_xy (2, $pos, $line{'barcode'});

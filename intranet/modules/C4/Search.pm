@@ -649,7 +649,7 @@ EOT
   @bind = ();
   $query="SELECT biblio.biblionumber
   	FROM autores
-	inner join colaboradores  on autores.id=colaboradores.idColaborador
+	inner join colaboradores on autores.id=colaboradores.idColaborador
 	inner join biblio on colaboradores.biblionumber=biblio.biblionumber
 	where	";
 			
@@ -679,7 +679,34 @@ EOT
   @bind = ();
   $query= "SELECT biblio.biblionumber FROM 
   	   autores inner join additionalauthors  on autores.id=additionalauthors.author
-	   inner join biblio on additionalauthors.author=biblio.biblionumber
+	   inner join biblio on additionalauthors.biblionumber=biblio.biblionumber
+	   where	";
+			
+  foreach my $keyword (@key)
+  {
+    push @clauses,
+        " autores.completo  LIKE ? OR autores.completo  like ? ";
+        push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
+  }
+  $query .= "(" . join(") AND (", @clauses) . ")";
+  $query .= " group by biblionumber";
+  $sth=$dbh->prepare($query);
+  $sth->execute(@bind);
+  while (my @res = $sth->fetchrow_array) {
+    for (@res)
+    {
+        $biblionumbers{$_} = 1;         # Add these results to the set
+    }
+  }
+  $sth->finish;
+
+#Ahora Autores
+
+
+  @clauses = ();
+  @bind = ();
+  $query= "SELECT biblio.biblionumber FROM 
+  	   autores inner join biblio on autores.id=biblio.author
 	   where	";
 			
   foreach my $keyword (@key)
@@ -867,13 +894,11 @@ while (my $data = $sth->fetchrow_hashref) {
 
  #Hay que agregar las analiticas
  my ($countanaliticas,@analiticas)= BiblioAnalysisSearch($search->{'keyword'});
-  my $end=$offset +$num +1;
+ my $end=$offset +$num +1;
 
-
-foreach my $aux (@analiticas){	
-
-	if (($count ge $offset) and ($count le ($offset+$num))){
-	push(@res2,$aux);
+foreach my $aux (@analiticas) {
+if (($count >= $offset) and ($count <= ($end))){
+push(@res2,$aux);
 	}
 		$count++;
 }				  

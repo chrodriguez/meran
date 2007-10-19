@@ -51,10 +51,8 @@
 		<!-- TMPL_VAR NAME="author" -->
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="title" ESCAPE=HTML-->
-		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
-				<!-- TMPL_VAR NAME="unititle" -->
-		<!-- /TMPL_IF -->
+<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
 		<!-- TMPL_VAR NAME="number" -->
