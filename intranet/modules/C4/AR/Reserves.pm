@@ -86,7 +86,7 @@ sub isRegular
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
 	my $regular=1; #Regular por defecto
-        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ?");
+        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ? and categorycode='ES'" );
         $sth->execute($bor);
         my $reg = $sth->fetchrow();
 	if (($reg eq 1)|| ($reg eq 0)){$regular = $reg;}
@@ -171,6 +171,7 @@ for (my $i=0;$i<$isunum;$i++){
 
 #Si NO es regular
 my $regular =  isRegular($borrowernumber);
+
 if ($regular eq 0){return (0,6);}
 
 
