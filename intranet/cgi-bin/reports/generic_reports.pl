@@ -59,7 +59,7 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
 				debug => 1,
 				});
 
-   my ($results,$campos,$count) = reportSearch(\@fieldlist,\@value, \@operator, \@excluding , \@and_or , $startfrom);
+   my ($results,$campos,$count,$filename) = reportSearch(\@fieldlist,\@value, \@operator, \@excluding , \@and_or , $startfrom , $loggedinuser );
   
    my @campos=split(/,/,$campos);
    my $fields='';
@@ -89,7 +89,8 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
    
    $template->param(campos=>$fields,
       			result=>\@RES,
-			total =>$count);
+			total =>$count,
+			filename=>$filename);
     
    ####PAGINADOR#####
    #

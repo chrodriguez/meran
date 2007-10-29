@@ -82,10 +82,17 @@ Resultado de reporte
 		<td width="1%">&nbsp;</td></tr>
 	<!-- /TMPL_LOOP -->
 </table>
-
+<br>
 <center>
 Resultados <b><!-- TMPL_VAR NAME="startfrom" --></b> a <b><!-- TMPL_VAR NAME="endat" --></b> de <b><!-- TMPL_VAR NAME="numrecords" --></b> registros.
 </center>
+<br>
+<center>
+<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="filename" -->">Generar planilla
+<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/sxc.png" border="0">
+</a>
+</center>
+
 <!-- /TMPL_IF -->
 </form>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

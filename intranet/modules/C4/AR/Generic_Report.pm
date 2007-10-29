@@ -23,7 +23,7 @@ package C4::AR::Generic_Report;
 use strict;
 require Exporter;
 use C4::Context;
-use OpenOffice::OOCBuilder;
+use ooolib;
 
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
@@ -187,13 +187,14 @@ sub getFieldsArray {
 }
 
 sub reportSearch {
-        my ( $fieldlist, $value, $operator,  $excluding, $and_or, $startfrom) = @_;
+        my ( $fieldlist, $value, $operator,  $excluding, $and_or, $startfrom , $loggedinuser) = @_;
 
 	  my $results;
 	  my @tables = ();# Tablas involucrados
 	  my $where='';# Armo el where de la consulta
 	  my $dbh = C4::Context->dbh;
 	  my $count;
+	  my $filename=''; #Para la planilla
 
 	  for(my $i = 0 ; $i <= $#{$value} ; $i++) # Se procesan los que poseen algun valor ingresado
 	    { 
@@ -239,7 +240,7 @@ sub reportSearch {
 	    
 	    #Se obtienen los campos
 	    my ($campos,$nombres)=getSearchFields(\@tables);
-	    #Se obtienen los joins (OJO!!! NO ES JODA)
+	    #Se obtienen los joins
 	    my ($joins,$no_joins)=getSearchJoins(\@tables); 
 	    
 	  if (!@$no_joins[0]){#Hay algun join que no se pudo realizar?
@@ -254,7 +255,7 @@ sub reportSearch {
 	       
 	       #Generar la planilla# 
 	       
-	       generar_planilla($rescount);
+	       $filename=generar_planilla($rescount,$nombres,$loggedinuser);
 
 	       #
 	      
@@ -276,7 +277,7 @@ sub reportSearch {
 	   $sth->finish;
 	   }
 	   
-	   return ($results,$nombres,$count);
+	   return ($results,$nombres,$count,$filename);
 	   }
 
 
@@ -403,71 +404,65 @@ sub searchjoin {
 
 
 sub generar_planilla {
-	my (@results) = @_;
+	my ($results,$nombres,$loggedinuser) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
-my $sheet=new OpenOffice::OOCBuilder();
+my $sheet=new ooolib("sxc");
+$sheet->oooSet("builddir","./plantillas");
 #
 ## - Set Meta.xml data
-$sheet->set_title ('Resultado de búsqueda genérica');
-$sheet->set_author ('KOHA');
+$sheet->oooSet("title","Resultado de búsqueda genérica");
+$sheet->oooSet("author","KOHA");
 # - Set name of first sheet
-$sheet->set_sheet_name ('Reporte',1);
+$sheet->oooSet("subject","Reporte");
 # - Set some data
 # columns can be in numbers or letters
-$sheet->set_bold (1);
+
+#$sheet->set_bold (1);
+
 my $pos=1;
-$sheet->set_fontsize(11);
+
+#$sheet->set_fontsize(11);
 
 ##PARAMETRIZAR!!!
-$sheet->set_data_xy (1, $pos, "Ministerio de Educación
+$sheet->oooSet("cell-loc",1,$pos);
+$sheet->oooSet("cell-data", "Ministerio de Educación
 Universidad Nacional de La Plata
-Biblioteca de la Facultad de Ciencias Económicas");
+");
 
-$sheet->set_fontsize(10);
+#$sheet->set_fontsize(10);
 $pos++;
-$sheet->set_data_xy (1, $pos, 'Fecha');
-$sheet->set_colwidth (1, 2000);
-$sheet->set_data_xy (2, $pos, 'Nro. Inventario');
-$sheet->set_colwidth (2, 1000);
-$sheet->set_data_xy (3, $pos, 'Ejs.');
-$sheet->set_data_xy (4, $pos, 'Autor');
-$sheet->set_colwidth (4, 4000);
-$sheet->set_data_xy (5, $pos, 'Título');
-$sheet->set_colwidth (5, 10000);
-$sheet->set_data_xy (6, $pos, 'Edic.');
-$sheet->set_data_xy (7, $pos, 'Editor');
-$sheet->set_data_xy (8, $pos, 'Año');
-$sheet->set_data_xy (9, $pos, 'Signatura Topográfica');
-$sheet->set_colwidth (9, 1000);
-$sheet->set_bold (0);
 
+#Titulos
+my @campos=split(/,/,$nombres);
+my $count=1;
+foreach my $field (@campos){
+
+$sheet->oooSet("cell-loc", $count, $pos);
+$sheet->oooData("cell-text", $field);
+
+#$sheet->set_colwidth ($count, 1000);
+
+$count++;
+}
+#$sheet->set_bold (0);
 $pos++;
 ##
-foreach my $element (@res) {
-															
-        $sheet->set_data_xy (2, $pos, $line{'barcode'});
-        $sheet->set_data_xy (9, $pos, $line{'bulk'});
-														
-	$sheet->set_data_xy (4, $pos, $line{'author'});
-																if($line{'unititle'} eq ""){
-	$sheet->set_data_xy (5, $pos, $line{'title'});}
-															    else{
-	my $titulo=$line{'title'}.": ".$line{'unititle'};
-	$sheet->set_data_xy (5, $pos, $titulo);
 
+#Datos
+for(my $i = 0 ; $i <= $#{$results} ; $i++)
+{
+my $j=0;
+foreach my $field (@campos){
+
+$sheet->oooSet("cell-loc", $j+1, $pos);
+$sheet->oooData("cell-text", @$results->[$i][$j]);
+$j++;
 }
-
-$sheet->set_data_xy (6, $pos, $line{'number'});
-$sheet->set_data_xy (7, $pos, $line{'publisher'});
-$sheet->set_data_xy (8, $pos, $line{'publicationyear'});								
-$pos++;																						
+$pos++;
 }
-
-
-my $name='inventario'.$loggedinuser;
-$sheet->generate($name);
-
-return ($result,$i);
+##
+my $name="reporte-generico-".$loggedinuser;
+	 $sheet->oooGenerate($name);
+	return($name);
 	}
-
