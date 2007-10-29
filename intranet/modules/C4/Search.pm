@@ -395,6 +395,9 @@ sub catalogsearch {
 		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset,$orden,$type);
 	}elsif ($search->{'subjectitems'}){
                 ($count,@results)=CatSearch($env,'loose',$search,$num,$offset,$orden,$type);
+	}elsif ($search->{'class'}){
+		($count,@results)=CatSearch($env,'loose',$search,$num,$offset,$orden,$type);
+
         }elsif ($search->{'analytical'}){
 	                ($count,@results)=BiblioAnalysisSearch($search->{'analytical'});
 #Matias: Signatura Topografica
@@ -1418,7 +1421,12 @@ sub CatSearch  {
 			$i++;
 		}
 
-	}
+		if ($search->{'class'}){
+				    $query.= "and ( itemtype=?)";
+				    push(@bind,$search->{'class'});
+				    }
+
+		    }
 	if ($type eq 'precise'){
 	#falta autores.apellido as apellido,autores.nombre as nombre
 	if ($search->{'authorid'} ne ''){
@@ -3464,7 +3472,7 @@ sub bibavail {
   my $dbh = C4::Context->dbh;
   my $data;
   my $sth;  
-  my $query="select count(itemnumber) as num from items where items.biblionumber=? and (wthdrawn=0 or wthdrawn is NULL or wthdrawn=2 )"; #wthdrawn=2 es COMPARTIDO 
+  my $query="select count(itemnumber) as num from items where items.biblionumber=? and (wthdrawn=0 or wthdrawn is NULL or wthdrawn=2 or wthdrawn=7)"; #wthdrawn=2 es COMPARTIDO 
   $sth=$dbh->prepare($query);
   $sth->execute($bib);
   #Fin: Cantidad de ejemplares
