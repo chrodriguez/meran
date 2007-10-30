@@ -394,7 +394,7 @@ sub catalogsearch {
 	} elsif ($search->{'keyword'}){
 		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset,$orden,$type);
 	}elsif ($search->{'subjectitems'}){
-                ($count,@results)=CatSearch($env,'loose',$search,$num,$offset,$orden,$type);
+                ($count,@results)=CatSearch($env,'subjectitems',$search,$num,$offset,$orden,$type);
 	}elsif ($search->{'class'}){
 		($count,@results)=CatSearch($env,'loose',$search,$num,$offset,$orden,$type);
 
@@ -1243,7 +1243,9 @@ sub CatSearch  {
         $query="Select * from biblio inner join bibliosubject on
          biblio.biblionumber=bibliosubject.biblionumber where
           bibliosubject.subject= '".$search->{'subjectitems'}."'" ;
-                                }
+
+			}
+
                         #################################################################
 
 	my $title = lc($search->{'title'});

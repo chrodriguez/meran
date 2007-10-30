@@ -78,7 +78,7 @@ document.getElementById(id).src=src;
 <input id="pstop" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favorito.png" title="Ver mis favoritos" hspace=0 cspace=0 border=0 name="pstop" align="absbottom">
 </a>
 <!-- TMPL_ELSE -->
-<a href="/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
+<a href="<!-- TMPL_VAR NAME='themelang' -->/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
         <img name="join" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png"
 	        title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
 	<!-- /TMPL_IF NAME="loggedinusername" -->	

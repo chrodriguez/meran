@@ -67,7 +67,7 @@ document.getElementById(id).src=src;
 	<!-- /TMPL_IF -->
 	<a href="/cgi-bin/koha/opac-shelves.pl?startfrom=0" onMouseOut="swap('estantes','<!-- TMPL_VAR NAME='themelang' -->/images/estantes.png ')" onMouseOver="swap('estantes','<!-- TMPL_VAR NAME='themelang' -->/images/estantesbis.png ')" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/estantes.png" name="estantes" id="estantes" title="Estantes Virtuales" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  ></a>
 
-	<a href="/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" ><img name="join" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png" title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
+	<a href="<!-- TMPL_VAR NAME='themelang' -->/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" ><img name="join" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png" title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
 
 	<a href="/cgi-bin/koha/opac-main.pl" onMouseOut="swap('home','<!-- TMPL_VAR NAME='themelang' -->/images/menu-home.png ')" onMouseOver="swap('home','<!-- TMPL_VAR NAME='themelang' -->/images/menu-homebis.png ')" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-home.png" name="home" id="home" title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  ></a><td>
 	
@@ -100,7 +100,7 @@ document.getElementById(id).src=src;
         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/estantes.png" name="estantes" id="estantes"
         title="Estantes Virtuales" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  ></a>
 
-<a href="/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
+<a href="<!-- TMPL_VAR NAME='themelang' -->/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
         <img name="join" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png"
         title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
 

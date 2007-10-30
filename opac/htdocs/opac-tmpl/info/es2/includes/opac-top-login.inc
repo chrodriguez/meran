@@ -71,7 +71,7 @@ document.getElementById(id).src=src;
         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-catalogo.png" name="cat" id="cat" title="Buscar" hspace=0 cspace=0 border=0 name="menu-search" align="absbottom">
         </a>
 <!-- /TMPL_IF -->
-<a href="/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
+<a href="<!-- TMPL_VAR NAME='themelang' -->/join.html"  onMouseOut="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png')" onMouseOver="swap('join','<!-- TMPL_VAR NAME='themelang' -->/images/menu-joinbis.png')" >
         <img name="join" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png"
         title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
 
