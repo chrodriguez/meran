@@ -48,8 +48,8 @@ function mandarArreglo(valores){
 					<b> T&iacute;tulo 
 					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 				<!-- TMPL_ELSE -->
-				<!-- TMPL_IF EXPR="(field eq 'subjectitems')||(field eq 'subjectitems2')" -->
-					<b> Tema <!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
+				<!-- TMPL_IF EXPR="(field eq 'subjectitems')||(field eq 'subjectid')" -->
+					<b> Tema <!-- TMPL_VAR NAME="descripcion" ESCAPE=HTML --></b>, 
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF EXPR="(field eq 'class')" -->
 					<b> Tipo de Documento <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 

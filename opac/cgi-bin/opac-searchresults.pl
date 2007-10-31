@@ -116,10 +116,10 @@ if ($query->param('virtual')) {#es una busqueda por biblioteca virtual
 			$search{'subjectid'}=$idTema;
 			my $tema=&getTema($idTema);
 			my $nomTema=$tema->{'nombre'};
-			push @$forminputs, {	field => 'subjectitems',
-				value =>$idTema };
-			push @$forminputs, {	field => 'subjectitems2',
-				value =>$nomTema };#solucion provisoria VER DESPUES DE LAS BUSQUEDAS!!!!!
+			push @$forminputs, {	field => 'subjectid',
+				value =>$idTema ,
+				descripcion=>$nomTema};
+			;#solucion provisoria VER DESPUES DE LAS BUSQUEDAS!!!!!
 		} 
 		#Einar para el authorid
 		my $value = $query->param('authorid');
