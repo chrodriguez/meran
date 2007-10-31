@@ -125,7 +125,7 @@
 			
 			<!-- TMPL_IF name="subject" -->Tema:<b> 
 				<!-- TMPL_LOOP NAME="SUBJECTS" -->			
-					<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="nomTema" --></a><!-- TMPL_VAR NAME=separator -->
+					<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectid=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="nomTema" --></a><!-- TMPL_VAR NAME=separator -->
 				<!-- /TMPL_LOOP --></b>
 			<br><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->Notas:<b> 

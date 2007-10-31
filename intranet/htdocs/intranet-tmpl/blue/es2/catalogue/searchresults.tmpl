@@ -14,25 +14,25 @@
 			<b><!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'author')" -->
-			<b> Autor <!-- TMPL_VAR NAME="value" --></b>, 
+			<b> Autor <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'title')" -->
 			<b> T&iacute;tulo <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 		<!-- TMPL_ELSE -->
-		<!-- TMPL_IF EXPR="(field eq 'subject')||(field eq 'subjectitems')" -->
-			<b> Tema <!-- TMPL_VAR NAME="value"  --></b>, 
+		<!-- TMPL_IF EXPR="(field eq 'subjectid')||(field eq 'subjectitems')" -->
+			<b> Tema <!-- TMPL_VAR NAME="descripcion"  ESCAPE=HTML --></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'class')" -->
-			<b> Tipo de Documento <!-- TMPL_VAR NAME="value" --></b>, 
+			<b> Tipo de Documento <!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'analytical')" -->
-			<b> Anal&iacute;ticas <!-- TMPL_VAR NAME="value" --></b>, 
+			<b> Anal&iacute;ticas <!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'itemnumber')" -->
-			<b> C&oacute;digo de Barras <!-- TMPL_VAR NAME="value" --></b>, 
+			<b> C&oacute;digo de Barras <!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_IF EXPR="(field eq 'signature')" -->
-			<b> Signatura Topogr&aacute;fica <!-- TMPL_VAR NAME="value" --></b> 
+			<b> Signatura Topogr&aacute;fica <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b> 
 		<!-- /TMPL_IF -->
 		<!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF-->
 		<!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF-->

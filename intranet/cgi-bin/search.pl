@@ -59,7 +59,7 @@ my $orden;
 if ($query->param('orden')){$orden=$query->param('orden');} else {$orden='title';}
 
 
-my $subject=$query->param('subject');
+my $subject=$query->param('subjectitems');
 
 #Matias: Es una busqueda por analiticas?
 my $analytical=$query->param('analytical');
@@ -188,7 +188,18 @@ $template->param(AUTORID => \@val);
 push @forminputs, {	field => 'authorid',
 			value =>$value };
 
-}	
+} else{
+my $value = $query->param('subjectid');
+if ($value) {
+my @val=&getTema($value);
+$search{'subjectid'} = $val[0]{'id'};
+$template->param(SUBJECTID => \@val);
+push @forminputs, {	field => 'subjectid',
+			value =>$val[0]{'id'},
+			descripcion=>$val[0]{'nombre'} };
+
+}}
+	
 foreach my $term (qw(keyword subject author illustrator itemnumber
 		     date-before class dewey branch title abstract
 		     publisher ttype dictionary dicdetail subjectitems virtual analytical signature))  #Los X (ya no se cuantos son) ultimos los agregue yo(Matias)
@@ -224,11 +235,12 @@ if (($dictionary)||($signature)) {
 
 my $n= 1;
 my $resultsarray;
+
 foreach my $result (@results) {
     # set up the even odd elements....
     ((($n % 2) && ($result->{'clase'} = 'par' ))|| ($result->{'clase'}='impar'));
     $n++;
-    
+if (! $search{'subjectitems'}){    
 if ($result->{'analyticalnumber'} ne ''){
     my $autorppal=  C4::Search::getautor($result->{'autorppal'});
     $result->{'apellidoppal'}= $autorppal->{'apellido'};
@@ -247,66 +259,17 @@ if ($result->{'analyticalnumber'} ne ''){
    
    
     ($result->{'copyrightdate'}==0) && ($result->{'copyrightdate'}='');
+}
     ($type eq 'opac') ? ($result->{'opac'}=1) : ($result->{'opac'}=0);
+
     push (@$resultsarray, $result);
+
 }
 
 ($resultsarray) || (@$resultsarray=());
-=item $search no se usa mas
-my $search="num=10";
-#my $searchdesc='';
-if ($search{"keyword"}) {
-    $search .= "&keyword=$search{keyword}";
-#    $searchdesc.=" T&eacute;rmino de B&uacute;squeda $search{keyword}, ";
-}
-
-#Matias: Biblioteca Virtual
-if ($virtual){
-    $search .= "&virtual=$virtual";
-#    $searchdesc.="Biblioteca Virtual $virtual ";
-}
-#
-
-if (my $subjectitems=$query->param('subjectitems')){
-    $search .= "&subjectitems=$subjectitems";
-#    $searchdesc.="Materia $subjectitems, ";
-}
-if ($subject){
-    $search .= "&subject=$subject";
-#    $searchdesc.="Materia $subject, ";
-}
-if ($search{"author"}){
-    $search .= "&author=$search{author}";
-#    $searchdesc.="Autor $search{author}, ";
-}
-if ($search{"authorid"}){
-    $search .= "&authorid=$search{authorid}";
-#    $searchdesc.="Autor $search{author}, ";
-}
-if ($search{"class"}){
-    $search .= "&class=$search{class}";
-#    $searchdesc.="Tipo $search{class}, ";
-}
-if ($search{"title"}){
-    $search .= "&title=$search{title}";
-#    $searchdesc.="T&iacute;tulo $search{title}, ";
-}
-if ($search{"dewey"}){
-    $search .= "&dewey=$search{dewey}";
-#    $searchdesc.="Dewey $search{dewey}, ";
-}
-if ($search{"illustrator"}){
-    $search .= "&illustrator=$search{illustrator}";
-#    $searchdesc.="Ilustrator $search{illustrator}, ";
-}
-if ($search{"itemnumber"}){
-    $search .= "&itemnumber=$search{itemnumber}";
-#    $searchdesc.="C&oacute;digo de Barras $search{itemnumber}, ";
-}
-$search.="&ttype=$search{ttype}";
-$search=~ s/ /%20/g;
-=cut $search
 $num=10;
+
+
 $template->param(startfrom => $startfrom+1);
 ($startfrom+$num<=$count) ? ($template->param(endat =>( $startfrom+$num))) : ($template->param(endat => $count));
 $template->param(numrecords => $count);
