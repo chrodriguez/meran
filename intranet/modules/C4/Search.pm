@@ -154,7 +154,7 @@ on what is passed to it, it calls the appropriate search function.
         &getSupport
         &getLanguage
 	&getLevel
-	
+	&getTema
 	&getAvail
 	&getavails
 	&availDetail
@@ -386,18 +386,15 @@ sub catalogsearch {
 	my ($count,@results);
 
 	#  print STDERR "Doing a search \n";
-	if ($search->{'itemnumber'} || $search->{'isbn'} || $search->{'authorid'}){
+	if ($search->{'itemnumber'} || $search->{'isbn'} || $search->{'authorid'}|| $search->{'subjectid'}){
 	#	print STDERR "Haciendo una b&uacute;squeda precisa\n";
 		($count,@results)=CatSearch($env,'precise',$search,$num,$offset,$orden,$type);
-	} elsif ($search->{'subject'}){
-		($count,@results)=CatSearch($env,'subject',$search,$num,$offset,$orden,$type);
-	} elsif ($search->{'keyword'}){
+	}elsif ($search->{'keyword'}){
 		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset,$orden,$type);
 	}elsif ($search->{'subjectitems'}){
-                ($count,@results)=CatSearch($env,'subjectitems',$search,$num,$offset,$orden,$type);
+			($count,@results)=SubjectSearch($env,'subject',$search,$num,$offset,$orden,$type);
 	}elsif ($search->{'class'}){
 		($count,@results)=CatSearch($env,'loose',$search,$num,$offset,$orden,$type);
-
         }elsif ($search->{'analytical'}){
 	                ($count,@results)=BiblioAnalysisSearch($search->{'analytical'});
 #Matias: Signatura Topografica
@@ -610,29 +607,19 @@ EOT
   }
   $sth->finish;
 
-  # Look for keywords in the 'bibliosubject' table.
-
-  # FIXME - The other queries look for words in the desired field that
-  # begin with the individual keywords the user entered. This one
-  # searches for the literal string the user entered. Is this the
-  # desired effect?
-  # Note in particular that spaces are retained: if the user typed
-  #	science  fiction
-  # (with two spaces), this won't find the subject "science fiction"
-  # (one space). Likewise, a search for "%" will return absolutely
-  # everything.
-  # If this isn't the desired effect, see the previous searches for
-  # how to do it.
-
-
-  # Again, we build a list of clauses from the keywords.
+# Look for keywords in the 'temas-bibliosubject' table.
+#Primero tengo que obtener los ids de los subjects de la tabla temas y  combinarlos con la tabla bibliosubject para obtener todos los biblio-ids que corresponden
   @clauses = ();
   @bind = ();
-  $query = "Select biblionumber from bibliosubject where ";
+  $query="SELECT bibliosubject.biblionumber
+  	FROM bibliosubject
+	inner join temas on bibliosubject.subject=temas.id
+	where	";
+			
   foreach my $keyword (@key)
   {
     push @clauses,
-        " subject LIKE ? OR subject like ? ";
+        " temas.nombre  LIKE ? OR temas.nombre  like ? ";
         push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
   }
   $query .= "(" . join(") AND (", @clauses) . ")";
@@ -704,7 +691,6 @@ EOT
   $sth->finish;
 
 #Ahora Autores
-
 
   @clauses = ();
   @bind = ();
@@ -906,174 +892,10 @@ push(@res2,$aux);
 		$count++;
 }				  
  ####Fin anliticas
-close L;
+
 return($count,@res2);
 }
 
-sub KeywordSearch2 {
-  my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = C4::Context->dbh;
-  $search->{'keyword'}=~ s/ +$//;
-  my @key=split(' ',$search->{'keyword'});
-  my $count=@key;
-  my $i=1;
-  my @results;
-  my $query ="Select * from biblio,bibliosubtitle,biblioitems where
-  biblio.biblionumber=biblioitems.biblionumber and
-  biblio.biblionumber=bibliosubtitle.biblionumber and
-  (((title like ? or title like ?)";
-  my @bind=("$key[0]%","% $key[0]%");
-  while ($i < $count){
-    $query .= " and (title like ? or title like ?)";
-    push(@bind,"$key[$i]%","% $key[$i]%");
-    $i++;
-  }
-  $query.= ") or ((subtitle like ? or subtitle like ?)";
-  push(@bind,"$key[0]%","% $key[0]%");
-  for ($i=1;$i<$count;$i++){
-    $query.= " and (subtitle like ? or subtitle like ?)";
-    push(@bind,"$key[$i]%","% $key[$i]%");
-  }
-  $query.= ") or ((seriestitle like ? or seriestitle like ?)";
-  push(@bind,"$key[0]%","% $key[0]%");
-  for ($i=1;$i<$count;$i++){
-    $query.=" and (seriestitle like ? or seriestitle like ?)";
-    push(@bind,"$key[$i]%","% $key[$i]%");
-  }
-  $query.= ") or ((biblio.notes like ? or biblio.notes like ?)";
-  push(@bind,"$key[0]%","% $key[0]%");
-  for ($i=1;$i<$count;$i++){
-    $query.=" and (biblio.notes like ? or biblio.notes like ?)";
-    push(@bind,"$key[$i]%","% $key[$i]%");
-  }
-  $query.= ") or ((biblioitems.notes like ? or biblioitems.notes like ?)";
-  push(@bind,"$key[0]%","% $key[0]%");
-  for ($i=1;$i<$count;$i++){
-    $query.=" and (biblioitems.notes like ? or biblioitems.notes like ?)";
-    push(@bind,"$key[$i]%","% $key[$i]%");
-  }
-  if ($search->{'keyword'} =~ /new zealand/i){
-    $query.= "or (title like 'nz%' or title like '% nz %' or title like '% nz' or subtitle like 'nz%'
-    or subtitle like '% nz %' or subtitle like '% nz' or author like 'nz %'
-    or author like '% nz %' or author like '% nz')"
-  }
-  if ($search->{'keyword'} eq  'nz' || $search->{'keyword'} eq 'NZ' ||
-  $search->{'keyword'} =~ /nz /i || $search->{'keyword'} =~ / nz /i ||
-  $search->{'keyword'} =~ / nz/i){
-    $query.= "or (title like 'new zealand%' or title like '% new zealand %'
-    or title like '% new zealand' or subtitle like 'new zealand%' or
-    subtitle like '% new zealand %'
-    or subtitle like '% new zealand' or author like 'new zealand%'
-    or author like '% new zealand %' or author like '% new zealand' or
-    seriestitle like 'new zealand%' or seriestitle like '% new zealand %'
-    or seriestitle like '% new zealand')"
-  }
-  $query .= "))";
-  if ($search->{'class'} ne ''){
-    my @temp=split(/\|/,$search->{'class'});
-    my $count=@temp;
-    $query.= "and ( itemtype=?";
-    push(@bind,"$temp[0]");
-    for (my $i=1;$i<$count;$i++){
-      $query.=" or itemtype=?";
-      push(@bind,"$temp[$i]");
-     }
-  $query.=")";
-  }
-  if ($search->{'dewey'} ne ''){
-    $query.= "and (dewey like '$search->{'dewey'}%') ";
-  }
-   $query.="group by biblio.biblionumber";
-   #$query.=" order by author,title";
-#  print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-#FIXME: rewrite to use ? before uncomment
-#    my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}
-#    ");
-#    $sti->execute;
-#    my ($dewey, $subclass) = $sti->fetchrow;
-    my $dewey=$data->{'dewey'};
-    my $subclass=$data->{'subclass'};
-    $dewey=~s/\.*0*$//;
-    ($dewey == 0) && ($dewey='');
-    ($dewey) && ($dewey.=" $subclass");
-#    $sti->finish;
-    $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey";
-#      print $results[$i];
-    $i++;
-  }
-  $sth->finish;
-  $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
-  like ? group by biblionumber");
-  $sth->execute("%".$search->{'keyword'}."%");
-  while (my $data=$sth->fetchrow_hashref){
-    $query="Select * from biblio,biblioitems where
-    biblio.biblionumber=? and
-    biblio.biblionumber=biblioitems.biblionumber ";
-    @bind=($data->{'biblionumber'});
-    if ($search->{'class'} ne ''){
-      my @temp=split(/\|/,$search->{'class'});
-      my $count=@temp;
-      $query.= " and ( itemtype=?";
-      push(@bind,$temp[0]);
-      for (my $i=1;$i<$count;$i++){
-        $query.=" or itemtype=?";
-        push(@bind,$temp[$i]);
-      }
-      $query.=")";
-
-    }
-    if ($search->{'dewey'} ne ''){
-      $query.= "and (dewey like ?)";
-      push(@bind,"$search->{'dewey'}%");
-    }
-    my $sth2=$dbh->prepare($query);
-    $sth2->execute(@bind);
-#    print $query;
-    while (my $data2=$sth2->fetchrow_hashref){
-      my $dewey= $data2->{'dewey'};
-      my $subclass=$data2->{'subclass'};
-      $dewey=~s/\.*0*$//;
-      ($dewey == 0) && ($dewey='');
-      ($dewey) && ($dewey.=" $subclass") ;
-#      $sti->finish;
-       $results[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
-#      print $results[$i];
-      $i++;
-    }
-    $sth2->finish;
-  }
-  my $i2=1;
-  @results=sort @results;
-  my @res;
-  $count=@results;
-  $i=1;
-  if ($count > 0){
-    $res[0]=$results[0];
-  }
-  while ($i2 < $count){
-    if ($results[$i2] ne $res[$i-1]){
-      $res[$i]=$results[$i2];
-      $i++;
-    }
-    $i2++;
-  }
-  $i2=0;
-  my @res2;
-  $count=@res;
-  while ($i2 < $num && $i2 < $count){
-    $res2[$i2]=$res[$i2+$offset];
-#    print $res2[$i2];
-    $i2++;
-  }
-  $sth->finish;
-#  $i--;
-#  $i++;
-  return($i,@res2);
-}
 
 =item CatSearch
 
@@ -1238,16 +1060,8 @@ sub CatSearch  {
 	my @results;
 	my $searchAnaliticas=$search;
                          ##############################Matias(Materias)##################                                                                                                                             
-                        if ($search->{'subjectitems'} ne ''){
-                                                                                                                             
-        $query="Select * from biblio inner join bibliosubject on
-         biblio.biblionumber=bibliosubject.biblionumber where
-          bibliosubject.subject= '".$search->{'subjectitems'}."'" ;
-
-			}
-
+			 
                         #################################################################
-
 	my $title = lc($search->{'title'});
 	if ($type eq 'loose') {
 	if ($search->{'author'} ne ''){
@@ -1406,23 +1220,16 @@ sub CatSearch  {
 			} elsif ($search->{'date-before'} ne ''){
 				$query = "Select * from biblio where copyrightdate like ?";
 				@bind=("%$search->{'date-before'}%");
-			}
+			}				
+}
 			$query .=" group by biblio.biblionumber";
 		}
-	}
-	if ($type eq 'subject'){
-		my @key=split(' ',$search->{'subject'});
-		my $count=@key;
-		my $i=1;
-		$query="select * from bibliosubject inner join  biblioitems on
-(bibliosubject.biblionumber = biblioitems.biblionumber) where ( subject like ? or subject like ? or subject like ?)";
-		@bind=("$key[0]%","% $key[0]%","%($key[0])%");
-		while ($i<$count){
-			$query.=" and (subject like ? or subject like ? or subject like ?)";
-			push(@bind,"$key[$i]%","% $key[$i]%","%($key[$i])%");
-			$i++;
-		}
+	
+			
+#ORIGINAL	
 
+
+if ($type eq 'precise'){
 		if ($search->{'class'}){
 				    $query.= "and ( itemtype=?)";
 				    push(@bind,$search->{'class'});
@@ -1431,7 +1238,7 @@ sub CatSearch  {
 		    }
 	if ($type eq 'precise'){
 	#falta autores.apellido as apellido,autores.nombre as nombre
-	if ($search->{'authorid'} ne ''){
+if ($search->{'authorid'} ne ''){
 			@bind=($search->{'authorid'},$search->{'authorid'},$search->{'authorid'});
 			$query="select *,biblio.author,biblio.biblionumber from
 				biblio
@@ -1443,53 +1250,27 @@ sub CatSearch  {
 				or colaboradores.idColaborador=?)";
 			$query.=" group by biblio.biblionumber";
 			}
-	#EINARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	if ($search->{'subjectid'} ne ''){
+			@bind=($search->{'subjectid'});
+			$query="select * from
+				biblio
+				left join bibliosubject
+				on bibliosubject.biblionumber =biblio.biblionumber
+				 where
+				(bibliosubject.subject = ?)";
+			$query.=" group by biblio.biblionumber";
+			}
+	
+	
 	if ($search->{'itemnumber'} ne ''){
 	$query="select * from items right join biblio  on  items.biblionumber=biblio.biblionumber
 	where  barcode like ? ";
 	my $search2=uc $search->{'itemnumber'};
 	@bind=($search2);									
-					# FIXME - .= <<EOT;
 		}
-=item Se hace aparte
-		if ($search->{'isbn'} ne ''){
-			my $search2=uc $search->{'isbn'};
-			my $sth1=$dbh->prepare("select * from biblioitems where isbn=?");
-			$sth1->execute($search2);
-			my $i2=0;
-			while (my $data=$sth1->fetchrow_hashref) {
-			
-		 if (($from ne 'opac')||( bibavail($data->{'biblionumber'}) eq 1)){ #Si viene de opac y no esta disponible no lo proceso
- 
-				my $sth=$dbh->prepare("select * from biblio inner join biblioitems 
-				on biblioitems.biblionumber = biblio.biblionumber
-				where   biblio.biblionumber = ? ");
-				$sth->execute($data->{'biblionumber'});
-				# FIXME - There's already a $data in this scope.
-				my $data=$sth->fetchrow_hashref;
-				my ($dewey, $subclass) = ($data->{'dewey'}, $data->{'subclass'});
-				# FIXME - The following assumes that the Dewey code is a
-				# floating-point number. It isn't: it's a string.
-				$dewey=~s/\.*0*$//;
-				($dewey == 0) && ($dewey='');
-				($dewey) && ($dewey.=" $subclass");
-				$data->{'dewey'}=$dewey;
-				$results[$i2]=$data;
-				$i2++;
-				$sth->finish;
-		}	
-		
-			}
-			$sth1->finish;
-		}
-=cut
 	}
 	if ($type ne 'precise' && $type ne 'subject'){
-		#if ($search->{'author'} ne ''){
-		#	$query .= " order by biblio.author,title";
-		#} else {
 			$query .= " order by biblio.$orden ";
-		#}
 	} else {
 		if ($type eq 'subject'){
 			$query .= "group by subject order by subject";
@@ -1595,6 +1376,69 @@ sub CatSearch  {
 
 	return($count,@resFinal);
 }
+
+#SubjectSearch
+# busca los temas
+#
+sub SubjectSearch
+{
+open (L,">/tmp/tiempo3");
+my ($env,$type,$search,$num,$offset,$orden,$from)=@_;
+printf L $offset."offset\n";
+printf L $num."num\n";
+printf L $type."type\n";
+printf L $search."searnch\n";
+printf L $from."from\n";
+printf L $search->{'subjectitems'}."ppp";
+
+my $dbh = C4::Context->dbh;
+my $query = '';
+my @bind = ();
+my @results;
+my @key=split(' ',$search->{'subjectitems'});
+my $count=@key;
+my $i=1;
+$query="SELECT * FROM temas where((temas.nombre like ? or temas.nombre like ?)";
+			@bind=("$key[0]%","% $key[0]%");
+			while ($i < $count){
+					$query .= " and (temas.nombre like ? or temas.nombre like ?)";
+					push(@bind,"$key[$i]%","% $key[$i]%");
+				$i++;
+					}
+			$query .= ")";
+
+my $sth=$dbh->prepare($query);
+$sth->execute(@bind);
+
+
+my $i=0;
+my $limit= $num+$offset;
+  while (my $data=$sth->fetchrow_hashref){
+    push @results, $data;
+    $i++;
+  }
+my $count=$i;
+$sth->finish;
+
+my $countFinal=0;
+my @resFinal;
+($offset||($offset=0));
+
+for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i)
+{ 
+printf L $i."nro\n";
+printf L $results[$i]{'id'}."nro\n";
+$resFinal[$countFinal]=$results[$i];
+$countFinal++; }
+close L;
+return($count,@resFinal);
+
+} 
+
+#http://127.0.0.1/cgi-bin/koha/opac-searchresults.pl?orden=title&startfrom=15&subjectitems=economia
+#http://127.0.0.1/cgi-bin/koha/opac-searchresults.pl?criteria=subjectitems&searchinc=economia&se.x=40&se.y=16&se=Buscar
+
+
 
 sub updatesearchstats{
   my ($dbh,$query)=@_;
@@ -4661,6 +4505,7 @@ sub getautor{
     $sth->finish();
     return($data1);
  }
+
 sub getautoresAdicionales{
     my ($biblionumber) = @_;
     my @result;
@@ -4674,7 +4519,8 @@ sub getautoresAdicionales{
     }
     $sth->finish();
     return(@results);
-    }
+}
+
 sub getColaboradores{
     my ($biblionumber) = @_;
     my @result;
@@ -4720,8 +4566,7 @@ sub getavailsplus {
   return(%resultslabels);
 } # sub getavails
 
-sub getAvail
-{
+sub getAvail{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
         my $query = "SELECT * from unavailable where code = '$cod' ";
@@ -4730,6 +4575,18 @@ sub getAvail
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
+}
+
+#Temas, toma un id de tema y devuelve la descripcion del tema.
+sub getTema(){
+	my ($idTema)=@_;
+	my $dbh = C4::Context->dbh;
+        my $query = "SELECT * from temas where id = ? ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute($idTema);
+        my $tema=$sth->fetchrow_hashref;
+        $sth->finish();
+	return($tema);
 }
 
 #Disponibilidad

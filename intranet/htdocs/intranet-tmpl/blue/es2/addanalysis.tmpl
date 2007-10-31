@@ -101,8 +101,8 @@
 <!-- TMPL_IF name="size" -->Tama&ntilde;o:<b> <!-- TMPL_VAR name="size" --></b><br><!-- /TMPL_IF -->
 <!-- Comentado porq no es de biblio, sino de biblioitem <!-- TMPL_IF name="collection" --><b>Colecci&oacute;n:</b><!-- TMPL_VAR NAME="seriestitle" --><br><!-- /TMPL_IF --> -->
 <!-- TMPL_IF name="subject" -->Tema:<b> 
-<!-- TMPL_LOOP NAME="SUBJECTS" -->                      
-<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
+<!-- TMPL_LOOP NAME="SUBJECTS" -->
+<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="nomTema" --></a><!-- TMPL_VAR NAME=separator -->
 <!-- /TMPL_LOOP --></b>
 <br><!-- /TMPL_IF -->
 <!-- TMPL_IF name="notes" -->Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br><!-- /TMPL_IF -->

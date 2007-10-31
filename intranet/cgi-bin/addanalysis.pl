@@ -2,7 +2,7 @@
 #Este script sirve para realizar alta baja y modificaciones de Analiticas
 #Escrito el 11/09/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -49,10 +49,16 @@ my @subjects;
 my $len= scalar(split(",",$dat->{'subject'}));
 my $i= 1;
 my $coma;
+my $tema;
+my $idTema;
+my $nomTema;
 foreach my $elem (split(",",$dat->{'subject'})) {
-if ($len==$i){$coma=""} else {$coma=","};
-for ($elem) {s/^\s+//;} # delete the spaces at the begining of the string
-push(@subjects, {subject => $elem, separator => $coma});
+	if ($len==$i){$coma=""} else {$coma=","};
+	$tema=&getTema($elem);
+	$idTema=$tema->{'id'};
+	$nomTema=$tema->{'nombre'};
+        for ($nomTema) {s/^\s+//;} # delete the spaces at the begining of the string
+push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
 $i+=1;
 }
 $dat->{'SUBJECTS'} = \@subjects;

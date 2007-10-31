@@ -33,10 +33,16 @@ my @subjects;
 my $len= scalar(split(",",$dat->{'subject'}));
 my $i= 1;
 my $coma;
+my $tema;
+my $idTema;
+my $nomTema;
 foreach my $elem (split(",",$dat->{'subject'})) {
         if ($len==$i){$coma=""} else {$coma=","};
-        for ($elem) {s/^\s+//;} # delete the spaces at the begining of the string
-        push(@subjects, {subject => $elem, separator => $coma});
+	$tema=&getTema($elem);
+	$idTema=$tema->{'id'};
+	$nomTema=$tema->{'nombre'};
+        for ($nomTema) {s/^\s+//;} # delete the spaces at the begining of the string
+        push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
         $i+=1;
 }
 $dat->{'SUBJECTS'} = \@subjects;

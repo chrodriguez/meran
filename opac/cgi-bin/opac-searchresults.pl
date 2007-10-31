@@ -106,9 +106,21 @@ if ($query->param('virtual')) {#es una busqueda por biblioteca virtual
 			push @$forminputs, {field => $field, value => $search{$field}};            
 		}
 	}else{
+	
 		#quiere decir que no es searchinc, entonces se esta haciendo una busqueda o simple o avanzada
-		(($query->param('subject'))&&($template->param(subjectsearch =>$query->param('subject')))&&( push @$forminputs, {field => 'subjectitems' , value => $search{'subjectitems'}}));	
+		(($query->param('subjectitems'))&&($template->param(subjectsearch =>$query->param('subjectitems')))&&( push @$forminputs, {field => 'subjectitems' , value => $search{'subjectitems'}}));
 		(($search{'keyword'} = $query->param('keyword'))||($search{'keyword'} =$query->param('words')) );
+		#para el id del tema
+		my $idTema=$query->param('subjectid');
+		if($idTema){
+			$search{'subjectid'}=$idTema;
+			my $tema=&getTema($idTema);
+			my $nomTema=$tema->{'nombre'};
+			push @$forminputs, {	field => 'subjectitems',
+				value =>$idTema };
+			push @$forminputs, {	field => 'subjectitems2',
+				value =>$nomTema };#solucion provisoria VER DESPUES DE LAS BUSQUEDAS!!!!!
+		} 
 		#Einar para el authorid
 		my $value = $query->param('authorid');
 		if ($value) {
@@ -139,14 +151,6 @@ if (C4::Context->preference("EnabledMailSystem")){
 #ttype es el metodo de busqueda, si es exacto o no
 (($search{'ttype'} = $query->param('ttype') )&& (push @$forminputs, {field => 'ttype', value => $search{'ttype'}}));
 
-#Luciano: Busqueda por diccionario
-#if ($dictionary){
-#	$search{'dictionary'}= $dictionary;
-#	push @$forminputs, {field => 'dictionary' , value => $dictionary};
-#	$search{'dicdetail'}= $dicdetail;
-#}
-#
-
 @$forminputs=() unless $forminputs;
 
 $template->param(FORMINPUTS => $forminputs);
@@ -174,8 +178,9 @@ if ($dictionary) {
 ###################################################################
 
 my $num = 1;
+if (! $search{'subjectitems'}) {
 foreach my $res (@results) {
-    ((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
+	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
     $num++;
     my @aux=&getautor($res->{'author'});
     $res->{'id'}=$res->{'author'};
@@ -183,6 +188,8 @@ foreach my $res (@results) {
     $res->{'nombre'}=$aux[0]->{'nombre'};
     $res->{'apellido'}=$aux[0]->{'apellido'};
 }
+}
+
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
