@@ -20,5 +20,5 @@ update bibliosubject set subject = (select id from temas where nombre=subject);
 
 -- --------------------------------------------------------
 --Agrego los datos necesarios para manejarlo desde la interfaz de manejo generica de tabla de referencia
---INSERT INTO `tablasDeReferencias` (`referencia`, `nomcamporeferencia`, `camporeferencia`, `referente`, `camporeferente`) VALUES ('temas', 'id', 0, 'bibliosubject', 'subject');
---INSERT INTO `tablasDeReferenciasInfo` (`orden`, `referencia`, `similares`) VALUES ('nombre', 'temas', 'nombre');
+INSERT INTO `tablasDeReferencias` (`referencia`, `nomcamporeferencia`, `camporeferencia`, `referente`, `camporeferente`) VALUES ('temas', 'id', 0, 'bibliosubject', 'subject');
+INSERT INTO `tablasDeReferenciasInfo` (`orden`, `referencia`, `similares`) VALUES ('nombre', 'temas', 'nombre');
