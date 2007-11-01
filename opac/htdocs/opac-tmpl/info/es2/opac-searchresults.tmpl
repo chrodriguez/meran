@@ -117,10 +117,10 @@ function mandarArreglo(valores){
 			
 			</tr>
 			<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
-				<tr>
-					<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject ESCAPE="URL" -->"><!-- TMPL_VAR NAME=subject --></a></td>
-						
-				</tr>
+			<tr>
+			<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectid=<!-- TMPL_VAR NAME="id"   ESCAPE="URL" -->"><!-- TMPL_VAR NAME="nombre" --></a>
+			</td>
+			</tr>
 			<!-- /TMPL_LOOP -->
 			<tr class="bordetabla">
 
