@@ -1128,7 +1128,7 @@ sub CatSearch  {
 				$query.= " and (copyrightdate like ?)";
 				push(@bind,"%$search->{'date-before'}%");
 							 }
-			$query.=" group by biblio.biblionumber";
+			#$query.=" group by biblio.biblionumber";
 			} else {
 			if ($search->{'title'} ne '') {
 				if ($search->{'ttype'} eq 'exact'){
