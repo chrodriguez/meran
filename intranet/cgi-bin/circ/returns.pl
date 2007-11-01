@@ -113,7 +113,7 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 				$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
 				$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
 				$infoTotal[$i]->{'unititle'}=$iteminfo->{'unititle'};
-				$infoTotal[$i]->{'edition'}=$iteminfo->{'edition'};
+				$infoTotal[$i]->{'edition'}=$iteminfo->{'number'};
 				$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
 			} 
 			else{
@@ -143,6 +143,7 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 				$infoTotal[0]->{'barcode'}=$barcode;
 				$infoTotal[0]->{'author'}=$iteminfo->{'author'};
 				$infoTotal[0]->{'title'}=$iteminfo->{'title'};
+				$infoTotal[0]->{'edition'}=$iteminfo->{'number'};
 				$strItemNumbers.=$iteminfo->{'itemnumber'}.",";
 			} 
 			else{
@@ -277,7 +278,7 @@ $template->param(
                 phone => $borrower->{'phone'},
                 cardnumber => $borrower->{'cardnumber'},
                 itemnumber => $iteminfo->{'itemnumber'},
-                edition => $iteminfo->{'number'},
+#                 edition => $iteminfo->{'number'},
                 biblioitemnumber => $iteminfo->{'biblioitemnumber'},
                 notforloan => $iteminfo->{'notforloan'},
                 author => $iteminfo->{'author'}, #devolvia el codigo del autor, se modifico para que de el nombre completo, en la funcion getiteminformation del paquete Circ2.pm
