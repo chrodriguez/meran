@@ -96,7 +96,7 @@
 	<!-- TMPL_IF name="subject" -->
 		Tema:<b> 
 		<!-- TMPL_LOOP NAME="SUBJECTS" -->
-        	<a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME=subject --></a><!-- TMPL_VAR NAME=separator -->
+        	<a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectid=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME=nomTema --></a><!-- TMPL_VAR NAME=separator -->
 		<!-- /TMPL_LOOP --></b><br>
 	<!-- /TMPL_IF -->
 
@@ -176,33 +176,32 @@
 	Disponibilidad Actual Para Sala de Lectura:	 <b><!-- TMPL_VAR NAME='notfl' --></b>
 	
 	<br>
-	      <!-- TMPL_IF NAME="CirculationEnabled" -->
-	      		<!-- TMPL_UNLESS NAME="shared" -->
-		       <!-- TMPL_UNLESS NAME="notforloan" -->
+	<!-- TMPL_IF NAME="CirculationEnabled" -->
+	<!-- si es 0 -->
+ 	      		<!-- TMPL_UNLESS NAME="shared" --> 
                        <!-- TMPL_UNLESS NAME="norequests" -->
   	<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblioitemnumber" ESCAPE=URL -->">
         		<b>Reservar</b>
 			</a></p>  
-			<!-- /TMPL_UNLESS -->
-			<!-- /TMPL_UNLESS -->
+ 			<!-- /TMPL_UNLESS --> 
 			<!-- /TMPL_UNLESS -->
 			
 			 <!-- TMPL_UNLESS NAME="shared" -->
-			<!-- TMPL_IF NAME="notforloan" -->
+		<!-- TMPL_IF NAME="norequests" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
-                	<!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
 			<!-- /TMPL_UNLESS -->
 
 			   <!-- TMPL_IF NAME="shared" -->
 			    <p align="right"></p>
 			   <!-- /TMPL_IF -->
-									   
-	      <!-- TMPL_ELSE -->
+<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
+	<!-- TMPL_ELSE -->
 			<!-- TMPL_IF NAME="notforloan" -->
 			<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
 			<!-- TMPL_ELSE -->
 			<p align="right"><b>Disponible para Reservar</b></p>
-                	<!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
 			   <!-- TMPL_IF NAME="shared" -->
 			   <p align="right"></p>
 			 <!-- /TMPL_IF -->

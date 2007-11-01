@@ -33,30 +33,30 @@ function mandarArreglo(valores){
 		<td  class="fontresultado" align="center">
 			&nbsp;  Ha realizado una b&uacute;squeda por:
 			<!-- TMPL_LOOP NAME="AUTORID" -->
-				<b> Autor <!-- TMPL_VAR NAME="completo" --></b>,
+				<b> Autor <!-- TMPL_VAR NAME="completo" ESCAPE=HTML --></b>,
 			<!-- /TMPL_LOOP --> 
 
 			<!-- TMPL_LOOP NAME="FORMINPUTS" -->
 				<!-- TMPL_IF EXPR="(field eq 'keyword')" -->
 					<b> T&eacute;rmino de B&uacute;squeda 
-					<!-- TMPL_VAR NAME="value" --></b>, 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF EXPR="(field eq 'author')" -->
-					<b> Autor <!-- TMPL_VAR NAME="value" --></b>, 
+					<b> Autor <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF EXPR="(field eq 'title')" -->
 					<b> T&iacute;tulo 
 					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
 				<!-- TMPL_ELSE -->
-				<!-- TMPL_IF EXPR="(field eq 'subject')||(field eq 'subjectitems')" -->
-					<b> Tema <!-- TMPL_VAR NAME="value"  --></b>, 
+				<!-- TMPL_IF EXPR="(field eq 'subjectitems')||(field eq 'subjectid')" -->
+					<b> Tema <!-- TMPL_VAR NAME="descripcion" ESCAPE=HTML --></b>, 
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF EXPR="(field eq 'class')" -->
-					<b> Tipo de Documento <!-- TMPL_VAR NAME="value" --></b>, 
+					<b> Tipo de Documento <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_IF EXPR="(field eq 'itemnumber')" -->
 					<b> C&oacute;digo de Barras 
-					<!-- TMPL_VAR NAME="value" --></b>, 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
 				<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
@@ -64,7 +64,7 @@ function mandarArreglo(valores){
 				<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
-			<!-- TMPL_VAR NAME="numrecords" --> resultados encontrados
+			<!-- TMPL_VAR NAME="numrecords" ESCAPE=HTML--> resultados encontrados
 		</td>
 	</tr>
 	
@@ -128,7 +128,7 @@ function mandarArreglo(valores){
 			</tr>
 			<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
 			<tr>
-			<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject ESCAPE="URL" -->"><!-- TMPL_VAR NAME=subject --></a>
+			<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectid=<!-- TMPL_VAR NAME="id"   ESCAPE="URL" -->"><!-- TMPL_VAR NAME="nombre" --></a>
 			</td>
 			</tr>
 			<!-- /TMPL_LOOP -->
@@ -196,14 +196,14 @@ function mandarArreglo(valores){
 		
 	<!-- TMPL_ELSE -->
 
-		<td class=<!-- TMPL_VAR name="clase" -->><!-- TMPL_IF NAME='title' --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a><!-- TMPL_ELSE --><p align="center">---<!-- /TMPL_IF -->
+		<td class=<!-- TMPL_VAR name="clase" -->><!-- TMPL_IF NAME='title' --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 		</td>
-		<td class=<!-- TMPL_VAR name="clase" -->><!-- TMPL_IF NAME='nomCompleto' --><a class="inputFontNormal" href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="nomCompleto" --></a><!-- TMPL_ELSE --><p align="center">---<!-- /TMPL_IF -->
+		<td class=<!-- TMPL_VAR name="clase" -->><a class="inputFontNormal" href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="nomCompleto" --></a>
 		</td>
 				
 		<td align="center" class=<!-- TMPL_VAR name="clase" -->> 
 		<!-- TMPL_LOOP NAME="grupos" -->
-		<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" -->(<!-- TMPL_VAR NAME="publicationyear" -->)<!-- TMPL_ELSE --><p align="center">---<!-- /TMPL_IF --> 
+		<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" -->(<!-- TMPL_VAR NAME="publicationyear" -->)<!-- /TMPL_IF --> 
 		<!-- TMPL_IF NAME="volume" -->     t <!-- TMPL_VAR NAME="volume" --><br>
 		<!-- TMPL_ELSE -->&nbsp;<br><!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->

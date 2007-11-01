@@ -18,7 +18,7 @@
 	<tr>
 	   <td align="center">
         <font class="titulo">Biblioteca </font><br>
-        <font class="subtitulo"> Facultad de Ciencias Econ&oacute;micas</font>
+        <font class="subtitulo"> Demostraci&oacute;n</font>
         </td>
 	<td align="right"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" ></td>
 	</tr>
@@ -37,22 +37,25 @@
 			<tr >
 				<td>
 <!-- TMPL_IF NAME="analyticalnumber" -->
-<!-- TMPL_IF name="analyticalauthor" -->
-<!-- TMPL_LOOP NAME="analyticalauthor" -->
-<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF -->.     
-<!-- /TMPL_LOOP -->                                                                                                                           <!-- /TMPL_IF -->
+	<!-- TMPL_IF name="analyticalauthor" -->
+		<!-- TMPL_LOOP NAME="analyticalauthor" -->
+			<!-- TMPL_VAR NAME="completo" -->
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
 
-<b><i><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML -->.</i></b>&nbsp;EN: <!-- TMPL_VAR NAME="apellidoppal" --><!-- TMPL_IF name="nombreppal" -->, <!-- TMPL_VAR NAME="nombreppal" --><!-- /TMPL_IF --> <b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML -->.</i></b>&nbsp; (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
-
+	<b><i><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML -->.</i></b>
+	&nbsp;EN: <!-- TMPL_VAR NAME="completo" -->&nbsp;
+	<b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML -->.</i></b>
+	&nbsp; (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME='apellido'-->
-<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a>
-<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->&nbsp;<b>
-<i><!-- TMPL_VAR NAME="title" ESCAPE=HTML-->.</i></b>&nbsp;  (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
+	<!-- TMPL_VAR NAME="completo" -->&nbsp;
+	<b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML-->.</i></b>
+	&nbsp;  (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
 <!-- /TMPL_IF -->
-</td>
-</tr>
+					</td>
+				</tr>
 <!-- /TMPL_LOOP  -->
+
 </table>
 </td></tr>
 <tr><td align="center" colspan="2">
