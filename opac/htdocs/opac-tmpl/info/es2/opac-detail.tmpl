@@ -42,12 +42,14 @@ Autores Adicionales: <br>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="cdu" -->CDU :<b> <!-- TMPL_VAR NAME="cdu" --></b><br><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="subject" -->Tema:<b> 
-                                <!-- TMPL_LOOP NAME="SUBJECTS" -->                                        
-					<a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME=subject --></a><!-- TMPL_VAR NAME=separator -->
-                                <!-- /TMPL_LOOP --></b>
-			<br><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="notes" -->Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br><!-- /TMPL_IF -->
+                        
+<!-- TMPL_IF name="subject" -->
+		Tema:<b> 
+		<!-- TMPL_LOOP NAME="SUBJECTS" -->
+        	<a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectid=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME=nomTema --></a><!-- TMPL_VAR NAME=separator -->
+		<!-- /TMPL_LOOP --></b><br>
+	<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="notes" -->Notas:<b> <!-- TMPL_VAR NAME="notes" --></b><br><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="abstract" -->Resumen:<b> <!-- TMPL_VAR NAME="abstract" --></b><br><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="classification" -->Nivel bibliogr&aacute;fico:<b> <!-- TMPL_VAR name="classification" --></b><br><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="lccn" -->LCCN:<b> <!-- TMPL_VAR name="lccn" --></b><br><!-- /TMPL_IF -->

@@ -33,17 +33,40 @@ function mandarArreglo(valores){
 <tr >
 <td  class="fontresultado" align="center">
 &nbsp;  Ha realizado una b&uacute;squeda en 
-<!-- TMPL_LOOP NAME="AUTORID" --><b> Autor <!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF NAME="nombre" -->,  <!-- TMPL_VAR NAME="nombre" --> <!-- /TMPL_IF--> </b>,  <!-- /TMPL_LOOP -->
-<!-- TMPL_LOOP NAME="FORMINPUTS" -->
-<!-- TMPL_IF EXPR="(field eq 'keyword')" --><b> T&eacute;rmino de B&uacute;squeda <!-- TMPL_VAR NAME="value" --></b>, <!-- TMPL_ELSE -->
-<!-- TMPL_IF EXPR="(field eq 'author')" --><b> Autor <!-- TMPL_VAR NAME="value" --></b>, <!-- TMPL_ELSE -->
-<!-- TMPL_IF EXPR="(field eq 'title')" --><b> T&iacute;tulo <!-- TMPL_VAR NAME="value" --></b>, <!-- TMPL_ELSE -->
-<!-- TMPL_IF EXPR="(field eq 'subject')||(field eq 'subjectitems')" --><b> Tema <!-- TMPL_VAR NAME="value"  --></b>, <!-- TMPL_ELSE -->
-<!-- TMPL_IF EXPR="(field eq 'class')" --><b> Tipo de Documento <!-- TMPL_VAR NAME="value" --></b>, <!-- TMPL_ELSE -->
-<!-- TMPL_IF EXPR="(field eq 'itemnumber')" --><b> C&oacute;digo de Barras <!-- TMPL_VAR NAME="value" --></b>, <!-- /TMPL_IF -->
-<!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF--><!-- /TMPL_IF-->
-<!-- /TMPL_LOOP -->
-<!-- TMPL_VAR NAME="numrecords" --> resultados encontrados
+
+<!-- TMPL_LOOP NAME="AUTORID" -->
+				<b> Autor <!-- TMPL_VAR NAME="completo" ESCAPE=HTML --></b>,
+			<!-- /TMPL_LOOP --> 
+
+			<!-- TMPL_LOOP NAME="FORMINPUTS" -->
+				<!-- TMPL_IF EXPR="(field eq 'keyword')" -->
+					<b> T&eacute;rmino de B&uacute;squeda 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'author')" -->
+					<b> Autor <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'title')" -->
+					<b> T&iacute;tulo 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'subjectitems')||(field eq 'subjectid')" -->
+					<b> Tema <!-- TMPL_VAR NAME="descripcion" ESCAPE=HTML --></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'class')" -->
+					<b> Tipo de Documento <!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF EXPR="(field eq 'itemnumber')" -->
+					<b> C&oacute;digo de Barras 
+					<!-- TMPL_VAR NAME="value" ESCAPE=HTML--></b>, 
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_VAR NAME="numrecords" ESCAPE=HTML--> resultados encontrados
 
 </td></tr>
 <tr><td>
