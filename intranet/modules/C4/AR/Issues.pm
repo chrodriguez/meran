@@ -79,7 +79,7 @@ FIXME
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
 =cut 
 
-sub devolver{
+sub devolver {
 	my @resultado;
 	my ($itemnumber,$borrowernumber)=@_;
 	
@@ -89,7 +89,7 @@ sub devolver{
 	$sth=$dbh->prepare("select * from issues where itemnumber=? and returndate IS NULL");
 	$sth->execute($itemnumber);
 	my $iteminformation= $sth->fetchrow_hashref;
-	my $returnDate= vencimiento($itemnumber); # tiene que estar aca porque despues ya se marco como devuelto
+	my $fechaVencimiento= vencimiento($itemnumber); # tiene que estar aca porque despues ya se marco como devuelto
 	$sth=$dbh->prepare("Update issues set returndate=NOW() where itemnumber=? and borrowernumber=? and returndate is NULL");
 	$sth->execute($itemnumber,$borrowernumber);
 	#verifico que el item no sea para sala
@@ -134,7 +134,7 @@ sub devolver{
 ### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
 		my $hasdebts=0;
 		my $sanction=0;
-		my $enddate;
+		my $fechaFinSancion;
 		if (hasDebts($dbh, $borrowernumber)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
 			$hasdebts = 1;
@@ -143,11 +143,11 @@ sub devolver{
 			my $issuetype=IssueType($iteminformation->{'issuecode'});
 			my $daysissue=$issuetype->{'daysissues'}; 
 			
-			my $gmtime = C4::Date::format_date_in_iso(ParseDate("today"));
+			my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
                         my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
                         $sth->execute($borrowernumber);
                         my $categorycode= $sth->fetchrow;
-                        my $sanctionDays= SanctionDays($dbh, $gmtime, $returnDate, $categorycode, $iteminformation->{'issuecode'});
+                        my $sanctionDays= SanctionDays($dbh, $fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
 
 
 
@@ -156,8 +156,8 @@ sub devolver{
 				my $sanctiontypecode = getSanctionTypeCode($dbh, $iteminformation->{'issuecode'}, $categorycode);
 				my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
-				$enddate= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err));
-				insertSanction($dbh, $sanctiontypecode, undef, $borrowernumber, $gmtime, $enddate, $sanctionDays);
+				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err));
+				insertSanction($dbh, $sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
 #Se borran las reservas del usuario sancionado
 				C4::AR::Reserves::cancelar_reservas($borrowernumber);
@@ -177,7 +177,7 @@ sub devolver{
 vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha en que vence el prestamo
 =cut
 
-sub vencimiento{
+sub vencimiento {
 my ($itemnumber)=@_;
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from issues where itemnumber=? and returndate is NULL");
@@ -185,17 +185,17 @@ $sth->execute($itemnumber);
 my $data= $sth->fetchrow_hashref;
 if ($data){
 	my $issuetype=IssueType($data->{'issuecode'}); 
-
-	if ($data->{'renewals'}){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-	 	my $plazo_actual=$issuetype->{'renewdays'};
+	my $plazo_actual;
+	
+	if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 $plazo_actual=$issuetype->{'renewdays'};
 
 		return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
 	} 
 	else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
-		my $plazo_actual=$issuetype->{'daysissues'};
-		 
+		 $plazo_actual=$issuetype->{'daysissues'};
 				 
-		 return(proximoHabil($plazo_actual,0,$data->{'date_due'}));
+		 return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
 		
 	}
 
@@ -209,7 +209,7 @@ sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que h
 
 #######********* ESTA FUNCION ESTA IGUAL QUE LA SEPUEDERENOVAR2 SE REDEFINIO PARA OPTIMIZAR EL CODIGO
 #######********* HAY QUE SACARLA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-sub sepuederenovar{
+sub sepuederenovar {
 my ($borrowernumber,$itemnumber)=@_;
 my $dbh = C4::Context->dbh;
 
@@ -422,7 +422,7 @@ sub chequeoDeFechas(){
 renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.
 =cut
  
-sub renovar{
+sub renovar {
 	my ($borrowernumber,$itemnumber)=@_;
 	my $renovacion= &sepuederenovar2($borrowernumber,$itemnumber);
 	if ($renovacion){
@@ -515,7 +515,7 @@ return ($resultado,$desde,$fecha,$branch,$apertura,$cierre);
 }
 
 
-sub verificarTipoPrestamo{
+sub verificarTipoPrestamo {
 #retorna verdadero si se puede hacer un determinado tipo de prestamo
 	my ($issuetype,$notforloan)=@_;
 	my $dbh = C4::Context->dbh;
@@ -525,7 +525,7 @@ sub verificarTipoPrestamo{
 }
 
 
-sub IssueType{
+sub IssueType {
 #retorna los datos del tipo de prestamo
 	my ($issuetype)=@_;
 	my $dbh = C4::Context->dbh;
@@ -534,7 +534,7 @@ sub IssueType{
 	return($sth->fetchrow_hashref);
 }
 
-sub IssuesType{
+sub IssuesType {
 #Trae todos los tipos de Prestamos existentes
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("Select issuecode, description  From issuetypes Order By description");

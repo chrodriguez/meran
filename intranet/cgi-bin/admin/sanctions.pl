@@ -62,7 +62,7 @@ if ($action eq 'delete') {
 	my $amount= $input->param('amounts');
 	my $sanctiontypecode1= $input->param('sanctiontypecode');
 	my $sanctionrulecode= $input->param('rules');
-	my $sth = $dbh->prepare("insert into sanctiontypesrules (sanctiontypecode,sanctionrulecode,sanctiontypesrules.order,amount) values (?,?,?,?)");
+	my $sth = $dbh->prepare("insert into sanctiontypesrules (sanctiontypecode,sanctionrulecode,orden,amount) values (?,?,?,?)");
 	$sth->execute($sanctiontypecode1, $sanctionrulecode, $order, $amount);
 }
 
@@ -114,7 +114,7 @@ my $CGIcategories=CGI::scrolling_list(
                         -multiple => 0 );
 
 
-my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.order");
+my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");
 $sth->execute($issue, $category);
 my @sanctionsarray;
 while (my $res = $sth->fetchrow_hashref) {
@@ -168,7 +168,7 @@ my $CGIrules=CGI::scrolling_list(
                         -multiple => 0 );
 
 if ($sanctiontypecode) {
-	my $sth= $dbh->prepare("select max(sanctiontypesrules.order) from sanctiontypesrules where sanctiontypecode = ?");
+	my $sth= $dbh->prepare("select max(sanctiontypesrules.orden) from sanctiontypesrules where sanctiontypecode = ?");
 	$sth->execute($sanctiontypecode);
 	my $data= $sth->fetchrow_array;
 	$sugestedOrder=  $data + 1;

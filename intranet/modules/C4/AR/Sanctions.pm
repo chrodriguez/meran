@@ -50,7 +50,7 @@ sub SanctionDays {
  
 
 #Corresponde una sancion
-  	my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.order");
+  	my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");
 	$sth->execute($issuecode, $categorycode);
 	my $err;
 	my $delta= &DateCalc($date_due,$returndate,\$err);
@@ -63,18 +63,30 @@ sub SanctionDays {
 	my $amountOfDays= 0;
 	my $i;
 	my $sanctiondays;
-	#Este while busca el resultado de la consulta que en todo los casos es solo una tupla.
+	#Este while busca el resultado de la consulta.
 	while ((my $res = $sth->fetchrow_hashref) && ($daysExceeded > 0)) {
 		my $amount= $res->{'amount'};
         	my $delaydays= $res->{'delaydays'};
 		$sanctiondays= $res->{'sanctiondays'};
+		#($amount==0) ===> INFINITO
 		for ($i=0; (($i < $amount) || ($amount==0)) && ($daysExceeded > 0); $i++) {
 			$daysExceeded-= $delaydays;
 			$amountOfDays+= $sanctiondays;	
 		}
 	}
 	$sth->finish;
-return($days*$sanctiondays);
+
+#	TEST
+#	open(F,">>/tmp/tmp");
+#	printf F "Days = ".$days."\n";
+#	printf F "SanstionsDays = ".$sanctiondays."\n";
+#	printf F "daysExceeded- = ".$daysExceeded."\n";
+#	printf F "amountOfDays = ".$amountOfDays."\n";
+#	printf F "Resultado devuelto  = ".$days*$sanctiondays."\n";
+#	close F;
+#	return($days*$sanctiondays);
+
+return($amountOfDays);
 }
 
 sub hasSanctions {
