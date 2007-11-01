@@ -18,6 +18,7 @@ my @result;
 if(length($param) gt 0){ 
 if ($tipo eq 'author'||$tipo eq 'additionalauthors'||$tipo eq 'colaboradores'||$tipo eq 'analysisauthor'){ 
  @result=&obtenerReferencia($param);}
+# busca temas
  elsif ($tipo eq 'subjectheadings'){
  @result=&obtenerTemas($param);}
  elsif ($tipo eq 'publishercode'){

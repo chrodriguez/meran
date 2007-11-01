@@ -7,7 +7,7 @@
 DROP TABLE IF EXISTS `temas`;
 CREATE TABLE `temas` (
   `id` int(11) NOT NULL auto_increment,
-  `nombre` text NOT NULL,
+  `nombre` varchar(250) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

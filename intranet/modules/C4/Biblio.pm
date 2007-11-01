@@ -1376,6 +1376,7 @@ sub OLDnewbiblio {
 	$sth = $dbh->prepare("insert into biblio set biblionumber  = ?, title = ?, unititle = ? , author = ?,  serial = ?, seriestitle = ?, notes = ?, abstract = ?, responsability=?");
 #MATIAS pongo en unititle el title tambien
 	$sth->execute($bibnum,$biblio->{'title'}, $biblio->{'unititle'} ,$codautor,$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'},$biblio->{'responsability'});
+	#agregar TEMAS
 	agregarMaterias($dbh,$bibnum,$biblio->{'subjectheadings'});
 	
 	agregarColaboradores($dbh,$bibnum,$biblio->{'colaboradores'});
@@ -1911,6 +1912,8 @@ foreach my $ar (@ars)  {
 	}}}}
 =cut
 
+
+=item
 sub agregarMaterias{
         my ($dbh,$bibnro,$subjects) =@_;
         my @ars=split(/^/,$subjects); #separa los \n
@@ -1920,29 +1923,94 @@ foreach my $ar (@ars)  {
 	$aux =~ s/\n//; #elimina los \n
 	$aux=~ s/\s+$//;#elimina el espacio del final
 	if ($aux ne '') {
-
- $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?;");
-        $sth->execute($bibnro,$aux);
-        my $data=$sth->fetchrow;
-        $sth->finish;
+# verifica existencia en tabla N a N
+ 	  $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?;");
+          $sth->execute($bibnro,$aux);
+          my $data=$sth->fetchrow;
+          $sth->finish;
+#no existe en la tabla N a N se agrega
         if ($data eq 0) {
 
-            $sth = $dbh->prepare ("insert into bibliosubject (biblionumber, subject) values ( ? , ?);");
-            $sth->execute($bibnro,$aux);
-            $sth->finish;
-
-        $sth=$dbh->prepare("Select count(*) from catalogueentry  where catalogueentry=?;");
+           $sth = $dbh->prepare("insert into bibliosubject (biblionumber, subject) values (? , ?);");
+           $sth->execute($bibnro,$aux);
+           $sth->finish;
+#verifica si existe el tema en la tabla de temas, sino lo agrega
+#         $sth=$dbh->prepare("Select count(*) from catalogueentry  where catalogueentry=?;");
+	$sth=$dbh->prepare("Select count(*) from temas  where nombre=?;");
         $sth->execute($aux);
         my $data=$sth->fetchrow;
         $sth->finish;
         if ($data eq 0) {
-                       $sth = $dbh->prepare ("insert into catalogueentry  (catalogueentry, entrytype) values (? , 's');");
-                        $sth->execute($aux);
-                       $sth->finish;
+#         	$sth = $dbh->prepare ("insert into catalogueentry  (catalogueentry, entrytype) values (? , 's');");
+		#el tema no existe, entonces se agrega
+	        $sth = $dbh->prepare ("insert into temas(nombre) values (?);");
 
-                        }
-		}
-	} }}
+                $sth->execute($aux);
+                $sth->finish;
+         }
+	}# end if ($data eq 0)
+      } #end if ($aux ne '') 
+}#end for
+
+}#end agregarMaterias
+=cut
+
+sub agregarMaterias{
+my ($dbh,$bibnro,$subjects) =@_;
+my @ars=split(/^/,$subjects); #separa los \n
+my $sth;
+foreach my $ar (@ars)  {
+	my $aux=$ar;
+	my $idTema= 0;
+	my $tema;
+	$aux =~ s/\n//; #elimina los \n
+	$aux=~ s/\s+$//;#elimina el espacio del final
+	if ($aux ne '') {
+	#verifica si existe el tema en la tabla de temas
+	  $sth=$dbh->prepare("Select id from temas  where nombre=?");
+          $sth->execute($aux);
+  	  my $data=$sth->fetchrow_hashref;
+          $sth->finish;
+
+#no se compara con 0, si no trae nada no es 000000000000
+          if (!$data) {
+
+		#el tema no existe, entonces se agrega
+	        $sth = $dbh->prepare ("insert into temas(nombre) values (?)");
+                $sth->execute($aux);
+                $sth->finish;
+		#obtengo el id del tema agregado
+		$sth = $dbh->prepare ("Select max(id) as id From temas");
+                $sth->execute();
+		my $dataTemas= $sth->fetchrow_hashref;
+		$sth->finish;
+		$idTema= $dataTemas->{'id'};
+           }
+
+	  if($idTema != 0){
+		$tema= $idTema;
+	  }else{
+		$tema= $data->{'id'};
+	  }
+
+	  #el tema existe en la tabla de tamas
+	  #verifica existencia en tabla N a N
+ 	  $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?");
+          $sth->execute($bibnro,$tema);
+          my $data=$sth->fetchrow;
+          $sth->finish;
+
+	  #no existe en la tabla N a N se agrega
+          if ($data eq 0) {
+
+          	$sth = $dbh->prepare("insert into bibliosubject(biblionumber, subject) values(? , ?);");
+           	$sth->execute($bibnro,$tema);
+           	$sth->finish;
+	 }
+      } #end if ($aux ne '') 
+}#end for
+
+}#end agregarMaterias
 
 sub agregarEditoriales{
 #LUCIANO se agregan las editoriales
@@ -2486,6 +2554,8 @@ sub newbiblio {
 	# finds new (MARC bibid
 # 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
 	my $record = &MARCkoha2marcBiblio($dbh,$bibnum);
+# 	de donde sale?????????????????
+# $biblio->{'biblioitemnumber'}
 	MARCaddbiblio($dbh,$record,$bibnum,$biblio->{'biblioitemnumber'});
 	return($bibnum);
 }

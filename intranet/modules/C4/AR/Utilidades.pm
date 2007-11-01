@@ -129,7 +129,8 @@ sub obtenerReferencia{
 sub obtenerTemas{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
+# 	my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
+	my $sth=$dbh->prepare("select nombre from temas where nombre LIKE ? order by nombre limit 0,15");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
