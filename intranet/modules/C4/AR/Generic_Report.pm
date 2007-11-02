@@ -418,34 +418,23 @@ $sheet->oooSet("subject","Reporte");
 # - Set some data
 # columns can be in numbers or letters
 
-#$sheet->set_bold (1);
-
 my $pos=1;
-
-#$sheet->set_fontsize(11);
-
-##PARAMETRIZAR!!!
-$sheet->oooSet("cell-loc",1,$pos);
-$sheet->oooSet("cell-data", "Ministerio de Educación
-Universidad Nacional de La Plata
-");
-
-#$sheet->set_fontsize(10);
-$pos++;
-
+my $count=1;
+$sheet->oooSet("bold", "on");
 #Titulos
 my @campos=split(/,/,$nombres);
-my $count=1;
-foreach my $field (@campos){
 
+$sheet->oooSet("bold", "on");
+
+foreach my $field (@campos){
 $sheet->oooSet("cell-loc", $count, $pos);
 $sheet->oooData("cell-text", $field);
-
 #$sheet->set_colwidth ($count, 1000);
 
 $count++;
 }
-#$sheet->set_bold (0);
+$sheet->oooSet("bold", "off");
+
 $pos++;
 ##
 
