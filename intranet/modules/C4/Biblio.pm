@@ -1972,7 +1972,6 @@ foreach my $ar (@ars)  {
   	  my $data=$sth->fetchrow_hashref;
           $sth->finish;
 
-#no se compara con 0, si no trae nada no es 000000000000
           if (!$data) {
 
 		#el tema no existe, entonces se agrega
@@ -1985,16 +1984,17 @@ foreach my $ar (@ars)  {
 		my $dataTemas= $sth->fetchrow_hashref;
 		$sth->finish;
 		$idTema= $dataTemas->{'id'};
-           }
-
-	  if($idTema != 0){
 		$tema= $idTema;
-	  }else{
+
+           }else{
+		
 		$tema= $data->{'id'};
-	  }
+	
+	   }
+
 
 	  #el tema existe en la tabla de tamas
-	  #verifica existencia en tabla N a N
+	  #verifica existencia en tabla N a N, creo q no es necesario
  	  $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?");
           $sth->execute($bibnro,$tema);
           my $data=$sth->fetchrow;
