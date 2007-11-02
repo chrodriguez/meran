@@ -43,7 +43,7 @@ my $data=&bibdata($bibnum);
 my ($subjectcount, $subject)     = &subject($bibnum);
 my ($subtitlecount, $subtitle)   = &subtitle($bibnum);
 #my ($addauthorcount, $addauthor) = &addauthor($bibnum);
-my $sub        = $subject->[0]->{'subject'};
+my $sub        = $subject->[0]->{'nombre'};
 #my $additional = $addauthor->[0]->{'author'};
 my $subtitles = $subtitle->[0]->{'subtitle'};
 
@@ -71,7 +71,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 # have to get all subtitles, subjects and additional authors
-$sub = join("\n", map { $_->{'subject'} } @{$subject});
+$sub = join("\n", map { $_->{'nombre'} } @{$subject});
 $subtitles = join("\n", map { $_->{'subtitle'} } @{$subtitle});
 
 $data->{'title'} = &tidyhtml($data->{'title'});

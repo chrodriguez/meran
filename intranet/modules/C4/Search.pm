@@ -2196,6 +2196,7 @@ sub bibdata {
     $data  = $sth->fetchrow_hashref;
 
     $sth->finish;
+=item
     $sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
     $sth->execute($bibnum);
     while (my $dat = $sth->fetchrow_hashref){
@@ -2213,7 +2214,7 @@ sub bibdata {
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
     $sth->finish;
-
+=cut
 	#Para mostrar el nivel bibliografico  
 	 my $level=getLevel($data->{'classification'});
         $data->{'classification'}= $level->{'description'};
@@ -2284,17 +2285,16 @@ sub bibitemdata {
 
   ($count, $subjects) = &subject($biblionumber);
 
-Looks up the subjects of the book with the given biblionumber. Returns
-a two-element list. C<$subjects> is a reference-to-array, where each
-element is a subject of the book, and C<$count> is the number of
-elements in C<$subjects>.
+Lo que hace es mirar la tabla temas y recuperar la combinacion de con la tabla 
+bibliosubject buscando por el numero de biblioi
 
 =cut
 #'
 sub subject {
   my ($bibnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from bibliosubject where biblionumber=?");
+  #my $sth=$dbh->prepare("Select * from bibliosubject where biblionumber=?");
+  my $sth   = $dbh->prepare("Select id, nombre from temas inner join bibliosubject on bibliosubject.subject=temas.id where  bibliosubject.biblionumber= ?");
   $sth->execute($bibnum);
   my @results;
   my $i=0;
@@ -4506,7 +4506,7 @@ sub getautor{
     return($data1);
  }
 
-sub getautoresAdicionales{
+ sub getautoresAdicionales{
     my ($biblionumber) = @_;
     my @result;
     my $dbh   = C4::Context->dbh;
