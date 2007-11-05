@@ -23,14 +23,8 @@ SSLEngine On
 SSLCertificateFile /etc/apache2/ssl/apacheINT.pem
 
 <Directory /usr/local/koha/intranet/ >
- Order deny,allow
- Allow from 10.8.0.
- Allow from 163.10.10.
- Allow from 163.10.20.
- Allow from 163.10.17.4
- Allow from 163.10.17.2
-Allow from 163.10.5.67
-Deny from all
+ Order allow,deny
+Allow from all
 </Directory>
 
 Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/"
@@ -44,7 +38,7 @@ Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/picture
 Order allow,deny
 Allow from all
 </Directory>
-ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
+#ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
 
 </VirtualHost>
 
