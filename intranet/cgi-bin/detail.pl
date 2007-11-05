@@ -45,6 +45,7 @@ foreach my $itm (@items) {
 }
 
 my $dat=bibdata($biblionumber);
+my ($subjectcount, $subject)     = &subject($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites) = &getwebsites($biblionumber);
 my ($subtitlecount,$subtitles) = &subtitle($biblionumber);
@@ -53,22 +54,26 @@ $dat->{'count'} = @items;
 $dat->{'norequests'} = $norequests;
 
 my @subjects;
-my $len= scalar(split(",",$dat->{'subject'}));
+#my $len= scalar(split(",",$dat->{'nombre'}));
 my $i= 1;
 my $coma;
 my $tema;
 my $idTema;
 my $nomTema;
-foreach my $elem (split(",",$dat->{'subject'})) {
-	if ($len==$i){$coma=""} else {$coma=","};
-	my $tema=&getTema($elem);
-	$idTema=$tema->{'id'};
-	$nomTema=$tema->{'nombre'};
-        for ($nomTema) {s/^\s+//;} # delete the spaces at the begining of the string
-       	push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
+foreach my $elem (@$subject) {
+	if ($subjectcount==$i){$coma=""} else {$coma=","};
+	my $tema;
+	$tema->{'subject'}=$elem->{'id'};
+	$tema->{'nomTema'}=$elem->{'nombre'};
+	$tema->{'separator'}=$coma;
+        for ($tema->{'nomTema'}) {s/^\s+//;} # delete the spaces at the begining of the string
+	push (@subjects,$tema);
 	$i+=1;
 }
+
+
 $dat->{'SUBJECTS'} = \@subjects;
+#$dat->{'subject'} = 1;
 
 my @autorPPAL= &getautor($dat->{'author'});
 my @autoresAdicionales=&getautoresAdicionales($biblionumber);

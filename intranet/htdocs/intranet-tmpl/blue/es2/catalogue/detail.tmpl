@@ -123,7 +123,7 @@
 
 			<!-- Comentado porq no es de biblio, sino de biblioitem <!-- TMPL_IF name="collection" --><b>Colecci&oacute;n:</b><!-- TMPL_VAR NAME="seriestitle" --><br><!-- /TMPL_IF --> -->
 			
-			<!-- TMPL_IF name="subject" -->Tema:<b> 
+			<!-- TMPL_IF name="SUBJECTS" -->Tema:<b> 
 				<!-- TMPL_LOOP NAME="SUBJECTS" -->			
 					<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectid=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="nomTema" --></a><!-- TMPL_VAR NAME=separator -->
 				<!-- /TMPL_LOOP --></b>
