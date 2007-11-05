@@ -1398,7 +1398,8 @@ my @results;
 my @key=split(' ',$search->{'subjectitems'});
 my $count=@key;
 my $i=1;
-$query="SELECT * FROM temas where((temas.nombre like ? or temas.nombre like ?)";
+#$query="SELECT * FROM temas where((temas.nombre like ? or temas.nombre like ?)";
+$query="Select distinct temas.id, temas.nombre from bibliosubject inner join temas on temas.id=bibliosubject.subject where((temas.nombre like ? or temas.nombre like ?)";
 			@bind=("$key[0]%","% $key[0]%");
 			while ($i < $count){
 					$query .= " and (temas.nombre like ? or temas.nombre like ?)";
