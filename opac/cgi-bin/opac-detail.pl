@@ -23,6 +23,7 @@ my $viewdetail = C4::Context->preference("viewDetail");
 # change back when ive fixed request.pl
 my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 my $dat                                   = &bibdata($biblionumber);
+my ($subjectcount, $subject)     = &subject($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 #esta consulta no seria necesaria, ya que este resultado no se muestra en el tmpl
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
@@ -30,21 +31,23 @@ my ($websitecount, @websites)             = &getwebsites($biblionumber);
 $dat->{'count'}=@items;
 
 my @subjects;
-my $len= scalar(split(",",$dat->{'subject'}));
+#my $len= scalar(split(",",$dat->{'subject'}));
 my $i= 1;
 my $coma;
 my $tema;
 my $idTema;
 my $nomTema;
-foreach my $elem (split(",",$dat->{'subject'})) {
-        if ($len==$i){$coma=""} else {$coma=","};
-	$tema=&getTema($elem);
-	$idTema=$tema->{'id'};
-	$nomTema=$tema->{'nombre'};
-        for ($nomTema) {s/^\s+//;} # delete the spaces at the begining of the string
-        push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
-        $i+=1;
+foreach my $elem (@$subject) {
+ if ($subjectcount==$i){$coma=""} else {$coma=","};
+ my $tema;
+ $tema->{'subject'}=$elem->{'id'};
+ $tema->{'nomTema'}=$elem->{'nombre'};
+ $tema->{'separator'}=$coma;
+ for ($tema->{'nomTema'}) {s/^\s+//;} # delete the spaces at the begining of the string
+	 push (@subjects,$tema);
+ $i+=1;
 }
+
 $dat->{'SUBJECTS'} = \@subjects;
 
 my @autorPPAL= &getautor($dat->{'author'});
@@ -77,7 +80,7 @@ $solicitarCopia = 'Solicitar Copia';
     $row++;
 }
 
-
+=item
 my @subjects;
 my $subject;
 my @subj = split /, /,($dat->{'subject'});  #split returned string into array
@@ -88,7 +91,7 @@ foreach my $subjct (@subj) {
     };
     push @subjects, $subject;
 }
-
+=cut
 
 $template->param(norequests => $norequests);
 $template->param(solicitarCopia => $solicitarCopia);
@@ -107,7 +110,7 @@ my @all=allbibitems($biblionumber,"opac");
 my $i=0;
 foreach my $tmp1 (@all){
              $all[$i]->{'SUBJECTS'}=  $dat->{'SUBJECTS'};
-             $all[$i]->{'subject'}=  $dat->{'subject'};
+             #$all[$i]->{'subject'}=  $dat->{'subject'};
 	     $all[$i]->{'author'}= \@autorPPAL;
 	     $all[$i]->{'ADDITIONAL'}=\@autoresAdicionales;
 	     $all[$i]->{'COLABS'}=\@colaboradores;

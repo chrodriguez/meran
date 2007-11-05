@@ -73,7 +73,6 @@ foreach my $elem (@$subject) {
 
 
 $dat->{'SUBJECTS'} = \@subjects;
-#$dat->{'subject'} = 1;
 
 my @autorPPAL= &getautor($dat->{'author'});
 my @autoresAdicionales=&getautoresAdicionales($biblionumber);
