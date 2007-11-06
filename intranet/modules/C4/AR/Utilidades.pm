@@ -193,15 +193,16 @@ return @results;
 }
 
 sub listadoTabla{
-my($tabla,$ind,$cant,$id,$orden)=@_;
+my($tabla,$ind,$cant,$id,$orden,$search)=@_;
 $cant=$cant+$ind;
 ($id||($id=0));
+$search=$search.'%';
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select count(*) from $tabla");
+my $sth=$dbh->prepare("select count(*) from $tabla  where nombre like '$search'");
 $sth->execute();
 my @cantidad=$sth->fetchrow_array;
 #$sth=$dbh->prepare("select * from $tabla order by $orden limit ?,?");
-$sth=$dbh->prepare("select * from $tabla order by $orden limit $ind,$cant");
+$sth=$dbh->prepare("select * from $tabla where nombre like '$search' order by $orden limit $ind,$cant");
 #$sth->execute($ind,$cant);
 $sth->execute();
 

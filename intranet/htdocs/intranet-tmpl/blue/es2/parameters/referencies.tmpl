@@ -8,6 +8,9 @@ function reloading(){
 	document.getElementById("editandoCONTENIDO").action="referencies.pl";
 	document.getElementById("editandoCONTENIDO").submit();}
 
+function search(){
+	document.getElementById("editandoCONTENIDO").action="referencies.pl";
+	document.getElementById("editandoCONTENIDO").submit();}
 </SCRIPT>
 
 <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0">
@@ -24,15 +27,16 @@ function reloading(){
 	<input type="hidden" name="editandoidentificador" value="<!-- TMPL_VAR NAME="editandoidentificador" -->" >
 	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="" >
 	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="<!-- TMPL_VAR NAME="editandoorden" -->" >
+	<INPUT type="hidden" name="search" id="editandoorden" value="<!-- TMPL_VAR NAME="search" -->" >
         <table>
 	<tr>     
 	<form id="form1" action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
-		<td><input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="searchfield" -->></td>
-		<td> <img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR 	NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onClick="document.getElementById('form1').submit()">
+		<td><input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="search" -->></td>
+		<td><a class="inputFontNormal" href="javascript:search()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/boton-buscar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a></td>
+		<!--<td> <img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR 	NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onClick="document.getElementById('form1').submit()">-->
 		 
 		<!--<input type="submit" name="submit" value="OK" class="button">-->
 		</td>
-	</form>
 	</tr>
 	</table>
         <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
@@ -67,7 +71,7 @@ function reloading(){
 	<tr>
 	<td colspan="100%">Mostrando: 
 		<INPUT type="text" size="4" name="editandocant" id="editandocant" value="<!-- TMPL_VAR NAME="editandocant" -->" > registros desde el registro nro
-		<INPUT type="text" size="4" name="editandoind" id="editandoind" value="<!-- TMPL_VAR NAME="editandoind" -->" > sobre un total de <!-- TMPL_VAR NAME="editandototal"--><a class="inputFontNormal" href="javascript:reloading()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  ALT="Recargar" hspace=0 vspace=0 border=0></a>
+		<INPUT type="text" size="4" name="editandoind" id="editandoind" value="<!-- TMPL_VAR NAME="editandoind" -->" > sobre un total de <!-- TMPL_VAR NAME="editandototal"-->&nbsp;<a class="inputFontNormal" href="javascript:reloading()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/boton-mostrar.png"  ALT="Recargar" hspace=0 vspace=0 border=0></a>
 	</td>
 	</tr>
 	</table>

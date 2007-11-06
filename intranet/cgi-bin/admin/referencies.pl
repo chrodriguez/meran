@@ -46,17 +46,20 @@ my $env;
 my @campos=obtenerCampos($tabla);
 my $ind=$input->param('editandoind');
 ($ind||($ind=0)); 
+my $search=$input->param('description');
+($search||($search='')); 
 my $cant=$input->param('editandocant');
 ($cant||($cant=20)); 
 my $orden=$input->param('editandoorden');
 ($orden||($orden=$valores->{'orden'})); 
 
 
-my ($total,@loop)= listadoTabla($tabla,$ind,$cant,$valores->{'camporeferencia'},$orden);
+my ($total,@loop)= listadoTabla($tabla,$ind,$cant,$valores->{'camporeferencia'},$orden,$search);
 $template->param(camposloop =>\@campos,
 		loop =>\@loop,
 		editandoind=>$ind,
 		editandocant=> $cant,
+		search=> $search,
 		editandoorden=> $orden,
 		editandotabla=> $tabla,
 		editandoidentificador=> $valores->{'nomcamporeferencia'},
