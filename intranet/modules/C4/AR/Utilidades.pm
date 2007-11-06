@@ -194,7 +194,7 @@ return @results;
 
 sub listadoTabla{
 my($tabla,$ind,$cant,$id,$orden,$search)=@_;
-$cant=$cant+$ind;
+#$cant=$cant+$ind;
 ($id||($id=0));
 $search=$search.'%';
 my $dbh = C4::Context->dbh;
