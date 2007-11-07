@@ -130,7 +130,7 @@ for (my $i=0; $i < $count; $i++){
 	if($regular eq 0){$regular="<font color='red'>Irregular</font>";}
 	else{$regular="---";};}
   
-  if($results->[$i]{'categorycode'} eq 'EG'){$regular="<font color='blue'>Egresado</font>";} elsif($results->[$i]{'categorycode'} eq 'DO'){$regular="<font color='blue'>Docente</font>";} elsif($results->[$i]{'categorycode'} eq 'ND'){$regular="<font color='blue'>No docente</font>";} 
+  if($results->[$i]{'categorycode'} eq 'EG'){$regular="<font color='blue'>Egresado</font>";} elsif($results->[$i]{'categorycode'} eq 'DO'){$regular="<font color='black'>Docente</font>";} elsif($results->[$i]{'categorycode'} eq 'ND'){$regular="<font color='blue'>No docente</font>";} 
 
   my %row = (
         clase => $background,
