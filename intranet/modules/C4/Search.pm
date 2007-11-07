@@ -122,7 +122,7 @@ on what is passed to it, it calls the appropriate search function.
 	&FindVol
 	&publisherList
 	&isbnList
-
+	&obtenerCategoria
 	&canDeleteBiblio
 	&canDeleteBiblioitem
 	&canDeleteItem
@@ -4264,6 +4264,24 @@ sub getcitycategory
 	if ($description) {return $description;}
 			else{return "";}
 } # sub getcitycategory
+
+sub obtenerCategoria
+{
+        my ($bor) = @_;
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT categorycode FROM persons WHERE borrowernumber = ?");
+        $sth->execute($bor);
+        my $condicion = $sth->fetchrow();
+	if (not $condicion){
+		$sth = $dbh->prepare("SELECT categorycode FROM borrowers 		WHERE borrowernumber = ?");
+       		$sth->execute($bor);
+        	$condicion = $sth->fetchrow();
+			}
+	$sth->finish();
+        return $condicion;
+                       
+} # sub getcitycategory
+
 
 sub isRegular
 {
