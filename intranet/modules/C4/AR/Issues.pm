@@ -248,7 +248,7 @@ if ($data){
 			if ($data->{'renewals'}){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 				my $maximo_de_renovaciones=$issuetype->{'renew'};
 				if ($data->{'renewals'} lt $maximo_de_renovaciones) {#quiere decir que no se supero el maximo de renovaciones
-					$plazo_actual=$issuetype->{'renewdays'};# Cuantos dias más se renovo el prestamo
+					$plazo_actual=$issuetype->{'renewdays'};# Cuantos dias mï¿½s se renovo el prestamo
 					my $vencimiento=proximoHabil($plazo_actual,0,$data->{'lastreneweddate'});
 					my $err= "Error con la fecha";
 					my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err,2));
@@ -395,7 +395,7 @@ sub estaSancionado(){
 sub chequeoDeFechas(){
 	my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
 	# La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
-	my $plazo_actual=$cantDiasRenovacion;# Cuantos dias más se puede renovar el prestamo
+	my $plazo_actual=$cantDiasRenovacion;# Cuantos dias mï¿½s se puede renovar el prestamo
 	my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
 	my $err= "Error con la fecha";
 	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err));#se saco el 2 para que ande bien.
@@ -431,7 +431,8 @@ sub renovar {
 		my $sth=$dbh->prepare("UPDATE issues SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() WHERE itemnumber = ? AND borrowernumber = ?");
 		$sth->execute($itemnumber, $borrowernumber);
 
-	my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,itemnumber,branchcode) values (?,?,NOW(),?,?,?);");
+# 	my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,itemnumber,branchcode) values (?,?,NOW(),?,?,?);");
+		my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,itemnumber,date) values (?,?,?,NOW());");
                 $sth3->execute('renew',$borrowernumber,$itemnumber);
 
 		return 1;

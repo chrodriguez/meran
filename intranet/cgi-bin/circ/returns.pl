@@ -156,30 +156,32 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 			$okMensaje.= "El c&oacute;digo de barras $barcode no existe";
 		}
 	}
-} elsif($strItemNumbers ne "") {
+}
+elsif($strItemNumbers ne "") {
 	my @arrayItemNumbers=split(/,/,$strItemNumbers);
 # si viene el itemnumber entonces esta aceptando la confirmacion => hay que hacer la devolucion o la renovacion
 	my $cant=scalar(@arrayItemNumbers);
 	for(my $i=0;$i<$cant;$i++){
-	my $itemnumber= $arrayItemNumbers[$i];
-	$iteminfo= getiteminformation( \%env, $itemnumber);
-	my $action= $query->param('action');
-	$barcode= $iteminfo->{'barcode'};
-	$query->param('borrnumber', $iteminfo->{'borrowernumber'});
+		my $itemnumber= $arrayItemNumbers[$i];
+		$iteminfo= getiteminformation( \%env, $itemnumber);
+		my $action= $query->param('action');
+		$barcode= $iteminfo->{'barcode'};
+		$query->param('borrnumber', $iteminfo->{'borrowernumber'});
 
-	if ($action eq 'return') {
-		my ($returned) = devolver($iteminfo->{'itemnumber'},$iteminfo->{'borrowernumber'});
-		$okMensaje.=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto<br>';
-	} elsif($action eq 'renew') {
-		
-		my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
-		$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
-		if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-			$ticket_string=&crearTicket($iteminfo);
+		if ($action eq 'return') {
+			my ($returned) = devolver($iteminfo->{'itemnumber'},$iteminfo->{'borrowernumber'});
+			$okMensaje.=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto<br>';
+		} 
+		elsif($action eq 'renew') {
+			my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
+			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
+			if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
+				$ticket_string=&crearTicket($iteminfo);
+			}
 		}
 	}
-	}
-} else {
+}
+else {
 
 	# if there is a list of find borrowers....
 	my $findborrower = $query->param('findborrower');

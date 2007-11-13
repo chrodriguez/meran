@@ -20,8 +20,8 @@ my  ($template, $borrowernumber, $cookie);
                              authnotrequired => 1,
                              flagsrequired => {borrow => 1},
                          });
-
-my $mail = &borrdata('',$borrowernumber)->{'emailaddress'};
+my $borrdata=&borrdata('',$borrowernumber);
+my $mail = $borrdata->{'emailaddress'};
 $template->param(MAIL => $mail);
 
 
