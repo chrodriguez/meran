@@ -26,17 +26,24 @@
 	<TD>
 		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=author&limit=<!-- TMPL_VAR name="limit" -->"><b>Autor</b></a>
 	</TD>
- 	<TD >
-                <b>Ed.</b>
-        </TD>
+        <TD >
+        <b>Edici&oacute;n</b>
+ 	</TD>
+        <TD >
+        <b>C&oacute;digo</b>
+ 	</TD>
 	<TD>
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>Préstamo</b></a>
+	<b>Préstamo</b>
 	</TD>
+        <TD >
+        <b>Renovaci&oacute;n</b>
+ 	</TD>
+
 	<TD>
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>Venc.</b></a>
+	<b>Vencimiento</b>
 	</TD>
 	<TD >
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>Dev.</b></a>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>Devoluci&oacute;n</b></a>
 	</TD>
 
 	 <td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
@@ -46,12 +53,16 @@
 <TR VALIGN=middle>
 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
 	<TD class="<!-- TMPL_VAR NAME="clase"-->">
- 		<!-- TMPL_VAR name="title" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->&nbsp;
+<a href='/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->'>
+ <!-- TMPL_VAR name="title" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->
+    </a>
 	</TD>
 	<TD class="<!-- TMPL_VAR NAME="clase"-->">
- 		<!-- TMPL_VAR name="author" -->&nbsp;
+ 		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="idauthor" ESCAPE="URL" -->&type=intra">
+		<!-- TMPL_VAR name="author" -->
+		</a>
 	</TD>
-	<TD  class="<!-- TMPL_VAR NAME="clase"-->">
+	<TD  class="<!-- TMPL_VAR NAME="clase"-->" align="center">
         <!-- TMPL_LOOP NAME="grupos" -->
 	<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --><!-- /TMPL_IF -->
 	<!-- TMPL_IF name="publicationyear" -->&nbsp;(<!-- TMPL_VAR NAME="publicationyear" -->)
@@ -60,13 +71,19 @@
 	<!-- /TMPL_LOOP -->
 
         </td>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->">
+	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center" >
+		<!-- TMPL_VAR name="barcode" -->&nbsp;
+	</TD>
+	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center" >
 		<!-- TMPL_VAR name="date_due" -->&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->">
+	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+		<!-- TMPL_VAR name="date_renew" -->&nbsp;
+	</TD>
+	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
 		<!-- TMPL_VAR name="date_fin" -->&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->">
+	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
 		<!-- TMPL_VAR name="returndate" -->&nbsp;
 	</TD>
 

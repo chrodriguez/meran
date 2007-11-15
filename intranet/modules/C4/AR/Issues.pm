@@ -74,6 +74,7 @@ FIXME
     &PrestamosMaximos
     &IssueType
     &sepuederenovar2
+    &fechaDeVencimiento
 );
 =item
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
@@ -174,6 +175,34 @@ sub devolver {
 
 
 =item
+fechaDeVencimiento recibe dos parametro, un itemnumber y la fecha de prestamo lo que hace es devolver la fecha en que vence o vencio ese prestamo
+=cut
+
+sub fechaDeVencimiento {
+my ($itemnumber,$date_due)=@_;
+my $dbh = C4::Context->dbh;
+my $sth=$dbh->prepare("Select * from issues where itemnumber = ? and date_due = ? ");
+$sth->execute($itemnumber,$date_due);
+my $data= $sth->fetchrow_hashref;
+if ($data){
+	my $issuetype=IssueType($data->{'issuecode'}); 
+	my $plazo_actual;
+	
+	if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 $plazo_actual=$issuetype->{'renewdays'};
+		 return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
+	} 
+	else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
+		 $plazo_actual=$issuetype->{'daysissues'};
+		 return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
+		
+	}
+
+}
+}
+
+
+=item
 vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha en que vence el prestamo
 =cut
 
@@ -201,6 +230,7 @@ if ($data){
 
 }
 }
+
 
 =item
 sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false

@@ -66,11 +66,14 @@ for (my $i=0;$i<$count;$i++){
 	$line{title}=$issues->[$i]->{'title'};
 	$line{unititle}=$issues->[$i]->{'unititle'};
 	$line{author}=$issues->[$i]->{'author'};
+	$line{idauthor}=$issues->[$i]->{'id'};
+	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
+	$line{barcode}=$issues->[$i]->{'barcode'};
  	$line{date_due}=format_date($issues->[$i]->{'date_due'});
-# Miguel 11-11-07 - Se estaba pasando la fecha de prestamo
- 	my $df=C4::Date::format_date_in_iso(vencimiento($issues->[$i]->{'itemnumber'})); #C4::AR::Issues.pm
+ 	my $df=C4::AR::Issues::fechaDeVencimiento($issues->[$i]->{'itemnumber'},$issues->[$i]->{'date_due'});
     	$line{'date_fin'} = format_date($df);
-
+	$line{date_renew}="-";
+ 	if ($issues->[$i]->{'renewals'}){$line{date_renew}=format_date($issues->[$i]->{'lastreneweddate'});}
 	$line{returndate}=format_date($issues->[$i]->{'returndate'});
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	($line{grupos})=Grupos($issues->[$i]->{'biblionumber'},'intra');
