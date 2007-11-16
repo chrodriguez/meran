@@ -365,14 +365,12 @@ return (2,$resultado,$desde,$fecha,$branch,$apertura,$cierre);
 }
 
 =item
-
 Funcion que cancela una reserva
 Se invoca con dos parametros cancelar-reserva($biblioitem,$borrowernumber);
 un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya que son los dos campos con los que identifico una reserva sin duplicados
-
 =cut
 
-sub cancelar_reserva{
+sub cancelar_reserva {
 
 	my ($biblioitemnumber,$borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;

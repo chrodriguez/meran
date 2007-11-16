@@ -17,6 +17,7 @@ use vars qw(@EXPORT @ISA);
 		&hasDebts 
 		&permitionToLoan 
 		&insertSanction 
+		&insertPendingSanction 
 		&getSanctionTypeCode 
 		&hasSanctions 
 		&getBorrowersSanctions 
@@ -77,7 +78,7 @@ sub SanctionDays {
 	$sth->finish;
 
 #	TEST
-#	open(F,">>/tmp/tmp");
+#	open(F,">>/tmp/fin");
 #	printf F "Days = ".$days."\n";
 #	printf F "SanstionsDays = ".$sanctiondays."\n";
 #	printf F "daysExceeded- = ".$daysExceeded."\n";
@@ -191,8 +192,64 @@ sub sanctionSelect {
 sub insertSanction {
   #Esta funcion da de alta una sancion
   my ($dbh, $sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays)=@_;
-  my $sth=$dbh->prepare("INSERT INTO sanctions (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) VALUES (?,?,?,?,?,?)");
-  $sth->execute($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays);
+ #Hay varios casos:
+ #Si no existe una tupla con una posible sancion y debe ser sancionado por $delaydays
+ #Si existe se sanciona con la matoy cantidad de dias
+ #Busco si tiene una sancion pendiente
+ my $sth1 = $dbh->prepare("select * from sanctions where borrowernumber = ? and startdate is null and enddate is null");
+    $sth1->execute($borrowernumber);
+if (my $res= $sth1->fetchrow_hashref) 
+ {#Hay sancion pendiente
+ 
+ my $ddays=$res->{'delaydays'};
+ my $edate=$res->{'enddate'};
+ my $sanctiontype=$res->{'sanctiontypecode'};
+
+	if ($res->{'delaydays'} < $delaydays ){ #La Sancion pendiente es menor a la actual, recalculo la fecha de fin
+	$ddays=$delaydays;
+	$sanctiontype=$sanctiontypecode;
+	my $err;
+	$edate= C4::Date::format_date_in_iso(DateCalc($startdate,"+ ".$ddays." days",\$err));
+	
+	}
+ my $sth2 = $dbh->prepare("Update sanctions set sanctiontypecode = ? , delaydays = ?,startdate=?,enddate=?  where borrowernumber = ? and startdate is null and enddate is null");
+ $sth2->execute($sanctiontype,$ddays,$startdate,$edate,$borrowernumber);
+	  
+	}
+  else { #No tiene sanciones pendientes
+ 
+ my $sth3=$dbh->prepare("INSERT INTO sanctions (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) VALUES (?,?,?,?,?,?)");
+  
+  $sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays);
+      }
+  }
+
+sub insertPendingSanction {
+  #Esta funcion da de alta una sancion pendiente 
+  my ($dbh, $sanctiontypecode, $reservenumber, $borrowernumber, $delaydays)=@_;
+ #Hay varios casos:
+ #Si no existe una tupla con una posible sancion se crea una
+ #Si ya existe una posible sancion se deja la mayor
+
+ #Busco si tiene una sancion pendiente
+ my $sth1 = $dbh->prepare("select * from sanctions where borrowernumber = ? and startdate is null and enddate is null");
+    $sth1->execute($borrowernumber);
+ if (my $res= $sth1->fetchrow_hashref) 
+ {#Hay sancion pendiente
+
+if ($res->{'delaydays'} < $delaydays ){ #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion
+  my $sth2 = $dbh->prepare("Update sanctions set delaydays = ?, sanctiontypecode = ?  where borrowernumber = ? and startdate is null and enddate is null");
+	$sth2->execute($delaydays,$sanctiontypecode,$borrowernumber);
+	 
+	 }
+	}
+  else { #No tiene sanciones pendientes
+
+
+my $sth3=$dbh->prepare("INSERT INTO sanctions (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) VALUES (?,?,?,NULL,NULL,?)");
+  
+   $sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $delaydays);
+  }
 }
 
 sub getSanctionTypeCode {

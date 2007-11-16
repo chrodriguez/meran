@@ -136,11 +136,8 @@ sub devolver {
 		my $hasdebts=0;
 		my $sanction=0;
 		my $fechaFinSancion;
-		if (hasDebts($dbh, $borrowernumber)) {
-# El borrower tiene libros vencidos en su poder (es moroso)
-			$hasdebts = 1;
-		} else {
-# Si el usuario no tiene deudas (libros en su poder) hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
+
+# Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
 			my $issuetype=IssueType($iteminformation->{'issuecode'});
 			my $daysissue=$issuetype->{'daysissues'}; 
 			
@@ -152,18 +149,31 @@ sub devolver {
 
 
 
-			if ($sanctionDays) {
+			if ($sanctionDays gt 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
 				my $sanctiontypecode = getSanctionTypeCode($dbh, $iteminformation->{'issuecode'}, $categorycode);
+
+
+
+			if (hasDebts($dbh, $borrowernumber)) {
+# El borrower tiene libros vencidos en su poder (es moroso)
+			$hasdebts = 1;
+			 insertPendingSanction($dbh,$sanctiontypecode, undef, $borrowernumber, $sanctionDays);
+			}
+			else
+			{
 				my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
+			
 				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err));
 				insertSanction($dbh, $sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
+
 #Se borran las reservas del usuario sancionado
 				C4::AR::Reserves::cancelar_reservas($borrowernumber);
 			}
-		}
+			}
+		
 ### Final del tema sanciones
 
 
