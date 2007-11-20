@@ -2,7 +2,7 @@
 
 # script to generate cards for the borrowers
 # written 03/2005
-# by Luciano Iglesias - li@info.unlp.edu.ar - LINTI, Facultad de Informática, UNLP Argentina
+# by Luciano Iglesias - li@info.unlp.edu.ar - LINTI, Facultad de Informï¿½tica, UNLP Argentina
 
 # This file is part of Koha.
 #
