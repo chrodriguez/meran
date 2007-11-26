@@ -22,6 +22,9 @@ $VERSION = 0.01;
 	&shelfContentsGenerator
 	&estadisticasPdfGenerator
 	&hitoricoPrestamosPdfGenerator
+	&cardGenerator
+	&batchCardsGenerator
+	&generateCard 
 );
 
 
@@ -486,3 +489,147 @@ sub imprimirFinal(){
 
 
 
+
+
+################CARNETS############################################33
+
+sub completeBorrowerNumber {
+        my ($bornum) = @_;
+	my $str="";
+	my $i=0;
+	my $aux;
+	while ($bornum > 0) {	
+		$aux= $bornum % 10;
+		$str= $aux.$str;
+		$bornum= ($bornum - ($bornum % 10)) / 10;
+		$i++;
+		}
+	
+	while ($i < 11) {
+		$str= "0".$str;
+		$i++;									
+		}
+	return($str);
+	}
+
+
+sub cardGenerator {
+        my ($bornum) = @_;
+	my $pdf = newPdf();
+        $pdf->newpage(1);
+        $pdf->openpage(1);
+	#Hoja A4 :  X diferencia 254 - Y diferencia 160 
+	generateCard($bornum,14,14,$pdf);
+	return ($pdf);
+	}	
+
+#  Genera los carnets a partir de una busqueda
+
+sub batchCardsGenerator {
+        my ($count,@results) = @_;
+#	my $cantidad=$count;
+#	my $hojas= $count / 8;
+	my $i=0;
+	my $pag=1;
+	my $pdf = newPdf();
+        
+	while ($i<$count)
+	{
+	$pdf->newpage($pag);
+        $pdf->openpage($pag);
+	#Hoja A4 :  X diferencia 254 - Y diferencia 160 
+	
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},14,14,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},14,174,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},14,334,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},14,494,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},14,654,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,14,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,174,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,334,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,494,$pdf);$i++;}
+	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,654,$pdf);$i++;}
+	$pag++;
+	}
+	return ($pdf);
+	}	
+
+
+#genera a partir de una coordenada
+sub generateCard {
+	 my ($bornum,$x,$y,$pdf) = @_;
+
+	my $dbh = C4::Context->dbh;
+	#Datos del usuario
+	my $sth=$dbh->prepare("SELECT borrowernumber, documenttype, documentnumber, studentnumber, firstname, surname, branchcode,  categories.description FROM borrowers left join categories on borrowers.categorycode=categories.categorycode 
+				WHERE borrowernumber=?");
+	$sth->execute($bornum);
+	my ($borrowernumber, $documenttype, $documentnumber, $studentnumber, $firstname, $surname,$branchcode, $categorydes) = $sth->fetchrow_array;
+	$sth->finish;
+
+	#Datos de la biblioteca
+	my $sth2=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, branchcategories.categoryname  
+	FROM branches inner join branchrelations on branches.branchcode=branchrelations.branchcode inner join branchcategories on branchcategories.categorycode = branchrelations.categorycode WHERE branches.branchcode=?");
+	   $sth2->execute($branchcode);
+my ($branchname,$branchaddress1,$branchaddress2,$branchaddress3,$branchphone,$branchfax,$branchemail,$categoryname) = $sth2->fetchrow_array;
+	$sth2->finish;
+
+
+	my ($pagewidth, $pageheight) = $pdf->getPageDimensions();
+	$pdf->setSize(7);
+																          #Insert a picture of the borrower if 
+        my $picturesDir= C4::Context->config("picturesdir");
+        my $foto= undef;
+	if (opendir(DIR, $picturesDir)) {
+ 		my $pattern= $bornum.".*";
+		my @file = grep { /$pattern/ } readdir(DIR);
+		$foto= join("",@file) if scalar(@file);
+		closedir DIR;
+	}
+	if ($foto){
+		$pdf->addImg($picturesDir.'/'.$foto, $x+154, $pageheight - ($y+75));
+		} else {
+		$pdf->drawRect($x+154, $pageheight - ($y-10), $x+239 , $pageheight - ($y+75));
+		$pdf->addRawText("3 x 3 cm.",$x+176,$pageheight - ($y+36));
+		}
+
+	 ####
+         
+	 #Insert a rectangle to delimite the card
+	 $pdf->drawRect($x-12, $pageheight - ($y-12) , $x+241 , $pageheight - ($y+142)); # 9x5,5 cm = 3.51x2.145 inches = 253x154 pdf-units
+	 
+	 #Insert a barcode to the card
+	 $pdf->drawBarcode($x+19,$pageheight - ($y+146),undef,1,"3of9",completeBorrowerNumber($borrowernumber),undef, 10, 10, 30, 10);
+	
+	 #Write the borrower data into the pdf file
+	 $pdf->setSize(7);
+	 $pdf->setFont("Arial-Bold");
+         $pdf->addRawText(uc($categoryname),$x,$pageheight - ($y+4));
+	 $pdf->addRawText(uc($branchname),$x,$pageheight - ($y+11));
+	 $pdf->addRawText("BIBLIOTECA",$x,$pageheight - ($y+18));
+	 $pdf->setFont("Arial");
+	 $pdf->setSize(6);
+
+	 my $address=$branchaddress1;
+	 if($branchaddress2 ne ''){$address.="\n".$branchaddress2;}
+	 if($branchaddress3 ne ''){$address.="\n".$branchaddress3;}
+	 $pdf->addRawText($address,$x,$pageheight - ($y+25));
+
+	 if (($branchphone ne '')||($branchfax ne '')){
+	 my $aux="";
+
+	 if ($branchphone eq $branchfax){$aux="Tel/Fax ".$branchphone;}
+	 	else{
+			if ($branchphone ne '') { $aux=" Tel ".$branchphone;}
+			if ($branchfax ne '') { $aux=" Fax ".$branchfax;}
+			}
+	 $pdf->addRawText($aux,$x,$pageheight - ($y+31));
+	 
+	 }
+	 
+	 $pdf->setSize(8);
+	 $pdf->addRawText("Apellido: $surname",$x+4,$pageheight - ($y+57));
+	 $pdf->addRawText("Nombre: $firstname",$x+4,$pageheight - ($y+65));
+	 $pdf->addRawText("Tipo de Lector: $categorydes",$x+4,$pageheight - ($y+73));
+	 $pdf->addRawText("$documenttype: $documentnumber",$x+4,$pageheight - ($y+81));
+	}

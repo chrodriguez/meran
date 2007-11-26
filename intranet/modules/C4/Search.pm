@@ -73,6 +73,7 @@ on what is passed to it, it calls the appropriate search function.
 	&newsearch
 	&CatSearch
 	&BornameSearch 
+	&BornameSearchForCard
 	&ItemInfo 
 	&KeywordSearch 
 	&subsearch
@@ -112,6 +113,7 @@ on what is passed to it, it calls the appropriate search function.
 	&getalllanguages 
 	&getbranchname 
 	&getborrowercategory 
+	&getallborrowercategorys 
 	&infoitem 
 	&itemsfrombiblioitem 
 	&allitems 
@@ -3833,6 +3835,20 @@ sub getborrowercategory
 	return $description;
 } # sub getborrowercategory
 
+sub getallborrowercategorys
+{
+	my $dbh = C4::Context->dbh;
+	my %categories;
+	my $sth = $dbh->prepare("SELECT description,categorycode FROM categories");
+	$sth->execute();
+	  while (my $cat=$sth->fetchrow_hashref) {
+	  $categories{$cat->{'categorycode'}}=$cat;
+	  }
+	$sth->finish();
+	return (\%categories);
+} # sub getallorrowercategorys
+
+
 #Cantidad  maxima de prestamos
 sub getmaxissues {
 	my ($issuetype) = @_;
@@ -4650,7 +4666,6 @@ sub itemdata2
         return $res;
 }  
 
-
 sub SearchSig
 {
 my ($signature) = @_;
@@ -4664,6 +4679,46 @@ $sth->execute("$signature%","% $signature%");
  $sth->finish;
  return(scalar(@results),@results);					   
 }
+
+sub BornameSearchForCard 
+{
+my ($surname1,$surname2,$category,$branch,$orden) = @_;
+my @bind=();
+my $dbh = C4::Context->dbh;
+my $query = "SELECT borrowers.*,categories.description as categoria from borrowers left join categories on categories.categorycode = borrowers.categorycode where branchcode = ? ";
+push (@bind,$branch);
+
+if (($category ne '')&& ($category ne 'Todos')) { $query.= " and borrowers.categorycode = ? ";
+						   push (@bind,$category);}
+
+if (($surname1 ne '') || ($surname2 ne '')) 
+{
+if ($surname2 eq '') { $query.= " and surname like ? ";
+                       push (@bind,"$surname1%"); }
+	else { $query.= " and surname between ? and ? ";
+                push (@bind,$surname1,$surname2);
+		   }
+}
+
+
+if ($orden ne '') { $query.= " order by  ? ";
+                       push (@bind,$orden); }
+		   else {$query.= " order by  surname ";}
+
+my $sth = $dbh->prepare($query);
+$sth->execute(@bind);
+ my @results;
+ my $i=0;
+ my $class='par';
+ while (my $data=$sth->fetchrow_hashref){
+	$results[$i]=$data; 
+	$results[$i]->{'clase'}= $class;
+	if($class eq 'par'){$class='impar'}else{$class='par'};
+	$i++; }
+ $sth->finish;
+ return(scalar(@results),@results);					   
+}
+
 
 END { }       # module clean-up code here (global destructor)
 
