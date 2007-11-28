@@ -561,10 +561,10 @@ sub generateCard {
 
 	my $dbh = C4::Context->dbh;
 	#Datos del usuario
-	my $sth=$dbh->prepare("SELECT borrowernumber, documenttype, documentnumber, studentnumber, firstname, surname, branchcode,  categories.description FROM borrowers left join categories on borrowers.categorycode=categories.categorycode 
+	my $sth=$dbh->prepare("SELECT cardnumber, borrowernumber, documenttype, documentnumber, studentnumber, firstname, surname, branchcode,  categories.description FROM borrowers left join categories on borrowers.categorycode=categories.categorycode 
 				WHERE borrowernumber=?");
 	$sth->execute($bornum);
-	my ($borrowernumber, $documenttype, $documentnumber, $studentnumber, $firstname, $surname,$branchcode, $categorydes) = $sth->fetchrow_array;
+	my ($cardnumber, $borrowernumber, $documenttype, $documentnumber, $studentnumber, $firstname, $surname,$branchcode, $categorydes) = $sth->fetchrow_array;
 	$sth->finish;
 
 	#Datos de la biblioteca
@@ -599,7 +599,7 @@ my ($branchname,$branchaddress1,$branchaddress2,$branchaddress3,$branchphone,$br
 	 $pdf->drawRect($x-12, $pageheight - ($y-12) , $x+241 , $pageheight - ($y+142)); # 9x5,5 cm = 3.51x2.145 inches = 253x154 pdf-units
 	 
 	 #Insert a barcode to the card
-	 $pdf->drawBarcode($x+19,$pageheight - ($y+146),undef,1,"3of9",completeBorrowerNumber($borrowernumber),undef, 10, 10, 30, 10);
+	 $pdf->drawBarcode($x+19,$pageheight - ($y+146),undef,1,"3of9",$cardnumber,undef, 10, 10, 30, 10);
 	
 	 #Write the borrower data into the pdf file
 	 $pdf->setSize(7);

@@ -10,6 +10,7 @@ function generarCarnets(){
 	document.cards.surname2.value='<!-- TMPL_VAR NAME=surname2  -->';
 	document.cards.branch.value='<!-- TMPL_VAR NAME=branch  -->';
 	document.cards.category.value='<!-- TMPL_VAR NAME=category  -->';
+	document.cards.regular.value='<!-- TMPL_VAR NAME=regular  -->';
 
 	document.cards.op.value='pdf';
 	document.cards.submit();
@@ -35,16 +36,21 @@ function generarCarnets(){
 	
 	<tr class="inputFontNormal">
 	<td>Apellido:</td>
-	<td>Desde:&nbsp; <input type='text' id='surname1' name='surname1' value='<!-- TMPL_VAR NAME=surname1  -->'></td>
-	<td>Hasta:&nbsp; <input type='text' id='surname2' name='surname2' value='<!-- TMPL_VAR NAME=surname2  -->'></td>
+	<td>
+	Desde:&nbsp; <input type='text' id='surname1' name='surname1' value='<!-- TMPL_VAR NAME=surname1  -->'><br>
+	Hasta:&nbsp; <input type='text' id='surname2' name='surname2' value='<!-- TMPL_VAR NAME=surname2  -->'></td>
 	</tr>
+	 <tr class="inputFontNormal">
+	 <td>Unidad de informaci&oacute;n:</td>
+	 <td colspan="2"><!-- TMPL_VAR NAME=unidades  --></td>
+	 </tr>
 	<tr class="inputFontNormal">
 	<td>Categor&iacute;as:</td>
 	<td><!-- TMPL_VAR NAME=categories  --></td>
 	</tr>
-	<tr class="inputFontNormal">
-	<td>Unidad de informaci&oacute;n:</td>
-	<td><!-- TMPL_VAR NAME=unidades  --></td>
+	<tr>
+	<td class="inputFontNormal">Regularidad: </td>
+	<td> <!-- TMPL_VAR NAME=regulares  --></td>
 	</tr>
 </table>
 	<input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
@@ -54,33 +60,35 @@ function generarCarnets(){
 <table border="0" cellspacing="0" cellpadding="0"  width="90%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
-	<td><a class="inputFontNormal" href="users-cards.pl?orden=surname&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Apellido</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=firstname&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Nombre</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=streetaddress&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Direcci&oacute;n</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=cardnumber&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Tarjeta de Id.</a></td>
+	<td><a class="inputFontNormal" href="users-cards.pl?orden=surname&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Apellido</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=firstname&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Nombre</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=streetaddress&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Direcci&oacute;n</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=cardnumber&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Tarjeta de Id.</a></td>
 		<td class="inputFontNormal" >Ciudad</td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=phone&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Telefono</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=emailaddress&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">E-mail</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=dateenrolled&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Ingreso</a></td>
-		<td><a class="inputFontNormal" href="users-cards.pl?orden=category&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->">Categoria</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=phone&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Telefono</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=emailaddress&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">E-mail</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=dateenrolled&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Ingreso</a></td>
+		<td><a class="inputFontNormal" href="users-cards.pl?orden=category&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->">Categoria</a></td>
+		<td class="inputFontNormal" >Regularidad</td>
 		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 	</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr>
 		<td class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
 		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --> 
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=firstname --> 
 		</td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=streetaddress --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=cardnumber --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=city --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=phone --></td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=categoria --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=streetaddress --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=cardnumber --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=city --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=phone --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=categoria --></td>
+  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"><b><!-- TMPL_VAR NAME=regular --></b></td>
  		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
   	</tr>
 

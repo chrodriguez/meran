@@ -34,6 +34,7 @@ use C4::AR::VirtualLibrary; #Matias: Bilbioteca Virtual
 use C4::AR::AnalysisBiblio; #Matias: Analiticas
 use Date::Manip;
 use C4::Date;
+use C4::Koha;
 
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -4682,28 +4683,30 @@ $sth->execute("$signature%","% $signature%");
 
 sub BornameSearchForCard 
 {
-my ($surname1,$surname2,$category,$branch,$orden) = @_;
+my ($surname1,$surname2,$category,$branch,$orden,$regular) = @_;
 my @bind=();
 my $dbh = C4::Context->dbh;
-my $query = "SELECT borrowers.*,categories.description as categoria from borrowers left join categories on categories.categorycode = borrowers.categorycode where branchcode = ? ";
+my $query = "SELECT borrowers.*,categories.description as categoria, persons.regular  from borrowers left join persons on borrowers.borrowernumber=persons.borrowernumber left join categories on categories.categorycode = borrowers.categorycode where borrowers.branchcode = ? ";
 push (@bind,$branch);
 
 if (($category ne '')&& ($category ne 'Todos')) { $query.= " and borrowers.categorycode = ? ";
 						   push (@bind,$category);}
 
+if (($regular ne '')&& ($regular ne 'Todos')) { $query.= " and persons.regular = ? ";
+						   push (@bind,$regular);}
 if (($surname1 ne '') || ($surname2 ne '')) 
 {
-if ($surname2 eq '') { $query.= " and surname like ? ";
+if ($surname2 eq '') { $query.= " and borrowers.surname like ? ";
                        push (@bind,"$surname1%"); }
-	else { $query.= " and surname between ? and ? ";
+	else { $query.= " and borrowers.surname between ? and ? ";
                 push (@bind,$surname1,$surname2);
 		   }
 }
 
 
-if ($orden ne '') { $query.= " order by  ? ";
-                       push (@bind,$orden); }
-		   else {$query.= " order by  surname ";}
+if ($orden ne '') { $query.= " order by  ? ASC";
+                       push (@bind,"borrowers.".$orden); }
+		   else {$query.= " order by  borrowers.surname ASC";}
 
 my $sth = $dbh->prepare($query);
 $sth->execute(@bind);
@@ -4712,6 +4715,10 @@ $sth->execute(@bind);
  my $class='par';
  while (my $data=$sth->fetchrow_hashref){
 	$results[$i]=$data; 
+	$results[$i]->{'city'}=getcity($results[$i]->{'city'});
+	if ($results[$i]->{'regular'} eq 1){$results[$i]->{'regular'}="<font color='green'>Regular</font>";}
+	elsif($results[$i]->{'regular'} eq 0){$results[$i]->{'regular'}="<font color='red'>Irregular</font>";}
+	else{$results[$i]->{'regular'}="---";};
 	$results[$i]->{'clase'}= $class;
 	if($class eq 'par'){$class='impar'}else{$class='par'};
 	$i++; }

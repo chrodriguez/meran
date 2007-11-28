@@ -198,11 +198,11 @@ my($tabla,$ind,$cant,$id,$orden,$search)=@_;
 ($id||($id=0));
 $search=$search.'%';
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select count(*) from $tabla  where nombre like '$search'");
+my $sth=$dbh->prepare("select count(*) from $tabla  where $orden like '$search'");
 $sth->execute();
 my @cantidad=$sth->fetchrow_array;
 #$sth=$dbh->prepare("select * from $tabla order by $orden limit ?,?");
-$sth=$dbh->prepare("select * from $tabla where nombre like '$search' order by $orden limit $ind,$cant");
+$sth=$dbh->prepare("select * from $tabla where $orden like '$search' order by $orden limit $ind,$cant");
 #$sth->execute($ind,$cant);
 $sth->execute();
 

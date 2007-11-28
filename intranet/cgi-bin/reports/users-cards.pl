@@ -37,12 +37,21 @@ my  $op=$input->param('op');
 my  $surname1=$input->param('surname1');
 my  $surname2=$input->param('surname2');
 my  $category=$input->param('category');
+my  $regular=$input->param('regular');
 my  $branch=$input->param('branch');
+my  $count=0;
+my  @results=();
+
+
+if ($category eq ''){$category='Todos';}
+if ($regular eq ''){$regular='Todos';}
+
+if ($op ne ''){
+ ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular);
+		}
 
 if ($op eq 'pdf') {
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
-
-my ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden);
 my $tmpFileName= "carnets.pdf";
 my $pdf = batchCardsGenerator($count,@results);
 print "Content-type: application/pdf\n";
@@ -52,7 +61,6 @@ print $pdf->Finish();
 }
 else
 {
-if ($category eq ''){$category='Todos';}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/users-cards.tmpl",
@@ -106,11 +114,26 @@ my $CGIcategories=CGI::scrolling_list(  -name      => 'category',
                                  );
 
 
+my @select_regular;
+my %select_regular;
+#Lleno los datos del select de regulares
+push @select_regular, '1';
+push @select_regular, '0';
+push @select_regular, 'Todos';
+$select_regular{'1'} = 'Regular';
+$select_regular{'0'} = 'Irregular';
+$select_regular{'Todos'} = 'Todos';
+
+my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
+                                        -id        => 'regular',
+                                        -values    => \@select_regular,
+					-defaults  => $regular,
+                                        -labels    => \%select_regular,
+                                        -size      => 1,
+					);
 
 if ($op eq 'search'){
 #Se realiza la busqueda si al algun campo no vacio
-
-my ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden);
 $template->param(
 		RESULTSLOOP=>\@results,
                 cantidad=>$count
@@ -126,6 +149,8 @@ $template->param(
 		orden => $orden,
 		surname1=>$surname1,
 		surname2=>$surname2,
+		regular=>$regular,
+		regulares=>$CGIregular
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
