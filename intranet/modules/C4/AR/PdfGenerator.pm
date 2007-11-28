@@ -586,12 +586,12 @@ my ($branchname,$branchaddress1,$branchaddress2,$branchaddress3,$branchphone,$br
 		$foto= join("",@file) if scalar(@file);
 		closedir DIR;
 	}
-	if ($foto){
-		$pdf->addImg($picturesDir.'/'.$foto, $x+154, $pageheight - ($y+75));
-		} else {
+	 #if ($foto){
+	#	$pdf->addImg($picturesDir.'/'.$foto, $x+154, $pageheight - ($y+75));
+	#	} else {
 		$pdf->drawRect($x+154, $pageheight - ($y-10), $x+239 , $pageheight - ($y+75));
 		$pdf->addRawText("3 x 3 cm.",$x+176,$pageheight - ($y+36));
-		}
+	#	}
 
 	 ####
          
