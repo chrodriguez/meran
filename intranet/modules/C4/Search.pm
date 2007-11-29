@@ -4683,17 +4683,15 @@ $sth->execute("$signature%","% $signature%");
 
 sub BornameSearchForCard 
 {
-my ($surname1,$surname2,$category,$branch,$orden,$regular) = @_;
+my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
 my @bind=();
 my $dbh = C4::Context->dbh;
-my $query = "SELECT borrowers.*,categories.description as categoria, persons.regular  from borrowers left join persons on borrowers.borrowernumber=persons.borrowernumber left join categories on categories.categorycode = borrowers.categorycode where borrowers.branchcode = ? ";
+my $query = "SELECT borrowers.*,categories.description as categoria from borrowers left join categories on categories.categorycode = borrowers.categorycode where borrowers.branchcode = ? ";
 push (@bind,$branch);
 
 if (($category ne '')&& ($category ne 'Todos')) { $query.= " and borrowers.categorycode = ? ";
 						   push (@bind,$category);}
 
-if (($regular ne '')&& ($regular ne 'Todos')) { $query.= " and persons.regular = ? ";
-						   push (@bind,$regular);}
 if (($surname1 ne '') || ($surname2 ne '')) 
 {
 if ($surname2 eq '') { $query.= " and borrowers.surname like ? ";
@@ -4703,25 +4701,45 @@ if ($surname2 eq '') { $query.= " and borrowers.surname like ? ";
 		   }
 }
 
+if (($legajo1 ne '') || ($legajo2 ne '')) 
+{
+if ($legajo2 eq '') { $query.= " and borrowers.studentnumber like ? ";
+                       push (@bind,"$legajo1%"); }
+	else { $query.= " and borrowers.studentnumber between ? and ? ";
+                push (@bind,$legajo1,$legajo2);
+		   }
+}
 
-if ($orden ne '') { $query.= " order by  ? ASC";
-                       push (@bind,"borrowers.".$orden); }
-		   else {$query.= " order by  borrowers.surname ASC";}
+if ($orden ne '') { $query.= " order by  borrowers.$orden ASC ";}
+		   else {$query.= " order by  borrowers.surname ASC ";}
 
 my $sth = $dbh->prepare($query);
 $sth->execute(@bind);
  my @results;
- my $i=0;
+ my $i=-1;
  my $class='par';
  while (my $data=$sth->fetchrow_hashref){
+	my $reg=C4::AR::Reserves::isRegular($data->{'borrowernumber'});
+	my $pasa=1;
+
+	if (($regular ne '')&& ($regular ne 'Todos')) { #Se tiene que filtrar por regularidad??
+ 	  if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
+		}
+	if ($pasa == 1){ #Pasa el filtro
+	$i++; 
 	$results[$i]=$data; 
 	$results[$i]->{'city'}=getcity($results[$i]->{'city'});
-	if ($results[$i]->{'regular'} eq 1){$results[$i]->{'regular'}="<font color='green'>Regular</font>";}
-	elsif($results[$i]->{'regular'} eq 0){$results[$i]->{'regular'}="<font color='red'>Irregular</font>";}
+	if ($results[$i]->{'categorycode'} eq 'ES'){
+		$results[$i]->{'regular'}= $reg;
+		if ($results[$i]->{'regular'} eq 1){$results[$i]->{'regular'}="<font color='green'>Regular</font>";}
+		elsif($results[$i]->{'regular'} eq 0){$results[$i]->{'regular'}="<font color='red'>Irregular</font>";}
+	}
 	else{$results[$i]->{'regular'}="---";};
+
 	$results[$i]->{'clase'}= $class;
 	if($class eq 'par'){$class='impar'}else{$class='par'};
-	$i++; }
+	}
+	}
  $sth->finish;
  return(scalar(@results),@results);					   
 }

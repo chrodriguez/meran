@@ -36,6 +36,8 @@ my  $orden=$input->param('orden');
 my  $op=$input->param('op');
 my  $surname1=$input->param('surname1');
 my  $surname2=$input->param('surname2');
+my  $legajo1=$input->param('legajo1');
+my  $legajo2=$input->param('legajo2');
 my  $category=$input->param('category');
 my  $regular=$input->param('regular');
 my  $branch=$input->param('branch');
@@ -47,7 +49,7 @@ if ($category eq ''){$category='Todos';}
 if ($regular eq ''){$regular='Todos';}
 
 if ($op ne ''){
- ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular);
+ ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
 		}
 
 if ($op eq 'pdf') {
@@ -149,6 +151,8 @@ $template->param(
 		orden => $orden,
 		surname1=>$surname1,
 		surname2=>$surname2,
+		legajo1=>$legajo1,
+		legajo2=>$legajo2,
 		regular=>$regular,
 		regulares=>$CGIregular
 		);
