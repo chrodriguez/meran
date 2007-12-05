@@ -57,7 +57,7 @@ sub SanctionDays {
 	my $delta= &DateCalc($date_due,$returndate,\$err);
 	my $days= &Delta_Format($delta,0,"%dh");
 
-	#Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un día
+	#Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dï¿½a
 	if ($issuecode eq 'ES'){$days++;}
 
 	my $daysExceeded= $days;
@@ -283,40 +283,40 @@ sub delSanction {
 
 
 sub sanciones{
+	my ($orden)=@_;
  #Esta sancion de toda las sanciones que hay
-my $linecolor1='par';
-my $linecolor2='impar';
+	my $linecolor1='par';
+	my $linecolor2='impar';
+	my $class='';
 
-my $class='';
-
-my $dbh = C4::Context->dbh;
-my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
+	my $dbh = C4::Context->dbh;
+	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
 	from borrowers inner join sanctions on borrowers.borrowernumber = sanctions.borrowernumber 
 	inner join categories on categories.categorycode = borrowers.categorycode 
 	left join sanctiontypes on sanctiontypes.sanctiontypecode = sanctions.sanctiontypecode 
 	left join issuetypes on issuetypes.issuecode = sanctiontypes.issuecode 
-	where (startdate <= now()) AND (enddate >= now()) group by cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, startdate, enddate, categories.description, issuetypes.description order by surname, firstname, borrowers.borrowernumber";
-my $sth=$dbh->prepare($query);
-$sth->execute();
-my @sanctionsarray;
-my $borrowernumber;
-my $res = $sth->fetchrow_hashref;
-while ($res) {
-	my $res1= $res;
-        ($class eq $linecolor1) ? ($class=$linecolor2) : ($class=$linecolor1);
-	$res1->{'enddate'}=  format_date($res->{'enddate'});
-	$res1->{'startdate'}=  format_date($res->{'startdate'});
-	$res1->{'sanctionnumber'}=  $res->{'sanctionnumber'};
-	$res1->{'clase'}= $class;
-	$borrowernumber= $res->{'borrowernumber'};
-	my @issueslist;
-	while ($res && ($borrowernumber eq $res->{'borrowernumber'})) {
-		push (@issueslist,$res->{'issuecodedescription'});
-		$res = $sth->fetchrow_hashref;
+	where (startdate <= now()) AND (enddate >= now()) group by cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, startdate, enddate, categories.description, issuetypes.description order by ?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($orden);
+	my @sanctionsarray;
+	my $borrowernumber;
+	my $res = $sth->fetchrow_hashref;
+	while ($res) {
+		my $res1= $res;
+        	($class eq $linecolor1) ? ($class=$linecolor2) : ($class=$linecolor1);
+		$res1->{'enddate'}=  format_date($res->{'enddate'});
+		$res1->{'startdate'}=  format_date($res->{'startdate'});
+		$res1->{'sanctionnumber'}=  $res->{'sanctionnumber'};
+		$res1->{'clase'}= $class;
+		$borrowernumber= $res->{'borrowernumber'};
+		my @issueslist;
+		while ($res && ($borrowernumber eq $res->{'borrowernumber'})) {
+			push (@issueslist,$res->{'issuecodedescription'});
+			$res = $sth->fetchrow_hashref;
+		}
+		$res1->{'issuecodedescription'}= join(', ',@issueslist);
+		push (@sanctionsarray, $res1);
 	}
-	$res1->{'issuecodedescription'}= join(', ',@issueslist);
-	push (@sanctionsarray, $res1);
-} 
-$sth->finish;
-return @sanctionsarray;
+	$sth->finish;
+	return @sanctionsarray;
 }
