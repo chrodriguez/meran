@@ -38,7 +38,7 @@ my $dbh = C4::Context->dbh;
 my $responsable=$input->param('userloggedname');
 my $flags= &getuserflags($responsable ,$dbh);
 
-if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})){
+if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'updatesanctions'})){
 my $query = "select * from sanctions"; 					
 my $sth=$dbh->prepare($query);
 $sth->execute();

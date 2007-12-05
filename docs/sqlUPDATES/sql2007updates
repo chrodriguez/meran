@@ -29,4 +29,6 @@ INSERT INTO `tablasDeReferenciasInfo` (`orden`, `referencia`, `similares`) VALUE
 --Cambio en Sanciones-
 
  ALTER TABLE `sanctiontypesrules` CHANGE `order` `orden` INT( 11 ) NOT NULL DEFAULT '1';
+-- Modifico el bit 10 que va a permitir eliminar sanciones
+ UPDATE `userflags` SET `flag` = 'updatesanctions',`flagdesc` = 'Actualizar sanciones' WHERE `userflags`.`bit` =10 ;
 

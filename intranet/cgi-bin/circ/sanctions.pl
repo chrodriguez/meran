@@ -46,11 +46,11 @@ my ($template, $borrowernumber, $cookie)
 if ($borrowernumber eq 0){#es el kohaadmin
 	$template->param(superlibrarian => 1);
 }
-else{
+else{ #es superlibrarian o puede actualizar sanciones??
 	my $data=borrdata('',$borrowernumber);
 	my $dbh = C4::Context->dbh;
 	my $flags= &getuserflags($data->{'cardnumber'} ,$dbh);
-	$template->param(superlibrarian => $flags->{'superlibrarian'});
+	$template->param(superlibrarian => $flags->{'superlibrarian'}||$flags->{'updatesanctions'});
 }
 #
 

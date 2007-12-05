@@ -18,7 +18,7 @@ my ($template, $loggedinuser, $cookie)
 			     				parameters => 1, borrowers => 1,
 							permissions =>1, reserveforothers=>1,
 							borrow => 1, reserveforself => 1,
-							editcatalogue => 1, updatecharges => 1, },
+							editcatalogue => 1, updatesanctions => 1, },
 			     debug => 1,
 			     });
 
