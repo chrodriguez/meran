@@ -37,18 +37,14 @@ my $input=new CGI;
 my $bornum=$input->param('bornum');
 #get borrower details
 my $data=borrdata('',$bornum);
-my $order=$input->param('order');
-my $order2=$order;
-if ($order2 eq ''){
-  $order2="date_due desc";
-}
+my $orden=$input->param('order')||"date_due desc";
 my $limit=$input->param('limit');
 if ($limit eq 'full'){
   $limit=0;
 } else {
   $limit=50;
 }
-my ($count,$issues)=allissues($bornum,$order2,$limit);
+my ($count,$issues)=allissues($bornum,$orden,$limit);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
