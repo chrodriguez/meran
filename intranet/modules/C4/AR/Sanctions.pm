@@ -288,16 +288,16 @@ sub sanciones{
 	my $linecolor1='par';
 	my $linecolor2='impar';
 	my $class='';
-
+	$orden=&C4::AR::Utilidades::verificarValor($orden);
 	my $dbh = C4::Context->dbh;
 	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
 	from borrowers inner join sanctions on borrowers.borrowernumber = sanctions.borrowernumber 
 	inner join categories on categories.categorycode = borrowers.categorycode 
 	left join sanctiontypes on sanctiontypes.sanctiontypecode = sanctions.sanctiontypecode 
 	left join issuetypes on issuetypes.issuecode = sanctiontypes.issuecode 
-	where (startdate <= now()) AND (enddate >= now()) group by cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, startdate, enddate, categories.description, issuetypes.description order by ?";
+	where (startdate <= now()) AND (enddate >= now()) group by cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, startdate, enddate, categories.description, issuetypes.description order by ".$orden;
 	my $sth=$dbh->prepare($query);
-	$sth->execute($orden);
+	$sth->execute();
 	my @sanctionsarray;
 	my $borrowernumber;
 	my $res = $sth->fetchrow_hashref;

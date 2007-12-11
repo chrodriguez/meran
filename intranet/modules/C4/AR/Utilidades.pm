@@ -3,7 +3,7 @@ package C4::AR::Utilidades;
 #Este modulo provee funcionalidades varias sobre las tablas de referencias en general
 #Escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ use C4::Date;
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios);
+@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor);
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
@@ -473,4 +473,21 @@ $sth->execute($biblioitem->{'serie'},'serie');
 
 }
 
+
+=item
+verificarValor
+Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
+=cut
+sub verificarValor(){
+	my ($valor)=@_;
+	my @array=split(/;/,$valor);
+	if(scalar(@array) > 1){
+		#por si viene un ; saco las palabras peligrosas, que son las de sql.
+		$valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
+	}
+	$valor=~ s/%|"|-|=|\*|'|;|-(<,>)/\\/g;
+	$valor=~ s/%3b|%3d|%27|%25/\\/g;#Por aca no entra llegan los caracteres ya traducidos
+	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>/ /gi;
+	return $valor;
+}
 1;

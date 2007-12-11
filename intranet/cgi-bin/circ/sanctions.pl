@@ -27,12 +27,13 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Koha;
 use C4::Search;
+use C4::AR::Sanctions;
 
 my $input = new CGI;
 
 my $orden=$input->param('orden')||'surname';
 
-my @sanctionsarray= C4::AR::Sanctions::sanciones($orden); #Se cambio para que la consulta no este en el .pl
+my @sanctionsarray= &sanciones($orden); #Se cambio para que la consulta no este en el .pl
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({	template_name => "circ/sanctions.tmpl",
 				query => $input,
