@@ -359,8 +359,8 @@ my $sth=$dbh->prepare(" Select * from reserves inner join issues on 				issues.i
 			and reserves.borrowernumber=? and reserves.constrainttype='P' and returndate is null");
 
 $sth->execute($itemnumber,$borrowernumber);
-my $data= $sth->fetchrow_hashref;
-if ($data){
+
+if (my $data= $sth->fetchrow_hashref){
 
 	my $issuetype=IssueType($data->{'issuecode'});
 	
@@ -381,7 +381,7 @@ if ($data){
 
 			if ($data->{'renewals'}){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 				my $maximo_de_renovaciones=$issuetype->{'renew'};
-				if ($data->{'renewals'} lt $maximo_de_renovaciones) {#quiere decir que no se supero el maximo de renovaciones
+				if ($data->{'renewals'} < $maximo_de_renovaciones) {#quiere decir que no se supero el maximo de renovaciones
 					if(chequeoDeFechas($issuetype->{'renewdays'},$data->{'lastreneweddate'},$intervalo_vale_renovacion)){
 						return 1;
 					}
