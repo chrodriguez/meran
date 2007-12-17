@@ -62,7 +62,7 @@
 		<!-- TMPL_VAR name="author" -->
 		</a>
 	</TD>
-	<TD  class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+	<TD  class="<!-- TMPL_VAR NAME='clase'-->" align="center">
         <!-- TMPL_LOOP NAME="grupos" -->
 	<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --><!-- /TMPL_IF -->
 	<!-- TMPL_IF name="publicationyear" -->&nbsp;(<!-- TMPL_VAR NAME="publicationyear" -->)
@@ -71,19 +71,19 @@
 	<!-- /TMPL_LOOP -->
 
         </td>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center" >
-		<!-- TMPL_VAR name="barcode" -->&nbsp;
+	<TD class="<!-- TMPL_VAR NAME='clase'-->" align="center" >
+		<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center" >
+	<TD class="<!-- TMPL_VAR NAME='clase'-->" align="center" >
 		<!-- TMPL_VAR name="date_due" -->&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+	<TD class="<!-- TMPL_VAR NAME='clase'-->" align="center">
 		<!-- TMPL_VAR name="date_renew" -->&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+	<TD class="<!-- TMPL_VAR NAME='clase'-->" align="center">
 		<!-- TMPL_VAR name="date_fin" -->&nbsp;
 	</TD>
-	<TD class="<!-- TMPL_VAR NAME="clase"-->" align="center">
+	<TD class="<!-- TMPL_VAR NAME='clase'-->" align="center">
 		<!-- TMPL_VAR name="returndate" -->&nbsp;
 	</TD>
 

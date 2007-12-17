@@ -2244,7 +2244,7 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 sub bibitemdata {
     my ($bibitem) = @_;
     my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select biblio.biblionumber,biblio.author,biblio.title,biblio.notes,biblioitems.notes as bnotes,biblioitems.biblioitemnumber, biblioitems.volume,biblioitems.number,biblioitems.classification ,biblioitems.isbn,biblioitems.isbn2,biblioitems.lccn ,biblioitems.issn,biblioitems.dewey ,biblioitems.subclass,biblioitems.publishercode, biblioitems.publicationyear ,biblioitems.volumeddesc, biblioitems.illus ,biblioitems.pages ,biblioitems.size, biblioitems.place ,biblioitems.url ,biblioitems.seriestitle,itemtypes.description, itemtypes.itemtype,biblioitems.idCountry, biblioitems.idSupport, biblioitems.idLanguage  
+    my $sth   = $dbh->prepare("Select biblio.biblionumber,biblio.author as author,biblio.title as title,biblio.notes,biblioitems.notes as bnotes,biblioitems.biblioitemnumber as biblioitemnumber, biblioitems.volume,biblioitems.number,biblioitems.classification ,biblioitems.isbn,biblioitems.isbn2,biblioitems.lccn ,biblioitems.issn,biblioitems.dewey ,biblioitems.subclass,biblioitems.publishercode, biblioitems.publicationyear ,biblioitems.volumeddesc, biblioitems.illus ,biblioitems.pages ,biblioitems.size, biblioitems.place ,biblioitems.url ,biblioitems.seriestitle,itemtypes.description, itemtypes.itemtype,biblioitems.idCountry, biblioitems.idSupport, biblioitems.idLanguage  
     
     from biblio inner join  biblioitems on  biblio.biblionumber = biblioitems.biblionumber 
         inner join itemtypes on biblioitems.itemtype = itemtypes.itemtype 
