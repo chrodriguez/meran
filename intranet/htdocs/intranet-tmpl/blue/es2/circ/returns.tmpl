@@ -588,18 +588,18 @@ Sin sanciones
 	<td align=center bgcolor="<!-- TMPL_VAR Name="color" -->">
 		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Ejemplar'); return false;"><!-- TMPL_VAR Name="barcode" --></a>
 	</td>
-	<td bgcolor="<!-- TMPL_VAR Name="color" -->">
+	<td bgcolor="<!-- TMPL_VAR Name='color' -->">
 		<!-- TMPL_VAR Name="itemtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="itemunititle" -->:&nbsp;<!-- TMPL_VAR NAME="itemunititle" --><!-- /TMPL_IF -->
 	</td>
-	<td bgcolor="<!-- TMPL_VAR Name="color" -->">
+	<td bgcolor="<!-- TMPL_VAR Name='color' -->">
 		<!-- TMPL_VAR Name="itemauthor" -->
 	</td>
-	<td align=center bgcolor="<!-- TMPL_VAR Name="color" -->">
+	<td align=center bgcolor="<!-- TMPL_VAR Name='color' -->">
 		<!-- TMPL_VAR Name="itemtype" -->
 	</td>
-	<td bgcolor="<!-- TMPL_VAR Name="color" -->">
+	<td bgcolor="<!-- TMPL_VAR Name='color' -->">
 		<!-- TMPL_IF Name="duedate" -->
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->','Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->','Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 		<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR Name="bornum" -->
 		<!-- /TMPL_IF -->
@@ -611,12 +611,12 @@ Sin sanciones
 
 </table>
 
-<!-- TMPL_IF name="ticket_string" -->
+<!-- TMPL_LOOP name="ticket_string" -->
 	<script>
-		window.open ("receipt.pl<!-- TMPL_VAR name="ticket_string" -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("receipt.pl<!-- TMPL_VAR name='ticket_string' -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	</script>
 
-<!-- /TMPL_IF-->
+<!-- /TMPL_LOOP-->
 
 <script language="JavaScript">
 

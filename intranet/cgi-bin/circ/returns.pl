@@ -92,6 +92,7 @@ my $loop=scalar(@chkbox);
 my $chkall=$query->param('selectAll');
 my $acc=$query->param('action');
 my $ticket_string="";
+my @tickets;
 
 if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 # si viene el barcode entonces esta intentando hacer la devolucion o renovacion => se le pregunta por una confirmacion
@@ -177,6 +178,7 @@ elsif($strItemNumbers ne "") {
 			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
 			if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticket_string=&crearTicket($iteminfo);
+				$tickets[$i]->{'ticket_string'}=$ticket_string;
 			}
 		}
 	}
@@ -295,7 +297,7 @@ $template->param(
 		strItemNumbers =>$strItemNumbers,
 		chkbox     =>join(",",@chkbox),
 		chkall  =>$chkall,
-		ticket_string => $ticket_string,
+		ticket_string => \@tickets,
 );
 
 # actually print the page!
