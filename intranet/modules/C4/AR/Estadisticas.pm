@@ -11,6 +11,7 @@ require Exporter;
 use C4::Search;
 use C4::Context;
 use C4::Date;
+use Date::Manip;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(&usuarios
@@ -50,8 +51,94 @@ use vars qw(@EXPORT @ISA);
 	   &cantidadUsuariosPrestamos
 	   &cantidadUsuariosReservas
 	   &cantidadUsuariosRenovados
+	   &historicoDeBusqueda
 );
 
+sub historicoDeBusqueda(){
+        my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios)=@_;
+
+        my $dbh = C4::Context->dbh;
+	my $olddate;
+	my $newdate;	
+	my $query2;
+	my $filtro1;
+	my $filtro2;
+	my $filtro3;
+
+	$query2 = " SELECT count(*) as cant
+			FROM busquedas b INNER JOIN historialBusqueda hb 
+			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
+			ON (b.borrower = bor.borrowernumber) LEFT JOIN categories c
+			ON (c.categorycode = bor.categorycode) ";
+	
+        my $query ="	SELECT bor.borrowernumber,bor.surname, bor.firstname, bor.cardnumber, 
+			b.fecha, hb.campo, hb.valor, c.description
+			FROM busquedas b INNER JOIN historialBusqueda hb 
+			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
+			ON (b.borrower = bor.borrowernumber) LEFT JOIN categories c
+			ON (c.categorycode = bor.categorycode) ";
+
+	if(($fechaIni ne "")&&($fechaFin ne "")&&($catUsuarios ne "SIN SELECCIONAR")){
+
+		$fechaIni=format_date_in_iso($fechaIni)." 00:00:00";
+		$fechaFin=format_date_in_iso($fechaFin)." 23:59:59";
+
+		$filtro1 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
+		$filtro1 .= " AND bor.categorycode = '".$catUsuarios."'";
+		$query2 .= $filtro1;
+		$query .= $filtro1;
+
+	}else{
+		if(($fechaIni ne "")&&($fechaFin ne "")){
+
+			$fechaIni=format_date_in_iso($fechaIni)." 00:00:00";
+			$fechaFin=format_date_in_iso($fechaFin)." 23:59:59";
+
+			$filtro2 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
+			$query2 .= $filtro2;
+			$query .= $filtro2;
+		}else{
+			if($catUsuarios ne "SIN SELECCIONAR"){
+				$filtro3 = " WHERE bor.categorycode = '".$catUsuarios."'";
+				$query2 .= $filtro3;
+				$query .= $filtro3;
+			}
+		}
+	}	
+
+	$query .= " limit ?,?";
+
+        my $sth=$dbh->prepare($query);
+        $sth->execute($ini,$cantR);
+
+	my $sth2=$dbh->prepare($query2);
+	$sth2->execute();
+	my $cantidad=$sth2->fetchrow_hashref;
+
+	my @results;
+	my $olddate;
+	my $newdate;
+
+	while (my $data=$sth->fetchrow_hashref){
+ 		
+		$olddate= $data->{'fecha'};
+		
+		Date_Init("DateFormat=US");
+		$olddate = ParseDate($olddate);
+		$newdate = UnixDate($olddate,'%m/%d/%Y %H:%M');
+
+		$data->{'fecha'}= $newdate;
+
+		if($data->{'borrowernumber'} eq ""){
+			$data->{'surname'}= "USUARIO NO LOGUEADO";
+		}
+
+		push(@results,$data);
+        };
+	
+	return($cantidad->{'cant'},@results);      	
+
+}   
 
 sub historicoPrestamos{
 	#Se realiza un Historial de Prestamos, con los siguientes datos:
@@ -110,7 +197,7 @@ sub historicoPrestamos{
 
 
 #
-#Cuenta la cantidad de prestamos realizados durante el año que ingresa por parametro
+#Cuenta la cantidad de prestamos realizados durante el aï¿½o que ingresa por parametro
 sub prestamosAnual{
         my ($branch,$year)=@_;
  	my $clase='par';

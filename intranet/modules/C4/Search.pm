@@ -381,11 +381,14 @@ HTML.
 sub catalogsearch {
 
 
-	my ($env,$type,$search,$num,$offset,$orden)=@_;
+	my ($borrowernumber,$env,$type,$search,$num,$offset,$orden)=@_;
 	my $dbh = C4::Context->dbh;
 	#  foreach my $key (%$search){
 	#    $search->{$key}=$dbh->quote($search->{$key});
 	#  }
+	
+	loguearBusqueda($borrowernumber,$env,$type,$search);
+
 	my ($count,@results);
 
 	#  print STDERR "Doing a search \n";
@@ -437,6 +440,98 @@ sub catalogsearch {
 	}
 
 	return ($count,@results);
+}
+
+sub loguearBusqueda(){	
+	my ($borrowernumber,$env,$type,$search)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+	my $old_pe = $dbh->{PrintError}; # save and reset
+	my $old_re = $dbh->{RaiseError}; # error-handling
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+  	$dbh->{RaiseError} = 0; #si lo dejo, para la aplicacion y muestra error
+
+	#comienza la transaccion
+	{
+
+	my $query = "	INSERT INTO `busquedas` ( `borrower` , `fecha` )
+			VALUES ( ?, NOW( ));";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber);
+
+	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM busquedas";
+	$sth=$dbh->prepare($query2);
+	$sth->execute();
+
+	my $id=$sth->fetchrow;
+
+	my $query3;
+	my $campo;
+	my $valor;
+
+	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor` )
+			VALUES (?, ?, ?);";
+
+	$sth=$dbh->prepare($query3);
+
+
+	if($search->{'keyword'} ne ""){
+		$sth->execute($id, 'keyword', $search->{'keyword'});
+	}
+
+	if($search->{'dictionary'} ne ""){
+		$sth->execute($id, 'dictionary', $search->{'dictionary'});
+	}
+
+	if($search->{'virtual'} ne ""){
+		$sth->execute($id, 'virtual', $search->{'virtual'});
+	}
+
+	if($search->{'signature'} ne ""){
+		$sth->execute($id, 'signature', $search->{'signature'});
+	}	
+
+	if($search->{'analytical'} ne ""){
+		$sth->execute($id, 'analytical', $search->{'analytical'});
+	}
+
+	if($search->{'itemnumber'} ne ""){
+		$sth->execute($id, 'itemnumber', $search->{'itemnumber'});
+	}
+
+	if($search->{'class'} ne ""){
+		$sth->execute($id, 'class', $search->{'class'});
+	}
+
+	if($search->{'subjectitems'} ne ""){
+		$sth->execute($id, 'subjectitems', $search->{'subjectitems'});
+	}
+
+	if($search->{'isbn'} ne ""){
+		$sth->execute($id, 'isbn', $search->{'isbn'});
+	}
+
+	if($search->{'subjectid'} ne ""){
+		$sth->execute($id, 'subjectid', $search->{'subjectid'});
+	}
+
+	if($search->{'author'} ne ""){
+		$sth->execute($id, 'author', $search->{'author'});
+	}
+
+	if($search->{'title'} ne ""){
+		$sth->execute($id,'title', $search->{'title'});
+	}
+		
+
+	$dbh->commit ();
+	};
+	$dbh->rollback () if $@;    # rollback if transaction failed
+	$dbh->{AutoCommit} = 1;    # restore auto-commit mode
+
+	#falta ver bien el tema de la transaccion, pq si no se dispara el error y la segunda consulta falla
+	#se hace rollback solo de la segunda
 }
 
 =item KeywordSearch

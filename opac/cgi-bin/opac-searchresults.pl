@@ -165,7 +165,7 @@ my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
 
-($count, @results) = &catalogsearch($env,'opac',\%search,$number_of_results,$startfrom,$orden);
+($count, @results) = &catalogsearch($borrowernumber,$env,'opac',\%search,$number_of_results,$startfrom,$orden);
 
 
 ################### AGREGADO POR LUCIANO ##########################

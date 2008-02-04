@@ -439,3 +439,6 @@ font-size: 12px;
 }
 
 	
+ul li {
+      list-style-type:none;
+}
