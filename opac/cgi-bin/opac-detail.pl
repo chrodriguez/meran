@@ -58,14 +58,14 @@ $dat->{'author'} = \@autorPPAL;
 $dat->{'ADDITIONAL'}= \@autoresAdicionales;
 $dat->{'COLABS'}=\@colaboradores;
 
-my $norequests = 1;
+my $norequests = 0;
 my $solicitarCopia;
 my $row = 1;
 foreach my $itm (@items) {
 #     $norequests = 0 unless $itm->{'notforloan'};
 # $norequests = 0 unless $itm->{'itemnotforloan'};
 #si existe un item q no es para sala
-if ($itm->{'itemnotforloan'} == 0 or $itm->{'itemnotforloan'} == '' ){$norequests = 0}
+if ($itm->{'itemnotforloan'} == 1 ){$norequests = 1}
 if ($itm->{'wthdrawn'} == 7){
 $norequests = 1;
 $solicitarCopia = 'Solicitar Copia';

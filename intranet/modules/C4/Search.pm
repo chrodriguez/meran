@@ -1647,7 +1647,7 @@ sub ItemInfo {
     }
 
 				
-   if ($data->{'notforloan'} eq '1'){
+   if ($data->{'itemnotforloan'} eq '1'){
             $datedue="<font color='blue'>Para Sala</font>";
     }
 

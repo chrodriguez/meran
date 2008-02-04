@@ -20,7 +20,9 @@ var MENU_ITEMS = [
 		['Usuarios Potenciales', '/cgi-bin/koha/members-home2.pl'],
 		['------------------------', null],
 		['Agregar Usuario', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=adult'],
-		['Agregar Organización', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation']
+		['Agregar Organización', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation'],
+		['------------------------', null],
+		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']
 	],
 
 	['Circulación', '/cgi-bin/koha/circ/circulation.pl', null,
