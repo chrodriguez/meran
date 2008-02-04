@@ -387,7 +387,9 @@ sub catalogsearch {
 	#    $search->{$key}=$dbh->quote($search->{$key});
 	#  }
 	
-	loguearBusqueda($borrowernumber,$env,$type,$search);
+	if($type eq "opac"){
+		loguearBusqueda($borrowernumber,$env,$type,$search);
+	}
 
 	my ($count,@results);
 

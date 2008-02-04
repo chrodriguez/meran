@@ -32,3 +32,33 @@ INSERT INTO `tablasDeReferenciasInfo` (`orden`, `referencia`, `similares`) VALUE
 -- Modifico el bit 10 que va a permitir eliminar sanciones
  UPDATE `userflags` SET `flag` = 'updatesanctions',`flagdesc` = 'Actualizar sanciones' WHERE `userflags`.`bit` =10 ;
 
+
+----------------------------------------------------------
+--Tablas agregadas para el logueo de las busquedas
+-- 
+-- Estructura de tabla para la tabla `busquedas`
+-- 
+
+CREATE TABLE `busquedas` (
+  `idBusqueda` int(11) NOT NULL auto_increment,
+  `borrower` int(11) default NULL,
+  `fecha` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`idBusqueda`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=74 ;
+
+
+- 
+-- Estructura de tabla para la tabla `historialBusqueda`
+-- 
+
+CREATE TABLE `historialBusqueda` (
+  `idHistorial` int(11) NOT NULL auto_increment,
+  `idBusqueda` int(11) NOT NULL,
+  `campo` varchar(100) NOT NULL,
+  `valor` varchar(100) NOT NULL,
+  PRIMARY KEY  (`idHistorial`),
+  KEY `FK_idBusqueda` (`idBusqueda`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=49 ;
+
+
+
