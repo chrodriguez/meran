@@ -221,7 +221,7 @@ $search{'front'}=$query->param('front');
 my $num=10;
 my @results;
 my $count;
-($count,@results)=catalogsearch(\%env,'intra',\%search,$num,$startfrom,$orden);
+($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$startfrom,$orden);
 
 ################### AGREGADO POR LUCIANO ##########################
 if (($dictionary)||($signature)) {
