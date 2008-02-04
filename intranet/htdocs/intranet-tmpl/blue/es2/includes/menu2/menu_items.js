@@ -1,16 +1,16 @@
 /* Tigra Menu items structure */
 var MENU_ITEMS = [
 	['Inicio', '/cgi-bin/koha/mainpage.pl'],
-	['Catï¿½logo', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet', null,
-		['Bï¿½squeda  Avanzada', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet'],
-		['Bï¿½squeda MARC', '/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet'],
+	['Catálogo', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet', null,
+		['Búsqueda  Avanzada', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet'],
+		['Búsqueda MARC', '/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet'],
 		['------------------------', null],
 		['Estantes Virtuales', '/cgi-bin/koha/shelves.pl?startfrom=0'],
 		['Agregar Libro', '/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet'],
 		['Mantenimiento', '/cgi-bin/koha/maint/catmaintain.pl'],
-		['Importaciï¿½n MARC', '/cgi-bin/koha/importacionMarc.pl']
+		['Importación MARC', '/cgi-bin/koha/importacionMarc.pl']
 ,
-		['Importaciï¿½n', '/cgi-bin/koha/importacion.pl']
+		['Importación', '/cgi-bin/koha/importacion.pl']
 ,
 		['Adquisici&oacute;n de ej.', '/cgi-bin/koha/loadmodules.pl?module=acquisitions']
 
@@ -20,28 +20,27 @@ var MENU_ITEMS = [
 		['Usuarios Potenciales', '/cgi-bin/koha/members-home2.pl'],
 		['------------------------', null],
 		['Agregar Usuario', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=adult'],
-		['Agregar Organizaciï¿½n', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation']
-		['Agregar Organizaciï¿½n', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation'],
+		['Agregar Organización', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation'],
 		['------------------------', null],
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']
 	],
 
-	['Circulaciï¿½n', '/cgi-bin/koha/circ/circulation.pl', null,
-		['Prï¿½stamos', '/cgi-bin/koha/circ/circulation.pl'],
+	['Circulación', '/cgi-bin/koha/circ/circulation.pl', null,
+		['Préstamos', '/cgi-bin/koha/circ/circulation.pl'],
 		['Devol. y  Renov.', '/cgi-bin/koha/circ/returns.pl'],
 		['Transferencias', '/cgi-bin/koha/circ/branchtransfers.pl'],
 		['Sanciones', '/cgi-bin/koha/circ/sanctions.pl']
 	],
-	['Parï¿½metros', null, null,
+	['Parámetros', null, null,
 		['Preferencias',  '/cgi-bin/koha/admin/systempreferences.pl', null,
 			['Preferencias', '/cgi-bin/koha/admin/systempreferences.pl'],
 			['------------------------', null],
-			['Reportes Genï¿½ricos', '/cgi-bin/koha/admin/generic_reports.pl'],
+			['Reportes Genéricos', '/cgi-bin/koha/admin/generic_reports.pl'],
 			['Unid. de informaci&oacute;n', '/cgi-bin/koha/admin/branches.pl'],
 			['Tablas de Referencias', '/cgi-bin/koha/admin/refs.pl'],
 			['Tipos de documentos', '/cgi-bin/koha/admin/itemtypes.pl'],
-			['Categorï¿½a de usuarios', '/cgi-bin/koha/admin/categorie.pl'],
-			['Tipos de prï¿½stamos', '/cgi-bin/koha/admin/issuetypes.pl'],
+			['Categoría de usuarios', '/cgi-bin/koha/admin/categorie.pl'],
+			['Tipos de préstamos', '/cgi-bin/koha/admin/issuetypes.pl'],
 			['Valores autorizados', '/cgi-bin/koha/admin/authorised_values.pl'],
 			['Feriados', '/cgi-bin/koha/admin/feriados.pl'],
 			['Sanciones', '/cgi-bin/koha/admin/sanctions.pl'],
@@ -53,13 +52,13 @@ var MENU_ITEMS = [
 			['Servidores Z39.50', '/cgi-bin/koha/admin/z3950servers.pl']
 		],
 		['Herramientas', null, null,
-			['Exportaciï¿½n', '/cgi-bin/koha/export/marc.pl'],
-			['Importaciï¿½n', '/cgi-bin/koha/import/breeding.pl']
+			['Exportación', '/cgi-bin/koha/export/marc.pl'],
+			['Importación', '/cgi-bin/koha/import/breeding.pl']
 		]
 	],
 	['Reportes', null, null,
 		['Todos', '/cgi-bin/koha/reports-home.pl'],
-		['Reportes Genï¿½ricos', '/cgi-bin/koha/reports/generic_reports.pl'],
+		['Reportes Genéricos', '/cgi-bin/koha/reports/generic_reports.pl'],
 		['-------Reportes-------', null],
 		['Reporte diario (hoy)', '/cgi-bin/koha/stats.pl?time=today'],
 		['Reporte diario (ayer)', '/cgi-bin/koha/stats.pl?time=yesterday'],
@@ -74,11 +73,10 @@ var MENU_ITEMS = [
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl'],
 		['-----Estad&iacute;sticas-----', null],
 		['Disp. de Ejem.','/cgi-bin/koha/reports/availability.pl'],
-		['Historico de Prï¿½stamos.','/cgi-bin/koha/reports/historico_Prestamos.pl'],
-		['Historico de Busquedas en OPAC.','/cgi-bin/koha/reports/logueoBusqueda.pl'],
+		['Historico de Préstamos.','/cgi-bin/koha/reports/historico_Prestamos.pl'],
 		['Estad. de Prestamos.','/cgi-bin/koha/reports/estadisticas.pl']
 	],
 	['Ayuda', null, null,
 		['Acerca de', '/cgi-bin/koha/about.pl']
 	]
-];
+]; 

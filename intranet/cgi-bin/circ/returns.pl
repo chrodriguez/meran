@@ -48,6 +48,9 @@ my ($template, $loggedinuser, $cookie)
 			flagsrequired => {circulate => 1},
 			});
 
+open(A, ">>/tmp/debug.txt");
+print A "creo el archivo desde returns.pl \n";
+
 sub crearTicket(){
 	my ($iteminfo)=@_;
 	my %env;
@@ -159,6 +162,7 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 	}
 }
 elsif($strItemNumbers ne "") {
+print A "elseif strItemNumbers <> blanco ".$strItemNumbers."\n";
 	my @arrayItemNumbers=split(/,/,$strItemNumbers);
 # si viene el itemnumber entonces esta aceptando la confirmacion => hay que hacer la devolucion o la renovacion
 	my $cant=scalar(@arrayItemNumbers);
@@ -237,13 +241,15 @@ if ($bornum) {
 		}
 	}
 
+
+print A "llama a hasSanctions \n";
 ####Tiene sanciones el usuario?###
 my $sanctions = hasSanctions($bornum);
 $template->param(sanctions       => $sanctions);
 ####
 
 } else { # else -- if ($bornum)
-
+print A "entro a else \n";
 	my @values;
 	my %labels;
 	if ($borrowerslist) {
