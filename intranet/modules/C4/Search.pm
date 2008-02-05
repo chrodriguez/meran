@@ -2122,8 +2122,14 @@ my $i=0;
 	#
 
 	$results[$i]->{'notforloan'}= ((($results[$i]->{'fl'}+$results[$i]->{'issue'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
+	
+	if ($results[$i]->{'wthdrawn'} == 7){
+	$results[$i]->{'notforloan'} = 1;
+	$results[$i]->{'solicitarcopia'} = 1;
+	}	
 
- 	   if (($type ne 'intranet')&&(C4::Context->preference("avail") eq 0))
+
+	   if (($type ne 'intranet')&&(C4::Context->preference("avail") eq 0))
 	#if (($type ne 'intranet'))
 	       {
 	       $results[$i]->{'unavailable'}=($results[$i]->{'total'} eq  $results[$i]->{'unav'});
