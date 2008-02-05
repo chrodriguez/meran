@@ -1944,7 +1944,8 @@ sub allitems {
 
   my @results;
 
-  my $issue=0;
+  my $issue=0;  
+  my $reserve=0;
   my $available=0;
   my $notforloan=0;
   my $forloan=0;
@@ -1959,6 +1960,7 @@ sub allitems {
     my $returndate = '';
     my $reminderdate='';
     my $issued=0;
+    my $reserved=0;
     my $renew=0;	
     my $borr=0;
 
@@ -1983,46 +1985,45 @@ sub allitems {
 
    $isth->finish;
    ##
-
     ## Esta Reservado?? 
     my $rsth=$dbh->prepare("SELECT  * FROM reserves left join  borrowers on reserves.borrowernumber=borrowers.borrowernumber WHERE reserves.itemnumber = ? and constrainttype is NULL");
     $rsth->execute($data->{'itemnumber'});
     if (my $rdata=$rsth->fetchrow_hashref){
+	$reserved=1;
 	$borr=$rdata->{'borrowernumber'};
 	$reminderdate=format_date($rdata->{'reminderdate'});
       if ($type eq "intranet") { 
       $datedue ="Reservado a <STRONG><A href='moremember.pl?bornum=".$rdata->{'borrowernumber'}."'>".$rdata->{'firstname'}." ".$rdata->{'surname'}."</A></STRONG>"; 
       }
       else {$datedue="<b>Reservado<b>";}
-    }
+   	$reserve++;
+	}
    $rsth->finish;
    ##
     
-    if (($datedue eq '')&&($data->{'notforloan'} eq '1')){
+    if (($datedue eq '')&&($data->{'notforloan'} eq '1')) {
         $datedue="<font size=2 color='blue'>SALA DE LECTURA</font>";
-	$notforloan++;
-	$available++;
+	if ($data->{'wthdrawn'} eq '0') {$notforloan++;}
     }
 
      if ($data->{'wthdrawn'} ne '0'){
              $datedue.="<font size=2 color='red'>".getAvail($data->{'wthdrawn'})->{'description'}."</font>";
 	             if ($data->{'wthdrawn'} eq '2'){ $shared++;} # compartido
 		     else {
-		     if ($data->{'wthdrawn'} ne '3'){$unavailable++;}}
+		     $unavailable++;}
 		     }
 					   
  
 
     if ($datedue eq ''){
         $datedue="<font size=2 color='green'>PRESTAMO</font>";
-        $available++;
 	$forloan++;
     }
 
     my $forloan2;
     my $notforloan2;
 
-    if ($data->{'wthdrawn'}){
+    if ($data->{'wthdrawn'} ne 0){
 	    $forloan2=0;
 	    $notforloan2=0;
     } elsif ($data->{'notforloan'}){ 
@@ -2033,12 +2034,12 @@ sub allitems {
 	    $notforloan2=0;
     }
 		
-    push(@results,{ bulk => $data->{"bulk"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , reminderdate => $reminderdate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, wthdrawn => $data->{'wthdrawn'}, biblioitemnumber => $bib, itemnumber => $data->{'itemnumber'}, borr => $borr , renew=>$renew} );
+    push(@results,{ bulk => $data->{"bulk"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , reminderdate => $reminderdate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, reserved => $reserved, wthdrawn => $data->{'wthdrawn'}, biblioitemnumber => $bib, itemnumber => $data->{'itemnumber'}, borr => $borr , renew=>$renew} );
 
   $total++;
   }
   $sth->finish;
-  return($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,@results);
+  return($total,$forloan,$notforloan,$unavailable,$issue,$reserve,$shared,@results);
 }
 
 sub countitems {
@@ -2115,18 +2116,20 @@ my $i=0;
 	$results[$i]->{'isbncode'}= isbnList($results[$i]->{'biblioitemnumber'},$dbh); #agregado por Einar
 	my @aux;
 
-($results[$i]->{'total'},$results[$i]->{'available'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'shared'},@aux)=allitems($data->{'biblioitemnumber'},$type);
+($results[$i]->{'total'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'reserve'},$results[$i]->{'shared'},@aux)=allitems($data->{'biblioitemnumber'},$type);
+
+	
+	#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
+$results[$i]->{'available'}= $results[$i]->{'issue'} + $results[$i]->{'reserve'} + $results[$i]->{'fl'} + $results[$i]->{'notfl'};
 
 	#Matias necesito la primera signatura topografica
 	if(@aux ne 0){ $results[$i]->{'firstST'}=$aux[0]->{'bulk'}; }
 	#
 
-	$results[$i]->{'notforloan'}= ((($results[$i]->{'fl'}+$results[$i]->{'issue'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
+	$results[$i]->{'notforloan'}= ((($results[$i]->{'available'} - $results[$i]->{'notfl'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
 	
-	if ($results[$i]->{'wthdrawn'} == 7){
-	$results[$i]->{'notforloan'} = 1;
-	$results[$i]->{'solicitarcopia'} = 1;
-	}	
+	#Son todos compartidos?
+	$results[$i]->{'allshared'} = (($results[$i]->{'shared'} gt 0) and ($results[$i]->{'available'} eq 0));
 
 
 	   if (($type ne 'intranet')&&(C4::Context->preference("avail") eq 0))

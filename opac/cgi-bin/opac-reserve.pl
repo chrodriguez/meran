@@ -91,7 +91,7 @@ else{#quiere decir que result es 0 por lo tanto, no se efectuo la reserva
 			$template->param(bib => $query->param('bib'));
 			$template->param(too_many_reserves => $result[3]);
 		}  elsif($result[1] == 5){ #si tiene un nro de reservas en espera máximo alcanzado 
-                        $template->param(RESERVES => format_date($result[2]));
+                        $template->param(RESERVES => $result[2]);
                         # get biblioitemnumber.....
                         $template->param(bib => $query->param('bib'));
                         $template->param(too_many_waitreserves => $result[3]);
