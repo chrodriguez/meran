@@ -2130,16 +2130,19 @@ $results[$i]->{'available'}= $results[$i]->{'issue'} + $results[$i]->{'reserve'}
 	
 	#Son todos compartidos?
 	$results[$i]->{'allshared'} = (($results[$i]->{'shared'} gt 0) and ($results[$i]->{'available'} eq 0));
+	
+	#Son todos no disponibles?
+	$results[$i]->{'allunavail'}= ($results[$i]->{'total'} eq  $results[$i]->{'unav'});
 
 
-	   if (($type ne 'intranet')&&(C4::Context->preference("avail") eq 0))
-	#if (($type ne 'intranet'))
-	       {
-	       $results[$i]->{'unavailable'}=($results[$i]->{'total'} eq  $results[$i]->{'unav'});
+	   if (($type ne 'intranet')&&(C4::Context->preference("opacUnavail") eq 0))
+	       {$results[$i]->{'unavailable'}=($results[$i]->{'total'} eq  $results[$i]->{'unav'});
 	       # Para ver si todos los grupos estan deshabilitados
 	       if ($results[$i]->{'unavailable'}){$cantunavail++;};
 	       	}
-				                          
+	
+
+
 	$cantbibit++;
  	#
 
