@@ -129,9 +129,9 @@ else {
 
  	my ($subjectcount,$subjects) =&subject($biblionumber);
       if ($subjectcount) {
-        $allsubjects=" " . $subjects->[0]->{'subject'};
+        $allsubjects=" " . $subjects->[0]->{'nombre'};
         for (my $i = 1; $i < $subjectcount; $i++) {
-                $allsubjects.= ", " . $subjects->[$i]->{'subject'};
+                $allsubjects.= ", " . $subjects->[$i]->{'nombre'};
         } # for
         } # if
 
