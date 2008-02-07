@@ -49,6 +49,9 @@ if ($updateemailaddress eq '') {
     exit;
 }
 
+if ( C4::Context->preference('CheckUpdateDataEnabled') == 'yes') {
+
+
 if ($query->{'surname'}) {
     # get all the fields:
     my $message = <<"EOF";
@@ -80,7 +83,7 @@ EOF
         warn "Error sending mail: $Mail::Sendmail::error \n";
     }
 }
-
+}
 
 $borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
 $borr->{'expiry'}       = format_date($borr->{'expiry'});

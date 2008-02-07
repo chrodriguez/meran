@@ -517,7 +517,7 @@ my $mailFrom=C4::Context->preference("reserveFrom");
 my $mailSubject =C4::Context->preference("reserveSubject");
 my $mailMessage =C4::Context->preference("reserveMessage");
 my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
-
+$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
 
 $mailSubject =~ s/BRANCH/$branchname/;
 $mailMessage =~ s/BRANCH/$branchname/;
