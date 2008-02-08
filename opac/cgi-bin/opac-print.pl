@@ -22,6 +22,18 @@ foreach my $field (@fields) {
     }
     }
 
+
+#Para imprimir
+	my  ($template, $borrowernumber, $cookie)
+                = get_template_and_user({template_name => "opac-print.tmpl",
+                             query => $query,
+                             type => "opac",
+                             authnotrequired => 1,
+                             flagsrequired => {borrow => 1}
+                             });
+
+
+
 #Analiticas
 my $analytical= $query->param('analytical');
 $search{'analytical'}= $analytical;
@@ -51,7 +63,7 @@ if ($from ){
 	}
 #
 else{
-($count, @results) = catalogsearch(\%env,'opac',\%search,$cant,0,$orden);
+($count, @results) = catalogsearch($borrowernumber,\%env,'opac',\%search,$cant,0,$orden);
 	}
 foreach my $res (@results) {
     $res->{'firstbulk'} = &firstbulk($res->{'biblionumber'});
@@ -90,7 +102,7 @@ else{
 }
 
 foreach my $res (@results) {
- $mailMessage .= $res->{'author'}.' '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')
+ $mailMessage .= C4::Search::getautor($res->{'author'})->{'completo'}.' -- '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')
 
 ';}
 
@@ -120,16 +132,6 @@ else{ print $input->redirect("opac-search.pl");}
 
 		}
 else{ #Para imprimir
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "opac-print.tmpl",
-                             query => $query,
-                             type => "opac",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
-                             });
-
-
-
 
 my $resultsarray=\@results;
 ($resultsarray) || (@$resultsarray=());

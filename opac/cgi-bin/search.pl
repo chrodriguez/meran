@@ -117,7 +117,7 @@ if (my $subject=$query->param('subjectitems')) {
     @results=subsearch(\$blah,$subject);
     $count=$#results+1;
 } else {
-    ($count,@results)=catalogsearch(\%env,'',\%search,$num,$startfrom);
+    ($count,@results)=catalogsearch($loggedinuser,\%env,'',\%search,$num,$startfrom);
 }
 
 my $num = 1;
