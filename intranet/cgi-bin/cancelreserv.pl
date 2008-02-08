@@ -31,7 +31,7 @@ use C4::Auth;
 
 my $input = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1});
 
 my $biblioitemnumber=$input->param('biblioitem');
 my $volver=$input->param('volver');
