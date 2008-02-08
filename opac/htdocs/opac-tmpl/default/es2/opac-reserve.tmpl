@@ -156,9 +156,12 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  <!-- TMPL_VAR NAME="desde" --> a las <!-- TMPL_VAR NAME="desdeh" --> hasta el d&iacute;a: <!-- TMPL_VAR NAME="hasta" --> hasta las <!-- TMPL_VAR NAME="hastah" -->.
 
 <!-- TMPL_ELSE -->
-En este momento no hay ning&uacute;n ejemplar disponible para pr&eacute;stamo domiciliario.<br>
-Cuando haya ejemplares disponibles se le informar&aacute; en su cuenta de usuario y a su mail: <i><!-- TMPL_VAR NAME="MAIL" --></i>.<br>
-Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.<br> 
+En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
+<br>
+<i><!-- TMPL_VAR NAME="MAIL" --></i>
+<br>
+Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.
+<br>
  <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
 <!-- /TMPL_IF -->
 </b></font>
