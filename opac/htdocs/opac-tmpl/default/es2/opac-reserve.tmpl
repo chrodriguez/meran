@@ -96,24 +96,8 @@
 
 	</b></font></td></tr></table>
 <!-- TMPL_ELSE -->
-<table class="tablemsg">
-<tr><td><font class="fontmsg"><b>
-<!-- TMPL_IF NAME="itemReserve" -->
-El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  <!-- TMPL_VAR NAME="desde" --> a las <!-- TMPL_VAR NAME="desdeh" --> hasta el d&iacute;a: <!-- TMPL_VAR NAME="hasta" --> hasta las <!-- TMPL_VAR NAME="hastah" -->.
-
-<!-- TMPL_ELSE -->
-En este momento no hay ning&uacute;n ejemplar disponible para pr&eacute;stamo domiciliario.<br>
-Cuando haya ejemplares disponibles se le informar&aacute; en su cuenta de usuario y a su mail: <i><!-- TMPL_VAR NAME="MAIL" --></i>.<br>
-Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.<br> 
- <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
-<!-- /TMPL_IF -->
-</b></font>
-</td></tr></table>	
-
 	<p align="left"> <font class="fonttitulo"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="author" -->)</font></p>
 	
-
-
 <table cellspacing="0" cellpadding="4" border="1" align="center" width="90%">
 <tr bordercolor="#f2f2f2"><td colspan="4"  class="bordetabla"></td></tr>
         <tr valign="top" bordercolor="#f2f2f2">
@@ -169,7 +153,7 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 		<table align=center>
 		<tr>
           <td class="impar" colspan=2> 
-<!-- TMPL_IF NAME="CirculationEnabled" --><a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar</a><!-- TMPL_ELSE -->No disponible<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CirculationEnabled" --><a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar Reserva</a><!-- TMPL_ELSE -->No disponible<!-- /TMPL_IF -->
 		 </td>
 		</tr>
                 </table>
@@ -188,6 +172,22 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 		<img src='<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reserva.png' name="home" id="home"
 	title="Actualizar Pedido" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >
 </a>    	
+
+
+<table class="tablemsg">
+<tr><td><font class="fontmsg"><b>
+<!-- TMPL_IF NAME="itemReserve" -->
+El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  <!-- TMPL_VAR NAME="desde" --> a las <!-- TMPL_VAR NAME="desdeh" --> hasta el d&iacute;a: <!-- TMPL_VAR NAME="hasta" --> hasta las <!-- TMPL_VAR NAME="hastah" -->.
+
+<!-- TMPL_ELSE -->
+En este momento no hay ning&uacute;n ejemplar disponible para pr&eacute;stamo domiciliario.<br>
+Cuando haya ejemplares disponibles se le informar&aacute; en su cuenta de usuario y a su mail: <i><!-- TMPL_VAR NAME="MAIL" --></i>.<br>
+Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.<br> 
+ <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
+<!-- /TMPL_IF -->
+</b></font>
+</td></tr></table>
+
 		</td></tr>
 	 <!-- /TMPL_IF -->
 		</table>
