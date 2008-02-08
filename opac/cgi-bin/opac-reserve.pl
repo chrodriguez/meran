@@ -26,6 +26,8 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
+my $pagetitle = "Reserva de ejemplares";
+
 #Hay que ver que no este sancionado ni supere el nro maximo de reservas.
 #Si ninguna de las dos es verdadera entonces se efectua la reserva, si alguno de los items esta disponible se reserva el item, sino se agrega a la lista de espera del grupo
 my $branch=(split("_",(split(";",$cookie))[0]))[1];
@@ -37,6 +39,7 @@ if ($result[0]){#si no ocurrio ningun error, entonces puedo reservar el libro
 	my $biblioitemdata=bibitemdata($biblioitemnumber);
 	#Se la paso al tmpl
 	$template-> param($biblioitemdata);
+	$pagetitle = "Usted acaba de reservar:";
 	#Ahora intento hacer la reserva, de acuerdo al resultado que me de la consulta se si se puedo hacer en un ejemplar o se agrego a la cola de reservas del grupo
  	if ($result[1]){#quiere decir que se logro reservar un item
                 $template->param( itemReserve => $result[1],
@@ -119,7 +122,7 @@ my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 $template->param (	MAIL  => $borr->{'emailaddress'},
 			borrowernumber => $borrowernumber,
 			CirculationEnabled => C4::Context->preference("circulation"),
-			pagetitle => "Reserva de ejemplares");
+			pagetitle => $pagetitle);
 
 # check that you can actually make the reserve.
 
