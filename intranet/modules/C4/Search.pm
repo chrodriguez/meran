@@ -691,9 +691,18 @@ EOT
   $query = "SELECT biblionumber FROM biblioitems WHERE ";
   foreach my $keyword (@key)
   {
-    push @clauses,
-	"notes LIKE ? OR notes like ?";
-	push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
+
+ my @subclauses = ();
+	
+    foreach my $field (qw(notes seriestitle volumeddesc number))
+    {
+      push @subclauses,
+	"$field LIKE ? OR $field LIKE ?";
+	  push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
+    }
+
+    push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
+
   }
   $query .= "(" . join(") AND (", @clauses) . ")";
 
@@ -1952,6 +1961,7 @@ sub allitems {
   my $unavailable=0;
   my $shared=0;
   my $total=0;
+  my $copy=0;
 
 #se recorren todos los items de biblionumber = $bib, y verifica el estado del item
   while (my $data=$sth->fetchrow_hashref){
@@ -2009,8 +2019,8 @@ sub allitems {
      if ($data->{'wthdrawn'} ne '0'){
              $datedue.="<font size=2 color='red'>".getAvail($data->{'wthdrawn'})->{'description'}."</font>";
 	             if ($data->{'wthdrawn'} eq '2'){ $shared++;} # compartido
-		     else {
-		     $unavailable++;}
+			elsif ($data->{'wthdrawn'} eq '7'){ $copy++;} # para copiar
+		     		else {$unavailable++;}
 		     }
 					   
  
@@ -2039,7 +2049,7 @@ sub allitems {
   $total++;
   }
   $sth->finish;
-  return($total,$forloan,$notforloan,$unavailable,$issue,$reserve,$shared,@results);
+  return($total,$forloan,$notforloan,$unavailable,$issue,$reserve,$shared,$copy,@results);
 }
 
 sub countitems {
@@ -2116,7 +2126,7 @@ my $i=0;
 	$results[$i]->{'isbncode'}= isbnList($results[$i]->{'biblioitemnumber'},$dbh); #agregado por Einar
 	my @aux;
 
-($results[$i]->{'total'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'reserve'},$results[$i]->{'shared'},@aux)=allitems($data->{'biblioitemnumber'},$type);
+($results[$i]->{'total'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'reserve'},$results[$i]->{'shared'},$results[$i]->{'copy'},@aux)=allitems($data->{'biblioitemnumber'},$type);
 
 	
 	#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
@@ -2131,6 +2141,9 @@ $results[$i]->{'available'}= $results[$i]->{'issue'} + $results[$i]->{'reserve'}
 	#Son todos compartidos?
 	$results[$i]->{'allshared'} = (($results[$i]->{'shared'} gt 0) and ($results[$i]->{'available'} eq 0));
 	
+	#Son todos para copiar?
+	$results[$i]->{'allcopy'} = (($results[$i]->{'copy'} gt 0) and ($results[$i]->{'available'} eq 0));
+
 	#Son todos no disponibles?
 	$results[$i]->{'allunavail'}= ($results[$i]->{'total'} eq  $results[$i]->{'unav'});
 

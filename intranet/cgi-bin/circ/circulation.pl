@@ -156,7 +156,7 @@ if ($bornum) {
 
 	    $message="Se prest&oacute; el ejemplar ".$iteminfo->{'barcode'}." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
     } else {
-	my ($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
+	my ($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
 	my @values;
 	my %labels;
 	foreach (@results){

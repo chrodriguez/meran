@@ -180,6 +180,9 @@
 			<!-- TMPL_IF NAME="allshared" -->
 			<p align="right"><b>Ejemplares compartidos</b></p>
 			<!-- TMPL_ELSE -->
+			<!-- TMPL_IF NAME="allcopy" -->
+			<p align="right"><b>Solicitar copia</b></p>
+			<!-- TMPL_ELSE -->
 				<!-- TMPL_IF NAME="notforloan" -->
 				<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
                 		<!-- TMPL_ELSE -->
@@ -189,6 +192,7 @@
 					<p align="right"><b>Disponible para Reservar</b></p>
         				<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_UNLESS -->
 	</td>
