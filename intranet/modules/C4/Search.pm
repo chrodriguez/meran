@@ -387,6 +387,7 @@ sub catalogsearch {
 	#    $search->{$key}=$dbh->quote($search->{$key});
 	#  }
 	
+# 	Miguel, esto estaria bueno que sea una preferencia y que se pueda configurar para opac o intra
 	if($type eq "opac"){
 		loguearBusqueda($borrowernumber,$env,$type,$search);
 	}
