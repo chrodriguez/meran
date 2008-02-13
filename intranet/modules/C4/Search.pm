@@ -32,6 +32,7 @@ use C4::AR::Reserves;
 use C4::AR::Issues;
 use C4::AR::VirtualLibrary; #Matias: Bilbioteca Virtual
 use C4::AR::AnalysisBiblio; #Matias: Analiticas
+use C4::AR::Utilidades;
 use Date::Manip;
 use C4::Date;
 use C4::Koha;
@@ -387,8 +388,12 @@ sub catalogsearch {
 	#    $search->{$key}=$dbh->quote($search->{$key});
 	#  }
 	
-# 	Miguel, esto estaria bueno que sea una preferencia y que se pueda configurar para opac o intra
-	if($type eq "opac"){
+# 	Miguel, dependiendo de las preferencias loguea en OPAC (y/o) INTRA
+
+	my $valorOPAC= C4::Context->preference("logSearchOPAC");
+	my $valorINTRA= C4::Context->preference("logSearchINTRA");
+
+	if( (($valorOPAC == 1)&&($type eq "opac")) || (($valorINTRA == 1)&&($type eq "intra")) ){
 		loguearBusqueda($borrowernumber,$env,$type,$search);
 	}
 
@@ -473,58 +478,63 @@ sub loguearBusqueda(){
 	my $campo;
 	my $valor;
 
-	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor` )
-			VALUES (?, ?, ?);";
+	my $desde= "INTRA";
+	if($type eq "opac"){
+		$desde= "OPAC";
+	}
+
+	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor`, `tipo`)
+			VALUES (?, ?, ?, ?);";
 
 	$sth=$dbh->prepare($query3);
 
 
 	if($search->{'keyword'} ne ""){
-		$sth->execute($id, 'keyword', $search->{'keyword'});
+		$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
 	}
 
 	if($search->{'dictionary'} ne ""){
-		$sth->execute($id, 'dictionary', $search->{'dictionary'});
+		$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
 	}
 
 	if($search->{'virtual'} ne ""){
-		$sth->execute($id, 'virtual', $search->{'virtual'});
+		$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
 	}
 
 	if($search->{'signature'} ne ""){
-		$sth->execute($id, 'signature', $search->{'signature'});
+		$sth->execute($id, 'signature', $search->{'signature'}, $desde);
 	}	
 
 	if($search->{'analytical'} ne ""){
-		$sth->execute($id, 'analytical', $search->{'analytical'});
+		$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
 	}
 
 	if($search->{'itemnumber'} ne ""){
-		$sth->execute($id, 'itemnumber', $search->{'itemnumber'});
+		$sth->execute($id, 'itemnumber', $search->{'itemnumber'}, $desde);
 	}
 
 	if($search->{'class'} ne ""){
-		$sth->execute($id, 'class', $search->{'class'});
+		$sth->execute($id, 'class', $search->{'class'}, $desde);
 	}
 
 	if($search->{'subjectitems'} ne ""){
-		$sth->execute($id, 'subjectitems', $search->{'subjectitems'});
+		$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
 	}
 
 	if($search->{'isbn'} ne ""){
-		$sth->execute($id, 'isbn', $search->{'isbn'});
+		$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
 	}
 
 	if($search->{'subjectid'} ne ""){
-		$sth->execute($id, 'subjectid', $search->{'subjectid'});
+		$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
 	}
 
 	if($search->{'author'} ne ""){
-		$sth->execute($id, 'author', $search->{'author'});
+		$sth->execute($id, 'author', $search->{'author'}, $desde);
 	}
 
 	if($search->{'title'} ne ""){
-		$sth->execute($id,'title', $search->{'title'});
+		$sth->execute($id,'title', $search->{'title'}, $desde);
 	}
 		
 
@@ -827,7 +837,7 @@ EOT
   $sth->finish;
 
 
-=cut
+=item
   $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
   like ? group by biblionumber");
   $sth->execute("%$search->{'keyword'}%");
@@ -875,7 +885,7 @@ while (my $data = $sth->fetchrow_hashref) {
 	     push(@res,$data->{'biblionumber'});
 	     $count++;
 	}	
-	}
+}
 
 #Tiempo
 #my ($epoch, $usecs) = gettimeofday;

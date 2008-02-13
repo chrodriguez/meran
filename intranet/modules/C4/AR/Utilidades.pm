@@ -490,4 +490,5 @@ sub verificarValor(){
 	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>/ /gi;
 	return $valor;
 }
+
 1;

@@ -72,7 +72,7 @@ sub historicoDeBusqueda(){
 			ON (c.categorycode = bor.categorycode) ";
 	
         my $query ="	SELECT bor.borrowernumber,bor.surname, bor.firstname, bor.cardnumber, 
-			b.fecha, hb.campo, hb.valor, c.description
+			b.fecha, hb.campo, hb.valor, c.description, hb.tipo
 			FROM busquedas b INNER JOIN historialBusqueda hb 
 			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
 			ON (b.borrower = bor.borrowernumber) LEFT JOIN categories c
