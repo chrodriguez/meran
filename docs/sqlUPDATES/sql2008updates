@@ -1,0 +1,11 @@
+---------------------------------------------------------------
+--Se agrega preferencia de logueo de busquedas para OPAC y para INTRA
+insert into systempreferences (variable,value,explanation) 
+values ('logSearchOPAC','0','Hbilita (1) o no (0) loguea busquedas en el OPAC')
+
+ insert into systempreferences (variable,value,explanation) 
+values ('logSearchINTRA','0','Hbilita (1) o no (0) loguea busquedas en la INTRA')
+
+
+--Se agrega la columna tipo que dira (INTRAu OPAC)
+ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
