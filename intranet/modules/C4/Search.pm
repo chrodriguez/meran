@@ -4792,7 +4792,7 @@ sub itemdata2
 {       
         my ($itemnumber) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT barcode,homebranch,bulk,holdingbranch from items where itemnumber='$itemnumber' ";
+        my $query = "SELECT barcode,homebranch,bulk,holdingbranch,itemnotes from items where itemnumber='$itemnumber' ";
         my $sth = $dbh->prepare($query);
         $sth->execute();
         my $res=$sth->fetchrow_hashref;

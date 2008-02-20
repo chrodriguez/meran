@@ -46,7 +46,7 @@ my $barcode=$input->param('barcode');
 
 
 my $data=bibitemdata($bibitemnum);
-
+my $itemdata=itemdata2($itemnum);
 
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -54,7 +54,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	query           => $input,
 	type            => "intranet",
 	authnotrequired => 0,
-	flagsrequired   => {catalogue => 1},
+	flagsrequired   => {circulate => 1},
     });
 
 my %inputs;
@@ -80,6 +80,7 @@ if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTA
 $template->param(DETAIL => \@results,
 		title => $data->{'title'},
 	        author => $data->{'author'},
+		itemnotes => $itemdata->{'itemnotes'},
 		biblionumber => $data->{'biblionumber'},
         	biblioitemnumber => $data->{'biblioitemnumber'},
 		itemnumber => $itemnum,
