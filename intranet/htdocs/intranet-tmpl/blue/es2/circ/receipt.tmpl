@@ -11,6 +11,30 @@
 		<b>PR&Eacute;STAMO - RENOVACI&Oacute;N</b>
 	</td>
     </tr>
+        <tr>
+      	<TD align="left" width="50%">
+        	C&oacute;digo de barras:
+      	</TD>
+      	<td>
+        	<b><!-- TMPL_VAR Name="barcode" --></b>
+      	</td>
+    </tr>
+    <tr>
+    	<TD align="left" width="50%">
+        	Usuario:
+      	</TD>
+      	<td>
+       		<b><!-- TMPL_VAR Name="borrowerName" --></b>
+      	</td>
+    </tr>
+    <tr>
+    	<TD align="left" width="50%">
+        	Documento:
+      	</TD>
+      	<td>
+       		Tipo:<b><!-- TMPL_VAR Name="documentType" --></b> N&uacute;mero:<b><!-- TMPL_VAR Name="documentNumber" --></b>
+      	</td>
+    </tr>
     <tr>
       	<td align="left" width="50%">
         	Fecha de pr&eacute;stamo: 
@@ -35,14 +59,7 @@
         	<b><!-- TMPL_VAR Name="issuedescription" --></b>
       	</td>
     </tr>
-    <tr>
-    	<TD align="left" width="50%">
-        	Usuario:
-      	</TD>
-      	<td>
-       		<b><!-- TMPL_VAR Name="borrowerName" --></b>
-      	</td>
-    </tr>
+
     <tr>
       	<TD align="left" width="50%">
         	Autor:
@@ -75,14 +92,7 @@
         <b><!-- TMPL_VAR Name="volume" --></b>
       </td>
     </tr>
-    <tr>
-      	<TD align="left" width="50%">
-        	C&oacute;digo de barras:
-      	</TD>
-      	<td>
-        	<b><!-- TMPL_VAR Name="barcode" --></b>
-      	</td>
-    </tr>
+
     <!--<tr>
       	<TD align="right">
         	Tipo de pr&eacute;stamo:

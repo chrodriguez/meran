@@ -143,6 +143,8 @@ if ($bornum) {
 	    $ticket_string = 
 		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
 		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
+		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
+		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
 		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
 		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .

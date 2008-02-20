@@ -28,6 +28,8 @@ my %args = {};
 
 $args{'borrowerName'} = $query->param('borrowerName');
 $args{'borrowerNumber'} = $query->param('borrowerNumber');
+$args{'documentType'} = $query->param('documentType');
+$args{'documentNumber'} = $query->param('documentNumber');
 $args{'author'} = $query->param('author');
 $args{'bookTitle'} = $query->param('bookTitle');
 $args{'inventory'} = $query->param('inventory');
