@@ -295,12 +295,18 @@
 
 <!-- TMPL_IF NAME="realreserves" -->
 <br>
+<form id="formPrestar" name="formPrestar" method="post" action="/cgi-bin/koha/circ/circulation.pl">
+
+<input type="hidden" name="borrnumber" id="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
 <TABLE  CELLSPACING=0  CELLPADDING=0  border=0   width="100%">
   <TR VALIGN=middle>
       <td colspan=11 align=center><B>EJEMPLARES ASIGNADOS</B></td> 
   </TR>
   <tr valign="middle" class="tablaresultadoTitle">
 	<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+	<td>
+		<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+	</td>
 	<td>T&iacute;tulo</td>
  	<td>Autor</td>
 	<td>C. Barra</td>
@@ -308,13 +314,18 @@
 	<td>Vol.</td> 
 	<td>Vencimiento</td>
 	<td width="10%">Retira en</td>
-	<td width="10%">Prestar</td>
+<!-- 	<td width="10%">Prestar</td> -->
 	<td width="10%">Cancelar</td>
 	<td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
  </tr>
 <!-- TMPL_LOOP NAME="realreserves" -->
 <tr >
- <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>	
+<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+ 
+<td class="<!-- TMPL_VAR NAME='clase' -->">
+	<input type="checkbox" name="chkbox" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
+</td>
+
  <td width="16%" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><a href="detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML--><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF --></a></td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 <td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" -->
@@ -325,9 +336,13 @@
 </td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_VAR NAME="rreminderdate" --></td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" align="center"><b><!-- TMPL_VAR NAME="rbranch" --></b></td>
-<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
+
+
+<!--<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
 <INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->);return false;">
-</td>
+</td>-->
+
+
  <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
 <INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)" title="Cancelar">
 </td>
@@ -335,7 +350,13 @@
                                                                                                                              
 </tr>
 <!-- /TMPL_LOOP -->
+<tr>
+	<td colspan="10" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
+		<INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:confirm_prestamo();return false;">
+	</td>
+</tr>
 </table>
+</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="waiting" -->
@@ -376,7 +397,6 @@
 	</td>
 	</tr>
 </table>
-	</form>
 
 <!-- /TMPL_IF -->
 
@@ -497,9 +517,13 @@
 <br>
 </td></tr></table>
 <script>
+/*
 function confirm_prestamo(bibitem,item) {
         window.location="/cgi-bin/koha/circ/circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&itemnumber="+item;
-	}
+}*/
+function confirm_prestamo(){
+	document.getElementById('formPrestar').submit();
+}
 
 function confirm_cancelation(num) {
         var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');

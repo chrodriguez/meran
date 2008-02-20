@@ -306,8 +306,22 @@
         <td align="center">
         <table border="0">
 	<tr class="tablemsg">
-		<td class="fontmsg"><b><u>PR&Eacute;STAMO</u>:</b> <!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="edition" -->, <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="volume" -->, t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --> <br>
-		<b><u>USUARIO</u>:</b> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
+		<td class="fontmsg">
+			<b><u>PR&Eacute;STAMO</u>:</b> 
+			<!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
+			<!-- TMPL_IF NAME="unititle" -->
+				:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="edition" -->
+				, <!-- TMPL_VAR NAME="edition" -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="volume" -->
+				, t <!-- TMPL_VAR NAME="volume" -->
+			<!-- /TMPL_IF -->
+			<br>
+			<b><u>USUARIO</u>:</b> 
+				<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+		</td>
 	</tr>
         <tr align="center">
 		<td class="inputFontNormal">C&oacute;digo de barras: <!-- TMPL_VAR NAME="CGIselectbarcode" --></td>
@@ -429,19 +443,25 @@
 		</tr>
                 <tr class="tablaresultadoTitle">
 			<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+			<td>
+				<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+			</td>
                         <td>T&iacute;tulo</td>
 			<td>Autor</td>
 			<td>Edici&oacute;n</td>
                         <td>Reservado desde</td>
 			<td>Reservado hasta</td>
-			<td>&nbsp;</td> 
+<!-- 			<td>&nbsp;</td>  -->
 			<td>&nbsp;</td>
 			<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
                 </tr>
 		<!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
                 <!-- TMPL_LOOP NAME="RESERVES" -->
-                        <tr valign="top">
-		         <td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
+                <tr align="center">
+			<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
+			<td class="<!-- TMPL_VAR NAME='clase' -->">
+				<input type="checkbox" name="chkbox" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
+			</td>
                         <td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
 			</td>
                         <td class="<!-- TMPL_VAR NAME="clase" -->">
@@ -461,14 +481,18 @@
 			<!-- TMPL_VAR NAME="rreminderdate" -->
 			</font>
 			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>-->
-		<td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_IF name="ritemnumber"--><INPUT onClick="confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->)"  TYPE="image" name="borrow"  VALUE="prestar" BORDER=0 src="/intranet-tmpl/blue/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario"><!-- TMPL_ELSE -->Esperando<!-- /TMPL_IF --></td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->" align="middle"> 
-	       <INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="confirm_cancelation2(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)" title="Cancelar">
-
+		<!--<td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_IF name="ritemnumber"--><INPUT onClick="confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->)"  TYPE="image" name="borrow"  VALUE="prestar" BORDER=0 src="/intranet-tmpl/blue/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario"><!-- TMPL_ELSE -->Esperando<!-- /TMPL_IF --></td>-->
+			<td class="<!-- TMPL_VAR NAME="clase" -->" align="middle"> 
+	       			<INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="confirm_cancelation2(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)" title="Cancelar">
 			</td>
 			<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-                        </tr>
+                </tr>
                 <!-- /TMPL_LOOP -->
+		<tr>
+			<td colspan="10" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
+				<INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:confirm_prestamo();return false;">
+			</td>
+		</tr>
         </table>
 
 <!-- /TMPL_IF -->
@@ -523,7 +547,7 @@ function confirm_prestamo(bibitem,item) {
 }
 
 function confirm_prestamoBORRAR(bibitem,item) {
-	var is_confirmed = confirm('Esta seguro que desea realizar el préstamo?');
+	var is_confirmed = confirm('Esta seguro que desea realizar el prï¿½stamo?');
 	if (is_confirmed) {
 		window.location="/cgi-bin/koha/issuereserv.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&biblioitem="+ bibitem+"&itemnumber="+item;
 	}

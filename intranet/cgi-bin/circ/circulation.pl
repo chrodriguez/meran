@@ -67,6 +67,13 @@ my $iteminfo;
 my $ticket_string;
 my $ticket_borrower;
 
+#DAMIAN - Para prestar varios items.
+my @chkbox=$query->param('chkbox');
+my @infoTotal;
+open(A,">>/tmp/debug.txt");
+print A "chbox: $chkbox[0]\n";
+print A "chbox: $chkbox[1]\n";
+close(A);
 
 #set up cookie.....
 my $branchcookie;
