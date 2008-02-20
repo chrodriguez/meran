@@ -46,13 +46,14 @@ sub make_query {
   		}							  
   	}
   else {
-  while (my ($biblionumber,$itemnumber,$data) = $sth->fetchrow_array) {
-	$data_aux= ($DictionaryCaseSensitive eq "yes")?$data:&noaccents($data);	
-	my %row = (keyword =>  $data_aux, biblionumber => $biblionumber, itemnumber => $itemnumber);
-	push(@returnvalues,\%row);
-	$count+=1;
-  		}
+  	while (my ($biblionumber,$itemnumber,$data) = $sth->fetchrow_array) {
+		$data_aux= ($DictionaryCaseSensitive eq "yes")?$data:&noaccents($data);	
+		my %row = (keyword =>  $data_aux, biblionumber => $biblionumber, itemnumber => $itemnumber);
+		push(@returnvalues,\%row);
+		$count+=1;
   	}
+  }
+
   $sth->finish;
   return($count,@returnvalues);
 }
@@ -231,17 +232,25 @@ sub DictionarySignatureSearch {
     my $strComp= ($DictionaryCaseSensitive eq "yes")?" LIKE BINARY ":" = ";	
     $condition= $strComp."'".$keyword."'";
   } else {
-    $condition= " LIKE '".$keyword."%'";
+    $condition= " LIKE '%".$keyword."%'";
   }
 
-  my @queries=(
-   "SELECT biblionumber,itemnumber,bulk from items where bulk ".$condition
-  ) ;
+  #para calcular la cantidad total de resultados  
+  my $qTotalFilas= "SELECT count(*) as cant FROM items WHERE bulk ".$condition;
+  my $sth=$dbh->prepare($qTotalFilas);
+  $sth->execute();
+  my $data=$sth->fetchrow_hashref;
+  my $countTotal= $data->{'cant'};
+
+  #para paginar el resultado
+  my $q= "SELECT biblionumber,itemnumber,bulk FROM items WHERE bulk ".$condition;
+  $q .= " LIMIT ".$offset*$num.",".$num;
+  my @queries=($q);
 
   foreach my $query (@queries){
-    ($countaux,@returnaux)= make_query($dbh,$query,$DictionaryCaseSensitive,'signature');
-    #$count+= $countaux;
-    push(@returnvalues,@returnaux);
+    	($countaux,@returnaux)= make_query($dbh,$query,$DictionaryCaseSensitive,'signature');
+    	#$count+= $countaux;
+    	push(@returnvalues,@returnaux);
   }
 
   my @resultarray;
@@ -255,95 +264,106 @@ sub DictionarySignatureSearch {
  # my $unique;
  
 
-my @results= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @returnvalues;
+  my @results= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @returnvalues;
 
   if (!$dicdetail) {
     while ($index < $size) {
-      $res= $results[$index]->{keyword};
-      $it= $results[$index]->{itemnumber};
-      $bib= $results[$index]->{biblionumber};
-#      $unique=1;
+      	$res= $results[$index]->{keyword};
+      	$it= $results[$index]->{itemnumber};
+      	$bib= $results[$index]->{biblionumber};
+	#$unique=1;
 	
 	my @auxarray;
 
-      while (($index < $size) && ($res eq $results[$index]->{keyword}) ) {
+      	while (($index < $size) && ($res eq $results[$index]->{keyword}) ) {
 
-         my $exists=0;
-	foreach my $aux (@auxarray){ if($aux->{'biblionumber'} eq $results[$index]->{biblionumber}){$exists=1;}}
+        	my $exists=0;
+		foreach my $aux (@auxarray){ 
+			if($aux->{'biblionumber'} eq $results[$index]->{biblionumber}){
+				$exists=1;
+			}
+		}
 
-	if ($exists eq 0){
+		if ($exists eq 0){
 
-	 push(@auxarray, $results[$index]);
+	 		push(@auxarray, $results[$index]);
 
-	$bib=$results[$index]->{biblionumber};
-	 $cantStr+= 1;
-	}
-	$index+= 1;
-      }
-      $res1= $res;
-      $res.= " (".$cantStr.")" if $cantStr > 1;
-       $count+= $cantStr;
+			$bib=$results[$index]->{biblionumber};
+	 		$cantStr+= 1;
+		}
+		$index+= 1;
+      	}#end while
+
+      	$res1= $res;
+      	$res.= " (".$cantStr.")" if $cantStr > 1;
+       	$count+= $cantStr;
   
-  #Si es unico lo muestro en detalle
-      my $query= "SELECT bulk,title,unititle,author FROM items inner join biblio on items.biblionumber=biblio.biblionumber WHERE itemnumber =".$it;
-      my $sth=$dbh->prepare($query);
-      $sth->execute();
+  	#Si es unico lo muestro en detalle
+      	my $query= "SELECT bulk,title,unititle,author FROM items inner join biblio on items.biblionumber=biblio.biblionumber WHERE itemnumber =".$it;
+      	my $sth=$dbh->prepare($query);
+      	$sth->execute();
      
-	  my $data = $sth->fetchrow_hashref;
-	  my $autor=C4::Search::getautor($data->{'author'});
-	  $data->{'author'}=$autor->{'completo'};
-	  $sth->finish;
-	   my $direct=1;
-	   if ($cantStr gt 1) {$direct=0;}
+	my $data = $sth->fetchrow_hashref;
+	my $autor=C4::Search::getautor($data->{'author'});
+	$data->{'author'}=$autor->{'completo'};
+	$sth->finish;
+	my $direct=1;
+	
+	if ($cantStr gt 1) {$direct=0;}
 
-	  my %row = (keyword => $res, jump => 0 , biblionumber=>$bib, itemnumber => $it, direct => $direct, bulk => $data->{'bulk'},title => $data->{'title'},unititle => $data->{'unititle'},author => $data->{'author'}, keyword2 => $res1, show => 1);
+	my %row = (keyword => $res, jump => 0 , biblionumber=>$bib, itemnumber => $it, direct => $direct, bulk => $data->{'bulk'},title => $data->{'title'},unititle => $data->{'unititle'},author => $data->{'author'}, keyword2 => $res1, show => 1);
 
 
    
-      push(@resultarray, \%row);
-      $cantStr= 0;
-   }
+      	push(@resultarray, \%row);
+      	$cantStr= 0;
+   }#end while ($index < $size)
 
-  } else {
+} else {
     my @results= @returnvalues;
 	$bib='';
     while ($index < $size) {
     	#Si exist el biblionumber no lo proceso
 	my $exists=0;
-	foreach my $aux (@resultarray){ if($aux->{'biblionumber'} eq $results[$index]->{biblionumber}){$exists=1;}}	
-	if ($exists eq 0){
-	$count++; # Se va a agregar
-      $res= $results[$index]->{keyword};
-      $it= $results[$index]->{itemnumber};
-      $bib= $results[$index]->{biblionumber};
-     
-      my $query= "SELECT bulk,title,unititle,author FROM items inner join biblio on items.biblionumber=biblio.biblionumber WHERE itemnumber = ".$it;
-      my $sth=$dbh->prepare($query);
-      $sth->execute();
-       #my ($bulk) = $sth->fetchrow_array;
-      my $data = $sth->fetchrow_hashref;
-      my $autor=C4::Search::getautor($data->{'author'});
-      $data->{'author'}=$autor->{'completo'};
+	foreach my $aux (@resultarray){ 
+		if($aux->{'biblionumber'} eq $results[$index]->{biblionumber}){
+			$exists=1;}
+	}	
 
-      $sth->finish;
-      my %row = (keyword => $res, jump => 0 , biblionumber=>$bib, itemnumber => $it, direct => 1, bulk => $data->{'bulk'},title => $data->{'title'},unititle => $data->{'unititle'},author => $data->{'author'});
-      push(@resultarray, \%row);
+	if ($exists eq 0){
+		$count++; # Se va a agregar
+      		$res= $results[$index]->{keyword};
+      		$it= $results[$index]->{itemnumber};
+      		$bib= $results[$index]->{biblionumber};
+     
+      		my $query= "SELECT bulk,title,unititle,author FROM items inner join biblio on items.biblionumber=biblio.biblionumber WHERE itemnumber = ".$it;
+      		my $sth=$dbh->prepare($query);
+      		$sth->execute();
+       		#my ($bulk) = $sth->fetchrow_array;
+      		my $data = $sth->fetchrow_hashref;
+      		my $autor=C4::Search::getautor($data->{'author'});
+      		$data->{'author'}=$autor->{'completo'};
+
+      		$sth->finish;
+      		my %row = (keyword => $res, jump => 0 , biblionumber=>$bib, itemnumber => $it, direct => 1, bulk => $data->{'bulk'},title => $data->{'title'},unititle => $data->{'unititle'},author => $data->{'author'});
+      		push(@resultarray, \%row);
     
     	}
-    $index+=1;
-   	}
+   	$index+=1;
+   }
     
     #Ordena
    # @resultarray= sort { &noaccents($a->{bulk}) cmp &noaccents($b->{bulk}) } @resultarray;
 
-}
+}#fin else
 
-  if ($size) {
+if ($size) {
     my $middle= (scalar(@resultarray) - (scalar(@resultarray) % 2)) / 2;
     $resultarray[$middle-1]->{jump}= 1;
-  }
+}
 
-	my @finalresults= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @resultarray;
-  
-  return($count,@finalresults);
+my @finalresults= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @resultarray;
+
+# return($count,@finalresults);
+return($countTotal,@finalresults);
 }

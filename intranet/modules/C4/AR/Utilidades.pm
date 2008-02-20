@@ -29,7 +29,7 @@ use C4::Date;
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor);
+@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor &cantidadRenglones &armarPaginas &crearPaginador);
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
@@ -490,5 +490,117 @@ sub verificarValor(){
 	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>/ /gi;
 	return $valor;
 }
+
+
+#*****************************************Paginador*********************************
+#Funciones para paginar en el Servidor
+#
+
+sub crearPaginador{
+	my ($template, $cantResult, $iniParam)=@_;
+#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+	my $ini;
+	my $pagActual;
+	#cant. de renglones q se pueden mostrar por pagina
+	my $cantR=cantidadRenglones();
+
+	if (($iniParam eq "")){
+        	$ini=0;
+		$pagActual=1;
+	} else {
+		$ini= ($iniParam-1)* $cantR;
+		$pagActual= $iniParam;
+	};
+#FIN inicializacion
+
+	my ($cantPaginas, @numeros)=armarPaginas($pagActual, $cantResult);
+	my $paginas = scalar(@numeros)||1;
+
+	$template->param( 	paginas   => $paginas,
+		  		actual    => $pagActual,
+		  		cantidad  => $cantResult,
+				numbers   => \@numeros);
+
+#Si la cantidad de filas es > que la cant. de filas maximo a mostrar	
+	if ( $cantResult > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+
+		$template->param(
+					pri   	=> 1,
+ 					ult	=> $cantPaginas
+				);
+
+        	my $sig = $pagActual + 1;
+         	if ($sig < $cantPaginas){
+                 	$template->param(
+                              	displaynext    	=>'1',
+                                sig   		=> $sig
+			);
+        	};
+
+        	if ($sig > 2 ){
+                	my $ant = $pagActual - 1;
+                	$template->param(
+                                	displayprev     => '1',
+                                	ant     	=> $ant
+				)
+		}
+	}
+
+	return ($template, $ini, $cantR);
+}
+
+sub armarPaginas{
+
+	my ($actual, $cantRegistros)=@_;
+
+	my $renglones = cantidadRenglones();
+	my $paginas = 0;
+	if ($renglones != 0){
+		$paginas= $cantRegistros % $renglones;
+	}
+	if  ($paginas == 0){
+        	$paginas= $cantRegistros /$renglones;
+	}
+	else {
+		$paginas= (($cantRegistros - $paginas)/$renglones) +1
+	};
+	my @numeros=();
+	my $highlight=0;
+	my $ini;
+	if($actual + 10 >= $paginas){
+		$ini= $paginas - 10;
+	}
+	else{
+		$ini= $actual;
+	}
+		
+	#cant. maxima que paginas q se van a mostrar
+	my $tope= $actual + 10;
+	
+	for (my $i=$ini; ($paginas >1 and $i <= $paginas and $i < $tope) ; $i++ ) {
+		if($i!=$actual){
+			 $highlight=0;
+		}else{
+			$highlight=1;
+		}
+	 	push @numeros, { number => $i, actual => ($i!=$actual), highlight => $highlight}
+	}
+
+	return($paginas, @numeros);
+}
+
+#
+#Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
+sub cantidadRenglones{
+        my $dbh = C4::Context->dbh;
+        my $query="select value
+		   from systempreferences
+                   where variable='renglones'";
+        my $sth=$dbh->prepare($query);
+	$sth->execute();
+	return($sth->fetchrow_array);        
+}
+
+#**************************************Fins***Paginador*********************************
 
 1;

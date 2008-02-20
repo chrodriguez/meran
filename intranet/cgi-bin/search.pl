@@ -48,6 +48,7 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 use C4::Interface::CGI::Output;
+use C4::AR::Utilidades;
 
 my $query=new CGI;
 my $type=$query->param('type');
@@ -218,10 +219,13 @@ $template->param(FORMINPUTS => \@forminputs);
 # I think it is (or was) a search from the "front" page...   [st]
 $search{'front'}=$query->param('front');
 
-my $num=10;
+#cantidad de resultados que se van a mostrar
+my $num=20;
 my @results;
 my $count;
-($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$startfrom,$orden);
+my $ini= $query->param('ini')||0;
+($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
+my ($template, $ini, $cantR)=&crearPaginador($template, $count, $ini);
 
 ################### AGREGADO POR LUCIANO ##########################
 if (($dictionary)||($signature)) {

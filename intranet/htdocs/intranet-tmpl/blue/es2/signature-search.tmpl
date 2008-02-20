@@ -1,4 +1,39 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<!-- ************************************Paginador******************************************************* -->
+<center>
+<!-- TMPL_IF NAME="displayprev" -->
+	<a href="search.pl?orden=<!-- TMPL_VAR NAME='orden' -->&ini=<!-- TMPL_VAR NAME='ant' -->&<!-- TMPL_LOOP NAME='FORMINPUTS' --><!-- TMPL_VAR NAME='field' -->=<!-- TMPL_VAR name='value' ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/ant.gif" border="0" alt="P&aacute;gina Anterior"></a>
+<!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
+<!-- /TMPL_IF -->
+		
+<!-- TMPL_LOOP NAME="numbers" -->
+	
+	<!-- TMPL_IF NAME="highlight" -->
+		<span class="highnumber">	
+		<!-- TMPL_VAR NAME="number" --> 
+		</span>
+		
+	<!-- TMPL_ELSE -->
+		
+		<a href="search.pl?orden=<!-- TMPL_VAR NAME='orden' -->&ini=<!-- TMPL_VAR NAME='number' -->&<!-- TMPL_LOOP NAME='FORMINPUTS' --><!-- TMPL_VAR NAME='field' -->=<!-- TMPL_VAR name='value' ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra">
+		<u><!-- TMPL_VAR NAME=number --></u></a>
+		
+	<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP -->
+	
+	<!-- TMPL_IF NAME="displaynext" -->
+		<a href="search.pl?orden=<!-- TMPL_VAR NAME='orden' -->&ini=<!-- TMPL_VAR NAME='sig' -->&<!-- TMPL_LOOP NAME='FORMINPUTS' --><!-- TMPL_VAR NAME='field' -->=<!-- TMPL_VAR name='value' ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" alt="P&aacute;gina Siguiente"></a>
+		<!-- TMPL_ELSE -->
+		<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
+	<!-- /TMPL_IF -->
+
+</center>
+<!--***********************************************Fin Paginador******************************************* -->
+<br>
+
 <center>
 <!-- TMPL_LOOP NAME="FORMINPUTS" -->
 <!-- TMPL_IF EXPR="(field eq 'signature')" -->
