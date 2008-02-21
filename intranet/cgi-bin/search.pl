@@ -48,7 +48,7 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::AR::Utilidades;
+use C4::AR::Estadisticas;
 
 my $query=new CGI;
 my $type=$query->param('type');
@@ -220,12 +220,59 @@ $template->param(FORMINPUTS => \@forminputs);
 $search{'front'}=$query->param('front');
 
 #cantidad de resultados que se van a mostrar
-my $num=20;
+my $num=cantidadRenglones();
 my @results;
 my $count;
-my $ini= $query->param('ini')||0;
-($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
-my ($template, $ini, $cantR)=&crearPaginador($template, $count, $ini);
+
+#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+my $ini;
+my $pageNumber;
+my $cantR=cantidadRenglones();
+
+if (($query->param('ini') eq "")){
+        $ini=0;
+	$pageNumber=1;
+} else {
+	$ini= ($query->param('ini')-1)* $cantR;
+	$pageNumber= $query->param('ini');
+};
+#FIN inicializacion
+$num= $num + $ini;
+
+my ($cantidad,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
+
+my @numeros= &armarPaginas($cantidad, $pageNumber);
+my $paginas = scalar(@numeros)||1;
+
+my $pagActual = $query->param('ini')||1;
+
+if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+        my $sig = $pagActual+1;
+        if ($sig <= $paginas){
+                 $template->param(
+                                displaynext    =>'1',
+                                sig   => $sig);
+        };
+        if ($sig > 2 ){
+                my $ant = $pagActual-1;
+                $template->param(
+                                displayprev     => '1',
+                                ant     => $ant)}
+}
+
+$template->param( 	paginas   => $paginas,
+			actual    => $pagActual,
+			cantidad  => $cantidad,
+			numbers   => \@numeros
+		);
+
+
+
+#*****************************************Fin Paginador*************************************************
+
+
+# $num= $num + $ini;
+# ($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
 
 ################### AGREGADO POR LUCIANO ##########################
 if (($dictionary)||($signature)) {

@@ -209,7 +209,7 @@ my $query="SELECT biblio.title, biblio.unititle, autores.completo FROM biblio in
 
 
 sub DictionarySignatureSearch {
-  my ($env,$type,$search,$num,$offset)=@_;
+  my ($env,$type,$search,$fin,$inicio)=@_;
   my $dbh = C4::Context->dbh;
   $search->{'signature'}=~ s/ +$//;
   my $count=0;
@@ -232,7 +232,7 @@ sub DictionarySignatureSearch {
     my $strComp= ($DictionaryCaseSensitive eq "yes")?" LIKE BINARY ":" = ";	
     $condition= $strComp."'".$keyword."'";
   } else {
-    $condition= " LIKE '%".$keyword."%'";
+    $condition= " LIKE '".$keyword."%'";
   }
 
   #para calcular la cantidad total de resultados  
@@ -242,9 +242,8 @@ sub DictionarySignatureSearch {
   my $data=$sth->fetchrow_hashref;
   my $countTotal= $data->{'cant'};
 
-  #para paginar el resultado
   my $q= "SELECT biblionumber,itemnumber,bulk FROM items WHERE bulk ".$condition;
-  $q .= " LIMIT ".$offset*$num.",".$num;
+
   my @queries=($q);
 
   foreach my $query (@queries){
@@ -351,11 +350,12 @@ sub DictionarySignatureSearch {
     	}
    	$index+=1;
    }
-    
-    #Ordena
-   # @resultarray= sort { &noaccents($a->{bulk}) cmp &noaccents($b->{bulk}) } @resultarray;
 
 }#fin else
+
+
+
+$countTotal= scalar(@resultarray);
 
 if ($size) {
     my $middle= (scalar(@resultarray) - (scalar(@resultarray) % 2)) / 2;
@@ -364,6 +364,24 @@ if ($size) {
 
 my @finalresults= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @resultarray;
 
+my %row;
+my $hash;
+my @finalresults2;
+my $tope= scalar(@finalresults);
+
+#se pagina el resultado (se filtra info del arreglo)
+#Miguel - No se puede paginar de otro modo
+for (my $i=$inicio; ($i < $fin and $i < $tope); $i++){
+	$hash= @finalresults[$i];
+
+	my %row = (keyword => $hash->{'keyword'}, jump => $hash->{'jump'}, 
+	biblionumber=> $hash->{'biblionumber'}, itemnumber => $hash->{'itemnumber'}, 
+	direct => $hash->{'direct'}, bulk => $hash->{'bulk'},title => $hash->{'title'},unititle => $hash->{'unititle'},author => $hash->{'author'});
+
+	push(@finalresults2, \%row);
+}
+
 # return($count,@finalresults);
-return($countTotal,@finalresults);
+# return($countTotal,@finalresults);
+return($countTotal,@finalresults2);
 }
