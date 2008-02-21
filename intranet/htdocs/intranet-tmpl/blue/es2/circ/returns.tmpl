@@ -6,6 +6,12 @@
 <!-- /TMPL_IF -->
 
 <script language="javascript" type="text/javascript">
+
+function imprimirTicket(str){
+	window.open ("receipt.pl"+str, "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+}
+
+
 	function swap(id,src){
 		document.getElementById(id).src=src;
 	}
@@ -613,7 +619,8 @@ Sin sanciones
 
 <!-- TMPL_LOOP name="ticket_string" -->
 	<script>
-		window.open ("receipt.pl<!-- TMPL_VAR name='ticket_string' -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->");
+// 		window.open ("receipt.pl<!-- TMPL_VAR name='ticket_string' -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	</script>
 
 <!-- /TMPL_LOOP-->

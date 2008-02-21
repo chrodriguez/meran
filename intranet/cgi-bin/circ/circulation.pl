@@ -69,6 +69,7 @@ my $ticket_borrower;
 
 #DAMIAN - Para prestar varios items.
 my @chkbox=$query->param('chkbox');
+my $loop=scalar(@chkbox);
 my @infoTotal;
 open(A,">>/tmp/debug.txt");
 print A "chbox: $chkbox[0]\n";
@@ -123,11 +124,11 @@ $template->param($query->param('codError')=>1) if $query->param('codError');
 my $print=$query->param('print');
 my $bornum = $query->param('borrnumber');
 my $itemnumber = $query->param('itemnumber') || $query->param('ticket');
-my $iteminfo= getiteminformation( \%env, $itemnumber);
-
-if ($iteminfo->{'barcode'} eq ''  && $print eq 'maybe'){
-	$print = 'yes';
-}
+my $iteminfo;
+my $strItemnumber="";
+# if ($iteminfo->{'barcode'} eq ''  && $print eq 'maybe'){
+# 	$print = 'yes';
+# }
 if ($print eq 'yes' && $bornum ne ''){
 	printslip(\%env,$bornum);
 	$query->param('borrnumber','');
@@ -141,74 +142,74 @@ my $hash;
 my $max= getmaxissues();
 $template->param(issues_max =>$max);
 
-if ($bornum) {
-    ($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
-
-    if ($query->param('ticket')){ # se realizo el prestamo
-	    $ticket_duedate = vencimiento($itemnumber);
-	    $ticket_borrower = $borrower;
-	    $ticket_string = 
-		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
-		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
-		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
-		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
-		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
-		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
-		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
-		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
-		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
-		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
-		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
-		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
-		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . $loggedinuser;
-
-	    $message="Se prest&oacute; el ejemplar ".$iteminfo->{'barcode'}." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
-    } else {
-	my ($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
-	my @values;
-	my %labels;
-	foreach (@results){
-		if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))) { #solo pone los items que no estan prestados
-			push @values,$_->{'itemnumber'};
-			$labels{$_->{'itemnumber'}} ="$_->{'barcode'}";
+if($bornum){
+	($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
+	if ($query->param('ticket')){ # se realizo el prestamo
+# 		$ticket_duedate = vencimiento($itemnumber);
+		$ticket_borrower = $borrower;
+		my $barcodes="";
+		my @itemPrestados=split("/",$query->param('ticket'));
+		foreach my $itemnumber (@itemPrestados){
+			$iteminfo= getiteminformation( \%env, $itemnumber);
+			$ticket_string=crearTicket($iteminfo);
+			$barcodes.=", ".$iteminfo->{'barcode'};
 		}
-	}
-
-	$CGIselectbarcode=CGI::scrolling_list(
-			-name => 'itemnumber',
-			-values => \@values,
-			-labels => \%labels,
-			-default => $iteminfo->{'itemnumber'}, 
-			-size => 1,
-			-multiple => 0
+		$message="Se prest&oacute; el/los ejemplar/es".$barcodes." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
+	} 
+	else{
+		for(my $i=0;$i<$loop;$i++){
+			my $itemnumber=$chkbox[$i];
+			$strItemnumber.=$itemnumber."#";
+			$iteminfo= getiteminformation( \%env, $itemnumber);
+			my ($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
+			my @values;
+			my %labels;
+			foreach (@results){
+				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ #solo pone los items que no estan prestados
+					push @values,$_->{'itemnumber'};
+					$labels{$_->{'itemnumber'}} ="$_->{'barcode'}";
+				}
+			}
+			$CGIselectbarcode=CGI::scrolling_list(
+				-name => 'itemnumber',
+				-values => \@values,
+				-labels => \%labels,
+				-default => $iteminfo->{'itemnumber'}, 
+				-size => 1,
+				-multiple => 0
 			);
-    }
+				$infoTotal[$i]->{'iteminfo'}=$iteminfo;
+				$infoTotal[$i]->{'itemnumber'}=$itemnumber;
+				$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
+				$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
+				$infoTotal[$i]->{'unititle'}=$iteminfo->{'unititle'};
+				$infoTotal[$i]->{'edition'}=$iteminfo->{'number'};
 
 #Agregado por Luciano para poner los tipos de prestamos existentes
-my $defaultissuetype= C4::Context->preference('defaultissuetype');
-$template->param(issuetypes =>sanctionSelect($dbh,$defaultissuetype,undef,$iteminfo->{'notforloan'}));
+			my $defaultissuetype= C4::Context->preference('defaultissuetype');
+			$template->param(issuetypes =>sanctionSelect($dbh,$defaultissuetype,undef,$iteminfo->{'notforloan'}));
+		}
 #Fin de lo agregado por Luciano para los tipos de prestamo
-
-if ($branchcookie) {
-    $cookie=[$cookie, $branchcookie, $printercookie];
-}
+	}
+	if ($branchcookie) {
+		$cookie=[$cookie, $branchcookie, $printercookie];
+	}
 
 # Si esta bien con los libros...
 # Obtengo el maximo de prestamos que se pueden pedir, veo la cantidad de prestamos
 # realizados por el usuario y a partir de ahi genero los mensajes para mandar al tmpl
 # Verifica si tiene sanciones
-my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
+	my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 
 #$template->param(cant_issues =>$cant_issues);
 ##########################FIXME###############################################################################
 #$template->param(all_issues =>1) if ($cant_issues == $max); # el usuario tiene todos los libros permitidos...
-$template->param(MAXISSUES => \@issuetypes);# if ($cant > 0); # el usuario tiene mas libros de los permitidos...
+	$template->param(MAXISSUES => \@issuetypes);# if ($cant > 0); # el usuario tiene mas libros de los permitidos...
 ##############################################################################################################
-my $sanctions = hasSanctions($bornum);
-$template->param(sanctions =>$sanctions);
-my $debts= hasDebts($dbh, $bornum); # indica si el usuario tiene libros vencidos
-$template->param(debts =>$debts);
+	my $sanctions = hasSanctions($bornum);
+	$template->param(sanctions =>$sanctions);
+	my $debts= hasDebts($dbh, $bornum); # indica si el usuario tiene libros vencidos
+	$template->param(debts =>$debts);
 } # if (bornum)
 
 # now the reserved items....
@@ -243,8 +244,7 @@ foreach my $res (@$reserves) {
 		$res->{'clase'}= $clase2;
 		push @waiting, $res;
 		$wcount++;
-	}       
-
+	} 
 }#end for
 
 $template->param(
@@ -266,11 +266,11 @@ $template->param(
 		city => $borrower->{'city'},
 		phone => $borrower->{'phone'},
 		cardnumber => $borrower->{'cardnumber'},
-		barcode => $iteminfo->{'barcode'},
-		edition => $iteminfo->{'number'},
-		volume => $iteminfo->{'volume'},
-		itemnumber => $itemnumber,
-		biblioitemnumber => $iteminfo->{'biblioitemnumber'},	
+# 		barcode => $iteminfo->{'barcode'},
+# 		edition => $iteminfo->{'number'},
+# 		volume => $iteminfo->{'volume'},
+# 		itemnumber => $itemnumber,
+# 		biblioitemnumber => $iteminfo->{'biblioitemnumber'},
 		message => $message,
 		error => $error,
 		CGIselectborrower => $CGIselectborrower,
@@ -283,7 +283,11 @@ $template->param(
 		RESERVES => \@realreserves,
 		reserves_count => $rcount,
 		WAITRESERVES => \@waiting,
-		waiting_count => $wcount
+		waiting_count => $wcount,
+#agregado damian para prestar varios items
+		chkbox     =>join(",",@chkbox),
+		strItemnumber => $strItemnumber,
+		infoTotal => \@infoTotal,
 );
 
 
@@ -322,6 +326,29 @@ sub printslip {
 	$i++;
     }
     remoteprint($env,\@issues,$borrower);
+}
+
+sub crearTicket(){
+	my ($iteminfo)=@_;
+	my %env;
+	my $bornum=$iteminfo->{'borrowernumber'};
+	my ($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
+	my $ticket_duedate = vencimiento($iteminfo->{'itemnumber'});
+	my $ticket_borrower = $borrower;
+	my $ticket_string =
+		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
+		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
+		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
+		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
+		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
+		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
+		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
+		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
+		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
+		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
+		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
+		    "&librarianNumber=" . $loggedinuser. "##";
+	return ($ticket_string);
 }
 
 # Local Variables:

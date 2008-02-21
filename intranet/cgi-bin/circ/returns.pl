@@ -48,9 +48,6 @@ my ($template, $loggedinuser, $cookie)
 			flagsrequired => {circulate => 1},
 			});
 
-open(A, ">>/tmp/debug.txt");
-print A "creo el archivo desde returns.pl \n";
-
 sub crearTicket(){
 	my ($iteminfo)=@_;
 	my %env;
@@ -70,7 +67,7 @@ sub crearTicket(){
 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
 		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . $loggedinuser;
+		    "&librarianNumber=" . $loggedinuser. "##";
 	return ($ticket_string);
 }
 
@@ -162,7 +159,6 @@ if($loop != 0 || $barcode){#Damian - Para devolver muchos libros a la vez
 	}
 }
 elsif($strItemNumbers ne "") {
-print A "elseif strItemNumbers <> blanco ".$strItemNumbers."\n";
 	my @arrayItemNumbers=split(/,/,$strItemNumbers);
 # si viene el itemnumber entonces esta aceptando la confirmacion => hay que hacer la devolucion o la renovacion
 	my $cant=scalar(@arrayItemNumbers);
@@ -179,9 +175,10 @@ print A "elseif strItemNumbers <> blanco ".$strItemNumbers."\n";
 		} 
 		elsif($action eq 'renew') {
 			my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
-			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
+			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
 			if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticket_string=&crearTicket($iteminfo);
+				$okMensaje.="  <a class='click' onClick=imprimirTicket('".$ticket_string."')>imprimir ticket</a><br>";
 				$tickets[$i]->{'ticket_string'}=$ticket_string;
 			}
 		}
@@ -241,15 +238,12 @@ if ($bornum) {
 		}
 	}
 
-
-print A "llama a hasSanctions \n";
 ####Tiene sanciones el usuario?###
 my $sanctions = hasSanctions($bornum);
 $template->param(sanctions       => $sanctions);
 ####
 
 } else { # else -- if ($bornum)
-print A "entro a else \n";
 	my @values;
 	my %labels;
 	if ($borrowerslist) {
@@ -304,6 +298,7 @@ $template->param(
 		chkbox     =>join(",",@chkbox),
 		chkall  =>$chkall,
 		ticket_string => \@tickets,
+# 		ticket_string => $ticket_string,
 );
 
 # actually print the page!
