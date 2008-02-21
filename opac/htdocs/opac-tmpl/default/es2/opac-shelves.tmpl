@@ -119,7 +119,7 @@ function mandarArreglo(valores){
 		<th><a href="#" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a></th>
 		<!-- /TMPL_IF  -->
 		<th align="center" width=40%><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME='shelfnumber' -->&orden=title">T&iacute;tulo</a></th>
-                <th  align="center" width=20%><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME='shelfnumber' -->&orden=author">Autor</a></th>
+                <th  align="center" width=20%><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME='shelfnumber' -->&orden=completo">Autor</a></th>
                	<th  align="center" width=13%><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME='shelfnumber' -->&orden=place">Lugar</a></th>
 		<th  align="center" width=10%>Edici&oacute;n</th>
  		<th  align="center" width=27%>Disponibilidad</th>
@@ -399,16 +399,15 @@ Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_V
 		</table>
 <br>
 <!-- ES LA PAGINACION -->
-  <table border="0"  align="center">
-        <tr align="center" cellpadding=0 cellspacing=0>
+<table border="0"  align="center">
+  <tr align="center" cellpadding=0 cellspacing=0>
         <td>
         <!-- TMPL_IF NAME="displayprev" -->
-        <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME="viewShelfItems" -->&startfro
-m=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif
-" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
+        <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='prevstartfrom' -->">
+	<img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15">
+	</a>
     <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="
-0">
+        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
     <!-- /TMPL_IF -->
         </td>
 
@@ -417,7 +416,10 @@ m=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelan
         <!-- TMPL_IF NAME="highlight" -->
         <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
         <!-- TMPL_ELSE -->
-<td nowrap class="number"> <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME="viewShelfItems" -->&startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>
+	<td nowrap class="number"> 
+		<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='startfrom' -->"> <!-- TMPL_VAR NAME=number -->
+		</a>
+	</td>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="break" -->
@@ -425,25 +427,29 @@ m=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelan
         <!-- /TMPL_IF -->
 
     <!-- /TMPL_LOOP -->
-<td>
+	<td>
 <!-- TMPL_IF NAME="displaynext" -->
-        <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME="viewShelfItems" -->&startfro
-m=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif
-" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
+        <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='nextstartfrom' -->">
+	<img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
+	</a>
     <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt=
-"">
+        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
     <!-- /TMPL_IF -->
-</td></tr>
+	</td>
+  </tr>
 </table>
 <!-- FIN PAGINACION -->
 
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<tr bordercolor="#f2f2f2"><td align="center">
- <a target="_blank" href="<!-- TMPL_VAR NAME="themelang" -->/help/evhelp.htm" onMouseOut="swap('help2','<!-- TMPL_VAR NAME="themelang" -->/images/help.png')" onMouseOver="swap('help2','<!-- TMPL_VAR NAME="themelang" -->/images/helpbis.png')">
-        <img alt="Ayuda" src="<!-- TMPL_VAR NAME="themelang" -->/images/help.png" border="0" name="help2" id="help2"></a>
+<table>
+<tr bordercolor="#f2f2f2">
+	<td align="center">
+ 		<a target="_blank" href="<!-- TMPL_VAR NAME='themelang' -->/help/evhelp.htm" onMouseOut="swap('help2','<!-- TMPL_VAR NAME='themelang' -->/images/help.png')" onMouseOver="swap('help2','<!-- TMPL_VAR NAME='themelang' -->/images/helpbis.png')">
+        	<img alt="Ayuda" src="<!-- TMPL_VAR NAME='themelang' -->/images/help.png" border="0" name="help2" id="help2">
+		</a>
 
-</td></tr>
+	</td>
+</tr>
 </table>
 <!-- TMPL_INCLUde Name="opac-bottom.inc" -->

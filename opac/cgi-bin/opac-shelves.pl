@@ -69,7 +69,7 @@ if (C4::Context->boolean_preference('marc') eq '1') {
 } else {
         $template->param(script => "opac-detail.pl");
 }
-=c
+=item
 if ($query->param('modifyshelfcontents')) {
 	my $shelfnumber=$query->param('shelfnumber');
 	my $barcode=$query->param('addbarcode');
@@ -96,7 +96,7 @@ SWITCH: {
 	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
 my %shelflist;
-=cut
+=item
 if ($query->param('viewShelfItems')) {
   %shelflist = &getbookshelfItems($type,$nameShelf);
     $template->param ({viewShelfItems => $nameShelf});
@@ -184,7 +184,7 @@ my $startfrom = $query->param('startfrom');
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 
-my $ini=$query->param('startfrom');
+my $ini=$query->param('startfrom')||0;
 my $cantR=cantidadRenglones();
 
   %shelflist = &GetShelfList($type,  $ini,$cantR);
@@ -390,14 +390,13 @@ sub viewshelf {
 #para los contenidos
 	#my $color='';
 
-	          ###Matias: Para el orden
-		     my $orden='title';
-		     if ($query->param('orden')){$orden=$query->param('orden');}
-		   ###
+###Matias: Para el orden
+  my $orden='title';
+    if ($query->param('orden')){$orden=$query->param('orden');}
+ ###
 		                                        
-
-	my @bitemsloop;
-        my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}->{$orden} ) } keys(%bitemlist);
+my @bitemsloop;
+my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}->{$orden} ) } keys(%bitemlist);
 	
         my $bibitem;
         foreach my $element (@key) {
@@ -406,7 +405,7 @@ sub viewshelf {
                 $line{'color'}= $color;
                 $line{'biblioitemnumber'}=$bitemlist{$element}->{'biblioitemnumber'};
                 $line{'title'}=$bitemlist{$element}->{'title'};
-				$line{'unititle'}=$bitemlist{$element}->{'unititle'};
+		$line{'unititle'}=$bitemlist{$element}->{'unititle'};
                 $line{'biblionumber'}=$bitemlist{$element}->{'biblionumber'};
 		
 				##AUTOR###
@@ -420,7 +419,9 @@ sub viewshelf {
 		($line{'total'},$line{'unavailable'},$line{'counts'}) = itemcountbibitem($bibitem,'opac');
 				      
                 push (@bitemsloop, \%line);
-		}
+	}#end for
+
+close(A);
 
 
 	  
