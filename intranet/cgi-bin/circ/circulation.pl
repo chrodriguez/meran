@@ -161,7 +161,6 @@ $template->param(issues_max =>$max);
 if($bornum){
 	($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
 	if ($query->param('ticket')){ # se realizo el prestamo
-# 		$ticket_duedate = vencimiento($itemnumber);
 		$ticket_borrower = $borrower;
 		my $barcodes="";
 		my @itemPrestados=split("/",$query->param('ticket'));
