@@ -67,7 +67,7 @@ sub crearTicket(){
 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
 		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . $loggedinuser. "##";
+		    "&librarianNumber=" . $loggedinuser;
 	return ($ticket_string);
 }
 
@@ -85,7 +85,7 @@ my $itemnumber = $query->param('itemnumber');
 my $bornum=$query->param('borrnumber');
 
 #DAMIAN - Para devolver varios items.
-my @chkbox=$query->param('chkbox');
+my @chkbox=$query->param('chkbox1');
 my @infoTotal;
 my $strItemNumbers=$query->param('strItemNumbers')||"";
 my $loop=scalar(@chkbox);

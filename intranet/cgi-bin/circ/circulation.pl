@@ -34,7 +34,7 @@ use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
 use C4::Date;
-use CGI::Util; 	
+use CGI::Util;
 use C4::AR::Reserves;
 use C4::AR::Issues;
 use Date::Manip;
@@ -63,18 +63,13 @@ my $dbh = C4::Context->dbh;
 ## Para el ticket
 my $ticket_print = 0;
 my $ticket_duedate;
-my $iteminfo;
 my $ticket_string;
 my $ticket_borrower;
 
 #DAMIAN - Para prestar varios items.
-my @chkbox=$query->param('chkbox');
+my @chkbox=$query->param('chkbox2');
 my $loop=scalar(@chkbox);
 my @infoTotal;
-open(A,">>/tmp/debug.txt");
-print A "chbox: $chkbox[0]\n";
-print A "chbox: $chkbox[1]\n";
-close(A);
 
 #set up cookie.....
 my $branchcookie;
@@ -119,8 +114,26 @@ if ($findborrower) {
 	}
 }
 
-# check and see if we should print
-$template->param($query->param('codError')=>1) if $query->param('codError');
+# Si hay errores, se genera un arreglo con el codigo de barra del item que genero el error y el string
+# correspondiente
+if($error){
+	my @codsErrores=split("/",$query->param('codError'));
+	my @errores;
+	my @array;
+	my $info;
+	my $j=0;
+	foreach my $err (@codsErrores){
+		@array=split("-",$err);
+		my $numeroItem=$array[0];
+		my $strError=$array[1];
+		$info= getiteminformation( \%env, $numeroItem);
+		$errores[$j]->{'barcode'}=$info->{'barcode'};
+		$errores[$j]->{'string'}=procesarStr($strError);;
+		$j++;
+	}
+$template->param(errores=>\@errores);
+}
+
 my $print=$query->param('print');
 my $bornum = $query->param('borrnumber');
 my $itemnumber = $query->param('itemnumber') || $query->param('ticket');
@@ -170,24 +183,34 @@ if($bornum){
 					$labels{$_->{'itemnumber'}} ="$_->{'barcode'}";
 				}
 			}
-			$CGIselectbarcode=CGI::scrolling_list(
-				-name => 'itemnumber',
+			my $CGIselectbarcode=CGI::scrolling_list(
+				-name => 'itemnumber'.$i,
 				-values => \@values,
 				-labels => \%labels,
 				-default => $iteminfo->{'itemnumber'}, 
 				-size => 1,
 				-multiple => 0
 			);
-				$infoTotal[$i]->{'iteminfo'}=$iteminfo;
-				$infoTotal[$i]->{'itemnumber'}=$itemnumber;
-				$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
-				$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
-				$infoTotal[$i]->{'unititle'}=$iteminfo->{'unititle'};
-				$infoTotal[$i]->{'edition'}=$iteminfo->{'number'};
 
-#Agregado por Luciano para poner los tipos de prestamos existentes
 			my $defaultissuetype= C4::Context->preference('defaultissuetype');
-			$template->param(issuetypes =>sanctionSelect($dbh,$defaultissuetype,undef,$iteminfo->{'notforloan'}));
+			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
+			my $selectissuetype=CGI::scrolling_list(
+				-name => 'issuetype'.$i,
+				-values => $valuesIss,
+				-labels => $labelsIss,
+				-default => $defaultissuetype,
+				-size => 1,
+				-multiple => 0
+			);
+
+			$infoTotal[$i]->{'iteminfo'}=$iteminfo;
+			$infoTotal[$i]->{'itemnumber'}=$itemnumber;
+			$infoTotal[$i]->{'author'}=$iteminfo->{'author'};
+			$infoTotal[$i]->{'title'}=$iteminfo->{'title'};
+			$infoTotal[$i]->{'unititle'}=$iteminfo->{'unititle'};
+			$infoTotal[$i]->{'edition'}=$iteminfo->{'number'};
+			$infoTotal[$i]->{'codbarra'}=$CGIselectbarcode;
+			$infoTotal[$i]->{'tipoprest'}=$selectissuetype;
 		}
 #Fin de lo agregado por Luciano para los tipos de prestamo
 	}
@@ -349,6 +372,34 @@ sub crearTicket(){
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
 		    "&librarianNumber=" . $loggedinuser. "##";
 	return ($ticket_string);
+}
+
+sub procesarStr(){
+	my ($strError)=@_;
+	if($strError eq "SANCIONADO_O_LIBROS_VENCIDOS"){ 
+		return "El usuario est&aacute; sancionado o tiene libros vencidos";
+	}
+	elsif($strError eq "SUPERA_MAX_RESERVAS"){
+		return "El usuario supera el n&uacute;mero m&aacute;ximo de reservas";
+	}
+	elsif($strError eq "YA_TIENE_PRESTAMO_SOBRE_EL_GRUPO"){
+		return "El usuario ya tiene un pr&eacute;stamo sobre este grupo";
+	}
+	elsif($strError eq "NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO"){
+		return "No hay m&aacute;s ejemplares disponibles, se realiz&oacute; una reserva sobre el grupo";
+	}
+	elsif($strError eq "NO_HAY_MAS_EJEMPLARES_NO_RESERVA"){
+		return "No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite";
+	}
+	elsif($strError eq "IRREGULAR"){
+		return "El usuario no es un alumno regular";
+	}
+	elsif($strError eq "YA_TIENE_TODOS_LOS_EJEMPLARES_PARA_EL_TIPO_DE_PRESTAMO"){
+		return "El usuario supera el n&uacute;mero m&aacute;ximo de ejemplares para ese tipo de pr&eacute;stamo.";
+	}
+	elsif($strError eq "NO_ES_HORA_DEL_PRESTAMO_ESPECIAL"){
+		return "Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.";
+	}
 }
 
 # Local Variables:

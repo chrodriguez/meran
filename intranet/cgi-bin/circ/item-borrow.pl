@@ -27,9 +27,9 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 my $flags;
 my $borrower;
 my $bornum = $query->param('borrnumber');
-my $issuecode = $query->param('issuetype');
-# my $itemnumber = $query->param('itemnumber');#SACARLO
-my $olditemnumber = $query->param('olditemnumber');
+# my $issuecode = $query->param('issuetype');
+# my $itemnumber = $query->param('itemnumber');
+# my $olditemnumber = $query->param('olditemnumber');
 my $branchcode = $query->param('branch');
 my $bib;
 my $bibit;
@@ -40,109 +40,128 @@ my $strItemnumber = $query->param('strItemnumber');
 my @numerosItems=split("#",$strItemnumber);
 my $strResult="";
 my $mensajeError="";
-
-for my $itemnumber (@numerosItems){ #ESTO ES PARA PODER PRESTAR TODOS LAS RESERVAS!!!!!!! VER CON EL MONO
-
+my $error=0;
+my $itemnumber;
+my $issuecode;
+my $i=0;
+open(A,">>/tmp/pr.txt");
+for my $olditemnumber (@numerosItems){ #ESTO ES PARA PODER PRESTAR TODOS LAS RESERVAS!!!!!!! VER CON EL MONO
+print A "Entro al loop: $olditemnumber\n";
+	$issuecode = $query->param('issuetype'.$i);
+	$itemnumber = $query->param('itemnumber'.$i);
+	$i++;
 #busca la informacion del item y del usuario
-my $biblio = getiteminformation(\%env,$itemnumber);
-if ($biblio) {
-	$bib=$biblio->{'biblionumber'};
-	$bibit=$biblio->{'biblioitemnumber'};
-	$barcode=$biblio->{'barcode'};
-} else { #No existe el item
-	print $query->redirect("circulation.pl?borrnumber=".$bornum);
-}
+	my $biblio = getiteminformation(\%env,$itemnumber);
+	if ($biblio){
+		$bib=$biblio->{'biblionumber'};
+		$bibit=$biblio->{'biblioitemnumber'};
+		$barcode=$biblio->{'barcode'};
+	} 
+	else{ #No existe el item
+		print $query->redirect("circulation.pl?borrnumber=".$bornum);
+	}
 
-($borrower, $flags) = getpatroninformation(\%env,$bornum,0);
-if (!$borrower) { #no existe el usuario
-	print $query->redirect("circulation.pl?itemnumber=".$itemnumber);
-}
+	($borrower, $flags) = getpatroninformation(\%env,$bornum,0);
+	if (!$borrower) { #no existe el usuario
+		print $query->redirect("circulation.pl?itemnumber=".$itemnumber);
+	}
 #si existe el borrower sigo, sino devuelvo que el borrower no existe
 
-my @resultado=reservaritem($bornum,$bibit,$itemnumber,$branchcode,1,$issuecode);
+	my @resultado=reservaritem($bornum,$bibit,$itemnumber,$branchcode,1,$issuecode);
 
 
 #se hace el prestamo
-if ($resultado[0] eq 0){#quiere decir que dio algun tipo de error
-	if ($resultado[1] eq 5){#quiere decir que el item ya esta reservado
-		if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
-
-			if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
+	if ($resultado[0] eq 0){#quiere decir que dio algun tipo de error
+		if ($resultado[1] eq 5){#quiere decir que el item ya esta reservado
+			if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
+				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 					foreach my $iss (@issuetypes){
 						if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
-						}}}
+						}
+					}
+				}
 		
 # 			print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$itemnumber);
-			$strResult.=$itemnumber."/";
-		} else {
-			cancelar_reserva($bibit,$bornum);
-		} 
-	} elsif ($resultado[1] eq 3) {
+				$strResult.=$itemnumber."/";
+			}
+			else{
+				cancelar_reserva($bibit,$bornum);
+			}
+		}
+		elsif($resultado[1] eq 3){
 	# El usuario ya tiene una reserva sobre este grupo pero sobre olditemnumber => hay que hacer un intercambio 
 	# de itemnumbers ($itemnumber <=> $olditemnumber)
-		intercambiar_itemnumber($bornum, $bibit, $itemnumber, $olditemnumber);
-		if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
-
-			if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
+			intercambiar_itemnumber($bornum, $bibit, $itemnumber, $olditemnumber);
+			if (efectivizar_reserva($bornum,$bibit,$issuecode)){
+				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 					foreach my $iss (@issuetypes){
 						if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
-						}}}
+						}
+					}
+				}
 
 		
 # 			print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$itemnumber);
 			$strResult.=$itemnumber."/";
-		} else {
-			cancelar_reserva($bibit,$bornum);
+			}
+			else{
+				cancelar_reserva($bibit,$bornum);
+			}
 		} 
-	} else {
-		my $msg=""; #FIXME hay que codificar los mensajes de error
-		if ($resultado[1] eq 1) {
-			$msg= "SANCIONADO_O_LIBROS_VENCIDOS"; #El usuario esta sancionado o tiene libros vencidos
-		} elsif ($resultado[1] eq 2) {
-			$msg= "SUPERA_MAX_RESERVAS"; #El usuario supera el numero maximo de reservas";
-		} elsif ($resultado[1] eq 4) {
-			$msg= "YA_TIENE_PRESTAMO_SOBRE_EL_GRUPO"; #El usuario ya tiene un prestamo sobre este grupo";
-		} elsif ($resultado[1] eq 6) {
-                        $msg= "IRREGULAR"; #El usuario no es regular
-		} elsif ($resultado[1] eq 7) {
-                        $msg= "YA_TIENE_TODOS_LOS_EJEMPLARES_PARA_EL_TIPO_DE_PRESTAMO"; #El usuario ya tiene todos los prestamos para el tipo de prestamo
-                } elsif ($resultado[1] eq 8) {
-		        $msg= "NO_ES_HORA_DEL_PRESTAMO_ESPECIAL"; #No se puede realizar el prestamo especial por la hora
-		}
-		$mensajeError.=$itemnumber."-".$msg."/";
+		else{
+			my $msg=""; #FIXME hay que codificar los mensajes de error
+			if ($resultado[1] eq 1) {
+				$msg= "SANCIONADO_O_LIBROS_VENCIDOS"; #El usuario esta sancionado o tiene libros vencidos
+			} elsif ($resultado[1] eq 2) {
+				$msg= "SUPERA_MAX_RESERVAS"; #El usuario supera el numero maximo de reservas";
+			} elsif ($resultado[1] eq 4) {
+				$msg= "YA_TIENE_PRESTAMO_SOBRE_EL_GRUPO"; #El usuario ya tiene un prestamo sobre este grupo";
+			} elsif ($resultado[1] eq 6) {
+                        	$msg= "IRREGULAR"; #El usuario no es regular
+			} elsif ($resultado[1] eq 7) {
+                        	$msg= "YA_TIENE_TODOS_LOS_EJEMPLARES_PARA_EL_TIPO_DE_PRESTAMO"; #El usuario ya tiene todos los prestamos para el tipo de prestamo
+                	} elsif ($resultado[1] eq 8) {
+		        	$msg= "NO_ES_HORA_DEL_PRESTAMO_ESPECIAL"; #No se puede realizar el prestamo especial por la hora
+			}
+			$error=1;
+			$mensajeError.=$itemnumber."-".$msg."/";
 # 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=".$msg);
-	}
-} elsif ($resultado[0] eq 2){#quiere decir que se reservo el item que se queria
-	if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
-
-			if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
-					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
-					foreach my $iss (@issuetypes){
-						if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
-						}}}
-	
-# 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$itemnumber);
-		$strResult.=$itemnumber."/";
-	} else {
-		cancelar_reserva($bibit,$bornum);
+		}
 	} 
-} elsif ($resultado[0] eq 1) {
-	if ($resultado[1] eq 0) { #No hay mas ejemplares disponibles. Se realizo una reserva sobre el grupo.
+	elsif ($resultado[0] eq 2){#quiere decir que se reservo el item que se queria
+		if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
+			if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
+				my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
+				foreach my $iss (@issuetypes){
+					if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
+						 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
+					}
+				}
+			}
+# 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$itemnumber);
+			$strResult.=$itemnumber."/";
+		}
+		else{
+			cancelar_reserva($bibit,$bornum);
+		}
+	}
+	elsif ($resultado[0] eq 1) {
+		if ($resultado[1] eq 0) { #No hay mas ejemplares disponibles. Se realizo una reserva sobre el grupo.
 # 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO");
-		$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO/";
-	} elsif ($resultado[1] eq -1) { #No hay mas ejemplares disponibles y el usuario no puede tener mas reservas => no se hace nada
+			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO/";
+		}
+		elsif ($resultado[1] eq -1) { #No hay mas ejemplares disponibles y el usuario no puede tener mas reservas => no se hace nada
 # 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=NO_HAY_MAS_EJEMPLARES_NO_RESERVA");
-	$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA/";
+			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA/";
+		}
 	}
 }
-}
-
-print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$strResult."&codError=".$mensajeError);
+close(A);
+print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$strResult."&error=".$error."&codError=".$mensajeError);
 
 # Local Variables:
 # tab-width: 8

@@ -62,7 +62,6 @@ FIXME
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &IssuesType	
     &devolver
     &renovar
     &borrowerissues
@@ -73,6 +72,8 @@ FIXME
     &verificarTipoPrestamo
     &PrestamosMaximos
     &IssueType
+    &IssuesType
+    &IssuesType2
     &sepuederenovar2
     &fechaDeVencimiento
 );
@@ -589,6 +590,30 @@ sub IssuesType {
 	return(@result);
 }
 
+sub IssuesType2 {
+ 	my ($notforloan)=@_;
+	my $dbh = C4::Context->dbh;
+  	my $sth;
+  	my $query= "select * from issuetypes";
+  	if ($notforloan ne undef){
+    		$query.=" where notforloan = ? order by description";
+    		$sth = $dbh->prepare($query);
+    		$sth->execute($notforloan);
+  	} 
+	else{
+    		$query.=" order by description";
+    		$sth = $dbh->prepare($query);
+    		$sth->execute();
+  	}
+  	my %issueslabels;
+ 	my @issuesvalues;
+  	while (my $res = $sth->fetchrow_hashref) {
+        	push @issuesvalues, $res->{'issuecode'};
+        	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
+ 	}
+  	$sth->finish;
+	return(\@issuesvalues,\%issueslabels);
+}
 
 sub DatosPrestamos {
   #Esta funcion retorna los datos de los prestamos de un usuario
