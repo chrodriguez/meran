@@ -60,6 +60,9 @@ my $branch=(split("_",(split(";",$cookie))[0]))[1];
 my $printer = getprinter($query, $printers);
 my $dbh = C4::Context->dbh;
 
+
+my $iteminfo;
+
 ## Para el ticket
 my $ticket_print = 0;
 my $ticket_duedate;
@@ -137,7 +140,7 @@ $template->param(errores=>\@errores);
 my $print=$query->param('print');
 my $bornum = $query->param('borrnumber');
 my $itemnumber = $query->param('itemnumber') || $query->param('ticket');
-my $iteminfo;
+
 my $strItemnumber="";
 # if ($iteminfo->{'barcode'} eq ''  && $print eq 'maybe'){
 # 	$print = 'yes';
