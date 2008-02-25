@@ -394,6 +394,11 @@ sub cancelar_reserva {
 			@resultado= ($data->{'itemnumber'}, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'}, $data2->{'reservenumber'});
 		}
 	}
+
+#Actualizo la sancion para que refleje el itemnumber y asi poder informalo
+	my $sth6=$dbh->prepare(" UPDATE sanctions SET itemnumber = ? WHERE reservenumber = ? ");
+	$sth6->execute($data->{'itemnumber'},$data->{'reservenumber'});
+
 #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 	$sth=$dbh->prepare("Delete from reserves where biblioitemnumber=? and borrowernumber=?");
 	$sth->execute($biblioitemnumber,$borrowernumber);
@@ -758,9 +763,16 @@ sub eliminarReservasVencidas(){
 		if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
 			@resultado= ($data->{'itemnumber'}, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'});
 		}
+
+		#Actualizo la sancion para que refleje el itemnumber y asi poder informalo
+		my $sth6=$dbh->prepare(" UPDATE sanctions SET itemnumber = ? WHERE reservenumber = ? ");
+		$sth6->execute($data->{'itemnumber'},$data->{'reservenumber'});
+
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 		my $sth3=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? ");
 		$sth3->execute($data->{'reservenumber'});
+
+
 		if (@resultado){
 		#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);

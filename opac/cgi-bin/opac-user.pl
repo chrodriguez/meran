@@ -101,6 +101,8 @@ my $venc=0;
 my $sanc= hasSanctions($borrowernumber);
 
 foreach my $san (@$sanc) {
+if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
+			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
 $san->{'enddate'}=format_date($san->{'enddate'});
 $san->{'startdate'}=format_date($san->{'startdate'});
 }

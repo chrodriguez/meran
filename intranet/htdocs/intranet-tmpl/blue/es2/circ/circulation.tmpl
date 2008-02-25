@@ -18,7 +18,7 @@
             </td>
           </tr>
 	<!-- TMPL_LOOP NAME="sanctions" -->
-	  <tr>
+	  <tr>     
 	    <td>
               <font class="fontmsg"><!-- TMPL_IF NAME="description" --><li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF --></font>
 	    </td>
@@ -30,7 +30,7 @@
 <!-- TMPL_IF name="borrowernumber" -->
 <!-- TMPL_LOOP name="MAXISSUES"-->
 <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
-      <tr>
+      <tr>      
         <td>
 	  <font class="fontmsg">&iexcl;El usuario tiene <!-- TMPL_VAR name="maxissues" --> ejemplar(es) en prestamo de tipo <!-- TMPL_VAR name="description" -->, est&aacute; en el l&iacute;mite de lo permitido!</font>
         </td>
@@ -140,17 +140,25 @@
 	<table border="0" cellpadding="0" cellspacing="0" width="50%">
 		<tr class="tablaresultadoTitle"> 
  			<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-			<td>Mensajes de errores</td>
+			<td>Mensajes</td>
 			<td width="1%" align="rigth" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 		</tr>
 		<tr>
-		    <td width="1%">&nbsp;</td>
-	<!-- TMPL_LOOP name="errores" -->
+		    <td width="1%">&nbsp;</td>	
 		    <td class="inputFontNormal" align="center">
-			No se pudo prestar el ejemplar:<b> <!-- TMPL_VAR name="barcode" --></b> por la siguiente situaci&oacute;n:<br>
-			<b><!-- TMPL_VAR name="string" --></b>
+			<!-- TMPL_IF name="SANCIONADO_O_LIBROS_VENCIDOS" -->El usuario est&aacute; sancionado o tiene libros vencidos<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="SUPERA_MAX_RESERVAS" -->El usuario supera el n&uacute;mero m&aacute;ximo de reservas<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="YA_TIENE_PRESTAMO_SOBRE_EL_GRUPO" -->El usuario ya tiene un pr&eacute;stamo sobre este grupo<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO" -->No hay m&aacute;s ejemplares disponibles, se realiz&oacute; una reserva sobre el grupo<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="NO_HAY_MAS_EJEMPLARES_NO_RESERVA" -->No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite<!-- /TMPL_IF -->
+			   <!-- TMPL_IF name="IRREGULAR" -->El usuario no es un alumno regular<!-- /TMPL_IF -->
+			 <!-- TMPL_IF name="YA_TIENE_TODOS_LOS_EJEMPLARES_PARA_EL_TIPO_DE_PRESTAMO" -->El usuario supera el n&uacute;mero m&aacute;ximo de ejemplares para ese tipo de pr&eacute;stamo.
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="NO_ES_HORA_DEL_PRESTAMO_ESPECIAL" -->Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.
+			<!-- /TMPL_IF -->
+						
+			 
 		    </td>
-	<!-- /TMPL_LOOP -->
 		    <td width="1%">&nbsp;</td>
                 </tr>
 	</table>
@@ -277,7 +285,7 @@
 <!--Este es el ticket que se imprimir como comprobante del prestamo -->
 <!-- TMPL_IF name="ticket_string" -->
 	<script>
-		window.open ("receipt.pl<!-- TMPL_VAR name="ticket_string" -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("receipt.pl<!-- TMPL_VAR name="ticket_string" -->", "Boleta","width=600,height=600,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	</script>
 
 <!-- TMPL_ELSE-->
@@ -299,36 +307,30 @@
         <table border="0">
 	<tr class="tablemsg">
 		<td class="fontmsg">
-			<b><u>PR&Eacute;STAMO</u>:</b>
+			<b><u>PR&Eacute;STAMO</u>:</b><br>
+			<!-- TMPL_LOOP NAME="infoTotal" -->
+				<!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
+				<!-- TMPL_IF NAME="unititle" -->
+					:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="edition" -->
+					, <!-- TMPL_VAR NAME="edition" -->
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="volume" -->
+					, t <!-- TMPL_VAR NAME="volume" -->
+				<!-- /TMPL_IF -->
+				<br>
+			<!-- /TMPL_LOOP -->
+			<br>
+			<b><u>USUARIO</u>:</b> 
+				<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		</td>
 	</tr>
-	<!-- TMPL_LOOP NAME="infoTotal" -->
-	<tr>
-		<td  class="fontmsg">
-			<!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
-			<!-- TMPL_IF NAME="unititle" -->
-				:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="edition" -->
-				, <!-- TMPL_VAR NAME="edition" -->
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="volume" -->
-				, t <!-- TMPL_VAR NAME="volume" -->
-			<!-- /TMPL_IF -->
-		</td>
+        <tr align="center">
+		<td class="inputFontNormal">C&oacute;digo de barras: <!-- TMPL_VAR NAME="CGIselectbarcode" --></td>
 	</tr>
-	<tr align="center">
-		<td class="inputFontNormal">
-			C&oacute;digo de barras: <!-- TMPL_VAR NAME="codbarra" --><br>
-			Tipo de pr&eacute;stamo: <!-- TMPL_VAR NAME="tipoprest" -->
-		</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
-	<tr>
-		<td class="fontmsg">
-			<b><u>USUARIO</u>:</b>
-			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-		</td>
+        <tr align="center">
+		<td class="inputFontNormal">Tipo de pr&eacute;stamo: <!-- TMPL_VAR NAME="issuetypes" --></td>
 	</tr>
 	<tr align="center">
 		<td class="inputFontNormal">
@@ -462,7 +464,7 @@
 	<tr align="center">
 		<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
 		<td class="<!-- TMPL_VAR NAME='clase' -->">
-			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
+			<input type="checkbox" name="chkbox" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase" -->">
 			<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->

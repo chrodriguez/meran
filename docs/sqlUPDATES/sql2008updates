@@ -9,3 +9,7 @@ values ('logSearchINTRA','0','Hbilita (1) o no (0) loguea busquedas en la INTRA'
 
 --Se agrega la columna tipo que dira (INTRAu OPAC)
 ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
+
+
+-- se agrega la columna itemnumber a sanctions para poder informar desde que registro se produjo la sancion
+ALTER TABLE `Econo`.`sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;

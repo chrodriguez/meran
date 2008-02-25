@@ -81,6 +81,7 @@ on what is passed to it, it calls the appropriate search function.
 	&subsearch
 	&itemdata 
 	&itemdata2
+	&itemdata3
 	&bibdata 
 	&GetItems 
 	&borrdata 
@@ -4799,6 +4800,22 @@ sub itemdata2
         $sth->finish();
         return $res;
 }  
+
+
+#Dado un itemnumber devuelve los datos del item (titulo y autor)
+sub itemdata3
+{       
+        my ($itemnumber) = @_;
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT title, author from items right join biblio on items.biblionumber = biblio.biblionumber where itemnumber='$itemnumber' ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute();
+        my $res=$sth->fetchrow_hashref;
+        $sth->finish();
+	$res->{'author'}=getautor($res->{'author'})->{'completo'};
+        return $res;
+}  
+
 
 sub SearchSig
 {

@@ -140,6 +140,14 @@ my @overdues;
 my @issuedat;
 my $clase='par';
 my $sanctions = hasSanctions($bornum);
+foreach my $san (@$sanctions) {
+if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
+			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
+$san->{'enddate'}=format_date($san->{'enddate'});
+$san->{'startdate'}=format_date($san->{'startdate'});
+}
+#
+
 
 foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
