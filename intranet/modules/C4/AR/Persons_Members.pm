@@ -59,7 +59,7 @@ sub addmembers{
 
 	#Se puede habilitar usurios irregulares??
 	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
-	if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)){# No es regular y no se puede habilitar regulares
+	if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)&&($data->{'categorycode'} eq 'ES')){# No es regular y no se puede habilitar regulares
 	 $result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' es IRREGULAR y no puede ser habilitado!!! <br>';
 	}else{
    	$data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
