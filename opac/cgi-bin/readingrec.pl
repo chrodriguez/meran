@@ -32,8 +32,15 @@ use C4::Search;
 use HTML::Template;
 my $input=new CGI;
 
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "readingrec.tmpl",
+				query => $input,
+				type => "opac",
+				authnotrequired => 1,
+				debug => 1,
+				});
 
-my $bornum=$input->param('bornum');
+my $bornum=$loggedinuser;
 #get borrower details
 my $data=borrdata('',$bornum);
 my $order=$input->param('order');
@@ -49,13 +56,6 @@ if ($limit eq 'full'){
 }
 my ($count,$issues)=allissues($bornum,$order2,$limit);
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "readingrec.tmpl",
-				query => $input,
-				type => "opac",
-				authnotrequired => 1,
-				debug => 1,
-				});
 
 my @loop_reading;
 my $classe='par';
