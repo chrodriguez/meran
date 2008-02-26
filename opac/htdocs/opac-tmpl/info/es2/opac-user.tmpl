@@ -137,7 +137,7 @@
 <!-- TMPL_LOOP NAME="WAITING" -->
 <tr bordercolor="#f2f2f2">
  <td class="impar"><b><a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->"><!-- TMPL_VAR NAME="rtitle" --></a></b></td>
-<td class="impar"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+<td class="impar"><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 
  <td align=center class="impar">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
  </td>
@@ -241,11 +241,19 @@
 
 <p align="center">
 
+<a  class=button href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+          Historial de Pr&eacute;stamos
+</a>
+
+</p>
+
+<p align="center">
+
 <a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')"
 ><input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
 </a>
 
-        </p>
+</p>
 
 </td><td width="20%" valign="top">
 
