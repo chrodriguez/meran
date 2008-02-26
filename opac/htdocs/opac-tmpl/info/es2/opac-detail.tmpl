@@ -34,14 +34,16 @@ Autores Adicionales: <br>
 <!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a></b><br>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="COLABS" -->Colaboradores :<br>
+<!-- TMPL_IF name="COLABS" -->Colaboradores:<br>
 <!-- TMPL_LOOP NAME="COLABS" -->
 <b><a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
 <!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="tipo" -->)</a></b><br>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="cdu" -->CDU :<b> <!-- TMPL_VAR NAME="cdu" --></b><br><!-- /TMPL_IF -->
+<!-- TMPL_IF name="cdu" -->
+	Clasificaci&oacute;n por materia:<b> <!-- TMPL_VAR NAME="cdu" --></b><br>
+<!-- /TMPL_IF -->
                         
 <!-- TMPL_IF name="SUBJECTS" -->
 		Tema:<b> 
