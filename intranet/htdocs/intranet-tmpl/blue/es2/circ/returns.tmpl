@@ -7,9 +7,15 @@
 
 <script language="javascript" type="text/javascript">
 
-function imprimirTicket(str){
-	window.open ("receipt.pl"+str, "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+function imprimirTicket(str,num){
+	window.open ("receipt.pl"+str, "Boleta "+num,"width=600,height=500,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 }
+
+
+<!-- TMPL_LOOP name="ticket_string" -->
+ imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->","<!-- TMPL_VAR name='number' -->");
+<!-- /TMPL_LOOP-->
+
 
 
 	function swap(id,src){
@@ -21,7 +27,7 @@ function imprimirTicket(str){
 			frm.action.value= action;
 			frm.submit();
 		}else{
-			alert("ï¿½Debe completar el cï¿½digo de barras!");
+			alert("Debe completar el código de barras!");
 		}
 	}
 
@@ -616,14 +622,6 @@ Sin sanciones
 <!-- /TMPL_IF -->
 
 </table>
-
-<!-- TMPL_LOOP name="ticket_string" -->
-	<script>
-		imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->");
-// 		window.open ("receipt.pl<!-- TMPL_VAR name='ticket_string' -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-	</script>
-
-<!-- /TMPL_LOOP-->
 
 <script language="JavaScript">
 

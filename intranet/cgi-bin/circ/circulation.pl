@@ -68,6 +68,7 @@ my $ticket_print = 0;
 my $ticket_duedate;
 my $ticket_string;
 my $ticket_borrower;
+my @tickets;
 
 #DAMIAN - Para prestar varios items.
 my @chkbox=$query->param('chkbox2');
@@ -164,10 +165,14 @@ if($bornum){
 		$ticket_borrower = $borrower;
 		my $barcodes="";
 		my @itemPrestados=split("/",$query->param('ticket'));
+		my $i=0;
 		foreach my $itemnumber (@itemPrestados){
 			$iteminfo= getiteminformation( \%env, $itemnumber);
 			$ticket_string=crearTicket($iteminfo);
+			$tickets[$i]->{'ticket_string'}=$ticket_string;
+			$tickets[$i]->{'number'}=$i;
 			$barcodes.=", ".$iteminfo->{'barcode'};
+			$i++;
 		}
 		$message="Se prest&oacute; el/los ejemplar/es".$barcodes." al usuario ".$ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'};
 	} 
@@ -300,7 +305,6 @@ $template->param(
 		error => $error,
 		CGIselectborrower => $CGIselectborrower,
 		CGIselectbarcode => $CGIselectbarcode,
-		ticket_string => $ticket_string,
 		notforloan => $iteminfo->{'notforloan'},
 		author => $iteminfo->{'author'},
 		title => $iteminfo->{'title'},
@@ -313,6 +317,8 @@ $template->param(
 		chkbox     =>join(",",@chkbox),
 		strItemnumber => $strItemnumber,
 		infoTotal => \@infoTotal,
+		ticket_string => \@tickets,
+# 		ticket_string => $ticket_string,
 );
 
 

@@ -175,11 +175,11 @@ elsif($strItemNumbers ne "") {
 		} 
 		elsif($action eq 'renew') {
 			my ($renewed) = renovar($iteminfo->{'borrowernumber'},$iteminfo->{'itemnumber'});
-			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
+			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
 			if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticket_string=&crearTicket($iteminfo);
-				$okMensaje.="  <a class='click' onClick=imprimirTicket('".$ticket_string."')>imprimir ticket</a><br>";
 				$tickets[$i]->{'ticket_string'}=$ticket_string;
+				$tickets[$i]->{'number'}=$i;
 			}
 		}
 	}

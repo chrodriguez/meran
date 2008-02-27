@@ -1,4 +1,17 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script language="javascript" type="text/javascript">
+
+function imprimirTicket(str,num){
+	window.open ("receipt.pl"+str, "Boleta "+num,"width=600,height=500,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+}
+
+<!-- TMPL_LOOP name="ticket_string" -->
+ imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->","<!-- TMPL_VAR name='number' -->");
+<!-- /TMPL_LOOP-->
+
+</script>
+
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >
@@ -274,14 +287,7 @@
 
 <!-- TMPL_ELSE -->
 
-<!--Este es el ticket que se imprimir como comprobante del prestamo -->
-<!-- TMPL_IF name="ticket_string" -->
-	<script>
-		window.open ("receipt.pl<!-- TMPL_VAR name="ticket_string" -->", "Boleta","width=600,height=400,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-	</script>
-
-<!-- TMPL_ELSE-->
-
+<!-- TMPL_UNLESS name="ticket_string"-->
 <!-- TMPL_UNLESS name="max_issues"-->
 <!-- TMPL_UNLESS name="all_issues"-->
 <!-- TMPL_UNLESS name="sanctions"-->
@@ -351,8 +357,7 @@
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
-
-<!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 
 <form name=frm method="post" action="/cgi-bin/koha/circ/circulation.pl">
 	<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
