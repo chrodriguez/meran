@@ -213,18 +213,7 @@ sub prestamosAnual{
         $sth->execute($year);
 	while (my $data=$sth->fetchrow_hashref){
 		if ($clase eq 'par') {$clase='impar';}else{$clase='par'};
-		if ($data->{'mes'} eq "1") {$data->{'mes'}='Enero'};
-		if ($data->{'mes'} eq "2") {$data->{'mes'}='Febrero'};
-		if ($data->{'mes'} eq "3") {$data->{'mes'}='Marzo'};
-		if ($data->{'mes'} eq "4") {$data->{'mes'}='Abril'};
-		if ($data->{'mes'} eq "5") {$data->{'mes'}='Mayo'};
-		if ($data->{'mes'} eq "6") {$data->{'mes'}='Junio'};
-		if ($data->{'mes'} eq "7") {$data->{'mes'}='Julio'};
-		if ($data->{'mes'} eq "8") {$data->{'mes'}='Agosto'};
-		if ($data->{'mes'} eq "9") {$data->{'mes'}='Septiembre'};
-		if ($data->{'mes'} eq "10") {$data->{'mes'}='Octubre'};
-		if ($data->{'mes'} eq "11") {$data->{'mes'}='Noviembre'};
-		if ($data->{'mes'} eq "12") {$data->{'mes'}='Diciembre'};
+		$data->{'mes'}=&mesString($data->{'mes'});
 		$data->{'clase'}=$clase;
 		push(@results,$data);
         	};

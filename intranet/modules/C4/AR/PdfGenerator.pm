@@ -24,13 +24,14 @@ $VERSION = 0.01;
 	&hitoricoPrestamosPdfGenerator
 	&cardGenerator
 	&batchCardsGenerator
-	&generateCard 
+	&generateCard
+	&libreDeuda
 );
 
 
 sub newPdf{
 	my $pdf = new PDF::Report(PageSize => "A4", PageOrientation => 'Portrait');
-	return $pdf;		
+	return $pdf;
 }
 
 sub searchGenerator {
@@ -632,4 +633,93 @@ my ($branchname,$branchaddress1,$branchaddress2,$branchaddress3,$branchphone,$br
 	 $pdf->addRawText("Nombre: $firstname",$x+4,$pageheight - ($y+65));
 	 $pdf->addRawText("Tipo de Lector: $categorydes",$x+4,$pageheight - ($y+73));
 	 $pdf->addRawText("$documenttype: $documentnumber",$x+4,$pageheight - ($y+81));
+}
+#############FIN CARNET########################
+
+
+sub libreDeuda(){
+	my ($bornum,$borrewer) = @_;
+	my $tmpFileName= "libreDeuda".$bornum.".pdf";
+	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
+	my $dni= $borrewer->{'documentnumber'};
+	my $branchcode=$borrewer->{'branchcode'};
+	my $biblio=datosBiblio($branchcode);
+	my $categ=$biblio->{'categ'};
+	my $branchname=$biblio->{'branchname'};
+	my $pageheight;
+	my $pdf=newPdf();
+	my $x=50;
+	my $titulo="CERTIFICADO DE LIBRE DEUDA";
+	my @parrafo;
+	my $texto="       Certificamos que ".$nombre.", de la ".$branchname.", con número de documento ".$dni.",";
+	$parrafo[0]=$texto;
+	$texto=" no adeuda material bibliográfico en esta Biblioteca.";
+	$parrafo[1]=$texto;
+	$texto="          Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
+	$parrafo[2]=$texto;
+	$texto=" validez de 10 días corridos a partir de su fecha de emisión.";
+	$parrafo[3]=$texto;
+
+	($pdf,$pageheight)=&imprimirEncabezado($pdf,$categ,$branchname,$titulo,$x);
+	$pdf=imprimirContenido($pdf,$x,$pageheight,\@parrafo);
+	&imprimirFinal($pdf,$tmpFileName);
+}
+
+
+sub imprimirEncabezado(){
+	my ($pdf,$categ,$branchname,$titulo,$x)=@_;
+	my $pagewidth;
+	my $pageheight;
+	my @datearr = localtime(time);
+	my $anio=1900+$datearr[5];
+	my $mes=&C4::Date::mesString($datearr[4]+1);
+	my $dia=$datearr[3];
+	$pdf->newpage(1);
+	$pdf->openpage(1);
+	($pagewidth, $pageheight) = $pdf->getPageDimensions();
+        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 120);
+	$pdf->setFont("Arial-Bold");
+      	$pdf->setSize(10);
+	$pdf->addRawText(uc($categ), $x,$pageheight - 140);
+	$pdf->addRawText(uc($branchname), $x,$pageheight - 150);
+	$pdf->addRawText("BIBLIOTECA", $x,$pageheight - 160);
+	$pdf->setFont("Verdana-Bold");
+	$pdf->setSize(14);
+	$pdf->addRawText($titulo, 170,$pageheight - 200);
+	$pdf->setFont("Verdana");
+	$pdf->setSize(10);
+	$pdf->addRawText("La Plata, ".$dia." de ".$mes. " de ".$anio, $pagewidth-200,$pageheight - 230);
+	return($pdf,$pageheight);
+}
+
+sub imprimirContenido(){
+	my ($pdf,$x,$pageheight,$parrafo)=@_;
+	$pdf->setFont("Verdana");
+	$pdf->setSize(10);
+	my $y=0;
+	for(my $i=0; $i < scalar(@$parrafo); $i++){
+		$pdf->addRawText($parrafo->[$i], $x,$pageheight - (260+$y));
+		$y=$y+15;
 	}
+	$y=$y+30;
+	my $linea="................................";
+	$pdf->addRawText($linea, 130,$pageheight - (260+$y));
+	$pdf->addRawText($linea, 330,$pageheight - (260+$y));
+	$y=$y+10;
+	$pdf->addRawText("Firma", 160,$pageheight - (260+$y));
+	$pdf->addRawText("Aclaración", 360,$pageheight - (260+$y));
+	return($pdf);
+}
+
+
+sub datosBiblio(){
+	my ($branchcode)=@_;
+	my $dbh = C4::Context->dbh;
+	my $biblio;
+	my $sth=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, branchcategories.categoryname as categ
+	FROM branches inner join branchrelations on branches.branchcode=branchrelations.branchcode inner join branchcategories on branchcategories.categorycode = branchrelations.categorycode WHERE branches.branchcode=?");
+	$sth->execute($branchcode);
+	$biblio=$sth->fetchrow_hashref();
+	$sth->finish;
+	return($biblio);
+}

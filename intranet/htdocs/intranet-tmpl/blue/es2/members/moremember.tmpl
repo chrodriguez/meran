@@ -180,13 +180,30 @@
 		<tr>
 		<td span=100%> 
 			<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
-		 	<a href="#" onClick="formCarnet.submit()" ><img alt="Generar Carnet" src="<!-- TMPL_VAR NAME="themelang" -->/images/generarcarnet.png" border="0""></a>
+		 	<a href="#" onClick="formCarnet.submit()" ><img alt="Generar Carnet" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0""></a>
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+
+			</form>
+	 	</td>
+		</tr>
+		<tr>
+		<td span=100%> 
+			<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
+		 	<a href="#" onClick="formLibre.submit()" ><img alt="Generar Libre Deuda" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0""></a>
 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
 
 			</form>
 	 	</td>
 		</tr>
 
+		<td span=100%> 
+			<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
+		 	<a href="#" onClick="formInterBiblio.submit()" ><img alt="Generar Prestamo Interbibliotecario" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0""></a>
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+
+			</form>
+	 	</td>
+		</tr>
 		
 	 <!-- TMPL_IF name="mensaje_error_foto" -->	
 	 	<tr>

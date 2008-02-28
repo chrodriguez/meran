@@ -25,6 +25,7 @@ $VERSION = 0.01;
 	     &calc_endES
 	     &proximosHabiles
 	     &proximoHabil
+	     &mesString
 );
 
 sub get_date_format
@@ -211,7 +212,7 @@ sub updateForHoliday{
 #30/03/2007 - Damian - Se Agregaron las dos funciones proximoHabil y proximosHabiles porque se repetia en dos modulos Issues.pm y Reserves.pm.
 
 sub proximoHabil{
-#funcion que recibe como parametro una cantidad de dias y devuelve el proximo día hábil a partir de hoy + esa cantidad, ejemplo si recibe 2, devuelve el dia habil que sigue a pasado mañana. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles o no. El tercer parametro es opcional, si se recibe se calcula el perido desde ese dia, sino se hace desde el dia de hoy
+#funcion que recibe como parametro una cantidad de dias y devuelve el proximo dï¿½a hï¿½bil a partir de hoy + esa cantidad, ejemplo si recibe 2, devuelve el dia habil que sigue a pasado maï¿½ana. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles o no. El tercer parametro es opcional, si se recibe se calcula el perido desde ese dia, sino se hace desde el dia de hoy
 	my ($cantidad,$todosHabiles,$desde)=@_;
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
@@ -244,7 +245,7 @@ sub proximoHabil{
 }
 
 sub proximosHabiles{
-#funcion que recibe como parametro una cantidad de dias y devuelve el proximo día hábil a partir de hoy y el dia habil correspondiente a esa cantidad, ejemplo si recibe 2, devuelve el dia habil que corresponde a hoy y el que corresponde a 2 dias siguientes. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles.
+#funcion que recibe como parametro una cantidad de dias y devuelve el proximo dï¿½a hï¿½bil a partir de hoy y el dia habil correspondiente a esa cantidad, ejemplo si recibe 2, devuelve el dia habil que corresponde a hoy y el que corresponde a 2 dias siguientes. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles.
 	my ($cantidad,$todosHabiles)=@_;
 	my $apertura=C4::Context->preference("open");
 	my $cierre=C4::Context->preference("close");
@@ -259,7 +260,7 @@ sub proximosHabiles{
 	my $hoy=ParseDate("today");
 
 	if ($desde eq $hoy && $apertura gt $actual) {#entonces hoy no es habil, o la biblioteca no abrio aun
-#si todavia no abrio el usuario tiene desde el dia de hoy para retirar, asi que le resto 1 a la cantidad de dias que será valido el pedido
+#si todavia no abrio el usuario tiene desde el dia de hoy para retirar, asi que le resto 1 a la cantidad de dias que serï¿½ valido el pedido
 		$cantidad--;
 	} 
 	elsif($cierre lt $actual){#si ya paso el horario de cierre entonces lo tengo que tener disponible desde el dia siguiente
@@ -297,5 +298,20 @@ sub proximosHabiles{
 return (C4::Date::format_date_in_iso($desde),C4::Date::format_date_in_iso($hasta),$apertura,$cierre);
 }
 
-
+sub mesString(){
+	my ($mes)=@_;
+	if ($mes eq "1") {$mes='Enero'}
+	elsif ($mes eq "2") {$mes='Febrero'}
+	elsif ($mes eq "3") {$mes='Marzo'}
+	elsif ($mes eq "4") {$mes='Abril'}
+	elsif ($mes eq "5") {$mes='Mayo'}
+	elsif ($mes eq "6") {$mes='Junio'}
+	elsif ($mes eq "7") {$mes='Julio'}
+	elsif ($mes eq "8") {$mes='Agosto'}
+	elsif ($mes eq "9") {$mes='Septiembre'}
+	elsif ($mes eq "10") {$mes='Octubre'}
+	elsif ($mes eq "11") {$mes='Noviembre'}
+	elsif ($mes eq "12") {$mes='Diciembre'};
+	return ($mes);
+}
 1;
