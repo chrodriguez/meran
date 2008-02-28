@@ -128,9 +128,9 @@ if (! $biblionumber) {
   #original   } elsif (&checkitems(1,$barcode)) {
     } else {
 	#Aca esta la funcion que arma la lista de los barcodes repetidos Einar.
-	my $BarcoderepetidoS;
-	
-	if ($wthdrawn ne 2){ #MATIAS:  SI NO ES UN ITEM COMPARTIDO SE CHEQUEA EL BARCODE
+	my $BarcoderepetidoS='';
+	my $SignaturaRepetidas=0;
+	if ($wthdrawn ne 2){ #MATIAS:  SI NO ES UN ITEM COMPARTIDO SE CHEQUEA EL BARCODE Y LA SIGNATURA
 
 	foreach my $aux(@barcodes){
 		if (checkitems(1,$aux)){
@@ -138,12 +138,14 @@ if (! $biblionumber) {
 			else{$BarcoderepetidoS=$aux;}
 		}#if checkitems
 	}#foreach
-	
+
+	#Busca si esta siendo utilizada la signatura topografica en otro registro que no sea el propio.
+	 $SignaturaRepetidas=&signaturaUtilizada($input->param('bulk'),$biblionumber);	
+
 	 }#es Compartido?
 
 
-	#Busca si esta siendo utilizada la signatura topografica en otro registro que no sea el propio.
-	my $SignaturaRepetidas=&signaturaUtilizada($input->param('bulk'),$biblionumber);
+
 
 	
 	if (($BarcoderepetidoS)or($SignaturaRepetidas gt 0)){

@@ -76,8 +76,6 @@ my $Clevel;
 
 my %langlabels;
 my @langtypes;
-my $bulk;
-
 
   my $allsubtitles;
   my $additionals;
@@ -470,8 +468,7 @@ if ($msg eq "havereservesgroup")       {
             SUBTITLE    => $allsubtitles,
             ABSTRACT     => $biblios[0]->{'abstract'},
 	    SUBJECT => $allsubjects,
-            #CDU    => $biblios[0]->{'seriestitle'},	
-	    bulk    => $biblios[0]->{'seriestitle'},	
+            CDU    => $biblios[0]->{'seriestitle'},	
             TITLE     => $biblios[0]->{'title'},
             ADDITIONAL => \@autoresAdicionales,
 	    COLABS => \@colaboradores,
@@ -488,6 +485,8 @@ if ($msg eq "havereservesgroup")       {
            valores          => $valor,    #idem anterior
 	Cavails => $Cavails, disableDisp => 1  #Disponibilidad
         );
+
+	if (!$bulk) 	{$template->param(   bulk    => $biblios[0]->{'seriestitle'});}
 
 	#Valores Por Defecto
 	my @defaults=&obtenerDefaults();
