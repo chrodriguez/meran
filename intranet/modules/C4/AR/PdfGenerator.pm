@@ -26,6 +26,7 @@ $VERSION = 0.01;
 	&batchCardsGenerator
 	&generateCard
 	&libreDeuda
+	&prestInterBiblio
 );
 
 
@@ -636,82 +637,11 @@ my ($branchname,$branchaddress1,$branchaddress2,$branchaddress3,$branchphone,$br
 }
 #############FIN CARNET########################
 
-
-sub libreDeuda(){
-	my ($bornum,$borrewer) = @_;
-	my $tmpFileName= "libreDeuda".$bornum.".pdf";
-	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
-	my $dni= $borrewer->{'documentnumber'};
-	my $branchcode=$borrewer->{'branchcode'};
-	my $biblio=datosBiblio($branchcode);
-	my $categ=$biblio->{'categ'};
-	my $branchname=$biblio->{'branchname'};
-	my $pageheight;
-	my $pdf=newPdf();
-	my $x=50;
-	my $titulo="CERTIFICADO DE LIBRE DEUDA";
-	my @parrafo;
-	my $texto="       Certificamos que ".$nombre.", de la ".$branchname.", con número de documento ".$dni.",";
-	$parrafo[0]=$texto;
-	$texto=" no adeuda material bibliográfico en esta Biblioteca.";
-	$parrafo[1]=$texto;
-	$texto="          Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-	$parrafo[2]=$texto;
-	$texto=" validez de 10 días corridos a partir de su fecha de emisión.";
-	$parrafo[3]=$texto;
-
-	($pdf,$pageheight)=&imprimirEncabezado($pdf,$categ,$branchname,$titulo,$x);
-	$pdf=imprimirContenido($pdf,$x,$pageheight,\@parrafo);
-	&imprimirFinal($pdf,$tmpFileName);
-}
-
-
-sub imprimirEncabezado(){
-	my ($pdf,$categ,$branchname,$titulo,$x)=@_;
-	my $pagewidth;
-	my $pageheight;
-	my @datearr = localtime(time);
-	my $anio=1900+$datearr[5];
-	my $mes=&C4::Date::mesString($datearr[4]+1);
-	my $dia=$datearr[3];
-	$pdf->newpage(1);
-	$pdf->openpage(1);
-	($pagewidth, $pageheight) = $pdf->getPageDimensions();
-        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 120);
-	$pdf->setFont("Arial-Bold");
-      	$pdf->setSize(10);
-	$pdf->addRawText(uc($categ), $x,$pageheight - 140);
-	$pdf->addRawText(uc($branchname), $x,$pageheight - 150);
-	$pdf->addRawText("BIBLIOTECA", $x,$pageheight - 160);
-	$pdf->setFont("Verdana-Bold");
-	$pdf->setSize(14);
-	$pdf->addRawText($titulo, 170,$pageheight - 200);
-	$pdf->setFont("Verdana");
-	$pdf->setSize(10);
-	$pdf->addRawText("La Plata, ".$dia." de ".$mes. " de ".$anio, $pagewidth-200,$pageheight - 230);
-	return($pdf,$pageheight);
-}
-
-sub imprimirContenido(){
-	my ($pdf,$x,$pageheight,$parrafo)=@_;
-	$pdf->setFont("Verdana");
-	$pdf->setSize(10);
-	my $y=0;
-	for(my $i=0; $i < scalar(@$parrafo); $i++){
-		$pdf->addRawText($parrafo->[$i], $x,$pageheight - (260+$y));
-		$y=$y+15;
-	}
-	$y=$y+30;
-	my $linea="................................";
-	$pdf->addRawText($linea, 130,$pageheight - (260+$y));
-	$pdf->addRawText($linea, 330,$pageheight - (260+$y));
-	$y=$y+10;
-	$pdf->addRawText("Firma", 160,$pageheight - (260+$y));
-	$pdf->addRawText("Aclaración", 360,$pageheight - (260+$y));
-	return($pdf);
-}
-
-
+=item
+datosBiblio
+Busca todos los datos de la biblioteca en que se encuentra asociado el usuario.
+Nota: branchaddress3, se va usar para guardar la direccion web de la biblioteca.
+=cut
 sub datosBiblio(){
 	my ($branchcode)=@_;
 	my $dbh = C4::Context->dbh;
@@ -722,4 +652,235 @@ sub datosBiblio(){
 	$biblio=$sth->fetchrow_hashref();
 	$sth->finish;
 	return($biblio);
+}
+
+=item
+libreDeuda
+Genera y muestar la ventana para imprimir el documento de libre deuda.
+=cut
+sub libreDeuda(){
+	my ($bornum,$borrewer) = @_;
+	my $tmpFileName= "libreDeuda".$bornum.".pdf";
+	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
+	my $dni= $borrewer->{'documentnumber'};
+	my $branchcode=$borrewer->{'branchcode'};
+	my $biblio=&datosBiblio($branchcode);
+	my $categ=$biblio->{'categ'};
+	my $branchname=$biblio->{'branchname'};
+
+	my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
+
+	my $x=50;
+	my $y=260;#pos 'y' a partir de donde se van a escribir la parte del contenido.
+	my %titulo;
+	$titulo{'titulo'}="CERTIFICADO DE LIBRE DEUDA";
+	$titulo{'posx'}=170;
+	my @parrafo;
+	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", con número de documento ".$dni.",";
+	$parrafo[1]=" no adeuda material bibliográfico en esta Biblioteca.";
+	$parrafo[2]="          Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
+	$parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
+
+	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
+	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
+	($pdf,$y)=&imprimirFirma($pdf,$y,$pageheight);
+	&imprimirFinal($pdf,$tmpFileName);
+}
+
+=item
+prestInterBiblio
+Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
+=cut
+sub prestInterBiblio(){
+	my ($bornum,$borrewer)=@_;
+	my $tmpFileName= "prestInterBiblio".$bornum.".pdf";
+	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
+	my $dni= $borrewer->{'documentnumber'};
+	my $branchcode=$borrewer->{'branchcode'};
+	my $biblio=&datosBiblio($branchcode);
+	my $categ=$biblio->{'categ'};
+	my $branchname=$biblio->{'branchname'};
+
+	my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
+
+	my $x=50;
+	my $y=260;
+	my %titulo;
+	$titulo{'titulo'}="SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO";
+	$titulo{'posx'}=100;
+	my @parrafo;
+	$parrafo[0]="Sr. Director de la Biblioteca";
+	$parrafo[1]="de la Facultad de ________________________";
+	$parrafo[2]="S/D";
+	$parrafo[3]="______________________";
+	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
+	$parrafo[5]="interbibliotecario los siguientes ítems:";
+
+	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
+	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
+	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,2);
+
+	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
+	$parrafo[1]="Nombre y apellido:".$nombre;
+	$parrafo[2]="DNI:".$dni;
+	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
+	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
+	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddrress'};
+	$parrafo[6]="";
+	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
+	$parrafo[8]="atentamente.";
+
+	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
+	($pdf,$y)=&imprimirFirma($pdf,$y,$pageheight);
+	$y=$y+15;
+	$pdf->drawLine(50, $pageheight-$y, $pagewidth-50, $pageheight-$y);
+	$pdf=&imprimirPiePag($pdf,$y,$pageheight,$biblio);
+	&imprimirFinal($pdf,$tmpFileName);
+}
+
+=item
+inicializarPDF
+Crea un objeto pdf, lo devuelve, junto con la longitud de ancho ($pagewidth) y largo ($pageheight) que va a tener el documento.
+=cut
+sub inicializarPDF(){
+	my $pdf=newPdf();
+	$pdf->newpage(1);
+	$pdf->openpage(1);
+	my ($pagewidth, $pageheight) = $pdf->getPageDimensions();
+	return($pdf,$pagewidth,$pageheight);
+}
+
+=item
+imprimirEncabezado
+Imprime el encabezado del documento, con el escudo del la universidad nacional de la plata.
+@params:
+	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
+	$categ, categoria de la institucion en la que se va a imprimir el documento;
+	$branchname, nombre de la biblioteca en la que esta asociado el usuario que pidio el documento;
+	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$pagewidth, ancho del documento;
+	$pageheight, largo del documento;
+	$titulo, Titulo del documento;
+=cut
+sub imprimirEncabezado(){
+	my ($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,$titulo)=@_;
+#fecha
+	my @datearr = localtime(time);
+	my $anio=1900+$datearr[5];
+	my $mes=&C4::Date::mesString($datearr[4]+1);
+	my $dia=$datearr[3];
+#fin fecha
+        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 120);
+	$pdf->setFont("Arial-Bold");
+      	$pdf->setSize(10);
+	$pdf->addRawText(uc($categ), $x,$pageheight - 140);
+	$pdf->addRawText(uc($branchname), $x,$pageheight - 150);
+	$pdf->addRawText("BIBLIOTECA", $x,$pageheight - 160);
+	$pdf->setFont("Verdana-Bold");
+	$pdf->setSize(14);
+	$pdf->addRawText($titulo->{'titulo'}, $titulo->{'posx'},$pageheight - 200);
+	$pdf->setFont("Verdana");
+	$pdf->setSize(10);
+	$pdf->addRawText("La Plata, ".$dia." de ".$mes. " de ".$anio, $pagewidth-250,$pageheight - 230);
+	return($pdf);
+}
+
+=item
+imprimirContenido
+Imprime el contenido de del documento.
+@params:
+	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
+	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
+	    imprimir;
+	$pageheight, largo del documento;
+	$tamRenglon, tamaño que va a tener el renglon. Espacio entre texto por fila;
+	$parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
+=cut
+sub imprimirContenido(){
+	my ($pdf,$x,$y,$pageheight,$tamRenglon,$parrafo)=@_;
+	for(my $i=0; $i < scalar(@$parrafo); $i++){
+		$pdf->addRawText($parrafo->[$i], $x,$pageheight - $y);
+		$y=$y+$tamRenglon;
+	}
+	return($pdf,$y);
+}
+
+=item
+imprimirFirma
+Imprime la parte donde se pide la firma y aclaracion.
+@params:
+	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
+	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
+	    imprimir;
+	$pageheight, largo del documento;
+=cut
+sub imprimirFirma(){
+	my ($pdf,$y,$pageheight)=@_;
+	my $linea="................................";
+	$y=$y+30;
+	$pdf->addRawText($linea, 130,$pageheight - $y);
+	$pdf->addRawText($linea, 330,$pageheight - $y);
+	$y=$y+10;
+	$pdf->addRawText("Firma", 160,$pageheight - $y);
+	$pdf->addRawText("Aclaración", 360,$pageheight - $y);
+	return($pdf,$y);
+}
+
+=item
+imprimirTabla
+Imprime una tabla de tres columnas y n filas, dependiendo del parametro que llega.
+@params:
+	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
+	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
+	    imprimir;
+	$pageheight, largo del documento;
+	$cantFila: cantidad de filas a generar en la tabla;
+=cut
+sub imprimirTabla(){
+	my ($pdf,$y,$pageheight,$cantFila)=@_;
+	$pdf->setFont("Verdana-Bold");
+	$pdf->setSize(12);
+	$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
+	$pdf->addRawText("Autor/es", 100,$pageheight - ($y+15));
+	$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
+	$pdf->addRawText("Título", 255,$pageheight - ($y+15));
+	$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
+	$pdf->addRawText("Otros datos", 395,$pageheight - ($y+15));
+	$y=$y+20;
+	for(my $i=0;$i<$cantFila;$i++){
+		$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
+		$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
+		$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
+		$y=$y+20;
+	}
+	$pdf->setFont("Verdana");
+	$pdf->setSize(10);
+	$y=$y+20;
+	return($pdf,$y);
+}
+
+=item
+imprimirPiePag
+Imprime el pie de pagina del documento con la info de la biblioteca.
+@params:
+	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
+	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
+	    imprimir;
+	$pageheight, largo del documento;
+	$biblio, referencia a una hash con los datos de la biblioteca.
+=cut
+sub imprimirPiePag(){
+	my ($pdf,$y,$pageheight,$biblio)=@_;
+	my @texto;
+	$texto[0]="Biblioteca".$biblio->{'branchname'};
+	$texto[1]="Calle ".$biblio->{'branchaddress1'};
+	$texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
+	$texto[3]="Atención: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
+	$texto[4]="E-mail: ".$biblio->{'branchemail'};
+	$texto[5]="Sitios web: ".$biblio->{'branchaddress3'};
+	$texto[6]="";
+	$y=$y+15;
+	($pdf,$y)=&imprimirContenido($pdf,200,$y,$pageheight,10,\@texto);
+	return ($pdf);
 }

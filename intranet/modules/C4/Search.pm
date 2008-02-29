@@ -4424,7 +4424,7 @@ sub obtenerCategoria
         $sth->execute($bor);
         my $condicion = $sth->fetchrow();
 	if (not $condicion){
-		$sth = $dbh->prepare("SELECT categorycode FROM borrowers 		WHERE borrowernumber = ?");
+		$sth = $dbh->prepare("SELECT categorycode FROM borrowers WHERE borrowernumber = ?");
        		$sth->execute($bor);
         	$condicion = $sth->fetchrow();
 			}
