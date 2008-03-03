@@ -725,7 +725,7 @@ sub prestInterBiblio(){
 	$parrafo[2]="DNI:".$dni;
 	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
 	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
-	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddrress'};
+	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddress'};
 	$parrafo[6]="";
 	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
 	$parrafo[8]="atentamente.";
