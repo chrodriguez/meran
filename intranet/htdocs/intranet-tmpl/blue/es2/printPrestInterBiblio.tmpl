@@ -1,0 +1,96 @@
+<html>
+<script>
+function imprimir(){
+	var autores="";
+	var titulos="";
+	var otros="";
+	for(i=1;i<=2;i++){
+		autores=autores+document.getElementById('autor'+i).value+"#";
+		titulos=titulos+document.getElementById('titulo'+i).value+"#";
+		otros=otros+document.getElementById('otro'+i).value+"#";
+	}
+	document.getElementById('autores').value=autores;
+	document.getElementById('titulos').value=titulos;
+	document.getElementById('otros').value=otros;
+	document.getElementById('info').submit();
+	setTimeout("close()", 10000);
+}
+
+</script>
+
+<body  onUnload="cerrar()">
+
+<table align="center" height="100%" weight="100%">
+	<form name="info" id="info" action="/cgi-bin/koha/prestamoInterBiblio.pl">
+		<input type="hidden" name="bornum" id="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
+		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
+		<input type="hidden" name="autores" id="autores" >
+		<input type="hidden" name="titulos" id="titulos" >
+		<input type="hidden" name="otros" id="otros" >
+	<tr>
+		<td>
+			Biblioteca:
+		</td>
+		<td colspan="2">
+			<!-- TMPL_VAR NAME=bibliotecas -->
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Nombre Director:
+		</td>
+		<td colspan="2">
+			<input type="text" id="director" name="director">
+		</td>
+	</tr>
+	<tr>
+		<td  align="center" colspan="3">
+			Datos de los documentos
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Autor
+		</th>
+		<th>
+			Titulo
+		</th>
+		<th>
+			Otros Datos
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<input type=text name="autor1" id="autor1" value="">
+		</td>
+		<td>
+			<input type=text name="titulo1" id="titulo1" value="">
+		</td>
+		<td>
+			<input type=text name="otro1" id="otro1" value="">
+		</td>
+	</tr>
+		<tr>
+		<td>
+			<input type=text name="autor2" id="autor2" value="">
+		</td>
+		<td>
+			<input type=text name="titulo2" id="titulo2" value="">
+		</td>
+		<td>
+			<input type=text name="otro2" id="otro2" value="">
+		</td>
+	</tr>
+	<tr>
+		<td align=center colspan="3">
+			<br><br>
+			<input type="button" onClick="imprimir()"  value="imprimir">
+			<a href="javascript: window.close();">Cerrar</a>
+		</td>
+	</tr>
+	</form>
+</table>
+</body>
+</html>
+
+

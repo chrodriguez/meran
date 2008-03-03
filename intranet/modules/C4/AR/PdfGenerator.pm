@@ -692,7 +692,7 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 sub prestInterBiblio(){
-	my ($bornum,$borrewer)=@_;
+	my ($bornum,$borrewer,$biblioDestino,$director,$datos)=@_;
 	my $tmpFileName= "prestInterBiblio".$bornum.".pdf";
 	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
 	my $dni= $borrewer->{'documentnumber'};
@@ -710,15 +710,15 @@ sub prestInterBiblio(){
 	$titulo{'posx'}=100;
 	my @parrafo;
 	$parrafo[0]="Sr. Director de la Biblioteca";
-	$parrafo[1]="de la Facultad de ________________________";
+	$parrafo[1]="de la ".$biblioDestino;
 	$parrafo[2]="S/D";
-	$parrafo[3]="______________________";
+	$parrafo[3]=$director;
 	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
 	$parrafo[5]="interbibliotecario los siguientes ítems:";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
-	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,2);
+	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,2,$datos);
 
 	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
@@ -838,7 +838,7 @@ Imprime una tabla de tres columnas y n filas, dependiendo del parametro que lleg
 	$cantFila: cantidad de filas a generar en la tabla;
 =cut
 sub imprimirTabla(){
-	my ($pdf,$y,$pageheight,$cantFila)=@_;
+	my ($pdf,$y,$pageheight,$cantFila,$datos)=@_;
 	$pdf->setFont("Verdana-Bold");
 	$pdf->setSize(12);
 	$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
@@ -848,15 +848,19 @@ sub imprimirTabla(){
 	$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
 	$pdf->addRawText("Otros datos", 395,$pageheight - ($y+15));
 	$y=$y+20;
+	$pdf->setFont("Verdana");
+	$pdf->setSize(11);
 	for(my $i=0;$i<$cantFila;$i++){
 		$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
+		$pdf->addRawText($datos->[$i]->{'autor'}, 60,$pageheight - ($y+15));
 		$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
+		$pdf->addRawText($datos->[$i]->{'titulo'}, 210,$pageheight - ($y+15));
 		$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
+		$pdf->addRawText($datos->[$i]->{'otros'}, 360,$pageheight - ($y+15));
 		$y=$y+20;
 	}
-	$pdf->setFont("Verdana");
-	$pdf->setSize(10);
 	$y=$y+20;
+	$pdf->setSize(10);
 	return($pdf,$y);
 }
 

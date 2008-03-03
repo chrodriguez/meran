@@ -24,17 +24,75 @@ require Exporter;
 use strict;
 use CGI;
 use C4::Context;
-use PDF::Report;
 use C4::AR::PdfGenerator;
 use C4::Search;
+use HTML::Template;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Koha;
+use C4::Auth;
 
-my $cgi= new CGI;
-my $bornum = $cgi->param('bornum');
+my $input= new CGI;
+my $bornum = $input->param('bornum');
+my $accion = $input->param('accion');
 
-#FALTA HACER EL LLENADO DE LOS CAMPOS PARA LOS LIBRO Y DEMAS DATOS; SE PROCESA EN LA MISMA PAGINA
+if($accion eq "ingresarDatos"){
+	my  ($template, $borrowernumber, $cookie)
+                = get_template_and_user({template_name => "printPrestInterBiblio.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 1,
+                             flagsrequired => {borrow => 1}
+                             });
+	
+	
+	#Por los branches
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches=getbranches();
+	foreach my $branch (keys %$branches) {
+        	push @select_branch, $branch;
+        	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	}
+	my $branch=$input->param('branch');
+	($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
 
-my $borrewer= &borrdata("",$bornum);
-&prestInterBiblio($bornum,$borrewer);
+	my $bibliotecas=CGI::scrolling_list(      -name      => 'branch',
+                                        -id        => 'branch',
+                                        -values    => \@select_branch,
+                                        -labels    => \%select_branches,
+                                        -size      => 1,
+                      );
+	#Fin: Por los branches
 
+	$template->param(
+		bibliotecas => $bibliotecas,
+		bornum      => $bornum,
+		);
+	
+	output_html_with_http_headers $input, $cookie, $template->output;
+}
+else{
+	my $biblioDestino = getbranchname($input->param('branch'));
+	my $director = $input->param('director')||"___________________";
+	my @autores=split("#",$input->param('autores'));
+	my @titulos=split("#",$input->param('titulos'));
+	my @otros=split("#",$input->param('otros'));
+	my @datos;
+	for(my $i=0;$i<scalar(@titulos);$i++){
+		if($i<scalar(@autores)){
+			$datos[$i]->{'autor'}=$autores[$i];
+		}
+		else{$datos[$i]->{'autor'}="";}
+		if($i<scalar(@otros)){
+			$datos[$i]->{'otros'}=$otros[$i];
+		}
+		else{$datos[$i]->{'otros'}="";}
+		$datos[$i]->{'titulo'}=$titulos[$i];
+	}
+	my $borrewer= &borrdata("",$bornum);
+	&prestInterBiblio($bornum,$borrewer,$biblioDestino,$director,\@datos);
+}
 
 

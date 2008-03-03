@@ -198,9 +198,9 @@
 
 		<td span=100%> 
 			<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
-		 	<a href="#" onClick="formInterBiblio.submit()" ><img alt="Generar Prestamo Interbibliotecario" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0""></a>
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-
+		 	<a href="#" onClick="openPopup()" ><img alt="Generar Prestamo Interbibliotecario" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0""></a>
+			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
+			<input type="hidden" name="accion" value="ingresarDatos">
 			</form>
 	 	</td>
 		</tr>
@@ -534,10 +534,10 @@
 <br>
 </td></tr></table>
 <script>
-/*
-function confirm_prestamo(bibitem,item) {
-        window.location="/cgi-bin/koha/circ/circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&itemnumber="+item;
-}*/
+function openPopup() {
+	window.open('prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
+}
+
 function confirm_prestamo(){
 	document.getElementById('formPrestar').submit();
 }
