@@ -73,13 +73,13 @@ function enviarContenido3(codigo){
 		</tr>
 		<!-- TMPL_LOOP NAME=loop -->
 			<tr valign="middle">
-			<td width="1%" align="right"  valign="top" class="<!-- TMPL_VAR NAME="clase"-->">
+			<td width="1%" align="right"  valign="top" class="<!-- TMPL_VAR NAME='clase'-->">
 				&nbsp;
 			</td>
-			<td class=""><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
-		 	<td align="center"class="<!-- TMPL_VAR NAME="clase"-->"><!-- TMPL_IF NAME="valor" --><!-- TMPL_VAR NAME="valor"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF -->
+			<td class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
+		 	<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME="valor" --><!-- TMPL_VAR NAME="valor"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF -->
 			</td>
-                	<td height=20 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                	<td height=20 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
  		<tr>
@@ -109,8 +109,8 @@ function enviarContenido3(codigo){
 			<!--<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">-->
 			</td>
 			<td> 
-				El registro tiene relacionados <!-- TMPL_VAR 			NAME="relacionadoTablaCantidad"--> 
-				tuplas de la tabla <!-- TMPL_VAR NAME="relacionadoTabla"-->
+			El registro tiene relacionados <!-- TMPL_VAR NAME="relacionadoTablaCantidad"--> 
+			tuplas de la tabla <!-- TMPL_VAR NAME="relacionadoTabla"-->
 			</td>
 		<!-- /TMPL_LOOP -->
 		<!--TMPL_ELSE --> 
@@ -124,9 +124,7 @@ function enviarContenido3(codigo){
  	</table>
 	<br><br>
 
-	
-	<!-- Miguel - Esta tabla por ahora no se usa, ver si queda-->
-	
+
 	<table border=0 cellspacing=0 cellpadding="0" width="100%">
 		<tr class="tablaresultadoTitle">
 			<td width="1%" align="right"  valign="top">
@@ -145,17 +143,18 @@ function enviarContenido3(codigo){
 		<!-- TMPL_LOOP NAME=editandoSimilares -->
 		<tr valign="middle">
 			<td>&nbsp;</td>
-			<!--<td width="1%" align="right"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>-->
+		
 			<!-- TMPL_LOOP NAME=registro -->
-			<td class="" align="center"><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
+			<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
 			<!-- /TMPL_LOOP -->
-	                <td align="center"class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href="javascript:enviarContenido2('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
+	                <td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido2('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
 			</td>
-			<td align="center"class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href="javascript:enviarContenido3('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
+			<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido3('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
 			</td>
-			<!--<td height=20 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>-->
+			
 		</tr>
-		<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->	
+	<!--</FORM>	-->
  	<tr valign=bottom> 
         <td class="lineafinaltabla"  align="left" colspan="15"></td>
         </tr>

@@ -55,6 +55,7 @@ my $orden=$input->param('editandoorden');
 
 
 my ($total,@loop)= listadoTabla($tabla,$ind,$cant,$valores->{'camporeferencia'},$orden,$search);
+#para agregar la clase y que se vea la zebra
 my $num= 1;
 foreach my $res (@loop) {
 	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));

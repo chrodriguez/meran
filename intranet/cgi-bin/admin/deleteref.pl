@@ -2,7 +2,7 @@
 #script para administrar el borrado de elementos de las tablas de referencia
 #escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -52,6 +52,22 @@ my $cant=$input->param('editandocant');
 ($cant||($cant=20)); 
 my $orden=$input->param('editandoorden');
 my @loopRelacionados= tablasRelacionadas($tabla,$camporeferencia,$codigo);
+
+
+#para agregar la clase y que se vea la zebra
+my $num= 1;
+foreach my $res (@loop) {
+	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
+    	$num++;
+}
+
+#para agregar la clase y que se vea la zebra
+my $num= 1;
+foreach my $res (@valoresSimilares) {
+	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
+    	$num++;
+}
+
 $template->param(camposloop => \@campos,
 		loop => \@loop,
 		loopRelacionados =>\@loopRelacionados,
