@@ -219,6 +219,7 @@ $template->param(FORMINPUTS => \@forminputs);
 # I think it is (or was) a search from the "front" page...   [st]
 $search{'front'}=$query->param('front');
 
+
 #cantidad de resultados que se van a mostrar
 my $num=cantidadRenglones();
 my @results;
@@ -236,8 +237,18 @@ if (($query->param('ini') eq "")){
 	$ini= ($query->param('ini')-1)* $cantR;
 	$pageNumber= $query->param('ini');
 };
+
+
+#patch ADAMSSSSSSSSSSSSs
+if (($dictionary)||($signature)) {
 #FIN inicializacion
 $num= $num + $ini;
+}else{
+#*************************si no es por dictionary o signatura******************************
+$ini= $startfrom;
+#******************************************************************************************
+}
+
 
 my ($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
 
@@ -269,10 +280,6 @@ $template->param( 	paginas   => $paginas,
 
 
 #*****************************************Fin Paginador*************************************************
-
-
-# $num= $num + $ini;
-# ($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
 
 ################### AGREGADO POR LUCIANO ##########################
 if (($dictionary)||($signature)) {
@@ -316,7 +323,7 @@ if ($result->{'analyticalnumber'} ne ''){
     push (@$resultsarray, $result);
 
 }
-
+#??????????????????????
 ($resultsarray) || (@$resultsarray=());
 $num=10;
 

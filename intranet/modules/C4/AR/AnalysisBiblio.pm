@@ -292,19 +292,24 @@ foreach my $keyword (@key)
   my $i=0;
   while (my $data=$sth->fetchrow_hashref)
   {
-  my $autorppal=  C4::Search::getautor($data->{'autorppal'});
-  $data->{'apellidoppal'}= $autorppal->{'apellido'};
-  $data->{'nombreppal'}= $autorppal->{'nombre'};
-  $data->{'completoppal'}=$autorppal->{'completo'}; 
+  	my $autorppal=  C4::Search::getautor($data->{'autorppal'});
+  	$data->{'apellidoppal'}= $autorppal->{'apellido'};
+  	$data->{'nombreppal'}= $autorppal->{'nombre'};
+  	$data->{'completoppal'}=$autorppal->{'completo'}; 
   
-  my @autores=&getanalyticalautors($data->{'analyticalnumber'});
-  $data->{'analyticalauthor'}=\@autores;
+  	my @autores=&getanalyticalautors($data->{'analyticalnumber'});
+  	$data->{'analyticalauthor'}=\@autores;
 	     
- $results[$i]=$data;
-  $i++;}
+ 	$results[$i]=$data;
+  	$i++;
+  }
+# open(A, ">>/tmp/debug.txt");
+# print A "desde analitcas \n";
+# print A " cant ".scalar(@results)."\n";
   $sth->finish;
+# close(A);
   return(scalar(@results),@results);
- }
+}
 
 
 sub BiblioAnalysisTypeSearch

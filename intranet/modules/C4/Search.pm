@@ -1005,13 +1005,13 @@ while (my $data = $sth->fetchrow_hashref) {
  #Hay que agregar las analiticas
  my ($countanaliticas,@analiticas)= BiblioAnalysisSearch($search->{'keyword'});
  my $end=$offset +$num +1;
-
 foreach my $aux (@analiticas) {
-if (($count >= $offset) and ($count <= ($end))){
-push(@res2,$aux);
+	if (($count >= $offset) and ($count <= ($end))){
+		push(@res2,$aux);
 	}
-		$count++;
-}				  
+	
+	$count++;
+}			
  ####Fin anliticas
 
 return($count,@res2);
@@ -1486,15 +1486,14 @@ if ($search->{'authorid'} ne ''){
 			}
  ####Fin anliticas 
 
-
 #Filtro lo que hay que mostrar
  my $countFinal=0;
  my @resFinal;
+
    for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i)
    { 
    $resFinal[$countFinal]=$results[$i];
    $countFinal++; }
-
 	return($count,@resFinal);
 }
 
@@ -1503,56 +1502,70 @@ if ($search->{'authorid'} ne ''){
 #
 sub SubjectSearch
 {
-open (L,">/tmp/tiempo3");
+# open (L,">/tmp/tiempo3");
 my ($env,$type,$search,$num,$offset,$orden,$from)=@_;
-printf L $offset."offset\n";
-printf L $num."num\n";
-printf L $type."type\n";
-printf L $search."searnch\n";
-printf L $from."from\n";
-printf L $search->{'subjectitems'}."ppp";
+# printf L $offset."offset\n";
+# printf L $num."num\n";
+# printf L $type."type\n";
+# printf L $search."searnch\n";
+# printf L $from."from\n";
+# printf L $search->{'subjectitems'}."ppp";
+
 
 my $dbh = C4::Context->dbh;
 my $query = '';
 my @bind = ();
 my @results;
 my @key=split(' ',$search->{'subjectitems'});
+
 my $count=@key;
+
 my $i=1;
 #$query="SELECT * FROM temas where((temas.nombre like ? or temas.nombre like ?)";
-$query="Select distinct temas.id, temas.nombre from bibliosubject inner join temas on temas.id=bibliosubject.subject where((temas.nombre like ? or temas.nombre like ?)";
-			@bind=("$key[0]%","% $key[0]%");
-			while ($i < $count){
-					$query .= " and (temas.nombre like ? or temas.nombre like ?)";
-					push(@bind,"$key[$i]%","% $key[$i]%");
-				$i++;
-					}
-			$query .= ")";
+# $query="Select distinct temas.id, temas.nombre from bibliosubject inner join temas on temas.id=bibliosubject.subject where((temas.nombre like ? or temas.nombre like ?)";
+
+$query="Select distinct temas.id, temas.nombre from temas where((temas.nombre like ? or temas.nombre like ?)";
+
+@bind=("$key[0]%","% $key[0]%");
+
+while ($i < $count){
+	$query .= " and (temas.nombre like ? or temas.nombre like ?)";
+	push(@bind,"$key[$i]%","% $key[$i]%");
+	$i++;
+}
+$query .= ")";
 
 my $sth=$dbh->prepare($query);
 $sth->execute(@bind);
-
-
+ 
 my $i=0;
 my $limit= $num+$offset;
-  while (my $data=$sth->fetchrow_hashref){
+
+while (my $data=$sth->fetchrow_hashref){
     push @results, $data;
     $i++;
-  }
-my $count=$i;
+}
+
 $sth->finish;
+
+my $count=$i;
+
 
 my $countFinal=0;
 my @resFinal;
 ($offset||($offset=0));
 
+
 for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i)
 { 
-printf L $i."nro\n";
-printf L $results[$i]{'id'}."nro\n";
-$resFinal[$countFinal]=$results[$i];
-$countFinal++; }
-close L;
+# printf L $i."nro\n";
+# printf L $results[$i]{'id'}."nro\n";
+	$resFinal[$countFinal]=$results[$i];
+	$countFinal++; 
+}
+# close L;
+# print A "offset $offset limit $limit  count $count \n";
+
 return($count,@resFinal);
 
 } 
