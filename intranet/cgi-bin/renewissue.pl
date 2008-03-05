@@ -32,12 +32,13 @@ use C4::Auth;
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+$loggedinuser = getborrowernumber($loggedinuser);
 
 my $itemnumber=$input->param('item');
 
 my $borrowernumber=$input->param('borrnumber');
 
-my $res=renovar($itemnumber,$borrowernumber);
+my $res=renovar($itemnumber,$borrowernumber,$loggedinuser);
 if ($res){$res='si'}else{$res='no'};
 
 my $borname=$input->param('borrnumber');

@@ -21,6 +21,7 @@ use Date::Manip;
 
 my $query=new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0,{borrow => 1});
+$loggedinuser = getborrowernumber($loggedinuser);
 my %env;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
@@ -73,12 +74,12 @@ print A "Entro al loop: $olditemnumber\n";
 #se hace el prestamo
 	if ($resultado[0] eq 0){#quiere decir que dio algun tipo de error
 		if ($resultado[1] eq 5){#quiere decir que el item ya esta reservado
-			if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
+			if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)) {
 				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 					foreach my $iss (@issuetypes){
 						if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
+							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum,$loggedinuser);
 						}
 					}
 				}
@@ -87,19 +88,19 @@ print A "Entro al loop: $olditemnumber\n";
 				$strResult.=$itemnumber."/";
 			}
 			else{
-				cancelar_reserva($bibit,$bornum);
+				cancelar_reserva($bibit,$bornum,$loggedinuser);
 			}
 		}
 		elsif($resultado[1] eq 3){
 	# El usuario ya tiene una reserva sobre este grupo pero sobre olditemnumber => hay que hacer un intercambio 
 	# de itemnumbers ($itemnumber <=> $olditemnumber)
 			intercambiar_itemnumber($bornum, $bibit, $itemnumber, $olditemnumber);
-			if (efectivizar_reserva($bornum,$bibit,$issuecode)){
+			if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)){
 				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 					foreach my $iss (@issuetypes){
 						if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
+							 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum,$loggedinuser);
 						}
 					}
 				}
@@ -109,7 +110,7 @@ print A "Entro al loop: $olditemnumber\n";
 			$strResult.=$itemnumber."/";
 			}
 			else{
-				cancelar_reserva($bibit,$bornum);
+				cancelar_reserva($bibit,$bornum,$loggedinuser);
 			}
 		} 
 		else{
@@ -133,12 +134,12 @@ print A "Entro al loop: $olditemnumber\n";
 		}
 	} 
 	elsif ($resultado[0] eq 2){#quiere decir que se reservo el item que se queria
-		if (efectivizar_reserva($bornum,$bibit,$issuecode)) {
+		if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)) {
 			if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 				my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 				foreach my $iss (@issuetypes){
 					if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-						 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum);
+						 C4::AR::Reserves::cancelar_reservas_inmediatas($bornum,$loggedinuser);
 					}
 				}
 			}
@@ -146,7 +147,7 @@ print A "Entro al loop: $olditemnumber\n";
 			$strResult.=$itemnumber."/";
 		}
 		else{
-			cancelar_reserva($bibit,$bornum);
+			cancelar_reserva($bibit,$bornum,$loggedinuser);
 		}
 	}
 	elsif ($resultado[0] eq 1) {

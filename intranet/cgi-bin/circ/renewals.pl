@@ -56,7 +56,7 @@ if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
-    my ($returned) = devolver($iteminformation->{'itemnumber'},$iteminformation->{'borrowernumber'});
+    my ($returned) = devolver($iteminformation->{'itemnumber'},$iteminformation->{'borrowernumber'},$borrowernumber);
     if ($returned) {
 	    $okMensaje= 'El libro fue devuelto';
     } else {

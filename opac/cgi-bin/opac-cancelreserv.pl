@@ -38,7 +38,7 @@ my $biblioitemnumber=$input->param('biblioitem');
 my $volver=$input->param('volver');
 
 my $borrowernumber=getborrowernumber($loggedinuser);
-cancelar_reserva($biblioitemnumber,$borrowernumber);
+cancelar_reserva($biblioitemnumber,$borrowernumber,$loggedinuser);
 
 if ($volver){
     print $input->redirect("opac-reserve.pl?bib=".$volver);}

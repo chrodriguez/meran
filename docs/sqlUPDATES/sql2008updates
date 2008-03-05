@@ -13,3 +13,8 @@ ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
 
 -- se agrega la columna itemnumber a sanctions para poder informar desde que registro se produjo la sancion
 ALTER TABLE `Econo`.`sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
+
+
+--Se agrega la columna responsable a historicCirculation para poder saber quien fue el usuario que realizo la operacion
+
+ALTER TABLE `historicCirculation` ADD `responsable` VARCHAR( 20 ) NOT NULL AFTER `borrowernumber` ;

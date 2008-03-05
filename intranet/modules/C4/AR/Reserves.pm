@@ -372,7 +372,7 @@ un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya 
 
 sub cancelar_reserva {
 
-	my ($biblioitemnumber,$borrowernumber)=@_;
+	my ($biblioitemnumber,$borrowernumber,$loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SET autocommit=0;");
 	$sth->execute();
@@ -420,7 +420,7 @@ sub cancelar_reserva {
 		my $sth3=$dbh->prepare("commit");
 		$sth3->execute();
 
-		Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre);
+		Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
 
 #Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
 #my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
@@ -431,8 +431,8 @@ sub cancelar_reserva {
 		my $sth3=$dbh->prepare("commit");
 		$sth3->execute();
 	}
-	my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblioitemnumber,branchcode,itemnumber) values (?,?,NOW(),?,?,?) ");
-	$sth3->execute('cancel',$borrowernumber,$biblioitemnumber,$data->{'branchcode'},$data->{'itemnumber'});
+	my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,branchcode,itemnumber) values (?,?,?,NOW(),?,?,?) ");
+	$sth3->execute('cancel',$borrowernumber,$loggedinuser,$biblioitemnumber,$data->{'branchcode'},$data->{'itemnumber'});
 
 }
 
@@ -453,7 +453,7 @@ un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya 
 sub efectivizar_reserva{
 
 	my $dbh = C4::Context->dbh;
-	my ($borrowernumber,$biblioitemnumber,$issuecode)=@_;
+	my ($borrowernumber,$biblioitemnumber,$issuecode,$loggedinuser)=@_;
 	my @sancion= permitionToLoan($dbh, $borrowernumber, $issuecode);
 	if ($sancion[0]||$sancion[1]) {
 		return 0;
@@ -491,8 +491,8 @@ sub efectivizar_reserva{
 			$sth3->execute($data->{'borrowernumber'}, $data->{'itemnumber'}, $data->{'branchcode'}, $data->{'branchcode'}, 0, $issuecode);
 	
 		#Historial
-			my $sth4=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?) ");
-			$sth4->execute('issue',$data->{'borrowernumber'},$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'});
+			my $sth4=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,itemnumber,branchcode) values (?,?,?,NOW(),?,?,?) ");
+			$sth4->execute('issue',$data->{'borrowernumber'},$loggedinuser,$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'});
 			$sth3=$dbh->prepare("commit;");
 			$sth3->execute();
 
@@ -505,7 +505,7 @@ sub efectivizar_reserva{
 sub Enviar_Email{
 
 if (C4::Context->preference("EnabledMailSystem")){
-my ($itemnumber,$bor,$desde, $fecha, $apertura,$cierre)=@_;
+my ($itemnumber,$bor,$desde, $fecha, $apertura,$cierre,$loggedinuser)=@_;
 
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
@@ -546,8 +546,8 @@ my $resultado='ok';
 if ($borrower->{'emailaddress'} && $mailFrom ){sendmail(%mail) or die $resultado='error';
 						}
 						else {$resultado='';}
-my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
-$sth3->execute('notification',$bor,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
+my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
+$sth3->execute('notification',$bor,$res->{'rbiblionumber'},$loggedinuser,$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
 
 	}
 }
@@ -699,13 +699,13 @@ sub cant_waiting
 
 sub cancelar_reservas{
 # Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
-	my @borrowersnumbers= @_;
+	my ($loggedinuser,@borrowersnumbers)= @_;
         my $dbh = C4::Context->dbh;
 	foreach (@borrowersnumbers) {
 		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? and constrainttype is NULL");
 		$sth->execute($_);
 		while (my $biblioitemnumber= $sth->fetchrow){
-			&cancelar_reserva($biblioitemnumber, $_);
+			&cancelar_reserva($biblioitemnumber, $_,$loggedinuser);
 		}
 		$sth->finish;
 	}
@@ -713,6 +713,7 @@ sub cancelar_reservas{
 
 
 sub cancelar_reservas_inmediatas{
+	my ($loggedinuser)=@_;
 # Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
 	my @borrowersnumbers= @_;
         my $dbh = C4::Context->dbh;
@@ -720,7 +721,7 @@ sub cancelar_reservas_inmediatas{
 		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? and constrainttype is NULL and itemnumber is not NULL ");
 		$sth->execute($_);
 		while (my $biblioitemnumber= $sth->fetchrow){
-			&cancelar_reserva($biblioitemnumber, $_);
+			&cancelar_reserva($biblioitemnumber, $_,$loggedinuser);
 		}
 		$sth->finish;
 	}
@@ -747,6 +748,7 @@ sub intercambiar_itemnumber{
 }
 
 sub eliminarReservasVencidas(){
+	my ($loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 
 	my $sth=$dbh->prepare("SET autocommit=0");
@@ -778,7 +780,7 @@ sub eliminarReservasVencidas(){
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
 			my $sth4=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=? where biblioitemnumber=? and borrowernumber=? ");
 			$sth4->execute($resultado[0], $desde, $fecha,$resultado[1],$resultado[2]);
-			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre);
+			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
 		}
 	}
 	my $sth5=$dbh->prepare("commit ");

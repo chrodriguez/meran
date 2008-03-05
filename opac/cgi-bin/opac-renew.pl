@@ -10,5 +10,5 @@ use CGI;
 my $query = new CGI;
 my $itemnumber = $query->param('item');
 my $borrowernumber = $query->param("bornum");
-my $status = renovar($borrowernumber,$itemnumber);
+my $status = renovar($borrowernumber,$itemnumber,$borrowernumber);
 print $query->redirect("/cgi-bin/koha/opac-user.pl");

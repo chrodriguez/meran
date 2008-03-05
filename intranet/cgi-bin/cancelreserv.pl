@@ -32,12 +32,13 @@ use C4::Auth;
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+$loggedinuser = getborrowernumber($loggedinuser);
 
 my $biblioitemnumber=$input->param('biblioitem');
 my $volver=$input->param('volver');
 
 my $borrowernumber=$input->param('borrnumber');
-cancelar_reserva($biblioitemnumber,$borrowernumber);
+cancelar_reserva($biblioitemnumber,$borrowernumber,$loggedinuser);
 my $borname=$input->param('borrnumber');
 if ($volver){
     print $input->redirect("opac-reserve.pl?bib=".$volver);}

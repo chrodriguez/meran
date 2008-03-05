@@ -32,6 +32,7 @@ use C4::Auth;
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+$loggedinuser = getborrowernumber($loggedinuser);
 
 my $already=$input->param('already');
 my $biblioitemnumber=$input->param('biblioitem');
@@ -40,7 +41,7 @@ my $volver=$input->param('volver');
 my $borrnumber=$input->param('borrnumber');
 my $issuecode = $input->param('issuetypes')  || 'DO';
 
-my $res = efectivizar_reserva($borrnumber,$biblioitemnumber,$issuecode);
+my $res = efectivizar_reserva($borrnumber,$biblioitemnumber,$issuecode,$loggedinuser);
 
 if ($volver){
 	print $input->redirect("opac-reserve.pl?bib=".$volver);

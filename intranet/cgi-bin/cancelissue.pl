@@ -32,12 +32,13 @@ use C4::Auth;
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+$loggedinuser = getborrowernumber($loggedinuser);
 
 my $itemnumber=$input->param('item');
 my $barcode=$input->param('barcode');
 my $borrowernumber=$input->param('borrnumber');
 
-devolver($itemnumber , $borrowernumber);
+devolver($itemnumber , $borrowernumber,$loggedinuser);
 
 my $borname=$input->param('borrnumber');
 print $input->redirect("circ/circulation.pl?borrnumber=".$borname."&devolver=1&msgbar=".$barcode);

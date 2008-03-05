@@ -83,7 +83,7 @@ la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabl
 
 sub devolver {
 	my @resultado;
-	my ($itemnumber,$borrowernumber)=@_;
+	my ($itemnumber,$borrowernumber,$loggedinuser)=@_;
 	
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SET autocommit=0;");
@@ -120,7 +120,7 @@ sub devolver {
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
 			$sth=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=?, branchcode=? where biblioitemnumber=? and borrowernumber=? ");
 			$sth->execute($resultado[0], $desde, $fecha,$iteminformation->{'branchcode'},$resultado[1],$resultado[2]);
-			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre);
+			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
 			#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
 			#my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
 			#$t->detach;
@@ -130,8 +130,8 @@ sub devolver {
 		my $sth3=$dbh->prepare("commit;");
 		$sth3->execute();
 
-		$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?) ");
-		$sth3->execute('return',$borrowernumber,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'});
+		$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,itemnumber,branchcode) values (?,?,?,NOW(),?,?,?) ");
+		$sth3->execute('return',$borrowernumber,$loggedinuser,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'});
 
 ### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
 		my $hasdebts=0;
@@ -171,7 +171,7 @@ sub devolver {
 				$sanction = 1;
 
 #Se borran las reservas del usuario sancionado
-				C4::AR::Reserves::cancelar_reservas($borrowernumber);
+				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);
 			}
 			}
 		
@@ -464,7 +464,7 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
 =cut
  
 sub renovar {
-	my ($borrowernumber,$itemnumber)=@_;
+	my ($borrowernumber,$itemnumber,$loggedinuser)=@_;
 	my $renovacion= &sepuederenovar2($borrowernumber,$itemnumber);
 	if ($renovacion){
 #Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
@@ -473,8 +473,8 @@ sub renovar {
 		$sth->execute($itemnumber, $borrowernumber);
 
 # 	my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,itemnumber,branchcode) values (?,?,NOW(),?,?,?);");
-		my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,itemnumber,date) values (?,?,?,NOW());");
-                $sth3->execute('renew',$borrowernumber,$itemnumber);
+		my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,itemnumber,date) values (?,?,?,?,NOW());");
+                $sth3->execute('renew',$borrowernumber,$loggedinuser,$itemnumber);
 
 		return 1;
 	}else{
