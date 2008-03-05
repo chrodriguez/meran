@@ -52,6 +52,7 @@ use vars qw(@EXPORT @ISA);
 	   &cantidadUsuariosReservas
 	   &cantidadUsuariosRenovados
 	   &historicoDeBusqueda
+	   &reporteDiario
 );
 
 sub historicoDeBusqueda(){
@@ -1210,5 +1211,52 @@ return ($cant);
 }
 
 
+sub reporteDiario{
+	my ($ini,$cantR,$tipoPrestamo)=@_;
+
+	my $dbh= C4::Context->dbh;
+
+#para tener el total de registros
+	my $queryTotal= " 	
+			SELECT count(*) as cant
+			FROM issues i INNER JOIN  items it
+			ON ( i.itemnumber = it.itemnumber )
+			INNER JOIN biblio b
+			ON (b.biblionumber = it.biblionumber) ";
+
+=item
+	if($tipoPrestamo){
+		$queryTotal .= " i.issuecode = ?";
+	}
+=cut
+
+	my $sthTotal= $dbh->prepare($queryTotal);
+	$sthTotal->execute();
+
+	my $cantidad=$sthTotal->fetchrow_hashref;
+
+	my $query= " 	SELECT i.borrowernumber, i.itemnumber, i.issuecode, i.date_due, i.returndate,
+			it.itemnumber, it.biblionumber, it.biblioitemnumber, it.barcode, it.wthdrawn, it.notforloan, it.barcode, b.biblionumber, b.title
+			FROM issues i INNER JOIN  items it
+			ON ( i.itemnumber = it.itemnumber )
+			INNER JOIN biblio b
+			ON (b.biblionumber = it.biblionumber) ";
+
+
+	$query .= " limit ?,?";
+
+	my $sth= $dbh->prepare($query);
+	$sth->execute($ini,$cantR);
+
+	my $cant= 0;
+	my @result;
+
+	while (my $data=$sth->fetchrow_hashref){
+		push @result, $data;
+		$cant++;
+	}
+
+	return $cantidad->{'cant'}, @result;
+}
 
 

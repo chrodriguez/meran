@@ -49,6 +49,13 @@ if (($input->param('ini') eq "")){
 
 my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios);#historial de busquedas desde OPAC
 
+#para la zebra
+my $num= 1;
+foreach my $res (@resultsdata) {
+	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
+    	$num++;
+}
+
 my @numeros=armarPaginas($cantidad);
 my $paginas = scalar(@numeros)||1;
 my $pagActual = $input->param('ini')||1;
