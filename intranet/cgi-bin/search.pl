@@ -239,14 +239,14 @@ if (($query->param('ini') eq "")){
 #FIN inicializacion
 $num= $num + $ini;
 
-my ($cantidad,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
+my ($count,@results)=catalogsearch($loggedinuser,\%env,'intra',\%search,$num,$ini,$orden);
 
-my @numeros= &armarPaginas($cantidad, $pageNumber);
+my @numeros= &armarPaginas($count, $pageNumber);
 my $paginas = scalar(@numeros)||1;
 
 my $pagActual = $query->param('ini')||1;
 
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+if ( $count > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
         my $sig = $pagActual+1;
         if ($sig <= $paginas){
                  $template->param(
@@ -262,7 +262,7 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
 
 $template->param( 	paginas   => $paginas,
 			actual    => $pagActual,
-			cantidad  => $cantidad,
+			cantidad  => $count,
 			numbers   => \@numeros
 		);
 
