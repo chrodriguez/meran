@@ -1,0 +1,132 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/epoch_styles.css ">
+<script type="text/javascript">
+<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+
+/*You can also place this code in a separate file and link to it like epoch_classes.js*/
+        var dp_ini,dp_fin;      
+	window.onload = function () {
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
+				};
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="pagetitle" >Reporte Diario</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+<center>
+
+
+<form action='/cgi-bin/koha/reports/reporteDiario.pl' method=post >
+
+<ul>
+	<li>
+	  <b>Seleccione una fecha de inicio: </b>
+	</li>
+	<li>
+		<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="<!-- TMPL_VAR NAME="fechaIni" -->"> <a href="javascript:dp_ini.toggle();">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	</li>
+	<li><b>Seleccione una fecha de Fin: </b></li>	
+	<li>
+	  	<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="<!-- TMPL_VAR NAME="fechaFin" -->"> <a href="javascript:dp_fin.toggle();">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	</li>
+	<li><b>Tipo de Pr&eacute;stamo: </b></li>
+	<li><!-- TMPL_VAR NAME="selectTiposPrestamos" --></li>
+
+	<li>
+		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="submit();">
+	</li>
+</ul>
+</form>
+
+<br>
+Cantidad de registros: <!-- TMPL_VAR name=cantidad -->
+<br>
+
+<!-- TMPL_IF NAME="ok2" -->
+		<a class="inputFontNormal" href="reporteDiario.pl?ini=<!-- TMPL_VAR NAME=ant -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
+			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<!-- TMPL_IF NAME="actual" -->
+		<a class="inputFontNormal" href="reporteDiario.pl?ini=<!-- TMPL_VAR NAME=number -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->"> 
+			<u><!-- TMPL_VAR name=number --></u>
+		</a>
+	<!-- TMPL_ELSE -->
+        	<u><!-- TMPL_VAR name=number --></u>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+		<a class="inputFontNormal" href="reporteDiario.pl?ini=<!-- TMPL_VAR NAME=sig -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
+			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+<br>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+ 	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png">
+		</td>
+	
+		<th>Autor</th>
+		<th>T&iacute;tulo</th>
+		<th>C. de Barras</th>
+		<th>Responsable</th>
+		<th>Pr&eacute;stamo</th>
+		<th>Vencimiento</th>
+
+		<td width="1%" align="rigth" valign="top">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png">
+		</td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr align='center'>
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+		</td>
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=barcode --> 
+		</td>
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=cardnumber --> 
+		</td>
+			<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=description --> 
+		</td>
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=fecha -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=campo -->
+		</td>
+
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+
+</table>
+<br>
+</center>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
