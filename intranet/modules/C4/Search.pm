@@ -1979,6 +1979,7 @@ sub allitems {
   my @results;
 
   my $issue=0;  
+  my $issuenfl=0;  
   my $reserve=0;
   my $available=0;
   my $notforloan=0;
@@ -2015,7 +2016,8 @@ sub allitems {
       	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
       $returndate= format_date(vencimiento($data->{'itemnumber'}));
       $renew = &sepuederenovar2($borr, $data->{'itemnumber'});
-      $issue++;
+     if ($data->{'notforloan'} eq '1') {$issuenfl++;} else {$issue++;}
+	
     }
 
    $isth->finish;
@@ -2074,7 +2076,7 @@ sub allitems {
   $total++;
   }
   $sth->finish;
-  return($total,$forloan,$notforloan,$unavailable,$issue,$reserve,$shared,$copy,@results);
+  return($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results);
 }
 
 sub countitems {
@@ -2151,17 +2153,17 @@ my $i=0;
 	$results[$i]->{'isbncode'}= isbnList($results[$i]->{'biblioitemnumber'},$dbh); #agregado por Einar
 	my @aux;
 
-($results[$i]->{'total'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'reserve'},$results[$i]->{'shared'},$results[$i]->{'copy'},@aux)=allitems($data->{'biblioitemnumber'},$type);
+($results[$i]->{'total'},$results[$i]->{'fl'},$results[$i]->{'notfl'},$results[$i]->{'unav'},$results[$i]->{'issue'},$results[$i]->{'issuenfl'},$results[$i]->{'reserve'},$results[$i]->{'shared'},$results[$i]->{'copy'},@aux)=allitems($data->{'biblioitemnumber'},$type);
 
 	
 	#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
-$results[$i]->{'available'}= $results[$i]->{'issue'} + $results[$i]->{'reserve'} + $results[$i]->{'fl'} + $results[$i]->{'notfl'};
+$results[$i]->{'available'}= $results[$i]->{'issue'}+$results[$i]->{'issuenfl'} + $results[$i]->{'reserve'} + $results[$i]->{'fl'} + $results[$i]->{'notfl'};
 
 	#Matias necesito la primera signatura topografica
 	if(@aux ne 0){ $results[$i]->{'firstST'}=$aux[0]->{'bulk'}; }
 	#
-
-	$results[$i]->{'notforloan'}= ((($results[$i]->{'available'} - $results[$i]->{'notfl'}) eq 0) and ($results[$i]->{'notfl'} gt 0));
+	#Si son todos para sala los disponibles esta solo disponible para sala (Se tiene en cuenta los prestados en sala en este momento!!!)
+	$results[$i]->{'notforloan'}= ((($results[$i]->{'available'} - ($results[$i]->{'notfl'}+$results[$i]->{'issuenfl'})) eq 0) and (($results[$i]->{'notfl'}+$results[$i]->{'issuenfl'}) gt 0));
 	
 	#Son todos compartidos?
 	$results[$i]->{'allshared'} = (($results[$i]->{'shared'} gt 0) and ($results[$i]->{'available'} eq 0));
