@@ -67,6 +67,7 @@ var MENU_ITEMS = [
 		['Pr. sin devolver', '/cgi-bin/koha/reports/prestamos.pl'],
 		['Reservas', '/cgi-bin/koha/reports/reservas.pl'],
 		['Registro de actividades', '/cgi-bin/koha/reports/registro.pl'],
+		['Registro de circulaci&oacute;n', '/cgi-bin/koha/reports/historicoCirculacion.pl'],
 		['Actividades anuales','/cgi-bin/koha/reports/estadistica_Anual.pl'],
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl'],
 		['-----Estad&iacute;sticas-----', null],

@@ -52,6 +52,8 @@ use vars qw(@EXPORT @ISA);
 	   &cantidadUsuariosReservas
 	   &cantidadUsuariosRenovados
 	   &historicoDeBusqueda
+	   &historicoCirculacion
+	   &insertarNotaHistCirc
 	   &reporteDiario
 );
 
@@ -1210,12 +1212,79 @@ sub cantidadUsuariosReservas{
 return ($cant);
 }
 
+sub historicoCirculacion(){
+	my ($chkfecha,$fechaIni,$fechaFin,$chkuser,$user,$itemnumber,$ini,$cantR,$orden)=@_;
+        my $dbh = C4::Context->dbh;
+ 	my $clase='par';
+	my @blind;
+	my $query="";
+	my $cant=0;
+        my $select="SELECT id,nota,biblionumber,biblioitemnumber,itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname ";
+	my $from="FROM historicCirculation h INNER JOIN borrowers b ON (h.responsable=b.borrowernumber) ";
+	my $where = "";
+	if ($chkfecha ne ''){
+		$where = "WHERE (date>=?) AND (date<=?) ";
+		push(@blind,$fechaIni);
+		push(@blind,$fechaFin);
+	}
+	if ($chkuser ne ''){
+		if ($where eq ''){
+			$where = "WHERE responsable=? ";
+		}
+		else {$where.= " AND responsable=? ";}
+		push(@blind,$user);
+	}
+	my $finCons=" ORDER BY ".$orden." limit $ini,$cantR ";
+#para buscar las operaciones sobre un item, viene desde el pl item-detial.pl
+	if($itemnumber ne ''){
+		$where.=" AND itemnumber = ?";
+		$finCons="";
+		push(@blind,$itemnumber);
+	}
+	
+	$query="SELECT count(*) as cant ".$from.$where;
+        my $sth=$dbh->prepare($query);
+        $sth->execute(@blind);
+	$cant=$sth->fetchrow_array;
+	
+	$query=$select.$from.$where.$finCons;
+	$sth=$dbh->prepare($query);
+        $sth->execute(@blind);
+	my @results;
+        while (my $data=$sth->fetchrow_hashref){
+		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
+		$data->{'fecha'}=format_date($data->{'date'});
+		$data->{'clase'}=$clase;
+		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
+		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
+                push(@results,$data);
+        }
+        return ($cant,@results);
+}
+
+
+sub tipoDeOperacion(){
+	my ($tipo)=@_;
+	if($tipo eq "issue"){$tipo="Prestamo";}
+	elsif($tipo eq "return"){$tipo="Devolución";}
+	elsif($tipo eq "cancel"){$tipo="Cancelación";}
+	elsif($tipo eq "notification"){$tipo="Notificación";}
+	return $tipo;
+}
+
+sub insertarNotaHistCirc(){
+	my ($id,$nota)=@_;
+        my $dbh = C4::Context->dbh;
+        my $query="update  historicCirculation set nota=?
+		   where id=?";
+        my $sth=$dbh->prepare($query);
+        $sth->execute($nota,$id);
+}
+
 
 sub reporteDiario{
 	my ($ini,$cantR,$tipoPrestamo)=@_;
-
 	my $dbh= C4::Context->dbh;
-
 #para tener el total de registros
 	my $queryTotal= " 	
 			SELECT count(*) as cant

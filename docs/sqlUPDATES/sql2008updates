@@ -15,6 +15,8 @@ ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
 ALTER TABLE `Econo`.`sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
 
 
---Se agrega la columna responsable a historicCirculation para poder saber quien fue el usuario que realizo la operacion
+--Se agrega la columna id, responsable y nota a historicCirculation para poder saber quien fue el usuario que realizo la operacion, identificar a la tupla para poder agregarle una nota si es necesario.
 
 ALTER TABLE `historicCirculation` ADD `responsable` VARCHAR( 20 ) NOT NULL AFTER `borrowernumber` ;
+ALTER TABLE `historicCirculation` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `historicCirculation` ADD `nota` VARCHAR( 50 ) NULL AFTER `date` ;

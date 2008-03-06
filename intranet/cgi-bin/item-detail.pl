@@ -36,6 +36,7 @@ use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
+use C4::AR::Estadisticas;
 
 my $input = new CGI;
 my $itemnum=$input->param('itemnum');
@@ -47,7 +48,6 @@ my $barcode=$input->param('barcode');
 
 my $data=bibitemdata($bibitemnum);
 my $itemdata=itemdata2($itemnum);
-
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	template_name   => 'item-detail.tmpl',
@@ -77,7 +77,21 @@ if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTA
   push(@results, \%row);
 }
 
+my @datearr = localtime(time);
+my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+$template->param( 
+		todaydate => format_date($today),
+		dateselected => $input->param('dateselected'),
+		dateselectedEnd => $input->param('dateselectedEnd'),
+		);
+my $fechaInicio =  format_date_in_iso($input->param('dateselected'))||$today;
+my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'))||$today;
+
+my ($cant,@resultsdata)= &historicoCirculacion("ok",$fechaInicio,$fechaFin,"","",$itemnum,"","","date");
+
+
 $template->param(DETAIL => \@results,
+		HISTORICO => \@resultsdata,
 		title => $data->{'title'},
 	        author => $data->{'author'},
 		itemnotes => $itemdata->{'itemnotes'},
