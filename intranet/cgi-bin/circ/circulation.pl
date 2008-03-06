@@ -73,6 +73,10 @@ my @tickets;
 #DAMIAN - Para prestar varios items.
 my @chkbox=$query->param('chkbox2');
 my $loop=scalar(@chkbox);
+
+#Si viene un itemnumber se trata de prestar desde el catalogo UNO solo
+if (($loop eq 0)&&($query->param('itemnumber'))) { $loop=1; $chkbox[0]=$query->param('itemnumber');}
+
 my @infoTotal;
 
 #set up cookie.....

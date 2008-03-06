@@ -36,7 +36,7 @@ my $type='public';
                 my %line;
                 $line{'firstbulk'} = &firstbulk($bitemlist{$element}->{'biblioitemnumber'});
 		$line{'title'}=$bitemlist{$element}->{'title'};
-                $line{'author'}=$bitemlist{$element}->{'author'};
+                $line{'author'}=$bitemlist{$element}->{'completo'};
                 $line{'place'}=$bitemlist{$element}->{'place'};
                 $line{'editors'}=$bitemlist{$element}->{'editors'};
                 push (@results, \%line);

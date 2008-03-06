@@ -152,7 +152,7 @@ function mandarArreglo(valores){
                         </table>
 		</tr>
 		</table>
-
+		<center>
 		<!-- TMPL_IF NAME='loggedinusername' -->
 		<input type="hidden" value="" name="bookmarks" id="bookmarks"><a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritosbis.png')">  
 		<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos"></a>
@@ -170,7 +170,7 @@ function mandarArreglo(valores){
 
 		<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
 		<input onClick="printform.target='_self'; printform.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF"></a>
-
+		</center>
 </form>
 <!-- /TMPL_IF -->
 
@@ -442,7 +442,7 @@ Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_V
 
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<table>
+<table align="center">
 <tr bordercolor="#f2f2f2">
 	<td align="center">
  		<a target="_blank" href="<!-- TMPL_VAR NAME='themelang' -->/help/evhelp.htm" onMouseOut="swap('help2','<!-- TMPL_VAR NAME='themelang' -->/images/help.png')" onMouseOver="swap('help2','<!-- TMPL_VAR NAME='themelang' -->/images/helpbis.png')">

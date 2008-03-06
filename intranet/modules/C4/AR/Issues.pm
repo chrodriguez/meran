@@ -76,6 +76,7 @@ FIXME
     &IssuesType2
     &sepuederenovar2
     &fechaDeVencimiento
+    &enviar_recordatorios_prestamos
 );
 =item
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
@@ -517,7 +518,7 @@ my $resultado;
 if (my $data= $sth->fetchrow_hashref){
 					$res=' not in ('.$data->{'itemnumber'};
 					while (my $data= $sth->fetchrow_hashref){
-							$res.=', '.$data->{'itemnumber'};
+							$res.=', '.$data->{'itemnumber'}; &fechaDeVencimiento
 					}  
 					$res.=')';
 					}
@@ -676,4 +677,72 @@ sub PrestamosMaximos {
 
   return($cant, @result);
 }
+
+=item
+mail de recordatorio envia los mails a los dueños de los items que vencen el proximo dia habil
+=cut
+
+sub Enviar_Recordatorio{
+
+if (C4::Context->preference("EnabledMailSystem")){
+my ($itemnumber,$bor,$vencimiento)=@_;
+
+my $dbh = C4::Context->dbh;
+my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
+$sth->execute($bor);
+my $borrower= $sth->fetchrow_hashref;
+$sth=$dbh->prepare("SELECT biblio.title as rtitle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, biblio.unititle as runititle, reserves.biblioitemnumber as rbiblioitemnumber, biblioitems.number as redicion			FROM reserves
+			inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
+			INNER JOIN biblio on biblioitems.biblionumber = biblio.biblionumber WHERE  reserves.borrowernumber =? and reserves.itemnumber= ?  
+					");
+$sth->execute($bor,$itemnumber);
+my $res= $sth->fetchrow_hashref;	
+
+my $mailFrom=C4::Context->preference("mailFrom");
+my $mailSubject =C4::Context->preference("reminderSubject");
+my $mailMessage =C4::Context->preference("reminderMessage");
+my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
+$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
+
+$mailSubject =~ s/BRANCH/$branchname/;
+$mailMessage =~ s/BRANCH/$branchname/;
+$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
+$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
+$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
+$mailMessage =~ s/TITLE/$res->{'rtitle'}/;
+$mailMessage =~ s/AUTHOR/$res->{'rauthor'}/;
+$mailMessage =~ s/EDICION/$res->{'redicion'}/;
+$mailMessage =~ s/VENCIMIENTO/$vencimiento/;
+
+my %mail = ( To => $borrower->{'emailaddress'},
+                        From => $mailFrom,
+                        Subject => $mailSubject,
+                        Message => $mailMessage);
+my $resultado='ok';
+if ($borrower->{'emailaddress'} && $mailFrom ){sendmail(%mail) or die $resultado='error';
+						}
+						else {$resultado='';}
+my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
+$sth3->execute('notification',$bor,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
+
+	}
+}
+
+
+
+sub enviar_recordatorios_prestamos {
+my $dbh = C4::Context->dbh;
+my $sth=$dbh->prepare("Select * from issues where returndate is NULL");
+$sth->execute();
+while(my $data= $sth->fetchrow_hashref) {
+	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
+	my $proximohabil=proximoHabil(0,1);
+	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) eq 0) {
+	Enviar_Recordatorio($data->{'borrowernumber'},$data->{'itemnumber'},$fechaDeVencimiento)	
+	};
+}
+}
+
+
+
 

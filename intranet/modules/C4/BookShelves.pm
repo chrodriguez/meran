@@ -558,12 +558,11 @@ sub RemoveShelf {
 sub privateShelfs {
     my ($bor,$num,$start) = @_;	
     my $count=0;
-=cut	 my $sth2=$dbh->prepare("SELECT  count(*)  FROM  bookshelf  INNER  JOIN shelfcontents ON                             
+    my $sth2=$dbh->prepare("SELECT  count(*)  FROM  bookshelf  INNER  JOIN shelfcontents ON                             
                                 bookshelf.shelfnumber = shelfcontents.shelfnumber   WHERE bookshelf.shelfname = $bor 
                            and bookshelf.type='private';");
 	 $sth2->execute();
-	$count= $sth2->fetchrow;
-=cut
+	my $total= $sth2->fetchrow;
 
     my $fin=$start+$num;
     my @results;
@@ -577,93 +576,21 @@ sub privateShelfs {
 
 #----			
 			my $author=&C4::Search::getautor($data->{'author'}); #Damian. Para mostrar 
-        		$data->{'author'} = $author->{'completo'}; #el nombre del autor y no el id.
+        		$data->{'completo'} = $author->{'completo'}; #el nombre del autor y no el id.
+			$data->{'nombre'} = $author->{'nombre'};
+			$data->{'apellido'} = $author->{'apellido'};
 
                         ($data->{'total'},$data->{'unavailable'},$data->{'counts'}) = &C4::Search::itemcount3($data->{'biblionumber'}, 'opac');
                         my $subject2=$data->{'subject'};
                         $subject2=~ s/ /%20/g;
 
                         ($data->{'grupos'})=&C4::Search::Grupos( $data->{'biblionumber'},'opac');
-
-                         if ($data->{'total'} gt $data->{'unavailable'}){
-                               push(@results,$data);
-                               $count++;
-                                 }
+			 push(@results,$data);
+                         $count++;
      			}
 #----
-=cut
-                        $editors= editorsname($data->{'biblionumber'}); #Luciano: agregado para mostrar las ediciones
-
-                        my $subject2=$data->{'subject'};
-                        $subject2=~ s/ /%20/g;
-                        (my $cantGrupos,$data->{'itemcount'})=itemcountPorGrupos($env,$data->{'biblionumber'},'intra');
-                        if ($cantGrupos >1){$data->{'variosVolumenes'}="true";}
-                        my $totalitemcounts=0;
-                        foreach my $key (keys %$counts){
-                                if ($key ne 'total'){   # FIXME - Should ignore 'order', too.
-                                        #$data->{'location'}.="$key $counts->{$key} ";
-                                        $totalitemcounts+=$counts->{$key};
-                                        $data->{'locationhash'}->{$key}=$counts->{$key};
-                                }
-                        }
-                        my $locationtext='';
-                        my $locationtextonly='';
-                        my $notavailabletext='';
-                        foreach (sort keys %{$data->{'locationhash'}}) {
-                                if ($_ eq 'notavailable') {
-                                        $notavailabletext="Not available";
-                                        my $c=$data->{'locationhash'}->{$_};
-                                        $data->{'not-available-p'}=$totalitemcounts;
-                                        if ($totalitemcounts>1) {
-                                        $notavailabletext.=" ($c)";
-                                        $data->{'not-available-plural-p'}=1;
-                                        }
-                                } else {
-                                        $locationtext.="$_";
-                                my $c=$data->{'locationhash'}->{$_};
-                                        if ($_ eq 'Perdidos') {
-                                        $data->{'lost-p'}=$totalitemcounts;
-                                        $data->{'lost-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                        } elsif ($_ eq 'Retirados') {
-
- $data->{'withdrawn-p'}=$totalitemcounts;
-                                        $data->{'withdrawn-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                        } elsif ($_ eq 'Prestados') {
-                                        $data->{'on-loan-p'}=$totalitemcounts;
-                                        $data->{'on-loan-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                        } else {
-                                        $locationtextonly.=$_;
-                                        $locationtextonly.=" ($c), "
-                                                        if $totalitemcounts>1;
-                                        }
-                                        if ($totalitemcounts>1) {
-                                        #$locationtext.=" ($c), "; MODIFICADO POR LUCIANO
-                                        $locationtext.="<br>";
-                                        }
-                                }
-                        }
-                        if ($notavailabletext) {
-                                $locationtext.=$notavailabletext;
-                        } else {
-                                $locationtext=~s/, $//;
-                        }
-                        $data->{'location'}=$locationtext;
-                        $data->{'location-only'}=$locationtextonly;
-                        $data->{'subject2'}=$subject2;
-                        $data->{'use-location-flags-p'}=1;
-                       
-			 #Luciano
-                        $data->{'editors'}= $editors;
-                        #Fin: Luciano
-			}
-=cut    
-            
-        
 	$sth->finish;
-        return($count,@results);
+        return($total,@results);
 	}
 
 sub createPrivateShelf {

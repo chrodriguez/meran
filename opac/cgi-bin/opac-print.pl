@@ -13,7 +13,7 @@ use C4::BookShelves;
 my $query=new CGI;
 my $cant=$query->param('num');
 my %search;
-my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn', 'date-before', 'date-after', 'class', 'dewey', 'branch', 'title', 'abstract', 'publisher','subjectitems', 'virtual');
+my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn', 'date-before', 'date-after', 'class', 'dewey', 'branch', 'title', 'abstract', 'publisher','subjectitems', 'virtual', 'authorid' );
 
 foreach my $field (@fields) {
     $search{$field} = $query->param($field);
@@ -67,12 +67,11 @@ else{
 	}
 foreach my $res (@results) {
     $res->{'firstbulk'} = &firstbulk($res->{'biblionumber'});
-#    $res->{'editors'} = editorsname($res->{'biblionumber'});
-	my @aux=&getautor($res->{'author'});
-	$res->{'id'}=$res->{'author'};
-	$res->{'nombre'}=$aux[0]->{'nombre'};
-	$res->{'apellido'}=$aux[0]->{'apellido'};
-	$res->{'completo'}=$aux[0]->{'completo'};
+    my @aux=&getautor($res->{'author'});
+    $res->{'id'}=$res->{'author'};
+    $res->{'completo'}=$aux[0]->{'completo'};
+    $res->{'nombre'}=$aux[0]->{'nombre'};
+    $res->{'apellido'}=$aux[0]->{'apellido'};
 }
 
 if ($query->param('type') eq 'pdf') {#Para PDF
@@ -102,7 +101,7 @@ else{
 }
 
 foreach my $res (@results) {
- $mailMessage .= C4::Search::getautor($res->{'author'})->{'completo'}.' -- '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')
+ $mailMessage .= $res->{'completo'}.' -- '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')
 
 ';}
 
@@ -134,7 +133,7 @@ else{ print $input->redirect("opac-search.pl");}
 else{ #Para imprimir
 
 my $resultsarray=\@results;
-($resultsarray) || (@$resultsarray=());
+#($resultsarray) || (@$resultsarray=());
 
 $template->param(SEARCH_RESULTS => $resultsarray,
 		 numrecords => $cant);
