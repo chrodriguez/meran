@@ -64,7 +64,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $bornum=$input->param('bornum');
-
+my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 #start the page and read in includes
 
 my $data=borrdata('',$bornum);
@@ -267,6 +267,7 @@ my $msgError=$input->param('error');
 $template->param($data);
 $template->param(
 		bornum          => $bornum,
+		mensaje		=> $mensaje,
 		totaldue          =>$total,
 #los libros que tiene "en espera para retirar"
 		waiting=> \@waiting,

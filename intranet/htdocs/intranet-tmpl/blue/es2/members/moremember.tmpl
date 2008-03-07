@@ -1,14 +1,14 @@
-<!-- TMPL_IF NAME="opac" -->
-	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-<!-- TMPL_ELSE -->
-	<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 
 <!-- main site -->
 
 <!-- TMPL_IF NAME="mensaje_error_borrar" -->
 	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje_error_borrar --></font>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="mensaje" -->
+	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje --></font>
 <!-- /TMPL_IF -->
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>

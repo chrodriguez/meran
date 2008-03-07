@@ -651,7 +651,7 @@ sub cant_reserves
 #Cantidad de reservas reales
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="SELECT count(*) from reserves"; 
+        my $query="SELECT count(*) as cant from reserves"; 
         $query .= " WHERE  reserves.borrowernumber =? 
                                         and cancellationdate is NULL and
                                         (found <> 'F' or found is NULL) and reserves.constrainttype is NULL
@@ -684,7 +684,7 @@ sub cant_waiting
 #Cantidad de reservas en espera
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="SELECT count(*) from reserves";
+        my $query="SELECT count(*) as cant from reserves";
         $query .= " WHERE  reserves.borrowernumber = ?
                                         and cancellationdate is NULL and
                                         (found <> 'F' or found is NULL) and reserves.constrainttype is NULL

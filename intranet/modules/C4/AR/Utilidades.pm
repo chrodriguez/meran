@@ -29,7 +29,7 @@ use C4::Date;
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor );
+@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor &cambiarLibreDeuda);
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
@@ -489,6 +489,18 @@ sub verificarValor(){
 	$valor=~ s/%3b|%3d|%27|%25/\\/g;#Por aca no entra llegan los caracteres ya traducidos
 	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>/ /gi;
 	return $valor;
+}
+
+=item
+cambiarLibreDeuda
+guarda el nuevo valor de la variable libreDeuda de la tabla de las preferencias
+NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sistema, esta funcion se utiliza en los archivos adminLibreDeuda.pl y libreDeuda.pl
+=cut
+sub cambiarLibreDeuda(){
+	my ($valor)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("update systempreferences set value=? where variable='libreDeuda'");
+	$sth->execute($valor);
 }
 
 1;

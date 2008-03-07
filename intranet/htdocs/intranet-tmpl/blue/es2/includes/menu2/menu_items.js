@@ -40,6 +40,7 @@ var MENU_ITEMS = [
 			['Categor&iacute;a de usuarios', '/cgi-bin/koha/admin/categorie.pl'],
 			['Tipos de pr&eacute;stamos', '/cgi-bin/koha/admin/issuetypes.pl'],
 			['Valores autorizados', '/cgi-bin/koha/admin/authorised_values.pl'],
+			['Admin. Libre Deuda', '/cgi-bin/koha/admin/adminLibreDeuda.pl'],
 			['Feriados', '/cgi-bin/koha/admin/feriados.pl'],
 			['Sanciones', '/cgi-bin/koha/admin/sanctions.pl'],
 			['Thesaurus', '/cgi-bin/koha/admin/thesaurus.pl'],		

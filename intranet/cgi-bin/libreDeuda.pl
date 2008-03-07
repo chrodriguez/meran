@@ -28,10 +28,57 @@ use PDF::Report;
 use C4::AR::PdfGenerator;
 use C4::Search;
 
-my $cgi= new CGI;
-my $bornum = $cgi->param('bornum');
+my $input= new CGI;
+my $bornum = $input->param('bornum');
 my $borrewer= &borrdata("",$bornum);
-&libreDeuda($bornum,$borrewer);
 
+my $libreD=C4::Context->preference("libreDeuda");
+my @array=split(//, $libreD);
+my $ok=1;
+my $msj="";
+# RESERVAS ADJUDICADAS 0--------> flag 1; function C4::AR::Reserves::cant_reserves($borum);
+# RESERVAS EN ESPERA   1--------> flag 2; function C4::AR::Reserves::cant_waiting($borum);
+# PRESTAMOS VENCIDOS   2--------> flag 3; fucntion C4::AR::Sanctions::hasDebts("",$borum); 1 tiene vencidos. 0 no.
+# PRESTAMOS EN CURSO   3--------> flag 4; fucntion C4::AR::Issues::DatosPrestamos($borum);
+# SANSIONADO           4--------> flag 5; function C4::AR::Sanctions::hasSanctions($borum);
 
+if($array[0] eq "1"){
+	if(C4::AR::Reserves::cant_reserves($bornum)->{'cant'}){
+		$ok=0;
+		$msj="por tener reservas asignadas";
+	}
+}
+if($array[1] eq "1" && $ok){
+	if(C4::AR::Reserves::cant_waiting($bornum)->{'cant'}){
+		$ok=0;
+		$msj="por tener reservas en espera";
+	}
+}
+if($array[2] eq "1" && $ok){
+	if(C4::AR::Sanctions::hasDebts("",$bornum)){
+		$ok=0;
+		$msj="por tener prestamos vencidos";
+	}
+}
+if($array[3] eq "1" && $ok){
+	my($cant,$result)=C4::AR::Issues::DatosPrestamos($bornum);
+	if($cant){
+		$ok=0;
+		$msj="por tener prestamos en curso";
+	}
+}
+if($array[4] eq "1" && $ok){
+	my $result=C4::AR::Sanctions::hasSanctions($bornum);
+	if(scalar(@$result) > 0){
+		$ok=0;
+		$msj="por estar sancionado";
+	}
+}
+if($ok){
+	&libreDeuda($bornum,$borrewer);
+}
+else{
+	my $mensaje="<b>No se puede imprimir el documento de libre deuda ".$msj." </b>";
+	print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum&mensaje=$mensaje");
+}
 
