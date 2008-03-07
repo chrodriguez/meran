@@ -702,7 +702,7 @@ my $mailFrom=C4::Context->preference("mailFrom");
 my $mailSubject =C4::Context->preference("reminderSubject");
 my $mailMessage =C4::Context->preference("reminderMessage");
 my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
-$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
+#$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
 
 $mailSubject =~ s/BRANCH/$branchname/;
 $mailMessage =~ s/BRANCH/$branchname/;

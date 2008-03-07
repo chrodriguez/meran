@@ -185,7 +185,10 @@ if($bornum){
 			my $itemnumber=$chkbox[$i];
 			$strItemnumber.=$itemnumber."#";
 			$iteminfo= getiteminformation( \%env, $itemnumber);
-			my ($total,$available,$forloan,$notforloan,$unavailable,$issue,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
+			my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
+			
+				#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
+			my $available= $issue+ $issuenfl + $reserve + $forloan + $notforloan;
 			my @values;
 			my %labels;
 			foreach (@results){

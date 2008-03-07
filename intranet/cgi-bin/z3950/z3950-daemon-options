@@ -1,5 +1,5 @@
-RunAsUser=paul
-KohaZ3950Dir=/home/paul/koha.dev/koha.stable/koha/z3950
-KohaModuleDir=/home/paul/koha.dev/koha.stable/koha
-LogDir=/home/paul/tmp
-KohaConf=/etc/koha-stable.conf
+RunAsUser=www-data
+KohaZ3950Dir=/usr/local/koha/intranet/cgi-bin/z3950/
+KohaModuleDir=/usr/local/koha/intranet/modules/C4/
+LogDir=/var/log/z2950.log
+KohaConf=/etc/koha.conf

@@ -144,7 +144,7 @@ sub BreedingSearch {
 	my ($query,@bind);
 	my $sth;
 	my @results;
-
+	if (($z3950random)||($title)||($isbn)) {
 	$query = "Select id,file,isbn,title,author from marc_breeding where ";
 	if ($z3950random) {
 		$query .= "z3950random = ?";
@@ -171,6 +171,7 @@ sub BreedingSearch {
 	} # while
 
 	$sth->finish;
+	}
 	return($count, @results);
 } # sub breedingsearch
 
