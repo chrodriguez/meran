@@ -211,6 +211,10 @@ if ($data2){
 
 $fecha=C4::Context->preference("reserveItem");
 ($desde,$fecha,$apertura,$cierre)=proximosHabiles($fecha,1);
+#Miguel hacer funcion
+my $sth3=$dbh->prepare("INSERT INTO historicCirculation (type, borrowernumber, biblioitemnumber, branchcode) 
+values (?,?,?,?) ");
+$sth3->execute('reserve', $borrowernumber, $biblioitemnumber, $data2->{'holdingbranch'});
 
 my $sth2=$dbh->prepare("insert into reserves (itemnumber,biblioitemnumber,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) values (?,?,?,?,NOW(),?,?) ");
 $sth2->execute($data2->{'itemnumber'},$biblioitemnumber,$borrowernumber,$desde,$fecha,$data2->{'holdingbranch'});
@@ -230,6 +234,10 @@ $enddate= C4::Date::format_date_in_iso($enddate);
 insertSanction($dbh, undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
 
 } else{
+#Miguel hacer funcion
+my $sth3=$dbh->prepare("INSERT INTO historicCirculation (type, borrowernumber, biblioitemnumber) 
+values (?,?,?) ");
+$sth3->execute('queue', $borrowernumber, $biblioitemnumber);
 
 #se hace una reserva para el grupo, ya que no hay ningun item libre
 my $sth2=$dbh->prepare("insert into reserves (biblioitemnumber,borrowernumber,reservedate) values (?,?,NOW()) ");
@@ -633,7 +641,7 @@ sub DatosReservas {
 	$query .= " WHERE  reserves.borrowernumber =? 
 					and cancellationdate is NULL and
 					(found <> 'F' or found is NULL) and reserves.constrainttype is NULL";
-#13/03/2007 se agrego el año de publicacion (rpublicationyear) para mostrar en la interfaz - Damian
+#13/03/2007 se agrego el aï¿½o de publicacion (rpublicationyear) para mostrar en la interfaz - Damian
 	my $sth=$dbh->prepare($query);
 	$sth->execute($bor);
 	my @results;
