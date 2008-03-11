@@ -12,7 +12,7 @@ ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
 
 
 -- se agrega la columna itemnumber a sanctions para poder informar desde que registro se produjo la sancion
-ALTER TABLE `Econo`.`sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
+ALTER TABLE `sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
 
 
 --Se agrega la columna id, responsable y nota a historicCirculation para poder saber quien fue el usuario que realizo la operacion, identificar a la tupla para poder agregarle una nota si es necesario.
@@ -26,5 +26,14 @@ ALTER TABLE `historicCirculation` ADD `nota` VARCHAR( 50 ) NULL AFTER `date` ;
 
 INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
 VALUES (
-'libreDeuda', '00100', 'variable que limita la impresiÃ³n del documento de libre deuda', NULL , NULL
+'libreDeuda', '00100', 'variable que limita la impresion del documento de libre deuda', NULL , NULL
 );
+
+-- Preferencias para mail de recordatorio de prestamo a vencer
+
+INSERT INTO systempreferences (value,variable) VALUES ('1','reminderMail');
+
+insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el día VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n','Mensaje del mail de recordatorio de prestamo a vencer', 'reminderMessage');
+
+insert into  systempreferences   (value,explanation,variable) VALUES ('Recordatorio de vencimiento de préstamos','Subject del mail de recodatorio de prestamo a vencer','reminderSubject');
+
