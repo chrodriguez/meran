@@ -39,7 +39,7 @@ use C4::Date;
 use C4::AR::Estadisticas;
 
 my $input = new CGI;
-my $itemnum=$input->param('itemnum');
+my $itemnumber=$input->param('itemnum');
 my $bibitemnum=$input->param('bibit');
 my $biblionum=$input->param('bib');
 my $bulk=$input->param('bulk');
@@ -47,7 +47,7 @@ my $barcode=$input->param('barcode');
 
 
 my $data=bibitemdata($bibitemnum);
-my $itemdata=itemdata2($itemnum);
+my $itemdata=itemdata2($itemnumber);
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	template_name   => 'item-detail.tmpl',
@@ -58,17 +58,17 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     });
 
 my %inputs;
-my ($count, $detail)=availDetail($itemnum);
+my ($count, $detail)=availDetail($itemnumber);
 my @results;
 
 for (my $i=0; $i < $count; $i++){
 my $avail='';
 if ($detail->[$i]{'avail'} eq 'Disponible'){$avail='<font size=3 color=green> Disponible </font>'; }
-					else {$avail='<font size=3 color=red>'.$detail->[$i]{'avail'}.'</font>';}	
+	else {$avail='<font size=3 color=red>'.$detail->[$i]{'avail'}.'</font>';}	
 
 my $loan='';
 if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTAMO </font>'; }
-                                        else {$loan='<font size=3 color=blue>'.$detail->[$i]{'loan'}.'</font>';}
+	else {$loan='<font size=3 color=blue>'.$detail->[$i]{'loan'}.'</font>';}
   my %row = (
         avail=> $avail,
 	loan=>$loan,
@@ -79,16 +79,22 @@ if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTA
 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-$template->param( 
-		todaydate => format_date($today),
-		dateselected => $input->param('dateselected'),
-		dateselectedEnd => $input->param('dateselectedEnd'),
-		);
+my $dateSelected= $input->param('dateselected')||format_date($today);
+my $dateSelectedEnd= $input->param('dateselectedEnd')||format_date($today);
+
 my $fechaInicio =  format_date_in_iso($input->param('dateselected'))||$today;
 my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'))||$today;
 
-my ($cant,@resultsdata)= &historicoCirculacion("ok",$fechaInicio,$fechaFin,"","",$itemnum,"","","date");
+# my ($cant,@resultsdata)= &historicoCirculacion("ok",$fechaInicio,$fechaFin,"","",$itemnum,"","","date");
+# $chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
+# $tipoPrestamo,$tipoOperacion
+my $ini;
+my $cantR;
+my $orden;
+my $tipoPrestamo;
+my $tipoOperacion;
 
+my ($cant,@resultsdata)=&historicoCirculacion('ok',$fechaInicio,$fechaFin,'-1',$itemnumber,$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
 $template->param(DETAIL => \@results,
 		HISTORICO => \@resultsdata,
@@ -97,9 +103,11 @@ $template->param(DETAIL => \@results,
 		itemnotes => $itemdata->{'itemnotes'},
 		biblionumber => $data->{'biblionumber'},
         	biblioitemnumber => $data->{'biblioitemnumber'},
-		itemnumber => $itemnum,
+		itemnumber => $itemnumber,
 		barcode => $barcode,
-		bulk => $bulk
+		bulk => $bulk,
+		dateselected => $dateSelected,
+		dateselectedEnd => $dateSelectedEnd,
 		);
 
 print $input->header(

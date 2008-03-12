@@ -161,9 +161,12 @@ my @result= (
 		{type => 'queue',
 		description => 'R. en Espera'
 		},
+		{type => 'reminderNotification',
+		description => 'Recordatorio de Vto'
+		},
 		{type => 'notification',
 		description => 'Notificacion'
-		},
+		},	
 		{type => 'cancel',
 		description => 'Cancelado'
 		},

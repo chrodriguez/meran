@@ -70,9 +70,16 @@ DETALLE DE DISPONIBILIDAD:<br>
 
 			<td valign= "top" class=inputFontNormal><br><br>
 				<input id="ini" class="inputFontNormal" name="dateselected" value="
-			<!-- TMPL_IF NAME="dateselected" --><!-- TMPL_VAR NAME="dateselected" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
+				<!-- TMPL_IF NAME='dateselected' --><!-- TMPL_VAR NAME='dateselected' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"> 
+				<a href="javascript:dp_ini.toggle();">
+				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
+				</a><br><br>
+
 				<input id="fin" class="inputFontNormal" name="dateselectedEnd" value="
-			<!-- TMPL_IF NAME="dateselectedEnd" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
+				<!-- TMPL_IF NAME='dateselectedEnd' --><!-- TMPL_VAR NAME='dateselectedEnd' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"> 
+				<a href="javascript:dp_fin.toggle();">
+				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha">
+				</a>
 			</td>
 			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td valign="center">

@@ -1213,7 +1213,7 @@ return ($cant);
 }
 
 sub historicoCirculacion(){
-	my ($chkfecha,$fechaIni,$fechaFin,$chkuser,$user,$itemnumber,$ini,$cantR,$orden,
+	my ($chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
@@ -1227,7 +1227,7 @@ sub historicoCirculacion(){
 =cut
 
 	my $select= " 	SELECT h.id, nota, a.completo,h.biblionumber, bib.title, 	
-			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname, i.barcode ";
+			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname, i.barcode, i.bulk ";
 
 	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
 			ON (h.responsable=b.borrowernumber)
@@ -1244,7 +1244,7 @@ sub historicoCirculacion(){
 		push(@bind,$fechaIni);
 		push(@bind,$fechaFin);
 	}
-# 	if ($chkuser ne ''){
+
 	if (($user)&&($user ne '-1')){	
 		if ($where eq ''){$where = " WHERE responsable=? ";}
 		else {$where.= " AND responsable=? ";}
@@ -1269,7 +1269,7 @@ sub historicoCirculacion(){
 
 #para buscar las operaciones sobre un item, viene desde el pl item-detial.pl
 	if($itemnumber ne ''){
-		$where.=" AND itemnumber = ?";
+		$where.=" AND i.itemnumber = ?";
 		$finCons="";
 		push(@bind,$itemnumber);
 	}
