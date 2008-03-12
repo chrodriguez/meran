@@ -48,7 +48,9 @@ function hacerSubmit(){
 			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
 		</a>
 </td>
-<td class="inputFontNormal"> <input type="submit" name="consulta" value="Generar listado"></td>	
+<td class="inputFontNormal"> 
+	<input type="image" name="consulta" onClick="branches.submit()" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png">
+</td>	
    </tr>
 <tr><td colspan="3">&nbsp;</td></tr>
 </table>
