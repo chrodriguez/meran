@@ -135,7 +135,7 @@
 		</td>
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
 			
-			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->'><!-- TMPL_VAR NAME=barcode --></a> 
+			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=nomCompleto --> 
@@ -144,16 +144,10 @@
 			<!-- TMPL_VAR NAME=fecha --> </td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=operacion --> </td>
-		<!--<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR NAME=biblioitemnumber --> 
-		</td>-->
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <textarea class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota --></textarea>
 		<br>
 		<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="modificacion.submit()">
 		</td>
-  		<!--<td class="<!-- TMPL_VAR NAME='clase'-->" > <input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="modificacion.submit()"> </td>
-
- 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>-->
  	</tr>
    	<input type="hidden" value="<!-- TMPL_VAR NAME=id -->"  name="id" >
 	</form>
