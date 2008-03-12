@@ -248,7 +248,6 @@ my $issuetype= '-';
 my $itemnumber= 0;
 my $loggedinuser= $borrowernumber;
 
-# $type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype
 C4::Circulation::Circ2::insertHistoricCirculation('queue',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
@@ -470,7 +469,6 @@ sub cancelar_reserva {
 	
 	my $issuetype= '-';
 	my $loggedinuser= $borrowernumber;
-	# $type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype
 	
 	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'itemnumber'},$branchcode,$issuetype); #C4::Circulation::Circ2
 #******************************Fin****Se registra el movimiento en historicCirculation*************************
@@ -594,7 +592,7 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 }else {$resultado='';}
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-my $issuetype= '??';
+my $issuetype= '-';
 my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
 my $branchcode= $dataItems->{'homebranch'};
 C4::Circulation::Circ2::insertHistoricCirculation('notification',$bor,$loggedinuser,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$branchcode,$issuetype);

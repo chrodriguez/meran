@@ -480,7 +480,15 @@ sub renovar {
 		$sth->execute($itemnumber, $borrowernumber);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-		my $issuetype= '??';
+#esto se podria cruzar con la lo trae getDataItms para hacer una sola funcion
+		my $dbh = C4::Context->dbh;
+		my $sth=$dbh->prepare(" SELECT issuecode
+					FROM issues
+					WHERE(itemnumber = ? AND borrowernumber = ?) ");
+		$sth->execute($itemnumber, $borrowernumber);
+		my $data = $sth->fetchrow_hashref;
+
+		my $issuetype= $data->{'issuecode'};
 		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
 		my $biblionumber= $dataItems->{'biblionumber'};
 		my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
