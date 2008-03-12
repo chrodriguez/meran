@@ -761,16 +761,20 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 
 sub enviar_recordatorios_prestamos {
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from issues where returndate is NULL");
+my $sth=$dbh->prepare("Select * from issues left join issuetypes on issues.issuecode=issuetypes.issuecode where issues.returndate is NULL and issuetypes.notforloan = 0");
 $sth->execute();
 
 while(my $data= $sth->fetchrow_hashref) {
 	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
-	my $proximohabil=proximoHabil(0,1);
+	my $proximohabil=proximoHabil(1,0);
+
+		open L, ">>/tmp/avisos";
+		printf L "Venc  ".$fechaDeVencimiento." \n";
+		printf L "Prox habil  ".$proximohabil." \n";
+		close L;
 
 	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));	
-
+	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));
 	};
 }
 }
