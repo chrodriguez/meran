@@ -52,7 +52,7 @@ if (($input->param('ini') eq "")){
 
 my ($cantidad, @resultsdata)= &reporteDiario($ini,$cantR,$tipoPrestamo);
 
-#para la zebra
+#para la zebra$tipoPrestamo
 my $num= 1;
 foreach my $res (@resultsdata) {
 	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));

@@ -133,7 +133,7 @@ my ($resnum, $reserves) = DatosReservas($borrowernumber);
 #my $waiting;
 #my $realreserves;
 
-=cut
+=item
 foreach my $res (@$reserves) {
     if ($res->{'ritemnumber'}) {
 	  push @$realreserves, $res;
@@ -211,10 +211,14 @@ if ($data2){
 
 $fecha=C4::Context->preference("reserveItem");
 ($desde,$fecha,$apertura,$cierre)=proximosHabiles($fecha,1);
-#Miguel hacer funcion
-my $sth3=$dbh->prepare("INSERT INTO historicCirculation (type, borrowernumber, biblioitemnumber, branchcode) 
-values (?,?,?,?) ");
-$sth3->execute('reserve', $borrowernumber, $biblioitemnumber, $data2->{'holdingbranch'});
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+my $dataItems= C4::Circulation::Circ2::getDataItems($data2->{'itemnumber'});
+my $biblionumber= $dataItems->{'biblionumber'};
+my $branchcode= $dataItems->{'homebranch'};
+
+C4::Circulation::Circ2::insertHistoricCirculation('reserve',$borrowernumber,$borrowernumber,$biblionumber,$biblioitemnumber,$data2->{'itemnumber'},$branchcode,'-');
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 my $sth2=$dbh->prepare("insert into reserves (itemnumber,biblioitemnumber,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) values (?,?,?,?,NOW(),?,?) ");
 $sth2->execute($data2->{'itemnumber'},$biblioitemnumber,$borrowernumber,$desde,$fecha,$data2->{'holdingbranch'});
@@ -234,10 +238,19 @@ $enddate= C4::Date::format_date_in_iso($enddate);
 insertSanction($dbh, undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
 
 } else{
-#Miguel hacer funcion
-my $sth3=$dbh->prepare("INSERT INTO historicCirculation (type, borrowernumber, biblioitemnumber) 
-values (?,?,?) ");
-$sth3->execute('queue', $borrowernumber, $biblioitemnumber);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($biblioitemnumber);
+
+my $biblionumber= $dataBiblioItems->{'biblionumber'};
+my $branchcode= '-';
+my $issuetype= '-';
+my $itemnumber= 0;
+my $loggedinuser= $borrowernumber;
+
+# $type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype
+C4::Circulation::Circ2::insertHistoricCirculation('queue',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 #se hace una reserva para el grupo, ya que no hay ningun item libre
 my $sth2=$dbh->prepare("insert into reserves (biblioitemnumber,borrowernumber,reservedate) values (?,?,NOW()) ");
@@ -439,9 +452,28 @@ sub cancelar_reserva {
 		my $sth3=$dbh->prepare("commit");
 		$sth3->execute();
 	}
-	my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,branchcode,itemnumber) values (?,?,?,NOW(),?,?,?) ");
-	$sth3->execute('cancel',$borrowernumber,$loggedinuser,$biblioitemnumber,$data->{'branchcode'},$data->{'itemnumber'});
 
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $biblionumber;
+	my $branchcode;
+
+	if($data->{'itemnumber'}){
+
+		my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'itemnumber'});
+		$biblionumber= $dataItems->{'biblionumber'};
+		$branchcode= $dataItems->{'homebranch'};
+	}else{
+		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($biblioitemnumber);
+		$biblionumber= $dataBiblioItems->{'biblionumber'};
+		$branchcode= 0;
+	}
+	
+	my $issuetype= '-';
+	my $loggedinuser= $borrowernumber;
+	# $type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype
+	
+	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'itemnumber'},$branchcode,$issuetype); #C4::Circulation::Circ2
+#******************************Fin****Se registra el movimiento en historicCirculation*************************
 }
 
 
@@ -497,10 +529,14 @@ sub efectivizar_reserva{
 			$fecha_devolucion=proximoHabil($fecha_devolucion,0);
 			my $sth3=$dbh->prepare("INSERT INTO issues (borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals,issuecode) VALUES (?,?,NOW(),?,?,?,?) ");
 			$sth3->execute($data->{'borrowernumber'}, $data->{'itemnumber'}, $data->{'branchcode'}, $data->{'branchcode'}, 0, $issuecode);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+			my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'itemnumber'});
+			my $biblionumber= $dataItems->{'biblionumber'};
 	
-		#Historial
-			my $sth4=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,itemnumber,branchcode) values (?,?,?,NOW(),?,?,?) ");
-			$sth4->execute('issue',$data->{'borrowernumber'},$loggedinuser,$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'});
+			C4::Circulation::Circ2::insertHistoricCirculation('issue',$data->{'borrowernumber'},$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'},$issuecode);
+#********************************Fin**Se registra el movimiento en historicCirculation*************************
+
 			$sth3=$dbh->prepare("commit;");
 			$sth3->execute();
 
@@ -510,10 +546,12 @@ sub efectivizar_reserva{
 	}
 }
 
+#para enviar un mail cuando al usuario se le vence la reserva
 sub Enviar_Email{
 
-if (C4::Context->preference("EnabledMailSystem")){
 my ($itemnumber,$bor,$desde, $fecha, $apertura,$cierre,$loggedinuser)=@_;
+
+if (C4::Context->preference("EnabledMailSystem")){
 
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
@@ -551,13 +589,18 @@ my %mail = ( To => $borrower->{'emailaddress'},
                         Subject => $mailSubject,
                         Message => $mailMessage);
 my $resultado='ok';
-if ($borrower->{'emailaddress'} && $mailFrom ){sendmail(%mail) or die $resultado='error';
-						}
-						else {$resultado='';}
-my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
-$sth3->execute('notification',$bor,$res->{'rbiblionumber'},$loggedinuser,$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
+if ($borrower->{'emailaddress'} && $mailFrom ){
+	sendmail(%mail) or die $resultado='error';
+}else {$resultado='';}
 
-	}
+#**********************************Se registra el movimiento en historicCirculation***************************
+my $issuetype= '??';
+my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+my $branchcode= $dataItems->{'homebranch'};
+C4::Circulation::Circ2::insertHistoricCirculation('notification',$bor,$loggedinuser,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$branchcode,$issuetype);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+
+	}#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
 

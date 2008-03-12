@@ -65,7 +65,7 @@ Also deals with stocktaking.
 	&currentissues &getissues &getiteminformation
 	&issuebook &returnbook &find_reserves &transferbook &decode
 	&calc_charges &listitemsforinventory &listitemsforinventorysigtop &itemseen
-	&getmaxbarcode &getminbarcode &barcodesbytype
+	&getmaxbarcode &getminbarcode &barcodesbytype &insertHistoricCirculation &getDataItems &getDataBiblioItems
 	);
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
@@ -78,6 +78,54 @@ C<$itemnum> is the item number
 =back
 
 =cut
+
+#Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
+sub getDataBiblioItems{
+	my ($biblioitemnumber)=@_;
+	
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	SELECT biblionumber FROM biblioitems WHERE biblioitemnumber = ? ");
+
+	$sth->execute($biblioitemnumber);
+	my $dataBiblioItems= $sth->fetchrow_hashref;
+
+	return $dataBiblioItems;
+}
+
+#Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
+sub getDataItems{
+
+	my ($itemnumber)= @_;
+
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	SELECT biblionumber, homebranch, biblioitemnumber
+				FROM items
+				WHERE(itemnumber = ?)");
+
+	$sth->execute($itemnumber);
+	my $dataItems= $sth->fetchrow_hashref;
+
+	return $dataItems;
+}
+
+=item
+Registra Movimiento
+=cut
+
+sub insertHistoricCirculation{
+  my ($type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype)=@_;
+	
+  my $dbh = C4::Context->dbh;
+
+  my $sth=$dbh->prepare("	INSERT INTO historicCirculation(type,borrowernumber,responsable,date,biblionumber,
+				biblioitemnumber,itemnumber,branchcode,issuetype)
+  				VALUES (?,?,?,NOW(),?,?,?,?,?) ");
+
+  $sth->execute($type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype);
+	
+  return;
+}
+
 sub itemseen {
 	my ($itemnum) = @_;
 	my $dbh = C4::Context->dbh;

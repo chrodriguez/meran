@@ -20,6 +20,7 @@ ALTER TABLE `sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
 ALTER TABLE `historicCirculation` ADD `responsable` VARCHAR( 20 ) NOT NULL AFTER `borrowernumber` ;
 ALTER TABLE `historicCirculation` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 ALTER TABLE `historicCirculation` ADD `nota` VARCHAR( 50 ) NULL AFTER `date` ;
+ALTER TABLE `historicCirculation` ADD `issuetype` CHAR( 2 );
 
 
 --Se agraga la variable libreDeuda al las preferencias del sistema. Por defecto esta seteada para no permitir la impresion cuando el usuario tiene prestamos vencidos.

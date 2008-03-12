@@ -1213,44 +1213,77 @@ return ($cant);
 }
 
 sub historicoCirculacion(){
-	my ($chkfecha,$fechaIni,$fechaFin,$chkuser,$user,$itemnumber,$ini,$cantR,$orden)=@_;
+	my ($chkfecha,$fechaIni,$fechaFin,$chkuser,$user,$itemnumber,$ini,$cantR,$orden,
+	$tipoPrestamo,$tipoOperacion)=@_;
+	
         my $dbh = C4::Context->dbh;
  	my $clase='par';
-	my @blind;
+	my @bind;
 	my $query="";
 	my $cant=0;
+=item
         my $select="SELECT id,nota,biblionumber,biblioitemnumber,itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname ";
 	my $from="FROM historicCirculation h INNER JOIN borrowers b ON (h.responsable=b.borrowernumber) ";
+=cut
+
+	my $select= " 	SELECT h.id, nota, a.completo,h.biblionumber, bib.title, 	
+			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname, i.barcode ";
+
+	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
+			ON (h.responsable=b.borrowernumber)
+			LEFT JOIN biblio bib
+			ON (bib.biblionumber = h.biblionumber)
+			LEFT JOIN autores a
+			ON (a.id = bib.author) 
+			LEFT JOIN items i
+			ON (i.itemnumber = h.itemnumber) ";
+
 	my $where = "";
 	if ($chkfecha ne ''){
-		$where = "WHERE (date>=?) AND (date<=?) ";
-		push(@blind,$fechaIni);
-		push(@blind,$fechaFin);
+		$where = " WHERE (date>=?) AND (date<=?) ";
+		push(@bind,$fechaIni);
+		push(@bind,$fechaFin);
 	}
-	if ($chkuser ne ''){
-		if ($where eq ''){
-			$where = "WHERE responsable=? ";
-		}
+# 	if ($chkuser ne ''){
+	if (($user)&&($user ne '-1')){	
+		if ($where eq ''){$where = " WHERE responsable=? ";}
 		else {$where.= " AND responsable=? ";}
-		push(@blind,$user);
+		push(@bind,$user);
 	}
-	my $finCons=" ORDER BY ".$orden." limit $ini,$cantR ";
+
+	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
+		if ($where eq ''){$where = " WHERE h.type = ? ";}
+		else{$where .= " AND h.type = ? ";}
+		push(@bind, $tipoOperacion);
+	}
+
+	if(($tipoPrestamo)&&($tipoPrestamo ne '-1')){
+		if ($where eq ''){ $where = " WHERE h.issuetype = ? ";}
+		else{$where .= " AND h.issuetype = ? ";}
+		push(@bind, $tipoPrestamo);
+	}
+
+# 	my $finCons=" ORDER BY ".$orden." limit $ini,$cantR ";
+#Miguel solo para testear, despues sacar
+	my $finCons=" ORDER BY h.timestamp desc limit $ini,$cantR ";
+
 #para buscar las operaciones sobre un item, viene desde el pl item-detial.pl
 	if($itemnumber ne ''){
 		$where.=" AND itemnumber = ?";
 		$finCons="";
-		push(@blind,$itemnumber);
+		push(@bind,$itemnumber);
 	}
 	
 	$query="SELECT count(*) as cant ".$from.$where;
         my $sth=$dbh->prepare($query);
-        $sth->execute(@blind);
+        $sth->execute(@bind);
 	$cant=$sth->fetchrow_array;
 	
 	$query=$select.$from.$where.$finCons;
 	$sth=$dbh->prepare($query);
-        $sth->execute(@blind);
+        $sth->execute(@bind);
 	my @results;
+
         while (my $data=$sth->fetchrow_hashref){
 		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
 		$data->{'fecha'}=format_date($data->{'date'});
@@ -1266,9 +1299,11 @@ sub historicoCirculacion(){
 sub tipoDeOperacion(){
 	my ($tipo)=@_;
 	if($tipo eq "issue"){$tipo="Prestamo";}
-	elsif($tipo eq "return"){$tipo="Devolución";}
-	elsif($tipo eq "cancel"){$tipo="Cancelación";}
-	elsif($tipo eq "notification"){$tipo="Notificación";}
+	elsif($tipo eq "return"){$tipo="Devoluci&oacute;n";}
+	elsif($tipo eq "cancel"){$tipo="Cancelaci&oacute;n";}
+	elsif($tipo eq "notification"){$tipo="Notificaci&oacute;n";}
+	elsif($tipo eq "queue"){$tipo="R. en Espera";}
+	elsif($tipo eq "reserve"){$tipo="Reservado";}
 	return $tipo;
 }
 
@@ -1285,22 +1320,30 @@ sub insertarNotaHistCirc(){
 sub reporteDiario{
 	my ($ini,$cantR,$tipoPrestamo)=@_;
 	my $dbh= C4::Context->dbh;
+	my @bind=();
+	my $where= "";
+
+	my $filtroPorTipoPrestamo= " ";
+	if($tipoPrestamo){
+		$filtroPorTipoPrestamo= " i.issuecode = ? ";
+		push(@bind, $tipoPrestamo);
+	}
+
+	if($filtroPorTipoPrestamo ne " "){
+		$where= " WHERE ";
+	}
+
 #para tener el total de registros
 	my $queryTotal= " 	
 			SELECT count(*) as cant
 			FROM issues i INNER JOIN  items it
 			ON ( i.itemnumber = it.itemnumber )
 			INNER JOIN biblio b
-			ON (b.biblionumber = it.biblionumber) ";
+			ON (b.biblionumber = it.biblionumber) $where $filtroPorTipoPrestamo ";
 
-=item
-	if($tipoPrestamo){
-		$queryTotal .= " i.issuecode = ?";
-	}
-=cut
 
 	my $sthTotal= $dbh->prepare($queryTotal);
-	$sthTotal->execute();
+	$sthTotal->execute(@bind);
 
 	my $cantidad=$sthTotal->fetchrow_hashref;
 
@@ -1309,13 +1352,14 @@ sub reporteDiario{
 			FROM issues i INNER JOIN  items it
 			ON ( i.itemnumber = it.itemnumber )
 			INNER JOIN biblio b
-			ON (b.biblionumber = it.biblionumber) ";
-
+			ON (b.biblionumber = it.biblionumber) $where $filtroPorTipoPrestamo ";
 
 	$query .= " limit ?,?";
+	push(@bind, $ini);
+	push(@bind, $cantR);
 
 	my $sth= $dbh->prepare($query);
-	$sth->execute($ini,$cantR);
+	$sth->execute(@bind);
 
 	my $cant= 0;
 	my @result;

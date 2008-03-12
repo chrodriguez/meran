@@ -128,11 +128,18 @@ sub devolver {
 			#FALTA ENVIARLE EL MAIL al usuario avisandole de  la disponibilidad del libro mediante un proceso separado, un thread por ej, el problema me parece es que el thread no accede a las bases de datos.
 
 		}
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+
+		my $biblionumber= $dataItems->{'biblionumber'};
+
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$biblionumber,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'},$iteminformation->{'issuecode'});
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+
+
 		my $sth3=$dbh->prepare("commit;");
 		$sth3->execute();
-
-		$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,date,biblioitemnumber,itemnumber,branchcode) values (?,?,?,NOW(),?,?,?) ");
-		$sth3->execute('return',$borrowernumber,$loggedinuser,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'});
 
 ### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
 		my $hasdebts=0;
@@ -142,7 +149,6 @@ sub devolver {
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
 			my $issuetype=IssueType($iteminformation->{'issuecode'});
 			my $daysissue=$issuetype->{'daysissues'}; 
-			
 			my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
                         my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
                         $sth->execute($borrowernumber);
@@ -473,9 +479,15 @@ sub renovar {
 		my $sth=$dbh->prepare("UPDATE issues SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() WHERE itemnumber = ? AND borrowernumber = ?");
 		$sth->execute($itemnumber, $borrowernumber);
 
-# 	my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,itemnumber,branchcode) values (?,?,NOW(),?,?,?);");
-		my	$sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,responsable,itemnumber,date) values (?,?,?,?,NOW());");
-                $sth3->execute('renew',$borrowernumber,$loggedinuser,$itemnumber);
+#**********************************Se registra el movimiento en historicCirculation***************************
+		my $issuetype= '??';
+		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+		my $biblionumber= $dataItems->{'biblionumber'};
+		my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
+		my $branchcode= $dataItems->{'homebranch'};
+
+		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype);
+#****************************Fin******Se registra el movimiento en historicCirculation*************************
 
 		return 1;
 	}else{
@@ -679,13 +691,14 @@ sub PrestamosMaximos {
 }
 
 =item
-mail de recordatorio envia los mails a los dueños de los items que vencen el proximo dia habil
+mail de recordatorio envia los mails a los dueï¿½os de los items que vencen el proximo dia habil
 =cut
 
 sub Enviar_Recordatorio{
 
-if (C4::Context->preference("EnabledMailSystem")){
 my ($itemnumber,$bor,$vencimiento)=@_;
+
+if (C4::Context->preference("EnabledMailSystem")){
 
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
@@ -719,13 +732,32 @@ my %mail = ( To => $borrower->{'emailaddress'},
                         Subject => $mailSubject,
                         Message => $mailMessage);
 my $resultado='ok';
-if ($borrower->{'emailaddress'} && $mailFrom ){sendmail(%mail) or die $resultado='error';
-						}
-						else {$resultado='';}
+if ($borrower->{'emailaddress'} && $mailFrom ){
+	sendmail(%mail) or die $resultado='error';
+}else {
+	$resultado='';
+}
+
+=item
+#**********************************Se registra el movimiento en historicCirculation***************************
 my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
 $sth3->execute('notification',$bor,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+=cut
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
 
-	}
+	my $biblionumber= $dataItems->{'biblionumber'};
+	my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
+	my $branchcode= $dataItems->{'homebranch'};
+	my $borrowernumber= $bor;
+	my $loggedinuser= $bor;
+	my $issuecode= '-';
+		
+	C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode);
+#*******************************Fin***Se registra el movimiento en historicCirculation**********************
+
+	}#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
 
@@ -738,7 +770,7 @@ while(my $data= $sth->fetchrow_hashref) {
 	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
 	my $proximohabil=proximoHabil(0,1);
 	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) eq 0) {
-	Enviar_Recordatorio($data->{'borrowernumber'},$data->{'itemnumber'},$fechaDeVencimiento)	
+	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},$fechaDeVencimiento)	
 	};
 }
 }
