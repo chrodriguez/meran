@@ -878,7 +878,7 @@ Imprime el pie de pagina del documento con la info de la biblioteca.
 sub imprimirPiePag(){
 	my ($pdf,$y,$pageheight,$biblio)=@_;
 	my @texto;
-	$texto[0]="Biblioteca".$biblio->{'branchname'};
+	$texto[0]="Biblioteca: ".$biblio->{'branchname'};
 	$texto[1]="Calle ".$biblio->{'branchaddress1'};
 	$texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
 	$texto[3]="Atención: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');

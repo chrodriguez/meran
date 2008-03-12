@@ -1,4 +1,5 @@
 <html>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/intranet.css ">
 <script>
 function imprimir(){
 	var autores="";
@@ -18,9 +19,13 @@ function imprimir(){
 
 </script>
 
-<body>
+<body bgcolor="#f7f6f6">
 
-<table align="center" height="100%" weight="100%">
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+	<tr><td>Completar Datos</td></tr>
+        <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+<table class="inputFontNormal" align="center" height="100%" weight="100%">
 	<form name="info" id="info" action="/cgi-bin/koha/prestamoInterBiblio.pl">
 		<input type="hidden" name="bornum" id="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
@@ -43,9 +48,9 @@ function imprimir(){
 			<input type="text" id="director" name="director">
 		</td>
 	</tr>
-	<tr>
+	<tr class="tablaresultadoTitle">
 		<td  align="center" colspan="3">
-			Datos de los documentos
+			DATOS DE LOS DOCUMENTOS
 		</td>
 	</tr>
 	<tr>
@@ -53,7 +58,7 @@ function imprimir(){
 			Autor
 		</th>
 		<th>
-			Titulo
+			T&iacute;tulo
 		</th>
 		<th>
 			Otros Datos
@@ -84,8 +89,7 @@ function imprimir(){
 	<tr>
 		<td align=center colspan="3">
 			<br><br>
-			<input type="button" onClick="imprimir()"  value="imprimir">
-			<a href="javascript: window.close();">Cerrar</a>
+			<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png"  onClick="imprimir()"  value="imprimir">
 		</td>
 	</tr>
 	</form>
