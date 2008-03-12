@@ -1220,10 +1220,6 @@ sub historicoCirculacion(){
 	my @bind;
 	my $query="";
 	my $cant=0;
-=item
-        my $select="SELECT id,nota,biblionumber,biblioitemnumber,itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname ";
-	my $from="FROM historicCirculation h INNER JOIN borrowers b ON (h.responsable=b.borrowernumber) ";
-=cut
 
 	my $select= " 	SELECT h.id, nota, a.completo,h.biblionumber, bib.title, 	
 			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,responsable,type,surname,firstname, i.barcode, i.bulk ";
