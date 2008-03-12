@@ -54,7 +54,6 @@ use vars qw(@EXPORT @ISA);
 	   &historicoDeBusqueda
 	   &historicoCirculacion
 	   &insertarNotaHistCirc
-	   &reporteDiario
 );
 
 sub historicoDeBusqueda(){
@@ -1227,10 +1226,12 @@ sub historicoCirculacion(){
 =cut
 
 	my $select= " 	SELECT h.id, nota, a.completo,h.biblionumber, bib.title, 	
-			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode,date,responsable,type,surname,firstname, i.barcode, i.bulk ";
+			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,responsable,type,surname,firstname, i.barcode, i.bulk ";
 
 	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
 			ON (h.responsable=b.borrowernumber)
+			LEFT JOIN issuetypes it
+			ON(it.issuecode = h.issuetype)
 			LEFT JOIN biblio bib
 			ON (bib.biblionumber = h.biblionumber)
 			LEFT JOIN autores a
@@ -1304,6 +1305,7 @@ sub tipoDeOperacion(){
 	elsif($tipo eq "notification"){$tipo="Notificaci&oacute;n";}
 	elsif($tipo eq "queue"){$tipo="R. en Espera";}
 	elsif($tipo eq "reserve"){$tipo="Reservado";}
+	elsif($tipo eq "renew"){$tipo="Renovado";}	
 	return $tipo;
 }
 
@@ -1314,62 +1316,6 @@ sub insertarNotaHistCirc(){
 		   where id=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($nota,$id);
-}
-
-
-sub reporteDiario{
-	my ($ini,$cantR,$tipoPrestamo)=@_;
-	my $dbh= C4::Context->dbh;
-	my @bind=();
-	my $where= "";
-
-	my $filtroPorTipoPrestamo= " ";
-	if($tipoPrestamo){
-		$filtroPorTipoPrestamo= " i.issuecode = ? ";
-		push(@bind, $tipoPrestamo);
-	}
-
-	if($filtroPorTipoPrestamo ne " "){
-		$where= " WHERE ";
-	}
-
-#para tener el total de registros
-	my $queryTotal= " 	
-			SELECT count(*) as cant
-			FROM issues i INNER JOIN  items it
-			ON ( i.itemnumber = it.itemnumber )
-			INNER JOIN biblio b
-			ON (b.biblionumber = it.biblionumber) $where $filtroPorTipoPrestamo ";
-
-
-	my $sthTotal= $dbh->prepare($queryTotal);
-	$sthTotal->execute(@bind);
-
-	my $cantidad=$sthTotal->fetchrow_hashref;
-
-	my $query= " 	SELECT i.borrowernumber, i.itemnumber, i.issuecode, i.date_due, i.returndate,
-			it.itemnumber, it.biblionumber, it.biblioitemnumber, it.barcode, it.wthdrawn, it.notforloan, it.barcode, b.biblionumber, b.title
-			FROM issues i INNER JOIN  items it
-			ON ( i.itemnumber = it.itemnumber )
-			INNER JOIN biblio b
-			ON (b.biblionumber = it.biblionumber) $where $filtroPorTipoPrestamo ";
-
-	$query .= " limit ?,?";
-	push(@bind, $ini);
-	push(@bind, $cantR);
-
-	my $sth= $dbh->prepare($query);
-	$sth->execute(@bind);
-
-	my $cant= 0;
-	my @result;
-
-	while (my $data=$sth->fetchrow_hashref){
-		push @result, $data;
-		$cant++;
-	}
-
-	return $cantidad->{'cant'}, @result;
 }
 
 

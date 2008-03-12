@@ -174,6 +174,9 @@ my @result= (
 		},
 		{type => 'reserve',
 		description => 'Reservado'
+		},
+		{type => 'renew',
+		description => 'Renovacion'
 		}
 );
 

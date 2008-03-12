@@ -13,15 +13,6 @@
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
 				};
 
-
-// 	function validar(){
-// 		var selectUser= document.getElementById('user');
-// 		if(selectUser.value == "SIN SELECCIONAR"){
-// 			alert("Seleccione el usuario");
-// 			selectUser.focus();
-// 			
-// 		}else{ document.getElementById('unidad').submit(); }
-// 	}
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
@@ -72,7 +63,6 @@
 			<td colspan="4" align="center">
 				<br><br>
 				<a  onClick='unidad.submit()'><img   src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
-				<!--<a  onClick='validar();'><img   src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>-->
 			</td>
    		</tr>
 	</table>
@@ -113,9 +103,7 @@
 		<th>Responsable</th>
 		<th>Fecha</th>
 		<th>Operaci&oacute;n</th>
-<!-- 		<th>Item</th> -->
 		<th>Nota</th>
-<!-- 		<th>Agregar nota</th> -->
 
 		<td align="right" valign="top" width="1%">
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
@@ -142,8 +130,12 @@
 		</td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=fecha --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=operacion --> </td>
+  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
+			<!-- TMPL_VAR NAME=operacion -->
+			<!-- TMPL_IF NAME=description -->
+				<br>(<!-- TMPL_VAR NAME=description -->) 
+			<!-- /TMPL_IF -->
+		</td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <textarea class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota --></textarea>
 		<br>
 		<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="modificacion.submit()">
