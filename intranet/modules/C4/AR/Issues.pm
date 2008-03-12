@@ -750,7 +750,7 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 	my $loggedinuser= $bor;
 	my $issuecode= '-';
 		
-	C4::Circulation::Circ2::insertHistoricCirculation('reminderNotification',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode);
+	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode);
 #*******************************Fin***Se registra el movimiento en historicCirculation**********************
 
 	}#end if (C4::Context->preference("EnabledMailSystem"))

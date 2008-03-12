@@ -55,9 +55,6 @@
 			<td rowspan="4" valign="top" class="inputFontNormal"> <b>Filtrar por:</b> <br>
 
 			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-
-				<!--<input class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"
-				<!-- TMPL_IF NAME="chkuser" -->checked<!-- /TMPL_IF -->>-->
 				<b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
 
 				<br><br>
@@ -89,17 +86,17 @@
 </p><br>
 
 <!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name='ant' -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME=chkuser -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
+<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name='ant' -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
 <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR NAME=number -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME=chkuser -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
+<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR NAME=number -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
 <u><!-- TMPL_VAR name=number --></u></a>
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name="sig" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&chkuser=<!--TMPL_VAR NAME= chkuser -->&user=<!--TMPL_VAR NAME= user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
+<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name="sig" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME= user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
 <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
 <!-- /TMPL_IF -->
 

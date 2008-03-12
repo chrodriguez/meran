@@ -80,7 +80,6 @@ my @resultsdata;
 my $cant;
 
 my $user= $input->param('user');
-my $chkuser= $input->param('chkuser'); # checkbox que busca por usuario
 my $chkfecha= $input->param('chkfecha'); #checkbox que busca por fecha
 
 #Select de usuarios
@@ -161,7 +160,7 @@ my @result= (
 		{type => 'queue',
 		description => 'R. en Espera'
 		},
-		{type => 'reminderNotification',
+		{type => 'reminder',
 		description => 'Recordatorio de Vto'
 		},
 		{type => 'notification',
@@ -199,7 +198,9 @@ my $tipoOperacion= $input->param('tipoOperacion');
 #Miguel - tiene la posibilidad de no filtrar nada var si queda!!!!!!!!!!!!!!!!!!!!!!!!!! 
 # if($chkfecha ne "" || $user ne "SIN SELECCIONAR"){
 # if($chkfecha ne ""){
-($cant,@resultsdata)= &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$chkuser,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+($cant,@resultsdata)=
+ &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+
 # }
 
 my @numeros=armarPaginas($cant,$pageNumber);
@@ -235,7 +236,6 @@ $template->param(
 			chkfecha         => $chkfecha,
 			dateselected     => $input->param('dateselected'),
 		        dateselectedEnd  => $input->param('dateselectedEnd'),
-			chkuser          => $chkuser,
 			user             => $user,
 			tiposPrestamos	 => $tipoPrestamo,
 			tipoOperacion	 => $tipoOperacion
