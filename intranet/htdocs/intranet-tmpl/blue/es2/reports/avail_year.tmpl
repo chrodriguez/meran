@@ -1,6 +1,16 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<script>
+<script type="text/javascript">
+
+<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+
+/*You can also place this code in a separate file and link to it like epoch_classes.js*/
+        var dp_ini,dp_fin;      
+	window.onload = function () {
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+				};
+
 function hacerSubmit(){
         document.branches.submit();
         }
@@ -22,20 +32,22 @@ function hacerSubmit(){
 </tr>
 <tr>
 <td class="inputFontNormal">Seleccione una fecha de inicio:</td>
-<td class="inputFontNormal"> <input  name="ini" value="<!-- TMPL_VAR NAME="ini" -->">
-            <script language="javascript"> <!-- TMPL_INCLUDE NAME="date-picker.js" --></script>
-             <a href="javascript:show_calendar('branches.ini');" >
-             <img src="<!-- TMPL_VAR NAME='themelang' -->/images/calendar.png" alt="Calendario" border=0 >
-             </a></td>
-   <td>&nbsp;</td>
+<td class="inputFontNormal"> 
+		<input id="ini" name="ini" value="<!-- TMPL_VAR NAME='ini' -->">
+	     	<a href="javascript:dp_ini.toggle();">
+				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
+		</a>
+</td>
+<td>&nbsp;</td>
 </tr>
 <tr>
 <td class="inputFontNormal">Seleccione una fecha de Fin: </td>
-<td class="inputFontNormal"> <input  name="fin" value="<!-- TMPL_VAR NAME="fin" -->">
-            <script language="javascript"><!-- TMPL_INCLUDE NAME="date-picker.js" --></script>
-             <a href="javascript:show_calendar('branches.fin');" > 
-             <img src="<!-- TMPL_VAR NAME='themelang' -->/images/calendar.png" alt="Calendario" border=0 >
-             </a></td>
+<td class="inputFontNormal"> 
+		<input  id="fin" name="fin" value="<!-- TMPL_VAR NAME='fin' -->">
+		<a href="javascript:dp_fin.toggle();">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
+		</a>
+</td>
 <td class="inputFontNormal"> <input type="submit" name="consulta" value="Generar listado"></td>	
    </tr>
 <tr><td colspan="3">&nbsp;</td></tr>

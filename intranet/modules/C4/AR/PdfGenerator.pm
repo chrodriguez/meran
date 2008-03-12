@@ -718,7 +718,8 @@ sub prestInterBiblio(){
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
-	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,2,$datos);
+	my $cant=scalar(@$datos);
+	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
 	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
