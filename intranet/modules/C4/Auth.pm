@@ -361,6 +361,18 @@ sub checkauth {
 				$sth->execute($lastlogin);
 				$enter=1;
 			}
+			
+			#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
+			my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+			if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+				# lastlogin es anterior a hoy
+				# Hoy no se enviaron nunca los mails de recordacion
+				open L, ">>/tmp/avisos";
+				printf L "Enviar MAIL! \n";
+				close L;
+				&C4::AR::Issues::enviar_recordatorios_prestamos();
+			}
+
 			}
 			if ($enter) {
 				#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en el while anterior
@@ -382,9 +394,7 @@ sub checkauth {
 				&C4::AR::Reserves::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
 				#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 				&C4::AR::Reserves::cancelar_reservas($userid,C4::AR::Reserves::FindNotRegularUsersWithReserves());
-				&C4::AR::Reserves::eliminarReservasVencidas($userid);
-				C4::AR::Issues::enviar_recordatorios_prestamos();
-
+				&C4::AR::Reserves::eliminarReservasVencidas($userid);	
 				#Si se logueo correctamente en intranet entonces guardo la fecha
 				$dbh->do("update borrowers set lastlogin=now() where cardnumber = ?", undef, $cardnumber);
 			}

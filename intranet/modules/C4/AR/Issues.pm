@@ -698,7 +698,7 @@ sub Enviar_Recordatorio{
 
 my ($itemnumber,$bor,$vencimiento)=@_;
 
-if (C4::Context->preference("EnabledMailSystem")){
+if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
 
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
@@ -715,8 +715,11 @@ my $mailFrom=C4::Context->preference("mailFrom");
 my $mailSubject =C4::Context->preference("reminderSubject");
 my $mailMessage =C4::Context->preference("reminderMessage");
 my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
-#$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
 
+$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
+
+
+$mailFrom =~ s/BRANCH/$branchname/;
 $mailSubject =~ s/BRANCH/$branchname/;
 $mailMessage =~ s/BRANCH/$branchname/;
 $mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
@@ -738,15 +741,8 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 	$resultado='';
 }
 
-=item
-#**********************************Se registra el movimiento en historicCirculation***************************
-my $sth3=$dbh->prepare("Insert into historicCirculation (type,borrowernumber,date,biblionumber,biblioitemnumber,itemnumber,branchcode) values (?,?,NOW(),?,?,?,?) ");
-$sth3->execute('notification',$bor,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$borrower->{'branchcode'});
-#*******************************Fin***Se registra el movimiento en historicCirculation*************************
-=cut
 #**********************************Se registra el movimiento en historicCirculation***************************
 	my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
-
 	my $biblionumber= $dataItems->{'biblionumber'};
 	my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
 	my $branchcode= $dataItems->{'homebranch'};
@@ -758,6 +754,7 @@ $sth3->execute('notification',$bor,$res->{'rbiblionumber'},$res->{'rbiblioitemnu
 #*******************************Fin***Se registra el movimiento en historicCirculation**********************
 
 	}#end if (C4::Context->preference("EnabledMailSystem"))
+
 }
 
 
@@ -766,11 +763,14 @@ sub enviar_recordatorios_prestamos {
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from issues where returndate is NULL");
 $sth->execute();
+
 while(my $data= $sth->fetchrow_hashref) {
 	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
 	my $proximohabil=proximoHabil(0,1);
-	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) eq 0) {
-	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},$fechaDeVencimiento)	
+
+	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
+	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));	
+
 	};
 }
 }
