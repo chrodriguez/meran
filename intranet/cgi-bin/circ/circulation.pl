@@ -41,7 +41,7 @@ use Date::Manip;
 use C4::AR::Sanctions;
 
 my $query=new CGI;
-# my $input=new CGI;
+
 my ($template, $loggedinuser, $cookie) = get_template_and_user
     ({
 	template_name	=> 'circ/circulation.tmpl',
@@ -58,7 +58,7 @@ my $branches = getbranches();
 my $printers = getprinters(\%env);
 my $branch=(split("_",(split(";",$cookie))[0]))[1];
 my $printer = getprinter($query, $printers);
-my $dbh = C4::Context->dbh;
+
 
 
 my $iteminfo;
@@ -187,7 +187,7 @@ if($bornum){
 			$iteminfo= getiteminformation( \%env, $itemnumber);
 			my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
 			
-				#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
+			#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 			my $available= $issue+ $issuenfl + $reserve + $forloan + $notforloan;
 			my @values;
 			my %labels;
@@ -245,7 +245,7 @@ if($bornum){
 ##############################################################################################################
 	my $sanctions = hasSanctions($bornum);
 	$template->param(sanctions =>$sanctions);
-	my $debts= hasDebts($dbh, $bornum); # indica si el usuario tiene libros vencidos
+	my $debts= hasDebts("", $bornum); # indica si el usuario tiene libros vencidos
 	$template->param(debts =>$debts);
 } # if (bornum)
 
@@ -325,7 +325,6 @@ $template->param(
 		strItemnumber => $strItemnumber,
 		infoTotal => \@infoTotal,
 		ticket_string => \@tickets,
-# 		ticket_string => $ticket_string,
 );
 
 
@@ -385,7 +384,7 @@ sub crearTicket(){
 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
 		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . $loggedinuser. "##";
+		    "&librarianNumber=" . $loggedinuser;
 	return ($ticket_string);
 }
 

@@ -152,7 +152,7 @@ if ($op eq 'add') {
 	# actually delete branch and return to the main screen....
 	deletecategory($categorycode);
 	$template->param(else => 1);
-	default("The category with code $categorycode has been deleted.");
+	default("La categor&iacute;a con c&oacute;digo $categorycode ha sido borrado.");
 
 } else {
 	# if no operation has been set...
@@ -504,7 +504,7 @@ sub checkdatabasefor {
     my $message;
     if ($total) {
 	# FIXME: need to be replaced by an exported boolean parameter
-	$message = "Branch cannot be deleted because there are $total items using that branch.";
+	$message = "La unidad de informaci&oacute;n no puede ser borrada porque tiene $total items en uso.";
     }
     return $message;
 }
@@ -520,7 +520,7 @@ sub checkcategorycode {
     my $message;
     if ($total) {
 	# FIXME: need to be replaced by an exported boolean parameter
-	$message = "Category cannot be deleted because there are $total branches using that category.";
+	$message = "La categor&iacute;a no puede ser borrada porque tiene $total unidades de informaci&oacute;n en uso.";
     }
     return $message;
 }
