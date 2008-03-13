@@ -19,8 +19,6 @@ sub StringSearch  {
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-# 		if($data->{'enabled'} eq 1){$data->{'enabledOut'}= 'Si';}
-# 		else {$data->{'enabledOut'}= 'No';}
 		push(@results,$data);
 	}
 	#  $sth->execute;
