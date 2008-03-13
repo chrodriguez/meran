@@ -615,9 +615,11 @@ sub IssuesType2 {
  	my ($notforloan)=@_;
 	my $dbh = C4::Context->dbh;
   	my $sth;
-  	my $query= "select * from issuetypes";
+#Trae todos los tipos de prestamos que estan habilitados
+  	my $query= " SELECT * from issuetypes WHERE enabled = 1 ";
   	if ($notforloan ne undef){
-    		$query.=" where notforloan = ? order by description";
+#     		$query.=" where notforloan = ? order by description";
+		$query.=" AND notforloan = ? ORDER BY description";
     		$sth = $dbh->prepare($query);
     		$sth->execute($notforloan);
   	} 

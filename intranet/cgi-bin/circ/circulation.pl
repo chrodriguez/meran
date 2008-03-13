@@ -414,6 +414,9 @@ sub procesarStr(){
 	elsif($strError eq "NO_ES_HORA_DEL_PRESTAMO_ESPECIAL"){
 		return "Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.";
 	}
+	elsif($strError eq "FALTAN_PARAMETROS"){
+		return "por falta par&aacute;metros";
+	}
 }
 
 # Local Variables:

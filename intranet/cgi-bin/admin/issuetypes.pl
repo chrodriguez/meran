@@ -66,40 +66,49 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 
-					$template->param(
-                                                        description => $data->{'description'},
-                                                        maxissues => $data->{'maxissues'},
-                                                        notforloan => $data->{'notforloan'},
-							daysissues => $data->{'daysissues'},
-							renew => $data->{'renew'},
-							renewdays => $data->{'renewdays'},
-							dayscanrenew => $data->{'dayscanrenew'}
-                                                        );
+		$template->param(
+                	description => $data->{'description'},
+                        maxissues => $data->{'maxissues'},
+			notforloan => $data->{'notforloan'},
+			daysissues => $data->{'daysissues'},
+			renew => $data->{'renew'},
+			renewdays => $data->{'renewdays'},
+			enabled => $data->{'enabled'},
+			dayscanrenew => $data->{'dayscanrenew'}
+		);
 
 
  
 	}
-					$template->param(issuetype => $issuetype);
+		
+	$template->param(issuetype => $issuetype);
 ;
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace issuetypes (issuecode,description,maxissues,renew,renewdays,daysissues,dayscanrenew,notforloan) values (";
+	my $query = "replace issuetypes	(issuecode,description,maxissues,renew,renewdays,daysissues,dayscanrenew,notforloan,enabled) values (";
 	$query.= $dbh->quote($input->param('issuetype')).",";
 	$query.= $dbh->quote($input->param('description')).",";
 	$query.= $dbh->quote($input->param('maxissues')).",";
 	$query.= $dbh->quote($input->param('renew')).",";
-	 $query.= $dbh->quote($input->param('renewdays')).",";
+	$query.= $dbh->quote($input->param('renewdays')).",";
 	$query.= $dbh->quote($input->param('daysissues')).",";	 
-	 $query.= $dbh->quote($input->param('dayscanrenew')).",";
+	$query.= $dbh->quote($input->param('dayscanrenew')).",";
 	 
 	if ($input->param('notforloan') ne 1) {
+		$query.= "0,";
+	} else {
+		$query.= "1,";
+	}
+	
+	if ($input->param('enabled') ne 1) {
 		$query.= "0)";
 	} else {
 		$query.= "1)";
 	}
+
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;

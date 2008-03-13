@@ -45,11 +45,14 @@ my $error=0;
 my $itemnumber;
 my $issuecode;
 my $i=0;
-open(A,">>/tmp/pr.txt");
-for my $olditemnumber (@numerosItems){ #ESTO ES PARA PODER PRESTAR TODOS LAS RESERVAS!!!!!!! VER CON EL MONO
-print A "Entro al loop: $olditemnumber\n";
+
+for my $olditemnumber (@numerosItems){ 
+
 	$issuecode = $query->param('issuetype'.$i);
 	$itemnumber = $query->param('itemnumber'.$i);
+
+#por si los combos estan vacios
+if(($issuecode)&&($itemnumber)){
 	$i++;
 #busca la informacion del item y del usuario
 	my $biblio = getiteminformation(\%env,$itemnumber);
@@ -160,8 +163,14 @@ print A "Entro al loop: $olditemnumber\n";
 			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA/";
 		}
 	}
-}
-close(A);
+  }#end if(($issuecode)&&($itemnumber))
+  else{
+	$error= 1;
+	$mensajeError .= $itemnumber."-FALTAN_PARAMETROS/";
+  }
+	
+}#end for principal
+
 print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$strResult."&error=".$error."&codError=".$mensajeError);
 
 # Local Variables:

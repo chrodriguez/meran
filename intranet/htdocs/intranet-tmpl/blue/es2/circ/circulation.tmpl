@@ -156,16 +156,22 @@ function imprimirTicket(str,num){
 			<td>Mensajes de errores</td>
 			<td width="1%" align="rigth" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 		</tr>
+	<!-- TMPL_LOOP name="errores" -->
 		<tr>
 		    <td width="1%">&nbsp;</td>
-	<!-- TMPL_LOOP name="errores" -->
-		    <td class="inputFontNormal" align="center">
-			No se pudo prestar el ejemplar:<b> <!-- TMPL_VAR name="barcode" --></b> por la siguiente situaci&oacute;n:<br>
+	
+		    <td class="inputFontNormal">
+			No se pudo prestar el ejemplar:<b> <!-- TMPL_VAR name="barcode" --></b><br> por la siguiente situaci&oacute;n:
 			<b><!-- TMPL_VAR name="string" --></b>
 		    </td>
-	<!-- /TMPL_LOOP -->
 		    <td width="1%">&nbsp;</td>
                 </tr>
+		<tr>
+			<td width="1%">&nbsp;</td>
+			<td width="1%">&nbsp;</td>
+			<td width="1%">&nbsp;</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
 	</table>
 <!-- /TMPL_IF -->
 
@@ -292,6 +298,7 @@ function imprimirTicket(str,num){
 <!-- TMPL_UNLESS name="all_issues"-->
 <!-- TMPL_UNLESS name="sanctions"-->
 
+<!--******************************** Seleccion de tipo de pretamo *****************************************-->
 <!-- TMPL_IF NAME="strItemnumber" -->
 <form name=frm2 method="post" action="/cgi-bin/koha/circ/item-borrow.pl">
 <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
@@ -353,6 +360,7 @@ function imprimirTicket(str,num){
 </table>
 </form>
 <!-- /TMPL_IF -->
+<!--******************************Fin** Seleccion de tipo de pretamo *****************************************-->
 
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
