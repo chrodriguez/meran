@@ -266,6 +266,7 @@ function Check(f) {
 		<td>D&iacute;as de Renovaci&oacute;n</td>
 		<td>Cantidad de d&iacute;as para renovar</td>
 		<td>Para Sala</td>
+		<td>Habilitado</td>
 		<td width="8%">Editar</td>
 		<td>Eliminar</td>
 		<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
@@ -296,6 +297,13 @@ function Check(f) {
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
 			<!-- TMPL_IF name="notforloan" -->
+				Si
+			<!-- TMPL_ELSE -->
+				No
+			<!-- /TMPL_IF -->
+		</td>
+		<td class='<!-- TMPL_VAR NAME="clase"-->' class="inputFontNormal" align="center">
+			<!-- TMPL_IF name="enabled" -->
 				Si
 			<!-- TMPL_ELSE -->
 				No

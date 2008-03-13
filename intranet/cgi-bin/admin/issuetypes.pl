@@ -19,7 +19,9 @@ sub StringSearch  {
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
+# 		if($data->{'enabled'} eq 1){$data->{'enabledOut'}= 'Si';}
+# 		else {$data->{'enabledOut'}= 'No';}
+		push(@results,$data);
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -122,15 +124,16 @@ if ($op eq 'add_form') {
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 
-					$template->param(issuetype => $issuetype,
-							description => $data->{'description'},
-							notforloan => $data->{'notforloan'},
-							maxissues => $data->{'maxissues'},
-							renew => $data->{'renew'},
-							  renewdays => $data->{'renewdays'},
-							daysissues => $data->{'daysissues'},
-							dayscanrenew => $data->{'dayscanrenew'},
-							total => $total);
+	$template->param(issuetype => $issuetype,
+		description => $data->{'description'},
+		notforloan => $data->{'notforloan'},
+		maxissues => $data->{'maxissues'},
+		renew => $data->{'renew'},
+		renewdays => $data->{'renewdays'},
+		daysissues => $data->{'daysissues'},
+		dayscanrenew => $data->{'dayscanrenew'},
+		total => $total
+	);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -167,7 +170,8 @@ if ($op eq 'add_form') {
 		$row_data{daysissues} = $results->[$i]{'daysissues'};
 		$row_data{renew} = $results->[$i]{'renew'};
 		$row_data{renewdays} = $results->[$i]{'renewdays'};
-		 $row_data{dayscanrenew} = $results->[$i]{'dayscanrenew'};
+		$row_data{dayscanrenew} = $results->[$i]{'dayscanrenew'};
+		$row_data{enabled} = $results->[$i]{'enabled'};
 		 
 		push(@loop_data, \%row_data);
 	}
