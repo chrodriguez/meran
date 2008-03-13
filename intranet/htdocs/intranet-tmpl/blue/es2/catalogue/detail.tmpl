@@ -288,9 +288,9 @@ function confirm_devolucion(num,bar,bor) {
 
 	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaresultado" width="100%">
 	<form name="formTodos" id="formTodos" method="post">
-        <input type=hidden name=userloggedname value=<!-- TMPL_VAR NAME="loggedinusername" -->>
-        <input type=hidden name=bibitemnum value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
-        <input type=hidden name=biblionum value=<!-- TMPL_VAR NAME="biblionumber" -->>
+        <input type=hidden name=userloggedname value='<!-- TMPL_VAR NAME="loggedinusername" -->'>
+        <input type=hidden name=bibitemnum value='<!-- TMPL_VAR NAME="biblioitemnumber" -->'>
+        <input type=hidden name=biblionum value='<!-- TMPL_VAR NAME="biblionumber" -->'>
         <input type=hidden name=type value=ALL>
 
 	<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
@@ -315,15 +315,15 @@ function confirm_devolucion(num,bar,bor) {
 	<!-- TMPL_LOOP NAME="items" -->
 	<tr align="center" cellpadding="0"  valign="middle">
 	        <form method=post>
-                  <input type=hidden name=userloggedname value=<!-- TMPL_VAR NAME="loggedinusername" -->>
-                  <input type=hidden name=bibitemnum value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
-                  <input type=hidden name=itemnum value=<!-- TMPL_VAR NAME="itemnumber" -->>
-                  <input type=hidden name=biblio value=<!-- TMPL_VAR NAME="biblionumber" -->>
+                  <input type=hidden name=userloggedname value='<!-- TMPL_VAR NAME="loggedinusername" -->'>
+                  <input type=hidden name=bibitemnum value='<!-- TMPL_VAR NAME="biblioitemnumber" -->'>
+                  <input type=hidden name=itemnum value='<!-- TMPL_VAR NAME="itemnumber" -->'>
+                  <input type=hidden name=biblio value='<!-- TMPL_VAR NAME="biblionumber" -->'>
 
-                  <input type=hidden name=bulk value=<!-- TMPL_VAR NAME="bulk" -->>
-                  <input type=hidden name=barcode value=<!-- TMPL_VAR NAME="barcode" -->>
-                  <input type=hidden name=bibit value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
-                  <input type=hidden name=bib value=<!-- TMPL_VAR NAME="biblionumber" -->>
+                  <input type=hidden name=bulk value='<!-- TMPL_VAR NAME="bulk" -->' >
+                  <input type=hidden name=barcode value='<!-- TMPL_VAR NAME="barcode" -->'>
+                  <input type=hidden name=bibit value='<!-- TMPL_VAR NAME="biblioitemnumber" -->'>
+                  <input type=hidden name=bib value='<!-- TMPL_VAR NAME="biblionumber" -->'>
 
                   <input type=hidden name=from value=detail>
             <!-- <td>&nbsp;</td> -->
