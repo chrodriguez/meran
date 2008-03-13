@@ -39,15 +39,13 @@
 <!-- TMPL_IF NAME="analyticalnumber" -->
 <!-- TMPL_IF name="analyticalauthor" -->
 <!-- TMPL_LOOP NAME="analyticalauthor" -->
-<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF -->.     
+<!-- TMPL_VAR NAME="completo" -->
 <!-- /TMPL_LOOP -->                                                                                                                           <!-- /TMPL_IF -->
 
-<b><i><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML -->.</i></b>&nbsp;EN: <!-- TMPL_VAR NAME="apellidoppal" --><!-- TMPL_IF name="nombreppal" -->, <!-- TMPL_VAR NAME="nombreppal" --><!-- /TMPL_IF --> <b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML -->.</i></b>&nbsp; (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
+<b><i><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML -->.</i></b>&nbsp;EN: <!-- TMPL_VAR NAME="completo" -->&nbsp; <b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML -->.</i></b>&nbsp; (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
 
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME='apellido'-->
-<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a>
-<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->&nbsp;<b>
+<!-- TMPL_IF NAME='completo'-->&nbsp;<b>
 <i><!-- TMPL_VAR NAME="title" ESCAPE=HTML-->.</i></b>&nbsp;  (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
 <!-- /TMPL_IF -->
 </td>
