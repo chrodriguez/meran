@@ -39,7 +39,7 @@ insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FI
 insert into  systempreferences   (value,explanation,variable) VALUES ('Recordatorio de vencimiento de préstamos','Subject del mail de recodatorio de prestamo a vencer','reminderSubject');
 
 --Se agrega campo 'enabled' en la tabla issuetypes para habilitar/deshabilitar tipos de prestamos 
---por ej: prestamos de verano 
+--por ej: prestamos de verano para V2 y V3
 
 ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1
 
