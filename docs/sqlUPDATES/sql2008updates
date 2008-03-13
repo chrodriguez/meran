@@ -32,7 +32,7 @@ VALUES (
 
 -- Preferencias para mail de recordatorio de prestamo a vencer
 
-INSERT INTO systempreferences (value,variable) VALUES ('1','reminderMail');
+INSERT INTO systempreferences (value,variable) VALUES ('0','reminderMail');
 
 insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el día VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n','Mensaje del mail de recordatorio de prestamo a vencer', 'reminderMessage');
 
