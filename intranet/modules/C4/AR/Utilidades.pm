@@ -176,6 +176,7 @@ my @feriados= @_;
 	}
 	close F;
 }
+
 #Se obtienen los campos de una tabla que es el parametro que se recibe
 sub obtenerCampos{
 my ($tabla)=@_;
@@ -193,18 +194,44 @@ return @results;
 }
 
 sub listadoTabla{
-my($tabla,$ind,$cant,$id,$orden,$search)=@_;
+my($tabla,$ind,$cant,$id,$orden,$search,$bloqueIni,$bloqueFin)=@_;
 #$cant=$cant+$ind;
 ($id||($id=0));
+open(A, ">>/tmp/debug.txt");
+print A "listado Tabla \n";
+
 $search=$search.'%';
+
+print A "search $search \n";
+close(A);
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select count(*) from $tabla  where $orden like '$search'");
-$sth->execute();
-my @cantidad=$sth->fetchrow_array;
-#$sth=$dbh->prepare("select * from $tabla order by $orden limit ?,?");
-$sth=$dbh->prepare("select * from $tabla where $orden like '$search' order by $orden limit $ind,$cant");
-#$sth->execute($ind,$cant);
-$sth->execute();
+# my $sth=$dbh->prepare("select count(*) from $tabla  where $orden like '$search'");
+# $sth->execute();
+my $sth;
+my @cantidad;
+
+
+if( ($bloqueIni ne "")&&($bloqueFin ne "") ){
+	$sth=$dbh->prepare("	SELECT count(*)
+				FROM $tabla
+				WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' ");
+
+	$sth->execute();
+	@cantidad=$sth->fetchrow_array;
+
+	$sth=$dbh->prepare("	SELECT *
+				FROM $tabla
+				WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' 
+				ORDER BY $orden limit $ind,$cant ");
+	$sth->execute();
+}else{
+	$sth=$dbh->prepare("select count(*) from $tabla  where $orden like '$search'");
+	$sth->execute();
+
+	@cantidad=$sth->fetchrow_array;
+	$sth=$dbh->prepare("select * from $tabla where $orden like '$search' order by $orden limit $ind,$cant");
+	$sth->execute();
+}
 
 my @results;
 while (my @data=$sth->fetchrow_array){
@@ -216,15 +243,18 @@ while (my @data=$sth->fetchrow_array){
 		$aux->{'campo'} = $data[$i];
         	push(@results2,$aux);
 	}
+
 	my $aux2;
 	$aux2->{'registro'}=\@results2;
 	$aux2->{'id'}=$data[$id];
 	push(@results,$aux2);
-	}
+}
         
 $sth->finish;
 return ($cantidad[0],@results);
 }
+
+
 #devuelve los valores de un elemento en particular de la tabla de referencia que se esta editando
 #recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
 #estos tres parametros se obtienen anteriorimente de la tabla tablasDeReferencias
@@ -417,13 +447,15 @@ while (my $data = $sth->fetchrow_hashref) {#push(@results, $data);
 $sth->finish;
 return(%results);#,@results);
 }
-#Esta funcion devuelve la tabla de referencia que es esta buscando para modificar
+
+#Esta funcion devuelve la tabla de referencia que se esta buscando para modificar
 sub buscarTabladeReferencia{
 my ($ref)=@_;
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from tablasDeReferencias where referencia=? limit 0,1");
 $sth->execute($ref);
 my $results=$sth->fetchrow_hashref;
+#se obtiene el orden de la tabla con la que se esta trabajando
 $sth=$dbh->prepare("Select orden from tablasDeReferenciasInfo where referencia=? limit 0,1");
 $sth->execute($ref);
 $results->{'orden'}=$sth->fetchrow_array;

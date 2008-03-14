@@ -27,18 +27,34 @@ function search(){
 	<input type="hidden" name="editandoidentificador" value="<!-- TMPL_VAR NAME="editandoidentificador" -->" >
 	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="" >
 	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="<!-- TMPL_VAR NAME="editandoorden" -->" >
-	<INPUT type="hidden" name="search" id="editandoorden" value="<!-- TMPL_VAR NAME="search" -->" >
-        <table>
-	<tr>     
+	<INPUT type="hidden" name="search" id="editandoorden" value="<!-- TMPL_VAR NAME='search' -->" >
+<!--         <table> -->
+<!-- 	<tr>      -->
 	<form id="form1" action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
-		<td><input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="search" -->></td>
-		<td><a class="inputFontNormal" href="javascript:search()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/boton-buscar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a></td>
-		<!--<td> <img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR 	NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onClick="document.getElementById('form1').submit()">-->
-		 
-		<!--<input type="submit" name="submit" value="OK" class="button">-->
-		</td>
-	</tr>
-	</table>
+<!-- 		<td> -->
+			<b>B&uacute;queda Simple:<b><br>
+			<input type=text class="inputFontNormal" name=description value='<!-- TMPL_VAR name="search" -->'>
+<!-- 		</td> -->
+<!-- 		<td> -->
+			<a class="inputFontNormal" href="javascript:search()">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			</a><br><br>		
+<!--  		</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<!-- 		<td> -->
+			<b>B&uacute;queda en Bloque:</b><br>
+			Desde: <input type=text class="inputFontNormal" name=bloqueIni value="<!-- TMPL_VAR NAME='bloqueIni' -->"><br>
+			Hasta: <input type=text class="inputFontNormal" name=bloqueFin value="<!-- TMPL_VAR NAME='bloqueFin' -->">
+<!-- 		</td> -->
+<!-- 		<td> -->
+<!-- 		<td> -->
+			<a class="inputFontNormal" href="javascript:search()">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			</a>
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<!-- 	</table> -->
         <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 		<tr class="tablaresultadoTitle" height="24" valign="top">
 			<td width="1%" align="left" >
@@ -73,12 +89,39 @@ function search(){
  	<tr> 
         <td   align="left" colspan="15"><hr></td>
         </tr>
-	<tr>
+	<!--<tr>
 	<td colspan="100%">Mostrando: 
 		<INPUT type="text" size="4" name="editandocant" id="editandocant" value="<!-- TMPL_VAR NAME="editandocant" -->" > registros desde el registro nro
 		<INPUT type="text" size="4" name="editandoind" id="editandoind" value="<!-- TMPL_VAR NAME="editandoind" -->" > sobre un total de <!-- TMPL_VAR NAME="editandototal"-->&nbsp;<a class="inputFontNormal" href="javascript:reloading()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/boton-mostrar.png"  ALT="Recargar" hspace=0 vspace=0 border=0></a>
 	</td>
-	</tr>
+	</tr>-->
 	</table>
 	</FORM>	
+
+<center>
+<br>
+<!-- TMPL_IF NAME="ok2" -->
+		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=ant -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->" >
+			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<!-- TMPL_IF NAME="actual" -->
+		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=number -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->"> 
+			<u><!-- TMPL_VAR name=number --></u>
+		</a>
+	<!-- TMPL_ELSE -->
+        	<u><!-- TMPL_VAR name=number --></u>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=sig -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->" >
+			<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+<br>
+</center>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

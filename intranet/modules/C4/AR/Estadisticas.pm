@@ -1221,11 +1221,13 @@ sub historicoCirculacion(){
 	my $query="";
 	my $cant=0;
 
-	my $select= " 	SELECT h.id, nota, a.completo,h.biblionumber, bib.title, 	
-			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,responsable,type,surname,firstname, i.barcode, i.bulk ";
+	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.biblionumber, bib.title, 	
+			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, i.barcode, i.bulk, u.firstname as userFirstname, u.surname as userSurname";
 
 	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
 			ON (h.responsable=b.borrowernumber)
+			LEFT JOIN borrowers u
+			ON (h.borrowernumber = u.borrowernumber)
 			LEFT JOIN issuetypes it
 			ON(it.issuecode = h.issuetype)
 			LEFT JOIN biblio bib
@@ -1287,6 +1289,7 @@ sub historicoCirculacion(){
 		$data->{'clase'}=$clase;
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
+		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};
                 push(@results,$data);
         }
         return ($cant,@results);

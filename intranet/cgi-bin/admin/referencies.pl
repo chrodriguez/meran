@@ -29,6 +29,7 @@ use HTML::Template;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
+use C4::AR::Estadisticas;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -52,9 +53,28 @@ my $cant=$input->param('editandocant');
 ($cant||($cant=20)); 
 my $orden=$input->param('editandoorden');
 ($orden||($orden=$valores->{'orden'})); 
+my $bloqueIni= $input->param('bloqueIni');
+($bloqueIni||($bloqueIni = ''));
+my $bloqueFin= $input->param('bloqueFin');
+($bloqueFin||($bloqueFin = ''));
 
+#agregado********************************************************
+#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+my $ini;
+my $pageNumber;
+my $cantR=cantidadRenglones();
 
-my ($total,@loop)= listadoTabla($tabla,$ind,$cant,$valores->{'camporeferencia'},$orden,$search);
+if (($input->param('ini') eq "")){
+        $ini=0;
+	$pageNumber=1;
+} else {
+	$ini= ($input->param('ini')-1)* $cantR;
+	$pageNumber= $input->param('ini');
+};
+#FIN inicializacion
+
+# my ($total,@loop)= listadoTabla($tabla,$ind,$cant,$valores->{'camporeferencia'},$orden,$search,$bloqueIni,$bloqueFin);
+my ($total,@loop)= listadoTabla($tabla,$ini,$cantR,$valores->{'camporeferencia'},$orden,$search,$bloqueIni,$bloqueFin);
 #para agregar la clase y que se vea la zebra
 my $num= 1;
 foreach my $res (@loop) {
@@ -62,15 +82,44 @@ foreach my $res (@loop) {
     	$num++;
 }
 
-$template->param(camposloop =>\@campos,
-		loop =>\@loop,
-		editandoind=>$ind,
+my @numeros=armarPaginas($total);
+my $paginas = scalar(@numeros)||1;
+my $pagActual = $input->param('ini')||1;
+
+$template->param( paginas   => $paginas,
+		  actual    => $pagActual,
+		);
+
+if ( $total > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+        my $sig = $pagActual+1;
+        if ($sig <= $paginas){
+                 $template->param(
+                                ok    =>'1',
+                                sig   => $sig);
+        };
+        if ($sig > 2 ){
+                my $ant = $pagActual-1;
+                $template->param(
+                                ok2     => '1',
+                                ant     => $ant)}
+}
+
+
+
+$template->param(
+		camposloop => \@campos,
+		loop=> \@loop,
+		editandoind=> $ind,
 		editandocant=> $cant,
 		search=> $search,
 		editandoorden=> $orden,
 		editandotabla=> $tabla,
 		editandoidentificador=> $valores->{'nomcamporeferencia'},
-		editandototal=> $total);
+		editandototal=> $total,
+		bloqueFin=> $bloqueFin,
+		bloqueIni=> $bloqueIni,
+		numeros=> \@numeros,
+);
 
 
 output_html_with_http_headers $input, $cookie, $template->output;

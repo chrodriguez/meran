@@ -100,6 +100,7 @@
 		<th>T&iacute;tulo</th>
 		<th>Autor</th>
 		<th>C. Barra</th>
+		<th>Usuario</th>
 		<th>Responsable</th>
 		<th>Fecha</th>
 		<th>Operaci&oacute;n</th>
@@ -116,15 +117,19 @@
   		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR NAME=title --> 
+			<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
 		</td>
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR NAME=completo --> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='idAutor' ESCAPE='URL' -->&type=intra"><!-- TMPL_VAR NAME="completo" -->
+			</a>
 		</td>
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
 			
 			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=userCompleto -->
+		</td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=nomCompleto --> 
 		</td>
