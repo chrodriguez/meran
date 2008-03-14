@@ -36,6 +36,7 @@ sub SanctionDays {
    		if ($issuecode ne 'ES'){return(0);}
    		else{#Prestamo especial
 			if (Date_Cmp($date_due, $returndate) == 0){#Se tiene que devolver hoy	
+				
 				my $begin = ParseDate(C4::Context->preference("open"));
 				my $end =calc_endES();
 				my $actual=ParseDate("today");

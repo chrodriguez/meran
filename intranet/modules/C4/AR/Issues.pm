@@ -777,12 +777,6 @@ $sth->execute();
 while(my $data= $sth->fetchrow_hashref) {
 	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
 	my $proximohabil=proximoHabil(1,0);
-
-		open L, ">>/tmp/avisos";
-		printf L "Venc  ".$fechaDeVencimiento." \n";
-		printf L "Prox habil  ".$proximohabil." \n";
-		close L;
-
 	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
 	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));
 	};
