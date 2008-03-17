@@ -356,8 +356,7 @@
 
 
  <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
-	<!--<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="javascript:confirm_cancelation(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)" title="Cancelar">-->
-	<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation()" title="Cancelar">
+	<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('adjudicada')" title="Cancelar">
 	<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
 </td>
  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
@@ -398,7 +397,10 @@
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
  </td>
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->"> 
-	<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation2(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)" title="Cancelar">
+	<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">
+		<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('espera')" title="Cancelar">
+		<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
+	</form>
  </td>
  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
 </tr>
@@ -539,21 +541,20 @@ function confirm_prestamo(){
 	document.getElementById('formPrestar').submit();
 }
 
-function confirm_cancelation(num) {
+function confirm_cancelation(tipoReserva) {
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
 
         if (is_confirmed) {
-		var formu=document.getElementById('formPrestar');
+		var formu;
+		if(tipoReserva=="espera"){
+			formu=document.getElementById('resevEspera');
+		}
+		else{
+			formu=document.getElementById('formPrestar');
+		}
 		formu.action="/cgi-bin/koha/cancelreserv.pl";
 		formu.submit();
         }
-}
-
-function confirm_cancelation2(num) {
-	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-	if (is_confirmed) {
-		window.location="/cgi-bin/koha/cancelreserv.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->&biblioitem="+ num;
-	}
 }
 
 function confirm_deletion() {
