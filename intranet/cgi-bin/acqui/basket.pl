@@ -41,7 +41,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 my ($count,@results);
