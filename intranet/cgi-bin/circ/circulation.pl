@@ -172,7 +172,7 @@ if($bornum){
 		my $i=0;
 		foreach my $itemnumber (@itemPrestados){
 			$iteminfo= getiteminformation( \%env, $itemnumber);
-			$ticket_string=crearTicket($iteminfo);
+			$ticket_string=crearTicket($iteminfo,$loggedinuser);
 			$tickets[$i]->{'ticket_string'}=$ticket_string;
 			$tickets[$i]->{'number'}=$i;
 			$barcodes.=", ".$iteminfo->{'barcode'};
@@ -363,29 +363,6 @@ sub printslip {
 	$i++;
     }
     remoteprint($env,\@issues,$borrower);
-}
-
-sub crearTicket(){
-	my ($iteminfo)=@_;
-	my %env;
-	my $bornum=$iteminfo->{'borrowernumber'};
-	my ($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
-	my $ticket_duedate = vencimiento($iteminfo->{'itemnumber'});
-	my $ticket_borrower = $borrower;
-	my $ticket_string =
-		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
-		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
-		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
-		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
-		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
-		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
-		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
-		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
-		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
-		    "&librarian=" . CGI::Util::escape($template->param('loggedinusername')).
-		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . $loggedinuser;
-	return ($ticket_string);
 }
 
 sub procesarStr(){

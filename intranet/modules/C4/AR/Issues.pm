@@ -77,6 +77,7 @@ FIXME
     &sepuederenovar2
     &fechaDeVencimiento
     &enviar_recordatorios_prestamos
+    &crearTicket
 );
 =item
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
@@ -783,6 +784,31 @@ while(my $data= $sth->fetchrow_hashref) {
 }
 }
 
+sub crearTicket {
+	my ($iteminfo,$loggedinuser)=@_;
+	my %env;
+	my $bornum=$iteminfo->{'borrowernumber'};
+	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
+	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
+	my $ticket_duedate = vencimiento($iteminfo->{'itemnumber'});
+	my $ticket_borrower = $borrower;
+	my $ticket_string =
+		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
+		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
+		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
+  		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
+		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
+		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
+		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
+		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
+		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
+		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
+		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
+		    "&librarian=" . CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'}).
+		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
+		    "&librarianNumber=" . CGI::Util::escape($librarian->{'cardnumber'});
+	return ($ticket_string);
+}
 
 
 
