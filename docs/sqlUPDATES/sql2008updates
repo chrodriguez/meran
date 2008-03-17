@@ -43,8 +43,15 @@ insert into  systempreferences   (value,explanation,variable) VALUES ('Recordato
 
 ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1
 
+
+--La fecha de inicio y fin de las sanciones puede ser nulas por las sanciones que son pendientes
+
+ALTER TABLE `sanctions` CHANGE `startdate` `startdate` DATE NULL DEFAULT '0000-00-00'
+ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00'
+=======
 --QUIEN ROMPIO LOS PRESTAMOS ESPECIALES??????????????????----------
 
  insert into systempreferences (variable,value,explanation) values ('beginESissue','60','Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.');
 
   insert into systempreferences (variable,value,explanation) values ('endESissue','60','Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.');
+

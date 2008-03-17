@@ -355,13 +355,10 @@
 <td class="<!-- TMPL_VAR NAME="clase"-->" align="center"><b><!-- TMPL_VAR NAME="rbranch" --></b></td>
 
 
-<!--<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
-<INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->);return false;">
-</td>-->
-
-
  <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
-<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)" title="Cancelar">
+	<!--<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="javascript:confirm_cancelation(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)" title="Cancelar">-->
+	<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation()" title="Cancelar">
+	<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
 </td>
  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
                                                                                                                              
@@ -401,7 +398,7 @@
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
  </td>
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->"> 
-<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onClick="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)" title="Cancelar">
+	<INPUT TYPE="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation2(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)" title="Cancelar">
  </td>
  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
 </tr>
@@ -543,13 +540,25 @@ function confirm_prestamo(){
 }
 
 function confirm_cancelation(num) {
-        var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/cancelreserv.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&biblioitem="+ num;
-                        }
-                        }
+	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
+
+        if (is_confirmed) {
+		var formu=document.getElementById('formPrestar');
+		formu.action="/cgi-bin/koha/cancelreserv.pl";
+		formu.submit();
+        }
+}
+
+function confirm_cancelation2(num) {
+	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
+	if (is_confirmed) {
+		window.location="/cgi-bin/koha/cancelreserv.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->&biblioitem="+ num;
+	}
+}
+
 function confirm_deletion() {
 	var is_confirmed = confirm('Confirma la baja ?');
+
 	if (is_confirmed) {
 		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
 	}
