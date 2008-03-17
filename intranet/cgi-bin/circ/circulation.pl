@@ -300,7 +300,7 @@ $template->param(
 		documentnumber => $borrower->{'documentnumber'},
 		emailaddress => $borrower->{'emailaddress'},
 		streetaddress => $borrower->{'streetaddress'},
-		city => $borrower->{'city'},
+		city => &darCiudad($borrower->{'city'}),
 		phone => $borrower->{'phone'},
 		cardnumber => $borrower->{'cardnumber'},
  		barcode => $iteminfo->{'barcode'},
