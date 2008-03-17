@@ -69,15 +69,15 @@ if ($input->param('type') eq 'ALL'){
 	else{
 #	updateItemAvail($itemnumber,$bibnum,$bibitemnum,$wthdrawn,$notforloan,$homebranch,$bulk);
 	
-	moditem( { biblionumber => $bibnum,
-             itemnumber      => $itemnumber,
-             bibitemnum   => $bibitemnum,
-             homebranch   => $homebranch,
-             wthdrawn     => $wthdrawn,
-             notforloan => $notforloan,
-	     barcode      => $items[$i]->{'barcode'},
-             notes        => $notes,
-             bulk =>$bulk},$responsable);
+	moditem( {	biblionumber => $bibnum,
+             		itemnumber   => $itemnumber,
+             		bibitemnum   => $bibitemnum,
+             		homebranch   => $homebranch,
+             		wthdrawn     => $wthdrawn,
+             		notforloan   => $notforloan,
+	     		barcode      => $items[$i]->{'barcode'},
+             		notes        => $notes,
+             		bulk =>$bulk},$responsable);
 
 	changeAvailability($itemnumber,$wthdrawn,$notforloan,$homebranch);
 	
@@ -91,7 +91,7 @@ if ($input->param('type') eq 'ALL'){
 	if ($cant eq 1){$msg="&msg=noitemsdelete";}
 	if ($cantunavail eq 1){$msg="&msg=noitemunavail";}
 	print $input->redirect("/cgi-bin/koha/detail.pl?type=intra&bib=$bibnum".$msg); 
-	}
+ }
 
 
 
@@ -111,7 +111,10 @@ if(($wthdrawn ne 0)&&(canDeleteItem($itemnumber) eq 1)){$cantunavail=1;
 
 if($cantunavail eq 0){
 
-if (($oldwthdrawn ne $wthdrawn)or ($oldnotforloan ne $notforloan)) {changeAvailability($itemnumber,$wthdrawn,$notforloan,$homebranch)};
+if (($oldwthdrawn ne $wthdrawn)or ($oldnotforloan ne $notforloan)){
+	changeAvailability($itemnumber,$wthdrawn,$notforloan,$homebranch)
+};
+
 my $responsable=$input->param('userloggedname');
 
 if ((&checkitemupdate($itemnumber,$barcode) eq 1 )&&($wthdrawn ne 2)){#Se chequea el barcode  salvo que este compartido

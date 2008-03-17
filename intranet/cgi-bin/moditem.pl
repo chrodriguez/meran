@@ -153,6 +153,8 @@ $template->param(
         bulk => $item->{'bulk'},
         itemnumber => $itemnum,
         classification =>"$data->{'classification'}$dewey$data->{'subclass'}",
+	oldnotforloan => $item->{'notforloan'},
+	oldwithdrawn => $item->{'wthdrawn'}
 );
 
 

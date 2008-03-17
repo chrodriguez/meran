@@ -85,9 +85,6 @@ my $dateSelectedEnd= $input->param('dateselectedEnd')||format_date($today);
 my $fechaInicio =  format_date_in_iso($input->param('dateselected'))||$today;
 my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'))||$today;
 
-# my ($cant,@resultsdata)= &historicoCirculacion("ok",$fechaInicio,$fechaFin,"","",$itemnum,"","","date");
-# $chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
-# $tipoPrestamo,$tipoOperacion
 my $ini;
 my $cantR;
 my $orden;

@@ -51,9 +51,9 @@ if(checks[i].type == "checkbox"){
 <tr valign=top gcolor=#ffffcc>
 <td align="center"><input class="inputFontNormal" type="checkbox"  name="check_group_<!-- TMPL_VAR Name="barcode" -->"></td>
 <td align="center"><a class="inputFontNormal"href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR Name="itemnumber" -->&bib=<!-- TMPL_VAR Name="biblionumber" -->&bi=<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
-<td class="inputFontNormal"align="center"><!-- TMPL_VAR Name="holdingbranch" --></td>
-<td align="center"class="inputFontNormal"><!-- TMPL_VAR Name="notforloan" --><!-- TMPL_VAR Name="wthdrawn" --></td>
-<td align="center"class="inputFontNormal"><!-- TMPL_VAR Name="datelastseen" --></td>
+<td class="inputFontNormal" align="center"><!-- TMPL_VAR Name="holdingbranch" --></td>
+<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="notforloan" --><!-- TMPL_VAR Name="wthdrawn" --></td>
+<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="datelastseen" --></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
@@ -88,8 +88,9 @@ Pr&eacute;stamo
 Sala de lectura
 </td>
 </tr>
-<input type=hidden name=oldwithdrawn value="<!-- TMPL_VAR Name="itemwithdrawn" -->">
-<input type=hidden name=oldnotforloan value="<!-- TMPL_VAR Name="notforloan" -->">
+
+<input type=hidden name=oldwithdrawn value="<!-- TMPL_VAR Name='oldwithdrawn' -->">
+<input type=hidden name=oldnotforloan value="<!-- TMPL_VAR Name='oldnotforloan' -->">
 
 <tr valign=top >
 <td class="inputFontNormal">Estado</td>
@@ -111,9 +112,9 @@ NO disponible <!-- TMPL_VAR Name="Cavails" -->
 <tr valign=top>
 <td></td>
 <td class="inputFontNormal">
-<input type=image  name=submit src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" border=0 title="Guardar cambios">
+<input type=image  name=submit src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/guardar.png" border=0 title="Guardar cambios">
 <!-- TMPL_IF Name="ALL" -->
-<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlos?')) {document.getElementById('act').value='delete';this.f1.submit();} else {return false;}" title="Borrar Ejemplar">
+<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/edittrash.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlos?')) {document.getElementById('act').value='delete';this.f1.submit();} else {return false;}" title="Borrar Ejemplar">
 <!-- /TMPL_IF  -->
 </td>
 
