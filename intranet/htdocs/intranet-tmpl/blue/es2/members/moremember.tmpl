@@ -64,7 +64,13 @@
 		Asociado: <!-- TMPL_VAR NAME="dateenrolled" -->,  Expira: <!-- TMPL_VAR NAME="expiry" --><BR>
 		-->
 
-		Incorporaci&oacute;n a Biblioteca:<b> <!-- TMPL_VAR NAME="branchcode" --></b><P>
+		Incorporaci&oacute;n a Biblioteca:<b> <!-- TMPL_VAR NAME="branchcode" --></b><BR>
+		<!-- TMPL_IF name="course" -->
+		<!-- TMPL_IF name="usercourse" --> <br> <center><b>Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a <!-- TMPL_VAR name="usercourse" -->. </b></center><!-- /TMPL_IF --><!-- /TMPL_IF -->
+		
+		<P>
+
+		
 
 		<!-- TMPL_IF name="IS_ADULT" -->
                         <p align=center>

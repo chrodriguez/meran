@@ -12,6 +12,10 @@
 <!-- TMPL_IF NAME="sancionado" -->Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el  <!-- TMPL_VAR NAME="sancionado" -->.  <br><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="casisancionado" -->Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.  <br><!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="no_user_course" -->
+Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.  <br>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="not_regular" -->Disculpe, no puede efectuar reservas porque usted no es un alumno regular.  <br><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="too_many_issues" -->Disculpe, usted ha alcanzado la cantidad maxima de pr&eacute;stamos domiciliarios. No puede efectuar reservas sobre ejemplares. <br><!-- /TMPL_IF -->

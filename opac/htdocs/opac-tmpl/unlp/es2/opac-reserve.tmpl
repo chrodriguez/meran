@@ -9,6 +9,11 @@
 	<tr class="tablemsg" >
 	<td><font class="fontmsg"><b>
 <!-- TMPL_IF NAME="too_much_oweing" -->Disculpe, no puede efectuar reservas porque usted debe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="no_user_course" -->
+Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.  <br>
+<!-- /TMPL_IF -->
+
 	<!-- TMPL_IF NAME="too_many_reserves" -->Disculpe, usted no puede realizar m&aacute;s de <!-- TMPL_VAR NAME="too_many_reserves" --> reservas. <br><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="already_reserved" -->Ya tiene una reserva para este grupo.<br><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="no_items_selected" -->Debe seleccionar al menos un tipo de ejemplar.<br><!-- /TMPL_IF -->

@@ -156,8 +156,9 @@ document.getElementById(id).src=src;
 <table width=100%>
 	<tr valign=top >
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont"type="checkbox" name="updatepassword"<!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
+			<input  class="inputFontFont"type="checkbox" name="updatepassword" <!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
 		<td>
+
 			<!-- TMPL_IF name="ethcatpopup" -->
 				<select class="inputFontNormal" name="ethnicity" size=1>
 					<!-- TMPL_LOOP NAME=ethnicityloop -->
@@ -178,6 +179,18 @@ document.getElementById(id).src=src;
 	<tr>
 		<td>&nbsp;</td>
 	</tr>
+	
+	<!-- TMPL_IF name="course" -->
+	<tr>
+		<td   width="60%" class="inputFontNormal">
+			<input  class="inputFontFont"type="checkbox" name="usercourse" <!-- TMPL_IF NAME=usercourse --> checked <!-- /TMPL_IF -->>&nbsp;Realiz&oacute; el curso de usuario? </td>
+		<td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<!-- /TMPL_IF -->
+
 	<tr>
 		<td class="inputFontNormal">
 			 <b>Incorporaci&oacute;n a Unidad de Informaci&oacute;n</b>&nbsp;

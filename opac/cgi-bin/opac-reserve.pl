@@ -27,6 +27,13 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 my $pagetitle = "Reserva de ejemplares";
+my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+###CURSO DE USUARIO###
+if ((C4::Context->preference("usercourse"))&&($borr->{'usercourse'} == "NULL" )) {
+	#el usuario no hizo el curso!!!
+	$template->param(message => 1,no_user_course => 1);
+} 
+else { #No esta seteado lo del curso  o ya lo hizo
 
 #Hay que ver que no este sancionado ni supere el nro maximo de reservas.
 #Si ninguna de las dos es verdadera entonces se efectua la reserva, si alguno de los items esta disponible se reserva el item, sino se agrega a la lista de espera del grupo
@@ -117,7 +124,7 @@ else{#quiere decir que result es 0 por lo tanto, no se efectuo la reserva
 
 }
 
-my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+}
 
 $template->param (	MAIL  => $borr->{'emailaddress'},
 			borrowernumber => $borrowernumber,

@@ -198,6 +198,9 @@ $template->param(waiting_count => $wcount,
 			     pagetitle => "Usuarios",
 );
 
+#No se pudo renovar por no tener el curso?
+$template->param(no_user_course => $query->param('no_user_course'));
+#
 
 #Matias: Esta habilitada la Biblioteca Virtual?
 my $virtuallibrary=C4::Context->preference("virtuallibrary");

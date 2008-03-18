@@ -202,7 +202,7 @@ if ($data2){
 #se encontro algun item que se pudo reservar
 
 #MATIAS: Antes de reservar un item en particular se verifica si el usuario no tiene ya el maximo de prestamos domiciliarios
-  my ($cant, @issuetypes) = PrestamosMaximos ($borrowernumber);
+  my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos ($borrowernumber);
        foreach my $iss (@issuetypes){
 	if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 	return (0,9);

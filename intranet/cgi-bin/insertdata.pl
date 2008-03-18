@@ -62,6 +62,14 @@ if (my $data2=$sth->fetchrow_hashref){
   } else {
 	$data->{'updatepassword'}=0;
   }
+
+	# Curso de usuarios#
+  	if (C4::Context->preference("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
+	$data->{'usercourse'}=1;
+  	} else {
+	$data->{'usercourse'}=0;
+  	}
+	####################
 ##
  updateborrower($data); #Se actualiza en borrower
 ##
@@ -91,7 +99,16 @@ updateperson($data); #Se actualiza en person
   } else {
 	$data->{'updatepassword'}=0;
   }
+
+	# Curso de usuarios#
+  	if (C4::Context->preference("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
+	$data->{'usercourse'}=1;
+  	} else {
+	$data->{'usercourse'}=0;
+  	}
+	####################
  
+
   $data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
 
 ### Added by Luciano, when a new borrower is inserted the documentnumber is set as password

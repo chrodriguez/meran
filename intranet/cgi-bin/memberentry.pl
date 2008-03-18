@@ -50,6 +50,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 my $member=$input->param('bornum');
 my $data=borrdata('',$member);
+
 	# %flags: keys=$data-keys, datas=[formname, HTML-explanation]
 	my %flags = ('gonenoaddress' => ['gna', 'Direcci&oacute;n actualizada'],
 				#'lost'          => ['lost', 'Perdido'],
@@ -157,6 +158,7 @@ elsif($type eq 'Mod'){
 	my $expiry = $input->param('expiry');
 	my $cardnumber= $input->param('cardnumber');
 	my $dateofbirth = $input->param('dateofbirth');
+
 	$template->param(	type 		=> $type,
 				member          => $member,
 				address         => $adress,
@@ -186,6 +188,16 @@ elsif($type eq 'Mod'){
 				dateformat      => display_date_format(),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse")){
+		$template->param( 	course => 1 , 
+					usercourse => $input->param('usercourse')||0);
+		
+	}
+	####################
+
+
 	output_html_with_http_headers $input, $cookie, $template->output;
 
 }
@@ -193,10 +205,18 @@ else {  # this else goes down the whole script
 	if ($type eq 'Add'){
 		$template->param( addAction => 1);
 	} else {
-		$template->param( addAction =>0);
+		$template->param( addAction => 0);
 	}
 
 	
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse")){
+		$template->param( course => 1);
+		if ($data->{'usercourse'} != 'NULL') {  $template->param( usercourse => $data->{'usercourse'});}
+		
+	}
+	####################
+
 
 	if ($data->{'changepassword'} eq '0'){
 		$template->param( updatepassword => '0');
@@ -250,8 +270,6 @@ $data->{'dstreetcity'}=getcity($data->{'streetcity'});
                       #          -size     => 1,
                       #          -multiple => 0 );
 
-
-
 	$template->param(	type 		=> $type,
 				member          => $member,
 				address         => $data->{'streetaddress'},
@@ -262,10 +280,10 @@ $data->{'dstreetcity'}=getcity($data->{'streetcity'});
 				ethcatpopup	=> $ethcatpopup,
 				catcodepopup	=> $catcodepopup,
 				streetaddress   => $data->{'physstreet'},
-				zipcode => $data->{'zipcode'},
+				zipcode		 => $data->{'zipcode'},
 				streetcity      => $data->{'streetcity'},
 				dstreetcity      => $data->{'dstreetcity'},
-				homezipcode => $data->{'homezipcode'},
+				homezipcode 	=> $data->{'homezipcode'},
 				city		=> $data->{'city'},
 				 dcity           => $data->{'dcity'},
 				phone           => $data->{'phone'},
@@ -277,12 +295,9 @@ $data->{'dstreetcity'}=getcity($data->{'streetcity'});
 				altphone        => $data->{'altphone'},
 				altnotes	=> $data->{'altnotes'},
 				borrowernotes	=> $data->{'borrowernotes'},
-
-
                                 documentnumber   => $data->{'documentnumber'},
 				documentloop     => \@documentdata,
-
-				 studentnumber => $data->{'studentnumber'},
+				studentnumber => $data->{'studentnumber'},
 				flagloop	=> \@flagdata,
 				relshiploop	=> \@relshipdata,
 				"title_".$data->{'title'} => " SELECTED ",

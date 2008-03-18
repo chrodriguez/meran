@@ -73,6 +73,10 @@ $data->{'updatepassword'}= $data->{'changepassword'};
 
 $template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I"> => instutitional (A for Adult & C for children)
 
+# Curso de usuarios#
+  	if (C4::Context->preference("usercourse")){$data->{'course'}=1;}
+#
+
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
 $data->{'expiry'} = format_date($data->{'expiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
@@ -130,6 +134,12 @@ $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 
 # Converts the categorycode to the description
 $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse")){
+	$data->{'usercourse'} = format_date($data->{'usercourse'});
+	}
+	####################
 
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 my $issues = getissues(\%bor);

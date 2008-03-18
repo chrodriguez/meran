@@ -116,7 +116,14 @@ function subirDatos(url){
                         <td class="inputFontNormal"><!-- TMPL_IF Name="updatepassword" -->Si      <!-- TMPL_ELSE -->No<!-- /TMPL_IF--></td>
 			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
 		</tr>
-
+<!-- TMPL_IF name="course" -->
+		<tr valign="middle">
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+			<td class="inputFontNormal"><B>&nbsp;Realiz&oacute; el curso de usuario?</B></td>
+                        <td class="inputFontNormal"><!-- TMPL_IF Name="usercourse" -->Si      <!-- TMPL_ELSE -->No<!-- /TMPL_IF--></td>
+			<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		</tr>
+<!-- /TMPL_IF -->
 		<tr valign="middle" class="tablaresultadoTitle">
 			<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
 			<td colspan=2><B>DETALLES PERSONALES</B></td>

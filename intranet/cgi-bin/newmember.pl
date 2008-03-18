@@ -231,6 +231,14 @@ if ($ok == 0) {
 		    updatepassword => $data{'updatepassword'},
 		     inputsloop => \@inputsloop);
 
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse")){
+		$template->param( course => 1, usercourse => $data{'usercourse'});
+	}
+	####################
+
+
 # If things are not ok, display the error message
 } else {
     # Nothing to do; the "OK" and "string" variables have already been set
