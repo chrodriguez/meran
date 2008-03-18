@@ -1,14 +1,14 @@
 ---------------------------------------------------------------
 --Se agrega preferencia de logueo de busquedas para OPAC y para INTRA
 insert into systempreferences (variable,value,explanation) 
-values ('logSearchOPAC','0','Habilita (1) o no (0) loguea busquedas en el OPAC')
+values ('logSearchOPAC','0','Habilita (1) o no (0) loguea busquedas en el OPAC');
 
  insert into systempreferences (variable,value,explanation) 
-values ('logSearchINTRA','0','Habilita (1) o no (0) loguea busquedas en la INTRA')
+values ('logSearchINTRA','0','Habilita (1) o no (0) loguea busquedas en la INTRA');
 
 
 --Se agrega la columna tipo que dira (INTRAu OPAC)
-ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10)
+ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10);
 
 
 -- se agrega la columna itemnumber a sanctions para poder informar desde que registro se produjo la sancion
@@ -41,13 +41,13 @@ insert into  systempreferences   (value,explanation,variable) VALUES ('Recordato
 --Se agrega campo 'enabled' en la tabla issuetypes para habilitar/deshabilitar tipos de prestamos 
 --por ej: prestamos de verano para V2 y V3
 
-ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1
+ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1;
 
 
 --La fecha de inicio y fin de las sanciones puede ser nulas por las sanciones que son pendientes
 
-ALTER TABLE `sanctions` CHANGE `startdate` `startdate` DATE NULL DEFAULT '0000-00-00'
-ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00'
+ALTER TABLE `sanctions` CHANGE `startdate` `startdate` DATE NULL DEFAULT '0000-00-00';
+ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00';
 
 --QUIEN ROMPIO LOS PRESTAMOS ESPECIALES??????????????????----------
 
@@ -59,7 +59,7 @@ ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00
 
 --Para saber si se puede o no seleccionar las bibliotecas
 
-insert into systempreferences (variable,value,explanation) values ('selectHomeBranch','1','1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto')
+insert into systempreferences (variable,value,explanation) values ('selectHomeBranch','1','1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto');
 
 
 --Se crea una nueva tabla para loguear las sanciones
