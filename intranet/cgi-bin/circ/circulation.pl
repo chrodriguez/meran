@@ -187,12 +187,13 @@ if($bornum){
 			$iteminfo= getiteminformation( \%env, $itemnumber);
 			my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=allitems($iteminfo->{'biblioitemnumber'},'intranet');
 			
-			#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
+#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 			my $available= $issue+ $issuenfl + $reserve + $forloan + $notforloan;
 			my @values;
 			my %labels;
 			foreach (@results){
-				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ #solo pone los items que no estan prestados
+				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ 
+#solo pone los items que no estan prestados
 					push @values,$_->{'itemnumber'};
 					$labels{$_->{'itemnumber'}} ="$_->{'barcode'}";
 				}
@@ -207,7 +208,16 @@ if($bornum){
 			);
 
 			my $defaultissuetype= C4::Context->preference('defaultissuetype');
-			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
+# 			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
+#Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
+#esta sancionado
+			my ($valuesIss,$labelsIss)=&IssuesType3($iteminfo->{'notforloan'}, $bornum);
+			
+#para verificar si se tiene q mostrar el combo de tipos de prestamos o no
+#ya que el usuario puede estar sancionado para un tipo de prestamo en particular y el combo puede vernir vacio
+			my $selectissuetypecant= scalar(@$valuesIss);
+			$template->param(seletcIssueTypeEnabled => $selectissuetypecant);
+
 			my $selectissuetype=CGI::scrolling_list(
 				-name => 'issuetype'.$i,
 				-values => $valuesIss,
@@ -247,7 +257,7 @@ if($bornum){
 	$template->param(sanctions =>$sanctions);
 	my $debts= hasDebts("", $bornum); # indica si el usuario tiene libros vencidos
 	$template->param(debts =>$debts);
-} # if (bornum)
+} #end if (bornum)
 
 # now the reserved items....
 my ($rescount, $reserves) = DatosReservas ($bornum);

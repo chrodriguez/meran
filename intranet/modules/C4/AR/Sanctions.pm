@@ -223,7 +223,7 @@ if (my $res= $sth1->fetchrow_hashref)
   
   $sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays);
       }
-  }
+}
 
 sub insertPendingSanction {
   #Esta funcion da de alta una sancion pendiente 

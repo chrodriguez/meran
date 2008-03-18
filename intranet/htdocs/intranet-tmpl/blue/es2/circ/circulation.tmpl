@@ -10,6 +10,11 @@ function imprimirTicket(str,num){
  imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->","<!-- TMPL_VAR name='number' -->");
 <!-- /TMPL_LOOP-->
 
+function cancelar(borrowernumber){
+	var url= "circulation.pl?borrnumber=" + borrowernumber;
+	window.location.href= url;
+}
+
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -63,9 +68,9 @@ function imprimirTicket(str,num){
 
 <table border="0" cellpadding="0" cellspacing="0" width="50%">
                 <tr class="tablaresultadoTitle">
-                <td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+                <td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
                 <td>Mensajes</td>
-                <td width="1%" valing="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+                <td width="1%" valing="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
                 </tr>
 
                 <tr>
@@ -296,7 +301,6 @@ function imprimirTicket(str,num){
 <!-- TMPL_UNLESS name="ticket_string"-->
 <!-- TMPL_UNLESS name="max_issues"-->
 <!-- TMPL_UNLESS name="all_issues"-->
-<!-- TMPL_UNLESS name="sanctions"-->
 
 <!--******************************** Seleccion de tipo de pretamo *****************************************-->
 <!-- TMPL_IF NAME="strItemnumber" -->
@@ -333,7 +337,13 @@ function imprimirTicket(str,num){
 	<tr align="center">
 		<td class="inputFontNormal">
 			C&oacute;digo de barras: <!-- TMPL_VAR NAME="codbarra" --><br>
-			Tipo de pr&eacute;stamo: <!-- TMPL_VAR NAME="tipoprest" -->
+			Tipo de pr&eacute;stamo: 
+			<!-- TMPL_IF name="seletcIssueTypeEnabled"-->
+					<!-- TMPL_VAR NAME="tipoprest" -->
+				<!-- TMPL_ELSE -->
+					No hay Tipos de Pr&eacute;stamo disponibles
+			<!-- /TMPL_IF -->
+
 		</td>
 	</tr>
 	<!-- /TMPL_LOOP -->
@@ -345,13 +355,10 @@ function imprimirTicket(str,num){
 	</tr>
 	<tr align="center">
 		<td class="inputFontNormal">
-	        <!--<a href="#" onClick="document.frm2.submit()">-->
-			<!--<input title="Pr&eacute;stamo" type="button" value="Aceptar">-->
-			<input title="Pr&eacute;stamo" type="button" value="Aceptar" onClick="document.frm2.submit()">
-		<!--</a>-->
-	        <a href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->">
-			<input title="No realizar el pr&eacute;stamo" type="button" value="Cancelar">
-		</a>
+		  <!-- TMPL_IF name="seletcIssueTypeEnabled"-->
+		  <input title="Pr&eacute;stamo" type="button" value="Aceptar" onClick="document.frm2.submit()">
+		  <!-- /TMPL_IF -->
+		  <input title="No realizar el pr&eacute;stamo" type="button" value="Cancelar" onClick="cancelar('<!-- TMPL_VAR name='borrowernumber' -->')">
         	</td>
 	</tr>
 	</table>
@@ -365,7 +372,7 @@ function imprimirTicket(str,num){
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
-<!-- /TMPL_UNLESS -->
+
 
 <form name=frm method="post" action="/cgi-bin/koha/circ/circulation.pl">
 	<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">

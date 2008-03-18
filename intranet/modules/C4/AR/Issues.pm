@@ -78,6 +78,7 @@ FIXME
     &fechaDeVencimiento
     &enviar_recordatorios_prestamos
     &crearTicket
+    &IssuesType3
 );
 =item
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
@@ -128,7 +129,7 @@ sub devolver {
 			#$t->detach;
 			#FALTA ENVIARLE EL MAIL al usuario avisandole de  la disponibilidad del libro mediante un proceso separado, un thread por ej, el problema me parece es que el thread no accede a las bases de datos.
 
-		}
+		}# end if (@resultado) 
 
 #**********************************Se registra el movimiento en historicCirculation***************************
 		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
@@ -612,6 +613,44 @@ sub IssuesType {
 	return(@result);
 }
 
+#Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
+#esta sancionado, esta es una copia de IssuesType3, ver si queda y sacar la otra
+sub IssuesType3 {
+ 	my ($notforloan, $borrowernumber)=@_;
+	my $dbh = C4::Context->dbh;
+  	my $sth;
+#Trae todos los tipos de prestamos que estan habilitados
+  	my $query= " SELECT * from issuetypes WHERE enabled = 1 ";
+
+#Miguel Agregado ver!!!!!!!!!!!!11
+$query .= " AND issuecode NOT IN (select issuetypes.issuecode from sanctions 
+	inner join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
+	inner join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode 
+	inner join issuetypes on sanctionissuetypes.issuecode = issuetypes.issuecode 
+	where borrowernumber = ? and (now() between startdate and enddate)) ";
+
+  	if ($notforloan ne undef){
+#     		$query.=" where notforloan = ? order by description";
+		$query.=" AND notforloan = ? ORDER BY description";
+    		$sth = $dbh->prepare($query);
+    		$sth->execute($borrowernumber, $notforloan);
+  	} 
+	else{
+    		$query.=" order by description";
+    		$sth = $dbh->prepare($query);
+    		$sth->execute($borrowernumber);
+  	}
+
+  	my %issueslabels;
+ 	my @issuesvalues;
+  	while (my $res = $sth->fetchrow_hashref) {
+        	push @issuesvalues, $res->{'issuecode'};
+        	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
+ 	}
+  	$sth->finish;
+	return(\@issuesvalues,\%issueslabels);
+}
+
 sub IssuesType2 {
  	my ($notforloan)=@_;
 	my $dbh = C4::Context->dbh;
@@ -629,6 +668,7 @@ sub IssuesType2 {
     		$sth = $dbh->prepare($query);
     		$sth->execute();
   	}
+
   	my %issueslabels;
  	my @issuesvalues;
   	while (my $res = $sth->fetchrow_hashref) {
