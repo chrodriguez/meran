@@ -48,12 +48,19 @@ ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1
 
 ALTER TABLE `sanctions` CHANGE `startdate` `startdate` DATE NULL DEFAULT '0000-00-00'
 ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00'
-=======
+
 --QUIEN ROMPIO LOS PRESTAMOS ESPECIALES??????????????????----------
 
  insert into systempreferences (variable,value,explanation) values ('beginESissue','60','Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.');
 
   insert into systempreferences (variable,value,explanation) values ('endESissue','60','Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.');
+
+
+
+--Para saber si se puede o no seleccionar las bibliotecas
+
+insert into systempreferences (variable,value,explanation) values ('selectHomeBranch','1','1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto')
+
 
 --Se crea una nueva tabla para loguear las sanciones
 
@@ -69,8 +76,11 @@ CREATE TABLE `historicSanctions` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+
 --  Curso de usuarios
+
 ALTER TABLE `borrowers` ADD COLUMN `usercourse` date  DEFAULT NULL AFTER 'changepassword';
 
 insert into systempreferences (variable,value,explanation)  values ('usercourse' ,'0','habilita o no que el curso de usuario sea necesario para utilizar el opac. ');
+
 
