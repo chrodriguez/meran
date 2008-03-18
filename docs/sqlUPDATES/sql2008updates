@@ -55,3 +55,17 @@ ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00
 
   insert into systempreferences (variable,value,explanation) values ('endESissue','60','Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.');
 
+--Se crea una nueva tabla para loguear las sanciones
+
+CREATE TABLE `historicSanctions` (
+  `id` int(11) NOT NULL auto_increment,
+  `type` varchar(15) NOT NULL default '',
+  `borrowernumber` int(11) NOT NULL default '0',
+  `responsable` varchar(20) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `date` date NOT NULL default '0000-00-00',
+  `end_date` date default NULL,
+  `issuetype` varchar(2) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+

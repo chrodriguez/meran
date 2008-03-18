@@ -23,6 +23,7 @@ use vars qw(@EXPORT @ISA);
 		&getBorrowersSanctions 
 		&delSanction
 		&sanciones
+		&logSanction
 );
 
 sub SanctionDays {
@@ -274,13 +275,25 @@ sub getBorrowersSanctions {
   return(@results);
 }
 
+#Esta funcion es para guardar un log de sobre las sanciones
+sub logSanction{
+	my ($type,$borrowernumber,$responsable,$dateEnd,$issueType)=@_;
+        my $dbh= C4::Context->dbh;
+	my $sth = $dbh->prepare ("	INSERT INTO historicSanctions 
+					(type,borrowernumber,responsable,date,end_date,issuetype)
+                           		VALUES (?,?,?,NOW(),?,?);");
+        $sth->execute($type,$borrowernumber,$responsable,$dateEnd,$issueType);
+        $sth->finish;
+}
+
 sub delSanction {
   #Esta funcion elimina una sancion
    my ($dbh,$sanctionnumber)=@_;
+
    my $sth=$dbh->prepare("delete from sanctions where sanctionnumber = ?");
    $sth->execute($sanctionnumber);
-    $sth->finish;
-	   }          
+   $sth->finish;
+}          
 
 
 sub sanciones{

@@ -47,7 +47,14 @@ my $count=0;
 while (my $sanction=$sth->fetchrow_hashref){
 	 my $temp="check_group_".$sanction->{'sanctionnumber'};
 	 my $sanctionnumber=$input->param($temp);
-	 if($sanctionnumber){&delSanction($dbh,$sanction->{'sanctionnumber'});}
+	 if($sanctionnumber){
+		#logueo la sacion que se elimina
+		my $borrowernumber= $sanction->{'borrowernumber'};
+		my $dateEnd= $sanction->{'enddate'};
+		my $issueType= '??';
+		logSanction('Delete',$borrowernumber,$responsable,$dateEnd,$issueType);
+		&delSanction($dbh,$sanction->{'sanctionnumber'});
+	}
 	 				  }
     
 }
