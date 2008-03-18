@@ -70,6 +70,18 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 
 #Fin: Por los branches
 
+#CATEGORIAS
+my ($valuesCateg,$labelsCateg)=&borrowercategories();
+my $CGIcateg=CGI::scrolling_list(    -name      => 'categoria',
+                                     -id        => 'categoria',
+                                     -values    => $valuesCateg,
+				     -defaults  => $branch,
+                                     -labels    => $labelsCateg,
+                                     -size      => 1,
+                                 );
+
+
+
 #Para los años
 my @date=localtime;
 my $year_Default= $date[5]+1900;
@@ -86,6 +98,7 @@ my $years=CGI::scrolling_list(  -name      => 'year',
 #fin años
 
 my $year = $input->param('year');
+my $categ= $input->param('categoria');
 
 my $orden;
 if ($input->param('orden') eq ""){
@@ -122,9 +135,9 @@ if($chck2 ne ""){
 }                               #se hace para poder volver hacer las consultas
 
 
-my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,@chck);#Obtengo los usuarios de una pagina dada
+my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$categ,@chck);#Obtengo los usuarios de una pagina dada
 
-my $cantidad =cantidadUsuarios($branch,$year,$usos,@chck);#Obtengo la cantidad total de usuarios para poder paginar
+my $cantidad =cantidadUsuarios($branch,$year,$usos,$categ,@chck);#Obtengo la cantidad total de usuarios para poder paginar
 
 
 my @numeros=armarPaginas($cantidad);
@@ -152,11 +165,13 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
 $template->param( 	orden		 => $orden,
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
+			categorias	 => $CGIcateg,
 			numeros		 => \@numeros,
 			branch           => $branch,
 			years		 => $years,
 			chck             => join(",",@chck),#Trasfoma el arreglo checkbox en string
 			usos		 => $usos,
+			categ		 => $categ,
 			year		 => $year
 		);
 

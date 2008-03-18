@@ -671,19 +671,19 @@ sub libreDeuda(){
 	my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
 
 	my $x=50;
-	my $y=260;#pos 'y' a partir de donde se van a escribir la parte del contenido.
+	my $y=300;#pos 'y' a partir de donde se van a escribir la parte del contenido.
 	my %titulo;
 	$titulo{'titulo'}="CERTIFICADO DE LIBRE DEUDA";
 	$titulo{'posx'}=170;
 	my @parrafo;
-	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", con número de documento ".$dni.",";
-	$parrafo[1]=" no adeuda material bibliográfico en esta Biblioteca.";
-	$parrafo[2]="          Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
+	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
+	$parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
+	$parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
 	$parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
-	($pdf,$y)=&imprimirFirma($pdf,$y,$pageheight);
+	($pdf,$y)=&imprimirFirma($pdf,$y+50,$pageheight);
 	&imprimirFinal($pdf,$tmpFileName);
 }
 
@@ -704,15 +704,15 @@ sub prestInterBiblio(){
 	my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
 
 	my $x=50;
-	my $y=260;
+	my $y=300;
 	my %titulo;
 	$titulo{'titulo'}="SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO";
 	$titulo{'posx'}=100;
 	my @parrafo;
 	$parrafo[0]="Sr. Director de la Biblioteca";
 	$parrafo[1]="de la ".$biblioDestino;
-	$parrafo[2]="S/D";
-	$parrafo[3]=$director;
+	$parrafo[2]=$director;
+	$parrafo[3]="S/D";
 	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
 	$parrafo[5]="interbibliotecario los siguientes ítems:";
 
@@ -771,18 +771,18 @@ sub imprimirEncabezado(){
 	my $mes=&C4::Date::mesString($datearr[4]+1);
 	my $dia=$datearr[3];
 #fin fecha
-        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 120);
+        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 160);
 	$pdf->setFont("Arial-Bold");
       	$pdf->setSize(10);
-	$pdf->addRawText(uc($categ), $x,$pageheight - 140);
-	$pdf->addRawText(uc($branchname), $x,$pageheight - 150);
-	$pdf->addRawText("BIBLIOTECA", $x,$pageheight - 160);
+	$pdf->addRawText(uc($categ), $x,$pageheight - 180);
+	$pdf->addRawText(uc($branchname), $x,$pageheight - 190);
+	$pdf->addRawText("BIBLIOTECA", $x,$pageheight - 200);
 	$pdf->setFont("Verdana-Bold");
 	$pdf->setSize(14);
-	$pdf->addRawText($titulo->{'titulo'}, $titulo->{'posx'},$pageheight - 200);
+	$pdf->addRawText($titulo->{'titulo'}, $titulo->{'posx'},$pageheight - 240);
 	$pdf->setFont("Verdana");
 	$pdf->setSize(10);
-	$pdf->addRawText("La Plata, ".$dia." de ".$mes. " de ".$anio, $pagewidth-250,$pageheight - 230);
+	$pdf->addRawText("La Plata, ".$dia." de ".$mes. " de ".$anio, $pagewidth-250,$pageheight - 270);
 	return($pdf);
 }
 

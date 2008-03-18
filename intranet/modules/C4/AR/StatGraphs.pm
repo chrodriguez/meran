@@ -18,7 +18,15 @@ use Chart::LinesPoints;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&itemtypesPie &itemtypesHBars &levelsPie &levelsHBars &availLines);
+@EXPORT=qw(
+		&itemtypesPie 
+		&itemtypesHBars 
+		&levelsPie 
+		&levelsHBars 
+		&availLines
+		&userCategPie
+		&userCategHBars
+	);
 
 sub itemtypesPie
 {
@@ -269,4 +277,79 @@ my $lang=C4::Context->preference('opaclanguages');
 my $template=C4::Context->preference('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/avail$branch.png");
 }
+
+
+sub userCategPie(){
+	my ($branch,$cant,@results)=@_;
+	my $g = Chart::Pie->new(700,500);
+
+	my @categorias;
+	my @values;
+    	for (my $i=0; $i < $cant ; $i++ ) {
+                 push (@categorias,$results[$i]->{'categoria'});
+     		 push (@values,$results[$i]->{'cant'});
+        };
+
+	$g->add_dataset (@categorias);
+	$g->add_dataset (@values);
+
+	my %opt = ( 'title' =>'Usuarios por categoria (Torta)',
+		'label_values' => 'both',
+		'legend' => 'none',
+		'text_space' => 20,
+		'png_border' => 1,
+		'graph_border' => 0,
+		'colors' => { 	'x_label' => 'red',
+				'misc' => 'plum',
+				'background' => 'white'
+			},
+		);
+	$g->set (%opt);
+	my $lang=C4::Context->preference('opaclanguages');
+	my $template=C4::Context->preference('template');
+
+$g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercategpie$branch.png");
+
+}
+
+sub userCategHBars(){
+	my ($branch,$cant,@results)=@_;
+	my $g = Chart::HorizontalBars->new(640,480);
+
+	my @categorias;
+	my @values;
+    	for (my $i=0; $i < $cant ; $i++ ) {
+        	push (@categorias,$results[$i]->{'categoria'});
+                push (@values,$results[$i]->{'cant'});
+        };
+
+
+	$g->add_dataset (@categorias);
+	$g->add_dataset (@values);
+
+	my %hash = ( 'title' => 'Usuarios por categoria (Barras Horizontales)',
+		'grid_lines' => 'true',
+		'label_values' => 'both',
+		'text_space' => 10,
+		'png_border' => 1,
+		'graph_border' => 0,
+		'x_label' => 'Cantidad',
+		'y_label' => 'Tipos',
+		'include_zero' => 'true',
+		'x_ticks' => 'vertical',
+		'legend_labels' => ['Cantidad'],
+		'colors' => {
+			'misc' => 'plum',
+			'background' => 'white'
+		}
+		);
+
+	$g->set (%hash);
+
+	my $lang=C4::Context->preference('opaclanguages');
+	my $template=C4::Context->preference('template');
+
+$g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercateghbars$branch.png");
+}
+
 

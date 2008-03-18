@@ -54,6 +54,7 @@ use vars qw(@EXPORT @ISA);
 	   &historicoDeBusqueda
 	   &historicoCirculacion
 	   &insertarNotaHistCirc
+	   &userCategReport
 );
 
 sub historicoDeBusqueda(){
@@ -588,19 +589,26 @@ sub historialUsuario{
 
 
 sub cantidadUsuarios{
-        my ($branch,$anio,$usos,@chck)=@_;
+        my ($branch,$anio,$usos,$categ,@chck)=@_;
         my $dbh = C4::Context->dbh;
+	my @bind;
         my $query ="SELECT count( * ) AS cantidad
                     FROM borrowers b
-                    WHERE branchcode='$branch'";
-
+                    WHERE branchcode=?";
+	push(@bind,$branch);
 	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
 
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
 		if($chck[$i] eq "AN"){
-			$query2 = $query2 ." AND year( date_due )= $anio";
+			$query2 = $query2 ." AND year( date_due )= ?";
 			$exists = " AND EXISTS (";
+			push(@bind, $anio);
+		}
+		elsif($chck[$i] eq "CAT"){
+			$query.=" AND b.categorycode= ?";
+			$exists = " AND EXISTS (";
+			push(@bind, $categ);
 		}
 		else{
 			if($usos eq "NI"){
@@ -615,7 +623,7 @@ sub cantidadUsuarios{
 		$query = $query.$exists.$query2.")";
 	}
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 	return($sth->fetchrow_array);
 	
 }
@@ -624,22 +632,28 @@ sub cantidadUsuarios{
 #Damian - 31/05/2007 - Se agrego para difereciar usuarios que usan y no usan la biblioteca
 sub usuarios{
         my $clase='par';
-        my ($branch,$orden,$ini,$fin,$anio,$usos,@chck)=@_;
+        my ($branch,$orden,$ini,$fin,$anio,$usos,$categ,@chck)=@_;
 	my $dbh = C4::Context->dbh;
   	my @results;
-
+	my @bind;
         my $query ="SELECT  b.phone,b.emailaddress,b.dateenrolled,c.description as categoria ,
 		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city,b.borrowernumber
                     FROM borrowers b inner join categories c on (b.categorycode = c.categorycode)
- 		    WHERE b.branchcode='$branch'";
-
+ 		    WHERE b.branchcode=?";
+	push(@bind,$branch);
 	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
 
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
 		if($chck[$i] eq "AN"){
-			$query2 = $query2 ." AND year( date_due )= $anio";
+			$query2 = $query2 ." AND year( date_due )= ?";
 			$exists = " AND EXISTS (";
+			push(@bind,$anio);
+		}
+		elsif($chck[$i] eq "CAT"){
+			$query.=" AND b.categorycode= ?";
+			$exists = " AND EXISTS (";
+			push(@bind,$categ);
 		}
 		else{
 			if($usos eq "NI"){
@@ -657,7 +671,7 @@ sub usuarios{
 		$query= $query.$exists.$query2.") group by b.borrowernumber order by ($orden) limit $ini,$fin";
 	}
         my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 	while (my $data=$sth->fetchrow_hashref){
                 if ($clase eq 'par'){$clase='impar';}else {$clase='par'};
 		if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
@@ -1317,4 +1331,19 @@ sub insertarNotaHistCirc(){
         $sth->execute($nota,$id);
 }
 
-
+sub userCategReport(){
+	my ($branch)=@_;
+	my $dbh = C4::Context->dbh;
+        my $query=" SELECT categorycode, count( categorycode ) as cant FROM borrowers WHERE branchcode = ? GROUP BY categorycode  ";
+        my $sth=$dbh->prepare($query);
+        $sth->execute($branch);
+        my @results;
+ 	my $clase='par';
+        while (my $data=$sth->fetchrow_hashref){
+	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
+                $data->{'clase'}=$clase;
+		$data->{'categoria'}=&getborrowercategory($data->{'categorycode'});
+                push(@results,$data);
+        }
+        return (scalar(@results),@results);
+}

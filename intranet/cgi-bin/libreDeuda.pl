@@ -57,14 +57,14 @@ if($array[1] eq "1" && $ok){
 if($array[2] eq "1" && $ok){
 	if(C4::AR::Sanctions::hasDebts("",$bornum)){
 		$ok=0;
-		$msj="por tener prestamos vencidos";
+		$msj="por tener préstamos vencidos";
 	}
 }
 if($array[3] eq "1" && $ok){
 	my($cant,$result)=C4::AR::Issues::DatosPrestamos($bornum);
 	if($cant){
 		$ok=0;
-		$msj="por tener prestamos en curso";
+		$msj="por tener préstamos en curso";
 	}
 }
 if($array[4] eq "1" && $ok){
@@ -78,7 +78,7 @@ if($ok){
 	&libreDeuda($bornum,$borrewer);
 }
 else{
-	my $mensaje="<b>No se puede imprimir el documento de libre deuda ".$msj." </b>";
+	my $mensaje="<b>No se puede imprimir el certificado de libre deuda ".$msj." </b>";
 	print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum&mensaje=$mensaje");
 }
 

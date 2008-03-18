@@ -43,6 +43,15 @@ function hacerSubmit(){
 			</select>
 		</td>
 	</tr>
+	<tr class="inputFontNormal">
+		<td>
+			<br><input type="checkbox" name="chck" value="CAT" id="CAT">
+			Seleccione la categor&iacute;a:
+		</td>
+		<td>
+			<br><!-- TMPL_VAR NAME="categorias" -->
+		</td>
+	</tr>
 
 	<tr class="inputFontNormal">
 		<td>
@@ -70,15 +79,15 @@ function hacerSubmit(){
 <br>
 
 <!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="ant" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="ant" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
-<a class="inputFontNormal"href=users.pl?ini=<!-- TMPL_VAR NAME="number" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->> <u><!-- TMPL_VAR name=number --></u> </a>
+<a class="inputFontNormal"href=users.pl?ini=<!-- TMPL_VAR NAME="number" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->> <u><!-- TMPL_VAR name=number --></u> </a>
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="sig" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<a class="inputFontNormal" href=users.pl?ini=<!-- TMPL_VAR name="sig" -->&branch=<!-- TMPL_VAR name=branch -->&orden=<!-- TMPL_VAR NAME=orden -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
 <!-- /TMPL_IF -->
 <br>
 </center>
@@ -87,15 +96,15 @@ function hacerSubmit(){
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
 
-		<td><a class="inputFontNormal" href=users.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Apellido</a></td>
-		<td><a class="inputFontNormal" href=users.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Nombre</a></td>
-		<td><a class="inputFontNormal" href=users.pl?orden=streetaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Direcci&oacute;n</a></td>
-		<td><a class="inputFontNormal"  href=users.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Socio</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Apellido</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Nombre</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=streetaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Direcci&oacute;n</a></td>
+		<td><a class="inputFontNormal"  href=users.pl?orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Socio</a></td>
 		<td class="inputFontNormal">Ciudad</td>
-		<td><a class="inputFontNormal" href=users.pl?orden=phone&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Telefono</a></td>
-		<td><a class="inputFontNormal" href=users.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>E-mail</a></td>
-		<td><a class="inputFontNormal" href=users.pl?orden=dateenrolled&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Ingreso</a></td>
-		<td><a class="inputFontNormal" href=users.pl?orden=categoria&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Categoria</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=phone&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Telefono</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>E-mail</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=dateenrolled&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Ingreso</a></td>
+		<td><a class="inputFontNormal" href=users.pl?orden=categoria&branch=<!-- TMPL_VAR NAME=branch -->&year=<!-- TMPL_VAR NAME="year" -->&usos=<!-- TMPL_VAR NAME="usos" -->&categoria=<!-- TMPL_VAR NAME=categ -->&chck2=<!-- TMPL_VAR NAME="chck" -->>Categoria</a></td>
 		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 	</tr>
 

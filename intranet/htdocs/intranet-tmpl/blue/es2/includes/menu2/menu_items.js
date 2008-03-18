@@ -75,7 +75,8 @@ var MENU_ITEMS = [
 		['Disp. de Ejem.','/cgi-bin/koha/reports/availability.pl'],
 		['Historico de Pr&eacute;stamos.','/cgi-bin/koha/reports/historico_Prestamos.pl'],
 		['Estad. de Prestamos.','/cgi-bin/koha/reports/estadisticas.pl'],
-		['Logueo de B&uacute;squedas.','/cgi-bin/koha/reports/logueoBusqueda.pl']
+		['Logueo de B&uacute;squedas.','/cgi-bin/koha/reports/logueoBusqueda.pl'],
+		['Usuarios por categor&iacute;a.','/cgi-bin/koha/reports/userEst.pl'],
 	],
 	['Ayuda', null, null,
 		['Acerca de', '/cgi-bin/koha/about.pl']
