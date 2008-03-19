@@ -28,6 +28,7 @@ use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Koha;
 use C4::AR::StatGraphs;
+use ooolib;
 
 my $input = new CGI;
 
@@ -42,6 +43,31 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
+
+
+#Genero la hoja de calculo Openoffice
+my $sheet=new ooolib("sxc");
+$sheet->oooSet("builddir","./plantillas");
+$sheet->oooSet("title","Estadística Usuarios por categoría");
+$sheet->oooSet("author","KOHA");
+$sheet->oooSet("subject","Estadistica");
+$sheet->oooSet("bold", "on");
+my $pos=1;
+$sheet->oooSet("text-size", 11);
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Ministerio de Educación
+Universidad Nacional de La Plata
+");
+$sheet->oooSet("text-size", 10);
+$pos++;
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Categoría");
+$sheet->oooSet("cell-loc", 2, $pos);
+$sheet->oooData("cell-text", "Cantidad");
+$sheet->oooSet("bold", "off");
+$pos++;
+##
+
 
 
 #Por los branches
@@ -70,13 +96,24 @@ my ($cantidad,@resultsdata)= &userCategReport($branch);
 &userCategPie($branch,$cantidad, @resultsdata);
 &userCategHBars($branch,$cantidad, @resultsdata);
 
+#Contenido de la planilla.
+foreach my $cat (@resultsdata) {
+	$sheet->oooSet("cell-loc", 1, $pos);
+	$sheet->oooData("cell-text", $cat->{'categoria'});
+	$sheet->oooSet("cell-loc", 2, $pos);
+	$sheet->oooData("cell-text", $cat->{'cant'});
+	$pos++;
+}
 
+my $name='usuarioEstadistica-'.$loggedinuser;
+$sheet->oooGenerate($name);
 
 $template->param( 
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
 			branch           => $branch,
+			name		 => $name,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
