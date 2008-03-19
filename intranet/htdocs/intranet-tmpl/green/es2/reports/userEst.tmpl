@@ -9,7 +9,7 @@ function hacerSubmit(){
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 	<th>Seleccione una unidad de informaci&oacute;n :</th>
-	<th><form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
+	<th><form name="branches" action=/cgi-bin/koha/reports/userEst.pl method=post >
         	<!-- TMPL_VAR NAME=unidades  --></form>
 	</th>
 </table>
@@ -35,6 +35,10 @@ function hacerSubmit(){
  	</tr>
 <!-- /TMPL_LOOP -->
 </table>
+<br>
+	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="name" -->">Generar planilla 
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
+	</a>
 <br><br>
 
 <img src="<!-- TMPL_VAR NAME='themelang' -->/images/stats/usercategpie<!-- TMPL_VAR NAME='branch' -->.png" alt="Torta" border=0 >
