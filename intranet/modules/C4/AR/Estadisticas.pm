@@ -55,6 +55,7 @@ use vars qw(@EXPORT @ISA);
 	   &historicoCirculacion
 	   &insertarNotaHistCirc
 	   &userCategReport
+	   &historicoSanciones
 );
 
 sub historicoDeBusqueda(){
@@ -1309,16 +1310,90 @@ sub historicoCirculacion(){
         return ($cant,@results);
 }
 
+sub historicoSanciones(){
+	my ($chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
+	$tipoPrestamo,$tipoOperacion)=@_;
+	
+        my $dbh = C4::Context->dbh;
+ 	my $clase='par';
+	my @bind;
+	my $query="";
+	my $cant=0;
+
+
+	my $select= " 	SELECT hs.borrowernumber, hs.responsable,hs.type, b.firstname as firstnameBor, 
+			b.surname as surnameBor,resp.firstname as firstnameResp, resp.surname as surnameResp,
+			hs.end_date, hs.date, st.issuecode, hs.timestamp ";
+
+	my $from= "	FROM historicSanctions hs INNER JOIN borrowers b
+			ON (hs.borrowernumber = b.borrowernumber)
+			LEFT JOIN borrowers resp
+			ON (hs.responsable = resp.borrowernumber)
+			LEFT JOIN sanctiontypes st
+			ON (st.sanctiontypecode = hs.sanctiontypecode) ";
+
+	my $where = "";
+
+	if ($chkfecha ne ''){
+		$where = " WHERE (date>=?) AND (date<=?) ";
+		push(@bind,$fechaIni);
+		push(@bind,$fechaFin);
+	}
+
+	if (($user)&&($user ne '-1')){	
+		if ($where eq ''){$where = " WHERE responsable=? ";}
+		else {$where.= " AND responsable=? ";}
+		push(@bind,$user);
+	}
+
+	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
+		if ($where eq ''){$where = " WHERE hs.type = ? ";}
+		else{$where .= " AND hs.type = ? ";}
+		push(@bind, $tipoOperacion);
+	}
+
+	if(($tipoPrestamo)&&($tipoPrestamo ne '-1')){
+		if ($where eq ''){ $where = " WHERE st.issuecode = ? ";}
+		else{$where .= " AND st.issuecode = ? ";}
+		push(@bind, $tipoPrestamo);
+	}
+
+	my $finCons=" ORDER BY hs.timestamp desc limit $ini,$cantR ";
+
+	$query="SELECT count(*) as cant ".$from.$where;
+        my $sth=$dbh->prepare($query);
+        $sth->execute(@bind);
+	$cant=$sth->fetchrow_array;
+	
+	$query=$select.$from.$where.$finCons;
+	$sth=$dbh->prepare($query);
+        $sth->execute(@bind);
+	my @results;
+
+        while (my $data=$sth->fetchrow_hashref){
+		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
+		$data->{'clase'}=$clase;
+		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
+		$data->{'respCompleto'}=$data->{'surnameResp'}.", ".$data->{'firstnameResp'};
+		$data->{'userCompleto'}=$data->{'surnameBor'}.", ".$data->{'firstnameBor'};
+                push(@results,$data);
+        }
+        return ($cant,@results);
+}
+
 
 sub tipoDeOperacion(){
 	my ($tipo)=@_;
 	if($tipo eq "issue"){$tipo="Prestamo";}
 	elsif($tipo eq "return"){$tipo="Devoluci&oacute;n";}
 	elsif($tipo eq "cancel"){$tipo="Cancelaci&oacute;n";}
-	elsif($tipo eq "notification"){$tipo="Notificaci&oacute;n";}
+	elsif($tipo eq "notification"){$tipo="Notificaci&oacute;n (Vto. Reserva)";}
 	elsif($tipo eq "queue"){$tipo="R. en Espera";}
 	elsif($tipo eq "reserve"){$tipo="Reservado";}
-	elsif($tipo eq "renew"){$tipo="Renovado";}	
+	elsif($tipo eq "renew"){$tipo="Renovado";}
+	elsif($tipo eq "reminder"){$tipo="Notificaci&oacute;n (Vto. Pr&eacute;stamo)";}
+	elsif($tipo eq "Insert"){$tipo="Agregado";}	
+	elsif($tipo eq "Delete"){$tipo="Borrado";}
 	return $tipo;
 }
 

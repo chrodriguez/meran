@@ -202,11 +202,11 @@ if ($data2){
 #se encontro algun item que se pudo reservar
 
 #MATIAS: Antes de reservar un item en particular se verifica si el usuario no tiene ya el maximo de prestamos domiciliarios
-  my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos ($borrowernumber);
-       foreach my $iss (@issuetypes){
-	if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-	return (0,9);
-	}}
+  #my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos ($borrowernumber);
+   #    foreach my $iss (@issuetypes){
+#	if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
+#	return (0,9);
+#	}}
 #
 
 $fecha=C4::Context->preference("reserveItem");
@@ -236,7 +236,6 @@ my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
 my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 $enddate= C4::Date::format_date_in_iso($enddate);
 insertSanction($dbh, undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
-
 } else{
 
 #**********************************Se registra el movimiento en historicCirculation***************************

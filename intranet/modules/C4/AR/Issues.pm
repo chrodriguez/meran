@@ -178,6 +178,11 @@ sub devolver {
 				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err));
 				insertSanction($dbh, $sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
+#**********************************Se registra el movimiento en historicSanction***************************
+				my $responsable= $loggedinuser;
+				logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
 
 #Se borran las reservas del usuario sancionado
 				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);

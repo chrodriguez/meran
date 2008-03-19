@@ -46,7 +46,7 @@
 			<td rowspan="4" valign="top" class="inputFontNormal"> <b>Filtrar por:</b> <br>
 
 			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-				<b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
+				<b>Responsable: </b><!-- TMPL_VAR NAME="selectusuarios" -->
 
 				<br><br>
 
@@ -128,10 +128,18 @@
 			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=userCompleto -->
+			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
+				<!-- TMPL_IF NAME=responsable -->
+					<!-- TMPL_VAR NAME=userCompleto -->
+				<!-- /TMPL_IF -->
+			</a>
 		</td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=nomCompleto --> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
+				<!-- TMPL_IF NAME=responsable -->
+					<!-- TMPL_VAR NAME=nomCompleto -->
+				<!-- /TMPL_IF -->
+			</a>
 		</td>
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=fecha --> </td>
