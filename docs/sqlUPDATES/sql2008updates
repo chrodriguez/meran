@@ -76,11 +76,15 @@ CREATE TABLE `historicSanctions` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- este es el campo q se modifico, es para el mono
+ALTER TABLE `historicSanctions` CHANGE `issuetype` `sanctiontypecode` INT( 11 ) NULL DEFAULT NULL 
 
 --  Curso de usuarios
 
 ALTER TABLE `borrowers` ADD COLUMN `usercourse` date  DEFAULT NULL AFTER 'changepassword';
 
 insert into systempreferences (variable,value,explanation)  values ('usercourse' ,'0','habilita o no que el curso de usuario sea necesario para utilizar el opac. ');
+
+
 
 
