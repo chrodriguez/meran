@@ -280,7 +280,7 @@ sub logSanction{
 	my ($type,$borrowernumber,$responsable,$dateEnd,$issueType)=@_;
         my $dbh= C4::Context->dbh;
 	my $sth = $dbh->prepare ("	INSERT INTO historicSanctions 
-					(type,borrowernumber,responsable,date,end_date,issuetype)
+					(type,borrowernumber,responsable,date,end_date,sanctiontypecode)
                            		VALUES (?,?,?,NOW(),?,?);");
         $sth->execute($type,$borrowernumber,$responsable,$dateEnd,$issueType);
         $sth->finish;

@@ -39,24 +39,24 @@ my $responsable=$input->param('userloggedname');
 my $flags= &getuserflags($responsable ,$dbh);
 
 if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'updatesanctions'})){
-my $query = "select * from sanctions"; 					
-my $sth=$dbh->prepare($query);
-$sth->execute();
-my @sanctionsarray;
-my $count=0;
-while (my $sanction=$sth->fetchrow_hashref){
-	 my $temp="check_group_".$sanction->{'sanctionnumber'};
-	 my $sanctionnumber=$input->param($temp);
-	 if($sanctionnumber){
+	my $query = "select * from sanctions"; 					
+	my $sth=$dbh->prepare($query);
+	$sth->execute();
+	my @sanctionsarray;
+	my $count=0;
+	while (my $sanction=$sth->fetchrow_hashref){
+		my $temp="check_group_".$sanction->{'sanctionnumber'};
+		my $sanctionnumber=$input->param($temp);
+		if($sanctionnumber){
 		#logueo la sacion que se elimina
-		my $borrowernumber= $sanction->{'borrowernumber'};
-		my $dateEnd= $sanction->{'enddate'};
-		my $issueType= '??';
-		logSanction('Delete',$borrowernumber,$responsable,$dateEnd,$issueType);
-		&delSanction($dbh,$sanction->{'sanctionnumber'});
+			my $borrowernumber= $sanction->{'borrowernumber'};
+			my $dateEnd= $sanction->{'enddate'};
+			my $sanctionTypeCode= $sanction->{'sanctiontypecode'};
+			logSanction('Delete',$borrowernumber,$responsable,$dateEnd,$sanctionTypeCode);
+			&delSanction($dbh,$sanction->{'sanctionnumber'});
+		}
 	}
-	 				  }
-    
 }
+
 print $input->redirect("sanctions.pl");
 
