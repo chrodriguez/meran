@@ -187,11 +187,9 @@ si queda el nombre del parametro como bulk hay que borrar la linea-->
 </tr>
 <tr>
 <td class="inputFontNormal">Unidad de Informaci&oacute;n:</td>
-<td class="inputFontNormal"><select class="inputFontNormal" name="homebranch">
-<!-- TMPL_LOOP NAME="BRANCHES" -->
-<option value="<!-- TMPL_VAR NAME="branchcode" -->"<!-- TMPL_IF NAME="selected" --> selected <!-- /TMPL_IF--> ><!-- TMPL_VAR NAME="branchname" --></option>
-<!-- /TMPL_LOOP -->
-</select></td>
+<td class="inputFontNormal">
+	<!-- TMPL_VAR NAME="BRANCHES" -->
+</td>
 </tr>
 <tr>
 <td class="inputFontNormal" >Signatura Topogr&aacute;fica:</td>

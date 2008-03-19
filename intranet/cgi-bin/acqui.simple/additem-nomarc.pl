@@ -105,11 +105,34 @@ else {
                 debug           => 1,
             }
         );
-       ( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($biblionumber);
-       ( $branchcount,   @branches )  = &branches;
-       ( $itemtypecount, @itemtypes ) = &getitemtypes;
+       	( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($biblionumber);
+       	( $itemtypecount, @itemtypes ) = &getitemtypes;
 
-
+#PARA LOS BRANCH
+	my  $branch=$input->param('branch');
+	($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+	my @select_branch;
+	my %select_branches;
+	my $branches;
+	if((C4::Context->preference('selectHomeBranch'))){
+		$branches=&C4::Koha::getbranches();
+		foreach my $branch (keys %$branches) {
+        		push @select_branch, $branch;
+        		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+		}
+	}
+	else{ #para crear el select solo con la biblioteca por defecto.
+		push @select_branch, $branch;
+		$select_branches{$branch} = &getbranchname($branch);
+	}
+	my $CGIbranch=CGI::scrolling_list(      -name      => 'homebranch',
+                                        	-id        => 'homebranch',
+                                        	-values    => \@select_branch,
+						-defaults  => $branch,
+                                        	-labels    => \%select_branches,
+                                        	-size      => 1,
+                                 	);
+#FIN BRANCH
 
 	#Matias para mostrar autores adicionales ("colaboradores"), materias , otro titulo
 	my @autorPPAL= &getautor($biblios[0]->{'author'});
@@ -134,9 +157,6 @@ else {
         } # if
 
 	#MAtias
-
-    
-
 
        #Agregado por Einar para armar los combos de additem-nomarc.tmpl
        (%countrylabels) = &getcountrytypes;
@@ -252,9 +272,6 @@ my @availtypes;
 
 ##
 
-
-
-
         for ( my $i = 0 ; $i < $itemtypecount ; $i++ ) {
             $itemtypedescriptions{ $itemtypes[$i]->{'itemtype'} } =
               $itemtypes[$i]->{'description'};
@@ -273,18 +290,7 @@ my $itemdef=C4::Context->preference("defaultitemtype");
                                  );
 
 
-for ( my $i = 0 ; $i < $branchcount ; $i++ ) {
- $branchnames{ $branches[$i]->{'branchcode'} } =
-          $branches[$i]->{'branchname'};
-        }    # for
 
-#agregado por Einar para que quede el branch por defecto
-my $branch=$input->param('branch');
-unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
-for ( my $i = 0 ; $i < $branchcount ; $i++ ) {
-  $branches[$i]->{'selected'}  =  ($branches[$i]->{'branchcode'} eq $branch);
-}
-#hasta aca
 
 
         #	print $input->header;
@@ -474,7 +480,7 @@ if ($msg eq "havereservesgroup")       {
 	    COLABS => \@colaboradores,
             NOTES     => $biblios[0]->{'notes'},
             BIBITEMS  => \@biblioitems,
-            BRANCHES  => \@branches,
+            BRANCHES  => $CGIbranch,
             ITEMTYPES => $CItems,
             SUPPORTTYPES => $Csupports,
             LANGTYPES => $Clangs,
