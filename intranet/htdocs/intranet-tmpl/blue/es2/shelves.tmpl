@@ -21,6 +21,7 @@
                 <!-- TMPL_LOOP Name="parentloop" -->
 <!--Tabla que muestra los subestantes-->
 <center>
+<!-- Nivel 2 -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="tablaresultado">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
@@ -42,7 +43,7 @@
 			<!-- /TMPL_LOOP -->
 
                         <!-- TMPL_ELSE -->
-	 <!-- Primer nivel -->
+	 <!-- Nivel 1 -->
 		<center>
 		<table border="0" cellpadding="0" cellspacing="0" width="100%">
 
@@ -126,6 +127,8 @@
       </tr>
     </table> 
 
+<a class='<!-- TMPL_VAR Name="clase" -->' href="shelves.pl?startfrom=0">Volver</a>
+
 <br>
 <br>
  <!-- /TMPL_UNLESS -->
@@ -186,7 +189,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
 	<div id="seleccion" > </div>
 	</h3>
   	</td>	
-	 </tr>
+  </tr>
 <tr>
 <td>
 <a onclick="shelfform.tipo.value='RemoveItems';shelfform.submit();"  href="#" >
@@ -279,19 +282,13 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
 </table>
 <!-- FIN PAGINACION -->
 
-		
-		<table width="100%"  border="0" cellpadding="0" cellspacing="0"><tr><td class="pagetitle" >
-		Estantes Virtuales</td></tr>
+<!-- Nivel 0 -->
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+		<tr><td class="pagetitle" >Estantes Virtuales</td></tr>
 		<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
-		</table>
+	</table>
 		<br>
-		<!--<center>
-		<table border=0 cellpadding=4 cellspacing=0 width=60% class="tablaresultado">
-		   <tr class="tablaresultadoTitle">
-			<td>Lista de estantes
-			</td>
-	           </tr>
-		</table>-->
+
   <table border=0 cellpadding=4 cellspacing=0 width=80% class="tablaresultado">
 			<!-- TMPL_LOOP Name="shelvesloop" -->
 			<tr>   

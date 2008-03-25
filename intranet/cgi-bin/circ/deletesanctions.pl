@@ -36,6 +36,7 @@ use C4::AR::Sanctions;
 my $input= new CGI;
 my $dbh = C4::Context->dbh;
 my $responsable=$input->param('userloggedname');
+my $responsableBorrNum=$input->param('borrowernumber');
 my $flags= &getuserflags($responsable ,$dbh);
 
 if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'updatesanctions'})){
@@ -52,7 +53,7 @@ if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'upda
 			my $borrowernumber= $sanction->{'borrowernumber'};
 			my $dateEnd= $sanction->{'enddate'};
 			my $sanctionTypeCode= $sanction->{'sanctiontypecode'};
-			logSanction('Delete',$borrowernumber,$responsable,$dateEnd,$sanctionTypeCode);
+			logSanction('Delete',$borrowernumber,$responsableBorrNum,$dateEnd,$sanctionTypeCode);
 			&delSanction($dbh,$sanction->{'sanctionnumber'});
 		}
 	}

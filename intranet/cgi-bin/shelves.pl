@@ -61,6 +61,9 @@ my ($template, $loggedinuser, $cookie)
 							flagsrequired => {catalogue => 1},
 						});
 
+my $prevshelfnumber=$query->param('shelfnumber');
+$template->param(prevshelfnumber => $prevshelfnumber);
+
 if (C4::Context->boolean_preference('marc') eq '1') {
         $template->param(script => "MARCdetail.pl");
 } else {
@@ -182,6 +185,7 @@ my $displayprev=($prevstartfrom==-1) ? 0 : 1;
 $template->param(displaynext => $displaynext);
 $template->param(displayprev => $displayprev);
 $template->param(prevstartfrom => $prevstartfrom);
+
 
 
 

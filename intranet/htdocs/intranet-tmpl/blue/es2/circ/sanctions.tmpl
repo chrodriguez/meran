@@ -34,6 +34,8 @@ function todos(){
   <!-- TMPL_IF NAME="superlibrarian" -->
   <form name="f1" id="f1" action=deletesanctions.pl method=post>
   <input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME='loggedinusername' -->">
+  <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME='responsable' -->">
+
   
   		<td align="center"><a href="#" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n"  border=0></a></td>
   <!-- /TMPL_IF -->

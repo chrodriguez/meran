@@ -57,6 +57,7 @@ else{ #es superlibrarian o puede actualizar sanciones??
 
 
 $template->param(	
-			sanctionsloop => \@sanctionsarray
+			sanctionsloop 	=> \@sanctionsarray,
+			responsable	=> $borrowernumber,
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
