@@ -53,11 +53,8 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-#Miguel - 03-04-07 - Le agrego una opcion para que le indique al usuario que no se ha seleccionado nada aùn, ver si queda
 
-
-my $branch = $input->param('branch');
-($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+my $branch= C4::Context->preference('defaultbranch');
 
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',

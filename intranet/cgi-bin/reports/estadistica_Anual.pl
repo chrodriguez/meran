@@ -50,8 +50,7 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-my  $branch=$input->param('branch');
-($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+my $branch= C4::Context->preference('defaultbranch');
 
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',

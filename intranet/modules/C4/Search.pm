@@ -3958,7 +3958,7 @@ sub getbranchname
 {
 	my ($branchcode) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT branchname FROM branches WHERE branchcode = ?");
+	my $sth = $dbh->prepare("SELECT branchname as a FROM branches WHERE branchcode = ?");
 	$sth->execute($branchcode);
 	my $branchname = $sth->fetchrow();
 	$sth->finish();

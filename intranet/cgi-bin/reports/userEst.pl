@@ -48,20 +48,20 @@ my ($template, $loggedinuser, $cookie)
 #Genero la hoja de calculo Openoffice
 my $sheet=new ooolib("sxc");
 $sheet->oooSet("builddir","./plantillas");
-$sheet->oooSet("title","Estadística Usuarios por categoría");
+$sheet->oooSet("title","Estadï¿½stica Usuarios por categorï¿½a");
 $sheet->oooSet("author","KOHA");
 $sheet->oooSet("subject","Estadistica");
 $sheet->oooSet("bold", "on");
 my $pos=1;
 $sheet->oooSet("text-size", 11);
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Ministerio de Educación
+$sheet->oooData("cell-text", "Ministerio de Educaciï¿½n
 Universidad Nacional de La Plata
 ");
 $sheet->oooSet("text-size", 10);
 $pos++;
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Categoría");
+$sheet->oooData("cell-text", "Categorï¿½a");
 $sheet->oooSet("cell-loc", 2, $pos);
 $sheet->oooData("cell-text", "Cantidad");
 $sheet->oooSet("bold", "off");
@@ -79,8 +79,8 @@ foreach my $branch (keys %$branches) {
         push @select_branch, $branch;
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
-my $branch=$input->param('branch');
-($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+
+my $branch= C4::Context->preference('defaultbranch');
                                                                                                                              
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',

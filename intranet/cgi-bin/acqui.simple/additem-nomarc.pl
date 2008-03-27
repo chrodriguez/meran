@@ -108,9 +108,8 @@ else {
        	( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($biblionumber);
        	( $itemtypecount, @itemtypes ) = &getitemtypes;
 
-#PARA LOS BRANCH
-	my  $branch=$input->param('branch');
-	($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+	my $branch= C4::Context->preference('defaultbranch');
+
 	my @select_branch;
 	my %select_branches;
 	my $branches;
