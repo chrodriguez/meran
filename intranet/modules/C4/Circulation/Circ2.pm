@@ -469,7 +469,10 @@ sub getiteminformation {
 		$sth=$dbh->prepare("select * from biblio inner join biblioitems on biblio.biblionumber = biblioitems.biblionumber inner join items on  biblioitems.biblioitemnumber=items.biblioitemnumber where items.itemnumber=?");
 		$sth->execute($itemnumber);
 	} elsif ($barcode) {
-		$sth=$dbh->prepare("select * from biblio inner join biblioitems on biblio.biblionumber = biblioitems.biblionumber inner join items on  biblioitems.biblioitemnumber=items.biblioitemnumber where items.barcode=?");
+		#Cuando se busca por barcode puede darse el caso de tener repetidos con disponibilidad "Compartido"
+
+		$sth=$dbh->prepare("select * from biblio inner join biblioitems on biblio.biblionumber = biblioitems.biblionumber inner join items on  biblioitems.biblioitemnumber=items.biblioitemnumber where items.barcode=? and items.wthdrawn <> 2 ;");
+
 		$sth->execute($barcode);
 	} else {
 		$env->{'apierror'}="getiteminformation() subroutine must be called with either an itemnumber or a barcode";
