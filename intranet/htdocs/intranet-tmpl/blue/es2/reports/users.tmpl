@@ -137,17 +137,17 @@ function hacerSubmit(){
 
 <script language="JavaScript">
 var stringCheckbox= '<!-- TMPL_VAR NAME="chck" -->';
-var checkbox=stringCheckbox.split(",");
-
-for (var i=0; i<checkbox.length; i++){
-	var ch=document.getElementById(checkbox[i]);
-        ch.checked=true;
-	
+if(stringCheckbox != ""){
+	var checkbox=stringCheckbox.split(",");
+	for (var i=0; i<checkbox.length; i++){
+		var ch=document.getElementById(checkbox[i]);
+        	ch.checked=true;
+	}
 }
-
-var usos=document.getElementById('<!-- TMPL_VAR NAME="usos" -->');
-usos.selected=true;
-
+var idOpUso='<!-- TMPL_VAR NAME="usos" -->';
+if(idOpUso != ""){
+	document.getElementById('<!-- TMPL_VAR NAME="usos" -->').selected=true;
+}
 
 </script>
 
