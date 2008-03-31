@@ -365,20 +365,13 @@ if ($size) {
 my @finalresults= sort { &noaccents($a->{keyword}) cmp &noaccents($b->{keyword}) } @resultarray;
 
 my %row;
-my $hash;
 my @finalresults2;
 my $tope= scalar(@finalresults);
 
 #se pagina el resultado (se filtra info del arreglo)
 #Miguel - No se puede paginar de otro modo
 for (my $i=$inicio; ($i < $fin and $i < $tope); $i++){
-	$hash= @finalresults[$i];
-
-	my %row = (keyword => $hash->{'keyword'}, jump => $hash->{'jump'}, 
-	biblionumber=> $hash->{'biblionumber'}, itemnumber => $hash->{'itemnumber'}, 
-	direct => $hash->{'direct'}, bulk => $hash->{'bulk'},title => $hash->{'title'},unititle => $hash->{'unititle'},author => $hash->{'author'});
-
-	push(@finalresults2, \%row);
+	push(@finalresults2, @finalresults[$i]);
 }
 
 # return($count,@finalresults);
