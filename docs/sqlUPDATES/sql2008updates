@@ -85,6 +85,10 @@ ALTER TABLE `borrowers` ADD COLUMN `usercourse` date  DEFAULT NULL AFTER 'change
 
 insert into systempreferences (variable,value,explanation)  values ('usercourse' ,'0','habilita o no que el curso de usuario sea necesario para utilizar el opac. ');
 
+--Branch por defecto
+INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES ('defaultbranch', 'DIF', 'Unidad de informacion por defecto', NULL , NULL);
+
 
 
 
