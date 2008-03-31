@@ -80,6 +80,9 @@ $VERSION = 0.01;
 		&deladdauthors
 		&obtenerReferenciaAutor
 		&signaturaUtilizada
+
+		&getIndice
+		&insertIndice
  );
 
 #
@@ -3173,6 +3176,37 @@ sub find_biblioitemnumber {
 	$sth->execute($biblionumber);
 	my ($biblioitemnumber) = $sth->fetchrow;
 	return $biblioitemnumber;
+}
+
+#para mostrar el indice del biblioitem
+sub getIndice{
+
+	my ($biblioitemnumber, $biblionumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = " SELECT indice FROM biblioitems ";
+	$query .= " WHERE biblioitemnumber =  ?";
+	$query .= " AND biblionumber = ? ";
+	
+    	my $sth=$dbh->prepare($query);
+    	$sth->execute($biblioitemnumber, $biblionumber);
+    	my $result = $sth->fetchrow_hashref;
+    	return ($result);
+}
+
+#para mostrar el indice del biblioitem
+sub insertIndice{
+
+	my ($biblioitemnumber, $biblionumber, $infoIndice) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = " UPDATE biblioitems ";
+	$query .= " SET indice = ? ";
+	$query .= " WHERE biblioitemnumber =  ?";
+	$query .= " AND biblionumber = ? ";
+	
+    	my $sth=$dbh->prepare($query);
+    	$sth->execute($infoIndice, $biblioitemnumber, $biblionumber);
+#     	my $result = $sth->fetchrow_hashref;
+#     	return ($result);
 }
 
 #---------------------------------------

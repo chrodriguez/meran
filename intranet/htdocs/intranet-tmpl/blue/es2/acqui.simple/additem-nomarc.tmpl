@@ -43,7 +43,7 @@ C&oacute;digo de barras repetido. Disculpe, no puede utilizar <!-- TMPL_VAR NAME
  <form action="/cgi-bin/koha/modbib.pl" method="post">
                         <table width="100%" border=0 cellspacing=0 cellpadding=0>
                         <tr>
-                        <td >
+                        <td>
                                 <Input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 				 <Input type="hidden" name="from" value="additem">
                                 <input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"   border=0 title="Editar Libro">
@@ -76,8 +76,7 @@ C&oacute;digo de barras repetido. Disculpe, no puede utilizar <!-- TMPL_VAR NAME
 			<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="tipo" -->)</a><br>
 			<!-- /TMPL_LOOP -->
 			<!-- /TMPL_IF -->
-<!--MIGUEL - La linea siguiente la comente por las dudas, como ahora se le pasa bulk en vez de CDU
-si queda el nombre del parametro como bulk hay que borrar la linea-->
+
 <!-- TMPL_IF name="CDU" --><b>CDU:</b> <!-- TMPL_VAR NAME="CDU" --><br><!-- /TMPL_IF -->
 			<!-- <!-- TMPL_IF name="bulk" --><b>CDU:</b> <!-- TMPL_VAR NAME="bulk" --><br><!-- /TMPL_IF --> -->
  			<!-- TMPL_IF name="SUBJECT" --><b>Tema:</b> <!-- TMPL_VAR NAME="SUBJECT" --><br><!-- /TMPL_IF -->
@@ -134,7 +133,12 @@ si queda el nombre del parametro como bulk hay que borrar la linea-->
 <INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" title="Editar Grupo">                                                                                                                             
 <INPUT TYPE="image" name="delete"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" title="Borrar Grupo" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?\nCUIDADO, se borrar&aacute;n todos los ejemplares asociados.')) {return true;} else {return false;}">
 
-<a href="/cgi-bin/koha/shelves.pl?viewShelfItems=<!-- TMPL_VAR Name="biblioitemnumber" -->&biblio=<!-- TMPL_VAR NAME="BIBNUM" -->&title=<!-- TMPL_VAR NAME="title" -->&edicion=<!-- TMPL_VAR NAME="number" -->&volume=<!-- TMPL_VAR NAME="volume" -->&desc=<!-- TMPL_VAR NAME="volumeddesc" -->&fecha=<!-- TMPL_VAR NAME="publicationyear" -->"><img src="/images/bookshelf.png" width="40" height="39" border="0" alt="Estantes Virtuales"></a>
+<a href="/cgi-bin/koha/shelves.pl?viewShelfItems=<!-- TMPL_VAR Name="biblioitemnumber" -->&biblio=<!-- TMPL_VAR NAME="BIBNUM" -->&title=<!-- TMPL_VAR NAME="title" -->&edicion=<!-- TMPL_VAR NAME="number" -->&volume=<!-- TMPL_VAR NAME="volume" -->&desc=<!-- TMPL_VAR NAME="volumeddesc" -->&fecha=<!-- TMPL_VAR NAME="publicationyear" -->"><img src="/images/bookshelf.png" width="40" height="39" border="0" alt="Estantes Virtuales">
+</a>
+
+<a href="/cgi-bin/koha/indiceLibro.pl?biblioitemnumber=<!-- TMPL_VAR Name='biblioitemnumber' -->&biblionumber=<!-- TMPL_VAR NAME='BIBNUM' -->"><img src="/images/indice.png" width="40" height="39" border="0" alt="Indice">
+</a>
+
 </form>
 
 <b>ISBNs:</b> <!-- TMPL_VAR NAME="isbncode" --><br>

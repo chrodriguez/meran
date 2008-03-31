@@ -89,6 +89,10 @@ insert into systempreferences (variable,value,explanation)  values ('usercourse'
 INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
 VALUES ('defaultbranch', 'DIF', 'Unidad de informacion por defecto', NULL , NULL);
 
+-- Se agrega campo indice para guardar el indice del libro
 
+ALTER TABLE `biblioitems` ADD `indice` TEXT NOT NULL AFTER `number` ;
+
+ALTER TABLE `biblioitems` ADD FULLTEXT (`indice`);
 
 

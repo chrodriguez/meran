@@ -166,9 +166,11 @@
 	<!-- /TMPL_IF -->
 	</td></tr>
 	<tr><td class="impar" >
-	<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR Name="biblioitemnumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/vertodos.png" border="0" alt="Estantes Virtuales"></a>
+	<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR Name='biblioitemnumber' -->&biblio=<!-- TMPL_VAR NAME='biblionumber' -->"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/vertodos.png" border="0" alt="Estantes Virtuales"></a>
 	
-	<a  href="/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR name="biblionumber" -->&bibnumitems=<!-- TMPL_VAR name="biblioitemnumber" -->" class="inputFontNormal" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/analiticas.png" border="0" alt="Anal&iacute;ticas"></a>
+	<a  href="/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR name='biblionumber' -->&bibnumitems=<!-- TMPL_VAR name='biblioitemnumber' -->" class="inputFontNormal" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/analiticas.png" border="0" alt="Anal&iacute;ticas"></a>
+
+	<a  href="/cgi-bin/koha/opac-indiceLibro.pl?biblionumber=<!-- TMPL_VAR name='biblionumber' -->&biblioitemnumber=<!-- TMPL_VAR name='biblioitemnumber' -->" class="inputFontNormal" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/indice.png" border="0" alt="Indice"></a>
 	
 	<br>
 	Disponibilidad Actual Para Pr&eacute;stamo:	 <b><!-- TMPL_VAR NAME='fl' --></b>
