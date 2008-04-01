@@ -510,6 +510,7 @@ $sth->execute($biblioitem->{'serie'},'serie');
 verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
+
 sub verificarValor(){
 	my ($valor)=@_;
 	my @array=split(/;/,$valor);
@@ -517,9 +518,12 @@ sub verificarValor(){
 		#por si viene un ; saco las palabras peligrosas, que son las de sql.
 		$valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
 	}
-	$valor=~ s/%|"|-|=|\*|'|;|-(<,>)/\\/g;
-	$valor=~ s/%3b|%3d|%27|%25/\\/g;#Por aca no entra llegan los caracteres ya traducidos
-	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>/ /gi;
+	
+	#$valor=~ s/'/\\'/g; 
+	#$valor=~ s/-/\\-/g;
+	$valor=~ s/%|"|=|\*|;|-(<,>)//g;	
+	$valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
+	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 	return $valor;
 }
 

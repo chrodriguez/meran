@@ -43,15 +43,6 @@ my $biblioitemnumber=$input->param('biblioitemnumber');
 my $biblionumber=$input->param('biblionumber');
 my $infoIndice=$input->param('indice');
 
-=item
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => 'opac-indiceLibro.tmpl',
-	query           => $input,
-	type            => "opac",
-	authnotrequired => 0,
-	flagsrequired   => {circulate => 1},
-    });
-=cut
 
 my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name => "opac-indiceLibro.tmpl",

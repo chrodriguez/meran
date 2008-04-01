@@ -25,6 +25,7 @@ use C4::Biblio;
 use C4::Output;
 use C4::Search;
 use C4::BookShelves;
+use C4::AR::Utilidades;
 
 
 
@@ -32,43 +33,44 @@ my $input= new CGI;
 #print $input->header;
 #print $input->Dump;
 
-my $shelfbook        = $input->param('shelfbook');
-my $subshelfbook        = $input->param('subshelfbook');
-my $shelfvalues        = $input->param('shelfvalues');
-my $newshelfvalues       = $input->param('newvalues');
+my $shelfbook       = &verificarValor($input->param('shelfbook'));
+my $subshelfbook    = &verificarValor($input->param('subshelfbook'));
+my $shelfvalues     = &verificarValor($input->param('shelfvalues'));
+my $newshelfvalues  = &verificarValor($input->param('newvalues'));
 
 
-my $bibitemnum      = checkinp($input->param('bibitemnum'));
-my $bibnum          = checkinp($input->param('bibnum'));
-my $itemtype        = checkinp($input->param('item'));
-my $url             = checkinp($input->param('url'));#URL
-my $isbncode            = checkinp($input->param('isbncode'));#ISBNS
-my $issn            = $input->param('issn');#ISSN
-my $lccn            = $input->param('lccn');#Lccn
-my $country         = $input->param('country');#Pais
-my $language	    = $input->param('language');#Idioma
-my $support        = $input->param('support');#Idioma
+my $bibitemnum      = &verificarValor($input->param('bibitemnum'));
+my $bibnum          = &verificarValor($input->param('bibnum'));
+my $itemtype        = &verificarValor($input->param('item'));
+my $url             = &verificarValor($input->param('url'));#URL
+my $isbncode        = &verificarValor($input->param('isbncode'));#ISBNS
+my $issn            = &verificarValor($input->param('issn'));#ISSN
+my $lccn            = &verificarValor($input->param('lccn'));#Lccn
+my $country         = &verificarValor($input->param('country'));#Pais
+my $language	    = &verificarValor($input->param('language'));#Idioma
+my $support         = &verificarValor($input->param('support'));#Idioma
 
-my $publishercode   = checkinp($input->param('publisher'));#Editores
-my $publicationdate = checkinp($input->param('publicationyear'));#Año de edicion
-my $class           = checkinp($input->param('class'));#Tipo
-my $illus           = checkinp($input->param('illustrations'));#Ilustraciones
-my $pages           = checkinp($input->param('pages'));#Paginas
-my $volumeddesc     = checkinp($input->param('volumeddesc'));#Descripcion del volumen
-my $volume	    = checkinp($input->param('volume'));#Volumen
-my $notes           = $input->param('notes');#Notas
-my $size            = checkinp($input->param('size'));#Tamaño
-my $place           = checkinp($input->param('place'));#Lugar
-my $serie           = $input->param('serie');#Serie
-my $fasc           = $input->param('fasc');#Fasciculo
+my $publishercode   = &verificarValor($input->param('publisher'));#Editores
+my $publicationdate = &verificarValor($input->param('publicationyear'));#Año de edicion
+my $class           = &verificarValor($input->param('class'));#Tipo
+my $illus           = &verificarValor($input->param('illustrations'));#Ilustraciones
+my $pages           = &verificarValor($input->param('pages'));#Paginas
+# my $volumeddesc     = checkinp($input->param('volumeddesc'));#Descripcion del volumen
+my $volumeddesc     = &verificarValor($input->param('volumeddesc'));#Descripcion del volumen
+my $volume	    = &verificarValor($input->param('volume'));#Volumen
+my $notes           = &verificarValor($input->param('notes'));#Notas
+my $size            = &verificarValor($input->param('size'));#Tamaño
+my $place           = &verificarValor($input->param('place'));#Lugar
+my $serie           = &verificarValor($input->param('serie'));#Serie
+my $fasc            = &verificarValor($input->param('fasc'));#Fasciculo
 
-my $classification  = $input->param('level');#Nivel Bibliografico;
+my $classification  = &verificarValor($input->param('level'));#Nivel Bibliografico;
 my $dewey;
 my $subclass;
-my $responsable    = $input->param('userloggedname');
-my $number         =  $input->param('number');#Numero de edicion
+my $responsable    = &verificarValor($input->param('userloggedname'));
+my $number         = &verificarValor($input->param('number'));#Numero de edicion
 
-=cut
+=item
 if ($itemtype ne 'NF') {
   $classification=$class;
 } # if
@@ -293,10 +295,11 @@ close L;
 
 print $input->redirect("detail.pl?type=intra&bib=$bibnum");
 
+=item
 sub checkinp{
   my ($inp)=@_;
   $inp=~ s/\'/\\\'/g;
   $inp=~ s/\"/\\\"/g;
   return($inp);
 }
-
+=cut
