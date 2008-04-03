@@ -135,8 +135,8 @@ sub devolver {
 		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
 
 		my $biblionumber= $dataItems->{'biblionumber'};
-
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$biblionumber,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'},$iteminformation->{'issuecode'});
+		my $end_date= "null";
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$biblionumber,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 
@@ -500,8 +500,9 @@ sub renovar {
 		my $biblionumber= $dataItems->{'biblionumber'};
 		my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
 		my $branchcode= $dataItems->{'homebranch'};
+		my $end_date= C4::AR::Issues::vencimiento($itemnumber);
 
-		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype);
+		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype,$end_date);
 #****************************Fin******Se registra el movimiento en historicCirculation*************************
 
 		return 1;
@@ -805,8 +806,9 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 	my $borrowernumber= $bor;
 	my $loggedinuser= $bor;
 	my $issuecode= '-';
+	my $end_date= "null";
 		
-	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode);
+	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode,$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation**********************
 
 	}#end if (C4::Context->preference("EnabledMailSystem"))

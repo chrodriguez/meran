@@ -56,6 +56,7 @@ use vars qw(@EXPORT @ISA);
 	   &insertarNotaHistCirc
 	   &userCategReport
 	   &historicoSanciones
+	   &historialReservas
 );
 
 sub historicoDeBusqueda(){
@@ -1224,6 +1225,57 @@ sub cantidadUsuariosReservas{
 	}
 
 return ($cant);
+}
+
+sub historialReservas {
+  my ($bornum,$order,$limit)=@_;
+ 
+  my $dbh = C4::Context->dbh;
+
+  my $query=" 	SELECT h.id, a.completo,a.id as idAutor,h.biblionumber, bib.title, ";				$query .= "	h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, ";
+  $query .= "	it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
+  $query .= "	FROM historicCirculation h LEFT JOIN issuetypes it ";
+  $query .= "	ON(it.issuecode = h.issuetype) ";
+  $query .= "	LEFT JOIN biblio bib ";
+  $query .= "	ON (bib.biblionumber = h.biblionumber) ";
+  $query .= "	LEFT JOIN autores a ";
+  $query .= "	ON (a.id = bib.author) ";
+  $query .= "	LEFT JOIN items i ";
+  $query .= "	ON (i.itemnumber = h.itemnumber) "; 
+  $query .= "	WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
+  $query .= "	ORDER BY h.timestamp desc ";	
+
+=item
+  if ($limit !=0){
+    $query.=" limit $limit";
+  }
+=cutss
+  my $sth=$dbh->prepare($query);
+  $sth->execute($bornum);
+  my @result;
+  my $i=0;
+  my $clase;
+  while (my $data=$sth->fetchrow_hashref){
+
+	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
+        $data->{'clase'}=$clase;
+
+	if (( $data->{'type'} eq 'reserve' )||( $data->{'type'} eq 'notification' )) {
+		$data->{'estado'}= 'Otorgada';
+	}else{
+		if (( $data->{'type'} eq 'cancel' )&&($data->{'fechaVto'} eq '0000-00-00')) {
+			$data->{'estado'}= 'Anulada';
+			$data->{'fechaVto'}= '-';
+		}else{
+			$data->{'estado'}= 'Vencida';
+		}
+	}
+
+    	$result[$i]=$data;
+    	$i++;
+  }
+  $sth->finish;
+  return($i,\@result);
 }
 
 sub historicoCirculacion(){

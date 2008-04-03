@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<br>
+<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
+<tr bordercolor="#f2f2f2">    
+ <td colspan="5" align="center" class="bordetabla" borde=1>
+<b> Historial de Reservas </b>
+
+ </td>
+</tr> 	
+<tr  class="bordetabla"  bordercolor="#f2f2f2">
+ <th>T&iacute;tulo</th>
+ <th>Autor</th>
+ <th>Estado</th>
+ <th>F. Reserva </th>
+ <th>F. Vto </th>
+</tr>
+<!-- ESTE LOOP MUESTRA LAS RESERVAS -->
+<!-- TMPL_LOOP NAME="loop_reservas" -->
+<tr border="1" bordercolor="#f2f2f2">
+ <td class="<!-- TMPL_VAR NAME='clase'-->"> 
+	<!-- TMPL_IF NAME="biblionumber" -->
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
+	<!-- TMPL_VAR name="title" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->
+	</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+ </td>
+ <td class="<!-- TMPL_VAR NAME='clase'-->">
+	<!-- TMPL_IF NAME="idAutor" -->
+	<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idAutor' -->" >
+	<!-- TMPL_VAR NAME="completo" -->
+	</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+ </td>
+ <td align=center class="<!-- TMPL_VAR NAME='clase'-->">  
+	<!-- TMPL_IF NAME="estado" -->
+	<!-- TMPL_VAR NAME="estado" -->
+	<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ </td>
+ <td class="<!-- TMPL_VAR NAME='clase'-->">
+		<!-- TMPL_VAR name="fechaReserva" -->&nbsp;
+ </td>
+ <td align=center class="<!-- TMPL_VAR NAME='clase'-->">
+		<!-- TMPL_VAR name="fechaVto" -->&nbsp;
+ </td>
+</tr>
+ <!-- /TMPL_LOOP -->
+</table>
+
+
+<br>
+<a  href="opac-user.pl">Volver</a>
+<p align="center">
+	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')"><input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
+	</a>
+</p>
+	
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+
+
