@@ -201,7 +201,9 @@ $template->param(waiting_count => $wcount,
 #No se pudo renovar por no tener el curso?
 $template->param(no_user_course => $query->param('no_user_course'));
 #
-
+#Miguel para mostrar o no el historico de las Reservas
+my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
+$template->param(showHistoricReserves => $showHistoricReserves);
 #Matias: Esta habilitada la Biblioteca Virtual?
 my $virtuallibrary=C4::Context->preference("virtuallibrary");
 $template->param(virtuallibrary => $virtuallibrary);
@@ -230,7 +232,6 @@ if ($virtuallibrary eq 1)
 	if ($cantPrint eq $maxPrint){$template->param(redPrint=>1)};
 }
 #
-
 
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -429,16 +429,15 @@ sub cancelar_reserva {
 		$sth=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=?,branchcode=? where biblioitemnumber=? and borrowernumber=? ");
 		$sth->execute($resultado[0], $desde, $fecha,$data->{'branchcode'},$resultado[1],$resultado[2]);
 
-#Miguel, ver si es necesario loguear esto, es la transicion de un reserva en espera a reserva efectiva
 #**********************************Se registra el movimiento en historicCirculation***************************
-			my $itemnumber= $resultado[0];
-			my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
-			my $biblionumber= $dataItems->{'biblionumber'};
-			my $end_date= $fecha;
-			my $issuecode= '-';
-			my $borrnum= $resultado[2];
+		my $itemnumber= $resultado[0];
+		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+		my $biblionumber= $dataItems->{'biblionumber'};
+		my $end_date= $fecha;
+		my $issuecode= '-';
+		my $borrnum= $resultado[2];
 	
-			C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$data->{'branchcode'},$issuecode,$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$data->{'branchcode'},$issuecode,$end_date);
 #********************************Fin**Se registra el movimiento en historicCirculation*************************
 
 # Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro

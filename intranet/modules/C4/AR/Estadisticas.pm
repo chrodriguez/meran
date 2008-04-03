@@ -1262,14 +1262,18 @@ sub historialReservas {
 
 	if (( $data->{'type'} eq 'reserve' )||( $data->{'type'} eq 'notification' )) {
 		$data->{'estado'}= 'Otorgada';
+		$data->{'fechaVto'}= format_date($data->{'fechaVto'});
 	}else{
 		if (( $data->{'type'} eq 'cancel' )&&($data->{'fechaVto'} eq '0000-00-00')) {
 			$data->{'estado'}= 'Anulada';
 			$data->{'fechaVto'}= '-';
 		}else{
 			$data->{'estado'}= 'Vencida';
+			$data->{'fechaVto'}= format_date($data->{'fechaVto'});
 		}
 	}
+
+	$data->{'fechaReserva'}= format_date($data->{'fechaReserva'});
 
     	$result[$i]=$data;
     	$i++;

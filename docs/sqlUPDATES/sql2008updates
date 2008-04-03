@@ -95,4 +95,8 @@ ALTER TABLE `biblioitems` ADD `indice` TEXT NOT NULL AFTER `number` ;
 
 ALTER TABLE `biblioitems` ADD FULLTEXT (`indice`);
 
+-- Se agrega preferencia para mostrar o no el historico de reservas en el OPAC
 
+INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
+
+VALUES ('showHistoricReserves', '1', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL , NULL);
