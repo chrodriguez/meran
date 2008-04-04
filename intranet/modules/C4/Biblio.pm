@@ -2113,7 +2113,8 @@ sub OLDnewbiblioitem {
 		size		 = ?,		lccn		 = ?,
 		marc		 = ?,		place		 = ?,
 		seriestitle	 = ?,		idLanguage   	 = ?,
-		idCountry	 = ?,		idSupport   	 = ? ,  fasc        = ?");
+		idCountry	 = ?,		idSupport   	 = ? ,  
+		fasc        	 = ?,		indice		 = ?");
 	$sth->execute($bibitemnum,		$biblioitem->{'biblionumber'},
 				$biblioitem->{'volume'},		$biblioitem->{'number'},
 				$biblioitem->{'classification'},	$biblioitem->{'itemtype'},
@@ -2127,7 +2128,7 @@ sub OLDnewbiblioitem {
 				$biblioitem->{'marc'},			$biblioitem->{'place'},
 				$biblioitem->{'seriestitle'},	 		$biblioitem->{'language'},
 				$biblioitem->{'country'},		$biblioitem->{'support'}, 
-				$biblioitem->{'fasc'});
+				$biblioitem->{'fasc'},			$biblioitem->{'indice'});
    $sth->finish;
 	
 #llama a la funcion para agregar editoriales

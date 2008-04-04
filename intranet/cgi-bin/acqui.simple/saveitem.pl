@@ -60,7 +60,6 @@ my $item             = {
     bulk        => $input->param('bulk')?$input->param('bulk'):"",
     #Corregido el notes por el itemsnotes porque las notas del item son el items note
     itemnotes        => $input->param('itemnotes')?$input->param('itemnotes'):"",
-    indice 	     => $input->param('indice')?$input->param('indice'):"",
     #Agregado por Einar, para saber si es para sala o si esta perdido o si esta withdrawn y modificado por Matias
     notforloan        => $input->param('notforloan')?$input->param('notforloan'):"",
     wthdrawn        => $wthdrawn,
@@ -92,6 +91,7 @@ my $biblioitem       = {
     pages             => $input->param('pages')?$input->param('pages'):"",
     size              => $input->param('size')?$input->param('size'):"",
     bnotes            => $input->param('notes')?$input->param('notes'):"",
+    indice 	     => $input->param('indice')?$input->param('indice'):"",
     
 }; # my biblioitem
 my $newgroup = 0;
@@ -160,7 +160,7 @@ if (! $biblionumber) {
 	if (! $barcode){
     		        #@barcodes=("generar",1);
     			@barcodes=('generar',$input->param('cantidadItems')||1);
-			}
+	}
 	if ($newgroup) {
 	    $biblioitemnumber = &newbiblioitem($biblioitem,$responsable);
 	    $item->{'itemtype'}=$input->param('itemtype');
