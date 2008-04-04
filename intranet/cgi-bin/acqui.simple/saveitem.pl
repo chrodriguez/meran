@@ -60,6 +60,7 @@ my $item             = {
     bulk        => $input->param('bulk')?$input->param('bulk'):"",
     #Corregido el notes por el itemsnotes porque las notas del item son el items note
     itemnotes        => $input->param('itemnotes')?$input->param('itemnotes'):"",
+    indice 	     => $input->param('indice')?$input->param('indice'):"",
     #Agregado por Einar, para saber si es para sala o si esta perdido o si esta withdrawn y modificado por Matias
     notforloan        => $input->param('notforloan')?$input->param('notforloan'):"",
     wthdrawn        => $wthdrawn,

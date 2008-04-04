@@ -2733,6 +2733,7 @@ sub newitems {
 	  my $barcode;
 	  my $error;
           if ($barcodes[0] eq 'generar'){# quiere decir que automaticamente hay que generar los codigos de barras
+
 		for (my $i=0; $i<$barcodes[1]; $i++){
 			  ($itemnumber,$error,$barcode)=&OLDnewitems($dbh,$item,'generar');
 			  $errors .=$error;
@@ -2741,7 +2742,7 @@ sub newitems {
 			  my $MARCitem = &MARCkoha2marcItem($dbh,$item->{biblionumber},$itemnumber);
 			  &MARCadditem($dbh,$MARCitem,$item->{biblionumber});
 			  guardarModificacion('Alta',$responsable,$itemnumber,'Ejemplar');
-					}
+		}
 	 }
 	 else {
 		foreach  my $barcode (@barcodes) {
