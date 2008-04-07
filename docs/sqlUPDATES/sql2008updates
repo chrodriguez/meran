@@ -100,3 +100,8 @@ ALTER TABLE `biblioitems` ADD FULLTEXT (`indice`);
 INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
 
 VALUES ('showHistoricReserves', '1', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL , NULL);
+
+-- el campo sanctiotypecode puede ser NULL si se hace una reservar y no se retirada y luego 
+-- se sanciona al usuario
+
+ALTER TABLE `historicSanctions` CHANGE `sanctiontypecode` `sanctiontypecode` INT( 11 ) NULL DEFAULT '0'

@@ -1379,14 +1379,17 @@ sub historicoSanciones(){
 
 	my $select= " 	SELECT hs.borrowernumber, hs.responsable,hs.type, b.firstname as firstnameBor, 
 			b.surname as surnameBor,resp.firstname as firstnameResp, resp.surname as surnameResp,
-			hs.end_date, hs.date, st.issuecode, hs.timestamp ";
+			hs.end_date, hs.date, st.issuecode, hs.timestamp, hs.sanctiontypecode, 
+			it.description as tipoPrestamo";
 
 	my $from= "	FROM historicSanctions hs INNER JOIN borrowers b
 			ON (hs.borrowernumber = b.borrowernumber)
 			LEFT JOIN borrowers resp
 			ON (hs.responsable = resp.borrowernumber)
 			LEFT JOIN sanctiontypes st
-			ON (st.sanctiontypecode = hs.sanctiontypecode) ";
+			ON (st.sanctiontypecode = hs.sanctiontypecode) 
+			LEFT JOIN issuetypes it
+			ON (it.issuecode = st.issuecode) ";
 
 	my $where = "";
 

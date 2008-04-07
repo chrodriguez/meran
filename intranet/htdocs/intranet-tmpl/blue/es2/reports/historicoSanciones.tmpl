@@ -102,7 +102,7 @@
 		<th>Fecha</th>
 		<th>Fecha Fin</th>
 		<th>Operaci&oacute;n</th>
-		<th>Tipo Sanci&oacute;n<th>
+		<th>Tipo Pr&eacute;stamo<th>
 
 		<td align="right" valign="top" width="1%">
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
@@ -138,8 +138,11 @@
   		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
 			<!-- TMPL_VAR NAME=operacion -->
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=issuecode --> 
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">  
+		<!-- TMPL_IF NAME=issuecode -->
+					<!-- TMPL_VAR NAME=tipoPrestamo -->
+			<!-- TMPL_ELSE -->Reserva no Retirada
+		<!-- /TMPL_IF -->
 		</td>
   	
  	</tr>
