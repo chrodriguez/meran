@@ -301,9 +301,12 @@ function cancelar(borrowernumber){
 <!-- TMPL_UNLESS name="ticket_string"-->
 <!-- TMPL_UNLESS name="max_issues"-->
 <!-- TMPL_UNLESS name="all_issues"-->
+<!-- TMPL_UNLESS name="reservaNoRetiradaVencida" -->
 
 <!--******************************** Seleccion de tipo de pretamo *****************************************-->
+
 <!-- TMPL_IF NAME="strItemnumber" -->
+
 <form name=frm2 method="post" action="/cgi-bin/koha/circ/item-borrow.pl">
 <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
 <input type="hidden" name="branch" value="<!-- TMPL_VAR name='branch' -->">
@@ -369,6 +372,7 @@ function cancelar(borrowernumber){
 <!-- /TMPL_IF -->
 <!--******************************Fin** Seleccion de tipo de pretamo *****************************************-->
 
+<!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->

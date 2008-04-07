@@ -256,8 +256,15 @@ if($bornum){
 	my $sanctions = hasSanctions($bornum);
 	
 	foreach my $san (@$sanctions) {
-	if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
-			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
+		if ($san->{'itemnumber'}) {
+			my $aux=itemdata3($san->{'itemnumber'}); 
+			$san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; 
+		}
+
+		if ($san->{'reservaNoRetiradaVencida'}){
+		#Miguel - Tiene reserva no retirada vencida, no se le muestra el combo para prestar
+			$template->param(reservaNoRetiradaVencida =>$san->{'reservaNoRetiradaVencida'});
+		}
 	$san->{'enddate'}=format_date($san->{'enddate'});
 	$san->{'startdate'}=format_date($san->{'startdate'});
 	}

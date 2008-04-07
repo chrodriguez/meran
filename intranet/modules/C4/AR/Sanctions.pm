@@ -118,6 +118,7 @@ sub hasSanctions {
         $res->{'enddate'}=format_date($res->{'enddate'});
         $res->{'startdate'}=format_date($res->{'startdate'});
 	$res->{'description'}="Reserva no retirada";
+	$res->{'reservaNoRetiradaVencida'}= 1; #se setea flag de reservaNoRetirada vencida
         push(@results,$res);
   }
   $sth->finish;
