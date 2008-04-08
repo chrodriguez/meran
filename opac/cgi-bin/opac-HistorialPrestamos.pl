@@ -31,11 +31,10 @@ use CGI;
 use C4::Search;
 use HTML::Template;
 use C4::AR::Estadisticas;
-
 my $input=new CGI;
 
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-HistorialReservas.tmpl",
+= get_template_and_user({template_name => "opac-HistorialPrestamos.tmpl",
 				query => $input,
 				type => "opac",
 				authnotrequired => 1,
@@ -58,8 +57,7 @@ else {
 	$pageNumber= $input->param('ini');
 };
 
-
-my ($cant,$reservas_hashref)=&historialReservas($bornum,$ini,$cantR);
+my ($cant,$issues)=allissues($bornum,$ini,$cantR);
 
 my @numeros=armarPaginas($cant,$pageNumber);
 my $paginas = scalar(@numeros)||1;
@@ -84,11 +82,10 @@ if ( $cant > $cantR ){
 	}
 }
 
-
 $template->param(
 			cant  => $cant,
 			numeros => \@numeros,
- 			loop_reservas => $reservas_hashref
+			loop_reading => $issues
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

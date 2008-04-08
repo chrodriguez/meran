@@ -2841,34 +2841,60 @@ elements in C<$issues>
 =cut
 #'
 sub allissues {
-  my ($bornum,$order,$limit)=@_;
-  #FIXME: sanity-check order and limit
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from issues,biblio,items,biblioitems
-  where borrowernumber=? and
-  items.biblioitemnumber=biblioitems.biblioitemnumber and
-  items.itemnumber=issues.itemnumber and
-  items.biblionumber=biblio.biblionumber order by $order";
 
-  if ($limit !=0){
-    $query.=" limit $limit";
-  }
-  #print $query;
-  my $sth=$dbh->prepare($query);
+  my ($bornum,$ini,$cantR)=@_;
+
+  my $dbh = C4::Context->dbh;
+
+  my $querySelectCount = " SELECT count(*) as cant ";
+
+  my $querySelect= " SELECT b.title,b.biblionumber,b.author,iss.date_due,iss.returndate,volumeddesc ";
+
+  my $queryFrom = " FROM items i INNER JOIN biblioitems bi";
+  $queryFrom .= " ON (i.biblioitemnumber = bi.biblioitemnumber) ";
+  $queryFrom .= " INNER JOIN issues iss ";
+  $queryFrom .= " ON (i.itemnumber = iss.itemnumber) ";
+  $queryFrom .= " INNER JOIN biblio b ";
+  $queryFrom .= " ON (i.biblionumber = b.biblionumber) ";
+
+  my $queryWhere= " WHERE borrowernumber= ? ";
+  my $queryFinal= " ORDER BY date_due ";
+  $queryFinal .= " limit $ini,$cantR ";
+
+  my $consulta = $querySelectCount.$queryFrom.$queryWhere;
+
+  #obtengo la cantidad total para el paginador
+  my $sth=$dbh->prepare($consulta);
   $sth->execute($bornum);
+  my $data= $sth->fetchrow_hashref;
+  my $count= $data->{'cant'};
+
+  #se realiza la consulta
+  $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
+  my $sth=$dbh->prepare($consulta);
+  $sth->execute($bornum);
+
   my @result;
   my $i=0;
+  my $clase;
   while (my $data=$sth->fetchrow_hashref){
 
-    my $author=getautor($data->{'author'}); #Damian - 13/03/2007. Se ve el nombre y
-    $data->{'author'} = $author->{'completo'}; #el id del autor.
-    $data->{'id'} = $author->{'id'};
+  	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
+   
+   	$data->{'clase'}=$clase;
+	$data->{'date_due'}=  format_date($data->{'date_due'});
+	$data->{'returndate'}=  format_date($data->{'returndate'});
 
-    $result[$i]=$data;
-    $i++;
+    	my $author=getautor($data->{'author'});
+    	$data->{'author'} = $author->{'completo'};
+    	$data->{'id'} = $author->{'id'};
+
+    	$result[$i]=$data;
+    	$i++;
   }
   $sth->finish;
-  return($i,\@result);
+
+  return($count,\@result);
 }
 
 =item borrdata2
