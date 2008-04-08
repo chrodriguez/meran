@@ -1228,30 +1228,42 @@ return ($cant);
 }
 
 sub historialReservas {
-  my ($bornum,$order,$limit)=@_;
+  my ($bornum,$ini,$cantR)=@_;
  
   my $dbh = C4::Context->dbh;
 
-  my $query=" 	SELECT h.id, a.completo,a.id as idAutor,h.biblionumber, bib.title, ";				$query .= "	h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, ";
-  $query .= "	it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
-  $query .= "	FROM historicCirculation h LEFT JOIN issuetypes it ";
-  $query .= "	ON(it.issuecode = h.issuetype) ";
-  $query .= "	LEFT JOIN biblio bib ";
-  $query .= "	ON (bib.biblionumber = h.biblionumber) ";
-  $query .= "	LEFT JOIN autores a ";
-  $query .= "	ON (a.id = bib.author) ";
-  $query .= "	LEFT JOIN items i ";
-  $query .= "	ON (i.itemnumber = h.itemnumber) "; 
-  $query .= "	WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
-  $query .= "	ORDER BY h.timestamp desc ";	
+  my $querySelectCount=" SELECT count(*) as cant ";
 
-=item
-  if ($limit !=0){
-    $query.=" limit $limit";
-  }
-=cutss
-  my $sth=$dbh->prepare($query);
+  my $querySelect =" SELECT h.id, a.completo,a.id as idAutor,h.biblionumber, bib.title, ";			$querySelect .= " h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, ";
+  $querySelect .= " it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
+
+  my $queryFrom .= " FROM historicCirculation h LEFT JOIN issuetypes it ";
+  $queryFrom .= " ON(it.issuecode = h.issuetype) ";
+  $queryFrom .= " LEFT JOIN biblio bib ";
+  $queryFrom .= " ON (bib.biblionumber = h.biblionumber) ";
+  $queryFrom .= " LEFT JOIN autores a ";
+  $queryFrom .= " ON (a.id = bib.author) ";
+  $queryFrom .= " LEFT JOIN items i ";
+  $queryFrom .= " ON (i.itemnumber = h.itemnumber) "; 
+
+  my $queryWhere .= " WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
+
+  my $queryFinal .= " ORDER BY h.timestamp desc ";	
+  $queryFinal .= " limit $ini,$cantR ";
+
+  my $consulta= $querySelectCount.$queryFrom.$queryWhere;
+
+  #obtengo la cantidad total para el paginador
+  my $sth=$dbh->prepare($consulta);
   $sth->execute($bornum);
+  my $data= $sth->fetchrow_hashref;
+  my $count= $data->{'cant'};
+  #se realiza la consulta
+  $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
+  my $sth=$dbh->prepare($consulta);
+  $sth->execute($bornum);
+
+  #proceso los datos
   my @result;
   my $i=0;
   my $clase;
@@ -1279,7 +1291,7 @@ sub historialReservas {
     	$i++;
   }
   $sth->finish;
-  return($i,\@result);
+  return($count,\@result);
 }
 
 sub historicoCirculacion(){

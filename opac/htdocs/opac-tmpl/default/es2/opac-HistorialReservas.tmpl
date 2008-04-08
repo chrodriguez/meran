@@ -1,5 +1,28 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <br>
+
+<!-- TMPL_IF NAME="ok2" -->
+	<a class="inputFontNormal" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR name='ant' -->>
+	<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<a class="highnumber" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR NAME=number -->>
+	<u><!-- TMPL_VAR name=number --></u></a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+	<a class="inputFontNormal" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR name="sig" -->>
+	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<center>
+<p class="inputFontNormal"> 
+	<b>Cantidad de reservas realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
+	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+</p><br>
+<center>
+
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 <tr bordercolor="#f2f2f2">    
  <td colspan="5" align="center" class="bordetabla" borde=1>

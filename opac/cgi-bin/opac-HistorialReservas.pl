@@ -44,51 +44,64 @@ my ($template, $loggedinuser, $cookie)
 
 my $bornum=$loggedinuser;
 #get borrower details
-my $data=borrdata('',$bornum);
-my $order=$input->param('order');
-my $order2=$order;
-if ($order2 eq ''){
-  $order2="date_due desc";
+# my $data=borrdata('',$bornum);
+# my $order=$input->param('order');
+# my $order2=$order;
+# if ($order2 eq ''){
+#   $order2="date_due desc";
+# }
+# my $limit=$input->param('limit');
+# if ($limit eq 'full'){
+#   $limit=0;
+# } else {
+#   $limit=50;
+# }
+
+#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+my $ini;
+my $pageNumber;
+my $cantR=cantidadRenglones();
+
+if (($input->param('ini') eq "")){
+        $ini=0;
+	$pageNumber=1;
 }
-my $limit=$input->param('limit');
-if ($limit eq 'full'){
-  $limit=0;
-} else {
-  $limit=50;
+else {
+	$ini= ($input->param('ini')-1)* $cantR;
+	$pageNumber= $input->param('ini');
+};
+
+
+my ($cant,$reservas_hashref)=&historialReservas($bornum,$ini,$cantR);
+
+my @numeros=armarPaginas($cant,$pageNumber);
+my $paginas = scalar(@numeros)||1;
+my $pagActual = $input->param('ini')||1;
+$template->param( paginas   => $paginas,
+		  actual    => $pagActual);
+
+if ( $cant > $cantR ){
+#Seteo las flechas de siguiente y anterior
+       	my $sig = $pageNumber+1;;
+        if ($sig <= $paginas){
+       	         $template->param(
+               	                ok    =>'1',
+                       	        sig   => $sig);
+        };
+
+	if ($sig > 2 ){
+               my $ant = $pageNumber-1;
+               $template->param(
+                               ok2     => '1',
+                               ant     => $ant)
+	}
 }
 
-my ($count,$reservas_hashref)=&historialReservas($bornum,$order2,$limit);
 
-=item
-my @loop_reservas;
-my $clase='par';
-for (my $i=0;$i<$count;$i++){
- 	my %line;
-# 	$line{title}=$issues->[$i]->{'title'};
-# 	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
-# 	$line{edicion}=$issues->[$i]->{'edicion'};
-# 	$line{author}=$issues->[$i]->{'author'};
-# 	$line{id}=$issues->[$i]->{'id'};	
-# 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
-# 	$line{returndate}=format_date($issues->[$i]->{'returndate'});
-# 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-# 	($line{grupos})=Grupos($issues->[$i]->{'biblionumber'},'intra');
-	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
-        $line{'clase'}=$clase;
-	push(@loop_reservas,\%line);
-}
-=cut
-
-$template->param(title => $data->{'title'},
-						initials => $data->{'initials'},
-						surname => $data->{'surname'},
-						bornum => $bornum,
-						limit => $limit,
-						firstname => $data->{'firstname'},
-						cardnumber => $data->{'cardnumber'},
-						showfulllink => ($count > 50),					
-#  						loop_reservas => \@loop_reservas,
- 						loop_reservas => $reservas_hashref
+$template->param(
+			cant  => $cant,
+			numeros => \@numeros,
+ 			loop_reservas => $reservas_hashref
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
