@@ -24,7 +24,20 @@ use vars qw(@EXPORT @ISA);
 		&delSanction
 		&sanciones
 		&logSanction
+		&infoSanction
 );
+
+# Retorna la informacion de la sancion segun una reserva (antes de que se borre la reserva)
+sub infoSanction {
+
+	my ($reserveNumber)=@_;
+  	my $dbh = C4::Context->dbh;
+	#traigo la info de la sancion
+	my $sth=$dbh->prepare(" SELECT * FROM sanctions WHERE reservenumber = ?");
+	$sth->execute($reserveNumber);
+
+	return $sth->fetchrow_hashref;
+}
 
 sub SanctionDays {
 # Retorna la cantidad de dias de sancion que corresponden a una devolucion

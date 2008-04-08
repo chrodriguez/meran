@@ -416,6 +416,16 @@ sub cancelar_reserva {
 		}
 	}
 
+#**********************************Se registra el movimiento en historicSanction***************************
+		#traigo la info de la sancion
+		my $infoSancion= &infoSanction($data->{'reservenumber'});
+
+		my $responsable= $loggedinuser;
+		my $sanctiontypecode= 'null';
+		my $fechaFinSancion= $infoSancion->{'enddate'};
+		logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
 #Actualizo la sancion para que refleje el itemnumber y asi poder informalo
 	my $sth6=$dbh->prepare(" UPDATE sanctions SET itemnumber = ? WHERE reservenumber = ? ");
 	$sth6->execute($data->{'itemnumber'},$data->{'reservenumber'});
@@ -832,11 +842,13 @@ sub eliminarReservasVencidas(){
 		}
 
 #**********************************Se registra el movimiento en historicSanction***************************
+		my $infoSancion= &infoSanction($data->{'reservenumber'});
+		my $fechaFinSancion= $infoSancion->{'enddate'};
+
 		my $responsable= $loggedinuser;
 		my $sanctiontypecode= 'null';
 		my $borrowernumber= $data->{'borrowernumber'};
-		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
-		my $fechaFinSancion= $fechaHoy;
+
 		logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
 #**********************************Fin registra el movimiento en historicSanction***************************
 
