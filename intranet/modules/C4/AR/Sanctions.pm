@@ -318,38 +318,29 @@ sub delSanction {
 
 sub sanciones{
 	my ($orden)=@_;
- #Esta sancion de toda las sanciones que hay
+ #Esta funcion muestra toda las sanciones que hay
 	my $linecolor1='par';
 	my $linecolor2='impar';
 	my $class='';
 	$orden=&C4::AR::Utilidades::verificarValor($orden);
 	my $dbh = C4::Context->dbh;
 	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
-	from borrowers inner join sanctions on borrowers.borrowernumber = sanctions.borrowernumber 
-	inner join categories on categories.categorycode = borrowers.categorycode 
+	from sanctions  
+	left  join borrowers on borrowers.borrowernumber = sanctions.borrowernumber 
+	left join categories on categories.categorycode = borrowers.categorycode 
 	left join sanctiontypes on sanctiontypes.sanctiontypecode = sanctions.sanctiontypecode 
 	left join issuetypes on issuetypes.issuecode = sanctiontypes.issuecode 
-	where (startdate <= now()) AND (enddate >= now()) group by cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, startdate, enddate, categories.description, issuetypes.description order by ".$orden;
+	where (startdate <= now()) AND (enddate >= now())  order by ".$orden;
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
 	my @sanctionsarray;
 	my $borrowernumber;
-	my $res = $sth->fetchrow_hashref;
-	while ($res) {
-		my $res1= $res;
+	while (my $res = $sth->fetchrow_hashref) {
         	($class eq $linecolor1) ? ($class=$linecolor2) : ($class=$linecolor1);
-		$res1->{'enddate'}=  format_date($res->{'enddate'});
-		$res1->{'startdate'}=  format_date($res->{'startdate'});
-		$res1->{'sanctionnumber'}=  $res->{'sanctionnumber'};
-		$res1->{'clase'}= $class;
-		$borrowernumber= $res->{'borrowernumber'};
-		my @issueslist;
-		while ($res && ($borrowernumber eq $res->{'borrowernumber'})) {
-			push (@issueslist,$res->{'issuecodedescription'});
-			$res = $sth->fetchrow_hashref;
-		}
-		$res1->{'issuecodedescription'}= join(', ',@issueslist);
-		push (@sanctionsarray, $res1);
+		$res->{'enddate'}=  format_date($res->{'enddate'});
+		$res->{'startdate'}=  format_date($res->{'startdate'});
+		$res->{'clase'}= $class;
+		push (@sanctionsarray, $res);
 	}
 	$sth->finish;
 	return @sanctionsarray;
