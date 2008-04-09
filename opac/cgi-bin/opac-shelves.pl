@@ -392,7 +392,7 @@ sub viewshelf {
 
 ###Matias: Para el orden
   my $orden='title';
-    if ($query->param('orden')){$orden=$query->param('orden');}
+  if ($query->param('orden')){$orden=$query->param('orden');}
  ###
 		                                        
 my @bitemsloop;

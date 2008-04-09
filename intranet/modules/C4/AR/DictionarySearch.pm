@@ -156,53 +156,89 @@ sub DictionaryKeywordSearch {
       $res1= $res;
       $res.= " (".$cantStr.")" if $cantStr > 1;
       my %row;
-     if ($cantStr gt 1)
-	{%row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 0, keyword2 => $res1, show => 0);}
- else
-	{ #Si es unico lo muestro en detalle
-my $query="SELECT biblio.title,biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
-      my $sth=$dbh->prepare($query);
-      $sth->execute();
-      my ($title,$unititle,$author) = $sth->fetchrow_array;
-      $sth->finish;
+     if ($cantStr gt 1){
+	%row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 0, keyword2 => $res1, show => 0);
+     }else{ 
+#Si es unico lo muestro en detalle
+	my $query="SELECT biblio.title,biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
+      	my $sth=$dbh->prepare($query);
+      	$sth->execute();
+      	my ($title,$unititle,$author) = $sth->fetchrow_array;
+      	$sth->finish;
 
 	%row = (keyword => $res, jump => 0, biblionumber => $bib, direct =>  1, keyword2 => $res1, show => 1, title => $title, unititle=>$unititle, author => $author,grupos => Grupos($bib,'intra'));}
    
-      push(@resultarray, \%row);
-      $cantStr= 0;
-    }
+      	push(@resultarray, \%row);
+      	$cantStr= 0;
+    }# end while ($index < $size) 
 
   } else {
-    my @results= @returnvalues;
+    	my @results= @returnvalues;
 
-    while ($index < $size) {
-      $res= $results[$index]->{keyword};
-      $bib= $results[$index]->{biblionumber};
+    	while ($index < $size) {
+      		$res= $results[$index]->{keyword};
+      		$bib= $results[$index]->{biblionumber};
 
 
-my $query="SELECT biblio.title, biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
-      my $sth=$dbh->prepare($query);
-      $sth->execute();
-      my ($title,$unititle,$author) = $sth->fetchrow_array;
-      $sth->finish;
+		my $query="SELECT biblio.title, biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
+      		my $sth=$dbh->prepare($query);
+      		$sth->execute();
+      		my ($title,$unititle,$author) = $sth->fetchrow_array;
+      		$sth->finish;
       
-	     
-      my %row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 1, title => $title,unititle => $unititle, author => $author, show => 1, grupos => Grupos($bib,'intra'));
-      push(@resultarray, \%row);
-      $index+=1;
-    }
+      		my %row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 1, title => $title,unititle => $unititle, author => $author, show => 1, grupos => Grupos($bib,'intra'));
+      		push(@resultarray, \%row);
+      		$index+=1;
+    	}#end while ($index < $size)
     
-    #Ordena en funcion del titulo y el autor, porque la palabra clave es siempre la misma (esto es para el detalle)
-    @resultarray= sort { &noaccents($a->{title}.$a->{author}) cmp &noaccents($b->{title}.$b->{author}) } @resultarray;
+ #Ordena en funcion del titulo y el autor, porque la palabra clave es siempre la misma (esto es para el detalle)
+@resultarray= sort { &noaccents($a->{title}.$a->{author}) cmp &noaccents($b->{title}.$b->{author}) } @resultarray;
+#  @resultarray= sort { &noaccents($a->{author}) cmp &noaccents($b->{author}) } @resultarray;
 
 }
+
+my @apellidosCompuestos;
+my @apellidosSimples;
+
+# open(A, ">>/tmp/debug.txt");
+# print A "antes del foreach \n";
+#Miguel hay autores que estan pasando vacios
+  foreach my $query (@resultarray){
+
+	my @dataApellido = split(",", $query->{'author'});
+	my @dataKeyword = split(",", $query->{'keyword'});
+
+# print A " \n";
+# print A "title: $query->{'title'} \n";
+# print A "keyword: $query->{'keyword'} \n";
+# print A "author: $query->{'author'} \n";
+# print A "primer parte del apellido: @dataApellido[0] \n";
+ 	my @primerParte= split(" ",@dataApellido[0]);
+	my @primerParteKeyword= split(" ", @dataKeyword[0]);
+
+  	if( (scalar(@primerParte) gt 1)||(scalar(@primerParteKeyword) gt 1) ){
+	#el apellido es compuesto
+# print A "Apellido compuesto \n";
+# $query->{'author'}= $query->{'author'}."------COMPUESTO";
+		push(@apellidosCompuestos, $query);
+	}else{
+		push(@apellidosSimples, $query);
+	}
+# print A " \n";
+
+  }
+
+push(@apellidosSimples, @apellidosCompuestos);
+my @resultarray= @apellidosSimples;
+
+close(A);
 
   if ($size) {
     my $middle= (scalar(@resultarray) - (scalar(@resultarray) % 2)) / 2;
     $resultarray[$middle-1]->{jump}= 1;
   }
 
-  return($count,@resultarray);
+    return($count, @resultarray);
 }
 
 
