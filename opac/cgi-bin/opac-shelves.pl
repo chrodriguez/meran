@@ -43,6 +43,8 @@ my $titlebib = $query->param('title');
 my $fecha = $query->param('fecha');
 my $desc = $query->param('desc');
 
+my $orden= $query->param('orden')||'title';
+
 
 my $headerbackgroundcolor='#663266';
 my $circbackgroundcolor='#555555';
@@ -92,7 +94,7 @@ $template->param({	loggedinuser => $loggedinuser,
 			circbackgroundcolor => $circbackgroundcolor });
 
 SWITCH: {
-	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf'),$template); last SWITCH;}
+	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf'),$template,$orden); last SWITCH;}
 	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
 my %shelflist;
@@ -235,21 +237,23 @@ my $color='';
 my @shelvesloop;
 
 my @key=sort { noaccents($shelflist{$a}->{'shelfname'}) cmp noaccents($shelflist{$b}->{'shelfname'}) } keys(%shelflist);
+#se ordenan los estantes virtuales
 foreach my $element (@key) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
-
-                $line{'numberparent'}=$shelflist{$element}->{'numberparent'};#los datos del padre, sirve para la busqueda
-                $line{'nameparent'}=$shelflist{$element}->{'nameparent'};#los datos del padre,sirve para la busqueda
-
+#los datos del padre, sirve para la busqueda
+                $line{'numberparent'}=$shelflist{$element}->{'numberparent'};
+#los datos del padre,sirve para la busqueda
+                $line{'nameparent'}=$shelflist{$element}->{'nameparent'};
 		$line{'shelfname'}=$shelflist{$element}->{'shelfname'};
 		$line{'shelfbookcount'}=$shelflist{$element}->{'count'};
 		$line{'countshelf'}=$shelflist{$element}->{'countshelf'} ;
 
 		push (@shelvesloop, \%line);
 }
+
 $template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
@@ -318,37 +322,39 @@ sub shelves {
 
 sub viewshelf {
        
- my ($shelfnumber,$templ)=@_; 
+ my ($shelfnumber,$templ,$orden)=@_; 
 
 	if ($query->param('tipo') eq ('agregarEstante')) {
-        if (my $newshelf=$query->param('addshelves')) {
-                my $parent=$query->param('parent');
-                AddShelf($env,$newshelf,$type,$parent);
-        }}
+        	if (my $newshelf=$query->param('addshelves')) {
+                	my $parent=$query->param('parent');
+                	AddShelf($env,$newshelf,$type,$parent);
+        	}
+	}
         
         if ($query->param('tipo') eq ('remShelf')){
-          foreach ($query->param()) {
-            if (/DEL-(\d+)/) {
-                    my $delshelf=$1;
-                    my $texto=RemoveShelf($env,$delshelf);
-      		    $template->param(textodelete => $texto);                                                                                                          }
-          }
+        	foreach ($query->param()) {
+            		if (/DEL-(\d+)/) {
+                    		my $delshelf=$1;
+                    		my $texto=RemoveShelf($env,$delshelf);
+      		    		$template->param(textodelete => $texto);                                                    
+        		}
+          	}
         }
            
         if ($query->param('tipo') eq ('addItems')) {
-           if (my $newitems=$query->param('addbarcode')) {
-                AddToShelf(my $env,$newitems,$shelfnumber);
-               }
-          }
+        	if (my $newitems=$query->param('addbarcode')) {
+                	AddToShelf(my $env,$newitems,$shelfnumber);
+               	}
+        }
             
-          if ($query->param('tipo') eq ('RemoveItems')){
-           foreach ($query->param()) {
-            if (/REM-(\d+)/) {
-                    my $itemnumber=$1;
-                    RemoveFromShelf($env, $itemnumber, $shelfnumber);
-                   }
-            }
-          }        
+        if ($query->param('tipo') eq ('RemoveItems')){
+        	foreach ($query->param()) {
+            		if (/REM-(\d+)/) {
+                    		my $itemnumber=$1;
+                    		RemoveFromShelf($env, $itemnumber, $shelfnumber);
+                   	}
+            	}
+        }        
 
  
        my $shelfname=GetShelfName($env,$shelfnumber);
@@ -370,8 +376,8 @@ sub viewshelf {
                 $line{'count'}=$shelfnameParent{$element}->{'count'};
                 $line{'countshelf'}=$shelfnameParent{$element}->{'countshelf'};
 
-                push (@parentloop, \%line);}
-
+                push (@parentloop, \%line);
+	}
 
 #para los subestantes
        my @shelvesloopshelves;
@@ -385,16 +391,18 @@ sub viewshelf {
                 $line{'shelfnumber'}=$shelfcontentslist{$element}->{'shelfnumber'};
                 $line{'count'}=$shelfcontentslist{$element}->{'count'};
 		$line{'countshelf'}=$shelfcontentslist{$element}->{'countshelf'};
-		push (@shelvesloopshelves, \%line);}
+		push (@shelvesloopshelves, \%line);
+	}
 
 #para los contenidos
 	#my $color='';
 
 ###Matias: Para el orden
-  my $orden='title';
-  if ($query->param('orden')){$orden=$query->param('orden');}
+#   my $orden= $query->param('orden')||'title';
+
+#   if ($query->param('orden')){$orden=$query->param('orden');}
  ###
-		                                        
+
 my @bitemsloop;
 my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}->{$orden} ) } keys(%bitemlist);
 	
@@ -421,8 +429,6 @@ my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}
                 push (@bitemsloop, \%line);
 	}#end for
 
-close(A);
-
 
 	  
           #  for (my $i = 0; $i < $count; $i++) {
@@ -435,13 +441,15 @@ close(A);
        # } 
 
 	$templ->param(	bitemsloop => \@bitemsloop,
-                                shelvesloopshelves => \@shelvesloopshelves,
-                                parentloop => \@parentloop,  
- 	                        shelfname => $shelfname,
-                                shelfnumber => $shelfnumber,
- 				pagetitle => "Estantes Virtuales",
-				viewshelf => $shelfnumber#$query->param('viewshelf')
-					);
+                        shelvesloopshelves => \@shelvesloopshelves,
+                        parentloop => \@parentloop,  
+ 	                shelfname => $shelfname,
+                        shelfnumber => $shelfnumber,
+ 			pagetitle => "Estantes Virtuales",
+			orden => $orden,
+			viewshelf => $shelfnumber#$query->param('viewshelf')
+					
+	);
 }
 
 #
