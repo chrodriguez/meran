@@ -44,6 +44,7 @@ my $edic = $query->param('edicion');
 my $titlebib = $query->param('title');
 my $fecha = $query->param('fecha');
 my $desc = $query->param('desc');
+my $orden= $query->param('orden')||'title';
 
 
 my $headerbackgroundcolor='#663266';
@@ -91,7 +92,7 @@ $template->param({	loggedinuser => $loggedinuser,
 					circbackgroundcolor => $circbackgroundcolor });
 
 SWITCH: {
-	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
+	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf'),$template,$orden); last SWITCH;}
 	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
 my %shelflist;
@@ -251,7 +252,9 @@ sub shelves {
 }
 
 sub viewshelf {
-       my $shelfnumber= shift;
+#        my $shelfnumber= shift;
+	my ($shelfnumber,$templ,$orden)=@_; 
+
        if ($query->param('tipo') eq ('agregarEstante')) {
         if (my $newshelf=$query->param('addshelves')) {
 		checkauth($query,0,{editcatalogue => 1},"intranet");
@@ -327,8 +330,8 @@ sub viewshelf {
 	#my $color='';
 	
 	  ###Matias: Para el orden
-	      my $orden='title';
-	      if ($query->param('orden')){$orden=$query->param('orden');}
+# 	      my $orden='title';
+# 	      if ($query->param('orden')){$orden=$query->param('orden');}
 	  ###
 	                    
 	

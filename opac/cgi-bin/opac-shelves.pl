@@ -446,7 +446,6 @@ my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}
  	                shelfname => $shelfname,
                         shelfnumber => $shelfnumber,
  			pagetitle => "Estantes Virtuales",
-			orden => $orden,
 			viewshelf => $shelfnumber#$query->param('viewshelf')
 					
 	);
