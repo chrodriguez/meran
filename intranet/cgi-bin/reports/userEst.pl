@@ -45,31 +45,6 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 
-#Genero la hoja de calculo Openoffice
-my $sheet=new ooolib("sxc");
-$sheet->oooSet("builddir","./plantillas");
-$sheet->oooSet("title","Estad�stica Usuarios por categor�a");
-$sheet->oooSet("author","KOHA");
-$sheet->oooSet("subject","Estadistica");
-$sheet->oooSet("bold", "on");
-my $pos=1;
-$sheet->oooSet("text-size", 11);
-$sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Ministerio de Educaci�n
-Universidad Nacional de La Plata
-");
-$sheet->oooSet("text-size", 10);
-$pos++;
-$sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Categor�a");
-$sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", "Cantidad");
-$sheet->oooSet("bold", "off");
-$pos++;
-##
-
-
-
 #Por los branches
 my @branches;
 my @select_branch;
@@ -96,24 +71,16 @@ my ($cantidad,@resultsdata)= &userCategReport($branch);
 &userCategPie($branch,$cantidad, @resultsdata);
 &userCategHBars($branch,$cantidad, @resultsdata);
 
-#Contenido de la planilla.
-foreach my $cat (@resultsdata) {
-	$sheet->oooSet("cell-loc", 1, $pos);
-	$sheet->oooData("cell-text", $cat->{'categoria'});
-	$sheet->oooSet("cell-loc", 2, $pos);
-	$sheet->oooData("cell-text", $cat->{'cant'});
-	$pos++;
-}
 
-my $name='usuarioEstadistica-'.$loggedinuser;
-$sheet->oooGenerate($name);
+#Generar planilla.
+my $planilla=generar_planilla_usuario(\@resultsdata,$loggedinuser);
 
 $template->param( 
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
 			branch           => $branch,
-			name		 => $name,
+			name		 => $planilla,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

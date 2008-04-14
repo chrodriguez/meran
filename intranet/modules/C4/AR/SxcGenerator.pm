@@ -18,6 +18,7 @@ $VERSION = 0.01;
 	&generar_planilla_inventario
 	&generar_planilla_estantes
 	&generar_planilla_usuario
+	&generar_planilla_inventario_sig_top
 );
 
 
@@ -282,11 +283,135 @@ return($name);
 
 
 
-#Genera la planilla del reporte  "Préstamos sin devolver"
+#Genera la planilla del reporte  "Usuarios por Categoría"
 
 sub generar_planilla_usuario {
 	my ($results,$loggedinuser) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
+#Genero la hoja de calculo Openoffice
+my $sheet=new ooolib("sxc");
+$sheet->oooSet("builddir","./plantillas");
+$sheet->oooSet("title","Estadística Usuarios por categoría");
+$sheet->oooSet("author","KOHA");
+$sheet->oooSet("subject","Estadistica");
+$sheet->oooSet("bold", "on");
+my $pos=1;
+$sheet->oooSet("text-size", 11);
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Ministerio de Educación
+Universidad Nacional de La Plata
+");
+$sheet->oooSet("text-size", 10);
+$pos++;
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Categoría");
+$sheet->oooSet("cell-loc", 2, $pos);
+$sheet->oooData("cell-text", "Cantidad");
+$sheet->oooSet("bold", "off");
+$pos++;
+##
+
+#Datos
+for(my $i = 0 ; $i <= $#{$results} ; $i++)
+{
+if ( @$results[$i]) {
+
+	$sheet->oooSet("cell-loc", 1, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'categoria'});
+	$sheet->oooSet("cell-loc", 2, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'cant'});
+}
+	$pos++;
+}
+
+my $name='usuarioEstadistica-'.$loggedinuser;
+$sheet->oooGenerate($name);
+return($name);
+}
+
+#Genera la planilla del reporte  "Inventario Signatura Topograficca"
+
+sub generar_planilla_inventario_sig_top {
+my ($results,$loggedinuser) = @_;
+#Genero la hoja de calculo Openoffice
+## - start sxc document
+
+#Genero la hoja de calculo Openoffice
+my $sheet=new ooolib("sxc");
+$sheet->oooSet("builddir","./plantillas");
+$sheet->oooSet("title","Reporte de Inventario (Signatura topográfica)");
+$sheet->oooSet("author","KOHA");
+$sheet->oooSet("subject","Reporte");
+$sheet->oooSet("bold", "on");
+my $pos=1;
+$sheet->oooSet("text-size", 11);
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Ministerio de Educación
+Universidad Nacional de La Plata
+");
+$sheet->oooSet("text-size", 10);
+$pos++;
+#$sheet->set_colwidth (1, 2000);
+$sheet->oooSet("cell-loc", 1, $pos);
+$sheet->oooData("cell-text", "Nro. Inventario");
+#$sheet->set_colwidth (2, 1000);
+$sheet->oooSet("cell-loc", 2, $pos);
+$sheet->oooData("cell-text", "Autor");
+#$sheet->set_colwidth (4, 4000);
+$sheet->oooSet("cell-loc", 3, $pos);
+$sheet->oooData("cell-text", "Título");
+#$sheet->set_colwidth (5, 10000);
+$sheet->oooSet("cell-loc", 4, $pos);
+$sheet->oooData("cell-text", "Edic.");
+$sheet->oooSet("cell-loc", 5, $pos);
+$sheet->oooData("cell-text", "Editor");
+$sheet->oooSet("cell-loc", 6, $pos);
+$sheet->oooData("cell-text", "Año");
+$sheet->oooSet("cell-loc", 7, $pos);
+$sheet->oooData("cell-text", "Signatura Topográfica");
+#$sheet->set_colwidth (9, 1000);
+$sheet->oooSet("bold", "off");
+
+$pos++;
+##
+
+
+
+#Datos
+for(my $i = 0 ; $i <= $#{$results} ; $i++)
+{
+if ( @$results[$i]) {
+##Lleno los datos
+	$sheet->oooSet("cell-loc", 1, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'barcode'});
+
+	$sheet->oooSet("cell-loc", 7, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'bulk'});
+	
+	$sheet->oooSet("cell-loc", 2, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'author'});
+	
+	$sheet->oooSet("cell-loc", 3, $pos);
+	if(@$results[$i]->{'unititle'} eq ""){$sheet->oooData("cell-text", @$results[$i]->{'title'});}
+	else{	my $titulo=@$results[$i]->{'title'}.": ".@$results[$i]->{'unititle'};
+		$sheet->oooData("cell-text", $titulo);}
+
+	$sheet->oooSet("cell-loc", 4, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'number'});
+	
+	$sheet->oooSet("cell-loc", 5, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'publisher'});
+	
+	$sheet->oooSet("cell-loc", 6, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'publicationyear'});
+
+}
+$pos++;
+}
+##
+my $name="inventario-sig-top-".$loggedinuser;
+ $sheet->oooGenerate($name);
+return($name);
 
 }
