@@ -610,40 +610,35 @@ sub cantidadUsuarios{
         my ($branch,$anio,$usos,$categ,@chck)=@_;
         my $dbh = C4::Context->dbh;
 	my @bind;
+	my @bind2;
         my $query ="SELECT count( * ) AS cantidad
                     FROM borrowers b
                     WHERE branchcode=?";
 	push(@bind,$branch);
 	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
-
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
-		if($chck[$i] eq "AN"){
-			$query2 = $query2 ." AND year( date_due )= ?";
-			$exists = " AND EXISTS (";
-			push(@bind, $anio);
-		}
-		elsif($chck[$i] eq "CAT"){
+		if($chck[$i] eq "CAT"){
 			$query.=" AND b.categorycode= ?";
-			$exists = " AND EXISTS (";
+			if($exists eq ""){$exists = " AND EXISTS (";}
 			push(@bind, $categ);
 		}
+		elsif($chck[$i] eq "AN"){
+			$query2 = $query2 ." AND year( date_due )= ?";
+			$exists = " AND EXISTS (";
+			push(@bind2, $anio);
+		}
 		else{
-			if($usos eq "NI"){
-				$exists = " AND NOT EXISTS (";
-			}
-			else{
-				$exists = " AND EXISTS (";
-			}
+			if($usos eq "NI"){$exists = " AND NOT EXISTS (";}
+			else{$exists = " AND EXISTS (";}
 		}
 	}
 	if ($exists ne ""){
 		$query = $query.$exists.$query2.")";
 	}
 	my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
+        $sth->execute(@bind,@bind2);
 	return($sth->fetchrow_array);
-	
 }
 
 #Usuarios de un branch dado 
@@ -654,32 +649,28 @@ sub usuarios{
 	my $dbh = C4::Context->dbh;
   	my @results;
 	my @bind;
+	my @bind2;
         my $query ="SELECT  b.phone,b.emailaddress,b.dateenrolled,c.description as categoria ,
 		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city,b.borrowernumber
                     FROM borrowers b inner join categories c on (b.categorycode = c.categorycode)
  		    WHERE b.branchcode=?";
 	push(@bind,$branch);
 	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
-
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
-		if($chck[$i] eq "AN"){
-			$query2 = $query2 ." AND year( date_due )= ?";
-			$exists = " AND EXISTS (";
-			push(@bind,$anio);
-		}
-		elsif($chck[$i] eq "CAT"){
+		if($chck[$i] eq "CAT"){
 			$query.=" AND b.categorycode= ?";
-			$exists = " AND EXISTS (";
+			if($exists eq ""){$exists = " AND EXISTS (";}
 			push(@bind,$categ);
 		}
-		else{
-			if($usos eq "NI"){
-				$exists = " AND NOT EXISTS (";
-			}
-			else{
-				$exists = " AND EXISTS (";
-			}
+		elsif($chck[$i] eq "AN"){
+			$query2 = $query2 ." AND year( date_due )= ?";
+			$exists = " AND EXISTS (";
+			push(@bind2,$anio);
+		}
+		elsif($chck[$i] eq "USO"){
+			if($usos eq "NI"){$exists = " AND NOT EXISTS (";}
+			else{$exists = " AND EXISTS (";}
 		}
 	}
 	if ( $exists eq ""){
@@ -689,7 +680,7 @@ sub usuarios{
 		$query= $query.$exists.$query2.") group by b.borrowernumber order by ($orden) limit $ini,$fin";
 	}
         my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
+        $sth->execute(@bind,@bind2);
 	while (my $data=$sth->fetchrow_hashref){
                 if ($clase eq 'par'){$clase='impar';}else {$clase='par'};
 		if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
