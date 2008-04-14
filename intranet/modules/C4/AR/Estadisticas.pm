@@ -27,6 +27,7 @@ use vars qw(@EXPORT @ISA);
 	   &registroEntreFechas
 	   &insertarNota
 	   &armarPaginas
+	   &armarPaginasPorRenglones
 	   &cantidadRenglones
 	   &prestamosAnual
 	   &cantidadUsuarios
@@ -307,6 +308,21 @@ sub cantidadRenglones{
 sub armarPaginas{
 	my ($cant,$actual)=@_;
 	my $renglones = cantidadRenglones();
+	my $paginas = 0;
+	if ($renglones != 0){
+		$paginas= $cant % $renglones;}
+	if  ($paginas == 0){
+        	$paginas= $cant /$renglones;}
+	else {$paginas= (($cant - $paginas)/$renglones) +1};
+	my @numeros=();
+	for (my $i=1; ($paginas >1 and $i <= $paginas) ; $i++ ) {
+		 push @numeros, { number => $i, actual => ($i!=$actual)}
+	};
+	return(@numeros);
+}
+
+sub armarPaginasPorRenglones {
+	my ($cant,$actual,$renglones)=@_;
 	my $paginas = 0;
 	if ($renglones != 0){
 		$paginas= $cant % $renglones;}
@@ -762,8 +778,13 @@ sub prestamos{
 		$data->{'date_due'}=format_date($data->{'date_due'});
 		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+		
+		#Se marcan los prestamos vencidos
+		if ($flag lt 0){$data->{'vencido'}='1';}
+		#
+		
 		if ($estado eq "VE"){
-			if ($flag lt 0){
+				if ($flag lt 0){
 				push(@results,$data);
 			}
 		}

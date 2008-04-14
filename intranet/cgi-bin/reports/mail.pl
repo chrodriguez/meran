@@ -36,21 +36,15 @@ my $input = new CGI;
 my $branch = $input->param('branch');
 
 # my $today=ParseDate('today');
-my $tipo= $input->param('tipo'); # $tipo=0 prestamos vencidos/$tipo=1 reservas para ejemplar.
 my $mensaje; # mensaje que depende del tipo de consulta.
 my $mailSubject; # mensaje para el asunto.
 my $count;
 my $result;
-if($tipo){
+
 	($count,$result)=mailreservas($branch);
 	$mensaje =C4::Context->preference("reserveMessage");
 	$mailSubject=C4::Context->preference("reserveSubject")
-}
-else{
-	($count,$result)=mailissues($branch);
-	$mensaje =C4::Context->preference("mailMessage");
-	$mailSubject=C4::Context->preference("mailSubject");
-}
+
 
 my $branchname=getbranchname($branch);
 $mailSubject=~ s/BRANCH/$branchname/;
@@ -74,7 +68,7 @@ for (my $i=0;$i<$count;$i++){
                                                                                                                              
 		my $unititle=$result->[$i]{'unititle'};
 		$mailMessage =~ s/UNITITLE/$unititle/;
-        	if ($tipo){
+
 			my $dateInicio=format_date($result->[$i]{'notificationdate'});
         		$mailMessage =~ s/a1/$dateInicio/;
 			my $dateFin= format_date($result->[$i]{'reminderdate'});
@@ -85,12 +79,6 @@ for (my $i=0;$i<$count;$i++){
 			$mailMessage =~ s/a3/$horaFin/;
 			my $author= $result->[$i]{'author'};
 			$mailMessage =~ s/AUTHOR/$author/;
-		}
-		else{
-			my $date=$result->[$i]{'vencimiento'};
-			$date=format_date($date);
-        		$mailMessage =~ s/DATE/$date/;
-		}
 	                                                                                                                     
 		$mailMessage =~ s/BRANCH/$branchname/;
 
@@ -107,9 +95,5 @@ for (my $i=0;$i<$count;$i++){
 
 my $input = new CGI;
 
-if($tipo){
 	print $input->redirect("reservas.pl?branch=$branch");
-}
-else{
-	print $input->redirect("prestamos.pl?branch=$branch");
-}
+

@@ -29,7 +29,9 @@ use C4::Date;
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor &cambiarLibreDeuda);
+@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor &cambiarLibreDeuda 
+&quitarduplicados
+);
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
@@ -537,6 +539,24 @@ sub cambiarLibreDeuda(){
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("update systempreferences set value=? where variable='libreDeuda'");
 	$sth->execute($valor);
+}
+
+
+=item
+quitarduplicados
+simplemente devuelve el arreglo que recibe sin elementos duplicados
+=cut
+sub quitarduplicados (){
+my  (@arreglo)=@_;
+my @arreglosin=();
+for(my $i=0;$i<scalar(@arreglo);$i++){
+	my $ok=1;
+	for(my $j=0;$j<scalar(@arreglosin);$j++){
+	if ($arreglo[$i] == $arreglosin[$j] ){$ok=0;}
+	}
+	if ($ok eq 1) {push(@arreglosin, $arreglo[$i] );}
+}
+return (@arreglosin);
 }
 
 1;

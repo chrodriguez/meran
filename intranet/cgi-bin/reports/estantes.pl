@@ -30,7 +30,7 @@ use C4::AR::Estadisticas;
 use C4::AR::Utilidades;
 use C4::Koha;
 use C4::BookShelves;
-use ooolib;
+use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
@@ -54,7 +54,7 @@ foreach my $she (keys %shelflist) {
 push @select_shelfs, 'SIN SELECCIONAR';
                                                                                                                              
 my $CGIshelf=CGI::scrolling_list(      -name      => 'shelf',
-                                        -id        => 'shelf',
+					-id        => 'shelf',
                                         -values    => \@select_shelfs,
                                         -defaults  => $shelf,
                                         -labels    => \%select_shelfs,
@@ -63,38 +63,6 @@ my $CGIshelf=CGI::scrolling_list(      -name      => 'shelf',
 					default    =>'SIN SELECCIONAR'
                                  );
 #Fin: 
-
-
-#Genero la hoja de calculo Openoffice
-my $sheet=new ooolib("sxc");
-
-$sheet->oooSet("builddir","./plantillas");
-$sheet->oooSet("title","Reporte de Estantes");
-$sheet->oooSet("author","KOHA");
-$sheet->oooSet("subject","Reporte");
-$sheet->oooSet("bold", "on");
-my $pos=1;
-$sheet->oooSet("text-size", 12);
-$sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", GetShelfName('',$shelf) );
-$sheet->oooSet("text-size", 10);
-$pos++;
-
-$sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Estantes");
-$sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", "Títulos");
-$sheet->oooSet("cell-loc", 3, $pos);
-$sheet->oooData("cell-text", "Ejemplares");
-$sheet->oooSet("cell-loc", 4, $pos);
-$sheet->oooData("cell-text", "No Disponibles");
-$sheet->oooSet("cell-loc", 5, $pos);
-$sheet->oooData("cell-text", "Para Prestar");
-$sheet->oooSet("cell-loc", 6, $pos);
-$sheet->oooData("cell-text", "Para Sala");
-$sheet->oooSet("bold", "off");
-$pos++;
-##
 
 my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || ""; 
@@ -115,13 +83,14 @@ my $ejemplarestot=0;
 my $unavailabletot=0;
 my $forloantot=0;
 my $notforloantot=0;
-        my (%shelfcontentslist)= GetShelfContentsShelf($env,'public',$shelf);
-
+   
+my (%shelfcontentslist)= GetShelfContentsShelf($env,'public',$shelf);
 #para los subestantes
-       my @shelvesloopshelves;
-	my @key;
-	@key=sort { noaccents($shelfcontentslist{$a}->{'shelfname'} ) cmp noaccents($shelfcontentslist{$b}->{'shelfname'} ) } keys(%shelfcontentslist);
-	my $class='par';       
+my @shelvesloopshelves;
+my @key;
+@key=sort { noaccents($shelfcontentslist{$a}->{'shelfname'} ) cmp noaccents($shelfcontentslist{$b}->{'shelfname'} ) } keys(%shelfcontentslist);
+my $class='par';
+
 foreach my $element (@key) {
                 my %line;
 		$line{'clase'}= $class;
@@ -139,45 +108,15 @@ foreach my $element (@key) {
 	$forloantot+=$line{'forloan'};
 	$notforloantot+=$line{'notforloan'};
 
-	##Lleno los datos
-	 $sheet->oooSet("cell-loc", 1, $pos);
-	 $sheet->oooData("cell-text", $line{'shelfname'});
-	 $sheet->oooSet("cell-loc", 2, $pos);
-         $sheet->oooData("cell-float", $line{'titulos'});
-	 $sheet->oooSet("cell-loc", 3, $pos);
-	 $sheet->oooData("cell-float", $line{'ejemplares'});
-	 $sheet->oooSet("cell-loc", 4, $pos);
-         $sheet->oooData("cell-float", $line{'unavailable'});
-	 $sheet->oooSet("cell-loc", 5, $pos);
-         $sheet->oooData("cell-float", $line{'forloan'});
-	 $sheet->oooSet("cell-loc", 6, $pos);
-	 $sheet->oooData("cell-float", $line{'notforloan'});
-	 $pos++;
-	##
-                push (@shelvesloopshelves, \%line);}
+                push (@shelvesloopshelves, \%line);
+}
 
-	#TOTALES
-	
-	$sheet->oooSet("bold", "on");
-	$sheet->oooSet("cell-loc", 1, $pos);
-	$sheet->oooData("cell-text", "Totales");
-	$sheet->oooSet("cell-loc", 2, $pos);
-	$sheet->oooData("cell-float", $titulostot);
-	$sheet->oooSet("cell-loc", 3, $pos);
-	$sheet->oooData("cell-float", $ejemplarestot);
-	$sheet->oooSet("cell-loc", 4, $pos);
-	$sheet->oooData("cell-float", $unavailabletot);
-	$sheet->oooSet("cell-loc", 5, $pos);
-	$sheet->oooData("cell-float", $forloantot);
-	$sheet->oooSet("cell-loc", 6, $pos);
-	$sheet->oooData("cell-float", $notforloantot);
-        $sheet->oooSet("bold", "off");
-	$pos++;
 
-	#
 
-my $name='estantes-'.$loggedinuser;
-$sheet->oooGenerate($name);
+#Generar Planilla
+my $planilla=generar_planilla_estantes(\@shelvesloopshelves,$loggedinuser,GetShelfName('',$shelf));
+#
+
 
 my $cant=scalar(@shelvesloopshelves);
 $template->param( 
@@ -185,7 +124,7 @@ $template->param(
 			cantidad         => $cant,
 			shelvesloopshelves => \@shelvesloopshelves,
 			shelf => $shelf,
-			name => $name,
+			name => $planilla,
 			titulostot => $titulostot,
 			ejemplarestot =>$ejemplarestot,
 			unavailabletot =>$unavailabletot,

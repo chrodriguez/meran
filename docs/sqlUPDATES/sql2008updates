@@ -104,4 +104,12 @@ VALUES ('showHistoricReserves', '1', 'Muestra (valor = 1) o no el historico de r
 -- el campo sanctiotypecode puede ser NULL si se hace una reservar y no se retirada y luego 
 -- se sanciona al usuario
 
-ALTER TABLE `historicSanctions` CHANGE `sanctiontypecode` `sanctiontypecode` INT( 11 ) NULL DEFAULT '0'
+ALTER TABLE `historicSanctions` CHANGE `sanctiontypecode` `sanctiontypecode` INT( 11 ) NULL DEFAULT '0';
+
+
+-- Se agrega una preferencia y se actualiza otra para el aviso de prestamos vencidos
+
+update systempreferences set value='Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n',explanation='Mensaje del mail' where variable='mailMessage'
+
+
+Insert into systempreferences (variable,value,explanation) values ('mailMensajeVencido',' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.','Como se envia el vencimiento de un ejemplar por mail');

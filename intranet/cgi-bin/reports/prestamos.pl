@@ -27,9 +27,11 @@ use C4::Search;
 use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Koha;
+use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
+my $msg = $input->param('msg') || "";
 my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
@@ -74,6 +76,7 @@ my $estado=$input->param('estado')|| 'TO';
 my $ini;
 my $pageNumber;
 my $cantR=cantidadRenglones();
+if ($input->param('renglones')){$cantR=$input->param('renglones');}
 
 if (($input->param('ini') eq "")){
         $ini=0;
@@ -86,10 +89,13 @@ if (($input->param('ini') eq "")){
 
 my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado);#Prestamos sin devolver (vencidos y no vencidos)
 
+
+my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
 # my $cantidad=cantidadPrestamos($branch,$estado); se saco ya que la otra funcion toma cuenta todos los registro dependiendo el estado del prestamos.
 
 
-my @numeros=armarPaginas($cantidad);
+my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
+
 my $paginas = scalar(@numeros)||1;
 my $pagActual = $input->param('ini')||1;
 
@@ -111,14 +117,20 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
                                 ant     => $ant)}
 }
 
-
 $template->param( 	estado		 => $estado,
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
 			numeros		 => \@numeros,
+			ini		 => $pagActual,
 			branch           => $branch,
-			orden		 => $orden
+			orden		 => $orden,
+			renglones        => $cantR,
+			msg		 => $msg,
+			planilla	=> $planilla
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+
+

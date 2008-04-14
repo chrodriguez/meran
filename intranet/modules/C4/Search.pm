@@ -133,6 +133,7 @@ on what is passed to it, it calls the appropriate search function.
 	&canDeleteItem
 	&haveReserves
 	&mailissues
+	&mailissuesforborrower
 	&mailreservas
 	&firstbulk
 	&editorsname
@@ -4274,6 +4275,31 @@ sub mailissues {
 	LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
 	WHERE issues.returndate IS NULL AND issues.date_due <= now( ) AND issues.branchcode = ? ");
     	$sth->execute($branch);
+  	my @result;
+  	my @datearr = localtime(time);
+	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
+  	while (my $data = $sth->fetchrow_hashref) {
+		#Para que solo mande mail a los prestamos vencidos
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+		if ($flag lt 0){
+			#Solo ingresa los prestamos vencidos a el arreglo a retornar
+    			push @result, $data;
+		}
+  	}
+  	$sth->finish;
+  	return(scalar(@result), \@result);
+}
+
+sub mailissuesforborrower {
+  	my ($branch,$bornum)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $sth=$dbh->prepare("SELECT * 
+	FROM issues
+	LEFT JOIN items ON items.itemnumber = issues.itemnumber
+	LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+	WHERE issues.returndate IS NULL AND issues.date_due <= now( ) AND issues.branchcode = ? AND issues.borrowernumber = ? ");
+    	$sth->execute($branch,$bornum);
   	my @result;
   	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	

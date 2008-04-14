@@ -28,7 +28,7 @@ use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Koha;
 use C4::AR::StatGraphs;
-use ooolib;
+use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
