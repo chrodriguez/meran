@@ -40,7 +40,7 @@ use CGI;
 use C4::Search;
 use Date::Manip;
 use C4::Date;
-use C4::Reserves2;
+# use C4::Reserves2;
 use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
 use C4::Koha;
