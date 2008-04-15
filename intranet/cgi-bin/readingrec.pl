@@ -31,20 +31,28 @@ use CGI;
 use C4::Search;
 use C4::AR::Issues;
 use HTML::Template;
+use C4::AR::Estadisticas;
 my $input=new CGI;
 
 
 my $bornum=$input->param('bornum');
 #get borrower details
 my $data=borrdata('',$bornum);
-my $orden=$input->param('order')||"date_due desc";
-my $limit=$input->param('limit');
-if ($limit eq 'full'){
-  $limit=0;
-} else {
-  $limit=50;
+
+my $ini;
+my $pageNumber;
+my $cantR=cantidadRenglones();
+
+if (($input->param('ini') eq "")){
+        $ini=0;
+	$pageNumber=1;
 }
-my ($count,$issues)=allissues($bornum,$orden,$limit);
+else {
+	$ini= ($input->param('ini')-1)* $cantR;
+	$pageNumber= $input->param('ini');
+};
+
+my ($cant,$issues)=allissues($bornum,$ini,$cantR);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
@@ -57,7 +65,7 @@ my ($template, $loggedinuser, $cookie)
 
 my @loop_reading;
 my $classe='par';
-for (my $i=0;$i<$count;$i++){
+for (my $i=0;$i<$cantR;$i++){
  	my %line;
 	$line{title}=$issues->[$i]->{'title'};
 	$line{unititle}=$issues->[$i]->{'unititle'};
@@ -68,12 +76,11 @@ for (my $i=0;$i<$count;$i++){
 	$line{itemnumber}=$issues->[$i]->{'itemnumber'};
 	$line{bulk}=$issues->[$i]->{'bulk'};
 	$line{barcode}=$issues->[$i]->{'barcode'};
- 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
- 	my $df=C4::AR::Issues::fechaDeVencimiento($issues->[$i]->{'itemnumber'},$issues->[$i]->{'date_due'});
-    	$line{'date_fin'} = format_date($df);
+ 	$line{date_due}=$issues->[$i]->{'date_due'};
+    	$line{date_fin} = $issues->[$i]->{'date_fin'};
 	$line{date_renew}="-";
- 	if ($issues->[$i]->{'renewals'}){$line{date_renew}=format_date($issues->[$i]->{'lastreneweddate'});}
-	$line{returndate}=format_date($issues->[$i]->{'returndate'});
+ 	if ($issues->[$i]->{'renewals'}){$line{date_renew}=$issues->[$i]->{'lastreneweddate'};}
+	$line{returndate}=$issues->[$i]->{'returndate'};
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	($line{grupos})=Grupos($issues->[$i]->{'biblionumber'},'intra');
 	if ( $classe eq 'par' ) { $classe = 'impar'; } else {$classe = 'par'; }
@@ -81,15 +88,41 @@ for (my $i=0;$i<$count;$i++){
 	push(@loop_reading,\%line);
 }
 
-$template->param(title => $data->{'title'},
+my @numeros=armarPaginas($cant,$pageNumber);
+my $paginas = scalar(@numeros)||1;
+my $pagActual = $input->param('ini')||1;
+$template->param( paginas   => $paginas,
+		  actual    => $pagActual);
+
+if ( $cant > $cantR ){
+#Seteo las flechas de siguiente y anterior
+       	my $sig = $pageNumber+1;;
+        if ($sig <= $paginas){
+       	         $template->param(
+               	                ok    =>'1',
+                       	        sig   => $sig);
+        };
+
+	if ($sig > 2 ){
+               my $ant = $pageNumber-1;
+               $template->param(
+                               ok2     => '1',
+                               ant     => $ant)
+	}
+}
+
+$template->param(
+		cant  => $cant,
+		numeros => \@numeros,
+		title => $data->{'title'},
 		initials => $data->{'initials'},
 		surname => $data->{'surname'},
 		bornum => $bornum,
-		limit => $limit,
 		firstname => $data->{'firstname'},
 		cardnumber => $data->{'cardnumber'},
-		showfulllink => ($count > 50),
-		loop_reading => \@loop_reading);
+		showfulllink => ($cant > 50),
+		loop_reading => \@loop_reading
+		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

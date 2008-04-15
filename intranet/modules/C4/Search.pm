@@ -2849,7 +2849,7 @@ sub allissues {
 
   my $querySelectCount = " SELECT count(*) as cant ";
 
-  my $querySelect= " SELECT b.title,b.biblionumber,b.author,iss.date_due,iss.returndate,volumeddesc ";
+  my $querySelect= " SELECT b.title,b.biblionumber,b.author,iss.date_due,iss.returndate,volumeddesc, iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
 
   my $queryFrom = " FROM items i INNER JOIN biblioitems bi";
   $queryFrom .= " ON (i.biblioitemnumber = bi.biblioitemnumber) ";
@@ -2883,9 +2883,11 @@ sub allissues {
   	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
    
    	$data->{'clase'}=$clase;
+	my $df=C4::AR::Issues::fechaDeVencimiento($data->{'itemnumber'},$data->{'date_due'});
+	$data->{'date_fin'}=format_date($df);
 	$data->{'date_due'}=  format_date($data->{'date_due'});
 	$data->{'returndate'}=  format_date($data->{'returndate'});
-
+	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'});
     	my $author=getautor($data->{'author'});
     	$data->{'author'} = $author->{'completo'};
     	$data->{'id'} = $author->{'id'};

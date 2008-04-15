@@ -10,12 +10,29 @@
 <tr><td class="inputFontNormal" ><b>Tarjeta de identificaci&oacute;n :</b> <!-- TMPL_VAR NAME=cardnumber --></td></tr>
 </table>
 <br>
-<!-- TMPL_IF NAME=showfulllink -->
-<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=full">Full output</a>
-<br/>
-<!-- /TMPL_IF -->
-<br/>
+
 <center>
+<!-- TMPL_IF NAME="ok2" -->
+	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='ant' -->">
+	<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif border=0></a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<a class="highnumber" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR NAME=number -->">
+	<u><!-- TMPL_VAR name=number --></u></a>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='sig' -->">
+	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- /TMPL_IF -->
+
+
+<p class="inputFontNormal"> 
+	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
+	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+</p><br>
+
 <TABLE  CELLSPACING=0  CELLPADDING=0 border=0 width="100%">
 <TR VALIGN=middle class="tablaresultadoTitle">
 	<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
