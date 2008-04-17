@@ -523,7 +523,7 @@ sub verificarValor(){
 	
 	#$valor=~ s/'/\\'/g; 
 	#$valor=~ s/-/\\-/g;
-	$valor=~ s/%|"|=|\*|;|-(<,>)//g;	
+	$valor=~ s/%|"|=|\*|-(<,>)//g;	
 	$valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
 	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 	return $valor;

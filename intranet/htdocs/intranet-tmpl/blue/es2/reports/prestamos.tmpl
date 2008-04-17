@@ -78,7 +78,18 @@ function checkedAll(){
 			Cantidad de resultados por p&aacute;gina:
 		</td>
 		<td>
-			<input type="text" name='renglones' id='renglones' value="<!-- TMPL_VAR NAME=renglones  -->">
+			<select name="renglones" id="renglones">
+				<option value="5" id="5">5</option>
+				<option value="10" id="10">10</option>
+				<option value="15" id="15">15</option>
+				<option value="20" id="20">20</option>
+				<option value="25" id="25">25</option>
+				<option value="50" id="50">50</option>
+				<option value="100" id="100">100</option>
+				<option value="todos" id="todos" selected>Todos</option>
+			</select>
+			<script>document.getElementById('renglones').value="<!-- TMPL_VAR NAME=renglones  -->";</script>
+
 		</td>
 		<td>
 		<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="planilla" -->">Generar planilla 
@@ -130,7 +141,7 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->> Nombre</a>
 		</th>
 		<th>
-			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->>N&uacute;mero de socio</a>
+			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->>Tarjeta de Id.</a>
 		</th>
 
 		<th>
@@ -140,7 +151,7 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->>Fecha de prestamo</a>
 		</th>
 		<th>
-			<a class="inputFontNormal">Fecha de vencimiento</a>
+			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=vencimiento&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->>Fecha de vencimiento</a>
 		</th>
 		<th>
 			<a class="inputFontNormal" href=prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->>C&oacute;digo de barra</a>

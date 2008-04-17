@@ -274,6 +274,7 @@ sub disponibilidad{
 		push(@results,$data);
         }
         return (scalar(@results),@results);
+	   &reservas
 }
 
 sub disponibilidadCantidad{
@@ -747,9 +748,10 @@ sub prestamos{
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
 		    inner join items on (issues.itemnumber = items.itemnumber)
-                    where issues.branchcode=? and returndate is NULL
-		    order by ($orden)";
-# 		    limit  $ini,$fin";
+                    where issues.branchcode=? and returndate is NULL ";
+
+#		order by ($orden)";
+
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
 	my @datearr = localtime(time);
@@ -788,8 +790,15 @@ sub prestamos{
 			push(@results,$data);
 		}
         }
+
+# Da el ORDEN al arreglo
+	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+	@results=@sorted;
+#
 	my $cantReg=scalar(@results);
-	if( $cantReg > $fin){
+
+#Se chequean si se quieren devolver todos
+	if(($cantReg > $fin)&&($fin ne "todos")){
 		my $cantFila=$fin-1+$ini;
 		my @results2;
 		if($cantReg < $cantFila ){

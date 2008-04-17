@@ -93,7 +93,7 @@ my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado);#Pres
 my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
 # my $cantidad=cantidadPrestamos($branch,$estado); se saco ya que la otra funcion toma cuenta todos los registro dependiendo el estado del prestamos.
 
-
+if ($cantR ne 'todos') {
 my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
 
 my $paginas = scalar(@numeros)||1;
@@ -117,12 +117,14 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
                                 ant     => $ant)}
 }
 
+$template->param( 	numeros		 => \@numeros,
+			ini		 => $pagActual);
+}
+
 $template->param( 	estado		 => $estado,
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
-			numeros		 => \@numeros,
-			ini		 => $pagActual,
 			branch           => $branch,
 			orden		 => $orden,
 			renglones        => $cantR,
