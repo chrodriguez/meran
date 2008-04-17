@@ -736,7 +736,7 @@ sub cantidadPrestamos{
 }
 
 sub prestamos{
-        my ($branch,$orden,$ini,$fin,$estado)=@_;
+        my ($branch,$orden,$ini,$fin,$estado,$begindate,$enddate)=@_;
         my $dbh = C4::Context->dbh;
         my @results;
         my $clase='par';
@@ -750,10 +750,15 @@ sub prestamos{
 		    inner join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode=? and returndate is NULL ";
 
-#		order by ($orden)";
+	#Fechas
+	if (($begindate ne '') and ($enddate ne '')) { $query.=" AND issues.date_due BETWEEN  ?  AND  ? ";}
+	#
 
         my $sth=$dbh->prepare($query);
-        $sth->execute($branch);
+	
+	if (($begindate ne '') and ($enddate ne '')) {  $sth->execute($branch,format_date_in_iso($begindate),format_date_in_iso($enddate));}
+	else { $sth->execute($branch);}
+	
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){

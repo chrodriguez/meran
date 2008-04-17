@@ -72,6 +72,10 @@ else {$orden=$input->param('orden')};
 
 my $estado=$input->param('estado')|| 'TO';
 
+#Fechas 
+my $begindate = $input->param('begindate') || "";
+my $enddate = $input->param('enddate') || "";
+
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $ini;
 my $pageNumber;
@@ -87,7 +91,7 @@ if (($input->param('ini') eq "")){
 };
 #FIN inicializacion
 
-my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado);#Prestamos sin devolver (vencidos y no vencidos)
+my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado,$begindate,$enddate);#Prestamos sin devolver (vencidos y no vencidos)
 
 
 my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
@@ -129,7 +133,9 @@ $template->param( 	estado		 => $estado,
 			orden		 => $orden,
 			renglones        => $cantR,
 			msg		 => $msg,
-			planilla	=> $planilla
+			planilla	=> $planilla,
+			begindate	 => $begindate,
+			enddate		=> $enddate
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
