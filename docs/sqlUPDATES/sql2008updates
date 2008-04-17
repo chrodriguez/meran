@@ -109,7 +109,7 @@ ALTER TABLE `historicSanctions` CHANGE `sanctiontypecode` `sanctiontypecode` INT
 
 -- Se agrega una preferencia y se actualiza otra para el aviso de prestamos vencidos
 
-update systempreferences set value='Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n',explanation='Mensaje del mail' where variable='mailMessage'
+update systempreferences set value='Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n',explanation='Mensaje del mail' where variable='mailMessage';
 
 
 Insert into systempreferences (variable,value,explanation) values ('mailMensajeVencido',' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.','Como se envia el vencimiento de un ejemplar por mail');

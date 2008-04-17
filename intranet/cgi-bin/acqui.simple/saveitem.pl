@@ -79,7 +79,6 @@ my $biblioitem       = {
     country           => $input->param('country')?$input->param('country'):"",
     language          => $input->param('language')?$input->param('language'):"",
     classification    => $input->param('level')?$input->param('level'):"",
-    
     illus             => $input->param('illus')?$input->param('illus'):"",
     url               => $input->param('url')?$input->param('url'):"",
     dewey             => $input->param('dewey')?$input->param('dewey'):"",

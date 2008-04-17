@@ -1667,7 +1667,9 @@ place		= ?,
 idLanguage      = ?,
 idCountry       = ?,
 idSupport       =  ?,
-fasc       =  ?
+fasc       	=  ?,
+issn       	=  ?,
+lccn       	=  ?
 
 where biblioitemnumber = ?";
 
@@ -1675,7 +1677,7 @@ where biblioitemnumber = ?";
        $sth2->execute( $biblioitem->{'itemtype'},$biblioitem->{'url'}, $biblioitem->{'publicationyear'}, $biblioitem->{'classification'},
     $biblioitem->{'dewey'},$biblioitem->{'subclass'}, $biblioitem->{'illus'}, $biblioitem->{'pages'}, $biblioitem->{'volumeddesc'}, 
     $biblioitem->{'volume'}, $biblioitem->{'bnotes'}, $biblioitem->{'size'}, $biblioitem->{'seriestitle'}, $biblioitem->{'number'}, 
-    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'}  ,$biblioitem->{'biblioitemnumber'});
+    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'}  ,$biblioitem->{'issn'},$biblioitem->{'lccn'}, $biblioitem->{'biblioitemnumber'});
 	$sth2->finish;
 
 } # sub modbibitem
@@ -1777,8 +1779,9 @@ place		= ?,
 idLanguage      = ?,
 idCountry       = ?,
 idSupport       =  ?,
-fasc		= ?
-
+fasc		= ?,
+issn		= ?,
+lccn		= ?
 where biblioitemnumber = ?";
 
 $datos->{'publisher'}->{'publisher'}=~s/\|/\n/g;
@@ -1790,7 +1793,7 @@ updateISBNs($biblioitem->{'biblioitemnumber'},$datos->{'isbns'}->{'isbn'});
        $sth2->execute( $biblioitem->{'itemtype'},$biblioitem->{'url'}, $biblioitem->{'publicationyear'}, $biblioitem->{'classification'},
     $biblioitem->{'dewey'},$biblioitem->{'subclass'}, $biblioitem->{'illus'}, $biblioitem->{'pages'}, $biblioitem->{'volumeddesc'}, 
     $biblioitem->{'volume'}, $biblioitem->{'bnotes'}, $biblioitem->{'size'}, $biblioitem->{'seriestitle'}, $biblioitem->{'number'}, 
-    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'} ,$biblioitem->{'biblioitemnumber'});
+    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'} ,$biblioitem->{'issn'} ,$biblioitem->{'lccn'} , $biblioitem->{'biblioitemnumber'});
 	$sth2->finish;
 
 } 
@@ -2115,18 +2118,17 @@ sub OLDnewbiblioitem {
 		seriestitle	 = ?,		idLanguage   	 = ?,
 		idCountry	 = ?,		idSupport   	 = ? ,  
 		fasc        	 = ?,		indice		 = ?");
-	$sth->execute($bibitemnum,		$biblioitem->{'biblionumber'},
+	$sth->execute(		$bibitemnum,				$biblioitem->{'biblionumber'},
 				$biblioitem->{'volume'},		$biblioitem->{'number'},
 				$biblioitem->{'classification'},	$biblioitem->{'itemtype'},
-			        $biblioitem->{'url'},	
-				$biblioitem->{'issn'},			$biblioitem->{'dewey'},
-			        $biblioitem->{'subclass'},		$biblioitem->{'publicationyear'},
-			   	$biblioitem->{'volumedate'},
+			        $biblioitem->{'url'},			$biblioitem->{'issn'},
+				$biblioitem->{'dewey'},		        $biblioitem->{'subclass'},
+				$biblioitem->{'publicationyear'},   	$biblioitem->{'volumedate'},
 				$biblioitem->{'volumeddesc'},		$biblioitem->{'illus'},
 				$biblioitem->{'pages'},			$biblioitem->{'bnotes'},
 				$biblioitem->{'size'},	 		$biblioitem->{'lccn'},
 				$biblioitem->{'marc'},			$biblioitem->{'place'},
-				$biblioitem->{'seriestitle'},	 		$biblioitem->{'language'},
+				$biblioitem->{'seriestitle'},	 	$biblioitem->{'language'},
 				$biblioitem->{'country'},		$biblioitem->{'support'}, 
 				$biblioitem->{'fasc'},			$biblioitem->{'indice'});
    $sth->finish;
