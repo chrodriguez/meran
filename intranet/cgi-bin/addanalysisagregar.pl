@@ -47,12 +47,7 @@ my $mensajeError=$input->param('mensajeError');
 
 my $biblioitemcount;
 my @biblioitems;
-#my $bibnumitems=$input->param('bibnumitems');
-#my $data=bibitemdata($bibnumitems);
-#my @result;
-#$result[0]=$data;
-#my @result2;
-#my (@result2)=&BiblioAnalysisData($bibnum);
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "addanalysisagregar.tmpl",
 			     query => $input,
@@ -61,18 +56,22 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
+
 ( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($bibnum);
 
 
-for ( my $i = 0 ; $i < $biblioitemcount ; $i++ ) {
-if ($biblioitems[$i]->{'biblioitemnumber'} eq $bibitemnumber){
-	  $biblioitems[$i]->{'selected'}  = 1;}
-					}
+for ( my $i = 0 ; $i < $biblioitemcount ; $i++ ){
+	if ($biblioitems[$i]->{'biblioitemnumber'} eq $bibitemnumber){
+		$biblioitems[$i]->{'selected'}  = 1;
+	}
+					
+}
 
-$template->param (  biblionumber => $bibnum,
-		    biblioitemnumber => $bibitemnumber,
-		    reload => $reload,
-		    mensajeError => $mensajeError,
+
+$template->param (  	biblionumber => $bibnum,
+		    	biblioitemnumber => $bibitemnumber,
+		    	reload => $reload,
+		    	mensajeError => $mensajeError,
                     );
 
 output_html_with_http_headers $input, $cookie, $template->output;

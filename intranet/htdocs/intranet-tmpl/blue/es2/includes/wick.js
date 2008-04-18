@@ -261,7 +261,7 @@ function smartInputMatch(cleanValue, value) {
 //Miguel 28/03/07 - Cambie toLowerCase a toUpperCase, poq pedian que se muestre el nombre del autor con mayusculas
 function simplify(s) {
 return s.toUpperCase().replace(/^[ \s\f\t\n\r]+/,'').replace(/[ \s\f\t\n\r]+$/,'');
-//.replace(/[é,è,ê,ë,\u00E9,\u00E8,\u00EA,\u00EB]/gi,"e").replace(/[à,â,\u00E0,\u00E2]/gi,"a").
+//.replace(/[ÔøΩ,ÔøΩ,ÔøΩ,ÔøΩ,\u00E9,\u00E8,\u00EA,\u00EB]/gi,"e").replace(/[ÔøΩ,ÔøΩ,\u00E0,\u00E2]/gi,"a").
 }//simplify
 
 function getUserInputToMatch(s) {

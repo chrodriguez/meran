@@ -50,8 +50,11 @@ my $subjectheadings=$input->param('subjectheadings'); #TEMA
 my $classification=$input->param('classification');
 my $parts=$input ->param ('parts');
 my $time=$input->param('timestamp');
+my $resumen=$input->param('resumen');
+my $url=$input->param('url');
+my $keywords=$input->param('keywords'); #analyticalauthors
 
-&BiblioAnalysisUpdate($analyticalnumber,$analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts,$time);
+&BiblioAnalysisUpdate($analyticalnumber,$analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts,$time,$resumen,$url,$keywords);
 
 print $input->redirect("addanalysis.pl?bibnum=$bibnum&bibnumitems=$bibnumitems");
 

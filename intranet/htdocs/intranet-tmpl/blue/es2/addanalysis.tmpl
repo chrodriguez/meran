@@ -213,7 +213,24 @@ Tipo de ejemplar:<b> <!-- TMPL_VAR NAME="description" --></b>
  		<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
  	<!-- /TMPL_LOOP --></b><br>
 <!-- /TMPL_IF -->
-																 
+		
+<!-- TMPL_IF name="url" --><br>
+		URL:<b> <!-- TMPL_VAR NAME="url" --></b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="resumen" --><br>
+		Resumen:<b><br><textarea cols="50" rows="3" READONLY>
+					<!-- TMPL_VAR NAME="resumen" -->
+				</textarea></b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="keywords" --><br>
+		Palabras Claves:<b> 
+ 	<!-- TMPL_LOOP NAME="KEYWORDS" -->                      
+ 		<a Href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"><!-- TMPL_VAR NAME="keyword" --></a><!-- TMPL_VAR NAME=separator -->
+ 	<!-- /TMPL_LOOP --></b><br>
+<!-- /TMPL_IF -->
+														 
 <!-- TMPL_IF name="classification" -->
 		Clasificaci&oacute;n:<b> <!-- TMPL_VAR NAME="classification" --></b>
 <!-- /TMPL_IF -->

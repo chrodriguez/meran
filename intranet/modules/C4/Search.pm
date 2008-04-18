@@ -1571,6 +1571,73 @@ return($count,@resFinal);
 
 } 
 
+
+#AnalyticalKeywordSearch
+# busca los temas
+#
+sub AnalyticalKeywordSearch{
+
+my ($env,$type,$search,$num,$offset,$orden,$from)=@_;
+
+my $dbh = C4::Context->dbh;
+my $query = '';
+my @bind = ();
+my @results;
+my @key=split(' ',$search->{'analyticalkeyword'});
+
+my $count=@key;
+
+my $i=1;
+#$query="SELECT * FROM temas where((temas.nombre like ? or temas.nombre like ?)";
+# $query="Select distinct temas.id, temas.nombre from bibliosubject inner join temas on temas.id=bibliosubject.subject where((temas.nombre like ? or temas.nombre like ?)";
+
+$query="Select distinct temas.id, temas.nombre from temas where((temas.nombre like ? or temas.nombre like ?)";
+
+@bind=("$key[0]%","% $key[0]%");
+
+while ($i < $count){
+	$query .= " and (temas.nombre like ? or temas.nombre like ?)";
+	push(@bind,"$key[$i]%","% $key[$i]%");
+	$i++;
+}
+$query .= ")";
+
+my $sth=$dbh->prepare($query);
+$sth->execute(@bind);
+ 
+my $i=0;
+my $limit= $num+$offset;
+
+while (my $data=$sth->fetchrow_hashref){
+    push @results, $data;
+    $i++;
+}
+
+$sth->finish;
+
+my $count=$i;
+
+
+my $countFinal=0;
+my @resFinal;
+($offset||($offset=0));
+
+
+for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i)
+{ 
+# printf L $i."nro\n";
+# printf L $results[$i]{'id'}."nro\n";
+	$resFinal[$countFinal]=$results[$i];
+	$countFinal++; 
+}
+# close L;
+# print A "offset $offset limit $limit  count $count \n";
+
+return($count,@resFinal);
+
+} 
+
+
 #http://127.0.0.1/cgi-bin/koha/opac-searchresults.pl?orden=title&startfrom=15&subjectitems=economia
 #http://127.0.0.1/cgi-bin/koha/opac-searchresults.pl?criteria=subjectitems&searchinc=economia&se.x=40&se.y=16&se=Buscar
 

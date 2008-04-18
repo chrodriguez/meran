@@ -52,16 +52,29 @@ my $coma;
 my $tema;
 my $idTema;
 my $nomTema;
+
 foreach my $elem (split(",",$dat->{'subject'})) {
 	if ($len==$i){$coma=""} else {$coma=","};
 	$tema=&getTema($elem);
 	$idTema=$tema->{'id'};
 	$nomTema=$tema->{'nombre'};
         for ($nomTema) {s/^\s+//;} # delete the spaces at the begining of the string
-push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
-$i+=1;
+	push(@subjects, {subject => $idTema,nomTema=> $nomTema, separator => $coma});
+	$i+=1;
 }
+
 $dat->{'SUBJECTS'} = \@subjects;
+
+my @keywords;
+
+foreach my $elem (split(",",$dat->{'keyword'})) {
+	if ($len==$i){$coma=""} else {$coma=","};
+	for ($dat->{'keyword'}) {s/^\s+//;} # delete the spaces at the begining of the string
+	push(@keywords, {idkeyword => $dat->{'idkeyword'}, keyword=> $dat->{'keyword'}, separator => $coma});
+	$i+=1;
+}
+
+$dat->{'KEYWORDS'} = \@keywords;
 
 my @autorPPAL= &getautor($dat->{'author'});
 my @autoresAdicionales=&getautoresAdicionales($biblionumber);
@@ -70,10 +83,10 @@ $dat->{'author'}=\@autorPPAL;
 $dat->{'ADDITIONAL'}=\@autoresAdicionales;
 $dat->{'COLABS'}=\@colaboradores;
 if ($subtitlecount) {
-$dat->{'subtitle'}=" " . $subtitles->[0]->{'subtitle'};
-for (my $i = 1; $i < $subtitlecount; $i++) {
-$dat->{'subtitle'} .= ", " . $subtitles->[$i]->{'subtitle'};
-} # for
+	$dat->{'subtitle'}=" " . $subtitles->[0]->{'subtitle'};
+	for (my $i = 1; $i < $subtitlecount; $i++) {
+		$dat->{'subtitle'} .= ", " . $subtitles->[$i]->{'subtitle'};
+	} # for
 } # if
 my @results3;
 $results3[0]=$dat;
@@ -99,7 +112,8 @@ $template->param ( biblionumber => $bibnum,
 	           biblioitemnumber => $bibnumitems,
                    ANALYSIS => \@result2,
                    BIBITEM_DATA => \@result,
-		   BIBLIO_DATA => \@results3);
+		   BIBLIO_DATA => \@results3
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -47,20 +47,23 @@ my $analyticalunititle=$input->param('analysisunititle'); #Subtitulo
 my $subjectheadings=$input->param('subjectheadings'); #TEMA
 my $classification=$input->param('classification');
 my $parts=$input->param('parts');
+my $resumen=$input->param('resumen');
+my $url=$input->param('url');
+my $keywords=$input->param('keywords'); #analyticalauthors
 
 my $ok=0;
 my $string = "";
 
 # my @errors;
 if ($analyticaltitle eq ''){
-#  	push @errors,"El campo Título no puede ser nulo";
-    $string = "El campo Título no puede ser nulo. ";
+#  	push @errors,"El campo Tï¿½tulo no puede ser nulo";
+    $string = "El campo Tï¿½tulo no puede ser nulo. ";
     $ok=1;
 }
 
 if($ok == 0){
 #si esta todo ok inserto
-	&BiblioAnalysisInsert($analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts);
+	&BiblioAnalysisInsert($analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts,$resumen,$url,$keywords);
 }
 
 my $true='true';

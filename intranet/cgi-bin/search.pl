@@ -74,8 +74,8 @@ my $signature=$query->param('signature');
 my $isbn=$query->param('isbn');
 #
 if ($isbn) {#es una busqueda por isbn
-  print $query->redirect("/cgi-bin/koha/isbn.pl?isbn=$isbn");
-        }
+	print $query->redirect("/cgi-bin/koha/isbn.pl?isbn=$isbn");
+}
 
 
 
@@ -88,7 +88,7 @@ my $shelves=$query->param('shelves');
 
 if ($shelves) {#es una busqueda por estantes virtuales
   print $query->redirect("/cgi-bin/koha/shelves.pl?viewShelfName=$shelves&startfrom=0");
-	}
+}
 
 
 #Luciano: Es una busqueda por diccionario
@@ -183,27 +183,29 @@ my %search;			# Search terms. If the key is "author",
 my @forminputs;			# This is used in the form template.
 my $value = $query->param('authorid');
 if ($value) {
-my @val=&getautor($value);
-$search{'authorid'} = $value;
-$template->param(AUTORID => \@val);
-push @forminputs, {	field => 'authorid',
-			value =>$value };
+	my @val=&getautor($value);
+	$search{'authorid'} = $value;
+	$template->param(AUTORID => \@val);
+	push @forminputs, {	field => 'authorid',
+				value =>$value };
 
 } else{
-my $value = $query->param('subjectid');
-if ($value) {
-my @val=&getTema($value);
-$search{'subjectid'} = $val[0]{'id'};
-$template->param(SUBJECTID => \@val);
-push @forminputs, {	field => 'subjectid',
-			value =>$val[0]{'id'},
-			descripcion=>$val[0]{'nombre'} };
-
-}}
+	my $value = $query->param('subjectid');
+	if ($value) {
+		my @val=&getTema($value);
+		$search{'subjectid'} = $val[0]{'id'};
+		$template->param(SUBJECTID => \@val);
+		push @forminputs, {	field => 'subjectid',
+					value =>$val[0]{'id'},
+					descripcion=>$val[0]{'nombre'} 
+				};
+	}
+}
 	
 foreach my $term (qw(keyword subject author illustrator itemnumber
 		     date-before class dewey branch title abstract
-		     publisher ttype dictionary dicdetail subjectitems virtual analytical signature))  #Los X (ya no se cuantos son) ultimos los agregue yo(Matias)
+		     publisher ttype dictionary dicdetail subjectitems virtual analytical signature))  
+#Los X (ya no se cuantos son) ultimos los agregue yo(Matias)
 {
 	my $value = $query->param($term);
 	next unless defined $value && $value ne "";
@@ -299,7 +301,7 @@ foreach my $result (@results) {
     ((($n % 2) && ($result->{'clase'} = 'par' ))|| ($result->{'clase'}='impar'));
     $n++;
 if (! $search{'subjectitems'}){    
-if ($result->{'analyticalnumber'} ne ''){
+    if ($result->{'analyticalnumber'} ne ''){
     my $autorppal=  C4::Search::getautor($result->{'autorppal'});
     $result->{'apellidoppal'}= $autorppal->{'apellido'};
     $result->{'nombreppal'}= $autorppal->{'nombre'};
@@ -374,14 +376,14 @@ if ($count>$num) {
 	    push @numbers, { number => $i+1, highlight => $highlight , FORMELEMENTS => $formelements, FORMINPUTS => \@forminputs, startfrom => (($i)*($num)), opac => (($type eq 'opac') ? (1) : (0)), break => $break };
 	
     }
-}
+}#end if ($count>$num)
 
-$template->param(numbers => \@numbers);
-if (C4::Context->boolean_preference('marc') eq '1') {
-	$template->param(script => "MARCdetail.pl");
-} else {
-	$template->param(script => "detail.pl");
-}
+	$template->param(numbers => \@numbers);
+	if (C4::Context->boolean_preference('marc') eq '1') {
+		$template->param(script => "MARCdetail.pl");
+	} else {
+		$template->param(script => "detail.pl");
+	}
 
 } ############ Del if agragado por Luciano
 
