@@ -16,7 +16,7 @@ use C4::Date;
 use CGI::Util; 	# Para la función encode() (Nahuel)
 
 my $query=new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0,{borrow => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0,{borrow => 1},"intranet");
 
 my %env;
 my $missborrower;

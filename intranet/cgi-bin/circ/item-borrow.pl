@@ -20,7 +20,7 @@ use C4::AR::Issues;
 use Date::Manip;
 
 my $query=new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0,{borrow => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0,{borrow => 1},"intranet");
 $loggedinuser = getborrowernumber($loggedinuser);
 my %env;
 my @datearr = localtime(time());

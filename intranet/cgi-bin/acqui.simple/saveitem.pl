@@ -32,7 +32,7 @@ use C4::Interface::CGI::Output;
 
 
 my $input            = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1},"intranet");
 my $editBook	     =$input->param('editbook');
 my $barcode          = $input->param('barcode');
 my $biblionumber     = $input->param('biblionumber');

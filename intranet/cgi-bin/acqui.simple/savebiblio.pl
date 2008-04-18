@@ -25,7 +25,7 @@ use C4::Biblio;
 use C4::Auth;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1},"intranet");
 my $responsable=$input->param('userloggedname');
 my $biblio = {
     title       => $input->param('title'),

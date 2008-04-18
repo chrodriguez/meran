@@ -20,7 +20,7 @@ use C4::AR::Persons_Members;
 my $input = new CGI;
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired);
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"intranet");
 my $msg='';
 my @names=$input->param;
 my @data;

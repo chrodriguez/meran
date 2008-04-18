@@ -31,7 +31,7 @@ use C4::Auth;
 
 my $input = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1},"intranet");
 $loggedinuser = getborrowernumber($loggedinuser);
 
 my $itemnumber=$input->param('item');

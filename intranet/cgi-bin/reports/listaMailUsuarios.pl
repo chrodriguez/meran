@@ -29,7 +29,7 @@ use C4::Koha;
 
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrowers => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrowers => 1},"intranet");
 
 my @results = mailDeUsuarios();
 

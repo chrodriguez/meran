@@ -31,7 +31,7 @@ use C4::AR::Utilidades;
 
 
 my $input            = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1},"intranet");
 my $barcode          = $input->param('barcode');
 my $biblionumber     = $input->param('biblionumber');
 my $biblioitemnumber = $input->param('biblioitemnumber');
