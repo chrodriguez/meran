@@ -58,7 +58,7 @@ open (A, "</tmp/$fileTXT");
 
 # Se recorre el archivo para imprimir en la pantalla cuando se abre.
 while (<A>){
-	print $line=<A>;
+	print $line=$_;
 }
 
 close (A);
