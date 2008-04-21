@@ -734,12 +734,25 @@ sub cantidadPrestamos{
         }
         return($cantidad);
 }
+# Verifica que una fecha este entre otras 2 
+sub estaEnteFechas {
+   my ($begindate,$enddate,$vencimiento)=@_;
+
+  if (($begindate eq '')or($enddate eq '')or($vencimiento eq '')){ return 1;} # Si alguna de las fechas viene vacia se devuelve 1
+  else {
+		# Se hacen las comapraciones
+		my $flag1=Date::Manip::Date_Cmp($begindate,$vencimiento);
+		my $flag2=Date::Manip::Date_Cmp($vencimiento,$enddate);	
+		if (($flag1 le 0) and ($flag2 le 0)) {return 1;}
+		#
+	}
+  return 0;
+}
 
 sub prestamos{
         my ($branch,$orden,$ini,$fin,$estado,$begindate,$enddate)=@_;
         my $dbh = C4::Context->dbh;
         my @results;
-        my $clase='par';
 	my $query ="select borrowers.borrowernumber AS borrowernumber,
 			   items.itemnumber AS itemnumber, items.biblionumber AS biblionumber,
 			   issuetypes.issuecode AS issuecode,description,
@@ -750,33 +763,30 @@ sub prestamos{
 		    inner join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode=? and returndate is NULL ";
 
-	#Fechas
-	if (($begindate ne '') and ($enddate ne '')) { $query.=" AND issues.date_due BETWEEN  ?  AND  ? ";}
-	#
-
         my $sth=$dbh->prepare($query);
-	
-	if (($begindate ne '') and ($enddate ne '')) {  $sth->execute($branch,format_date_in_iso($begindate),format_date_in_iso($enddate));}
-	else { $sth->execute($branch);}
+	$sth->execute($branch);
 	
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
-               if ($clase eq 'par'){$clase='impar';} else {$clase='par'};
-		 		$data->{'clase'}=$clase;
-                if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
+
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		#Se filtra por Fechas de Vencimiento 
+		
+		if ( estaEnteFechas($begindate,$enddate,$data->{'vencimiento'}) ) {
+
+                if ($data->{'phone'} eq "" ){$data->{'phone'}='-';};
 		
 
 		if ($data->{'emailaddress'} eq "" ){
 					$data->{'emailaddress'}='-';
 					$data->{'ok'}=1;
 				 };
-		if ($data->{'returndate'} eq "" ){$data->{'returndate'}='-' }
+		if ($data->{'returndate'} eq "" ){$data->{'returndate'}='-';}
 		else  { $data->{'returndate'} =  format_date($data->{'returndate'})};
-		$data->{'date_due'}=format_date($data->{'date_due'});
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
-		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
-		
+		$data->{'date_due'}= format_date($data->{'date_due'});
+
+		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);		
 		#Se marcan los prestamos vencidos
 		if ($flag lt 0){$data->{'vencido'}='1';}
 		#
@@ -795,10 +805,19 @@ sub prestamos{
 			push(@results,$data);
 		}
         }
+	}
 
 # Da el ORDEN al arreglo
+	if (($orden ne "vencimiento") and ($orden ne "date_due")) {
+	#ordeno alfabeticamente
 	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
 	@results=@sorted;
+	}
+	else
+	{#ordeno Fechas
+	my @sorted = sort { Date::Manip::Date_Cmp($a->{$orden},$b->{$orden}) } @results;
+	@results=@sorted;
+	}
 #
 	my $cantReg=scalar(@results);
 

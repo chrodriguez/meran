@@ -125,6 +125,15 @@ $template->param( 	numeros		 => \@numeros,
 			ini		 => $pagActual);
 }
 
+
+# Poner el estilo
+  my $clase='par';
+foreach my $res (@resultsdata){
+  if ($clase eq 'par'){$clase='impar';} else {$clase='par';};
+		$res->{'clase'}=$clase;
+ }
+
+
 $template->param( 	estado		 => $estado,
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
