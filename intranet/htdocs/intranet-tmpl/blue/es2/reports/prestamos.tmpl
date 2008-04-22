@@ -43,7 +43,7 @@ function checkedAll(){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Pr&eacute;stamos sin devolver</td>
+		<td class="pagetitle" >Pr&eacute;stamos</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -175,6 +175,9 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">C&oacute;digo de barra</a>
 		</th>
 		<th>
+			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=bulk&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Signatura Topogr&aacute;fica</a>
+		</th>
+		<th>
 			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=description&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tipo de pr&eacute;stamo</a>
 		</th>
 	
@@ -211,6 +214,9 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
+		</td>
+		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=bulk -->
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=description -->

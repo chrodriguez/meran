@@ -142,9 +142,9 @@ $template->param( 	estado		 => $estado,
 			orden		 => $orden,
 			renglones        => $cantR,
 			msg		 => $msg,
-			planilla	=> $planilla,
+			planilla	 => $planilla,
 			begindate	 => $begindate,
-			enddate		=> $enddate
+			enddate		 => $enddate
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

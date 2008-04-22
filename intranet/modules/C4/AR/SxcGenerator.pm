@@ -43,7 +43,7 @@ my $pos=1;
 my $count=1;
 $sheet->oooSet("bold", "on");
 #Titulos
-my @campos=("Apellido","Nombre","Número de socio","E-mail","Fecha de prestamo","Fecha de vencimiento","Código de barra","Tipo de préstamo");
+my @campos=("Apellido","Nombre","Número de socio","E-mail","Fecha de prestamo","Fecha de vencimiento","Código de barra","Signatura Topográfica","Tipo de préstamo");
 
 $sheet->oooSet("bold", "on");
 
@@ -79,8 +79,9 @@ $sheet->oooData("cell-text", @$results[$i]->{'vencimiento'});
 $sheet->oooSet("cell-loc", 7, $pos);
 $sheet->oooData("cell-text", @$results[$i]->{'barcode'});
 $sheet->oooSet("cell-loc", 8, $pos);
+$sheet->oooData("cell-text", @$results[$i]->{'bulk'});
+$sheet->oooSet("cell-loc", 9, $pos);
 $sheet->oooData("cell-text", @$results[$i]->{'description'});
-
 
 }
 $pos++;

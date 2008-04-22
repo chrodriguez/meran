@@ -66,7 +66,7 @@ var MENU_ITEMS = [
 			['Signatura Topogr&aacute;fica', '/cgi-bin/koha/reports/inventory-sig-top.pl'],
 			['Estantes Virtuales', '/cgi-bin/koha/reports/estantes.pl'],
 			['Usuarios', '/cgi-bin/koha/reports/users.pl'],
-			['Pr. sin devolver', '/cgi-bin/koha/reports/prestamos.pl'],
+			['Pr&eacute;stamos', '/cgi-bin/koha/reports/prestamos.pl'],
 			['Reservas', '/cgi-bin/koha/reports/reservas.pl'],
 			['Registro de actividades', '/cgi-bin/koha/reports/registro.pl'],
 			['Registro de circulaci&oacute;n', '/cgi-bin/koha/reports/historicoCirculacion.pl'],

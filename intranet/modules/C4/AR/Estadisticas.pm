@@ -757,10 +757,10 @@ sub prestamos{
 			   items.itemnumber AS itemnumber, items.biblionumber AS biblionumber,
 			   issuetypes.issuecode AS issuecode,description,
 			   date_due, issues.branchcode AS branchcode, returndate,
-			   surname, firstname, cardnumber, emailaddress, barcode
-                    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
-		    inner join items on (issues.itemnumber = items.itemnumber)
+			   surname, firstname, cardnumber, emailaddress, barcode , items.bulk
+                    from issues left join issuetypes on (issues.issuecode = issuetypes.issuecode)
+		    left join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
+		    left join items on (issues.itemnumber = items.itemnumber)
                     where issues.branchcode=? and returndate is NULL ";
 
         my $sth=$dbh->prepare($query);
