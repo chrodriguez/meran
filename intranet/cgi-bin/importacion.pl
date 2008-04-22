@@ -121,9 +121,8 @@ foreach my $branch (keys %$branches) {
 push @select_branch,'SIN SELECCIONAR';
 
 #agregado por Einar para que quede el branch por defecto
-my $branch=$input->param('branch');
-unless ($branch) {$branch=(split("_",(split(";",$cookie))[0]))[1];}
-#hasta aca y la linea adentro del pasaje por parametros a la CGIbranch
+my $branch=$input->param('branch') || C4::Context->preference('defaultbranch');
+
 
 my $CGIbranch=CGI::scrolling_list( 	-name      => 'branch',
 		                        -id        => 'branch',
