@@ -7,7 +7,7 @@ var MENU_ITEMS = [
 		['------------------------', null],
 		['Estantes Virtuales', '/cgi-bin/koha/shelves.pl?startfrom=0'],
 		['Agregar Libro', '/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet'],
-		['Mantenimiento', '/cgi-bin/koha/maint/catmaintain.pl'],
+// 		['Mantenimiento', '/cgi-bin/koha/maint/catmaintain.pl'],
 		['Importaci&oacute;n MARC', '/cgi-bin/koha/importacionMarc.pl'],
 		['Importaci&oacute;n', '/cgi-bin/koha/importacion.pl'],
 		['Adquisici&oacute;n de ej.', '/cgi-bin/koha/loadmodules.pl?module=acquisitions']
