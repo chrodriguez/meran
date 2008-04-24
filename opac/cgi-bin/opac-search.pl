@@ -6,7 +6,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use CGI;
-use C4::Database;
+# use C4::Database;
 use HTML::Template;
 
 my $classlist='';

@@ -2,7 +2,7 @@
 use HTML::Template;
 use strict;
 require Exporter;
-use C4::Database;
+# use C4::Database;
 use C4::Output;  # contains gettemplate
 use C4::Interface::CGI::Output;
 use C4::Auth;

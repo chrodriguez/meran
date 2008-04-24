@@ -5,7 +5,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
+# use C4::Database;
 use C4::Catalogue;
 use C4::Biblio;
 use HTML::Template;

@@ -35,7 +35,7 @@ use DBI;
 
 # Koha modules used
 use C4::Context;
-use C4::Database;
+# use C4::Database;
 use C4::Acquisitions;
 use C4::Output;
 use C4::Input;

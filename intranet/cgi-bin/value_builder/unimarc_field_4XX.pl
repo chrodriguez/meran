@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Search;
 use C4::Auth;
 use C4::Output;
-use C4::Database;
+# use C4::Database;
 use C4::Biblio;
 #use C4::SimpleMarc;
 use C4::SearchMarc;
@@ -122,7 +122,7 @@ sub plugin {
 			$subfield_value_a.=$marcrecord->field('702')->subfield("f") if ($marcrecord->field('702')->subfield("f"));
 			$subfield_value_a.=")" if ($marcrecord->field('702')->subfield("f")) or ($marcrecord->field('702')->subfield("c"));
 		} elsif ($marcrecord->field('710')){
-			$subfield_value_a=$marcrecord->field('710')->subfield("d")."° " if ($marcrecord->field('710')->subfield("d"));
+			$subfield_value_a=$marcrecord->field('710')->subfield("d")."ï¿½ " if ($marcrecord->field('710')->subfield("d"));
 			$subfield_value_a.=$marcrecord->field('710')->subfield("a") if ($marcrecord->field('710')->subfield("a"));
 			$subfield_value_a.=", ".$marcrecord->field('710')->subfield("b") if ($marcrecord->field('710')->subfield("b"));
 			$subfield_value_a.=" (".$marcrecord->field('710')->subfield("f")." - " if ($marcrecord->field('710')->subfield("f"));
@@ -138,7 +138,7 @@ sub plugin {
 			$subfield_value_a.=$marcrecord->field('701')->subfield("f") if ($marcrecord->field('701')->subfield("f"));
 			$subfield_value_a.=")" if ($marcrecord->field('701')->subfield("f")) or ($marcrecord->field('701')->subfield("c"));
 		} elsif ($marcrecord->field('712')){
-			$subfield_value_a=$marcrecord->field('712')->subfield("d")."° " if ($marcrecord->field('712')->subfield("d"));
+			$subfield_value_a=$marcrecord->field('712')->subfield("d")."ï¿½ " if ($marcrecord->field('712')->subfield("d"));
 			$subfield_value_a.=$marcrecord->field('712')->subfield("a") if ($marcrecord->field('712')->subfield("a"));
 			$subfield_value_a.=", ".$marcrecord->field('712')->subfield("b") if ($marcrecord->field('712')->subfield("b"));
 			$subfield_value_a.=" (".$marcrecord->field('712')->subfield("f")." - " if ($marcrecord->field('712')->subfield("f"));

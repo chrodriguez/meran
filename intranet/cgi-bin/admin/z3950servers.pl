@@ -23,7 +23,7 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
-use C4::Database;
+# use C4::Database;
 use C4::Context;
 use HTML::Template;
 use C4::Auth;

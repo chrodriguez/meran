@@ -19,7 +19,7 @@ package C4::Biblio;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Database;
+# use C4::Database;
 use MARC::Record;
 use C4::BookShelves;
 use vars qw($VERSION @ISA @EXPORT);
