@@ -141,7 +141,7 @@ $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
 	}
 	####################
 
-my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
+# my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);  NO SE USA, Consulta sobre accountline
 my $issues = getissues(\%bor);
 my $count=0;
 my $venc=0;
@@ -278,7 +278,7 @@ $template->param($data);
 $template->param(
 		bornum          => $bornum,
 		mensaje		=> $mensaje,
-		totaldue          =>$total,
+# 		totaldue          =>$total,
 #los libros que tiene "en espera para retirar"
 		waiting=> \@waiting,
 #los libros que tiene esperando un ejemplar

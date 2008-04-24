@@ -43,7 +43,7 @@ my $bibnumitems=$input->param('bibnumitems');
 my $biblionumber=$bibnum;
 my $dat=bibdata($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites) = &getwebsites($biblionumber);
+my ($websitecount, @websites);# = &getwebsites($biblionumber);
 my ($subtitlecount,$subtitles) = &subtitle($biblionumber);
 my @subjects;
 my $len= scalar(split(",",$dat->{'subject'}));

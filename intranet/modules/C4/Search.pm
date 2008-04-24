@@ -85,7 +85,6 @@ on what is passed to it, it calls the appropriate search function.
 	&NewBorrowerNumber 
 	&bibitemdata 
 	&borrissues
-	&getboracctrecord 
 	&ItemType 
 	&itemissues 
 	&subject 
@@ -169,6 +168,7 @@ on what is passed to it, it calls the appropriate search function.
 =item
 NO SE USA
 &getwebsites 
+&getboracctrecord
 
 =cut
 

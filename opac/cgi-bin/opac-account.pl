@@ -33,7 +33,7 @@ $template->param( BORROWER_INFO => \@bordat );
 
 
 #get account details
-my ($numaccts,$accts,$total) = getboracctrecord(undef,$borr);
+my ($numaccts,$accts,$total);# = getboracctrecord(undef,$borr);
 
 for (my $i=0;$i<$numaccts;$i++){
     $accts->[$i]{'amount'}+=0.00;

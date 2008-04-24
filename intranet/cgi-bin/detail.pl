@@ -47,7 +47,7 @@ foreach my $itm (@items) {
 my $dat=bibdata($biblionumber);
 my ($subjectcount, $subject)     = &subject($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites) = &getwebsites($biblionumber);
+my ($websitecount, @websites);# = &getwebsites($biblionumber);
 my ($subtitlecount,$subtitles) = &subtitle($biblionumber);
 
 $dat->{'count'} = @items;

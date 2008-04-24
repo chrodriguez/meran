@@ -47,7 +47,7 @@ foreach my $itm (@items) {
 my $dat=bibdata($biblionumber);
 my ($authorcount, $addauthor)= &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my ($websitecount, @websites);#         = &getwebsites($biblionumber);
 
 $dat->{'count'}=@items;
 $dat->{'norequests'} = $norequests;

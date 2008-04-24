@@ -127,8 +127,8 @@ my %request;
 #Verifica Deuda (como en moremember.pl)
 	my %bor;
 	$bor{'borrowernumber'}=$req->{'borrowernumber'};
-	my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
-	$request{'totaldue'}=$total;
+# 	my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
+# 	$request{'totaldue'}=$total;
 #
 	  push(@noconditionloop,\%request);}
 	else { push(@conditionloop,\%request);}

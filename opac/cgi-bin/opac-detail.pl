@@ -26,7 +26,7 @@ my $dat                                   = &bibdata($biblionumber);
 my ($subjectcount, $subject)     = &subject($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 #esta consulta no seria necesaria, ya que este resultado no se muestra en el tmpl
-my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my ($websitecount, @websites);#            = &getwebsites($biblionumber);
 
 $dat->{'count'}=@items;
 
