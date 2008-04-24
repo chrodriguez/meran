@@ -88,7 +88,7 @@ if ($data{'cardnumber'} eq ''){
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
         $ok=1;
     	push @errors, "invalid_cardnumber";

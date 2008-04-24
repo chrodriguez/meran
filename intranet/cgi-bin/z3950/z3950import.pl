@@ -637,7 +637,7 @@ sub AcceptZ3950Queue {
 
     my $isbngood=1;
     if ($input->param('type') eq 'isbn') {
-	$isbngood=checkvalidisbn($query);
+	$isbngood=&C4::AR::Utilidades::checkvalidisbn($query);
     }
     if ($isbngood) {
     foreach ($input->param) {

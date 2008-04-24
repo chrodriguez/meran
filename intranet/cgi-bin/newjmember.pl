@@ -95,7 +95,7 @@ for (my $i=0;$i<3;$i++){
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
       $string.=" Invalid Cardnumber $number<br>";
       $missing=1;

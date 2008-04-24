@@ -93,7 +93,7 @@ if ($missing !=1) {
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
 
     $template->param( invalid => ($valid !=1));
 
