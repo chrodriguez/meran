@@ -21,12 +21,6 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-
-#use C4::Reserves2;
-
-	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
-	# So Perl complains that all of the functions here get redefined.
-
 use C4::AR::DictionarySearch; #Luciano: Busqueda por diccionario
 use C4::AR::Reserves; 
 use C4::AR::Issues;
@@ -103,7 +97,6 @@ on what is passed to it, it calls the appropriate search function.
 	&findguarantees 
 	&allissues
 	&findguarantor 
-	&getwebsites 
 	&getwebbiblioitems 
 	&catalogsearch 
 	&itemcount2
@@ -172,6 +165,12 @@ on what is passed to it, it calls the appropriate search function.
 	&SearchSig
 );
 # make all your functions, whether exported or not;
+
+=item
+NO SE USA
+&getwebsites 
+
+=cut
 
 
 =item newsearch
@@ -434,7 +433,6 @@ sub catalogsearch {
 
 	if ($env->{itemcount} eq '1') {
 			#Ocultar resultados en el opac de libros no disponibles
-
 
 #Miguel - FindItemType falla si se hace una busqueda por subject, no le llega el biblioitemnumber
 		foreach my $data (@results){
@@ -3017,13 +3015,16 @@ if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cier
 		    
  $sth->finish;
  # El resto lo dejo por  compatibilidad NO SE UTILIZA
+=item
   $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
     borrowernumber='$bornum'");
   $sth->execute;
   my $data3=$sth->fetchrow_hashref;
   $sth->finish;
+=cut
  #
-return($overdues,$issues,$data3->{'sum(amountoutstanding)'});
+# return($overdues,$issues,$data3->{'sum(amountoutstanding)'});
+return($overdues,$issues,"");
 }
 
 =item getboracctrecord
@@ -3044,6 +3045,7 @@ total amount outstanding for all of the account lines.
 
 =cut
 #'
+=item NO SIRVE HACE UNA CONSULTA SOBRE LA TABLA accountlines
 sub getboracctrecord {
    my ($env,$params) = @_;
    my $dbh = C4::Context->dbh;
@@ -3072,6 +3074,7 @@ borrowernumber=? order by date desc,timestamp desc");
    $sth->finish;
    return ($numlines,\@acctlines,$total);
 }
+=cut
 
 =item itemcount
 
@@ -3728,7 +3731,7 @@ C<@websites> is an array of references-to-hash; the keys are the
 fields from the C<websites> table in the Koha database.
 
 =cut
-#'
+#'NO SE USA!!!!!!!!!!!!!!!!11************************!!!!!!!!!!!!!!!!
 sub getwebsites {
     my ($biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
