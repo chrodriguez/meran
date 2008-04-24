@@ -435,6 +435,8 @@ sub catalogsearch {
 	if ($env->{itemcount} eq '1') {
 			#Ocultar resultados en el opac de libros no disponibles
 
+
+#Miguel - FindItemType falla si se hace una busqueda por subject, no le llega el biblioitemnumber
 		foreach my $data (@results){
 
 			($data->{'total'},$data->{'unavailable'},$data->{'counts'}) = itemcount3($data->{'biblionumber'}, $type);
@@ -1251,7 +1253,8 @@ sub CatSearch  {
 				push(@bind,"%$search->{'date-before'}%");
 							 }
 			#$query.=" group by biblio.biblionumber";
-			} else {
+	} else {
+	#$search->{'author'} eq ''
 			if ($search->{'title'} ne '') {
 				if ($search->{'ttype'} eq 'exact'){
 					$query="select * from biblio
@@ -1381,7 +1384,7 @@ if ($search->{'authorid'} ne ''){
 				 where
 				(bibliosubject.subject = ?)";
 			$query.=" group by biblio.biblionumber";
-			}
+	}
 	
 	
 	if ($search->{'itemnumber'} ne ''){
@@ -1473,29 +1476,30 @@ if ($search->{'authorid'} ne ''){
  foreach my $aux (@analiticas){
 	 my $j=0;
 	 if ($type eq 'subject'){#hay que sacar los repetidos
-	  while (($j< $count)&&($results[$j]->{'subject'} ne $aux->{'subject'})) {$j++;} 
+	  	while (($j< $count)&&($results[$j]->{'subject'} ne $aux->{'subject'})) {$j++;} 
 	 
-	 if($j eq $count){
-		 $results[$count]=$aux;
-	         $count++;			 
-	 		}
-	 }
- 	else{
+	 	if($j eq $count){
+			$results[$count]=$aux;
+	         	$count++;			 
+	 	}
+	}else{
 		$results[$count]=$aux;
 		$count++;		
-		}
-			}
+	}
+			
+  }
  ####Fin anliticas 
 
 #Filtro lo que hay que mostrar
  my $countFinal=0;
  my @resFinal;
 
-   for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i)
-   { 
-   $resFinal[$countFinal]=$results[$i];
-   $countFinal++; }
-	return($count,@resFinal);
+   for ($i = $offset; (($i < $limit) && ($i < $count)); ++$i){ 
+   	$resFinal[$countFinal]=$results[$i];
+   	$countFinal++; 
+   }
+
+   return($count,@resFinal);
 }
 
 #SubjectSearch

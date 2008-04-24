@@ -55,6 +55,19 @@ sub getKeywordID{
 	return $result_array_ref->{'idkeyword'};
 }
 
+sub getSubjectID{
+	my ($subjectId)=@_;
+	
+	my $dbh = C4::Context->dbh;
+	my $query ="SELECT id, nombre  FROM temas WHERE id = ? ";
+        my $sth=$dbh->prepare($query);
+        $sth->execute($subjectId);
+        my @results;
+        my $result_array_ref=$sth->fetchrow_hashref;
+
+	return $result_array_ref->{'nombre'};
+}
+
 sub getKeywordsLike{
 	my ($dato)=@_;
 
@@ -476,7 +489,7 @@ foreach my $keyword (@key)
   return(scalar(@results),@results);
 }
 
-
+#Miguel esta funcion solo es llamada desde Search::CatSearch
 sub BiblioAnalysisTypeSearch
 {
 my ($search,$type) = @_;
@@ -490,7 +503,8 @@ my @clauses = ();             # The search clauses
 my @bind = ();                # The term bindings
 
 
-if (($search->{'subjectitems'} ne '') or ($type eq 'subject')){
+# if (($search->{'subjectitems'} ne '') or ($type eq 'subject')){
+if (($search->{'subjectitems'} ne '') or ($search->{'subjectid'} ne '') ){
 	$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal,analyticalsubject.subject   from biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
 	inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
 	left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
@@ -500,68 +514,81 @@ if (($search->{'subjectitems'} ne '') or ($type eq 'subject')){
 
 }
 else {
-$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal   from 
-biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
-inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
-left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
-inner join autores on analyticalauthors.author = autores.id
-where ";
+	$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal   from 
+	biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
+	inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
+	left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
+	inner join autores on analyticalauthors.author = autores.id
+	where ";
 }
 
 if ($search->{'subjectitems'} ne ''){
-	$query .= "  analyticalsubject.subject= '".$search->{'subjectitems'}."'" ;	              
+	$query .= "  analyticalsubject.subject= '".$search->{'subjectitems'}."'" ;
+			
+}else {
+	# if ($type eq 'subject'){
+	if ($search->{'subjectid'} ne ''){
+	
+	
+		@subject=split(' ',$search->{'subject'});
+		my $countS=@subject;
+	
+		my $subjectName;
+	#siempre le llega un subjectid, asi que se busca el nombre del subject para no tener que arreglar la 
+	#tabla analyticalsubject (repite el subject para cada analitica, analyticalsubject(analicalnumber,subject) )	
+		$subjectName= getSubjectID($search->{'subjectid'});
+	
+		my $i=1;
+		$query.=" ( analyticalsubject.subject like ? or analyticalsubject.subject like ? or analyticalsubject.subject like ?)";
+	#   	@bind=("$subject[0]%","% $subject[0]%","%($subject[0])%");
+		@bind=("$subjectName%","% $subjectName%","%($subjectName)%");
+	
+	#este while no es necesario porque le llega 1 subjectid con el cual se esa filtrando
+=item  
+		while ($i<$countS){
+			$query.=" and (analyticalsubject.subject like ? or analyticalsubject.subject like ? or analyticalsubject.subject like ?)";
+			push(@bind,"$subject[$i]%","% $subject[$i]%","%($subject[$i])%");
+			$i++;
+		}
+=cut
+	
+	}# if ($search->{'subjectid'} eq '')
+	
+	if ($search->{'author'} ne ''){
+	@autor=split(' ',$search->{'author'});
+	my $countA=@autor;
+		foreach my $keyword (@autor)
+			{my @subclauses = ();
+			foreach my $field (qw(autores.completo))
+				{push @subclauses, "$field LIKE ? OR $field LIKE ?";
+				push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
+				}
+			push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
 			}
-else {
-if ($type eq 'subject'){
+		$query .= "(" . join(")\nAND (", @clauses) . ")";
+	}
+	
+	if ($search->{'authorid'} ne ''){ 	
+		 push(@bind,$search->{'authorid'}); 
+		$query .= "(  autores.id = ? )";
+	}
+	
+	if ($search->{'title'} ne ''){
+	my @title=split(' ',$search->{'title'});
+		my $countT=@title;
+	
+		foreach my $keyword (@title)
+			{my @subclauses = ();
+			foreach my $field (qw(analyticaltitle analyticalunititle))
+				{push @subclauses, "$field LIKE ? OR $field LIKE ?";
+				push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
+				}
+			push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
+			}
+		$query .= "(" . join(")\nAND (", @clauses) . ")";
+	}
 
- 
-  @subject=split(' ',$search->{'subject'});
-  my $countS=@subject;
-  my $i=1;
-  $query.=" ( analyticalsubject.subject like ? or analyticalsubject.subject like ? or analyticalsubject.subject like ?)";
-  @bind=("$subject[0]%","% $subject[0]%","%($subject[0])%");
-  
-  while ($i<$countS){
-  $query.=" and (analyticalsubject.subject like ? or analyticalsubject.subject like ? or analyticalsubject.subject like ?)";
-  push(@bind,"$subject[$i]%","% $subject[$i]%","%($subject[$i])%");
-  $i++;													                 
-  }															  
-
-}
-
-if ($search->{'author'} ne ''){
-   @autor=split(' ',$search->{'author'});
-      my $countA=@autor;
-	foreach my $keyword (@autor)
-  		{my @subclauses = ();
-  		 foreach my $field (qw(autores.completo))
-  			{push @subclauses, "$field LIKE ? OR $field LIKE ?";
-  			 push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  			}
-  		 push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
-  		 }
-   	$query .= "(" . join(")\nAND (", @clauses) . ")";
-}
-
-if ($search->{'authorid'} ne ''){ 	 push(@bind,$search->{'authorid'}); 
-					$query .= "(  autores.id = ? )";}
-
-if ($search->{'title'} ne ''){
-      my @title=split(' ',$search->{'title'});
-            my $countT=@title;
-
-	foreach my $keyword (@title)
-  		{my @subclauses = ();
-  		 foreach my $field (qw(analyticaltitle analyticalunititle))
-  			{push @subclauses, "$field LIKE ? OR $field LIKE ?";
-  			 push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  			}
-  		 push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
-  		 }
-   	$query .= "(" . join(")\nAND (", @clauses) . ")";
-}
-
-} #else
+} #end else
 
   my $sth=$dbh->prepare($query);
   $sth->execute(@bind);
