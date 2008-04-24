@@ -31,8 +31,8 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-use C4::Stats;
-use C4::Reserves2;
+# use C4::Stats;
+use C4::AR::Reserves;
 use C4::Koha;
 use C4::Search;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -61,12 +61,32 @@ Also deals with stocktaking.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&getpatroninformation
-	&currentissues &getissues &getiteminformation
-	&issuebook &returnbook &find_reserves &transferbook &decode
-	&calc_charges &listitemsforinventory &listitemsforinventorysigtop &itemseen
-	&getmaxbarcode &getminbarcode &barcodesbytype &insertHistoricCirculation &getDataItems &getDataBiblioItems
-	);
+@EXPORT = qw(
+	&getpatroninformation
+	&currentissues 
+	&getissues
+	&getiteminformation
+	&returnbook
+	&transferbook 
+	&listitemsforinventory 
+	&listitemsforinventorysigtop 
+	&itemseen
+	&getmaxbarcode
+	&getminbarcode
+	&barcodesbytype
+	&insertHistoricCirculation
+	&getDataItems 
+	&getDataBiblioItems
+	    );
+
+=item
+NO SE USA -- DAMIAN 15/04/2008
+
+&issuebook
+&decode
+&find_reserves
+
+=cut
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
@@ -147,7 +167,9 @@ sub getpublishers {
 					}
 					
 
-
+=item
+SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl) TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
+=cut
 sub getmaxbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
@@ -157,6 +179,9 @@ sub getmaxbarcode {
 	return $res;
 }
 
+=item
+SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl), TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
+=cut
 sub getminbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;                     
@@ -169,7 +194,9 @@ sub getminbarcode {
 
 
 
-
+=item
+SE USA EN EL REPORTE DE BARCODES POR TIPO - PERO NO SE SI ANDA SE PUEDE PASAR A ESTADISTICAS.PM
+=cut
 sub barcodesbytype {
 	my ($branch) = @_;
 	
@@ -214,7 +241,9 @@ sub barcodesbytype {
 
 
 
-
+=item
+SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
+=cut
 
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation) = @_;
@@ -243,6 +272,9 @@ sub listitemsforinventory {
 	return @results;
 }
 
+=item
+SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
+=cut
 sub listitemsforinventorysigtop {
 	my ($sigtop) = @_;
 	my $dbh = C4::Context->dbh;
@@ -349,7 +381,7 @@ fields from the reserves table of the Koha database.
 =back
 
 =cut
-#'
+#' SE PUEDE MEJORAR, LIMPIAR!!!!!!!!!!!!!!!!!!!!!!VER****************************
 sub getpatroninformation {
 # returns
 	my ($env, $borrowernumber,$cardnumber) = @_;
@@ -372,8 +404,8 @@ sub getpatroninformation {
 	}
 	$env->{'mess'} = $query;
 	my $borrower = $sth->fetchrow_hashref;
-	my $amount = checkaccount($env, $borrowernumber, $dbh);
-	$borrower->{'amountoutstanding'} = $amount;
+# 	my $amount = checkaccount($env, $borrowernumber, $dbh);
+# 	$borrower->{'amountoutstanding'} = $amount; NO SIRVE PARA NADA
 	my $flags = patronflags($env, $borrower, $dbh);
 	my $accessflagshash;
 
@@ -397,8 +429,9 @@ Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
 
 =cut
-#'
+=item
 # FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
+NO SE USA!!!!!!!!!!***********NO SE USA*******************
 sub decode {
 	my ($encoded) = @_;
 	my $seq = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-';
@@ -755,6 +788,8 @@ rental fee notice.
 # Is it this function's place to decide the default answer to the
 # various questions? Why not document the various problems and allow
 # the caller to decide?
+=item NO SE USA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 sub issuebook {
 	my ($env, $patroninformation, $barcode, $responses, $date) = @_;
 	my $dbh = C4::Context->dbh;
@@ -829,7 +864,7 @@ sub issuebook {
 					$defaultanswer = 'Y';
 					last SWITCH;
 				} elsif ($responses->{4} eq 'Y') {
-					my ($charge,$itemtype) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+					my ($charge,$itemtype) = &C4::Circulation::Renewals::calc_charges($env, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
 					if ($charge > 0) {
 						createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
 						$iteminformation->{'charge'} = $charge;
@@ -997,7 +1032,7 @@ if ($responses->{8} eq '') {
 		$sth->finish;
 		&itemseen($iteminformation->{'itemnumber'});
 		# If it costs to borrow this book, charge it to the patron's account.
-		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+		my ($charge,$itemtype)=&C4::Circulation::Renewals::calc_charges($env, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
 		if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
 			$iteminformation->{'charge'}=$charge;
@@ -1018,7 +1053,7 @@ if ($responses->{8} eq '') {
 
 	return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
 }
-
+=cut
 
 
 =item returnbook
@@ -1128,7 +1163,7 @@ sub returnbook {
 	if ($iteminformation->{'itemlost'}) {
 		# Mark the item as not being lost.
 		updateitemlost($iteminformation->{'itemnumber'});
-		fixaccountforlostandreturned($iteminformation, $borrower);
+# 		fixaccountforlostandreturned($iteminformation, $borrower);
 		$messages->{'WasLost'} = 1; # FIXME is the "= 1" right?
 	}
 	# fix up the overdues in accounts...
@@ -1142,7 +1177,7 @@ sub returnbook {
 	}
 	# update stats?
 	# Record the fact that this book was returned.
-	UpdateStats(\%env, $branch ,'return','0','',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
+# 	UpdateStats(\%env, $branch ,'return','0','',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
 	return ($doreturn, $messages, $iteminformation, $borrower);
 }
 
@@ -1179,6 +1214,8 @@ sub updateitemlost{
 }
 
 # Not exported
+=item
+NO SE USA!!!!!!!!!!!!!!!!***********VER***********************
 sub fixaccountforlostandreturned {
 	my ($iteminfo, $borrower) = @_;
 	my %env;
@@ -1262,8 +1299,11 @@ sub fixaccountforlostandreturned {
 	$sth->finish;
 	return;
 }
+=cut
 
 # Not exported
+=item
+NO SE USA-************************************NO SE USA*****************
 sub fixoverduesonreturn {
 	my ($brn, $itm) = @_;
 	my $dbh = C4::Context->dbh;
@@ -1279,6 +1319,7 @@ sub fixoverduesonreturn {
 	$sth->finish();
 	return;
 }
+=cut
 
 # Not exported
 #
@@ -1313,7 +1354,7 @@ sub patronflags {
 # Original subroutine for Circ2.pm
 	my %flags;
 	my ($env, $patroninformation, $dbh) = @_;
-	my $amount = checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
+	my $amount = 0;#checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
 	if ($amount > 0) {
 		my %flaginfo;
 		my $noissuescharge = C4::Context->preference("noissuescharge");
@@ -1362,7 +1403,7 @@ sub patronflags {
 		$flags{'ODUES'} = \%flaginfo;
 	}
 	my ($nowaiting, $itemswaiting)
-			= CheckWaiting($patroninformation->{'borrowernumber'});
+			= &C4::AR::Reserves::CheckWaiting($patroninformation->{'borrowernumber'});
 	if ($nowaiting > 0) {
 		my %flaginfo;
 		$flaginfo{'message'} = "Items reservados disponibles";
@@ -1652,6 +1693,7 @@ sub checkwaiting {
 
 # Not exported
 # FIXME - This is nearly-identical to &C4::Accounts::checkaccount
+=item NO SE USA*****************************NO SE USA*****************************
 sub checkaccount  {
 # Stolen from Accounts.pm
   #take borrower number
@@ -1682,7 +1724,7 @@ sub checkaccount  {
 	#  pause();
 	return($total);
 }
-
+=cut
 # FIXME - This is identical to &C4::Circulation::Renewals::renewstatus.
 # Pick one and stick with it.
 sub renewstatus {
@@ -1757,6 +1799,7 @@ sub renewbook {
 # &C4::Circulation::Issues::calc_charges and
 # &C4::Circulation::Renewals2::calc_charges.
 # Pick one and stick with it.
+#VER SI SE USA!!!!!!!!!!!!!!!!!!!!!!!!*************************VER*****************
 sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
@@ -1800,6 +1843,8 @@ sub calc_charges {
 
 # FIXME - A virtually identical function appears in
 # C4::Circulation::Issues. Pick one and stick with it.
+=item 
+NO SE USA*******************************NO SE USA**********************
 sub createcharge {
 #Stolen from Issues.pm
     my ($env,$dbh,$itemno,$bornum,$charge) = @_;
@@ -1816,8 +1861,10 @@ EOT
     $sth->execute($bornum, $itemno, $nextaccntno, $charge, $charge);
     $sth->finish;
 }
-
-
+=cut
+#Miguel esta tambien esta en Account.pm (pero son distintos) y se elimino de Account2.pm
+#y se agrego como getnextacctnoAccount2
+=item NO SE USA*****************************NO SE USA********************
 sub getnextacctno {
 # Stolen from Accounts.pm
     my ($env,$bornumber,$dbh)=@_;
@@ -1831,6 +1878,7 @@ sub getnextacctno {
     return($nextaccntno);
 }
 
+=cut
 =item find_reserves
 
   ($status, $record) = &find_reserves($itemnumber);
@@ -1850,6 +1898,9 @@ the fields from the reserves table of the Koha database.
 # was found.
 # FIXME - There's also a &C4::Circulation::Returns::find_reserves, but
 # that one looks rather different.
+=item
+NO SE USA******************************NO SE USA******************************
+
 sub find_reserves {
 # Stolen from Returns.pm
     my ($itemno) = @_;
@@ -1909,6 +1960,7 @@ sub find_reserves {
     return ($resfound,$lastrec);
 }
 
+=cut
 1;
 __END__
 

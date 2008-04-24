@@ -79,6 +79,15 @@ FIXME
     &intercambiar_itemnumber
     &eliminarReservasVencidas
 
+    &CalcReserveFee 
+    &CreateReserve
+
+    &CheckWaiting
+    &CancelReserve
+    &FillReserve
+    &ReserveWaiting
+    &Findgroupreserve
+
 );
 
 sub isRegular
@@ -872,5 +881,398 @@ sub eliminarReservasVencidas(){
 	my $sth5=$dbh->prepare("commit ");
 	$sth5->execute();
 }
+
+#*******************************Damian**vienen de C4::Reserves2.pm***************************************
+sub CheckWaiting {
+    	my ($borr)=@_;
+    	my $dbh = C4::Context->dbh;
+    	my @itemswaiting;
+
+	my $sth=$dbh->prepare("SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
+	FROM reserves
+	INNER JOIN items ON reserves.itemnumber = items.itemnumber
+	INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
+	INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
+	INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+	INNER JOIN branches ON branches.branchcode = reserves.branchcode
+	WHERE borrowernumber =? AND reserves.found = 'W' AND cancellationdate IS NULL");
+
+ 	$sth->execute($borr);
+    	while (my $data=$sth->fetchrow_hashref) {
+		push(@itemswaiting,$data);
+    	}
+    	$sth->finish;
+    	return (scalar(@itemswaiting),\@itemswaiting);
+}
+
+
+=item CheckReserves
+
+  ($status, $reserve) = &CheckReserves($itemnumber, $barcode);
+
+Find a book in the reserves.
+
+C<$itemnumber> is the book's item number. C<$barcode> is its barcode.
+Either one, but not both, may be false. If both are specified,
+C<&CheckReserves> uses C<$itemnumber>.
+
+$itemnubmer can be false, in which case uses the barcode. (Never uses
+both. $itemnumber gets priority).
+
+As I understand it, C<&CheckReserves> looks for the given item in the
+reserves. If it is found, that's a match, and C<$status> is set to
+C<Waiting>.
+
+Otherwise, it finds the most important item in the reserves with the
+same biblio number as this book (I'm not clear on this) and returns it
+with C<$status> set to C<Reserved>.
+
+C<&CheckReserves> returns a two-element list:
+
+C<$status> is either C<Waiting>, C<Reserved> (see above), or 0.
+
+C<$reserve> is the reserve item that matched. It is a
+reference-to-hash whose keys are mostly the fields of the reserves
+table in the Koha database.
+
+=cut
+#'
+sub CheckReserves {
+    my ($item, $barcode) = @_;
+#    warn "In CheckReserves: itemnumber = $item";
+    my $dbh = C4::Context->dbh;
+    my $sth;
+    if ($item) {
+	my $qitem=$dbh->quote($item);
+	# Look up the item by itemnumber
+	$sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+                             FROM items, biblioitems, itemtypes
+                            WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+                              AND biblioitems.itemtype = itemtypes.itemtype
+                              AND itemnumber=$qitem");
+    } else {
+	my $qbc=$dbh->quote($barcode);
+	# Look up the item by barcode
+	$sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+                             FROM items, biblioitems, itemtypes
+                            WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+                              AND biblioitems.itemtype = itemtypes.itemtype
+                              AND barcode=$qbc");
+	# FIXME - This function uses $item later on. Ought to set it here.
+    }
+    $sth->execute;
+    my ($biblio, $bibitem, $notforloan) = $sth->fetchrow_array;
+    $sth->finish;
+# if item is not for loan it cannot be reserved either.....
+    return (0, 0) if ($notforloan);
+# get the reserves...
+    # Find this item in the reserves
+    my ($count, @reserves) = Findgroupreserve($bibitem, $biblio);
+    # $priority and $highest are used to find the most important item
+    # in the list returned by &Findgroupreserve. (The lower $priority,
+    # the more important the item.)
+    # $highest is the most important item we've seen so far.
+    my $priority = 10000000;
+    my $highest;
+    if ($count) {
+	foreach my $res (@reserves) {
+	    # FIXME - $item might be undefined or empty: the caller
+	    # might be searching by barcode.
+	    if ($res->{'itemnumber'} == $item) {
+		# Found it
+		return ("<font color='orange'>En Espera</font>", $res); #Matias
+	    } else {
+		# See if this item is more important than what we've got
+		# so far.
+		if ($res->{'priority'} != 0 && $res->{'priority'} < $priority) {
+		    $priority = $res->{'priority'};
+		    $highest = $res;
+		}
+	    }
+	}
+    }
+
+    # If we get this far, then no exact match was found. Print the
+    # most important item on the list. I think this tells us who's
+    # next in line to get this book.
+    if ($highest) {	# FIXME - $highest might be undefined
+	$highest->{'itemnumber'} = $item;
+	return ("<font color='orange'>Reservado</font>", $highest);
+    } else {
+	return (0, 0);
+    }
+}
+
+=item CancelReserve
+
+  &CancelReserve($biblionumber, $itemnumber, $borrowernumber);
+
+Cancels a reserve.
+
+Use either C<$biblionumber> or C<$itemnumber> to specify the item to
+cancel, but not both: if both are given, C<&CancelReserve> does
+nothing.
+
+C<$borrowernumber> is the borrower number of the patron on whose
+behalf the book was reserved.
+
+If C<$biblionumber> was given, C<&CancelReserve> also adjusts the
+priorities of the other people who are waiting on the book.
+
+=cut
+#Posiblemente no se usa mas, VER!!!
+sub CancelReserve {
+    my ($biblio, $item, $borr) = @_;
+    my $dbh = C4::Context->dbh;
+    #warn "In CancelReserve";
+ if (($item and $borr) and (not $biblio)) {
+	# removing a waiting reserve record....
+	# update the database...
+	my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
+                                         found            = Null,
+                                         priority         = 0
+                                   where itemnumber       = ?
+                                     and borrowernumber   = ?");
+	$sth->execute($item,$borr);
+	$sth->finish;
+    }
+    if (($biblio and $borr) and (not $item)) {
+	# removing a reserve record....
+	# get the prioritiy on this record....
+	my $priority;
+	{
+	my $sth=$dbh->prepare("SELECT priority FROM reserves
+                                    WHERE biblionumber   = ?
+                                      AND borrowernumber = ?
+                                      AND cancellationdate is NULL
+                                      AND (found <> 'F' or found is NULL)");
+	$sth->execute($biblio,$borr);
+	($priority) = $sth->fetchrow_array;
+	$sth->finish;
+	}
+	# update the database, removing the record...
+	{
+	my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
+                                         found            = Null,
+                                         priority         = 0
+                                   where biblionumber     = ?
+                                     and borrowernumber   = ?
+                                     and cancellationdate is NULL
+                                     and (found <> 'F' or found is NULL)");
+	$sth->execute($biblio,$borr);
+	$sth->finish;
+	}
+	# now fix the priority on the others....
+	fixpriority($priority, $biblio);
+    }
+}
+
+=item FillReserve
+  &FillReserve($reserve);
+Fill a reserve. If I understand this correctly, this means that the
+reserved book has been found and given to the patron who reserved it.
+C<$reserve> specifies the reserve to fill. It is a reference-to-hash
+whose keys are fields from the reserves table in the Koha database.
+=cut
+#Posiblemente no se usa mas, VER!!!
+sub FillReserve {
+    my ($res) = @_;
+    my $dbh = C4::Context->dbh;
+
+    # fill in a reserve record....
+    # FIXME - Remove some of the redundancy here
+    my $biblio = $res->{'biblionumber'}; 
+    my $qbiblio =$biblio;
+    my $borr = $res->{'borrowernumber'}; 
+    my $resdate = $res->{'reservedate'}; 
+
+    # get the priority on this record....
+    my $priority;
+    {
+    my $query = "SELECT priority FROM reserves
+                                WHERE biblionumber   = ?
+                                  AND borrowernumber = ?
+                                  AND reservedate    = ?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($qbiblio,$borr,$resdate);
+    ($priority) = $sth->fetchrow_array;
+    $sth->finish;
+    }
+
+    # update the database...
+    {
+    my $query = "UPDATE reserves SET found            = 'F', timestamp = timestamp ,
+                                     priority         = 0
+                               WHERE biblionumber     = ?
+                                 AND reservedate      = ?
+                                 AND borrowernumber   = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($qbiblio,$resdate,$borr);
+    $sth->finish;
+    }
+
+    # now fix the priority on the others (if the priority wasn't
+    # already sorted!)....
+    unless ($priority == 0) {
+	fixpriority($priority, $biblio);
+    }
+}
+
+#Posiblemente no se usa mas, VER!!!
+sub ReserveWaiting {
+    my ($item, $borr) = @_;
+    my $dbh = C4::Context->dbh;
+# get priority and biblionumber....
+    my $sth = $dbh->prepare("SELECT reserves.priority     as priority,
+                        reserves.biblionumber as biblionumber,
+                        reserves.branchcode   as branchcode,
+                        reserves.timestamp     as timestamp
+                      FROM reserves inner join items ON  reserves.biblionumber   = items.biblionumber 
+                       WHERE items.itemnumber        = ?
+                       AND reserves.borrowernumber = ?
+                       AND reserves.cancellationdate is NULL
+                       AND (reserves.found <> 'F' or reserves.found is NULL)");
+    $sth->execute($item,$borr);
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    my $biblio = $data->{'biblionumber'};
+    my $timestamp = $data->{'timestamp'};
+# update reserves record....
+    $sth = $dbh->prepare("UPDATE reserves SET priority = 0, found = 'W', itemnumber = ?
+                            WHERE borrowernumber = ?
+                              AND biblionumber = ?
+                              AND timestamp = ?");
+    $sth->execute($item,$borr,$biblio,$timestamp);
+    $sth->finish;
+# now fix up the remaining priorities....
+    fixpriority($data->{'priority'}, $biblio);
+    my $branchcode = $data->{'branchcode'};
+    return $branchcode;
+}
+
+=item Findgroupreserve
+  ($count, @results) = &Findgroupreserve($biblioitemnumber, $biblionumber);
+I don't know what this does, because I don't understand how reserve
+constraints work. I think the idea is that you reserve a particular
+biblio, and the constraint allows you to restrict it to a given
+biblioitem (e.g., if you want to borrow the audio book edition of "The
+Prophet", rather than the first available publication).
+C<&Findgroupreserve> returns a two-element array:
+C<$count> is the number of elements in C<@results>.
+C<@results> is an array of references-to-hash whose keys are mostly
+fields from the reserves table of the Koha database, plus
+C<biblioitemnumber>.
+=cut
+sub Findgroupreserve {
+  my ($bibitem,$biblio)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("SELECT reserves.biblionumber               AS biblionumber,
+                      reserves.borrowernumber             AS borrowernumber,
+                      reserves.reservedate                AS reservedate,
+                      reserves.branchcode                 AS branchcode,
+                      reserves.cancellationdate           AS cancellationdate,
+                      reserves.found                      AS found,
+                      reserves.reservenotes               AS reservenotes,
+                      reserves.priority                   AS priority,
+                      reserves.timestamp                  AS timestamp,
+                      reserveconstraints.biblioitemnumber AS biblioitemnumber,
+                      reserves.itemnumber                 AS itemnumber
+                FROM reserves LEFT JOIN reserveconstraints ON reserves.biblionumber = reserveconstraints.biblionumber WHERE
+		 reserves.biblionumber = ? 
+                  AND ( ( reserveconstraints.biblioitemnumber = ? 
+                      AND reserves.borrowernumber = reserveconstraints.borrowernumber
+                      AND reserves.timestamp    =reserveconstraints.timestamp )
+                   OR reserves.constrainttype='a' )
+                  AND reserves.cancellationdate is NULL
+                  AND (reserves.found <> 'F' or reserves.found is NULL)");
+
+#LUCIANO
+# Cambie de la consulta enterior: 
+# reserves.reservedate    =reserveconstraints.reservedate por
+# reserves.timestamp    =reserveconstraints.timestamp 
+#FIN: LUCIANO
+  $sth->execute($biblio, $bibitem);
+  my @results;
+  while (my $data=$sth->fetchrow_hashref){
+    push(@results,$data);
+  }
+  $sth->finish;
+  return(scalar(@results),@results);
+}
+
+
+#*******************************Miguel**viene de C4::Reserves.pm***************************************
+
+# FIXME - A functionally identical version of this function appears in
+# C4::Reserves2. Pick one and stick with it.
+sub CalcReserveFee {
+  my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;
+  #check for issues;
+  my $dbh = C4::Context->dbh;
+  my $const = lc substr($constraint,0,1);
+  my $sth = $dbh->prepare("select * from borrowers,categories
+    where (borrowernumber = ?)
+    and (borrowers.categorycode = categories.categorycode)");
+  $sth->execute($borrnum);
+  my $data = $sth->fetchrow_hashref;
+  $sth->finish();
+  my $fee = $data->{'reservefee'};
+  my $cntitems = @->$bibitems;
+  if ($fee > 0) {
+    # check for items on issue
+    # first find biblioitem records
+    my @biblioitems;
+    my $sth1 = $dbh->prepare("select * from biblio,biblioitems
+       where (biblio.biblionumber = ?)
+       and (biblio.biblionumber = biblioitems.biblionumber)");
+    $sth1->execute($biblionumber);
+    while (my $data1=$sth1->fetchrow_hashref) {
+      if ($const eq "a") {
+        push @biblioitems,$data1;
+     } else {
+        my $found = 0;
+        my $x = 0;
+	while ($x < $cntitems) {
+          if (@$bibitems->{'biblioitemnumber'} == $data->{'biblioitemnumber'}) {
+	    $found = 1;
+	  }
+	  $x++;
+        }
+	if ($const eq 'o') {if ($found == 1) {push @biblioitems,$data;}
+	} else {if ($found == 0) {push @biblioitems,$data;} }
+      }
+    }
+    $sth1->finish;
+    my $cntitemsfound = @biblioitems;
+    my $issues = 0;
+    my $x = 0;
+    my $allissued = 1;
+    while ($x < $cntitemsfound) {
+      my $bitdata = @biblioitems[$x];
+      my $sth2 = $dbh->prepare("select * from items
+        where biblioitemnumber = ?");
+      $sth2->execute($bitdata->{'biblioitemnumber'});
+      while (my $itdata=$sth2->fetchrow_hashref) {
+        my $sth3 = $dbh->prepare("select * from issues
+           where itemnumber = ? and returndate is null");
+	$sth3->execute($itdata->{'itemnumber'});
+	if (my $isdata=$sth3->fetchrow_hashref) { } else {$allissued = 0; }
+      }
+      $x++;
+    }
+    if ($allissued == 0) {
+      my $rsth = $dbh->prepare("select * from reserves
+        where biblionumber = ?");
+      $rsth->execute($biblionumber);
+      if (my $rdata = $rsth->fetchrow_hashref) { } else {
+        $fee = 0;
+      }
+    }
+  }
+  return $fee;
+} # end CalcReserveFee
+
+
+#******************************************************************************************************
 
 1;
