@@ -27,7 +27,7 @@ use C4::Circulation::Circ2;
 use C4::Search;
 # use C4::Reserves2;
 use C4::Output;
-use C4::Print;
+# use C4::Print;
 use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;

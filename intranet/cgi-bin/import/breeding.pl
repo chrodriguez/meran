@@ -37,7 +37,7 @@ use DBI;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Input;
+# use C4::Input;
 use C4::Biblio;
 use MARC::File::USMARC;
 use HTML::Template;

@@ -33,7 +33,7 @@ use DBI;
 
 # Koha modules used
 # use C4::Database;
-use C4::Input;
+# use C4::Input;
 use C4::Biblio;
 
 #------------------

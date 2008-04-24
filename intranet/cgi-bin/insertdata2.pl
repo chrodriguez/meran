@@ -24,7 +24,7 @@
 
 use CGI;
 use C4::Context;
-use C4::Input;
+# use C4::Input;
 use C4::Search;
 use Date::Manip;
 use C4::Date;

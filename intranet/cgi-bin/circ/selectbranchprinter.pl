@@ -24,7 +24,7 @@ use CGI qw/:standard/;
 use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Auth;
-use C4::Print;
+# use C4::Print;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use DBI;

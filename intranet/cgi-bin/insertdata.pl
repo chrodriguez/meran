@@ -27,7 +27,7 @@ use Digest::MD5 qw(md5_base64);
 use C4::AR::Authldap;
 use C4::Membersldap;
 use C4::Context;
-use C4::Input;
+# use C4::Input;
 use C4::Search;
 use Date::Manip;
 use C4::Date;
