@@ -21,7 +21,7 @@ document.getElementById(id).src=src;
 
 <tr id="menu" valign="top" align="center" height="16" >
 <td width="100%">
-<!-- TMPL_INCLUDE NAME="/menu2/menu.inc" -->
+<!-- TMPL_INCLUDE NAME="/menu/menu.inc" -->
 </td>
 </tr>
 <tr>
