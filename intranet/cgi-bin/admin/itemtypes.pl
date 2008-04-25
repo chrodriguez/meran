@@ -140,11 +140,10 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace itemtypes (itemtype,description,loanlength,detail,renewalsallowed,rentalcharge,search,notforloan) values (";
+	my $query = "replace itemtypes (itemtype,description,loanlength,renewalsallowed,rentalcharge,search,notforloan) values (";
 	$query.= $dbh->quote($input->param('itemtype')).",";
 	$query.= $dbh->quote($input->param('description')).",";
 	$query.= $dbh->quote($input->param('loanlength')).",";
-	$query.= $dbh->quote($input->param('detail')).","; #Para modificar el det.
 	if ($input->param('renewalsallowed') ne 1) {
 		$query.= "0,";
 	} else {
