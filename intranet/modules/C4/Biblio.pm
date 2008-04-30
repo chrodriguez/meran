@@ -33,7 +33,7 @@ $VERSION = 0.01;
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT = qw(
-	     &sub terompotodo
+	     &terompotodo
 	     &updateBiblio &updateBiblioItem &updateItem
 	     &itemcount &newbiblio &newbiblioitem
 	     &modnote &newsubject &newsubtitle &delsubjects
