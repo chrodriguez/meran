@@ -2932,7 +2932,7 @@ sub allissues {
   $queryFrom .= " ON (a.id = b.author) ";
 
   my $queryWhere= " WHERE borrowernumber= ? ";
-  my $queryFinal= " ORDER BY ? ";
+  my $queryFinal= " ORDER BY $orden ";
   $queryFinal .= " limit ?,? ";
 
   my $consulta = $querySelectCount.$queryFrom.$queryWhere;
@@ -2946,7 +2946,7 @@ sub allissues {
   #se realiza la consulta
   $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
   my $sth=$dbh->prepare($consulta);
-  $sth->execute($bornum,$orden,$ini,$cantR);
+  $sth->execute($bornum,$ini,$cantR);
 
   my @result;
   my $i=0;
