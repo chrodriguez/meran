@@ -213,10 +213,14 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<!-- TMPL_VAR NAME=vencimiento -->
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
+		<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'>
+		<!-- TMPL_VAR NAME=barcode -->
+		</a>
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=bulk -->
+		<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->">	
+		<!-- TMPL_VAR NAME=bulk -->
+		</a>
 		</td>
 		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=description -->

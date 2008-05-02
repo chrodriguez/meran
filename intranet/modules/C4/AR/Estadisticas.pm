@@ -755,6 +755,7 @@ sub prestamos{
         my @results;
 	my $query ="select borrowers.borrowernumber AS borrowernumber,
 			   items.itemnumber AS itemnumber, items.biblionumber AS biblionumber,
+			   items.biblioitemnumber AS biblioitemnumber,
 			   issuetypes.issuecode AS issuecode,description,
 			   date_due, issues.branchcode AS branchcode, returndate,
 			   surname, firstname, cardnumber, emailaddress, barcode , items.bulk
