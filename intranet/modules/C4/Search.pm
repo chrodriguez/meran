@@ -2912,13 +2912,15 @@ elements in C<$issues>
 #'
 sub allissues {
 
-  my ($bornum,$ini,$cantR)=@_;
+  my ($bornum,$ini,$cantR,$orden)=@_;
+
+  if(!$orden){$orden='date_due';}
 
   my $dbh = C4::Context->dbh;
 
   my $querySelectCount = " SELECT count(*) as cant ";
 
-  my $querySelect= " SELECT b.title,b.biblionumber,b.author,iss.date_due,iss.returndate,volumeddesc, iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
+  my $querySelect= " SELECT b.title,b.biblionumber,b.author,a.completo,iss.date_due,iss.returndate,volumeddesc, iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
 
   my $queryFrom = " FROM items i INNER JOIN biblioitems bi";
   $queryFrom .= " ON (i.biblioitemnumber = bi.biblioitemnumber) ";
@@ -2926,10 +2928,12 @@ sub allissues {
   $queryFrom .= " ON (i.itemnumber = iss.itemnumber) ";
   $queryFrom .= " INNER JOIN biblio b ";
   $queryFrom .= " ON (i.biblionumber = b.biblionumber) ";
+  $queryFrom .= " INNER JOIN autores a ";
+  $queryFrom .= " ON (a.id = b.author) ";
 
   my $queryWhere= " WHERE borrowernumber= ? ";
-  my $queryFinal= " ORDER BY date_due ";
-  $queryFinal .= " limit $ini,$cantR ";
+  my $queryFinal= " ORDER BY ? ";
+  $queryFinal .= " limit ?,? ";
 
   my $consulta = $querySelectCount.$queryFrom.$queryWhere;
 
@@ -2942,7 +2946,7 @@ sub allissues {
   #se realiza la consulta
   $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
   my $sth=$dbh->prepare($consulta);
-  $sth->execute($bornum);
+  $sth->execute($bornum,$orden,$ini,$cantR);
 
   my @result;
   my $i=0;
@@ -2957,9 +2961,8 @@ sub allissues {
 	$data->{'date_due'}=  format_date($data->{'date_due'});
 	$data->{'returndate'}=  format_date($data->{'returndate'});
 	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'});
-    	my $author=getautor($data->{'author'});
-    	$data->{'author'} = $author->{'completo'};
-    	$data->{'id'} = $author->{'id'};
+    	$data->{'author'} = $data->{'completo'};
+    	$data->{'id'} = $data->{'author'};
 
     	$result[$i]=$data;
     	$i++;

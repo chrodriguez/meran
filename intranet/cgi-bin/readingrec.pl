@@ -36,6 +36,8 @@ my $input=new CGI;
 
 
 my $bornum=$input->param('bornum');
+my $orden=$input->param('order')||'date_due';
+
 #get borrower details
 my $data=borrdata('',$bornum);
 
@@ -52,7 +54,7 @@ else {
 	$pageNumber= $input->param('ini');
 };
 
-my ($cant,$issues)=allissues($bornum,$ini,$cantR);
+my ($cant,$issues)=allissues($bornum,$ini,$cantR,$orden);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
