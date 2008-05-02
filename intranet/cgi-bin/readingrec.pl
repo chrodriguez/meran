@@ -65,7 +65,8 @@ my ($template, $loggedinuser, $cookie)
 
 my @loop_reading;
 my $classe='par';
-for (my $i=0;$i<$cantR;$i++){
+for (my $i=0;$i< $cantR;$i++){
+if ($issues->[$i]->{'biblionumber'}){
  	my %line;
 	$line{title}=$issues->[$i]->{'title'};
 	$line{unititle}=$issues->[$i]->{'unititle'};
@@ -86,6 +87,7 @@ for (my $i=0;$i<$cantR;$i++){
 	if ( $classe eq 'par' ) { $classe = 'impar'; } else {$classe = 'par'; }
         $line{clase}=$classe;
 	push(@loop_reading,\%line);
+	}
 }
 
 my @numeros=armarPaginas($cant,$pageNumber);

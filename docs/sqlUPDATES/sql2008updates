@@ -113,3 +113,28 @@ update systempreferences set value='Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJE
 
 
 Insert into systempreferences (variable,value,explanation) values ('mailMensajeVencido',' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.','Como se envia el vencimiento de un ejemplar por mail');
+
+
+--se agrego la siguente tabla:
+
+CREATE TABLE `keyword` (
+`idkeyword` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`keyword` VARCHAR( 150 ) NOT NULL
+) ENGINE = MYISAM ;
+
+
+--se agrega tabla (N a N) entre keyword y biblioanalysis
+
+CREATE TABLE `analyticalkeyword` (
+`idkeyword` INT( 11 ) NOT NULL ,
+`analyticalnumber` VARCHAR( 11 ) NOT NULL ,
+PRIMARY KEY ( `idkeyword` , `analyticalnumber` )
+) ENGINE = MYISAM ;
+
+
+--se agregaron los siguientes campos a la tabla biblioanalysis
+
+ALTER TABLE `biblioanalysis` ADD `resumen` TEXT NULL AFTER `classification` ,
+ADD `url` VARCHAR( 100 ) NULL AFTER `resumen` ;
+
+ALTER TABLE `biblioanalysis` ADD FULLTEXT (`resumen`);
