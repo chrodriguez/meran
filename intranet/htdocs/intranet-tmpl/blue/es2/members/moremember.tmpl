@@ -287,8 +287,16 @@
  <td><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="itemtype" --> </td> 
 -->
 
-			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="bulk" --> <!-- TMPL_VAR NAME="bulk" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
+			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="barcode" --> 
+			<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'>
+			<!-- TMPL_VAR NAME="barcode" -->
+			</a>
+			<!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="bulk" --> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->">
+			<!-- TMPL_VAR NAME="bulk" --> 
+			</a>
+			<!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="date_due" --> <!-- TMPL_VAR NAME="date_due" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 
@@ -351,9 +359,16 @@
 
  <td width="16%" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><a href="detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML--><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF --></a></td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" -->
+<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="barcode" --> 
+<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->&bibit=<!-- TMPL_VAR NAME="rbiblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="ritemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'>
+<!-- TMPL_VAR NAME="barcode" -->
+</a>
 <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="bulk" --> <!-- TMPL_VAR NAME="bulk" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF -->
+<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="bulk" --> 
+<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=rbiblionumber -->">
+<!-- TMPL_VAR NAME="bulk" --> 
+</a>
+<!-- TMPL_ELSE -->-<!-- /TMPL_IF -->
 </td>
 <td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
 </td>
