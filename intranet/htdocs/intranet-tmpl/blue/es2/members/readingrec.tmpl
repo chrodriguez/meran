@@ -13,17 +13,17 @@
 
 <center>
 <!-- TMPL_IF NAME="ok2" -->
-	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='ant' -->">
+	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='ant' -->&order=<!-- TMPL_VAR NAME=orden -->">
 	<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
-	<a class="highnumber" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR NAME=number -->">
+	<a class="highnumber" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR NAME=number -->&order=<!-- TMPL_VAR NAME=orden -->">
 	<u><!-- TMPL_VAR name=number --></u></a>
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='sig' -->">
+	<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name='bornum' -->&ini=<!-- TMPL_VAR name='sig' -->&order=<!-- TMPL_VAR NAME=orden -->">
 	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
 <!-- /TMPL_IF -->
 
@@ -38,16 +38,16 @@
 	<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
 
 	<TD >
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=title&limit=<!-- TMPL_VAR name="limit" -->"><b>T&iacute;tulo</b></a>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=title&ini=<!-- TMPL_VAR name="actual" -->"><b>T&iacute;tulo</b></a>
 	</TD>
 	<TD>
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=completo&limit=<!-- TMPL_VAR name="limit" -->"><b>Autor</b></a>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=completo&ini=<!-- TMPL_VAR name="actual" -->"><b>Autor</b></a>
 	</TD>
         <TD >
         <b>Edici&oacute;n</b>
  	</TD>
         <TD >
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=barcode&limit=<!-- TMPL_VAR name="limit" -->"<b>C&oacute;digo</b></a>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=barcode&ini=<!-- TMPL_VAR name="actual" -->"<b>C&oacute;digo</b></a>
  	</TD>
 	<TD>
 	<b>Pr&eacute;stamo</b>
@@ -60,7 +60,7 @@
 	<b>Vencimiento</b>
 	</TD>
 	<TD >
-		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>Devoluci&oacute;n</b></a>
+		<a class="inputFontNormal" href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&ini=<!-- TMPL_VAR name="actual" -->"><b>Devoluci&oacute;n</b></a>
 	</TD>
 
 	 <td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
