@@ -1,17 +1,47 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/epoch_styles.css ">
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <script type="text/javascript">
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+//Agrego el codigo para mostrar el estado de la busqueda en Ajax
+<!-- TMPL_INCLUDE NAME="state.js" -->
+
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
 	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('dateselected'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('dateselectedEnd'));
 				};
+
+
+
+function consultar(){
+	var chkfecha=document.getElementById("chkfecha").checked;
+	var chkuser =document.getElementById("chkuser").checked;
+	var fechaIni=$("#dateselected").val();
+	var fechaFin=$("#dateselectedEnd").val();
+	var chck=$("input[@name='chck']:checked");
+	var array= new Array;
+	for(var i=0; i< chck.length; i++){
+		array[i]=chck[i].value;
+	}
+	var params="chkfecha="+chkfecha+"&dateselected="+fechaIni+"&dateselectedEnd="+fechaFin+"&chkuser="+chkuser+"&chck="+array;
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/reports/estadisticasResult.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				HiddeState();
+			}
+	});
+}
+
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
@@ -24,11 +54,10 @@
 </table>
 
 <br>
-<form  name="unidad"  method=post action="estadisticas.pl">
 	<table border="0" cellspacing="0" cellpadding="0">
   		<tr>
 			<td valign= "top" class=inputFontNormal>
-			<input class="inputFontNormal" type="checkbox" name="chkfecha" 
+			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha" 
 				<!-- TMPL_IF NAME="chkfecha" -->checked<!-- /TMPL_IF -->>
 			<b>Seleccione para buscar por fecha.</b><br><br>
 			Seleccione una fecha de inicio:<br><br>
@@ -37,11 +66,10 @@
 
 			<td valign= "top" class=inputFontNormal>
 				<br><br>
-			<input id="ini" class="inputFontNormal" name="dateselected" value="
+			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
 			<!-- TMPL_IF NAME="fechaInicio" --><!-- TMPL_VAR NAME="dateselected" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 				<br><br>
-			<input id="fin" class="inputFontNormal" name="dateselectedEnd" value="
-			<!-- TMPL_IF NAME="fechaFin" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_IF NAME="fechaFin" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 			</td>
 
 
@@ -49,139 +77,20 @@
 			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td rowspan=3 class="inputFontNormal"> <b>Buscar por:</b> <br>
 				<p>Prestamos:</p>
-				<input id="DO" class="inputFontNormal" type="checkbox"  value="DO" name="chck">Domiciliario
-				<input id="SA" class="inputFontNormal" type="checkbox"  value="SA" name="chck">Sala de lectura 
-				<input id="FO" class="inputFontNormal" type="checkbox"  value="FO" name="chck">Para fotocopia
-				<input id="ES" class="inputFontNormal" type="checkbox"  value="ES" name="chck">Especial <br><br>
-				<input id="US" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">Usuario
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="DO" name="chck">Domiciliario
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="SA" name="chck">Sala de lectura 
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="FO" name="chck">Para fotocopia
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="ES" name="chck">Especial <br><br>
+				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">Usuario
 				<br><br>
 
-				<a  onClick='unidad.submit()'><img src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+				<input type="image" onClick='consultar()' src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
 			</td>
    		</tr>
 	</table>
 
 <br>
-<!-- TMPL_VAR NAME="cantUsuarios" -->
+<div id="result"></div>
 
-<table border=0 cellspacing=0 cellpadding=0>
-	<tr>
-		<th colspan="7" align="center">Prestamos</th>
-	</tr>
-
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-		<th width="15%">Usuarios</th>
-		<th width="15%">Domciliarios</th>
-		<th>Sala de lectura</th>
-		<th>Para fotocopia</th>
-		<th>Especial</th>
-		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<table>
-				<tr>
-					<th>Prestamos</th>
-					<th>Reservas</th>
-					<th>Renovados</th>
-				</tr>
-			</table>
-		</td>
-		
-		<td>
-			<table>
-				<tr>
-					<th>Total</th>
-					<th>Devueltos</th>
-					<th>Renovados</th>
-				</tr>
-			</table>
-		</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-	</tr>
-
-	<tr align="center">
-		<td>&nbsp;</td>
-		<td>
-			<table>
-				<tr align="center">
-					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuPrest" -->
-					</td>
-					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuReser" -->
-					</td>
-					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuRenov" -->
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td>
-			<table>
-				<tr>
-					<td class="inputFontNormal" width="11%">
-						<!-- TMPL_VAR NAME="domiTotal" -->
-					</td>
-					<td class="inputFontNormal" width="15%">
-						<!-- TMPL_VAR NAME="devueltos" -->
-					</td>
-					<td class="inputFontNormal" width="8%">
-						<!-- TMPL_VAR NAME="renovados" -->
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="sala" --></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="foto" --></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="especial" --></td>
-		<td>&nbsp;</td>
-
-	</tr>
-
-
- 	<tr valign=middle>
-        	<td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
-</table>
-
-<br>
-
-<center>
-<br>
-
-
-<input TYPE="hidden" VALUE="pdf" NAME="type" > 
-<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
-<input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_blank';unidad.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
-</a>
-
-<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
-<input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_self'; unidad.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
-</a>
-</center>
-
-</form>
-
-<script language="JavaScript">
-var stringCheckbox= '<!-- TMPL_VAR NAME="chck" -->';
-var checkbox=stringCheckbox.split(",");
-
-for (var i=0; i<checkbox.length; i++){
-	var ch=document.getElementById(checkbox[i]);
-        ch.checked=true;	
-}
-</script>
-
-<script language="JavaScript">
-var chkuser='<!-- TMPL_VAR NAME="chkuser" -->'
-document.getElementById(chkuser).checked=true;
-</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

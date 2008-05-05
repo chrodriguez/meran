@@ -24,11 +24,11 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use HTML::Template;
-use C4::AR::Estadisticas;
 use C4::Koha;
 use C4::Date;
 
 my $input = new CGI;
+
 
 my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || ""; 
@@ -47,53 +47,11 @@ my ($template, $loggedinuser, $cookie)
                                                                                 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+
 $template->param( todaydate => format_date($today));
                                                                                 
 ###
 
-my $chkfecha= $input->param('chkfecha');
-my @chck= $input->param('chck');
-my $chkuser= $input->param('chkuser');
 
-
-#Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'));
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'));
-
-my $domiTotal;
-my $renovados;
-my $devueltos;
-my $foto;
-my $sala;
-my $especial;
-my $cantUsuPrest;
-my $cantUsuRenov;
-my $cantUsuReser;
-
-($domiTotal,$renovados,$devueltos,$sala,$foto,$especial)=estadisticasGenerales($fechaInicio, $fechaFin, $chkfecha, @chck);
-
-if(($chkuser eq "" && scalar(@chck)==0)||$chkuser ne ""){
-	$cantUsuPrest=cantidadUsuariosPrestamos($fechaInicio, $fechaFin, $chkfecha);
-	$cantUsuRenov=cantidadUsuariosRenovados($fechaInicio, $fechaFin, $chkfecha);
-	$cantUsuReser=cantidadUsuariosReservas($fechaInicio, $fechaFin, $chkfecha);
-}
-
-$template->param( 	chck             => join(",",$input->param('chck')),
-			chkfecha         => $chkfecha,
-			chkuser		 => $chkuser,
-			fechaFin         => $fechaFin,
-			fechaInicio      => $fechaInicio,
-			dateselected     => $input->param('dateselected'),
-		        dateselectedEnd  => $input->param('dateselectedEnd'),
-			domiTotal        => $domiTotal,
-			renovados        => $renovados,
-			devueltos        => $devueltos,
-			foto             => $foto,
-			sala             => $sala,
-			especial         => $especial,
-			cantUsuPrest	 => $cantUsuPrest,
-			cantUsuRenov	 => $cantUsuRenov,
-			cantUsuReser	 => $cantUsuReser,
-		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
