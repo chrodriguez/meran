@@ -1,0 +1,94 @@
+
+<br><br>
+<br><br><br><br>
+
+<p class=inputFontNormal align="center">La cantidad de préstamos es: <!-- TMPL_VAR NAME=cantidad --></p> 
+
+
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='orden' -->" NAME="orden" >
+
+<br>
+<table border=0 cellspacing=0 cellpadding=2 width=90%>
+	<tr align="center">
+	<!-- TMPL_IF NAME="ok2" -->
+	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_LOOP NAME=numeros -->
+		<!-- TMPL_IF NAME="actual" -->
+			<a class="inputFontNormal" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')"> <u><!-- TMPL_VAR name=number --></u> </a>
+		<!-- TMPL_ELSE -->
+        		<u><!-- TMPL_VAR name=number --></u>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+
+	<!-- TMPL_IF NAME="ok" -->
+
+	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+	<!-- /TMPL_IF -->
+	</tr>
+</table>
+
+
+<table cellspacing="0" cellpadding="0" border="0" class="tablaresultado" width="100%">
+	<tr height="24" class="tablaresultadoTitle">
+	<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+
+	<td onclick="consultar('surname')">Apellido</td>
+	<td onclick="consultar('firstname')">Nombre</td>
+	<td onclick="consultar('DNI')">DNI</td>
+	<td onclick="consultar('CatUsuario')">Categor&iacute;a</td>
+	<td onclick="consultar('tipoPrestamo')">Tipo Pr&eacute;stamo</td>
+	<td onclick="consultar('barcode')">C&oacute;digo de Barras</td>
+	<td onclick="consultar('fechaPrestamo')">Fecha Pr&eacute;stamo</td>
+	<td onclick="consultar('fechaDevolucion')">Fecha Devoluci&oacute;n</td>
+	<td onclick="consultar('tipoItem')">T&iacute;po</td>
+
+	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+	
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+       <tr align="center">
+  	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+  	<td align="left" class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_VAR NAME=surname ESCAPE=HTML--></td>
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=firstname --></td>
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=DNI --> </td>
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=CatUsuario --> </td>
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=tipoPrestamo --> </td>
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=barcode --> </td>
+	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=fechaPrestamo --> </td>  
+  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=fechaDevolucion --> </td>  
+	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=tipoItem --> </td>  
+  	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+       </tr>
+<!-- /TMPL_LOOP -->
+       <tr valign=bottom>
+       		<td class="lineafinaltabla"  align="left" colspan="9"></td>
+       </tr>
+	<tr align="center">
+	<td colspan="9">
+		<br><br>
+		<form name="branches" method="post">
+		<!-- Para imprimir correctamentes los datos -->
+		<input type="hidden" name="tiposItems" value="<!-- TMPL_VAR NAME=tipoItem -->">
+		<input type="hidden" name="catUsuarios" value="<!-- TMPL_VAR NAME=catUsuarios -->">
+		<input type="hidden" name="tipoPrestamos" value="<!-- TMPL_VAR NAME=tipoPrestamo -->">
+		
+		<input type="hidden" name="ini" value="<!-- TMPL_VAR NAME=ini -->">
+		<input type="hidden" name="fin" value="<!-- TMPL_VAR NAME=fin -->">
+		<input type="hidden" name="orden" value="<!-- TMPL_VAR NAME=orden -->">
+
+		<!-- Para ver que se hace, imprimir o generar un pdf -->
+		<input TYPE="hidden" VALUE="pdf" NAME="type" > 
+		<a onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+		</a>
+	
+		<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+		</a>
+		</form>
+	</td>
+	</tr>
+</table>
+<br>

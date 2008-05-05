@@ -10,18 +10,18 @@ use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use HTML::Template;
-use C4::AR::Estadisticas;
 use C4::AR::Issues;
 use C4::Koha;
 use C4::Biblio;
+use CGI::Ajax;
 
 my $input = new CGI;
 
-#Obtengo el Tipo de Item para filtrar
-my $tipoItem = $input->param('tiposItems');
-my $tipoPrestamo = $input->param('tipoPrestamos');
-my $catUsuarios = $input->param('catUsuarios');
+#url donde se arma la tabla
+my $url = '/cgi-bin/koha/reports/historico_PrestamosResult.pl';
 
+#creo una funcion asincronica
+my $pjx = new CGI::Ajax( 'external' => $url);
 
 my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
@@ -56,11 +56,14 @@ else {$avail=$input->param('avail')};
 #fin
 
 #Fechas
+=item
 my $ini='';
 my $fin='';
 if($input->param('ini')){$ini=$input->param('ini');}
 if($input->param('fin')){$fin=$input->param('fin');}
+=cut
 
+=item
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $iniPag;
 my $pageNumber;
@@ -73,8 +76,10 @@ if (($input->param('iniPag') eq "")){
 	$iniPag= ($input->param('iniPag')-1)* $cantR;
 	$pageNumber= $input->param('iniPag');
 };
-#FIN inicializacion
+=cut
 
+#FIN inicializacion
+=item
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
 my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$fin,$tipoItem,$tipoPrestamo,$catUsuarios);
 
@@ -98,6 +103,7 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
                                 ok2     => '1',
                                 ant     => $ant)}
 }
+=cut
 
 #Cargo todos los Select
 #*********************************Select de Categoria de Usuarios**********************************
@@ -200,16 +206,17 @@ if ($avail eq 0){$availD='Disponible';}else{	my $av=getAvail($avail);
 						}
 
 $template->param( 
-			resultsloop      => \@resultsdata,
-			tipoItem	 => $tipoItem,
-			tipoPrestamo	 => $tipoPrestamo,
-			catUsuarios	 => $catUsuarios,
+			#resultsloop      => \@resultsdata,
+			#tipoItem	 => $tipoItem,
+			#tipoPrestamo	 => $tipoPrestamo,
+			#catUsuarios	 => $catUsuarios,
 			orden 		 => $orden, 
-			pageNumber	 => $pageNumber,
-			cantR		 => $cantR,
-			paginas          => $paginas,
-			ini 		 => $ini,
-			fin		 => $fin		
+			#pageNumber	 => $pageNumber,
+			#cantR		 => $cantR,
+			#paginas          => $paginas,
+			funcion		 => $pjx,
+			#ini 		 => $ini,
+			#fin		 => $fin		
 		);
 
 
