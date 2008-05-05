@@ -1,0 +1,123 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+
+
+<script>
+$(document).ready(function(){
+	$(".zebra tr:even").addClass("impar");
+});
+
+function agregarEjemplar(id1){
+	var itemtype=$("#"+id1).val();
+	if(itemtype !=  -1){
+		location.href="../acqui.simple/agregarItem.pl?id1="+id1+"&itemtype="+itemtype;
+	}
+	else{
+		alert("Eliga el esquema de catalogo para agregar un item");
+	}
+}
+
+</script>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Resultados de la B&uacute;squeda de un ejemplar</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+
+<CENTER>
+
+<p class="inputFontNormal">
+Ha buscado por <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="titulo" -->t&iacute;tulo <!-- TMPL_VAR name="titulo" ESCAPE=HTML--><!-- /TMPL_IF --></b>
+<br>
+
+<!-- ������������������������������FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<!-- TMPL_IF name="total" -->
+	<!-- TMPL_VAR name="count" --> 
+		resultados encontrados<br>
+		Resultados <i><!-- TMPL_VAR name="showoffset" --></i> a <i><!-- TMPL_VAR name="total" --></i> mostrados.
+<!-- /TMPL_IF -->
+</p>
+
+<!-- ����������������������������������FALTA PAGINADOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+<table width="100%" cellpadding="0">
+	<tr>
+		<td>Descripciones bibliogr&aacute;ficas</td>
+	</tr>
+</table>
+
+<table class="zebra" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr align="left" class="tablaresultadoTitle">
+	        <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td>T&iacute;tulo</td>
+		<td>Autor</td>
+		<td>Esquema de catalogo</td>
+		<td>&nbsp;</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+	<!-- TMPL_IF NAME="result" -->
+	<!-- TMPL_LOOP NAME="result" -->
+	<tr>
+		<td>&nbsp;</td>
+		<td><!-- TMPL_VAR name="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" --> :&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML --><!-- /TMPL_IF --> </td>
+		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=autor --></td>
+		<td><!-- TMPL_VAR name="combo" --></td>
+		<td><a  class="click" class="inputFontNormal" onClick="agregarEjemplar('<!-- TMPL_VAR name='id1' -->')">Agregar grupo</a></td>
+		<td>&nbsp;</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td  class="inputFontNormal" align="center" colspan="6">No se encontr&oacute; nada</td>
+		</tr>
+	<!-- /TMPL_IF -->
+</table>
+<br>
+<table width="100%" cellpadding="0">
+	<tr>
+		<td>Descripciones bibliogr&aacute;ficas en breeding farm</td>
+	</tr>
+</table>
+
+<table  class="zebra" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td><b>T&iacute;tulo</b></td>
+		<td><b>Autor</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>Viene desde</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr valign="middle">
+			<td>&nbsp;</td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" --> :&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML --><!-- /TMPL_IF --></td>
+			<td class="inputFontNormal"> <!-- TMPL_VAR NAME=author --></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="isbn" --></td>
+			<td class="inputFontNormal"><!-- TMPL_VAR name="file" --></td>
+			<!-- TMPL_IF NAME="NOTMARC" -->			
+			<!-- TMPL_ELSE -->
+			<td><a  class="inputFontNormal" href="addbiblio.pl?breedingid=<!-- TMPL_VAR name='id' -->">Agregar&nbsp;ejemplar</a></td>
+			<!-- /TMPL_IF -->
+			<td>&nbsp;</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td  class="inputFontNormal" align="center" colspan="8">No se encontr&oacute; nada</td>
+		</tr>
+	<!-- /TMPL_IF -->
+
+</table>
+<br>
+<a  class="inputFontNormal" href="agregarItem.pl" class="button">Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a</a>
+<br>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+use strict;
+use CGI;
+use C4::Auth;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::AR::Busquedas;
+use HTML::Template;
+
+my $query = new CGI;
+
+my $tema=$query->param('tema');
+my $detalle=$query->param('detalle');
+
+
+my $search;
+$search->{'tema'}=$tema;
+$search->{'detalle'}=$detalle;
+
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "busquedas/tema.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
+
+my ($count,@results)=&buscarTema($search);
+
+  $template->param(SEARCH_RESULTS => \@results);
+  $template->param(numrecords => $count);
+  $template->param(value => $tema);
+
+output_html_with_http_headers $query, $cookie, $template->output;

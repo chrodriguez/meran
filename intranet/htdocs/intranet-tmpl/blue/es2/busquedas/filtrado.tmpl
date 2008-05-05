@@ -1,0 +1,374 @@
+
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+
+<script language="javascript" type="text/javascript">
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function buscarPorAutor(idAutor){
+
+var params= 	'idAutor=' + idAutor;
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/busqueda.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra('tablaResult');
+					$("#busqueda").slideUp('fast');
+					//se oculta busqueda avanzada
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+}
+
+
+function ordenarPor(orden){
+	buscar(orden);
+}
+
+function buscar(orden){
+	if ($('#keyword').val() != ''){
+	busquedaCombinada(orden);
+	}
+	else {
+	if ($('#estante').val() != ''){
+	buscarEstante();
+	}
+	else {
+	if ($('#dictionary').val() != '') {
+	buscarPorDiccionario();
+	}
+	else {
+	if ($('#signatura').val() != '') {
+	buscarPorSignatura();
+	}
+	else {
+	if ($('#tema').val() != '') {
+	buscarPorTema();
+	}
+	else {
+var radio= $(":checked");
+var tipo=radio[0].value;
+var params= 	'isbn=' + $('#isbn').val() + 
+		'&codBarra=' +$('#codBarra').val() +
+		'&tema=' + $('#tema').val() +
+		'&autor=' + $('#autor').val() +
+		'&titulo=' + $('#titulo').val() +
+		'&tipo=' + tipo + '&orden=' + orden +
+		'&comboItemTypes=' + $('#comboItemTypes').val();
+		
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/busqueda.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					zebra('tablaResult');
+					HiddeState();
+
+/*
+					//para ordenar el resultado en el cliente
+					$('#tablaResult').tablesorter({	
+  									sortList:[[0,0],[1,0],[2,0]],
+ 									widgets: ['zebra'],
+  									headers: { 3: { sorter: false} }
+								});
+*/
+				}
+	});
+
+	}}}}}
+}
+
+function mostrarDetalle(id1){
+	var params="id1="+id1;
+	crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
+}
+
+
+$(document).ready(function() {
+	$("input").keypress(function (e) {
+		if(e.which == 13){
+			buscar('titulo');
+		}
+	});
+
+	$("#volver").hide();
+
+	$("#volver").click(function(){
+		$("#resultMARCDetail").slideToggle('fast');	
+		//muestro el resultado de la busqueda
+		$("#resultBusqueda").slideDown("fast");
+		$("#volver").hide();
+	});
+	
+
+ 	$("#busqueda").show();
+	$("#showBusqueda p.showBusqueda ").click(function(){
+						$("#volver").hide();
+ 						$("#busqueda").slideToggle('fast');
+						//oculto el detalle MARC
+						$("#resultMARCDetail").slideUp("fast");
+						//oculto el resultado de la busqueda
+						$("#resultBusqueda").slideUp("fast");
+ 					});
+// Vengo del detalle, con el nombre del autor busca los documentos que escribio ese autor.
+	var array = location.href.split('?');
+	if (array.length >1){
+		var array=array[1].split('&');
+		var origen=array[0].split('=')[1];
+		if(origen == "detalle"){
+			var idAutor=array[1].split('=')[1];
+			buscarPorAutor(idAutor);
+		}
+	}
+});
+
+
+function buscarEstante(){
+var params= 	'viewShelfName=' + $('#estante').val()+ '&orden=title' ;
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/estante.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra('tablaResult');
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+function mostrarEstantes(){
+var params= '';
+		
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/estante.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra('tablaResult');
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+
+function buscarPorDiccionario(){
+
+var params= 	'dictionary=' + $('#dictionary').val() ;
+
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/diccionario.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra('tablaResult');
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+function buscarPorSignatura(){
+
+var params= 	'signatura=' + $('#signatura').val() ;
+
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/signatura.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra('tablaResult');
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+
+function buscarPorTema(){
+
+var params= 	'tema=' + $('#tema').val() ;
+
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/tema.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					$(".zebra tr:even").addClass("impar");
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+function busquedaCombinada(orden){
+
+var params= 	'keyword=' + $('#keyword').val() + '&orden=' + orden ;
+
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/busquedaCombinada.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					$(".zebra tr:even").addClass("impar");
+					//se oculta busqueda avanzada
+					//$("#busqueda").slideToggle('fast');	
+					$("#volver").hide();
+					$("#busqueda").slideUp('fast');	
+					$("#resultBusqueda").slideDown("fast");
+					HiddeState();
+				}
+	});
+
+}
+
+</script>
+
+<!-- PARA PODER CREAR EL FORMULARIO -->
+<div id="formulario"></div>
+
+<div id="showBusqueda" style="text-align: right; cursor:pointer;">
+<p class="showBusqueda" title="Busqueda Avanzada">[+]</p>
+</div>
+
+<div id="busqueda">
+	<span class="pagetitle">B&uacute;squeda Avanzada en el cat&aacute;logo</span>
+	<br>
+	<div class="formElemets">
+		<table width="70%" height="88%" valign="top"  border="0" align="center" cellpadding="0" cellspacing="0" >
+		<tr>
+		<td  valign="top"  align="right"  width="30%">
+		<ul>
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>B&uacute;squeda combinada</b><br>
+                	<input type="text" id="keyword" size="25" class="inputFontNormal">
+			<p valign="top" align="right">&nbsp;</p>
+			</li>
+
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+        		<b>Tipo de documento</b> <br>
+			<!-- TMPL_VAR name="comboItemTypes" -->
+			</li>
+			
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+    			<b>B&uacute;squeda por diccionario</b><br>
+         		<input class="inputFontNormal" type="text" size="25" id="dictionary">
+			</li>		
+
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>C&oacute;digo de barras</b><br>
+			<input class="inputFontNormal" type="text" size="25" id="codBarra">
+			</li>
+
+					
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>Signatura Topogr&aacute;fica</b><br>
+			<input class="inputFontNormal" type="text" size="25" id="signatura">
+			</li>
+
+		</ul>
+		</td>
+		<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
+  		<td  valign="top" align="right" width="30%">
+		<ul>
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>T&iacute;tulo</b><br>
+			<input class="inputFontNormal" type="text"  size="25" id="titulo">
+			<p valign="top" align="right">
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value=normal checked>Normal
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value=exacto>Exacto
+			</p>
+			</li>
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>Autor</b><br>
+			<input class="inputFontNormal" type="text" size="25" id="autor">
+			</li>
+
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>Tema</b><br>
+			<input class="inputFontNormal" type="text" size="25" id="tema">
+			</li>
+
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>ISBN</b><br>
+                	<input type="text" id="isbn" size="25" class="inputFontNormal">
+			</li>
+
+			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<b>Estantes Virtuales</b><br>
+			<input class="inputFontNormal" type="text" size="25" id="estante">
+			</li>
+	         	
+		</ul>
+		<td>
+		<tr>
+		</table>
+		<div align ="center">
+
+		<ul>
+			<li>
+			<input type="hidden" name="type" value="intra">
+			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscar('titulo');">
+
+			<input type="image"   src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/vertodos.png" onClick="mostrarEstantes();" >
+		
+			</li>
+		</ul>
+		</div>
+
+	</div>
+</div>
+
+<div id="resultBusqueda"></div>
+
+<div style="text-align: center; cursor:pointer;">
+	<span id="volver">Volver</span>
+</div>
+
+<div id="resultMARCDetail"></div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

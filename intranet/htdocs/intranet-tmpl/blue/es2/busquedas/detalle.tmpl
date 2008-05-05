@@ -1,0 +1,245 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script>
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+$(document).ready(function(){
+	$(".zebra tr:even").addClass("impar");
+});
+
+function consultarAjax(params,id1){
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/busquedas/detalle.pl",
+		data: params,
+		beforeSend: Init(),
+		complete: function(ajax){
+				HiddeState();
+				if(id1 != ''){
+					var para="id1="+id1;
+					crearForm("/cgi-bin/koha/busquedas/detalle.pl",para);
+				}
+				else{
+					crearForm("/cgi-bin/koha/busquedas/filtrado.pl","");
+				}
+			}
+	});
+}
+
+function detalleMARC(id3){
+	var params="id3="+id3;
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/busquedas/MARCDetalle.pl",
+		data: params,
+		beforeSend: Init(),
+		complete: function(ajax){
+				$('#detalleComun').slideUp("slow");
+				$('#detalleMARC').html(ajax.responseText);
+				HiddeState();
+			}
+	});
+}
+
+function verDivs(){
+	$('#detalleComun').slideDown("slow");
+	$('#detalleMARC').slideUp("slow");
+}
+
+function filtroPorAutor(id){
+	location.href="filtrado.pl?origen=detalle&idAutor="+id;
+}
+
+function editarNivel1(id1,itemtype){
+	location.href="../acqui.simple/agregarItem.pl?origen=detalle&nivel=1&itemtype="+itemtype+"&id1="+id1;
+}
+
+function editarGrupo(id1,id2,itemtype){
+	location.href="../acqui.simple/agregarItem.pl?origen=detalle&nivel=2&itemtype="+itemtype+"&id1="+id1+"&id2="+id2;
+}
+
+function editarEjemplar(id1,id3,itemtype){
+	var params="itemtype="+itemtype+",id1="+id1+",id3="+id3;
+	crearForm("../acqui.simple/editarEjemplar.pl",params);
+// 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id3="+id3;
+}
+
+function editarEjemplares(id1,id2,itemtype){
+	var params="itemtype="+itemtype+",id1="+id1+",id2="+id2+",json=0";
+	crearForm("../acqui.simple/editarEjemplar.pl",params);
+// 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id2="+id2;
+}
+
+function borrarGrupo(id1,id2){
+	var params= 'id1='+id1+'&id2='+id2+'&accion=borrarGrupo';
+	consultarAjax(params,id1);
+}
+
+function borrarN1(id1){
+	var params='id1='+id1+'&accion=borrarN1';
+	consultarAjax(params,'');
+}
+
+function borrarEjemplar(id1,id3){
+	var params='id3='+id3+'&accion=borrarEjemplar';
+	consultarAjax(params,id1);
+}
+
+function  cargarImagen(id){
+var params= 'id=' + id  + '&tipo=id2';
+$.ajax({        type: "POST", 
+                url: "/cgi-bin/koha/search-amazon.pl",
+		data: params,
+		complete: function(ajax){
+		if (ajax.responseText != ''){
+		urls=ajax.responseText.split("#");
+		if ((urls[0] != '')&&(urls[1] != '')){
+		$('#' + id).html(  '<a href="/covers/' + urls[1] + '" title="Ver imagen" rel="lightbox"><img src="/covers/' + urls[0] + '" ></a>');
+		}else {
+		if (urls[0] != ''){
+		$('#' + id).html(  '<img src="/covers/' + urls[0] + '" >');
+		}
+		}
+		}
+		
+		}
+	});
+}
+</script>
+
+<!-- PARA PODER CREAR EL FORMULARIO -->
+<div id="formulario"></div>
+
+<div id="detalleMARC"></div>
+
+<div id="detalleComun">
+<div id="titulo">
+	<p class="pagetitle"> 
+		<!-- TMPL_VAR NAME="titulo"--> 
+		<!-- TMPL_LOOP NAME="datosautor" -->
+			(<a class="click" onClick="filtroPorAutor(<!-- TMPL_VAR NAME='id' -->)"><!-- TMPL_VAR NAME="completo" --></a>)
+		<!-- /TMPL_LOOP -->
+	</p>
+</div>
+
+<!-----------------Registro de libro TABLE--------->
+<table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
+	<tr valign="top" height="24" class="tablaresultadoTitle">
+		  <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		  <td  valign="middle" height="24"><b>Registro de Documento</b> <!-- TMPL_VAR NAME="id1" --></td>
+		  <td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+</table>
+
+<div class="detalle">
+	<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png"   border=0 title="Editar Nivel 1" onClick="editarNivel1(<!-- TMPL_VAR NAME='id1' -->,'LIB')">
+
+	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarN1(<!-- TMPL_VAR NAME='id1' -->);} else {return false;}" title="Borrar Nivel 1">
+	<br>
+	<!-- TMPL_LOOP NAME="loopnivel1" -->
+		<!-- TMPL_IF NAME="librarian" -->
+			<!-- TMPL_IF NAME="dato" -->
+				<!-- TMPL_VAR NAME="librarian" -->: <b><!-- TMPL_VAR NAME="dato" --></b><br>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	<hr>
+	N&uacute;mero Total de Ejemplares:<b> <!-- TMPL_VAR NAME="cantItemN1" --></b> 
+</div>
+
+<!-- TMPL_LOOP NAME="loopnivel2" -->
+
+	<div>
+		<p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
+        		<!-- TMPL_VAR NAME="id2" --> GRUPO - <!-- TMPL_VAR NAME="tipoDoc" -->
+        	</p>
+	</div>
+
+	<div class="detalle">
+<!-- NIVEL 2 -->
+		<script>
+		cargarImagen('<!-- TMPL_VAR NAME='id2' -->');
+		</script>
+		<div id="<!-- TMPL_VAR NAME='id2' -->" style="position: relative; float:right;"></div>
+		
+		<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" title="Editar Grupo" onClick="editarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->,'<!-- TMPL_VAR NAME='itemtype' -->')">	
+
+		<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->);} else {return false;}" title="Borrar Grupo">
+		<br>
+		<!-- TMPL_LOOP NAME="resultado" -->
+			
+				<!-- TMPL_IF NAME="librarian" -->
+				<!-- TMPL_IF NAME="dato" -->
+				<!-- TMPL_VAR NAME="librarian" -->: <b><!-- TMPL_VAR NAME="dato" --></b><br>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+	
+			<!-- TMPL_IF NAME="cantItems" -->
+				Cantidad de Items: <!-- TMPL_VAR NAME="cantItems" --><br>
+			<!-- /TMPL_IF -->
+	
+			<!-- TMPL_LOOP NAME="loopnivel3" -->
+				<hr>
+				Ejemplares Disponibles:<b> <!-- TMPL_VAR NAME="disponibles" --></b><br>
+				Reservas Realizadas: <b> <!-- TMPL_VAR NAME="reservados" --></b><br>
+				Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="prestados" --></b><br>
+				<hr>
+			<table cellspacing="0" cellpadding="0"  width="100%" class="zebra" width="100%">
+				<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
+
+					<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
+					</td>
+					<td colspan="2" >
+						<b>Edici&oacute;n</b>
+       	 					<input TYPE="image" name="submit"  VALUE="modificar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplares('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Todos">
+					</td>
+					<td><b>Sig. Top.</b> </td>
+        				<td><b>C&oacute;digo</b></td>
+        				<td><b>Disponibilidad</b></td>
+        				<td><b>Vencimiento</b></td>
+					<td width="30%"  colspan="2"><b>Circulaci&oacute;n</b></td>
+					<td>MARC</td>
+					<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+				</tr>
+	
+				<!-- TMPL_LOOP NAME="nivel3" -->
+				<input type="hidden" name="id2" value="<!-- TMPL_VAR NAME='id2' -->">
+				<tr align="center">
+					<td width="10%" colspan="2" valign="middle" height="25">
+                				<input TYPE="image" name="submit"  VALUE="modify" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id3' -->,'<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Ejemplar">
+            				</td>
+            				<td width="6%" valign="middle">
+        			<!-- TMPL_UNLESS NAME="prestado" -->
+                				<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
+        			<!-- /TMPL_UNLESS -->
+            				</td>
+					<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
+					<td><!-- TMPL_VAR NAME="barcode" --></td>
+					<td><!-- TMPL_VAR NAME="notforloan" --></td>
+					<td>------</td>
+				
+	    				<td valign="middle" colspan="2">
+						<!-- TMPL_IF NAME="forloan" -->
+						<input TYPE="image" name="borrowD"  VALUE="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario" onClick="alert('falta')">
+						<!-- TMPL_ELSE -->
+							------
+						<!-- /TMPL_IF -->
+	    				</td>
+				
+					<td colspan="2">
+						<input TYPE="image" name="marc"  VALUE="detalle MARC" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/MARC.png" title="" onClick="detalleMARC('<!-- TMPL_VAR name='id3' -->')">
+					</td>
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<br><hr class="lineagruesa"><br>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+<!-- /TMPL_LOOP -->
+
+</div> <!-- Fin DIV detalleComun -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

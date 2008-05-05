@@ -1,0 +1,33 @@
+
+<p class="pagetitle">Detalle MARC</p>
+
+
+<!--*****************************************MARC DETAIL*****************************************************  -->
+<ul>
+<!-- TMPL_LOOP NAME="loopnivel2" -->
+
+<!-- TMPL_LOOP NAME="marcResult" -->
+
+  <!-- TMPL_IF NAME="campoMARC" -->
+	<li class="MARCheader">
+	<!-- TMPL_VAR NAME="campoMARC" -->&nbsp;<!-- TMPL_VAR NAME="nombreCampo" -->
+	</li>
+  <!-- /TMPL_IF -->  
+
+  <!-- TMPL_IF NAME="subcampo" -->
+    <!-- TMPL_IF NAME="dato" -->
+	<li class="detalleMARC">
+	&nbsp;&nbsp;<!-- TMPL_VAR NAME="subcampo" -->
+	&nbsp;<!-- TMPL_VAR NAME="librarian" -->: &nbsp;<b><!-- TMPL_VAR NAME="dato" --></b>
+	</li>
+    <!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- /TMPL_LOOP -->
+</ul>
+
+<p align="center"><a class="click" onClick="verDivs()">Volver</a></p>
+
+
+

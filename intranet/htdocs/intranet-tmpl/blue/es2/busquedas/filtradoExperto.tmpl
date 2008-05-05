@@ -1,0 +1,350 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+
+<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
+
+<script language="javascript" type="text/javascript">
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+// Realiza la busqueda RE AVANZADA!!!!
+function busquedaReAvanzada(){
+	var consulta = $('#consulta').val();
+	if(consulta !=""){
+		var params=	'nivel1=' + $('#nivel1').val() +
+			'&nivel2=' + $('#nivel2').val() +
+			'&nivel3=' + $('#nivel3').val() +
+			'&nivel1rep=' + $('#n1r').val() +
+			'&nivel2rep=' + $('#n2r').val() +
+			'&nivel3rep=' + $('#n3r').val() +
+			'&operador=' + $(':checked').val() +
+			'&accion=buscar';
+
+		$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					var texto=ajax.responseText;
+					$("#resultBusqueda").html(texto);
+					zebra();
+					HiddeState();
+
+					//para ordenar el resultado en el cliente
+					$('#tablaResult').tablesorter({	
+  									sortList:[[0,0],[1,0],[2,0]],
+ 									widgets: ['zebra'],
+  									headers: { 3: { sorter: false} }
+								});
+				}
+		});
+	}
+	else{
+		alert("No ingreso datos para consultar");
+	}
+}
+
+// Crea el string con los campos correspondiente al campoX elegido
+function seleccionCampoX(){
+	var params='campoX=' + $('#campoX').val() + '&accion=seleccionCampoX';
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					var texto=ajax.responseText;
+					crearOpciones(texto,"#campo");
+					HiddeState();
+				}
+	});
+
+}
+
+// Crea el string con los subcampos correspondientes a el campo elegido.
+function seleccionCampo(){
+	var params='campo=' + $('#campo').val() + '&accion=seleccionCampo';
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					var texto=ajax.responseText;
+					crearOpciones(texto,"#subcampo");
+					HiddeState();
+				}
+	});
+
+}
+
+// Crea el select con los valores de la tabla de referencia que corresponde al campo elegido.
+function buscarReferencia(){
+	var params='mapeo=' + $('#mapeo').val() + '&accion=busquedaReferencia';
+	$.ajax({	type: "POST",
+			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+					var texto=ajax.responseText;
+					ubicarComponente(texto);
+					eventoEnter("#valor1","primero");
+					HiddeState();
+				}
+	});
+}
+
+//Ubica el componente que viene desde la llamada a ajax
+function ubicarComponente(txt){
+	$("#valor1").remove();
+	$("#div1").append(txt);
+}
+
+//Crea las opciones de los select de los campos y subcampos con el string que llega de la llamada ajax
+function crearOpciones(texto,id){
+	var inputSel=$(id);
+	var arreglo=texto.split("#");
+	var i=0;
+	var option=null;
+	var txtnode;
+	inputSel.html("");
+
+	option = document.createElement("option");
+	option.setAttribute("value", -1);
+        option.appendChild(document.createTextNode("Elegir"));
+        inputSel[0].appendChild(option);
+
+	for(i;i<arreglo.length - 1;i++){
+		option = document.createElement("option");
+		option.setAttribute("value", arreglo[i]);
+		if(id == "#campo"){
+			txtnode=document.createTextNode(arreglo[i].split("/")[1]);
+		}
+		else{
+			txtnode=document.createTextNode(arreglo[i]);
+		}
+        	option.appendChild(txtnode);
+        	inputSel[0].appendChild(option);
+	}
+}
+
+// Crea el texto a mostrar en el textarea y ingresa los campos a consultar en los input hidden que corresponda
+function agregarConsulta(tipo){
+	var ok=true;
+	var campo;
+	var tabla;
+	var cond;
+	var valor;
+	var string;
+	var textarea=$("#consulta");
+	if(tipo=='primero'){
+		valor=$("#valor1");
+		var valorAMostrar;
+		if(valor[0].type != "text"){
+			valorAMostrar= valor[0].selectedIndex;
+			valorAMostrar=valor[0].options[valorAMostrar].text;
+		}
+		else{
+			valorAMostrar=valor.val();
+		}
+		if(valor.val() != ""){
+			var mapeo=$("#mapeo").val();
+			if(mapeo== -1){
+				ok=false;
+			}
+			else{
+				mapeo=mapeo.split("#");
+				tabla=mapeo[0];
+				campo=$("#mapeo option:selected").text();
+				cond=$("#cond1").val();
+				var hidden=$("#"+tabla);
+				hidden.val(hidden.val() + mapeo[1]+"/"+cond+"/"+valor.val()+"#");
+				string=campo+" "+cond+" "+valorAMostrar+"\n";
+			}
+		}
+		else{
+			ok=false;
+		}
+	}
+	else{
+		valor=$("#valor2");
+		if(valor.val() != ""){
+			campo=$("#campo").val();
+			var subcampo=$("#subcampo").val();
+			if(campo == -1 || subcampo == -1){
+				ok=false;
+			}
+			else{
+				tabla=campo.split("/")[0];
+				campo=campo.split("/")[1];
+				cond=$("#cond2").val();
+				var hidden=$("#"+tabla);
+				hidden.val(hidden.val()+campo+"/"+subcampo+"/"+cond+"/"+valor.val()+"#");
+				string=campo+" "+subcampo+" "+cond+" "+valor.val()+"\n";
+			}
+		}
+		else{
+			ok=false;
+		}
+	}
+	if(ok){
+		textarea[0].appendChild(document.createTextNode(string));
+	}
+	else{
+		alert("Datos incorrectos");
+		valor[0].focus();
+	}
+	
+}
+
+// limpia las entradas de la consulta y los input hidden
+function limpiar(){
+	$('#nivel1').val("");
+	$('#nivel2').val("");
+	$('#nivel3').val("");
+	$('#n1r').val("");
+	$('#n2r').val("");
+	$('#n3r').val("");
+	$('#consulta').html("");
+	$('#valor1').val("");
+	$('#valor2').val("");
+}
+
+// Hace una busqueda por el id del autor cuando se toca en el link del mismo.
+function buscarPorAutor(idAutor){
+
+var params= 	'idAutor=' + idAutor;
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/busquedas/busqueda.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#resultBusqueda').html(ajax.responseText);
+					zebra();
+					HiddeState();
+				}
+	});
+}
+
+// Crea un formulario para poder mandar los parametros por post (no se muestran en la url), necesita un div con id
+// formulario
+function mostrarDetalle(id1){
+	var params="id1="+id1;
+	crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
+}
+
+//Agrega el evento keypress (en esta caso el enter), a los input que se ingresa el valor de la busqueda.
+function eventoEnter(id,tipo){
+	$(id).keypress(function (e) {
+		if(e.which == 13){
+			agregarConsulta(tipo);
+ 		}
+	});
+}
+
+
+$(document).ready(function() {
+	eventoEnter("#valor2","segundo");
+});
+</script>
+
+
+<!-- PARA PODER CREAR EL FORMULARIO -->
+<div id="formulario"></div>
+
+
+<div id="busqueda">
+	<span class="pagetitle">B&uacute;squeda Experta en el cat&aacute;logo</span>
+	<br>
+	<div class="formElemets">
+		<ul>
+			<li>
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="AND" checked>Y (AND)
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="OR">O (OR)
+			</li>
+			
+			<li>
+        		<div style="float:left;">
+			Campo: <!-- TMPL_VAR name="mapeo" -->
+			Condici&oacute;n: <select id="cond1">
+						<option value="=">Igual</option>
+						<option value="<>">Distinto</option>
+						<option value=">">Mayor</option>
+						<option value="<">Menor</option>
+						<option value="Empieza">Empieza</option>
+						<option value="Contiene">Contiene</option>
+						<option value="Finaliza">Finaliza</option>
+					  </select>
+			</div>
+			<div id="div1" style="float:left;">
+				&nbsp;Valor: <input class="inputFontNormal" type="text"  id="valor1">
+			</div>
+			&nbsp;<input type="button" id="boton1" value="+" onClick="agregarConsulta('primero')">
+			</li>
+			
+			<li>
+        		Campo Marc: <select id="campoX" onChange="seleccionCampoX()">
+					<option value="-1">Elegir</option>
+					<option value="0">0XX</option>
+					<option value="1">1XX</option>
+					<option value="2">2XX</option>
+					<option value="3">3XX</option>
+					<option value="4">4XX</option>
+					<option value="5">5XX</option>
+					<option value="6">6XX</option>
+					<option value="7">7XX</option>
+					<option value="8">8XX</option>
+					<option value="9">9XX</option>
+				     </select>
+				     <select id="campo" onChange="seleccionCampo()">
+					<option value="-1">Elegir</option>
+				     </select>
+				     <select id="subcampo">
+					<option value="-1">Elegir</option>
+				     </select>
+			Condici&oacute;n: <select id="cond2">
+						<option value="=">Igual</option>
+						<option value="<>">Distinto</option>
+						<option value=">">Mayor</option>
+						<option value="<">Menor</option>
+						<option value="Empieza">Empieza</option>
+						<option value="Contiene">Contiene</option>
+						<option value="Finaliza">Finaliza</option>
+					  </select>
+			Valor: <input class="inputFontNormal" type="text"  id="valor2">
+			<input type="button"  value="+" onClick="agregarConsulta('segundo')">
+			</li>
+		</ul>
+
+		<div>
+		
+		<ul>
+			<li>
+				Consulta: <br>
+				<textarea id="consulta" cols="96" rows="7" readonly="readonly"></textarea>
+			</li>
+		</ul>
+
+		<ul>
+			<li>
+			<input type="hidden" name="type" value="intra">
+			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="busquedaReAvanzada()">
+			<input type="image" alt="Limpiar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" onClick="limpiar()">
+			</li>
+		</ul>
+		</div>
+
+	</div>
+</div>
+<input type="hidden" id="nivel1">
+<input type="hidden" id="nivel2">
+<input type="hidden" id="nivel3">
+<input type="hidden" id="n1r">
+<input type="hidden" id="n2r">
+<input type="hidden" id="n3r">
+
+<div id="resultBusqueda"></div>
+
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
