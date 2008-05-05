@@ -11,7 +11,6 @@ require Exporter;
 use C4::Search;
 use C4::Context;
 use C4::Date;
-use Date::Manip;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(&usuarios
@@ -153,25 +152,30 @@ sub historicoPrestamos{
 	
 	my ($orden,$ini,$fin,$tipoItem,$tipoPrestamo,$catUsuario)=@_;
 	my $dbh = C4::Context->dbh;
-
+	my @bind;
 	my $datesSQL='';
 	if (($ini ne '') and ($fin ne '')){
-		$datesSQL=' AND I.date_due BETWEEN "'.format_date_in_iso($ini).'" AND "'.format_date_in_iso($fin).'" ';
+		$datesSQL=" AND I.date_due BETWEEN ? AND ? ";
+		push(@bind,format_date_in_iso($ini));
+		push(@bind,format_date_in_iso($fin));
 	}
 
 	my $tipoDePrestamoSQL;
 	if ($tipoPrestamo ne "SIN SELECCIONAR"){
-		$tipoDePrestamoSQL= 'and ISST.issuecode = "'.$tipoPrestamo.'"';
+		$tipoDePrestamoSQL= "and ISST.issuecode = ? ";
+		push(@bind,$tipoPrestamo);
 	}	
 
 	my $tipoDeItemSQL = '';;
 	if ($tipoItem ne "SIN SELECCIONAR"){
-		$tipoDeItemSQL= 'and ITT.itemtype = "'.$tipoItem.'"';
+		$tipoDeItemSQL= "and ITT.itemtype = ? ";
+		push(@bind,$tipoItem);
 	}
 
 	my $catUsuarioSQL = '';
 	if ($catUsuario ne "SIN SELECCIONAR"){
-		$catUsuarioSQL= 'and C.categorycode = "'.$catUsuario.'"';
+		$catUsuarioSQL= "and C.categorycode = ? ";
+		push(@bind,$catUsuario);
 	}
 	
 
@@ -188,7 +192,7 @@ sub historicoPrestamos{
 	Order By ".$orden;
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 
 	my @results;
 	my $clase;
@@ -198,12 +202,12 @@ sub historicoPrestamos{
 		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'});
 		push(@results,$data);
         };
-	return(scalar(@results),@results);      
+	return(scalar(@results),@results);
 }
 
 
 #
-#Cuenta la cantidad de prestamos realizados durante el a�o que ingresa por parametro
+#Cuenta la cantidad de prestamos realizados durante el año que ingresa por parametro
 sub prestamosAnual{
         my ($branch,$year)=@_;
  	my $clase='par';
@@ -245,8 +249,13 @@ sub disponibilidad{
         my $dbh = C4::Context->dbh;
 	my @results;
 	my $dates='';
+	my @bind;
+	push(@bind,$avail);
+	push(@bind,$branch);
 	if (($ini ne '') and ($fin ne '')){
-		$dates=' AND av.date between "'.format_date_in_iso($ini).'" AND "'.format_date_in_iso($fin).'" ';
+		$dates=" AND av.date between ? AND ? ";
+		push(@bind,format_date_in_iso($ini));
+		push(@bind,format_date_in_iso($fin));
 	}
 
 	my $query = "SELECT DISTINCT i.*,bi.number,bi.publicationyear,b.title,b.author,
@@ -262,7 +271,7 @@ sub disponibilidad{
 
         my $sth=$dbh->prepare($query);
 
-        $sth->execute($avail,$branch);
+        $sth->execute(@bind);
         my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
 		if ($clase eq 'par'){$clase='impar'}else{$clase='par'};
@@ -274,7 +283,6 @@ sub disponibilidad{
 		push(@results,$data);
         }
         return (scalar(@results),@results);
-	   &reservas
 }
 
 sub disponibilidadCantidad{
@@ -288,9 +296,8 @@ sub disponibilidadCantidad{
         $sth->execute($avail,$branch);
         my $res=$sth->fetchrow_hashref;
         return ($res);
-}   
+}
 
-#
 #Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
 sub cantidadRenglones{
         my $dbh = C4::Context->dbh;
@@ -349,50 +356,58 @@ sub insertarNota{
 sub cantRegFechas{
 	my ($chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
         my $dbh = C4::Context->dbh;
+	my @bind;
         my $query ="SELECT  count(*)
         	    FROM modificaciones INNER JOIN borrowers ON
 		   (modificaciones.responsable=borrowers.cardnumber) ";
 	my $where = "";
 	
-	if ($chkfecha ne ''){
+	if ($chkfecha ne "false"){
 		$where = "WHERE";
-		$query.= $where." (fecha>='$fechaInicio') AND (fecha<='$fechaFin')";	
+		$query.= $where." (fecha>=?) AND (fecha<=?)";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 
 	if ($operacion ne ''){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." operacion='$operacion'";
+			$query.= $where." operacion=?";
 		}
-		else {$query.= " AND operacion='$operacion'";}
+		else {$query.= " AND operacion=?";}
+		push(@bind,$operacion);
 	}
 
 	if ($tipo ne ''){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." tipo='$tipo'";
+			$query.= $where." tipo=?";
 		}
-		else {$query.= " AND tipo='$tipo'";}
+		else {$query.= " AND tipo=?";}
+		push(@bind,$tipo);
 	}
 
-	if ($chkuser ne ''){
+	if ($chkuser ne "false"){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." responsable='$user'";
+			$query.= $where." responsable=?";
 		}
-		else {$query.= " AND responsable='$user'";}
+		else {$query.= " AND responsable=?";}
+		push(@bind,$user);
 	}
 	
-	if ($chknum ne ''){
+	if ($chknum ne "false"){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." numero >= '$numDesde' AND numero <= '$numHasta'";
+			$query.= $where." numero >= ? AND numero <= ?";
 		}
-		else {$query.= " AND numero >= '$numDesde' AND numero <= '$numHasta'";}
+		else {$query.= " AND numero >= ? AND numero <= ?";}
+		push(@bind,$numDesde);
+		push(@bind,$numHasta);
 	}
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
         return($sth->fetchrow_array);
 
 
@@ -403,51 +418,60 @@ sub registroEntreFechas{
         my ($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$fin,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
         my $dbh = C4::Context->dbh;
         my $clase='par';
-        my $query="SELECT operacion,fecha,responsable,numero,tipo,surname,firstname
+	my @bind;
+        my $query="SELECT idModificacion,nota,operacion,fecha,
+		   responsable,numero,tipo,surname,firstname
 		   FROM modificaciones INNER JOIN borrowers ON
 		   (modificaciones.responsable=borrowers.cardnumber) "; 
 	my $where = "";
 	
-	if ($chkfecha ne ''){
+	if ($chkfecha ne "false"){
 		$where = "WHERE";
-		$query.= $where." (fecha>='$fechaInicio') AND (fecha<='$fechaFin')";	
+		$query.= $where." fecha>=? AND fecha<=?";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 
 	if ($operacion ne ''){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." operacion='$operacion'";
+			$query.= $where." operacion=?";
 		}
-		else {$query.= " AND operacion='$operacion'";}
+		else {$query.= " AND operacion=?";}
+		push(@bind,$operacion);
 	}
 
 	if ($tipo ne ''){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." tipo='$tipo'";
+			$query.= $where." tipo=?";
 		}
-		else {$query.= " AND tipo='$tipo'";}
+		else {$query.= " AND tipo=?";}
+		push(@bind,$tipo);
 	}
 
-	if ($chkuser ne ''){
+	if ($chkuser ne "false"){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." responsable='$user'";
+			$query.= $where." responsable=?";
 		}
-		else {$query.= " AND responsable='$user'";}
+		else {$query.= " AND responsable=?";}
+		push(@bind,$user);
 	}
 	
-	if ($chknum ne ''){
+	if ($chknum ne "false"){
 		if ($where eq ''){
 			$where = "WHERE";
-			$query.= $where." numero >= '$numDesde' AND numero <= '$numHasta'";
+			$query.= $where." numero >= ? AND numero <= ?";
 		}
-		else {$query.= " AND numero >= '$numDesde' AND numero <= '$numHasta'";}
+		else {$query.= " AND numero >= ? AND numero <= ?";}
+		push(@bind,$numDesde);
+		push(@bind,$numHasta);
 	}
 
 	$query.=" ORDER BY ? limit $ini,$fin";
         my $sth=$dbh->prepare($query);
-        $sth->execute($orden);
+        $sth->execute(@bind,$orden);
         my @results;
 
 	my $IdModificacion;
@@ -456,32 +480,14 @@ sub registroEntreFechas{
                 if ($clase eq 'par') {$clase='impar';} else {$clase='par'};
 		$data->{'fecha'}=format_date($data->{'fecha'});
  	        $data->{'clase'}=$clase;
-		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
-
-		#ES RE TRUCHO PERO FUNCIONA, VER
-
-		#$IdModificacion = $data->{'idModificacion'};
-		#tengo que recuperar el numero del IdModificacion anterior
-		#$IdModificacion = $IdModificacion - 1;
-
-		#my $dbh = C4::Context->dbh;
-	        #my $query="Select numero  
-		#	   from modificaciones
-                #	   where (idmodificacion = ?) ";
-	        #my $sth2=$dbh->prepare($query);
-        	#$sth2->execute($IdModificacion);
-
-		#while (my $data2=$sth2->fetchrow_hashref){
-
-		#$data->{'bib'} = $data2->{'numero'};
-		#}	
+		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};	
 
                 push(@results,$data);
         }
         return (@results);
 }
 
-
+=item
 sub cantRegDiarias{
  	my ($today)=@_;
         my $dbh = C4::Context->dbh;
@@ -516,6 +522,7 @@ sub registroActividadesDiarias{
         }
         return (@results);
 }
+=cut
 
 #
 #Prestamos sin devolucion al dia de hoy
@@ -529,7 +536,7 @@ sub cantidadRetrasados{
 	              From issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
         	      Where (returndate is NULL and issues.branchcode = ? ) ";
 	my $sth=$dbh->prepare($query);
-	$sth->execute(&branch);
+	$sth->execute($branch);
 	while (my $data=$sth->fetchrow_hashref){
                 push(@results,$data);
         }
@@ -548,7 +555,7 @@ sub renovacionesDiarias{
   		    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    where (returnDate is NULL and issues.branchcode=? and renewals >= 1 )";
 	my $sth=$dbh->prepare($query);
-	$sth->execute(&branch);
+	$sth->execute($branch);
 	while (my $data=$sth->fetchrow_hashref){
                 push(@results,$data);
         }
@@ -566,7 +573,7 @@ sub prestamosEnUnaFecha{
 		    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    where (issues.date_due=? and issues.branchcode = ?)";
         my $sth=$dbh->prepare($query);
-        $sth->execute(&fecha,&branch);
+        $sth->execute($fecha,$branch);
 	while (my $data=$sth->fetchrow_hashref){
                 push(@results,$data);
         }
@@ -585,7 +592,7 @@ sub devolucionesParaFecha{
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    where (issues.returndate=? and issues.branchcode=?) ";
         my $sth=$dbh->prepare($query);
-        $sth->execute(&fecha,&branch);
+        $sth->execute($fecha,$branch);
 	while (my $data=$sth->fetchrow_hashref){
                 push(@results,$data);
         }
@@ -601,7 +608,7 @@ sub historialUsuario{
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    where borrowers.borrowernumber=? and issues.branchcode=?";
         my $sth=$dbh->prepare($query);
-        $sth->execute(&id,&branch);
+        $sth->execute($id,$branch);
 	return($sth->fechtrow_hashref);
 }
 
@@ -691,7 +698,7 @@ sub usuarios{
 				};
                 $data->{'clase'}=$clase;
 		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'});
-		$data->{'city'}=getcitycategory($data->{'city'});
+		$data->{'city'}=&getcitycategory($data->{'city'});
                 push(@results,$data);
         }
         return (@results);
@@ -770,7 +777,6 @@ sub prestamos{
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	while (my $data=$sth->fetchrow_hashref){
-
 		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
 		#Se filtra por Fechas de Vencimiento 
 		
@@ -821,7 +827,6 @@ sub prestamos{
 	}
 #
 	my $cantReg=scalar(@results);
-
 #Se chequean si se quieren devolver todos
 	if(($cantReg > $fin)&&($fin ne "todos")){
 		my $cantFila=$fin-1+$ini;
@@ -839,7 +844,6 @@ sub prestamos{
 		return ($cantReg,@results);
 	}
 }
-
 
 sub cantidadReservas{
 	my ($branch,$tipo)=@_;
@@ -1142,11 +1146,13 @@ sub getuser{
 sub estadisticasGenerales{
 	my ($fechaInicio, $fechaFin, $chkfecha, @chck)=@_;
 	my $dbh = C4::Context->dbh;
-
+	my @bind;
         my $query="SELECT count(*) as cant, issuecode, renewals FROM issues WHERE (renewals >0 OR renewals=0)";
 	
-	if ($chkfecha ne ''){
-		$query.=" AND (date_due>='$fechaInicio') AND (date_due<='$fechaFin')";	
+	if ($chkfecha ne "false"){
+		$query.=" AND (date_due>=?) AND (date_due<=?)";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 
 	my $loop=scalar(@chck);
@@ -1154,15 +1160,16 @@ sub estadisticasGenerales{
 	if ($loop>0){
 		my $i;
 		for ($i=0; $i<$loop-1; $i++){
-			$subquery.=" issuecode = '$chck[$i]' OR";
-			
+			$subquery.=" issuecode = ? OR";
+			push(@bind,$chck[$i]);
 		}
-		$subquery =" AND (".$subquery." issuecode = '$chck[$loop-1]')";
+		$subquery =" AND (".$subquery." issuecode = ?)";
+		push(@bind,$chck[$loop-1]);
 	}
 	$query .= $subquery." GROUP BY issuecode, renewals";
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 
 	my $domiTotal=0;
 	#my $noRenovados;
@@ -1195,14 +1202,17 @@ sub estadisticasGenerales{
 
 #******Para saber cuantos libros se devolvieron***********
 	if($domiTotal){
+		my @bind2;
 		my $query="SELECT count(*) as devueltos, issuecode FROM issues WHERE returndate IS NOT NULL AND issuecode = 'DO'";
-		if ($chkfecha ne ''){
-			$query.=" AND (date_due>='$fechaInicio') AND (date_due<='$fechaFin')";	
+		if ($chkfecha ne "false"){
+			$query.=" AND (date_due>=?) AND (date_due<=?)";
+			push(@bind2,$fechaInicio);
+			push(@bind2,$fechaFin);
 		}
 		$query.=" GROUP BY issuecode";
 		
 		my $sth=$dbh->prepare($query);
-        	$sth->execute();
+        	$sth->execute(@bind2);
 		my $data=$sth->fetchrow_hashref;
 		$devueltos=$data->{'devueltos'};
 	}
@@ -1217,14 +1227,16 @@ sub cantidadUsuariosPrestamos{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
         my $query="SELECT borrowernumber FROM issues ";
-	
-	if ($chkfecha ne ''){
-		$query.=" WHERE (date_due>='$fechaInicio') AND (date_due<='$fechaFin')";	
+	my @bind;
+	if ($chkfecha ne "false"){
+		$query.=" WHERE (date_due>=?) AND (date_due<=?)";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 	$query .=" GROUP BY borrowernumber";
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 	my $cant;
 	if($sth->rows()!=0){
 		$cant=$sth->rows();
@@ -1237,14 +1249,16 @@ sub cantidadUsuariosRenovados{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
         my $query="SELECT borrowernumber FROM issues WHERE renewals <> 0 ";
-	
-	if ($chkfecha ne ''){
-		$query.=" AND (date_due>='$fechaInicio') AND (date_due<='$fechaFin')";	
+	my @bind;
+	if ($chkfecha ne "false"){
+		$query.=" AND (date_due>=?) AND (date_due<=?)";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 	$query .=" GROUP BY borrowernumber";
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 	my $cant;
 	if($sth->rows()!=0){
 		$cant=$sth->rows();
@@ -1257,14 +1271,16 @@ sub cantidadUsuariosReservas{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
         my $query="SELECT borrowernumber FROM reserves ";
-	
-	if ($chkfecha ne ''){
-		$query.=" WHERE (reservedate>='$fechaInicio') AND (reservedate<='$fechaFin')";	
+	my @bind;
+	if ($chkfecha ne "false"){
+		$query.=" WHERE (reservedate>=?) AND (reservedate<=?)";
+		push(@bind,$fechaInicio);
+		push(@bind,$fechaFin);
 	}
 	$query .=" GROUP BY borrowernumber";
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute();
+        $sth->execute(@bind);
 	my $cant;
 	if($sth->rows()!=0){
 		$cant=$sth->rows();
@@ -1349,7 +1365,6 @@ sub historicoCirculacion(){
 	my @bind;
 	my $query="";
 	my $cant=0;
-
 	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.biblionumber, bib.title, 	
 			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, i.barcode, i.bulk, u.firstname as userFirstname, u.surname as userSurname";
 
@@ -1372,13 +1387,11 @@ sub historicoCirculacion(){
 		push(@bind,$fechaIni);
 		push(@bind,$fechaFin);
 	}
-
 	if (($user)&&($user ne '-1')){	
 		if ($where eq ''){$where = " WHERE responsable=? ";}
 		else {$where.= " AND responsable=? ";}
 		push(@bind,$user);
 	}
-
 	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
 		if ($where eq ''){$where = " WHERE h.type = ? ";}
 		else{$where .= " AND h.type = ? ";}
@@ -1411,7 +1424,6 @@ sub historicoCirculacion(){
 	$sth=$dbh->prepare($query);
         $sth->execute(@bind);
 	my @results;
-
         while (my $data=$sth->fetchrow_hashref){
 		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
 		$data->{'fecha'}=format_date($data->{'date'});
