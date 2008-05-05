@@ -1,0 +1,39 @@
+
+<table class="zebra" cellspacing="0" cellpadding="0" border="0">
+	<tr class="tablaresultadoTitle">
+
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+	
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
+
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+<!--  campo, subcampo, liblibrarian, dato -->
+
+<!-- 	<tr class="<!-- TMPL_VAR NAME='clase'-->"> -->
+<!-- 		<td>&nbsp;</td> -->
+		<td width="5%"> 
+			<!-- TMPL_VAR NAME=campo -->
+		</td>
+		<td width="5%"> 
+			<!-- TMPL_VAR NAME=subcampo --> 
+		</td>
+		<td width="45%"> 
+			<!-- TMPL_VAR NAME=liblibrarian --> 
+		</td>
+		<td width="45%"> 
+			<!-- TMPL_VAR NAME=dato -->
+		</td>
+<!-- 		<td>&nbsp;</td> -->
+	
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+
+

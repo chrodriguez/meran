@@ -1,0 +1,195 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+
+<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
+
+ <script>
+
+//Agrego el codigo para mostrar el estado de la busqueda en Ajax
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function deleteRow(idmap){
+	
+	var params= 	'idmap=' +  idmap +
+			'&action=DELETE'; 
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					SelectTablasKohaChange();
+					HiddeState();
+				}
+	});
+}
+
+function ValidarDatos(){
+	var campo= $('#campoMARC').val();
+	var subcampo= $('#subcampoMARC').val();
+
+	if(campo == ""){
+		alert("Ingrese el nombre del campo");
+		$('#campoMARC').focus();
+		return false;
+	}else if(subcampo == ""){
+			alert("Ingrese el subcampo");
+			$('#subcampoMARC').focus();
+			return false;
+		}else return true;
+}
+
+function agregarMapeo(){
+	
+	if(ValidarDatos()){
+
+		var params= 	'tabla=' +  $('#tablasKoha').val() +
+				'&campoKOHA=' + $('#camposKoha').val() +
+				'&campoMARC=' + $('#campoMARC').val() +
+				'&subcampoMARC=' + $('#subcampoMARC').val() +
+				'&action=INSERT'; 
+
+		$.ajax({	type: "POST", 
+				url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
+				data: params,
+				beforeSend: Init,
+ 				complete: function(ajax){
+						SelectTablasKohaChange();
+						HiddeState();
+					}
+		});
+	}
+}
+
+function RefreshComposKoha(){
+
+	var params=	'tabla=' +  $('#tablasKoha').val() +
+			'&action=SELECT';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					var resultSet = ajax.responseText;
+					var arreglo=resultSet.split("#");
+					var option = null;
+					var select = $("#camposKoha")[0];	
+	
+					//borro el combo
+					select.innerHTML= "";
+
+				 	for(var i=0; i<arreglo.length - 1;i++){
+					option = document.createElement("option");
+					option.setAttribute("value", arreglo[i]);
+        				option.appendChild(document.createTextNode(arreglo[i]));
+        				select.appendChild(option);
+ 					}
+					HiddeState();
+				}
+	});
+}
+
+function SelectTablasKohaChange(){
+
+	var params= 	'tabla=' +  $('#tablasKoha').val() +
+			'&action=TABLARESULT';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#result').html(ajax.responseText);
+					HiddeState();
+					RefreshComposKoha();
+					$('#tablaMapeo').tablesorter({	
+ 									widgets: ['zebra'],
+  									headers: { 0: { sorter: false},
+ 										   5: { sorter: false},
+ 										   6: { sorter: false}}
+								});
+				}
+	});
+}
+
+//Init Form
+$(document).ready(function() {
+	
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+});
+
+</script>
+
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Aqu&iacute; se puede realizar el mapeo de campos KOHA a campo y subcampo MARC</p>
+    </div>
+</div>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Mapeo de Tablas a MARC</td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+<br>
+
+<div class="formElemets">
+  <div>
+<!-- contenedor superior -->
+	<ul>
+	<li>
+		<label for="tablasKoha" style="float: left; width:15%" >
+			Tablas KOHA 
+		</label>
+		<!-- TMPL_VAR NAME="tablasKoha" -->
+	</li>
+	<li>
+		<label for="tablasKoha" style="float: left; width:15%" >
+			Campo KOHA 
+		</label>
+		<Select id="camposKoha"></Select>
+	</li>
+	<li>
+		<label for="campoMARC" style="float: left; width:15%" >
+			Campo MARC
+		</label>
+		<input type="text" id="campoMARC">
+	</li>
+	<li>
+		<label for="subcampoMARC" style="float: left; width:15%" >
+			Subcampo
+		</label>
+		<input type="text" id="subcampoMARC">
+	</li>
+	<li>
+	  <center>
+		<input id="agregar" type="button" value="Agregar" Title="Agregar nuevo mapeo" onClick="agregarMapeo();">
+	  </center>
+	<li>
+	</ul>
+  </div>
+
+<ul>
+<li>
+	<div id="result"></div>
+<br>
+</li>
+<ul>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

@@ -1,0 +1,141 @@
+<!-- TMPL_IF EXPR="(itemtype ne '-1')" -->
+
+<b><!-- TMPL_VAR NAME="error" --><!-- TMPL_VAR NAME="mensaje" --></b>
+
+<!-- TMPL_IF NAME="titulo" -->
+<div name="menuNivel1y2" style="float:left; width:20%; height:100%">
+	<div class="inputFontNormal">
+	<a href="../busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='id1' -->"><p class="pagetitle" ><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --></p></a>
+
+	<b>Autor: </b> <!-- TMPL_VAR NAME="autor" --><br>
+	Regitro de nivel 1: <!-- TMPL_VAR NAME="id1" -->
+	<br>
+
+	<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png"   border=0 title="Modificar Nivel 1" onClick=modificarN1(<!-- TMPL_VAR NAME="id1" -->)>
+
+	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarN1(<!-- TMPL_VAR NAME='id1' -->);} else {return false;}" title="Borrar Nivel 1">
+	</div>
+
+<!-- INFORMACION NIVEL 2 - GRUPOS -->
+<!-- TMPL_LOOP NAME="resultsGrupos" -->
+	<div>
+	<p class="inputFontNormal"> 
+		<b>Grupo: <!-- TMPL_VAR NAME="id2" --> - <!-- TMPL_VAR NAME= "tipo_documento" --></b><br>
+		
+		<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" title="Modificar Grupo" onClick="modificarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">
+		
+		<input type="button" name="agregar" value="+" border="0"  title="Agregar Ejemplar" onClick="agregarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->,'<!-- TMPL_VAR NAME='itemtype' -->')">	
+
+		<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->);} else {return false;}" title="Borrar Grupo">
+		<br>
+		<!-- TMPL_IF NAME="nivel_bibliografico" -->
+			Nivel bibliogr&aacute;fico: <!-- TMPL_VAR NAME="nivel_bibliografico" --><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="soporte" -->
+			Soporte: <!-- TMPL_VAR NAME="soporte" --><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="pais_publicacion" -->
+			Lugar: <!-- TMPL_VAR NAME="pais_publicacion" -->
+			<!-- TMPL_IF NAME="ciudad_publicacion" -->
+				- <!-- TMPL_VAR NAME="ciudad_publicacion" -->
+			<!-- /TMPL_IF -->
+			<br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="lenguaje" -->
+			Idioma: <!-- TMPL_VAR NAME="lenguaje" --><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="anio_publicacion" -->
+			Fecha: <!-- TMPL_VAR NAME="anio_publicacion" --><br>
+		<!-- /TMPL_IF -->
+		Cantidad Ejemplares: <!-- TMPL_VAR NAME="cantItems" -->
+	</p>
+	</div>	
+<!-- /TMPL_LOOP -->
+<!-- FIN INFORMACION NIVEL 2 -->
+</div>
+
+<!-- /TMPL_IF -->
+
+<br><br>
+
+<!-- TMPL_IF NAME="titulo" -->
+<div id="contenido" style="float:right; width:80%">
+<!-- TMPL_ELSE -->
+<div id="contenido">
+<!-- /TMPL_IF -->
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td colspan="7" class=inputFontNormal> 
+			<b>Agregar Documento: <!-- TMPL_VAR NAME="descripcion" -->  (paso: <!-- TMPL_VAR NAME="paso" --> de 2) </b>
+		</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+</table>
+
+<br>
+
+<!-- CAMPOS DEL NIVEL 1 y 2 -->
+<div id="parrafo1">
+<!-- TMPL_IF EXPR="(paso eq '1')" -->
+	<p>
+	<label for="autor" style="float: left; width:25%" >
+		Autor:
+	</label>
+	<input type="text" id="autor" name="autor" value="<!-- TMPL_VAR NAME='autor' -->">
+	<input type="hidden" id="idAutor" value="<!-- TMPL_VAR NAME='idAutor' -->">
+	</p>
+<!-- /TMPL_IF -->
+</div>
+
+<div style="clear:both" id="input1" class="boton" onClick="agregarCampoTemp(<!-- TMPL_VAR NAME='paso' -->,<!-- TMPL_VAR NAME='paso' -->)"><b>Campo Temporal</b></div>
+
+
+<br><br>
+
+<!-- CAMPOS DEL NIVEL 3 -->
+
+<!-- TMPL_IF EXPR="(paso eq '2')" -->
+<div id="parrafo2">
+	<br>
+	<hr>
+	<br>
+	<label for="codbarra" style="float: left; width:25%" >
+		C&oacute;digo de barra:
+	</label>
+	<input type="text" id="codbarra"> (Si deja en blanco autogenera) <br><br>
+
+	<label for="cantitems" style="float: left; width:25%" >
+		Cantidad:
+	</label>
+	<input type="text" id="cantitems" value="1"><br><br>
+</div>
+
+<div style="clear:both" id="input2" class="boton" onClick="agregarCampoTemp(<!-- TMPL_VAR NAME='paso' -->,3)"><b>Campo Temporal</b></div>
+<!-- /TMPL_IF -->
+
+<br>
+
+<p><b>&nbsp;* Campos obligatorios</b></p>
+
+<center>
+<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" value="Guardar Item nivel 1" title="Guardar Item" onClick="guardarItem(<!-- TMPL_VAR NAME='paso' -->)">
+</center>
+
+
+<div id="ocultos">
+<!-- Cantidad de campos generados dinamicamente -->
+<input type="hidden" id="cantIds" value="<!-- TMPL_VAR NAME='cantIds' -->">
+<!-- id de la tupla generada en la tabla del nivel1 -->
+<input type="hidden" id="id1" value="<!-- TMPL_VAR NAME='id1' -->">
+<input type="hidden" id="nivel" value="<!-- TMPL_VAR NAME='nivel' -->">
+<input type="hidden" id="accion" value="<!-- TMPL_VAR NAME='accion' -->">
+</div>
+
+</div>
+<!-- /TMPL_IF -->
+
+
+
+

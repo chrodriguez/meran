@@ -1,0 +1,168 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+
+<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
+
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+<script>
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="autocompletables.js" -->
+<!-- TMPL_INCLUDE NAME="crearComponentes.js" -->
+<!-- TMPL_INCLUDE NAME="seleccionCamposMarc.js" -->
+
+$(document).ready(function(){
+	var url="/cgi-bin/koha/acqui.simple/editarEjemplar.pl";
+	var paramsJSON="itemtype="+$("#itemtype").val() 
+			+"&id1="+$("#id1").val() + "&id2=" + $("#id2").val() 
+			+"&id3="+$("#id3").val() + "&json=1";
+	consultarAjaxJSON(3,paramsJSON,url);
+});
+
+
+function buscarChecked(){
+	var str="";
+	var checks=$("#todosEj :checked");
+	for (var i=0 ; i < checks.length; i++){
+		str=str+checks[i].value+"#";
+	}
+	return str;
+}
+
+
+function modNivel3(id1,id3){
+	var ok=1;
+	var cantIds=$("#cantIds").val();
+	ok=obtenerIdsValores(cantIds);
+	if(ok){
+		var respuesta=JSONstring.make(arrayjson);
+		var params="cantIds="+cantIds+"&id1="+id1+"&respuesta="+respuesta+"&accion=modNivel3";
+		if(id3 != ""){
+			params=params+"&id3="+id3+"&todos=0";
+		}
+		else{
+			var str=buscarChecked();
+			params=params+"&id3="+str+"&todos=1";
+		}
+		$.ajax({
+			type: "POST",
+			url: "/cgi-bin/koha/acqui.simple/editarEjemplar.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+				HiddeState();
+				location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+id1;
+			}
+		});
+	}
+	else{
+		alert("Por favor complete los campos del formulario que son obligatorios");
+	}
+}
+
+function todos(){
+	var checks=document.getElementsByTagName("input");
+	if (checks.length>0){
+		for(i=0;i<checks.length;i++){
+			if(checks[i].type == "checkbox"){
+				if(checks[i].checked){checks[i].checked=false}
+                   	 	else{checks[i].checked=true}
+			}
+		}
+	}
+}
+
+
+</script>
+
+<div id="titulo">
+	<p class="pagetitle"> 
+		<!-- TMPL_VAR NAME="titulo"--> 
+		<!-- TMPL_LOOP NAME="datosautor" -->
+			(<!-- TMPL_VAR NAME="completo" -->)
+		<!-- /TMPL_LOOP -->
+	</p>
+</div>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td colspan="7" class=inputFontNormal>
+			<!-- TMPL_IF NAME="todos" -->
+			<b>Modificar Ejemplares del grupo:<!-- TMPL_VAR NAME="id2" --></b>
+			<!-- TMPL_ELSE -->
+			<b>Modificar Ejemplar:<!-- TMPL_VAR NAME="id3" --></b>
+			<!-- /TMPL_IF -->
+		</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+</table>
+
+<!-- TMPL_IF NAME="todos" -->
+
+<table id="todosEj" align="center" width="100%">
+	<tr>
+		<td colspan=5 class="inputFontNormal">
+			<b>EJEMPLARES QUE SE VERAN AFECTADOS<br>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<a class="click" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+		</td>
+			<td align="center" class="inputFontNormal">C&oacute;digo de Barras</td>
+			<td align="center" class="inputFontNormal">Localizaci&oacute;n</td>
+		<td align="center" class="inputFontNormal">Disponibilidad</td>
+		<td align="center" class="inputFontNormal">&Uacute;ltima vista</td>
+	</tr>
+
+	<!-- TMPL_LOOP Name="itemloop" -->
+	<tr valign=top gcolor=#ffffcc>
+		<td align="center">
+			<input class="inputFontNormal" type="checkbox" value="<!-- TMPL_VAR NAME='id3' -->">
+		</td>
+		<td align="center">
+			<a class="click"><!-- TMPL_VAR Name="barcode" --></a>
+		</td>
+		<td class="inputFontNormal" align="center"><!-- TMPL_VAR Name="holdbranch" --></td>
+		<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="issuetype" -->-<!-- TMPL_VAR Name="disponibilidad" --></td>
+		<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="datelastseen" --></td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<hr>
+
+<br>
+<!-- /TMPL_IF -->
+
+
+<div id="parrafo2">
+
+</div>
+
+<div style="clear:both" id="input1" class="boton" onClick="agregarCampoTemp(3,3)"><b>Campo Temporal</b></div>
+
+<div id="ocultos">
+<!-- Cantidad de campos generados dinamicamente -->
+<input type="hidden" id="cantIds" value="<!-- TMPL_VAR NAME='cantIds' -->">
+<!-- id de la tupla generada en la tabla del nivel1 -->
+<input type="hidden" id="id1" value="<!-- TMPL_VAR NAME='id1' -->">
+<input type="hidden" id="id2" value="<!-- TMPL_VAR NAME='id2' -->">
+<input type="hidden" id="id3" value="<!-- TMPL_VAR NAME='id3' -->">
+<input type="hidden" id="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->">
+<input type="hidden" id="nivel" value="<!-- TMPL_VAR NAME='nivel' -->">
+<input type="hidden" id="accion" value="<!-- TMPL_VAR NAME='accion' -->">
+</div>
+
+<center>
+	<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" value="Modificar ejemplar" title="Guardar Item" onClick="modNivel3('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id3' -->')">
+</center>
+
+<!-- Div para seleccionar los campos temporales -->
+<div id="result"></div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+

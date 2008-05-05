@@ -1,0 +1,58 @@
+
+
+<table id="tablaVisualizacion" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="tablaresultadoTitle">
+		<th width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png">
+		</th>
+	
+		<th>Campo</th>
+		<th>Subcampo</th>
+		<th>Texto Pred</th>
+		<th>Texto Succ</th>
+		<th>Separador</th>
+		<th>Visible</th>
+		<th>Eliminar</th>
+		<th>Editar</th>
+	
+		<th width="1%" align="rigth" valign="top">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png">
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr align='center' class="inputFontNormal">
+		<td height=25>&nbsp;</td>
+
+		<td><!-- TMPL_VAR NAME=campo --></td>
+		<td><!-- TMPL_VAR NAME=subcampo --></td>
+		<td><!-- TMPL_VAR NAME=textpred --></td>
+		<td><!-- TMPL_VAR NAME=textsucc --></td>
+		<td><!-- TMPL_VAR NAME=separador --></td>
+		<td> 
+			<input type='checkbox' id="<!-- TMPL_VAR name='idestcatopac' -->"
+			value="<!-- TMPL_VAR NAME='visible' -->" 
+			onChange="cambiarVisibilidad('<!-- TMPL_VAR name='idestcatopac' -->');" 
+			value="<!-- TMPL_VAR NAME='visible' -->"
+			<!-- TMPL_IF NAME='visible' -->	checked	<!-- /TMPL_IF --> >
+		</td>
+		<td class="click" align="center">
+			<a onClick="deleteRowVisualizacion('eliminar',<!-- TMPL_VAR name='idestcatopac' -->);"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'></a>
+		</td>
+		<td class="click" align="center">
+			<a onClick="modificarVisualizacion('<!-- TMPL_VAR NAME=textpred -->','<!-- TMPL_VAR NAME=textsucc -->', '<!-- TMPL_VAR NAME=separador -->',<!-- TMPL_VAR name='idestcatopac' -->, 'modificar');"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
+			</a>
+		</td>
+
+		<td height=25>&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+	</tbody>
+
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="10"></td>
+        </tr>
+	
+</table>

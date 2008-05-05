@@ -1,0 +1,745 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+
+
+<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
+
+<script>
+
+//Agrego el codigo para mostrar el estado de la busqueda en Ajax
+<!-- TMPL_INCLUDE NAME="state.js" -->
+//para hacer la zebra
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function Complete(){
+	HiddeState();
+}
+
+function cambiarVisibilidad(idEstCat){
+
+var params= 	'id=' +  idEstCat +
+		'&visible=' + $('#' + idEstCat).val() +
+		'&tipoAccion=cambiarVisibilidad';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					armarTablaVisualizacion();
+					Complete();
+				}
+	});
+}
+
+
+function eleccionCampoX(accion){
+ 	accion= "seleccionCampo";
+
+var params= 	'campoX=' +  $('#campoX').val() +
+ 		'&encabezados=' +  $('#encabezados').val() +
+		'&accion=' + accion +
+		'&nivel=' + $('#nivel').val();
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#result').show();
+					$('#result').html(ajax.responseText);
+					Complete();
+				}
+	});
+}
+
+function eleccionCampo(accion){
+	accion= "seleccionSubCampo";
+
+var params= 	'campoX=' +  $('#campoX').val() +
+		'&encabezados=' +  $('#encabezados').val() +
+		'&campo=' +  $('#campo').val() +
+		'&accion=' + accion +
+		'&nivel=' + $('#nivel').val() + 
+		'&itemtype=' + $('#comboTiposItems').val();
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#result').html(ajax.responseText);
+					$('#guardar')[0].disabled = false;
+					Complete();
+				}
+	});
+}
+
+function seleccionarEncabezado(id){
+	
+	//oculto el boton de guardar
+	$('#guardar').show();
+	//oculto el boton de modificar
+	$('#modificar').hide();
+	$('#idEncabezado').val(id);
+	eleccionCampoX();
+	//muestro la tabla con resultados catalogados
+	armarTablaVisualizacion();
+}
+
+function modificarDatos(){
+
+	var params= 	'&textoPredecesor=' + $('#textoPredecesor').val() + 
+			'&textoSucesor=' + $('#textoSucesor').val() +  
+			'&separador=' + $('#separador').val() +
+			'&idestcatopac=' + idestcatopac +
+			'&tabla=estructuraCatalogacion&tipoAccion=Update';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					//arma la tabla de configuracion de visualizacion 
+					armarTablaVisualizacion();
+					//eleccionCampoX();
+					Complete();
+					$('#result').slideUp('slow');
+					$('#modificar').hide();
+				}
+	});
+
+}
+
+//para guardar el id de la fila seleccionada
+var idestcatopac;
+
+function modificarVisualizacion(textpred, textsucc, separador, id, tipo){
+
+	var params= 	'idestcatopac=' + id + 
+			'&tipo=' + tipo;
+
+	idestcatopac= id;
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+ 					$('#result').html(ajax.responseText);	
+					$('#textoPredecesor').val(textpred);
+					$('#textoSucesor').val(textsucc);
+					$('#separador').val(separador);
+					Complete();
+					if(tipo == "modificar"){
+						$('#seleccionCampos').hide();
+						$('#guardar').hide();
+						$('#modificar').show();
+ 						$('#textoPredecesor').focus();
+					}
+				}
+	});
+}
+
+function seleccionarCampos(){
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
+			beforeSend: Init,
+ 			complete: function(ajax){
+ 					$('#result').html(ajax.responseText);	
+					Complete();
+				}
+	});
+}
+
+function validarDatosEncabezado(){
+	if($('#nomEncabezadoAlta')[0].value == ""){
+		alert("Ingrese el encabezado");
+		$('#nomEncabezadoAlta')[0].focus();
+	}else {
+		saveEncabezado();
+		closeWindow();
+	};
+}
+
+function saveCatalogacion(){
+var params= 	'&textoPredecesor=' + $('#textoPredecesor').val() + 
+		'&textoSucesor=' + $('#textoSucesor').val() +  
+		'&separador=' + $('#separador').val() +
+		'&campo=' + $('#campo').val() +
+		'&subCampo=' + $('#subCampo').val() +
+		'&encabezados=' + $('#idEncabezado').val() +
+		'&tabla=estructuraCatalogacion&tipoAccion=Insert';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					//arma la tabla de configuracion de visualizacion 
+					armarTablaVisualizacion();
+					eleccionCampoX();
+					Complete();
+				}
+	});
+}
+
+//esta al pedo ver!!!!!!!!!!!!!!!!!!!!!!!!
+function mostrarError(responseText){
+	
+	var error= responseText;
+	if(error != ""){
+		//se informa el error
+		$('#resultError').show();
+		$('#resultError').html(error);
+		//luego de 6 seg ejecuta la funcion
+		delay("$('#resultError').hide()",6); //util.js
+	}
+}
+
+function deleteRowVisualizacion(OP,ID){
+
+var params= 	'tipoAccion=Delete&tabla=estructuraCatalogacion&idestcatopac=' + ID;
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					armarTablaVisualizacion();
+					Complete();
+				}
+	});
+
+}
+
+
+function armarTablaVisualizacion(){
+
+ var params= 	'encabezados=' + $('#idEncabezado').val() + 		
+		'&tipoAccion=MostrarTablaVisualizacion&componente=closeUpComboEncabezado';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#divTablaVisualizacion').html(ajax.responseText);
+					zebra('tablaVisualizacion');
+					//oculto div state
+					Complete();
+					$('#tablaVisualizacion').tablesorter({	
+//  									sortList:[[0,0],[1,0],[2,0]],
+ 									widgets: ['zebra'],
+  									headers: { 0: { sorter: false},
+ 										   7: { sorter: false},
+ 										   8: { sorter: false},
+ 										   9: { sorter: false}}
+// 									,debug: true
+								});
+
+				}
+	});
+}
+
+function validarDatos(){
+	var ok= true;
+	seleccionarEncabezado
+	if($('#campoX').selectedIndex == 0){
+		alert("Seleccione el filtro para campos");
+		$('#campoX').focus();
+		ok= false;
+	}
+
+	if(($('#campo').selectedIndex == 1)&&(ok)){
+		alert("Seleccione el campo");
+		$('#campo').focus();
+		ok= false;
+	}
+
+	if(($('#subcampo').selectedIndex == 1)&&(ok)){
+		alert("Seleccione el subcampo");
+		$('#subcampo').focus();
+		ok= false;
+	}
+
+	if(($('#textoPredecesor').value == "")&&(ok)){
+		alert("Ingrese el texto predecesor");
+		$('#textoPredecesor').focus();
+		ok= false;
+	}
+
+	if(($('#textoSucesor').value == "")&&(ok)){
+		alert("Ingrese el texto sucesor");
+		$('#textoSucesor').focus();
+		ok= false;
+	}
+
+	if(($('#separador').value == "")&&(ok)){
+		alert("Ingrese el separador");
+		$('#separador').focus();
+		ok= false;
+	}
+	
+	if(ok){
+	//se guarda la configuracion de visualizacion
+		saveCatalogacion();
+	}
+}
+
+function openWindow(){
+	$('.windowBlur').show();
+	$('#window').draggable({opacity: 0.7777});
+ 	$('#window').show();
+	
+}
+
+function closeWindow(){
+	$('.windowBlur').hide();
+	$('#window').hide();
+	clearDataTextArea();
+}
+
+
+function onChangeNivel(){
+	cargarTablaEncabezados();
+	$('#divTablaVisualizacion').html('');
+// 	$('#divTablaVisualizacion').slideUp('fast');
+// 	$('#divTablaVisualizacion').slideDown('fast');
+	$('#result').html('');
+// 	$('#result').slideUp('fast');
+// 	$('#result').slideDown('fast');
+}
+
+//********************************************Favoritos****************************************************
+
+//***************************************Encabezados***********************************************************
+function clearDataTextArea(){
+	//clear inputs
+	$('#textArearTiposItems').val('');
+	$('#nomEncabezadoAlta').val('');
+	//clear data
+	itemtypes_array= new Array();
+}
+
+function saveEncabezado(){
+	
+	var itemtypesJSON;
+	itemtypesJSON=JSONstring.make(itemtypes_array);
+
+	var params= 	'encabezado='+ $('#nomEncabezadoAlta').val() + 
+			'&tabla=encabezado&tipoAccion=Insert' +
+			'&nivel=' + $('#nivel').val() +
+//    			'&itemtypes=' + itemtypes_array.toJSONString();
+			'&itemtypes=' + itemtypesJSON;
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					clearDataTextArea();
+					cargarTablaEncabezados();
+					Complete();
+				}
+	});
+}
+
+function toObject(JSON){
+//para acceder a las propiedades
+//object[0].propiedades
+	return eval("("+ JSON +")");
+}
+
+function updateNombreEncabezado(idEncabezado, nombre){
+	var params= 	'encabezado=' + idEncabezado + 		
+			'&nombre=' + nombre + 
+			'&tipoAccion=UpdateEncebezdo';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					cargarTablaEncabezados();	
+					Complete();
+				}
+	});
+
+}
+
+//este no se va a usar si se modifican los datos en la fila de la tabla
+function modificarEncabezado(idEncabezado){
+
+	$('#updateEncabezado').slideDown('slow');
+	$('#nombreNuevo').val(jQuery.trim($('#encabezado'+idEncabezado).text()));
+	$('#nombreNuevo').keyup(
+		function () {
+			$('#encabezado'+idEncabezado).text($('#nombreNuevo').val());
+		});
+
+	$('#nombreNuevo').keypress(
+		function (e) {
+			if(e.which == 13){
+				updateNombreEncabezado(idEncabezado, $('#nombreNuevo').val());
+				$('#updateEncabezado').slideUp('slow');
+			}
+		});
+}
+
+function EditCell(idObj, id){
+	estado= $('#' + idObj + ' > div')[0].getAttribute('selected');
+
+	var array_aux= $('#tablaEncabezados tr > td > div');
+
+	//recorro los input para editar que se puedan estar mostrando
+	var valor;
+	for(i=0;i<array_aux.length;i++){
+		if($('#' + array_aux[i].id)[0].getAttribute('selected') == 'on'){
+			valor= $('#' + array_aux[i].id + '> input').val();
+			$('#'+array_aux[i].id).html("");
+			$('#'+array_aux[i].id).html($.trim(valor));
+			$('#'+array_aux[i].id)[0].setAttribute('selected', 'off');
+			$('#'+array_aux[i].id)[0].setAttribute('align', 'center');
+		}
+	}
+
+	if( estado == 'off' ){
+
+		var valor= $('#'+idObj + " > div").html();
+		$('#' + idObj + ' > div')[0].setAttribute('selected', 'on');
+		var inputO= "<input id='inputUpdate' type='text' size='50' />";
+		$('#'+idObj + " > div").html("");
+		$('#'+idObj + " > div").html(inputO);
+
+		$('#'+idObj)[0].setAttribute('align', 'left');
+		$('#inputUpdate').val($.trim(valor));
+		$('#inputUpdate').focus();
+		
+//agredo eventos al input donde se va a ingresar la actualizacion
+		$('#inputUpdate').keypress(
+		function (e) {
+			var nuevoValor;
+		// onEsc
+			if(e.which == 0){
+				$('#'+idObj + " > div").html("");
+				$('#'+idObj + " > div").html(valor);
+				$('#' + idObj + ' > div')[0].setAttribute('selected', 'off');
+				$('#'+idObj)[0].setAttribute('align', 'center');
+			}
+		// onEnter
+			if(e.which == 13){
+				nuevoValor= $('#inputUpdate').val();
+				updateNombreEncabezado(id, nuevoValor);
+				$('#'+idObj + " > div").html("");
+				$('#'+idObj + " > div").html(nuevoValor);
+				$('#' + idObj + ' > div')[0].setAttribute('selected', 'off');
+				$('#'+idObj)[0].setAttribute('align', 'center');
+			}
+		});
+
+	}
+}
+
+function changeTipoItem(){
+	//se llama al mismo evento
+	onChangeNivel();
+}
+
+//muestra la tabla de los encabezados, segun nivel e itemtype
+function cargarTablaEncabezados(){
+
+	var params= 	'nivel=' + $('#nivel').val() + 		
+			'&itemtype=' + $('#comboTiposItems').val() + 
+			'&tipoAccion=Select' + 
+			'&componente=cargarTablaEncabezados';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#divTablaEncabezados').html(ajax.responseText);	
+					zebra('tablaEncabezados');
+  					seleccionarFilaEncabezado();
+					Complete();
+				}
+	});
+
+}
+
+function deleteEncabezado(idEncabezado){
+
+	var params= 	'encabezado=' + idEncabezado +
+			'&tipoAccion=Delete' +
+			'&tabla=encabezadoCampoOpac';
+
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					cargarTablaEncabezados();
+					Complete();
+				}
+	});
+}
+
+function modificarOrden(encabezado, antOrden, action){
+	
+if((antOrden == 1)&&(action == 'up')){
+	alert("no se puede subir mas");
+}else{
+
+	var params= 	'encabezado=' + encabezado +
+			'&orden=' + antOrden +
+			'&itemtype=' + $('#comboTiposItems').val() + 
+			'&tipoAccion=cambiarOrdenEncabezado' +
+			'&action=' + action;
+
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					cargarTablaEncabezados();
+					Complete();
+				}
+	});
+
+	}
+}
+
+/******************************************Manejador para TextArea*********************************************/
+
+function dataO(ID, text){
+	this.ID= ID;
+	this.text= text;
+	return this;
+}
+
+var itemtypes_array= new Array();
+
+function pushEncabezadoTipoItem(){
+	
+	var id= $('#comboTiposItemsAltaEncabezado').val();	
+
+	if (!exist(id, itemtypes_array)){
+		var itemtype= $('#comboTiposItemsAltaEncabezado')[0].options[$('#comboTiposItemsAltaEncabezado')[0].selectedIndex].text;
+
+		$('#textArearTiposItems').val(itemtype + '\n' + $('#textArearTiposItems').val() );
+	
+		d= new dataO(id, itemtype);
+		itemtypes_array.push(d);
+	}else{
+		alert("Ya existe el elmento");
+	}
+
+	//si hay elementos habilito el boton pop
+	if(itemtypes_array.length > 0){
+		$('#pop').attr('disabled', false);
+	}
+}
+
+function exist(ID, vector){
+	var found= false;
+	var long= vector.length;
+	var i= 0;
+	while (!(found) && (i<long)){
+		if(vector[i].ID == ID){
+			found= true;
+		}else{
+			i++;
+		}
+	}
+	return found;
+}
+
+function mapToTextArea(idTextArea, vector){
+	var itemtype;
+
+	$('#'+idTextArea).val('');
+	for (var i=0;i<vector.length;i++){
+		itemtype= vector[i].text;
+		$('#'+idTextArea).val(itemtype + '\n' + $('#'+idTextArea).val() );
+	}
+}
+
+function popEncabezadoTipoItem(){
+	var obj= itemtypes_array.pop();
+// 	alert('tipoItem: ' + obj.text + ' ID: ' + obj.ID);
+	mapToTextArea('textArearTiposItems', itemtypes_array);
+	//si se vacia, deshabilito el boton pop
+	if(itemtypes_array.length == 0){
+		$('#pop').attr('disabled', true);
+	}
+}
+
+/*****************************************Fin**Manejador para TextArea*****************************************/
+
+function cambiarLineaEncabezado(id){
+		
+	linea= 0;
+	if($("#checkbox"+id).val() == 0){linea= 1;}//encabezado en linea
+
+	var params= 	'encabezado=' + id +
+			'&linea=' + linea +
+			'&tipoAccion=Update' +
+			'&tabla=encabezado';
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					Complete();
+				}
+	});
+
+}
+
+
+function handOver(){
+	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").hover(
+      		function () {
+			$(this).removeClass();
+			$(this).addClass("selected");
+      		}, 
+      		function () {
+			$(this).removeClass("selected");
+			zebra('tablaEncabezados');
+      		}
+    	);
+}
+
+//al seleccionar una fila se cambia el estilo para que se vea cual es la que se selecciona
+function seleccionarFilaEncabezado(){
+	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").click(
+		function () {
+			zebra('tablaEncabezados');
+			$(this).removeClass();
+			$(this).addClass("selected");
+// 			eleccionCampoX();
+// 			alert('selecciono encabezado');
+			
+		}
+    	);
+}
+
+//*************************************Fin**Encabezados********************************************************
+
+//Init Form
+$(document).ready(function() {
+	
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+});
+
+</script>
+
+<input type="hidden" id="idEncabezado">
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Descripcion breve para lo q sirve la ventana....</p>
+    </div>
+</div>
+
+<div id=window class=window style="display:none; height:270px; width:350px;">
+  <div class="windowBlur" style="display:none; height:270px; width:350px;">
+  </div>
+	<div id="headerWindow" class="headerWindow">
+		<span class="click" onClick="closeWindow();">Cerrar</span>
+	</div>
+	<div id="title" class="title">Titulo</div>	
+	<div id="contentWindow" class="contentWindow">
+	  <ul>
+	  	<li>
+		<label for="textoMod" style="float: left; width:25%" >
+		Encabezado:
+		</label>
+		<input type="text" id="nomEncabezadoAlta">
+		</li>
+		<li>
+		Tipo de item: <!-- TMPL_VAR NAME="selectItemTypeAltaEncabezado" -->
+		</li>
+		<li>
+		<input id="push" type="button" onClick="pushEncabezadoTipoItem();" value=">>" title="Agregar Tipo de Item" > 
+		<input id="pop" type="button" onClick="popEncabezadoTipoItem();" value="<<" title="Sacar Tipo de Item" disabled=true>
+		</li>
+		<li>
+		<textarea id="textArearTiposItems" style="height:60px; width:230px;" readonly></textarea>
+		</li>
+	</li>
+	</div>
+	<div class="controls" id="controls">
+		<p><a onClick="validarDatosEncabezado();"><img id="save" border="0" src="/intranet-tmpl/blue/es2/images/guardar.png" alt="Guardar" name="save"/>
+		</a></p>
+	</div>
+</div>
+
+
+<br>
+<div class="mensajeError" id="resultError" ><!-- TMPL_VAR NAME="mensajeError" --></div>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Visualizaci&oacute;n de campos MARC en OPAC</td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+<br>
+
+<div class="formElemets">
+  <div>
+<!-- contenedor superior -->
+	<ul>
+	<li>
+		<select id="nivel" onChange="onChangeNivel();">
+		<option value="1">Nivel1</option>
+		<option value="2">Nivel2</option>
+		<option value="3">Nivel3</option>
+		</select>
+		Tipo de item: <!-- TMPL_VAR NAME="selectItemType" -->
+		<input type="button" Title="Agregar Encabezado" onClick="openWindow()" value="Agregar" Title="Agregar un Encabezado">
+	</li>
+	<li>
+		<div id="divTablaEncabezados">
+		</div>
+	</li>
+	</ul>
+  </div>
+<br>
+<ul>
+<li>
+	<div id="result"></div>
+<br>
+</li>
+<li>
+	<center>
+	  <input id="guardar" type="button" value="Guardar" onClick="validarDatos();" disabled=true>
+	  <input id="modificar" type="button" value="Modificar" style="display:none;"
+		onClick="modificarDatos();">	
+	</center>
+</li>
+<li>
+	<div id="divTablaVisualizacion"></div>
+	<br>
+</li>
+<ul>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

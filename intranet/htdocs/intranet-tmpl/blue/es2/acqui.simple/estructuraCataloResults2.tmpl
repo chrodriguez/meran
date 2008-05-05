@@ -1,0 +1,27 @@
+<!-- TMPL_IF EXPR="(accion > 0) && (accion != 9)" -->
+
+<!-- TABLA PARA LA MODIFICACION DE LOS CAMPOS DE LA TABLA MARC_SUBFIELD_STRUCTURE -->
+<table id="tablaAgregar" width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td colspan="2">Campos a modificar en el nivel <!-- TMPL_VAR NAME="nivel" --></td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<br>
+			<!-- TMPL_INCLUDE NAME="seleccionCamposMarc.inc" -->
+		</td>
+	</tr>
+	<tr align="center">
+		<td colspan="4" >
+			<!-- TMPL_IF EXPR="(accion > 2) && (accion != 5)" -->
+			<input  src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" type="image"  value="Guardar Campo" title="Guardar Campo" onClick="guardarCamposModificados(5)">
+			<input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" onClick="cancelar()">
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+</table>
+
+<input id="tmpl" type="hidden" value="catalogacion">
+<!-- /TMPL_IF -->
