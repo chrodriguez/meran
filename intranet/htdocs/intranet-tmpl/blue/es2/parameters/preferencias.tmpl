@@ -1,0 +1,260 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.doblePaginador.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+<!-- TMPL_INCLUDE NAME="util.js" -->
+<!-- TMPL_INCLUDE NAME="state.js" -->
+
+
+
+$(document).ready( function() {
+	buscarPreferencia();
+});
+
+/*
+ * tablaOrdenada
+ * Hace que la tabla con los resultados, se pueda ordenar por los campos correspondientes y tambien hace que se 
+ * pueda usar dos paginadores.
+ */
+function tablaOrdenada(){
+	var tabla=$("#tablaResultado").tablesorter({	
+				widgets: ['zebra'],
+				headers: { 0: { sorter: false},
+					   4: { sorter: false},
+					   5: { sorter: false}}
+				});
+	inicializacion(tabla);
+}
+
+/*
+ * consultarAjax
+ * Hace la consulta a servidor, mediante ajax. El resultado se inserta en el div result.
+ */
+function consultarAjax(params,funcion){
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/admin/preferenciasResults.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				if(funcion != ""){
+					eval(funcion);
+				}
+				HiddeState();
+			}
+	});
+}
+
+/*
+ * consultarAjaxJSON
+ * Hace la consulta al servidor, el resultado es un string json. Cuando se completa la consulta se procesa
+ * texto.
+ */
+function consultarAjaxJSON(params,id,change){
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/admin/preferenciasResults.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				procesarJSON(ajax.responseText,id,change);
+				HiddeState();
+			}
+		});
+}
+
+/*
+ * buscarPreferencia
+ * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
+ */
+function buscarPreferencia(){
+	var params="buscar="+$("#buscar").val()+"&agregar=0";
+	consultarAjax(params,"tablaOrdenada()");
+}
+
+/*
+ * borrarDiv
+ * Borra el div que contiene la parte de agregado de variables.
+ */
+function borrarDiv(){$("#divAgregar").html("");}
+
+/*
+ * agregarPref
+ * Muestra la parte de agregado de una variable con los componentes correspondientes con el tipo de variable que
+ * se eligio.
+ */
+function agregarPref(){
+	var opcion=$("#tipoVar").val();
+	borrarDiv();
+	var params="opcion="+opcion+"&agregar=1";
+	var ok=1;
+	if(opcion == "combo"){
+		var tabla=$("#tabla").val();
+		var campo=$("#campo").val();
+		if(tabla == -1 || campo == -1){ok=0;}
+		else{params=params+"&tabla="+tabla+"&campo="+campo;}
+	}
+	if(opcion == "valAuto"){
+		var cat=$("#categoria").val();
+		if(cat == -1){ok=0;}
+		else{params=params+"&categoria="+cat;}
+	}
+	if(ok){
+		consultarAjax(params,"");
+	}
+	else{alert("Elija una tabla de referencia");}
+}
+
+/*
+ * selectOpcion
+ * Dependiendo del tipo de variable a agregar, si se elige una tabla de referencia o algún valor autorizado, se
+ * crean los componentes necesarios para representar la informancion que se necesita.
+ */
+function selectOpcion(){
+	var tabla=$("#tabla");
+	var categ=$("#categoria");
+	var campo=$("#campo");
+	var tipo=$("#tipoVar").val();
+	var params="tipo="+tipo+"&json=1";
+	borrarDiv();
+	if(tipo == "combo" && tabla.length == 0){
+		consultarAjaxJSON(params,"tabla","onChange='elegirCampo()'");
+	}
+	else{
+		if(tipo == "combo" && tabla.length == 1){tabla.show();campo.show();}
+	}
+
+	if(tipo == "valAuto" && categ.length == 0){
+		consultarAjaxJSON(params,"categoria","");
+	}
+	else{
+		if(tipo == "valAuto" && categ.length == 1){categ.show();}
+	}
+
+	if(tipo != "combo"){
+		tabla.hide();
+		campo.hide();
+	}
+	if(tipo != "valAuto"){ categ.hide();}
+}
+
+/*
+ * elegirCampo
+ * Cuando se selecciona una tabla de referencia se crea un listado con los campos de esa tabla.
+ */
+function elegirCampo(){
+	var tabla=$("#tabla");
+	var campo=$("#campo");
+	var tipo=$("#tipoVar").val();
+	borrarDiv();
+	if(tipo == "combo" && tabla.length == 1){
+		campo.remove();
+		var params="tabla="+tabla.val()+"&tipo="+tipo+"&json=1";
+		consultarAjaxJSON(params,"campo","onChange='borrarDiv()'");
+	}
+}
+
+/*
+ * procesarJSON
+ * Procesa el string json que viene cpmo parametro, y crea el listado de opciones correspondiente y se inserta en
+ * en donde corresponda.
+ */
+function procesarJSON(json, id,change){
+	var objetos=JSONstring.toObject(json);
+	var opciones="<option value='-1'>Elegir Opcion</option>";
+	for(var i=0; i< objetos.length; i++){
+		opciones=opciones+"<option value= '"+objetos[i].clave+"'> "+objetos[i].valor+"</option>";
+	}
+	var sel="<select id='"+id+"'"+change+">"+opciones+"</select>";
+	$(sel).insertBefore("#boton");
+}
+
+/*
+ * respuesta
+ * Cuando se guarda una variable nueva se verifica si esta ya exite, si es asi se devuelve un error y se muestra
+ * en la pantalla, de lo contrario se guarda la variable.
+ */
+function respuesta(responseText){
+	if(responseText == 0){buscarPreferencia();}
+	else{$("#error").html("La variable "+$("#variable").val()+" ya existe en el sistema");}
+}
+
+/*
+ * guardarVariable
+ * Hace el llamado ajax para poder guardar los datos ingresados para la variable.
+ */
+function guardarVariable(mod){
+	var tabla=$("#tabla");
+	var campo=$("#campo");
+	var categ=$("#categoria");
+	var params="variable="+$("#variable").val()+"&valor="+$("#valor").val()+"&explicacion="+$("#explicacion").val()+"&tipo="+$("#tipoVar").val()+"&json=1&guardar=1&modificar="+mod;
+	params=params+"&tabla="+tabla.val()+"&campo="+campo.val()+"&categoria="+categ.val();
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/admin/preferenciasResults.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+			respuesta(ajax.responseText);
+			tabla.remove();
+			campo.remove();
+			categ.remove();
+			HiddeState();
+		}
+	});
+	if(mod){$("#tipoVar").attr("disabled","")}
+}
+
+/*
+ * limpiar
+ * Borra el texto ingresado en el componente de busqueda.
+ */
+function limpiar(){$("#buscar").val("");}
+
+/*
+ * modificarVar
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion de la variables seleccionada.
+ */
+function modificarVar(variable,tipo){
+	var compo=$("#tipoVar");
+	compo.val(tipo);
+	compo.attr("disabled","disabled");
+	var params="variable="+variable+"&agregar=1&modificar=1";
+	consultarAjax(params,"");
+}
+
+</script>
+
+<p class="pagetitle">Administraci&oacute;n de Preferencias del Sistema</p>
+<!-- PARA BUSCAR -->
+<br>
+<p>
+	<input type="text" id="buscar" name="buscar" value="">
+	<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscarPreferencia()">
+	<input type="image" name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" onClick="limpiar()">
+</p>
+<!-- PARA AGREGAR -->
+<p>
+	<select id="tipoVar" onChange="selectOpcion()">
+		<option value="bool">Si-No</option>
+		<option value="texta">Texto grande</option>
+		<option value="text">Texto com&uacute;n</option>
+		<option value="combo">Lista opci&oacute;n</option>
+		<option value="valAuto">Valores autorizados</option>
+	</select>
+	<input id="boton" type="image" alt="Agregar Preferencia de Sistema"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/agregar.png" onclick="agregarPref()">
+</p>
+
+<div id="result">
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

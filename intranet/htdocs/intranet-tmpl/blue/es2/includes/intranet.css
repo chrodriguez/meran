@@ -121,6 +121,11 @@ color:black;
         color: black;
         font-size: 15px
 }
+
+.click {
+	 cursor: pointer;
+}
+
 a:link {
 	color: #000000;
 	text-decoration: none;
@@ -419,14 +424,39 @@ font-size: 12px;
 .tablemsg{
         border:0;
         }
-
-.fontmsg{
+.fontmsg {
         text-decoration: none;
         font-size:10pt;
         font-family:verdana;
         color:red;
 	font-weight:bold;
+}
 	
+.state {
+background:#3C9EB4 url(../images/medio.png) repeat-x scroll 0%;
+color:#FFFFFF;
+font-family:"Trebuchet MS","Verdana";
+font-size:9pt;
+font-weight:bold;
+text-align:center;
+}
+
+/* *****************************************Agregados**************************************** */
+/* Estilo para tabs */
+
+#containerTabs {
+	width:500px;
+}
+
+.tabs {
+	width:85px;
+	margin-right:5px;
+	padding:2px;
+	text-align:center;
+	float:left;
+	cursor:pointer;
+	border:2px solid #c3c0c0;
+	border-bottom:0;
 }
 
 .mensajeError{
@@ -438,11 +468,163 @@ font-size: 12px;
 	text-align: center;
 }
 
-	
-ul li {
-      list-style-type:none;
+/* fin Estilo para tabs */
+
+/*Estilo para pop ups*/
+div.window{
+	position:absolute;
+      	background-color:white;
+/*       	border:1px solid #888; */
+	border:0px solid #888;
+      	margin:0px;
+      	padding:0px;
+	z-index: 0;
 }
 
-.click {
-	 cursor: pointer;
+.windowBlur{
+   position:absolute;
+   background-color: #ccc; /*shadow color*/
+   color: inherit;
+   margin-left: 4px;
+   margin-top: 4px;
+   z-index:-1;
+}
+
+/*Estilo HELPPPPPPPPPPP******************************************/
+
+div.headerWindow{
+	text-decoration: none;
+        font-size:8pt;
+        font-family:verdana;
+        color:#55C5D0;
+	background-color: #666666;
+	font-weight: bold;
+	text-align: right;
+	border:1px solid #888;
+
+	width: 100%; 
+	height: 10%;
+}
+
+div.headerWindowHelp{
+	text-decoration: none;
+        font-size:8pt;
+        font-family:verdana;
+        color:#55C5D0;
+	background-color: #666666;
+	font-weight: bold;
+	text-align: right;
+	border:1px solid #888;
+
+	width: 100%; 
+	height: 5%;
+}
+
+/********************************************************************************************/
+
+div.title{
+	position:center;
+	text-align: center;
+	text-decoration: none;
+        font-size:12pt;
+        font-family:verdana;
+        color:#55C5D0;
+      	background-color:white;
+/*       	border:1px solid #888; */
+	
+	width: 100%; 
+	height: 20%;
+}
+
+.contentWindow ul li{
+	list-style-type:none;
+	padding-left:1em;
+	width: 100%; 
+	height: 50%;
+}
+
+
+.controls{
+ 	text-align: center;
+/* 	float: center; */
+	width: 100%; 
+	height: 15;
+}
+
+div.formElemets ul li {
+      list-style-type:none;
+      display:block;
+      margin:0;
+      padding:2px;
+}
+/*Fin Estilo para pop ups*/
+
+img.showhelp {
+	cursor: pointer;
+}
+
+.tablaresultadoTitleClick { 
+	font-Family : "Trebuchet MS", "Verdana";
+        color: #ffffff;
+        font-size: 9pt;
+	background: url(../images/medio.png) repeat-x ;
+	background-color:#3c9eb4;
+	cursor: pointer;
+	text-align: center;
+	font-weight: bold;
+	}
+
+/*Miguel lo agregue para hacer la zebra*/
+tr.par {
+/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
+/* color: #000000 ; */
+/* font-size: 10pt;  */
+background-color:#F4F4F4;
+}
+tr.impar {
+/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
+/* color:#000000;     */
+/* font-size: 10pt; */
+background-color:#FFFFFF;  
+}
+/*      Fin estilo zebra         */
+
+div.boton{
+	background : url(/images/agregar.png) repeat-y 100%;
+	cursor: pointer;
+	width: 190px; 
+	border: 1px solid #888888;
+}
+
+div.detalle{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	margin-left: 10px;
+}
+
+
+.detalleMARC {
+      list-style-type:none;
+      display:block;
+      padding:5px;
+      text-align: left;
+      width: 90%; 
+}
+
+.MARCheader {
+	margin:0;
+	padding:5px;
+	background-color:#FFFFFF;
+	width: 90%;
+	list-style-type:none;
+}
+/* color para fila seleccionada en una tabla, poner un color mejor */
+.selected {
+	background-color:#999999;
+}
+
+.focus {
+	background-color:#FFFAAA;  
 }
