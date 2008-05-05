@@ -10,7 +10,7 @@ use C4::Context;
 use C4::Koha; 
 use HTML::Template;
 use C4::AR::CatalogacionOpac;
-use C4::AR::Validaciones;
+# use C4::AR::Validaciones;
 use C4::AR::Utilidades;
 
 my $input = new CGI;

@@ -8,8 +8,6 @@ package C4::AR::CatalogacionOpac;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Database;
-use C4::AR::Validaciones;
 
 use vars qw($VERSION @EXPORT @ISA);
 
