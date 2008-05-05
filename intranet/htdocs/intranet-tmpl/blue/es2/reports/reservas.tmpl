@@ -1,10 +1,37 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+
 <script>
-function hacerSubmit(){
-        document.branches.submit();
-        }
+//Agrego el codigo para mostrar el estado de la busqueda en Ajax
+<!-- TMPL_INCLUDE NAME="state.js" -->
+
+function ocultarBoton(tipoReserva){
+	var botonMail=$("#contacto");
+	if(tipoReserva != "EJ"){
+		botonMail.hide();
+	}
+	else{
+		botonMail.show();
+	}
+}
+
+function consultar(orden,ini){
+	var branch=$("#branch").val();
+	var tipoReserva=$("#tipoReserva").val();
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/reports/reservasResult.pl",
+		data: "branch="+branch+"&tipoReserva="+tipoReserva+"&orden="+orden+"&ini="+ini,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				ocultarBoton(tipoReserva);
+				HiddeState();
+			}
+	})
+}
 
 </script>
 
@@ -21,17 +48,17 @@ function hacerSubmit(){
 <center>
 
 <table border=0 cellspacing=0 cellpadding=2>
-	<form name="branches" action=/cgi-bin/koha/reports/reservas.pl method=post >
+
 	<tr class="inputFontNormal">
 		<td>    Seleccione el tipo de reserva:
 	
 		</td>
 
 		<td>
-			<select name="tipo" id="tipoReserva">
-				<option value="EJ" id="EJ">Por ejemplar</option>
+			<select name="tipoReserva" id="tipoReserva">
+				<option selected="selected" value="EJ" id="EJ">Por ejemplar</option>
 				<option value="GR" id="GR">Por grupo</option>
-				<option selected="selected" value="TO" id="TO">Todas</option>
+				<option value="TO" id="TO">Todas</option>
 			</select>
 		</td>
 	</tr>
@@ -46,115 +73,14 @@ function hacerSubmit(){
 	</tr>
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="2">
-			<br><input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
+			<br>
+			<input type="image" onClick="consultar('cardnumber',1)"  src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
 		</td>
 	</tr>
-	</form>
-</table>
-
-<br>
-<p class="inputFontNormal">
-La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
-</p>
-<br>
-<br>
-<!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=reservas.pl?ini=<!-- TMPL_VAR name="ant" -->&branch=<!-- TMPL_VAR name=branch -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href=reservas.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->> <u><!-- TMPL_VAR name=number --></u> </a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP --> 
-
-<!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=reservas.pl?ini=<!-- TMPL_VAR name="sig" -->&branch=<!-- TMPL_VAR name=branch -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-
-</center>
-
-<table border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
-
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=surname&branch=<!-- TMPL_VAR name=branch -->> Apellido</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=firstname&branch=<!-- TMPL_VAR name=branch -->> Nombre</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=cardnumber&branch=<!-- TMPL_VAR name=branch -->> N&uacute;mero de socio</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=emailaddress&branch=<!-- TMPL_VAR name=branch -->>E-mail</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=reservedate&branch=<!-- TMPL_VAR name=branch -->> Fecha de reserva</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=reservedate&branch=<!-- TMPL_VAR name=branch -->> Fecha de vencimiento</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href=reservas.pl?orden=itemnumber&branch=<!-- TMPL_VAR name=branch -->> C&oacute;digo de barra</a>
-		</th>
- 		<td align="rigth" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/derecha.png"></td>
-	</tr>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<tr align='center'>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=firstname --> 
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=cardnumber --> 
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_IF NAME="mail" --> 
-				<!-- TMPL_VAR NAME=emailaddress -->
-			<!-- TMPL_ELSE -->
-				<a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
-			<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=reservedate -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=reminderdate -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
-		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-	</tr>
-<!-- /TMPL_LOOP -->
-	<tr valign=bottom>
-        	<td class="lineafinaltabla"  align="left" colspan="8"></td>
-	</tr>
-
 </table>
 
 <br>
 
-<center>
-<a class="inputFontNormal" href="mail.pl?branch=<!-- TMPL_VAR NAME=branch -->&tipo=1"> 
-<input id="contacto" type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/contactar.png" title="Enviar mail a usuarios con reservas asignadas">
-</a> 
-</center>
-
-<script>
-	var estado=document.getElementById('<!-- TMPL_VAR NAME="tipo" -->');
-	estado.selected=true;
-	if (estado.value == "GR" || estado.value == "TO"){
-		boton=document.getElementById('contacto');
-		boton.style.visibility="hidden";
-	}
-</script>
+<div id="result"></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
