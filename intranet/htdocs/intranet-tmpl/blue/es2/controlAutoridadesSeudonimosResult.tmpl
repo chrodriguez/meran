@@ -1,0 +1,37 @@
+
+
+
+<table id="tablaSeudonimos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
+	
+		<th>Seud&oacute;nimo</th>
+		<th>Eliminar</th>
+	
+		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+	</tr>
+	</thead>
+
+	<tbody>
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr align='center'>
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=seudonimo -->
+		</td>
+		<td class="<!-- TMPL_VAR NAME='clase'-->" align="center">
+			<a class="click" 
+			onClick="deleteSeudonimo('<!-- TMPL_VAR NAME=id2 -->');"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'></a>
+		</td>
+
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+	</tbody>
+</table>
+

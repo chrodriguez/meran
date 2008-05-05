@@ -1,0 +1,373 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+
+<script language="javascript">
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+
+function OnChangeComboTablasSeudonimos(){
+	
+	var tipo= $('#tabla').val();
+
+	switch(tipo){
+		case "temas": 
+			$('#content_search_temas').show();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').hide();
+			$('#search_temas').val('');
+/*
+			//registro evento para input de seudonimos
+			$('#search_tema_seudonimo').keypress(
+				function (e) {
+					if(e.which == 13){
+						pushSeudonimo();
+					}
+				});
+*/
+		break;
+		case "autores": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').show();
+			$('#content_search_editoriales').hide();
+			$('#search_autores').val('');
+/*
+			//registro evento para input de seudonimos
+			$('#search_autor_seudonimo').keypress(
+				function (e) {
+					if(e.which == 13){
+						pushSeudonimo();
+					}
+				});
+*/
+		break;
+		case "editoriales": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').show();
+			$('#search_editoriales').val('');
+/*
+			//registro evento para input de seudonimos
+			$('#search_editorial_seudonimo').keypress(
+				function (e) {
+					if(e.which == 13){
+						pushSeudonimo();
+					}
+				});
+*/
+			
+		break;
+		case "Sin Seleccionar": ;
+		break;
+	}
+
+}
+
+function consultarTablaSeudonimos(seudonimo){
+	
+	//verifico que tabla se selecciono
+	var tabla= $("#tabla").val();
+
+	var params= 	'tipo=consultaTablasSeudonimos' +
+ 			'&tabla=' +  tabla + 
+			'&seudonimo=' + seudonimo;
+
+	$.ajax({type: "POST", 
+		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
+		data: params,	
+ 		beforeSend: Init,
+ 		complete: function(ajax){
+				$('#resultSeudonimos').html(ajax.responseText);
+ 				HiddeState();
+				zebra('tablaSeudonimos');
+			}
+	});
+}
+
+
+function AutocompleteSeudonimos(idInput, tipo, flag){
+	// q= valor de campoHelp
+	$("#"+idInput).search();
+	$("#"+idInput).autocomplete('/cgi-bin/koha/controlAutoridadesDB.pl',{
+ 		formatItem: function(row){
+// 			return row[0]+" - "+row[1];
+			return row[1];
+		},
+		minChars:1,
+        	matchSubset:1,
+        	matchContains:1,
+		maxItemsToShow:10,
+        	cacheLength:10,
+        	selectOnly:1,
+		extraParams:{accion: tipo}	
+	});//end autocomplete
+	$("#"+idInput).result(function(event, data, formatted) {
+		$("#"+idInput).val(data[1]);
+
+//  		//creo un objeto para la autoridad con la q se va a trabajar
+//  		seudonimo_selected= new object_seudonimo(data[1], data[0]);
+
+		
+ 		seudonimo= new object_seudonimo(data[1], data[0]);
+
+		if(flag != 'seudonimo'){
+			//creo un objeto para la autoridad con la q se va a trabajar
+ 			seudonimo_selected= new object_seudonimo(data[1], data[0]);
+			//traigo info de seudonimos de la autoridad con la que se esta trabajando
+ 			consultarTablaSeudonimos(data[0]);
+		}
+	});
+}
+
+
+//*********************************************Objeto Sinonimo*************************************************
+
+function object_seudonimo(text, ID){
+	this.text= text;
+	this.ID= ID;
+}
+
+var objects_array= new Array();
+//******************************************Fin***Objeto Sinonimo***********************************************
+
+//******************************************TextArea************************************************************
+
+function pushSeudonimo(){
+		
+// 	if (!exist(seudonimo_selected.text, objects_array)){
+	if (!exist(seudonimo.text, objects_array)){
+// 		objects_array.push(seudonimo_selected);
+		objects_array.push(seudonimo);
+		mapToTextArea('textAreaSeudonimos', objects_array);
+	}else{
+		alert("Ya existe el elmento");
+	}
+	//si hay elementos habilito el boton pop
+	if(objects_array.length > 0){
+		$('#pop').attr('disabled', false);
+	}
+}
+
+function exist(text, vector){
+	var found= false;
+	var long= vector.length;
+	var i= 0;
+	while (!(found) && (i<long)){
+		if(vector[i].text == text){
+			found= true;
+		}else{
+			i++;
+		}
+	}
+	return found;
+}
+
+function mapToTextArea(idTextArea, vector){
+	var seudonimo;
+
+	$('#'+idTextArea).val('');
+	for (var i=0;i<vector.length;i++){
+		seudonimo= vector[i].text;
+		$('#'+idTextArea).val(seudonimo + '\n' + $('#'+idTextArea).val() );
+	}
+	//deshabilito boton pop	
+	$('#pop').attr('disabled', false);
+}
+
+/*solo para test*/
+/*
+function ver(){
+	for (var i=0;i<objects_array.length;i++){
+		alert(objects_array[i].ID);
+	}
+}
+*/
+
+function popSeudonimo(){
+	var obj= objects_array.pop();
+// 	alert('tipoItem: ' + obj.text + ' ID: ' + obj.ID);
+	mapToTextArea('textAreaSeudonimos', objects_array);
+	//si se vacia, deshabilito el boton pop
+	if(objects_array.length == 0){
+		$('#pop').attr('disabled', true);
+	}
+}
+
+function clearDataTextArea(){
+	//clear data
+	objects_array= new Array();
+	//actualizo el textarea
+	mapToTextArea('textAreaSeudonimos', objects_array);
+}
+
+//****************************************************Fin TextArea******************************************
+
+//*********************************************ABM Seudonimos************************************************
+function guardarDatos(){
+	//validar datos
+	var tabla= $('#tabla').val();
+	
+	var seudonimosJSON;
+	//pasa el arreglo a formato json
+	seudonimosJSON=JSONstring.make(objects_array);
+
+	var params= 	'tipo=insertarSeudonimos' +
+ 			'&tabla=' +  tabla + 
+			'&id=' + seudonimo_selected.ID +  
+			'&seudonimos=' + seudonimosJSON;
+
+	$.ajax({type: "POST", 
+		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
+		data: params,	
+ 		beforeSend: Init,
+ 		complete: function(ajax){
+// 				$('#resultSinonimos').html(ajax.responseText);
+ 				HiddeState();
+				//traigo info de seudonimos de la autoridad con la que se esta trabajando
+				consultarTablaSeudonimos(seudonimo_selected.ID);
+				clearDataTextArea();
+			}
+	});
+}
+
+function deleteSeudonimo(idDelete){
+	var tabla= $('#tabla').val();
+
+	var params= 	'tipo=eliminarSeudonimos' +
+ 			'&tabla=' +  tabla + 
+			'&id=' + seudonimo_selected.ID +
+			'&idDelete=' + idDelete;
+
+	$.ajax({type: "POST", 
+		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
+		data: params,	
+ 		beforeSend: Init,
+ 		complete: function(ajax){
+ 				HiddeState();
+				//traigo info de seudonimos de la autoridad con la que se esta trabajando
+				consultarTablaSeudonimos(seudonimo_selected.ID);
+			}
+	});
+}
+
+//****************************************Fin****ABM Seudonimos************************************************
+
+
+$(document).ready(function(){
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+
+	AutocompleteSeudonimos('search_temas','autocompleteTemas','');
+	AutocompleteSeudonimos('search_tema_seudonimo','autocompleteTemas','seudonimo');
+ 	$('#content_search_temas').hide();
+	AutocompleteSeudonimos('search_autores','autocompleteAutores','');
+	AutocompleteSeudonimos('search_autor_seudonimo','autocompleteAutores','seudonimo');
+ 	$('#content_search_autores').hide();
+	AutocompleteSeudonimos('search_editoriales','autocompleteEditoriales','');
+	AutocompleteSeudonimos('search_editorial_seudonimo','autocompleteEditoriales','seudonimo');
+ 	$('#content_search_editoriales').hide();	
+
+
+	//registro evento para input de seudonimos
+	$('#search_autor_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+	$('#search_tema_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+	$('#search_editorial_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+
+
+});
+
+</script>
+
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Descripcion breve para lo q sirve la ventana....</p>
+    </div>
+</div>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Control de Autoridades - Seud&oacute;nimos</td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+<br>
+
+<br>
+<div class="formElemets">
+<ul>
+	<li>Seleccione la tabla</li>
+	<li>
+		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSeudonimos();">
+			<option value="Sin Seleccionar">Sin Seleccionar</option>
+			<option value="autores">Autores</option>
+			<option value="temas">Temas</option>
+			<option value="editoriales">Editoriales</option>
+		</Select>
+	</li>
+
+	<div id="content_search_autores">
+		<li>Autores:</li>
+		<li><input id="search_autores" type="text" size="50"></li>
+		<li>Autor Seud&oacute;nimo:</li>
+		<li><input id="search_autor_seudonimo" type="text" size="50"></li>
+	</div>
+	<div id="content_search_temas">
+		<li>Temas:</li>
+		<li><input id="search_temas" type="text" size="50"></li>
+		<li>Tema Seud&oacute;nimo:</li>
+		<li><input id="search_tema_seudonimo" type="text" size="50"></li>
+	</div>
+	<div id="content_search_editoriales">
+		<li>Editoriales:</li>
+		<li><input id="search_editoriales" type="text" size="50"></li>
+		<li>Editorial Seud&oacute;nimo:</li>
+		<li><input id="search_editorial_seudonimo" type="text" size="50"></li>
+	</div>
+	<li>
+		<input id="push" type="button" onClick="pushSeudonimo();" value=">>" title="Agregar Seud&oacute;nimo"> 
+		<input id="pop" type="button" onClick="popSeudonimo();" value="<<" title="Sacar Seud&oacute;nimo" disabled=true>
+	</li>
+	<li>
+		<textarea id="textAreaSeudonimos" style="height:60px; width:230px;" readonly></textarea>
+	</li>
+
+	<li><hr></hr></li>
+	<li><input type="button" value="Guardar" onClick="guardarDatos();"></li>
+	<li><div id="resultSeudonimos"></div></li>
+</ul>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
