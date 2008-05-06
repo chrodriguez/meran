@@ -1,0 +1,99 @@
+<br>
+<!-- <p class="inputFontNormal" align="center">La cantidad de ejemplares es: &nbsp;<!-- TMPL_VAR NAME=cant --> 
+</p> -->
+<p class="inputFontNormal" align="center">La cantidad Total de ejemplares es: <!-- TMPL_VAR NAME=cantidad --></p>
+<br>
+<!-- ***************************************Paginador**************************************** -->
+<table border=0 cellspacing=0 cellpadding=2 width=90%>
+	<tr align="center">
+	<!-- TMPL_IF NAME="ok2" -->
+	<input type="image" onclick="consultar('barcode',<!-- TMPL_VAR name='ant' -->)" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_LOOP NAME=numeros -->
+		<!-- TMPL_IF NAME="actual" -->
+			<a class="inputFontNormal" onclick="consultar('barcode',<!-- TMPL_VAR NAME=number -->)"> <u><!-- TMPL_VAR name=number --></u> </a>
+		<!-- TMPL_ELSE -->
+        		<u><!-- TMPL_VAR name=number --></u>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+
+	<!-- TMPL_IF NAME="ok" -->
+
+	<input type="image" onclick="consultar('barcode',<!-- TMPL_VAR name='sig' -->)" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+	<!-- /TMPL_IF -->
+	</tr>
+</table>
+<br>
+<!-- **********************************Fin***Paginador**************************************** -->
+
+Paginador 2
+<div id="paginador1"></div>
+Fin Paginador 2
+
+<!-- actual -->
+<input id="actual" type="hidden" value='<!-- TMPL_VAR NAME=actual -->' >
+<!-- cant total de paginas -->
+<input id="paginas" type="hidden" value='<!-- TMPL_VAR NAME=paginas -->' >
+<!--<input id="orden" type="hidden" value='<!-- TMPL_VAR NAME=orden -->' >-->
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr class="tablaresultadoTitle">
+	<td align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+	<th onClick="consultar('barcode','<!-- TMPL_VAR name='ini' -->');">Nro. de Inventario</th>
+	<th onClick="consultar('completo','<!-- TMPL_VAR name='ini' -->');">Autor</th>
+	<th onClick="consultar('title','<!-- TMPL_VAR name='ini' -->');">T&iacute;tulo</th>
+	<th onClick="consultar('number','<!-- TMPL_VAR name='ini' -->');">Edic.</th>
+	<th onClick="consultar('publisher','<!-- TMPL_VAR name='ini' -->');">Editor</th>
+	<th onClick="consultar('publicationyear','<!-- TMPL_VAR name='ini' -->');">A&ntilde;o</th>
+	<th onClick="consultar('bulk','<!-- TMPL_VAR name='ini' -->');">Signatura Topogr&aacute;fica</th>
+	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+</tr>
+
+<!-- TMPL_LOOP Name="results" -->
+<tr>
+        <td class="<!-- TMPL_VAR Name='clase' -->" width="1%">&nbsp;</td>
+        <td  align=left class="<!-- TMPL_VAR Name='clase' -->" >
+		<!-- TMPL_VAR Name="barcode" -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align="center">
+		<!-- TMPL_VAR NAME="author" -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align="center">
+		<!-- TMPL_VAR NAME="title" ESCAPE=HTML-->
+		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
+			<!-- TMPL_VAR NAME="unititle" -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align="center">
+		<!-- TMPL_VAR NAME="number" -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align="center">
+		<!-- TMPL_VAR NAME="publisher" -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->"  align="center">
+		<!-- TMPL_VAR NAME="publicationyear" --> 
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->" align="center">
+		<!-- TMPL_VAR Name="bulk" -->
+	</td>
+	<td class="<!-- TMPL_VAR Name='clase' -->" width="1%">&nbsp;</td>
+</tr>
+
+<!-- /TMPL_LOOP -->
+<tr>
+	<td colspan="8">&nbsp;</td>
+</tr>
+<tr valign=bottom>
+	<td class="lineafinaltabla"  align="left" colspan="8"></td>
+</tr>
+
+</table>
+<br><br>
+
+<center>
+	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->">Generar planilla 
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
+	</a>
+</center>
+
