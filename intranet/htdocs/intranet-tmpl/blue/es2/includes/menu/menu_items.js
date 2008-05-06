@@ -93,6 +93,7 @@ var MENU_ITEMS = [
 			['Registro de circulaci&oacute;n', '/cgi-bin/koha/reports/historicoCirculacion.pl'],
 			['Actividades anuales','/cgi-bin/koha/reports/estadistica_Anual.pl'],
 			['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl'],
+			['Generar Etiquetas','/cgi-bin/koha/reports/book-labels.pl'],
 		],
 		['Estad&iacute;sticas', '/cgi-bin/koha/reports-home.pl',null,
 			['Disp. de Ejem.','/cgi-bin/koha/reports/availability.pl'],

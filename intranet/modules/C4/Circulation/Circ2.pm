@@ -246,9 +246,12 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 =cut
 
 sub listitemsforinventory {
-	my ($minlocation,$maxlocation) = @_;
+	my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
+	
+	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
+
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber,  biblioitems.biblionumber
+	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblioitems.biblionumber, items.homebranch
 	FROM (
 	(
 	items
@@ -256,20 +259,47 @@ sub listitemsforinventory {
 	)
 	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
 	)
-	WHERE barcode
+	WHERE (barcode
 	BETWEEN ?
-	AND ?
-	ORDER BY barcode, title");
+	AND ?)
+	AND items.homebranch= ?
+	ORDER BY barcode, title ");
 		
-	$sth->execute($minlocation,$maxlocation);
+	$sth->execute($minlocation,$maxlocation,$branchcode);
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
 		$row->{'author'}=C4::Search::getautor($row->{'author'});
+		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
 		push @results,$row;
 	}
-	return @results;
+
+	if ($orden){
+	# Da el ORDEN al arreglo
+	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+	@results=@sorted;
+	}
+
+	my $cantReg=scalar(@results);
+
+#Se chequean si se quieren devolver todos
+	if(($cantReg > $fin)&&($fin ne "todos")){
+		my $cantFila=$fin-1+$ini;
+		my @results2;
+		if($cantReg < $cantFila ){
+			@results2=@results[$ini..$cantReg];
+		}
+		else{
+			@results2=@results[$ini..$fin-1+$ini];
+		}
+
+		return($cantReg,@results2);
+	}
+        else{
+		return ($cantReg,@results);
+	}
+
 }
 
 =item

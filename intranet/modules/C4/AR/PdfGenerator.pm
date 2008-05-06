@@ -27,6 +27,8 @@ $VERSION = 0.01;
 	&generateCard
 	&libreDeuda
 	&prestInterBiblio
+	&generateBookLabel
+	&batchBookLabelGenerator
 );
 
 
@@ -483,16 +485,6 @@ sub imprimirFinal(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
 ################CARNETS############################################33
 
 sub completeBorrowerNumber {
@@ -677,9 +669,9 @@ sub libreDeuda(){
 	$titulo{'posx'}=170;
 	my @parrafo;
 	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
-	$parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
+	$parrafo[1]=" con nï¿½mero de documento ".$dni.", no adeuda material bibliogrï¿½fico en esta Biblioteca.";
 	$parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-	$parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
+	$parrafo[3]=" validez de 10 dï¿½as corridos a partir de su fecha de emisiï¿½n.";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
@@ -713,20 +705,20 @@ sub prestInterBiblio(){
 	$parrafo[1]="de la ".$biblioDestino;
 	$parrafo[2]=$director;
 	$parrafo[3]="S/D";
-	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
-	$parrafo[5]="interbibliotecario los siguientes ítems:";
+	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carï¿½cter de prï¿½stamo"; 
+	$parrafo[5]="interbibliotecario los siguientes ï¿½tems:";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
 	my $cant=scalar(@$datos);
 	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
-	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
+	$parrafo[0]="La(s) misma(s) serï¿½(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
-	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
-	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
-	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddress'};
+	$parrafo[3]="Direcciï¿½n:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
+	$parrafo[4]="Telï¿½fono:".$borrewer->{'phone'};
+	$parrafo[5]="Correo electrï¿½nico:".$borrewer->{'emailaddress'};
 	$parrafo[6]="";
 	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
 	$parrafo[8]="atentamente.";
@@ -758,7 +750,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
 	$categ, categoria de la institucion en la que se va a imprimir el documento;
 	$branchname, nombre de la biblioteca en la que esta asociado el usuario que pidio el documento;
-	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
 	$pagewidth, ancho del documento;
 	$pageheight, largo del documento;
 	$titulo, Titulo del documento;
@@ -791,11 +783,11 @@ imprimirContenido
 Imprime el contenido de del documento.
 @params:
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
-	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
 	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
 	    imprimir;
 	$pageheight, largo del documento;
-	$tamRenglon, tamaño que va a tener el renglon. Espacio entre texto por fila;
+	$tamRenglon, tamaï¿½o que va a tener el renglon. Espacio entre texto por fila;
 	$parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
 =cut
 sub imprimirContenido(){
@@ -824,7 +816,7 @@ sub imprimirFirma(){
 	$pdf->addRawText($linea, 330,$pageheight - $y);
 	$y=$y+10;
 	$pdf->addRawText("Firma", 160,$pageheight - $y);
-	$pdf->addRawText("Aclaración", 360,$pageheight - $y);
+	$pdf->addRawText("Aclaraciï¿½n", 360,$pageheight - $y);
 	return($pdf,$y);
 }
 
@@ -845,7 +837,7 @@ sub imprimirTabla(){
 	$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
 	$pdf->addRawText("Autor/es", 100,$pageheight - ($y+15));
 	$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
-	$pdf->addRawText("Título", 255,$pageheight - ($y+15));
+	$pdf->addRawText("Tï¿½tulo", 255,$pageheight - ($y+15));
 	$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
 	$pdf->addRawText("Otros datos", 395,$pageheight - ($y+15));
 	$y=$y+20;
@@ -881,7 +873,7 @@ sub imprimirPiePag(){
 	$texto[0]="Biblioteca: ".$biblio->{'branchname'};
 	$texto[1]="Calle ".$biblio->{'branchaddress1'};
 	$texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
-	$texto[3]="Atención: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
+	$texto[3]="Atenciï¿½n: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
 	$texto[4]="E-mail: ".$biblio->{'branchemail'};
 	$texto[5]="Sitios web: ".$biblio->{'branchaddress3'};
 	$texto[6]="";
@@ -889,3 +881,92 @@ sub imprimirPiePag(){
 	($pdf,$y)=&imprimirContenido($pdf,200,$y,$pageheight,10,\@texto);
 	return ($pdf);
 }
+
+
+#### Generar Etiquetas para Libros
+
+#  Genera los carnets a partir de una busqueda
+
+sub batchBookLabelGenerator {
+        my ($count,@results) = @_;
+
+	my $i=0;
+	my $pag=1;
+	my $pdf = new PDF::Report();
+	$pdf->{PageWidth}='300';
+	$pdf->{PageHeight}='200';
+
+	while ($i<$count)
+	{
+	$pdf->newpage($pag);
+        $pdf->openpage($pag);
+	if ($i<$count){
+	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,100,$pdf);$i++;
+	}
+	if ($i<$count){
+	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,0,$pdf);$i++;
+	}
+	$pag++;
+	}
+	return ($pdf);
+	}	
+
+
+#genera a partir de una coordenada
+sub generateBookLabel {
+	my ($signatura,$codigo,$branchcode,$x,$y,$pdf) = @_;
+
+	my $dbh = C4::Context->dbh;
+
+	#Datos de la biblioteca
+	my $branch=&datosBiblio($branchcode);
+
+	my ($pagewidth, $pageheight) = $pdf->getPageDimensions(); #(200x300)
+	$pdf->setSize(7);
+	 #Insert a rectangle to delimite the card
+	$pdf->drawRect($pagewidth, $pageheight+($y-100) , 0 ,$y);
+	$pdf->drawLine(100, $pageheight+($y-100), 100, $y);
+	 #Insert a barcode to the card
+	$pdf->drawBarcode($x+190,$y+10,0.5,1,"3of9",$codigo,undef, 10, 10, 20, 10);
+	
+	my $posy=110;
+	 #Write the borrower data into the pdf file
+	 $pdf->setSize(7);
+	 $pdf->setFont("Arial-Bold");
+         $pdf->addRawText($branch->{'categoryname'},$x+170,$pageheight + ($y-$posy));
+	 $posy=$posy+7;
+	 $pdf->addRawText($branch->{'branchname'},$x+170,$pageheight + ($y-$posy));
+	 $posy=$posy+7;
+	 $pdf->setSize(6);
+	 $pdf->addRawText("Biblioteca",$x+170,$pageheight + ($y-$posy));
+	 $posy=$posy+7;
+	 $pdf->setFont("Arial");
+	
+	 my $cantdir=1; #Cuantas direcciones tiene?
+	 my $address=$branch->{'branchaddress1'};
+	 if($branch->{'branchaddress2'} ne ''){$address.="\n".$branch->{'branchaddress2'};$cantdir++;}
+	 if($branch->{'branchaddress3'} ne ''){$address.="\n".$branch->{'branchaddress3'};$cantdir++;}
+	 $pdf->addRawText($address,$x+170,$pageheight + ($y-$posy));
+	 $posy=$posy+(7*$cantdir);
+	 
+	if ($branch->{'branchemail'} ne ''){
+	 my $mail=$branch->{'branchemail'};
+	 $pdf->addRawText($mail,$x+170,$pageheight + ($y-$posy));
+	 $posy=$posy+7;
+	}
+	
+	 if (($branch->{'branchphone'} ne '')||( $branch->{'branchfax'}  ne '')){
+	 my $aux="";
+	 if ($branch->{'branchphone'} eq $branch->{'branchfax'}){$aux="Tel/Fax ".$branch->{'branchphone'};}
+	 	else{
+			if ($branch->{'branchphone'} ne '') { $aux=" Tel ".$branch->{'branchphone'};}
+			if ($branch->{'branchfax'} ne '') { $aux=" Fax ".$branch->{'branchfax'};}
+			}
+	 $pdf->addRawText($aux,$x+170,$pageheight + ($y-$posy));
+	 }
+
+	 $pdf->setSize(8);
+	 $pdf->addRawText("$signatura",$x+15,$pageheight + ($y-130));
+}
+#############FIN Etiquetas########################
+
