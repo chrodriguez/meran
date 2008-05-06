@@ -38,8 +38,8 @@ var MENU_ITEMS = [
 		['Usuarios Reales', '/cgi-bin/koha/members/member.pl'],
 		['Usuarios Potenciales', '/cgi-bin/koha/members/member2.pl'],
 		['------------------------', null],
-		['Agregar Usuario', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=adult'],
-		['Agregar Organizaci&oacute;n', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation'],
+		['Agregar Usuario', '/cgi-bin/koha/members/memberentry.pl?type=Add'],
+		['Agregar Organizaci&oacute;n', '/cgi-bin/koha/members/imemberentry.pl?type=Add'],
 		['------------------------', null],
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']
 	],
