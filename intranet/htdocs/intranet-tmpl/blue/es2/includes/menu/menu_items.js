@@ -51,8 +51,8 @@ var MENU_ITEMS = [
 		['Sanciones', '/cgi-bin/koha/circ/sanctions.pl']
 	],
 	['Par&aacute;metros', null, null,
-		['Preferencias',  '/cgi-bin/koha/admin/systempreferences.pl', null,
-			['Preferencias', '/cgi-bin/koha/admin/systempreferences.pl'],
+		['Preferencias',  '/cgi-bin/koha/admin/preferencias.pl', null,
+			['Preferencias', '/cgi-bin/koha/admin/preferencias.pl'],
 			['------------------------', null],
 			['Reportes Gen&eacute;ricos', '/cgi-bin/koha/admin/generic_reports.pl'],
 			['Unid. de informaci&oacute;n', '/cgi-bin/koha/admin/branches.pl'],

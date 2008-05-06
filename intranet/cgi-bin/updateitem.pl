@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
-use C4::Accounts2;
 use C4::Search;
 #my $env;
 my $input= new CGI;

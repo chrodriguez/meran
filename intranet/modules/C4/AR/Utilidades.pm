@@ -3,7 +3,7 @@ package C4::AR::Utilidades;
 #Este modulo provee funcionalidades varias sobre las tablas de referencias en general
 #Escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Inform�tica, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -25,11 +25,121 @@ require Exporter;
 use C4::Context;
 use Date::Manip;
 use C4::Date;
+use C4::AR::Estadisticas;
+use JSON;
+use POSIX qw(ceil); #para redondear cuando divido un numero
 
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&obtenerTiposDeColaboradores &obtenerReferencia &obtenerTemas &obtenerEditores &noaccents &saveholidays &getholidays &savedatemanip &buscarTabladeReferencia &obtenerValores &actualizarCampos &buscarTablasdeReferencias &listadoTabla &obtenerCampos &valoresTabla &tablasRelacionadas &valoresSimilares &asignar &obtenerDefaults &guardarDefaults &mailDeUsuarios &verificarValor &cambiarLibreDeuda &checkdigit &checkvalidisbn &quitarduplicados);
+@EXPORT=qw(
+	&aplicarParches 
+	&obtenerParches 
+	&obtenerTiposDeColaboradores 
+	&obtenerReferencia 
+	&obtenerTemas 
+	&obtenerEditores 
+	&noaccents 
+	&saveholidays 
+	&getholidays 
+	&savedatemanip 
+	&buscarTabladeReferencia 
+	&obtenerValores 
+	&actualizarCampos 
+	&buscarTablasdeReferencias 
+	&listadoTabla 
+	&obtenerCampos 
+	&valoresTabla 
+	&tablasRelacionadas 
+	&valoresSimilares 
+	&asignar 
+	&obtenerDefaults 
+	&guardarDefaults 
+	&mailDeUsuarios 
+	&obtenerAutores 
+	&obtenerPaises 
+	&crearComponentes 
+	&obtenerTemas2 
+	&obtenerBiblios 
+	&verificarValor 
+	&cantidadRenglones 
+	&armarPaginas 
+	&crearPaginador 
+	&from_json_ISO 
+	&UTF8toISO 
+	&obtenerIdentTablaRef 
+	&obtenerValoresTablaRef 
+	&obtenerValoresAutorizados 
+	&obtenerDatosValorAutorizado
+	&cambiarLibreDeuda 
+	&checkdigit 
+	&checkvalidisbn 
+	&quitarduplicados
+	);
+
+=item
+crearComponentes
+Crea los componentes que van a ir al tmpl.
+$tipoInput es el tipo de componente que se va a crear en el tmpl.
+$id el id del componente para poder recuperarlo.
+$values los valores o que puede devolver el componente (combo, radiobotton y checkbox)
+$labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
+$idRep por si hay mÃ¡s de un comp repetible y no tiene un id de la base de datos.
+=cut
+sub crearComponentes(){
+	my ($tipoInput,$id,$values,$labels,$valor)=@_;
+	my $inputCampos;
+	if ($tipoInput eq 'combo'){
+		$inputCampos=CGI::scrolling_list(  
+			-name      => $id,
+			-id	   => $id,
+			-values    => $values,
+			-labels    => $labels,
+			-default   => $valor,
+			-size	   => 1,
+                );
+	}
+	elsif($tipoInput eq 'radio'){
+		$inputCampos=CGI::radio_group(
+			-name	   =>$id,
+			-id	   =>$id,
+			-values    => $values,
+			-labels    => $labels,
+			-default   => $valor,
+		);
+	}
+	elsif($tipoInput eq 'check'){
+		$inputCampos=CGI::checkbox_group(
+			-name	=>$id,
+			-id	=>$id,
+			-values    => $values,
+			-labels    => $labels,
+			-default   => $valor,
+		);
+	}
+	elsif($tipoInput eq 'text'){
+		$inputCampos=CGI::textfield(
+			-name	=>$id,
+			-id	=>$id,
+			-value  =>$valor,
+			-size	=>$values,
+                );
+	}
+	elsif($tipoInput eq 'texta'){
+		$inputCampos=CGI::textarea(
+			-name	 =>$id,
+			-id	 =>$id,
+			-value   =>$valor,
+			-rows	 =>$labels,
+			-cols	 =>$values,
+                );
+	}
+	else{
+		$inputCampos= CGI::hidden(-id=>$id,);
+	}
+	return($inputCampos);
+}
+
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
@@ -89,6 +199,7 @@ sub saveholidays{
 		}
 	}
 }
+
 sub obtenerTiposDeColaboradores{
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("select codigo,descripcion from  referenciaColaboradores order by descripcion");
@@ -102,6 +213,53 @@ while (my $data = $sth->fetchrow_hashref) {#push(@results, $data);
 	return(%results);#,@results);
 }
 
+=item obtenerParches
+la funcion obtenerParches devuelve toda la informacion sobre los parches de actualizacion que hay que aplpicar, con esto se logra cambiar de la version 2 a las versiones futuras sin problemas, via web
+=cut
+sub obtenerParches{
+my ($version)=@_;
+my $dbh = C4::Context->dbh;
+my $sth=$dbh->prepare("select * from  parches where corresponde > ? order by id");
+$sth->execute($version);
+my @results;
+while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+  push(@results,$data);
+}
+# while
+$sth->finish;
+return(@results);
+}
+
+=item aplicarParches
+la funcion aplicarParches aplica el parche que le llega por parametro.
+Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones mysql que corresponden con ese parche 
+=cut
+sub aplicarParches{
+my ($parche)=@_;
+my $dbh = C4::Context->dbh;
+my $sth=$dbh->prepare("select * from  parches_scripts where parche= ? order by id");
+$sth->execute($parche);
+my $sth2;
+my $error='';
+while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+$sth2=$dbh->prepare($data->{'sql'});
+$sth2->execute();  
+if ($sth2 -> errstr){ $error=$sth2 -> errstr;
+}
+# while
+$sth->finish;
+if (not $error){
+my $sth3=$dbh->prepare("update parches set aplicado='1' where id=?");
+$sth3->execute($parche);
+}
+	}
+
+$sth2->finish;
+
+return($error);
+}
+
+
 
 sub getholidays{
 	my $dbh = C4::Context->dbh;
@@ -112,6 +270,7 @@ sub getholidays{
 	$sth->finish;
 	return(scalar(@results),@results);
 }
+
 #27/03/07 Miguel - Cuando agregaba un autor en Colaboradores
 #obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
 sub obtenerReferencia{
@@ -121,6 +280,33 @@ sub obtenerReferencia{
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
+	$sth->finish;
+	return(@results);
+}
+
+#obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
+sub obtenerAutores{
+	my ($dato)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select completo, id from autores where apellido LIKE ? order by apellido");
+        $sth->execute($dato.'%');
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data); 
+	} # while
+	$sth->finish;
+	return(@results);
+}
+
+sub obtenerPaises{
+	my ($dato)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select printable_name, iso from countries where printable_name LIKE ? order by printable_name");
+        $sth->execute($dato.'%');
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data);
+	} # while
 	$sth->finish;
 	return(@results);
 }
@@ -138,6 +324,19 @@ sub obtenerTemas{
 	return(@results);
 }
 
+sub obtenerTemas2(){
+	my ($dato)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select nombre, id from temas where nombre LIKE ? order by nombre");
+        $sth->execute($dato.'%');
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data);
+	} # while
+	$sth->finish;
+	return(@results);
+}
+
 #obtenerEditores devuelve los editores que sean like el parametro
 sub obtenerEditores{
 	my ($dato)=@_;
@@ -149,6 +348,20 @@ sub obtenerEditores{
 	$sth->finish;
 	return(@results);
 }
+
+sub obtenerBiblios{
+	my ($dato)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select branchname, branchcode as id from branches where branchname LIKE ? order by branchname");
+        $sth->execute($dato.'%');
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data);
+	} # while
+	$sth->finish;
+	return(@results);
+}
+
 sub noaccents {
 	my $word = @_[0];
 	my @chars = split(//,$word);
@@ -243,7 +456,6 @@ while (my @data=$sth->fetchrow_array){
 		$aux->{'campo'} = $data[$i];
         	push(@results2,$aux);
 	}
-
 	my $aux2;
 	$aux2->{'registro'}=\@results2;
 	$aux2->{'id'}=$data[$id];
@@ -253,7 +465,6 @@ while (my @data=$sth->fetchrow_array){
 $sth->finish;
 return ($cantidad[0],@results);
 }
-
 
 #devuelve los valores de un elemento en particular de la tabla de referencia que se esta editando
 #recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
@@ -286,6 +497,37 @@ while (my $data=$sth->fetchrow_hashref){
         
 $sth->finish;
 return @results2;
+}
+
+=item
+obtenerValoresTablaRef
+Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
+=cut
+sub obtenerValoresTablaRef(){
+	my ($tabla,$ident,$campos,$orden)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
+	my $sth=$dbh->prepare($query);
+	$sth->execute();
+	my $strjson="";
+	my $labels;
+	my @campos=split(/,/,$campos);
+	my $long=scalar(@campos);
+	my $data;
+	my %result;
+	while($data=$sth->fetchrow_hashref()){
+		$result{$data->{'id'}}=$data->{$campos[0]};
+		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
+		$labels="'".$data->{$campos[0]};
+		for(my $i=1;$i<$long;$i++){
+			$labels.="|".$data->{$campos[$i]};
+			$result{$data->{'id'}}.=",".$data->{$campos[$i]};
+		}
+		$strjson.=$labels."'}";
+	}
+	$strjson=substr($strjson,1,length($strjson));
+	$strjson="[".$strjson."]";
+	return($strjson,\%result);
 }
 
 #devuelve todos los registros relacionados con un elemento de referencia, dependiendo de los valores en tablasDeReferencias, por ej: para el autor id 10 devolvera que tiene asignados 35 biblios
@@ -397,13 +639,7 @@ $sthT=$dbh->prepare("COMMIT");
 $sthT->execute();
 
 return ($asignar,$borrar);	
-        }
-
-
-
-
-
-
+}
 
 sub obtenerValores{
 my ($tabla,$indice,$valor)=@_;
@@ -421,6 +657,7 @@ my %row = ($campo => $data2->{$campo});
           }
 return \%row;
 }
+
 #Esta funcion recibe tres parametros, el nombre de la tabla que se esta editando, el campo identificador de la tabla y un hash de los campos y valores que se van a actualizar en esa tabla   
 sub actualizarCampos{
 my ($tabla,$id,%valores)=@_;
@@ -434,8 +671,8 @@ my $sth=$dbh->prepare("update $tabla set $sql where $id=?");
 $sth->execute($valores{$id});
 $sth->finish;
 }
-#Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
 
+#Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
 sub buscarTablasdeReferencias{
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("select distinct(referencia) from tablasDeReferencias order by referencia");
@@ -460,7 +697,21 @@ $sth=$dbh->prepare("Select orden from tablasDeReferenciasInfo where referencia=?
 $sth->execute($ref);
 $results->{'orden'}=$sth->fetchrow_array;
 $sth->finish;
-return($results);#,@results);
+return($results);
+}
+
+=item
+obtenerIdentTablaRef
+Obtiene el campo clave de la tabla a la cual se esta asi referencia
+=cut
+sub obtenerIdentTablaRef(){
+	my ($tabla)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query="SELECT nomcamporeferencia FROM tablasDeReferencias WHERE referencia=?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($tabla);
+	return($sth->fetchrow);
 }
 
 #obtenerTemas devuelve los temas que sean like el parametro
@@ -505,12 +756,10 @@ $sth->execute($biblioitem->{'serie'},'serie');
 
 }
 
-
 =item
 verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
-
 sub verificarValor(){
 	my ($valor)=@_;
 	my @array=split(/;/,$valor);
@@ -526,6 +775,129 @@ sub verificarValor(){
 	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 	return $valor;
 }
+
+#*****************************************Paginador*********************************
+#Funciones para paginar en el Servidor
+#
+
+sub crearPaginador{
+	my ($template, $cantResult, $iniParam)=@_;
+#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+	my $ini;
+	my $pagActual;
+	#cant. de renglones q se pueden mostrar por pagina
+	my $cantRenglones=cantidadRenglones();
+
+	if (($iniParam eq "")){
+        	$ini=0;
+		$pagActual=1;
+	} else {
+		$ini= ($iniParam-1)* $cantRenglones;
+		$pagActual= $iniParam;
+	};
+#FIN inicializacion
+
+	my ($cantPaginas, @numeros)=armarPaginas($pagActual, $cantResult, $cantRenglones);
+	my $paginas = scalar(@numeros)||1;
+
+	$template->param( 	paginas   => $paginas,
+		  		actual    => $pagActual,
+		  		cantidad  => $cantResult,
+				numbers   => \@numeros);
+
+#Si la cantidad de filas es > que la cant. de filas maximo a mostrar	
+	if ( $cantResult > $cantRenglones ){
+#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+
+		$template->param(
+					pri   	=> 1,
+ 					ult	=> $cantPaginas
+				);
+
+        	my $sig = $pagActual + 1;
+         	if ($sig < $cantPaginas){
+                 	$template->param(
+                              	displaynext    	=>'1',
+                                sig   		=> $sig
+			);
+        	};
+
+        	if ($sig > 2 ){
+                	my $ant = $pagActual - 1;
+                	$template->param(
+                                	displayprev     => '1',
+                                	ant     	=> $ant
+				)
+		}
+	}
+
+	return ($template, $ini, $cantRenglones);
+}
+
+sub armarPaginas{
+#@actual, es la pagina seleccionada por el usuario
+#@cantRegistros, cant de registros que se van a paginar
+#@$cantRenglones, cantidad de renglones maximo a mostrar
+
+	my ($actual, $cantRegistros, $cantRenglones)=@_;
+
+	#cant de paginas a mostrar, esto puede ser una preferencia
+	my $cantPaginas= 10;
+	#cant de paginas en total
+	my $totalPaginas = 0;
+=item
+	if ($cantRenglones != 0){
+		$totalPaginas= $cantRegistros % $cantRenglones;
+	}
+=cut
+
+# 	if  ($totalPaginas == 0){
+	#se calcula la cantidad de paginas total
+        	$totalPaginas= ceil($cantRegistros / $cantRenglones);
+# 	}
+# 	else {
+# 		$totalPaginas= (($cantRegistros - $totalPaginas)/$cantRenglones) + 1;
+# 	}
+
+	my @numeros=();
+	my $highlight=0;
+	my $ini;
+# 	if(($actual + $cantPaginas >= $totalPaginas)&&($totalPaginas > $cantPaginas)){
+	if(($actual + $cantPaginas >= $totalPaginas)){
+		$ini= $totalPaginas - $cantPaginas;
+	}
+	else{
+		$ini= $actual;
+	}
+		
+	#cant. maxima que paginas q se van a mostrar
+	my $tope= $actual + $cantPaginas;
+	
+	for (my $i=$ini; ($totalPaginas >1 and $i <= $totalPaginas and $i < $tope) ; $i++ ) {
+		if($i!=$actual){
+			 $highlight=0;
+		}else{
+			$highlight=1;
+		}
+	 	push @numeros, { number => $i, actual => ($i!=$actual), highlight => $highlight}
+	}
+
+	return($totalPaginas, @numeros);
+}
+
+#
+#Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
+sub cantidadRenglones{
+        my $dbh = C4::Context->dbh;
+        my $query="select value
+		   from systempreferences
+                   where variable='renglones'";
+        my $sth=$dbh->prepare($query);
+	$sth->execute();
+	return($sth->fetchrow_array);
+}
+
+#**************************************Fins***Paginador*********************************
 
 =item
 cambiarLibreDeuda
@@ -629,6 +1001,50 @@ for(my $i=0;$i<scalar(@arreglo);$i++){
 	if ($ok eq 1) {push(@arreglosin, $arreglo[$i] );}
 }
 return (@arreglosin);
+}
+
+#pasa de codificacion UTF8 a ISO-8859-1,
+sub UTF8toISO{
+	my ($data)=@_;
+	return $data= Encode::decode('utf8', $data);
+}
+
+
+sub from_json_ISO{
+	my ($data)=@_;
+	$data= UTF8toISO($data);
+	return from_json($data, {ascii => 1});
+}
+
+=item
+obtenerValoresAutorizados
+Obtiene todas las categorias, sin repetición de la tabla authorised_values.
+=cut
+sub obtenerValoresAutorizados(){
+	my $dbh = C4::Context->dbh;
+        my $query="SELECT DISTINCT(category) FROM authorised_values";
+        my $sth=$dbh->prepare($query);
+	$sth->execute();
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {push(@results, $data); }
+	return(\@results);
+}
+
+=item
+obtenerDatosValorAutorizado
+Obtiene todos los valores de una categoria.
+=cut
+sub obtenerDatosValorAutorizado(){
+	my ($categoria)=@_;
+	my $dbh = C4::Context->dbh;
+        my $query="SELECT * FROM authorised_values WHERE category=?";
+        my $sth=$dbh->prepare($query);
+	$sth->execute($categoria);
+	my %results;
+	while (my $data = $sth->fetchrow_hashref){
+		$results{$data->{'authorised_value'}}=$data->{'lib'};
+	}
+	return(%results);
 }
 
 1;

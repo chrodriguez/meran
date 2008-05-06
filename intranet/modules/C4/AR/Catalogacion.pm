@@ -9,7 +9,6 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Date;
-use C4::Database;
 use C4::AR::Utilidades;
 
 use vars qw(@EXPORT @ISA);
