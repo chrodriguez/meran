@@ -8,6 +8,7 @@ package C4::AR::Catalogacion;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::AR::Busquedas;
 use C4::Date;
 use C4::AR::Utilidades;
 
@@ -611,7 +612,7 @@ sub buscarDatosCampoMARC(){
 	if($dbh eq ""){
 		$dbh = C4::Context->dbh;
 	}
-	my $campoTabla=&C4::AR::Busquedas::buscarMapeoCampoSubcampo($campo,$subcampo,$nivel);
+	my $campoTabla=&buscarMapeoCampoSubcampo($campo,$subcampo,$nivel); #C4::AR::Busquedas::
 	my $tabla="nivel".$nivel;
 	my $query;
 	my @blind;

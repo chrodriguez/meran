@@ -183,7 +183,7 @@ if($accion > 2 ){
 			);
 
 	my $tagsubfield = $input->param('subcampo');
-	my $textoLib = UTF8toISO($input->param('lib'));
+	my $textoLib = &C4::AR::Utilidades::UTF8toISO($input->param('lib'));
 	my $obligatorio=$input->param('obligatorio');
 	my $tipoInput= $input->param('tipoInput');
 	my $tabla = $input->param('tabla')||$tablaRef;

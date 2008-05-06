@@ -5,12 +5,10 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-# use CGI;
 use C4::Context;
 use C4::Koha; 
 use HTML::Template;
 use C4::AR::CatalogacionOpac;
-# use C4::AR::Validaciones;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
@@ -201,13 +199,13 @@ my $subcampo =$input->param('subCampo');
 my $separador =$input->param('separador');
 my $idencabezado =$input->param('encabezados');
 
-if(&is_Number($idencabezado)){
+# if(&is_Number($idencabezado)){
 	my $cant= 0;
 	$cant= &verificarExistenciaCatalogacion($idencabezado, $campo, $subcampo);
 	if($cant == 0){
  		&insertarCatalogacion($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
 	}
-}else{$mensajeError= "Error al ingresar los datos";}
+# }else{$mensajeError= "Error al ingresar los datos";}
 
 print $input->header;
 print $mensajeError;
@@ -232,9 +230,9 @@ if(($tipoAccion eq "Delete")&&($tabla eq "estructuraCatalogacion")){
 my $idestcatopac =$input->param('idestcatopac');
 
 
-if(&is_Number($idestcatopac)){
+# if(&is_Number($idestcatopac)){
 	&deleteCatalogacion($idestcatopac);
-}else{$mensajeError= "Error al eliminar los datos";}
+# }else{$mensajeError= "Error al eliminar los datos";}
 
 print $input->header;
 print $mensajeError;
