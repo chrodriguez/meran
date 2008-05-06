@@ -135,7 +135,7 @@ my $type=$input->param('type') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
 if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+	print $input->redirect("/cgi-bin/koha/members/deletemem.pl?member=$member");
 }
 elsif($type eq 'Mod'){
 	my $adress=$input->param('address');

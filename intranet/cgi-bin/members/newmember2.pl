@@ -36,7 +36,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Input;
+# use C4::Input;
 use C4::Interface::CGI::Output;
 use CGI;
 use Date::Manip;
@@ -58,7 +58,7 @@ my ($template, $personnumber, $cookie)
 			     query => $input,
                              type => "intranet",
                              authnotrequired => 0,
-                             flagsrequired => {parameters => 1},
+                             flagsrequired => {borrowers => 1},
                          });
 
 #Get the database handle
@@ -88,7 +88,7 @@ if ($data{'cardnumber'} eq ''){
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
         $ok=1;
     	push @errors, "invalid_cardnumber";

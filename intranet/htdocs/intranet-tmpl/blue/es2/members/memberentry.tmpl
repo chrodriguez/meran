@@ -1,10 +1,5 @@
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-                <!-- TMPL_ELSE -->
-                       <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
-			   <!-- /TMPL_IF -->
-												
-<!-- <!-- TMPL_INCLUDE NAME="members-top.inc" --> -->
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
+
 <script>
 	function validarInput(campo,error){
 		if(campo.value==""){
@@ -79,7 +74,7 @@ document.getElementById(id).src=src;
 }
 </script>
 
-<form action="/cgi-bin/koha/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
+<form action="/cgi-bin/koha/members/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
 	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
 	<input type=hidden name=typeRegister value="borrowers">
@@ -244,7 +239,7 @@ document.getElementById(id).src=src;
 
           		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">
          
-           		<a onClick="window.open('searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
+           		<a onClick="window.open('../searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
            		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>	
 		</td>
 	</tr>
@@ -390,9 +385,5 @@ document.getElementById(id).src=src;
 </table>
 
 </form>
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-        <!-- TMPL_ELSE -->
-	        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-		        <!-- /TMPL_IF -->
-			
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

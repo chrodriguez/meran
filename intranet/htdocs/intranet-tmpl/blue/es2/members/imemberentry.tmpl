@@ -1,8 +1,5 @@
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-        <!-- TMPL_ELSE -->
-	        <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-		        <!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
 <script language="javascript" type="text/javascript">
 function swap(id,src){
 document.getElementById(id).src=src;
@@ -29,7 +26,7 @@ document.getElementById(id).src=src;
 
 <br>
 
-<form action=/cgi-bin/koha/newimember.pl method=post name=form1>
+<form action=/cgi-bin/koha/members/newimember.pl method=post name=form1>
   <input type=hidden name=joining value="">
   <input type=hidden name=expiry value="">
   <input type=hidden name=type value="borrowers">
@@ -180,10 +177,6 @@ document.getElementById(id).src=src;
 
 <br clear=all>
 <p> &nbsp; </p>
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-        <!-- TMPL_ELSE -->
-	        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-		        <!-- /TMPL_IF -->
-			
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

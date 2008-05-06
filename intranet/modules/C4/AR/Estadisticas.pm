@@ -11,8 +11,11 @@ require Exporter;
 use C4::Search;
 use C4::Context;
 use C4::Date;
+
 use vars qw(@EXPORT @ISA);
+
 @ISA=qw(Exporter);
+
 @EXPORT=qw(&usuarios
 	   &historicoPrestamos
            &cantidadPrestamos
@@ -698,7 +701,7 @@ sub usuarios{
 				};
                 $data->{'clase'}=$clase;
 		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'});
-		$data->{'city'}=&getcitycategory($data->{'city'});
+		$data->{'city'}=C4::Search::getcitycategory($data->{'city'});
                 push(@results,$data);
         }
         return (@results);

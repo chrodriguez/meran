@@ -58,7 +58,7 @@ my $type=$input->param('type') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
 if ($delete){
-	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+	print $input->redirect("/cgi-bin/koha/members/deletemem.pl?member=$member");
 } else {  # this else goes down the whole script
 	if ($type eq 'Add'){
 		$template->param( addAction => 1);

@@ -74,7 +74,7 @@
 
 		<!-- TMPL_IF name="IS_ADULT" -->
                         <p align=center>
-                        <form action=/cgi-bin/koha/jmemberentry.pl method=post name="formHijo">
+                        <form action=/cgi-bin/koha/members/jmemberentry.pl method=post name="formHijo">
 				 <a href="#" onClick="formHijo.submit()" >
 	                        <img alt="Agregar Hijo" src="<!-- TMPL_VAR NAME="themelang" -->/images/agregarhijo.png" border="0""></a>
 
@@ -108,11 +108,11 @@
 		<!--       COMENTADO *******
 		<!-- TMPL_UNLESS name="I" -->
 			<!-- TMPL_IF NAME="isguarantee" -->
-				Garant&iacute;a:<br><!-- TMPL_LOOP NAME="guaranteeloop" --><A HREF="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a><br><!-- /TMPL_LOOP -->
+				Garant&iacute;a:<br><!-- TMPL_LOOP NAME="guaranteeloop" --><A HREF="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a><br><!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
 				Garante:<b>
 				<!-- TMPL_IF NAME="guarantorborrowernumber" -->
-					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
+					<A HREF="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
 				<!-- TMPL_ELSE -->
 					sin garante</b><br>
 				<!-- /TMPL_IF -->
@@ -130,7 +130,7 @@
 		<!-- TMPL_IF name="I" -->
 		<tr class="inputFontNormal">
 		<td span=100%>	
-                <form action=/cgi-bin/koha/imemberentry.pl method=post name="formCarac">
+                <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
 			<a href="#" onClick="formCarac.submit()" >
                         <img alt="Modificar Caracter&acutei;stica" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarcaracteristicas.png" border="0""></a>
 			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
@@ -142,7 +142,7 @@
 		<!-- TMPL_ELSE -->
 		<tr>
 		<td span=100%> 
-			<form action=/cgi-bin/koha/memberentry.pl method=post name="formCarac2">
+			<form action=/cgi-bin/koha/members/memberentry.pl method=post name="formCarac2">
 			 <a href="#" onClick="formCarac2.submit()" >
                         <img alt="Modificar Caracter&iacute;stica" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarcaracteristicas.png" border="0""></a>
 
@@ -165,7 +165,7 @@
 	 	
 		<tr>
 		<td span=100%> 
-			<form action=/cgi-bin/koha/member-password.pl method=post name="formCambio"><a href="#" onClick="formCambio.submit()" ><img alt="Cambio de Contrase&ntilde;a" src="<!-- TMPL_VAR NAME="themelang" -->/images/cambiocontrasena.png" border="0""></a>
+			<form action=/cgi-bin/koha/members/member-password.pl method=post name="formCambio"><a href="#" onClick="formCambio.submit()" ><img alt="Cambio de Contrase&ntilde;a" src="<!-- TMPL_VAR NAME="themelang" -->/images/cambiocontrasena.png" border="0""></a>
 
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 
@@ -175,7 +175,7 @@
 	 	
 		<tr>
 		<td span=100%> 
-			<form action=/cgi-bin/koha/member-flags.pl method=post name="formPerm"><a href="#" onClick="formPerm.submit()" ><img alt="Modificar Permisos" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarpermisos.png" border="0""></a>
+			<form action=/cgi-bin/koha/members/member-flags.pl method=post name="formPerm"><a href="#" onClick="formPerm.submit()" ><img alt="Modificar Permisos" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarpermisos.png" border="0""></a>
 
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 
@@ -222,7 +222,7 @@
 	<!-- TMPL_IF NAME="foto_name" -->
 	  	<tr>
 		<td span=100%> 
-			<form action=/cgi-bin/koha/upload.pl method=post>
+			<form action=/cgi-bin/koha/members/upload.pl method=post>
 			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=submit class="button" value="Eliminar foto" align=center>
@@ -232,7 +232,7 @@
 	<!-- TMPL_ELSE -->
 	  	<tr>
 		<td span=100%> 
-			<form action=/cgi-bin/koha/upload.pl method=post enctype="multipart/form-data" >
+			<form action=/cgi-bin/koha/members/upload.pl method=post enctype="multipart/form-data" >
 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=image  src="<!-- TMPL_VAR NAME="themelang" -->/images/subirFoto.png" align=center valign="center">
 			<input type=file name="picture">
@@ -481,7 +481,7 @@
 <TABLE  border=0 CELLSPACING=0  CELLPADDING=0  align="right"  width="100%">
         <TR align=center>
                 <td>
-	<a class="inputFontNormal" class=button href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+	<a class="inputFontNormal" class=button href="/cgi-bin/koha/members/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
         Historial de Pr&eacute;stamos
 	</a>
 		</td> 
@@ -555,7 +555,7 @@
 </td></tr></table>
 <script>
 function openPopup() {
-	window.open('prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
+	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
 }
 
 function confirm_prestamo(){
@@ -582,7 +582,7 @@ function confirm_deletion() {
 	var is_confirmed = confirm('Confirma la baja ?');
 
 	if (is_confirmed) {
-		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
 	}
 }
 

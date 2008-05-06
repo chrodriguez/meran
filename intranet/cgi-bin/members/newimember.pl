@@ -28,7 +28,7 @@
 
 use strict;
 use C4::Output;
-use C4::Input;
+# use C4::Input;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Members;
@@ -43,7 +43,7 @@ my $input = new CGI;
 my $insert=$input->param('insert');
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name => "newimember.tmpl",
+	template_name => "members/newimember.tmpl",
 	query => $input,
 	type => "intranet",
 	authnotrequired => 0,
@@ -93,7 +93,7 @@ if ($missing !=1) {
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
 
     $template->param( invalid => ($valid !=1));
 

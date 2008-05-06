@@ -23,7 +23,7 @@ my $flagsrequired;
 $flagsrequired->{permissions}=1;
 
 my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "member-flags.tmpl",
+	= get_template_and_user({template_name => "members/member-flags.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
@@ -56,7 +56,7 @@ if ($input->param('newflags')) {
     }
     my $sth=$dbh->prepare("update borrowers set flags=? where borrowernumber=?");
     $sth->execute($flags, $member);
-    print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$member");
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
 } else {
     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
 

@@ -49,11 +49,11 @@
 		Tel&eacute;fono:<b> <!-- TMPL_VAR NAME="altphone" --></b><BR>
 		Notas:<b> <!-- TMPL_VAR NAME="altnotes" --></b><P>
 			<!-- TMPL_IF NAME="isguarantee" -->
-				Garant&iacute;a:<b><br><!-- TMPL_LOOP NAME="guaranteeloop" --><A HREF="/cgi-bin/koha/moremember.pl?pernum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a></b><br><!-- /TMPL_LOOP -->
+				Garant&iacute;a:<b><br><!-- TMPL_LOOP NAME="guaranteeloop" --><A HREF="/cgi-bin/koha/members/moremember.pl?pernum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a></b><br><!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
 				Garante:<b>
 				<!-- TMPL_IF NAME="guarantorborrowernumber" -->
-					<A HREF="/cgi-bin/koha/moremember2.pl?pernum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
+					<A HREF="/cgi-bin/koha/members/moremember2.pl?pernum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
 				<!-- TMPL_ELSE -->
 					sin garante</b><br>
 				<!-- /TMPL_IF -->
@@ -91,7 +91,7 @@
 
 	<!-- TMPL_IF NAME="foto_name" -->
 	  <tr><td> 
-		<form action=/cgi-bin/koha/upload.pl method=post>
+		<form action=/cgi-bin/koha/members/upload.pl method=post>
 			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
 			<input type=hidden name=pernum value=<!-- TMPL_VAR NAME=pernum -->>
 			<input type=submit class="button" value="Eliminar foto">
@@ -99,7 +99,7 @@
 	  </td></tr>
 	<!-- TMPL_ELSE -->
 	  <tr><td> 
-		<form action=/cgi-bin/koha/upload.pl method=post enctype="multipart/form-data">
+		<form action=/cgi-bin/koha/members/upload.pl method=post enctype="multipart/form-data">
 			<input type=hidden name=pernum value=<!-- TMPL_VAR NAME=pernum -->>
 			<input type=submit class="button" value="Subir foto" title="96 x 96 pixeles / 3 x 3 cent&iacute;metros">
 			<input type=file name="picture">
@@ -190,7 +190,7 @@
 function confirm_deletion() {
 	var is_confirmed = confirm('Confirma la baja ?');
 	if (is_confirmed) {
-		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="pernum" -->";
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="pernum" -->";
 	}
 }
 </script>

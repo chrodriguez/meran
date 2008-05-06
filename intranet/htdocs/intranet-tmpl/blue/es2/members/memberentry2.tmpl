@@ -15,7 +15,7 @@
 <br>
 
 
-<form action=/cgi-bin/koha/newmember2.pl method=post name="form1">
+<form action=/cgi-bin/koha/members/newmember2.pl method=post name="form1">
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
 	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
 	<input type=hidden name=typeRegister value="persons">
@@ -264,11 +264,9 @@ Estado (Regular o No Regular)</FONT> <input type="checkbox" id="regular" name="r
         </tr>
         </table>
 </form>
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-        <!-- TMPL_ELSE -->
-                <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-                        <!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
 
 
 

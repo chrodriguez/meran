@@ -34,9 +34,9 @@ var MENU_ITEMS = [
 			['Seud&oacute;nimos', '/cgi-bin/koha/controlAutoridadesSeudonimos.pl'],
 		]
 	],
-	['Usuarios', '/cgi-bin/koha/members-home.pl', null,
-		['Usuarios Reales', '/cgi-bin/koha/members-home.pl'],
-		['Usuarios Potenciales', '/cgi-bin/koha/members-home2.pl'],
+	['Usuarios', '/cgi-bin/koha/members/member.pl', null,
+		['Usuarios Reales', '/cgi-bin/koha/members/member.pl'],
+		['Usuarios Potenciales', '/cgi-bin/koha/members/member2.pl'],
 		['------------------------', null],
 		['Agregar Usuario', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=adult'],
 		['Agregar Organizaci&oacute;n', '/cgi-bin/koha/simpleredirect.pl?type=Agregar&chooseform=organisation'],

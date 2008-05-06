@@ -36,7 +36,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Input;
+# use C4::Input;
 use C4::Interface::CGI::Output;
 use C4::Search;
 use CGI;
@@ -55,7 +55,7 @@ foreach my $key (@names){
 }
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "newmember.tmpl",
+    = get_template_and_user({template_name => "members/newmember.tmpl",
 			     query => $input,
                              type => "intranet",
                              authnotrequired => 0,
@@ -92,7 +92,7 @@ if ($data{'cardnumber'} eq ''){
 	}
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=&C4::AR::Utilidades::checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
         $ok=1;
     	push @errors, "invalid_cardnumber";
@@ -231,11 +231,13 @@ if ($ok == 0) {
 		    updatepassword => $data{'updatepassword'},
 		     inputsloop => \@inputsloop);
 
+
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
 		$template->param( course => 1, usercourse => $data{'usercourse'});
 	}
 	####################
+
 
 # If things are not ok, display the error message
 } else {

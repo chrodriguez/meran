@@ -40,9 +40,7 @@ use CGI;
 use C4::Search;
 use Date::Manip;
 use C4::Date;
-#use C4::Reserves2;
 use C4::AR::Reserves;
-# use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
 use C4::Koha;
 use HTML::Template;
@@ -141,7 +139,7 @@ $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
 	}
 	####################
 
-my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
+# my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);  NO SE USA, Consulta sobre accountline
 my $issues = getissues(\%bor);
 my $count=0;
 my $venc=0;
@@ -278,7 +276,7 @@ $template->param($data);
 $template->param(
 		bornum          => $bornum,
 		mensaje		=> $mensaje,
-		totaldue          =>$total,
+# 		totaldue          =>$total,
 #los libros que tiene "en espera para retirar"
 		waiting=> \@waiting,
 #los libros que tiene esperando un ejemplar

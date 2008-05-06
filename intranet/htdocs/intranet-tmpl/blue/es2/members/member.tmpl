@@ -1,18 +1,78 @@
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-        <!-- TMPL_ELSE -->
-	        <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-		        <!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<!--<!-- TMPL_INCLUDE NAME="members-top.inc" -->-->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+
 <script language="javascript" type="text/javascript">
-function swap(id,src){
-document.getElementById(id).src=src;
-}        
+//Agrego el codigo para mostrar el estado de la busqueda en Ajax
+<!-- TMPL_INCLUDE NAME="state.js" -->
+//para manejar la zebra
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function consultar(){
+	
+	var p= 	'member=' + $('#member').val();
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/members/memberResult.pl",
+			data: p,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#result').html(ajax.responseText);
+					zebra('tablaResult');
+					$('#tablaResult').tablesorter({	
+ 									widgets: ['zebra'],
+  									headers: { 0: { sorter: false},
+ 										   9: { sorter: false}}
+// ,
+//  									debug: true
+								})
+							.tablesorterPager({container: $("#pager")})
+					Complete();
+				}
+	});
+
+}
+
+function Borrar(){
+	$('#member').val('');
+}
+
+function Complete(){
+	HiddeState();
+}
+
+function Buscar(){
+	var busqueda = $('#member').val();
+ 	if(busqueda != ""){
+		consultar();	
+ 	}else{
+ 		alert("Ingrese un dato");
+ 		$('#member').focus();
+ 	}
+}
+
+function datosUsuario(id){
+	location.href="/cgi-bin/koha/members/moremember.pl?bornum="+id;
+}
+
+$(document).ready(function() {
+
+	//onEnter con foco en input, ejecuta la busqueda
+	$("#member").keypress(function (e) {
+		if(e.which == 13){
+			Buscar();
+		}
+	});
+
+});
+
+
+
 </script>
-
-<center>
-
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >B&uacute;squeda de Usuarios Reales</td>
@@ -22,111 +82,47 @@ document.getElementById(id).src=src;
 	</tr>
 
 </table>
-
-<br>
-
-
-<table border=0 cellspacing=0 cellpadding=2 width=90%>
-	<tr>
-
-	<p><b>La cantidad de usuarios es : <!-- TMPL_VAR NAME=cantidad -->
-	<br>P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b></p><br>
-
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="/cgi-bin/koha/member.pl?ini=<!-- TMPL_VAR name="ant" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-        	<a class="inputFontNormal" href="/cgi-bin/koha/member.pl?ini=<!-- TMPL_VAR name="number" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"> <u><!-- TMPL_VAR name=number --></u> </a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="/cgi-bin/koha/member.pl?ini=<!-- TMPL_VAR name="sig" -->&orden=<!-- TMPL_VAR NAME=orden -->&member=<!-- TMPL_VAR NAME=member -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-	</tr>
-</table>
-
-<br>
-
+<center>
+<br><br><br>
 <table>
 	<tr>
-		<form name="formmember" action="/cgi-bin/koha/member.pl" method=post>
  		<td>
-			<input class="inputFontNormal" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+			<input id="member" class="inputFontNormal" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
- 			<a href="#" onClick="formmember.submit()" ><img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
+			<input id="buscar" type="image" onClick="Buscar();" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
-			<a href="#" onClick="formmember.reset()" ><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0"></a>
+			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 		</td>
-
-  <!--<input class="inputFontNormal" type="reset" name="reset" value="Limpiar">-->
-		</form>
+	</tr>
+	<tr>
+		<td class="inputFontNormal" colspan=2>
+			<p class="recuadroAyuda">
+			Tipear el apellido, DNI o legajo del usuario. Presionar buscar.
+			</p>
+		</td>
 	</tr>
 </table>
-
-<font class="inputFontNormal">Ha buscado por <!-- TMPL_VAR NAME=member --></font>
-<form action=/cgi-bin/koha/actualizarUsuarios.pl method=post>
-
-<table  border=0 cellspacing=0 cellpadding=0 width=100%>
-  	<tr class="tablaresultadoTitle">
-    		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-    		<td align="left" width="12%"><a href="/cgi-bin/koha/member.pl?orden=cardnumber&member=<!-- TMPL_VAR NAME=member -->">Tarjeta de Id.</a></td>
-    		<td align="left" width="30%"><a href="/cgi-bin/koha/member.pl?orden=surname,firstname&member=<!-- TMPL_VAR NAME=member -->">Apellido y Nombres</a></td>
-    		<td align="left" width="15%"><a href="/cgi-bin/koha/member.pl?orden=documentnumber&member=<!-- TMPL_VAR NAME=member -->">Documento</a></td>
-    		<td align="left"><a href="/cgi-bin/koha/member.pl?orden=studentnumber&member=<!-- TMPL_VAR NAME=member -->">Legajo</a></td>
-    		<td>Cat.</td>
-    		<td>Prest.</td>
-    		<td>Ven.</td>
-    		<td>Estado</td>
-    		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>	
-  	</tr>
-   
-  <!-- TMPL_LOOP NAME=resultsloop -->
-  	<tr  align="center">
-    		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left">
-			<!-- TMPL_VAR NAME=cardnumber -->
-		</td>
-     		<td width=250 class="<!-- TMPL_VAR NAME="clase"-->" align="left">
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname --></a>
-		</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left">
-			<!-- TMPL_VAR NAME=documenttype -->&nbsp;<!-- TMPL_VAR NAME=documentnumber -->
-		</td>
-      		<td align="left" class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal">
-			<!-- TMPL_VAR NAME=studentnumber -->
-		</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal">
-			<!-- TMPL_VAR NAME=categorycode -->
-		</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"align=center class="inputFontNormal">
-			<!-- TMPL_VAR NAME=issue -->
-		</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"align=center class="inputFontNormal">
-			<!-- TMPL_VAR NAME=od -->
-		</td>
-      		<td class="<!-- TMPL_VAR NAME="clase"-->"align="center" class="inputFontNormal">
-			<b><!-- TMPL_VAR NAME=regular --></b>
-		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-    	</tr>
-    	
-  <!-- /TMPL_LOOP -->
-  	<tr>
-		<td class="lineafinaltabla"  align="left" colspan="14"></td>
-	</tr>
-</table>
-</form>
 </center>
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-            <!-- TMPL_ELSE -->
-	                    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-			                            <!-- /TMPL_IF -->
-						    
 
+<br>
+<div id="result"></div>
+<br>
+<!--<div id="pager" class="pager" style="top: 640px; position: absolute;">
+<form>
+	<img class="first" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/first.png"/>
+	<img class="prev" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/prev.png"/>
+	<input class="pagedisplay" type="text"/>
+	<img class="next" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/next.png"/>
+	<img class="last" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/last.png"/>
+	<select class="pagesize">
+		<option value="10" selected="selected">10</option>
+		<option value="20">20</option>
+		<option value="50">50</option>
+	</select>
+</form>
+</div>-->
+<!-- TMPL_INCLUDE NAME="paginadorTabla.inc" -->
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
