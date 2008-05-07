@@ -551,6 +551,13 @@ div.title{
 	height: 15;
 }
 
+ul li {
+      list-style-type:none;
+      display:block;
+      margin:0;
+      padding:2px;
+}
+
 div.formElemets ul li {
       list-style-type:none;
       display:block;

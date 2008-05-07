@@ -107,7 +107,6 @@ on what is passed to it, it calls the appropriate search function.
 	&getallthemes 
 	&getalllanguages 
 	&getbranchname 
-	&getborrowercategory 
 	&getallborrowercategorys 
 	&infoitem 
 	&itemsfrombiblioitem 
@@ -4071,25 +4070,6 @@ sub getbranchname
 	return $branchname;
 } # sub getbranchname
 
-=item getborrowercategory
-
-  $description = &getborrowercategory($categorycode);
-
-Given the borrower's category code, the function returns the corresponding
-description for a comprehensive information display.
-
-=cut
-
-sub getborrowercategory
-{
-	my ($catcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
-	$sth->execute($catcode);
-	my $description = $sth->fetchrow();
-	$sth->finish();
-	return $description;
-} # sub getborrowercategory
 
 sub getallborrowercategorys
 {

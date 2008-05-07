@@ -11,6 +11,7 @@ require Exporter;
 use C4::Search;
 use C4::Context;
 use C4::Date;
+use C4::AR::Busquedas;
 
 use vars qw(@EXPORT @ISA);
 
@@ -1549,7 +1550,8 @@ sub userCategReport(){
         while (my $data=$sth->fetchrow_hashref){
 	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
                 $data->{'clase'}=$clase;
-		$data->{'categoria'}=C4::Search::getborrowercategory($data->{'categorycode'});
+# 		$data->{'categoria'}=C4::Search::getborrowercategory($data->{'categorycode'});
+		$data->{'categoria'}=getborrowercategory($data->{'categorycode'});
                 push(@results,$data);
         }
         return (scalar(@results),@results);

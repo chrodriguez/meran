@@ -26,6 +26,9 @@ $VERSION = 0.01;
 	     &proximosHabiles
 	     &proximoHabil
 	     &mesString
+	     &Date_Init
+	     &ParseDate
+	     &UnixDate
 );
 
 sub get_date_format
