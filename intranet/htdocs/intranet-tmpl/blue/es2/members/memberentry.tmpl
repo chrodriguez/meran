@@ -1,57 +1,112 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+                <!-- TMPL_ELSE -->
+                       <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
+			   <!-- /TMPL_IF -->
+												
 
-<script>
-	function validarInput(campo,error){
-		if(campo.value==""){
-			alert(error);
-			campo.focus();
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+<script language="javascript" type="text/javascript">
+
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+
+function validarInput(campo,error){
+	if(campo.value==""){
+		alert(error);
+		campo.focus();
+		var ancla="blanco"+campo.id;
+		crearAncla(campo.id,ancla);
+		location.href="#"+ancla;
+		return false;
+	}
+	return true;
+}
+
+function chequearCampos(){
+	var i=1;
+	var error="Campo obligatorio vacio, ingrese un valor";
+	var ok=true;
+	var idError;
+	while((i<6) && (ok)){
+		var campo= document.getElementById(i);
+		ok=validarInput(campo,error);
+		if(ok){
+			i++;
+		}
+	}
+	if(ok){
+		var city=document.getElementById('city');
+		ok=validarInput(city,error);
+	}
+	return ok;
+}
+	
+function chequearDocumento(){
+	var docInput=document.getElementById('4');
+	var doc = docInput.value.toString();
+	for (var i=0; i<doc.length; i++) {
+		var caracter = doc.charAt(i);
+		if (caracter<"0" || caracter>"9"){
+			alert("Error al ingresar el numero de documento, no es un numero tiene que ser solo digitos");
+			docInput.focus();
+			var ancla="blanco"+'4num';
+			crearAncla('4',ancla);
+			location.href="#"+ancla;
 			return false;
 		}
-		return true;
 	}
+	return true;
+}
+	
+function mandarForm(){
+	if(chequearCampos() && chequearDocumento()){
+		document.form1.submit();
+	}
+}
 
-	function chequearCampos(){
-		var i=1;
-		var error="Campo obligatorio vacio, ingrese un valor";
-		var ok=true;
-		for(i;i<6;i++){
-			var campo= document.getElementById(i);
-			if(ok){
-				ok=validarInput(campo,error);
-			}
-		}
-		if(ok){
-			var city=document.getElementById('dcity');
-			ok=validarInput(city,error);
-		}
-		return ok;
-	}
+function Complete(){
+	//oculto el div state
+	HiddeState();
+}
+
+function CrearAutocomplete(Id){
+	$("#"+Id).search();
+	// q= valor de campoHelp
+	$("#"+Id).autocomplete('/cgi-bin/koha/autocompletables/searchcity.pl',{
+ 		formatItem: function(row){
+			return row[1];
+		},
+		minChars:1,
+        	matchSubset:1,
+        	matchContains:1,
+		maxItemsToShow:10,
+        	cacheLength:10,
+        	selectOnly:1,
+	});//end autocomplete
+	$("#"+Id).result(function(event, data, formatted) {
+		$("#"+Id).val(data[1]);
+	});
+}
+
+$(document).ready(function() {
 	
-	function chequearDocumento(){
-		var docInput=document.getElementById('4');
-		var doc = docInput.value.toString();
-		for (var i=0; i<doc.length; i++) {
-			var caracter = doc.charAt(i);
-			if (caracter<"0" || caracter>"9"){
-				alert("Error al ingresar el numero de documento, no es un numero tiene que ser solo digitos");
-				docInput.focus();
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	function mandarForm(){
-		if(chequearCampos() && chequearDocumento()){
-			document.form1.submit();
-		}
-	}
+	CrearAutocomplete('city');
+	CrearAutocomplete('dstreetcity');
+});
 
 </script>
 
 <center>
-
-
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >
@@ -68,11 +123,6 @@
 </table>
 
 <br>
-<script language="javascript" type="text/javascript">
-function swap(id,src){
-document.getElementById(id).src=src;
-}
-</script>
 
 <form action="/cgi-bin/koha/members/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
@@ -85,7 +135,7 @@ document.getElementById(id).src=src;
 <table border=0  width="100%" class="tablaresultado" align="right">
 	<tr valign=top width="100%">
 		
-		<td  width="50%"ALIGN=RIGHT class="inputFontNormal">
+		<td  width="50%" ALIGN=RIGHT class="inputFontNormal">
 		 	Tarjeta de identificaci&oacute;n * <input id="1" type=text class="inputFontNormal" name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
 		</td>
 	</tr>
@@ -96,15 +146,15 @@ document.getElementById(id).src=src;
 	<br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
 	<tr valign=middle class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
-		<td   width="65%"ALIGN=RIGHT>*
+		<td   width="65%" ALIGN=RIGHT>*
 			<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
 			<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
 			&nbsp; &nbsp;  Fecha de nacimiento (<!-- TMPL_VAR NAME=dateformat -->)
-			<input class="inputFontNormal"type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
+			<input class="inputFontNormal" type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 </table>
 
@@ -120,26 +170,26 @@ document.getElementById(id).src=src;
 	</tr>
 	<tr>
 		<td width="15%">&nbsp;</td>
-		<td width="35%"class="inputFontNormal" align="left">
+		<td width="35%" class="inputFontNormal" align="left">
 	      		<b> Apellido*</b><br>
-	      		<input id="2" class="inputFontNormal"type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
+	      		<input id="2" class="inputFontNormal" type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
 		</td>
-		<td width="35%"class="inputFontNormal" align="left">
+		<td width="35%" class="inputFontNormal" align="left">
 			<b> Nombres*</b><br>
-                 	<input id="3" class="inputFontNormal"type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
+                 	<input id="3" class="inputFontNormal" type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="15%">&nbsp;</td>
-	 	<td width="35%"class="inputFontNormal" align="left">
+	 	<td width="35%" class="inputFontNormal" align="left">
 	 		<b>Documento (solo digitos)*</b><br>
                 	<select  class="inputFontNormal" name=documenttype size=1><!-- TMPL_LOOP NAME=documentloop -->
                  		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
                 	</select>
 			<input id="4" class="inputFontNormal" type=text name=documentnumber size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
 		</td>
-	 	<td width="35%"class="inputFontNormal" align="left">
+	 	<td width="35%" class="inputFontNormal" align="left">
 			<b>Legajo</b><br>
          		<input  class="inputFontNormal" type=text name=studentnumber size=50 value="<!-- TMPL_VAR NAME=studentnumber -->">
 		</td>
@@ -151,9 +201,8 @@ document.getElementById(id).src=src;
 <table width=100%>
 	<tr valign=top >
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont"type="checkbox" name="updatepassword" <!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
+			<input  class="inputFontFont" type="checkbox" name="updatepassword"<!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
 		<td>
-
 			<!-- TMPL_IF name="ethcatpopup" -->
 				<select class="inputFontNormal" name="ethnicity" size=1>
 					<!-- TMPL_LOOP NAME=ethnicityloop -->
@@ -165,7 +214,7 @@ document.getElementById(id).src=src;
 		<td >
 			<!-- TMPL_IF NAME=ethcatpopup -->
 				<!-- TMPL_VAR NAME=ethcatpopup -->
-				<input  class="inputFontNormal"type=text name=ethnicnotes size=40 >
+				<input  class="inputFontNormal" type=text name=ethnicnotes size=40 >
 			<!-- TMPL_ELSE -->
 				&nbsp;
 			<!-- /TMPL_IF -->
@@ -174,7 +223,7 @@ document.getElementById(id).src=src;
 	<tr>
 		<td>&nbsp;</td>
 	</tr>
-	
+
 	<!-- TMPL_IF name="course" -->
 	<tr>
 		<td   width="60%" class="inputFontNormal">
@@ -197,66 +246,54 @@ document.getElementById(id).src=src;
 	<br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
 	<tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td COLSPAN=6 width="100%">DIRECCI&Oacute;N DEL USUARIO</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
-
-	<!--<tr valign=top>
-		<td  class="inputFontNormal"><b>Direcci&oacute;n*</b></td>
-		<td  colspan=3 class="inputFontNormal"><b>C&oacute;digo Postal / Ciudad*</b></td>
-		<td  class="inputFontNormal"><b>Incorporaci&oacute;n a Unidad de Informaci&oacute;n</b></td>
-	</tr>-->
        	<tr valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 		<td>&nbsp;</td>	
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 	</tr>
 	
        	<tr align="center" valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	  		<b>Direcci&oacute;n*</b><br>
-	  		<input  id="5" class="inputFontNormal"type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
+	  		<input id="5" class="inputFontNormal" type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal</b><br>
-			<input  class="inputFontNormal"type=text name="zipcode" size=50 value="<!-- TMPL_VAR NAME="zipcode"-->">
+			<input  class="inputFontNormal" type=text name="zipcode" size=50 value="<!-- TMPL_VAR NAME='zipcode'-->">
 		</td>
 	</tr>
 	<tr>
-	 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	 	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
   	   		<b>Tel&eacute;fono particular</b><br>
-          		<input class="inputFontNormal"type=text name=phone size=50 value="<!-- TMPL_VAR NAME=phone -->">
+          		<input class="inputFontNormal" type=text name=phone size=50 value="<!-- TMPL_VAR NAME=phone -->">
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>Ciudad (Solo lectura)*</b><br>
-			<input class="inputFontNormal" type=text name="dcity" id="dcity" value="<!-- TMPL_IF NAME='dcity' --><!-- TMPL_VAR name='dcity' --> <!-- TMPL_ELSE --><!-- /TMPL_IF -->" readonly="readonly">
-
-
-          		<input class="inputFontNormal" type=hidden name="city" id="city" value="<!-- TMPL_VAR name="city" -->">
-         
-           		<a onClick="window.open('../searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
-           		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>	
+			<b>Ciudad*</b><br>
+			<input class="wickEnabled" class="inputFontNormal" type=text name="city" id="city" value="<!-- TMPL_VAR NAME='city' -->" size='50' >
 		</td>
 	</tr>
 	<tr>
-	 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	 	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	   		<b>Tel&eacute;fono del trabajo</b><br>
-          		<input class="inputFontNormal"type=text name=phoneday size=50 value="<!-- TMPL_VAR NAME=phoneday -->">
+          		<input class="inputFontNormal" type=text name=phoneday size=50 value="<!-- TMPL_VAR NAME=phoneday -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal de origen</b><br>
-          		<input  class="inputFontNormal" type=text name="homezipcode" size=50 value="<!-- TMPL_VAR NAME="homezipcode" -->">
+          		<input  class="inputFontNormal" type=text name="homezipcode" size=50 value="<!-- TMPL_VAR NAME='homezipcode' -->">
 		</td>
 	</tr>
 	<tr>
-         	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+         	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
  			<b>Direcci&oacute;n de origen</b><br>
@@ -264,18 +301,17 @@ document.getElementById(id).src=src;
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad de origen</b><br>
-          		<input class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" value="<!-- TMPL_IF NAME="dstreetcity" --><!-- TMPL_VAR name="dstreetcity" --> <!-- TMPL_ELSE --> ---- <!-- /TMPL_IF -->">
-          		<input class="inputFontNormal" type=hidden name="streetcity" id="streetcity" value="<!-- TMPL_VAR name="streetcity" -->">
-           		<a  onClick="window.open('searchstreetcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=yes');">
-           		<img   src="<!-- TMPL_VAR NAME="themelang" -->/images/modificar2.png" border="0"></a>
+			<input class="wickEnabled" class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
+
+          		<input class="inputFontNormal" type=hidden name="streetcity" id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->">
 		</td>
         </tr>
  	<tr>
-         	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+         	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
         		<b>E-Mail</b><br>
-          		<input class="inputFontNormal"type=text name=emailaddress size=50 value="<!-- TMPL_VAR NAME=emailaddress -->">
+          		<input class="inputFontNormal" type=text name=emailaddress size=50 value="<!-- TMPL_VAR NAME=emailaddress -->">
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
@@ -283,49 +319,15 @@ document.getElementById(id).src=src;
 		<td colspan="4">&nbsp;</td>
 	</tr>
 
-<br>
-<table width="100%"  cellpadding='0' cellspacing='0'>
-        <tr valign=middle width="100%"class="tablaresultadoTitle">
-                 <td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-                <td   COLSPAN=6 width="100%" ><B>DATOS ALTERNATIVOS DEL CONTACTO</b></td>
-                <td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-        </tr>
-</table>
-<table width="100%">
-	<tr>
-        	<td width="5%">&nbsp;</td>
-         	<td class="inputFontNormal"  align="right" width="38%">
-           		<b>Apellidos y nombres</b><br>
-           		<input class="inputFontNormal"type=text name=contactname size=50 value="<!-- TMPL_VAR NAME=contactname -->">
-          		<br>
-          		<br>
-           		<b>Tel&eacute;fono</b><br>
-           		<input class="inputFontNormal"type=text name=altphone size=50 value="<!-- TMPL_VAR NAME=altphone -->">
-          		<br>
-          		<br>
-           		<b>Relaci&oacute;n</b><br>
-           		<select class="inputFontNormal"name=altrelationship size=1><!-- TMPL_LOOP NAME=relshiploop -->
-            			<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=relationship -->
-            		<!-- /TMPL_LOOP -->
-           		</select>
-         	</td>
-   		<td class="inputFontNormal" width="41%" align="right">
-          		<b> Notas</b><br>
-          		<textarea class="inputFontNormal" name=altnotes wrap=physical cols=35 rows=5><!-- TMPL_VAR NAME=altnotes --></textarea>
-         	</td>
-         	<td width="10%">&nbsp;</td>
-        </tr>
-        <tr>&nbsp;</tr>
-</table>
-<br>
-
+	<br>
+	<br>
 <table width="100%" cellpadding='0' cellspacing='0'>
 	<tr valign=middle width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td  COLSPAN=6 width="100%">
 			NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N
 		</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 </table>
 <table width="100%">
@@ -351,9 +353,9 @@ document.getElementById(id).src=src;
 		<td  class="inputFontNormal">
 			<!-- TMPL_VAR NAME=html -->
 		</td>
-		<td  align="left"class="inputFontNormal">
+		<td  align="left" class="inputFontNormal">
 			<input class="inputFontNormal" type=radio name="<!-- TMPL_VAR NAME=name -->" value="1" <!-- TMPL_VAR NAME=yes -->>Si
-			<input class="inputFontNormal"type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>No
+			<input class="inputFontNormal" type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>No
 		</td>
 	</tr>
 		<!-- /TMPL_LOOP -->
@@ -366,13 +368,13 @@ document.getElementById(id).src=src;
 	<tr>
 		<td width="50%" align="right">
                 	<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-                	<a href="#" onClick="mandarForm()" >
-                	<img alt="Guardar" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+                	<a onClick="mandarForm()" >
+                	<img alt="Guardar" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
                 </td>
 
 	        <td  width="25%" align="left"> 
 			<a href="#" onClick="form1.reset()" >
-		 	<img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0">
+		 	<img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0">
 			</a>
 		</td>
 		
@@ -383,7 +385,11 @@ document.getElementById(id).src=src;
 	
 	</tr>
 </table>
-
+<div id="result" style="position: absolute; visibility:hidden"></div>
 </form>
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+        <!-- TMPL_ELSE -->
+	        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+		        <!-- /TMPL_IF -->
+			
