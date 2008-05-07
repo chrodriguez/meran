@@ -67,8 +67,8 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 #Fin: Por los branches
 
 my ($cantidad,@resultsdata)= levelsReport($branch); 
-levelsPie($branch,$cantidad, @resultsdata);
-levelsHBars($branch,$cantidad, @resultsdata);
+my $torta=&levelsPie($branch,$cantidad, @resultsdata);
+my $barras=&levelsHBars($branch,$cantidad, @resultsdata);
 
 
 
@@ -77,6 +77,8 @@ $template->param(
 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
 			branch           => $branch,
+			torta		 => $torta,
+			barras		 => $barras,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

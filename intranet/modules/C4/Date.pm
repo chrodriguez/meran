@@ -1,5 +1,3 @@
-#!/usr/bin/perl -w
-
 package C4::Date;
 
 use strict;

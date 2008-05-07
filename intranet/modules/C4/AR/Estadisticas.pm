@@ -1550,9 +1550,9 @@ sub userCategReport(){
         while (my $data=$sth->fetchrow_hashref){
 	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
                 $data->{'clase'}=$clase;
-# 		$data->{'categoria'}=C4::Search::getborrowercategory($data->{'categorycode'});
-		$data->{'categoria'}=getborrowercategory($data->{'categorycode'});
+		$data->{'categoria'}=&C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
                 push(@results,$data);
         }
         return (scalar(@results),@results);
 }
+1;

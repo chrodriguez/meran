@@ -20,19 +20,23 @@ use C4::AR::open_flash_chart;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-		&itemtypesPie 
-		&itemtypesHBars 
-		&levelsPie 
-		&levelsHBars 
+		&itemtypesPieSinFlash
+		&itemtypesHBarsSinFlash
+		&levelsPieSinFlash
+		&levelsHBarsSinFlash
+		&userCategPieSinFlash
+		&userCategHBarsSinFlash
+		&itemtypesPie
+		&itemtypesHBars
+		&levelsPie
+		&levelsHBars
 		&availLines
 		&userCategPie
 		&userCategHBars
-
-		&userCategHBars2
-		&userCategPie2
 	);
 
-sub itemtypesPie
+
+sub itemtypesPieSinFlash
 {
  my ($branch,$cant,@results)=@_;
 
@@ -67,7 +71,7 @@ my $template=C4::Context->preference('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/itemtypepie$branch.png");
 }
 
-sub itemtypesHBars 
+sub itemtypesHBarsSinFlash
 {
 my ($branch,$cant,@results)=@_;
 
@@ -112,7 +116,7 @@ $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/s
 
 
 
-sub levelsPie
+sub levelsPieSinFlash
 {
  my ($branch,$cant,@results)=@_;
 
@@ -147,7 +151,7 @@ my $template=C4::Context->preference('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/levelpie$branch.png");
 }
 
-sub levelsHBars 
+sub levelsHBarsSinFlash
 {
 my ($branch,$cant,@results)=@_;
 
@@ -233,7 +237,6 @@ return ($p,@labels);
 sub availLines 
 {
 my ($branch,$cant,$ini,$fin,@results)=@_;
-my @labels;
 my $i=0;
 my $year='';
 my $month=''; 
@@ -283,7 +286,7 @@ $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/s
 }
 
 
-sub userCategPie(){
+sub userCategPieSinFlash(){
 	my ($branch,$cant,@results)=@_;
 	my $g = Chart::Pie->new(700,500);
 
@@ -316,7 +319,7 @@ $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/s
 
 }
 
-sub userCategHBars(){
+sub userCategHBarsSinFlash(){
 	my ($branch,$cant,@results)=@_;
 	my $g = Chart::HorizontalBars->new(640,480);
 
@@ -356,7 +359,8 @@ sub userCategHBars(){
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercateghbars$branch.png");
 }
 
-#PRUEBA!!!!!!!!!!!!!!!!!!NUEVOS GRAFICOS!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!NUEVOS GRAFICOS CON FLASH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #***********************Funciones genericas internas para crear los graficos*************************
 sub inicializarGrafico(){
@@ -378,11 +382,10 @@ sub finalizarGrafico(){
 }
 #***********************************FIN***************************
 
-
-sub userCategHBars2(){
+sub userCategHBars(){
 	my ($branch,$cant,@results)=@_;
-
 	my $g=&inicializarGrafico("Usuarios por categoria (Barras)");
+
 	my @categorias;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
@@ -399,10 +402,9 @@ sub userCategHBars2(){
 	$g->set_y_legend( 'Cantidades', 10, '#736AFF' );
 	&finalizarGrafico($g);
 	return ($g->render());
-
 }
 
-sub userCategPie2(){
+sub userCategPie(){
 	my ($branch,$cant,@results)=@_;
 	my $g=&inicializarGrafico("Usuarios por categoria (Torta)");
 
@@ -445,3 +447,141 @@ sub userCategPie2(){
 	&finalizarGrafico($g);
 	return ($g->render());
 }
+
+sub itemtypesHBars(){
+	my ($branch,$cant,@results)=@_;
+	my $g = &inicializarGrafico("Tipo de documentos (Torta)");
+
+	my @tiposDoc;
+	my @values;
+    	for (my $i=0; $i < $cant ; $i++ ) {
+        	push(@tiposDoc,$results[$i]->{'description'});
+                push(@values,$results[$i]->{'cant'});
+        };
+#para generar las barras.
+	$g->bar_3D( 50, '0x0066CC', 'cantidad',10 );
+	$g->set_data(\@values );
+	$g->set_x_labels(\@tiposDoc);
+	$g->set_x_axis_3d(10);
+	$g->set_y_min( 0 );
+	$g->set_x_legend( 'Tipo de documentos', 10, '#736AFF' );
+	$g->set_y_legend( 'Cantidades', 10, '#736AFF' );
+
+	&finalizarGrafico($g);
+	return ($g->render());
+}
+
+sub itemtypesPie(){
+	my ($branch,$cant,@results)=@_;
+	my $g=&inicializarGrafico("Tipo de documentos (Torta)");
+
+	my @tiposDoc;
+	my @values;
+	my @colores;
+	my $num;
+	my $cantItems;
+	my $porcItems;
+	my $varios="";
+	my $totalItmes=0;
+	my $totalVar=0;
+	for (my $i=0; $i < $cant ; $i++ ) {
+		$totalItmes+=$results[$i]->{'cant'};
+	}
+    	for (my $i=0; $i < $cant ; $i++ ) {
+		$cantItems=$results[$i]->{'cant'};
+		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
+		$porcItems=sprintf("%.1f", ($cantItems/ $totalItmes) * 100.0);
+		if($porcItems >= 3){
+			push(@tiposDoc,$results[$i]->{'description'});
+     			push(@values,$cantItems);
+		}
+		else{
+			$totalVar+=$cantItems;
+		}
+		$num=int(rand(499999))+500000;
+		push(@colores,"#".$num);
+        };
+	if($totalVar > 0){
+		push(@tiposDoc,"Otros");
+     		push(@values,$totalVar);
+		
+	}
+#para generar la torta
+	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
+	$g->pie_values(\@values,\@tiposDoc);
+	$g->pie_slice_colours(\@colores);
+
+	&finalizarGrafico($g);
+	return ($g->render());
+}
+
+sub levelsHBars(){
+	my ($branch,$cant,@results)=@_;
+	my $g = &inicializarGrafico("Niveles Bibliograficos (Barras)");
+
+	my @descriptions;
+	my @values;
+    	for (my $i=0; $i < $cant ; $i++ ) {
+                 push (@descriptions,$results[$i]->{'description'});
+                 push (@values,$results[$i]->{'cant'});
+        };
+
+#para generar las barras.
+	$g->bar_3D( 50, '0x0066CC', 'cantidad',10 );
+	$g->set_data(\@values );
+	$g->set_x_labels(\@descriptions);
+	$g->set_x_axis_3d(10);
+	$g->set_y_min( 0 );
+	$g->set_x_legend( 'Tipo de documentos', 10, '#736AFF' );
+	$g->set_y_legend( 'Cantidades', 10, '#736AFF' );
+
+	&finalizarGrafico($g);
+	return ($g->render());
+}
+
+sub levelsPie(){
+	my ($branch,$cant,@results)=@_;
+	my $g = &inicializarGrafico("Niveles Bibliograficos (Torta)");
+
+	my @descriptions;
+	my @values;
+	my @colores;
+	my $num;
+	my $cantlevels;
+	my $porclevels;
+	my $varios="";
+	my $totallevels=0;
+	my $totalVar=0;
+	for (my $i=0; $i < $cant ; $i++ ) {
+		$totallevels+=$results[$i]->{'cant'};
+	}
+    	for (my $i=0; $i < $cant ; $i++ ) {
+		$cantlevels=$results[$i]->{'cant'};
+		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
+		$porclevels=sprintf("%.1f", ($cantlevels/ $totallevels) * 100.0);
+		if($porclevels >= 3){
+			push(@descriptions,$results[$i]->{'categoria'});
+     			push(@values,$cantlevels);
+		}
+		else{
+			$totalVar+=$cantlevels;
+		}
+		$num=int(rand(499999))+500000;
+		push(@colores,"#".$num);
+        };
+	if($totalVar > 0){
+		push(@descriptions,"Otros");
+     		push(@values,$totalVar);
+		
+	}
+#para generar la torta
+	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
+	$g->pie_values(\@values,\@descriptions);
+	$g->pie_slice_colours(\@colores);
+
+	&finalizarGrafico($g);
+	return ($g->render());
+}
+
+1;
+
