@@ -7,16 +7,16 @@ function crearAuto(id,tabla,accion,otroId,campos,orden,separador){
 	var params="?campos="+campos+"&orden="+orden+"&separador="+separador;
 	switch (tabla) {
 		case "temas":
-			url="/cgi-bin/koha/temasAutocomplete.pl"+params;
+			url="/cgi-bin/koha/autocompletables/temasAutocomplete.pl"+params;
 			break;
 		case "autores":
-			url="/cgi-bin/koha/autorAutocomplete.pl"+params;
+			url="/cgi-bin/koha/autocompletables/autorAutocomplete.pl"+params;
 			break;
 		case "countries":
-			url="/cgi-bin/koha/paisesAutocomplete.pl"+params;
+			url="/cgi-bin/koha/autocompletables/paisesAutocomplete.pl"+params;
 			break;
 		case "branches":
-			url="/cgi-bin/koha/bibliosAutocomplete.pl"+params;//CAMBIAR POR EL DE BRANCH
+			url="/cgi-bin/koha/autocompletables/branchAutocomplete.pl"+params;
 			break;
 	}
 	crearAutocomplete(id,url,accion,otroId);
