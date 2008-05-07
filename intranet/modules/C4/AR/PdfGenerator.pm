@@ -893,15 +893,15 @@ sub batchBookLabelGenerator {
 	my $i=0;
 	my $pag=1;
 	my $pdf = new PDF::Report();
-	$pdf->{PageWidth}='300';
-	$pdf->{PageHeight}='200';
+	$pdf->{PageWidth}='280';
+	$pdf->{PageHeight}='190';
 
 	while ($i<$count)
 	{
 	$pdf->newpage($pag);
         $pdf->openpage($pag);
 	if ($i<$count){
-	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,100,$pdf);$i++;
+	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,95,$pdf);$i++;
 	}
 	if ($i<$count){
 	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,0,$pdf);$i++;
@@ -924,21 +924,21 @@ sub generateBookLabel {
 	my ($pagewidth, $pageheight) = $pdf->getPageDimensions(); #(200x300)
 	$pdf->setSize(7);
 	 #Insert a rectangle to delimite the card
-	$pdf->drawRect($pagewidth, $pageheight+($y-100) , 0 ,$y);
-	$pdf->drawLine(100, $pageheight+($y-100), 100, $y);
+	$pdf->drawRect($pagewidth, $pageheight+($y-95) , 0 ,$y);
+	$pdf->drawLine(95, $pageheight+($y-95), 95, $y);
 	 #Insert a barcode to the card
-	$pdf->drawBarcode($x+190,$y+10,0.5,1,"3of9",$codigo,undef, 10, 10, 20, 10);
+	$pdf->drawBarcode($x+125,$y-5,0.73,1,"3of9",$codigo,undef, 10, 10, 25, 10);
 	
 	my $posy=110;
 	 #Write the borrower data into the pdf file
 	 $pdf->setSize(7);
 	 $pdf->setFont("Arial-Bold");
-         $pdf->addRawText($branch->{'categoryname'},$x+170,$pageheight + ($y-$posy));
+         $pdf->addRawText($branch->{'categoryname'},$x+135,$pageheight + ($y-$posy));
 	 $posy=$posy+7;
-	 $pdf->addRawText($branch->{'branchname'},$x+170,$pageheight + ($y-$posy));
+	 $pdf->addRawText($branch->{'branchname'},$x+135,$pageheight + ($y-$posy));
 	 $posy=$posy+7;
 	 $pdf->setSize(6);
-	 $pdf->addRawText("Biblioteca",$x+170,$pageheight + ($y-$posy));
+	 $pdf->addRawText("Biblioteca",$x+135,$pageheight + ($y-$posy));
 	 $posy=$posy+7;
 	 $pdf->setFont("Arial");
 	
@@ -946,12 +946,12 @@ sub generateBookLabel {
 	 my $address=$branch->{'branchaddress1'};
 	 if($branch->{'branchaddress2'} ne ''){$address.="\n".$branch->{'branchaddress2'};$cantdir++;}
 	 if($branch->{'branchaddress3'} ne ''){$address.="\n".$branch->{'branchaddress3'};$cantdir++;}
-	 $pdf->addRawText($address,$x+170,$pageheight + ($y-$posy));
+	 $pdf->addRawText($address,$x+135,$pageheight + ($y-$posy));
 	 $posy=$posy+(7*$cantdir);
 	 
 	if ($branch->{'branchemail'} ne ''){
 	 my $mail=$branch->{'branchemail'};
-	 $pdf->addRawText($mail,$x+170,$pageheight + ($y-$posy));
+	 $pdf->addRawText($mail,$x+135,$pageheight + ($y-$posy));
 	 $posy=$posy+7;
 	}
 	
@@ -962,7 +962,7 @@ sub generateBookLabel {
 			if ($branch->{'branchphone'} ne '') { $aux=" Tel ".$branch->{'branchphone'};}
 			if ($branch->{'branchfax'} ne '') { $aux=" Fax ".$branch->{'branchfax'};}
 			}
-	 $pdf->addRawText($aux,$x+170,$pageheight + ($y-$posy));
+	 $pdf->addRawText($aux,$x+135,$pageheight + ($y-$posy));
 	 }
 
 	 $pdf->setSize(8);
