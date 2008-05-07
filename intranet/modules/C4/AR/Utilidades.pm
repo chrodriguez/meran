@@ -886,14 +886,16 @@ sub armarPaginas{
 }
 
 #
-#Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
+#Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
+
         my $dbh = C4::Context->dbh;
-        my $query="select value
-		   from systempreferences
-                   where variable='renglones'";
+        my $query="	SELECT value
+		   	FROM systempreferences
+                   	WHERE variable='renglones'";
         my $sth=$dbh->prepare($query);
 	$sth->execute();
+
 	return($sth->fetchrow_array);
 }
 

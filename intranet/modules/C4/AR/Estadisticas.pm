@@ -131,9 +131,9 @@ sub historicoDeBusqueda(){
  		
 		$olddate= $data->{'fecha'};
 		
-		Date_Init("DateFormat=US");
-		$olddate = ParseDate($olddate);
-		$newdate = UnixDate($olddate,'%m/%d/%Y %H:%M');
+		C4::Date::Date_Init("DateFormat=US");
+		$olddate = C4::Date::ParseDate($olddate);
+		$newdate = C4::Date::UnixDate($olddate,'%m/%d/%Y %H:%M');
 
 		$data->{'fecha'}= $newdate;
 
