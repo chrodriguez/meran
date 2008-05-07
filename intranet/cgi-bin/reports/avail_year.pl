@@ -28,7 +28,7 @@ use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Koha;
 use C4::Date;
-use C4::AR::StatGraphs;
+# use C4::AR::StatGraphs;
 
 my $input = new CGI;
 
@@ -75,7 +75,7 @@ if($input->param('fin')){$fin=$input->param('fin');}
 #
 
 my ($cantidad,@resultsdata)= availYear($branch,$ini,$fin); 
-if( ($ini ne '') && ($fin ne '')){availLines($branch,$cantidad,$ini,$fin,@resultsdata);}
+# if( ($ini ne '') && ($fin ne '')){availLines($branch,$cantidad,$ini,$fin,@resultsdata);}
 
 $template->param( 
 			resultsloop      => \@resultsdata,

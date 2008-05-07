@@ -193,6 +193,7 @@ my $template=C4::Context->preference('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/levelhbars$branch.png");
 }
 
+=item
 sub getlabels
  { 
    my (@results)=@_;
@@ -284,7 +285,7 @@ my $lang=C4::Context->preference('opaclanguages');
 my $template=C4::Context->preference('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/avail$branch.png");
 }
-
+=cut
 
 sub userCategPieSinFlash(){
 	my ($branch,$cant,@results)=@_;
