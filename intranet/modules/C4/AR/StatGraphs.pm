@@ -15,6 +15,7 @@ use C4::Search;
 use Chart::Pie;
 use Chart::HorizontalBars;
 use Chart::LinesPoints;
+use C4::AR::open_flash_chart;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -26,6 +27,9 @@ use vars qw(@EXPORT @ISA);
 		&availLines
 		&userCategPie
 		&userCategHBars
+
+		&userCategHBars2
+		&userCategPie2
 	);
 
 sub itemtypesPie
@@ -352,4 +356,92 @@ sub userCategHBars(){
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercateghbars$branch.png");
 }
 
+#PRUEBA!!!!!!!!!!!!!!!!!!NUEVOS GRAFICOS!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+#***********************Funciones genericas internas para crear los graficos*************************
+sub inicializarGrafico(){
+	my ($titulo)=@_;
+	my $g = graph->new();
+	$g->set_width(640);
+	$g->set_height(480);
+	$g->title( $titulo,'{font-size: 20px; color: #FF8040}' );
+	return $g;
+}
+
+sub finalizarGrafico(){
+	my ($g)=@_;
+	my $lang=C4::Context->preference('opaclanguages');
+	my $template=C4::Context->preference('template');
+	$g->set_swf_path("/intranet-tmpl/$template/$lang/includes/open-flash-chart/");
+	$g->set_js_path("/intranet-tmpl/$template/$lang/includes/open-flash-chart/");
+	$g->set_output_type("js");
+}
+#***********************************FIN***************************
+
+
+sub userCategHBars2(){
+	my ($branch,$cant,@results)=@_;
+
+	my $g=&inicializarGrafico("Usuarios por categoria (Barras)");
+	my @categorias;
+	my @values;
+    	for (my $i=0; $i < $cant ; $i++ ) {
+        	push(@categorias,$results[$i]->{'categoria'});
+                push(@values,$results[$i]->{'cant'});
+        };
+#para generar las barras.
+	$g->bar_3D( 50, '0x0066CC', 'cantidad',10 );
+	$g->set_data(\@values );
+	$g->set_x_labels(\@categorias);
+	$g->set_x_axis_3d(10);
+	$g->set_y_min( 0 );
+	$g->set_x_legend( 'Categorias de usuarios', 10, '#736AFF' );
+	$g->set_y_legend( 'Cantidades', 10, '#736AFF' );
+	&finalizarGrafico($g);
+	return ($g->render());
+
+}
+
+sub userCategPie2(){
+	my ($branch,$cant,@results)=@_;
+	my $g=&inicializarGrafico("Usuarios por categoria (Torta)");
+
+	my @categorias;
+	my @values;
+	my @colores;
+	my $num;
+	my $cantUsr;
+	my $porcUsr;
+	my $varios="";
+	my $totalUsr=0;
+	my $totalVar=0;
+	for (my $i=0; $i < $cant ; $i++ ) {
+		$totalUsr+=$results[$i]->{'cant'};
+	}
+    	for (my $i=0; $i < $cant ; $i++ ) {
+		$cantUsr=$results[$i]->{'cant'};
+		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
+		$porcUsr=sprintf("%.1f", ($cantUsr/ $totalUsr) * 100.0);
+		if($porcUsr >= 3){
+			push(@categorias,$results[$i]->{'categoria'});
+     			push(@values,$cantUsr);
+		}
+		else{
+			$totalVar+=$cantUsr;
+		}
+		$num=int(rand(499999))+500000;
+		push(@colores,"#".$num);
+        };
+	if($totalVar > 0){
+		push(@categorias,"Otros");
+     		push(@values,$totalVar);
+		
+	}
+#para generar la torta
+	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
+	$g->pie_values(\@values,\@categorias);
+	$g->pie_slice_colours(\@colores);
+
+	&finalizarGrafico($g);
+	return ($g->render());
+}

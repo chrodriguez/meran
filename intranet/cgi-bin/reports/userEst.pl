@@ -68,8 +68,8 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 #Fin: Por los branches
 
 my ($cantidad,@resultsdata)= &userCategReport($branch);
-&userCategPie($branch,$cantidad, @resultsdata);
-&userCategHBars($branch,$cantidad, @resultsdata);
+my $torta=&userCategPie2($branch,$cantidad, @resultsdata);
+my $barras=&userCategHBars2($branch,$cantidad, @resultsdata);
 
 
 #Generar planilla.
@@ -81,6 +81,8 @@ $template->param(
 			cantidad         => $cantidad,
 			branch           => $branch,
 			name		 => $planilla,
+			barras		 => $barras,
+			torta		 => $torta,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
