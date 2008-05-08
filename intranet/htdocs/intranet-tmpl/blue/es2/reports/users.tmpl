@@ -97,7 +97,10 @@ function consultar(orden,ini){
 
 	<tr class="inputFontNormal">
 		<td colspan="2">
-			<br><a href="listaMailUsuarios.pl">Generar archivo con los mails</a>
+			<br>
+			<a href="listaMailUsuarios.pl" class="inputFontNormal" onMouseOut="swap('mails','<!-- TMPL_VAR NAME='themelang' -->/images/lista-mails.png')" onMouseOver="swap('mails','<!-- TMPL_VAR NAME='themelang' -->/images/lista-mailsbis.png')" >
+			<input  name="mails" id="mails" alt="Generar lista de mails" type="image" value="Lista de Mails"  src="<!-- TMPL_VAR NAME='themelang' -->/images/lista-mails.png" border="0" title="Lista de mails" >
+			</a>
 		</td>
 	</tr>
 	
