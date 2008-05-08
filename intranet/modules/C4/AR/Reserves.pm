@@ -816,7 +816,7 @@ sub intercambiar_itemnumber{
         my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SET autocommit=0");
 	$sth->execute();
-	$sth=$dbh->prepare("Select reserves.itemnumber from reserves where itemnumber=? for update ");
+	$sth=$dbh->prepare("Select reserves.itemnumber from reserves where itemnumber=? and constrainttype is NULL for update ");
 	$sth->execute($itemnumber);
 	
 	if (my $data= $sth->fetchrow_hashref){ #quiere decir que hay una reserva sobre el itemnumber
