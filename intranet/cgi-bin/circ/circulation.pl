@@ -419,6 +419,9 @@ sub procesarStr(){
 	elsif($strError eq "FALTAN_PARAMETROS"){
 		return "por falta par&aacute;metros";
 	}
+	elsif($strError eq "EL_DOCUMENTO_ESTA_PRESTADO"){
+		return "El documento esta prestado, seleccione otro c&oacute;digo de barra";
+	}
 }
 
 # Local Variables:

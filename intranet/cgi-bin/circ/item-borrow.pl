@@ -76,6 +76,7 @@ if(($issuecode)&&($itemnumber)){
 
 #se hace el prestamo
 	if ($resultado[0] eq 0){#quiere decir que dio algun tipo de error
+		my $msg="";
 		if ($resultado[1] eq 5){#quiere decir que el item ya esta reservado
 			if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)) {
 				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
@@ -97,8 +98,8 @@ if(($issuecode)&&($itemnumber)){
 		elsif($resultado[1] eq 3){
 	# El usuario ya tiene una reserva sobre este grupo pero sobre olditemnumber => hay que hacer un intercambio 
 	# de itemnumbers ($itemnumber <=> $olditemnumber)
-			intercambiar_itemnumber($bornum, $bibit, $itemnumber, $olditemnumber);
-			if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)){
+			if (intercambiar_itemnumber($bornum, $bibit, $itemnumber, $olditemnumber)){
+			   if (efectivizar_reserva($bornum,$bibit,$issuecode,$loggedinuser)){
 				if ($issuecode eq "DO"){#Si llego al maximo se caen las demas reservas
 					my ($cant, @issuetypes) = PrestamosMaximos ($bornum);
 					foreach my $iss (@issuetypes){
@@ -111,13 +112,19 @@ if(($issuecode)&&($itemnumber)){
 		
 # 			print $query->redirect("circulation.pl?borrnumber=".$bornum."&ticket=".$itemnumber);
 			$strResult.=$itemnumber."/";
+			   }
+			   else{
+				cancelar_reserva($bibit,$bornum,$loggedinuser);
+			   }
 			}
 			else{
-				cancelar_reserva($bibit,$bornum,$loggedinuser);
+				$error= 1;
+				$msg="";
+				$mensajeError.=$itemnumber."-EL_DOCUMENTO_ESTA_PRESTADO/";
 			}
 		} 
 		else{
-			my $msg=""; #FIXME hay que codificar los mensajes de error
+			 #FIXME hay que codificar los mensajes de error
 			if ($resultado[1] eq 1) {
 				$msg= "SANCIONADO_O_LIBROS_VENCIDOS"; #El usuario esta sancionado o tiene libros vencidos
 			} elsif ($resultado[1] eq 2) {
@@ -156,10 +163,12 @@ if(($issuecode)&&($itemnumber)){
 	elsif ($resultado[0] eq 1) {
 		if ($resultado[1] eq 0) { #No hay mas ejemplares disponibles. Se realizo una reserva sobre el grupo.
 # 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO");
+			$error= 1;
 			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO/";
 		}
 		elsif ($resultado[1] eq -1) { #No hay mas ejemplares disponibles y el usuario no puede tener mas reservas => no se hace nada
 # 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=NO_HAY_MAS_EJEMPLARES_NO_RESERVA");
+			$error= 1;
 			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA/";
 		}
 	}

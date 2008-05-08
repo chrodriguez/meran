@@ -816,19 +816,25 @@ sub intercambiar_itemnumber{
         my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SET autocommit=0");
 	$sth->execute();
-	$sth=$dbh->prepare("Select reserves.itemnumber from reserves where itemnumber=? and constrainttype is NULL for update ");
+	$sth=$dbh->prepare("Select reserves.itemnumber, constrainttype from reserves where itemnumber=? for update ");
 	$sth->execute($itemnumber);
-	
-	if (my $data= $sth->fetchrow_hashref){ #quiere decir que hay una reserva sobre el itemnumber
+	my $data= $sth->fetchrow_hashref;
+	if ($data && $data->{'constrainttype'} eq ""){ 
+		#quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
 		$sth=$dbh->prepare("update reserves set itemnumber= ? where itemnumber = ?");
 		$sth->execute($olditemnumber, $itemnumber);
 	}
 	#actualizo la reserva con el nuevo itemnumber
-	$sth=$dbh->prepare("update reserves set itemnumber= ? where biblioitemnumber=? and borrowernumber=?");
-	$sth->execute($itemnumber, $biblioitemnumber, $borrowernumber);
-
+	if($data->{'constrainttype'} eq "P"){
+		return 0; #El item esta prestado a otro usuario
+	}
+	else{
+		$sth=$dbh->prepare("update reserves set itemnumber= ? where biblioitemnumber=? and borrowernumber=?");
+		$sth->execute($itemnumber, $biblioitemnumber, $borrowernumber);
+	}
 	my $sth3=$dbh->prepare("commit ");
 	$sth3->execute();
+	return 1;
 }
 
 sub eliminarReservasVencidas(){
