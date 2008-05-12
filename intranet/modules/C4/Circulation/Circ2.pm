@@ -31,7 +31,6 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-# use C4::Stats;
 use C4::AR::Reserves;
 use C4::Koha;
 use C4::Search;
@@ -306,7 +305,7 @@ sub listitemsforinventory {
 SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 =cut
 sub listitemsforinventorysigtop {
-	my ($sigtop) = @_;
+	my ($sigtop,$orden) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblio.biblionumber as biblionumber
 	FROM (
@@ -316,10 +315,10 @@ sub listitemsforinventorysigtop {
 	)
 	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
 	)
-	WHERE bulk LIKE '$sigtop%'
+	WHERE bulk LIKE ?
 	ORDER BY barcode, title");
 		
-	$sth->execute();
+	$sth->execute($sigtop."%");
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
@@ -328,6 +327,13 @@ sub listitemsforinventorysigtop {
 		$row->{'author'}=C4::Search::getautor($row->{'author'});
 		push @results,$row;
 	}
+	
+	if ($orden){
+	# Da el ORDEN al arreglo
+	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+	@results=@sorted;
+	}
+
 	return @results;
 }
 

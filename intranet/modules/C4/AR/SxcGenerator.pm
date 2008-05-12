@@ -391,7 +391,7 @@ if ( @$results[$i]) {
 	$sheet->oooData("cell-text", @$results[$i]->{'bulk'});
 	
 	$sheet->oooSet("cell-loc", 2, $pos);
-	$sheet->oooData("cell-text", @$results[$i]->{'author'});
+	$sheet->oooData("cell-text", @$results[$i]->{'author'}->{'completo'});
 	
 	$sheet->oooSet("cell-loc", 3, $pos);
 	if(@$results[$i]->{'unititle'} eq ""){$sheet->oooData("cell-text", @$results[$i]->{'title'});}

@@ -1,5 +1,29 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script>
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function consultar(ini,orden){
+	var desde=$("#desde").val();
+	var hasta=$("#hasta").val();
+	var params="desde="+desde+"&hasta="+hasta+"&ini="+ini+"&orden="+orden;
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/reports/inventoryResult.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				HiddeState();
+				zebra("tablaResult");
+			}
+	});
+}
+
+</script>
+
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="pagetitle" >Inventario:</td>
@@ -10,79 +34,21 @@
 </table>
 <br>
 
-<form method="post" name="form1" action='inventory.pl'>
-
 <table border="0" cellspacing="0" cellpadding="0" align="left">
 	<tr>
 		<td class="inputFontNormal">Localizaci&oacute;n del ejemplar entre &nbsp;</td>
 		<td class="inputFontNormal">
-			<input class="inputFontNormal" type="text" name="from" value="<!-- TMPL_VAR name="from" -->">&nbsp; y &nbsp;
-			<input  class="inputFontNormal" type="text" name="to" value="<!-- TMPL_VAR name="to" -->">&nbsp;
+			<input class="inputFontNormal" type="text" id="desde" value="<!-- TMPL_VAR name='desde' -->">&nbsp; y &nbsp;
+			<input  class="inputFontNormal" type="text" id="hasta" value="<!-- TMPL_VAR name='hasta' -->">&nbsp;
 		</td>
-		<td><input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></td>
+		<td><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar(0,'barcode')"></td>
 	</tr>
 </table>
 
-</form>
 <br>
 <p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MIN --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAX --></b>. </p>
-<p class="inputFontNormal" align="left">La cantidad de ejemplares es: <!-- TMPL_VAR NAME=cant --></p>
-<br>
 
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-<tr class="tablaresultadoTitle">
-	<td align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-	<th>Nro. de Inventario</th>
-	<th>Autor</th>
-	<th>T&iacute;tulo</th>
-	<th>Edic.</th>
-	<th>Editor</th>
-	<th>A&ntilde;o</th>
-	<th>Signatura Topogr&aacute;fica</th>
-	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-</tr>
-<!-- TMPL_LOOP Name="results" -->
-<tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->" >
-		<!-- TMPL_VAR Name="barcode" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="author" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+<div id="result"></div>
 
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="number" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="publisher" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="publicationyear" --> 
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->" align="center">
-		<!-- TMPL_VAR Name="bulk" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-</tr>
 
-<!-- /TMPL_LOOP -->
-<tr>
-	<td colspan="8">&nbsp;</td>
-</tr>
-<tr valign=bottom>
-	<td class="lineafinaltabla"  align="left" colspan="8"></td>
-</tr>
-
-</table>
-<br><br>
-
-<center>
-<a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->" class="inputFontNormal" onMouseOut="swap('planillas','<!-- TMPL_VAR NAME="themelang" -->/images/plantilla.png')" onMouseOver="swap('planillas','<!-- TMPL_VAR NAME="themelang" -->/images/plantillabis.png')" >
-<input  name="planillas" id="planillas" alt="Generar planilla" type="image" value="Generar planilla"  src="<!-- TMPL_VAR NAME="themelang" -->/images/plantilla.png" border="0" title="Generar planilla" >
-</a>
-</center>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
