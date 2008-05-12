@@ -131,7 +131,7 @@ $bor{'borrowernumber'}=$bornum;
 $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 
 # Converts the categorycode to the description
-$data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
+$data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
@@ -180,7 +180,7 @@ if (Date::Manip::Date_Cmp($df,$hoy)<0)
 #    $issue->{'date_fin'} = format_date(vencimiento($issue->{'itemnumber'}));
 #    $venc= ($venc || (Date_Cmp(ParseDate("today"),ParseDate($issue->{'date_fin'})) > 0));
 
-    $issue->{'renew'} = &sepuederenovar2($bornum, $issue->{'itemnumber'});
+    $issue->{'renew'} = &sepuederenovar($bornum, $issue->{'itemnumber'});
     if ($issue->{'overdue'}) {
         push @overdues, $issue;
         $overdues_count++;

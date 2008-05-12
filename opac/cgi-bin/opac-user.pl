@@ -126,7 +126,7 @@ close(INFO);
   	{ $venc=1;
 	  $issue->{'color'} ='red';
 	}
-    $issue->{'renew'} = &sepuederenovar2($borrowernumber, $issue->{'itemnumber'});
+    $issue->{'renew'} = &sepuederenovar($borrowernumber, $issue->{'itemnumber'});
     if ($issue->{'overdue'}) {
 	push @overdues, $issue;
 	$overdues_count++;

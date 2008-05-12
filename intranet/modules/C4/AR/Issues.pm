@@ -74,7 +74,6 @@ FIXME
     &IssueType
     &IssuesType
     &IssuesType2
-    &sepuederenovar2
     &fechaDeVencimiento
     &enviar_recordatorios_prestamos
     &crearTicket
@@ -260,112 +259,7 @@ if ($data){
 =item
 sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false
 =cut
-
-
-#######********* ESTA FUNCION ESTA IGUAL QUE LA SEPUEDERENOVAR2 SE REDEFINIO PARA OPTIMIZAR EL CODIGO
-#######********* HAY QUE SACARLA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-sub sepuederenovar {
-my ($borrowernumber,$itemnumber)=@_;
-my $dbh = C4::Context->dbh;
-
-my $sth=$dbh->prepare(" Select * from reserves inner join issues on issues.itemnumber=reserves.itemnumber 
-			and reserves.borrowernumber=issues.borrowernumber  where reserves.itemnumber=? 
-			and reserves.borrowernumber=? and reserves.constrainttype='P' ");
-
-$sth->execute($itemnumber,$borrowernumber);
-my $data= $sth->fetchrow_hashref;
-if ($data){
-
-	my $issuetype=IssueType($data->{'issuecode'});
-	
-	if ($issuetype->{'renew'} eq 0){ #Si es 0 NO SE RENUEVA NUNCA
-					return 0;
-					}
-
-	my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1;");
-	$sth1->execute($data->{'biblioitemnumber'});
-	my $data1= $sth1->fetchrow_hashref;
-	if ($data1){# esto quiere decir que hay reservas esperando entonces se devuelve un false indicando que no se puede hacer la renovacion del prestamo
-		return 0;
-	}
-	else 
-	{#quiere decir que no hay reservas esperando por lo que podemos seguir
-		#my @sancion=(0,0); #estasancionado($borrowernumber)
-		my @sancion= permitionToLoan($dbh, $borrowernumber, $data->{'issuecode'});
-		if ($sancion[0]||$sancion[1]) 
-		{ 
-			return 0;
-		}
-		else 
-		{#veo si el nro de renovaciones realizadas es mayor al nro maximo de renovaciones posibles permitidas
-			my $intervalo_vale_renovacion=$issuetype->{'dayscanrenew'}; #Numero de dias en el que se puede hacer la renovacion antes del vencimiento.
-			my $plazo_actual;
-			if ($data->{'renewals'}){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-				my $maximo_de_renovaciones=$issuetype->{'renew'};
-				if ($data->{'renewals'} lt $maximo_de_renovaciones) {#quiere decir que no se supero el maximo de renovaciones
-					$plazo_actual=$issuetype->{'renewdays'};# Cuantos dias m�s se renovo el prestamo
-					my $vencimiento=proximoHabil($plazo_actual,0,$data->{'lastreneweddate'});
-					my $err= "Error con la fecha";
-					my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err,2));
-					my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err));	
-					my $flag = Date_Cmp($desde,$hoy);
-				  	#comparo la fecha de hoy con el inicio del plazo de renovacion	
-					if ($flag gt 0) { #todavia no estamos en fecha el dia de hoy es anterior al comienzo del plazo en el cual se puede renovar ($hoy es mas temprano que $desde)
-						return 0;}
-					else {
-						#quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
-						#ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
-						$flag=Date_Cmp($vencimiento,$hoy);
-						if ($flag lt 0){#la fecha de hoy es mayor a la del vencimiento -> el prestamo esta vencido, hay un problema con las sanciones habria que avisarle al administrador
-							return 0;
-						}
-						else{
-							#la fecha esta ok
-							return 1;
-						}
-
-					}
-				}
-				else{ #se supero la cantidad maxima de renovaciones
-					return 0;
-				}	
-			} 
-				else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
-					$plazo_actual= $issuetype->{'daysissues'}; 
-					my $vencimiento=proximoHabil($plazo_actual,0,$data->{'date_due'});
-					my $err= "Error con la fecha";
-					my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err,2));
-					my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,  "- ".$intervalo_vale_renovacion." days",\$err));
-					my $flag = Date_Cmp($desde,$hoy);
-					#comparo la fecha de hoy con el inicio del plazo de renovacion  
-					if ($flag gt 0) { #todavia no estamos en fecha el dia de hoy es anterior al comienzo del plazo en el cual se puede renovar 
-						return 0;}
-					else {
-						#quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
-                                                #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
-						$flag=Date_Cmp($vencimiento,$hoy);
-						if ($flag lt 0){#la fecha de hoy es mayor a la del vencimiento -> el prestamo esta vencido, hay un problema con las sanciones habria que avisarle al administrador ($vencimiento es mas temprano que $hoy)
-							return 0;
-							
-						}
-						else{
-							#la fecha esta ok
-							return 2;
-						}
-					}
-
-				#quiere decir que no esta sancionado, por lo tanto me fijo en las fechas, la cantidad de items prestados o reservados no me importan porque en realidad no se modifican esos nro
-
-			}
-		}#no esta sancionado
-	}#no hay reserva
-				
-}#if ($data-)
-return 0;
-}
-#***************************************Funciones de Prueba VER!!!!!!!!!!!!!!!!!!!!*******
-
-sub sepuederenovar2(){
+sub sepuederenovar(){
 my ($borrowernumber,$itemnumber)=@_;
 my $dbh = C4::Context->dbh;
 
@@ -479,7 +373,7 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
  
 sub renovar {
 	my ($borrowernumber,$itemnumber,$loggedinuser)=@_;
-	my $renovacion= &sepuederenovar2($borrowernumber,$itemnumber);
+	my $renovacion= &sepuederenovar($borrowernumber,$itemnumber);
 	if ($renovacion){
 #Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
 		my $dbh = C4::Context->dbh;

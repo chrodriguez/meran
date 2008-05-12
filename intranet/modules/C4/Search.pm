@@ -2084,7 +2084,7 @@ sub allitems {
      	}
       	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
       $returndate= format_date(vencimiento($data->{'itemnumber'}));
-      $renew = &sepuederenovar2($borr, $data->{'itemnumber'});
+      $renew = &sepuederenovar($borr, $data->{'itemnumber'});
      if ($data->{'notforloan'} eq '1') {$issuenfl++;} else {$issue++;}
 	
     }

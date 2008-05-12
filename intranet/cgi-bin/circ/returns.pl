@@ -207,7 +207,7 @@ if ($bornum) {
 			$book->{'date_fin'} = format_date($df);
 			if (Date::Manip::Date_Cmp($df,$hoy)<0){$book->{'color'} ='red';}
 			($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
-			$book->{'renew'} = &sepuederenovar2($bornum, $book->{'itemnumber'});
+			$book->{'renew'} = &sepuederenovar($bornum, $book->{'itemnumber'});
 			$book->{'clase'}=$pcolor;
 			$book->{'issuetype'}=$book->{'issuetype'};
 			if ($book->{'author'} eq ''){$book->{'author'}=' ';}
