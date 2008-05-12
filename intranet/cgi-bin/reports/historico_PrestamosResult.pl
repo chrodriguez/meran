@@ -42,42 +42,37 @@ if ($input->param('orden') eq ""){
 	 $orden='firstname'}
 else {$orden=$input->param('orden')};
 
-#Inicializo avail
-my $avail;
-if ($input->param('avail') eq ""){
-         $avail=1}
-else {$avail=$input->param('avail')};
-#fin
 
 #Fechas
-my $ini='';
-my $fin='';
-if($input->param('ini')){$ini=$input->param('ini');}
-if($input->param('fin')){$fin=$input->param('fin');}
+my $f_ini='';
+my $f_fin='';
+if($input->param('f_ini')){$f_ini=$input->param('f_ini');}
+if($input->param('f_fin')){$f_fin=$input->param('f_fin');}
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $iniPag;
+my $ini;
 my $pageNumber;
-my $cantR=cantidadRenglones();
+my $cantR=C4::AR::Estadisticas::cantidadRenglones();
 
-if (($input->param('iniPag') eq "")){
-        $iniPag=0;
+if (($input->param('ini') eq "")){
+        $ini=0;
 	$pageNumber=1;
 } else {
-	$iniPag= ($input->param('iniPag')-1)* $cantR;
-	$pageNumber= $input->param('iniPag');
+	$ini= ($input->param('ini')-1)* $cantR;
+	$pageNumber= $input->param('ini');
 };
 #FIN inicializacion
 
 
-my $fechaInicio = C4::Date::format_date_in_iso($ini);
-my $fechaFin = C4::Date::format_date_in_iso($fin);
+my $fechaIni = C4::Date::format_date_in_iso($f_ini);
+my $fechaFin = C4::Date::format_date_in_iso($f_fin);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$fechaInicio,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
+my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
 
-my @numeros=armarPaginas($cantidad,$pageNumber);
+my @numeros=C4::AR::Estadisticas::armarPaginas($cantidad,$pageNumber);
 my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('iniPag')||1;
+my $pagActual = $input->param('ini')||1;
+
 $template->param( paginas   => $paginas,
 		  actual    => $pagActual,
 		  );
@@ -93,14 +88,10 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
                 my $ant = $pageNumber-1;
                 $template->param(
                                 ok2     => '1',
-                                ant     => $ant)}
+                                ant     => $ant)
+	}
 }
 
-
-my $availD;
-if ($avail eq 0){$availD='Disponible';}else{	my $av=getAvail($avail);
-						if ($av){$availD=$av->{'description'};}
-						}
 
 $template->param( 
 			resultsloop      => \@resultsdata,
@@ -113,8 +104,8 @@ $template->param(
 			paginas          => $paginas,
 			cantidad	 => $cantidad,
 			numeros		 => \@numeros,
-			ini 		 => $ini,
-			fin		 => $fin		
+			fechaIni	 => $fechaIni,
+			fechaFin 	 => $fechaFin,	
 		);
 
 

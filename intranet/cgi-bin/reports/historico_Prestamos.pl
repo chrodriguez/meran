@@ -13,15 +13,8 @@ use HTML::Template;
 use C4::AR::Issues;
 use C4::Koha;
 use C4::Biblio;
-use CGI::Ajax;
 
 my $input = new CGI;
-
-#url donde se arma la tabla
-my $url = '/cgi-bin/koha/reports/historico_PrestamosResult.pl';
-
-#creo una funcion asincronica
-my $pjx = new CGI::Ajax( 'external' => $url);
 
 my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
@@ -48,61 +41,13 @@ if ($input->param('orden') eq ""){
 	 $orden='firstname'}
 else {$orden=$input->param('orden')};
 
+=item
 #Inicializo avail
 my $avail;
 if ($input->param('avail') eq ""){
          $avail=1}
 else {$avail=$input->param('avail')};
 #fin
-
-#Fechas
-=item
-my $ini='';
-my $fin='';
-if($input->param('ini')){$ini=$input->param('ini');}
-if($input->param('fin')){$fin=$input->param('fin');}
-=cut
-
-=item
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $iniPag;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('iniPag') eq "")){
-        $iniPag=0;
-	$pageNumber=1;
-} else {
-	$iniPag= ($input->param('iniPag')-1)* $cantR;
-	$pageNumber= $input->param('iniPag');
-};
-=cut
-
-#FIN inicializacion
-=item
-#obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$fin,$tipoItem,$tipoPrestamo,$catUsuarios);
-
-my @numeros=armarPaginas($cantidad,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('iniPag')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		  );
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pageNumber+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pageNumber-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
-}
 =cut
 
 #Cargo todos los Select
@@ -112,7 +57,10 @@ my %select_catUsuarios_Labels;
 #Funcion de C4::Koha, traer las categorias de los usuarios
 #llamo a la funcion borrowercategories() de C4::Koha
 my ($array,$hasheado)=&borrowercategories(); 
-push @select_catUsuarios_Values, 'SIN SELECCIONAR';
+# push @select_catUsuarios_Values, 'SIN SELECCIONAR';
+
+push @select_catUsuarios_Values, '-1';
+$select_catUsuarios_Labels{'-1'}= 'SIN SELECCIONAR';
 my $i=0;
 my @catUsuarios_Values;
 
@@ -140,7 +88,11 @@ my @select_tiposPrestamos_Values;
 my %select_tiposPrestamos_Labels;
 my @tipoDePrestamos=&IssuesType(); #Funcion de C4::AR::Issues, traer los tipos de prestamos
 
-push @select_tiposPrestamos_Values, 'SIN SELECCIONAR';
+# push @select_tiposPrestamos_Values, 'SIN SELECCIONAR';
+
+push @select_tiposPrestamos_Values, '-1';
+$select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';
+
 my $i=0;
 my $hash;
 my $value = "";
@@ -176,7 +128,9 @@ my $hash;
 my $value = "";
 my $key = "";
 
-push @select_tiposItems_Values, 'SIN SELECCIONAR';
+# push @select_tiposItems_Values, 'SIN SELECCIONAR';
+push @select_tiposItems_Values, '-1';
+$select_tiposItems_Labels{'-1'}= 'SIN SELECCIONAR';
 
 foreach (@tiposDeItems) {
 	
@@ -199,24 +153,15 @@ my $CGISelectTiposItems=CGI::scrolling_list(	-name      => 'tiposItems',
 $template->param(selectTiposItems => $CGISelectTiposItems);
 #************************************Fin Select de Tipos de Items*********************************
 
-
+=item
 my $availD;
 if ($avail eq 0){$availD='Disponible';}else{	my $av=getAvail($avail);
 						if ($av){$availD=$av->{'description'};}
 						}
+=cut
 
 $template->param( 
-			#resultsloop      => \@resultsdata,
-			#tipoItem	 => $tipoItem,
-			#tipoPrestamo	 => $tipoPrestamo,
-			#catUsuarios	 => $catUsuarios,
 			orden 		 => $orden, 
-			#pageNumber	 => $pageNumber,
-			#cantR		 => $cantR,
-			#paginas          => $paginas,
-			funcion		 => $pjx,
-			#ini 		 => $ini,
-			#fin		 => $fin		
 		);
 
 

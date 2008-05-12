@@ -149,64 +149,81 @@ sub historicoDeBusqueda(){
 
 }   
 
+
 sub historicoPrestamos{
 	#Se realiza un Historial de Prestamos, con los siguientes datos:
 	#Apellido y Nombre, DNI,Categoria del Usuario, Tipo de Prestamo, Codigo de Barras, 
 	#Fecha de Prestamo, Fecha de Devolucion, Tipo de Item
 	
-	my ($orden,$ini,$fin,$tipoItem,$tipoPrestamo,$catUsuario)=@_;
+	my ($orden,$ini,$fin,$f_ini,$f_fin,$tipoItem,$tipoPrestamo,$catUsuario)=@_;
 	my $dbh = C4::Context->dbh;
-	my @bind;
+
 	my $datesSQL='';
-	if (($ini ne '') and ($fin ne '')){
-		$datesSQL=" AND I.date_due BETWEEN ? AND ? ";
-		push(@bind,format_date_in_iso($ini));
-		push(@bind,format_date_in_iso($fin));
+	if (($f_ini ne '') and ($f_fin ne '')){
+		$datesSQL=' AND I.date_due BETWEEN "'.format_date_in_iso($f_ini).'" AND "'.format_date_in_iso($f_fin).'" ';
 	}
 
 	my $tipoDePrestamoSQL;
-	if ($tipoPrestamo ne "SIN SELECCIONAR"){
-		$tipoDePrestamoSQL= "and ISST.issuecode = ? ";
-		push(@bind,$tipoPrestamo);
+	if ($tipoPrestamo ne "-1"){
+		$tipoDePrestamoSQL= 'and ISST.issuecode = "'.$tipoPrestamo.'"';
 	}	
 
 	my $tipoDeItemSQL = '';;
-	if ($tipoItem ne "SIN SELECCIONAR"){
-		$tipoDeItemSQL= "and ITT.itemtype = ? ";
-		push(@bind,$tipoItem);
+	if ($tipoItem ne "-1"){
+		$tipoDeItemSQL= 'and ITT.itemtype = "'.$tipoItem.'"';
 	}
 
 	my $catUsuarioSQL = '';
-	if ($catUsuario ne "SIN SELECCIONAR"){
-		$catUsuarioSQL= "and C.categorycode = ? ";
-		push(@bind,$catUsuario);
+	if ($catUsuario ne "-1"){
+		$catUsuarioSQL= 'and C.categorycode = "'.$catUsuario.'"';
 	}
-	
+	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, IT.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
 
-        my $query ="Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, IT.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem
-	From issues I, borrowers B, categories C, items IT, biblioitems BBI, itemtypes ITT, issuetypes ISST
-	where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
+	my $queryFrom= " 	From issues I, borrowers B, categories C, items IT, biblioitems BBI, 
+				itemtypes ITT, issuetypes ISST ";
+
+	my $queryWhere= " where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
 	and(IT.itemnumber = I.itemnumber)and(ISST.issuecode = I.issuecode)
 	and(BBI.biblioitemnumber = IT.biblioitemnumber)and(ITT.itemtype = BBI.itemtype)
-	and not(I.returndate is null)
-	$datesSQL
-	$tipoDeItemSQL
-	$tipoDePrestamoSQL
-	$catUsuarioSQL
-	Order By ".$orden;
+	and not(I.returndate is null) ";
+
+	my $queryCount= " 	Select count(*) as cant 
+				$queryFrom
+				$queryWhere
+				$datesSQL
+				$tipoDeItemSQL
+				$tipoDePrestamoSQL
+				$catUsuarioSQL ";
+
+	my $sth=$dbh->prepare($queryCount);
+        $sth->execute();
+	my $dataResult= $sth->fetchrow_hashref;
+	my $cant= $dataResult->{'cant'};
+
+        my $query ="	$querySelect
+			$queryFrom
+			$queryWhere
+			$datesSQL
+			$tipoDeItemSQL
+			$tipoDePrestamoSQL
+			$catUsuarioSQL
+			Order By ".$orden;
+
+	$query .= " limit ".$ini.",".$fin;
 
 	my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
+        $sth->execute();
 
 	my @results;
 	my $clase;
 	while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar';}else{$clase='par'};
+
 		$data->{'fechaPrestamo'}=format_date($data->{'fechaPrestamo'});
 		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'});
 		push(@results,$data);
+
         };
-	return(scalar(@results),@results);
+	return($cant,@results);
 }
 
 

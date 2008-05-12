@@ -797,13 +797,14 @@ sub crearPaginador{
 	};
 #FIN inicializacion
 
-	my ($cantPaginas, @numeros)=armarPaginas($pagActual, $cantResult, $cantRenglones);
+	my ($paginador, $cantPaginas, @numeros)=armarPaginas($pagActual, $cantResult, $cantRenglones);
 	my $paginas = scalar(@numeros)||1;
 
 	$template->param( 	paginas   => $paginas,
 		  		actual    => $pagActual,
 		  		cantidad  => $cantResult,
-				numbers   => \@numeros);
+				numbers   => \@numeros,
+				paginador => $paginador);
 
 #Si la cantidad de filas es > que la cant. de filas maximo a mostrar	
 	if ( $cantResult > $cantRenglones ){
@@ -851,6 +852,10 @@ sub armarPaginas{
 	}
 =cut
 
+	if($cantRenglones == 0){
+		$cantRenglones= 1; #tira division por 0
+	}
+
 # 	if  ($totalPaginas == 0){
 	#se calcula la cantidad de paginas total
         	$totalPaginas= ceil($cantRegistros / $cantRenglones);
@@ -873,16 +878,20 @@ sub armarPaginas{
 	#cant. maxima que paginas q se van a mostrar
 	my $tope= $actual + $cantPaginas;
 	
+
+	my $paginador= "<div id=paginador>";
+# <!-- TMPL_VAR name='themelang' -->
+	$paginador .= "<span><img src='/images/numbers/ant.gif' border=0></span>";
+
 	for (my $i=$ini; ($totalPaginas >1 and $i <= $totalPaginas and $i < $tope) ; $i++ ) {
-		if($i!=$actual){
-			 $highlight=0;
-		}else{
-			$highlight=1;
-		}
-	 	push @numeros, { number => $i, actual => ($i!=$actual), highlight => $highlight}
+		$paginador .= "<span> ".$i." </span>";
 	}
 
-	return($totalPaginas, @numeros);
+	$paginador .= "<span><img src='/images/numbers/next.gif' border=0></span>";
+
+	$paginador .= "</div>";	
+
+	return($paginador, $totalPaginas, @numeros);
 }
 
 #

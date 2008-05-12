@@ -612,7 +612,7 @@ sub buscarDatosCampoMARC(){
 	if($dbh eq ""){
 		$dbh = C4::Context->dbh;
 	}
-	my $campoTabla=&buscarMapeoCampoSubcampo($campo,$subcampo,$nivel); #C4::AR::Busquedas::
+	my $campoTabla=C4::AR::Busquedas::buscarMapeoCampoSubcampo($campo,$subcampo,$nivel); #C4::AR::Busquedas::
 	my $tabla="nivel".$nivel;
 	my $query;
 	my @blind;

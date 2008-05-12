@@ -33,6 +33,7 @@ if($input->param('fechaIni')){$fechaIni=$input->param('fechaIni');}
 if($input->param('fechaFin')){$fechaFin=$input->param('fechaFin');}
 if($input->param('catUsuarios')){$catUsuarios= $input->param('catUsuarios');}
 
+
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $ini;
 my $pageNumber;
@@ -77,6 +78,12 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
                                 ok2     => '1',
                                 ant     => $ant)}
 }
+
+
+#************************************ prueba de paginador *******************************************
+
+my ($template, $ini, $cantRenglones)=C4::AR::Utilidades::crearPaginador($template, $cantidad, $ini);
+#************************************ prueba de paginador *******************************************
 
 #Cargo todos los Select
 #*********************************Select de Categoria de Usuarios**********************************

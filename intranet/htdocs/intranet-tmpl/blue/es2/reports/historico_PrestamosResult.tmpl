@@ -2,7 +2,7 @@
 <br><br>
 <br><br><br><br>
 
-<p class=inputFontNormal align="center">La cantidad de préstamos es: <!-- TMPL_VAR NAME=cantidad --></p> 
+<p class=inputFontNormal align="center">La cantidad de pr&eacute;stamos es: <!-- TMPL_VAR NAME=cantidad --></p> 
 
 
 <input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='orden' -->" NAME="orden" >
@@ -11,12 +11,12 @@
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
 	<tr align="center">
 	<!-- TMPL_IF NAME="ok2" -->
-	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->',<!-- TMPL_VAR NAME='ant' -->')" src='<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif' border=0>
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_LOOP NAME=numeros -->
 		<!-- TMPL_IF NAME="actual" -->
-			<a class="inputFontNormal" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')"> <u><!-- TMPL_VAR name=number --></u> </a>
+			<a class="inputFontNormal" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->',<!-- TMPL_VAR name='number' -->)"> <u><!-- TMPL_VAR name=number --></u> </a>
 		<!-- TMPL_ELSE -->
         		<u><!-- TMPL_VAR name=number --></u>
 		<!-- /TMPL_IF -->
@@ -24,13 +24,13 @@
 
 	<!-- TMPL_IF NAME="ok" -->
 
-	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+	<input type="image" onclick="consultar('<!-- TMPL_VAR NAME='orden' -->',<!-- TMPL_VAR name='sig' -->)" src='<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif' border=0>
 	<!-- /TMPL_IF -->
 	</tr>
 </table>
 
 
-<table cellspacing="0" cellpadding="0" border="0" class="tablaresultado" width="100%">
+<table id="tableResult" cellspacing="0" cellpadding="0" border="0" class="tablaresultado" width="100%">
 	<tr height="24" class="tablaresultadoTitle">
 	<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 

@@ -1,57 +1,75 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<!-- recupero la funcion -->
-<!-- TMPL_VAR NAME="funcion" -->
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
 <script language="javascript">
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
 	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('f_ini'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('f_fin'));
 				};
 
 
-
-function consultar( orden ){
-	external(['ini','fin','tiposItems','tipoPrestamos',
-	'catUsuarios','orden__' + orden],['result']);
+function Complete(){
+	HiddeState();
 }
 
-	//en el estado Initialized del Ajax le asigno la funcion Init (incluida en state.js)
-	pjx.prototype.pjxInitialized = Init;
-	//en el estado Completed del Ajax le asigno la funcion HiddeState (incluida en state.js)
-	pjx.prototype.pjxCompleted = HiddeState;
+
+function consultar(orden, ini){
+
+	var params= 	'f_ini=' + $('#f_ini').val() +
+			'&f_fin=' + $('#f_fin').val() +
+			'&tiposItems=' + $('#tiposItems').val() +
+			'&tipoPrestamos=' + $('#tipoPrestamos').val() +
+			'&catUsuarios=' + $('#catUsuarios').val() +
+			'&orden=' + orden;
+	if(ini){
+		params= params + '&ini=' + ini;
+	}
+
+	$.ajax({	type: "POST", 
+			url: "/cgi-bin/koha/reports/historico_PrestamosResult.pl",
+			data: params,
+			beforeSend: Init,
+ 			complete: function(ajax){
+					$('#result').html(ajax.responseText);
+  					Complete();
+					zebra('tableResult');
+				}
+	});
+
+}
+
 
 </script>
 
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >Historial de Préstamos</td></tr>
+	<tr><td class="pagetitle" >Historial de Pr&eacute;stamos</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 <br>
-
-<!-- <form name="branches" action=/cgi-bin/koha/reports/historico_Prestamos.pl method=post > -->
 
 
 <table border=0 cellspacing=0 cellpadding=0 width="80%" align="left">
 	<tr>
 	  <td><b>Seleccione una fecha de inicio: </b></td>
-	  <td><input id="ini" class="inputFontNormal" name="ini" value="<!-- TMPL_VAR NAME="ini" -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="<!-- TMPL_VAR NAME='f_ini' -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 	  </td>
 	<td colspan="2">&nbsp;</td>	
 	<tr>
 	  <td><b>Seleccione una fecha de Fin: </b></td>	
-	  <td  class=inputFontNormal><input id="fin" class="inputFontNormal" name="fin" value="<!-- TMPL_VAR NAME="fin" -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
-          <!--<td colspan=2 align="center"><input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png"	   onClick="branches.action='/cgi-bin/koha/reports/historico_Prestamos.pl';branches.target='_self'; submit();">-->
-	 <td colspan=2 align="center">
+	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="<!-- TMPL_VAR NAME='f_fin' -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  </td>
+	  <td colspan=2 align="center">
 		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar('firstname');">
 	  </td>
         </tr>
@@ -61,7 +79,7 @@ function consultar( orden ){
 	  <td colspan="3">&nbsp;</td>
 	</tr>
 	<tr>
-	  <td><b>Tipo de Préstamo: </b></td>
+	  <td><b>Tipo de Pr&eacute;stamo: </b></td>
 	  <td><!-- TMPL_VAR NAME="selectTiposPrestamos" --></td>
 	  <td colspan="3">&nbsp;</td>
     	</tr>
@@ -73,9 +91,8 @@ function consultar( orden ){
 </table>
 
 <br><br>
+
 <div id="result" width="100%" height="100%"></div>
 
-
-<!-- </form> -->
 <br>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
