@@ -363,18 +363,25 @@ if (($resaux=$sth->fetchrow_hashref)||($sepuede)){ #hay una reserva para el item
 	if ($data2){ #si el itemnumber que se quiere reservar ya esta reservado y hay otro libre => hago el intercambio para que el que quiero quede liberado
 		$sth=$dbh->prepare("update reserves set itemnumber= ? where itemnumber = ?");
 		$sth->execute($data2->{'itemnumber'}, $itemnumber);
-	} elsif($resnum < $MAXIMUM_NUMBER_OF_RESERVES) {
-	#se hace una reserva para el grupo, ya que no hay ningun item libre
+	} elsif($resnum < $MAXIMUM_NUMBER_OF_RESERVES) {#NO HAY EJEMPLARES LIBRES
+		
+		#Se permite realizar reservas sobre grupos desde la INTRANET???
+		if (C4::Context->preference("intranetGroupReserve")){
+		#se hace una reserva para el grupo, ya que no hay ningun item libre
 		my $sth2=$dbh->prepare("insert into reserves (biblioitemnumber,borrowernumber,reservedate) values (?,?,NOW())");
 		$sth2->execute($biblioitemnumber,$borrowernumber);
 		$desde='0000-00-00';#FechaFactible(); #la fecha factible en que el libro este disponible, hya que hacer una funcion medio rara
 		$fecha='0000-00-00';#hasta cuando lo puede retirar es mas subjetivo aun
 		$resultado=0;
+		}
+		else { #NO SE PERMITEN REALIZAR RESERVAS DESDE LA INTRANET
+		$resultado=-2;
+			}
+		
 		my $sth3=$dbh->prepare("commit");
 		$sth3->execute();
-		return (1,$resultado,$desde,$fecha,$branch,$apertura,$cierre); # si reserve para el grupo entonces devuelve $resultado=0 
-		#sino devuelve el itemnumber del libro que se reservo => esto no va mas desde que se puede elegir el item a prestar 
-		#Luciano al 23/03/2006
+		return (1,$resultado,$desde,$fecha,$branch,$apertura,$cierre); # si reserve para el grupo entonces devuelve $resultado=0  sino se puede resultado = -2.
+
 	} else {
 		$resultado=-1;
 		my $sth3=$dbh->prepare("commit");

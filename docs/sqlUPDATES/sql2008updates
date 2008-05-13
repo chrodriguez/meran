@@ -138,3 +138,8 @@ ALTER TABLE `biblioanalysis` ADD `resumen` TEXT NULL AFTER `classification` ,
 ADD `url` VARCHAR( 100 ) NULL AFTER `resumen` ;
 
 ALTER TABLE `biblioanalysis` ADD FULLTEXT (`resumen`);
+
+-- Reservas desde la Intranet!!!
+
+Insert into systempreferences (variable,value,explanation) values ('intranetGroupReserve','0','Indica que  si al realizar un prestamo desde la intranet y no se encuentra ningun ejemplar libre, se realiza o no (1 o 0) una reserva sobre el grupo desde la intranet.');
+--

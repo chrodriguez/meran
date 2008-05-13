@@ -167,9 +167,12 @@ if(($issuecode)&&($itemnumber)){
 			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO/";
 		}
 		elsif ($resultado[1] eq -1) { #No hay mas ejemplares disponibles y el usuario no puede tener mas reservas => no se hace nada
-# 		print $query->redirect("circulation.pl?borrnumber=".$bornum."&error=1&codError=NO_HAY_MAS_EJEMPLARES_NO_RESERVA");
 			$error= 1;
 			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA/";
+		}
+		elsif ($resultado[1] eq -2) { #No hay mas ejemplares disponibles y no se permiten realizar reservas desde la intranet
+			$error= 1;
+			$mensajeError.=$itemnumber."-NO_HAY_MAS_EJEMPLARES_NO_RESERVA_INTRANET/";
 		}
 	}
   }#end if(($issuecode)&&($itemnumber))

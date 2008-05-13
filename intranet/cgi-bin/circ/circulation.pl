@@ -404,6 +404,8 @@ sub procesarStr(){
 	}
 	elsif($strError eq "NO_HAY_MAS_EJEMPLARES_NO_RESERVA"){
 		return "No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite";
+	}elsif($strError eq "NO_HAY_MAS_EJEMPLARES_NO_RESERVA_INTRANET"){
+		return "No hay m&aacute;s ejemplares disponibles";
 	}
 	elsif($strError eq "IRREGULAR"){
 		return "El usuario no es un alumno regular";
