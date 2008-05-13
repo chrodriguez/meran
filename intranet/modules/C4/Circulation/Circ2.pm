@@ -1661,6 +1661,7 @@ sub getissues {
 	my %currentissues;
 	my $select = "SELECT issues.timestamp 	AS timestamp,
 		issues.date_due       	      	AS date_due,
+		issues.issuecode		AS issuecode,
 		items.biblionumber    	      	AS biblionumber,
 		items.itemnumber    		AS itemnumber,
 		items.barcode         		AS barcode,

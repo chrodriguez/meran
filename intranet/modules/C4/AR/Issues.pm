@@ -725,6 +725,7 @@ while(my $data= $sth->fetchrow_hashref) {
 }
 }
 
+
 sub crearTicket {
 	my ($iteminfo,$loggedinuser)=@_;
 	my %env;
@@ -751,5 +752,28 @@ sub crearTicket {
 	return ($ticket_string);
 }
 
-
+sub estaVencido(){
+	my($itemnumber,$tipoPres)=@_;
+	my @datearr = localtime(time);
+	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	my $venc=vencimiento($itemnumber);
+	if (Date_Cmp($venc, $hoy) >= 0) {
+		#Si es un prestamo especial debe devolverlo antes de una determinada hora
+   		if ($tipoPres ne 'ES'){return(0,$venc);}
+   		else{#Prestamo especial
+			if (Date_Cmp($venc, $hoy) == 0){#Se tiene que devolver hoy	
+				my $begin = ParseDate(C4::Context->preference("open"));
+				my $end =calc_endES();
+				my $actual=ParseDate("today");
+				if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
+					return(0,$venc);
+				}
+			}
+			else {#Se devuelve antes de la fecha de devolucion
+ 				return(0,$venc);
+			}
+		}#else ES
+	}#if Date_Cmp
+	return(1,$venc);
+}
 

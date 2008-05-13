@@ -158,40 +158,37 @@ $san->{'startdate'}=format_date($san->{'startdate'});
 
 
 foreach my $key (keys %$issues) {
-    my $issue = $issues->{$key};
-    $issue->{'clase'} = $clase;
-    $issue->{'date_due'} = format_date($issue->{'date_due'});
+    	my $issue = $issues->{$key};
+    	$issue->{'clase'} = $clase;
+    	$issue->{'date_due'} = format_date($issue->{'date_due'});
 
-    my $err= "Error con la fecha";
-    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
-    my  $close = ParseDate(C4::Context->preference("close"));
+    	my $err= "Error con la fecha";
+    	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+    	my  $close = ParseDate(C4::Context->preference("close"));
 	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
+		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));
+	}
 
-
-    my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}));
-
-    $issue->{'date_fin'} = format_date($df);
+	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'itemnumber'},$issue->{'issuecode'});
+    	$issue->{'date_fin'} = format_date($df);
    
-if (Date::Manip::Date_Cmp($df,$hoy)<0)
-        { $venc=1;
-          $issue->{'color'} ='red';
+	if ($vencido){ 
+		$venc=1;
+          	$issue->{'color'} ='red';
         }
-#    $issue->{'date_fin'} = format_date(vencimiento($issue->{'itemnumber'}));
-#    $venc= ($venc || (Date_Cmp(ParseDate("today"),ParseDate($issue->{'date_fin'})) > 0));
 
-    $issue->{'renew'} = &sepuederenovar($bornum, $issue->{'itemnumber'});
-    if ($issue->{'overdue'}) {
-        push @overdues, $issue;
-        $overdues_count++;
-        $issue->{'overdue'} = 1;
-    } else {
-        $issue->{'issued'} = 1;
-    }
-    push @issuedat, $issue;
-    $count++;
-    if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
-	
+    	$issue->{'renew'} = &sepuederenovar($bornum, $issue->{'itemnumber'});
+    	if ($issue->{'overdue'}) {
+        	push @overdues, $issue;
+        	$overdues_count++;
+        	$issue->{'overdue'} = 1;
+    	} 
+	else {
+        	$issue->{'issued'} = 1;
+    	}
+    	push @issuedat, $issue;
+    	$count++;
+    	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
 }
 
 #}

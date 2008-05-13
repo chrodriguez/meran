@@ -2083,7 +2083,11 @@ sub allitems {
       	$datedue ="Prestado a <STRONG><A href='moremember.pl?bornum=".$idata->{'borrowernumber'}."'>".$idata->{'firstname'}." ".$idata->{'surname'}."</A><BR>".$idata->{'description'}."</STRONG>";
      	}
       	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
-      $returndate= format_date(vencimiento($data->{'itemnumber'}));
+	my ($vencido,$df)= &C4::AR::Issues::estaVencido($idata->{'itemnumber'},$idata->{'issuecode'});
+	$returndate=format_date($df);
+	if($vencido){
+		$returndate="<font color='red'>".$returndate."</font>";
+	}
       $renew = &sepuederenovar($borr, $data->{'itemnumber'});
      if ($data->{'notforloan'} eq '1') {$issuenfl++;} else {$issue++;}
 	

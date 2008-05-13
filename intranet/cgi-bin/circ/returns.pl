@@ -201,10 +201,10 @@ if ($bornum) {
 			       if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
 				$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
 
-			my $df=C4::Date::format_date_in_iso(vencimiento($book->{'itemnumber'}));
+			my ($vencido,$df)= &C4::AR::Issues::estaVencido($book->{'itemnumber'},$book->{'issuecode'});
 
 			$book->{'date_fin'} = format_date($df);
-			if (Date::Manip::Date_Cmp($df,$hoy)<0){$book->{'color'} ='red';}
+			if ($vencido){$book->{'color'} ='red';}
 			($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
 			$book->{'renew'} = &sepuederenovar($bornum, $book->{'itemnumber'});
 			$book->{'clase'}=$pcolor;
