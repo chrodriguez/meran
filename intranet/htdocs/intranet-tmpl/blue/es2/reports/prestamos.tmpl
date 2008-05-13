@@ -1,8 +1,11 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <script type="text/javascript">
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
@@ -16,15 +19,43 @@
 
 <script language="JavaScript">
 
-function hacerSubmit(){
-        document.branches.submit();
-        }
 
-function hacerSubmit(frm,accion){
-			if (accion == 'search'){frm.action='/cgi-bin/koha/reports/prestamos.pl'}
-			else {frm.action='/cgi-bin/koha/reports/mailvencidos.pl'}
-			frm.submit();
+function enviarMails(){
+	location.href='/cgi-bin/koha/reports/mailvencidos.pl';
 }
+
+function ocultarBoton(estado){
+	var botonMail=$("#contacto");
+	if(estado != "VE"){
+		botonMail.hide();
+	}
+	else{
+		botonMail.show();
+	}
+}
+
+function consultar(orden,ini){
+	var fechaIni= $("#begindate").val();
+	var fechaFin=$("#enddate").val();
+	var estado=$("#estado").val();
+	var branch=$("#branch").val();
+	var rengl=$("#renglones").val();
+	var params="begindate="+fechaIni+"&enddate="+fechaFin+"&estado="+estado+"&branch="+branch+"&renglones="+rengl+"&orden="+orden+"&ini="+ini;
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/reports/prestamosResult.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
+				ocultarBoton(estado);
+				HiddeState();
+			}
+	});
+	
+}
+
 
 
 function checkedAll(){
@@ -58,7 +89,7 @@ function checkedAll(){
 <center>
 
 <table border=0 cellspacing=0 cellpadding=0 width="100%" >
-	<form name="prestamos" action="" method=post >
+<!-- 	<form name="prestamos" action="" method=post > -->
 	<input type="hidden" name="accion" value="search">
 	<input type="hidden" name="ini" value="<!-- TMPL_VAR NAME=ini  -->">
 
@@ -66,9 +97,10 @@ function checkedAll(){
 
 	<tr class="inputFontNormal">
 		<td align="right"> Seleccione una fecha de inicio:</td>
-		<td><input id="begindate" class="inputFontNormal" name="begindate" value="
-			<!-- TMPL_IF NAME="begindate" --><!-- TMPL_VAR NAME="begindate" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" 		border="0" alt="Selecciona una fecha"></a></td>
-		<td align="right">    Seleccione estado de prestamo:&nbsp;</td>
+		<td>
+			<input id="begindate" class="inputFontNormal" name="begindate"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+		</td>
+		<td align="right">Seleccione estado de prestamo:&nbsp;</td>
 
 		<td>
 			<select name="estado" id="estado">
@@ -76,15 +108,13 @@ function checkedAll(){
 				<option value="NV" id="NV">No vencidos</option>
 				<option value="TO" id="TO" selected>Todos</option>
 			</select>
-			<script>document.getElementById('estado').value="<!-- TMPL_VAR NAME=estado  -->";</script>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr class="inputFontNormal"><td colspan='5'>&nbsp;</td></tr>
 	<tr class="inputFontNormal">
 		<td align="right"> Seleccione una fecha de fin:</td>
-		<td><input id="enddate" class="inputFontNormal" name="enddate" value="
-			<!-- TMPL_IF NAME="enddate" --><!-- TMPL_VAR NAME="enddate" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a></td>
+		<td><input id="enddate" class="inputFontNormal" name="enddate"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
 		<td align="right">
 			Seleccione una unidad de informaci&oacute;n:&nbsp;
 		</td>
@@ -110,162 +140,17 @@ function checkedAll(){
 				<option value="100" id="100">100</option>
 				<option value="todos" id="todos" selected>Todos</option>
 			</select>
-			<script>document.getElementById('renglones').value="<!-- TMPL_VAR NAME=renglones  -->";</script>
-
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="5">
 			<br>
-		<a href="#" title="Buscar" onClick="hacerSubmit(document.prestamos, 'search');"><input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+		<a href="#" title="Buscar" onClick="consultar('','');"><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 		</td>
 	</tr>
 </table>
 
-<p class="inputFontNormal">
-La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
-<p class="inputFontNormal">
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ant -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"> <u><!-- TMPL_VAR name=number --></u></a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=sig -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-</p>
-
-
-<table border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
- 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
-		
-		<th>
-			<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
-		</th>
-
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Apellido</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"> Nombre</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tarjeta de Id.</a>
-		</th>
-
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">E-mail</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de prestamo</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=vencimiento&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de vencimiento</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">C&oacute;digo de barra</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=bulk&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Signatura Topogr&aacute;fica</a>
-		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=description&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tipo de pr&eacute;stamo</a>
-		</th>
-	
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/derecha.png"></td>
-	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<tr align='center'>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-		<!-- TMPL_IF NAME="vencido" --><input type="checkbox" name="chkbox1" value="<!-- TMPL_VAR NAME='borrowernumber' -->" id="<!-- TMPL_VAR NAME='borrowernumber' -->"><!-- /TMPL_IF -->
-		</td>
-
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=firstname --> 
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=cardnumber --> 
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress -->
-        		<!-- TMPL_ELSE --><a class="inputFontNormal"href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
-        		<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=date_due -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=vencimiento -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-		<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'>
-		<!-- TMPL_VAR NAME=barcode -->
-		</a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-		<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->">	
-		<!-- TMPL_VAR NAME=bulk -->
-		</a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=description -->
-		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-	</tr>
-<!-- /TMPL_LOOP -->
-	<tr valign=bottom>
-	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
-
-</table>
-
-<p class="inputFontNormal">
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ant -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"> <u><!-- TMPL_VAR name=number --></u></a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=sig -->&branch=<!-- TMPL_VAR name=branch -->&estado=<!-- TMPL_VAR name=estado -->&orden=<!-- TMPL_VAR name=orden -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-</p>
-
-
-
-<br>
-<input type="hidden" name="tipo" value="0"> <!-- Porqueria de Damian -->
-<a href="#" title="Enviar Mail" onClick="hacerSubmit(document.prestamos, 'sendmail');">
-<input id="contacto" type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/contactar.png" title="Enviar mail a usuarios con ejemplares atrasados">
-</a>
-&nbsp;&nbsp;&nbsp;
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="planilla" -->">Generar planilla 
-<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/sxc.png" border="0">
-</a>
-<br>
-</form>
-</center>
-
+<div id="result"></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

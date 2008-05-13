@@ -34,7 +34,7 @@ my $input = new CGI;
 my $msg = $input->param('msg') || "";
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/prestamos.tmpl",
+    = get_template_and_user({template_name => "reports/prestamosResult.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -42,35 +42,9 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-
-#Por los branches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=getbranches();
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
-
-my $branch= C4::Context->preference('defaultbranch');
-
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-                                        -defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                 );
-#Fin: Por los branches
-=item
-my $orden;
-if ( $input->param('orden') eq ""){
-	$orden='cardnumber'}
-else {$orden=$input->param('orden')};
-
+my $branch = $input->param('branch');
+my $orden = $input->param('orden') || 'cardnumber';
 my $estado=$input->param('estado')|| 'TO';
-
 #Fechas 
 my $begindate = $input->param('begindate') || "";
 my $enddate = $input->param('enddate') || "";
@@ -125,24 +99,16 @@ $template->param( 	numeros		 => \@numeros,
 }
 
 
-# Poner el estilo
-  my $clase='par';
-foreach my $res (@resultsdata){
-  if ($clase eq 'par'){$clase='impar';} else {$clase='par';};
-		$res->{'clase'}=$clase;
- }
-=cut
-
 $template->param( 	
-# 			estado		 => $estado,
-# 			resultsloop      => \@resultsdata,
-			unidades         => $CGIbranch,
-# 			cantidad         => $cantidad,
+			estado		 => $estado,
+			resultsloop      => \@resultsdata,
+# 			unidades         => $CGIbranch,
+			cantidad         => $cantidad,
 # 			branch           => $branch,
 # 			orden		 => $orden,
-# 			renglones        => $cantR,
-			msg		 => $msg,
-# 			planilla	 => $planilla,
+			renglones        => $cantR,
+# 			msg		 => $msg,
+			planilla	 => $planilla,
 # 			begindate	 => $begindate,
 # 			enddate		 => $enddate
 		);

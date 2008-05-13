@@ -1,10 +1,29 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <script>
-function hacerSubmit(){
-        document.shelfs.submit();
-        }
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function consultar(){
+	var shelf=$("#shelf").val();
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/reports/estantesResult.pl",
+		data: "shelf="+shelf,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
+				HiddeState();
+			}
+	})
+}
+
+$(document).ready( function() {
+	consultar();
+});
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
@@ -16,92 +35,10 @@ function hacerSubmit(){
 <table border="0" cellspacing="0" cellpadding="0" align="center" >
 <tr>
 	<td class="inputFontNormal">Seleccione un estante: &nbsp;&nbsp;</td>
-	<td class="inputFontNormal" valign="middle"><form name="shelfs" action=/cgi-bin/koha/reports/estantes.pl method=post >
-        <!-- TMPL_VAR NAME=estantes  --></form></td>
+	<td class="inputFontNormal" valign="middle">
+        	<!-- TMPL_VAR NAME=estantes  -->
+	</td>
 <tr>
 </table>
-
-<p class="inputFontNormal" align="center">
-La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
-<br>
-<center>
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-	<td class="tablaresultadoTitle" width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
-	</td>
-	<th class="tablaresultadoTitle">Estante</th>
-	<th class="tablaresultadoTitle"> T&iacute;tulos</th>
-	<th class="tablaresultadoTitle"> Ejemplares</th>
-	<th class="tablaresultadoTitle"> No Disponibles</th>
-	<th class="tablaresultadoTitle">Para Pr&eacute;stamo</th>
-	<th class="tablaresultadoTitle">Para Sala</th>
-
- 	<td class="tablaresultadoTitle" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-
-<!-- TMPL_LOOP Name="shelvesloopshelves" -->
-        <tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->" width="50%">
-                        <a  class="<!-- TMPL_VAR Name="clase" -->" href="/cgi-bin/koha/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelfnumber" -->">
-			<!-- TMPL_VAR Name="shelfname" --></a>
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-                         <!-- TMPL_VAR NAME="titulos" -->
-        </td>
-
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-			 <!-- TMPL_VAR NAME="ejemplares" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-                        <!-- TMPL_VAR NAME="unavailable" -->
-        </td>
-   	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-                         <!-- TMPL_VAR NAME="forloan" -->
-        </td>
-   	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-                         <!-- TMPL_VAR NAME="notforloan" --> 
-        </td>
-
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        </tr>
-<!-- /TMPL_LOOP -->
-
-	<tr>
-	<td colspan="8">&nbsp;</td>
-	</tr>
-	<tr valign=bottom>
-        <td class="lineafinaltabla"  align="left" colspan="8"></td>
-        </tr>
-
-	<tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->">            <b>TOTALES</b>
-	</td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">  <!-- TMPL_VAR NAME="titulostot" -->
-        </td>
-
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-        <!-- TMPL_VAR NAME="ejemplarestot" -->
-        </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-        <!-- TMPL_VAR NAME="unavailabletot" -->
-        </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-        <!-- TMPL_VAR NAME="forloantot" -->
-        </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
-        <!-- TMPL_VAR NAME="notforloantot" -->
-        </td>
-
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        </tr>
-
-
-</table>
-
-<br><br>
-
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="name" -->">Generar planilla 
-<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/sxc.png" border="0">
-</a>
-</center>
+<div id="result"></div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
