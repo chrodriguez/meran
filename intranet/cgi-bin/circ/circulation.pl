@@ -318,7 +318,7 @@ $template->param(
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
 		zipcode => $borrower->{'zipcode'},
-		categorycode => &getborrowercategory($borrower->{'categorycode'}),
+		categorycode => &C4::AR::Busquedas::getborrowercategory($borrower->{'categorycode'}),
 		documenttype => $borrower->{'documenttype'},
 		documentnumber => $borrower->{'documentnumber'},
 		emailaddress => $borrower->{'emailaddress'},
