@@ -1447,7 +1447,6 @@ sub historicoCirculacion(){
         $sth->execute(@bind);
 	my @results;
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
 		$data->{'fecha'}=format_date($data->{'date'});
 		$data->{'clase'}=$clase;
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
