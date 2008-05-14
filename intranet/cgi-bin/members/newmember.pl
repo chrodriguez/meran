@@ -47,6 +47,8 @@ use C4::AR::Persons_Members;
 my %env;
 my $input = new CGI;
 
+
+my $dateformat = C4::Date::get_date_format();
 #get rest of data
 my %data;
 my @names=$input->param;
@@ -158,7 +160,7 @@ if ($ok == 0) {
     }
     if ($data{'joining'} eq ''){
 	$data{'joining'}=ParseDate('today');
-	$data{'joining'}=format_date($data{'joining'});
+	$data{'joining'}=format_date($data{'joining'},$dateformat);
     }
     if ($data{'expiry'} eq ''){
     	my $get_enrolmentperiod = $dbh->prepare(q{SELECT enrolmentperiod FROM categories WHERE categorycode = ?});
@@ -167,12 +169,12 @@ if ($ok == 0) {
 	if ( ($period)  && ($period != 1))
 	{
 		$data{'expiry'}=ParseDate("in $period years");
-		$data{'expiry'}=format_date($data{'expiry'});
+		$data{'expiry'}=format_date($data{'expiry'},$dateformat);
 	}
 	else
 	{
 		$data{'expiry'}=ParseDate('in 1 year');
-		$data{'expiry'}=format_date($data{'expiry'});
+		$data{'expiry'}=format_date($data{'expiry'},$dateformat);
 	}
     }
     my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
@@ -204,11 +206,11 @@ if ($ok == 0) {
 		    studentnumber =>$data{'studentnumber'},		
 		     memcat => $data{'categorycode'},
 		  #   fee => $fee,
-		     joindate => format_date($data{'joining'}),
-		     expdate => format_date($data{'expiry'}),
+		     joindate => format_date($data{'joining'},$dateformat),
+		     expdate => format_date($data{'expiry'},$dateformat),
 		     branchcode => $data{'branchcode'},
 		     ethnic => $ethnic,
-		     dob => format_date($data{'dateofbirth'}),
+		     dob => format_date($data{'dateofbirth'},$dateformat),
 		     sex => $sex,
 		     postal => $postal,
 		     home => $home,

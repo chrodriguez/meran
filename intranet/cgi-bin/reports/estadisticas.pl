@@ -44,7 +44,8 @@ my ($template, $loggedinuser, $cookie)
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 
-$template->param( todaydate => format_date($today));
+my $dateformat = C4::Date::get_date_format();
+$template->param( todaydate => format_date($today,$dateformat));
                                                                                 
 ###
 

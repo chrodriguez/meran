@@ -45,6 +45,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 
+my $dateformat = C4::Date::get_date_format();
 my $member=$input->param('bornum');
 if ($member eq ''){
   $member=NewBorrowerNumber();
@@ -102,7 +103,7 @@ $template->param(member => $member,
 				expiry		=> $data->{'expiry'},
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $data->{'dateofbirth'},
-				dateformat      => display_date_format(),
+				dateformat      => display_date_format($dateformat),
 				cardnumber_institution => $cardnumber,
 				CGIbranch => $CGIbranch);
 

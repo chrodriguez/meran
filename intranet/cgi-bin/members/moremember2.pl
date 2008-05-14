@@ -63,10 +63,11 @@ my $pernum=$input->param('pernum');
 
 #start the page and read in includes
 
+my $dateformat = C4::Date::get_date_format();
 my $data=persdata('',$pernum);
-$data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
-$data->{'expiry'} = format_date($data->{'expiry'});
-$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+$data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
+$data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
+$data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 

@@ -40,7 +40,8 @@ my $DR=C4::Context->preference("daysvirtualrequest");
 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-$today = C4::Date::format_date_in_iso($today);
+my $dateformat = C4::Date::get_date_format();
+$today = C4::Date::format_date_in_iso($today,$dateformat);
 
 #my $err= "Error con la fecha";
 #my $ultimoDiaR = DateCalc($today,"+ ".$DR." days",\$err);
@@ -88,6 +89,7 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 my ($cant,@request)= requestsReport($branch);
 my @noconditionloop;
 my @conditionloop;
+my $dateformat = C4::Date::get_date_format();
 foreach my $req  (@request){
 my %request;
                                                                                                                              
@@ -100,7 +102,7 @@ my %request;
 	$request{'authorhtmlescaped'}=~s/ /%20/g;
 	if ($req->{'requesttype'} eq 'copy'){$request{'copy'}=1}else{$request{'print'}=1}
  	$request{'bib'}=$req->{'biblionumber'};
-	$request{'date'} = format_date($req->{'date_request'});
+	$request{'date'} = format_date($req->{'date_request'},$dateformat);
         $request{'borrowernumber'}=$req->{'borrowernumber'};
         $request{'firstname'}=$req->{'firstname'};
         $request{'surname'}=$req->{'surname'};
@@ -113,10 +115,10 @@ my %request;
 
 #Verifica la fecha de pedido
         my $err= "Error con la fecha";
-	my $reqD=C4::Date::format_date_in_iso($req->{'date_request'});
+	my $reqD=C4::Date::format_date_in_iso($req->{'date_request'},$dateformat);
 	my $ultimoDiaR = DateCalc($reqD,"+ ".$DR." days",\$err);
 
-	$ultimoDiaR = C4::Date::format_date_in_iso($ultimoDiaR);	
+	$ultimoDiaR = C4::Date::format_date_in_iso($ultimoDiaR,$dateformat);	
 	if (ParseDate($ultimoDiaR)  < ParseDate($today)){   
 	 $request{'red'}=1;  
 	}
@@ -133,12 +135,12 @@ my %request;
 	  push(@noconditionloop,\%request);}
 	else { push(@conditionloop,\%request);}
 		
-                                                                                                                             
-        }
+}
 
 
 my ($cant,@complete)= completeReport($branch);
 my @completeloop;
+my $dateformat = C4::Date::get_date_format();
 foreach my $req  (@complete){
 my %request;
 
@@ -152,7 +154,7 @@ my %request;
         $request{'authorhtmlescaped'}=~s/ /%20/g;
         if ($req->{'requesttype'} eq 'copy'){$request{'copy'}=1}else{$request{'print'}=1}
         $request{'bib'}=$req->{'biblionumber'};
-        $request{'date'} = format_date($req->{'date_request'});
+        $request{'date'} = format_date($req->{'date_request'},$dateformat);
         $request{'datecomplete'} = format_date($req->{'date_complete'}); 
 	$request{'borrowernumber'}=$req->{'borrowernumber'};
         $request{'firstname'}=$req->{'firstname'};
@@ -166,18 +168,18 @@ my %request;
        
 	#Verifica la fecha de pedido
         my $err= "Error con la fecha";
-        my $reqD=C4::Date::format_date_in_iso($req->{'date_request'});
+        my $reqD=C4::Date::format_date_in_iso($req->{'date_request'},$dateformat);
 	my $ultimoDiaR = DateCalc($reqD,"+ ".$DR." days",\$err);
 	
-        $ultimoDiaR = C4::Date::format_date_in_iso($ultimoDiaR);
+        $ultimoDiaR = C4::Date::format_date_in_iso($ultimoDiaR,$dateformat);
         if (ParseDate($ultimoDiaR)  < ParseDate($today)){
          $request{'redR'}=1;
         }
 
 	#Verifica la fecha de cumplido
-        my $reqC=C4::Date::format_date_in_iso($req->{'date_complete'});
+        my $reqC=C4::Date::format_date_in_iso($req->{'date_complete'},$dateformat);
         my $ultimoDiaC = DateCalc($reqC,"+ ".$DC." days",\$err);
-       $ultimoDiaC = C4::Date::format_date_in_iso($ultimoDiaC);
+       $ultimoDiaC = C4::Date::format_date_in_iso($ultimoDiaC,$dateformat);
 
         if (ParseDate($ultimoDiaC)  < ParseDate($today)){
          $request{'redC'}=1;}

@@ -192,18 +192,20 @@ if ($bornum) {
 	if ($borrower) {
 		my $pcolor = 'par';
 		my $issueslist = getissues($borrower); # FIXME trae libros que no corresponden
+		my $dateformat = C4::Date::get_date_format();
 		foreach my $it (keys %$issueslist) {
 			my $book= $issueslist->{$it};
-			$book->{'date_due'} = format_date($book->{'date_due'});
+			$book->{'date_due'} = format_date($book->{'date_due'},$dateformat);
 			my $err= "Error con la fecha";
-			  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
-			       my  $close = ParseDate(C4::Context->preference("close"));
-			       if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-				$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
+			my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+			my  $close = ParseDate(C4::Context->preference("close"));
+			if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
+				$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
+			}
 
 			my ($vencido,$df)= &C4::AR::Issues::estaVencido($book->{'itemnumber'},$book->{'issuecode'});
 
-			$book->{'date_fin'} = format_date($df);
+			$book->{'date_fin'} = format_date($df,$dateformat);
 			if ($vencido){$book->{'color'} ='red';}
 			($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
 			$book->{'renew'} = &sepuederenovar($bornum, $book->{'itemnumber'});

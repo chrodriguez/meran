@@ -26,6 +26,8 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
+
+my $dateformat = C4::Date::get_date_format();
 my $pagetitle = "Reserva de ejemplares";
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 ###CURSO DE USUARIO###
@@ -50,9 +52,9 @@ if ($result[0]){#si no ocurrio ningun error, entonces puedo reservar el libro
 	#Ahora intento hacer la reserva, de acuerdo al resultado que me de la consulta se si se puedo hacer en un ejemplar o se agrego a la cola de reservas del grupo
  	if ($result[1]){#quiere decir que se logro reservar un item
                 $template->param( itemReserve => $result[1],
-                                  desde => format_date($result[2]),
+                                  desde => format_date($result[2],$dateformat),
                                   desdeh => $result[5],
-                                  hasta => format_date($result[3]),
+                                  hasta => format_date($result[3],$dateformat),
                                   hastah => $result[6],
 				  donde=> $branches->{$result[4]}->{'branchname'});
                 my $itemdata=itemdata2($result[1]);
@@ -89,7 +91,7 @@ else{#quiere decir que result es 0 por lo tanto, no se efectuo la reserva
 		$template->param(message => 1);
         	if ($result[1] == 1){ #esta sancionado o por ser sancionado
 			if ($result[2]){#esta efectuvamente sancionado
-				$template->param(sancionado => format_date($result[2])); #aca le paso el parametro que podria indicar la cantidad de dias que deberia ser por la variable result en el 2 
+				$template->param(sancionado => format_date($result[2],$dateformat)); #aca le paso el parametro que podria indicar la cantidad de dias que deberia ser por la variable result en el 2 
 			}else{
                 		#esta por ser sancionado
 				$template->param(casisancionado => 1);

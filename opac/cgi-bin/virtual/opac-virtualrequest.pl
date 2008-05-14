@@ -31,6 +31,7 @@ my ($template, $borrowernumber, $cookie)
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 my @bordat;
 $bordat[0] = $borr;
+my $dateformat = C4::Date::get_date_format();
 
 # get biblionumber.....
 my $biblionumber = $query->param('bib');
@@ -128,7 +129,7 @@ foreach my $itm (@items) {
 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-$template->param( todaydate => format_date($today));
+$template->param( todaydate => format_date($today,$dateformat));
 
 ###
 
@@ -139,7 +140,7 @@ if ($query->param('item_types_selected')) {
 	my $proceed = 0;
 	my $cant=0; #Matias
 
-	$template->param(required_date => format_date($today));
+	$template->param(required_date => format_date($today,$dateformat));
 
 	if (@bibitemtypes) {
 		my @newbitypes;
@@ -249,7 +250,7 @@ my $type = requestType($bitmtype);
 
 	#Matias: Fecha
     	my $required_date = $query->param('required_date');
-   $required_date = format_date_in_iso($required_date);
+   $required_date = format_date_in_iso($required_date,$dateformat);
 	# my $expires_date = $query->param('expires_date');
    	# if ($expires_date eq 0) {$expires_date ='NULL';};
 

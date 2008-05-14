@@ -51,6 +51,7 @@ my ($count,@suppliers)=bookseller($supplier);
 my $colour='#EEEEEE';
 my $toggle=0;
 my @loop_suppliers;
+my $dateformat = C4::Date::get_date_format();
 for (my $i=0; $i<$count; $i++) {
 	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
 	my %line;
@@ -73,7 +74,7 @@ for (my $i=0; $i<$count; $i++) {
 		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
 		$inner_line{total} =$orders->[$i2]->{'count(*)'};
 		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-		$inner_line{entrydate} = format_date($orders->[$i2]->{'entrydate'});
+		$inner_line{entrydate} = format_date($orders->[$i2]->{'entrydate'},$dateformat);
 		push @loop_basket, \%inner_line;
 	}
 	$line{loop_basket} = \@loop_basket;

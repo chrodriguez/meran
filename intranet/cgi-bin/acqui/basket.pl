@@ -96,9 +96,10 @@ my $prefgist =C4::Context->preference("gist");
 $gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
 
+my $dateformat = C4::Date::get_date_format();
 $template->param(basket => $basket,
 						authorisedby => $results[0]->{'authorisedby'},
-						entrydate => format_date($results[0]->{'entrydate'}),
+						entrydate => format_date($results[0]->{'entrydate'},$dateformat),
 						id=> $results[0]->{'booksellerid'},
 						name => $booksellers[0]->{'name'},
 						books_loop => \@books_loop,

@@ -49,14 +49,16 @@ foreach my $key (@names){
   $data->{$key}=~ s/\'/\\\'/g;
   $data->{$key}=~ s/\"/\\\"/g;
 }
+
+my $dateformat = C4::Date::get_date_format();
 my $dbh = C4::Context->dbh;
 my $query="Select * from borrowers where borrowernumber=?";
 my $sth=$dbh->prepare($query);
 $sth->execute($data->{'borrowernumber'});
 if (my $data2=$sth->fetchrow_hashref){
-  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
-  $data->{'joining'}=format_date_in_iso($data->{'joining'});
-  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'},$dateformat);
+  $data->{'joining'}=format_date_in_iso($data->{'joining'},$dateformat);
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'},$dateformat);
   if ($data->{'updatepassword'} && ($data->{'updatepassword'} eq 'on')) {
 	$data->{'updatepassword'}=1;
   } else {
@@ -78,9 +80,9 @@ if (my $data2=$sth->fetchrow_hashref){
 my $sth=$dbh->prepare($query);
 $sth->execute($data->{'borrowernumber'});
 if (my $data2=$sth->fetchrow_hashref){
-  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
-  $data->{'joining'}=format_date_in_iso($data->{'joining'});
-  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'},$dateformat);
+  $data->{'joining'}=format_date_in_iso($data->{'joining'},$dateformat);
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'},$dateformat);
 
 ##
 $data->{'personnumber'}=$data2->{'personnumber'};
@@ -91,9 +93,9 @@ updateperson($data); #Se actualiza en person
 
 
 }else{
-  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
-  $data->{'joining'}=format_date_in_iso($data->{'joining'});
-  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'},$dateformat);
+  $data->{'joining'}=format_date_in_iso($data->{'joining'},$dateformat);
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'},$dateformat);
   if ($data->{'updatepassword'} && ($data->{'updatepassword'} eq 'on')) {
 	$data->{'updatepassword'}=1;
   } else {

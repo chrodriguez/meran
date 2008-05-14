@@ -43,16 +43,17 @@ use vars qw(@EXPORT @ISA);
 sub countPrint{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my $DAYSRENEW= C4::Context->preference("virtualprintrenew");
 
 	my @datearr = localtime(time);
 	my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	$today = C4::Date::format_date_in_iso($today);
+	$today = C4::Date::format_date_in_iso($today,$dateformat);
 
 #Se toman en cuenta solo los pedidos entregados entre la fecha calculada con la cantidad de dias que indica "virtualrenew" hasta hoy.
 	my $err; 
 	my $firstDate = DateCalc($today,"- ".$DAYSRENEW." days",\$err);
-        $firstDate = C4::Date::format_date_in_iso($firstDate);
+        $firstDate = C4::Date::format_date_in_iso($firstDate,$dateformat);
    
 	my $query ="SELECT count( * ) as cantidad
 			FROM virtual_request
@@ -85,16 +86,17 @@ sub canPrint{
 sub countCopy{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my $DAYSRENEW = C4::Context->preference("virtualcopyrenew");
 
         my @datearr = localtime(time);
         my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-        $today = C4::Date::format_date_in_iso($today);
+        $today = C4::Date::format_date_in_iso($today,$dateformat);
 
 #Se toman en cuenta solo los pedidos entregados entre la fecha calculada con la cantidad de dias que indica "virtualrenew" hasta hoy.
         my $err;
         my $firstDate = DateCalc($today,"- ".$DAYSRENEW." days",\$err);
-        $firstDate = C4::Date::format_date_in_iso($firstDate);
+        $firstDate = C4::Date::format_date_in_iso($firstDate,$dateformat);
 
         my $query ="
 
@@ -171,6 +173,7 @@ sub allVirtualRequests{
 sub allRequests{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my @results;
         my $query ="SELECT virtual_request.biblioitemnumber, virtual_request.date_request,virtual_request.date_complete,virtual_request.condition ,virtual_itemtypes.requesttype, itemtypes.description, biblio.title, biblio.author, biblioitems.biblionumber, biblioitems.volume, biblioitems.volumeddesc,branches.branchname
 FROM virtual_request
@@ -191,7 +194,7 @@ if($data->{'requesttype'} eq 'copy'){$data->{'copy'}=1;}else{$data->{'print'}=1;
 if ($data->{'condition'} eq 0){ $data->{'state'}='Falta Cumplir Condici&oacute;n'}
 else{	if($data->{'date_complete'} eq '')
 	{ $data->{'state'}='Pendiente'}
-	else  { $data->{'state'}='<b>Cumplido ('.format_date($data->{'date_complete'}).')</b>'};	
+	else  { $data->{'state'}='<b>Cumplido ('.format_date($data->{'date_complete'},$dateformat).')</b>'};	
   	}
 
         push(@results,$data);

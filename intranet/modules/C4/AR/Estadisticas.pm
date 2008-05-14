@@ -67,6 +67,7 @@ sub historicoDeBusqueda(){
         my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios)=@_;
 
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my $olddate;
 	my $newdate;	
 	my $query2;
@@ -89,8 +90,8 @@ sub historicoDeBusqueda(){
 
 	if(($fechaIni ne "")&&($fechaFin ne "")&&($catUsuarios ne "SIN SELECCIONAR")){
 
-		$fechaIni=format_date_in_iso($fechaIni)." 00:00:00";
-		$fechaFin=format_date_in_iso($fechaFin)." 23:59:59";
+		$fechaIni=format_date_in_iso($fechaIni,$dateformat)." 00:00:00";
+		$fechaFin=format_date_in_iso($fechaFin,$dateformat)." 23:59:59";
 
 		$filtro1 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
 		$filtro1 .= " AND bor.categorycode = '".$catUsuarios."'";
@@ -100,8 +101,8 @@ sub historicoDeBusqueda(){
 	}else{
 		if(($fechaIni ne "")&&($fechaFin ne "")){
 
-			$fechaIni=format_date_in_iso($fechaIni)." 00:00:00";
-			$fechaFin=format_date_in_iso($fechaFin)." 23:59:59";
+			$fechaIni=format_date_in_iso($fechaIni,$dateformat)." 00:00:00";
+			$fechaFin=format_date_in_iso($fechaFin,$dateformat)." 23:59:59";
 
 			$filtro2 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
 			$query2 .= $filtro2;
@@ -157,10 +158,11 @@ sub historicoPrestamos{
 	
 	my ($orden,$ini,$fin,$f_ini,$f_fin,$tipoItem,$tipoPrestamo,$catUsuario)=@_;
 	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 
 	my $datesSQL='';
 	if (($f_ini ne '') and ($f_fin ne '')){
-		$datesSQL=' AND I.date_due BETWEEN "'.format_date_in_iso($f_ini).'" AND "'.format_date_in_iso($f_fin).'" ';
+		$datesSQL=' AND I.date_due BETWEEN "'.format_date_in_iso($f_ini,$dateformat).'" AND "'.format_date_in_iso($f_fin,$dateformat).'" ';
 	}
 
 	my $tipoDePrestamoSQL;
@@ -217,8 +219,8 @@ sub historicoPrestamos{
 
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-		$data->{'fechaPrestamo'}=format_date($data->{'fechaPrestamo'});
-		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'});
+		$data->{'fechaPrestamo'}=format_date($data->{'fechaPrestamo'},$dateformat);
+		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'},$dateformat);
 		push(@results,$data);
 
         };
@@ -264,6 +266,7 @@ sub prestamosAnual{
 sub disponibilidad{
         my ($branch,$orden,$avail,$ini,$fin)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my @results;
 	my $dates='';
 	my @bind;
@@ -271,8 +274,8 @@ sub disponibilidad{
 	push(@bind,$branch);
 	if (($ini ne '') and ($fin ne '')){
 		$dates=" AND av.date between ? AND ? ";
-		push(@bind,format_date_in_iso($ini));
-		push(@bind,format_date_in_iso($fin));
+		push(@bind,format_date_in_iso($ini),$dateformat);
+		push(@bind,format_date_in_iso($fin),$dateformat);
 	}
 
 	my $query = "SELECT DISTINCT i.*,bi.number,bi.publicationyear,b.title,b.author,
@@ -290,7 +293,7 @@ sub disponibilidad{
 
         $sth->execute(@bind);
         while (my $data=$sth->fetchrow_hashref){
-		$data->{'date'}=format_date($data->{'date'});
+		$data->{'date'}=format_date($data->{'date'},$dateformat);
 		$data->{'id'}=$data->{'author'};
 		my $autorPPAL= &getautor($data->{'author'});
                 $data->{'author'}=$autorPPAL->{'completo'};
@@ -431,6 +434,7 @@ sub cantRegFechas{
 sub registroEntreFechas{
         my ($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$fin,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my @bind;
         my $query="SELECT idModificacion,nota,operacion,fecha,
 		   responsable,numero,tipo,surname,firstname
@@ -490,7 +494,7 @@ sub registroEntreFechas{
 	my $IdModificacion;
 
         while (my $data=$sth->fetchrow_hashref){
-		$data->{'fecha'}=format_date($data->{'fecha'});;
+		$data->{'fecha'}=format_date($data->{'fecha'},$dateformat);
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};	
 
                 push(@results,$data);
@@ -662,6 +666,7 @@ sub cantidadUsuarios{
 sub usuarios{
         my ($branch,$orden,$ini,$fin,$anio,$usos,$categ,@chck)=@_;
 	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
   	my @results;
 	my @bind;
 	my @bind2;
@@ -702,7 +707,7 @@ sub usuarios{
 					$data->{'emailaddress'}='-';
 					$data->{'ok'}=1;
 				};
-		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'});
+		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'},$dateformat);
 		$data->{'city'}=C4::Search::getcitycategory($data->{'city'});
                 push(@results,$data);
         }
@@ -717,6 +722,7 @@ Acutalmente no se usa!!!!!!!
 sub cantidadPrestamos{
 	my ($branch,$estado)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my $query ="select issues.itemnumber as itemnumber
                     from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
 		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
@@ -728,7 +734,7 @@ sub cantidadPrestamos{
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 	my $cantidad=0;
 	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}),$dateformat);
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($estado eq "VE"){
 			if ($flag lt 0){
@@ -764,6 +770,7 @@ sub estaEnteFechas {
 sub prestamos{
         my ($branch,$orden,$ini,$fin,$estado,$begindate,$enddate)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my @results;
 	my $query ="select borrowers.borrowernumber AS borrowernumber,
 			   items.itemnumber AS itemnumber, items.biblionumber AS biblionumber,
@@ -781,8 +788,10 @@ sub prestamos{
 	
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	my $dateformat = C4::Date::get_date_format();
+
 	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}),$dateformat);
 		#Se filtra por Fechas de Vencimiento 
 		
 		if ( estaEnteFechas($begindate,$enddate,$data->{'vencimiento'}) ) {
@@ -795,8 +804,8 @@ sub prestamos{
 					$data->{'ok'}=1;
 				 };
 		if ($data->{'returndate'} eq "" ){$data->{'returndate'}='-';}
-		else  { $data->{'returndate'} =  format_date($data->{'returndate'})};
-		$data->{'date_due'}= format_date($data->{'date_due'});
+		else  { $data->{'returndate'} =  C4::Date::format_date($data->{'returndate'},$dateformat)};
+		$data->{'date_due'}= C4::Date::format_date($data->{'date_due'},$dateformat);
 
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);		
 		#Se marcan los prestamos vencidos
@@ -873,6 +882,7 @@ sub cantidadReservas{
 sub reservas{
         my ($branch,$orden,$ini,$fin,$tipo)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my @results;
         my $query ="select surname, firstname, cardnumber, emailaddress, reminderdate,
 		    barcode, reservedate, reserves.itemnumber as itemnumber, 
@@ -896,8 +906,8 @@ sub reservas{
         my $sth=$dbh->prepare($query);
 	 $sth->execute($orden);
         while (my $data=$sth->fetchrow_hashref){
-		$data->{'reminderdate'}=format_date($data->{'reminderdate'});
-		$data->{'reservedate'}=format_date($data->{'reservedate'});
+		$data->{'reminderdate'}=format_date($data->{'reminderdate'},$dateformat);
+		$data->{'reservedate'}=format_date($data->{'reservedate'}),$dateformat;
 		if ($data->{'itemnumber'} eq "" ){$data->{'itemnumber'}='-' };
                 if ($data->{'emailaddress'} eq "" ){
 					$data->{'emailaddress'}='-';
@@ -1083,12 +1093,13 @@ sub levelsReport{
 sub availYear {
         my ($branch,$ini,$fin)=@_;
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
         my $query="SELECT month( date )  AS mes, year( date )  AS year, avail, count( avail )  AS cantidad
 			FROM availability
 			WHERE branch =  ?  AND date BETWEEN ? AND  ?
 			GROUP  BY year( date ) , month( date )  ORDER  BY month( date ) , year( date )";
         my $sth=$dbh->prepare($query);
-        $sth->execute($branch,format_date_in_iso($ini),format_date_in_iso($fin));
+        $sth->execute($branch,format_date_in_iso($ini,$dateformat),format_date_in_iso($fin,$dateformat));
         my @results;
         while (my $data=$sth->fetchrow_hashref){
                 push(@results,$data);
@@ -1263,6 +1274,7 @@ sub historialReservas {
   my ($bornum,$ini,$cantR)=@_;
  
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
 
   my $querySelectCount=" SELECT count(*) as cant ";
 
@@ -1301,18 +1313,18 @@ sub historialReservas {
   while (my $data=$sth->fetchrow_hashref){
 	if (( $data->{'type'} eq 'reserve' )||( $data->{'type'} eq 'notification' )) {
 		$data->{'estado'}= 'Otorgada';
-		$data->{'fechaVto'}= format_date($data->{'fechaVto'});
+		$data->{'fechaVto'}= format_date($data->{'fechaVto'},$dateformat);
 	}else{
 		if (( $data->{'type'} eq 'cancel' )&&($data->{'fechaVto'} eq '0000-00-00')) {
 			$data->{'estado'}= 'Anulada';
 			$data->{'fechaVto'}= '-';
 		}else{
 			$data->{'estado'}= 'Vencida';
-			$data->{'fechaVto'}= format_date($data->{'fechaVto'});
+			$data->{'fechaVto'}= format_date($data->{'fechaVto'},$dateformat);
 		}
 	}
 
-	$data->{'fechaReserva'}= format_date($data->{'fechaReserva'});
+	$data->{'fechaReserva'}= format_date($data->{'fechaReserva'},$dateformat);
 
     	$result[$i]=$data;
     	$i++;
@@ -1326,6 +1338,7 @@ sub historicoCirculacion(){
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my @bind;
 	my $query="";
 	my $cant=0;
@@ -1389,7 +1402,7 @@ sub historicoCirculacion(){
         $sth->execute(@bind);
 	my @results;
         while (my $data=$sth->fetchrow_hashref){
-		$data->{'fecha'}=format_date($data->{'date'});
+		$data->{'fecha'}=format_date($data->{'date'},$dateformat);
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};

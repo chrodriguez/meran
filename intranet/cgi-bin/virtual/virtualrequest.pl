@@ -47,7 +47,8 @@ my $dat = bibdata($bib);
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $year=$year+1900;
 $mon++;
-my $date=format_date("$year-$mon-$mday");
+my $dateformat = C4::Date::get_date_format();
+my $date=format_date("$year-$mon-$mday",$dateformat);
 
 # get biblioitem information and build rows for form
 my ($count2,@data) =virtualBibitems($bib);
@@ -56,6 +57,7 @@ my @bibitemloop;
 my @requestloop;
 my $branches = getbranches();
 
+my $dateformat = C4::Date::get_date_format();
 foreach my $dat (@data) {
 ###MATIAS###
        $dat->{'bibitemtype'}=$dat->{'biblioitemnumber'}." GRUPO - ". $dat->{'description'};
@@ -79,7 +81,7 @@ foreach my $req  (@request){
 my %request;	
 	
 	$request{'branchname'}=$req->{'branchname'};
- 	$request{'date'} = format_date($req->{'date_request'});
+ 	$request{'date'} = format_date($req->{'date_request'},$dateformat);
         $request{'borrowernumber'}=$req->{'borrowernumber'};
         $request{'firstname'}=$req->{'firstname'};
         $request{'surname'}=$req->{'surname'};
@@ -93,7 +95,7 @@ my %request;
 	 if ($req->{'requesttype'} eq 'copy'){$request{'copy'}=1}else{$request{'print'}=1}
 	
 	if ($req->{'date_complete'} ne ''){$request{'complete'}=1;
-						$request{'date_complete'}=format_date($req->{'date_complete'});}
+						$request{'date_complete'}=format_date($req->{'date_complete'},$dateformat);}
 
         push(@requestloop,\%request);
 

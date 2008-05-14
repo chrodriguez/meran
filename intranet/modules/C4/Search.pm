@@ -1810,6 +1810,7 @@ If this is set, it is set to C<One Order>.
 sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = C4::Context->dbh;
+    my $dateformat = C4::Date::get_date_format();
     my $query = "SELECT *,items.notforloan as itemnotforloan FROM items left join  biblio on biblio.biblionumber = items.biblionumber left join  biblioitems on biblioitems.biblioitemnumber = items.biblioitemnumber left join itemtypes on biblioitems.itemtype = itemtypes.itemtype WHERE items.biblionumber = ? ";
   if (($type ne 'intra')){
 # &&(C4::Context->preference("opacUnavail") eq 0)){
@@ -1828,7 +1829,7 @@ sub ItemInfo {
     my $isth=$dbh->prepare("SELECT * FROM issues inner join  borrowers on issues.borrowernumber = borrowers.borrowernumber  WHERE itemnumber = ? AND returndate IS  NULL ");
     $isth->execute($data->{'itemnumber'});
     if (my $idata=$isth->fetchrow_hashref){
-      $datedue ="Prestado a desde el".format_date($idata->{'date_due'});
+      $datedue ="Prestado a desde el".format_date($idata->{'date_due'},$dateformat);
     }
     if ($data->{'itemlost'} eq '2'){
         $datedue="<font color='red'>Muy Atrasado</font>";
@@ -1888,7 +1889,7 @@ sub ItemInfo {
     # FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
     # to leave it empty, rather than convert it to "//".
     # Also ideally this should use the local format for displaying dates.
-    my $date=format_date($data->{'datelastseen'});
+    my $date=format_date($data->{'datelastseen'},$dateformat);
     $data->{'datelastseen'}=$date;
     $data->{'datedue'}=$datedue;
     $data->{'class'}=$class;
@@ -2042,6 +2043,7 @@ return ( $data->{'volumeddesc'}, $data->{'volume'});
 sub allitems {
   my ($bib,$type)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   my $sth=$dbh->prepare("Select * from items where biblioitemnumber=? ");
   $sth->execute($bib);
 
@@ -2084,7 +2086,7 @@ sub allitems {
      	}
       	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
 	my ($vencido,$df)= &C4::AR::Issues::estaVencido($idata->{'itemnumber'},$idata->{'issuecode'});
-	$returndate=format_date($df);
+	$returndate=format_date($df,$dateformat);
 	if($vencido){
 		$returndate="<font color='red'>".$returndate."</font>";
 	}
@@ -2101,7 +2103,7 @@ sub allitems {
     if (my $rdata=$rsth->fetchrow_hashref){
 	$reserved=1;
 	$borr=$rdata->{'borrowernumber'};
-	$reminderdate=format_date($rdata->{'reminderdate'});
+	$reminderdate=format_date($rdata->{'reminderdate'},$dateformat);
       if ($type eq "intranet") { 
       $datedue ="Reservado a <STRONG><A href='moremember.pl?bornum=".$rdata->{'borrowernumber'}."'>".$rdata->{'firstname'}." ".$rdata->{'surname'}."</A></STRONG>"; 
       }
@@ -2300,6 +2302,7 @@ sub groupinfo {
 	
     my ($env,$biblioitemnumber,$biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
+    my $dateformat = C4::Date::get_date_format();
     my $query = "SELECT items.itemnumber,items.barcode, items.biblionumber,items.biblioitemnumber,items.holdingbranch, items.datelastborrowed, 
 				items.datelastseen  ,items.itemlost,items.wthdrawn,items.dateaccessioned, items.notforloan as itemnotforloan 
 				FROM items, biblioitems WHERE items.biblionumber = ? 
@@ -2327,7 +2330,7 @@ sub groupinfo {
     $isth->execute($data->{'itemnumber'});
 
     if (my $idata=$isth->fetchrow_hashref){
-      $datedue = format_date($idata->{'date_due'});
+      $datedue = format_date($idata->{'date_due'},$dateformat);
       $dates.=$data->{'barcode'}."(".$datedue.")<br> ";
       $isu++; #Prestados
     }
@@ -2920,7 +2923,7 @@ sub allissues {
   if(!$orden){$orden='date_due';}
 
   my $dbh = C4::Context->dbh;
-
+  my $dateformat = C4::Date::get_date_format();
   my $querySelectCount = " SELECT count(*) as cant ";
 
   my $querySelect= " SELECT b.title,b.biblionumber,b.author,a.completo,iss.date_due,iss.returndate,volumeddesc, iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
@@ -2960,10 +2963,10 @@ sub allissues {
    
    	$data->{'clase'}=$clase;
 	my $df=C4::AR::Issues::fechaDeVencimiento($data->{'itemnumber'},$data->{'date_due'});
-	$data->{'date_fin'}=format_date($df);
-	$data->{'date_due'}=  format_date($data->{'date_due'});
-	$data->{'returndate'}=  format_date($data->{'returndate'});
-	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'});
+	$data->{'date_fin'}=format_date($df,$dateformat);
+	$data->{'date_due'}=  format_date($data->{'date_due'},$dateformat);
+	$data->{'returndate'}=  format_date($data->{'returndate'},$dateformat);
+	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'},$dateformat);
     	$data->{'author'} = $data->{'completo'};
     	$data->{'id'} = $data->{'author'};
 
@@ -2994,6 +2997,7 @@ the total fine currently due by the borrower.
 sub borrdata2 {
   my ($env,$bornum)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   my $query="Select * from issues where borrowernumber='$bornum' and returndate is NULL";
     # print $query;
   my $sth=$dbh->prepare($query);
@@ -3003,17 +3007,17 @@ sub borrdata2 {
   
  #
  my $err= "Error con la fecha";
- my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+ my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
  my  $close = ParseDate(C4::Context->preference("close"));
 if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
+	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);}
 									 
 
  #
   while (my $data=$sth->fetchrow_hashref){
 	          
 	#Pregunto si esta vencido
-        my $df=C4::Date::format_date_in_iso(vencimiento($data->{'itemnumber'}));
+        my $df=C4::Date::format_date_in_iso(vencimiento($data->{'itemnumber'}),$dateformat);
 	if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
 	#
 		  $issues++;
@@ -4331,6 +4335,7 @@ sub haveReserves {
 sub mailissues {
   	my ($branch)=@_;
   	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
   	my $sth=$dbh->prepare("SELECT * 
 	FROM issues
 	LEFT JOIN borrowers ON borrowers.borrowernumber = issues.borrowernumber
@@ -4343,7 +4348,7 @@ sub mailissues {
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
   	while (my $data = $sth->fetchrow_hashref) {
 		#Para que solo mande mail a los prestamos vencidos
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'},$dateformat));
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($flag lt 0){
 			#Solo ingresa los prestamos vencidos a el arreglo a retornar
@@ -4357,6 +4362,7 @@ sub mailissues {
 sub mailissuesforborrower {
   	my ($branch,$bornum)=@_;
   	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
   	my $sth=$dbh->prepare("SELECT * 
 	FROM issues
 	LEFT JOIN items ON items.itemnumber = issues.itemnumber
@@ -4368,7 +4374,7 @@ sub mailissuesforborrower {
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
   	while (my $data = $sth->fetchrow_hashref) {
 		#Para que solo mande mail a los prestamos vencidos
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}));
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'},$dateformat));
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($flag lt 0){
 			#Solo ingresa los prestamos vencidos a el arreglo a retornar

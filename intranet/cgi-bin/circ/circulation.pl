@@ -253,6 +253,7 @@ if($bornum){
 ##############################################################################################################
 	my $sanctions = hasSanctions($bornum);
 	
+	my $dateformat = C4::Date::get_date_format();
 	foreach my $san (@$sanctions) {
 		if ($san->{'itemnumber'}) {
 			my $aux=itemdata3($san->{'itemnumber'}); 
@@ -263,8 +264,8 @@ if($bornum){
 		#Miguel - Tiene reserva no retirada vencida, no se le muestra el combo para prestar
 			$template->param(reservaNoRetiradaVencida =>$san->{'reservaNoRetiradaVencida'});
 		}
-	$san->{'enddate'}=format_date($san->{'enddate'});
-	$san->{'startdate'}=format_date($san->{'startdate'});
+	$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
+	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 	}
 
 	$template->param(sanctions =>$sanctions);
@@ -280,10 +281,11 @@ my $rcount = 0;
 my $wcount = 0;
 my $clase1='par';
 my $clase2='par';
+my $dateformat = C4::Date::get_date_format();
 foreach my $res (@$reserves) {
-	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'});
-	$res->{'rnotificationdate'}  = format_date($res->{'rnotificationdate'});
-	$res->{'rreminderdate'}  = format_date($res->{'rreminderdate'});
+	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
+	$res->{'rnotificationdate'}  = format_date($res->{'rnotificationdate'},$dateformat);
+	$res->{'rreminderdate'}  = format_date($res->{'rreminderdate'},$dateformat);
 
 	#Corregido 13/03/07 Miguel
 	#obtengo el autor

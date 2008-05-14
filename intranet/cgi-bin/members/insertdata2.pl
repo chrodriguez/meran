@@ -45,14 +45,15 @@ foreach my $key (@names){
   $data->{$key}=~ s/\"/\\\"/g;
 }
 my $dbh = C4::Context->dbh;
+my $dateformat = C4::Date::get_date_format();
 
 my $queryb="Select * from borrowers where borrowernumber=?";
 my $sthb=$dbh->prepare($queryb);
 $sthb->execute($data->{'borrowernumber'});
 if (my $data2=$sthb->fetchrow_hashref){
-  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
-  $data->{'joining'}=format_date_in_iso($data->{'joining'});
-  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'},$dateformat);
+  $data->{'joining'}=format_date_in_iso($data->{'joining'},$dateformat);
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'},$dateformat);
 
 ##
  updateborrower($data); #Se actualiza en borrower
@@ -63,9 +64,9 @@ my $query="Select * from persons where personnumber=?";
 my $sth=$dbh->prepare($query);
 $sth->execute($data->{'personnumber'});
 if (my $data2=$sth->fetchrow_hashref){
-  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'});
-  $data->{'joining'}=format_date_in_iso($data->{'joining'});
-  $data->{'expiry'}=format_date_in_iso($data->{'expiry'});
+  $data->{'dateofbirth'}=format_date_in_iso($data->{'dateofbirth'},$dateformat);
+  $data->{'joining'}=format_date_in_iso($data->{'joining'},$dateformat);
+  $data->{'expiry'}=format_date_in_iso($data->{'expiry'},$dateformat);
 
   ##
   updateperson($data); #Se actualiza en person
@@ -76,9 +77,9 @@ if (my $data2=$sth->fetchrow_hashref){
 #Esto iria si se permitiera agregar nuevos usuarios factibles 
 =cut
 else{
-  $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
-  $data{'joining'}=format_date_in_iso($data{'joining'});
-  $data{'expiry'}=format_date_in_iso($data{'expiry'});
+  $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'},$dateformat);
+  $data{'joining'}=format_date_in_iso($data{'joining'},$dateformat);
+  $data{'expiry'}=format_date_in_iso($data{'expiry'},$dateformat);
   $data{'borrowernumber'}=NewBorrowerNumber();
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,

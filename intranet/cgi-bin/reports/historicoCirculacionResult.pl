@@ -52,7 +52,8 @@ my $orden= "date";  # $input->param('orden')||'operacion';
                                                                                 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-$template->param( todaydate => format_date($today));
+my $dateformat = C4::Date::get_date_format();
+$template->param( todaydate => format_date($today,$dateformat));
                                                                                 
 ###
 
@@ -71,9 +72,11 @@ else {
 };
 
 #FIN inicializacion
+
+my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('fechaIni'));
-my $fechaFin    =  format_date_in_iso($input->param('fechaFin'));
+my $fechaInicio =  format_date_in_iso($input->param('fechaIni'),$dateformat);
+my $fechaFin    =  format_date_in_iso($input->param('fechaFin'),$dateformat);
 my @resultsdata;
 my $cant;
 

@@ -39,6 +39,8 @@ my $input=new CGI;
 my $id=$input->param('id');
 my $dbh = C4::Context->dbh;
 
+my $dateformat = C4::Date::get_date_format();
+
 my $search=$input->param('recieve');
 my $invoice=$input->param('invoice');
 my $freight=$input->param('freight');
@@ -140,10 +142,10 @@ if ($count == 1){
 		gst => $gst,
 		catview => ($catview ne 'yes'?1:0),
 		name => $booksellers[0]->{'name'},
-		date => format_date($date),
+		date => format_date($date,$dateformat),
 		title => $results[0]->{'title'},
 		author => $results[0]->{'author'},
-		copyrightdate => format_date($results[0]->{'copyrightdate'}),
+		copyrightdate => format_date($results[0]->{'copyrightdate'},$dateformat),
 		CGIitemtype => $CGIitemtype,
 		CGIbranch => $CGIbranch,
 		isbn => $results[0]->{'isbn'},
@@ -177,7 +179,7 @@ if ($count == 1){
 		push @loop,\%line;
 	}
 	$template->param( loop => \@loop,
-						date => format_date($date),
+						date => format_date($date,$dateformat),
 						name => $booksellers[0]->{'name'},
 						id => $id,
 						invoice => $invoice,

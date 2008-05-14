@@ -12,6 +12,8 @@ use DBI;
 use Text::ParseWords;
 use C4::Date;
 
+
+my $dateformat = C4::Date::get_date_format();
 # Se conecta con la base de datos MySql para determinar si el usuario ya existe
 my $dbh = DBI->connect('DBI:mysql:Econo', 'kohaadmin', '');
 open (L,">>cambioregularidad");
@@ -53,7 +55,7 @@ $firstname = join(" ", split(" ",$fields[4]));
 $firstname=~ s/\'//g;
 $documenttype = ($fields[20] eq '')?'NULL':'"'.$fields[20].'"';
 $documentnumber = ($fields[6] eq '')?'NULL':'"'.(split(/\./,$fields[6]))[0].'"';
-$dateofbirth= ($fields[5] eq '')?'NULL':'"'.format_date_in_iso($fields[5]).'"';
+$dateofbirth= ($fields[5] eq '')?'NULL':'"'.format_date_in_iso($fields[5],$dateformat).'"';
 $sex= $fields[6];
 $sex =~ tr/12/MF/;
 $streetaddress= "CALLE: ".(($fields[7])?$fields[7]:"-")." NUMERO: ".(($fields[8])?$fields[8]:"-")." PISO: ".(($fields[9])?$fields[9]:"-")." DPTO: ".(($fields[10])?$fields[10]:"-");

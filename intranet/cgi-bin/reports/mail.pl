@@ -52,7 +52,7 @@ $mailSubject=~ s/BRANCH/$branchname/;
 my $mailFrom=C4::Context->preference("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 
-
+my $dateformat = C4::Date::get_date_format();
 for (my $i=0;$i<$count;$i++){
 	if ( $result->[$i]{'emailaddress'} ne ''){
 		my $mailMessage = $mensaje;
@@ -69,9 +69,9 @@ for (my $i=0;$i<$count;$i++){
 		my $unititle=$result->[$i]{'unititle'};
 		$mailMessage =~ s/UNITITLE/$unititle/;
 
-			my $dateInicio=format_date($result->[$i]{'notificationdate'});
+			my $dateInicio=format_date($result->[$i]{'notificationdate'},$dateformat);
         		$mailMessage =~ s/a1/$dateInicio/;
-			my $dateFin= format_date($result->[$i]{'reminderdate'});
+			my $dateFin= format_date($result->[$i]{'reminderdate'},$dateformat);
 			$mailMessage =~ s/a4/$dateFin/;
 			my $horaInicio = C4::Context->preference("open");
 			$mailMessage =~ s/a2/$horaInicio/;

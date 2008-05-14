@@ -37,11 +37,13 @@ if($input->param('fin')){$fin=$input->param('fin');}
 my ($cantidad, @results)= disponibilidad($branch,$orden,$avail,$ini,$fin);
 
 	$msg='Ejemplares con disponibilidad: <b>'.getAvail($avail)->{'description'}.'</b> ';
-	if (($ini) and ($fin)){$msg.='entre las fechas: <b>'.format_date($ini).'</b> y <b>'.format_date($fin).'</b> .'; }
+	my $dateformat = C4::Date::get_date_format();
+	if (($ini) and ($fin)){$msg.='entre las fechas: <b>'.format_date($ini,$dateformat).'</b> y <b>'.format_date($fin).'</b> .'; }
 
 if ($input->param('type') eq 'pdf') {#Para PDF
 					my  $msg2='Ejemplares con disponibilidad: '.getAvail($avail)->{'description'}.' ';
-				        if (($ini) and ($fin)){$msg2.='entre las fechas: '.format_date($ini).' y '.format_date($fin).' .'; }
+					my $dateformat = C4::Date::get_date_format();
+				        if (($ini) and ($fin)){$msg2.='entre las fechas: '.format_date($ini,$dateformat).' y '.format_date($fin).' .'; }
 					availPdfGenerator($msg2,@results);
 				    }
 else{ #Para imprimir

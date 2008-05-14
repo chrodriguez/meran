@@ -185,7 +185,7 @@ elsif($type eq 'Mod'){
 				expiry		=> $expiry,
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $dateofbirth,
-				dateformat      => display_date_format(),
+				dateformat      => display_date_format($dateformat),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);
 
@@ -255,8 +255,9 @@ else {  # this else goes down the whole script
 	$template->param( modify => 1 );
 	}
 
+	my $dateformat = C4::Date::get_date_format();
 	#Convert dateofbirth to correct format
-	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
 
 
 
@@ -306,7 +307,7 @@ $data->{'dstreetcity'}=getcity($data->{'streetcity'});
 # cardnumber	=> $cardnumber, Esto es lo que estaba, ahora lo cambie porque no se mostraba el cardnumber cunado editas el usuario 
 				cardnumber	=> $data->{'cardnumber'}, #esto es lo que agregue yo
 				dateofbirth	=> $data->{'dateofbirth'},
-				dateformat      => display_date_format(),
+				dateformat      => display_date_format($dateformat),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);
 	

@@ -239,12 +239,13 @@ $sth3->execute();
 my $reservenumber= $sth3->fetchrow;
 
 # Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
+my $dateformat = C4::Date::get_date_format();
 my $err= "Error con la fecha";
 my $startdate= DateCalc($fecha,"+ 1 days",\$err);
-$startdate= C4::Date::format_date_in_iso($startdate);
+$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
 my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
 my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-$enddate= C4::Date::format_date_in_iso($enddate);
+$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 insertSanction($dbh, undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
 } else{
 
@@ -411,6 +412,7 @@ sub cancelar_reserva {
 
 	my ($biblioitemnumber,$borrowernumber,$loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my $sth=$dbh->prepare("SET autocommit=0;");
 	$sth->execute();
 #Primero busco los datos de la reserva que se quiere borrar
@@ -469,10 +471,10 @@ sub cancelar_reserva {
 # Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
 		my $err= "Error con la fecha";
 		my $startdate= DateCalc($fecha,"+ 1 days",\$err);
-		$startdate= C4::Date::format_date_in_iso($startdate);
+		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
 		my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-		$enddate= C4::Date::format_date_in_iso($enddate);
+		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 		insertSanction($dbh, undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
 
 		my $sth3=$dbh->prepare("commit");
@@ -591,6 +593,7 @@ my ($itemnumber,$bor,$desde, $fecha, $apertura,$cierre,$loggedinuser)=@_;
 if (C4::Context->preference("EnabledMailSystem")){
 
 my $dbh = C4::Context->dbh;
+my $dateformat = C4::Date::get_date_format();
 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
 $sth->execute($bor);
 my $borrower= $sth->fetchrow_hashref;
@@ -616,10 +619,10 @@ $mailMessage =~ s/TITLE/$res->{'rtitle'}/;
 $mailMessage =~ s/AUTHOR/$res->{'rauthor'}/;
 $mailMessage =~ s/EDICION/$res->{'redicion'}/;
 $mailMessage =~ s/a2/$apertura/;
-$desde=format_date($desde);
+$desde=format_date($desde,$dateformat);
 $mailMessage =~ s/a1/$desde/;
 $mailMessage =~ s/a3/$cierre/;
-$fecha=format_date($fecha);
+$fecha=format_date($fecha,$dateformat);
 $mailMessage =~ s/a4/$fecha/;
 my %mail = ( To => $borrower->{'emailaddress'},
                         From => $mailFrom,

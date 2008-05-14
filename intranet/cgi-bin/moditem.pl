@@ -79,11 +79,12 @@ my (@items)=itemissues($input->param('bibitemnum'));
 my @itemloop;
 my $count=@items;
 my $bulk;
+my $dateformat = C4::Date::get_date_format();
 for (my $i=0;$i<$count;$i++){
 	if ($i eq 0){$bulk=$items[$i]->{'bulk'}; 
 	             $homebranch= $items[$i]->{'homebranch'};}
         my %line;
-        $items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'});
+        $items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'},$dateformat);
         $line{barcode}=$items[$i]->{'barcode'};
         $line{itemnumber}=$items[$i]->{'itemnumber'};
         $line{biblionumber}=$input->param('biblio');

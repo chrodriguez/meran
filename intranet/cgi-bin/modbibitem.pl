@@ -43,7 +43,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my $bibitemnum=$input->param('bibitem');
-
+my $dateformat = C4::Date::get_date_format();
 
 my $responsable=$input->param('userloggedname');
 
@@ -233,7 +233,7 @@ my @itemloop;
 my $count=@items;
 for (my $i=0;$i<$count;$i++){
 	my %line;
-  	$items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'});
+  	$items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'},$dateformat);
 	$line{barcode}=$items[$i]->{'barcode'};
 	$line{itemnumber}=$items[$i]->{'itemnumber'};
 	$line{biblionumber}=$data->{'biblionumber'};

@@ -109,6 +109,7 @@ sub hasSanctions {
   #Esta funcion retorna un arreglo con los tipos de prestamo para los que el usuario esta sancionado
   my ($borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   #Esta primera consulta es por la devolucion atrasada de libros
   my $sth = $dbh->prepare("select * from sanctions 
 	inner join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
@@ -118,8 +119,8 @@ sub hasSanctions {
   $sth->execute($borrowernumber);
   my @results;
   while (my $res= $sth->fetchrow_hashref) {
-	$res->{'enddate'}=format_date($res->{'enddate'});
-        $res->{'startdate'}=format_date($res->{'startdate'});
+	$res->{'enddate'}=format_date($res->{'enddate'},$dateformat);
+        $res->{'startdate'}=format_date($res->{'startdate'},$dateformat);
 	push(@results,$res);
   }
   $sth->finish;
@@ -128,8 +129,8 @@ sub hasSanctions {
 	where borrowernumber = ? and (now() between startdate and enddate) and  sanctiontypecode is null");
   $sth->execute($borrowernumber);
   while (my $res= $sth->fetchrow_hashref) {
-        $res->{'enddate'}=format_date($res->{'enddate'});
-        $res->{'startdate'}=format_date($res->{'startdate'});
+        $res->{'enddate'}=format_date($res->{'enddate'},$dateformat);
+        $res->{'startdate'}=format_date($res->{'startdate'},$dateformat);
 	$res->{'description'}="Reserva no retirada";
 	$res->{'reservaNoRetiradaVencida'}= 1; #se setea flag de reservaNoRetirada vencida
         push(@results,$res);
@@ -150,9 +151,10 @@ sub hasDebts {
   #Esta funcion determina si un usuario ($borrowernumber) tiene algun biblio vencido que no le permite realizar reservas o prestamos
   my ($dbh, $borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
   $sth->execute($borrowernumber);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   while (my $ref= $sth->fetchrow_hashref) {
     my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
     return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
@@ -208,6 +210,8 @@ sub sanctionSelect {
 sub insertSanction {
   #Esta funcion da de alta una sancion
   my ($dbh, $sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays)=@_;
+
+  my $dateformat = C4::Date::get_date_format();
  #Hay varios casos:
  #Si no existe una tupla con una posible sancion y debe ser sancionado por $delaydays
  #Si existe se sanciona con la matoy cantidad de dias
@@ -228,7 +232,7 @@ sub insertSanction {
 		$ddays=$delaydays;
 		$sanctiontype=$sanctiontypecode;
 		my $err;
-		$edate= C4::Date::format_date_in_iso(DateCalc($startdate,"+ ".$ddays." days",\$err));
+		$edate= C4::Date::format_date_in_iso(DateCalc($startdate,"+ ".$ddays." days",\$err),$dateformat);
 	}
  	my $sth2 = $dbh->prepare("	Update sanctions set sanctiontypecode = ? , delaydays = 		
 		?,startdate=?,enddate=?  where borrowernumber = ? and startdate is null and enddate is null");
@@ -323,6 +327,7 @@ sub sanciones{
 	my $linecolor2='impar';
 	my $class='';
 	$orden=&C4::AR::Utilidades::verificarValor($orden);
+	my $dateformat = C4::Date::get_date_format();
 	my $dbh = C4::Context->dbh;
 	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
 	from sanctions  
@@ -337,8 +342,8 @@ sub sanciones{
 	my $borrowernumber;
 	while (my $res = $sth->fetchrow_hashref) {
         	($class eq $linecolor1) ? ($class=$linecolor2) : ($class=$linecolor1);
-		$res->{'enddate'}=  format_date($res->{'enddate'});
-		$res->{'startdate'}=  format_date($res->{'startdate'});
+		$res->{'enddate'}=  format_date($res->{'enddate'},$dateformat);
+		$res->{'startdate'}=  format_date($res->{'startdate'},$dateformat);
 		$res->{'clase'}= $class;
 		push (@sanctionsarray, $res);
 	}

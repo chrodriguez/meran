@@ -60,9 +60,9 @@ if (($input->param('ini') eq "")){
 };
 #FIN inicializacion
 
-
-my $fechaIni = C4::Date::format_date_in_iso($f_ini);
-my $fechaFin = C4::Date::format_date_in_iso($f_fin);
+my $dateformat = C4::Date::get_date_format();
+my $fechaIni = C4::Date::format_date_in_iso($f_ini,$dateformat);
+my $fechaFin = C4::Date::format_date_in_iso($f_fin,$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
 my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
 

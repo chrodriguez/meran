@@ -36,7 +36,7 @@ my $query=new CGI;
 
 # FIXME  subject is not exported to the template?
 my $subject=$query->param('subject');
-
+my $dateformat = C4::Date::get_date_format();
 # if its a subject we need to use the subject.tmpl
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	template_name   => ($subject? 'catalogue/subject.tmpl':
@@ -114,8 +114,8 @@ foreach my $item (@items){
     my $mon=substr($item->{'timestamp0'},4,2);
     my $day=substr($item->{'timestamp0'},6,2);
     $item->{'timestamp0'}="$day/$mon/$year";
-    $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
-    $item->{'datelastseen'} = format_date($item->{'datelastseen'});
+    $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'},$dateformat);
+    $item->{'datelastseen'} = format_date($item->{'datelastseen'},$dateformat);
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 

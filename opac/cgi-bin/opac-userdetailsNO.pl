@@ -21,13 +21,15 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
+
+my $dateformat = C4::Date::get_date_format();
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
-$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
-$borr->{'expiry'}       = format_date($borr->{'expiry'});
-$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
-$borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'},$dateformat);
+$borr->{'expiry'}       = format_date($borr->{'expiry'},$dateformat);
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'},$dateformat);
+$borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'},$dateformat);
 
 
 $template->param($borr,

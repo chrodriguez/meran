@@ -74,9 +74,10 @@ if($member ne ""){
 
 my @resultsdata;
 
+my $dateformat = C4::Date::get_date_format();
 my $err= "Error con la fecha";
-my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
-my  $close = ParseDate(C4::Context->preference("close"));
+my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+my  $close = ParseDate(C4::Context->preference("close"),$dateformat);
 if (Date::Manip::Date_Cmp($close,ParseDate("today")) < 0){
 	#Se paso la hora de cierre
 	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));

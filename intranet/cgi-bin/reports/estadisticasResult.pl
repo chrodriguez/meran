@@ -44,10 +44,10 @@ my $chkfecha= $input->param('chkfecha');
 my @chck= split(",",$input->param('chck'));
 my $chkuser= $input->param('chkuser');
 
-
+my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'));
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'));
+my $fechaInicio =  format_date_in_iso($input->param('dateselected'),$dateformat);
+my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateformat);
 
 my $domiTotal;
 my $renovados;

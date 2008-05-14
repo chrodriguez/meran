@@ -88,6 +88,7 @@ sub devolver {
 	my ($itemnumber,$borrowernumber,$loggedinuser)=@_;
 	
 	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	my $sth=$dbh->prepare("SET autocommit=0;");
 	$sth->execute();
 	$sth=$dbh->prepare("select * from issues where itemnumber=? and returndate IS NULL");
@@ -150,7 +151,7 @@ sub devolver {
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
 			my $issuetype=IssueType($iteminformation->{'issuecode'});
 			my $daysissue=$issuetype->{'daysissues'}; 
-			my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
+			my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
                         my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
                         $sth->execute($borrowernumber);
                         my $categorycode= $sth->fetchrow;
@@ -174,7 +175,7 @@ sub devolver {
 				my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
 			
-				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err));
+				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err),$dateformat);
 				insertSanction($dbh, $sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
 #**********************************Se registra el movimiento en historicSanction***************************
@@ -347,8 +348,9 @@ sub chequeoDeFechas(){
 	my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
 	my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
 	my $err= "Error con la fecha";
-	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err));#se saco el 2 para que ande bien.
-	my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2));#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
+	my $dateformat = C4::Date::get_date_format();
+	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
+	my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
 	my $flag = Date_Cmp($desde,$hoy);
 	#comparo la fecha de hoy con el inicio del plazo de renovacion	
 	if (!($flag gt 0)){ 
@@ -583,9 +585,10 @@ sub DatosPrestamos {
   #Esta funcion retorna los datos de los prestamos de un usuario
   my ($borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
   $sth->execute($borrowernumber);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   my @result;
   while (my $ref= $sth->fetchrow_hashref) {
     my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
@@ -601,9 +604,10 @@ sub DatosPrestamosPorTipo {
   #Esta funcion retorna los datos de los prestamos de un usuario por tipo de prestam
   my ($borrowernumber,$issuetype)=@_;
   my $dbh = C4::Context->dbh;
+  my $dateformat = C4::Date::get_date_format();
   my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ? and issuecode=?");
   $sth->execute($borrowernumber,$issuetype);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   my @result;
   while (my $ref= $sth->fetchrow_hashref) {
     my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
@@ -713,6 +717,7 @@ if ($borrower->{'emailaddress'} && $mailFrom ){
 
 sub enviar_recordatorios_prestamos {
 my $dbh = C4::Context->dbh;
+my $dateformat = C4::Date::get_date_format();
 my $sth=$dbh->prepare("Select * from issues left join issuetypes on issues.issuecode=issuetypes.issuecode where issues.returndate is NULL and issuetypes.notforloan = 0");
 $sth->execute();
 
@@ -720,7 +725,7 @@ while(my $data= $sth->fetchrow_hashref) {
 	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
 	my $proximohabil=proximoHabil(1,0);
 	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));
+	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
 	};
 }
 }
@@ -729,6 +734,7 @@ while(my $data= $sth->fetchrow_hashref) {
 sub crearTicket {
 	my ($iteminfo,$loggedinuser)=@_;
 	my %env;
+	my $dateformat = C4::Date::get_date_format();
 	my $bornum=$iteminfo->{'borrowernumber'};
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
@@ -744,8 +750,8 @@ sub crearTicket {
 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
 		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
 		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
-		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today"))) .
-		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate)) .
+		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today")),$dateformat) .
+		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate),$dateformat) .
 		    "&librarian=" . CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'}).
 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
 		    "&librarianNumber=" . CGI::Util::escape($librarian->{'cardnumber'});

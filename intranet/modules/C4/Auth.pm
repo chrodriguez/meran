@@ -229,6 +229,7 @@ sub checkauth {
 
 	my $dbh = C4::Context->dbh;
 	my $timeout = C4::Context->preference('timeout');
+	my $dateformat = C4::Date::get_date_format();
 	$timeout = 600 unless $timeout;
 
 	my $template_name;
@@ -350,20 +351,20 @@ sub checkauth {
 			my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
 			$sth->execute();
 			my $lastlogin= $sth->fetchrow;
-			my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1));
+			my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
 			my $enter=0;
 			if ($lastlogin){
 			while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
 				# lastlogin es anterior a prevWorkDate
 				# desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
-				$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1));
+				$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
 				my $sth=$dbh->prepare("insert into feriados (fecha) values (?)");
 				$sth->execute($lastlogin);
 				$enter=1;
 			}
 			
 			#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
-			my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+			my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
 			if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
 				# lastlogin es anterior a hoy
 				# Hoy no se enviaron nunca los mails de recordacion

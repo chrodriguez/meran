@@ -75,9 +75,10 @@ $template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I">
   	if (C4::Context->preference("usercourse")){$data->{'course'}=1;}
 #
 
-$data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
-$data->{'expiry'} = format_date($data->{'expiry'});
-$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+my $dateformat = C4::Date::get_date_format();
+$data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
+$data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
+$data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
@@ -135,7 +136,7 @@ $data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categ
 
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
-	$data->{'usercourse'} = format_date($data->{'usercourse'});
+	$data->{'usercourse'} = format_date($data->{'usercourse'},$dateformat);
 	}
 	####################
 
@@ -149,10 +150,13 @@ my @issuedat;
 my $clase='par';
 my $sanctions = hasSanctions($bornum);
 foreach my $san (@$sanctions) {
-if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
-			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
-$san->{'enddate'}=format_date($san->{'enddate'});
-$san->{'startdate'}=format_date($san->{'startdate'});
+	if ($san->{'itemnumber'}) {
+		my $aux=itemdata3($san->{'itemnumber'}); 
+		$san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; 
+	}
+
+	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);
+	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 #
 
@@ -160,17 +164,18 @@ $san->{'startdate'}=format_date($san->{'startdate'});
 foreach my $key (keys %$issues) {
     	my $issue = $issues->{$key};
     	$issue->{'clase'} = $clase;
-    	$issue->{'date_due'} = format_date($issue->{'date_due'});
+    	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
 
+	my $dateformat = C4::Date::get_date_format();
     	my $err= "Error con la fecha";
-    	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+    	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
     	my  $close = ParseDate(C4::Context->preference("close"));
 	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));
+		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
 	}
 
 	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'itemnumber'},$issue->{'issuecode'});
-    	$issue->{'date_fin'} = format_date($df);
+    	$issue->{'date_fin'} = format_date($df,$dateformat);
    
 	if ($vencido){ 
 		$venc=1;
@@ -204,7 +209,7 @@ my $clase1='par';
 my $clase2='par';
 foreach my $res (@$reserves) {
     $res->{'clase'} = $clase;	
-    $res->{'rreminderdate'} = format_date($res->{'rreminderdate'});
+    $res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
 
 	my $author=getautor($res->{'rauthor'});  #Damian - 13/03/2007. Se corrigio para ver el nombre
         $res->{'rauthor'} = $author->{'completo'}; #del autor y no el id.

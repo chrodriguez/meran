@@ -26,8 +26,9 @@ my $catUsuarios = $input->param('catUsuarios');
 if($input->param('ini')){$ini=$input->param('ini');}
 if($input->param('fin')){$fin=$input->param('fin');}
 
-my $fechaInicio =  format_date_in_iso($ini);
-my $fechaFin    =  format_date_in_iso($fin);
+my $dateformat = C4::Date::get_date_format();
+my $fechaInicio =  format_date_in_iso($ini,$dateformat);
+my $fechaFin    =  format_date_in_iso($fin,$dateformat);
 
 my $orden= $input->param('orden') || 'firstname' ;
 
@@ -36,7 +37,8 @@ my ($cantidad,@results)= historicoPrestamos($orden,$fechaInicio,$fechaFin,$tipoI
 
 
 $msg='Prestamos ';
-if (($ini) and ($fin)){$msg.=' entre las fechas: <b>'.format_date($ini).'</b> y <b>'.format_date($fin).'</b> .'; }
+my $dateformat = C4::Date::get_date_format();
+if (($ini) and ($fin)){$msg.=' entre las fechas: <b>'.format_date($ini,$dateformat).'</b> y <b>'.format_date($fin,$dateformat).'</b> .'; }
 
 #Si se quiere crear el PDF
 if ($input->param('type') eq 'pdf') {&hitoricoPrestamosPdfGenerator($msg,@results);}

@@ -50,6 +50,7 @@ use HTML::Template;
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
@@ -122,10 +123,11 @@ if ($op eq 'add_form') {
 	    $template->param(bookfundid => $bookfundid,
 	    							adding => 1);
 	}
-	$template->param(dateformat => display_date_format(),
+	my $dateformat = C4::Date::get_date_format();
+	$template->param(dateformat => display_date_format($dateformat),
 							aqbudgetid => $dataaqbudget->{'aqbudgetid'},
-							startdate => format_date($dataaqbudget->{'startdate'}),
-							enddate => format_date($dataaqbudget->{'enddate'}),
+							startdate => format_date($dataaqbudget->{'startdate'},$dateformat),
+							enddate => format_date($dataaqbudget->{'enddate'},$dateformat),
 							budgetamount => $dataaqbudget->{'budgetamount'}
 	);
 													# END $OP eq ADD_FORM
@@ -135,8 +137,8 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount) values (?,?,?,?,?)");
 	$sth->execute($input->param('aqbudgetid'),$input->param('bookfundid'),
-						format_date_in_iso($input->param('startdate')),
-						format_date_in_iso($input->param('enddate')),
+						format_date_in_iso($input->param('startdate'),$dateformat),
+						format_date_in_iso($input->param('enddate'),$dateformat),
 						$input->param('budgetamount')
 						);
 	$sth->finish;
@@ -146,6 +148,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
+	my $dateformat = C4::Date::get_date_format();
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where aqbudgetid=?");
 	$sth->execute($aqbudgetid);
@@ -153,8 +156,8 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
 	$template->param(aqbudgetid => $data->{'aqbudgetid'});
-	$template->param(startdate => format_date($data->{'startdate'}));
-	$template->param(enddate => format_date($data->{'enddate'}));
+	$template->param(startdate => format_date($data->{'startdate'},$dateformat));
+	$template->param(enddate => format_date($data->{'enddate'},$dateformat));
 	$template->param(budgetamount => $data->{'budgetamount'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -178,6 +181,7 @@ if ($op eq 'add_form') {
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
 	my @loop_data =();
+	my $dateformat = C4::Date::get_date_format();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		#find out stats
 	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
@@ -197,8 +201,8 @@ if ($op eq 'add_form') {
 		push(@toggle,$toggle);
 		push(@bookfundid,$results->[$i]{'bookfundid'});
 		push(@bookfundname,$dataaqbookfund->{'bookfundname'});
-		push(@startdate,format_date($results->[$i]{'startdate'}));
-		push(@enddate,format_date($results->[$i]{'enddate'}));
+		push(@startdate,format_date($results->[$i]{'startdate'},$dateformat));
+		push(@enddate,format_date($results->[$i]{'enddate'},$dateformat));
 		push(@budgetamount,$results->[$i]{'budgetamount'});
 	  	if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";

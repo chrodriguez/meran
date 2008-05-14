@@ -40,6 +40,7 @@ use C4::Date;
 
 my $input = new CGI;
 
+my $dateformat = C4::Date::get_date_format();
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/memberentry2.tmpl",
 			     query => $input,
@@ -151,7 +152,7 @@ if ($delete){
 	}
 
 	#Convert dateofbirth to correct format
-	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+	$data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
 
 	my @branches;
 	my @select_branch;
@@ -223,7 +224,7 @@ if ($delete){
 # cardnumber	=> $cardnumber, Esto es lo que estaba, ahora lo cambie porque no se mostraba el cardnumber cunado editas el usuario 
 				cardnumber	=> $data->{'cardnumber'}, #esto es lo que agregue yo
 				dateofbirth	=> $data->{'dateofbirth'},
-				dateformat      => display_date_format(),
+				dateformat      => display_date_format($dateformat),
 			        modify          => $modify,
 				CGIbranch       => $CGIbranch,
 				regular         => $data->{'regular'},

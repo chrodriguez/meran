@@ -30,8 +30,9 @@ my $ini='';
 my $fin='';
 $ini=$input->param('dateselected'); # Fecha para mostrar en la impresion
 $fin=$input->param('dateselectedEnd');
-my $fechaInicio =  format_date_in_iso($ini);# Fecha para poder hacer la busqueda
-my $fechaFin    =  format_date_in_iso($fin);
+my $dateformat = C4::Date::get_date_format();
+my $fechaInicio =  format_date_in_iso($ini,$dateformat);# Fecha para poder hacer la busqueda
+my $fechaFin    =  format_date_in_iso($fin,$dateformat);
 #
 
 my $domiTotal;
@@ -70,7 +71,8 @@ $estadisticas[8]=$cantUsuReser;
 
 
 $msg="Prestamos: ";
-if (($ini) and ($fin)){$msg.='entre las fechas: '.format_date($ini).' y '.format_date($fin).'.'; }
+my $dateformat = C4::Date::get_date_format();
+if (($ini) and ($fin)){$msg.='entre las fechas: '.format_date($ini,$dateformat).' y '.format_date($fin,$dateformat).'.'; }
 
 if ($input->param('type') eq 'pdf'){#Para PDF
 

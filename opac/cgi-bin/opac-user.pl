@@ -30,14 +30,15 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
+my $dateformat = C4::Date::get_date_format();
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 $borr->{'city'}=getcitycategory($borr->{'city'});
 $borr->{'streetcity'}=getcitycategory($borr->{'streetcity'});
-$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
-$borr->{'expiry'}       = format_date($borr->{'expiry'});
-$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'},$dateformat);
+$borr->{'expiry'}       = format_date($borr->{'expiry'},$dateformat);
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'},$dateformat);
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 if ($borr->{'amountoutstanding'} > 5) {
     $borr->{'amountoverfive'} = 1;
@@ -101,24 +102,25 @@ my $sanc= hasSanctions($borrowernumber);
 foreach my $san (@$sanc) {
 if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
 			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
-$san->{'enddate'}=format_date($san->{'enddate'});
-$san->{'startdate'}=format_date($san->{'startdate'});
+$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
+$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 #
 
 foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
-    $issue->{'date_due'} = format_date($issue->{'date_due'});
+    $issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
     my $err= "Error con la fecha"; 
 
-     my $hoy=C4::Date::format_date_in_iso(ParseDate("today"));
+     my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
      my  $close = ParseDate(C4::Context->preference("close"));
-       if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-       $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));}
+     if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
+     	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
+     }
 open(INFO, ">>/tmp/debug.txt");
-   my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'})); #C4::AR::Issues
+   my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}),$dateformat); #C4::AR::Issues
 print INFO "entro a calcular vencimiento $df \n";  
-    $issue->{'date_fin'} = format_date($df);
+    $issue->{'date_fin'} = format_date($df,$dateformat);
 close(INFO);
     if (Date::Manip::Date_Cmp($df,$hoy)<0)
   	{ $venc=1;
@@ -163,8 +165,8 @@ foreach my $res (@$reserves) {
 		$res->{'color'} ='red'; 
 	}
     
-	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'});
-    	$res->{'rnotificationdate'} = format_date($res->{'rnotificationdate'});
+	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
+    	$res->{'rnotificationdate'} = format_date($res->{'rnotificationdate'},$dateformat);
 
  	my $author=getautor($res->{'rauthor'}); #llamo a getautor en C4::Search.pm
 						#paso como parametro ID de autor de la reserva

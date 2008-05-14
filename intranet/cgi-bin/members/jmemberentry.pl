@@ -76,6 +76,7 @@ for (my $i=0;$i<1;$i++){
 }
 
 my $jcardnumber=C4::Members::fixup_cardnumber("");
+my $dateformat = C4::Date::get_date_format();
 
 $template->param( member => $member,
 			firstname       => $data->{'firstname'},
@@ -93,7 +94,7 @@ $template->param( member => $member,
 			emailaddress    => $data->{'emailaddress'},
 			contactname     => $data->{'contactname'},
 			altphone        => $data->{'altphone'},
-			dateformat      => display_date_format(),
+			dateformat      => display_date_format($dateformat),
 			titleloop       => \@titledata,
 			cmemloop        => \@cmemdata );
 

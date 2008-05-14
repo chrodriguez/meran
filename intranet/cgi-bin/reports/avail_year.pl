@@ -73,6 +73,7 @@ if($input->param('fin')){$fin=$input->param('fin');}
 
 my ($cantidad,@resultsdata)= availYear($branch,$ini,$fin); 
 
+my $dateformat = C4::Date::get_date_format();
 $template->param( 
 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
@@ -80,7 +81,7 @@ $template->param(
 			branch           => $branch,
 			ini              => $ini,
                         fin              => $fin,
-			namepng		 => &format_date_in_iso($ini).&format_date_in_iso($fin)
+			namepng		 => &format_date_in_iso($ini,$dateformat).&format_date_in_iso($fin,$dateformat)
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -87,13 +87,14 @@ foreach my $branchcode (keys %$branches) {
 	push(@branchloop,\%linebranch);
 }
 
+my $dateformat = C4::Date::get_date_format();
 $template->param(	bib => $bib,
 								title => $data->{'title'},
 								author => $data->{'author'},
 								barcode => $idata->{'barcode'},
 								homebranch =>$homebranch,
 								holdingbranch => $holdingbranch,
-								lastdate =>  format_date($lastdate),
+								lastdate =>  format_date($lastdate,$dateformat),
 								count =>  $count,
 								branchloop => \@branchloop);
 
@@ -181,6 +182,7 @@ sub slashdate {
     if (not $date) {
 	return "NUNCA";
     }
+    my $dateformat = C4::Date::get_date_format();
     my ($yr, $mo, $da, $hr, $mi) = (substr($date, 0, 4), substr($date, 4, 2), substr($date, 6, 2), substr($date, 8, 2), substr($date, 10, 2));
-    return "$hr:$mi  " . format_date("$yr-$mo-$da");
+    return "$hr:$mi  " . format_date("$yr-$mo-$da",$dateformat);
 }

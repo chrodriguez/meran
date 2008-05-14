@@ -83,6 +83,7 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 	($count,$result)=mailissuesforborrower($branch,$bornum);
 	my $mensajeVencidos="";
 
+	my $dateformat = C4::Date::get_date_format();
 	for (my $i=0;$i<$count;$i++){
 
 		my $mensajeActual=C4::Context->preference("mailMensajeVencido");
@@ -94,7 +95,7 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 		$mensajeActual =~ s/UNITITLE/$unititle/;
 
 		my $date=$result->[$i]{'vencimiento'};
-		$date=format_date($date);
+		$date=format_date($date,$dateformat);
         	$mensajeActual =~ s/DATE/$date/;
 
 		#Concateno

@@ -39,6 +39,7 @@ use C4::Date;
 use C4::AR::Estadisticas;
 
 my $input = new CGI;
+my $dateformat = C4::Date::get_date_format();
 my $itemnumber=$input->param('itemnum');
 my $bibitemnum=$input->param('bibit');
 my $biblionum=$input->param('bib');
@@ -72,18 +73,18 @@ if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTA
   my %row = (
         avail=> $avail,
 	loan=>$loan,
-        date=> format_date($detail->[$i]{'date'})
+        date=> format_date($detail->[$i]{'date'},$dateformat)
         );
   push(@results, \%row);
 }
 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-my $dateSelected= $input->param('dateselected')||format_date($today);
-my $dateSelectedEnd= $input->param('dateselectedEnd')||format_date($today);
+my $dateSelected= $input->param('dateselected')||format_date($today,$dateformat);
+my $dateSelectedEnd= $input->param('dateselectedEnd')||format_date($today,$dateformat);
 
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'))||$today;
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'))||$today;
+my $fechaInicio =  format_date_in_iso($input->param('dateselected'),$dateformat)||$today;
+my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateformat)||$today;
 
 my $ini;
 my $cantR;

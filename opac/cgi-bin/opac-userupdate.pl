@@ -26,7 +26,7 @@ my ($template, $borrowernumber, $cookie)
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
-
+my $dateformat = C4::Date::get_date_format();
 # handle the new information....
 # collect the form values and send an email.
 my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
@@ -85,9 +85,9 @@ EOF
 }
 }
 
-$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
-$borr->{'expiry'}       = format_date($borr->{'expiry'});
-$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'},$dateformat);
+$borr->{'expiry'}       = format_date($borr->{'expiry'},$dateformat);
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'},$dateformat);
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 

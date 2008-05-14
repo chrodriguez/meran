@@ -75,16 +75,16 @@ my ($template, $loggedinuser, $cookie)
 
 my @loop_reading;
 
-
+my $dateformat = C4::Date::get_date_format();
 foreach my $req  (@report){
 my %request;
 
 	$request{'title'}=$req->{'title'};
         $request{'author'}=$req->{'author'};
         $request{'branchname'}=$req->{'branchname'};
-        $request{'daterequest'} = format_date($req->{'date_request'});
-        $request{'dateaquire'} = format_date($req->{'date_aquire'});
-        $request{'datecomplete'} = format_date($req->{'date_complete'});
+        $request{'daterequest'} = format_date($req->{'date_request'},$dateformat);
+        $request{'dateaquire'} = format_date($req->{'date_aquire'},$dateformat);
+        $request{'datecomplete'} = format_date($req->{'date_complete'},$dateformat);
         $request{'borrowernumber'}=$req->{'borrowernumber'};
         $request{'firstname'}=$req->{'firstname'};
         $request{'surname'}=$req->{'surname'};
