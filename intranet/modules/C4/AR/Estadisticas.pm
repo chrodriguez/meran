@@ -216,9 +216,7 @@ sub historicoPrestamos{
         $sth->execute();
 
 	my @results;
-	my $clase;
 	while (my $data=$sth->fetchrow_hashref){
-
 		$data->{'fechaPrestamo'}=format_date($data->{'fechaPrestamo'});
 		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'});
 		push(@results,$data);
@@ -232,7 +230,6 @@ sub historicoPrestamos{
 #Cuenta la cantidad de prestamos realizados durante el año que ingresa por parametro
 sub prestamosAnual{
         my ($branch,$year)=@_;
- 	my $clase='par';
         my $dbh = C4::Context->dbh;
 	my @results;
 	my $query ="SELECT month( date_due ) AS mes, count( * ) AS cantidad,SUM( renewals ) AS 
@@ -244,9 +241,7 @@ sub prestamosAnual{
 	my $sth=$dbh->prepare($query);
         $sth->execute($year);
 	while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar';}else{$clase='par'};
 		$data->{'mes'}=&mesString($data->{'mes'});
-		$data->{'clase'}=$clase;
 		push(@results,$data);
         	};
 	$query ="SELECT count( * ) AS devoluciones
@@ -294,10 +289,7 @@ sub disponibilidad{
         my $sth=$dbh->prepare($query);
 
         $sth->execute(@bind);
-        my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par'){$clase='impar'}else{$clase='par'};
-		$data->{'clase'}=$clase;
 		$data->{'date'}=format_date($data->{'date'});
 		$data->{'id'}=$data->{'author'};
 		my $autorPPAL= &getautor($data->{'author'});
@@ -439,7 +431,6 @@ sub cantRegFechas{
 sub registroEntreFechas{
         my ($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$fin,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
         my $dbh = C4::Context->dbh;
-        my $clase='par';
 	my @bind;
         my $query="SELECT idModificacion,nota,operacion,fecha,
 		   responsable,numero,tipo,surname,firstname
@@ -499,9 +490,7 @@ sub registroEntreFechas{
 	my $IdModificacion;
 
         while (my $data=$sth->fetchrow_hashref){
-                if ($clase eq 'par') {$clase='impar';} else {$clase='par'};
-		$data->{'fecha'}=format_date($data->{'fecha'});
- 	        $data->{'clase'}=$clase;
+		$data->{'fecha'}=format_date($data->{'fecha'});;
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};	
 
                 push(@results,$data);
@@ -525,7 +514,6 @@ sub cantRegDiarias{
 sub registroActividadesDiarias{
 	my ($orden,$fecha,$ini,$cantR)=@_;
         my $dbh = C4::Context->dbh;
- 	my $clase='par';
         my $query="SELECT operacion,fecha,responsable,numero,tipo,surname,firstname
 		   FROM modificaciones INNER JOIN borrowers ON
 		   (modificaciones.responsable=borrowers.cardnumber) 
@@ -536,9 +524,7 @@ sub registroActividadesDiarias{
         $sth->execute($fecha,$orden);
 	my @results;
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
 		$data->{'fecha'}=format_date($data->{'fecha'});
-		$data->{'clase'}=$clase;
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
                 push(@results,$data);
         }
@@ -674,7 +660,6 @@ sub cantidadUsuarios{
 #Usuarios de un branch dado 
 #Damian - 31/05/2007 - Se agrego para difereciar usuarios que usan y no usan la biblioteca
 sub usuarios{
-        my $clase='par';
         my ($branch,$orden,$ini,$fin,$anio,$usos,$categ,@chck)=@_;
 	my $dbh = C4::Context->dbh;
   	my @results;
@@ -712,13 +697,11 @@ sub usuarios{
         my $sth=$dbh->prepare($query);
         $sth->execute(@bind,@bind2);
 	while (my $data=$sth->fetchrow_hashref){
-                if ($clase eq 'par'){$clase='impar';}else {$clase='par'};
 		if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
 		if ($data->{'emailaddress'} eq "" ){
 					$data->{'emailaddress'}='-';
 					$data->{'ok'}=1;
 				};
-                $data->{'clase'}=$clase;
 		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'});
 		$data->{'city'}=C4::Search::getcitycategory($data->{'city'});
                 push(@results,$data);
@@ -890,7 +873,6 @@ sub cantidadReservas{
 sub reservas{
         my ($branch,$orden,$ini,$fin,$tipo)=@_;
         my $dbh = C4::Context->dbh;
-        my $clase='par';
         my @results;
         my $query ="select surname, firstname, cardnumber, emailaddress, reminderdate,
 		    barcode, reservedate, reserves.itemnumber as itemnumber, 
@@ -914,7 +896,6 @@ sub reservas{
         my $sth=$dbh->prepare($query);
 	 $sth->execute($orden);
         while (my $data=$sth->fetchrow_hashref){
- 		if ($clase eq 'par') {$clase ='impar';} else {$clase='par'};
 		$data->{'reminderdate'}=format_date($data->{'reminderdate'});
 		$data->{'reservedate'}=format_date($data->{'reservedate'});
 		if ($data->{'itemnumber'} eq "" ){$data->{'itemnumber'}='-' };
@@ -922,7 +903,6 @@ sub reservas{
 					$data->{'emailaddress'}='-';
 					$data->{'mail'}=1;
 				 };
-		$data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (@results);
@@ -931,7 +911,6 @@ sub reservas{
 sub biblioitems{
 
   my ($orden,$ini,$fin)=@_;
-	my $clase='par';
         my $dbh = C4::Context->dbh;
         my @results;
         my $query ="select  *
@@ -946,11 +925,9 @@ sub biblioitems{
 		if ($data->{'seriesitle'} eq "" ){
                         $data->{'seriestitle'}='-';}
 		if ($data->{'place'} eq "" ){
-                        $data->{'place'}='-';}
-		if ($clase eq 'par'){$clase='impar'} else {$clase='par'};
+                        $data->{'place'}='-';};
 		if ($data->{'publicationyear'} eq "" ){
                         $data->{'publicationyear'}='-';}
-                $data->{'clase'}=$clase;
                 push(@results,$data);
 	}
         return (@results);
@@ -973,7 +950,6 @@ sub biblio{
   my ($orden,$ini,$fin)=@_;
         my $dbh = C4::Context->dbh;
         my @results;
-        my $clase='par';
         my $query ="select  *
                     from biblio
                     order by($orden)
@@ -992,10 +968,6 @@ sub biblio{
 			 $data->{'author'}= $autorPPAL->{'apellido'};
 		         $data->{'authorNombre'}= $autorPPAL->{'nombre'};
 			}
-		
-		#para que muestre las filas intercalando el color	
-                if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-		$data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (@results);
@@ -1014,7 +986,6 @@ sub cantBiblio{
 }
 
 sub items{
-  my $clase='par';
   my ($orden,$ini,$fin)=@_;
         my $dbh = C4::Context->dbh;
         my @results;
@@ -1028,9 +999,6 @@ sub items{
 		if ($data->{'barcode'} eq "" ){
                         $data->{'barcode'}='-';
 		}
-		#16/03/07 Miguel - No mostraba las filas con el color de  forma intercalada
-		if ($clase eq 'par'){$clase='impar'} else {$clase='par'};
-		$data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (@results);
@@ -1038,19 +1006,16 @@ sub items{
 }
 
 sub cantidadItem{
-
         my $dbh = C4::Context->dbh;
         my $query ="select  count(*)
                     from items";
         my $sth=$dbh->prepare($query);
         $sth->execute();
         return($sth->fetchrow_array);
-
 }
 
 
 sub cantidadTipos{
-                                                                                                                   
         my $dbh = C4::Context->dbh;
         my @results;
         my $query ="SELECT count( * ) AS cantidad, itemtypes.description AS descripcion
@@ -1059,27 +1024,20 @@ sub cantidadTipos{
 		    GROUP BY itemtypes.itemtype";
         my $sth=$dbh->prepare($query);
         $sth->execute();
-        my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-		$data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (@results);
-}                                                                                                                         
+}
 
 sub cantidadAnaliticas{
-                                                                                                                             
         my $dbh = C4::Context->dbh;
         my @results;
-	my $clase='par';
         my $query ="SELECT count( * ) AS cantidad
                     FROM biblioanalysis";
         my $sth=$dbh->prepare($query);
         $sth->execute();
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-		$data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (@results);
@@ -1098,10 +1056,7 @@ sub itemtypesReport{
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
- 	my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-                $data->{'clase'}=$clase; 
                 push(@results,$data);
         }
         return (scalar(@results),@results);
@@ -1119,10 +1074,7 @@ sub levelsReport{
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
-        my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-    	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-                $data->{'clase'}=$clase;
                 push(@results,$data);
         }
         return (scalar(@results),@results);
@@ -1138,11 +1090,7 @@ sub availYear {
         my $sth=$dbh->prepare($query);
         $sth->execute($branch,format_date_in_iso($ini),format_date_in_iso($fin));
         my @results;
-        my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-                $data->{'clase'}=$clase;
-
                 push(@results,$data);
         }
         return (scalar(@results),@results);
@@ -1350,12 +1298,7 @@ sub historialReservas {
   #proceso los datos
   my @result;
   my $i=0;
-  my $clase;
   while (my $data=$sth->fetchrow_hashref){
-
-	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
-        $data->{'clase'}=$clase;
-
 	if (( $data->{'type'} eq 'reserve' )||( $data->{'type'} eq 'notification' )) {
 		$data->{'estado'}= 'Otorgada';
 		$data->{'fechaVto'}= format_date($data->{'fechaVto'});
@@ -1383,7 +1326,6 @@ sub historicoCirculacion(){
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
- 	my $clase='par';
 	my @bind;
 	my $query="";
 	my $cant=0;
@@ -1448,7 +1390,6 @@ sub historicoCirculacion(){
 	my @results;
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'fecha'}=format_date($data->{'date'});
-		$data->{'clase'}=$clase;
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};
@@ -1462,7 +1403,6 @@ sub historicoSanciones(){
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
- 	my $clase='par';
 	my @bind;
 	my $query="";
 	my $cant=0;
@@ -1521,8 +1461,6 @@ sub historicoSanciones(){
 	my @results;
 
         while (my $data=$sth->fetchrow_hashref){
-		if ($clase eq 'par') {$clase='impar';}else {$clase='par'};
-		$data->{'clase'}=$clase;
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'respCompleto'}=$data->{'surnameResp'}.", ".$data->{'firstnameResp'};
 		$data->{'userCompleto'}=$data->{'surnameBor'}.", ".$data->{'firstnameBor'};
@@ -1563,10 +1501,7 @@ sub userCategReport(){
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
- 	my $clase='par';
         while (my $data=$sth->fetchrow_hashref){
-	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-                $data->{'clase'}=$clase;
 		$data->{'categoria'}=&C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
                 push(@results,$data);
         }
