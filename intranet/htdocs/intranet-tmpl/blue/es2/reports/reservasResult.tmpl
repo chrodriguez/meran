@@ -4,7 +4,7 @@ La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
 </p>
 <br>
 <!-- TMPL_IF NAME="ok2" -->
-	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='ant' -->)"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='ant' -->)"><img src="<!-- TMPL_VAR name='themelang' -->/images/numbers/ant.gif" border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
@@ -16,12 +16,12 @@ La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='sig' -->)"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='sig' -->)"><img src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border=0></a>
 <!-- /TMPL_IF -->
 
 
 
-<table border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
 
@@ -37,39 +37,35 @@ La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
 	</tr>
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr align='center'>
-		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td height=25 >&nbsp;</td>
+		<td class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=firstname --> 
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=cardnumber --> 
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<!-- TMPL_IF NAME="mail" --> 
 				<!-- TMPL_VAR NAME=emailaddress -->
 			<!-- TMPL_ELSE -->
 				<a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
 			<!-- /TMPL_IF -->
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=reservedate -->
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=reminderdate -->
 		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+		<td class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
 		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+		<td height=25 >&nbsp;</td>
 	</tr>
 <!-- /TMPL_LOOP -->
-	<tr valign=bottom>
-        	<td class="lineafinaltabla"  align="left" colspan="8"></td>
-	</tr>
-
 </table>
 
 <br>

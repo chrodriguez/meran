@@ -22,7 +22,7 @@
 <!-- /TMPL_IF -->
 <br><br>
 
-<table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
+<table id="tablaResult" cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 
 	<tr height="24" class="tablaresultadoTitle">
 	<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
@@ -40,15 +40,15 @@
 	</tr>
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr align="center">
-  	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-  	<td align="left" class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=author --></td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=bulk --> </td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=barcode --> </td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=number --> </td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=publicationyear --> </td>
-  	<td class="<!-- TMPL_VAR NAME='clase'-->"> <!-- TMPL_VAR NAME=date --> </td>  
-  	<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+  	<td height=25>&nbsp;</td>
+  	<td align="left"> <!-- TMPL_VAR NAME=author --></td>
+  	<td> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
+  	<td> <!-- TMPL_VAR NAME=bulk --> </td>
+  	<td> <!-- TMPL_VAR NAME=barcode --> </td>
+  	<td> <!-- TMPL_VAR NAME=number --> </td>
+  	<td> <!-- TMPL_VAR NAME=publicationyear --> </td>
+  	<td> <!-- TMPL_VAR NAME=date --> </td>  
+  	<td height=25>&nbsp;</td>
        </tr>
 <!-- /TMPL_LOOP -->
        <tr valign=bottom>

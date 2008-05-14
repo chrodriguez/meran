@@ -41,47 +41,41 @@
 <!-- TMPL_LOOP Name="results" -->
 <tr>
         <td width="1%">&nbsp;</td>
-        <td  align=left>
+        <td  align=left class="inputFontNormal">
 		<!-- TMPL_VAR Name="barcode" -->
 	</td>
 	<!-- falta que se ve el campo del autor -->
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR NAME="author" -->
 	</td>
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR NAME="title" ESCAPE=HTML-->
 		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
 				<!-- TMPL_VAR NAME="unititle" -->
 		<!-- /TMPL_IF -->
 	</td>
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR NAME="number" -->
 	</td>
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR NAME="publisher" -->
 	</td>
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR NAME="publicationyear" --> 
 	</td>
-	<td align="center">
+	<td align="center" class="inputFontNormal">
 		<!-- TMPL_VAR Name="bulk" -->
 	</td>
 	<td width="1%">&nbsp;</td>
 </tr>
 
 <!-- /TMPL_LOOP -->
-<tr>
-	<td colspan="8">&nbsp;</td>
-</tr>
-<tr valign=bottom>
-	<td class="lineafinaltabla"  align="left" colspan="8"></td>
-</tr>
-
 </table>
+
 <br><br>
 <center>
-<a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->" class="inputFontNormal" onMouseOut="swap('planillas','<!-- TMPL_VAR NAME="themelang" -->/images/plantilla.png')" onMouseOver="swap('planillas','<!-- TMPL_VAR NAME="themelang" -->/images/plantillabis.png')" >
-<input  name="planillas" id="planillas" alt="Generar planilla" type="image" value="Generar planilla"  src="<!-- TMPL_VAR NAME="themelang" -->/images/plantilla.png" border="0" title="Generar planilla" >
+<a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->" class="inputFontNormal" onMouseOut="swap('planillas','<!-- TMPL_VAR NAME='themelang' -->/images/plantilla.png')" onMouseOver="swap('planillas','<!-- TMPL_VAR NAME='themelang' -->/images/plantillabis.png')" >
+<input  name="planillas" id="planillas" alt="Generar planilla" type="image" value="Generar planilla"  src="<!-- TMPL_VAR NAME='themelang' -->/images/plantilla.png" border="0" title="Generar planilla" >
 </a>
 </center>
 

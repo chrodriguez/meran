@@ -6,6 +6,7 @@
 <script language="javascript">
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
@@ -28,6 +29,7 @@ function consultar(orden,iniPag){
 		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
 				HiddeState();
 			}
 	})

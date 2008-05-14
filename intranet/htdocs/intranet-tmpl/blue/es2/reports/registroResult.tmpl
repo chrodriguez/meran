@@ -19,9 +19,9 @@
 <!-- /TMPL_IF -->
 
 
-<table border=0 cellspacing=0 cellpadding=0 width="100%">
+<table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<th>Usuario</th>
 		<th>Fecha</th>
 		<th>Operaci&oacute;n</th>
@@ -29,35 +29,32 @@
 		<th>N&uacute;mero</th>
 		<th>Nota</th>
 		<th>Agregar nota</th>
-		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	
   	<tr align='center'>
-  		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=nomCompleto --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=fecha --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=operacion --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=tipo --></td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href=/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->><!-- TMPL_VAR NAME=numero --></a></td>
+  		<td height=25 >&nbsp;</td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=nomCompleto --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=fecha --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=operacion --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=tipo --></td>
+		<td ><a class="inputFontNormal" href="/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->"><!-- TMPL_VAR NAME=numero --></a></td>
 		
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
+  		<td class="inputFontNormal"> 
 			<textarea class="inputFontNormal" id="<!-- TMPL_VAR NAME=idModificacion -->" name="notas2" cols="20" rows="6"><!-- TMPL_VAR NAME=nota -->
 			</textarea>
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" > 
+  		<td> 
 			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('fecha',<!-- TMPL_VAR NAME=actual -->,'<!-- TMPL_VAR NAME=idModificacion -->')"> 
 		</td>
- 		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+ 		<td height=25 >&nbsp;</td>
  	</tr>
 	
 <!-- /TMPL_LOOP -->
 
- 	<tr valign=middle>
-        	<td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
 </table>
 
 </center>

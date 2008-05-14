@@ -17,29 +17,29 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 
 <!-- TMPL_LOOP Name="shelvesloopshelves" -->
         <tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->" width="50%">
-                        <a  class="<!-- TMPL_VAR Name="clase" -->" href="/cgi-bin/koha/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelfnumber" -->">
+        <td width="1%">&nbsp;</td>
+        <td  align=left width="50%" class="inputFontNormal">
+                        <a  href="/cgi-bin/koha/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelfnumber" -->">
 			<!-- TMPL_VAR Name="shelfname" --></a>
 	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+	<td width="1%" align="center" class="inputFontNormal">
                          <!-- TMPL_VAR NAME="titulos" -->
         </td>
 
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+	<td width="1%" align="center" class="inputFontNormal">
 			 <!-- TMPL_VAR NAME="ejemplares" -->
 	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+	<td width="1%" align="center" class="inputFontNormal">
                         <!-- TMPL_VAR NAME="unavailable" -->
         </td>
-   	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+   	<td width="1%" align="center" class="inputFontNormal">
                          <!-- TMPL_VAR NAME="forloan" -->
         </td>
-   	<td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+   	<td width="1%" align="center" class="inputFontNormal">
                          <!-- TMPL_VAR NAME="notforloan" --> 
         </td>
 
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
+        <td width="1%">&nbsp;</td>
         </tr>
 <!-- /TMPL_LOOP -->
 
@@ -51,26 +51,26 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
         </tr>
 
 	<tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->">            <b>TOTALES</b>
+        <td width="1%">&nbsp;</td>
+        <td  align=left class="inputFontNormal">            <b>TOTALES</b>
 	</td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">  <!-- TMPL_VAR NAME="titulostot" -->
+        <td width="1%" align="center" class="inputFontNormal">  <!-- TMPL_VAR NAME="titulostot" -->
         </td>
 
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+        <td width="1%" align="center" class="inputFontNormal">
         <!-- TMPL_VAR NAME="ejemplarestot" -->
         </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+        <td width="1%" align="center" class="inputFontNormal">
         <!-- TMPL_VAR NAME="unavailabletot" -->
         </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+        <td width="1%" align="center" class="inputFontNormal">
         <!-- TMPL_VAR NAME="forloantot" -->
         </td>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%" align="center">
+        <td width="1%" align="center" class="inputFontNormal">
         <!-- TMPL_VAR NAME="notforloantot" -->
         </td>
 
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
+        <td width="1%">&nbsp;</td>
         </tr>
 
 

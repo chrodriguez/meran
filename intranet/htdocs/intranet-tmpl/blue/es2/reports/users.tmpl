@@ -7,7 +7,7 @@
 
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
-
+<!-- TMPL_INCLUDE NAME="util.js" -->
 
 function buscarChecked(){
 	var str="";
@@ -31,6 +31,7 @@ function consultar(orden,ini){
 		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
 				HiddeState();
 			}
 	})

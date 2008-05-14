@@ -25,7 +25,7 @@
 
 </center>
 
-<table border="0" cellspacing="0" cellpadding="0"  width="100%">
+<table id="tablaResult" border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
 
@@ -43,22 +43,20 @@
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr>
-		<td class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=surname --> </td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=streetaddress --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=cardnumber --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=city --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=phone --></td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> <!-- TMPL_VAR NAME=categoria --></td>
- 		<td  class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+		<td>&nbsp;</td>
+		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=surname --> </td>
+		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=streetaddress --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=cardnumber --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=city --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=phone --></td>
+  		<td class="inputFontNormal"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
+  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=categoria --></td>
+ 		<td>&nbsp;</td>
   	</tr>
 
 <!-- /TMPL_LOOP -->
-
-
 	<tr>
 		<td colspan="11">&nbsp;</td>
 	</tr>
