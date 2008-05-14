@@ -168,7 +168,7 @@ sub historicoPrestamos{
 		$tipoDePrestamoSQL= 'and ISST.issuecode = "'.$tipoPrestamo.'"';
 	}	
 
-	my $tipoDeItemSQL = '';;
+	my $tipoDeItemSQL = '';
 	if ($tipoItem ne "-1"){
 		$tipoDeItemSQL= 'and ITT.itemtype = "'.$tipoItem.'"';
 	}
@@ -177,6 +177,7 @@ sub historicoPrestamos{
 	if ($catUsuario ne "-1"){
 		$catUsuarioSQL= 'and C.categorycode = "'.$catUsuario.'"';
 	}
+
 	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, IT.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
 
 	my $queryFrom= " 	From issues I, borrowers B, categories C, items IT, biblioitems BBI, 

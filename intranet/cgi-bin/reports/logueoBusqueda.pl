@@ -5,15 +5,11 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 use HTML::Template;
-use C4::AR::Estadisticas;
 use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/logueoBusqueda.tmpl",
 			     query => $input,
@@ -24,66 +20,6 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 
-#Fechas
-my $fechaIni='';
-my $fechaFin='';
-my $catUsuarios="SIN SELECCIONAR";
-
-if($input->param('fechaIni')){$fechaIni=$input->param('fechaIni');}
-if($input->param('fechaFin')){$fechaFin=$input->param('fechaFin');}
-if($input->param('catUsuarios')){$catUsuarios= $input->param('catUsuarios');}
-
-
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-} else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-#FIN inicializacion
-
-my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios);#historial de busquedas desde OPAC
-
-#para la zebra
-my $num= 1;
-foreach my $res (@resultsdata) {
-	((($num % 2) && ($res->{'clase'} = 'par' ))|| ($res->{'clase'}='impar'));
-    	$num++;
-}
-
-my @numeros=armarPaginas($cantidad);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		);
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pagActual+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pagActual-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
-}
-
-
-#************************************ prueba de paginador *******************************************
-
-my ($template, $ini, $cantRenglones)=C4::AR::Utilidades::crearPaginador($template, $cantidad, $ini);
-#************************************ prueba de paginador *******************************************
 
 #Cargo todos los Select
 #*********************************Select de Categoria de Usuarios**********************************
@@ -112,14 +48,5 @@ my $CGISelectCatUsuarios=CGI::scrolling_list(	-name      => 'catUsuarios',
 #Se lo paso al template
 $template->param(selectCatUsuarios => $CGISelectCatUsuarios);
 #*********************************Fin Select de Categoria de Usuarios******************************
-
-
-$template->param( 	resultsloop      => \@resultsdata,
-			cantidad         => $cantidad,
-			numeros		 => \@numeros,
-			fechaIni	=> $fechaIni,
-			fechaFin 	=> $fechaFin,
-			catUsuarios	=> $catUsuarios,
-		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
