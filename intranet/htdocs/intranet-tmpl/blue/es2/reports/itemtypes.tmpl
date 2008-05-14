@@ -1,43 +1,52 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script>
+<!-- TMPL_INCLUDE NAME="util.js" -->
 function hacerSubmit(){
         document.branches.submit();
-        }
+}
+
+$(document).ready( function() {
+		zebra("tablaResult");
+});
 </script>
 
-<center><table border=0 cellspacing=0 cellpadding=2>
-<th>Seleccione una unidad de informaci&oacute;n :</th>
-<th><form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
-        <!-- TMPL_VAR NAME=unidades  --></form></th>
+<center>
+<table border=0 cellspacing=0 cellpadding=2>
+	<th>Seleccione una unidad de informaci&oacute;n :</th>
+	<th>
+		<form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
+        	<!-- TMPL_VAR NAME=unidades  -->
+		</form>
+	</th>
 </table>
 
 <br><br>
-<center><table border=0 cellspacing=0 cellpadding=0 width="40%">
- <td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-<th class="tablaresultadoTitle">Tipos de documentos</th>
-<th class="tablaresultadoTitle">Cantidad</th>
- <td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+
+
+<table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="40%">
+ 	<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+	<th class="tablaresultadoTitle">Tipos de documentos</th>
+	<th class="tablaresultadoTitle">Cantidad</th>
+ 	<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
-  <tr align='center'>
-   <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>	
-  <td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=description --> </td>
-  <td align="right" class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=cant --> </td>
- <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
- </tr>
+  	<tr align='center' class="inputFontNormal">
+   		<td height=25>&nbsp;</td>	
+  		<td> <!-- TMPL_VAR NAME=description --> </td>
+  		<td> <!-- TMPL_VAR NAME=cant --> </td>
+ 		<td height=25>&nbsp;</td>
+ 	</tr>
 <!-- /TMPL_LOOP -->
 </table>
+
 <br><br>
-<!--               <img src="<!-- TMPL_VAR NAME='themelang' -->/images/stats/itemtypepie<!-- TMPL_VAR NAME='branch' -->.png" alt="Torta" border=0 >  -->
-<!-- <br> -->
-<!--         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/stats/itemtypehbars<!-- TMPL_VAR NAME='branch' -->.png" alt="Barras Horizontales" border=0 > -->
-<!-- <br> -->
 
 				<!-- Scripts con los graficos en flash -->
 <!-- TMPL_VAR NAME='torta'  -->
 <br>
 <!-- TMPL_VAR NAME='barras'  -->
 <br>
-
+</center>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

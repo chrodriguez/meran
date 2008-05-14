@@ -1,6 +1,6 @@
 <br><br>
 <br><br>
-<p class=inputFontNormal>La cantidad de ejemplares en estado <b><!-- TMPL_VAR NAME=availD --></b>  es: <!-- TMPL_VAR NAME=cantidad --></p>
+<p class="inputFontNormal">La cantidad de ejemplares en estado <b><!-- TMPL_VAR NAME=availD --></b>  es: <!-- TMPL_VAR NAME=cantidad --></p>
 <br>
 
 <!-- TMPL_IF NAME="ok2" -->
@@ -41,19 +41,17 @@
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr align="center">
   	<td height=25>&nbsp;</td>
-  	<td align="left"> <!-- TMPL_VAR NAME=author --></td>
-  	<td> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
-  	<td> <!-- TMPL_VAR NAME=bulk --> </td>
-  	<td> <!-- TMPL_VAR NAME=barcode --> </td>
-  	<td> <!-- TMPL_VAR NAME=number --> </td>
-  	<td> <!-- TMPL_VAR NAME=publicationyear --> </td>
-  	<td> <!-- TMPL_VAR NAME=date --> </td>  
+  	<td align="left" class="inputFontNormal"> <!-- TMPL_VAR NAME=author --></td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=bulk --> </td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=barcode --> </td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=number --> </td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=publicationyear --> </td>
+  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=date --> </td>  
   	<td height=25>&nbsp;</td>
        </tr>
 <!-- /TMPL_LOOP -->
-       <tr valign=bottom>
-       		<td class="lineafinaltabla"  align="left" colspan="9"></td>
-       </tr>
+
 	<!--Botones del fondo -->
        <tr align="center">
 	 <td colspan="9">
