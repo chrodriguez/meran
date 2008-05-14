@@ -18,10 +18,8 @@ my $desde=$input->param('desde');
 my $hasta=$input->param('hasta');
 my $orden=$input->param('orden');
 
-my $theme = $input->param('theme') || "default";
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/inventoryResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

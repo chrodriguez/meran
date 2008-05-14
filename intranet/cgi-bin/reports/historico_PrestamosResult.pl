@@ -22,12 +22,9 @@ my $input = new CGI;
 my $tipoItem = $input->param('tiposItems');
 my $tipoPrestamo = $input->param('tipoPrestamos');
 my $catUsuarios = $input->param('catUsuarios');
-
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
+ 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/historico_PrestamosResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

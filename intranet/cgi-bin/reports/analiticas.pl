@@ -28,11 +28,8 @@ use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/analiticas.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

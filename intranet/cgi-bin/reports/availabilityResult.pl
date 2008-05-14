@@ -31,11 +31,8 @@ use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/availabilityResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -102,9 +99,13 @@ if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pa
 }
 
 my $availD;
-if ($avail eq 0){$availD='Disponible';}else{	my $av=getAvail($avail);
-						if ($av){$availD=$av->{'description'};}
-						}
+if ($avail eq 0){
+	$availD='Disponible';
+}
+else{
+	my $av=getAvail($avail);
+	if ($av){$availD=$av->{'description'};}
+}
 
 $template->param( 
 			resultsloop      => \@resultsdata,

@@ -58,9 +58,8 @@ foreach my $she (keys %shelflist) {
 	if ($shelf eq ''){$shelf=$she; }
 }
 
-#Miguel - 03-04-07 - Le agrego una opcion para que le indique al usuario que no se ha seleccionado nada aùn, ver si queda
+
 push @select_shelfs, 'SIN SELECCIONAR';
-                                                                                                                             
 my $CGIshelf=CGI::scrolling_list(      -name      => 'shelf',
                                         -id        => 'shelf',
                                         -values    => \@select_shelfs,

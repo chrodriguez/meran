@@ -30,11 +30,8 @@ use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/browserItem.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -49,13 +46,12 @@ my @select_branch;
 my %select_branches;
 my $branches=getbranches();
 foreach my $branch (keys %$branches) {
-
         push @select_branch, $branch;
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
 my $branch= C4::Context->preference('defaultbranch');
-                                                                                                                             
+
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',
                                         -values    => \@select_branch,

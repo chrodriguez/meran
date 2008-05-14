@@ -29,9 +29,7 @@ if($input->param('fin')){$fin=$input->param('fin');}
 my $fechaInicio =  format_date_in_iso($ini);
 my $fechaFin    =  format_date_in_iso($fin);
 
-my $orden;
-if ($input->param('orden') eq ""){$orden='firstname'}
-				else {$orden=$input->param('orden')};
+my $orden= $input->param('orden') || 'firstname' ;
 
 #Traigo los prestamos
 my ($cantidad,@results)= historicoPrestamos($orden,$fechaInicio,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);

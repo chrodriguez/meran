@@ -32,11 +32,8 @@ use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_templateexpr_and_user({template_name => "reports/reservasResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -45,11 +42,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my  $branch=$input->param('branch');
-my $orden;
-
-if ($input->param('orden') eq ""){
-         $orden='cardnumber'}
-else {$orden=$input->param('orden')};
+my $orden = $input->param('orden') || 'cardnumber';
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $ini;
@@ -92,13 +85,10 @@ if ( $cant > $cantR ){
  				ant	=> $ant)}	  
 }
 
-$template->param( 	#tipoReserva      => $tipoReserva,
+$template->param(
 			resultsloop      => \@resultsdata,
 			cantidad         => $cant,
-			#branch		 => $branch,
 			numeros		 => \@numeros,
-			#orden		 => $orden,
-			#ini		 => $pagActual
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

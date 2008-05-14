@@ -22,11 +22,8 @@ my @select_catUsuarios_Values2;
 #Funcion de C4::Koha, traer las categorias de los usuarios
 my (@select_catUsuarios_Values2,%catUsuarios)= C4::Koha::borrowercategories(); 
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/historico_Prestamos.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -41,14 +38,7 @@ if ($input->param('orden') eq ""){
 	 $orden='firstname'}
 else {$orden=$input->param('orden')};
 
-=item
-#Inicializo avail
-my $avail;
-if ($input->param('avail') eq ""){
-         $avail=1}
-else {$avail=$input->param('avail')};
-#fin
-=cut
+
 
 #Cargo todos los Select
 #*********************************Select de Categoria de Usuarios**********************************
@@ -56,8 +46,7 @@ my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
 #Funcion de C4::Koha, traer las categorias de los usuarios
 #llamo a la funcion borrowercategories() de C4::Koha
-my ($array,$hasheado)=&borrowercategories(); 
-# push @select_catUsuarios_Values, 'SIN SELECCIONAR';
+my ($array,$hasheado)=&borrowercategories();
 
 push @select_catUsuarios_Values, '-1';
 $select_catUsuarios_Labels{'-1'}= 'SIN SELECCIONAR';
@@ -87,8 +76,6 @@ $template->param(selectCatUsuarios => $CGISelectCatUsuarios);
 my @select_tiposPrestamos_Values;
 my %select_tiposPrestamos_Labels;
 my @tipoDePrestamos=&IssuesType(); #Funcion de C4::AR::Issues, traer los tipos de prestamos
-
-# push @select_tiposPrestamos_Values, 'SIN SELECCIONAR';
 
 push @select_tiposPrestamos_Values, '-1';
 $select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';
@@ -128,7 +115,6 @@ my $hash;
 my $value = "";
 my $key = "";
 
-# push @select_tiposItems_Values, 'SIN SELECCIONAR';
 push @select_tiposItems_Values, '-1';
 $select_tiposItems_Labels{'-1'}= 'SIN SELECCIONAR';
 

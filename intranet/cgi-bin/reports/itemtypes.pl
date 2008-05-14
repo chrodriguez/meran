@@ -31,11 +31,8 @@ use C4::AR::StatGraphs;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/itemtypes.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -55,7 +52,7 @@ foreach my $branch (keys %$branches) {
 }
 
 my $branch= C4::Context->preference('defaultbranch');
-                                                                                                                             
+
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',
                                         -values    => \@select_branch,
@@ -70,8 +67,6 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 my ($cantidad,@resultsdata)= itemtypesReport($branch); 
 my $torta=&itemtypesPie($branch,$cantidad, @resultsdata);
 my $barras=&itemtypesHBars($branch,$cantidad, @resultsdata);
-
-
 
 $template->param( 
 			resultsloop      => \@resultsdata,

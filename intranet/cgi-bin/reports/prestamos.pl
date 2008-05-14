@@ -42,7 +42,6 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-
 #Por los branches
 my @branches;
 my @select_branch;
@@ -63,88 +62,10 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -size      => 1,
                                  );
 #Fin: Por los branches
-=item
-my $orden;
-if ( $input->param('orden') eq ""){
-	$orden='cardnumber'}
-else {$orden=$input->param('orden')};
-
-my $estado=$input->param('estado')|| 'TO';
-
-#Fechas 
-my $begindate = $input->param('begindate') || "";
-my $enddate = $input->param('enddate') || "";
-
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-if ($input->param('renglones')){$cantR=$input->param('renglones');}
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-} else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-#FIN inicializacion
-
-my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado,$begindate,$enddate);#Prestamos sin devolver (vencidos y no vencidos)
-
-
-my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
-# my $cantidad=cantidadPrestamos($branch,$estado); se saco ya que la otra funcion toma cuenta todos los registro dependiendo el estado del prestamos.
-
-if ($cantR ne 'todos') {
-my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
-
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		);
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pagActual+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pagActual-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
-}
-
-$template->param( 	numeros		 => \@numeros,
-			ini		 => $pagActual);
-}
-
-
-# Poner el estilo
-  my $clase='par';
-foreach my $res (@resultsdata){
-  if ($clase eq 'par'){$clase='impar';} else {$clase='par';};
-		$res->{'clase'}=$clase;
- }
-=cut
 
 $template->param( 	
-# 			estado		 => $estado,
-# 			resultsloop      => \@resultsdata,
 			unidades         => $CGIbranch,
-# 			cantidad         => $cantidad,
-# 			branch           => $branch,
-# 			orden		 => $orden,
-# 			renglones        => $cantR,
 			msg		 => $msg,
-# 			planilla	 => $planilla,
-# 			begindate	 => $begindate,
-# 			enddate		 => $enddate
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

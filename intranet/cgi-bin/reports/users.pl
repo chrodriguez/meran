@@ -32,11 +32,8 @@ use C4::Koha;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/users.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -77,8 +74,6 @@ my $CGIcateg=CGI::scrolling_list(    -name      => 'categoria',
                                      -labels    => $labelsCateg,
                                      -size      => 1,
                                  );
-
-
 #Para los a�os
 my @date=localtime;
 my $year_Default= $date[5]+1900;
@@ -93,7 +88,6 @@ my $years=CGI::scrolling_list(  -name      => 'year',
                                 -size      => 1,
                                  );
 #fin a�os
-
 
 $template->param( 
 			unidades         => $CGIbranch,

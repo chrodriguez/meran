@@ -36,9 +36,9 @@ my $input = new CGI;
 
 my  $shelf=$input->param('shelf');
 my $nameShelf=GetShelfName('',$shelf);
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/estantesResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

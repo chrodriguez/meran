@@ -31,8 +31,6 @@ use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
-my $msg = $input->param('msg') || "";
-
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/prestamosResult.tmpl",
 			     query => $input,
@@ -68,7 +66,7 @@ my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado,$begin
 
 
 my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
-# my $cantidad=cantidadPrestamos($branch,$estado); se saco ya que la otra funcion toma cuenta todos los registro dependiendo el estado del prestamos.
+
 
 if ($cantR ne 'todos') {
 my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
@@ -102,15 +100,9 @@ $template->param( 	numeros		 => \@numeros,
 $template->param( 	
 			estado		 => $estado,
 			resultsloop      => \@resultsdata,
-# 			unidades         => $CGIbranch,
 			cantidad         => $cantidad,
-# 			branch           => $branch,
-# 			orden		 => $orden,
 			renglones        => $cantR,
-# 			msg		 => $msg,
 			planilla	 => $planilla,
-# 			begindate	 => $begindate,
-# 			enddate		 => $enddate
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -33,7 +33,6 @@ my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/historicoSanciones.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -117,7 +116,6 @@ $sth->execute();
 my @select_tiposPrestamos_Values;
 my %select_tiposPrestamos_Labels;
 
-# push @select_tiposPrestamos_Values, 'SIN SELECCIONAR';
 push @select_tiposPrestamos_Values, '-1';
 $select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';
 my @result;

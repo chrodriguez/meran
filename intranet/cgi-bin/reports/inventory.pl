@@ -14,10 +14,8 @@ use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/inventory.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -29,7 +27,6 @@ my ($template, $loggedinuser, $cookie)
 my $branch=$input->param('branch');
 ($branch ||($branch=C4::Context->preference("defaultbranch")));
 #
-
 
 my $MIN=C4::Circulation::Circ2::getminbarcode($branch);
 my $MAX=C4::Circulation::Circ2::getmaxbarcode($branch);

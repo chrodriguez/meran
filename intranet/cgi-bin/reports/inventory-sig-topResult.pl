@@ -18,10 +18,8 @@ my @results;
 my $sigtop= $input->param('sigtop');
 my $orden= $input->param('orden');
 
-my $theme = $input->param('theme') || "default";
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/inventory-sig-topResult.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
