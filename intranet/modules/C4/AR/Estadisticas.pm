@@ -1399,7 +1399,7 @@ sub historicoCirculacion(){
 }
 
 sub historicoSanciones(){
-	my ($chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
+	my ($fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
@@ -1424,11 +1424,10 @@ sub historicoSanciones(){
 
 	my $where = "";
 
-	if ($chkfecha ne ''){
-		$where = " WHERE (date>=?) AND (date<=?) ";
-		push(@bind,$fechaIni);
-		push(@bind,$fechaFin);
-	}
+	$where = " WHERE (date>=?) AND (date<=?) ";
+	push(@bind,$fechaIni);
+	push(@bind,$fechaFin);
+
 
 	if (($user)&&($user ne '-1')){	
 		if ($where eq ''){$where = " WHERE responsable=? ";}

@@ -1,0 +1,85 @@
+
+paginador:
+<!-- TMPL_VAR NAME="paginador" -->
+
+<br>
+<!-- TMPL_IF NAME="ok2" -->
+		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=ant -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
+			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME=numeros -->
+	<!-- TMPL_IF NAME="actual" -->
+		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=number -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->"> 
+			<u><!-- TMPL_VAR name=number --></u>
+		</a>
+	<!-- TMPL_ELSE -->
+        	<u><!-- TMPL_VAR name=number --></u>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="ok" -->
+		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=sig -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
+			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+		</a>
+<!-- /TMPL_IF -->
+<br>
+
+
+<table id="tableResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+ 	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
+	
+		<th>Apellido</th>
+		<th>Nombre</th>
+		<th>N&uacute;mero de socio</th>
+		<th>Categor&iacute;a</th>
+		<th>Fecha</th>
+		<th>Campo</th>
+		<th>Valor</th>
+		<th>Tipo</th>
+
+		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr align='center'>
+		<td height=25 >&nbsp;</td>
+
+		<td  class="inputFontNormal"> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=firstname --> 
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=cardnumber --> 
+		</td>
+			<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=description --> 
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=fecha -->
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=campo -->
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=valor -->
+		</td>
+		<td  class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=tipo -->
+		</td>
+
+		<td height=25 >&nbsp;</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+
+</table>
+<br>
+</center>
+

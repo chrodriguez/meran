@@ -1,17 +1,41 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
 <script type="text/javascript">
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+<!-- TMPL_INCLUDE NAME="state.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
 	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
 				};
+
+	function consultar(){
+
+		var params= 	'fechaIni=' + $('#fechaIni').val() +
+				'&fechaFin=' + $('#fechaFin').val() +
+				'&user=' + $('#user').val() +
+				'&tiposPrestamos=' + $('#tiposPrestamos').val() +
+				'&tipoOperacion=' + $('#tipoOperacion').val();
+	
+		$.ajax({	type: "POST", 
+				url: "/cgi-bin/koha/reports/historicoSancionesResult.pl",
+				data: params,
+				beforeSend: Init,
+				complete: function(ajax){
+						$('#result').html(ajax.responseText);
+						HiddeState();
+						zebra('tableResult');
+					}
+		});
+
+	}
 
 </script>
 
@@ -25,19 +49,18 @@
 	<table border="0" cellspacing="0" cellpadding="0">
   		<tr>
 			<td valign= "top" class=inputFontNormal>
-			<input class="inputFontNormal" type="checkbox" name="chkfecha" <!-- TMPL_IF NAME="chkfecha" -->checked<!-- /TMPL_IF -->>
 			<b>Seleccione para buscar por fecha.</b><br><br>
 			Seleccione una fecha de inicio:<br><br>
 			Seleccione una fecha de Fin:
 			</td>
 
 			<td valign= "top" class=inputFontNormal><br><br>
-				<input id="ini" class="inputFontNormal" name="dateselected" value="
-			<!-- TMPL_IF NAME="fechaInicio" --><!-- TMPL_VAR NAME="dateselected" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->">
+				<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="
+			<!-- TMPL_IF NAME='fechaIni' --><!-- TMPL_VAR NAME='fechaIni' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->">
 				<a href="javascript:dp_ini.toggle();">
 				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
-				<input id="fin" class="inputFontNormal" name="dateselectedEnd" value="
-			<!-- TMPL_IF NAME="fechaFin" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"">
+				<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="
+			<!-- TMPL_IF NAME='fechaFin' --><!-- TMPL_VAR NAME='fechaFin' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"">
 				<a href="javascript:dp_fin.toggle();">
 				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
 			</td>
@@ -62,96 +85,12 @@
 		<tr>
 			<td colspan="4" align="center">
 				<br><br>
-				<a  onClick='unidad.submit()'><img   src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+				<a  onClick='consultar()'><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 			</td>
    		</tr>
 	</table>
 </form>
 
+<div id="result"></div>
 
-<center>
-<p class="inputFontNormal"> 
-	<b>La cantidad de operaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
-</p><br>
-
-<!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name='ant' -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR NAME=number -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<u><!-- TMPL_VAR name=number --></u></a>
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name="sig" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME= user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-
-
-<table border=0 cellspacing=0 cellpadding=0 width="100%">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
-		</td>
-
-		<th>Usuario</th>
-		<th>Responsable</th>
-		<th>Fecha</th>
-		<th>Fecha Fin</th>
-		<th>Operaci&oacute;n</th>
-		<th>Tipo Pr&eacute;stamo<th>
-
-		<td align="right" valign="top" width="1%">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
-		</td>
-	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<form  name="modificacion"  method=post action="historicoCirculacion.pl">
-  	<tr align='center'>
-
-  		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
-				<!-- TMPL_IF NAME=borrowernumber -->
-					<!-- TMPL_VAR NAME=userCompleto -->
-				<!-- /TMPL_IF -->
-			</a>
-		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
-				<!-- TMPL_IF NAME=responsable -->
-					<!-- TMPL_VAR NAME=respCompleto -->
-				<!-- /TMPL_IF -->
-			</a>
-		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=date --> 
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=end_date --> 
-		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR NAME=operacion -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">  
-		<!-- TMPL_IF NAME=issuecode -->
-					<!-- TMPL_VAR NAME=tipoPrestamo -->
-			<!-- TMPL_ELSE -->Reserva no Retirada
-		<!-- /TMPL_IF -->
-		</td>
-  	
- 	</tr>
-   	<input type="hidden" value="<!-- TMPL_VAR NAME=id -->"  name="id" >
-	</form>
-<!-- /TMPL_LOOP -->
- 	<tr valign=middle>
-        	<td class="lineafinaltabla"  align="left" colspan="8"></td>
-        </tr>
-</table>
-</center>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

@@ -61,6 +61,10 @@ my $CGIuser=CGI::scrolling_list(        -name      => 'user',
                                         -size      => 1,
 					-defaults  => 'SIN SELECCIONAR'
                                  );
+
+$template->param( 
+			selectusuarios   => $CGIuser,
+		);
 #fin select de usuarios
 
 
@@ -154,10 +158,5 @@ my $CGISelectTipoOperacion=CGI::scrolling_list(		-name      => 'tipoOperacion',
 $template->param(selectTipoOperacion => $CGISelectTipoOperacion);
 #*******************************Fin**Select Tipos de Operacion***************************************
 
-$template->param( 
-			selectusuarios   => $CGIuser,
-# 			tiposPrestamos	 => $tipoPrestamo,
-# 			tipoOperacion	 => $tipoOperacion
-		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

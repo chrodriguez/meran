@@ -40,46 +40,13 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-#Inserta la nota en la tupla correspondiente al id.
-my $id   = $input->param('id');
-if ($id ne "0"){
-	my $nota = $input->param('notas');
-       &insertarNotaHistCirc($id,$nota);
-}
 
-my $orden= "date";  # $input->param('orden')||'operacion';
+my $orden= "date"; 
 
-###Marca la Fecha de Hoy
-                                                                                
+###Marca la Fecha de Hoy          
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 $template->param( todaydate => format_date($today));
-                                                                                
-###
-
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-}
-else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-
-#FIN inicializacion
-#Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'));
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'));
-my @resultsdata;
-my $cant;
-
-my $user= $input->param('user');
-my $chkfecha= $input->param('chkfecha'); #checkbox que busca por fecha
 
 #Select de usuarios
 my @users;
@@ -102,6 +69,8 @@ my $CGIuser=CGI::scrolling_list(        -name      => 'user',
                                         -size      => 1,
 					-defaults  => 'SIN SELECCIONAR'
                                  );
+
+$template->param(selectusuarios   => $CGIuser);
 #fin select de usuarios
 
 
@@ -176,49 +145,5 @@ my $CGISelectTipoOperacion=CGI::scrolling_list(		-name      => 'tipoOperacion',
 #Se lo paso al template
 $template->param(selectTipoOperacion => $CGISelectTipoOperacion);
 #*******************************Fin**Select Tipos de Operacion***************************************
-my $tipoPrestamo= $input->param('tiposPrestamos');
-my $tipoOperacion= $input->param('tipoOperacion');
-
-($cant,@resultsdata)=
- &historicoSanciones($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
-
-my @numeros=armarPaginas($cant,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual);
-
-if ( $cant > $cantR ){#Seteo las flechas de siguiente y anterior
-       	my $sig = $pageNumber+1;;
-        if ($sig <= $paginas){
-       	         $template->param(
-               	                ok    =>'1',
-                       	        sig   => $sig);
-        };
-	if ($sig > 2 ){
-               my $ant = $pageNumber-1;
-               $template->param(
-                               ok2     => '1',
-                               ant     => $ant)}
-}
-
-$template->param(
-			numeros => \@numeros)
-;
-
-$template->param( 
-			resultsloop      => \@resultsdata,
-                        cant             => $cant,
-			fechaFin         => $fechaFin,
-			fechaInicio      => $fechaInicio,
-			selectusuarios   => $CGIuser,
-			chkfecha         => $chkfecha,
-			dateselected     => $input->param('dateselected'),
-		        dateselectedEnd  => $input->param('dateselectedEnd'),
-			user             => $user,
-			tiposPrestamos	 => $tipoPrestamo,
-			tipoOperacion	 => $tipoOperacion
-
-		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
