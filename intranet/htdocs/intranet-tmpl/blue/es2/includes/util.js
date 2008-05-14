@@ -53,11 +53,11 @@ function delay(funcion, segundos){
  * respectivos valores y nombres. Despues de crearlo se hace el submit.
  * Para que funcione el tmpl tiene que tener un DIV con el id formulario.
  * @param url: url donde va el formulario (action del form)
- * @param params: string con los paramatros a pasar por el formulario, concatenado con "," entre parametros y con
+ * @param params: string con los paramatros a pasar por el formulario, concatenado con "&" entre parametros y con
  *                "=" entre nombre y valor del parametro.
  */
 function crearForm(url,params){
-	var arrayParam=params.split(",");
+	var arrayParam=params.split("&");
 	var formu=$("#formulario");
 	var inputs="";
 	for(var i=0; i<arrayParam.length;i++){

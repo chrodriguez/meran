@@ -59,13 +59,13 @@ function editarGrupo(id1,id2,itemtype){
 }
 
 function editarEjemplar(id1,id3,itemtype){
-	var params="itemtype="+itemtype+",id1="+id1+",id3="+id3;
+	var params="itemtype="+itemtype+"&id1="+id1+"&id3="+id3;
 	crearForm("../acqui.simple/editarEjemplar.pl",params);
 // 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id3="+id3;
 }
 
 function editarEjemplares(id1,id2,itemtype){
-	var params="itemtype="+itemtype+",id1="+id1+",id2="+id2+",json=0";
+	var params="itemtype="+itemtype+"&id1="+id1+"&id2="+id2+"&json=0";
 	crearForm("../acqui.simple/editarEjemplar.pl",params);
 // 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id2="+id2;
 }

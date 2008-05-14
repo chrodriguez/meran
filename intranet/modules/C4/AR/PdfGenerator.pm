@@ -545,7 +545,8 @@ sub batchCardsGenerator {
 	if ($i<$count){	generateCard($results[$i]->{'borrowernumber'},270,654,$pdf);$i++;}
 	$pag++;
 	}
-	return ($pdf);
+	my $tmpFileName= "carnets.pdf";
+	&imprimirFinal($pdf,$tmpFileName);
 	}	
 
 
@@ -669,9 +670,9 @@ sub libreDeuda(){
 	$titulo{'posx'}=170;
 	my @parrafo;
 	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
-	$parrafo[1]=" con nï¿½mero de documento ".$dni.", no adeuda material bibliogrï¿½fico en esta Biblioteca.";
+	$parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
 	$parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-	$parrafo[3]=" validez de 10 dï¿½as corridos a partir de su fecha de emisiï¿½n.";
+	$parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
@@ -705,8 +706,8 @@ sub prestInterBiblio(){
 	$parrafo[1]="de la ".$biblioDestino;
 	$parrafo[2]=$director;
 	$parrafo[3]="S/D";
-	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carï¿½cter de prï¿½stamo"; 
-	$parrafo[5]="interbibliotecario los siguientes ï¿½tems:";
+	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
+	$parrafo[5]="interbibliotecario los siguientes items:";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
@@ -716,9 +717,9 @@ sub prestInterBiblio(){
 	$parrafo[0]="La(s) misma(s) serï¿½(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
-	$parrafo[3]="Direcciï¿½n:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
-	$parrafo[4]="Telï¿½fono:".$borrewer->{'phone'};
-	$parrafo[5]="Correo electrï¿½nico:".$borrewer->{'emailaddress'};
+	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
+	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
+	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddress'};
 	$parrafo[6]="";
 	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
 	$parrafo[8]="atentamente.";
@@ -816,7 +817,7 @@ sub imprimirFirma(){
 	$pdf->addRawText($linea, 330,$pageheight - $y);
 	$y=$y+10;
 	$pdf->addRawText("Firma", 160,$pageheight - $y);
-	$pdf->addRawText("Aclaraciï¿½n", 360,$pageheight - $y);
+	$pdf->addRawText("Aclaración", 360,$pageheight - $y);
 	return($pdf,$y);
 }
 
@@ -837,7 +838,7 @@ sub imprimirTabla(){
 	$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
 	$pdf->addRawText("Autor/es", 100,$pageheight - ($y+15));
 	$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
-	$pdf->addRawText("Tï¿½tulo", 255,$pageheight - ($y+15));
+	$pdf->addRawText("Título", 255,$pageheight - ($y+15));
 	$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
 	$pdf->addRawText("Otros datos", 395,$pageheight - ($y+15));
 	$y=$y+20;
@@ -873,7 +874,7 @@ sub imprimirPiePag(){
 	$texto[0]="Biblioteca: ".$biblio->{'branchname'};
 	$texto[1]="Calle ".$biblio->{'branchaddress1'};
 	$texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
-	$texto[3]="Atenciï¿½n: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
+	$texto[3]="Atención: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
 	$texto[4]="E-mail: ".$biblio->{'branchemail'};
 	$texto[5]="Sitios web: ".$biblio->{'branchaddress3'};
 	$texto[6]="";

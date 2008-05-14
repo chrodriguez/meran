@@ -1,26 +1,44 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <script language="javascript">
-function hacerSubmit(){
-	document.cards.op.value='search';
-	document.cards.submit();
-	}
-function ordenar(orden){
-	
-	window.location.href="users-cards.pl?orden="+orden+"&op=search&surname1=<!-- TMPL_VAR NAME=surname1 -->&surname2=<!-- TMPL_VAR NAME=surname2 -->&legajo1=<!-- TMPL_VAR NAME=legajo1 -->&legajo2=<!-- TMPL_VAR NAME=legajo2 -->&branch=<!-- TMPL_VAR NAME=branch -->&regular=<!-- TMPL_VAR NAME=regular -->&category=<!-- TMPL_VAR NAME=category -->";
-	}
-function generarCarnets(){
-	document.cards.orden.value='<!-- TMPL_VAR NAME=orden  -->';
-	document.cards.surname1.value='<!-- TMPL_VAR NAME=surname1  -->';
-	document.cards.surname2.value='<!-- TMPL_VAR NAME=surname2  -->';
-	document.cards.branch.value='<!-- TMPL_VAR NAME=branch  -->';
-	document.cards.category.value='<!-- TMPL_VAR NAME=category  -->';
-	document.cards.regular.value='<!-- TMPL_VAR NAME=regular  -->';
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
 
-	document.cards.op.value='pdf';
-	document.cards.submit();
+function consultar(op,orden){
+	var sur1=$("#surname1").val();
+	var sur2=$("#surname2").val();
+	var leg1=$("#legajo1").val();
+	var leg2=$("#legajo2").val();
+	var cat=$("#category").val();
+	var reg=$("#regular").val();
+	var branch=$("#branch").val();
+	var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&category="+cat+
+	"&regular="+reg+"&branch="+branch+"&op="+op+"&orden="+orden;
+	if(op == "pdf"){
+		var url= "/cgi-bin/koha/reports/users-cards.pl";
+		crearForm(url,params);//Funcion en util.js
 	}
+	else{
+		$.ajax({
+			type: "POST",
+			url: "/cgi-bin/koha/reports/users-cardsResult.pl",
+			data: params,
+			beforeSend: Init,
+			complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
+				HiddeState();
+				}
+			});
+	}
+}
+
 </script>
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<!-- Formulario para poder crear el pdf -->
+<div id="formulario">
+</div>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
@@ -33,9 +51,7 @@ function generarCarnets(){
 <br>
 
 <center>
-<form name="cards" action=/cgi-bin/koha/reports/users-cards.pl method=post >
-<input type='hidden' id='orden' name='orden' value='<!-- TMPL_VAR NAME=orden  -->'>
-<input type='hidden' id='op' name='op' value='search'>
+
 <table border="0" cellspacing="0" cellpadding="0">
 <tr valign="top"><td>
 <table border="0" cellspacing="0" cellpadding="0">
@@ -72,56 +88,9 @@ function generarCarnets(){
 </table>
 </td></tr></table>
 <br>
-<input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
-</form>
+<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar('search','');">
+
 <br>
-
-<table border="0" cellspacing="0" cellpadding="0"  width="90%">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
-	<td><a class="inputFontNormal" href="#" onclick="ordenar('surname')">Apellido</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('firstname')">Nombre</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('streetaddress')">Direcci&oacute;n</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('cardnumber')">Tarjeta de Id.</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('studentnumber')">Legajo</a></td>
-		<td class="inputFontNormal" >Ciudad</td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('phone')">Telefono</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('emailaddress')">E-mail</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('dateenrolled')">Ingreso</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('categorycode')" >Categoria</a></td>
-		<td class="inputFontNormal" >Regularidad</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<tr>
-		<td class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=firstname --> 
-		</td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=streetaddress --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=cardnumber --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=studentnumber --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=city --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=phone --></td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"> <!-- TMPL_VAR NAME=categoria --></td>
-  		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center"><b><!-- TMPL_VAR NAME=regular --></b></td>
- 		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-  	</tr>
-
-<!-- /TMPL_LOOP -->
-
-</table>
-
-<p>
-<b>La cantidad de usuarios es : <!-- TMPL_VAR NAME=cantidad --></b><br>
-
-<img border="0" src="/intranet-tmpl/blue/es2/images/generarcarnet.png" alt="Generar Carnets" onClick="generarCarnets();">
-
-</p>
+<div id="result"></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

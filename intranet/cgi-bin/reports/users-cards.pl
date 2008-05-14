@@ -32,33 +32,27 @@ use PDF::Report;
 use C4::AR::PdfGenerator;
 
 my $input = new CGI;
-my  $orden=$input->param('orden');
-my  $op=$input->param('op');
-my  $surname1=$input->param('surname1');
-my  $surname2=$input->param('surname2');
-my  $legajo1=$input->param('legajo1');
-my  $legajo2=$input->param('legajo2');
-my  $category=$input->param('category');
-my  $regular=$input->param('regular');
-my  $branch=$input->param('branch');
-my  $count=0;
-my  @results=();
 
-
-if ($category eq ''){$category='Todos';}
-if ($regular eq ''){$regular='Todos';}
-
-if ($op ne ''){
- ($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
-		}
+my $op=$input->param('op');
 
 if ($op eq 'pdf') {
+
+my $orden=$input->param('orden');
+my $surname1=$input->param('surname1');
+my $surname2=$input->param('surname2');
+my $legajo1=$input->param('legajo1');
+my $legajo2=$input->param('legajo2');
+my $category=$input->param('category');
+my $regular=$input->param('regular');
+my $branch=$input->param('branch');
+my $count=0;
+my @results=();
+
+($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
+
+
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
-my $tmpFileName= "carnets.pdf";
-my $pdf = batchCardsGenerator($count,@results);
-print "Content-type: application/pdf\n";
-print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
-print $pdf->Finish();
+&batchCardsGenerator($count,@results);
 
 }
 else
@@ -66,7 +60,6 @@ else
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/users-cards.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -110,7 +103,7 @@ push @select_category, 'Todos';
 my $CGIcategories=CGI::scrolling_list(  -name      => 'category',
                                         -id        => 'category',
                                         -values    => \@select_category,
-					-defaults  => $category,
+					-defaults  => 'Todos',
                                         -labels    => \%select_categories,
                                         -size      => 1,
                                  );
@@ -129,31 +122,14 @@ $select_regular{'Todos'} = 'Todos';
 my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
                                         -id        => 'regular',
                                         -values    => \@select_regular,
-					-defaults  => $regular,
+					-defaults  => 'Todos',
                                         -labels    => \%select_regular,
                                         -size      => 1,
 					);
 
-if ($op eq 'search'){
-#Se realiza la busqueda si al algun campo no vacio
-$template->param(
-		RESULTSLOOP=>\@results,
-                cantidad=>$count
-	               );
-		
-	}
-
 $template->param(
 		unidades => $CGIbranch,
-		branch => $input->param('branch'),
-		category => $input->param('category'),
 		categories => $CGIcategories,
-		orden => $orden,
-		surname1=>$surname1,
-		surname2=>$surname2,
-		legajo1=>$legajo1,
-		legajo2=>$legajo2,
-		regular=>$regular,
 		regulares=>$CGIregular
 		);
 

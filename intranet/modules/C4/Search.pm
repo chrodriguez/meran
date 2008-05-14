@@ -5004,7 +5004,6 @@ my $sth = $dbh->prepare($query);
 $sth->execute(@bind);
  my @results;
  my $i=-1;
- my $class='par';
  while (my $data=$sth->fetchrow_hashref){
 	my $reg=C4::AR::Reserves::isRegular($data->{'borrowernumber'});
 	my $pasa=1;
@@ -5022,13 +5021,10 @@ $sth->execute(@bind);
 		elsif($results[$i]->{'regular'} eq 0){$results[$i]->{'regular'}="<font color='red'>Irregular</font>";}
 	}
 	else{$results[$i]->{'regular'}="---";};
-
-	$results[$i]->{'clase'}= $class;
-	if($class eq 'par'){$class='impar'}else{$class='par'};
 	}
 	}
  $sth->finish;
- return(scalar(@results),@results);					   
+ return(scalar(@results),@results);
 }
 
 
