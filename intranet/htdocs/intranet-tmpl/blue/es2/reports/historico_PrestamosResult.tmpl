@@ -17,7 +17,7 @@
 	<tr height="24" class="tablaresultadoTitle">
 	<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 
-	<td onclick="consultar('','surname')">Apellido</td>
+	<td onclick="ordenar('surname')">Apellido</td>
 	<td onclick="ordenar('firstname')">Nombre</td>
 	<td onclick="ordenar('DNI')">DNI</td>
 	<td onclick="ordenar('CatUsuario')">Categor&iacute;a</td>
@@ -45,11 +45,9 @@
   	<td height=25 >&nbsp;</td>
        </tr>
 <!-- /TMPL_LOOP -->
-       <tr valign=bottom>
-       		<td class="lineafinaltabla"  align="left" colspan="9"></td>
-       </tr>
-	<tr align="center">
-	<td colspan="9">
+</table>
+
+<div align="center">
 		<br><br>
 		<form name="branches" method="post">
 		<!-- Para imprimir correctamentes los datos -->
@@ -71,7 +69,5 @@
 		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
 		</a>
 		</form>
-	</td>
-	</tr>
-</table>
+</div>
 <br>
