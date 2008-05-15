@@ -43,7 +43,7 @@ if($json ne ""){
 		my $modificar=$input->param('modificar');
 		my $variable=$input->param('variable');
 		my $valor=$input->param('valor');
-		my $expl=$input->param('explicacion');
+		my $expl=&UTF8toISO($input->param('explicacion'));
 		my $opciones="";
 		if($tipo eq "combo"){$opciones=$tabla."|".$input->param('campo');}
 		if($tipo eq "valAuto"){
@@ -134,9 +134,6 @@ if($agregar){
 			$labels{0}="No";
 			$compo=&crearComponentes("radio","valor",\@values,\%labels,$valor);
 		}
-		elsif($opcion eq "text"){
-			$compo=&crearComponentes("text","valor",60,\%labels,$valor);
-		}
 		elsif($opcion eq "texta"){
 			$compo=&crearComponentes("texta","valor",60,4,$valor);
 		}
@@ -146,7 +143,7 @@ if($agregar){
 			@values=keys(%labels);
 			$compo=&crearComponentes("combo","valor",\@values,\%labels,"");
 		}
-		else{
+		elsif($opcion eq "combo"){
 			my $campo=$input->param('campo')||$op;
 			my $id=&obtenerIdentTablaRef($tabla);
 			my ($js,$valores)=&obtenerValoresTablaRef($tabla,$id,$campo,$campo);
@@ -155,6 +152,9 @@ if($agregar){
 				$labels{$val}=$valores->{$val};
 			}
 			$compo=&crearComponentes("combo","valor",\@values,\%labels,$valor);
+		}
+		else{
+			$compo=&crearComponentes("text","valor",60,\%labels,$valor);
 		}
 		$template->param(valor=>$compo);
 }
