@@ -890,7 +890,6 @@ sub imprimirPiePag(){
 
 sub batchBookLabelGenerator {
         my ($count,@results) = @_;
-
 	my $i=0;
 	my $pag=1;
 	my $pdf = new PDF::Report();
@@ -909,8 +908,10 @@ sub batchBookLabelGenerator {
 	}
 	$pag++;
 	}
-	return ($pdf);
-	}	
+	my $tmpFileName= "etiquetas.pdf";
+	&imprimirFinal($pdf,$tmpFileName);
+# 	return ($pdf);
+}	
 
 
 #genera a partir de una coordenada

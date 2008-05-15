@@ -27,7 +27,7 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
 use JSON;
-use POSIX qw(ceil); #para redondear cuando divido un numero
+use POSIX qw(ceil floor); #para redondear cuando divido un numero
 
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
@@ -65,6 +65,7 @@ use vars qw(@EXPORT @ISA);
 	&cantidadRenglones 
 	&armarPaginas 
 	&crearPaginador 
+	&InitPaginador
 	&from_json_ISO 
 	&UTF8toISO 
 	&obtenerIdentTablaRef 
@@ -780,118 +781,82 @@ sub verificarValor(){
 #Funciones para paginar en el Servidor
 #
 
-sub crearPaginador{
-	my ($template, $cantResult, $iniParam)=@_;
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
+sub InitPaginador{
+	my ($iniParam)=@_;
+	my $pageNumber;
 	my $ini;
-	my $pagActual;
-	#cant. de renglones q se pueden mostrar por pagina
-	my $cantRenglones=cantidadRenglones();
+	my $cantR=cantidadRenglones();
 
 	if (($iniParam eq "")){
         	$ini=0;
-		$pagActual=1;
+		$pageNumber=1;
 	} else {
-		$ini= ($iniParam-1)* $cantRenglones;
-		$pagActual= $iniParam;
+		$ini= ($iniParam-1)* $cantR;
+		$pageNumber= $iniParam;
 	};
-#FIN inicializacion
 
-	my ($paginador, $cantPaginas, @numeros)=armarPaginas($pagActual, $cantResult, $cantRenglones);
-	my $paginas = scalar(@numeros)||1;
+	return ($ini,$pageNumber,$cantR);
+}
 
-	$template->param( 	paginas   => $paginas,
-		  		actual    => $pagActual,
-		  		cantidad  => $cantResult,
-				numbers   => \@numeros,
-				paginador => $paginador);
+sub crearPaginador{
+	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
+	my $ini;
+	#cant. de renglones q se pueden mostrar por pagina
 
-#Si la cantidad de filas es > que la cant. de filas maximo a mostrar	
-	if ( $cantResult > $cantRenglones ){
-#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
+	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion);
 
-		$template->param(
-					pri   	=> 1,
- 					ult	=> $cantPaginas
-				);
+	$template->param(paginador => $paginador);
 
-        	my $sig = $pagActual + 1;
-         	if ($sig < $cantPaginas){
-                 	$template->param(
-                              	displaynext    	=>'1',
-                                sig   		=> $sig
-			);
-        	};
-
-        	if ($sig > 2 ){
-                	my $ant = $pagActual - 1;
-                	$template->param(
-                                	displayprev     => '1',
-                                	ant     	=> $ant
-				)
-		}
-	}
-
-	return ($template, $ini, $cantRenglones);
+	return ($template, $ini);
 }
 
 sub armarPaginas{
 #@actual, es la pagina seleccionada por el usuario
 #@cantRegistros, cant de registros que se van a paginar
 #@$cantRenglones, cantidad de renglones maximo a mostrar
+	my ($actual, $cantRegistros, $cantRenglones,$funcion)=@_;
+	my $pagAMostrar=10;
+	my $numBloq=floor($actual / $pagAMostrar);
 
-	my ($actual, $cantRegistros, $cantRenglones)=@_;
-
-	#cant de paginas a mostrar, esto puede ser una preferencia
-	my $cantPaginas= 10;
-	#cant de paginas en total
-	my $totalPaginas = 0;
-=item
-	if ($cantRenglones != 0){
-		$totalPaginas= $cantRegistros % $cantRenglones;
+#  	my $limInf=($numBloq * $pagAMostrar)+1;
+#  	my $limSup=$limInf + $pagAMostrar -1;
+	my $limInf=($numBloq * $pagAMostrar);
+	my $limSup=$limInf + $pagAMostrar;
+	if($limInf == 0){
+		$limInf= 1;
+		$limSup=$limInf + $pagAMostrar -1;
 	}
-=cut
-
-	if($cantRenglones == 0){
-		$cantRenglones= 1; #tira division por 0
-	}
-
-# 	if  ($totalPaginas == 0){
-	#se calcula la cantidad de paginas total
-        	$totalPaginas= ceil($cantRegistros / $cantRenglones);
-# 	}
-# 	else {
-# 		$totalPaginas= (($cantRegistros - $totalPaginas)/$cantRenglones) + 1;
-# 	}
-
-	my @numeros=();
-	my $highlight=0;
-	my $ini;
-# 	if(($actual + $cantPaginas >= $totalPaginas)&&($totalPaginas > $cantPaginas)){
-	if(($actual + $cantPaginas >= $totalPaginas)){
-		$ini= $totalPaginas - $cantPaginas;
-	}
-	else{
-		$ini= $actual;
-	}
-		
-	#cant. maxima que paginas q se van a mostrar
-	my $tope= $actual + $cantPaginas;
-	
+	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
 
 	my $paginador= "<div id=paginador>";
+	my $class="paginaNormal";
 # <!-- TMPL_VAR name='themelang' -->
-	$paginador .= "<span><img src='/images/numbers/ant.gif' border=0></span>";
+	if($actual > 1){
+		#a la primer pagina
+		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'><img src='/images/numbers/ant.gif' border=0><img src='/images/numbers/ant.gif' border=0></span>";
 
-	for (my $i=$ini; ($totalPaginas >1 and $i <= $totalPaginas and $i < $tope) ; $i++ ) {
-		$paginador .= "<span> ".$i." </span>";
+		$paginador .= "<span> </span>";
+
+		my $ant= $actual-1;
+		$paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'><img src='/images/numbers/ant.gif' border=0></span>";
+	}
+	for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
+		if($actual == $i){$class="paginaActual"}
+			else{$class="paginaNormal"}
+		$paginador .= "<span class='".$class."' onClick='".$funcion."(".$i.")'> ".$i." </span>";
 	}
 
-	$paginador .= "<span><img src='/images/numbers/next.gif' border=0></span>";
+	if($actual >= 1 && $actual < $totalPaginas){
+		my $sig= $actual+1;
+		$paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'><img src='/images/numbers/next.gif' border=0></span>";
 
+		$paginador .= "<span> </span>";
+		#a la primer pagina
+		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'><img src='/images/numbers/next.gif' border=0><img src='/images/numbers/next.gif' border=0></span>";
+	}
 	$paginador .= "</div>";	
 
-	return($paginador, $totalPaginas, @numeros);
+	return($paginador, $totalPaginas);
 }
 
 #

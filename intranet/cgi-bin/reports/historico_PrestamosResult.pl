@@ -46,19 +46,8 @@ my $f_fin='';
 if($input->param('f_ini')){$f_ini=$input->param('f_ini');}
 if($input->param('f_fin')){$f_fin=$input->param('f_fin');}
 
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=C4::AR::Estadisticas::cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-} else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-#FIN inicializacion
+my $ini= ($input->param('ini'));
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my $dateformat = C4::Date::get_date_format();
 my $fechaIni = C4::Date::format_date_in_iso($f_ini,$dateformat);
@@ -66,28 +55,7 @@ my $fechaFin = C4::Date::format_date_in_iso($f_fin,$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
 my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
 
-my @numeros=C4::AR::Estadisticas::armarPaginas($cantidad,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		  );
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pageNumber+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pageNumber-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)
-	}
-}
+my ($template, $ini)=C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 
 $template->param( 
@@ -96,11 +64,7 @@ $template->param(
 			tipoPrestamo	 => $tipoPrestamo,
 			catUsuarios	 => $catUsuarios,
 			orden 		 => $orden, 
-			pageNumber	 => $pageNumber,
-			cantR		 => $cantR,
-			paginas          => $paginas,
 			cantidad	 => $cantidad,
-			numeros		 => \@numeros,
 			fechaIni	 => $fechaIni,
 			fechaFin 	 => $fechaFin,	
 		);

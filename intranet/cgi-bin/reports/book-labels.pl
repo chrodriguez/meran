@@ -56,13 +56,8 @@ my ($template, $loggedinuser, $cookie)
 if ($op eq 'pdf') {
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
 
-my $tmpFileName= "etiquetas.pdf";
 ($cantidad,@results)= C4::Circulation::Circ2::listitemsforinventory($barcode1,$barcode2,$branch,1,"todos",$orden);
-my $pdf = batchBookLabelGenerator($cantidad,@results);
-
-print "Content-type: application/pdf\n";
-print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
-print $pdf->Finish();
+&batchBookLabelGenerator($cantidad,@results);
 
 }
 else

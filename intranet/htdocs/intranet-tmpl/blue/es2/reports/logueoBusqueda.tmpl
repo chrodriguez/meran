@@ -15,11 +15,12 @@
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
 				};
 
-	function consultar(){
+	function consultar(ini){
 
 		var params= 	'fechaIni=' + $('#fechaIni').val() +
 				'&fechaFin=' + $('#fechaFin').val() +
-				'&catUsuarios=' + $('#catUsuarios').val();
+				'&catUsuarios=' + $('#catUsuarios').val()+
+				'&ini='+ini;
 	
 		$.ajax({	type: "POST", 
 				url: "/cgi-bin/koha/reports/logueoBusquedaResult.pl",
@@ -64,7 +65,7 @@
 	<li><b>Categoria de Usuario: </b></li>
 	<li><!-- TMPL_VAR NAME="selectCatUsuarios" --></li>
 	<li>
-		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="consultar();">
+		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="consultar('');">
 	</li>
 </ul>
 

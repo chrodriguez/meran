@@ -635,3 +635,19 @@ div.detalle{
 .focus {
 	background-color:#FFFAAA;  
 }
+
+.paginaNormal{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.paginaActual{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: red;
+	font-weight: bold;
+	cursor: pointer;
+}

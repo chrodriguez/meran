@@ -22,18 +22,20 @@ function Complete(){
 	HiddeState();
 }
 
+var orden='firstname';
+function ordenar(ordenParam){
+	orden=ordenParam;
+	consultar('');
+}
 
-function consultar(orden, ini){
+function consultar(ini){
 
 	var params= 	'f_ini=' + $('#f_ini').val() +
 			'&f_fin=' + $('#f_fin').val() +
 			'&tiposItems=' + $('#tiposItems').val() +
 			'&tipoPrestamos=' + $('#tipoPrestamos').val() +
 			'&catUsuarios=' + $('#catUsuarios').val() +
-			'&orden=' + orden;
-	if(ini){
-		params= params + '&ini=' + ini;
-	}
+			'&orden='+orden +'&ini=' + ini;
 
 	$.ajax({	type: "POST", 
 			url: "/cgi-bin/koha/reports/historico_PrestamosResult.pl",
@@ -70,7 +72,7 @@ function consultar(orden, ini){
 	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="<!-- TMPL_VAR NAME='f_fin' -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 	  </td>
 	  <td colspan=2 align="center">
-		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar('firstname');">
+		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar('');">
 	  </td>
         </tr>
 	<tr>

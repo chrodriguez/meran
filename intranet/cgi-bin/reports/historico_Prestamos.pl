@@ -139,12 +139,6 @@ my $CGISelectTiposItems=CGI::scrolling_list(	-name      => 'tiposItems',
 $template->param(selectTiposItems => $CGISelectTiposItems);
 #************************************Fin Select de Tipos de Items*********************************
 
-=item
-my $availD;
-if ($avail eq 0){$availD='Disponible';}else{	my $av=getAvail($avail);
-						if ($av){$availD=$av->{'description'};}
-						}
-=cut
 
 $template->param( 
 			orden 		 => $orden, 
