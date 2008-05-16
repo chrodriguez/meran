@@ -25,34 +25,40 @@
 
 </center>
 
+<center>
+<!-- TMPL_VAR NAME="paginador" -->
+</center>
+
+
 <table id="tablaResult" border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td> 
 
-		<td class="tablaresultadoTitleClick" onclick="consultar('surname','<!-- TMPL_VAR name='ini' -->')">Apellido</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('firstname','<!-- TMPL_VAR name='ini' -->')">Nombre</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('streetaddress','<!-- TMPL_VAR name='ini' -->')">Direcci&oacute;n</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('cardnumber','<!-- TMPL_VAR name='ini' -->')">Socio</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" Title="Ordenar por Apellido">Apellido</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" Title="Ordenar por Nombre">Nombre</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('streetaddress')" Title="Ordenar por Direcci&oacute;n">Direcci&oacute;n</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" Title="Ordenar por Socio">Socio</td>
 		<td class="tablaresultadoTitle">Ciudad</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('phone','<!-- TMPL_VAR name="ini" -->')">Telefono</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('emailaddress','<!-- TMPL_VAR name='ini' -->')">E-mail</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('dateenrolled','<!-- TMPL_VAR name='ini' -->')">Ingreso</td>
-		<td class="tablaresultadoTitleClick" onclick="consultar('categoria','<!-- TMPL_VAR name='ini' -->')">Categoria</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('phone')" Title="Ordenar por Tel&eacute;fono">Telefono</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('emailaddress')" Title="Ordenar por e-mail">E-mail</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('dateenrolled')" Title="Ordenar por Ingreso">Ingreso</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('categoria')" Title="Ordenar por Categor&iacute;a">Categoria</td>
+
 		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<tr>
+	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
-		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=surname --> </td>
-		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=streetaddress --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=cardnumber --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=city --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=phone --></td>
-  		<td class="inputFontNormal"> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=dateenrolled --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=categoria --></td>
+		<td> <!-- TMPL_VAR NAME=surname --> </td>
+		<td> <!-- TMPL_VAR NAME=firstname --> </td>
+  		<td> <!-- TMPL_VAR NAME=streetaddress --> </td>
+  		<td> <!-- TMPL_VAR NAME=cardnumber --> </td>
+  		<td> <!-- TMPL_VAR NAME=city --> </td>
+  		<td> <!-- TMPL_VAR NAME=phone --></td>
+  		<td> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
+  		<td> <!-- TMPL_VAR NAME=dateenrolled --> </td>
+  		<td> <!-- TMPL_VAR NAME=categoria --></td>
  		<td>&nbsp;</td>
   	</tr>
 

@@ -50,59 +50,25 @@ else {
 	$orden=$input->param('orden')
 };
 
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-
-if (($input->param('ini') eq "")){
-	$ini=0;
-	$pageNumber=1;
-}
-else {
-	$ini= ($input->param('ini')-1)* $cantR; 
-	$pageNumber= $input->param('ini');
-};
-#FIN inicializacion
-
 my $year = $input->param('year');
 my $categ= $input->param('categoria');
 my @chck=split('#',$input->param('chck'));
 my $usos=$input->param('usos');
 my $branch=$input->param('branch');
 
-my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$categ,@chck);#Obtengo los usuarios de una pagina dada
 
+my $ini= ($input->param('ini'));
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+#esto se tiene q hacer todo dentro de usuarios ARREGLAR!!!!!!!!!!!!!!
 my $cantidad =cantidadUsuarios($branch,$year,$usos,$categ,@chck);#Obtengo la cantidad total de usuarios para poder paginar
+#Obtengo los usuarios de una pagina dada
+my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$categ,@chck);
+my ($template, $ini)=C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
-
-my @numeros=C4::AR::Estadisticas::armarPaginas($cantidad);
-#Miguel 30-03-07 
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		);
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pageNumber+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pageNumber-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
-}
 
 $template->param( 	orden		 => $orden,
 			resultsloop      => \@resultsdata,
- 			ini		 => $pagActual,
-			numeros		 => \@numeros,
 			cantidad  	 => $cantidad
 		);
 

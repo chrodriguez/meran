@@ -18,16 +18,24 @@ function buscarChecked(){
 	return str;
 }
 
-function consultar(orden,ini){
+var orden='firstname';
+function ordenar(ordenParam){
+	orden=ordenParam;
+	consultar('');
+}
+
+function consultar(ini){
+
 	var branch=$("#branch").val();
 	var year=$("#year").val();
 	var usos=$("#usos").val();
 	var categ=$("#categoria").val();
 	var strChck=buscarChecked();
+
 	$.ajax({
 		type: "POST",
 		url: "/cgi-bin/koha/reports/usersResult.pl",
-		data: "branch="+branch+"&year="+year+"&chck="+strChck+"&categoria="+categ+"&usos="+usos+"&orden="+orden+"&ini="+ini,
+		data: "branch="+branch+"&year="+year+"&chck="+strChck+"&categoria="+categ+"&usos="+usos+"&orden="+orden+"&ini="+ini+"&orden="+orden,
 		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
@@ -108,7 +116,7 @@ function consultar(orden,ini){
 </table>
 
 	<br>
-	<input type="image" onClick="consultar('cardnumber',1)"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+	<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 
 </center>
 <div id="result"></div>
