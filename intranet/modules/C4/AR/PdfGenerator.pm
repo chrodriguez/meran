@@ -751,7 +751,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
 	$categ, categoria de la institucion en la que se va a imprimir el documento;
 	$branchname, nombre de la biblioteca en la que esta asociado el usuario que pidio el documento;
-	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
 	$pagewidth, ancho del documento;
 	$pageheight, largo del documento;
 	$titulo, Titulo del documento;
@@ -784,11 +784,11 @@ imprimirContenido
 Imprime el contenido de del documento.
 @params:
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
-	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
 	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
 	    imprimir;
 	$pageheight, largo del documento;
-	$tamRenglon, tamaï¿½o que va a tener el renglon. Espacio entre texto por fila;
+	$tamRenglon, tamaño que va a tener el renglon. Espacio entre texto por fila;
 	$parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
 =cut
 sub imprimirContenido(){
@@ -901,7 +901,8 @@ sub batchBookLabelGenerator {
 	$pdf->newpage($pag);
         $pdf->openpage($pag);
 	if ($i<$count){
-	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,95,$pdf);$i++;
+	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,97,$pdf);
+	#$i++;  Se imprimen 2 por ejemplar
 	}
 	if ($i<$count){
 	&generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,0,$pdf);$i++;
@@ -926,14 +927,19 @@ sub generateBookLabel {
 	my ($pagewidth, $pageheight) = $pdf->getPageDimensions(); #(200x300)
 	$pdf->setSize(7);
 	 #Insert a rectangle to delimite the card
-	$pdf->drawRect($pagewidth, $pageheight+($y-95) , 0 ,$y);
-	$pdf->drawLine(95, $pageheight+($y-95), 95, $y);
+	$pdf->drawRect($pagewidth, $pageheight+($y-97) , 0 ,$y);
+	$pdf->drawLine(95, $pageheight+($y-97), 95, $y);
 	 #Insert a barcode to the card
-	$pdf->drawBarcode($x+125,$y-5,0.73,1,"3of9",$codigo,undef, 10, 10, 25, 10);
+	$pdf->drawBarcode($x+100,$y, 80/100 ,1,"3of9",$codigo,undef, 10, 10, 25, 10);
 
 	my $posy=105;
+	my $escudo = C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-'.$branchcode.'.png';
 
-     $pdf->addImgScaled(C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x + 96 , $pageheight + ($y-35-$posy) , 0.32);
+	if (!( (-e $escudo) && (-r $escudo) ) ){
+    	$escudo = C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png';
+	}
+
+	 $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
 
 	
 	 #Write the borrower data into the pdf file
