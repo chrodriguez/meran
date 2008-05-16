@@ -15,14 +15,17 @@
 		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
 				};
-
-	function consultar(){
-
+	var orden='date';
+	function ordenar(ordenParam){
+		orden=ordenParam;
+		consultar('');
+	}
+	function consultar(ini){
 		var params= 	'fechaIni=' + $('#fechaIni').val() +
 				'&fechaFin=' + $('#fechaFin').val() +
 				'&user=' + $('#user').val() +
 				'&tiposPrestamos=' + $('#tiposPrestamos').val() +
-				'&tipoOperacion=' + $('#tipoOperacion').val();
+				'&tipoOperacion=' + $('#tipoOperacion').val()+'&ini='+ini+'&orden='+orden;
 	
 		$.ajax({	type: "POST", 
 				url: "/cgi-bin/koha/reports/historicoSancionesResult.pl",
@@ -85,7 +88,7 @@
 		<tr>
 			<td colspan="4" align="center">
 				<br><br>
-				<a  onClick='consultar()'><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
+				<a  onClick="consultar('')"><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 			</td>
    		</tr>
 	</table>

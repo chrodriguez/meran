@@ -1,44 +1,20 @@
 
-paginador:
+
 <!-- TMPL_VAR NAME="paginador" -->
-
-<br>
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=ant -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
-			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
-		</a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=number -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->"> 
-			<u><!-- TMPL_VAR name=number --></u>
-		</a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="logueoBusqueda.pl?ini=<!-- TMPL_VAR NAME=sig -->&fechaIni=<!-- TMPL_VAR NAME='fechaIni' -->&fechaFin=<!-- TMPL_VAR NAME='fechaFin' -->&catUsuarios=<!-- TMPL_VAR NAME='catUsuarios' -->" >
-			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
-		</a>
-<!-- /TMPL_IF -->
-<br>
 
 
 <table id="tableResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
 	
-		<th>Apellido</th>
-		<th>Nombre</th>
-		<th>N&uacute;mero de socio</th>
-		<th>Categor&iacute;a</th>
-		<th>Fecha</th>
-		<th>Campo</th>
-		<th>Valor</th>
-		<th>Tipo</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" Title="Ordenar por Apellido">Apellido</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('firstname')" Title="Ordenar por Nombre">Nombre</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" Title="Ordenar por Socio">N&uacute;mero de socio</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('description')" Title="Ordenar por Categor&iacute;a">Categor&iacute;a</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('fecha')" Title="Ordenar por Fecha">Fecha</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('campo')" Title="Ordenar por Campo">Campo</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('valor')" Title="Ordenar por Valor">Valor</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('tipo')" Title="Ordenar por Tipo">Tipo</th>
 
 		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
 	</tr>

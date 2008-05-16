@@ -34,17 +34,12 @@ my ($template, $loggedinuser, $cookie)
 
 
 
-my $orden;
-if ($input->param('orden') eq ""){
-	 $orden='firstname'}
-else {$orden=$input->param('orden')};
+my $orden=$input->param('orden')||'firstname';
 
 
 #Fechas
-my $f_ini='';
-my $f_fin='';
-if($input->param('f_ini')){$f_ini=$input->param('f_ini');}
-if($input->param('f_fin')){$f_fin=$input->param('f_fin');}
+my $f_ini=$input->param('f_ini')||'';
+my $f_fin=$input->param('f_fin')||'';
 
 my $ini= ($input->param('ini'));
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
@@ -55,7 +50,6 @@ my $fechaFin = C4::Date::format_date_in_iso($f_fin,$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
 my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
 
-# my ($template)=
 C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 

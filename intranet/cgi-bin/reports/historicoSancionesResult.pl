@@ -41,66 +41,26 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 
-my $orden= "date";  # $input->param('orden')||'operacion';
-
-###Marca la Fecha de Hoy
-                                                                                
-my @datearr = localtime(time);
-my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-my $dateformat = C4::Date::get_date_format();
-$template->param( todaydate => format_date($today,$dateformat));
-                                                                                
-###
-
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-}
-else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-
+my $ini= $input->param('ini');
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
 my $fechaIni =  format_date_in_iso($input->param('fechaIni'),$dateformat);
 my $fechaFin    =  format_date_in_iso($input->param('fechaFin'),$dateformat);
-my @resultsdata;
-my $cant;
+
+my $orden= $input->param('orden') ||'date';
 my $user= $input->param('user');
 my $tipoPrestamo= $input->param('tiposPrestamos');
 my $tipoOperacion= $input->param('tipoOperacion');
 
-($cant,@resultsdata)=
+my ($cant,@resultsdata)=
  &historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
-my @numeros=armarPaginas($cant,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual);
 
-if ( $cant > $cantR ){#Seteo las flechas de siguiente y anterior
-       	my $sig = $pageNumber+1;;
-        if ($sig <= $paginas){
-       	         $template->param(
-               	                ok    =>'1',
-                       	        sig   => $sig);
-        };
-	if ($sig > 2 ){
-               my $ant = $pageNumber-1;
-               $template->param(
-                               ok2     => '1',
-                               ant     => $ant)
-	}
-}
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,"consultar");
 
 
 $template->param( 
@@ -109,8 +69,6 @@ $template->param(
 			user             => $user,
 			tiposPrestamos	 => $tipoPrestamo,
 			tipoOperacion	 => $tipoOperacion,
-			numeros 	 => \@numeros
-
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

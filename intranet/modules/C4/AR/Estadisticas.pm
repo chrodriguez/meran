@@ -64,7 +64,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 sub historicoDeBusqueda(){
-        my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios)=@_;
+        my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden)=@_;
 
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
@@ -116,7 +116,7 @@ sub historicoDeBusqueda(){
 		}
 	}	
 
-	$query .= " limit ?,?";
+	$query .= " ORDER BY $orden limit ?,?";
 
         my $sth=$dbh->prepare($query);
         $sth->execute($ini,$cantR);
@@ -1460,7 +1460,7 @@ sub historicoSanciones(){
 		push(@bind, $tipoPrestamo);
 	}
 
-	my $finCons=" ORDER BY hs.timestamp desc limit $ini,$cantR ";
+	my $finCons=" ORDER BY $orden desc limit $ini,$cantR ";
 
 	$query="SELECT count(*) as cant ".$from.$where;
         my $sth=$dbh->prepare($query);
@@ -1471,11 +1471,13 @@ sub historicoSanciones(){
 	$sth=$dbh->prepare($query);
         $sth->execute(@bind);
 	my @results;
-
+	my $dateformat = C4::Date::get_date_format();
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'respCompleto'}=$data->{'surnameResp'}.", ".$data->{'firstnameResp'};
 		$data->{'userCompleto'}=$data->{'surnameBor'}.", ".$data->{'firstnameBor'};
+		$data->{'date'}=format_date($data->{'date'},$dateformat);
+		$data->{'end_date'}=format_date($data->{'end_date'},$dateformat);
                 push(@results,$data);
         }
         return ($cant,@results);
