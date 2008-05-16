@@ -800,14 +800,12 @@ sub InitPaginador{
 
 sub crearPaginador{
 	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
-	my $ini;
 	#cant. de renglones q se pueden mostrar por pagina
 
 	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion);
 
 	$template->param(paginador => $paginador);
 
-	return ($template, $ini);
 }
 
 sub armarPaginas{
