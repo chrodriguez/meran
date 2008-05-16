@@ -486,9 +486,9 @@ sub registroEntreFechas{
 		push(@bind,$numHasta);
 	}
 
-	$query.=" ORDER BY ? limit $ini,$fin";
+	$query.=" ORDER BY ".$orden." limit $ini,$fin";
         my $sth=$dbh->prepare($query);
-        $sth->execute(@bind,$orden);
+        $sth->execute(@bind);
         my @results;
 
 	my $IdModificacion;
@@ -901,18 +901,18 @@ sub reservas{
 # La linea anterior se comento porque cuando una reserva pasa grupo a ejemplar no se guarda el codigo de la biblioteca porque las reservas por grupo no lo hacen, por lo tanto al cambiar de estado la reserva, esto se mantiene.
 		$query.=" AND biblionumber IS NOT NULL";
 	}
-	$query.=" order by(?) limit $ini , $fin";
+	$query.=" order by $orden limit $ini , $fin";
 
         my $sth=$dbh->prepare($query);
-	 $sth->execute($orden);
+	$sth->execute();
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'reminderdate'}=format_date($data->{'reminderdate'},$dateformat);
-		$data->{'reservedate'}=format_date($data->{'reservedate'}),$dateformat;
+		$data->{'reservedate'}=format_date($data->{'reservedate'},$dateformat);
 		if ($data->{'itemnumber'} eq "" ){$data->{'itemnumber'}='-' };
                 if ($data->{'emailaddress'} eq "" ){
-					$data->{'emailaddress'}='-';
-					$data->{'mail'}=1;
-				 };
+			$data->{'emailaddress'}='-';
+			$data->{'mail'}=1;
+		};
                 push(@results,$data);
         }
         return (@results);

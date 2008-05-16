@@ -3,35 +3,19 @@
 La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
 </p>
 <br>
-<!-- TMPL_IF NAME="ok2" -->
-	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='ant' -->)"><img src="<!-- TMPL_VAR name='themelang' -->/images/numbers/ant.gif" border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR NAME='number' -->)"><u><!-- TMPL_VAR name=number --></u></a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-	<a class="inputFontNormal" onClick="consultar(<!-- TMPL_VAR name='orden' -->,<!-- TMPL_VAR name='sig' -->)"><img src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border=0></a>
-<!-- /TMPL_IF -->
-
-
+<!-- TMPL_VAR NAME="paginador" -->
 
 <table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
 
-		<td class="tablaresultadoTitle" onclick="consultar('surname','<!-- TMPL_VAR name='ini' -->')"> Apellido</td>
-		<td class="tablaresultadoTitle" onclick="consultar('firstname','<!-- TMPL_VAR name='ini' -->')"> Nombre</td>
-		<td class="tablaresultadoTitle" onclick="consultar('cardnumber','<!-- TMPL_VAR name='ini' -->')"> N&uacute;mero de socio</td>
-		<td class="tablaresultadoTitle" onclick="consultar('emailaddress','<!-- TMPL_VAR name='ini' -->')">E-mail</td>
-		<td class="tablaresultadoTitle" onclick="consultar('reservedate','<!-- TMPL_VAR name='ini' -->')"> Fecha de reserva</td>
-		<td class="tablaresultadoTitle" onclick="consultar('reminderdate','<!-- TMPL_VAR name='ini' -->')"> Fecha de vencimiento</td>
-		<td class="tablaresultadoTitle" onclick="consultar('barcode','<!-- TMPL_VAR name='ini' -->')"> C&oacute;digo de barra</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" title="Ordenar por apellido"> Apellido</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" title="Ordenar por nombre"> Nombre</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" title="Ordenar por numero de socio"> N&uacute;mero de socio</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('emailaddress')" title="Ordenar por mial">E-mail</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('reservedate')" title="Ordenar por fecha de reserva"> Fecha de reserva</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('reminderdate')" title="Ordenar por fecha de vencimiento"> Fecha de vencimiento</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" title="Ordenar por codigo de barra"> C&oacute;digo de barra</td>
 
  		<td align="rigth" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
 	</tr>

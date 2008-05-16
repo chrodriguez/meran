@@ -25,15 +25,14 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
-# use HTML::Template;
-use HTML::Template::Expr;
+use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Koha;
 
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "reports/reservasResult.tmpl",
+    = get_template_and_user({template_name => "reports/reservasResult.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -45,50 +44,19 @@ my  $branch=$input->param('branch');
 my $orden = $input->param('orden') || 'cardnumber';
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-} else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
+my $ini=$input->param('ini');
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
 my $tipoReserva=$input->param('tipoReserva'); # Tipo de reserva
 my @resultsdata= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
 my $cant=cantidadReservas($branch,$tipoReserva);
 
-
-my @numeros=armarPaginas($cant);
-my $paginas = scalar(@numeros)||1;
-
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		);
-
-if ( $cant > $cantR ){
-	my $sig = $pageNumber+1;
-	if ($sig <= $paginas){
-		 $template->param(
-				ok    =>'1',	
-				sig   => $sig);
-	};
-	if ($sig > 2 ){
-		my $ant = $pageNumber-1;
-		$template->param(
-				ok2	=> '1',	
- 				ant	=> $ant)}	  
-}
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,"consultar");
 
 $template->param(
 			resultsloop      => \@resultsdata,
 			cantidad         => $cant,
-			numeros		 => \@numeros,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

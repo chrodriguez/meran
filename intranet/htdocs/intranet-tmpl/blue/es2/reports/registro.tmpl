@@ -17,14 +17,20 @@
 				};
 
 //Funcion que guarda la nota de la modificacion, es llamada desde regitroResult.tmpl
-function nota(orden,ini,id){
+var notas="";
+var orden="surname";
+function nota(ini,id){
 	var not=$("#"+id).val();
-	var notas="&id="+id+"&notas="+not;
-	consultar(orden,ini,notas);
+	notas="&id="+id+"&notas="+not;
+	consultar(ini);
 } 
 
+function ordenar(ord){
+	orden=ord;
+	consultar('');
+}
 
-function consultar(orden,ini,notas){
+function consultar(ini){
 	var chkfecha=document.getElementById("chkfecha").checked;
 	var chkuser=document.getElementById("chkuser").checked;
 	var chknum=document.getElementById("chknum").checked;
@@ -44,6 +50,7 @@ function consultar(orden,ini,notas){
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
 				zebra("tablaResult");
+				notas="";
 				HiddeState();
 			}
 	});
@@ -75,9 +82,9 @@ function consultar(orden,ini,notas){
 
 			<td valign= "top" class=inputFontNormal><br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
-			<!-- TMPL_VAR NAME="todaydate" -->">
+			<!-- TMPL_VAR NAME='todaydate' -->">
 			<a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
-			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_VAR NAME="todaydate" -->"> 
+			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_VAR NAME='todaydate' -->"> 
 			<a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
 			</td>
 
@@ -103,20 +110,14 @@ function consultar(orden,ini,notas){
 
 			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
 
-				<input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"
-				<!-- TMPL_IF NAME="chkuser" -->checked<!-- /TMPL_IF -->><b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
-
+				<input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"><b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
 				<br><br>
+				<input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num"><b>N&uacute;mero
 
-				<input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num" 
-				<!-- TMPL_IF NAME="chknum" -->checked<!-- /TMPL_IF -->><b>N&uacute;mero
-
-				desde: <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12" 
-				<!-- TMPL_IF NAME="chknum" -->value="<!-- TMPL_VAR NAME= "numDesde" -->"<!-- /TMPL_IF -->>
-				hasta: </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" 
-				<!-- TMPL_IF NAME="chknum" -->value="<!-- TMPL_VAR NAME= "numHasta" -->"<!-- /TMPL_IF -->>
+				desde: <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
+				hasta: </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
 				<br><br>
-				<input type="image" onClick="consultar('fecha',1,'')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+				<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 
 			</td>
    		</tr>

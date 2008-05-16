@@ -1,32 +1,18 @@
 
 <center>
 <p class="inputFontNormal"> 
-	<b>La cantidad de modificaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+	<b>La cantidad de modificaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --></b>
 </p><br>
 
-<!-- TMPL_IF NAME="ok2" -->
-<input type="image" onClick="consultar('fecha',<!-- TMPL_VAR name='ant' -->,'')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-<a class="click" class="inputFontNormal" onClick="consultar('fecha',<!-- TMPL_VAR NAME=number -->,'')">
-<u><!-- TMPL_VAR name=number --></u></a>
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-<input type="image" onClick="consultar('fecha',<!-- TMPL_VAR name='sig' -->,'')" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
-<!-- /TMPL_IF -->
-
-
+<!-- TMPL_VAR name="paginador" -->
 <table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<th>Usuario</th>
-		<th>Fecha</th>
-		<th>Operaci&oacute;n</th>
-		<th>Tipo</th>
-		<th>N&uacute;mero</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" title="Ordenar por usuario">Usuario</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('fecha')" title="Ordenar por fecha">Fecha</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('operacion')" title="Ordenar por operacion">Operaci&oacute;n</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('tipo')" title="Ordenar por tipo">Tipo</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('numero')" title="Ordenar por numero de documento">N&uacute;mero</th>
 		<th>Nota</th>
 		<th>Agregar nota</th>
 		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
@@ -48,7 +34,7 @@
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
   		<td> 
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('fecha',<!-- TMPL_VAR NAME=actual -->,'<!-- TMPL_VAR NAME=idModificacion -->')"> 
+			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('','<!-- TMPL_VAR NAME=idModificacion -->')"> 
 		</td>
  		<td height=25 >&nbsp;</td>
  	</tr>

@@ -8,6 +8,12 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 
+var orden="cardnumber";
+function ordenar(ord){
+	orden=ord;
+	consultar('');
+}
+
 function ocultarBoton(tipoReserva){
 	var botonMail=$("#contacto");
 	if(tipoReserva != "EJ"){
@@ -18,7 +24,7 @@ function ocultarBoton(tipoReserva){
 	}
 }
 
-function consultar(orden,ini){
+function consultar(ini){
 	var branch=$("#branch").val();
 	var tipoReserva=$("#tipoReserva").val();
 	$.ajax({
@@ -76,7 +82,7 @@ function consultar(orden,ini){
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="2">
 			<br>
-			<input type="image" onClick="consultar('cardnumber',1)"  src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
+			<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 		</td>
 	</tr>
 </table>
