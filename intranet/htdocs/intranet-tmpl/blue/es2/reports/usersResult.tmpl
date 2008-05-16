@@ -1,31 +1,9 @@
 <center>
 <p>
 <b>La cantidad de usuarios es : <!-- TMPL_VAR NAME=cantidad --><br>
-   P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> 
-   de un total de: <!-- TMPL_VAR NAME=paginas --></b>
 </p>
 <br>
 
-<!-- TMPL_IF NAME="ok2" -->
-<input type="image" onClick="consultar('<!-- TMPL_VAR name='orden' -->',<!-- TMPL_VAR name='ant' -->)" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" onClick="consultar('<!-- TMPL_VAR name='orden' -->',<!-- TMPL_VAR NAME='number' -->)"> <u><!-- TMPL_VAR name=number --></u> </a>
-	<!-- TMPL_ELSE -->
-			<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-<input type="image" onClick="consultar('<!-- TMPL_VAR name='orden' -->',<!-- TMPL_VAR name='sig' -->)" src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
-<!-- /TMPL_IF -->
-<br><br>
-
-</center>
-
-<center>
 <!-- TMPL_VAR NAME="paginador" -->
 </center>
 
@@ -59,13 +37,13 @@
   		<td> <!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress --><!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a><!-- /TMPL_IF --></td>
   		<td> <!-- TMPL_VAR NAME=dateenrolled --> </td>
   		<td> <!-- TMPL_VAR NAME=categoria --></td>
- 		<td>&nbsp;</td>
   	</tr>
 
 <!-- /TMPL_LOOP -->
-	<tr>
-		<td colspan="11">&nbsp;</td>
-	</tr>
+
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
 
 </table>
 

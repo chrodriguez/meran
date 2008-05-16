@@ -64,7 +64,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 my $cantidad =cantidadUsuarios($branch,$year,$usos,$categ,@chck);#Obtengo la cantidad total de usuarios para poder paginar
 #Obtengo los usuarios de una pagina dada
 my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$categ,@chck);
-my ($template, $ini)=C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 
 $template->param( 	orden		 => $orden,
