@@ -54,24 +54,7 @@ my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
 $template->param( todaydate => format_date($today,$dateformat));
-                                                                                
-###
 
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-}
-else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
-
-#FIN inicializacion
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
@@ -86,36 +69,20 @@ my $chkfecha= $input->param('chkfecha'); #checkbox que busca por fecha
 my $tipoPrestamo= $input->param('tiposPrestamos');
 my $tipoOperacion= $input->param('tipoOperacion');
 
-($cant,@resultsdata)=
+
+
+my $ini= ($input->param('ini'));
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+
+my ($cantidad,@resultsdata)=
  &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
-my @numeros=armarPaginas($cant,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual);
-
-if ( $cant > $cantR ){#Seteo las flechas de siguiente y anterior
-       	my $sig = $pageNumber+1;;
-        if ($sig <= $paginas){
-       	         $template->param(
-               	                ok    =>'1',
-                       	        sig   => $sig);
-        };
-	if ($sig > 2 ){
-               my $ant = $pageNumber-1;
-               $template->param(
-                               ok2     => '1',
-                               ant     => $ant)}
-}
-
-$template->param(
-			numeros => \@numeros)
-;
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 $template->param( 
 			resultsloop      => \@resultsdata,
-                        cant             => $cant,
+                        cantidad         => $cantidad,
 			fechaFin         => $fechaFin,
 			fechaInicio      => $fechaInicio,
 			chkfecha         => $chkfecha,

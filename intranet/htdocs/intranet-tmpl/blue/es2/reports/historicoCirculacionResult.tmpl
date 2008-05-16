@@ -3,25 +3,10 @@
 <br>
 <center>
 <p class="inputFontNormal"> 
-	<b>La cantidad de operaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+	<b>La cantidad de operaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cantidad --><br>
 </p><br>
 
-<!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name='ant' -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR NAME=number -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME=user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<u><!-- TMPL_VAR name=number --></u></a>
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=historicoCirculacion.pl?ini=<!-- TMPL_VAR name="sig" -->&dateselected=<!--TMPL_VAR NAME=dateselected -->&dateselectedEnd=<!-- TMPL_VAR NAME=dateselectedEnd -->&chkfecha=<!--TMPL_VAR NAME= chkfecha -->&user=<!--TMPL_VAR NAME= user -->&tiposPrestamos=<!--TMPL_VAR NAME= tiposPrestamos -->&tipoOperacion=<!--TMPL_VAR NAME= tipoOperacion -->>
-<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
-
+<!-- TMPL_VAR NAME="paginador" -->
 <br>
 <br>
 <table id="tableResult" border=0 cellspacing=0 cellpadding=0 width="100%">
@@ -45,43 +30,43 @@
 	</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
-  	<tr align='center'>
+  	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
 
-		<td  class="inputFontNormal">
-			<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+		<td>
+			<a href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
 		</td>
-		<td  class="inputFontNormal">
-			<a class="inputFontNormal" href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='idAutor' ESCAPE='URL' -->&type=intra"><!-- TMPL_VAR NAME="completo" -->
+		<td>
+			<a ref="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='idAutor' ESCAPE='URL' -->&type=intra"><!-- TMPL_VAR NAME="completo" -->
 			</a>
 		</td>
-		<td  class="inputFontNormal">
+		<td>
 			
 			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
-		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
+		<td> 
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
 				<!-- TMPL_IF NAME=responsable -->
 					<!-- TMPL_VAR NAME=userCompleto -->
 				<!-- /TMPL_IF -->
 			</a>
 		</td>
-  		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
+  		<td> 
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
 				<!-- TMPL_IF NAME=responsable -->
 					<!-- TMPL_VAR NAME=nomCompleto -->
 				<!-- /TMPL_IF -->
 			</a>
 		</td>
-  		<td  class="inputFontNormal"> 
+  		<td> 
 			<!-- TMPL_VAR NAME=fecha --> </td>
-  		<td  class="inputFontNormal">
+  		<td>
 			<!-- TMPL_VAR NAME=operacion -->
 			<!-- TMPL_IF NAME=description -->
 				<br>(<!-- TMPL_VAR NAME=description -->) 
 			<!-- /TMPL_IF -->
 		</td>
-  		<td  class="inputFontNormal">
+  		<td>
 			<textarea id="<!-- TMPL_VAR NAME=id -->" class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota -->
 			</textarea>
 		<br>

@@ -17,13 +17,21 @@
 				};
 
 
-	function consultar(){
+	var orden='firstname';
+
+	function ordenar(ordenParam){
+		orden=ordenParam;
+		consultar('');
+	}
+
+	function consultar(ini){
 
 		var params= 	'fechaIni=' + $('#fechaIni').val() +
 				'&fechaFin=' + $('#fechaFin').val() +
 				'&user=' + $('#user').val() +
 				'&tiposPrestamos=' + $('#tiposPrestamos').val() +
-				'&tipoOperacion=' + $('#tipoOperacion').val();
+				'&tipoOperacion=' + $('#tipoOperacion').val() + 
+				'&ini=' + ini;
 	
 		$.ajax({	type: "POST", 
 				url: "/cgi-bin/koha/reports/historicoCirculacionResult.pl",
@@ -106,7 +114,7 @@
 	<tr>
 		<td colspan="4" align="center">
 			<br><br>
-			<a  onClick='consultar();'><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
+			<a  onClick="consultar('');"><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 		</td>
 	</tr>
 </table>
