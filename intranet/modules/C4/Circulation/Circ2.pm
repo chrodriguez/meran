@@ -1671,6 +1671,7 @@ sub getissues {
 		biblio.author         		AS author,
 		biblioitems.dewey     		AS dewey,
 		itemtypes.description 		AS itemtype,
+		biblioitems.number 		AS redicion,
 		biblioitems.volume 		AS volume,
 		biblioitems.volumeddesc 	AS volumeddesc, 
 		biblioitems.subclass  		AS subclass,

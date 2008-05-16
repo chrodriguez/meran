@@ -266,6 +266,7 @@
   			<td>Autor</td>
   			<td>C. Barra</td>
   			<td>Sig. Top.</td>
+			<td>Ed.</td>
   			<td>Vol.</td>
   			<td>Pr&eacute;stamo</td>
   			<td>Vencimiento</td>
@@ -297,7 +298,10 @@
 			<!-- TMPL_VAR NAME="bulk" --> 
 			</a>
 			<!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
-			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
+			 <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ 			</td>
+			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" --><!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+			</td>
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="date_due" --> <!-- TMPL_VAR NAME="date_due" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="date_fin" --> <font color="<!-- TMPL_VAR NAME="color" -->"> <!-- TMPL_VAR NAME="date_fin" --> </font><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
@@ -342,6 +346,7 @@
  	<td>Autor</td>
 	<td>C. Barra</td>
   	<td>Sig. Top.</td>
+	<td>Ed.</td>
 	<td>Vol.</td> 
 	<td>Vencimiento</td>
 	<td width="10%">Retira en</td>
@@ -370,7 +375,9 @@
 </a>
 <!-- TMPL_ELSE -->-<!-- /TMPL_IF -->
 </td>
-<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ </td>
+<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" --><!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
 </td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_VAR NAME="rreminderdate" --></td>
 <td class="<!-- TMPL_VAR NAME="clase"-->" align="center"><b><!-- TMPL_VAR NAME="rbranch" --></b></td>
@@ -404,6 +411,7 @@
 <td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
 <td>T&iacute;tulo</td>
  <td>Autor</td>
+<td>Edici&oacute;n</td>
  <td>Volumen</td>
  <td>Cancelar</td>
 <td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
@@ -416,6 +424,8 @@
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
  </td>
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ </td>
+ <td align=center class="<!-- TMPL_VAR NAME="clase"-->">  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" --><!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
  </td>
  <td align=center class="<!-- TMPL_VAR NAME="clase"-->"> 
 	<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">

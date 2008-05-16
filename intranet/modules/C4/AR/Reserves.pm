@@ -275,6 +275,7 @@ $sth3->execute();
 return (1,$resultado,$desde,$fecha,$branch,$apertura,$cierre);
 }
 
+#Se intenta reservar un ejemplar para prestar desde la INTRANET
 sub reservaritem {
 my ($borrowernumber,$biblioitemnumber,$itemnumber,$branch,$immediateIssue,$issuetype)=@_;
 
@@ -364,7 +365,7 @@ if (($resaux=$sth->fetchrow_hashref)||($sepuede)){ #hay una reserva para el item
 	if ($data2){ #si el itemnumber que se quiere reservar ya esta reservado y hay otro libre => hago el intercambio para que el que quiero quede liberado
 		$sth=$dbh->prepare("update reserves set itemnumber= ? where itemnumber = ?");
 		$sth->execute($data2->{'itemnumber'}, $itemnumber);
-	} elsif($resnum < $MAXIMUM_NUMBER_OF_RESERVES) {#NO HAY EJEMPLARES LIBRES
+	} elsif($resnum < $MAXIMUM_NUMBER_OF_RESERVES) { #NO HAY EJEMPLARES LIBRES
 		
 		#Se permite realizar reservas sobre grupos desde la INTRANET???
 		if (C4::Context->preference("intranetGroupReserve")){
@@ -720,7 +721,7 @@ sub FindNotRegularUsersWithReserves {
 sub DatosReservas {
 	my ($bor)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT biblio.title as rtitle, biblio.unititle as runititle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, reserves.biblioitemnumber as rbiblioitemnumber,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, biblioitems.volume as volume, biblioitems.number as redicion, biblioitems.publicationyear as rpublicationyear, reserves.itemnumber as ritemnumber, reserves.branchcode as rbranch
+	my $query="SELECT biblio.title as rtitle, biblio.unititle as runititle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, reserves.biblioitemnumber as rbiblioitemnumber,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc , biblioitems.number as redicion, biblioitems.publicationyear as rpublicationyear, reserves.itemnumber as ritemnumber, reserves.branchcode as rbranch
 	FROM reserves
 	inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
 	inner join biblio on biblioitems.biblionumber = biblio.biblionumber";
@@ -892,6 +893,19 @@ sub eliminarReservasVencidas(){
 			my $sth4=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=? where biblioitemnumber=? and borrowernumber=? ");
 			$sth4->execute($resultado[0], $desde, $fecha,$resultado[1],$resultado[2]);
 			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
+			
+		#**********************************Se registra el movimiento en historicCirculation***************************
+		my $itemnumber= $resultado[0];
+		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+		my $biblionumber= $dataItems->{'biblionumber'};
+		my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
+		my $end_date= $fecha;
+		my $issuecode= '-';
+		my $borrnum= $resultado[2];
+	
+		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$data->{'branchcode'},$issuecode,$end_date);
+		#********************************Fin**Se registra el movimiento en historicCirculation*************************
+
 		}
 	}
 	my $sth5=$dbh->prepare("commit ");
