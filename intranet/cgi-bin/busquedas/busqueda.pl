@@ -85,9 +85,9 @@ if($titulo ne ""){
 	}
 }
 
-if($idTema ne "" || $tema ne ""){
+if($idTema ne "" ){
 	$buscoPor.="Tema: ".$tema."&";
-	$nivel1rep.= "(n1r.campo='650' AND n1r.subcampo='a'AND n1r.dato='".&verificarValor($tema)."')#";
+	$nivel1rep.= "(n1r.campo='650' AND n1r.subcampo='a'AND n1r.dato='".&verificarValor($idTema)."')#";
 }
 
 
