@@ -3011,11 +3011,8 @@ sub borrdata2 {
  my  $close = ParseDate(C4::Context->preference("close"));
 if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
 	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);}
-									 
 
- #
   while (my $data=$sth->fetchrow_hashref){
-	          
 	#Pregunto si esta vencido
         my $df=C4::Date::format_date_in_iso(vencimiento($data->{'itemnumber'}),$dateformat);
 	if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
@@ -3024,16 +3021,7 @@ if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cier
 	  }
 		    
  $sth->finish;
- # El resto lo dejo por  compatibilidad NO SE UTILIZA
-=item
-  $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
-    borrowernumber='$bornum'");
-  $sth->execute;
-  my $data3=$sth->fetchrow_hashref;
-  $sth->finish;
-=cut
- #
-# return($overdues,$issues,$data3->{'sum(amountoutstanding)'});
+
 return($overdues,$issues,"");
 }
 

@@ -10,7 +10,7 @@
 
 function buscarPorAutor(idAutor){
 
-var params= 	'idAutor=' + idAutor;
+	var params= 'idAutor=' + idAutor+'&ini=""';
 	$.ajax({	type: "POST", 
 			url: "/cgi-bin/koha/busquedas/busqueda.pl",
 			data: params,
@@ -26,12 +26,14 @@ var params= 	'idAutor=' + idAutor;
 	});
 }
 
-
-function ordenarPor(orden){
-	buscar(orden);
+var orden="titulo";
+function ordenarPor(ord){
+// 	buscar(orden);
+	orden=ord;
+	buscar('');
 }
 
-function buscar(orden){
+function buscar(ini){
 	if ($('#keyword').val() != ''){
 	busquedaCombinada(orden);
 	}
@@ -59,7 +61,7 @@ var params= 	'isbn=' + $('#isbn').val() +
 		'&tema=' + $('#tema').val() +
 		'&autor=' + $('#autor').val() +
 		'&titulo=' + $('#titulo').val() +
-		'&tipo=' + tipo + '&orden=' + orden +
+		'&tipo=' + tipo + '&orden=' + orden + '&ini=' + ini +
 		'&comboItemTypes=' + $('#comboItemTypes').val();
 		
 	$.ajax({	type: "POST", 
@@ -74,15 +76,6 @@ var params= 	'isbn=' + $('#isbn').val() +
 					$("#resultBusqueda").slideDown("fast");
 					zebra('tablaResult');
 					HiddeState();
-
-/*
-					//para ordenar el resultado en el cliente
-					$('#tablaResult').tablesorter({	
-  									sortList:[[0,0],[1,0],[2,0]],
- 									widgets: ['zebra'],
-  									headers: { 3: { sorter: false} }
-								});
-*/
 				}
 	});
 
@@ -98,7 +91,7 @@ function mostrarDetalle(id1){
 $(document).ready(function() {
 	$("input").keypress(function (e) {
 		if(e.which == 13){
-			buscar('titulo');
+			buscar('');
 		}
 	});
 
@@ -352,7 +345,7 @@ var params= 	'keyword=' + $('#keyword').val() + '&orden=' + orden ;
 		<ul>
 			<li>
 			<input type="hidden" name="type" value="intra">
-			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscar('titulo');">
+			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscar('');">
 
 			<input type="image"   src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/vertodos.png" onClick="mostrarEstantes();" >
 		

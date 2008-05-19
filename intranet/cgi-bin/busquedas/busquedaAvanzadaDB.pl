@@ -132,7 +132,7 @@ if($accion eq "buscar"){
 	my $nivel3rep=&parsearString($input->param('nivel3rep'),"n3r");
 	my $operador=$input->param('operador');
 
-	my $resultId1= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador);
+	my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador);
 
 my @resultsarray;
 my %result;

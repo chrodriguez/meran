@@ -49,19 +49,24 @@ function buscarPorAutor(idAutor){
 }
 
 </script>
-<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></p>
+<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" ESCAPE=HTML--></b></p>
 </div>
+
+<center>
+<!-- TMPL_VAR NAME="paginador" -->
+</center>
+
 <table id="tablaResult" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width=100% id="zebra">
 	<thead>
 	<tr class="tablaresultadoTitle">
 		<td width="2%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 
 		</td>
-		<td width="5%">&nbsp;</td>
-		<th width="35%"><a class="click" onClick="ordenarPor('titulo')">T&iacute;tulo</a></th>
-		<th width="35%"><a class="click" onClick="ordenarPor('nomCompleto')"> Autor </a></th>
-		<th width="12%">Edici&oacute;n/A&ntilde;o</th>
-		<th width="15%"> Disponibilidad </th>
+		<td width="5%"  class="tablaresultadoTitle">&nbsp;</td>
+		<th width="35%" class="tablaresultadoTitleClick" onClick="ordenarPor('titulo')">T&iacute;tulo</th>
+		<th width="35%" class="tablaresultadoTitleClick" onClick="ordenarPor('nomCompleto')"> Autor </th>
+		<th width="12%" class="tablaresultadoTitle">Edici&oacute;n/A&ntilde;o</th>
+		<th width="15%" class="tablaresultadoTitle"> Disponibilidad </th>
 
 		<td width="2%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
 		</td>

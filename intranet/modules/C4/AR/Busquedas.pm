@@ -1369,7 +1369,7 @@ busquedaAvanzada
 Busca los id1 dependiendo de los strings que viene desde el pl.
 =cut
 sub busquedaAvanzada(){
-	my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$startRecord ,$numberOfRecords)= @_;
+	my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR)= @_;
 	my $dbh = C4::Context->dbh;
 #Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
 	if($operador eq "AND"){
@@ -1542,6 +1542,7 @@ if($from3 ne "" || $nivel3rep ne ""){
 
 my @resultsId1;
 my $query="";
+my $queryCant="";
 my $n="";
 # Se concatenan todas las consultas.
 if($consultaN1 ne ""){
@@ -1568,11 +1569,13 @@ if($consultaN3 ne ""){
 }
 
 $query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
+$queryCant=$query;
+#Se reemplaza la 1º subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
+$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(*) /o;
 
-#### Paginador ####
-	if (defined $startRecord && defined $numberOfRecords) {
-		$query.= " limit $startRecord,$numberOfRecords";
-	}
+if (defined $ini && defined $cantR) {
+	$query.= " limit $ini,$cantR";
+}
 
 my $sth=$dbh->prepare($query);
 $sth->execute();
@@ -1580,7 +1583,13 @@ while(my $data=$sth->fetchrow_hashref){
 	push(@resultsId1, $data->{'id1'});
 }
 
-return (\@resultsId1);
+$sth=$dbh->prepare($queryCant);
+$sth->execute();
+my $cantidad=$sth->fetchrow;
+
+$sth->finish;
+
+return ($cantidad,\@resultsId1);
 
 }#end busquedaAvanzada
 

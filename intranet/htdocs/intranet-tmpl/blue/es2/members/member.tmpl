@@ -1,10 +1,6 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 
 <script language="javascript" type="text/javascript">
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
@@ -12,24 +8,31 @@
 //para manejar la zebra
 <!-- TMPL_INCLUDE NAME="util.js" -->
 
-function consultar(){
-	var p= 	'member=' + $('#member').val();
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/members/memberResult.pl",
-			data: p,
-			beforeSend: Init,
- 			complete: function(ajax){
+var orden="surname";
+function ordenar(ord){
+	orden=ord;
+	consultar('');
+}
+
+function consultar(ini){
+	var busqueda = $('#member').val();
+	if(busqueda != ""){
+		var p= 	'member=' + busqueda+'&ini='+ini+'&orden='+orden;
+		$.ajax({	type: "POST", 
+				url: "/cgi-bin/koha/members/memberResult.pl",
+				data: p,
+				beforeSend: Init,
+ 				complete: function(ajax){
 					$('#result').html(ajax.responseText);
 					zebra('tablaResult');
-					$('#tablaResult').tablesorter({	
- 									widgets: ['zebra'],
-  									headers: { 0: { sorter: false},
- 										   9: { sorter: false}}
-								})
-							.tablesorterPager({container: $("#pager")})
-					Complete();
+					HiddeState();
 				}
-	});
+		});
+	}
+	else{
+		alert("Ingrese un dato");
+ 		$('#member').focus();
+	}
 
 }
 
@@ -37,30 +40,13 @@ function Borrar(){
 	$('#member').val('');
 }
 
-function Complete(){
-	HiddeState();
-}
-
-function Buscar(){
-	var busqueda = $('#member').val();
- 	if(busqueda != ""){
-		consultar();	
- 	}else{
- 		alert("Ingrese un dato");
- 		$('#member').focus();
- 	}
-}
-
-function datosUsuario(id){
-	location.href="/cgi-bin/koha/members/moremember.pl?bornum="+id;
-}
 
 $(document).ready(function() {
 
 	//onEnter con foco en input, ejecuta la busqueda
 	$("#member").keypress(function (e) {
 		if(e.which == 13){
-			Buscar();
+			consultar();
 		}
 	});
 
@@ -86,7 +72,7 @@ $(document).ready(function() {
 			<input id="member" class="inputFontNormal" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="Buscar();" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="consultar('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
 			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 		</td>
@@ -104,20 +90,7 @@ $(document).ready(function() {
 <br>
 <div id="result"></div>
 <br>
-<!--<div id="pager" class="pager" style="top: 640px; position: absolute;">
-<form>
-	<img class="first" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/first.png"/>
-	<img class="prev" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/prev.png"/>
-	<input class="pagedisplay" type="text"/>
-	<img class="next" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/next.png"/>
-	<img class="last" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/last.png"/>
-	<select class="pagesize">
-		<option value="10" selected="selected">10</option>
-		<option value="20">20</option>
-		<option value="50">50</option>
-	</select>
-</form>
-</div>-->
+
 
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

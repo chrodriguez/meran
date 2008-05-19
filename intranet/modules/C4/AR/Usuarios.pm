@@ -19,29 +19,25 @@ use vars qw(@EXPORT @ISA);
   llamada por memberResult.pl
 =cut
 sub ListadoDeUsuarios  {
-	my ($env,$searchstring,$type,$onlyCount)=@_;
+	my ($env,$searchstring,$type,$orden,$ini,$cantR)=@_;
 	my $dbh = C4::Context->dbh;
 	my $count; 
 	my @data;
 	my @bind=();
-	my $query;
-
-	if ($onlyCount) {
-		$query = "Select count(*) from borrowers b";
-	} else {
-		$query = "Select * from borrowers ";
-	}
+	my $query = "Select count(*) from borrowers b";
+	my $query2 = "Select * from borrowers ";
+	my $where;
 
 	if($type eq "simple")	# simple search for one letter only
 	{
-		$query.=" where surname like ? ";
+		$where=" where surname like ? ";
 		@bind=("$searchstring%");
 	}
 	else	# advanced search looking in surname, firstname and othernames
 	{
 		@data=split(' ',$searchstring);
                 $count=@data;
-                $query.=" where (surname like ? or surname like ?
+                $where=" where (surname like ? or surname like ?
 		or  firstname like ? or firstname like ?
                 or  documentnumber  like ? or  documentnumber like ?
                 or  cardnumber like ? or  cardnumber like ?
@@ -49,7 +45,7 @@ sub ListadoDeUsuarios  {
                 @bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
 
                 for (my $i=1;$i<$count;$i++){
-                	$query=$query." and  (surname like ? or surname like ?
+                	$where.=" and  (surname like ? or surname like ?
 	     		or  firstname like ? or firstname like ?
                 	or  documentnumber  like ? or  documentnumber like ?
                 	or  cardnumber like ? or  cardnumber like ?
@@ -59,22 +55,23 @@ sub ListadoDeUsuarios  {
                 }
 
 	}
-
+	
+	$query.=$where;
+	$query2.=$where." order by ".$orden." limit ?,?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute(@bind);
-	if ($onlyCount) {
-	  my $cnt= $sth->fetchrow;
-	  $sth->finish;
-	  return ($cnt);
-	} else {
-	  my @results;
-	  my $cnt=$sth->rows;
-	  while (my $data=$sth->fetchrow_hashref){
-	    push(@results,$data);
-	  }
-	  $sth->finish;
-	  return ($cnt,\@results);
+	my $cnt= $sth->fetchrow;
+	$sth->finish;
+
+	my $sth=$dbh->prepare($query2);
+	$sth->execute(@bind,$ini,$cantR);
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		push(@results,$data);
 	}
+	$sth->finish;
+
+	return ($cnt,\@results);
 }
 
 

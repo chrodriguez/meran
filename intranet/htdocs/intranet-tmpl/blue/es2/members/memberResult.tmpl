@@ -7,23 +7,25 @@
 		<b>Ha buscado por : <!-- TMPL_VAR NAME=member --></b>
 	</tr>
 </table>
-
+<center>
+<!-- TMPL_VAR NAME="paginador" -->
+</center>
 <table id="tablaResult" class="tablesorter" ssborder=0 cellspacing=0 cellpadding=0 width=100%>
 	<thead>
-  	<tr class="tablaresultadoTitle">
-    		<th width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+  	<tr>
+    		<th class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
 
-		<th class="header" align="left" width="12%">Tarjeta de Id.</th>
-    		<th class="header" align="left" width="30%">Apellido y Nombres</th>
-    		<th class="header" width="15%">Documento</th>
-    		<th class="header" align="left">Legajo</th>
-    		<th class="header">Cat.</th>
-    		<th class="header">Prest.</th>
-    		<th class="header">Ven.</th>
-    		<th class="header">Estado</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" Title="Ordenar por tarjeta de Id." width="12%">Tarjeta de Id.</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" Title="Ordenar por apellido" align="left" width="30%">Apellido y Nombres</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('documentnumber')" Title="Ordenar por DNI" width="15%">Documento</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('studentnumber')" Title="Ordenar por legajo" align="left">Legajo</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('categorycode')" Title="Ordenar por categoria">Cat.</th>
+    		<th class="tablaresultadoTitle">Prest.</th>
+    		<th class="tablaresultadoTitle">Ven.</th>
+    		<th class="tablaresultadoTitle">Estado</th>
 
 
-   		<th width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>	
+   		<th class="tablaresultadoTitle" width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>	
   	</tr>
    	</thead>
 	<tbody>
@@ -36,11 +38,8 @@
       		<td align='left'>
 			<!-- TMPL_VAR NAME=cardnumber -->
 		</td>
-     		<td width=250 align="left" class="click" onclick="datosUsuario(<!-- TMPL_VAR NAME=borrowernumber -->)">
-			
-			<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->
-	
-			<!--<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname --></a>-->
+     		<td width=250 align="left">
+			<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname --></a>
 		</td>
       		<td align="left">
 			<!-- TMPL_VAR NAME=documenttype -->&nbsp;<!-- TMPL_VAR NAME=documentnumber -->
@@ -70,5 +69,4 @@
 	</tr>
 	</tbody>
 </table>
-<!-- TMPL_INCLUDE NAME="paginadorTabla.inc" -->
 

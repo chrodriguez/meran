@@ -25,7 +25,7 @@ my $idTema= $input->param('idTema');
 my $tema= $input->param('tema');
 my $comboItemTypes= $input->param('comboItemTypes');
 my $idAutor=$input->param('idAutor');#Viene por get desde un link de autor
-my $orden=$input->param('orden');#PARA EL ORDEN
+my $orden=$input->param('orden')||'titulo';#PARA EL ORDEN
 
 my $nivel1="";
 my $nivel2="";
@@ -44,10 +44,6 @@ my $buscoPor="";
 			     flagsrequired => {catalogue => 1},
 			     debug => 1,
 			     });
-
-
-
-
 
 if($idAutor > 0 ){
 	$nivel1="autor=".&verificarValor($idAutor);
@@ -89,9 +85,9 @@ if($titulo ne ""){
 	}
 }
 
-if($idTema ne ""){
+if($idTema ne "" || $tema ne ""){
 	$buscoPor.="Tema: ".$tema."&";
-	$nivel1rep.= "(n1r.campo='650' AND n1r.subcampo='a'AND n1r.dato='".&verificarValor($idTema)."')#";
+	$nivel1rep.= "(n1r.campo='650' AND n1r.subcampo='a'AND n1r.dato='".&verificarValor($tema)."')#";
 }
 
 
@@ -102,7 +98,12 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
 }
 
-my $resultId1= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND");
+my $ini= ($input->param('ini'));
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
+
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"buscar");
 
 my @resultsarray;
 my %result;
@@ -123,7 +124,6 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
 }
 
-#PARA EL ORDEN VER SI QUEDA, PUEDE SER CAMBIADO POR JQUERY!!!!!!!!!!!!!!!
 my @keys=keys %result;
 @keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
 foreach my $row (@keys){

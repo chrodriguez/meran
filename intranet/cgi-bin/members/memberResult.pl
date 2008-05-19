@@ -46,49 +46,32 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+my $orden=$input->param('orden')||'surname';
 my $member=$input->param('member');
-
+my $ini=$input->param('ini');
 my $env;
 
-my ($count,$results);
+
+my ($cantidad,$results);
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 if($member ne ""){
-	if(length($member) == 1) {
-		$count=&ListadoDeUsuarios($env,$member,"simple",1);
-	} else {
-		$count=&ListadoDeUsuarios($env,$member,"advanced",1);
-	}
-}
-
-$template->param( cantidad  => $count);
-
-if($member ne ""){
-
 	if((length($member) == 1)&&(defined $member)) {
-		($count,$results)=&ListadoDeUsuarios($env,$member,"simple",0);
+		($cantidad,$results)=&ListadoDeUsuarios($env,$member,"simple",$orden,$ini,$cantR);
 	} else {
-		($count,$results)=&ListadoDeUsuarios($env,$member,"advanced",0);
+		($cantidad,$results)=&ListadoDeUsuarios($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
-
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 my @resultsdata;
-
-my $dateformat = C4::Date::get_date_format();
-my $err= "Error con la fecha";
-my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-my  $close = ParseDate(C4::Context->preference("close"),$dateformat);
-if (Date::Manip::Date_Cmp($close,ParseDate("today")) < 0){
-	#Se paso la hora de cierre
-	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err));
-}
-
-for (my $i=0; $i < $count; $i++){
+for (my $i=0; $i < $cantR; $i++){
   #find out stats
- my ($od,$issue)=borrdata2($env,$results->[$i]{'borrowernumber'},$hoy,$close);
- my $regular= esRegular($results->[$i]{'borrowernumber'});
+    if($results->[$i]{'borrowernumber'} ne ""){
+ 	my ($od,$issue)=borrdata2($env,$results->[$i]{'borrowernumber'});
+ 	my $regular= esRegular($results->[$i]{'borrowernumber'});
 
- if ($regular eq 1){$regular="<font color='green'>Regular</font>";}	
+ 	if ($regular eq 1){$regular="<font color='green'>Regular</font>";}	
 	else{
 		if($regular eq 0){$regular="<font color='red'>Irregular</font>";}
 		else{
@@ -96,29 +79,31 @@ for (my $i=0; $i < $count; $i++){
 		}
 	}
 
-  my %row = (
-        borrowernumber => $results->[$i]{'borrowernumber'},
-        cardnumber => $results->[$i]{'cardnumber'},
-        surname => $results->[$i]{'surname'},
-        firstname => $results->[$i]{'firstname'},
-        categorycode => $results->[$i]{'categorycode'},
-        streetaddress => $results->[$i]{'streetaddress'},
-        documenttype => $results->[$i]{'documenttype'},
-        documentnumber => $results->[$i]{'documentnumber'},
-        studentnumber => $results->[$i]{'studentnumber'},
-        city => $results->[$i]{'city'},
-        odissue => "$od/$issue",
-        issue => "$issue",
-        od => "$od",
-        regular => $regular,
-        borrowernotes => $results->[$i]{'borrowernotes'});
- 
-  	push(@resultsdata, \%row);
+  	my %row = (
+        	borrowernumber => $results->[$i]{'borrowernumber'},
+        	cardnumber => $results->[$i]{'cardnumber'},
+        	surname => $results->[$i]{'surname'},
+        	firstname => $results->[$i]{'firstname'},
+        	categorycode => $results->[$i]{'categorycode'},
+        	streetaddress => $results->[$i]{'streetaddress'},
+        	documenttype => $results->[$i]{'documenttype'},
+        	documentnumber => $results->[$i]{'documentnumber'},
+        	studentnumber => $results->[$i]{'studentnumber'},
+        	city => $results->[$i]{'city'},
+        	odissue => "$od/$issue",
+        	issue => "$issue",
+        	od => "$od",
+        	regular => $regular,
+        	borrowernotes => $results->[$i]{'borrowernotes'}
+	);
+	push(@resultsdata, \%row);
+     }
 }
 
 $template->param(
 			member          => $member,
-			resultsloop     => \@resultsdata 
+			resultsloop     => \@resultsdata,
+			cantidad        => $cantidad,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
