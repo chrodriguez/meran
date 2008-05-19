@@ -319,9 +319,11 @@
 			<td colspan="10" align="center">
 				<input type="hidden" id="action" name="action">
 				<input type="image" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolverItmes()">
+			<!-- TMPL_IF NAME="regular" -->
 				<!-- TMPL_UNLESS NAME="sanctions" -->
 				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="renovarItems()">
 				<!-- /TMPL_UNLESS -->
+			<!-- /TMPL_IF -->
 			</td>
 		</tr>
 		</table>

@@ -220,6 +220,10 @@ if ($bornum) {
 my $sanctions = hasSanctions($bornum);
 $template->param(sanctions       => $sanctions);
 ####
+####Es regular el Usuario?####
+my $regular =  C4::AR::Reserves::isRegular($bornum);
+$template->param(regular       => $regular);
+####
 
 } else { # else -- if ($bornum)
 	my @values;

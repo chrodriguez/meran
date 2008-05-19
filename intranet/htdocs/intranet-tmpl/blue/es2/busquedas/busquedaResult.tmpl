@@ -56,7 +56,7 @@ function buscarPorAutor(idAutor){
 <!-- TMPL_VAR NAME="paginador" -->
 </center>
 
-<table id="tablaResult" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width=100% id="zebra">
+<table id="tablaResult" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<thead>
 	<tr class="tablaresultadoTitle">
 		<td width="2%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
@@ -75,11 +75,11 @@ function buscarPorAutor(idAutor){
 	<tbody>
 <!-- Actual Resultados de la b&uacute;squeda -->
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
-	<tr>
+	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
 		<td>
 		<script>
-		cargarImagen('<!-- TMPL_VAR NAME='id1' -->');
+// 		cargarImagen('<!-- TMPL_VAR NAME='id1' -->');
 		</script>
 		<div id="<!-- TMPL_VAR NAME='id1' -->">
 		<div>
@@ -99,14 +99,14 @@ function buscarPorAutor(idAutor){
 			</a>
 		</td>
 
-		<td class="inputFontNormal">
+		<td>
 			<!-- TMPL_LOOP NAME="grupos" -->
 				<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="anio_publicacion" -->(<!-- TMPL_VAR NAME="anio_publicacion" -->)<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --><br>
 			<!-- /TMPL_LOOP -->
 		</td>
 
-		<td class="inputFontNormal">
+		<td>
 			<!-- TMPL_LOOP NAME="disponibilidad" -->
 				<b><!-- TMPL_VAR NAME="tipoPrestamo" --></b> <!-- TMPL_VAR NAME="cantTotal" -->
 				<br>

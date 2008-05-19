@@ -149,6 +149,10 @@ my @overdues;
 my @issuedat;
 my $clase='par';
 my $sanctions = hasSanctions($bornum);
+####Es regular el Usuario?####
+my $regular =  C4::AR::Reserves::isRegular($bornum);
+$template->param(regular       => $regular);
+####
 foreach my $san (@$sanctions) {
 	if ($san->{'itemnumber'}) {
 		my $aux=itemdata3($san->{'itemnumber'}); 
