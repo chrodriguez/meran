@@ -98,7 +98,7 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
 }
 
-my $ini= ($input->param('ini'));
+my $ini= ($input->param('ini')||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
@@ -147,7 +147,8 @@ $buscoPor= substr($buscoPor,2,length($buscoPor));
 
 $template->param(
 		SEARCH_RESULTS => \@resultsarray,
-		buscoPor=>	$buscoPor
+		buscoPor=>	$buscoPor,
+		cantidad=>	$cantidad
 		);
 
 

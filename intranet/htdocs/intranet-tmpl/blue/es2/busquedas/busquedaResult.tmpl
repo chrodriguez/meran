@@ -2,54 +2,13 @@
 
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<script language="javascript" type="text/javascript">
-
-function mostrarDetalle(id1){
-	var params="id1="+id1;
-	crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
-}
-</script>
-
 <!-- PARA PODER CREAR EL FORMULARIO -->
 <div id="formulario"></div>
 <!-- /TMPL_IF -->
 
-<div>
-<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
-<script>
-
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
-
-function  cargarImagen(id){
-var params= 'id=' + id  + '&tipo=id1';
-
-
-$.ajax({        type: "POST", 
-		url: "/cgi-bin/koha/search-amazon.pl",
-		data: params,
-		complete: function(ajax){
-			if (ajax.responseText != ''){
-			urls=ajax.responseText.split("#");
-				if ((urls[0] != '')&&(urls[1] != '')){
-				$('#' + id).html(  '<a href="/covers/' + urls[1] + '" title="Ver imagen" rel="lightbox"><img src="/covers/' + urls[0] + '" ></a>');
-				}else {
-				if (urls[0] != ''){
-				$('#' + id).html(  '<img src="/covers/' + urls[0] + '" >');
-				}
-				}
-			}}
-		});
-
-}
-
-function buscarPorAutor(idAutor){
-	location.href="filtrado.pl?origen=detalle&idAutor="+idAutor;
-}
-
-</script>
-<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" ESCAPE=HTML--></b></p>
+<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" ESCAPE=HTML--></b>
+<br>Total de registros: <b><!-- TMPL_VAR NAME='cantidad' --></b></p>
 </div>
 
 <center>
@@ -78,19 +37,12 @@ function buscarPorAutor(idAutor){
 	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
 		<td>
-		<script>
-// 		cargarImagen('<!-- TMPL_VAR NAME='id1' -->');
-		</script>
-		<div id="<!-- TMPL_VAR NAME='id1' -->">
-		<div>
 		</td>
 		<td>
 			<a class="click" onClick="mostrarDetalle('<!-- TMPL_VAR NAME='id1' -->');" title="Mostrar Detalle">
 				<!-- TMPL_VAR NAME=titulo ESCAPE=HTML -->
 			</a>
 
-			<!--<a class="click" href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='id1' -->" title="Mostrar Detalle"><!-- TMPL_VAR NAME=titulo ESCAPE=HTML -->
-			</a>-->
 		</td>
 
 		<td>
