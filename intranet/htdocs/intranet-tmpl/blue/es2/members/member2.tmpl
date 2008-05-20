@@ -1,9 +1,6 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 
 
 <script language="javascript" type="text/javascript">
@@ -12,11 +9,7 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 
 <!-- TMPL_INCLUDE NAME="util.js" -->
-
-// function swap(id,src){
-// document.getElementById(id).src=src;
-// }
-
+/*
 function todos(){
 var checks=document.getElementsByTagName("input");
 if (checks.length>0){
@@ -28,90 +21,96 @@ if (checks.length>0){
 		else{checks[i].checked=true}
 	}
  }
-}
+}*/
 
-function prueba(){
-var checks=document.getElementsByTagName("input");
-var theStatus=""  ;
-var cant=0;
-if (checks.length>0){
-	theStatus= "Usted esta a punto de "+document.getElementById("accion").value+" a los propietarios de:\n"; 
+function habilitar(){
+	var checks=$("input[@type='checkbox']:checked");
+	var array=checks.get();
+	var theStatus="";
+	var personNumbers=new Array();
+	var cant=checks.length;
+	var accion=$("#accion").val();
+	if (cant>0){
+		theStatus= "Usted esta a punto de "+accion+" a los propietarios de:\n"; 
 	
-for(i=0;i<checks.length;i++)
-{
-if((checks[i].type == "checkbox")&&(checks[i].checked))
-{
-cant++;
-theStatus=theStatus+" -  Tarjeta nro "+ checks[i].id+"\n";
-}
-}
-theStatus=theStatus + "\n\nEsta seguro?";
-if (cant>0){if (confirm (theStatus)){
-			document.getElementById("cantidad").value=cant; 
-			document.form1.submit();}
-}else{ alert ("No selecciono ningun usuario");}
-}}
+		for(i=0;i<checks.length;i++){
+			theStatus=theStatus+" -  Tarjeta nro "+ array[i].value+"\n";
+			personNumbers[i]=array[i].name;
+		}
 
+		theStatus=theStatus + "\n\nEsta seguro?";
+		if (cant>0){
+			if (confirm (theStatus)){
+				var params="cantidad="+cant+"&accion="+accion+"&personNumbers="+personNumbers;
+				actualizarPersonas(params);
+			}
+		}
+	}
+	else{ alert ("No selecciono ningun usuario");}
+}
 
+function actualizarPersonas(params){
+	$.ajax({type: "POST",
+		url: "/cgi-bin/koha/members/actualizarPersonas.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				if(ajax.responseText != ""){
+					$("#msj").html(ajax.responseText);
+				}
+				else{$("#msj").html('');}
+				consultar('');
+				HiddeState();
+			}
+		});
+}
+	
 
 //*************************************************************************************************************
+var orden="surname";
+function ordenar(ord){
+	orden=ord;
+	consultar('');
+}
 
-function consultar(){
-	
-	var p= 	'member=' + $('#member').val();
-
-	$.ajax({	type: "POST", 
+function consultar(ini){
+	var busqueda = $('#member').val();
+	var p = 'member='+busqueda+'&ini='+ini+'&orden='+orden;
+	if(busqueda != ""){
+		$.ajax({type: "POST",
 			url: "/cgi-bin/koha/members/member2Result.pl",
 			data: p,
 			beforeSend: Init,
  			complete: function(ajax){
 					$('#result').html(ajax.responseText);
 					zebra('tablaResult');
-					$('#tablaResult').tablesorter({	
- 									widgets: ['zebra'],
-  									headers: { 0: { sorter: false},
-										   1: { sorter: false},
- 										   9: { sorter: false}}
-// ,
-//  									debug: true
-								})
-							.tablesorterPager({container: $("#pager")})
-					Complete();
+					HiddeState();
 				}
-	});
-
-}
-
-function Borrar(){
-	$('#member').val('');
-}
-
-function Complete(){
-	HiddeState();
-}
-
-function Buscar(){
-	var busqueda = $('#member').val();
-	if(busqueda != ""){
-		consultar();	
-	}else{
+		});
+	}
+	else{
 		alert("Ingrese un dato");
 		$('#member').focus();
 	}
 }
 
-$(document).ready(function() {
+function Borrar(){
+	$('#member').val('');
+}
+function borrarMsj(){
+	$("#msj").html('');
+}
 
+$(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
 	$("#member").keypress(function (e) {
 		if(e.which == 13){
-			Buscar();
+			consultar('');
+			borrarMsj();
 		}
 	});
 
 });
-
-
 
 </script>
 
@@ -127,27 +126,7 @@ $(document).ready(function() {
 </table>
 
 <br>
-
-<!-- TMPL_IF name="msg" -->
-<center>
-<table border="0" cellpadding="0" cellspacing="0" width="60%">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-		<td>Mensajes</td>
-		<td width="1%" class="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-	<tr>
-		<td width="1%">&nbsp;</td>
-		<td class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="msg" -->
-		</td>
-		<td width="1%">&nbsp;</td>
-	</tr>
-</table>
-</center>
-<br>
-<!-- /TMPL_IF -->
-
+<p id="msj" style="font-size:12pt; color:red"></p>
 
 <table>
 	<tr>
@@ -155,8 +134,7 @@ $(document).ready(function() {
 			<input id="member" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
-
-			<input id="buscar" type="image" onClick="Buscar();" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="consultar('');borrarMsj();" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
 			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 
@@ -173,21 +151,7 @@ $(document).ready(function() {
 
 <br>
 <div id="result"></div>
-<br>
-<div id="pager" class="pager" style="top: 640px; position: absolute;">
-<form>
-	<img class="first" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/first.png"/>
-	<img class="prev" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/prev.png"/>
-	<input class="pagedisplay" type="text"/>
-	<img class="next" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/next.png"/>
-	<img class="last" src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/pager/last.png"/>
-	<select class="pagesize">
-		<option value="10" selected="selected">10</option>
-		<option value="20">20</option>
-		<option value="50">50</option>
-	</select>
-</form>
-</div>
+</center>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

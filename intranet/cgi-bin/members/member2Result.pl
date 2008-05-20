@@ -46,78 +46,67 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $member=$input->param('member');
+my $ini=$input->param('ini');
+my $orden=$input->param('orden')||'surname';
 
 my $env;
 
-my ($count,$results);
+my ($cantidad,$results);
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 if($member ne ""){
-
 	if(length($member) == 1) {
-		$count=ListadoDePersonas($env,$member,"simple",1);
-	} else {
-		$count=ListadoDePersonas($env,$member,"advanced",1);
-	}
-}
-
-$template->param( cantidad  => $count);
-
-if($member ne ""){
-
-	if(length($member) == 1) {
-		($count,$results)=ListadoDePersonas($env,$member,"simple",0);
+		($cantidad,$results)=ListadoDePersonas($env,$member,"simple",$orden,$ini,$cantR);
 	} else {	
-		($count,$results)=ListadoDePersonas($env,$member,"advanced",0);
+		($cantidad,$results)=ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
 
 my @resultsdata;
 
-for (my $i=0; $i < $count; $i++){
-
-my $regular=$results->[$i]{'regular'};
-
-if ($regular eq 1){
-	$regular="<font color='green'>Regular</font>";
-}elsif($regular eq 0){
-		$regular="<font color='red'>Irregular</font>";
-	}else{
-		$regular="---";
+for (my $i=0; $i < $cantR; $i++){
+	if($results->[$i]{'cardnumber'} ne ""){
+		my $regular=$results->[$i]{'regular'};
+		if ($regular eq 1){
+			$regular="<font color='green'>Regular</font>";
+		}elsif($regular eq 0){
+			$regular="<font color='red'>Irregular</font>";
+		}else{
+			$regular="---";
+		}
+  		my %row = (
+        		documentnumber=> $results->[$i]{'documentnumber'},
+        		documenttype=> $results->[$i]{'documenttype'},
+			emailaddress=> $results->[$i]{'emailaddress'},
+			phone=> $results->[$i]{'phone'},
+			borrowernumber => $results->[$i]{'borrowernumber'},
+        		personnumber => $results->[$i]{'personnumber'},
+        		cardnumber => $results->[$i]{'cardnumber'},
+        		surname => $results->[$i]{'surname'},
+			studentnumber => $results->[$i]{'studentnumber'},
+        		firstname => $results->[$i]{'firstname'},
+        		categorycode => $results->[$i]{'categorycode'},
+        		streetaddress => $results->[$i]{'streetaddress'},
+        		city => $results->[$i]{'city'},
+        		borrowernotes => $results->[$i]{'borrowernotes'},
+			regular=> $regular,
+		);
+	
+		if ($row{'borrowernumber'}){
+			my @aux=sepuedeeliminar($row{'borrowernumber'});
+			$row{'modificable'}=$aux[3];
+		}else{
+			$row{'nomodificable'}="0";
+		} 
+  		push(@resultsdata, \%row);
 	}
-
-  my %row = (
-        documentnumber=> $results->[$i]{'documentnumber'},
-        documenttype=> $results->[$i]{'documenttype'},
-	emailaddress=> $results->[$i]{'emailaddress'},
-	phone=> $results->[$i]{'phone'},
-	borrowernumber => $results->[$i]{'borrowernumber'},
-        personnumber => $results->[$i]{'personnumber'},
-        cardnumber => $results->[$i]{'cardnumber'},
-        surname => $results->[$i]{'surname'},
-	studentnumber => $results->[$i]{'studentnumber'},
-        firstname => $results->[$i]{'firstname'},
-        categorycode => $results->[$i]{'categorycode'},
-        streetaddress => $results->[$i]{'streetaddress'},
-        city => $results->[$i]{'city'},
-        borrowernotes => $results->[$i]{'borrowernotes'},
-	regular=> $regular,
-	);
-
-if ($row{'borrowernumber'}){
-
-	my @aux=sepuedeeliminar($row{'borrowernumber'});
-	$row{'modificable'}=$aux[3]; 
-
-}else{
-	$row{'nomodificable'}="0";
-} 
-			
-  	push(@resultsdata, \%row);
 }
 
-$template->param(   	
+$template->param(
 			member          => $member,
-			resultsloop     => \@resultsdata 
+			resultsloop     => \@resultsdata,
+			cantidad	=> $cantidad,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

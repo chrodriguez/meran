@@ -9,23 +9,23 @@
 	</tr>
 </table>
 
-<form name="form1" action=/cgi-bin/koha/actualizarPersonas.pl method=post>
+<center><!-- TMPL_VAR NAME="paginador" --></center>
 
-<table id="tablaResult" class="tablesorter" width="100%" cellspacing=0 cellpadding=0>
+<table id="tablaResult" width="100%" cellspacing=0 cellpadding=0>
 	<thead>
-  	<tr class="tablaresultadoTitle">
-    		<th width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
-    		<th>&nbsp;</th>
+  	<tr>
+    		<th class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+    		<th class="tablaresultadoTitle">&nbsp;</th>
 
-		<th class="header" align="left" width="12%" >Tarjeta de ID</th>
-    		<th class="header" align="left" width="28%" >Apellido y Nombres</th>
-    		<th class="header" align="left" width="15%" >Documento</th>
-    		<th class="header" align="left" >Legajo</th>
-    		<th class="header">Cat.</th>
-    		<th class="header">Estado</th>
-    		<th class="header">Habilitado?</th>
+		<th align="left" width="12%" class="tablaresultadoTitleClick" onClick="ordenar('cardnumber')">Tarjeta de ID</th>
+    		<th align="left" width="28%" class="tablaresultadoTitleClick" onClick="ordenar('surname')">Apellido y Nombres</th>
+    		<th align="left" width="15%" class="tablaresultadoTitleClick" onClick="ordenar('documentnumber')">Documento</th>
+    		<th align="left" class="tablaresultadoTitleClick" onClick="ordenar('studentnumber')">Legajo</th>
+    		<th class="tablaresultadoTitle">Cat.</th>
+    		<th class="tablaresultadoTitle">Estado</th>
+    		<th class="tablaresultadoTitle">Habilitado?</th>
 
-    		<th width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
+    		<th width="1%" valign="top" align="right" class="tablaresultadoTitle"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
   	</tr>
 	</thead>
 	<tbody>
@@ -36,7 +36,7 @@
      		<td valign="middle" align="center">
 			<!-- TMPL_IF NAME=nomodificable -->Imposible 
 			<!-- TMPL_ELSE --> 
-				<input type=checkbox name="<!-- TMPL_VAR Name='personnumber'-->" id="<!-- TMPL_VAR NAME=documentnumber -->">
+				<input type=checkbox name="<!-- TMPL_VAR Name='personnumber'-->" id="<!-- TMPL_VAR NAME=documentnumber -->" value="<!-- TMPL_VAR NAME=documentnumber -->">
 			<!-- /TMPL_IF -->
 		</td>
 		
@@ -78,7 +78,6 @@
 </table>
 
 
-
 <table>
 	<tr>
 		<td>
@@ -94,12 +93,7 @@
 			</select>
 		</td>
 		<td>
-			<input type="image"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/seleccionar.png" onClick="javascript:prueba()">
+			<input type="image"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/seleccionar.png" onClick="javascript:habilitar()">
 		</td>
 	</tr>
 </table>
-</form>
-
-
-
-
