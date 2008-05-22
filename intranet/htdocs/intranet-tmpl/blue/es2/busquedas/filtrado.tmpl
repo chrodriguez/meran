@@ -41,6 +41,11 @@ function busquedaCombinable(){
 			
 }
 
+function changePage(ini){
+	objBusqueda.changePage(ini);
+}
+
+
 function buscar(){
 
 	//primero verifico las busquedas individuales
@@ -124,11 +129,6 @@ function buscarEstante(){
 	//se setea la funcion para cambiar de pagina
 	objBusqueda.funcion= 'changePage';
 	objBusqueda.sendToServer();
-}
-
-
-function changePage(ini){
-	objBusqueda.changePage(ini);
 }
 
 function mostrarEstantes(){
