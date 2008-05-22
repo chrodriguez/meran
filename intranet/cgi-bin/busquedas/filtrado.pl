@@ -40,8 +40,10 @@ my ($branchcount,@branches)=branches();
 						\%labelsItemtypes,'');
 
 
-$template->param(type => 'intranet',
-		 branches=>\@branches,
-		 comboItemTypes=> $comboItemTypes);
+$template->param(
+			type => 'intranet',
+		 	branches=>\@branches,
+		 	comboItemTypes=> $comboItemTypes
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -89,9 +89,14 @@ return (\@result);
 
 
 sub DictionaryKeywordSearch {
-  my ($env,$type,$search,$num,$offset)=@_;
+  my ($type,$search,$num,$offset)=@_;
   my $dbh = C4::Context->dbh;
-  $search->{'dictionary'}=~ s/ +$//;
+#   $search->{'dictionary'}=~ s/ +$//;
+
+open(A, ">>/tmp/debug.txt");
+
+
+
   my $count=0;
   my $countaux=0;
   my @returnvalues= ();
@@ -99,6 +104,11 @@ sub DictionaryKeywordSearch {
   my $keyword= $search->{'dictionary'};
   my $dicdetail= $search->{'dicdetail'};
   my $condition;
+
+print A " DictionaryKeywordSearch \n";
+
+print A " dictionary: $keyword \n";
+
 
   my $DictionaryCaseSensitive;
   if ($type eq 'intra') {
@@ -209,9 +219,9 @@ my @apellidosSimples;
 	my @dataKeyword = split(",", $query->{'keyword'});
 
 # print A " \n";
-# print A "title: $query->{'title'} \n";
-# print A "keyword: $query->{'keyword'} \n";
-# print A "author: $query->{'author'} \n";
+#  print A "title: $query->{'title'} \n";
+#  print A "keyword: $query->{'keyword'} \n";
+#  print A "author: $query->{'author'} \n";
 # print A "primer parte del apellido: @dataApellido[0] \n";
  	my @primerParte= split(" ",@dataApellido[0]);
 	my @primerParteKeyword= split(" ", @dataKeyword[0]);
@@ -231,14 +241,29 @@ my @apellidosSimples;
 push(@apellidosSimples, @apellidosCompuestos);
 my @resultarray= @apellidosSimples;
 
-close(A);
 
-  if ($size) {
-    my $middle= (scalar(@resultarray) - (scalar(@resultarray) % 2)) / 2;
-    $resultarray[$middle-1]->{jump}= 1;
+
+  my $total= $num+$offset;
+  my @resultarray2;
+  my $i;
+
+   for($i=$num; $i<$total; $i++){
+	
+	push(@resultarray2, @resultarray[$i]);
   }
 
-    return($count, @resultarray);
+#   if ($size) {
+#     my $middle= (scalar(@resultarray2) - (scalar(@resultarray2) % 2)) / 2;
+#     $resultarray2[$middle-1]->{jump}= 1;
+#   }
+
+print A "ini $num \n";
+print A "cantR $offset \n";
+print A "total: $total \n";
+
+close(A);
+
+    return($count, @resultarray2);
 }
 
 

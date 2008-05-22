@@ -11,21 +11,26 @@ use C4::AR::Catalogacion;
 use HTML::Template;
 
 my $input = new CGI;
-my $template;
-my $loggedinuser;
-my $cookie;
 
-my $signatura= $input->param('signatura');
-my $isbn = $input->param('isbn');
-my $codBarra= $input->param('codBarra');
-my $autor= $input->param('autor');
-my $titulo= $input->param('titulo');
-my $tipo= $input->param('tipo');
-my $idTema= $input->param('idTema');
-my $tema= $input->param('tema');
-my $comboItemTypes= $input->param('comboItemTypes');
-my $idAutor=$input->param('idAutor');#Viene por get desde un link de autor
-my $orden=$input->param('orden')||'titulo';#PARA EL ORDEN
+my $obj=$input->param('obj');
+
+if($obj ne ""){
+	$obj=from_json_ISO($obj);
+}
+
+my $signatura= $obj->{'signatura'};
+my $isbn = $obj->{'isbn'};
+my $codBarra= $obj->{'codBarra'};
+my $autor= $obj->{'autor'};
+my $titulo= $obj->{'titulo'};
+my $tipo= $obj->{'tipo'};
+my $idTema= $obj->{'idTema'};
+my $tema= $obj->{'tema'};
+my $comboItemTypes= $obj->{'comboItemTypes'};
+my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
+my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
+my $funcion= $obj->{'funcion'};
+
 
 my $nivel1="";
 my $nivel2="";
@@ -36,7 +41,7 @@ my $nivel3rep="";
 my $buscoPor="";
 
 
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "busquedas/busquedaResult.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -98,19 +103,23 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
 }
 
-my $ini= ($input->param('ini')||'');
+# my $ini= ($input->param('ini')||'');
+my $ini= ($obj->{'ini'}||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"buscar");
+# C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"buscar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsarray;
 my %result;
 my $nivel1;
 my @autor;
 my $id1;
+
 for (my $i=0;$i<scalar(@$resultId1);$i++){
+
 	$id1=$resultId1->[$i];
 	$result{$i}->{'id1'}= $id1;
 	$nivel1= &buscarNivel1($id1);
@@ -122,6 +131,7 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'grupos'}=\@ediciones;
 	my @disponibilidad=&obtenerDisponibilidadTotal($id1, $comboItemTypes);
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
+
 }
 
 my @keys=keys %result;
@@ -135,15 +145,8 @@ $buscoPor="";
 foreach my $str (@busqueda){
 	$buscoPor.=", ".$str;
 }
+
 $buscoPor= substr($buscoPor,2,length($buscoPor));
-# #se hace la busqueda
-# open(INFO, ">/tmp/debug.txt");
-# print INFO "Se imprime el result \n";
-# # my @aux= split(/&/,$nivel1);
-# for (my $i=0;$i<scalar(@$resultId1);$i++){
-# 	print INFO "id1: $resultId1->[$i] \n";
-# }
-# close(INFO);
 
 $template->param(
 		SEARCH_RESULTS => \@resultsarray,

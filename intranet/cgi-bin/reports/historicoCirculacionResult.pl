@@ -49,36 +49,39 @@ if ($id ne "0"){
 my $orden= "date";  # $input->param('orden')||'operacion';
 
 ###Marca la Fecha de Hoy
-                                                                                
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
 $template->param( todaydate => format_date($today,$dateformat));
 
 
+my $obj=$input->param('obj');
+
+if($obj ne ""){
+	$obj= C4::AR::Utilidades::from_json_ISO($obj);
+}
+
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('fechaIni'),$dateformat);
-my $fechaFin    =  format_date_in_iso($input->param('fechaFin'),$dateformat);
+my $fechaInicio =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
+my $user= $obj->{'user'};
+my $chkfecha= $obj->{'chkfecha'}; #checkbox que busca por fecha
+my $funcion= $obj->{'funcion'};
+my $tipoPrestamo= $obj->{'tiposPrestamos'};
+my $tipoOperacion= $obj->{'tipoOperacion'};
 my @resultsdata;
 my $cant;
 
-my $user= $input->param('user');
-my $chkfecha= $input->param('chkfecha'); #checkbox que busca por fecha
 
-my $tipoPrestamo= $input->param('tiposPrestamos');
-my $tipoOperacion= $input->param('tipoOperacion');
-
-
-
-my $ini= ($input->param('ini'));
+my $ini= ($obj->{'ini'});
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 
 my ($cantidad,@resultsdata)=
  &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 $template->param( 
 			resultsloop      => \@resultsdata,

@@ -115,40 +115,57 @@ return($count2);
 }
 
 sub getbookshelfLike {
-  my ($nameShelf, $init,$cantR) = @_;
-  my $fin= $init+$cantR;
-  my $limit='limit '.$init.', '.$cantR;
+#   my ($nameShelf, $init,$cantR) = @_;
+  my ($nameShelf) = @_;
+#   my $fin= $init+$cantR;
+#   my $limit='limit '.$init.', '.$cantR;
   my $dbh   = C4::Context->dbh;
+=item
+  my $sth =$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
+                          	count(shelfcontents.biblioitemnumber) as count
+                                FROM bookshelf
+                                LEFT JOIN shelfcontents
+                                ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (shelfname LIKE ? or shelfname LIKE ?)
+                                GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ".$limit);
+=cut
 
-  my $sth =$dbh->prepare("SELECT               bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
-                                                        count(shelfcontents.biblioitemnumber) as count
-                                                                FROM            bookshelf
-                                                                LEFT JOIN       shelfcontents
-                                                                ON              bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (shelfname LIKE ? or shelfname LIKE ?)
-                                                                GROUP BY        bookshelf.shelfnumber order by bookshelf.shelfname ASC ".$limit);
+  
+  my $sth =$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
+                          	count(shelfcontents.biblioitemnumber) as count
+                                FROM bookshelf
+                                LEFT JOIN shelfcontents
+                                ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (shelfname LIKE ? or shelfname LIKE ?)
+                                GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ");
+
 
   $sth->execute("$nameShelf%", "$nameShelf %");
   my %resultslabels;
   $sth->execute;
   my $i;
   $i=1;
-  my $sth2=$dbh->prepare("Select count(*) as countshelf FROM bookshelf WHere ( bookshelf.type = ? ) AND ( bookshelf.parent =?)");
-  my $sth3=$dbh->prepare("select shelfnumber as numberparent,shelfname as nameparent from bookshelf  where shelfnumber=? and type=?");
+  my $sth2=$dbh->prepare("	SELECT count(*) as countshelf FROM bookshelf 
+				WHERE ( bookshelf.type = ? ) AND (bookshelf.parent =?)");
+
+  my $sth3=$dbh->prepare("	SELECT shelfnumber as numberparent,shelfname as nameparent 
+				FROM bookshelf  
+				WHERE shelfnumber=? AND type=?");
+
+open(A, ">>/tmp/debug.txt");
+print A "BookShelves  \n";
     while (my ($shelfnumber, $shelfname,$shelfparent,$count) = $sth->fetchrow) {
         $sth2->execute('public',$shelfnumber);
         my $shelfnameparent;
         $sth3->execute($shelfparent, 'public');
-
         ($shelfparent, $shelfnameparent)=$sth3->fetchrow;
         $resultslabels{$shelfnumber}->{'numberparent'}=$shelfparent;
         $resultslabels{$shelfnumber}->{'nameparent'}=$shelfnameparent;
-
+print A "$shelfname \n";
         $resultslabels{$shelfnumber}->{'shelfname'}=$shelfname;
         $resultslabels{$shelfnumber}->{'count'}=$count;
         $resultslabels{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
         $i=$i+1;
     }
-  
+close(A);
   $sth->finish;
   return(%resultslabels);
 } 

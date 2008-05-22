@@ -361,12 +361,12 @@ color: #999999;
 font-weight: bold;
 		}
 .inputFontNormal{
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
-color: #000000;
-font-weight: normal;
-overflow:auto;              
-  }
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto;              
+}
                
 .lineafinaltabla{
            background-color:#999999;
@@ -651,3 +651,25 @@ div.detalle{
 	font-weight: bold;
 	cursor: pointer;
 }
+
+/* Miguel agregado para cambiar fondo de inputs */
+
+.inputFontDisabled{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto;
+	background-color:gray; 
+}
+
+.inputFontEnabled{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto;
+	background-color:white; 
+}
+
+/* end agregado */

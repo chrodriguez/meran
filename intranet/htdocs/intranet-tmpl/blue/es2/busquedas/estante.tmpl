@@ -27,6 +27,7 @@ var params= 	'viewshelf=' + estante;
 <p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></p>
 </div>
 
+
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="zebra">
 
 	<tr class="tablaresultadoTitle">
@@ -48,10 +49,10 @@ var params= 	'viewshelf=' + estante;
 		<td>&nbsp;</td>
 		<td>
                  <!-- TMPL_IF Name="parentname" -->
-		<b><i><a href="#" onclick="verEstante(<!-- TMPL_VAR Name="shelfnumberParent" -->)"><!-- TMPL_VAR Name="parentname" --> </a></i></b>&nbsp;/&nbsp; 
+		<b><i><a href="#" onclick="verEstante(<!-- TMPL_VAR Name='shelfnumberParent' -->)"><!-- TMPL_VAR Name="parentname" --> </a></i></b>&nbsp;/&nbsp; 
 		<!-- /TMPL_IF -->
 
-		<a href="#" onclick="verEstante(<!-- TMPL_VAR Name="shelf" -->)">
+		<a href="#" onclick="verEstante(<!-- TMPL_VAR Name='shelf' -->)">
                                     <!-- TMPL_VAR Name="shelfname" --> 
                 </a>
 

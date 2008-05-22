@@ -1359,7 +1359,7 @@ sub historicoCirculacion(){
 			ON (i.itemnumber = h.itemnumber) ";
 
 	my $where = "";
-	if ($chkfecha ne ''){
+	if ($chkfecha ne 'false'){
 		$where = " WHERE (date>=?) AND (date<=?) ";
 		push(@bind,$fechaIni);
 		push(@bind,$fechaFin);

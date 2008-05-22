@@ -6,12 +6,22 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
+use C4::AR::Utilidades;
 use HTML::Template;
 
 my $query = new CGI;
 
 my $tema=$query->param('tema');
 my $detalle=$query->param('detalle');
+
+
+my $obj=$query->param('obj');
+
+if($obj ne ""){
+	$obj=from_json_ISO($obj);
+}
+
+$tema= $obj->{'tema'};
 
 
 my $search;

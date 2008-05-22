@@ -1570,7 +1570,7 @@ if($consultaN3 ne ""){
 
 $query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
 $queryCant=$query;
-#Se reemplaza la 1º subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
+#Se reemplaza la 1ï¿½ subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
 $queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(*) /o;
 
 if (defined $ini && defined $cantR) {
@@ -2337,59 +2337,71 @@ return($count,@results);
 
 
 sub busquedaCombinada {
-  my ($search)=@_;
-  my $dbh = C4::Context->dbh;
-  $search->{'keyword'}=~ s/ +$//;
-  my @key=split(' ',$search->{'keyword'});
+
+	my ($search, $ini, $cantR)=@_;
+
+  	my $dbh = C4::Context->dbh;
+  	$search->{'keyword'}=~ s/ +$//;
+	my @key=split(' ',$search->{'keyword'});
   
-  my $count=0;
-  my @returnvalues= ();
+  	my $count=0;
+  	my @returnvalues= ();
   
-  my @bind = ();
-  my @condiciones=(); 
-  my $index=0;
+  	my @bind = ();
+  	my @condiciones=(); 
+  	my $index=0;
 
-#Se arma el bind
-foreach my $keyword (@key) {push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");}
+	#Se arma el bind
+	foreach my $keyword (@key) {push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");}
 
-#Campos para las condiciones, se tienen que corresponder con las queries
-foreach my $field (qw(titulo autores.completo temas.nombre nivel1_repetibles.dato nivel2_repetibles.dato nivel3_repetibles.dato)) 
-{ 
- my @subclauses = ();
- foreach my $keyword (@key) { push @subclauses, "$field LIKE ? OR $field LIKE ?";}
- $condiciones[$index]= "(" . join(")\n\tOR (", @subclauses) . ")";
- $index++;
-}
+	#Campos para las condiciones, se tienen que corresponder con las queries
+	foreach my $field (qw(titulo autores.completo temas.nombre nivel1_repetibles.dato nivel2_repetibles.dato nivel3_repetibles.dato)){ 
+		my @subclauses = ();
+		foreach my $keyword (@key) { push @subclauses, "$field LIKE ? OR $field LIKE ?";}
+		$condiciones[$index]= "(" . join(")\n\tOR (", @subclauses) . ")";
+		$index++;
+	}
+	
+	#CONSULTAS
+	my @queries=(
+		"SELECT id1 FROM nivel1 WHERE ".$condiciones[0], #TITULO
+		"SELECT id1 FROM nivel1 left join autores on nivel1.autor = autores.id WHERE ".$condiciones[1], #AUTOR
+		"SELECT id1 FROM nivel1_repetibles left join autores on nivel1_repetibles.dato = autores.id WHERE campo='700' and subcampo='a' and ".$condiciones[1], #Autores adicionales 700 a
+		"SELECT id1 FROM nivel1_repetibles left join temas on nivel1_repetibles.dato = temas.id WHERE campo='650' and subcampo='a' and ".$condiciones[2], #Tema 650 a
+		"SELECT id1 FROM nivel1_repetibles WHERE ".$condiciones[3], #nivel1_repetibles
+		"SELECT nivel2.id1 FROM nivel2 right join nivel2_repetibles on nivel2.id2 = nivel2_repetibles.id2 WHERE ".$condiciones[4], #nivel2_repetibles
+		"SELECT nivel3.id1 FROM nivel3 right join nivel3_repetibles on nivel3.id3 = nivel3_repetibles.id3 WHERE ".$condiciones[5], #nivel3_repetibles
+	) ;
 
-#CONSULTAS
-  my @queries=(
-    "SELECT id1 FROM nivel1 WHERE ".$condiciones[0], #TITULO
-    "SELECT id1 FROM nivel1 left join autores on nivel1.autor = autores.id WHERE ".$condiciones[1], #AUTOR
-    "SELECT id1 FROM nivel1_repetibles left join autores on nivel1_repetibles.dato = autores.id WHERE campo='700' and subcampo='a' and ".$condiciones[1], #Autores adicionales 700 a
-    "SELECT id1 FROM nivel1_repetibles left join temas on nivel1_repetibles.dato = temas.id WHERE campo='650' and subcampo='a' and ".$condiciones[2], #Tema 650 a
-    "SELECT id1 FROM nivel1_repetibles WHERE ".$condiciones[3], #nivel1_repetibles
-    "SELECT nivel2.id1 FROM nivel2 right join nivel2_repetibles on nivel2.id2 = nivel2_repetibles.id2 WHERE ".$condiciones[4], #nivel2_repetibles
-    "SELECT nivel3.id1 FROM nivel3 right join nivel3_repetibles on nivel3.id3 = nivel3_repetibles.id3 WHERE ".$condiciones[5], #nivel3_repetibles
-  ) ;
-
-#Realizamos las consultas
-  foreach my $query (@queries){
-  	my $sth=$dbh->prepare($query);
-  	$sth->execute(@bind);
-  	while (my ($id1) = $sth->fetchrow) {
-		#Se agrega solo si no es repetido
-		my $found=0;
-            	foreach my $ret ( @returnvalues ) {
-                    if( $ret == $id1 ) { $found = 1; last }
-                    } 
-		if ($found == 0){
-  			push(@returnvalues,$id1);
-  			$count++;
+	#Realizamos las consultas
+	foreach my $query (@queries){
+		my $sth=$dbh->prepare($query);
+		$sth->execute(@bind);
+		while (my ($id1) = $sth->fetchrow) {
+			#Se agrega solo si no es repetido
+			my $found=0;
+			foreach my $ret ( @returnvalues ) {
+			if( $ret == $id1 ) { $found = 1; last }
+			} 
+	
+			if ($found == 0){
+				push(@returnvalues,$id1);
+				$count++;
 			}
-  	}
-  }
+		}
+	}
 
-return(@returnvalues);
+	my $i;
+	my $cantidad= scalar(@returnvalues);
+	my $fin= $ini + $cantR;
+	my @returnvalues2;
+
+# 	Se pagina el resultado
+	for($i=$ini;$i<$fin;$i++){
+		push(@returnvalues2, $returnvalues[$i]);
+	}
+
+	return($cantidad, @returnvalues2);
 }
 
 

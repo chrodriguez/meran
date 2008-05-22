@@ -6,11 +6,19 @@ use C4::Output;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
-use C4::AR::Utilidades;
 use C4::BookShelves;
 
 my $query = new CGI;
-my $nameShelf = $query->param('viewShelfName');
+# my $nameShelf = $query->param('viewShelfName');
+
+my $obj=$query->param('obj');
+
+if($obj ne ""){
+	$obj=C4::AR::Utilidades::from_json_ISO($obj);
+}
+
+my $nameShelf = $obj->{'viewShelfName'};
+my $funcion= $obj->{'funcion'};
 my $buscoPor="";
 my %shelflist;
 my $type='public';#Estantes publicos
@@ -24,10 +32,7 @@ my ($template, $loggedinuser, $cookie)  = get_template_and_user({template_name =
 
 if ($nameShelf) { #Buscar por nombre
 
-my $startfrom = 0;
-if($query->param('startfrom')) {$startfrom = $query->param('startfrom');}
-  (%shelflist) = &getbookshelfLike($nameShelf);
-
+  	my (%shelflist) = &getbookshelfLike($nameShelf);
 	$buscoPor ="Estante Virtual: ".$nameShelf ;
  
 }
@@ -47,12 +52,13 @@ foreach my $element (@key) {
 		$line{'shelfname'}=$shelflist{$element}->{'shelfname'};
 		$line{'shelfbookcount'}=$shelflist{$element}->{'count'};
 		$line{'countshelf'}=$shelflist{$element}->{'countshelf'} ;
+
 		push (@shelvesloop, \%line);
 }
 
 $template->param(
 		SEARCH_RESULTS => \@shelvesloop,
-		buscoPor=>	$buscoPor
+		buscoPor=>	$buscoPor,
 		);
 
 

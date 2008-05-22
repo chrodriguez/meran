@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
@@ -17,35 +20,38 @@
 				};
 
 
-	var orden='firstname';
+	var objBusqueda;
 
-	function ordenar(ordenParam){
-		orden=ordenParam;
-		consultar('');
+	function ordenar(orden){
+		objBusqueda.sort(ord);
 	}
 
-	function consultar(ini){
-
-		var params= 	'fechaIni=' + $('#fechaIni').val() +
-				'&fechaFin=' + $('#fechaFin').val() +
-				'&user=' + $('#user').val() +
-				'&tiposPrestamos=' + $('#tiposPrestamos').val() +
-				'&tipoOperacion=' + $('#tipoOperacion').val() + 
-				'&ini=' + ini;
-	
-		$.ajax({	type: "POST", 
-				url: "/cgi-bin/koha/reports/historicoCirculacionResult.pl",
-				data: params,
-				beforeSend: Init,
-				complete: function(ajax){
-						$('#result').html(ajax.responseText);
-						HiddeState();
-						zebra('tableResult');
-					}
-		});
-
+	function changePage(ini){
+		objBusqueda.changePage(ini);
 	}
 
+	function updateInfo(responseText){
+		$('#result').html(responseText);
+		HiddeState();
+		zebra('tableResult');
+	}
+
+	function consultar(){
+		objBusqueda=new SearchHelper(updateInfo, Init);
+ 	 	objBusqueda.debug= true;
+		//para busquedas combinables
+		objBusqueda.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+		objBusqueda.fechaIni=  $('#fechaIni').val();
+		objBusqueda.fechaFin= $('#fechaFin').val();
+		objBusqueda.chkfecha=  $('#chkfecha')[0].checked;
+		objBusqueda.user= $('#user').val()
+		objBusqueda.tiposPrestamos= $('#tiposPrestamos').val();
+		objBusqueda.tipoOperacion= $('#tipoOperacion').val();
+		//se setea la funcion para cambiar de pagina
+		objBusqueda.funcion= 'changePage';
+		objBusqueda.sendToServer();
+
+	}
 	
 	function guardarNota(id){
 
@@ -57,9 +63,7 @@
 				data: params,
 				beforeSend: Init,
 				complete: function(ajax){
- 						$('#result').html(ajax.responseText);
-						HiddeState();
- 						zebra('tableResult');
+ 						updateInfo(ajax.responseText);
 					}
 		});
 
@@ -77,7 +81,7 @@
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td valign= "top" class=inputFontNormal>
-		<input class="inputFontNormal" type="checkbox" name="chkfecha" <!-- TMPL_IF NAME="chkfecha" -->checked<!-- /TMPL_IF -->>
+		<input class="inputFontNormal" type="checkbox" id="chkfecha">
 		<b>Seleccione para buscar por fecha.</b><br><br>
 		Seleccione una fecha de inicio:<br><br>
 		Seleccione una fecha de Fin:
@@ -114,7 +118,7 @@
 	<tr>
 		<td colspan="4" align="center">
 			<br><br>
-			<a  onClick="consultar('');"><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
+			<a  onClick="consultar();"><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 		</td>
 	</tr>
 </table>

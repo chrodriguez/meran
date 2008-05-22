@@ -1,25 +1,4 @@
 
-<script>
-function verTema(idtema,tema){
-	var params= 	'idTema=' + idtema +'&tema=' + tema;
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/busquedas/busqueda.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-					$('#resultBusqueda').html(ajax.responseText);
-					$("#volver").hide();
-					$("#busqueda").slideUp('fast');	
-					$("#resultBusqueda").slideDown("fast");
-					zebra("tablaResult");
-					HiddeState();
-				}
-	});
-
-}
-</script>
-
 <center>
 <table border="0"  align="center">
 	<tr>
