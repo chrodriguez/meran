@@ -23,7 +23,7 @@
 	var objBusqueda;
 
 	function ordenar(orden){
-		objBusqueda.sort(ord);
+		objBusqueda.sort(orden);
 	}
 
 	function changePage(ini){
@@ -38,7 +38,6 @@
 
 	function consultar(){
 		objBusqueda=new SearchHelper(updateInfo, Init);
- 	 	objBusqueda.debug= true;
 		//para busquedas combinables
 		objBusqueda.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
 		objBusqueda.fechaIni=  $('#fechaIni').val();
