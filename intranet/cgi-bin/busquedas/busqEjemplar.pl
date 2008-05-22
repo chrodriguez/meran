@@ -23,60 +23,53 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
-use C4::AR::Utilidades;
 
-my $input      = new CGI;
-my $isbn       = $input->param('isbn');
-my $titulo      = $input->param('titulo');
-#FALTA EL PAGINADOR NO VA CAMBIAR POR AJAX
+my $input = new CGI;
 
-my $total;
-my $count;
-my @results;
-
-if ( !$isbn && !$titulo ) {
-    print $input->redirect('adminEjemplares.pl');
-}
-else {
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
             template_name   => "busquedas/busqEjemplar.tmpl",
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
-        }
-    );
+        });
 
+my $isbn = $input->param('isbn');
+my $titulo = $input->param('titulo');
+my $ini = $input->param('ini');
 
 #combo itemtype
-	my ($cant,@results)= C4::Biblio::getitemtypes();
-	my @valuesItemtypes;
-	my %labelsItemtypes;
-	my $i=0;
-	push(@valuesItemtypes,-1);
-	$labelsItemtypes{-1}="Elegir tipo Item";
-	for ($i; $i<scalar(@results); $i++){
-		push(@valuesItemtypes,$results[$i]->{'itemtype'});
-		$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
-	}
+my ($cant,@itemtypes)= C4::Biblio::getitemtypes();
+my @valuesItemtypes;
+my %labelsItemtypes;
+my $i=0;
+push(@valuesItemtypes,-1);
+$labelsItemtypes{-1}="Elegir tipo Item";
+for ($i; $i<scalar(@itemtypes); $i++){
+	push(@valuesItemtypes,$itemtypes[$i]->{'itemtype'});
+	$labelsItemtypes{$itemtypes[$i]->{'itemtype'}}=$itemtypes[$i]->{'description'};
+}
 #fin combo
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-	my @result=&C4::AR::Busquedas::buscarGrupos($isbn,$titulo);
-	$cant=scalar(@result);
-	for (my $i=0; $i<$cant; $i++ ){
-		my $id1=$result[$i]{'id1'};
-		$result[$i]{'combo'}=&crearComponentes('combo',$id1,\@valuesItemtypes,\%labelsItemtypes,'');
+my ($cantidad,$result)=&C4::AR::Busquedas::buscarGrupos($isbn,$titulo,$ini,$cantR);
+
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+
+
+for (my $i=0; $i<scalar(@$result); $i++ ){
+	my $id1=$result->[$i]{'id1'};
+	if($id1 ne ""){
+		$result->[$i]{'combo'}=&C4::AR::Utilidades::crearComponentes('combo',$id1,\@valuesItemtypes,\%labelsItemtypes,'');
 	}
+}
 
 $template->param(
 		isbn          	=> $isbn,
 		titulo         	=> $titulo,
-		total        	=> $total,
-		count	      	=> $cant,
-		result          => \@result,
+		cantidad      	=> $cantidad,
+		result          => $result,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-}# else

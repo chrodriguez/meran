@@ -390,7 +390,7 @@ sub userCategHBars(){
 	my @categorias;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
-        	push(@categorias,$results[$i]->{'categoria'});
+        	push(@categorias,C4::AR::Utilidades::noaccents($results[$i]->{'categoria'}));
                 push(@values,$results[$i]->{'cant'});
         };
 #para generar las barras.
@@ -426,7 +426,7 @@ sub userCategPie(){
 		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
 		$porcUsr=sprintf("%.1f", ($cantUsr/ $totalUsr) * 100.0);
 		if($porcUsr >= 3){
-			push(@categorias,$results[$i]->{'categoria'});
+			push(@categorias,C4::AR::Utilidades::noaccents($results[$i]->{'categoria'}));
      			push(@values,$cantUsr);
 		}
 		else{
@@ -451,12 +451,12 @@ sub userCategPie(){
 
 sub itemtypesHBars(){
 	my ($branch,$cant,@results)=@_;
-	my $g = &inicializarGrafico("Tipo de documentos (Torta)");
+	my $g = &inicializarGrafico("Tipo de documentos (Barras)");
 
 	my @tiposDoc;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
-        	push(@tiposDoc,$results[$i]->{'description'});
+        	push(@tiposDoc,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
                 push(@values,$results[$i]->{'cant'});
         };
 #para generar las barras.
@@ -493,7 +493,7 @@ sub itemtypesPie(){
 		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
 		$porcItems=sprintf("%.1f", ($cantItems/ $totalItmes) * 100.0);
 		if($porcItems >= 3){
-			push(@tiposDoc,$results[$i]->{'description'});
+			push(@tiposDoc,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
      			push(@values,$cantItems);
 		}
 		else{
@@ -523,7 +523,7 @@ sub levelsHBars(){
 	my @descriptions;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
-                 push (@descriptions,$results[$i]->{'description'});
+                 push (@descriptions,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
                  push (@values,$results[$i]->{'cant'});
         };
 
@@ -561,7 +561,7 @@ sub levelsPie(){
 		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
 		$porclevels=sprintf("%.1f", ($cantlevels/ $totallevels) * 100.0);
 		if($porclevels >= 3){
-			push(@descriptions,$results[$i]->{'categoria'});
+			push(@descriptions,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
      			push(@values,$cantlevels);
 		}
 		else{

@@ -2395,23 +2395,44 @@ return(@returnvalues);
 
 
 sub buscarGrupos(){
-	my ($isbn,$titulo)=@_;
+	my ($isbn,$titulo,$ini,$cantR)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth;
+	my $limit=" limit ?,?";
+	my @bind;
+	my $query="SELECT COUNT(*) ";
+	my $query2;
+	my $resto;
 	if($isbn ne ""){
 		#issn 022a
 		#isbn 020a
-		my $query="SELECT * FROM nivel2_repetibles n2r INNER JOIN nivel2 n2 ON (n2r.id2=n2.id2)";
-		$query.=" INNER JOIN nivel1 n1 ON (n2.id1=n1.id1)";
-		$query.=" WHERE (campo=020 and subcampo='a' and dato=?) or (campo=022 and subcampo='a' and dato=?) ";
-		$sth=$dbh->prepare($query);
-        	$sth->execute($isbn,$isbn);
+		$query2="SELECT * ";
+		$resto="FROM nivel2_repetibles n2r INNER JOIN nivel2 n2 ON (n2r.id2=n2.id2)";
+		$resto.=" INNER JOIN nivel1 n1 ON (n2.id1=n1.id1)";
+		$resto.=" WHERE (campo=020 and subcampo='a' and dato=?) or (campo=022 and subcampo='a' and dato=?) ";
+# 		$sth=$dbh->prepare($query);
+#         	$sth->execute($isbn,$isbn);
+		push(@bind,$isbn);
+		push(@bind,$isbn);
 	}
 	else{
-		my $query="SELECT DISTINCT n1.* FROM nivel1 n1 WHERE titulo like ? ";
-		$sth=$dbh->prepare($query);
-        	$sth->execute($titulo."%");
+		$query2="SELECT DISTINCT n1.* ";
+		$resto="FROM nivel1 n1 WHERE titulo like ? ";
+		$titulo.="%";
+		push(@bind,$titulo);
+# 		$sth=$dbh->prepare($query);
+#         	$sth->execute($titulo."%");
 	}
+	$query.=$resto;
+	my $sth=$dbh->prepare($query);
+	$sth->execute(@bind);
+	my $cantidad=$sth->fetchrow;
+
+	$query2.=$resto.$limit;
+	push(@bind,$ini);
+	push(@bind,$cantR);
+	$sth=$dbh->prepare($query2);
+	$sth->execute(@bind);
+	
 	my @result;
 	my $i=0;
 	while(my $data=$sth->fetchrow_hashref){
@@ -2423,5 +2444,6 @@ sub buscarGrupos(){
 		$result[$i]{'itemtype'}=$data->{'tipo_documento'};
 		$i++;
 	}
-	return(@result);
+	$sth->finish;
+	return($cantidad,\@result);
 }

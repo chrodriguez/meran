@@ -1,50 +1,75 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+
 <script language="JavaScript" type="text/JavaScript">
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
+
+$(document).ready(function(){
+	$("input").keypress(function (e) {
+		if(e.which == 13){
+			consultar('');
+		}
+	});
+});
+
 function swap(id,src){
 	document.getElementById(id).src=src;
 }
+
+function consultar(ini){
+	var isbn=$("#isbn").val();
+	var titulo=$("#titulo").val();
+	if(isbn != "" || titulo != ""){
+	var params="isbn="+isbn+"&titulo="+titulo+"&ini="+ini;
+	$.ajax({
+		type: "POST",
+		url: "/cgi-bin/koha/busquedas/busqEjemplar.pl",
+		data: params,
+		beforeSend: Init,
+		complete: function(ajax){
+				$("#result").html(ajax.responseText);
+				zebra("tablaResult");
+				HiddeState();
+			}
+	});
+	}
+	else{
+		alert("Ingrese un dato para realizar la busqueda");
+	}
+}
+
+function agregarEjemplar(id1){
+	var itemtype=$("#"+id1).val();
+	if(itemtype !=  -1){
+		location.href="../acqui.simple/agregarItem.pl?id1="+id1+"&itemtype="+itemtype;
+	}
+	else{
+		alert("Eliga el esquema de catalogo para agregar un item");
+	}
+}
+
 </script>
+
 <p class="pagetitle">Administraci&oacute;n de ejemplares</p>
+
+<span class="recuadroAyuda">&nbsp;Para agregar una nueva descripci&oacute;n bibliogr&aacute;fica o un nuevo ejemplar, ingrese el n&uacute;mero de ISBN o ISSN: &nbsp;</span>
+
+
+<p><label for="isbn" style="float: left; width:15%">ISBN:</label>
 	
+<input type="text" name="isbn" id="isbn">
 
-<table border="0" align="left" cellpadding="0" cellspacing="0" width="100%">
-<!-- TMPL_IF name="noitemsfound" -->
- <tr>
- 	<td>
-		<font color="red" size="4">No se encontraron ejemplares</font>
-	</td>
- </tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="websiteadded" -->
-  <tr>
-  	<td >
-		<font color="red" size="4">Sitio Web Biblioitem Added</font>
-	</td>
-  </tr>
- <!-- /TMPL_IF -->
+<a class="inputFontNormal" href="#" onClick="consultar('');" onMouseOut="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png" border="0"></a>
+</p>
+<label for="titulo" style="float: left; width:15%">T&iacute;tulo:</label>
+<input type="text" name="titulo" id="titulo">
 
-<table width="100%">
- 	<tr>
- 		<td >
-			<span class="recuadroAyuda">&nbsp;Para agregar una nueva descripci&oacute;n bibliogr&aacute;fica o un nuevo ejemplar, ingrese el n&uacute;mero de ISBN o ISSN: &nbsp;</span>
-		</td>
-  	</tr>
-</table>
-
-<form action="busqEjemplar.pl" name="form1">
-	<p><label for="isbn" style="float: left; width:15%">ISBN:</label>
-	
-       	<input type="text" name="isbn">
-
-      	<a class="inputFontNormal" href="#" onClick="document.form1.submit();" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-ir.png" border="0"></a>
-	</p>
-	<label for="titulo" style="float: left; width:15%">T&iacute;tulo:</label>
-	<input type="text" name="titulo">
-</form>
 <br>
-<p><b><a class="inputFontNormal" href="agregarItem.pl" class="button">Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a</a></b><p>
-	
+<br>
+<hr>
+<div id="result"></div>
 
 
 <!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

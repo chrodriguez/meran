@@ -19,7 +19,7 @@ var MENU_ITEMS = [
 		['B&uacute;squeda Experta', '/cgi-bin/koha/busquedas/filtradoExperto.pl'],
 		['--------Cat&aacute;logo--------', null],
 		['Agregar Documento', '/cgi-bin/koha/acqui.simple/agregarItem.pl'],
-		['Busqueda Ejemplar', '/cgi-bin/koha/busquedas/busqEjemplar.pl'],
+		['Busqueda Ejemplar', '/cgi-bin/koha/busquedas/adminEjemplares.pl'],
 		['Estantes Virtuales', '/cgi-bin/koha/busquedas/estante.pl'],
 		['---------MARC---------', null],
 		['Mapeo Koha a MARC', '/cgi-bin/koha/acqui.simple/kohaToMARC.pl'],

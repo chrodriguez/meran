@@ -2967,8 +2967,8 @@ sub allissues {
 	$data->{'date_due'}=  format_date($data->{'date_due'},$dateformat);
 	$data->{'returndate'}=  format_date($data->{'returndate'},$dateformat);
 	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'},$dateformat);
+	$data->{'id'} = $data->{'author'};
     	$data->{'author'} = $data->{'completo'};
-    	$data->{'id'} = $data->{'author'};
 
     	$result[$i]=$data;
     	$i++;
