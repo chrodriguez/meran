@@ -2,16 +2,18 @@
 
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 
 <script>
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
+<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
 
-var orden="cardnumber";
-function ordenar(ord){
-	orden=ord;
-	consultar('');
+
+var objBusqueda;
+function ordenar(orden){
+	objBusqueda.sort(orden);
 }
 
 function ocultarBoton(tipoReserva){
@@ -24,21 +26,27 @@ function ocultarBoton(tipoReserva){
 	}
 }
 
-function consultar(ini){
-	var branch=$("#branch").val();
-	var tipoReserva=$("#tipoReserva").val();
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/reservasResult.pl",
-		data: "branch="+branch+"&tipoReserva="+tipoReserva+"&orden="+orden+"&ini="+ini,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				ocultarBoton(tipoReserva);
-				zebra("tablaResult");
-				HiddeState();
-			}
-	})
+var tipoReserva; // Para poder ocultar el boton ya que si realiza la consulta por Grupo o todas y cambia el combo por ejemplar el boton de contactar por mail se hace visible, con esta variable me aseguro que eso no pase. Se setea cuando se hace la consulta.
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	ocultarBoton(tipoReserva);
+	zebra("tablaResult");
+	HiddeState();
+}
+
+function changePage(ini){
+	objBusqueda.changePage(ini);
+}
+
+
+function consultar(){
+	tipoReserva=$("#tipoReserva").val();
+	objBusqueda=new SearchHelper(updateInfo, Init);
+	objBusqueda.url="/cgi-bin/koha/reports/reservasResult.pl";
+	objBusqueda.branch=$("#branch").val();
+	objBusqueda.tipoReserva=tipoReserva;
+	objBusqueda.funcion= "changePage";
+	objBusqueda.sendToServer();
 }
 
 </script>
@@ -82,7 +90,7 @@ function consultar(ini){
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="2">
 			<br>
-			<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+			<input type="image" onClick="consultar()"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 		</td>
 	</tr>
 </table>

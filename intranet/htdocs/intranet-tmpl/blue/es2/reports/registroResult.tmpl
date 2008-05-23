@@ -20,20 +20,20 @@
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	
-  	<tr align='center'>
+  	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=nomCompleto --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=fecha --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=operacion --> </td>
-  		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=tipo --></td>
-		<td ><a class="inputFontNormal" href="/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->"><!-- TMPL_VAR NAME=numero --></a></td>
+  		<td> <!-- TMPL_VAR NAME=nomCompleto --> </td>
+  		<td> <!-- TMPL_VAR NAME=fecha --> </td>
+  		<td> <!-- TMPL_VAR NAME=operacion --> </td>
+  		<td> <!-- TMPL_VAR NAME=tipo --></td>
+		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->"><!-- TMPL_VAR NAME=numero --></a></td>
 		
-  		<td class="inputFontNormal"> 
+  		<td> 
 			<textarea class="inputFontNormal" id="<!-- TMPL_VAR NAME=idModificacion -->" name="notas2" cols="20" rows="6"><!-- TMPL_VAR NAME=nota --></textarea>
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
   		<td> 
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('','<!-- TMPL_VAR NAME=idModificacion -->')"> 
+			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('<!-- TMPL_VAR NAME=idModificacion -->')"> 
 		</td>
  		<td height=25 >&nbsp;</td>
  	</tr>

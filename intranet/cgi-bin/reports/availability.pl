@@ -28,14 +28,10 @@ use HTML::Template;
 use C4::Koha;
 use CGI::Ajax;
 
-
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
-my $campoIso = $input->param('code') || ""; 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/availability.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -54,7 +50,6 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-
 my $branch = $input->param('branch');
 ($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
 
@@ -66,13 +61,10 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -size      => 1,
                                  );
 
-
 $template->param( 
 			unidades         => $CGIbranch,
 			branch           => $branch,	
 		);
-
-
 
 ## Scroll de disponibilidades
 my %availlabels;

@@ -40,19 +40,21 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my  $branch=$input->param('branch');
-my $orden = $input->param('orden') || 'cardnumber';
-
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $branch=$obj->{'branch'};
+my $orden = $obj->{'orden'} || 'cardnumber';
+my $tipoReserva=$obj->{'tipoReserva'}; # Tipo de reserva
+my $funcion=$obj->{'funcion'};
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini=$input->param('ini');
+my $ini=$obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
-my $tipoReserva=$input->param('tipoReserva'); # Tipo de reserva
+
 my @resultsdata= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
 my $cant=cantidadReservas($branch,$tipoReserva);
 
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
 
 $template->param(
 			resultsloop      => \@resultsdata,

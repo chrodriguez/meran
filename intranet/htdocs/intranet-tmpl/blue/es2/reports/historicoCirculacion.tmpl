@@ -38,7 +38,6 @@
 
 	function consultar(){
 		objBusqueda=new SearchHelper(updateInfo, Init);
-		//para busquedas combinables
 		objBusqueda.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
 		objBusqueda.fechaIni=  $('#fechaIni').val();
 		objBusqueda.fechaFin= $('#fechaFin').val();

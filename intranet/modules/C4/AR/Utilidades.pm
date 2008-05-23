@@ -813,7 +813,7 @@ sub armarPaginas{
 #@cantRegistros, cant de registros que se van a paginar
 #@$cantRenglones, cantidad de renglones maximo a mostrar
 	my ($actual, $cantRegistros, $cantRenglones,$funcion)=@_;
-	my $pagAMostrar=10;
+	my $pagAMostrar=C4::Context->preference("paginas");
 	my $numBloq=floor($actual / $pagAMostrar);
 
 #  	my $limInf=($numBloq * $pagAMostrar)+1;

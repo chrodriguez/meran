@@ -2,12 +2,13 @@
 
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 
 <script language="javascript">
 
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
+<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
 
 function buscarChecked(){
 	var str="";
@@ -18,31 +19,32 @@ function buscarChecked(){
 	return str;
 }
 
-var orden='firstname';
-function ordenar(ordenParam){
-	orden=ordenParam;
-	consultar('');
+var objBusqueda;
+
+function ordenar(orden){
+	objBusqueda.sort(orden);
 }
 
-function consultar(ini){
+function changePage(ini){
+	objBusqueda.changePage(ini);
+}
 
-	var branch=$("#branch").val();
-	var year=$("#year").val();
-	var usos=$("#usos").val();
-	var categ=$("#categoria").val();
-	var strChck=buscarChecked();
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
+	HiddeState();
+}
 
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/usersResult.pl",
-		data: "branch="+branch+"&year="+year+"&chck="+strChck+"&categoria="+categ+"&usos="+usos+"&orden="+orden+"&ini="+ini+"&orden="+orden,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-				HiddeState();
-			}
-	})
+function consultar(){
+	objBusqueda=new SearchHelper(updateInfo, Init);
+	objBusqueda.url="/cgi-bin/koha/reports/usersResult.pl";
+	objBusqueda.branch=$("#branch").val();
+	objBusqueda.year=$("#year").val();
+	objBusqueda.usos=$("#usos").val();
+	objBusqueda.categoria=$("#categoria").val();
+	objBusqueda.chck=buscarChecked();
+	objBusqueda.funcion= "changePage";
+	objBusqueda.sendToServer();
 }
 
 </script>
@@ -116,7 +118,7 @@ function consultar(ini){
 </table>
 
 	<br>
-	<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+	<input type="image" onClick="consultar()"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 
 </center>
 <div id="result"></div>

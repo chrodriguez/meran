@@ -46,7 +46,6 @@ use vars qw(@EXPORT @ISA);
 	   &cantidadTipos
 	   &cantidadAnaliticas
 	   &disponibilidad
-	   &disponibilidadCantidad
 	   &itemtypesReport
 	   &levelsReport
 	   &availYear
@@ -264,7 +263,7 @@ sub prestamosAnual{
 #
 #Ejemplares perdidos del branch que le paso por parametro
 sub disponibilidad{
-        my ($branch,$orden,$avail,$ini,$fin)=@_;
+        my ($branch,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR)=@_;
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
 	my @results;
@@ -272,26 +271,32 @@ sub disponibilidad{
 	my @bind;
 	push(@bind,$avail);
 	push(@bind,$branch);
-	if (($ini ne '') and ($fin ne '')){
+	if (($fechaIni ne '') && ($fechaFin ne '')){
 		$dates=" AND av.date between ? AND ? ";
-		push(@bind,format_date_in_iso($ini),$dateformat);
-		push(@bind,format_date_in_iso($fin),$dateformat);
+		push(@bind,format_date_in_iso($fechaIni,$dateformat));
+		push(@bind,format_date_in_iso($fechaFin,$dateformat));
 	}
-
-	my $query = "SELECT DISTINCT i.*,bi.number,bi.publicationyear,b.title,b.author,
-		     MAX(av.date) AS date, a.completo
-	  	     FROM items i INNER JOIN biblioitems bi ON (i.biblioitemnumber = bi.biblioitemnumber) 
+	my $query= "SELECT COUNT(*)";
+	my $query2 = "SELECT DISTINCT i.*,bi.number,bi.publicationyear,b.title,b.author,MAX(av.date) AS date, a.completo";
+	my $resto= " FROM items i INNER JOIN biblioitems bi ON (i.biblioitemnumber = bi.biblioitemnumber) 
 		     INNER JOIN biblio b ON (bi.biblionumber=b.biblionumber) 
 		     INNER JOIN availability av ON ( av.item = i.itemnumber  ) 
 		     INNER JOIN autores a ON (a.id = b.author)
-		     WHERE i.wthdrawn = ? AND homebranch=? ".$dates. " GROUP BY av.item
-		     ORDER BY ".$orden;
+		     WHERE i.wthdrawn = ? AND homebranch=? ".$dates." GROUP BY av.item";
 	
-
-
+	$query.=$resto;
         my $sth=$dbh->prepare($query);
-
         $sth->execute(@bind);
+	my $cant=$sth->rows;
+
+	$query2.=$resto." ORDER BY ".$orden;
+	if($ini ne ""){
+		$query2.=" limit ?,?";
+		push(@bind,$ini);
+		push(@bind,$cantR);
+	}
+	$sth=$dbh->prepare($query2);
+	$sth->execute(@bind);
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'date'}=format_date($data->{'date'},$dateformat);
 		$data->{'id'}=$data->{'author'};
@@ -299,20 +304,7 @@ sub disponibilidad{
                 $data->{'author'}=$autorPPAL->{'completo'};
 		push(@results,$data);
         }
-        return (scalar(@results),@results);
-}
-
-sub disponibilidadCantidad{
-        my ($branch,$avail)=@_;
-        my $dbh = C4::Context->dbh;
-        my @results;
-        my $query ="select count(itemnumber)
-                    from items i
-                    where i.wthdrawn = ? and homebranch=? ";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($avail,$branch);
-        my $res=$sth->fetchrow_hashref;
-        return ($res);
+        return ($cant,@results);
 }
 
 #Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina

@@ -42,29 +42,25 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $orden;
-if ($input->param('orden') eq ""){
-	 $orden='cardnumber'
-}
-else {
-	$orden=$input->param('orden')
-};
+my $obj=$input->param('obj');
+$obj= C4::AR::Utilidades::from_json_ISO($obj);
 
-my $year = $input->param('year');
-my $categ= $input->param('categoria');
-my @chck=split('#',$input->param('chck'));
-my $usos=$input->param('usos');
-my $branch=$input->param('branch');
+my $orden=$obj->{'orden'}||'cardnumber';
+my $year = $obj->{'year'};
+my $categ= $obj->{'categoria'};
+my @chck=split('#',$obj->{'chck'});
+my $usos=$obj->{'usos'};
+my $branch=$obj->{'branch'};
+my $funcion=$obj->{'funcion'};
 
-
-my $ini= ($input->param('ini'));
+my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 #esto se tiene q hacer todo dentro de usuarios ARREGLAR!!!!!!!!!!!!!!
 my $cantidad =cantidadUsuarios($branch,$year,$usos,$categ,@chck);#Obtengo la cantidad total de usuarios para poder paginar
 #Obtengo los usuarios de una pagina dada
 my (@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$categ,@chck);
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 
 $template->param( 	orden		 => $orden,

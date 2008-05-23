@@ -25,7 +25,6 @@ use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use HTML::Template;
-use C4::AR::Estadisticas;
 use C4::AR::Utilidades;
 use C4::Koha;
 
@@ -40,63 +39,23 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $branch = $input->param('branch');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
-my $orden;
-if ($input->param('orden') eq ""){
-	 $orden='date'}
-else {$orden=$input->param('orden')};
+my $orden = $obj->{'orden'}||'date';
+my $ini =$obj->{'ini'};
+my $funcion=$obj->{'funcion'};
 
-#Inicializo avail
-my $avail;
-if ($input->param('avail') eq ""){
-         $avail=1}
-else {$avail=$input->param('avail')};
-#fin
-
-#Fechas
-my $ini='';
-my $fin='';
-if($input->param('ini')){$ini=$input->param('ini');}
-if($input->param('fin')){$fin=$input->param('fin');}
+my $branch = $obj->{'branch'};
+my $avail=$obj->{'avail'}||1;
+my $fechaIni=$obj->{'fechaIni'};
+my $fechaFin=$obj->{'fechaFin'};
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $iniPag;
-my $pageNumber;
-my $cantR=cantidadRenglones();
-if (($input->param('iniPag') eq "")){
-        $iniPag=0;
-	$pageNumber=1;
-} else {
-	$iniPag= ($input->param('iniPag')-1)* $cantR;
-	$pageNumber= $input->param('iniPag');
-};
-
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
+my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR);
 
-my ($cantidad, @resultsdata)= disponibilidad($branch,$orden,$avail,$ini,$fin);
-
-my @numeros=armarPaginas($pageNumber,$cantidad,$cantR);
-my $paginas = scalar(@numeros)||1;
-
-my $pagActual = $input->param('iniPag')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		  );
-
-if ( $cantidad > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
-        my $sig = $pageNumber+1;
-        if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
-        };
-        if ($sig > 2 ){
-                my $ant = $pageNumber-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
-}
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my $availD;
 if ($avail eq 0){
@@ -109,17 +68,13 @@ else{
 
 $template->param( 
 			resultsloop      => \@resultsdata,
-			numeros		 => \@numeros,
 			cantidad	 => $cantidad,
 			branch           => $branch,
-			orden 		 => $orden, 
+			orden 		 => $orden,
 			avail		 => $avail,
 			availD		 => $availD,
-			ini 		 => $ini,
-			fin		 => $fin		
+			fechaIni	 => $fechaIni,
+			fechaFin	 => $fechaFin,
 		);
-
-
-
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -2,37 +2,46 @@
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 
 <script language="javascript">
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
 	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
+			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
 				};
+var objBusqueda;
 
-function consultar(orden,iniPag){
-	var branch=$("#branch").val();
-	var fechaI=$("#ini").val();
-	var fechaF=$("#fin").val();
-	var avail=$("#avail").val();
-	var params="branch="+branch+"&ini="+fechaI+"&fin="+fechaF+"&avail="+avail+"&iniPag="+iniPag+"&orden="+orden;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/availabilityResult.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-				HiddeState();
-			}
-	})
+function ordenar(orden){
+	objBusqueda.sort(orden);
+}
+
+function changePage(ini){
+	objBusqueda.changePage(ini);
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
+	HiddeState();
+}
+
+function consultar(){
+	objBusqueda=new SearchHelper(updateInfo,Init);
+	objBusqueda.url="/cgi-bin/koha/reports/availabilityResult.pl";
+	objBusqueda.branch=$("#branch").val();
+	objBusqueda.fechaIni=$("#fechaIni").val();
+	objBusqueda.fechaFin=$("#fechaFin").val();
+	objBusqueda.avail=$("#avail").val();
+	objBusqueda.funcion= "changePage";
+	objBusqueda.sendToServer();
 }
 
 </script>
@@ -47,24 +56,24 @@ function consultar(orden,iniPag){
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%" align="left">
 	<tr>
-	  <td class=inputFontNormal>Seleccione una unidad de informaci&oacute;n :</td>
-	  <td  class=inputFontNormal> <!-- TMPL_VAR NAME=unidades  --></td>
-	  <td  class=inputFontNormal><!-- TMPL_VAR NAME=Cavails  --></td>
+	  	<td class=inputFontNormal>Seleccione una unidad de informaci&oacute;n :</td>
+	  	<td  class=inputFontNormal> <!-- TMPL_VAR NAME=unidades  --></td>
+	  	<td  class=inputFontNormal><!-- TMPL_VAR NAME=Cavails  --></td>
 	</tr>
 
 	<tr>
-	  <td  class=inputFontNormal>Seleccione una fecha de inicio:</td>
-	  <td  class=inputFontNormal><input id="ini" class="inputFontNormal" name="ini" 		value="<!-- TMPL_VAR NAME="ini" -->"> <a href="javascript:dp_ini.toggle();"><img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" 		border="0" alt="Selecciona una fecha"></a>
-	  </td>
-	 <td></td>
+	  	<td  class=inputFontNormal>Seleccione una fecha de inicio:</td>
+	  	<td  class=inputFontNormal><input id="fechaIni" class="inputFontNormal"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  	</td>
+	 	<td></td>
 	<tr>
 
 	<tr>
-	  <td  class=inputFontNormal>Seleccione una fecha de Fin: </td>	
-	  <td  class=inputFontNormal><input id="fin" class="inputFontNormal" name='fin' value="<!-- TMPL_VAR NAME='fin' -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
-          <td colspan=2 align="center">
-		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="consultar('completo','');">
-	  </td>
+	  	<td  class=inputFontNormal>Seleccione una fecha de Fin: </td>	
+	  	<td  class=inputFontNormal><input id="fechaFin" class="inputFontNormal"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
+          	<td colspan=2 align="center">
+		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="consultar();">
+	  	</td>
         </tr>
 </table>
 

@@ -1,6 +1,5 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
@@ -39,11 +38,9 @@ function updateInfo(responseText){
 }
 
 
-function consultar(ini){
+function consultar(){
 	objBusqueda=new SearchHelper(updateInfo, Init);
-	objBusqueda.debug= true;
 	objBusqueda.url="/cgi-bin/koha/reports/registroResult.pl";
-
 	objBusqueda.chkfecha=$("#chkfecha")[0].checked;
 	objBusqueda.chkuser=$("#chkuser")[0].checked;
 	objBusqueda.chknum=$("#chknum")[0].checked;
@@ -58,7 +55,7 @@ function consultar(ini){
 	objBusqueda.sendToServer();
 }
 
-function nota(ini,id){
+function nota(id){
 	var not=$("#"+id).val();
 	objBusqueda.id=id;
 	objBusqueda.notas=not;
@@ -79,61 +76,57 @@ function nota(ini,id){
 
 
 <br>
-	<table border="0" cellspacing="0" cellpadding="0">
-  		<tr>
-			<td valign= "top" class=inputFontNormal>
+<table border="0" cellspacing="0" cellpadding="0">
+  	<tr>
+		<td valign= "top" class=inputFontNormal>
 			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha">
 			<b>Seleccione para buscar por fecha.</b><br><br>
 			Seleccione una fecha de inicio:<br><br>
 			Seleccione una fecha de Fin:
-			</td>
+		</td>
 
-			<td valign= "top" class=inputFontNormal><br><br>
+		<td valign= "top" class=inputFontNormal><br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
 			<!-- TMPL_VAR NAME='todaydate' -->">
 			<a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
 			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_VAR NAME='todaydate' -->"> 
 			<a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
-			</td>
+		</td>
 
-
-
-			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan=3 class="inputFontNormal"> <b>Filtrar por:</b> <br>
-				<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Alta">&nbsp;Alta
+		<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<td rowspan=3 class="inputFontNormal"> <b>Filtrar por:</b> <br>
+			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Alta">&nbsp;Alta
 				&nbsp;&nbsp;&nbsp;
-				<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Actualizado">&nbsp;Actualizado
-				<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Borrado">&nbsp;Borrado
+			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Actualizado">&nbsp;Actualizado
+			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Borrado">&nbsp;Borrado
 				&nbsp;
-				<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="" checked>&nbsp;Ninguno
-				<br><br>
+			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="" checked>&nbsp;Ninguno
+			<br><br>
 
-				<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Libro">&nbsp;Libro
+			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Libro">&nbsp;Libro
 	        		&nbsp;
-				<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Grupo">Grupo
+			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Grupo">Grupo
                 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Ejemplar">&nbsp;Ejemplar
-				<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="" checked>&nbsp;Ninguno
-				<br><br>
+			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="Ejemplar">&nbsp;Ejemplar
+			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="" checked>&nbsp;Ninguno
+			<br><br>
 
 			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
 
-				<input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"><b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
-				<br><br>
-				<input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num"><b>N&uacute;mero
+			<input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"><b>Nombre de usuario: </b><!-- TMPL_VAR NAME="selectusuarios" -->
+			<br><br>
+			<input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num"><b>N&uacute;mero
 
-				desde: <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
-				hasta: </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
-				<br><br>
-				<input type="image" onClick="consultar('')"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+			desde: <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
+			hasta: </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
+			<br><br>
+			<input type="image" onClick="consultar()"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 
-			</td>
-   		</tr>
-	</table>
+		</td>
+   	</tr>
+</table>
 
-<div id="result" >
-
-</div>
+<div id="result" ></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

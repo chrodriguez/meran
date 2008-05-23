@@ -8,44 +8,38 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::AR::Utilidades;
-use C4::AR::Estadisticas;
 use C4::Koha;
 use C4::Date;
 my $input=new CGI;
 
 my $msg='';
 
-my $branches=getbranches();
-my $branch = getbranch($input, $branches);
+my $branch = $input->param('branch');
 
-my $orden;
-if ($input->param('orden') eq ""){$orden='date'}
-				else {$orden=$input->param('orden')};
+my $orden=$input->param('orden')||'date';
 #Inicializo avail
-my $avail;
-if ($input->param('avail') eq ""){$avail=1}
-else {$avail=$input->param('avail')};
+my $avail=$input->param('avail')||1;
 #fin
 
 #Fechas
-my $ini='';
-my $fin='';
-if($input->param('ini')){$ini=$input->param('ini');}
-if($input->param('fin')){$fin=$input->param('fin');}
+my $fini=$input->param('fechaIni');
+my $ffin=$input->param('fechaFni');
 #
 
-my ($cantidad, @results)= disponibilidad($branch,$orden,$avail,$ini,$fin);
+my ($cantidad, @results)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fini,$ffin,'','');
 
 	$msg='Ejemplares con disponibilidad: <b>'.getAvail($avail)->{'description'}.'</b> ';
 	my $dateformat = C4::Date::get_date_format();
-	if (($ini) and ($fin)){$msg.='entre las fechas: <b>'.format_date($ini,$dateformat).'</b> y <b>'.format_date($fin).'</b> .'; }
+	if (($fini) and ($ffin)){$msg.='entre las fechas: <b>'.format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; }
 
 if ($input->param('type') eq 'pdf') {#Para PDF
-					my  $msg2='Ejemplares con disponibilidad: '.getAvail($avail)->{'description'}.' ';
-					my $dateformat = C4::Date::get_date_format();
-				        if (($ini) and ($fin)){$msg2.='entre las fechas: '.format_date($ini,$dateformat).' y '.format_date($fin).' .'; }
-					availPdfGenerator($msg2,@results);
-				    }
+	my  $msg2='Ejemplares con disponibilidad: '.getAvail($avail)->{'description'}.' ';
+	my $dateformat = C4::Date::get_date_format();
+	if (($fini) and ($ffin)){
+		$msg2.='entre las fechas: '.format_date($fini,$dateformat).' y '.format_date($ffin,$dateformat).' .';
+	}
+	availPdfGenerator($msg2,@results);
+}
 else{ #Para imprimir
 	my  ($template, $borrowernumber, $cookie)
                 = get_template_and_user({template_name => "print.tmpl",

@@ -143,3 +143,9 @@ ALTER TABLE `biblioanalysis` ADD FULLTEXT (`resumen`);
 
 Insert into systempreferences (variable,value,explanation) values ('intranetGroupReserve','0','Indica que  si al realizar un prestamo desde la intranet y no se encuentra ningun ejemplar libre, se realiza o no (1 o 0) una reserva sobre el grupo desde la intranet.');
 --
+
+
+--Se agrego una nueva variable para parametrizar la vista de las paginas que muestra el nuevo paginador.
+
+INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES ('paginas','10','Cantidad de paginas que va a  mostrar el paginador.','text','');
+
