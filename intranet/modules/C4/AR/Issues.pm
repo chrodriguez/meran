@@ -281,7 +281,7 @@ if (my $data= $sth->fetchrow_hashref){
 	if (!&hayReservasEsperando($data->{'biblioitemnumber'})){
 		#quiere decir que no hay reservas esperando por lo que podemos seguir
 		
-		if (!estaSancionado($dbh, $borrowernumber, $data->{'issuecode'})){
+		if (!estaSancionado($borrowernumber, $data->{'issuecode'})){
 			#El usuario no tiene sanciones, puede seguir.
 			
 			#veo si el nro de renovaciones realizadas es mayor al nro maximo de renovaciones posibles permitidas
@@ -335,8 +335,8 @@ sub hayReservasEsperando(){
 }
 
 sub estaSancionado(){
-	my ($dbh,$borrowernumber,$issuecode)=@_;
-	my @sancion= permitionToLoan($dbh, $borrowernumber, $issuecode);
+	my ($borrowernumber,$issuecode)=@_;
+	my @sancion= permitionToLoan($borrowernumber, $issuecode);
 	if (($sancion[0]||$sancion[1])) { 
 		return 1;
 	}

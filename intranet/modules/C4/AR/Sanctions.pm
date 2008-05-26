@@ -164,16 +164,18 @@ sub hasDebts {
 
 sub permitionToLoan {
   #Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
-  my ($dbh, $borrowernumber, $issuecode)=@_;
-  my $debtOrSanction= 0; #Se supone que no esta sancionado
-  my $until= undef;
-  if (hasDebts($dbh,$borrowernumber)) {
-    $debtOrSanction= 1; #Tiene biblos vencidos 
-  } elsif (my $res= isSanction($dbh, $borrowernumber, $issuecode)) {
-    $debtOrSanction= 1; #Tiene una sancion vigente
-    $until= $res->{'enddate'};
-  }
-  return($debtOrSanction, $until);
+  	my ($borrowernumber, $issuecode)=@_;
+	my $dbh = C4::Context->dbh;
+  	my $debtOrSanction= 0; #Se supone que no esta sancionado
+  	my $until= undef;
+  	if (hasDebts($dbh,$borrowernumber)) {
+    		$debtOrSanction= 1; #Tiene biblos vencidos 
+  	}
+	elsif (my $res= isSanction($dbh, $borrowernumber, $issuecode)) {
+    		$debtOrSanction= 1; #Tiene una sancion vigente
+    		$until= $res->{'enddate'};
+  	}
+  	return($debtOrSanction, $until);
 }
 
 sub sanctionSelect {

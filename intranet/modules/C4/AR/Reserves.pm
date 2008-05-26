@@ -132,7 +132,7 @@ my ($borrowernumber,$biblioitemnumber,$branch)=@_;
 my $dbh = C4::Context->dbh;
 
 #my @sancion=(0,0); #estasancionado($borr); Deberia devolver 2 valores distintos uno si esta sancionado y otro si esta atrasado, y hasta cuando esta sancionado
-my @sancion= &permitionToLoan($dbh, $borrowernumber, C4::Context->preference("defaultissuetype"));
+my @sancion= &permitionToLoan($borrowernumber, C4::Context->preference("defaultissuetype"));
 #Si esta sancionado devuelvo false
 if ($sancion[0]) {return (0,1,$sancion[1]);}
 
@@ -303,7 +303,7 @@ if ($immediateIssue) {
 	if ($cantissues >= $maxissues) {return(0,7)}
 }
 
-my @sancion= &permitionToLoan($dbh, $borrowernumber, $issuetype);
+my @sancion= &permitionToLoan($borrowernumber, $issuetype);
 #Si esta sancionado devuelvo false
 if ($sancion[0]) {return (0,1,$sancion[1]);}
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
@@ -533,7 +533,7 @@ sub efectivizar_reserva{
 
 	my $dbh = C4::Context->dbh;
 	my ($borrowernumber,$biblioitemnumber,$issuecode,$loggedinuser)=@_;
-	my @sancion= permitionToLoan($dbh, $borrowernumber, $issuecode);
+	my @sancion= permitionToLoan($borrowernumber, $issuecode);
 	if ($sancion[0]||$sancion[1]) {
 		return 0;
 	} else {

@@ -384,7 +384,7 @@ sub checkauth {
 			#Se borran las reservas de los usuarios sancionados			
 			if ($type eq 'opac') {
 				#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-				my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan($dbh, getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
+				my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
 				my $regular= C4::AR::Reserves::isRegular(getborrowernumber($userid));
 				
 				if ($isSanction || !$regular ){
