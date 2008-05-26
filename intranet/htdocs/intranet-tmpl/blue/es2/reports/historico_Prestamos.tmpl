@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
@@ -9,6 +10,7 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -17,37 +19,31 @@
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('f_fin'));
 				};
 
+var objBusqueda;
+function ordenar(orden){
+	objBusqueda.sort(orden);
+}
 
-function Complete(){
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
 	HiddeState();
 }
 
-var orden='firstname';
-function ordenar(ordenParam){
-	orden=ordenParam;
-	consultar('');
+function changePage(ini){
+	objBusqueda.changePage(ini);
 }
 
-function consultar(ini){
-
-	var params= 	'f_ini=' + $('#f_ini').val() +
-			'&f_fin=' + $('#f_fin').val() +
-			'&tiposItems=' + $('#tiposItems').val() +
-			'&tipoPrestamos=' + $('#tipoPrestamos').val() +
-			'&catUsuarios=' + $('#catUsuarios').val() +
-			'&orden='+orden +'&ini=' + ini;
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/reports/historico_PrestamosResult.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-  					Complete();
-					zebra('tableResult');
-				}
-	});
-
+function consultar(){
+	objBusqueda=new SearchHelper(updateInfo,Init);
+	objBusqueda.f_ini= $('#f_ini').val();
+	objBusqueda.f_fin= $('#f_fin').val();
+	objBusqueda.tiposItems= $('#tiposItems').val();
+	objBusqueda.tipoPrestamos=$('#tipoPrestamos').val();
+	objBusqueda.catUsuarios=$('#catUsuarios').val();
+	objBusqueda.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
+	objBusqueda.funcion="changePage";
+	objBusqueda.sendToServer();
 }
 
 
@@ -72,7 +68,7 @@ function consultar(ini){
 	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="<!-- TMPL_VAR NAME='f_fin' -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 	  </td>
 	  <td colspan=2 align="center">
-		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar('');">
+		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar();">
 	  </td>
         </tr>
 	<tr>
