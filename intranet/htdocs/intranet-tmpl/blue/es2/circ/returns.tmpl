@@ -251,7 +251,7 @@ function renovarItems(){
    	<tr>
         	<td width="1%">&nbsp;</td>
         	<td colspan="2" class="inputFontNormal">
-			Nombre y apellido: <b><a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
+			Nombre y apellido: <b><a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
         		Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
         		Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><BR>
        		 	Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --></b><BR>
@@ -343,7 +343,7 @@ Sin sanciones
 		<td colspan="5" class="inputFontNormal">
 			<font color='red'><b>Ejemplar marcado como En espera:</b></font><br>
 			<b>Ejemplar </b><!-- TMPL_VAR Name="itemtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="itemunititle" -->:&nbsp;<!-- TMPL_VAR NAME="itemunititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR Name="itemauthor" -->) <br>
-			<b>est&aacute; esperando en </b><!-- TMPL_VAR Name="branchname" --><b> a ser retirado por </b><!-- TMPL_VAR Name="name" --> (<a class="inputFontNormal"href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+			<b>est&aacute; esperando en </b><!-- TMPL_VAR Name="branchname" --><b> a ser retirado por </b><!-- TMPL_VAR Name="name" --> (<a class="inputFontNormal"href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
 			
 			<form method=post action='returns.pl'>
 			
@@ -364,7 +364,7 @@ Sin sanciones
 			<font color='red'><b>Ejemplar marcado como En espera:</b></font><br>
 			<b>Ejemplar:</b> <!-- TMPL_VAR Name="itemtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="itemunititle" -->:&nbsp;<!-- TMPL_VAR NAME="itemunititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR Name="itemauthor" -->)<br>
 			<b>necesita transferirse a </b><!-- TMPL_VAR Name="branchname" --> <br>
-			<b>para ser retirado por</b> <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+			<b>para ser retirado por</b> <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
 			
 			<form method=post action='returns.pl'>
 			<!-- TMPL_LOOP Name="inputloop" -->
@@ -388,7 +388,7 @@ Sin sanciones
 		<td colspan="5" class="inputFontNormal">
 			<font color='red'><b>Reserva encontrada:</b></font><br>
 			<b>Ejemplar:</b><!-- TMPL_VAR Name="itemtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="itemunititle" -->:&nbsp;<!-- TMPL_VAR NAME="itemunititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR Name="itemauthor" -->) <a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Ejemplar'); return false;"><!-- TMPL_VAR Name="itembarcode" --></a><br>
-			<b>para</b> <!-- TMPL_VAR Name="name" --> (<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false"><!-- TMPL_VAR Name="borcnum" --></a>) <b>a ser retirado en  </b><!-- TMPL_VAR Name="branchname" -->.<br>
+			<b>para</b> <!-- TMPL_VAR Name="name" --> (<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Usuario'); return false"><!-- TMPL_VAR Name="borcnum" --></a>) <b>a ser retirado en  </b><!-- TMPL_VAR Name="branchname" -->.<br>
 			
 			<b>El ejemplar quedar&aacute; en espera para ser retirado.</b>
 
@@ -495,7 +495,7 @@ Sin sanciones
   </tr>
   <tr>
   	<td colspan="5" class="inputFontNormal">
-		<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Usuario'); return false;"><!-- TMPL_VAR Name="riborcnum" --></a><!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" -->
+		<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Usuario'); return false;"><!-- TMPL_VAR Name="riborcnum" --></a><!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" -->
 	</td>
   </tr>
   
@@ -613,7 +613,7 @@ Sin sanciones
 	</td>
 	<td bgcolor="<!-- TMPL_VAR Name='color' -->">
 		<!-- TMPL_IF Name="duedate" -->
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->','Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name='bornum' -->','Usuario'); return false;"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 		<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR Name="bornum" -->
 		<!-- /TMPL_IF -->

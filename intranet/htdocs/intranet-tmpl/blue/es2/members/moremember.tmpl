@@ -307,11 +307,6 @@
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="date_fin" --> <font color="<!-- TMPL_VAR NAME="color" -->"> <!-- TMPL_VAR NAME="date_fin" --> </font><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
 
 			<td class="<!-- TMPL_VAR NAME="clase"-->"  align="center" ><!-- TMPL_IF NAME="issuetype" --><font color="<!-- TMPL_VAR NAME="color" -->">         <!-- TMPL_VAR NAME="issuetype" --> </font><!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-					  
-<!-- 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=return"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/item-return.png" title="Devolver"></td> -->
-<!-- 			<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center><!-- TMPL_IF NAME="renew" --><A HREF="circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->&action=renew"><img BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/renew.png" title="Renovar"> -->
-<!-- 			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->  </td> -->
-
 			<td class="<!-- TMPL_VAR NAME="clase"-->" height=25 class="impar"></td>
 			</tr>
 <!-- /TMPL_LOOP -->
@@ -615,7 +610,7 @@ function checkedAll(strForm){
 }
 
 function subirForm(){
-	var formulario=document.getElementById('formReturn').action="circ/returns.pl";
+	var formulario=document.getElementById('formReturn').action="/cgi-bin/koha/circ/returns.pl";
 	formulario.submit;
 }
 

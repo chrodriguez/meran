@@ -138,6 +138,7 @@ if ($delete){
 	print $input->redirect("/cgi-bin/koha/members/deletemem.pl?member=$member");
 }
 elsif($type eq 'Mod'){
+	my $dateformat = C4::Date::get_date_format();
 	my $adress=$input->param('address');
 	my $firstname=$input->param('firstname');
 	my $surname= $input->param('surname');
