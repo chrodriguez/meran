@@ -1,60 +1,99 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_INCLUDE NAME="opac-top.inc" --> 
 
-<form name="ffind" action="/cgi-bin/koha/opac-searchresults.pl" method=post>
-<table border="0" align="center" width="100%" class="top" >
+<script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
+<script src="/opac-tmpl/default/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/opac-tmpl/default/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/opac-tmpl/default/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 
+
+<script language=javascript>
+
+<!-- TMPL_INCLUDE NAME="navegador.js" -->
+<!-- TMPL_INCLUDE NAME="paginador.js" -->
+<!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="opac-serachFunciones.js" -->
+
+var p= new Paginador(20, 1, '', '');
+
+$(document).ready(function(){
+// 	p.draw('paginador');
+});
+</script>
+<!-- Miguel para testear paginador -->
+<div id="paginador"></div>
+
+<div id="navegador">
+<input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="<!-- TMPL_VAR NAME='themelang' -->/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
+<input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="<!-- TMPL_VAR NAME='themelang' -->/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
+</div>
+
+
+<table id="filtros" border="0" align="center" width="100%" class="top" >
 <tr width=100%><td colspan="5"><h4> B&uacute;squeda Avanzada </h4><td></tr>
 <tr>
         <td width=27% align="right">Autor:</td>
-	<td width=20%> <input type="text" size="25" name="author"></td> <!--puse los width para que quede centrado-->
+	<td width=20%> <input id="autor" type="text" size="25" name="autor"></td>
 	<td width=16% align="right">Diccionario:</td>
-	<td width=37%> <input type="text" size="25" name="dictionary"></td>
+	<td width=37%> <input type="text" size="25" id="dictionary" name="dictionary"></td>
 
 </tr>
 <tr>
  	<td align="right">T&iacute;tulo:</td>
-	<td> <input type="text"  size="25"   name="title"></td>
+	<td> <input type="text"  size="25" id="titulo" name="titulo"></td>
 	<td align="right">Tema:</td>
-        <td><input type="text"  size="25"   name="subjectitems"></td>
+        <td><input type="text"  size="25" id="tema" name="tema"></td>
 </tr>
 <tr>
-<td>&nbsp;</td>
- 	<td><input type="radio" name="ttype" value="normal" checked="checked">Normal<input type="radio" name="ttype" value="exacto">Exacto</td>
-	<td align="right">Anal&iacute;ticas:</td>
- 	<td align="absbottom"><input type="text"  size="25"   name="analytical"></td>
-
-	 <!-- <td align="right">C&oacute;digo de Barras:</td> 
-        <td ><input type="text" size="25" name="itemnumber"></td> -->
+	<td>&nbsp;</td>
+	<td>
+		<input type="radio" id="checkNormal" name="ttype" value="normal" checked="checked">Normal
+		<input type="radio" id="checkExacto" name="ttype" value="exacto">Exacto
+	</td>
+	<td align="right">C&oacute;digo de Barras:</td>
+        <td ><input type="text" size="25" id="codBarra" name="codBarra"></td>
 </tr>
 <tr>
 
 	<td align="right">Tipo de Documento:</td>
 	<td>
-        	<select size="1"  name="class">
-        	<option value="">Cualquiera</option>
-        	<!-- fetch class list -->
-        	<!-- TMPL_VAR name="classlist" -->
-        	<!-- #include virtual="/includes/cat-class-list.inc" -->
-        	</select>
+		<!-- TMPL_VAR name="comboItemTypes" -->
         </td>
         <td align="right">Estante Virtual:</td>
-        <td align="absbottom"><input type="text"  size="25"   name="shelves">
+        <td align="absbottom"><input type="text"  size="25" id="shelves" name="shelves">
         </td>
 
 </tr>
-																	
-<tr><td colspan="5" align="center">Filas a Mostrar:&nbsp;<input type="text" size="5" name="cantidad" value="15"></td></tr>
+
+<tr>
+<td align="right"></td>
+<td align="absbottom">
+</td>
+<td align="right">Anal&iacute;ticas:</td>
+ <td align="absbottom"><input type="text"  size="25" id="analytical" name="analytical">
+</tr>
+																		
+<tr><td colspan="5" align="center">Filas a Mostrar:&nbsp;<input type="text" size="5" name="cantidad" value="15"></td>
+</tr>
+
 <tr>
 	<td colspan="5" align="center">
-	<a  onMouseOut="swap('bus','<!-- TMPL_VAR NAME="themelang" -->/images/search-button.png')" onMouseOver="swap('bus','<!-- TMPL_VAR NAME="themelang" -->/images/search-buttonbis.png')">
-	<input type="image" name="bus" id="bus" src="<!-- TMPL_VAR NAME="themelang" -->/images/search-button.png"  value="Buscar" border="0"></a>
-   <a href="#" onMouseOut="swap('clear','<!-- TMPL_VAR NAME="themelang" -->/images/search-borrar.png')" onMouseOver="swap('clear','<!-- TMPL_VAR NAME="themelang" -->/images/search-borrarbis.png')" onClick="ffind.reset();">
-	<img name="clear" id="clear"  alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/search-borrar.png" border="0"></a>
+	<a  onMouseOut="swap('bus','<!-- TMPL_VAR NAME='themelang' -->/images/search-button.png')" onMouseOver="swap('bus','<!-- TMPL_VAR NAME='themelang' -->/images/search-buttonbis.png')">
 
-   <a target="_blank" href="<!-- TMPL_VAR NAME="themelang" -->/help/help.htm" onMouseOut="swap('help','<!-- TMPL_VAR NAME="themelang" -->/images/help.png')" onMouseOver="swap('help','<!-- TMPL_VAR NAME="themelang" -->/images/helpbis.png')">
-        <img alt="Ayuda" src="<!-- TMPL_VAR NAME="themelang" -->/images/help.png" border="0" name="help" id="help"></a>
+	<input onClick="buscar('', 1);" type="image" name="bus" id="bus" src="<!-- TMPL_VAR NAME='themelang' -->/images/search-button.png"  value="Buscar" border="0">
+	</a>
+   	<a href="#" onMouseOut="swap('clear','<!-- TMPL_VAR NAME='themelang' -->/images/search-borrar.png')" onMouseOver="swap('clear','<!-- TMPL_VAR NAME='themelang' -->/images/search-borrarbis.png')" onClick="clearAll();">
+	<img name="clear" id="clear"  alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/search-borrar.png" border="0">
+	</a>
+
+   	<a target="_blank" href="<!-- TMPL_VAR NAME='themelang' -->/help/help.htm" onMouseOut="swap('help','<!-- TMPL_VAR NAME='themelang' -->/images/help.png')" onMouseOver="swap('help','<!-- TMPL_VAR NAME='themelang' -->/images/helpbis.png')">
+        <img alt="Ayuda" src="<!-- TMPL_VAR NAME='themelang' -->/images/help.png" border="0" name="help" id="help">
+	</a>
 
 </tr>
 </table>
-</form>
+<br>
+<div id="nevegador"></div>
+<div id="result"></div>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

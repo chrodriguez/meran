@@ -1,0 +1,180 @@
+
+
+<table border="0"  align="center">
+	<tr align="center" cellpadding=0 cellspacing=0>
+
+		<td>
+
+		<!-- TMPL_IF NAME="displayprev" -->
+
+			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='pri' -->');" 
+			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif" border="0" width="15" height="14" Title="Primera P&aacute;gina (1)">
+
+
+			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='ant' -->');" 
+			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif" border="0" width="15" height="14" alt="P&aacute;gina Anterior">
+
+    		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
+    		<!-- /TMPL_IF -->
+		</td>
+		<!-- TMPL_LOOP NAME="numbers" -->
+		<!-- TMPL_IF NAME="highlight" -->
+			<td class="highnumber">	
+				<!-- TMPL_VAR NAME="number" --> 
+			</td>
+				<!-- TMPL_ELSE -->
+			<td nowrap class="number"> 
+	
+				<a class='click' onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='number' -->');" ><!-- TMPL_VAR NAME=number --></a>
+			</td>
+				<!-- /TMPL_IF -->
+
+				<!-- TMPL_IF NAME="break" -->
+
+        	<tr><!-- PARA SEPARAR LOS NUMEROS!!!!!!! --></tr>
+
+        		<!-- /TMPL_IF -->
+
+    		<!-- /TMPL_LOOP -->
+			<td>
+		<!-- TMPL_IF NAME="displaynext" -->
+				
+			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='sig' -->');" 
+			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border="0" width="15" height="14" Title="P&aacute;gina Siguiente">
+
+			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='ult' -->');" 
+			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border="0" width="15" height="14" Title="&Uacute;ltima P&aacute;gina (<!-- TMPL_VAR NAME='ult' -->)" >
+	
+    		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
+    		<!-- /TMPL_IF -->
+		</td>
+
+		</tr>
+		<tr>
+			<td><br></td>
+		</tr>
+</table>
+
+<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></br>
+		Cantidad de Registros: <b><!-- TMPL_VAR NAME='cantidad' --></b>
+</p>
+
+
+<!--<table id="#tablaResult" class="tablesorter" border=1 align="center" cellspacing=0 cellpadding=0 width=100% class="zebra">-->
+<table id="tablaResult" class="zebra" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
+	<thead>
+	<tr  class="bordetabla" bordercolor="#f2f2f2">
+		<!-- TMPL_IF NAME='loggedinusername' -->
+		<th>
+			<a class="click" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a>
+		</th>
+		<!-- /TMPL_IF-->
+		<th align="center" width="30%">
+			<a class="click">T&iacute;tulo</a>
+		</th>
+		<th align="center" width="30%">
+			<a class="click"> Autor </a>
+		</th>
+		<th align="center" width="20%">Edici&oacute;n/A&ntilde;o</th>
+		<th align="center" width="20%"> Disponibilidad </th>
+
+	</tr>
+	</thead>
+	<tbody>
+<!-- Resultados de la busqueda -->
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+	<tr>
+<!-- <tr bordercolor="#f2f2f2"> -->
+		<!-- TMPL_IF NAME='loggedinusername' -->
+		<td class=<!-- TMPL_VAR name='clase' --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR NAME='id1' -->" id="<!-- TMPL_VAR NAME='id1' -->">
+		</td>
+		<!-- /TMPL_IF  -->
+		<td class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">	
+		  <!-- TMPL_IF NAME=titulo -->
+
+			<!-- TMPL_VAR NAME=titulo ESCAPE=HTML -->
+
+		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>
+
+		<td class="click" onClick="buscarPorAutor(<!-- TMPL_VAR NAME='idAutor' -->)">
+		  <!-- TMPL_IF NAME="nomCompleto" -->
+
+			<!-- TMPL_VAR NAME="nomCompleto" -->
+
+		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>
+
+		<td class="inputFontNormal">
+		  <!-- TMPL_IF NAME="grupos" -->
+			<!-- TMPL_LOOP NAME="grupos" -->
+				<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="anio_publicacion" -->(<!-- TMPL_VAR NAME="anio_publicacion" -->)<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --><br>
+			<!-- /TMPL_LOOP -->
+		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>
+
+		<td class="inputFontNormal">
+		  <!-- TMPL_IF NAME="disponibilidad" -->
+			<!-- TMPL_LOOP NAME="disponibilidad" -->
+				<b><!-- TMPL_VAR NAME="tipoPrestamo" --></b> <!-- TMPL_VAR NAME="cantTotal" -->
+				<br>
+				<div style="margin-right:4px">
+				<!-- TMPL_VAR NAME="reservados"-->
+				<br> 
+				<!-- TMPL_VAR NAME="prestados"-->
+				<br>
+				</div>
+         		<!-- /TMPL_LOOP -->
+		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>	
+	</tr>
+<!-- /TMPL_LOOP -->
+	</tbody>
+</table>
+<br>
+
+
+<!-- <form name="printform" action="/cgi-bin/koha/opac-print.pl"> -->
+<!-- creo q no se usa -->
+<!--<input TYPE="hidden" VALUE="pdf" NAME="type" >
+<input TYPE="hidden" NAME="orden" value="<!-- TMPL_VAR NAME="orden" -->">
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="numrecords" -->" NAME="num">-->
+<!-- esto tampoco -->
+ <!-- TMPL_LOOP NAME="forminputs" -->
+	<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="value" -->" NAME="<!-- TMPL_VAR NAME="field" -->">
+ <!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME='loggedinusername' -->
+<input type="hidden" value="" name="bookmarks" id="bookmarks">
+<a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">
+
+
+<!--<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">-->
+
+<input onClick="agregarAFavoritos();"
+name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">
+</a>            
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME='MAIL' -->
+<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='MAIL' -->" NAME="mail">
+<a  onMouseOut="swap('mail','<!-- TMPL_VAR NAME="themelang" -->/images/mail.png')" onMouseOver="swap('mail','<!-- TMPL_VAR NAME="themelang" -->/images/mailbis.png')">
+<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  src="<!-- TMPL_VAR NAME='themelang' -->/images/mail.png" border="0" title="Enviar Resultados por Mail">
+</a>
+<!-- /TMPL_IF -->
+
+<!-- Deshabilitado, no esta funcionando -->
+<!--<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+<input onClick="printform.target='_blank';printform.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" b
+order="0" title="Imprimir Resultados">
+</a>-->
+
+<!-- Deshabilitado, no esta funcionando -->
+<!--<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
+<input onClick="printform.target='_self'; printform.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+</a>-->
+
+<!-- </form> -->
