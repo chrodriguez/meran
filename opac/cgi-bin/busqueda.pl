@@ -22,7 +22,7 @@ my ($template, $loggedinuser, $cookie)
 #  			     debug => 1,
 			     });
 
-my $obj=$input->param('obj');
+my $obj=$query->param('obj');
 
 if($obj ne ""){
 	$obj=from_json_ISO($obj);
@@ -110,8 +110,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
 
-# C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"buscar");
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsarray;
 my %result;

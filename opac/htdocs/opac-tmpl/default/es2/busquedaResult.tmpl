@@ -1,76 +1,21 @@
 
 
-<table border="0"  align="center">
-	<tr align="center" cellpadding=0 cellspacing=0>
-
-		<td>
-
-		<!-- TMPL_IF NAME="displayprev" -->
-
-			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='pri' -->');" 
-			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif" border="0" width="15" height="14" Title="Primera P&aacute;gina (1)">
-
-
-			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='ant' -->');" 
-			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif" border="0" width="15" height="14" alt="P&aacute;gina Anterior">
-
-    		<!-- TMPL_ELSE -->
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
-    		<!-- /TMPL_IF -->
-		</td>
-		<!-- TMPL_LOOP NAME="numbers" -->
-		<!-- TMPL_IF NAME="highlight" -->
-			<td class="highnumber">	
-				<!-- TMPL_VAR NAME="number" --> 
-			</td>
-				<!-- TMPL_ELSE -->
-			<td nowrap class="number"> 
-	
-				<a class='click' onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='number' -->');" ><!-- TMPL_VAR NAME=number --></a>
-			</td>
-				<!-- /TMPL_IF -->
-
-				<!-- TMPL_IF NAME="break" -->
-
-        	<tr><!-- PARA SEPARAR LOS NUMEROS!!!!!!! --></tr>
-
-        		<!-- /TMPL_IF -->
-
-    		<!-- /TMPL_LOOP -->
-			<td>
-		<!-- TMPL_IF NAME="displaynext" -->
-				
-			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='sig' -->');" 
-			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border="0" width="15" height="14" Title="P&aacute;gina Siguiente">
-
-			<input type="image" onClick="buscar('<!-- TMPL_VAR NAME='orden' -->', '<!-- TMPL_VAR NAME='ult' -->');" 
-			src="<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif" border="0" width="15" height="14" Title="&Uacute;ltima P&aacute;gina (<!-- TMPL_VAR NAME='ult' -->)" >
-	
-    		<!-- TMPL_ELSE -->
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
-    		<!-- /TMPL_IF -->
-		</td>
-
-		</tr>
-		<tr>
-			<td><br></td>
-		</tr>
-</table>
-
 <p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></br>
 		Cantidad de Registros: <b><!-- TMPL_VAR NAME='cantidad' --></b>
 </p>
 
+<center>
+<!-- TMPL_VAR NAME="paginador" -->
+</center>
 
-<!--<table id="#tablaResult" class="tablesorter" border=1 align="center" cellspacing=0 cellpadding=0 width=100% class="zebra">-->
 <table id="tablaResult" class="zebra" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
 	<thead>
-	<tr  class="bordetabla" bordercolor="#f2f2f2">
-		<!-- TMPL_IF NAME='loggedinusername' -->
+	<tr class="bordetabla" bordercolor="#f2f2f2">
+	<!-- TMPL_IF NAME='loggedinusername' -->
 		<th>
 			<a class="click" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a>
 		</th>
-		<!-- /TMPL_IF-->
+	<!-- /TMPL_IF-->
 		<th align="center" width="30%">
 			<a class="click">T&iacute;tulo</a>
 		</th>
@@ -86,11 +31,11 @@
 <!-- Resultados de la busqueda -->
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
 	<tr>
-<!-- <tr bordercolor="#f2f2f2"> -->
-		<!-- TMPL_IF NAME='loggedinusername' -->
-		<td class=<!-- TMPL_VAR name='clase' --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR NAME='id1' -->" id="<!-- TMPL_VAR NAME='id1' -->">
+
+	<!-- TMPL_IF NAME='loggedinusername' -->
+		<td class="<!-- TMPL_VAR name='clase' -->" valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR NAME='id1' -->" id="<!-- TMPL_VAR NAME='id1' -->">
 		</td>
-		<!-- /TMPL_IF  -->
+	<!-- /TMPL_IF  -->
 		<td class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">	
 		  <!-- TMPL_IF NAME=titulo -->
 

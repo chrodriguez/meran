@@ -33,6 +33,71 @@ function mandarArreglo(valores){
 // 	return valores.value;
 }
 
+
+var objBusqueda;
+
+function Complete(){
+	HiddeState();
+}
+
+function ordenarPor(ord){
+	//seteo el orden de los resultados
+	objBusqueda.sort(ord);
+}
+
+function changePage(ini){
+	objBusqueda.changePage(ini);
+}
+
+function updateInfo(responseText){
+
+	$('#result').html(responseText);
+	zebra('tablaResult');
+ 	pushCache(responseText, 'result');
+	Complete();
+
+}
+
+function buscar(){
+
+	//seteo normal
+	var tipo= $("#checkNormal").val();
+	//busqueda exacta
+	if($("#checkExacto").attr("checked") == true){
+		tipo= $("#checkExacto").val();
+	}
+
+	objBusqueda=new SearchHelper(updateInfo, Init);
+ 	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
+	objBusqueda.codBarra= $('#codBarra').val();
+	objBusqueda.tema=  $('#tema').val();
+	objBusqueda.autor= $('#autor').val();
+	objBusqueda.titulo= $('#titulo').val();
+ 	objBusqueda.tipo= tipo;
+ 	objBusqueda.comboItemTypes= $('#comboItemTypes').val();
+	
+	//se setea la funcion para cambiar de pagina
+	objBusqueda.funcion= 'changePage';
+	//se envia la consulta
+	objBusqueda.sendToServer();
+
+}
+
+function buscarPorAutor(idAutor){
+
+	objBusqueda=new SearchHelper(updateInfo, Init);
+ 	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
+	objBusqueda.idAutor= idAutor;	
+	//se setea la funcion para cambiar de pagina
+	objBusqueda.funcion= 'changePage';
+	//se envia la consulta
+	objBusqueda.sendToServer();
+}
+
 //****************************************Busqueda para usuario no logueado************************************
 function searchinc(orden, ini){
 
@@ -89,15 +154,9 @@ function mostrarHistorialPrestamos(bornum){
 
 
 //**********************************************************************************************************
-//dibuja la zebra para los resultados
- function zebra(){
-  	$(".zebra tr:not(tr.bordetabla):odd").addClass("impar");
- }
 
 
-function Complete(){
-	HiddeState();
-}
+
 
 
 //********************************************Favoritos****************************************************
@@ -176,53 +235,6 @@ function borrarDeFavoritos(){
 //****************************************Fin****Favoritos****************************************************
 
 //****************************************Busqueda Avanzada****************************************************
-function buscar(orden, ini){
-
-//seteo normal
-var tipo= $("#checkNormal").val();
-//busqueda exacta
-if($("#checkExacto").attr("checked") == true){
-	tipo= $("#checkExacto").val();
-}
-
-var params= 	'codBarra=' +$('#codBarra').val() +
- 		'&tema=' + $('#tema').val() +
-		'&autor=' + $('#autor').val() +
-		'&titulo=' + $('#titulo').val() +
- 		'&tipo=' + tipo +
-		'&ini=' + ini +
- 		'&comboItemTypes=' + $('#comboItemTypes').val();
-		
-
-	$.ajax({	type: "POST", 
-			url: "busqueda.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					zebra();
- 					pushCache(ajax.responseText, 'result');
-					Complete();
-				}
-	});
-
-}
-
-function buscarPorAutor(idAutor){
-
-var params= 	'idAutor=' + idAutor;
-
-	$.ajax({	type: "POST", 
-			url: "busqueda.pl",
-			data: params,
- 			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					pushCache(ajax.responseText, 'result');
-					Complete();
-				}
-	});
-}
 
 function clearAll(){
 	$('#autor').val("");
@@ -293,27 +305,28 @@ $(document).ready(function(){
 
 	$('#codBarra').keypress(function (e) {
 		if(e.which == 13){
-			buscar('', 1);
+			buscar();
 		}
 	});
 	$('#tema=').keypress(function (e) {
 		if(e.which == 13){
-			buscar('', 1);
+			buscar();
 		}
 	});
 	$('#autor').keypress(function (e) {
 		if(e.which == 13){
-			buscar('', 1);
+			buscar();
 		}
 	});
 	$('#titulo').keypress(function (e) {
 		if(e.which == 13){
-			buscar('', 1);
+// 			buscar('', 1);
+			buscar();
 		}
 	});
  	$('#tipo').keypress(function (e) {
 		if(e.which == 13){
-			buscar('', 1);
+			buscar();
 		}
 	});
 	$('#searchinc').keypress(function (e) {

@@ -4,23 +4,22 @@
 <script src="/opac-tmpl/default/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/opac-tmpl/default/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/opac-tmpl/default/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<script src="/opac-tmpl/default/es2/includes/json/jsonStringify.js"></script>
+<script src="/opac-tmpl/default/es2/includes/SearchHelper.js"></script>
 
 
 <script language=javascript>
 
 <!-- TMPL_INCLUDE NAME="navegador.js" -->
-<!-- TMPL_INCLUDE NAME="paginador.js" -->
 <!-- TMPL_INCLUDE NAME="state.js" -->
+<!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="opac-serachFunciones.js" -->
 
-var p= new Paginador(20, 1, '', '');
 
 $(document).ready(function(){
 // 	p.draw('paginador');
 });
 </script>
-<!-- Miguel para testear paginador -->
-<div id="paginador"></div>
 
 <div id="navegador">
 <input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="<!-- TMPL_VAR NAME='themelang' -->/images/1leftarrow.png" border="0" title="Anterior" style="display:none">

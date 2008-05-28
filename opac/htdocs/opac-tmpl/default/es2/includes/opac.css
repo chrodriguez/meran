@@ -15,6 +15,7 @@ td.highnumber{
 	text-decoration: underline;
 
 }
+
 h4{background-color: #A63D3F;
 	color:#e3e3db;
 	}
@@ -59,9 +60,26 @@ h4{background-color: #A63D3F;
         color:#000000;
 		}
 
+/*
 td.impar {Background-color: #dddcd9;}
 
 td.par {Background-color: #dddcd9;}
+*/
+
+/*Miguel lo agregue para hacer la zebra*/
+tr.par {
+/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
+/* color: #000000 ; */
+/* font-size: 10pt;  */
+background-color:#F4F4F4;
+}
+tr.impar {
+/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
+/* color:#000000;     */
+/* font-size: 10pt; */
+background-color:#FFFFFF;  
+}
+/*      Fin estilo zebra         */
 
 a{text-decoration: none;
 	font-size:10pt;
@@ -118,3 +136,29 @@ body { background-image: url(../images/patern.jpg);
    border-left-width: 0px;
    padding: 2px;
       }
+
+
+/*PARA EL PAGINAGOR*/
+
+.paginaNormal{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.paginaActual{
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: red;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+
+/*FIN PARA EL PAGINAGOR*/
+
+.click {
+	 cursor: pointer;
+}

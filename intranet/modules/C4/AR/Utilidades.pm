@@ -798,11 +798,12 @@ sub InitPaginador{
 	return ($ini,$pageNumber,$cantR);
 }
 
-sub crearPaginador{
+sub crearPaginador(){
+
 	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
 	#cant. de renglones q se pueden mostrar por pagina
 
-	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion);
+	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion, $template);
 
 	$template->param(paginador => $paginador);
 
@@ -812,12 +813,12 @@ sub armarPaginas{
 #@actual, es la pagina seleccionada por el usuario
 #@cantRegistros, cant de registros que se van a paginar
 #@$cantRenglones, cantidad de renglones maximo a mostrar
-	my ($actual, $cantRegistros, $cantRenglones,$funcion)=@_;
+#@$template, para obtener el path para las imagenes
+
+	my ($actual, $cantRegistros, $cantRenglones,$funcion, $template)=@_;
+
 	my $pagAMostrar=C4::Context->preference("paginas")||10;
 	my $numBloq=floor($actual / $pagAMostrar);
-
-#  	my $limInf=($numBloq * $pagAMostrar)+1;
-#  	my $limSup=$limInf + $pagAMostrar -1;
 	my $limInf=($numBloq * $pagAMostrar);
 	my $limSup=$limInf + $pagAMostrar;
 	if($limInf == 0){
@@ -825,18 +826,22 @@ sub armarPaginas{
 		$limSup=$limInf + $pagAMostrar -1;
 	}
 	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
+	my $themelang = $template->param('themelang');
 
 	my $paginador= "<div id=paginador>";
 	my $class="paginaNormal";
-# <!-- TMPL_VAR name='themelang' -->
+
 	if($actual > 1){
 		#a la primer pagina
-		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'><img src='/images/numbers/ant.gif' border=0><img src='/images/numbers/ant.gif' border=0></span>";
+		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
+		<img src='".$themelang."/images/numbers/prev.gif' border=0>
+		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
 
 		$paginador .= "<span> </span>";
 
 		my $ant= $actual-1;
-		$paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'><img src='/images/numbers/ant.gif' border=0></span>";
+		$paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'>
+		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
 	}
 	for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
 		if($actual == $i){$class="paginaActual"}
@@ -846,11 +851,14 @@ sub armarPaginas{
 
 	if($actual >= 1 && $actual < $totalPaginas){
 		my $sig= $actual+1;
-		$paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'><img src='/images/numbers/next.gif' border=0></span>";
+		$paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'>
+		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
 
 		$paginador .= "<span> </span>";
 		#a la primer pagina
-		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'><img src='/images/numbers/next.gif' border=0><img src='/images/numbers/next.gif' border=0></span>";
+		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
+		<img src='".$themelang."/images/numbers/next.gif' border=0>
+		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
 	}
 	$paginador .= "</div>";	
 
