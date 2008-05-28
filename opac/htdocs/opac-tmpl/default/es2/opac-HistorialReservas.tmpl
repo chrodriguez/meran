@@ -1,80 +1,77 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
 <br>
-
-<!-- TMPL_IF NAME="ok2" -->
-	<a class="inputFontNormal" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR name='ant' -->>
-	<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/prev.gif border=0></a>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME=numeros -->
-	<a class="highnumber" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR NAME=number -->>
-	<u><!-- TMPL_VAR name=number --></u></a>
-<!-- /TMPL_LOOP -->
-
-<!-- TMPL_IF NAME="ok" -->
-	<a class="inputFontNormal" href=opac-HistorialReservas.pl?ini=<!-- TMPL_VAR name="sig" -->>
-	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
 
 <center>
 <p class="inputFontNormal"> 
+
 	<b>Cantidad de reservas realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
-</p><br>
+	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> 
+	de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+</p>
+<br>
+
+<!-- TMPL_VAR NAME="paginador" -->
 <center>
 
-<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">    
- <td colspan="5" align="center" class="bordetabla" borde=1>
-<b> Historial de Reservas </b>
+<table width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 
- </td>
-</tr> 	
-<tr  class="bordetabla"  bordercolor="#f2f2f2">
- <th>T&iacute;tulo</th>
- <th>Autor</th>
- <th>Estado</th>
- <th>F. Reserva </th>
- <th>F. Vto </th>
-</tr>
+	<tr bordercolor="#f2f2f2">    
+ 		<td colspan="5" align="center" class="bordetabla" borde=1>
+			<b> Historial de Reservas </b>
+		</td>
+	</tr> 
+
+</table>
+
+<table id="tablaHistReservas" width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">	
+
+	<tr class="bordetabla"  bordercolor="#f2f2f2">
+		<th>T&iacute;tulo</th>
+		<th>Autor</th>
+		<th>Estado</th>
+		<th>F. Reserva </th>
+		<th>F. Vto </th>
+	</tr>
+
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
 <!-- TMPL_LOOP NAME="loop_reservas" -->
-<tr border="1" bordercolor="#f2f2f2">
- <td class="<!-- TMPL_VAR NAME='clase'-->"> 
+	<tr border="1" bordercolor="#f2f2f2">
+ 		<td> 
 	<!-- TMPL_IF NAME="biblionumber" -->
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
+		<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
 	<!-- TMPL_VAR name="title" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->
-	</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
- </td>
- <td class="<!-- TMPL_VAR NAME='clase'-->">
+		</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+ 		</td>
+ 		<td>
 	<!-- TMPL_IF NAME="idAutor" -->
 	<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idAutor' -->" >
 	<!-- TMPL_VAR NAME="completo" -->
 	</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
- </td>
- <td align=center class="<!-- TMPL_VAR NAME='clase'-->">  
+ 		</td>
+ 		<td align=center>  
 	<!-- TMPL_IF NAME="estado" -->
 	<!-- TMPL_VAR NAME="estado" -->
 	<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- </td>
- <td class="<!-- TMPL_VAR NAME='clase'-->">
+ 		</td>
+ 		<td>
 		<!-- TMPL_VAR name="fechaReserva" -->&nbsp;
- </td>
- <td align=center class="<!-- TMPL_VAR NAME='clase'-->">
-		<!-- TMPL_VAR name="fechaVto" -->&nbsp;
- </td>
-</tr>
+ 		</td>
+ 		<td align=center>
+			<!-- TMPL_VAR name="fechaVto" -->&nbsp;
+ 		</td>
+	</tr>
  <!-- /TMPL_LOOP -->
+
 </table>
 
 
 <br>
 <a  href="opac-user.pl">Volver</a>
 <p align="center">
-	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')"><input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
+	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
+	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
 	</a>
 </p>
 	
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
 
 

@@ -50,7 +50,9 @@ function changePage(ini){
 }
 
 function updateInfo(responseText){
-
+	
+	//si estoy logueado, oculta la informacion del usuario
+	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
 	zebra('tablaResult');
  	pushCache(responseText, 'result');
@@ -98,27 +100,31 @@ function buscarPorAutor(idAutor){
 	objBusqueda.sendToServer();
 }
 
+
 //****************************************Busqueda para usuario no logueado************************************
-function searchinc(orden, ini){
+function searchinc(){
 
-var params= 	$('#criteria').val() + '=' + $('#searchinc').val() + 
-		'&comboItemTypes= -1' +
-		'&ini=' + ini +
-  		'&tipo=normal';
-
-	$.ajax({	type: "POST", 
-			url: "busqueda.pl",
-			data: params,
- 			complete: function(ajax){
-					//si estoy logueado, oculta la informacion del usuario
-					$('#datosUsuario').slideUp('slow');
-					$('#result').html(ajax.responseText);
-					pushCache(ajax.responseText, 'result');
-					zebra();
-				}
-	});
+	objBusqueda=new SearchHelper(updateInfo, Init);
+ 	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
+	objBusqueda.criteria= $('#criteria').val();
+	objBusqueda.searchinc= $('#searchinc').val();
+	objBusqueda.tipo= 'normal';
+	objBusqueda.comboItemTypes= '-1';
+	//se setea la funcion para cambiar de pagina
+	objBusqueda.funcion= 'changePage';
+	//se envia la consulta
+	objBusqueda.sendToServer();
 }
 //**************************************Fin**Busqueda para usuario no logueado********************************
+
+
+
+
+
+
+
 
 function consultarEstanteVirtual(){
 
@@ -139,13 +145,29 @@ function consultarEstanteVirtual(){
 function mostrarHistorialPrestamos(bornum){
 
 	$.ajax({	type: "POST", 
-			url: "readingrec.pl",
+			url: "opac-HistorialPrestamos.pl",
  			data: "bornum=" + bornum,
 			beforeSend: Init,
  			complete: function(ajax){
  					$('#datosUsuario').slideUp('slow');
 					$('#result').html(ajax.responseText);
-					zebra();
+					zebra('tablaHistPrestamos');
+					Complete();
+				}
+	});
+
+}
+
+function mostrarHistorialReservas(bornum){
+
+	$.ajax({	type: "POST", 
+			url: "opac-HistorialReservas.pl",
+ 			data: "bornum=" + bornum,
+			beforeSend: Init,
+ 			complete: function(ajax){
+ 					$('#datosUsuario').slideUp('slow');
+					$('#result').html(ajax.responseText);
+					zebra('tablaHistReservas');
 					Complete();
 				}
 	});
@@ -260,7 +282,7 @@ var params= 'id1=' + id1;
  			complete: function(ajax){
 					$('#result').html(ajax.responseText);
 					pushCache(ajax.responseText, 'result');
-					zebra();
+					zebra('tableResult');
 					Complete();
 				}
 	});
@@ -320,7 +342,6 @@ $(document).ready(function(){
 	});
 	$('#titulo').keypress(function (e) {
 		if(e.which == 13){
-// 			buscar('', 1);
 			buscar();
 		}
 	});
@@ -331,7 +352,7 @@ $(document).ready(function(){
 	});
 	$('#searchinc').keypress(function (e) {
  		if(e.which == 13){
-  			searchinc('', 1);
+  			searchinc();
  		}
  	});
 });

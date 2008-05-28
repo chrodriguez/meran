@@ -39,9 +39,7 @@
 
 <!-- TMPL_LOOP NAME="loopEncabezados" -->
 	<div align="left">
-		<!--Encabezado: <b><!-- TMPL_VAR NAME="encabezado" --></b><br>-->
 		<span class="Encabezados"><!-- TMPL_VAR NAME="encabezado" --></span>
-<!-- 		En Linea: <!-- TMPL_VAR NAME="linea" --><br> -->
 	</div>
 
 	<ul>
@@ -50,7 +48,6 @@
 	
 	<!-- TMPL_IF NAME="dato" -->
 	<li>
-		<!--<!-- TMPL_VAR NAME="librarian" --> <b><!-- TMPL_VAR NAME="dato" --></b>-->
 		<!-- TMPL_VAR NAME="librarian" --> <!-- TMPL_VAR NAME="dato" -->
 	</li>
 	<!-- /TMPL_IF -->
@@ -63,7 +60,7 @@
   </table></td></tr>
 </table>
 
-<table class="zebra" cellspacing=0 border="0" cellpadding=0 width="100%" class="tope">
+<table id="tableResult" cellspacing=0 border="0" cellpadding=0 width="100%" class="tope">
 <tr class="bordetabla" align="center">
 	<td>&nbsp;</td>
 	<td>C&oacute;digo</td>
@@ -78,19 +75,23 @@
   <!-- TMPL_LOOP NAME="loopnivel3" -->
 	<!-- TMPL_LOOP NAME="nivel3" -->
 <tr align="center">
-		<td>&nbsp;</td>
-		<td><!-- TMPL_VAR NAME="barcode" --></td>
-		<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
-		<td><!-- TMPL_VAR NAME="holdingbranch" --></td>
-		<td><!-- TMPL_VAR NAME="homebranch" --></td>
-		<td><!-- TMPL_VAR NAME="wthdrawn" --></td>
-		<td><!-- TMPL_VAR NAME="notforloan" --></td>
-		<td>
-		  <a onClick="MARCDetail('<!-- TMPL_VAR NAME='id3' -->', '<!-- TMPL_VAR NAME='DivDetalle' -->', '<!-- TMPL_VAR NAME='DivMARC' -->');">
-		  <img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/es2/images/MARC.png" border="0" alt="Detalle MARC" title="Detalle MARC">
-		  </a>
-		</td>
-		<td>&nbsp;</td>
+
+	<td>&nbsp;</td>
+
+	<td><!-- TMPL_VAR NAME="barcode" --></td>
+	<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
+	<td><!-- TMPL_VAR NAME="holdingbranch" --></td>
+	<td><!-- TMPL_VAR NAME="homebranch" --></td>
+	<td><!-- TMPL_VAR NAME="wthdrawn" --></td>
+	<td><!-- TMPL_VAR NAME="notforloan" --></td>
+	<td>
+		<a onClick="MARCDetail('<!-- TMPL_VAR NAME='id3' -->', '<!-- TMPL_VAR NAME='DivDetalle' -->', '<!-- TMPL_VAR NAME='DivMARC' -->');">
+		<img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/es2/images/MARC.png" border="0" alt="Detalle MARC" title="Detalle MARC">
+		</a>
+	</td>
+
+	<td>&nbsp;</td>
+
 </tr>
 	<!-- /TMPL_LOOP -->
   <!-- /TMPL_LOOP -->

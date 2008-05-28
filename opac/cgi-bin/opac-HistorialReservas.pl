@@ -25,12 +25,11 @@
 use strict;
 use C4::Auth;
 use C4::Output;
-use C4::Date;
+# use C4::Date;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use HTML::Template;
-use C4::AR::Estadisticas;
 
 my $input=new CGI;
 
@@ -44,54 +43,19 @@ my ($template, $loggedinuser, $cookie)
 
 my $bornum=$loggedinuser;
 
-#Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini;
-my $pageNumber;
-my $cantR=cantidadRenglones();
 
-if (($input->param('ini') eq "")){
-        $ini=0;
-	$pageNumber=1;
-}
-else {
-	$ini= ($input->param('ini')-1)* $cantR;
-	$pageNumber= $input->param('ini');
-};
+my $funcion= $input->param('funcion');
+my $ini= ( $input->param('ini') || '');
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
+my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
 
-my ($cant,$reservas_hashref)=&historialReservas($bornum,$ini,$cantR);
-
-my @numeros=armarPaginas($cant,$pageNumber);
-my $paginas = scalar(@numeros)||1;
-my $pagActual = $input->param('ini')||1;
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual);
-
-if ( $cant > $cantR ){
-#Seteo las flechas de siguiente y anterior
-       	my $sig = $pageNumber+1;;
-        if ($sig <= $paginas){
-       	         $template->param(
-               	                ok    =>'1',
-                       	        sig   => $sig);
-        };
-
-	if ($sig > 2 ){
-               my $ant = $pageNumber-1;
-               $template->param(
-                               ok2     => '1',
-                               ant     => $ant)
-	}
-}
+&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 
 $template->param(
-			cant  => $cant,
-			numeros => \@numeros,
+			cantidad	=> $cantidad,
  			loop_reservas => $reservas_hashref
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
-

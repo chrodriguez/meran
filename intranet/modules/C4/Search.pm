@@ -2925,7 +2925,7 @@ sub allissues {
   my $dateformat = C4::Date::get_date_format();
   my $querySelectCount = " SELECT count(*) as cant ";
 
-  my $querySelect= " SELECT b.title,b.biblionumber,b.author,a.completo,iss.date_due,iss.returndate,volumeddesc, iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
+  my $querySelect= " SELECT b.title,b.biblionumber,b.author,a.completo,iss.date_due,iss.returndate,volumeddesc, 			iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
 
   my $queryFrom = " FROM items i INNER JOIN biblioitems bi";
   $queryFrom .= " ON (i.biblioitemnumber = bi.biblioitemnumber) ";
@@ -2955,12 +2955,9 @@ sub allissues {
 
   my @result;
   my $i=0;
-  my $clase;
+
   while (my $data=$sth->fetchrow_hashref){
 
-  	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
-   
-   	$data->{'clase'}=$clase;
 	my $df=C4::AR::Issues::fechaDeVencimiento($data->{'itemnumber'},$data->{'date_due'});
 	$data->{'date_fin'}=format_date($df,$dateformat);
 	$data->{'date_due'}=  format_date($data->{'date_due'},$dateformat);

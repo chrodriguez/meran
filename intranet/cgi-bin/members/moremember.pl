@@ -150,7 +150,8 @@ my @issuedat;
 my $clase='par';
 my $sanctions = hasSanctions($bornum);
 ####Es regular el Usuario?####
-my $regular =  C4::AR::Usuarios::esRegular($bornum);
+my $regular =&C4::AR::Usuarios::esRegular($bornum);
+
 $template->param(regular       => $regular);
 ####
 foreach my $san (@$sanctions) {

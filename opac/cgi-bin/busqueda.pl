@@ -41,6 +41,16 @@ my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
 my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};
 
+#busqueda desde el top
+my $criteria= $obj->{'criteria'};
+my $searchinc= $obj->{'searchinc'};
+
+if($criteria ne ''){
+
+	if($criteria eq 'autor'){$autor= $searchinc;}
+	if($criteria eq 'titulo'){$titulo= $searchinc;}
+}
+####
 
 #*********************************Busqueda Avanzada********************************************************
 my $nivel1="";
@@ -104,7 +114,6 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
 }
 
-# my $ini= ($input->param('ini')||'');
 my $ini= ($obj->{'ini'}||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
