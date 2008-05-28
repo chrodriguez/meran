@@ -60,6 +60,9 @@ use vars qw(@EXPORT @ISA);
 	   &userCategReport
 	   &historicoSanciones
 	   &historialReservas
+	   &signaturamax
+	   &signaturamin
+	   &listaDeEjemplares
 );
 
 sub historicoDeBusqueda(){
@@ -1513,4 +1516,113 @@ sub userCategReport(){
         }
         return (scalar(@results),@results);
 }
-1;
+=item
+SE USA EN EL REPORTE Generar Etiquetas
+=cut
+sub signaturamax {
+ my ($branch) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select MAX(bulk) as max from items where bulk is not NULL and bulk <> '' and homebranch = ?");
+	$sth->execute($branch);
+	my $res= ($sth->fetchrow_hashref)->{'max'};
+	return $res;
+}
+
+=item
+SE USA EN EL REPORTE Generar Etiquetas
+=cut
+sub signaturamin {
+ my ($branch) = @_;
+	my $dbh = C4::Context->dbh;                     
+	my $sth = $dbh->prepare("select MIN(bulk) as min from items where bulk is not NULL and bulk <> '' and homebranch = ?");
+	$sth->execute($branch);
+	my $res= ($sth->fetchrow_hashref)->{'min'};
+	return $res;
+	}
+
+
+=item
+SE USA EN EL REPORTE Generar Etiquetas
+=cut
+
+sub listaDeEjemplares {
+	my ($minbarcode,$maxbarcode,$minlocation,$maxlocation,$beginlocation,$branch,$ini,$fin,$orden) = @_;
+	my @bind;
+	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
+	my $dbh = C4::Context->dbh;
+	
+	my $query="SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblioitems.biblionumber, items.homebranch
+	FROM (
+	(items 	INNER JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber)
+	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
+	    )
+	WHERE ";
+	
+	if ($beginlocation ne '') {
+		$query.=" (bulk LIKE '".$beginlocation."%') ";
+	}
+	else {
+	
+	if (($minbarcode ne '') and ($maxbarcode ne '')) {
+		$query.=" (barcode 	BETWEEN ? AND ?) ";
+		push(@bind,$minbarcode);
+		push(@bind,$maxbarcode);
+		}
+	if (($minlocation ne '') and ($maxlocation ne '')) {
+		if (($minbarcode ne '') and ($maxbarcode ne '')) {$query.=" AND ";} #Se van a hacer las 2 consultas
+		
+		$query.=" (bulk BETWEEN ? AND ?) ";
+		push(@bind,$minlocation);
+		push(@bind,$maxlocation);
+		}
+	}
+	
+	if (($beginlocation ne '') or (($minbarcode ne '') and ($maxbarcode ne '')) or (($minlocation ne '') and ($maxlocation ne ''))) {
+	#Se va a hacer la consulta
+
+		$query.=" AND (items.homebranch= ?) ;";
+		push(@bind,$branchcode);	
+		my $sth = $dbh->prepare($query);
+		$sth->execute(@bind);
+	
+	my @results;
+	while (my $row = $sth->fetchrow_hashref) {
+		$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
+		$row->{'author'}=C4::Search::getautor($row->{'author'});
+		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
+		push @results,$row;
+	}
+
+	if ($orden){
+	# Da el ORDEN al arreglo
+	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+	@results=@sorted;
+	}
+
+	my $cantReg=scalar(@results);
+
+	#Se chequean si se quieren devolver todos
+	if(($cantReg > $fin)&&($fin ne "todos")){
+		my $cantFila=$fin-1+$ini;
+		my @results2;
+		if($cantReg < $cantFila ){
+			@results2=@results[$ini..$cantReg];
+		}
+		else{
+			@results2=@results[$ini..$fin-1+$ini];
+		}
+
+		return($cantReg,@results2);
+	}
+        else{
+		return ($cantReg,@results);
+	}
+
+	}
+	else 
+	{# NO se hace la consulta
+	return (0,[]);
+	}	
+
+}
+

@@ -36,6 +36,10 @@ my  $orden=$input->param('orden');
 my  $op=$input->param('op');
 my  $barcode1=$input->param('barcode1');
 my  $barcode2=$input->param('barcode2');
+my  $bulk1=$input->param('bulk1');
+my  $bulk2=$input->param('bulk2');
+my  $bulkbegin=$input->param('bulkbegin');
+
 my  $branch=$input->param('branch');
 my  $count=0;
 my  $cantidad=0;
@@ -56,8 +60,13 @@ my ($template, $loggedinuser, $cookie)
 if ($op eq 'pdf') {
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
 
-($cantidad,@results)= C4::Circulation::Circ2::listitemsforinventory($barcode1,$barcode2,$branch,1,"todos",$orden);
-&batchBookLabelGenerator($cantidad,@results);
+my $tmpFileName= "etiquetas.pdf";
+($cantidad,@results)= listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$branch,1,"todos",$orden);
+my $pdf = batchBookLabelGenerator($cantidad,@results);
+
+print "Content-type: application/pdf\n";
+print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
+print $pdf->Finish();
 
 }
 else
@@ -82,7 +91,7 @@ if (($input->param('ini') eq "")){
 #FIN inicializacion
 
 
-($cantidad,@results)= C4::Circulation::Circ2::listitemsforinventory($barcode1,$barcode2,$branch,$ini,$cantR,$orden);
+($cantidad,@results)= listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$branch,$ini,$cantR,$orden);
 
 if ($cantR ne 'todos') {
 my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
@@ -145,19 +154,25 @@ $template->param(
 	               );
 	}
 
-my $MIN=C4::Circulation::Circ2::getminbarcode($branch);
-my $MAX=C4::Circulation::Circ2::getmaxbarcode($branch);
-
+my $MINB=C4::Circulation::Circ2::getminbarcode($branch);
+my $MAXB=C4::Circulation::Circ2::getmaxbarcode($branch);
+my $MINS= signaturamax($branch);
+my $MAXS= signaturamin($branch);
 
 $template->param(
-                cantidad=>$count,
+                cantidad=>$cantidad,
 		unidades => $CGIbranch,
 		branch => $branch,
 		orden => $orden,
 		barcode1 => $barcode1,
 		barcode2 => $barcode2,
-		MAX => $MAX,
-		MIN => $MIN
+		MAXB => $MAXB,
+		MINB => $MINB,
+		bulk1 => $bulk1,
+		bulk2 => $bulk2,
+		MAXS => $MAXS,
+		MINS => $MINS,
+		bulkbegin => $bulkbegin
 		);
 
 

@@ -6,12 +6,15 @@ function hacerSubmit(){
 	}
 function ordenar(orden){
 	
-	window.location.href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden="+orden+"&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->";
+	window.location.href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden="+orden+"&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->";
 	}
 function generarEtiquetas(){
 	document.cards.orden.value='<!-- TMPL_VAR NAME=orden  -->';
 	document.cards.barcode1.value='<!-- TMPL_VAR NAME=barcode1  -->';
 	document.cards.barcode2.value='<!-- TMPL_VAR NAME=barcode2  -->';
+	document.cards.bulk1.value='<!-- TMPL_VAR NAME=bulk1  -->';
+	document.cards.bulk2.value='<!-- TMPL_VAR NAME=bulk2  -->';
+	document.cards.bulkbegin.value='<!-- TMPL_VAR NAME=bulkbegin  -->';
 	document.cards.branch.value='<!-- TMPL_VAR NAME=branch  -->';
 
 	document.cards.op.value='pdf';
@@ -36,19 +39,18 @@ function generarEtiquetas(){
 <input type='hidden' id='orden' name='orden' value='<!-- TMPL_VAR NAME=orden  -->'>
 <input type='hidden' id='op' name='op' value='search'>
 <table border="0" cellspacing="0" cellpadding="0">
-<tr valign="top"><td>
+<tr valign="top">
+<td>
 <table border="0" cellspacing="0" cellpadding="0">
 	
 	<tr class="inputFontNormal">
-	<td>Inventario:</td>
-	<td colspan="2">
-	Desde:&nbsp; <input type='text' id='barcode1' name='barcode1' value='<!-- TMPL_VAR NAME=barcode1  -->'><br>
+	<td colspan="3">
+	<b>Inventario:</b><br>
+	Desde:&nbsp; <input type='text' id='barcode1' name='barcode1' value='<!-- TMPL_VAR NAME=barcode1  -->'> 
 	Hasta:&nbsp; <input type='text' id='barcode2' name='barcode2' value='<!-- TMPL_VAR NAME=barcode2  -->'></td>
-	</tr>
 	<tr>
 	<td colspan="3">
-	<p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MIN --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAX --></b>. </p>
-	<p class="inputFontNormal" align="left">La cantidad de ejemplares es: <!-- TMPL_VAR NAME=cantidad --></p>
+	<p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MINB --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAXB --></b>. </p>
 	</td>
 	</tr>
 
@@ -56,14 +58,56 @@ function generarEtiquetas(){
 </td>
 <td>&nbsp;</td>
 <td>
+
+
 <table border="0" cellspacing="0" cellpadding="0">
 <tr class="inputFontNormal">
-	 <td>Unidad de informaci&oacute;n:</td>
-	 <td colspan="2"><!-- TMPL_VAR NAME=unidades  --></td>
+	 <td colspan="3">
+	 <b>Unidad de informaci&oacute;n:</b><br>
+	<!-- TMPL_VAR NAME=unidades  --></td>
 </tr>
 </table>
 
-</td></tr></table>
+</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr valign="top">
+<td>
+<table border="0" cellspacing="0" cellpadding="0">
+	
+	<tr class="inputFontNormal">
+	<td colspan="3">
+	<b>Signatura Topogr&aacute;fica:</b><br>
+	<br>
+	Desde:&nbsp; <input type='text' id='bulk1' name='bulk1' value='<!-- TMPL_VAR NAME=bulk1  -->'> 
+	Hasta:&nbsp; <input type='text' id='bulk2' name='bulk2' value='<!-- TMPL_VAR NAME=bulk2  -->'>
+	</td>
+	</tr>
+	<tr>
+	<td colspan="3">
+	<p class="inputFontNormal" align="left">La m&iacute;nima signatura existente es: <b><!-- TMPL_VAR NAME=MINS --></b> y la m&aacute;xima es: <b><!-- TMPL_VAR NAME=MAXS --></b>. </p>
+	</td>
+	</tr>
+</table>
+</td>
+
+<td>&nbsp;</td>
+<td>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr class="inputFontNormal">
+<td colspan="3">
+<br><b>O</b><br>
+Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!-- TMPL_VAR NAME=bulkbegin  -->'>
+</td>
+</tr>
+</table>
+
+</td></tr>
+
+	
+
+
+</table>
 <br>
 <input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
 </form>
@@ -73,19 +117,19 @@ function generarEtiquetas(){
 <tr class="inputFontNormal">
 <td>
 <!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ant -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
+		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ant -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_LOOP NAME=numeros -->
 	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=number -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->" > <u><!-- TMPL_VAR name=number --></u></a>
+		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=number -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->" > <u><!-- TMPL_VAR name=number --></u></a>
 	<!-- TMPL_ELSE -->
         	<u><!-- TMPL_VAR name=number --></u>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=sig -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=sig -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
 <!-- /TMPL_IF -->
 
 </td>
@@ -137,6 +181,20 @@ function generarEtiquetas(){
 </tr>
 
 <!-- /TMPL_LOOP -->
+
+
+
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+<tr>
+<td colspan="9">
+<p class="inputFontNormal" align="left">La cantidad de ejemplares es: <b><!-- TMPL_VAR NAME=cantidad --></b></p>
+</td>
+</tr>
 
 </table>
 

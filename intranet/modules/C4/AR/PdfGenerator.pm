@@ -714,7 +714,7 @@ sub prestInterBiblio(){
 	my $cant=scalar(@$datos);
 	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
-	$parrafo[0]="La(s) misma(s) serï¿½(n) retirada(s) por:";
+	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
 	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
@@ -930,7 +930,7 @@ sub generateBookLabel {
 	$pdf->drawRect($pagewidth, $pageheight+($y-97) , 0 ,$y);
 	$pdf->drawLine(95, $pageheight+($y-97), 95, $y);
 	 #Insert a barcode to the card
-	$pdf->drawBarcode($x+100,$y, 80/100 ,1,"3of9",$codigo,undef, 10, 10, 25, 10);
+	$pdf->drawBarcode($x+150,$y, 50/100 ,1,"3of9",$codigo,undef, 10, 10, 25, 10);
 
 	my $posy=105;
 	my $escudo = C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-'.$branchcode.'.png';
@@ -977,8 +977,16 @@ sub generateBookLabel {
 	 $pdf->addRawText($aux,$x+135,$pageheight + ($y-$posy));
 	 }
 
-	 $pdf->setSize(8);
-	 $pdf->addRawText("$signatura",$x+15,$pageheight + ($y-130));
+	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
+	$pdf->setSize(14);
+	$pdf->setFont("Arial-Bold");
+	my @sigs = split(/ /, $signatura);
+	my $posicion=0;
+	foreach my $sig (@sigs) {
+	$pdf->addRawText("$sig",$x+15,$pageheight + ($y-120) - $posicion );
+	$posicion+=15;
+	}
+ 	$pdf->setFont("Arial");
 }
 #############FIN Etiquetas########################
 
