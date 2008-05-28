@@ -199,11 +199,15 @@ sub updateForHoliday{
 #Este procedimiento actualiza las fechas que corresponden cuando se setea/dessetea un feriado
 	my ($fecha,$sign)= @_;
 	my $err= "Error con la fecha";
-	my $fecha_nueva_inicio = C4::Date::format_date_in_iso(DateCalc($fecha,"$sign 1 business days",\$err));
+	my $dateformat = C4::Date::get_date_format();
+
+	my $fecha_nueva_inicio = C4::Date::format_date_in_iso(DateCalc($fecha,"$sign 1 business days",\$err),$dateformat);
 	my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
-	my $fecha_nueva_fin = C4::Date::format_date_in_iso(DateCalc($fecha_nueva_inicio,"+ $daysOfSanctions days",\$err));
+	my $fecha_nueva_fin = C4::Date::format_date_in_iso(DateCalc($fecha_nueva_inicio,"+ $daysOfSanctions days",\$err),$dateformat);
 	my $dbh = C4::Context->dbh;
+
 	my $sth = $dbh->prepare("update sanctions set startdate=?, enddate=? where sanctiontypecode is null and startdate = ?");
+
 	$sth->execute($fecha_nueva_inicio,$fecha_nueva_fin,$fecha);
 }
 
@@ -217,6 +221,7 @@ sub proximoHabil{
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
 	my $hasta;
+	my $dateformat = C4::Date::get_date_format();
 
 	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
 #Los dias Habiles se controlan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
@@ -230,18 +235,18 @@ sub proximoHabil{
 	}
 
 	######Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
-	$hasta = C4::Date::format_date_in_iso($hasta);
+	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM feriados WHERE fecha >= ?");
 	$sth->execute($hasta);
 	while ((my $date= $sth->fetchrow_hashref)) {
-		if( C4::Date::format_date_in_iso($hasta) eq $date->{'fecha'}) {
+		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 		}
 	}
 	#######hasta aca
 
-	return (C4::Date::format_date_in_iso($hasta));
+	return (C4::Date::format_date_in_iso($hasta, $dateformat));
 }
 
 sub proximosHabiles{
@@ -281,13 +286,14 @@ sub proximosHabiles{
 		$hasta=DateCalc($hasta,"+ 0 days",\$err,2);  
 	}
 
+	my $dateformat= C4::Date::get_date_format();
 	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
-	$hasta = C4::Date::format_date_in_iso($hasta);
+	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM feriados WHERE fecha >= ?");
 	$sth->execute($hasta);
 	while ((my $date= $sth->fetchrow_hashref)) {
-		if( C4::Date::format_date_in_iso($hasta) eq $date->{'fecha'}) {
+		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 			
 		}
@@ -295,7 +301,11 @@ sub proximosHabiles{
 	#######hasta aca
 
 
-return (C4::Date::format_date_in_iso($desde),C4::Date::format_date_in_iso($hasta),$apertura,$cierre);
+return (	C4::Date::format_date_in_iso($desde, $dateformat),
+		C4::Date::format_date_in_iso($hasta, $dateformat),
+		$apertura,
+		$cierre
+	);
 }
 
 sub mesString(){

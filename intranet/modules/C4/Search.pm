@@ -132,7 +132,6 @@ on what is passed to it, it calls the appropriate search function.
 	&PersonNameSearch
 	&persdata
 	&getcitycategory 
-	&isRegular
 	&itemcountPorGrupos
 	&Grupos
 	&generarEstadoDeColeccion
@@ -4557,19 +4556,6 @@ sub obtenerCategoria
                        
 } # sub getcitycategory
 
-
-sub isRegular
-{
-        my ($bor) = @_;
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ?");
-        $sth->execute($bor);
-        my $regular = $sth->fetchrow();
-        $sth->finish();
-        return $regular;
-                       
-} # sub getcitycategory
-
 sub mostrarProvincias { 
 	
 	my ($pais) = @_;
@@ -4999,7 +4985,7 @@ $sth->execute(@bind);
  my @results;
  my $i=-1;
  while (my $data=$sth->fetchrow_hashref){
-	my $reg=C4::AR::Reserves::isRegular($data->{'borrowernumber'});
+	my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
 	my $pasa=1;
 
 	if (($regular ne '')&& ($regular ne 'Todos')) { #Se tiene que filtrar por regularidad??

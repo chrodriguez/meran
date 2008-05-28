@@ -69,7 +69,7 @@ for (my $i=0; $i < $cantR; $i++){
   #find out stats
     if($results->[$i]{'borrowernumber'} ne ""){
  	my ($od,$issue)=borrdata2($env,$results->[$i]{'borrowernumber'});
- 	my $regular= esRegular($results->[$i]{'borrowernumber'});
+ 	my $regular= C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
 
  	if ($regular eq 1){$regular="<font color='green'>Regular</font>";}	
 	else{

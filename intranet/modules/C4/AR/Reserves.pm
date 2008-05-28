@@ -90,20 +90,7 @@ FIXME
 
 );
 
-sub isRegular
-{
-        my ($bor) = @_;
-        my $dbh = C4::Context->dbh;
-	my $regular=1; #Regular por defecto
-        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ? and categorycode='ES'" );
-        $sth->execute($bor);
-        my $reg = $sth->fetchrow();
-	if (($reg eq 1)|| ($reg eq 0)){$regular = $reg;}
-        $sth->finish();
-	
-	return $regular;
-	
-} # sub getcitycategory
+
 
  
 #borrowerissues retorna todos los prestamos que tiene actualmente un borrower, recibe el nro de borrower y devuelve la cantidad de prestamos actuales y el arreglo de los prestamos actuales
@@ -179,7 +166,7 @@ for (my $i=0;$i<$isunum;$i++){
 }
 
 #Si NO es regular
-my $regular =  isRegular($borrowernumber);
+my $regular =  C4::AR::Usuarios::esRegular($borrowernumber);
 
 if ($regular eq 0){return (0,6);}
 
@@ -327,7 +314,7 @@ for (my $i=0;$i<$isunum;$i++){
 
 
 #Si NO es regular
-my $regular =  isRegular($borrowernumber);
+my $regular =  C4::AR::Usuarios::esRegular($borrowernumber);
 if ($regular eq 0){return (0,6);}
 
 
@@ -539,7 +526,7 @@ sub efectivizar_reserva{
 	} else {
 
 		#Si NO es regular
-		my $regular =  isRegular($borrowernumber);
+		my $regular =  C4::AR::Usuarios::esRegular($borrowernumber);
 		return(0) if ($regular eq 0);
 
 		#Se pasa del maximo
@@ -739,23 +726,6 @@ sub DatosReservas {
 	
 	$sth->finish;
 	return($#results+1,\@results);
-}
-
-sub cant_reserves
-{
-#Cantidad de reservas reales
-        my ($bor)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="SELECT count(*) as cant from reserves"; 
-        $query .= " WHERE  reserves.borrowernumber =? 
-                                        and cancellationdate is NULL and
-                                        (found <> 'F' or found is NULL) and reserves.constrainttype is NULL
-					and itemnumber is not Null ";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($bor);
-        my $result=$sth->fetchrow_hashref;
-        $sth->finish;
-        return($result);
 }
 
 sub tiene_reservas {

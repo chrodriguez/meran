@@ -78,7 +78,14 @@ FIXME
     &enviar_recordatorios_prestamos
     &crearTicket
     &IssuesType3
+
+   	&getCountPrestamosDeGrupo
 );
+
+
+
+
+
 =item
 la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
 =cut 
@@ -165,7 +172,7 @@ sub devolver {
 
 
 
-			if (hasDebts($dbh, $borrowernumber)) {
+			if (tieneLibroVencido($dbh, $borrowernumber)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
 			$hasdebts = 1;
 			 insertPendingSanction($dbh,$sanctiontypecode, undef, $borrowernumber, $sanctionDays);
@@ -281,7 +288,7 @@ if (my $data= $sth->fetchrow_hashref){
 	if (!&hayReservasEsperando($data->{'biblioitemnumber'})){
 		#quiere decir que no hay reservas esperando por lo que podemos seguir
 		
-		if (!estaSancionado($borrowernumber, $data->{'issuecode'})){
+		if (!C4::AR::Usuarios::estaSancionado($borrowernumber, $data->{'issuecode'})){
 			#El usuario no tiene sanciones, puede seguir.
 			
 			#veo si el nro de renovaciones realizadas es mayor al nro maximo de renovaciones posibles permitidas
@@ -331,14 +338,6 @@ sub hayReservasEsperando(){
 	}
 	else{
 		return 0;
-	}
-}
-
-sub estaSancionado(){
-	my ($borrowernumber,$issuecode)=@_;
-	my @sancion= permitionToLoan($borrowernumber, $issuecode);
-	if (($sancion[0]||$sancion[1])) { 
-		return 1;
 	}
 }
 
@@ -781,5 +780,29 @@ sub estaVencido(){
 		}#else ES
 	}#if Date_Cmp
 	return(1,$venc);
+}
+
+
+#********************************AGREGADO PARA V3******************************************************
+
+sub getCountPrestamosDeGrupo() {
+#devuelve los prestamos de grupo del usuario
+	my ($borrowernumber, $id2, $issuesType)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query= "	SELECT count(*) as cantPrestamos
+        		FROM issues i LEFT JOIN nivel3 n3 ON n3.id3 = i.id3
+        		INNER JOIN  nivel2 n2 ON n3.id2 = n2.id2
+         		WHERE i.borrowernumber = ? AND n2.id2 = ?
+			AND n3.notforloan = ?
+        		AND i.returndate IS NULL ";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber, $id2, $issuesType);
+
+	my $cant=$sth->fetchrow();
+
+	$sth->finish;
+	return($cant);
 }
 

@@ -1,21 +1,24 @@
 
 
 
-<table id="tablaSeudonimos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<table id="tablaSeudonimos" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<thead>
  	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/izquierda.png"></td>
+
+		<th width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></th>
 	
 		<th>Seud&oacute;nimo</th>
 		<th>Eliminar</th>
 	
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+		<th width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></th>
 	</tr>
+
 	</thead>
 
 	<tbody>
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
-	<tr align='center'>
+	<tr align='center' class="tablaresultadoTitle">
+
 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
@@ -27,6 +30,7 @@
 		</td>
 
 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+
 	</tr>
 <!-- /TMPL_LOOP -->
 	<tr valign=bottom>

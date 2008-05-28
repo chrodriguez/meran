@@ -149,3 +149,22 @@ Insert into systempreferences (variable,value,explanation) values ('intranetGrou
 
 INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES ('paginas','10','Cantidad de paginas que va a  mostrar el paginador.','text','');
 
+
+--Se modifca el campo constrainttype por estado (P='Prestado', E='Reserva Ejemplar', G='Reserva de Grupo')
+
+ALTER TABLE `reserves` CHANGE `constrainttype` `estado` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+--Se eliminan los siguiente campos de la tabla reservas para V3
+
+ALTER TABLE `reserves` DROP `biblioitemnumber` ,
+DROP `priority` ,
+DROP `found` ,
+DROP `itemnumber` ;
+
+--Se agregan los siguientes campos en reservas para V3
+
+ALTER TABLE `reserves` ADD `id2` INT( 11 ) NOT NULL FIRST ,
+ADD `id3` INT( 11 ) NULL AFTER `id2` ;
+
+
+

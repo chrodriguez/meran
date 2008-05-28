@@ -12,7 +12,35 @@ use vars qw(@EXPORT @ISA);
 	&ListadoDeUsuarios
 	&ListadoDePersonas
 	&esRegular
+	&estaSancionado
+	&llegoMaxReservas
 );
+
+
+sub llegoMaxReservas(){
+#Verifica si el usuario llego al maximo de las resevas que puede relizar sengun la preferencia del sistema
+	my ($borrowernumber)=@_;
+
+	my $cant= &C4::AR::Reservas::cant_reservas($borrowernumber);	
+
+	return $cant >= C4::Context->preference("maxreserves");
+}
+
+sub estaSancionado(){
+#Verifica si un usuario esta sancionado segun un tipo de prestamo
+
+	my ($borrowernumber,$issuecode)=@_;
+	my $sancionado= 0;
+
+	my @sancion= permitionToLoan($borrowernumber, $issuecode);
+
+	if (($sancion[0]||$sancion[1])) { 
+		$sancionado= 1;
+	}
+
+	return $sancionado;
+}
+
 =item ListadodeUsuarios
 
   ($cnt,\@results) = &ListadodeUsuarios($env,$searchstring,$type,$onlyCount);
@@ -137,12 +165,18 @@ sub ListadoDePersonas  {
 }
 
 
-sub esRegular{
+sub esRegular(){
+#Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ?");
+	my $regular= 1; #Regular por defecto
+        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ? AND categorycode='ES'" );
         $sth->execute($bor);
-        my $regular = $sth->fetchrow();
+        my $reg = $sth->fetchrow();
+
+	if (($reg eq 1) || ($reg eq 0)){$regular = $reg;}
         $sth->finish();
-        return $regular;
+	
+	return $regular;
+	
 }

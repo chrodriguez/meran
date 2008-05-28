@@ -14,7 +14,7 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(	&SanctionDays 
 		&isSanction 
 		&sanctionSelect 
-		&hasDebts 
+		&tieneLibroVencido 
 		&permitionToLoan 
 		&insertSanction 
 		&insertPendingSanction 
@@ -147,7 +147,7 @@ sub isSanction {
   return($sth->fetchrow_hashref); 
 }
 
-sub hasDebts {
+sub tieneLibroVencido {
   #Esta funcion determina si un usuario ($borrowernumber) tiene algun biblio vencido que no le permite realizar reservas o prestamos
   my ($dbh, $borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
@@ -168,7 +168,7 @@ sub permitionToLoan {
 	my $dbh = C4::Context->dbh;
   	my $debtOrSanction= 0; #Se supone que no esta sancionado
   	my $until= undef;
-  	if (hasDebts($dbh,$borrowernumber)) {
+  	if (tieneLibroVencido($dbh,$borrowernumber)) {
     		$debtOrSanction= 1; #Tiene biblos vencidos 
   	}
 	elsif (my $res= isSanction($dbh, $borrowernumber, $issuecode)) {

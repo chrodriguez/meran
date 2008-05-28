@@ -269,7 +269,7 @@ if($bornum){
 	}
 
 	$template->param(sanctions =>$sanctions);
-	my $debts= hasDebts("", $bornum); # indica si el usuario tiene libros vencidos
+	my $debts= tieneLibroVencido("", $bornum); # indica si el usuario tiene libros vencidos
 	$template->param(debts =>$debts);
 } #end if (bornum)
 
