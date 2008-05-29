@@ -1,7 +1,7 @@
 /*
  * LIBRERIA SearchHelper v 1.0.0
  * Esta es una libreria creada para el sistema KOHA
- * Para poder utilizarla es necesario incluir en el tmpl la libreria jquery.js
+ * Para poder utilizarla es necesario incluir en el tmpl la libreria jquery.js y jsonStringify.js
  * @author Carbone Miguel
  * Fecha de creacion 22/05/2008
  *
@@ -20,6 +20,7 @@ function SearchHelper(fncUpdateInfo, fncInit){
 	this.debug= false;	
 	this.onComplete= fncUpdateInfo;  //se ejecuta cuando se completa el ajax
 	this.onBeforeSend= fncInit;	//se ejecuta antes de consultar al servidor con ajax
+	this.type= 'POST';	//POST por defecto
 
 	this.sendToServer= function(){
 
@@ -38,7 +39,7 @@ function SearchHelper(fncUpdateInfo, fncInit){
 			this.orden= ord;
 			//se envia la consulta
 			this.sendToServer();
-	}
+	}//end sort
 
 	this.changePage= function(ini){
 
@@ -49,18 +50,18 @@ function SearchHelper(fncUpdateInfo, fncInit){
 				this.ini= ini;
 				this.sendToServer();
 
-	}
+	}//end changePage
 
 	this.ajaxCallback= function(helper){
 			
 			var params= "obj="+JSONstring.make(helper);
 
-			if(this.debug){
+			if(helper.debug){
  				console.log("SearchHelper => ajaxCallback \n" + params);
 			}
 
 	
-			$.ajax({	type: "POST", 
+			$.ajax({	type: helper.type,
 					url: helper.url,
 					data: params,
  					beforeSend: helper.onBeforeSend,
@@ -68,7 +69,7 @@ function SearchHelper(fncUpdateInfo, fncInit){
  						helper.onComplete(ajax.responseText);
   					}
 				});
-	}
+	}//end ajaxCallback
 
 }
 
