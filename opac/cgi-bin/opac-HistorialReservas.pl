@@ -43,9 +43,12 @@ my ($template, $loggedinuser, $cookie)
 
 my $bornum=$loggedinuser;
 
+my $obj=$input->param('obj');
+$obj= &C4::AR::Utilidades::from_json_ISO($obj);
 
-my $funcion= $input->param('funcion');
-my $ini= ( $input->param('ini') || '');
+my $funcion= $obj->{'funcion'};
+my $ini= ( $obj->{'ini'} || '');
+
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
@@ -55,7 +58,7 @@ my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornu
 
 $template->param(
 			cantidad	=> $cantidad,
- 			loop_reservas => $reservas_hashref
+ 			loop_reservas 	=> $reservas_hashref
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

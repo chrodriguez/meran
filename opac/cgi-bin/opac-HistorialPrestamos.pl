@@ -29,7 +29,6 @@ use C4::Interface::CGI::Output;
 use CGI;
 use HTML::Template;
 
-
 my $input=new CGI;
 
 my ($template, $loggedinuser, $cookie)
@@ -42,8 +41,12 @@ my ($template, $loggedinuser, $cookie)
 
 my $bornum=$loggedinuser;
 
-my $funcion= $input->param('funcion');
-my $ini= ( $input->param('ini') || '');
+my $obj=$input->param('obj');
+$obj= &C4::AR::Utilidades::from_json_ISO($obj);
+
+my $funcion= $obj->{'funcion'};
+my $ini= ( $obj->{'ini'} || '');
+
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$issues)=&C4::Search::allissues($bornum,$ini,$cantR);

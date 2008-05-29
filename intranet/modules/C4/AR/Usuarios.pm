@@ -17,6 +17,23 @@ use vars qw(@EXPORT @ISA);
 );
 
 
+sub esRegular {
+#Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
+        my ($bor) = @_;
+
+        my $dbh = C4::Context->dbh;
+	my $regular= 1; #Regular por defecto
+        my $sth = $dbh->prepare(" SELECT regular FROM persons WHERE borrowernumber = ? AND categorycode='ES' " );
+        $sth->execute($bor);
+        my $reg = $sth->fetchrow();
+
+	if (($reg eq 1) || ($reg eq 0)){$regular = $reg;}
+        $sth->finish();
+	
+	return $regular;
+	
+}
+
 sub llegoMaxReservas(){
 #Verifica si el usuario llego al maximo de las resevas que puede relizar sengun la preferencia del sistema
 	my ($borrowernumber)=@_;
@@ -165,18 +182,4 @@ sub ListadoDePersonas  {
 }
 
 
-sub esRegular(){
-#Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
-        my ($bor) = @_;
-        my $dbh = C4::Context->dbh;
-	my $regular= 1; #Regular por defecto
-        my $sth = $dbh->prepare("SELECT regular FROM persons WHERE borrowernumber = ? AND categorycode='ES'" );
-        $sth->execute($bor);
-        my $reg = $sth->fetchrow();
-
-	if (($reg eq 1) || ($reg eq 0)){$regular = $reg;}
-        $sth->finish();
-	
-	return $regular;
-	
-}
+1

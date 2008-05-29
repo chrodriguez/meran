@@ -100,6 +100,44 @@ function buscarPorAutor(idAutor){
 	objBusqueda.sendToServer();
 }
 
+function mostrarHistorialUpdate(responseText){
+
+	$('#datosUsuario').slideUp('slow');
+	$('#result').hide();
+	$('#result').html(responseText);
+	$('#result').slideDown('slow');
+	zebra('tablaHistorial');
+	Complete();
+
+}
+
+function mostrarHistorialPrestamos(bornum){
+
+	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
+ 	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
+	objBusqueda.bornum= bornum;
+	//se setea la funcion para cambiar de pagina
+	objBusqueda.funcion= 'changePage';
+	//se envia la consulta
+	objBusqueda.sendToServer();
+
+}
+
+function mostrarHistorialReservas(bornum){
+
+	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
+ 	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
+	objBusqueda.bornum= bornum;
+	//se setea la funcion para cambiar de pagina
+	objBusqueda.funcion= 'changePage';
+	//se envia la consulta
+	objBusqueda.sendToServer();
+
+}
 
 //****************************************Busqueda para usuario no logueado************************************
 function searchinc(){
@@ -136,38 +174,6 @@ function consultarEstanteVirtual(){
 					$('#datosUsuario').slideUp('slow');
 					$('#result').html(ajax.responseText);
 					zebra();
-					Complete();
-				}
-	});
-
-}
-
-function mostrarHistorialPrestamos(bornum){
-
-	$.ajax({	type: "POST", 
-			url: "opac-HistorialPrestamos.pl",
- 			data: "bornum=" + bornum,
-			beforeSend: Init,
- 			complete: function(ajax){
- 					$('#datosUsuario').slideUp('slow');
-					$('#result').html(ajax.responseText);
-					zebra('tablaHistPrestamos');
-					Complete();
-				}
-	});
-
-}
-
-function mostrarHistorialReservas(bornum){
-
-	$.ajax({	type: "POST", 
-			url: "opac-HistorialReservas.pl",
- 			data: "bornum=" + bornum,
-			beforeSend: Init,
- 			complete: function(ajax){
- 					$('#datosUsuario').slideUp('slow');
-					$('#result').html(ajax.responseText);
-					zebra('tablaHistReservas');
 					Complete();
 				}
 	});
