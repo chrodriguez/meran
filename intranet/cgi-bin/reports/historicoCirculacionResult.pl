@@ -75,7 +75,7 @@ my $cant;
 
 
 my $ini= ($obj->{'ini'});
-my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
 
 
 my ($cantidad,@resultsdata)=

@@ -45,14 +45,14 @@
 			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
 		<td> 
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
 				<!-- TMPL_IF NAME=responsable -->
 					<!-- TMPL_VAR NAME=userCompleto -->
 				<!-- /TMPL_IF -->
 			</a>
 		</td>
   		<td> 
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
 				<!-- TMPL_IF NAME=responsable -->
 					<!-- TMPL_VAR NAME=nomCompleto -->
 				<!-- /TMPL_IF -->
@@ -67,8 +67,7 @@
 			<!-- /TMPL_IF -->
 		</td>
   		<td>
-			<textarea id="<!-- TMPL_VAR NAME=id -->" class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota -->
-			</textarea>
+			<textarea id="<!-- TMPL_VAR NAME=id -->" class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota --></textarea>
 		<br>
 		<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="guardarNota('<!-- TMPL_VAR NAME=id -->')">
 		</td>

@@ -798,7 +798,7 @@ sub InitPaginador{
 	return ($ini,$pageNumber,$cantR);
 }
 
-sub crearPaginador(){
+sub crearPaginador{
 
 	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
 	#cant. de renglones q se pueden mostrar por pagina
@@ -834,14 +834,14 @@ sub armarPaginas{
 	if($actual > 1){
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
-		<img src='".$themelang."/images/numbers/prev.gif' border=0>
-		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
+		<img src='".$themelang."/images/numbers/pag_primera.png' border=0>";
+# 		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
 
 		$paginador .= "<span> </span>";
 
 		my $ant= $actual-1;
 		$paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'>
-		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
+		<img src='".$themelang."/images/numbers/pag_anterior.png' border=0></span>";
 	}
 	for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
 		if($actual == $i){$class="paginaActual"}
@@ -852,13 +852,13 @@ sub armarPaginas{
 	if($actual >= 1 && $actual < $totalPaginas){
 		my $sig= $actual+1;
 		$paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'>
-		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
+		<img src='".$themelang."/images/numbers/pag_siguiente.png' border=0></span>";
 
 		$paginador .= "<span> </span>";
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
-		<img src='".$themelang."/images/numbers/next.gif' border=0>
-		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
+		<img src='".$themelang."/images/numbers/pag_ultima.png' border=0>";
+# 		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
 	}
 	$paginador .= "</div>";	
 
