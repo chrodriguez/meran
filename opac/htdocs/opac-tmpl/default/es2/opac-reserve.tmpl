@@ -17,21 +17,11 @@ codMSG:<!-- TMPL_VAR NAME="codMsg" -->
 	<table  cellpadding="5" cellspacing="0" >
 	<tr class="tablemsg" >
 	<td><font class="fontmsg"><b>
-<!-- TMPL_IF NAME="sancionado" -->Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el  <!-- TMPL_VAR NAME="sancionado" -->.  <br><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="casisancionado" -->Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.  <br><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="no_user_course" -->
-Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.  <br>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="not_regular" -->Disculpe, no puede efectuar reservas porque usted no es un alumno regular.  <br><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="too_many_issues" -->Disculpe, usted ha alcanzado la cantidad maxima de pr&eacute;stamos domiciliarios. No puede efectuar reservas sobre ejemplares. <br><!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="too_many_reserves" -->Disculpe, usted no puede realizar m&aacute;s de <!-- TMPL_VAR NAME="too_many_reserves" --> reservas. <br>
 	
 	<!-- TMPL_IF NAME="RESERVES" -->
 <br><br><br><hr>
+
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 <tr bordercolor="#f2f2f2">    
 <td colspan="6" align="center" class="bordetabla" borde=1>
@@ -64,9 +54,7 @@ Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el 
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
 
-        <!-- TMPL_IF NAME="too_many_waitreserves" -->Disculpe, usted no puede tener m&aacute;s de <!-- TMPL_VAR NAME="too_many_waitreserves" --> reservas en espera. <br>
 
         <!-- TMPL_IF NAME="RESERVES" -->
 <br><br><br><hr>
@@ -101,7 +89,7 @@ Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el 
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+
 
 <!-- TMPL_IF NAME="already_reserved" -->Usted ya realiz&oacute; una reserva de este libro.<br><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="already_issued" -->Ya tiene un ejemplar de este grupo en su poder.<br><!-- /TMPL_IF -->

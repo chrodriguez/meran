@@ -57,9 +57,9 @@ $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 $params{'branch'}= $branch;
 
-my ($error, $codMsg)= &C4::AR::Reservas::reservar(\%params);
+my ($error, $codMsg,$paraMens)= &C4::AR::Reservas::reservar(\%params);
 
-my $message= &C4::AR::Mensajes::getMensaje($codMsg);
+my $message= &C4::AR::Mensajes::getMensaje($codMsg,$paraMens);
 
 $template->param (
 	message	=> $message,

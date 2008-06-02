@@ -40,21 +40,41 @@ $VERSION = 0.01;
 #U300 - U399 para Usuarios
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
-my %mensajes = (
+my %mensajesOPAC = (
     	'000' => 'No hay error',
-    	'R001' => 'R001 El Usuario llegá al máximo de reservas permitidas ',
-    	'R002' => 'R002 El Usuario ya tiene una reserva para el mismo tipo de préstamo',
-# 	'R003' => 'R003 El Usuario ya tiene una reserva de Sala',
-	'P100' => 'P100 El Usuario ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
-	'S200' => 'S200 El usuario tiene sanciones pendientes',
-	'U300' => 'U300 El usuario no es regular',
+    	'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
+    	'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
+	'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
+	'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
+	'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos domiciliarios. No puede efectuar reservas sobre ejemplares.',
+	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
+	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
+	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
+	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
 );
 
+my %mensajesINTRA = (
+    	'000' => 'No hay error',
+    	'R001' => 'El usuario lleg&oacute; al m&acute;ximo de reservas permitidas (*?*).',
+    	'R002' => 'El usuario ya tiene una reserva para el mismo tipo de prestamo ',
+	'R003' => 'El usuario lleg&oacute; al m&acute;ximo de reservas en espera (*?*).',
+	'P100' => 'El usuario ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
+	'P101' => 'El usuario alcanzo la cantidad m&aacute;xima  de pr&eacute;stamos domiciliarios',
+	'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
+	'S201' => 'El usuario no puede reservar porque tiene una posible sanci&oacute;n pendiente.',
+	'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
+	'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
+);
 
 sub getMensaje {
-	my($codigo)=@_;
-
-	return $mensajes{$codigo};
+	my($codigo,$tipo,$param)=@_;
+	my $msj="";
+	($tipo eq "OPAC")?$msj=$mensajesOPAC{$codigo}:$msj=$mensajesINTRA{$codigo};
+	foreach my $p (keys %$param){
+		my $p2=$param->{$p};
+		$msj=~ s/\*\?\*/$p2/o;
+	}
+	return $msj;
 }
 
 

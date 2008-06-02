@@ -34,7 +34,7 @@ use vars qw(@EXPORT @ISA);
 		&buscarDatoDeCampoRepetible
 		&buscarTema
 
-		&MARCDetail
+		&MARCDetailfecha
 		&detalleNivel3MARC
 		&detalleNivel2MARC
 		&detalleNivel1MARC
