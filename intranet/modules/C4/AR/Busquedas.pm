@@ -590,7 +590,13 @@ sub buscarNivel3PorId2(){
 	my @result;
 	my $i=0;
 	my $disponibles=0;
+	my %infoNivel3;
+	$infoNivel3{'cantParaSala'}=0;
+	$infoNivel3{'cantParaPrestamo'}=0;
+	$infoNivel3{'cantReservas'}=0;
+
 	while(my $data=$sth->fetchrow_hashref){
+
 		my $holdbranch= getbranchname($data->{'holdingbranch'});
 		$data->{'holdbranch'}=$data->{'holdingbranch'};
 		$data->{'holdingbranch'}=$holdbranch;
@@ -601,22 +607,29 @@ sub buscarNivel3PorId2(){
 		
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
 		if(!$data->{'wthdrawn'}){
+		#wthdrawn = 0, Disponible
 			$disponibles++;
 		}
+
 		$data->{'disponibilidad'}=$data->{'wthdrawn'};
 		$data->{'wthdrawn'}=$wthdrawn->{'description'};
 		
 		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
 		if($data->{'notforloan'} eq 'DO'){
 			$data->{'forloan'}=1;
+			$infoNivel3{'cantParaPrestamo'}++;
+		}else{
+			$infoNivel3{'cantParaSala'}++;
 		}
+
 		$data->{'issuetype'}=$data->{'notforloan'};
 		$data->{'notforloan'}=$issuetype->{'description'};
 
 		$result[$i]=$data;
 		$i++;
 	}
-	return($disponibles,@result);
+
+	return(\%infoNivel3,@result);
 }
 
 =item
@@ -747,292 +760,20 @@ sub detalleNivel1_copia(){
 	return @nivel1Comp;
 }
 
-=item
-detalleNivel2
-Trae todos los datos del nivel 2, para poder verlos en el template, tambien busca el detalle del nivel 3 asociados a cada nivel 2.
-=cut
-=item
-sub detalleNivel2_copia(){
-	my($id1,$tipo)=@_;
-	my $dbh = C4::Context->dbh;
-	my @nivel2=&C4::AR::Catalogacion::buscarNivel2PorId1($id1);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
-	my $id2;
-	my $itemtype;
-	my $tipoDoc;
-	my $campo;
-	my $subcampo;
-	my $dato;
-	my @results;
-	my $getLib;
-	my $librarian;
-	my $j=0;
-	foreach my $row(@nivel2){
-		my $i=0;
-		my @nivel2Comp;
-		my @marcResult;
-		$id2=$row->{'id2'};
-		$itemtype=$row->{'itemtype'};
-		$tipoDoc=$row->{'tipo_documento'};
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$nivel2Comp[$i]->{'campo'}=$campo;
-			$nivel2Comp[$i]->{'subcampo'}=$subcampo;
-			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$getLib= &getLibrarian($campo, $subcampo, "", $itemtype, $tipo);
-			$nivel2Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel2Comp[$i]->{'dato'}= $dato;
 
-			$i++;
-		}
-		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id2);
-		while (my $data=$sth->fetchrow_hashref){
-
-			$nivel2Comp[$i]->{'campo'}=$data->{'campo'};
-			$nivel2Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-			$getLib= &getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},$itemtype,$tipo);
-			$nivel2Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel2Comp[$i]->{'dato'}= $getLib->{'dato'};
-
-			$i++;
-		}
-		$sth->finish;
-		$nivel2Comp[$i]->{'cantItems'}=$row->{'cantItems'};
-		my($nivel3,$nivel3Comp)=&detalleNivel3_copia($id2,$itemtype,$tipo);
-		$nivel2Comp[$i]->{'loopnivel3'}=$nivel3;
-		$nivel2Comp[$i]->{'loopnivel3Comp'}=$nivel3Comp;
-
-		$results[$j]->{'resultado'}=\@nivel2Comp;
-		$results[$j]->{'id2'}=$id2;
-		$results[$j]->{'DivMARC'}="MARCDetail".$j;
-		$results[$j]->{'DivDetalle'}="Detalle".$j;
-		$results[$j]->{'itemtype'}=$itemtype;
-		$results[$j]->{'tipoDoc'}=$tipoDoc;
-		$j++;
-	}
-	return(@results);
-}
-=cut
-
-=item
-detalleNivel3
-Trae todos los datos del nivel 3, para poder verlos en el template.
-=cut
-sub detalleNivel3_copia(){
-	my ($id2,$itemtype,$tipo)=@_;
-	my $dbh = C4::Context->dbh;
-	my ($disponibles,@nivel3)=&buscarNivel3PorId2($id2);
-	my $mapeo=&buscarMapeo('nivel3');
-	my @nivel3Comp;
-	my @results;
-	my $i=0;
-	my $id3;
-	my $campo;
-	my $subcampo;
-	my $dato;
-	my $librarian;
-	my $getLib;
-
-	$results[0]->{'nivel3'}=\@nivel3;
-	$results[0]->{'disponibles'}=$disponibles;
-	$results[0]->{'reservados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
-	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
-	foreach my $row(@nivel3){
-
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$nivel3Comp[$i]->{'campo'}=$campo;
-			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
-			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$getLib= &getLibrarian($campo, $subcampo, "", $itemtype,$tipo);
-			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel3Comp[$i]->{'dato'}= $dato;#$getLib->{'dato'};
-			$i++;
-		}
-		$id3=$row->{'id3'};
-		my $query="SELECT * FROM nivel3_repetibles WHERE id3=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id3);
-		while (my $data=$sth->fetchrow_hashref){
-			$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
-			$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-			$getLib= &getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'}, $itemtype,$tipo);
-			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel3Comp[$i]->{'dato'}= $getLib->{'dato'};
-
-			$i++;
-		}
-		$sth->finish;
-	}
-	return(\@results,\@nivel3Comp);
-}
 
 #*********************************************Detalle OPAC 2*******************************************
 
 
-=item
-sub detalleNivel1_copia2(){
-	my ($id1, $nivel1,$tipo)= @_;
-	my $dbh = C4::Context->dbh;
-	my @nivel1Comp;
-	my $i=0;
-	my $getLib;
-	my $autor= $nivel1->{'autor'};
-	
-	$nivel1Comp[$i]->{'campo'}= "245";
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	$getLib= &getLibrarian('245', 'a',$nivel1->{'titulo'}, 'ALL',$tipo);
-	$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-	$i++;
-
-	$autor= &getautor($autor);
-	$nivel1Comp[$i]->{'campo'}= "100"; #$autor->{'campo'}; se va a sacar de aca
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
-	$nivel1Comp[$i]->{'librarian'}= "Autor";
-	$i++;
-
-#trae nive1_repetibles
-	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	while(my $data=$sth->fetchrow_hashref){
-		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
-		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-		$getLib= &getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, 'ALL',$tipo);
-		$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-		$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
-		$i++;
-	}
-	$sth->finish;
-	return @nivel1Comp;
-}
-
-=cut
-
-=item
-detalleNivel2
-Trae todos los datos del nivel 2, para poder verlos en el template, tambien busca el detalle del nivel 3 asociados a cada nivel 2.
-=cut
-
-=item
-sub detalleNivel2_copia2(){
-	my($id1,$tipo)=@_;
-	my $dbh = C4::Context->dbh;
-	my @nivel2=&C4::AR::Catalogacion::buscarNivel2PorId1($id1);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
-	my $id2;
-	my $itemtype;
-	my $tipoDoc;
-	my $campo;
-	my $subcampo;
-	my $dato;
-	my @results;
-	my $getLib;
-	my $librarian;
-	my $j=0;
-
-my @todosEncabezados;
-
-open(A, ">>/tmp/debug.txt");
-print A "desde detalleNivel2_copia2 \n";
-
-	foreach my $row(@nivel2){
-		my $i=0;
-		my @nivel2Comp;
-		my @marcResult;
-		$id2=$row->{'id2'};
-		$itemtype=$row->{'itemtype'};
-		$tipoDoc=$row->{'tipo_documento'};
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$nivel2Comp[$i]->{'campo'}=$campo;
-			$nivel2Comp[$i]->{'subcampo'}=$subcampo;
-			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$getLib= &getLibrarian($campo, $subcampo, "", $itemtype, $tipo);
-			$nivel2Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel2Comp[$i]->{'dato'}= $dato;
-
-			$i++;
-		}
-
-		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id2);
-		while (my $data=$sth->fetchrow_hashref){
-
-			$nivel2Comp[$i]->{'campo'}=$data->{'campo'};
-			$nivel2Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-			$getLib= &getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},$itemtype,$tipo);
-			$nivel2Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel2Comp[$i]->{'dato'}= $getLib->{'dato'};
-
-print A "campo ".$nivel2Comp[$i]->{'campo'}." \n";
-print A "subcampo ".$nivel2Comp[$i]->{'subcampo'}." \n";
-print A "dato ".$nivel2Comp[$i]->{'dato'}." \n";
-
-			$i++;
-		}
-
-		$sth->finish;
-		$nivel2Comp[$i]->{'cantItems'}=$row->{'cantItems'};
-		my($nivel3,$nivel3Comp)=&detalleNivel3_copia2($id2,$itemtype,$tipo);
-		$nivel2Comp[$i]->{'loopnivel3'}=$nivel3;
-
-
-
- 		$nivel2Comp[$i]->{'loopnivel3Comp'}=$nivel3Comp;
-
-		$results[$j]->{'resultado'}=\@nivel2Comp;
-		$results[$j]->{'id2'}=$id2;
-		$results[$j]->{'DivMARC'}="MARCDetail".$j;
-		$results[$j]->{'DivDetalle'}="Detalle".$j;
-		$results[$j]->{'itemtype'}=$itemtype;
-		$results[$j]->{'tipoDoc'}=$tipoDoc;
-
-my @encabezados;
-
-@encabezados= &traerLibrarianPorEncabezado($itemtype);
-push (@todosEncabezados,@encabezados);
-my $cant= scalar(@encabezados);
-
-
-	}#end foreach my $row(@nivel2)
-
-
-
-
-# 	@encabezados
-# 	$result[$i]->{'campo'}= $data->{'campo'};
-# 	$result[$i]->{'subcampo'}= $data->{'subcampo'};
-# 	$result[$i]->{'textpred'}= $data->{'textpred'};
-# 	$result[$i]->{'textsucc'}= $data->{'textsucc'};
-# 	$result[$i]->{'separador'}= $data->{'separador'}; 
-# 	$result[$i]->{'encabezado'}= $data->{'encabezado'};
-# 	$result[$i]->{'linea'}= $data->{'linea'};
-	
-
-
-close(A);
-
-	return(@results);
-}
-=cut
 
 =item
 detalleNivel3
 Trae todos los datos del nivel 3, para poder verlos en el template.
 =cut
-sub detalleNivel3_copia2(){
+sub detalleNivel3_Opac(){
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
-	my ($disponibles,@nivel3)=&buscarNivel3PorId2($id2);
+	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2($id2);
 	my $mapeo=&buscarMapeo('nivel3');
 	my @nivel3Comp;
 	my @results;
@@ -1045,7 +786,11 @@ sub detalleNivel3_copia2(){
 	my $getLib;
 
 	$results[0]->{'nivel3'}=\@nivel3;
-	$results[0]->{'disponibles'}=$disponibles;
+
+	$results[0]->{'id2'}= $id2;
+	$results[0]->{'cantParaPrestamo'}= $infoNivel3->{'cantParaPrestamo'};
+	$results[0]->{'cantParaSala'}= $infoNivel3->{'cantParaSala'};
+# 	$results[0]->{'disponibles'}=$disponibles;
 	$results[0]->{'reservados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
 	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
 	foreach my $row(@nivel3){
@@ -2105,7 +1850,7 @@ print A "-------------------linea: ".$infoEncabezados->[$i]->{'linea'}."\n";
 		$encInd=0;
 
 		#se obtiene el detalle de nivel3 para un id2 en particular (grupo)
- 		my($nivel3,$nivel3Comp)=&detalleNivel3_copia2($id2,$itemtype,'opac');
+ 		my($nivel3,$nivel3Comp)=&detalleNivel3_Opac($id2,$itemtype,'opac');
  		$result[$grupoInd]->{'loopnivel3'}=$nivel3;
  		$result[$grupoInd]->{'loopnivel3Comp'}=$nivel3Comp;	
 

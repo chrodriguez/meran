@@ -37,7 +37,7 @@ $VERSION = 0.01;
 	&getReservasDeGrupo
 );
 
-sub reservar(){
+sub reservar {
 	my($params)=@_;
 
 =item
@@ -56,7 +56,7 @@ sub reservar(){
 
 #Numer de diasas que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 		my $numeroDias= C4::Context->preference("reserveItem");
-		my ($desde,$hasta,$apertura,$cierre)=proximosHabiles($numeroDias,1);
+		my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
 		my %paramsReserva;
 		
@@ -66,18 +66,16 @@ sub reservar(){
 		$paramsReserva{'reservedate'}= $desde;
 		$paramsReserva{'reminderdate'}= $hasta;
 		$paramsReserva{'branchcode'}= $data->{'holdingbranch'};
+		$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
 
-		insertarReserva($paramsReserva);
+		insertarReserva(\%paramsReserva);
 
-		return ($error, $codMsg);
-
-	}else{
-		return ($error, $codMsg);
 	}
-	
+
+	return ($error, $codMsg);
 }
 
-sub getNotForLoan(){
+sub getNotForLoan{
 #Devuelve la disponibilidad del item ('SA'= Sala, 'DO'= Domiciliaria)
 	my ($id3)=@_;
 	
@@ -93,7 +91,7 @@ sub getNotForLoan(){
 	return $sth->fetchrow();
 }
 
-sub verificarTipoReserva() {
+sub verificarTipoReserva {
 #Verifica que el usuario no reserve un item que ya tenga una reserva para el mismo grupo y 
 #para el mismo tipo de prestamo
 
@@ -107,7 +105,7 @@ sub verificarTipoReserva() {
 	if($tipo eq "INTRA"){
 #Si ya tiene una reserva se verifica que no sean para el mismo tipo de prestamo
 #Es un prestamo inmediato desde la INTRA
-		if( ($cant == 1) && (getNotForLoan($reservas[0]->{'id3'}) eq getNotForLoan($id3) ) ){
+		if( ($cant == 1) && (getNotForLoan($reservas->[0]->{'id3'}) eq getNotForLoan($id3) ) ){
 			$error= 1;
 		}
 	
@@ -119,7 +117,7 @@ sub verificarTipoReserva() {
 	return ($error);
 }
 
-sub getReservasDeBorrower() {
+sub getReservasDeBorrower {
 #devuelve las reservas de grupo del usuario
 	my ($borrowernumber, $id2)=@_;
 	my $dbh = C4::Context->dbh;
@@ -166,17 +164,18 @@ sub getItemsParaReserva(){
         my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT n3.id3, n3.holdingbranch 
-			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='0' AND n3.wthdrawn='0' 
-			AND n3.id3 NOT IN (SELECT reserves.id3 FROM reserves WHERE id2 = ?) FOR UPDATE ";
+			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
+			AND n3.id3 NOT IN (SELECT reserves.id3 FROM reserves 
+			WHERE id2 = ? AND id3 IS NOT NULL) FOR UPDATE ";
 
-	$sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare($query);
 	$sth->execute($id2, $id2);
 
 	return $sth->fetchrow_hashref;
 
 }
 
-sub sePuedeReservar(){
+sub sePuedeReservar {
 	
 	my($params)=@_;
 
@@ -185,18 +184,19 @@ sub sePuedeReservar(){
 	my $id3= $params->{'id3'};
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $loggedinuser= $params->{'loggedinuser'};
-	my $issuesType= $params->{'issuesType'};
+	my $issueType= $params->{'issuesType'};
 
 	my $error= 0;
+	my $codMsg= '000';
 
 #Se verifica que el usuario sea Regular
-	if( &C4::AR::Usuarios::esRegular($borrowernumber) ){
+	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
 		$error= 1;
 		$codMsg= 'U300';
 	}	
 
 #Se verfica si el usuario esta sancionado	
-	if( !($error) && (C4::AR::Usuarios::estaSancionado($borrowernumber, $issuesType)) ){
+	if( !($error) && (C4::AR::Usuarios::estaSancionado($borrowernumber, $issueType)) ){
 		$error= 1;
 		$codMsg= 'S200';
 	}
@@ -222,12 +222,12 @@ sub sePuedeReservar(){
 	return ($error, $codMsg);
 }
 
-sub insertarReserva(){
+sub insertarReserva {
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
 
-	my $query="INSERT INTO reserves (id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) 
-	VALUES (?,?,?,?,NOW(),?,?) ";
+	my $query="INSERT INTO reserves (id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
+	VALUES (?,?,?,?,NOW(),?,?,?) ";
 
 	my $sth2=$dbh->prepare($query);
 	$sth2->execute( $params->{'id3'},
@@ -235,7 +235,8 @@ sub insertarReserva(){
 			$params->{'borrowernumber'},
 			$params->{'reservedate'},
 			$params->{'reminderdate'},
-			$params->{'branchcode'}
+			$params->{'branchcode'},
+			$params->{'estado'}
 		);
 }
 

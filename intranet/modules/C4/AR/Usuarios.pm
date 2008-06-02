@@ -34,7 +34,7 @@ sub esRegular {
 	
 }
 
-sub llegoMaxReservas(){
+sub llegoMaxReservas {
 #Verifica si el usuario llego al maximo de las resevas que puede relizar sengun la preferencia del sistema
 	my ($borrowernumber)=@_;
 
@@ -43,13 +43,13 @@ sub llegoMaxReservas(){
 	return $cant >= C4::Context->preference("maxreserves");
 }
 
-sub estaSancionado(){
+sub estaSancionado {
 #Verifica si un usuario esta sancionado segun un tipo de prestamo
 
 	my ($borrowernumber,$issuecode)=@_;
 	my $sancionado= 0;
 
-	my @sancion= permitionToLoan($borrowernumber, $issuecode);
+	my @sancion= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issuecode);
 
 	if (($sancion[0]||$sancion[1])) { 
 		$sancionado= 1;

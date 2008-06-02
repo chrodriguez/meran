@@ -1,6 +1,10 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 
+Error:<!-- TMPL_VAR NAME="error" -->
+codMSG:<!-- TMPL_VAR NAME="codMsg" -->
+
+
 <table align="center" class="top" border="0" width="90%">
 <tr><td align="center">
 
@@ -251,14 +255,14 @@ Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a est
 
 <script>
 function confirm_cancelation2(num) {
-        var is_confirmed = confirm('¿Esta seguro que desea cancelar la reserva?');
+        var is_confirmed = confirm('ï¿½Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
                 window.location="/cgi-bin/koha/opac-cancelreserv.pl?biblioitem="+ num;
         }
 }
 
 function confirm_cancelation(num,volver) {
-        var is_confirmed = confirm('¿Esta seguro que desea cancelar la reserva?');
+        var is_confirmed = confirm('ï¿½Esta seguro que desea cancelar la reserva?');
 	if (is_confirmed) {
                 window.location="/cgi-bin/koha/opac-cancelreserv.pl?biblioitem="+ num +"&volver="+volver;
         }

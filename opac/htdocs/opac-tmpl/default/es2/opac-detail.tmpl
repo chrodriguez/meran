@@ -94,8 +94,50 @@
 
 </tr>
 	<!-- /TMPL_LOOP -->
-  <!-- /TMPL_LOOP -->
+ 
 </table>
+
+<!--<table align="left">-->
+<table  width="100%">
+	<tr>
+		<td class="impar" >
+		<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR Name='biblioitemnumber' -->&biblio=<!-- TMPL_VAR NAME='biblionumber' -->"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/vertodos.png" border="0" alt="Estantes Virtuales"></a>
+	
+		<a  href="/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR name='biblionumber' -->&bibnumitems=<!-- TMPL_VAR name='biblioitemnumber' -->" class="inputFontNormal" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/analiticas.png" border="0" alt="Anal&iacute;ticas"></a>
+
+		<a  href="/cgi-bin/koha/opac-indiceLibro.pl?biblionumber=<!-- TMPL_VAR name='biblionumber' -->&biblioitemnumber=<!-- TMPL_VAR name='biblioitemnumber' -->" class="inputFontNormal" ><img src="<!-- TMPL_VAR NAME='themelang' -->/images/indice.png" border="0" alt="Indice"></a>
+	
+		<br>
+		Disponibilidad Actual Para Pr&eacute;stamo:	 <b><!-- TMPL_VAR NAME='cantParaPrestamo' --></b>
+		<br>	
+		Disponibilidad Actual Para Sala de Lectura:	 <b><!-- TMPL_VAR NAME='cantParaSala' --></b>
+		<br>
+		Cantidad Actual de Reservas:	 <b><!-- TMPL_VAR NAME='cantResevasActual' --></b>
+		<br>
+			<!-- TMPL_UNLESS NAME="allunavail" -->
+				<!-- TMPL_IF NAME="allshared" -->
+				<p align="right"><b>Ejemplares compartidos</b></p>
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF NAME="allcopy" -->
+				<p align="right"><b>Solicitar copia</b></p>
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_IF NAME="notforloan" -->
+					<p align="right"><b>Disponible s&oacute;lo para consulta en Sala de Lectura</b></p>
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF NAME="CirculationEnabled" -->  <!-- si es 0 -->
+						<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?id2=<!-- TMPL_VAR NAME='id2' ESCAPE=URL -->"><b>Reservar</b></a></p>
+						<!-- TMPL_ELSE --> 
+			<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
+						<p align="right"><b>Disponible para Reservar</b></p>
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_UNLESS -->
+		</td>
+        </tr>
+</table>
+	 <!-- /TMPL_LOOP -->
 
 </div>
 

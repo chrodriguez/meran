@@ -689,12 +689,20 @@ sub FindReserves {
 
 sub FindNotRegularUsersWithReserves {
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT reserves.borrowernumber FROM reserves inner join persons
+#         my $query="SELECT reserves.borrowernumber FROM reserves inner join persons
+# 			on reserves.borrowernumber = persons.borrowernumber
+# 			where regular = '0'
+# 			and cancellationdate is NULL
+# 			and (found <> 'F' or found is NULL)
+# 			and reserves.constrainttype is NULL";
+#Miguel constrainttype se cambio por estado
+#	found se elimino
+	 my $query="	SELECT reserves.borrowernumber FROM reserves inner join persons
 			on reserves.borrowernumber = persons.borrowernumber
 			where regular = '0'
 			and cancellationdate is NULL
-			and (found <> 'F' or found is NULL)
-			and reserves.constrainttype is NULL";
+			and reserves.estado is NULL";
+
         my $sth=$dbh->prepare($query);
         $sth->execute();
         my @results;

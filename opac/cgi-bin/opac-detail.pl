@@ -34,6 +34,7 @@ for (my $i=0; $i < scalar(@nivel2Loop); $i++){
 	
 
 $template->param(
+	CirculationEnabled => C4::Context->preference("circulation"),
 	loopnivel2	=> \@nivel2Loop,
 );
 

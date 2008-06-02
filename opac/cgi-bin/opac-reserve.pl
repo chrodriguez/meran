@@ -9,7 +9,8 @@ use C4::Search;
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
-use C4::AR::Reserves;
+# use C4::AR::Reserves;
+use C4::AR::Reservas;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Date;
@@ -26,7 +27,7 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
-
+=item
 my $dateformat = C4::Date::get_date_format();
 my $pagetitle = "Reserva de ejemplares";
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
@@ -36,13 +37,33 @@ if ((C4::Context->preference("usercourse"))&&($borr->{'usercourse'} == "NULL" ))
 	$template->param(message => 1,no_user_course => 1);
 } 
 else { #No esta seteado lo del curso  o ya lo hizo
+=cut
+
 
 #Hay que ver que no este sancionado ni supere el nro maximo de reservas.
 #Si ninguna de las dos es verdadera entonces se efectua la reserva, si alguno de los items esta disponible se reserva el item, sino se agrega a la lista de espera del grupo
 my $branch=(split("_",(split(";",$cookie))[0]))[1];
 my $branches = getbranches();
-my $biblioitemnumber = $query->param('bib');
-my (@result)=reservar($borrowernumber,$biblioitemnumber,$branch);
+my $id2 = $query->param('id2');
+
+my %params;
+
+$params{'tipo'}= 'OPAC'; #INTRA u OPAC
+$params{'id2'}= $id2;
+# $params->{'id3'}= ;
+$params{'borrowernumber'}= $borrowernumber;
+$params{'loggedinuser'}= $borrowernumber;
+$params{'issuesType'}= 'DO';
+$params{'branch'}= $branch;
+
+my ($error, $codMsg)= &C4::AR::Reservas::reservar(\%params);
+
+$template->param (
+	error	=> $error,
+	codMsg	=> $codMsg,
+);
+
+=item
 if ($result[0]){#si no ocurrio ningun error, entonces puedo reservar el libro
 	#Busco la data del biblioitem, esto me devuelve tambien la data del biblio
 	my $biblioitemdata=bibitemdata($biblioitemnumber);
@@ -134,6 +155,7 @@ $template->param (	MAIL  => $borr->{'emailaddress'},
 			pagetitle => $pagetitle);
 
 # check that you can actually make the reserve.
+=cut
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

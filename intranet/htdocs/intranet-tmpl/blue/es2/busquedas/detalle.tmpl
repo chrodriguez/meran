@@ -221,7 +221,7 @@ $.ajax({        type: "POST",
 				
 	    				<td valign="middle" colspan="2">
 						<!-- TMPL_IF NAME="forloan" -->
-						<input TYPE="image" name="borrowD"  VALUE="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario" onClick="alert('falta')">
+						<input TYPE="image" name="borrowD"  VALUE="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario" onClick="reservar('<!-- TMPL_VAR name='id3' -->');">
 						<!-- TMPL_ELSE -->
 							------
 						<!-- /TMPL_IF -->
