@@ -15,6 +15,7 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Date;
 use C4::Context;
+use C4::AR::Mensajes;
 
 
 my $query = new CGI;
@@ -58,7 +59,10 @@ $params{'branch'}= $branch;
 
 my ($error, $codMsg)= &C4::AR::Reservas::reservar(\%params);
 
+my $message= &C4::AR::Mensajes::getMensaje($codMsg);
+
 $template->param (
+	message	=> $message,
 	error	=> $error,
 	codMsg	=> $codMsg,
 );

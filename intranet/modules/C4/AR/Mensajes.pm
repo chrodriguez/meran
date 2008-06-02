@@ -51,7 +51,7 @@ my %mensajes = (
 );
 
 
-sub getMensaje(){
+sub getMensaje {
 	my($codigo)=@_;
 
 	return $mensajes{$codigo};
