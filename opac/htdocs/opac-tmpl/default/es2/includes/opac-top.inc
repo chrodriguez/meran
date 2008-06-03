@@ -2,6 +2,17 @@
 <head>
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/opac.css">
+
+<script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
+<script src="/opac-tmpl/default/es2/includes/SearchHelper.js"></script>
+<script src="/opac-tmpl/default/es2/includes/json/jsonStringify.js"></script>
+<script src="/opac-tmpl/default/es2/includes/navegador.js"></script>
+<script src="/opac-tmpl/default/es2/includes/state.js"></script>
+<script src="/opac-tmpl/default/es2/includes/util.js"></script>
+<script src="/opac-tmpl/default/es2/includes/opac-serachFunciones.js"></script>
+
+
+
 </head>
 <script language="javascript" type="text/javascript">
 

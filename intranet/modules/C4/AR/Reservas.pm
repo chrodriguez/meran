@@ -48,7 +48,7 @@ sub reservar {
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issuesType= $params->{'issuesType'};
 =cut
-	my ($error, $codMsg,$paraMens)= sePuedeReservar($params);
+	my ($error, $codMsg,$paraMens)= &sePuedeReservar($params);
 
 	if(!$error){
 #No hay error
@@ -197,17 +197,17 @@ sub sePuedeReservar {
 
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
-	if( !($error) && (($sancionado||$fechaFin)){
+	if( !($error) && ($sancionado||$fechaFin) ){
 		$error= 1;
 		$codMsg= 'S200';
-		%paraMens{'finDeSancion'}=$fechaFin;
+		$paraMens{'finDeSancion'}=$fechaFin;
 	}
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
 	if( !($error) && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber)) ){
 		$error= 1;
 		$codMsg= 'R001';
-		%paraMens{'cantMaxReservas'}=C4::Context->preference("maxreserves");
+		$paraMens{'cantMaxReservas'}=C4::Context->preference("maxreserves");
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
