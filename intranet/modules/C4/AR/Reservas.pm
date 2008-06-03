@@ -32,6 +32,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&reservar
 	&insertarReserva
+	&insertarPrestamo
 	&sePuedeReservar
 	&cant_reservas
 	&getReservasDeGrupo
@@ -229,10 +230,12 @@ sub insertarReserva {
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
 
-	my $query="INSERT INTO reserves (id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
-	VALUES (?,?,?,?,NOW(),?,?,?) ";
+	my $query="	INSERT INTO reserves 	
+			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
+			VALUES (?,?,?,?,NOW(),?,?,?) ";
 
 	my $sth2=$dbh->prepare($query);
+
 	$sth2->execute( $params->{'id3'},
 			$params->{'id2'},
 			$params->{'borrowernumber'},
@@ -241,6 +244,43 @@ sub insertarReserva {
 			$params->{'branchcode'},
 			$params->{'estado'}
 		);
+}
+
+sub insertarPrestamo {
+
+	my($params)=@_;
+	my $dbh=C4::Context->dbh;
+
+#Se acutualiza el estado de la reserva a P = Presetado
+	$sth=$dbh->prepare("	UPDATE reserves SET estado='P' 
+				WHERE id2 = ? AND borrowernumber = ? ");
+
+	$sth->execute(	$params->{'id2'},
+			$params->{'borrowernumber'}
+	);
+
+# Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
+=item
+	my $sth2=$dbh->prepare("	DELETE FROM sanctions 
+					WHERE reservenumber = ? ");
+
+	$sth2->execute(	$params->{'reservenumber'});
+=cut
+
+
+#Se realiza el prestamo del item
+	my $sth3=$dbh->prepare("	INSERT INTO issues 		
+					(borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals,issuecode) 
+					VALUES (?,?,NOW(),?,?,?,?) ");
+
+	$sth3->execute(	$params->{'borrowernumber'}, 
+			$params->{'id3'}, 
+			$params->{'branchcode'}, 
+			$params->{'branchcode'}, 
+			0, 
+			$params->{'issuecode'}
+	);
+
 }
 
 1;

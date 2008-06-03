@@ -545,7 +545,8 @@ sub efectivizar_reserva{
 		$sth=$dbh->prepare("Select * from reserves where biblioitemnumber=? and borrowernumber=? for update ");
 		$sth->execute($biblioitemnumber,$borrowernumber);
 		my $data= $sth->fetchrow_hashref;
-		if($data->{'itemnumber'}){ #Si la reserva que voy a efectivizar estaba asociada a un item se puede sino hubo un error
+		if($data->{'itemnumber'}){ 
+#Si la reserva que voy a efectivizar estaba asociada a un item se puede sino hubo un error
 			$sth=$dbh->prepare("Update reserves set constrainttype='P'  where biblioitemnumber=? and borrowernumber=? ");
 			$sth->execute($biblioitemnumber,$borrowernumber);
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
