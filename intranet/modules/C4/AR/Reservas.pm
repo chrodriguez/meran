@@ -70,7 +70,7 @@ sub reservar {
 		$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
 		$paramsReserva{'reservedate'}= $desde;
 		$paramsReserva{'reminderdate'}= $hasta;
-		$paramsReserva{'branchcode'}= $data->{'holdingbranch'};
+		$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
 		$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
 
 		insertarReserva(\%paramsReserva);
@@ -395,7 +395,9 @@ sub prestar {
 
 		if ($data=$sth->fetchrow_hashref){
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo
-			
+			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
+			$params->{'id3'}= $datosNivel3->{'id3'};
+			$params->{'holdingbranch'}= $datosNivel3->{'holdingbranch'};
 		}
 
 		#Se realiza una reserva
@@ -404,6 +406,8 @@ sub prestar {
 
 	#Se verifica datos del prestamo
 	#Se realiza el pretamo
+
+	insertarPrestamo($params);
 }
 
 sub insertarPrestamo {
