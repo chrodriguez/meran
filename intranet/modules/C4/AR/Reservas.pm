@@ -99,22 +99,9 @@ sub verificarTipoReserva {
 	my ($borrowernumber, $id2, $id3, $tipo)=@_;
 
 	my $error= 0;
-
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
-
-
-	if($tipo eq "INTRA"){
-#Si ya tiene una reserva se verifica que no sean para el mismo tipo de prestamo
-#Es un prestamo inmediato desde la INTRA
-		if( ($cant == 1) && (getNotForLoan($reservas->[0]->{'id3'}) eq getNotForLoan($id3) ) ){
-			$error= 1;
-		}
-	
-	}else{
 #Se intento reservar desde el OPAC sobre el mismo GRUPO
-		if ($cant == 1){$error= 1;}
-	}
-
+	if ($cant == 1){$error= 1;}
 	return ($error);
 }
 
@@ -127,6 +114,29 @@ sub getReservasDeBorrower {
 			FROM reserves
 			WHERE (borrowernumber = ?) AND (id2 = ?)
 			AND (estado <> 'P')";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber, $id2);
+
+	my @results;
+	my $cant= 0;
+	while (my $data=$sth->fetchrow_hashref){
+
+		push (@results,$data);
+		$cant++;
+	}
+	
+	$sth->finish;
+	return($cant,\@results);
+}
+
+sub getReservasDeId2 {
+#devuelve las reservas de grupo del usuario
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query= "	SELECT *
+			FROM reserves
+			WHERE (id2 = ?) AND (estado <> 'P')";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber, $id2);
@@ -194,8 +204,16 @@ sub sePuedeReservar {
 	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
 		$error= 1;
 		$codMsg= 'U300';
-	}	
-
+	}
+=item
+#Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
+#SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
+	if( !($error) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
+		$error= 1;
+		$codMsg= 'P101';
+		$paraMens{'tipoPrestamo'}=$issueType;
+	}
+=cut
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
 	if( !($error) && ($sancionado||$fechaFin) ){
@@ -212,7 +230,7 @@ sub sePuedeReservar {
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
-	if( !($error) && (&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
+	if( !($error) && $tipo "OPAC" &&(&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
 		$error= 1;
 		$codMsg= 'R002';
 	}
@@ -221,8 +239,14 @@ sub sePuedeReservar {
 	if( !($error) && (&C4::AR::Issues::getCountPrestamosDeGrupo($borrowernumber, $id2, $issueType)) ){
 		$error= 1;
 		$codMsg= 'P100';
-	}	
-
+	}
+=item
+#Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
+	if(!$error && $tipo eq "INTRA" && $issueType eq 'ES' && verificarHorario()){
+		$error=1;
+		$codMsg='P102';
+	}
+=cut
 	return ($error, $codMsg,\%paraMens);
 }
 
@@ -245,6 +269,101 @@ sub insertarReserva {
 			$params->{'estado'}
 		);
 }
+
+sub verificarMaxTipoPrestamo{
+	my ($borrowernumber,$issuetype)=@_;
+	my $error=0;
+	my $sth=$dbh->prepare("SELECT maxissues FROM issuetypes WHERE issuecode = ? ");
+	$sth->execute($issuetype);
+	my $maxissues= $sth->fetchrow;
+	$sth->finish;
+	my ($cantissues, $issues)= C4::AR::Issues::DatosPrestamosPorTipo($borrowernumber,$issuetype);
+	if ($cantissues >= $maxissues) {$error=1}
+	return $error;
+}
+
+sub sePuedePrestar(){
+	my($params)=@_;
+	
+	my $oldid3=$params->{'oldid3'};
+	my $id3=$params->{'id3'};
+	my $issueType=$params->{'issueType'};
+	my $borrowernumber=$params->{'borrowernumber'};
+	my $error=0;
+	my %paraMens;
+
+	my ($cant, $reservas)= getReservasDeId2($id2);
+#Si ya tiene una reserva se verifica que no sean para el mismo tipo de prestamo
+#Es un prestamo inmediato desde la INTRA, se intercambian los id3.
+	if( ($cant == 1) && (getNotForLoan($reservas->[0]->{'id3'}) eq getNotForLoan($id3) ) ){
+		intercambiar_id3($borrowernumber,$id2,$id3,$oldid3);
+	}
+	else{
+	
+	}
+	
+
+
+
+
+
+#Se verifica que el usuario sea Regular
+	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
+		$error= 1;
+		$codMsg= 'U300';
+	}
+#Se verfica si el usuario esta sancionado
+	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
+	if( !($error) && ($sancionado||$fechaFin) ){
+		$error= 1;
+		$codMsg= 'S200';
+		$paraMens{'finDeSancion'}=$fechaFin;
+	}
+#Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
+	if(!$error && $issueType eq 'ES' && verificarHorario()){
+		$error=1;
+		$codMsg='P102';
+	}
+	
+	return($error,$codMsg,\%paraMens);
+}
+
+sub verificarHorario{
+	my $end = ParseDate(C4::Context->preference("close"));
+	my $begin =calc_beginES();
+	my $actual=ParseDate("today");
+	my $error=0;
+	if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){$error=1;}
+	return $error;
+}
+
+
+sub intercambiar_id3{
+	my ($borrowernumber, $id2, $id3, $oldid3)= @_;
+        my $dbh = C4::Context->dbh;
+# 	my $sth=$dbh->prepare("SET autocommit=0");
+# 	$sth->execute();
+	my $sth=$dbh->prepare("SELECT reserves.id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
+	$sth->execute($id3);
+	my $data= $sth->fetchrow_hashref;
+	if ($data && $data->{'estado'} eq "E"){ 
+		#quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
+		$sth=$dbh->prepare("UPDATE reserves SET id3= ? where id3 = ?");
+		$sth->execute($oldid3, $id3);
+	}
+	#actualizo la reserva con el nuevo itemnumber
+	if($data->{'estado'} eq "P"){
+		return 0; #El item esta prestado a otro usuario
+	}
+	else{
+		$sth=$dbh->prepare("UPDATE reserves SET id3= ? WHERE id2=? AND borrowernumber=?");
+		$sth->execute($id3, $id2, $borrowernumber);
+	}
+# 	my $sth3=$dbh->prepare("commit ");
+# 	$sth3->execute();
+	return 1;
+}
+
 
 sub insertarPrestamo {
 
