@@ -53,8 +53,12 @@ sub reservar {
 
 	if(!$error){
 #No hay error
-		my ($data)= getItemsParaReserva($params->{'id2'});
-
+		my $data->{'id3'}= $params->{'id3'};	
+	
+		if($params->{'tipo'} eq 'OPAC'){
+			$data= getItemsParaReserva($params->{'id2'});
+		}
+		
 #Numer de diasas que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 		my $numeroDias= C4::Context->preference("reserveItem");
 		my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
@@ -230,7 +234,7 @@ sub sePuedeReservar {
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
-	if( !($error) && $tipo "OPAC" &&(&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
+	if( !($error) && ($tipo eq "OPAC") && (&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
 		$error= 1;
 		$codMsg= 'R002';
 	}
@@ -364,6 +368,43 @@ sub intercambiar_id3{
 	return 1;
 }
 
+sub prestar {
+
+	my($params)=@_;
+	my $dbh=C4::Context->dbh;
+
+	my $borrowernumber= $params->{'borrowernumber'};
+	my $id2= $params->{'id2'};
+	my $id3= $params->{'id3'};
+	my ($error, $codMsg, $paraMens);
+
+#Se verifica si ya se tiene la reserva sobre el grupo
+	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
+	if($cant == 1){
+		#El usuario ya tiene la reserva
+		($error, $codMsg, $paraMens)= &sePuedeReservar($params);
+		
+	}else{
+		#Se verifca disponibilidad del item;
+		
+		#Se verifica si ya hay una reserva sobre el item (DE CUALQUIER USUARIO)
+		$sth=$dbh->prepare("	SELECT * FROM reserves WHERE id3 = ? ");
+		$sth->execute($id3);
+
+		my $data;
+
+		if ($data=$sth->fetchrow_hashref){
+		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo
+			
+		}
+
+		#Se realiza una reserva
+		($error, $codMsg, $paraMens)= reservar($params);
+	}
+
+	#Se verifica datos del prestamo
+	#Se realiza el pretamo
+}
 
 sub insertarPrestamo {
 
