@@ -525,7 +525,7 @@ Trae todos los datos del nivel 3, para poder verlos en el template.
 sub detalleNivel3(){
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
-	my ($disponibles,@nivel3)=&buscarNivel3PorId2($id2);
+	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2($id2);
 	my $mapeo=&buscarMapeo('nivel3');
 	my @nivel3Comp;
 	my %llaves;
@@ -536,8 +536,8 @@ sub detalleNivel3(){
 	my $subcampo;
 	my $getLib;
 	$results[0]->{'nivel3'}=\@nivel3;
-	$results[0]->{'disponibles'}=$disponibles;
-	$results[0]->{'reservados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
+	$results[0]->{'disponibles'}=$infoNivel3->{'cantParaPrestamo'};
+	$results[0]->{'reservados'}=$infoNivel3->{'cantReservas'};#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
 	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
 	foreach my $row(@nivel3){
 		foreach my $llave (keys %$mapeo){
