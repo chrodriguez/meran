@@ -36,6 +36,8 @@ $VERSION = 0.01;
 	&sePuedeReservar
 	&cant_reservas
 	&getReservasDeGrupo
+
+	&prestar
 );
 
 sub reservar {
@@ -53,7 +55,8 @@ sub reservar {
 
 	if(!$error){
 #No hay error
-		my $data->{'id3'}= $params->{'id3'};	
+		my $data;
+		$data->{'id3'}= $params->{'id3'};
 	
 		if($params->{'tipo'} eq 'OPAC'){
 			$data= getItemsParaReserva($params->{'id2'});
@@ -143,7 +146,7 @@ sub getReservasDeId2 {
 			WHERE (id2 = ?) AND (estado <> 'P')";
 
 	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber, $id2);
+	$sth->execute($id2);
 
 	my @results;
 	my $cant= 0;
@@ -173,7 +176,7 @@ sub cant_reservas{
         return($result);
 }
 
-sub getItemsParaReserva(){
+sub getItemsParaReserva{
 #Busca los items sin reservas para los prestamos 
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
@@ -277,6 +280,7 @@ sub insertarReserva {
 sub verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;
 	my $error=0;
+	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT maxissues FROM issuetypes WHERE issuecode = ? ");
 	$sth->execute($issuetype);
 	my $maxissues= $sth->fetchrow;
@@ -285,7 +289,7 @@ sub verificarMaxTipoPrestamo{
 	if ($cantissues >= $maxissues) {$error=1}
 	return $error;
 }
-
+=item
 sub sePuedePrestar(){
 	my($params)=@_;
 	
@@ -306,10 +310,6 @@ sub sePuedePrestar(){
 	
 	}
 	
-
-
-
-
 
 #Se verifica que el usuario sea Regular
 	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
@@ -340,14 +340,14 @@ sub verificarHorario{
 	if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){$error=1;}
 	return $error;
 }
-
+=cut
 
 sub intercambiar_id3{
 	my ($borrowernumber, $id2, $id3, $oldid3)= @_;
         my $dbh = C4::Context->dbh;
 # 	my $sth=$dbh->prepare("SET autocommit=0");
 # 	$sth->execute();
-	my $sth=$dbh->prepare("SELECT reserves.id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
+	my $sth=$dbh->prepare("SELECT id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
 	if ($data && $data->{'estado'} eq "E"){ 
@@ -366,6 +366,14 @@ sub intercambiar_id3{
 # 	my $sth3=$dbh->prepare("commit ");
 # 	$sth3->execute();
 	return 1;
+}
+
+sub cambiarId3{
+	my ($id3Libre,$reservenumber)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query="UPDATE reserves SET id3= ? where reservenumber = ?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id3Libre,$reservenumber);
 }
 
 sub prestar {
@@ -388,26 +396,41 @@ sub prestar {
 		#Se verifca disponibilidad del item;
 		
 		#Se verifica si ya hay una reserva sobre el item (DE CUALQUIER USUARIO)
-		$sth=$dbh->prepare("	SELECT * FROM reserves WHERE id3 = ? ");
+		my $sth=$dbh->prepare("	SELECT * FROM reserves WHERE id3 = ? ");
 		$sth->execute($id3);
 
 		my $data;
-
+		my $ok=1;
 		if ($data=$sth->fetchrow_hashref){
-		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo
+		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
 			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
-			$params->{'id3'}= $datosNivel3->{'id3'};
-			$params->{'holdingbranch'}= $datosNivel3->{'holdingbranch'};
+			if($datosNivel3){
+				&cambiarId3($datosNivel3->{'id3'},$data->{'reservenumber'});
+# 				el id3 de params quedo libre para ser reservado
+
+			}
+			else{
+# 				NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE 					REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
+				$params->{'id3'}="";
+				if(!C4::Context->preference('intranetGroupReserve')){
+					$ok=0;
+					$error=1;
+					$codMsg='R004';
+				}
+			}
 		}
 
 		#Se realiza una reserva
+		if($ok){
 		($error, $codMsg, $paraMens)= reservar($params);
+		}
 	}
 
 	#Se verifica datos del prestamo
 	#Se realiza el pretamo
-
-	insertarPrestamo($params);
+	if(!$error){
+		insertarPrestamo($params);
+	}
 }
 
 sub insertarPrestamo {
@@ -416,7 +439,7 @@ sub insertarPrestamo {
 	my $dbh=C4::Context->dbh;
 
 #Se acutualiza el estado de la reserva a P = Presetado
-	$sth=$dbh->prepare("	UPDATE reserves SET estado='P' 
+	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' 
 				WHERE id2 = ? AND borrowernumber = ? ");
 
 	$sth->execute(	$params->{'id2'},
@@ -434,7 +457,7 @@ sub insertarPrestamo {
 
 #Se realiza el prestamo del item
 	my $sth3=$dbh->prepare("	INSERT INTO issues 		
-					(borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals,issuecode) 
+					(borrowernumber,id3,date_due,branchcode,issuingbranch,renewals,issuecode) 
 					VALUES (?,?,NOW(),?,?,?,?) ");
 
 	$sth3->execute(	$params->{'borrowernumber'}, 
@@ -442,7 +465,7 @@ sub insertarPrestamo {
 			$params->{'branchcode'}, 
 			$params->{'branchcode'}, 
 			0, 
-			$params->{'issuecode'}
+			$params->{'issuesType'}
 	);
 
 }

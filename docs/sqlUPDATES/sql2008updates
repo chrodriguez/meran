@@ -167,4 +167,8 @@ ALTER TABLE `reserves` ADD `id2` INT( 11 ) NOT NULL FIRST ,
 ADD `id3` INT( 11 ) NULL AFTER `id2` ;
 
 
+--Se modifico el siguiente campo en la tabla issues para V3
+
+ALTER TABLE `issues` CHANGE `itemnumber` `id3` INT( 11 ) NOT NULL DEFAULT '0';
+
 

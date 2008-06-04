@@ -34,11 +34,15 @@ use HTML::Template;
 use C4::Date;
 use CGI::Util;
 use C4::AR::Reserves;
+use C4::AR::Reservas;
 use C4::AR::Issues;
 use Date::Manip;
 use C4::AR::Sanctions;
 
 my $query=new CGI;
+
+
+
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user
     ({
@@ -49,6 +53,21 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 	flagsrequired	=> { circulate => 1 },
     });
 
+
+my $id3=$query->param('id3');
+my $id2=$query->param('id2');
+my $borrnumber=$query->param('borrnumber');
+if($id3 ne ""){
+	my %params;
+	$params{'id2'}=$id2;
+	$params{'id3'}=$id3;
+	$params{'borrowernumber'}=$borrnumber;
+	$params{'loggedinuser'}=$loggedinuser;
+	$params{'tipo'}="INTRA";
+	$params{'issuesType'}="DO";
+	&C4::AR::Reservas::prestar(\%params);
+}
+=item
 my %env;
 my $linecolor1='par';
 my $linecolor2='impar';
@@ -351,7 +370,7 @@ $template->param(
 		infoTotal => \@infoTotal,
 		ticket_string => \@tickets,
 );
-
+=cut
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
