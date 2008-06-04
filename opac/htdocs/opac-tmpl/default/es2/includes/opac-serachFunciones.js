@@ -287,8 +287,8 @@ var params= 'id1=' + id1;
 			beforeSend: Init,
  			complete: function(ajax){
 					$('#result').html(ajax.responseText);
+					zebra('tablaDetalleNivel3');
 					pushCache(ajax.responseText, 'result');
-					zebra('tableResult');
 					Complete();
 				}
 	});

@@ -79,8 +79,17 @@ function crearForm(url,params){
 //dibuja la zebra para los resultados
 function zebra(IdObj){
 
-	$("#"+ IdObj + " tr:gt(0):odd").addClass("impar");
-	$("#"+ IdObj + " tr:gt(0):even").addClass("par");		
+	 
+// 	$("."+ IdObj + " tr:not([tr.bordetabla]):odd").addClass("impar");
+// 	$("."+ IdObj + " tr:not([tr.bordetabla]):even").addClass("par");		
+//  	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
+//  	$("."+ IdObj + " tr:gt(1):even").addClass("par");
+
+	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
+  	$("."+ IdObj + " tr:gt(0):even").addClass("par");
+
+// 	$("."+ IdObj + " tr:nth-child(odd) ").addClass("impar");		
+// 	$("."+ IdObj + " tr:nth-child(even) ").addClass("par");
 }
 
 

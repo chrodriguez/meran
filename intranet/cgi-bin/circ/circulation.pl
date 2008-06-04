@@ -65,7 +65,7 @@ if($id3 ne ""){
 	$params{'loggedinuser'}=$loggedinuser;
 	$params{'tipo'}="INTRA";
 	$params{'issuesType'}="DO";
-	&C4::AR::Reservas::prestar(\%params);
+	my ($error, $codMsg, $paraMens)= &C4::AR::Reservas::prestar(\%params);
 }
 =item
 my %env;
@@ -407,42 +407,6 @@ sub printslip {
 	$i++;
     }
     remoteprint($env,\@issues,$borrower);
-}
-
-sub procesarStr(){
-	my ($strError)=@_;
-	if($strError eq "SANCIONADO_O_LIBROS_VENCIDOS"){ 
-		return "El usuario est&aacute; sancionado o tiene libros vencidos";
-	}
-	elsif($strError eq "SUPERA_MAX_RESERVAS"){
-		return "El usuario supera el n&uacute;mero m&aacute;ximo de reservas";
-	}
-	elsif($strError eq "YA_TIENE_PRESTAMO_SOBRE_EL_GRUPO"){
-		return "El usuario ya tiene un pr&eacute;stamo sobre este grupo";
-	}
-	elsif($strError eq "NO_HAY_MAS_EJEMPLARES_RESERVA_SOBRE_GRUPO"){
-		return "No hay m&aacute;s ejemplares disponibles, se realiz&oacute; una reserva sobre el grupo";
-	}
-	elsif($strError eq "NO_HAY_MAS_EJEMPLARES_NO_RESERVA"){
-		return "No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite";
-	}elsif($strError eq "NO_HAY_MAS_EJEMPLARES_NO_RESERVA_INTRANET"){
-		return "No hay m&aacute;s ejemplares disponibles";
-	}
-	elsif($strError eq "IRREGULAR"){
-		return "El usuario no es un alumno regular";
-	}
-	elsif($strError eq "YA_TIENE_TODOS_LOS_EJEMPLARES_PARA_EL_TIPO_DE_PRESTAMO"){
-		return "El usuario supera el n&uacute;mero m&aacute;ximo de ejemplares para ese tipo de pr&eacute;stamo.";
-	}
-	elsif($strError eq "NO_ES_HORA_DEL_PRESTAMO_ESPECIAL"){
-		return "Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.";
-	}
-	elsif($strError eq "FALTAN_PARAMETROS"){
-		return "por falta par&aacute;metros";
-	}
-	elsif($strError eq "EL_DOCUMENTO_ESTA_PRESTADO"){
-		return "El documento esta prestado, seleccione otro c&oacute;digo de barra";
-	}
 }
 
 # Local Variables:

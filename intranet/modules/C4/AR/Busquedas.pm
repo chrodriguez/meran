@@ -1039,7 +1039,7 @@ sub detalleNivel3MARC(){
 }
 
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
-sub MARCDetail(){
+sub MARCDetail{
 
 	my ($id3)= @_;
 

@@ -41,6 +41,7 @@ $VERSION = 0.01;
 );
 
 sub reservar {
+
 	my($params)=@_;
 
 =item
@@ -62,7 +63,7 @@ sub reservar {
 			$data= getItemsParaReserva($params->{'id2'});
 		}
 		
-#Numer de diasas que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
+#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 		my $numeroDias= C4::Context->preference("reserveItem");
 		my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
@@ -415,6 +416,8 @@ sub prestar {
 				if(!C4::Context->preference('intranetGroupReserve')){
 					$ok=0;
 					$error=1;
+					$codMsg='R005';
+				}else{
 					$codMsg='R004';
 				}
 			}
@@ -422,7 +425,7 @@ sub prestar {
 
 		#Se realiza una reserva
 		if($ok){
-		($error, $codMsg, $paraMens)= reservar($params);
+			($error, $codMsg, $paraMens)= reservar($params);
 		}
 	}
 
@@ -430,7 +433,11 @@ sub prestar {
 	#Se realiza el pretamo
 	if(!$error){
 		insertarPrestamo($params);
+		# Se realizo el prestamo con exito
+		$codMsg= 'P103';
 	}
+
+	return ($error, $codMsg, $paraMens);
 }
 
 sub insertarPrestamo {

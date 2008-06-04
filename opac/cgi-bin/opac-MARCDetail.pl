@@ -32,7 +32,7 @@ my $idNivel3=$input->param('id3');
 #  	@nivel2Loop[$i]->{'loopnivel1'}= \@nivel1Loop;
 # }
 
-my @nivel2Loop= &MARCDetail($idNivel3);
+my @nivel2Loop= C4::AR::Busquedas::MARCDetail($idNivel3);
 
 $template->param(
  	loopnivel2 => \@nivel2Loop,
