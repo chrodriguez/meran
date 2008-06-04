@@ -70,7 +70,7 @@ function buscar(){
 	}
 
 	objBusqueda=new SearchHelper(updateInfo, Init);
- 	objBusqueda.debug= true;
+//  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
 	objBusqueda.codBarra= $('#codBarra').val();
@@ -90,7 +90,7 @@ function buscar(){
 function buscarPorAutor(idAutor){
 
 	objBusqueda=new SearchHelper(updateInfo, Init);
- 	objBusqueda.debug= true;
+//  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
 	objBusqueda.idAutor= idAutor;	
@@ -114,7 +114,7 @@ function mostrarHistorialUpdate(responseText){
 function mostrarHistorialPrestamos(bornum){
 
 	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
- 	objBusqueda.debug= true;
+//  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
 	objBusqueda.bornum= bornum;
@@ -128,7 +128,7 @@ function mostrarHistorialPrestamos(bornum){
 function mostrarHistorialReservas(bornum){
 
 	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
- 	objBusqueda.debug= true;
+//  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
 	objBusqueda.bornum= bornum;
@@ -143,7 +143,7 @@ function mostrarHistorialReservas(bornum){
 function searchinc(){
 
 	objBusqueda=new SearchHelper(updateInfo, Init);
- 	objBusqueda.debug= true;
+//  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
 	objBusqueda.criteria= $('#criteria').val();

@@ -85,7 +85,8 @@ function zebra(IdObj){
 //  	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
 //  	$("."+ IdObj + " tr:gt(1):even").addClass("par");
 
-	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
+// 	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
+	$("."+ IdObj + " tr:nth-child(even)").addClass("impar");
   	$("."+ IdObj + " tr:gt(0):even").addClass("par");
 
 // 	$("."+ IdObj + " tr:nth-child(odd) ").addClass("impar");		
