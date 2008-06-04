@@ -834,7 +834,7 @@ sub armarPaginas{
 	if($actual > 1){
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
-		<img src='".$themelang."/images/numbers/pag_primera.png' border=0>";
+		<img src='".$themelang."/images/numbers/pag_primera.png' border=0></span>";
 # 		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
 
 		$paginador .= "<span> </span>";
@@ -857,7 +857,7 @@ sub armarPaginas{
 		$paginador .= "<span> </span>";
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
-		<img src='".$themelang."/images/numbers/pag_ultima.png' border=0>";
+		<img src='".$themelang."/images/numbers/pag_ultima.png' border=0></span>";
 # 		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
 	}
 	$paginador .= "</div>";	
