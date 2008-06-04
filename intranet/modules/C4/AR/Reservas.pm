@@ -135,7 +135,7 @@ sub getReservasDeBorrower {
 }
 
 sub getReservasDeId2 {
-#devuelve las reservas de grupo del usuario
+#devuelve las reservas de grupo
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query= "	SELECT *
