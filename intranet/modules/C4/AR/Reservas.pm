@@ -33,7 +33,7 @@ $VERSION = 0.01;
 	&reservar
 	&insertarReserva
 	&insertarPrestamo
-	&sePuedeReservar
+	&verificaciones
 	&cant_reservas
 	&getReservasDeGrupo
 
@@ -52,7 +52,7 @@ sub reservar {
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issuesType= $params->{'issuesType'};
 =cut
-	my ($error, $codMsg,$paraMens)= &sePuedeReservar($params);
+	my ($error, $codMsg,$paraMens)= &verificaciones($params);
 
 	if(!$error){
 #No hay error
@@ -194,7 +194,7 @@ sub getItemsParaReserva{
 
 }
 
-sub sePuedeReservar {
+sub verificaciones {
 	
 	my($params)=@_;
 
@@ -213,7 +213,7 @@ sub sePuedeReservar {
 		$error= 1;
 		$codMsg= 'U300';
 	}
-=item
+
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
 	if( !($error) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
@@ -221,7 +221,13 @@ sub sePuedeReservar {
 		$codMsg= 'P101';
 		$paraMens{'tipoPrestamo'}=$issueType;
 	}
-=cut
+
+#Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
+#SOLO PARA INTRA, ES UN PRESTAMO ESPECIAL.
+	if(!$error && $tipo eq "INTRA" && $issueType eq 'ES' && verificarHorario()){
+		$error=1;
+		$codMsg='P102';
+	}
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
 	if( !($error) && ($sancionado||$fechaFin) ){
@@ -248,13 +254,6 @@ sub sePuedeReservar {
 		$error= 1;
 		$codMsg= 'P100';
 	}
-=item
-#Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
-	if(!$error && $tipo eq "INTRA" && $issueType eq 'ES' && verificarHorario()){
-		$error=1;
-		$codMsg='P102';
-	}
-=cut
 	return ($error, $codMsg,\%paraMens);
 }
 
@@ -386,12 +385,12 @@ sub prestar {
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my ($error, $codMsg, $paraMens);
-
+	
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
 	if($cant == 1){
 		#El usuario ya tiene la reserva
-		($error, $codMsg, $paraMens)= &sePuedeReservar($params);
+		($error, $codMsg, $paraMens)= &verificaciones($params);
 		
 	}else{
 		#Se verifca disponibilidad del item;
@@ -416,9 +415,9 @@ sub prestar {
 				if(!C4::Context->preference('intranetGroupReserve')){
 					$ok=0;
 					$error=1;
-					$codMsg='R005';
-				}else{
 					$codMsg='R004';
+				}else{
+					$codMsg='R005';
 				}
 			}
 		}

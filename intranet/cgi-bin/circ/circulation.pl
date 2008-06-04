@@ -38,6 +38,7 @@ use C4::AR::Reservas;
 use C4::AR::Issues;
 use Date::Manip;
 use C4::AR::Sanctions;
+use C4::AR::Mensajes;
 
 my $query=new CGI;
 
@@ -66,6 +67,11 @@ if($id3 ne ""){
 	$params{'tipo'}="INTRA";
 	$params{'issuesType'}="DO";
 	my ($error, $codMsg, $paraMens)= &C4::AR::Reservas::prestar(\%params);
+	my @errores;
+	$errores[0]->{'barcode'}=$id3;
+	$errores[0]->{'string'}=&C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	$template->param(error=>$error,
+			errores=>\@errores);
 }
 =item
 my %env;
@@ -153,7 +159,7 @@ if($error){
 		my $strError=$array[1];
 		$info= getiteminformation( \%env, $numeroItem);
 		$errores[$j]->{'barcode'}=$info->{'barcode'};
-		$errores[$j]->{'string'}=procesarStr($strError);;
+		$errores[$j]->{'string'}=procesarStr($strError);
 		$j++;
 	}
 $template->param(errores=>\@errores);
