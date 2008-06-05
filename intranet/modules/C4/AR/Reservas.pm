@@ -165,6 +165,17 @@ sub getReservasDeId2 {
 	return($cant,\@results);
 }
 
+sub getReservaDeId3(){
+	#devuelve las reservas del item
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+	
+	my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
+	$sth->execute($id3);
+	
+	return $sth->fecthrow_hashref();
+}
+
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARESgetReservasDeBorrower
         my ($bor)=@_;
@@ -340,12 +351,6 @@ sub sePuedePrestar(){
 	
 	}
 	
-
-#Se verifica que el usuario sea Regular
-	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
-		$error= 1;
-		$codMsg= 'U300';
-	}
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
 	if( !($error) && ($sancionado||$fechaFin) ){
@@ -375,8 +380,7 @@ sub verificarHorario{
 sub intercambiar_id3{
 	my ($borrowernumber, $id2, $id3, $oldid3)= @_;
         my $dbh = C4::Context->dbh;
-# 	my $sth=$dbh->prepare("SET autocommit=0");
-# 	$sth->execute();
+
 	my $sth=$dbh->prepare("SELECT id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
@@ -393,8 +397,7 @@ sub intercambiar_id3{
 		$sth=$dbh->prepare("UPDATE reserves SET id3= ? WHERE id2=? AND borrowernumber=?");
 		$sth->execute($id3, $id2, $borrowernumber);
 	}
-# 	my $sth3=$dbh->prepare("commit ");
-# 	$sth3->execute();
+
 	return 1;
 }
 
@@ -432,12 +435,12 @@ sub prestar {
 		#Se verifca disponibilidad del item;
 		
 		#Se verifica si ya hay una reserva sobre el item (DE CUALQUIER USUARIO)
-		my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
-		$sth->execute($id3);
+# 		my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
+# 		$sth->execute($id3);
 
-		my $data;
+		my $data=getReservaDeId3($id3);
 		my $ok=1;
-		if ($data=$sth->fetchrow_hashref){
+		if ($data){
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
 			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
 			if($datosNivel3){
