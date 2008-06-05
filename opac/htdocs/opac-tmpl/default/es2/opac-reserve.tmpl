@@ -162,68 +162,84 @@ En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato.
 <br>
 Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.
 <br>
- <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
+ <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
 <!-- /TMPL_IF -->
 </b></font>
 </td></tr></table>
 		<br>
-		<table align=center>
-		<tr>
-          <td class="impar" colspan=2> 
-<!-- TMPL_IF NAME="CirculationEnabled" --><a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar Reserva</a><!-- TMPL_ELSE -->No disponible<!-- /TMPL_IF -->
-		 </td>
-		</tr>
-                </table>
-		<!-- TMPL_IF NAME="itemReserve" -->
-		<form action="/cgi-bin/koha/modificarReserva.pl" method=post >
-		<table border="0" cellspacing="0" cellpadding="0">
-		<input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemReserve" -->" > 
+<table align=center>
+	<tr>
+        	<td class="impar" colspan=2> 
+			<!-- TMPL_IF NAME="CirculationEnabled" -->
+			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar Reserva</a>
+			<!-- TMPL_ELSE -->No disponible
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+</table>
+<!-- TMPL_IF NAME="itemReserve" -->
+<form action="/cgi-bin/koha/modificarReserva.pl" method=post >
+	<table border="0" cellspacing="0" cellpadding="0">
+		<input type="hidden" name="item" value="<!-- TMPL_VAR NAME='itemReserve' -->" > 
 		<!-- TMPL_IF name="multiplebranch" -->
 		<tr><td colspan=2>
 		
 	 	 Retira de Unidad de Informaci&oacute;n:
-                <!-- TMPL_VAR NAME="CGIbranch" -->
+		 <!-- TMPL_VAR NAME="CGIbranch" -->
 		
-<a  onMouseOut="swap('conreserve','<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reserva.png')" onMouseOver="swap('conreserve','<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reservabis.png')"> 
+		<a onMouseOut="swap('conreserve','<!-- TMPL_VAR NAME='themelang' -->/images/confirmar-reserva.png')" onMouseOver="swap('conreserve','<!-- TMPL_VAR NAME='themelang' -->/images/confirmar-reservabis.png')"> 
 		<img src='<!-- TMPL_VAR NAME="themelang" -->/images/confirmar-reserva.png' name="home" id="home"
 	title="Actualizar Pedido" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >
 </a>    	
 
 		</td></tr>
-	 <!-- /TMPL_IF -->
-		</table>
+		<!-- /TMPL_IF -->
+	</table>
 		</form>
 		
 <!-- TMPL_IF NAME="RESERVES" -->
 <br><br><br><hr>
-		<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">    
- <td colspan="6" align="center" class="bordetabla" borde=1>
-<b> Reservas actuales</b>
+<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
+	<tr bordercolor="#f2f2f2">    
+ 		<td colspan="6" align="center" class="bordetabla" borde=1>
+			<b> Reservas actuales</b>
 
- </td>
-</tr> 	
-<tr  class="bordetabla"  bordercolor="#f2f2f2">
- <th>T&iacute;tulo</th>
- <th>Autor</th>
- <th>Volumen</th>
- <th>Disponible desde </th>
- <th>Fecha de Vencimiento </th>
- <th>Acci&oacute;n </th>
-</tr>
+ 		</td>
+	</tr> 	
+	<tr class="bordetabla"  bordercolor="#f2f2f2">
+ 		<th>T&iacute;tulo</th>
+ 		<th>Autor</th>
+		<th>Volumen</th>
+		<th>Disponible desde </th>
+		<th>Fecha de Vencimiento </th>
+		<th>Acci&oacute;n </th>
+	</tr>
 <!-- TMPL_LOOP NAME="RESERVES" -->
-<tr border="1" bordercolor="#f2f2f2">
- <td class="impar"> <a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML--></a>
- </td>			
- <td class="impar"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
- </td>
- <td align=center class="impar">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- </td>
- <td class="impar" align="center"><!-- TMPL_VAR NAME="notificationdate" --></td>
-<td class="impar" align="center"><!-- TMPL_VAR NAME="rreminderdate" --></td>
- <td class="impar"> <a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->)">Reemplazar</a>
- </td>			
-</tr>
+
+	<tr border="1" bordercolor="#f2f2f2">
+ 		<td class="impar">
+			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='rbiblionumber' -->">
+				<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML-->
+			</a>
+ 		</td>			
+ 		<td class="impar">
+			<!-- TMPL_IF NAME="rauthor" -->
+				<!-- TMPL_VAR NAME="rauthor" -->
+			<!-- TMPL_ELSE -->&nbsp;
+			<!-- /TMPL_IF -->
+ 		</td>
+ 		<td align=center class="impar">  
+			<!-- TMPL_IF NAME="redicion" --> 
+				<!-- TMPL_VAR NAME="redicion" -->
+			<!-- TMPL_ELSE --> - 
+			<!-- /TMPL_IF -->
+ 		</td>
+ 		<td class="impar" align="center"><!-- TMPL_VAR NAME="notificationdate" --></td>
+		<td class="impar" align="center"><!-- TMPL_VAR NAME="rreminderdate" --></td>
+ 		<td class="impar"> 
+			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)">Reemplazar</a>
+ 		</td>			
+	</tr>
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->

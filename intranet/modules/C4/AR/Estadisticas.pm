@@ -1272,7 +1272,7 @@ sub historialReservas {
   my $dateformat = C4::Date::get_date_format();
 
   my $querySelectCount=" SELECT count(*) as cant ";
-
+=item
   my $querySelect =" SELECT h.id, a.completo,a.id as idAutor,h.biblionumber, bib.title, ";			$querySelect .= " h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, ";
   $querySelect .= " it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
 
@@ -1284,6 +1284,25 @@ sub historialReservas {
   $queryFrom .= " ON (a.id = bib.author) ";
   $queryFrom .= " LEFT JOIN items i ";
   $queryFrom .= " ON (i.itemnumber = h.itemnumber) "; 
+
+  my $queryWhere .= " WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
+
+  my $queryFinal .= " ORDER BY h.timestamp desc ";	
+  $queryFinal .= " limit $ini,$cantR ";
+=cut
+
+  my $querySelect =" SELECT h.id, a.completo,a.id as idAutor,h.id1, n1.titulo, ";
+  $querySelect .= " h.id2,h.id3,h.branchcode as branchcode, ";
+  $querySelect .= " it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
+
+  my $queryFrom .= " FROM historicCirculation h LEFT JOIN issuetypes it ";
+  $queryFrom .= " ON(it.issuecode = h.issuetype) ";
+  $queryFrom .= " LEFT JOIN nivel1 n1 ";
+  $queryFrom .= " ON (n1.id1 = h.id1) ";
+  $queryFrom .= " LEFT JOIN autores a ";
+  $queryFrom .= " ON (a.id = n1.autor) ";
+  $queryFrom .= " LEFT JOIN nivel3 n3 ";
+  $queryFrom .= " ON (n3.id3 = h.id3) "; 
 
   my $queryWhere .= " WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
 

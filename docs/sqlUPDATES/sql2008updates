@@ -171,4 +171,10 @@ ADD `id3` INT( 11 ) NULL AFTER `id2` ;
 
 ALTER TABLE `issues` CHANGE `itemnumber` `id3` INT( 11 ) NOT NULL DEFAULT '0';
 
+--Se modifco los siguientes campos en historicCirculation
+
+ALTER TABLE `historicCirculation` CHANGE `biblionumber` `id1` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
+
 
