@@ -783,7 +783,6 @@ sub prestamos{
 	
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	my $dateformat = C4::Date::get_date_format();
 
 	while (my $data=$sth->fetchrow_hashref){
 		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}),$dateformat);
