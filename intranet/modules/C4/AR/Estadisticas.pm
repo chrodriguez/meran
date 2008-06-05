@@ -182,14 +182,14 @@ sub historicoPrestamos{
 		$catUsuarioSQL= 'and C.categorycode = "'.$catUsuario.'"';
 	}
 
-	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, IT.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
+	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, n3.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
 
-	my $queryFrom= " 	From issues I, borrowers B, categories C, items IT, biblioitems BBI, 
+	my $queryFrom= " 	From issues I, borrowers B, categories C, nivel3 n3, nivel2 n2, 
 				itemtypes ITT, issuetypes ISST ";
 
 	my $queryWhere= " where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
-	and(IT.itemnumber = I.itemnumber)and(ISST.issuecode = I.issuecode)
-	and(BBI.biblioitemnumber = IT.biblioitemnumber)and(ITT.itemtype = BBI.itemtype)
+	and(n3.id3 = I.id3)and(ISST.issuecode = I.issuecode)
+	and(n2.id2 = n3.id2)and(ITT.itemtype = n2.tipo_documento)
 	and not(I.returndate is null) ";
 
 	my $queryCount= " 	Select count(*) as cant 
