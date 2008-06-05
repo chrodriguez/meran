@@ -2,9 +2,6 @@
 
 #written 27/01/2000
 #script to display borrowers reading record
-
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -25,7 +22,6 @@
 use strict;
 use C4::Auth;
 use C4::Output;
-# use C4::Date;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;

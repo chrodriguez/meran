@@ -46,16 +46,16 @@ else { #No esta seteado lo del curso  o ya lo hizo
 my $branch=(split("_",(split(";",$cookie))[0]))[1];
 my $branches = getbranches();
 my $id2 = $query->param('id2');
+my $id1 = $query->param('id1');
 
 my %params;
 
 $params{'tipo'}= 'OPAC'; #INTRA u OPAC
+$params{'id1'}= $id1;
 $params{'id2'}= $id2;
-# $params->{'id3'}= ;
 $params{'borrowernumber'}= $borrowernumber;
 $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
-$params{'branch'}= $branch;
 
 my ($error, $codMsg,$paraMens)= &C4::AR::Reservas::reservar(\%params);
 

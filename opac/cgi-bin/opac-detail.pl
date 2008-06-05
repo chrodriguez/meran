@@ -2,7 +2,6 @@
 use strict;
 require Exporter;
 use CGI;
-# use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
@@ -34,8 +33,9 @@ for (my $i=0; $i < scalar(@nivel2Loop); $i++){
 	
 
 $template->param(
-	CirculationEnabled => C4::Context->preference("circulation"),
-	loopnivel2	=> \@nivel2Loop,
+	CirculationEnabled 	=> C4::Context->preference("circulation"),
+	loopnivel2		=> \@nivel2Loop,
+	id1			=> $idNivel1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

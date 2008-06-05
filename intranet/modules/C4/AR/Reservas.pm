@@ -69,13 +69,17 @@ sub reservar {
 
 		my %paramsReserva;
 		
+		$paramsReserva{'id1'}= $data->{'id1'};
 		$paramsReserva{'id2'}= $params->{'id2'};
 		$paramsReserva{'id3'}= $data->{'id3'};
 		$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
+		$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};			
 		$paramsReserva{'reservedate'}= $desde;
 		$paramsReserva{'reminderdate'}= $hasta;
 		$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
 		$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
+		$paramsReserva{'hasta'}= $hasta;
+		$paramsReserva{'issuesType'}= $params{'issuesType'};
 
 		insertarReserva(\%paramsReserva);
 
@@ -182,7 +186,7 @@ sub getItemsParaReserva{
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
 
-	my $query= "	SELECT n3.id3, n3.holdingbranch 
+	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
 			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
 			AND n3.id3 NOT IN (SELECT reserves.id3 FROM reserves 
 			WHERE id2 = ? AND id3 IS NOT NULL) FOR UPDATE ";
@@ -259,6 +263,7 @@ sub verificaciones {
 
 sub insertarReserva {
 	my($params)=@_;
+
 	my $dbh=C4::Context->dbh;
 
 	my $query="	INSERT INTO reserves 	
@@ -275,6 +280,31 @@ sub insertarReserva {
 			$params->{'branchcode'},
 			$params->{'estado'}
 		);
+
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+my $estado;
+
+if($params->{'estado'} eq 'E'){
+#es una reserva sobre el ITEM
+	$estado= 'reserve'
+}else{
+#es una reserva sobre el GRUPO
+	$estado= 'queue';
+	$params->{'id3'}= 0;
+}
+
+C4::Circulation::Circ2::insertHistoricCirculation(	$estado,
+							$params->{'borrowernumber'},
+							$params->{'loggedinuser'},
+							$params->{'id1'},
+							$params->{'id2'},
+							$params->{'id3'},
+							$params->{'branchcode'},
+							$params->{'issuesType'},
+							$params->{'hasta'}
+						);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
 }
 
 sub verificarMaxTipoPrestamo{

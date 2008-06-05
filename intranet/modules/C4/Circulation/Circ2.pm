@@ -131,16 +131,17 @@ sub getDataItems{
 Registra Movimiento
 =cut
 
-sub insertHistoricCirculation{
-my ($type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype,$end_date)=@_;
+sub insertHistoricCirculation {
+
+  my ($type,$borrowernumber,$responsable,$id1,$id2,$id3,$branchcode,$issuetype,$end_date)=@_;
 	
   my $dbh = C4::Context->dbh;
 
-  my $sth=$dbh->prepare("	INSERT INTO historicCirculation(type,borrowernumber,responsable,date,biblionumber,
-				biblioitemnumber,itemnumber,branchcode,issuetype,end_date)
+  my $sth=$dbh->prepare("	INSERT INTO historicCirculation(type,borrowernumber,responsable,date,id1,
+				id2,id3,branchcode,issuetype,end_date)
   				VALUES (?,?,?,NOW(),?,?,?,?,?,?) ");
 
-  $sth->execute($type,$borrowernumber,$responsable,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype,$end_date);
+  $sth->execute($type,$borrowernumber,$responsable,$id1,$id2,$id3,$branchcode,$issuetype,$end_date);
 	
   return;
 }

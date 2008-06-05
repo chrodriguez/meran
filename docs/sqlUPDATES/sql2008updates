@@ -177,4 +177,4 @@ ALTER TABLE `historicCirculation` CHANGE `biblionumber` `id1` INT( 11 ) NOT NULL
 CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0',
 CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
 
-
+ALTER TABLE `reserves` DROP INDEX `IdUnico` 
