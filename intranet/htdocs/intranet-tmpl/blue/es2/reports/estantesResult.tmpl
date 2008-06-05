@@ -3,8 +3,8 @@
 La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 <br>
 <center>
-<table id="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
-	<td class="tablaresultadoTitle" width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
+<table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<td class="tablaresultadoTitle" width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 	</td>
 	<th class="tablaresultadoTitle">Estante</th>
 	<th class="tablaresultadoTitle"> T&iacute;tulos</th>
@@ -13,7 +13,7 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 	<th class="tablaresultadoTitle">Para Pr&eacute;stamo</th>
 	<th class="tablaresultadoTitle">Para Sala</th>
 
- 	<td class="tablaresultadoTitle" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+ 	<td class="tablaresultadoTitle" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 
 <!-- TMPL_LOOP Name="shelvesloopshelves" -->
         <tr>
@@ -78,7 +78,7 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 
 <br><br>
 
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name="name" -->">Generar planilla 
-<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/sxc.png" border="0">
+<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->">Generar planilla 
+<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
 </a>
 </center>

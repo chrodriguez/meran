@@ -42,25 +42,29 @@ my ($template, $loggedinuser, $cookie)
 
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
-my $ini= $input->param('ini');
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaIni =  format_date_in_iso($input->param('fechaIni'),$dateformat);
-my $fechaFin    =  format_date_in_iso($input->param('fechaFin'),$dateformat);
+my $fechaIni =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
-my $orden= $input->param('orden') ||'date';
-my $user= $input->param('user');
-my $tipoPrestamo= $input->param('tiposPrestamos');
-my $tipoOperacion= $input->param('tipoOperacion');
+my $orden= $obj->{'orden'} ||'date';
+my $user= $obj->{'user'};
+my $tipoPrestamo= $obj->{'tiposPrestamos'};
+my $tipoOperacion= $obj->{'tipoOperacion'};
+my $funcion=$obj->{'funcion'};
 
 my ($cant,@resultsdata)=
  &historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
 
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
 
 
 $template->param( 

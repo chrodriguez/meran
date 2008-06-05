@@ -444,6 +444,7 @@ sub userCategPie(){
 	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
 	$g->pie_values(\@values,\@categorias);
 	$g->pie_slice_colours(\@colores);
+	$g->set_tool_tip("#val#%");
 
 	&finalizarGrafico($g);
 	return ($g->render());
@@ -511,6 +512,7 @@ sub itemtypesPie(){
 	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
 	$g->pie_values(\@values,\@tiposDoc);
 	$g->pie_slice_colours(\@colores);
+	$g->set_tool_tip("#val#%");
 
 	&finalizarGrafico($g);
 	return ($g->render());
@@ -579,6 +581,7 @@ sub levelsPie(){
 	$g->pie(50,'0x0066CC','{font-size: 12px; color: #404040;');
 	$g->pie_values(\@values,\@descriptions);
 	$g->pie_slice_colours(\@colores);
+	$g->set_tool_tip("#val#%");
 
 	&finalizarGrafico($g);
 	return ($g->render());

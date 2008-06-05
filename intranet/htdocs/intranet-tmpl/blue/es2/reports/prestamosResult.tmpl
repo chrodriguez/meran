@@ -20,7 +20,7 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 </p>
 
 
-<table id="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
 		
@@ -28,33 +28,33 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
 		</th>
 
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Apellido</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=surname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Apellido</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"> Nombre</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=firstname&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->"> Nombre</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tarjeta de Id.</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=cardnumber&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tarjeta de Id.</a>
 		</th>
 
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">E-mail</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=emailaddress&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">E-mail</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de prestamo</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=date_due&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de prestamo</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=vencimiento&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de vencimiento</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=vencimiento&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Fecha de vencimiento</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">C&oacute;digo de barra</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">C&oacute;digo de barra</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=bulk&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Signatura Topogr&aacute;fica</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=bulk&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Signatura Topogr&aacute;fica</a>
 		</th>
-		<th>
-			<a class="inputFontNormal" href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=description&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tipo de pr&eacute;stamo</a>
+		<th class="tablaresultadoTitleClick">
+			<a href="prestamos.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden=description&branch=<!-- TMPL_VAR NAME=branch -->&estado=<!-- TMPL_VAR NAME=estado -->&renglones=<!-- TMPL_VAR name=renglones -->&begindate=<!-- TMPL_VAR name=begindate -->&enddate=<!-- TMPL_VAR name=enddate -->">Tipo de pr&eacute;stamo</a>
 		</th>
 	
 		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/derecha.png"></td>

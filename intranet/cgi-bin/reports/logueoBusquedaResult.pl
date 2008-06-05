@@ -21,23 +21,20 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 #Fechas
-my $fechaIni=$input->param('fechaIni')||'';
-my $fechaFin=$input->param('fechaFin')||'';
-my $catUsuarios=$input->param('catUsuarios')||"SIN SELECCIONAR";
-my $orden= $input->param('orden')||'surname';
-
-# if($input->param('fechaIni')){$fechaIni=;}
-# if($input->param('fechaFin')){$fechaFin=;}
-# if($input->param('catUsuarios')){$catUsuarios= ;}
-
+my $fechaIni=$obj->{'fechaIni'};
+my $fechaFin=$obj->{'fechaFin'};
+my $catUsuarios=$obj->{'catUsuarios'}||"SIN SELECCIONAR";
+my $orden= $obj->{'orden'}||'surname';
+my $funcion=$obj->{'funcion'};
 #************************************ prueba de paginador *******************************************
-my $ini= $input->param('ini');
+my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #historial de busquedas desde OPAC
 my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden);
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 #************************************ prueba de paginador *******************************************
 
 

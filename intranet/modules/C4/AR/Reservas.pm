@@ -162,7 +162,7 @@ sub getReservasDeId2 {
 }
 
 sub cant_reservas{
-#Cantidad de reservas totales de GRUPO y EJEMPLARES
+#Cantidad de reservas totales de GRUPO y EJEMPLARESgetReservasDeBorrower
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
         my $query="	SELECT count(*) as cant FROM reserves"; 
@@ -388,15 +388,21 @@ sub prestar {
 	
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
-	if($cant == 1){
+	my $tipoPrestamo=getNotForLoan($id3);
+	if($cant == 1 && $tipoPrestamo eq "DO"){
 		#El usuario ya tiene la reserva
 		($error, $codMsg, $paraMens)= &verificaciones($params);
+		#Se actualiza la reserva si no hay error...FALTA
 		
-	}else{
+	}
+	elsif($cant==1 && $tipoPrestamo eq "SA"){
+# 		FALTA!!! SE PUEDE PONER EN EL ELSE???	
+	}
+	else{
 		#Se verifca disponibilidad del item;
 		
 		#Se verifica si ya hay una reserva sobre el item (DE CUALQUIER USUARIO)
-		my $sth=$dbh->prepare("	SELECT * FROM reserves WHERE id3 = ? ");
+		my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
 		$sth->execute($id3);
 
 		my $data;
@@ -407,7 +413,6 @@ sub prestar {
 			if($datosNivel3){
 				&cambiarId3($datosNivel3->{'id3'},$data->{'reservenumber'});
 # 				el id3 de params quedo libre para ser reservado
-
 			}
 			else{
 # 				NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE 					REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
