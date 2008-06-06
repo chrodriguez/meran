@@ -1329,7 +1329,7 @@ sub historialReservas {
 }
 
 sub historicoCirculacion(){
-	my ($chkfecha,$fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
+	my ($chkfecha,$fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
@@ -1337,8 +1337,8 @@ sub historicoCirculacion(){
 	my @bind;
 	my $query="";
 	my $cant=0;
-	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.biblionumber, bib.title, 	
-			h.biblioitemnumber,h.itemnumber,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, i.barcode, i.bulk, u.firstname as userFirstname, u.surname as userSurname";
+	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, bib.title,
+			h.id2,h.id3,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, n3.barcode, n3.signatura_topografica, u.firstname as userFirstname, u.surname as userSurname";
 
 	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
 			ON (h.responsable=b.borrowernumber)
@@ -1347,11 +1347,11 @@ sub historicoCirculacion(){
 			LEFT JOIN issuetypes it
 			ON(it.issuecode = h.issuetype)
 			LEFT JOIN biblio bib
-			ON (bib.biblionumber = h.biblionumber)
+			ON (bib.biblionumber = h.id2)
 			LEFT JOIN autores a
 			ON (a.id = bib.author) 
-			LEFT JOIN items i
-			ON (i.itemnumber = h.itemnumber) ";
+			LEFT JOIN nivel3 n3
+			ON (n3.id3 = h.id3) ";
 
 	my $where = "";
 	if ($chkfecha ne 'false'){
@@ -1381,10 +1381,10 @@ sub historicoCirculacion(){
 	my $finCons=" ORDER BY h.timestamp desc limit $ini,$cantR ";
 
 #para buscar las operaciones sobre un item, viene desde el pl item-detial.pl
-	if($itemnumber ne ''){
-		$where.=" AND i.itemnumber = ?";
+	if($id3 ne ''){
+		$where.=" AND n3.id3 = ?";
 		$finCons="";
-		push(@bind,$itemnumber);
+		push(@bind,$id3);
 	}
 	
 	$query="SELECT count(*) as cant ".$from.$where;

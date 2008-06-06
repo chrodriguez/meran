@@ -177,4 +177,13 @@ ALTER TABLE `historicCirculation` CHANGE `biblionumber` `id1` INT( 11 ) NOT NULL
 CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0',
 CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
 
+--Se saco el indice unico que habia quedado al cambiar el nombre del campo biblioitemnumber por id2
 ALTER TABLE `reserves` DROP INDEX `IdUnico` 
+
+--Se agrego una fila en la tabla unavailable para la V3, porque es necesario para el componente que se crean dinamicamente, de disponibilidad.
+
+INSERT INTO `unavailable` ( `code` , `description` )
+VALUES (
+'0', 'Disponible'
+);
+
