@@ -239,10 +239,10 @@ vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha
 =cut
 
 sub vencimiento {
-my ($itemnumber)=@_;
+my ($id3)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from issues where itemnumber=? and returndate is NULL");
-$sth->execute($itemnumber);
+my $sth=$dbh->prepare("Select * from issues where id3=? and returndate is NULL");
+$sth->execute($id3);
 my $data= $sth->fetchrow_hashref;
 if ($data){
 	my $issuetype=IssueType($data->{'issuecode'}); 

@@ -156,7 +156,7 @@ sub tieneLibroVencido {
   $sth->execute($borrowernumber);
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
+    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
     return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
   }
   return(0);

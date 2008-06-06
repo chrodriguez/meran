@@ -59,7 +59,7 @@ $params{'issuesType'}= 'DO';
 
 my ($error, $codMsg,$paraMens)= &C4::AR::Reservas::reservar(\%params);
 
-my $message= &C4::AR::Mensajes::getMensaje($codMsg,$paraMens);
+my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
 
 $template->param (
 	message	=> $message,

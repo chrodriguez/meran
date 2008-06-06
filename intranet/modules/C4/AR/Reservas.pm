@@ -172,8 +172,7 @@ sub getReservaDeId3{
 	
 	my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
 	$sth->execute($id3);
-	
-	return $sth->fecthrow_hashref();
+	return ($sth->fetchrow_hashref);
 }
 
 sub cant_reservas{
@@ -253,6 +252,7 @@ print A "Entro al if de prestamos especiales";
 	}
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
+print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($error) && ($sancionado||$fechaFin) ){
 		$error= 1;
 		$codMsg= 'S200';
@@ -283,8 +283,8 @@ print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de presta
 	}
 print A "\n\n";
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
-	return ($error, $codMsg,\%paraMens);
 close(A);
+	return ($error, $codMsg,\%paraMens);
 }
 
 sub insertarReserva {
@@ -404,9 +404,15 @@ sub prestar {
 	my ($error, $codMsg, $paraMens);
 	
 #Se verifica si ya se tiene la reserva sobre el grupo
-	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
-	my $tipoPrestamo=getNotForLoan($id3);
-	if($cant == 1 && $tipoPrestamo eq "DO"){
+	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);# ver lo que sigue.
+#********************************        VER!!!!!!!!!!!!!! *************************************************
+# Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
+# Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
+# Si esta prestado la clase de prestamo que se quiere hacer en este momento. 
+# Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
+# Tener en cuenta los prestamos especiales, $issueType ==> ES ---> SA. **** VER!!!!!!
+	my $disponibilidad=getNotForLoan($id3);
+	if($cant == 1 && $disponibilidad eq "DO"){
 		#El usuario ya tiene la reserva
 		($error, $codMsg, $paraMens)= &verificaciones($params);
 		if(!$error){
@@ -414,10 +420,11 @@ sub prestar {
 			($error,$codMsg)=&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'});
 		}
 	}
-	elsif($cant==1 && $tipoPrestamo eq "SA"){
+	elsif($cant==1 && $disponibilidad eq "SA"){
 # 		FALTA!!! SE PUEDE PONER EN EL ELSE???	
 #llamar a la funcion verificaciones!!
 #verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
+#es un prestamo ES ?????? ****VER****
 	}
 	else{
 		#Se verifca disponibilidad del item;
@@ -464,8 +471,7 @@ sub insertarPrestamo {
 	my $dbh=C4::Context->dbh;
 
 #Se acutualiza el estado de la reserva a P = Presetado
-	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' SELECT
-				WHERE id2 = ? AND borrowernumber = ? ");
+	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
 
 	$sth->execute(	$params->{'id2'},
 			$params->{'borrowernumber'}

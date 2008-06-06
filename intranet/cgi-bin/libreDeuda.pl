@@ -36,7 +36,7 @@ my $libreD=C4::Context->preference("libreDeuda");
 my @array=split(//, $libreD);
 my $ok=1;
 my $msj="";
-# RESERVAS ADJUDICADAS 0--------> flag 1; function C4::AR::Reserves::cant_reservas($borum);
+# RESERVAS ADJUDICADAS 0--------> flag 1; function C4::AR::Reservas::cant_reservas($borum);
 # RESERVAS EN ESPERA   1--------> flag 2; function C4::AR::Reserves::cant_waiting($borum);
 # PRESTAMOS VENCIDOS   2--------> flag 3; fucntion C4::AR::Sanctions::hasDebts("",$borum); 1 tiene vencidos. 0 no.
 # PRESTAMOS EN CURSO   3--------> flag 4; fucntion C4::AR::Issues::DatosPrestamos($borum);
