@@ -6,6 +6,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Catalogacion;
+use C4::AR::Reservas;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -790,6 +791,7 @@ sub detalleNivel3_Opac(){
 	$results[0]->{'id2'}= $id2;
 	$results[0]->{'cantParaPrestamo'}= $infoNivel3->{'cantParaPrestamo'};
 	$results[0]->{'cantParaSala'}= $infoNivel3->{'cantParaSala'};
+	$results[0]->{'cantResevasActual'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
 # 	$results[0]->{'disponibles'}=$disponibles;
 	$results[0]->{'reservados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
 	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS

@@ -36,6 +36,7 @@ $VERSION = 0.01;
 	&verificaciones
 	&cant_reservas
 	&getReservasDeGrupo
+	&cantReservasPorGrupo
 
 	&prestar
 );
@@ -205,6 +206,17 @@ sub cant_reservas{
         return($result);
 }
 
+sub cantReservasPorGrupo{
+#Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
+   my ($id2)=@_;
+   my $dbh = C4::Context->dbh;
+   my $sth=$dbh->prepare("	SELECT  count(*) as reservas
+                       		FROM reserves
+                       		WHERE id2 =? AND estado <> 'P' ");
+   $sth->execute($id2);
+   return $sth->fetchrow;
+}
+
 sub getItemsParaReserva{
 #Busca los items sin reservas para los prestamos y nuevas reservas.
 	my ($id2)=@_;
@@ -220,6 +232,23 @@ sub getItemsParaReserva{
 
 	return $sth->fetchrow_hashref;
 
+}
+
+sub getDisponibilidadGrupo{
+#Busca los items sin reservas para los prestamos y nuevas reservas.
+	my ($id2)=@_;
+        my $dbh = C4::Context->dbh;
+
+	my $query= "	SELECT count(*) as disponibilidad
+			FROM nivel2 n2 INNER JOIN nivel3 n3 ON (n2.id2 = n3.id2)
+			WHERE (n2.id2 = ?) AND (n3.notforloan = 'DO') ";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id2);
+
+		
+
+	return ($sth->fetchrow > 0)?'DO':'SA';
 }
 
 sub verificaciones {
@@ -272,6 +301,13 @@ print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 		$codMsg= 'S200';
 		$paraMens{'finDeSancion'}=$fechaFin;
 print A "Entro al if de sanciones";
+	}
+
+	if(!$error && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
+	#Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
+		$error=1;
+		$codMsg='R007';
+print A "Entro al if de prestamos de sala";
 	}
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
