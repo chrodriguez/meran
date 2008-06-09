@@ -44,18 +44,12 @@ sub reservar {
 
 	my($params)=@_;
 
-=item
-	my $tipo= $params->{'tipo'}= ; #INTRA u OPAC
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
-	my $borrowernumber= $params->{'borrowernumber'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $issuesType= $params->{'issuesType'};
-=cut
+	my $dateformat = C4::Date::get_date_format();
+
 	my ($error, $codMsg,$paraMens)= &verificaciones($params);
 
 	if(!$error){
-#No hay error
+	#No hay error
 		my $data;
 		$data->{'id3'}= $params->{'id3'};
 	
@@ -81,7 +75,27 @@ sub reservar {
 		$paramsReserva{'hasta'}= $hasta;
 		$paramsReserva{'issuesType'}= $params->{'issuesType'};
 
-		insertarReserva(\%paramsReserva);
+		my $reservenumber= insertarReserva(\%paramsReserva);
+
+		if($data->{'id3'} ne ''){
+		#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
+		#al ultimo dia que tiene el usuario para ir a retirar el libro
+
+			my $err= "Error con la fecha";
+			my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
+			$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+			my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
+			my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+			$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+
+			C4::AR::Sanctions::insertSanction(	undef,
+								$reservenumber,
+								$params->{'borrowernumber'}, 
+								$startdate, 
+								$enddate, 
+								undef
+			);	
+		}
 
 	}
 
@@ -307,31 +321,39 @@ sub insertarReserva {
 			$params->{'estado'}
 		);
 
+	#Se obtiene el reservenumber
+	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
+	$sth3->execute();
+	my $reservenumber= $sth3->fetchrow;
+
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-my $estado;
+	my $estado;
 
-if($params->{'estado'} eq 'E'){
-#es una reserva sobre el ITEM
-	$estado= 'reserve'
-}else{
-#es una reserva sobre el GRUPO
-	$estado= 'queue';
-	$params->{'id3'}= 0;
-}
+	if($params->{'estado'} eq 'E'){
+	#es una reserva sobre el ITEM
+		$estado= 'reserve'
+	}else{
+	#es una reserva sobre el GRUPO
+		$estado= 'queue';
+		$params->{'id3'}= 0;
+	}
 
-C4::Circulation::Circ2::insertHistoricCirculation(	$estado,
-							$params->{'borrowernumber'},
-							$params->{'loggedinuser'},
-							$params->{'id1'},
-							$params->{'id2'},
-							$params->{'id3'},
-							$params->{'branchcode'},
-							$params->{'issuesType'},
-							$params->{'hasta'}
-						);
+	C4::Circulation::Circ2::insertHistoricCirculation(	$estado,
+								$params->{'borrowernumber'},
+								$params->{'loggedinuser'},
+								$params->{'id1'},
+								$params->{'id2'},
+								$params->{'id3'},
+								$params->{'branchcode'},
+								$params->{'issuesType'},
+								$params->{'hasta'}
+							);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
-}
+
+	return $reservenumber;
+
+}#end insertarReserva
 
 sub verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;

@@ -211,8 +211,9 @@ sub sanctionSelect {
 
 sub insertSanction {
   #Esta funcion da de alta una sancion
-  my ($dbh, $sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays)=@_;
+  my ($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays)=@_;
 
+  my $dbh = C4::Context->dbh;
   my $dateformat = C4::Date::get_date_format();
  #Hay varios casos:
  #Si no existe una tupla con una posible sancion y debe ser sancionado por $delaydays

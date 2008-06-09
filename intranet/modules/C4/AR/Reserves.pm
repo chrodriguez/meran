@@ -233,7 +233,7 @@ $startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
 my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
 my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 $enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-insertSanction($dbh, undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
+insertSanction(undef, $reservenumber ,$borrowernumber, $startdate, $enddate, undef);
 } else{
 
 #**********************************Se registra el movimiento en historicCirculation***************************
@@ -463,7 +463,7 @@ sub cancelar_reserva {
 		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
 		my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-		insertSanction($dbh, undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
+		insertSanction(undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
 
 		my $sth3=$dbh->prepare("commit");
 		$sth3->execute();
