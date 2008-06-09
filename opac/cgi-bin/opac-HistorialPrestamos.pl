@@ -45,7 +45,7 @@ my $obj=$input->param('obj');
 $obj= &C4::AR::Utilidades::from_json_ISO($obj);
 
 my $funcion= $obj->{'funcion'};
-my $ini= ( $obj->{'ini'} || '');
+my $ini= $obj->{'ini'}||'';
 
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 

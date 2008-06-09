@@ -2932,16 +2932,16 @@ sub allissues {
   my $dateformat = C4::Date::get_date_format();
   my $querySelectCount = " SELECT count(*) as cant ";
 
-  my $querySelect= " SELECT b.title,b.biblionumber,b.author,a.completo,iss.date_due,iss.returndate,volumeddesc, 			iss.itemnumber,lastreneweddate,barcode,iss.renewals ";
+  my $querySelect= " SELECT n1.titulo,n1.id1,n1.autor,a.completo,iss.date_due,iss.returndate, iss.id3,lastreneweddate,barcode,iss.renewals ";
 
-  my $queryFrom = " FROM items i INNER JOIN biblioitems bi";
-  $queryFrom .= " ON (i.biblioitemnumber = bi.biblioitemnumber) ";
+  my $queryFrom = " FROM nivel3 n3 INNER JOIN nivel2 n2";
+  $queryFrom .= " ON (n3.id2 = n2.id2) ";
   $queryFrom .= " INNER JOIN issues iss ";
-  $queryFrom .= " ON (i.itemnumber = iss.itemnumber) ";
-  $queryFrom .= " INNER JOIN biblio b ";
-  $queryFrom .= " ON (i.biblionumber = b.biblionumber) ";
+  $queryFrom .= " ON (n3.id3 = iss.id3) ";
+  $queryFrom .= " INNER JOIN nivel1 n1 ";
+  $queryFrom .= " ON (n3.id1 = n1.id1) ";
   $queryFrom .= " INNER JOIN autores a ";
-  $queryFrom .= " ON (a.id = b.author) ";
+  $queryFrom .= " ON (a.id = n1.autor) ";
 
   my $queryWhere= " WHERE borrowernumber= ? ";
   my $queryFinal= " ORDER BY $orden ";
@@ -2965,13 +2965,13 @@ sub allissues {
 
   while (my $data=$sth->fetchrow_hashref){
 
-	my $df=C4::AR::Issues::fechaDeVencimiento($data->{'itemnumber'},$data->{'date_due'});
+	my $df=C4::AR::Issues::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
 	$data->{'date_fin'}=format_date($df,$dateformat);
 	$data->{'date_due'}=  format_date($data->{'date_due'},$dateformat);
 	$data->{'returndate'}=  format_date($data->{'returndate'},$dateformat);
 	$data->{'lastreneweddate'}=format_date($data->{'lastreneweddate'},$dateformat);
-	$data->{'id'} = $data->{'author'};
-    	$data->{'author'} = $data->{'completo'};
+	$data->{'id'} = $data->{'autor'};
+    	$data->{'autor'} = $data->{'completo'};
 
     	$result[$i]=$data;
     	$i++;

@@ -2,9 +2,7 @@
 
 <center>
 <p class="inputFontNormal"> 
-	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> 
-	de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;<!-- TMPL_VAR NAME=cantidad --><br>
 </p>
 <br>
 
@@ -35,9 +33,9 @@
 <!-- TMPL_LOOP NAME="loop_reading" -->
 	<tr border="1" bordercolor="#f2f2f2">
  		<td> 
-	<!-- TMPL_IF NAME="biblionumber" -->
-		<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='biblionumber' -->">
-			<!-- TMPL_VAR name="title" ESCAPE=HTML-->
+	<!-- TMPL_IF NAME="id1" -->
+		<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">
+			<!-- TMPL_VAR name="titulo" ESCAPE=HTML-->
 		<!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML-->
 		<!-- /TMPL_IF -->
 		</a> 
@@ -45,9 +43,9 @@
 	<!-- /TMPL_IF -->
  		</td>
  		<td>
-	<!-- TMPL_IF NAME="author" -->
+	<!-- TMPL_IF NAME="autor" -->
 		<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='id' -->" >
-	<!-- TMPL_VAR NAME="author" -->
+	<!-- TMPL_VAR NAME="autor" -->
 		</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
  		</td>
  		<td align=center>  

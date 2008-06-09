@@ -230,7 +230,7 @@ sub getReservaDeId3{
 }
 
 sub cant_reservas{
-#Cantidad de reservas totales de GRUPO y EJEMPLARESgetReservasDeBorrower
+#Cantidad de reservas totales de GRUPO y EJEMPLARES
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
         my $query="	SELECT count(*) as cant FROM reserves"; 
