@@ -683,7 +683,7 @@ return (@result);
 }
 
 
-sub obtenerDisponibilidadTotal(){
+sub obtenerDisponibilidadTotal{
 	my ($id1,$itemtype)=@_;
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
@@ -708,8 +708,7 @@ sub obtenerDisponibilidadTotal(){
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Domicilio:";
 			$disponibilidad[$i]->{'prestados'}="Prestados: ";
 			$disponibilidad[$i]->{'prestados'}.=0;#VER MAS ADELANTE!!!!!!!!!
-			$disponibilidad[$i]->{'reservados'}="Reservados: ";
-			$disponibilidad[$i]->{'reservados'}.=0;#VER MAS ADELANTE!!!!!!!!!
+			$disponibilidad[$i]->{'reservados'}="Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
 		}
 		else{
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Sala:";

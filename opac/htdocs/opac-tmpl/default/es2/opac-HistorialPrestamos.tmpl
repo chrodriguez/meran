@@ -44,7 +44,8 @@
  		</td>
  		<td>
 	<!-- TMPL_IF NAME="autor" -->
-		<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='id' -->" >
+<!-- 		<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='id' -->" > -->
+		<a class="click" onClick="buscarPorAutor(<!-- TMPL_VAR NAME='id' -->)" title="Mostrar Detalle por autor">
 	<!-- TMPL_VAR NAME="autor" -->
 		</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
  		</td>
