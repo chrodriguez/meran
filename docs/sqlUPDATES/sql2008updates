@@ -187,3 +187,7 @@ VALUES (
 '0', 'Disponible'
 );
 
+
+--Se modifico el campo itemnumber de la tabla sanctions
+
+ALTER TABLE `sanctions` CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
