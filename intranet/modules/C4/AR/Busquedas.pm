@@ -538,7 +538,7 @@ sub detalleNivel3(){
 	my $getLib;
 	$results[0]->{'nivel3'}=\@nivel3;
 	$results[0]->{'disponibles'}=$infoNivel3->{'cantParaPrestamo'};
-	$results[0]->{'reservados'}=$infoNivel3->{'cantReservas'};#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
+	$results[0]->{'reservados'}=$infoNivel3->{'cantReservas'};
 	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
 	foreach my $row(@nivel3){
 		foreach my $llave (keys %$mapeo){
@@ -594,7 +594,7 @@ sub buscarNivel3PorId2(){
 	my %infoNivel3;
 	$infoNivel3{'cantParaSala'}=0;
 	$infoNivel3{'cantParaPrestamo'}=0;
-	$infoNivel3{'cantReservas'}=0;
+	$infoNivel3{'cantReservas'}=C4::AR::Reservas::cantReservasPorGrupo($id2);
 
 	while(my $data=$sth->fetchrow_hashref){
 
@@ -791,10 +791,7 @@ sub detalleNivel3_Opac(){
 	$results[0]->{'id2'}= $id2;
 	$results[0]->{'cantParaPrestamo'}= $infoNivel3->{'cantParaPrestamo'};
 	$results[0]->{'cantParaSala'}= $infoNivel3->{'cantParaSala'};
-	$results[0]->{'cantResevasActual'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
-# 	$results[0]->{'disponibles'}=$disponibles;
-	$results[0]->{'reservados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LAS RESERVAS
-	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
+	$results[0]->{'cantResevasActual'}= $infoNivel3->{'cantReservas'};
 	foreach my $row(@nivel3){
 
 		foreach my $llave (keys %$mapeo){

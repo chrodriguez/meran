@@ -2166,7 +2166,8 @@ sub countitems {
 
 
 ### cuenta las reserva que tiene un biblioitem 30/03/2007 VER SI ESTA BIEN!!!!!!!!!!!!!!! - Damian
-
+### ESTA EN C4::AR::Reservas, SE TIENE QUE BORRAR!!!!!!! Y MODIFICAR EN TODOS LOS LADOS DONDE SE LLAMA.
+### NO SE USA MAS EN LA VERSION NUEVA, SE USA LA NUEVA, SE DEJA POR LAS DUDAS, EN LA LIMPIEZA BORRAR.
 sub Countreserve{
    my ($bibitemnumber)=@_;
    my $dbh = C4::Context->dbh;
@@ -2179,6 +2180,7 @@ sub Countreserve{
 }
 
 #cuenta las reservas pendientes del grupo
+### NO SE USA MAS EN LA VERSION NUEVA, SE DEJA POR LAS DUDAS, EN LA LIMPIEZA BORRAR.
 sub CountreserveGrupo{
    my ($biblioitemnumber)=@_;
    my $dbh = C4::Context->dbh;
@@ -2263,10 +2265,15 @@ $results[$i]->{'available'}= $results[$i]->{'issue'}+$results[$i]->{'issuenfl'} 
 	#bibitnfloan ($results[$i]->{'biblioitemnumber'},$type);	
 
 	$results[$i]->{'items'}=\@aux;
-
+	
+# Miguel - Se pidio que se muestre la misma cant de reservas en la INTRA y en el OPAC
+=item
 #### Este if estaba comentado los descomente para que devuelva la cantidad de reservas que hay en en grupo.
 if ($type eq "intranet") {$results[$i]->{'reserves'}= Countreserve($data->{'biblioitemnumber'}); }
 else {$results[$i]->{'reserves'}= CountreserveGrupo($data->{'biblioitemnumber'});}
+=cut
+
+	$results[$i]->{'reserves'}= Countreserve($data->{'biblioitemnumber'});
 
  #MAtias Lenguaje Pais y Soporte
         my $country=getCountry($results[$i]->{'idCountry'});

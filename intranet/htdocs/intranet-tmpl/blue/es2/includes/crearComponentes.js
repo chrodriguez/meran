@@ -110,7 +110,7 @@ function procesarObjeto(objeto){
 			compText=crearComponente("text",idComp,"","");
 			comp=crearComponente("texta","texta"+id,"readonly='readonly'","");
 			hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
-			var boton="<input type='button' value='<<' onclick='borrarEleccion("+id+")'>";
+			var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='<!-- TMPL_VAR name=themelang -->/images/sacar.png'>";
 			comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+hidden+"</div>";
 			
 			compText=compText+" "+boton;

@@ -73,7 +73,6 @@ FIXME
     &cancelar_reservas_inmediatas
     &efectivizar_reserva
     &Enviar_Email
-    &cant_reserves
     &cant_waiting	
     &tiene_reservas 
     &intercambiar_itemnumber

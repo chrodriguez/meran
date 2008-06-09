@@ -597,10 +597,12 @@ background-color:#FFFFFF;
 /*      Fin estilo zebra         */
 
 div.boton{
-	background : url(/images/agregar.png) repeat-y 100%;
+/* 	background : url(/images/agregar_temporal.png) repeat-y 100%; */
 	cursor: pointer;
-	width: 190px; 
-	border: 1px solid #888888;
+	width: 35px; 
+/* 	border: 1px solid #888888;  */
+	height:21px;
+	
 }
 
 div.detalle{
