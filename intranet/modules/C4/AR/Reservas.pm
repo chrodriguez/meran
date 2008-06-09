@@ -57,7 +57,7 @@ sub reservar {
 			$data= getItemsParaReserva($params->{'id2'});
 		}
 		
-#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
+	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 		my $numeroDias= C4::Context->preference("reserveItem");
 		my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
@@ -77,7 +77,7 @@ sub reservar {
 
 		my $reservenumber= insertarReserva(\%paramsReserva);
 
-		if($data->{'id3'} ne ''){
+		if( ($data->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
 		#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 		#al ultimo dia que tiene el usuario para ir a retirar el libro
 
