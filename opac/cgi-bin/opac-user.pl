@@ -155,7 +155,7 @@ $template->param(overdues_count => $overdues_count);
 my $branches = getbranches();
 
 # now the reserved items....
-my ($rcount, $reserves) = DatosReservas($borrowernumber); 					  
+my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($borrowernumber); 
 
 my @realreserves;
 $rcount = 0;
@@ -171,21 +171,19 @@ foreach my $res (@$reserves) {
 	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
     	$res->{'rnotificationdate'} = format_date($res->{'rnotificationdate'},$dateformat);
 
- 	my $author=getautor($res->{'rauthor'}); #llamo a getautor en C4::Search.pm
+ 	my $author=getautor($res->{'rautor'}); #llamo a getautor en C4::Search.pm
 						#paso como parametro ID de autor de la reserva
 	#guardo el Apellido, Nombre del autor
-	$res->{'author'} = $author->{'completo'}; #le paso Apellido y Nombre
+	$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
 	
-    if ($res->{'ritemnumber'}) {
+    if ($res->{'rid3'}) {
 	$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchname'};
 	push @waiting, $res;
 	$wcount++;
-    	}
-    	else
-	{
+    }else{
 	push @realreserves, $res;
 	$rcount++;
-	}
+    }
 }
 
 $template->param(RESERVES => \@realreserves);
