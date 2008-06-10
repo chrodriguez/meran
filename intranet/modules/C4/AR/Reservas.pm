@@ -538,7 +538,23 @@ sub cambiarId3 {
 	$sth->execute($id3Libre,$reservenumber);
 }
 
-sub prestar {
+
+sub prestar{
+	my ($params)=@_;
+
+	my ($error, $codMsg,$paraMens)= &verificaciones($params);
+	if(!$error){
+	#No hay error
+
+		my ($paramsPrestamo)= chequeoParaPrestamo($params);
+		
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $message);
+}
+
+sub chequeoParaPrestamo {
 
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
@@ -559,11 +575,14 @@ sub prestar {
 	my $disponibilidad=getNotForLoan($id3);
 	if($cant == 1 && $disponibilidad eq "DO"){
 		#El usuario ya tiene la reserva
-		($error, $codMsg, $paraMens)= &verificaciones($params);
-		if(!$error){
+# 		($error, $codMsg, $paraMens)= &verificaciones($params);
+# 		if(!$error){
 #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+		if($id3 != $reservas->{'id3'}){
+		#Los ids son distintos, se intercambian.
 			($error,$codMsg)=&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'});
 		}
+# 		}
 	}
 	elsif($cant==1 && $disponibilidad eq "SA"){
 # 		FALTA!!! SE PUEDE PONER EN EL ELSE???	
