@@ -1660,6 +1660,8 @@ sub getissues {
 	my $dbh = C4::Context->dbh;
 	my $borrowernumber = $borrower->{'borrowernumber'};
 	my %currentissues;
+
+=item
 	my $select = "SELECT issues.timestamp 	AS timestamp,
 		issues.date_due       	      	AS date_due,
 		issues.issuecode		AS issuecode,
@@ -1688,6 +1690,30 @@ sub getissues {
 		AND itemtypes.itemtype     	= biblioitems.itemtype
 		AND issues.returndate      	IS NULL
 		ORDER BY issues.date_due";
+=cut
+	my $select= " SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
+                n3.id1 AS biblionumber, n3.id3 AS itemnumber, n3.barcode AS barcode,
+                n1.titulo AS title, n1.autor AS author, n2.id2 AS biblioitemnumber,
+                isst.description AS issuetype
+                FROM issues iss INNER JOIN issuetypes isst ON ( iss.issuecode = isst.issuecode )
+		INNER JOIN nivel3 n3 ON ( iss.id3 = n3.id3 )
+		INNER JOIN nivel1 n1 ON ( n3.id1 = n1.id1)
+		INNER JOIN nivel2 n2 ON ( n2.id2 = n3.id2 )
+		INNER JOIN itemtypes it ON ( it.itemtype = n2.tipo_documento )
+                WHERE iss.borrowernumber = ?
+                AND iss.returndate IS NULL
+                ORDER BY iss.date_due ";
+
+# FALTA!!!!!!!!!
+# 		items.bulk 			AS bulk,
+# 		biblio.unititle			AS unititle,
+# 		biblioitems.dewey     		AS dewey,
+# 		biblioitems.number 		AS redicion,
+# 		biblioitems.volume 		AS volume,
+# 		biblioitems.volumeddesc 	AS volumeddesc, 
+# 		biblioitems.subclass  		AS subclass,
+# 		biblioitems.classification 	AS classification,
+
 	#Matias Para mostrar la signatura topografica agrego el bulk como resultado de la consulta #y ademas el nro de grupo y el volumen
 	my $sth=$dbh->prepare($select);
 	$sth->execute($borrowernumber);
@@ -1701,15 +1727,16 @@ sub getissues {
 		$datedue =~ s/-//g;
 		if ($datedue < $todaysdate) {$data->{'overdue'} = 1;}
 		
-		$data->{'idauthor'}=$data->{'author'}; #Paso el id del author para poder buscar.
+		$data->{'idauthor'}=$data->{'autor'}; #Paso el id del author para poder buscar.
 		#Obtengo los datos del autor
-		my $autor=C4::Search::getautor($data->{'author'});
-		$data->{'author'}=$autor->{'completo'};
+		my $autor=C4::Search::getautor($data->{'autor'});
+		$data->{'autor'}=$autor->{'completo'};
 
 		$currentissues{$counter} = $data;
 		$counter++;
 	}
 	$sth->finish;
+
 	return(\%currentissues);
 }
 

@@ -1,13 +1,21 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-
-Error:<!-- TMPL_VAR NAME="error" -->
-codMSG:<!-- TMPL_VAR NAME="codMsg" -->
-
-<!-- TMPL_IF NAME="message" -->
-	<!-- TMPL_VAR NAME="message" -->
-<!-- /TMPL_IF -->
-
+<div class="tablemsg">
+<!-- <tr><td> -->
+	Error:<!-- TMPL_VAR NAME="error" -->
+	codMSG:<!-- TMPL_VAR NAME="message" -->
+	
+	<font class="fontmsg"><b>
+	<!-- TMPL_IF NAME="reservaGrupo" -->
+		<center> 
+			<a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->">
+				<input title="Modificar" type="button" value="Modificar">
+			</a> 
+		</center>
+	<!-- /TMPL_IF -->
+	</b></font>
+<!-- </td></tr> -->
+</div>
 
 <table align="center" class="top" border="0" width="90%">
 <tr><td align="center">
@@ -149,23 +157,6 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 		</tr>
 		
 		</table>
-		<br>
-		<table class="tablemsg">
-<tr><td><font class="fontmsg"><b>
-<!-- TMPL_IF NAME="itemReserve" -->
-El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  <!-- TMPL_VAR NAME="desde" --> a las <!-- TMPL_VAR NAME="desdeh" --> hasta el d&iacute;a: <!-- TMPL_VAR NAME="hasta" --> hasta las <!-- TMPL_VAR NAME="hastah" -->.
-
-<!-- TMPL_ELSE -->
-En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
-<br>
-<i><!-- TMPL_VAR NAME="MAIL" --></i>
-<br>
-Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.
-<br>
- <center> <a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->"><input title="Modificar" type="button" value="Modificar"></a> </center>
-<!-- /TMPL_IF -->
-</b></font>
-</td></tr></table>
 		<br>
 <table align=center>
 	<tr>

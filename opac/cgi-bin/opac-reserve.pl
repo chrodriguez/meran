@@ -57,14 +57,15 @@ $params{'borrowernumber'}= $borrowernumber;
 $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 
-my ($error, $codMsg,$paraMens)= &C4::AR::Reservas::reservar(\%params);
+my ($error, $reservaGrupo, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
 
-my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+# my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+
 
 $template->param (
 	message	=> $message,
 	error	=> $error,
-	codMsg	=> $codMsg,
+	reservaGrupo => $reservaGrupo,
 );
 
 =item

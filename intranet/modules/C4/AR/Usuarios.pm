@@ -14,8 +14,27 @@ use vars qw(@EXPORT @ISA);
 	&esRegular
 	&estaSancionado
 	&llegoMaxReservas
+	&getBorrowerInfo
 );
 
+
+sub getBorrowerInfo {
+# Devuelve toda la informacion del usuario segun un borrowernumber
+	my ($borrowernumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query;
+	my $sth;
+
+	$query= "	SELECT borrowers.*,localidades.nombre as cityname , categories.description AS cat
+			FROM borrowers LEFT JOIN categories ON categories.categorycode = borrowers.categorycode
+			LEFT JOIN localidades ON localidades.localidad = borrowers.city
+			WHERE borrowers.borrowernumber = ? ; ";
+
+	$sth = $dbh->prepare($query);
+	$sth->execute($borrowernumber);
+
+	return ($sth->fetchrow_hashref);
+}
 
 sub esRegular {
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto

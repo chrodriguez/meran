@@ -42,66 +42,97 @@ $VERSION = 0.01;
 	&prestar
 );
 
+sub reservarOPAC {
+	
+	my($params)=@_;
+	my $reservaGrupo= 0;
+
+	my ($error, $codMsg,$paraMens)= &verificaciones($params);
+	
+	if(!$error){
+	#No hay error
+
+		my ($paramsReserva)= reservar($params);
+		#Se setean los parametros para el mensaje de la reserva SIN ERRORES
+		if($paramsReserva->{'estado'} eq 'E'){
+		#SE RESERVO CON EXITO UN EJEMPLAR
+			$codMsg= 'U302';
+			$paraMens->{'desde'}= $paramsReserva->{'desde'};
+			$paraMens->{'desdeh'}= $paramsReserva->{'desdeh'};	
+			$paraMens->{'hasta'}= $paramsReserva->{'hasta'};
+			$paraMens->{'hastah'}= $paramsReserva->{'hastah'};
+		}else{
+		#SE REALIZO UN RESERVA DE GRUPO
+			$codMsg= 'U303';
+			my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
+			$paraMens->{'mail'}= $borrowerInfo->{'emailaddress'};
+			$reservaGrupo= 1;
+		}
+		
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+
+	return ($error, $reservaGrupo, $message);
+}
+
 sub reservar {
 
 	my($params)=@_;
 
 	my $dateformat = C4::Date::get_date_format();
+	my $data;
+	$data->{'id3'}= $params->{'id3'};
 
-	my ($error, $codMsg,$paraMens)= &verificaciones($params);
-
-	if(!$error){
-	#No hay error
-		my $data;
-		$data->{'id3'}= $params->{'id3'};
+	if($params->{'tipo'} eq 'OPAC'){
+		$data= getItemsParaReserva($params->{'id2'});
+	}
 	
-		if($params->{'tipo'} eq 'OPAC'){
-			$data= getItemsParaReserva($params->{'id2'});
-		}
-		
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
-		my $numeroDias= C4::Context->preference("reserveItem");
-		my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
+	my $numeroDias= C4::Context->preference("reserveItem");
+	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
-		my %paramsReserva;
-		
-		$paramsReserva{'id1'}= $data->{'id1'};
-		$paramsReserva{'id2'}= $params->{'id2'};
-		$paramsReserva{'id3'}= $data->{'id3'};
-		$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
-		$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};			
-		$paramsReserva{'reservedate'}= $desde;
-		$paramsReserva{'reminderdate'}= $hasta;
-		$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
-		$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
-		$paramsReserva{'hasta'}= $hasta;
-		$paramsReserva{'issuesType'}= $params->{'issuesType'};
+	my %paramsReserva;
+	
+	$paramsReserva{'id1'}= $data->{'id1'};
+	$paramsReserva{'id2'}= $params->{'id2'};
+	$paramsReserva{'id3'}= $data->{'id3'};
+	$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
+	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};			
+	$paramsReserva{'reservedate'}= $desde;
+	$paramsReserva{'reminderdate'}= $hasta;
+	$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
+	$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
+	$paramsReserva{'hasta'}= $hasta;
+	$paramsReserva{'desde'}= $desde;
+	$paramsReserva{'desdeh'}= $apertura;
+	$paramsReserva{'hastah'}= $cierre;	
+	$paramsReserva{'issuesType'}= $params->{'issuesType'};
 
-		my $reservenumber= insertarReserva(\%paramsReserva);
+	my $reservenumber= insertarReserva(\%paramsReserva);
 
-		if( ($data->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
-		#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
-		#al ultimo dia que tiene el usuario para ir a retirar el libro
+	if( ($data->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
+	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
+	#al ultimo dia que tiene el usuario para ir a retirar el libro
 
-			my $err= "Error con la fecha";
-			my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
-			$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-			my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
-			my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-			$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+		my $err= "Error con la fecha";
+		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
+		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
+		my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 
-			C4::AR::Sanctions::insertSanction(	undef,
-								$reservenumber,
-								$params->{'borrowernumber'}, 
-								$startdate, 
-								$enddate, 
-								undef
-			);	
-		}
-
+		C4::AR::Sanctions::insertSanction(	undef,
+							$reservenumber,
+							$params->{'borrowernumber'}, 
+							$startdate, 
+							$enddate, 
+							undef
+		);	
 	}
 
-	return ($error, $codMsg,$paraMens);
+
+	return (\%paramsReserva);
 }
 
 sub DatosReservas {
@@ -493,7 +524,7 @@ sub intercambiarId3{
 	return ($error,$codMsg);
 }
 
-sub cambiarId3{
+sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="UPDATE reserves SET id3= ? where reservenumber = ?";

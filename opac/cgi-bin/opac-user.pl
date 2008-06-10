@@ -111,34 +111,36 @@ $san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 #
 
 foreach my $key (keys %$issues) {
-    my $issue = $issues->{$key};
-    $issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
-    my $err= "Error con la fecha"; 
+	my $issue = $issues->{$key};
+    	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
+    	my $err= "Error con la fecha"; 
 
-     my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-     my  $close = ParseDate(C4::Context->preference("close"));
-     if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-     	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
-     }
+     	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+     	my  $close = ParseDate(C4::Context->preference("close"));
+     	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
+     		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
+     	}
 open(INFO, ">>/tmp/debug.txt");
-   my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}),$dateformat); #C4::AR::Issues
+   	my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}),$dateformat); #C4::AR::Issues
 print INFO "entro a calcular vencimiento $df \n";  
-    $issue->{'date_fin'} = format_date($df,$dateformat);
+    	$issue->{'date_fin'} = format_date($df,$dateformat);
 close(INFO);
-    if (Date::Manip::Date_Cmp($df,$hoy)<0)
-  	{ $venc=1;
-	  $issue->{'color'} ='red';
+    	if (Date::Manip::Date_Cmp($df,$hoy)<0){ 
+		$venc=1;
+	  	$issue->{'color'} ='red';
 	}
-    $issue->{'renew'} = &sepuederenovar($borrowernumber, $issue->{'itemnumber'});
-    if ($issue->{'overdue'}) {
-	push @overdues, $issue;
-	$overdues_count++;
-	$issue->{'overdue'} = 1;
-    } else {
-	$issue->{'issued'} = 1;
-    }	
-    push @issuedat, $issue; 
-    $count++;
+
+    	$issue->{'renew'} = &sepuederenovar($borrowernumber, $issue->{'itemnumber'});
+    	if ($issue->{'overdue'}) {
+		push @overdues, $issue;
+		$overdues_count++;
+		$issue->{'overdue'} = 1;
+    	}else{
+		$issue->{'issued'} = 1;
+   	}	
+    
+	push @issuedat, $issue; 
+    	$count++;
 }
 
 #my $maxissues= C4::Context->preference("maxissues");
