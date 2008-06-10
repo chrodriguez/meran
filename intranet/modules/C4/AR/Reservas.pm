@@ -72,7 +72,6 @@ sub reservarOPAC {
 	}
 
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-
 	return ($error, $reservaGrupo, $message);
 }
 
@@ -358,6 +357,14 @@ print A "issueType: $issueType\n";
 print A "Entro al if de regularidad\n";
 	}
 
+#Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
+	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
+	if( !($error) && ($tipo eq "OPAC") && (C4::Context->preference("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
+		$error= 1;
+		$codMsg= 'U304';
+print A "Entro al if del curso en el opac\n";
+	}
+
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
 	if( !($error) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
@@ -383,9 +390,8 @@ print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 		$paraMens{'finDeSancion'}=$fechaFin;
 print A "Entro al if de sanciones";
 	}
-
+#Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
 	if(!$error && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
-	#Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
 		$error=1;
 		$codMsg='R007';
 print A "Entro al if de prestamos de sala";

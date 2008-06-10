@@ -207,14 +207,14 @@ sub devolver {
 
 
 =item
-fechaDeVencimiento recibe dos parametro, un itemnumber y la fecha de prestamo lo que hace es devolver la fecha en que vence o vencio ese prestamo
+fechaDeVencimiento recibe dos parametro, un id3 y la fecha de prestamo lo que hace es devolver la fecha en que vence o vencio ese prestamo
 =cut
 
 sub fechaDeVencimiento {
-my ($itemnumber,$date_due)=@_;
+my ($id3,$date_due)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from issues where itemnumber = ? and date_due = ? ");
-$sth->execute($itemnumber,$date_due);
+my $sth=$dbh->prepare("Select * from issues where id3 = ? and date_due = ? ");
+$sth->execute($id3,$date_due);
 my $data= $sth->fetchrow_hashref;
 if ($data){
 	my $issuetype=IssueType($data->{'issuecode'}); 

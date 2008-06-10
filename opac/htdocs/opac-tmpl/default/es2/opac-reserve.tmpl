@@ -1,11 +1,9 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
+<!-- Mensajes -->
 <div class="tablemsg">
-<!-- <tr><td> -->
-	Error:<!-- TMPL_VAR NAME="error" -->
-	codMSG:<!-- TMPL_VAR NAME="message" -->
-	
 	<font class="fontmsg"><b>
+	<!-- TMPL_VAR NAME="message" -->
 	<!-- TMPL_IF NAME="reservaGrupo" -->
 		<center> 
 			<a href="opac-userupdate.pl?borrnumber=<!-- TMPL_VAR name='borrowernumber' -->">
@@ -14,7 +12,6 @@
 		</center>
 	<!-- /TMPL_IF -->
 	</b></font>
-<!-- </td></tr> -->
 </div>
 
 <table align="center" class="top" border="0" width="90%">
@@ -97,10 +94,6 @@
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-
-
-<!-- TMPL_IF NAME="already_reserved" -->Usted ya realiz&oacute; una reserva de este libro.<br><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="already_issued" -->Ya tiene un ejemplar de este grupo en su poder.<br><!-- /TMPL_IF -->
 
 	</b></font></td></tr></table>
 <!-- TMPL_ELSE -->
