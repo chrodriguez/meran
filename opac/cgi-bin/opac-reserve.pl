@@ -59,9 +59,6 @@ $params{'issuesType'}= 'DO';
 
 my ($error, $reservaGrupo, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
 
-# my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-
-
 $template->param (
 	message	=> $message,
 	error	=> $error,

@@ -47,7 +47,9 @@ my %mensajesOPAC = (
 	'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
 	'R004' => '',
 	'R005' => '',
-	'R007' => 'Disculpe, pero no se puede reservar un item para sala ',
+	'R006' => '',
+	'R007' => 'Disculpe, pero no se puede reservar un item para sala.',
+	'R008' => 'Disculpe, llego al m&aacute;ximo de reservas en espera.',
 	'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos *?*. No puede efectuar reservas sobre ejemplares.',
 	'P102' => '',
@@ -57,7 +59,8 @@ my %mensajesOPAC = (
 	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
 	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  *?* a las *?* hasta el d&iacute;a: *?* hasta las *?*',
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
-	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.'
+	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
+	'U304' => ''
 );
 
 my %mensajesINTRA = (
@@ -68,6 +71,8 @@ my %mensajesINTRA = (
 	'R004' => 'No hay ejemplares libres para el prestamo, y no se pueden realizar reservas sobre un grupo desde intranet.',
 	'R005' => 'No hay ejemplares libres para el prestamo, y se realizo una reserva sobre el grupo.',
 	'R006' => 'No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite',
+	'R007' => '',
+	'R008' => '',
 	'P100' => 'El usuario ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'El usuario alcanzo la cantidad m&aacute;xima  de pr&eacute;stamos *?*',
 	'P102' => 'Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.',
@@ -80,6 +85,9 @@ my %mensajesINTRA = (
 	'S201' => 'El usuario no puede reservar porque tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
 	'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
+	'U302' => '',
+	'U303' => '',
+	'U304' => ''
 );
 
 sub getMensaje {
