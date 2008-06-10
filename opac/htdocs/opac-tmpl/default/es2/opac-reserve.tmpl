@@ -19,43 +19,65 @@
 
 <!-- TMPL_IF NAME="message" -->
 	<br>
-	<table  cellpadding="5" cellspacing="0" >
+	<!--<table  cellpadding="5" cellspacing="0" >
 	<tr class="tablemsg" >
-	<td><font class="fontmsg"><b>
+	<td><font class="fontmsg"><b>-->
 
 	
 	<!-- TMPL_IF NAME="RESERVES" -->
 <br><br><br><hr>
 
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">    
-<td colspan="6" align="center" class="bordetabla" borde=1>
-<b> Reservas actuales</b>
+	<tr bordercolor="#f2f2f2">    
+		<td colspan="6" align="center" class="bordetabla" borde=1>
+			<b> Reservas actuales</b>
 
- </td>
-</tr> 	
-<tr  class="bordetabla"  bordercolor="#f2f2f2">
- <th>T&iacute;tulo</th>
- <th>Autor</th>
- <th>Volumen</th>
- <th>Disponible desde </th>
- <th>Fecha de Vencimiento </th>
- <th>Acci&oacute;n </th>
-</tr>
+ 		</td>
+	</tr> 	
+	<tr class="bordetabla"  bordercolor="#f2f2f2">
+ 		<th>T&iacute;tulo</th>
+		<th>Autor</th>
+		<th>Volumen</th>
+		<th>Disponible desde </th>
+		<th>Fecha de Vencimiento </th>
+		<th>Acci&oacute;n </th>
+	</tr>
 <!-- TMPL_LOOP NAME="RESERVES" -->
-<tr border="1" bordercolor="#f2f2f2">
- <td class="impar"> <a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML--></a>
- </td>			
- <td class="impar"><!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
- </td>
- <td align=center class="impar">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- </td>
- <td class="impar" align="center"><!-- TMPL_VAR NAME="rreservedate" --></td>
-<td class="impar" align="center"><!-- TMPL_VAR NAME="rreminderdate" --></td>
+	<tr border="1" bordercolor="#f2f2f2">
+ 		<td class="impar">
+			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->">
+				<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML-->
+			</a>
+ 		</td>			
+ 		<td class="impar">
+		<!-- TMPL_IF NAME="rauthor" -->
+			<!-- TMPL_VAR NAME="rauthor" -->
+		<!-- TMPL_ELSE -->
+			&nbsp;
+		<!-- /TMPL_IF -->
+ 		</td>
+ 		<td align=center class="impar">
+		<!-- TMPL_IF NAME="redicion" -->
+			<!-- TMPL_VAR NAME="redicion" -->
+		<!-- TMPL_ELSE --> 
+			- 
+		<!-- /TMPL_IF -->
+		</td>
+ 		<td class="impar" align="center">
+			<!-- TMPL_VAR NAME="rreservedate" -->
+		</td>
+		<td class="impar" align="center">
+			<!-- TMPL_VAR NAME="rreminderdate" -->
+		</td>
 
-<td class="impar"> <!-- TMPL_IF NAME="CirculationEnabled" --><a href="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="bib" -->)">Cancelar</a> <!-- TMPL_ELSE -->No disponible<!-- /TMPL_IF -->
- </td>			
-</tr>
+		<td class="impar">
+			<!-- TMPL_IF NAME="CirculationEnabled" -->
+			<a href="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="bib" -->)">Cancelar</a> 
+			<!-- TMPL_ELSE -->
+				No disponible
+			<!-- /TMPL_IF -->
+ 		</td>			
+	</tr>
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
@@ -95,7 +117,7 @@
 </table>
 <!-- /TMPL_IF -->
 
-	</b></font></td></tr></table>
+<!-- 	</b></font></td></tr></table> -->
 <!-- TMPL_ELSE -->
 	<p align="left"> <font class="fonttitulo"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="author" -->)</font></p>
 	
