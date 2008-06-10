@@ -73,12 +73,12 @@ function consultar(){
 <TR VALIGN=middle align="center" class="inputFontNormal">
 	<td height=25 >&nbsp;</td>
 	<TD>
-		<a href='/cgi-bin/koha/detail.pl?type=intra&id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->'>
+		<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->'>
  		<!-- TMPL_VAR name="titulo" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->
     		</a>
 	</TD>
 	<TD>
- 		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->&type=intra">
+ 		<a href="/cgi-bin/koha/busquedas/busqueda.pl?idAutor=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->&type=intra">
 		<!-- TMPL_VAR name="autor" -->
 		</a>
 	</TD>
@@ -91,7 +91,7 @@ function consultar(){
 		<!-- /TMPL_LOOP -->
         </td>
 	<TD align="center" >
-		<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>&nbsp;
+		<a href='/cgi-bin/koha/item-detail.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>&nbsp;
 	</TD>
 	<TD>
 		<!-- TMPL_VAR name="date_due" -->&nbsp;
