@@ -65,7 +65,8 @@ if($error){
 # }
 
 $template->param (
-	
+	id1 => $id1,
+	id2 => $id2,
 	message	=> $message,
 	error	=> $error,
 	reservaGrupo => $acciones->{'reservaGrupo'},

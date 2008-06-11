@@ -52,21 +52,20 @@ sub reservarOPAC {
 	
 	if(!$error){
 	#No hay error
-
 		my ($paramsReserva)= reservar($params);
 		#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 		if($paramsReserva->{'estado'} eq 'E'){
 		#SE RESERVO CON EXITO UN EJEMPLAR
 			$codMsg= 'U302';
-			$paraMens->{'desde'}= $paramsReserva->{'desde'};
-			$paraMens->{'desdeh'}= $paramsReserva->{'desdeh'};	
-			$paraMens->{'hasta'}= $paramsReserva->{'hasta'};
-			$paraMens->{'hastah'}= $paramsReserva->{'hastah'};
+			$paraMens->[0]= $paramsReserva->{'desde'};
+			$paraMens->[1]= $paramsReserva->{'desdeh'};
+			$paraMens->[2]= $paramsReserva->{'hasta'};
+			$paraMens->[3]= $paramsReserva->{'hastah'};
 		}else{
 		#SE REALIZO UN RESERVA DE GRUPO
 			$codMsg= 'U303';
 			my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-			$paraMens->{'mail'}= $borrowerInfo->{'emailaddress'};
+			$paraMens->[0]= $borrowerInfo->{'emailaddress'};
 		}
 		
 	}
@@ -102,8 +101,8 @@ sub reservar {
 	$paramsReserva{'reminderdate'}= $hasta;
 	$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
 	$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
-	$paramsReserva{'hasta'}= $hasta;
-	$paramsReserva{'desde'}= $desde;
+	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
+	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
 	$paramsReserva{'desdeh'}= $apertura;
 	$paramsReserva{'hastah'}= $cierre;	
 	$paramsReserva{'issuesType'}= $params->{'issuesType'};
@@ -266,7 +265,7 @@ sub DatosReservas {
 
 	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
 			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
-			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, n2.anio_publicacion as rpublicationyear, r.id3 as ritemnumber, r.branchcode as rbranch
+			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.branchcode as rbranch
 			FROM reserves r
 			INNER JOIN nivel2 n2 ON  n2.id2 = r.id2
 			INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
@@ -276,10 +275,11 @@ sub DatosReservas {
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute($bor);
-
+	my $dateformat = C4::Date::get_date_format();
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-
+		$data->{'rreminderdate'}=C4::Date::format_date($data->{'rreminderdate'},$dateformat);
+		$data->{'rreservedate'}=C4::Date::format_date($data->{'rreservedate'},$dateformat);
 		push (@results,$data);
 	}
 	
@@ -480,7 +480,7 @@ sub verificaciones {
 	my $issueType= $params->{'issuesType'};
 	my $error= 0;
 	my $codMsg= '000';
-	my %paraMens;
+	my @paraMens;
 
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "tipo: $tipo\n";
@@ -508,7 +508,7 @@ print A "Entro al if del curso en el opac\n";
 	if( !($error) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
 		$error= 1;
 		$codMsg= 'P101';
-		$paraMens{'tipoPrestamo'}=$issueType;
+		$paraMens[0]=$issueType;
 print A "Entro al if que verifica la cantidad de prestamos";
 	}
 
@@ -525,7 +525,7 @@ print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($error) && ($sancionado||$fechaFin) ){
 		$error= 1;
 		$codMsg= 'S200';
-		$paraMens{'finDeSancion'}=$fechaFin;
+		$paraMens[0]=$fechaFin;
 print A "Entro al if de sanciones";
 	}
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
@@ -535,19 +535,19 @@ print A "Entro al if de sanciones";
 print A "Entro al if de prestamos de sala";
 	}
 
-#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
-	if( !($error) && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber)) ){
-		$error= 1;
-		$codMsg= 'R001';
-		$paraMens{'cantMaxReservas'}=C4::Context->preference("maxreserves");
-print A "Entro al if de maximo de reservas";
-	}
-
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
 	if( !($error) && ($tipo eq "OPAC") && (&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
 		$error= 1;
 		$codMsg= 'R002';
 print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
+	}
+
+#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
+	if( !($error) && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber)) ){
+		$error= 1;
+		$codMsg= 'R001';
+		$paraMens[0]=C4::Context->preference("maxreserves");
+print A "Entro al if de maximo de reservas";
 	}
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
@@ -559,7 +559,7 @@ print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de presta
 print A "\n\n";
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
-	return ($error, $codMsg,\%paraMens);
+	return ($error, $codMsg,\@paraMens);
 }
 
 sub insertarReserva {
@@ -753,7 +753,7 @@ sub chequeoParaPrestamo {
 		}
 		#Se realiza una reserva
 		if($ok){
-			($error, $codMsg, $paraMens)= reservar($params);
+			my ($paraReservas)= reservar($params);
 		}
 	}
 	#Se verifica datos del prestamo

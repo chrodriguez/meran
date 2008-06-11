@@ -85,10 +85,10 @@ function reservar(id1, id2){
 	objBusqueda.sendToServer();
 }
 
-function cancelarYReservar(id1, id2){
+function cancelarYReservar(id1,id2,id1Nuevo,id2Nuevo){
 
 	cancelar(id1, id2);
-	reservar(id1, id2);
+	reservar(id1Nuevo, id2Nuevo);
 }
 
 function cancelar(id1, id2){

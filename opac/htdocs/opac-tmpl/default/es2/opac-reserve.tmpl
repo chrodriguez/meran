@@ -200,18 +200,6 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 
 <!-- /TMPL_IF -->
 
-<table align=center>
-	<tr>
-        	<td class="impar" colspan=2> 
-		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a class="click" onClick="cancelar(127,172)">Cancelar Reserva</a>
-		<!-- TMPL_ELSE -->
-			No disponible
-		<!-- /TMPL_IF -->
-		</td>
-	</tr>
-</table>
-
 <!-- esto no esta implementado -->
 <!-- TMPL_IF NAME="itemReserve" -->
 <form action="/cgi-bin/koha/modificarReserva.pl" method=post >
