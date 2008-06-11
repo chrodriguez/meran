@@ -127,7 +127,15 @@
 					<!-- TMPL_IF NAME="cantParaPrestamo" -->
 
 						<!-- TMPL_IF NAME="CirculationEnabled" -->  <!-- si es 0 -->
-						<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?id2=<!-- TMPL_VAR NAME='id2' ESCAPE=URL -->&id1=<!-- TMPL_VAR NAME='id1' ESCAPE=URL -->"><b>Reservar</b></a></p>
+						<!--<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?id2=<!-- TMPL_VAR NAME='id2' ESCAPE=URL -->&id1=<!-- TMPL_VAR NAME='id1' ESCAPE=URL -->"><b>Reservar</b></a></p>-->
+
+						<p align="right">
+						<a class="click" 
+						onClick="reservar(<!-- TMPL_VAR NAME='id1' ESCAPE=URL -->,
+						<!-- TMPL_VAR NAME='id2' ESCAPE=URL -->)">
+						<b>Reservar</b>
+						</a></p>
+
 						<!-- TMPL_ELSE --> 
 			<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
 						<p align="right"><b>Disponible para Reservar</b></p>

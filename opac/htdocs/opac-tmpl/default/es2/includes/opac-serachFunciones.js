@@ -55,9 +55,36 @@ function updateInfo(responseText){
 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
 	zebra('tablaResult');
+	$('#result').slideDown('slow');
  	pushCache(responseText, 'result');
 	Complete();
 
+}
+
+function updateInfoReserva(responseText){
+	
+	//si estoy logueado, oculta la informacion del usuario
+// 	$('#result').slideUp('slow');
+	$('#result').html(responseText);
+	$('#result').slideDown('slow');	
+// 	zebra('tablaResult');
+//  	pushCache(responseText, 'result');
+	Complete();
+
+}
+
+function reservar(id1, id2){
+
+	objBusqueda=new SearchHelper(updateInfoReserva, Init);
+//  	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/opac-reserve.pl';
+	objBusqueda.criteria= $('#criteria').val();
+	objBusqueda.searchinc= $('#searchinc').val();
+	objBusqueda.id1= id1;
+	objBusqueda.id2= id2;
+	//se envia la consulta
+	objBusqueda.sendToServer();
 }
 
 function buscar(){

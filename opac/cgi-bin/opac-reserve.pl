@@ -12,6 +12,7 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::Context;
 use C4::AR::Mensajes;
+use C4::AR::Utilidades;
 
 
 my $query = new CGI;
@@ -24,24 +25,43 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
-my $id2 = $query->param('id2');
-my $id1 = $query->param('id1');
+
+my $obj=$query->param('obj');
+
+$obj=from_json_ISO($obj);
+
+
+my $id1= $obj->{'id1'};
+my $id2 = $obj->{'id2'};
 
 my %params;
 
-$params{'tipo'}= 'OPAC'; #INTRA u OPAC
+$params{'tipo'}= 'OPAC'; 
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
 $params{'borrowernumber'}= $borrowernumber;
 $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 
-my ($error, $reservaGrupo, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
+my ($error, $codMsg, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
+
+my $acciones= getAccion($codMsg);
+
+if($acciones->{'tablaReservas'}){
+#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
+	my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
+
+	$template->param (
+		RESERVES => $reservas
+	);
+}
 
 $template->param (
+	
 	message	=> $message,
 	error	=> $error,
-	reservaGrupo => $reservaGrupo,
+	reservaGrupo => $acciones->{'reservaGrupo'},
+	tablaReservas => $acciones->{'tablaReservas'},
 	CirculationEnabled => C4::Context->preference("circulation"),
 );
 

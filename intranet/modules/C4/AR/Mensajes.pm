@@ -31,6 +31,7 @@ $VERSION = 0.01;
 
 @EXPORT = qw(
 	&getMensaje
+	&getAccion
 );
 
 #000 - Todo normal
@@ -99,6 +100,24 @@ sub getMensaje {
 		$msj=~ s/\*\?\*/$p2/o;
 	}
 	return $msj;
+}
+
+=item
+Esta funcion se encarga de setear variables para los distintos pl que la invocan segun un codigo de error
+=cut
+sub getAccion {
+	my($codigo,$tipo)=@_;
+	my %acciones;
+	
+	if($codigo eq 'R001'){
+		$acciones{'tablaReservas'}= 1;
+	}
+
+	if($codigo eq 'U303'){
+		$acciones{'reservaGrupo'}= 1;
+	}
+
+	return \%acciones;
 }
 
 

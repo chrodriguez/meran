@@ -1,4 +1,3 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 <!-- Mensajes -->
 <div class="tablemsg">
@@ -12,19 +11,9 @@
 		</center>
 	<!-- /TMPL_IF -->
 	</b></font>
-</div>
+<!--</div>-->
 
-<table align="center" class="top" border="0" width="90%">
-<tr><td align="center">
-
-<!-- TMPL_IF NAME="message" -->
-	<br>
-	<!--<table  cellpadding="5" cellspacing="0" >
-	<tr class="tablemsg" >
-	<td><font class="fontmsg"><b>-->
-
-	
-	<!-- TMPL_IF NAME="RESERVES" -->
+<!-- TMPL_IF NAME="tablaReservas" -->
 <br><br><br><hr>
 
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
@@ -45,13 +34,13 @@
 <!-- TMPL_LOOP NAME="RESERVES" -->
 	<tr border="1" bordercolor="#f2f2f2">
  		<td class="impar">
-			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->">
-				<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML-->
+			<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
+				<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML-->
 			</a>
  		</td>			
  		<td class="impar">
-		<!-- TMPL_IF NAME="rauthor" -->
-			<!-- TMPL_VAR NAME="rauthor" -->
+		<!-- TMPL_IF NAME="rautor" -->
+			<!-- TMPL_VAR NAME="nomCompleto" -->
 		<!-- TMPL_ELSE -->
 			&nbsp;
 		<!-- /TMPL_IF -->
@@ -71,19 +60,16 @@
 		</td>
 
 		<td class="impar">
-			<!-- TMPL_IF NAME="CirculationEnabled" -->
+		<!-- TMPL_IF NAME="CirculationEnabled" -->
 			<a href="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="bib" -->)">Cancelar</a> 
-			<!-- TMPL_ELSE -->
-				No disponible
-			<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+			No disponible
+		<!-- /TMPL_IF -->
  </td>			
 </tr>
  <!-- /TMPL_LOOP -->
 </table>
-<!-- /TMPL_IF -->
 
-
-<!-- TMPL_IF NAME="RESERVES" -->
 <br><br><br><hr>
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 	<tr bordercolor="#f2f2f2">
@@ -103,13 +89,13 @@
 <!-- TMPL_LOOP NAME="RESERVES" -->
 	<tr border="1" bordercolor="#f2f2f2">
  		<td class="impar"> 
-			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="rbiblionumber" -->">
-				<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML -->
+			<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
+				<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
 			</a>
  		</td>
  		<td class="impar">
-		<!-- TMPL_IF NAME="rauthor" -->
-			<!-- TMPL_VAR NAME="rauthor" -->
+		<!-- TMPL_IF NAME="rautor" -->
+			<!-- TMPL_VAR NAME="nomCompleto" -->
 		<!-- TMPL_ELSE -->
 			&nbsp;
 		<!-- /TMPL_IF -->
@@ -140,17 +126,21 @@
 </table>
 <!-- /TMPL_IF -->
 
-<!-- 	</b></font></td></tr></table> -->
-<!-- TMPL_ELSE -->
-	<p align="left"> <font class="fonttitulo"><!-- TMPL_VAR NAME="title" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="author" -->)</font></p>
+<!-- TMPL_IF NAME="datosReserva" -->
+<p align="left"> 
+	<font class="fonttitulo">
+		<!-- TMPL_VAR NAME="title" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="author" -->)
+	</font>
+</p>
 	
 <table cellspacing="0" cellpadding="4" border="1" align="center" width="90%">
-<tr bordercolor="#f2f2f2"><td colspan="4"  class="bordetabla"></td></tr>
+	<tr bordercolor="#f2f2f2"><td colspan="4"  class="bordetabla"></td></tr>
         <tr valign="top" bordercolor="#f2f2f2">
                 <td colspan="4" class="impar">
                         <!-- TMPL_IF name="unititle" -->T&iacute;tulo Informativo:<b> <!-- TMPL_VAR NAME="subtitle" --></b><br><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="subtitle" -->Otro T&iacute;tulo:<b> <!-- TMPL_VAR NAME="unititle" --></b><br><!--
-/TMPL_IF -->
+                        <!-- TMPL_IF name="subtitle" -->
+				Otro T&iacute;tulo:<b> <!-- TMPL_VAR NAME="unititle" --></b><br>
+			<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="author" -->Autor:<b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!--
 TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b><br><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="additional" -->Colaboradores:<b> <!-- TMPL_VAR NAME="additional" --></b><br><!-- /TMPL_IF -->
@@ -199,13 +189,18 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 <table align=center>
 	<tr>
         	<td class="impar" colspan=2> 
-			<!-- TMPL_IF NAME="CirculationEnabled" -->
+		<!-- TMPL_IF NAME="CirculationEnabled" -->
 			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar Reserva</a>
-			<!-- TMPL_ELSE -->No disponible
-			<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+			No disponible
+		<!-- /TMPL_IF -->
 		</td>
 	</tr>
 </table>
+
+<!-- /TMPL_IF -->
+
+
 <!-- TMPL_IF NAME="itemReserve" -->
 <form action="/cgi-bin/koha/modificarReserva.pl" method=post >
 	<table border="0" cellspacing="0" cellpadding="0">
@@ -225,8 +220,10 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 		<!-- /TMPL_IF -->
 	</table>
 		</form>
+<!-- /TMPL_IF -->
 		
-<!-- TMPL_IF NAME="RESERVES" -->
+<!-- esta tabla no se para que es -->
+<!-- TMPL_IF NAME="RESERVES2" -->
 <br><br><br><hr>
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 	<tr bordercolor="#f2f2f2">    
@@ -272,24 +269,11 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-		
-		
-		
-		
-<!-- /TMPL_IF -->
 
-
-
-
-	
-
-
-
-	</tr>
+<!--	</tr>
 			
-		</table>
-<!-- /TMPL_IF -->
-
+		</table>-->
+</div>
 <script>
 function confirm_cancelation2(num) {
         var is_confirmed = confirm('�Esta seguro que desea cancelar la reserva?');
@@ -310,6 +294,4 @@ function confirm_cancelation(num,volver) {
 </td> </tr>
 </table>
 
-
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
 

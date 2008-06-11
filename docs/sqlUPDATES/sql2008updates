@@ -191,3 +191,6 @@ VALUES (
 --Se modifico el campo itemnumber de la tabla sanctions
 
 ALTER TABLE `sanctions` CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
+--Se modifco el siguiente campo
+
+ALTER TABLE `shelfcontents` CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0'

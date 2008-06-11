@@ -66,13 +66,12 @@ sub reservarOPAC {
 			$codMsg= 'U303';
 			my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
 			$paraMens->{'mail'}= $borrowerInfo->{'emailaddress'};
-			$reservaGrupo= 1;
 		}
 		
 	}
 
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-	return ($error, $reservaGrupo, $message);
+	return ($error, $codMsg, $message);
 }
 
 sub reservar {
@@ -152,12 +151,14 @@ sub DatosReservas {
 # biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc , biblioitems.number as redicion
 
 	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
-			reserves.id2 as rid2,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, n2.anio_publicacion as rpublicationyear, reserves.id3 as ritemnumber, reserves.branchcode as rbranch
-			FROM reserves
-			INNER JOIN nivel2 n2 ON  n2.id2 = reserves.id2
+			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
+			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, n2.anio_publicacion as rpublicationyear, r.id3 as ritemnumber, r.branchcode as rbranch
+			FROM reserves r
+			INNER JOIN nivel2 n2 ON  n2.id2 = r.id2
 			INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
-			WHERE reserves.borrowernumber = ?
-			AND cancellationdate is NULL AND reserves.estado <> 'P' ";
+			LEFT JOIN autores a ON (a.id = n1.autor)
+			WHERE r.borrowernumber = ?
+			AND cancellationdate is NULL AND r.estado <> 'P' ";
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute($bor);

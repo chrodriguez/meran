@@ -7,6 +7,8 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::BookShelves;
+use C4::AR::Catalogacion;
+use C4::AR::Busquedas;
 
 my $query=new CGI;
 
@@ -20,8 +22,9 @@ my  ($template, $borrowernumber, $cookie);
                              authnotrequired => 1,
                              flagsrequired => {borrow => 1},
                          });
-my $borrdata=&borrdata('',$borrowernumber);
-my $mail = $borrdata->{'emailaddress'};
+
+
+my $mail = &borrdata('',$borrowernumber)->{'emailaddress'};
 $template->param(MAIL => $mail);
 
 
@@ -33,53 +36,48 @@ my $pshelf=gotShelf($borrowernumber);
 if( $pshelf eq 0){$pshelf=createPrivateShelf($borrowernumber);}
 
 my $shelfvalues = $query->param('bookmarks');
- 	my @val=split(/#/,$shelfvalues);
-        foreach my $biblio (@val){
-if ($op eq 'del'){ delPrivateShelfs($pshelf,$biblio);}  else{addPrivateShelfs($pshelf,$biblio);}
-	}
+my @val=split(/#/,$shelfvalues);
 
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
-
-($count, @results) = privateShelfs($borrowernumber ,$number_of_results,$startfrom);
-my $num = 1;
-foreach my $res (@results) { $num++;}
-
-my $resultsarray=\@results;
-($resultsarray) || (@$resultsarray=());
-
-
-# sorting out which results to display.
-$template->param(startfrom => $startfrom+1);
-($startfrom+$num<=$count) ? ($template->param(endat => $startfrom+$number_of_results)) : ($template->param(endat => $count));
-$template->param(numrecords => $count);
-my $nextstartfrom=($startfrom+$number_of_results<$count) ? ($startfrom+$number_of_results) : (-1);
-my $prevstartfrom=($startfrom-$number_of_results>=0) ? ($startfrom-$number_of_results) : (-1);
-$template->param(nextstartfrom => $nextstartfrom);
-my $displaynext=($nextstartfrom==-1) ? 0 : 1;
-my $displayprev=($prevstartfrom==-1) ? 0 : 1;
-$template->param(displaynext => $displaynext);
-$template->param(displayprev => $displayprev);
-$template->param(prevstartfrom => $prevstartfrom);
-$template->param(borrower => $borrowernumber);
-$template->param(SEARCH_RESULTS => $resultsarray);
-
-$template->param(pagetitle => "Favoritos");
-
-my $numbers;
-@$numbers = ();
-if ($count>$number_of_results) {
-    for (my $i=0; $i<($count/$number_of_results); $i++) {
-	my $highlight=0;
-	my $break=0;
-	my $themelang = $template->param('themelang');
-	($startfrom==($i*$number_of_results)) && ($highlight=1);
-	if ((($i+1) % 29) eq 0){$break=1;}
-	push @$numbers, { number => $i+1, highlight => $highlight , break => $break, startfrom => (($i)*$number_of_results) };
-   }
+foreach my $biblio (@val){
+	if ($op eq 'del'){ 
+		delPrivateShelfs($pshelf,$biblio);
+	}else{
+		addPrivateShelfs($pshelf,$biblio);}
 }
 
-$template->param(numbers => $numbers,
-			     LibraryName => C4::Context->preference("LibraryName"));
+# uso privateShelfs2 para mantener la anterior, si esta bien sacar la vieja
+my ($count, $resultId1) = &privateShelfs($borrowernumber);
+
+my %result;
+my $nivel1;
+my @autor;
+my $id1;
+my $comboItemTypes= "-1";
+my @resultsarray;
+
+for (my $i=0;$i<scalar(@$resultId1);$i++){
+	$id1=$resultId1->[$i];
+	$result{$i}->{'id1'}= $id1;
+ 	$nivel1= &buscarNivel1($id1);
+	$result{$i}->{'titulo'}= $nivel1->{'titulo'};
+	@autor= C4::Search::getautor($nivel1->{'autor'});
+	$result{$i}->{'idAutor'}=$autor[0]->{'id'};
+	$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
+	my @ediciones=&obtenerEdiciones($id1, $comboItemTypes);
+	$result{$i}->{'grupos'}=\@ediciones;
+
+	my @disponibilidad=&obtenerDisponibilidadTotal($id1, $comboItemTypes);
+	$result{$i}->{'disponibilidad'}=\@disponibilidad;
+	push (@resultsarray, $result{$i});
+}
+
+
+$template->param(SEARCH_RESULTS => \@resultsarray);
+$template->param(numrecords => $count);
+$template->param(pagetitle => "Favoritos");
+
+$template->param(
+			LibraryName => C4::Context->preference("LibraryName")
+		);
 
 output_html_with_http_headers $query, $cookie, $template->output;
