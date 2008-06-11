@@ -185,7 +185,8 @@
 </td>
 <td class="impar" align="center"> 
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
-		<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
+		<a class="click"
+		onClick="cancelar(<!-- TMPL_VAR NAME='rid21' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->
@@ -235,11 +236,17 @@
 		&nbsp;
 	<!-- /TMPL_IF -->
  </td>
- <td align=center class="impar">  <!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+ <td align=center class="impar"> 
+	<!-- TMPL_IF NAME="redicion" --> 
+		<!-- TMPL_VAR NAME="redicion" -->
+	<!-- TMPL_ELSE --> 
+		- 
+	<!-- /TMPL_IF -->
  </td>
 <td class="impar" align="center">
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
-		<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
+		<a class="click"
+		onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->

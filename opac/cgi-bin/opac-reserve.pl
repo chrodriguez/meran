@@ -44,11 +44,12 @@ $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 
 my ($error, $codMsg, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
+my $acciones;
 
 if($error){
-	my $acciones= C4::AR::Mensajes::getAccion($codMsg);
+	$acciones= C4::AR::Mensajes::getAccion($codMsg);
 	if($acciones->{'tablaReservas'}){
-		#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
+	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
 		my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
 
 		$template->param (
@@ -56,12 +57,12 @@ if($error){
 		);
 	}
 }
-else{
-	my $datosReserva=C4::AR::Reservas::datosReservaRealizada($id2);
-	$template->param (
-			datosReserva => $datosReserva
-		);
-}
+# else{
+# 	my $datosReserva=C4::AR::Reservas::datosReservaRealizada($id2);
+# 	$template->param (
+# 			datosReserva => $datosReserva
+# 		);
+# }
 
 $template->param (
 	

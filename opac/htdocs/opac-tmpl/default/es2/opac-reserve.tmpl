@@ -1,5 +1,5 @@
 
-<!-- Mensajes -->
+<!-- Mensajes de Informacion al Usuario-->
 <div class="tablemsg">
 	<font class="fontmsg"><b>
 	<!-- TMPL_VAR NAME="message" -->
@@ -11,7 +11,7 @@
 		</center>
 	<!-- /TMPL_IF -->
 	</b></font>
-<!--</div>-->
+
 
 <!-- TMPL_IF NAME="tablaReservas" -->
 <br><br><br><hr>
@@ -61,7 +61,7 @@
 
 		<td class="impar">
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a href="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="bib" -->)">Cancelar</a> 
+			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->,<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">Cancelar</a> 
 		<!-- TMPL_ELSE -->
 			No disponible
 		<!-- /TMPL_IF -->
@@ -115,7 +115,7 @@
 		</td>
 		<td class="impar">
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a href="javascript:confirm_cancelation(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="bib" -->)">
+			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">
 			Cancelar</a>
 		<!-- TMPL_ELSE -->
 			No disponible
@@ -190,7 +190,7 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 	<tr>
         	<td class="impar" colspan=2> 
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME="biblioitemnumber" -->)">Cancelar Reserva</a>
+			<a class="click" onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar Reserva</a>
 		<!-- TMPL_ELSE -->
 			No disponible
 		<!-- /TMPL_IF -->
@@ -200,7 +200,19 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 
 <!-- /TMPL_IF -->
 
+<table align=center>
+	<tr>
+        	<td class="impar" colspan=2> 
+		<!-- TMPL_IF NAME="CirculationEnabled" -->
+			<a class="click" onClick="cancelar(127,172)">Cancelar Reserva</a>
+		<!-- TMPL_ELSE -->
+			No disponible
+		<!-- /TMPL_IF -->
+		</td>
+	</tr>
+</table>
 
+<!-- esto no esta implementado -->
 <!-- TMPL_IF NAME="itemReserve" -->
 <form action="/cgi-bin/koha/modificarReserva.pl" method=post >
 	<table border="0" cellspacing="0" cellpadding="0">
@@ -219,7 +231,7 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 		</td></tr>
 		<!-- /TMPL_IF -->
 	</table>
-		</form>
+</form>
 <!-- /TMPL_IF -->
 		
 <!-- esta tabla no se para que es -->
@@ -244,7 +256,7 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 
 	<tr border="1" bordercolor="#f2f2f2">
  		<td class="impar">
-			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='rbiblionumber' -->">
+			<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME='rid2' -->">
 				<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML-->
 			</a>
  		</td>			
@@ -263,35 +275,31 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
  		<td class="impar" align="center"><!-- TMPL_VAR NAME="notificationdate" --></td>
 		<td class="impar" align="center"><!-- TMPL_VAR NAME="rreminderdate" --></td>
  		<td class="impar"> 
-			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME='rbiblioitemnumber' -->)">Reemplazar</a>
+			<a href="javascript:confirm_cancelation2(<!-- TMPL_VAR NAME='rid2' -->)">Reemplazar</a>
  		</td>			
 	</tr>
  <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
 
-<!--	</tr>
-			
-		</table>-->
+
 </div>
 <script>
 function confirm_cancelation2(num) {
         var is_confirmed = confirm('�Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
-                window.location="/cgi-bin/koha/opac-cancelreserv.pl?biblioitem="+ num;
+                window.location="/cgi-bin/koha/opac-cancelreserv.pl?id2="+ num;
         }
 }
 
 function confirm_cancelation(num,volver) {
         var is_confirmed = confirm('�Esta seguro que desea cancelar la reserva?');
 	if (is_confirmed) {
-                window.location="/cgi-bin/koha/opac-cancelreserv.pl?biblioitem="+ num +"&volver="+volver;
+                window.location="/cgi-bin/koha/opac-cancelreserv.pl?id2="+ num +"&volver="+volver;
         }
 }
 
 </script>
 
-</td> </tr>
-</table>
 
 

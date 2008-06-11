@@ -38,6 +38,7 @@ $VERSION = 0.01;
 	&getReservasDeGrupo
 	&cantReservasPorGrupo
 	&DatosReservas
+	&cancelar_reserva
 
 	&prestar
 );
@@ -131,6 +132,130 @@ sub reservar {
 
 
 	return (\%paramsReserva);
+}
+
+
+=item
+Funcion que cancela una reserva
+Se invoca con dos parametros cancelar-reserva($biblioitem,$borrowernumber);
+un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya que son los dos campos con los que identifico una reserva sin duplicados
+=cut
+
+sub cancelar_reserva {
+
+	my ($biblioitemnumber,$borrowernumber,$loggedinuser)=@_;
+	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
+	my $sth=$dbh->prepare("SET autocommit=0;");
+	$sth->execute();
+#Primero busco los datos de la reserva que se quiere borrar
+	$sth=$dbh->prepare("	SELECT * 
+				FROM reserves 
+				WHERE id2= ? AND borrowernumber= ? FOR UPDATE");
+
+	$sth->execute($biblioitemnumber,$borrowernumber);
+	my @resultado;
+	my $data= $sth->fetchrow_hashref;
+	if($data->{'id3'}){
+#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
+		my $sth1=$dbh->prepare("	SELECT * 
+						FROM reserves 
+						WHERE id2=? AND id3 is NULL 
+						ORDER BY timestamp LIMIT 1 ");
+		$sth1->execute($biblioitemnumber);
+# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+		my $sth4=$dbh->prepare("	DELETE FROM sanctions 
+						WHERE reservenumber=? AND (now() < startdate)");
+		$sth4->execute($data->{'reservenumber'});
+
+		my $data2= $sth1->fetchrow_hashref;
+
+		if ($data2) { 
+		#Quiere decir que hay reservas esperando para este mismo grupo
+			@resultado= ($data->{'id3'}, $data2->{'id2'}, $data2->{'borrowernumber'}, $data2->{'reservenumber'});
+		}
+	}
+
+#**********************************Se registra el movimiento en historicSanction***************************
+		#traigo la info de la sancion
+		my $infoSancion= &C4::AR::Sanctions::infoSanction($data->{'reservenumber'});
+
+		my $responsable= $loggedinuser;
+		my $sanctiontypecode= 'null';
+		my $fechaFinSancion= $infoSancion->{'enddate'};
+		C4::AR::Sanctions::logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
+#Actualizo la sancion para que refleje el itemnumber y asi poder informalo
+	my $sth6=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
+	$sth6->execute($data->{'id3'},$data->{'reservenumber'});
+
+#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+	$sth=$dbh->prepare("DELETE FROM reserves WHERE id2=? AND borrowernumber=?");
+	$sth->execute($biblioitemnumber,$borrowernumber);
+
+	if (@resultado) {#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
+		my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
+		$sth=$dbh->prepare("	UPDATE reserves 
+					SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, branchcode=? 
+					WHERE id2=? AND borrowernumber=? ");
+		$sth->execute($resultado[0], $desde, $fecha,$data->{'branchcode'},$resultado[1],$resultado[2]);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+		my $itemnumber= $resultado[0];
+		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+		my $biblionumber= $dataItems->{'id1'};
+		my $end_date= $fecha;
+		my $issuecode= '-';
+		my $borrnum= $resultado[2];
+	
+		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$data->{'branchcode'},$issuecode,$end_date);
+#********************************Fin**Se registra el movimiento en historicCirculation*************************
+
+# Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
+		my $err= "Error con la fecha";
+		my $startdate= DateCalc($fecha,"+ 1 days",\$err);
+		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
+		my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+		C4::AR::Sanctions::insertSanction(undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
+
+		my $sth3=$dbh->prepare("commit");
+		$sth3->execute();
+
+		Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
+
+#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
+#my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
+#$t->detach;
+#FALTA ENVIARLE EL MAIL al usuario avisandole de  la disponibilidad del libro mediante un proceso separado, un thread por ej, el problema me parece es que el thread no accede a las bases de datos.
+
+	}else{
+		my $sth3=$dbh->prepare("commit");
+		$sth3->execute();
+	}
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $biblionumber;
+	my $branchcode;
+
+	if($data->{'id3'}){
+
+		my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'id3'});
+		$biblionumber= $dataItems->{'id1'};
+		$branchcode= $dataItems->{'homebranch'};
+	}else{
+		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($biblioitemnumber);
+		$biblionumber= $dataBiblioItems->{'id1'};
+		$branchcode= 0;
+	}
+	
+	my $issuetype= '-';
+	my $loggedinuser= $borrowernumber;
+	my $end_date = 'null';
+	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'id3'},$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
+#******************************Fin****Se registra el movimiento en historicCirculation*************************
 }
 
 sub DatosReservas {

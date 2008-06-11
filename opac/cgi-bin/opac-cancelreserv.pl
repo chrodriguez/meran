@@ -28,21 +28,35 @@ use CGI;
 use C4::Output;
 use C4::AR::Reserves;
 use C4::Auth;
+use C4::AR::Utilidades;
+# use JSON;
 
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 
-my $already=$input->param('already');
-my $biblioitemnumber=$input->param('biblioitem');
-my $volver=$input->param('volver');
+
+
+my $objJSON=$input->param('obj');
+
+my $obj=from_json_ISO($objJSON);
+my $id1= $obj->{'id1'};
+my $id2 = $obj->{'id2'};
+
 
 my $borrowernumber=getborrowernumber($loggedinuser);
-cancelar_reserva($biblioitemnumber,$borrowernumber,$loggedinuser);
+C4::AR::Reservas::cancelar_reserva($id2,$borrowernumber,$loggedinuser);
 
-if ($volver){
-    print $input->redirect("opac-reserve.pl?bib=".$volver);}
-    else{print $input->redirect("opac-user.pl"); }
-#Matias
+=item
+if ($accion eq 'cancelarYReservar'){
+    	$input->redirect("opac-reserve.pl?obj=".$objJSON);
+	exit;
+}else{
+	$input->redirect("opac-user.pl"); 
+	exit;
+}
+=cut
+
+print $input->header;
 
 

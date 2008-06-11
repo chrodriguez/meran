@@ -76,16 +76,33 @@ function updateInfoReserva(responseText){
 function reservar(id1, id2){
 
 	objBusqueda=new SearchHelper(updateInfoReserva, Init);
-//  	objBusqueda.debug= true;
+  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/opac-reserve.pl';
-	objBusqueda.criteria= $('#criteria').val();
-	objBusqueda.searchinc= $('#searchinc').val();
 	objBusqueda.id1= id1;
 	objBusqueda.id2= id2;
 	//se envia la consulta
 	objBusqueda.sendToServer();
 }
+
+function cancelarYReservar(id1, id2){
+
+	cancelar(id1, id2);
+	reservar(id1, id2);
+}
+
+function cancelar(id1, id2){
+
+	objBusqueda=new SearchHelper(updateInfoReserva, Init);
+//  	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/opac-cancelreserv.pl';
+	objBusqueda.id1= id1;
+	objBusqueda.id2= id2;
+	//se envia la consulta
+	objBusqueda.sendToServer();
+}
+
 
 function buscar(){
 
