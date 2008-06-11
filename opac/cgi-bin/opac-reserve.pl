@@ -15,10 +15,10 @@ use C4::AR::Mensajes;
 use C4::AR::Utilidades;
 
 
-my $query = new CGI;
+my $input = new CGI;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-reserve.tmpl",
-			     query => $query,
+			     query => $input,
 			     type => "opac",
 			     authnotrequired => 0,
 			     flagsrequired => {borrow => 1},
@@ -26,7 +26,7 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 
-my $obj=$query->param('obj');
+my $obj=$input->param('obj');
 
 $obj=from_json_ISO($obj);
 
@@ -45,15 +45,22 @@ $params{'issuesType'}= 'DO';
 
 my ($error, $codMsg, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
 
-my $acciones= getAccion($codMsg);
+if($error){
+	my $acciones= C4::AR::Mensajes::getAccion($codMsg);
+	if($acciones->{'tablaReservas'}){
+		#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
+		my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
 
-if($acciones->{'tablaReservas'}){
-#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
-	my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
-
+		$template->param (
+			RESERVES => $reservas
+		);
+	}
+}
+else{
+	my $datosReserva=C4::AR::Reservas::datosReservaRealizada($id2);
 	$template->param (
-		RESERVES => $reservas
-	);
+			datosReserva => $datosReserva
+		);
 }
 
 $template->param (
@@ -65,7 +72,7 @@ $template->param (
 	CirculationEnabled => C4::Context->preference("circulation"),
 );
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:
 # tab-width: 8

@@ -136,17 +136,6 @@ sub reservar {
 sub DatosReservas {
 	my ($bor)=@_;
 	my $dbh = C4::Context->dbh;
-
-=item
-	my $query="SELECT biblio.title as rtitle, biblio.unititle as runititle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, reserves.biblioitemnumber as rbiblioitemnumber,reserves.notificationdate as rnotificationdate,reserves.reservedate as rreservedate, reserves.reminderdate as rreminderdate, biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc , biblioitems.number as redicion, biblioitems.publicationyear as rpublicationyear, reserves.itemnumber as ritemnumber, reserves.branchcode as rbranch
-	FROM reserves
-	inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
-	inner join biblio on biblioitems.biblionumber = biblio.biblionumber";
-	$query .= " WHERE  reserves.borrowernumber =? 
-					and cancellationdate is NULL and
-					(found <> 'F' or found is NULL) and reserves.constrainttype is NULL";
-=cut
-
 # FALTAN!!!!!!!!!!!!!!!!!!!!!!
 # biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc , biblioitems.number as redicion
 
@@ -171,6 +160,29 @@ sub DatosReservas {
 	
 	$sth->finish;
 	return($#results+1,\@results);
+}
+
+=item
+datosReservaRealizada
+Trae los datos de todo el nivel2 (y nivel2_repetibles) con el nivel1 para la reserva que realizo el usuario.
+=cut
+sub datosReservaRealizada{
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query="SELECT * FROM nivel2 n2 INNER JOIN nivel1 n1 ON (n2.id1=n1.id1)
+		   LEFT JOIN nivel2_repetibles n2r ON (n2.id2=n2r.id2) 
+		   WHERE n2.id2=?";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id2);
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+
+		push (@results,$data);
+	}
+	
+	$sth->finish;
 }
 
 sub getNotForLoan{
