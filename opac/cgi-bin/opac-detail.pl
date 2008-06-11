@@ -19,7 +19,10 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     });
 
-my $idNivel1=$input->param('id1');
+my $obj=$input->param('obj');
+
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $idNivel1= $obj->{'id1'};
 
 my (@nivel2Loop)= &detalleOpacNivel2($idNivel1);
 

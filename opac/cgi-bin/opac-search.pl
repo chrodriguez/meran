@@ -54,13 +54,15 @@ my $virtuallibrary=C4::Context->preference("virtuallibrary");
 $template->param(virtuallibrary => $virtuallibrary);
 #
 
-$template->param(classlist => $classlist,
+$template->param(comboItemTypes => $classlist,
 			     pagetitle => "Buscar bibliograf&iacute;a", 
 			     LibraryName => C4::Context->preference("LibraryName"),
 );
 
 #$template->param(listshelf => $listShelf,
 #);
+
+
 
 
 

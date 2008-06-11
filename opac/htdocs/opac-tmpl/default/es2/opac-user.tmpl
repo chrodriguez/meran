@@ -120,7 +120,7 @@
 
 
 <!-- TMPL_IF NAME="waiting_count" -->
-<!-- <p> Usted tiene <!-- TMPL_VAR NAME="waiting_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</p> -->
+<!--<p> Usted tiene <!-- TMPL_VAR NAME="waiting_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</p>-->
 
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
 <tr valign="top">
@@ -142,7 +142,7 @@
 <!-- TMPL_LOOP NAME="WAITING" -->
 <tr bordercolor="#f2f2f2">
 <td class="impar">
-	<b><a href="opac-detail.pl?id1=<!-- TMPL_VAR NAME='rid1' -->">
+	<b><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
 	<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
 	<!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
 	</a></b>
@@ -186,7 +186,7 @@
 <td class="impar" align="center"> 
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
 		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='rid21' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
+		onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->

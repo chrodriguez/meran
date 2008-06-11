@@ -103,7 +103,8 @@ sub getMensaje {
 }
 
 =item
-Esta funcion se encarga de setear variables para los distintos pl que la invocan segun un codigo de error
+Esta funcion se encarga de setear variables para los distintos pl que la invocan segun un codigo de error,
+estas variables se setean para mostrar u ocultar cosas en los tmpls
 =cut
 sub getAccion {
 	my($codigo,$tipo)=@_;

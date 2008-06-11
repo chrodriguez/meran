@@ -114,7 +114,7 @@ function buscar(){
 	}
 
 	objBusqueda=new SearchHelper(updateInfo, Init);
-//  	objBusqueda.debug= true;
+  	objBusqueda.debug= true;
 	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
 	objBusqueda.codBarra= $('#codBarra').val();
@@ -322,20 +322,26 @@ function clearAll(){
 
 //*******************************************Detalles***********************************************************
 
-function detalle(id1){
-var params= 'id1=' + id1;
+function updateInfoDetalle(responseText){
 
-	$.ajax({	type: "POST", 
- 			url: "opac-detail.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					zebra('tablaDetalleNivel3');
-					pushCache(ajax.responseText, 'result');
-					Complete();
-				}
-	});
+	$('#datosUsuario').slideUp('slow');
+	$('#result').html(responseText);
+	zebra('tablaDetalleNivel3');
+	$('#result').slideDown('slow');
+	pushCache(responseText, 'result');
+	Complete();
+
+}
+
+function detalle(id1){
+
+	objBusqueda=new SearchHelper(updateInfoDetalle, Init);
+//   	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/opac-detail.pl';
+	objBusqueda.id1= id1;
+	//se envia la consulta
+	objBusqueda.sendToServer();
 }
 
 function MARCDetail(id3, IdDivDetalle, IdDivMARC){

@@ -179,6 +179,7 @@ foreach my $res (@$reserves) {
 	$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
 	
     if ($res->{'rid3'}) {
+	#Reservas para retirar
 	$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchname'};
 	push @waiting, $res;
 	$wcount++;
