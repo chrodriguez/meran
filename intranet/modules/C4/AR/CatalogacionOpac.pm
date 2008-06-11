@@ -496,6 +496,7 @@ sub traerCampos(){
 	$query .=" WHERE campo like '".$campo."%'".") )";
 =cut
 
+=item
 	my $query=" SELECT tagfield as campo FROM marc_subfield_structure ";
 	$query .=" WHERE obligatorio = '1' and tagfield like '".$campo."%'";
   	$query .=" UNION ( ";
@@ -503,6 +504,11 @@ sub traerCampos(){
 	$query .=" FROM estructura_catalogacion ec INNER JOIN estructura_catalogacion_opac eco ";
 	$query .=" ON (ec.campo = eco.campo) ";
 	$query .=" WHERE ec.campo like '".$campo."%'"." and ec.nivel = ? )";
+=cut
+
+	my $query= "	SELECT DISTINCT ec.campo  FROM estructura_catalogacion ec  
+			WHERE ec.campo LIKE '".$campo."%'"." AND ec.nivel = ?  ";
+
 
 
 	my $sth=$dbh->prepare($query);

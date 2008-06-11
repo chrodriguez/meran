@@ -11,11 +11,19 @@
 var objBusqueda;
 
 function updateInfo(responseText){
- 
+ /*
 	$('#resultBusqueda').html(responseText);
 	$("#volver").hide();
 	$("#filtrosBusqueda").slideUp('fast');	
 	$("#resultBusqueda").slideDown("fast");
+	zebra('tablaResult');
+	HiddeState();  */
+
+	
+	$("#volver").hide();
+	$("#filtrosBusqueda").slideUp('slow');	
+	$('#resultBusqueda').html(responseText);
+	$("#resultBusqueda").slideDown("slow");
 	zebra('tablaResult');
 	HiddeState();  
 }
@@ -222,10 +230,16 @@ $(document).ready(function() {
 						$("#volver").hide();
 						if($("#showBusqueda p.showBusqueda ").html() == "[-]"){
 							$("#showBusqueda p.showBusqueda ").html("[+]");
-						}else{$("#showBusqueda p.showBusqueda ").html("[-]");}
- 						$("#filtrosBusqueda").slideToggle('fast');
+							$("#resultBusqueda").slideUp("slow");
+							$("#filtrosBusqueda").slideDown("slow");
+						}else{
+							$("#showBusqueda p.showBusqueda ").html("[-]");
+							$("#resultBusqueda").slideDown("slow");
+							$("#filtrosBusqueda").slideUp("slow");
+						}
+//  						$("#filtrosBusqueda").slideToggle('fast');
 						//oculto el resultado de la busqueda
-						$("#resultBusqueda").slideUp("fast");
+// 						$("#resultBusqueda").slideUp("fast");
  	});
 
 // Vengo del detalle, con el nombre del autor busca los documentos que escribio ese autor.
@@ -247,7 +261,7 @@ $(document).ready(function() {
 <div id="formulario"></div>
 
 <div id="showBusqueda" style="text-align: right; cursor:pointer;">
-<p class="showBusqueda" title="Busqueda Avanzada">[-]</p>
+	<p class="showBusqueda" title="Busqueda Avanzada">[-]</p>
 </div>
 
 <div id="filtrosBusqueda">
