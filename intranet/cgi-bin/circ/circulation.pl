@@ -45,8 +45,7 @@ my $query=new CGI;
 
 
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user
-    ({
+my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 	template_name	=> 'circ/circulation.tmpl',
 	query		=> $query,
 	type		=> "intranet",
@@ -54,7 +53,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 	flagsrequired	=> { circulate => 1 },
     });
 
-
+=item
 my $id3=$query->param('id3');
 my $id2=$query->param('id2');
 my $borrnumber=$query->param('borrnumber');
@@ -66,14 +65,20 @@ if($id3 ne ""){
 	$params{'loggedinuser'}=$loggedinuser;
 	$params{'tipo'}="INTRA";
 	$params{'issuesType'}="DO";
-	my ($error, $codMsg, $paraMens)= &C4::AR::Reservas::prestar(\%params);
+
+	my ($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
 	my @errores;
 	$errores[0]->{'barcode'}=$id3;
-	$errores[0]->{'string'}=&C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	$template->param(error=>$error,
-			errores=>\@errores);
+ 	$errores[0]->{'string'}= $message;
+
+	$template->param(
+				error=>$error,
+				errores=>\@errores
+	);
 }
-=item
+=cut
+
+
 my %env;
 my $linecolor1='par';
 my $linecolor2='impar';
@@ -376,7 +381,6 @@ $template->param(
 		infoTotal => \@infoTotal,
 		ticket_string => \@tickets,
 );
-=cut
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

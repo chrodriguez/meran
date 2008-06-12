@@ -144,12 +144,22 @@ function buscarPorAutor(idAutor){
 	objBusqueda.sendToServer();
 }
 
+//***************************************Historiales**********************************************************
+
+function volverDesdeHistorial(){
+	$('#resultHistoriales').slideUp('up');
+	$('#datosUsuario').slideDown('slow');
+	$('#result').slideDown();
+}
+
 function mostrarHistorialUpdate(responseText){
 
 	$('#datosUsuario').slideUp('slow');
-	$('#result').hide();
-	$('#result').html(responseText);
-	$('#result').slideDown('slow');
+	$('#result').slideUp('slow');
+// 	$('#result').html(responseText);
+	$('#resultHistoriales').html(responseText);
+// 	$('#result').slideDown('slow');
+	$('#resultHistoriales').slideDown('slow');
 	zebra('tablaHistorial');
 	Complete();
 
@@ -182,6 +192,7 @@ function mostrarHistorialReservas(bornum){
 	objBusqueda.sendToServer();
 
 }
+//************************************Fin***Historiales*******************************************************
 
 //****************************************Busqueda para usuario no logueado************************************
 function searchinc(){
@@ -325,6 +336,7 @@ function clearAll(){
 function updateInfoDetalle(responseText){
 
 	$('#datosUsuario').slideUp('slow');
+	$('#resultHistoriales').slideUp('slow');
 	$('#result').html(responseText);
 	zebra('tablaDetalleNivel3');
 	$('#result').slideDown('slow');

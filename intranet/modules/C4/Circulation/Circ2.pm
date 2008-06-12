@@ -1460,17 +1460,29 @@ sub checkoverdues {
 	my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
 	my @overdueitems;
 	my $count = 0;
+=item
 	my $sth = $dbh->prepare("SELECT * FROM issues,biblio,biblioitems,items
-			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+				WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
 				AND items.biblionumber     = biblio.biblionumber
 				AND issues.itemnumber      = items.itemnumber
 				AND issues.borrowernumber  = ?
 				AND issues.returndate is NULL
 				AND issues.date_due < ?");
+=cut
+	my $sth = $dbh->prepare("	SELECT * FROM issues i, nivel1 n1, nivel2 n2, nivel3 n3
+					WHERE n3.id2 = n2.id2
+					AND n3.id1 = n1.id1
+					AND i.id3 = n3.id3
+					AND i.borrowernumber  = ?
+					AND i.returndate is NULL
+					AND i.date_due < ?
+				");
+
+
 	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {
-	push (@overdueitems, $data);
-	$count++;
+		push (@overdueitems, $data);
+		$count++;
 	}
 	$sth->finish;
 	return ($count, \@overdueitems);

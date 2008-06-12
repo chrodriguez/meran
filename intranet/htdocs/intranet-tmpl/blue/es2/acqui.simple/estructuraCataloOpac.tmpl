@@ -604,7 +604,7 @@ function cambiarLineaEncabezado(id){
 
 }
 
-
+/*
 function handOver(){
 	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").hover(
       		function () {
@@ -617,17 +617,15 @@ function handOver(){
       		}
     	);
 }
+*/
 
 //al seleccionar una fila se cambia el estilo para que se vea cual es la que se selecciona
 function seleccionarFilaEncabezado(){
 	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").click(
 		function () {
 			zebra('tablaEncabezados');
-			$(this).removeClass();
-			$(this).addClass("selected");
-// 			eleccionCampoX();
-// 			alert('selecciono encabezado');
-			
+// 			$(this).removeClass();
+// 			$(this).addClass("selected");			
 		}
     	);
 }

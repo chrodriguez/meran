@@ -94,10 +94,12 @@ my %mensajesINTRA = (
 sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
+
 	($tipo eq "OPAC") ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
-	for(my $p=0; $p<scalar(@$param); $p++){
-		my $p2=$param->[$p];
-		$msj=~ s/\*\?\*/$p2/o;
+	
+	my $p;
+	foreach $p (@$param){
+		$msj=~ s/\*\?\*/$p/o;
 	}
 	return $msj;
 }

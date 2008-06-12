@@ -896,14 +896,14 @@ sub CheckWaiting {
     	my $dbh = C4::Context->dbh;
     	my @itemswaiting;
 
-	my $sth=$dbh->prepare("SELECT items.barcode, biblio.title, branches.branchname, biblioitems.biblioitemnumber, itemtypes.description, reserves. * 
-	FROM reserves
-	INNER JOIN items ON reserves.itemnumber = items.itemnumber
-	INNER JOIN biblio ON biblio.biblionumber = items.biblionumber
-	INNER JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber AND items.biblioitemnumber = biblioitems.biblioitemnumber
-	INNER JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
-	INNER JOIN branches ON branches.branchcode = reserves.branchcode
-	WHERE borrowernumber =? AND reserves.found = 'W' AND cancellationdate IS NULL");
+	my $sth=$dbh->prepare("	SELECT n3.barcode, n1.titulo, b.branchname, n2.id2, it.description, r. * 
+	FROM reserves r
+	INNER JOIN nivel3 n3 ON r.id3 = n3.id3
+	INNER JOIN nivel1 n1 ON n1.id1 = n3.id1
+	INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
+	INNER JOIN itemtypes it ON it.itemtype = n2.tipo_documento
+	INNER JOIN branches b ON b.branchcode = r.branchcode
+	WHERE borrowernumber =? AND cancellationdate IS NULL");
 
  	$sth->execute($borr);
     	while (my $data=$sth->fetchrow_hashref) {
