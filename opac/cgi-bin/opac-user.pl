@@ -92,7 +92,7 @@ foreach my $aux (keys (%$borr)) {
 $template->param(borrowernumber => $borrowernumber);
 
 #get issued items ....
-my $issues = getissues($borr); #C4 C4::Circulation::Circ2
+my $issues = prestamosPorUsuario($borr); #C4 C4::AR::Issues
 
 my $count = 0;
 my $overdues_count = 0;

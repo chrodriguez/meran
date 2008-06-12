@@ -141,7 +141,7 @@ $data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categ
 	####################
 
 # my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);  NO SE USA, Consulta sobre accountline
-my $issues = getissues(\%bor);
+my $issues = prestamosPorUsuario(\%bor);
 my $count=0;
 my $venc=0;
 my $overdues_count = 0;

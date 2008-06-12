@@ -191,7 +191,7 @@ if ($bornum) {
 	($borrower, $flags, $hash) = getpatroninformation(\%env,$bornum,0);
 	if ($borrower) {
 		my $pcolor = 'par';
-		my $issueslist = getissues($borrower); # FIXME trae libros que no corresponden
+		my $issueslist = prestamosPorUsuario($borrower); # FIXME trae libros que no corresponden
 		my $dateformat = C4::Date::get_date_format();
 		foreach my $it (keys %$issueslist) {
 			my $book= $issueslist->{$it};

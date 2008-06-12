@@ -85,6 +85,8 @@ NO SE USA -- DAMIAN 15/04/2008
 &decode
 &find_reserves
 
+
+&getissues SE PASO a Issues.pm con el nombre de prestamosPorUsuario
 =cut
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
@@ -1665,7 +1667,7 @@ The values of C<$issues> are references-to-hash whose keys are
 selected fields from the issues, items, biblio, and biblioitems tables
 of the Koha database.
 
-=cut
+
 #'
 sub getissues {
 	my ($borrower) = @_;
@@ -1702,7 +1704,7 @@ sub getissues {
 		AND itemtypes.itemtype     	= biblioitems.itemtype
 		AND issues.returndate      	IS NULL
 		ORDER BY issues.date_due";
-=cut
+
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
                 n3.id1 AS biblionumber, n3.id3 AS itemnumber, n3.barcode AS barcode,
                 n1.titulo AS title, n1.autor AS author, n2.id2 AS biblioitemnumber,
@@ -1751,7 +1753,7 @@ sub getissues {
 
 	return(\%currentissues);
 }
-
+=cut
 # Not exported
 sub checkwaiting {
 #Stolen from Main.pm
