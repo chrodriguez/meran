@@ -1,0 +1,162 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+<script src="/intranet-tmpl/blue/es2/includes/autocompletables.js"></script>
+
+
+
+<script language="javascript" type="text/javascript">
+
+
+function object_usuario(text, ID){
+	this.text= text;
+	this.ID= ID;
+}
+
+var objects_array= new Array();
+
+function AutocompleteSeudonimos(idInput, tipo){
+	// q= valor de campoHelp
+	$("#"+idInput).search();
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
+ 		formatItem: function(row){
+// 			return row[0]+" - "+row[1];
+			return row[0];
+		},
+		minChars:1,
+        	matchSubset:1,
+        	matchContains:1,
+		maxItemsToShow:10,
+        	cacheLength:10,
+        	selectOnly:1,
+		extraParams:{accion: tipo}	
+	});//end autocomplete
+	$("#"+idInput).result(function(event, data, formatted) {
+		//muestro en el input el usuario seleccioinado
+		$("#"+idInput).val(data[0]);
+	
+ 		usuario= new object_usuario(data[1], data[0]);
+// 		alert("usuario: data1 " + data[1] + "data0" + data[0]);
+		detalleUsuario(data[1]);
+		detallePretamos(data[1]);
+
+// 		if(flag != 'seudonimo'){
+			//creo un objeto para la autoridad con la q se va a trabajar
+//  			usuario_selected= new object_usuario(data[1], data[0]);
+			//traigo info de seudonimos de la autoridad con la que se esta trabajando
+//  			consultarTablaSeudonimos(data[0]);
+// 		}
+	});
+}
+
+function updateInfoUsuario(responseText){
+	
+	//si estoy logueado, oculta la informacion del usuario
+	$('#detalleUsuario').slideDown('slow');
+	$('#detalleUsuario').html(responseText);
+// 	zebra('tablaResult');
+// 	$('#result').slideDown('slow');
+	HiddeState();
+
+}
+
+function updateInfoPrestamos(responseText){
+	
+	//si estoy logueado, oculta la informacion del usuario
+	$('#tablaPrestamos').slideDown('slow');
+	$('#tablaPrestamos').html(responseText);
+// 	zebra('tablaResult');
+// 	$('#result').slideDown('slow');
+	HiddeState();
+
+}
+
+var objBusqueda;
+
+function detalleUsuario(borrower){
+
+	objBusqueda=new SearchHelper(updateInfoUsuario, Init);
+//   	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
+	objBusqueda.borrowernumber= borrower;
+	//se envia la consulta
+	objBusqueda.sendToServer();
+}
+
+function detallePretamos(borrower){
+
+	objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
+//   	objBusqueda.debug= true;
+	//para busquedas combinables
+	objBusqueda.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
+	objBusqueda.borrnumber= borrower;
+	//se envia la consulta
+	objBusqueda.sendToServer();
+}
+
+
+$(document).ready(function() {
+
+// crearAutocomplete(	'usuarioAutocomplete',
+// 			'/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',
+// 			'reemplazar', 'borrowernumber');
+
+AutocompleteSeudonimos('usuarioAutocomplete', '');
+	
+});
+
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >
+			Pr&eacute;stamos
+		</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<div id="buscarUsuario">
+	<input id="borrowernumber" type="hidden" value="">
+
+	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
+		<tr class="tablaresultadoTitle">
+			<td align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+			</td>
+			<td>
+				<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
+			</td>
+			<td valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td width="1%">&nbsp;</td>
+			<td align="center">
+				<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
+			</td>
+			<td width="1%">&nbsp;</td>
+		</tr>
+	</table>
+</div> 
+
+<div id="detalleUsuario"></div>
+<div id="tablaPrestamos"></div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
