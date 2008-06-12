@@ -15,8 +15,35 @@ use vars qw(@EXPORT @ISA);
 	&estaSancionado
 	&llegoMaxReservas
 	&getBorrowerInfo
+	&buscarBorrower
 );
 
+
+sub buscarBorrower {
+
+	my ($busqueda) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query;
+	my $sth;
+	$busqueda .= "%";
+
+	my $query= " 	SELECT borrowernumber, surname, firstname, cardnumber, documentnumber, studentnumber 
+			FROM borrowers
+			WHERE (surname LIKE ?)OR(firstname LIKE ?)
+			OR (cardnumber LIKE ?)OR(documentnumber LIKE ?)
+			OR (studentnumber LIKE ?) ";
+
+	
+	$sth = $dbh->prepare($query);
+	$sth->execute($busqueda, $busqueda, $busqueda, $busqueda, $busqueda);
+
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data); 
+	} # while
+	$sth->finish;
+	return(@results);
+}
 
 sub getBorrowerInfo {
 # Devuelve toda la informacion del usuario segun un borrowernumber

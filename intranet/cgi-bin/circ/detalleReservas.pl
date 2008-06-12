@@ -23,21 +23,14 @@
 
 use strict;
 use CGI;
-use C4::Circulation::Circ2;
 use C4::Output;
 # use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
-use C4::Date;
-use C4::AR::Reservas;
-use Date::Manip;
 
 my $input=new CGI;
-
-
-
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 	template_name	=> 'circ/detalleReservas.tmpl',
@@ -49,7 +42,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 
 
 my $borrowernumber= $input->param('borrowernumber');
-
 
 
 

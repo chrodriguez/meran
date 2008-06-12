@@ -18,6 +18,9 @@ function crearAuto(id,tabla,accion,otroId,campos,orden,separador){
 		case "branches":
 			url="/cgi-bin/koha/autocompletables/branchAutocomplete.pl"+params;
 			break;
+		case "usuarios":
+			url="/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl"+params;
+			break;
 	}
 	crearAutocomplete(id,url,accion,otroId);
 }

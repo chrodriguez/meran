@@ -43,7 +43,12 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 	flagsrequired	=> { circulate => 1 },
     });
 
-my $borrnumber=$input->param('borrnumber');
+# my $borrnumber=$input->param('borrnumber');
+
+my $obj=$input->param('obj');
+
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $borrnumber= $obj->{'borrnumber'};
 
 my $issueslist = prestamosPorUsuario($borrnumber);
 my @issues;
