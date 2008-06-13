@@ -22,7 +22,7 @@ function object_usuario(){
 
 var objects_array= new Array();
 
-function AutocompleteSeudonimos(idInput, tipo){
+function AutocompleteUsuario(idInput){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
 	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
@@ -92,6 +92,33 @@ function detallePretamos(borrower){
 	objBusqueda.sendToServer();
 }
 
+// IGUAL A LA DE prestamos.tmpl, DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
+// Recomiendo ponerla en un js con la de autocomplete de usuario y las otras tambien y limpiar algunas librerias.
+
+function realizarDevORen(accion){
+	var chck=$("input[@name='chkbox1']:checked");
+	var array= new Array;
+	var long=chck.length;
+	var borrowernumber=$("#borrowernumber").val();//Esta en el detalle de usuario.
+	if ( long == 0){
+		alert("Elija al menos un documento para devolver o renovar");
+	}
+	else{
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+		objBusqueda=new SearchHelper(updateInfoReservas, Init);
+//    		objBusqueda.debug= true;
+		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objBusqueda.tipoAccion= accion;
+		objBusqueda.ids3=array;
+		objBusqueda.borrowernumber=borrowernumber;
+	//se envia la consulta
+		objBusqueda.sendToServer();
+	}
+}
+
+
 //**************************************************************************************************************
 
 function imprimirTicket(str,num){
@@ -137,13 +164,6 @@ function confirm_prestamo(bibitem,item) {
 	window.location="/cgi-bin/koha/circ/circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&itemnumber="+item;
 }
 
-function confirm_prestamoBORRAR(bibitem,item) {
-	var is_confirmed = confirm('Esta seguro que desea realizar el pr�stamo?');
-	if (is_confirmed) {
-		window.location="/cgi-bin/koha/issuereserv.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&biblioitem="+ bibitem+"&itemnumber="+item;
-	}
-}
-
 
 function confirm_cancelation(tipoReserva){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
@@ -172,20 +192,6 @@ function checkedAll(){
 	}
 }
 
-function confirm_renovacion(num) {
-        var is_confirmed = confirm('Esta seguro que desea realizar la renovacion?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/renewissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num;
-                        }
-}
-
-function confirm_devolucion(num,bar) {
-        var is_confirmed = confirm('Esta seguro que deseaa devolver el ejemplar?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/cancelissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num+"&barcode="+bar;
-               //window.location="/cgi-bin/koha/circ/returns.pl?barcode="+bar;
-                        }
-}
 
 //Selecciona los checkbox seleccionados por el usuario para devolver.
 var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
@@ -203,7 +209,7 @@ if(cantChk != 0 && stringCheckbox != ""){
 
 $(document).ready(function() {
 
-AutocompleteSeudonimos('usuarioAutocomplete', '');
+AutocompleteUsuario('usuarioAutocomplete', '');
 	
 });
 

@@ -32,7 +32,7 @@
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
 <!-- TMPL_LOOP NAME="RESERVES" -->
-	<tr align="center">
+	<tr align="center" class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
 			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='rid3' -->">
@@ -73,12 +73,10 @@
 		<td width="1%">&nbsp;</td>
 	</tr>
 <!-- /TMPL_LOOP -->
-	<tr>
-		<td colspan="10" class="inputFontNormal" align=center>
-			<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarPrestamo();">
-		</td>
-	</tr>
 </table>
+	<p colspan="10" class="inputFontNormal" align=center>
+		<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarPrestamo('PRESTAMO');">
+	</p>
 
 <!-- /TMPL_IF -->
 

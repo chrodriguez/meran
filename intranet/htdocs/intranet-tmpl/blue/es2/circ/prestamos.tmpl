@@ -23,7 +23,7 @@ function object_usuario(){
 
 var objects_array= new Array();
 
-function AutocompleteSeudonimos(idInput, tipo){
+function AutocompleteUsuario(idInput){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
 	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
@@ -97,35 +97,31 @@ function detalleReservas(borrower){
 
 //**********************************************************************************************************
 
-function realizarPrestamo(){
-
-/*
-function confirm_prestamo(bibitem,item) {
-	window.location="/cgi-bin/koha/circ/circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&itemnumber="+item;
-}
-*/
-
-	objBusqueda=new SearchHelper(updateInfoReservas, Init);
-//   	objBusqueda.debug= true;
-	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objBusqueda.tipoAccion= 'PRESTAMO';
-	objBusqueda.id3=
-	objBusqueda.id2=
-	objBusqueda.borrowernumber=
-
+// IGUAL A LA DE devoluciones.tmpl (realizarDevORen), DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
+// Recomiendo ponerla en un js con la de autocomplete de usuario y las otras tambien y limpiar algunas librerias.
+function realizarPrestamo(accion){
+	var chck=$("input[@name='chkbox2']:checked");
+	var array= new Array;
+	var long=chck.length;
+	var borrowernumber=$("#borrowernumber").val();
+	if ( long == 0){
+		alert("Elija al menos un documento para prestar");
+	}
+	else{
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+		objBusqueda=new SearchHelper(updateInfoReservas, Init);
+//    		objBusqueda.debug= true;
+		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objBusqueda.tipoAccion= accion;
+		objBusqueda.ids3=array;
+		objBusqueda.borrowernumber=borrowernumber;
 	//se envia la consulta
-	objBusqueda.sendToServer();
-}
-
-
-
-function confirm_prestamoBORRAR(bibitem,item) {
-	var is_confirmed = confirm('Esta seguro que desea realizar el pr�stamo?');
-	if (is_confirmed) {
-		window.location="/cgi-bin/koha/issuereserv.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&biblioitem="+ bibitem+"&itemnumber="+item;
+		objBusqueda.sendToServer();
 	}
 }
+
 
 
 function confirm_cancelation(tipoReserva){
@@ -155,20 +151,6 @@ function checkedAll(){
 	}
 }
 
-function confirm_renovacion(num) {
-        var is_confirmed = confirm('Esta seguro que desea realizar la renovacion?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/renewissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num;
-                        }
-}
-
-function confirm_devolucion(num,bar) {
-        var is_confirmed = confirm('Esta seguro que deseaa devolver el ejemplar?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/cancelissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num+"&barcode="+bar;
-               //window.location="/cgi-bin/koha/circ/returns.pl?barcode="+bar;
-                        }
-}
 
 //Selecciona los checkbox seleccionados por el usuario para devolver.
 var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
@@ -185,9 +167,7 @@ if(cantChk != 0 && stringCheckbox != ""){
 
 
 $(document).ready(function() {
-
-AutocompleteSeudonimos('usuarioAutocomplete', '');
-	
+	AutocompleteUsuario('usuarioAutocomplete');
 });
 
 </script>
@@ -204,8 +184,6 @@ AutocompleteSeudonimos('usuarioAutocomplete', '');
 </table>
 
 <div id="buscarUsuario">
-	<input id="borrowernumber" type="hidden" value="">
-
 	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
 		<tr class="tablaresultadoTitle">
 			<td align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
