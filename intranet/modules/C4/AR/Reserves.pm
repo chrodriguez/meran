@@ -574,6 +574,8 @@ sub efectivizar_reserva{
 }
 
 #para enviar un mail cuando al usuario se le vence la reserva
+=item
+SE PASO A EL PM DE RESERVAS
 sub Enviar_Email{
 
 my ($itemnumber,$bor,$desde, $fecha, $apertura,$cierre,$loggedinuser)=@_;
@@ -629,11 +631,11 @@ my $branchcode= $dataItems->{'homebranch'};
 my $end_date= $fecha;
 C4::Circulation::Circ2::insertHistoricCirculation('notification',$bor,$loggedinuser,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$branchcode,$issuetype,$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
-=cut
+
 
 	}#end if (C4::Context->preference("EnabledMailSystem"))
 }
-
+=cut
 
 
 =item FindReserves

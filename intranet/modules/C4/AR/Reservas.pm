@@ -22,6 +22,8 @@ package C4::AR::Reservas;
 use strict;
 require Exporter;
 
+use Mail::Sendmail;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -39,6 +41,8 @@ $VERSION = 0.01;
 	&cantReservasPorGrupo
 	&DatosReservas
 	&cancelar_reserva
+	
+	&Enviar_Email
 
 	&prestar
 );
@@ -142,7 +146,7 @@ un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya 
 
 sub cancelar_reserva {
 
-	my ($biblioitemnumber,$borrowernumber,$loggedinuser)=@_;
+	my ($reservenumber,$borrowernumber,$loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
 	my $sth=$dbh->prepare("SET autocommit=0;");
@@ -150,28 +154,29 @@ sub cancelar_reserva {
 #Primero busco los datos de la reserva que se quiere borrar
 	$sth=$dbh->prepare("	SELECT * 
 				FROM reserves 
-				WHERE id2= ? AND borrowernumber= ? FOR UPDATE");
+				WHERE reservenumber= ? AND borrowernumber= ? FOR UPDATE");
 
-	$sth->execute($biblioitemnumber,$borrowernumber);
+	$sth->execute($reservenumber,$borrowernumber);
 	my @resultado;
 	my $data= $sth->fetchrow_hashref;
-	if($data->{'id3'}){
+	my $id2=$data->{'id2'};
+	my $id3=$data->{'id3'};
+	if($id3){
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
 		my $sth1=$dbh->prepare("	SELECT * 
 						FROM reserves 
 						WHERE id2=? AND id3 is NULL 
 						ORDER BY timestamp LIMIT 1 ");
-		$sth1->execute($biblioitemnumber);
+		$sth1->execute($id2);
+		my $data2= $sth1->fetchrow_hashref;
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		my $sth4=$dbh->prepare("	DELETE FROM sanctions 
 						WHERE reservenumber=? AND (now() < startdate)");
-		$sth4->execute($data->{'reservenumber'});
-
-		my $data2= $sth1->fetchrow_hashref;
+		$sth4->execute($reservenumber);
 
 		if ($data2) { 
 		#Quiere decir que hay reservas esperando para este mismo grupo
-			@resultado= ($data->{'id3'}, $data2->{'id2'}, $data2->{'borrowernumber'}, $data2->{'reservenumber'});
+			@resultado= ($id3, $data2->{'id2'}, $data2->{'borrowernumber'}, $data2->{'reservenumber'});
 		}
 	}
 
@@ -187,36 +192,35 @@ sub cancelar_reserva {
 
 #Actualizo la sancion para que refleje el itemnumber y asi poder informalo
 	my $sth6=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
-	$sth6->execute($data->{'id3'},$data->{'reservenumber'});
+	$sth6->execute($id3,$reservenumber);
 
 #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-	$sth=$dbh->prepare("DELETE FROM reserves WHERE id2=? AND borrowernumber=?");
-	$sth->execute($biblioitemnumber,$borrowernumber);
+	$sth=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? AND borrowernumber=?");
+	$sth->execute($reservenumber,$borrowernumber);
 
 	if (@resultado) {#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
-		my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
+		my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::Context->preference("reserveGroup"),1);
 		$sth=$dbh->prepare("	UPDATE reserves 
-					SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, branchcode=? 
+					SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, branchcode=?, estado='E'
 					WHERE id2=? AND borrowernumber=? ");
 		$sth->execute($resultado[0], $desde, $fecha,$data->{'branchcode'},$resultado[1],$resultado[2]);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-		my $itemnumber= $resultado[0];
-		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
-		my $biblionumber= $dataItems->{'id1'};
+		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		my $id1= $dataItems->{'id1'};
 		my $end_date= $fecha;
 		my $issuecode= '-';
 		my $borrnum= $resultado[2];
 	
-		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$data->{'branchcode'},$issuecode,$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$id1,$id2,$id3,$data->{'branchcode'},$issuecode,$end_date);
 #********************************Fin**Se registra el movimiento en historicCirculation*************************
 
 # Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
 		my $err= "Error con la fecha";
-		my $startdate= DateCalc($fecha,"+ 1 days",\$err);
+		my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
 		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
-		my $enddate= DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+		my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 		C4::AR::Sanctions::insertSanction(undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
 
@@ -236,24 +240,24 @@ sub cancelar_reserva {
 	}
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-	my $biblionumber;
+	my $id1;
 	my $branchcode;
 
-	if($data->{'id3'}){
+	if($id3){
 
 		my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'id3'});
-		$biblionumber= $dataItems->{'id1'};
+		$id1= $dataItems->{'id1'};
 		$branchcode= $dataItems->{'homebranch'};
 	}else{
-		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($biblioitemnumber);
-		$biblionumber= $dataBiblioItems->{'id1'};
+		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
+		$id1= $dataBiblioItems->{'id1'};
 		$branchcode= 0;
 	}
 	
 	my $issuetype= '-';
 	my $loggedinuser= $borrowernumber;
 	my $end_date = 'null';
-	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'id3'},$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
+	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
 #******************************Fin****Se registra el movimiento en historicCirculation*************************
 }
 
@@ -802,6 +806,66 @@ sub insertarPrestamo {
 			$params->{'issuesType'}
 	);
 
+}
+
+#para enviar un mail cuando al usuario se le vence la reserva
+sub Enviar_Email{
+	my ($id3,$bor,$desde, $fecha, $apertura,$cierre,$loggedinuser)=@_;
+
+	if (C4::Context->preference("EnabledMailSystem")){
+		my $dbh = C4::Context->dbh;
+		my $dateformat = C4::Date::get_date_format();
+		my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
+		$sth->execute($bor);
+		my $borrower= $sth->fetchrow_hashref;
+# biblio.unititle as runititle, biblioitems.number as redicion FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
+		$sth=$dbh->prepare("SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
+				FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
+				INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
+				WHERE  reserves.borrowernumber =? and reserves.id3= ? ");
+		$sth->execute($bor,$id3);
+		my $res= $sth->fetchrow_hashref;
+
+		my $mailFrom=C4::Context->preference("reserveFrom");
+		my $mailSubject =C4::Context->preference("reserveSubject");
+		my $mailMessage =C4::Context->preference("reserveMessage");
+		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
+		$res->{'rauthor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
+
+		$mailSubject =~ s/BRANCH/$branchname/;
+		$mailMessage =~ s/BRANCH/$branchname/;
+		$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
+		$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
+		$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
+		$mailMessage =~ s/TITLE/$res->{'titulo'}/;
+		$mailMessage =~ s/AUTHOR/$res->{'rauthor'}/;
+		$mailMessage =~ s/EDICION/$res->{'redicion'}/;
+		$mailMessage =~ s/a2/$apertura/;
+		$desde=C4::Date::format_date($desde,$dateformat);
+		$mailMessage =~ s/a1/$desde/;
+		$mailMessage =~ s/a3/$cierre/;
+		$fecha=C4::Date::format_date($fecha,$dateformat);
+		$mailMessage =~ s/a4/$fecha/;
+		my %mail = ( To => $borrower->{'emailaddress'},
+                        From => $mailFrom,
+                        Subject => $mailSubject,
+                        Message => $mailMessage);
+		my $resultado='ok';
+		if ($borrower->{'emailaddress'} && $mailFrom ){
+			sendmail(%mail) or die $resultado='error';
+		}else {$resultado='';}
+
+=item
+#**********************************Se registra el movimiento en historicCirculation***************************
+my $issuetype= '-';
+my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+my $branchcode= $dataItems->{'homebranch'};
+my $end_date= $fecha;
+C4::Circulation::Circ2::insertHistoricCir$itemnumberculation('notification',$bor,$loggedinuser,$res->{'rbiblionumber'},$res->{'rbiblioitemnumber'},$itemnumber,$branchcode,$issuetype,$end_date);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+=cut
+
+	}#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
 1;

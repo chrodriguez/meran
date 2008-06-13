@@ -131,7 +131,7 @@ sub devolver {
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
 			$sth=$dbh->prepare("Update reserves set id3=?,reservedate=?,notificationdate=NOW(),reminderdate=?, branchcode=? where id2=? and borrowernumber=? ");
 			$sth->execute($resultado[0], $desde, $fecha,$iteminformation->{'branchcode'},$resultado[1],$resultado[2]);
-			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
+			C4::AR::Reservas::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
 			#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
 			#my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
 			#$t->detach;
@@ -815,7 +815,7 @@ sub prestamosPorUsuario {
 	my %currentissues;
 
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
-                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode,
+                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica,
                 n1.titulo AS titulo, n1.autor, isst.description AS issuetype
                 FROM issues iss INNER JOIN issuetypes isst ON ( iss.issuecode = isst.issuecode )
 		INNER JOIN nivel3 n3 ON ( iss.id3 = n3.id3 )
@@ -827,7 +827,6 @@ sub prestamosPorUsuario {
                 ORDER BY iss.date_due ";
 
 # FALTA!!!!!!!!!
-# 		items.bulk 			AS bulk,
 # 		biblio.unititle			AS unititle,
 # 		biblioitems.dewey     		AS dewey,
 # 		biblioitems.number 		AS redicion,
@@ -836,7 +835,6 @@ sub prestamosPorUsuario {
 # 		biblioitems.subclass  		AS subclass,
 # 		biblioitems.classification 	AS classification,
 
-	#Matias Para mostrar la signatura topografica agrego el bulk como resultado de la consulta #y ademas el nro de grupo y el volumen
 	my $sth=$dbh->prepare($select);
 	$sth->execute($borrowernumber);
 	my $counter = 0;
@@ -849,7 +847,7 @@ sub prestamosPorUsuario {
 		$datedue =~ s/-//g;
 		if ($datedue < $todaysdate) {$data->{'overdue'} = 1;}
 		
-		$data->{'idauthor'}=$data->{'autor'}; #Paso el id del author para poder buscar.
+		$data->{'idautor'}=$data->{'autor'}; #Paso el id del author para poder buscar.
 		#Obtengo los datos del autor
 		my $autor=C4::Search::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};

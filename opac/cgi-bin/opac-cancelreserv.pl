@@ -40,12 +40,11 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 my $objJSON=$input->param('obj');
 
 my $obj=from_json_ISO($objJSON);
-my $id1= $obj->{'id1'};
-my $id2 = $obj->{'id2'};
+my $reserveNumber = $obj->{'reserveNumber'};
 
 
 my $borrowernumber=getborrowernumber($loggedinuser);
-C4::AR::Reservas::cancelar_reserva($id2,$borrowernumber,$loggedinuser);
+C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
 
 =item
 if ($accion eq 'cancelarYReservar'){

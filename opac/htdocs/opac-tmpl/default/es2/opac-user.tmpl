@@ -82,7 +82,7 @@
 </tr>
 <!-- TMPL_LOOP NAME="ISSUES" -->
 <tr  class="tope" bordercolor="#f2f2f2">
-<td class="impar"><a href="opac-detail.pl?id1='<!-- TMPL_VAR NAME='id1' -->' "><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
+<td class="impar"><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar detalle"><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
 </td>
 <td class="impar"><!-- TMPL_IF NAME="autor" -->
 	<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idautor' -->" >
@@ -92,7 +92,7 @@
 <!--	<td><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="itemtype" --> </td> --> 
 <td class="impar" align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" -->
 <!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="bulk" --> <!-- TMPL_VAR NAME="bulk" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF --> 
+<td class="impar" align="center" ><!-- TMPL_IF NAME="signatura_topografica" --> <!-- TMPL_VAR NAME="signatura_topografica" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF --> 
 </td>
 <td align=center class="impar" align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
 </td>
@@ -185,7 +185,7 @@
 <td class="impar" align="center"> 
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
 		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
+		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->
@@ -245,7 +245,7 @@
 <td class="impar" align="center">
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
 		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar</a>
+		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->

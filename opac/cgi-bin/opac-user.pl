@@ -103,8 +103,8 @@ my $venc=0;
 my $sanc= hasSanctions($borrowernumber);
 
 foreach my $san (@$sanc) {
-if ($san->{'itemnumber'}) {my $aux=itemdata3($san->{'itemnumber'}); 
-			   $san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; }
+if ($san->{'id3'}) {my $aux=itemdata3($san->{'id3'}); 
+			   $san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; }
 $san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
 $san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
@@ -115,13 +115,13 @@ foreach my $key (keys %$issues) {
     	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
     	my $err= "Error con la fecha"; 
 
-     	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-     	my  $close = ParseDate(C4::Context->preference("close"));
-     	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-     		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
+     	my $hoy=C4::Date::format_date_in_iso(C4::Date::ParseDate("today"),$dateformat);
+     	my  $close = C4::Date::ParseDate(C4::Context->preference("close"));
+     	if (Date::Manip::Date_Cmp($close,C4::Date::ParseDate("today"))<0){#Se paso la hora de cierre
+     		$hoy=C4::Date::format_date_in_iso(C4::Date::DateCalc($hoy,"+ 1 day",\$err),$dateformat);
      	}
    	my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'id3'}),$dateformat); #C4::AR::Issues
-    	$issue->{'date_fin'} = format_date($df,$dateformat);
+    	$issue->{'date_fin'} = C4::Date::format_date($df,$dateformat);
     	if (Date::Manip::Date_Cmp($df,$hoy)<0){ 
 		$venc=1;
 	  	$issue->{'color'} ='red';

@@ -61,7 +61,7 @@
 
 		<td class="impar">
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->,<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">Cancelar</a> 
+			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='reserveNumber' -->,<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">Cancelar</a> 
 		<!-- TMPL_ELSE -->
 			No disponible
 		<!-- /TMPL_IF -->
@@ -115,7 +115,7 @@
 		</td>
 		<td class="impar">
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">
+			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='reserveNumber' -->,<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">
 			Cancelar</a>
 		<!-- TMPL_ELSE -->
 			No disponible
@@ -129,7 +129,7 @@
 <!-- TMPL_IF NAME="datosReserva" -->
 <p align="left"> 
 	<font class="fonttitulo">
-		<!-- TMPL_VAR NAME="title" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="author" -->)
+		<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --> (<!-- TMPL_VAR NAME="autor" -->)
 	</font>
 </p>
 	
@@ -190,7 +190,7 @@ TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></b>
 	<tr>
         	<td class="impar" colspan=2> 
 		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a class="click" onClick="cancelar(<!-- TMPL_VAR NAME='rid1' -->,<!-- TMPL_VAR NAME='rid2' -->)">Cancelar Reserva</a>
+			<a class="click" onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar Reserva</a>
 		<!-- TMPL_ELSE -->
 			No disponible
 		<!-- /TMPL_IF -->
