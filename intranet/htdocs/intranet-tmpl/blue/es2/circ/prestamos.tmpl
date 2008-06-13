@@ -59,6 +59,22 @@ function updateInfoUsuario(responseText){
 
 }
 
+
+function updateInfoPrestamos(responseText){
+	
+	info= JSONstring.toObject(responseText);
+	alert("Error: " + info.error + " Mensaje :" + info.message);
+
+	detalleReservas(usuario.ID);
+	//si estoy logueado, oculta la informacion del usuario
+// 	$('#tablaReservas').slideDown('slow');
+// 	$('#tablaReservas').html(responseText);
+// 	zebra('tablaReservas');
+// 	$('#result').slideDown('slow');
+	HiddeState();
+
+}
+
 function updateInfoReservas(responseText){
 	
 	//si estoy logueado, oculta la informacion del usuario
@@ -99,7 +115,7 @@ function detalleReservas(borrower){
 
 // IGUAL A LA DE devoluciones.tmpl (realizarDevORen), DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
 // Recomiendo ponerla en un js con la de autocomplete de usuario y las otras tambien y limpiar algunas librerias.
-function realizarPrestamo(accion){
+function realizarPrestamo(){
 	var chck=$("input[@name='chkbox2']:checked");
 	var array= new Array;
 	var long=chck.length;
@@ -111,11 +127,11 @@ function realizarPrestamo(accion){
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objBusqueda=new SearchHelper(updateInfoReservas, Init);
+		objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
 //    		objBusqueda.debug= true;
 		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-		objBusqueda.tipoAccion= accion;
-		objBusqueda.ids3=array;
+		objBusqueda.tipoAccion= 'PRESTAMO';
+		objBusqueda.ids3= array;
 		objBusqueda.borrowernumber=borrowernumber;
 	//se envia la consulta
 		objBusqueda.sendToServer();
