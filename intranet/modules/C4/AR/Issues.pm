@@ -269,14 +269,14 @@ if ($data){
 sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false
 =cut
 sub sepuederenovar(){
-my ($borrowernumber,$itemnumber)=@_;
+my ($borrowernumber,$id3)=@_;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare(" Select * from reserves inner join issues on 				issues.itemnumber=reserves.itemnumber 
-			and reserves.borrowernumber=issues.borrowernumber  where reserves.itemnumber=? 
-			and reserves.borrowernumber=? and reserves.constrainttype='P' and returndate is null");
+my $sth=$dbh->prepare(" Select * from reserves inner join issues on issues.id3=reserves.id3 
+			and reserves.borrowernumber=issues.borrowernumber  where reserves.id3=? 
+			and reserves.borrowernumber=? and reserves.estado='P' and returndate is null");
 
-$sth->execute($itemnumber,$borrowernumber);
+$sth->execute($id3,$borrowernumber);
 
 if (my $data= $sth->fetchrow_hashref){
 
@@ -286,7 +286,7 @@ if (my $data= $sth->fetchrow_hashref){
 					return 0;
 					}
 
-	if (!&hayReservasEsperando($data->{'biblioitemnumber'})){
+	if (!&hayReservasEsperando($data->{'id2'})){
 		#quiere decir que no hay reservas esperando por lo que podemos seguir
 		
 		if (!C4::AR::Usuarios::estaSancionado($borrowernumber, $data->{'issuecode'})){
@@ -328,11 +328,11 @@ return 0;
 
 
 sub hayReservasEsperando(){
-	my ($biblioitemnumber)=@_;
+	my ($id2)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1;");
-	$sth1->execute($biblioitemnumber);
+	my $sth1=$dbh->prepare("Select * from reserves where id2=? and id3 is NULL order by timestamp limit 1;");
+	$sth1->execute($id2);
 	my $data1= $sth1->fetchrow_hashref;
 	if ($data1){# esto quiere decir que hay reservas esperando entonces se devuelve un false indicando que no se puede hacer la renovacion del prestamo
 		return 1;
