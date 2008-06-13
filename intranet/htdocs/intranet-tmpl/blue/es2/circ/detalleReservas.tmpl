@@ -4,7 +4,7 @@
 <b>El usuario tiene <!-- TMPL_VAR NAME="reserves_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 <br>
 
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+<table class="tablaReservas" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 	<tr>
 		<td colspan="9" class="inputFontNormal" align="center">
 			<b>EJEMPLARES RESERVADOS</b>
@@ -75,7 +75,7 @@
 <!-- /TMPL_LOOP -->
 	<tr>
 		<td colspan="10" class="inputFontNormal" align=center>
-			<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="form.submit();return false;">
+			<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarPrestamo();">
 		</td>
 	</tr>
 </table>
@@ -140,73 +140,6 @@
 </table>
 
 <!-- /TMPL_IF -->
-
-<script>
-function confirm_prestamo(bibitem,item) {
-	window.location="/cgi-bin/koha/circ/circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&itemnumber="+item;
-}
-
-function confirm_prestamoBORRAR(bibitem,item) {
-	var is_confirmed = confirm('Esta seguro que desea realizar el pr�stamo?');
-	if (is_confirmed) {
-		window.location="/cgi-bin/koha/issuereserv.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&biblioitem="+ bibitem+"&itemnumber="+item;
-	}
-}
-
-
-function confirm_cancelation(tipoReserva){
-	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-        if (is_confirmed) {
-		var formu;
-		if(tipoReserva == "espera"){
-			formu=document.getElementById('resevEspera');
-		}
-		else{
-			formu=document.getElementById('formPrestar');
-		}
-		formu.action="/cgi-bin/koha/cancelreserv.pl";
-		formu.submit();
-        }
-}
-
-function checkedAll(){
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++){
-			if(checks[i].type == "checkbox"){
-				if(checks[i].checked){checks[i].checked=false}
-                   	 	else{checks[i].checked=true}
-			}
-		}
-	}
-}
-
-function confirm_renovacion(num) {
-        var is_confirmed = confirm('Esta seguro que desea realizar la renovacion?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/renewissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num;
-                        }
-}
-
-function confirm_devolucion(num,bar) {
-        var is_confirmed = confirm('Esta seguro que deseaa devolver el ejemplar?');
-          if (is_confirmed) {
-               window.location="/cgi-bin/koha/cancelissue.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&item="+ num+"&barcode="+bar;
-               //window.location="/cgi-bin/koha/circ/returns.pl?barcode="+bar;
-                        }
-}
-
-//Selecciona los checkbox seleccionados por el usuario para devolver.
-var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
-var checkbox=stringCheckbox.split(",");
-var cantChk= checkbox.length;
-if(cantChk != 0 && stringCheckbox != ""){
-	for (var i=0; i< checkbox.length; i++){
-		var ch=document.getElementById(checkbox[i]);
-        	ch.checked=true;	
-	}
-}
-</script>
 
 <br>
 
