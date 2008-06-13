@@ -24,7 +24,6 @@
 use strict;
 use CGI;
 use C4::Output;
-# use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
@@ -40,10 +39,10 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 	flagsrequired	=> { circulate => 1 },
     });
 
+my $obj=$input->param('obj');
 
-my $borrowernumber= $input->param('borrowernumber');
-
-
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $borrowernumber= $obj->{'borrnumber'};
 
 # now the reserved items....
 my ($rescount, $reserves) = C4::AR::Reservas::DatosReservas ($borrowernumber);
@@ -57,17 +56,9 @@ my $dateformat = C4::Date::get_date_format();
 
 foreach my $res (@$reserves) {
 
-	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
-	$res->{'rnotificationdate'}  = format_date($res->{'rnotificationdate'},$dateformat);
-	$res->{'rreminderdate'}  = format_date($res->{'rreminderdate'},$dateformat);
-
-	#Corregido 13/03/07 Miguel
-	#obtengo el autor
-#  	my $author=getautor($res->{'rautor'});
-	#guardo el Apellido, Nombre del autor
-# 	$res->{'rautor'} = $author->{'nomCompleto'}; #le paso Apellido y Nombre
-	#guardo el ID de autor para luego hacer busqueda por este campo
-# 	$res->{'id'} = $author->{'id'}; #le paso el Id del autor  
+	$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
+	$res->{'rnotificationdate'}  = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
+	$res->{'rreminderdate'}  = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
 
 	if ($res->{'estado'} eq 'E') {
 # 		$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchcode'};

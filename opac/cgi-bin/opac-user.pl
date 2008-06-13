@@ -39,9 +39,9 @@ my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 $borr->{'city'}=getcitycategory($borr->{'city'});
 $borr->{'streetcity'}=getcitycategory($borr->{'streetcity'});
-$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'},$dateformat);
-$borr->{'expiry'}       = format_date($borr->{'expiry'},$dateformat);
-$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'},$dateformat);
+$borr->{'dateenrolled'} = C4::Date::format_date($borr->{'dateenrolled'},$dateformat);
+$borr->{'expiry'}       = C4::Date::format_date($borr->{'expiry'},$dateformat);
+$borr->{'dateofbirth'}  = C4::Date::format_date($borr->{'dateofbirth'},$dateformat);
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 if ($borr->{'amountoutstanding'} > 5) {
     $borr->{'amountoverfive'} = 1;
@@ -92,7 +92,7 @@ foreach my $aux (keys (%$borr)) {
 $template->param(borrowernumber => $borrowernumber);
 
 #get issued items ....
-my $issues = prestamosPorUsuario($borr); #C4 C4::AR::Issues
+my $issues = C4::AR::Issues::prestamosPorUsuario($borrowernumber); #C4 C4::AR::Issues
 
 my $count = 0;
 my $overdues_count = 0;
@@ -120,17 +120,14 @@ foreach my $key (keys %$issues) {
      	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
      		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
      	}
-open(INFO, ">>/tmp/debug.txt");
-   	my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'itemnumber'}),$dateformat); #C4::AR::Issues
-print INFO "entro a calcular vencimiento $df \n";  
+   	my $df=C4::Date::format_date_in_iso(vencimiento($issue->{'id3'}),$dateformat); #C4::AR::Issues
     	$issue->{'date_fin'} = format_date($df,$dateformat);
-close(INFO);
     	if (Date::Manip::Date_Cmp($df,$hoy)<0){ 
 		$venc=1;
 	  	$issue->{'color'} ='red';
 	}
 
-    	$issue->{'renew'} = &sepuederenovar($borrowernumber, $issue->{'itemnumber'});
+    	$issue->{'renew'} = &sepuederenovar($borrowernumber, $issue->{'id3'});
     	if ($issue->{'overdue'}) {
 		push @overdues, $issue;
 		$overdues_count++;
@@ -148,7 +145,7 @@ close(INFO);
 
 $template->param(vencimientos => $venc);
 $template->param(sanciones_loop => $sanc);
-$template->param(ISSUES => \@issuedat);  #Damian, se pasaba mal el parametro, sin \ - 13/03/2007
+$template->param(ISSUES => \@issuedat);
 $template->param(issues_count => $count);
 #$template->param(available_issues => $available_issues);
 

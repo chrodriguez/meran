@@ -11,551 +11,87 @@
 	</tr>
 </table>
 
-<!-- TMPL_IF NAME="sanctions" -->
-      <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
-        <tr>
-            <td>
-              <font class="fontmsg">El usuario est&aacute; sancionado para los tipos de pr&eacute;stamo:</font>
-            </td>
-          </tr>
-	<!-- TMPL_LOOP NAME="sanctions" -->
-	  <tr>
-	    <td>
-              <font class="fontmsg"><!-- TMPL_IF NAME="description" --><li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF --></font>
-	    </td>
-	  </tr>
-	<!-- /TMPL_LOOP -->
-      </table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="borrowernumber" -->
-<!-- TMPL_LOOP name="MAXISSUES"-->
-<table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
-      <tr>
-        <td>
-	  <font class="fontmsg">&iexcl;El usuario tiene <!-- TMPL_VAR name="maxissues" --> ejemplar(es) en prestamo de tipo <!-- TMPL_VAR name="description" -->, est&aacute; en el l&iacute;mite de lo permitido!</font>
-        </td>
-      </tr>
-    </table>
-<!-- /TMPL_LOOP -->
-
-
-<!-- /TMPL_IF  -->
-
-<!-- <b>M&aacute;ximo de documentos a prestar: <!-- TMPL_VAR name="issues_max" --></b><br><br> -->
-
-<!-- TMPL_IF name="message" -->
-<br>
-
-<center>
-
-<table border="0" cellpadding="0" cellspacing="0" width="50%">
-                <tr class="tablaresultadoTitle">
-                <td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-                <td>Mensajes</td>
-                <td width="1%" valing="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-                </tr>
-
-                <tr>
-                    <td width="1%">&nbsp;</td>
-                    <td class="inputFontNormal" align="center"><!-- TMPL_VAR name="message" --></td>
-                    <td width="1%">&nbsp;</td>
-                </tr>
-</table>
-</center>
-<!-- /TMPL_IF -->
-
-
-<!-- TMPL_IF name="question" -->
-	<table border="1" cellpadding="5" cellspacing="0">
-		<tr>
-			<td>
-				<font size="+2" color="red"><b>Pregunta de Pr&eacute;stamo</b></font>
-			</td>
-		</tr>
-		<tr>
-		    <td>
-		        <table border="0" cellpadding="10">
-			<tr>
-			  <td>Intento de prestar <!-- TMPL_VAR name="title" ESCAPE=HTML--><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> de <!-- TMPL_VAR name="author" --> a <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.<p><!-- TMPL_VAR name="question" --></td>
-			</tr>
-			</table>
-		    </td>
-		</tr>
-		<tr>
-		 <td align="center">
-		  <table border="0">
-		  <tr>
-		<td><form method="get">	
-			<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">	
-	 		<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
-			<input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->">
-			<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
-			<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
-			<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
-			<input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->">
-			<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-			<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-			<!-- TMPL_LOOP NAME="responseloop" -->
-			<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
-			<!-- /TMPL_LOOP -->
-			<input type="hidden" name="answer" value="Y">
-			<input type="submit" value="Si">
-		    </form>
-	       </td>
-	       <td>
-		<form method="get">
-		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
-		<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
-		<input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->">
-		<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
-		<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
-		<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
-		<input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->">
-		<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-		<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-		<!-- TMPL_LOOP NAME="responseloop" -->
-		<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
-		<!-- /TMPL_LOOP -->
-		<input type="hidden" name="answer" value="N">
-		<input type="submit" value="No">
-		</form>
-	      </td>
-	</tr>
-	</table>
-	</td>
-	</tr>
-	</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="rejected" -->
-	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
-		<tr><th><font color="black" size="5">Error expidiendo el ejemplar </font></th></tr>
-		<tr><td><font color="red" size="5"><!-- TMPL_VAR name="rejected" --></font></td></tr>
-	</table>
-	<br>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="error" -->
-        <center>
-	<table border="0" cellpadding="0" cellspacing="0" width="50%">
-		<tr class="tablaresultadoTitle"> 
- 			<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-			<td>Mensajes de errores</td>
-			<td width="1%" align="rigth" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-		</tr>
-	<!-- TMPL_LOOP name="errores" -->
-		<tr>
-		    <td width="1%">&nbsp;</td>
-	
-		    <td class="inputFontNormal">
-			No se pudo prestar el ejemplar:<b> <!-- TMPL_VAR name="barcode" --></b><br> por la siguiente situaci&oacute;n:
-			<b><!-- TMPL_VAR name="string" --></b>
-		    </td>
-		    <td width="1%">&nbsp;</td>
-                </tr>
-		<tr>
-			<td width="1%">&nbsp;</td>
-			<td width="1%">&nbsp;</td>
-			<td width="1%">&nbsp;</td>
-		</tr>
-	<!-- /TMPL_LOOP -->
-	</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="CGIselectborrower" -->
-	<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="form2">
-	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->">
-	<input type="hidden" name="notforloan" value="<!-- TMPL_VAR name="notforloan" -->">
-	<table border="0" cellspacing="0" cellpadding="0"  align="center" width="100%">
-		<tr class="tablaresultadoTitle">
-			<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-			<td>Seleccione un usuario</td>
-			<td width="1%" align="rigth" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-		</tr>
-		<tr>
-			<td width="1%">&nbsp;</td>
-			<td align="center" class="inputFontNormal">
-				<!-- TMPL_VAR name="CGIselectborrower" -->
-				<br>
-				 <a href="#" onClick="form2.submit()" >
-                                  <img alt="Seleccionar" src="<!-- TMPL_VAR NAME="themelang" -->/images/seleccionar.png" border="0""></a>
-			</td>
-			<td width="1%">&nbsp;</td>
-		</tr>
-	</table></form>
-<!-- TMPL_ELSE -->
-    <!-- TMPL_IF NAME="borrowernumber" -->
-    
-    <!-- TMPL_ELSE -->
-	<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="form1">
-	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-	<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
-	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR name="itemnumber" -->">
-	<input type="hidden" name="notforloan" value="<!-- TMPL_VAR name="notforloan" -->">
-	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
-		<tr class="tablaresultadoTitle">
-			<td align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-
-			<td>
-				<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
-			</td>
-			<td valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-		</tr>
-		<tr><td colspan="3">&nbsp;</td></tr>
-		<tr>
-			<td width="1%">&nbsp;</td>
-			<td align="center">
-				<input class="inputFontNormal" name="findborrower" size="40">
-				<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-				<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-				 <a href="#" onClick="form1.submit()" >
-				  <img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
-			</td>
-			<td width="1%">&nbsp;</td>
-		</tr>
-	</table>
-	</form>
-     <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="confirm_dialog" -->
-<!-- Nahuel -->
-<table border="1">
-    <th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-	<font size="+2" color="red"><b>Confirmar pr&eacute;stamo</b></font>
-    </th>
-    <tr>
-	<td>
-	    Confirma el pr&eacute;stamo de "<!-- TMPL_VAR name="confirm_title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->"
-	    a <!-- TMPL_VAR name="confirm_borrower" -->?
-	</td>
-    </tr>
-    <tr>
-	<td align="center">
-	    <table cols="2">
-		<tr>
-    		    <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-		    <td align="center" valign="middle">
-			<input type="submit" value="Prestar">
-		    </td>
-		    <input type="hidden" name="confirm_borrow" value="yes">
-		    <input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
-		    <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
-		    <input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
-		    <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
-		    <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
-		    <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->">
-		    <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-		    <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-		    <input type="hidden" name="print" value="tal vez">
-		    </form>
-		    <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-		    <td align="center" valign="middle">
-			<input type="submit" value="Cancelar">
-		    </td>
-		    <input type="hidden" name="confirm_borrow" value="no">
-		    <input type="hidden" name="barcode" value="">
-		    <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
-		    <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-		    <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-		    <input type="hidden" name="print" value="tal vez">
-		</tr>
-	    </table>
-	</td>
-    </tr></table>
-<!-- TMPL_ELSE -->
-<!-- TMPL_IF name="borrowernumber" -->
-<!-- TMPL_IF  NAME="debts" -->
-
-      <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
-        <tr>
-            <td>
-              <font class="fontmsg">&iexcl;El usuario tiene libros VENCIDOS y por lo tanto no se le pueden realizar pr&eacute;stamos!</font>
-            </td>
-          </tr> 
-      </table>
-
-<!-- TMPL_ELSE -->
-
-<!-- TMPL_UNLESS name="ticket_string"-->
-<!-- TMPL_UNLESS name="max_issues"-->
-<!-- TMPL_UNLESS name="all_issues"-->
-<!-- TMPL_UNLESS name="reservaNoRetiradaVencida" -->
-
-<!--******************************** Seleccion de tipo de pretamo *****************************************-->
-
-<!-- TMPL_IF NAME="strItemnumber" -->
-
-<form name=frm2 method="post" action="/cgi-bin/koha/circ/item-borrow.pl">
-<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-<input type="hidden" name="branch" value="<!-- TMPL_VAR name='branch' -->">
-<input type="hidden" name="printer" value="<!-- TMPL_VAR name='printer' -->">
-<input type="hidden" name="olditemnumber" value="<!-- TMPL_VAR name='itemnumber' -->">
-<input type="hidden" name="strItemnumber" value="<!-- TMPL_VAR name='strItemnumber' -->">
-<table border="1" cellspacing="0" cellpadding="0" width="95%"  align="center" bgcolor="white">
-<tr>
-        <td align="center">
-        <table border="0">
-	<tr class="tablemsg">
-		<td class="fontmsg">
-			<b><u>PR&Eacute;STAMO</u>:</b>
-		</td>
-	</tr>
-	<!-- TMPL_LOOP NAME="infoTotal" -->
-	<tr>
-		<td  class="fontmsg">
-			<!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
-			<!-- TMPL_IF NAME="unititle" -->
-				:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="edition" -->
-				, <!-- TMPL_VAR NAME="edition" -->
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="volume" -->
-				, t <!-- TMPL_VAR NAME="volume" -->
-			<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<tr align="center">
-		<td class="inputFontNormal">
-			C&oacute;digo de barras: <!-- TMPL_VAR NAME="codbarra" --><br>
-			Tipo de pr&eacute;stamo: 
-			<!-- TMPL_IF name="seletcIssueTypeEnabled"-->
-					<!-- TMPL_VAR NAME="tipoprest" -->
-				<!-- TMPL_ELSE -->
-					No hay Tipos de Pr&eacute;stamo disponibles
-			<!-- /TMPL_IF -->
-
-		</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
-	<tr>
-		<td class="fontmsg">
-			<b><u>USUARIO</u>:</b>
-			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-		</td>
-	</tr>
-	<tr align="center">
-		<td class="inputFontNormal">
-		  <!-- TMPL_IF name="seletcIssueTypeEnabled"-->
-		  <input title="Pr&eacute;stamo" type="button" value="Aceptar" onClick="document.frm2.submit()">
-		  <!-- /TMPL_IF -->
-		  <input title="No realizar el pr&eacute;stamo" type="button" value="Cancelar" onClick="cancelar('<!-- TMPL_VAR name='borrowernumber' -->')">
-        	</td>
-	</tr>
-	</table>
-</td>
-</tr>
-</table>
-</form>
-<!-- /TMPL_IF -->
-<!--******************************Fin** Seleccion de tipo de pretamo *****************************************-->
-
-<!-- /TMPL_UNLESS -->
-<!-- /TMPL_UNLESS -->
-<!-- /TMPL_UNLESS -->
-<!-- /TMPL_UNLESS -->
-
-
-<form name=frm method="post" action="/cgi-bin/koha/circ/circulation.pl">
-	<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
-	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-	<input type="hidden" name="print" value="tal vez">
-	<!-- TMPL_IF name="MULTAS" -->
-		<input type="hidden" name="charges" value="yes">
-		<input type="hidden" name="oldamount" value="<!-- TMPL_VAR name="amountold" -->">
-	<!-- /TMPL_IF -->
-</form>
-<!-- /TMPL_IF -->
 
 <table border="0" cellpadding="0" cellspacing="0"  width="100%">
-    <tr class="tablaresultadoTitle">
-	<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-	<td colspan="2" >Informaci&oacute;n del usuario</td>
-	<td width="1%" valign="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-    </tr>
-    <tr>
-	<td width="1%">&nbsp;</td>
-	<td colspan="2" class="inputFontNormal">
-	<!-- Nombre y apellido: <b><a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br> -->
- 	<!-- 28-03-07 Miguel - No se mostraba en negrita el Apellido y Nombre -->
-	Nombre y apellido: <b><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
-	Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
-	Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><BR>
-	Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --></b><BR>
- 	E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
-	ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><BR>
-	Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categorycode" --></b><BR>
-        </td>
-	<td width="1%">&nbsp;</td>
-    </tr>
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td colspan="2">Informaci&oacute;n del usuario</td>
+		<td width="1%" valign="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+    	</tr>
+    	<tr>
+		<td width="1%">&nbsp;</td>
+		<td colspan="2" class="inputFontNormal">
+<!-- TMPL_LOOP name="borrower" -->
+			Nombre y apellido: <b><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
+			Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
+			Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><BR>
+			Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --></b><BR>
+ 			E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
+			ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><BR>
+			Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categorycode" --></b><BR>
+        	</td>
+		<td width="1%">&nbsp;</td>
+    	</tr>
+<!-- /TMPL_LOOP -->
+
 <!-- TMPL_IF name="noissues" -->
-<!-- TMPL_IF NAME="gna" -->
-<tr><td valign="top" class="inputFontNormal"><font color="red">GNA</font></td><td class="inputFontNormal" bgcolor=<!-- TMPL_VAR name="color" -->>El usuario no posee direcci&oacute;n</td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="lost" -->
-<tr><td valign="top" class="inputFontNormal"><font color="red">PERDIDO</font></td><td class="inputFontNormal" bgcolor=<!-- TMPL_VAR name="color" -->>La tarjeta de identificaci&oacute;n del usuario se encuentra perdida</td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>El usuario ha sido excluido</td></tr>
-<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="charges" -->
-		<tr><td valign="top"><font color="red">MULTAS</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" >Pagos</a></td></tr>
-	<!-- TMPL_ELSE -->
-		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><!-- TMPL_VAR name="message" --></td></tr>
+	<!-- TMPL_IF NAME="gna" -->
+	<tr>
+		<td valign="top" class="inputFontNormal">
+			<font color="red">GNA</font>
+		</td>
+		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
+			El usuario no posee direcci&oacute;n
+		</td>
+	</tr>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="lost" -->
+	<tr>
+		<td valign="top" class="inputFontNormal">
+			<font color="red">PERDIDO</font>
+		</td>
+		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
+			La tarjeta de identificaci&oacute;n del usuario se encuentra perdida
+		</td>
+	</tr>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="dbarred" -->
+	<tr>
+		<td valign="top">
+			<font color="red">DBARRED</font>
+		</td>
+		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
+			El usuario ha sido excluido
+		</td>
+	</tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-		<!-- TMPL_IF name="charges" -->
-			<tr><td valign=top>MULTAS</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" >Pagos</a></td></tr>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="waiting" -->
-			<tr>
-			<td valign="top">EN ESPERA</td>
-			<td>
-			<!-- TMPL_LOOP name="itemswaiting" -->
-				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->&amp;type=intra" ><!-- TMPL_VAR name="barcode" --></a> <!-- TMPL_VAR name="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR name="branchname" -->)<br>
-			<!-- /TMPL_LOOP -->
-			</td>
-			</tr>
-		<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="odues" -->
-				<!-- TMPL_IF name="nonreturns" -->
-					<tr><td valign="top">Debe ejemplares</td><td>Si, vea a continuaci&oacute;n</td></tr>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="notes" -->
-					<tr><td valign="top">NOTAS</td><td><!-- TMPL_VAR name="notesmsg" --></td></tr>
-			<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-</table>
-<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-
-<!-- AGREGADO POR LUCIANO -->
-<br>
-<!-- TMPL_IF NAME="reserves_count" -->
-<b>El usuario tiene <!-- TMPL_VAR NAME="reserves_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
-<br>
-
-<form id="formPrestar" name="formPrestar" method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<input type="hidden" name="borrnumber" id="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+	<!-- TMPL_IF name="waiting" -->
 	<tr>
-		<td colspan="9" class="inputFontNormal" align="center">
-			<b>EJEMPLARES RESERVADOS</b>
-		</td>
-	</tr>
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td valign="top">EN ESPERA</td>
 		<td>
-			<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+		<!-- TMPL_LOOP name="itemswaiting" -->
+			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR name='id1' -->"><!-- TMPL_VAR name="barcode" --></a> <!-- TMPL_VAR name="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR name="branchname" -->)<br>
+		<!-- /TMPL_LOOP -->
 		</td>
-		<td>T&iacute;tulo</td>
-		<td>Autor</td>
-		<td>Edici&oacute;n</td>
-		<td>Reservado desde</td>
-		<td>Reservado hasta</td>
-<!-- 		<td>&nbsp;</td>  -->
-		<td>&nbsp;</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 	</tr>
-<!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
-<!-- TMPL_LOOP NAME="RESERVES" -->
-	<tr align="center">
-		<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME='clase' -->">
-			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-			<!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-			<!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" --><!-- TMPL_ELSE -->&nbsp;
-			<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-			<!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-			<!-- TMPL_IF name="rnotificationdate" --> <!-- TMPL_VAR NAME="rnotificationdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-			<!-- TMPL_VAR name="rreminderdate" -->
-		</td>
-			<!--<!-- TMPL_IF name="rreminderdate" --> 
-			<font <!-- TMPL_IF name="vencido" --> color="red" <!-- /TMPL_IF -->>
-			<!-- TMPL_VAR NAME="rreminderdate" -->
-			</font>
-			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>-->
-	<!--<td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_IF name="ritemnumber"--><INPUT onClick="confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->)"  TYPE="image" name="borrow"  VALUE="prestar" BORDER=0 src="/intranet-tmpl/blue/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario"><!-- TMPL_ELSE -->Esperando<!-- /TMPL_IF --></td>-->
-		<td class="<!-- TMPL_VAR NAME="clase" -->" align="middle"> 
-	       		<INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('adjudicada')" title="Cancelar">
-			<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
-		</td>
-		<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-	</tr>
-<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="odues" -->
+		<!-- TMPL_IF name="nonreturns" -->
 	<tr>
-		<td colspan="10" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align=center>
-			<INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="form.submit();return false;">
-		</td>
+		<td valign="top">Debe ejemplares</td>
+		<td>Si, vea a continuaci&oacute;n</td>
 	</tr>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="notes" -->
+	<tr>
+		<td valign="top">NOTAS</td>
+		<td><!-- TMPL_VAR name="notesmsg" --></td>
+	</tr>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </table>
-</form>
-<!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME="waiting_count" -->
-<br>
-<b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>        
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
-		<tr>
-	<td colspan="6" class="inputFontNormal" align="center"> 
-                        <b>RESERVAS</b>
-                </td>
-
-		</tr>
-                <tr class="tablaresultadoTitle">
-			<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-                        <td>T&iacute;tulo</td>
-			<td>Autor</td>
-			<td>Edici&oacute;n</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-
-                </tr>
-		<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-                <!-- TMPL_LOOP NAME="WAITRESERVES" -->
-                        <tr valign="top">
-			<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-                        <td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_VAR NAME="rtitle" ESCAPE=HTML --><!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
-			</td>
-                        <td class="<!-- TMPL_VAR NAME="clase" -->">
-				<!-- TMPL_IF NAME="rauthor" --><!-- TMPL_VAR NAME="rauthor" -->
-				<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-			</td>
-                        <td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-		<td class="<!-- TMPL_VAR NAME="clase" -->">
-		<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">
-			<INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('espera')" title="Cancelar">
-			<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
-			<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-		</form>
-		</td>
-			<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-			<td width="1%" class="<!-- TMPL_VAR NAME="clase" -->">&nbsp;</td>
-                        </tr>
-                <!-- /TMPL_LOOP -->
-        </table>
-
-<!-- /TMPL_IF -->
-
-
-<br>
 

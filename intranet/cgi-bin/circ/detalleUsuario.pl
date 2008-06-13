@@ -24,7 +24,6 @@
 use strict;
 use CGI;
 use C4::Output;
-use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
@@ -45,6 +44,12 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $borrnumber= $obj->{'borrowernumber'};
 
+my @resultBorrower;
+$resultBorrower[0]=C4::AR::Usuarios::getBorrowerInfo($borrnumber);
+
+$template->param(
+	borrower => \@resultBorrower,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

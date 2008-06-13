@@ -93,43 +93,43 @@ la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabl
 
 sub devolver {
 	my @resultado;
-	my ($itemnumber,$borrowernumber,$loggedinuser)=@_;
+	my ($id3,$borrowernumber,$loggedinuser)=@_;
 	
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
 	my $sth=$dbh->prepare("SET autocommit=0;");
 	$sth->execute();
-	$sth=$dbh->prepare("select * from issues where itemnumber=? and returndate IS NULL");
-	$sth->execute($itemnumber);
+	$sth=$dbh->prepare("select * from issues where id3=? and returndate IS NULL");
+	$sth->execute($id3);
 	my $iteminformation= $sth->fetchrow_hashref;
-	my $fechaVencimiento= vencimiento($itemnumber); # tiene que estar aca porque despues ya se marco como devuelto
-	$sth=$dbh->prepare("Update issues set returndate=NOW() where itemnumber=? and borrowernumber=? and returndate is NULL");
-	$sth->execute($itemnumber,$borrowernumber);
+	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
+	$sth=$dbh->prepare("Update issues set returndate=NOW() where id3=? and borrowernumber=? and returndate is NULL");
+	$sth->execute($id3,$borrowernumber);
 	#verifico que el item no sea para sala
-	$sth=$dbh->prepare("Select notforloan from items where itemnumber=?");
-	$sth->execute($itemnumber);
+	$sth=$dbh->prepare("Select notforloan from nivel3 where id3=?");
+	$sth->execute($id3);
 	my $notforloan= $sth->fetchrow_hashref;
 	
-	$sth=$dbh->prepare("Select * from reserves where itemnumber=? and borrowernumber=?");
-	$sth->execute($itemnumber,$borrowernumber);
+	$sth=$dbh->prepare("Select * from reserves where id3=? and borrowernumber=?");
+	$sth->execute($id3,$borrowernumber);
 	my $data= $sth->fetchrow_hashref;
-	if($data->{'itemnumber'}){
+	if($data->{'id3'}){
 	#Si la reserva que voy a borrar existia realmente sino hubo un error
-		if($notforloan->{'notforloan'} == 0){#si no es para sala
-			my $sth1=$dbh->prepare("Select * from reserves where biblioitemnumber=? and itemnumber is NULL order by timestamp limit 1 ");
-			$sth1->execute($data->{'biblioitemnumber'});
+		if($notforloan->{'notforloan'} eq 'DO'){#si no es para sala
+			my $sth1=$dbh->prepare("Select * from reserves where id2=? and id3 is NULL order by timestamp limit 1 ");
+			$sth1->execute($data->{'id2'});
 			my $data2= $sth1->fetchrow_hashref;
 			if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
-				@resultado= ($itemnumber, $data2->{'biblioitemnumber'}, $data2->{'borrowernumber'});
+				@resultado= ($id3, $data2->{'id2'}, $data2->{'borrowernumber'});
 			}
 		}
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-		$sth=$dbh->prepare("Delete from reserves where itemnumber=? and borrowernumber=?");
-		$sth->execute($itemnumber,$borrowernumber);
+		$sth=$dbh->prepare("Delete from reserves where id3=? and borrowernumber=?");
+		$sth->execute($id3,$borrowernumber);
 		if (@resultado) {
 		#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
-			$sth=$dbh->prepare("Update reserves set itemnumber=?,reservedate=?,notificationdate=NOW(),reminderdate=?, branchcode=? where biblioitemnumber=? and borrowernumber=? ");
+			$sth=$dbh->prepare("Update reserves set id3=?,reservedate=?,notificationdate=NOW(),reminderdate=?, branchcode=? where id2=? and borrowernumber=? ");
 			$sth->execute($resultado[0], $desde, $fecha,$iteminformation->{'branchcode'},$resultado[1],$resultado[2]);
 			C4::AR::Reserves::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
 			#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
@@ -140,11 +140,11 @@ sub devolver {
 		}# end if (@resultado) 
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
+		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
 
-		my $biblionumber= $dataItems->{'biblionumber'};
+		my $id1= $dataItems->{'id1'};
 		my $end_date= "null";
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$biblionumber,$data->{'biblioitemnumber'},$itemnumber,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$data->{'id2'},$id3,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 
@@ -374,31 +374,31 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
 =cut
  
 sub renovar {
-	my ($borrowernumber,$itemnumber,$loggedinuser)=@_;
-	my $renovacion= &sepuederenovar($borrowernumber,$itemnumber);
+	my ($borrowernumber,$id3,$loggedinuser)=@_;
+	my $renovacion= &sepuederenovar($borrowernumber,$id3);
 	if ($renovacion){
 #Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("UPDATE issues SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() WHERE itemnumber = ? AND borrowernumber = ?");
-		$sth->execute($itemnumber, $borrowernumber);
+		my $sth=$dbh->prepare("UPDATE issues SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() WHERE id3 = ? AND borrowernumber = ?");
+		$sth->execute($id3, $borrowernumber);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
 #esto se podria cruzar con la lo trae getDataItms para hacer una sola funcion
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare(" SELECT issuecode
 					FROM issues
-					WHERE(itemnumber = ? AND borrowernumber = ?) ");
-		$sth->execute($itemnumber, $borrowernumber);
+					WHERE(id3 = ? AND borrowernumber = ?) ");
+		$sth->execute($id3, $borrowernumber);
 		my $data = $sth->fetchrow_hashref;
 
 		my $issuetype= $data->{'issuecode'};
-		my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
-		my $biblionumber= $dataItems->{'biblionumber'};
-		my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
+		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		my $id1= $dataItems->{'id1'};
+		my $id2= $dataItems->{'id2'};
 		my $branchcode= $dataItems->{'homebranch'};
-		my $end_date= C4::AR::Issues::vencimiento($itemnumber);
+		my $end_date= C4::AR::Issues::vencimiento($id3);
 
-		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuetype,$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date);
 #****************************Fin******Se registra el movimiento en historicCirculation*************************
 
 		return 1;
@@ -581,6 +581,9 @@ sub IssuesType2 {
 	return(\@issuesvalues,\%issueslabels);
 }
 
+=item
+VER LA DE PRESTAMOSPORUSUARIO EN USUARIOS.PM SON =?????!!!!!!!!!!!!!!
+=cut
 sub DatosPrestamos {
   #Esta funcion retorna los datos de los prestamos de un usuario
   my ($borrowernumber)=@_;
@@ -591,7 +594,7 @@ sub DatosPrestamos {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   my @result;
   while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
+    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
     $ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
     push @result, $ref;
   }
@@ -610,7 +613,7 @@ sub DatosPrestamosPorTipo {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   my @result;
   while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'itemnumber'});
+    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
     $ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
     push @result, $ref;
   }
@@ -722,10 +725,10 @@ my $sth=$dbh->prepare("Select * from issues left join issuetypes on issues.issue
 $sth->execute();
 
 while(my $data= $sth->fetchrow_hashref) {
-	my $fechaDeVencimiento=vencimiento ($data->{'itemnumber'});
+	my $fechaDeVencimiento=vencimiento ($data->{'id3'});
 	my $proximohabil=proximoHabil(1,0);
 	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-	Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
+	Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
 	};
 }
 }
@@ -738,15 +741,15 @@ sub crearTicket {
 	my $bornum=$iteminfo->{'borrowernumber'};
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
-	my $ticket_duedate = vencimiento($iteminfo->{'itemnumber'});
+	my $ticket_duedate = vencimiento($iteminfo->{'id3'});
 	my $ticket_borrower = $borrower;
 	my $ticket_string =
 		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
 		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
 		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
   		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
-		    "&author=" . CGI::Util::escape($iteminfo->{'author'}) .
-		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'title'}) .
+		    "&author=" . CGI::Util::escape($iteminfo->{'autor'}) .
+		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'titulo'}) .
 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
 		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
 		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
@@ -759,10 +762,10 @@ sub crearTicket {
 }
 
 sub estaVencido(){
-	my($itemnumber,$tipoPres)=@_;
+	my($id3,$tipoPres)=@_;
 	my @datearr = localtime(time);
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	my $venc=vencimiento($itemnumber);
+	my $venc=vencimiento($id3);
 	if (Date_Cmp($venc, $hoy) >= 0) {
 		#Si es un prestamo especial debe devolverlo antes de una determinada hora
    		if ($tipoPres ne 'ES'){return(0,$venc);}

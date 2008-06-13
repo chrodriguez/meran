@@ -3017,7 +3017,7 @@ if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cier
 
   while (my $data=$sth->fetchrow_hashref){
 	#Pregunto si esta vencido
-        my $df=C4::Date::format_date_in_iso(vencimiento($data->{'itemnumber'}),$dateformat);
+        my $df=C4::Date::format_date_in_iso(vencimiento($data->{'id3'}),$dateformat);
 	if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
 	#
 		  $issues++;
@@ -4330,8 +4330,8 @@ sub mailissues {
   	my $sth=$dbh->prepare("SELECT * 
 	FROM issues
 	LEFT JOIN borrowers ON borrowers.borrowernumber = issues.borrowernumber
-	LEFT JOIN items ON items.itemnumber = issues.itemnumber
-	LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+	LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
+	LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
 	WHERE issues.returndate IS NULL AND issues.date_due <= now( ) AND issues.branchcode = ? ");
     	$sth->execute($branch);
   	my @result;
@@ -4339,7 +4339,7 @@ sub mailissues {
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
   	while (my $data = $sth->fetchrow_hashref) {
 		#Para que solo mande mail a los prestamos vencidos
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'},$dateformat));
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($flag lt 0){
 			#Solo ingresa los prestamos vencidos a el arreglo a retornar
@@ -4356,8 +4356,8 @@ sub mailissuesforborrower {
 	my $dateformat = C4::Date::get_date_format();
   	my $sth=$dbh->prepare("SELECT * 
 	FROM issues
-	LEFT JOIN items ON items.itemnumber = issues.itemnumber
-	LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+	LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
+	LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
 	WHERE issues.returndate IS NULL AND issues.date_due <= now( ) AND issues.branchcode = ? AND issues.borrowernumber = ? ");
     	$sth->execute($branch,$bornum);
   	my @result;
@@ -4365,7 +4365,7 @@ sub mailissuesforborrower {
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
   	while (my $data = $sth->fetchrow_hashref) {
 		#Para que solo mande mail a los prestamos vencidos
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'},$dateformat));
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
 		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
 		if ($flag lt 0){
 			#Solo ingresa los prestamos vencidos a el arreglo a retornar

@@ -265,7 +265,7 @@ sub DatosReservas {
 
 	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
 			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
-			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate,
+			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, r.reservenumber,
 			r.estado, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.branchcode as rbranch
 			FROM reserves r
 			INNER JOIN nivel2 n2 ON  n2.id2 = r.id2

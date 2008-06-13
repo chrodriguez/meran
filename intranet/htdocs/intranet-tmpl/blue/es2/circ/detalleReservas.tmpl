@@ -1,13 +1,9 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-
 
 <br>
 <!-- TMPL_IF NAME="reserves_count" -->
 <b>El usuario tiene <!-- TMPL_VAR NAME="reserves_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 <br>
 
-<form id="formPrestar" name="formPrestar" method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<input type="hidden" name="borrnumber" id="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 	<tr>
 		<td colspan="9" class="inputFontNormal" align="center">
@@ -28,7 +24,6 @@
 		<td>Edici&oacute;n</td>
 		<td>Reservado desde</td>
 		<td>Reservado hasta</td>
-<!-- 		<td>&nbsp;</td>  -->
 		<td>&nbsp;</td>
 
 		<td width="1%" align="right" valign="top">
@@ -40,7 +35,7 @@
 	<tr align="center">
 		<td width="1%">&nbsp;</td>
 		<td>
-			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='ritemnumber' -->" id="<!-- TMPL_VAR NAME='ritemnumber' -->">
+			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='rid3' -->">
 		</td>
 		<td>
 			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
@@ -72,32 +67,25 @@
 		<td>
 			<!-- TMPL_VAR name="rreminderdate" -->
 		</td>
-			<!--<!-- TMPL_IF name="rreminderdate" --> 
-			<font <!-- TMPL_IF name="vencido" --> color="red" <!-- /TMPL_IF -->>
-			<!-- TMPL_VAR NAME="rreminderdate" -->
-			</font>
-			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>-->
-	<!--<td class="<!-- TMPL_VAR NAME="clase" -->"><!-- TMPL_IF name="ritemnumber"--><INPUT onClick="confirm_prestamo(<!-- TMPL_VAR NAME="rbiblioitemnumber" -->,<!-- TMPL_VAR NAME="ritemnumber" -->)"  TYPE="image" name="borrow"  VALUE="prestar" BORDER=0 src="/intranet-tmpl/blue/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario"><!-- TMPL_ELSE -->Esperando<!-- /TMPL_IF --></td>-->
-		<td class="<!-- TMPL_VAR NAME="clase" -->" align="middle"> 
-	       		<INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('adjudicada')" title="Cancelar">
-			<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
+		<td align="middle"> 
+	       		<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
 <!-- /TMPL_LOOP -->
 	<tr>
 		<td colspan="10" class="inputFontNormal" align=center>
-			<INPUT TYPE="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="form.submit();return false;">
+			<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="form.submit();return false;">
 		</td>
 	</tr>
 </table>
-</form>
+
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="waiting_count" -->
 <br>
-<b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>        
+<b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 	<tr>
 		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS</b></td>
@@ -143,11 +131,7 @@
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">
-				<INPUT TYPE="image" name="cancel"  VALUE="cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('espera')" title="Cancelar">
-				<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME='rbiblioitemnumber' -->">
-				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-			</form>
+			<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 		<td width="1%">&nbsp;</td>
@@ -225,4 +209,4 @@ if(cantChk != 0 && stringCheckbox != ""){
 </script>
 
 <br>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+

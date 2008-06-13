@@ -768,14 +768,13 @@ sub prestamos{
 	my $dateformat = C4::Date::get_date_format();
         my @results;
 	my $query ="select borrowers.borrowernumber AS borrowernumber,
-			   items.itemnumber AS itemnumber, items.biblionumber AS biblionumber,
-			   items.biblioitemnumber AS biblioitemnumber,
+			   n3.id3 AS id3, n3.id1 AS id1, n3.id2 AS id2,
 			   issuetypes.issuecode AS issuecode,description,
 			   date_due, issues.branchcode AS branchcode, returndate,
-			   surname, firstname, cardnumber, emailaddress, barcode , items.bulk
+			   surname,firstname,cardnumber, emailaddress, barcode , n3.signatura_topografica as bulk
                     from issues left join issuetypes on (issues.issuecode = issuetypes.issuecode)
 		    left join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    left join items on (issues.itemnumber = items.itemnumber)
+		    left join nivel3 n3 on (issues.id3 = n3.id3)
                     where issues.branchcode=? and returndate is NULL ";
 
         my $sth=$dbh->prepare($query);
@@ -785,7 +784,7 @@ sub prestamos{
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 
 	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}),$dateformat);
+		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
 		#Se filtra por Fechas de Vencimiento 
 		
 		if ( estaEnteFechas($begindate,$enddate,$data->{'vencimiento'}) ) {

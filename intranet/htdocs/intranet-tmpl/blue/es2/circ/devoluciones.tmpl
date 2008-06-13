@@ -43,7 +43,6 @@ function AutocompleteSeudonimos(idInput, tipo){
 		maxItemsToShow:10,
         	cacheLength:10,
         	selectOnly:1,
-		extraParams:{accion: tipo}	
 	});//end autocomplete
 	$("#"+idInput).result(function(event, data, formatted) {
 		//muestro en el input el usuario seleccioinado
@@ -53,13 +52,6 @@ function AutocompleteSeudonimos(idInput, tipo){
 // 		alert("usuario: data1 " + data[1] + "data0" + data[0]);
 		detalleUsuario(data[1]);
 		detallePretamos(data[1]);
-
-// 		if(flag != 'seudonimo'){
-			//creo un objeto para la autoridad con la q se va a trabajar
-//  			usuario_selected= new object_usuario(data[1], data[0]);
-			//traigo info de seudonimos de la autoridad con la que se esta trabajando
-//  			consultarTablaSeudonimos(data[0]);
-// 		}
 	});
 }
 
