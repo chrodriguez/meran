@@ -16,6 +16,115 @@
 <script language="javascript" type="text/javascript">
 
 
+//*********************************************Prestamos******************************************
+function itemPrestamo(){
+	this.id3= '';
+	this.id3Old= '';
+	this.barcode= '';
+	this.tipoPrestamo= '';
+}
+
+function tipoPrestamo(){
+	codPrestamo= '';
+	descripcion= '';
+}
+
+function infoPrestamo(){
+	this.id3= '';
+	this.id3Old= '';
+// 	this.titulo='';
+// 	this.autor= '';
+// 	this.unititle= '';
+// 	this.edition= '';
+	this.tipoPrestamo; //este es el tipo de prestamo para el id3
+}
+
+var infoPrestamos_array= new Array();
+
+function generaComboPrestamo(responseText){
+	
+	infoArray= JSONstring.toObject(responseText);
+// 	CAMBIAR TABLA POR ESTILOS!!!!!!!!!!!!!!!!!!!
+	var html="<table width='95%' cellspacing='0' cellpadding='0' border='1' bgcolor='white' align='center'>";
+	html= html + "<tr align='center'><td class='fontmsg'>";
+	var i;
+	
+
+	for(i=0; i<infoArray.length;i++){
+	
+		var infoPrestamoObj= new infoPrestamo();
+		infoPrestamoObj.id3Old= infoArray[i].id3Old;
+// 		infoPrestamoObj.titulo= infoArray[i].titulo;
+// 		infoPrestamoObj.autor= infoArray[i].autor;
+// 		infoPrestamoObj.unititle= infoArray[i].unititle;
+// 		infoPrestamoObj.edition= infoArray[i].edicion;
+		infoPrestamos_array[i]= infoPrestamoObj;
+ 
+		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
+		var comboTipoPrestamo =crearCombo(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
+		
+		html= html + infoArray[i].titulo + "<br>";
+		html= html + infoArray[i].autor + "<br>";
+		html= html + infoArray[i].unititle + "<br>";
+		html= html + infoArray[i].edicion + "<br>";
+		html= html + "C&oacute;digo de barras: " + comboItems + "<br>";
+		html= html + "Tipo de pr&eacute;stamo: " + comboTipoPrestamo + "<br>";
+	}
+
+	html= html + "</td></tr></table>";
+	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarPrestamo();'></center><br>"
+
+	$('#confirmar_prestamos').html(html);
+
+	HiddeState();
+}
+
+function cancelarPrestamo(){
+	$('#confirmar_prestamos').html('');
+}
+
+function updateInfoPrestamo(){
+	$('#confirmar_prestamos').html('');
+	detalleReservas(usuario.ID);
+}
+
+function prestar(){
+	
+
+	for(var i=0; i< infoPrestamos_array.length; i++){
+		//se setea el id3 que se va a prestar
+		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
+		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
+	}
+	
+	objBusqueda=new SearchHelper(updateInfoPrestamo, Init);
+	objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objBusqueda.tipoAccion= 'PRESTAMO';
+	objBusqueda.infoPrestamos= infoPrestamos_array;
+	objBusqueda.borrowernumber= usuario.ID;
+	//se envia la consulta
+	objBusqueda.sendToServer();
+}
+
+function crearCombo(items_array, idSelect){
+
+	var opciones= '';	
+	var html= "<select id='" + idSelect + "'>";
+	var i;
+
+	for(i=0;i<items_array.length;i++){
+
+		opciones= opciones + "<option value=" + items_array[i].value + ">" + items_array[i].label + "</option>";
+
+	}
+	
+	html= html + opciones + "</select>";
+	return html;
+}
+//**********************************************FIN Prestamos*************************************
+
+
+
 function object_usuario(){
 	this.text;
 	this.ID;
@@ -58,26 +167,6 @@ function updateInfoUsuario(responseText){
 
 }
 
-
-function updateInfoPrestamos(responseText){
-	
-	infoArray= JSONstring.toObject(responseText);
-
-	for(i=0; i<infoArray.length;i++){
-
-// 		alert("Error: " + infoArray[i].error + " Mensaje :" + infoArray[i].message);
-		msj= $('#mensajes').html();
-// VER ESTO COMO SE PARSEA DESPUES, Y ARMAR UN DIV MENSAJE CON UN ESTILO PARA USAR EN DEVOLUCIONES TB
-		$('#mensajes').html(msj + "<br>" + infoArray[i].message);
-	
-	}
-
-	//se muestran las reservas del usuario
-	detalleReservas(usuario.ID);
-	zebra('tablaReservas');
-	HiddeState();
-
-}
 
 function updateInfoReservas(responseText){
 	
@@ -126,9 +215,9 @@ function realizarPrestamo(){
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
+		objBusqueda=new SearchHelper(generaComboPrestamo, Init);
 		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-		objBusqueda.tipoAccion= 'PRESTAMO';
+		objBusqueda.tipoAccion= 'CONFIRMAR_PRESTAMO';
 		objBusqueda.ids3= array;
 		objBusqueda.borrowernumber=borrowernumber;
 		//se envia la consulta
@@ -220,6 +309,7 @@ $(document).ready(function() {
 	</table>
 </div> 
 
+<div id="confirmar_prestamos"></div>
 <div id="mensajes"></div>
 <div id="detalleUsuario"></div>
 <div id="tablaReservas"></div>

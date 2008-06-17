@@ -65,12 +65,14 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 if($tipoAccion eq "PRESTAMO"){
 
 print A "desde PRESTAMO \n";
-	my $array_ids3=$obj->{'ids3'};
-	my $id2=$obj->{'id2'};
+	my $array_ids3=$obj->{'infoPrestamos'};
+# 	my $id2=$obj->{'id2'};
 	my $borrnumber=$obj->{'borrowernumber'};
 
 	my $i;
 	my $id3='';
+	my $id2;
+	my $tipoPrestamo;
 	my ($error, $codMsg, $message);
 	my $long= scalar(@$array_ids3);
 	my %infoOperacion;
@@ -81,7 +83,8 @@ print A "long: $long \n";
 	for($i=0;$i<$long;$i++){
 
 		#obtengo el id3 de un item a prestar
- 		$id3= $array_ids3->[$i];
+ 		$id3= $array_ids3->[$i]->{'id3'};
+		$tipoPrestamo= $array_ids3->[$i]->{'tipoPrestamo'};
 
 print A "id3 antes de setear: $id3\n";	
 
@@ -111,7 +114,7 @@ my $id1= $data->{'id1'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
 			$params{'tipo'}="INTRA";
-			$params{'issuesType'}="DO";  #?????
+			$params{'issuesType'}= $tipoPrestamo;
 		
 			($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
 			@errores;
