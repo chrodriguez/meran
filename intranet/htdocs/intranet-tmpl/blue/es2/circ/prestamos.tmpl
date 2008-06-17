@@ -17,25 +17,10 @@
 
 
 //*********************************************Prestamos******************************************
-function itemPrestamo(){
-	this.id3= '';
-	this.id3Old= '';
-	this.barcode= '';
-	this.tipoPrestamo= '';
-}
-
-function tipoPrestamo(){
-	codPrestamo= '';
-	descripcion= '';
-}
 
 function infoPrestamo(){
 	this.id3= '';
 	this.id3Old= '';
-// 	this.titulo='';
-// 	this.autor= '';
-// 	this.unititle= '';
-// 	this.edition= '';
 	this.tipoPrestamo; //este es el tipo de prestamo para el id3
 }
 
@@ -54,10 +39,6 @@ function generaComboPrestamo(responseText){
 	
 		var infoPrestamoObj= new infoPrestamo();
 		infoPrestamoObj.id3Old= infoArray[i].id3Old;
-// 		infoPrestamoObj.titulo= infoArray[i].titulo;
-// 		infoPrestamoObj.autor= infoArray[i].autor;
-// 		infoPrestamoObj.unititle= infoArray[i].unititle;
-// 		infoPrestamoObj.edition= infoArray[i].edicion;
 		infoPrestamos_array[i]= infoPrestamoObj;
  
 		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
@@ -124,13 +105,10 @@ function crearCombo(items_array, idSelect){
 //**********************************************FIN Prestamos*************************************
 
 
-
 function object_usuario(){
 	this.text;
 	this.ID;
 }
-
-var objects_array= new Array();
 
 function AutocompleteUsuario(idInput){
 	// q= valor de campoHelp
