@@ -1,0 +1,72 @@
+
+
+
+<!--******************************** Seleccion de tipo de pretamo *****************************************-->
+
+<!-- TMPL_IF NAME="strItemnumber" -->
+
+<form name=frm2 method="post" action="/cgi-bin/koha/circ/item-borrow.pl">
+<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
+<input type="hidden" name="branch" value="<!-- TMPL_VAR name='branch' -->">
+<input type="hidden" name="printer" value="<!-- TMPL_VAR name='printer' -->">
+<input type="hidden" name="olditemnumber" value="<!-- TMPL_VAR name='itemnumber' -->">
+<input type="hidden" name="strItemnumber" value="<!-- TMPL_VAR name='strItemnumber' -->">
+<table border="1" cellspacing="0" cellpadding="0" width="95%"  align="center" bgcolor="white">
+<tr>
+        <td align="center">
+        <table border="0">
+	<tr class="tablemsg">
+		<td class="fontmsg">
+			<b><u>PR&Eacute;STAMO</u>:</b>
+		</td>
+	</tr>
+	<!-- TMPL_LOOP NAME="infoTotal" -->
+	<tr>
+		<td  class="fontmsg">
+			<!-- TMPL_VAR NAME="author" -->, <!-- TMPL_VAR NAME="title" ESCAPE=HTML -->
+			<!-- TMPL_IF NAME="unititle" -->
+				:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="edition" -->
+				, <!-- TMPL_VAR NAME="edition" -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="volume" -->
+				, t <!-- TMPL_VAR NAME="volume" -->
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
+	<tr align="center">
+		<td class="inputFontNormal">
+			C&oacute;digo de barras: <!-- TMPL_VAR NAME="codbarra" --><br>
+			Tipo de pr&eacute;stamo: 
+			<!-- TMPL_IF name="seletcIssueTypeEnabled"-->
+					<!-- TMPL_VAR NAME="tipoprest" -->
+				<!-- TMPL_ELSE -->
+					No hay Tipos de Pr&eacute;stamo disponibles
+			<!-- /TMPL_IF -->
+
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	<tr>
+		<td class="fontmsg">
+			<b><u>USUARIO</u>:</b>
+			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+		</td>
+	</tr>
+	<tr align="center">
+		<td class="inputFontNormal">
+		  <!-- TMPL_IF name="seletcIssueTypeEnabled"-->
+		  <input title="Pr&eacute;stamo" type="button" value="Aceptar" onClick="document.frm2.submit()">
+		  <!-- /TMPL_IF -->
+		  <input title="No realizar el pr&eacute;stamo" type="button" value="Cancelar" onClick="cancelar('<!-- TMPL_VAR name='borrowernumber' -->')">
+        	</td>
+	</tr>
+	</table>
+</td>
+</tr>
+</table>
+</form>
+<!-- /TMPL_IF -->
+<!--******************************Fin** Seleccion de tipo de pretamo *****************************************-->
+
