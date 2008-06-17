@@ -2040,11 +2040,11 @@ return ( $data->{'volumeddesc'}, $data->{'volume'});
 
 
 sub allitems {
-  my ($bib,$type)=@_;
+  my ($id2,$type)=@_;
   my $dbh = C4::Context->dbh;
   my $dateformat = C4::Date::get_date_format();
-  my $sth=$dbh->prepare("Select * from items where biblioitemnumber=? ");
-  $sth->execute($bib);
+  my $sth=$dbh->prepare("SELECT * FROM nivel3 WHERE id2=? ");
+  $sth->execute($id2);
 
   my @results;
 
@@ -2071,8 +2071,8 @@ sub allitems {
     my $borr=0;
 
     ## Esta Prestado?? 
-    my $isth=$dbh->prepare("SELECT  * FROM issues, borrowers , issuetypes WHERE itemnumber = ? AND returndate IS  NULL  AND issues.borrowernumber = borrowers.borrowernumber AND issuetypes.issuecode=issues.issuecode");
-    $isth->execute($data->{'itemnumber'});
+    my $isth=$dbh->prepare("SELECT  * FROM issues, borrowers , issuetypes WHERE id3 = ? AND returndate IS  NULL  AND issues.borrowernumber = borrowers.borrowernumber AND issuetypes.issuecode=issues.issuecode");
+    $isth->execute($data->{'id3'});
     if (my $idata=$isth->fetchrow_hashref){
     #el item esta prestado	
 	$issued=1;  
@@ -2081,15 +2081,15 @@ sub allitems {
       
 	#si estoy en la intra muestro los datos del usuario que lo tiene
       	if ($type eq "intranet") { 
-      	$datedue ="Prestado a <STRONG><A href='moremember.pl?bornum=".$idata->{'borrowernumber'}."'>".$idata->{'firstname'}." ".$idata->{'surname'}."</A><BR>".$idata->{'description'}."</STRONG>";
+      	$datedue ="Prestado a <STRONG><A href='members/moremember.pl?bornum=".$idata->{'borrowernumber'}."'>".$idata->{'firstname'}." ".$idata->{'surname'}."</A><BR>".$idata->{'description'}."</STRONG>";
      	}
       	else {$datedue="<b>Prestado<b>";} #si estoy en el OPAC, muestro que esta prestado
-	my ($vencido,$df)= &C4::AR::Issues::estaVencido($idata->{'itemnumber'},$idata->{'issuecode'});
+	my ($vencido,$df)= &C4::AR::Issues::estaVencido($idata->{'id3'},$idata->{'issuecode'});
 	$returndate=format_date($df,$dateformat);
 	if($vencido){
 		$returndate="<font color='red'>".$returndate."</font>";
 	}
-      $renew = &sepuederenovar($borr, $data->{'itemnumber'});
+      $renew = &sepuederenovar($borr, $data->{'id3'});
      if ($data->{'notforloan'} eq '1') {$issuenfl++;} else {$issue++;}
 	
     }
@@ -2097,8 +2097,8 @@ sub allitems {
    $isth->finish;
    ##
     ## Esta Reservado?? 
-    my $rsth=$dbh->prepare("SELECT  * FROM reserves left join  borrowers on reserves.borrowernumber=borrowers.borrowernumber WHERE reserves.itemnumber = ? and constrainttype is NULL");
-    $rsth->execute($data->{'itemnumber'});
+    my $rsth=$dbh->prepare("SELECT  * FROM reserves LEFT JOIN  borrowers ON reserves.borrowernumber=borrowers.borrowernumber WHERE reserves.id3 = ? AND estado <> 'P'");
+    $rsth->execute($data->{'id3'});
     if (my $rdata=$rsth->fetchrow_hashref){
 	$reserved=1;
 	$borr=$rdata->{'borrowernumber'};
@@ -2145,7 +2145,7 @@ sub allitems {
 	    $notforloan2=0;
     }
 		
-    push(@results,{ bulk => $data->{"bulk"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , reminderdate => $reminderdate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, reserved => $reserved, wthdrawn => $data->{'wthdrawn'}, biblioitemnumber => $bib, itemnumber => $data->{'itemnumber'}, borr => $borr , renew=>$renew} );
+    push(@results,{ bulk => $data->{"signatura_topografica"} , barcode => $data->{"barcode"}, datedue => $datedue, returndate => $returndate , reminderdate => $reminderdate , forloan => $forloan2 , notforloan => $notforloan2 , issued => $issued, reserved => $reserved, wthdrawn => $data->{'wthdrawn'}, id2 => $id2, id3 => $data->{'id3'}, borr => $borr , renew=>$renew} );
 
   $total++;
   }

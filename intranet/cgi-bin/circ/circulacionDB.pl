@@ -163,9 +163,74 @@ if($tipoAccion eq "DEVOLCION"){
 
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
-#SE CREA EL COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
+#SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
+	my $array_ids3=$obj->{'ids3'};
+	my $id2=$obj->{'id2'};
+	my $borrnumber=$obj->{'borrowernumber'};
+	my $loop=scalar(@$array_ids3);
+	my @infoPrestamo;
+	my $env;
+	for(my $i=0;$i<$loop;$i++){
+			my $id3=$array_ids3->[$i];
+			my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
+			my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=C4::Search::allitems($iteminfo->{'id2'},'intranet');
+			
+#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
+# 			my $available= $issue+ $issuenfl + $reserve + $forloan + $notforloan;
+# 			my @values;
+# 			my %labels;
+			my @items;
+			my $j=0;
+			foreach (@results){
+				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ 
+#solo pone los items que no estan prestados
+					$items[$j]->{'barcode'}="$_->{'barcode'}";
+					$items[$j]->{'id3'}=$_->{'id3'};
+					$j++;
+# 					push @values,$_->{'itemnumber'};
+# 					$labels{$_->{'itemnumber'}} =
+				}
+			}
+# 			my $CGIselectbarcode=CGI::scrolling_list(
+# 				-name => 'itemnumber'.$i,
+# 				-values => \@values,
+# 				-labels => \%labels,
+# 				-default => $iteminfo->{'itemnumber'}, 
+# 				-size => 1,
+# 				-multiple => 0
+# 			);
 
+			my $defaultissuetype= C4::Context->preference('defaultissuetype');
+# 			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
+#Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
+#esta sancionado
+			my ($tipoPrestamos)=&C4::AR::Issues::IssuesType3($iteminfo->{'notforloan'}, $borrnumber);
+			
+#para verificar si se tiene q mostrar el combo de tipos de prestamos o no
+#ya que el usuario puede estar sancionado para un tipo de prestamo en particular y el combo puede vernir vacio
+# 			my $selectissuetypecant= scalar(@$valuesIss);
+# 			$template->param(seletcIssueTypeEnabled => $selectissuetypecant);
+# 
+# 			my $selectissuetype=CGI::scrolling_list(
+# 				-name => 'issuetype'.$i,
+# 				-values => $valuesIss,
+# 				-labels => $labelsIss,
+# 				-default => $defaultissuetype,
+# 				-size => 1,
+# 				-multiple => 0
+# 			);
+			
+			$infoPrestamo[$i]->{'id3Old'}=$id3;
+			$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
+			$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
+			$infoPrestamo[$i]->{'unititle'}=$iteminfo->{'title'};#NO ESTA!!!!
+			$infoPrestamo[$i]->{'edition'}=$iteminfo->{'number'};#NO ESTA!!!!
+			$infoPrestamo[$i]->{'items'}=\@items;
+			$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
+	}
+	my $infoPrestamoJSON = to_json \@infoPrestamo;
 	print $input->header;
+	print $infoPrestamoJSON;
 }
 #*************************************************************************************************************
 

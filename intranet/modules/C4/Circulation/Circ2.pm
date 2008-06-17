@@ -534,16 +534,16 @@ True if the item may not be borrowed.
 #'
 sub getiteminformation {
 # returns a hash of item information given either the itemnumber or the barcode
-	my ($env, $itemnumber, $barcode) = @_;
+	my ($env, $id3, $barcode) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth;
-	if ($itemnumber) {
-		$sth=$dbh->prepare("select * from biblio inner join biblioitems on biblio.biblionumber = biblioitems.biblionumber inner join items on  biblioitems.biblioitemnumber=items.biblioitemnumber where items.itemnumber=?");
-		$sth->execute($itemnumber);
+	if ($id3) {
+		$sth=$dbh->prepare("SELECT * FROM nivel1 n1 INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 INNER JOIN nivel3 n3 ON  n2.id2=n3.id2 WHERE n3.id3=?");
+		$sth->execute($id3);
 	} elsif ($barcode) {
 		#Cuando se busca por barcode puede darse el caso de tener repetidos con disponibilidad "Compartido"
 
-		$sth=$dbh->prepare("select * from biblio inner join biblioitems on biblio.biblionumber = biblioitems.biblionumber inner join items on  biblioitems.biblioitemnumber=items.biblioitemnumber where items.barcode=? and items.wthdrawn <> 2 ;");
+		$sth=$dbh->prepare("SELECT * FROM nivel1 n1 INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 INNER JOIN nivel3 n3 ON  n2.id2=n3.id2 WHERE n3.barcode=? AND n3.wthdrawn <> 2 ;");
 
 		$sth->execute($barcode);
 	} else {
@@ -553,13 +553,13 @@ sub getiteminformation {
 	my $iteminformation=$sth->fetchrow_hashref;
 	$sth->finish;
 	if ($iteminformation) {
-		$sth=$dbh->prepare("select date_due, borrowers.borrowernumber, issuetypes.issuecode, issuetypes.description as issuedescription, categorycode from issues inner join borrowers on issues.borrowernumber = borrowers.borrowernumber inner join issuetypes on issuetypes.issuecode = issues.issuecode where itemnumber=? and isnull(returndate)");
-		$sth->execute($iteminformation->{'itemnumber'});
+		$sth=$dbh->prepare("SELECT date_due, borrowers.borrowernumber, issuetypes.issuecode, issuetypes.description AS issuedescription, categorycode FROM issues INNER JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber INNER JOIN issuetypes ON issuetypes.issuecode = issues.issuecode WHERE id3=? AND returndate IS NULL");
+		$sth->execute($iteminformation->{'id3'});
 		my ($date_due, $borrowernumber, $issuecode, $issuedescription, $categorycode) = $sth->fetchrow;
 		
 		#Obtengo los datos del autor
-		my $autor=C4::Search::getautor($iteminformation->{'author'});
-		$iteminformation->{'author'}=$autor->{'completo'};
+		my $autor=C4::Search::getautor($iteminformation->{'autor'});
+		$iteminformation->{'autor'}=$autor->{'completo'};
 
 		$iteminformation->{'date_due'}=$date_due;
 		$iteminformation->{'categorycode'}=$categorycode;
@@ -568,7 +568,7 @@ sub getiteminformation {
 		$iteminformation->{'issuedescription'}=$issuedescription;
 		$sth->finish;
 		($iteminformation->{'dewey'} == 0) && ($iteminformation->{'dewey'}='');
-		$sth=$dbh->prepare("select * from itemtypes where itemtype=?");
+		$sth=$dbh->prepare("SELECT * FROM itemtypes WHERE itemtype=?");
 		$sth->execute($iteminformation->{'itemtype'});
 		my $itemtype=$sth->fetchrow_hashref;
 		$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
