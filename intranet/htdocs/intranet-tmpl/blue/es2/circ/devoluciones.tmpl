@@ -51,7 +51,6 @@ function AutocompleteUsuario(idInput){
 
 function updateInfoUsuario(responseText){
 	
-	//si estoy logueado, oculta la informacion del usuario
 	$('#detalleUsuario').slideDown('slow');
 	$('#detalleUsuario').html(responseText);
 	HiddeState();
@@ -60,7 +59,6 @@ function updateInfoUsuario(responseText){
 
 function updateInfoPrestamos(responseText){
 	
-	//si estoy logueado, oculta la informacion del usuario
 	$('#tablaPrestamos').slideDown('slow');
 	$('#tablaPrestamos').html(responseText);
  	zebra('tablaPrestamos');
@@ -73,8 +71,6 @@ var objBusqueda;
 function detalleUsuario(borrower){
 
 	objBusqueda=new SearchHelper(updateInfoUsuario, Init);
-//   	objBusqueda.debug= true;
-	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
 	objBusqueda.borrowernumber= borrower;
 	//se envia la consulta
@@ -84,8 +80,6 @@ function detalleUsuario(borrower){
 function detallePretamos(borrower){
 
 	objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
-//   	objBusqueda.debug= true;
-	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
 	objBusqueda.borrnumber= borrower;
 	//se envia la consulta
@@ -108,12 +102,11 @@ function realizarDevORen(accion){
 			array[i]=chck[i].value;
 		}
 		objBusqueda=new SearchHelper(updateInfoReservas, Init);
-//    		objBusqueda.debug= true;
 		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objBusqueda.tipoAccion= accion;
 		objBusqueda.ids3=array;
 		objBusqueda.borrowernumber=borrowernumber;
-	//se envia la consulta
+		//se envia la consulta
 		objBusqueda.sendToServer();
 	}
 }
@@ -208,8 +201,8 @@ if(cantChk != 0 && stringCheckbox != ""){
 
 
 $(document).ready(function() {
-
-AutocompleteUsuario('usuarioAutocomplete', '');
+	//se crea el autocomplete para buscar el usuario
+	AutocompleteUsuario('usuarioAutocomplete', '');
 	
 });
 

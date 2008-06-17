@@ -53,7 +53,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 	flagsrequired	=> { circulate => 1 },
     });
 
-
+=item
 my $id3=$query->param('id3');
 my $id2=$query->param('id2');
 my $borrnumber=$query->param('borrnumber');
@@ -76,6 +76,7 @@ if($id3 ne ""){
 				errores=>\@errores
 	);
 }
+=cut
 
 =item
 
@@ -384,6 +385,7 @@ $template->param(
 =cut
 output_html_with_http_headers $query, $cookie, $template->output;
 
+=item
 ####################################################################
 # Extra subroutines
 # FIXME - This clashes with &C4::Print::printslip
@@ -418,6 +420,8 @@ sub printslip {
     }
     remoteprint($env,\@issues,$borrower);
 }
+
+=cut
 
 # Local Variables:
 # tab-width: 8

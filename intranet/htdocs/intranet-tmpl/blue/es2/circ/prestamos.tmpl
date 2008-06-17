@@ -52,7 +52,6 @@ function AutocompleteUsuario(idInput){
 
 function updateInfoUsuario(responseText){
 	
-	//si estoy logueado, oculta la informacion del usuario
 	$('#detalleUsuario').slideDown('slow');
 	$('#detalleUsuario').html(responseText);
 	HiddeState();
@@ -62,26 +61,29 @@ function updateInfoUsuario(responseText){
 
 function updateInfoPrestamos(responseText){
 	
-	info= JSONstring.toObject(responseText);
-	alert("Error: " + info.error + " Mensaje :" + info.message);
+	infoArray= JSONstring.toObject(responseText);
 
+	for(i=0; i<infoArray.length;i++){
+
+// 		alert("Error: " + infoArray[i].error + " Mensaje :" + infoArray[i].message);
+		msj= $('#mensajes').html();
+// VER ESTO COMO SE PARSEA DESPUES, Y ARMAR UN DIV MENSAJE CON UN ESTILO PARA USAR EN DEVOLUCIONES TB
+		$('#mensajes').html(msj + "<br>" + infoArray[i].message);
+	
+	}
+
+	//se muestran las reservas del usuario
 	detalleReservas(usuario.ID);
-	//si estoy logueado, oculta la informacion del usuario
-// 	$('#tablaReservas').slideDown('slow');
-// 	$('#tablaReservas').html(responseText);
-// 	zebra('tablaReservas');
-// 	$('#result').slideDown('slow');
+	zebra('tablaReservas');
 	HiddeState();
 
 }
 
 function updateInfoReservas(responseText){
 	
-	//si estoy logueado, oculta la informacion del usuario
 	$('#tablaReservas').slideDown('slow');
 	$('#tablaReservas').html(responseText);
 	zebra('tablaReservas');
-// 	$('#result').slideDown('slow');
 	HiddeState();
 
 }
@@ -91,8 +93,6 @@ var objBusqueda;
 function detalleUsuario(borrower){
 
 	objBusqueda=new SearchHelper(updateInfoUsuario, Init);
-//   	objBusqueda.debug= true;
-	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
 	objBusqueda.borrowernumber= borrower;
 	//se envia la consulta
@@ -102,8 +102,6 @@ function detalleUsuario(borrower){
 function detalleReservas(borrower){
 
 	objBusqueda=new SearchHelper(updateInfoReservas, Init);
-//   	objBusqueda.debug= true;
-	//para busquedas combinables
 	objBusqueda.url= '/cgi-bin/koha/circ/detalleReservas.pl';
 	objBusqueda.borrnumber= borrower;
 	//se envia la consulta
@@ -124,16 +122,16 @@ function realizarPrestamo(){
 		alert("Elija al menos un documento para prestar");
 	}
 	else{
+
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
 		objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
-//    		objBusqueda.debug= true;
 		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objBusqueda.tipoAccion= 'PRESTAMO';
 		objBusqueda.ids3= array;
 		objBusqueda.borrowernumber=borrowernumber;
-	//se envia la consulta
+		//se envia la consulta
 		objBusqueda.sendToServer();
 	}
 }
@@ -168,6 +166,7 @@ function checkedAll(){
 }
 
 
+// VER SI ESTO SE USA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 //Selecciona los checkbox seleccionados por el usuario para devolver.
 var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
 var checkbox=stringCheckbox.split(",");
@@ -183,6 +182,7 @@ if(cantChk != 0 && stringCheckbox != ""){
 
 
 $(document).ready(function() {
+	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete');
 });
 
@@ -220,6 +220,7 @@ $(document).ready(function() {
 	</table>
 </div> 
 
+<div id="mensajes"></div>
 <div id="detalleUsuario"></div>
 <div id="tablaReservas"></div>
 
