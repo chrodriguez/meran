@@ -486,6 +486,7 @@ sub verificaciones {
 	my $error= 0;
 	my $codMsg= '000';
 	my @paraMens;
+	my $dateformat=C4::Date::get_date_format();
 
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "tipo: $tipo\n";
@@ -530,7 +531,7 @@ print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($error) && ($sancionado||$fechaFin) ){
 		$error= 1;
 		$codMsg= 'S200';
-		$paraMens[0]=$fechaFin;
+		$paraMens[0]=C4::Date::format_date($fechaFin,$dateformat);
 print A "Entro al if de sanciones";
 	}
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA

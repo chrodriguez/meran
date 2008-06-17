@@ -126,7 +126,7 @@ sub hasSanctions {
   $sth->finish;
   #Esta segunda consulta es por las reservas que fueron retiradas
   my $sth = $dbh->prepare("select * from sanctions 
-	where borrowernumber = ? and (now() between startdate and enddate) and  sanctiontypecode is null");
+	where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and  sanctiontypecode is null");
   $sth->execute($borrowernumber);
   while (my $res= $sth->fetchrow_hashref) {
         $res->{'enddate'}=format_date($res->{'enddate'},$dateformat);
@@ -142,7 +142,7 @@ sub hasSanctions {
 sub isSanction {
   #Esta funcion determina si un usuario ($borrowernumber) tiene derecho (o sea no esta sancionado) a retirar un biblio para un tipo de prestamo ($issuecode)
   my ($dbh, $borrowernumber, $issuecode)=@_;
-  my $sth = $dbh->prepare("select * from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where borrowernumber = ? and (now() between startdate and enddate) and ((sanctionissuetypes.issuecode = ?) or (sanctionissuetypes.issuecode is null))");
+  my $sth = $dbh->prepare("select * from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and ((sanctionissuetypes.issuecode = ?) or (sanctionissuetypes.issuecode is null))");
   $sth->execute($borrowernumber, $issuecode);
   return($sth->fetchrow_hashref); 
 }

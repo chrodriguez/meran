@@ -1,4 +1,26 @@
-
+<!-- TMPL_IF NAME="sanctions" -->
+      <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
+        <tr>
+            <td>
+              <font class="fontmsg">El usuario est&aacute; sancionado para los tipos de pr&eacute;stamo:</font>
+            </td>
+          </tr>
+	<!-- TMPL_LOOP NAME="sanctions" -->
+	  <tr>
+	    <td>
+              <font class="fontmsg"><!-- TMPL_IF NAME="description" --><li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF --></font>
+	    </td>
+	  </tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF  NAME="debts" -->
+	<tr>
+            <td>
+              <font class="fontmsg">&iexcl;El usuario tiene libros VENCIDOS y por lo tanto no se le pueden realizar pr&eacute;stamos!</font>
+            </td>
+        </tr>
+	<!-- /TMPL_IF -->
+      </table>
+<!-- /TMPL_IF -->
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>

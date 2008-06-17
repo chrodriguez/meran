@@ -4926,14 +4926,14 @@ sub itemdata2
 #Dado un itemnumber devuelve los datos del item (titulo y autor)
 sub itemdata3
 {       
-        my ($itemnumber) = @_;
+        my ($id3) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT title, author from items right join biblio on items.biblionumber = biblio.biblionumber where itemnumber='$itemnumber' ";
+        my $query = "SELECT titulo, autor FROM nivel3 n3 RIGHT JOIN nivel1 n1 ON n3.id1 = n1.id1 WHERE id3=? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($id3);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
-	$res->{'author'}=getautor($res->{'author'})->{'completo'};
+	$res->{'autor'}=getautor($res->{'autor'})->{'completo'};
         return $res;
 }  
 

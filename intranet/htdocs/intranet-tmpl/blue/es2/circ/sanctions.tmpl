@@ -29,7 +29,7 @@ function todos(){
 <br>
 <table border="0" cellpadding="0" cellspacing="0" width="99%">
 	<tr class="tablaresultadoTitle">
-  		<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+  		<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
   
   <!-- TMPL_IF NAME="superlibrarian" -->
   <form name="f1" id="f1" action=deletesanctions.pl method=post>
@@ -65,7 +65,13 @@ function todos(){
 	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=firstname --></a></td>
 	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=studentnumber --></td>
 	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=categorydescription --></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=issuecodedescription --></td>
+	<td class="<!-- TMPL_VAR NAME=clase -->">
+		<!-- TMPL_IF NAME=issuecodedescription -->
+			<!-- TMPL_VAR NAME=issuecodedescription -->
+		<!-- TMPL_ELSE -->
+			Reserva no retirada
+		<!-- /TMPL_IF -->
+	</td>
 	<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'><!-- TMPL_VAR NAME="startdate"--></font></td>
 	<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'><!-- TMPL_VAR NAME="enddate"--></font></td>
 	<td width="1%" class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
