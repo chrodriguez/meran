@@ -550,8 +550,8 @@ $query .= " AND issuecode NOT IN (select issuetypes.issuecode from sanctions
   	while (my $res = $sth->fetchrow_hashref) {
 #         	push @issuesvalues, $res->{'issuecode'};
 #         	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
-		$issuesType[$i]->{'codPrestamo'}=$res->{'issuecode'};
-		$issuesType[$i]->{'descripcion'}=$res->{'description'};
+		$issuesType[$i]->{'value'}=$res->{'issuecode'};
+		$issuesType[$i]->{'label'}=$res->{'description'};
 		$i++;
 		
  	}

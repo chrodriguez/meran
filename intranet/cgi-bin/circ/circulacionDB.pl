@@ -181,8 +181,8 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 			foreach (@results){
 				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ 
 #solo pone los items que no estan prestados
-					$items[$j]->{'barcode'}="$_->{'barcode'}";
-					$items[$j]->{'id3'}=$_->{'id3'};
+					$items[$j]->{'label'}="$_->{'barcode'}";
+					$items[$j]->{'value'}=$_->{'id3'};
 					$j++;
 				}
 			}
@@ -195,7 +195,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 			$infoPrestamo[$i]->{'id3Old'}=$id3;
 			$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
 			$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
-			$infoPrestamo[$i]->{'unititle'}=$iteminfo->{'title'};#NO ESTA!!!!
+			$infoPrestamo[$i]->{'unititle'}="FALTA!!!";#NO ESTA!!!!
 			$infoPrestamo[$i]->{'edition'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"250","a","2");
 			$infoPrestamo[$i]->{'items'}=\@items;
 			$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
