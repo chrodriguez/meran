@@ -29,11 +29,8 @@ var infoPrestamos_array= new Array();
 function generaComboPrestamo(responseText){
 	
 	infoArray= JSONstring.toObject(responseText);
-// 	CAMBIAR TABLA POR ESTILOS!!!!!!!!!!!!!!!!!!!
-	var html="<table width='95%' cellspacing='0' cellpadding='0' border='1' bgcolor='white' align='center'>";
-	html= html + "<tr align='center'><td class='fontmsg'>";
+	var html="<div class='divSeleccionPrestamos'> <p class='fontmsg'>";
 	var i;
-	
 
 	for(i=0; i<infoArray.length;i++){
 	
@@ -43,17 +40,17 @@ function generaComboPrestamo(responseText){
  
 		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
 		var comboTipoPrestamo =crearCombo(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
-		
-		html= html + infoArray[i].titulo + "<br>";
-		html= html + infoArray[i].autor + "<br>";
-		html= html + infoArray[i].unititle + "<br>";
-		html= html + infoArray[i].edicion + "<br>";
+		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
+		html= html + infoArray[i].titulo + ", ";
+		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
+		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
 		html= html + "C&oacute;digo de barras: " + comboItems + "<br>";
 		html= html + "Tipo de pr&eacute;stamo: " + comboTipoPrestamo + "<br>";
 	}
 
-	html= html + "</td></tr></table>";
-	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarPrestamo();'></center><br>"
+	html= html + "</p>";
+	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarPrestamo();'></center><br>";
+	html= html + "</div>";
 
 	$('#confirmar_prestamos').html(html);
 
@@ -65,7 +62,7 @@ function cancelarPrestamo(){
 }
 
 function updateInfoPrestamo(){
-	$('#confirmar_prestamos').html('');
+	cancelarPrestamo();
 	detalleReservas(usuario.ID);
 }
 
@@ -286,7 +283,7 @@ $(document).ready(function() {
 		</tr>
 	</table>
 </div> 
-
+<br>
 <div id="confirmar_prestamos"></div>
 <div id="mensajes"></div>
 <div id="detalleUsuario"></div>

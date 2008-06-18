@@ -23,40 +23,26 @@
 
 use strict;
 use CGI;
-# use C4::Circulation::Circ2;
-# use C4::Search;
 use C4::Output;
 use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
-# use C4::Date;
-# use CGI::Util;
-# use C4::AR::Reserves;
 use C4::AR::Reservas;
-# use C4::AR::Issues;
-# use Date::Manip;
-# use C4::AR::Sanctions;
 use C4::AR::Mensajes;
 use JSON;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user ({
-	template_name	=> 'circ/detalleReservas.tmpl',
-	query		=> $input,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
-    });
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
 
 my $obj=$input->param('obj');
 open(A, ">>/tmp/debug.txt");
 print A "obj: $obj \n";
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-#tipoAccion = PRESTAMO, RESREVA, DEVOLUCION
+#tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 
@@ -174,34 +160,34 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 	my @infoPrestamo;
 	my $env;
 	for(my $i=0;$i<$loop;$i++){
-			my $id3=$array_ids3->[$i];
-			my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
-			my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=C4::Search::allitems($iteminfo->{'id2'},'intranet');
+		my $id3=$array_ids3->[$i];
+		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
+		my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=C4::Search::allitems($iteminfo->{'id2'},'intranet');
 			
 #Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
-			my @items;
-			my $j=0;
-			foreach (@results){
-				if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ 
+		my @items;
+		my $j=0;
+		foreach (@results){
+			if (!$_->{'issued'} && (($iteminfo->{'notforloan'} && $_->{'notforloan'}) || (!$iteminfo->{'notforloan'} && $_->{'forloan'}))){ 
 #solo pone los items que no estan prestados
-					$items[$j]->{'label'}="$_->{'barcode'}";
-					$items[$j]->{'value'}=$_->{'id3'};
-					$j++;
-				}
+				$items[$j]->{'label'}="$_->{'barcode'}";
+				$items[$j]->{'value'}=$_->{'id3'};
+				$j++;
 			}
+		}
 
 # 			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
 #Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
 #esta sancionado
-			my ($tipoPrestamos)=&C4::AR::Issues::IssuesType3($iteminfo->{'notforloan'}, $borrnumber);
+		my ($tipoPrestamos)=&C4::AR::Issues::IssuesType3($iteminfo->{'notforloan'}, $borrnumber);
 			
-			$infoPrestamo[$i]->{'id3Old'}=$id3;
-			$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
-			$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
-			$infoPrestamo[$i]->{'unititle'}="FALTA!!!";#NO ESTA!!!!
-			$infoPrestamo[$i]->{'edition'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"250","a","2");
-			$infoPrestamo[$i]->{'items'}=\@items;
-			$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
+		$infoPrestamo[$i]->{'id3Old'}=$id3;
+		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
+		$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
+		$infoPrestamo[$i]->{'unititle'}="FALTA!!!";#NO ESTA!!!!
+		$infoPrestamo[$i]->{'edicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"250","a","2");
+		$infoPrestamo[$i]->{'items'}=\@items;
+		$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
 	}
 	my $infoPrestamoJSON = to_json \@infoPrestamo;
 	print $input->header;
