@@ -25,11 +25,9 @@ use strict;
 
 use C4::Search;
 use CGI;
-use C4::Output;
-use C4::AR::Reserves;
+# use C4::Output;
 use C4::Auth;
 use C4::AR::Utilidades;
-# use JSON;
 
 my $input = new CGI;
 
@@ -46,15 +44,6 @@ my $reserveNumber = $obj->{'reserveNumber'};
 my $borrowernumber=getborrowernumber($loggedinuser);
 C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
 
-=item
-if ($accion eq 'cancelarYReservar'){
-    	$input->redirect("opac-reserve.pl?obj=".$objJSON);
-	exit;
-}else{
-	$input->redirect("opac-user.pl"); 
-	exit;
-}
-=cut
 
 print $input->header;
 
