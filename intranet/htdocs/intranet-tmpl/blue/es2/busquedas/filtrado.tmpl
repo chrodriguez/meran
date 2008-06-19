@@ -2,13 +2,13 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 
 <script language="javascript" type="text/javascript">
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 
-var objBusqueda;
+var AH;
 
 function updateInfo(responseText){
  /*
@@ -30,27 +30,27 @@ function updateInfo(responseText){
 
 function busquedaCombinable(){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	objBusqueda.titulo=  $('#titulo').val();
-	objBusqueda.autor= $('#autor').val();
-	objBusqueda.signatura= $('#signatura').val()
-	objBusqueda.comboItemTypes= $('#comboItemTypes').val();
+	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	AH.titulo=  $('#titulo').val();
+	AH.autor= $('#autor').val();
+	AH.signatura= $('#signatura').val()
+	AH.comboItemTypes= $('#comboItemTypes').val();
 					
 	var radio= $(":checked");
 	var tipo=radio[0].value;
-	objBusqueda.tipo= tipo;
+	AH.tipo= tipo;
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	AH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	AH.sendToServer();
 			
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	AH.changePage(ini);
 }
 
 
@@ -80,63 +80,63 @@ function buscar(){
 }
 
 function buscarPorCodigoBarra(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	objBusqueda.codBarra= $('#codBarra').val();
-	objBusqueda.sendToServer();
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	AH.codBarra= $('#codBarra').val();
+	AH.sendToServer();
 }
 
 function buscarPorTema(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/tema.pl';
-	objBusqueda.tema= $('#tema').val();
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/tema.pl';
+	AH.tema= $('#tema').val();
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.sendToServer();
 }
 
 function buscarPorISBN(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	objBusqueda.isbn= $('#isbn').val();
-	objBusqueda.sendToServer();
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	AH.isbn= $('#isbn').val();
+	AH.sendToServer();
 }
 
 function buscarPorDiccionario(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/diccionario.pl';
-	objBusqueda.dictionary= $('#dictionary').val();
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
+	AH.dictionary= $('#dictionary').val();
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.sendToServer();
 }
 
 function busquedaPorKeyword(){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
-	objBusqueda.keyword= $('#keyword').val();
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
+	AH.keyword= $('#keyword').val();
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.sendToServer();
 
 }
 
 function buscarEstante(){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/estante.pl';
-	objBusqueda.viewShelfName= $('#estante').val();
-	objBusqueda.orden= 'title';
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/estante.pl';
+	AH.viewShelfName= $('#estante').val();
+	AH.orden= 'title';
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.sendToServer();
 }
 
 function mostrarEstantes(){
@@ -155,14 +155,14 @@ var params= '';
 
 function verTema(idtema,tema){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	objBusqueda.idTema= idtema;
-	objBusqueda.tema= tema;
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	AH.idTema= idtema;
+	AH.tema= tema;
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.sendToServer();
 
 }
 
@@ -182,19 +182,19 @@ function cambiarEstadoCampos(campos, clase){
 
 function buscarPorAutor(idAutor){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-// 	objBusqueda.debug= true;
-	objBusqueda.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	AH=new AjaxHelper(updateInfo, Init);
+// 	AH.debug= true;
+	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
-	objBusqueda.idAutor= idAutor;
-	objBusqueda.sendToServer();
+	AH.funcion= 'changePage';
+	AH.idAutor= idAutor;
+	AH.sendToServer();
 
 }
 
 function ordenarPor(ord){
 	//seteo el orden de los resultados
-	objBusqueda.sort(ord);
+	AH.sort(ord);
 }
 
 function mostrarDetalle(id1){

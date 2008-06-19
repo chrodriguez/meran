@@ -34,7 +34,7 @@ function mandarArreglo(valores){
 }
 
 
-var objBusqueda;
+var objAH;
 
 function Complete(){
 	HiddeState();
@@ -42,11 +42,11 @@ function Complete(){
 
 function ordenarPor(ord){
 	//seteo el orden de los resultados
-	objBusqueda.sort(ord);
+	objAH.sort(ord);
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 function updateInfo(responseText){
@@ -75,14 +75,14 @@ function updateInfoReserva(responseText){
 
 function reservar(id1, id2){
 
-	objBusqueda=new SearchHelper(updateInfoReserva, Init);
-  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfoReserva, Init);
+  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/opac-reserve.pl';
-	objBusqueda.id1= id1;
-	objBusqueda.id2= id2;
+	objAH.url= '/cgi-bin/koha/opac-reserve.pl';
+	objAH.id1= id1;
+	objAH.id2= id2;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
@@ -93,13 +93,13 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
 function cancelar(reserveNumber){
 
-	objBusqueda=new SearchHelper(updateInfoReserva, Init);
-//  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfoReserva, Init);
+//  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/opac-cancelreserv.pl';
-	objBusqueda.reserveNumber= reserveNumber;
+	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
+	objAH.reserveNumber= reserveNumber;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 
@@ -112,35 +112,35 @@ function buscar(){
 		tipo= $("#checkExacto").val();
 	}
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfo, Init);
+  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
-	objBusqueda.codBarra= $('#codBarra').val();
-	objBusqueda.tema=  $('#tema').val();
-	objBusqueda.autor= $('#autor').val();
-	objBusqueda.titulo= $('#titulo').val();
- 	objBusqueda.tipo= tipo;
- 	objBusqueda.comboItemTypes= $('#comboItemTypes').val();
+	objAH.url= '/cgi-bin/koha/busqueda.pl';
+	objAH.codBarra= $('#codBarra').val();
+	objAH.tema=  $('#tema').val();
+	objAH.autor= $('#autor').val();
+	objAH.titulo= $('#titulo').val();
+ 	objAH.tipo= tipo;
+ 	objAH.comboItemTypes= $('#comboItemTypes').val();
 	
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 
 }
 
 function buscarPorAutor(idAutor){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-//  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfo, Init);
+//  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
-	objBusqueda.idAutor= idAutor;	
+	objAH.url= '/cgi-bin/koha/busqueda.pl';
+	objAH.idAutor= idAutor;	
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 //***************************************Historiales**********************************************************
@@ -166,29 +166,29 @@ function mostrarHistorialUpdate(responseText){
 
 function mostrarHistorialPrestamos(bornum){
 
-	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
-//  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(mostrarHistorialUpdate, Init);
+//  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
-	objBusqueda.bornum= bornum;
+	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
+	objAH.bornum= bornum;
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 
 }
 
 function mostrarHistorialReservas(bornum){
 
-	objBusqueda=new SearchHelper(mostrarHistorialUpdate, Init);
-//  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(mostrarHistorialUpdate, Init);
+//  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
-	objBusqueda.bornum= bornum;
+	objAH.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
+	objAH.bornum= bornum;
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 
 }
 //************************************Fin***Historiales*******************************************************
@@ -196,18 +196,18 @@ function mostrarHistorialReservas(bornum){
 //****************************************Busqueda para usuario no logueado************************************
 function searchinc(){
 
-	objBusqueda=new SearchHelper(updateInfo, Init);
-//  	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfo, Init);
+//  	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/busqueda.pl';
-	objBusqueda.criteria= $('#criteria').val();
-	objBusqueda.searchinc= $('#searchinc').val();
-	objBusqueda.tipo= 'normal';
-	objBusqueda.comboItemTypes= '-1';
+	objAH.url= '/cgi-bin/koha/busqueda.pl';
+	objAH.criteria= $('#criteria').val();
+	objAH.searchinc= $('#searchinc').val();
+	objAH.tipo= 'normal';
+	objAH.comboItemTypes= '-1';
 	//se setea la funcion para cambiar de pagina
-	objBusqueda.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 //**************************************Fin**Busqueda para usuario no logueado********************************
 
@@ -346,13 +346,13 @@ function updateInfoDetalle(responseText){
 
 function detalle(id1){
 
-	objBusqueda=new SearchHelper(updateInfoDetalle, Init);
-//   	objBusqueda.debug= true;
+	objAH=new AjaxHelper(updateInfoDetalle, Init);
+//   	objAH.debug= true;
 	//para busquedas combinables
-	objBusqueda.url= '/cgi-bin/koha/opac-detail.pl';
-	objBusqueda.id1= id1;
+	objAH.url= '/cgi-bin/koha/opac-detail.pl';
+	objAH.id1= id1;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 function MARCDetail(id3, IdDivDetalle, IdDivMARC){
