@@ -1,8 +1,8 @@
 /*
- * LIBRERIA SearchHelper v 1.0.0
+ * LIBRERIA AjaxhHelper v 1.0.1
  * Esta es una libreria creada para el sistema KOHA
- * Para poder utilizarla es necesario incluir en el tmpl la libreria jquery.js y jsonStringify.js
- * @author Carbone Miguel
+ * Para poder utilizarla es necesario incluir en el tmpl la libreria jquery.js
+ * @author Carbone Miguel, Di Costanzo Damian
  * Fecha de creacion 22/05/2008
  *
  */
@@ -11,16 +11,15 @@
 
 
 
-function SearchHelper(fncUpdateInfo, fncInit){
+function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.ini= '';		//para manejar el actual del paginador
 	this.funcion= '';	//nombre de funcion que tiene q conocer el paginador
-	this.url= '/cgi-bin/koha/busqueda.pl';
+	this.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	this.orden= '';		//para ordenar los resultados
 	this.debug= false;	
 	this.onComplete= fncUpdateInfo;  //se ejecuta cuando se completa el ajax
 	this.onBeforeSend= fncInit;	//se ejecuta antes de consultar al servidor con ajax
-	this.type= 'POST';	//POST por defecto
 
 	this.sendToServer= function(){
 
@@ -32,36 +31,36 @@ function SearchHelper(fncUpdateInfo, fncInit){
 	this.sort= function(ord){
 
 			if(this.debug){
- 				console.log("SearchHelper => sort: " + ord);
+ 				console.log("AjaxHelper => sort: " + ord);
  			}
 			
 			//seteo el orden de los resultados
 			this.orden= ord;
 			//se envia la consulta
 			this.sendToServer();
-	}//end sort
+	}
 
 	this.changePage= function(ini){
 
 				if(this.debug){
- 					console.log("SearchHelper => changePage: " + ini);
+ 					console.log("AjaxHelper => changePage: " + ini);
  				}
 
 				this.ini= ini;
 				this.sendToServer();
 
-	}//end changePage
+	}
 
 	this.ajaxCallback= function(helper){
 			
 			var params= "obj="+JSONstring.make(helper);
 
-			if(helper.debug){
- 				console.log("SearchHelper => ajaxCallback \n" + params);
+			if(this.debug){
+ 				console.log("AjaxHelper => ajaxCallback \n" + params);
 			}
 
 	
-			$.ajax({	type: helper.type,
+			$.ajax({	type: "POST", 
 					url: helper.url,
 					data: params,
  					beforeSend: helper.onBeforeSend,
@@ -69,7 +68,7 @@ function SearchHelper(fncUpdateInfo, fncInit){
  						helper.onComplete(ajax.responseText);
   					}
 				});
-	}//end ajaxCallback
+	}
 
 }
 
