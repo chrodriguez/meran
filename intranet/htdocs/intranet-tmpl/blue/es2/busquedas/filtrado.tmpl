@@ -8,7 +8,8 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 
-var AH;
+
+var objAH;
 
 function updateInfo(responseText){
  /*
@@ -30,27 +31,27 @@ function updateInfo(responseText){
 
 function busquedaCombinable(){
 
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+
 	//para busquedas combinables
-	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	AH.titulo=  $('#titulo').val();
-	AH.autor= $('#autor').val();
-	AH.signatura= $('#signatura').val()
-	AH.comboItemTypes= $('#comboItemTypes').val();
-					
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.titulo=  $('#titulo').val();
+	objAH.autor= $('#autor').val();
+	objAH.signatura= $('#signatura').val()
+	objAH.comboItemTypes= $('#comboItemTypes').val();
+	
 	var radio= $(":checked");
 	var tipo=radio[0].value;
-	AH.tipo= tipo;
+	objAH.tipo= tipo;
 	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
+	objAH.funcion= 'changePage';
 	//se envia la consulta
-	AH.sendToServer();
-			
+	objAH.sendToServer();	
 }
 
 function changePage(ini){
-	AH.changePage(ini);
+	objAH.changePage(ini);
 }
 
 
@@ -80,63 +81,64 @@ function buscar(){
 }
 
 function buscarPorCodigoBarra(){
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	AH.codBarra= $('#codBarra').val();
-	AH.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.codBarra= $('#codBarra').val();
+	objAH.sendToServer();
 }
 
 function buscarPorTema(){
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/tema.pl';
-	AH.tema= $('#tema').val();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/tema.pl';
+	objAH.tema= $('#tema').val();
+
 	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.sendToServer();
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
 }
 
 function buscarPorISBN(){
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	AH.isbn= $('#isbn').val();
-	AH.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.isbn= $('#isbn').val();
+	objAH.sendToServer();
 }
 
 function buscarPorDiccionario(){
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
-	AH.dictionary= $('#dictionary').val();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
+	objAH.dictionary= $('#dictionary').val();
 	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.sendToServer();
+
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
 }
 
 function busquedaPorKeyword(){
 
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
-	AH.keyword= $('#keyword').val();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
+	objAH.keyword= $('#keyword').val();
 	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.sendToServer();
-
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
 }
 
 function buscarEstante(){
 
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/estante.pl';
-	AH.viewShelfName= $('#estante').val();
-	AH.orden= 'title';
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/estante.pl';
+	objAH.viewShelfName= $('#estante').val();
+	objAH.orden= 'title';
 	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.sendToServer();
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
 }
 
 function mostrarEstantes(){
@@ -155,15 +157,15 @@ var params= '';
 
 function verTema(idtema,tema){
 
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	AH.idTema= idtema;
-	AH.tema= tema;
-	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.idTema= idtema;
+	objAH.tema= tema;
 
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
 }
 
 combinables= ['titulo', 'autor', 'tipo', 'signatura', 'comboItemTypes'];
@@ -182,19 +184,19 @@ function cambiarEstadoCampos(campos, clase){
 
 function buscarPorAutor(idAutor){
 
-	AH=new AjaxHelper(updateInfo, Init);
-// 	AH.debug= true;
-	AH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-	//se setea la funcion para cambiar de pagina
-	AH.funcion= 'changePage';
-	AH.idAutor= idAutor;
-	AH.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	objAH.idAutor= idAutor;
+	objAH.sendToServer();
 }
 
 function ordenarPor(ord){
 	//seteo el orden de los resultados
-	AH.sort(ord);
+	objAH.sort(ord);
 }
 
 function mostrarDetalle(id1){

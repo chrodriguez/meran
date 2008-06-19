@@ -31,7 +31,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.sort= function(ord){
 
 			if(this.debug){
- 				console.log("SearchHelper => sort: " + ord);
+ 				console.log("AjaxHelper => sort: " + ord);
  			}
 			
 			//seteo el orden de los resultados
@@ -43,7 +43,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.changePage= function(ini){
 
 				if(this.debug){
- 					console.log("SearchHelper => changePage: " + ini);
+ 					console.log("AjaxHelper => changePage: " + ini);
  				}
 
 				this.ini= ini;
@@ -56,7 +56,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			var params= "obj="+JSONstring.make(helper);
 
 			if(this.debug){
- 				console.log("SearchHelper => ajaxCallback \n" + params);
+ 				console.log("AjaxHelper => ajaxCallback \n" + params);
 			}
 
 	

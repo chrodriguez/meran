@@ -1,14 +1,14 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<!--<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
@@ -66,24 +66,24 @@ function updateInfoPrestamos(responseText){
 
 }
 
-var objBusqueda;
+var objAH;
 
 function detalleUsuario(borrower){
 
-	objBusqueda=new SearchHelper(updateInfoUsuario, Init);
-	objBusqueda.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
-	objBusqueda.borrowernumber= borrower;
+	objAH=new AjaxHelper(updateInfoUsuario, Init);
+	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
+	objAH.borrowernumber= borrower;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 function detallePretamos(borrower){
 
-	objBusqueda=new SearchHelper(updateInfoPrestamos, Init);
-	objBusqueda.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
-	objBusqueda.borrnumber= borrower;
+	objAH=new AjaxHelper(updateInfoPrestamos, Init);
+	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
+	objAH.borrnumber= borrower;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 // IGUAL A LA DE prestamos.tmpl, DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
@@ -101,13 +101,13 @@ function realizarDevORen(accion){
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objBusqueda=new SearchHelper(updateInfoReservas, Init);
-		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-		objBusqueda.tipoAccion= accion;
-		objBusqueda.ids3=array;
-		objBusqueda.borrowernumber=borrowernumber;
+		objAH=new AjaxHelper(updateInfoReservas, Init);
+		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= accion;
+		objAH.ids3=array;
+		objAH.borrowernumber=borrowernumber;
 		//se envia la consulta
-		objBusqueda.sendToServer();
+		objAH.sendToServer();
 	}
 }
 

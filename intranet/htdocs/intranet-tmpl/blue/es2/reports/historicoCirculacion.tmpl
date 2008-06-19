@@ -2,7 +2,7 @@
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/ajaxHelper.js"></script>
 
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
@@ -20,14 +20,14 @@
 				};
 
 
-	var objBusqueda;
+	var objAH;
 
 	function ordenar(orden){
-		objBusqueda.sort(orden);
+		objAH.sort(orden);
 	}
 
 	function changePage(ini){
-		objBusqueda.changePage(ini);
+		objAH.changePage(ini);
 	}
 
 	function updateInfo(responseText){
@@ -37,17 +37,17 @@
 	}
 
 	function consultar(){
-		objBusqueda=new SearchHelper(updateInfo, Init);
-		objBusqueda.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
-		objBusqueda.fechaIni=  $('#fechaIni').val();
-		objBusqueda.fechaFin= $('#fechaFin').val();
-		objBusqueda.chkfecha=  $('#chkfecha')[0].checked;
-		objBusqueda.user= $('#user').val()
-		objBusqueda.tiposPrestamos= $('#tiposPrestamos').val();
-		objBusqueda.tipoOperacion= $('#tipoOperacion').val();
+		objAH=new AjaxHelper(updateInfo, Init);
+		objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+		objAH.fechaIni=  $('#fechaIni').val();
+		objAH.fechaFin= $('#fechaFin').val();
+		objAH.chkfecha=  $('#chkfecha')[0].checked;
+		objAH.user= $('#user').val()
+		objAH.tiposPrestamos= $('#tiposPrestamos').val();
+		objAH.tipoOperacion= $('#tipoOperacion').val();
 		//se setea la funcion para cambiar de pagina
-		objBusqueda.funcion= 'changePage';
-		objBusqueda.sendToServer();
+		objAH.funcion= 'changePage';
+		objAH.sendToServer();
 
 	}
 	

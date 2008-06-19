@@ -9,7 +9,7 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
-<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
+<!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -17,14 +17,14 @@
 		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
 				};
-var objBusqueda;
+var objAH;
 
 function ordenar(orden){
-	objBusqueda.sort(orden);
+	objAH.sort(orden);
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 function updateInfo(responseText){
@@ -34,14 +34,14 @@ function updateInfo(responseText){
 }
 
 function consultar(){
-	objBusqueda=new SearchHelper(updateInfo,Init);
-	objBusqueda.url="/cgi-bin/koha/reports/availabilityResult.pl";
-	objBusqueda.branch=$("#branch").val();
-	objBusqueda.fechaIni=$("#fechaIni").val();
-	objBusqueda.fechaFin=$("#fechaFin").val();
-	objBusqueda.avail=$("#avail").val();
-	objBusqueda.funcion= "changePage";
-	objBusqueda.sendToServer();
+	objAH=new AjaxHelper(updateInfo,Init);
+	objAH.url="/cgi-bin/koha/reports/availabilityResult.pl";
+	objAH.branch=$("#branch").val();
+	objAH.fechaIni=$("#fechaIni").val();
+	objAH.fechaFin=$("#fechaFin").val();
+	objAH.avail=$("#avail").val();
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
 }
 
 </script>

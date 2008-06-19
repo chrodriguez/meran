@@ -265,7 +265,7 @@ sub DatosReservas {
 	my ($bor)=@_;
 	my $dbh = C4::Context->dbh;
 # FALTAN!!!!!!!!!!!!!!!!!!!!!!
-# biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc , biblioitems.number as redicion
+# biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc
 
 	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
 			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
@@ -285,6 +285,8 @@ sub DatosReservas {
 	while (my $data=$sth->fetchrow_hashref){
 		$data->{'rreminderdate'}=C4::Date::format_date($data->{'rreminderdate'},$dateformat);
 		$data->{'rreservedate'}=C4::Date::format_date($data->{'rreservedate'},$dateformat);
+		$data->{'rnotificationdate'}= C4::Date::format_date($data->{'rnotificationdate'},$dateformat);
+		$data->{'redicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'rid2'},"250","a","2");#VER SI QUEDA!!!!!!!!!!!!!!!!!!
 		push (@results,$data);
 	}
 	

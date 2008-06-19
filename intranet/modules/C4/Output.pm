@@ -31,7 +31,6 @@ use strict;
 require Exporter;
 
 use C4::Context;
-# use C4::Database;
 use HTML::Template;
 use HTML::Template::Expr;
 use vars qw($VERSION @ISA @EXPORT);

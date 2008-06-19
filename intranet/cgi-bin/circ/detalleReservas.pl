@@ -52,13 +52,12 @@ my $rcount = 0;
 my $wcount = 0;
 my $clase1='par';
 my $clase2='par';
-my $dateformat = C4::Date::get_date_format();
 
 foreach my $res (@$reserves) {
 
-	$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
-	$res->{'rnotificationdate'}  = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
-	$res->{'rreminderdate'}  = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
+# 	$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
+# 	$res->{'rnotificationdate'}  = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
+# 	$res->{'rreminderdate'}  = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
 
 	if ($res->{'estado'} eq 'E') {
 # 		$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchcode'};

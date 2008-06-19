@@ -8,12 +8,12 @@
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
-<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
+<!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
 
-var objBusqueda;
+var objAH;
 function ordenar(orden){
-	objBusqueda.sort(orden);
+	objAH.sort(orden);
 }
 
 function ocultarBoton(tipoReserva){
@@ -35,18 +35,18 @@ function updateInfo(responseText){
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 
 function consultar(){
 	tipoReserva=$("#tipoReserva").val();
-	objBusqueda=new SearchHelper(updateInfo, Init);
-	objBusqueda.url="/cgi-bin/koha/reports/reservasResult.pl";
-	objBusqueda.branch=$("#branch").val();
-	objBusqueda.tipoReserva=tipoReserva;
-	objBusqueda.funcion= "changePage";
-	objBusqueda.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+	objAH.url="/cgi-bin/koha/reports/reservasResult.pl";
+	objAH.branch=$("#branch").val();
+	objAH.tipoReserva=tipoReserva;
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
 }
 
 </script>

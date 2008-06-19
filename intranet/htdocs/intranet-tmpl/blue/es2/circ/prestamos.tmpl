@@ -1,14 +1,14 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/SearchHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
@@ -66,6 +66,8 @@ function updateInfoPrestamo(){
 	detalleReservas(usuario.ID);
 }
 
+var objAH;
+
 function prestar(){
 	
 
@@ -75,13 +77,13 @@ function prestar(){
 		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
 	}
 	
-	objBusqueda=new SearchHelper(updateInfoPrestamo, Init);
-	objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objBusqueda.tipoAccion= 'PRESTAMO';
-	objBusqueda.infoPrestamos= infoPrestamos_array;
-	objBusqueda.borrowernumber= usuario.ID;
+	objAH=new AjaxHelper(updateInfoPrestamo, Init);
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'PRESTAMO';
+	objAH.infoPrestamos= infoPrestamos_array;
+	objAH.borrowernumber= usuario.ID;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 function crearCombo(items_array, idSelect){
@@ -152,24 +154,22 @@ function updateInfoReservas(responseText){
 
 }
 
-var objBusqueda;
-
 function detalleUsuario(borrower){
 
-	objBusqueda=new SearchHelper(updateInfoUsuario, Init);
-	objBusqueda.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
-	objBusqueda.borrowernumber= borrower;
+	objAH=new AjaxHelper(updateInfoUsuario, Init);
+	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
+	objAH.borrowernumber= borrower;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 function detalleReservas(borrower){
 
-	objBusqueda=new SearchHelper(updateInfoReservas, Init);
-	objBusqueda.url= '/cgi-bin/koha/circ/detalleReservas.pl';
-	objBusqueda.borrnumber= borrower;
+	objAH=new AjaxHelper(updateInfoReservas, Init);
+	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
+	objAH.borrnumber= borrower;
 	//se envia la consulta
-	objBusqueda.sendToServer();
+	objAH.sendToServer();
 }
 
 
@@ -190,30 +190,22 @@ function realizarPrestamo(){
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objBusqueda=new SearchHelper(generaComboPrestamo, Init);
-		objBusqueda.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-		objBusqueda.tipoAccion= 'CONFIRMAR_PRESTAMO';
-		objBusqueda.ids3= array;
-		objBusqueda.borrowernumber=borrowernumber;
+		objAH=new AjaxHelper(generaComboPrestamo, Init);
+		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
+		objAH.ids3= array;
+		objAH.borrowernumber=borrowernumber;
 		//se envia la consulta
-		objBusqueda.sendToServer();
+		objAH.sendToServer();
 	}
 }
 
 
 
-function confirm_cancelation(tipoReserva){
+function cancelarReserva(numeroReserva){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
-		var formu;
-		if(tipoReserva == "espera"){
-			formu=document.getElementById('resevEspera');
-		}
-		else{
-			formu=document.getElementById('formPrestar');
-		}
-		formu.action="/cgi-bin/koha/cancelreserv.pl";
-		formu.submit();
+		
         }
 }
 
@@ -229,18 +221,6 @@ function checkedAll(){
 	}
 }
 
-
-// VER SI ESTO SE USA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-//Selecciona los checkbox seleccionados por el usuario para devolver.
-var stringCheckbox= '<!-- TMPL_VAR NAME="chkbox" -->';
-var checkbox=stringCheckbox.split(",");
-var cantChk= checkbox.length;
-if(cantChk != 0 && stringCheckbox != ""){
-	for (var i=0; i< checkbox.length; i++){
-		var ch=document.getElementById(checkbox[i]);
-        	ch.checked=true;	
-	}
-}
 
 //**********************************************************************************************************
 

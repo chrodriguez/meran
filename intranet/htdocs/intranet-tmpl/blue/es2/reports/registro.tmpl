@@ -9,7 +9,7 @@
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
-<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
+<!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
 	window.onload = function () {
@@ -19,47 +19,47 @@
 
 //Funcion que guarda la nota de la modificacion, es llamada desde regitroResult.tmpl
 var notas="";
-var objBusqueda;
+var objAH;
 
 function ordenar(orden){
-	objBusqueda.sort(orden);
+	objAH.sort(orden);
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 function updateInfo(responseText){
 	$("#result").html(responseText);
 	zebra("tablaResult");
-	objBusqueda.id="";
-	objBusqueda.notas="";
+	objAH.id="";
+	objAH.notas="";
 	HiddeState();
 }
 
 
 function consultar(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-	objBusqueda.url="/cgi-bin/koha/reports/registroResult.pl";
-	objBusqueda.chkfecha=$("#chkfecha")[0].checked;
-	objBusqueda.chkuser=$("#chkuser")[0].checked;
-	objBusqueda.chknum=$("#chknum")[0].checked;
-	objBusqueda.dateselected=$("#dateselected").val();
-	objBusqueda.dateselectedEnd=$("#dateselectedEnd").val();
-	objBusqueda.operacion=$("input[@name='operacion']:checked").val();
-	objBusqueda.tipo=$("input[@name='tipo']:checked").val();
-	objBusqueda.user=$("#user").val();
-	objBusqueda.numDesde=$("#numDesde").val();
-	objBusqueda.numHasta=$("#numHasta").val();
-	objBusqueda.funcion= "changePage";
-	objBusqueda.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+	objAH.url="/cgi-bin/koha/reports/registroResult.pl";
+	objAH.chkfecha=$("#chkfecha")[0].checked;
+	objAH.chkuser=$("#chkuser")[0].checked;
+	objAH.chknum=$("#chknum")[0].checked;
+	objAH.dateselected=$("#dateselected").val();
+	objAH.dateselectedEnd=$("#dateselectedEnd").val();
+	objAH.operacion=$("input[@name='operacion']:checked").val();
+	objAH.tipo=$("input[@name='tipo']:checked").val();
+	objAH.user=$("#user").val();
+	objAH.numDesde=$("#numDesde").val();
+	objAH.numHasta=$("#numHasta").val();
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
 }
 
 function nota(id){
 	var not=$("#"+id).val();
-	objBusqueda.id=id;
-	objBusqueda.notas=not;
-	objBusqueda.sendToServer();
+	objAH.id=id;
+	objAH.notas=not;
+	objAH.sendToServer();
 }
 
 </script>

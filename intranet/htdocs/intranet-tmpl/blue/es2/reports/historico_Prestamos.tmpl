@@ -10,7 +10,7 @@
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
-<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
+<!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -19,9 +19,9 @@
 			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('f_fin'));
 				};
 
-var objBusqueda;
+var objAH;
 function ordenar(orden){
-	objBusqueda.sort(orden);
+	objAH.sort(orden);
 }
 
 function updateInfo(responseText){
@@ -31,19 +31,19 @@ function updateInfo(responseText){
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 function consultar(){
-	objBusqueda=new SearchHelper(updateInfo,Init);
-	objBusqueda.f_ini= $('#f_ini').val();
-	objBusqueda.f_fin= $('#f_fin').val();
-	objBusqueda.tiposItems= $('#tiposItems').val();
-	objBusqueda.tipoPrestamos=$('#tipoPrestamos').val();
-	objBusqueda.catUsuarios=$('#catUsuarios').val();
-	objBusqueda.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
-	objBusqueda.funcion="changePage";
-	objBusqueda.sendToServer();
+	objAH=new AjaxHelper(updateInfo,Init);
+	objAH.f_ini= $('#f_ini').val();
+	objAH.f_fin= $('#f_fin').val();
+	objAH.tiposItems= $('#tiposItems').val();
+	objAH.tipoPrestamos=$('#tipoPrestamos').val();
+	objAH.catUsuarios=$('#catUsuarios').val();
+	objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
+	objAH.funcion="changePage";
+	objAH.sendToServer();
 }
 
 

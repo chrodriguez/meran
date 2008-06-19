@@ -8,7 +8,7 @@
 
 <!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
-<!-- TMPL_INCLUDE NAME="SearchHelper.js" -->
+<!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
 function buscarChecked(){
 	var str="";
@@ -19,14 +19,14 @@ function buscarChecked(){
 	return str;
 }
 
-var objBusqueda;
+var objAH;
 
 function ordenar(orden){
-	objBusqueda.sort(orden);
+	objAH.sort(orden);
 }
 
 function changePage(ini){
-	objBusqueda.changePage(ini);
+	objAH.changePage(ini);
 }
 
 function updateInfo(responseText){
@@ -36,15 +36,15 @@ function updateInfo(responseText){
 }
 
 function consultar(){
-	objBusqueda=new SearchHelper(updateInfo, Init);
-	objBusqueda.url="/cgi-bin/koha/reports/usersResult.pl";
-	objBusqueda.branch=$("#branch").val();
-	objBusqueda.year=$("#year").val();
-	objBusqueda.usos=$("#usos").val();
-	objBusqueda.categoria=$("#categoria").val();
-	objBusqueda.chck=buscarChecked();
-	objBusqueda.funcion= "changePage";
-	objBusqueda.sendToServer();
+	objAH=new AjaxHelper(updateInfo, Init);
+	objAH.url="/cgi-bin/koha/reports/usersResult.pl";
+	objAH.branch=$("#branch").val();
+	objAH.year=$("#year").val();
+	objAH.usos=$("#usos").val();
+	objAH.categoria=$("#categoria").val();
+	objAH.chck=buscarChecked();
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
 }
 
 </script>

@@ -34,15 +34,13 @@ my $input = new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 $loggedinuser = getborrowernumber($loggedinuser);
 
-my $biblioitemnumber=$input->param('biblioitem');
-my $volver=$input->param('volver');
+my $objJSON=$input->param('obj');
 
-my $borrowernumber=$input->param('borrnumber');
-cancelar_reserva($biblioitemnumber,$borrowernumber,$loggedinuser);
-my $borname=$input->param('borrnumber');
-if ($volver){
-    print $input->redirect("opac-reserve.pl?bib=".$volver);}
-    else{print $input->redirect("circ/circulation.pl?borrnumber=".$borname); }
-#Matias
+my $obj=from_json_ISO($objJSON);
+my $reserveNumber = $obj->{'reserveNumber'};
 
 
+my $borrowernumber=getborrowernumber($loggedinuser);
+C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
+
+print $input->header;
