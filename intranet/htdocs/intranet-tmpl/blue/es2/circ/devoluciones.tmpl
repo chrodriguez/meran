@@ -7,21 +7,19 @@
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<!--<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
+
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script language="javascript" type="text/javascript">
 
-
+/*
 function object_usuario(){
 	this.text;
 	this.ID;
-}
-
-var objects_array= new Array();
-
+}*/
+/*
 function AutocompleteUsuario(idInput){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
@@ -47,16 +45,16 @@ function AutocompleteUsuario(idInput){
 		detalleUsuario(data[1]);
 		detallePretamos(data[1]);
 	});
-}
-
+}*/
+/*
 function updateInfoUsuario(responseText){
 	
 	$('#detalleUsuario').slideDown('slow');
 	$('#detalleUsuario').html(responseText);
 	HiddeState();
 
-}
-
+}*/
+/*
 function updateInfoPrestamos(responseText){
 	
 	$('#tablaPrestamos').slideDown('slow');
@@ -65,10 +63,10 @@ function updateInfoPrestamos(responseText){
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
 	HiddeState();
 
-}
+}*/
 
-var objAH;
-
+// var objAH;
+/*
 function detalleUsuario(borrower){
 
 	objAH=new AjaxHelper(updateInfoUsuario, Init);
@@ -76,8 +74,8 @@ function detalleUsuario(borrower){
 	objAH.borrowernumber= borrower;
 	//se envia la consulta
 	objAH.sendToServer();
-}
-
+}*/
+/*
 function detallePretamos(borrower){
 
 	objAH=new AjaxHelper(updateInfoPrestamos, Init);
@@ -85,11 +83,11 @@ function detallePretamos(borrower){
 	objAH.borrnumber= borrower;
 	//se envia la consulta
 	objAH.sendToServer();
-}
+}*/
 
 // IGUAL A LA DE prestamos.tmpl, DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
 // Recomiendo ponerla en un js con la de autocomplete de usuario y las otras tambien y limpiar algunas librerias.
-
+/*
 function realizarDevORen(accion){
 	var chck=$("input[@name='chkbox1']:checked");
 	var array= new Array;
@@ -110,7 +108,7 @@ function realizarDevORen(accion){
 		//se envia la consulta
 		objAH.sendToServer();
 	}
-}
+}*/
 
 
 //**************************************************************************************************************
@@ -160,7 +158,7 @@ function renovarItems(){
 
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
-	AutocompleteUsuario('usuarioAutocomplete', '');
+	AutocompleteUsuario('usuarioAutocomplete',detallePretamos);
 	
 });
 

@@ -691,7 +691,7 @@ sub prestar{
 	if(!$error){
 	#No hay error
 
-		my ($paramsPrestamo)= chequeoParaPrestamo($params);
+		($error, $codMsg, $paraMens)= chequeoParaPrestamo($params);
 		
 	}
 
@@ -793,7 +793,10 @@ sub insertarPrestamo {
 
 	$sth2->execute(	$params->{'reservenumber'});
 =cut
-
+#  VER ES PARA SACAR DE DONDE ES EL ITEM.(HOLDINGBRANCH) PORQUE NO SE GUARDABA EN LA BASE DE DATOS
+	my $sth=$dbh->prepare("SELECT * FROM nivel3 WHERE id3=?");
+	$sth->execute($params->{'id3'});
+	my $data=$sth->$sth->fetchrow_hashref;
 
 #Se realiza el prestamo del item
 	my $sth3=$dbh->prepare("	INSERT INTO issues 		
@@ -802,8 +805,8 @@ sub insertarPrestamo {
 
 	$sth3->execute(	$params->{'borrowernumber'}, 
 			$params->{'id3'}, 
-			$params->{'branchcode'}, 
-			$params->{'branchcode'}, 
+			$data->{'holdingbranch'}, 
+			$data->{'holdingbranch'}, 
 			0, 
 			$params->{'issuesType'}
 	);

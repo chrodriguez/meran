@@ -1,0 +1,292 @@
+/*
+ * LIBRERIA circulacion v 1.0.1
+ * Esta es una libreria creada para el sistema KOHA
+ * Contendran las funciones para permitir la circulacion en el sistema
+ * Las siguientes librerias son necesarias:
+ *	<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+ * @author Carbone Miguel, Di Costanzo Damian
+ * Fecha de creacion 19/06/2008
+ *
+ */
+
+
+var infoPrestamos_array= new Array();//Arreglo que contendra los objetos, con info que pertenece a los prestamos.
+var objAH;//Objeto AjaxHelper.
+
+/*
+ * infoPrestamo
+ * Representa al objeto que contendra la informacion para poder prestar el item. 
+ * Que se pasara con json al servidor, en un arreglo (infoPrestamos_array).
+ * prestamos.tmpl
+ */
+function infoPrestamo(){
+	this.id3= '';
+	this.id3Old= '';
+	this.tipoPrestamo; //este es el tipo de prestamo para el id3
+}
+
+/*
+ * object_usuario
+ * Representa al objeto que contendra la informacion del usuario seleccionado del autocomplete.
+ */
+function object_usuario(){
+	this.text;
+	this.ID;
+}
+
+/*
+ * AutocompleteUsuario
+ * Funcion que asigna al input que busca el usuario la funcion de autocomplete.
+ */
+function AutocompleteUsuario(idInput,funcionDetalle){
+	// q= valor de campoHelp
+	$("#"+idInput).search();
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
+ 		formatItem: function(row){
+			return row[0];
+		},
+		minChars:1,
+        	matchSubset:1,
+        	matchContains:1,
+		maxItemsToShow:10,
+        	cacheLength:10,
+        	selectOnly:1,
+	});//end autocomplete
+	$("#"+idInput).result(function(event, data, formatted) {
+		//muestro en el input el usuario seleccioinado
+		$("#"+idInput).val(data[0]);
+	
+ 		usuario= new object_usuario();
+		usuario.text= data[0];
+		usuario.ID= data[1];
+		
+		detalleUsuario(data[1]);
+		funcionDetalle(data[1]);//Puede ser detallePrestamo o detalleReserva
+	});
+}
+
+/*
+ * detalleUsuario
+ * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
+ */
+function detalleUsuario(borrower){
+	objAH=new AjaxHelper(updateInfoUsuario, Init);
+	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
+	objAH.borrowernumber= borrower;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoUsuario
+ * Funcion que se realiza cuando se completa la consulta ajax de detalleUsuario, muestra los datos del usuario.
+ */
+function updateInfoUsuario(responseText){
+	$('#detalleUsuario').slideDown('slow');
+	$('#detalleUsuario').html(responseText);
+	HiddeState();
+
+}
+
+/*
+ * detalleReservas
+ * Funcion que hace la consulta Ajax para traer las reservas del usuario seleccionado.
+ * prestamos.tmpl---> tabla de reservas para poder prestar.
+ */
+function detalleReservas(borrower){
+	objAH=new AjaxHelper(updateInfoReservas, Init);
+	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
+	objAH.borrnumber= borrower;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoReservas
+ * Funcion que se realiza cuando se completa la consulta ajax de detalleReservas, muestra las reservas del usuario
+ * prestamos.tmpl---> se muestra la tabla.
+ */
+function updateInfoReservas(responseText){
+	$('#tablaReservas').slideDown('slow');
+	$('#tablaReservas').html(responseText);
+	zebra('tablaReservas');
+	checkedAll('checkAllReservas','chkboxReservas');
+	HiddeState();
+
+}
+
+/*
+ * detallePretamos
+ * Funcion que hace la consulta Ajax para traer los prestamos del usuario seleccionado.
+ * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
+ */
+function detallePretamos(borrower){
+	objAH=new AjaxHelper(updateInfoPrestamos, Init);
+	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
+	objAH.borrnumber= borrower;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoPrestamos
+ * Funcion que se realiza cuando se completa la consulta ajax de detallePrestamos, 
+ * muestra los prestamos del usuario.
+ * devoluciones.tmpl---> se muestra la tabla
+ */
+function updateInfoPrestamos(responseText){
+	$('#tablaPrestamos').slideDown('slow');
+	$('#tablaPrestamos').html(responseText);
+ 	zebra('tablaPrestamos');
+	checkedAll('checkAllPrestamos','chkboxPrestamos');
+	HiddeState();
+
+}
+
+/*
+ * realizarAccion
+ * Realiza la accion correspondiente segun el parametro que recibe.
+ * @params: accion--> lo que se va a realizar en circulacionDB.pl,(CONFIRMAR_PRESTAMO,RENOVAR,DEVOLVER)
+ *          chckbox-> nombre del los checkbox correspondientes a las tablas.
+ *	    funcion-> la funcion que se tiene que ejecutar cuando termina la consulta ajax.
+ */
+function realizarAccion(accion,chckbox,funcion){
+	var chck=$("input[@name="+chckbox+"]:checked");
+	var array= new Array;
+	var long=chck.length;
+	if ( long == 0){
+		alert("Elija al menos un documento para realizar la acci&oacute;n");
+	}
+	else{
+
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+		objAH=new AjaxHelper(funcion, Init);
+		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= accion;
+		objAH.ids3= array;
+		objAH.borrowernumber=usuario.ID;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
+}
+
+/*
+ * generaComboPrestamo
+ * Funcion que se hace cuando termina la funcion realizarAccion.
+ * Genera el div con los datos de los prestamos a realizar, con la posibilidad de seleccionar el tipo de prestamo
+ * y el item que se va a prestar.
+ * prestamos.tmpl---> crea el div para los prestamos
+ */
+function generaDivPrestamo(responseText){
+	
+	infoArray= JSONstring.toObject(responseText);
+	var html="<div class='divSeleccionPrestamos'> <p class='fontmsg'>";
+	var i;
+
+	for(i=0; i<infoArray.length;i++){
+	
+		var infoPrestamoObj= new infoPrestamo();
+		infoPrestamoObj.id3Old= infoArray[i].id3Old;
+		infoPrestamos_array[i]= infoPrestamoObj;
+ 
+		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
+		var comboTipoPrestamo =crearCombo(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
+		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
+		html= html + infoArray[i].titulo + ", ";
+		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
+		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
+		html= html + "C&oacute;digo de barras: " + comboItems + "<br>";
+		html= html + "Tipo de pr&eacute;stamo: " + comboTipoPrestamo + "<br>";
+	}
+
+	html= html + "</p>";
+	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarPrestamo();'></center><br>";
+	html= html + "</div>";
+
+	$('#confirmar_prestamos').html(html);
+
+	HiddeState();
+}
+
+/*
+ * crearCombo
+ * Crea los combos necesarios para poder seleccionar el item y el tipo de prestamo, para cada item que se va a
+ * prestar.
+ * prestamos.tmpl--->se usa en la funcion generarDivPrestamos.
+ * PUEDE IR EN OTRA LIBRERIA, COMO UTIL.js !!!!!!???????
+ */
+function crearCombo(items_array, idSelect){
+	var opciones= '';	
+	var html= "<select id='" + idSelect + "'>";
+	var i;
+	for(i=0;i<items_array.length;i++){
+		opciones= opciones + "<option value=" + items_array[i].value + ">" + items_array[i].label + "</option>";
+	}
+	html= html + opciones + "</select>";
+	return html;
+}
+
+/*
+ * prestar
+ * Funcion que realiza los prestamos correspondientes a los items seleccionados.
+ * prestamos.tmpl---> se prestan los libros.
+ */
+function prestar(){
+	for(var i=0; i< infoPrestamos_array.length; i++){
+		//se setea el id3 que se va a prestar
+		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
+		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
+	}
+	
+	objAH=new AjaxHelper(updateInfoPrestarReserva, Init);
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'PRESTAMO';
+	objAH.infoPrestamos= infoPrestamos_array;
+	objAH.borrowernumber= usuario.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoPrestarReserva
+ * Funcion que se realiza cuando se realiza el prestamo.
+ * prestamos.tmpl---> se actualiza la tabla de reservas despues que se presto algun item.
+ */
+function updateInfoPrestarReserva(){
+	cancelarPrestamo();
+	detalleReservas(usuario.ID);
+}
+
+/*
+ * cancelarPrestamo
+ * Cancela el prestamo que se iba a realizar.
+ * Borra el div generado por la funcion generaDivPrestamo
+ * prestamos.tmpl---> se borra el div que contiene los datos de los prestamos.
+ */
+function cancelarPrestamo(){
+	$('#confirmar_prestamos').html('');
+}
+
+/*
+ * cancelarReserva
+ * Funcion que cancela la reserva seleccionada.
+ * prestamos.tmpl---> se cancela la reserva.
+ */
+function cancelarReserva(reserveNumber){
+	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
+        if (is_confirmed) {
+		objAH=new AjaxHelper(updateInfoPrestamo, Init);
+		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
+		objAH.borrowernumber=usuario.ID;
+		objAH.reserveNumber=reserveNumber;
+		objAH.sendToServer();
+        }
+}

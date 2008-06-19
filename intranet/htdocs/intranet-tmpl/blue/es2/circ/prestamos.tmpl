@@ -7,25 +7,23 @@
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
-<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script language="javascript" type="text/javascript">
 
-
 //*********************************************Prestamos******************************************
-
+/*
 function infoPrestamo(){
 	this.id3= '';
 	this.id3Old= '';
 	this.tipoPrestamo; //este es el tipo de prestamo para el id3
-}
+}*/
 
-var infoPrestamos_array= new Array();
-
+// var infoPrestamos_array= new Array();
+/*
 function generaComboPrestamo(responseText){
 	
 	infoArray= JSONstring.toObject(responseText);
@@ -55,19 +53,19 @@ function generaComboPrestamo(responseText){
 	$('#confirmar_prestamos').html(html);
 
 	HiddeState();
-}
-
+}*/
+/*
 function cancelarPrestamo(){
 	$('#confirmar_prestamos').html('');
-}
-
+}*/
+/*
 function updateInfoPrestamo(){
 	cancelarPrestamo();
 	detalleReservas(usuario.ID);
-}
+}*/
 
-var objAH;
-
+// var objAH;
+/*
 function prestar(){
 	
 
@@ -84,8 +82,8 @@ function prestar(){
 	objAH.borrowernumber= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
-}
-
+}*/
+/*
 function crearCombo(items_array, idSelect){
 
 	var opciones= '';	
@@ -100,15 +98,15 @@ function crearCombo(items_array, idSelect){
 	
 	html= html + opciones + "</select>";
 	return html;
-}
+}*/
 //**********************************************FIN Prestamos*************************************
 
-
+/*
 function object_usuario(){
 	this.text;
 	this.ID;
-}
-
+}*/
+/*
 function AutocompleteUsuario(idInput){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
@@ -134,17 +132,17 @@ function AutocompleteUsuario(idInput){
 		detalleUsuario(data[1]);
 		detalleReservas(data[1]);
 	});
-}
-
+}*/
+/*
 function updateInfoUsuario(responseText){
 	
 	$('#detalleUsuario').slideDown('slow');
 	$('#detalleUsuario').html(responseText);
 	HiddeState();
 
-}
+}*/
 
-
+/*
 function updateInfoReservas(responseText){
 	
 	$('#tablaReservas').slideDown('slow');
@@ -153,8 +151,8 @@ function updateInfoReservas(responseText){
 	checkedAll('checkAllReservas','chkboxReservas');
 	HiddeState();
 
-}
-
+}*/
+/*
 function detalleUsuario(borrower){
 
 	objAH=new AjaxHelper(updateInfoUsuario, Init);
@@ -162,8 +160,8 @@ function detalleUsuario(borrower){
 	objAH.borrowernumber= borrower;
 	//se envia la consulta
 	objAH.sendToServer();
-}
-
+}*/
+/*
 function detalleReservas(borrower){
 
 	objAH=new AjaxHelper(updateInfoReservas, Init);
@@ -171,18 +169,19 @@ function detalleReservas(borrower){
 	objAH.borrnumber= borrower;
 	//se envia la consulta
 	objAH.sendToServer();
-}
+}*/
 
 
 //**********************************************************************************************************
 
 // IGUAL A LA DE devoluciones.tmpl (realizarDevORen), DISTINTA ACCION Y NOMBRE DE CHECKBOX!!!!!!!!!!!!!!!
 // Recomiendo ponerla en un js con la de autocomplete de usuario y las otras tambien y limpiar algunas librerias.
+/*
 function realizarPrestamo(){
 	var chck=$("input[@name='chkbox2']:checked");
 	var array= new Array;
 	var long=chck.length;
-	var borrowernumber=$("#borrowernumber").val();
+	var borrowernumber=usuario.ID;
 	if ( long == 0){
 		alert("Elija al menos un documento para prestar");
 	}
@@ -199,10 +198,10 @@ function realizarPrestamo(){
 		//se envia la consulta
 		objAH.sendToServer();
 	}
-}
+}*/
 
 
-
+/*
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
@@ -212,14 +211,14 @@ function cancelarReserva(reserveNumber){
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
-}
+}*/
 
 //**********************************************************************************************************
 
 
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
-	AutocompleteUsuario('usuarioAutocomplete');
+	AutocompleteUsuario('usuarioAutocomplete',detalleReservas);
 });
 
 </script>

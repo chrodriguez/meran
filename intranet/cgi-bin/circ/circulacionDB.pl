@@ -57,6 +57,7 @@ print A "desde PRESTAMO \n";
 
 	my $i;
 	my $id3='';
+	my $id3Old;
 	my $id2;
 	my $tipoPrestamo;
 	my ($error, $codMsg, $message);
@@ -71,6 +72,7 @@ print A "long: $long \n";
 		#obtengo el id3 de un item a prestar
  		$id3= $array_ids3->[$i]->{'id3'};
 		$tipoPrestamo= $array_ids3->[$i]->{'tipoPrestamo'};
+		$id3Old=$array_ids3->[$i]->{'id3Old'};
 
 print A "id3 antes de setear: $id3\n";	
 
@@ -97,6 +99,7 @@ my $id1= $data->{'id1'};
 			my %params;
 			$params{'id2'}=$id2;
 			$params{'id3'}=$id3;
+			$params{'id3Old'}=$id3Old;
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
 			$params{'tipo'}="INTRA";
