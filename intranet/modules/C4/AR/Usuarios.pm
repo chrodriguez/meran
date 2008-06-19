@@ -52,7 +52,7 @@ sub getBorrowerInfo {
 	my $query;
 	my $sth;
 
-	$query= "	SELECT borrowers.*,localidades.nombre as cityname , categories.description AS cat
+	$query= "	SELECT borrowers.*,localidades.nombre as cityname , categories.description AS categoria
 			FROM borrowers LEFT JOIN categories ON categories.categorycode = borrowers.categorycode
 			LEFT JOIN localidades ON localidades.localidad = borrowers.city
 			WHERE borrowers.borrowernumber = ? ; ";
