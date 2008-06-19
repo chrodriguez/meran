@@ -15,9 +15,7 @@
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 		</td>
 		<td>
-			<a class="click" onclick="checkedAll();">
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n">
-			</a>
+			<input type="image" id="checkAllReservas" src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Seleccionar todos">
 		</td>
 		<td>T&iacute;tulo</td>
 		<td>Autor</td>
@@ -35,7 +33,7 @@
 	<tr align="center" class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			<input type="checkbox" name="chkbox2" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='rid3' -->">
+			<input type="checkbox" name="chkboxReservas" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='rid3' -->">
 		</td>
 		<td>
 			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
@@ -68,7 +66,7 @@
 			<!-- TMPL_VAR name="rreminderdate" -->
 		</td>
 		<td align="middle"> 
-	       		<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
+	       		<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
@@ -129,7 +127,7 @@
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
+			<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 		<td width="1%">&nbsp;</td>

@@ -10,7 +10,7 @@
 	<tr class="tablaresultadoTitle">
         	<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td>
-			<a class="click" onclick="checkedAll();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+			<a class="click" id="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
 		</td>
                 <td>T&iacute;tulo</td>
                 <td>Autor</td>
@@ -21,10 +21,10 @@
         	<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
         <!-- TMPL_LOOP name="issues" -->
-	<tr>
+	<tr class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			 <input type="checkbox" name="chkbox1" value="<!-- TMPL_VAR NAME='barcode' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
+			 <input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='barcode' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
 		</td>
                 <td>
 			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML -->

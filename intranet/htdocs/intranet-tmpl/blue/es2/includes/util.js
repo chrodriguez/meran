@@ -98,3 +98,19 @@ function tomarTiempo(){
 	return hours + ":" + minutes + " " + " " + seconds;
 }
 
+/*
+ * checkedAll
+ * Selecciona y deselecciona a todos los checkbox, cuando se toca el boton.
+ * primer click selecciona, segundo click deselecciona. 
+ */
+function checkedAll(id,nombreCheckbox){
+	$("#"+id).toggle(function(){
+			$("input[@name="+nombreCheckbox+"]").each(function(){
+			this.checked=true;})
+			},
+			function(){
+  			$("input[@name="+nombreCheckbox+"]").each(function(){
+			this.checked=false;})
+			}
+		);
+}

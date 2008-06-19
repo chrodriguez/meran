@@ -25,7 +25,6 @@ use strict;
 
 use C4::Search;
 use CGI;
-# use C4::Output;
 use C4::Auth;
 use C4::AR::Utilidades;
 

@@ -255,7 +255,6 @@ sub cancelar_reserva {
 	}
 	
 	my $issuetype= '-';
-	my $loggedinuser= $borrowernumber;
 	my $end_date = 'null';
 	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
 #******************************Fin****Se registra el movimiento en historicCirculation*************************

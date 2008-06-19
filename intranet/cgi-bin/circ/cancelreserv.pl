@@ -25,22 +25,20 @@ use strict;
 
 use C4::Search;
 use CGI;
-use C4::Output;
-use C4::AR::Reserves;
 use C4::Auth;
 
 my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+
 $loggedinuser = getborrowernumber($loggedinuser);
 
 my $objJSON=$input->param('obj');
+my $obj=C4::AR::Utilidades::from_json_ISO($objJSON);
 
-my $obj=from_json_ISO($objJSON);
 my $reserveNumber = $obj->{'reserveNumber'};
+my $borrowernumber=$obj->{'borrowernumber'};
 
-
-my $borrowernumber=getborrowernumber($loggedinuser);
 C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
 
 print $input->header;
