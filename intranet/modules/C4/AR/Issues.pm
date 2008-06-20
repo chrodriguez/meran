@@ -375,7 +375,14 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
  
 sub renovar {
 	my ($borrowernumber,$id3,$loggedinuser)=@_;
+	open(A,">>/tmp/debRenovar.txt");
+print A "id3 : $id3\n";
+print A "user: $borrowernumber\n";
+print A "resp: $loggedinuser\n";
+
 	my $renovacion= &sepuederenovar($borrowernumber,$id3);
+print A "renovacion: $renovacion\n";
+close(A);
 	if ($renovacion){
 #Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
 		my $dbh = C4::Context->dbh;

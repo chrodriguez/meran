@@ -2070,8 +2070,11 @@ sub allitems {
     my $renew=0;	
     my $borr=0;
 
-    ## Esta Prestado?? 
-    my $isth=$dbh->prepare("SELECT  * FROM issues, borrowers , issuetypes WHERE id3 = ? AND returndate IS  NULL  AND issues.borrowernumber = borrowers.borrowernumber AND issuetypes.issuecode=issues.issuecode");
+    ## Esta Prestado??
+   my $query="SELECT * FROM issues iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
+	      INNER JOIN issuetypes ist ON (iss.issuecode=ist.issuecode) WHERE id3=? AND returndate IS  NULL";
+#     my $isth=$dbh->prepare("SELECT  * FROM issues, borrowers , issuetypes WHERE id3 = ? AND returndate IS  NULL  AND issues.borrowernumber = borrowers.borrowernumber AND issuetypes.issuecode=issues.issuecode");
+    my $isth=$dbh->prepare($query);
     $isth->execute($data->{'id3'});
     if (my $idata=$isth->fetchrow_hashref){
     #el item esta prestado	
@@ -2090,7 +2093,7 @@ sub allitems {
 		$returndate="<font color='red'>".$returndate."</font>";
 	}
       $renew = &sepuederenovar($borr, $data->{'id3'});
-     if ($data->{'notforloan'} eq '1') {$issuenfl++;} else {$issue++;}
+     if ($data->{'notforloan'} eq 'SA') {$issuenfl++;} else {$issue++;}
 	
     }
 
@@ -2112,7 +2115,7 @@ sub allitems {
    $rsth->finish;
    ##
     
-    if (($datedue eq '')&&($data->{'notforloan'} eq '1')) {
+    if (($datedue eq '')&&($data->{'notforloan'} eq 'SA')) {
         $datedue="<font size=2 color='blue'>SALA DE LECTURA</font>";
 	if ($data->{'wthdrawn'} eq '0') {$notforloan++;}
     }
@@ -2137,7 +2140,7 @@ sub allitems {
     if ($data->{'wthdrawn'} ne 0){
 	    $forloan2=0;
 	    $notforloan2=0;
-    } elsif ($data->{'notforloan'}){ 
+    } elsif ($data->{'notforloan'} eq 'SA'){ 
 	    $notforloan2=1;
 	    $forloan2=0;
     } else {

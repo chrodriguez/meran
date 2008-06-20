@@ -43,7 +43,7 @@ function AutocompleteUsuario(idInput){
 		usuario.ID= data[1];
 
 		detalleUsuario(data[1]);
-		detallePretamos(data[1]);
+		detallePrestamos(data[1]);
 	});
 }*/
 /*
@@ -76,7 +76,7 @@ function detalleUsuario(borrower){
 	objAH.sendToServer();
 }*/
 /*
-function detallePretamos(borrower){
+function detallePrestamos(borrower){
 
 	objAH=new AjaxHelper(updateInfoPrestamos, Init);
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
@@ -109,8 +109,47 @@ function realizarDevORen(accion){
 		objAH.sendToServer();
 	}
 }*/
+function generaDivDevRen(responseText){
+	infoArray= JSONstring.toObject(responseText);
+	var html="<div class='divSeleccionPrestamos'> <p class='fontmsg'>";
+	var accion=infoArray[0].accion;
+	html=html + infoArray[0].accion +":<br>";
+	for(var i=0; i<infoArray.length;i++){
+	
+		var infoDevRenObj= new infoPrestamo();
+		infoDevRenObj.id3= infoArray[i].id3;
+		infoDevRenObj.barcode=infoArray[i].barcode;
+		infoPrestamos_array[i]= infoDevRenObj;
+ 
+		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
+		html= html + infoArray[i].titulo + ", ";
+		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
+		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
+	}
+	html= html + "</p>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "</div>";
 
+	$('#confirmar_div').html(html);
 
+	HiddeState();
+}
+
+function devolver_renovar(accion){
+	objAH=new AjaxHelper(updateInfoDevRen, Init);
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
+	objAH.infoDevRen= infoPrestamos_array;
+	objAH.borrowernumber= usuario.ID;
+	objAH.accion=accion;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfoDevRen(){
+	cancelarDiv();
+	detallePrestamos(usuario.ID);
+}
 //**************************************************************************************************************
 
 function imprimirTicket(str,num){
@@ -158,8 +197,7 @@ function renovarItems(){
 
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
-	AutocompleteUsuario('usuarioAutocomplete',detallePretamos);
-	
+	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos);
 });
 
 </script>
@@ -175,9 +213,11 @@ $(document).ready(function() {
 	</tr>
 </table>
 
-<div id="buscarUsuario">
-	<input id="borrowernumber" type="hidden" value="">
+<br>
+<div id="confirmar_div"></div>
+<br>
 
+<div id="buscarUsuario">
 	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
 		<tr class="tablaresultadoTitle">
 			<td align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
@@ -196,7 +236,7 @@ $(document).ready(function() {
 			<td width="1%">&nbsp;</td>
 		</tr>
 	</table>
-</div> 
+</div>
 
 <div id="detalleUsuario"></div>
 <div id="tablaPrestamos"></div>

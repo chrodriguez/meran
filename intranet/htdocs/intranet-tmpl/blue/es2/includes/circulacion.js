@@ -122,11 +122,11 @@ function updateInfoReservas(responseText){
 }
 
 /*
- * detallePretamos
+ * detallePrestamos
  * Funcion que hace la consulta Ajax para traer los prestamos del usuario seleccionado.
  * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
  */
-function detallePretamos(borrower){
+function detallePrestamos(borrower){
 	objAH=new AjaxHelper(updateInfoPrestamos, Init);
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
 	objAH.borrnumber= borrower;
@@ -208,10 +208,10 @@ function generaDivPrestamo(responseText){
 	}
 
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarPrestamo();'></center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
 	html= html + "</div>";
 
-	$('#confirmar_prestamos').html(html);
+	$('#confirmar_div').html(html);
 
 	HiddeState();
 }
@@ -261,18 +261,18 @@ function prestar(){
  * prestamos.tmpl---> se actualiza la tabla de reservas despues que se presto algun item.
  */
 function updateInfoPrestarReserva(){
-	cancelarPrestamo();
+	cancelarDiv();
 	detalleReservas(usuario.ID);
 }
 
 /*
- * cancelarPrestamo
- * Cancela el prestamo que se iba a realizar.
+ * cancelarDiv
+ * Cancela el prestamo, renovacion, o devolucion que se iba a realizar.
  * Borra el div generado por la funcion generaDivPrestamo
  * prestamos.tmpl---> se borra el div que contiene los datos de los prestamos.
  */
-function cancelarPrestamo(){
-	$('#confirmar_prestamos').html('');
+function cancelarDiv(){
+	$('#confirmar_div').html('');
 }
 
 /*

@@ -24,7 +24,7 @@
 	<tr class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			 <input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='barcode' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
+			 <input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='id3' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
 		</td>
                 <td>
 			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML -->
@@ -50,13 +50,12 @@
         	<td width="1%">&nbsp;</td>
 	</tr>
         <!-- /TMPL_LOOP -->
-	<tr>
-		<td colspan="10" align="center">
-			<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="realizarDevORen('DEVOLVER','chkboxPrestamos',updateInfoReservas)">
-			<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="realizarDevORen('RENOVAR','chkboxPrestamos',updateInfoReservas)">
-		</td>
-	</tr>
 </table>
+
+<center>
+<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
+<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
+</center>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
