@@ -78,6 +78,7 @@ FIXME
     &enviar_recordatorios_prestamos
     &crearTicket
     &IssuesType3
+    &estaVencido
 
    	&getCountPrestamosDeGrupo
 	&prestamosPorUsuario
@@ -777,8 +778,11 @@ sub crearTicket {
 
 sub estaVencido(){
 	my($id3,$tipoPres)=@_;
-	my @datearr = localtime(time);
-	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+# 	my @datearr = localtime(time);
+	my $err;
+	my $dateformat=C4::Date::get_date_format();
+# 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
 	my $venc=vencimiento($id3);
 	if (Date_Cmp($venc, $hoy) >= 0) {
 		#Si es un prestamo especial debe devolverlo antes de una determinada hora

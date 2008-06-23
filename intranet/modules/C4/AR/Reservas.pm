@@ -701,7 +701,7 @@ sub prestar{
 }
 
 sub chequeoParaPrestamo {
-
+open(A,">>/tmp/debugChequeo.txt");
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
 
@@ -709,10 +709,12 @@ sub chequeoParaPrestamo {
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my ($error, $codMsg, $paraMens);
-	
+print A "id2: $id2\n";
+print A "id3: $id3\n";
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);# ver lo que sigue.
-	$params->{'reservenumber'}= $reservas->{'reservenumber'};
+	$params->{'reservenumber'}= $reservas->[0]->{'reservenumber'};
+print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
 # Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
@@ -725,7 +727,7 @@ sub chequeoParaPrestamo {
 # 		($error, $codMsg, $paraMens)= &verificaciones($params);
 # 		if(!$error){
 #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
-		if($id3 != $reservas->{'id3'}){
+		if($id3 != $reservas->[0]->{'id3'}){
 		#Los ids son distintos, se intercambian.
 			($error,$codMsg)=&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'});
 		}
@@ -773,7 +775,7 @@ sub chequeoParaPrestamo {
 		# Se realizo el prestamo con exito
 		$codMsg= 'P103';
 	}
-
+close(A);
 	return ($error, $codMsg, $paraMens);
 }
 
@@ -799,7 +801,7 @@ sub insertarPrestamo {
 #  VER ES PARA SACAR DE DONDE ES EL ITEM.(HOLDINGBRANCH) PORQUE NO SE GUARDABA EN LA BASE DE DATOS
 	my $sth=$dbh->prepare("SELECT * FROM nivel3 WHERE id3=?");
 	$sth->execute($params->{'id3'});
-	my $data=$sth->$sth->fetchrow_hashref;
+	my $data=$sth->fetchrow_hashref;
 
 #Se realiza el prestamo del item
 	my $sth3=$dbh->prepare("	INSERT INTO issues 		
