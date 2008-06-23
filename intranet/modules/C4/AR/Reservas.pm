@@ -112,6 +112,7 @@ sub reservar {
 	$paramsReserva{'issuesType'}= $params->{'issuesType'};
 
 	my $reservenumber= insertarReserva(\%paramsReserva);
+	$paramsReserva{'reservenumber'}= $reservenumber;
 
 	if( ($data->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
@@ -711,6 +712,7 @@ sub chequeoParaPrestamo {
 	
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);# ver lo que sigue.
+	$params->{'reservenumber'}= $reservas->{'reservenumber'};
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
 # Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
@@ -761,6 +763,7 @@ sub chequeoParaPrestamo {
 		#Se realiza una reserva
 		if($ok){
 			my ($paraReservas)= reservar($params);
+			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
 		}
 	}
 	#Se verifica datos del prestamo
@@ -787,12 +790,12 @@ sub insertarPrestamo {
 	);
 
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-=item
+
 	my $sth2=$dbh->prepare("	DELETE FROM sanctions 
 					WHERE reservenumber = ? ");
 
 	$sth2->execute(	$params->{'reservenumber'});
-=cut
+
 #  VER ES PARA SACAR DE DONDE ES EL ITEM.(HOLDINGBRANCH) PORQUE NO SE GUARDABA EN LA BASE DE DATOS
 	my $sth=$dbh->prepare("SELECT * FROM nivel3 WHERE id3=?");
 	$sth->execute($params->{'id3'});
