@@ -176,18 +176,17 @@ my $id1= $data->{'id1'};
 			$params{'id2'}=$id2;
 			$params{'id3'}=$id3;
 			$params{'id3Old'}=$id3Old;
+			$params{'barcode'}= $array_ids3->[$i]->{'barcode'};
+			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		
 			($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
-			@errores;
-			$errores[0]->{'barcode'}=$id3;
-			$errores[0]->{'string'}= $message;
 
 			#guardo los errores
-			%infoOperacion = (
+			my %infoOperacion = (
         			error => $error,
         			message => $message,
     			);

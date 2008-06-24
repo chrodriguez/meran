@@ -89,6 +89,8 @@ function detalleUsuario(borrower){
  */
 function updateInfoUsuario(responseText){
 	$('#detalleUsuario').slideDown('slow');
+	//se borran los mensajes de error/informacion del usuario
+	$('#mensajes').html('');
 	$('#detalleUsuario').html(responseText);
 	HiddeState();
 
@@ -243,7 +245,9 @@ function prestar(){
 	for(var i=0; i< infoPrestamos_array.length; i++){
 		//se setea el id3 que se va a prestar
 		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
+		infoPrestamos_array[i].barcode= $('#comboItems' + i).text();
 		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
+		infoPrestamos_array[i].descripcionTipoPrestamo= $('#tiposPrestamos' + i).text();
 	}
 	
 	objAH=new AjaxHelper(updateInfoPrestarReserva, Init);
@@ -260,8 +264,16 @@ function prestar(){
  * Funcion que se realiza cuando se realiza el prestamo.
  * prestamos.tmpl---> se actualiza la tabla de reservas despues que se presto algun item.
  */
-function updateInfoPrestarReserva(){
+function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
+	infoArray= JSONstring.toObject(responseText);
+	var i;
+	var mensajes= '';
+
+	for(i=0; i<infoArray.length;i++){
+		mensajes= mensajes + infoArray[i].message + '<br>';
+	}
+	$('#mensajes').html(mensajes);
 	detalleReservas(usuario.ID);
 }
 

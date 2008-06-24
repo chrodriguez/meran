@@ -787,6 +787,8 @@ sub cancelar_reservas{
 }
 
 
+# FIXME PORQUE SE LE PASA UN ARREGLO DE BORROWERS?????????????????????????????????????
+#VER,ESTO SE CAMBIO EN V3, RECIBE UN EL USUARIO LOGUEADO Y UN BORROWER
 sub cancelar_reservas_inmediatas{
 	my ($loggedinuser)=@_;
 # Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro

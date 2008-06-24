@@ -139,6 +139,23 @@ sub reservar {
 }
 
 
+
+sub cancelar_reservas_inmediatas{
+	my ($borrowernumber, $loggedinuser)=@_;
+# Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
+        my $dbh = C4::Context->dbh;
+
+	my $sth=$dbh->prepare("	SELECT reservenumber 
+				FROM reserves 
+				WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
+	$sth->execute($borrowernumber);
+
+	while (my $reservenumber= $sth->fetchrow){
+		&cancelar_reserva($reservenumber, $borrowernumber,$loggedinuser);
+	}
+	$sth->finish;
+}
+
 =item
 Funcion que cancela una reserva
 Se invoca con dos parametros cancelar-reserva($biblioitem,$borrowernumber);
@@ -482,6 +499,7 @@ sub verificaciones {
 	my $tipo= $params->{'tipo'}; #INTRA u OPAC
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
+	my $barcode= $params->{'barcode'};
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
@@ -516,7 +534,8 @@ print A "Entro al if del curso en el opac\n";
 	if( !($error) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
 		$error= 1;
 		$codMsg= 'P101';
-		$paraMens[0]=$issueType;
+		$paraMens[0]=$params->{'descripcionTipoPrestamo'};
+		$paraMens[1]=$barcode;
 print A "Entro al if que verifica la cantidad de prestamos";
 	}
 
@@ -550,12 +569,12 @@ print A "Entro al if de prestamos de sala";
 print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
 	}
 
-#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
-	if( !($error) && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber)) ){
+#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
+	if( !($error) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber))){
 		$error= 1;
 		$codMsg= 'R001';
 		$paraMens[0]=C4::Context->preference("maxreserves");
-print A "Entro al if de maximo de reservas";
+print A "Entro al if de maximo de reservas desde OPAC";
 	}
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
@@ -565,6 +584,47 @@ print A "Entro al if de maximo de reservas";
 print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
 	}
 print A "\n\n";
+print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
+close(A);
+	return ($error, $codMsg,\@paraMens);
+}
+
+#Esta funcion se utiliza para verificar post condiciones luego de un prestamo
+sub verificacionesPostPrestamo {
+	my($params)=@_;
+
+	my $id2= $params->{'id2'};
+	my $id3= $params->{'id3'};
+	my $barcode= $params->{'barcode'};
+	my $borrowernumber= $params->{'borrowernumber'};
+	my $loggedinuser= $params->{'loggedinuser'};
+	my $issueType= $params->{'issuesType'};
+	my $error= 0;
+	my $codMsg= 'P103'; # Se realizo el prestamo con exito
+	my @paraMens;
+	my $dateformat=C4::Date::get_date_format();
+
+open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
+print A "desde verificacionesPostPrestamo\n";
+print A "id2: $id2\n";
+print A "id3: $id3\n";
+print A "borrowernumber: $borrowernumber\n";
+print A "issueType: $issueType\n";
+
+#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
+if ($issueType eq "DO"){
+# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
+	my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos($borrowernumber);
+	foreach my $iss (@issuetypes){
+		if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
+				C4::AR::Reservas::cancelar_reservas_inmediatas($borrowernumber,$loggedinuser);
+		}
+	}
+
+ 	$codMsg= 'P108';
+	$paraMens[0]= $barcode;
+}
+
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
 	return ($error, $codMsg,\@paraMens);
@@ -742,7 +802,7 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 	else{
 		#Se verifca disponibilidad del item;
 		my $data=getReservaDeId3($id3);
-		my $ok=1;
+		my $sePermiteReservaGrupo=1;
 		if ($data){
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
 			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
@@ -754,16 +814,24 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 # 				NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE 					REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
 				$params->{'id3'}="";
 				if(!C4::Context->preference('intranetGroupReserve')){
-					$ok=0;
+					$sePermiteReservaGrupo=0;
 					$error=1;#Hay error no se permite realizar una reserva de grupo en intra.
 					$codMsg='R004';
 				}else{
 					$codMsg='R005';#No hay error, se realiza una reserva de grupo.
+					#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
+					if( C4::AR::Usuarios::llegoMaxReservas($borrowernumber) ){
+						$error= 1;
+						$codMsg= 'R001';
+						$paraMens->[0]=C4::Context->preference("maxreserves");
+						$sePermiteReservaGrupo= 0;
+					}
+
 				}
 			}
 		}
 		#Se realiza una reserva
-		if($ok){
+		if($sePermiteReservaGrupo){
 			my ($paraReservas)= reservar($params);
 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
 		}
@@ -772,8 +840,8 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 	#Se realiza el pretamo
 	if(!$error){
 		insertarPrestamo($params);
-		# Se realizo el prestamo con exito
-		$codMsg= 'P103';
+
+		($error, $codMsg, $paraMens)=verificacionesPostPrestamo($params);
 	}
 close(A);
 	return ($error, $codMsg, $paraMens);
