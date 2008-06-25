@@ -32,22 +32,23 @@ use C4::AR::Utilidades;
 
 
 my $input = new CGI;
-my $json=$input->param('json');
-my $tabla=$input->param('tabla');
+my $obj=&from_json_ISO($input->param('obj'));
+my $json=$obj->{'json'};
+my $tabla=$obj->{'tabla'};
 if($json ne ""){
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ parameters => 1});
 
-	my $guardar=$input->param('guardar');
-	my $tipo=$input->param('tipo');
+	my $guardar=$obj->{'guardar'};
+	my $tipo=$obj->{'tipo'};
 	if($guardar){
-		my $modificar=$input->param('modificar');
-		my $variable=$input->param('variable');
-		my $valor=$input->param('valor');
-		my $expl=&UTF8toISO($input->param('explicacion'));
+		my $modificar=$obj->{'modificar'};
+		my $variable=$obj->{'variable'};
+		my $valor=$obj->{'valor'};
+		my $expl=&UTF8toISO($obj->{'explicacion'});
 		my $opciones="";
-		if($tipo eq "combo"){$opciones=$tabla."|".$input->param('campo');}
+		if($tipo eq "combo"){$opciones=$tabla."|".$obj->{'campo'};}
 		if($tipo eq "valAuto"){
-			my $categ=$input->param('categoria');
+			my $categ=$obj->{'categoria'};
 			$opciones="authorised_values|".$categ;
 		}
 		my $error=0;
@@ -95,15 +96,15 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 
-my $buscar=$input->param('buscar');
-my $agregar=$input->param('agregar');
+my $buscar=$obj->{'buscar'};
+my $agregar=$obj->{'agregar'};
 if($agregar){
-	my $modificar=$input->param('modificar');
+	my $modificar=$obj->{'modificar'};
 	my $infoVar;
 	my $valor="";
 	my $op="";
 	if($modificar){
-		my $variable=$input->param('variable');
+		my $variable=$obj->{'variable'};
 		$infoVar=&buscarPreferencia($variable);
 		$valor=$infoVar->{'value'};
 		$op=$infoVar->{'options'};
@@ -123,7 +124,7 @@ if($agregar){
 			campo	    => $op,
 		);
 	}
-		my $opcion=$input->param('opcion')||$infoVar->{'type'};
+		my $opcion=$obj->{'opcion'}||$infoVar->{'type'};
 		my $compo;
 		my %labels;
 		my @values;
@@ -138,13 +139,13 @@ if($agregar){
 			$compo=&crearComponentes("texta","valor",60,4,$valor);
 		}
 		elsif($opcion eq "valAuto"){
-			my $categoria=$input->param('categoria')||$op;
+			my $categoria=$obj->{'categoria'}||$op;
 			%labels=&obtenerDatosValorAutorizado($categoria);
 			@values=keys(%labels);
 			$compo=&crearComponentes("combo","valor",\@values,\%labels,"");
 		}
 		elsif($opcion eq "combo"){
-			my $campo=$input->param('campo')||$op;
+			my $campo=$obj->{'campo'}||$op;
 			my $id=&obtenerIdentTablaRef($tabla);
 			my ($js,$valores)=&obtenerValoresTablaRef($tabla,$id,$campo,$campo);
 			@values=keys %$valores;

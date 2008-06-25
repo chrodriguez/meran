@@ -190,7 +190,7 @@ function realizarAccion(accion,chckbox,funcion){
 function generaDivPrestamo(responseText){
 	
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divSeleccionPrestamos'> <p class='fontmsg'>";
+	var html="<div class='divCirculacion'> <p class='fontmsg'>";
 	var i;
 
 	for(i=0; i<infoArray.length;i++){

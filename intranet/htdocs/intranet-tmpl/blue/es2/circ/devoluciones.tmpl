@@ -111,7 +111,7 @@ function realizarDevORen(accion){
 }*/
 function generaDivDevRen(responseText){
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divSeleccionPrestamos'> <p class='fontmsg'>";
+	var html="<div class='divCirculacion'> <p class='fontmsg'>";
 	var accion=infoArray[0].accion;
 	html=html + infoArray[0].accion +":<br>";
 	for(var i=0; i<infoArray.length;i++){
