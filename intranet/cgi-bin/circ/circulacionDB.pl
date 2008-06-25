@@ -23,12 +23,8 @@
 
 use strict;
 use CGI;
-use C4::Output;
-use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::Koha;
-use HTML::Template;
 use C4::AR::Reservas;
 use C4::AR::Mensajes;
 use JSON;
