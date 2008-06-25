@@ -188,11 +188,16 @@ my $data= $sth->fetchrow_hashref;
 			$params{'issuesType'}= $tipoPrestamo;
 		
 			($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
-
+			my $ticketObj;
+			if(!$error){
+			#Se crean los ticket para imprimir.
+				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
+			}
 			#guardo los errores
 			my %infoOperacion = (
         			error => $error,
         			message => $message,
+				ticket  => $ticketObj,
     			);
 
 			push (@infoOperacionArray, \%infoOperacion);

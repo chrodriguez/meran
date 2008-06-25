@@ -750,30 +750,47 @@ while(my $data= $sth->fetchrow_hashref) {
 
 
 sub crearTicket {
-	my ($iteminfo,$loggedinuser)=@_;
+	my ($id3,$bornum,$loggedinuser)=@_;
 	my %env;
 	my $dateformat = C4::Date::get_date_format();
-	my $bornum=$iteminfo->{'borrowernumber'};
+# 	my $bornum=$iteminfo->{'borrowernumber'};
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
+	my $iteminfo= C4::Circulation::Circ2::getiteminformation(\%env, $id3);
 	my $ticket_duedate = vencimiento($iteminfo->{'id3'});
-	my $ticket_borrower = $borrower;
-	my $ticket_string =
-		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
-		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
-		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
-  		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
-		    "&author=" . CGI::Util::escape($iteminfo->{'autor'}) .
-		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'titulo'}) .
-		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
-		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
-		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
-		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today")),$dateformat) .
-		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate),$dateformat) .
-		    "&librarian=" . CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'}).
-		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-		    "&librarianNumber=" . CGI::Util::escape($librarian->{'cardnumber'});
-	return ($ticket_string);
+	my %ticket;
+	$ticket{'borrowerName'}=CGI::Util::escape($borrower->{'firstname'} . " " . $borrower->{'surname'});
+	$ticket{'borrowerNumber'}=CGI::Util::escape($borrower->{'cardnumber'});
+	$ticket{'documentType'}=CGI::Util::escape($borrower->{'documenttype'});
+	$ticket{'documentNumber'}=CGI::Util::escape($borrower->{'documentnumber'});
+	$ticket{'autor'}=CGI::Util::escape($iteminfo->{'autor'});
+	$ticket{'titulo'}=CGI::Util::escape($iteminfo->{'titulo'});
+	$ticket{'topoSign'}=CGI::Util::escape($iteminfo->{'signatura_topografica'});
+	$ticket{'barcode'}=CGI::Util::escape($iteminfo->{'barcode'});
+# 	$ticket{'volume'}=CGI::Util::escape($iteminfo->{'volume'}); FALTA CODIGO MARC
+	$ticket{'borrowDate'}=CGI::Util::escape(format_date_hour(ParseDate("today"),$dateformat));
+	$ticket{'returnDate'}=CGI::Util::escape(format_date($ticket_duedate,$dateformat));
+	$ticket{'librarian'}=CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'});
+	$ticket{'issuedescription'}=CGI::Util::escape($iteminfo->{'issuedescription'});
+	$ticket{'librarianNumber'}=CGI::Util::escape($librarian->{'cardnumber'});
+# 	my $ticket_borrower = $borrower;
+# 	my $ticket_string =
+# 		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
+# 		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
+# 		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
+#   		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
+# 		    "&author=" . CGI::Util::escape($iteminfo->{'autor'}) .
+# 		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'titulo'}) .
+# 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
+# 		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
+# 		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
+# 		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today")),$dateformat) .
+# 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate),$dateformat) .
+# 		    "&librarian=" . CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'}).
+# 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
+# 		    "&librarianNumber=" . CGI::Util::escape($librarian->{'cardnumber'});
+# 	return ($ticket_string);
+	return(\%ticket);
 }
 
 sub estaVencido(){

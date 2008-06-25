@@ -271,6 +271,8 @@ function updateInfoPrestarReserva(responseText){
 	var mensajes= '';
 
 	for(i=0; i<infoArray.length;i++){
+// alert(infoArray[i].ticket.titulo);
+		imprimirTicket(infoArray[i].ticket,i);
 		mensajes= mensajes + infoArray[i].message + '<br>';
 	}
 	$('#mensajes').html(mensajes);
