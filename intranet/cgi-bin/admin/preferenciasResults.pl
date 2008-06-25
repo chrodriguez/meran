@@ -23,13 +23,9 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::AR::Preferencias;
 use C4::AR::Utilidades;
-
 
 my $input = new CGI;
 my $obj=&from_json_ISO($input->param('obj'));
@@ -44,7 +40,7 @@ if($json ne ""){
 		my $modificar=$obj->{'modificar'};
 		my $variable=$obj->{'variable'};
 		my $valor=$obj->{'valor'};
-		my $expl=&UTF8toISO($obj->{'explicacion'});
+		my $expl=$obj->{'explicacion'};
 		my $opciones="";
 		if($tipo eq "combo"){$opciones=$tabla."|".$obj->{'campo'};}
 		if($tipo eq "valAuto"){
