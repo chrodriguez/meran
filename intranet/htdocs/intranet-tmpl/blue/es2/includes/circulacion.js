@@ -245,9 +245,9 @@ function prestar(){
 	for(var i=0; i< infoPrestamos_array.length; i++){
 		//se setea el id3 que se va a prestar
 		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
-		infoPrestamos_array[i].barcode= $('#comboItems' + i).text();
+		infoPrestamos_array[i].barcode= $("#comboItems" + i + " option:selected").text();
 		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
-		infoPrestamos_array[i].descripcionTipoPrestamo= $('#tiposPrestamos' + i).text();
+		infoPrestamos_array[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
 	}
 	
 	objAH=new AjaxHelper(updateInfoPrestarReserva, Init);

@@ -646,7 +646,7 @@ sub insertarReserva {
 			$params->{'borrowernumber'},
 			$params->{'reservedate'},
 			$params->{'reminderdate'},
-			$params->{'branchcode'},
+			$params->{'defaultbranch'},
 			$params->{'estado'}
 		);
 
@@ -674,7 +674,7 @@ sub insertarReserva {
 								$params->{'id1'},
 								$params->{'id2'},
 								$params->{'id3'},
-								$params->{'branchcode'},
+								$params->{'defaultbranch'},
 								$params->{'issuesType'},
 								$params->{'hasta'}
 							);
@@ -719,7 +719,7 @@ sub intercambiarId3{
 
 	if ($data && $data->{'estado'} eq "E"){ 
 		#quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
-		$sth=$dbh->prepare("UPDATE reserves SET id3= ? where id3 = ?");
+		$sth=$dbh->prepare("UPDATE reserves SET id3= ? WHERE id3 = ?");
 		$sth->execute($oldid3, $id3);
 		#actualizo la reserva con el viejo id3 para la reserva del otro usuario.
 	}
@@ -739,7 +739,7 @@ sub intercambiarId3{
 sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE reserves SET id3= ? where reservenumber = ?";
+	my $query="UPDATE reserves SET id3= ? WHERE reservenumber = ?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3Libre,$reservenumber);
 }
@@ -866,11 +866,6 @@ sub insertarPrestamo {
 
 	$sth2->execute(	$params->{'reservenumber'});
 
-#  VER ES PARA SACAR DE DONDE ES EL ITEM.(HOLDINGBRANCH) PORQUE NO SE GUARDABA EN LA BASE DE DATOS
-	my $sth=$dbh->prepare("SELECT * FROM nivel3 WHERE id3=?");
-	$sth->execute($params->{'id3'});
-	my $data=$sth->fetchrow_hashref;
-
 #Se realiza el prestamo del item
 	my $sth3=$dbh->prepare("	INSERT INTO issues 		
 					(borrowernumber,id3,date_due,branchcode,issuingbranch,renewals,issuecode) 
@@ -878,13 +873,26 @@ sub insertarPrestamo {
 
 	$sth3->execute(	$params->{'borrowernumber'}, 
 			$params->{'id3'}, 
-			$data->{'holdingbranch'}, 
-			$data->{'holdingbranch'}, 
+			$params->{'defaultbranch'}, 
+			$params->{'defaultbranch'}, 
 			0, 
 			$params->{'issuesType'}
 	);
 
-}
+#**********************************Se registra el movimiento en historicCirculation***************************
+	C4::Circulation::Circ2::insertHistoricCirculation(	'issue',
+								$params->{'borrowernumber'},
+								$params->{'loggedinuser'},
+								$params->{'id1'},
+								$params->{'id2'},
+								$params->{'id3'},
+								$params->{'defaultbranch'},
+								$params->{'issuesType'},
+								$params->{'hasta'}
+							);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+
+}#end insertarPrestamo
 
 #para enviar un mail cuando al usuario se le vence la reserva
 sub Enviar_Email{

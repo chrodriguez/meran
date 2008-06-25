@@ -42,6 +42,7 @@ $params{'id2'}= $id2;
 $params{'borrowernumber'}= $borrowernumber;
 $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
+$params{'defaultbranch'}= C4::Context->preference("defaultbranch");
 
 my ($error, $codMsg, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
 my $acciones;

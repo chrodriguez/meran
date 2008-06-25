@@ -57,6 +57,8 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
+#items a devolver o renovar
+#aca se arma el div para mostrar los items que se van a devolver o renovar
 	my $array_ids3=$obj->{'ids3'};
 	my $borrnumber=$obj->{'borrowernumber'};
 	my $loop=scalar(@$array_ids3);
@@ -125,10 +127,9 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 #***************************************************PRESTAMO*************************************************
 if($tipoAccion eq "PRESTAMO"){
-
+#se realizan los prestamos
 print A "desde PRESTAMO \n";
 	my $array_ids3=$obj->{'infoPrestamos'};
-# 	my $id2=$obj->{'id2'};
 	my $borrnumber=$obj->{'borrowernumber'};
 
 	my $i;
@@ -166,20 +167,23 @@ my $sth=$dbh->prepare("	SELECT id2, id1
 			WHERE id3 = ? ");
 $sth->execute($id3);
 my $data= $sth->fetchrow_hashref;
-$id2= $data->{'id2'};
-my $id1= $data->{'id1'};
+
+# $id2= $data->{'id2'};
+# my $id1= $data->{'id1'};
 # FIXME ########################################################################################
 
 
 		if($id3 ne ""){
 			my %params;
-			$params{'id2'}=$id2;
-			$params{'id3'}=$id3;
+			$params{'id1'}= $data->{'id1'};
+			$params{'id2'}= $data->{'id2'};
+			$params{'id3'}= $id3;
 			$params{'id3Old'}=$id3Old;
 			$params{'barcode'}= $array_ids3->[$i]->{'barcode'};
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
+			$params{'defaultbranch'}= C4::Context->preference("defaultbranch");
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		
