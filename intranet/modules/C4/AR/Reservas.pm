@@ -57,15 +57,19 @@ sub reservarOPAC {
 	if(!$error){
 	#No hay error
 		my $dbh = C4::Context->dbh;
+		my ($paramsReserva);
 		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 		$dbh->{RaiseError} = 1;
-		my ($paramsReserva)= reservar($params);	
+		eval {
+		($paramsReserva)= reservar($params);	
 		$dbh->commit;
-		if($@){
+		};
+		if ($@){
 			open(A,">>/tmp/debugErrorDBA.txt");
 			print A "error en la transaccion\n";
+			print A "$@ \n";
 			close(A);
-			$dbh->rollback;
+			eval {$dbh->rollback};
 		}
 		$dbh->{AutoCommit} = 1;
 		
@@ -109,7 +113,7 @@ sub reservar {
 	my %paramsReserva;
 	
 	$paramsReserva{'id1'}= $data->{'id1'};
-	$paramsReserva{'id2'}= $params->{'id2'};
+# 	$paramsReserva{'id2'}= $params->{'id2'};
 	$paramsReserva{'id3'}= $data->{'id3'};
 	$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};			
