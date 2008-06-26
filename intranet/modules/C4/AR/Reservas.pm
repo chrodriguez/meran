@@ -61,32 +61,35 @@ sub reservarOPAC {
 		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 		$dbh->{RaiseError} = 1;
 		eval {
-		($paramsReserva)= reservar($params);	
-		$dbh->commit;
+			($paramsReserva)= reservar($params);	
+			$dbh->commit;
+	
+					#Se setean los parametros para el mensaje de la reserva SIN ERRORES
+			if($paramsReserva->{'estado'} eq 'E'){
+			#SE RESERVO CON EXITO UN EJEMPLAR
+				$codMsg= 'U302';
+				$paraMens->[0]= $paramsReserva->{'desde'};
+				$paraMens->[1]= $paramsReserva->{'desdeh'};
+				$paraMens->[2]= $paramsReserva->{'hasta'};
+				$paraMens->[3]= $paramsReserva->{'hastah'};
+			}else{
+			#SE REALIZO UN RESERVA DE GRUPO
+				$codMsg= 'U303';
+				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
+				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+			}	
 		};
+
 		if ($@){
-			open(A,">>/tmp/debugErrorDBA.txt");
-			print A "error en la transaccion\n";
-			print A "$@ \n";
-			close(A);
+			#Se loguea error de Base de Datos
+			$codMsg= 'B400';
+			C4::AR::Mensajes::printErrorDB($@, $codMsg);
 			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'R009';
 		}
 		$dbh->{AutoCommit} = 1;
-		
-		#Se setean los parametros para el mensaje de la reserva SIN ERRORES
-		if($paramsReserva->{'estado'} eq 'E'){
-		#SE RESERVO CON EXITO UN EJEMPLAR
-			$codMsg= 'U302';
-			$paraMens->[0]= $paramsReserva->{'desde'};
-			$paraMens->[1]= $paramsReserva->{'desdeh'};
-			$paraMens->[2]= $paramsReserva->{'hasta'};
-			$paraMens->[3]= $paramsReserva->{'hastah'};
-		}else{
-		#SE REALIZO UN RESERVA DE GRUPO
-			$codMsg= 'U303';
-			my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-			$paraMens->[0]= $borrowerInfo->{'emailaddress'};
-		}
 		
 	}
 

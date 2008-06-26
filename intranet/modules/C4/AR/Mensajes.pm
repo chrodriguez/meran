@@ -39,6 +39,7 @@ $VERSION = 0.01;
 #P100 - P199 para Prestamos
 #S200 - S299 para Sanciones
 #U300 - U399 para Usuarios
+#B400 - B499 para Errores e Informacion de Base de Datos
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -51,6 +52,7 @@ my %mensajesOPAC = (
 	'R006' => '',
 	'R007' => 'Disculpe, pero no se puede reservar un item para sala.',
 	'R008' => 'Disculpe, llego al m&aacute;ximo de reservas en espera.',
+	'R009' => 'Disculpe, no se pudo realizar la reserva, intente nuevamente.',	
 	'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos *?*. No puede efectuar reservas sobre ejemplares.',
 	'P102' => '',
@@ -67,7 +69,8 @@ my %mensajesOPAC = (
 	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  *?* a las *?* hasta el d&iacute;a: *?* hasta las *?*',
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
-	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.'
+	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
+	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.'
 );
 
 my %mensajesINTRA = (
@@ -80,6 +83,7 @@ my %mensajesINTRA = (
 	'R006' => 'No hay m&aacute;s ejemplares disponibles y no puede hacer m&aacute;s reservas porque lleg&oacute; el l&iacute;mite',
 	'R007' => '',
 	'R008' => '',
+	'R009' => '',
 	'P100' => 'El usuario ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'El usuario alcanzo la cantidad m&aacute;xima  de pr&eacute;stamos *?*, no se pudo prestar *?*',
 	'P102' => 'Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.',
@@ -130,5 +134,20 @@ sub getAccion {
 	return \%acciones;
 }
 
+
+sub printErrorDB {
+	my($errorsDB_array,$codigo)=@_;
+	my $paraMens;
+
+	open(A,">>/tmp/debugErrorDBA.txt");
+	print A "\n";
+	print A "**************Error en la transaccion - Fecha:". C4::Date::ParseDate("today")."**************\n";
+	print A "Codigo: $codigo\n";
+	my $message= &C4::AR::Mensajes::getMensaje($codigo,"OPAC",$paraMens);
+	print A "Message: $message\n";
+	print A "$@ \n";
+	print A "\n";
+	close(A);
+}
 
 1;
