@@ -56,7 +56,19 @@ sub reservarOPAC {
 	
 	if(!$error){
 	#No hay error
-		my ($paramsReserva)= reservar($params);
+		my $dbh = C4::Context->dbh;
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+		my ($paramsReserva)= reservar($params);	
+		$dbh->commit;
+		if($@){
+			open(A,">>/tmp/debugErrorDBA.txt");
+			print A "error en la transaccion\n";
+			close(A);
+			$dbh->rollback;
+		}
+		$dbh->{AutoCommit} = 1;
+		
 		#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 		if($paramsReserva->{'estado'} eq 'E'){
 		#SE RESERVO CON EXITO UN EJEMPLAR
@@ -138,7 +150,59 @@ sub reservar {
 	return (\%paramsReserva);
 }
 
+sub insertarReserva {
+	my($params)=@_;
 
+	my $dbh=C4::Context->dbh;
+
+	my $query="	INSERT INTO reserves 	
+			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
+			VALUES (?,?,?,?,NOW(),?,?,?) ";
+
+	my $sth2=$dbh->prepare($query);
+
+	$sth2->execute( $params->{'id3'},
+			$params->{'id2'},
+			$params->{'borrowernumber'},
+			$params->{'reservedate'},
+			$params->{'reminderdate'},
+			$params->{'defaultbranch'},
+			$params->{'estado'}
+		);
+
+	#Se obtiene el reservenumber
+	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
+	$sth3->execute();
+	my $reservenumber= $sth3->fetchrow;
+
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $estado;
+
+	if($params->{'estado'} eq 'E'){
+	#es una reserva sobre el ITEM
+		$estado= 'reserve'
+	}else{
+	#es una reserva sobre el GRUPO
+		$estado= 'queue';
+		$params->{'id3'}= 0;
+	}
+
+	C4::Circulation::Circ2::insertHistoricCirculation(	$estado,
+								$params->{'borrowernumber'},
+								$params->{'loggedinuser'},
+								$params->{'id1'},
+								$params->{'id2'},
+								$params->{'id3'},
+								$params->{'defaultbranch'},
+								$params->{'issuesType'},
+								$params->{'reminderdate'}
+							);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+
+	return $reservenumber;
+
+}#end insertarReserva
 
 sub cancelar_reservas_inmediatas{
 	my ($borrowernumber, $loggedinuser)=@_;
@@ -467,7 +531,7 @@ sub getItemsParaReserva{
 	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
 			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
 			AND n3.id3 NOT IN (SELECT reserves.id3 FROM reserves 
-			WHERE id2 = ? AND id3 IS NOT NULL) FOR UPDATE ";
+			WHERE id2 = ? AND id3 IS NOT NULL)";#SE SACO!!!!!!!!!! FOR UPDATE ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2, $id2);
@@ -630,59 +694,6 @@ close(A);
 	return ($error, $codMsg,\@paraMens);
 }
 
-sub insertarReserva {
-	my($params)=@_;
-
-	my $dbh=C4::Context->dbh;
-
-	my $query="	INSERT INTO reserves 	
-			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
-			VALUES (?,?,?,?,NOW(),?,?,?) ";
-
-	my $sth2=$dbh->prepare($query);
-
-	$sth2->execute( $params->{'id3'},
-			$params->{'id2'},
-			$params->{'borrowernumber'},
-			$params->{'reservedate'},
-			$params->{'reminderdate'},
-			$params->{'defaultbranch'},
-			$params->{'estado'}
-		);
-
-	#Se obtiene el reservenumber
-	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
-	$sth3->execute();
-	my $reservenumber= $sth3->fetchrow;
-
-
-#**********************************Se registra el movimiento en historicCirculation***************************
-	my $estado;
-
-	if($params->{'estado'} eq 'E'){
-	#es una reserva sobre el ITEM
-		$estado= 'reserve'
-	}else{
-	#es una reserva sobre el GRUPO
-		$estado= 'queue';
-		$params->{'id3'}= 0;
-	}
-
-	C4::Circulation::Circ2::insertHistoricCirculation(	$estado,
-								$params->{'borrowernumber'},
-								$params->{'loggedinuser'},
-								$params->{'id1'},
-								$params->{'id2'},
-								$params->{'id3'},
-								$params->{'defaultbranch'},
-								$params->{'issuesType'},
-								$params->{'hasta'}
-							);
-#*******************************Fin***Se registra el movimiento en historicCirculation*************************
-
-	return $reservenumber;
-
-}#end insertarReserva
 
 sub verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;
@@ -747,15 +758,16 @@ sub cambiarId3 {
 
 sub prestar{
 	my ($params)=@_;
-
+	
 	my ($error,$codMsg,$paraMens)= &verificaciones($params);
 	if(!$error){
 	#No hay error
-
+		my $dbh=C4::Context->dbh;
+		$dbh->{AutoCommit} = 0;
 		($error, $codMsg, $paraMens)= chequeoParaPrestamo($params);
-		
+		$dbh->commit;
+		$dbh->{AutoCommit} = 1;
 	}
-
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
