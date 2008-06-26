@@ -62,6 +62,7 @@ my %mensajesOPAC = (
 	'P106' => '',
 	'P107' => '',
 	'P108' => '',
+	'P109' => '',
 	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
 	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
@@ -70,7 +71,10 @@ my %mensajesOPAC = (
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
-	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.'
+	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
+	'B401' => '',
+	'B402' => '',
+	'B403' => '',
 );
 
 my %mensajesINTRA = (
@@ -93,13 +97,21 @@ my %mensajesINTRA = (
 	'P106' => 'Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.',
 	'P107' => 'El documento esta prestado, seleccione otro c&oacute;digo de barra',
 	'P108' => 'Pr&eacute;stamo realizado con &eacute;xito *?*, el usuario lleg&oacute; al m&aacute;ximo de pr&eacute;stamos, se le cancelaron todas las reservas',
+	'P109' => 'No se pudo realizar el pr&eacute;stamo, intentelo nuevamente.',
 	'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
 	'S201' => 'El usuario no puede reservar porque tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
 	'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
 	'U302' => '',
 	'U303' => '',
-	'U304' => 'El usuario no hizo el curso de koha.'
+	'U304' => 'El usuario no hizo el curso de koha.',
+	'B400' => '',
+	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::prestar.',
+	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
+	'B403' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccionNivel3.',
+	'C500' => 'Los items fueron guardados correctamente.',
+	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
+	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
 );
 
 sub getMensaje {
@@ -136,14 +148,15 @@ sub getAccion {
 
 
 sub printErrorDB {
-	my($errorsDB_array,$codigo)=@_;
+	my($errorsDB_array,$codigo,$tipo)=@_;
 	my $paraMens;
-
+# 	my $path=C4::Context->pathLog();
+# 	open(A,">>".$path."/debugErrorDBA.txt");
 	open(A,">>/tmp/debugErrorDBA.txt");
 	print A "\n";
 	print A "**************Error en la transaccion - Fecha:". C4::Date::ParseDate("today")."**************\n";
 	print A "Codigo: $codigo\n";
-	my $message= &C4::AR::Mensajes::getMensaje($codigo,"OPAC",$paraMens);
+	my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
 	print A "Message: $message\n";
 	print A "$@ \n";
 	print A "\n";

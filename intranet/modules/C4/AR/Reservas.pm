@@ -64,7 +64,7 @@ sub reservarOPAC {
 			($paramsReserva)= reservar($params);	
 			$dbh->commit;
 	
-					#Se setean los parametros para el mensaje de la reserva SIN ERRORES
+			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
 			#SE RESERVO CON EXITO UN EJEMPLAR
 				$codMsg= 'U302';
@@ -83,7 +83,7 @@ sub reservarOPAC {
 		if ($@){
 			#Se loguea error de Base de Datos
 			$codMsg= 'B400';
-			C4::AR::Mensajes::printErrorDB($@, $codMsg);
+			C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
 			$error= 1;
@@ -116,13 +116,13 @@ sub reservar {
 	my %paramsReserva;
 	
 	$paramsReserva{'id1'}= $data->{'id1'};
-# 	$paramsReserva{'id2'}= $params->{'id2'};
+	$paramsReserva{'id2'}= $params->{'id2'};
 	$paramsReserva{'id3'}= $data->{'id3'};
 	$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
-	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};			
+	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'reservedate'}= $desde;
 	$paramsReserva{'reminderdate'}= $hasta;
-	$paramsReserva{'branchcode'}= $data->{'holdingbranch'}||$params->{'holdingbranch'};
+	$paramsReserva{'branchcode'}= $params->{'defaultbranch'};
 	$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
@@ -173,7 +173,7 @@ sub insertarReserva {
 			$params->{'borrowernumber'},
 			$params->{'reservedate'},
 			$params->{'reminderdate'},
-			$params->{'defaultbranch'},
+			$params->{'branchcode'},
 			$params->{'estado'}
 		);
 
@@ -771,8 +771,20 @@ sub prestar{
 	#No hay error
 		my $dbh=C4::Context->dbh;
 		$dbh->{AutoCommit} = 0;
-		($error, $codMsg, $paraMens)= chequeoParaPrestamo($params);
-		$dbh->commit;
+		$dbh->{RaiseError} = 1;
+		eval{
+			($error, $codMsg, $paraMens)= chequeoParaPrestamo($params);
+			$dbh->commit;
+		};
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B401';
+			C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'P109';
+		}
 		$dbh->{AutoCommit} = 1;
 	}
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);

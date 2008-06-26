@@ -122,8 +122,8 @@ while (my $biblio=$sth->fetchrow_hashref ) {
 	$sth8->finish();	
 
 	#########################################################################
-
-	$id1=&guardarNivel1($autor,\@ids1,\@valores1);
+my($error,$codMsg);
+	($id1,$error,$codMsg)=&guardarNivel1($autor,\@ids1,\@valores1);
 #---------------------------------------NIVEL1---------------------------------------#	
 
 #---------------------------------------NIVEL2---------------------------------------#
@@ -161,7 +161,7 @@ while (my $biblio=$sth->fetchrow_hashref ) {
 
 
 
-	($id2,$tipoDocN2)=&guardarNivel2($id1,\@ids2,\@valores2);
+	($id2,$tipoDocN2,$error,$codMsg)=&guardarNivel2($id1,\@ids2,\@valores2);
 
 	###########################ESTANTES VIRTUALES##########################
 	my $sth20=$dbh->prepare(" UPDATE shelfcontents SET id = ? where id = ?;");
@@ -186,7 +186,7 @@ while (my $biblio=$sth->fetchrow_hashref ) {
 		push(@valores3,$val);
 	}
 	
-	$id3=&guardarNivel3($id1,$id2,$item->{'barcode'},1,$tipoDocN2,\@ids3,\@valores3);
+	($id3,$error,$codMsg)=&guardarNivel3($id1,$id2,$item->{'barcode'},1,$tipoDocN2,\@ids3,\@valores3);
 
 	@ids3=();
 	@valores3=();	

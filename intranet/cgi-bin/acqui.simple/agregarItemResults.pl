@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Koha; 
 use HTML::Template::Expr;
 use C4::AR::Catalogacion;
+use C4::AR::Mensajes;
 
 my $input = new CGI;
 
@@ -96,29 +97,32 @@ my $idAutor=$input->param('idAutor');
 my $cantItems=$input->param('cantitems'); #recupero la cantidad de items del nivel 3 a insertar
 my $barcode=$input->param('codbarra'); #recupero el codigo de barra para el o los items del nivel 3
 
-my $error="";
+my $error=0;
+my $codMsg;
 my $mensaje="";
+my $paraMens;
 if($paso > 1 && ($accion ne "modificarN1" && $accion ne "agregarN2" && $accion ne "borrarN2" && $accion ne "modificarN2")){
 	if(($paso-1)==1){
-		$id1= &guardarNivel1($idAutor,\@nivel1o2);
-		if($id1 == -1){
-			$error="Se produjo un error al intentar guardar los datos del nivel 1, repita la operacion";
+		($id1,$error,$codMsg)= guardarNivel1($idAutor,\@nivel1o2);
+		if($error){
+			$mensaje= C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=1;
 		}
 	}
-	elsif(($paso-1)==2 && $error eq ""){
-		my ($id2,$tipoDocN2)=&guardarNivel2($id1,\@nivel1o2);
-		if($id2 eq ""){
-			$error="Se produjo un error al intentar guardar los datos del nivel 2, repita la operacion";
+	elsif(($paso-1)==2 && (!$error)){
+		my ($id2,$tipoDocN2,$error,$codMsg)=guardarNivel2($id1,\@nivel1o2);
+		if($error){
+			$mensaje= C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=2;
 		}
 		else{
-			if(&guardarNivel3($id1,$id2,$barcode,$cantItems,$tipoDocN2,\@nivel3)){
-				$error="Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo";
-			}
-			else{
-				$mensaje="Los items fueron guardados correctamente.";
-			}
+			($error,$codMsg)=guardarNivel3($id1,$id2,$barcode,$cantItems,$tipoDocN2,\@nivel3);
+# 			if($error){
+				$mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+# 			}
+# 			else{
+# 				$mensaje=&C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+# 			}
 			$paso=2;
 		}
 	}

@@ -993,75 +993,103 @@ Funcion interna al pm
 Realiza el guardado en la base de datos de los campos de los niveles 1 y 2, por medio de una transaccion.
 los paramentros que recibe son: $query1 es el insert a la tabla del nivel que corresponda; $query2 es el insert en la tabla repetibles del nivel correspondiente; $query3 es la consulta que devuelve el id de la fila insertada en la tabla nivel.
 =cut
-sub transaccion(){
+sub transaccion{
 	my($query1,$bind1,$query2,$bind2,$query3)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
-	my $sth=$dbh->prepare($query1);
-	$sth->execute(@$bind1);
+	my $error=0;
+	my $ident;
+	my $codMsg;
+	eval{
+		my $sth=$dbh->prepare($query1);
+		$sth->execute(@$bind1);
 	
-	$sth=$dbh->prepare($query3);
-	$sth->execute;
-	my($ident)=$sth->fetchrow;
+		$sth=$dbh->prepare($query3);
+		$sth->execute;
+		$ident=$sth->fetchrow;
 
-	if ($query2 ne ""){
+		if ($query2 ne ""){
 		#Reemplaza el caracter ? por el id de la nueva fila en la tabla nivel
-		$query2=~ s/\*\?\*/$ident/g; 
-		$sth=$dbh->prepare($query2);
-        	$sth->execute(@$bind2);
+			$query2=~ s/\*\?\*/$ident/g; 
+			$sth=$dbh->prepare($query2);
+        		$sth->execute(@$bind2);
+		}
+		$dbh->commit;
+		$codMsg='C500';
+	};
+	if($@){
+			#Se loguea error de Base de Datos
+			my $codMsg= 'B402';
+			C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'C501';
 	}
-	$dbh->commit;
 	$dbh->{AutoCommit} = 1;
-	return($ident);
+	return($ident,$error,$codMsg);
 }
 
 =item
-transaccion
+transaccionNivel3
 Funcion interna al pm
 Realiza el guardado en la base de datos de los campos del nivel 3, por medio de una transaccion.
 los paramentros que recibe son: $barcodes es un string con los barcodes para los items, este string puede estar en blanco, de ser asi se autogeneran en la transaccion; $query1 es el insert a la tabla del nivel 3; $query2 es el insert en la tabla repetibles del nivel 3; $query3 es la consulta que devuelve el id de la fila insertada en la tabla nivel3.
 =cut
-sub transaccionNivel3(){
+sub transaccionNivel3{
 	my($barcodes,$query1,$bind1,$query2,$bind2,$query3,$parametros)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	my $barcode="";
 	my $error=0;
+	my $codMsg='C500';
 	my $ident=-1;
-	if($barcodes eq ""){
-		$barcode=&generaCodigoBarra($dbh,$parametros);
-	}
-	else{
+	eval{
+		if($barcodes eq ""){$barcode=&generaCodigoBarra($dbh,$parametros);}
+		else{
 		#EL BARCODE VIENE DESDE LA INTERFACE - separados por "," se utiliza el barcode asosiado al indice que corresponde al item que se va agregar.
-		my @barcodes2=split(/,/,$barcodes);
-		$barcode="'".$barcodes2[%$parametros->{'indice'}-1]."'";
-		my $query="SELECT * FROM nivel3 WHERE barcode= ".$barcode;
-		my $sth=$dbh->prepare($query);
-		$sth->execute();
-		if($sth->fetchrow_hashref){$error=1;}
-	}
-	if(!$error){
-	#reemplaza el string *?* por el barcode generado
-		$query1=~ s/\*\?\*/$barcode/g;
-		my $sth=$dbh->prepare($query1);
-		$sth->execute(@$bind1);
-	
-		$sth=$dbh->prepare($query3);
-		$sth->execute;
-		my($ident)=$sth->fetchrow;
-
-		if ($query2 ne ""){
-			#Reemplaza el string *?* por el id de la nueva fila en la tabla nivel
-			$query2=~ s/\*\?\*/$ident/g; 
-			$sth=$dbh->prepare($query2);
-        		$sth->execute(@$bind2);
+			my @barcodes2=split(/,/,$barcodes);
+			$barcode="'".$barcodes2[%$parametros->{'indice'}-1]."'";
+			my $query="SELECT * FROM nivel3 WHERE barcode= ".$barcode;
+			my $sth=$dbh->prepare($query);
+			$sth->execute();
+			if($sth->fetchrow_hashref){
+				$error=1;
+				$codMsg='C502';
+			}
 		}
-		$dbh->commit;
+		if(!$error){
+	#reemplaza el string *?* por el barcode generado
+			$query1=~ s/\*\?\*/$barcode/g;
+			my $sth=$dbh->prepare($query1);
+			$sth->execute(@$bind1);
+	
+			$sth=$dbh->prepare($query3);
+			$sth->execute;
+			$ident=$sth->fetchrow;
+
+			if ($query2 ne ""){
+			#Reemplaza el string *?* por el id de la nueva fila en la tabla nivel
+				$query2=~ s/\*\?\*/$ident/g; 
+				$sth=$dbh->prepare($query2);
+        			$sth->execute(@$bind2);
+			}
+			$dbh->commit;
+		}
+	};
+	if($@){
+			#Se loguea error de Base de Datos
+			my $codMsg= 'B403';
+			C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'C501';
 	}
 	$dbh->{AutoCommit} = 1;
-	return($error);
+	return($error,$codMsg);
 }
 
 =item
@@ -1070,7 +1098,7 @@ Funcion interna al pm
 Genera el codigo de barras del item automanticamente por medio de una consulta a la base de datos, esta funcion es llamada desde una transaccion.
 Los parametros son el manejador de la base de datos y los parametros que necesita para generar el codigo de barra.
 =cut
-sub generaCodigoBarra(){
+sub generaCodigoBarra{
 	#VER COMO SE GENERA EL BARCODE!!! VER SI ESTA BIEN!!!!!!!!
 	my($dbh,$parametros)=@_;
 	my $barcode;
@@ -1096,7 +1124,7 @@ guardarNivel1
 Guarda los campos del nivel 1 tanto los unicos como los repetibles.
 Los parametros que reciben son: $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
 =cut
-sub guardarNivel1(){
+sub guardarNivel1{
 	my ($autor,$nivel1)=@_;
 	my $query1="";
 	my $query2="";
@@ -1132,7 +1160,8 @@ sub guardarNivel1(){
 		$query2=substr($query2,1,length($query2));
 		$query2="INSERT INTO nivel1_repetibles (campo,subcampo,id1,dato) VALUES ".$query2;
 	}
-	return(&transaccion($query1,\@bind1,$query2,\@bind2,$query3));
+	my($ident,$error,$codMsg)=transaccion($query1,\@bind1,$query2,\@bind2,$query3);
+	return($ident,$error,$codMsg);
 }
 
 =item
@@ -1140,7 +1169,7 @@ guardarNivel2
 Guarda los campo del nivel 2
 Los parametros que reciben son: $itemType el tipo de item que es; $id1 es el id de la fila insertada para ese item en la tabla nivel1; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
 =cut
-sub guardarNivel2(){
+sub guardarNivel2{
 	my ($id1,$nivel2)=@_;
 	my $query1="";
 	my $query2="";
@@ -1205,8 +1234,8 @@ sub guardarNivel2(){
 		$query2=substr($query2,1,length($query2));
 		$query2="INSERT INTO nivel2_repetibles (campo,subcampo,id2,dato) VALUES ".$query2;
 	}
-	my $id2 =&transaccion($query1,\@bind1,$query2,\@bind2,$query3);
-	return($id2,$tipoDoc);
+	my ($id2,$error,$codMsg) =&transaccion($query1,\@bind1,$query2,\@bind2,$query3);
+	return($id2,$tipoDoc,$error,$codMsg);
 
 }
 
@@ -1215,7 +1244,7 @@ guardarNivel3
 Guarda los campos del nivel 3
 Los parametros que reciben son: $id1 es el id de la fila insertada para ese item en la tabla nivel1; $id2 es el id de la fila insertada para ese item en la tabla nivel2; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
 =cut
-sub guardarNivel3(){
+sub guardarNivel3{
 	my ($id1,$id2,$barcodes,$cantItems,$itemType,$nivel3)=@_;
 	my $query1="";
 	my $query2="";
@@ -1229,6 +1258,7 @@ sub guardarNivel3(){
 	my $wthdrawn="";
 	my $notforloan="";
 	my $error=0;
+	my $codMsg;
 	foreach my $obj(@$nivel3){
 		my $campo=$obj->{'campo'};
 		my $subcampo=$obj->{'subcampo'};
@@ -1276,12 +1306,12 @@ sub guardarNivel3(){
 	$parametros{'itemtype'}=$itemType;
 	for(my $i=1; $i<=$cantItems;$i++){
 		$parametros{'indice'}=$i;
-		$error=&transaccionNivel3($barcodes,$query1,\@bind1,$query2,\@bind2,$query3,\%parametros);
+		($error,$codMsg)=&transaccionNivel3($barcodes,$query1,\@bind1,$query2,\@bind2,$query3,\%parametros);
 		if($error){
-			return($error);
+			return($error,$codMsg);
 		}
 	}
-	return($error);
+	return($error,$codMsg);
 }
 
 =item

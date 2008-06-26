@@ -55,7 +55,12 @@ if(!$json){
 		my $tipoDoc=$nivel2->{'tipo_documento'};
 		my $respuesta=$input->param('respuesta');
 		my $nivel3 = &C4::AR::Utilidades::from_json_ISO($respuesta);
-		&guardarNivel3($id1,$id2,$barcodes,$cantItems,$tipoDoc,$nivel3);
+		my $paraMens;
+		my ($error,$codMsg)=&guardarNivel3($id1,$id2,$barcodes,$cantItems,$tipoDoc,$nivel3);
+		my $mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+		$template->param(
+			mensaje	  => $mensaje,
+		);
 	}
 
 	my $nivel=3;
