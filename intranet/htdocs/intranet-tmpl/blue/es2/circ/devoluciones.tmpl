@@ -14,93 +14,6 @@
 
 <script language="javascript" type="text/javascript">
 
-
-function generaDivDevRen(responseText){
-	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontmsg'>";
-	var accion=infoArray[0].accion;
-	html=html + infoArray[0].accion +":<br>";
-	for(var i=0; i<infoArray.length;i++){
-	
-		var infoDevRenObj= new infoPrestamo();
-		infoDevRenObj.id3= infoArray[i].id3;
-		infoDevRenObj.barcode=infoArray[i].barcode;
-		infoPrestamos_array[i]= infoDevRenObj;
- 
-		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
-		html= html + infoArray[i].titulo + ", ";
-		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
-		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
-	}
-	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
-	html= html + "</div>";
-
-	$('#confirmar_div').html(html);
-
-	HiddeState();
-}
-
-function devolver_renovar(accion){
-	objAH=new AjaxHelper(updateInfoDevRen, Init);
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
-	objAH.infoDevRen= infoPrestamos_array;
-	objAH.borrowernumber= usuario.ID;
-	objAH.accion=accion;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateInfoDevRen(){
-	cancelarDiv();
-	detallePrestamos(usuario.ID);
-}
-//**************************************************************************************************************
-
-function imprimirTicket(str,num){
-	window.open ("receipt.pl"+str, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-}
-
-
-<!-- TMPL_LOOP name="ticket_string" -->
- imprimirTicket("<!-- TMPL_VAR name='ticket_string' -->","<!-- TMPL_VAR name='number' -->");
-<!-- /TMPL_LOOP-->
-
-
-
-	function swap(id,src){
-		document.getElementById(id).src=src;
-	}
-
-	function hacerSubmit(frm, action){
-		if (frm.barcode.value!="") {
-			frm.action.value= action;
-			frm.submit();
-		}else{
-			alert("Debe completar el c�digo de barras!");
-		}
-	}
-
-function subirForm(){
-	var formulario=document.getElementById('formReturn');
-	formulario.submit;
-}
-
-function devolverItmes(){
-	document.getElementById('action').value="return";
-	subirForm();
-}
-
-function renovarItems(){
-	document.getElementById('action').value="renew";
-	subirForm();
-}
-
-
-//**************************************************************************************************************
-
-
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos);
@@ -143,7 +56,7 @@ $(document).ready(function() {
 		</tr>
 	</table>
 </div>
-
+<div id="mensajes"></div>
 <div id="detalleUsuario"></div>
 <div id="tablaPrestamos"></div>
 

@@ -267,11 +267,8 @@ function prestar(){
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
 	infoArray= JSONstring.toObject(responseText);
-	var i;
 	var mensajes= '';
-
-	for(i=0; i<infoArray.length;i++){
-// alert(infoArray[i].ticket.titulo);
+	for(var i=0; i<infoArray.length;i++){
 		imprimirTicket(infoArray[i].ticket,i);
 		mensajes= mensajes + infoArray[i].message + '<br>';
 	}
@@ -303,4 +300,80 @@ function cancelarReserva(reserveNumber){
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
+}
+
+/*
+ * generaDivDevRen
+ * Genera el div con los datos de los items que se van a devolver o renovar.
+ */
+function generaDivDevRen(responseText){
+	infoArray= JSONstring.toObject(responseText);
+	var html="<div class='divCirculacion'> <p class='fontmsg'>";
+	var accion=infoArray[0].accion;
+	html=html + infoArray[0].accion +":<br>";
+	for(var i=0; i<infoArray.length;i++){
+	
+		var infoDevRenObj= new infoPrestamo();
+		infoDevRenObj.id3= infoArray[i].id3;
+		infoDevRenObj.barcode=infoArray[i].barcode;
+		infoPrestamos_array[i]= infoDevRenObj;
+ 
+		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
+		html= html + infoArray[i].titulo + ", ";
+		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
+		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
+	}
+	html= html + "</p>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "</div>";
+
+	$('#confirmar_div').html(html);
+
+	HiddeState();
+}
+
+/*
+ * devolver_renovar
+ * Devuelve o renueva el o los items seleccionados.
+ */
+function devolver_renovar(accion){
+	objAH=new AjaxHelper(updateInfoDevRen, Init);
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
+	objAH.infoDevRen= infoPrestamos_array;
+	objAH.borrowernumber= usuario.ID;
+	objAH.accion=accion;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoDevRen
+ * Funcion que se ejecuta cuando se realiza devoluviones o renovaciones y actualiza la tabla de prestamos.
+ * IGUAL A updateInfoPrestarReserva SALVO POR EL LLAMADO A LOS DETALLES.
+ */
+function updateInfoDevRen(responseText){
+	cancelarDiv();
+	infoArray= JSONstring.toObject(responseText);
+	var mensajes= '';
+	for(i=0; i<infoArray.length;i++){
+		imprimirTicket(infoArray[i].ticket,i);
+		mensajes= mensajes + infoArray[i].message + '<br>';
+	}
+	$('#mensajes').html(mensajes);
+	detallePrestamos(usuario.ID);
+}
+
+
+/*
+ * imprimirTicket
+ * Abre la ventana para poder imprimir el ticket del prestamo o renovacion.
+ * @params: ticket, es el objeto que representa al ticket, o 0 si hubo algun error antes de generar el ticket.
+ *          num, es el indice que se usa para darle nombre a la ventana.
+ */
+function imprimirTicket(ticket,num){
+	if(ticket != 0){
+		var obj=JSONstring.make(ticket)
+		window.open ("receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+	}
 }

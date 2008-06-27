@@ -674,7 +674,7 @@ sub verificacionesPostPrestamo {
 	my $codMsg= 'P103'; # Se realizo el prestamo con exito
 	my @paraMens;
 	my $dateformat=C4::Date::get_date_format();
-
+	$paraMens[0]= $barcode;
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "desde verificacionesPostPrestamo\n";
 print A "id2: $id2\n";
@@ -688,12 +688,10 @@ if ($issueType eq "DO"){
 	my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos($borrowernumber);
 	foreach my $iss (@issuetypes){
 		if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-				C4::AR::Reservas::cancelar_reservas_inmediatas($borrowernumber,$loggedinuser);
+			$codMsg= 'P108';
+			C4::AR::Reservas::cancelar_reservas_inmediatas($borrowernumber,$loggedinuser);
 		}
 	}
-
- 	$codMsg= 'P108';
-	$paraMens[0]= $barcode;
 }
 
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
@@ -783,7 +781,7 @@ sub prestar{
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
 			$error= 1;
-			$codMsg= 'P109';
+			$codMsg= 'P106';
 		}
 		$dbh->{AutoCommit} = 1;
 	}

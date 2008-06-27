@@ -14,12 +14,6 @@
 
 <script language="javascript" type="text/javascript">
 
-
-function imprimirTicket(ticket,num){
-	var obj=JSONstring.make(ticket)
-	window.open ("receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-}
-
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete',detalleReservas);

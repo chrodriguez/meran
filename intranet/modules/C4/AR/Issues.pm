@@ -35,7 +35,7 @@ use Date::Manip;
 use Time::HiRes qw(gettimeofday);
 use Thread;
 use Mail::Sendmail;
-
+use C4::Auth;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -201,9 +201,9 @@ sub devolver {
 ### Final del tema sanciones
 
 
-		return(1); # Si la devolucion se pudo realizar
+		return(0,'P109'); # Si la devolucion se pudo realizar
 	} else {
-		return(0); # Si la devolucion dio error
+		return(1,'P110'); # Si la devolucion dio error
 	}
 }
 
@@ -376,7 +376,7 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
  
 sub renovar {
 	my ($borrowernumber,$id3,$loggedinuser)=@_;
-	open(A,">>/tmp/debRenovar.txt");
+	open(A,">>/tmp/debugRenovar.txt");
 print A "id3 : $id3\n";
 print A "user: $borrowernumber\n";
 print A "resp: $loggedinuser\n";
@@ -409,10 +409,10 @@ close(A);
 		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date);
 #****************************Fin******Se registra el movimiento en historicCirculation*************************
 
-		return 1;
+		return (0,'P111');
 	}else{
 #el prestamo no se puede renovar
-		return 0;
+		return (1,'P112');
 	}
 }
 
@@ -753,7 +753,7 @@ sub crearTicket {
 	my ($id3,$bornum,$loggedinuser)=@_;
 	my %env;
 	my $dateformat = C4::Date::get_date_format();
-# 	my $bornum=$iteminfo->{'borrowernumber'};
+	$loggedinuser = C4::Auth::getborrowernumber($loggedinuser);
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
 	my $iteminfo= C4::Circulation::Circ2::getiteminformation(\%env, $id3);
@@ -773,23 +773,6 @@ sub crearTicket {
 	$ticket{'librarian'}=CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'});
 	$ticket{'issuedescription'}=CGI::Util::escape($iteminfo->{'issuedescription'});
 	$ticket{'librarianNumber'}=CGI::Util::escape($librarian->{'cardnumber'});
-# 	my $ticket_borrower = $borrower;
-# 	my $ticket_string =
-# 		    "?borrowerName=" . CGI::Util::escape($ticket_borrower->{'firstname'} . " " . $ticket_borrower->{'surname'}) .
-# 		    "&borrowerNumber=" . CGI::Util::escape($ticket_borrower->{'cardnumber'}) .
-# 		    "&documentType=" . CGI::Util::escape($ticket_borrower->{'documenttype'}) .
-#   		    "&documentNumber=" . CGI::Util::escape($ticket_borrower->{'documentnumber'}) .
-# 		    "&author=" . CGI::Util::escape($iteminfo->{'autor'}) .
-# 		    "&bookTitle=" . CGI::Util::escape($iteminfo->{'titulo'}) .
-# 		    "&topoSign=" . CGI::Util::escape($iteminfo->{'bulk'}) .
-# 		    "&barcode=" . CGI::Util::escape($iteminfo->{'barcode'}) .
-# 		    "&volume=" . CGI::Util::escape($iteminfo->{'volume'}) .
-# 		    "&borrowDate=" . CGI::Util::escape(format_date_hour(ParseDate("today")),$dateformat) .
-# 		    "&returnDate=" . CGI::Util::escape(format_date($ticket_duedate),$dateformat) .
-# 		    "&librarian=" . CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'}).
-# 		    "&issuedescription=" . CGI::Util::escape($iteminfo->{'issuedescription'}).
-# 		    "&librarianNumber=" . CGI::Util::escape($librarian->{'cardnumber'});
-# 	return ($ticket_string);
 	return(\%ticket);
 }
 

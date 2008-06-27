@@ -102,7 +102,6 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 			}
 		}
 
-# 			my ($valuesIss,$labelsIss)=&IssuesType2($iteminfo->{'notforloan'});
 #Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
 #esta sancionado
 		my ($tipoPrestamos)=&C4::AR::Issues::IssuesType3($iteminfo->{'notforloan'}, $borrnumber);
@@ -168,7 +167,6 @@ my $data= $sth->fetchrow_hashref;
 # my $id1= $data->{'id1'};
 # FIXME ########################################################################################
 
-
 		if($id3 ne ""){
 			my %params;
 			$params{'id1'}= $data->{'id1'};
@@ -184,7 +182,7 @@ my $data= $sth->fetchrow_hashref;
 			$params{'issuesType'}= $tipoPrestamo;
 		
 			($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
-			my $ticketObj;
+			my $ticketObj=0;
 			if(!$error){
 			#Se crean los ticket para imprimir.
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
@@ -197,20 +195,15 @@ my $data= $sth->fetchrow_hashref;
     			);
 
 			push (@infoOperacionArray, \%infoOperacion);
-
 print A "id3: $id3\n";		
 print A "id2: $id2\n";	
 # print A "id1: $id1\n";	
 print A "error: $error\n";
 print A "message: $message \n";
-
 		}
-
 	}
 
 	my $infoOperacionJSON = to_json \@infoOperacionArray;
-
-
 
 	print $input->header;
 	print $infoOperacionJSON;
@@ -224,26 +217,40 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $loop=scalar(@$array_ids3);
 	my $id3;
 	my $barcode;
-	my $iteminfo;
+	my $ticketObj;
+	my @infoOperacionArray;
+	my ($error,$codMsg,$message,$paraMens);
+print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){
 		$id3= $array_ids3->[$i]->{'id3'};
 		$barcode= $array_ids3->[$i]->{'barcode'};
-
+		my %infoOperacion;
+		$paraMens->[0]=$barcode;
+		$ticketObj=0;
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			my ($returned) = C4::AR::Issues::devolver($id3,$borrnumber,$loggedinuser);
-# 			$okMensaje.=($returned)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue devuelto<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser devuelto<br>';
+			($error,$codMsg) = C4::AR::Issues::devolver($id3,$borrnumber,$loggedinuser);
 		} 
 		elsif($accion eq 'RENOVACION') {
-			my ($renewed) = C4::AR::Issues::renovar($borrnumber,$id3,$loggedinuser);
-# 			$okMensaje.=($renewed)?'El ejemplar con c&oacute;digo de barras '.$barcode.' fue renovado<br>':'El ejemplar con c&oacute;digo de barras '.$barcode.' no pudo ser renovado<br>';
-			if(C4::Context->preference("print_renew") && $renewed){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-# 				$ticket_string=&crearTicket($iteminfo,$loggedinuser);
-# 				$tickets[$i]->{'ticket_string'}=$ticket_string;
-# 				$tickets[$i]->{'number'}=$i;
+print A "Entra al if de ren\n";
+print A "ID3: $id3\n";
+			($error,$codMsg) = C4::AR::Issues::renovar($borrnumber,$id3,$loggedinuser);
+print A "error: $error\n";
+			if(C4::Context->preference("print_renew") && !$error){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
+				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
 		}
+		$message=C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens); # PASAR A LAS FUNCIONES;
+        	%infoOperacion = (error => $error,
+        			  message => $message,
+				  ticket  => $ticketObj,
+		);
+		push (@infoOperacionArray, \%infoOperacion);
 	}
+
+	my $infoOperacionJSON = to_json \@infoOperacionArray;
+
 	print $input->header;
+	print $infoOperacionJSON;
 }
 close(A);
