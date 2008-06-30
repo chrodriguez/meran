@@ -103,10 +103,11 @@ my $venc=0;
 my $sanc= hasSanctions($borrowernumber);
 
 foreach my $san (@$sanc) {
-if ($san->{'id3'}) {my $aux=itemdata3($san->{'id3'}); 
-			   $san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; }
-$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
-$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
+if ($san->{'id3'}) {
+	my $aux=itemdata3($san->{'id3'}); 
+	$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; }
+	$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
+	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 #
 
@@ -205,34 +206,5 @@ $template->param(no_user_course => $query->param('no_user_course'));
 #Miguel para mostrar o no el historico de las Reservas
 my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
 $template->param(showHistoricReserves => $showHistoricReserves);
-#Matias: Esta habilitada la Biblioteca Virtual?
-my $virtuallibrary=C4::Context->preference("virtuallibrary");
-$template->param(virtuallibrary => $virtuallibrary);
-$template->param(CirculationEnabled => C4::Context->preference("circulation"));
-if ($virtuallibrary eq 1)
-{
-        my ($count2,@requestdata) = allRequests($borrowernumber);
-        if ($count2 ne 0){
-                		$template->param( vrequest => 1,
-                 		requestloop     => \@requestdata);
-                        }
-	my $maxCopy=C4::Context->preference("maxvirtualcopy");
-	my $maxPrint=C4::Context->preference("maxvirtualprint");
-	my $copyRenew=C4::Context->preference("virtualcopyrenew");
-	my $printRenew=C4::Context->preference("virtualprintrenew");
-	my $cantPrint=countPrint($borrowernumber);
-	my $cantCopy=countCopy($borrowernumber);
-
- $template->param(  maxCopy => $maxCopy,
-		    copyRenew => $copyRenew,
-		    cantCopy => $cantCopy,
-		    maxPrint => $maxPrint,
-                    printRenew => $printRenew,
-                    cantPrint => $cantPrint);
-	if ($cantCopy eq $maxCopy){$template->param(redCopy=>1)};
-	if ($cantPrint eq $maxPrint){$template->param(redPrint=>1)};
-}
-#
-
 
 output_html_with_http_headers $query, $cookie, $template->output;

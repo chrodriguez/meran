@@ -218,32 +218,43 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $id3;
 	my $barcode;
 	my $ticketObj;
+	my %params;
+	$params{'loggedinuser'}= $loggedinuser;
+	$params{'borrowernumber'}= $borrnumber;
+	$params{'tipo'}= 'INTRA';
+
+
 	my @infoOperacionArray;
 	my ($error,$codMsg,$message,$paraMens);
 print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){
 		$id3= $array_ids3->[$i]->{'id3'};
 		$barcode= $array_ids3->[$i]->{'barcode'};
-		my %infoOperacion;
-		$paraMens->[0]=$barcode;
 		$ticketObj=0;
+		$params{'id3'}= $id3;
+		$params{'barcode'}= $barcode;
+		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			($error,$codMsg) = C4::AR::Issues::devolver($id3,$borrnumber,$loggedinuser);
-		} 
-		elsif($accion eq 'RENOVACION') {
+			($error,$codMsg, $message) = C4::AR::Issues::devolver(\%params);
+
+		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
-			($error,$codMsg) = C4::AR::Issues::renovar($borrnumber,$id3,$loggedinuser);
+		
+			($error,$codMsg, $message) = C4::AR::Issues::renovar(\%params);
 print A "error: $error\n";
-			if(C4::Context->preference("print_renew") && !$error){#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
+			if(C4::Context->preference("print_renew") && !$error){
+			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
-		}
-		$message=C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens); # PASAR A LAS FUNCIONES;
-        	%infoOperacion = (error => $error,
-        			  message => $message,
-				  ticket  => $ticketObj,
+		}# end elsif($accion eq 'RENOVACION')
+
+		#se genera info para enviar al cliente
+        	my %infoOperacion = (
+					error => $error,
+        			  	message => $message,
+				  	ticket  => $ticketObj,
 		);
 		push (@infoOperacionArray, \%infoOperacion);
 	}

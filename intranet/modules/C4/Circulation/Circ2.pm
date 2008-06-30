@@ -119,7 +119,7 @@ sub getDataItems{
 	my ($id3)= @_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2
+	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2, barcode
 				FROM nivel3
 				WHERE(id3 = ?)");
 

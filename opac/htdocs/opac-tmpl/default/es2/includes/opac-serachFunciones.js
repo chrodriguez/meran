@@ -64,14 +64,30 @@ function updateInfo(responseText){
 function updateInfoReserva(responseText){
 	
 	//si estoy logueado, oculta la informacion del usuario
-// 	$('#result').slideUp('slow');
 	$('#result').html(responseText);
 	$('#result').slideDown('slow');	
-// 	zebra('tablaResult');
-//  	pushCache(responseText, 'result');
 	Complete();
 
 }
+
+function updateDetalleReserva(responseText){
+	
+	//si estoy logueado, oculta la informacion del usuario
+	$('#detalleReservas').html(responseText);
+	$('#detalleReservas').slideDown('slow');	
+	Complete();
+
+}
+
+function updateDetallePrestamo(responseText){
+	
+	//si estoy logueado, oculta la informacion del usuario
+	$('#detallePrestamos').html(responseText);
+	$('#detallePrestamos').slideDown('slow');	
+	Complete();
+
+}
+
 
 function reservar(id1, id2){
 
@@ -93,7 +109,8 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
 function cancelar(reserveNumber){
 
-	objAH=new AjaxHelper(updateInfoReserva, Init);
+// 	objAH=new AjaxHelper(updateInfoReserva, Init);
+	objAH=new AjaxHelper(DetalleReservas, Init);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
@@ -102,6 +119,55 @@ function cancelar(reserveNumber){
 	objAH.sendToServer();
 }
 
+function updateInfoRenovar(responseText){
+	var infoArray= JSONstring.toObject(responseText);
+	var mensajes= '';
+	for(i=0; i<infoArray.length;i++){
+		mensajes= mensajes + infoArray[i].message + '<br>';
+	}
+	$('#mensajes').html(mensajes);
+	DetallePrestamos();	
+}
+
+
+function renovar(id3){
+
+// 	objAH=new AjaxHelper(updateInfoReserva, Init);
+	objAH=new AjaxHelper(updateInfoRenovar, Init);
+  	objAH.debug= true;
+	//para busquedas combinables
+	objAH.url= '/cgi-bin/koha/opac-renew.pl';
+	objAH.id3= id3;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function DetalleReservas(){
+
+	objAH=new AjaxHelper(updateDetalleReserva, Init);
+  	objAH.debug= true;
+	//para busquedas combinables
+	objAH.url= '/cgi-bin/koha/opac-DetalleReservas.pl';
+// 	objAH.borrowernumber= borrowernumber;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function DetallePrestamos(){
+
+	objAH=new AjaxHelper(updateDetallePrestamo, Init);
+  	objAH.debug= true;
+	//para busquedas combinables
+	objAH.url= '/cgi-bin/koha/opac-DetallePrestamos.pl';
+// 	objAH.borrowernumber= borrowernumber;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function MostrarReservasYPrestamos(borrowernumber){
+	DetallePrestamos(borrowernumber);
+	DetalleReservas(borrowernumber);
+}
 
 function buscar(){
 

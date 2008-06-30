@@ -93,9 +93,19 @@ la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabl
 =cut 
 
 sub devolver {
-	my @resultado;
-	my ($id3,$borrowernumber,$loggedinuser)=@_;
+	my ($params)=@_;
+
+	my $borrowernumber= $params->{'borrowernumber'};
+	my $id3= $params->{'id3'};
+	my $tipo= $params->{'tipo'};
+	my $loggedinuser= $params->{'loggedinuser'};
+	my $codMsg;
+	my $error;
+	my $paraMens;
+	#se setea el barcode para informar al usuario en la renovacion	
+	$paraMens->[0]= $params->{'barcode'};	
 	
+	my @resultado;
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
 	my $sth=$dbh->prepare("SET autocommit=0;");
@@ -200,11 +210,19 @@ sub devolver {
 		
 ### Final del tema sanciones
 
-
-		return(0,'P109'); # Si la devolucion se pudo realizar
+		# Si la devolucion se pudo realizar
+		$error= 0;
+		$codMsg= 'P109';
 	} else {
-		return(1,'P110'); # Si la devolucion dio error
+		# Si la devolucion dio error
+		$error= 1;
+		$codMsg= 'P110';
 	}
+
+	#se obtiene el mensaje para el usuario
+	my $message=C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+
+	return ($error,$codMsg, $message);
 }
 
 
@@ -375,19 +393,35 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
 =cut
  
 sub renovar {
-	my ($borrowernumber,$id3,$loggedinuser)=@_;
-	open(A,">>/tmp/debugRenovar.txt");
+	my ($params)=@_;
+
+	my $borrowernumber= $params->{'borrowernumber'};
+	my $id3= $params->{'id3'};
+	my $tipo= $params->{'tipo'};
+	my $loggedinuser= $params->{'loggedinuser'};
+	my $paraMens;
+	my $codMsg;
+	my $error= 0;
+open(A,">>/tmp/debugRenovar.txt");
 print A "id3 : $id3\n";
 print A "user: $borrowernumber\n";
 print A "resp: $loggedinuser\n";
 
+#ESTA FUNCION HAY Q LIMPIARLA Y ADAPTARLA, DEBERIA DEVOLVER VODIGOS DE ERROR, ADEMAS DEBERIA IR DENTRO
+# DE VERIFICAR PARA RENOVAR
 	my $renovacion= &sepuederenovar($borrowernumber,$id3);
 print A "renovacion: $renovacion\n";
 close(A);
-	if ($renovacion){
-#Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
+
+	my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
+
+	if( ($renovacion) && (!$error) ){
+	#Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
+
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("UPDATE issues SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() WHERE id3 = ? AND borrowernumber = ?");
+		my $sth=$dbh->prepare("	UPDATE issues 
+					SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() 
+					WHERE id3 = ? AND borrowernumber = ?");
 		$sth->execute($id3, $borrowernumber);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
@@ -406,14 +440,80 @@ close(A);
 		my $branchcode= $dataItems->{'homebranch'};
 		my $end_date= C4::AR::Issues::vencimiento($id3);
 
-		C4::Circulation::Circ2::insertHistoricCirculation('renew',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation(	'renew',
+									$borrowernumber,
+									$loggedinuser,
+									$id1,
+									$id2,
+									$id3,
+									$branchcode,
+									$issuetype,
+									$end_date
+								);
 #****************************Fin******Se registra el movimiento en historicCirculation*************************
-
-		return (0,'P111');
+		$codMsg= 'P111';
+		$error= 0;		
 	}else{
-#el prestamo no se puede renovar
-		return (1,'P112');
+		#el prestamo no se puede renovar
+		$codMsg= 'P112';
+		$error= 1;
 	}
+	
+	return ($error,$codMsg, $paraMens);
+}
+
+sub verificarParaRenovar{
+
+	my ($params)=@_;
+
+	my $error= 0;
+	my $codMsg= '000';
+	my @paraMens;
+	#se setea el barcode para informar al usuario en la renovacion	
+	@paraMens[0]= $params->{'barcode'};	
+
+	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation(	undef, 				
+										$params->{'borrowernumber'}
+									);	
+	$params->{'usercourse'}= $borrower->{'usercourse'};
+
+	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
+	if( !($error) && (C4::Context->preference("usercourse") && ($params->{'usercourse'} == "NULL" ) ) ){
+		$error= 1;
+		$codMsg= 'P114';
+	}
+
+	return ($error, $codMsg,\@paraMens);
+}
+
+=item
+t_renovar
+Transaccion que renueva un prestamo.
+@params: $params-->Hash con los datos necesarios para poder cancelar la reserva.
+=cut
+sub t_renovar{
+	my ($params)=@_;
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;
+	$dbh->{RaiseError} = 1;
+	my $tipo=$params->{'tipo'};
+	my ($error,$codMsg,$paraMens);
+	eval{
+		($error,$codMsg,$paraMens)= renovar($params);
+		$dbh->commit;
+	};
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B405';
+		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'P113';
+	}
+	$dbh->{AutoCommit} = 1;
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+	return($error,$codMsg,$message);
 }
 
 #borrowerissues retorna todos los prestamos que tiene actualmente un borrower, recibe el nro de borrower y devuelve la cantidad de prestamos actuales y el arreglo de los prestamos actuales

@@ -116,7 +116,7 @@ sub reservar {
 
 	my %paramsReserva;
 	
-	$paramsReserva{'id1'}= $data->{'id1'};
+	$paramsReserva{'id1'}= $params->{'id1'};
 	$paramsReserva{'id2'}= $params->{'id2'};
 	$paramsReserva{'id3'}= $data->{'id3'};
 	$paramsReserva{'borrowernumber'}= $params->{'borrowernumber'};
@@ -216,8 +216,8 @@ sub t_cancelar_reservas_inmediatas{
 	eval{
 # Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
 		my $sth=$dbh->prepare("	SELECT reservenumber 
-				FROM reserves 
-				WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
+					FROM reserves 
+					WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
 			$sth->execute($borrowernumber);
 
 		while (my $reservenumber= $sth->fetchrow){

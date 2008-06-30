@@ -7,6 +7,13 @@
 		detalle(id1);
 	}
 
+
+	$(document).ready(function() {
+		DetalleReservas();
+		DetallePrestamos();
+	
+	});
+
 </script>
 
 <div id="navegador">
@@ -16,8 +23,116 @@
 
 <!-- para mostrar los resultados de las busquedas -->
 <div id="result"></div>
+<div id="mensajes"></div>
 <div id="resultHistoriales"></div>
 <div id="datosUsuario">
+
+<table width="98%" cellspacing="0" cellpadding="0" border="0" align="center">
+<tbody>
+
+
+<tr>
+<td valign="top">
+<table class="tope" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
+	<tr><td>
+		<div id="detallePrestamos"></div>
+	<tr><td>
+		<div id="detalleReservas"></div>
+	<tr><td>
+</table>
+</td>
+<td width="20%" valign="top">
+	<table align="center" cellpadding="5" cellspacing="0" border="0" width="100%" valign="top">
+	<tr >
+		<td class="bordetabla" align="Center">
+		<b>Datos del usuario:</b></td>
+	</tr>
+	<!-- TMPL_IF NAME="foto_name" -->
+	<tr>
+		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"></td>
+	</tr>
+	<!-- /TMPL_IF -->
+<tr><td class="impar" >Tarjeta de la biblioteca: <b><!-- TMPL_VAR NAME="cardnumber" --></b> </td></tr>
+<tr><td class="impar" >Apellido y nombres: <b><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR NAME="firstname" --> </b></td></tr>
+<tr><td class="impar" > Documento: <b> <!-- TMPL_VAR NAME="documenttype" -->  <!-- TMPL_VAR NAME="documentnumber" --></b></td></tr>
+<!-- TMPL_IF NAME="studentnumber" -->
+<tr><td class="impar" >Legajo: <b><!-- TMPL_VAR NAME="studentnumber" --></b> </td></tr>
+<!-- /TMPL_IF -->
+<tr><td class="impar" >Categor&iacute;a: <b><!-- TMPL_VAR NAME="cat" --></b> </td></tr>
+<!-- TMPL_IF NAME="streetaddress" -->
+<tr><td class="impar" >Direcci&oacute;n: <b><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></b></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="physstreet" -->
+<tr><td class="impar" >Domicilio y localidad de origen: <b><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="streetcity" --></b></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="phone" -->
+<tr><td class="impar" >Tel&eacute;fono: <b><!-- TMPL_VAR NAME="phone" --></b></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="emailaddress" -->
+<tr><td class="impar" >Mail: <b><!-- TMPL_VAR NAME="emailaddress" --></b></td></tr>
+<!-- /TMPL_IF -->
+<tr><td class="impar" >&nbsp;</td></tr>
+<!--Esto es un agregado de Einar para validar el tema de los usuarios que puedan ser locales o no, o sea que la biblioteca`pueda o no cambiar los datos de los alumnos, dependera de la variable Guarani que ira en el system preferences de Koha--> 	
+<tr><td class="impar">
+<!-- TMPL_IF NAME="updatedata" -->
+Si alg&uacute;n dato es incorrecto o debe ser modificado,
+avisar al personal de la Biblioteca.
+<!-- TMPL_ELSE --> 
+		Alguno de nuestros registros es incorrecto? Para solucionarlo: <br> <a href="/cgi-bin/koha/opac-userupdate.pl">Actualizar Registro</a>
+        <!-- /TMPL_IF -->
+</td></tr>
+<!-- TMPL_IF name="UploadPictureFromOPAC" -->
+         <!-- TMPL_IF name="mensaje_error_foto" -->
+         <tr><td span=100% class="impar" >
+                <font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
+         </td></tr>
+         <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="foto_name" -->
+          <tr><td span=100% class="impar" >
+                <form name="foto" action="/cgi-bin/koha/upload.pl" method=post>
+                        <input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
+                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+<center>
+
+
+<a    onMouseOut="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png')" onMouseOver="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-fotobis.png')" >
+<input name="delpic" id="delpic" type="image" onClick="document.foto.submit();" value="Eliminar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png" border="0"  >
+</a>
+</center>
+                </form>
+          </td></tr>
+        <!-- TMPL_ELSE -->
+          <tr><td span=100% align="center" class="impar" >
+                <form action="/cgi-bin/koha/upload.pl" method=post enctype="multipart/form-data">
+                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+
+<a  onMouseOut="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/upload.png')" onMouseOver="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/uploadbis.png')">
+<input name="up" id="up" type="image" value="Subir Foto"  src="<!-- TMPL_VAR NAME='themelang' -->/images/upload.png" border="0">
+</a>
+                        <input type=file name="picture">
+                </form>
+           </td></tr>
+         <!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
+	
+<!-- Hasta aca llega el agregaro, en el original estaba solo el tema del ELSE -->
+		</font>
+		</td>
+	</tr>
+</table>
+
+</td>
+</tr>
+
+</tbody>
+</table>
+
+
+
+
+
+
+
 
 <table width="100%" align="center" class="top" valign="top">
 <tr>
@@ -62,6 +177,8 @@
                 </tr>
         </table>
 <!-- /TMPL_IF -->
+
+
 
 <!-- TMPL_IF NAME="issues_count" -->
 
@@ -120,6 +237,9 @@
 
 <!-- TMPL_IF NAME="waiting_count" -->
 <!--<p> Usted tiene <!-- TMPL_VAR NAME="waiting_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</p>-->
+
+<div id="MaterialEnEspera">
+</div>
 
 <table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
 <tr valign="top">
@@ -186,6 +306,8 @@
 	<!-- TMPL_IF NAME="CirculationEnabled" -->
 		<a class="click"
 		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
+		<a class="click"
+		onClick="DetalleReservas()">CancelarAjax</a>
 	<!-- TMPL_ELSE -->
 		No disponible
 	<!-- /TMPL_IF -->
@@ -256,52 +378,7 @@
 <br>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=virtualLibrary -->
-<center><h3>Biblioteca Virtual</h3>	</center>
-<!-- TMPL_IF NAME=vrequest -->
 
-<TABLE  CELLSPACING=0  CELLPADDING=7  border=0 align="center">
-<TR VALIGN=TOP>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp" colspan=8><B>BIBLIOTECA VIRTUAL</B>
-  </td> 
-</TR>
-<TR VALIGN=TOP >
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>T&iacute;tulo</b></TD>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Autor</b></TD>
-  <!--   <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name="themelang" -->/images/background-vir.bmp"><B>Tipo de Ejemplar</b></TD> -->
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Volumen</b></TD>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Solicitado</b></TD>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Tipo</b></TD>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Unidad de Informaci&oacute;n</b></TD>
-  <td  bgcolor="ffffcc" background="<!-- TMPL_VAR name='themelang' -->/images/background-vir.bmp"><B>Estado</b></TD>
-</TR>
-<!-- TMPL_LOOP NAME=requestloop -->
-<tr VALIGN=TOP>
-  <td><a href="opac-detail.pl?id1=<!-- TMPL_VAR NAME='id1' -->"><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a></td>
-  <td> <!-- TMPL_IF NAME=author --> <!-- TMPL_VAR NAME="author" --> <!-- TMPL_ELSE --> -  <!-- /TMPL_IF --></td>
-  <!--  <td>  <!-- TMPL_VAR NAME="id2" --> GRUPO - <!-- TMPL_VAR NAME="description" --></td> -->
-  <td align=center > <!-- TMPL_IF NAME=volumeddesc --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE -->-<!-- /TMPL_IF --></td>
-  <td><!-- TMPL_VAR NAME="date_request" --></td>
-  <td><IMG <!-- TMPL_IF Name='copy' --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/cd.png" alt="Para Copiar" <!-- TMPL_ELSE --> src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/print.png" alt="Para Imprimir"  <!-- /TMPL_IF -->> </td>
-  <TD><!-- TMPL_VAR Name="branchname" --></td> 
-  <td><!-- TMPL_VAR NAME="state" --></td>
-    <input type=hidden name=id1 value="<!-- TMPL_VAR NAME='id1' -->">
-    <input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME='bornum' -->">
-    <input type=hidden name=id2 value="<!-- TMPL_VAR NAME='id2' -->">
-    <input type=hidden name=timestamp value="<!-- TMPL_VAR NAME='timestamp' -->">
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-<!-- /TMPL_IF -->
-<p>
-<!-- TMPL_IF NAME=redCopy --> <font color="red"> <!-- /TMPL_IF -->
-<i>Lleva realizadas <b><!-- TMPL_VAR NAME="cantCopy" --></b> operaciones de copia en un lapso de <b><!-- TMPL_VAR NAME="copyRenew" --></b> d&iacute;as. El m&aacute;ximo posible es <b><!-- TMPL_VAR NAME="maxCopy" --></b>.</i><br>	
-<!-- TMPL_IF NAME=redCopy --> </font> <!-- /TMPL_IF --> 
-<!-- TMPL_IF NAME=redPrint --> <font color="red"> <!-- /TMPL_IF --> 
-  <i>Lleva realizadas <b><!-- TMPL_VAR NAME="cantPrint" --></b> operaciones de impresi&oacute;n en un lapso de <b><!-- TMPL_VAR NAME="printRenew" --></b> d&iacute;as. El m&aacute;ximo posible es <b><!-- TMPL_VAR NAME="maxPrint" --></b>.</i><br>
-<!-- TMPL_IF NAME=redPrint --> </font> <!-- /TMPL_IF --> 
-</p>
-<!-- /TMPL_IF -->
 
 <p align="center">
 
@@ -410,6 +487,7 @@ avisar al personal de la Biblioteca.
 		</td>
 	</tr>
 </table>
+
 <script>
 function confirm_cancelation2(num) {
         var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
