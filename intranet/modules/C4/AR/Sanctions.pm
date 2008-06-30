@@ -25,6 +25,9 @@ use vars qw(@EXPORT @ISA);
 		&sanciones
 		&logSanction
 		&infoSanction
+
+		&borrarSancionReserva
+		&actualizarSancion
 );
 
 # Retorna la informacion de la sancion segun una reserva (antes de que se borre la reserva)
@@ -352,4 +355,19 @@ sub sanciones{
 	}
 	$sth->finish;
 	return @sanctionsarray;
+}
+
+sub borrarSancionReserva{
+	my ($reservenumber)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	DELETE FROM sanctions 
+				WHERE reservenumber=? AND (now() < startdate)");
+	$sth->execute($reservenumber);
+}
+
+sub actualizarSancion{
+	my ($id3,$reservenumber)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
+	$sth->execute($id3,$reservenumber);
 }

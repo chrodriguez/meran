@@ -23,6 +23,7 @@ use strict;
 require Exporter;
 
 use Mail::Sendmail;
+use C4::AR::Mensajes;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -83,7 +84,7 @@ sub reservarOPAC {
 		if ($@){
 			#Se loguea error de Base de Datos
 			$codMsg= 'B400';
-			C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
 			$error= 1;
@@ -159,15 +160,11 @@ sub reservar {
 
 sub insertarReserva {
 	my($params)=@_;
-
 	my $dbh=C4::Context->dbh;
-
 	my $query="	INSERT INTO reserves 	
 			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
 			VALUES (?,?,?,?,NOW(),?,?,?) ";
-
 	my $sth2=$dbh->prepare($query);
-
 	$sth2->execute( $params->{'id3'},
 			$params->{'id2'},
 			$params->{'borrowernumber'},
@@ -176,19 +173,16 @@ sub insertarReserva {
 			$params->{'branchcode'},
 			$params->{'estado'}
 		);
-
 	#Se obtiene el reservenumber
 	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
 	$sth3->execute();
 	my $reservenumber= $sth3->fetchrow;
 
-
 #**********************************Se registra el movimiento en historicCirculation***************************
 	my $estado;
-
 	if($params->{'estado'} eq 'E'){
 	#es una reserva sobre el ITEM
-		$estado= 'reserve'
+		$estado= 'reserve';
 	}else{
 	#es una reserva sobre el GRUPO
 		$estado= 'queue';
@@ -208,32 +202,220 @@ sub insertarReserva {
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 	return $reservenumber;
-
 }#end insertarReserva
 
-sub cancelar_reservas_inmediatas{
-	my ($borrowernumber, $loggedinuser)=@_;
+sub t_cancelar_reservas_inmediatas{
+	my ($params)=@_;
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;
+	$dbh->{RaiseError} = 1;
+	my $tipo=$params->{'tipo'};
+	my $borrowernumber=$params->{'borrowernumber'};
+	my $loggedinuser=$params->{'loggedinuser'};
+	my ($error,$codMsg,$paraMens);
+	eval{
 # Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
-        my $dbh = C4::Context->dbh;
-
-	my $sth=$dbh->prepare("	SELECT reservenumber 
+		my $sth=$dbh->prepare("	SELECT reservenumber 
 				FROM reserves 
 				WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
-	$sth->execute($borrowernumber);
+			$sth->execute($borrowernumber);
 
-	while (my $reservenumber= $sth->fetchrow){
-		&cancelar_reserva($reservenumber, $borrowernumber,$loggedinuser);
+		while (my $reservenumber= $sth->fetchrow){
+			$params->{'reservenumber'}=$reservenumber;
+			($error,$codMsg,$paraMens)=cancelar_reserva($params);
+		}
+		$sth->finish;
+		$dbh->commit;
+	};
+		if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B404';
+		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R010';
 	}
-	$sth->finish;
+	$dbh->{AutoCommit} = 1;
+	return($error,$codMsg,$paraMens);
 }
 
 =item
-Funcion que cancela una reserva
-Se invoca con dos parametros cancelar-reserva($biblioitem,$borrowernumber);
-un biblioitem y un numero de usuario correspondiente al que hizo la reserva, ya que son los dos campos con los que identifico una reserva sin duplicados
+t_cancelar_reserva
+Transaccion que cancela una reserva.
+@params: $params-->Hash con los datos necesarios para poder cancelar la reserva.
 =cut
+sub t_cancelar_reserva{
+	my ($params)=@_;
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;
+	$dbh->{RaiseError} = 1;
+	my $tipo=$params->{'tipo'};
+	my ($error,$codMsg,$paraMens);
+	eval{
+		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+		$dbh->commit;
+	};
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B404';
+		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R010';
+	}
+	$dbh->{AutoCommit} = 1;
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+	return($error,$codMsg,$message);
+}
 
-sub cancelar_reserva {
+
+=item
+cancelar_reserva
+Funcion que cancela una reserva
+=cut
+sub cancelar_reserva{
+	my ($params)=@_;
+	my $dbh= C4::Context->dbh;
+	my $reservenumber=$params->{'reservenumber'};
+	my $borrowernumber=$params->{'borrowernumber'};
+	my $loggedinuser=$params->{'loggedinuser'};
+	my $error=0;
+	my $codMsg;
+	my $paraMens;
+	my $reserva=getDatosReserva($reservenumber);
+	my $id2=$reserva->{'id2'};
+	my $id3=$reserva->{'id3'};
+	if($id3){
+#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
+		my $reservaGrupo=getDatosReservaEnEspera($id2);
+		if($reservaGrupo){
+			$reservaGrupo->{'branchcode'}=$reserva->{'branchcode'};
+			$reservaGrupo->{'borrowernumber'}=$borrowernumber;
+			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
+			actualizarDatosReservaEnEspera($reservaGrupo);
+		}
+
+# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
+	}
+#**********************************Se registra el movimiento en historicSanction***************************
+	#traigo la info de la sancion
+	my $infoSancion= &C4::AR::Sanctions::infoSanction($reservenumber);
+	my $sanctiontypecode= 'null';
+	my $fechaFinSancion= $infoSancion->{'enddate'};
+	C4::AR::Sanctions::logSanction('Insert',$borrowernumber,$loggedinuser,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
+#Actualizo la sancion para que refleje el id3 y asi poder informalo
+	C4::AR::Sanctions::actualizarSancion($id3,$reservenumber);
+
+#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+	borrarReserva($reservenumber);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $id1;
+	my $branchcode;
+	if($id3){
+		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		$id1= $dataItems->{'id1'};
+		$branchcode= $dataItems->{'homebranch'};
+	}else{
+		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
+		$id1= $dataBiblioItems->{'id1'};
+		$branchcode= 0;
+	}
+	my $issuetype= '-';
+	my $end_date = 'null';
+	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
+#******************************Fin****Se registra el movimiento en historicCirculation*************************
+
+	return($error,$codMsg,$paraMens);
+}
+
+=item
+getDatosReserva
+Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
+=cut
+sub getDatosReserva{
+	my ($reservenumber)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("	SELECT * 
+				FROM reserves 
+				WHERE reservenumber= ? FOR UPDATE");
+
+	$sth->execute($reservenumber);
+	return($sth->fetchrow_hashref);
+}
+
+=item
+getDatosReservaEnEspera
+Funcion que trae los datos de la primer reserva de la cola que estaba esperando que se desocupe un ejemplar del grupo devuelto o cancelado.
+=cut
+sub getDatosReservaEnEspera{
+	my ($id2)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT *
+				FROM reserves
+				WHERE id2=? AND id3 is NULL
+				ORDER BY timestamp LIMIT 1 ");
+	$sth->execute($id2);
+	return($sth->fetchrow_hashref);
+}
+
+=item
+actualizarDatosReservaEnEspera
+Funcion que actualiza la reserva que estaba esperando por un ejemplar.
+=cut
+sub actualizarDatosReservaEnEspera{
+	my ($reservaGrupo)=@_;
+	my $dbh=C4::Context->dbh;
+	my $id2=$reservaGrupo->{'id2'};
+	my $id3=$reservaGrupo->{'id3'};
+	my $borrowernumber=$reservaGrupo->{'borrowernumber'};
+	my $loggedinuser=$reservaGrupo->{'loggedinuser'};
+	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::Context->preference("reserveGroup"),1);
+	my $sth=$dbh->prepare("UPDATE reserves 
+			SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, branchcode=?, estado='E'
+			WHERE id2=? AND borrowernumber=? ");
+	$sth->execute($id3, $desde, $fecha,$reservaGrupo->{'branchcode'},$id2,$borrowernumber);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+	my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+	my $id1= $dataItems->{'id1'};
+	my $issuecode= '-';
+	C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$reservaGrupo->{'branchcode'},$issuecode,$fecha);
+#********************************Fin**Se registra el movimiento en historicCirculation*************************
+
+# Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
+	my $err= "Error con la fecha";
+	my $dateformat=C4::Date::get_date_format();
+	my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
+	$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+	my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
+	my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+	C4::AR::Sanctions::insertSanction(undef, $reservaGrupo->{'reservenumber'} ,$borrowernumber, $startdate, $enddate, undef);
+
+	my $sth3=$dbh->prepare("commit");
+	$sth3->execute();
+
+	Enviar_Email($id3,$borrowernumber,$desde, $fecha, $apertura,$cierre,$loggedinuser);
+}
+
+=item
+borrarReserva
+Funcion que elimina la reserva de la base de datos.
+=cut
+sub borrarReserva{
+	my ($reservenumber)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=?");
+	$sth->execute($reservenumber);
+}
+
+sub cancelar_reservaVieja {
 
 	my ($reservenumber,$borrowernumber,$loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
@@ -407,26 +589,22 @@ sub datosReservaRealizada{
 
 sub getNotForLoan{
 #Devuelve la disponibilidad del item ('SA'= Sala, 'DO'= Domiciliaria)
-	my ($id3)=@_;
-	
+	my ($id3)=@_;	
 	my $dbh = C4::Context->dbh;
-
 	my $query= "	SELECT notforloan
 			FROM nivel3
 			WHERE (id3 = ?)";
-
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
-
 	return $sth->fetchrow();
 }
 
+=item
+verificarTipoReserva
+Verifica que el usuario no reserve un item que ya tenga una reserva para el mismo grupo y para el mismo tipo de prestamo
+=cut
 sub verificarTipoReserva {
-#Verifica que el usuario no reserve un item que ya tenga una reserva para el mismo grupo y 
-#para el mismo tipo de prestamo
-
 	my ($borrowernumber, $id2, $id3, $tipo)=@_;
-
 	my $error= 0;
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
 #Se intento reservar desde el OPAC sobre el mismo GRUPO
@@ -438,23 +616,19 @@ sub getReservasDeBorrower {
 #devuelve las reservas de grupo del usuario
 	my ($borrowernumber, $id2)=@_;
 	my $dbh = C4::Context->dbh;
-
 	my $query= "	SELECT *
 			FROM reserves
 			WHERE (borrowernumber = ?) AND (id2 = ?)
 			AND (estado <> 'P')";
-
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber, $id2);
 
 	my @results;
 	my $cant= 0;
 	while (my $data=$sth->fetchrow_hashref){
-
 		push (@results,$data);
 		$cant++;
 	}
-	
 	$sth->finish;
 	return($cant,\@results);
 }
@@ -466,18 +640,15 @@ sub getReservasDeId2 {
 	my $query= "	SELECT *
 			FROM reserves
 			WHERE (id2 = ?) AND (estado <> 'P')";
-
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2);
 
 	my @results;
 	my $cant= 0;
 	while (my $data=$sth->fetchrow_hashref){
-
 		push (@results,$data);
 		$cant++;
 	}
-	
 	$sth->finish;
 	return($cant,\@results);
 }
@@ -672,9 +843,9 @@ sub verificacionesPostPrestamo {
 	my $issueType= $params->{'issuesType'};
 	my $error= 0;
 	my $codMsg= 'P103'; # Se realizo el prestamo con exito
-	my @paraMens;
+	my $paraMens;
 	my $dateformat=C4::Date::get_date_format();
-	$paraMens[0]= $barcode;
+	$paraMens->[0]= $barcode;
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "desde verificacionesPostPrestamo\n";
 print A "id2: $id2\n";
@@ -689,14 +860,15 @@ if ($issueType eq "DO"){
 	foreach my $iss (@issuetypes){
 		if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 			$codMsg= 'P108';
-			C4::AR::Reservas::cancelar_reservas_inmediatas($borrowernumber,$loggedinuser);
+			$params->{'tipo'}="INTRA";
+			($error,$codMsg,$paraMens)=C4::AR::Reservas::t_cancelar_reservas_inmediatas($params);
 		}
 	}
 }
 
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
-	return ($error, $codMsg,\@paraMens);
+	return ($error, $codMsg,$paraMens);
 }
 
 

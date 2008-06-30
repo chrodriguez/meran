@@ -36,9 +36,12 @@ $loggedinuser = getborrowernumber($loggedinuser);
 my $objJSON=$input->param('obj');
 my $obj=C4::AR::Utilidades::from_json_ISO($objJSON);
 
-my $reserveNumber = $obj->{'reserveNumber'};
-my $borrowernumber=$obj->{'borrowernumber'};
+my %params;
+$params{'reservenumber'}=$obj->{'reserveNumber'};
+$params{'borrowernumber'}=$obj->{'borrowernumber'};
+$params{'loggedinuser'}=$loggedinuser;
+$params{'tipo'}="INTRA";
 
-C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
+my ($error,$codMsg,$messege)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 
 print $input->header;

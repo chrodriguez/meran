@@ -37,12 +37,15 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 my $objJSON=$input->param('obj');
 
 my $obj=from_json_ISO($objJSON);
-my $reserveNumber = $obj->{'reserveNumber'};
-
 
 my $borrowernumber=getborrowernumber($loggedinuser);
-C4::AR::Reservas::cancelar_reserva($reserveNumber,$borrowernumber,$loggedinuser);
+my %params;
+$params{'reservenumber'}=$obj->{'reserveNumber'};
+$params{'borrowernumber'}=$borrowernumber;
+$params{'loggedinuser'}=$borrowernumber;
+$params{'tipo'}="OPAC";
 
+my ($error,$codMsg,$messege)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 
 print $input->header;
 
