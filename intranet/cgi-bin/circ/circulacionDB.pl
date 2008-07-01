@@ -40,24 +40,15 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $array_ids3=$obj->{'datosArray'};
+my $borrnumber=$obj->{'borrowernumber'};
+my $loop=scalar(@$array_ids3);
 
-
-#***************************************************RESERVA*************************************************
-# if($tipoAccion eq "RENOVACION"){
-# 
-# 
-# 
-# 	print $input->header;
-# }
-#*************************************************************************************************************
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
-	my $array_ids3=$obj->{'ids3'};
-	my $borrnumber=$obj->{'borrowernumber'};
-	my $loop=scalar(@$array_ids3);
 	my @infoDevRen=();
 	my $env;
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
@@ -80,16 +71,15 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
-	my $array_ids3=$obj->{'ids3'};
-	my $borrnumber=$obj->{'borrowernumber'};
-	my $loop=scalar(@$array_ids3);
+# 	my $array_ids3=$obj->{'ids3'};
+# 	my $borrnumber=$obj->{'borrowernumber'};
+# 	my $loop=scalar(@$array_ids3);
 	my @infoPrestamo;
 	my $env;
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
 		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
 		my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=C4::Search::allitems($iteminfo->{'id2'},'intranet');
-			
 #Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 		my @items;
 		my $j=0;
@@ -124,50 +114,36 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 if($tipoAccion eq "PRESTAMO"){
 #se realizan los prestamos
 print A "desde PRESTAMO \n";
-	my $array_ids3=$obj->{'infoPrestamos'};
-	my $borrnumber=$obj->{'borrowernumber'};
-
-	my $i;
+# 	my $array_ids3=$obj->{'infoPrestamos'};
+# 	my $borrnumber=$obj->{'borrowernumber'};
+# 	my $long= scalar(@$array_ids3);
 	my $id3='';
 	my $id3Old;
 	my $id2;
 	my $tipoPrestamo;
 	my ($error, $codMsg, $message);
-	my $long= scalar(@$array_ids3);
 	my %infoOperacion;
 	my @infoOperacionArray;
 	my @errores;
 
-print A "long: $long \n";
-	for($i=0;$i<$long;$i++){
-
+print A "long: $loop \n";
+	for(my $i=0;$i<$loop;$i++){
 		#obtengo el id3 de un item a prestar
  		$id3= $array_ids3->[$i]->{'id3'};
 		$tipoPrestamo= $array_ids3->[$i]->{'tipoPrestamo'};
 		$id3Old=$array_ids3->[$i]->{'id3Old'};
 
-print A "id3 antes de setear: $id3\n";	
+print A "id3 antes de setear: $id3\n";
 
 # FIXME ########################################################################################
 #si se tiene la preferencia de intranetGroupReserve = 0, te dice q se presta, y esto no es asi
 #deberia decir q no se permite prestar (sin reserva ) desde la INTRA
-=item
-HACER funcion o ver si existe, es para probar
-=cut
+
 #Presta 1 o mas al mismo tiempo
-
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT id2, id1
-			FROM nivel3
-			WHERE id3 = ? ");
-$sth->execute($id3);
-my $data= $sth->fetchrow_hashref;
-
-# $id2= $data->{'id2'};
-# my $id1= $data->{'id1'};
 # FIXME ########################################################################################
 
 		if($id3 ne ""){
+			my $data= C4::Circulation::Circ2::getDataItems($id3);
 			my %params;
 			$params{'id1'}= $data->{'id1'};
 			$params{'id2'}= $data->{'id2'};
@@ -211,21 +187,20 @@ print A "message: $message \n";
 #*************************************************************************************************************
 
 if($tipoAccion eq "DEVOLVER_RENOVAR"){
-	my $array_ids3=$obj->{'infoDevRen'};
-	my $borrnumber=$obj->{'borrowernumber'};
+# 	my $array_ids3=$obj->{'infoDevRen'};
+# 	my $borrnumber=$obj->{'borrowernumber'};
+# 	my $loop=scalar(@$array_ids3);
 	my $accion=$obj->{'accion'};
-	my $loop=scalar(@$array_ids3);
 	my $id3;
 	my $barcode;
 	my $ticketObj;
+	my @infoOperacionArray;
+	my ($error,$codMsg,$message,$paraMens);
 	my %params;
 	$params{'loggedinuser'}= $loggedinuser;
 	$params{'borrowernumber'}= $borrnumber;
 	$params{'tipo'}= 'INTRA';
 
-
-	my @infoOperacionArray;
-	my ($error,$codMsg,$message,$paraMens);
 print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){
 		$id3= $array_ids3->[$i]->{'id3'};
@@ -237,13 +212,11 @@ print A "LOOP: $loop\n";
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
 			($error,$codMsg, $message) = C4::AR::Issues::devolver(\%params);
-
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
-		
-			($error,$codMsg, $message) = C4::AR::Issues::renovar(\%params);
-print A "error: $error\n";
+			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
+print A "error: $error --- cod: $codMsg\n";
 			if(C4::Context->preference("print_renew") && !$error){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);

@@ -103,29 +103,22 @@ C<$itemnum> is the item number
 #Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
 sub getDataBiblioItems{
 	my ($id2)=@_;
-	
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id1 FROM nivel2 WHERE id2 = ? ");
-
 	$sth->execute($id2);
 	my $dataBiblioItems= $sth->fetchrow_hashref;
-
 	return $dataBiblioItems;
 }
 
 #Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
 sub getDataItems{
-
 	my ($id3)= @_;
-
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2, barcode
 				FROM nivel3
 				WHERE(id3 = ?)");
-
 	$sth->execute($id3);
 	my $dataItems= $sth->fetchrow_hashref;
-
 	return $dataItems;
 }
 

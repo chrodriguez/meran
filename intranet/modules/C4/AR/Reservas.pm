@@ -348,7 +348,7 @@ sub getDatosReservaEnEspera{
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT *
 				FROM reserves
-				WHERE id2=? AND id3 is NULL
+				WHERE id2=? AND id3 IS NULL
 				ORDER BY timestamp LIMIT 1 ");
 	$sth->execute($id2);
 	return($sth->fetchrow_hashref);
@@ -405,122 +405,10 @@ sub borrarReserva{
 	$sth->execute($reservenumber);
 }
 
-sub cancelar_reservaVieja {
-
-	my ($reservenumber,$borrowernumber,$loggedinuser)=@_;
-	my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SET autocommit=0;");
-	$sth->execute();
-#Primero busco los datos de la reserva que se quiere borrar
-	$sth=$dbh->prepare("	SELECT * 
-				FROM reserves 
-				WHERE reservenumber= ? AND borrowernumber= ? FOR UPDATE");
-
-	$sth->execute($reservenumber,$borrowernumber);
-	my @resultado;
-	my $data= $sth->fetchrow_hashref;
-	my $id2=$data->{'id2'};
-	my $id3=$data->{'id3'};
-	if($id3){
-#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		my $sth1=$dbh->prepare("	SELECT * 
-						FROM reserves 
-						WHERE id2=? AND id3 is NULL 
-						ORDER BY timestamp LIMIT 1 ");
-		$sth1->execute($id2);
-		my $data2= $sth1->fetchrow_hashref;
-# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-		my $sth4=$dbh->prepare("	DELETE FROM sanctions 
-						WHERE reservenumber=? AND (now() < startdate)");
-		$sth4->execute($reservenumber);
-
-		if ($data2) { 
-		#Quiere decir que hay reservas esperando para este mismo grupo
-			@resultado= ($id3, $data2->{'id2'}, $data2->{'borrowernumber'}, $data2->{'reservenumber'});
-		}
-	}
-
-#**********************************Se registra el movimiento en historicSanction***************************
-		#traigo la info de la sancion
-		my $infoSancion= &C4::AR::Sanctions::infoSanction($data->{'reservenumber'});
-
-		my $responsable= $loggedinuser;
-		my $sanctiontypecode= 'null';
-		my $fechaFinSancion= $infoSancion->{'enddate'};
-		C4::AR::Sanctions::logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
-#**********************************Fin registra el movimiento en historicSanction***************************
-
-#Actualizo la sancion para que refleje el itemnumber y asi poder informalo
-	my $sth6=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
-	$sth6->execute($id3,$reservenumber);
-
-#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-	$sth=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? AND borrowernumber=?");
-	$sth->execute($reservenumber,$borrowernumber);
-
-	if (@resultado) {#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
-		my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::Context->preference("reserveGroup"),1);
-		$sth=$dbh->prepare("	UPDATE reserves 
-					SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, branchcode=?, estado='E'
-					WHERE id2=? AND borrowernumber=? ");
-		$sth->execute($resultado[0], $desde, $fecha,$data->{'branchcode'},$resultado[1],$resultado[2]);
-
-#**********************************Se registra el movimiento en historicCirculation***************************
-		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
-		my $id1= $dataItems->{'id1'};
-		my $end_date= $fecha;
-		my $issuecode= '-';
-		my $borrnum= $resultado[2];
-	
-		C4::Circulation::Circ2::insertHistoricCirculation('notification',$borrnum,$loggedinuser,$id1,$id2,$id3,$data->{'branchcode'},$issuecode,$end_date);
-#********************************Fin**Se registra el movimiento en historicCirculation*************************
-
-# Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
-		my $err= "Error con la fecha";
-		my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
-		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions= C4::Context->preference("daysOfSanctionReserves");
-		my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-		C4::AR::Sanctions::insertSanction(undef, $resultado[3] ,$borrowernumber, $startdate, $enddate, undef);
-
-		my $sth3=$dbh->prepare("commit");
-		$sth3->execute();
-
-		Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
-
-#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
-#my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
-#$t->detach;
-#FALTA ENVIARLE EL MAIL al usuario avisandole de  la disponibilidad del libro mediante un proceso separado, un thread por ej, el problema me parece es que el thread no accede a las bases de datos.
-
-	}else{
-		my $sth3=$dbh->prepare("commit");
-		$sth3->execute();
-	}
-
-#**********************************Se registra el movimiento en historicCirculation***************************
-	my $id1;
-	my $branchcode;
-
-	if($id3){
-
-		my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'id3'});
-		$id1= $dataItems->{'id1'};
-		$branchcode= $dataItems->{'homebranch'};
-	}else{
-		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
-		$id1= $dataBiblioItems->{'id1'};
-		$branchcode= 0;
-	}
-	
-	my $issuetype= '-';
-	my $end_date = 'null';
-	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
-#******************************Fin****Se registra el movimiento en historicCirculation*************************
-}
-
+=item
+DatosReservas
+Busca todas las reservas que tiene el usuario que llega como parametro, trae todo los datos de los documentos asociados a la reserva.
+=cut
 sub DatosReservas {
 	my ($bor)=@_;
 	my $dbh = C4::Context->dbh;

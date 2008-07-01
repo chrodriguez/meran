@@ -40,6 +40,7 @@ $VERSION = 0.01;
 #S200 - S299 para Sanciones
 #U300 - U399 para Usuarios
 #B400 - B499 para Errores e Informacion de Base de Datos
+#C500 - C599 para Catalogacion
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (

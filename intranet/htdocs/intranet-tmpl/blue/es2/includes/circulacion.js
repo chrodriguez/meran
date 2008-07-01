@@ -173,7 +173,7 @@ function realizarAccion(accion,chckbox,funcion){
 		objAH=new AjaxHelper(funcion, Init);
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= accion;
-		objAH.ids3= array;
+		objAH.datosArray= array;
 		objAH.borrowernumber=usuario.ID;
 		//se envia la consulta
 		objAH.sendToServer();
@@ -188,7 +188,6 @@ function realizarAccion(accion,chckbox,funcion){
  * prestamos.tmpl---> crea el div para los prestamos
  */
 function generaDivPrestamo(responseText){
-	
 	infoArray= JSONstring.toObject(responseText);
 	var html="<div class='divCirculacion'> <p class='fontmsg'>";
 	var i;
@@ -253,7 +252,7 @@ function prestar(){
 	objAH=new AjaxHelper(updateInfoPrestarReserva, Init);
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
-	objAH.infoPrestamos= infoPrestamos_array;
+	objAH.datosArray= infoPrestamos_array;
 	objAH.borrowernumber= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -351,7 +350,7 @@ function devolver_renovar(accion){
 	objAH=new AjaxHelper(updateInfoDevRen, Init);
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
-	objAH.infoDevRen= infoPrestamos_array;
+	objAH.datosArray= infoPrestamos_array;
 	objAH.borrowernumber= usuario.ID;
 	objAH.accion=accion;
 	//se envia la consulta
@@ -374,7 +373,6 @@ function updateInfoDevRen(responseText){
 	$('#mensajes').html(mensajes);
 	detallePrestamos(usuario.ID);
 }
-
 
 /*
  * imprimirTicket

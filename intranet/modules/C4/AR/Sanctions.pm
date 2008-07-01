@@ -46,7 +46,8 @@ sub SanctionDays {
 # Retorna la cantidad de dias de sancion que corresponden a una devolucion
 # Si retorna 0 (cero) entonces no corresponde una sancion
 # Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
-	my ($dbh, $returndate, $date_due, $categorycode, $issuecode)=@_;
+	my ($returndate, $date_due, $categorycode, $issuecode)=@_;
+	my $dbh= C4::Context->dbh;
 	my $late=0; #Se devuelve tarde
 	if (Date_Cmp($date_due, $returndate) >= 0) {
 		#Si es un prestamo especial debe devolverlo antes de una determinada hora

@@ -94,6 +94,123 @@ la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabl
 
 sub devolver {
 	my ($params)=@_;
+	my $id3= $params->{'id3'};
+	my $tipo= $params->{'tipo'};
+	my $loggedinuser= $params->{'loggedinuser'};
+	my $borrowernumber= $params->{'borrowernumber'};
+	my $codMsg;
+	my $error;
+	my $paraMens;
+	#se setea el barcode para informar al usuario en la devolucion
+	$paraMens->[0]= $params->{'barcode'};
+	
+	my @resultado;
+	my $dateformat = C4::Date::get_date_format();
+
+	my $prestamo= getDatosPrestamo($id3);
+	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
+	actualizarPrestamo($id3,$borrowernumber);
+
+	my $notforloan=C4::AR::Reservas::getNotForLoan($id3);
+	
+	my $reserva=C4::AR::Reservas::getReservaDeId3($id3);
+	if($reserva->{'id3'}){
+	#Si la reserva que voy a borrar existia realmente sino hubo un error
+		if($notforloan eq 'DO'){#si no es para sala
+			my $reservaGrupo=C4::AR::Reservas::getDatosReservaEnEspera($reserva->{'id2'});
+			if($reservaGrupo){
+				$reservaGrupo->{'branchcode'}=$prestamo->{'branchcode'};
+				$reservaGrupo->{'borrowernumber'}=$borrowernumber;
+				$reservaGrupo->{'loggedinuser'}=$loggedinuser;
+				C4::AR::Reservas::actualizarDatosReservaEnEspera($reservaGrupo);
+			}
+		}
+		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+		C4::AR::Reservas::borrarReserva($reserva->{'reservenumber'});
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		my $id1= $dataItems->{'id1'};
+		my $end_date= "null";
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$data->{'id2'},$id3,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
+#*******************************Fin***Se registra el movimiento en historicCirculation*************************
+
+
+### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
+		my $hasdebts=0;
+		my $sanction=0;
+		my $fechaFinSancion;
+
+# Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
+		my $issuetype=IssueType($iteminformation->{'issuecode'});
+		my $daysissue=$issuetype->{'daysissues'}; 
+		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+                my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
+                $sth->execute($borrowernumber);
+                my $categorycode= $sth->fetchrow;
+                my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
+
+
+
+		if ($sanctionDays gt 0) {
+# Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
+			my $sanctiontypecode = getSanctionTypeCode($dbh, $iteminformation->{'issuecode'}, $categorycode);
+
+
+
+			if (tieneLibroVencido($dbh, $borrowernumber)) {
+# El borrower tiene libros vencidos en su poder (es moroso)
+				$hasdebts = 1;
+			 	insertPendingSanction($dbh,$sanctiontypecode, undef, $borrowernumber, $sanctionDays);
+			}
+			else{
+				my $err;
+# Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
+			
+				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err),$dateformat);
+				insertSanction($sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
+				$sanction = 1;
+#**********************************Se registra el movimiento en historicSanction***************************
+				my $responsable= $loggedinuser;
+				logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
+
+#Se borran las reservas del usuario sancionado
+				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);
+			}
+		}
+		
+### Final del tema sanciones
+
+		# Si la devolucion se pudo realizar
+		$error= 0;
+		$codMsg= 'P109';
+	}
+	else {
+		# Si la devolucion dio error
+		$error= 1;
+		$codMsg= 'P110';
+	}
+
+	#se obtiene el mensaje para el usuario
+	my $message=C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+
+	return ($error,$codMsg, $message);
+}
+
+sub getDatosPrestamo{
+	my ($id3)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from issues where id3=? and returndate IS NULL");
+	$sth->execute($id3);
+	return ($sth->fetchrow_hashref);
+}
+
+
+
+sub devolverVieja {
+	my ($params)=@_;
 
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $id3= $params->{'id3'};
@@ -174,7 +291,7 @@ sub devolver {
                         my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
                         $sth->execute($borrowernumber);
                         my $categorycode= $sth->fetchrow;
-                        my $sanctionDays= SanctionDays($dbh, $fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
+                        my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
 
 
 
@@ -302,8 +419,8 @@ if (my $data= $sth->fetchrow_hashref){
 	my $issuetype=IssueType($data->{'issuecode'});
 	
 	if ($issuetype->{'renew'} eq 0){ #Si es 0 NO SE RENUEVA NUNCA
-					return 0;
-					}
+		return 0;
+	}
 
 	if (!&hayReservasEsperando($data->{'id2'})){
 		#quiere decir que no hay reservas esperando por lo que podemos seguir
@@ -394,7 +511,6 @@ renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es 
  
 sub renovar {
 	my ($params)=@_;
-
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $id3= $params->{'id3'};
 	my $tipo= $params->{'tipo'};
@@ -402,17 +518,10 @@ sub renovar {
 	my $paraMens;
 	my $codMsg;
 	my $error= 0;
-open(A,">>/tmp/debugRenovar.txt");
-print A "id3 : $id3\n";
-print A "user: $borrowernumber\n";
-print A "resp: $loggedinuser\n";
 
 #ESTA FUNCION HAY Q LIMPIARLA Y ADAPTARLA, DEBERIA DEVOLVER VODIGOS DE ERROR, ADEMAS DEBERIA IR DENTRO
 # DE VERIFICAR PARA RENOVAR
 	my $renovacion= &sepuederenovar($borrowernumber,$id3);
-print A "renovacion: $renovacion\n";
-close(A);
-
 	my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
 
 	if( ($renovacion) && (!$error) ){
@@ -458,7 +567,6 @@ close(A);
 		$codMsg= 'P112';
 		$error= 1;
 	}
-	
 	return ($error,$codMsg, $paraMens);
 }
 
@@ -466,7 +574,6 @@ close(A);
 Se verifica que se cumplan las condiciones para poder renovar
 =cut
 sub verificarParaRenovar{
-
 	my ($params)=@_;
 
 	my $error= 0;
@@ -481,7 +588,7 @@ sub verificarParaRenovar{
 	$params->{'usercourse'}= $borrower->{'usercourse'};
 
 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
-	if( !($error) && (C4::Context->preference("usercourse") && ($params->{'usercourse'} == "NULL" ) ) ){
+	if( !($error) && $params->{'tipo'} eq "OPAC" && (C4::Context->preference("usercourse") && ($params->{'usercourse'} == "NULL" ) ) ){
 		$error= 1;
 		$codMsg= 'P114';
 	}
