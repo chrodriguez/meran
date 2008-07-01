@@ -202,6 +202,7 @@ $template->param(waiting_count => $wcount,
 
 #No se pudo renovar por no tener el curso?
 $template->param(no_user_course => $query->param('no_user_course'));
+$template->param(CirculationEnabled => C4::Context->preference("circulation"));
 #
 #Miguel para mostrar o no el historico de las Reservas
 my $showHistoricReserves= C4::Context->preference("showHistoricReserves");

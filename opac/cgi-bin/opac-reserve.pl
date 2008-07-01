@@ -44,7 +44,7 @@ $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 $params{'defaultbranch'}= C4::Context->preference("defaultbranch");
 
-my ($error, $codMsg, $message)= &C4::AR::Reservas::reservarOPAC(\%params);
+my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
 my $acciones;
 
 if($error){
@@ -58,12 +58,6 @@ if($error){
 		);
 	}
 }
-# else{
-# 	my $datosReserva=C4::AR::Reservas::datosReservaRealizada($id2);
-# 	$template->param (
-# 			datosReserva => $datosReserva
-# 		);
-# }
 
 $template->param (
 	id1 => $id1,

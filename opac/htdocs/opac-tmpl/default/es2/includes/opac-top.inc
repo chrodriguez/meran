@@ -9,7 +9,8 @@
 <script src="/opac-tmpl/default/es2/includes/navegador.js"></script>
 <script src="/opac-tmpl/default/es2/includes/state.js"></script>
 <script src="/opac-tmpl/default/es2/includes/util.js"></script>
-<script src="/opac-tmpl/default/es2/includes/opac-serachFunciones.js"></script>
+<script src="/opac-tmpl/default/es2/includes/opac-searchFunciones.js"></script>
+<script src="/opac-tmpl/default/es2/includes/circulacionOPAC.js"></script>
 
 
 

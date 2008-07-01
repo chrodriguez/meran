@@ -33,22 +33,22 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
+	&t_reservarOPAC
+	&t_cancelar_reserva
 	&reservar
-	&insertarReserva
 	&insertarPrestamo
 	&verificaciones
 	&cant_reservas
 	&getReservasDeGrupo
 	&cantReservasPorGrupo
 	&DatosReservas
-	&cancelar_reserva
 	
 	&Enviar_Email
 
 	&prestar
 );
 
-sub reservarOPAC {
+sub t_reservarOPAC {
 	
 	my($params)=@_;
 	my $reservaGrupo= 0;

@@ -221,11 +221,11 @@ my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
 $template->param(showHistoricReserves => $showHistoricReserves);
 
 #Matias: Esta habilitada la Biblioteca Virtual?
-my $virtuallibrary=C4::Context->preference("virtuallibrary");
-$template->param(virtuallibrary => $virtuallibrary);
+# my $virtuallibrary=C4::Context->preference("virtuallibrary");
+# $template->param(virtuallibrary => $virtuallibrary);
 $template->param(CirculationEnabled => C4::Context->preference("circulation"));
-if ($virtuallibrary eq 1)
-{
+# if ($virtuallibrary eq 1)
+# {
 #         my ($count2,@requestdata) = allRequests($borrowernumber);
 #         if ($count2 ne 0){
 #                 		$template->param( vrequest => 1,
@@ -247,7 +247,7 @@ if ($virtuallibrary eq 1)
 #                     cantPrint => $cantPrint);
 # 	if ($cantCopy eq $maxCopy){$template->param(redCopy=>1)};
 # 	if ($cantPrint eq $maxPrint){$template->param(redPrint=>1)};
-}
+# }
 #
 
 

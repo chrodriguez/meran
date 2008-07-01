@@ -27,6 +27,7 @@ use C4::Search;
 use CGI;
 use C4::Auth;
 use C4::AR::Utilidades;
+use JSON;
 
 my $input = new CGI;
 
@@ -45,8 +46,16 @@ $params{'borrowernumber'}=$borrowernumber;
 $params{'loggedinuser'}=$borrowernumber;
 $params{'tipo'}="OPAC";
 
-my ($error,$codMsg,$messege)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+
+my %infoOperacion = (	error => $error,
+        		message => $message,
+		);
+
+my $infoOperacionJSON = to_json \%infoOperacion;
 
 print $input->header;
+print $infoOperacionJSON;
+
 
 

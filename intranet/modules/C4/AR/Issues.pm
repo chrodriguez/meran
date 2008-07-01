@@ -462,6 +462,9 @@ close(A);
 	return ($error,$codMsg, $paraMens);
 }
 
+=item
+Se verifica que se cumplan las condiciones para poder renovar
+=cut
 sub verificarParaRenovar{
 
 	my ($params)=@_;
@@ -489,7 +492,7 @@ sub verificarParaRenovar{
 =item
 t_renovar
 Transaccion que renueva un prestamo.
-@params: $params-->Hash con los datos necesarios para poder cancelar la reserva.
+@params: $params-->Hash con los datos necesarios para poder renovar un prestamo.
 =cut
 sub t_renovar{
 	my ($params)=@_;
@@ -532,61 +535,6 @@ sub borrowerissues {
   }
   $sth->finish;
   return(scalar(@result), \@result);
-}
-
-
-
-
-sub reservar {
-my ($borrowernumber,$biblioitemnumber)=@_;
-my $dbh = C4::Context->dbh;
-
-my $sth=$dbh->prepare("SET autocommit=0;");
-$sth->execute();
-$sth=$dbh->prepare("Select reserves.itemnumber from reserves where biblioitemnumber=? for update;");
-$sth->execute($biblioitemnumber);
-my $res;
-my $resultado;
-if (my $data= $sth->fetchrow_hashref){
-					$res=' not in ('.$data->{'itemnumber'};
-					while (my $data= $sth->fetchrow_hashref){
-							$res.=', '.$data->{'itemnumber'}; &fechaDeVencimiento
-					}  
-					$res.=')';
-					}
-					else{ $res='';}
-
-my $sth1=$dbh->prepare("Select items.itemnumber, items.holdingbranch from items where items.biblioitemnumber=? and notforloan='0' and items.itemnumber ". $res. ";");
-$sth1->execute($biblioitemnumber);
-my $data2= $sth1->fetchrow_hashref;
-my ($fecha,$apertura,$cierre);
-my $desde;
-my $branch='';
-if ($data2){
-#se encontro algun item que se pudo reservar
-
-$fecha=C4::Context->preference("reserveItem");
-($desde,$fecha,$apertura,$cierre)=proximosHabiles($fecha,1);
-
-my $sth2=$dbh->prepare("insert into reserves (itemnumber,biblioitemnumber,borrowernumber,reservedate,notificationdate,reminderdate,branchcode) values (?,?,?,?,NOW(),?,?);");
-$sth2->execute($data2->{'itemnumber'},$biblioitemnumber,$borrowernumber,$desde,$fecha,$data2->{'holdingbranch'});
-#reminderdate le puse la fecha de vencimiento de la reserva
-$resultado=$data2->{'itemnumber'};
-#por ahora tiene la unidad que lo tiene al libro pero deberia cambiarse para adecuarse a la que seleccione el usuario
-$branch=$data2->{'holdingbranch'};
-} else{
-
-#se hace una reserva para el grupo, ya que no hay ningun item libre
-my $sth2=$dbh->prepare("insert into reserves (biblioitemnumber,borrowernumber,reservedate) values (?,?,NOW());");
-$sth2->execute($biblioitemnumber,$borrowernumber);
-$desde='0000-00-00';#FechaFactible(); #la fecha factible en que el libro este disponible, hya que hacer una funcion medio rara
-$fecha='0000-00-00';#hasta cuando lo puede retirar es mas subjetivo aun
-$resultado=0;
-}
-my $sth3=$dbh->prepare("commit;");
-$sth3->execute();
-
-return ($resultado,$desde,$fecha,$branch,$apertura,$cierre);
 }
 
 

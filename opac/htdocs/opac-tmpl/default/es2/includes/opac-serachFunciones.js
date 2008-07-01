@@ -107,10 +107,15 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 	reservar(id1Nuevo, id2Nuevo);
 }
 
+function updateInfoCancelarReserva(responseText){
+	objJSON= JSONstring.toObject(responseText);
+	$('#mensajes').html(objJSON.message);
+	DetalleReservas();
+}
+
 function cancelar(reserveNumber){
 
-// 	objAH=new AjaxHelper(updateInfoReserva, Init);
-	objAH=new AjaxHelper(DetalleReservas, Init);
+	objAH=new AjaxHelper(updateInfoCancelarReserva, Init);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
