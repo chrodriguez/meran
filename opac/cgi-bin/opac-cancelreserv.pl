@@ -33,16 +33,13 @@ my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 
-
-
 my $objJSON=$input->param('obj');
-
 my $obj=from_json_ISO($objJSON);
 
 my $borrowernumber=getborrowernumber($loggedinuser);
 my %params;
 $params{'reservenumber'}=$obj->{'reserveNumber'};
-$params{'borrowernumber'}=$borrowernumber;
+# $params{'borrowernumber'}=$borrowernumber;
 $params{'loggedinuser'}=$borrowernumber;
 $params{'tipo'}="OPAC";
 

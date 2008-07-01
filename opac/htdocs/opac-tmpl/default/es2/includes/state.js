@@ -6,6 +6,7 @@ var alto= screen.width;
 function Init(){
 	AddDiv();
 	ShowState();
+// 	hideMessage();
 }
 
 //crea un Div dinamicamente

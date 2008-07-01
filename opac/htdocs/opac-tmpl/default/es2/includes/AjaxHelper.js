@@ -7,9 +7,11 @@
  *
  */
 
+function createLoading(){
+	$('#state').html("<img src='../indicador.gif' />");
+}
 
-
-
+//este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
 
 function AjaxHelper(fncUpdateInfo, fncInit){
 
@@ -63,8 +65,13 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			$.ajax({	type: "POST", 
 					url: helper.url,
 					data: params,
- 					beforeSend: helper.onBeforeSend,
+ 					beforeSend: function(){
+						Init();
+						createLoading();
+						helper.onBeforeSend();
+					},
 					complete: function(ajax){
+						HiddeState();
  						helper.onComplete(ajax.responseText);
   					}
 				});
