@@ -294,12 +294,23 @@ function cancelarDiv(){
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
-		objAH=new AjaxHelper(updateInfoPrestamo, Init);
+		objAH=new AjaxHelper(updateInfoCancelacion, Init);
 		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
 		objAH.borrowernumber=usuario.ID;
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
+}
+
+/*
+ * updateInfoCancelacion
+ * Funcion que se ejecuta cuando se cancela una reserva, muestra el mensaje si hay algun error y actualiza la
+ * tabla de reservas.
+ */
+function updateInfoCancelacion(responseText){
+	var objJson=JSONstring.toObject(responseText);
+	$('#mensajes').html(objJson.message);
+	detalleReservas(usuario.ID);
 }
 
 /*

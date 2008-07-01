@@ -95,7 +95,7 @@ my %mensajesINTRA = (
 	'R007' => '',
 	'R008' => '',
 	'R009' => '',
-	'R010' => 'Se produjo un error al intentar cancelar la reserva, repita la operacion',
+	'R010' => 'Se produjo un error al intentar cancelar la reserva, repita la operaci&oacute;n',
 	'P100' => 'El usuario ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'El usuario alcanzo la cantidad m&aacute;xima  de pr&eacute;stamos *?*, no se pudo prestar *?*',
 	'P102' => 'Estamos fuera del horario de realizaci&oacute;n del pr&eacute;stamo especial.',
@@ -165,9 +165,8 @@ sub getAccion {
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
 	my $paraMens;
-# 	my $path=C4::Context->pathLog();
-# 	open(A,">>".$path."/debugErrorDBA.txt");
-	open(A,">>/tmp/debugErrorDBA.txt");
+	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
+	open(A,$path);
 	print A "\n";
 	print A "**************Error en la transaccion - Fecha:". C4::Date::ParseDate("today")."**************\n";
 	print A "Codigo: $codigo\n";

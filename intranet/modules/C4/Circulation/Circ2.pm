@@ -105,7 +105,7 @@ sub getDataBiblioItems{
 	my ($id2)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id1 FROM nviel2 WHERE id2 = ? ");
+	my $sth=$dbh->prepare("	SELECT id1 FROM nivel2 WHERE id2 = ? ");
 
 	$sth->execute($id2);
 	my $dataBiblioItems= $sth->fetchrow_hashref;

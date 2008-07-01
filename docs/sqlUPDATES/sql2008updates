@@ -194,3 +194,7 @@ ALTER TABLE `sanctions` CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL
 --Se modifco el siguiente campo
 
 ALTER TABLE `shelfcontents` CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0'
+
+
+*************SE MODIFICO EL PATH DE LOGEO DEL ARCHIVO /etc/koha/koha.conf A kohalogdir=/var/log/koha***************
+SE TIENE QUE CREAR UN ARCHIVO CON NOMBRE debugErrorDBA.txt CON PERMISOS DE ESCRITURA PARA TODOS LOS USUARIOS. 

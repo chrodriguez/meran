@@ -26,6 +26,7 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Auth;
+use JSON;
 
 my $input = new CGI;
 
@@ -42,6 +43,14 @@ $params{'borrowernumber'}=$obj->{'borrowernumber'};
 $params{'loggedinuser'}=$loggedinuser;
 $params{'tipo'}="INTRA";
 
-my ($error,$codMsg,$messege)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+
+my %infoOperacion = (
+        		error => $error,
+        		message => $message,
+);
+
+my $infoOperacionJSON=to_json \%infoOperacion;
 
 print $input->header;
+print $infoOperacionJSON;
