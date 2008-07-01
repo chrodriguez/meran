@@ -99,23 +99,18 @@ sub reservarOPAC {
 }
 
 sub reservar {
-
 	my($params)=@_;
-
 	my $dateformat = C4::Date::get_date_format();
 	my $data;
 	$data->{'id3'}= $params->{'id3'};
-
 	if($params->{'tipo'} eq 'OPAC'){
 		$data= getItemsParaReserva($params->{'id2'});
 	}
-	
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 	my $numeroDias= C4::Context->preference("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
 	my %paramsReserva;
-	
 	$paramsReserva{'id1'}= $params->{'id1'};
 	$paramsReserva{'id2'}= $params->{'id2'};
 	$paramsReserva{'id3'}= $data->{'id3'};
@@ -137,7 +132,6 @@ sub reservar {
 	if( ($data->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
-
 		my $err= "Error con la fecha";
 		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
 		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
@@ -153,8 +147,6 @@ sub reservar {
 							undef
 		);	
 	}
-
-
 	return (\%paramsReserva);
 }
 
@@ -200,7 +192,6 @@ sub insertarReserva {
 								$params->{'reminderdate'}
 							);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
-
 	return $reservenumber;
 }#end insertarReserva
 
@@ -218,7 +209,7 @@ sub t_cancelar_reservas_inmediatas{
 		my $sth=$dbh->prepare("	SELECT reservenumber 
 					FROM reserves 
 					WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
-			$sth->execute($borrowernumber);
+		$sth->execute($borrowernumber);
 
 		while (my $reservenumber= $sth->fetchrow){
 			$params->{'reservenumber'}=$reservenumber;
@@ -227,7 +218,7 @@ sub t_cancelar_reservas_inmediatas{
 		$sth->finish;
 		$dbh->commit;
 	};
-		if ($@){
+	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B404';
 		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
@@ -296,7 +287,6 @@ sub cancelar_reserva{
 			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
 			actualizarDatosReservaEnEspera($reservaGrupo);
 		}
-
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
 	}
@@ -316,16 +306,16 @@ sub cancelar_reserva{
 
 #**********************************Se registra el movimiento en historicCirculation***************************
 	my $id1;
-	my $branchcode;
-	if($id3){
-		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
-		$id1= $dataItems->{'id1'};
-		$branchcode= $dataItems->{'homebranch'};
-	}else{
+	my $branchcode=$reserva->{'branchcode'};
+# 	if($id3){
+# 		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+# 		$id1= $dataItems->{'id1'};
+# 		$branchcode= $dataItems->{'homebranch'};
+# 	}else{
 		my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
 		$id1= $dataBiblioItems->{'id1'};
-		$branchcode= 0;
-	}
+# 		$branchcode= 0;
+# 	}
 	my $issuetype= '-';
 	my $end_date = 'null';
 	C4::Circulation::Circ2::insertHistoricCirculation('cancel',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuetype,$end_date); #C4::Circulation::Circ2
