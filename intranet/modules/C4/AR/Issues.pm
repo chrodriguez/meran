@@ -132,7 +132,12 @@ sub devolver {
 		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
 		my $id1= $dataItems->{'id1'};
 		my $end_date= "null";
+<<<<<<< .mine
+		
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$data->{'id2'},$id3,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
+=======
 		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->{'id2'},$id3,$reserva->{'branchcode'},$prestamo->{'issuecode'},$end_date);
+>>>>>>> .r543
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
 ### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente

@@ -7,9 +7,7 @@
  *
  */
 
-
-
-
+//este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
 
 function AjaxHelper(fncUpdateInfo, fncInit){
 
@@ -63,8 +61,14 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			$.ajax({	type: "POST", 
 					url: helper.url,
 					data: params,
- 					beforeSend: helper.onBeforeSend,
+ 					beforeSend: function(){
+						Init();//muestra el estado del AJAX
+							if(helper.onBeforeSend){
+								helper.onBeforeSend();
+							}
+					},
 					complete: function(ajax){
+						HiddeState();//oculta el estado del AJAX
  						helper.onComplete(ajax.responseText);
   					}
 				});

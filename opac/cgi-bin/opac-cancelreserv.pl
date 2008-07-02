@@ -39,7 +39,7 @@ my $obj=from_json_ISO($objJSON);
 my $borrowernumber=getborrowernumber($loggedinuser);
 my %params;
 $params{'reservenumber'}=$obj->{'reserveNumber'};
-# $params{'borrowernumber'}=$borrowernumber;
+$params{'borrowernumber'}=$borrowernumber;
 $params{'loggedinuser'}=$borrowernumber;
 $params{'tipo'}="OPAC";
 

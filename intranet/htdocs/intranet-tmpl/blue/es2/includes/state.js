@@ -1,4 +1,8 @@
 
+//este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
+var alto= screen.width;
+    ancho= screen.height;
+
 function Init(){
 	AddDiv();
 	ShowState();
@@ -6,50 +10,27 @@ function Init(){
 
 //crea un Div dinamicamente
 function AddDiv(){
-var contenedor = document.getElementById("state");
+
+var contenedor = $('#state')[0];
 	if(contenedor == null){
-		//creo un div
-		contenedor= document.createElement('div');
-		contenedor.id= "state";
-
-		//creo un nodo de texto
-		Texto = document.createTextNode('Cargando...');
-
-		table= document.createElement('table');
-		row= document.createElement('tr');
-		row.style.background="red";
-		//seteo el estilo
-		row.setAttribute("class","state");
-		cell= document.createElement('td');
-		cell.appendChild(Texto);
-		row.appendChild(cell);
-		table.appendChild(row);
-		//agrego la tabla al div
-		contenedor.appendChild(table);
-		//seteo parametros del div
-		contenedor.style.position= 'absolute'; 
-		contenedor.style.visibility = "visible";
-		contenedor.style.display="block";
-
-		//agrego el div al body
-		document.getElementsByTagName("body")[0].appendChild(contenedor);
+		$('body').append("<div id='state' class='loading' style='position:absolute'></div>");
+		$('#state').html("<img src='/intranet-tmpl/blue/es2/images/indicator.gif' />");
+		$('#state')[0].style.top= window.pageXOffset+'px';
+		$('#state')[0].style.left= window.pageYOffset+'px';
+	}else{
+		$('#state')[0].style.top= window.pageXOffset+'px';
+		$('#state')[0].style.left= window.pageYOffset+'px';
 	}
-		contenedor.style.left= "0px";//window.pageXOffset+'px';
-		contenedor.style.top= "0px";//window.pageYOffset+'px';
 }
 
 
 //muestra el div
 function ShowState(){
-	ObjDiv = document.getElementById("state");
-	ObjDiv.style.visibility = "visible";
-	ObjDiv.style.display="block";
+	$('#state').show();
 };
 
 //oculta el div
 function HiddeState(){
-	ObjDiv = document.getElementById("state");
-	ObjDiv.style.visibility="hidden";
-	ObjDiv.style.display="none";
+ 	$('#state').hide();
 };
 

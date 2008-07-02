@@ -76,7 +76,7 @@ function AutocompleteUsuario(idInput,funcionDetalle){
  * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
  */
 function detalleUsuario(borrower){
-	objAH=new AjaxHelper(updateInfoUsuario, Init);
+	objAH=new AjaxHelper(updateInfoUsuario);
 	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
 	objAH.borrowernumber= borrower;
 	//se envia la consulta
@@ -92,7 +92,7 @@ function updateInfoUsuario(responseText){
 	//se borran los mensajes de error/informacion del usuario
 	$('#mensajes').html('');
 	$('#detalleUsuario').html(responseText);
-	HiddeState();
+// 	HiddeState();
 
 }
 
@@ -102,7 +102,7 @@ function updateInfoUsuario(responseText){
  * prestamos.tmpl---> tabla de reservas para poder prestar.
  */
 function detalleReservas(borrower){
-	objAH=new AjaxHelper(updateInfoReservas, Init);
+	objAH=new AjaxHelper(updateInfoReservas);
 	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -119,7 +119,7 @@ function updateInfoReservas(responseText){
 	$('#tablaReservas').html(responseText);
 	zebra('tablaReservas');
 	checkedAll('checkAllReservas','chkboxReservas');
-	HiddeState();
+// 	HiddeState();
 
 }
 
@@ -129,7 +129,7 @@ function updateInfoReservas(responseText){
  * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
  */
 function detallePrestamos(borrower){
-	objAH=new AjaxHelper(updateInfoPrestamos, Init);
+	objAH=new AjaxHelper(updateInfoPrestamos);
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -147,7 +147,7 @@ function updateInfoPrestamos(responseText){
 	$('#tablaPrestamos').html(responseText);
  	zebra('tablaPrestamos');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
-	HiddeState();
+// 	HiddeState();
 
 }
 
@@ -170,7 +170,7 @@ function realizarAccion(accion,chckbox,funcion){
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objAH=new AjaxHelper(funcion, Init);
+		objAH=new AjaxHelper(funcion);
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= accion;
 		objAH.datosArray= array;
@@ -214,7 +214,7 @@ function generaDivPrestamo(responseText){
 
 	$('#confirmar_div').html(html);
 
-	HiddeState();
+// 	HiddeState();
 }
 
 /*
@@ -249,7 +249,7 @@ function prestar(){
 		infoPrestamos_array[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
 	}
 	
-	objAH=new AjaxHelper(updateInfoPrestarReserva, Init);
+	objAH=new AjaxHelper(updateInfoPrestarReserva);
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
 	objAH.datosArray= infoPrestamos_array;
@@ -293,7 +293,7 @@ function cancelarDiv(){
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
-		objAH=new AjaxHelper(updateInfoCancelacion, Init);
+		objAH=new AjaxHelper(updateInfoCancelacion);
 		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
 		objAH.borrowernumber=usuario.ID;
 		objAH.reserveNumber=reserveNumber;
@@ -339,7 +339,7 @@ function generaDivDevRen(responseText){
 
 	$('#confirmar_div').html(html);
 
-	HiddeState();
+// 	HiddeState();
 }
 
 /*
@@ -347,7 +347,7 @@ function generaDivDevRen(responseText){
  * Devuelve o renueva el o los items seleccionados.
  */
 function devolver_renovar(accion){
-	objAH=new AjaxHelper(updateInfoDevRen, Init);
+	objAH=new AjaxHelper(updateInfoDevRen);
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
 	objAH.datosArray= infoPrestamos_array;
