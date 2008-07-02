@@ -132,9 +132,8 @@ sub devolver {
 		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
 		my $id1= $dataItems->{'id1'};
 		my $end_date= "null";
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$data->{'id2'},$id3,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->{'id2'},$id3,$reserva->{'branchcode'},$prestamo->{'issuecode'},$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
-
 
 ### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
 		my $hasdebts=0;
@@ -142,21 +141,18 @@ sub devolver {
 		my $fechaFinSancion;
 
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
-		my $issuetype=IssueType($iteminformation->{'issuecode'});
+		my $issuetype=IssueType($prestamo->{'issuecode'});
 		my $daysissue=$issuetype->{'daysissues'}; 
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+		my $dbh=C4::Context->dbh;
                 my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
                 $sth->execute($borrowernumber);
                 my $categorycode= $sth->fetchrow;
-                my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
-
-
+                my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'issuecode'});
 
 		if ($sanctionDays gt 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
-			my $sanctiontypecode = getSanctionTypeCode($dbh, $iteminformation->{'issuecode'}, $categorycode);
-
-
+			my $sanctiontypecode = getSanctionTypeCode($dbh, $prestamo->{'issuecode'}, $categorycode);
 
 			if (tieneLibroVencido($dbh, $borrowernumber)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
@@ -166,7 +162,6 @@ sub devolver {
 			else{
 				my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
-			
 				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err),$dateformat);
 				insertSanction($sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
@@ -175,14 +170,11 @@ sub devolver {
 				logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
 #**********************************Fin registra el movimiento en historicSanction***************************
 
-
 #Se borran las reservas del usuario sancionado
 				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);
 			}
 		}
-		
 ### Final del tema sanciones
-
 		# Si la devolucion se pudo realizar
 		$error= 0;
 		$codMsg= 'P109';
@@ -192,7 +184,6 @@ sub devolver {
 		$error= 1;
 		$codMsg= 'P110';
 	}
-
 	#se obtiene el mensaje para el usuario
 	my $message=C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
 
@@ -202,12 +193,17 @@ sub devolver {
 sub getDatosPrestamo{
 	my ($id3)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from issues where id3=? and returndate IS NULL");
+	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3=? AND returndate IS NULL");
 	$sth->execute($id3);
 	return ($sth->fetchrow_hashref);
 }
 
-
+sub actualizarPrestamo{
+	my ($id3,$borrowernumber)=@_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("UPDATE issues SET returndate=NOW() WHERE id3=? AND borrowernumber=? AND returndate IS NULL");
+	$sth->execute($id3,$borrowernumber);
+}
 
 sub devolverVieja {
 	my ($params)=@_;
