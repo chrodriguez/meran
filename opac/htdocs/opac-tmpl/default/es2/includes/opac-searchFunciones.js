@@ -57,122 +57,8 @@ function updateInfo(responseText){
 	zebra('tablaResult');
 	$('#result').slideDown('slow');
  	pushCache(responseText, 'result');
-	Complete();
-
 }
 
-function updateInfoReserva(responseText){
-	
-	//si estoy logueado, oculta la informacion del usuario
-	$('#result').html(responseText);
-	$('#result').slideDown('slow');	
-	Complete();
-
-}
-
-function updateDetalleReserva(responseText){
-	
-	//si estoy logueado, oculta la informacion del usuario
-	$('#detalleReservas').html(responseText);
-	$('#detalleReservas').slideDown('slow');	
-	Complete();
-
-}
-
-function updateDetallePrestamo(responseText){
-	
-	//si estoy logueado, oculta la informacion del usuario
-	$('#detallePrestamos').html(responseText);
-	$('#detallePrestamos').slideDown('slow');	
-	Complete();
-
-}
-
-
-function reservar(id1, id2){
-
-	objAH=new AjaxHelper(updateInfoReserva, Init);
-//   	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-reserve.pl';
-	objAH.id1= id1;
-	objAH.id2= id2;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
-
-	cancelar(reserveNumber);
-	reservar(id1Nuevo, id2Nuevo);
-}
-
-function updateInfoCancelarReserva(responseText){
-	objJSON= JSONstring.toObject(responseText);
-	$('#mensajes').html(objJSON.message);
-	DetalleReservas();
-}
-
-function cancelar(reserveNumber){
-
-	objAH=new AjaxHelper(updateInfoCancelarReserva, Init);
-//  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
-	objAH.reserveNumber= reserveNumber;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateInfoRenovar(responseText){
-	var infoArray= JSONstring.toObject(responseText);
-	var mensajes= '';
-	for(i=0; i<infoArray.length;i++){
-		mensajes= mensajes + infoArray[i].message + '<br>';
-	}
-	$('#mensajes').html(mensajes);
-	DetallePrestamos();	
-}
-
-
-function renovar(id3){
-
-// 	objAH=new AjaxHelper(updateInfoReserva, Init);
-	objAH=new AjaxHelper(updateInfoRenovar, Init);
-  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-renew.pl';
-	objAH.id3= id3;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function DetalleReservas(){
-
-	objAH=new AjaxHelper(updateDetalleReserva, Init);
-  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-DetalleReservas.pl';
-// 	objAH.borrowernumber= borrowernumber;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function DetallePrestamos(){
-
-	objAH=new AjaxHelper(updateDetallePrestamo, Init);
-  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-DetallePrestamos.pl';
-// 	objAH.borrowernumber= borrowernumber;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function MostrarReservasYPrestamos(borrowernumber){
-	DetallePrestamos(borrowernumber);
-	DetalleReservas(borrowernumber);
-}
 
 function buscar(){
 
@@ -203,7 +89,7 @@ function buscar(){
 
 function buscarPorAutor(idAutor){
 
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
@@ -226,18 +112,14 @@ function mostrarHistorialUpdate(responseText){
 
 	$('#datosUsuario').slideUp('slow');
 	$('#result').slideUp('slow');
-// 	$('#result').html(responseText);
 	$('#resultHistoriales').html(responseText);
-// 	$('#result').slideDown('slow');
 	$('#resultHistoriales').slideDown('slow');
 	zebra('tablaHistorial');
-	Complete();
-
 }
 
 function mostrarHistorialPrestamos(bornum){
 
-	objAH=new AjaxHelper(mostrarHistorialUpdate, Init);
+	objAH=new AjaxHelper(mostrarHistorialUpdate);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
@@ -251,7 +133,7 @@ function mostrarHistorialPrestamos(bornum){
 
 function mostrarHistorialReservas(bornum){
 
-	objAH=new AjaxHelper(mostrarHistorialUpdate, Init);
+	objAH=new AjaxHelper(mostrarHistorialUpdate);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
@@ -267,7 +149,7 @@ function mostrarHistorialReservas(bornum){
 //****************************************Busqueda para usuario no logueado************************************
 function searchinc(){
 
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
 //  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
@@ -411,7 +293,6 @@ function updateInfoDetalle(responseText){
 	zebra('tablaDetalleNivel3');
 	$('#result').slideDown('slow');
 	pushCache(responseText, 'result');
-	Complete();
 
 }
 
