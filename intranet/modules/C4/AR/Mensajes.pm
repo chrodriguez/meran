@@ -83,6 +83,8 @@ my %mensajesOPAC = (
 	'B402' => '',
 	'B403' => '',
 	'B404' => 'Error al cancelar una reserva desde OPAC, funcion C4::AR::Reservas::t_cancelar_reserva',
+	'B405' => 'Error al intentar renovar desde OPAC, funcion C4::AR::Issues::t_renovar',
+	'B406' => '',
 );
 
 my %mensajesINTRA = (
@@ -124,7 +126,8 @@ my %mensajesINTRA = (
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
 	'B403' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccionNivel3.',
 	'B404' => 'Error al cancelar una reserva desde INTRA, funcion C4::AR::Reservas::t_cancelar_reserva',
-	'B405' => 'Error al intentar renovar, funcion C4::AR::Issues::t_renovar',
+	'B405' => 'Error al intentar renovar desde la INTRA, funcion C4::AR::Issues::t_renovar',
+	'B406' => 'Error al intentar devolver desde la INTRA, funcion C4::AR::Issues::t_devolver',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
