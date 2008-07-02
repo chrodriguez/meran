@@ -33,6 +33,8 @@ my $input=new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
 
+$loggedinuser=getborrowernumber($loggedinuser);
+
 my $obj=$input->param('obj');
 open(A, ">>/tmp/debug.txt");
 print A "obj: $obj \n";
