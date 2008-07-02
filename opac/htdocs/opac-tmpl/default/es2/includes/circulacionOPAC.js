@@ -35,7 +35,7 @@ function updateInfoReserva(responseText){
 * Funcion que muestra el div de mensajes para usuario
 */
 function showMessage(mensaje){
-	if(mensaje != ''){
+	if(mensaje != null){
 		$('#mensajes').slideDown();
 		$('#mensajes font').html(objJSON.message);
 	}

@@ -203,6 +203,7 @@ function consultarFavoritos(){
 			beforeSend: Init,
  			complete: function(ajax){
 					$('#datosUsuario').slideUp('slow');
+					$('#result').show();
 					$('#result').html(ajax.responseText);
 					pushCache(ajax.responseText, 'result');
 					zebra();

@@ -254,7 +254,8 @@ sub cancelar_reservas{
 	my ($loggedinuser,@borrowersnumbers)= @_;
         my $dbh = C4::Context->dbh;
 	foreach (@borrowersnumbers) {
-		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? AND estado <> 'P'");
+		my $sth=$dbh->prepare("	SELECT id2 FROM reserves 
+					WHERE borrowernumber = ? AND estado <> 'P'");
 		$sth->execute($_);
 		while (my $biblioitemnumber= $sth->fetchrow){
 			cancelar_reserva($biblioitemnumber, $_,$loggedinuser);
