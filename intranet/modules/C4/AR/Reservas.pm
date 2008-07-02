@@ -2,7 +2,7 @@ package C4::AR::Reservas;
 
 #Este modulo provee funcionalidades para la reservas de documentos
 #
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -35,9 +35,8 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&t_reservarOPAC
 	&t_cancelar_reserva
+	&t_cancelar_y_reservar
 	&cancelar_reservas
-	&reservar
-	&insertarPrestamo
 	&verificaciones
 	&cant_reservas
 	&getReservasDeGrupo
@@ -99,6 +98,60 @@ sub t_reservarOPAC {
 	return ($error, $codMsg, $message);
 }
 
+sub t_cancelar_y_reservar {
+	
+	my($params)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $paramsReserva;
+	my ($error, $codMsg,$paraMens);
+	
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+
+		($error, $codMsg,$paraMens)= &verificaciones($params);
+
+		if(!$error){
+
+			($paramsReserva)= reservar($params);	
+		
+			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
+			if($paramsReserva->{'estado'} eq 'E'){
+			#SE RESERVO CON EXITO UN EJEMPLAR
+				$codMsg= 'U302';
+				$paraMens->[0]= $paramsReserva->{'desde'};
+				$paraMens->[1]= $paramsReserva->{'desdeh'};
+				$paraMens->[2]= $paramsReserva->{'hasta'};
+				$paraMens->[3]= $paramsReserva->{'hastah'};
+			}else{
+			#SE REALIZO UN RESERVA DE GRUPO
+				$codMsg= 'U303';
+				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
+				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+			}
+		}
+
+		$dbh->commit;	
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B407';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R011';
+	}
+	$dbh->{AutoCommit} = 1;
+	
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
 sub reservar {
 	my($params)=@_;
 	my $dateformat = C4::Date::get_date_format();
@@ -119,7 +172,7 @@ sub reservar {
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'reservedate'}= $desde;
 	$paramsReserva{'reminderdate'}= $hasta;
-	$paramsReserva{'branchcode'}= $params->{'defaultbranch'};
+	$paramsReserva{'branchcode'}= C4::Context->preference("defaultbranch");
 	$paramsReserva{'estado'}= ($data->{'id3'} ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);

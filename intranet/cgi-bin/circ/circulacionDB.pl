@@ -152,7 +152,6 @@ print A "id3 antes de setear: $id3\n";
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
-			$params{'defaultbranch'}= C4::Context->preference("defaultbranch");
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		

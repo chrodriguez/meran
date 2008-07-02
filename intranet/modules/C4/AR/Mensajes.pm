@@ -55,6 +55,7 @@ my %mensajesOPAC = (
 	'R008' => 'Disculpe, llego al m&aacute;ximo de reservas en espera.',
 	'R009' => 'Disculpe, no se pudo realizar la reserva, intente nuevamente.',
 	'R010' => 'Disculpe, no se pudo cancelar la reserva, intente nuevamente.',
+	'R011' => 'Disculpe, no se pudo cancelar y reservar, intente nuevamente.',
 	'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
 	'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos *?*. No puede efectuar reservas sobre ejemplares.',
 	'P102' => '',
@@ -85,6 +86,7 @@ my %mensajesOPAC = (
 	'B404' => 'Error al cancelar una reserva desde OPAC, funcion C4::AR::Reservas::t_cancelar_reserva',
 	'B405' => 'Error al intentar renovar desde OPAC, funcion C4::AR::Issues::t_renovar',
 	'B406' => '',
+	'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
 );
 
 my %mensajesINTRA = (
@@ -128,6 +130,7 @@ my %mensajesINTRA = (
 	'B404' => 'Error al cancelar una reserva desde INTRA, funcion C4::AR::Reservas::t_cancelar_reserva',
 	'B405' => 'Error al intentar renovar desde la INTRA, funcion C4::AR::Issues::t_renovar',
 	'B406' => 'Error al intentar devolver desde la INTRA, funcion C4::AR::Issues::t_devolver',
+	'B407' => '',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',

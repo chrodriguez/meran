@@ -43,7 +43,20 @@ $params{'borrowernumber'}=$borrowernumber;
 $params{'loggedinuser'}=$borrowernumber;
 $params{'tipo'}="OPAC";
 
-my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+my ($error,$codMsg,$message);
+
+if($obj->{'accion'} eq 'CANCELAR'){
+
+	($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+}
+
+if($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
+	#parametros necesarios para cancelar y reservar
+	$params{'id1'}=$obj->{'id1Nuevo'};
+	$params{'id2'}=$obj->{'id2Nuevo'};
+
+	($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
+}
 
 my %infoOperacion = (	error => $error,
         		message => $message,

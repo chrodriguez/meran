@@ -34,7 +34,7 @@ function mandarArreglo(valores){
 }
 
 
-var objAH;
+var objAH;//Objeto AjaxHelper.
 
 function Complete(){
 	HiddeState();
@@ -298,7 +298,7 @@ function updateInfoDetalle(responseText){
 
 function detalle(id1){
 
-	objAH=new AjaxHelper(updateInfoDetalle, Init);
+	objAH=new AjaxHelper(updateInfoDetalle);
 //   	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-detail.pl';
