@@ -683,4 +683,13 @@ div.detalle{
 	margin-left:30px;
 }
 
+.divDatosUsuario{
+	float:left;
+	width:50%;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+}
+
 /* end agregado */

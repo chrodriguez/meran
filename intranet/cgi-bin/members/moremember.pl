@@ -32,23 +32,21 @@
 
 use strict;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
+# use C4::Context;
+# use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Interface::CGI::Template;
+# use C4::Interface::CGI::Template;
 use CGI;
 use C4::Search;
 use Date::Manip;
 use C4::Date;
-use C4::AR::Reserves;
+use C4::AR::Reservas;
 use C4::Circulation::Circ2;
 use C4::Koha;
-use HTML::Template;
+# use HTML::Template;
 use C4::AR::VirtualLibrary; #Matias
 use C4::AR::Issues;
 use C4::AR::Sanctions;
-
-my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 
@@ -83,7 +81,7 @@ $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 
-$data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
+# $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 $data->{'city'}=&getcitycategory($data->{'city'});
 $data->{'streetcity'}=&getcitycategory($data->{'streetcity'});
 
@@ -140,7 +138,6 @@ $data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categ
 	}
 	####################
 
-# my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);  NO SE USA, Consulta sobre accountline
 my $issues = prestamosPorUsuario(\%bor);
 my $count=0;
 my $venc=0;
