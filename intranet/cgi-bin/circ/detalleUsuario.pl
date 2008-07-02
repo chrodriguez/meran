@@ -62,7 +62,7 @@ foreach my $san (@$sanctions) {
 # 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 
-my $debts= C4::AR::Sanctions::tieneLibroVencido("", $borrnumber); # indica si el usuario tiene libros vencidos
+my $debts= C4::AR::Sanctions::tieneLibroVencido($borrnumber); # indica si el usuario tiene libros vencidos
 $template->param(sanctions =>$sanctions,
 		 debts =>$debts
 		);

@@ -62,8 +62,8 @@ FIXME
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &devolver
-    &renovar
+    &t_devolver
+    &t_renovar
     &borrowerissues
     &DatosPrestamos
     &DatosPrestamosPorTipo
@@ -85,11 +85,38 @@ FIXME
 );
 
 
+sub t_devolver {
+	my($params)=@_;
+	my $codMsg;
+	my $error;
+	my $paraMens;
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+		($error,$codMsg,$paraMens)= devolver($params);
+		$dbh->commit;
+	};
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B406';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$paraMens->[0]=$params->{'barcode'};
+		$codMsg= 'P110';
+	}
+	$dbh->{AutoCommit} = 1;
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+	return ($error, $codMsg, $message);
+}
 
 
 
 =item
-la funcion devolver recibe un itemnumber y un borrowernumber y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
+la funcion devolver recibe una hash y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
 =cut 
 
 sub devolver {
@@ -103,9 +130,6 @@ sub devolver {
 	my $paraMens;
 	#se setea el barcode para informar al usuario en la devolucion
 	$paraMens->[0]= $params->{'barcode'};
-	
-	my @resultado;
-	my $dateformat = C4::Date::get_date_format();
 
 	my $prestamo= getDatosPrestamo($id3);
 	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
@@ -144,22 +168,19 @@ sub devolver {
 
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
 		my $issuetype=IssueType($prestamo->{'issuecode'});
-		my $daysissue=$issuetype->{'daysissues'}; 
+		my $daysissue=$issuetype->{'daysissues'};
+		my $dateformat = C4::Date::get_date_format();
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-		my $dbh=C4::Context->dbh;
-                my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
-                $sth->execute($borrowernumber);
-                my $categorycode= $sth->fetchrow;
+		my $categorycode=C4::Search::obtenerCategoria($borrowernumber);
                 my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'issuecode'});
 
 		if ($sanctionDays gt 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
-			my $sanctiontypecode = getSanctionTypeCode($dbh, $prestamo->{'issuecode'}, $categorycode);
-
-			if (tieneLibroVencido($dbh, $borrowernumber)) {
+			my $sanctiontypecode = getSanctionTypeCode($prestamo->{'issuecode'}, $categorycode);
+			if (tieneLibroVencido($borrowernumber)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
 				$hasdebts = 1;
-			 	insertPendingSanction($dbh,$sanctiontypecode, undef, $borrowernumber, $sanctionDays);
+			 	insertPendingSanction($sanctiontypecode, undef, $borrowernumber, $sanctionDays);
 			}
 			else{
 				my $err;
@@ -173,7 +194,7 @@ sub devolver {
 #**********************************Fin registra el movimiento en historicSanction***************************
 
 #Se borran las reservas del usuario sancionado
-				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);
+				C4::AR::Reservas::cancelar_reservas($loggedinuser,$borrowernumber);
 			}
 		}
 ### Final del tema sanciones
@@ -207,165 +228,31 @@ sub actualizarPrestamo{
 	$sth->execute($id3,$borrowernumber);
 }
 
-sub devolverVieja {
-	my ($params)=@_;
-
-	my $borrowernumber= $params->{'borrowernumber'};
-	my $id3= $params->{'id3'};
-	my $tipo= $params->{'tipo'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $codMsg;
-	my $error;
-	my $paraMens;
-	#se setea el barcode para informar al usuario en la renovacion	
-	$paraMens->[0]= $params->{'barcode'};	
-	
-	my @resultado;
-	my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SET autocommit=0;");
-	$sth->execute();
-	$sth=$dbh->prepare("select * from issues where id3=? and returndate IS NULL");
-	$sth->execute($id3);
-	my $iteminformation= $sth->fetchrow_hashref;
-	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
-	$sth=$dbh->prepare("Update issues set returndate=NOW() where id3=? and borrowernumber=? and returndate is NULL");
-	$sth->execute($id3,$borrowernumber);
-	#verifico que el item no sea para sala
-	$sth=$dbh->prepare("Select notforloan from nivel3 where id3=?");
-	$sth->execute($id3);
-	my $notforloan= $sth->fetchrow_hashref;
-	
-	$sth=$dbh->prepare("Select * from reserves where id3=? and borrowernumber=?");
-	$sth->execute($id3,$borrowernumber);
-	my $data= $sth->fetchrow_hashref;
-	if($data->{'id3'}){
-	#Si la reserva que voy a borrar existia realmente sino hubo un error
-		if($notforloan->{'notforloan'} eq 'DO'){#si no es para sala
-			my $sth1=$dbh->prepare("Select * from reserves where id2=? and id3 is NULL order by timestamp limit 1 ");
-			$sth1->execute($data->{'id2'});
-			my $data2= $sth1->fetchrow_hashref;
-			if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
-				@resultado= ($id3, $data2->{'id2'}, $data2->{'borrowernumber'});
-			}
-		}
-		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-		$sth=$dbh->prepare("Delete from reserves where id3=? and borrowernumber=?");
-		$sth->execute($id3,$borrowernumber);
-		if (@resultado) {
-		#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
-			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
-			$sth=$dbh->prepare("Update reserves set id3=?,reservedate=?,notificationdate=NOW(),reminderdate=?, branchcode=? where id2=? and borrowernumber=? ");
-			$sth->execute($resultado[0], $desde, $fecha,$iteminformation->{'branchcode'},$resultado[1],$resultado[2]);
-			C4::AR::Reservas::Enviar_Email($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre,$loggedinuser);
-			#Este thread se utiliza para enviar el mail al usuario avisandole de la disponibilidad
-			#my $t = Thread->new(\&Enviar_Email, ($resultado[0],$resultado[2],$desde, $fecha, $apertura,$cierre));
-			#$t->detach;
-			#FALTA ENVIARLE EL MAIL al usuario avisandole de  la disponibilidad del libro mediante un proceso separado, un thread por ej, el problema me parece es que el thread no accede a las bases de datos.
-
-		}# end if (@resultado) 
-
-#**********************************Se registra el movimiento en historicCirculation***************************
-		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
-
-		my $id1= $dataItems->{'id1'};
-		my $end_date= "null";
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$data->{'id2'},$id3,$data->{'branchcode'},$iteminformation->{'issuecode'},$end_date);
-#*******************************Fin***Se registra el movimiento en historicCirculation*************************
-
-
-		my $sth3=$dbh->prepare("commit;");
-		$sth3->execute();
-
-### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
-		my $hasdebts=0;
-		my $sanction=0;
-		my $fechaFinSancion;
-
-# Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
-			my $issuetype=IssueType($iteminformation->{'issuecode'});
-			my $daysissue=$issuetype->{'daysissues'}; 
-			my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-                        my $sth=$dbh->prepare("Select categorycode from borrowers where borrowernumber=?");
-                        $sth->execute($borrowernumber);
-                        my $categorycode= $sth->fetchrow;
-                        my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $iteminformation->{'issuecode'});
-
-
-
-			if ($sanctionDays gt 0) {
-# Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
-				my $sanctiontypecode = getSanctionTypeCode($dbh, $iteminformation->{'issuecode'}, $categorycode);
-
-
-
-			if (tieneLibroVencido($dbh, $borrowernumber)) {
-# El borrower tiene libros vencidos en su poder (es moroso)
-			$hasdebts = 1;
-			 insertPendingSanction($dbh,$sanctiontypecode, undef, $borrowernumber, $sanctionDays);
-			}
-			else
-			{
-				my $err;
-# Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
-			
-				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err),$dateformat);
-				insertSanction($sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
-				$sanction = 1;
-#**********************************Se registra el movimiento en historicSanction***************************
-				my $responsable= $loggedinuser;
-				logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
-#**********************************Fin registra el movimiento en historicSanction***************************
-
-
-#Se borran las reservas del usuario sancionado
-				C4::AR::Reserves::cancelar_reservas($loggedinuser,$borrowernumber);
-			}
-			}
-		
-### Final del tema sanciones
-
-		# Si la devolucion se pudo realizar
-		$error= 0;
-		$codMsg= 'P109';
-	} else {
-		# Si la devolucion dio error
-		$error= 1;
-		$codMsg= 'P110';
-	}
-
-	#se obtiene el mensaje para el usuario
-	my $message=C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
-
-	return ($error,$codMsg, $message);
-}
-
 
 =item
 fechaDeVencimiento recibe dos parametro, un id3 y la fecha de prestamo lo que hace es devolver la fecha en que vence o vencio ese prestamo
 =cut
 
 sub fechaDeVencimiento {
-my ($id3,$date_due)=@_;
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from issues where id3 = ? and date_due = ? ");
-$sth->execute($id3,$date_due);
-my $data= $sth->fetchrow_hashref;
-if ($data){
-	my $issuetype=IssueType($data->{'issuecode'}); 
-	my $plazo_actual;
+	my ($id3,$date_due)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Select * from issues where id3 = ? and date_due = ? ");
+	$sth->execute($id3,$date_due);
+	my $data= $sth->fetchrow_hashref;
+	if ($data){
+		my $issuetype=IssueType($data->{'issuecode'}); 
+		my $plazo_actual;
 	
-	if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-	 	 $plazo_actual=$issuetype->{'renewdays'};
-		 return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
-	} 
-	else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
-		 $plazo_actual=$issuetype->{'daysissues'};
-		 return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
-		
-	}
+		if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 	$plazo_actual=$issuetype->{'renewdays'};
+		 	return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
+		} 
+		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
+			$plazo_actual=$issuetype->{'daysissues'};
+		 	return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
+		}
 
-}
+	}
 }
 
 
@@ -374,28 +261,23 @@ vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha
 =cut
 
 sub vencimiento {
-my ($id3)=@_;
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from issues where id3=? and returndate is NULL");
-$sth->execute($id3);
-my $data= $sth->fetchrow_hashref;
-if ($data){
-	my $issuetype=IssueType($data->{'issuecode'}); 
-	my $plazo_actual;
-	
-	if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-	 	 $plazo_actual=$issuetype->{'renewdays'};
-
-		return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
-	} 
-	else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
+	my ($id3)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Select * from issues where id3=? and returndate is NULL");
+	$sth->execute($id3);
+	my $data= $sth->fetchrow_hashref;
+	if ($data){
+		my $issuetype=IssueType($data->{'issuecode'}); 
+		my $plazo_actual;
+		if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 	$plazo_actual=$issuetype->{'renewdays'};
+			return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
+		} 
+		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
 		 $plazo_actual=$issuetype->{'daysissues'};
-				 
 		 return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
-		
+		}
 	}
-
-}
 }
 
 
@@ -906,7 +788,6 @@ sub crearTicket {
 	my ($id3,$bornum,$loggedinuser)=@_;
 	my %env;
 	my $dateformat = C4::Date::get_date_format();
-	$loggedinuser = C4::Auth::getborrowernumber($loggedinuser);
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
 	my $iteminfo= C4::Circulation::Circ2::getiteminformation(\%env, $id3);

@@ -55,7 +55,7 @@ if($array[1] eq "1" && $ok){
 	}
 }
 if($array[2] eq "1" && $ok){
-	if(C4::AR::Sanctions::tieneLibroVencido("",$bornum)){
+	if(C4::AR::Sanctions::tieneLibroVencido($bornum)){
 		$ok=0;
 		$msj="por tener pr�stamos vencidos";
 	}

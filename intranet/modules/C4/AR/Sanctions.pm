@@ -153,17 +153,17 @@ sub isSanction {
 
 sub tieneLibroVencido {
   #Esta funcion determina si un usuario ($borrowernumber) tiene algun biblio vencido que no le permite realizar reservas o prestamos
-  my ($dbh, $borrowernumber)=@_;
-  my $dbh = C4::Context->dbh;
-  my $dateformat = C4::Date::get_date_format();
-  my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
-  $sth->execute($borrowernumber);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-  while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
-    return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
-  }
-  return(0);
+  	my ($borrowernumber)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $dateformat = C4::Date::get_date_format();
+  	my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
+  	$sth->execute($borrowernumber);
+  	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+  	while (my $ref= $sth->fetchrow_hashref) {
+    		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+    		return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
+  	}
+  	return(0);
 }
 
 sub permitionToLoan {
@@ -172,7 +172,7 @@ sub permitionToLoan {
 	my $dbh = C4::Context->dbh;
   	my $debtOrSanction= 0; #Se supone que no esta sancionado
   	my $until= undef;
-  	if (tieneLibroVencido($dbh,$borrowernumber)) {
+  	if (tieneLibroVencido($borrowernumber)) {
     		$debtOrSanction= 1; #Tiene biblos vencidos 
   	}
 	elsif (my $res= isSanction($dbh, $borrowernumber, $issuecode)) {
@@ -255,13 +255,13 @@ sub insertSanction {
   }
 }
 
+ #Esta funcion da de alta una sancion pendiente 
 sub insertPendingSanction {
-  #Esta funcion da de alta una sancion pendiente 
- my ($dbh, $sanctiontypecode, $reservenumber, $borrowernumber, $delaydays)=@_;
+ my ($sanctiontypecode, $reservenumber, $borrowernumber, $delaydays)=@_;
  #Hay varios casos:
  #Si no existe una tupla con una posible sancion se crea una
  #Si ya existe una posible sancion se deja la mayor
-
+my $dbh= C4::Context->dbh;
  #Busco si tiene una sancion pendiente
  my $sth1 = $dbh->prepare("	select * 
 				from sanctions 
@@ -287,11 +287,12 @@ sub insertPendingSanction {
 
 sub getSanctionTypeCode {
   #Esta funcion recupera el sanctiontypecode a partir del issuecode y el categorycode
-  my ($dbh, $issuecode, $categorycode)=@_;
-  my $sth=$dbh->prepare("select sanctiontypecode from sanctiontypes where issuecode = ? and categorycode = ?");
-  $sth->execute($issuecode, $categorycode);
-  my $res= $sth->fetchrow_hashref;
-  return($res->{'sanctiontypecode'});
+	my ($issuecode, $categorycode)=@_;
+	my $dbh=C4::Context->dbh;
+  	my $sth=$dbh->prepare("select sanctiontypecode from sanctiontypes where issuecode = ? and categorycode = ?");
+  	$sth->execute($issuecode, $categorycode);
+  	my $res= $sth->fetchrow_hashref;
+  	return($res->{'sanctiontypecode'});
 }
 
 sub getBorrowersSanctions {

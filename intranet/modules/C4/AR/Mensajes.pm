@@ -2,7 +2,7 @@ package C4::AR::Mensajes;
 
 #Este modulo provee funcionalidades para la reservas de documentos
 #
-#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or

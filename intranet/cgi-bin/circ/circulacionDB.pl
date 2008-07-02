@@ -1,10 +1,7 @@
 #!/usr/bin/perl
-# Please use 8-character tabs for this file (indents are every 4 characters)
 
-#written 8/5/2002 by Finlay
-#script to execute issuing of books
-
-# Copyright 2000-2002 Katipo Communications
+#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#This file is part of Koha-UNLP
 #
 # This file is part of Koha.
 #

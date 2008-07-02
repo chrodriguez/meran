@@ -2,7 +2,7 @@ package C4::AR::Reservas;
 
 #Este modulo provee funcionalidades para la reservas de documentos
 #
-#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -35,6 +35,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&t_reservarOPAC
 	&t_cancelar_reserva
+	&cancelar_reservas
 	&reservar
 	&insertarPrestamo
 	&verificaciones
@@ -194,6 +195,20 @@ sub insertarReserva {
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 	return $reservenumber;
 }#end insertarReserva
+
+sub cancelar_reservas{
+# Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
+	my ($loggedinuser,@borrowersnumbers)= @_;
+        my $dbh = C4::Context->dbh;
+	foreach (@borrowersnumbers) {
+		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? AND estado <> 'P'");
+		$sth->execute($_);
+		while (my $biblioitemnumber= $sth->fetchrow){
+			cancelar_reserva($biblioitemnumber, $_,$loggedinuser);
+		}
+		$sth->finish;
+	}
+}
 
 sub t_cancelar_reservas_inmediatas{
 	my ($params)=@_;

@@ -390,13 +390,13 @@ sub checkauth {
 				my $regular= &C4::AR::Usuarios::esRegular(getborrowernumber($userid));
 				
 				if ($isSanction || !$regular ){
-				&C4::AR::Reserves::cancelar_reservas($userid,getborrowernumber($userid));
+				&C4::AR::Reservas::cancelar_reservas($userid,getborrowernumber($userid));
 				}
 			} else {
 				#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-				&C4::AR::Reserves::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
+				&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
 				#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-				&C4::AR::Reserves::cancelar_reservas($userid,C4::AR::Reserves::FindNotRegularUsersWithReserves());
+				&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reserves::FindNotRegularUsersWithReserves());
 				&C4::AR::Reserves::eliminarReservasVencidas($userid);	
 				#Si se logueo correctamente en intranet entonces guardo la fecha
 				$dbh->do("update borrowers set lastlogin=now() where cardnumber = ?", undef, $cardnumber);

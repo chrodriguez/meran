@@ -777,7 +777,7 @@ sub cancelar_reservas{
 	my ($loggedinuser,@borrowersnumbers)= @_;
         my $dbh = C4::Context->dbh;
 	foreach (@borrowersnumbers) {
-		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? and constrainttype is NULL");
+		my $sth=$dbh->prepare("SELECT biblioitemnumber FROM reserves where borrowernumber = ? AND estado <> 'P'");
 		$sth->execute($_);
 		while (my $biblioitemnumber= $sth->fetchrow){
 			&cancelar_reserva($biblioitemnumber, $_,$loggedinuser);
