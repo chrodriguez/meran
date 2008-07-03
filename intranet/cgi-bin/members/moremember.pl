@@ -32,10 +32,7 @@
 
 use strict;
 use C4::Auth;
-# use C4::Context;
-# use C4::Output;
 use C4::Interface::CGI::Output;
-# use C4::Interface::CGI::Template;
 use CGI;
 use C4::Search;
 use Date::Manip;
@@ -43,7 +40,6 @@ use C4::Date;
 use C4::AR::Reservas;
 use C4::Circulation::Circ2;
 use C4::Koha;
-# use HTML::Template;
 use C4::AR::VirtualLibrary; #Matias
 use C4::AR::Issues;
 use C4::AR::Sanctions;
@@ -63,28 +59,28 @@ my $bornum=$input->param('bornum');
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 #start the page and read in includes
 
-my $data=borrdata('',$bornum);
+my $data=C4::AR::Usuarios::getBorrowerInfo($bornum);
 
 $data->{'updatepassword'}= $data->{'changepassword'};
 
-$template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I"> => instutitional (A for Adult & C for children)
+my $dateformat = C4::Date::get_date_format();
 
 # Curso de usuarios#
-  	if (C4::Context->preference("usercourse")){$data->{'course'}=1;}
+if (C4::Context->preference("usercourse")){
+	$data->{'course'}=1;
+	$data->{'usercourse'} = format_date($data->{'usercourse'},$dateformat);
+}
 #
-
-my $dateformat = C4::Date::get_date_format();
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
 $data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
-$data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
+# $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
-$data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
-
-# $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 $data->{'city'}=&getcitycategory($data->{'city'});
 $data->{'streetcity'}=&getcitycategory($data->{'streetcity'});
 
+=item
+Para los hijos VER MAS ADELANTE!!!!
 if ($data->{'categorycode'} eq 'C'){
 	my $data2=borrdata('',$data->{'guarantor'});
 	$data->{'streetaddress'}=$data2->{'streetaddress'};
@@ -97,9 +93,6 @@ if ($data->{'categorycode'} eq 'C'){
 }
 
 
-if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
-	$template->param(printethnicityline => 1);
-}
 
 if ($data->{'categorycode'} ne 'C'){
 	$template->param(isguarantee => 1);
@@ -122,9 +115,7 @@ if ($data->{'categorycode'} ne 'C'){
 		$template->param(guarantorborrowernumber => $guarantor->{'borrowernumber'}, guarantorcardnumber => $guarantor->{'cardnumber'});
 	}
 }
-
-my %bor;
-$bor{'borrowernumber'}=$bornum;
+=cut
 
 # Converts the branchcode to the branch name
 $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
@@ -132,19 +123,13 @@ $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 # Converts the categorycode to the description
 $data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
-	# Curso de usuarios#
-	if (C4::Context->preference("usercourse")){
-	$data->{'usercourse'} = format_date($data->{'usercourse'},$dateformat);
-	}
-	####################
 
-my $issues = prestamosPorUsuario(\%bor);
+my $issues = prestamosPorUsuario($bornum);
 my $count=0;
 my $venc=0;
 my $overdues_count = 0;
 my @overdues;
 my @issuedat;
-my $clase='par';
 my $sanctions = hasSanctions($bornum);
 ####Es regular el Usuario?####
 my $regular =&C4::AR::Usuarios::esRegular($bornum);
@@ -152,9 +137,9 @@ my $regular =&C4::AR::Usuarios::esRegular($bornum);
 $template->param(regular       => $regular);
 ####
 foreach my $san (@$sanctions) {
-	if ($san->{'itemnumber'}) {
-		my $aux=itemdata3($san->{'itemnumber'}); 
-		$san->{'description'}.=": ".$aux->{'title'}." (".$aux->{'author'}.") "; 
+	if ($san->{'id3'}) {
+		my $aux=itemdata3($san->{'id3'}); 
+		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; 
 	}
 
 	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);
@@ -162,10 +147,8 @@ foreach my $san (@$sanctions) {
 }
 #
 
-
 foreach my $key (keys %$issues) {
     	my $issue = $issues->{$key};
-    	$issue->{'clase'} = $clase;
     	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
 
 	my $dateformat = C4::Date::get_date_format();
@@ -175,16 +158,13 @@ foreach my $key (keys %$issues) {
 	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
 		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
 	}
-
-	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'itemnumber'},$issue->{'issuecode'});
+	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'id3'},$issue->{'issuecode'});
     	$issue->{'date_fin'} = format_date($df,$dateformat);
-   
 	if ($vencido){ 
 		$venc=1;
           	$issue->{'color'} ='red';
         }
-
-    	$issue->{'renew'} = &sepuederenovar($bornum, $issue->{'itemnumber'});
+    	$issue->{'renew'} = &sepuederenovar($bornum, $issue->{'id3'});
     	if ($issue->{'overdue'}) {
         	push @overdues, $issue;
         	$overdues_count++;
@@ -195,7 +175,6 @@ foreach my $key (keys %$issues) {
     	}
     	push @issuedat, $issue;
     	$count++;
-    	if ( $clase eq 'par' ) { $clase = 'impar'; } else {$clase = 'par'; }
 }
 
 #}
@@ -207,35 +186,30 @@ my @realreserves;
 my @waiting;
 my $rcount = 0;
 my $wcount = 0;
-my $clase1='par';
-my $clase2='par';
-foreach my $res (@$reserves) {
-    $res->{'clase'} = $clase;	
+
+foreach my $res (@$reserves) {	
     $res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
 
-	my $author=getautor($res->{'rauthor'});  #Damian - 13/03/2007. Se corrigio para ver el nombre
+	my $author=getautor($res->{'rautor'});  #Damian - 13/03/2007. Se corrigio para ver el nombre
         $res->{'rauthor'} = $author->{'completo'}; #del autor y no el id.
 	$res->{'id'} = $author->{'id'}; 
-    if ($res->{'ritemnumber'}) {
-	my $item=itemdata2($res->{'ritemnumber'});
+    if ($res->{'rid3'}) {
+	my $item=itemdata2($res->{'rid3'});
 
 	
 
 	$res->{'barcode'} = $item->{'barcode'};
-	$res->{'bulk'} = $item->{'bulk'};
+	$res->{'bulk'} = $item->{'signatura_topografica'};
 
-	$res->{'clase'} = $clase1;
 
         $res->{'rbranch'} = &getbranchname($branches->{$res->{'rbranch'}}->{'branchcode'}); #Damian - 13/03/2007. Se ve el nombre de la biblio y no el id.
         push @realreserves, $res;
         $rcount++;
-	if ( $clase1 eq 'par' ) { $clase1 = 'impar'; } else {$clase1 = 'par'; }
     }
         else{
-	$res->{'clase'} = $clase2;
         push @waiting, $res;
         $wcount++;
-	if ( $clase2 eq 'par' ) { $clase2 = 'impar'; } else {$clase2 = 'par'; }
+
         }
 }
 
@@ -286,7 +260,7 @@ $template->param(
 #los libros que tiene esperando un ejemplar
 		realreserves     => \@realreserves,
 ###
-		issueloop       => \@issuedat,
+		prestamos       => \@issuedat,
 		foto_name => $foto,
 		sanctions       => $sanctions,
 		mensaje_error_foto => $msgFoto,

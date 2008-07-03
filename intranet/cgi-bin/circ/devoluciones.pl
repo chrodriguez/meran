@@ -36,5 +36,25 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user ({
 	flagsrequired	=> { circulate => 1 },
     });
 
+my $obj=$input->param('obj');
+my $usuarioID="";
+my $usuarioText="";
+
+if($obj ne ""){
+	$obj=C4::AR::Utilidades::from_json_ISO($obj);
+	my $array=$obj->{'array_ids3'};
+	$usuarioID=$obj->{'usuario'}->{'ID'};
+	$usuarioText=$obj->{'usuario'}->{'text'};
+
+	$template->param(
+		usuarioText => $usuarioText,
+		array	    => $array,
+		accion	    => $obj->{'accion'},
+	);
+}
+
+$template->param(
+	usuarioID   => $usuarioID,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

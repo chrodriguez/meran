@@ -16,9 +16,38 @@
 
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
-	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos);
-	$('#usuarioAutocomplete')[0].focus();
+	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos,updateInfoPrestamos);
+	if('<!-- TMPL_VAR NAME=usuarioID -->' != ""){
+		usuario= new object_usuario();
+		usuario.text= '<!-- TMPL_VAR NAME=usuarioText -->';
+		usuario.ID= '<!-- TMPL_VAR NAME=usuarioID -->';
+		$('#usuarioAutocomplete').val('<!-- TMPL_VAR NAME=usuarioText -->');
+		detalleUsuario(usuario.ID);
+		detallePrestamos(usuario.ID,updateInfoPrestamosConChck);
+
+	}else{
+		$('#usuarioAutocomplete')[0].focus();
+	}
 });
+
+/*
+ * updateInfoPrestamosConChck
+ * Esta funcion se ejecuta cuando se viene desde moremember o el detalle, cuando se completa el ajax de la funcion
+ * detalleReservas.
+ * Tiene que estar en el template, porque recibe variables desde el pl.
+ * Despues realiza la funcion realizarAccion que es la que genera el div para el prestamo.
+ */
+function updateInfoPrestamosConChck(responseText){
+	$('#tablaPrestamos').slideDown('slow');
+	$('#tablaPrestamos').html(responseText);
+ 	zebra('tablaPrestamos');
+	checkedAll('checkAllPrestamos','chkboxPrestamos');
+	<!-- TMPL_LOOP NAME=array -->
+		var chk=$("#"+<!-- TMPL_VAR NAME=id3 -->)[0];
+		chk.checked=true;
+	<!-- /TMPL_LOOP -->
+	realizarAccion('<!-- TMPL_VAR NAME=accion -->','chkboxPrestamos',generaDivDevRen);
+}
 
 </script>
 

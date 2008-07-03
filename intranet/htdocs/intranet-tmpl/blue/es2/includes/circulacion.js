@@ -44,7 +44,7 @@ function object_usuario(){
  * AutocompleteUsuario
  * Funcion que asigna al input que busca el usuario la funcion de autocomplete.
  */
-function AutocompleteUsuario(idInput,funcionDetalle){
+function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
 	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
@@ -67,7 +67,7 @@ function AutocompleteUsuario(idInput,funcionDetalle){
 		usuario.ID= data[1];
 		
 		detalleUsuario(data[1]);
-		funcionDetalle(data[1]);//Puede ser detallePrestamo o detalleReserva
+		funcionDetalle(data[1],funcionUpdateInfo);//Puede ser detallePrestamo o detalleReserva
 	});
 }
 
@@ -92,17 +92,17 @@ function updateInfoUsuario(responseText){
 	//se borran los mensajes de error/informacion del usuario
 	$('#mensajes').html('');
 	$('#detalleUsuario').html(responseText);
-// 	HiddeState();
-
 }
 
 /*
  * detalleReservas
  * Funcion que hace la consulta Ajax para traer las reservas del usuario seleccionado.
+ * El parametro funcion, es lo que se hace despues de que se completa el ajax. 
+ * (updateInfoReservas o updateInfoReservaConChck -- esta definida en prestamos.tmpl)
  * prestamos.tmpl---> tabla de reservas para poder prestar.
  */
-function detalleReservas(borrower){
-	objAH=new AjaxHelper(updateInfoReservas);
+function detalleReservas(borrower,funcion){
+	objAH=new AjaxHelper(funcion);
 	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -119,8 +119,6 @@ function updateInfoReservas(responseText){
 	$('#tablaReservas').html(responseText);
 	zebra('tablaReservas');
 	checkedAll('checkAllReservas','chkboxReservas');
-// 	HiddeState();
-
 }
 
 /*
@@ -128,8 +126,8 @@ function updateInfoReservas(responseText){
  * Funcion que hace la consulta Ajax para traer los prestamos del usuario seleccionado.
  * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
  */
-function detallePrestamos(borrower){
-	objAH=new AjaxHelper(updateInfoPrestamos);
+function detallePrestamos(borrower,funcion){
+	objAH=new AjaxHelper(funcion);
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -147,8 +145,6 @@ function updateInfoPrestamos(responseText){
 	$('#tablaPrestamos').html(responseText);
  	zebra('tablaPrestamos');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
-// 	HiddeState();
-
 }
 
 /*
@@ -213,8 +209,6 @@ function generaDivPrestamo(responseText){
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-
-// 	HiddeState();
 }
 
 /*
@@ -272,7 +266,7 @@ function updateInfoPrestarReserva(responseText){
 		mensajes= mensajes + infoArray[i].message + '<br>';
 	}
 	$('#mensajes').html(mensajes);
-	detalleReservas(usuario.ID);
+	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
 /*
@@ -309,7 +303,7 @@ function cancelarReserva(reserveNumber){
 function updateInfoCancelacion(responseText){
 	var objJson=JSONstring.toObject(responseText);
 	$('#mensajes').html(objJson.message);
-	detalleReservas(usuario.ID);
+	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
 /*
@@ -338,8 +332,6 @@ function generaDivDevRen(responseText){
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-
-// 	HiddeState();
 }
 
 /*
@@ -371,7 +363,7 @@ function updateInfoDevRen(responseText){
 		mensajes= mensajes + infoArray[i].message + '<br>';
 	}
 	$('#mensajes').html(mensajes);
-	detallePrestamos(usuario.ID);
+	detallePrestamos(usuario.ID,updateInfoPrestamos);
 }
 
 /*
