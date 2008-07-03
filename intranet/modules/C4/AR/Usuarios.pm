@@ -69,7 +69,9 @@ sub esRegular {
 
         my $dbh = C4::Context->dbh;
 	my $regular= 1; #Regular por defecto
-        my $sth = $dbh->prepare(" SELECT regular FROM persons WHERE borrowernumber = ? AND categorycode='ES' " );
+        my $sth = $dbh->prepare(" 	SELECT regular 
+					FROM persons 
+					WHERE borrowernumber = ? AND categorycode='ES' " );
         $sth->execute($bor);
         my $reg = $sth->fetchrow();
 

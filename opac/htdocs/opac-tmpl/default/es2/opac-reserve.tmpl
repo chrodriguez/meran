@@ -70,60 +70,6 @@
  <!-- /TMPL_LOOP -->
 </table>
 
-<br><br><br><hr>
-<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-	<tr bordercolor="#f2f2f2">
- 		<td colspan="6" align="center" class="bordetabla" borde=1>
-			<b>Reservas actuales</b>
- 		</td>
-	</tr>
-
-	<tr class="bordetabla"  bordercolor="#f2f2f2">
-		<th>T&iacute;tulo</th>
-		<th>Autor</th>
-		<th>Volumen</th>
-		<th>Disponible desde </th>
-		<th>Fecha de Vencimiento </th>
-		<th>Acci&oacute;n </th>
-	</tr>
-<!-- TMPL_LOOP NAME="RESERVES" -->
-	<tr border="1" bordercolor="#f2f2f2">
- 		<td class="impar"> 
-			<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
-				<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-			</a>
- 		</td>
- 		<td class="impar">
-		<!-- TMPL_IF NAME="rautor" -->
-			<!-- TMPL_VAR NAME="nomCompleto" -->
-		<!-- TMPL_ELSE -->
-			&nbsp;
-		<!-- /TMPL_IF -->
- 		</td>
- 		<td align=center class="impar">
-		<!-- TMPL_IF NAME="redicion" -->
-			<!-- TMPL_VAR NAME="redicion" -->
-		<!-- TMPL_ELSE --> 
-			- 
-		<!-- /TMPL_IF -->
- 		</td>
- 		<td class="impar" align="center">
-			<!-- TMPL_VAR NAME="rreservedate" -->
-		</td>
-		<td class="impar" align="center">
-			<!-- TMPL_VAR NAME="rreminderdate" -->
-		</td>
-		<td class="impar">
-		<!-- TMPL_IF NAME="CirculationEnabled" -->
-			<a class="click" onClick="cancelarYReservar(<!-- TMPL_VAR NAME='reserveNumber' -->,<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->)">
-			Cancelar</a>
-		<!-- TMPL_ELSE -->
-			No disponible
-		<!-- /TMPL_IF -->
- 		</td>
-	</tr>
- <!-- /TMPL_LOOP -->
-</table>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="datosReserva" -->

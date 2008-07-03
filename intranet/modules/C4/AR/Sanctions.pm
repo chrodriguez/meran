@@ -167,7 +167,7 @@ sub tieneLibroVencido {
 }
 
 sub permitionToLoan {
-  #Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
+#Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
   	my ($borrowernumber, $issuecode)=@_;
 	my $dbh = C4::Context->dbh;
   	my $debtOrSanction= 0; #Se supone que no esta sancionado

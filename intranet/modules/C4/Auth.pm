@@ -85,6 +85,8 @@ C4::Auth - Authenticates Koha users
 @ISA = qw(Exporter);
 @EXPORT = qw(
              &checkauth
+	     &t_operacionesDeINTRA
+	     &t_operacionesDeOPAC		
              &get_template_and_user
 	     &get_templateexpr_and_user
              &getborrowernumber
@@ -269,7 +271,8 @@ sub checkauth {
 		close L;
 		
 		}
-		if ($userid) { #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
+		if ($userid) { 
+		#la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
 		  if ($lasttime<time()-$timeout) {
 			# timed logout
 			$info{'timed_out'} = 1;
@@ -310,7 +313,7 @@ sub checkauth {
 			  }#if de la sesion que existia en la bdd
 		}#eslif se requiere cookie
 	unless ($userid) { #si no hay userid, hay que autentificarlo y no existe sesion
-		$sessionID=int(rand()*100000).'-'.time();
+		$sessionID=int(rand()*1000000).'-'.time();
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
 		#AGREGADO PARA HACER EL HASH DE LA PASSWORD
@@ -349,7 +352,7 @@ sub checkauth {
 					-expires => '');
 		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
 			$loggedin = 1;
-			#WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
+			#WARNING: REVISAR ver si es solo de intranet el usuario q se loguear Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
 			my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
 			$sth->execute();
 			my $lastlogin= $sth->fetchrow;
@@ -382,17 +385,22 @@ sub checkauth {
 				my ($count,@holidays)= C4::AR::Utilidades::getholidays();
 				C4::AR::Utilidades::savedatemanip(@holidays);
 			}
-			
+#-------------------------------------- SECCION CRITICA	--------------------------------------------------------
 			#Se borran las reservas de los usuarios sancionados			
 			if ($type eq 'opac') {
+=item
 				#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
 				my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
 				my $regular= &C4::AR::Usuarios::esRegular(getborrowernumber($userid));
 				
 				if ($isSanction || !$regular ){
-				&C4::AR::Reservas::cancelar_reservas($userid,getborrowernumber($userid));
+					&C4::AR::Reservas::cancelar_reservas($userid,getborrowernumber($userid));
 				}
+=cut
+				t_operacionesDeOPAC($userid);
 			} else {
+				t_operacionesDeINTRA($userid, $cardnumber);
+=item
 				#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
 				&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
 				#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
@@ -400,8 +408,9 @@ sub checkauth {
 				&C4::AR::Reserves::eliminarReservasVencidas($userid);	
 				#Si se logueo correctamente en intranet entonces guardo la fecha
 				$dbh->do("update borrowers set lastlogin=now() where cardnumber = ?", undef, $cardnumber);
+=cut
 			}
-
+#--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
 		} else {
 			$info{'nopermission'} = 1;
 		}
@@ -536,6 +545,74 @@ sub checkauth {
 	exit;
 }
 
+
+sub t_operacionesDeOPAC{
+
+	my ($userid) = @_;
+
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;
+	$dbh->{RaiseError} = 1;
+
+	my ($error,$codMsg,$paraMens);
+	my $tipo= 'OPAC';
+
+	eval{
+		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
+		my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
+		my $regular= &C4::AR::Usuarios::esRegular(getborrowernumber($userid));
+				
+		if ($isSanction || !$regular ){
+			&C4::AR::Reservas::cancelar_reservas($userid,getborrowernumber($userid));
+		}
+		$dbh->commit;
+	};
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B408';
+		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R010';
+	}
+	$dbh->{AutoCommit} = 1;
+# 	return($error,$codMsg,$paraMens);
+}
+
+sub t_operacionesDeINTRA{
+
+	my ($userid, $cardnumber) = @_;
+
+	my $dbh = C4::Context->dbh;
+	$dbh->{AutoCommit} = 0;
+	$dbh->{RaiseError} = 1;
+
+	my ($error,$codMsg,$paraMens);
+	my $tipo= 'INTRA';
+
+	eval{
+		#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
+		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
+		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
+		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reserves::FindNotRegularUsersWithReserves());
+		&C4::AR::Reservas::eliminarReservasVencidas($userid);	
+		#Si se logueo correctamente en intranet entonces guardo la fecha
+		$dbh->do("UPDATE borrowers SET lastlogin=now() WHERE cardnumber = ?", undef, $cardnumber);
+		$dbh->commit;
+	};
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B409';
+		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R010';
+	}
+	$dbh->{AutoCommit} = 1;
+# 	return($error,$codMsg,$paraMens);
+}
 
 
 sub checkpw {

@@ -2,7 +2,7 @@ package C4::AR::Mensajes;
 
 #Este modulo provee funcionalidades para la reservas de documentos
 #
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -131,6 +131,8 @@ my %mensajesINTRA = (
 	'B405' => 'Error al intentar renovar desde la INTRA, funcion C4::AR::Issues::t_renovar',
 	'B406' => 'Error al intentar devolver desde la INTRA, funcion C4::AR::Issues::t_devolver',
 	'B407' => '',
+	'B408' => 'Error en funcion C4::Auth::t_operacionesDeOPAC',
+	'B409' => 'Error en funcion C4::Auth::t_operacionesDeINTRA',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
