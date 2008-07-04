@@ -71,19 +71,20 @@ function prestar(){
 	location.href="../circ/prestamos.pl?obj="+obj;
 }
 
-function confirm_cancelation(tipoReserva) {
-	alert("FALTA");
-}
 
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
 		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
-		objAH.borrowernumber=usuario.ID;
+		objAH.borrowernumber="<!-- TMPL_VAR NAME='bornum' -->";
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
+}
+
+function updateInfoCancelacion(){
+	location.href="moremember.pl?bornum=<!-- TMPL_VAR NAME='bornum' -->";
 }
 
 function confirm_deletion() {
@@ -421,7 +422,7 @@ function confirm_deletion() {
 		</td>
 
 		<td>
-			<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation(<!-- TMPL_VAR NAME='reservenumber' -->)" title="Cancelar">
+			<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva(<!-- TMPL_VAR NAME='reservenumber' -->)" title="Cancelar">
 		</td>
  		<td height=25>&nbsp;</td>
 
