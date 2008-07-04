@@ -2,6 +2,7 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 
 <script>
 function openPopup() {
@@ -51,7 +52,7 @@ function devolver_renovar(accion){
 	location.href="../circ/devoluciones.pl?obj="+obj;
 }
 
-function confirm_prestamo(){
+function prestar(){
 	var chck=$("input[@name=chkboxReservas]:checked");
 	var array=new Array;
 	for(var i=0; i< chck.length; i++){
@@ -72,6 +73,17 @@ function confirm_prestamo(){
 
 function confirm_cancelation(tipoReserva) {
 	alert("FALTA");
+}
+
+function cancelarReserva(reserveNumber){
+	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
+        if (is_confirmed) {
+		objAH=new AjaxHelper(updateInfoCancelacion);
+		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
+		objAH.borrowernumber=usuario.ID;
+		objAH.reserveNumber=reserveNumber;
+		objAH.sendToServer();
+        }
 }
 
 function confirm_deletion() {
@@ -108,7 +120,7 @@ function confirm_deletion() {
 <br><br>
 <div class="divDatosUsuario">
 	<!-- TMPL_IF NAME="foto_name" -->
-		<img border="0" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->">
+		<img border="0" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"><br>
 	<!-- /TMPL_IF -->
 		
 	Documento:<b> <!-- TMPL_VAR NAME="documenttype" --> &nbsp; <!-- TMPL_VAR NAME="documentnumber" --></b><br>
@@ -116,21 +128,30 @@ function confirm_deletion() {
 	Fecha de nacimiento:<b> <!-- TMPL_VAR NAME="dateofbirth" --></b><br>
 	Sexo:<b> <!-- TMPL_VAR NAME="sex" --></b><br>
 			
-	Contacto Alternativo:<b> <!-- TMPL_VAR NAME="contactname" --></b><br>
+	<!-- TMPL_IF NAME="contactname" -->
+		Contacto Alternativo:<b> <!-- TMPL_VAR NAME="contactname" --></b><br>
+	<!-- /TMPL_IF -->
 
-	Tel&eacute;fono:<b> <!-- TMPL_VAR NAME="altphone" --></b><br>
+	<!-- TMPL_IF NAME="altphone" -->
+		Tel&eacute;fono:<b> <!-- TMPL_VAR NAME="altphone" --></b><br>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="altrelationship" -->
+		Relaci&oacute;n:<b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
+	<!-- /TMPL_IF -->
 
-	Relaci&oacute;n:<b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
-
-	E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br><br>
-
-
+	<!-- TMPL_IF NAME="emailaddress" -->
+		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->">
+			<!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
+	<!-- /TMPL_IF -->
+	<br>
 
 	Tarjeta de identificaci&oacute;n :<b> <!-- TMPL_VAR NAME="cardnumber" --></b><br>
 
 	Legajo :<b> <!-- TMPL_VAR NAME="studentnumber" --></b><br>
 	
 	ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
+
 	Categor&iacute;a del usuario:<b> <!-- TMPL_VAR NAME="categorycode" --></b><br>
 
 	Incorporaci&oacute;n a Biblioteca:<b> <!-- TMPL_VAR NAME="branchcode" --></b><br>
@@ -140,9 +161,13 @@ function confirm_deletion() {
 		</center>
 	<!-- /TMPL_IF -->
 
-	Notas:<b> <!-- TMPL_VAR NAME="altnotes" --></b><br>
-		
-	Notas generales: <b><A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false"><!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
+	<!-- TMPL_IF NAME="altnotes" -->
+		Notas:<b> <!-- TMPL_VAR NAME="altnotes" --></b><br>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="borrowernotes" -->
+		Notas generales: <b><A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false"><!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
+	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF name="IS_ADULT" -->
 		<p align=center>
@@ -156,7 +181,7 @@ function confirm_deletion() {
 	<!-- /TMPL_IF -->
 </div>
 
-<div class="divDatosUsuario" style="margin-top: 5%">
+<div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
 	<!-- TMPL_IF name="I" -->
                 <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
 			<a href="#" onClick="formCarac.submit()" >
@@ -236,20 +261,20 @@ function confirm_deletion() {
 <table class="tablaResult" cellspacing=0  cellpadding=0 border=0  width="100%" >
 
 	<tr valign=middle class="tablaresultadoTitle">
-   		<td width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td>
+   		<th width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+		<th>
 			<a class="click" id="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Seleccionar todos"></a>
-		</td>
-  		<td>T&iacute;tulo</td>
-  		<td>Autor</td>
-  		<td>C. Barra</td>
-  		<td>Sig. Top.</td>
-		<td>Ed.</td>
-  		<td>Vol.</td>
-  		<td>Pr&eacute;stamo</td>
-  		<td>Vencimiento</td>
-   		<td>Tipo</td>
-  		<td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		</th>
+  		<th>T&iacute;tulo</th>
+  		<th>Autor</th>
+  		<th>C. Barra</th>
+  		<th>Sig. Top.</th>
+		<th>Ed.</th>
+  		<th>Vol.</th>
+  		<th>Pr&eacute;stamo</th>
+  		<th>Vencimiento</th>
+   		<th>Tipo</th>
+  		<th width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
 	</tr>
 <!-- TMPL_LOOP NAME="prestamos" -->
 	<tr class="inputFontNormal" align="center">
@@ -283,7 +308,7 @@ function confirm_deletion() {
 		</td>
 
 		<td>  
-			<!-- TMPL_IF NAME="redicion" --> <!-- TMPL_VAR NAME="redicion" -->
+			<!-- TMPL_IF NAME="edicion" --> <!-- TMPL_VAR NAME="edicion" -->
 			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
  		</td>
 
@@ -332,21 +357,21 @@ function confirm_deletion() {
 
 <p align=center><B>EJEMPLARES ASIGNADOS</B></p> 
 <table class="tablaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
-	<tr valign="middle" class="tablaresultadoTitle">
-		<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td>
+	<tr class="tablaresultadoTitle">
+		<th width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+		<th>
 			<a class="click" id="checkAllReservas"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
-		</td>
-		<td>T&iacute;tulo</td>
- 		<td>Autor</td>
-		<td>C. Barra</td>
-  		<td>Sig. Top.</td>
-		<td>Ed.</td>
-		<td>Vol.</td> 
-		<td>Vencimiento</td>
-		<td width="10%">Retira en</td>
-		<td width="10%">Cancelar</td>
-		<td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		</th>
+		<th>T&iacute;tulo</th>
+ 		<th>Autor</th>
+		<th>C. Barra</th>
+  		<th>Sig. Top.</th>
+		<th>Ed.</th>
+		<th>Vol.</th> 
+		<th>Vencimiento</th>
+		<th width="10%">Retira en</th>
+		<th width="10%">Cancelar</th>
+		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
  	</tr>
 <!-- TMPL_LOOP NAME="realreserves" -->
 	<tr class="inputFontNormal" align="center">
@@ -405,7 +430,7 @@ function confirm_deletion() {
 </table>
 
 <p align=center>
-	<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:confirm_prestamo();return false;">
+	<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:prestar();return false;">
 </p>
 <!-- /TMPL_IF --> <!-- FIN IF realreserves -->
 
@@ -417,13 +442,13 @@ function confirm_deletion() {
 
 <table class="tablaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 	<tr valign=middle class="tablaresultadotitle">
-		<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td>T&iacute;tulo</td>
- 		<td>Autor</td>
-		<td>Edici&oacute;n</td>
- 		<td>Volumen</td>
- 		<td>Cancelar</td>
-		<td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<th width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+		<th>T&iacute;tulo</th>
+ 		<th>Autor</th>
+		<th>Edici&oacute;n</th>
+ 		<th>Volumen</th>
+ 		<th>Cancelar</th>
+		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
 	</tr>
 <!-- TMPL_LOOP NAME="waiting" -->
 	<tr align="center" class="inputFontNormal">

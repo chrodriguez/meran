@@ -1570,7 +1570,7 @@ sub cantidadItem(){
 buscarNivel3
 Busca la informacion del nivel 3 perteneciente a un documento por su id3.
 =cut
-sub buscarNivel3(){
+sub buscarNivel3{
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel3 WHERE id3 = ?";

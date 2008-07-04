@@ -903,7 +903,7 @@ sub prestamosPorUsuario {
 		#Obtengo los datos del autor
 		my $autor=C4::Search::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
-
+		$data->{'edicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'id2'},"250","a","2");
 		$currentissues{$counter} = $data;
 		$counter++;
 	}

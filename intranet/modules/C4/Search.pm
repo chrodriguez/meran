@@ -4913,13 +4913,15 @@ sub availDetail
 }
 
 #Dado un itemnumber devuelve los datos del item
+#SE puede cambiar por buscarNivel3 de C4::AR::Catalogacion.pm
 sub itemdata2
 {       
-        my ($itemnumber) = @_;
+        my ($id3) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT barcode,homebranch,bulk,holdingbranch,itemnotes from items where itemnumber='$itemnumber' ";
+        my $query = "SELECT barcode,homebranch,signatura_topografica,holdingbranch FROM nivel3 WHERE id3=?";
+	
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($id3);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
