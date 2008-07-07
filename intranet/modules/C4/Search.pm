@@ -23,6 +23,7 @@ use DBI;
 use C4::Context;
 use C4::AR::DictionarySearch; #Luciano: Busqueda por diccionario
 use C4::AR::Reservas; 
+use C4::AR::Busquedas; 
 use C4::AR::Issues;
 use C4::AR::VirtualLibrary; #Matias: Bilbioteca Virtual
 use C4::AR::AnalysisBiblio; #Matias: Analiticas
@@ -142,7 +143,7 @@ on what is passed to it, it calls the appropriate search function.
 	&mostrarPaises		&darPais
 	
 	
-	&getautor &getautoresAdicionales &getColaboradores
+	 &getautoresAdicionales &getColaboradores
 	
 	&buscarCiudades
 	&buscarCiudadesMasUsadas
@@ -4787,19 +4788,7 @@ sub getLevel
         $sth->finish();
         return $res;
 }
-#Manejo de Autores, colaboradores y autores adicionales para permitir el uso de control de autoridades
-sub getautor{
-    my ($idAutor) = @_;
-    my @result;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select id,apellido,nombre,completo from autores where id = ?");
-    $sth->execute($idAutor);
-    my $data1 =$sth->fetchrow_hashref; 
-    my @result;
-    push(@result,$data1);
-    $sth->finish();
-    return($data1);
- }
+
 
  sub getautoresAdicionales{
     my ($biblionumber) = @_;

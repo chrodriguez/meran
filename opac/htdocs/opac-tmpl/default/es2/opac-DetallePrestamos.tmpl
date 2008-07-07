@@ -16,32 +16,6 @@
 <table width="100%" align="center"  border="0" cellpadding="0" cellspacing="0" >
 <tr>
 <td valign="top">
-<!-- TMPL_IF NAME="sanciones_loop" -->
-<table cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td>
-			<font color="red" size="3"><b>Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo: </font></b>
-			<font color="red" size="2"><b>
-			<!-- TMPL_LOOP NAME="sanciones_loop" -->
-		  	<!-- TMPL_IF NAME="description" -->
-				<li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-		</font></b>
-			
-			</td>
-	</tr>
-</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="no_user_course" -->
-        <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                        <td>
-                                <font color="red" size="3"><b>Disculpe, no puede efectuar renovaciones porque usted no ha realizado a&uacute;n el curso para usuarios.</b></font>
-                        </td>
-                </tr>
-        </table>
-<!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="vencimientos" -->
         <table cellpadding="0" cellspacing="0" border="0">
@@ -56,11 +30,12 @@
 <!-- TMPL_IF NAME="issues_count" -->
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">
- <td colspan=7 align="center" class="bordetabla" borde=1><b>Pr&eacute;stamos </b>
- </td>
-</tr>
-<tr  class="bordetabla" bordercolor="#f2f2f2">
+  <tr bordercolor="#f2f2f2">
+	<td colspan=7 align="center" class="bordetabla" borde=1><b>Pr&eacute;stamos </b>
+ 	</td>
+  </tr>
+
+  <tr class="bordetabla" bordercolor="#f2f2f2">
 	<th>T&iacute;tulo</th>
 	<th>Autor</th>
 	<th>C&oacute;digo de Barras</th>
@@ -68,51 +43,75 @@
 	<th>Volumen</th>
 	<th>Fechas de Pr&eacute;stamo</th>
 	<th>Vencimiento</th>
-</tr>
+  </tr>
 <!-- TMPL_LOOP NAME="ISSUES" -->
-<tr  class="tope" bordercolor="#f2f2f2">
-<td class="impar"><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar detalle"><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
-</td>
-<td class="impar"><!-- TMPL_IF NAME="autor" -->
-	<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idautor' -->" >
-	<!-- TMPL_VAR NAME="autor" -->
-	</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-</td>
-<!--	<td><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="itemtype" --> </td> --> 
-<td class="impar" align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" -->
-<!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="signatura_topografica" --> <!-- TMPL_VAR NAME="signatura_topografica" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF --> 
-</td>
-<td align=center class="impar" align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-</td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="date_due" --> <!-- TMPL_VAR NAME="date_due" -->
-<!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="date_due" -->
-	<font color="<!-- TMPL_VAR NAME='color' -->"> 	<!-- TMPL_VAR NAME="date_fin" --> </font>
-<!-- TMPL_IF NAME="CirculationEnabled" --> 
-       <!-- TMPL_IF NAME="renew" --><br>
-		<a class="click"
-		onClick="renovar(<!-- TMPL_VAR NAME='id3' -->);">Renovar</a>
+  <tr class="tope" bordercolor="#f2f2f2">
+	<td class="impar">
+		<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar detalle">
+			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->
+		</a>
+	</td>
+	<td class="impar">
+	<!-- TMPL_IF NAME="autor" -->
+		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idautor' -->" >
+		<!-- TMPL_VAR NAME="autor" -->
+		</a>
+	<!-- TMPL_ELSE -->
+		&nbsp;
 	<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-<!-- TMPL_ELSE --> 
-	- 
-<!-- /TMPL_IF -->
-</td>
-</tr>
+	</td>
+	<td class="impar" align="center" >
+	<!-- TMPL_IF NAME="barcode" --> 
+		<!-- TMPL_VAR NAME="barcode" -->
+	<!-- TMPL_ELSE --> 
+		- 
+	<!-- /TMPL_IF -->
+	</td>
+	<td class="impar" align="center" >
+	<!-- TMPL_IF NAME="signatura_topografica" --> 
+		<!-- TMPL_VAR NAME="signatura_topografica" --> 
+	<!-- TMPL_ELSE -->
+		-
+	<!-- /TMPL_IF --> 
+	</td>
+	<td align=center class="impar" align="center" >
+	<!-- TMPL_IF NAME="volume" -->
+		<!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" -->
+	<!-- TMPL_ELSE --> 
+		- 
+	<!-- /TMPL_IF -->
+	</td>
+	<td class="impar" align="center" >
+	<!-- TMPL_IF NAME="date_due" --> 
+		<!-- TMPL_VAR NAME="date_due" -->
+	<!-- TMPL_ELSE --> 
+		- 
+	<!-- /TMPL_IF -->
+	</td>
+	<td class="impar" align="center" >
+	<!-- TMPL_IF NAME="date_due" -->
+		<font color="<!-- TMPL_VAR NAME='color' -->"><!-- TMPL_VAR NAME="date_fin" --></font>
+		<!-- TMPL_IF NAME="CirculationEnabled" --> 
+       			<!-- TMPL_IF NAME="renew" --><br>
+				<a class="click" onClick="renovar(<!-- TMPL_VAR NAME='id3' -->);">Renovar</a>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --> 
+		- 
+	<!-- /TMPL_IF -->
+	</td>
+  </tr>
 <!-- /TMPL_LOOP -->
 </table>
 <br>
 <!-- TMPL_ELSE -->
-<p>No tiene ejemplares prestados.</p>
+	<p>No tiene ejemplares prestados.</p>
 <!-- /TMPL_IF -->
 
 
 </td>
   </tr>
 </table>
-
-</div>
 
 
 

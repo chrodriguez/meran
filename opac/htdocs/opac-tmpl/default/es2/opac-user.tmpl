@@ -2,10 +2,10 @@
 
 <script language=javascript>
 
-	function detalleMaterialEnEspera(id1){
-		$('#datosUsuario').slideUp('slow');
-		detalle(id1);
-	}
+// 	function detalleMaterialEnEspera(id1){
+// 		$('#datosUsuario').slideUp('slow');
+// 		detalle(id1);
+// 	}
 
 
 	$(document).ready(function() {
@@ -27,6 +27,33 @@
 	<font class="fontmsg"></font><br>
 </div>
 
+<!-- Tabla de Sanciones -->
+<table width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+	<td valign="top">
+<!-- TMPL_IF NAME="sanciones_loop" -->
+		<table cellpadding="0" cellspacing="0" border="0">
+		  <tr>
+			<td>
+			  <font color="red" size="3">
+				<b>Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo:
+			  </font></b>
+			  <ul>
+			<!-- TMPL_LOOP NAME="sanciones_loop" -->
+			  <!-- TMPL_IF NAME="description" -->
+				<li class="sancionesOPAC"><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.
+				</li>
+			  <!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			  <ul>
+			</td>
+		  </tr>
+		</table>
+<!-- /TMPL_IF -->
+	</td>
+  </tr>
+</table>
+
 <!-- para mostrar los resultados de las busquedas -->
 <div id="result"></div>
 <div id="resultHistoriales"></div>
@@ -34,21 +61,19 @@
 
 <table width="98%" cellspacing="0" cellpadding="0" border="0" align="center">
 <tbody>
-
-
-<tr>
-<td valign="top">
-<table class="tope" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
-	<tr><td>
+  <tr>
+	<td valign="top">
+	<table class="tope" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
+	  <tr><td>
 		<div id="detallePrestamos"></div>
-	<tr><td>
+	  <tr><td>
 		<div id="detalleReservas"></div>
-	<tr><td>
-</table>
-</td>
-<td width="20%" valign="top">
+	  <tr><td>
+	</table>
+	</td>
+	<td width="20%" valign="top">
 	<table align="center" cellpadding="5" cellspacing="0" border="0" width="100%" valign="top">
-	<tr >
+	<tr>
 		<td class="bordetabla" align="Center">
 		<b>Datos del usuario:</b></td>
 	</tr>
@@ -100,7 +125,7 @@ avisar al personal de la Biblioteca.
 <center>
 
 
-<a    onMouseOut="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png')" onMouseOver="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-fotobis.png')" >
+<a onMouseOut="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png')" onMouseOver="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-fotobis.png')" >
 <input name="delpic" id="delpic" type="image" onClick="document.foto.submit();" value="Eliminar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png" border="0"  >
 </a>
 </center>
@@ -134,11 +159,6 @@ avisar al personal de la Biblioteca.
 
 
 
-
-
-
-
-
 <table width="100%" align="center" class="top" valign="top">
 <tr>
 <td width="80%"  valign="top">
@@ -146,260 +166,18 @@ avisar al personal de la Biblioteca.
 <table width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
 <tr>
 <td valign="top">
-<!-- TMPL_IF NAME="sanciones_loop" -->
-<table cellpadding="0" cellspacing="0" border="0">
-	<tr>
-		<td>
-			<font color="red" size="3"><b>Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo: </font></b>
-			<font color="red" size="2"><b>
-			<!-- TMPL_LOOP NAME="sanciones_loop" -->
-		  	<!-- TMPL_IF NAME="description" -->
-				<li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-		</font></b>
-			
-			</td>
-	</tr>
-</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="no_user_course" -->
-        <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                        <td>
-                                <font color="red" size="3"><b>Disculpe, no puede efectuar renovaciones porque usted no ha realizado a&uacute;n el curso para usuarios.</b></font>
-                        </td>
-                </tr>
-        </table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="vencimientos" -->
-        <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                        <td>
-                                <font color="red" size="3"><b>Usted tiene ejemplares vencidos</b></font>
-                        </td>
-                </tr>
-        </table>
-<!-- /TMPL_IF -->
-
-
-
-<!-- TMPL_IF NAME="issues_count" -->
-
-<!-- <p>Usted tiene <!-- TMPL_VAR NAME="issues_count" --> ejemplar(es) actualmente prestado(s).</p> -->
-<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">
- <td colspan=7 align="center" class="bordetabla" borde=1><b>Pr&eacute;stamos </b>
- </td>
-</tr>
-<tr  class="bordetabla" bordercolor="#f2f2f2">
-	<th>T&iacute;tulo</th>
-	<th>Autor</th>
-	<th>C&oacute;digo de Barras</th>
-	<th>Signatura Topogr&aacute;fica</th>
-	<th>Volumen</th>
-	<th>Fechas de Pr&eacute;stamo</th>
-	<th>Vencimiento</th>
-</tr>
-<!-- TMPL_LOOP NAME="ISSUES" -->
-<tr  class="tope" bordercolor="#f2f2f2">
-<td class="impar"><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar detalle"><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
-</td>
-<td class="impar"><!-- TMPL_IF NAME="autor" -->
-	<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idautor' -->" >
-	<!-- TMPL_VAR NAME="autor" -->
-	</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-</td>
-<!--	<td><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="itemtype" --> </td> --> 
-<td class="impar" align="center" ><!-- TMPL_IF NAME="barcode" --> <!-- TMPL_VAR NAME="barcode" -->
-<!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="signatura_topografica" --> <!-- TMPL_VAR NAME="signatura_topografica" --> <!-- TMPL_ELSE -->-<!-- /TMPL_IF --> 
-</td>
-<td align=center class="impar" align="center" >  <!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-</td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="date_due" --> <!-- TMPL_VAR NAME="date_due" -->
-<!-- TMPL_ELSE --> - <!-- /TMPL_IF --></td>
-<td class="impar" align="center" ><!-- TMPL_IF NAME="date_due" -->
-	<font color="<!-- TMPL_VAR NAME='color' -->"> 	<!-- TMPL_VAR NAME="date_fin" --> </font>
-<!-- TMPL_IF NAME="CirculationEnabled" --> 
-       <!-- TMPL_IF NAME="renew" --><br>
-		<a href="opac-renew.pl?id3=<!-- TMPL_VAR NAME='id3' -->&bornum=<!-- TMPL_VAR NAME='borrowernumber' -->">Renovar</a>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-<!-- TMPL_ELSE --> 
-	- 
-<!-- /TMPL_IF -->
-</td>
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-<br>
-<!-- TMPL_ELSE -->
-<p>No tiene ejemplares prestados.</p>
-<!-- /TMPL_IF -->
-
-
-<!-- TMPL_IF NAME="waiting_count" -->
-<!--<p> Usted tiene <!-- TMPL_VAR NAME="waiting_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</p>-->
-
-<div id="MaterialEnEspera">
-</div>
-
-<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
-<tr valign="top">
- <td colspan="7" align="center" class="bordetabla" borde=1>
-<b>Material para retirar</b>
- </td>
-</tr>
-
-<tr class="bordetabla">
- <th>T&iacute;tulo</th>
- <th>Autor</th>
- <th>Edici&oacute;n</th>
- <th>Disponible desde </th>
- <th>Disponible hasta </th> 
- <th>Retira en</th>
- <th>Acci&oacute;n</th>
-</tr>
-<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-<!-- TMPL_LOOP NAME="WAITING" -->
-<tr bordercolor="#f2f2f2">
-<td class="impar">
-	<b><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
-	<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-	<!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
-	</a></b>
-</td>
-<td class="impar">
-  <!-- TMPL_IF NAME="rautor" -->
-	<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='rautor' -->" >
-		<!-- TMPL_VAR NAME="autor" -->
-	</a>
-  <!-- TMPL_ELSE -->
-	&nbsp;
-  <!-- /TMPL_IF -->
-</td> 
-<td align=center class="impar">  
-	<!-- TMPL_IF NAME="redicion" --> 
-	<!-- TMPL_VAR NAME="redicion" --> - 
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="rpublicationyear" -->&nbsp;(<!-- TMPL_VAR NAME="rpublicationyear" -->)<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" -->
-	<!--/TMPL_IF-->
-</td>
-<td class="impar" align="center">
-	<!-- TMPL_IF NAME="rnotificationdate" --> 
-		<!-- TMPL_VAR NAME="rnotificationdate" -->
-	<!-- TMPL_ELSE --> 
-		- 
-	<!-- /TMPL_IF -->
-</td>
-<td class="impar" align="center">
-	<!-- TMPL_IF NAME="rreminderdate" -->
-		<font color="<!-- TMPL_VAR NAME='color' -->"><!-- TMPL_VAR NAME="rreminderdate" --></font>
-	<!-- TMPL_ELSE --> 
-		- 
-	<!-- /TMPL_IF -->
-</td>
-
-
-<td class="impar">
-	<b><!-- TMPL_VAR NAME="rbranch" --></b>
-</td>
-<td class="impar" align="center"> 
-	<!-- TMPL_IF NAME="CirculationEnabled" -->
-		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
-		<a class="click"
-		onClick="DetalleReservas()">CancelarAjax</a>
-	<!-- TMPL_ELSE -->
-		No disponible
-	<!-- /TMPL_IF -->
- </td>
-
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-<br>
-<!-- /TMPL_IF -->
-
-
-
-<!-- TMPL_IF NAME="reserves_count" -->
-<!-- <p>Usted tiene <!-- TMPL_VAR NAME="reserves_count" --> reserva(s) en espera.</p> -->
-
-<table  width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-<tr bordercolor="#f2f2f2">    
- <td colspan="4" align="center" class="bordetabla" borde=1>
-<b> Material en espera</b>
-
- </td>
-</tr> 	
-<tr  class="bordetabla"  bordercolor="#f2f2f2">
- <th>T&iacute;tulo</th>
- <th>Autor</th>
- <th>Edici&oacute;n</th>
- <th>Acci&oacute;n </th>
-</tr>
-<!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-<!-- TMPL_LOOP NAME="RESERVES" -->
-<tr border="1" bordercolor="#f2f2f2">
- <td class="impar">
-	<a class="click" onClick="detalleMaterialEnEspera(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
-		<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-		<!-- TMPL_IF NAME="runititle" -->
-			:&nbsp;<!-- TMPL_VAR NAME="runititle" -->
-		<!-- /TMPL_IF -->
-  	</a>
- </td>
- <td class="impar">
-	<!-- TMPL_IF NAME="rautor" -->
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='rautor' -->" >
-		<!-- TMPL_VAR NAME="autor" -->
-		</a>
-	<!-- TMPL_ELSE -->
-		&nbsp;
-	<!-- /TMPL_IF -->
- </td>
- <td align=center class="impar"> 
-	<!-- TMPL_IF NAME="redicion" --> 
-		<!-- TMPL_VAR NAME="redicion" -->
-	<!-- TMPL_ELSE --> 
-		- 
-	<!-- /TMPL_IF -->
- </td>
-<td class="impar" align="center">
-	<!-- TMPL_IF NAME="CirculationEnabled" -->
-		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
-	<!-- TMPL_ELSE -->
-		No disponible
-	<!-- /TMPL_IF -->
- </td>
-</tr>
- <!-- /TMPL_LOOP -->
-</table>
-<br>
-<!-- /TMPL_IF -->
-
-
 
 <p align="center">
-
 	<a  class="click" onClick="mostrarHistorialPrestamos('<!-- TMPL_VAR NAME='bornum' -->');">
           Historial de Pr&eacute;stamos
   	</a>
-
 </p>
 
 <!-- TMPL_IF NAME=showHistoricReserves -->
 <p align="center">
-
   	<a  class="click" onClick="mostrarHistorialReservas('<!-- TMPL_VAR NAME='bornum' -->');">
          	Historial de Reservas
   	</a>
-		  
 </p>
 <!-- /TMPL_IF -->
 	
@@ -413,103 +191,6 @@ avisar al personal de la Biblioteca.
 </p>
 
 </td><td width="20%" valign="top">
-
-<table align="center" cellpadding="5" cellspacing="0" border="0" width="100%" valign="top">
-	<tr >
-		<td class="bordetabla" align="Center">
-		<b>Datos del usuario:</b></td>
-	</tr>
-	<!-- TMPL_IF NAME="foto_name" -->
-	<tr>
-		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"></td>
-	</tr>
-	<!-- /TMPL_IF -->
-<tr><td class="impar" >Tarjeta de la biblioteca: <b><!-- TMPL_VAR NAME="cardnumber" --></b> </td></tr>
-<tr><td class="impar" >Apellido y nombres: <b><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR NAME="firstname" --> </b></td></tr>
-<tr><td class="impar" > Documento: <b> <!-- TMPL_VAR NAME="documenttype" -->  <!-- TMPL_VAR NAME="documentnumber" --></b></td></tr>
-<!-- TMPL_IF NAME="studentnumber" -->
-<tr><td class="impar" >Legajo: <b><!-- TMPL_VAR NAME="studentnumber" --></b> </td></tr>
-<!-- /TMPL_IF -->
-<tr><td class="impar" >Categor&iacute;a: <b><!-- TMPL_VAR NAME="cat" --></b> </td></tr>
-<!-- TMPL_IF NAME="streetaddress" -->
-<tr><td class="impar" >Direcci&oacute;n: <b><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="physstreet" -->
-<tr><td class="impar" >Domicilio y localidad de origen: <b><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="streetcity" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="phone" -->
-<tr><td class="impar" >Tel&eacute;fono: <b><!-- TMPL_VAR NAME="phone" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="emailaddress" -->
-<tr><td class="impar" >Mail: <b><!-- TMPL_VAR NAME="emailaddress" --></b></td></tr>
-<!-- /TMPL_IF -->
-<tr><td class="impar" >&nbsp;</td></tr>
-<!--Esto es un agregado de Einar para validar el tema de los usuarios que puedan ser locales o no, o sea que la biblioteca`pueda o no cambiar los datos de los alumnos, dependera de la variable Guarani que ira en el system preferences de Koha--> 	
-<tr><td class="impar">
-<!-- TMPL_IF NAME="updatedata" -->
-Si alg&uacute;n dato es incorrecto o debe ser modificado,
-avisar al personal de la Biblioteca.
-<!-- TMPL_ELSE --> 
-		Alguno de nuestros registros es incorrecto? Para solucionarlo: <br> <a href="/cgi-bin/koha/opac-userupdate.pl">Actualizar Registro</a>
-        <!-- /TMPL_IF -->
-</td></tr>
-<!-- TMPL_IF name="UploadPictureFromOPAC" -->
-         <!-- TMPL_IF name="mensaje_error_foto" -->
-         <tr><td span=100% class="impar" >
-                <font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
-         </td></tr>
-         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="foto_name" -->
-          <tr><td span=100% class="impar" >
-                <form name="foto" action="/cgi-bin/koha/upload.pl" method=post>
-                        <input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
-                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-<center>
-
-
-<a    onMouseOut="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png')" onMouseOver="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-fotobis.png')" >
-<input name="delpic" id="delpic" type="image" onClick="document.foto.submit();" value="Eliminar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png" border="0"  >
-</a>
-</center>
-                </form>
-          </td></tr>
-        <!-- TMPL_ELSE -->
-          <tr><td span=100% align="center" class="impar" >
-                <form action="/cgi-bin/koha/upload.pl" method=post enctype="multipart/form-data">
-                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-
-<a  onMouseOut="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/upload.png')" onMouseOver="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/uploadbis.png')">
-<input name="up" id="up" type="image" value="Subir Foto"  src="<!-- TMPL_VAR NAME='themelang' -->/images/upload.png" border="0">
-</a>
-                        <input type=file name="picture">
-                </form>
-           </td></tr>
-         <!-- /TMPL_IF -->
-  <!-- /TMPL_IF -->
-	
-<!-- Hasta aca llega el agregaro, en el original estaba solo el tema del ELSE -->
-		</font>
-		</td>
-	</tr>
-</table>
-
-<script>
-function confirm_cancelation2(num) {
-        var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-        if (is_confirmed) {
-                window.location="/cgi-bin/koha/opac-cancelreserv.pl?id2="+ num;
-        }
-}
-
-function confirm_cancelation(num,volver) {
-        var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-        if (is_confirmed) {
-                window.location="/cgi-bin/koha/opac-cancelreserv.pl?id2="+ num +"&volver="+volver;
-        }
-}
-
-</script>
-
 
     </td>
   </tr>

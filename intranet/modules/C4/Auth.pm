@@ -353,6 +353,7 @@ sub checkauth {
 		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
 			$loggedin = 1;
 			#WARNING: REVISAR ver si es solo de intranet el usuario q se loguear Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
+# Miguel- esta consutla no deberia formar parte de una transaccion????
 			my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
 			$sth->execute();
 			my $lastlogin= $sth->fetchrow;
@@ -388,27 +389,12 @@ sub checkauth {
 #-------------------------------------- SECCION CRITICA	--------------------------------------------------------
 			#Se borran las reservas de los usuarios sancionados			
 			if ($type eq 'opac') {
-=item
-				#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-				my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
-				my $regular= &C4::AR::Usuarios::esRegular(getborrowernumber($userid));
-				
-				if ($isSanction || !$regular ){
-					&C4::AR::Reservas::cancelar_reservas($userid,getborrowernumber($userid));
-				}
-=cut
+
 				t_operacionesDeOPAC($userid);
+
 			} else {
+
 				t_operacionesDeINTRA($userid, $cardnumber);
-=item
-				#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-				&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
-				#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-				&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reserves::FindNotRegularUsersWithReserves());
-				&C4::AR::Reserves::eliminarReservasVencidas($userid);	
-				#Si se logueo correctamente en intranet entonces guardo la fecha
-				$dbh->do("update borrowers set lastlogin=now() where cardnumber = ?", undef, $cardnumber);
-=cut
 			}
 #--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
 		} else {

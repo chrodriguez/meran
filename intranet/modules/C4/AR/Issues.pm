@@ -84,6 +84,9 @@ FIXME
 );
 
 
+=item
+Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
+=cut
 sub t_devolver {
 	my($params)=@_;
 	my $codMsg;
@@ -111,8 +114,6 @@ sub t_devolver {
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
 	return ($error, $codMsg, $message);
 }
-
-
 
 =item
 la funcion devolver recibe una hash y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.

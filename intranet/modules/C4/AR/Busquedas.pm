@@ -1,6 +1,6 @@
 package C4::AR::Busquedas;
 
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -1915,15 +1915,19 @@ sub buscarDatoDeCampoRepetible {
 
 
 sub getautor {
+
     my ($idAutor) = @_;
     my @result;
     my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select id,apellido,nombre,completo from autores where id = ?");
+    my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
+				FROM autores WHERE id = ?");
     $sth->execute($idAutor);
+
     my $data1 =$sth->fetchrow_hashref; 
     my @result;
     push(@result,$data1);
     $sth->finish();
+
     return($data1);
  }
 
