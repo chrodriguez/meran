@@ -1,9 +1,6 @@
 #!/usr/bin/perl
-
 #written 27/01/2000
 #script to display borrowers reading record
-
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -24,18 +21,14 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Date;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
-use C4::AR::Issues;
-use HTML::Template;
-use C4::AR::Estadisticas;
 
 my $input=new CGI;
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "members/historialPrestamos.tmpl",
+= get_template_and_user({template_name => "members/historialPrestamosResult.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
@@ -43,20 +36,19 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
-my $bornum=$input->param('bornum');
-my $orden=$input->param('order')||'date_due';
-my $ini=$input->param('ini')||'';
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $bornum=$obj->{'borrowernumber'};
+my $orden=$obj->{'orden'}||'date_due';
+my $ini=$obj->{'ini'}||'';
+my $funcion=
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-#get borrower details
-my $data=borrdata('',$bornum);
 
 my ($cant,$issues)=allissues($bornum,$ini,$cantR,$orden);
 
-&C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,"consultar");
+&C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
 
 my @loop_reading;
-my $classe='par';
 for (my $i=0;$i< $cantR;$i++){
    if ($issues->[$i]->{'id1'}){
  	my %line;
@@ -67,7 +59,7 @@ for (my $i=0;$i< $cantR;$i++){
 	$line{id1}=$issues->[$i]->{'id1'};
 	$line{id2}=$issues->[$i]->{'id2'};
 	$line{id3}=$issues->[$i]->{'id3'};
-	$line{bulk}=$issues->[$i]->{'signatura_topografica'};
+	$line{signatura_topografica}=$issues->[$i]->{'signatura_topografica'};
 	$line{barcode}=$issues->[$i]->{'barcode'};
  	$line{date_due}=$issues->[$i]->{'date_due'};
     	$line{date_fin} = $issues->[$i]->{'date_fin'};
@@ -82,17 +74,8 @@ for (my $i=0;$i< $cantR;$i++){
 
 $template->param(
 		cant  => $cant,
-		title => $data->{'title'},
-		initials => $data->{'initials'},
-		surname => $data->{'surname'},
 		bornum => $bornum,
-		firstname => $data->{'firstname'},
-		cardnumber => $data->{'cardnumber'},
 		showfulllink => ($cant > 50),
-		orden =>$orden,
 		loop_reading => \@loop_reading
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
-

@@ -30,8 +30,6 @@ require Exporter;
 
 use C4::Search;
 use CGI;
-use C4::Output;
-use HTML::Template;
 use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -39,27 +37,27 @@ use C4::Date;
 use C4::AR::Estadisticas;
 
 my $input = new CGI;
-my $dateformat = C4::Date::get_date_format();
-my $itemnumber=$input->param('itemnum');
-my $bibitemnum=$input->param('bibit');
-my $biblionum=$input->param('bib');
-my $bulk=$input->param('bulk');
-my $barcode=$input->param('barcode');
-
-
-my $data=bibitemdata($bibitemnum);
-my $itemdata=itemdata2($itemnumber);
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => 'item-detail.tmpl',
-	query           => $input,
-	type            => "intranet",
-	authnotrequired => 0,
-	flagsrequired   => {circulate => 1},
-    });
+			template_name   => 'item-detail.tmpl',
+			query           => $input,
+			type            => "intranet",
+			authnotrequired => 0,
+			flagsrequired   => {circulate => 1},
+    			});
+
+my $dateformat = C4::Date::get_date_format();
+my $id3=$input->param('id3');
+my $id2=$input->param('id2');
+my $id1=$input->param('id1');
+my $signatura_topografica=$input->param('signatura_topografica');
+my $barcode=$input->param('barcode');
+
+my $data=bibitemdata($id2);
+my $itemdata=itemdata2($id3);
 
 my %inputs;
-my ($count, $detail)=availDetail($itemnumber);
+my ($count, $detail)=availDetail($id3);
 my @results;
 
 for (my $i=0; $i < $count; $i++){
@@ -92,18 +90,18 @@ my $orden;
 my $tipoPrestamo;
 my $tipoOperacion;
 
-my ($cant,@resultsdata)=&historicoCirculacion('ok',$fechaInicio,$fechaFin,'-1',$itemnumber,$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+my ($cant,@resultsdata)=&historicoCirculacion('ok',$fechaInicio,$fechaFin,'-1',$id3,$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
 $template->param(DETAIL => \@results,
 		HISTORICO => \@resultsdata,
-		title => $data->{'title'},
-	        author => $data->{'author'},
+		titulo => $data->{'titulo'},
+	        autor => $data->{'autor'},
 		itemnotes => $itemdata->{'itemnotes'},
-		biblionumber => $data->{'biblionumber'},
-        	biblioitemnumber => $data->{'biblioitemnumber'},
-		itemnumber => $itemnumber,
+		id1 => $data->{'id1'},
+        	id2 => $data->{'id2'},
+		id3 => $id3,
 		barcode => $barcode,
-		bulk => $bulk,
+		signatura_topografica => $signatura_topografica,
 		dateselected => $dateSelected,
 		dateselectedEnd => $dateSelectedEnd,
 		);

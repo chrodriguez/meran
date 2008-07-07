@@ -6,18 +6,19 @@
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
-				};
+var dp_ini,dp_fin;
+window.onload = function () {
+	dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
+	dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
+};
+
 </script>
 
  <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"  ><tr><td>
-<p class="pagetitle"><!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</p>
+<p class="pagetitle"><!-- TMPL_VAR Name="titulo" --> (<!-- TMPL_VAR Name="autor" -->)</p>
 <p class="inputFontNormal">
 <b>C&oacute;digo de Barras:</b> <!-- TMPL_VAR NAME="barcode" --><br>
-<b>Signatura Topogr&aacute;fica:</b> <!-- TMPL_VAR NAME="bulk" --><br>
+<b>Signatura Topogr&aacute;fica:</b> <!-- TMPL_VAR NAME="signatura_topografica" --><br>
 <b>Notas:</b> <!-- TMPL_VAR NAME="itemnotes" -->
 </p>
 </td></tr>
@@ -55,10 +56,10 @@ DETALLE DE DISPONIBILIDAD:<br>
 <p align="center" class="inputFontNormal"><b>Historico de circulaci&oacute;n</b></p>
 
 <form  name="unidad"  method=post action="item-detail.pl">
-	<input type="hidden" name="bib" value=" <!-- TMPL_VAR NAME='biblionumber' -->">
-	<input type="hidden" name="bibit" value=" <!-- TMPL_VAR NAME='biblioitemnumber' -->">
-	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME='itemnumber' -->">
-	<input type="hidden" name="bulk" value="<!-- TMPL_VAR NAME='bulk' -->">
+	<input type="hidden" name="id1" value=" <!-- TMPL_VAR NAME='id1' -->">
+	<input type="hidden" name="id2" value=" <!-- TMPL_VAR NAME='id2' -->">
+	<input type="hidden" name="id3" value="<!-- TMPL_VAR NAME='id3' -->">
+	<input type="hidden" name="signatura_topografica" value="<!-- TMPL_VAR NAME='signatura_topografica' -->">
 	<input type="hidden" name="barcode" value=" <!-- TMPL_VAR NAME='barcode' -->">
 	<table border="0" cellspacing="0" cellpadding="0">
   		<tr>
@@ -83,7 +84,7 @@ DETALLE DE DISPONIBILIDAD:<br>
 			</td>
 			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td valign="center">
-				<a  onClick='unidad.submit()'><img   src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0"></a>
+				<a  onClick='unidad.submit()'><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
 			</td>
 		</tr>
 	</table>
@@ -94,22 +95,20 @@ DETALLE DE DISPONIBILIDAD:<br>
 <table border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 		</td>
-
 		<th>Usuario</th>
 		<th>Responsable</th>
 		<th>Fecha</th>
 		<th>Operaci&oacute;n</th>
-	
 		<td align="right" valign="top" width="1%">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
 		</td>
 	</tr>
 
 <!-- TMPL_LOOP NAME=HISTORICO -->
 
-  	<tr align='center'>
+  	<tr align='center' class="inputFontNormal">
   		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 
 		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 

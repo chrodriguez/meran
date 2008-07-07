@@ -38,8 +38,6 @@ use C4::Search;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Reservas;
-# use C4::Circulation::Circ2;
-# use C4::Koha;
 use C4::AR::Issues;
 use C4::AR::Sanctions;
 

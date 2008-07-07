@@ -30,7 +30,7 @@ use C4::Search;
 
 my $input= new CGI;
 my $bornum = $input->param('bornum');
-my $borrewer= &borrdata("",$bornum);
+my $borrewer= C4::AR::Usuarios::getBorrowerInfo($bornum);
 
 my $libreD=C4::Context->preference("libreDeuda");
 my @array=split(//, $libreD);

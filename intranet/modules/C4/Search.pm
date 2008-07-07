@@ -2476,43 +2476,44 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 #'
 
 sub bibitemdata {
-    my ($bibitem) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select biblio.biblionumber,biblio.author as author,biblio.title as title,biblio.notes,biblioitems.notes as bnotes,biblioitems.biblioitemnumber as biblioitemnumber, biblioitems.volume,biblioitems.number,biblioitems.classification ,biblioitems.isbn,biblioitems.isbn2,biblioitems.lccn ,biblioitems.issn,biblioitems.dewey ,biblioitems.subclass,biblioitems.publishercode, biblioitems.publicationyear ,biblioitems.volumeddesc, biblioitems.illus ,biblioitems.pages ,biblioitems.size, biblioitems.place ,biblioitems.url ,biblioitems.seriestitle,itemtypes.description, itemtypes.itemtype,biblioitems.idCountry, biblioitems.idSupport, biblioitems.idLanguage  
-    
-    from biblio inner join  biblioitems on  biblio.biblionumber = biblioitems.biblionumber 
-        inner join itemtypes on biblioitems.itemtype = itemtypes.itemtype 
-        where biblioitemnumber = ? ");
+    my ($id2) = @_;
+    my $dbh= C4::Context->dbh;
+# biblio.notes,biblioitems.notes as bnotes, biblioitems.volume,biblioitems.number, biblioitems.isbn, biblioitems.isbn2, biblioitems.lccn, biblioitems.issn, biblioitems.dewey, biblioitems.subclass, biblioitems.publishercode, biblioitems.volumeddesc, biblioitems.illus, biblioitems.pages, biblioitems.size, biblioitems.url, biblioitems.seriestitle, FALTA!!!!
+    my $sth   = $dbh->prepare("SELECT n1.id1, autor, titulo, n2.id2, itemtypes.description,
+				itemtypes.itemtype, pais_publicacion, soporte,lenguaje,nivel_bibliografico,
+				anio_publicacion, ciudad_publicacion
+    				FROM nivel1 n1 INNER JOIN  nivel2 n2 ON n1.id1=n2.id1
+        			INNER JOIN itemtypes ON n2.tipo_documento = itemtypes.itemtype 
+        			WHERE id2 = ? ");
     my $data;
 
-   $sth->execute($bibitem);
+   $sth->execute($id2);
    $data = $sth->fetchrow_hashref;
 
    #MAtias Lenguaje Pais y Soporte
-   my $country=getCountry($data->{'idCountry'});
+   my $country=getCountry($data->{'pais_publicacion'});
    $data->{'country'}= $country->{'printable_name'};
    $data->{'idCountry'}= $country->{'iso'};
 
-   my $support=getSupport($data->{'idSupport'});
+   my $support=getSupport($data->{'soporte'});
    $data->{'support'}= $support->{'description'};
    $data->{'idSupport'}= $support->{'idSupport'};
 
-   my $language=getLanguage($data->{'idLanguage'});
+   my $language=getLanguage($data->{'lenguaje'});
    $data->{'language'}= $language->{'description'};
    $data->{'idLanguage'}= $language->{'idLanguage'};
 
 
-   my $level=getLevel($data->{'classification'});
+   my $level=getLevel($data->{'nivel_bibliografico'});
         $data->{'classification'}= $level->{'description'};
         $data->{'idclass'}= $level->{'code'};
 
-  $data->{'publishercode'}= publisherList($bibitem,$dbh); #agregado por Luciano
-  $data->{'isbncode'}= isbnList($bibitem,$dbh); #agregado por Einar
+  $data->{'publishercode'}= publisherList($id2,$dbh); #agregado por Luciano
+  $data->{'isbncode'}= isbnList($id2,$dbh); #agregado por Einar
 	
-  my $author=getautor($data->{'author'}); #agregado por Damian
-  $data->{'author'}=$author->{'completo'}; #agregado por Damian
-  
-   #                                                                                
+  my $author=getautor($data->{'autor'}); #agregado por Damian
+  $data->{'autor'}=$author->{'completo'}; #agregado por Damian
+
 
     $sth->finish;
     return($data);
@@ -2935,7 +2936,7 @@ sub allissues {
   my $dateformat = C4::Date::get_date_format();
   my $querySelectCount = " SELECT count(*) as cant ";
 
-  my $querySelect= " SELECT n1.titulo,n1.id1,n1.autor,a.completo,iss.date_due,iss.returndate, iss.id3,lastreneweddate,barcode,iss.renewals ";
+  my $querySelect= " SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
 
   my $queryFrom = " FROM nivel3 n3 INNER JOIN nivel2 n2";
   $queryFrom .= " ON (n3.id2 = n2.id2) ";
