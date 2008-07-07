@@ -2,7 +2,6 @@
 
 # $Id: moditem.pl,v 1.7 2003/03/18 09:52:30 tipaul Exp $
 
-
 #script to modify/delete biblios
 #written 8/11/99
 # modified 11/11/99 by chris@katipo.co.nz
@@ -30,16 +29,14 @@ require Exporter;
 
 use C4::Search;
 use CGI;
-use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
-use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-			template_name   => 'item-detail.tmpl',
+			template_name   => 'busquedas/detalleItem.tmpl',
 			query           => $input,
 			type            => "intranet",
 			authnotrequired => 0,
@@ -78,22 +75,9 @@ if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTA
 
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-my $dateSelected= $input->param('dateselected')||format_date($today,$dateformat);
-my $dateSelectedEnd= $input->param('dateselectedEnd')||format_date($today,$dateformat);
-
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'),$dateformat)||$today;
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateformat)||$today;
-
-my $ini;
-my $cantR;
-my $orden;
-my $tipoPrestamo;
-my $tipoOperacion;
-
-my ($cant,@resultsdata)=&historicoCirculacion('ok',$fechaInicio,$fechaFin,'-1',$id3,$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+my $today= format_date($today,$dateformat);
 
 $template->param(DETAIL => \@results,
-		HISTORICO => \@resultsdata,
 		titulo => $data->{'titulo'},
 	        autor => $data->{'autor'},
 		itemnotes => $itemdata->{'itemnotes'},
@@ -102,12 +86,7 @@ $template->param(DETAIL => \@results,
 		id3 => $id3,
 		barcode => $barcode,
 		signatura_topografica => $signatura_topografica,
-		dateselected => $dateSelected,
-		dateselectedEnd => $dateSelectedEnd,
+		today => $today,
 		);
 
-print $input->header(
-        -type => C4::Interface::CGI::Output::guesstype($template->output),
-        -expires=>'now'
-), $template->output;
-
+output_html_with_http_headers $input, $cookie, $template->output;

@@ -69,7 +69,7 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 		</td>
 
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
 		</td>
 		<td class="inputFontNormal"> 
 			<!-- TMPL_VAR NAME=firstname --> 
@@ -89,13 +89,11 @@ La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
 			<!-- TMPL_VAR NAME=vencimiento -->
 		</td>
 		<td class="inputFontNormal"> 
-		<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle de disponibilidad'>
-		<!-- TMPL_VAR NAME=barcode -->
-		</a>
+		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
 		</td>
 		<td class="inputFontNormal"> 
-		<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->">	
-		<!-- TMPL_VAR NAME=bulk -->
+		<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 -->">	
+		<!-- TMPL_VAR NAME=signatura_topografica -->
 		</a>
 		</td>
 		<td class="inputFontNormal"> 

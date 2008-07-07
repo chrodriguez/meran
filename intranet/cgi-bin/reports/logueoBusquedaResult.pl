@@ -29,13 +29,13 @@ my $fechaFin=$obj->{'fechaFin'};
 my $catUsuarios=$obj->{'catUsuarios'}||"SIN SELECCIONAR";
 my $orden= $obj->{'orden'}||'surname';
 my $funcion=$obj->{'funcion'};
-#************************************ prueba de paginador *******************************************
+
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #historial de busquedas desde OPAC
 my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden);
 C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
-#************************************ prueba de paginador *******************************************
+
 
 
 $template->param( 	resultsloop      => \@resultsdata,

@@ -1,0 +1,44 @@
+<center><!-- TMPL_VAR NAME=paginador --></center>
+<table class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
+		<th>Usuario</th>
+		<th>Responsable</th>
+		<th>Fecha</th>
+		<th>Operaci&oacute;n</th>
+		<td align="right" valign="top" width="1%">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=HISTORICO -->
+
+  	<tr align='center' class="inputFontNormal">
+  		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+
+		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
+				<!-- TMPL_VAR NAME=userCompleto -->
+			</a>
+		</td>
+  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
+			<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
+				<!-- TMPL_VAR NAME=nomCompleto -->
+			</a> 
+		</td>
+  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+			<!-- TMPL_VAR NAME=fecha -->
+		</td>
+  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
+			<!-- TMPL_VAR NAME=operacion -->
+			<!-- TMPL_IF NAME=description -->
+				<br>(<!-- TMPL_VAR NAME=description -->) 
+			<!-- /TMPL_IF -->
+		</td>
+
+ 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+ 	</tr>
+<!-- /TMPL_LOOP -->
+</table>

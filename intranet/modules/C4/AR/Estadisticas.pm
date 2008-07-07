@@ -1379,10 +1379,9 @@ sub historicoCirculacion(){
 #Miguel solo para testear, despues sacar
 	my $finCons=" ORDER BY h.timestamp desc limit $ini,$cantR ";
 
-#para buscar las operaciones sobre un item, viene desde el pl item-detial.pl
+#para buscar las operaciones sobre un item, viene desde el pl detalleItemResult.pl
 	if($id3 ne ''){
 		$where.=" AND n3.id3 = ?";
-		$finCons="";
 		push(@bind,$id3);
 	}
 	

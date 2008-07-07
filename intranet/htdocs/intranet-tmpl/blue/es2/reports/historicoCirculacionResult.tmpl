@@ -34,15 +34,15 @@
   		<td height=25 >&nbsp;</td>
 
 		<td>
-			<a href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+			<a href=/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
 		</td>
 		<td>
-			<a ref="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='idAutor' ESCAPE='URL' -->&type=intra"><!-- TMPL_VAR NAME="completo" -->
+			<a ref="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->"><!-- TMPL_VAR NAME="completo" -->
 			</a>
 		</td>
 		<td>
 			
-			<a href='/cgi-bin/koha/item-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&bibit=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itemnum=<!-- TMPL_VAR NAME="itemnumber" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="bulk" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
 		</td>	
 		<td> 
 			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">

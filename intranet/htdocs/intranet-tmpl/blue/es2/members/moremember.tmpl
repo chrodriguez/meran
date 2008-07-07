@@ -295,9 +295,7 @@ function confirm_deletion() {
 		</td>
 
 		<td>
-			<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'>
-			<!-- TMPL_VAR NAME="barcode" -->
-			</a>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
 		</td>
 
 		<td>
@@ -393,9 +391,7 @@ function confirm_deletion() {
 			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a class="inputFontNormal" href='/cgi-bin/koha/item-detail.pl?id1=<!-- TMPL_VAR NAME="rid1" -->&id2=<!-- TMPL_VAR NAME="rid2" -->&id3=<!-- TMPL_VAR NAME="rid3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&bulk=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'>
-			<!-- TMPL_VAR NAME="barcode" -->
-			</a>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
 		</td>
 		<td>
 			<!-- TMPL_IF NAME="signatura_topografica" --> 
