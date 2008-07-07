@@ -43,6 +43,8 @@ $VERSION = 0.01;
 	&cantReservasPorGrupo
 	&DatosReservas
 	&eliminarReservasVencidas
+	&cant_waiting
+	&CheckWaiting
 	
 	&Enviar_Email
 
@@ -260,7 +262,7 @@ sub cancelar_reservas{
 	$params->{'tipo'}= 'INTRA';
         my $dbh = C4::Context->dbh;
 	foreach (@borrowersnumbers) {
-		my $sth=$dbh->prepare("	SELECT id2,reservenumebr FROM reserves 
+		my $sth=$dbh->prepare("	SELECT id2,reservenumber FROM reserves 
 					WHERE borrowernumber = ? AND estado <> 'P'");
 		$sth->execute($_);
 
@@ -426,7 +428,7 @@ Funcion que trae los datos de la primer reserva de la cola que estaba esperando 
 sub getDatosReservaEnEspera{
 	my ($id2)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT *
+	my $sth=$dbh->prepare("	SELECT *
 				FROM reserves
 				WHERE id2=? AND id3 IS NULL
 				ORDER BY timestamp LIMIT 1 ");
@@ -1184,6 +1186,165 @@ sub eliminarReservasVencidas(){
 	}
 
 }
+
+=item
+Esta funcion retorna la cantidad de reservas en espera
+=cut
+sub cant_waiting{
+        my ($borrowernumber)=@_;
+
+        my $dbh = C4::Context->dbh;
+        my $query="	SELECT count(*) as cant from reserves
+   			WHERE borrowernumber = ?
+			AND cancellationdate is NULL
+			AND estado <> 'P'
+			AND id3 is Null ";
+
+        my $sth=$dbh->prepare($query);
+        $sth->execute($borrowernumber);
+
+        my $result=$sth->fetchrow_hashref;
+        $sth->finish;
+
+        return($result);
+}
+
+sub CheckWaiting {
+    	my ($borrowernumber)=@_;
+
+    	my $dbh = C4::Context->dbh;
+    	my @itemswaiting;
+
+	my $sth=$dbh->prepare("	SELECT n3.barcode, n1.titulo, b.branchname, n2.id2, it.description, r. * 
+				FROM reserves r
+				INNER JOIN nivel3 n3 ON r.id3 = n3.id3
+				INNER JOIN nivel1 n1 ON n1.id1 = n3.id1
+				INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
+				INNER JOIN itemtypes it ON it.itemtype = n2.tipo_documento
+				INNER JOIN branches b ON b.branchcode = r.branchcode
+				WHERE borrowernumber =? AND cancellationdate IS NULL");
+
+ 	$sth->execute($borrowernumber);
+
+    	while (my $data=$sth->fetchrow_hashref) {
+		push(@itemswaiting,$data);
+    	}
+    	$sth->finish;
+    	return (scalar(@itemswaiting),\@itemswaiting);
+}
+
+
+=item
+Verifica si el item tiene reservas, se saco de C4::AR::Reserves, solo es llamada de delitem.pl, creo q no se va
+a usar mas
+=cut
+sub tiene_reservas {
+
+	my ($id3)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $query= "	SELECT * FROM reserves  
+			WHERE cancellationdate is NULL
+			AND estado <> 'P'
+			AND id3 = ?";
+
+	my $sth=$dbh->prepare($query);
+
+	$sth->execute($id3);
+
+ 	my $result="";
+        if (my $data = $sth->fetchrow_hashref){ 
+		$result=1
+	} else {
+		 $result=0
+	}
+        return($result);
+}
+
+sub FindNotRegularUsersWithReserves {
+
+	my $dbh = C4::Context->dbh;
+
+	my $query="	SELECT reserves.borrowernumber 
+			FROM reserves INNER JOIN persons ON reserves.borrowernumber = persons.borrowernumber
+			WHERE regular = '0'
+			AND cancellationdate is NULL
+			AND reserves.estado is NULL";
+
+        my $sth=$dbh->prepare($query);
+        $sth->execute();
+        my @results;
+
+        while (my $data=$sth->fetchrow){
+		push (@results,$data);
+        }
+
+        $sth->finish;
+        return(@results);
+}
+
+
+
+=item
+efectivizar_reserva se deja para sacar validadciones, luego se va a borrar
+=cut
+sub efectivizar_reserva{
+
+	my $dbh = C4::Context->dbh;
+	my ($borrowernumber,$biblioitemnumber,$issuecode,$loggedinuser)=@_;
+	my @sancion= permitionToLoan($borrowernumber, $issuecode);
+	if ($sancion[0]||$sancion[1]) {
+		return 0;
+	} else {
+
+		#Si NO es regular
+		my $regular =  C4::AR::Usuarios::esRegular($borrowernumber);
+		return(0) if ($regular eq 0);
+
+		#Se pasa del maximo
+		my $sth=$dbh->prepare("Select count(*) as prestamos from issues where returndate is NULL and borrowernumber=? and issuecode=?");
+		$sth->execute($borrowernumber,$issuecode);
+		my $datamax= $sth->fetchrow;
+		my $sth=$dbh->prepare("SELECT daysissues,maxissues FROM issuetypes WHERE issuecode = ? ");
+		$sth->execute($issuecode);
+		my ($max,$fecha_devolucion)= $sth->fetchrow_hashref;
+		return(0) if ($datamax >= $max);
+
+#agregar comprobacion de maximos de prestamos y sanciones
+		$sth=$dbh->prepare("SET autocommit=0");
+		$sth->execute();
+#Primero busco los datos de la reserva que se quiere efectivizar
+		$sth=$dbh->prepare("Select * from reserves where biblioitemnumber=? and borrowernumber=? for update ");
+		$sth->execute($biblioitemnumber,$borrowernumber);
+		my $data= $sth->fetchrow_hashref;
+		if($data->{'itemnumber'}){ 
+#Si la reserva que voy a efectivizar estaba asociada a un item se puede sino hubo un error
+			$sth=$dbh->prepare("Update reserves set constrainttype='P'  where biblioitemnumber=? and borrowernumber=? ");
+			$sth->execute($biblioitemnumber,$borrowernumber);
+# Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
+			my $sth4=$dbh->prepare("Delete from sanctions where reservenumber=? ");
+			$sth4->execute($data->{'reservenumber'});
+			#my $fecha_devolucion=C4::Context->preference("daysissue");
+			$fecha_devolucion=proximoHabil($fecha_devolucion,0);
+			my $sth3=$dbh->prepare("INSERT INTO issues (borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals,issuecode) VALUES (?,?,NOW(),?,?,?,?) ");
+			$sth3->execute($data->{'borrowernumber'}, $data->{'itemnumber'}, $data->{'branchcode'}, $data->{'branchcode'}, 0, $issuecode);
+
+#**********************************Se registra el movimiento en historicCirculation***************************
+			my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'itemnumber'});
+			my $biblionumber= $dataItems->{'biblionumber'};
+			my $end_date= 'null';
+	
+			C4::Circulation::Circ2::insertHistoricCirculation('issue',$data->{'borrowernumber'},$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'},$issuecode,$end_date);
+#********************************Fin**Se registra el movimiento en historicCirculation*************************
+
+			$sth3=$dbh->prepare("commit;");
+			$sth3->execute();
+
+		}
+
+		return 1;
+	}
+}
+
 
 
 1;

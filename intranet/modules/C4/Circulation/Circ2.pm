@@ -31,7 +31,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-use C4::AR::Reserves;
+use C4::AR::Reservas;
 use C4::Koha;
 use C4::Search;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -1435,7 +1435,7 @@ sub patronflags {
 		$flags{'ODUES'} = \%flaginfo;
 	}
 	my ($nowaiting, $itemswaiting)
-			= &C4::AR::Reserves::CheckWaiting($patroninformation->{'borrowernumber'});
+			= &C4::AR::Reservas::CheckWaiting($patroninformation->{'borrowernumber'});
 	if ($nowaiting > 0) {
 		my %flaginfo;
 		$flaginfo{'message'} = "Items reservados disponibles";

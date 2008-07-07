@@ -30,7 +30,7 @@ use C4::Context;
 use C4::Circulation::Circ2;
 use C4::Search;
 use C4::AR::Sanctions;
-use C4::AR::Reserves;
+use C4::AR::Reservas;
 use Date::Manip;
 use Time::HiRes qw(gettimeofday);
 use Thread;
@@ -64,7 +64,6 @@ FIXME
 @EXPORT = qw(
     &t_devolver
     &t_renovar
-    &borrowerissues
     &DatosPrestamos
     &DatosPrestamosPorTipo
     &sepuederenovar
@@ -505,25 +504,6 @@ sub t_renovar{
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
 	return($error,$codMsg,$message);
 }
-
-#borrowerissues retorna todos los prestamos que tiene actualmente un borrower, recibe el nro de borrower y devuelve la cantidad de prestamos actuales y el arreglo de los prestamos actuales
-sub borrowerissues {
-  my ($bornum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select *, issues.renewals as renewals2
-        from issues left join items  on items.itemnumber=issues.itemnumber
-        inner join  biblioitems on items.biblioitemnumber=biblioitems.biblioitemnumber
-         where borrowernumber=?
-        and issues.returndate is NULL order by date_due");
-    $sth->execute($bornum);
-  my @result;
-  while (my $data = $sth->fetchrow_hashref) {
-    push @result, $data;
-  }
-  $sth->finish;
-  return(scalar(@result), \@result);
-}
-
 
 sub verificarTipoPrestamo {
 #retorna verdadero si se puede hacer un determinado tipo de prestamo

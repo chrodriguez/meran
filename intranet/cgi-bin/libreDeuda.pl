@@ -49,7 +49,7 @@ if($array[0] eq "1"){
 	}
 }
 if($array[1] eq "1" && $ok){
-	if(C4::AR::Reserves::cant_waiting($bornum)->{'cant'}){
+	if(C4::AR::Reservas::cant_waiting($bornum)->{'cant'}){
 		$ok=0;
 		$msj="por tener reservas en espera";
 	}

@@ -22,7 +22,7 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::AR::DictionarySearch; #Luciano: Busqueda por diccionario
-use C4::AR::Reserves; 
+use C4::AR::Reservas; 
 use C4::AR::Issues;
 use C4::AR::VirtualLibrary; #Matias: Bilbioteca Virtual
 use C4::AR::AnalysisBiblio; #Matias: Analiticas

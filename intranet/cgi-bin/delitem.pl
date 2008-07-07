@@ -45,7 +45,7 @@ my $biblionumber=$input->param('biblio');
 my $item=$input->param('itemnum');
 my $msg="";
 if (canDeleteItem($item) eq 1) {$msg="&msg=noitemdelete";} else {
-if (tiene_reservas($item) eq 1){$msg="&msg=havereservesitem";}
+if (C4::AR::Reservas::tiene_reservas($item) eq 1){$msg="&msg=havereservesitem";}
 
 delitem($item,$responsable);}
 
