@@ -91,9 +91,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 			}
 		}
 
-#Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
-#esta sancionado
-		my ($tipoPrestamos)=&C4::AR::Issues::IssuesType3($iteminfo->{'notforloan'}, $borrnumber);
+		my ($tipoPrestamos)=&C4::AR::Issues::IssuesTypeEnabled($iteminfo->{'notforloan'}, $borrnumber);
 			
 		$infoPrestamo[$i]->{'id3Old'}=$id3;
 		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
@@ -152,6 +150,7 @@ print A "id3 antes de setear: $id3\n";
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
+			$params{'defaultbranch'}=C4::Context->preference('defaultbranch');
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		

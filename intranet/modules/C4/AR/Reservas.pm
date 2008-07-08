@@ -44,9 +44,12 @@ $VERSION = 0.01;
 	&DatosReservas
 	&eliminarReservasVencidas
 	&cant_waiting
+
 	&CheckWaiting
-	
+	&tiene_reservas
 	&Enviar_Email
+	&FindNotRegularUsersWithReserves
+	&eliminarReservasVencidas
 
 	&prestar
 );
@@ -415,7 +418,7 @@ sub getDatosReserva{
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT * 
 				FROM reserves 
-				WHERE reservenumber= ? FOR UPDATE");
+				WHERE reservenumber= ?");#SE SACO EL 'FOR UPDATE' VER!!!!!
 
 	$sth->execute($reservenumber);
 	return($sth->fetchrow_hashref);
@@ -469,9 +472,6 @@ sub actualizarDatosReservaEnEspera{
 	my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 	C4::AR::Sanctions::insertSanction(undef, $reservaGrupo->{'reservenumber'} ,$borrowernumber, $startdate, $enddate, undef);
-
-	my $sth3=$dbh->prepare("commit");
-	$sth3->execute();
 
 	Enviar_Email($id3,$borrowernumber,$desde, $fecha, $apertura,$cierre,$loggedinuser);
 }
@@ -682,16 +682,12 @@ sub getDisponibilidadGrupo{
 #Busca los items sin reservas para los prestamos y nuevas reservas.
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
-
 	my $query= "	SELECT count(*) as disponibilidad
 			FROM nivel2 n2 INNER JOIN nivel3 n3 ON (n2.id2 = n3.id2)
 			WHERE (n2.id2 = ?) AND (n3.notforloan = 'DO') ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2);
-
-		
-
 	return ($sth->fetchrow > 0)?'DO':'SA';
 }
 
@@ -835,11 +831,8 @@ close(A);
 sub verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;
 	my $error=0;
-	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT maxissues FROM issuetypes WHERE issuecode = ? ");
-	$sth->execute($issuetype);
-	my $maxissues= $sth->fetchrow;
-	$sth->finish;
+	my $issuetype=C4::AR::Issues::IssueType($issuetype);
+	my $maxissues= $issuetype->{'maxissues'};
 	my ($cantissues, $issues)= C4::AR::Issues::DatosPrestamosPorTipo($borrowernumber,$issuetype);
 	if ($cantissues >= $maxissues) {$error=1}
 	return $error;
@@ -1009,29 +1002,21 @@ close(A);
 }
 
 sub insertarPrestamo {
-
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
-
 #Se acutualiza el estado de la reserva a P = Presetado
 	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
-
 	$sth->execute(	$params->{'id2'},
 			$params->{'borrowernumber'}
 	);
-
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-
 	my $sth2=$dbh->prepare("	DELETE FROM sanctions 
 					WHERE reservenumber = ? ");
-
 	$sth2->execute(	$params->{'reservenumber'});
-
 #Se realiza el prestamo del item
 	my $sth3=$dbh->prepare("	INSERT INTO issues 		
 					(borrowernumber,id3,date_due,branchcode,issuingbranch,renewals,issuecode) 
 					VALUES (?,?,NOW(),?,?,?,?) ");
-
 	$sth3->execute(	$params->{'borrowernumber'}, 
 			$params->{'id3'}, 
 			$params->{'defaultbranch'}, 
@@ -1039,8 +1024,7 @@ sub insertarPrestamo {
 			0, 
 			$params->{'issuesType'}
 	);
-
-#**********************************Se registra el movimiento en historicCirculation***************************
+#*********************************Se registra el movimiento en historicCirculation***************************
 	C4::Circulation::Circ2::insertHistoricCirculation(	'issue',
 								$params->{'borrowernumber'},
 								$params->{'loggedinuser'},
@@ -1052,7 +1036,6 @@ sub insertarPrestamo {
 								$params->{'hasta'}
 							);
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
-
 }#end insertarPrestamo
 
 #para enviar un mail cuando al usuario se le vence la reserva
@@ -1062,14 +1045,14 @@ sub Enviar_Email{
 	if (C4::Context->preference("EnabledMailSystem")){
 		my $dbh = C4::Context->dbh;
 		my $dateformat = C4::Date::get_date_format();
-		my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
+		my $sth=$dbh->prepare("SELECT * FROM borrowers WHERE borrowernumber=?;");
 		$sth->execute($bor);
 		my $borrower= $sth->fetchrow_hashref;
 # biblio.unititle as runititle, biblioitems.number as redicion FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
 		$sth=$dbh->prepare("SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
 				FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
 				INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
-				WHERE  reserves.borrowernumber =? and reserves.id3= ? ");
+				WHERE  reserves.borrowernumber =? AND reserves.id3= ? ");
 		$sth->execute($bor,$id3);
 		my $res= $sth->fetchrow_hashref;
 
@@ -1117,7 +1100,8 @@ C4::Circulation::Circ2::insertHistoricCir$itemnumberculation('notification',$bor
 
 
 #esta funcion se saco de Reserves, se cambiaron los nombres de los campos para que se adapten a la V3, pero faltaria revisar el codigo!!!!!!!!!!!!!!!!!!!!!!
-sub eliminarReservasVencidas(){
+#SE PUEDE MEJORAR EL CODIGO!!!!!!!!!!!!!!!!!!!!!!!! HAY FUNCIONES QUE YA SE HICIERON EN CANCELAR RESERVAS!!!!!!!!!
+sub eliminarReservasVencidas{
 	my ($loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -1192,20 +1176,17 @@ Esta funcion retorna la cantidad de reservas en espera
 =cut
 sub cant_waiting{
         my ($borrowernumber)=@_;
-
         my $dbh = C4::Context->dbh;
-        my $query="	SELECT count(*) as cant from reserves
+        my $query="	SELECT count(*) as cant FROM reserves
    			WHERE borrowernumber = ?
-			AND cancellationdate is NULL
+			AND cancellationdate IS NULL
 			AND estado <> 'P'
-			AND id3 is Null ";
-
+			AND id3 IS NULL ";
         my $sth=$dbh->prepare($query);
         $sth->execute($borrowernumber);
 
         my $result=$sth->fetchrow_hashref;
         $sth->finish;
-
         return($result);
 }
 
@@ -1235,11 +1216,11 @@ sub CheckWaiting {
 
 
 =item
+tiene_reservas
 Verifica si el item tiene reservas, se saco de C4::AR::Reserves, solo es llamada de delitem.pl, creo q no se va
 a usar mas
 =cut
 sub tiene_reservas {
-
 	my ($id3)=@_;
   	my $dbh = C4::Context->dbh;
   	my $query= "	SELECT * FROM reserves  
@@ -1261,14 +1242,12 @@ sub tiene_reservas {
 }
 
 sub FindNotRegularUsersWithReserves {
-
 	my $dbh = C4::Context->dbh;
-
 	my $query="	SELECT reserves.borrowernumber 
 			FROM reserves INNER JOIN persons ON reserves.borrowernumber = persons.borrowernumber
 			WHERE regular = '0'
-			AND cancellationdate is NULL
-			AND reserves.estado is NULL";
+			AND cancellationdate IS NULL
+			AND reserves.estado IS NULL";
 
         my $sth=$dbh->prepare($query);
         $sth->execute();
@@ -1281,70 +1260,5 @@ sub FindNotRegularUsersWithReserves {
         $sth->finish;
         return(@results);
 }
-
-
-
-=item
-efectivizar_reserva se deja para sacar validadciones, luego se va a borrar
-=cut
-sub efectivizar_reserva{
-
-	my $dbh = C4::Context->dbh;
-	my ($borrowernumber,$biblioitemnumber,$issuecode,$loggedinuser)=@_;
-	my @sancion= permitionToLoan($borrowernumber, $issuecode);
-	if ($sancion[0]||$sancion[1]) {
-		return 0;
-	} else {
-
-		#Si NO es regular
-		my $regular =  C4::AR::Usuarios::esRegular($borrowernumber);
-		return(0) if ($regular eq 0);
-
-		#Se pasa del maximo
-		my $sth=$dbh->prepare("Select count(*) as prestamos from issues where returndate is NULL and borrowernumber=? and issuecode=?");
-		$sth->execute($borrowernumber,$issuecode);
-		my $datamax= $sth->fetchrow;
-		my $sth=$dbh->prepare("SELECT daysissues,maxissues FROM issuetypes WHERE issuecode = ? ");
-		$sth->execute($issuecode);
-		my ($max,$fecha_devolucion)= $sth->fetchrow_hashref;
-		return(0) if ($datamax >= $max);
-
-#agregar comprobacion de maximos de prestamos y sanciones
-		$sth=$dbh->prepare("SET autocommit=0");
-		$sth->execute();
-#Primero busco los datos de la reserva que se quiere efectivizar
-		$sth=$dbh->prepare("Select * from reserves where biblioitemnumber=? and borrowernumber=? for update ");
-		$sth->execute($biblioitemnumber,$borrowernumber);
-		my $data= $sth->fetchrow_hashref;
-		if($data->{'itemnumber'}){ 
-#Si la reserva que voy a efectivizar estaba asociada a un item se puede sino hubo un error
-			$sth=$dbh->prepare("Update reserves set constrainttype='P'  where biblioitemnumber=? and borrowernumber=? ");
-			$sth->execute($biblioitemnumber,$borrowernumber);
-# Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-			my $sth4=$dbh->prepare("Delete from sanctions where reservenumber=? ");
-			$sth4->execute($data->{'reservenumber'});
-			#my $fecha_devolucion=C4::Context->preference("daysissue");
-			$fecha_devolucion=proximoHabil($fecha_devolucion,0);
-			my $sth3=$dbh->prepare("INSERT INTO issues (borrowernumber,itemnumber,date_due,branchcode,issuingbranch,renewals,issuecode) VALUES (?,?,NOW(),?,?,?,?) ");
-			$sth3->execute($data->{'borrowernumber'}, $data->{'itemnumber'}, $data->{'branchcode'}, $data->{'branchcode'}, 0, $issuecode);
-
-#**********************************Se registra el movimiento en historicCirculation***************************
-			my $dataItems= C4::Circulation::Circ2::getDataItems($data->{'itemnumber'});
-			my $biblionumber= $dataItems->{'biblionumber'};
-			my $end_date= 'null';
-	
-			C4::Circulation::Circ2::insertHistoricCirculation('issue',$data->{'borrowernumber'},$loggedinuser,$biblionumber,$biblioitemnumber,$data->{'itemnumber'},$data->{'branchcode'},$issuecode,$end_date);
-#********************************Fin**Se registra el movimiento en historicCirculation*************************
-
-			$sth3=$dbh->prepare("commit;");
-			$sth3->execute();
-
-		}
-
-		return 1;
-	}
-}
-
-
 
 1;

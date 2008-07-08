@@ -72,11 +72,10 @@ FIXME
     &PrestamosMaximos
     &IssueType
     &IssuesType
-    &IssuesType2
+    &IssuesTypeEnabled
     &fechaDeVencimiento
     &enviar_recordatorios_prestamos
     &crearTicket
-    &IssuesType3
     &estaVencido
 
    	&getCountPrestamosDeGrupo
@@ -236,7 +235,7 @@ fechaDeVencimiento recibe dos parametro, un id3 y la fecha de prestamo lo que ha
 sub fechaDeVencimiento {
 	my ($id3,$date_due)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from issues where id3 = ? and date_due = ? ");
+	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3 = ? AND date_due = ? ");
 	$sth->execute($id3,$date_due);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -263,7 +262,7 @@ vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha
 sub vencimiento {
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from issues where id3=? and returndate is NULL");
+	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3=? AND returndate IS NULL");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -288,9 +287,9 @@ sub sepuederenovar(){
 my ($borrowernumber,$id3)=@_;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare(" Select * from reserves inner join issues on issues.id3=reserves.id3 
-			and reserves.borrowernumber=issues.borrowernumber  where reserves.id3=? 
-			and reserves.borrowernumber=? and reserves.estado='P' and returndate is null");
+my $sth=$dbh->prepare(" SELECT * FROM reserves INNER JOIN issues ON issues.id3=reserves.id3 
+			AND reserves.borrowernumber=issues.borrowernumber  WHERE reserves.id3=? 
+			AND reserves.borrowernumber=? AND reserves.estado='P' AND returndate IS NULL");
 
 $sth->execute($id3,$borrowernumber);
 
@@ -347,7 +346,7 @@ sub hayReservasEsperando(){
 	my ($id2)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth1=$dbh->prepare("Select * from reserves where id2=? and id3 is NULL order by timestamp limit 1;");
+	my $sth1=$dbh->prepare("SELECT * FROM reserves WHERE id2=? AND id3 IS NULL ORDER BY timestamp LIMIT 1;");
 	$sth1->execute($id2);
 	my $data1= $sth1->fetchrow_hashref;
 	if ($data1){# esto quiere decir que hay reservas esperando entonces se devuelve un false indicando que no se puede hacer la renovacion del prestamo
@@ -510,7 +509,7 @@ sub verificarTipoPrestamo {
 #retorna verdadero si se puede hacer un determinado tipo de prestamo
 	my ($issuetype,$notforloan)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from issuetypes where issuecode = ? and notforloan = ?");
+	my $sth=$dbh->prepare("SELECT * FROM issuetypes WHERE issuecode = ? AND notforloan = ?");
 	$sth->execute($issuetype,$notforloan);
 	return($sth->fetchrow_hashref);
 }
@@ -520,7 +519,7 @@ sub IssueType {
 #retorna los datos del tipo de prestamo
 	my ($issuetype)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select *  from issuetypes where issuecode = ?");
+	my $sth=$dbh->prepare("SELECT * FROM issuetypes WHERE issuecode = ?");
 	$sth->execute($issuetype);
 	return($sth->fetchrow_hashref);
 }
@@ -528,9 +527,8 @@ sub IssueType {
 sub IssuesType {
 #Trae todos los tipos de Prestamos existentes
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select issuecode, description  From issuetypes Order By description");
+	my $sth=$dbh->prepare("SELECT issuecode, description FROM issuetypes ORDER BY description");
 	$sth->execute();
-
 	my @result;
 	while (my $ref= $sth->fetchrow_hashref) {
     		push @result, $ref;
@@ -539,30 +537,29 @@ sub IssuesType {
 	return(@result);
 }
 
-#Miguel - estoy probando esta funcion, para que muestre los tipos de prestamos en los que el usuario no 
-#esta sancionado, esta es una copia de IssuesType3, ver si queda y sacar la otra
-sub IssuesType3 {
+=item
+IssuesTypeEnabled
+Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
+=cut
+sub IssuesTypeEnabled {
  	my ($notforloan, $borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;
   	my $sth;
 #Trae todos los tipos de prestamos que estan habilitados
-  	my $query= " SELECT * from issuetypes WHERE enabled = 1 ";
-
-#Miguel Agregado ver!!!!!!!!!!!!11
-$query .= " AND issuecode NOT IN (select issuetypes.issuecode from sanctions 
-	inner join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
-	inner join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode 
-	inner join issuetypes on sanctionissuetypes.issuecode = issuetypes.issuecode 
-	where borrowernumber = ? and (now() between startdate and enddate)) ";
+  	my $query= " SELECT * FROM issuetypes WHERE enabled = 1 ";
+	$query .= " AND issuecode NOT IN (SELECT issuetypes.issuecode FROM sanctions 
+	INNER JOIN sanctiontypes ON sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
+	INNER JOIN sanctionissuetypes ON sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode 
+	INNER JOIN issuetypes ON sanctionissuetypes.issuecode = issuetypes.issuecode 
+	WHERE borrowernumber = ? AND (now() between startdate AND enddate)) ";
 
   	if ($notforloan ne undef){
-#     		$query.=" where notforloan = ? order by description";
 		$query.=" AND notforloan = ? ORDER BY description";
     		$sth = $dbh->prepare($query);
     		$sth->execute($borrowernumber, $notforloan);
   	} 
 	else{
-    		$query.=" order by description";
+    		$query.=" ORDER BY description";
     		$sth = $dbh->prepare($query);
     		$sth->execute($borrowernumber);
   	}
@@ -572,84 +569,56 @@ $query .= " AND issuecode NOT IN (select issuetypes.issuecode from sanctions
 	my @issuesType;
 	my $i=0;
   	while (my $res = $sth->fetchrow_hashref) {
-#         	push @issuesvalues, $res->{'issuecode'};
-#         	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
 		$issuesType[$i]->{'value'}=$res->{'issuecode'};
 		$issuesType[$i]->{'label'}=$res->{'description'};
 		$i++;
 		
  	}
   	$sth->finish;
-# 	return(\@issuesvalues,\%issueslabels);
 	return(\@issuesType);
 }
 
-sub IssuesType2 {
- 	my ($notforloan)=@_;
+=item
+DatosPrestamos
+Esta funcion retorna los datos de los prestamos de un usuario
+=cut
+sub DatosPrestamos {
+	my ($borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;
-  	my $sth;
-#Trae todos los tipos de prestamos que estan habilitados
-  	my $query= " SELECT * from issuetypes WHERE enabled = 1 ";
-  	if ($notforloan ne undef){
-#     		$query.=" where notforloan = ? order by description";
-		$query.=" AND notforloan = ? ORDER BY description";
-    		$sth = $dbh->prepare($query);
-    		$sth->execute($notforloan);
-  	} 
-	else{
-    		$query.=" order by description";
-    		$sth = $dbh->prepare($query);
-    		$sth->execute();
-  	}
-
-  	my %issueslabels;
- 	my @issuesvalues;
-  	while (my $res = $sth->fetchrow_hashref) {
-        	push @issuesvalues, $res->{'issuecode'};
-        	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
- 	}
-  	$sth->finish;
-	return(\@issuesvalues,\%issueslabels);
+	my $dateformat = C4::Date::get_date_format();
+	my $sth=$dbh->prepare("SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ?");
+	$sth->execute($borrowernumber);
+	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+	my @result;
+	while (my $ref= $sth->fetchrow_hashref) {
+		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+		$ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
+		push @result, $ref;
+	}
+	$sth->finish;
+  	return(scalar(@result), \@result);
 }
 
 =item
-VER LA DE PRESTAMOSPORUSUARIO EN USUARIOS.PM SON =?????!!!!!!!!!!!!!!
+DatosPrestamosPorTipo
+Esta funcion retorna los datos de los prestamos de un usuario por tipo de prestamo
 =cut
-sub DatosPrestamos {
-  #Esta funcion retorna los datos de los prestamos de un usuario
-  my ($borrowernumber)=@_;
-  my $dbh = C4::Context->dbh;
-  my $dateformat = C4::Date::get_date_format();
-  my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
-  $sth->execute($borrowernumber);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-  my @result;
-  while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
-    $ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
-    push @result, $ref;
-  }
-  $sth->finish;
-  return(scalar(@result), \@result);
-}
-
-
 sub DatosPrestamosPorTipo {
-  #Esta funcion retorna los datos de los prestamos de un usuario por tipo de prestam
-  my ($borrowernumber,$issuetype)=@_;
-  my $dbh = C4::Context->dbh;
-  my $dateformat = C4::Date::get_date_format();
-  my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ? and issuecode=?");
-  $sth->execute($borrowernumber,$issuetype);
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-  my @result;
-  while (my $ref= $sth->fetchrow_hashref) {
-    my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
-    $ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
-    push @result, $ref;
-  }
-  $sth->finish;
-  return(scalar(@result), \@result);
+	my ($borrowernumber,$issuetype)=@_;
+	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
+	my $query="SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber,$issuetype);
+	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+	my @result;
+	while (my $ref= $sth->fetchrow_hashref) {
+		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+		$ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
+		push @result, $ref;
+	}
+	$sth->finish;
+	return(scalar(@result), \@result);
 }
 
 sub PrestamosMaximos {
@@ -657,14 +626,14 @@ sub PrestamosMaximos {
   my ($borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
   
-    my $sth=$dbh->prepare("Select * from issuetypes;");
+    my $sth=$dbh->prepare("SELECT * FROM issuetypes;");
     $sth->execute();
     my @result;
    my $cant=0;	
 	my @result;	
     while (my $iss= $sth->fetchrow_hashref) {
     	my $issuetype=$iss->{'issuecode'};
-  	my $sth1=$dbh->prepare("Select count(*) as prestamos from issues where returndate is NULL and borrowernumber = ? and issuecode=?");
+  	my $sth1=$dbh->prepare("SELECT count(*) AS prestamos FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?");
   	$sth1->execute($borrowernumber,$issuetype);
 	
 	my $tot=$sth1->fetchrow;
@@ -684,84 +653,84 @@ mail de recordatorio envia los mails a los due�os de los items que vencen el p
 =cut
 
 sub Enviar_Recordatorio{
+	my ($id3,$bor,$vencimiento)=@_;
 
-my ($itemnumber,$bor,$vencimiento)=@_;
+	if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
 
-if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
+		my $dbh = C4::Context->dbh;
+		my $sth=$dbh->prepare("SELECT * FROM borrowers WHERE borrowernumber=?;"); #Podria ser una funcion
+		$sth->execute($bor);
+		my $borrower= $sth->fetchrow_hashref;
+# 		biblio.unititle as runititle, biblioitems.number as redicion FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		$sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2 rautor, reserves.id3 AS rid3
+				    FROM reserves
+				    INNER JOIN nivel2 n2 ON n2.id2 = reserves.id2
+				    INNER JOIN nivel1 n1 ON n2.id1 = n1.id1
+				    WHERE  reserves.borrowernumber =? AND reserves.id3= ?");
+		$sth->execute($bor,$id3);
+		my $res= $sth->fetchrow_hashref;	
 
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?;");
-$sth->execute($bor);
-my $borrower= $sth->fetchrow_hashref;
-$sth=$dbh->prepare("SELECT biblio.title as rtitle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, biblio.unititle as runititle, reserves.biblioitemnumber as rbiblioitemnumber, biblioitems.number as redicion			FROM reserves
-			inner join biblioitems on  biblioitems.biblioitemnumber = reserves.biblioitemnumber
-			INNER JOIN biblio on biblioitems.biblionumber = biblio.biblionumber WHERE  reserves.borrowernumber =? and reserves.itemnumber= ?  
-					");
-$sth->execute($bor,$itemnumber);
-my $res= $sth->fetchrow_hashref;	
+		my $mailFrom=C4::Context->preference("mailFrom");
+		my $mailSubject =C4::Context->preference("reminderSubject");
+		my $mailMessage =C4::Context->preference("reminderMessage");
+		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
 
-my $mailFrom=C4::Context->preference("mailFrom");
-my $mailSubject =C4::Context->preference("reminderSubject");
-my $mailMessage =C4::Context->preference("reminderMessage");
-my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
+	$res->{'rautor'}=(C4::Search::getautor($res->{'rautor'}))->{'completo'};
+	my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'rid2'},"250","a","2");
+	$mailFrom =~ s/BRANCH/$branchname/;
+	$mailSubject =~ s/BRANCH/$branchname/;
+	$mailMessage =~ s/BRANCH/$branchname/;
+	$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
+	$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
+	$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
+	$mailMessage =~ s/TITLE/$res->{'rtitulo'}/;
+	$mailMessage =~ s/AUTHOR/$res->{'rautor'}/;
+	$mailMessage =~ s/EDICION/$edicion/;
+	$mailMessage =~ s/VENCIMIENTO/$vencimiento/;
 
-$res->{'rauthor'}=(C4::Search::getautor($res->{'rauthor'}))->{'completo'};
-
-
-$mailFrom =~ s/BRANCH/$branchname/;
-$mailSubject =~ s/BRANCH/$branchname/;
-$mailMessage =~ s/BRANCH/$branchname/;
-$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
-$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
-$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
-$mailMessage =~ s/TITLE/$res->{'rtitle'}/;
-$mailMessage =~ s/AUTHOR/$res->{'rauthor'}/;
-$mailMessage =~ s/EDICION/$res->{'redicion'}/;
-$mailMessage =~ s/VENCIMIENTO/$vencimiento/;
-
-my %mail = ( To => $borrower->{'emailaddress'},
-                        From => $mailFrom,
-                        Subject => $mailSubject,
-                        Message => $mailMessage);
-my $resultado='ok';
-if ($borrower->{'emailaddress'} && $mailFrom ){
-	sendmail(%mail) or die $resultado='error';
-}else {
-	$resultado='';
-}
+	my %mail = ( To => $borrower->{'emailaddress'},
+                     From => $mailFrom,
+                     Subject => $mailSubject,
+                     Message => $mailMessage);
+	my $resultado='ok';
+	if ($borrower->{'emailaddress'} && $mailFrom ){
+		sendmail(%mail) or die $resultado='error';
+	}else {
+		$resultado='';
+	}
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-	my $dataItems= C4::Circulation::Circ2::getDataItems($itemnumber);
-	my $biblionumber= $dataItems->{'biblionumber'};
-	my $biblioitemnumber= $dataItems->{'biblioitemnumber'};
+	my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+	my $id1= $dataItems->{'id1'};
+	my $id2= $dataItems->{'id2'};
 	my $branchcode= $dataItems->{'homebranch'};
 	my $borrowernumber= $bor;
 	my $loggedinuser= $bor;
 	my $issuecode= '-';
 	my $end_date= "null";
 		
-	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$biblionumber,$biblioitemnumber,$itemnumber,$branchcode,$issuecode,$end_date);
+	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuecode,$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation**********************
 
 	}#end if (C4::Context->preference("EnabledMailSystem"))
-
 }
 
 
 
 sub enviar_recordatorios_prestamos {
-my $dbh = C4::Context->dbh;
-my $dateformat = C4::Date::get_date_format();
-my $sth=$dbh->prepare("Select * from issues left join issuetypes on issues.issuecode=issuetypes.issuecode where issues.returndate is NULL and issuetypes.notforloan = 0");
-$sth->execute();
+	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
+	my $sth=$dbh->prepare("SELECT * FROM issues iss LEFT JOIN issuetypes isst ON iss.issuecode=isst.issuecode 
+			       WHERE iss.returndate IS NULL AND isst.notforloan = 0");
+	$sth->execute();
 
-while(my $data= $sth->fetchrow_hashref) {
-	my $fechaDeVencimiento=vencimiento ($data->{'id3'});
-	my $proximohabil=proximoHabil(1,0);
-	if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-	Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
-	};
-}
+	while(my $data= $sth->fetchrow_hashref) {
+		my $fechaDeVencimiento=vencimiento ($data->{'id3'});
+		my $proximohabil=proximoHabil(1,0);
+		if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
+		Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
+		};
+	}
 }
 
 
@@ -827,7 +796,7 @@ sub getCountPrestamosDeGrupo() {
 	my ($borrowernumber, $id2, $issuesType)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query= "	SELECT count(*) as cantPrestamos
+	my $query= "	SELECT count(*) AS cantPrestamos
         		FROM issues i LEFT JOIN nivel3 n3 ON n3.id3 = i.id3
         		INNER JOIN  nivel2 n2 ON n3.id2 = n2.id2
          		WHERE i.borrowernumber = ? AND n2.id2 = ?
@@ -835,9 +804,7 @@ sub getCountPrestamosDeGrupo() {
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber, $id2, $issuesType);
-
 	my $cant=$sth->fetchrow();
-
 	$sth->finish;
 	return($cant);
 }
