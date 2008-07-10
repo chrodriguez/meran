@@ -662,7 +662,7 @@ sub Enviar_Recordatorio{
 		$sth->execute($bor);
 		my $borrower= $sth->fetchrow_hashref;
 # 		biblio.unititle as runititle, biblioitems.number as redicion FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		$sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2 rautor, reserves.id3 AS rid3
+		$sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, reserves.id3 AS rid3
 				    FROM reserves
 				    INNER JOIN nivel2 n2 ON n2.id2 = reserves.id2
 				    INNER JOIN nivel1 n1 ON n2.id1 = n1.id1
@@ -675,16 +675,16 @@ sub Enviar_Recordatorio{
 		my $mailMessage =C4::Context->preference("reminderMessage");
 		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
 
-	$res->{'rautor'}=(C4::Search::getautor($res->{'rautor'}))->{'completo'};
-	my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'rid2'},"250","a","2");
+	$res->{'autor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
+	my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
 	$mailFrom =~ s/BRANCH/$branchname/;
 	$mailSubject =~ s/BRANCH/$branchname/;
 	$mailMessage =~ s/BRANCH/$branchname/;
 	$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
 	$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
 	$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
-	$mailMessage =~ s/TITLE/$res->{'rtitulo'}/;
-	$mailMessage =~ s/AUTHOR/$res->{'rautor'}/;
+	$mailMessage =~ s/TITLE/$res->{'titulo'}/;
+	$mailMessage =~ s/AUTHOR/$res->{'autor'}/;
 	$mailMessage =~ s/EDICION/$edicion/;
 	$mailMessage =~ s/VENCIMIENTO/$vencimiento/;
 
