@@ -614,35 +614,37 @@ sub buscarNivel3PorId2(){
 	$infoNivel3{'cantReservas'}=C4::AR::Reservas::cantReservasPorGrupo($id2);
 
 	while(my $data=$sth->fetchrow_hashref){
-
 		my $holdbranch= getbranchname($data->{'holdingbranch'});
-		$data->{'holdbranch'}=$data->{'holdingbranch'};
-		$data->{'holdingbranch'}=$holdbranch;
+		$data->{'holdingbranchNombre'}=$holdbranch;
 		
 		my $homebranch= getbranchname($data->{'homebranch'});
-		$data->{'hbranch'}=$data->{'homebranch'};
-		$data->{'homebranch'}=$homebranch;
+		$data->{'homebranchNombre'}=$homebranch;
 		
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
-		if(!$data->{'wthdrawn'}){
-		#wthdrawn = 0, Disponible
-			$disponibles++;
-		}
-
-		$data->{'disponibilidad'}=$data->{'wthdrawn'};
-		$data->{'wthdrawn'}=$wthdrawn->{'description'};
+		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
 		
 		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
+		$data->{'issuetype'}=$issuetype->{'description'};
+		
+		if(!$data->{'wthdrawn'}){
+		#wthdrawn = 0, Disponible
+			$data->{'disponibilidad'}=$wthdrawn->{'description'};
+			$data->{'clase'}="fechaVencida";
+			$disponibles++;
+		}
+		
 		if($data->{'notforloan'} eq 'DO'){
 			$data->{'forloan'}=1;
+			$data->{'disponibilidad'}="PRESTAMO";
+			$data->{'clase'}="prestamo";
 			$infoNivel3{'cantParaPrestamo'}++;
 		}else{
 			$infoNivel3{'cantParaSala'}++;
+			$data->{'disponibilidad'}="SALA DE LECTURA";
+			$data->{'clase'}="salaLectura";
 		}
 
-		$data->{'issuetype'}=$data->{'notforloan'};
-		$data->{'notforloan'}=$issuetype->{'description'};
-
+		disponibilidadItem($data);
 		$result[$i]=$data;
 		$i++;
 	}
@@ -651,11 +653,64 @@ sub buscarNivel3PorId2(){
 }
 
 =item
+disponibilidadItem
+Esta funcion busca el estado en el que se encuentra el item con id3 que viene por parametro, si esta prestado o reservado trae la info del usuario al cual fue asignado.
+=cut
+sub disponibilidadItem{
+	my ($datosItem)=@_;
+	my $dbh=C4::Context->dbh;
+	my $borrowernumber="";
+	my $clase;
+	my $disponibilidad;
+	my $dateformat = C4::Date::get_date_format();
+	$datosItem->{'sePuedeBorrar'}=1;
+	## Esta Prestado??
+   	my $query="SELECT * FROM issues iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
+	           INNER JOIN issuetypes ist ON (iss.issuecode=ist.issuecode) WHERE id3=? AND returndate IS  NULL";
+    	my $sth=$dbh->prepare($query);
+    	$sth->execute($datosItem->{'id3'});
+    	if (my $data=$sth->fetchrow_hashref){
+    		#el item esta prestado
+		$datosItem->{'prestado'}=1;
+		$datosItem->{'clase'}="";
+		$datosItem->{'sePuedeBorrar'}=0;
+		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		$datosItem->{'disponibilidad'}="Prestado a ";
+		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
+     	
+		my ($vencido,$df)= &C4::AR::Issues::estaVencido($data->{'id3'},$data->{'issuecode'});
+		my $returndate=format_date($df,$dateformat);
+		$datosItem->{'vencimiento'}=$returndate;
+		if($vencido){
+			$datosItem->{'claseFecha'}="fechaVencida";
+		}
+      		$datosItem->{'renew'} = C4::AR::Issues::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
+   		$sth->finish;
+	}
+    ## Esta Reservado?? 
+   	$sth=$dbh->prepare("SELECT  * FROM reserves LEFT JOIN  borrowers ON 
+                            reserves.borrowernumber=borrowers.borrowernumber WHERE reserves.id3 = ? 
+                            AND estado <> 'P'");
+    	$sth->execute($datosItem->{'id3'});
+   	if (my $data=$sth->fetchrow_hashref){
+		$datosItem->{'sePuedeBorrar'}=0;
+		$datosItem->{'clase'}="";
+		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
+		$datosItem->{'disponibilidad'}="Reservado a ";
+      		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
+		$sth->finish;
+	}
+}
+
+
+
+=item
 obtenerEdiciones
 obtiene las ediciones que pose un id de nivel 1.
 =cut
-sub obtenerEdiciones(){
-	my ($id1, $itemtype)=@_;
+sub obtenerEdiciones{
+	my ($id1,$itemtype)=@_;
 	my @ediciones;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel2 WHERE id1=? ";

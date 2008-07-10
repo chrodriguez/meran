@@ -107,7 +107,7 @@ $.ajax({        type: "POST",
 }
 
 function prestar(id2,id3){
-	location.href="/cgi-bin/koha/circ/circulation.pl?id2="+id2+"&id3="+id3+"&borrnumber=1";
+// 	location.href="/cgi-bin/koha/circ/circulation.pl?id2="+id2+"&id3="+id3+"&borrnumber=1";
 }
 </script>
 
@@ -214,21 +214,39 @@ function prestar(id2,id3){
                 				<input TYPE="image" name="submit"  VALUE="modify" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id3' -->,'<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Ejemplar">
             				</td>
             				<td width="6%" valign="middle">
-        			<!-- TMPL_UNLESS NAME="prestado" -->
+        			<!-- TMPL_IF NAME="sePuedeBorrar" -->
                 				<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
-        			<!-- /TMPL_UNLESS -->
+        			<!-- /TMPL_IF -->
             				</td>
 					<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
 					<td><!-- TMPL_VAR NAME="barcode" --></td>
-					<td><!-- TMPL_VAR NAME="notforloan" --></td>
-					<td>------</td>
-				
+					<td>
+						<span class="<!-- TMPL_VAR NAME='clase' -->">
+						<!-- TMPL_VAR NAME="disponibilidad" -->
+					<!-- TMPL_IF NAME="usuario" -->
+						<b><!-- TMPL_VAR NAME="usuario" --></b>
+					<!-- /TMPL_IF -->
+					</td>
+					<td>
+						<span class="<!-- TMPL_VAR NAME='claseFecha' -->">
+					<!-- TMPL_IF NAME="vencimiento" -->
+						<!-- TMPL_VAR NAME="vencimiento" -->
+					<!-- TMPL_ELSE -->
+						-------
+					<!-- /TMPL_IF -->
+						</span>
+					</td>
 	    				<td valign="middle" colspan="2">
-						<!-- TMPL_IF NAME="forloan" -->
-						<input TYPE="image" name="borrowD"  VALUE="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo domiciliario" onClick="prestar('<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->');">
+					<!-- TMPL_UNLESS NAME="wthdrawn" -->
+						<!-- TMPL_IF NAME="prestado" -->
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="">
+							<!-- TMPL_IF NAME="renew" -->
+	    						<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="">
+							<!-- /TMPL_IF -->
 						<!-- TMPL_ELSE -->
-							------
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="prestar('<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->');">
 						<!-- /TMPL_IF -->
+					<!-- /TMPL_UNLESS -->
 	    				</td>
 				
 					<td colspan="2">

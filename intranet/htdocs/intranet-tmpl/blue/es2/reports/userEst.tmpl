@@ -28,15 +28,19 @@ $(document).ready( function() {
 		Categor&iacute;as
 	</th>
 	<th class="tablaresultadoTitle">
-		Cantidad
+		Cantidad de usuarios reales
+	</th>
+	<th class="tablaresultadoTitle">
+		Cantidad de usuarios potenciales
 	</th>
  	<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
   	<tr align='center' class="inputFontNormal">
    		<td height=25>&nbsp;</td>	
-  		<td > <!-- TMPL_VAR NAME=categoria --> </td>
-  		<td > <!-- TMPL_VAR NAME=cant --> </td>
+  		<td> <!-- TMPL_VAR NAME=categoria --> </td>
+  		<td> <!-- TMPL_VAR NAME=reales --> </td>
+		<td> <!-- TMPL_VAR NAME=potenciales --> </td>
  		<td height=25 >&nbsp;</td>
  	</tr>
 <!-- /TMPL_LOOP -->

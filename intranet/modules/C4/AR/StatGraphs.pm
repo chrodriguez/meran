@@ -295,7 +295,7 @@ sub userCategPieSinFlash(){
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
                  push (@categorias,$results[$i]->{'categoria'});
-     		 push (@values,$results[$i]->{'cant'});
+     		 push (@values,$results[$i]->{'reales'});
         };
 
 	$g->add_dataset (@categorias);
@@ -385,13 +385,13 @@ sub finalizarGrafico(){
 
 sub userCategHBars(){
 	my ($branch,$cant,@results)=@_;
-	my $g=&inicializarGrafico("Usuarios por categoria (Barras)");
+	my $g=&inicializarGrafico("Usuarios reales por categoria (Barras)");
 
 	my @categorias;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
         	push(@categorias,C4::AR::Utilidades::noaccents($results[$i]->{'categoria'}));
-                push(@values,$results[$i]->{'cant'});
+                push(@values,$results[$i]->{'reales'});
         };
 #para generar las barras.
 	$g->bar_3D( 50, '0x0066CC', 'cantidad',10 );
@@ -407,8 +407,7 @@ sub userCategHBars(){
 
 sub userCategPie(){
 	my ($branch,$cant,@results)=@_;
-	my $g=&inicializarGrafico("Usuarios por categoria (Torta)");
-
+	my $g=&inicializarGrafico("Usuarios reales por categoria (Torta)");
 	my @categorias;
 	my @values;
 	my @colores;
@@ -419,10 +418,10 @@ sub userCategPie(){
 	my $totalUsr=0;
 	my $totalVar=0;
 	for (my $i=0; $i < $cant ; $i++ ) {
-		$totalUsr+=$results[$i]->{'cant'};
+		$totalUsr+=$results[$i]->{'reales'};
 	}
     	for (my $i=0; $i < $cant ; $i++ ) {
-		$cantUsr=$results[$i]->{'cant'};
+		$cantUsr=$results[$i]->{'reales'};
 		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
 		$porcUsr=sprintf("%.1f", ($cantUsr/ $totalUsr) * 100.0);
 		if($porcUsr >= 3){

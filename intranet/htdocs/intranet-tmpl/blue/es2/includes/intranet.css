@@ -692,4 +692,21 @@ div.detalle{
 	font-weight: normal;
 }
 
+/* PARA EL DETALLE*/
+.fechaVencida{
+	font-size:10pt;
+	color:red;
+}
+
+.prestamo{
+	font-size:10pt;
+	color:green;
+}
+
+.salaLectura{
+	font-size:10pt;
+	color:blue;
+}
+
+
 /* end agregado */

@@ -308,7 +308,9 @@ $pos++;
 $sheet->oooSet("cell-loc", 1, $pos);
 $sheet->oooData("cell-text", "Categoría");
 $sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", "Cantidad");
+$sheet->oooData("cell-text", "Cantidad de Usuarios Reales");
+$sheet->oooSet("cell-loc", 3, $pos);
+$sheet->oooData("cell-text", "Cantidad de Usuarios Potenciales");
 $sheet->oooSet("bold", "off");
 $pos++;
 ##
@@ -317,11 +319,12 @@ $pos++;
 for(my $i = 0 ; $i <= $#{$results} ; $i++)
 {
 if ( @$results[$i]) {
-
 	$sheet->oooSet("cell-loc", 1, $pos);
 	$sheet->oooData("cell-text", @$results[$i]->{'categoria'});
 	$sheet->oooSet("cell-loc", 2, $pos);
-	$sheet->oooData("cell-text", @$results[$i]->{'cant'});
+	$sheet->oooData("cell-text", @$results[$i]->{'reales'});
+	$sheet->oooSet("cell-loc", 3, $pos);
+	$sheet->oooData("cell-text", @$results[$i]->{'potenciales'});
 }
 	$pos++;
 }

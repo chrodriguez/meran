@@ -1646,6 +1646,7 @@ sub buscarNivel3Completo(){
 =item
 buscarNivel3PorId2
 Busca los datos de los ejemplares (tabla nivel3) que corresponde con el id2 que viene como parametro.
+Se usa en editarEjemplar, Se llama igual que en Busquedas.pm ver cual queda. (Sacar esta y dejar la de busquedas)
 =cut
 sub buscarNivel3PorId2(){
 	my ($id2)=@_;

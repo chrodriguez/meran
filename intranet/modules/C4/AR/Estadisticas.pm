@@ -1372,19 +1372,47 @@ sub insertarNotaHistCirc(){
         $sth->execute($nota,$id);
 }
 
-sub userCategReport(){
+sub userCategReport{
 	my ($branch)=@_;
 	my $dbh = C4::Context->dbh;
         my $query=" SELECT categorycode, count( categorycode ) as cant FROM borrowers WHERE branchcode = ? GROUP BY categorycode  ";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
+ 	my $clase='par';
+	my $catcode;
+	my $i=0;
+	my %indices;
         while (my $data=$sth->fetchrow_hashref){
-		$data->{'categoria'}=&C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
-                push(@results,$data);
+	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
+		$catcode=$data->{'categorycode'};
+		$indices{$catcode}=$i;
+		$results[$i]->{'reales'}=$data->{'cant'};
+		$results[$i]->{'categoria'}=&getborrowercategory($data->{'categorycode'});
+		$results[$i]->{'clase'}=$clase;
+		$i++;
         }
-        return (scalar(@results),@results);
+
+	my $query=" SELECT categorycode, count( categorycode ) as cant FROM persons WHERE branchcode = ? AND borrowernumber IS NULL GROUP BY categorycode  ";
+	$sth=$dbh->prepare($query);
+        $sth->execute($branch);
+	while (my $data=$sth->fetchrow_hashref){
+		$catcode=$data->{'categorycode'};
+		if (not exists($indices{$catcode})){
+			if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
+			$results[$i]->{'reales'}=0;
+			$results[$i]->{'potenciales'}=$data->{'cant'};
+			$results[$i]->{'categoria'}=&getborrowercategory($data->{'categorycode'});
+			$results[$i]->{'clase'}=$clase;
+			$i++;
+		}
+		else{
+			$results[$indices{$catcode}]->{'potenciales'}=$data->{'cant'};
+		}
+	}
+         return (scalar(@results),@results);
 }
+
 =item
 SE USA EN EL REPORTE Generar Etiquetas
 =cut
