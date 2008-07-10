@@ -60,8 +60,9 @@ function updateInfo(responseText){
 }
 
 
-function buscar(){
+function busquedaCombinable(){
 
+alert("busqueda combinables");
 	//seteo normal
 	var tipo= $("#checkNormal").val();
 	//busqueda exacta
@@ -87,6 +88,7 @@ function buscar(){
 
 }
 
+
 function buscarPorAutor(idAutor){
 
 	objAH=new AjaxHelper(updateInfo);
@@ -97,6 +99,14 @@ function buscarPorAutor(idAutor){
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
 	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function buscarPorCodigoBarra(){
+	objAH=new AjaxHelper(updateInfo, Init);
+// 	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/busqueda.pl';
+	objAH.codBarra= $('#codBarra').val();
 	objAH.sendToServer();
 }
 
@@ -343,36 +353,39 @@ function Volver(IdDivDetalle, IdDivMARC){
 
 //**************************************Fin*****Detalles*********************************************************
 
-$(document).ready(function(){
 
-	$('#codBarra').keypress(function (e) {
-		if(e.which == 13){
-			buscar();
-		}
-	});
-	$('#tema=').keypress(function (e) {
-		if(e.which == 13){
-			buscar();
-		}
-	});
-	$('#autor').keypress(function (e) {
-		if(e.which == 13){
-			buscar();
-		}
-	});
-	$('#titulo').keypress(function (e) {
-		if(e.which == 13){
-			buscar();
-		}
-	});
- 	$('#tipo').keypress(function (e) {
-		if(e.which == 13){
-			buscar();
-		}
-	});
-	$('#searchinc').keypress(function (e) {
+function buscar(){
+
+	//primero verifico las busquedas individuales
+	if ($('#codBarra').val() != ''){
+		buscarPorCodigoBarra();
+	}else
+	if ($('#tema').val() != '') {
+		buscarPorTema();
+	}
+	if ($('#searchinc')) {
+		searchinc();
+	}
+	else {
+//si no hay busquedas individuales, se realiza una busqueda combinable y se levantan los parametros
+//de la interface
+		busquedaCombinable();
+	}
+}
+
+function registrarEventos(){
+
+	$("input").keypress(function (e) {
  		if(e.which == 13){
-  			searchinc();
+ 			buscar('');
  		}
  	});
+
+}
+
+
+$(document).ready(function(){
+
+	registrarEventos();
+
 });
