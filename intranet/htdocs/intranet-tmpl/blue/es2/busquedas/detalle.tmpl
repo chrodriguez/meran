@@ -282,7 +282,9 @@ function buscarUsuario(id3){
         			<!-- /TMPL_IF -->
             				</td>
 					<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
-					<td><!-- TMPL_VAR NAME="barcode" --></td>
+					<td>
+						<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR NAME="barcode" --></a>
+					</td>
 					<td>
 						<span class="<!-- TMPL_VAR NAME='clase' -->">
 						<!-- TMPL_VAR NAME="disponibilidad" -->
