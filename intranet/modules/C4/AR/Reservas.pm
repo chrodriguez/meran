@@ -42,7 +42,6 @@ $VERSION = 0.01;
 	&getReservasDeGrupo
 	&cantReservasPorGrupo
 	&DatosReservas
-	&eliminarReservasVencidas
 	&cant_waiting
 
 	&CheckWaiting
@@ -375,16 +374,11 @@ sub cancelar_reserva{
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
 	}
-#**********************************Se registra el movimiento en historicSanction***************************
-	#traigo la info de la sancion
-	my $infoSancion= &C4::AR::Sanctions::infoSanction($reservenumber);
-	my $sanctiontypecode= 'null';
-	my $fechaFinSancion= $infoSancion->{'enddate'};
-	C4::AR::Sanctions::logSanction('Insert',$borrowernumber,$loggedinuser,$fechaFinSancion,$sanctiontypecode);
-#**********************************Fin registra el movimiento en historicSanction***************************
 
 #Actualizo la sancion para que refleje el id3 y asi poder informalo
-	C4::AR::Sanctions::actualizarSancion($id3,$reservenumber);
+	$params->{'id3'}= $id3;
+	$params->{'reservenumber'}= $reservenumber;
+	C4::AR::Sanctions::actualizarSancion($params);
 
 #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 	borrarReserva($reservenumber);

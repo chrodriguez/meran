@@ -314,6 +314,7 @@ sub logSanction{
 	my $sth = $dbh->prepare ("	INSERT INTO historicSanctions 
 					(type,borrowernumber,responsable,date,end_date,sanctiontypecode)
                            		VALUES (?,?,?,NOW(),?,?);");
+
         $sth->execute($type,$borrowernumber,$responsable,$dateEnd,$issueType);
         $sth->finish;
 }
@@ -359,6 +360,7 @@ sub sanciones{
 	return @sanctionsarray;
 }
 
+
 sub borrarSancionReserva{
 	my ($reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
@@ -367,9 +369,39 @@ sub borrarSancionReserva{
 	$sth->execute($reservenumber);
 }
 
+
+# MIGUEL ESTOY PROBANDO LA FUNCION ACTUALIZARSANCION DE ABAJO, DESPUES BORRAR
+=item
 sub actualizarSancion{
 	my ($id3,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
 	$sth->execute($id3,$reservenumber);
 }
+=cut
+
+sub actualizarSancion {
+	my ($params)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
+	$sth->execute(
+			$params->{'id3'},
+			$params->{'reservenumber'}
+	);
+
+#**********************************Se registra el movimiento en historicSanction***************************
+	my $infoSancion= infoSanction($params->{'reservenumber'});
+	$params->{'sanctiontypecode'}= 'null';
+	$params->{'fechaFinSancion'}= $infoSancion->{'enddate'};
+
+	logSanction(
+			'Update',
+			$params->{'borrowernumber'},
+			$params->{'loggedinuser'},
+			$params->{'fechaFinSancion'},
+			$params->{'sanctiontypecode'}
+	);
+#*******************************Fin***Se registra el movimiento en historicSanction*************************
+}
+
