@@ -4,8 +4,8 @@
  * Contendran las funciones para permitir la circulacion en el sistema
  * Las siguientes librerias son necesarias:
  *	<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
- *	<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
  *	<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+ *	<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
  *	<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
  *	<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
  *	<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>

@@ -1,30 +1,15 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script>
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
-$(document).ready(function(){
-	$(".zebra tr:even").addClass("impar");
-});
 
-function consultarAjax(params,id1){
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/busquedas/detalle.pl",
-		data: params,
-		beforeSend: Init(),
-		complete: function(ajax){
-				HiddeState();
-				if(id1 != ''){
-					var para="id1="+id1;
-					crearForm("/cgi-bin/koha/busquedas/detalle.pl",para);
-				}
-				else{
-					crearForm("/cgi-bin/koha/busquedas/filtrado.pl","");
-				}
-			}
-	});
-}
+$(document).ready(function(){
+	zebra("tablaResult");
+});
 
 function detalleMARC(id3){
 	var params="id3="+id3;
@@ -71,18 +56,41 @@ function editarEjemplares(id1,id2,itemtype){
 }
 
 function borrarGrupo(id1,id2){
-	var params= 'id1='+id1+'&id2='+id2+'&accion=borrarGrupo';
-	consultarAjax(params,id1);
+	objAH=new AjaxHelper(updateInfoDetalleConId1);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.id2= id2;
+	objAH.accion="borrarGrupo";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfoDetalleConId1(responseText){
+	var para="id1="+objAH.id1;
+	crearForm("/cgi-bin/koha/busquedas/detalle.pl",para);
 }
 
 function borrarN1(id1){
-	var params='id1='+id1+'&accion=borrarN1';
-	consultarAjax(params,'');
+	objAH=new AjaxHelper(updateInfoDetalleSinId1);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.accion="borrarN1";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfoDetalleSinId1(){
+	crearForm("/cgi-bin/koha/busquedas/filtrado.pl","");
 }
 
 function borrarEjemplar(id1,id3){
-	var params='id3='+id3+'&accion=borrarEjemplar';
-	consultarAjax(params,id1);
+	objAH=new AjaxHelper(updateInfoDetalleConId1);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.id3= id3;
+	objAH.accion="borrarEjemplar";
+	//se envia la consulta
+	objAH.sendToServer();
 }
 
 function  cargarImagen(id){
@@ -106,8 +114,63 @@ $.ajax({        type: "POST",
 	});
 }
 
-function prestar(id2,id3){
-// 	location.href="/cgi-bin/koha/circ/circulation.pl?id2="+id2+"&id3="+id3+"&borrnumber=1";
+/*************************************************CIRCULACUION***************************************************/
+
+function objeto_datos(){
+	this.array_ids3;
+	this.usuario;
+	this.id3;
+	this.accion;
+}
+
+function objeto_usuario(){
+	this.text;
+	this.ID;
+}
+
+function item(){
+	this.id3;
+	this.barcode;
+}
+
+function prestar(userId,userNom,id3){
+	if(userId != ""){	
+		var userObj=new objeto_usuario();
+		var array = new Array();
+		var it=new item();
+		var obj=new objeto_datos();
+		userObj.ID=userId;
+		userObj.text=userNom;
+		it.id3=id3;
+		array[0]=it;
+		obj.array_ids3=array;
+		obj.usuario=userObj;
+		obj=JSONstring.make(obj);
+		location.href="../circ/prestamos.pl?obj="+obj;
+	}
+	else{
+		buscarUsuario(id3);
+	}
+}
+
+function devolver_renovar(accion,userId,userNom,id3){
+	var array=new Array;
+	var it=new item();
+	it.id3=id3;
+	array[0]=it;
+	var usuario=new objeto_usuario();
+	usuario.ID=userId;
+	usuario.text=userNom;
+	var obj=new objeto_datos();
+	obj.array_ids3=array;
+	obj.usuario=usuario;
+	obj.accion=accion;
+	obj=JSONstring.make(obj);
+	location.href="../circ/devoluciones.pl?obj="+obj;
+}
+
+function buscarUsuario(id3){
+	
 }
 </script>
 
@@ -129,9 +192,9 @@ function prestar(id2,id3){
 <!-----------------Registro de libro TABLE--------->
 <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 	<tr valign="top" height="24" class="tablaresultadoTitle">
-		  <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		  <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		  <td  valign="middle" height="24"><b>Registro de Documento</b> <!-- TMPL_VAR NAME="id1" --></td>
-		  <td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		  <td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 </table>
 
@@ -188,7 +251,7 @@ function prestar(id2,id3){
 				Reservas Realizadas: <b> <!-- TMPL_VAR NAME="reservados" --></b><br>
 				Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="prestados" --></b><br>
 				<hr>
-			<table cellspacing="0" cellpadding="0"  width="100%" class="zebra" width="100%">
+			<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
 				<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
 
 					<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
@@ -201,7 +264,7 @@ function prestar(id2,id3){
         				<td><b>C&oacute;digo</b></td>
         				<td><b>Disponibilidad</b></td>
         				<td><b>Vencimiento</b></td>
-					<td width="30%"  colspan="2"><b>Circulaci&oacute;n</b></td>
+					<td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
 					<td>MARC</td>
 					<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 
@@ -226,6 +289,7 @@ function prestar(id2,id3){
 					<!-- TMPL_IF NAME="usuario" -->
 						<b><!-- TMPL_VAR NAME="usuario" --></b>
 					<!-- /TMPL_IF -->
+						</span>
 					</td>
 					<td>
 						<span class="<!-- TMPL_VAR NAME='claseFecha' -->">
@@ -239,12 +303,12 @@ function prestar(id2,id3){
 	    				<td valign="middle" colspan="2">
 					<!-- TMPL_UNLESS NAME="wthdrawn" -->
 						<!-- TMPL_IF NAME="prestado" -->
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="">
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver_renovar('DEVOLUCION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->')">
 							<!-- TMPL_IF NAME="renew" -->
-	    						<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="">
+	    						<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->')">
 							<!-- /TMPL_IF -->
 						<!-- TMPL_ELSE -->
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="prestar('<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->');">
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="prestar('<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->');">
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_UNLESS -->
 	    				</td>

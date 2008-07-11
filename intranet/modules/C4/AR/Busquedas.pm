@@ -626,19 +626,19 @@ sub buscarNivel3PorId2(){
 		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
 		$data->{'issuetype'}=$issuetype->{'description'};
 		
-		if(!$data->{'wthdrawn'}){
+		if($data->{'wthdrawn'}){
 		#wthdrawn = 0, Disponible
-			$data->{'disponibilidad'}=$wthdrawn->{'description'};
+			$data->{'disponibilidad'}=C4::AR::Utilidades::noaccents($wthdrawn->{'description'});
 			$data->{'clase'}="fechaVencida";
 			$disponibles++;
 		}
 		
-		if($data->{'notforloan'} eq 'DO'){
+		if($data->{'notforloan'} eq 'DO' && !$data->{'wthdrawn'}){
 			$data->{'forloan'}=1;
 			$data->{'disponibilidad'}="PRESTAMO";
 			$data->{'clase'}="prestamo";
 			$infoNivel3{'cantParaPrestamo'}++;
-		}else{
+		}elsif(!$data->{'wthdrawn'}){
 			$infoNivel3{'cantParaSala'}++;
 			$data->{'disponibilidad'}="SALA DE LECTURA";
 			$data->{'clase'}="salaLectura";
@@ -675,6 +675,7 @@ sub disponibilidadItem{
 		$datosItem->{'clase'}="";
 		$datosItem->{'sePuedeBorrar'}=0;
 		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$datosItem->{'disponibilidad'}="Prestado a ";
 		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
      	
@@ -696,7 +697,9 @@ sub disponibilidadItem{
 		$datosItem->{'sePuedeBorrar'}=0;
 		$datosItem->{'clase'}="";
 		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
 		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
+		$datosItem->{'vencimiento'}=$reminderdate;
 		$datosItem->{'disponibilidad'}="Reservado a ";
       		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
 		$sth->finish;
