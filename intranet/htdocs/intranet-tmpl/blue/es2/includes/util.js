@@ -72,11 +72,9 @@ function crearForm(url,params){
 /*
  * zebra
  * Le da la clase de estilo a las filas de las tabla, dependiendo si es impar o par.
- * necesita jquery para funcionar, se le tiene que pasar el id de la tabla a la que se
+ * necesita jquery para funcionar, se le tiene que pasar el nombre de la clase de la tabla a la que se
  * le quiere realizar la zebra
  */
-
-//dibuja la zebra para los resultados
 function zebra(IdObj){
 
 	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
@@ -113,4 +111,18 @@ function checkedAll(id,nombreCheckbox){
 			this.checked=false;})
 			}
 		);
+}
+
+/*
+ * onEnter
+ * Funcion que se asigna el evento onEnter al input que viene el id pasado por parametro y se ejecuta la funcion
+ * que se pasa por paramentro.
+ */
+function onEnter(idInput,funcion){
+	$("#"+idInput).keypress(function (e) {
+ 		if(e.which == 13){
+ 			funcion();
+ 		}
+ 	});
+
 }

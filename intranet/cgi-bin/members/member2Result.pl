@@ -25,14 +25,11 @@
 
 use strict; 
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use C4::AR::Usuarios;
-use HTML::Template;
 use C4::AR::Persons_Members;
-use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
@@ -45,10 +42,11 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $member=$input->param('member');
-my $ini=$input->param('ini');
-my $orden=$input->param('orden')||'surname';
-
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $member=$obj->{'member'};
+my $ini=$obj->{'ini'};
+my $orden=$obj->{'orden'}||'surname';
+my $funcion=$obj->{'funcion'};
 my $env;
 
 my ($cantidad,$results);
@@ -61,21 +59,25 @@ if($member ne ""){
 		($cantidad,$results)=ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsdata;
 
 for (my $i=0; $i < $cantR; $i++){
 	if($results->[$i]{'cardnumber'} ne ""){
+		my $clase="";
 		my $regular=$results->[$i]{'regular'};
 		if ($regular eq 1){
-			$regular="<font color='green'>Regular</font>";
+			$regular="Regular";
+			$clase="prestamo";
 		}elsif($regular eq 0){
-			$regular="<font color='red'>Irregular</font>";
+			$regular="Irregular";
+			$clase="fechaVencida"
 		}else{
 			$regular="---";
 		}
   		my %row = (
+			clase=>$clase,
         		documentnumber=> $results->[$i]{'documentnumber'},
         		documenttype=> $results->[$i]{'documenttype'},
 			emailaddress=> $results->[$i]{'emailaddress'},

@@ -1,44 +1,54 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
-<script language="JavaScript" type="text/JavaScript">
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
+<script language="javascript" type="text/javascript">
+
+var objAH;
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+function consultar(){
+	var isbn=$("#isbn").val();
+	var titulo=$("#titulo").val();
+	if(isbn != "" || titulo != ""){
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= "/cgi-bin/koha/busquedas/busqEjemplar.pl";
+		objAH.funcion= 'changePage';
+		objAH.isbn= isbn;
+		objAH.titulo= titulo;
+		objAH.sendToServer();
+	}
+	else{
+		alert("Ingrese un dato para realizar la busqueda");
+	}
+
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
+}
+
 
 $(document).ready(function(){
-	$("input").keypress(function (e) {
-		if(e.which == 13){
-			consultar('');
-		}
-	});
+	onEnter("isbn",consultar);
+	onEnter("titulo",consultar);
 });
 
 function swap(id,src){
 	document.getElementById(id).src=src;
 }
 
-function consultar(ini){
-	var isbn=$("#isbn").val();
-	var titulo=$("#titulo").val();
-	if(isbn != "" || titulo != ""){
-	var params="isbn="+isbn+"&titulo="+titulo+"&ini="+ini;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/busquedas/busqEjemplar.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-				HiddeState();
-			}
-	});
-	}
-	else{
-		alert("Ingrese un dato para realizar la busqueda");
-	}
-}
 
 function agregarEjemplar(id1){
 	var itemtype=$("#"+id1).val();
@@ -61,7 +71,7 @@ function agregarEjemplar(id1){
 	
 <input type="text" name="isbn" id="isbn">
 
-<a class="inputFontNormal" href="#" onClick="consultar('');" onMouseOut="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png" border="0"></a>
+<a class="inputFontNormal" href="#" onClick="consultar();" onMouseOut="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png" border="0"></a>
 </p>
 <label for="titulo" style="float: left; width:15%">T&iacute;tulo:</label>
 <input type="text" name="titulo" id="titulo">

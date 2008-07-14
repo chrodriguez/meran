@@ -25,10 +25,8 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
 
 my $input = new CGI;
 

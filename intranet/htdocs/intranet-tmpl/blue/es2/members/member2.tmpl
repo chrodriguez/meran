@@ -1,27 +1,13 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 
 <script language="javascript" type="text/javascript">
-
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
-
-<!-- TMPL_INCLUDE NAME="util.js" -->
-/*
-function todos(){
-var checks=document.getElementsByTagName("input");
-if (checks.length>0){
-	for(i=0;i<checks.length;i++)
-	{	
-		if((checks[i].type == "checkbox")&&(checks[i].checked)){
-			checks[i].checked=false
-		}
-		else{checks[i].checked=true}
-	}
- }
-}*/
 
 function habilitar(){
 	var checks=$("input[@type='checkbox']:checked");
@@ -40,76 +26,69 @@ function habilitar(){
 
 		theStatus=theStatus + "\n\nEsta seguro?";
 		if (cant>0){
-			if (confirm (theStatus)){
-				var params="cantidad="+cant+"&accion="+accion+"&personNumbers="+personNumbers;
-				actualizarPersonas(params);
-			}
+			if (confirm (theStatus)){actualizarPersonas(cant,personNumbers);}
 		}
 	}
 	else{ alert ("No selecciono ningun usuario");}
+}	
+
+var objAH;
+function ordenar(orden){
+	objAH.sort(orden);
 }
 
-function actualizarPersonas(params){
-	$.ajax({type: "POST",
-		url: "/cgi-bin/koha/members/actualizarPersonas.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				if(ajax.responseText != ""){
-					$("#msj").html(ajax.responseText);
-				}
-				else{$("#msj").html('');}
-				consultar('');
-				HiddeState();
-			}
-		});
-}
-	
-
-//*************************************************************************************************************
-var orden="surname";
-function ordenar(ord){
-	orden=ord;
-	consultar('');
+function changePage(ini){
+	objAH.changePage(ini);
+	borrarMsj();
 }
 
-function consultar(ini){
-	var busqueda = $('#member').val();
-	var p = 'member='+busqueda+'&ini='+ini+'&orden='+orden;
+function actualizarPersonas(cant,arrayPersonNumbers){
+	objAH=new AjaxHelper(updateInfoActualizar);
+	objAH.url= "/cgi-bin/koha/members/actualizarPersonas.pl";
+	objAH.cantidad=cant;
+	objAH.accion=$("#accion").val();
+	objAH.personNumbers=arrayPersonNumbers;
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
+}
+
+function updateInfoActualizar(responseText){
+	if(responseText != ""){$("#msj").html(responseText);}
+	else{$("#msj").html('');}
+	consultar();
+}
+
+function consultar(){
+	var busqueda = $("#member").val();
 	if(busqueda != ""){
-		$.ajax({type: "POST",
-			url: "/cgi-bin/koha/members/member2Result.pl",
-			data: p,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					zebra('tablaResult');
-					HiddeState();
-				}
-		});
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= "/cgi-bin/koha/members/member2Result.pl";
+		objAH.funcion= "changePage";
+		objAH.member= busqueda;
+		objAH.sendToServer();
 	}
 	else{
 		alert("Ingrese un dato");
-		$('#member').focus();
+ 		$("#member").focus();
 	}
+
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
 }
 
 function Borrar(){
-	$('#member').val('');
+	$("#member").val('');
 }
 function borrarMsj(){
 	$("#msj").html('');
 }
 
 $(document).ready(function() {
-	//onEnter con foco en input, ejecuta la busqueda
-	$("#member").keypress(function (e) {
-		if(e.which == 13){
-			consultar('');
-			borrarMsj();
-		}
-	});
-
+	onEnter("member",consultar);
+	borrarMsj();
 });
 
 </script>

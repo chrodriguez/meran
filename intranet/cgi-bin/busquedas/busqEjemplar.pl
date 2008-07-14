@@ -20,9 +20,9 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
+# use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+# use HTML::Template;
 
 my $input = new CGI;
 
@@ -35,9 +35,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
             debug           => 1,
         });
 
-my $isbn = $input->param('isbn');
-my $titulo = $input->param('titulo');
-my $ini = $input->param('ini');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $isbn = $obj->{'isbn'};
+my $titulo = $obj->{'titulo'};
+my $ini = $obj->{'ini'};
+my $funcion=$obj->{'funcion'};
 
 #combo itemtype
 my ($cant,@itemtypes)= C4::Biblio::getitemtypes();
@@ -55,7 +57,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$result)=&C4::AR::Busquedas::buscarGrupos($isbn,$titulo,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 
 for (my $i=0; $i<scalar(@$result); $i++ ){

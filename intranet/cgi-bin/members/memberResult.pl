@@ -25,15 +25,12 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
-use HTML::Template;
-use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
@@ -45,10 +42,11 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
-
-my $orden=$input->param('orden')||'surname';
-my $member=$input->param('member');
-my $ini=$input->param('ini');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $orden=$obj->{'orden'}||'surname';
+my $member=$obj->{'member'};
+my $ini=$obj->{'ini'};
+my $funcion=$obj->{'funcion'};
 my $env;
 
 
@@ -62,24 +60,26 @@ if($member ne ""){
 		($cantidad,$results)=&ListadoDeUsuarios($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"consultar");
+&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
   #find out stats
     if($results->[$i]{'borrowernumber'} ne ""){
+	my $clase="";
  	my ($od,$issue)=borrdata2($env,$results->[$i]{'borrowernumber'});
  	my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
 
- 	if ($regular eq 1){$regular="<font color='green'>Regular</font>";}	
+ 	if ($regular eq 1){$regular="Regular"; $clase="prestamo";}	
 	else{
-		if($regular eq 0){$regular="<font color='red'>Irregular</font>";}
+		if($regular eq 0){$regular="Irregular";$clase="fechaVencida";}
 		else{
 			$regular="---";
 		}
 	}
 
   	my %row = (
+		clase=>$clase,
         	borrowernumber => $results->[$i]{'borrowernumber'},
         	cardnumber => $results->[$i]{'cardnumber'},
         	surname => $results->[$i]{'surname'},

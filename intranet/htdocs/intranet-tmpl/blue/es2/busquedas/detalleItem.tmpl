@@ -72,8 +72,8 @@ $(document).ready(function() {
 	</tr>
 <!-- TMPL_LOOP Name="DETAIL" -->
 	<tr valign=middle class="inputFontNormal" align="center">
-		<td><!-- TMPL_VAR Name="avail" --></td>
-		<td><!-- TMPL_VAR Name="loan" --></td>
+		<td><span class="<!-- TMPL_VAR Name='claseAvail' -->"><!-- TMPL_VAR Name="avail" --></span></td>
+		<td><span class="<!-- TMPL_VAR Name='claseLoan' -->"><!-- TMPL_VAR Name="loan" --></span></td>
 		<td><!-- TMPL_VAR Name="date" --></td>
 	</tr>
 <!-- /TMPL_LOOP -->

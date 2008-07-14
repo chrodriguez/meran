@@ -17,7 +17,7 @@ Resultados encontrados:<!-- TMPL_VAR name="cantidad" --><br>
 
 <!-- TMPL_VAR name="paginador" -->
 
-<table class="zebra" border="0" cellspacing="0" cellpadding="0" width="100%">
+<table class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr align="left" class="tablaresultadoTitle">
 	        <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td>T&iacute;tulo</td>
@@ -28,10 +28,10 @@ Resultados encontrados:<!-- TMPL_VAR name="cantidad" --><br>
 	</tr>
 	<!-- TMPL_IF NAME="result" -->
 	<!-- TMPL_LOOP NAME="result" -->
-	<tr>
+	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
 		<td><!-- TMPL_VAR name="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" --> :&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML --><!-- /TMPL_IF --> </td>
-		<td class="inputFontNormal"> <!-- TMPL_VAR NAME=autor --></td>
+		<td> <!-- TMPL_VAR NAME=autor --></td>
 		<td><!-- TMPL_VAR name="combo" --></td>
 		<td><a  class="click" class="inputFontNormal" onClick="agregarEjemplar('<!-- TMPL_VAR name='id1' -->')">Agregar grupo</a></td>
 		<td>&nbsp;</td>

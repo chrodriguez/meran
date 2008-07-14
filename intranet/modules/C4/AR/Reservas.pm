@@ -1123,8 +1123,10 @@ sub Enviar_Email{
 }
 
 
-#esta funcion se saco de Reserves, se cambiaron los nombres de los campos para que se adapten a la V3, pero faltaria revisar el codigo!!!!!!!!!!!!!!!!!!!!!!
-#SE PUEDE MEJORAR EL CODIGO!!!!!!!!!!!!!!!!!!!!!!!! HAY FUNCIONES QUE YA SE HICIERON EN CANCELAR RESERVAS!!!!!!!!!
+=item
+eliminarReservasVencidas
+Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grupo, si es que exiten, para los item liberados.
+=cut
 sub eliminarReservasVencidas{
 	my ($loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;

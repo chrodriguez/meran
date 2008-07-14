@@ -58,19 +58,34 @@ my ($count, $detail)=availDetail($id3);
 my @results;
 
 for (my $i=0; $i < $count; $i++){
-my $avail='';
-if ($detail->[$i]{'avail'} eq 'Disponible'){$avail='<font size=3 color=green> Disponible </font>'; }
-	else {$avail='<font size=3 color=red>'.$detail->[$i]{'avail'}.'</font>';}	
+	my $avail='';
+	my $clase="";
+	my $clase2="";
+	if ($detail->[$i]{'avail'} eq 'Disponible'){
+		$avail='Disponible';
+		$clase="prestamo";
+	}
+	else {
+		$avail=$detail->[$i]{'avail'};
+		$clase="fechaVencida";
+	}	
 
-my $loan='';
-if ($detail->[$i]{'loan'} eq 'PRESTAMO'){$loan='<font size=3 color=green> PRESTAMO </font>'; }
-	else {$loan='<font size=3 color=blue>'.$detail->[$i]{'loan'}.'</font>';}
-  my %row = (
-        avail=> $avail,
-	loan=>$loan,
-        date=> format_date($detail->[$i]{'date'},$dateformat)
-        );
-  push(@results, \%row);
+	my $loan='';
+	if ($detail->[$i]{'loan'} eq 'PRESTAMO'){
+		$loan='PRESTAMO'; $clase2="prestamo";
+	}
+	else {
+		$loan=$detail->[$i]{'loan'};
+		$clase2="salaLectura";
+	}
+ 	 my %row = (
+		claseAvail=>$clase,
+		claseLoan=>$clase2,
+        	avail=> $avail,
+		loan=>$loan,
+        	date=> format_date($detail->[$i]{'date'},$dateformat)
+        	);
+  	push(@results, \%row);
 }
 
 my @datearr = localtime(time);

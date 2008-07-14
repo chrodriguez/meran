@@ -659,7 +659,7 @@ sub Enviar_Recordatorio{
 
 		my $dbh = C4::Context->dbh;
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
-# 		biblio.unititle as runititle, biblioitems.number as redicion FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# 		biblio.unititle as runititle,FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		my $sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, reserves.id3 AS rid3
 				    FROM reserves
 				    INNER JOIN nivel2 n2 ON n2.id2 = reserves.id2

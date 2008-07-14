@@ -1,33 +1,30 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script language="javascript" type="text/javascript">
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
-//para manejar la zebra
-<!-- TMPL_INCLUDE NAME="util.js" -->
 
-var orden="surname";
-function ordenar(ord){
-	orden=ord;
-	consultar('');
+var objAH;
+function ordenar(orden){
+	objAH.sort(orden);
 }
 
-function consultar(ini){
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+function consultar(){
 	var busqueda = $('#member').val();
 	if(busqueda != ""){
-		var p= 	'member=' + busqueda+'&ini='+ini+'&orden='+orden;
-		$.ajax({	type: "POST", 
-				url: "/cgi-bin/koha/members/memberResult.pl",
-				data: p,
-				beforeSend: Init,
- 				complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					zebra('tablaResult');
-					HiddeState();
-				}
-		});
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= '/cgi-bin/koha/members/memberResult.pl';
+		objAH.funcion= 'changePage';
+		objAH.member= busqueda;
+		objAH.sendToServer();
 	}
 	else{
 		alert("Ingrese un dato");
@@ -36,25 +33,23 @@ function consultar(ini){
 
 }
 
+function updateInfo(responseText){
+	$('#result').html(responseText);
+	zebra('tablaResult');
+}
+
 function Borrar(){
 	$('#member').val('');
 }
 
 
 $(document).ready(function() {
-
 	//onEnter con foco en input, ejecuta la busqueda
-	$("#member").keypress(function (e) {
-		if(e.which == 13){
-			consultar('');
-		}
-	});
-
+	onEnter("member",consultar);
 });
 
-
-
 </script>
+
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >B&uacute;squeda de Usuarios Reales</td>

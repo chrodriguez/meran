@@ -7,12 +7,8 @@
 
 use strict;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Koha;
-use HTML::Template;
 use C4::AR::Persons_Members;
 
 my $input = new CGI;
@@ -20,17 +16,12 @@ my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"intranet");
 
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $msg='';
 
-my @data=split(",",$input->param('personNumbers'));;
+my $data=$obj->{'personNumbers'};
 
-if ($input->param('accion') eq "habilitar"){
-	$msg=addmembers(@data);
-}
-else{
-	$msg=delmembers (@data);
-}
-
+($obj->{'accion'} eq "habilitar")?($msg=addmembers(@$data)):($msg=delmembers(@$data));
 
 print $input->header;
 print $msg;

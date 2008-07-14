@@ -10,14 +10,13 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
 <!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script> -->
 <!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script> -->
+<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 
 <script language="javascript">
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
-
 
 function OnChangeComboTablasSinonimos(){
 	
@@ -262,7 +261,7 @@ function modificarSinonimo(idSinonimo, nroSinonimo, nombreViejo){
 		function () {
 			$('#sinonimo'+nroSinonimo).text($('#nombreNuevo').val());
 		});
-
+//VER CON ON ENTER DE Util.js
 	$('#nombreNuevo').keypress(
 		function (e) {
 			if(e.which == 13){
@@ -294,12 +293,13 @@ $(document).ready(function(){
 	$('#content_search_editoriales').hide();	
 
 	//registro evento para input de sinonimos
-	$('#sinonimo').keypress(
-		function (e) {
-			if(e.which == 13){
-				pushSinonimo();
-			}
-		});
+// 	$('#sinonimo').keypress(
+// 		function (e) {
+// 			if(e.which == 13){
+// 				pushSinonimo();
+// 			}
+// 		});
+	onEnter("sinonimo",pushSinonimo);
 
 });
 
