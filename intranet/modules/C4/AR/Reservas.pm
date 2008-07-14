@@ -1041,7 +1041,7 @@ sub Enviar_Email{
 		my $dateformat = C4::Date::get_date_format();
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
 # biblio.unititle as runititle FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
-		$sth=$dbh->prepare("SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
+		my $sth=$dbh->prepare("SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
 				FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
 				INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
 				WHERE  reserves.borrowernumber =? AND reserves.id3= ? ");
@@ -1119,7 +1119,7 @@ sub eliminarReservasVencidas{
 # 		}
 		my $borrowernumber= $data->{'borrowernumber'};
 		my $reservenumber= $data->{'reservenumber'};
-		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'};
+		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'});
 		if($reservaGrupo){
 			$reservaGrupo->{'branchcode'}=$data->{'branchcode'};
 			$reservaGrupo->{'borrowernumber'}=$borrowernumber;
