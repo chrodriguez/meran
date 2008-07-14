@@ -1039,10 +1039,8 @@ sub Enviar_Email{
 	if (C4::Context->preference("EnabledMailSystem")){
 		my $dbh = C4::Context->dbh;
 		my $dateformat = C4::Date::get_date_format();
-		my $sth=$dbh->prepare("SELECT * FROM borrowers WHERE borrowernumber=?;");
-		$sth->execute($bor);
-		my $borrower= $sth->fetchrow_hashref;
-# biblio.unititle as runititle, biblioitems.number as redicion FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
+		my $borrower= C4::AR::Usuarios::getBorrower($bor);
+# biblio.unititle as runititle FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
 		$sth=$dbh->prepare("SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
 				FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
 				INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
@@ -1054,16 +1052,16 @@ sub Enviar_Email{
 		my $mailSubject =C4::Context->preference("reserveSubject");
 		my $mailMessage =C4::Context->preference("reserveMessage");
 		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
-		$res->{'rauthor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
-
+		$res->{'autor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
+		my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
 		$mailSubject =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
 		$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
 		$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
 		$mailMessage =~ s/TITLE/$res->{'titulo'}/;
-		$mailMessage =~ s/AUTHOR/$res->{'rauthor'}/;
-		$mailMessage =~ s/EDICION/$res->{'redicion'}/;
+		$mailMessage =~ s/AUTHOR/$res->{'autor'}/;
+		$mailMessage =~ s/EDICION/$edicion/;
 		$mailMessage =~ s/a2/$apertura/;
 		$desde=C4::Date::format_date($desde,$dateformat);
 		$mailMessage =~ s/a1/$desde/;
@@ -1099,45 +1097,61 @@ sub eliminarReservasVencidas{
 	my ($loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query= "	SELECT * 
-			FROM reserves 
-			WHERE estado <> 'P' AND reminderdate < NOW() AND id3 IS NOT NULL";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
+# 	my $query= "	SELECT * 
+# 			FROM reserves 
+# 			WHERE estado <> 'P' AND reminderdate < NOW() AND id3 IS NOT NULL";
+# 
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute();
+	my $reservasVencidas=reservasVencidas();
 	#Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
 	my @resultado;
-	while(my $data=$sth->fetchrow_hashref){
-		my $sth1=$dbh->prepare("	SELECT * 
-						FROM reserves WHERE id2=? AND id3 is NULL 
-						ORDER BY timestamp LIMIT 1 ");
-
-		$sth1->execute($data->{'id2'});
-		my $data2= $sth1->fetchrow_hashref;
-		if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
-			@resultado= ($data->{'id3'}, $data2->{'id2'}, $data2->{'borrowernumber'});
+# 	while(my $data=$sth->fetchrow_hashref){
+	foreach my $data (@$reservasVencidas){
+# 		my $sth1=$dbh->prepare("	SELECT * 
+# 						FROM reserves WHERE id2=? AND id3 is NULL 
+# 						ORDER BY timestamp LIMIT 1 ");
+# 
+# 		$sth1->execute($data->{'id2'});
+# 		my $data2= $sth1->fetchrow_hashref;
+# 		if ($data2) { #Quiere decir que hay reservas esperando para este mismo grupo
+# 			@resultado= ($data->{'id3'}, $data2->{'id2'}, $data2->{'borrowernumber'});
+# 		}
+		my $borrowernumber= $data->{'borrowernumber'};
+		my $reservenumber= $data->{'reservenumber'};
+		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'};
+		if($reservaGrupo){
+			$reservaGrupo->{'branchcode'}=$data->{'branchcode'};
+			$reservaGrupo->{'borrowernumber'}=$borrowernumber;
+			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
+			actualizarDatosReservaEnEspera($reservaGrupo);
 		}
 
 #**********************************Se registra el movimiento en historicSanction***************************
-		my $infoSancion= &infoSanction($data->{'reservenumber'});
+		my $infoSancion= &infoSanction($reservenumber);
 		my $fechaFinSancion= $infoSancion->{'enddate'};
 
 		my $responsable= $loggedinuser;
 		my $sanctiontypecode= 'null';
-		my $borrowernumber= $data->{'borrowernumber'};
 
 		logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
 #**********************************Fin registra el movimiento en historicSanction***************************
 
 		#Actualizo la sancion para que refleje el itemnumber y asi poder informalo
-		my $sth6=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
-		$sth6->execute($data->{'id3'},$data->{'reservenumber'});
+# 		my $sth6=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
+# 		$sth6->execute($data->{'id3'},$reservenumber);
+		my %params;
+		$params{'id3'}=$data->{'id3'};
+		$params{'reservenumber'}=$reservenumber;
+		actualizarSancion(\%params);
 
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-		my $sth3=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? ");
-		$sth3->execute($data->{'reservenumber'});
+# 		my $sth3=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=? ");
+# 		$sth3->execute($data->{'reservenumber'});
+		borrarReserva($reservenumber);
 
-
+=item
+actualizarDatosReservaEnEspera
 		if (@resultado){
 		#esto quiere decir que se realizo un movimiento de asignacion de item a una reserva que estaba en espera en la base, hay que actualizar las fechas y notificarle al usuario
 			my ($desde,$fecha,$apertura,$cierre)=proximosHabiles(C4::Context->preference("reserveGroup"),1);
@@ -1161,8 +1175,27 @@ sub eliminarReservasVencidas{
 #********************************Fin**Se registra el movimiento en historicCirculation*************************
 
 		}
+=cut
 	}
 
+}
+
+=item
+reservasVencidas
+Devuele una referencia a un arreglo con todas las reservas que esta vencidas al dia de la fecha.
+=cut
+sub reservasVencidas{
+	my $dbh = C4::Context->dbh;
+	my @results;
+	my $query= "	SELECT * 
+			FROM reserves 
+			WHERE estado <> 'P' AND reminderdate < NOW() AND id3 IS NOT NULL";
+	my $sth=$dbh->prepare($query);
+	$sth->execute();
+	while(my $data=$sth->fetchrow_hashref){
+		push(@results,$data);
+	}
+	return (\@results);
 }
 
 =item

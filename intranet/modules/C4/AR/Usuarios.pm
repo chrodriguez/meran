@@ -14,6 +14,7 @@ use vars qw(@EXPORT @ISA);
 	&esRegular
 	&estaSancionado
 	&llegoMaxReservas
+	&getBorrower
 	&getBorrowerInfo
 	&buscarBorrower
 );
@@ -43,6 +44,15 @@ sub buscarBorrower {
 	} # while
 	$sth->finish;
 	return(@results);
+}
+
+sub getBorrower{
+	my ($borrowernumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query="SELECT * FROM borrowers WHERE borrowernumber=?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber);
+	return ($sth->fetchrow_hashref);
 }
 
 sub getBorrowerInfo {

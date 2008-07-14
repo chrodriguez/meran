@@ -649,7 +649,7 @@ sub PrestamosMaximos {
 }
 
 =item
-mail de recordatorio envia los mails a los dueï¿½os de los items que vencen el proximo dia habil
+mail de recordatorio envia los mails a los dueños de los items que vencen el proximo dia habil
 =cut
 
 sub Enviar_Recordatorio{
@@ -658,9 +658,7 @@ sub Enviar_Recordatorio{
 	if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
 
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("SELECT * FROM borrowers WHERE borrowernumber=?;"); #Podria ser una funcion
-		$sth->execute($bor);
-		my $borrower= $sth->fetchrow_hashref;
+		my $borrower= C4::AR::Usuarios::getBorrower($bor);
 # 		biblio.unititle as runititle, biblioitems.number as redicion FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		$sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, reserves.id3 AS rid3
 				    FROM reserves
@@ -728,7 +726,7 @@ sub enviar_recordatorios_prestamos {
 		my $fechaDeVencimiento=vencimiento ($data->{'id3'});
 		my $proximohabil=proximoHabil(1,0);
 		if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-		Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
+			Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
 		};
 	}
 }
