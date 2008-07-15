@@ -73,7 +73,8 @@ if ($subtitlecount) {
         } # for
 } # if
 
-my ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
+# getbiblio se elimino
+# my ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
 my @autorPPAL= &getautor($biblios[0]->{'author'});
 my @autoresAdicionales=&getautoresAdicionales($biblionumber);
 my @colaboradores=&getColaboradores($biblionumber);

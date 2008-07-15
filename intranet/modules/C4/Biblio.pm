@@ -36,9 +36,7 @@ $VERSION = 0.01;
 	     &itemcount
 	     &checkitems &checkitemupdate
 	     &addauthor
-	     &delsubtitles
-	     &delbiblio
-	     &getitemtypes &getbiblio
+	     &getitemtypes
 	     &getcountrytypes &getsupporttypes &getlanguages  &getlevels 
 	     &getbiblioitembybiblionumber
 	     &getbiblioitem &getitemsbybiblioitem	
@@ -48,10 +46,6 @@ $VERSION = 0.01;
 		&MARCfind_marc_from_kohafield
 	     &MARCfindsubfield
 	     &MARCgettagslib
-
-		&NEWnewbiblio &NEWnewitem 
-		&NEWmodbiblio &NEWmoditem
-		&NEWdelbiblio &NEWdelitem
 
 	     &MARCaddbiblio &MARCadditem
 	     &MARCmodsubfield &MARCaddsubfield
@@ -65,11 +59,6 @@ $VERSION = 0.01;
 		&deletereserves
 		&changeAvailability
 
-
-		&find_biblioitemnumber
-		&get_item_from_barcode
-		&obtenerBiblioitemType
-		&deladdauthors
 		&obtenerReferenciaAutor
 		&signaturaUtilizada
 
@@ -948,16 +937,6 @@ sub MARChtml2marc {
 	return $record;
 }
 
-sub get_item_from_barcode {
-  my ($barcode)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from items,biblioitems where barcode=?
-  and items.biblioitemnumber=biblioitems.biblioitemnumber");
-  $sth->execute($barcode);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
 
 sub MARCmarc2koha {
 	my ($dbh,$record) = @_;
@@ -1115,143 +1094,7 @@ sub MARCdelword {
 #
 
 
-=item ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
 
-creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
-are builded from the MARC::Record. If they are passed, they are used.
-
-=item NEWnewitem($dbh, $record,$bibid);
-
-adds an item in the db.
-
-=cut
-
-sub NEWnewbiblio {
-	my ($dbh, $record, $oldbiblio, $oldbiblioitem) = @_;
-	# note $oldbiblio and $oldbiblioitem are not mandatory.
-	# if not present, they will be builded from $record with MARCmarc2koha function
-	if (($oldbiblio) and not($oldbiblioitem)) {
-		print STDERR "NEWnewbiblio : missing parameter\n";
-		print "NEWnewbiblio : missing parameter : contact koha development  team\n";
-		die;
-	}
-	my $oldbibnum;
-	my $oldbibitemnum;
-	if ($oldbiblio) {
-		$oldbibnum = OLDnewbiblio($dbh,$oldbiblio);
-		$oldbiblioitem->{'biblionumber'} = $oldbibnum;
-		$oldbibitemnum = OLDnewbiblioitem($dbh,$oldbiblioitem);
-	} else {
-		my $olddata = MARCmarc2koha($dbh,$record);
-		$oldbibnum = OLDnewbiblioMARC($dbh,$olddata); #cambie donde apuntaba la funcion porque la estructura de koha cambio por eso tengo que modificar algunas cosas
-		$olddata->{'biblioitems'}->{'biblionumber'} = $oldbibnum;
-		$oldbibitemnum = OLDnewbiblioitemMARC($dbh,$olddata);
-	}
-	# search subtiles, addiauthors and subjects
-
-#	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
-#	my @addiauthfields = $record->field($tagfield);
-#	foreach my $addiauthfield (@addiauthfields) {
-#		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
-#		foreach my $subfieldcount (0..$#addiauthsubfields) {
-#			OLDmodaddauthor($dbh,$oldbibnum,$addiauthsubfields[$subfieldcount]);
-#		}
-#	}
-#	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
-#	my @subtitlefields = $record->field($tagfield);
-#	foreach my $subtitlefield (@subtitlefields) {
-#		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
-	#	foreach my $subfieldcount (0..$#subtitlesubfields) {
-#			OLDnewsubtitle($dbh,$oldbibnum,$subtitlesubfields[$subfieldcount]);
-#		}
-#	}
-#	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
-#	my @subj = $record->field($tagfield);
-#	my @subjects;
-#	foreach my $subject (@subj) {
-#		my @subjsubfield = $subject->subfield($tagsubfield);
-#		foreach my $subfieldcount (0..$#subjsubfield) {
-#			push @subjects,$subjsubfield[$subfieldcount];
-#		}
-#	}
-#	OLDmodsubject($dbh,$oldbibnum,1,@subjects);
-	# we must add bibnum and bibitemnum in MARC::Record...
-	# we build the new field with biblionumber and biblioitemnumber
-	# we drop the original field
-	# we add the new builded field.
-	# NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
-	# (steve and paul : thinks 090 is a good choice)
-	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-	$sth->execute("biblio.biblionumber");
-	(my $tagfield1, my $tagsubfield1) = $sth->fetchrow;
-	$sth->execute("biblioitems.biblioitemnumber");
-	(my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
-	if ($tagfield1 != $tagfield2) {
-		warn "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-		print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-		die;
-	}
-	my $newfield = MARC::Field->new( $tagfield1,'','',
-						"$tagsubfield1" => $oldbibnum,
-						"$tagsubfield2" => $oldbibitemnum);
-	# drop old field and create new one...
-	my $old_field = $record->field($tagfield1);
-	$record->delete_field($old_field);
-	$record->add_fields($newfield);
-	my $bibid = MARCaddbiblio($dbh,$record,$oldbibnum,$oldbibitemnum);
-	return ($bibid,$oldbibnum,$oldbibitemnum );
-}
-
-sub NEWmodbiblio {
-	
-        my ($dbh,$record,$bibid,$responsable) =@_;
-	guardarModificacion('Actualizado',$responsable,$bibid,'Libro');
-
-# para guardar quien cambio algo Pedro
-#        my $sth = $dbh->prepare ("insert into modificaciones (operacion,fecha,responsable,numero,tipo)
-#                           values ('update',NOW(),?,?,'biblio');");
-#        $sth->execute($responsable,$bibid);
-#           $sth->finish;
-#fin logeo Pedro
-
-
- 	&MARCmodbiblio($dbh,$bibid,$record,0);
-	my $oldbiblio = MARCmarc2koha($dbh,$record);
-	my $oldbiblionumber = OLDmodbiblioMARC($dbh,$oldbiblio);
-	OLDmodbibitemMARC($dbh,$oldbiblio);
-	return 1;
-}
-
-sub NEWdelbiblio {
-	my ($dbh,$bibid)=@_;
-	my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	&OLDdelbiblio($dbh,$biblio);
-	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
-	$sth->execute($biblio);
-	while(my ($biblioitemnumber) = $sth->fetchrow) {
-		OLDdeletebiblioitem($dbh,$biblioitemnumber);
- 	}
-	&MARCdelbiblio($dbh,$bibid,0);
-}
-=cut
-es el mismo metodo pero mejorado para evitar hacer algunas cosas dos veces, se invoca desde acqui.simple/additem.pl
-=cut
-sub NEWnewitem { 
-	my ($dbh, $item,$record,$bibid) = @_;
-	# add item in old-DB
-	#my $item = &MARCmarc2koha($dbh,$record);
-	# needs old biblionumber and biblioitemnumber
-	$item->{'biblionumber'} = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	my $sth = $dbh->prepare("select biblioitemnumber,itemtype from biblioitems where biblionumber=?");
-	$sth->execute($item->{'biblionumber'});
-	($item->{'biblioitemnumber'},$item->{'itemtype'}) = $sth->fetchrow;
-	my ($itemnumber,$error) = &OLDnewitems($dbh,$item,$item->{'barcode'});
-	# add itemnumber to MARC::Record before adding the item.
-	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-	&MARCkoha2marcOnefield($sth,$record,"items.itemnumber",$itemnumber);
-	# add the item
-	my $bib = &MARCadditem($dbh,$record,$item->{'biblionumber'});
-}
 
 
 #sub NEWnewitemorig {
@@ -1271,19 +1114,8 @@ sub NEWnewitem {
 #	my $bib = &MARCadditem($dbh,$record,$item->{'biblionumber'});
 #}
 
-sub NEWmoditem {
-	my ($dbh,$record,$bibid,$itemnumber,$delete,$responsable) = @_;
-	&MARCmoditem($dbh,$record,$bibid,$itemnumber,$delete,$responsable);
-	my $olditem = MARCmarc2koha($dbh,$record,$responsable);
-	&OLDmoditem($dbh,$olditem);
-}
 
-sub NEWdelitem {
-	my ($dbh,$bibid,$itemnumber,$responsable)=@_;
-	my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-	&OLDdelitem($dbh,$itemnumber);
-	&MARCdelitem($dbh,$bibid,$itemnumber);
-}
+
 
 #
 #
@@ -1355,33 +1187,6 @@ delete a biblio
 
 =cut
 
-sub OLDnewbiblio {
-	my ($dbh,$biblio) = @_;
-	#  my $dbh    = &C4Connect;
-	my $sth    = $dbh->prepare("Select max(biblionumber) from biblio");
-	$sth->execute;
-	my $data   = $sth->fetchrow_arrayref;
-	my $bibnum = $$data[0] + 1;
-	my $series = 0;
-	if ($biblio->{'seriestitle'}) { $series = 1 };
-	$sth->finish;
-	#EINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-	my $codautor=obtenerReferenciaAutor($dbh,$biblio->{'author'});
-	(($codautor ne '')||($codautor='0'));
-	$sth = $dbh->prepare("insert into biblio set biblionumber  = ?, title = ?, unititle = ? , author = ?,  serial = ?, seriestitle = ?, notes = ?, abstract = ?, responsability=?");
-#MATIAS pongo en unititle el title tambien
-	$sth->execute($bibnum,$biblio->{'title'}, $biblio->{'unititle'} ,$codautor,$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'},$biblio->{'responsability'});
-	#agregar TEMAS
-	agregarMaterias($dbh,$bibnum,$biblio->{'subjectheadings'});
-	
-	agregarColaboradores($dbh,$bibnum,$biblio->{'colaboradores'});
-	agregarAutoresAdicionales($dbh,$bibnum,$biblio->{'additionalauthors'});
-	agregarSubtitulos($dbh,$bibnum,$biblio->{'subtitle'});
-	$sth->finish;
-	#  $dbh->disconnect;
-	#EINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-	return($bibnum);
-}
 
 =cut
 Se agrega este metodo para buscar el codigo que corresponde al autor en la tabla aurores.
@@ -1422,105 +1227,7 @@ return $$data[0];
 
 
 
-=cut
-Se agrega este metodo para agregar a Koha lo que se esta agregando en MARC, ya que al cambiar la estructura de KOha hay que hacer algunos cambios.
-=cut
 
-sub OLDnewbiblioMARC {
-	my ($dbh,$datos) = @_;
-	my $biblio= $datos->{'biblio'};
-	my $sth    = $dbh->prepare("Select max(biblionumber) from biblio");
-	$sth->execute;
-	my $data   = $sth->fetchrow_arrayref;
-	my $bibnum = $$data[0] + 1;
-	$sth->finish;
-	$sth = $dbh->prepare("insert into biblio set biblionumber  = ?, title = ?, unititle = ? , author = ?, seriestitle = ?, notes = ?, abstract = ?");
-#MATIAS pongo en unititle el title tambien
-	$sth->execute($bibnum,$biblio->{'title'}, $biblio->{'unititle'} ,$biblio->{'author'},$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
-	$datos->{'bibliosubject'}->{'subject'}=~s/\|/\n/g;
-	agregarMaterias($dbh,$bibnum,$datos->{'bibliosubject'}->{'subject'});
-	$datos->{'additionalauthors'}->{'author'}=~s/\|/\n/g;
-	agregarColaboradores($dbh,$bibnum,$datos->{'additionalauthors'}->{'author'});
-	$datos->{'bibliosubtitle'}->{'subtitle'}=~s/\|/\n/g;
-	agregarSubtitulos($dbh,$bibnum,$datos->{'bibliosubtitle'}->{'subtitle'});
-	$sth->finish;
-	#  $dbh->disconnect;
-	return($bibnum);
-}
-
-sub OLDmodbiblioMARC {
-	my ($dbh,$datos) = @_;
-	my $biblio = $datos->{'biblio'};
-	my $sth;
-	$sth   = $dbh->prepare("Update biblio set title = ?, author = ?, abstract = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ? where biblionumber = ?");
-	$sth->execute($biblio->{'title'},$biblio->{'author'},$biblio->{'abstract'}, $biblio->{'seriestitle'},$biblio->{'serial'},$biblio->{'unititle'},$biblio->{'notes'},$biblio->{'biblionumber'});
-
-	$sth->finish;
-	my $bibnum=$biblio->{'biblionumber'};
-$datos->{'bibliosubject'}->{'subject'}=~s/\|/\n/g;
-        updateTablaReferenciaINV($bibnum,"biliosubject","biblionumber",$datos->{'bibliosubject'}->{'subject'});
-        $datos->{'additionalauthors'}->{'author'}=~s/\|/\n/g;
-        updateTablaReferenciaINV($bibnum,"additionalauthors","biblionumber",$datos->{'additionalauthors'}->{'author'});
-        $datos->{'bibliosubtitle'}->{'subtitle'}=~s/\|/\n/g;
-        updateTablaReferenciaINV($bibnum,"bibliosubtitle","biblionumber",$datos->{'bibliosubtitle'}->{'subtitle'});
-return ($bibnum);
-
-
-} 
-
-sub OLDmodbiblio {
-	my ($dbh,$biblio) = @_;
-	#  my $dbh   = C4Connect;
-	my $query;
-	my $sth;
-	$query = "";
-	my $bibnum=$biblio->{'biblionumber'};	
-	#Matias:  COPIA DE EINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-        my $codautor=obtenerReferenciaAutor($dbh,$biblio->{'author'});                
-	(($codautor ne '')||($codautor='0'));
-	
-	my $series = 0;
-	if ($biblio->{'seriestitle'}) { $series = 1 };
-		
-	$sth   = $dbh->prepare("Update biblio set title = ?, author = ?, abstract = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ?, responsability=?  where biblionumber = ?");
-	$sth->execute($biblio->{'title'},$codautor,$biblio->{'abstract'}, $biblio->{'seriestitle'},$series,$biblio->{'unititle'},$biblio->{'notes'},$biblio->{'responsability'},$biblio->{'biblionumber'});
-
-	$sth->finish;
-
-	 
-	 #MATIAS  Elimino todo y despues agrego
-	 &deladdauthors($dbh,$bibnum);#Borra todos los autores adicionales
-	 &delcolaboradores($dbh,$bibnum);#Borra todos los colaboradores 
-	 &delsubtitles($dbh,$bibnum); #Borra todos los  temas
-	 &delsubjects($dbh,$bibnum);
-	 #MATIAS
-
-	agregarMaterias($dbh,$bibnum,$biblio->{'subjectheadings'});
-	agregarColaboradores($dbh,$bibnum,$biblio->{'colaboradores'});
-	agregarAutoresAdicionales($dbh,$bibnum,$biblio->{'additionalauthors'});
-	agregarSubtitulos($dbh,$bibnum,$biblio->{'subtitle'});
-	$sth->finish;
-	$dbh->disconnect;
-#Matias: EINARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-                                                                                        
-
-	return($biblio->{'biblionumber'});
-} # sub OLdmodbiblio
-
-sub OLDmodsubtitle {
-	my ($dbh,$bibnum, $subtitle,$responsable) = @_;
-	my $sth   = $dbh->prepare("update bibliosubtitle set subtitle = ? where biblionumber = ?");
-	$sth->execute($subtitle,$bibnum);
-	$sth->finish;
-	guardarModificacion('Actualizado',$responsable,$bibnum,'Libro')
-
-#para guardar quien cambio algo Pedro
-#        my $sth = $dbh->prepare ("insert into modificaciones (operacion,fecha,responsable,numero,tipo)
-#                           values ('update',NOW(),?,?,'biblio');");
-#        $sth->execute($responsable,$bibnum);
-#	$sth->finish;
-#fin logeo Pedro
-} # sub modsubtitle
 
 
 sub OLDmodaddauthor {
@@ -1628,140 +1335,6 @@ sub OLDmodsubject {
 	return($error);
 } # sub modsubject
 
-sub OLDmodbibitem {
-    my ($dbh,$biblioitem) = @_;
-    my $query;
-
-    $query = "Update biblioitems set
-itemtype        = ?,
-url             = ?,
-publicationyear = ?,
-classification  = ?,
-dewey           = ?,
-subclass        = ?,
-illus           = ?,
-pages           = ?,
-volumeddesc     = ?,
-volume    	= ?,
-notes 		= ?,
-size		= ?,
-seriestitle     = ?,
-number          = ?,
-place		= ?,
-idLanguage      = ?,
-idCountry       = ?,
-idSupport       =  ?,
-fasc       	=  ?,
-issn       	=  ?,
-lccn       	=  ?
-
-where biblioitemnumber = ?";
-
-    my $sth2   = $dbh->prepare($query);
-       $sth2->execute( $biblioitem->{'itemtype'},$biblioitem->{'url'}, $biblioitem->{'publicationyear'}, $biblioitem->{'classification'},
-    $biblioitem->{'dewey'},$biblioitem->{'subclass'}, $biblioitem->{'illus'}, $biblioitem->{'pages'}, $biblioitem->{'volumeddesc'}, 
-    $biblioitem->{'volume'}, $biblioitem->{'bnotes'}, $biblioitem->{'size'}, $biblioitem->{'seriestitle'}, $biblioitem->{'number'}, 
-    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'}  ,$biblioitem->{'issn'},$biblioitem->{'lccn'}, $biblioitem->{'biblioitemnumber'});
-	$sth2->finish;
-
-} # sub modbibitem
-
-sub updateTablaReferenciaINV{
-  my ($num,$tabla,$id,$campo)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("delete from $tabla where $id = $num");
-  $sth->execute();
-  $sth->finish;
-  my @ars=split(/^/,$campo); #separa los \n
-        foreach my $ar (@ars)  {
-		my $aux=$ar;
-		$aux =~ s/\n//; #elimina los \n
-		$aux=~ s/\s+$//;#elimina el espacio del final
-		if ($aux ne '') {
-			$sth = $dbh->prepare ("insert into $tabla 
-					values (".$aux.",'".$num."');");
-            $sth->execute();
-            $sth->finish;
-          }
-        }
-} # sub
-
-sub updateTablaReferencia{
-  my ($num,$tabla,$id,$campo)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("delete from $tabla where $id = $num");
-  $sth->execute();
-  $sth->finish;
-  my @ars=split(/^/,$campo); #separa los \n
-        foreach my $ar (@ars)  {
-		my $aux=$ar;
-		$aux =~ s/\n//; #elimina los \n
-		$aux=~ s/\s+$//;#elimina el espacio del final
-		if ($aux ne '') {
-			$sth = $dbh->prepare ("insert into $tabla 
-					values (".$num.",'".$aux."');");
-            $sth->execute();
-            $sth->finish;
-          }
-        }
-} # sub
-
-
-
-sub OLDmodbibitemMARC {
-   my ($dbh,$datos) = @_;
-   my $biblioitem=$datos->{'biblioitems'};
-            
-    my $query;
-
-    $query = "Update biblioitems set
-itemtype        = ?,
-url             = ?,
-publicationyear = ?,
-classification  = ?,
-dewey           = ?,
-subclass        = ?,
-illus           = ?,
-pages           = ?,
-volumeddesc     = ?,
-volume    	= ?,
-notes 		= ?,
-size		= ?,
-seriestitle     = ?,
-number          = ?,
-place		= ?,
-idLanguage      = ?,
-idCountry       = ?,
-idSupport       =  ?,
-fasc		= ?,
-issn		= ?,
-lccn		= ?
-where biblioitemnumber = ?";
-
-$datos->{'publisher'}->{'publisher'}=~s/\|/\n/g;
-updatePublishers($biblioitem->{'biblioitemnumber'},$datos->{'publisher'}->{'publisher'});
-$datos->{'isbns'}->{'isbn'}=~s/\|/\n/g;
-updateISBNs($biblioitem->{'biblioitemnumber'},$datos->{'isbns'}->{'isbn'});
-
-    my $sth2   = $dbh->prepare($query);
-       $sth2->execute( $biblioitem->{'itemtype'},$biblioitem->{'url'}, $biblioitem->{'publicationyear'}, $biblioitem->{'classification'},
-    $biblioitem->{'dewey'},$biblioitem->{'subclass'}, $biblioitem->{'illus'}, $biblioitem->{'pages'}, $biblioitem->{'volumeddesc'}, 
-    $biblioitem->{'volume'}, $biblioitem->{'bnotes'}, $biblioitem->{'size'}, $biblioitem->{'seriestitle'}, $biblioitem->{'number'}, 
-    $biblioitem->{'place'}, $biblioitem->{'language'}, $biblioitem->{'country'}, $biblioitem->{'support'},$biblioitem->{'fasc'} ,$biblioitem->{'issn'} ,$biblioitem->{'lccn'} , $biblioitem->{'biblioitemnumber'});
-	$sth2->finish;
-
-} 
-
-sub OLDmodnote {
-	my ($dbh,$bibitemnum,$note)=@_;
-	#  my $dbh=C4connect;
-	my $query="update biblioitems set notes='$note' where
-	biblioitemnumber='$bibitemnum'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	$sth->finish;
-	#  $dbh->disconnect;
-}
 
 
 #Funciones Adicionales para agregar dependencias
@@ -1777,46 +1350,7 @@ sub guardarModificacion{
         $sth->finish;
 }#Fin PEDRO
 
-sub agregarSubtitulos {
-# NAHUEL
-	my ($dbh,$bibnro,$subs) = @_;
-    	my @ars=split(/^/,$subs);
-my $sth;
-foreach my $ar (@ars)  {
-        my $aux=$ar;
-        $aux =~ s/\n//;
-	$aux =~ s/^\s+//; #Quita los espacios al principio
-	$aux =~ s/\s+$//; #Quita los espacios al final
-			  
-	if ($aux ne '') {   
- 	OLDnewsubtitle ($dbh,$bibnro,$aux);
-	}}}
 
-sub agregarAutoresAdicionales {
-	my ($dbh,$bibnro,$additauth) = @_;
-    	my @ars=split(/^/,$additauth);
-my $sth;
-foreach my $ar (@ars)  {
-        my $aux=$ar;
-	
-	$aux =~ s/\n+$//; #elimina los \n
-	$aux =~ s/\r+$//; #elimina los \r
-	$aux =~ s/^\s+//; #Quita los espacios al principio
-	$aux =~ s/\s+$//; #Quita los espacios al final
-	
-        if ($aux ne '') {   
-	$sth=$dbh->prepare("Select count(*) from additionalauthors  where biblionumber=? and author=?;");
-        $sth->execute($bibnro,$aux);
-        my $data=$sth->fetchrow;
-        $sth->finish;
-        if ($data eq 0) {
-
- 
-	$sth = $dbh->prepare ("insert into additionalauthors (biblionumber, author) values (?, ?);");
-	    $sth->execute($bibnro,$aux);
-	    $sth->finish;
-
-	}}}}
 
 sub agregarColaboradores {
 	my ($dbh,$bibnro,$additauth) = @_;
@@ -1835,160 +1369,6 @@ sub agregarColaboradores {
 	    	$sth->finish;
 				
 }}
-
-
-
-
-sub agregarAutoresAdicionales {
-	my ($dbh,$bibnro,$additauth) = @_;
-	my @ars=split(/^/,$additauth);
-	my $sth;
-	foreach my $ar (@ars)  {
-		my $idCol=obtenerReferenciaAutor($dbh,$ar);#Esto habria que cambiarlo si no corresponde que la misma tabla de referencia de autores sea la de colaborad
-        	$sth = $dbh->prepare ("insert into additionalauthors (biblionumber, author) values (?, ?);");
-		$sth->execute($bibnro,$idCol);
-	    	$sth->finish;
-	}}
-
-=item 	
-sub agregarColaboradoresOriginal {
-	my ($dbh,$bibnro,$additauth) = @_;
-    	my @ars=split(/^/,$additauth);
-my $sth;
-foreach my $ar (@ars)  {
-        my $aux=$ar;
-        $aux =~ s/\n//;
-        $aux=~ s/\s+$//;
-        if ($aux ne '') {   
-	$sth=$dbh->prepare("Select count(*) from colaboradores where biblionumber=? and author=?;");
-        $sth->execute($bibnro,$aux);
-        my $data=$sth->fetchrow;
-        $sth->finish;
-        if ($data eq 0) {
-	$sth = $dbh->prepare ("insert into colaboradores (biblionumber, author) values (?, ?);");
-	    $sth->execute($bibnro,$aux);
-	    $sth->finish;
-
-	}}}}
-=cut
-
-
-=item
-sub agregarMaterias{
-        my ($dbh,$bibnro,$subjects) =@_;
-        my @ars=split(/^/,$subjects); #separa los \n
-my $sth;
-foreach my $ar (@ars)  {
-	my $aux=$ar;
-	$aux =~ s/\n//; #elimina los \n
-	$aux=~ s/\s+$//;#elimina el espacio del final
-	if ($aux ne '') {
-# verifica existencia en tabla N a N
- 	  $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?;");
-          $sth->execute($bibnro,$aux);
-          my $data=$sth->fetchrow;
-          $sth->finish;
-#no existe en la tabla N a N se agrega
-        if ($data eq 0) {
-
-           $sth = $dbh->prepare("insert into bibliosubject (biblionumber, subject) values (? , ?);");
-           $sth->execute($bibnro,$aux);
-           $sth->finish;
-#verifica si existe el tema en la tabla de temas, sino lo agrega
-#         $sth=$dbh->prepare("Select count(*) from catalogueentry  where catalogueentry=?;");
-	$sth=$dbh->prepare("Select count(*) from temas  where nombre=?;");
-        $sth->execute($aux);
-        my $data=$sth->fetchrow;
-        $sth->finish;
-        if ($data eq 0) {
-#         	$sth = $dbh->prepare ("insert into catalogueentry  (catalogueentry, entrytype) values (? , 's');");
-		#el tema no existe, entonces se agrega
-	        $sth = $dbh->prepare ("insert into temas(nombre) values (?);");
-
-                $sth->execute($aux);
-                $sth->finish;
-         }
-	}# end if ($data eq 0)
-      } #end if ($aux ne '') 
-}#end for
-
-}#end agregarMaterias
-=cut
-
-sub agregarMaterias{
-my ($dbh,$bibnro,$subjects) =@_;
-my @ars=split(/^/,$subjects); #separa los \n
-my $sth;
-foreach my $ar (@ars)  {
-	my $aux=$ar;
-	my $idTema= 0;
-	my $tema;
-	$aux =~ s/\n//; #elimina los \n
-	$aux=~ s/\s+$//;#elimina el espacio del final
-	if ($aux ne '') {
-	#verifica si existe el tema en la tabla de temas
-	  $sth=$dbh->prepare("Select id from temas  where nombre=?");
-          $sth->execute($aux);
-  	  my $data=$sth->fetchrow_hashref;
-          $sth->finish;
-
-          if (!$data) {
-
-		#el tema no existe, entonces se agrega
-	        $sth = $dbh->prepare ("insert into temas(nombre) values (?)");
-                $sth->execute($aux);
-                $sth->finish;
-		#obtengo el id del tema agregado
-		$sth = $dbh->prepare ("Select max(id) as id From temas");
-                $sth->execute();
-		my $dataTemas= $sth->fetchrow_hashref;
-		$sth->finish;
-		$idTema= $dataTemas->{'id'};
-		$tema= $idTema;
-
-           }else{
-		
-		$tema= $data->{'id'};
-	
-	   }
-
-
-	  #el tema existe en la tabla de tamas
-	  #verifica existencia en tabla N a N, creo q no es necesario
- 	  $sth=$dbh->prepare("Select count(*) from bibliosubject  where biblionumber=? and subject=?");
-          $sth->execute($bibnro,$tema);
-          my $data=$sth->fetchrow;
-          $sth->finish;
-
-	  #no existe en la tabla N a N se agrega
-          if ($data eq 0) {
-
-          	$sth = $dbh->prepare("insert into bibliosubject(biblionumber, subject) values(? , ?);");
-           	$sth->execute($bibnro,$tema);
-           	$sth->finish;
-	 }
-      } #end if ($aux ne '') 
-}#end for
-
-}#end agregarMaterias
-
-sub agregarEditoriales{
-#LUCIANO se agregan las editoriales
-  my ($dbh,$bibitemnro,$publishers) = @_;
-  my $sth;
-  my @ars=split(/^/,$publishers); #separa los \n
-  foreach my $ar (@ars)  {
-    my $aux=$ar;
-    $aux =~ s/\n//; #elimina los \n
-    $aux=~ s/\s+$//;#elimina el espacio del final
-    if ($aux ne '') {
-      $sth = $dbh->prepare ("insert into publisher (biblioitemnumber, publisher) values (?,?);");
-      $sth->execute($bibitemnro,$aux);
-      $sth->finish;
-    }
-  }
-#FIN: LUCIANO 
-}
 
 sub agregarISBNs{
 #EINAR se agregan las editoriales
@@ -2538,15 +1918,6 @@ sub checkitemupdate{
 
 #MATIAS
 
-sub deladdauthors {
-    my ($dbh,$biblio)=@_;
-#   my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Delete from additionalauthors where biblionumber = ?");
-    $sth->execute($biblio);
-    $sth->finish;
-
-}
-
 sub delcolaboradores {
     my ($dbh,$biblio)=@_;
     #   my $dbh   = C4Connect;
@@ -2554,15 +1925,6 @@ sub delcolaboradores {
 	$sth->execute($biblio);
 	$sth->finish;
     }
-
-sub delsubtitles {
-    my ($dbh,$biblio)=@_;
-    my $sth = $dbh->prepare("Delete from bibliosubtitle where biblionumber = ?");
-    $sth->execute($biblio);
-    $sth->finish;
-
-}
-
 
 
 sub deletereserves {
@@ -2593,31 +1955,6 @@ sub deletereserves {
 #MATIAS
 
 
-
-
-
-sub delbiblio {
-	my ($biblio,$responsable)=@_;
-	my $dbh = C4::Context->dbh;
-	#Damian - Se agrego para que se guarde en modificaciones los grupos que fueron borrados
-	my $sth = $dbh->prepare("SELECT * FROM biblioitems WHERE biblionumber=?");
-	$sth->execute($biblio);
-	while (my $data = $sth->fetchrow_hashref){
-		guardarModificacion('Borrado',$responsable,$data->{'biblioitemnumber'},'Grupo');
-	}
-
-	guardarModificacion('Borrado',$responsable,$biblio,'Libro');
-	&OLDdelbiblio($dbh,$biblio);
-	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblio);
-	&MARCdelbiblio($dbh,$bibid,0);
-
-#MATIAS
-&deladdauthors($dbh,$biblio);
-&delcolaboradores($dbh,$biblio);
-&delsubtitles($dbh,$biblio);
-&delsubjects($dbh,$biblio);
-#MATIAS
-}
 
 sub getitemtypes {
   my $dbh   = C4::Context->dbh;
@@ -2712,24 +2049,6 @@ sub getcountrytypes {
   return(%resultslabels);
 } # sub getcountrytypes
 
-sub getbiblio {
-    my ($biblionumber) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select * from biblio where biblionumber = ?");
-      # || die "Cannot prepare $query\n" . $dbh->errstr;
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-      # || die "Cannot execute $query\n" . $sth->errstr;
-    while (my $data = $sth->fetchrow_hashref) {
-      $results[$count] = $data;
-      $count++;
-    } # while
-
-    $sth->finish;
-    return($count, @results);
-} # sub getbiblio
 
 
 
@@ -2751,16 +2070,6 @@ biblioitemnumber = ?");
     $sth->finish;
     return($count, @results);
 } # sub getbiblioitem
-
-sub obtenerBiblioitemType{
-    my ($biblioitemnumber) = @_;
-    my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("SELECT  biblioitems.itemtype FROM biblioitems WHERE biblioitemnumber = ?");
-    $sth->execute($biblioitemnumber);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return($data->{'itemtype'});
-} # sub
 
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
@@ -2849,14 +2158,6 @@ sub logchange {
 }
 
 #------------------------------------------------
-sub find_biblioitemnumber {
-	my ( $dbh, $biblionumber ) = @_;
-	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
-	$sth->execute($biblionumber);
-	my ($biblioitemnumber) = $sth->fetchrow;
-	return $biblioitemnumber;
-}
-
 #para mostrar el indice del biblioitem
 sub getIndice{
 
