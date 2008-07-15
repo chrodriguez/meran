@@ -65,17 +65,12 @@ on what is passed to it, it calls the appropriate search function.
 @ISA = qw(Exporter);
 @EXPORT = qw(
 &buscarCiudades	
-
-
+&BornameSearchForCard
+&itemdata3
 	
-	&BornameSearch 
-	&BornameSearchForCard
-	&ItemInfo 
-	&KeywordSearch 
-	&subsearch
-	&itemdata 
-	&itemdata2
-	&itemdata3
+	
+	
+	
 	&bibdata 
 	&GetItems 
 	&borrdata 
@@ -173,7 +168,12 @@ NO SE USA
 &getmaxrenewals
 &newsearch
 &CatSearch
-
+&BornameSearch
+&ItemInfo
+&KeywordSearch
+&subsearch
+&itemdata
+&itemdata2
 
 =cut
 
@@ -200,6 +200,93 @@ sub buscarCiudades{
 	return ($cant, \@results);
 }
 
+=item
+BornameSearchForCard
+Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
+=cut
+sub BornameSearchForCard{
+	my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
+	my @bind=();
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT borrowers.*,categories.description AS categoria FROM borrowers LEFT JOIN categories ON categories.categorycode = borrowers.categorycode WHERE borrowers.branchcode = ? ";
+	push (@bind,$branch);
+
+	if (($category ne '')&& ($category ne 'Todos')) {
+		$query.= " AND borrowers.categorycode = ? ";
+		push (@bind,$category);
+	}
+	if (($surname1 ne '') || ($surname2 ne '')){
+		if ($surname2 eq ''){ 
+			$query.= " AND borrowers.surname LIKE ? ";
+                       	push (@bind,"$surname1%"); 
+		}
+		else{
+			$query.= " AND borrowers.surname BETWEEN ? AND ? ";
+                	push (@bind,$surname1,$surname2);
+		}
+	}
+
+	if (($legajo1 ne '') || ($legajo2 ne '')){
+		if ($legajo2 eq '') {
+			$query.= " AND borrowers.studentnumber LIKE ? ";
+                       	push (@bind,"$legajo1%"); 
+		}
+		else{
+			$query.= " AND borrowers.studentnumber BETWEEN ? AND ? ";
+                	push (@bind,$legajo1,$legajo2);
+		}
+	}
+
+	if ($orden ne ''){$query.= " ORDER BY  borrowers.$orden ASC ";}
+	else {$query.= " ORDER BY  borrowers.surname ASC ";}
+
+	my $sth = $dbh->prepare($query);
+	$sth->execute(@bind);
+ 	my @results;
+ 	my $i=-1;
+ 	while (my $data=$sth->fetchrow_hashref){
+		my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
+		my $pasa=1;
+
+		if (($regular ne '')&&($regular ne 'Todos')){ #Se tiene que filtrar por regularidad??
+ 	  		if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
+		}
+		if ($pasa == 1){ #Pasa el filtro
+			$i++; 
+			$results[$i]=$data; 
+			$results[$i]->{'city'}=getcity($results[$i]->{'city'});
+			if ($results[$i]->{'categorycode'} eq 'ES'){
+				$results[$i]->{'regular'}= $reg;
+				if ($results[$i]->{'regular'} eq 1){
+					$results[$i]->{'regular'}="<font color='green'>Regular</font>";
+				}
+				elsif($results[$i]->{'regular'} eq 0){
+					$results[$i]->{'regular'}="<font color='red'>Irregular</font>";
+				}
+			}
+			else{$results[$i]->{'regular'}="---";};
+		}
+	}
+ 	$sth->finish;
+ 	return(scalar(@results),@results);
+}
+
+=item
+itemdata3
+Dado un itemnumber devuelve los datos del item (titulo y autor) 
+SE PUEDE RENOMBRAR o USAR OTRA FUNCION!!!!!!
+=cut
+sub itemdata3{
+        my ($id3) = @_;
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT titulo, autor FROM nivel3 n3 RIGHT JOIN nivel1 n1 ON n3.id1 = n1.id1 WHERE id3=? ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute($id3);
+        my $res=$sth->fetchrow_hashref;
+        $sth->finish();
+	$res->{'autor'}=getautor($res->{'autor'})->{'completo'};
+        return $res;
+}
 
 =item findguarantees
 
@@ -492,477 +579,6 @@ sub loguearBusqueda(){
 	#se hace rollback solo de la segunda
 }
 
-=item KeywordSearch
-
-  $search = { "keyword"	=> "One or more keywords",
-	      "class"	=> "VID|CD",	# Limit search to fiction and CDs
-	      "dewey"	=> "813",
-	 };
-  ($count, @results) = &KeywordSearch($env, $type, $search, $num, $offset);
-
-C<&KeywordSearch> searches the catalog by keyword: given a string
-(C<$search-E<gt>{"keyword"}> consisting of a space-separated list of
-keywords, it looks for books that contain any of those keywords in any
-of a number of places.
-
-C<&KeywordSearch> looks for keywords in the book title (and subtitle),
-series name, notes (both C<biblio.notes> and C<biblioitems.notes>),
-and subjects.
-
-C<$search-E<gt>{"class"}> can be set to a C<|> (pipe)-separated list of
-item class codes (e.g., "F" for fiction, "JNF" for junior nonfiction,
-etc.). In this case, the search will be restricted to just those
-classes.
-
-If C<$search-E<gt>{"class"}> is not specified, you may specify
-C<$search-E<gt>{"dewey"}>. This will restrict the search to that
-particular Dewey Decimal Classification category. Setting
-C<$search-E<gt>{"dewey"}> to "513" will return books about arithmetic,
-whereas setting it to "5" will return all books with Dewey code 5I<xx>
-(Science and Mathematics).
-
-C<$env> and C<$type> are ignored.
-
-C<$offset> and C<$num> specify the subset of results to return.
-C<$num> specifies the number of results to return, and C<$offset> is
-the number of the first result. Thus, setting C<$offset> to 100 and
-C<$num> to 5 will return results 100 through 104 inclusive.
-
-=cut
-#'
-sub KeywordSearch {
-  my ($env,$type,$search,$num,$offset,$orden,$from)=@_;
-  my $dbh = C4::Context->dbh;
-  $search->{'keyword'}=~ s/ +$//;
-  my @key=split(' ',$search->{'keyword'});
-		# FIXME - Naive users might enter comma-separated
-		# words, e.g., "training, animal". Ought to cope with
-		# this.
-  my $count=@key;
-  my $i=1;
-  my %biblionumbers;		# Set of biblionumbers returned by the
-				# various searches.
-  
-  
-  # FIXME - Ought to filter the stopwords out of the list of keywords.
-  #	@key = map { !defined($stopwords{$_}) } @key;
-
-  # FIXME - The way this code is currently set up, it looks for all of
-  # the keywords first in (title, notes, seriestitle), then in the
-  # subtitle, then in the subject. Thus, if you look for keywords
-  # "science fiction", this search won't find a book with
-  #	title    = "How to write fiction"
-  #	subtitle = "A science-based approach"
-  # Is this the desired effect? If not, then the first SQL query
-  # should look in the biblio, subtitle, and subject tables all at
-  # once. The way the first query is built can accomodate this easily.
-
-  # Look for keywords in table 'biblio'.
-
-  # Build an SQL query that finds each of the keywords in any of the
-  # title, biblio.notes, or seriestitle. To do this, we'll build up an
-  # array of clauses, one for each keyword.
-  my $query;			# The SQL query
-  my @clauses = ();		# The search clauses
-  my @bind = ();		# The term bindings
-#Tiempo
-#use Time::HiRes qw(gettimeofday);
-#open (L,">>/tmp/tiempo");
-#my ($epoch, $usecs) = gettimeofday;
-#my ($second, $minute, $hour) = localtime $epoch;
-#printf L "antes de buscar %02d:%02d:%02d.%06d\n", $hour, $minute, $second, $usecs;
-
-  $query = <<EOT;		# Beginning of the query
-	SELECT	biblionumber
-	FROM	biblio LEFT JOIN autores on  autores.id=biblio.author
-	WHERE
-EOT
-
-  foreach my $keyword (@key)
-  {
-    my @subclauses = ();	# Subclauses, one for each field we're
-				# searching on
-
-    # For each field we're searching on, create a subclause that'll
-    # match the current keyword in the current field.
-    foreach my $field (qw(title notes seriestitle autores.completo))
-    {
-      push @subclauses,
-	"$field LIKE ? OR $field LIKE ?";
-	  push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-    }
-    # (Yes, this could have been done as
-    #	@subclauses = map {...} qw(field1 field2 ...)
-    # )but I think this way is more readable.
-
-    # Construct the current clause by joining the subclauses.
-    push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
-  }
-  # Now join all of the clauses together and append to the query.
-  $query .= "(" . join(")\nAND (", @clauses) . ")";
-
-  # FIXME - Perhaps use $sth->bind_columns() ? Documented as the most
-  # efficient way to fetch data.
-  my $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-	$biblionumbers{$_} = 1;		# Add these results to the set
-    }
-  }
-  $sth->finish;
-
-  # Now look for keywords in the 'bibliosubtitle' table.
-
-  # Again, we build a list of clauses from the keywords.
-
-  @clauses = ();
-  @bind = ();
-  $query = "SELECT biblionumber FROM bibliosubtitle WHERE ";
-  foreach my $keyword (@key)
-  {
-    push @clauses,
-	"subtitle LIKE ? OR subtitle like ?";
-	push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-	$biblionumbers{$_} = 1;		# Add these results to the set
-    }
-  }
-  $sth->finish;
-
-  # Look for the keywords in the notes for individual items
-  # ('biblioitems.notes')
-
-  # Again, we build a list of clauses from the keywords.
-  @clauses = ();
-  @bind = ();
-  $query = "SELECT biblionumber FROM biblioitems WHERE ";
-  foreach my $keyword (@key)
-  {
-
- my @subclauses = ();
-	
-    foreach my $field (qw(notes seriestitle volumeddesc number))
-    {
-      push @subclauses,
-	"$field LIKE ? OR $field LIKE ?";
-	  push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-    }
-
-    push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
-
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-	$biblionumbers{$_} = 1;		# Add these results to the set
-    }
-  }
-  $sth->finish;
-
-# Look for keywords in the 'temas-bibliosubject' table.
-#Primero tengo que obtener los ids de los subjects de la tabla temas y  combinarlos con la tabla bibliosubject para obtener todos los biblio-ids que corresponden
-  @clauses = ();
-  @bind = ();
-  $query="SELECT bibliosubject.biblionumber
-  	FROM bibliosubject
-	inner join temas on bibliosubject.subject=temas.id
-	where	";
-			
-  foreach my $keyword (@key)
-  {
-    push @clauses,
-        " temas.nombre  LIKE ? OR temas.nombre  like ? ";
-        push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-  $query .= " group by biblionumber";
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-        $biblionumbers{$_} = 1;         # Add these results to the set
-    }
-  }
-  $sth->finish;
-#Primero tengo que obtener los autores
-  # Busqueda por autores adicionales.
-  @clauses = ();
-  @bind = ();
-  $query="SELECT biblio.biblionumber
-  	FROM autores
-	inner join colaboradores on autores.id=colaboradores.idColaborador
-	inner join biblio on colaboradores.biblionumber=biblio.biblionumber
-	where	";
-			
-  foreach my $keyword (@key)
-  {
-    push @clauses,
-        " autores.completo  LIKE ? OR autores.completo  like ? ";
-        push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-  $query .= " group by biblionumber";
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-        $biblionumbers{$_} = 1;         # Add these results to the set
-    }
-  }
-  $sth->finish;
-
-
-#Ahora Colaboradores
-
-
-  @clauses = ();
-  @bind = ();
-  $query= "SELECT biblio.biblionumber FROM 
-  	   autores inner join additionalauthors  on autores.id=additionalauthors.author
-	   inner join biblio on additionalauthors.biblionumber=biblio.biblionumber
-	   where	";
-			
-  foreach my $keyword (@key)
-  {
-    push @clauses,
-        " autores.completo  LIKE ? OR autores.completo  like ? ";
-        push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-  $query .= " group by biblionumber";
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-        $biblionumbers{$_} = 1;         # Add these results to the set
-    }
-  }
-  $sth->finish;
-
-#Ahora Autores
-
-  @clauses = ();
-  @bind = ();
-  $query= "SELECT biblio.biblionumber FROM 
-  	   autores inner join biblio on autores.id=biblio.author
-	   where	";
-			
-  foreach my $keyword (@key)
-  {
-    push @clauses,
-        " autores.completo  LIKE ? OR autores.completo  like ? ";
-        push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
-  }
-  $query .= "(" . join(") AND (", @clauses) . ")";
-  $query .= " group by biblionumber";
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-        $biblionumbers{$_} = 1;         # Add these results to the set
-    }
-  }
-  $sth->finish;
-
-
-=item
-  $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
-  like ? group by biblionumber");
-  $sth->execute("%$search->{'keyword'}%");
-
-  while (my @res = $sth->fetchrow_array) {
-    for (@res)
-    {
-	$biblionumbers{$_} = 1;		# Add these results to the set
-    }
-  }
-  $sth->finish;
-=cut
-  my $i2=0;
-  my $i3=0;
-  my $i4=0;
-
-  my @res2;
-  my @res = keys %biblionumbers;
-  $count=@res;
-
-#Tiempo
-#my ($epoch, $usecs) = gettimeofday;
-#my ($second, $minute, $hour) = localtime $epoch;
-#printf L "luego de buscar y antes de ordenar%02d:%02d:%02d.%06d\n", $hour, $minute, $second, $usecs;
-
-
-
-############### Matias: Le doy el orden
-my $j=0;
-my $list='';
- my $query="select biblionumber from biblio where biblionumber IN (  ";
-while ($j < $count){$query .= "'".$res[$j]."'";
-if ($j+1 < $count){$query .=", ";}
-$j++;
- }
-$query .= " ) order by $orden ";
-  my $sth=$dbh->prepare($query);
-       $sth->execute();
-  my @res; 
-
-$count=0;  
-while (my $data = $sth->fetchrow_hashref) {
-
-	if (($from ne 'opac')||( bibavail($data->{'biblionumber'}) eq 1)||(C4::Context->preference("opacUnavail") eq 1)){ #Si viene de opac y no esta disponible no lo proceso	 
-	     push(@res,$data->{'biblionumber'});
-	     $count++;
-	}	
-}
-
-#Tiempo
-#my ($epoch, $usecs) = gettimeofday;
-#my ($second, $minute, $hour) = localtime $epoch;
-#printf L "despues de ordenar %02d:%02d:%02d.%06d\n", $hour, $minute, $second, $usecs;
-#close L;
-
-###############
-
-  $i=0;
-  if ($search->{'class'}){
-    while ($i2 <$count){
-
-      my $query="select * from biblio left join  biblioitems on biblio.biblionumber=biblioitems.biblionumber  where
-    biblio.biblionumber=?";
-      my @bind = ($res[$i2]);
-      if ($search->{'class'}){	# FIXME - Redundant
-      my @temp=split(/\|/,$search->{'class'});
-      my $count=@temp;
-      $query.= "and ( itemtype=?";
-      push(@bind,$temp[0]);
-      for (my $i=1;$i<$count;$i++){
-        $query.=" or itemtype=?";
-        push(@bind,$temp[$i]);
-      }
-      $query.=")";
-      }
-       my $sth=$dbh->prepare($query);
-       $sth->execute(@bind);
-       if (my $data2=$sth->fetchrow_hashref){
-         my $dewey= $data2->{'dewey'};
-         my $subclass=$data2->{'subclass'};
-         # FIXME - This next bit is bogus, because it assumes that the
-         # Dewey code is a floating-point number. It isn't. It's
-         # actually a string that mainly consists of numbers. In
-         # particular, "4" is not a valid Dewey code, although "004"
-         # is ("Data processing; Computer science"). Likewise, zeros
-         # after the decimal are significant ("575" is not the same as
-         # "575.0"; the latter is more specific). And "000" is a
-         # perfectly good Dewey code ("General works; computer
-         # science") and should not be interpreted to mean "this
-         # database entry does not have a Dewey code". That's what
-         # NULL is for.
-         $dewey=~s/\.*0*$//;
-         ($dewey == 0) && ($dewey='');
-         ($dewey) && ($dewey.=" $subclass") ;
-          $sth->finish;
-	  my $end=$offset +$num;
-	  if ($i4 <= $offset){
-	    $i4++;
-	  }
-	  if ($i4 <=$end && $i4 > $offset){
-	    $data2->{'dewey'}=$dewey;
-	    $res2[$i3]=$data2;
-
-            $i3++;
-            $i4++;
-	  } else {
-#	    print $end;
-	  }
-	  $i++;
-        }
-
-
-     $i2++;
-     } # while
-     $count=$i;
-
-   } else {
-  # $search->{'class'} was not specified
-
-  # FIXME - This is bogus: it makes a separate query for each
-  # biblioitem, and returns results in apparently random order. It'd
-  # be much better to combine all of the previous queries into one big
-  # one (building it up a little at a time, of course), and have that
-  # big query select all of the desired fields, instead of just
-  # 'biblionumber'.
-
-  while ($i2 < $num && $i2 < $count){
-    my $query="select biblio.*, biblioitems.biblioitemnumber, volume, number, classification, itemtype, isbn, issn, dewey, subclass, publicationyear, publishercode, volumedate, volumeddesc, biblioitems.timestamp, illus, pages, biblioitems.notes, size, place, url, lccn, marc 
-    from biblio left join  biblioitems on biblio.biblionumber=biblioitems.biblionumber  where
-    biblio.biblionumber=? ";
-    my @bind=($res[$i2+$offset]);
-
-    if ($search->{'dewey'} ne ''){
-      $query.= "and (dewey like ?)";
-      push(@bind,"$search->{'dewey'}%");
-    }
-
-    my $sth=$dbh->prepare($query);
-
-
-#    print $query;
-    $sth->execute(@bind);
-    if (my $data2=$sth->fetchrow_hashref){
-        my $dewey= $data2->{'dewey'};
-        my $subclass=$data2->{'subclass'};
-	$dewey=~s/\.*0*$//;
-        ($dewey == 0) && ($dewey='');
-        ($dewey) && ($dewey.=" $subclass");
-        $sth->finish;
-	$data2->{'dewey'}=$dewey;
-
-	$res2[$i]=$data2;
-# $res2[$i]->{'biblionumber'}= $data2->{'biblionumber'};
-#	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
-        $i++;
-    }
-
-    $i2++;
-
-  } #while
-  } #else
-
-
- #Hay que agregar las analiticas
- my ($countanaliticas,@analiticas)= BiblioAnalysisSearch($search->{'keyword'});
- my $end=$offset +$num +1;
-foreach my $aux (@analiticas) {
-	if (($count >= $offset) and ($count <= ($end))){
-		push(@res2,$aux);
-	}
-	
-	$count++;
-}			
- ####Fin anliticas
-
-return($count,@res2);
-}
-
-
-
 
 #SubjectSearch
 # busca los temas
@@ -1114,270 +730,7 @@ sub updatesearchstats{
 
 }
 
-=item subsearch
 
-  @results = &subsearch($env, $subject);
-
-Searches for books that have a subject that exactly matches
-C<$subject>.
-
-C<&subsearch> returns an array of results. Each element of this array
-is a string, containing the book's title, author, and biblionumber,
-separated by tabs.
-
-C<$env> is ignored.
-
-=cut
-#'
-sub subsearch {
-  # Antes ($env,$subject)=@_;
-  my ($env,$subject,$num,$offset)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio inner join  bibliosubject on
-  biblio.biblionumber=bibliosubject.biblionumber where
-  bibliosubject.subject=? group by biblio.biblionumber
-  order by biblio.title");
-  $sth->execute($subject);
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    push @results, $data;
-    $i++;
-  }
-  $sth->finish;
-  
-
-
-
-################  MATIAS  (Para que cuente los items y la ubicacion)       ##########################
-
-
-if ($env->{itemcount} eq '1') {
-                foreach my $data (@results){
-                        my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
-                        my $subject2=$data->{'subject'};
-                        $subject2=~ s/ /%20/g;
-                        $data->{'itemcount'}=$counts->{'total'};
-                        my $totalitemcounts=0;
-                        foreach my $key (keys %$counts){
-                                if ($key ne 'total'){   # FIXME - Should ignore 'order', too.
-                                        #$data->{'location'}.="$key $counts->{$key} ";
-                                        $totalitemcounts+=$counts->{$key};
-                                        $data->{'locationhash'}->{$key}=$counts->{$key};
-                                }
-                        }
-                        my $locationtext='';
-    my $locationtextonly='';
-                        my $notavailabletext='';
-                        foreach (sort keys %{$data->{'locationhash'}}) {
-                                if ($_ eq 'notavailable') {
-                                        $notavailabletext="Not available";
-                                       my $c=$data->{'locationhash'}->{$_};
-                                        $data->{'not-available-p'}=$totalitemcounts;
-                                        if ($totalitemcounts>1) {
-                                        $notavailabletext.=" ($c)";
-                                       $data->{'not-available-plural-p'}=1;
-                                       }
-                                } else {
-                                        $locationtext.="$_";
-                                        my $c=$data->{'locationhash'}->{$_};
-                                        if ($_ eq 'Perdidos') {
-                                        $data->{'lost-p'}=$totalitemcounts;
-                                        $data->{'lost-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                       } elsif ($_ eq 'Retirados') {
-       $data->{'withdrawn-p'}=$totalitemcounts;
-                                        $data->{'withdrawn-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                        } elsif ($_ eq 'Prestados') {
-                                        $data->{'on-loan-p'}=$totalitemcounts;
-                                        $data->{'on-loan-plural-p'}=1
-                                                        if $totalitemcounts > 1;
-                                        } else {
-                                        $locationtextonly.=$_;
-                                   	$locationtextonly.=" ($c), "
-                                                       if $totalitemcounts>1;
-                                       }
-                                       if ($totalitemcounts>1) {
-                                        $locationtext.=" ($c), ";
-                                        }
-                                }
-                        }
-                        if ($notavailabletext) {
-                                $locationtext.=$notavailabletext;
-                        } else {
-                                $locationtext=~s/, $//;
-                        }
-                        $data->{'location'}=$locationtext;
-                        $data->{'location-only'}=$locationtextonly;
-                        $data->{'subject2'}=$subject2;
-                        $data->{'use-location-flags-p'}=1; # XXX
-               }
-       }
-
-
-################################################
-
-
-
-
-return(@results);
-}
-
-=item ItemInfo
-
-  @results = &ItemInfo($env, $biblionumber, $type);
-
-Returns information about books with the given biblionumber.
-
-C<$type> may be either C<intra> or anything else. If it is not set to
-C<intra>, then the search will exclude lost, very overdue, and
-withdrawn items.
-
-C<$env> is ignored.
-
-C<&ItemInfo> returns a list of references-to-hash. Each element
-contains a number of keys. Most of them are table items from the
-C<biblio>, C<biblioitems>, C<items>, and C<itemtypes> tables in the
-Koha database. Other keys include:
-
-=over 4
-
-=item C<$data-E<gt>{branchname}>
-
-The name (not the code) of the branch to which the book belongs.
-
-=item C<$data-E<gt>{datelastseen}>
-
-This is simply C<items.datelastseen>, except that while the date is
-stored in YYYY-MM-DD format in the database, here it is converted to
-DD/MM/YYYY format. A NULL date is returned as C<//>.
-
-=item C<$data-E<gt>{datedue}>
-
-=item C<$data-E<gt>{class}>
-
-This is the concatenation of C<biblioitems.classification>, the book's
-Dewey code, and C<biblioitems.subclass>.
-
-=item C<$data-E<gt>{ocount}>
-
-I think this is the number of copies of the book available.
-
-=item C<$data-E<gt>{order}>
-
-If this is set, it is set to C<One Order>.
-
-=back
-
-=cut
-#'
-sub ItemInfo {
-    my ($env,$biblionumber,$type) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $dateformat = C4::Date::get_date_format();
-    my $query = "SELECT *,items.notforloan as itemnotforloan FROM items left join  biblio on biblio.biblionumber = items.biblionumber left join  biblioitems on biblioitems.biblioitemnumber = items.biblioitemnumber left join itemtypes on biblioitems.itemtype = itemtypes.itemtype WHERE items.biblionumber = ? ";
-  if (($type ne 'intra')){
-# &&(C4::Context->preference("opacUnavail") eq 0)){
-    $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-    or items.itemlost is NULL)
-    and (wthdrawn <> 1 or wthdrawn is NULL)";
-  }
-  $query .= " order by items.dateaccessioned desc";
-    #warn $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute($biblionumber);
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    my $datedue = '';
-    my $isth=$dbh->prepare("SELECT * FROM issues inner join  borrowers on issues.borrowernumber = borrowers.borrowernumber  WHERE itemnumber = ? AND returndate IS  NULL ");
-    $isth->execute($data->{'itemnumber'});
-    if (my $idata=$isth->fetchrow_hashref){
-      $datedue ="Prestado a desde el".format_date($idata->{'date_due'},$dateformat);
-    }
-    if ($data->{'itemlost'} eq '2'){
-        $datedue="<font color='red'>Muy Atrasado</font>";
-    }
-    if ($data->{'itemlost'} eq '1'){
-        $datedue="<font color='red'>Perdido</font>";
-    }
-    if ($data->{'wthdrawn'} eq '1'){
-	$datedue="<font color='red'>Cancelado</font>";
-    }
-    if ($data->{'wthdrawn'} eq '2'){
-             $datedue="<font color='orange'>Compartido</font>";
-	         }
-    if ($data->{'wthdrawn'} eq '3'){
-             $datedue="<font color='orange'>Extension</font>";
-    }
-
-				
-   if ($data->{'itemnotforloan'} eq '1'){
-            $datedue="<font color='blue'>Para Sala</font>";
-    }
-
-=item
-    if ($datedue eq ''){
-	$datedue="<font color='green'>Disponible</font>";
-	my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
-	if ($restype){
-	    $datedue="<font color='green'>Reservado</font>";
-	}
-    }
-=cut
-
-    $isth->finish;
-#get branch information.....
-    my $bsth=$dbh->prepare("SELECT * FROM branches
-                          WHERE branchcode = ?");
-    $bsth->execute($data->{'holdingbranch'});
-    if (my $bdata=$bsth->fetchrow_hashref){
-	$data->{'branchname'} = $bdata->{'branchname'};
-    }
-
-    my $class = $data->{'classification'};# FIXME : $class is useless
-    my $dewey = $data->{'dewey'};
-    $dewey =~ s/0+$//;
-    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general books about computer science
-    if ($dewey < 10){$dewey='00'.$dewey;}
-    if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
-    if ($dewey <= 0){
-      $dewey='';
-    }
-    $dewey=~ s/\.$//;
-    $class .= $dewey;
-    if ($dewey ne ''){
-      $class .= $data->{'subclass'};
-    }
- #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
-    # FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
-    # to leave it empty, rather than convert it to "//".
-    # Also ideally this should use the local format for displaying dates.
-    my $date=format_date($data->{'datelastseen'},$dateformat);
-    $data->{'datelastseen'}=$date;
-    $data->{'datedue'}=$datedue;
-    $data->{'class'}=$class;
-    $results[$i]=$data;
-    $i++;
-  }
- $sth->finish;
-  #FIXME: ordering/indentation here looks wrong
-  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-  $sth2->execute($biblionumber);
-  my $data;
-  my $ocount;
-  if ($data=$sth2->fetchrow_hashref){
-    $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-    if ($ocount > 0){
-      $data->{'ocount'}=$ocount;
-      $data->{'order'}="One Order";
-      $results[$i]=$data;
-    }
-  }
-  $sth2->finish;
-  return(@results);
-}
 
 =item GetItems
 
@@ -1436,27 +789,6 @@ sub GetItems {
    return(@results);
 }
 
-=item itemdata
-
-  $item = &itemdata($barcode);
-
-Looks up the item with the given barcode, and returns a
-reference-to-hash containing information about that item. The keys of
-the hash are the fields from the C<items> and C<biblioitems> tables in
-the Koha database.
-
-=cut
-#'
-sub itemdata {
-  my ($barcode)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from items,biblioitems where barcode=?
-  and items.biblioitemnumber=biblioitems.biblioitemnumber");
-  $sth->execute($barcode);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
 
 #########Matias
 sub infoitem {
@@ -2204,99 +1536,6 @@ sub itemnodata {
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   return($data);
-}
-
-=item BornameSearch
-
-  ($count, $borrowers) = &BornameSearch($env, $searchstring, $type);
-
-Looks up patrons (borrowers) by name.
-
-C<$env> is ignored.
-
-BUGFIX 499: C<$type> is now used to determine type of search.
-if $type is "simple", search is performed on the first letter of the
-surname only.
-
-C<$searchstring> is a space-separated list of search terms. Each term
-must match the beginning a borrower's surname, first name, or other
-name.
-
-C<&BornameSearch> returns a two-element list. C<$borrowers> is a
-reference-to-array; each element is a reference-to-hash, whose keys
-are the fields of the C<borrowers> table in the Koha database.
-C<$count> is the number of elements in C<$borrowers>.
-
-=cut
-#'
-#used by member enquiries from the intranet
-#called by member.pl
-sub BornameSearch  {
-	my ($env,$searchstring,$type,$onlyCount,$orden,$startRecord,$numberOfRecords)=@_;
-	my $dbh = C4::Context->dbh;
-	my $count; 
-	my @data;
-	my @bind=();
-	my $query;
-	#Por si viene Vacio
-	if ($orden eq ''){$orden='surname,firstname';}
-	#
-
-	if ($onlyCount) {
-		$query = "Select count(*) from borrowers ";
-	} else {
-		$query = "Select * from borrowers ";
-	}
-
-	if($type eq "simple")	# simple search for one letter only
-	{
-		$query.="where surname like ? order by $orden";
-		@bind=("$searchstring%");
-	}
-	else	# advanced search looking in surname, firstname and othernames
-	{
-		@data=split(' ',$searchstring);
-                $count=@data;
-                $query.="where (surname like ? or surname like ?
-		or  firstname like ? or firstname like ?
-                or  documentnumber  like ? or  documentnumber like ?
-                or  cardnumber like ? or  cardnumber like ?
-		or  studentnumber like ? or  studentnumber like ?)";
-                @bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
-
-                for (my $i=1;$i<$count;$i++){
-                $query=$query." and  (surname like ? or surname like ?
-	     	or  firstname like ? or firstname like ?
-                or  documentnumber  like ? or  documentnumber like ?
-                or  cardnumber like ? or  cardnumber like ?
-		or  studentnumber  like ? or  studentnumber like ? )";
-	
-                push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
-                }
-                $query=$query."  order by $orden";
-	}
-
-	#### Add by Luciano to get pages of users insted of all the records ####
-	if (defined $startRecord && defined $numberOfRecords) {
-		$query.= " limit $startRecord,$numberOfRecords";
-	}
-	######
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
-	if ($onlyCount) {
-	  my $cnt= $sth->fetchrow;
-	  $sth->finish;
-	  return ($cnt);
-	} else {
-	  my @results;
-	  my $cnt=$sth->rows;
-	  while (my $data=$sth->fetchrow_hashref){
-	    push(@results,$data);
-	  }
-	  $sth->finish;
-	  return ($cnt,\@results);
-	}
 }
 
 =item borrdata
@@ -4293,35 +3532,7 @@ sub availDetail
   	return(scalar(@results),\@results);
 }
 
-#Dado un itemnumber devuelve los datos del item
-#SE puede cambiar por buscarNivel3 de C4::AR::Catalogacion.pm
-sub itemdata2
-{       
-        my ($id3) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT barcode,homebranch,signatura_topografica,holdingbranch FROM nivel3 WHERE id3=?";
-	
-        my $sth = $dbh->prepare($query);
-        $sth->execute($id3);
-        my $res=$sth->fetchrow_hashref;
-        $sth->finish();
-        return $res;
-}  
 
-
-#Dado un itemnumber devuelve los datos del item (titulo y autor)
-sub itemdata3
-{       
-        my ($id3) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT titulo, autor FROM nivel3 n3 RIGHT JOIN nivel1 n1 ON n3.id1 = n1.id1 WHERE id3=? ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($id3);
-        my $res=$sth->fetchrow_hashref;
-        $sth->finish();
-	$res->{'autor'}=getautor($res->{'autor'})->{'completo'};
-        return $res;
-}  
 
 
 sub SearchSig
@@ -4338,64 +3549,7 @@ $sth->execute("$signature%","% $signature%");
  return(scalar(@results),@results);					   
 }
 
-sub BornameSearchForCard 
-{
-my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
-my @bind=();
-my $dbh = C4::Context->dbh;
-my $query = "SELECT borrowers.*,categories.description as categoria from borrowers left join categories on categories.categorycode = borrowers.categorycode where borrowers.branchcode = ? ";
-push (@bind,$branch);
 
-if (($category ne '')&& ($category ne 'Todos')) { $query.= " and borrowers.categorycode = ? ";
-						   push (@bind,$category);}
-
-if (($surname1 ne '') || ($surname2 ne '')) 
-{
-if ($surname2 eq '') { $query.= " and borrowers.surname like ? ";
-                       push (@bind,"$surname1%"); }
-	else { $query.= " and borrowers.surname between ? and ? ";
-                push (@bind,$surname1,$surname2);
-		   }
-}
-
-if (($legajo1 ne '') || ($legajo2 ne '')) 
-{
-if ($legajo2 eq '') { $query.= " and borrowers.studentnumber like ? ";
-                       push (@bind,"$legajo1%"); }
-	else { $query.= " and borrowers.studentnumber between ? and ? ";
-                push (@bind,$legajo1,$legajo2);
-		   }
-}
-
-if ($orden ne '') { $query.= " order by  borrowers.$orden ASC ";}
-		   else {$query.= " order by  borrowers.surname ASC ";}
-
-my $sth = $dbh->prepare($query);
-$sth->execute(@bind);
- my @results;
- my $i=-1;
- while (my $data=$sth->fetchrow_hashref){
-	my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
-	my $pasa=1;
-
-	if (($regular ne '')&& ($regular ne 'Todos')) { #Se tiene que filtrar por regularidad??
- 	  if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
-		}
-	if ($pasa == 1){ #Pasa el filtro
-	$i++; 
-	$results[$i]=$data; 
-	$results[$i]->{'city'}=getcity($results[$i]->{'city'});
-	if ($results[$i]->{'categorycode'} eq 'ES'){
-		$results[$i]->{'regular'}= $reg;
-		if ($results[$i]->{'regular'} eq 1){$results[$i]->{'regular'}="<font color='green'>Regular</font>";}
-		elsif($results[$i]->{'regular'} eq 0){$results[$i]->{'regular'}="<font color='red'>Irregular</font>";}
-	}
-	else{$results[$i]->{'regular'}="---";};
-	}
-	}
- $sth->finish;
- return(scalar(@results),@results);
-}
 
 
 END { }       # module clean-up code here (global destructor)

@@ -51,7 +51,6 @@ my $signatura_topografica=$input->param('signatura_topografica');
 my $barcode=$input->param('barcode');
 
 my $data=bibitemdata($id2);
-my $itemdata=itemdata2($id3);
 
 my %inputs;
 my ($count, $detail)=availDetail($id3);
@@ -95,7 +94,7 @@ my $today= format_date($today,$dateformat);
 $template->param(DETAIL => \@results,
 		titulo => $data->{'titulo'},
 	        autor => $data->{'autor'},
-		itemnotes => $itemdata->{'itemnotes'},
+# 		itemnotes => FALTA LAS NOTAS DEL ITEM ES UN CAMPO MARC
 		id1 => $data->{'id1'},
         	id2 => $data->{'id2'},
 		id3 => $id3,
