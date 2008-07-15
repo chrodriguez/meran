@@ -80,6 +80,7 @@ FIXME
 
    	&getCountPrestamosDeGrupo
 	&prestamosPorUsuario
+	&cantidadDePrestamosPorUsuario
 );
 
 
@@ -858,3 +859,32 @@ sub prestamosPorUsuario {
 	return(\%currentissues);
 }
 
+=item
+cantidadDePrestamosPorUsuario
+Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro y la cantidad de vencidos.
+=cut
+sub cantidadDePrestamosPorUsuario{
+	my ($bornum)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $dateformat = C4::Date::get_date_format();
+  	my $query="SELECT * FROM issues WHERE borrowernumber=? AND returndate IS NULL";
+  	my $sth=$dbh->prepare($query);
+  	$sth->execute($bornum);
+  	my $issues=0;
+  	my $overdues=0;
+  
+ 	my $err= "Error con la fecha";
+ 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+ 	my $close = ParseDate(C4::Context->preference("close"));
+	if(Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
+		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
+	}
+	while (my $data=$sth->fetchrow_hashref){
+		#Pregunto si esta vencido
+       	 	my $df=C4::Date::format_date_in_iso(vencimiento($data->{'id3'}),$dateformat);
+		if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
+		$issues++;
+	}
+ 	$sth->finish;
+	return($overdues,$issues);
+}

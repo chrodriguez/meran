@@ -67,17 +67,13 @@ on what is passed to it, it calls the appropriate search function.
 &buscarCiudades	
 &BornameSearchForCard
 &itemdata3
+&bibdata
+&borrdata
+&NewBorrowerNumber
+
 	
 	
 	
-	
-	&bibdata 
-	&GetItems 
-	&borrdata 
-	&itemnodata 
-	&itemcount
-	&borrdata2 
-	&NewBorrowerNumber 
 	&bibitemdata 
 	&borrissues
 	&ItemType 
@@ -174,6 +170,10 @@ NO SE USA
 &subsearch
 &itemdata
 &itemdata2
+&GetItems
+&itemnodata
+&itemcount
+&borrdata2
 
 =cut
 
@@ -288,6 +288,127 @@ sub itemdata3{
         return $res;
 }
 
+=item bibdata
+  $data = &bibdata($biblionumber, $type);
+Returns information about the book with the given biblionumber.
+C<$type> is ignored.
+C<&bibdata> returns a reference-to-hash. The keys are the fields in
+the C<biblio>, C<biblioitems>, and C<bibliosubtitle> tables in the
+Koha database.
+In addition, C<$data-E<gt>{subject}> is the list of the book's
+subjects, separated by C<" , "> (space, comma, space).
+If there are multiple biblioitems with the given biblionumber, only
+the first one is considered.
+
+POSIBLEMENTE NO SE USE MAS, VER!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+SE USA PARA LOS PL DE ANALITICAS. (addanalysis.pl y opac-analysis.pl)
+=cut
+#'
+sub bibdata {
+    my ($bibnum, $type) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * ,biblio.seriestitle as cdu,  biblioitems.notes AS bnotes, 	biblio.notes
+	FROM biblio
+	LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
+	LEFT JOIN bibliosubtitle ON biblio.biblionumber = bibliosubtitle.biblionumber
+	WHERE biblio.biblionumber = ".$bibnum."
+	ORDER BY biblioitems.biblioitemnumber LIMIT 0 , 30 ");
+    $sth->execute();
+    my $data;
+    $data  = $sth->fetchrow_hashref;
+
+    $sth->finish;
+=item
+    $sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
+    $sth->execute($bibnum);
+    while (my $dat = $sth->fetchrow_hashref){
+        $data->{'subject'} .= "$dat->{'subject'}, ";
+    } # while
+	chop $data->{'subject'};
+	chop $data->{'subject'};
+    $sth->finish;
+    $sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
+    $sth->execute($bibnum);
+    while (my $dat = $sth->fetchrow_hashref){
+        $data->{'additionalauthors'} .= "$dat->{'author'}, ";
+
+    } # while
+	chop $data->{'additionalauthors'};
+	chop $data->{'additionalauthors'};
+    $sth->finish;
+=cut
+	#Para mostrar el nivel bibliografico  
+	 my $level=getLevel($data->{'classification'});
+        $data->{'classification'}= $level->{'description'};
+        $data->{'idclass'}= $level->{'code'};
+
+	
+
+    return($data);
+} # sub bibdata
+
+=item borrdata
+
+  $borrower = &borrdata($cardnumber, $borrowernumber);
+
+Looks up information about a patron (borrower) by either card number
+or borrower number. If $borrowernumber is specified, C<&borrdata>
+searches by borrower number; otherwise, it searches by card number.
+
+C<&borrdata> returns a reference-to-hash whose keys are the fields of
+the C<borrowers> table in the Koha database.
+POSIBLEMENTE SE PUEDE CAMBIAR POR ALGUNA FUNCION QUE SE ENCUENTRA EN EL PM DE USUARIOS.
+=cut
+#'
+sub borrdata {
+  my ($cardnumber,$bornum)=@_;
+  $cardnumber = uc $cardnumber;
+  my $dbh = C4::Context->dbh;
+  my $sth;
+  if ($bornum eq ''){
+    $sth=$dbh->prepare("SELECT * FROM borrowers WHERE cardnumber=?");
+    $sth->execute($cardnumber);
+  } else {
+    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($bornum);
+  }
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  if ($data) {
+  	return($data);
+	} else { # try with firstname
+		if ($cardnumber) {
+			my $sth=$dbh->prepare("select * from borrowers where firstname=?");
+			$sth->execute($cardnumber);
+			my $data=$sth->fetchrow_hashref;
+			$sth->finish;
+			return($data);
+		}
+	}
+	return undef;
+}
+
+=item 
+NewBorrowerNumber
+  $num = &NewBorrowerNumber();
+Allocates a new, unused borrower number, and returns it.
+=cut
+sub NewBorrowerNumber{
+  	my $dbh = C4::Context->dbh;
+  	my $sth=$dbh->prepare("SELECT MAX(borrowernumber) FROM borrowers");
+  	$sth->execute;
+  	my $data=$sth->fetchrow_hashref;
+  	$sth->finish;
+  	$data->{'max(borrowernumber)'}++;
+  	return($data->{'max(borrowernumber)'});
+}
+
+
+
+
+
+
+
 =item findguarantees
 
   ($num_children, $children_arrayref) = &findguarantees($parent_borrno);
@@ -349,26 +470,7 @@ sub findguarantor{
   return($data);
 }
 
-=item NewBorrowerNumber
 
-  $num = &NewBorrowerNumber();
-
-Allocates a new, unused borrower number, and returns it.
-
-=cut
-#'
-# FIXME - This is identical to C4::Circulation::Borrower::NewBorrowerNumber.
-# Pick one and stick with it. Preferably use the other one. This function
-# doesn't belong in C4::Search.
-sub NewBorrowerNumber {
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  $data->{'max(borrowernumber)'}++;
-  return($data->{'max(borrowernumber)'});
-}
 
 =item catalogsearch
 
@@ -731,63 +833,6 @@ sub updatesearchstats{
 }
 
 
-
-=item GetItems
-
-  @results = &GetItems($env, $biblionumber);
-
-Returns information about books with the given biblionumber.
-
-C<$env> is ignored.
-
-C<&GetItems> returns an array of strings. Each element is a
-tab-separated list of values: biblioitemnumber, itemtype,
-classification, Dewey number, subclass, ISBN, volume, number, and
-itemdata.
-
-Itemdata, in turn, is a string of the form
-"I<barcode>C<[>I<holdingbranch>C<[>I<flags>" where I<flags> contains
-the string C<NFL> if the item is not for loan, and C<LOST> if the item
-is lost.
-
-=cut
-#'
-sub GetItems {
-   my ($env,$biblionumber)=@_;
-   #debug_msg($env,"GetItems");
-   my $dbh = C4::Context->dbh;
-   my $sth=$dbh->prepare("Select * from biblioitems where (biblionumber = ?)");
-   $sth->execute($biblionumber);
-   #debug_msg($env,"executed query");
-   my $i=0;
-   my @results;
-   while (my $data=$sth->fetchrow_hashref) {
-      #debug_msg($env,$data->{'biblioitemnumber'});
-      my $dewey = $data->{'dewey'};
-      $dewey =~ s/0+$//;
-      my $line = $data->{'biblioitemnumber'}."\t".$data->{'itemtype'};
-      $line .= "\t$data->{'classification'}\t$dewey";
-      $line .= "\t$data->{'subclass'}\t$data->{isbn}";
-      $line .= "\t$data->{'volume'}\t$data->{number}";
-      my $isth= $dbh->prepare("select * from items where biblioitemnumber = ?");
-      $isth->execute($data->{'biblioitemnumber'});
-      while (my $idata = $isth->fetchrow_hashref) {
-        my $iline = $idata->{'barcode'}."[".$idata->{'holdingbranch'}."[";
-	if ($idata->{'notforloan'} == 1) {
-	  $iline .= "NFL ";
-	}
-	if ($idata->{'itemlost'} == 1) {
-	  $iline .= "LOST ";
-	}
-        $line .= "\t$iline";
-      }
-      $isth->finish;
-      $results[$i] = $line;
-      $i++;
-   }
-   $sth->finish;
-   return(@results);
-}
 
 
 #########Matias
@@ -1198,68 +1243,7 @@ my ($reserve, @reserves) ; # Findgroupreserve($biblioitemnumber,$biblionumber);
 
 
 #########
-=item bibdata
 
-  $data = &bibdata($biblionumber, $type);
-
-Returns information about the book with the given biblionumber.
-
-C<$type> is ignored.
-
-C<&bibdata> returns a reference-to-hash. The keys are the fields in
-the C<biblio>, C<biblioitems>, and C<bibliosubtitle> tables in the
-Koha database.
-
-In addition, C<$data-E<gt>{subject}> is the list of the book's
-subjects, separated by C<" , "> (space, comma, space).
-
-If there are multiple biblioitems with the given biblionumber, only
-the first one is considered.
-
-=cut
-#'
-sub bibdata {
-    my ($bibnum, $type) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("SELECT * ,biblio.seriestitle as cdu,  biblioitems.notes AS bnotes, 	biblio.notes
-	FROM biblio
-	LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
-	LEFT JOIN bibliosubtitle ON biblio.biblionumber = bibliosubtitle.biblionumber
-	WHERE biblio.biblionumber = ".$bibnum."
-	ORDER BY biblioitems.biblioitemnumber LIMIT 0 , 30 ");
-    $sth->execute();
-    my $data;
-    $data  = $sth->fetchrow_hashref;
-
-    $sth->finish;
-=item
-    $sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
-    $sth->execute($bibnum);
-    while (my $dat = $sth->fetchrow_hashref){
-        $data->{'subject'} .= "$dat->{'subject'}, ";
-    } # while
-	chop $data->{'subject'};
-	chop $data->{'subject'};
-    $sth->finish;
-    $sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
-    $sth->execute($bibnum);
-    while (my $dat = $sth->fetchrow_hashref){
-        $data->{'additionalauthors'} .= "$dat->{'author'}, ";
-
-    } # while
-	chop $data->{'additionalauthors'};
-	chop $data->{'additionalauthors'};
-    $sth->finish;
-=cut
-	#Para mostrar el nivel bibliografico  
-	 my $level=getLevel($data->{'classification'});
-        $data->{'classification'}= $level->{'description'};
-        $data->{'idclass'}= $level->{'code'};
-
-	
-
-    return($data);
-} # sub bibdata
 
 =item bibitemdata
 
@@ -1513,72 +1497,6 @@ and issues.borrowernumber = borrowers.borrowernumber");
     return(@results);
 }
 
-=item itemnodata
-
-  $item = &itemnodata($env, $dbh, $biblioitemnumber);
-
-Looks up the item with the given biblioitemnumber.
-
-C<$env> and C<$dbh> are ignored.
-
-C<&itemnodata> returns a reference-to-hash whose keys are the fields
-from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
-database.
-
-=cut
-#'
-sub itemnodata {
-  my ($env,$dbh,$itemnumber) = @_;
-  $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select biblio.biblionumber,items.homebranch, items.itemnotes,items.notforloan ,items.itemlost,items.wthdrawn,items.bulk,items.barcode from (biblio left join items on biblio.biblionumber = items.biblionumber) left join  biblioitems on biblioitems.biblioitemnumber = items.biblioitemnumber   where items.itemnumber = ? ");
-#  print $query;
-  $sth->execute($itemnumber);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
-
-=item borrdata
-
-  $borrower = &borrdata($cardnumber, $borrowernumber);
-
-Looks up information about a patron (borrower) by either card number
-or borrower number. If $borrowernumber is specified, C<&borrdata>
-searches by borrower number; otherwise, it searches by card number.
-
-C<&borrdata> returns a reference-to-hash whose keys are the fields of
-the C<borrowers> table in the Koha database.
-
-=cut
-#'
-sub borrdata {
-  my ($cardnumber,$bornum)=@_;
-  $cardnumber = uc $cardnumber;
-  my $dbh = C4::Context->dbh;
-  my $sth;
-  if ($bornum eq ''){
-    $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
-    $sth->execute($cardnumber);
-  } else {
-    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-  $sth->execute($bornum);
-  }
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  if ($data) {
-  	return($data);
-	} else { # try with firstname
-		if ($cardnumber) {
-			my $sth=$dbh->prepare("select * from borrowers where firstname=?");
-			$sth->execute($cardnumber);
-			my $data=$sth->fetchrow_hashref;
-			$sth->finish;
-			return($data);
-		}
-	}
-	return undef;
-}
-
 =item borrissues
 
   ($count, $issues) = &borrissues($borrowernumber);
@@ -1688,214 +1606,6 @@ sub allissues {
   $sth->finish;
 
   return($count,\@result);
-}
-
-=item borrdata2
-
-  ($borrowed, $due, $fine) = &borrdata2($env, $borrowernumber);
-
-Returns aggregate data about items borrowed by the patron with the
-given borrowernumber.
-
-C<$env> is ignored.
-
-C<&borrdata2> returns a three-element array. C<$borrowed> is the
-number of books the patron currently has borrowed. C<$due> is the
-number of overdue items the patron currently has borrowed. C<$fine> is
-the total fine currently due by the borrower.
-
-=cut
-#'
-sub borrdata2 {
-  my ($env,$bornum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $dateformat = C4::Date::get_date_format();
-  my $query="Select * from issues where borrowernumber='$bornum' and returndate is NULL";
-    # print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $issues=0;
-  my $overdues=0;
-  
- #
- my $err= "Error con la fecha";
- my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
- my  $close = ParseDate(C4::Context->preference("close"));
-if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-	$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);}
-
-  while (my $data=$sth->fetchrow_hashref){
-	#Pregunto si esta vencido
-        my $df=C4::Date::format_date_in_iso(vencimiento($data->{'id3'}),$dateformat);
-	if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
-	#
-		  $issues++;
-	  }
-		    
- $sth->finish;
-
-return($overdues,$issues,"");
-}
-
-=item getboracctrecord
-
-  ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
-
-Looks up accounting data for the patron with the given borrowernumber.
-
-C<$env> is ignored.
-
-(FIXME - I'm not at all sure what this is about.)
-
-C<&getboracctrecord> returns a three-element array. C<$acctlines> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields of the C<accountlines> table in the Koha database.
-C<$count> is the number of elements in C<$acctlines>. C<$total> is the
-total amount outstanding for all of the account lines.
-
-=cut
-#'
-=item NO SIRVE HACE UNA CONSULTA SOBRE LA TABLA accountlines
-sub getboracctrecord {
-   my ($env,$params) = @_;
-   my $dbh = C4::Context->dbh;
-   my @acctlines;
-   my $numlines=0;
-   my $sth=$dbh->prepare("Select * from accountlines where
-borrowernumber=? order by date desc,timestamp desc");
-#   print $query;
-   $sth->execute($params->{'borrowernumber'});
-   my $total=0;
-   while (my $data=$sth->fetchrow_hashref){
-   #FIXME before reinstating: insecure?
-#      if ($data->{'itemnumber'} ne ''){
-#        $query="Select * from items,biblio where items.itemnumber=
-#	'$data->{'itemnumber'}' and biblio.biblionumber=items.biblionumber";
-#	my $sth2=$dbh->prepare($query);
-#	$sth2->execute;
-#	my $data2=$sth2->fetchrow_hashref;
-#	$sth2->finish;
-#	$data=$data2;
- #     }
-      $acctlines[$numlines] = $data;
-      $numlines++;
-      $total += $data->{'amountoutstanding'};
-   }
-   $sth->finish;
-   return ($numlines,\@acctlines,$total);
-}
-=cut
-
-=item itemcount
-
-  ($count, $lcount, $nacount, $fcount, $scount, $lostcount,
-  $mending, $transit,$ocount) =
-    &itemcount($env, $biblionumber, $type);
-
-Counts the number of items with the given biblionumber, broken down by
-category.
-
-C<$env> is ignored.
-
-If C<$type> is not set to C<intra>, lost, very overdue, and withdrawn
-items will not be counted.
-
-C<&itemcount> returns a nine-element list:
-
-C<$count> is the total number of items with the given biblionumber.
-
-C<$lcount> is the number of items at the Levin branch.
-
-C<$nacount> is the number of items that are neither borrowed, lost,
-nor withdrawn (and are therefore presumably on a shelf somewhere).
-
-C<$fcount> is the number of items at the Foxton branch.
-
-C<$scount> is the number of items at the Shannon branch.
-
-C<$lostcount> is the number of lost and very overdue items.
-
-C<$mending> is the number of items at the Mending branch (being
-mended?).
-
-C<$transit> is the number of items at the Transit branch (in transit
-between branches?).
-
-C<$ocount> is the number of items that haven't arrived yet
-(aqorders.quantity - aqorders.quantityreceived).
-
-=cut
-#'
-
-# FIXME - There's also a &C4::Biblio::itemcount.
-# Since they're all exported, acqui/acquire.pl doesn't compile with -w.
-sub itemcount {
-  my ($env,$bibnum,$type)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from items where
-  biblionumber=? ";
-  if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
-    $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
-    (wthdrawn <> 1 or wthdrawn is NULL)";
-  }
-  my $sth=$dbh->prepare($query);
-  #  print $query;
-  $sth->execute($bibnum);
-  my $count=0;
-  my $lcount=0;
-  my $nacount=0;
-  my $fcount=0;
-  my $scount=0;
-  my $lostcount=0;
-  my $mending=0;
-  my $transit=0;
-  my $ocount=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $count++;
-
-    my $sth2=$dbh->prepare("select * from issues,items where issues.itemnumber=
-    ? and returndate is NULL
-    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
-    items.itemlost <> 2) or items.itemlost is NULL)
-    and (wthdrawn <> 1 or wthdrawn is NULL)");
-    $sth2->execute($data->{'itemnumber'});
-    if (my $data2=$sth2->fetchrow_hashref){
-       $nacount++;
-    } else {
-      if ($data->{'holdingbranch'} eq 'C' || $data->{'holdingbranch'} eq 'LT'){
-        $lcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'F' || $data->{'holdingbranch'} eq 'FP'){
-        $fcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'S' || $data->{'holdingbranch'} eq 'SP'){
-        $scount++;
-      }
-      if ($data->{'itemlost'} eq '1'){
-        $lostcount++;
-      }
-      if ($data->{'itemlost'} eq '2'){
-        $lostcount++;
-      }
-      if ($data->{'holdingbranch'} eq 'FM'){
-        $mending++;
-      }
-      if ($data->{'holdingbranch'} eq 'TR'){
-        $transit++;
-      }
-    }
-    $sth2->finish;
-  }
-#  if ($count == 0){
-    my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-    $sth2->execute($bibnum);
-    if (my $data=$sth2->fetchrow_hashref){
-      $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-    }
-#    $count+=$ocount;
-    $sth2->finish;
-  $sth->finish;
-  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount);
 }
 
 =item itemcount2

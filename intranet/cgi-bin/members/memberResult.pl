@@ -67,7 +67,7 @@ for (my $i=0; $i < $cantR; $i++){
   #find out stats
     if($results->[$i]{'borrowernumber'} ne ""){
 	my $clase="";
- 	my ($od,$issue)=borrdata2($env,$results->[$i]{'borrowernumber'});
+ 	my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($results->[$i]{'borrowernumber'});
  	my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
 
  	if ($regular eq 1){$regular="Regular"; $clase="prestamo";}	
