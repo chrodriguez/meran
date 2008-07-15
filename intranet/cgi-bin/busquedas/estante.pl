@@ -41,7 +41,7 @@ else { #Trae todos los del primer nivel
 }
 
 my @shelvesloop;
-my @key=sort { noaccents($shelflist{$a}->{'shelfname'}) cmp noaccents($shelflist{$b}->{'shelfname'}) } keys(%shelflist);
+my @key=sort { C4::AR::Utilidades::noaccents($shelflist{$a}->{'shelfname'}) cmp C4::AR::Utilidades::noaccents($shelflist{$b}->{'shelfname'}) } keys(%shelflist);
 
 
 foreach my $element (@key) {

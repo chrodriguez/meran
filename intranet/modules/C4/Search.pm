@@ -64,9 +64,11 @@ on what is passed to it, it calls the appropriate search function.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&buscarCiudades2
-	&getmaxissues
-	&getmaxrenewals
+&buscarCiudades	
+
+
+	
+	
 	&newsearch
 	&CatSearch
 	&BornameSearch 
@@ -145,8 +147,7 @@ on what is passed to it, it calls the appropriate search function.
 	
 	 &getautoresAdicionales &getColaboradores
 	
-	&buscarCiudades
-	&buscarCiudadesMasUsadas
+	
         &getCountry
         &getSupport
         &getLanguage
@@ -169,93 +170,37 @@ NO SE USA
 &getwebsites 
 &getboracctrecord
 
+&buscarCiudades2
+&buscarCiudadesMasUsadas
+&getmaxissues
+&getmaxrenewals
+&newsearch
+
 =cut
 
 
-=item newsearch
-	my (@results) = newsearch($itemtype,$duration,$number_of_results,$startfrom);
-c<newsearch> find biblio acquired recently (last 30 days)
-=cut
-sub newsearch {
-	my ($itemtype,$duration,$num,$offset)=@_;
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT to_days( now( ) ) - to_days( dateaccessioned ) AS duration,  biblio.biblionumber, barcode, title, author, number AS editors, classification, itemtype, dewey, dateaccessioned, price, replacementprice
-						FROM  biblio INNER JOIN  biblioitems ON  biblio.biblionumber = biblioitems.biblionumber 
-						INNER JOIN items ON items.biblioitemnumber = biblioitems.biblioitemnumber 
-					WHERE	to_days( now( ) ) - to_days( dateaccessioned ) < ? and itemtype=?
-						ORDER BY duration ASC limit 0,20");
-#Ahora limitamos a 20 pero habria que devolver los resultados paginandolios en ves de devolver solo los ultimos 20
-	$sth->execute($duration,$itemtype);
-	my $i=0;
-	my @result;
-	while (my $data = $sth->fetchrow_hashref) {
-		if ($i>=$offset && $i<$num+$offset) {
-			my ($counts) = itemcount2("", $data->{'biblionumber'}, 'intra');
-			my $subject2=$data->{'subject'};
-			$subject2=~ s/ /%20/g;
-			$data->{'itemcount'}=$counts->{'total'};
-			my $totalitemcounts=0;
-			foreach my $key (keys %$counts){
-				if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
-					#$data->{'location'}.="$key $counts->{$key} ";
-					$totalitemcounts+=$counts->{$key};
-					$data->{'locationhash'}->{$key}=$counts->{$key};
-				}
-			}
-			my $locationtext='';
-			my $locationtextonly='';
-			my $notavailabletext='';
-			foreach (sort keys %{$data->{'locationhash'}}) {
-				if ($_ eq 'notavailable') {
-					$notavailabletext="Not available";
-					my $c=$data->{'locationhash'}->{$_};
-					$data->{'not-available-p'}=$totalitemcounts;
-					if ($totalitemcounts>1) {
-					$notavailabletext.=" ($c)";
-					$data->{'not-available-plural-p'}=1;
-					}
-				} else {
-					$locationtext.="$_ ";
-					my $c=$data->{'locationhash'}->{$_};
-					if ($_ eq 'Perdidos') {
-					$data->{'lost-p'}=$totalitemcounts;
-					$data->{'lost-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'Retirados') {
-					$data->{'withdrawn-p'}=$totalitemcounts;
-					$data->{'withdrawn-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'Prestados') {
-					$data->{'on-loan-p'}=$totalitemcounts;
-					$data->{'on-loan-plural-p'}=1
-							if $totalitemcounts > 1;
-					} else {
-					$locationtextonly.=$_;
-					$locationtextonly.=" ($c), "
-							if $totalitemcounts>1;
-					}
-					if ($totalitemcounts>1) {
-					$locationtext.=" ($c), ";
-					}
-				}
-			}
-			if ($notavailabletext) {
-				$locationtext.=$notavailabletext;
-			} else {
-				$locationtext=~s/, $//;
-			}
-			$data->{'location'}=$locationtext;
-			$data->{'location-only'}=$locationtextonly;
-			$data->{'subject2'}=$subject2;
-			$data->{'use-location-flags-p'}=1; # XXX
-			push @result,$data;
-		}
-		$i++
+
+=item
+buscarCiudades
+Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
+=cut
+sub buscarCiudades{
+        my ($ciudad) = @_;
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad as localidad,localidades.nombre AS nombre FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais WHERE localidades.nombre LIKE ? or localidades.nombre LIKE ? ORDER BY localidades.nombre";
+	my $sth = $dbh->prepare($query);
+        $sth->execute($ciudad.'%', '% '.$ciudad.'%');
+        my @results;
+	my $cant;
+        while (my $data=$sth->fetchrow_hashref){ 
+		push(@results,$data); 
+		$cant++;
 	}
-	return($i,@result);
-
+	$sth->finish;
+	return ($cant, \@results);
 }
+
 
 =item findguarantees
 
@@ -4089,29 +4034,6 @@ sub getallborrowercategorys
 } # sub getallorrowercategorys
 
 
-#Cantidad  maxima de prestamos
-sub getmaxissues {
-	my ($issuetype) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT maxissues FROM issuetypes WHERE issuecode = ? ");
-	$sth->execute($issuetype);
-	my $max= $sth->fetchrow;
-	$sth->finish;
-	return $max;
-}
-
-#Cantidad  maxima de renovaciones
-sub getmaxrenewals
-{
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select value  from systempreferences where variable='maxrenewals'");
-  $sth->execute();
-  my $data=$sth->fetchrow();
-  $sth->finish;
-  return $data;
-}
-#fin agregado por Matias
-
 
 #agregado por LUCIANO
 sub editorsname {
@@ -4629,57 +4551,6 @@ sub darDepartamento {
         $sth->finish();
         return ($data);
 }
-
-
-sub buscarCiudades{
-        
-        my ($ciudad) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad as localidad,localidades.nombre AS nombre FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais WHERE localidades.nombre LIKE ? or localidades.nombre LIKE ? ORDER BY localidades.nombre";
-	my $sth = $dbh->prepare($query);
-        $sth->execute($ciudad.'%', '% '.$ciudad.'%');
-
-        my @results;
-	my $cant;
-        while (my $data=$sth->fetchrow_hashref){ 
-		push(@results,$data); 
-		$cant++;
-	}
- 
-	$sth->finish;
-
-	return ($cant, \@results);
-}
-#Miguel despues la saco
-sub buscarCiudades2{
-        
-        my ($ciudad) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad as localidad,localidades.nombre AS nombre FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais WHERE localidades.nombre LIKE ? or localidades.nombre LIKE ? ORDER BY localidades.nombre
-	limit 0,10";
-	my $sth = $dbh->prepare($query);
-        $sth->execute($ciudad.'%', '% '.$ciudad.'%');
-        my @results;
-        while (my $data=$sth->fetchrow_hashref){ push(@results,$data); }
-          $sth->finish;
-        return @results;
-}
-
-####Para buscar a las localidades mas usadas las primeras 20######
-
-sub buscarCiudadesMasUsadas{
-	my $dbh = C4::Context->dbh;
-        my $query = "SELECT count(localidad) AS maximas, countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad as localidad,localidades.nombre AS nombre
-	FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais INNER JOIN borrowers ON (localidades.localidad = borrowers.city) GROUP BY localidad ORDER BY maximas DESC limit 0,20";
-	my $sth = $dbh->prepare($query);
-        $sth->execute();
-        my @results;
-        while (my $data=$sth->fetchrow_hashref){ push(@results,$data); }
-          $sth->finish;
-        return \@results;
-}
-
-
 
 ###
 #Dados una provincia y un departamento me devuelva todas las localidades
