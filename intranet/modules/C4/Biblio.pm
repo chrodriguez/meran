@@ -36,8 +36,8 @@ $VERSION = 0.01;
 	     &itemcount
 	     &checkitems &checkitemupdate
 	     &addauthor
-	     &getitemtypes  
-	     &getbiblioitembybiblionumber
+	     
+	 
 
 	     &MARCfind_oldbiblionumber_from_MARCbibid
 	     &MARCfind_MARCbibid_from_oldbiblionumber
@@ -53,12 +53,10 @@ $VERSION = 0.01;
 	     &MARCgetbiblio &MARCgetitem
 	     &MARCaddword &MARCdelword
 		&char_decode
-		&guardarModificacion
-		&deletereserves
-		&changeAvailability
+
+
 
 		&obtenerReferenciaAutor
-		&signaturaUtilizada
 
 		&getIndice
 		&insertIndice
@@ -1082,108 +1080,6 @@ sub MARCdelword {
     $sth->execute($bibid,$tag,$tagorder,$subfield,$subfieldorder);
 }
 
-#
-#
-# NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
-#
-#
-# all the following subs are useful to manage MARC-DB with complete MARC records.
-# it's used with marcimport, and marc management tools
-#
-
-
-
-
-
-#sub NEWnewitemorig {
-#	my ($dbh, $record,$bibid) = @_;
-#	# add item in old-DB
-#	my $item = &MARCmarc2koha($dbh,$record);
-#	# needs old biblionumber and biblioitemnumber
-#	$item->{'biblionumber'} = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
-#	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
-#	$sth->execute($item->{'biblionumber'});
-#	($item->{'biblioitemnumber'}) = $sth->fetchrow;
-#	my ($itemnumber,$error) = &OLDnewitems($dbh,$item,$item->{barcode});
-#	# add itemnumber to MARC::Record before adding the item.
-#	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-#	&MARCkoha2marcOnefield($sth,$record,"items.itemnumber",$itemnumber);
-#	# add the item
-#	my $bib = &MARCadditem($dbh,$record,$item->{'biblionumber'});
-#}
-
-
-
-
-#
-#
-# OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD
-#
-#
-
-=item $biblionumber = OLDnewbiblio($dbh,$biblio);
-
-adds a record in biblio table. Datas are in the hash $biblio.
-
-=item $biblionumber = OLDmodbiblio($dbh,$biblio);
-
-modify a record in biblio table. Datas are in the hash $biblio.
-
-=item OLDmodsubtitle($dbh,$bibnum,$subtitle);
-
-modify subtitles in bibliosubtitle table.
-
-=item OLDmodaddauthor($dbh,$bibnum,$author);
-
-adds or modify additional authors
-NOTE :  Strange sub : seems to delete MANY and add only ONE author... maybe buggy ?
-
-=item $errors = OLDmodsubject($dbh,$bibnum, $force, @subject);
-
-modify/adds subjects
-
-=item OLDmodbibitem($dbh, $biblioitem);
-
-modify a biblioitem
-
-=item OLDmodnote($dbh,$bibitemnum,$note
-
-modify a note for a biblioitem
-
-=item OLDnewbiblioitem($dbh,$biblioitem);
-
-adds a biblioitem ($biblioitem is a hash with the values)
-
-=item OLDnewsubject($dbh,$bibnum);
-
-adds a subject
-
-=item OLDnewsubtitle($dbh,$bibnum,$subtitle);
-
-create a new subtitle
-
-=item ($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);
-
-create a item. $item is a hash and $barcode the barcode.
-
-=item OLDmoditem($dbh,$item);
-
-modify item
-
-=item OLDdelitem($dbh,$itemnum);
-
-delete item
-
-=item OLDdeletebiblioitem($dbh,$biblioitemnumber);
-
-deletes a biblioitem
-NOTE : not standard sub name. Should be OLDdelbiblioitem()
-
-=item OLDdelbiblio($dbh,$biblio);
-
-delete a biblio
-
-=cut
 
 
 =cut
@@ -1225,50 +1121,6 @@ return $$data[0];
 
 
 
-
-
-
-sub OLDmodaddauthor {
-    my ($dbh,$bibnum, $author) = @_;
-#    my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Delete from additionalauthors where biblionumber = ?");
-
-    $sth->execute($bibnum);
-    $sth->finish;
-
-    if ($author ne '') {
-        $sth   = $dbh->prepare("Insert into additionalauthors set author = ?, biblionumber = ?");
-
-        $sth->execute($author,$bibnum);
-
-        $sth->finish;
-    } # if
-} # sub modaddauthor
-
-#MATIAS
-
-sub addauthor {
-    my ($bibnum, $author) = @_;
-    my $dbh   = C4::Context->dbh;
-
-    if ($author ne '') {    
-#MATIAS Me fijo si no existe ya como autor adicional
-	my $sth   = $dbh->prepare("Select count(author) as num from additionalauthors where  author = ? and biblionumber = ?");
-        $sth->execute($author,$bibnum);
-	my $aux= $sth->fetchrow;
-        $sth->finish;
-
-	if ($aux eq 0){
-###
-	$sth   = $dbh->prepare("Insert into additionalauthors set author = ?, biblionumber = ?");
-        $sth->execute($author,$bibnum);
-        $sth->finish;
-##
-	    }
-##
-    } # if
-} # sub addauthor
-
 sub signaturaUtilizada
  {
  my ($bulk,$biblionumber) = @_;
@@ -1285,68 +1137,8 @@ sub signaturaUtilizada
 #MATIAS
 
 
-sub OLDmodsubject {
-	my ($dbh,$bibnum, $force, @subject) = @_;
-	#  my $dbh   = C4Connect;
-	my $count = @subject;
-	my $error;
-	for (my $i = 0; $i < $count; $i++) {
-		$subject[$i] =~ s/^ //g;
-		$subject[$i] =~ s/ $//g;
-		my $sth   = $dbh->prepare("select * from catalogueentry where entrytype = 's' and catalogueentry = ?");
-		$sth->execute($subject[$i]);
-
-		if (my $data = $sth->fetchrow_hashref) {
-		} else {
-			if ($force eq $subject[$i] || $force == 1) {
-				# subject not in aut, chosen to force anway
-				# so insert into cataloguentry so its in auth file
-				my $sth2 = $dbh->prepare("Insert into catalogueentry (entrytype,catalogueentry) values ('s',?)");
-
-				$sth2->execute($subject[$i]);
-				$sth2->finish;
-			} else {
-				$error = "$subject[$i]\n no existe como materia";
-				my $sth2 = $dbh->prepare("Select * from catalogueentry where entrytype = 's' and (catalogueentry like ? or catalogueentry like ? or catalogueentry like ?)");
-				$sth2->execute("$subject[$i] %","% $subject[$i] %","% $subject[$i]");
-				while (my $data = $sth2->fetchrow_hashref) {
-					$error .= "<br>$data->{'catalogueentry'}";
-				} # while
-				$sth2->finish;
-			} # else
-		} # else
-		$sth->finish;
-	} # else
-	if ($error eq '') {
-		my $sth   = $dbh->prepare("Delete from bibliosubject where biblionumber = ?");
-		$sth->execute($bibnum);
-		$sth->finish;
-		$sth = $dbh->prepare("Insert into bibliosubject values (?,?)");
-		my $query;
-		foreach $query (@subject) {
-			$sth->execute($query,$bibnum);
-		} # foreach
-		$sth->finish;
-	} # if
-
-	#  $dbh->disconnect;
-	return($error);
-} # sub modsubject
-
-
-
 #Funciones Adicionales para agregar dependencias
 #
-
-#Esta funcion es para guardar un log de que persona modifica que parte del biblio
-sub guardarModificacion{
-	my ($operacion,$responsable,$numero,$tipo)=@_;
-        my $dbh= C4::Context->dbh;
-	my $sth = $dbh->prepare ("insert into modificaciones (operacion,fecha,responsable,numero,tipo)
-                           values (?,NOW(),?,?,?);");
-        $sth->execute($operacion,$responsable,$numero,$tipo);
-        $sth->finish;
-}#Fin PEDRO
 
 
 
@@ -1382,19 +1174,6 @@ sub getAvail
         return ($res->{'description'});
 }       
   
-sub changeAvailability{
-	my ($item,$wthdrawn,$notforloan,$homebranch) = @_;
-	my $dbh= C4::Context->dbh;
-	my $wth;
-	my $loan;
-	if ($notforloan eq 0){$loan="PRESTAMO";}else{$loan="SALA DE LECTURA";}
-	if ($wthdrawn eq 0){$wth="Disponible";}else{$wth=(getAvail($wthdrawn));}
-        my $sth = $dbh->prepare ("	insert into availability (item,avail,loan,date,branch) 
-					values (?,?,?,NOW(),?);");
-        $sth->execute($item,$wth,$loan,$homebranch);
-        $sth->finish;
-
-	}
 
 
 
@@ -1413,61 +1192,7 @@ sub itemcount{
   return($data->{'count(*)'});
 }
 
-=item getorder
 
-  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
-
-Looks up the order with the given biblionumber and biblioitemnumber.
-
-Returns a two-element array. C<$ordernumber> is the order number.
-C<$order> is a reference-to-hash describing the order; its keys are
-fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
-tables of the Koha database.
-
-=cut
-#'
-# FIXME - This is effectively identical to &C4::Catalogue::getorder.
-# Pick one and stick with it.
-sub getorder{
-  my ($bi,$bib)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select ordernumber
- 	from aqorders
- 	where biblionumber=? and biblioitemnumber=?");
-  $sth->execute($bib,$bi);
-  # FIXME - Use fetchrow_array(), since we're only interested in the one
-  # value.
-  my $ordnum=$sth->fetchrow_hashref;
-  $sth->finish;
-  my $order=getsingleorder($ordnum->{'ordernumber'});
-  return ($order,$ordnum->{'ordernumber'});
-}
-
-=item getsingleorder
-
-  $order = &getsingleorder($ordernumber);
-
-Looks up an order by order number.
-
-Returns a reference-to-hash describing the order. The keys of
-C<$order> are fields from the biblio, biblioitems, aqorders, and
-aqorderbreakdown tables of the Koha database.
-
-=cut
-
-sub getsingleorder {
-  my ($ordnum)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
-  on aqorders.ordernumber=aqorderbreakdown.ordernumber
-  where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber
-  and biblioitems.biblioitemnumber=aqorders.biblioitemnumber");
-  $sth->execute($ordnum);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  return($data);
-}
 
 #MATIAS
 
@@ -1507,33 +1232,6 @@ my ($shelf) = @_;
 } # sub getbooksubshelf
 =cut
 
-
-sub getbiblioitembybiblionumber {
-    my ($biblionumber) = @_;
-    my $dbh   = C4::Context->dbh;
-#Matias modifique para que se vea la descripcion del tipo
-
-    my $sth   = $dbh->prepare("SELECT  biblioitems.*,itemtypes.description FROM biblioitems, itemtypes WHERE itemtypes.itemtype = biblioitems.itemtype AND biblionumber = ?");
-    my $count = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-
-    while (my $data = $sth->fetchrow_hashref) {
-	$data->{'publishercode'}= C4::Search::publisherList($data->{'biblioitemnumber'},$dbh);
-	$data->{'isbncode'}= C4::Search::isbnList($data->{'biblioitemnumber'},$dbh);
-	my $classi=C4::Search::getLevel($data->{'classification'});
-	if ($classi){
-    	 $data->{'classification'}= $classi->{'description'};
-	 		}
-
-        $results[$count] = $data;
-	$count++;
-    } # while
-
-    $sth->finish;
-    return($count, @results);
-} # sub
 
 
 

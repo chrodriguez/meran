@@ -57,16 +57,6 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-( $biblioitemcount, @biblioitems ) = &getbiblioitembybiblionumber($bibnum);
-
-
-for ( my $i = 0 ; $i < $biblioitemcount ; $i++ ){
-	if ($biblioitems[$i]->{'biblioitemnumber'} eq $bibitemnumber){
-		$biblioitems[$i]->{'selected'}  = 1;
-	}
-					
-}
-
 
 $template->param (  	biblionumber => $bibnum,
 		    	biblioitemnumber => $bibitemnumber,

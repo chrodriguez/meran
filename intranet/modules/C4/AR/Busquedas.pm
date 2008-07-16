@@ -603,7 +603,7 @@ sub detalleNivel3(){
 buscarNivel3PorId2
 Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
-sub buscarNivel3PorId2(){
+sub buscarNivel3PorId2{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel3 WHERE id2 = ?";
@@ -1148,7 +1148,7 @@ sub MARCDetail{
 buscarCamposMARC
 Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de filtradoAvanzado.
 =cut
-sub buscarCamposMARC(){
+sub buscarCamposMARC{
 	my ($campoX) =@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT DISTINCT nivel,tagfield FROM marc_subfield_structure ";

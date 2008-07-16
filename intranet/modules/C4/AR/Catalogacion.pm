@@ -3,7 +3,7 @@ package C4::AR::Catalogacion;
 #Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
 #Tambien en la carga de los items en los distintos niveles.
 
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -88,6 +88,8 @@ use vars qw(@EXPORT @ISA);
 	
 	&subirOrden
 	&bajarOrden
+
+	&guardarModificacion
 );
 
 
@@ -2142,4 +2144,17 @@ sub dameIdReptible{
 		}
 	}
 	return $idRep;
+}
+
+# FIXME
+# FALTA LOGUEAR LAS MODIFICACIONES EN V3
+#Esta funcion es para guardar un log de que persona modifica que parte del biblio
+sub guardarModificacion{
+	my ($operacion,$responsable,$numero,$tipo)=@_;
+
+        my $dbh= C4::Context->dbh;
+	my $sth = $dbh->prepare ("	INSERT INTO modificaciones (operacion,fecha,responsable,numero,tipo)
+                           		VALUES (?,NOW(),?,?,?);");
+        $sth->execute($operacion,$responsable,$numero,$tipo);
+        $sth->finish;
 }
