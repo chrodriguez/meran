@@ -92,9 +92,9 @@ my @results3;
 $results3[0]=$dat;
 
 #Biblioitem
-my $data=bibitemdata($bibnumitems);
-my @autorPPAL= &getautor($data->{'author'});
-$data->{'author'}=\@autorPPAL;
+my $data=C4::AR::Catalogacion::buscarNivel1($bibnum);
+my @autorPPAL= &getautor($data->{'autor'});
+$data->{'autor'}=\@autorPPAL;
 my @result;
 $result[0]=$data;
 my @result2;

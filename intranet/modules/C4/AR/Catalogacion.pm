@@ -104,7 +104,7 @@ return($i,@resultsdata):
 	$i => cantidad de componentes creadas
 	@resultsdata => arreglo con los datos de los campos marc que estan guardados en la base de datos.
 =cut
-sub crearCatalogo(){
+sub crearCatalogo{
 	my($indice,$nivelComp,$cantMod,$itemtype,%results)=@_;
 	my @resultsdata;
 	my $tipoComponente;
@@ -178,7 +178,7 @@ buscarCampoTemporal
 busca toda la informacion que se guardo para un campo temporal.
 Se usa en la funcion creaCatalogo.
 =cut
-sub buscarCampoTemporal(){
+sub buscarCampoTemporal{
 	my($campo,$subcampo,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM estructura_catalogacion WHERE campo=? AND subcampo=? AND itemtype =? AND intranet_habilitado = 0";
@@ -204,7 +204,7 @@ obtenerValoresRef
 obtiene los valores de los componentes que tienen referencia a una tabla, para la edicion.
 Agrega los datos obtenidos a la referencia de hash que contiene toda la info del componente.
 =cut
-sub obtenerValoresRef(){
+sub obtenerValoresRef{
 	my ($row,$valor,$results)=@_;
 	my $campos=$results->{$row}->{'campos'};
 	my $tabla=$results->{$row}->{'tabla'};
@@ -238,7 +238,7 @@ sub obtenerValoresRef(){
 buscarCamposObligatorios
 Busca los campos MARC de la tabla marc_subfield_structure que son obligatorios para el standar de catalogacion MARC
 =cut
-sub buscarCamposObligatorios(){
+sub buscarCamposObligatorios{
 	
 	my $dbh = C4::Context->dbh;
 	my $query = "SELECT nivel, obligatorio, liblibrarian, kohafield ";
@@ -260,7 +260,7 @@ sub buscarCamposObligatorios(){
 buscarNombreCampoMarc
 Busca el nombre del campo marc en la tabla marc_tag_structure.
 =cut
-sub buscarNombreCampoMarc(){
+sub buscarNombreCampoMarc{
 	my ($tagField)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nombre="";
@@ -289,7 +289,7 @@ sub buscarNombreCampoMarc(){
 buscarCamposMARC
 Busca los campos MARC de la tabla marc_subfield_structure, recibe como parametro el primer digito de los campos a buscar y devuelve un arreglo con los distintos campos (no repetidos) que empienzan con ese digito
 =cut
-sub buscarCamposMARC(){
+sub buscarCamposMARC{
 	my ($campoX,$nivel) =@_;
 	my $dbh = C4::Context->dbh;
 
@@ -315,7 +315,7 @@ Esta funcion busca los subcampos de los campos MARC, recibe como parametro el ca
 Realiza la busqueda sobre 2 tablas estructura_catalogacion (estan los subcampos seleccionados por el usuario) y marc_subfield_structure (estan los subcampos propios de marc con su nombre original).
 Filtra a los subcampos del usuario para que no se repitan
 =cut
-sub buscarSubCampo(){
+sub buscarSubCampo{
 	#Ver posibilidad de SP!!!
 	my ($tagField,$nivel,$itemType)=@_;
 	my $dbh = C4::Context->dbh;
@@ -360,7 +360,7 @@ sub buscarSubCampo(){
 buscarCamposModificados
 Busca los campos que se encuentran en la tabla estructura_catalogacion que estan habilitados
 =cut
-sub buscarCamposModificados(){
+sub buscarCamposModificados{
 	my ($nivel,$itemType)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -385,7 +385,7 @@ actualizarCamposModificados
 Actualiza los cambios hecho en un campo modificado; recibe como parametro el id del campo que se modifico junto con el texto nuevo para el campo y el tipo de input deseado para mostrar los datos.
 Y si el campo estaba deshabilitado el parametro intra toma el ultimo lugar en el orden, si esta habilitado intra tiene el valor 0.
 =cut
-sub actualizarCamposModificados(){
+sub actualizarCamposModificados{
 	my ($id,$textoMod,$tipoInput,$intra,$ref)=@_;
 	
 	my $dbh = C4::Context->dbh;
@@ -405,7 +405,7 @@ actualizarInfoReferencia
 Actualiza los cambios hechos en la informacion de referencia de un campo, esto se hace si es que ya tenia la info de referencia.
 Si no hay info de referencia del campo se inserta en la tabla.
 =cut
-sub actualizarInfoReferencia(){
+sub actualizarInfoReferencia{
 	my ($idinforef,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="UPDATE informacion_referencias ";
@@ -420,7 +420,7 @@ sub actualizarInfoReferencia(){
 actualizarVisibilidad
 Cambia la visibilidad del campo modificado, para ver si se muestra o no en el detalle del documento.
 =cut
-sub actualizarVisibilidad(){
+sub actualizarVisibilidad{
 	my ($idestcat,$visible)=@_;
 	my $dbh = C4::Context->dbh;
 	$visible= ($visible +1)% 2;
@@ -435,7 +435,7 @@ sub actualizarVisibilidad(){
 eliminarNivelIntranet
 Deshabilita el campo marc para la vista en intranet
 =cut
-sub eliminarNivelIntranet(){
+sub eliminarNivelIntranet{
 	my ($id,$intra,$nivel,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="UPDATE estructura_catalogacion SET intranet_habilitado='0' WHERE id=? ";
@@ -451,7 +451,7 @@ sub eliminarNivelIntranet(){
 buscarMaximoHabilitado
 Busca el maximo campo para generar un nuevo maximo para generar el orden del campo.
 =cut
-sub buscarMaximoHabilitado(){
+sub buscarMaximoHabilitado{
 	my($tmpl,$itemType,$nivel)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT max(".$tmpl."_habilitado) FROM estructura_catalogacion WHERE itemtype=? AND nivel=?";
@@ -466,7 +466,7 @@ modificarCampo
 Actualiza los cambios hecho en un campo modificado; recibe como parametro el id del campo que se modifico junto con el texto nuevo para el campo y el tipo de input deseado para mostrar los datos.
 Y si el campo estaba deshabilitado el parametro intra toma el ultimo lugar en el orden, si esta habilitado intra tiene el valor 0.
 =cut
-sub modificarCampo(){
+sub modificarCampo{
 	my ($id,$objeto)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -499,7 +499,7 @@ sub modificarCampo(){
 gurdarCamposModificados
 Guarda un nuevo campo en la tabla estructura_catalogacion.
 =cut
-sub guardarCamposModificados(){
+sub guardarCamposModificados{
 	my ($nivel,$itemType,$objeto)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -542,7 +542,7 @@ sub guardarCamposModificados(){
 insertarCamposMod
 Hace el insert en la tabla estructura_catalogacion.
 =cut
-sub insertarCamposMod(){
+sub insertarCamposMod{
 	my ($field,$subfield,$itemType,$textoLib,$obligatorio,$tipoInput,$ref,$nivel,$intra)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="INSERT INTO estructura_catalogacion ";
@@ -562,7 +562,7 @@ guardarCampoTemporal
 Si el campo no esta guardado en estructura_catalogacion se guardan los datos del campo temporal pero deshabilitado, si tiene referencia tambien se guardan los datos.
 Si el campo ya esta guardado, primero busca si en las tabla de niveles hay datos guardados para ese campo, si es asi las modificaciones hechas (si es que las hay), no tiene efecto y se setean al obejto los campos necesesarios para que esto se cumpla, por el contrario si no hay datos, se efectuan la modificacion del campo, tanto de la parte de estructura_catalogacon como la de informacion_referencia (Se toma como si no estuviera guardado el campo)
 =cut
-sub guardarCampoTemporal(){
+sub guardarCampoTemporal{
 	my ($objeto,$nivel,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -623,7 +623,7 @@ buscarDatosCampoTemp
 Busca en las tablas de niveles correspondiente al paramentro de entrada, para ver si hay algun dato para el campo y subcampo que entran como paramentros tambien para el itemtype.
 Retorna 1 si hay datos y 0 si no los hay.
 =cut
-sub buscarDatosCampoMARC(){
+sub buscarDatosCampoMARC{
 	my ($nivel,$campo,$subcampo,$dbh)=@_;
 	if($dbh eq ""){
 		$dbh = C4::Context->dbh;
@@ -639,31 +639,11 @@ sub buscarDatosCampoMARC(){
 		my $id="id".$nivel;
 		$query ="SELECT dato FROM ".$tabla." t INNER JOIN ".$tablaRep." tr ON (t.".$id."=tr.".$id.") ";
 		$query.="WHERE campo=? AND subcampo=?";
-=item		if($nivel == 1){
-			$query.=$where;
-			push(@blind,$campo,$subcampo);
-		}
-		elsif($nivel == 2){
-			$query.=$where." AND tipo_documento = ?";
-			push(@blind,$campo,$subcampo,$itemtype);
-		}
-		elsif($nivel == 3){
-			$query.="INNER JOIN nivel2 n2 ON (t.id2 = n2.id2)".$where." AND tipo_documento = ?";
-			push(@blind,$campo,$subcampo,$itemtype);
-=cut		}
 		$sth=$dbh->prepare($query);
 		$sth->execute($campo,$subcampo);
 	}
 	else{
 		$query="SELECT ".$campoTabla." FROM ".$tabla. " WHERE ". $campoTabla . " <> '' " ;
-=item		if($nivel == 2){
-			$query.=" WHERE tipo_documento=?";
-			push(@blind,$itemtype);
-		}
-		elsif($nivel==3){
-			$query.=" INNER JOIN nivel2 n2 ON (t.id2 = n2.id2) WHERE tipo_documento = ?";
-			push(@blind,$itemtype);
-=cut		}
 		$sth=$dbh->prepare($query);
 		$sth->execute();
 	}
@@ -678,7 +658,7 @@ sub buscarDatosCampoMARC(){
 guardarInfoReferencia
 Guarda los datos en la tabla informacion_referencias, si ya exite la informacion de referencia para ese campo se actualiza.
 =cut
-sub guardarInfoReferencia(){
+sub guardarInfoReferencia{
 	my ($idestcat,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM informacion_referencias WHERE idestcat=?";
@@ -698,7 +678,7 @@ sub guardarInfoReferencia(){
 insertarInfoRef
 Hace el insert en la tabla informacion_referencia.
 =cut
-sub insertarInfoRef(){
+sub insertarInfoRef{
 	my($idestcat,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="INSERT INTO informacion_referencias ";
@@ -711,7 +691,7 @@ sub insertarInfoRef(){
 obtenerCamposTablaRef
 Obtiene los campos de la tabla que se pasa como parametro y tambien devuelve un tupla como ejemplo para el usuario de la misma tabla
 =cut
-sub obtenerCamposTablaRef(){
+sub obtenerCamposTablaRef{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -739,7 +719,7 @@ sub obtenerCamposTablaRef(){
 }
 
 # creo q no se usa!!!!!!!!!!!!!!!!!!!!!!!
-sub obtenerIdentTablaRef2(){
+sub obtenerIdentTablaRef2{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -753,7 +733,7 @@ sub obtenerIdentTablaRef2(){
 obtenerIdentTablaRef
 Obtiene el campo clave de la tabla a la cual se esta asi referencia
 =cut
-sub obtenerIdentTablaRef(){
+sub obtenerIdentTablaRef{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -767,7 +747,7 @@ sub obtenerIdentTablaRef(){
 obtenerValoresTablaRef
 Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia y las transfoma en un string json.
 =cut
-sub obtenerValoresTablaRef(){
+sub obtenerValoresTablaRef{
 	my ($tabla,$ident,$campos,$orden)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
@@ -795,7 +775,7 @@ sub obtenerValoresTablaRef(){
 obtenerValorTablaRef
 Obtiene el valor del los campos correspondientes al id que viene como paramentro.
 =cut
-sub obtenerValorTablaRef(){
+sub obtenerValorTablaRef{
 	my ($tabla,$ident,$campos,$sepa,$id)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT ".$ident." as id,".$campos;
@@ -818,7 +798,7 @@ sub obtenerValorTablaRef(){
 buscarInfoReferencia
 Busca la informacion de referecia de un campo marc determinado (campo, subcampo), para un tipo de item (itemtype)
 =cut
-sub buscarInfoReferencia(){
+sub buscarInfoReferencia{
 	my($idestcat)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -831,7 +811,7 @@ sub buscarInfoReferencia(){
 	return($sth->fetchrow_hashref());
 }
 
-sub buscarInfoRefCampoSubcampo(){
+sub buscarInfoRefCampoSubcampo{
 	my($campo,$subcampo,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	my $tabla=-1;
@@ -847,7 +827,6 @@ sub buscarInfoRefCampoSubcampo(){
 	my $ok=0;
 	my $sth=$dbh->prepare($query);
         $sth->execute(@bind);
-# 	$tabla=$sth->fetchrow_hashref();
 	while(my $data=$sth->fetchrow_hashref()){
 		if($data->{'tabla'} ne "" && !$ok){
 			$tabla=$data->{'tabla'};
@@ -862,7 +841,7 @@ sub buscarInfoRefCampoSubcampo(){
 buscarCamposModificadosInfoReferencia
 Busca la informacion de catalogacion y referencia de un campo marc determinado (campo, subcampo), para un tipo de item (itemtype)
 =cut
-sub buscarCamposModificadosInfoReferencia(){
+sub buscarCamposModificadosInfoReferencia{
 	my($idestcat)=@_;
 	my $dbh = C4::Context->dbh;
 
@@ -879,7 +858,7 @@ sub buscarCamposModificadosInfoReferencia(){
 buscarCamposModificadosYObligatorios
 Busca los campos modificados y los obligatorios, si estos ultimos no estan modificados se agregan a la hash a devolver, de esta manera los campos obligatorios estaran siempre en la catalogacion
 =cut
-sub buscarCamposModificadosYObligatorios(){
+sub buscarCamposModificadosYObligatorios{
 	my($nivel,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	my %results;
@@ -984,7 +963,7 @@ sub buscarCamposModificadosYObligatorios(){
 buscarCampo
 Busca toda la informacion que hay de un campo en particular, que fue modificado por el usuario.
 =cut
-sub buscarCampo(){
+sub buscarCampo{
 	my($id)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM estructura_catalogacion WHERE id=?");
@@ -1334,7 +1313,7 @@ sub guardarNivel3{
 buscarNivel1
 Busca la informacion de nivel 1 de un item. solo de la tabla nivel1
 =cut
-sub buscarNivel1(){
+sub buscarNivel1{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel1 WHERE id1 = ?";
@@ -1348,7 +1327,7 @@ sub buscarNivel1(){
 buscarNivel1Completo
 Busca la informacion de nivel 1 de un item, tanto de la tabla nivel1 como de la tabla nivel1_repetible
 =cut
-sub buscarNivel1Completo(){
+sub buscarNivel1Completo{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nivel1=&buscarNivel1($id1);
@@ -1389,7 +1368,7 @@ sub buscarNivel1Completo(){
 buscarNivel2
 Busca la informacion de nivel 2 de un item.
 =cut
-sub buscarNivel2(){
+sub buscarNivel2{
 	my($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel2 WHERE id2 = ?";
@@ -1414,7 +1393,7 @@ sub buscarNivel2(){
 buscarNivel2Completo
 Busca la informacion de nivel 2 de un item, tanto de la tabla nivel2 como de la tabla nivel2_repetible
 =cut
-sub buscarNivel2Completo(){
+sub buscarNivel2Completo{
 	my($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nivel2=&buscarNivel2($id2);
@@ -1462,7 +1441,7 @@ buscarNivel2PorId1
 Busca la informacion de nivel 2 de un item. para un  id1 de la tabla nivel 1
 =cut
 
-sub buscarNivel2PorId1 {
+sub buscarNivel2PorId1{
 
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
@@ -1506,7 +1485,7 @@ AGREGADO MIGUEL, VER SI QUEDA
 buscarNivel2PorId1Id2 
 Busca la informacion de nivel 2 de un item. para un  id1 de la tabla nivel 1 e id2
 =cut
-sub buscarNivel2PorId1Id2(){
+sub buscarNivel2PorId1Id2{
 	my($id1, $id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel2 WHERE id1 = ? and id2 = ?";
@@ -1547,7 +1526,7 @@ sub buscarNivel2PorId1Id2(){
 cantidadItem
 Cuenta la cantidad de item que exiten en el nivel 3 dependiendo el nivel y el id que le llegan como parametros, si el nivel es 1 cuenta los item para que exiten para ese nivel y si es 2 cuenta los item que exiten para ese grupo.
 =cut
-sub cantidadItem(){
+sub cantidadItem{
 	my($nivel,$id)=@_;
 	my $dbh = C4::Context->dbh;
 	my $cant=0;
@@ -1603,7 +1582,7 @@ sub buscarNivel3{
 buscarNivel3Completo
 Busca toda la informacion asosiada a un id3 de la tabla nivel3
 =cut
-sub buscarNivel3Completo(){
+sub buscarNivel3Completo{
 	my($id3)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nivel3=&buscarNivel3($id3);
@@ -1648,7 +1627,7 @@ buscarNivel3PorId2
 Busca los datos de los ejemplares (tabla nivel3) que corresponde con el id2 que viene como parametro.
 Se usa en editarEjemplar, Se llama igual que en Busquedas.pm ver cual queda. (Sacar esta y dejar la de busquedas)
 =cut
-sub buscarNivel3PorId2(){
+sub buscarNivel3PorId2{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel3 WHERE id2 = ?";
@@ -1678,7 +1657,7 @@ eliminarNivel1
 Elimina todo la informacion de un item para el nivel 1
 FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
 =cut
-sub eliminarNivel1(){
+sub eliminarNivel1{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -1724,7 +1703,7 @@ eliminarNivel2
 Elimina todo la informacion de un item para el nivel 2
 FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
 =cut
-sub eliminarNivel2(){
+sub eliminarNivel2{
 	my($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -1759,7 +1738,7 @@ eliminarNivel3
 Elimina todo la informacion de un item para el nivel 2
 FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
 =cut
-sub eliminarNivel3(){
+sub eliminarNivel3{
 	my($id3)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -1782,7 +1761,7 @@ sub eliminarNivel3(){
 subirOrden
 Sube el orden en la vista, del campo seleccionado.
 =cut
-sub subirOrden(){
+sub subirOrden{
 	my($id,$intra,$nivel,$itemtype)=@_;
 	my $intraNuevo=1;
 	if($intra > 1){
@@ -1795,7 +1774,7 @@ sub subirOrden(){
 subirOrden
 Baja el orden en la vista, del campo seleccionado.
 =cut
-sub bajarOrden(){
+sub bajarOrden{
 	my($id,$intra,$nivel,$itemtype)=@_;
 	my $intraNuevo=$intra+1;
 	actualizarOrden($id,$intra,$intraNuevo,$nivel,$itemtype);
@@ -1805,7 +1784,7 @@ sub bajarOrden(){
 actualizarOrden
 actualiza el orden del campo seleccionado
 =cut
-sub actualizarOrden(){
+sub actualizarOrden{
 	my($id,$intra,$intraNuevo,$nivel,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	if($intra != $intraNuevo){
@@ -1833,7 +1812,7 @@ sub actualizarOrden(){
 modificarNivel1Completo
 Modifica los datos del nivel 1 y sus repetibles.
 =cut
-sub modificarNivel1Completo(){
+sub modificarNivel1Completo{
 	my($id1,$idAutor,$nivel1)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -1915,7 +1894,7 @@ sub modificarNivel1Completo(){
 			}
 		}
 	}
-close(A);
+# close(A);
 	my $sth=$dbh->prepare($query);
         $sth->execute($titulo,$idAutor,$id1);
 	$dbh->commit;
@@ -1926,7 +1905,7 @@ close(A);
 modificarNivel2Completo
 Modifica los datos del nivel 2 y sus repetibles.
 =cut
-sub modificarNivel2Completo(){
+sub modificarNivel2Completo{
 	my($id2,$nivel2)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -2039,7 +2018,7 @@ sub modificarNivel2Completo(){
 modificarNivel3Completo
 Modifica los datos del nivel 3 y sus repetibles.
 =cut
-sub modificarNivel3Completo(){
+sub modificarNivel3Completo{
 	my($id3,$nivel3,$todos)=@_;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
@@ -2145,7 +2124,7 @@ dameIdReptible
 Devuelve el id de repetibles para un campo y subcampo que no halla sido modificado en uno de los pasos anteriores
 Sirve para cuando se quieren modificar varios ejemplares a la vez, el idRep de la funcion modificarNivel3Completo siempre = "", por lo tanto no se tiene el rep_n3_id para hacer el update.
 =cut
-sub dameIdReptible(){
+sub dameIdReptible{
 	my ($dbh,$id3,$campo,$subcampo,$repModificados)=@_;
 	my $llave=$campo.",".$subcampo;
 	my $query="SELECT rep_n3_id FROM nivel3_repetibles WHERE id3 = ? AND campo=? AND subcampo=? ";

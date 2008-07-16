@@ -1,28 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: moditem.pl,v 1.7 2003/03/18 09:52:30 tipaul Exp $
-
-#script to modify/delete biblios
-#written 8/11/99
-# modified 11/11/99 by chris@katipo.co.nz
-# modified 12/16/02 by hdl@ifrance.com : Templating
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
 require Exporter;
@@ -50,8 +27,9 @@ my $id1=$input->param('id1');
 my $signatura_topografica=$input->param('signatura_topografica');
 my $barcode=$input->param('barcode');
 
-my $data=bibitemdata($id2);
-
+my $data=C4::AR::Catalogacion::buscarNivel1($id1);
+my $autor=getautor($data->{'autor'});
+$data->{'autor'}=$autor->{'completo'};
 my %inputs;
 my ($count, $detail)=availDetail($id3);
 my @results;
@@ -95,8 +73,8 @@ $template->param(DETAIL => \@results,
 		titulo => $data->{'titulo'},
 	        autor => $data->{'autor'},
 # 		itemnotes => FALTA LAS NOTAS DEL ITEM ES UN CAMPO MARC
-		id1 => $data->{'id1'},
-        	id2 => $data->{'id2'},
+		id1 => $id1,
+        	id2 => $id2,
 		id3 => $id3,
 		barcode => $barcode,
 		signatura_topografica => $signatura_topografica,

@@ -74,7 +74,7 @@ on what is passed to it, it calls the appropriate search function.
 	
 	
 	
-	&bibitemdata 
+	
 	&borrissues
 	&ItemType 
 	&itemissues 
@@ -154,7 +154,7 @@ on what is passed to it, it calls the appropriate search function.
 # make all your functions, whether exported or not;
 
 =item
-NO SE USA
+NO SE USAN
 &getwebsites 
 &getboracctrecord
 
@@ -174,6 +174,8 @@ NO SE USA
 &itemnodata
 &itemcount
 &borrdata2
+&bibitemdata
+
 
 =cut
 
@@ -1245,61 +1247,7 @@ my ($reserve, @reserves) ; # Findgroupreserve($biblioitemnumber,$biblionumber);
 #########
 
 
-=item bibitemdata
 
-  $itemdata = &bibitemdata($biblioitemnumber);
-
-Looks up the biblioitem with the given biblioitemnumber. Returns a
-reference-to-hash. The keys are the fields from the C<biblio>,
-C<biblioitems>, and C<itemtypes> tables in the Koha database, except
-that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
-
-=cut
-#'
-
-sub bibitemdata {
-    my ($id2) = @_;
-    my $dbh= C4::Context->dbh;
-# biblio.notes,biblioitems.notes as bnotes, biblioitems.volume,biblioitems.number, biblioitems.isbn, biblioitems.isbn2, biblioitems.lccn, biblioitems.issn, biblioitems.dewey, biblioitems.subclass, biblioitems.publishercode, biblioitems.volumeddesc, biblioitems.illus, biblioitems.pages, biblioitems.size, biblioitems.url, biblioitems.seriestitle, FALTA!!!!
-    my $sth   = $dbh->prepare("SELECT n1.id1, autor, titulo, n2.id2, itemtypes.description,
-				itemtypes.itemtype, pais_publicacion, soporte,lenguaje,nivel_bibliografico,
-				anio_publicacion, ciudad_publicacion
-    				FROM nivel1 n1 INNER JOIN  nivel2 n2 ON n1.id1=n2.id1
-        			INNER JOIN itemtypes ON n2.tipo_documento = itemtypes.itemtype 
-        			WHERE id2 = ? ");
-    my $data;
-
-   $sth->execute($id2);
-   $data = $sth->fetchrow_hashref;
-
-   #MAtias Lenguaje Pais y Soporte
-   my $country=getCountry($data->{'pais_publicacion'});
-   $data->{'country'}= $country->{'printable_name'};
-   $data->{'idCountry'}= $country->{'iso'};
-
-   my $support=getSupport($data->{'soporte'});
-   $data->{'support'}= $support->{'description'};
-   $data->{'idSupport'}= $support->{'idSupport'};
-
-   my $language=getLanguage($data->{'lenguaje'});
-   $data->{'language'}= $language->{'description'};
-   $data->{'idLanguage'}= $language->{'idLanguage'};
-
-
-   my $level=getLevel($data->{'nivel_bibliografico'});
-        $data->{'classification'}= $level->{'description'};
-        $data->{'idclass'}= $level->{'code'};
-
-  $data->{'publishercode'}= publisherList($id2,$dbh); #agregado por Luciano
-  $data->{'isbncode'}= isbnList($id2,$dbh); #agregado por Einar
-	
-  my $author=getautor($data->{'autor'}); #agregado por Damian
-  $data->{'autor'}=$author->{'completo'}; #agregado por Damian
-
-
-    $sth->finish;
-    return($data);
-} # sub bibitemdata
 
 
 =item subject

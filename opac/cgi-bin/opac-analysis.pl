@@ -78,9 +78,9 @@ $results3[0]=$dat;
 
 
 #Biblioitem
-my $data=bibitemdata($bibnumitems);
-my @autorPPAL= &getautor($data->{'author'});
-$data->{'author'}=\@autorPPAL;
+my $data=C4::AR::Catalogacion::buscarNivel1($bibnum);
+my @autorPPAL= &getautor($data->{'autor'});
+$data->{'autor'}=\@autorPPAL;
 
 #Damian - 23/03/2007 - para ver la topografia
 my @item = itemsfrombiblioitem($bibnumitems);
