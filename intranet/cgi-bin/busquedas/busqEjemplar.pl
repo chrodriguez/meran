@@ -42,7 +42,7 @@ my $ini = $obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 
 #combo itemtype
-my ($cant,@itemtypes)= C4::Biblio::getitemtypes();
+my ($cant,@itemtypes)= C4::AR::Busquedas::getItemTypes();
 my @valuesItemtypes;
 my %labelsItemtypes;
 my $i=0;

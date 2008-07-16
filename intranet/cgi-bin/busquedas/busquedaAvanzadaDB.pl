@@ -197,14 +197,14 @@ else{
 		my $labels="";
 		my $value;
 		if($campo eq "nivel_bibliografico"){
-			%labelsMapeo=&C4::Biblio::getlevels();
+			%labelsMapeo=&C4::Busquedas::getLevels();
 			foreach my $key (keys %labelsMapeo){
 				push(@valuesMapeo,$key);
 			}
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "lenguaje"){
-			%labelsMapeo=&C4::Biblio::getlanguages();
+			%labelsMapeo=&C4::Busquedas::getLanguages();
 			my @keys= keys %labelsMapeo;
 			@keys= sort{$labelsMapeo{$a} cmp $labelsMapeo{$b}} @keys;
 			foreach my $key (@keys){
@@ -213,7 +213,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "pais_publicacion"){
-			%labelsMapeo=&C4::Biblio::getcountrytypes();
+			%labelsMapeo=&C4::Busquedas::getCountryTypes();
 			my @keys= keys %labelsMapeo;
 			@keys= sort{$labelsMapeo{$a} cmp $labelsMapeo{$b}} @keys;
 			foreach my $key (@keys){
@@ -237,7 +237,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "tipo_documento"){
-			my($i,@labels)=&C4::Biblio::getitemtypes();
+			my($i,@labels)=&C4::AR::Busquedas::getItemTypes();
 			my $key;
 			foreach my $itemtype (@labels){
 				$key=$itemtype->{'itemtype'};
@@ -257,7 +257,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "soporte"){
-			%labelsMapeo=&C4::Biblio::getsupporttypes();
+			%labelsMapeo=&C4::Busquedas::getSupportTypes();
 			foreach my $key (keys %labelsMapeo){
 				push(@valuesMapeo,$key);
 			}

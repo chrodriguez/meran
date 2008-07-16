@@ -61,6 +61,7 @@ Koha.pm provides many functions for Koha scripts.
 		&getbranch &getprinter
 		&getcities
 		&getcity
+		&branches
 	     $DEBUG);
 
 use vars qw();
@@ -229,6 +230,36 @@ sub getbranches {
 	}
 	return (\%branches);
 }
+
+=item branches
+
+  ($count, @results) = &branches();
+
+Returns a list of all library branches.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of the branches
+table of the Koha database.
+
+=cut
+#Se paso de Catalogue
+sub branches {
+    my $dbh   = C4::Context->dbh;
+    my $query = "Select * from branches order by branchname";
+    my $sth   = $dbh->prepare($query);
+    my $i     = 0;
+    my @results;
+
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$i] = $data;
+    	$i++;
+    } # while
+
+    $sth->finish;
+    return($i, @results);
+} # sub branches
+
 
 =item getprinters
 

@@ -60,10 +60,15 @@ use vars qw(@EXPORT @ISA);
 
 		&getautor
 		&getLevel
+		&getLevels
 		&getCountry
+		&getCountryTypes
 		&getSupport
+		&getSupportTypes
 		&getLanguage
+		&getLanguages
 		&getItemType
+		&getItemTypes
 		&getbranchname
 		&getborrowercategory
 		&getallborrowercategorys
@@ -2004,7 +2009,18 @@ sub getLevel
         return $res;
 }
 
-
+#Nivel bibliografico
+sub getLevels {
+  my $dbh   = C4::Context->dbh;
+  my $sth   = $dbh->prepare("select * from bibliolevel");
+  my %resultslabels;
+  $sth->execute;
+  while (my $data = $sth->fetchrow_hashref) {
+    $resultslabels{$data->{'code'}}= $data->{'description'};
+  } # while
+  $sth->finish;
+  return(%resultslabels);
+} # sub getlevels
 
 sub  getCountry
 {
@@ -2018,6 +2034,21 @@ sub  getCountry
         return $res;
 }
 
+sub getCountryTypes {
+  my $dbh   = C4::Context->dbh;
+
+  my $sth   = $dbh->prepare("SELECT * FROM countries ");
+  my %resultslabels;
+  $sth->execute;
+
+  while (my $data = $sth->fetchrow_hashref) {
+  	$resultslabels{$data->{'iso'}}= $data->{'printable_name'};	
+  } # while
+  $sth->finish;
+
+  return(%resultslabels);
+} # sub getcountrytypes
+
 sub getSupport
 {
         my ($cod) = @_;
@@ -2030,11 +2061,24 @@ sub getSupport
         return $res;
 }
 
+
+sub getSupportTypes {
+  my $dbh   = C4::Context->dbh;
+  my $sth   = $dbh->prepare("SELECT * FROM supports");
+  my %resultslabels;
+  $sth->execute;
+  while (my $data = $sth->fetchrow_hashref) {
+    $resultslabels{$data->{'idSupport'}}= $data->{'description'};	
+  } # while
+  $sth->finish;
+  return(%resultslabels);
+} # sub getsupporttypes
+
 sub getLanguage
 {
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from languages where idLanguage = '$cod' ";
+        my $query = "SELECT * FROM languages WHERE idLanguage = '$cod' ";
         my $sth = $dbh->prepare($query);
         $sth->execute();
         my $res=$sth->fetchrow_hashref;
@@ -2042,15 +2086,45 @@ sub getLanguage
         return $res;
 }
 
+sub getLanguages {
+  my $dbh   = C4::Context->dbh;
+  my $sth   = $dbh->prepare("SELECT * FROM languages");
+  my %resultslabels;
+  $sth->execute;
+  while (my $data = $sth->fetchrow_hashref) {
+    $resultslabels{$data->{'idLanguage'}}= $data->{'description'};	
+  } # while
+  $sth->finish;
+  return(%resultslabels);
+} # sub getlanguages
+
 sub getItemType {
   my ($type)=@_;
+
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("select description from itemtypes where itemtype=?");
+  my $sth=$dbh->prepare("SELECT description FROM itemtypes WHERE itemtype=?");
   $sth->execute($type);
   my $dat=$sth->fetchrow_hashref;
   $sth->finish;
+
   return ($dat->{'description'});
 }
+
+sub getItemTypes {
+  my $dbh   = C4::Context->dbh;
+  my $sth   = $dbh->prepare("SELECT * FROM itemtypes ORDER BY description");
+  my $count = 0;
+  my @results;
+
+  $sth->execute;
+  while (my $data = $sth->fetchrow_hashref) {
+    $results[$count] = $data;
+    $count++;
+  } # while
+
+  $sth->finish;
+  return($count, @results);
+} # sub getitemtypes
 
 
 sub getbranchname

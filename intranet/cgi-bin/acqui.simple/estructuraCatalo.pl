@@ -44,7 +44,7 @@ my ($template, $loggedinuser, $cookie)
 
 
 #item type
-my ($cant,@results)= C4::Biblio::getitemtypes();
+my ($cant,@results)= C4::Busquedas::getItemTypes();
 my @valuesItemtypes;
 my %labelsItemtypes;
 my $i=0;

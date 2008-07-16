@@ -18,11 +18,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-
-my ($branchcount,@branches)=branches();
-
 #combo itemtype
-	my ($cant,@results)= C4::Biblio::getitemtypes();
+	my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
 	my @valuesItemtypes;
 	my %labelsItemtypes;
 	my $i=0;
@@ -41,7 +38,6 @@ my ($branchcount,@branches)=branches();
 
 $template->param(
 			type => 'intranet',
-		 	branches=>\@branches,
 		 	comboItemTypes=> $comboItemTypes
 		);
 

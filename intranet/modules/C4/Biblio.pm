@@ -36,8 +36,7 @@ $VERSION = 0.01;
 	     &itemcount
 	     &checkitems &checkitemupdate
 	     &addauthor
-	     &getitemtypes
-	     &getcountrytypes &getsupporttypes &getlanguages  &getlevels 
+	     &getitemtypes  
 	     &getbiblioitembybiblionumber
 
 	     &MARCfind_oldbiblionumber_from_MARCbibid
@@ -1481,48 +1480,6 @@ sub delcolaboradores {
     }
 
 
-
-sub getitemtypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from itemtypes order by description");
-  my $count = 0;
-  my @results;
-
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $results[$count] = $data;
-    $count++;
-  } # while
-
-  $sth->finish;
-  return($count, @results);
-} # sub getitemtypes
-
-sub getlanguages {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from languages");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'idLanguage'}}= $data->{'description'};	
-  } # while
-  $sth->finish;
-  return(%resultslabels);
-} # sub getlanguages
-
-#Nivel bibliografico
-sub getlevels {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bibliolevel");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'code'}}= $data->{'description'};
-  } # while
-  $sth->finish;
-  return(%resultslabels);
-} # sub getlevels
-
 =cut
 sub getbookshelf {
   my $dbh   = C4::Context->dbh;
@@ -1549,34 +1506,6 @@ my ($shelf) = @_;
   return(%resultslabels);
 } # sub getbooksubshelf
 =cut
-
-
-
-sub getsupporttypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from supports");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'idSupport'}}= $data->{'description'};	
-  } # while
-  $sth->finish;
-  return(%resultslabels);
-} # sub getsupporttypes
-sub getcountrytypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from countries ");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'iso'}}= $data->{'printable_name'};	
-} # while
-  $sth->finish;
-  return(%resultslabels);
-} # sub getcountrytypes
-
-
-
 
 
 sub getbiblioitembybiblionumber {

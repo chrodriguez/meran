@@ -27,7 +27,7 @@ $template->param(virtuallibrary => $virtuallibrary);
 
 
 my ($branchcount,@branches)=branches();
-my ($itemtypecount,@itemtypes)=getitemtypes();
+my ($itemtypecount,@itemtypes)=C4::AR::Busquedas::getItemTypes();
 
 my $classlist='';
 my $dbh=C4::Context->dbh;

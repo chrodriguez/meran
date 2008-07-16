@@ -109,7 +109,7 @@ $template->param(selectTiposPrestamos => $CGISelectTiposPrestamos);
 my @select_tiposItems_Values;
 my %select_tiposItems_Labels;
 #Funcion de C4::Biblio, trae los tipos de items
-my ($cant,@tiposDeItems)=&getitemtypes(); 
+my ($cant,@tiposDeItems)=&C4::AR::Busquedas::getItemTypes(); 
 my $i=0;
 my $hash;
 my $value = "";
