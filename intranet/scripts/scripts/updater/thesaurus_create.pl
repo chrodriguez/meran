@@ -23,7 +23,6 @@ use strict;
 # with the data in bibliothesaurus
 
 use C4::Context;
-use C4::Catalogue;
 use DBI;
 
 my $dbh = C4::Context->dbh;

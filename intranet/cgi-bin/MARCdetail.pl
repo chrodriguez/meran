@@ -55,7 +55,6 @@ use CGI;
 use C4::Search;
 use MARC::Record;
 use C4::Biblio;
-use C4::Catalogue;
 use HTML::Template;
 
 my $query=new CGI;

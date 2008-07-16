@@ -1455,10 +1455,7 @@ C<$order> are fields from the biblio, biblioitems, aqorders, and
 aqorderbreakdown tables of the Koha database.
 
 =cut
-#'
-# FIXME - This is effectively identical to
-# &C4::Catalogue::getsingleorder.
-# Pick one and stick with it.
+
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
