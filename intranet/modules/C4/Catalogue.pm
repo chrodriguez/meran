@@ -57,9 +57,7 @@ orders, converting money to different currencies, and so forth.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	     &basket &newbasket
 
-	     &getorders &getallorders &getrecorders
 	     &getorder &neworder &delorder
 	     &ordersearch
 	     &modorder &getsingleorder &invoice &receiveorder
@@ -73,83 +71,6 @@ orders, converting money to different currencies, and so forth.
 	     &websitesearch &addwebsite &updatewebsite &deletewebsite
 );
 
-#
-#
-#
-# BASKETS
-#
-#
-#
-=item basket
-
-  ($count, @orders) = &basket($basketnumber, $booksellerID);
-
-Looks up the pending (non-cancelled) orders with the given basket
-number. If C<$booksellerID> is non-empty, only orders from that seller
-are returned.
-
-C<&basket> returns a two-element array. C<@orders> is an array of
-references-to-hash, whose keys are the fields from the aqorders,
-biblio, and biblioitems tables in the Koha database. C<$count> is the
-number of elements in C<@orders>.
-
-=cut
-#'
-sub basket {
-  my ($basketno,$supplier)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
-  where basketno='$basketno'
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
-  =aqorders.biblioitemnumber
-  and (datecancellationprinted is NULL or datecancellationprinted =
-  '0000-00-00')";
-  if ($supplier ne ''){
-    $query.=" and aqorders.booksellerid='$supplier'";
-  }
-  $query.=" order by biblioitems.publishercode";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-#  print $query;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return($i,@results);
-}
-
-=item newbasket
-
-  $basket = &newbasket();
-
-Finds the next unused basket number in the aqorders table of the Koha
-database, and returns it.
-
-=cut
-#'
-# FIXME - There's a race condition here:
-#	A calls &newbasket
-#	B calls &newbasket (gets the same number as A)
-#	A updates the basket
-#	B updates the basket, and clobbers A's result.
-# A better approach might be to create a dummy order (with, say,
-# requisitionedby == "Dummy-$$" or notes == "dummy <time> <pid>"), and
-# see which basket number it gets. Then have a cron job periodically
-# remove out-of-date dummy orders.
-sub newbasket {
-  my $dbh = C4::Context->dbh;
-  my $query="Select max(basketno) from aqorders";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_arrayref;
-  my $basket=$$data[0];
-  $basket++;
-  $sth->finish;
-  return($basket);
-}
 
 =item neworder
 
@@ -366,65 +287,7 @@ sub updaterecorder{
   $sth->finish;
 }
 
-#
-#
-# ORDERS
-#
-#
 
-=item getorders
-
-  ($count, $orders) = &getorders($booksellerid);
-
-Finds pending orders from the bookseller with the given ID. Ignores
-completed and cancelled orders.
-
-C<$count> is the number of elements in C<@{$orders}>.
-
-C<$orders> is a reference-to-array; each element is a
-reference-to-hash with the following fields:
-
-=over 4
-
-=item C<count(*)>
-
-Gives the number of orders in with this basket number.
-
-=item C<authorizedby>
-
-=item C<entrydate>
-
-=item C<basketno>
-
-These give the value of the corresponding field in the aqorders table
-of the Koha database.
-
-=back
-
-Results are ordered from most to least recent.
-
-=cut
-#'
-sub getorders {
-  my ($supplierid)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where
-  booksellerid='$supplierid' and (quantity > quantityreceived or
-  quantityreceived is NULL)
-  and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')";
-  $query.=" group by basketno order by entrydate desc";
-  #print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return ($i,\@results);
-}
 
 =item getorder
 
@@ -486,70 +349,7 @@ sub getsingleorder {
   return($data);
 }
 
-=item getallorders
 
-  ($count, @results) = &getallorders($booksellerid);
-
-Looks up all of the pending orders from the supplier with the given
-bookseller ID. Ignores cancelled and completed orders.
-
-C<$count> is the number of elements in C<@results>. C<@results> is an
-array of references-to-hash. The keys of each element are fields from
-the aqorders, biblio, and biblioitems tables of the Koha database.
-
-C<@results> is sorted alphabetically by book title.
-
-=cut
-#'
-sub getallorders {
-  #gets all orders from a certain supplier, orders them alphabetically
-  my ($supid)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
-  and (cancelledby is NULL or cancelledby = '')
-  and (quantityreceived < quantity or quantityreceived is NULL)
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber
-  group by aqorders.biblioitemnumber
-  order by
-  biblio.title";
-  my $i=0;
-  my @results;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return($i,@results);
-}
-
-# FIXME - Never used
-sub getrecorders {
-  #gets all orders from a certain supplier, orders them alphabetically
-  my ($supid)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
-  and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber and
-  aqorders.quantityreceived>0
-  and aqorders.datereceived >=now()
-  group by aqorders.biblioitemnumber
-  order by
-  biblio.title";
-  my $i=0;
-  my @results;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return($i,@results);
-}
 
 =item ordersearch
 
