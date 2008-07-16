@@ -78,12 +78,12 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
 		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
-		my ($total,$forloan,$notforloan,$unavailable,$issue,$issuenfl,$reserve,$shared,$copy,@results)=C4::Search::allitems($iteminfo->{'id2'},'intranet');
+		my ($infoN3,@results)=C4::AR::Busquedas::buscarNivel3PorId2($iteminfo->{'id2'});
 #Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 		my @items;
 		my $j=0;
 		foreach (@results){
-			if (!$_->{'issued'} && (($iteminfo->{'notforloan'} eq 'SA' && $_->{'notforloan'} eq 'SA') || ($iteminfo->{'notforloan'} eq 'DO' && $_->{'forloan'}))){ 
+			if (!$_->{'prestado'} && (($iteminfo->{'notforloan'} eq 'SA' && $_->{'notforloan'} eq 'SA') || ($iteminfo->{'notforloan'} eq 'DO' && $_->{'forloan'}))){ 
 #solo pone los items que no estan prestados
 				$items[$j]->{'label'}="$_->{'barcode'}";
 				$items[$j]->{'value'}=$_->{'id3'};
@@ -208,7 +208,7 @@ print A "LOOP: $loop\n";
 		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			($error,$codMsg, $message) = C4::AR::Issues::devolver(\%params);
+			($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";

@@ -24,10 +24,10 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
+# use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
+# use HTML::Template;
 
 my $input=new CGI;
 
@@ -45,11 +45,12 @@ my $obj=$input->param('obj');
 $obj= &C4::AR::Utilidades::from_json_ISO($obj);
 
 my $funcion= $obj->{'funcion'};
+my $orden=$obj->{'orden'}||'date_due';
 my $ini= $obj->{'ini'}||'';
 
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad,$issues)=&C4::Search::allissues($bornum,$ini,$cantR);
+my ($cantidad,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
 &C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion);
 

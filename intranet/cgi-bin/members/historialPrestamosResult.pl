@@ -24,9 +24,9 @@ use C4::Auth;
 use C4::Date;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 
 my $input=new CGI;
+
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/historialPrestamosResult.tmpl",
 				query => $input,
@@ -40,11 +40,11 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $bornum=$obj->{'borrowernumber'};
 my $orden=$obj->{'orden'}||'date_due';
 my $ini=$obj->{'ini'}||'';
-my $funcion=
+my $funcion=$obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cant,$issues)=allissues($bornum,$ini,$cantR,$orden);
+my ($cant,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
 &C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
 
@@ -67,7 +67,7 @@ for (my $i=0;$i< $cantR;$i++){
  	if ($issues->[$i]->{'renewals'}){$line{date_renew}=$issues->[$i]->{'lastreneweddate'};}
 	$line{returndate}=$issues->[$i]->{'returndate'};
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-	($line{grupos})=Grupos($issues->[$i]->{'id1'},'intra');
+	($line{grupos})=C4::Search::Grupos($issues->[$i]->{'id1'},'intra');
 	push(@loop_reading,\%line);
    }
 }

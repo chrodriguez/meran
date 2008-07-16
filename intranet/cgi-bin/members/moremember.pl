@@ -74,10 +74,10 @@ $data->{'city'}=&getcitycategory($data->{'city'});
 $data->{'streetcity'}=&getcitycategory($data->{'streetcity'});
 
 # Converts the branchcode to the branch name
-$data->{'branchcode'} = &getbranchname($data->{'branchcode'});
+$data->{'branchcode'} = C4::AR::Busquedas::getbranchname($data->{'branchcode'});
 
 # Converts the categorycode to the description
-$data->{'categorycode'} = &C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
+$data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
 
 my $issues = prestamosPorUsuario($bornum);
@@ -138,7 +138,7 @@ foreach my $res (@$reserves) {
 		my $item=C4::AR::Catalogacion::buscarNivel3($res->{'rid3'});
 		$res->{'barcode'} = $item->{'barcode'};
 		$res->{'signatura_topografica'} = $item->{'signatura_topografica'};
-        	$res->{'rbranch'} = &getbranchname($res->{'rbranch'});
+        	$res->{'rbranch'} = C4::AR::Busquedas::getbranchname($res->{'rbranch'});
         	push @realreserves, $res;
         	$rcount++;
   	}

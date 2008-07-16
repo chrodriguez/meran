@@ -26,10 +26,10 @@ use CGI;
 use C4::Context;
 use C4::AR::PdfGenerator;
 use C4::Search;
-use HTML::Template;
-use C4::Output;
+# use HTML::Template;
+# use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Koha;
+# use C4::Koha;
 use C4::Auth;
 
 my $input= new CGI;
@@ -74,7 +74,7 @@ if($accion eq "ingresarDatos"){
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
 else{
-	my $biblioDestino = getbranchname($input->param('branch'));
+	my $biblioDestino = C4::AR::Busquedas::getbranchname($input->param('branch'));
 	my $director = $input->param('director')||"___________________";
 	my @autores=split("#",$input->param('autores'));
 	my @titulos=split("#",$input->param('titulos'));

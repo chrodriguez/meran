@@ -22,12 +22,12 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
-use C4::Koha;
+# use C4::Output;
+# use C4::Koha;
 use C4::Search;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
+# use HTML::Template;
 use PDF::Report;
 use C4::AR::PdfGenerator;
 
@@ -92,7 +92,7 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 my @categories;
 my @select_category;
 my %select_categories;
-my $categories=getallborrowercategorys();
+my $categories=C4::AR::Busquedas::getallborrowercategorys();
 foreach my $category (keys %$categories) {
         push @select_category, $category;
         $select_categories{$category} = $categories->{$category}->{'description'};

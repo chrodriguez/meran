@@ -80,10 +80,10 @@ my %bor;
 $bor{'personnumber'}=$pernum;
 
 # Converts the branchcode to the branch name
-$data->{'branchcode'} = &getbranchname($data->{'branchcode'});
+$data->{'branchcode'} = C4::AR::Busquedas::getbranchname($data->{'branchcode'});
 
 # Converts the categorycode to the description
-$data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
+$data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
 # Converts the citycodes to the description
 $data->{'city'} = &getcitycategory($data->{'city'});

@@ -42,8 +42,6 @@ my $bibnumitems=$input->param('bibnumitems');
 #Biblio
 my $biblionumber=$bibnum;
 my $dat=bibdata($biblionumber);
-my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites);# = &getwebsites($biblionumber);
 my ($subtitlecount,$subtitles) = &subtitle($biblionumber);
 my @subjects;
 my $len= scalar(split(",",$dat->{'subject'}));
@@ -82,9 +80,6 @@ my $data=C4::AR::Catalogacion::buscarNivel1($bibnum);
 my @autorPPAL= &getautor($data->{'autor'});
 $data->{'autor'}=\@autorPPAL;
 
-#Damian - 23/03/2007 - para ver la topografia
-my @item = itemsfrombiblioitem($bibnumitems);
-my $bulk = $item[0]->{'bulk'};
 
 
 my @result;
@@ -108,7 +103,7 @@ $template->param ( biblionumber => $bibnum,
                    BIBITEM_DATA => \@result,
 		   BIBLIO_DATA => \@results3,
 		    pagetitle => "Anal&iacute;ticas",
-		    bulk => $bulk,
+# 		    bulk => $bulk, FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		    );
 
 output_html_with_http_headers $input, $cookie, $template->output;

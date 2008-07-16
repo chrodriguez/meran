@@ -81,6 +81,7 @@ FIXME
    	&getCountPrestamosDeGrupo
 	&prestamosPorUsuario
 	&cantidadDePrestamosPorUsuario
+	&historialPrestamos
 );
 
 
@@ -102,7 +103,7 @@ sub t_devolver {
 	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B406';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
 		$error= 1;
@@ -111,7 +112,7 @@ sub t_devolver {
 	}
 	$dbh->{AutoCommit} = 1;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
 
@@ -207,10 +208,8 @@ sub devolver {
 		$error= 1;
 		$codMsg= 'P110';
 	}
-	#se obtiene el mensaje para el usuario
-	my $message=C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
 
-	return ($error,$codMsg, $message);
+	return ($error,$codMsg, $paraMens);
 }
 
 sub getDatosPrestamo{
@@ -672,9 +671,9 @@ sub Enviar_Recordatorio{
 		my $mailFrom=C4::Context->preference("mailFrom");
 		my $mailSubject =C4::Context->preference("reminderSubject");
 		my $mailMessage =C4::Context->preference("reminderMessage");
-		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
+		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
 
-	$res->{'autor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
+	$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
 	my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
 	$mailFrom =~ s/BRANCH/$branchname/;
 	$mailSubject =~ s/BRANCH/$branchname/;
@@ -887,4 +886,62 @@ sub cantidadDePrestamosPorUsuario{
 	}
  	$sth->finish;
 	return($overdues,$issues);
+}
+
+=item
+historialPrestamos
+Devuelve el historial de prestamos de un usuario en particular.
+=cut
+sub historialPrestamos {
+	my ($bornum,$ini,$cantR,$orden)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $dateformat = C4::Date::get_date_format();
+  	my $querySelectCount = " SELECT count(*) AS cant ";
+
+  	my $querySelect= " SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
+
+  	my $queryFrom = " FROM nivel3 n3 INNER JOIN nivel2 n2";
+  	$queryFrom .= " ON (n3.id2 = n2.id2) ";
+  	$queryFrom .= " INNER JOIN issues iss ";
+  	$queryFrom .= " ON (n3.id3 = iss.id3) ";
+  	$queryFrom .= " INNER JOIN nivel1 n1 ";
+  	$queryFrom .= " ON (n3.id1 = n1.id1) ";
+  	$queryFrom .= " INNER JOIN autores a ";
+  	$queryFrom .= " ON (a.id = n1.autor) ";
+
+ 	my $queryWhere= " WHERE borrowernumber= ? ";
+  	my $queryFinal= " ORDER BY $orden ";
+  	$queryFinal .= " limit ?,? ";
+
+  	my $consulta = $querySelectCount.$queryFrom.$queryWhere;
+
+  #obtengo la cantidad total para el paginador
+  	my $sth=$dbh->prepare($consulta);
+  	$sth->execute($bornum);
+  	my $data= $sth->fetchrow_hashref;
+  	my $count= $data->{'cant'};
+
+  #se realiza la consulta
+  	$consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
+  	my $sth=$dbh->prepare($consulta);
+  	$sth->execute($bornum,$ini,$cantR);
+
+  	my @result;
+  	my $i=0;
+
+  	while (my $data=$sth->fetchrow_hashref){
+		my $df=C4::AR::Issues::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
+		$data->{'date_fin'}=C4::Date::format_date($df,$dateformat);
+		$data->{'date_due'}=  C4::Date::format_date($data->{'date_due'},$dateformat);
+		$data->{'returndate'}=  C4::Date::format_date($data->{'returndate'},$dateformat);
+		$data->{'lastreneweddate'}=C4::Date::format_date($data->{'lastreneweddate'},$dateformat);
+		$data->{'id'} = $data->{'autor'};
+    		$data->{'autor'} = $data->{'completo'};
+
+    		$result[$i]=$data;
+    		$i++;
+  	}
+  	$sth->finish;
+
+  	return($count,\@result);
 }

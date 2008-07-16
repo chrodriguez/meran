@@ -58,7 +58,7 @@ if(!$json){
 	}
 	else{
 		my $nivel=2;
-		my $descripcion=C4::Search::ItemType($itemtype);
+		my $descripcion=C4::AR::Busquedas::getItemType($itemtype);
 
 		$template->param(
 			nivel		  => $nivel,

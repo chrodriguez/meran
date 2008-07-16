@@ -1074,8 +1074,8 @@ sub Enviar_Email{
 		my $mailFrom=C4::Context->preference("reserveFrom");
 		my $mailSubject =C4::Context->preference("reserveSubject");
 		my $mailMessage =C4::Context->preference("reserveMessage");
-		my $branchname= C4::Search::getbranchname($borrower->{'branchcode'});
-		$res->{'autor'}=(C4::Search::getautor($res->{'autor'}))->{'completo'};
+		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
+		$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
 		my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
 		$mailSubject =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/BRANCH/$branchname/;

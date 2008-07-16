@@ -21,13 +21,13 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
+# use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
-use HTML::Template;
+# use HTML::Template;
 use C4::AR::Estadisticas;
-use C4::Koha;
+# use C4::Koha;
 use Mail::Sendmail;
 use C4::Date;
 use Date::Manip;
@@ -46,7 +46,7 @@ my $result;
 	$mailSubject=C4::Context->preference("reserveSubject")
 
 
-my $branchname=getbranchname($branch);
+my $branchname=C4::AR::Busquedas::getbranchname($branch);
 $mailSubject=~ s/BRANCH/$branchname/;
                                                                                                                              
 my $mailFrom=C4::Context->preference("mailFrom");

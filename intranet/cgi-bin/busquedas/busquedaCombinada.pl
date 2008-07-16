@@ -44,7 +44,7 @@ if($keyword ne ""){
 
 if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$comboItemTypes=&verificarValor($comboItemTypes);
-	my $itemtype=C4::AR::Busquedas::ItemType($comboItemTypes);
+	my $itemtype=C4::AR::Busquedas::getItemType($comboItemTypes);
 	$buscoPor.="Tipo de documento: ".$itemtype."&";
 }
 

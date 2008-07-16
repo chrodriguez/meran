@@ -80,7 +80,7 @@ use vars qw(@EXPORT @ISA);
 buscarDatoReferencia
 Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla de una tabla y se buscan los campos que el usuario introdujo para que se vean. Se concatenan con el separador que el mismo introdujo.
 =cut
-sub buscarDatoReferencia(){
+sub buscarDatoReferencia{
 	my ($dato,$tabla,$campos,$separador)=@_;
 	
 	my $ident=&C4::AR::Catalogacion::obtenerIdentTablaRef($tabla);
@@ -118,7 +118,7 @@ sub buscarDatoReferencia(){
 getLibrarianEstCat
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
-sub getLibrarianEstCat(){
+sub getLibrarianEstCat{
 	my ($campo, $subcampo,$dato, $itemtype)= @_;
 
 	my $dbh = C4::Context->dbh;
@@ -155,7 +155,7 @@ sub getLibrarianEstCat(){
 getLibrarianEstCatOpac
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
-sub getLibrarianEstCatOpac(){
+sub getLibrarianEstCatOpac{
 	my ($campo, $subcampo, $dato, $itemtype)= @_;
 
 	my $dbh = C4::Context->dbh;
@@ -243,7 +243,7 @@ $query .= " and (eio.itemtype = ?)";
 getLibrarianMARCSubField
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
-sub getLibrarianMARCSubField(){
+sub getLibrarianMARCSubField{
 	my ($campo, $subcampo, $tipo)= @_;
 	my $dbh = C4::Context->dbh;
 
@@ -265,7 +265,7 @@ sub getLibrarianMARCSubField(){
 getLibrarianIntra
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
-sub getLibrarianIntra(){
+sub getLibrarianIntra{
 	my ($campo, $subcampo,$dato, $itemtype) = @_;
 
 #busca librarian segun campo, subcampo e itemtype
@@ -293,7 +293,7 @@ sub getLibrarianIntra(){
 getLibrarianOpac
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion_opac y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
-sub getLibrarianOpac(){
+sub getLibrarianOpac{
 	my ($campo, $subcampo,$dato, $itemtype) = @_;
 	my $textPred;	
 	my $textSucc;
@@ -317,7 +317,7 @@ sub getLibrarianOpac(){
 	return $librarian;
 }
 
-sub getLibrarian(){
+sub getLibrarian{
 	my ($campo, $subcampo,$dato,$itemtype, $tipo)=@_;
 	my $librarian;
 	if($tipo eq "intra"){
@@ -332,7 +332,7 @@ sub getLibrarian(){
 buscarMapeo
 Asocia los campos marc correspondientes con los campos de las tablas de los nivel 1, 2 y 3 (koha) correspondiente al parametro que llega.
 =cut
-sub buscarMapeo(){
+sub buscarMapeo{
 	my ($tabla)= @_;
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
@@ -355,7 +355,7 @@ sub buscarMapeo(){
 buscarMapeoTotal
 Busca el mapeo de los campos de todas las tablas de niveles y obtiene el nombre de los campos
 =cut
-sub buscarMapeoTotal(){
+sub buscarMapeoTotal{
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
 	my $llave;
@@ -374,7 +374,7 @@ sub buscarMapeoTotal(){
 	return (\%mapeo);
 }
 
-sub buscarMapeoCampoSubcampo(){
+sub buscarMapeoCampoSubcampo{
 	my ($campo,$subcampo,$nivel)=@_;
 	my $dbh = C4::Context->dbh;
 	my $tabla="nivel".$nivel;
@@ -392,7 +392,7 @@ sub buscarMapeoCampoSubcampo(){
 buscarSubCamposMapeo
 Busca el mapeo para el subcampo perteneciente al campo que se pasa por parametro.
 =cut
-sub buscarSubCamposMapeo(){
+sub buscarSubCamposMapeo{
 	my ($campo)=@_;
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
@@ -413,7 +413,7 @@ sub buscarSubCamposMapeo(){
 detalleNivel1
 Trae todo los datos del nivel 1 para poder verlos en el template.
 =cut
-sub detalleNivel1(){
+sub detalleNivel1{
 	my ($id1, $nivel1,$tipo)= @_;
 	my $dbh = C4::Context->dbh;
 	my @nivel1Comp;
@@ -463,7 +463,7 @@ sub detalleNivel1(){
 detalleNivel2
 Trae todos los datos del nivel 2, para poder verlos en el template, tambien busca el detalle del nivel 3 asociados a cada nivel 2.
 =cut
-sub detalleNivel2(){
+sub detalleNivel2{
 	my($id1,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 	my @nivel2=&buscarNivel2PorId1($id1);
@@ -545,7 +545,7 @@ sub detalleNivel2(){
 detalleNivel3
 Trae todos los datos del nivel 3, para poder verlos en el template.
 =cut
-sub detalleNivel3(){
+sub detalleNivel3{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2($id2);
@@ -805,7 +805,7 @@ sub obtenerDisponibilidadTotal{
 
 #*****************************************Prueba Miguel*******esta funcionando***********************************
 
-sub detalleNivel1_copia(){
+sub detalleNivel1_copia{
 	my ($id1, $nivel1,$tipo)= @_;
 	my $dbh = C4::Context->dbh;
 	my @nivel1Comp;
@@ -853,7 +853,7 @@ sub detalleNivel1_copia(){
 detalleNivel3
 Trae todos los datos del nivel 3, para poder verlos en el template.
 =cut
-sub detalleNivel3_Opac(){
+sub detalleNivel3_Opac{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2($id2);
@@ -910,7 +910,7 @@ sub detalleNivel3_Opac(){
 
 #****************************************************MARC DETAIL**************************************************
 
-sub detalleNivel1MARC(){
+sub detalleNivel1MARC{
 	my ($id1, $nivel1,$tipo)= @_;
 	my $dbh = C4::Context->dbh;
 	my @nivel1Comp;
@@ -953,7 +953,7 @@ sub detalleNivel1MARC(){
 detalleNivel2MARC
 Busca el nivel 2 segun id1 y id2, al resultado le agrega el nivel 1 y nivel 3
 =cut
-sub detalleNivel2MARC(){
+sub detalleNivel2MARC{
 	my($id1,$id2,$id3,$tipo,$nivel1)=@_;
 	my $dbh = C4::Context->dbh;
 	#Busca el nivel 2 segun id1 e id2, (retorna solo uno)
@@ -1071,7 +1071,7 @@ detalleNivel3MARC
 trae el nivel3 completo (nivel3 y nivel3_repetibles), para mostrar en MARC,
 segun id3 pasado por parametro
 =cut
-sub detalleNivel3MARC(){
+sub detalleNivel3MARC{
 	my ($id3,$itemtype,$tipo)=@_;
 
 	my $dbh = C4::Context->dbh;
@@ -1170,7 +1170,7 @@ sub buscarCamposMARC{
 buscarSubCamposMARC
 Busca los subcampos correspondiente al parametro de campo y que no sean propios de una tabla de nivel, solo los que estan en tablas de nivel repetibles.
 =cut
-sub buscarSubCamposMARC(){
+sub buscarSubCamposMARC{
 	my ($campo) =@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT tagsubfield FROM marc_subfield_structure ";
@@ -1194,7 +1194,7 @@ sub buscarSubCamposMARC(){
 busquedaAvanzada
 Busca los id1 dependiendo de los strings que viene desde el pl.
 =cut
-sub busquedaAvanzada(){
+sub busquedaAvanzada{
 	my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR)= @_;
 	my $dbh = C4::Context->dbh;
 #Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
@@ -1422,7 +1422,7 @@ return ($cantidad,\@resultsId1);
 
 
 
-sub busquedaAvanzadaPaginada(){
+sub busquedaAvanzadaPaginada{
 	my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$startRecord ,$numberOfRecords,$onlyCount)= @_;
 	my $dbh = C4::Context->dbh;
 #Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
@@ -1679,7 +1679,7 @@ if($onlyCount){
 buscarItemtypes
 Busca los distintos tipos de documentos que tiene una tupla del nivel1, se pasa como parametro el id1 de la misma.
 =cut
-sub buscarItemtypes(){
+sub buscarItemtypes{
 	my ($id1)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT DISTINCT tipo_documento FROM nivel2 WHERE id1=?";
@@ -1700,7 +1700,7 @@ sub buscarItemtypes(){
 buscarEncabezados
 Busca los encabezados correspondientes a los tipos de documentos que llegan por parametro y para un determinado nivel.
 =cut
-sub buscarEncabezados(){
+sub buscarEncabezados{
 	my ($itemtypes,$nivel)= @_;
 	my %encabezados;
 	my $linea;
@@ -1772,7 +1772,7 @@ close(A);
 buscarNivel2EnMARC
 Busca los datos de la tabla nivel2 y nivel2_repetibles y los devuelve en formato MARC (campo,subcampo,dato).
 =cut
-sub buscarNivel2EnMARC(){
+sub buscarNivel2EnMARC{
 	my ($id1)=@_;
 # open(A, ">>/tmp/debug.txt");
 # print A "\n";
@@ -1832,7 +1832,7 @@ sub buscarNivel2EnMARC(){
 detalleOpacNivel2
 Busca todos los encabezados para los distintos tipo de documentos y toda la informacion de nivel2 para un id1 y devuelve el detalle de como se va a imprimir en el opac. (la visualización) 
 =cut
-sub detalleOpacNivel2(){
+sub detalleOpacNivel2{
 	my ($id1)=@_;
 	my $n2itemtypes=&buscarItemtypes($id1);
 
@@ -1951,7 +1951,7 @@ close(A);
 	return @result;
 }
 
-sub buscarAutorPorCond(){
+sub buscarAutorPorCond{
 	my ($cond)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM autores WHERE completo".$cond." ORDER BY apellido";
@@ -1981,20 +1981,14 @@ sub buscarDatoDeCampoRepetible {
 
 
 sub getautor {
-
     my ($idAutor) = @_;
-    my @result;
     my $dbh   = C4::Context->dbh;
     my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
 				FROM autores WHERE id = ?");
     $sth->execute($idAutor);
-
-    my $data1 =$sth->fetchrow_hashref; 
-    my @result;
-    push(@result,$data1);
+    my $data=$sth->fetchrow_hashref; 
     $sth->finish();
-
-    return($data1);
+    return($data);
  }
 
 sub getLevel
@@ -2127,8 +2121,7 @@ sub getItemTypes {
 } # sub getitemtypes
 
 
-sub getbranchname
-{
+sub getbranchname{
 	my ($branchcode) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("SELECT branchname FROM branches WHERE branchcode = ?");
@@ -2138,17 +2131,13 @@ sub getbranchname
 	return $branchname;
 } # sub getbranchname
 
+
 =item getborrowercategory
-
   $description = &getborrowercategory($categorycode);
-
 Given the borrower's category code, the function returns the corresponding
 description for a comprehensive information display.
-
 =cut
-
-sub getborrowercategory
-{
+sub getborrowercategory{
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
@@ -2158,8 +2147,7 @@ sub getborrowercategory
 	return $description;
 } # sub getborrowercategory
 
-sub getallborrowercategorys
-{
+sub getallborrowercategorys{
 	my $dbh = C4::Context->dbh;
 	my %categories;
 	my $sth = $dbh->prepare("SELECT description,categorycode FROM categories");
@@ -2172,8 +2160,7 @@ sub getallborrowercategorys
 } # sub getallorrowercategorys
 
 
-sub getAvail
-{
+sub getAvail{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
         my $query = "SELECT * from unavailable where code = '$cod' ";
@@ -2185,7 +2172,7 @@ sub getAvail
 }
 
 #Temas, toma un id de tema y devuelve la descripcion del tema.
-sub getTema(){
+sub getTema{
 	my ($idTema)=@_;
 	my $dbh = C4::Context->dbh;
         my $query = "SELECT * from temas where id = ? ";
@@ -2305,7 +2292,7 @@ sub busquedaCombinada {
 
 
 
-sub buscarGrupos(){
+sub buscarGrupos{
 	my ($isbn,$titulo,$ini,$cantR)=@_;
 	my $dbh = C4::Context->dbh;
 	my $limit=" limit ?,?";
@@ -2358,3 +2345,5 @@ sub buscarGrupos(){
 	$sth->finish;
 	return($cantidad,\@result);
 }
+
+1;

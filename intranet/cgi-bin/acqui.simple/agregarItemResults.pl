@@ -47,7 +47,7 @@ my $id1=$input->param('id1') || -1;
 my $id2=$input->param('id2') || -1;
 my $accion=$input->param('accion2')||$input->param('accion')||-1;
 #busca la primera vez la descripcion del itemtype y despues lo toma de la pagina.
-my $descripcion=$input->param('descripcion') || C4::Search::ItemType($itemtype);
+my $descripcion=$input->param('descripcion') || C4::AR::Busquedas::getItemType($itemtype);
 
 
 if($accion eq "borrar"){

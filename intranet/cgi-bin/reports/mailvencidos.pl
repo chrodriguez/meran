@@ -21,14 +21,13 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
+# use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
+# use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Circulation::Circ2;
-use C4::Koha;
+# use C4::Koha;
 use Mail::Sendmail;
 use C4::Date;
 use Date::Manip;
@@ -46,7 +45,7 @@ my $return_url ="prestamos.pl?ini=$ini&branch=$branch&estado=$estado&orden=$orde
 my $mensaje =C4::Context->preference("mailMessage");
 my $mailSubject=C4::Context->preference("mailSubject");
 
-my $branchname=getbranchname($branch);
+my $branchname=C4::AR::Busquedas::getbranchname($branch);
 $mailSubject=~ s/BRANCH/$branchname/;
 $mensaje=~ s/BRANCH/$branchname/;
 
@@ -60,7 +59,7 @@ my $result;
 my @chkbox=$input->param('chkbox1');
 my $cant=scalar(@chkbox);
 ##Hay que quitar los duplicados ya que un usuario puede llegar a tener muchos ejemplares vencidos!!!!
-my @borrowers=quitarduplicados(@chkbox);
+my @borrowers=C4::AR::Utilidades::quitarduplicados(@chkbox);
 
 for(my $i=0;$i<scalar(@borrowers);$i++){
 
@@ -80,7 +79,7 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 		$mailMessage =~ s/SURNAME/$surname/;
 
 	#Se buscan y procesan los prestamos vencidos
-	($count,$result)=mailissuesforborrower($branch,$bornum);
+	($count,$result)=C4::Search::mailissuesforborrower($branch,$bornum);
 	my $mensajeVencidos="";
 
 	my $dateformat = C4::Date::get_date_format();
@@ -127,16 +126,4 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 print $input->redirect($return_url);
 
 
-sub quitarduplicados () {
-my  (@arreglo)=@_;
-my @arreglosin=();
-for(my $i=0;$i<scalar(@arreglo);$i++){
-	my $ok=1;
-	for(my $j=0;$j<scalar(@arreglosin);$j++){
-	if ($arreglo[$i] == $arreglosin[$j] ){$ok=0;}
-	}
-	if ($ok eq 1) {push(@arreglosin, $arreglo[$i] );}
-}
-return (@arreglosin);
-}
 

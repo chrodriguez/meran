@@ -75,7 +75,7 @@ if (my $data2=$sth->fetchrow_hashref){
 }
 
 #Esto iria si se permitiera agregar nuevos usuarios factibles 
-=cut
+=item
 else{
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'},$dateformat);
   $data{'joining'}=format_date_in_iso($data{'joining'},$dateformat);
