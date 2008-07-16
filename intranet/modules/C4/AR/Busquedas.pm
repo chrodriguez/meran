@@ -734,27 +734,30 @@ sub obtenerEdiciones{
 
 
 sub obtenerGrupos {
-  my ($id1,$itemtype)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from nivel2 left join nivel1 on nivel1.id1=nivel2.id1 where nivel2.id1=?";
-
-  if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
-		$query .=" and nivel2.tipo_documento = '".$itemtype."'";
+	my ($id1,$itemtype)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $query="SELECT * FROM nivel2 LEFT JOIN nivel1 ON nivel1.id1=nivel2.id1 WHERE nivel2.id1=?";
+	my @bind;
+	push(@bind,$id1);
+  	if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
+		$query .=" AND nivel2.tipo_documento = ?";
+		push(@bind,$itemtype);
 	}
 
-  my $sth=$dbh->prepare($query);
-  $sth->execute($id1);
-  my @result;
-  my $res=0;
-  my $data;
-  while ( $data=$sth->fetchrow_hashref){
-        $result[$res]->{'id2'}=$data->{'id2'};
-        $result[$res]->{'edicion'}=buscarDatoDeCampoRepetible($data->{'id2'},"250","a","2");
-        $result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-        $result[$res]->{'volume'}= buscarDatoDeCampoRepetible($data->{'id2'},"740","n","2");
-        $res++;
+  	my $sth=$dbh->prepare($query);
+  	$sth->execute(@bind);
+  	my @result;
+  	my $res=0;
+  	my $data;
+  	while ( $data=$sth->fetchrow_hashref){
+        	$result[$res]->{'id2'}=$data->{'id2'};
+		#HACER METODOS PARA LOS CAMPOS MAS COMUNES A MOSTRAR QUE LLAMEN A LA SGTE FUNCION (EJ. getEdicion)
+        	$result[$res]->{'edicion'}=buscarDatoDeCampoRepetible($data->{'id2'},"250","a","2");
+        	$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
+        	$result[$res]->{'volume'}= buscarDatoDeCampoRepetible($data->{'id2'},"740","n","2");
+        	$res++;
         }
-return (@result);
+	return (@result);
 }
 
 
@@ -771,7 +774,7 @@ sub obtenerDisponibilidadTotal{
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1);
 	}else{#Filtro tb por tipo de item
-	  $query .= " and id2 in ( SELECT id2 FROM nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
+	  $query .= " AND id2 IN ( SELECT id2 FROM nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
 
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1, $itemtype);
@@ -2281,3 +2284,49 @@ sub buscarGrupos(){
 	$sth->finish;
 	return($cantidad,\@result);
 }
+
+
+=item
+bibitemdata
+
+=cut
+sub bibitemdata {
+    my ($id2) = @_;
+    my $dbh= C4::Context->dbh;
+# biblio.notes,biblioitems.notes as bnotes, biblioitems.volume,biblioitems.number, biblioitems.isbn, biblioitems.isbn2, biblioitems.lccn, biblioitems.issn, biblioitems.dewey, biblioitems.subclass, biblioitems.publishercode, biblioitems.volumeddesc, biblioitems.illus, biblioitems.pages, biblioitems.size, biblioitems.url, biblioitems.seriestitle, FALTA!!!!
+    my $sth   = $dbh->prepare("SELECT n1.id1, autor, titulo, n2.id2, itemtypes.description,
+				itemtypes.itemtype, pais_publicacion, soporte,lenguaje,nivel_bibliografico,
+				anio_publicacion, ciudad_publicacion
+    				FROM nivel1 n1 INNER JOIN  nivel2 n2 ON n1.id1=n2.id1
+        			INNER JOIN itemtypes ON n2.tipo_documento = itemtypes.itemtype 
+        			WHERE id2 = ? ");
+    my $data;
+
+   $sth->execute($id2);
+   $data = $sth->fetchrow_hashref;
+
+   #MAtias Lenguaje Pais y Soporte
+   my $country=getCountry($data->{'pais_publicacion'});
+   $data->{'country'}= $country->{'printable_name'};
+   $data->{'idCountry'}= $country->{'iso'};
+
+   my $support=getSupport($data->{'soporte'});
+   $data->{'support'}= $support->{'description'};
+   $data->{'idSupport'}= $support->{'idSupport'};
+
+   my $language=getLanguage($data->{'lenguaje'});
+   $data->{'language'}= $language->{'description'};
+   $data->{'idLanguage'}= $language->{'idLanguage'};
+
+
+   my $level=getLevel($data->{'nivel_bibliografico'});
+        $data->{'classification'}= $level->{'description'};
+        $data->{'idclass'}= $level->{'code'};
+	
+  my $author=getautor($data->{'autor'}); #agregado por Damian
+  $data->{'autor'}=$author->{'completo'}; #agregado por Damian
+
+
+    $sth->finish;
+    return($data);
+} # sub bibitemdata
