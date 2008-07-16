@@ -44,7 +44,7 @@ var MENU_ITEMS = [
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']
 	],
 
-	['Circulaci&oacute;n', '/cgi-bin/koha/circ/circulation.pl', null,
+	['Circulaci&oacute;n', null, null,
 		['Pr&eacute;stamos', '/cgi-bin/koha/circ/prestamos.pl'],
 		['Devol. y  Renov.', '/cgi-bin/koha/circ/devoluciones.pl'],
 		['Transferencias', '/cgi-bin/koha/circ/branchtransfers.pl'],

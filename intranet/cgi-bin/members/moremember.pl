@@ -62,12 +62,12 @@ my $dateformat = C4::Date::get_date_format();
 # Curso de usuarios#
 if (C4::Context->preference("usercourse")){
 	$data->{'course'}=1;
-	$data->{'usercourse'} = format_date($data->{'usercourse'},$dateformat);
+	$data->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 }
 #
-$data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
-$data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
-$data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
+$data->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
+$data->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
+$data->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
 $data->{'city'}=&getcitycategory($data->{'city'});
@@ -131,7 +131,7 @@ my $wcount = 0;
 foreach my $res (@$reserves) {	
     	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
 
-	my $author=getautor($res->{'rautor'});
+	my $author=C4::AR::Busquedas::getautor($res->{'rautor'});
         $res->{'rauthor'} = $author->{'completo'};
 	$res->{'id'} = $author->{'id'}; 
     	if ($res->{'rid3'}) {

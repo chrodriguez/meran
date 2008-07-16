@@ -282,13 +282,14 @@ sub cancelar_reservas{
 sub t_cancelar_reservas_inmediatas{
 	my ($params)=@_;
 	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;
-	$dbh->{RaiseError} = 1;
+# 	$dbh->{AutoCommit} = 0;
+# 	$dbh->{RaiseError} = 1;
 	my $tipo=$params->{'tipo'};
 	my $borrowernumber=$params->{'borrowernumber'};
 	my $loggedinuser=$params->{'loggedinuser'};
-	my ($error,$codMsg,$paraMens);
-	eval{
+	my $error=0;
+	my ($codMsg,$paraMens);
+# 	eval{
 # Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
 		my $sth=$dbh->prepare("	SELECT reservenumber 
 					FROM reserves 
@@ -300,7 +301,7 @@ sub t_cancelar_reservas_inmediatas{
 			($error,$codMsg,$paraMens)=cancelar_reserva($params);
 		}
 		$sth->finish;
-		$dbh->commit;
+=item		$dbh->commit;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
@@ -311,7 +312,7 @@ sub t_cancelar_reservas_inmediatas{
 		$error= 1;
 		$codMsg= 'R010';
 	}
-	$dbh->{AutoCommit} = 1;
+=cut	$dbh->{AutoCommit} = 1;
 	return($error,$codMsg,$paraMens);
 }
 
@@ -819,6 +820,9 @@ if ($issueType eq "DO"){
 			$codMsg= 'P108';
 			$params->{'tipo'}="INTRA";
 			($error,$codMsg,$paraMens)=C4::AR::Reservas::t_cancelar_reservas_inmediatas($params);
+			#ACA ESTA EL PROBLEMA DEL COMMIT NO DEBE SER UNA TRANSACCION, POR ESTA DENTRO DE OTRA(t_prestar) SE SACO VER!!!!!!!!!!!!!!!!!! VER EL COD DE ERROR SE SOBRE ESCRIBE 
+			$codMsg= 'P108';
+			
 		}
 	}
 }
