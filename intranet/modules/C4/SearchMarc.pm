@@ -29,13 +29,10 @@ $VERSION = 0.02;
 
 =head1 NAME
 
-C4::Search - Functions for searching the Koha MARC catalog
 
 =head1 SYNOPSIS
 
-  use C4::Search;
 
-  my ($count, @results) = catalogsearch();
 
 =head1 DESCRIPTION
 

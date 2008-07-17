@@ -24,10 +24,6 @@
 use strict;
 use C4::Auth;
 use CGI;
-use C4::Context;
-use HTML::Template;
-use C4::Search;
-use C4::Output;
 use C4::Authorities;
 use C4::Interface::CGI::Output;
 # get all the data ....

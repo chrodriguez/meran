@@ -17,11 +17,16 @@ use vars qw(@EXPORT @ISA);
 	&getBorrower
 	&getBorrowerInfo
 	&buscarBorrower
+	&obtenerCategoria
+	&mailIssuesForBorrower
+	&personData
+	&BornameSearchForCard
+	&NewBorrowerNumber
+	&findguarantees
 );
 
 
-sub buscarBorrower {
-
+sub buscarBorrower{
 	my ($busqueda) = @_;
 	my $dbh = C4::Context->dbh;
 	my $query;
@@ -238,6 +243,192 @@ sub ListadoDePersonas  {
 	$sth->finish;
 	return ($cnt,\@results);
 }
+
+=item
+obtenerCategoria
+Obtiene la categoria de un usuario en particular.
+=cut
+# FIXME ES NECESARIO EL SELECT en la tabla persons!!!!!!!!!!
+sub obtenerCategoria{
+        my ($bor) = @_;
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT categorycode FROM persons WHERE borrowernumber = ?");
+        $sth->execute($bor);
+        my $condicion = $sth->fetchrow();
+	if (not $condicion){
+		$sth = $dbh->prepare("SELECT categorycode FROM borrowers WHERE borrowernumber = ?");
+       		$sth->execute($bor);
+        	$condicion = $sth->fetchrow();
+			}
+	$sth->finish();
+        return $condicion;
+} 
+
+
+sub mailIssuesForBorrower{
+  	my ($branch,$bornum)=@_;
+  	my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Date::get_date_format();
+  	my $sth=$dbh->prepare("SELECT * 
+				FROM issues
+				LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
+				LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
+				WHERE issues.returndate IS NULL AND issues.date_due <= now( ) 
+				AND issues.branchcode = ? AND issues.borrowernumber = ? ");
+    	$sth->execute($branch,$bornum);
+  	my @result;
+  	my @datearr = localtime(time);
+	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
+  	while (my $data = $sth->fetchrow_hashref) {
+		#Para que solo mande mail a los prestamos vencidos
+		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
+		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+		if ($flag lt 0){
+			#Solo ingresa los prestamos vencidos a el arreglo a retornar
+    			push @result, $data;
+		}
+  	}
+  	$sth->finish;
+  	return(scalar(@result), \@result);
+}
+
+=item
+personData
+Busca los datos de una persona, que viene como parametro.
+=cut
+# FIXME SE USA EN moremember2.pl y memberentry2.pl POR AHI SE PUEDE BORRAR
+sub personData {
+  	my ($bornum)=@_;
+ 	my $dbh = C4::Context->dbh;
+  	my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+  	$sth->execute($bornum);
+
+  	my $data=$sth->fetchrow_hashref;
+  	$sth->finish;
+
+  	return($data);
+}
+
+
+=item
+BornameSearchForCard
+Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
+=cut
+sub BornameSearchForCard{
+	my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
+	my @bind=();
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT borrowers.*,categories.description AS categoria FROM borrowers LEFT JOIN categories ON categories.categorycode = borrowers.categorycode WHERE borrowers.branchcode = ? ";
+	push (@bind,$branch);
+
+	if (($category ne '')&& ($category ne 'Todos')) {
+		$query.= " AND borrowers.categorycode = ? ";
+		push (@bind,$category);
+	}
+	if (($surname1 ne '') || ($surname2 ne '')){
+		if ($surname2 eq ''){ 
+			$query.= " AND borrowers.surname LIKE ? ";
+                       	push (@bind,"$surname1%"); 
+		}
+		else{
+			$query.= " AND borrowers.surname BETWEEN ? AND ? ";
+                	push (@bind,$surname1,$surname2);
+		}
+	}
+	if (($legajo1 ne '') || ($legajo2 ne '')){
+		if ($legajo2 eq '') {
+			$query.= " AND borrowers.studentnumber LIKE ? ";
+                       	push (@bind,"$legajo1%"); 
+		}
+		else{
+			$query.= " AND borrowers.studentnumber BETWEEN ? AND ? ";
+                	push (@bind,$legajo1,$legajo2);
+		}
+	}
+
+	if ($orden ne ''){$query.= " ORDER BY  borrowers.$orden ASC ";}
+	else {$query.= " ORDER BY  borrowers.surname ASC ";}
+
+	my $sth = $dbh->prepare($query);
+	$sth->execute(@bind);
+ 	my @results;
+ 	my $i=-1;
+ 	while (my $data=$sth->fetchrow_hashref){
+		my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
+		my $pasa=1;
+
+		if (($regular ne '')&&($regular ne 'Todos')){ #Se tiene que filtrar por regularidad??
+ 	  		if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
+		}
+		if ($pasa == 1){ #Pasa el filtro
+			$i++; 
+			$results[$i]=$data; 
+			$results[$i]->{'city'}=getcity($results[$i]->{'city'});
+			if ($results[$i]->{'categorycode'} eq 'ES'){
+				$results[$i]->{'regular'}= $reg;
+				if ($results[$i]->{'regular'} eq 1){
+					$results[$i]->{'regular'}="<font color='green'>Regular</font>";
+				}
+				elsif($results[$i]->{'regular'} eq 0){
+					$results[$i]->{'regular'}="<font color='red'>Irregular</font>";
+				}
+			}
+			else{$results[$i]->{'regular'}="---";};
+		}
+	}
+ 	$sth->finish;
+ 	return(scalar(@results),@results);
+}
+
+=item 
+NewBorrowerNumber
+Devulve el maximo borrowernumber
+Posiblemente no se usa o no sierve!!!!!!! VER!!!!!!!!!!!!
+=cut
+sub NewBorrowerNumber{
+  	my $dbh = C4::Context->dbh;
+  	my $sth=$dbh->prepare("SELECT MAX(borrowernumber) FROM borrowers");
+  	$sth->execute;
+  	my $data=$sth->fetchrow_hashref;
+  	$sth->finish;
+  	$data->{'max(borrowernumber)'}++;
+  	return($data->{'max(borrowernumber)'});
+}
+
+=item 
+findguarantees
+
+  ($num_children, $children_arrayref) = &findguarantees($parent_borrno);
+  $child0_cardno = $children_arrayref->[0]{"cardnumber"};
+  $child0_borrno = $children_arrayref->[0]{"borrowernumber"};
+
+C<&findguarantees> takes a borrower number (e.g., that of a patron
+with children) and looks up the borrowers who are guaranteed by that
+borrower (i.e., the patron's children).
+
+C<&findguarantees> returns two values: an integer giving the number of
+borrowers guaranteed by C<$parent_borrno>, and a reference to an array
+of references to hash, which gives the actual results.
+
+SE USA EN insertdata.pl ----- VER!!!!!!!!!!!!!!!!!!!!
+POSIBLEMENTE SE PUEDA BORRAR !!!!! BUSCA HIJOS!!!!!!!
+=cut
+sub findguarantees{
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("SELECT cardnumber,borrowernumber, firstname, surname FROM borrowers WHERE guarantor=?");
+  $sth->execute($bornum);
+
+  my @dat;
+  while (my $data = $sth->fetchrow_hashref)
+  {
+    push @dat, $data;
+  }
+  $sth->finish;
+  return (scalar(@dat), \@dat);
+}
+
+
 
 
 1

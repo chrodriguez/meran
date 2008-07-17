@@ -20,15 +20,9 @@
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
 use C4::Interface::CGI::Output;
-use C4::Context;
-use C4::Search;
 use C4::Auth;
-use C4::Output;
-# use C4::Database;
 use C4::Biblio;
-#use C4::SimpleMarc;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Koha;

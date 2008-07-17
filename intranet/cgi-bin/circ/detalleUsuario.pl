@@ -50,8 +50,8 @@ my $sanctions = C4::AR::Sanctions::hasSanctions($borrnumber);
 my $dateformat = C4::Date::get_date_format();
 foreach my $san (@$sanctions) {
 	if ($san->{'id3'}) {
-		my $aux=C4::Search::itemdata3($san->{'id3'}); 
-		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; 
+		my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
+		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
 	}
 
 	if ($san->{'reservaNoRetiradaVencida'}){

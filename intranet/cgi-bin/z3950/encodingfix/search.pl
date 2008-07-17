@@ -20,14 +20,10 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
-use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Z3950;
-use C4::Search;
-use HTML::Template;
 use MARC::File::USMARC;
 
 use vars qw( $tagslib );
@@ -76,7 +72,7 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 # fill with books in breeding farm
-($count, @results) = breedingsearch($title,$isbn,$random);
+($count, @results) = C4::Breeding::BreedingSearch($title,$isbn,$random);
 my $numberpending= &checkz3950searchdone($random);
 my @breeding_loop = ();
 for (my $i=0; $i <= $#results; $i++) {

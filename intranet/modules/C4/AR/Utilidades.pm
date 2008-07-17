@@ -76,6 +76,7 @@ use vars qw(@EXPORT @ISA);
 	&checkdigit 
 	&checkvalidisbn 
 	&quitarduplicados
+	&buscarCiudades
 	);
 
 =item
@@ -1028,5 +1029,27 @@ sub obtenerDatosValorAutorizado(){
 	}
 	return(%results);
 }
+
+=item
+buscarCiudades
+Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
+=cut
+sub buscarCiudades{
+        my ($ciudad) = @_;
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad AS localidad,localidades.nombre AS nombre FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais WHERE localidades.nombre LIKE ? OR localidades.nombre LIKE ? ORDER BY localidades.nombre";
+	my $sth = $dbh->prepare($query);
+        $sth->execute($ciudad.'%', '% '.$ciudad.'%');
+        my @results;
+	my $cant;
+        while (my $data=$sth->fetchrow_hashref){ 
+		push(@results,$data); 
+		$cant++;
+	}
+	$sth->finish;
+	return ($cant, \@results);
+}
+
+
 
 1;

@@ -2,10 +2,8 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::BookShelves;
 use C4::AR::Catalogacion;
 use C4::AR::Busquedas;
@@ -24,7 +22,7 @@ my  ($template, $borrowernumber, $cookie);
                          });
 
 
-my $mail = &borrdata('',$borrowernumber)->{'emailaddress'};
+my $mail = C4::AR::Usuarios::getBorrower($borrowernumber)->{'emailaddress'};
 $template->param(MAIL => $mail);
 
 
@@ -60,9 +58,9 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'id1'}= $id1;
  	$nivel1= &buscarNivel1($id1);
 	$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-	@autor= C4::Search::getautor($nivel1->{'autor'});
-	$result{$i}->{'idAutor'}=$autor[0]->{'id'};
-	$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
+	$autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
+	$result{$i}->{'idAutor'}=$autor->{'id'};
+	$result{$i}->{'nomCompleto'}= $autor->{'completo'};
 	my @ediciones=&obtenerEdiciones($id1, $comboItemTypes);
 	$result{$i}->{'grupos'}=\@ediciones;
 

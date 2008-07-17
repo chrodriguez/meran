@@ -20,13 +20,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
 use C4::AR::Utilidades;
-use C4::Koha;
 
 my $input = new CGI;
 
@@ -62,7 +58,7 @@ if ($avail eq 0){
 	$availD='Disponible';
 }
 else{
-	my $av=getAvail($avail);
+	my $av=C4::AR::Busquedas::getAvail($avail);
 	if ($av){$availD=$av->{'description'};}
 }
 

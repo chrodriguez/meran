@@ -48,7 +48,7 @@ SOAP::Transport::HTTP::CGI
 
 package Demo;
 use strict;
-use C4::Search;
+
 sub isRegularBorrower {
   my ($name,$documentnumber)= @_;
   my $dbh = C4::Context->dbh;
@@ -68,4 +68,25 @@ sub isRegularBorrower {
     $sth->finish;
     return("-1");
   }
+}
+
+
+=item
+borrissues
+=cut
+sub borrissues {
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("Select *, issues.renewals as renewals2  
+	from issues left join items  on items.itemnumber=issues.itemnumber 
+	inner join  biblio on items.biblionumber=biblio.biblionumber 
+	 where borrowernumber=?
+	and issues.returndate is NULL order by date_due");
+    $sth->execute($bornum);
+  my @result;
+  while (my $data = $sth->fetchrow_hashref) {
+    push @result, $data;
+  }
+  $sth->finish;
+  return(scalar(@result), \@result);
 }

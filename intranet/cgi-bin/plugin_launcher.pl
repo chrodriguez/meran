@@ -21,10 +21,7 @@
 
 use strict;
 use CGI;
-use C4::Context;
-use HTML::Template;
-use C4::Search;
-use C4::Output;
+
 
 my $input = new CGI;
 my $plugin_name=$input->param("plugin_name");

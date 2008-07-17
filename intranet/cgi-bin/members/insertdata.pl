@@ -26,9 +26,6 @@ use CGI;
 use Digest::MD5 qw(md5_base64);
 use C4::AR::Authldap;
 use C4::Membersldap;
-use C4::Context;
-# use C4::Input;
-use C4::Search;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Persons_Members;
@@ -130,7 +127,7 @@ updateperson($data); #Se actualiza en person
 
 if ($data->{'categorycode'} eq 'A' || $data->{'categorycode'} eq 'W'){
     # is adult check guarantees;
-    my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
+    my ($count,$guarantees)=C4::AR::Usuarios::findguarantees($data->{'borrowernumber'});
     for (my $i=0;$i<$count;$i++){
 	# FIXME
 	# It looks like the $i is only being returned to handle walking through

@@ -18,19 +18,12 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-
-use HTML::Template;
 use strict;
 require Exporter;
-use C4::Context;
-use C4::Output;  # contains gettemplate
 use CGI;
-use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
-
 use C4::AR::AnalysisBiblio;
 
 my $input = new CGI;
@@ -41,7 +34,7 @@ my $bibnumitems=$input->param('bibnumitems');
 
 #Biblio
 my $biblionumber=$bibnum;
-my $dat=bibdata($biblionumber);
+my $dat=C4::AR::AnalysisBiblio::bibdata($biblionumber);
 my ($subtitlecount,$subtitles) = &subtitle($biblionumber);
 my @subjects;
 my $len= scalar(split(",",$dat->{'subject'}));
@@ -57,8 +50,8 @@ $i+=1;
 $dat->{'SUBJECTS'} = \@subjects;
 
 my @autorPPAL= &getautor($dat->{'author'});
-my @autoresAdicionales=&getautoresAdicionales($biblionumber);
-my @colaboradores=&getColaboradores($biblionumber);
+my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($biblionumber);
+my @colaboradores=C4::AR::Nivel1::getColaboradores($biblionumber);
 $dat->{'author'}=\@autorPPAL;
 $dat->{'ADDITIONAL'}=\@autoresAdicionales;
 $dat->{'COLABS'}=\@colaboradores;

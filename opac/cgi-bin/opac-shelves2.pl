@@ -22,14 +22,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Search;
 use CGI;
-use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::AR::Utilidades;
 use C4::AR::Estadisticas;
 

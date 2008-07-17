@@ -23,10 +23,8 @@ require Exporter;
 
 use strict;
 use CGI;
-use C4::Context;
 use PDF::Report;
 use C4::AR::PdfGenerator;
-use C4::Search;
 
 my $input= new CGI;
 my $bornum = $input->param('bornum');
@@ -57,14 +55,14 @@ if($array[1] eq "1" && $ok){
 if($array[2] eq "1" && $ok){
 	if(C4::AR::Sanctions::tieneLibroVencido($bornum)){
 		$ok=0;
-		$msj="por tener pr�stamos vencidos";
+		$msj="por tener pr&eacute;stamos vencidos";
 	}
 }
 if($array[3] eq "1" && $ok){
 	my($cant,$result)=C4::AR::Issues::DatosPrestamos($bornum);
 	if($cant){
 		$ok=0;
-		$msj="por tener pr�stamos en curso";
+		$msj="por tener pr&eacute;stamos en curso";
 	}
 }
 if($array[4] eq "1" && $ok){

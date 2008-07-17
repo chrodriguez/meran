@@ -20,13 +20,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
 use C4::Koha;
-use CGI::Ajax;
 
 my $input = new CGI;
 
@@ -71,7 +67,7 @@ my %availlabels;
 my @availtypes;
 my $avail;
 
- ( %availlabels) = &getavails;
+ ( %availlabels) = C4::AR::Busquedas::getAvails();
         foreach my $aux ( sort { $availlabels{$a} cmp $availlabels{$b} } keys(%availlabels)){
         push(@availtypes,$aux);}
         my $Cavails=CGI::scrolling_list(-name      => 'avail',

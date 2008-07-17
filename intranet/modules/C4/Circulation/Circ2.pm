@@ -30,10 +30,9 @@ use strict;
 # use warnings;
 require Exporter;
 use DBI;
-use C4::Context;
 use C4::AR::Reservas;
 use C4::Koha;
-use C4::Search;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -265,7 +264,7 @@ sub listitemsforinventory {
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
-		$row->{'author'}=C4::Search::getautor($row->{'author'});
+		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
 		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
 		push @results,$row;
 	}
@@ -320,7 +319,7 @@ sub listitemsforinventorysigtop {
 	while (my $row = $sth->fetchrow_hashref) {
 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
 		$row->{'id'}=$row->{'author'};
-		$row->{'author'}=C4::Search::getautor($row->{'author'});
+		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
 		push @results,$row;
 	}
 	
@@ -551,7 +550,7 @@ sub getiteminformation {
 		my ($date_due, $borrowernumber, $issuecode, $issuedescription, $categorycode) = $sth->fetchrow;
 		
 		#Obtengo los datos del autor
-		my $autor=C4::Search::getautor($iteminformation->{'autor'});
+		my $autor=C4::AR::Busquedas::getautor($iteminformation->{'autor'});
 		$iteminformation->{'autor'}=$autor->{'completo'};
 
 		$iteminformation->{'date_due'}=$date_due;
@@ -1736,7 +1735,7 @@ sub getissues {
 		
 		$data->{'idauthor'}=$data->{'autor'}; #Paso el id del author para poder buscar.
 		#Obtengo los datos del autor
-		my $autor=C4::Search::getautor($data->{'autor'});
+		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
 
 		$currentissues{$counter} = $data;

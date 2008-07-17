@@ -22,11 +22,8 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Context;
 use C4::Koha; 
-use HTML::Template::Expr;
 use C4::AR::Catalogacion;
 use C4::AR::Mensajes;
 
@@ -61,7 +58,7 @@ elsif($accion eq "borrarN2"){
 elsif($accion eq "modificarN1" && $nivel == 1){
 	my $nivel1 =&buscarNivel1($id1);
 	my $idAutor=$nivel1->{'autor'};
-	my $autor=C4::Search::getautor($idAutor);
+	my $autor=C4::AR::Busquedas::getautor($idAutor);
 	$autor=$autor->{'completo'};
 	$nivel=1;
 	$template->param(accion  => $accion,
@@ -139,7 +136,7 @@ elsif($accion eq "modificarN1" && $paso==2){
 #BUSQUEDA de los datos ingresados en el nivel 1 y nivel 2 para mostrar en la pagina del paso 2
 if($paso > 1 && $id1 != -1){
 	my $itemNivel1=&buscarNivel1($id1);
-	my $autor=C4::Search::getautor($itemNivel1->{'autor'});
+	my $autor=C4::AR::Busquedas::getautor($itemNivel1->{'autor'});
 	$autor=$autor->{'completo'};
 	my $titulo=$itemNivel1->{'titulo'};
 	my @itemNivel2=&buscarNivel2PorId1($id1);

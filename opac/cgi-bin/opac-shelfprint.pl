@@ -1,12 +1,9 @@
 #!/usr/bin/perl
 require Exporter;
 use CGI;
-use C4::Context;
-use C4::Search;
 use C4::AR::PdfGenerator;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use Mail::Sendmail;
 use C4::BookShelves;
 use C4::AR::Utilidades;
@@ -34,7 +31,7 @@ my $type='public';
         my $bibnum;
         foreach my $element (@key) {
                 my %line;
-                $line{'firstbulk'} = &firstbulk($bitemlist{$element}->{'biblioitemnumber'});
+#                 $line{'firstbulk'} = &firstbulk($bitemlist{$element}->{'biblioitemnumber'}); SE BORRO LA FUNCION!!!!! Hacer otra porque no servia ver si ya viene la signatura topografica en los datos
 		$line{'title'}=$bitemlist{$element}->{'title'};
                 $line{'author'}=$bitemlist{$element}->{'completo'};
                 $line{'place'}=$bitemlist{$element}->{'place'};

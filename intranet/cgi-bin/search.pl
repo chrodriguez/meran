@@ -42,11 +42,6 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use HTML::Template;
-use HTML::Template::Expr;
-use C4::Context;
-use C4::Search;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AR::Estadisticas;
 
@@ -175,7 +170,6 @@ my %env = (
 	);
 
 # get all the search variables
-# we assume that C4::Search will validate these values for us
 my %search;			# Search terms. If the key is "author",
 				# then $search{author} is the author the
 				# user is looking for.
@@ -192,7 +186,7 @@ if ($value) {
 } else{
 	my $value = $query->param('subjectid');
 	if ($value) {
-		my @val=&getTema($value);
+		my @val=C4::AR::Busquedas::getTema($value);
 		$search{'subjectid'} = $val[0]{'id'};
 		$template->param(SUBJECTID => \@val);
 		push @forminputs, {	field => 'subjectid',
@@ -302,7 +296,7 @@ foreach my $result (@results) {
     $n++;
 if (! $search{'subjectitems'}){    
     if ($result->{'analyticalnumber'} ne ''){
-    my $autorppal=  C4::Search::getautor($result->{'autorppal'});
+    my $autorppal=  C4::AR::Busquedas::getautor($result->{'autorppal'});
     $result->{'apellidoppal'}= $autorppal->{'apellido'};
     $result->{'nombreppal'}= $autorppal->{'nombre'};
     $result->{'completo'}=$autorppal->{'completo'};

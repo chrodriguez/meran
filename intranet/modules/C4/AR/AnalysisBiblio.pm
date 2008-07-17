@@ -26,6 +26,9 @@ use vars qw(@EXPORT @ISA);
 	   &getKeywords
   	   &getKeywordsLike
 	   &getKeywordID
+
+	   &bibdata
+
 	   );
 
 #Recupero los datos del analisis
@@ -470,7 +473,7 @@ foreach my $keyword (@key)
   my $i=0;
   while (my $data=$sth->fetchrow_hashref)
   {
-  	my $autorppal=  C4::Search::getautor($data->{'autorppal'});
+  	my $autorppal=  C4::AR::Busquedas::getautor($data->{'autorppal'});
   	$data->{'apellidoppal'}= $autorppal->{'apellido'};
   	$data->{'nombreppal'}= $autorppal->{'nombre'};
   	$data->{'completoppal'}=$autorppal->{'completo'}; 
@@ -596,7 +599,7 @@ if ($search->{'subjectitems'} ne ''){
   my $i=0;
   while (my $data=$sth->fetchrow_hashref)
   {
-  my $autorppal=  C4::Search::getautor($data->{'autorppal'});
+  my $autorppal= C4::AR::Busquedas::getautor($data->{'autorppal'});
   $data->{'apellidoppal'}= $autorppal->{'apellido'};
   $data->{'nombreppal'}= $autorppal->{'nombre'}; 
   
@@ -608,3 +611,47 @@ if ($search->{'subjectitems'} ne ''){
   $sth->finish;
   return(scalar(@results),@results);
  }
+
+
+
+
+=item 
+bibdata
+*********** VIENE DEL SEARCH.PM SE DEJO COMO ESTABA****** VER!!!!!!!!!!!!!!!
+
+  $data = &bibdata($biblionumber, $type);
+Returns information about the book with the given biblionumber.
+C<$type> is ignored.
+C<&bibdata> returns a reference-to-hash. The keys are the fields in
+the C<biblio>, C<biblioitems>, and C<bibliosubtitle> tables in the
+Koha database.
+In addition, C<$data-E<gt>{subject}> is the list of the book's
+subjects, separated by C<" , "> (space, comma, space).
+If there are multiple biblioitems with the given biblionumber, only
+the first one is considered.
+
+POSIBLEMENTE NO SE USE MAS, VER!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+SE USA PARA LOS PL DE ANALITICAS. (addanalysis.pl y opac-analysis.pl)
+=cut
+sub bibdata {
+    my ($bibnum, $type) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * ,biblio.seriestitle as cdu,  biblioitems.notes AS bnotes, 	biblio.notes
+	FROM biblio
+	LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
+	LEFT JOIN bibliosubtitle ON biblio.biblionumber = bibliosubtitle.biblionumber
+	WHERE biblio.biblionumber = ".$bibnum."
+	ORDER BY biblioitems.biblioitemnumber LIMIT 0 , 30 ");
+    $sth->execute();
+    my $data;
+    $data  = $sth->fetchrow_hashref;
+
+    $sth->finish;
+
+	#Para mostrar el nivel bibliografico  
+	 my $level=C4::AR::Busquedas::getLevel($data->{'classification'});
+        $data->{'classification'}= $level->{'description'};
+        $data->{'idclass'}= $level->{'code'};
+
+    return($data);
+} # sub bibdata

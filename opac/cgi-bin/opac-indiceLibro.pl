@@ -27,11 +27,7 @@
 
 use strict;
 require Exporter;
-
-use C4::Search;
 use CGI;
-use C4::Output;
-use HTML::Template;
 use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -66,8 +62,8 @@ if ($subtitlecount) {
 # getbiblio se elimino
 # my ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
 my @autorPPAL= &getautor($biblios[0]->{'author'});
-my @autoresAdicionales=&getautoresAdicionales($biblionumber);
-my @colaboradores=&getColaboradores($biblionumber);
+my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($biblionumber);
+my @colaboradores=C4::AR::Nivel1::getColaboradores($biblionumber);
 
 $template->param(
 		infoIndice => $resultsdata->{'indice'},

@@ -24,16 +24,11 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-use HTML::Template;
 use strict;
 require Exporter;
-use C4::Context;
-use C4::Output;  # contains gettemplate
 use CGI;
-use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::Date;
 use C4::AR::AnalysisBiblio;
 
 

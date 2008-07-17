@@ -21,8 +21,7 @@
 use CGI;
 use strict;
 use C4::Biblio;
-use C4::Search;
-use C4::Output;
+
 
 my $input    = new CGI;
 my $keywords = $input->param('keyword');

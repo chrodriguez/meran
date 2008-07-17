@@ -22,14 +22,11 @@
 
 use strict;
 use C4::Auth;
-# use C4::Output;
-# use C4::Koha;
-use C4::Search;
+use C4::Koha;
 use C4::Interface::CGI::Output;
 use CGI;
-# use HTML::Template;
-use PDF::Report;
 use C4::AR::PdfGenerator;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -48,7 +45,7 @@ my $branch=$input->param('branch');
 my $count=0;
 my @results=();
 
-($count,@results)=BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
+($count,@results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
 
 
 #HAY QUE GENERAR EL PDF CON LOS CARNETS

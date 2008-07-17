@@ -24,11 +24,8 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
 use C4::AR::ImportacionIsoMARC;
 
 my $input = new CGI;

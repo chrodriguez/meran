@@ -21,12 +21,9 @@
 
 use strict;
 use CGI;
-use C4::Output;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::Koha;
-use C4::Search;
 use C4::AR::Sanctions;
 
 my $input = new CGI;
@@ -48,7 +45,7 @@ if ($borrowernumber eq 0){#es el kohaadmin
 	$template->param(superlibrarian => 1);
 }
 else{ #es superlibrarian o puede actualizar sanciones??
-	my $data=borrdata('',$borrowernumber);
+	my $data=C4::AR::Usuarios::getBorrower($borrowernumber);
 	my $dbh = C4::Context->dbh;
 	my $flags= &getuserflags($data->{'cardnumber'} ,$dbh);
 	$template->param(superlibrarian => $flags->{'superlibrarian'}||$flags->{'updatesanctions'});

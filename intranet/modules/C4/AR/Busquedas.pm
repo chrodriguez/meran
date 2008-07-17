@@ -74,7 +74,11 @@ use vars qw(@EXPORT @ISA);
 		&getborrowercategory
 		&getallborrowercategorys
 		&getAvail
+		&getAvails
 		&getTema
+		&getNombreLocalidad
+
+		&loguearBusqueda
 );
 
 =item
@@ -738,9 +742,12 @@ sub obtenerEdiciones{
 	return(@ediciones);
 }
 
-
+=item
+obtenerGrupos
+Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un id1. Se puede filtrar por tipo de documento.
+=cut
 sub obtenerGrupos {
-	my ($id1,$itemtype)=@_;
+	my ($id1,$itemtype,$type)=@_;
   	my $dbh = C4::Context->dbh;
   	my $query="SELECT * FROM nivel2 LEFT JOIN nivel1 ON nivel1.id1=nivel2.id1 WHERE nivel2.id1=?";
 	my @bind;
@@ -756,13 +763,24 @@ sub obtenerGrupos {
   	my $res=0;
   	my $data;
   	while ( $data=$sth->fetchrow_hashref){
-        	$result[$res]->{'id2'}=$data->{'id2'};
-		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
-        	$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-        	$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
-        	$res++;
+		my $query2="SELECT COUNT(*) AS cant FROM nivel3 n3 WHERE n3.id2 = ?";
+ 		if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
+    			$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL  OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
+  		}
+		my $sth2=$dbh->prepare($query2);
+  		$sth2->execute($data->{'id2'});
+		my $cant=($sth2->fetchrow);
+
+		if ( $cant > 0){
+        		$result[$res]->{'id2'}=$data->{'id2'};
+			$result[$res]->{'cant'}=$cant;
+        		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
+        		$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
+        		$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
+        		$res++;
+		}
         }
-	return (@result);
+	return (\@result);
 }
 
 
@@ -1991,13 +2009,12 @@ sub getautor {
     return($data);
  }
 
-sub getLevel
-{
+sub getLevel{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from bibliolevel where code = '$cod' ";
+        my $query = "SELECT * from bibliolevel where code = ? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
@@ -2005,119 +2022,112 @@ sub getLevel
 
 #Nivel bibliografico
 sub getLevels {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bibliolevel");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'code'}}= $data->{'description'};
-  } # while
-  $sth->finish;
-  return(%resultslabels);
+ 	my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("select * from bibliolevel");
+  	my %resultslabels;
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+   		$resultslabels{$data->{'code'}}= $data->{'description'};
+  	}
+  	$sth->finish;
+  	return(%resultslabels);
 } # sub getlevels
 
-sub  getCountry
-{
+sub  getCountry{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from countries where iso = '$cod' ";
+        my $query = "SELECT * FROM countries WHERE iso = ? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
 }
 
-sub getCountryTypes {
-  my $dbh   = C4::Context->dbh;
-
-  my $sth   = $dbh->prepare("SELECT * FROM countries ");
-  my %resultslabels;
-  $sth->execute;
-
-  while (my $data = $sth->fetchrow_hashref) {
-  	$resultslabels{$data->{'iso'}}= $data->{'printable_name'};	
-  } # while
-  $sth->finish;
-
-  return(%resultslabels);
+sub getCountryTypes{
+  	my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("SELECT * FROM countries ");
+ 	 my %resultslabels;
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+  		$resultslabels{$data->{'iso'}}= $data->{'printable_name'};	
+  	}
+  	$sth->finish;
+  	return(%resultslabels);
 } # sub getcountrytypes
 
-sub getSupport
-{
+sub getSupport{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from supports where idSupport = '$cod' ";
+        my $query = "SELECT * from supports where idSupport = ? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
 }
 
 
-sub getSupportTypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("SELECT * FROM supports");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'idSupport'}}= $data->{'description'};	
-  } # while
-  $sth->finish;
-  return(%resultslabels);
+sub getSupportTypes{
+  	my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("SELECT * FROM supports");
+  	my %resultslabels;
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+    		$resultslabels{$data->{'idSupport'}}= $data->{'description'};	
+  	}
+  	$sth->finish;
+  	return(%resultslabels);
 } # sub getsupporttypes
 
-sub getLanguage
-{
+sub getLanguage{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM languages WHERE idLanguage = '$cod' ";
+        my $query = "SELECT * FROM languages WHERE idLanguage = ? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
 }
 
-sub getLanguages {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("SELECT * FROM languages");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'idLanguage'}}= $data->{'description'};	
-  } # while
-  $sth->finish;
-  return(%resultslabels);
+sub getLanguages{
+ 	 my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("SELECT * FROM languages");
+  	my %resultslabels;
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+    		$resultslabels{$data->{'idLanguage'}}= $data->{'description'};	
+  	}
+  	$sth->finish;
+  	return(%resultslabels);
 } # sub getlanguages
 
 sub getItemType {
-  my ($type)=@_;
+ 	my ($type)=@_;
+  	my $dbh = C4::Context->dbh;
+  	my $sth=$dbh->prepare("SELECT description FROM itemtypes WHERE itemtype=?");
+  	$sth->execute($type);
+  	my $dat=$sth->fetchrow_hashref;
+  	$sth->finish;
 
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("SELECT description FROM itemtypes WHERE itemtype=?");
-  $sth->execute($type);
-  my $dat=$sth->fetchrow_hashref;
-  $sth->finish;
-
-  return ($dat->{'description'});
+  	return ($dat->{'description'});
 }
 
 sub getItemTypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("SELECT * FROM itemtypes ORDER BY description");
-  my $count = 0;
-  my @results;
+ 	my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("SELECT * FROM itemtypes ORDER BY description");
+  	my $count = 0;
+  	my @results;
 
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $results[$count] = $data;
-    $count++;
-  } # while
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+    		$results[$count] = $data;
+    		$count++;
+  	}
 
-  $sth->finish;
-  return($count, @results);
+  	$sth->finish;
+  	return($count, @results);
 } # sub getitemtypes
 
 
@@ -2163,13 +2173,27 @@ sub getallborrowercategorys{
 sub getAvail{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from unavailable where code = '$cod' ";
+        my $query = "SELECT * from unavailable where code = ? ";
         my $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
         return $res;
 }
+
+#Disponibilidad
+sub getAvails {
+  	my $dbh   = C4::Context->dbh;
+  	my $sth   = $dbh->prepare("select * from unavailable");
+  	my %resultslabels;
+  	$sth->execute;
+  	while (my $data = $sth->fetchrow_hashref) {
+    		$resultslabels{$data->{'code'}}= $data->{'description'};
+  	}
+  	$sth->finish;
+  	return(%resultslabels);
+} # sub getavails
+
 
 #Temas, toma un id de tema y devuelve la descripcion del tema.
 sub getTema{
@@ -2184,42 +2208,41 @@ sub getTema{
 }
 
 
-sub buscarTema
-{
-my ($search)=@_;
+sub buscarTema{
+	my ($search)=@_;
 
-my $dbh = C4::Context->dbh;
-my $query = '';
-my @bind = ();
-my @results;
-my @key=split(' ',$search->{'tema'});
-my $count=@key;
-my $i=1;
+	my $dbh = C4::Context->dbh;
+	my $query = '';
+	my @bind = ();
+	my @results;
+	my @key=split(' ',$search->{'tema'});
+	my $count=@key;
+	my $i=1;
 
 	$query="Select distinct temas.id, temas.nombre from nivel1_repetibles inner join 
 			temas on temas.id= nivel1_repetibles.dato  where (campo='650' and subcampo='a') and
 			((temas.nombre like ? or temas.nombre like ?)";
-			@bind=("$key[0]%","% $key[0]%");
-			while ($i < $count){
-					$query .= " and (temas.nombre like ? or temas.nombre like ?)";
-					push(@bind,"$key[$i]%","% $key[$i]%");
-				$i++;
-					}
-			$query .= ")";
+	@bind=("$key[0]%","% $key[0]%");
+	while ($i < $count){
+		$query .= " and (temas.nombre like ? or temas.nombre like ?)";
+		push(@bind,"$key[$i]%","% $key[$i]%");
+		$i++;
+	}
+	$query .= ")";
 
-my $sth=$dbh->prepare($query);
-$sth->execute(@bind);
+	my $sth=$dbh->prepare($query);
+	$sth->execute(@bind);
 
-my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    push @results, $data;
-    $i++;
-  }
-my $count=$i;
-$sth->finish;
+	my $i=0;
+  	while (my $data=$sth->fetchrow_hashref){
+    		push @results, $data;
+    		$i++;
+  	}
+	my $count=$i;
+	$sth->finish;
 
-return($count,@results);
-} 
+	return($count,@results);
+}
 
 
 sub busquedaCombinada {
@@ -2335,7 +2358,7 @@ sub buscarGrupos{
 	my $i=0;
 	while(my $data=$sth->fetchrow_hashref){
 		$result[$i]{'titulo'}=$data->{'titulo'};
-		my $autor=C4::Search::getautor($data->{'autor'});
+		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 		$result[$i]{'autor'}=$autor->{'completo'};
 		$result[$i]{'id1'}=$data->{'id1'};
 		$result[$i]{'id2'}=$data->{'id2'};
@@ -2345,5 +2368,123 @@ sub buscarGrupos{
 	$sth->finish;
 	return($cantidad,\@result);
 }
+
+=item
+getNombreLocalidad
+Devuelve el nombre de la localidad que se pasa por parametro.
+=cut
+sub getNombreLocalidad{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT nombre FROM localidades WHERE localidad = ?");
+	$sth->execute($catcode);
+	my $description = $sth->fetchrow();
+	$sth->finish();
+	if ($description) {return $description;}
+	else{return "";}
+}
+
+
+=item
+loguearBusqueda
+Guarda en la base de datos el tipo de busqueda que se realizo y que se busco.
+=cut
+sub loguearBusqueda{
+	my ($borrowernumber,$env,$type,$search)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+	my $old_pe = $dbh->{PrintError}; # save and reset
+	my $old_re = $dbh->{RaiseError}; # error-handling
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+  	$dbh->{RaiseError} = 0; #si lo dejo, para la aplicacion y muestra error
+
+	#comienza la transaccion
+	{
+
+	my $query = "	INSERT INTO `busquedas` ( `borrower` , `fecha` )
+			VALUES ( ?, NOW( ));";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber);
+
+	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM busquedas";
+	$sth=$dbh->prepare($query2);
+	$sth->execute();
+
+	my $id=$sth->fetchrow;
+
+	my $query3;
+	my $campo;
+	my $valor;
+
+	my $desde= "INTRA";
+	if($type eq "opac"){
+		$desde= "OPAC";
+	}
+
+	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor`, `tipo`)
+			VALUES (?, ?, ?, ?);";
+
+	$sth=$dbh->prepare($query3);
+
+
+	if($search->{'keyword'} ne ""){
+		$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
+	}
+
+	if($search->{'dictionary'} ne ""){
+		$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
+	}
+
+	if($search->{'virtual'} ne ""){
+		$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
+	}
+
+	if($search->{'signature'} ne ""){
+		$sth->execute($id, 'signature', $search->{'signature'}, $desde);
+	}	
+
+	if($search->{'analytical'} ne ""){
+		$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
+	}
+
+	if($search->{'itemnumber'} ne ""){
+		$sth->execute($id, 'itemnumber', $search->{'itemnumber'}, $desde);
+	}
+
+	if($search->{'class'} ne ""){
+		$sth->execute($id, 'class', $search->{'class'}, $desde);
+	}
+
+	if($search->{'subjectitems'} ne ""){
+		$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
+	}
+
+	if($search->{'isbn'} ne ""){
+		$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
+	}
+
+	if($search->{'subjectid'} ne ""){
+		$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
+	}
+
+	if($search->{'author'} ne ""){
+		$sth->execute($id, 'author', $search->{'author'}, $desde);
+	}
+
+	if($search->{'title'} ne ""){
+		$sth->execute($id,'title', $search->{'title'}, $desde);
+	}
+		
+
+	$dbh->commit ();
+	};
+	$dbh->rollback () if $@;    # rollback if transaction failed
+	$dbh->{AutoCommit} = 1;    # restore auto-commit mode
+
+	#falta ver bien el tema de la transaccion, pq si no se dispara el error y la segunda consulta falla
+	#se hace rollback solo de la segunda
+}
+
 
 1;

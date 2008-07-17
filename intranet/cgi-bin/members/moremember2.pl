@@ -32,19 +32,11 @@
 
 use strict;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Interface::CGI::Template;
 use CGI;
-use C4::Search;
 use Date::Manip;
 use C4::Date;
-# use C4::Reserves2;
-# use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
-use C4::Koha;
-use HTML::Template;
 
 my $dbh = C4::Context->dbh;
 
@@ -64,7 +56,7 @@ my $pernum=$input->param('pernum');
 #start the page and read in includes
 
 my $dateformat = C4::Date::get_date_format();
-my $data=persdata('',$pernum);
+my $data=C4::AR::Usuarios::personData($pernum);
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
 $data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
@@ -86,8 +78,8 @@ $data->{'branchcode'} = C4::AR::Busquedas::getbranchname($data->{'branchcode'});
 $data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
 # Converts the citycodes to the description
-$data->{'city'} = &getcitycategory($data->{'city'});
-$data->{'streetcity'} = &getcitycategory($data->{'streetcity'});
+$data->{'city'} = C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
+$data->{'streetcity'} = C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
 
 my $today=ParseDate('today');
 

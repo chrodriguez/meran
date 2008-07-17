@@ -25,8 +25,6 @@ package C4::BookShelves;
 use strict;
 require Exporter;
 use DBI;
-use C4::Search;
-use C4::Context;
 use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -381,7 +379,7 @@ sub GetShelfContents {
         #  $contentlist{$id2}->{'biblioitemnumber'}=$biblioitemnumber;
         #  $contentlist{$id2}->{'biblionumber'}=$biblionumber;
           $contentlist{$id2}->{'editors'}= "($publicationyear)";
-	  my $aut=C4::Search::getautor($author);
+	  my $aut=C4::AR::Busquedas::getautor($author);
 	  $contentlist{$id2}->{'completo'}=$aut->{'completo'};
           $contentlist{$id2}->{'apellido'}=$aut->{'apellido'};
 	  $contentlist{$id2}->{'nombre'}=$aut->{'nombre'};
@@ -564,45 +562,7 @@ sub RemoveShelf {
     }
 }
 
-=item
-sub privateShelfs {
-    my ($bor,$num,$start) = @_;	
-    my $count=0;
-    my $sth2=$dbh->prepare("SELECT  count(*)  FROM  bookshelf  INNER  JOIN shelfcontents ON                             
-                                bookshelf.shelfnumber = shelfcontents.shelfnumber   WHERE bookshelf.shelfname = $bor 
-                           and bookshelf.type='private';");
-	 $sth2->execute();
-	my $total= $sth2->fetchrow;
 
-    my $fin=$start+$num;
-    my @results;
-    my $sth=$dbh->prepare("SELECT  biblio.*  FROM  (bookshelf  INNER  JOIN shelfcontents ON				
-				bookshelf.shelfnumber = shelfcontents.shelfnumber) INNER JOIN biblio ON 
-				biblio.biblionumber=shelfcontents.biblioitemnumber  WHERE bookshelf.shelfname = $bor 
-			   AND bookshelf.type='private' limit $start ,$fin ;");
-        $sth->execute();
- 
-       while (my $data=$sth->fetchrow_hashref) {
-
-#----			
-			my $author=&C4::Search::getautor($data->{'author'}); #Damian. Para mostrar 
-        		$data->{'completo'} = $author->{'completo'}; #el nombre del autor y no el id.
-			$data->{'nombre'} = $author->{'nombre'};
-			$data->{'apellido'} = $author->{'apellido'};
-
-                        ($data->{'total'},$data->{'unavailable'},$data->{'counts'}) = &C4::Search::itemcount3($data->{'biblionumber'}, 'opac');
-                        my $subject2=$data->{'subject'};
-                        $subject2=~ s/ /%20/g;
-
-                        ($data->{'grupos'})=&C4::Search::Grupos( $data->{'biblionumber'},'opac');
-			 push(@results,$data);
-                         $count++;
-     			}
-#----
-	$sth->finish;
-        return($total,@results);
-	}
-=cut
 
 sub privateShelfs {
  	my ($bor) = @_;

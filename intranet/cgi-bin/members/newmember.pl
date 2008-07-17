@@ -36,12 +36,9 @@
 
 use strict;
 use C4::Auth;
-# use C4::Input;
 use C4::Interface::CGI::Output;
-use C4::Search;
 use CGI;
 use Date::Manip;
-use HTML::Template;
 use C4::Date;
 use C4::AR::Persons_Members;
 my %env;
@@ -178,10 +175,10 @@ if ($ok == 0) {
 	}
     }
     my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
-    my $postal=$data{'address'}."<br>". &getcitycategory($data{'city'});
+    my $postal=$data{'address'}."<br>". C4::AR::Busquedas::getNombreLocalidad($data{'city'});
     my $home;
     if ($data{'streetaddress'} ne ''){
-	$home=$data{'streetaddress'}."<br>".&getcitycategory($data{'streetcity'});
+	$home=$data{'streetaddress'}."<br>".C4::AR::Busquedas::getNombreLocalidad($data{'streetcity'});
     } else {
 	$home=$postal;
     }

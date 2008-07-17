@@ -22,10 +22,7 @@ use CGI;
 use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
-use C4::Search;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 
 my $input      = new CGI;
 my $isbn       = $input->param('isbn');
@@ -137,7 +134,7 @@ else {
 
 # fill with books in breeding farm
 	my $count2;
-	( $count2, @results ) = breedingsearch( $title, $isbn );
+	( $count2, @results ) = C4::Breeding::BreedingSearch( $title, $isbn );
 	my @breeding_loop = ();
 	for ( my $i = 0 ; $i <= $#results ; $i++ ) {
 		my %row_data;

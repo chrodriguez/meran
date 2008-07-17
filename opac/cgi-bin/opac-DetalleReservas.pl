@@ -44,8 +44,8 @@ foreach my $res (@$reserves) {
 	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
     	$res->{'rnotificationdate'} = format_date($res->{'rnotificationdate'},$dateformat);
 
- 	my $author= C4::AR::Busquedas::getautor($res->{'rautor'}); #llamo a getautor en C4::Search.pm
-						#paso como parametro ID de autor de la reserva
+ 	my $author= C4::AR::Busquedas::getautor($res->{'rautor'});
+	#paso como parametro ID de autor de la reserva
 	#guardo el Apellido, Nombre del autor
 	$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
 	

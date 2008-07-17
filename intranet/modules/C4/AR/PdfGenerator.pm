@@ -717,7 +717,7 @@ sub prestInterBiblio(){
 	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
-	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::Search::darCiudad($borrewer->{'city'});
+	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::AR::Busquedas::getNombreLocalidad($borrewer->{'city'});
 	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
 	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddress'};
 	$parrafo[6]="";

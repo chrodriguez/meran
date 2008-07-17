@@ -20,13 +20,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
 use C4::AR::Estadisticas;
-use C4::Koha;
 use C4::Date;
 
 my $input = new CGI;
@@ -51,8 +47,8 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaIni =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
-my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
+my $fechaIni =  C4::Date::format_date_in_iso($obj->{'fechaIni'},$dateformat);
+my $fechaFin    =  C4::Date::format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
 my $orden= $obj->{'orden'} ||'date';
 my $user= $obj->{'user'};

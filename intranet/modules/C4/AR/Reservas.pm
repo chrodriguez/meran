@@ -279,41 +279,27 @@ sub cancelar_reservas{
 	}
 }
 
-sub t_cancelar_reservas_inmediatas{
+=item
+cancelar_reservas_inmediatas
+Se cancelan todas las reservas del usuario que viene por parametro cuando este llega al maximo de prestamos de un tipo determinado.
+=cut
+sub cancelar_reservas_inmediatas{
 	my ($params)=@_;
 	my $dbh = C4::Context->dbh;
-# 	$dbh->{AutoCommit} = 0;
-# 	$dbh->{RaiseError} = 1;
 	my $tipo=$params->{'tipo'};
 	my $borrowernumber=$params->{'borrowernumber'};
 	my $loggedinuser=$params->{'loggedinuser'};
-	my $error=0;
-	my ($codMsg,$paraMens);
-# 	eval{
-# Este procedimiento cancela todas las reservas con item ya asignado de los usuarios recibidos como parametro
-		my $sth=$dbh->prepare("	SELECT reservenumber 
-					FROM reserves 
-					WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
-		$sth->execute($borrowernumber);
 
-		while (my $reservenumber= $sth->fetchrow){
-			$params->{'reservenumber'}=$reservenumber;
-			($error,$codMsg,$paraMens)=cancelar_reserva($params);
-		}
-		$sth->finish;
-=item		$dbh->commit;
-	};
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B404';
-		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R010';
+	my $sth=$dbh->prepare("	SELECT reservenumber 
+				FROM reserves 
+				WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
+	$sth->execute($borrowernumber);
+
+	while (my $reservenumber= $sth->fetchrow){
+		$params->{'reservenumber'}=$reservenumber;
+		my ($error,$codMsg,$paraMens)=cancelar_reserva($params);
 	}
-=cut	$dbh->{AutoCommit} = 1;
-	return($error,$codMsg,$paraMens);
+	$sth->finish;
 }
 
 =item
@@ -819,10 +805,7 @@ if ($issueType eq "DO"){
 		if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 			$codMsg= 'P108';
 			$params->{'tipo'}="INTRA";
-			($error,$codMsg,$paraMens)=C4::AR::Reservas::t_cancelar_reservas_inmediatas($params);
-			#ACA ESTA EL PROBLEMA DEL COMMIT NO DEBE SER UNA TRANSACCION, POR ESTA DENTRO DE OTRA(t_prestar) SE SACO VER!!!!!!!!!!!!!!!!!! VER EL COD DE ERROR SE SOBRE ESCRIBE 
-			$codMsg= 'P108';
-			
+			C4::AR::Reservas::cancelar_reservas_inmediatas($params);
 		}
 	}
 }
@@ -1270,6 +1253,32 @@ sub FindNotRegularUsersWithReserves {
 
         $sth->finish;
         return(@results);
+}
+
+=item
+mailReservas
+Busca todas las reservas que no estan prestadas de una biblioteca, con los usarios que las hicieron.
+Para poder mandarles un mail.
+=cut
+sub mailReservas{
+	my ($branch)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * FROM reserves 
+		INNER JOIN borrowers ON (reserves.borrowernumber=borrowers.borrowernumber) 
+		LEFT JOIN nivel3 n3 ON (reserves.id3 = n3.id3 )
+		INNER JOIN nivel1 n1 ON (n3.id1 = n1.id1)
+		WHERE reserves.branchcode=? AND estado <> 'P'");
+	$sth->execute($branch);
+	my @result;
+	while (my $data = $sth->fetchrow_hashref) {
+		my $author=getautor($data->{'author'});
+		$author=$author->{'completo'};
+		$data->{'author'}=$author;
+		push @result, $data;
+	}
+	$sth->finish;
+	return(scalar(@result), \@result);
+
 }
 
 1;

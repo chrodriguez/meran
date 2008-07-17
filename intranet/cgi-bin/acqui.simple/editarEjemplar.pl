@@ -63,7 +63,7 @@ if(!$json){
 
 	my $nivel1=&buscarNivel1($id1);
 	my $titulo=$nivel1->{'titulo'};
-	my @autor=&C4::Search::getautor($nivel1->{'autor'});
+	my $autor=C4::AR::Busquedas::getautor($nivel1->{'autor'});
 	my $cant=0;
 
 	if($accion eq "modNivel3"){
@@ -91,7 +91,7 @@ if(!$json){
 		id2		=> $id2,
 		id3		=> $id3,
 		titulo		=> $titulo,
-		datosautor	=> \@autor,
+		datosautor	=> $autor->{'completo'},
 		todos  		=> $todos,
 	);
 	output_html_with_http_headers $input, $cookie, $template->output;

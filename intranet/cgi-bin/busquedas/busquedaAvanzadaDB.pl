@@ -1,32 +1,10 @@
 #!/usr/bin/perl
 
-# $Id: addbiblio.pl,v 1.32.2.7 2004/03/19 08:21:01 tipaul Exp $
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Context;
-use C4::Koha;
-use HTML::Template;
 use C4::AR::Busquedas;
 use C4::AR::Catalogacion;
 
@@ -144,11 +122,11 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'id1'}= $id1;
 	$nivel1= &buscarNivel1($id1);
 	$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-	@autor= C4::Search::getautor($nivel1->{'autor'});
-	$result{$i}->{'idAutor'}=$autor[0]->{'id'};
-	$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
-	my @ediciones=&obtenerEdiciones($id1, 'ALL');
-	$result{$i}->{'grupos'}=\@ediciones;
+	$autor= getautor($nivel1->{'autor'});
+	$result{$i}->{'idAutor'}=$autor->{'id'};
+	$result{$i}->{'nomCompleto'}= $autor->{'completo'};
+	my $ediciones=obtenerGrupos($id1, 'ALL','INTRA');
+	$result{$i}->{'grupos'}=$ediciones;
 	my @disponibilidad=&obtenerDisponibilidadTotal($id1, 'ALL');
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
 }
@@ -197,14 +175,14 @@ else{
 		my $labels="";
 		my $value;
 		if($campo eq "nivel_bibliografico"){
-			%labelsMapeo=&C4::Busquedas::getLevels();
+			%labelsMapeo=C4::AR::Busquedas::getLevels();
 			foreach my $key (keys %labelsMapeo){
 				push(@valuesMapeo,$key);
 			}
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "lenguaje"){
-			%labelsMapeo=&C4::Busquedas::getLanguages();
+			%labelsMapeo=C4::AR::Busquedas::getLanguages();
 			my @keys= keys %labelsMapeo;
 			@keys= sort{$labelsMapeo{$a} cmp $labelsMapeo{$b}} @keys;
 			foreach my $key (@keys){
@@ -213,7 +191,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "pais_publicacion"){
-			%labelsMapeo=&C4::Busquedas::getCountryTypes();
+			%labelsMapeo=C4::AR::Busquedas::getCountryTypes();
 			my @keys= keys %labelsMapeo;
 			@keys= sort{$labelsMapeo{$a} cmp $labelsMapeo{$b}} @keys;
 			foreach my $key (@keys){
@@ -222,7 +200,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "wthdrawn"){
-			%labelsMapeo=&C4::Search::getavails();
+			%labelsMapeo=C4::AR::Busquedas::getAvails();
 			foreach my $key (keys %labelsMapeo){
 				push(@valuesMapeo,$key);
 			}
@@ -237,7 +215,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "tipo_documento"){
-			my($i,@labels)=&C4::AR::Busquedas::getItemTypes();
+			my($i,@labels)=C4::AR::Busquedas::getItemTypes();
 			my $key;
 			foreach my $itemtype (@labels){
 				$key=$itemtype->{'itemtype'};
@@ -257,7 +235,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "soporte"){
-			%labelsMapeo=&C4::Busquedas::getSupportTypes();
+			%labelsMapeo=&C4::AR::Busquedas::getSupportTypes();
 			foreach my $key (keys %labelsMapeo){
 				push(@valuesMapeo,$key);
 			}

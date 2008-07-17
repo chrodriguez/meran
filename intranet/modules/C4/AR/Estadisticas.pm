@@ -8,8 +8,6 @@ package C4::AR::Estadisticas;
 
 use strict;
 require Exporter;
-use C4::Search;
-use C4::Context;
 use C4::Date;
 use C4::AR::Busquedas;
 
@@ -696,7 +694,7 @@ sub usuarios{
 					$data->{'ok'}=1;
 				};
 		$data->{'dateenrolled'}=format_date($data->{'dateenrolled'},$dateformat);
-		$data->{'city'}=C4::Search::getcitycategory($data->{'city'});
+		$data->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
                 push(@results,$data);
         }
         return (@results);
@@ -1485,7 +1483,7 @@ sub listaDeEjemplares {
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
 		$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
-		$row->{'author'}=C4::Search::getautor($row->{'author'});
+		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
 		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
 		push @results,$row;
 	}

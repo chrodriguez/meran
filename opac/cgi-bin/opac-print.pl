@@ -1,12 +1,9 @@
 #!/usr/bin/perl
 require Exporter;
 use CGI;
-use C4::Context;
-use C4::Search;
 use C4::AR::PdfGenerator;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use Mail::Sendmail;
 use C4::BookShelves;
 
@@ -66,7 +63,7 @@ else{
 ($count, @results) = catalogsearch($borrowernumber,\%env,'opac',\%search,$cant,0,$orden);
 	}
 foreach my $res (@results) {
-    $res->{'firstbulk'} = &firstbulk($res->{'biblionumber'});
+#     $res->{'firstbulk'} = &firstbulk($res->{'biblionumber'}); SE BORRO LA FUNCION VER!!!!!!!!  Hacer otra porque no servia ver si ya viene la signatura topografica en los datos
     my @aux=&getautor($res->{'author'});
     $res->{'id'}=$res->{'author'};
     $res->{'completo'}=$aux[0]->{'completo'};

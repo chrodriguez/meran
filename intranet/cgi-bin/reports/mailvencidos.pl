@@ -21,13 +21,10 @@
 
 use strict;
 use C4::Auth;
-# use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-# use HTML::Template;
 use C4::AR::Estadisticas;
 use C4::Circulation::Circ2;
-# use C4::Koha;
 use Mail::Sendmail;
 use C4::Date;
 use Date::Manip;
@@ -62,16 +59,11 @@ my $cant=scalar(@chkbox);
 my @borrowers=C4::AR::Utilidades::quitarduplicados(@chkbox);
 
 for(my $i=0;$i<scalar(@borrowers);$i++){
-
-	print F $borrowers[$i]."  seleccionado\n";
-
 	my $bornum=$borrowers[$i];
 	my $env;
 	my ($borrower, $flags)=C4::Circulation::Circ2::getpatroninformation($env,$bornum);
-	
 	if ( $borrower->{'emailaddress'} ne ''){# Si tiene mail se envia la info de sus prestamos vencidos
-
-	my $mailMessage = $mensaje;
+		my $mailMessage = $mensaje;
 	##Reemplazo por los valores correctos
 		my $firstname=$borrower->{'firstname'};
 		$mailMessage =~ s/FIRSTNAME/$firstname/;
@@ -79,51 +71,40 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 		$mailMessage =~ s/SURNAME/$surname/;
 
 	#Se buscan y procesan los prestamos vencidos
-	($count,$result)=C4::Search::mailissuesforborrower($branch,$bornum);
-	my $mensajeVencidos="";
+		($count,$result)=C4::AR::Usuarios::mailIssuesForBorrower($branch,$bornum);
+		my $mensajeVencidos="";
 
-	my $dateformat = C4::Date::get_date_format();
-	for (my $i=0;$i<$count;$i++){
+		my $dateformat = C4::Date::get_date_format();
+		for (my $i=0;$i<$count;$i++){
+			my $mensajeActual=C4::Context->preference("mailMensajeVencido");
 
-		my $mensajeActual=C4::Context->preference("mailMensajeVencido");
+			my $title=$result->[$i]{'title'};
+			$mensajeActual =~ s/TITLE/$title/;
 
-		my $title=$result->[$i]{'title'};
-		$mensajeActual =~ s/TITLE/$title/;
+			my $unititle=$result->[$i]{'unititle'};
+			$mensajeActual =~ s/UNITITLE/$unititle/;
 
-		my $unititle=$result->[$i]{'unititle'};
-		$mensajeActual =~ s/UNITITLE/$unititle/;
-
-		my $date=$result->[$i]{'vencimiento'};
-		$date=format_date($date,$dateformat);
-        	$mensajeActual =~ s/DATE/$date/;
-
+			my $date=$result->[$i]{'vencimiento'};
+			$date=C4::Date::format_date($date,$dateformat);
+        		$mensajeActual =~ s/DATE/$date/;
 		#Concateno
-		$mensajeVencidos.=$mensajeActual;
-
+			$mensajeVencidos.=$mensajeActual;
 		}
-
 		#Pongo los vencidos en el mensaje del mail
 		$mailMessage =~ s/MENSAJEVENCIDO/$mensajeVencidos/;
 
-
-		print F $mailMessage."\n  enviado a  -->".$borrower->{'emailaddress'}." \n";
-
 		my %mail = ( To => $borrower->{'emailaddress'},
-			From => $mailFrom,
-			Subject => $mailSubject,
-			Message => $mailMessage);
+				From => $mailFrom,
+				Subject => $mailSubject,
+				Message => $mailMessage);
 
-	 	if (sendmail(%mail)) 
-		{
+		if (sendmail(%mail)) {
 		#mail enviado correctamente
-		$return_url.="&msg=mail_sended";
-			} 
-		else 
-		{ die $Mail::Sendmail::error;}
-}}
-
+			$return_url.="&msg=mail_sended";
+		} 
+		else {die $Mail::Sendmail::error;}
+	}
+}
 
 print $input->redirect($return_url);
-
-
 

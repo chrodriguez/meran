@@ -22,12 +22,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Koha;
-use C4::Search;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
 use C4::AR::PdfGenerator;
 use C4::AR::Estadisticas;
 

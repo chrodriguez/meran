@@ -18,8 +18,6 @@ package C4::Biblio;
 
 use strict;
 require Exporter;
-use C4::Context;
-# use C4::Database;
 use MARC::Record;
 use C4::BookShelves;
 use vars qw($VERSION @ISA @EXPORT);
@@ -107,10 +105,6 @@ sub agregarColaboradores {
 				
 }}
 
-  
-
-
-
 
 #MATIAS
 
@@ -123,7 +117,7 @@ sub delcolaboradores {
     }
 
 
-=cut
+=item
 sub getbookshelf {
   my $dbh   = C4::Context->dbh;
   my $sth   = $dbh->prepare("select * from bookshelf where parent=0 ");

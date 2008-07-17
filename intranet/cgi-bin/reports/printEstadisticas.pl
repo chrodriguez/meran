@@ -1,12 +1,9 @@
 #!/usr/bin/perl
 require Exporter;
 use CGI;
-use C4::Context;
-use C4::Search;
 use C4::AR::PdfGenerator;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::AR::Utilidades;
 use C4::AR::Estadisticas;
 use C4::Koha;
@@ -31,8 +28,8 @@ my $fin='';
 $ini=$input->param('dateselected'); # Fecha para mostrar en la impresion
 $fin=$input->param('dateselectedEnd');
 my $dateformat = C4::Date::get_date_format();
-my $fechaInicio =  format_date_in_iso($ini,$dateformat);# Fecha para poder hacer la busqueda
-my $fechaFin    =  format_date_in_iso($fin,$dateformat);
+my $fechaInicio =  C4::Date::format_date_in_iso($ini,$dateformat);# Fecha para poder hacer la busqueda
+my $fechaFin    =  C4::Date::format_date_in_iso($fin,$dateformat);
 #
 
 my $domiTotal;

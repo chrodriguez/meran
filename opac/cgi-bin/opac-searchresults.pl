@@ -2,12 +2,9 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Search;
 use C4::Auth;
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
-use HTML::Template;
-use HTML::Template::Expr;
 use C4::BookShelves;
 use C4::AR::PdfGenerator;
 my $query=new CGI;
@@ -39,7 +36,7 @@ my $dicdetail=$query->param('dicdetail');
 ($dicdetail) || ($dicdetail=0);
 #
 # get all the search variables
-# we assume that C4::Search will validate these values for us
+
 my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn', 'date-before', 'date-after', 'class', 'dewey', 'branch', 'title', 'abstract', 'publisher','subjectitems', 'virtual', 'shelves'); #Matias: Agrego 'virtual'  
 
 if (($shelves) || ($query->param('criteria') eq 'shelves')) {
@@ -114,7 +111,7 @@ if ($query->param('virtual')) {#es una busqueda por biblioteca virtual
 		my $idTema=$query->param('subjectid');
 		if($idTema){
 			$search{'subjectid'}=$idTema;
-			my $tema=&getTema($idTema);
+			my $tema=C4::AR::Busquedas::getTema($idTema);
 			my $nomTema=$tema->{'nombre'};
 			push @$forminputs, {	field => 'subjectid',
 				value =>$idTema ,

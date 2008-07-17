@@ -27,7 +27,6 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;

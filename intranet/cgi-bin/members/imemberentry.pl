@@ -24,12 +24,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use CGI;
-use C4::Search;
 use C4::Interface::CGI::Output;
 use C4::Koha;
-use HTML::Template;
 use C4::Members;
 use C4::Date;
 
@@ -48,11 +45,11 @@ my ($template, $loggedinuser, $cookie)
 my $dateformat = C4::Date::get_date_format();
 my $member=$input->param('bornum');
 if ($member eq ''){
-  $member=NewBorrowerNumber();
+  $member=C4::AR::Usuarios::NewBorrowerNumber();
 }
 my $type=$input->param('type');
 
-my $data=borrdata('',$member);
+my $data=C4::AR::Usuarios::getBorrower($member);
 
 my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
 

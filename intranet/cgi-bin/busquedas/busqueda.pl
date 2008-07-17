@@ -3,12 +3,10 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
-use HTML::Template;
 
 my $input = new CGI;
 
@@ -124,11 +122,11 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'id1'}= $id1;
 	$nivel1= &buscarNivel1($id1);
 	$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-	@autor= C4::Search::getautor($nivel1->{'autor'});
-	$result{$i}->{'idAutor'}=$autor[0]->{'id'};
-	$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
-	my @ediciones=&obtenerGrupos($id1, $comboItemTypes);
-	$result{$i}->{'grupos'}=\@ediciones;
+	$autor= getautor($nivel1->{'autor'});
+	$result{$i}->{'idAutor'}=$autor->{'id'};
+	$result{$i}->{'nomCompleto'}= $autor->{'completo'};
+	my $ediciones=&obtenerGrupos($id1, $comboItemTypes,"INTRA");
+	$result{$i}->{'grupos'}=$ediciones;
 	my @disponibilidad=&obtenerDisponibilidadTotal($id1, $comboItemTypes);
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
 

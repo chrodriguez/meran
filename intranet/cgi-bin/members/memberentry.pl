@@ -27,14 +27,10 @@
 
 use strict;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 use C4::Members;
 use C4::Koha;
-use HTML::Template;
 use Date::Manip;
 use C4::Date;
 
@@ -49,7 +45,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 my $member=$input->param('bornum');
-my $data=borrdata('',$member);
+my $data=C4::AR::Usuarios::getBorrower($member);
 
 	# %flags: keys=$data-keys, datas=[formname, HTML-explanation]
 	my %flags = ('gonenoaddress' => ['gna', 'Direcci&oacute;n actualizada'],

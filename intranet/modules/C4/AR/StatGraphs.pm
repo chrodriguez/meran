@@ -8,10 +8,7 @@ package C4::AR::StatGraphs;
 
 use strict;
 require Exporter;
-
-use C4::Context;
 use C4::Date;
-use C4::Search;
 use Chart::Pie;
 use Chart::HorizontalBars;
 use Chart::LinesPoints;

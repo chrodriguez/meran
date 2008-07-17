@@ -25,11 +25,8 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::AR::PdfGenerator;
-use C4::Search;
-# use HTML::Template;
-# use C4::Output;
 use C4::Interface::CGI::Output;
-# use C4::Koha;
+use C4::Koha;
 use C4::Auth;
 
 my $input= new CGI;
@@ -91,7 +88,7 @@ else{
 		else{$datos[$i]->{'otros'}="";}
 		$datos[$i]->{'titulo'}=$titulos[$i];
 	}
-	my $borrewer= &borrdata("",$bornum);
+	my $borrewer= C4::AR::Usuarios::getBorrower($bornum);
 	&prestInterBiblio($bornum,$borrewer,$biblioDestino,$director,\@datos);
 }
 

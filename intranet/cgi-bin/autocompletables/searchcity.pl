@@ -3,12 +3,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
-# use C4::Interface::CGI::Output;
-use C4::Context;
-# use HTML::Template;
-# use C4::Koha;
-use C4::Search;
+use C4::AR::Utilidades;
 #Este pl se usa para autocompletar la busqueda de una ciudad
 #Agregar Usuario
 #Agregar Organizacion
@@ -20,7 +15,7 @@ my @result;
 	
 my $ciudad = $input->param("q");
 if ($ciudad){
-	my($cant, $result) = &buscarCiudades($ciudad);# agregado sacar
+	my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
 
 	$textout= "";
 

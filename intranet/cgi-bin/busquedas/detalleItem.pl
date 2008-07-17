@@ -3,8 +3,6 @@
 
 use strict;
 require Exporter;
-
-use C4::Search;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -31,7 +29,7 @@ my $data=C4::AR::Catalogacion::buscarNivel1($id1);
 my $autor=getautor($data->{'autor'});
 $data->{'autor'}=$autor->{'completo'};
 my %inputs;
-my ($count, $detail)=availDetail($id3);
+my ($count, $detail)=C4::AR::Nivel3::detalleDisponibilidad($id3);
 my @results;
 
 for (my $i=0; $i < $count; $i++){

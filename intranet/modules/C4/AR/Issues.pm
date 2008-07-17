@@ -26,9 +26,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Date;
-use C4::Context;
 use C4::Circulation::Circ2;
-use C4::Search;
 use C4::AR::Sanctions;
 use C4::AR::Reservas;
 use Date::Manip;
@@ -172,7 +170,7 @@ sub devolver {
 		my $daysissue=$issuetype->{'daysissues'};
 		my $dateformat = C4::Date::get_date_format();
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-		my $categorycode=C4::Search::obtenerCategoria($borrowernumber);
+		my $categorycode=C4::AR::Usuarios::obtenerCategoria($borrowernumber);
                 my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'issuecode'});
 
 		if ($sanctionDays gt 0) {
@@ -283,7 +281,7 @@ sub vencimiento {
 =item
 sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false
 =cut
-sub sepuederenovar(){
+sub sepuederenovar{
 my ($borrowernumber,$id3)=@_;
 my $dbh = C4::Context->dbh;
 
@@ -847,7 +845,7 @@ sub prestamosPorUsuario {
 		
 		$data->{'idautor'}=$data->{'autor'}; #Paso el id del author para poder buscar.
 		#Obtengo los datos del autor
-		my $autor=C4::Search::getautor($data->{'autor'});
+		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
 		$data->{'edicion'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
 		$currentissues{$counter} = $data;

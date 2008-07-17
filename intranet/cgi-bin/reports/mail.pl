@@ -21,13 +21,9 @@
 
 use strict;
 use C4::Auth;
-# use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-# use HTML::Template;
 use C4::AR::Estadisticas;
-# use C4::Koha;
 use Mail::Sendmail;
 use C4::Date;
 use Date::Manip;
@@ -41,7 +37,7 @@ my $mailSubject; # mensaje para el asunto.
 my $count;
 my $result;
 
-	($count,$result)=mailreservas($branch);
+	($count,$result)=C4::AR::Reservas::mailReservas($branch);
 	$mensaje =C4::Context->preference("reserveMessage");
 	$mailSubject=C4::Context->preference("reserveSubject")
 
@@ -93,7 +89,6 @@ for (my $i=0;$i<$count;$i++){
 	}
 }
 
-my $input = new CGI;
 
-	print $input->redirect("reservas.pl?branch=$branch");
+print $input->redirect("reservas.pl?branch=$branch");
 

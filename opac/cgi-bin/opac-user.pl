@@ -2,21 +2,16 @@
 use strict;
 require Exporter;
 use CGI;
+use C4::Auth;
+use C4::Circulation::Circ2;
+use C4::Interface::CGI::Output;
+use C4::Date;
+use C4::AR::Sanctions;
+use Date::Manip;
 
 # Agregado por Einar.
 #para soportar el tema de las que pueden o no modificar a los socios
-
 use C4::AR::UpdateData;
-use C4::Auth;
-use C4::Koha;
-use C4::Circulation::Circ2;
-use C4::Search;
-use C4::Interface::CGI::Output;
-use HTML::Template;
-use C4::Date;
-# use C4::AR::Issues;
-use C4::AR::Sanctions;
-use Date::Manip;
 
 my $query = new CGI;
 
@@ -34,8 +29,8 @@ my $dateformat = C4::Date::get_date_format();
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
-$borr->{'city'}=getcitycategory($borr->{'city'});
-$borr->{'streetcity'}=getcitycategory($borr->{'streetcity'});
+$borr->{'city'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'city'});
+$borr->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'streetcity'});
 $borr->{'dateenrolled'} = C4::Date::format_date($borr->{'dateenrolled'},$dateformat);
 $borr->{'expiry'}       = C4::Date::format_date($borr->{'expiry'},$dateformat);
 $borr->{'dateofbirth'}  = C4::Date::format_date($borr->{'dateofbirth'},$dateformat);
@@ -92,8 +87,8 @@ my $sanc= hasSanctions($borrowernumber);
 
 foreach my $san (@$sanc) {
 if ($san->{'id3'}) {
-	my $aux=itemdata3($san->{'id3'}); 
-	$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; }
+	my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
+	$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; }
 	$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }

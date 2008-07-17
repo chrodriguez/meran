@@ -23,9 +23,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Context;
-# use C4::Input;
-use C4::Search;
 use Date::Manip;
 use C4::Date;
 use strict;

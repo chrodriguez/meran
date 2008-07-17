@@ -22,14 +22,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Search;
 use CGI;
-use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::AR::Utilidades;
 use C4::AR::Estadisticas;
 
@@ -415,7 +412,9 @@ sub viewshelf {
                 $line{'place'}=$bitemlist{$element}->{'place'};
                 $line{'editors'}=$bitemlist{$element}->{'editors'};
 		$bibitem=$bitemlist{$element}->{'biblioitemnumber'};
-		($line{'total'},$line{'unavailable'},$line{'counts'}) = itemcountbibitem($bibitem,'opac');
+		($line{'total'},$line{'unavailable'},$line{'counts'}) = itemcountbibitem($bibitem,'opac'); 
+#REHACER LA FUNCION, NO SE SABE PARA QUE SIRVE!!!!!!!!
+#SE COPIO LA FUNCION EN EL PL PARA TENERLA DE REFERENCIA---SE TIENE QUE BORRAR!!!!!
 				      
                 push (@bitemsloop, \%line);
 		}
@@ -441,57 +440,91 @@ sub viewshelf {
 					);
 }
 
-#
-# $Log: shelves.pl,v $
-# Revision 1.12.2.1  2004/02/06 14:22:19  tipaul
-# fixing bugs in bookshelves management.
-#
-# Revision 1.12  2003/02/05 10:04:14  acli
-# Worked around weirdness with HTML::Template; without the {}, it complains
-# of being passed an odd number of arguments even though we are not
-#
-# Revision 1.11  2003/02/05 09:23:03  acli
-# Fixed a few minor errors to make it run
-# Noted correct tab size
-#
-# Revision 1.10  2003/02/02 07:18:37  acli
-# Moved C4/Charset.pm to C4/Interface/CGI/Output.pm
-#
-# Create output_html_with_http_headers function to contain the "print $query
-# ->header(-type => guesstype...),..." call. This is in preparation for
-# non-HTML output (e.g., text/xml) and charset conversion before output in
-# the future.
-#
-# Created C4/Interface/CGI/Template.pm to hold convenience functions specific
-# to the CGI interface using HTML::Template
-#
-# Modified moremembers.pl to make the "sex" field localizable for languages
-# where M and F doesn't make sense
-#
-# Revision 1.9  2002/12/19 18:55:40  hdl
-# Templating reservereport et shelves.
-#
-# Revision 1.9  2002/08/14 18:12:51  hdl
-# Templating files
-#
-# Revision 1.8  2002/08/14 18:12:51  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.7  2002/07/05 05:03:37  tonnesen
-# Minor changes to authentication routines.
-#
-# Revision 1.5  2002/07/04 19:42:48  tonnesen
-# Minor changes
-#
-# Revision 1.4  2002/07/04 19:21:29  tonnesen
-# Beginning of authentication api.  Applied to shelves.pl for now as a test case.
-#
-# Revision 1.2.2.1  2002/06/26 20:28:15  tonnesen
-# Some udpates that I made here locally a while ago.  Still won't be useful, but
-# should be functional
-#
-#
-#
+
+=item
+itemcountbibitem
+SE USA SOLAMENTE EN opac-shelves.pl
+VER SI QUEDA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+=cut
+sub itemcountbibitem {
+
+  my ($bibitem,$type)=@_;
+  my $dbh = C4::Context->dbh;
+  my $query="select * from branches";
+  my $sth=$dbh->prepare($query);
+  $sth->execute();
+  my %counts;
+  while (my $dataorig=$sth->fetchrow_hashref){
+  		$counts{$dataorig->{'branchcode'}}{'nombre'}=$dataorig->{'branchcode'};
+  	}
+  #Cantidad de ejemplares
+  my $query2="select holdingbranch, wthdrawn , notforloan, biblioitemnumber from items where items.biblioitemnumber=?";
+  if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
+    $query2.=" and (wthdrawn=0 or wthdrawn is NULL or wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
+  			}
+  $sth=$dbh->prepare($query2);
+  $sth->execute($bibitem);
+  my $data;
+  my $total=0;
+  my $unavailable=0;
+  #Fin: Cantidad de ejemplares
+  #Los agrupo por holding branch
+  while ($data=$sth->fetchrow_hashref) { 
+        $counts{$data->{'holdingbranch'}}{'cantXbranch'}++; #Total
+	
+	if ($data->{'wthdrawn'} eq 2){ #COMPARTIDO
+	 $counts{$data->{'holdingbranch'}}{'cantXbranchShared'}++;
+	}else {
+        if ($data->{'wthdrawn'} >0){
+				$counts{$data->{'holdingbranch'}}{'cantXbranchUnavail'}++; #No Disponible 
+				$unavailable++;	
+				}else{ 
+	if ($data->{'notforloan'}){
+		$counts{$data->{'holdingbranch'}}{'cantXbranchNotForLoan'}++; # Para Sala
+				}else{
+		$counts{$data->{'holdingbranch'}}{'cantXbranchForLoan'}++; # Para Prestamo		
+				}
+				}
+		}
+				
+  	$total++;
+             } 
+   #Cantidad de ejemplares prestados y/o reservados
+   
+   my $query2= "SELECT count( * ) AS c, holdingbranch
+		FROM issues, items
+		WHERE items.biblioitemnumber = ? AND items.itemnumber = issues.itemnumber AND issues.returndate IS NULL
+		GROUP BY holdingbranch";
+   $sth=$dbh->prepare($query2);                     
+   $sth->execute($bibitem);
+   while ($data=$sth->fetchrow_hashref){
+	$counts{$data->{'holdingbranch'}}{'prestados'}=$data->{'c'};
+		}
+  $sth->finish;
+
+
+ my $query3= "SELECT count( * ) AS c, items.holdingbranch
+		FROM reserves, biblioitems, items
+		WHERE biblioitems.biblioitemnumber = ? AND biblioitems.biblioitemnumber = items.biblioitemnumber AND 
+		biblioitems.biblioitemnumber = reserves.biblioitemnumber AND reserves.constrainttype IS NULL  GROUP BY holdingbranch";
+   $sth=$dbh->prepare($query3);
+   $sth->execute($bibitem);
+   while ($data=$sth->fetchrow_hashref){
+        $counts{$data->{'holdingbranch'}}{'reservados'}=$data->{'c'};
+                }
+  $sth->finish;
+
+
+my @results;
+  foreach my $key (keys %counts){	
+	if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){ # Si no hay ninguno disponible no lo muestro en el opac
+		if (($counts{$key}->{'cantXbranch'})&&($counts{$key}->{'cantXbranch'} gt $counts{$key}->{'cantXbranchUnavail'}))
+			{push(@results,$counts{$key});}
+			 }
+	  else {($counts{$key}->{'cantXbranch'} && push(@results,$counts{$key}));}
+	}
+  return ($total,$unavailable,\@results);
+}
 
 
 

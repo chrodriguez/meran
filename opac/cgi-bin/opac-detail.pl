@@ -4,8 +4,6 @@ require Exporter;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
-
 use C4::AR::Catalogacion;
 use C4::AR::Busquedas;
 
@@ -27,7 +25,7 @@ my $idNivel1= $obj->{'id1'};
 my (@nivel2Loop)= &detalleOpacNivel2($idNivel1);
 
 my $nivel1=&buscarNivel1($idNivel1); #C4::AR::Catalogacion;
-my @autor=C4::Search::getautor($nivel1->{'autor'});
+my $autor=C4::AR::Busquedas::getautor($nivel1->{'autor'});
 my @nivel1Loop= &detalleNivel1_copia($idNivel1, $nivel1, 'opac');
 
 for (my $i=0; $i < scalar(@nivel2Loop); $i++){

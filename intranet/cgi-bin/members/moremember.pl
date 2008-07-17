@@ -34,12 +34,12 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Reservas;
 use C4::AR::Issues;
 use C4::AR::Sanctions;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -70,8 +70,8 @@ $data->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
 $data->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
-$data->{'city'}=&getcitycategory($data->{'city'});
-$data->{'streetcity'}=&getcitycategory($data->{'streetcity'});
+$data->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
+$data->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
 
 # Converts the branchcode to the branch name
 $data->{'branchcode'} = C4::AR::Busquedas::getbranchname($data->{'branchcode'});
@@ -94,8 +94,8 @@ $template->param(regular       => $regular);
 ####
 foreach my $san (@$sanctions) {
 	if ($san->{'id3'}) {
-		my $aux=itemdata3($san->{'id3'}); 
-		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'autor'}.") "; 
+		my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
+		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
 	}
 
 	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);

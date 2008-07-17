@@ -68,11 +68,11 @@ if($cantidad > 0){
 		$result{$i}->{'id1'}= $id1;
 		$nivel1= &C4::AR::Catalogacion::buscarNivel1($id1);
 		$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-		@autor= C4::Search::getautor($nivel1->{'autor'});
+		$autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
 		$result{$i}->{'idAutor'}=$autor[0]->{'id'};
 		$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
-		my @ediciones=&C4::AR::Busquedas::obtenerEdiciones($id1, $comboItemTypes);
-		$result{$i}->{'grupos'}=\@ediciones;
+		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $comboItemTypes,"INTRA");
+		$result{$i}->{'grupos'}=$ediciones;
 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $comboItemTypes);
 		$result{$i}->{'disponibilidad'}=\@disponibilidad;
 	

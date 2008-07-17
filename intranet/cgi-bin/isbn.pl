@@ -21,10 +21,8 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
-use C4::Search;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+
 
 my $input      = new CGI;
 my $isbn       = $input->param('isbn');
@@ -75,7 +73,7 @@ my $marc_p = C4::Context->boolean_preference("marc");
 		$row_data{biblionumber}  = $results[$i]->{'biblionumber'};
 		$row_data{title}         = $results[$i]->{'title'};
 
-		  my $aut=C4::Search::getautor($results[$i]->{'author'});			    
+		  my $aut=C4::AR::Busquedas::getautor($results[$i]->{'author'});			    
 		$row_data{apellido}        = $aut->{'apellido'};
 		$row_data{nombre}        = $aut->{'nombre'};
 		$row_data{id}        = $aut->{'id'};

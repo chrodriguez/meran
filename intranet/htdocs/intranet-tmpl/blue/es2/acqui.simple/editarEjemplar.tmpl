@@ -80,9 +80,9 @@ function todos(){
 <div id="titulo">
 	<p class="pagetitle"> 
 		<!-- TMPL_VAR NAME="titulo"--> 
-		<!-- TMPL_LOOP NAME="datosautor" -->
-			(<!-- TMPL_VAR NAME="completo" -->)
-		<!-- /TMPL_LOOP -->
+		<!-- TMPL_IF NAME="datosautor" -->
+			(<!-- TMPL_VAR NAME="datosautor" -->)
+		<!-- /TMPL_IF -->
 	</p>
 </div>
 

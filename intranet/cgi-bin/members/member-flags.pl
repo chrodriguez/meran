@@ -5,15 +5,9 @@
 # July 26, 2002 (my birthday!)
 
 use strict;
-
-use C4::Search;
 use CGI;
-use C4::Output;
 use C4::Auth;
-use C4::Context;
 use C4::Circulation::Circ2;
-#use C4::Acquisitions;
-use HTML::Template;
 use C4::Interface::CGI::Output;
 
 my $input = new CGI;

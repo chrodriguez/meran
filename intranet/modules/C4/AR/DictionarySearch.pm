@@ -58,35 +58,6 @@ sub make_query {
   return($count,@returnvalues);
 }
 
-sub Grupos {
-  my ($bibnum,$type)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="Select * from biblioitems where biblionumber=?";
-  my $sth=$dbh->prepare($query);
-  $sth->execute($bibnum);
-  my @result;
-  my $res=0;
-  my $data;
-  while ( $data=$sth->fetchrow_hashref){
-        $result[$res]{'biblioitemnumber'}=$data->{'biblioitemnumber'};
-        $result[$res]{'edicion'}=$data->{'number'};
-        $result[$res]{'publicationyear'}=$data->{'publicationyear'};
-        $result[$res]{'volume'}=$data->{'volume'};
-        my $query2="select count(*) as c from items where items.biblioitemnumber=?";
-        if ($type ne 'intra'){
-                $query2.=" and (wthdrawn=0 or wthdrawn is NULL)";
-                            }
-        my $sth2=$dbh->prepare($query2);
-        $sth2->execute($data->{'biblioitemnumber'});
-        my $aux;
-        (($aux=($sth2->fetchrow_hashref)) && ($result[$res]{'cant'}=$aux->{'c'}));
-        $res++;
-        }
-return (\@result);
-}
-
-
-
 
 sub DictionaryKeywordSearch {
   my ($type,$search,$num,$offset)=@_;
@@ -176,7 +147,7 @@ print A " dictionary: $keyword \n";
       	my ($title,$unititle,$author) = $sth->fetchrow_array;
       	$sth->finish;
 
-	%row = (keyword => $res, jump => 0, biblionumber => $bib, direct =>  1, keyword2 => $res1, show => 1, title => $title, unititle=>$unititle, author => $author,grupos => Grupos($bib,'intra'));}
+	%row = (keyword => $res, jump => 0, biblionumber => $bib, direct =>  1, keyword2 => $res1, show => 1, title => $title, unititle=>$unititle, author => $author,grupos => C4::AR::Busquedas::obtenerGrupos($bib,'','intra'));}
    
       	push(@resultarray, \%row);
       	$cantStr= 0;
@@ -196,7 +167,7 @@ print A " dictionary: $keyword \n";
       		my ($title,$unititle,$author) = $sth->fetchrow_array;
       		$sth->finish;
       
-      		my %row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 1, title => $title,unititle => $unititle, author => $author, show => 1, grupos => Grupos($bib,'intra'));
+      		my %row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 1, title => $title,unititle => $unititle, author => $author, show => 1, grupos => C4::AR::Busquedas::obtenerGrupos($bib,'','intra'));
       		push(@resultarray, \%row);
       		$index+=1;
     	}#end while ($index < $size)
@@ -364,7 +335,7 @@ sub DictionarySignatureSearch {
       	$sth->execute();
      
 	my $data = $sth->fetchrow_hashref;
-	my $autor=C4::Search::getautor($data->{'author'});
+	my $autor=C4::AR::Busquedas::getautor($data->{'author'});
 	$data->{'author'}=$autor->{'completo'};
 	$sth->finish;
 	my $direct=1;
@@ -399,9 +370,8 @@ sub DictionarySignatureSearch {
       		my $query= "SELECT bulk,title,unititle,author FROM items inner join biblio on items.biblionumber=biblio.biblionumber WHERE itemnumber = ".$it;
       		my $sth=$dbh->prepare($query);
       		$sth->execute();
-       		#my ($bulk) = $sth->fetchrow_array;
       		my $data = $sth->fetchrow_hashref;
-      		my $autor=C4::Search::getautor($data->{'author'});
+      		my $autor=C4::AR::Busquedas::getautor($data->{'author'});
       		$data->{'author'}=$autor->{'completo'};
 
       		$sth->finish;

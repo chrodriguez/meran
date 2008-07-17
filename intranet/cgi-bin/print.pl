@@ -1,14 +1,10 @@
 #!/usr/bin/perl
 require Exporter;
 use CGI;
-use C4::Context;
-use C4::Search;
 use C4::AR::PdfGenerator;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::AR::Utilidades;
-use C4::Koha;
 use C4::Date;
 my $input=new CGI;
 
@@ -28,12 +24,12 @@ my $ffin=$input->param('fechaFni');
 
 my ($cantidad, @results)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fini,$ffin,'','');
 
-	$msg='Ejemplares con disponibilidad: <b>'.getAvail($avail)->{'description'}.'</b> ';
+	$msg='Ejemplares con disponibilidad: <b>'.C4::AR::Busquedas::getAvail($avail)->{'description'}.'</b> ';
 	my $dateformat = C4::Date::get_date_format();
-	if (($fini) and ($ffin)){$msg.='entre las fechas: <b>'.format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; }
+	if (($fini) and ($ffin)){$msg.='entre las fechas: <b>'.C4::Date::format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; }
 
 if ($input->param('type') eq 'pdf') {#Para PDF
-	my  $msg2='Ejemplares con disponibilidad: '.getAvail($avail)->{'description'}.' ';
+	my  $msg2='Ejemplares con disponibilidad: '.C4::AR::Busquedas::getAvail($avail)->{'description'}.' ';
 	my $dateformat = C4::Date::get_date_format();
 	if (($fini) and ($ffin)){
 		$msg2.='entre las fechas: '.format_date($fini,$dateformat).' y '.format_date($ffin,$dateformat).' .';

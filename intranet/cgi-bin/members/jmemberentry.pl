@@ -23,10 +23,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
 use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::Members;
@@ -44,11 +41,11 @@ my ($template, $loggedinuser, $cookie)
 
 my $member=$input->param('bornum');
 if ($member eq ''){
-  $member=NewBorrowerNumber();
+  $member=C4::AR::Usuarios::NewBorrowerNumber();
 }
 my $type=$input->param('type');
 
-my $data=borrdata('',$member);
+my $data=C4::AR::Usuarios::getBorrower($member);
 
 my @titles = ('Miss', 'Mrs', 'Ms', 'Mr', 'Dr', 'Sir');
 	# FIXME - Assumes English. This ought to be made part of i18n.
@@ -65,7 +62,7 @@ while (@titles) {
 }
 
 # get the data for children
-my $cmember1=NewBorrowerNumber();
+my $cmember1=C4::AR::Usuarios::NewBorrowerNumber();
 my @cmemdata;
 for (my $i=0;$i<1;$i++){
   my %row;
