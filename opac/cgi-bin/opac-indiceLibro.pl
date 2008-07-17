@@ -52,7 +52,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     });
 
-my ($resultsdata)=&getIndice($biblioitemnumber, $biblionumber);
+my ($resultsdata)=&C4::AR::Nivel2::getIndice($biblioitemnumber, $biblionumber);
 
 my $allsubtitles;
 my ($subtitlecount,$subtitles) =&subtitle($biblionumber);

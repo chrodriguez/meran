@@ -81,8 +81,6 @@ use vars qw(@EXPORT @ISA);
 	&modificarNivel3Completo
 
 	&obtenerCamposTablaRef
-	&obtenerIdentTablaRef
-	&obtenerValoresTablaRef
 	&obtenerValorTablaRef
  	&obtenerIdentTablaRef2
 	
@@ -212,12 +210,12 @@ sub obtenerValoresRef{
 	my $tabla=$results->{$row}->{'tabla'};
 	my $orden=$results->{$row}->{'orden'};
 	my $sepa=$results->{$row}->{'separador'};
-	my $ident=&obtenerIdentTablaRef($tabla);
+	my $ident=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 # print B "tabla $tabla \n";
 	my $tipoComponente=$results->{$row}->{'tipo'};
 # print B "componente: $tipoComponente\n";
 	if($tipoComponente eq "combo"){
-		my $opciones=&obtenerValoresTablaRef($tabla,$ident,$campos,$orden);
+		my $opciones=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$ident,$campos,$orden);
 		$results->{$row}->{'opciones'}=$opciones;
 	}
 	elsif(($tipoComponente eq "texta" || $tipoComponente eq "texa2") && $valor ne ""){
@@ -731,47 +729,6 @@ sub obtenerIdentTablaRef2{
 	return($sth->fetchrow_hashref());
 }
 
-=item
-obtenerIdentTablaRef
-Obtiene el campo clave de la tabla a la cual se esta asi referencia
-=cut
-sub obtenerIdentTablaRef{
-	my ($tabla)=@_;
-	my $dbh = C4::Context->dbh;
-
-	my $query="SELECT nomcamporeferencia FROM tablasDeReferencias WHERE referencia=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tabla);
-	return($sth->fetchrow);
-}
-
-=item
-obtenerValoresTablaRef
-Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia y las transfoma en un string json.
-=cut
-sub obtenerValoresTablaRef{
-	my ($tabla,$ident,$campos,$orden)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
-	my $strjson="";
-	my $labels;
-	my @campos=split(/,/,$campos);
-	my $long=scalar(@campos);
-	my $data;
-	while($data=$sth->fetchrow_hashref()){
-		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
-		$labels="'".$data->{$campos[0]};
-		for(my $i=1;$i<$long;$i++){
-			$labels.="|".$data->{$campos[$i]};
-		}
-		$strjson.=$labels."'}";
-	}
-	$strjson=substr($strjson,1,length($strjson));
-	$strjson="[".$strjson."]";
-	return($strjson);
-}
 
 =item
 obtenerValorTablaRef

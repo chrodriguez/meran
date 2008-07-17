@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 # This file is part of Koha.
@@ -58,8 +58,8 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 		$infoDevRen[$i]->{'barcode'}=$iteminfo->{'barcode'};
 		$infoDevRen[$i]->{'autor'}=$iteminfo->{'autor'};
 		$infoDevRen[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoDevRen[$i]->{'unititle'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"245","b","1");
-		$infoDevRen[$i]->{'edicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"250","a","2");
+		$infoDevRen[$i]->{'unititle'}=C4::AR::Nivel2::getUntitle($iteminfo->{'id2'});
+		$infoDevRen[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
 	print $input->header;
@@ -96,8 +96,8 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		$infoPrestamo[$i]->{'id3Old'}=$id3;
 		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
 		$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoPrestamo[$i]->{'unititle'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"245","b","1");
-		$infoPrestamo[$i]->{'edicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($iteminfo->{'id2'},"250","a","2");
+		$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel2::getUntitle($iteminfo->{'id2'});
+		$infoPrestamo[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
 		$infoPrestamo[$i]->{'items'}=\@items;
 		$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
 	}

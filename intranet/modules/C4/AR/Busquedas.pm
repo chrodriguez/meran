@@ -24,6 +24,7 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Catalogacion;
 use C4::AR::Reservas;
+use C4::AR::Nivel2;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -83,7 +84,7 @@ Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla
 sub buscarDatoReferencia{
 	my ($dato,$tabla,$campos,$separador)=@_;
 	
-	my $ident=&C4::AR::Catalogacion::obtenerIdentTablaRef($tabla);
+	my $ident=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 
 	my $dbh = C4::Context->dbh;
 	my @camposArr=split(/,/,$campos);
@@ -756,10 +757,9 @@ sub obtenerGrupos {
   	my $data;
   	while ( $data=$sth->fetchrow_hashref){
         	$result[$res]->{'id2'}=$data->{'id2'};
-		#HACER METODOS PARA LOS CAMPOS MAS COMUNES A MOSTRAR QUE LLAMEN A LA SGTE FUNCION (EJ. getEdicion)
-        	$result[$res]->{'edicion'}=buscarDatoDeCampoRepetible($data->{'id2'},"250","a","2");
+		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
         	$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-        	$result[$res]->{'volume'}= buscarDatoDeCampoRepetible($data->{'id2'},"740","n","2");
+        	$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
         	$res++;
         }
 	return (@result);

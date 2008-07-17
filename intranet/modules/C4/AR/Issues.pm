@@ -649,7 +649,7 @@ sub PrestamosMaximos {
 }
 
 =item
-mail de recordatorio envia los mails a los dueños de los items que vencen el proximo dia habil
+mail de recordatorio envia los mails a los dueï¿½os de los items que vencen el proximo dia habil
 =cut
 
 sub Enviar_Recordatorio{
@@ -674,7 +674,7 @@ sub Enviar_Recordatorio{
 		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
 
 	$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
-	my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
+	my $edicion=C4::AR::Nivel2::getEdicion($res->{'rid2'});
 	$mailFrom =~ s/BRANCH/$branchname/;
 	$mailSubject =~ s/BRANCH/$branchname/;
 	$mailMessage =~ s/BRANCH/$branchname/;
@@ -849,7 +849,7 @@ sub prestamosPorUsuario {
 		#Obtengo los datos del autor
 		my $autor=C4::Search::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
-		$data->{'edicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'id2'},"250","a","2");
+		$data->{'edicion'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
 		$currentissues{$counter} = $data;
 		$counter++;
 	}

@@ -518,7 +518,7 @@ sub DatosReservas {
 		$data->{'rreminderdate'}=C4::Date::format_date($data->{'rreminderdate'},$dateformat);
 		$data->{'rreservedate'}=C4::Date::format_date($data->{'rreservedate'},$dateformat);
 		$data->{'rnotificationdate'}= C4::Date::format_date($data->{'rnotificationdate'},$dateformat);
-		$data->{'redicion'}=C4::AR::Busquedas::buscarDatoDeCampoRepetible($data->{'rid2'},"250","a","2");#VER SI QUEDA!!!!!!!!!!!!!!!!!!
+		$data->{'redicion'}=C4::AR::Nivel2::getEdicion($data->{'rid2'});
 		push (@results,$data);
 	}
 	
@@ -1080,7 +1080,7 @@ sub Enviar_Email{
 		my $mailMessage =C4::Context->preference("reserveMessage");
 		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
 		$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
-		my $edicion=C4::AR::Busquedas::buscarDatoDeCampoRepetible($res->{'rid2'},"250","a","2");
+		my $edicion=C4::AR::Nivel2::getEdicion($res->{'rid2'});
 		$mailSubject =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;

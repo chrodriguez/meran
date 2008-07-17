@@ -504,7 +504,7 @@ return @results2;
 obtenerValoresTablaRef
 Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
 =cut
-sub obtenerValoresTablaRef(){
+sub obtenerValoresTablaRef{
 	my ($tabla,$ident,$campos,$orden)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
@@ -705,7 +705,7 @@ return($results);
 obtenerIdentTablaRef
 Obtiene el campo clave de la tabla a la cual se esta asi referencia
 =cut
-sub obtenerIdentTablaRef(){
+sub obtenerIdentTablaRef{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 

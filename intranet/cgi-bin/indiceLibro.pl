@@ -62,7 +62,7 @@ if($tipo eq "UPDATE"){
 	&insertIndice($biblioitemnumber, $biblionumber, $infoIndice);
 }
 
-my ($resultsdata)=&getIndice($biblioitemnumber, $biblionumber);
+my ($resultsdata)=&C4::AR::Nivel2::getIndice($biblioitemnumber, $biblionumber);
 
 my $allsubtitles;
 my ($subtitlecount,$subtitles) =&subtitle($biblionumber);

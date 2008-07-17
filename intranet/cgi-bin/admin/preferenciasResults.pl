@@ -142,8 +142,8 @@ if($agregar){
 		}
 		elsif($opcion eq "combo"){
 			my $campo=$obj->{'campo'}||$op;
-			my $id=&obtenerIdentTablaRef($tabla);
-			my ($js,$valores)=&obtenerValoresTablaRef($tabla,$id,$campo,$campo);
+			my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
+			my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
 			@values=keys %$valores;
 			foreach my $val(@values){
 				$labels{$val}=$valores->{$val};
