@@ -11,6 +11,7 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
 
 	&getAutoresAdicionales
+	&getColaboradores
 
 );
 
@@ -20,6 +21,13 @@ use vars qw(@EXPORT @ISA);
 =cut
 
 sub getAutoresAdicionales(){
+	my ($id)=@_;
+
+# 	falta implementar, seria un campo de nivel 1 repetibles
+}
+
+
+sub getColaboradores(){
 	my ($id)=@_;
 
 # 	falta implementar, seria un campo de nivel 1 repetibles
