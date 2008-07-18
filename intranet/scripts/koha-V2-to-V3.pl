@@ -28,17 +28,93 @@ my $additionalauthor;
 
 my $dbh = C4::Context->dbh;
 
+#############################RELACION KOHA-MARC #####################################
+
+my $kohamarc=$dbh->prepare("DROP TABLE IF EXISTS `kohaToMARC`;");
+$kohamarc->execute();
+
+my $kohamarc1=$dbh->prepare("CREATE TABLE `kohaToMARC` (
+  `idmap` int(11) NOT NULL auto_increment,
+  `tabla` varchar(100) NOT NULL,
+  `campoTabla` varchar(100) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `campo` varchar(3) NOT NULL,
+  `subcampo` varchar(1) NOT NULL,
+  PRIMARY KEY  (`idmap`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;");
+$kohamarc1->execute();
+
+my $kohamarc2=$dbh->prepare("INSERT INTO `kohaToMARC` (`idmap`, `tabla`, `campoTabla`, `nombre`, `campo`, `subcampo`) VALUES 
+(1, 'nivel1', 'titulo', 'titulo', '245', 'a'),
+(2, 'nivel2', 'tipo_documento', 'tipo documento', '910', 'a'),
+(3, 'nivel2', 'pais_publicacion', 'pais publicacion', '043', 'c'),
+(4, 'nivel2', 'anio_publicacion', 'año publicacion', '260', 'c'),
+(5, 'nivel2', 'ciudad_publicacion', 'ciudad publicacion', '260', 'a'),
+(6, 'nivel2', 'lenguaje', 'idioma', '041', 'h'),
+(7, 'nivel2', 'soporte', 'soporte', '245', 'h'),
+(8, 'nivel2', 'nivel_bibliografico', 'nivel bibliografico', '900', 'b'),
+(9, 'nivel3', 'holdingbranch', 'Unidad de informacion de origen', '995', 'd'),
+(10, 'nivel3', 'homebranch', 'Unidad de informacion', '995', 'c'),
+(11, 'nivel3', 'signatura_topografica', 'signatura topografica', '995', 't'),
+(12, 'nivel3', 'wthdrawn', 'Estado de ejemplar', '995', 'e'),
+(13, 'nivel3', 'notforloan', 'Disponibilidad', '995', 'o'),
+(20, 'additionalauthors', 'author', 'Nombre Personal', '700', 'a'),
+(21, 'biblio', 'abstract', 'Nota de resumen, etc.', '520', 'a'),
+(22, 'biblio', 'author', 'Nombre Personal', '100', 'a'),
+(24, 'biblio', 'notes', 'Entrada principal del original', '534', 'a'),
+(25, 'biblio', 'seriestitle', 'Número de Clasificación Decimal Universal', '080', 'a'),
+(26, 'biblio', 'title', 'Título', '245', 'a'),
+(27, 'biblio', 'unititle', 'Resto del título', '245', 'b'),
+(30, 'biblioitems', 'dewey', 'Call number prefix (NR)', '852', 'k'),
+(31, 'biblioitems', 'idCountry', 'Código ISO (R)', '043', 'c'),
+(33, 'biblioitems', 'illus', 'Otros detalles físicos', '300', 'b'),
+(34, 'biblioitems', 'issn', 'ISSN', '022', 'a'),
+(35, 'biblioitems', 'itemtype', 'Tipo de documento', '910', 'a'),
+(36, 'biblioitems', 'lccn', 'LC control number', '010', 'a'),
+(37, 'biblioitems', 'notes', 'Nota General', '500', 'a'),
+(38, 'biblioitems', 'number', 'Mención de edición', '250', 'a'),
+(39, 'biblioitems', 'pages', 'Extensión', '300', 'a'),
+(40, 'biblioitems', 'place', 'Lugar de publicación, distribución, etc.', '260', 'a'),
+(41, 'biblioitems', 'publicationyear', 'Fecha de publicación, distribución, etc.', '260', 'c'),
+(42, 'biblioitems', 'seriestitle', 'Título', '440', 'a'),
+(43, 'biblioitems', 'size', 'Dimensiones', '300', 'c'),
+(44, 'biblioitems', 'subclass', 'Call number suffix (NR)', '852', 'm'),
+(45, 'biblioitems', 'url', 'Identificador Uniforme de Recurso (URI)', '856', 'u'),
+(46, 'biblioitems', 'volume', 'Number of part/section of a work', '740', 'n'),
+(47, 'biblioitems', 'volumeddesc', 'Título', '740', 'a'),
+(48, 'bibliosubject', 'subject', 'Tópico o nombre geográfico', '650', 'a'),
+(49, 'bibliosubtitle', 'subtitle', 'Título propiamente dicho/Título corto', '246', 'a'),
+(50, 'isbns', 'isbn', 'ISBN', '020', 'a'),
+(51, 'items', 'barcode', 'C&oacute;digo de Barras', '995', 'f'),
+(52, 'items', 'booksellerid', 'Nombre del vendedor', '995', 'a'),
+(53, 'items', 'bulk', 'Signatura Topogr&aacute;fica', '995', 't'),
+(54, 'items', 'dateaccessioned', 'Fecha de acceso', '995', 'm'),
+(55, 'items', 'holdingbranch', 'Unidad de Informaci&oacute;n', '995', 'c'),
+(56, 'items', 'homebranch', 'Unidad de Informaci&oacute;n de Origen', '995', 'd'),
+(57, 'items', 'itemnotes', 'Notas del item', '995', 'u'),
+(59, 'items', 'notforloan', 'Disponibilidad', '995', 'o'),
+(60, 'items', 'price', 'Precio de compra', '995', 'p'),
+(61, 'items', 'replacementprice', 'Precio de reemplazo', '995', 'r'),
+(62, 'items', 'wthdrawn', 'Estado', '995', 'e'),
+(63, 'publisher', 'publisher', 'Nombre de la editorial, distribuidor, etc.', '260', 'b'),
+(64, 'biblioitems', 'classification', '', '900', 'b'),
+(65, 'biblioitems', 'idLanguage', '', '041', 'h'),
+(66, 'biblioitems', 'idSupport', '', '245', 'h');");
+$kohamarc2->execute();
+#################################################################################
+
 ######Primero agrego las tablas nuevas######
-my $tablas=$dbh->prepare("
+my $tabla1=$dbh->prepare("
 CREATE TABLE `nivel1` (
   `id1` int(11) NOT NULL auto_increment,
   `titulo` varchar(100) NOT NULL,
   `autor` int(11) NOT NULL,
   `timestamp` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id1`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1  ;
-
-CREATE TABLE `nivel1_repetibles` (
+) ENGINE=InnoDB DEFAULT CHARSET=latin1  ;");
+$tabla1->execute();
+my $tabla2=$dbh->prepare(
+"CREATE TABLE `nivel1_repetibles` (
   `rep_n1_id` int(11) NOT NULL auto_increment,
   `id1` int(11) NOT NULL,
   `campo` varchar(3) default NULL,
@@ -46,9 +122,10 @@ CREATE TABLE `nivel1_repetibles` (
   `dato` varchar(250) NOT NULL,
   `timestamp` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`rep_n1_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
-
-CREATE TABLE `nivel2` (
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;");
+$tabla2->execute();
+my $tabla3=$dbh->prepare(
+"CREATE TABLE `nivel2` (
   `id2` int(11) NOT NULL auto_increment,
   `id1` int(11) NOT NULL,
   `tipo_documento` varchar(4) NOT NULL,
@@ -60,8 +137,9 @@ CREATE TABLE `nivel2` (
   `anio_publicacion` varchar(15) default NULL,
   `timestamp` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id2`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1  ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1  ;");
+$tabla3->execute();
+my $tabla4=$dbh->prepare("
 CREATE TABLE `nivel2_repetibles` (
   `rep_n2_id` int(11) NOT NULL auto_increment,
   `id2` int(11) NOT NULL,
@@ -70,8 +148,9 @@ CREATE TABLE `nivel2_repetibles` (
   `dato` varchar(250) default NULL,
   `timestamp` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`rep_n2_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;");
+$tabla4->execute();
+my $tabla5=$dbh->prepare("
 CREATE TABLE `nivel3` (
   `id3` int(11) NOT NULL auto_increment,
   `id1` int(11) NOT NULL,
@@ -84,8 +163,9 @@ CREATE TABLE `nivel3` (
   `notforloan` char(2) default '0',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, 
  PRIMARY KEY  (`id3`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;");
+$tabla5->execute();
+my $tabla6=$dbh->prepare("
 CREATE TABLE `nivel3_repetibles` (
   `rep_n3_id` int(11) NOT NULL auto_increment,
   `id3` int(11) NOT NULL,
@@ -96,8 +176,7 @@ CREATE TABLE `nivel3_repetibles` (
   PRIMARY KEY  (`rep_n3_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ");
-
-$tablas->execute();
+$tabla6->execute();
 
 	#########################################################################
 	#			NUEVAS REFERENCIAS!!!!!				#
@@ -426,32 +505,36 @@ $biblios->finish();
 	#			CONTROL DE AUTORIDADES				#
 	#########################################################################
 
-my $control_autoridades=$dbh->prepare("
+my $control_autoridades1=$dbh->prepare("
 CREATE TABLE `control_autores_seudonimos` (
   `id` int(11) NOT NULL,
   `id2` int(11) NOT NULL,
   PRIMARY KEY  (`id`,`id2`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+$control_autoridades1->execute();
+my $control_autoridades2=$dbh->prepare("
 CREATE TABLE `control_autores_sinonimos` (
   `id` int(11) NOT NULL,
   `autor` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`,`autor`),
   KEY `autor` (`autor`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+$control_autoridades2->execute();
+my $control_autoridades3=$dbh->prepare("
 CREATE TABLE `control_editoriales_seudonimos` (
   `id` int(11) NOT NULL,
   `id2` int(11) NOT NULL,
   PRIMARY KEY  (`id`,`id2`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+$control_autoridades3->execute();
+my $control_autoridades4=$dbh->prepare("
 CREATE TABLE `control_temas_seudonimos` (
   `id` int(11) NOT NULL,
   `id2` int(11) NOT NULL,
   PRIMARY KEY  (`id`,`id2`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+$control_autoridades4->execute();
+my $control_autoridades5=$dbh->prepare("
 CREATE TABLE `control_temas_sinonimos` (
   `id` int(11) NOT NULL auto_increment,
   `tema` varchar(255) NOT NULL,
@@ -459,8 +542,7 @@ CREATE TABLE `control_temas_sinonimos` (
   KEY `tema` (`tema`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 ");
-$control_autoridades->execute();
-
+$control_autoridades5->execute();
 
 	#########################################################################
 	#			QUITAR TABLAS DE MAS!!!				#
