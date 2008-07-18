@@ -3,12 +3,9 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Context;
-use HTML::Template;
-use C4::Koha;
 use C4::Date;
+use C4::AR::Busquedas;
 
 my $query = new CGI;
 
@@ -31,7 +28,7 @@ $template->param(virtuallibrary => $virtuallibrary);
 my @branches;
 my @select_branch;
 my %select_branches;
-my $branches=getbranches();
+my $branches=C4::AR::Busquedas::getBranches();
 foreach my $branch (keys %$branches) {
         push @select_branch, $branch;
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
