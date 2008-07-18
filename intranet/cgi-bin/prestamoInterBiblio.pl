@@ -23,11 +23,10 @@ require Exporter;
 
 use strict;
 use CGI;
-use C4::Context;
 use C4::AR::PdfGenerator;
 use C4::Interface::CGI::Output;
-use C4::Koha;
 use C4::Auth;
+use C4::AR::Busquedas;
 
 my $input= new CGI;
 my $bornum = $input->param('bornum');
@@ -47,7 +46,7 @@ if($accion eq "ingresarDatos"){
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches();
+	my $branches=C4::AR::Busquedas::getBranches();
 	foreach my $branch (keys %$branches) {
         	push @select_branch, $branch;
         	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
@@ -71,7 +70,7 @@ if($accion eq "ingresarDatos"){
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
 else{
-	my $biblioDestino = C4::AR::Busquedas::getbranchname($input->param('branch'));
+	my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branch'));
 	my $director = $input->param('director')||"___________________";
 	my @autores=split("#",$input->param('autores'));
 	my @titulos=split("#",$input->param('titulos'));

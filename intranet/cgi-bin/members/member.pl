@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $member=$input->param('member');
 
-$template->param(       
+$template->param(
 			member  => $member,
 		);
 

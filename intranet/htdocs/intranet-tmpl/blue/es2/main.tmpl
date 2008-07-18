@@ -1,82 +1,78 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <br>
 <br>
-<script language="javascript" type="text/javascript"> function swap(id,src){document.getElementById(id).src=src;} </script>
+<script language="javascript" type="text/javascript"> 
+function swap(id,src){document.getElementById(id).src=src;}
+
+function busquedaCombinada(){
+location.href="/cgi-bin/koha/busquedas/filtrado.pl?origen=main&keyword="+document.getElementById("keyword").value;
+}
+
+</script>
+
 <table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-<tr>
-<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" colspan="2">
-<b>Cat&aacute;logo:</b>
-</td>
-</tr>
 	<tr>
-	<td width="15%" >&nbsp;</td>
-	 <td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
-	<form action="/cgi-bin/koha/loadmodules.pl" method="post" name="form1" >
-		B&uacute;squeda combinada
-		<input type="hidden" name="module" value="search">
-		<input type="hidden" name="type" value="intranet">
-		<input type="hidden" name="marc" value="0">
-		<input type="text" name="keyword" size="20" class="inputFontNormal">
-		<a href="#" onClick="form1.submit()" >
-  		<img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
-	</form>	
-    </td>
-  </tr>
-  <tr>
-<td width="15%" >&nbsp;</td>
-      <td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-      <a  href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" >
-      B&uacute;squeda avanzada
-      </a>
-      </td>
-	
-	</tr>		
-</table>		      
-<table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-<tr>
-<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" colspan="2">
-<b>Usuarios:</b>
-</td>
-</tr>
-<tr>
-<td width="15%">&nbsp;</td>
-<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
-		<form action="/cgi-bin/koha/member.pl" method="post" name="form2">
-		    B&uacute;squeda de usuarios &nbsp;
-		    <input type="text" name="member" size="20" class="inputFontNormal" >	    
-   	            <a href="#" onClick="form2.submit()" >
-                    <img alt="Buscar" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0""></a>
- 
-	  	    </form>
- 	 </tr>
-  <!--<tr >
-  <td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-  <a href="/cgi-bin/koha/members-home.pl">Usuarios</a><br>
-  </td> 
-  </tr>-->		
+		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" colspan="2">
+			<b>Cat&aacute;logo:</b>
+		</td>
+	</tr>
+	<tr>
+		<td width="15%" >&nbsp;</td>
+		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
+			B&uacute;squeda combinada
+			<input type="text" id="keyword" size="20" class="inputFontNormal">
+  			<input type="image" alt="Buscar" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="busquedaCombinada()">
+    		</td>
+  	</tr>
+  	<tr>
+		<td width="15%" >&nbsp;</td>
+      		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+      			<a  href="/cgi-bin/koha/busquedas/filtrado.pl" >
+      				B&uacute;squeda avanzada
+      			</a>
+      		</td>
+	</tr>
 </table>
+
 <table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-			     
-<tr>
-    <td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    <a href="/cgi-bin/koha/circ/circulation.pl"><b>Circulaci&oacute;n</b></a><br>
-    </td>
-  </tr>
-  <tr >
-    <td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    <a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" ><b>Adquisici&oacute;n</b></a><br>
-    </td>
-  </tr>
-  <tr>
-  <td   class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-  <a href="/cgi-bin/koha/reports-home.pl"><b>Reportes</b></a><br>
-  </td>
-  </tr>
-  <tr>
-    <td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    <a href="/cgi-bin/koha/admin-home.pl" ><b> Par&aacute;metros</b></a><br>
-   </td>
-  </tr>
+	<tr>
+		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" colspan="2">
+			<b>Usuarios:</b>
+		</td>
+	</tr>
+	<tr>
+		<td width="15%">&nbsp;</td>
+		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
+			<form action="/cgi-bin/koha/members/member.pl" method="post" name="form2">
+		    	B&uacute;squeda de usuarios &nbsp;
+		    	<input type="text" name="member" size="20" class="inputFontNormal">
+                    	<input type="image" alt="Buscar" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="form2.submit()">
+	  	    	</form>
+		</td>
+ 	 </tr>
+</table>
+
+<table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
+	<tr>
+    		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+    			<a href="/cgi-bin/koha/circ/prestamos.pl"><b>Pr&eacute;stamos</b></a><br>
+    		</td>
+  	</tr>
+  	<tr>
+    		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+    			<a href="/cgi-bin/koha/circ/devoluciones.pl" ><b>Devoluciones y Renovaciones</b></a><br>
+    		</td>
+  	</tr>
+  	<tr>
+  		<td   class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+  			<a href="/cgi-bin/koha/reports/reports-home.pl"><b>Reportes</b></a><br>
+  		</td>
+  	</tr>
+  	<tr>
+    		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+    			<a href="/cgi-bin/koha/admin-home.pl" ><b> Par&aacute;metros</b></a><br>
+   		</td>
+  	</tr>
 </table>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

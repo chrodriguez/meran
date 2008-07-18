@@ -34,7 +34,6 @@ $borr->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'streetcity'
 $borr->{'dateenrolled'} = C4::Date::format_date($borr->{'dateenrolled'},$dateformat);
 $borr->{'expiry'}       = C4::Date::format_date($borr->{'expiry'},$dateformat);
 $borr->{'dateofbirth'}  = C4::Date::format_date($borr->{'dateofbirth'},$dateformat);
-$borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 if ($borr->{'amountoutstanding'} > 5) {
     $borr->{'amountoverfive'} = 1;
 }

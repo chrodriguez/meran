@@ -70,13 +70,13 @@ use vars qw(@EXPORT @ISA);
 		&getLanguages
 		&getItemType
 		&getItemTypes
-		&getbranchname
 		&getborrowercategory
-		&getallborrowercategorys
 		&getAvail
 		&getAvails
 		&getTema
 		&getNombreLocalidad
+		&getBranches
+		&getBranch
 
 		&loguearBusqueda
 );
@@ -624,10 +624,10 @@ sub buscarNivel3PorId2{
 	$infoNivel3{'cantReservas'}=C4::AR::Reservas::cantReservasPorGrupo($id2);
 
 	while(my $data=$sth->fetchrow_hashref){
-		my $holdbranch= getbranchname($data->{'holdingbranch'});
+		my $holdbranch= getBranch($data->{'holdingbranch'});
 		$data->{'holdingbranchNombre'}=$holdbranch;
 		
-		my $homebranch= getbranchname($data->{'homebranch'});
+		my $homebranch= getBranch($data->{'homebranch'});
 		$data->{'homebranchNombre'}=$homebranch;
 		
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
@@ -2130,18 +2130,6 @@ sub getItemTypes {
   	return($count, @results);
 } # sub getitemtypes
 
-
-sub getbranchname{
-	my ($branchcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT branchname FROM branches WHERE branchcode = ?");
-	$sth->execute($branchcode);
-	my $branchname = $sth->fetchrow();
-	$sth->finish();
-	return $branchname;
-} # sub getbranchname
-
-
 =item getborrowercategory
   $description = &getborrowercategory($categorycode);
 Given the borrower's category code, the function returns the corresponding
@@ -2156,19 +2144,6 @@ sub getborrowercategory{
 	$sth->finish();
 	return $description;
 } # sub getborrowercategory
-
-sub getallborrowercategorys{
-	my $dbh = C4::Context->dbh;
-	my %categories;
-	my $sth = $dbh->prepare("SELECT description,categorycode FROM categories");
-	$sth->execute();
-	  while (my $cat=$sth->fetchrow_hashref) {
-	  $categories{$cat->{'categorycode'}}=$cat;
-	  }
-	$sth->finish();
-	return (\%categories);
-} # sub getallorrowercategorys
-
 
 sub getAvail{
         my ($cod) = @_;
@@ -2486,5 +2461,35 @@ sub loguearBusqueda{
 	#se hace rollback solo de la segunda
 }
 
+=item
+getBranches
+Devuelve una hash con todas bibliotecas y sus relaciones.
+=cut
+sub getBranches {
+# returns a reference to a hash of references to branches...
+	my %branches;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT branches.*,categorycode FROM branches INNER JOIN branchrelations ON branches.branchcode=branchrelations.branchcode");
+	$sth->execute;
+	while (my $branch=$sth->fetchrow_hashref) {
+		$branches{$branch->{'branchcode'}}=$branch;
+	}
+	return (\%branches);
+}
+
+=item
+getBranch
+=cut
+sub getBranch{
+    my($branch) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = "SELECT * FROM branches WHERE branchcode=?";
+    my $sth   = $dbh->prepare($query);
+    $sth->execute($branch);
+    return $sth->fetchrow();
+}
+
+
 
 1;
+__END__

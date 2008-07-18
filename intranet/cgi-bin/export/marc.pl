@@ -1,14 +1,11 @@
 #!/usr/bin/perl
-use HTML::Template;
 use strict;
 require Exporter;
-# use C4::Database;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::Output;  # contains gettemplate
 use C4::Biblio;
 use CGI;
-use C4::Koha;
+use C4::AR::Busquedas;
 
 my $query = new CGI;
 my $op=$query->param("op");
@@ -86,7 +83,7 @@ if ($op eq "export") {
 							-multiple => 0 );
 	$sth->finish;
 	
-	my $branches = &getbranches();
+	my $branches = C4::AR::Busquedas::getBranches();
 	my @branchloop;
 	foreach my $thisbranch (keys %$branches) {
 # 			my $selected = 1 if $thisbranch eq $branch;

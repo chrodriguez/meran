@@ -7,6 +7,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
+use C4::AR::Nivel3;
 
 my $input = new CGI;
 
@@ -26,7 +27,7 @@ my $signatura_topografica=$input->param('signatura_topografica');
 my $barcode=$input->param('barcode');
 
 my $data=C4::AR::Catalogacion::buscarNivel1($id1);
-my $autor=getautor($data->{'autor'});
+my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 $data->{'autor'}=$autor->{'completo'};
 my %inputs;
 my ($count, $detail)=C4::AR::Nivel3::detalleDisponibilidad($id3);

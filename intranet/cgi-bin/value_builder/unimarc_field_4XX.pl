@@ -25,8 +25,8 @@ use C4::Auth;
 use C4::Biblio;
 use C4::SearchMarc;
 use C4::Acquisition;
-use C4::Koha;
 use MARC::Record;
+use C4::AR::Busquedas;
 
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
@@ -351,7 +351,7 @@ sub plugin {
 		my @branchloop;
 		my @select_branch;
 		my %select_branches;
-		my $branches=getbranches;
+		my $branches=C4::AR::Busquedas::getBranches();
 		push @select_branch, "";
 		$select_branches{''} = "";
 		foreach my $thisbranch (keys %$branches){

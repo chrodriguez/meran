@@ -34,7 +34,7 @@ use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
-
+use C4::AR::Issues;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -377,7 +377,7 @@ sub checkauth {
 				open L, ">>/tmp/avisos";
 				printf L "Enviar MAIL! \n";
 				close L;
-				&C4::AR::Issues::enviar_recordatorios_prestamos();
+				C4::AR::Issues::enviar_recordatorios_prestamos();
 			}
 
 			}

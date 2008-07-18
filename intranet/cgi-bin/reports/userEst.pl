@@ -23,9 +23,9 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::AR::Estadisticas;
-use C4::Koha;
 use C4::AR::StatGraphs;
 use C4::AR::SxcGenerator;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie)
 my @branches;
 my @select_branch;
 my %select_branches;
-my $branches=getbranches();
+my $branches=C4::AR::Busquedas::getBranches();
 foreach my $branch (keys %$branches) {
         push @select_branch, $branch;
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};

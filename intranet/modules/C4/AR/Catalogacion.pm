@@ -1518,10 +1518,10 @@ sub buscarNivel3{
 
 	if($data=$sth->fetchrow_hashref){
 
-		my $holdbranch= &C4::AR::Busquedas::getbranchname($data->{'holdingbranch'});
+		my $holdbranch= C4::AR::Busquedas::getBranch($data->{'holdingbranch'});
 		$data->{'holdbranch'}=$holdbranch;
 		
-		my $homebranch= &C4::AR::Busquedas::getbranchname($data->{'homebranch'});
+		my $homebranch= &C4::AR::Busquedas::getBranch($data->{'homebranch'});
 		$data->{'hbranch'}=$homebranch;
 		
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
@@ -1594,10 +1594,10 @@ sub buscarNivel3PorId2{
         $sth->execute($id2);
 	my @result;
 	while (my $data=$sth->fetchrow_hashref){
-		my $holdbranch= &C4::AR::Busquedas::getbranchname($data->{'holdingbranch'});
+		my $holdbranch= &C4::AR::Busquedas::getBranch($data->{'holdingbranch'});
 		$data->{'holdbranch'}=$holdbranch;
 		
-		my $homebranch= &C4::AR::Busquedas::getbranchname($data->{'homebranch'});
+		my $homebranch= &C4::AR::Busquedas::getBranch($data->{'homebranch'});
 		$data->{'hbranch'}=$homebranch;
 		
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});

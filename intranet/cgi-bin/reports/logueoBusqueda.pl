@@ -26,7 +26,7 @@ my ($template, $loggedinuser, $cookie)
 my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
 
-my ($array,$hasheado)=&borrowercategories(); 
+my ($array,$hasheado)=C4::AR::Usuarios::obtenerCategorias(); 
 push @select_catUsuarios_Values, 'SIN SELECCIONAR';
 my $i=0;
 my @catUsuarios_Values;

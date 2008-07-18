@@ -22,7 +22,6 @@
 
 use strict;
 use C4::Auth;
-use C4::Koha;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::AR::PdfGenerator;
@@ -68,7 +67,7 @@ my ($template, $loggedinuser, $cookie)
 my @branches;
 my @select_branch;
 my %select_branches;
-my $branches=getbranches();
+my $branches=C4::AR::Busquedas::getBranches();
 foreach my $branch (keys %$branches) {
         push @select_branch, $branch;
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
@@ -86,22 +85,16 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 
 #Fin: Por los branches
 
-my @categories;
-my @select_category;
-my %select_categories;
-my $categories=C4::AR::Busquedas::getallborrowercategorys();
-foreach my $category (keys %$categories) {
-        push @select_category, $category;
-        $select_categories{$category} = $categories->{$category}->{'description'};
-}
 
-push @select_category, 'Todos';
+my ($select_category,$select_categories)=C4::AR::Usuarios::obtenerCategorias();
+
+push @$select_category, 'Todos';
 
 my $CGIcategories=CGI::scrolling_list(  -name      => 'category',
                                         -id        => 'category',
-                                        -values    => \@select_category,
+                                        -values    => $select_category,
 					-defaults  => 'Todos',
-                                        -labels    => \%select_categories,
+                                        -labels    => $select_categories,
                                         -size      => 1,
                                  );
 

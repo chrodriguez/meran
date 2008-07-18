@@ -46,6 +46,9 @@ function Borrar(){
 $(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
 	onEnter("member",consultar);
+	if('<!-- TMPL_VAR NAME=member -->' != ""){
+		consultar();
+	}
 });
 
 </script>

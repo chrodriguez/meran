@@ -1,19 +1,7 @@
 /* Tigra Menu items structure */
 var MENU_ITEMS = [
 	['Inicio', '/cgi-bin/koha/mainpage.pl'],
-	['Cat&aacute;logo', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet', null,
-		['B&uacute;squeda  Avanzada', '/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet'],
-		['B&uacute;squeda MARC', '/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet'],
-		['------------------------', null],
-		['Estantes Virtuales', '/cgi-bin/koha/shelves.pl?startfrom=0'],
-		['Agregar Libro', '/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet'],
-// 		['Mantenimiento', '/cgi-bin/koha/maint/catmaintain.pl'],
-		['Importaci&oacute;n MARC', '/cgi-bin/koha/importacionMarc.pl'],
-		['Importaci&oacute;n', '/cgi-bin/koha/importacion.pl'],
-		['Adquisici&oacute;n de ej.', '/cgi-bin/koha/loadmodules.pl?module=acquisitions']
-
-	],
-	['Cat&aacute;logo V3', '/cgi-bin/koha/busquedas/filtrado.pl', null,
+	['Cat&aacute;logo', '/cgi-bin/koha/busquedas/filtrado.pl', null,
 		['--------B&uacute;squedas------', null],
 		['B&uacute;squeda  Avanzada', '/cgi-bin/koha/busquedas/filtrado.pl'],
 		['B&uacute;squeda Experta', '/cgi-bin/koha/busquedas/filtradoExperto.pl'],
@@ -77,12 +65,8 @@ var MENU_ITEMS = [
 		]
 	],
 	['Reportes', null, null,
-		['Reportes', '/cgi-bin/koha/reports-home.pl', null,
-// 		['Todos', '/cgi-bin/koha/reports-home.pl'],
+		['Reportes', '/cgi-bin/koha/reports/reports-home.pl', null,
 			['Reportes Gen&eacute;ricos', '/cgi-bin/koha/reports/generic_reports.pl'],
-// 		['-------Reportes-------', null],
-// 			['Reporte diario (hoy)', '/cgi-bin/koha/stats.pl?time=today'],
-// 			['Reporte diario (ayer)', '/cgi-bin/koha/stats.pl?time=yesterday'],
 			['Inventario', '/cgi-bin/koha/reports/inventory.pl'],
 			['Signatura Topogr&aacute;fica', '/cgi-bin/koha/reports/inventory-sig-top.pl'],
 			['Estantes Virtuales', '/cgi-bin/koha/reports/estantes.pl'],
@@ -95,7 +79,7 @@ var MENU_ITEMS = [
 			['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl'],
 			['Generar Etiquetas','/cgi-bin/koha/reports/book-labels.pl'],
 		],
-		['Estad&iacute;sticas', '/cgi-bin/koha/reports-home.pl',null,
+		['Estad&iacute;sticas', '/cgi-bin/koha/reports/reports-home.pl',null,
 			['Disp. de Ejem.','/cgi-bin/koha/reports/availability.pl'],
 			['Hist&oacute;rico de Pr&eacute;stamos.','/cgi-bin/koha/reports/historico_Prestamos.pl'],
 			['Hist&oacute;rico de Sanciones.','/cgi-bin/koha/reports/historicoSanciones.pl'],

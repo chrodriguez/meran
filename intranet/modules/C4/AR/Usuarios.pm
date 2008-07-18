@@ -18,11 +18,13 @@ use vars qw(@EXPORT @ISA);
 	&getBorrowerInfo
 	&buscarBorrower
 	&obtenerCategoria
+	&obtenerCategorias
 	&mailIssuesForBorrower
 	&personData
 	&BornameSearchForCard
 	&NewBorrowerNumber
 	&findguarantees
+	&updateOpacBorrower
 );
 
 
@@ -264,6 +266,20 @@ sub obtenerCategoria{
         return $condicion;
 } 
 
+sub obtenerCategorias {
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("SELECT categorycode,description FROM categories ORDER BY description");
+    $sth->execute();
+    my %labels;
+    my @codes;
+    while (my $data=$sth->fetchrow_hashref){
+      push @codes,$data->{'categorycode'};
+      $labels{$data->{'categorycode'}}=$data->{'description'};
+    }
+    $sth->finish;
+    return(\@codes,\%labels);
+}
+
 
 sub mailIssuesForBorrower{
   	my ($branch,$bornum)=@_;
@@ -363,7 +379,7 @@ sub BornameSearchForCard{
 		if ($pasa == 1){ #Pasa el filtro
 			$i++; 
 			$results[$i]=$data; 
-			$results[$i]->{'city'}=getcity($results[$i]->{'city'});
+			$results[$i]->{'city'}=C4::AR::Busquedas::getNombreLocalidad($results[$i]->{'city'});
 			if ($results[$i]->{'categorycode'} eq 'ES'){
 				$results[$i]->{'regular'}= $reg;
 				if ($results[$i]->{'regular'} eq 1){
@@ -428,7 +444,16 @@ sub findguarantees{
   return (scalar(@dat), \@dat);
 }
 
+sub updateOpacBorrower{
+	my($update) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query="UPDATE borrowers SET streetaddress=?, faxnumber=?, firstname=?, emailaddress=?, 
+		city=?, phone=?, surname=? WHERE borrowernumber=?";
+
+	my $sth=$dbh->prepare($query);
+  	$sth->execute($update->{'streetaddress'},$update->{'faxnumber'},$update->{'firstname'},$update->{'emailaddress'},$update->{'city'},$update->{'phone'},$update->{'surname'},$update->{'borrowernumber'});
+	$sth->finish;
+}
 
 
-
-1
+1;

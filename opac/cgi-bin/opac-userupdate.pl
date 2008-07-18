@@ -73,7 +73,7 @@ EOF
     if (sendmail %mail) {
 # do something if it works....
 
-	&updateopacborrower($update);  #Se actualiza el registro del usuario
+	C4::AR::Usuarios::updateOpacBorrower($update);  #Se actualiza el registro del usuario
 
 	warn "Mail sent ok\n";
 	print $query->redirect('/cgi-bin/koha/opac-user.pl');
@@ -88,7 +88,6 @@ EOF
 $borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'},$dateformat);
 $borr->{'expiry'}       = format_date($borr->{'expiry'},$dateformat);
 $borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'},$dateformat);
-$borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 
 my @bordat;

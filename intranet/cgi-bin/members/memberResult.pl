@@ -30,6 +30,7 @@ use CGI;
 use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
+use C4::AR::Utilidades;
 
 my $input = new CGI;
 

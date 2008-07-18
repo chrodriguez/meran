@@ -3,11 +3,10 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
+use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 use C4::AR::Busquedas;
-use HTML::Template;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -18,9 +17,6 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {catalogue => 1},
 			     debug => 1,
 			     });
-
-
-my ($branchcount,@branches)=branches();
 
 my $mapeoHash=&buscarMapeoTotal();
 my @valuesMapeo;

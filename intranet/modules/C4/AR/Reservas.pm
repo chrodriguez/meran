@@ -1061,7 +1061,7 @@ sub Enviar_Email{
 		my $mailFrom=C4::Context->preference("reserveFrom");
 		my $mailSubject =C4::Context->preference("reserveSubject");
 		my $mailMessage =C4::Context->preference("reserveMessage");
-		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
+		my $branchname= C4::AR::Busquedas::getBranch($borrower->{'branchcode'});
 		$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
 		my $edicion=C4::AR::Nivel2::getEdicion($res->{'rid2'});
 		$mailSubject =~ s/BRANCH/$branchname/;

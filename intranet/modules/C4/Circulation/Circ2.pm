@@ -29,9 +29,8 @@ package C4::Circulation::Circ2;
 use strict;
 # use warnings;
 require Exporter;
-use DBI;
 use C4::AR::Reservas;
-use C4::Koha;
+use C4::AR::Busquedas;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -88,7 +87,6 @@ NO SE USA -- DAMIAN 15/04/2008
 &getissues SE PASO a Issues.pm con el nombre de prestamosPorUsuario
 =cut
 
-# &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
 =item itemseen
 &itemseen($itemnum)
@@ -655,7 +653,7 @@ sub transferbook {
 	my $messages;
 	my %env;
 	my $dotransfer = 1;
-	my $branches = getbranches();
+	my $branches = C4::AR::Busquedas::getBranches();
 	my $iteminformation = getiteminformation(\%env, 0, $barcode);
 	# bad barcode..
 	if (not $iteminformation) {
@@ -1169,7 +1167,7 @@ sub returnbook {
 	}
 	# check if the book is in a permanent collection....
 	my $hbr = $iteminformation->{'homebranch'};
-	my $branches = getbranches();
+	my $branches = C4::AR::Busquedas::getBranches();
 	if ($branches->{$hbr}->{'PE'}) {
 		$messages->{'IsPermanent'} = $hbr;
 	}

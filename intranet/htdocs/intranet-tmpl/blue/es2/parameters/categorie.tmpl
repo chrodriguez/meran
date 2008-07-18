@@ -244,11 +244,12 @@
                 <tr>
 			<td class="inputFontNormal" colspan=2 align=center><b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b></td>
 		</tr>
+		</form>
                <tr>
 			<td colspan=2>
-				</form><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-                                <a onMouseOut="swap('save','<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png')" onMouseOver="swap('save','<!-- TMPL_VAR NAME="themelang" -->/images/guardarbis.png')" onClick="Aform.submit()" >
-				<img name="save" id="save" alt="Guardar" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                                <a onMouseOut="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png')" onMouseOver="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardarbis.png')" onClick="Aform.submit()" >
+				<img name="save" id="save" alt="Guardar" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
 									
 				<input type=submit value=OK>
 				</form>
@@ -293,10 +294,10 @@
 	<tr>
 	<form action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
 		<td>
-			<input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="searchfield" -->>
+			<input type=text class="inputFontNormal" name=description value=<!-- TMPL_VAR name="searchfield" -->>
 		</td>
 		<td> 
-			<img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscarbis.png')" onClick="form1.submit()">
+			<input type="image" name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="form1.submit()">
 		 
 		</td>
 	</form>
@@ -304,7 +305,7 @@
 </table>
 <table border=0 cellspacing=0 cellpadding="0" width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td >Categor&iacute;a</td>
 		<td width="10%">Descripci&oacute;n</td>
 		<td >Per&iacute;odo de inscripci&oacute;n</td>
@@ -318,7 +319,7 @@
 		<td width="6%">Reserva</td>
 		<td width="6%">Editar </td>
 		<td >Eliminar </td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 		<!-- TMPL_LOOP NAME=loop -->
 	<tr valign="middle">

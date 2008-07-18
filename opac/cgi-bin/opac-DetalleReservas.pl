@@ -1,14 +1,13 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use CGI;
 
+use CGI;
 use C4::Auth;
-use C4::Koha;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::Date;;
 use Date::Manip;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -27,7 +26,7 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $dateformat = C4::Date::get_date_format();
-my $branches = getbranches();
+my $branches = C4::AR::Busquedas::getBranches();
 
 my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($borrowernumber); 
 

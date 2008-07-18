@@ -60,7 +60,6 @@ my $data=C4::AR::Usuarios::personData($pernum);
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'},$dateformat);
 $data->{'expiry'} = format_date($data->{'expiry'},$dateformat);
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'},$dateformat);
-$data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 
 if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
@@ -72,7 +71,7 @@ my %bor;
 $bor{'personnumber'}=$pernum;
 
 # Converts the branchcode to the branch name
-$data->{'branchcode'} = C4::AR::Busquedas::getbranchname($data->{'branchcode'});
+$data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'});
 
 # Converts the categorycode to the description
 $data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});

@@ -30,9 +30,9 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Members;
-use C4::Koha;
 use Date::Manip;
 use C4::Date;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -68,20 +68,7 @@ my $data=C4::AR::Usuarios::getBorrower($member);
 	push(@flagdata, \%row);
 	}
 
-my ($categories,$labels)=ethnicitycategories();
-	my $ethnicitycategoriescount=$#{$categories};
-	my $ethcatpopup;
-	if ($ethnicitycategoriescount>=0) {
-		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
-					-id => 'ethnicity',
-					-values=>$categories,
-					-default=>$data->{'ethnicity'},
-					-labels=>$labels);
-		$template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
-	}
-
-
-	($categories,$labels)=borrowercategories();
+	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
 					-id => 'categorycode',
 					-values=>$categories,
@@ -105,7 +92,7 @@ my @documents = ('DNI', 'LC','LE', 'CI', 'PAS');
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=getbranches();
+	my $branches=C4::AR::Busquedas::getBranches();
 	foreach my $branch (keys %$branches) {
 		push @select_branch, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
@@ -161,7 +148,6 @@ elsif($type eq 'Mod'){
 				address         => $adress,
 				firstname       => $firstname,
 				surname         => $surname,
-				ethcatpopup	=> $ethcatpopup,
 				catcodepopup	=> $catcodepopup,
 				streetaddress   => $streetaddress,
 				zipcode 	=> $zipcode,
@@ -258,8 +244,8 @@ else {  # this else goes down the whole script
 
 
 
-$data->{'dcity'}=getcity($data->{'city'});
-$data->{'dstreetcity'}=getcity($data->{'streetcity'});
+$data->{'dcity'}=getNombreLocalidad($data->{'city'});
+$data->{'dstreetcity'}=getNombreLocalidad($data->{'streetcity'});
 #CGI::scrolling_list(-name     => 'streetcity',
                       #          -id => 'streetcity',
                       #          -values   => \@select_city,
@@ -275,7 +261,6 @@ $data->{'dstreetcity'}=getcity($data->{'streetcity'});
 				surname         => $data->{'surname'},
 				othernames	=> $data->{'othernames'},
 				initials	=> $data->{'initials'},
-				ethcatpopup	=> $ethcatpopup,
 				catcodepopup	=> $catcodepopup,
 				streetaddress   => $data->{'physstreet'},
 				zipcode		 => $data->{'zipcode'},

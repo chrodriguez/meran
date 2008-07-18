@@ -3,9 +3,8 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
-
+use C4::AR::Utilidades;
 my $input = new CGI;
 
 my $obj=$input->param('obj');
@@ -58,7 +57,7 @@ C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$fun
 my @resultsarray;
 my %result;
 my $nivel1;
-my @autor;
+my $autor;
 my $i=0;
 
 if($cantidad > 0){
@@ -69,8 +68,8 @@ if($cantidad > 0){
 		$nivel1= &C4::AR::Catalogacion::buscarNivel1($id1);
 		$result{$i}->{'titulo'}= $nivel1->{'titulo'};
 		$autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
-		$result{$i}->{'idAutor'}=$autor[0]->{'id'};
-		$result{$i}->{'nomCompleto'}= $autor[0]->{'completo'};
+		$result{$i}->{'idAutor'}=$autor->{'id'};
+		$result{$i}->{'nomCompleto'}= $autor->{'completo'};
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $comboItemTypes,"INTRA");
 		$result{$i}->{'grupos'}=$ediciones;
 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $comboItemTypes);

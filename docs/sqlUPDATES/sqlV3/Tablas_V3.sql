@@ -146,6 +146,7 @@ CREATE TABLE `branches` (
   `branchfax` text,
   `branchemail` text,
   `issuing` tinyint(4) default NULL,
+  PRIMARY KEY  (`branchcode`),
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -162,7 +163,7 @@ CREATE TABLE `busquedas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=207 ;
 
 CREATE TABLE `colaboradores` (
-  `biblionumber` int(11) NOT NULL,
+  `id1` int(11) NOT NULL,
   `idColaborador` int(11) NOT NULL,
   `tipo` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -368,7 +369,7 @@ CREATE TABLE `historicCirculation` (
 
 CREATE TABLE `historicIssues` (
   `borrowernumber` int(11) NOT NULL default '0',
-  `itemnumber` int(11) NOT NULL default '0',
+  `id3` int(11) NOT NULL default '0',
   `date_due` date default NULL,
   `branchcode` char(4) default NULL,
   `issuingbranch` char(18) default NULL,

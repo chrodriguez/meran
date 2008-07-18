@@ -10,6 +10,8 @@ use CGI;
 use C4::AR::Issues;
 use C4::Koha;
 use C4::Biblio;
+use C4::Koha;
+use C4::AR::Busquedas;
 
 my $input = new CGI;
 
@@ -17,7 +19,7 @@ my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
 my @select_catUsuarios_Values2;
 #Funcion de C4::Koha, traer las categorias de los usuarios
-my (@select_catUsuarios_Values2,%catUsuarios)= C4::Koha::borrowercategories(); 
+my (@select_catUsuarios_Values2,%catUsuarios)= C4::AR::Usuarios::obtenerCategorias(); 
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/historico_Prestamos.tmpl",
@@ -41,9 +43,7 @@ else {$orden=$input->param('orden')};
 #*********************************Select de Categoria de Usuarios**********************************
 my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
-#Funcion de C4::Koha, traer las categorias de los usuarios
-#llamo a la funcion borrowercategories() de C4::Koha
-my ($array,$hasheado)=&borrowercategories();
+my ($array,$hasheado)=C4::AR::Usuarios::obtenerCategorias();
 
 push @select_catUsuarios_Values, '-1';
 $select_catUsuarios_Labels{'-1'}= 'SIN SELECCIONAR';

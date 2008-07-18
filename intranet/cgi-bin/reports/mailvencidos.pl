@@ -42,7 +42,7 @@ my $return_url ="prestamos.pl?ini=$ini&branch=$branch&estado=$estado&orden=$orde
 my $mensaje =C4::Context->preference("mailMessage");
 my $mailSubject=C4::Context->preference("mailSubject");
 
-my $branchname=C4::AR::Busquedas::getbranchname($branch);
+my $branchname=C4::AR::Busquedas::getBranch($branch);
 $mailSubject=~ s/BRANCH/$branchname/;
 $mensaje=~ s/BRANCH/$branchname/;
 

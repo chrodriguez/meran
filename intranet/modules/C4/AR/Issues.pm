@@ -669,7 +669,7 @@ sub Enviar_Recordatorio{
 		my $mailFrom=C4::Context->preference("mailFrom");
 		my $mailSubject =C4::Context->preference("reminderSubject");
 		my $mailMessage =C4::Context->preference("reminderMessage");
-		my $branchname= C4::AR::Busquedas::getbranchname($borrower->{'branchcode'});
+		my $branchname= C4::AR::Busquedas::getBranch($borrower->{'branchcode'});
 
 	$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
 	my $edicion=C4::AR::Nivel2::getEdicion($res->{'rid2'});

@@ -80,7 +80,7 @@ if ($query->param('type') eq 'mail') {#Por Mail
 my $mail=$query->param('mail');
 
 
-my $branchname=C4::AR::Busquedas::getbranchname($branch);
+my $branchname=C4::AR::Busquedas::getBranch($branch);
 
 my $mailFrom=C4::Context->preference("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;

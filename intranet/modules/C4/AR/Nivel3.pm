@@ -35,6 +35,3 @@ sub detalleDisponibilidad{
 	return(scalar(@results),\@results);
 }
 
-
-
-

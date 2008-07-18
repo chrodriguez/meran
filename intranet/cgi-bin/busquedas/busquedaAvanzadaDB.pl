@@ -207,7 +207,7 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "holdingbranch" || $campo eq "homebranch" ){
-			my $labels=&C4::Koha::getbranches();
+			my $labels=C4::AR::Busquedas::getBranches();
 			foreach my $key (keys %$labels){
 				push(@valuesMapeo,$key);
 				$labelsMapeo{$key}=%$labels->{$key}->{'branchname'};
