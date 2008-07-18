@@ -466,8 +466,8 @@ $control_autoridades->execute();
 	#			QUITAR TABLAS DE MAS!!!				#
 	#########################################################################
 
-
-
+my $drop=$dbh->prepare("DROP TABLE `additionalauthors`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliosubject`, `bibliosubtitle`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `printers`, `publisher`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `marc_subfield_table`;");
+$drop->execute();
 	#########################################################################
 	#			GRACIAS!!!!!!!!!!				#
 	#########################################################################
