@@ -22,12 +22,8 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Context;
-use C4::Koha; 
-use HTML::Template;
 use C4::AR::BusquedasMARC;
 
 my $input = new CGI;

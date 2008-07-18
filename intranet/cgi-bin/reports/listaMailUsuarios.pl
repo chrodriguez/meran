@@ -21,12 +21,9 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::AR::Utilidades;
-use C4::Koha;
-
 
 my $input = new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrowers => 1},"intranet");

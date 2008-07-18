@@ -25,15 +25,10 @@
 
 use strict;
 use C4::Auth;
-use C4::Context;
-use C4::Output;
-# use C4::Input;
 use C4::Interface::CGI::Output;
 use C4::Interface::CGI::Template;
-use C4::Koha;
 use CGI;
 use Date::Manip;
-use HTML::Template;
 
 my %env;
 my $input = new CGI;

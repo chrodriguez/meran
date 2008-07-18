@@ -25,8 +25,6 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
 use MARC::Record;
-use C4::Koha;
-
 
 =head1
 

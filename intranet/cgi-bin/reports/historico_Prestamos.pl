@@ -8,9 +8,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::AR::Issues;
-use C4::Koha;
 use C4::Biblio;
-use C4::Koha;
 use C4::AR::Busquedas;
 
 my $input = new CGI;
@@ -18,7 +16,6 @@ my $input = new CGI;
 my @select_catUsuarios_Values;
 my %select_catUsuarios_Labels;
 my @select_catUsuarios_Values2;
-#Funcion de C4::Koha, traer las categorias de los usuarios
 my (@select_catUsuarios_Values2,%catUsuarios)= C4::AR::Usuarios::obtenerCategorias(); 
 
 my ($template, $loggedinuser, $cookie)

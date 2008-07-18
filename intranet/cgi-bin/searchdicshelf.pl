@@ -3,11 +3,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Context;
-use HTML::Template;
-use C4::Koha;
 use C4::Date;
 use C4::AR::DictionarySearch;
  

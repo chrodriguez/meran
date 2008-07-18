@@ -4,7 +4,6 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Koha;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
