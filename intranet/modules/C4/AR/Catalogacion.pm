@@ -114,7 +114,7 @@ sub crearCatalogo{
 	my $idRep="";#Para guardar el id de la tabla de nivelx_repetible para la modificacion
 	my @keys= keys %results;
 	@keys= sort{$results{$a}->{'intranet_habilitado'} cmp $results{$b}->{'intranet_habilitado'}} @keys;
-# open(B,">>/tmp/pruebaB.txt");
+open(B,">>/tmp/debugCrearCat.txt");
 # print B "cant: $cantMod\n";
 	foreach my $row (@keys){
 # print B "otra vuelta\n";
@@ -169,7 +169,7 @@ sub crearCatalogo{
 		}
 	}
 	$nivelComp="";
-# close(B);
+close(B);
 	return($i,@resultsdata);
 }
 
@@ -211,25 +211,23 @@ sub obtenerValoresRef{
 	my $orden=$results->{$row}->{'orden'};
 	my $sepa=$results->{$row}->{'separador'};
 	my $ident=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
-# print B "tabla $tabla \n";
 	my $tipoComponente=$results->{$row}->{'tipo'};
-# print B "componente: $tipoComponente\n";
 	if($tipoComponente eq "combo"){
-		my $opciones=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$ident,$campos,$orden);
+		my ($opciones,$hashOp)=C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$ident,$campos,$orden);
 		$results->{$row}->{'opciones'}=$opciones;
 	}
 	elsif(($tipoComponente eq "texta" || $tipoComponente eq "texa2") && $valor ne ""){
 		my @idsTablaRef= split("#",$valor);
 		my $valTextArea="";
 		foreach my $id (@idsTablaRef){
-			my $valText=&obtenerValorTablaRef($tabla,$ident,$campos,$sepa,$id);
+			my $valText=obtenerValorTablaRef($tabla,$ident,$campos,$sepa,$id);
 			$valTextArea.="\n".$valText;
 		}
 		$valTextArea=substr($valTextArea,1,length($valTextArea));
 		$results->{$row}->{'valTextArea'}=$valTextArea;
 	}
 	elsif($valor ne ""){
-		my $valText=&obtenerValorTablaRef($tabla,$ident,$campos,$sepa,$valor);
+		my $valText=obtenerValorTablaRef($tabla,$ident,$campos,$sepa,$valor);
 		$results->{$row}->{'valText'}=$valText;
 	}
 }
