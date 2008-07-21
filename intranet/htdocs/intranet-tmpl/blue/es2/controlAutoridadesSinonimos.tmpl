@@ -3,13 +3,12 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
-<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script> -->
-<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script> -->
 <script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
@@ -47,38 +46,37 @@ function OnChangeComboTablasSinonimos(){
 
 }
 
+function updateConsultarTablaSinonimos(responseText){
+	$('#resultSinonimos').html(responseText);
+	$('#tablaSinonimos').tablesorter({	
+						widgets: ['zebra'],
+						headers: { 0: { sorter: false},
+								2: { sorter: false},
+								3: { sorter: false},
+								4: { sorter: false}
+							}
+				});
+}
+
 function consultarTablaSinonimos(sinonimo){
-	
+
 	//verifico que tabla se selecciono
 	var tabla= $("#tabla").val();
 
-	var params= 	'tipo=consultaTablasSinonimos' +
- 			'&tabla=' +  tabla + 
-			'&sinonimo=' + sinonimo;
+	objAH=new AjaxHelper(updateConsultarTablaSinonimos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'consultaTablasSinonimos';
+	objAH.tabla= tabla;
+	objAH.sinonimo= sinonimo;
+	//se envia la consulta
+	objAH.sendToServer();
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
-				$('#resultSinonimos').html(ajax.responseText);
- 				HiddeState();
-				$('#tablaSinonimos').tablesorter({	
-									widgets: ['zebra'],
-  									headers: { 0: { sorter: false},
-										   2: { sorter: false},
-										   3: { sorter: false},
- 										   4: { sorter: false}
-										}
-							});
-			}
-	});
 }
 
 function AutocompleteSinonimos(idInput, tipo){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
-	$("#"+idInput).autocomplete('/cgi-bin/koha/controlAutoridadesDB.pl',{
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/controlAutoridadesAutocomplete.pl',{
  		formatItem: function(row){
 // 			return row[0]+" - "+row[1];
 			return row[1];
@@ -160,7 +158,6 @@ function mapToTextArea(idTextArea, vector){
 
 function popSinonimo(){
 	var obj= objects_array.pop();
-// 	alert('tipoItem: ' + obj.text + ' ID: ' + obj.ID);
 	mapToTextArea('textAreaSinonimos', objects_array);
 	//si se vacia, deshabilito el boton pop
 	if(objects_array.length == 0){
@@ -181,80 +178,61 @@ function clearDataTextArea(){
 
 //*********************************************ABM Sinonimos************************************************
 function guardarDatos(){
-	//validar datos
+
 	var tabla= $('#tabla').val();
 	var sinonimosJSON;
 	//pasa el arreglo a formato json
 	sinonimosJSON=JSONstring.make(objects_array);
 
-	var params= 	'tipo=insertarSinonimos' +
- 			'&tabla=' +  tabla + 
- 			'&id=' + sinonimo_selected.ID +	
-// 			'&id=' + 1 +  
-			'&sinonimos=' + sinonimosJSON;
+	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'insertarSinonimos';
+	objAH.tabla= tabla;
+	objAH.sinonimos= sinonimosJSON;
+	objAH.id= sinonimo_selected.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
-// 				$('#resultSinonimos').html(ajax.responseText);
- 				HiddeState();
-				//esto no va aca lo dejo pq no anda el autocompelte
-				consultarTablaSinonimos(sinonimo_selected.ID);
-				clearDataTextArea();
-			}
-	});
+function updateGuadarDatos(){
+	consultarTablaSinonimos(sinonimo_selected.ID);
+	clearDataTextArea();
 }
 
 function deleteSinonimo(idDelete, sinonimo_string){
 	var tabla= $('#tabla').val();
-	var params= 	'tipo=eliminarSinonimos' +
- 			'&tabla=' +  tabla + 
-// 			'&id=' + sinonimo_selected.ID +	
-			'&id=' + idDelete +  
-			'&sinonimoDelete_string=' + sinonimo_string;
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
-// 				$('#resultSinonimos').html(ajax.responseText);
- 				HiddeState();
-				consultarTablaSinonimos(sinonimo_selected.ID);
-			}
-	});
+	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'eliminarSinonimos';
+	objAH.tabla= tabla;
+	objAH.sinonimoDelete_string= sinonimo_string;
+	objAH.id= idDelete;
+	//se envia la consulta
+	objAH.sendToServer();
 }
 
 function updateNombreSinonimo(idSinonimo, nombre, nombreViejo){
+	
 	var tabla= $('#tabla').val();
 
-	var params= 	'idSinonimo=' + idSinonimo + 		
-			'&tabla=' +  tabla + 
-			'&nombre=' + nombre +
-			'&nombreViejo=' + nombreViejo +  
-			'&tipo=UpdateSinonimo';
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/controlAutoridadesDB.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					consultarTablaSinonimos(idSinonimo);
-					HiddeState();
-				}
-	});
+	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'UpdateSinonimo';
+	objAH.tabla= tabla;
+	objAH.idSinonimo= idSinonimo;
+	objAH.nombre= nombre;
+	objAH.nombreViejo= nombreViejo;
+	//se envia la consulta
+	objAH.sendToServer();
 
 }
 
 
 function modificarSinonimo(idSinonimo, nroSinonimo, nombreViejo){
 
-//  	var nombreViejo= jQuery.trim($('#sinonimo'+nroSinonimo).text());
 	$('#updateSinonimo').slideDown('slow');
 	$('#nombreNuevo').focus();
-// 	$('#nombreNuevo').val(jQuery.trim($('#sinonimo'+idSinonimo).text()));
 	$('#nombreNuevo').val(nombreViejo);
 
 	$('#nombreNuevo').keyup(
@@ -269,6 +247,8 @@ function modificarSinonimo(idSinonimo, nroSinonimo, nombreViejo){
 				$('#updateSinonimo').slideUp('slow');
 			}
 		});
+
+	onEnter('nombreNuevo',)
 }
 
 //****************************************Fin****ABM Sinonimos************************************************
@@ -284,7 +264,6 @@ $(document).ready(function(){
 						$("#topichelp").slideToggle('fast');
 					});
 
-
 	AutocompleteSinonimos('search_temas','autocompleteTemas');
 	$('#content_search_temas').hide();
 	AutocompleteSinonimos('search_autores','autocompleteAutores');
@@ -292,13 +271,6 @@ $(document).ready(function(){
 	AutocompleteSinonimos('search_editoriales','autocompleteEditoriales');
 	$('#content_search_editoriales').hide();	
 
-	//registro evento para input de sinonimos
-// 	$('#sinonimo').keypress(
-// 		function (e) {
-// 			if(e.which == 13){
-// 				pushSinonimo();
-// 			}
-// 		});
 	onEnter("sinonimo",pushSinonimo);
 
 });

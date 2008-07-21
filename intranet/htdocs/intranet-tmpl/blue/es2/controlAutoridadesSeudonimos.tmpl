@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
@@ -10,8 +11,6 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
-<!--<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
@@ -28,45 +27,18 @@ function OnChangeComboTablasSeudonimos(){
 			$('#content_search_autores').hide();
 			$('#content_search_editoriales').hide();
 			$('#search_temas').val('');
-/*
-			//registro evento para input de seudonimos
-			$('#search_tema_seudonimo').keypress(
-				function (e) {
-					if(e.which == 13){
-						pushSeudonimo();
-					}
-				});
-*/
 		break;
 		case "autores": 
 			$('#content_search_temas').hide();
 			$('#content_search_autores').show();
 			$('#content_search_editoriales').hide();
 			$('#search_autores').val('');
-/*
-			//registro evento para input de seudonimos
-			$('#search_autor_seudonimo').keypress(
-				function (e) {
-					if(e.which == 13){
-						pushSeudonimo();
-					}
-				});
-*/
 		break;
 		case "editoriales": 
 			$('#content_search_temas').hide();
 			$('#content_search_autores').hide();
 			$('#content_search_editoriales').show();
 			$('#search_editoriales').val('');
-/*
-			//registro evento para input de seudonimos
-			$('#search_editorial_seudonimo').keypress(
-				function (e) {
-					if(e.which == 13){
-						pushSeudonimo();
-					}
-				});
-*/
 			
 		break;
 		case "Sin Seleccionar": ;
@@ -76,37 +48,35 @@ function OnChangeComboTablasSeudonimos(){
 }
 
 function consultarTablaSeudonimos(seudonimo){
-	
-	//verifico que tabla se selecciono
+
 	var tabla= $("#tabla").val();
 
-	var params= 	'tipo=consultaTablasSeudonimos' +
- 			'&tabla=' +  tabla + 
-			'&seudonimo=' + seudonimo;
+	objAH=new AjaxHelper(updateConsultarTablaSeudonimos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'consultaTablasSeudonimos';
+	objAH.tabla= tabla;
+	objAH.seudonimo= seudonimo;
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
-				$('#resultSeudonimos').html(ajax.responseText);
- 				HiddeState();
-				$('#tablaSeudonimos').tablesorter({	
-									widgets: ['zebra'],
-  									headers: { 0: { sorter: false},
-										   2: { sorter: false},
- 										   3: { sorter: false}
-										}
-							});
-			}
-	});
+function updateConsultarTablaSeudonimos(responseText){
+
+	$('#resultSeudonimos').html(responseText);
+	$('#tablaSeudonimos').tablesorter({	
+						widgets: ['zebra'],
+						headers: { 0: { sorter: false},
+								2: { sorter: false},
+								3: { sorter: false}
+							}
+				});
 }
 
 
 function AutocompleteSeudonimos(idInput, tipo, flag){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
-	$("#"+idInput).autocomplete('/cgi-bin/koha/controlAutoridadesDB.pl',{
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/controlAutoridadesAutocomplete.pl',{
  		formatItem: function(row){
 // 			return row[0]+" - "+row[1];
 			return row[1];
@@ -123,9 +93,6 @@ function AutocompleteSeudonimos(idInput, tipo, flag){
 		$("#"+idInput).val(data[1]);
 
 //  		//creo un objeto para la autoridad con la q se va a trabajar
-//  		seudonimo_selected= new object_seudonimo(data[1], data[0]);
-
-		
  		seudonimo= new object_seudonimo(data[1], data[0]);
 
 		if(flag != 'seudonimo'){
@@ -152,9 +119,7 @@ var objects_array= new Array();
 
 function pushSeudonimo(){
 		
-// 	if (!exist(seudonimo_selected.text, objects_array)){
 	if (!exist(seudonimo.text, objects_array)){
-// 		objects_array.push(seudonimo_selected);
 		objects_array.push(seudonimo);
 		mapToTextArea('textAreaSeudonimos', objects_array);
 	}else{
@@ -192,15 +157,6 @@ function mapToTextArea(idTextArea, vector){
 	$('#pop').attr('disabled', false);
 }
 
-/*solo para test*/
-/*
-function ver(){
-	for (var i=0;i<objects_array.length;i++){
-		alert(objects_array[i].ID);
-	}
-}
-*/
-
 function popSeudonimo(){
 	var obj= objects_array.pop();
 // 	alert('tipoItem: ' + obj.text + ' ID: ' + obj.ID);
@@ -221,6 +177,11 @@ function clearDataTextArea(){
 //****************************************************Fin TextArea******************************************
 
 //*********************************************ABM Seudonimos************************************************
+function updateGuradarDatos(){
+	consultarTablaSeudonimos(seudonimo_selected.ID);
+	clearDataTextArea();
+}
+
 function guardarDatos(){
 	//validar datos
 	var tabla= $('#tabla').val();
@@ -229,43 +190,29 @@ function guardarDatos(){
 	//pasa el arreglo a formato json
 	seudonimosJSON=JSONstring.make(objects_array);
 
-	var params= 	'tipo=insertarSeudonimos' +
- 			'&tabla=' +  tabla + 
-			'&id=' + seudonimo_selected.ID +  
-			'&seudonimos=' + seudonimosJSON;
+	objAH=new AjaxHelper(updateGuradarDatos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'insertarSeudonimos';
+	objAH.tabla= tabla;
+	objAH.id= seudonimo_selected.ID;
+	objAH.seudonimos= seudonimosJSON;
+	//se envia la consulta
+	objAH.sendToServer();
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
-// 				$('#resultSinonimos').html(ajax.responseText);
- 				HiddeState();
-				//traigo info de seudonimos de la autoridad con la que se esta trabajando
-				consultarTablaSeudonimos(seudonimo_selected.ID);
-				clearDataTextArea();
-			}
-	});
 }
 
 function deleteSeudonimo(idDelete){
 	var tabla= $('#tabla').val();
 
-	var params= 	'tipo=eliminarSeudonimos' +
- 			'&tabla=' +  tabla + 
-			'&id=' + seudonimo_selected.ID +
-			'&idDelete=' + idDelete;
+	objAH=new AjaxHelper(updateGuradarDatos);
+	objAH.url= '/cgi-bin/koha/controlAutoridadesDB.pl';
+	objAH.tipo= 'eliminarSeudonimos';
+	objAH.tabla= tabla;
+	objAH.id= seudonimo_selected.ID;
+	objAH.idDelete= idDelete;
+	//se envia la consulta
+	objAH.sendToServer();
 
-	$.ajax({type: "POST", 
-		url: '/cgi-bin/koha/controlAutoridadesDB.pl',
-		data: params,	
- 		beforeSend: Init,
- 		complete: function(ajax){
- 				HiddeState();
-				//traigo info de seudonimos de la autoridad con la que se esta trabajando
-				consultarTablaSeudonimos(seudonimo_selected.ID);
-			}
-	});
 }
 
 //****************************************Fin****ABM Seudonimos************************************************

@@ -41,6 +41,7 @@ $VERSION = 0.01;
 #U300 - U399 para Usuarios
 #B400 - B499 para Errores e Informacion de Base de Datos
 #C500 - C599 para Catalogacion
+#CA600 - CA699 para Control de Autoridades
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -136,6 +137,11 @@ my %mensajesINTRA = (
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
+	'CA601' => 'Se produjo un error al intentar agregar un sin&oacute;nimo, repita la operaci&oacute;n',
+	'CA602' => 'Se produjo un error al intentar agregar un seud&oacute;nimo, repita la operaci&oacute;n',	
+	'CA603' => 'Se produjo un error al intentar eliminar un seud&oacute;nimo, repita la operaci&oacute;n',
+	'CA604' => 'Se produjo un error al intentar eliminar un sin&oacute;nimo, repita la operaci&oacute;n',
+	'CA605' => 'Se produjo un error al intentar actualizar un sin&oacute;nimo, repita la operaci&oacute;n',
 );
 
 sub getMensaje {

@@ -18,107 +18,46 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
 
-my $tipo = $input->param('tipo');
-my $tabla = $input->param('tabla');
-my $seudonimo = $input->param('tablasSelectSeudonimo');
-my $id = $input->param('id');
-my $seudonimoDelete = $input->param('idDelete');
-my $accion = $input->param('accion');
 
-my $sinonimoDelete_string = $input->param('sinonimoDelete_string');
-my $Existe;
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-#*******************************************Autocomplete de Temas*********************************************
-my $tema= $input->param('q');
-if($accion eq 'autocompleteTemas'){
-	
-	my ($cant, @results)= &search_temas($tema);
+my $tipo = $obj->{'tipo'};
+my $tabla = $obj->{'tabla'};
+my $seudonimo = $obj->{'tablasSelectSeudonimo'};
+my $id = $obj->{'id'};
+my $seudonimoDelete = $obj->{'idDelete'};
+my $accion = $obj->{'accion'};
+my $sinonimoDelete_string = $obj->{'sinonimoDelete_string'};
 
-	my $i=0;
-	my $resultado="";
-	my $field;
-	my $data;
 
-	for ($i; $i<$cant; $i++){
-		$field=$results[$i]->{'id'};
-		$data=$results[$i]->{'nombre'};
-  		$resultado .= $field."|".$data. "\n";
-	}
-
-	print "Content-type: text/html\n\n";
- 	print $resultado;
-}
-#***************************************Fin****Autocomplete de Temas******************************************
-#*******************************************Autocomplete de Autores********************************************
-my $autor= $input->param('q');
-if($accion eq 'autocompleteAutores'){
-	
-	my ($cant, @results)= &search_autores($autor);
-
-	my $i=0;
-	my $resultado="";
-	my $field;
-	my $data;
-
-	for ($i; $i<$cant; $i++){
-		$field=$results[$i]->{'id'};
-		$data=$results[$i]->{'nombre'};
-  		$resultado .= $field."|".$data. "\n";
-	}
-
-	print "Content-type: text/html\n\n";
- 	print $resultado;
-}
-#***************************************Fin****Autocomplete de Autores*****************************************
-
-#*****************************************Autocomplete de Editoriales******************************************
-my $editorial= $input->param('q');
-if($accion eq 'autocompleteEditoriales'){
-	
-	my ($cant, @results)= &search_editoriales($editorial);
-
-	my $i=0;
-	my $resultado="";
-	my $field;
-	my $data;
-
-	for ($i; $i<$cant; $i++){
-		$field=$results[$i]->{'id'};
-		$data=$results[$i]->{'editorial'};
-  		$resultado .= $field."|".$data. "\n";
-	}
-
-	print "Content-type: text/html\n\n";
- 	print $resultado;
-}
-#************************************Fin****Autocomplete de Editoriales*****************************************
 
 
 if($tabla eq 'autores'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		&eliminarSeudonimosAutor($id,$seudonimoDelete);
+		&C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor($id,$seudonimoDelete);
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $input->param('seudonimos')||"";
+		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		&insertSeudonimosAutor($seudonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::insertSeudonimosAutor($seudonimos_arrayref, $id);
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
-		&eliminarSinonimosAutor($id,$sinonimoDelete_string);
+		&C4::AR::ControlAutoridades::eliminarSinonimosAutor($id,$sinonimoDelete_string);
 	}
 	if($tipo eq 'insertarSinonimos'){
-		my $sinonimos= $input->param('sinonimos')||" ";
+		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		&insertSinonimosAutor($sinonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::t_insertSinonimosAutor($sinonimos_arrayref, $id);
 	}
 	if($tipo eq 'UpdateSinonimo'){
-		my $idSinonimo= $input->param('idSinonimo')||" ";
-		my $nombre= $input->param('nombre');
-		my $nombreViejo= $input->param('nombreViejo');
-		&updateSinonimosAutores($idSinonimo, $nombre, $nombreViejo);
+		my $idSinonimo= $obj->{'idSinonimo'}||" ";
+		my $nombre= $obj->{'nombre'};
+		my $nombreViejo= $obj->{'nombreViejo'};
+		&C4::AR::ControlAutoridades::t_updateSinonimosAutores($idSinonimo, $nombre, $nombreViejo);
 	}
 
 	print $input->header;
@@ -127,29 +66,29 @@ if($tabla eq 'autores'){
 if($tabla eq 'temas'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		&eliminarSeudonimosTema($id,$seudonimoDelete);
+		&C4::AR::ControlAutoridades::t_eliminarSeudonimosTema($id,$seudonimoDelete);
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $input->param('seudonimos')||"";
+		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		&insertSeudonimosTemas($seudonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::t_insertSeudonimosTemas($seudonimos_arrayref, $id);
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
-		&eliminarSinonimosTema($id,$sinonimoDelete_string);
+		&C4::AR::ControlAutoridades::t_eliminarSinonimosTema($id,$sinonimoDelete_string);
 	}
 
 	if($tipo eq 'insertarSinonimos'){
-		my $sinonimos= $input->param('sinonimos')||" ";
+		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		&insertSinonimosTemas($sinonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::t_insertSinonimosTemas($sinonimos_arrayref, $id);
 	}
 	if($tipo eq 'UpdateSinonimo'){
-		my $idSinonimo= $input->param('idSinonimo')||" ";
-		my $nombre= $input->param('nombre');
-		my $nombreViejo= $input->param('nombreViejo');
-		&updateSinonimosTemas($idSinonimo, $nombre, $nombreViejo);
+		my $idSinonimo= $obj->{'idSinonimo'}||" ";
+		my $nombre= $obj->{'nombre'};
+		my $nombreViejo= $obj->{'nombreViejo'};
+		&C4::AR::ControlAutoridades::t_updateSinonimosTemas($idSinonimo, $nombre, $nombreViejo);
 	}
 
 	print $input->header;
@@ -158,35 +97,35 @@ if($tabla eq 'temas'){
 if($tabla eq 'editoriales'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		&eliminarSeudonimosEditorial($id,$seudonimoDelete);
+		&C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial($id,$seudonimoDelete);
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $input->param('seudonimos')||"";
+		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		&insertSeudonimosEditoriales($seudonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales($seudonimos_arrayref, $id);
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
-		&eliminarSinonimosEditorial($id,$sinonimoDelete_string);
+		&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial($id,$sinonimoDelete_string);
 	}
 	if($tipo eq 'insertarSinonimos'){
-		my $sinonimos= $input->param('sinonimos')||" ";
+		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		&insertSinonimosEditoriales($sinonimos_arrayref, $id);
+		&C4::AR::ControlAutoridades::t_insertSinonimosEditoriales($sinonimos_arrayref, $id);
 	}
 	if($tipo eq 'UpdateSinonimo'){
-		my $idSinonimo= $input->param('idSinonimo')||" ";
-		my $nombre= $input->param('nombre');
-		my $nombreViejo= $input->param('nombreViejo');
-		&updateSinonimosEditoriales($idSinonimo, $nombre, $nombreViejo);
+		my $idSinonimo= $obj->{'idSinonimo'}||" ";
+		my $nombre= $obj->{'nombre'};
+		my $nombreViejo= $obj->{'nombreViejo'};
+		&C4::AR::ControlAutoridades::t_updateSinonimosEditoriales($idSinonimo, $nombre, $nombreViejo);
 	}
 
 	print $input->header;
 }
 
 #*********************************************Tablas Sinonimos************************************************
-my $sinonimo= $input->param('sinonimo');
+my $sinonimo= $obj->{'sinonimo'};
 #Para consultar los sinonimos de un Autor
 if( (($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'autores')){
 
@@ -260,7 +199,7 @@ print  $template->output;
 
 
 #*********************************************Tablas Seudonimos************************************************
-my $idSeudonimo= $input->param('seudonimo');
+my $idSeudonimo= $obj->{'seudonimo'};
 #Para consultar los seudonimos de un Autor
 if( (($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'autores')){
 
