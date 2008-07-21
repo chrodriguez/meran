@@ -1,9 +1,9 @@
 package C4::AR::Catalogacion;
 
 #Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
-#Tambien en la carga de los items en los distintos niveles.
+#Tambien en la carga de los items en los distintos niveles y de la creacion del catalogo.
 
-#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -114,10 +114,10 @@ sub crearCatalogo{
 	my $idRep="";#Para guardar el id de la tabla de nivelx_repetible para la modificacion
 	my @keys= keys %results;
 	@keys= sort{$results{$a}->{'intranet_habilitado'} cmp $results{$b}->{'intranet_habilitado'}} @keys;
-open(B,">>/tmp/debugCrearCat.txt");
+# open(B,">>/tmp/debugCrearCat.txt");
 # print B "cant: $cantMod\n";
 	foreach my $row (@keys){
-# print B "otra vuelta\n";
+# print B "\n\notra vuelta\n";
 		$valor="";
 		my $llave=$results{$row}->{'campo'}.",".$results{$row}->{'subcampo'};
 		$results{$row}->{'indice'}=$i;
@@ -143,33 +143,39 @@ open(B,">>/tmp/debugCrearCat.txt");
 		$results{$row}->{'varios'}=$varios;
 		$results{$row}->{'valTextArea'}="";
 		$results{$row}->{'valText'}="";
+# print B "referencia:     $results{$row}->{'referencia'} \n";
 		if($results{$row}->{'referencia'}){
 			&obtenerValoresRef($row,$valor,\%results);
 		}
 		push(@resultsdata,$results{$row});
 	}#fin FOR @keys
+# print B "\nfor de nivel completo\n";
 	foreach my $datosCampo (%$nivelComp){
 #PARA OBTENER LOS DATOS DE LOS CAMPOS TEMPORALES PARA LA MODIFICACION!!!!!!!!!
 		if($nivelComp->{$datosCampo}->{'visto'} == 0 && $nivelComp->{$datosCampo}->{'valor'} ne ""){
+# print B "entro al if\n";
 			my $campo=$nivelComp->{$datosCampo}->{'campo'};
 			my $subcampo=$nivelComp->{$datosCampo}->{'subcampo'};
+# print B "campo: $campo ---- subcampo: $subcampo\n";
 			my $campoTemp=&buscarCampoTemporal($campo,$subcampo,$itemtype);
-			my $id=$campoTemp->{'id'};
-			my $valor=$nivelComp->{$datosCampo}->{'valor'};
-			$results{$id}=$campoTemp;
-			$results{$id}->{'idRep'}=$nivelComp->{$datosCampo}->{'idRep'};
-			$results{$id}->{'valor'}=$valor;
-			$results{$id}->{'varios'}=$nivelComp->{$datosCampo}->{'varios'};
-			if($campoTemp->{'referencia'}){
-				&obtenerValoresRef($id,$valor,\%results);
+			if($campoTemp){#El campo esta en el catalogo. Si no esta no se muestra nada.
+				my $id=$campoTemp->{'id'};
+				my $valor=$nivelComp->{$datosCampo}->{'valor'};
+				$results{$id}=$campoTemp;
+				$results{$id}->{'idRep'}=$nivelComp->{$datosCampo}->{'idRep'};
+				$results{$id}->{'valor'}=$valor;
+				$results{$id}->{'varios'}=$nivelComp->{$datosCampo}->{'varios'};
+				if($campoTemp->{'referencia'}){
+					&obtenerValoresRef($id,$valor,\%results);
+				}
+				$results{$id}->{'indice'}=$i;
+				$i++;
+				push(@resultsdata,$results{$id});
 			}
-			$results{$id}->{'indice'}=$i;
-			$i++;
-			push(@resultsdata,$results{$id});
 		}
 	}
 	$nivelComp="";
-close(B);
+# close(B);
 	return($i,@resultsdata);
 }
 

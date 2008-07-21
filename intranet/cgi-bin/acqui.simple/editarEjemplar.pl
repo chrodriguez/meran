@@ -81,9 +81,6 @@ else{
 	my ($cantIdsModN3,@resultsdata)=&crearCatalogo(0,$nivel3Comp,$cant,$itemtype,%results);
 
 	my $resultadoJSON = to_json \@resultsdata;
-open(A,">>/tmp/debugEditar.txt");
-print A "resultadoJSON: $resultadoJSON";
-close(A);
 	#Para que no valla a un tmpl
 	print $input->header;
 	print $resultadoJSON;

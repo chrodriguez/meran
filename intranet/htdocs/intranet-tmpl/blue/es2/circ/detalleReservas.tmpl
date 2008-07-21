@@ -82,7 +82,7 @@
 <!-- TMPL_IF NAME="waiting_count" -->
 <br>
 <b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
 	<tr>
 		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS</b></td>
 	</tr>
@@ -103,7 +103,7 @@
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
 	<!-- TMPL_LOOP NAME="WAITRESERVES" -->
-	<tr valign="top">
+	<tr valign="top" class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
                 <td>
 			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
