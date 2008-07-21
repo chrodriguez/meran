@@ -48,7 +48,7 @@ my ($count, $resultId1) = &privateShelfs($borrowernumber);
 
 my %result;
 my $nivel1;
-my @autor;
+my $autor;
 my $id1;
 my $comboItemTypes= "-1";
 my @resultsarray;

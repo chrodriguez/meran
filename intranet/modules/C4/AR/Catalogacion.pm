@@ -550,7 +550,7 @@ sub insertarCamposMod{
 	$query .= " VALUES (?,?,?,?,?,?,?,?,?)";
 	my $sth=$dbh->prepare($query);
         $sth->execute($field,$subfield,$itemType,$textoLib,$tipoInput,$ref,$nivel,$obligatorio,$intra);
-	my $query2="select max(id) from estructura_catalogacion";
+	my $query2="SELECT MAX(id) FROM estructura_catalogacion";
 	$sth=$dbh->prepare($query2);
 	$sth->execute;
 	my $id=$sth->fetchrow;
@@ -1006,9 +1006,9 @@ sub transaccionNivel3{
 		#EL BARCODE VIENE DESDE LA INTERFACE - separados por "," se utiliza el barcode asosiado al indice que corresponde al item que se va agregar.
 			my @barcodes2=split(/,/,$barcodes);
 			$barcode="'".$barcodes2[%$parametros->{'indice'}-1]."'";
-			my $query="SELECT * FROM nivel3 WHERE barcode= ".$barcode;
+			my $query="SELECT * FROM nivel3 WHERE barcode= ?";
 			my $sth=$dbh->prepare($query);
-			$sth->execute();
+			$sth->execute($barcode);
 			if($sth->fetchrow_hashref){
 				$error=1;
 				$codMsg='C502';
@@ -1066,7 +1066,7 @@ sub generaCodigoBarra{
 			$like.=$estructurabarcode[$i];
 		}
 	}
-	my $sth2=$dbh->prepare("select max(CAST(substring(barcode,INSTR(barcode,?)+?,100) AS SIGNED))as maximo from nivel3 where barcode like (?)");
+	my $sth2=$dbh->prepare("SELECT MAX(CAST(substring(barcode,INSTR(barcode,?)+?,100) AS SIGNED)) AS maximo FROM nivel3 WHERE barcode LIKE (?)");
 	$sth2->execute($like.'%',length($like)+1,$like.'%');
 	my $data2= $sth2->fetchrow_hashref;
 	$barcode="'".$like.($data2->{'maximo'}+1)."'";
@@ -1084,7 +1084,7 @@ sub guardarNivel1{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="select max(id1) from nivel1";
+	my $query3="SELECT MAX(id1) FROM nivel1";
 	my $titulo="";
 	foreach my $obj(@$nivel1){
 		my $campo=$obj->{'campo'};
@@ -1129,7 +1129,7 @@ sub guardarNivel2{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="select max(id2) from nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
+	my $query3="SELECT MAX(id2) FROM nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
 	my $nivelBiblio="";
 	my $tipoDoc="";
 	my $soporte="";
@@ -1204,7 +1204,7 @@ sub guardarNivel3{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="select max(id3) from nivel3";
+	my $query3="SELECT MAX(id3) FROM nivel3";
 	my %parametros;
 	my $homebranch="";
 	my $holdingbranch="";
@@ -1489,7 +1489,7 @@ sub cantidadItem{
 	my($nivel,$id)=@_;
 	my $dbh = C4::Context->dbh;
 	my $cant=0;
-	my $query="SELECT count(*) as cant FROM nivel3 WHERE ";
+	my $query="SELECT COUNT(*) as cant FROM nivel3 WHERE ";
 	if($nivel==1){
 		$query.="id1=?";
 	}
@@ -1753,12 +1753,12 @@ sub actualizarOrden{
 		my $sth=$dbh->prepare($query);
         	$sth->execute($nivel,$itemtype,$intraNuevo);
 		if(my $data=$sth->fetchrow){
-			$query="UPDATE estructura_catalogacion SET  intranet_habilitado =? WHERE id = ? ";
+			$query="UPDATE estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
 			my $sth=$dbh->prepare($query);
 			my $idMod=$data;
 			$sth->execute($intra,$idMod);	
 		}
-		$query="UPDATE estructura_catalogacion SET  intranet_habilitado =? WHERE id = ? ";
+		$query="UPDATE estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($intraNuevo,$id);	
 	

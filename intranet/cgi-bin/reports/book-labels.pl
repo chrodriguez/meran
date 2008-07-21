@@ -44,7 +44,6 @@ my  @results=();
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/book-labels.tmpl",
-
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -57,13 +56,8 @@ my ($template, $loggedinuser, $cookie)
 if ($op eq 'pdf') {
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
 
-my $tmpFileName= "etiquetas.pdf";
 ($cantidad,@results)= listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$branch,1,"todos",$orden);
 my $pdf = batchBookLabelGenerator($cantidad,@results);
-
-print "Content-type: application/pdf\n";
-print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
-print $pdf->Finish();
 
 }
 else

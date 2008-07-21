@@ -35,7 +35,6 @@ var MENU_ITEMS = [
 	['Circulaci&oacute;n', null, null,
 		['Pr&eacute;stamos', '/cgi-bin/koha/circ/prestamos.pl'],
 		['Devol. y  Renov.', '/cgi-bin/koha/circ/devoluciones.pl'],
-		['Transferencias', '/cgi-bin/koha/circ/branchtransfers.pl'],
 		['Sanciones', '/cgi-bin/koha/circ/sanctions.pl']
 	],
 	['Par&aacute;metros', null, null,

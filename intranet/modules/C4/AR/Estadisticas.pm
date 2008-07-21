@@ -1386,7 +1386,7 @@ sub userCategReport{
 		$catcode=$data->{'categorycode'};
 		$indices{$catcode}=$i;
 		$results[$i]->{'reales'}=$data->{'cant'};
-		$results[$i]->{'categoria'}=&getborrowercategory($data->{'categorycode'});
+		$results[$i]->{'categoria'}=C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 		$results[$i]->{'clase'}=$clase;
 		$i++;
         }
@@ -1400,7 +1400,7 @@ sub userCategReport{
 			if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
 			$results[$i]->{'reales'}=0;
 			$results[$i]->{'potenciales'}=$data->{'cant'};
-			$results[$i]->{'categoria'}=&getborrowercategory($data->{'categorycode'});
+			$results[$i]->{'categoria'}=C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 			$results[$i]->{'clase'}=$clase;
 			$i++;
 		}

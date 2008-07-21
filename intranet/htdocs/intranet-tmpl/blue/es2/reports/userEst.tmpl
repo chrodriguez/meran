@@ -8,7 +8,7 @@ function hacerSubmit(){
 }
 
 $(document).ready( function() {
-		zebra("tablaResult");
+	zebra("tablaResult");
 });
 </script>
 
@@ -22,18 +22,20 @@ $(document).ready( function() {
 
 <br><br>
 
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="40%">
-	<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-	<th class="tablaresultadoTitle">
-		Categor&iacute;as
-	</th>
-	<th class="tablaresultadoTitle">
-		Cantidad de usuarios reales
-	</th>
-	<th class="tablaresultadoTitle">
-		Cantidad de usuarios potenciales
-	</th>
- 	<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="60%">
+	<tr class="tablaresultadoTitle">
+		<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<th>
+			Categor&iacute;as
+		</th>
+		<th>
+			Cant de usuarios reales
+		</th>
+		<th>
+			Cant de usuarios potenciales
+		</th>
+ 		<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
   	<tr align='center' class="inputFontNormal">
