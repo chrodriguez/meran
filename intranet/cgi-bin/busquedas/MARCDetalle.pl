@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 my $idNivel3=$input->param('id3');
 
-my @nivel2Loop= &MARCDetail($idNivel3);
+my @nivel2Loop= &C4::AR::Busquedas::MARCDetail($idNivel3);
 
 $template->param(
  	loopnivel2 => \@nivel2Loop,

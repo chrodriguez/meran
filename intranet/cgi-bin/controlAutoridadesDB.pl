@@ -1,10 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: actualizarPersonas.pl,v 1.0 2005/05/3 10:44:45 tipaul Exp $
-
-#script para actualizar los datos de los posibles usuarios
-#written 3/05/2005  by einar@info.unlp.edu.ar
-
 #En este modulo se va hacer los llamados a funciones para insertar los sinonimos de
 #autores, temas, ..
 

@@ -12,6 +12,7 @@ use vars qw(@EXPORT @ISA);
 	&buscarNivel1PorId3
 	&getAutoresAdicionales
 	&getColaboradores
+	&detalleNivel1MARC
 
 );
 
@@ -50,3 +51,43 @@ sub getColaboradores(){
 
 # 	falta implementar, seria un campo de nivel 1 repetibles
 }
+
+sub detalleNivel1MARC{
+	my ($id1, $nivel1,$tipo)= @_;
+	my $dbh = C4::Context->dbh;
+	my @nivel1Comp;
+	my $i=0;
+	my $autor= $nivel1->{'autor'};
+	
+	$nivel1Comp[$i]->{'campo'}= "245";
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
+	my $librarian= &C4::AR::Busquedas::getLibrarianMARCSubField('245', 'a', 'opac');
+	$nivel1Comp[$i]->{'librarian'}=  $librarian->{'liblibrarian'}; 
+	$i++;
+
+	$autor= &C4::AR::Busquedas::getautor($autor);
+	$nivel1Comp[$i]->{'campo'}= "100"; #$autor->{'campo'}; se va a sacar de aca
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
+	$nivel1Comp[$i]->{'librarian'}= "Autor";
+	$i++;
+
+#trae nive1_repetibles
+	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	while(my $data=$sth->fetchrow_hashref){
+		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
+		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
+		$nivel1Comp[$i]->{'dato'}= $data->{'dato'};
+		$librarian= &C4::AR::Busquedas::getLibrarianMARCSubField($data->{'campo'}, $data->{'subcampo'},'opac');
+		$nivel1Comp[$i]->{'librarian'}= $librarian->{'liblibrarian'}; 
+	
+		$i++;
+	}
+	$sth->finish;
+	return @nivel1Comp;
+}
+
+
