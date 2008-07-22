@@ -1,6 +1,5 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
@@ -170,8 +169,13 @@ function devolver_renovar(accion,userId,userNom,id3){
 }
 
 function buscarUsuario(id3){
-	alert("FALTA!!!!!");
+// 	window.open ("busquedaDeUsuario.pl?id3="+id3, "Usuario ","width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+
+	$('.windowBlur').show();
+	$('#windowHelp').draggable({opacity: 0.7777});
+	$('#windowHelp').show()
 }
+/************************************************FIN CIRCULACUION************************************************/
 </script>
 
 <!-- PARA PODER CREAR EL FORMULARIO -->
@@ -213,7 +217,7 @@ function buscarUsuario(id3){
 	<hr>
 	N&uacute;mero Total de Ejemplares:<b> <!-- TMPL_VAR NAME="cantItemN1" --></b> 
 </div>
-
+<!-- TMPL_INCLUDE NAME="busquedaDeUsuario.inc" -->
 <!-- TMPL_LOOP NAME="loopnivel2" -->
 
 	<div>

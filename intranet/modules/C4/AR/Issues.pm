@@ -142,8 +142,8 @@ sub devolver {
 		if($notforloan eq 'DO'){#si no es para sala
 			my $reservaGrupo=C4::AR::Reservas::getDatosReservaEnEspera($reserva->{'id2'});
 			if($reservaGrupo){
+				$reservaGrupo->{'id3'}=$id3;
 				$reservaGrupo->{'branchcode'}=$prestamo->{'branchcode'};
-				$reservaGrupo->{'borrowernumber'}=$borrowernumber;
 				$reservaGrupo->{'loggedinuser'}=$loggedinuser;
 				C4::AR::Reservas::actualizarDatosReservaEnEspera($reservaGrupo);
 			}

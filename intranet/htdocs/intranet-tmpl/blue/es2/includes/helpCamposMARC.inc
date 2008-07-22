@@ -119,7 +119,7 @@ $(document).ready(function() {
 		<a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
 		para mas informaci&oacute;n MARC</a>
 	</li>
-	<ul>
+	</ul>
 	</div>
 </div> <!-- end div windowBlur -->
 </div>

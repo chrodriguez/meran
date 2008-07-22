@@ -353,8 +353,8 @@ sub cancelar_reserva{
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
 		my $reservaGrupo=getDatosReservaEnEspera($id2);
 		if($reservaGrupo){
+			$reservaGrupo->{'id3'}=$id3;
 			$reservaGrupo->{'branchcode'}=$reserva->{'branchcode'};
-			$reservaGrupo->{'borrowernumber'}=$borrowernumber;
 			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
 			actualizarDatosReservaEnEspera($reservaGrupo);
 		}
@@ -1123,14 +1123,12 @@ sub eliminarReservasVencidas{
 	my @resultado;
 
 	foreach my $data (@$reservasVencidas){
-
-		my $borrowernumber= $data->{'borrowernumber'};
 		my $reservenumber= $data->{'reservenumber'};
 		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'});
 		if($reservaGrupo){
 		#Quiere decir que hay reservas esperando para este mismo grupo
+			$reservaGrupo->{'id3'}=$data->{'id3'};
 			$reservaGrupo->{'branchcode'}=$data->{'branchcode'};
-			$reservaGrupo->{'borrowernumber'}=$borrowernumber;
 			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
 			actualizarDatosReservaEnEspera($reservaGrupo);
 		}

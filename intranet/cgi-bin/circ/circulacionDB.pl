@@ -70,9 +70,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
-# 	my $array_ids3=$obj->{'ids3'};
-# 	my $borrnumber=$obj->{'borrowernumber'};
-# 	my $loop=scalar(@$array_ids3);
+
 	my @infoPrestamo;
 	my $env;
 	for(my $i=0;$i<$loop;$i++){
@@ -111,9 +109,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 if($tipoAccion eq "PRESTAMO"){
 #se realizan los prestamos
 print A "desde PRESTAMO \n";
-# 	my $array_ids3=$obj->{'infoPrestamos'};
-# 	my $borrnumber=$obj->{'borrowernumber'};
-# 	my $long= scalar(@$array_ids3);
+
 	my $id3='';
 	my $id3Old;
 	my $id2;
@@ -184,9 +180,6 @@ print A "message: $message \n";
 #*************************************************************************************************************
 
 if($tipoAccion eq "DEVOLVER_RENOVAR"){
-# 	my $array_ids3=$obj->{'infoDevRen'};
-# 	my $borrnumber=$obj->{'borrowernumber'};
-# 	my $loop=scalar(@$array_ids3);
 	my $accion=$obj->{'accion'};
 	my $id3;
 	my $barcode;
