@@ -1154,7 +1154,6 @@ sub guardarNivel2{
 			$fecha=$valor ;
 		}
 		elsif($campo eq '260' && $subcampo eq 'a' && $ciudad eq ""){
-			#Repetibles!!!
 			$ciudad=$valor ;
 		}
 		elsif($campo eq '041' && $subcampo eq 'h' && $lenguaje eq ""){

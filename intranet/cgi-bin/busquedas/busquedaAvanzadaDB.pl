@@ -115,7 +115,7 @@ if($accion eq "buscar"){
 my @resultsarray;
 my %result;
 my $nivel1;
-my @autor;
+my $autor;
 my $id1;
 for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$id1=$resultId1->[$i];

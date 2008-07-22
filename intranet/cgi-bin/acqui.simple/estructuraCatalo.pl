@@ -5,7 +5,6 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use CGI;
 use C4::AR::Catalogacion;
 
 my $input = new CGI;
@@ -25,7 +24,8 @@ my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
 my @valuesItemtypes;
 my %labelsItemtypes;
 my $i=0;
-
+push(@valuesItemtypes,'ALL');
+$labelsItemtypes{'ALL'}='TODOS';
 for ($i; $i<scalar(@results); $i++){
 	push(@valuesItemtypes,$results[$i]->{'itemtype'});
 	$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
