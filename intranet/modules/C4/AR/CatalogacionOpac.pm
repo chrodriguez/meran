@@ -164,7 +164,7 @@ sub buscarInfoSubCampo(){
 	return ($cant, @results);
 }
 
-sub buscarEncabezados(){
+sub buscarEncabezados{
 
 	my ($nivel, $itemtype)=@_;
 	

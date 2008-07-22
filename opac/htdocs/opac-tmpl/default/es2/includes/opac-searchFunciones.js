@@ -62,7 +62,6 @@ function updateInfo(responseText){
 
 function busquedaCombinable(){
 
-alert("busqueda combinables");
 	//seteo normal
 	var tipo= $("#checkNormal").val();
 	//busqueda exacta
@@ -70,7 +69,7 @@ alert("busqueda combinables");
 		tipo= $("#checkExacto").val();
 	}
 
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
   	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
@@ -363,7 +362,7 @@ function buscar(){
 	if ($('#tema').val() != '') {
 		buscarPorTema();
 	}
-	if ($('#searchinc')) {
+	if ($('#searchinc').val() != '') {
 		searchinc();
 	}
 	else {
