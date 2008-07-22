@@ -12,7 +12,10 @@ use vars qw(@EXPORT @ISA);
 	&buscarNivel1PorId3
 	&getAutoresAdicionales
 	&getColaboradores
+
+	&detalleNivel1
 	&detalleNivel1MARC
+	&detalleNivel1OPAC
 
 );
 
@@ -90,4 +93,90 @@ sub detalleNivel1MARC{
 	return @nivel1Comp;
 }
 
+sub detalleNivel1OPAC{
+	my ($id1, $nivel1,$tipo)= @_;
+	my $dbh = C4::Context->dbh;
+	my @nivel1Comp;
+	my $i=0;
+	my $getLib;
+	my $autor= $nivel1->{'autor'};
+	
+	$nivel1Comp[$i]->{'campo'}= "245";
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
+	$getLib= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'}, 'ALL',$tipo);
+	$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
+	$i++;
 
+	$autor= &C4::AR::Busquedas::getautor($autor);
+	$nivel1Comp[$i]->{'campo'}= "100"; #$autor->{'campo'}; se va a sacar de aca
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
+	$nivel1Comp[$i]->{'librarian'}= "Autor";
+	$i++;
+
+#trae nive1_repetibles
+	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	while(my $data=$sth->fetchrow_hashref){
+		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
+		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
+		$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, 'ALL',$tipo);
+		$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
+		$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
+		$i++;
+	}
+	$sth->finish;
+	return @nivel1Comp;
+}
+
+=item
+detalleNivel1
+Trae todo los datos del nivel 1 para poder verlos en el template.
+=cut
+sub detalleNivel1{
+	my ($id1, $nivel1,$tipo)= @_;
+	my $dbh = C4::Context->dbh;
+	my @nivel1Comp;
+	my %llaves;
+	my $i=0;
+	my $autor= $nivel1->{'autor'};
+	my $getLib=&C4::AR::Busquedas::getLibrarian('245', 'a', "",'ALL',$tipo);
+	$nivel1Comp[$i]->{'campo'}= "245";
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
+	$nivel1Comp[$i]->{'librarian'}= $getLib->{'liblibrarian'};
+	$i++;
+
+	$autor= &C4::AR::Busquedas::getautor($autor);
+	$nivel1Comp[$i]->{'campo'}= "100";
+	$nivel1Comp[$i]->{'subcampo'}= "a";
+	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
+	$nivel1Comp[$i]->{'librarian'}= "Autor";
+	$i++;
+
+#trae nive1_repetibles
+	my $query="SELECT * FROM nivel1_repetibles WHERE id1=? ORDER BY campo,subcampo";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	my $llave;
+	while(my $data=$sth->fetchrow_hashref){
+		$llave=$data->{'campo'}.",".$data->{'subcampo'};
+		my $getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo);
+		if(not exists($llaves{$llave})){
+			$llaves{$llave}=$i;
+			$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
+			$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
+			$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
+			$nivel1Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
+			$i++;
+		}
+		else{
+			my $pos=$llaves{$llave};
+			$nivel1Comp[$pos]->{'dato'}.=", ".$getLib->{'dato'};
+		}
+	}
+	$sth->finish;
+	return @nivel1Comp;
+}

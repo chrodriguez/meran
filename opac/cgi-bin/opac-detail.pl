@@ -17,16 +17,18 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     });
 
+
+
 my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $idNivel1= $obj->{'id1'};
 
-my (@nivel2Loop)= &detalleOpacNivel2($idNivel1);
+my (@nivel2Loop)= &C4::AR::Nivel2::detalleNivel2OPAC($idNivel1);
 
-my $nivel1=&buscarNivel1($idNivel1); #C4::AR::Catalogacion;
+my $nivel1=&C4::AR::Catalogacion::buscarNivel1($idNivel1);
 my $autor=C4::AR::Busquedas::getautor($nivel1->{'autor'});
-my @nivel1Loop= &detalleNivel1_copia($idNivel1, $nivel1, 'opac');
+my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1OPAC($idNivel1, $nivel1, 'opac');
 
 for (my $i=0; $i < scalar(@nivel2Loop); $i++){
 	@nivel2Loop[$i]->{'loopnivel1'}= \@nivel1Loop;

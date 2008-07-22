@@ -48,8 +48,8 @@ if($input->param('obj') eq ""){
 	my $nivel1=&buscarNivel1($id1); #C4::AR::Catalogacion;
 	my $cantItemN1=&cantidadItem(1,$id1);
 	my @autor= getautor($nivel1->{'autor'});
-	my @nivel1Loop= &detalleNivel1($id1, $nivel1,"intra");
-	my @nivel2Loop= &detalleNivel2($id1,"intra");
+	my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1($id1, $nivel1,"intra");
+	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2($id1,"intra");
 
 	$template->param(
 		loopnivel1 => \@nivel1Loop,

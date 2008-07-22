@@ -19,16 +19,6 @@ my ($template, $borrowernumber, $cookie)
 
 my $idNivel3=$input->param('id3');
 
-# my $nivel1=&buscarNivel1($idNivel1); #C4::AR::Catalogacion;
-# my $autor=C4::AR::Busquedas::getautor($nivel1->{'autor'});
-# my @nivel1Loop= &detalleNivel1_copia($idNivel1, $nivel1, 'opac');
-# my @nivel2Loop= &detalleNivel2_copia($idNivel1, 'opac');
-# 
-#  
-# for (my $i=0; $i < scalar(@nivel2Loop); $i++){
-#  	@nivel2Loop[$i]->{'loopnivel1'}= \@nivel1Loop;
-# }
-
 my @nivel2Loop= C4::AR::Busquedas::MARCDetail($idNivel3);
 
 $template->param(

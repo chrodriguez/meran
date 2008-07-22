@@ -17,8 +17,10 @@ use vars qw(@EXPORT @ISA);
 
 		&getIndice
 		&insertIndice
-
+		
+		&detalleNivel2
 		&detalleNivel2MARC
+		&detalleNivel2OPAC
 );
 
 
@@ -131,14 +133,11 @@ sub detalleNivel2MARC{
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id2);
 		while (my $data=$sth->fetchrow_hashref){
-# my $getLib=&getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,'intra');
 			$librarian=&C4::AR::Busquedas::getLibrarianMARCSubField($data->{'campo'}, $data->{'subcampo'},'opac');
 			$marcResult[$i]->{'campo'}= $data->{'campo'};
 			$marcResult[$i]->{'subcampo'}= $data->{'subcampo'};
 			$marcResult[$i]->{'dato'}= $data->{'dato'};
 			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
-# 			$marcResult[$i]->{'dato'}= $getLib->{'dato'};
-# 			$marcResult[$i]->{'librarian'}= $getLib->{'liblibrarian'};
 
 			$i++;
 		}
@@ -201,3 +200,176 @@ sub detalleNivel2MARC{
 	return(@results);
 }
 
+=item
+detalleNivel2OPAC
+Busca todos los encabezados para los distintos tipo de documentos y toda la informacion de nivel2 para un id1 y devuelve el detalle de como se va a imprimir en el opac. (la visualización) 
+=cut
+sub detalleNivel2OPAC{
+	my ($id1)=@_;
+	my $n2itemtypes=&C4::AR::Busquedas::buscarItemtypes($id1);
+	my ($encabezados_hash_ref)= &C4::AR::Busquedas::buscarEncabezados($n2itemtypes,2);
+	my $nivel2Comp= &C4::AR::Busquedas::buscarNivel2EnMARC($id1);
+
+	my $llave;
+	my $dato;
+	my $itemtype;
+	my $linea;
+	my $salidaLinea="";
+	my @salida;
+	my @salidaTMP;
+	my @result;
+	my $j=0;
+	my $grupoInd=0;
+	my $encInd= 0;
+	my $id2;
+	my $encabezados;
+
+
+#recorro cada grupo
+  	foreach my $nivel2 (@$nivel2Comp){
+ 		my @salidaTMP;
+		
+	
+		$itemtype=$nivel2->{'itemtype'};
+		my $infoEncabezados= $encabezados_hash_ref->{$itemtype};
+
+		$id2= $nivel2->{'id2'};
+
+		my $cant= scalar(@$infoEncabezados);
+
+#proceso los encabezados
+		for (my $i=0; $i < $cant; $i++){ 
+
+			$linea= $infoEncabezados->[$i]->{'linea'};
+ 			my $info= $infoEncabezados->[$i]->{'result'};
+			$salidaLinea= "";
+			my @salida;
+			$j=0;
+	
+
+#proceso un encabezado en particular
+			foreach $llave (keys %$info){	
+	
+				$dato= $nivel2->{$llave};
+				if($dato ne ""){
+					$dato=~ s/\*\?\*/$info->{$llave}->{'separador'}/g;
+					if($linea eq 0){
+						$salida[$j]->{'librarian'}= $info->{$llave}->{'textpred'};
+						$salida[$j]->{'dato'}= "<b>".$dato."</b>";
+						$j++;
+					}
+					else{
+						$salidaLinea .= $info->{$llave}->{'textpred'}." <b>".$dato." </b>".$info->{$llave}->{'textsucc'}." ".$info->{$llave}->{'separador'}." ";
+					}
+
+				}
+				
+			}
+			
+			if($linea eq 1){
+				$salida[$j]->{'librarian'}= $info->{$llave}->{'textpred'};
+				$salida[$j]->{'dato'}= $salidaLinea;	
+				$j++;
+			}
+
+			$salidaTMP[$encInd]->{'resultado'}= \@salida;
+			$salidaTMP[$encInd]->{'linea'}= $infoEncabezados->[$i]->{'linea'};
+#si el encabezado no tiene info para mostrar no se muestra
+			if($j != 0){$salidaTMP[$encInd]->{'encabezado'}= $infoEncabezados->[$i]->{'nombre'};}
+
+			$encInd++;
+
+		}#end foreach my $info_hash_ref
+		$encInd=0;
+
+		#se obtiene el detalle de nivel3 para un id2 en particular (grupo)
+ 		my($nivel3,$nivel3Comp)=&C4::AR::Nivel3::detalleNivel3OPAC($id2,$itemtype,'opac');
+ 		$result[$grupoInd]->{'loopnivel3'}=$nivel3;
+ 		$result[$grupoInd]->{'loopnivel3Comp'}=$nivel3Comp;	
+
+
+ 		$result[$grupoInd]->{'loopEncabezados'}= \@salidaTMP;
+		$result[$grupoInd]->{'grupo'}= $grupoInd;
+		$result[$grupoInd]->{'DivMARC'}="MARCDetail".$grupoInd;
+		$result[$grupoInd]->{'DivDetalle'}="Detalle".$grupoInd;
+		$grupoInd++;
+
+	
+	print A "\n";
+	
+  	}#end foreach my $nivel2
+	return @result;
+}
+
+=item
+detalleNivel2
+Trae todos los datos del nivel 2, para poder verlos en el template, tambien busca el detalle del nivel 3 asociados a cada nivel 2.
+=cut
+sub detalleNivel2{
+	my($id1,$tipo)=@_;
+	my $dbh = C4::Context->dbh;
+	my @nivel2=&C4::AR::Catalogacion::buscarNivel2PorId1($id1);
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
+	my $id2;
+	my $itemtype;
+	my $tipoDoc;
+	my $campo;
+	my $subcampo;
+	my @results;
+	my $getLib;
+	my $j=0;
+	foreach my $row(@nivel2){
+		my $i=0;
+		my @nivel2Comp;
+		my %llaves;
+		$id2=$row->{'id2'};
+		$itemtype=$row->{'itemtype'};
+		$tipoDoc=$row->{'tipo_documento'};
+		foreach my $llave (keys %$mapeo){
+
+			$campo=$mapeo->{$llave}->{'campo'};
+			$subcampo=$mapeo->{$llave}->{'subcampo'};
+			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo,"" ,$itemtype,$tipo);
+			$nivel2Comp[$i]->{'campo'}=$campo;
+			$nivel2Comp[$i]->{'subcampo'}=$subcampo;
+			$nivel2Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
+ 			my $dato=$row->{$mapeo->{$llave}->{'campoTabla'}};
+			$nivel2Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
+			$i++;
+		}
+		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
+		my $sth=$dbh->prepare($query);
+        	$sth->execute($id2);
+		my $llave2;
+		while (my $data=$sth->fetchrow_hashref){
+			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
+			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo);
+			if(not exists($llaves{$llave2})){
+				$llaves{$llave2}=$i;
+				$nivel2Comp[$i]->{'campo'}=$data->{'campo'};
+				$nivel2Comp[$i]->{'subcampo'}=$data->{'subcampo'};
+				$nivel2Comp[$i]->{'dato'}=$getLib->{'dato'};
+				$nivel2Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
+				$i++;
+			}
+			else{
+				my $pos=$llaves{$llave2};
+				$nivel2Comp[$pos]->{'dato'}.=", ".$getLib->{'dato'};
+			}
+		}
+		$sth->finish;
+		$nivel2Comp[$i]->{'cantItems'}=$row->{'cantItems'};
+		my($nivel3,$nivel3Comp)=&C4::AR::Nivel3::detalleNivel3($id2,$itemtype,$tipo);
+	
+
+		$nivel2Comp[$i]->{'loopnivel3'}=$nivel3;
+		$nivel2Comp[$i]->{'loopnivel3Comp'}=$nivel3Comp;
+		$results[$j]->{'resultado'}=\@nivel2Comp;
+		$results[$j]->{'id2'}=$id2;
+		$results[$j]->{'itemtype'}=$itemtype;
+		$results[$j]->{'tipoDoc'}=$tipoDoc;
+		
+		$j++;
+	}
+	return(@results);
+}

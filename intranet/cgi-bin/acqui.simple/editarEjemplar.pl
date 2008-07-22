@@ -26,7 +26,7 @@ if($id3 ne ""){
 }
 else{
 	$todos=1;
-	@niveles3=&buscarNivel3PorId2($id2);
+	@niveles3=&C4::AR::Catalogacion::buscarNivel3PorId2($id2);
 }
 
 if(!$json){
