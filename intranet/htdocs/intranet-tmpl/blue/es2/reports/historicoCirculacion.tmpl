@@ -10,7 +10,6 @@
 <script type="text/javascript">
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
-<!-- TMPL_INCLUDE NAME="state.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -59,7 +58,7 @@
 		$.ajax({	type: "POST", 
 				url: "/cgi-bin/koha/reports/historicoCirculacionResult.pl",
 				data: params,
-				beforeSend: Init,
+// 				beforeSend: Init,
 				complete: function(ajax){
  						updateInfo(ajax.responseText);
 					}

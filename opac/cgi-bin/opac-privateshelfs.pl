@@ -7,15 +7,16 @@ use C4::Interface::CGI::Output;
 use C4::BookShelves;
 use C4::AR::Catalogacion;
 use C4::AR::Busquedas;
+use C4::AR::Utilidades;
 
-my $query=new CGI;
+my $input=new CGI;
 
 
 my  ($template, $borrowernumber, $cookie);
 
 ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-privateshelfs.tmpl",
-                             query => $query,
+                             query => $input,
                              type => "opac",
                              authnotrequired => 1,
                              flagsrequired => {borrow => 1},
@@ -25,26 +26,17 @@ my  ($template, $borrowernumber, $cookie);
 my $mail = C4::AR::Usuarios::getBorrower($borrowernumber)->{'emailaddress'};
 $template->param(MAIL => $mail);
 
+my $obj=$input->param('obj');
+$obj=from_json_ISO($obj);
 
-my $op=  $query->param('bookmarkOp');
-my $number_of_results = 15;
-my @results;
-my $count;
-my $pshelf=gotShelf($borrowernumber);
-if( $pshelf eq 0){$pshelf=createPrivateShelf($borrowernumber);}
+my $funcion= $obj->{'funcion'};
+my $ini= $obj->{'ini'}||'';
 
-my $shelfvalues = $query->param('bookmarks');
-my @val=split(/#/,$shelfvalues);
+my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
-foreach my $biblio (@val){
-	if ($op eq 'del'){ 
-		delPrivateShelfs($pshelf,$biblio);
-	}else{
-		addPrivateShelfs($pshelf,$biblio);}
-}
+my ($count, $resultId1) = &privateShelfs($borrowernumber,$ini,$cantR);
 
-# uso privateShelfs2 para mantener la anterior, si esta bien sacar la vieja
-my ($count, $resultId1) = &privateShelfs($borrowernumber);
+&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion);
 
 my %result;
 my $nivel1;
@@ -54,6 +46,7 @@ my $comboItemTypes= "-1";
 my @resultsarray;
 
 for (my $i=0;$i<scalar(@$resultId1);$i++){
+
 	$id1=$resultId1->[$i];
 	$result{$i}->{'id1'}= $id1;
  	$nivel1= &buscarNivel1($id1);
@@ -78,4 +71,4 @@ $template->param(
 			LibraryName => C4::Context->preference("LibraryName")
 		);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

@@ -42,6 +42,7 @@ $VERSION = 0.01;
 #B400 - B499 para Errores e Informacion de Base de Datos
 #C500 - C599 para Catalogacion
 #CA600 - CA699 para Control de Autoridades
+#F700 - F 799 para Favoritos
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -88,6 +89,12 @@ my %mensajesOPAC = (
 	'B405' => 'Error al intentar renovar desde OPAC, funcion C4::AR::Issues::t_renovar',
 	'B406' => '',
 	'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
+	'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',	
+	'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
+	'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
+	'F701' => 'Se agrego el favorito con &eacute;xito',
+	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
+	'F703' => 'Disculpe, no se pudo eliminar el favorito, intente nuevamente.',
 );
 
 my %mensajesINTRA = (

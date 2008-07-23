@@ -7,6 +7,8 @@
  *
  */
 
+//cargo dinamicamente la libreria state.js
+$.getScript("/opac-tmpl/default/es2/includes/state.js");
 //este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
 
 function AjaxHelper(fncUpdateInfo, fncInit){

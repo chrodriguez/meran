@@ -3,7 +3,6 @@
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 
 <script>
-<!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 
 function consultar(){
@@ -16,7 +15,6 @@ function consultar(){
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
 				zebra("tablaResult");
-				HiddeState();
 			}
 	})
 }

@@ -3,7 +3,6 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/state.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script language="javascript" type="text/javascript">
@@ -145,7 +144,7 @@ var params= '';
 	$.ajax({	type: "POST", 
 			url: "/cgi-bin/koha/busquedas/estante.pl",
 			data: params,
-			beforeSend: Init,
+// 			beforeSend: Init,
 			complete: function(ajax){
 					updateInfo(ajax.responseText);
 				}

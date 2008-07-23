@@ -52,7 +52,33 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio &getbookshelfNOItems &RemoveFromShelf &AddShelf &RemoveShelf &RemoveFromShelvesBiblio &getbookshelfItems &GetShelfContentsShelf &GetShelfName &GetShelfParent &existsShelf  &getbookshelfItemsforList &getbookshelf &getbooksubshelf  &privateShelfs &createPrivateShelf &gotShelf &addPrivateShelfs &delPrivateShelfs &getbookshelfLike &getbookshelfLikeCount  &getshelfListCount &shelfitemcount  &modshelf
+@EXPORT = qw(
+		&GetShelfList
+		&GetShelfContents
+		&getbookshelfLike 
+		&getbookshelfLikeCount  
+		&getshelfListCount 
+		&getbookshelfItems 
+		&GetShelfContentsShelf 
+		&GetShelfName 
+		&GetShelfParent  
+		&getbookshelf 
+		&getbooksubshelf  
+		
+		&AddToShelf	
+		&AddShelf 
+		&t_addPrivateShelfs 
+		
+		&RemoveFromShelf 
+		&RemoveShelf 
+
+		&t_delPrivateShelfs 
+		
+		&privateShelfs 
+		&createPrivateShelf 
+		&gotShelf 
+		&shelfitemcount  
+		&modshelf
 );
 
 my $dbh = C4::Context->dbh;
@@ -86,123 +112,123 @@ The number of books on that bookshelf.
 # hash.
 
 sub getshelfListCount{
-my ($type)=@_;
-my $dbh   = C4::Context->dbh;
-  my $sth4=$dbh->prepare("SELECT     count(bookshelf.shelfnumber)as count2
-                                                                FROM            bookshelf WHERE bookshelf.type=? and  bookshelf.parent=? "   );
+	my ($type)=@_;
 
-  $sth4->execute($type,0);
-(my $count2)=$sth4->fetchrow;
-return($count2);
-        
+	my $dbh   = C4::Context->dbh;
+	my $sth4=$dbh->prepare("	SELECT count(bookshelf.shelfnumber)as count2
+					FROM bookshelf 
+					WHERE bookshelf.type=? AND  bookshelf.parent=? ");
+	
+	$sth4->execute($type,0);
+	(my $count2)=$sth4->fetchrow;
+
+	return($count2);
+
 }   
 
 sub getbookshelfLikeCount{
-my ($nameShelf)=@_;
-my $dbh   = C4::Context->dbh;
-  my $sth4=$dbh->prepare("SELECT     count(bookshelf.shelfnumber)as count2
-                                                                FROM            bookshelf
+	my ($nameShelf)=@_;
 
-                                                               WHERE (shelfname LIKE ? or shelfname LIKE ?)
-                                                             "   );
+	my $dbh   = C4::Context->dbh;
+	my $sth4=$dbh->prepare("	SELECT count(bookshelf.shelfnumber)as count2
+					FROM bookshelf
+					WHERE (shelfname LIKE ? or shelfname LIKE ?) ");
+	
+	$sth4->execute("$nameShelf%", "$nameShelf %");
+	(my $count2)=$sth4->fetchrow;
 
-  $sth4->execute("$nameShelf%", "$nameShelf %");
-(my $count2)=$sth4->fetchrow;
-return($count2);
-
+	return($count2);
 }
 
 sub getbookshelfLike {
-  my ($nameShelf) = @_;
-  
-  my $dbh   = C4::Context->dbh;
-=item
-  my $sth =$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
-                          	count(shelfcontents.biblioitemnumber) as count
-                                FROM bookshelf
-                                LEFT JOIN shelfcontents
-                                ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (shelfname LIKE ? or shelfname LIKE ?)
-                                GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ".$limit);
-=cut
+	my ($nameShelf) = @_;
+	
+	my $dbh= C4::Context->dbh;
+	
+	my $sth=$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
+				count(shelfcontents.id2) as count
+				FROM  bookshelf
+				LEFT JOIN shelfcontents
+				ON bookshelf.shelfnumber = shelfcontents.shelfnumber 
+				WHERE (shelfname LIKE ? or shelfname LIKE ?)
+				GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ");
+	
+	
+	
+	$sth->execute("$nameShelf%", "$nameShelf %");
+	my %resultslabels;
+	$sth->execute;
+	my $i;
+	$i=1;
+	my $sth2=$dbh->prepare("	SELECT count(*) as countshelf FROM bookshelf 
+					WHERE ( bookshelf.type = ? ) AND (bookshelf.parent =?)");
+	
+	my $sth3=$dbh->prepare("	SELECT shelfnumber as numberparent,shelfname as nameparent 
+					FROM bookshelf  
+					WHERE shelfnumber=? AND type=?");
+	
+	open(A, ">>/tmp/debug.txt");
+	print A "BookShelves  \n";
+	while (my ($shelfnumber, $shelfname,$shelfparent,$count) = $sth->fetchrow) {
+		$sth2->execute('public',$shelfnumber);
+		my $shelfnameparent;
+		$sth3->execute($shelfparent, 'public');
+		($shelfparent, $shelfnameparent)=$sth3->fetchrow;
+		$resultslabels{$shelfnumber}->{'numberparent'}=$shelfparent;
+		$resultslabels{$shelfnumber}->{'nameparent'}=$shelfnameparent;
+	print A "$shelfname \n";
+		$resultslabels{$shelfnumber}->{'shelfname'}=$shelfname;
+		$resultslabels{$shelfnumber}->{'count'}=$count;
+		$resultslabels{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
+		$i=$i+1;
+	}
+	close(A);
+	$sth->finish;
 
-  my ($nameShelf) = @_;
-  
-  my $dbh   = C4::Context->dbh;
-
-  my $sth =$dbh->prepare("SELECT bookshelf.shelfnumber, bookshelf.shelfname, bookshelf.parent,
-                          count(shelfcontents.id2) as count
-                          FROM  bookshelf
-                          LEFT JOIN shelfcontents
-                          ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (shelfname LIKE ? or shelfname LIKE ?)
-                          GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ");
-
-
-
-  $sth->execute("$nameShelf%", "$nameShelf %");
-  my %resultslabels;
-  $sth->execute;
-  my $i;
-  $i=1;
-  my $sth2=$dbh->prepare("	SELECT count(*) as countshelf FROM bookshelf 
-				WHERE ( bookshelf.type = ? ) AND (bookshelf.parent =?)");
-
-  my $sth3=$dbh->prepare("	SELECT shelfnumber as numberparent,shelfname as nameparent 
-				FROM bookshelf  
-				WHERE shelfnumber=? AND type=?");
-
-open(A, ">>/tmp/debug.txt");
-print A "BookShelves  \n";
-    while (my ($shelfnumber, $shelfname,$shelfparent,$count) = $sth->fetchrow) {
-        $sth2->execute('public',$shelfnumber);
-        my $shelfnameparent;
-        $sth3->execute($shelfparent, 'public');
-        ($shelfparent, $shelfnameparent)=$sth3->fetchrow;
-        $resultslabels{$shelfnumber}->{'numberparent'}=$shelfparent;
-        $resultslabels{$shelfnumber}->{'nameparent'}=$shelfnameparent;
-print A "$shelfname \n";
-        $resultslabels{$shelfnumber}->{'shelfname'}=$shelfname;
-        $resultslabels{$shelfnumber}->{'count'}=$count;
-        $resultslabels{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
-        $i=$i+1;
-    }
-close(A);
-  $sth->finish;
-  return(%resultslabels);
+	return(%resultslabels);
 } 
 
 
 sub getbookshelf {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bookshelf where parent=0 and type='public' ORDER BY shelfname ASC");
-  my %resultslabels;
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'shelfnumber'}}= $data->{'shelfname'};
-  } # while
-  $sth->finish;
-  return(%resultslabels);
+	my $dbh = C4::Context->dbh;
+	my $sth= $dbh->prepare("	SELECT * 
+					FROM bookshelf 
+					WHERE parent=0 and type='public' 
+					ORDER BY shelfname ASC");
+	my %resultslabels;
+	$sth->execute;
+	while (my $data = $sth->fetchrow_hashref){
+		$resultslabels{$data->{'shelfnumber'}}= $data->{'shelfname'};
+	} # while
+	$sth->finish;
+
+	return(%resultslabels);
 } # sub getbookshelf
 
 sub getbooksubshelf {
-my ($shelf) = @_;
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bookshelf where parent=? ");
-  my %resultslabels;
-  $sth->execute($shelf);
-   while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'shelfnumber'}}= $data->{'shelfname'};
-  } # while
-  $sth->finish;
-  return(%resultslabels);
+	my ($shelf) = @_;
+
+	my $dbh   = C4::Context->dbh;
+	my $sth   = $dbh->prepare("SELECT * FROM bookshelf WHERE parent=? ");
+	my %resultslabels;
+	$sth->execute($shelf);
+
+	while (my $data = $sth->fetchrow_hashref) {
+		$resultslabels{$data->{'shelfnumber'}}= $data->{'shelfname'};
+	} # while
+	$sth->finish;
+
+	return(%resultslabels);
 } # sub getbooksubshelf
 
 
 
 sub getbookshelfItems {
   my ($type,$id2)=@_;
+
   my $dbh   = C4::Context->dbh;
-  #my $sth   = $dbh->prepare("select bookshelf.shelfnumber, bookshelf.shelfname from bookshelf,shelfcontents where (shelfcontents.shelfnumber=bookshelf.shelfnumber) and (bookshelf.type = ?) and (shelfcontents.biblioitemnumber=?)");
-  my $sth   = $dbh->prepare("SELECT bs2.shelfname AS parentname, bs.shelfname, bs.shelfnumber, bs2.shelfnumber AS shelfnumberParent
+  my $sth   = $dbh->prepare("	SELECT bs2.shelfname AS parentname, bs.shelfname, bs.shelfnumber, 
+				bs2.shelfnumber AS shelfnumberParent
                                 FROM bookshelf AS bs
                                 LEFT JOIN bookshelf AS bs2 ON bs2.shelfnumber = bs.parent
                                 INNER JOIN shelfcontents ON bs.shelfnumber = shelfcontents.shelfnumber
@@ -210,73 +236,45 @@ sub getbookshelfItems {
   my %resultslabels;
   $sth->execute($type,$id2);
   while (my ($parentname, $shelfname, $shelfnumber,$shelfnumberParent) = $sth->fetchrow){
-  $resultslabels{$shelfnumber}->{'shelfnumberParent'}= $shelfnumberParent;
-  $resultslabels{$shelfnumber}->{'parentname'}= $parentname;
-  $resultslabels{$shelfnumber}->{'shelfnumber'}= $shelfnumber;
-  $resultslabels{$shelfnumber}->{'shelfname'}= $shelfname;
+	$resultslabels{$shelfnumber}->{'shelfnumberParent'}= $shelfnumberParent;
+	$resultslabels{$shelfnumber}->{'parentname'}= $parentname;
+	$resultslabels{$shelfnumber}->{'shelfnumber'}= $shelfnumber;
+	$resultslabels{$shelfnumber}->{'shelfname'}= $shelfname;
   } # while
   $sth->finish;
+
   return(%resultslabels);
 }
-
-sub getbookshelfItemsforList {
-  my ($type,$id2)=@_;
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("SELECT bs2.shelfname AS parentname, bs.shelfname, bs.shelfnumber
-				FROM bookshelf AS bs
-				LEFT JOIN bookshelf AS bs2 ON bs2.shelfnumber = bs.parent
-				INNER JOIN shelfcontents ON bs.shelfnumber = shelfcontents.shelfnumber
-				WHERE ( bs.type = ?  ) AND ( shelfcontents.id2 = ? )");
-  my %resultslabels;
-  $sth->execute($type,$id2);
-  while (my $data = $sth->fetchrow_hashref) {
-	my $name='';
-	if ($data->{'parentname'}){$name=$data->{'parentname'}.'->'.$data->{'shelfname'};} else {$name=$data->{'shelfname'};}	
-    $resultslabels{$data->{'shelfnumber'}}= $name;
-  } # while
-  $sth->finish;
-  return(%resultslabels);
-}
-
-
-sub getbookshelfNOItems {
-  my ($type,$lista)=@_;
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bookshelf where (bookshelf.type= ?) and (shelfnumber NOT IN ($lista))");
-  my %resultslabels;
-  $sth->execute();
-  while (my $data = $sth->fetchrow_hashref) {
-    $resultslabels{$data->{'shelfnumber'}}= $data->{'shelfname'};
-  } # while
-  $sth->finish;
-  return(%resultslabels);
-} 
-
 
 sub GetShelfList {
-    my($type)=@_;
+    	my($type)=@_;
     
-    my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
-							count(shelfcontents.id2) as count
-								FROM		bookshelf
-								LEFT JOIN	shelfcontents
-								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type=?) and (bookshelf.parent=0)
-								GROUP BY	bookshelf.shelfnumber order by bookshelf.shelfname ASC ");
+	my $sth=$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname,
+				count(shelfcontents.id2) as count
+				FROM bookshelf
+				LEFT JOIN shelfcontents
+				ON bookshelf.shelfnumber = shelfcontents.shelfnumber 
+				WHERE (bookshelf.type=?) and (bookshelf.parent=0)
+				GROUP BY bookshelf.shelfnumber order by bookshelf.shelfname ASC ");
+	
+	$sth->execute($type);
+	my %shelflist;
+	my $sth2=$dbh->prepare("	SELECT count(*) as countshelf 
+					FROM bookshelf 
+					WHERE ( bookshelf.type = ? ) AND ( bookshelf.parent =?)");
 
-    $sth->execute($type);
-    my %shelflist;
-        my $sth2=$dbh->prepare("Select count(*) as countshelf FROM bookshelf WHere ( bookshelf.type = ? ) AND ( bookshelf.parent =?)");
-    while (my ($shelfnumber, $shelfname,$count) = $sth->fetchrow) {
-        $sth2->execute($type,$shelfnumber);
+	while (my ($shelfnumber, $shelfname,$count) = $sth->fetchrow) {
+		$sth2->execute($type,$shelfnumber);
+	
+		$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
+		$shelflist{$shelfnumber}->{'count'}=$count;
+		$shelflist{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
+	
+	}
+	$sth->finish;
+	$sth2->finish;
 
-	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
-	$shelflist{$shelfnumber}->{'count'}=$count;
-        $shelflist{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
-
-    }
-$sth->finish;
-$sth2->finish;
-return(%shelflist);
+	return(%shelflist);
 }
 
 =item GetShelfContents
@@ -294,106 +292,118 @@ I don't know what C<$env> is.
 =cut
 #'
 sub GetShelfContentsShelf{
-my ($type,$shelfnumbershelf)=@_;
-my %shelfcontentshelf;
-my $sth2;
-my $sth=$dbh->prepare("SELECT bookshelf.shelfnumber, bookshelf.shelfname,
-                                                        count(shelfcontents.id2) as count
-                                                                FROM            bookshelf
-                                                                LEFT JOIN       shelfcontents
-                                                                ON              bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type=?) and (bookshelf.parent=?)
-                                                                GROUP BY        bookshelf.shelfnumber order by shelfname");
-#my $sth=$dbh->prepare("SELECT bookshelf.shelfnumber, bookshelf.shelfname FROM bookshelf WHere ( bookshelf.type =  'public' ) AND ( bookshelf.parent =? )ORDER  BY shelfname");
-$sth->execute($type,$shelfnumbershelf);
-# my @results;
-          $sth2=$dbh->prepare("Select count(*) as countShelf FROM bookshelf WHere ( bookshelf.type =  ? ) AND ( bookshelf.parent =? )ORDER  BY shelfname");
-        while (my ($shelfnumber,$shelfname,$count) = $sth->fetchrow) {
-          $shelfcontentshelf{$shelfnumber}->{'shelfnumber'}=$shelfnumber;
-          $sth2->execute($type,$shelfnumber);
+	my ($type,$shelfnumbershelf)=@_;
 
-          $shelfcontentshelf{$shelfnumber}->{'shelfname'}=$shelfname;
-          $shelfcontentshelf{$shelfnumber}->{'count'}=$count;
-         $shelfcontentshelf{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
+	my %shelfcontentshelf;
+	my $sth2;
+	my $sth=$dbh->prepare("	SELECT bookshelf.shelfnumber, bookshelf.shelfname,
+				count(shelfcontents.id2) as count
+				FROM bookshelf
+				LEFT JOIN shelfcontents
+				ON bookshelf.shelfnumber = shelfcontents.shelfnumber 
+				WHERE (bookshelf.type=?) and (bookshelf.parent=?)
+				GROUP BY bookshelf.shelfnumber order by shelfname");
 
+	$sth->execute($type,$shelfnumbershelf);
 
-         }
+	$sth2=$dbh->prepare("	SELECT count(*) as countShelf 
+				FROM bookshelf 
+				WHERE ( bookshelf.type =  ? ) AND ( bookshelf.parent =? )
+				ORDER  BY shelfname");
+
+	while (my ($shelfnumber,$shelfname,$count) = $sth->fetchrow) {
+		$shelfcontentshelf{$shelfnumber}->{'shelfnumber'}=$shelfnumber;
+		$sth2->execute($type,$shelfnumber);
+	
+		$shelfcontentshelf{$shelfnumber}->{'shelfname'}=$shelfname;
+		$shelfcontentshelf{$shelfnumber}->{'count'}=$count;
+		$shelfcontentshelf{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
+	}
+
 	$sth2->finish;
 	$sth->finish;
+
 	return(%shelfcontentshelf);
-
 }
 
-sub GetShelfName
-{
-my ($shelfnumber) = @_;
-my $sth=$dbh->prepare("select shelfname from bookshelf  where shelfnumber=?");
-$sth->execute($shelfnumber);
-my $aux=$sth->fetchrow;
-$sth->finish;
-return($aux);
+sub GetShelfName{
+	my ($shelfnumber) = @_;
+	
+	my $sth=$dbh->prepare("SELECT shelfname FROM bookshelf  WHERE shelfnumber=?");
+	$sth->execute($shelfnumber);
+
+	my $aux=$sth->fetchrow;
+	$sth->finish;
+
+	return($aux);
 }
 
-sub GetShelfParent
-{
-my ($type,$shelfnumberP) = @_;
-my $sth=$dbh->prepare("select parent from bookshelf  where shelfnumber=? and type=?");
-$sth->execute($shelfnumberP, $type);
+sub GetShelfParent{
+	my ($type,$shelfnumberP) = @_;
 
-my $parent=$sth->fetchrow;
-my $sth1=$dbh->prepare("SELECT               bookshelf.shelfnumber, bookshelf.shelfname,
-                                                        count(shelfcontents.biblioitemnumber) as count
-                                                                FROM            bookshelf
-                                                                LEFT JOIN       shelfcontents
-                                                                ON              bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type=?) and (bookshelf.shelfnumber=?)
-                                                                GROUP BY        bookshelf.shelfnumber order by shelfname");
-$sth1->execute($type,$parent);
-my %shelfparent;
-my $sth2=$dbh->prepare("Select count(*) as countShelf FROM bookshelf WHERE ( bookshelf.type =  'public' ) AND ( bookshelf.parent =? )ORDER  BY shelfname");
-while (my ($shelfnumber,$shelfname, $count) = $sth1->fetchrow){
-  $shelfparent{$shelfnumber}->{'shelfnumber'}=$shelfnumber;
-  $sth2->execute($shelfnumber);
-  $shelfparent{$shelfnumber}->{'count'}=$count;
-  $shelfparent{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
-  $shelfparent{$shelfnumber}->{'shelfname'}=$shelfname;
+	my $sth=$dbh->prepare("SELECT parent FROM bookshelf WHERE shelfnumber=? AND type=?");
+	$sth->execute($shelfnumberP, $type);
+	
+	my $parent=$sth->fetchrow;
+	my $sth1=$dbh->prepare("SELECT bookshelf.shelfnumber, bookshelf.shelfname,
+				count(shelfcontents.biblioitemnumber) as count
+				FROM bookshelf
+				LEFT JOIN shelfcontents
+				ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type=?) and (bookshelf.shelfnumber=?)
+				GROUP BY bookshelf.shelfnumber order by shelfname");
 
-}
-$sth->finish;
-$sth1->finish;
-$sth2->finish;
-
-return(%shelfparent);
-
+	$sth1->execute($type,$parent);
+	my %shelfparent;
+	my $sth2=$dbh->prepare("SELECT count(*) as countShelf 
+				FROM bookshelf 
+				WHERE ( bookshelf.type =  'public' ) 
+				AND ( bookshelf.parent =? )ORDER  BY shelfname");
+	
+	while (my ($shelfnumber,$shelfname, $count) = $sth1->fetchrow){
+		$shelfparent{$shelfnumber}->{'shelfnumber'}=$shelfnumber;
+		$sth2->execute($shelfnumber);
+		$shelfparent{$shelfnumber}->{'count'}=$count;
+		$shelfparent{$shelfnumber}->{'countshelf'}=$sth2->fetchrow;
+		$shelfparent{$shelfnumber}->{'shelfname'}=$shelfname;
+	}
+	$sth->finish;
+	$sth1->finish;
+	$sth2->finish;
+	
+	return(%shelfparent);
 }
 
 
 sub GetShelfContents {
-    my ($type,$shelfnumber) = @_;
-    my %contentlist;           
-    my $sth=$dbh->prepare("SELECT nivel1.titulo as title,  nivel1.id1 as id1, nivel2.id2 as id2, nivel1.autor as author, nivel2.ciudad_publicacion as place, nivel2.anio_publicacion as publicationyear  FROM ((shelfcontents LEFT JOIN nivel2 ON shelfcontents.id = nivel2.id2) LEFT JOIN nivel1 ON nivel2.id1=nivel1.id1) WHERE ( shelfnumber =? )");
-    $sth->execute($shelfnumber);
+	my ($type,$shelfnumber) = @_;
+
+	my %contentlist;
+	my $sth=$dbh->prepare("	SELECT nivel1.titulo as title,  nivel1.id1 as id1, nivel2.id2 as id2, 		
+				nivel1.autor as author, nivel2.ciudad_publicacion as place, nivel2.anio_publicacion as publicationyear  
+				FROM ((shelfcontents LEFT JOIN nivel2 ON shelfcontents.id = nivel2.id2) 
+				LEFT JOIN nivel1 ON nivel2.id1=nivel1.id1) 
+				WHERE ( shelfnumber =? )");
+
+	$sth->execute($shelfnumber);
 	my @results;
-  	my $i=0;
-        while (my ($title,$id1,$id2,$author, $place,$publicationyear ) = $sth->fetchrow) {
-          $contentlist{$id2}->{'title'}=$title;
-	#  $contentlist{$biblioitemnumber}->{'unititle'}=$unititle;
-        #  $contentlist{$id2}->{'biblioitemnumber'}=$biblioitemnumber;
-        #  $contentlist{$id2}->{'biblionumber'}=$biblionumber;
-          $contentlist{$id2}->{'editors'}= "($publicationyear)";
-	  my $aut=C4::AR::Busquedas::getautor($author);
-	  $contentlist{$id2}->{'completo'}=$aut->{'completo'};
-          $contentlist{$id2}->{'apellido'}=$aut->{'apellido'};
-	  $contentlist{$id2}->{'nombre'}=$aut->{'nombre'};
-	  $contentlist{$id2}->{'id'}=$aut->{'id'};
-	  $contentlist{$id2}->{'id1'}=$id1;
-	  $contentlist{$id2}->{'id2'}=$id2;
-          $contentlist{$id2}->{'place'}=$place;
+	my $i=0;
+	while (my ($title,$id1,$id2,$author, $place,$publicationyear ) = $sth->fetchrow) {
+		$contentlist{$id2}->{'title'}=$title;
+		$contentlist{$id2}->{'editors'}= "($publicationyear)";
+		my $aut=C4::AR::Busquedas::getautor($author);
+		$contentlist{$id2}->{'completo'}=$aut->{'completo'};
+		$contentlist{$id2}->{'apellido'}=$aut->{'apellido'};
+		$contentlist{$id2}->{'nombre'}=$aut->{'nombre'};
+		$contentlist{$id2}->{'id'}=$aut->{'id'};
+		$contentlist{$id2}->{'id1'}=$id1;
+		$contentlist{$id2}->{'id2'}=$id2;
+		$contentlist{$id2}->{'place'}=$place;
 
-# 	  if ($volume){$biblioitemlist{$id2}->{'editors'}.=" t. ".$volume;}
-          $i++;
-         }
+		$i++;
+	}
 	$sth->finish;
-        return($i,%contentlist);
 
+	return($i,%contentlist);
 }
 
 =item AddToShelf
@@ -409,43 +419,27 @@ C<$env> is ignored.
 #'
 sub AddToShelf {
 	my ($id2, $shelfnumber) = @_;
+
  	return unless $id2;
-        my $sth1 = $dbh->prepare("select id2 from nivel2 where id2=?");
+       	my $sth1 = $dbh->prepare("SELECT id2 FROM nivel2 WHERE id2=?");
         $sth1->execute($id2);
         if ($sth1->rows){
 
-	my $sth2=$dbh->prepare("select * from shelfcontents where shelfnumber=? and id2=?");
+	my $sth2=$dbh->prepare("SELECT * FROM shelfcontents wHERE shelfnumber=? AND id2=?");
 
 	$sth2->execute($shelfnumber, $id2);
 	if ($sth2->rows) {
 # already on shelf
 	} else {
-		my $sth3=$dbh->prepare("insert into shelfcontents (shelfnumber, id2, flags) values (?, ?, 0)");
+		my $sth3=$dbh->prepare("INSERT INTO shelfcontents (shelfnumber, id2, flags) 
+					VALUES (?, ?, 0)");
 		$sth3->execute($shelfnumber, $id2);
 		$sth3->finish;
 	}
 	$sth2->finish;
 	}
 
-$sth1->finish;
-}
-
-
-
-sub AddToShelfFromBiblio {
-#	my ($env, $biblioitemnumber, $shelfnumber) = @_;
-#	return unless $biblioitemnumber;
-#	my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblioitemnumber=?");
-#	$sth->execute($biblioitemnumber);
-#	my ($biblioitemnumber2) = $sth->fetchrow;
-	#my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and biblioitemnumber=?");
-	#my $sth->execute($shelfnumber, $biblioitemnumber2);
-#	if ($sth->rows) {
-# already on shelf
-#	} else {
-#		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, biblioitemnumber, flags) values (?, ?, 0)");
-#		$sth->execute($shelfnumber, $biblioitemnumber2);
-#	}
+	$sth1->finish;
 }
 
 =item RemoveFromShelf
@@ -462,16 +456,9 @@ C<$env> is ignored.
 #'
 sub RemoveFromShelf {
     my ($id2, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=? and id=?");
-    $sth->execute($shelfnumber,$id2);
-    $sth->finish;
-}
 
-#eliminar de todos los estantes virtuales un libro dado
-sub RemoveFromShelvesBiblio {
-    my ($id2) = @_;
-    my $sth=$dbh->prepare("delete from shelfcontents where id=?");
-    $sth->execute($id2);
+    my $sth=$dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber=? AND id=?");
+    $sth->execute($shelfnumber,$id2);
     $sth->finish;
 }
 
@@ -492,38 +479,32 @@ C<$env> is ignored.
 # FIXME - Perhaps this could/should return the number of the new bookshelf
 # as well?
 sub AddShelf {
-    my ($shelfname,$type,$shelfnumberP) = @_;
-    my $sth=$dbh->prepare('select * from bookshelf where parent=? and shelfname=?');
-    $sth->execute($shelfnumberP,$shelfname);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-
-    if ($data) 
-	{return (0) }
-    else {	 	
-   my $sth2=$dbh->prepare('select  max(shelfnumber) as number from bookshelf');
-    $sth2->execute;
-    my $data   = $sth2->fetchrow;
-    my $numbers = $data + 1;
-    $sth2->finish;
-
-   my  $sth3=$dbh->prepare("insert into bookshelf (shelfnumber,shelfname,type,parent) values (?,?,?,?)");
-    $sth3->execute($numbers,$shelfname,$type,$shelfnumberP);
-   $sth3->finish;
-
-    return ($numbers);
-    }}
-
-
-sub existsShelf
-{
- my ($shelfname,$shelfnumberP,) = @_;
-    my $sth=$dbh->prepare("select * from bookshelf where shelfname=? and parent=?");
-        $sth->execute($shelfname,$shelfnumberP);
-    return($sth->rows);
-
-
+	my ($shelfname,$type,$shelfnumberP) = @_;
+	
+	my $sth=$dbh->prepare('SELECT * FROM bookshelf WHERE parent=? AND shelfname=?');
+	$sth->execute($shelfnumberP,$shelfname);
+	my $data = $sth->fetchrow_hashref;
+	$sth->finish;
+	
+	if ($data) 
+		{return (0) }
+	else {	 	
+		my $sth2=$dbh->prepare('SELECT  max(shelfnumber) as number FROM bookshelf');
+		$sth2->execute;
+		my $data   = $sth2->fetchrow;
+		my $numbers = $data + 1;
+		$sth2->finish;
+		
+		my  $sth3=$dbh->prepare("INSERT INTO bookshelf (shelfnumber,shelfname,type,parent) 
+					VALUES (?,?,?,?)");
+		$sth3->execute($numbers,$shelfname,$type,$shelfnumberP);
+		$sth3->finish;
+		
+		return ($numbers);
+    	}
 }
+
+
 =item RemoveShelf
 
   ($status, $msg) = &RemoveShelf($env, $shelfnumber);
@@ -540,46 +521,79 @@ C<$env> is ignored.
 =cut
 #'
 sub RemoveShelf {
-    my ($shelfnumber) = @_;
-    my $sth=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
-    $sth->execute($shelfnumber);
-    my $count=$sth->fetchrow;
-
-    my $sth1=$dbh->prepare("select count(*) from bookshelf where parent=?");
-    $sth1->execute($shelfnumber);
-    my $count1=$sth1->fetchrow;
-
-    if (($count gt 0) || ($count1 gt 0)) {
-        $sth->finish;
-        $sth1->finish;
-	return ("El estante contiene grupos o subestantes relacionados. Por favor eliminelos y despues borre el estante.");
-    } else {
-	$sth=$dbh->prepare("delete from bookshelf where shelfnumber=?");
+	my ($shelfnumber) = @_;
+	
+	my $sth=$dbh->prepare("	SELECT count(*) FROM shelfcontents WHERE shelfnumber=?");
 	$sth->execute($shelfnumber);
-        $sth->finish;
-        $sth1->finish;
-	return (0);
-    }
+	my $count=$sth->fetchrow;
+	
+	my $sth1=$dbh->prepare("	SELECT count(*) FROM bookshelf wHERE parent=?");
+	$sth1->execute($shelfnumber);
+	my $count1=$sth1->fetchrow;
+	
+	if (($count gt 0) || ($count1 gt 0)) {
+		$sth->finish;
+		$sth1->finish;
+		return ("El estante contiene grupos o subestantes relacionados. Por favor eliminelos y despues borre el estante.");
+	} else {
+		$sth=$dbh->prepare("DELETE FROM bookshelf WHERE shelfnumber=?");
+		$sth->execute($shelfnumber);
+		$sth->finish;
+		$sth1->finish;
+		return (0);
+	}
 }
 
 
 
 sub privateShelfs {
- 	my ($bor) = @_;
+ 	my ($bor,$ini,$cantR) = @_;
+	
+	my $dbh = C4::Context->dbh;
 	my $count= 0;
+=item
 	my $query = " 	SELECT id2 FROM  bookshelf  INNER  JOIN shelfcontents 
 			ON (bookshelf.shelfnumber = shelfcontents.shelfnumber)
 			WHERE bookshelf.shelfname = ?
-			AND bookshelf.type='private'  ";
+			AND bookshelf.type='private'  
+			limit ?,? ";
+=cut
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($query);
-	$sth->execute($bor);
+	my $querySelect= "	SELECT id2 ";
+
+	my $querySelectCount= "	SELECT count(id2) cant";
+
+	my $queryFrom= "	FROM  bookshelf  INNER  JOIN shelfcontents 
+				ON (bookshelf.shelfnumber = shelfcontents.shelfnumber) ";
+
+	my $queryWhere="	WHERE bookshelf.shelfname = ?
+				AND bookshelf.type='private'  ";
+
+	my $queryFinal="	LIMIT ?,? ";
+
+	my $consulta = $querySelectCount.$queryFrom.$queryWhere;
+
+  	#obtengo la cantidad total para el paginador
+  	my $sth=$dbh->prepare($consulta);
+  	$sth->execute($bor);
+  	my $data= $sth->fetchrow_hashref;
+  	my $count= $data->{'cant'};
+
+	#se realiza la consulta
+  	$consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
+  	my $sth=$dbh->prepare($consulta);
+  	$sth->execute($bor,$ini,$cantR);
+	
+			
+
+# 	my $dbh = C4::Context->dbh;
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute($bor,$ini,$cantR);
 	my @resultsId1=();
 
 	while(my $data=$sth->fetchrow_hashref){
 		push(@resultsId1, $data->{'id2'});
-		$count++;
+# 		$count++;
 	}
 
 	$sth->finish;
@@ -587,90 +601,173 @@ sub privateShelfs {
 }
 
 sub createPrivateShelf {
-    my ($bor) = @_;
+	my ($bor) = @_;
 
-    my $sth=$dbh->prepare('select  max(shelfnumber) as number from bookshelf');
-    $sth->execute;
-    my $data   = $sth->fetchrow;
-    my $numbers = $data + 1;
+    	my $sth=$dbh->prepare('SELECT  MAX(shelfnumber) AS number FROM bookshelf');
+    	$sth->execute;
+
+    	my $data   = $sth->fetchrow;
+    	my $numbers = $data + 1;
 	$sth->finish;
 
-    my $sth2=$dbh->prepare("Insert into bookshelf values ($numbers ,$bor,'private',0);");
-        $sth2->execute();
-    $sth2->finish;
-  return($numbers);      
-  }
+    	my $sth2=$dbh->prepare("INSERT INTO bookshelf VALUES (?,?,'private',0);");
+        $sth2->execute($numbers, $bor);
+
+    	$sth2->finish;
+
+  	return($numbers);
+}
 
 sub gotShelf {
-    my ($bor) = @_;
-    my $sth=$dbh->prepare("select shelfnumber  from bookshelf where type='private' and shelfname= $bor  ");
-    $sth->execute;
-    my $res=$sth->fetchrow;
-    $sth->finish;
- if ($res) {return ($res);}else{return 0;}
-     
-	}
+    	my ($bor) = @_;
+
+    	my $sth=$dbh->prepare("SELECT shelfnumber FROM bookshelf WHERE type='private' AND shelfname= ? ");
+    	$sth->execute($bor);
+    	my $res=$sth->fetchrow;
+    	$sth->finish;
+
+ 	if ($res) {return ($res);}else{return 0;}
+
+}
 
 sub addPrivateShelfs {
-    my ($shelf, $id2) = @_;
-    my $sth1=$dbh->prepare("select  count(*)  from shelfcontents where shelfnumber=? and id2 = ? ");
-    $sth1->execute($shelf, $id2);
-   if ($sth1->fetchrow eq 0){
-    my $sth2=$dbh->prepare("insert into shelfcontents values (?,?,0) ");
-    $sth2->execute($shelf,$id2);
-    $sth2->finish;
+	my ($shelf, $id2) = @_;
+
+	my $sth1=$dbh->prepare(" SELECT count(*) FROM shelfcontents WHERE shelfnumber=? AND id2 = ? ");
+	$sth1->execute($shelf, $id2);
+
+	if ($sth1->fetchrow eq 0){
+		my $sth2=$dbh->prepare(" INSERT INTO shelfcontents VALUES (?,?,0) ");
+		$sth2->execute($shelf,$id2);
+		$sth2->finish;
 	}
-    $sth1->finish;
-        }
+
+	$sth1->finish;
+}
+
+sub t_addPrivateShelfs {
+	
+	my ($shelf, $id2)=@_;
+	my $dbh = C4::Context->dbh;
+	my ($error, $codMsg, $message, $paraMens);
+
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+		addPrivateShelfs($shelf, $id2);	
+		$dbh->commit;
+		$error= 0;
+		$codMsg= 'F700';
+
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B408';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'F701';
+	}
+	$dbh->{AutoCommit} = 1;
+		
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
 
 sub delPrivateShelfs {
-   my ($shelf, $id2) = @_;
-    my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=? and id2= ? ");
-    $sth->execute($shelf,$id2);
-    $sth->finish;
+	my ($shelf, $id2) = @_;
+
+	my $sth=$dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber=? AND id2= ? ");
+	$sth->execute($shelf,$id2);
+	$sth->finish;
+}
+
+sub t_delPrivateShelfs {
+	
+	my ($shelf, $id2)=@_;
+	my $dbh = C4::Context->dbh;
+	my ($error, $codMsg, $message, $paraMens);
+
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+		delPrivateShelfs($shelf, $id2);	
+		$dbh->commit;
+		$error= 0;
+		$codMsg= 'F702';
+
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B409';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'F703';
 	}
+	$dbh->{AutoCommit} = 1;
+		
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
 
 sub shelfitemcount{
- my ($shelf) = @_;
-
-  my $dbh = C4::Context->dbh;
-
-  #Cantidad de ejemplares
-  my $query2="select nivel3.wthdrawn, nivel3.notforloan from nivel3 inner join shelfcontents on nivel3.id2  = shelfcontents.id WHERE  shelfcontents.shelfnumber = ?";
- 
- my $sth=$dbh->prepare($query2);
-    $sth->execute($shelf);
+	my ($shelf) = @_;
 	
-  my $data;
-  my $ejemplares=0;
-  my $unavailable=0;
-  my $forloan=0;
-  my $notforloan=0;
-  while ($data=$sth->fetchrow_hashref) {
-        if ($data->{'wthdrawn'} >0){$unavailable++;}
-	else{if ($data->{'notforloan'}){$notforloan++;}else{$forloan++;}}
-        $ejemplares++;}
+	my $dbh = C4::Context->dbh;
+	
+	#Cantidad de ejemplares
+	my $query2="	SELECT nivel3.wthdrawn, nivel3.notforloan 
+			FROM nivel3 INNER JOIN shelfcontents ON nivel3.id2 = shelfcontents.id 
+			WHERE  shelfcontents.shelfnumber = ?";
+	
+	my $sth=$dbh->prepare($query2);
+	$sth->execute($shelf);
+		
+	my $data;
+	my $ejemplares=0;
+	my $unavailable=0;
+	my $forloan=0;
+	my $notforloan=0;
+	while ($data=$sth->fetchrow_hashref){
 
+		if ($data->{'wthdrawn'} >0){$unavailable++;}
+		else{
+			if ($data->{'notforloan'}){$notforloan++;}else{$forloan++;}
+		}
+		
+		$ejemplares++;
+	}
+	
+	
+	my $query3="	SELECT count( DISTINCT nivel2.id1 )
+			FROM nivel2
+			INNER JOIN shelfcontents ON nivel2.id2 = shelfcontents.id
+			WHERE shelfcontents.shelfnumber = ?";
 
-  my $query3="SELECT count( DISTINCT nivel2.id1 )
-		FROM nivel2
-		INNER JOIN shelfcontents ON nivel2.id2 = shelfcontents.id
-		WHERE shelfcontents.shelfnumber = ?";
- my $sth3=$dbh->prepare($query3);
-    $sth3->execute($shelf);
- my $titulos=$sth3->fetchrow;
-
-  return ($titulos,$ejemplares,$unavailable,$forloan,$notforloan);
+	my $sth3=$dbh->prepare($query3);
+	$sth3->execute($shelf);
+	my $titulos=$sth3->fetchrow;
+	
+	return ($titulos,$ejemplares,$unavailable,$forloan,$notforloan);
 
 }
 
 sub modshelf {
-   my ($shelfnumber, $shelfname) = @_;
-       my $sth=$dbh->prepare("update  bookshelf set shelfname=? where shelfnumber=? ");
-       $sth->execute($shelfname,$shelfnumber);
+	my ($shelfnumber, $shelfname) = @_;
+
+	my $sth=$dbh->prepare("	UPDATE  bookshelf SET shelfname=? WHERE shelfnumber=? ");
+	$sth->execute($shelfname,$shelfnumber);
 	$sth->finish;
-	               }
-		       
+}
+
 
 END { }       # module clean-up code here (global destructor)
 

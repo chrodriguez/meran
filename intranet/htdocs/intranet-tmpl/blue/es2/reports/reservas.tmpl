@@ -6,7 +6,6 @@
 
 <script>
 //Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
@@ -31,7 +30,6 @@ function updateInfo(responseText){
 	$("#result").html(responseText);
 	ocultarBoton(tipoReserva);
 	zebra("tablaResult");
-	HiddeState();
 }
 
 function changePage(ini){

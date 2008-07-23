@@ -5,8 +5,6 @@
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 
 <script language="javascript">
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 <!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
@@ -30,7 +28,6 @@ function changePage(ini){
 function updateInfo(responseText){
 	$("#result").html(responseText);
 	zebra("tablaResult");
-	HiddeState();
 }
 
 function consultar(){

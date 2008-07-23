@@ -6,7 +6,6 @@
 
 <script language="javascript">
 
-<!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="util.js" -->
 <!-- TMPL_INCLUDE NAME="AjaxHelper.js" -->
 
@@ -32,7 +31,6 @@ function changePage(ini){
 function updateInfo(responseText){
 	$("#result").html(responseText);
 	zebra("tablaResult");
-	HiddeState();
 }
 
 function consultar(){
