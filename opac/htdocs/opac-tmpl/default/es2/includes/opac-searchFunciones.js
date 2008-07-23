@@ -36,10 +36,6 @@ function mandarArreglo(valores){
 
 var objAH;//Objeto AjaxHelper.
 
-function Complete(){
-	HiddeState();
-}
-
 function ordenarPor(ord){
 	//seteo el orden de los resultados
 	objAH.sort(ord);
@@ -187,15 +183,25 @@ function consultarEstanteVirtual(){
  			data: "startfrom=0",
 			beforeSend: Init,
  			complete: function(ajax){
-					$('#datosUsuario').slideUp('slow');
-					$('#result').html(ajax.responseText);
-					zebra();
-					Complete();
+					updateConsultarEstanteVirutal(ajax.responseText);
 				}
 	});
 
+/*
+	objAH=new AjaxHelper(updateInfo);
+//  	objAH.debug= true;
+	objAH.url= 'opac-shelves.pl';
+	objAH.startfrom= '0';
+	//se envia la consulta
+	objAH.sendToServer();
+*/
 }
 
+function updateConsultarEstanteVirutal(responseText){
+	$('#datosUsuario').slideUp('slow');
+	$('#result').html(responseText);
+	zebra();
+}
 
 //**********************************************************************************************************
 
@@ -256,7 +262,6 @@ function MARCDetail(id3, IdDivDetalle, IdDivMARC){
 					$('#'+IdDivMARC).slideDown('slow');
 					//se muestra el boton volver
 					$('#volver'+IdDivMARC).show();
-					Complete();
 				}
 	});
 }

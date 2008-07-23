@@ -75,7 +75,6 @@ items to and from bookshelves.
 		&t_delPrivateShelfs 
 		
 		&privateShelfs 
-		&createPrivateShelf 
 		&gotShelf 
 		&shelfitemcount  
 		&modshelf
@@ -545,19 +544,14 @@ sub RemoveShelf {
 }
 
 
-
+=item
+Esta funcion muestra los favoritos de un borrower
+=cut
 sub privateShelfs {
  	my ($bor,$ini,$cantR) = @_;
 	
 	my $dbh = C4::Context->dbh;
 	my $count= 0;
-=item
-	my $query = " 	SELECT id2 FROM  bookshelf  INNER  JOIN shelfcontents 
-			ON (bookshelf.shelfnumber = shelfcontents.shelfnumber)
-			WHERE bookshelf.shelfname = ?
-			AND bookshelf.type='private'  
-			limit ?,? ";
-=cut
 
 	my $querySelect= "	SELECT id2 ";
 
@@ -584,29 +578,28 @@ sub privateShelfs {
   	my $sth=$dbh->prepare($consulta);
   	$sth->execute($bor,$ini,$cantR);
 	
-			
-
-# 	my $dbh = C4::Context->dbh;
-# 	my $sth=$dbh->prepare($query);
-# 	$sth->execute($bor,$ini,$cantR);
 	my @resultsId1=();
 
 	while(my $data=$sth->fetchrow_hashref){
 		push(@resultsId1, $data->{'id2'});
-# 		$count++;
 	}
 
 	$sth->finish;
 	return ($count, \@resultsId1);
 }
 
+
+=item
+Esta crea un contenedor de favoritos para el borrower pasado por parametro
+=cut
 sub createPrivateShelf {
 	my ($bor) = @_;
 
-    	my $sth=$dbh->prepare('SELECT  MAX(shelfnumber) AS number FROM bookshelf');
+    	my $sth=$dbh->prepare('SELECT MAX(shelfnumber) AS number FROM bookshelf');
     	$sth->execute;
 
-    	my $data   = $sth->fetchrow;
+    	my $data = $sth->fetchrow;
+# ESTO ES UNA CAGADA!!!!!!!!!!
     	my $numbers = $data + 1;
 	$sth->finish;
 
@@ -618,6 +611,10 @@ sub createPrivateShelf {
   	return($numbers);
 }
 
+
+=item
+Esta funcion verifica si existe el contenedor de favoritos para el usuario pasado por parametro
+=cut
 sub gotShelf {
     	my ($bor) = @_;
 
@@ -630,31 +627,29 @@ sub gotShelf {
 
 }
 
-sub addPrivateShelfs {
-	my ($shelf, $id2) = @_;
-
-	my $sth1=$dbh->prepare(" SELECT count(*) FROM shelfcontents WHERE shelfnumber=? AND id2 = ? ");
-	$sth1->execute($shelf, $id2);
-
-	if ($sth1->fetchrow eq 0){
-		my $sth2=$dbh->prepare(" INSERT INTO shelfcontents VALUES (?,?,0) ");
-		$sth2->execute($shelf,$id2);
-		$sth2->finish;
-	}
-
-	$sth1->finish;
-}
-
+=item
+Esta transaccion agrega los favoritos pasados por parametro, si el contenedor de favoritos no existe se crea
+=cut
 sub t_addPrivateShelfs {
 	
-	my ($shelf, $id2)=@_;
+	my ($borrowernumber, $shelf, $arrayFavoritos)=@_;
 	my $dbh = C4::Context->dbh;
 	my ($error, $codMsg, $message, $paraMens);
 
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-		addPrivateShelfs($shelf, $id2);	
+		#si no existe el contenedor de favoritos, se crea
+		if( $shelf eq 0){
+ 
+ 			$shelf=createPrivateShelf($borrowernumber);
+ 		}
+
+		#se agregan los favoritos al conetenedor de favoritos
+		foreach my $id2 (@$arrayFavoritos){
+			addPrivateShelfs($shelf,$id2);
+		}
+
 		$dbh->commit;
 		$error= 0;
 		$codMsg= 'F700';
@@ -677,24 +672,37 @@ sub t_addPrivateShelfs {
 	return ($error, $codMsg, $message);
 }
 
-sub delPrivateShelfs {
+sub addPrivateShelfs {
 	my ($shelf, $id2) = @_;
 
-	my $sth=$dbh->prepare("DELETE FROM shelfcontents WHERE shelfnumber=? AND id2= ? ");
-	$sth->execute($shelf,$id2);
-	$sth->finish;
+	my $sth1=$dbh->prepare(" SELECT count(*) FROM shelfcontents WHERE shelfnumber=? AND id2 = ? ");
+	$sth1->execute($shelf, $id2);
+
+	if ($sth1->fetchrow eq 0){
+		my $sth2=$dbh->prepare(" INSERT INTO shelfcontents VALUES (?,?,0) ");
+		$sth2->execute($shelf,$id2);
+		$sth2->finish;
+	}
+
+	$sth1->finish;
 }
 
+=item
+Esta transaccion elimina los favoritos pasados por parametro
+=cut
 sub t_delPrivateShelfs {
 	
-	my ($shelf, $id2)=@_;
+	my ($shelf, $arrayFavoritos)=@_;
 	my $dbh = C4::Context->dbh;
 	my ($error, $codMsg, $message, $paraMens);
 
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-		delPrivateShelfs($shelf, $id2);	
+		foreach my $id2 (@$arrayFavoritos){
+			my ($error, $codMsg, $message)= delPrivateShelfs($shelf,$id2);
+		}	
+
 		$dbh->commit;
 		$error= 0;
 		$codMsg= 'F702';
@@ -717,6 +725,13 @@ sub t_delPrivateShelfs {
 	return ($error, $codMsg, $message);
 }
 
+sub delPrivateShelfs {
+	my ($shelf, $id2) = @_;
+
+	my $sth=$dbh->prepare(" DELETE FROM shelfcontents WHERE shelfnumber=? AND id2= ? ");
+	$sth->execute($shelf,$id2);
+	$sth->finish;
+}
 
 sub shelfitemcount{
 	my ($shelf) = @_;

@@ -95,6 +95,7 @@ my %mensajesOPAC = (
 	'F701' => 'Se agrego el favorito con &eacute;xito',
 	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
 	'F703' => 'Disculpe, no se pudo eliminar el favorito, intente nuevamente.',
+
 );
 
 my %mensajesINTRA = (

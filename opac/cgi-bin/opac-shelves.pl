@@ -48,6 +48,8 @@ my $linecolor1='#bbbbbb';
 my $linecolor2='#dddddd';
 my $type='public';
 my $color='';
+
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
@@ -55,6 +57,11 @@ my ($template, $loggedinuser, $cookie)
 							authnotrequired => 1,
 							flagsrequired => {borrow => 1},
 						});
+
+# my $obj=$input->param('obj');
+
+# $obj=from_json_ISO($obj);
+# my $op= $obj->{'Accion'};
 
 #Para mandar la dir de mail
 my ($borr, $flags) = getpatroninformation(undef, $loggedinuser);
@@ -237,10 +244,10 @@ foreach my $element (@key) {
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
-
-                $line{'numberparent'}=$shelflist{$element}->{'numberparent'};#los datos del padre, sirve para la busqueda
-                $line{'nameparent'}=$shelflist{$element}->{'nameparent'};#los datos del padre,sirve para la busqueda
-
+		#los datos del padre, sirve para la busqueda
+                $line{'numberparent'}=$shelflist{$element}->{'numberparent'};
+		#los datos del padre,sirve para la busqueda
+                $line{'nameparent'}=$shelflist{$element}->{'nameparent'};
 		$line{'shelfname'}=$shelflist{$element}->{'shelfname'};
 		$line{'shelfbookcount'}=$shelflist{$element}->{'count'};
 		$line{'countshelf'}=$shelflist{$element}->{'countshelf'} ;
