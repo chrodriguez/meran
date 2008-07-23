@@ -16,18 +16,17 @@
 </center>
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
-	<thead>
 	<tr class="tablaresultadoTitle">
 		<td width="2%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 		</td>
 
 		<td width="5%"  class="tablaresultadoTitle">&nbsp;</td>
 		<td width="35%" class="tablaresultadoTitleClick" 
-			onClick="ordenarPor('titulo')" Title="Ordenar por T&iacute;tulo">
+			onClick="ordenar('titulo')" Title="Ordenar por T&iacute;tulo">
 			T&iacute;tulo
 		</td>
 		<td width="35%" class="tablaresultadoTitleClick" 
-			onClick="ordenarPor('nomCompleto')" Title="Ordenar por Autor">
+			onClick="ordenar('nomCompleto')" Title="Ordenar por Autor">
 			Autor
 		</td>
 		<td width="12%" class="tablaresultadoTitle">Edici&oacute;n/A&ntilde;o</td>
@@ -36,8 +35,6 @@
 		<td width="2%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
 		</td>
 	</tr>
-	</thead>
-	<tbody>
 <!-- Actual Resultados de la b&uacute;squeda -->
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
 	<tr class="inputFontNormal">
@@ -80,7 +77,6 @@
 		<td height=25>&nbsp;</td>
 	</tr>
 <!-- /TMPL_LOOP -->
-	<tbody>
 </table>
 
 <br>

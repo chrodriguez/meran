@@ -110,7 +110,6 @@ function buscarPorDiccionario(){
 	objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
 	objAH.dictionary= $('#dictionary').val();
 	//se setea la funcion para cambiar de pagina
-
 	objAH.funcion= 'changePage';
 	objAH.sendToServer();
 }
@@ -180,18 +179,15 @@ function cambiarEstadoCampos(campos, clase){
 
 
 function buscarPorAutor(idAutor){
-
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
 	objAH.idAutor= idAutor;
 	objAH.sendToServer();
 }
 
-function ordenarPor(ord){
+function ordenar(ord){
 	//seteo el orden de los resultados
 	objAH.sort(ord);
 }

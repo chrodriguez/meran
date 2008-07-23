@@ -3,12 +3,11 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 
 <script type="text/javascript">
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
-
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -20,26 +19,25 @@
 
 
 function consultar(){
-	var chkfecha=document.getElementById("chkfecha").checked;
-	var chkuser =document.getElementById("chkuser").checked;
-	var fechaIni=$("#dateselected").val();
-	var fechaFin=$("#dateselectedEnd").val();
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= "/cgi-bin/koha/reports/estadisticasResult.pl";
+	objAH.chkfecha= document.getElementById("chkfecha").checked;
+	objAH.chkuser= document.getElementById("chkuser").checked;
+	objAH.fechaIni= $("#dateselected").val();
+	objAH.fechaFin= $("#dateselectedEnd").val();
+	
 	var chck=$("input[@name='chck']:checked");
-	var array= new Array;
+	var str="";
 	for(var i=0; i< chck.length; i++){
-		array[i]=chck[i].value;
+		str=str+chck[i].value+",";
 	}
-	var params="chkfecha="+chkfecha+"&dateselected="+fechaIni+"&dateselectedEnd="+fechaFin+"&chkuser="+chkuser+"&chck="+array;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/estadisticasResult.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				HiddeState();
-			}
-	});
+	objAH.chck=str;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
 }
 
 </script>
@@ -67,9 +65,9 @@ function consultar(){
 			<td valign= "top" class=inputFontNormal>
 				<br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
-			<!-- TMPL_IF NAME="fechaInicio" --><!-- TMPL_VAR NAME="dateselected" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			<!-- TMPL_IF NAME='fechaInicio' --><!-- TMPL_VAR NAME='dateselected' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 				<br><br>
-			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_IF NAME="fechaFin" --><!-- TMPL_VAR NAME="dateselectedEnd" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="todaydate" --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_IF NAME='fechaFin' --><!-- TMPL_VAR NAME='dateselectedEnd' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 			</td>
 
 
@@ -84,7 +82,7 @@ function consultar(){
 				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">Usuario
 				<br><br>
 
-				<input type="image" onClick='consultar()' src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0">
+				<input type="image" onClick='consultar()' src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
 			</td>
    		</tr>
 	</table>
@@ -93,4 +91,4 @@ function consultar(){
 <div id="result"></div>
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

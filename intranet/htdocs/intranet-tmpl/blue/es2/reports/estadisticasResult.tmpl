@@ -5,13 +5,13 @@
 	</tr>
 
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<th width="15%">Usuarios</th>
 		<th width="15%">Domciliarios</th>
 		<th>Sala de lectura</th>
 		<th>Para fotocopia</th>
 		<th>Especial</th>
-		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 
 	<tr>
@@ -45,14 +45,14 @@
 		<td>&nbsp;</td>
 		<td>
 			<table>
-				<tr align="center">
-					<td class="inputFontNormal" width="5%">
+				<tr align="center" class="inputFontNormal">
+					<td width="5%">
 						<!-- TMPL_VAR NAME="cantUsuPrest" -->
 					</td>
-					<td class="inputFontNormal" width="5%">
+					<td width="5%">
 						<!-- TMPL_VAR NAME="cantUsuReser" -->
 					</td>
-					<td class="inputFontNormal" width="5%">
+					<td width="5%">
 						<!-- TMPL_VAR NAME="cantUsuRenov" -->
 					</td>
 				</tr>
@@ -60,14 +60,14 @@
 		</td>
 		<td>
 			<table>
-				<tr>
-					<td class="inputFontNormal" width="11%">
+				<tr class="inputFontNormal">
+					<td width="11%">
 						<!-- TMPL_VAR NAME="domiTotal" -->
 					</td>
-					<td class="inputFontNormal" width="15%">
+					<td width="15%">
 						<!-- TMPL_VAR NAME="devueltos" -->
 					</td>
-					<td class="inputFontNormal" width="8%">
+					<td width="8%">
 						<!-- TMPL_VAR NAME="renovados" -->
 					</td>
 				</tr>
@@ -93,20 +93,20 @@
 
 <form name="unidad" method="post">
 <!-- Para poder imprimir los resultados correctamentes -->
-<input type="hidden" name="chkfecha" value="<!-- TMPL_VAR NAME="chkfecha" -->">
-<input type="hidden" name="chck2" value="<!-- TMPL_VAR NAME="chck" -->">
-<input type="hidden" name="chkuser" value="<!-- TMPL_VAR NAME="chkuser" -->">
-<input type="hidden" name="dateselected" value="<!-- TMPL_VAR NAME="dateselected" -->">
-<input type="hidden" name="dateselectedEnd" value="<!-- TMPL_VAR NAME="dateselectedEnd" -->">
+<input type="hidden" name="chkfecha" value="<!-- TMPL_VAR NAME='chkfecha' -->">
+<input type="hidden" name="chck2" value="<!-- TMPL_VAR NAME='chck' -->">
+<input type="hidden" name="chkuser" value="<!-- TMPL_VAR NAME='chkuser' -->">
+<input type="hidden" name="dateselected" value="<!-- TMPL_VAR NAME='dateselected' -->">
+<input type="hidden" name="dateselectedEnd" value="<!-- TMPL_VAR NAME='dateselectedEnd' -->">
 
 <!-- Para saber que se quiere, imprimir o un pdf -->
 <input TYPE="hidden" VALUE="pdf" NAME="type" >
 
-<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
 <input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_blank';unidad.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
 </a>
 
-<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
+<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
 <input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_self'; unidad.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
 </a>
 </form>

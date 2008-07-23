@@ -1,9 +1,15 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script language="javascript">
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
+
+function ordenar(orden){
+	objAH.sort=orden;
+	objAH.sendToServer();
+}
 
 function consultar(op,orden){
 	var sur1=$("#surname1").val();
@@ -20,18 +26,23 @@ function consultar(op,orden){
 		crearForm(url,params);//Funcion en util.js
 	}
 	else{
-		$.ajax({
-			type: "POST",
-			url: "/cgi-bin/koha/reports/users-cardsResult.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-				HiddeState();
-				}
-			});
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= "/cgi-bin/koha/reports/users-cardsResult.pl";
+		objAH.surname1= sur1;
+		objAH.surname2= sur2;
+		objAH.legajo1= leg1;
+		objAH.legajo2= leg2;
+		objAH.category=cat;
+		objAH.branch=branch;
+		objAH.op=op;
+		//se envia la consulta
+		objAH.sendToServer();
 	}
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
 }
 
 </script>

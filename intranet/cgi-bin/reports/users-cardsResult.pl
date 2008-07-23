@@ -5,19 +5,19 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::AR::PdfGenerator;
 
 my $input = new CGI;
 
-my $orden=$input->param('orden');
-my $op=$input->param('op');
-my $surname1=$input->param('surname1');
-my $surname2=$input->param('surname2');
-my $legajo1=$input->param('legajo1');
-my $legajo2=$input->param('legajo2');
-my $category=$input->param('category');
-my $regular=$input->param('regular');
-my $branch=$input->param('branch');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $orden=$obj->{'orden'}||'surname';
+my $op=$obj->{'op'};
+my $surname1=$obj->{'surname1'};
+my $surname2=$obj->{'surname2'};
+my $legajo1=$obj->{'legajo1'};
+my $legajo2=$obj->{'legajo2'};
+my $category=$obj->{'category'};
+my $regular=$obj->{'regular'};
+my $branch=$obj->{'branch'};
 my $count=0;
 my @results=();
 

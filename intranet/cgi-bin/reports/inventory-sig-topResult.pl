@@ -6,17 +6,16 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
 use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
 my @results;
-my $sigtop= $input->param('sigtop');
-my $orden= $input->param('orden');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $sigtop= $obj->{'sigtop'};
+my $orden= $obj->{'orden'}||'barcode';
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/inventory-sig-topResult.tmpl",
@@ -41,14 +40,14 @@ my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
 foreach my $element (@res) {
         my %line;
 	$line{'barcode'}=$element->{'barcode'};
-	$line{'biblionumber'}=$element->{'biblionumber'};
-	$line{'bulk'}=$element->{'bulk'};
+	$line{'id2'}=$element->{'id2'};
+	$line{'signatura_topografica'}=$element->{'signatura_topografica'};
 	$line{'id'}=$element->{'id'};
-	$line{'author'}=$element->{'author'}->{'completo'};
-	$line{'title'}=$element->{'title'};
+	$line{'autor'}=$element->{'autor'}->{'completo'};
+	$line{'titulo'}=$element->{'titulo'};
 	$line{'unititle'}=$element->{'unititle'};
 	$line{'publisher'}=$element->{'publisher'};
-	$line{'publicationyear'}=$element->{'publicationyear'};
+	$line{'anio_publicacion'}=$element->{'anio_publicacion'};
 	$line{'number'}=$element->{'number'};
         push (@results, \%line);
 }

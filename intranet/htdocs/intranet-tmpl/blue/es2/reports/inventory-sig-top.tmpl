@@ -1,24 +1,26 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script>
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
-function consultar(orden,ini){
-	var sigtop=$("#sigtop").val();
-	var params="sigtop="+sigtop+"&ini="+ini+"&orden="+orden;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/inventory-sig-topResult.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				HiddeState();
-				zebra("tablaResult");
-			}
-	});
+<script>
+function ordenar(orden){
+	objAH.sort=orden;
+	objAH.sendToServer();
+}
+
+function consultar(){
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
+	objAH.sigtop= $("#sigtop").val();
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
 }
 </script>
 
@@ -40,7 +42,7 @@ function consultar(orden,ini){
 		<td class="inputFontNormal">
 			<input class="inputFontNormal" type="text" id="sigtop" value="<!-- TMPL_VAR name='sigtop' -->">&nbsp;
 		</td>
-		<td><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar('barcode',0)"></td>
+		<td><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar()"></td>
 	</tr>
 </table>
 

@@ -1482,7 +1482,7 @@ sub listaDeEjemplares {
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
-		$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
+# 		$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
 		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
 		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
 		push @results,$row;

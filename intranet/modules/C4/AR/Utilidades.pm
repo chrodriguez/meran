@@ -86,7 +86,7 @@ $tipoInput es el tipo de componente que se va a crear en el tmpl.
 $id el id del componente para poder recuperarlo.
 $values los valores o que puede devolver el componente (combo, radiobotton y checkbox)
 $labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
-$idRep por si hay mÃ¡s de un comp repetible y no tiene un id de la base de datos.
+$valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
 sub crearComponentes(){
 	my ($tipoInput,$id,$values,$labels,$valor)=@_;

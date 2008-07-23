@@ -1,23 +1,5 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-#
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -36,15 +18,15 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-
-my $chkfecha= $input->param('chkfecha');
-my @chck= split(",",$input->param('chck'));
-my $chkuser= $input->param('chkuser');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $chkfecha= $obj->{'chkfecha'};
+my @chck= split(",",$obj->{'chck'});
+my $chkuser= $obj->{'chkuser'};
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'),$dateformat);
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateformat);
+my $fechaInicio =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
 my $domiTotal;
 my $renovados;
@@ -65,15 +47,14 @@ if(($chkuser eq "false" && $checkbox==0)||$chkuser ne "false"){
 	$cantUsuPrest=cantidadUsuariosPrestamos($fechaInicio, $fechaFin, $chkfecha);
 	$cantUsuRenov=cantidadUsuariosRenovados($fechaInicio, $fechaFin, $chkfecha);
 	$cantUsuReser=cantidadUsuariosReservas($fechaInicio, $fechaFin, $chkfecha);
-}
-
+};
 $template->param( 	
 # 			Esta variables que se pasan son para poder imprimir los resultados
-			chck             => $input->param('chck'),
+			chck             => $obj->{'chck'},
 			chkfecha         => $chkfecha,
 			chkuser		 => $chkuser,
-			dateselected     => $input->param('dateselected'),
-		        dateselectedEnd  => $input->param('dateselectedEnd'),
+			dateselected     => $obj->{'fechaIni'},
+		        dateselectedEnd  => $obj->{'fechaFin'},
 #			Variables que se muestran en el tmpl
 			domiTotal        => $domiTotal,
 			renovados        => $renovados,

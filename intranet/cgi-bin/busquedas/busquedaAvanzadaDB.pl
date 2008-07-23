@@ -13,7 +13,7 @@ armarCondicion
 Arma la condicion para la busqueda. Si la condicion es un like agrega el % dependiende de la condicion y concatena el valor; si es cualquiera otra condicion solo concatena el valor a esa condicion.
 Tambien verifica que el valor de busqueda se valido.
 =cut
-sub armarCondicion(){
+sub armarCondicion{
 	my ($cond,$valor)=@_;
 	$valor=&C4::AR::Utilidades::verificarValor($valor);
 	if($cond eq "Empieza"){
@@ -31,21 +31,12 @@ sub armarCondicion(){
 	return $cond;
 }
 
-sub armarCondicionAutor(){
+=item
+Primero busca los autores que cumple con la condicion con la que se quiere realizar la busqueda. Despues construye un string con todos los id de los autores que cumple esa condicion para poder realizar la busqueda sobre la tabla nivel1
+=cut
+sub armarCondicionAutor{
 	my ($cond,$valor)=@_;
-	$valor=&C4::AR::Utilidades::verificarValor($valor);
-	if($cond eq "Empieza"){
-		$cond=" like '".$valor."%' ";
-	}
-	elsif($cond eq "Contiene"){
-		$cond=" like '%".$valor."%' ";
-	}
-	elsif($cond eq "Finaliza"){
-		$cond=" like '%".$valor."' ";
-	}
-	else{
-		$cond=$cond."'".$valor."'";
-	}
+	$cond=armarCondicion($cond,$valor);
 	my @autores=&buscarAutorPorCond($cond);
 	my $str="";
 	foreach my $aut (@autores){
@@ -59,7 +50,7 @@ sub armarCondicionAutor(){
 parsearString
 Esta funcion parsea los string que viene desde el tmpl armando asi el string para hacer las consultas y verificado que el dato sea correcto previniendo el sql injection.
 =cut
-sub parsearString(){
+sub parsearString{
 	my ($str,$rep)=@_;
 	my @arrayCampos;
 	my @arrayVal;
@@ -71,15 +62,15 @@ sub parsearString(){
 		foreach my $cons (@arrayCampos){
 			@arrayVal=split(/\//,$cons);
 			if($rep){
-				$cond=&armarCondicion($arrayVal[2],$arrayVal[3]);
+				$cond=armarCondicion($arrayVal[2],$arrayVal[3]);
 				$string.="(".$rep.".campo=".$arrayVal[0]." AND ".$rep.".subcampo='".$arrayVal[1]."' AND ".$rep.".dato".$cond.")#";
 			}
 			else{
 				if($arrayVal[0] eq "autor"){
-					$string.=&armarCondicionAutor($arrayVal[1],$arrayVal[2])."#";
+					$string.=armarCondicionAutor($arrayVal[1],$arrayVal[2])."#";
 				}
 				else{
-					$cond=&armarCondicion($arrayVal[1],$arrayVal[2]);
+					$cond=armarCondicion($arrayVal[1],$arrayVal[2]);
 					$string.=$arrayVal[0].$cond."#";
 				}
 				
@@ -90,7 +81,8 @@ sub parsearString(){
 }
 
 my $input = new CGI;
-my $accion= $input->param('accion');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $accion= $obj->{'accion'};
 
 if($accion eq "buscar"){
 	my ($template, $loggedinuser, $cookie)
@@ -102,15 +94,22 @@ if($accion eq "buscar"){
 			     debug => 1,
 			     });
 
-	my $nivel1=&parsearString($input->param('nivel1'),0);
-	my $nivel2=&parsearString($input->param('nivel2'),0);
-	my $nivel3=&parsearString($input->param('nivel3'),0);
-	my $nivel1rep=&parsearString($input->param('nivel1rep'),"n1r");
-	my $nivel2rep=&parsearString($input->param('nivel2rep'),"n2r");
-	my $nivel3rep=&parsearString($input->param('nivel3rep'),"n3r");
-	my $operador=$input->param('operador');
+	my $nivel1=parsearString($obj->{'nivel1'},0);
+	my $nivel2=parsearString($obj->{'nivel2'},0);
+	my $nivel3=parsearString($obj->{'nivel3'},0);
+	my $nivel1rep=parsearString($obj->{'nivel1rep'},"n1r");
+	my $nivel2rep=parsearString($obj->{'nivel2rep'},"n2r");
+	my $nivel3rep=parsearString($obj->{'nivel3rep'},"n3r");
+	my $operador=$obj->{'operador'};
 
-	my ($cantidad,$resultId1)= &busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador);
+	my $ini=$obj->{'ini'};
+	my $orden=$obj->{'orden'}||'titulo';
+	my $funcion=$obj->{'funcion'};
+	my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+	my ($cantidad,$resultId1)= C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR);
+
+	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsarray;
 my %result;
@@ -131,11 +130,12 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
 }
 
+
 my @keys=keys %result;
+@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys; #PARA EL ORDEN
 foreach my $row (@keys){
 	push (@resultsarray, $result{$row});
 }
-
 
 $template->param(
 		SEARCH_RESULTS => \@resultsarray,
@@ -147,28 +147,25 @@ output_html_with_http_headers $input, $cookie, $template->output;
 }
 else{
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ catalogue => 1});
-
-	my $campoX= $input->param('campoX');
-	my $campo= $input->param('campo');
-
+	
 	my $string="";
 
 	if($accion eq "seleccionCampoX"){
+		my $campoX= $obj->{'campoX'};
 		my @campos=&C4::AR::Busquedas::buscarCamposMARC($campoX);
 		for(my $i=0; $i < scalar(@campos); $i++){
 			$string .= $campos[$i]."#";
 		}
 	}
 	elsif($accion eq "seleccionCampo"){
-		my @arrCampos=split("/",$campo);
-		my @subcampos=&C4::AR::Busquedas::buscarSubCamposMARC($arrCampos[1]);
+		my $campo= $obj->{'campo'};
+		my @subcampos=&C4::AR::Busquedas::buscarSubCamposMARC($campo);
 		for(my $i=0; $i < scalar(@subcampos); $i++){
 			$string .= $subcampos[$i]."#";
 		}
 	}
 	else{#accion = busquedaReferencia
-		my $mapeo= $input->param('mapeo');
-		my $campo= (split(/#/,$mapeo))[1];
+		my $campo= $obj->{'campo'};
 		my $tipo='combo';
 		my @valuesMapeo;
 		my %labelsMapeo;
@@ -207,10 +204,10 @@ else{
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "holdingbranch" || $campo eq "homebranch" ){
-			my $labels=C4::AR::Busquedas::getBranches();
+			$labels=C4::AR::Busquedas::getBranches();
 			foreach my $key (keys %$labels){
 				push(@valuesMapeo,$key);
-				$labelsMapeo{$key}=%$labels->{$key}->{'branchname'};
+				$labelsMapeo{$key}=$labels->{$key}->{'branchname'};
 			}
 			$labels=\%labelsMapeo;
 		}

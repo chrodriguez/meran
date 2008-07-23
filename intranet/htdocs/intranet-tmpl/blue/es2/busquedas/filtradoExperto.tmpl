@@ -1,97 +1,100 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <script language="javascript" type="text/javascript">
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
+
+var objAH;
+function ordenarPor(orden){
+	objAH.sort(orden);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
 
 // Realiza la busqueda RE AVANZADA!!!!
 function busquedaReAvanzada(){
 	var consulta = $('#consulta').val();
-	if(consulta !=""){
-		var params=	'nivel1=' + $('#nivel1').val() +
-			'&nivel2=' + $('#nivel2').val() +
-			'&nivel3=' + $('#nivel3').val() +
-			'&nivel1rep=' + $('#n1r').val() +
-			'&nivel2rep=' + $('#n2r').val() +
-			'&nivel3rep=' + $('#n3r').val() +
-			'&operador=' + $(':checked').val() +
-			'&accion=buscar';
-
-		$.ajax({	type: "POST",
-			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-					var texto=ajax.responseText;
-					$("#resultBusqueda").html(texto);
-					zebra();
-					HiddeState();
-
-					//para ordenar el resultado en el cliente
-					$('#tablaResult').tablesorter({	
-  									sortList:[[0,0],[1,0],[2,0]],
- 									widgets: ['zebra'],
-  									headers: { 3: { sorter: false} }
-								});
-				}
-		});
+	if(consulta != ""){
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= '/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl';
+		objAH.funcion= 'changePage';
+		objAH.nivel1= $('#nivel1').val();
+		objAH.nivel2= $('#nivel2').val();
+		objAH.nivel3= $('#nivel3').val();
+		objAH.nivel1rep= $('#n1r').val();
+		objAH.nivel2rep= $('#n2r').val();
+		objAH.nivel3rep= $('#n3r').val();
+		objAH.operador= $(':checked').val();
+		objAH.accion='buscar';
+		objAH.sendToServer();
 	}
 	else{
 		alert("No ingreso datos para consultar");
 	}
+
+}
+
+// Hace una busqueda por el id del autor cuando se toca en el link del mismo.
+function buscarPorAutor(idAutor){
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.idAutor= idAutor;
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	$('#resultBusqueda').html(responseText);
+	zebra('tablaResult');
 }
 
 // Crea el string con los campos correspondiente al campoX elegido
 function seleccionCampoX(){
-	var params='campoX=' + $('#campoX').val() + '&accion=seleccionCampoX';
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-					var texto=ajax.responseText;
-					crearOpciones(texto,"#campo");
-					HiddeState();
-				}
-	});
+	objAH=new AjaxHelper(crearOpcionesCampo);
+	objAH.url= '/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl';
+	objAH.campoX= $('#campoX').val();
+	objAH.accion='seleccionCampoX';
+	objAH.sendToServer();
+}
 
+function crearOpcionesCampo(responseText){
+	crearOpciones(responseText,"#campo");
 }
 
 // Crea el string con los subcampos correspondientes a el campo elegido.
 function seleccionCampo(){
-	var params='campo=' + $('#campo').val() + '&accion=seleccionCampo';
-	$.ajax({	type: "POST",
-			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-					var texto=ajax.responseText;
-					crearOpciones(texto,"#subcampo");
-					HiddeState();
-				}
-	});
+	var campo=$('#campo').val();
+	campo=campo.split("/")[1];
+	objAH=new AjaxHelper(crearOpcionesSubcampo);
+	objAH.url= '/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl';
+	objAH.campo= campo;
+	objAH.accion='seleccionCampo';
+	objAH.sendToServer();
+}
 
+function crearOpcionesSubcampo(responseText){
+	crearOpciones(responseText,"#subcampo");
 }
 
 // Crea el select con los valores de la tabla de referencia que corresponde al campo elegido.
 function buscarReferencia(){
-	var params='mapeo=' + $('#mapeo').val() + '&accion=busquedaReferencia';
-	$.ajax({	type: "POST",
-			url: "/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl",
-			data: params,
-			beforeSend: Init,
-			complete: function(ajax){
-					var texto=ajax.responseText;
-					ubicarComponente(texto);
-					eventoEnter("#valor1","primero");
-					HiddeState();
-				}
-	});
+	var campo=$('#mapeo').val();
+	campo=campo.split("#")[1]
+	objAH=new AjaxHelper(updateInfoReferencia);
+	objAH.url= '/cgi-bin/koha/busquedas/busquedaAvanzadaDB.pl';
+	objAH.campo= campo;
+	objAH.accion='busquedaReferencia';
+	objAH.sendToServer();
+}
+
+function updateInfoReferencia(responseText){
+	ubicarComponente(responseText);
+	eventoEnter("#valor1","primero");
 }
 
 //Ubica el componente que viene desde la llamada a ajax
@@ -210,22 +213,6 @@ function limpiar(){
 	$('#valor2').val("");
 }
 
-// Hace una busqueda por el id del autor cuando se toca en el link del mismo.
-function buscarPorAutor(idAutor){
-
-var params= 	'idAutor=' + idAutor;
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/busquedas/busqueda.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#resultBusqueda').html(ajax.responseText);
-					zebra();
-					HiddeState();
-				}
-	});
-}
-
 // Crea un formulario para poder mandar los parametros por post (no se muestran en la url), necesita un div con id
 // formulario
 function mostrarDetalle(id1){
@@ -257,10 +244,10 @@ $(document).ready(function() {
 	<span class="pagetitle">B&uacute;squeda Experta en el cat&aacute;logo</span>
 	<br>
 	<div class="formElemets">
-		<ul>
+		<ul class="inputFontNormal">
 			<li>
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="AND" checked>Y (AND)
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="OR">O (OR)
+			<input name="tipo" type=radio id=tipo value="AND" checked>Y (AND)
+			<input name="tipo" type=radio id=tipo value="OR">O (OR)
 			</li>
 			
 			<li>
@@ -277,7 +264,7 @@ $(document).ready(function() {
 					  </select>
 			</div>
 			<div id="div1" style="float:left;">
-				&nbsp;Valor: <input class="inputFontNormal" type="text"  id="valor1">
+				&nbsp;Valor: <input type="text"  id="valor1">
 			</div>
 			&nbsp;<input type="button" id="boton1" value="+" onClick="agregarConsulta('primero')">
 			</li>
@@ -311,14 +298,14 @@ $(document).ready(function() {
 						<option value="Contiene">Contiene</option>
 						<option value="Finaliza">Finaliza</option>
 					  </select>
-			Valor: <input class="inputFontNormal" type="text"  id="valor2">
+			Valor: <input type="text"  id="valor2">
 			<input type="button"  value="+" onClick="agregarConsulta('segundo')">
 			</li>
 		</ul>
 
 		<div>
 		
-		<ul>
+		<ul class="inputFontNormal">
 			<li>
 				Consulta: <br>
 				<textarea id="consulta" cols="96" rows="7" readonly="readonly"></textarea>

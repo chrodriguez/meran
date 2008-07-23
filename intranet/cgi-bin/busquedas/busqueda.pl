@@ -25,7 +25,7 @@ my $tipo= $obj->{'tipo'};
 my $idTema= $obj->{'idTema'};
 my $tema= $obj->{'tema'};
 my $comboItemTypes= $obj->{'comboItemTypes'};
-my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
+my $idAutor= $obj->{'idAutor'};
 my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};
 
@@ -101,14 +101,12 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
 }
 
-# my $ini= ($input->param('ini')||'');
 my $ini= ($obj->{'ini'}||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad,$resultId1)= &C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
+my ($cantidad,$resultId1)= C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
 
-# C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,"buscar");
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsarray;
 my %result;
@@ -133,7 +131,7 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 }
 
 my @keys=keys %result;
-@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys; #PARA EL ORDEN
 foreach my $row (@keys){
 	push (@resultsarray, $result{$row});
 }

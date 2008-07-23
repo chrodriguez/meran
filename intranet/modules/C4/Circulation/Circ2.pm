@@ -145,19 +145,7 @@ sub itemseen {
 	$sth->execute($itemnum);
 	return;
 }
-
-sub getpublishers {
-        my ($bibitemnum) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select publisher from publisher where biblioitemnumber= ?");
-	$sth->execute($bibitemnum);
-	my $res='';
-	while (my $row = $sth->fetchrow_hashref) 
-	{$res.=$row->{'publisher'}.' '}
-	   
-	return $res;
-					}
-					
+	
 
 =item
 SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl) TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
@@ -261,7 +249,7 @@ sub listitemsforinventory {
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
-		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
+# 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
 		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
 		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
 		push @results,$row;
@@ -300,24 +288,25 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 sub listitemsforinventorysigtop {
 	my ($sigtop,$orden) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblio.biblionumber as biblionumber
+	#FALTA unititle,number es la edicion,
+	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
 	FROM (
 	(
-	items
-	INNER JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+	nivel3 n3
+	INNER JOIN nivel2 n2 ON n3.id2 = n2.id2
 	)
-	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
+	INNER JOIN nivel1 n1 ON n1.id1 = n2.id1
 	)
-	WHERE bulk LIKE ?
-	ORDER BY barcode, title");
+	WHERE signatura_topografica LIKE ?
+	ORDER BY barcode, titulo");
 		
 	$sth->execute($sigtop."%");
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
-		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
-		$row->{'id'}=$row->{'author'};
-		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
+# 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
+		$row->{'id'}=$row->{'autor'};
+		$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
 		push @results,$row;
 	}
 	
