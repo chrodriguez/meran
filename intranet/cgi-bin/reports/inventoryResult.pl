@@ -5,18 +5,17 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
 use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
 my @results;
-my $desde=$input->param('desde');
-my $hasta=$input->param('hasta');
-my $orden=$input->param('orden');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $desde=$obj->{'desde'};
+my $hasta=$obj->{'hasta'};
+my $orden=$obj->{'orden'}||'barcode';
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "reports/inventoryResult.tmpl",
@@ -38,18 +37,18 @@ my $planilla=generar_planilla_inventario(\@res,$loggedinuser);
 foreach my $element (@res) {
                 my %line;
 		$line{'barcode'}=$element->{'barcode'};
-		$line{'biblionumber'}=$element->{'biblionumber'};
-		$line{'bulk'}=$element->{'bulk'};
-		$line{'author'}=$element->{'completo'};
-		$line{'title'}=$element->{'title'};
+		$line{'id1'}=$element->{'id1'};
+		$line{'signatura_topografica'}=$element->{'signatura_topografica'};
+		$line{'autor'}=$element->{'completo'};
+		$line{'titulo'}=$element->{'titulo'};
 		$line{'unititle'}=$element->{'unititle'};
 		$line{'publisher'}=$element->{'publisher'};
-		$line{'publicationyear'}=$element->{'publicationyear'};
+		$line{'anio_publicacion'}=$element->{'anio_publicacion'};
 		$line{'number'}=$element->{'number'};
 	        push (@results, \%line);
 }
 
-my $cant=scalar(@results);
+# my $cant=scalar(@results);
 
 $template->param( 
 			results => \@results,

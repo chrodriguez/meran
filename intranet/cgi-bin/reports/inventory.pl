@@ -6,10 +6,8 @@
 
 use strict;
 use C4::Auth;
-use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
 use C4::AR::SxcGenerator;
 
 my $input = new CGI;
@@ -31,9 +29,12 @@ my $branch=$input->param('branch');
 my $MIN=C4::Circulation::Circ2::getminbarcode($branch);
 my $MAX=C4::Circulation::Circ2::getmaxbarcode($branch);
 
+my @barcodePorTipo=C4::Circulation::Circ2::barcodesbytype($branch);
+
 $template->param(
 			MAX => $MAX,
-			MIN => $MIN
+			MIN => $MIN,
+			barcodePorTipo=>\@barcodePorTipo,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

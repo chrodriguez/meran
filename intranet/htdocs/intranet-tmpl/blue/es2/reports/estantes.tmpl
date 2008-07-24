@@ -1,22 +1,22 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script>
-<!-- TMPL_INCLUDE NAME="util.js" -->
 
 function consultar(){
-	var shelf=$("#shelf").val();
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/estantesResult.pl",
-		data: "shelf="+shelf,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-			}
-	})
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= "/cgi-bin/koha/reports/estantesResult.pl";
+	objAH.shelf= $("#shelf").val();
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
 }
 
 $(document).ready( function() {

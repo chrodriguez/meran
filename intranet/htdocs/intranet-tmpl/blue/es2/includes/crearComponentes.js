@@ -127,7 +127,7 @@ function procesarObjeto(objeto){
 				var array=valor.split("#");
 				valor=array.join("\n");
 			}
-				comp=crearComponente("texta",id,"class='unoxlinea'","") + "  UNO POR LINEA ";
+				comp=(crearComponente("texta",id,"class='unoxlinea'","")) + "  UNO POR LINEA ";
 		}
 		else{
 			comp=crearComponente(tipo,id,"","");

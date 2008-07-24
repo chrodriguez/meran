@@ -1,20 +1,13 @@
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-                <!-- TMPL_ELSE -->
-                       <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->	
-			   <!-- /TMPL_IF -->
-												
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script language="javascript" type="text/javascript">
-
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
 
 function swap(id,src){
 document.getElementById(id).src=src;
@@ -72,11 +65,6 @@ function mandarForm(){
 	if(chequearCampos() && chequearDocumento()){
 		document.form1.submit();
 	}
-}
-
-function Complete(){
-	//oculto el div state
-	HiddeState();
 }
 
 function CrearAutocomplete(Id){

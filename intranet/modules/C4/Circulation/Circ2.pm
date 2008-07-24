@@ -153,7 +153,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (invento
 sub getmaxbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select MAX(barcode) as max from items where barcode is not NULL and barcode <> '' and homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MAX(barcode) as max FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'max'};
 	return $res;
@@ -165,7 +165,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (invento
 sub getminbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;                     
-	my $sth = $dbh->prepare("select MIN(barcode) as min from items where barcode is not NULL and barcode <> '' and homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MIN(barcode) as min FROM nivel3 where barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'min'};
 	return $res;
@@ -183,13 +183,13 @@ sub barcodesbytype {
 	my $clase='par';
 	my @results;
 	my $row;
-	 $row->{'tipo'}='TODOS';
-	 $row->{'minimo'}=&getminbarcode($branch);
-	 $row->{'maximo'}=&getmaxbarcode($branch);
+	$row->{'tipo'}='TODOS';
+	$row->{'minimo'}=&getminbarcode($branch);
+	$row->{'maximo'}=&getmaxbarcode($branch);
 	if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {push @results,$row };
 
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select itemtype from itemtypes;");
+	my $sth = $dbh->prepare("SELECT itemtype FROM itemtypes;");
 	$sth->execute();
 	
 	while (my $it = $sth->fetchrow_hashref) {
@@ -198,18 +198,13 @@ sub barcodesbytype {
 
 		my $inicio=$branch."-".$it->{'itemtype'}."-%";
 		
-		my $sth2 = $dbh->prepare("select MIN(barcode) as min from items where barcode is not NULL and barcode <> '' and homebranch = ? and barcode like ? ");
+		my $sth2 = $dbh->prepare("SELECT MIN(barcode) AS min FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
 		$sth2->execute($branch,$inicio);
 	 	$row->{'minimo'} = ($sth2->fetchrow_hashref)->{'min'};
 
-		my $sth3 = $dbh->prepare("select MAX(barcode) as max from items where barcode is not NULL and barcode <> '' and homebranch = ? and barcode like ? ");
+		my $sth3 = $dbh->prepare("SELECT MAX(barcode) AS max FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
 		$sth3->execute($branch,$inicio);
 	 	$row->{'maximo'} = ($sth3->fetchrow_hashref)->{'max'};
-
-		#16/03/07 Miguel - No mostraba las filas con el color de  forma intercalada
-		#Ver si hay que mostrarlo de esta forma, sino quitar las dos lineas
-		if ($clase eq 'par'){$clase='impar'} else {$clase='par'};
-		$row->{'clase'}=$clase;
 
 		if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {push @results,$row };
 		$sth2->finish;
@@ -227,31 +222,20 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
-	
 	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
-
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblioitems.biblionumber, items.homebranch
-	FROM (
-	(
-	items
-	INNER JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-	)
-	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
-	)
-	WHERE (barcode
-	BETWEEN ?
-	AND ?)
-	AND items.homebranch= ?
-	ORDER BY barcode, title ");
+	# unititle,number,
+	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch
+	FROM (( nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
+	WHERE (barcode BETWEEN ? AND ?) AND n3.homebranch= ? ORDER BY barcode, titulo ");
 		
 	$sth->execute($minlocation,$maxlocation,$branchcode);
 	
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {
 # 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
-		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
-		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
+		$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
+		$row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
 		push @results,$row;
 	}
 
@@ -290,13 +274,7 @@ sub listitemsforinventorysigtop {
 	my $dbh = C4::Context->dbh;
 	#FALTA unititle,number es la edicion,
 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
-	FROM (
-	(
-	nivel3 n3
-	INNER JOIN nivel2 n2 ON n3.id2 = n2.id2
-	)
-	INNER JOIN nivel1 n1 ON n1.id1 = n2.id1
-	)
+	FROM ((nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
 	WHERE signatura_topografica LIKE ?
 	ORDER BY barcode, titulo");
 		

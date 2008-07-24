@@ -1,10 +1,29 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script>
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
+<script>
+function ordenar(orden){
+	objAH.sort=orden;
+	objAH.sendToServer();
+}
+
+function consultar(){
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
+	objAH.desde= $("#desde").val();
+	objAH.hasta= $("#hasta").val();
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("tablaResult");
+}
+/*
 function consultar(ini,orden){
 	var desde=$("#desde").val();
 	var hasta=$("#hasta").val();
@@ -20,7 +39,7 @@ function consultar(ini,orden){
 				zebra("tablaResult");
 			}
 	});
-}
+}*/
 
 </script>
 
@@ -34,6 +53,28 @@ function consultar(ini,orden){
 </table>
 <br>
 
+<center>
+<table border="0" cellspacing="0" cellpadding="0" width="90%">
+	<tr class="tablaresultadoTitle">
+		<td align="left"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td align="center" width="30%">Tipo</td>
+		<td align="center">M&iacute;nimo</td>
+		<td align="center">M&aacute;ximo</td>
+		<td align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	</tr>
+
+<!-- TMPL_LOOP NAME=barcodePorTipo -->
+  	<tr align="center">
+		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
+	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=tipo --> </td>
+	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=minimo --> </td>
+	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=maximo --> </td>
+		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
+ 	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+</center>
+<br>
 <table border="0" cellspacing="0" cellpadding="0" align="left">
 	<tr>
 		<td class="inputFontNormal">Localizaci&oacute;n del ejemplar entre &nbsp;</td>
@@ -46,7 +87,7 @@ function consultar(ini,orden){
 </table>
 
 <br>
-<p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MIN --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAX --></b>. </p>
+<!-- <p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MIN --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAX --></b>. </p> -->
 
 <div id="result"></div>
 

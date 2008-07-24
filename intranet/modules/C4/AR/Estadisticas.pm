@@ -15,47 +15,46 @@ use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(&usuarios
-	   &historicoPrestamos
-           &cantidadPrestamos
-	   &cantidadRetrasados
-	   &renovacionesDiarias
-	   &prestamos
-	   &reservas
-	   &cantUsuarios
-	   &cantidadReservas
-	   &registroActividadesDiarias
-	   &registroEntreFechas
-	   &insertarNota
-	   &armarPaginas
-	   &armarPaginasPorRenglones
-	   &cantidadRenglones
-	   &prestamosAnual
-	   &cantidadUsuarios
-	   &cantidadReservas
-	   &cantRegDiarias
-	   &cantRegFechas
-	   &cantidadAnaliticas
-	   &disponibilidad
-	   &itemtypesReport
-	   &levelsReport
-	   &availYear
-	   &getuser
-	   &estadisticasGenerales
-	   &cantidadUsuariosPrestamos
-	   &cantidadUsuariosReservas
-	   &cantidadUsuariosRenovados
-	   &historicoDeBusqueda
-	   &historicoCirculacion
-	   &insertarNotaHistCirc
-	   &userCategReport
-	   &historicoSanciones
-	   &historialReservas
-	   &signaturamax
-	   &signaturamin
-	   &listaDeEjemplares
+@EXPORT=qw(
+	&usuarios
+	&historicoPrestamos
+        &cantidadPrestamos
+	&cantidadRetrasados
+	&renovacionesDiarias
+	&prestamos
+	&reservas
+	&cantUsuarios
+	&cantidadReservas
+	&registroActividadesDiarias
+	&registroEntreFechas
+	&insertarNota
+	&armarPaginas
+	&armarPaginasPorRenglones
+	&cantidadRenglones
+	&prestamosAnual
+	&cantidadReservas
+	&cantRegDiarias
+	&cantRegFechas
+	&cantidadAnaliticas
+	&disponibilidad
+	&itemtypesReport
+	&levelsReport
+	&availYear
+	&getuser
+	&estadisticasGenerales
+	&cantidadUsuariosPrestamos
+	&cantidadUsuariosReservas
+	&cantidadUsuariosRenovados
+	&historicoDeBusqueda
+	&historicoCirculacion
+	&insertarNotaHistCirc
+	&userCategReport
+	&historicoSanciones
+	&historialReservas
+	&signaturamax
+	&signaturamin
+	&listaDeEjemplares
 );
-
 sub historicoDeBusqueda(){
         my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden)=@_;
 
@@ -611,42 +610,6 @@ sub historialUsuario{
 }
 
 
-
-sub cantidadUsuarios{
-        my ($branch,$anio,$usos,$categ,@chck)=@_;
-        my $dbh = C4::Context->dbh;
-	my @bind;
-	my @bind2;
-        my $query ="SELECT count( * ) AS cantidad
-                    FROM borrowers b
-                    WHERE branchcode=?";
-	push(@bind,$branch);
-	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
-	my $exists = "";
-	for (my $i=0; $i < scalar(@chck); $i++){
-		if($chck[$i] eq "CAT"){
-			$query.=" AND b.categorycode= ?";
-			if($exists eq ""){$exists = " AND EXISTS (";}
-			push(@bind, $categ);
-		}
-		elsif($chck[$i] eq "AN"){
-			$query2 = $query2 ." AND year( date_due )= ?";
-			$exists = " AND EXISTS (";
-			push(@bind2, $anio);
-		}
-		else{
-			if($usos eq "NI"){$exists = " AND NOT EXISTS (";}
-			else{$exists = " AND EXISTS (";}
-		}
-	}
-	if ($exists ne ""){
-		$query = $query.$exists.$query2.")";
-	}
-	my $sth=$dbh->prepare($query);
-        $sth->execute(@bind,@bind2);
-	return($sth->fetchrow_array);
-}
-
 #Usuarios de un branch dado 
 #Damian - 31/05/2007 - Se agrego para difereciar usuarios que usan y no usan la biblioteca
 sub usuarios{
@@ -656,16 +619,22 @@ sub usuarios{
   	my @results;
 	my @bind;
 	my @bind2;
+	my $queryCant ="SELECT count( * ) AS cantidad
+                    FROM borrowers b
+                    WHERE branchcode=? ";
+
         my $query ="SELECT  b.phone,b.emailaddress,b.dateenrolled,c.description as categoria ,
 		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city,b.borrowernumber
                     FROM borrowers b inner join categories c on (b.categorycode = c.categorycode)
- 		    WHERE b.branchcode=?";
+ 		    WHERE b.branchcode=? ";
+	my $where="";
 	push(@bind,$branch);
+
 	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
 		if($chck[$i] eq "CAT"){
-			$query.=" AND b.categorycode= ?";
+			$where.=" AND b.categorycode= ?";
 			if($exists eq ""){$exists = " AND EXISTS (";}
 			push(@bind,$categ);
 		}
@@ -679,13 +648,20 @@ sub usuarios{
 			else{$exists = " AND EXISTS (";}
 		}
 	}
+	my $finCons= " ORDER BY ($orden) LIMIT $ini,$fin";
 	if ( $exists eq ""){
-		$query .= " order by ($orden) limit $ini,$fin";
+		$query.=$finCons;
 	}
 	else{
-		$query= $query.$exists.$query2.") group by b.borrowernumber order by ($orden) limit $ini,$fin";
+		$queryCant.=$where.$exists.$query2.")";
+		$query.=$where.$exists.$query2.") GROUP BY b.borrowernumber ".$finCons;
 	}
-        my $sth=$dbh->prepare($query);
+
+        my $sth=$dbh->prepare($queryCant);
+        $sth->execute(@bind,@bind2);
+	my $cantidad=$sth->fetchrow;
+	
+	$sth=$dbh->prepare($query);
         $sth->execute(@bind,@bind2);
 	while (my $data=$sth->fetchrow_hashref){
 		if ($data->{'phone'} eq "" ){$data->{'phone'}='-' };
@@ -697,7 +673,7 @@ sub usuarios{
 		$data->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
                 push(@results,$data);
         }
-        return (@results);
+        return ($cantidad,@results);
 }
 
 =item
