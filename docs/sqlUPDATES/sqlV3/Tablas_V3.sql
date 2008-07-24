@@ -306,7 +306,7 @@ CREATE TABLE `estructura_catalogacion` (
   KEY `subcampo` (`subcampo`),
   KEY `itemtype` (`itemtype`),
   KEY `indiceTodos` (`campo`,`subcampo`,`itemtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `estructura_catalogacion_opac` (
   `idestcatopac` int(11) NOT NULL auto_increment,
@@ -402,7 +402,8 @@ CREATE TABLE `informacion_referencias` (
   `separador` varchar(3) default NULL,
   PRIMARY KEY  (`idinforef`),
   KEY `idestcat` (`idestcat`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
 
 
 CREATE TABLE `iso2709` (
@@ -543,7 +544,8 @@ CREATE TABLE `marc_subfield_structure` (
   PRIMARY KEY  (`tagfield`,`tagsubfield`),
   KEY `kohafield` (`kohafield`),
   KEY `tab` (`tab`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 
 CREATE TABLE `marc_tag_structure` (
   `tagfield` char(3) NOT NULL default '',
