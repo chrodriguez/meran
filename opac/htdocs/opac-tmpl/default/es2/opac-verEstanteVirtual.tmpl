@@ -10,18 +10,21 @@
   </tr>
 
   <tr bordercolor="#f2f2f2">
-	<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><b><i><!-- TMPL_VAR Name="shelfname" -->
+	<td valign="middle"><b><i><!-- TMPL_VAR Name="shelfname" -->
 	</td></i></b>
   </tr>
 
 <!-- TMPL_LOOP Name="shelvesloopshelves" -->
   <tr  bordercolor="#f2f2f2">
-	<td <!-- TMPL_IF name='even' --> class='impar' <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign='middle'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<!--<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelfnumber" -->"><!-- TMPL_IF Name="shelfname" --><!-- TMPL_VAR Name="shelfname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></a>-->
-	
+	<td valign='middle'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
 	<a class="click" onClick="verSubEstanteVirtual('<!-- TMPL_VAR Name='shelfnumber' -->');">
-	<!-- TMPL_IF Name="shelfname" --><!-- TMPL_VAR Name="shelfname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></a>
+	<!-- TMPL_IF Name="shelfname" -->
+		<!-- TMPL_VAR Name="shelfname" -->
+	<!-- TMPL_ELSE -->
+		&nbsp;
+	<!-- /TMPL_IF -->
+	</a>
 	
 	</td>
   </tr>
