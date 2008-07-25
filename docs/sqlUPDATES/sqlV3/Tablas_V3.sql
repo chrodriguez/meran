@@ -496,17 +496,6 @@ CREATE TABLE `localidades` (
   PRIMARY KEY  (`LOCALIDAD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `marc_biblio` (
-  `bibid` bigint(20) unsigned NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default '0',
-  `datecreated` date NOT NULL default '0000-00-00',
-  `datemodified` date default NULL,
-  `origincode` char(20) default NULL,
-  PRIMARY KEY  (`bibid`),
-  KEY `origincode` (`origincode`),
-  KEY `biblionumber` (`biblionumber`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1884 ;
-
 CREATE TABLE `marc_blob_subfield` (
   `blobidlink` bigint(20) NOT NULL auto_increment,
   `subfieldvalue` longtext NOT NULL,
