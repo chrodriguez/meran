@@ -58,6 +58,7 @@ print "FFFAAAAAAAAA  NO TERMINABA MAS!! Fuiste a comer???  Tardo $tardo2 segundo
 print "Quitando referencias  viejas \n";
 quitarReferenciasViejas();
 ##
+
 print "Quitando tablas de mas \n";
 quitarTablasDeMas();
 print "Pasamos TODO a INNODB \n";
@@ -66,6 +67,9 @@ print "Creando nuevas claves foraneas \n";
 crearClaves();
 print "Creando la estructura MARC \n";
 crearEstructuraMarc();
+
+print "Agregando preferencias del sistema \n";
+agregarPreferenciasDelSistema();
 print "FIN!!! \n";
 print "\n GRACIAS DICO!!! \n";
 
@@ -524,6 +528,13 @@ $biblios->finish();
 	#TODOS
 	my $mod4=$dbh->prepare("ALTER TABLE modificaciones DROP numero;");
    	$mod4->execute();
+
+
+	my $res1=$dbh->prepare("ALTER TABLE `reserves` CHANGE `constrainttype` `estado` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;");
+	$res1->execute();
+	my $res2=$dbh->prepare("ALTER TABLE `reserves` DROP `priority` , DROP `found` , DROP `itemnumber` ;");
+	$res2->execute();
+
 	#########################################################################
 	#			FIN QUITAR REFERENCIAS VIEJAS!!!!!		#
 	#########################################################################
@@ -614,7 +625,7 @@ $kohamarc2->execute();
 	#			CREAR TABLAS NECESARIAS!!!			#
 	#########################################################################
 
-my $dropear=$dbh->prepare("DROP TABLE IF EXISTS `nivel1`, `nivel1_repetibles`, `nivel2`, `nivel2_repetibles`, `nivel3`, `nivel3_repetibles`;");
+my $dropear=$dbh->prepare("DROP TABLE IF EXISTS `nivel1`, `nivel1_repetibles`, `nivel2`, `nivel2_repetibles`, `nivel3`, `nivel3_repetibles`, `amazon_covers`;");
 $dropear->execute();
 
 
@@ -699,6 +710,16 @@ CREATE TABLE `nivel3_repetibles` (
 ");
 $tabla6->execute();
 
+my $tabla7=$dbh->prepare("
+CREATE TABLE `amazon_covers` (
+  `isbn` varchar(50) NOT NULL,
+  `small` varchar(500) default NULL,
+  `medium` varchar(500) default NULL,
+  `large` varchar(50) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+");
+$tabla7->execute();
 
 	#########################################################################
 	#			CONTROL DE AUTORIDADES				#
@@ -777,19 +798,29 @@ $b2->execute();
 	#########################################################################
 	#			QUITAR TABLAS DE MAS!!!				#
 	#########################################################################
-	my @drops = ('additionalauthors', 'aqbookfund', 'aqbooksellers', 'aqbudget', 'aqorderbreakdown', 'aqorderdelivery', 'aqorders', 'biblio', 'biblioitems', 'bibliosubject', 'bibliosubtitle', 'bibliothesaurus', 'borexp', 'branchtransfers', 'catalogueentry', 'categoryitem', 'currency', 'defaultbiblioitem', 'deletedbiblio', 'deletedbiblioitems', 'deleteditems', 'ethnicity', 'isbns', 'isomarc', 'items', 'itemsprices', 'printers', 'publisher', 'reserveconstraints', 'statistics', 'virtual_itemtypes','virtual_request', 'marc_subfield_table');
+	my @drops = ('accountlines','accountoffsets','additionalauthors', 'aqbookfund', 'aqbooksellers', 'aqbudget', 'aqorderbreakdown', 'aqorderdelivery', 'aqorders', 'biblio', 'biblioitems', 'bibliosubject', 'bibliosubtitle', 'bibliothesaurus', 'borexp', 'branchtransfers', 'catalogueentry', 'categoryitem', 'currency', 'defaultbiblioitem', 'deletedbiblio', 'deletedbiblioitems', 'deleteditems', 'ethnicity', 'isbns', 'isomarc', 'items', 'itemsprices', 'printers', 'publisher', 'reserveconstraints', 'statistics', 'virtual_itemtypes','virtual_request','websites', 'marc_subfield_table', 'marc_word', 'marc_biblio');
 
-	my $drop=$dbh->prepare("DROP TABLE ? ;");
-	foreach $tabla (@drops){$drop->execute($tabla);}
+	foreach $tabla (@drops){
+	my $drop=$dbh->prepare("DROP TABLE $tabla ;");
+	$drop->execute();}
+	
 	}
 	sub pasarTodoAInnodb 
 	{
 	#########################################################################
 	#			PASAR TODO A INNODB				#
 	#########################################################################
-	my @innodbs = ('analyticalauthors','analyticalkeyword','analyticalsubject','authorised_values','autores','availability','biblioanalysis','bibliolevel','bookshelf','borrowers','branchcategories','branches','branchrelations','busquedas','categories','colaboradores','countries','deletedborrowers','dptos_partidos','feriados','generic_report_joins','generic_report_tables','historialBusqueda','historicCirculation','historicIssues','historicSanctions','informacion_referencias','iso2709','issues','issuetypes','itemtypes','keyword','languages','localidades','marc_blob_subfield','marc_breeding','marc_subfield_structure','marc_tag_structure','marc_word','marcrecorddone','modificaciones','persons','provincias','referenciaColaboradores','reserves','sanctionissuetypes','sanctionrules','sanctions','sanctiontypes','sanctiontypesrules','sessionqueries','sessions','shelfcontents','stopwords','supports','systempreferences','tablasDeReferencias','tablasDeReferenciasInfo','temas','unavailable','uploadedmarc','userflags','users','z3950queue','z3950results','z3950servers');
-	my $innodb=$dbh->prepare("ALTER TABLE ? ENGINE = innodb;");
-	foreach $tabla (@innodbs){$innodb->execute($tabla);}
+	#hay que quitar algunos fulltext que no soporta Innodb
+	my $fulltext=$dbh->prepare("ALTER TABLE `biblioanalysis` DROP INDEX `resumen`");
+	$fulltext->execute();
+
+	my @innodbs = ('analyticalauthors','analyticalkeyword','analyticalsubject','authorised_values','autores','availability','biblioanalysis','bibliolevel','bookshelf','borrowers','branchcategories','branches','branchrelations','busquedas','categories','colaboradores','countries','deletedborrowers','dptos_partidos','feriados','generic_report_joins','generic_report_tables','historialBusqueda','historicCirculation','historicIssues','historicSanctions','iso2709','issues','issuetypes','itemtypes','keyword','languages','localidades','marc_blob_subfield','marc_breeding','marc_subfield_structure','marc_tag_structure','marc_word','marcrecorddone','modificaciones','persons','provincias','referenciaColaboradores','reserves','sanctionissuetypes','sanctionrules','sanctions','sanctiontypes','sanctiontypesrules','sessionqueries','sessions','shelfcontents','stopwords','supports','systempreferences','tablasDeReferencias','tablasDeReferenciasInfo','temas','unavailable','uploadedmarc','userflags','users','z3950queue','z3950results','z3950servers');
+	
+	foreach $tabla (@innodbs)
+	{
+	my $innodb=$dbh->prepare("ALTER TABLE $tabla ENGINE = innodb;");
+	$innodb->execute();
+	}
 	}
 	sub crearClaves 
 	{
@@ -813,6 +844,16 @@ $b2->execute();
 	foreach $clave (@claves){my $cv=$dbh->prepare($clave);	$cv->execute();}
 
 	}
+
+	sub agregarPreferenciasDelSistema 
+	{
+	#########################################################################
+	#			PREFERENCIAS DEL SISTEMA			#
+	#########################################################################
+	my $pref1=$dbh->prepare("INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES ('paginas','10','Cantidad de paginas que va a  mostrar el paginador.','text','');");
+	   $pref1->execute();
+	}
+
 	sub crearEstructuraMarc 
 	{
 	#########################################################################
@@ -2861,7 +2902,7 @@ INSERT INTO `marc_subfield_structure` (`nivel`, `obligatorio`, `tagfield`, `tags
 (0, 0, '995', 'r', 'Precio de reemplazo', 'Precio de reemplazo', 0, 0, 'items.replacementprice', 10, '', '', ''),
 (2, 1, '910', 'a', 'Tipo de documento', 'Tipo de documento', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', NULL, NULL),
 (3, 1, '995', 'e', 'Estado', 'Estado', 0, 0, 'items.wthdrawn', 10, 'wthdrawn', '', ''),
-(0, 0, '000', '@', 'LEADER', 'LEADER', 0, 0, '', 0, '', '', 'marc21_leader.pl'),
+(0, 0, '000', '\@', 'LEADER', 'LEADER', 0, 0, '', 0, '', '', 'marc21_leader.pl'),
 (2, 0, '900', 'b', 'nivel bibliografico', 'nivel bibliografico', 0, 0, NULL, NULL, NULL, NULL, NULL);");
 $marc6->execute();
 #################################################################################

@@ -557,23 +557,6 @@ CREATE TABLE `marc_tag_structure` (
   PRIMARY KEY  (`tagfield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `marc_word` (
-  `bibid` bigint(20) NOT NULL default '0',
-  `tag` char(3) NOT NULL default '',
-  `tagorder` tinyint(4) NOT NULL default '1',
-  `subfieldid` char(1) NOT NULL default '',
-  `subfieldorder` tinyint(4) NOT NULL default '1',
-  `word` varchar(255) NOT NULL default '',
-  `sndx_word` varchar(255) NOT NULL default '',
-  KEY `bibid` (`bibid`),
-  KEY `tag` (`tag`),
-  KEY `tagorder` (`tagorder`),
-  KEY `subfieldid` (`subfieldid`),
-  KEY `subfieldorder` (`subfieldorder`),
-  KEY `word` (`word`),
-  KEY `sndx_word` (`sndx_word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 CREATE TABLE `marcrecorddone` (
   `isbn` char(40) default NULL,
   `issn` char(40) default NULL,

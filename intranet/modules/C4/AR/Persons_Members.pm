@@ -6,6 +6,8 @@ package C4::AR::Persons_Members;
 require Exporter;
 use strict;
 use C4::Circulation::Circ2;
+use C4::AR::Usuarios;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
@@ -174,7 +176,7 @@ my ($data)=@_;
 
 my $dbh = C4::Context->dbh;
 
-$data->{'borrowernumber'}=C4::AR::Usuarios::NewBorrowerNumber();
+$data->{'borrowernumber'}=&NewBorrowerNumber();
 
 my $query="insert into borrowers (borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
