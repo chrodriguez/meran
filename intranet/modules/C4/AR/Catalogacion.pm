@@ -114,16 +114,15 @@ sub crearCatalogo{
 	my $idRep="";#Para guardar el id de la tabla de nivelx_repetible para la modificacion
 	my @keys= keys %results;
 	@keys= sort{$results{$a}->{'intranet_habilitado'} <=> $results{$b}->{'intranet_habilitado'}} @keys;
-open(B,">>/tmp/debugCrearCat.txt");
-print B "cant: $cantMod\n";
+# open(B,">>/tmp/debugCrearCat.txt");
+# print B "cant: $cantMod\n";
 	foreach my $row (@keys){
-print B "\n\notra vuelta\n";
+# print B "\n\notra vuelta\n";
 		$valor="";
 		my $llave=$results{$row}->{'campo'}.",".$results{$row}->{'subcampo'};
 		$results{$row}->{'indice'}=$i;
 		$i++;
-print B "llave result: $llave\n";
-print B "intranet hab: $results{$row}->{'intranet_habilitado'}";
+# print B "llave result: $llave\n";
 		#Para la parte de modificacion de un nivel obtiene el valor del input.
 		if($cantMod != 0){
 			if(exists($nivelComp->{$llave})){
@@ -176,7 +175,7 @@ print B "intranet hab: $results{$row}->{'intranet_habilitado'}";
 		}
 	}
 	$nivelComp="";
-close(B);
+# close(B);
 	return($i,@resultsdata);
 }
 

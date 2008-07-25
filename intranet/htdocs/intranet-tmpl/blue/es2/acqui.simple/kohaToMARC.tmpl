@@ -4,28 +4,19 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
- <script>
+<script>
 
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
-<!-- TMPL_INCLUDE NAME="util.js" -->
-
+var objAH;
 function deleteRow(idmap){
-	
-	var params= 	'idmap=' +  idmap +
-			'&action=DELETE'; 
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					SelectTablasKohaChange();
-					HiddeState();
-				}
-	});
+	objAH=new AjaxHelper(SelectTablasKohaChange);
+	objAH.url= "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl";
+	objAH.idmap= idmap;
+	objAH.action= "DELETE";
+	objAH.sendToServer();
 }
 
 function ValidarDatos(){
@@ -46,74 +37,56 @@ function ValidarDatos(){
 function agregarMapeo(){
 	
 	if(ValidarDatos()){
-
-		var params= 	'tabla=' +  $('#tablasKoha').val() +
-				'&campoKOHA=' + $('#camposKoha').val() +
-				'&campoMARC=' + $('#campoMARC').val() +
-				'&subcampoMARC=' + $('#subcampoMARC').val() +
-				'&action=INSERT'; 
-
-		$.ajax({	type: "POST", 
-				url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
-				data: params,
-				beforeSend: Init,
- 				complete: function(ajax){
-						SelectTablasKohaChange();
-						HiddeState();
-					}
-		});
+		objAH=new AjaxHelper(SelectTablasKohaChange);
+		objAH.url= "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl";
+		objAH.tabla= $('#tablasKoha').val();
+		objAH.campoKOHA=$('#camposKoha').val();
+		objAH.campoMARC= $('#campoMARC').val();
+		objAH.subcampoMARC=$('#subcampoMARC').val();
+		objAH.action= "INSERT";
+		objAH.sendToServer();
 	}
 }
 
 function RefreshComposKoha(){
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url= "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl";
+	objAH.tabla= $('#tablasKoha').val();
+	objAH.action= "SELECT";
+	objAH.sendToServer();
+}
 
-	var params=	'tabla=' +  $('#tablasKoha').val() +
-			'&action=SELECT';
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					var resultSet = ajax.responseText;
-					var arreglo=resultSet.split("#");
-					var option = null;
-					var select = $("#camposKoha")[0];	
+function updateInfo(responseText){
+	var resultSet = responseText;
+	var arreglo=resultSet.split("#");
+	var option = null;
+	var select = $("#camposKoha")[0];	
 	
-					//borro el combo
-					select.innerHTML= "";
-
-				 	for(var i=0; i<arreglo.length - 1;i++){
-					option = document.createElement("option");
-					option.setAttribute("value", arreglo[i]);
-        				option.appendChild(document.createTextNode(arreglo[i]));
-        				select.appendChild(option);
- 					}
-					HiddeState();
-				}
-	});
+	//borro el combo
+	select.innerHTML= "";
+	for(var i=0; i<arreglo.length - 1;i++){
+		option = document.createElement("option");
+		option.setAttribute("value", arreglo[i]);
+        	option.appendChild(document.createTextNode(arreglo[i]));
+        	select.appendChild(option);
+	}
 }
 
 function SelectTablasKohaChange(){
-
-	var params= 	'tabla=' +  $('#tablasKoha').val() +
-			'&action=TABLARESULT';
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl",
-			data: params,
-			beforeSend: Init,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					HiddeState();
-					RefreshComposKoha();
-					$('#tablaMapeo').tablesorter({	
- 									widgets: ['zebra'],
-  									headers: { 0: { sorter: false},
- 										   5: { sorter: false},
- 										   6: { sorter: false}}
-								});
-				}
+	objAH=new AjaxHelper(updateInfoRefresh);
+	objAH.url= "/cgi-bin/koha/acqui.simple/kohaToMARC_DB.pl";
+	objAH.tabla= $('#tablasKoha').val();
+	objAH.action= "TABLARESULT";
+	objAH.sendToServer();
+}
+function updateInfoRefresh(responseText){
+	$('#result').html(responseText);
+	RefreshComposKoha();
+	$('#tablaMapeo').tablesorter({	
+ 		widgets: ['zebra'],
+  		headers: { 0: { sorter: false},
+ 		5: { sorter: false},
+ 		6: { sorter: false}}
 	});
 }
 

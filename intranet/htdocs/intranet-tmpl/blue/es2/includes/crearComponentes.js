@@ -135,11 +135,7 @@ function procesarObjeto(objeto){
 		$(comp).appendTo("#"+idDiv);
 		$("#"+id).val(valor);
 	}
-/*	//agrega el componente en donde corresponda.
-	var divLabel="<div style='float: left; width: 25%;'>  "+libtext+": </div>";
-	strComp="<div style='clear:both; padding-top:1%'> "+divLabel+comp+hidden+"</div>";
-	$(strComp).appendTo(divParrafo);
-*/
+
 	//Se agregan clases para cuando tenga que recuperar los datos.
 	if(objeto.obligatorio == "1"){
 		$("#"+idComp).addClass("obligatorio");
@@ -198,7 +194,7 @@ function crearComponente(tipo,id,opciones,valor){
  */
 function unoPorLinea(id,str){
 	var comp=$("#"+id);
-	var arrayValores=comp.val().split(str);;
+	var arrayValores=comp.val().split(str);
 	var array= new Array;
 	var i=0;
 	for (var j=0;j < arrayValores.length; j++){
