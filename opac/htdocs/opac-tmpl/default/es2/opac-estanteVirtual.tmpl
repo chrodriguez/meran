@@ -1,0 +1,33 @@
+
+<!-- TMPL_VAR NAME="paginador" -->
+
+<table width=100%  cellpadding="4" cellspacing="0" border="1" align="center">
+  <tr class="bordetabla"  bordercolor="#f2f2f2" >
+	<th class="bordetabla"  bordercolor="#f2f2f2">&nbsp;</th>
+  </tr>
+
+<!-- TMPL_LOOP Name="shelvesloop" -->
+  <tr  bordercolor="#f2f2f2">
+	<td valign="middle">
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<a class="click" onclick="verEstanteVirtual('<!-- TMPL_VAR Name='shelf' -->');">
+	<!-- TMPL_IF Name="shelfname" -->
+		<!-- TMPL_VAR Name="shelfname" -->
+	<!-- TMPL_ELSE -->
+		--------
+	<!-- /TMPL_IF -->
+	</a>
+
+	</td>
+  </tr>
+<!-- /TMPL_LOOP -->
+  <tr bordercolor="#f2f2f2">
+	<table width=100% cellpadding="4" cellspacing="0" border="0" align="center">
+		<th class="bordetabla"  bordercolor="#f2f2f2" ></th>
+	</table>
+  </tr>
+</table>
+
+
