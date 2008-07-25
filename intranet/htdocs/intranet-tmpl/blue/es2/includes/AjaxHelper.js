@@ -11,8 +11,6 @@
 $.getScript("/intranet-tmpl/blue/es2/includes/state.js");
 //este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
 
-//carga dinamicamente la libreria de json
-$.getScript("/intranet-tmpl/blue/es2/includes/json/jsonStringify.js");
 
 function AjaxHelper(fncUpdateInfo, fncInit){
 

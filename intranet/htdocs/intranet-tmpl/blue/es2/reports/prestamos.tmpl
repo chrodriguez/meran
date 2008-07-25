@@ -2,10 +2,12 @@
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
 <script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script type="text/javascript">
-<!-- TMPL_INCLUDE NAME="util.js" -->
-<!-- TMPL_INCLUDE NAME="state.js" -->
+
 <!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
@@ -34,28 +36,35 @@ function ocultarBoton(estado){
 	}
 }
 
-function consultar(orden,ini){
-	var fechaIni= $("#begindate").val();
-	var fechaFin=$("#enddate").val();
-	var estado=$("#estado").val();
-	var branch=$("#branch").val();
-	var rengl=$("#renglones").val();
-	var params="begindate="+fechaIni+"&enddate="+fechaFin+"&estado="+estado+"&branch="+branch+"&renglones="+rengl+"&orden="+orden+"&ini="+ini;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/prestamosResult.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				zebra("tablaResult");
-				ocultarBoton(estado);
-			}
-	});
-	
+var objAH;
+
+function changePage(ini){
+	objAH.changePage(ini);
 }
 
+function ordenar(orden){
+	objAH.sort(orden);
+}
 
+function consultar(){
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/reports/prestamosResult.pl";
+	objAH.branch=$("#branch").val();
+	objAH.begindate=$("#begindate").val();
+	objAH.enddate=$("#enddate").val();
+	objAH.estado=$("#estado").val();
+	objAH.renglones=$("#renglones").val();
+	objAH.funcion= "changePage";
+	objAH.sendToServer();	
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	var estado=$("#estado").val();
+	zebra("tablaResult");
+	ocultarBoton(estado);
+	checkedAll('checkAllPrestamos','chkboxPrestamos');
+}
 
 function checkedAll(){
 	var checks=document.getElementsByTagName("input");
