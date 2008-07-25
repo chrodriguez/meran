@@ -173,34 +173,54 @@ function searchinc(){
 
 
 
+function verEstanteVirtual(shelf){
+	
+	objAH=new AjaxHelper(updateVerEstanteVirtual);
+  	objAH.debug= true;
+	objAH.url= 'opac-estanteVirtualDB.pl';
+	objAH.shelves= shelf;
+	objAH.tipo= 'VER_ESTANTE';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
+function verSubEstanteVirtual(shelf){
+	
+	objAH=new AjaxHelper(updateVerEstanteVirtual);
+  	objAH.debug= true;
+	objAH.url= 'opac-estanteVirtualDB.pl';
+	objAH.shelves= shelf;
+	objAH.tipo= 'VER_SUBESTANTE';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateVerEstanteVirtual(responseText){
+	
+	$('#result').html(responseText);
+}
 
 
 function consultarEstanteVirtual(){
 
-	$.ajax({	type: "POST", 
-			url: "opac-shelves.pl",
- 			data: "startfrom=0",
-			beforeSend: Init,
- 			complete: function(ajax){
-					updateConsultarEstanteVirutal(ajax.responseText);
-				}
-	});
-
-/*
-	objAH=new AjaxHelper(updateInfo);
-//  	objAH.debug= true;
-	objAH.url= 'opac-shelves.pl';
-	objAH.startfrom= '0';
+	objAH=new AjaxHelper(updateConsultarEstanteVirutal);
+  	objAH.debug= true;
+	objAH.url= 'opac-estanteVirtual.pl';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
 	//se envia la consulta
 	objAH.sendToServer();
-*/
 }
 
 function updateConsultarEstanteVirutal(responseText){
-	$('#datosUsuario').slideUp('slow');
+// 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
-	zebra();
+// 	zebra();
 }
 
 //**********************************************************************************************************

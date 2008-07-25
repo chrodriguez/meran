@@ -1579,7 +1579,9 @@ sub getBranches {
 # returns a reference to a hash of references to branches...
 	my %branches;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT branches.*,categorycode FROM branches INNER JOIN branchrelations ON branches.branchcode=branchrelations.branchcode");
+	my $sth=$dbh->prepare("	SELECT branches.*,categorycode 
+				FROM branches INNER JOIN branchrelations 
+				ON branches.branchcode=branchrelations.branchcode");
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
 		$branches{$branch->{'branchcode'}}=$branch;

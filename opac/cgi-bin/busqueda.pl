@@ -22,6 +22,11 @@ my ($template, $loggedinuser, $cookie)
 #  			     debug => 1,
 			     });
 
+my $themelang = $template->param('themelang');
+open(A, ">>/tmp/debug.txt");
+print A "desde busquedas themeland $themelang \n";
+close(A);
+
 my $obj=$query->param('obj');
 
 if($obj ne ""){

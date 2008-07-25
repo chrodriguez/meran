@@ -14,11 +14,6 @@
 
 var objAH;//Objeto AjaxHelper.
 
-$(document).ready( function() {
-	buscarPreferencia();
-	onEnter("buscar",buscarPreferencia);
-});
-
 /*
  * tablaOrdenada
  * Hace que la tabla con los resultados, se pueda ordenar por los campos correspondientes y tambien hace que se 
@@ -62,7 +57,7 @@ function updateInfoConsultaJSON(responseText){
  * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
  */
 function buscarPreferencia(){
-	objAH=new AjaxHelper(updateInfoConsulta, Init);
+	objAH=new AjaxHelper(updateInfoConsulta);
 	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 	objAH.buscar=$("#buscar").val();
 	objAH.agregar=0;
@@ -87,7 +82,7 @@ function agregarPref(){
 	var opcion=$("#tipoVar").val();
 	borrarDiv();
 	var ok=1;
-	objAH=new AjaxHelper(updateInfoConsulta, Init);
+	objAH=new AjaxHelper(updateInfoConsulta);
 	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 	objAH.opcion=opcion;
 	objAH.agregar=1;
@@ -122,7 +117,7 @@ function selectOpcion(){
 	var campo=$("#campo");
 	var tipo=$("#tipoVar").val();
 	borrarDiv();
-	objAH=new AjaxHelper(updateInfoConsultaJSON, Init);
+	objAH=new AjaxHelper(updateInfoConsultaJSON);
 	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 	objAH.tipo=tipo;
 	objAH.json=1;
@@ -162,7 +157,7 @@ function elegirCampo(){
 	borrarDiv();
 	if(tipo == "combo" && tabla.length == 1){
 		campo.remove();
-		objAH=new AjaxHelper(updateInfoConsultaJSON, Init);
+		objAH=new AjaxHelper(updateInfoConsultaJSON);
 		objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 		objAH.tipo=tipo;
 		objAH.json=1;
@@ -203,7 +198,7 @@ function respuesta(responseText){
  * Hace el llamado ajax para poder guardar los datos ingresados para la variable.
  */
 function guardarVariable(mod){
-	objAH=new AjaxHelper(updateInfoGuardarVar, Init);
+	objAH=new AjaxHelper(updateInfoGuardarVar);
 	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 	objAH.variable=$("#variable").val();
 	objAH.valor=$("#valor").val();
@@ -246,13 +241,18 @@ function modificarVar(variable,tipo){
 	var compo=$("#tipoVar");
 	compo.val(tipo);
 	compo.attr("disabled","disabled");
-	objAH=new AjaxHelper(updateInfoConsulta, Init);
+	objAH=new AjaxHelper(updateInfoConsulta);
 	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
 	objAH.variable=variable;
 	objAH.agregar=1;
 	objAH.modificar=1;
 	objAH.sendToServer();
 }
+
+$(document).ready( function() {
+//  	buscarPreferencia();
+	onEnter("buscar",buscarPreferencia);
+});
 
 </script>
 

@@ -896,7 +896,8 @@ sub historialPrestamos {
   	my $dateformat = C4::Date::get_date_format();
   	my $querySelectCount = " SELECT count(*) AS cant ";
 
-  	my $querySelect= " SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
+  	my $querySelect= " 	SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, 
+				signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
 
   	my $queryFrom = " FROM nivel3 n3 INNER JOIN nivel2 n2";
   	$queryFrom .= " ON (n3.id2 = n2.id2) ";

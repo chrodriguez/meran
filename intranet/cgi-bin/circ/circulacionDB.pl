@@ -76,7 +76,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
 		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
-		my ($infoN3,@results)=C4::AR::Busquedas::buscarNivel3PorId2($iteminfo->{'id2'});
+		my ($infoN3,@results)=C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($iteminfo->{'id2'});
 #Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 		my @items;
 		my $j=0;

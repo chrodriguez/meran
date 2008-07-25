@@ -26,6 +26,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Circulation::Circ2;
+use C4::AR::Utilidades;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -78,6 +79,9 @@ items to and from bookshelves.
 		&gotShelf 
 		&shelfitemcount  
 		&modshelf
+		&itemcountbibitem
+		&viewshelf
+
 );
 
 my $dbh = C4::Context->dbh;
@@ -345,7 +349,7 @@ sub GetShelfParent{
 	
 	my $parent=$sth->fetchrow;
 	my $sth1=$dbh->prepare("SELECT bookshelf.shelfnumber, bookshelf.shelfname,
-				count(shelfcontents.biblioitemnumber) as count
+				count(shelfcontents.id2) as count
 				FROM bookshelf
 				LEFT JOIN shelfcontents
 				ON bookshelf.shelfnumber = shelfcontents.shelfnumber WHERE (bookshelf.type=?) and (bookshelf.shelfnumber=?)
@@ -379,7 +383,7 @@ sub GetShelfContents {
 	my %contentlist;
 	my $sth=$dbh->prepare("	SELECT nivel1.titulo as title,  nivel1.id1 as id1, nivel2.id2 as id2, 		
 				nivel1.autor as author, nivel2.ciudad_publicacion as place, nivel2.anio_publicacion as publicationyear  
-				FROM ((shelfcontents LEFT JOIN nivel2 ON shelfcontents.id = nivel2.id2) 
+				FROM ((shelfcontents LEFT JOIN nivel2 ON shelfcontents.id2 = nivel2.id2) 
 				LEFT JOIN nivel1 ON nivel2.id1=nivel1.id1) 
 				WHERE ( shelfnumber =? )");
 
@@ -485,10 +489,10 @@ sub AddShelf {
 	my $data = $sth->fetchrow_hashref;
 	$sth->finish;
 	
-	if ($data) 
-		{return (0) }
-	else {	 	
-		my $sth2=$dbh->prepare('SELECT  max(shelfnumber) as number FROM bookshelf');
+	if ($data) {
+		return (0) 
+	}else {
+		my $sth2=$dbh->prepare('SELECT max(shelfnumber) as number FROM bookshelf');
 		$sth2->execute;
 		my $data   = $sth2->fetchrow;
 		my $numbers = $data + 1;
@@ -781,6 +785,186 @@ sub modshelf {
 	my $sth=$dbh->prepare("	UPDATE  bookshelf SET shelfname=? WHERE shelfnumber=? ");
 	$sth->execute($shelfname,$shelfnumber);
 	$sth->finish;
+}
+
+
+sub viewshelf {
+
+	my ($shelfnumber,$ini,$cantR)=@_; 	
+	my $type= 'public'; #no se de donde sale
+	
+	my (%shelfcontentslist)= GetShelfContentsShelf($type,$shelfnumber);
+	
+	#para los Superestantes
+	my @parentloop;
+
+	#para los subestantes
+	my @shelvesloopshelves;
+	my @key=sort { noaccents($shelfcontentslist{$a}->{'shelfname'} ) cmp noaccents($shelfcontentslist{$b}->{'shelfname'} ) } keys(%shelfcontentslist);
+
+	my $fin= $cantR-1+$ini;
+	my $cantEstantes= scalar(@key);
+	if($fin > $cantEstantes){
+	#si hay menos estantes para mostrar que renglones por pagina, el limite es la cantdad de estantes para mostrar
+		$fin= $cantEstantes - 1;
+	}
+	
+	my @keyAux=@key[$ini..$fin];
+	
+	foreach my $element (@keyAux) {
+		my %line;
+		$line{'shelfname'}=$shelfcontentslist{$element}->{'shelfname'};
+		$line{'shelfnumber'}=$shelfcontentslist{$element}->{'shelfnumber'};
+		$line{'count'}=$shelfcontentslist{$element}->{'count'};
+		$line{'countshelf'}=$shelfcontentslist{$element}->{'countshelf'};
+
+		push (@shelvesloopshelves, \%line);
+	}
+
+	return $cantEstantes, \@shelvesloopshelves;
+
+}
+
+sub viewshelfContent {
+
+	my ($shelfnumber,$ini,$cantR,$orden)=@_; 
+	my $type= 'public'; #no se de donde sale
+ 	my ($count,%bitemlist) = GetShelfContents($type,$shelfnumber);
+
+	my @bitemsloop;
+	my @key=sort { noaccents($bitemlist{$a}->{$orden} ) cmp noaccents($bitemlist{$b}->{$orden} ) } keys(%bitemlist);
+
+	my $fin= $cantR-1+$ini;
+	my $cantEstantes= scalar(@key);
+	if($fin > $cantEstantes){
+	#si hay menos estantes para mostrar que renglones por pagina, el limite es la cantdad de estantes para mostrar
+		$fin= $cantEstantes - 1;
+	}
+
+	my @keyAux=@key[$ini..$fin];	
+	my $bibitem;
+	
+	foreach my $element (@key) {
+		my %line;
+		$line{'id2'}=$bitemlist{$element}->{'id2'};
+		$line{'title'}=$bitemlist{$element}->{'title'};
+		$line{'unititle'}=$bitemlist{$element}->{'unititle'};
+		$line{'id1'}=$bitemlist{$element}->{'id1'};
+		##AUTOR###
+		$line{'completo'}=$bitemlist{$element}->{'completo'};
+		$line{'id'}=$bitemlist{$element}->{'id'};
+		#########
+		$line{'place'}=$bitemlist{$element}->{'place'};
+		$line{'editors'}=$bitemlist{$element}->{'editors'};
+		$bibitem=$bitemlist{$element}->{'id2'};
+		($line{'total'},$line{'unavailable'},$line{'counts'}) = C4::BookShelves::itemcountbibitem($bibitem,'opac'); 
+	#REHACER LA FUNCION, NO SE SABE PARA QUE SIRVE!!!!!!!!
+	#SE COPIO LA FUNCION EN EL PL PARA TENERLA DE REFERENCIA---SE TIENE QUE BORRAR!!!!!
+					
+		push (@bitemsloop, \%line);
+	}
+	
+
+	return $cantEstantes, \@bitemsloop;
+}
+
+sub itemcountbibitem {
+
+	my ($id2,$type)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $query="SELECT * FROM branches";
+	my $sth=$dbh->prepare($query);
+	$sth->execute();
+	my %counts;
+	while (my $dataorig=$sth->fetchrow_hashref){
+		$counts{$dataorig->{'branchcode'}}{'nombre'}=$dataorig->{'branchcode'};
+	}
+	#Cantidad de ejemplares
+	my $query2="	SELECT holdingbranch, wthdrawn , notforloan, id2 
+			FROM nivel3 
+			WHERE id2=? ";
+
+	if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
+		$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
+	}
+
+	$sth=$dbh->prepare($query2);
+	$sth->execute($id2);
+	my $data;
+	my $total=0;
+	my $unavailable=0;
+	#Fin: Cantidad de ejemplares
+	#Los agrupo por holding branch
+	while ($data=$sth->fetchrow_hashref) { 
+		$counts{$data->{'holdingbranch'}}{'cantXbranch'}++; #Total
+		
+		if ($data->{'wthdrawn'} eq 2){ #COMPARTIDO
+		$counts{$data->{'holdingbranch'}}{'cantXbranchShared'}++;
+		}else {
+			if ($data->{'wthdrawn'} >0){
+			#No Disponible 
+				$counts{$data->{'holdingbranch'}}{'cantXbranchUnavail'}++;
+				$unavailable++;	
+			}else{ 
+				if ($data->{'notforloan'}){
+				 # Para Sala
+					$counts{$data->{'holdingbranch'}}{'cantXbranchNotForLoan'}++;
+				}else{
+				# Para Prestamo
+					$counts{$data->{'holdingbranch'}}{'cantXbranchForLoan'}++; 
+				}
+			}
+		}
+					
+		$total++;
+	} #end while ($data=$sth->fetchrow_hashref) 
+
+	#Cantidad de ejemplares prestados y/o reservados
+	
+	my $query2= "	SELECT count( * ) AS c, holdingbranch
+			FROM issues i INNER JOIN nivel3 n3 ON (i.id3 = n3.id3)
+			WHERE n3.id2 = ? AND issues.returndate IS NULL
+			GROUP BY holdingbranch";
+
+	$sth=$dbh->prepare($query2);
+	$sth->execute($id2);
+
+	while ($data=$sth->fetchrow_hashref){
+		$counts{$data->{'holdingbranch'}}{'prestados'}=$data->{'c'};
+	}
+
+	$sth->finish;
+	
+	
+	my $query3= "	SELECT count( * ) AS c, items.holdingbranch
+			FROM reserves r INNER JOIN nivel2 n2 ON (n2.id2 = r.id2)
+			INNER JOIN nivel3 n3 ON (n2.id2 = n3.id2)
+			WHERE n2.id2 = ? AND r.estado <> 'P'
+			GROUP BY holdingbranch";
+
+	$sth=$dbh->prepare($query3);
+	$sth->execute($id2);
+	while ($data=$sth->fetchrow_hashref){
+		$counts{$data->{'holdingbranch'}}{'reservados'}=$data->{'c'};
+	}
+	$sth->finish;
+	
+	
+	my @results;
+	foreach my $key (keys %counts){	
+		if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){ 
+		# Si no hay ninguno disponible no lo muestro en el opac
+			if (($counts{$key}->{'cantXbranch'})&&($counts{$key}->{'cantXbranch'} gt $counts{$key}->{'cantXbranchUnavail'})){
+				push(@results,$counts{$key});
+			}
+		}
+		else {
+			($counts{$key}->{'cantXbranch'} && push(@results,$counts{$key}));
+		}
+	}
+
+	return ($total,$unavailable,\@results);
 }
 
 

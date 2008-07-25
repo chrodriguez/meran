@@ -1,7 +1,6 @@
 
 <br><br>
-<!-- Creo un Ancla para posicionarme aqui luego de la busqueda -->
-<a name="aResultSearch"></a>
+
 <table border="0"  width="100%" class="top" >
 	<tr>
 	<td>
@@ -174,6 +173,11 @@ function mandarArreglo(valores){
 		</tr>
 		</table>
 
+
+
+
+<!-- hasta aca -->
+
 		<!-- TMPL_IF NAME='loggedinusername' -->
 		<input type="hidden" value="" name="bookmarks" id="bookmarks"><a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">  
 		<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos"></a>
@@ -212,46 +216,7 @@ function mandarArreglo(valores){
 </td></tr>
 </table>
 <br>
-<!--**************************************** Paginador ***************************************-->
-  <table border="0"  align="center">
-        <tr align="center" cellpadding=0 cellspacing=0>
-        <td>
-        <!-- TMPL_IF NAME="displayprev" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='prevstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>-->
 
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='prevstartfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
-
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
-    <!-- /TMPL_IF -->
-        </td>
-
-    <!-- TMPL_LOOP NAME="numbers" -->
-
-        <!-- TMPL_IF NAME="highlight" -->
-        <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
-        <!-- TMPL_ELSE -->
-	<!--<td nowrap class="number"><a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>-->
-
-	<td nowrap class="number"><a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='startfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '')"> <!-- TMPL_VAR NAME=number --></a></td>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="break" -->
-        </tr><tr>
-        <!-- /TMPL_IF -->
-
-    <!-- /TMPL_LOOP -->
-<td>
-<!-- TMPL_IF NAME="displaynext" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME="viewShelfItems" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>-->
-
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='nextstartfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
-    <!-- /TMPL_IF -->
-</td></tr>
-</table>
-<!--*********************************Fin***** Paginador ***************************************-->
 <!-- TMPL_IF Name="shelvesloop" -->
                 <table width=100%  cellpadding="4" cellspacing="0" border="1" align="center">
                    <tr class="bordetabla"  bordercolor="#f2f2f2" >
@@ -278,53 +243,7 @@ function mandarArreglo(valores){
                                 </tr>
                 </table>
 <!--/TMPL_IF -->
-<!-- ES LA PAGINACION -->
-  <table border="0"  align="center">
-        <tr align="center" cellpadding=0 cellspacing=0>
-        <td>
-        <!-- TMPL_IF NAME="displayprev" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfro
-m=<!-- TMPL_VAR NAME='prevstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif
-" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>-->
 
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='prevstartfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="
-0">
-    <!-- /TMPL_IF -->
-        </td>
-
-    <!-- TMPL_LOOP NAME="numbers" -->
-
-        <!-- TMPL_IF NAME="highlight" -->
-        <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
-        <!-- TMPL_ELSE -->
-	<!--<td nowrap class="number"> <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='startfrom' -->"> <!-- TMPL_VAR NAME=number --></a></td>-->
-
-	<td nowrap class="number">
-		<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='startfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><!-- TMPL_VAR NAME=number -->
-		</a>
-	</td>	
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="break" -->
-        </tr><tr>
-        <!-- /TMPL_IF -->
-
-    <!-- /TMPL_LOOP -->
-	<td>
-	<!-- TMPL_IF NAME="displaynext" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='nextstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>-->
-
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='nextstartfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
-    <!-- /TMPL_IF -->
-</td></tr>
-</table>
-<!-- FIN PAGINACION -->
 
 <!-- TMPL_IF Name="shelvesloop" -->
 
@@ -373,53 +292,6 @@ Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_V
 
 <!-- TMPL_ELSE -->
 <!-- es ver todos los estantes -->
-<!-- ES LA PAGINACION -->
-
-  <table border="0"  align="center">
-        <tr align="center" cellpadding=0 cellspacing=0>
-        <td>
-        <!-- TMPL_IF NAME="displayprev" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?startfrom=<!-- TMPL_VAR NAME='prevstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15">
-	</a>-->
-		
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='prevstartfrom' -->', '', '', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15">
-	</a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
-    <!-- /TMPL_IF -->
-        </td>
-
-    <!-- TMPL_LOOP NAME="numbers" -->
-
-        <!-- TMPL_IF NAME="highlight" -->
-        <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
-        <!-- TMPL_ELSE -->
-	<!--<td nowrap class="number"><a href="/cgi-bin/koha/opac-shelves.pl?startfrom=<!-- TMPL_VAR NAME='startfrom' -->"> <!-- TMPL_VAR NAME=number --></a></td>-->
-	
-	<td nowrap class="number">
-		<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='startfrom' -->', '', '', '');"> <!-- TMPL_VAR NAME=number --></a>
-	</td>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="break" -->
-        </tr><tr>
-        <!-- /TMPL_IF -->
-
-    <!-- /TMPL_LOOP -->
-<td>
-<!-- TMPL_IF NAME="displaynext" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?startfrom=<!-- TMPL_VAR NAME='nextstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>-->
-	
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='nextstartfrom' -->', '', '', '')"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
-    <!-- /TMPL_IF -->
-</td></tr>
-</table>
-<!-- FIN PAGINACION -->
-
 
 		<br>
 		<table width=100%  cellpadding="4" cellspacing="0" border="1" align="center">
@@ -446,53 +318,7 @@ Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_V
                 		</tr>
 		</table>
 <br>
-<!-- ES LA PAGINACION -->
-  <table border="0"  align="center">
-        <tr align="center" cellpadding=0 cellspacing=0>
-        <td>
-        <!-- TMPL_IF NAME="displayprev" -->
-       <!-- <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='prevstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15">
-	</a>-->
 
-	 <a class="click" onClick="consultarEstanteVirtual(viewshelf, '<!-- TMPL_VAR NAME='prevstartfrom' -->', orden, '<!-- TMPL_VAR NAME='viewShelfItems' -->', biblio);"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15">
-	</a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" height="14" width="15" alt="" border="0">
-    <!-- /TMPL_IF -->
-        </td>
-
-    <!-- TMPL_LOOP NAME="numbers" -->
-
-        <!-- TMPL_IF NAME="highlight" -->
-        <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
-        <!-- TMPL_ELSE -->
-	<!--<td nowrap class="number"><a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='startfrom' -->"> <!-- TMPL_VAR NAME=number --></a>
-	</td>-->
-
-	<td nowrap class="number">
-		<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='startfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><!-- TMPL_VAR NAME=number --></a>
-	</td>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="break" -->
-        </tr><tr>
-        <!-- /TMPL_IF -->
-
-    <!-- /TMPL_LOOP -->
-	<td>
-<!-- TMPL_IF NAME="displaynext" -->
-        <!--<a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=<!-- TMPL_VAR NAME='viewShelfItems' -->&startfrom=<!-- TMPL_VAR NAME='nextstartfrom' -->"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>-->
-
-	<a class="click" onClick="consultarEstanteVirtual('', '<!-- TMPL_VAR NAME='nextstartfrom' -->', '', '<!-- TMPL_VAR NAME='viewShelfItems' -->', '');"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente">
-	</a>
-    <!-- TMPL_ELSE -->
-        <img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" border="0" width="15" height="14" alt="">
-    <!-- /TMPL_IF -->
-	</td>
-    </tr>
-</table>
-<!-- FIN PAGINACION -->
 
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

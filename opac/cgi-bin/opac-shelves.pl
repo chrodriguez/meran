@@ -73,7 +73,7 @@ if (C4::Context->boolean_preference('marc') eq '1') {
 } else {
         $template->param(script => "opac-detail.pl");
 }
-=c
+=item
 if ($query->param('modifyshelfcontents')) {
 	my $shelfnumber=$query->param('shelfnumber');
 	my $barcode=$query->param('addbarcode');
@@ -100,7 +100,8 @@ SWITCH: {
 	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
 my %shelflist;
-=cut
+
+=item
 if ($query->param('viewShelfItems')) {
   %shelflist = &getbookshelfItems($type,$nameShelf);
     $template->param ({viewShelfItems => $nameShelf});
@@ -114,6 +115,7 @@ if ($query->param('viewShelfItems')) {
 
 		}else
 =cut		
+
 if ($nameShelf) {                                 #cambiar el  campo por algo de search= shelfsearch
 
 my $count=0;
@@ -275,31 +277,6 @@ sub shelves {
       }
 
 
-       #if ($query->param('tipo') eq ('agregarEstante')) {
-	#if (my $newshelf=$query->param('addshelves')) {
-         #       my $parent=$query->param('parent');
-	#	my ($status, $string) = AddShelf($env,$newshelf,$type,$parent);
-	#	if ($status) {
-	#		$template->param(status1 => $status, string1 => $string);
-#	               	     }
-#	}}
-#	 if ($query->param('tipo') eq ('remShelf')){ 
- #       my @paramsloop;
-#	foreach ($query->param()) {
-#		my %line;
-#		if (/DEL-(\d+)/) {
-#			my $delshelf=$1;
-#			my ($status, $string) = RemoveShelf($env,$delshelf);
-#			if ($status) {
-#				$line{'status'}=$status;
-#				$line{'string'} = $string;
-#			             }
- #                                }
-		#if the shelf is not deleted, %line points on null
-#		push(@paramsloop,\%line);
-#	}
-#	$template->param(paramsloop => \@paramsloop);}
-
 	my (%shelflist) = &GetShelfList($type);
  	my $color='';
 	my @shelvesloop;
@@ -365,6 +342,7 @@ sub viewshelf {
 #para los Superestantes
        my @parentloop;
        my @key=sort { noaccents($shelfnameParent{$a}->{'shelfname'} ) cmp noaccents($shelfnameParent{$b}->{'shelfname'} ) } keys(%shelfnameParent);
+
        foreach my $element (@key) {
                  my %line;
                 ($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
@@ -419,23 +397,12 @@ sub viewshelf {
                 $line{'place'}=$bitemlist{$element}->{'place'};
                 $line{'editors'}=$bitemlist{$element}->{'editors'};
 		$bibitem=$bitemlist{$element}->{'biblioitemnumber'};
-		($line{'total'},$line{'unavailable'},$line{'counts'}) = itemcountbibitem($bibitem,'opac'); 
+		($line{'total'},$line{'unavailable'},$line{'counts'}) = C4::BookShelves::itemcountbibitem($bibitem,'opac'); 
 #REHACER LA FUNCION, NO SE SABE PARA QUE SIRVE!!!!!!!!
 #SE COPIO LA FUNCION EN EL PL PARA TENERLA DE REFERENCIA---SE TIENE QUE BORRAR!!!!!
 				      
                 push (@bitemsloop, \%line);
-		}
-
-
-	  
-          #  for (my $i = 0; $i < $count; $i++) {
-	#	  my %line;
-         #       ($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-          #      $line{'biblioitemnumber'}=$bitemlist->[$i]->{'biblioitemnumber'};        
-           #     $line{'shelfnumber'}=$bitemlist->[$i]->{'shelfnumber'};  
-            #    $line{'color'}=$color;
-       	#	 push(@bitemsloop, \%line);
-       # } 
+	}
 
 	$templ->param(	bitemsloop => \@bitemsloop,
                                 shelvesloopshelves => \@shelvesloopshelves,
@@ -447,95 +414,3 @@ sub viewshelf {
 					);
 }
 
-
-=item
-itemcountbibitem
-SE USA SOLAMENTE EN opac-shelves.pl
-VER SI QUEDA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-=cut
-sub itemcountbibitem {
-
-  my ($bibitem,$type)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query="select * from branches";
-  my $sth=$dbh->prepare($query);
-  $sth->execute();
-  my %counts;
-  while (my $dataorig=$sth->fetchrow_hashref){
-  		$counts{$dataorig->{'branchcode'}}{'nombre'}=$dataorig->{'branchcode'};
-  	}
-  #Cantidad de ejemplares
-  my $query2="select holdingbranch, wthdrawn , notforloan, biblioitemnumber from items where items.biblioitemnumber=?";
-  if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
-    $query2.=" and (wthdrawn=0 or wthdrawn is NULL or wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
-  			}
-  $sth=$dbh->prepare($query2);
-  $sth->execute($bibitem);
-  my $data;
-  my $total=0;
-  my $unavailable=0;
-  #Fin: Cantidad de ejemplares
-  #Los agrupo por holding branch
-  while ($data=$sth->fetchrow_hashref) { 
-        $counts{$data->{'holdingbranch'}}{'cantXbranch'}++; #Total
-	
-	if ($data->{'wthdrawn'} eq 2){ #COMPARTIDO
-	 $counts{$data->{'holdingbranch'}}{'cantXbranchShared'}++;
-	}else {
-        if ($data->{'wthdrawn'} >0){
-				$counts{$data->{'holdingbranch'}}{'cantXbranchUnavail'}++; #No Disponible 
-				$unavailable++;	
-				}else{ 
-	if ($data->{'notforloan'}){
-		$counts{$data->{'holdingbranch'}}{'cantXbranchNotForLoan'}++; # Para Sala
-				}else{
-		$counts{$data->{'holdingbranch'}}{'cantXbranchForLoan'}++; # Para Prestamo		
-				}
-				}
-		}
-				
-  	$total++;
-             } 
-   #Cantidad de ejemplares prestados y/o reservados
-   
-   my $query2= "SELECT count( * ) AS c, holdingbranch
-		FROM issues, items
-		WHERE items.biblioitemnumber = ? AND items.itemnumber = issues.itemnumber AND issues.returndate IS NULL
-		GROUP BY holdingbranch";
-   $sth=$dbh->prepare($query2);                     
-   $sth->execute($bibitem);
-   while ($data=$sth->fetchrow_hashref){
-	$counts{$data->{'holdingbranch'}}{'prestados'}=$data->{'c'};
-		}
-  $sth->finish;
-
-
- my $query3= "SELECT count( * ) AS c, items.holdingbranch
-		FROM reserves, biblioitems, items
-		WHERE biblioitems.biblioitemnumber = ? AND biblioitems.biblioitemnumber = items.biblioitemnumber AND 
-		biblioitems.biblioitemnumber = reserves.biblioitemnumber AND reserves.constrainttype IS NULL  GROUP BY holdingbranch";
-   $sth=$dbh->prepare($query3);
-   $sth->execute($bibitem);
-   while ($data=$sth->fetchrow_hashref){
-        $counts{$data->{'holdingbranch'}}{'reservados'}=$data->{'c'};
-                }
-  $sth->finish;
-
-
-my @results;
-  foreach my $key (keys %counts){	
-	if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){ # Si no hay ninguno disponible no lo muestro en el opac
-		if (($counts{$key}->{'cantXbranch'})&&($counts{$key}->{'cantXbranch'} gt $counts{$key}->{'cantXbranchUnavail'}))
-			{push(@results,$counts{$key});}
-			 }
-	  else {($counts{$key}->{'cantXbranch'} && push(@results,$counts{$key}));}
-	}
-  return ($total,$unavailable,\@results);
-}
-
-
-
-
-# Local Variables:
-# tab-width: 4
-# End:
