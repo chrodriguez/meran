@@ -13,7 +13,8 @@ use vars qw(@EXPORT @ISA);
 
 		&getEdicion
 		&getVolume
-		getUntitle
+		&getVolumeDesc
+		&getISBN
 
 		&getIndice
 		&insertIndice
@@ -28,20 +29,12 @@ use vars qw(@EXPORT @ISA);
 
 =cut
 
-# FIXME Todavia no esta implementado en V3, viene de V2, ver si va a quedar
-#para mostrar el indice del biblioitem
+=item
+retorna el indice del grupo con correpondiente al parametro $id2
+=cut
 sub getIndice{
-
-	my ($biblioitemnumber, $biblionumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = " SELECT indice FROM biblioitems ";
-	$query .= " WHERE biblioitemnumber =  ?";
-	$query .= " AND biblionumber = ? ";
-	
-    	my $sth=$dbh->prepare($query);
-    	$sth->execute($biblioitemnumber, $biblionumber);
-    	my $result = $sth->fetchrow_hashref;
-    	return ($result);
+	my ($id2)=@_;
+	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"555","a","2");
 }
 
 #para mostrar el indice del biblioitem
@@ -78,14 +71,21 @@ sub getVolume {
 }
 
 =item
-Esta funcion retorna el untitle segun un id2
+Esta funcion retorna la descripcion del volumen segun un id2
 =cut
-sub getUntitle {
+sub getVolumeDesc {
 	my($id2)= @_;
 
-	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"245","b","1");
+	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"740","a","2");
 }
 
+=item
+retorna el primer isbn del grupo con correpondiente al parametro $id2
+=cut
+sub getISBN{
+	my ($id2)=@_;
+	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"020","a","2");
+}
 
 =item
 detalleNivel2MARC

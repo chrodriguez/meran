@@ -21,7 +21,7 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 # get borrower information ....
-my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 
 my @bordat;
 $bordat[0] = $borr;

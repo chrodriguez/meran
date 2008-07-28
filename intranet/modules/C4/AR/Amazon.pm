@@ -30,20 +30,13 @@ return ($url)
 }
 
 sub getImage{
-my ($biblionumber,$size)=@_;
-my $url='';
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select isbns.isbn from isbns left join biblioitems on isbns.biblioitemnumber=biblioitems.biblioitemnumber where biblioitems.biblionumber= ? ;");
-$sth->execute($biblionumber);
-
-my $isbn=$sth->fetchrow;
-$sth->finish;
-if ($isbn ne ''){
-
-$isbn =~ s/-//g;
-$url= getImageByIsbn($isbn,$size);
-
-}
+	my ($id2,$size)=@_;
+	my $url='';
+	my $isbn=C4::AR::Nivel2::getISBN($id2);
+	if ($isbn ne ''){
+		$isbn =~ s/-//g;
+		$url= getImageByIsbn($isbn,$size);
+	}
 
 return($url);
 }

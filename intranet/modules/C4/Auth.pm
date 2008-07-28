@@ -132,7 +132,7 @@ sub get_template_and_user {
 		$template->param(loggedinusername => $user);
 		$template->param(sessionID => $sessionID);
 		$borrowernumber = getborrowernumber($user);
-		my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
 		$template->param(USER_INFO => \@bordat);
@@ -152,7 +152,7 @@ sub get_templateexpr_and_user {
                 $template->param(sessionID => $sessionID);
 
                 $borrowernumber = getborrowernumber($user);
-                my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+                my ($borr, $flags) = getpatroninformation($borrowernumber,"");
                 my @bordat;
                 $bordat[0] = $borr;
 

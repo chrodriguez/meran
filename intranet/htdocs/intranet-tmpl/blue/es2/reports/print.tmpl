@@ -3,13 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>Formato de Impresi&oacute;n</title>
 <style type="text/css">
-<!--
-.titulo {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 20pt;
-}
-.subtitulo {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16pt; }
--->
+
 </style>
 </head>
 
@@ -20,10 +14,10 @@
         <font class="titulo" >Biblioteca:</font><br>
         <font class="subtitulo">Facultad de Ciencias Econ&oacute;micas</font>
         </td>
-	<td align="right" colspan=3><img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" ></td>
+	<td align="right" colspan=3><img src="<!-- TMPL_VAR NAME='themelang' -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" ></td>
 	</tr>
 	<tr><td align="center" colspan="7">
-	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
 	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
 	</a>
 	</td></tr>
@@ -47,19 +41,19 @@
 
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr align="center">
- <td> <!-- TMPL_VAR NAME=author --> </td>
-  <td> <!-- TMPL_VAR NAME=title --> </td>
-  <td> <!-- TMPL_VAR NAME=bulk --> </td>
+ <td> <!-- TMPL_VAR NAME=autor --> </td>
+  <td> <!-- TMPL_VAR NAME=titulo --> </td>
+  <td> <!-- TMPL_VAR NAME=signatura_topografica --> </td>
   <td> <!-- TMPL_VAR NAME=barcode --> </td>
   <td> <!-- TMPL_VAR NAME=number --> </td>
-  <td> <!-- TMPL_VAR NAME=publicationyear --> </td>
+  <td> <!-- TMPL_VAR NAME=anio_publicacion --> </td>
   <td> <!-- TMPL_VAR NAME=date --> </td>
 </tr>
 <tr><td colspan='7'><hr></td></tr>
 <!-- /TMPL_LOOP -->
 <tr><td align="center" colspan="7">
 
-<a onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
+<a onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
 <input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
 </a>
 </td></tr>

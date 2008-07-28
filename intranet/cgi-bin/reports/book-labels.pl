@@ -60,8 +60,7 @@ if ($op eq 'pdf') {
 my $pdf = batchBookLabelGenerator($cantidad,@results);
 
 }
-else
-{
+else{
 
 
 if ($op ne ''){

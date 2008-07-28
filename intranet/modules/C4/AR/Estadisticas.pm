@@ -18,13 +18,11 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
 	&usuarios
 	&historicoPrestamos
-        &cantidadPrestamos
 	&cantidadRetrasados
 	&renovacionesDiarias
 	&prestamos
 	&reservas
 	&cantUsuarios
-	&cantidadReservas
 	&registroActividadesDiarias
 	&registroEntreFechas
 	&insertarNota
@@ -32,7 +30,6 @@ use vars qw(@EXPORT @ISA);
 	&armarPaginasPorRenglones
 	&cantidadRenglones
 	&prestamosAnual
-	&cantidadReservas
 	&cantRegDiarias
 	&cantRegFechas
 	&cantidadAnaliticas
@@ -55,6 +52,8 @@ use vars qw(@EXPORT @ISA);
 	&signaturamin
 	&listaDeEjemplares
 );
+
+
 sub historicoDeBusqueda(){
         my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden)=@_;
 
@@ -270,12 +269,12 @@ sub disponibilidad{
 		push(@bind,format_date_in_iso($fechaFin,$dateformat));
 	}
 	my $query= "SELECT COUNT(*)";
-	my $query2 = "SELECT DISTINCT i.*,bi.number,bi.publicationyear,b.title,b.author,MAX(av.date) AS date, a.completo";
-	my $resto= " FROM items i INNER JOIN biblioitems bi ON (i.biblioitemnumber = bi.biblioitemnumber) 
-		     INNER JOIN biblio b ON (bi.biblionumber=b.biblionumber) 
-		     INNER JOIN availability av ON ( av.item = i.itemnumber  ) 
-		     INNER JOIN autores a ON (a.id = b.author)
-		     WHERE i.wthdrawn = ? AND homebranch=? ".$dates." GROUP BY av.item";
+	my $query2 = "SELECT DISTINCT n3.*, anio_publicacion, titulo, autor AS id,MAX(av.date) AS date, a.completo AS autor";
+	my $resto= " FROM nivel3 n3 INNER JOIN nivel2 n2 ON (n3.id2 = n2.id2) 
+		     INNER JOIN nivel1 n1 ON (n2.id1=n1.id1) 
+		     INNER JOIN availability av ON ( av.id3 = n3.id3  ) 
+		     INNER JOIN autores a ON (a.id = n1.autor)
+		     WHERE n3.wthdrawn = ? AND homebranch=? ".$dates." GROUP BY av.id3";
 	
 	$query.=$resto;
         my $sth=$dbh->prepare($query);
@@ -292,9 +291,7 @@ sub disponibilidad{
 	$sth->execute(@bind);
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'date'}=format_date($data->{'date'},$dateformat);
-		$data->{'id'}=$data->{'author'};
-		my $autorPPAL= &getautor($data->{'author'});
-                $data->{'author'}=$autorPPAL->{'completo'};
+		$data->{'number'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
 		push(@results,$data);
         }
         return ($cant,@results);
@@ -676,44 +673,7 @@ sub usuarios{
         return ($cantidad,@results);
 }
 
-=item
-cantidadPrestamos
-Cuenta los prestamos segun su estado.
-Acutalmente no se usa!!!!!!!
-=cut
-sub cantidadPrestamos{
-	my ($branch,$estado)=@_;
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-        my $query ="select issues.itemnumber as itemnumber
-                    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    inner join issuetypes on (issues.issuecode = issuetypes.issuecode)
-		    inner join items on (issues.itemnumber = items.itemnumber)
-                    where issues.branchcode=? and returndate is NULL";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($branch);
-	my @datearr = localtime(time);
-	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	my $cantidad=0;
-	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'itemnumber'}),$dateformat);
-		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
-		if ($estado eq "VE"){
-			if ($flag lt 0){
-				$cantidad++;
-			}
-		}
-		elsif($estado eq "NV"){
-			if($flag gt 0 || $flag == 0){
-				$cantidad++;
-			}
-		}
-		else{
-			$cantidad++;
-		}
-        }
-        return($cantidad);
-}
+
 # Verifica que una fecha este entre otras 2 
 sub estaEnteFechas {
    my ($begindate,$enddate,$vencimiento)=@_;
@@ -819,63 +779,52 @@ sub prestamos{
 	}
 }
 
-sub cantidadReservas{
-	my ($branch,$tipo)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query ="select  count(*)
-                   from reserves inner join borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
-		   where constrainttype IS NULL";
-	if($tipo eq "GR"){
-		$query.=" AND itemnumber IS NULL";
-	}
-	elsif($tipo eq "EJ"){
-# 		$query.=" AND reserves.branchcode='$branch' AND itemnumber IS NOT NULL"; 
-# La linea anterior se comento porque cuando una reserva pasa grupo a ejemplar no se guarda el codigo de la biblioteca porque las reservas por grupo no lo hacen, por lo tanto al cambiar de estado la reserva, esto se mantiene.
-		$query.=" AND itemnumber IS NOT NULL";
-	}
-        my $sth=$dbh->prepare($query);
-        $sth->execute();
-        return($sth->fetchrow_array);
-
-}
-
 sub reservas{
         my ($branch,$orden,$ini,$fin,$tipo)=@_;
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
         my @results;
-        my $query ="select surname, firstname, cardnumber, emailaddress, reminderdate,
-		    barcode, reservedate, reserves.itemnumber as itemnumber, 
+	my $where="";
+	my $queryCount="SELECT  COUNT(*) as cant
+                   	FROM reserves INNER JOIN borrowers ON (reserves.borrowernumber=borrowers.borrowernumber)
+			WHERE ";
+
+        my $query ="SELECT surname, firstname, cardnumber, emailaddress, reminderdate,
+		    barcode, reservedate, reserves.id3 AS id3, 
 		    borrowers.borrowernumber AS borrowernumber,
 		    reserves.branchcode as branchcode,
-		    items.biblionumber AS biblionumber
-                    from reserves inner join borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
-		    left join items on (reserves.itemnumber = items.itemnumber )
-		    where constrainttype IS NULL ";
+		    n3.id1 AS id1
+                    FROM reserves INNER JOIN borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
+		    LEFT JOIN nivel3 n3 ON (reserves.id3 = n3.id3 ) WHERE ";
 	
 	if($tipo eq "GR"){
-		$query.=" AND biblionumber IS NULL";
+		$where=" estado = 'G'";
 	}
 	elsif($tipo eq "EJ"){
-# 		$query.=" AND reserves.branchcode='".$branch."' AND biblionumber IS NOT NULL";
-# La linea anterior se comento porque cuando una reserva pasa grupo a ejemplar no se guarda el codigo de la biblioteca porque las reservas por grupo no lo hacen, por lo tanto al cambiar de estado la reserva, esto se mantiene.
-		$query.=" AND biblionumber IS NOT NULL";
+		$where=" estado = 'E' ";
 	}
-	$query.=" order by $orden limit $ini , $fin";
+	else {
+		$where=" estado = 'E' OR estado = 'G' ";
+	}
+	$query.=$where." ORDER BY $orden LIMIT $ini , $fin";
 
         my $sth=$dbh->prepare($query);
 	$sth->execute();
         while (my $data=$sth->fetchrow_hashref){
 		$data->{'reminderdate'}=format_date($data->{'reminderdate'},$dateformat);
 		$data->{'reservedate'}=format_date($data->{'reservedate'},$dateformat);
-		if ($data->{'itemnumber'} eq "" ){$data->{'itemnumber'}='-' };
+		if ($data->{'id3'} eq "" ){$data->{'id3'}='-' };
                 if ($data->{'emailaddress'} eq "" ){
 			$data->{'emailaddress'}='-';
 			$data->{'mail'}=1;
 		};
                 push(@results,$data);
         }
-        return (@results);
+	$queryCount.=$where;
+	$sth=$dbh->prepare($queryCount);
+	$sth->execute();
+	my $cant=$sth->fetchrow;
+        return ($cant,@results);
 }
 
 sub cantidadAnaliticas{
@@ -895,11 +844,11 @@ sub cantidadAnaliticas{
 sub itemtypesReport{
         my ($branch)=@_;
         my $dbh = C4::Context->dbh;
-        my $query=" SELECT itemtypes.description, count( itemtypes.description ) as cant
+        my $query=" SELECT itemtypes.description, COUNT( itemtypes.description ) AS cant
 		FROM itemtypes
-		LEFT JOIN biblioitems ON itemtypes.itemtype = biblioitems.itemtype
-		INNER JOIN items ON biblioitems.biblioitemnumber = items.biblioitemnumber
-		WHERE items.holdingbranch = ?
+		LEFT JOIN nivel2 n2 ON itemtypes.itemtype = n2.tipo_documento
+		INNER JOIN nivel3 n3 ON n2.id2 = n3.id2
+		WHERE holdingbranch = ?
 		GROUP BY itemtypes.description  ";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
@@ -913,11 +862,11 @@ sub itemtypesReport{
 sub levelsReport{
         my ($branch)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="SELECT bibliolevel.description, count( bibliolevel.description ) AS cant
+        my $query="SELECT bibliolevel.description, COUNT( bibliolevel.description ) AS cant
 		FROM bibliolevel
-		LEFT JOIN biblioitems ON bibliolevel.code = biblioitems.classification
-		INNER JOIN items ON biblioitems.biblioitemnumber = items.biblioitemnumber
-		WHERE items.holdingbranch = ?
+		LEFT JOIN nivel2 n2 ON bibliolevel.code = n2.nivel_bibliografico
+		INNER JOIN nivel3 n3 ON n2.id2 = n3.id2
+		WHERE holdingbranch = ?
 		GROUP BY bibliolevel.description";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
@@ -1250,7 +1199,7 @@ sub historicoCirculacion(){
 }
 
 sub historicoSanciones(){
-	my ($fechaIni,$fechaFin,$user,$itemnumber,$ini,$cantR,$orden,
+	my ($fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
 	$tipoPrestamo,$tipoOperacion)=@_;
 	
         my $dbh = C4::Context->dbh;
@@ -1259,10 +1208,10 @@ sub historicoSanciones(){
 	my $cant=0;
 
 
-	my $select= " 	SELECT hs.borrowernumber, hs.responsable,hs.type, b.firstname as firstnameBor, 
-			b.surname as surnameBor,resp.firstname as firstnameResp, resp.surname as surnameResp,
+	my $select= " 	SELECT hs.borrowernumber, hs.responsable,hs.type, b.firstname AS firstnameBor, 
+			b.surname AS surnameBor,resp.firstname AS firstnameResp, resp.surname AS surnameResp,
 			hs.end_date, hs.date, st.issuecode, hs.timestamp, hs.sanctiontypecode, 
-			it.description as tipoPrestamo";
+			it.description AS tipoPrestamo";
 
 	my $from= "	FROM historicSanctions hs INNER JOIN borrowers b
 			ON (hs.borrowernumber = b.borrowernumber)
@@ -1298,7 +1247,7 @@ sub historicoSanciones(){
 		push(@bind, $tipoPrestamo);
 	}
 
-	my $finCons=" ORDER BY $orden desc limit $ini,$cantR ";
+	my $finCons=" ORDER BY $orden DESC LIMIT $ini,$cantR ";
 
 	$query="SELECT count(*) as cant ".$from.$where;
         my $sth=$dbh->prepare($query);
@@ -1393,7 +1342,7 @@ SE USA EN EL REPORTE Generar Etiquetas
 sub signaturamax {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select MAX(bulk) as max from items where bulk is not NULL and bulk <> '' and homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MAX(signatura_topografica) AS max FROM nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'max'};
 	return $res;
@@ -1404,8 +1353,8 @@ SE USA EN EL REPORTE Generar Etiquetas
 =cut
 sub signaturamin {
  my ($branch) = @_;
-	my $dbh = C4::Context->dbh;                     
-	my $sth = $dbh->prepare("select MIN(bulk) as min from items where bulk is not NULL and bulk <> '' and homebranch = ?");
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT MIN(signatura_topografica) AS min FROM nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'min'};
 	return $res;
@@ -1421,79 +1370,75 @@ sub listaDeEjemplares {
 	my @bind;
 	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
 	my $dbh = C4::Context->dbh;
-	
-	my $query="SELECT itemnumber, barcode, bulk, title, unititle, author, publicationyear, number,items.biblioitemnumber, biblioitems.biblionumber, items.homebranch
-	FROM (
-	(items 	INNER JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber)
-	INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
-	    )
+# 	FALTA unititle,number
+	my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
+	FROM ((nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2)
+	INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
 	WHERE ";
 	
 	if ($beginlocation ne '') {
-		$query.=" (bulk LIKE '".$beginlocation."%') ";
+		$query.=" (signatura_topografica LIKE '".$beginlocation."%') ";
 	}
 	else {
 	
-	if (($minbarcode ne '') and ($maxbarcode ne '')) {
-		$query.=" (barcode 	BETWEEN ? AND ?) ";
-		push(@bind,$minbarcode);
-		push(@bind,$maxbarcode);
+		if (($minbarcode ne '') and ($maxbarcode ne '')) {
+			$query.=" (barcode BETWEEN ? AND ?) ";
+			push(@bind,$minbarcode);
+			push(@bind,$maxbarcode);
 		}
-	if (($minlocation ne '') and ($maxlocation ne '')) {
-		if (($minbarcode ne '') and ($maxbarcode ne '')) {$query.=" AND ";} #Se van a hacer las 2 consultas
+		if (($minlocation ne '') and ($maxlocation ne '')) {
+			if (($minbarcode ne '') and ($maxbarcode ne '')) {$query.=" AND ";} #Se van a hacer las 2 consultas
 		
-		$query.=" (bulk BETWEEN ? AND ?) ";
-		push(@bind,$minlocation);
-		push(@bind,$maxlocation);
+			$query.=" (signatura_topografica BETWEEN ? AND ?) ";
+			push(@bind,$minlocation);
+			push(@bind,$maxlocation);
 		}
 	}
-	
+	my @results;
 	if (($beginlocation ne '') or (($minbarcode ne '') and ($maxbarcode ne '')) or (($minlocation ne '') and ($maxlocation ne ''))) {
 	#Se va a hacer la consulta
 
-		$query.=" AND (items.homebranch= ?) ;";
+		$query.=" AND (homebranch= ?) ;";
 		push(@bind,$branchcode);	
 		my $sth = $dbh->prepare($query);
 		$sth->execute(@bind);
 	
-	my @results;
-	while (my $row = $sth->fetchrow_hashref) {
-# 		$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
-		$row->{'author'}=C4::AR::Busquedas::getautor($row->{'author'});
-		$row->{'completo'}=($row->{'author'})->{'completo'}; #para dar el orden
-		push @results,$row;
-	}
-
-	if ($orden){
-	# Da el ORDEN al arreglo
-	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-	@results=@sorted;
-	}
-
-	my $cantReg=scalar(@results);
-
-	#Se chequean si se quieren devolver todos
-	if(($cantReg > $fin)&&($fin ne "todos")){
-		my $cantFila=$fin-1+$ini;
-		my @results2;
-		if($cantReg < $cantFila ){
-			@results2=@results[$ini..$cantReg];
-		}
-		else{
-			@results2=@results[$ini..$fin-1+$ini];
+		while (my $row = $sth->fetchrow_hashref) {
+# 			$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
+			$row->{'number'}=C4::AR::Nivel2::getEdicion($row->{'id2'});
+			$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
+			$row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
+			push @results,$row;
 		}
 
-		return($cantReg,@results2);
-	}
-        else{
-		return ($cantReg,@results);
-	}
+		if ($orden){
+		# Da el ORDEN al arreglo
+			my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+			@results=@sorted;
+		}
+
+		my $cantReg=scalar(@results);
+
+		#Se chequean si se quieren devolver todos
+		if(($cantReg > $fin)&&($fin ne "todos")){
+			my $cantFila=$fin-1+$ini;
+			my @results2;
+			if($cantReg < $cantFila ){
+				@results2=@results[$ini..$cantReg];
+			}
+			else{
+				@results2=@results[$ini..$fin-1+$ini];
+			}
+
+			return($cantReg,@results2);
+		}
+        	else{
+			return ($cantReg,@results);
+		}
 
 	}
-	else 
-	{# NO se hace la consulta
-	return (0,[]);
+	else {# NO se hace la consulta
+		return (0,@results);
 	}	
-
 }
 

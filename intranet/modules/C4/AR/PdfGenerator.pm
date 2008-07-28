@@ -41,35 +41,13 @@ sub searchGenerator {
 	my ($from,@results)=@_;
 	my $pdf=newPdf();
 	my $pos;
-	#my $pagewidth;
-	#my $pageheight; 
 	my $msg="Resultado de la busqueda: ";
 	my $msg2="Biblioteca: ";
 	my $text;
 	my $line=36; 
 	my $page=0;
 	foreach my $res (@results){
-=item	  if($line > 35){
-			$line=0;
-			$pos=800;
-			$pdf->newpage(1);
-			$page++;
-	        	$pdf->openpage($page);
-		        ($pagewidth, $pageheight) = $pdf->getPageDimensions();
-		        $pdf->setFont("Verdana");
-        		$pdf->setSize(22);
-        		$pdf->addRawText("Biblioteca: " ,180,$pos);
-        		$pdf->setSize(20);
-        		$pos=$pos-20;
-        		$pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
-		        $pdf->setFont("Verdana");
-      			$pdf->setSize(10);
-			 $pos=$pos-35;
-		        $pdf->drawLine(25, $pos+12, 570 , $pos+12);
-			}
-=cut
-		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);# Se puso la parte de arriba en una funcion generica para que pueda ser usada por las otras funciones!!!! - Damian - 22/05/2007
-# Si funciona sacar lo comentado que esta arriba!!!!!
+		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);# Se puso la parte de 
 		if ($from eq 'shelfs'){
 			if ($res->{'nameparent'}){
 				$text= $res->{'nameparent'}.' / '.$res->{'shelfname'};
@@ -92,113 +70,26 @@ sub searchGenerator {
 
 			$text= $autorppal.' - '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')';
 		}
-		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);# Funcion generica que reemplaza la parte que esta comentada abajo!!!
-	#Se puede usar en todas la funciones que generan pdf!!!! - Damian 22/05/2007
-
-
-=item	if (length($text) < 100){
-		     $pdf->addParagragh($text, 25,$pos,550,20, 30);
-		     $line++;
-		     $pdf->drawLine(25, $pos-5, 570 , $pos-5);
-		     $pos=$pos-19;
-			}else
-		       {my $blank=index($text,' ', 100);
-			if ($blank<0){$blank=length($text)}
-			my $index=0;	
-		while (($blank < length($text))and($blank>0)){
-			my $size=$blank-$index;
-			my $substr= substr($text,$index ,$size);
-			 $pdf->addParagragh($substr, 25,$pos,550,20, 30);
- 
-			$line++;
-                     	 $pos=$pos-10;
-			$index=$blank;
-			if($blank+90 < length($text)) {$blank=index($text,' ',$blank+100);}else{$blank=length($text);}
-		   				}
-			  my $substr= substr($text,$index ,length($text)-$index);
-                         $pdf->addParagragh($substr, 25,$pos,550,20, 30);
-                         $line++;
-		
-			$pdf->drawLine(25, $pos-5, 570 , $pos-5);
-                        $pos=$pos-20;
-=cut			}
-
+		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);
 	}#for each
 	my $tmpFileName= "search.pdf";
         imprimirFinal($pdf,$tmpFileName);
 }
 
 
-sub shelfContentsGenerator {
-	
+sub shelfContentsGenerator {	
 	my ($shelfname,@results)=@_;
 	my $pdf=newPdf();
 	my $pos;
-	#my $pagewidth;
-	#my $pageheight; 
 	my $text;
 	my $line=36; 
 	my $page=0;
 	my $msg2="Biblioteca: ";
 	my $msg="Contenido del Estante Virtual : ".$shelfname;
 	foreach my $res (@results) {
-=item	  if($line > 35){
-			$line=0;
-			$pos=800;
-			$pdf->newpage(1);
-			$page++;
-	        	$pdf->openpage($page);
-		        ($pagewidth, $pageheight) = $pdf->getPageDimensions();
-		        $pdf->setFont("Verdana");
-        		$pdf->setSize(22);
-        		$pdf->addRawText("Biblioteca: " ,180,$pos);
-        		$pdf->setSize(20);
-        		$pos=$pos-20;
-        		$pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
-			
-			$pdf->setFont("Verdana");
-                        $pdf->setSize(12);
-			$pdf->addRawText("Contenido del Estante Virtual : ".$shelfname ,70,$pos-15);
-			
-		        $pdf->setFont("Verdana");
-      			$pdf->setSize(10);
-			$pos=$pos-35;
-		        $pdf->drawLine(25, $pos+12, 570 , $pos+12);
-			}
-=cut
-		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);# Se puso la parte de arriba en una funcion generica para que pueda ser usada por las otras funciones!!!! - Damian - 22/05/2007
-	
+		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);
 		$text= $res->{'author'}.' - '.$res->{'title'}.' (Solicitar por '.$res->{'firstbulk'}.')';
-		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);# Funcion generica que reemplaza la parte que esta comentada abajo!!!
-	#Se puede usar en todas la funciones que generan pdf!!!! - Damian 22/05/2007
-
-=item	if (length($text) < 100){
-		     $pdf->addParagragh($text, 25,$pos,550,20, 30);
-		     $line++;
-		     $pdf->drawLine(25, $pos-5, 570 , $pos-5);
-		     $pos=$pos-19;
-			}else
-		       {my $blank=index($text,' ', 100);
-			if ($blank<0){$blank=length($text)}
-			my $index=0;	
-		while (($blank < length($text))and($blank>0)){
-			my $size=$blank-$index;
-			my $substr= substr($text,$index ,$size);
-			 $pdf->addParagragh($substr, 25,$pos,550,20, 30);
- 
-			$line++;
-                     	 $pos=$pos-10;
-			$index=$blank;
-			if($blank+90 < length($text)) {$blank=index($text,' ',$blank+100);}else{$blank=length($text);}
-		   				}
-			  my $substr= substr($text,$index ,length($text)-$index);
-                         $pdf->addParagragh($substr, 25,$pos,550,20, 30);
-                         $line++;
-		
-			$pdf->drawLine(25, $pos-5, 570 , $pos-5);
-                        $pos=$pos-20;
-=cut			}
-
+		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);
 	}#for each
 	my $tmpFileName= "shelfContents.pdf";
         imprimirFinal($pdf,$tmpFileName);
@@ -208,70 +99,20 @@ sub searchShelfGenerator {
 	my (@results)=@_;
 	my $pdf=newPdf();
 	my $pos;
-	#my $pagewidth;
-	#my $pageheight; 
 	my $msg="Estantes virtules";
 	my $msg2="Biblioteca: ";
 	my $text;
 	my $line=36; 
 	my $page=0;
 	foreach my $res (@results) {
-		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);# Se puso la parte de arriba en una funcion generica para que pueda ser usada por las otras funciones!!!! - Damian - 22/05/2007
-=item	  if($line > 35){
-			$line=0;
-			$pos=800;
-			$pdf->newpage(1);
-			$page++;
-	        	$pdf->openpage($page);
-		        ($pagewidth, $pageheight) = $pdf->getPageDimensions();
-		        $pdf->setFont("Verdana");
-        		$pdf->setSize(22);
-        		$pdf->addRawText("Biblioteca: " ,180,$pos);
-        		$pdf->setSize(20);
-        		$pos=$pos-20;
-        		$pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
-		        $pdf->setFont("Verdana");
-      			$pdf->setSize(10);
-			 $pos=$pos-35;
-		        $pdf->drawLine(25, $pos+12, 570 , $pos+12);
-=cut			}
-
+		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);
 		if ($res->{'nameparent'}){
 			$text= $res->{'nameparent'}.' / '.$res->{'shelfname'};
 		}
 		else{ 
 			$text= $res->{'shelfname'};
 		}
-		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);# Funcion generica que reemplaza la parte que esta comentada abajo!!!
-	#Se puede usar en todas la funciones que generan pdf!!!! - Damian 22/05/2007
-
-=item	if (length($text) < 100){
-		     $pdf->addParagragh($text, 25,$pos,550,20, 30);
-		     $line++;
-		     $pdf->drawLine(25, $pos-5, 570 , $pos-5);
-		     $pos=$pos-19;
-			}else
-		       {my $blank=index($text,' ', 100);
-			if ($blank<0){$blank=length($text)}
-			my $index=0;	
-		while (($blank < length($text))and($blank>0)){
-			my $size=$blank-$index;
-			my $substr= substr($text,$index ,$size);
-			 $pdf->addParagragh($substr, 25,$pos,550,20, 30);
- 
-			$line++;
-                     	 $pos=$pos-10;
-			$index=$blank;
-			if($blank+90 < length($text)) {$blank=index($text,' ',$blank+100);}else{$blank=length($text);}
-		   				}
-			  my $substr= substr($text,$index ,length($text)-$index);
-                         $pdf->addParagragh($substr, 25,$pos,550,20, 30);
-                         $line++;
-		
-			$pdf->drawLine(25, $pos-5, 570 , $pos-5);
-                        $pos=$pos-20;
-=cut			}
-
+		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);
 	}#for each
 	my $tmpFileName= "searchShelf.pdf";
         imprimirFinal($pdf,$tmpFileName);
@@ -287,68 +128,12 @@ sub availPdfGenerator{
 	my $line=36; 
 	my $pos;
 	my $page=0;
-=item
-	my $pagewidth;
-	my $pageheight; 
 
-
-	
-=cut
 	foreach my $res (@results) {
-=item	  if($line > 35){
-			$line=0;
-			$pos=810;
-			$pdf->newpage(1);
-			$page++;
-	        	$pdf->openpage($page);
-		        ($pagewidth, $pageheight) = $pdf->getPageDimensions();
-		        $pdf->setFont("Verdana");
-        		$pdf->setSize(16);
-        		$pdf->addRawText("Biblioteca: " ,180,$pos);
-        		$pdf->setSize(12);
-        		$pos=$pos-15;
-        		$pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
-		        $pdf->setFont("Verdana");
-      			$pdf->setSize(10);
-			 $pos=$pos-40;
-			$pdf->addParagragh($msg, 25 ,$pos+20,550,20, 30);
-		        $pdf->drawLine(25, $pos+12, 570 , $pos+12);
-			}
-=cut
-		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);# Se puso la parte de arriba en una funcion generica para que pueda ser usada por las otras funciones!!!! - Damian - 22/05/2007
-	# Si funciona sacar lo comentado que esta arriba!!!!!
-		$text= $res->{'author'}.' - '.$res->{'title'}.' - Signatura: '.$res->{'bulk'}.' Cod.: '.$res->{'barcode'}.' Fecha: '.$res->{'date'}; 
+		($pdf,$pos,$page,$line)=imprimirLinea($pdf,$pos,$msg,$msg2,$line,$page);
+		 $text= $res->{'autor'}.' - '.$res->{'titulo'}.' - Signatura: '.$res->{'signatura_topografica'}.' Cod.: '.$res->{'barcode'}.' Fecha: '.$res->{'date'}; 
 
-		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);# Funcion generica que reemplaza la parte que esta comentada abajo!!!
-	#Se puede usar en todas la funciones que generan pdf!!!! - Damian 22/05/2007
-
-=item	if (length($text) < 100){
-		     $pdf->addParagragh($text, 25,$pos,550,20, 30);
-		     $line++;
-		     $pdf->drawLine(25, $pos-5, 570 , $pos-5);
-		     $pos=$pos-19;
-			}else
-		       {my $blank=index($text,' ', 100);
-			if ($blank<0){$blank=length($text)}
-			my $index=0;	
-		while (($blank < length($text))and($blank>0)){
-			my $size=$blank-$index;
-			my $substr= substr($text,$index ,$size);
-			 $pdf->addParagragh($substr, 25,$pos,550,20, 30);
- 
-			$line++;
-                     	 $pos=$pos-10;
-			$index=$blank;
-			if($blank+90 < length($text)) {$blank=index($text,' ',$blank+100);}else{$blank=length($text);}
-		   				}
-			  my $substr= substr($text,$index ,length($text)-$index);
-                         $pdf->addParagragh($substr, 25,$pos,550,20, 30);
-                         $line++;
-		
-			$pdf->drawLine(25, $pos-5, 570 , $pos-5);
-                        $pos=$pos-20;
-			}
-=cut
+		($pdf,$line,$pos)=imprimirLinea2($pdf,$text,$line,$pos);
 	}#for each
 	my $tmpFileName= "availsearch.pdf";
         imprimirFinal($pdf,$tmpFileName);
@@ -407,7 +192,6 @@ sub hitoricoPrestamosPdfGenerator(){
 
 #Damian - 22/05/2007
 #Funcion generica que sirve para imprimir las lineas se usa en todos los generadores de pdf
-#Ver si sirve!!!!!!!!!!!!
 sub imprimirLinea(){
 	my ($pdf,$pos,$msg,$msg2,$line,$page)=@_;
 	my $pagewidth;
@@ -436,7 +220,6 @@ sub imprimirLinea(){
 
 #Damian - 22/05/2007
 #Funcion generica que sirve para imprimir las lineas se usa en todos los generadores de pdf
-#Ver si sirve!!!!!!!!!!!!
 sub imprimirLinea2(){
 	my ($pdf, $text,$line,$pos)=@_;
 

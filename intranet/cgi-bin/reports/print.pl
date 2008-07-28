@@ -19,18 +19,19 @@ my $avail=$input->param('avail')||1;
 
 #Fechas
 my $fini=$input->param('fechaIni');
-my $ffin=$input->param('fechaFni');
+my $ffin=$input->param('fechaFin');
 #
 
 my ($cantidad, @results)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fini,$ffin,'','');
 
-	$msg='Ejemplares con disponibilidad: <b>'.C4::AR::Busquedas::getAvail($avail)->{'description'}.'</b> ';
-	my $dateformat = C4::Date::get_date_format();
-	if (($fini) and ($ffin)){$msg.='entre las fechas: <b>'.C4::Date::format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; }
+$msg='Ejemplares con disponibilidad: <b>'.C4::AR::Busquedas::getAvail($avail)->{'description'}.'</b> ';
+my $dateformat = C4::Date::get_date_format();
+if (($fini) and ($ffin)){
+	$msg.='entre las fechas: <b>'.C4::Date::format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; 
+}
 
 if ($input->param('type') eq 'pdf') {#Para PDF
 	my  $msg2='Ejemplares con disponibilidad: '.C4::AR::Busquedas::getAvail($avail)->{'description'}.' ';
-	my $dateformat = C4::Date::get_date_format();
 	if (($fini) and ($ffin)){
 		$msg2.='entre las fechas: '.format_date($fini,$dateformat).' y '.format_date($ffin,$dateformat).' .';
 	}
@@ -38,7 +39,7 @@ if ($input->param('type') eq 'pdf') {#Para PDF
 }
 else{ #Para imprimir
 	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "print.tmpl",
+                = get_template_and_user({template_name => "reports/print.tmpl",
                              query => $input,
                              type => "intranet",
                              authnotrequired => 1,

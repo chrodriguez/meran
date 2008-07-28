@@ -49,16 +49,15 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
 	my @infoDevRen=();
-	my $env;
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
-		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
+		my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
 		$infoDevRen[$i]->{'id3'}=$id3;
 		$infoDevRen[$i]->{'barcode'}=$iteminfo->{'barcode'};
 		$infoDevRen[$i]->{'autor'}=$iteminfo->{'autor'};
 		$infoDevRen[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoDevRen[$i]->{'unititle'}=C4::AR::Nivel2::getUntitle($iteminfo->{'id2'});
+		$infoDevRen[$i]->{'unititle'}=C4::AR::Nivel1::getUntitle($iteminfo->{'id1'});
 		$infoDevRen[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
@@ -70,12 +69,10 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
-
 	my @infoPrestamo;
-	my $env;
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
-		my $iteminfo= C4::Circulation::Circ2::getiteminformation($env,$id3);
+		my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
 		my ($infoN3,@results)=C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($iteminfo->{'id2'});
 #Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
 		my @items;

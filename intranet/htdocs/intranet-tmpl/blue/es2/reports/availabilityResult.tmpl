@@ -13,11 +13,11 @@
 
 	<!-- ver si va esta clase ????, falta q se vea la manito-->
 		<td class="tablaresultadoTitleClick" onClick="ordenar('completo');" title="Ordenar por autor">Autor</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('title');" title="Ordenar por titulo">T&iacute;tulo</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('bulk');" title="Ordenar por Sig. Topografica">Signatura Topogr&aacute;fica</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('titulo');" title="Ordenar por titulo">T&iacute;tulo</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('signatura_topografica');" title="Ordenar por Sig. Topografica">Signatura Topogr&aacute;fica</td>
 		<td class="tablaresultadoTitleClick" onClick="ordenar('barcode');" title="Ordenar por cod. de barras">C&oacute;digo de barras</td>
 		<td class="tablaresultadoTitleClick" onClick="ordenar('number');" title="Ordenar por edicion">Edici&oacute;n</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('publicationyear');" title="Ordenar por a&ntilde;o de publicacion">A&ntilde;o de Publicaci&oacute;n</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('anio_publicacion');" title="Ordenar por a&ntilde;o de publicacion">A&ntilde;o de Publicaci&oacute;n</td>
 		<td class="tablaresultadoTitleClick" onClick="ordenar('date');" title="Ordenar por fecha">Fecha</a></th>
 
 		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
@@ -25,12 +25,12 @@
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
 	<tr align="center" class="inputFontNormal">
   		<td height=25>&nbsp;</td>
-  		<td align="left"> <!-- TMPL_VAR NAME=author --></td>
-  		<td> <!-- TMPL_VAR NAME=title ESCAPE=HTML--> </td>
-  		<td> <!-- TMPL_VAR NAME=bulk --> </td>
+  		<td align="left"> <!-- TMPL_VAR NAME=autor --></td>
+  		<td> <!-- TMPL_VAR NAME=titulo ESCAPE=HTML--> </td>
+  		<td> <!-- TMPL_VAR NAME=signatura_topografica --> </td>
   		<td> <!-- TMPL_VAR NAME=barcode --> </td>
   		<td> <!-- TMPL_VAR NAME=number --> </td>
-  		<td> <!-- TMPL_VAR NAME=publicationyear --> </td>
+  		<td> <!-- TMPL_VAR NAME=anio_publicacion --> </td>
   		<td> <!-- TMPL_VAR NAME=date --> </td>  
   		<td height=25>&nbsp;</td>
        </tr>
@@ -48,11 +48,11 @@
 
 	<input TYPE="hidden" VALUE="pdf" NAME="type" > 
 		<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/print.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
 		</a>
 
 		<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/print.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
 		</a>
 <form>
 <br><br>

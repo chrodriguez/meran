@@ -141,7 +141,7 @@ if ($query->param('virtual')) {#es una busqueda por biblioteca virtual
 } 
 
 if (C4::Context->preference("EnabledMailSystem")){
-	my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+	my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 	if ($borr->{'emailaddress'}){$template->param(MAIL =>$borr->{'emailaddress'} ); }
 }
 

@@ -71,7 +71,7 @@ if (C4::Context->boolean_preference('marc') eq '1') {
 if ($query->param('modifyshelfcontents')) {
 	my $shelfnumber=$query->param('shelfnumber');
 	my $barcode=$query->param('addbarcode');
-	#my ($item) = getiteminformation($env, 0, $barcode);
+	#my ($item) = getiteminformation(0, $barcode);
 	#AddToShelf($env, $item->{'itemnumber'}, $shelfnumber);
 	my $itemnumber=$barcode; 
         AddToShelf($env,$itemnumber,$shelfnumber);

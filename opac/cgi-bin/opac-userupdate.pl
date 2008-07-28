@@ -21,7 +21,7 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 # get borrower information ....
-my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 
 my $dateformat = C4::Date::get_date_format();
 # handle the new information....

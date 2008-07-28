@@ -254,9 +254,8 @@ sub fechaDeVencimiento {
 
 
 =item
-vencimiento recibe un parametro, un itemnumber  lo que hace es devolver la fecha en que vence el prestamo
+vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que vence el prestamo
 =cut
-
 sub vencimiento {
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
@@ -279,7 +278,7 @@ sub vencimiento {
 
 
 =item
-sepuederenovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false
+sepuederenovar recibe dos parametros un id3 y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se devuelve true, sino false
 =cut
 sub sepuederenovar{
 my ($borrowernumber,$id3)=@_;
@@ -337,8 +336,6 @@ if (my $data= $sth->fetchrow_hashref){
 }#if ($data-)
 return 0;
 }
-		
-
 
 sub hayReservasEsperando(){
 	my ($id2)=@_;
@@ -380,12 +377,9 @@ sub chequeoDeFechas(){
 	return 0;
 }
 
-#**********************************Termina ACA ********************************************
-
 =item
-renovar recibe dos parametros un itemnumber y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.
+renovar recibe dos parametros un id3 y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.
 =cut
- 
 sub renovar {
 	my ($params)=@_;
 	my $borrowernumber= $params->{'borrowernumber'};
@@ -396,8 +390,6 @@ sub renovar {
 	my $codMsg;
 	my $error= 0;
 
-#ESTA FUNCION HAY Q LIMPIARLA Y ADAPTARLA, DEBERIA DEVOLVER VODIGOS DE ERROR, ADEMAS DEBERIA IR DENTRO
-# DE VERIFICAR PARA RENOVAR
 	my $renovacion= &sepuederenovar($borrowernumber,$id3);
 	my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
 
@@ -459,9 +451,7 @@ sub verificarParaRenovar{
 	#se setea el barcode para informar al usuario en la renovacion	
 	@paraMens[0]= $params->{'barcode'};	
 
-	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation(	undef, 				
-										$params->{'borrowernumber'}
-									);	
+	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation($params->{'borrowernumber'},"");
 	$params->{'usercourse'}= $borrower->{'usercourse'};
 
 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
@@ -732,11 +722,10 @@ sub enviar_recordatorios_prestamos {
 
 sub crearTicket {
 	my ($id3,$bornum,$loggedinuser)=@_;
-	my %env;
 	my $dateformat = C4::Date::get_date_format();
-	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation(\%env,$bornum,0);
-	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation(\%env,$loggedinuser,0);
-	my $iteminfo= C4::Circulation::Circ2::getiteminformation(\%env, $id3);
+	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation($bornum,0);
+	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation($loggedinuser,0);
+	my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
 	my $ticket_duedate = vencimiento($iteminfo->{'id3'});
 	my %ticket;
 	$ticket{'borrowerName'}=CGI::Util::escape($borrower->{'firstname'} . " " . $borrower->{'surname'});
@@ -747,7 +736,7 @@ sub crearTicket {
 	$ticket{'titulo'}=CGI::Util::escape($iteminfo->{'titulo'});
 	$ticket{'topoSign'}=CGI::Util::escape($iteminfo->{'signatura_topografica'});
 	$ticket{'barcode'}=CGI::Util::escape($iteminfo->{'barcode'});
-# 	$ticket{'volume'}=CGI::Util::escape($iteminfo->{'volume'}); FALTA CODIGO MARC
+	$ticket{'volume'}=CGI::Util::escape(C4::AR::Nivel2::getVolume($iteminfo->{'id2'}));
 	$ticket{'borrowDate'}=CGI::Util::escape(format_date_hour(ParseDate("today"),$dateformat));
 	$ticket{'returnDate'}=CGI::Util::escape(format_date($ticket_duedate,$dateformat));
 	$ticket{'librarian'}=CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'});
@@ -811,7 +800,7 @@ sub prestamosPorUsuario {
 	my %currentissues;
 
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
-                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica,
+                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico
                 n1.titulo AS titulo, n1.autor, isst.description AS issuetype
                 FROM issues iss INNER JOIN issuetypes isst ON ( iss.issuecode = isst.issuecode )
 		INNER JOIN nivel3 n3 ON ( iss.id3 = n3.id3 )
@@ -823,13 +812,8 @@ sub prestamosPorUsuario {
                 ORDER BY iss.date_due ";
 
 # FALTA!!!!!!!!!
-# 		biblio.unititle			AS unititle,
 # 		biblioitems.dewey     		AS dewey,
-# 		biblioitems.number 		AS redicion,
-# 		biblioitems.volume 		AS volume,
-# 		biblioitems.volumeddesc 	AS volumeddesc, 
 # 		biblioitems.subclass  		AS subclass,
-# 		biblioitems.classification 	AS classification,
 
 	my $sth=$dbh->prepare($select);
 	$sth->execute($borrowernumber);
@@ -848,6 +832,9 @@ sub prestamosPorUsuario {
 		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
 		$data->{'edicion'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
+		$data->{'unititle'}=C4::AR::Nivel1::getTituloInformativo($data->{'id1'});
+		$data->{'volume'}=C4::AR::Nivel2::getVolume($data->{'id2'});
+		$data->{'volumeddesc'}=C4::AR::Nivel2::getVolumeDesc($data->{'id2'});
 		$currentissues{$counter} = $data;
 		$counter++;
 	}

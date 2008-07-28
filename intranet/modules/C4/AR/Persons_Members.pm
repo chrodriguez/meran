@@ -114,10 +114,7 @@ sub addmember{
 sub sepuedeeliminar{
   my ($member)=@_;
   my %env;
-  $env{'nottodayissues'}=1;
-  my %member2;
-  $member2{'borrowernumber'}=$member;
-  my $issues=currentissues(\%env,\%member2);
+  my $issues=C4::AR::Issues::prestamosPorUsuario($member);
   my $i=0;
   foreach (sort keys %$issues) {
     $i++;

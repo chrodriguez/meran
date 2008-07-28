@@ -32,14 +32,6 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 my $member=$input->param('member');
 my %env;
-$env{'nottodayissues'}=1;
-my %member2;
-$member2{'borrowernumber'}=$member;
-my $issues=currentissues(\%env,\%member2);
-my $i=0;
-foreach (sort keys %$issues) {
-    $i++;
-}
 
 my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $newpassword = $input->param('newpassword');

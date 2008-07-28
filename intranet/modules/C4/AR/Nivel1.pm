@@ -10,8 +10,10 @@ use vars qw(@EXPORT @ISA);
 
 @EXPORT=qw(
 	&buscarNivel1PorId3
+
 	&getAutoresAdicionales
 	&getColaboradores
+	&getUnititle
 
 	&detalleNivel1
 	&detalleNivel1MARC
@@ -53,6 +55,14 @@ sub getColaboradores(){
 	my ($id)=@_;
 
 # 	falta implementar, seria un campo de nivel 1 repetibles
+}
+
+=item
+Esta funcion retorna el untitle segun un id1
+=cut
+sub getUnititle {
+	my($id1)= @_;
+	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
 
 sub detalleNivel1MARC{

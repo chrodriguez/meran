@@ -1536,8 +1536,8 @@ sub loguearBusqueda{
 		$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
 	}
 
-	if($search->{'itemnumber'} ne ""){
-		$sth->execute($id, 'itemnumber', $search->{'itemnumber'}, $desde);
+	if($search->{'id3'} ne ""){
+		$sth->execute($id, 'id3', $search->{'id3'}, $desde);
 	}
 
 	if($search->{'class'} ne ""){

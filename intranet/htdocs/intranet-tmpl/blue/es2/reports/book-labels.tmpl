@@ -109,7 +109,7 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 
 </table>
 <br>
-<input type="image" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
+<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
 </form>
 <br>
 
@@ -139,17 +139,17 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 
 <table border="0" cellspacing="0" cellpadding="0"  width="90%" align="center">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td> 
+		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td> 
 
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('barcode')">Nro. de Inventario</a></td>
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('completo')">Autor</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('title')">T&iacute;tulo</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('titulo')">T&iacute;tulo</a></td>
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('number')">Edic.</a></td>
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('publisher')">Editor</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('publicationyear')">A&ntilde;o</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('bulk')">Signatura Topogr&aacute;fica</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('anio_publicacion')">A&ntilde;o</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('signatura_topografica')">Signatura Topogr&aacute;fica</a></td>
 
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
 
 <!-- TMPL_LOOP NAME=RESULTSLOOP -->
@@ -162,7 +162,7 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 		<!-- TMPL_VAR NAME="completo" -->
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
 
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
@@ -172,10 +172,10 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 		<!-- TMPL_VAR NAME="publisher" -->
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="publicationyear" --> 
+		<!-- TMPL_VAR NAME="anio_publicacion" --> 
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" -->" align="center">
-		<!-- TMPL_VAR Name="bulk" -->
+		<!-- TMPL_VAR Name="signatura_topografica" -->
 	</td>
 	<td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
 </tr>
@@ -199,8 +199,8 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 </table>
 
 <p>
-<a href="#" onClick="generarEtiquetas();" class="inputFontNormal" onMouseOut="swap('etiquetas','<!-- TMPL_VAR NAME="themelang" -->/images/etiquetas.png')" onMouseOver="swap('etiquetas','<!-- TMPL_VAR NAME="themelang" -->/images/etiquetasbis.png')" >
-<input  name="etiquetas" id="etiquetas" alt="Generar etiquetas" type="image" value="Generar etiquetas"  src="<!-- TMPL_VAR NAME="themelang" -->/images/etiquetas.png" border="0" title="Generar etiquetas" >
+<a href="#" onClick="generarEtiquetas();" class="inputFontNormal" onMouseOut="swap('etiquetas','<!-- TMPL_VAR NAME='themelang' -->/images/etiquetas.png')" onMouseOver="swap('etiquetas','<!-- TMPL_VAR NAME='themelang' -->/images/etiquetasbis.png')" >
+<input  name="etiquetas" id="etiquetas" alt="Generar etiquetas" type="image" value="Generar etiquetas"  src="<!-- TMPL_VAR NAME='themelang' -->/images/etiquetas.png" border="0" title="Generar etiquetas" >
 </a>
 
 

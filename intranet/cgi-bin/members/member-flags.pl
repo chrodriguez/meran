@@ -30,14 +30,6 @@ my ($template, $loggedinuser, $cookie)
 
 my $member=$input->param('member');
 my %env;
-$env{'nottodayissues'}=1;
-my %member2;
-$member2{'borrowernumber'}=$member;
-my $issues=currentissues(\%env,\%member2);
-my $i=0;
-foreach (sort keys %$issues) {
-    $i++;
-}
 
 if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();

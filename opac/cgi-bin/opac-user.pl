@@ -27,7 +27,7 @@ my ($template, $borrowernumber, $cookie)
 
 my $dateformat = C4::Date::get_date_format();
 # get borrower information ....
-my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 
 $borr->{'city'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'city'});
 $borr->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'streetcity'});

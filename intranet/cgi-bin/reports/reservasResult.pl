@@ -47,8 +47,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
 
-my @resultsdata= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
-my $cant=cantidadReservas($branch,$tipoReserva);
+my ($cant,@resultsdata)= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
 
 C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
 

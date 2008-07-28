@@ -34,8 +34,8 @@ use C4::Date;
 use C4::Biblio;
 
 my $input = new CGI;
-my $biblioitemnumber=$input->param('biblioitemnumber');
-my $biblionumber=$input->param('biblionumber');
+my $id2=$input->param('id2');
+my $id1=$input->param('id1');
 my $infoIndice=$input->param('indice');
 
 
@@ -47,30 +47,30 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			     });
 
-my ($resultsdata)=&C4::AR::Nivel2::getIndice($biblioitemnumber, $biblionumber);
+my ($resultsdata)=&C4::AR::Nivel2::getIndice($id2);
 
-my $allsubtitles;
-my ($subtitlecount,$subtitles) =&subtitle($biblionumber);
-if ($subtitlecount) {
-	$allsubtitles=" " . $subtitles->[0]->{'subtitle'};
-        for (my $i = 1; $i < $subtitlecount; $i++) {
-                $allsubtitles.= ", " . $subtitles->[$i]->{'subtitle'};
-        } # for
-} # if
+# my $allsubtitles;  SON CAMPOS MARC
+# my ($subtitlecount,$subtitles) =&subtitle($biblionumber);
+# if ($subtitlecount) {
+# 	$allsubtitles=" " . $subtitles->[0]->{'subtitle'};
+#         for (my $i = 1; $i < $subtitlecount; $i++) {
+#                 $allsubtitles.= ", " . $subtitles->[$i]->{'subtitle'};
+#         } # for
+# } # if
 
 # getbiblio se elimino
 # my ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
-my @autorPPAL= &getautor($biblios[0]->{'author'});
-my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($biblionumber);
-my @colaboradores=C4::AR::Nivel1::getColaboradores($biblionumber);
+# my @autorPPAL= &getautor($biblios[0]->{'author'});
+my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($id1);
+my @colaboradores=C4::AR::Nivel1::getColaboradores($id1);
 
 $template->param(
 		infoIndice => $resultsdata->{'indice'},
- 		biblionumber => $biblionumber,
-         	biblioitemnumber => $biblioitemnumber,
-		TITLE     => $biblios[0]->{'title'},
-		UNITITLE    => $biblios[0]->{'unititle'},
-            	SUBTITLE    => $allsubtitles,
+ 		id1 => $id1,
+         	id2 => $id2,
+# 		TITLE     => $biblios[0]->{'title'},
+# 		UNITITLE    => $biblios[0]->{'unititle'},
+#             	SUBTITLE    => $allsubtitles,
 		AUTHOR    => \@autorPPAL,
 		ADDITIONAL => \@autoresAdicionales,
 	    	COLABS => \@colaboradores,

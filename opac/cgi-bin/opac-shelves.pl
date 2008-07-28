@@ -64,7 +64,7 @@ my ($template, $loggedinuser, $cookie)
 # my $op= $obj->{'Accion'};
 
 #Para mandar la dir de mail
-my ($borr, $flags) = getpatroninformation(undef, $loggedinuser);
+my ($borr, $flags) = getpatroninformation($loggedinuser,"");
 if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 #
 
