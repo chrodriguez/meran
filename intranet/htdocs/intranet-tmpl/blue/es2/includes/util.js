@@ -75,10 +75,10 @@ function crearForm(url,params){
  * necesita jquery para funcionar, se le tiene que pasar el nombre de la clase de la tabla a la que se
  * le quiere realizar la zebra
  */
-function zebra(IdObj){
+function zebra(classObj){
 
-	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
-	$("."+ IdObj + " tr:gt(0):even").addClass("par");		
+	$("."+ classObj + " tr:gt(0):odd").addClass("impar");
+	$("."+ classObj + " tr:gt(0):even").addClass("par");		
 }
 
 

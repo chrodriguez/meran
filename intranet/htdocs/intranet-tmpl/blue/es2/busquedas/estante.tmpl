@@ -8,7 +8,7 @@ var params= 	'viewshelf=' + estante;
 	$.ajax({	type: "POST", 
 			url: "/cgi-bin/koha/estantes/verEstante.pl",
 			data: params,
-			beforeSend: Init,
+// 			beforeSend: Init,
 			complete: function(ajax){
 					$('#resultBusqueda').html(ajax.responseText);
 					$(".zebra tr:even").addClass("impar");
@@ -17,11 +17,36 @@ var params= 	'viewshelf=' + estante;
 					$("#volver").hide();
 					$("#busqueda").slideUp('fast');	
 					$("#resultBusqueda").slideDown("fast");
-					HiddeState();
+// 					HiddeState();
 				}
 	});
 
 }
+
+function verSubEstanteVirtual(shelf){
+	
+	objAH=new AjaxHelper(updateVerEstanteVirtual);
+  	objAH.debug= true;
+	objAH.url= 'estanteVirtualDB.pl';
+	objAH.shelves= shelf;
+	objAH.tipo= 'VER_SUBESTANTE';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateVerEstanteVirtual(responseText){
+	
+	$('#resultBusqueda').html(responseText);
+// 	$(".zebra tr:even").addClass("impar");
+	zebra('zebra');
+	$("#volver").hide();
+	$("#busqueda").slideUp('fast');	
+	$("#resultBusqueda").slideDown("fast");
+}
+
 </script>
 <div>
 <p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></p>

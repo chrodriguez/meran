@@ -10,14 +10,6 @@
 var objAH;
 
 function updateInfo(responseText){
- /*
-	$('#resultBusqueda').html(responseText);
-	$("#volver").hide();
-	$("#filtrosBusqueda").slideUp('fast');	
-	$("#resultBusqueda").slideDown("fast");
-	zebra('tablaResult');
-	HiddeState();  */
-
 	
 	$("#volver").hide();
 	$("#filtrosBusqueda").slideUp('slow');	
@@ -137,19 +129,76 @@ function buscarEstante(){
 	objAH.sendToServer();
 }
 
+/******************************************Estantes**********************************************/
+
+function ordenarPor(ord){
+	//seteo el orden de los resultados
+	objAH.sort(ord);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
 function mostrarEstantes(){
-var params= '';
-		
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/busquedas/estante.pl",
-			data: params,
-// 			beforeSend: Init,
-			complete: function(ajax){
-					updateInfo(ajax.responseText);
-				}
-	});
+
+	objAH=new AjaxHelper(updateMostrarEstantes);
+  	objAH.debug= true;
+	objAH.url= '../estanteVirtual.pl';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
 
 }
+
+function updateMostrarEstantes(responseText){
+	
+// 	$("#volver").hide();
+	$("#filtrosBusqueda").slideUp('slow');	
+	$('#resultBusqueda').html(responseText);
+	$("#resultBusqueda").slideDown("slow");
+	zebra('tablaresultado');
+}
+
+
+function verEstanteVirtual(shelf){
+	
+	objAH=new AjaxHelper(updateVerEstanteVirtual);
+  	objAH.debug= true;
+	objAH.url= '../estanteVirtualDB.pl';
+	objAH.shelves= shelf;
+	objAH.tipo= 'VER_ESTANTE';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function verSubEstanteVirtual(shelf){
+	
+	objAH=new AjaxHelper(updateVerEstanteVirtual);
+  	objAH.debug= true;
+	objAH.url= '../estanteVirtualDB.pl';
+	objAH.shelves= shelf;
+	objAH.tipo= 'VER_SUBESTANTE';
+	//se setea la funcion para cambiar de pagina
+	objAH.funcion= 'changePage';
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateVerEstanteVirtual(responseText){
+	
+	$('#resultBusqueda').html(responseText);
+	zebra('tablaresultado');
+	$("#volver").hide();
+	$("#busqueda").slideUp('fast');	
+	$("#resultBusqueda").slideDown("fast");
+}
+
+/**************************************Fin****Estantes**********************************************/
 
 function verTema(idtema,tema){
 
@@ -300,7 +349,7 @@ $(document).ready(function() {
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
 			<b>Estantes Virtuales</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="estante" onChange="estanteChange()">
+			<input class="inputFontNormal" type="text" size="25" id="estante">
 			</li>
 
 		</ul>
