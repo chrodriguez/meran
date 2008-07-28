@@ -32,6 +32,8 @@
 	function updateInfo(responseText){
 		$('#result').html(responseText);
 		zebra('tablaResult');
+		objAH.id="";
+		objAH.notas="";
 	}
 
 	function consultar(){
@@ -50,11 +52,8 @@
 	}
 	
 	function guardarNota(id){
-		objAH=new AjaxHelper(updateInfo);
-		objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
 		objAH.id=  id;
 		objAH.notas= $('#'+id).val();
-		objAH.funcion= 'changePage';
 		objAH.sendToServer();
 	}
 

@@ -38,7 +38,6 @@ function updateInfoConsulta(responseText){
 	if(objAH.funcion == 1){
 		tablaOrdenada();
 	}
-	HiddeState();
 }
 
 /*
@@ -48,7 +47,6 @@ function updateInfoConsulta(responseText){
  */
 function updateInfoConsultaJSON(responseText){
 	procesarJSON(responseText,objAH.idComp,objAH.funcionChange);
-	HiddeState();
 }
 
 
@@ -224,7 +222,6 @@ function updateInfoGuardarVar(responseText){
 	$("#tabla").remove();
 	$("#campo").remove();
 	$("#categ").remove();
-	HiddeState();
 }
 
 /*

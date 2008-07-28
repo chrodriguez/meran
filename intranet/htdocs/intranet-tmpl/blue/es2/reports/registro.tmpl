@@ -33,7 +33,6 @@ function updateInfo(responseText){
 	zebra("tablaResult");
 	objAH.id="";
 	objAH.notas="";
-	HiddeState();
 }
 
 
@@ -55,9 +54,8 @@ function consultar(){
 }
 
 function nota(id){
-	var not=$("#"+id).val();
 	objAH.id=id;
-	objAH.notas=not;
+	objAH.notas=$("#"+id).val();
 	objAH.sendToServer();
 }
 
