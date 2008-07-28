@@ -1067,7 +1067,7 @@ sub Enviar_Email{
 		$mailMessage =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
 		$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
-		my $unititle=C4::AR::Nivel1::getUntitle($res->{'id1'});
+		my $unititle=C4::AR::Nivel1::getUnititle($res->{'id1'});
 		$mailMessage =~ s/UNITITLE/$unititle/;
 		$mailMessage =~ s/TITLE/$res->{'titulo'}/;
 		$mailMessage =~ s/AUTHOR/$res->{'autor'}/;

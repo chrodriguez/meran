@@ -10,7 +10,6 @@ var params= 	'dictionary=' + keyword2 + '&dicdetail=1' ;
 	$.ajax({	type: "POST",
 			url: "/cgi-bin/koha/busquedas/diccionario.pl",
 			data: params,
-			beforeSend: Init,
 			complete: function(ajax){
 					$('#resultBusqueda').html(ajax.responseText);
 					$(".zebra tr:even").addClass("impar");
@@ -19,7 +18,6 @@ var params= 	'dictionary=' + keyword2 + '&dicdetail=1' ;
 					$("#volver").hide();
 					$("#busqueda").slideUp('fast');	
 					$("#resultBusqueda").slideDown("fast");
-					HiddeState();
 				}
 	});
 

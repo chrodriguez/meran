@@ -31,7 +31,7 @@ function updateInfo(responseText){
 }
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/reports/usersResult.pl";
 	objAH.branch=$("#branch").val();
 	objAH.year=$("#year").val();

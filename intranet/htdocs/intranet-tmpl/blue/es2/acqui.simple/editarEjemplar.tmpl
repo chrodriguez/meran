@@ -8,7 +8,6 @@
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script>
-<!-- TMPL_INCLUDE NAME="state.js" -->
 <!-- TMPL_INCLUDE NAME="autocompletables.js" -->
 <!-- TMPL_INCLUDE NAME="crearComponentes.js" -->
 <!-- TMPL_INCLUDE NAME="seleccionCamposMarc.js" -->
@@ -50,9 +49,7 @@ function modNivel3(id1,id3){
 			type: "POST",
 			url: "/cgi-bin/koha/acqui.simple/editarEjemplar.pl",
 			data: params,
-			beforeSend: Init,
 			complete: function(ajax){
-				HiddeState();
 				location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+id1;
 			}
 		});

@@ -31,12 +31,11 @@
 
 	function updateInfo(responseText){
 		$('#result').html(responseText);
-		HiddeState();
 		zebra('tablaResult');
 	}
 
 	function consultar(){
-		objAH=new AjaxHelper(updateInfo, Init);
+		objAH=new AjaxHelper(updateInfo);
 		objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
 		objAH.fechaIni=  $('#fechaIni').val();
 		objAH.fechaFin= $('#fechaFin').val();
@@ -51,19 +50,12 @@
 	}
 	
 	function guardarNota(id){
-
-		var params= 	'id=' + id +
-				'&notas=' + $('#'+id).val();
-	
-		$.ajax({	type: "POST", 
-				url: "/cgi-bin/koha/reports/historicoCirculacionResult.pl",
-				data: params,
-// 				beforeSend: Init,
-				complete: function(ajax){
- 						updateInfo(ajax.responseText);
-					}
-		});
-
+		objAH=new AjaxHelper(updateInfo);
+		objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+		objAH.id=  id;
+		objAH.notas= $('#'+id).val();
+		objAH.funcion= 'changePage';
+		objAH.sendToServer();
 	}
 
 </script>

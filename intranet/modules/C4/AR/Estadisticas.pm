@@ -1130,7 +1130,7 @@ sub historicoCirculacion(){
 	my @bind;
 	my $query="";
 	my $cant=0;
-	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, bib.title,
+	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, titulo,
 			h.id2,h.id3,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, n3.barcode, n3.signatura_topografica, u.firstname as userFirstname, u.surname as userSurname";
 
 	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
@@ -1139,10 +1139,10 @@ sub historicoCirculacion(){
 			ON (h.borrowernumber = u.borrowernumber)
 			LEFT JOIN issuetypes it
 			ON(it.issuecode = h.issuetype)
-			LEFT JOIN biblio bib
-			ON (bib.biblionumber = h.id2)
+			LEFT JOIN nivel1 n1
+			ON (n1.id1 = h.id1)
 			LEFT JOIN autores a
-			ON (a.id = bib.author) 
+			ON (a.id = n1.autor) 
 			LEFT JOIN nivel3 n3
 			ON (n3.id3 = h.id3) ";
 
@@ -1193,6 +1193,7 @@ sub historicoCirculacion(){
 		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
 		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};
+		$data->{'unititle'}=C4::AR::Nivel1::getUnititle($data->{'id1'});
                 push(@results,$data);
         }
         return ($cant,@results);

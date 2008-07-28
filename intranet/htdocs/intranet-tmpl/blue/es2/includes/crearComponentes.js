@@ -33,10 +33,8 @@ function consultarAjaxJSON(paso,paramsJSON,url){
 		type: "POST",
 		url: url,
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				procesarInfoJson(ajax.responseText);
-				HiddeState();
 			}
 	});
 }

@@ -38,7 +38,7 @@ function updateInfo(responseText){
 
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/reports/registroResult.pl";
 	objAH.chkfecha=$("#chkfecha")[0].checked;
 	objAH.chkuser=$("#chkuser")[0].checked;

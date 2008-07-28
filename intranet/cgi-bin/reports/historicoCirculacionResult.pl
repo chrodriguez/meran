@@ -36,13 +36,6 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-#Inserta la nota en la tupla correspondiente al id.
-my $id   = $input->param('id');
-if ($id ne "0"){
-	my $nota = $input->param('notas');
-       &insertarNotaHistCirc($id,$nota);
-}
-
 my $orden= "date";  # $input->param('orden')||'operacion';
 
 ###Marca la Fecha de Hoy
@@ -57,6 +50,14 @@ my $obj=$input->param('obj');
 if($obj ne ""){
 	$obj= C4::AR::Utilidades::from_json_ISO($obj);
 }
+
+#Inserta la nota en la tupla correspondiente al id.
+my $id   = $obj->{'id'};
+if ($id ne "0"){
+	my $nota = $obj->{'notas'};
+       &insertarNotaHistCirc($id,$nota);
+}
+
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO

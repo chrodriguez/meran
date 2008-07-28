@@ -33,7 +33,7 @@ function changePage(ini){
 }
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo,Init);
+	objAH=new AjaxHelper(updateInfo);
 	objAH.fechaIni= $('#fechaIni').val();
 	objAH.fechaFin= $('#fechaFin').val();
 	objAH.user= $('#user').val();

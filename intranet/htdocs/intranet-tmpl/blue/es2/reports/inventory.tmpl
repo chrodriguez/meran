@@ -24,23 +24,6 @@ function updateInfo(responseText){
 	$("#result").html(responseText);
 	zebra("tablaResult");
 }
-/*
-function consultar(ini,orden){
-	var desde=$("#desde").val();
-	var hasta=$("#hasta").val();
-	var params="desde="+desde+"&hasta="+hasta+"&ini="+ini+"&orden="+orden;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/reports/inventoryResult.pl",
-		data: params,
-		beforeSend: Init,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				HiddeState();
-				zebra("tablaResult");
-			}
-	});
-}*/
 
 </script>
 

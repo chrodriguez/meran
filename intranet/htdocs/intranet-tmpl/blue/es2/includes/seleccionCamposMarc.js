@@ -9,10 +9,8 @@ function consultarAjaxSeleccion(params){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
-				HiddeState();
 				foco();
 			}
 	});
@@ -72,10 +70,8 @@ function eleccionSubCampo(accion){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
-				HiddeState();
 				$('#tagsubField')[0].selectedIndex=ind;
 				$('#subcampo').val(array[0]);
 				$('#lib').val(array[1]);
@@ -123,10 +119,8 @@ function eleccionTabla(accion,accion2){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#result").html(ajax.responseText);
-				HiddeState();;
 				$('#tagsubField')[0].selectedIndex=ind;
 			}
 		});
@@ -217,7 +211,6 @@ function guardarCampoTemp(nivel){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/agregarItemResults2.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				var objetoResp=JSONstring.toObject(ajax.responseText);
 				if(objetoResp.ok > 0){
@@ -226,7 +219,6 @@ function guardarCampoTemp(nivel){
 				else{
 					alert("Error, intente otra vez");
 				}
-				HiddeState();
 			}
 	});
 }

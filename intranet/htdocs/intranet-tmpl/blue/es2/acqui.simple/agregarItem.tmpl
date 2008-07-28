@@ -2,24 +2,17 @@
 
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/seleccionCamposMarc.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/autocompletables.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/crearComponentes.js"></script>
 
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
- 
+
 
 <script>
-//Agrego el codigo para mostrar el estado de la busqueda en Ajax
-<!-- TMPL_INCLUDE NAME="state.js" -->
-//funciones para la parte de agregar un campo temporal son las misma que se usan en el tmpl de catalogacion.
-<!-- TMPL_INCLUDE NAME="seleccionCamposMarc.js" -->
-// funciones para asignar a los componentes que corresponda la funcion de autocomplete.
-<!-- TMPL_INCLUDE NAME="autocompletables.js" -->
-//funciones para crear los componenentes segun los datos que se obtienen de la base de datos.
-<!-- TMPL_INCLUDE NAME="crearComponentes.js" -->
-
 
 /*
  * CrearAutocomplete1
@@ -48,11 +41,9 @@ function consultarAjax(params,nivel,paramsJSON){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/agregarItemResults.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#result2").html(ajax.responseText);
 				CrearAutocomplete1(nivel);
-				HiddeState();
 				consultarAjaxJSON(paso,paramsJSON,url);
 			}
 	});
@@ -113,10 +104,8 @@ function ajaxModificarGrupoJSON(id1,id2){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				procesarInfoJson(ajax.responseText);
-				HiddeState();
 			}
 	});
 }
@@ -132,11 +121,9 @@ function modificarGrupo(id1,id2){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#contenido").html(ajax.responseText);
 				ajaxModificarGrupoJSON(id1,id2);
-				HiddeState();
 			}
 	});
 }
@@ -158,9 +145,7 @@ function modNivel2(id1,id2){
 			type: "POST",
 			url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
 			data: "cantIds="+cantIds+"&id1="+id1+"&id2="+id2+"&respuesta="+str+"&accion=modNivel2&json=0",
-			beforeSend: Init,
 			complete: function(ajax){
-				HiddeState();
 				location.href="agregarItem.pl?origen=ModNivel2&itemtype="+itemtype+"&id1="+id1;
 			}
 		});
@@ -181,10 +166,8 @@ function ajaxAgregarEjemplarJSON(params){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
 		data: params,
-		beforeSend: Init,
 		complete: function(ajax){
 				procesarInfoJson(ajax.responseText);
-				HiddeState();
 			}
 	});
 }
@@ -200,10 +183,8 @@ function agregarEjemplar(id1,id2,itemtype){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
 		data: params + "&json=0",
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#contenido").html(ajax.responseText);
-				HiddeState();
 				ajaxAgregarEjemplarJSON(params);
 			}
 	});
@@ -227,9 +208,7 @@ function agregarNivel3(id1,id2){
 			type: "POST",
 			url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
 			data: "cantIds="+cantIds+"&id1="+id1+"&id2="+id2+"&respuesta="+str+"&cantItems="+cantItems+"&barcodes="+barcodes+"&accion=agregarNivel3",
-			beforeSend: Init,
 			complete: function(ajax){
-				HiddeState();
 				location.href="agregarItem.pl?id1="+id1+"&itemtype="+itemtype;
 			}
 		});
@@ -302,10 +281,8 @@ function modificarDetalleGrupo(id1,id2,itemtype){
 		type: "POST",
 		url: "/cgi-bin/koha/acqui.simple/agregarItemResults.pl",
 		data: "itemtype="+itemtype+"&id1="+id1+"&accion2=agregarN2&nivel=2&paso=2",
-		beforeSend: Init,
 		complete: function(ajax){
 				$("#result2").html(ajax.responseText);
-				HiddeState();
 				modificarGrupo(id1,id2);
 			}
 	});
