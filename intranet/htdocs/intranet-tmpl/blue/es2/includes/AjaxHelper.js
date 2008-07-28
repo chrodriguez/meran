@@ -7,9 +7,70 @@
  *
  */
 
-//cargo dinamicamente la libreria state.js
-$.getScript("/intranet-tmpl/blue/es2/includes/state.js");
-//este codigo debe ser incluido luego del codigo que se genera para manejar AJAX
+
+//Funciones Privadas para manejar el estado del la consulta de AJAX
+
+function _Init(options){
+	_AddDiv();
+	_ShowState(options);
+}
+
+function _AddDiv(){
+
+	var contenedor = $('#state')[0];
+	if(contenedor == null){
+		$('body').append("<div id='state' class='loading' style='position:absolute'></div>");
+		$('#state').html("<img src='/intranet-tmpl/blue/es2/images/indicator.gif' />");
+		$('#state').css('top', '0px');
+		$('#state').css('left', '0px');
+
+	}
+}
+
+//muestra el div
+function _ShowState(options){
+	$('#state').centerObject(options);	
+	$('#state').show();
+};
+
+//oculta el div
+function _HiddeState(){
+ 	$('#state').hide();
+};
+
+//Esta funcion sirve para centrar un objeto
+jQuery.fn.centerObject = function(options) {
+
+	var obj = this;
+	var total= 0;
+	var dif= 0;
+
+	//se calcula el centro verticalmente
+	if($(window).scrollTop() == 0){
+		obj.css('top',  $(window).height()/2 - this.height()/2);
+	}else{
+	//se hizo scroll
+	
+		total= $(window).height() + $(window).scrollTop();
+		dif= total - $(window).height();
+		obj.css('top', dif + ( $(window).height() )/2);
+	}
+
+	//se calcula el centro horizontalmente
+	obj.css('left',$(window).width()/2 - this.width()/2);
+
+	if(options.debug){
+		console.log(	"centerObject => \n" +
+				"Total Vertical: " + total + "\n" + 
+				"Dif: " + dif + "\n" + 
+				"Medio: " + (dif + ( $(window).height() )/2) +
+				"\n" +
+				"Total Horizontal: " + $(window).width() + "\n" + 
+				"Medio: " +  $(window).width()/2
+		);
+	}
+
+}
 
 
 function AjaxHelper(fncUpdateInfo, fncInit){
@@ -21,6 +82,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.debug= false;	
 	this.onComplete= fncUpdateInfo;  //se ejecuta cuando se completa el ajax
 	this.onBeforeSend= fncInit;	//se ejecuta antes de consultar al servidor con ajax
+	this.showState= true;
 
 	this.sendToServer= function(){
 
@@ -65,13 +127,20 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					url: helper.url,
 					data: params,
  					beforeSend: function(){
-						Init();//muestra el estado del AJAX
-							if(helper.onBeforeSend){
-								helper.onBeforeSend();
-							}
+
+						if(helper.showState){
+						//muestra el estado del AJAX
+							_Init({debug: helper.debug});
+						}
+
+						if(helper.onBeforeSend){
+							helper.onBeforeSend();
+						}
+
 					},
 					complete: function(ajax){
-						HiddeState();//oculta el estado del AJAX
+						//oculta el estado del AJAX
+						_HiddeState();
  						helper.onComplete(ajax.responseText);
   					}
 				});

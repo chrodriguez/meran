@@ -844,7 +844,7 @@ sub viewshelfContent {
 	my @keyAux=@key[$ini..$fin];	
 	my $bibitem;
 	
-	foreach my $element (@key) {
+	foreach my $element (@keyAux) {
 		my %line;
 		$line{'id2'}=$bitemlist{$element}->{'id2'};
 		$line{'title'}=$bitemlist{$element}->{'title'};

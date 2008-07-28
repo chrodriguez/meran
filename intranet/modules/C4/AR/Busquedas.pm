@@ -904,7 +904,10 @@ if($consultaN3 ne ""){
 $query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
 $queryCant=$query;
 #Se reemplaza la 1� subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
-$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(*) /o;
+$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(DISTINCT(*?*)) /o;
+
+#Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la
+$queryCant=~ s/\*\?\*/$n/g; 
 
 if (defined $ini && defined $cantR) {
 	$query.= " limit $ini,$cantR";

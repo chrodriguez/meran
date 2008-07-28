@@ -69,23 +69,28 @@
 	</td>
 	
 	<td valign="middle">
-	
-	<!-- TMPL_LOOP NAME="counts" -->
-		<!-- TMPL_VAR NAME="nombre" --> <br> (Para Pr&eacute;stamo:
-		<!-- TMPL_IF name="cantXbranchForLoan" -->
-			<!-- TMPL_VAR NAME="cantXbranchForLoan" -->
-		<!-- TMPL_ELSE -->
-			0
-		<!-- /TMPL_IF -->,<br> Para Sala de lectura:
-		<!-- TMPL_IF name="cantXbranchNotForLoan" -->
-			<!-- TMPL_VAR NAME="cantXbranchNotForLoan" -->
-		<!-- TMPL_ELSE -->
-			0
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="cantXbranchShared" -->
-			,<br> Compartidos: <!-- TMPL_VAR name="cantXbranchShared" -->
-		<!-- /TMPL_IF -->) <br><br>
-	<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF Name="counts" -->
+		
+		<!-- TMPL_LOOP NAME="counts" -->
+			<!-- TMPL_VAR NAME="nombre" --> <br> (Para Pr&eacute;stamo:
+			<!-- TMPL_IF name="cantXbranchForLoan" -->
+				<!-- TMPL_VAR NAME="cantXbranchForLoan" -->
+			<!-- TMPL_ELSE -->
+				0
+			<!-- /TMPL_IF -->,<br> Para Sala de lectura:
+			<!-- TMPL_IF name="cantXbranchNotForLoan" -->
+				<!-- TMPL_VAR NAME="cantXbranchNotForLoan" -->
+			<!-- TMPL_ELSE -->
+				0
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="cantXbranchShared" -->
+				,<br> Compartidos: <!-- TMPL_VAR name="cantXbranchShared" -->
+			<!-- /TMPL_IF -->) <br><br>
+		<!-- /TMPL_LOOP -->
+
+	<!-- TMPL_ELSE -->
+			&nbsp;
+	<!-- /TMPL_IF -->
 	</td>
   </tr>
 <!-- /TMPL_LOOP -->

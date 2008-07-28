@@ -66,7 +66,7 @@ function busquedaCombinable(){
 	}
 
 	objAH=new AjaxHelper(updateInfo);
-  	objAH.debug= true;
+//   	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.codBarra= $('#codBarra').val();
@@ -98,7 +98,7 @@ function buscarPorAutor(idAutor){
 }
 
 function buscarPorCodigoBarra(){
-	objAH=new AjaxHelper(updateInfo, Init);
+	objAH=new AjaxHelper(updateInfo);
 // 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.codBarra= $('#codBarra').val();
@@ -270,7 +270,7 @@ function MARCDetail(id3, IdDivDetalle, IdDivMARC){
 	$.ajax({	type: "POST", 
 			url: "opac-MARCDetail.pl",
 			data: params,
-			beforeSend: Init,
+// 			beforeSend: Init,
  			complete: function(ajax){
 					//seteo el estado en cached
 // 					$('#content'+IdDivMARC).attr('state', 'cached');
