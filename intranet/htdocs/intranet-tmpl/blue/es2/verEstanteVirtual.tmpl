@@ -1,0 +1,43 @@
+
+
+<center><!-- TMPL_VAR NAME="paginador" --></center>
+
+<!-- TMPL_IF Name="shelvesloopshelves" -->
+
+<table id="tablaResult" class="tablaresultado" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+  <tr class="tablaresultadoTitle">
+	<td width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+	</td>
+	<td>&nbsp;</td>
+	<td>
+		Estantes Virtuales
+	</td>
+
+	<td width="1%" align="right" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+	</td>
+  </tr>
+
+<!-- TMPL_LOOP Name="shelvesloopshelves" -->
+  <tr class="inputFontNormal">
+	<td width="1%">&nbsp;</td>
+	<td>&nbsp;</td>
+	<td valign='middle'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a class="click" onClick="verSubEstanteVirtual('<!-- TMPL_VAR Name='shelfnumber' -->');">
+	<!-- TMPL_IF Name="shelfname" -->
+		<!-- TMPL_VAR Name="shelfname" -->
+	<!-- TMPL_ELSE -->
+		&nbsp;
+	<!-- /TMPL_IF -->
+	</a>
+	
+	</td>
+	<td>&nbsp;</td>
+  </tr>
+<!-- /TMPL_LOOP -->
+
+</table>
+<br>
+<!-- /TMPL_IF -->
