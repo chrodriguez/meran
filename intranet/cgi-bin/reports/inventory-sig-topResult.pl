@@ -45,7 +45,7 @@ foreach my $element (@res) {
 	$line{'id'}=$element->{'id'};
 	$line{'autor'}=$element->{'autor'}->{'completo'};
 	$line{'titulo'}=$element->{'titulo'};
-	$line{'unititle'}=$element->{'unititle'};
+	$line{'unititle'}=C4::AR::Nivel1::getUnititle($element->{'id1'});
 	$line{'publisher'}=$element->{'publisher'};
 	$line{'anio_publicacion'}=$element->{'anio_publicacion'};
 	$line{'number'}=$element->{'number'};

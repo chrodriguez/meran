@@ -571,9 +571,7 @@ sub checkoverdues {
 	my $sth = $dbh->prepare("SELECT * FROM issues i INNER JOIN nivel3 n3 ON (i.id3 = n3.id3)
 				INNER JOIN nivel2 n2 ON (n3.id2 = n2.id2)
 				INNER JOIN nivel1 n1 ON (n3.id1 = n1.id1)
-				WHERE issues.borrowernumber  = ?
-				AND issues.returndate IS NULL
-				AND issues.date_due < ?");
+				WHERE i.borrowernumber  = ? AND i.returndate IS NULL AND i.date_due < ?");
 	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {
 	push (@overdueitems, $data);

@@ -647,7 +647,6 @@ sub Enviar_Recordatorio{
 
 		my $dbh = C4::Context->dbh;
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
-# 		biblio.unititle as runititle,FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		my $sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, reserves.id3 AS rid3
 				    FROM reserves
 				    INNER JOIN nivel2 n2 ON n2.id2 = reserves.id2
@@ -668,7 +667,8 @@ sub Enviar_Recordatorio{
 	$mailMessage =~ s/BRANCH/$branchname/;
 	$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
 	$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
-	$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
+	my $unititle=C4::AR::Nivel1::getUntitle($res->{'id1'})
+	$mailMessage =~ s/UNITITLE/$unititle/;
 	$mailMessage =~ s/TITLE/$res->{'titulo'}/;
 	$mailMessage =~ s/AUTHOR/$res->{'autor'}/;
 	$mailMessage =~ s/EDICION/$edicion/;
@@ -832,7 +832,7 @@ sub prestamosPorUsuario {
 		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
 		$data->{'autor'}=$autor->{'completo'};
 		$data->{'edicion'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
-		$data->{'unititle'}=C4::AR::Nivel1::getTituloInformativo($data->{'id1'});
+		$data->{'unititle'}=C4::AR::Nivel1::getUnititle($data->{'id1'});
 		$data->{'volume'}=C4::AR::Nivel2::getVolume($data->{'id2'});
 		$data->{'volumeddesc'}=C4::AR::Nivel2::getVolumeDesc($data->{'id2'});
 		$currentissues{$counter} = $data;

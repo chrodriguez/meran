@@ -53,7 +53,7 @@ for (my $i=0;$i< $cantR;$i++){
    if ($issues->[$i]->{'id1'}){
  	my %line;
 	$line{titulo}=$issues->[$i]->{'titulo'};
-	$line{unititle}=$issues->[$i]->{'unititle'};
+	$line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
 	$line{autor}=$issues->[$i]->{'autor'};
 	$line{idautor}=$issues->[$i]->{'id'};
 	$line{id1}=$issues->[$i]->{'id1'};

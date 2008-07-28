@@ -91,7 +91,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		$infoPrestamo[$i]->{'id3Old'}=$id3;
 		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
 		$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel2::getUntitle($iteminfo->{'id2'});
+		$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel1::getUntitle($iteminfo->{'id1'});
 		$infoPrestamo[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
 		$infoPrestamo[$i]->{'items'}=\@items;
 		$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;

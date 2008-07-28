@@ -69,7 +69,7 @@ $template->param(
  		id1 => $id1,
          	id2 => $id2,
 # 		TITLE     => $biblios[0]->{'title'},
-# 		UNITITLE    => $biblios[0]->{'unititle'},
+		UNITITLE    => C4::AR::Nivel1::getUntitle($id1),
 #             	SUBTITLE    => $allsubtitles,
 		AUTHOR    => \@autorPPAL,
 		ADDITIONAL => \@autoresAdicionales,

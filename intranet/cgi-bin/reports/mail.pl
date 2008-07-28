@@ -62,7 +62,7 @@ for (my $i=0;$i<$count;$i++){
 		my $title=$result->[$i]{'title'};
 		$mailMessage =~ s/TITLE/$title/;
                                                                                                                              
-		my $unititle=$result->[$i]{'unititle'};
+		my $unititle=C4::AR::Nivel1::getUnititle($result->[$i]{'id1'});
 		$mailMessage =~ s/UNITITLE/$unititle/;
 
 			my $dateInicio=format_date($result->[$i]{'notificationdate'},$dateformat);
@@ -73,7 +73,7 @@ for (my $i=0;$i<$count;$i++){
 			$mailMessage =~ s/a2/$horaInicio/;
 			my $horaFin = C4::Context->preference("close");
 			$mailMessage =~ s/a3/$horaFin/;
-			my $author= $result->[$i]{'author'};
+			my $author= $result->[$i]{'autor'};
 			$mailMessage =~ s/AUTHOR/$author/;
 	                                                                                                                     
 		$mailMessage =~ s/BRANCH/$branchname/;

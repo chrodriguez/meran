@@ -210,7 +210,7 @@ if($accion == 9){
 		if($tablaRef != -1){$hayDatos=1;}
 	}
 	my $tablaMod=&generarSelectTabla('tablaMod',$tabla,'eleccionTabla(9,"Modificar")',$hayDatos);
-	if($tabla){
+	if($tabla != -1){
 		my $ordDef=$result->[0]->{'orden'};
 		my($ejemplo,$stringCampos,$ordenMod)=&generarSelectOrden('ordenMod',$ordDef,$tabla);
 		$template->param(selectordenMod	 => $ordenMod,

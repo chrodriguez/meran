@@ -1048,7 +1048,6 @@ sub Enviar_Email{
 		my $dbh = C4::Context->dbh;
 		my $dateformat = C4::Date::get_date_format();
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
-# biblio.unititle as runititle FALTA NO ESTAN LOS DATOS EN LAS TABLAS!!!!
 
 		my $sth=$dbh->prepare("	SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
 					FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
@@ -1068,7 +1067,8 @@ sub Enviar_Email{
 		$mailMessage =~ s/BRANCH/$branchname/;
 		$mailMessage =~ s/FIRSTNAME/$borrower->{'firstname'}/;
 		$mailMessage =~ s/SURNAME/$borrower->{'surname'}/;
-		$mailMessage =~ s/UNITITLE/$res->{'runititle'}/;
+		my $unititle=C4::AR::Nivel1::getUntitle($res->{'id1'});
+		$mailMessage =~ s/UNITITLE/$unititle/;
 		$mailMessage =~ s/TITLE/$res->{'titulo'}/;
 		$mailMessage =~ s/AUTHOR/$res->{'autor'}/;
 		$mailMessage =~ s/EDICION/$edicion/;

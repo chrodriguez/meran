@@ -1370,7 +1370,6 @@ sub listaDeEjemplares {
 	my @bind;
 	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
 	my $dbh = C4::Context->dbh;
-# 	FALTA unititle,number
 	my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
 	FROM ((nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2)
 	INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
@@ -1407,6 +1406,7 @@ sub listaDeEjemplares {
 # 			$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
 			$row->{'number'}=C4::AR::Nivel2::getEdicion($row->{'id2'});
 			$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
+			$row->{'unititle'}=C4::AR::Nivel1::getUnititle($row->{'id1'});
 			$row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
 			push @results,$row;
 		}

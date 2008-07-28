@@ -78,10 +78,10 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 		for (my $i=0;$i<$count;$i++){
 			my $mensajeActual=C4::Context->preference("mailMensajeVencido");
 
-			my $title=$result->[$i]{'title'};
+			my $title=$result->[$i]{'titulo'};
 			$mensajeActual =~ s/TITLE/$title/;
 
-			my $unititle=$result->[$i]{'unititle'};
+			my $unititle=C4::AR::Nivel1::getUnititle($result->[$i]{'id1'});
 			$mensajeActual =~ s/UNITITLE/$unititle/;
 
 			my $date=$result->[$i]{'vencimiento'};

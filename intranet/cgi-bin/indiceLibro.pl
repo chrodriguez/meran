@@ -11,7 +11,7 @@ use C4::Biblio;
 
 my $input = new CGI;
 my $biblioitemnumber=$input->param('biblioitemnumber');
-my $biblionumber=$input->param('biblionumber');
+my $id1=$input->param('biblionumber');
 my $infoIndice=$input->param('indice');
 my $tipo=$input->param('tipoAccion')||" ";
 
@@ -30,13 +30,13 @@ if($tipo eq "DELETE"){
 }
 
 if($tipo eq "UPDATE"){
-	&insertIndice($biblioitemnumber, $biblionumber, $infoIndice);
+	&insertIndice($biblioitemnumber, $id1, $infoIndice);
 }
 
-my ($resultsdata)=&C4::AR::Nivel2::getIndice($biblioitemnumber, $biblionumber);
+my ($resultsdata)=&C4::AR::Nivel2::getIndice($biblioitemnumber, $id1);
 
 my $allsubtitles;
-my ($subtitlecount,$subtitles) =&subtitle($biblionumber);
+my ($subtitlecount,$subtitles) =&subtitle($id1);
 if ($subtitlecount) {
 	$allsubtitles=" " . $subtitles->[0]->{'subtitle'};
         for (my $i = 1; $i < $subtitlecount; $i++) {
@@ -47,15 +47,15 @@ if ($subtitlecount) {
 # getbiblio se elimino
 # my ( $bibliocount, @biblios ) = &getbiblio($biblionumber);
 my @autorPPAL= &getautor($biblios[0]->{'author'});
-my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($biblionumber);
-my @colaboradores=C4::AR::Nivel1::getColaboradores($biblionumber);
+my @autoresAdicionales=C4::AR::Nivel1::getAutoresAdicionales($id1);
+my @colaboradores=C4::AR::Nivel1::getColaboradores($id1);
 
 $template->param(
 		infoIndice => $resultsdata->{'indice'},
- 		biblionumber => $biblionumber,
+ 		biblionumber => $id1,
          	biblioitemnumber => $biblioitemnumber,
 		TITLE     => $biblios[0]->{'title'},
-		UNITITLE    => $biblios[0]->{'unititle'},
+		UNITITLE    => C4::AR::Nivel1::getUnititle($id1);,
             	SUBTITLE    => $allsubtitles,
 		AUTHOR    => \@autorPPAL,
 		ADDITIONAL => \@autoresAdicionales,
