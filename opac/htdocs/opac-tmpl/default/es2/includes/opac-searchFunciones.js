@@ -30,7 +30,6 @@ function mandarArreglo(valores){
 		}       
 	}
         valores.value= arreglo.join("#");
-// 	return valores.value;
 }
 
 
@@ -172,6 +171,7 @@ function searchinc(){
 
 
 
+//*******************************************Estantes Virutales**********************************************
 
 function verEstanteVirtual(shelf){
 	
@@ -205,7 +205,6 @@ function updateVerEstanteVirtual(responseText){
 	$('#result').html(responseText);
 }
 
-
 function consultarEstanteVirtual(){
 
 	objAH=new AjaxHelper(updateConsultarEstanteVirutal);
@@ -218,12 +217,10 @@ function consultarEstanteVirtual(){
 }
 
 function updateConsultarEstanteVirutal(responseText){
-// 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
-// 	zebra();
 }
+//***************************************Fin****Estantes Virutales*******************************************
 
-//**********************************************************************************************************
 
 //****************************************Busqueda Avanzada****************************************************
 

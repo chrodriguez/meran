@@ -36,7 +36,9 @@
 	<tr>
 
 	<!-- TMPL_IF NAME='loggedinusername' -->
-		<td class="<!-- TMPL_VAR name='clase' -->" valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR NAME='id1' -->" id="<!-- TMPL_VAR NAME='id1' -->">
+		<td valign="middle" align="center">
+			<input type=checkbox name=checkbox value="<!-- TMPL_VAR NAME='id1' -->" 
+			id="<!-- TMPL_VAR NAME='id1' -->">
 		</td>
 	<!-- /TMPL_IF  -->
 		<td class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">	
@@ -97,14 +99,13 @@
 
 <!-- TMPL_IF NAME='loggedinusername' -->
 <input type="hidden" value="" name="bookmarks" id="bookmarks">
-<a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">
 
+<a  	onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" 		
+	onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">
 
-<!--<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">-->
-
-<input onClick="agregarAFavoritos();"
-name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">
-</a>            
+	<input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
+	src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">
+</a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME='MAIL' -->

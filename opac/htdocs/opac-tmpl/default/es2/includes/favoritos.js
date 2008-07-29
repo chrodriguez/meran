@@ -27,26 +27,26 @@ function updateConsultarFavoritos(responseText){
 
 function agregarAFavoritos(){
 
-	var result="";
-//hacer con jquery
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++)
-		{
-			if((checks[i].type == "checkbox")&&(checks[i].checked)){ 		
-				result= result + checks[i].name + '#';
-			}
-		}       
+	var chck=$("input[@name=checkbox]:checked");
+	var array= new Array;
+	var long=chck.length;
+	if ( long == 0){
+		alert("Seleccione un ejemplar para agregar a Favoritos");
 	}
-	params= result;
+	else{
 
-	objAH=new AjaxHelper(updateAgregarAFavoritos);
-  	objAH.debug= true;
-	objAH.url= 'opac-privateshelfsDB.pl';
-	objAH.bookmarks= params;
-	objAH.Accion= 'ADD';
-	//se envia la consulta
-	objAH.sendToServer();
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+		
+		objAH=new AjaxHelper(updateAgregarAFavoritos);
+		objAH.debug= true;
+		objAH.url= 'opac-privateshelfsDB.pl';
+		objAH.datosArray= array;
+		objAH.Accion= 'ADD';
+		//se envia la consulta
+		objAH.sendToServer();
+	}
 }
 
 function updateAgregarAFavoritos(){
@@ -55,25 +55,40 @@ function updateAgregarAFavoritos(){
 
 function borrarDeFavoritos(){
 
-	var result="";
-//hacer con jquery
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++)
-		{
-			if((checks[i].type == "checkbox")&&(checks[i].checked)){ 		
-				result= result + checks[i].name + '#';
-			}
-		}       
-	}
-	params= result;
+// 	var result="";
+// //hacer con jquery
+// 	var checks=document.getElementsByTagName("input");
+// 	if (checks.length>0){
+// 		for(i=0;i<checks.length;i++)
+// 		{
+// 			if((checks[i].type == "checkbox")&&(checks[i].checked)){ 		
+// 				result= result + checks[i].name + '#';
+// 			}
+// 		}       
+// 	}
+// // 	params= result;
 
-	objAH=new AjaxHelper(updateAgregarAFavoritos);
-  	objAH.debug= true;
-	objAH.url= 'opac-privateshelfsDB.pl';
-	objAH.bookmarks= params;
-	objAH.Accion= 'DELETE';
-	//se envia la consulta
-	objAH.sendToServer();
+
+
+	var chck=$("input[@name=checkbox]:checked");
+	var array= new Array;
+	var long=chck.length;
+	if ( long == 0){
+		alert("Seleccione un ejemplar para eliminar de Favoritos");
+	}
+	else{
+
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+		
+		objAH=new AjaxHelper(updateAgregarAFavoritos);
+		objAH.debug= true;
+		objAH.url= 'opac-privateshelfsDB.pl';
+		objAH.datosArray= array;
+		objAH.Accion= 'DELETE';
+		//se envia la consulta
+		objAH.sendToServer();	
+	}
 	
 }

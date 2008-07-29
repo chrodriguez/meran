@@ -16,9 +16,12 @@
 
 <!-- TMPL_IF NAME='loggedinusername' -->	
 	  <th>
-		<a class="click" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a>
+		<a class="click" onclick="todos();">
+		<img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0>
+		</a>
 	   </th>
 <!-- /TMPL_IF  -->
+
 	  <th align="center">T&iacute;tulo&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/ico_helpbordo.png" title="Haga clic sobre el t&iacute;tulo para ver m&aacute;s datos" border=0>
 	  </th>
 	  <th align="center">Autor&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/ico_helpbordo.png" title="Haga clic sobre el autor para ver todos sus libros" border=0>
@@ -32,8 +35,11 @@
 	<!-- Actual Search Results -->
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->	
 	<tr  bordercolor="#f2f2f2">
+
 	<!-- TMPL_IF NAME='loggedinusername' -->
-          <td <!-- TMPL_IF name='even' --> class="impar" <!-- TMPL_ELSE --> class="par"<!-- /TMPL_IF --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR NAME='id1' -->" id="<!-- TMPL_VAR NAME='id1' -->">
+          <td valign="middle" align="center">
+		<input type=checkbox id="<!-- TMPL_VAR NAME='id1' -->" name=checkbox
+		value="<!-- TMPL_VAR NAME='id1' -->">
 	  </td>
 	<!-- /TMPL_IF  -->
 	  <td>	
@@ -83,7 +89,7 @@
   <tr>
 	<td align="center">
 
-	  <!-- TMPL_IF NAME='loggedinusername' -->
+<!-- TMPL_IF NAME='loggedinusername' -->
  	  <input type="hidden" value="" name="bookmarks" id="bookmarks">
 	  <input type="hidden" value="del" name="bookmarkOp" id="bookmarkOp">
 
@@ -92,7 +98,7 @@
 	  <input onClick="borrarDeFavoritos()"  name="ps" id="delps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/borrarfavoritos.png" border="0" title="Eliminar favoritos">
 	  </a>
 
-	  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 	
 	  <!-- TMPL_IF NAME='MAIL' -->
 	  <input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='MAIL' -->" NAME="mail">

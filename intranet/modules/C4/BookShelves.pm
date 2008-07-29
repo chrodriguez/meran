@@ -840,6 +840,7 @@ sub viewshelfContent {
 	#si hay menos estantes para mostrar que renglones por pagina, el limite es la cantdad de estantes para mostrar
 		$fin= $cantEstantes - 1;
 	}
+	$fin= $fin - 1; #????
 
 	my @keyAux=@key[$ini..$fin];	
 	my $bibitem;

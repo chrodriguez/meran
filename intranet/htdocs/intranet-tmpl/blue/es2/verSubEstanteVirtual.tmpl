@@ -5,7 +5,9 @@
 
 <table id="tablaResult" class="tablaresultado" border=0 cellspacing=0 cellpadding=0 width=100%>
   <tr class="tablaresultadoTitle">
-	<th width="2%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+
+	<th width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 	</th>
 
 	<th align="center" width=40%>
@@ -20,8 +22,10 @@
 	<th align="center" width=10%>Edici&oacute;n</th>
 	<th align="center" width=27%>Disponibilidad</th>
 
-	<th width="2%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+	<th width="1%" align="right" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
 	</th>
+
   </tr>
 
 <!-- TMPL_LOOP Name="bitemsloop" -->
@@ -29,7 +33,7 @@
 	<td>&nbsp;</td>
 
 	<td valign="middle">
-		<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">
+		<a class="click" onClick="mostrarDetalle('<!-- TMPL_VAR NAME='id1' -->');" title="Mostrar Detalle">
 		<!-- TMPL_VAR NAME=title ESCAPE=HTML -->
 	<!-- TMPL_IF NAME="unititle" -->
 		:&nbsp;<!-- TMPL_VAR NAME="unititle" -->
@@ -38,7 +42,7 @@
 	</td>
 
 	<td valign="middle">
-		<a class="click" onClick="consultarAutor(<!-- TMPL_VAR NAME=id -->);">
+		<a class="click" onClick="buscarPorAutor(<!-- TMPL_VAR NAME='id' -->)" title="Filtrar por Autor">
 		<!-- TMPL_IF NAME="completo" -->
 			<!-- TMPL_VAR NAME="completo" -->
 		<!-- TMPL_ELSE -->

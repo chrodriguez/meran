@@ -17,8 +17,7 @@ my $obj=$input->param('obj');
 
 $obj=from_json_ISO($obj);
 my $op= $obj->{'Accion'};
-my $shelfvalues = $obj->{'bookmarks'};
-my @val=split(/#/,$shelfvalues);
+my $shelfvalues=$obj->{'datosArray'};
 
 
 #Se verifica la existencia del contenedor de favoritos
@@ -26,7 +25,10 @@ my $pshelf=gotShelf($borrowernumber);
 
 #***********************************ADD PrivateShelfs*************************************
 if ($op eq 'ADD'){ 
-	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs($borrowernumber, $pshelf,\@val);
+
+	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs(	$borrowernumber, 											$pshelf,
+										$shelfvalues
+									);
 	
 	print $input->header;
 }
@@ -35,7 +37,10 @@ if ($op eq 'ADD'){
 
 #***********************************DELETE PrivateShelfs*************************************
 if ($op eq 'DELETE'){ 
-	my ($error, $codMsg, $message)= C4::BookShelves::t_delPrivateShelfs($pshelf,\@val);
+
+	my ($error, $codMsg, $message)= C4::BookShelves::t_delPrivateShelfs(	$pshelf,
+										$shelfvalues
+									);
 	
 	print $input->header;
 }

@@ -29,7 +29,8 @@
  <tr>
 <!-- TMPL_IF NAME='loggedinusername' -->
 	<td valign="middle" align="center">
-		<input type=checkbox name="<!-- TMPL_VAR Name='id2'-->" id="<!-- TMPL_VAR NAME=id2 -->">
+		<input type=checkbox name=checkbox id="<!-- TMPL_VAR NAME=id2 -->" 
+		value="<!-- TMPL_VAR NAME='id1' -->">
 	</td>
 <!-- /TMPL_IF  -->
 
@@ -101,4 +102,32 @@
 	</table>
   </tr>
 </table>
+
+<!-- TMPL_IF NAME='loggedinusername' -->
+	<input type="hidden" value="" name="bookmarks" id="bookmarks">
+	<a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">  
+
+	<input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
+	src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">	
+	</a>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME='MAIL' -->
+<!-- MIGUEL - NO SE PARA QUE ES ESTO -->
+	<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='MAIL' -->" NAME="mail">
+	<a  onMouseOut="swap('mail','<!-- TMPL_VAR NAME='themelang' -->/images/mail.png')" onMouseOver="swap('mail','<!-- TMPL_VAR NAME='themelang' -->/images/mailbis.png')">
+	<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  src="<!-- TMPL_VAR NAME='themelang' -->/images/mail.png" border="0" title="Enviar Resultados por Mail">
+	</a> 
+<!-- /TMPL_IF -->
+
+<!-- MIGUEL - FALTA IMPLEMENTAR -->
+	<a onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
+	<input onClick="printform.target='_blank';printform.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+	</a>
+
+<!-- MIGUEL - FALTA IMPLEMENTAR -->
+	<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
+	<input onClick="printform.target='_self'; printform.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+	</a>
 
