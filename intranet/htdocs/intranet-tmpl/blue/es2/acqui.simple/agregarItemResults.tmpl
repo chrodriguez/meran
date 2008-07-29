@@ -3,7 +3,7 @@
 <b><!-- TMPL_VAR NAME="mensaje" --></b>
 
 <!-- TMPL_IF NAME="titulo" -->
-<div name="menuNivel1y2" style="float:left; width:20%; height:100%">
+<div name="menuNivel1y2" style="float:left; width:20%; height:100%" >
 	<div class="inputFontNormal">
 	<a href="../busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='id1' -->"><p class="pagetitle" ><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --></p></a>
 
@@ -80,7 +80,7 @@
 <div id="parrafo1">
 <!-- TMPL_IF EXPR="(paso eq '1')" -->
 	<p>
-	<label for="autor" style="float: left; width:25%" >
+	<label for="autor" style="float: left; width:25%" class="inputFontNormal">
 		Autor:
 	</label>
 	<input type="text" id="autor" name="autor" value="<!-- TMPL_VAR NAME='autor' -->">

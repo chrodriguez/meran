@@ -60,12 +60,24 @@ function crearAutocomplete(id,url,accion,otroId){
 				textA=data[0];
 			}
 			else{
-				valor=valor+"#"+data[1];
-				textA=textA+"\n"+data[0];
+				var repetidos=verRepetidos(valor,data[1]);
+				if(repetidos == 0){
+					valor=valor+"#"+data[1];
+					textA=textA+"\n"+data[0];
+				}
 			}
 			$("#"+otroId).val(valor);//se guardan (concatenan) los id en un hidden de lo seleccionado
 			$("#texta"+otroId).val(textA);//se escribe en el textarea el texto seleccionado.
 			comp.focus();
 		}
 	});
+}
+
+function verRepetidos(valor,valorNuevo){
+	var array=new Array();
+	array=valor.split("#");
+	for(var i=0; i<array.length;i++){
+		if(valorNuevo==array[i]){return 1;}
+	}
+	return 0;
 }

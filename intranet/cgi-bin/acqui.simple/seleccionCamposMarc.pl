@@ -1,24 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: addbiblio.pl,v 1.32.2.7 2004/03/19 08:21:01 tipaul Exp $
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use CGI;
 use C4::Auth;
@@ -30,7 +11,10 @@ use C4::AR::Catalogacion;
 #Este archivo es llamado por los archivos estructuraCataloResults.pl y agregarItemResults.pl.
 
 my $input = new CGI;
-my $tmpl=$input->param('tmpl');
+
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $tmpl=$obj->{'tmpl'};
 my $url;
 if($tmpl eq 'agregar'){
 	$url="acqui.simple/agregarItemResults3.tmpl";
@@ -48,12 +32,12 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $nivel=$input->param('nivel');
-my $itemtype=$input->param('itemtype');
-my $accion=$input->param('accion2')||$input->param('accion')||-1;
+my $nivel=$obj->{'nivel'};
+my $itemtype=$obj->{'itemtype'};
+my $accion=$obj->{'accion2'}||$obj->{'accion'}||-1;
 
-my $campoX=$input->param('campoX');
-my $tagField=$input->param('tagField');
+my $campoX=$obj->{'campoX'};
+my $tagField=$obj->{'tagField'};
 
 #Variable que sirve para identificar el tipo o nivel de consulta
 	
@@ -80,12 +64,12 @@ if($accion eq "agregar" || $accion > 0){
 		$option= $i."xx";
 		$camposX{$i}=$option;
 	}
-
+	my $defaulCX=($campoX >=0)? $campoX : 'Elegir';
 	my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
 				-id	   => 'campoX',
 				-values    => \@values,
 				-labels    => \%camposX,
-				-defaults  => 'Elegir',
+				-defaults  => $defaulCX,
 				-size      => 1,
 				-onChange  => 'eleccionCampoX(2)',
                                  );
@@ -100,12 +84,12 @@ if($accion > 1){
 		@campos= &buscarCamposMARC($campoX,$nivel);
 	}
 	push (@campos,'Elegir campo');
-
+	my $defaultTF=$tagField||'Elegir campo';
 	my $selecttagField=CGI::scrolling_list( 
 					-name      => 'tagField',
 					-id	   => 'tagField',
 					-values    => \@campos,
-					-defaults  => 'Elegir campo',
+					-defaults  => $defaultTF,
 					-size      => 1,
 					-onChange  => 'eleccionCampo(3)',
                                 );
@@ -121,7 +105,7 @@ if($accion > 2 ){
 	my @valuesSubCampos;
 	my %labelsSubCampos;
 	my $lib;
-	my $default= $input->param('tagsubField') || "-1, ";
+	my $default= $obj->{'tagsubField'} || "-1, ";
 
 	push(@valuesSubCampos, "-1, ");
 	$labelsSubCampos{"-1, "}="Elegir subcampo";
@@ -145,7 +129,7 @@ if($accion > 2 ){
 			 nombretagField       => $nombretagField,
 			);
 #FIN combo subcampos
-	my $subcampo= $input->param('subcampo');
+	my $subcampo= $obj->{'subcampo'};
 	my $tablaRef=-1;
 	my $habilitado;
 	my $ok=1;
@@ -162,13 +146,14 @@ if($accion > 2 ){
 		else{$accion=4;}
 	}
 	#Tablas de refencias
+	my $defaultT=$obj->{'tabla'}||$tablaRef;
 	my %tablas=buscarTablasdeReferencias();
 	$tablas{-1}="Elegir tabla";
 	my $lista_Refs=CGI::scrolling_list(
 					-id	   => 'tabla',
 					-name      => 'tabla',
                                         -values    => \%tablas,
-                                        -defaults  => $tablaRef,
+                                        -defaults  => $defaultT,
 					-size	   => 1,
 					-onChange  => 'eleccionTabla(4,"Agregar")'
                                  );
@@ -178,11 +163,11 @@ if($accion > 2 ){
 			  tagsubField=>$default,
 			);
 
-	my $tagsubfield = $input->param('subcampo');
-	my $textoLib = &C4::AR::Utilidades::UTF8toISO($input->param('lib'));
-	my $obligatorio=$input->param('obligatorio');
-	my $tipoInput= $input->param('tipoInput');
-	my $tabla = $input->param('tabla')||$tablaRef;
+	my $tagsubfield = $obj->{'subcampo'};
+	my $textoLib = $obj->{'lib'};
+	my $obligatorio=$obj->{'obligatorio'};
+	my $tipoInput= $obj->{'tipoInput'};
+	my $tabla = $obj->{'tabla'}||$tablaRef;
 	if($accion==4){
 		#Select para los campos de la tabla de referencia
 		if($tabla != -1){		

@@ -1,23 +1,18 @@
 //funciones para ajax recibe el parametro accion, para identificar en que nivel de consulta estoy.
 
-/*
- * consultarAjaxSeleccion
- * Funcion que hace un llamado ajax para realizar la funcion correspondiente en el pl.
- */
-function consultarAjaxSeleccion(params){
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
-		data: params,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				foco();
-			}
-	});
-}
+var objAH; //Objeto AjaxHelper.
 
 function foco(){
 	$('#campoX').focus();
+}
+
+/*
+ * updateInfo
+ * Funcion que se ejecuta cuando termina el llamado ajax.
+ */
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	foco();
 }
 
 /*
@@ -26,11 +21,14 @@ function foco(){
  * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
  */
 function eleccionCampoX(accion){
-	var params='campoX='+ $('#campoX').val() + 
-		'&nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&tmpl=' + $('#tmpl').val()  + '&accion=' + accion;
-	consultarAjaxSeleccion(params);
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.campoX=$('#campoX').val();
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.tmpl= $('#tmpl').val();
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 /*
@@ -39,12 +37,44 @@ function eleccionCampoX(accion){
  * ejecuta el ajax, con los parametros correspondiente a la accion realizada.
  */
 function eleccionCampo(accion){
-	var params='campoX='+ $('#campoX').val() + 
-		'&nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&tagField=' +  $('#tagField').val() +
-		'&tmpl=' + $('#tmpl').val() + '&accion=' + accion;
-	consultarAjaxSeleccion(params);
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.campoX=$('#campoX').val();
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.tmpl= $('#tmpl').val();
+	objAH.tagField=$('#tagField').val();
+	objAH.accion=accion;
+	objAH.sendToServer();
+}
+
+
+/*
+ * objetoSeleccionSubCampo
+ * Objeto que guarda la opcion que se selecciono del combo que pertenece al subcampo.
+ * Esto se hace para poder saber que se selecciono despues del llamado ajax.
+ */
+function objetoSeleccionSubCampo(){
+	this.subcampo;
+	this.texto;
+	this.obligatorio;
+	this.indice;
+}
+
+/* Objeto que guarda lo que se selecciono */
+var objSubCampo=new objetoSeleccionSubCampo();
+
+/*
+ * updateInfoSubCampo
+ * Funcion que se ejecuta cuando termina el llamado ajax de la seleccion del subcampo.
+ */
+function updateInfoSubCampo(responseText){
+	$("#result").html(responseText);
+	$('#tagsubField')[0].selectedIndex=objSubCampo.indice;
+	$('#subcampo').val(objSubCampo.subcampo);
+	$('#lib').val(objSubCampo.texto);
+	$('#obligatorio').val(objSubCampo.obligatorio);
+	verificarRef($('#ok').val());
 }
 
 /*
@@ -57,28 +87,22 @@ function eleccionSubCampo(accion){
 	var ind=sel.selectedIndex;
 	var opcion= sel.options[ind].value;
 	var array= opcion.split(",");
-	
-	var params='campoX='+ $('#campoX').val() +
-		'&nivel=' +  $('#nivel').val() +
-		'&itemtype=' + $('#itemtype').val() +
-		'&tagField=' + $('#tagField').val() +
-		'&tagsubField=' + $('#tagsubField').val() +
-		'&subcampo=' + array[0] +
-		'&tmpl=' + $('#tmpl').val() + '&accion=' + accion;
+	objSubCampo.indice=ind;
+	objSubCampo.subcampo=array[0];
+	objSubCampo.texto=array[1];
+	objSubCampo.obligatorio=array[2];
 
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
-		data: params,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				$('#tagsubField')[0].selectedIndex=ind;
-				$('#subcampo').val(array[0]);
-				$('#lib').val(array[1]);
-				$('#obligatorio').val(array[2]);
-				verificarRef($('#ok').val());
-			}
-	});
+	objAH=new AjaxHelper(updateInfoSubCampo);
+	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.campoX=$('#campoX').val();
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.tagField=$('#tagField').val();
+	objAH.tagsubField=$('#tagsubField').val();
+	objAH.subcampo=objSubCampo.subcampo;
+	objAH.tmpl= $('#tmpl').val();
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 /*
@@ -96,39 +120,57 @@ function verificarRef(ok){
 }
 
 /*
+ * updateInfoEleccionTabla
+ * Funcion que se ejecuta cuando termina el llamado ajax de la seleccion del combo de las tabla de referencia
+ * y la accion2 es igual a Agregar.
+ */
+function updateInfoEleccionTablaAgr(responseText){
+	$("#result").html(responseText);
+	$('#tagsubField')[0].selectedIndex=objSubCampo.indice;
+}
+
+/*
+ * updateInfoEleccionTabla
+ * Funcion que se ejecuta cuando termina el llamado ajax de la seleccion del combo de las tabla de referencia
+ * y la accion2 es igual a Modificar.
+ */
+function updateInfoEstrCatalogo(responseText){
+	$("#result2").html(responseText);
+	zebra("tablaResult");
+}
+
+/*
  * eleccionTabla
  * Funcion que se ejecuta cuando se selecciona un valor del combo tabla, y hace un llamado ajax.
  */
 function eleccionTabla(accion,accion2){
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&accion=' + accion;
-	
-	if(accion2 == 'Agregar'){       
-		params=params + '&tagField=' + $('#tagField').val() +
-			'&campoX=' + $('#campoX').val() +
-			'&subcampo=' + $('#subcampo').val() +
-			'&tagsubField=' + $('#tagsubField').val() +
-			'&tipoInput=' + $('#tipoInput').val() +
-			'&tabla=' + $('#tabla').val() +
-			'&lib=' + $('#lib').val() +
-			'&obligatorio=' + $('#obligatorio').val() +
-			'&tmpl=' + $('#tmpl').val();
-		var ind=$('#tagsubField')[0].selectedIndex;
-		$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl",
-		data: params,
-		complete: function(ajax){
-				$("#result").html(ajax.responseText);
-				$('#tagsubField')[0].selectedIndex=ind;
-			}
-		});
+	if(accion2 == 'Agregar'){
+		objAH=new AjaxHelper(updateInfoEleccionTablaAgr);
+		objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+		objAH.campoX=$('#campoX').val();
+		objAH.nivel=$('#nivel').val();
+		objAH.itemtype=$('#itemtype').val();
+		objAH.tagField=$('#tagField').val();
+		objAH.tagsubField=$('#tagsubField').val();
+		objAH.subcampo=objSubCampo.subcampo;
+		objAH.tipoInput=$('#tipoInput').val();
+		objAH.tabla=$('#tabla').val();
+		objAH.lib=$('#lib').val();
+		objAH.obligatorio=objSubCampo.obligatorio;
+		objAH.tmpl= $('#tmpl').val();
+		objAH.accion=accion;
+		objAH.sendToServer();
 	}
 	if(accion2 == 'Modificar'){
-		params=params + '&idMod=' + $('#idMod').val() +
-			'&tablaMod=' + $('#tablaMod').val() + '&disable=0';
-		consultarAjax(params);
+		objAH=new AjaxHelper(updateInfoEstrCatalogo);
+		objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+		objAH.nivel=$('#nivel').val();
+		objAH.itemtype=$('#itemtype').val();
+		objAH.idMod= $('#idMod').val();
+		objAH.tablaMod=$('#tablaMod').val();
+		objAH.disable=0;
+		objAH.accion=accion;
+		objAH.sendToServer();
 	}
 }
 
@@ -148,10 +190,15 @@ function cancelar(){
  */
 function agregarCampoTemp(paso,nivel){
 	$("#nivel").val(nivel);
-	var params="nivel=" +  nivel +
-		"&itemtype=" +  $("#itemtype").val() +
-		"&tmpl=agregar"  + "&accion2=agregar" + "&paso="+paso;
-	consultarAjaxSeleccion(params);
+	
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.nivel=nivel;
+	objAH.itemtype=$('#itemtype').val();
+	objAH.tmpl="agregar";
+	objAH.accion2="agregar";
+	objAH.paso=paso;
+	objAH.sendToServer();
 }
 
 /*
@@ -172,6 +219,19 @@ function objetoCampoTemp(nivel,campo,subcampo,liblibrarian,tipoInput,tabla,indic
 	this.idRep="";
 }
 
+/*
+ * updateInfoCampoTemp
+ * Funcion que se ejecuta cuando termina el llamado ajax del guardado del campo temporal
+ */
+function updateInfoCampoTemp(responseText){
+	var objetoResp=JSONstring.toObject(responseText);
+	if(objetoResp.ok > 0){
+		procesarObjeto(objetoResp);
+	}
+	else{
+		alert("Error, intente otra vez");
+	}
+}
 
 /*
  * guardarCampoTemp
@@ -179,7 +239,7 @@ function objetoCampoTemp(nivel,campo,subcampo,liblibrarian,tipoInput,tabla,indic
  */
 function guardarCampoTemp(nivel){
 	var campo=$("#tagField").val();
-	var subcampo=$("#subcampo").val();
+	var subcampo=objSubCampo.subcampo;
 	var lib=$("#lib").val();
 	var tipoInput=$("#tipoInput").val();
 	var tabla=$("#tabla").val();
@@ -200,26 +260,19 @@ function guardarCampoTemp(nivel){
 		}
 		
 	}
-	var str=JSONstring.make(objeto);
-	$("#cantIds").val(parseInt(cantIds)+1);
+
 	var itemtype=$("#itemtype").val();
 	if(nivel==1){
 		itemtype="ALL";
 	}
-	var params ="itemtype="+itemtype+"&nivel="+nivel+"&cant="+cantIds+"&objeto="+str;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/agregarItemResults2.pl",
-		data: params,
-		complete: function(ajax){
-				var objetoResp=JSONstring.toObject(ajax.responseText);
-				if(objetoResp.ok > 0){
-					procesarObjeto(objetoResp);
-				}
-				else{
-					alert("Error, intente otra vez");
-				}
-			}
-	});
-}
 
+	objAH=new AjaxHelper(updateInfoCampoTemp);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults2.pl";
+	objAH.nivel=nivel;
+	objAH.itemtype=itemtype;
+	objAH.cant=cantIds;
+	objAH.objeto=objeto;
+	objAH.sendToServer();
+
+	$("#cantIds").val(parseInt(cantIds)+1);
+}

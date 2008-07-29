@@ -1,16 +1,16 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<script type="text/javascript" src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
-
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/seleccionCamposMarc.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/autocompletables.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/crearComponentes.js"></script>
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script>
-<!-- TMPL_INCLUDE NAME="autocompletables.js" -->
-<!-- TMPL_INCLUDE NAME="crearComponentes.js" -->
-<!-- TMPL_INCLUDE NAME="seleccionCamposMarc.js" -->
 
 $(document).ready(function(){
 	var url="/cgi-bin/koha/acqui.simple/editarEjemplar.pl";

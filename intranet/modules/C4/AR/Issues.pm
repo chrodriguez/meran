@@ -800,7 +800,7 @@ sub prestamosPorUsuario {
 	my %currentissues;
 
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
-                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico
+                n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico,
                 n1.titulo AS titulo, n1.autor, isst.description AS issuetype
                 FROM issues iss INNER JOIN issuetypes isst ON ( iss.issuecode = isst.issuecode )
 		INNER JOIN nivel3 n3 ON ( iss.id3 = n3.id3 )

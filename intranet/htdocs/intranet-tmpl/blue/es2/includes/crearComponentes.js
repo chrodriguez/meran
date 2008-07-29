@@ -79,7 +79,7 @@ function procesarObjeto(objeto){
 	}
 	var idDiv="div"+id;
 	var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
-	var divLabel="<div style='float: left; width: 25%;'>  "+libtext+": </div>";
+	var divLabel="<div id='label"+id+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
 	strComp="<div id='strComp"+id+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
 	$(strComp).appendTo(divParrafo);
 	var objetoResp=new objetoRespuesta(objeto.nivel,objeto.campo,objeto.subcampo,objeto.idRep,"");
@@ -108,7 +108,7 @@ function procesarObjeto(objeto){
 			compText=crearComponente("text",idComp,"","");
 			comp=crearComponente("texta","texta"+id,"readonly='readonly'","");
 			hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
-			var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='<!-- TMPL_VAR name=themelang -->/images/sacar.png'>";
+			var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='/images/sacar.png'>";
 			comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+hidden+"</div>";
 			
 			compText=compText+" "+boton;
@@ -125,7 +125,10 @@ function procesarObjeto(objeto){
 				var array=valor.split("#");
 				valor=array.join("\n");
 			}
-				comp=(crearComponente("texta",id,"class='unoxlinea'","")) + "  UNO POR LINEA ";
+			comp=(crearComponente("texta",id,"class='unoxlinea'",""));
+// 			var str=($("#label"+id).html());
+// 			str=str+"<br>UNO POR LINEA";
+			$("#label"+id).html($("#label"+id).html()+"<br>UNO POR LINEA");
 		}
 		else{
 			comp=crearComponente(tipo,id,"","");

@@ -8,7 +8,7 @@
 	<div id="id2">
 	<!-- TMPL_IF EXPR="(accion > 1)" -->
 		<p>
-		<label for="campoX" style="float:left; width:13%">Campo: </label>
+		<label for="tagField" style="float:left; width:13%">Campo: </label>
 		<!-- TMPL_VAR NAME="selecttagField" -->
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF EXPR="(accion > 2)" -->

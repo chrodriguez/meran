@@ -485,9 +485,6 @@ sub modificarCampo{
 	if($tabla != -1){
 		$ref=1;
 		&guardarInfoReferencia($id,$tabla,$ordenMod,$camposRefMod,$separadorMod);
-# 		my $query="SELECT id FROM estructura_catalogacion WHERE idestcat <> ? AND campo=? AND subcampo=?";
-# 		my $sth=$dbh->prepare($query);
-#         	$sth->execute($id,);
 	}
 	else{
 		my $query="DELETE FROM informacion_referencias WHERE idestcat = ?";

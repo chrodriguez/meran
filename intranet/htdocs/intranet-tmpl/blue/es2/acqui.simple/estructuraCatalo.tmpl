@@ -2,37 +2,27 @@
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/seleccionCamposMarc.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <script>
 
-/*
- * consultarAjax
- * Funcion que hace el llamado ajax.
- */
-function consultarAjax(params){
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl",
-		data: params,
-		complete: function(ajax){
-				$("#result2").html(ajax.responseText);
-				zebra("tablaResult");
-			}
-	});
-}
-
 //funciones para ajax recibe el parametro tipo, para identificar en que nivel de consulta estoy.
 function eleccionDeNivel(tipo){
-	var niv=$("#nivel").val();
+	var nivel=$("#nivel").val();
 	var ObjDiv = $("#divitemtype");
-	if((niv == '1') || (niv == 'Niveles')){ObjDiv.hide();}
+	if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
 	else{ObjDiv.show();}
-	var params= 'nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val();
-	consultarAjax(params);
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=nivel;
+	objAH.itemtype=$('#itemtype').val();
+	objAH.sendToServer();
+
 	$("#result").html("");
 }
 
@@ -49,81 +39,107 @@ function objetoRespuesta(campo,subcampo,lib,tipo,oblig,tabla){
 }
 
 function guardarCamposModificados(accion){
-	var params='campoX='+ $('#campoX').val() + 
-		'&nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&accion=' + accion;
+
 	var objeto=new objetoRespuesta($('#tagField').val(),$('#subcampo').val(),$('#lib').val(),$('#tipoInput').val(),$('#obligatorio').val(),$('#tabla').val());
 	if ($('#tabla').val() != -1){
 		objeto.orden=$('#orden').val();
 		objeto.camposRef=$('#camposRef').val();
 		objeto.separador=$('#separador').val();
 	}
-	params=params + "&objeto="+JSONstring.make(objeto);
-	consultarAjax(params);
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.objeto=objeto;
+	objAH.accion=accion;
+	objAH.sendToServer();
 	$("#result").html("");
 }
 
 function guardarModificaciones(accion){
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.idMod=$('#idMod').val();
+	objAH.accion=accion;
+	
 	var objeto=new objetoRespuesta($('#campoMod').val(),$('#subcampoMod').val(),$('#textoMod').val(),$('#selectTipo').val(),"",$('#tablaMod').val());
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&idMod=' +  $('#idMod').val() +
-		'&accion=' + accion;
 	if($('#tablaMod').val() != -1){
-		params= params + 
-			'&idinforef='+ $('#idinforef').val();
+		objAH.idinforef=$('#idinforef').val();
 		objeto.orden=$('#ordenMod').val();
 		objeto.camposRef=$('#camposRefMod').val();
 		objeto.separador=$('#separadorMod').val();
 	}
-	params=params + "&objeto="+JSONstring.make(objeto);
-	consultarAjax(params);
+	objAH.objeto=objeto;
+	objAH.sendToServer();
 }
 
 function agregarCampo(accion){
 	$("#modificar").hide();
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&tmpl=catalogacion'+
-		'&accion='+ accion;
-	consultarAjaxSeleccion(params);
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.tmpl= "catalogacion";
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 //Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id,intra,accion){
 	$("#result").html("");
 	$('#idMod').val(id);
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&idMod=' + id + '&intra=' + intra + '&accion=' + accion;
-	consultarAjax(params);
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.idMod=id;
+	objAH.intra=intra;
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 function modificarOrden(id,intra,accion){
 	$("#result").html("");
  	$('#idMod').val(id);
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&idMod=' + id + '&intra=' + intra + '&accion=' + accion;
-	consultarAjax(params);
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.idMod=id;
+	objAH.intra=intra;
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 function editarCampo(id,accion){
 	$("#result").html("");
 	$('#idMod').val(id);
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&idMod=' + id + '&accion=' + accion ;
-	consultarAjax(params);
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.idMod=id;
+	objAH.accion=accion;
+	objAH.sendToServer();
 }
 
 function visibilidad(id){
 	var visible=$('#'+id).val();
-	var params='nivel=' +  $('#nivel').val() +
-		'&itemtype=' +  $('#itemtype').val() +
-		'&visible=' + visible + '&id=' + id +'&accion=11';
-	consultarAjax(params);
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#itemtype').val();
+	objAH.id=id;
+	objAH.visible=visible;
+	objAH.accion=11;
+	objAH.sendToServer();
 }
 
 </script>

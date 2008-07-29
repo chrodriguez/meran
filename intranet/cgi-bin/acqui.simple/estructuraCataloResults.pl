@@ -1,23 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: addbiblio.pl,v 1.32.2.7 2004/03/19 08:21:01 tipaul Exp $
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
 use CGI;
@@ -87,18 +69,17 @@ sub generarSelectOrden(){
 }
 #FIN DE FUNCIONES INTERNAS
 
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
-
-my $nivel=$input->param('nivel');
-my $campoX=$input->param('campoX');
-my $tagField=$input->param('tagField');
+my $nivel=$obj->{'nivel'};
+my $tagField=$obj->{'tagField'};
 my $itemType='ALL';
 if($nivel > 1){
-	$itemType=$input->param('itemtype');
+	$itemType=$obj->{'itemtype'};
 }
 
 #Variable que sirve para identificar la accion que se realizo.
-my $accion = $input->param('accion'); 
+my $accion = $obj->{'accion'}; 
 =item 
 $accion=0 => es la eleccion del nivel en que se van a modificar los campos (Combo Nivel)
 $accion=1 => es la eleccion de agregar un nuevo campo a la catalogacion(Boton agregar).
@@ -121,18 +102,17 @@ $accion=9 => Activa la parte de modificacion de un campo que ya esta en la catal
 $accion=10 => se guardan las modificaciones hechas a los campos ya modificados por parte del usuario.
 	(Boton guardar del paso de modificacion).
 =cut
-my $obj=$input->param('objeto');
+my $objResp=$obj->{'objeto'};
 my $tagsubfield;
 my $textoLib;
 my $tabla;
 my $ok=0;
 my $error;
-if( $accion==5 && $obj ne ""){
-	$obj=from_json_ISO($obj);
-	$tagField=$obj->{'campo'};
-	$tagsubfield = $obj->{'subcampo'};
-	$textoLib = $obj->{'lib'};
-	$tabla = $obj->{'tabla'};
+if( $accion==5 && $objResp ne ""){
+	$tagField=$objResp->{'campo'};
+	$tagsubfield = $objResp->{'subcampo'};
+	$textoLib = $objResp->{'lib'};
+	$tabla = $objResp->{'tabla'};
 	$ok=1;
 
 	if ($tagsubfield != -1 && $textoLib ne ''){
@@ -146,18 +126,8 @@ if( $accion==5 && $obj ne ""){
 		}
 		if(($tablasIguales || !$hayDatos) && $ok){
 			my $id = -1;
-			$id=&guardarCamposModificados($nivel,$itemType,$obj);
+			$id=&guardarCamposModificados($nivel,$itemType,$objResp);
 			if($id == -1){ $error = "Error en el guardado del campo, intentelo otra vez."}
-=item		if($id != -1 && $tabla != -1){
-			my $orden= $input->param('orden');
-			my $campoRef= $input->param('camposRef');
-			my $separador = $input->param('separador');
-			if($tabla!= -1 && $campoRef ne '' && $separador ne ''){
-				&guardarInfoReferencia($id,$tabla,$orden,$campoRef,$separador);
-			}
-		}
-		else{#error
-=cut		}
 		}
 		else{$error="Error en la información de referencia.";}
 		$accion=1;
@@ -172,36 +142,35 @@ if( $accion==5 && $obj ne ""){
 elsif($accion ==5){$error="Error en el pasaje de parametros";}
 #Se deshabilita el campo seleccionado para la vista en intranet
 if($accion==6){
-	my $id=$input->param('idMod');
-	my $intra=$input->param('intra');
+	my $id=$obj->{'idMod'};
+	my $intra=$obj->{'intra'};
 	&eliminarNivelIntranet($id,$intra,$nivel,$itemType);
 	$accion=0;
 }
 
 #Sube el orden en la vista del campo seleccionado
 if($accion==7){
-	my $id=$input->param('idMod');
-	my $intra = $input->param('intra');
+	my $id=$obj->{'idMod'};
+	my $intra = $obj->{'intra'};
 	&subirOrden($id,$intra,$nivel,$itemType);
 	$accion=0;
 }
 
 #Baja el orden en la vista del campo seleccionado
 if($accion==8){
-	my $id=$input->param('idMod');
-	my $intra = $input->param('intra');
+	my $id=$obj->{'idMod'};
+	my $intra = $obj->{'intra'};
 	&bajarOrden($id,$intra,$nivel,$itemType);
 	$accion=0;
 }
 
 #Modificacion de un campo ya ingresado para la catalogacion
 if($accion == 9){
-	my $nivel=$input->param('nivel');
-	my $id= $input->param('idMod');
-# 	my $disable=$input->param('disable');
+	my $nivel=$obj->{'nivel'};
+	my $id= $obj->{'idMod'};
 	my $result= &buscarCampo($id);
 	$result->[0]->{'tipoInput'}=$result->[0]->{'tipo'};
-	my $tabla= $input->param('tablaMod')||$result->[0]->{'tabla'}||-1;
+	my $tabla= $obj->{'tablaMod'}||$result->[0]->{'tabla'}||-1;
 	my $campo=$result->[0]->{'campo'};
 	my $subcampo=$result->[0]->{'subcampo'};
 	my $hayDatos=&buscarDatosCampoMARC($nivel,$campo,$subcampo,"");
@@ -230,14 +199,13 @@ if($accion == 9){
 
 #Se actualizan los campos marc ya modificados por el usuario.
 if($accion==10){
-	my $id=$input->param('idMod');
-	my $idinforef=$input->param('idinforef');
-	my $obj=$input->param('objeto');
-	if( $obj ne ""){
-		$obj=from_json_ISO($obj);
-		my $campo=$obj->{'campo'};
-		my $subcampo=$obj->{'subcampo'};
-		my $tabla=$obj->{'tabla'};
+	my $id=$obj->{'idMod'};
+	my $idinforef=$obj->{'idinforef'};
+	my $objResp=$obj->{'objeto'};
+	if( $objResp ne ""){
+		my $campo=$objResp->{'campo'};
+		my $subcampo=$objResp->{'subcampo'};
+		my $tabla=$objResp->{'tabla'};
 		my $hayDatos=&buscarDatosCampoMARC($nivel,$campo,$subcampo,"");
 		my $tablaRef=-1;
 		my $hab;
@@ -247,24 +215,18 @@ if($accion==10){
 			$tablasIguales=($tabla == $tablaRef);
 		}
 		if($tablasIguales || !$hayDatos){
-			&modificarCampo($id,$obj);
+			&modificarCampo($id,$objResp);
 		}
 		else{$error="Error en la información de referencia.";}
 	}
 	else{$error="Error en el pasaje de parametros"}
-# 	my $ref=0;
-# 	if($tabla != -1){
-# 		$ref=1;
-# 		&guardarInfoReferencia($id,$tabla,$ordenMod,$camposRefMod,$separadorMod);
-# 	}
-# 	&actualizarCamposModificados($id,$textoMod,$selectInput,0,$ref);
 	$accion=0;
 }
 
 #Se cambia la visibilidad del campo.
 if($accion==11){
-	my $visible=$input->param('visible');
-	my $idestcat=$input->param('id');
+	my $visible=$obj->{'visible'};
+	my $idestcat=$obj->{'id'};
 	&actualizarVisibilidad($idestcat,$visible);
 	$accion=0;
 }
