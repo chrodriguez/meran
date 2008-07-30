@@ -79,18 +79,9 @@ function crearForm(url,params){
 //dibuja la zebra para los resultados
 function zebra(IdObj){
 
-	 
-// 	$("."+ IdObj + " tr:not([tr.bordetabla]):odd").addClass("impar");
-// 	$("."+ IdObj + " tr:not([tr.bordetabla]):even").addClass("par");		
-//  	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
-//  	$("."+ IdObj + " tr:gt(1):even").addClass("par");
-
-// 	$("."+ IdObj + " tr:gt(0):odd").addClass("impar");
 	$("."+ IdObj + " tr:nth-child(even)").addClass("impar");
   	$("."+ IdObj + " tr:gt(0):even").addClass("par");
 
-// 	$("."+ IdObj + " tr:nth-child(odd) ").addClass("impar");		
-// 	$("."+ IdObj + " tr:nth-child(even) ").addClass("par");
 }
 
 
@@ -108,3 +99,33 @@ function tomarTiempo(){
 	return hours + ":" + minutes + " " + " " + seconds;
 }
 
+/*
+ * checkedAll
+ * Selecciona y deselecciona a todos los checkbox, cuando se toca el boton.
+ * primer click selecciona, segundo click deselecciona. 
+ */
+function checkedAll(id,nombreCheckbox){
+	$("#"+id).toggle(function(){
+			$("input[@name="+nombreCheckbox+"]").each(function(){
+			this.checked=true;})
+			},
+			function(){
+  			$("input[@name="+nombreCheckbox+"]").each(function(){
+			this.checked=false;})
+			}
+		);
+}
+
+/*
+ * onEnter
+ * Funcion que se asigna el evento onEnter al input que viene el id pasado por parametro y se ejecuta la funcion
+ * que se pasa por paramentro.
+ */
+function onEnter(idInput,funcion){
+	$("#"+idInput).keypress(function (e) {
+ 		if(e.which == 13){
+ 			funcion();
+ 		}
+ 	});
+
+}

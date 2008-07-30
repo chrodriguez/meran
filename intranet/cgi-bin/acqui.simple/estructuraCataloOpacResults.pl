@@ -10,11 +10,9 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 
-my $url="acqui.simple/estructuraCataloOpacResults.tmpl";
-
 
 my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => $url,
+    = get_templateexpr_and_user({template_name => "acqui.simple/estructuraCataloOpacResults.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -22,30 +20,37 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $accion=$input->param('accion')||"";
-my $tipo=$input->param('tipo')||"";
 
-my $campoX=$input->param('campoX');
-my $campo=$input->param('campo');
-my $idencabezado=$input->param('encabezados');
-my $nivel= $input->param('nivel');
-my $id= $input->param('idestcatopac');
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-if($tipo eq "modificar"){
-my ($cant, @result) = &traerVisualizacion($id);
+my $accion= $obj->{'accion'}||"";
+my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $componente= $obj->{'componente'};
+my $campoX= $obj->{'campoX'};
+my $defaultCampoX= ($campoX >= 0)?$campoX:'Elegir';
+my $campo= $obj->{'campo'};
+my $defaultCampo= ($campo >= 0)?$campo:'Elegir campo';
+my $idencabezado= $obj->{'encabezados'};
+my $nivel= $obj->{'nivel'};
 
 
+#***************************** Mostrar configuracion de campo, subcampo*****************************
+if( ($tipoAccion eq "SELECT")&&($componente eq "CONF_CAMPO_SUBCAMPO") ){
+	my $id= $obj->{'idestcatopac'};
 
-my $textpred= $result[0]->{'textpred'};#$input->param('textpred');
-my $textsucc= $result[0]->{'textsucc'};#$input->param('textsucc');
-my $separador= $result[0]->{'separador'};#$input->param('separador');
-
-$template->param(	textpred   => "textopred",
-			textsucc   => "textsucc",
-			separador  => "separador",
-);
+	my ($cant, @result) = &C4::AR::CatalogacionOpac::traerVisualizacion($id);
+	
+	my $textpred= $result[0]->{'textpred'};
+	my $textsucc= $result[0]->{'textsucc'};
+	my $separador= $result[0]->{'separador'};
+	
+	$template->param(	textpred   => "textopred",
+				textsucc   => "textsucc",
+				separador  => "separador",
+	);
 }
-
+#****************************Fin**Mostrar configuracion de campo, subcampo***************************
 
 #***********************Filtro de numero de campo*******************************************
 my %camposX;
@@ -60,34 +65,36 @@ for (my $i =0 ; $i <= 9; $i++){
 	$camposX{$i}=$option;
 }
 
-my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
-			-id	   => 'campoX',
-			-values    => \@values,
-			-labels    => \%camposX,
-			-defaults  => 'Elegir',
-			-size      => 1,
-			-onChange  => 'eleccionCampoX()',
+my $selectCampoX=CGI::scrolling_list( 	-name      => 'campoX',
+					-id	   => 'campoX',
+					-values    => \@values,
+					-labels    => \%camposX,
+					-defaults  => $defaultCampoX,
+					-size      => 1,
+					-onChange  => 'eleccionCampoX()',
                         );
+
+
 $template->param(selectCampoX	  => $selectCampoX);
 #***********************FIN filtro de numero de campo********************************************
 
-if($accion eq "seleccionCampo" || $accion eq "seleccionSubCampo"){
+if( ($accion eq "SELECCION_CAMPO") || ($accion eq "SELECCION_SUB_CAMPO") ){
 
 	my @campos;
 	if($campoX != -1){
 # 	traigo todos los campos que estan catalogados en MARC, segun el campo por ej 1xx
 #    	y los tipos de items q tiene el encabezado
-		@campos= &traerCampos($idencabezado, $campoX, $nivel);
+		@campos= &C4::AR::CatalogacionOpac::traerCampos($idencabezado, $campoX, $nivel);
 	}
 	push (@campos,'Elegir campo');
 
  	my $selecttagField=CGI::scrolling_list( 
- 					-name      => 'campo',
- 					-id	   => 'campo',
- 					-values    => \@campos,
- 					-defaults  => 'Elegir campo',
- 					-size      => 1,
- 					-onChange  => 'eleccionCampo()',
+						-name      => 'campo',
+						-id	   => 'campo',
+						-values    => \@campos,
+						-defaults  => $defaultCampo,
+						-size      => 1,
+						-onChange  => 'eleccionCampo()',
                                  );
  
  	$template->param(selecttagField    => $selecttagField,);
@@ -96,22 +103,23 @@ if($accion eq "seleccionCampo" || $accion eq "seleccionSubCampo"){
 }
 
 
-if($accion eq "seleccionSubCampo" ){
+if($accion eq "SELECCION_SUB_CAMPO" ){
 
-	my $nombretagCampo=&buscarNombreCampoMarc($campo);#C4::AR::Catalogacion;
-	my $itemtype= $input->param('itemtype');
-	my @subCampos= &traerSubCampos($idencabezado,$campo,$itemtype);
+	my $nombretagCampo=&C4::AR::Catalogacion::buscarNombreCampoMarc($campo);
+	my $itemtype= $obj->{'itemtype'};
+	my @subCampos= &C4::AR::CatalogacionOpac::traerSubCampos($idencabezado,$campo,$itemtype);
 #Combo para los subcampos
 	my @valuesSubCampos;
-	my %labelsSubCampos;
-	my $default= $input->param('subCampo') || "-1,";
+# 	my %labelsSubCampos;
+	my $default= $obj->{'subCampo'} || "-1,";
 		
-	my $selecttagsubField=CGI::scrolling_list( -name      => 'subCampo',
-					-id	   => 'subCampo',
-					-values    => \@subCampos,
-					-defaults  => $default,
-                                	-size      => 1,
+	my $selecttagsubField=CGI::scrolling_list( 	-name      => 'subCampo',
+							-id	   => 'subCampo',
+							-values    => \@subCampos,
+							-defaults  => $default,
+							-size      => 1,
                                  	);
+
 	$template->param(selecttagsubField    => $selecttagsubField,
 			nombreCampo	      => $nombretagCampo,
 			);

@@ -42,7 +42,8 @@ $VERSION = 0.01;
 #B400 - B499 para Errores e Informacion de Base de Datos
 #C500 - C599 para Catalogacion
 #CA600 - CA699 para Control de Autoridades
-#F700 - F 799 para Favoritos
+#F700 - F799 para Favoritos
+#VO800 - VO899 para Visualizacion Opac
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -142,6 +143,8 @@ my %mensajesINTRA = (
 	'B407' => '',
 	'B408' => 'Error en funcion C4::Auth::t_operacionesDeOPAC',
 	'B409' => 'Error en funcion C4::Auth::t_operacionesDeINTRA',
+	'B410' => 'Error en funcion C4::AR::CatalogacionOpac::t_insertarEncabezado',
+	'B411' => 'Error en funcion C4::AR::CatalogacionOpac::t_deleteEncabezado',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
@@ -150,6 +153,10 @@ my %mensajesINTRA = (
 	'CA603' => 'Se produjo un error al intentar eliminar un seud&oacute;nimo, repita la operaci&oacute;n',
 	'CA604' => 'Se produjo un error al intentar eliminar un sin&oacute;nimo, repita la operaci&oacute;n',
 	'CA605' => 'Se produjo un error al intentar actualizar un sin&oacute;nimo, repita la operaci&oacute;n',
+	'VO800' => 'Se agreg&oacute; con &eacute;xito el encabezado',
+	'VO801' => 'Disculpe, no se pudo ingresar el Encabezado, intente nuevamente',
+	'VO802' => 'Disculpe, no se pudo eliminar el Encabezado, intente nuevamente',
+	'VO803' => 'Se elimin&oacute; el encabezado con &eacute;xito',
 );
 
 sub getMensaje {

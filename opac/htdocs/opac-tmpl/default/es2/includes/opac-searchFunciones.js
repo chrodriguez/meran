@@ -1,22 +1,22 @@
 
 //opac-searchFunciones.js
 //*******************************************Para agregar a Favoritos*******************************************
-function todos(){
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++)
-		{
-			if((checks[i].type == "checkbox")&&(checks[i].checked)){
-				checks[i].checked=false
-			}
-                        else{
-				checks[i].checked=true
-			}
-		}
-	}
-}
+// function todos(){
+// 	var checks=document.getElementsByTagName("input");
+// 	if (checks.length>0){
+// 		for(i=0;i<checks.length;i++)
+// 		{
+// 			if((checks[i].type == "checkbox")&&(checks[i].checked)){
+// 				checks[i].checked=false
+// 			}
+//                         else{
+// 				checks[i].checked=true
+// 			}
+// 		}
+// 	}
+// }
 
-// se va a dejar de usar
+// se va a dejar de usar!!!!!!!!!!!!BORRRRRARR
 function mandarArreglo(valores){
         arreglo= new Array();
 	
@@ -52,6 +52,8 @@ function updateInfo(responseText){
 	zebra('tablaResult');
 	$('#result').slideDown('slow');
  	pushCache(responseText, 'result');
+
+	checkedAll('todos','checkbox');
 }
 
 
@@ -203,6 +205,7 @@ function verSubEstanteVirtual(shelf){
 function updateVerEstanteVirtual(responseText){
 	
 	$('#result').html(responseText);
+	checkedAll('todos','checkbox');
 }
 
 function consultarEstanteVirtual(){

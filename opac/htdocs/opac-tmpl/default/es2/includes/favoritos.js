@@ -22,7 +22,9 @@ function updateConsultarFavoritos(responseText){
 	$('#result').show();
 	$('#result').html(responseText);
 	pushCache(responseText, 'result');
-	zebra();
+// 	zebra();
+
+	checkedAll('todos','checkbox');
 }
 
 function agregarAFavoritos(){

@@ -22,65 +22,72 @@ $VERSION = 0.01;
 	&buscarInfoCampo
 	&buscarInfoSubCampo
 	&buscarTiposItemParaEncabezado
+
 	&verificarExistenciaEncabezadoItem
 	&verificarExistenciaCatalogacion
-	&verificarExistenciaEncabezado
+
 	&traerCampos
 	&traerSubCampos
 	&traerVisualizacion
-	&insertarCatalogacion
-	&UpdateCatalogacion
-	&insertarEncabezadoItem
-	&insertarEncabezado
-	&deleteCatalogacion
-	&deleteEncabezado
 	&traerKohaToMARC
+
+	&insertarCatalogacion	
+	&t_insertarEncabezado
 	&insertarMapeoKohaToMARC
+
+	&deleteCatalogacion
+	&t_deleteEncabezado
 	&deleteMapeoKohaToMARC
 	&deleteEncabezado
+
 	&modificarVisulizacion
 	&modificarLineaEncabezado
 	&modificarNombreEncabezado
+	&UpdateCatalogacion
+
 	&subirOrden
 	&bajarOrden
 );
 
 
-sub insertarMapeoKohaToMARC(){
+sub insertarMapeoKohaToMARC{
 	my ($tabla, $campoKoha, $campo, $subcampo)=@_;
+
 	my $dbh = C4::Context->dbh;
 
-	my $queryExiste = " SELECT count(*) as cant ";
-	$queryExiste .= " FROM kohaToMARC ";
-	$queryExiste .= " WHERE (campo = ?)and(subcampo = ?) ";
-	$queryExiste .= " and(campoTabla = ?)and( tabla = ?) ";
+	my $queryExiste = "	SELECT count(*) AS cant
+				FROM kohaToMARC
+				WHERE (campo = ?)AND(subcampo = ?)
+				AND(campoTabla = ?)AND( tabla = ?) ";
+
 	my $sth=$dbh->prepare($queryExiste);
 	$sth->execute($campo, $subcampo, $campoKoha, $tabla);
 	my $data= $sth->fetchrow_hashref;
 
 	if($data->{'cant'} eq 0){
 
-	  my $query="INSERT INTO kohaToMARC (tabla, campoTabla, campo, subcampo) ";
-	  $query .= " VALUES (?, ? ,? ,?)";
-	  $sth=$dbh->prepare($query);
-          $sth->execute($tabla, $campoKoha, $campo, $subcampo);
+		my $query="	INSERT INTO kohaToMARC (tabla, campoTabla, campo, subcampo)
+				VALUES (?, ? ,? ,?)";
+	
+		$sth=$dbh->prepare($query);
+		$sth->execute($tabla, $campoKoha, $campo, $subcampo);
 	}
 }
 
-sub deleteMapeoKohaToMARC(){
+sub deleteMapeoKohaToMARC{
 	my ($id)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query="DELETE FROM kohaToMARC ";
-	$query .= " WHERE idmap = ?";
+	my $query="	DELETE FROM kohaToMARC WHERE idmap = ? ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id);
 }
 
-sub deleteEncabezado(){
+sub deleteEncabezado{
 	my ($id)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query="DELETE FROM encabezado_campo_opac ";
-	$query .= " WHERE idencabezado = ?";
+	my $query="DELETE FROM encabezado_campo_opac WHERE idencabezado = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id);
 }
@@ -88,15 +95,15 @@ sub deleteEncabezado(){
 =item
 trae el mapeo de tablas koha a MARC
 =cut
-sub traerKohaToMARC(){
+sub traerKohaToMARC{
 	my ($tabla)=@_;
   	my $dbh = C4::Context->dbh;
 
-	my $query = "SELECT ktm.idmap, ktm.tabla, ktm.campoTabla, ktm.campo, ktm.subcampo ";
-	$query .= ", mse.liblibrarian ";
-	$query .= " FROM kohaToMARC ktm LEFT JOIN marc_subfield_structure mse ";
-	$query .= " ON (mse.tagfield = ktm.campo)and(mse.tagsubfield = ktm.subcampo) ";
-	$query .= " WHERE tabla = ? ";
+	my $query = "	SELECT ktm.idmap, ktm.tabla, ktm.campoTabla, ktm.campo, ktm.subcampo, mse.liblibrarian
+			FROM kohaToMARC ktm LEFT JOIN marc_subfield_structure mse
+			ON (mse.tagfield = ktm.campo) AND (mse.tagsubfield = ktm.subcampo)
+			WHERE tabla = ? ";
+
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla);
 
@@ -114,14 +121,14 @@ sub traerKohaToMARC(){
 buscarCamposObligatorios
 Busca los campos MARC de la tabla marc_subfield_structure que son obligatorios para el standar de catalogacion MARC
 =cut
-sub buscarInfoCampo(){
+sub buscarInfoCampo{
 	my ($campo)=@_;
   
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT tagfield, liblibrarian";
-	$query .=" FROM `marc_tag_structure` ";
-  	$query .=" WHERE tagfield like ? OR  liblibrarian like ?";
-	$query .=" ORDER BY liblibrarian";
+	my $query = "	SELECT tagfield, liblibrarian
+			FROM `marc_tag_structure`
+			WHERE tagfield like ? OR  liblibrarian like ?
+			ORDER BY liblibrarian ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($campo.'%', '%'.$campo.'%');
@@ -137,21 +144,17 @@ sub buscarInfoCampo(){
 }
 
 
-sub buscarInfoSubCampo(){
-# 	my ($campo, $subcampo)=@_;
+sub buscarInfoSubCampo{
 	my ($campo)=@_;
   
 	my $dbh = C4::Context->dbh;
 
-# 	my $query = "SELECT tagfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) as subcampo, tagsubfield, liblibrarian ";
-	my $query = "SELECT tagsubfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) as subcampo";
-	$query .=" FROM `marc_subfield_structure` ";
-# 	$query .=" WHERE tagfield = ? and  tagsubfield like ? ";
-	$query .=" WHERE tagfield = ? ";
-	$query .=" ORDER BY tagsubfield, liblibrarian ";
+	my $query = "	SELECT tagsubfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) AS subcampo
+			FROM `marc_subfield_structure` 
+			WHERE tagfield = ?
+			ORDER BY tagsubfield, liblibrarian ";
 
 	my $sth=$dbh->prepare($query);
-#         $sth->execute($campo, $subcampo.'%');
 	$sth->execute($campo);
 
 	my @results;
@@ -169,21 +172,13 @@ sub buscarEncabezados{
 	my ($nivel, $itemtype)=@_;
 	
 	my $dbh = C4::Context->dbh;
-=item
-	my $query = "SELECT idencabezado, nombre, orden, linea";
-	$query .=" FROM encabezado_campo_opac ";
-	$query .=" WHERE nivel = ? ";
-	$query .="ORDER BY nombre";
-=cut
-
-	my $query = " SELECT eco.idencabezado, eco.nombre, eco.orden, eco.linea ";
-	$query .= " FROM encabezado_campo_opac eco INNER JOIN encabezado_item_opac eio ";
-	$query .= " ON (eco.idencabezado = eio.idencabezado) ";
-	$query .= " WHERE nivel = ? and eio.itemtype = ? ";
-	$query .= " ORDER BY orden ";
+	my $query = "	SELECT eco.idencabezado, eco.nombre, eco.orden, eco.linea
+			FROM encabezado_campo_opac eco INNER JOIN encabezado_item_opac eio
+			ON (eco.idencabezado = eio.idencabezado)
+			WHERE nivel = ? and eio.itemtype = ?
+			ORDER BY orden ";
 
 	my $sth=$dbh->prepare($query);
-#         $sth->execute();
 	$sth->execute($nivel, $itemtype);
 
 	my @results;
@@ -197,13 +192,14 @@ sub buscarEncabezados{
 }
 
 
-sub encabezadoEnLinea(){
+sub encabezadoEnLinea{
 
 	my ($encabezado)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT idencabezado, nombre, orden,linea";
-	$query .=" FROM encabezado_campo_opac where idencabezado = ? ";
+	my $query = "	SELECT idencabezado, nombre, orden,linea
+			FROM encabezado_campo_opac 
+			WHERE idencabezado = ? ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($encabezado);
@@ -215,16 +211,16 @@ sub encabezadoEnLinea(){
 }
 
 
-sub buscarTiposItemParaEncabezado(){
-
+sub buscarTiposItemParaEncabezado{
 	my ($encabezado)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT i.itemtype as itemtype, description";
-	$query .=" FROM encabezado_item_opac eio INNER JOIN itemtypes i ";
-	$query .=" ON ( i.itemtype = eio.itemtype )";
-	$query .=" WHERE eio.idencabezado = ? ";
-	$query .=" ORDER BY i.description";
+
+	my $query = "	SELECT i.itemtype as itemtype, description
+			FROM encabezado_item_opac eio INNER JOIN itemtypes i
+			ON ( i.itemtype = eio.itemtype )
+			WHERE eio.idencabezado = ?
+			ORDER BY i.description ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($encabezado);
@@ -240,14 +236,14 @@ sub buscarTiposItemParaEncabezado(){
 	return ($cant, @results);
 }
 
-sub verificarExistenciaEncabezadoItem(){
+sub verificarExistenciaEncabezadoItem{
 #se verifica la existencia de la tupla $idencabezado, $iditemtype
 	my ($idencabezado, $iditemtype)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT count(*) ";
-	$query .=" FROM encabezado_item_opac ";
-	$query .=" WHERE idencabezado = ? AND itemtype = ?";
+	my $query ="	SELECT count(*)
+			FROM encabezado_item_opac 
+			WHERE idencabezado = ? AND itemtype = ? ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado, $iditemtype);
@@ -257,14 +253,14 @@ sub verificarExistenciaEncabezadoItem(){
 	return ($data);
 }
 
-sub verificarExistenciaCatalogacion(){
+sub verificarExistenciaCatalogacion{
 #se verifica la existencia de la tupla $idencabezado, $campo, $subcampo
 	my ($idencabezado, $campo, $subcampo)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT count(*) ";
-	$query .=" FROM estructura_catalogacion_opac ";
-	$query .=" WHERE idencabezado = ? AND campo = ? AND subcampo = ?";
+	my $query = "	SELECT count(*)
+			FROM estructura_catalogacion_opac
+			WHERE idencabezado = ? AND campo = ? AND subcampo = ?";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado, $campo, $subcampo);
@@ -274,14 +270,14 @@ sub verificarExistenciaCatalogacion(){
 	return ($data);
 }
 
-sub verificarExistenciaEncabezado(){
+sub verificarExistenciaEncabezado{
 #se verifica la existencia de la tupla $encabezado
 	my ($encabezado)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT count(*) ";
-	$query .=" FROM encabezado_campo_opac ";
-	$query .=" WHERE nombre = ?";
+	my $query = "	SELECT count(*)
+			FROM encabezado_campo_opac
+			WHERE nombre = ?";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($encabezado);
@@ -292,66 +288,70 @@ sub verificarExistenciaEncabezado(){
 }
 
 #insertar iditemtype, idencabezado en tabla encabezado_item_opac
-sub insertarEncabezadoItem(){
+sub insertarEncabezadoItem{
 	my ($idencabezado, $iditemtype)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query="INSERT INTO encabezado_item_opac ";
-	$query .= " (idencabezado, itemtype)";
-	$query .= " VALUES (?,?)";
+	my $query="	INSERT INTO encabezado_item_opac (idencabezado, itemtype)
+			VALUES (?,?)";
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado, $iditemtype);
 }
 
 
-sub insertarCatalogacion(){
+sub insertarCatalogacion{
 	my ($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query="INSERT INTO estructura_catalogacion_opac ";
-	$query .= " (campo, subcampo, textpred, textsucc, separador, idencabezado)";
-	$query .= " VALUES (?,?,?,?,?,?)";
+	my $query="	INSERT INTO estructura_catalogacion_opac
+			(campo, subcampo, textpred, textsucc, separador, idencabezado)
+			VALUES (?,?,?,?,?,?) ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
 }
 
-sub UpdateCatalogacion(){
+sub UpdateCatalogacion{
 	my ($textoPred, $textoSucc, $separador, $idestcatopac) = @_;
 
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE estructura_catalogacion_opac ";
-	$query .= " SET textpred = ?, textsucc = ?, separador = ? ";
-	$query .= " WHERE idestcatopac = ? ";
+	my $query="	UPDATE estructura_catalogacion_opac
+			SET textpred = ?, textsucc = ?, separador = ?
+			WHERE idestcatopac = ? ";
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($textoPred, $textoSucc, $separador, $idestcatopac);
 
 }
 
-sub modificarVisulizacion(){
+sub modificarVisulizacion{
 	my ($idestcat, $visible)=@_;
+
 	$visible= ($visible + 1) % 2;
 	my $dbh = C4::Context->dbh;
-	my $query=" UPDATE estructura_catalogacion_opac ";
-	$query .= " SET visible = ? ";
-	$query .= " WHERE idestcatopac = ?";
+	my $query="	UPDATE estructura_catalogacion_opac
+			SET visible = ?
+			WHERE idestcatopac = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($visible, $idestcat);
 }
 
-sub modificarLineaEncabezado(){
+sub modificarLineaEncabezado{
 	my ($idencabezado, $linea)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $query=" UPDATE encabezado_campo_opac SET linea = ? ";
-	$query .= " WHERE idencabezado = ?";
+	my $query=" 	UPDATE encabezado_campo_opac SET linea = ?
+			WHERE idencabezado = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($linea, $idencabezado);
 }
 
-sub modificarNombreEncabezado(){
+sub modificarNombreEncabezado{
 	my ($idencabezado, $nombre)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $query=" UPDATE encabezado_campo_opac SET nombre = ? ";
-	$query .= " WHERE idencabezado = ?";
+	my $query=" 	UPDATE encabezado_campo_opac SET nombre = ? 
+			WHERE idencabezado = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($nombre, $idencabezado);
 }
@@ -361,7 +361,7 @@ sub modificarNombreEncabezado(){
 subirOrden
 Sube el orden en la vista del encabezado
 =cut
-sub subirOrden(){
+sub subirOrden{
 	my($idencabezado, $orden, $itemtype, $action)=@_;
 
 	$orden=$orden-1;
@@ -372,7 +372,7 @@ sub subirOrden(){
 subirOrden
 Baja el orden en la vista del encabezado.
 =cut
-sub bajarOrden(){
+sub bajarOrden{
 	my($idencabezado, $orden, $itemtype, $action)=@_;
 
 	$orden=$orden+1;
@@ -382,22 +382,22 @@ sub bajarOrden(){
 =item
 Modifica el orden del encabezado, ;)
 =cut
-sub modificarOrdenEncabezado(){
+sub modificarOrdenEncabezado{
 	my ($idencabezado, $orden, $itemtype, $action)=@_;
 
 	my $dbh = C4::Context->dbh;
 
 	#obtengo el id del encabezado q se encuentra cerca
-	my $query=" SELECT eco.idencabezado FROM encabezado_campo_opac eco ";
-	$query .= " INNER JOIN encabezado_item_opac eio ON (eco.idencabezado = eio.idencabezado) ";
-	$query .= " WHERE(eio.itemtype = ?)AND(eco.orden = ?) ";
+	my $query=" 	SELECT eco.idencabezado FROM encabezado_campo_opac eco
+			INNER JOIN encabezado_item_opac eio ON (eco.idencabezado = eio.idencabezado)
+			WHERE(eio.itemtype = ?)AND(eco.orden = ?) ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($itemtype ,$orden);
 
 	#actualiza al encabezado el nuevo orden
-	my $query=" UPDATE encabezado_campo_opac SET orden = ? ";
-	$query .= " WHERE idencabezado = ? ";
+	my $query=" 	UPDATE encabezado_campo_opac SET orden = ?
+			WHERE idencabezado = ? ";
 	my $sth2=$dbh->prepare($query);
 	$sth2->execute($orden, $idencabezado);
 	
@@ -406,8 +406,8 @@ sub modificarOrdenEncabezado(){
 	}else{
 		$orden= $orden - 1;
 	}
-	$query= " UPDATE encabezado_campo_opac SET orden = ? ";
-	$query .= " WHERE idencabezado = ? ";
+	$query= " 	UPDATE encabezado_campo_opac SET orden = ?
+			WHERE idencabezado = ? ";
         
 	if(my $data=$sth->fetchrow){
 		#actualizo el orden del vecino
@@ -416,17 +416,18 @@ sub modificarOrdenEncabezado(){
 	}
 }
 
-sub insertarEncabezado(){
+sub insertarEncabezado{
 	my ($encabezado, $nivel, $itemtypes_arrayref)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query="INSERT INTO encabezado_campo_opac ";
-	$query .= " (nombre, nivel)";
-	$query .= " VALUES (?, ?)";
+	my $query="	INSERT INTO encabezado_campo_opac (nombre, nivel)
+			VALUES (?, ?)";
+
 	my $sth=$dbh->prepare($query);
 
         $sth->execute($encabezado, $nivel);
 
-	$query="SELECT max(idencabezado) FROM encabezado_campo_opac ";
+	$query="	SELECT max(idencabezado) FROM encabezado_campo_opac ";
 	$sth=$dbh->prepare($query);
 	$sth->execute();
 	
@@ -441,78 +442,120 @@ sub insertarEncabezado(){
  	}
 }
 
-sub deleteCatalogacion(){
-	my ($idestcatopac)=@_;
+sub t_insertarEncabezado {
+	
+	my($encabezado, $nivel, $itemtypes_arrayref)=@_;
+	my $reservaGrupo= 0;
+
+	my ($error, $codMsg,$paraMens);
+	
 	my $dbh = C4::Context->dbh;
-	my $query="DELETE FROM estructura_catalogacion_opac ";
-	$query .= " WHERE idestcatopac = ?";
+	my ($paramsReserva);
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+
+		my $cant= 0;
+		$cant= &verificarExistenciaEncabezado($encabezado);
+	
+		if($cant eq 0){
+
+			insertarEncabezado($encabezado, $nivel, $itemtypes_arrayref);	
+			$dbh->commit;
+			$codMsg= 'VO800';
+		}
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B410';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'VO801';
+	}
+	$dbh->{AutoCommit} = 1;
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
+sub deleteCatalogacion{
+	my ($idestcatopac)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $query="	DELETE FROM estructura_catalogacion_opac
+			WHERE idestcatopac = ?";
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($idestcatopac);
 }
 
-=item
-sub deleteEncabezadoItem(){
-	my ($idestcatopac, $itemtype)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="DELETE FROM encabezado_item_opac ";
-	$query .= " WHERE idencabezado = ?";
-	$query .= " AND itemtype = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($idestcatopac, $itemtype);
-}
-=cut
-
-sub deleteEncabezado(){
+sub deleteEncabezado{
 	my ($idencabezado)=@_;
+
 	my $dbh = C4::Context->dbh;
-	my $query=" DELETE FROM encabezado_campo_opac ";
-	$query .= " WHERE idencabezado = ?";
+	my $query=" 	DELETE FROM encabezado_campo_opac
+			WHERE idencabezado = ?";
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado);
 
-	$query=" DELETE FROM encabezado_item_opac ";
-	$query .= " WHERE idencabezado = ?";
+	$query=" 	DELETE FROM encabezado_item_opac
+			WHERE idencabezado = ?";
+
 	$sth=$dbh->prepare($query);
         $sth->execute($idencabezado);
 
-	$query=" DELETE FROM estructura_catalogacion_opac ";
-	$query .= " WHERE idencabezado = ?";
+	$query=" 	DELETE FROM estructura_catalogacion_opac
+			WHERE idencabezado = ?";
+
 	$sth=$dbh->prepare($query);
         $sth->execute($idencabezado);
-#esto deberia ser una transaccion!!!!!!!!!!!!!!!!!
 }
 
-sub traerCampos(){
+sub t_deleteEncabezado {
+	
+	my($idencabezado)=@_;
+	my $reservaGrupo= 0;
+
+	my ($error, $codMsg,$paraMens);
+	
+	my $dbh = C4::Context->dbh;
+	my ($paramsReserva);
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+
+		deleteEncabezado($idencabezado);	
+		$dbh->commit;
+		$codMsg= 'VO803';
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B411';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'VO802';
+	}
+	$dbh->{AutoCommit} = 1;
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
+sub traerCampos{
 	my ($idencabezado, $campo, $nivel) =@_;
 	my $dbh = C4::Context->dbh;
-
-=item
-	my $query=" SELECT tagfield as campo FROM marc_subfield_structure ";
-	$query .=" WHERE obligatorio = '1' and tagfield like '".$campo."%'";
-  	$query .=" UNION ( ";
-	$query .=" SELECT DISTINCT campo FROM estructura_catalogacion  ";
-	$query .=" WHERE campo like '".$campo."%'"." and nivel = ? and (campo,subcampo) not in ";
-	$query .=" (SELECT DISTINCT campo, subcampo FROM estructura_catalogacion_opac ";
-	$query .=" WHERE campo like '".$campo."%'".") )";
-=cut
-
-=item
-	my $query=" SELECT tagfield as campo FROM marc_subfield_structure ";
-	$query .=" WHERE obligatorio = '1' and tagfield like '".$campo."%'";
-  	$query .=" UNION ( ";
-	$query .=" SELECT DISTINCT eco.campo ";
-	$query .=" FROM estructura_catalogacion ec INNER JOIN estructura_catalogacion_opac eco ";
-	$query .=" ON (ec.campo = eco.campo) ";
-	$query .=" WHERE ec.campo like '".$campo."%'"." and ec.nivel = ? )";
-=cut
 
 	my $query= "	SELECT DISTINCT ec.campo  FROM estructura_catalogacion ec  
 			WHERE ec.campo LIKE '".$campo."%'"." AND ec.nivel = ?  ";
 
-
-
 	my $sth=$dbh->prepare($query);
-# 	$sth->execute($nivel, $nivel);
 	$sth->execute($nivel);
 	
 	my @results;
@@ -525,30 +568,20 @@ sub traerCampos(){
 }
 
 
-sub traerSubCampos(){
+sub traerSubCampos{
 	my ($idencabezado, $campo, $itemtype) =@_;
 	my $dbh = C4::Context->dbh;
 
-=item
-my $query=" SELECT tagsubfield as subcampo FROM marc_subfield_structure ";
-	$query .=" WHERE obligatorio = '1' and tagfield = ?";
-  	$query .=" and tagsubfield not in ( SELECT DISTINCT subcampo FROM estructura_catalogacion ";
-	$query .=" WHERE campo = ?) "; 
-	$query .=" UNION SELECT DISTINCT subcampo FROM estructura_catalogacion ";
-	$query .=" WHERE campo = ? "; 
-=cut
-
- 	my $query=" SELECT tagsubfield as subcampo FROM marc_subfield_structure  ";
- 	$query .=" WHERE obligatorio = '1' and tagfield = ? union ";
-	$query .=" (SELECT DISTINCT subcampo FROM estructura_catalogacion  ";
-	$query .=" WHERE campo = ? ) UNION ";
-	$query .=" (SELECT DISTINCT subcampo FROM estructura_catalogacion_opac ";
-	$query .=" WHERE campo = ?) ";
+ 	my $query=" 	SELECT tagsubfield as subcampo FROM marc_subfield_structure
+			WHERE obligatorio = '1' and tagfield = ? UNION
+			(SELECT DISTINCT subcampo FROM estructura_catalogacion
+			WHERE campo = ? ) UNION
+			(SELECT DISTINCT subcampo FROM estructura_catalogacion_opac
+			WHERE campo = ?) ";
 
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo, $campo, $campo);
-# 	$sth->execute($campo, $campo);		
 	
 	my @results;
 	while(my $data=$sth->fetchrow_hashref){
@@ -559,14 +592,14 @@ my $query=" SELECT tagsubfield as subcampo FROM marc_subfield_structure ";
 	return (@results);	
 }
 
-sub traerVisualizacion(){
+sub traerVisualizacion{
 	my ($idencabezado) =@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query=" SELECT * ";
-	$query .=" FROM estructura_catalogacion_opac ";
-	$query .=" WHERE idencabezado = ?";
-	$query .=" ORDER BY campo, subcampo ";
+	my $query=" 	SELECT *
+			FROM estructura_catalogacion_opac
+			WHERE idencabezado = ?
+			ORDER BY campo, subcampo ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado);

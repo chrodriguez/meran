@@ -10,12 +10,13 @@
 
 <table id="tablaResult" class="tablaResult" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
 	<thead>
-	<!--<tr class="bordetabla" bordercolor="#f2f2f2">-->	
 	<tr class="bordetabla" >
 	<!-- TMPL_IF NAME='loggedinusername' -->
 		<th>
-			<a class="click" onclick="todos();">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0>
+			<!--<a id="todos" class="click" onclick="todos();">-->
+			<a id="todos" class="click">
+			<img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" 
+				title="Invertir la selecci&oacute;n" border=0>
 			</a>
 		</th>
 	<!-- /TMPL_IF-->

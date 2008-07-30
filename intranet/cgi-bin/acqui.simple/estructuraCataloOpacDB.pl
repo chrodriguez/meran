@@ -10,238 +10,199 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
 
+
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+
 #tipoAccion = Insert, Update, Select
-my $tipoAccion= $input->param('tipoAccion')||"";
-my $componente= $input->param('componente')||"";
-my $tabla= $input->param('tabla')||"";
+my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $componente= $obj->{'componente'}||"";
+my $tabla= $obj->{'tabla'}||"";
 my $result;
-my $mensajeError= "";
 
-
-#******************** para Ayuda de campos MARK*************************************
-if(($tipoAccion eq "Select")&&($componente eq "ayudaCampoMARK")){
-
- 	my $campo= $input->param('q');
-	my ($cant,@results)= &buscarInfoCampo($campo); #C4::AR::CatalogacionOpac
-	my $i=0;
-	my $resultAyudaMARK="";
-	my $field;
-	my $data;
-
-	for ($i; $i<$cant; $i++){
-		$field=$results[$i]->{'tagfield'};
-		$data=$results[$i]->{'liblibrarian'};
-  		$resultAyudaMARK .= $field."|".$data. "\n";
-	}
-
-	print "Content-type: text/html\n\n";
- 	print $resultAyudaMARK;
-}
-#**************************************************************************************************
-
-#******************** para Ayuda de campos MARK*************************************
-if(($tipoAccion eq "Select")&&($componente eq "ayudaCampoMARKsubcampo")){
-	my $campo= $input->param('campo');
-	my $subcampo= $input->param('subcampo');
-
-	my ($cant,@results)= &buscarInfoSubCampo($campo); #C4::AR::CatalogacionOpac
-	my $i=0;
-	my $resultAyudaMARK="";
-	my $field;
-	my $data;
-
-	for ($i; $i<$cant; $i++){
-	$resultAyudaMARK .= $results[$i]->{'tagsubfield'}."/".$results[$i]->{'subcampo'}."#";
-	}
-
-	print "Content-type: text/html\n\n";
- 	print $resultAyudaMARK;
-}
-#**************************************************************************************************
 
 #************************* para cargar la tabla de encabezados*************************************
-if(($tipoAccion eq "Select")&&($componente eq "cargarTablaEncabezados")){
+if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 
-my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
-			template_name => "acqui.simple/estructuraCataloOpacTablaEncabezados.tmpl",
-			query => $input,
-			type => "intranet",
-			authnotrequired => 0,
-			flagsrequired => {borrowers => 1},
-			debug => 1,
-});
+	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
+				template_name => "acqui.simple/estructuraCataloOpacTablaEncabezados.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+	});
 
-	my $nivel =$input->param('nivel');
-	my $itemtype =$input->param('itemtype');
+	my $nivel =$obj->{'nivel'};
+	my $itemtype =$obj->{'itemtype'};
 
-	my ($cant,@results)= &buscarEncabezados($nivel, $itemtype); #C4::AR::CatalogacionOpac
+	my ($cant,@results)= &C4::AR::CatalogacionOpac::buscarEncabezados($nivel, $itemtype);
 
-$template->param( 	
- 			RESULTSLOOP      => \@results,
-		);
+	$template->param( 	
+				RESULTSLOOP      => \@results,
+			);
 
-print  $template->output;
+	print  $template->output;
 
 }
 #**************************************************************************************************
 
 #***********************************Cambio Visibilidad en OPAC**********************************
-if($tipoAccion eq "cambiarVisibilidad"){
+if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 
-my $idestcat =$input->param('id');
-my $visible =$input->param('visible');
-
-&modificarVisulizacion($idestcat, $visible);
-
-print $input->header;
+	my $idestcat =$obj->{'id'};
+	my $visible =$obj->{'visible'};
+	
+	&modificarVisulizacion($idestcat, $visible);
+	
+	print $input->header;
 }
 #**************************************************************************************************
+
 #******* Se arma una tabla con la Visualizacion de OPAC y se muestra con un tmpl********************
-if(($tipoAccion eq "MostrarTablaVisualizacion")&&($componente eq "closeUpComboEncabezado")){
-
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-			template_name => "acqui.simple/estructuraCataloOpacTabla.tmpl",
-			query => $input,
-			type => "intranet",
-			authnotrequired => 0,
-			flagsrequired => {borrowers => 1},
-			debug => 1,
-});
-
-	my $idencabezado =$input->param('encabezados');
+if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMBO_ENCABEZADO")){
+	
+	my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
+				template_name => "acqui.simple/estructuraCataloOpacTabla.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+	});
+	
+	my $idencabezado =$obj->{'encabezados'};
 	my $result;
 
 	my ($cant, @resultsCatalogacion)= &traerVisualizacion($idencabezado);
-
-$template->param( 	
- 			RESULTSLOOP      => \@resultsCatalogacion,
-		);
-
-# output_html_with_http_headers $input, $cookie, $template->output;
-print  $template->output;
+	
+	$template->param( 	
+				RESULTSLOOP      => \@resultsCatalogacion,
+			);
+	
+	print  $template->output;
 }
 #**********************************************************************************************************
+
 #********************** gurado el encabezado en la tabla encabezado_campo_opac*****************************
-if(($tipoAccion eq "Insert")&&($tabla eq "encabezado")){
-my $encabezado= $input->param('encabezado');
-my $nivel= $input->param('nivel');
-my $itemtypes= $input->param('itemtypes');
-# my $itemtypes_arrayref= decode_json $itemtypes;
-my $itemtypes_arrayref= from_json_ISO($itemtypes);
+if(($tipoAccion eq "INSERT")&&($tabla eq "ENCABEZADO")){
 
-my $cant= 0;
-$cant= &verificarExistenciaEncabezado($encabezado);
-
-if($cant eq 0){
- 	&insertarEncabezado($encabezado, $nivel, $itemtypes_arrayref);
-}
-else{$mensajeError= "Error al ingresar los datos";}
-
-print $input->header;
-print $mensajeError;
-# print encode_json $itemtypes_arrayref;
+	my $encabezado= $obj->{'encabezado'};
+# 	my $nivel= $obj->{'nivel2'};	#para probar los mensajes de error
+	my $nivel= $obj->{'nivel'};
+	my $itemtypes= $obj->{'itemtypes'};
+	my $itemtypes_arrayref= from_json_ISO($itemtypes);
+	
+	my ($error, $codMsg, $message)= &t_insertarEncabezado($encabezado, $nivel, $itemtypes_arrayref);
+	
+	print $input->header;
+	($error)?print $message:'';
 }
 #*******************FIN *** gurado el encabezado en la tabla encabezado_campo_opac*****************************
 
 #******************** actualizo el nombre del encabezado en la tabla encabezado_campo_opac***********************
-if($tipoAccion eq "UpdateEncebezdo"){
+if( ($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO") ){
 			
-my $encabezado= $input->param('encabezado');
-my $nombre= $input->param('nombre');
-
-&modificarNombreEncabezado($encabezado, $nombre);
-
-print $input->header;
-# print encode_json $itemtypes_arrayref;
+	my $encabezado= $obj->{'encabezado'};
+	my $nombre= $obj->{'nombre'};
+	
+	&modificarNombreEncabezado($encabezado, $nombre);
+	
+	print $input->header;
 }
 #****************FIN**** actualizo el nombre del encabezado en la tabla encabezado_campo_opac******************
 
 #*********************************se actualiza el campo linea del encabezado*********************************
-if(($tipoAccion eq "Update")&&($tabla eq "encabezado")){
-my $idencabezado= $input->param('encabezado');
-my $linea= $input->param('linea');
+if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
 
-&modificarLineaEncabezado($idencabezado, $linea);
-
-print $input->header;
-print $mensajeError;
+	my $idencabezado= $obj->{'encabezado'};
+	my $linea= $obj->{'linea'};
+	
+	&modificarLineaEncabezado($idencabezado, $linea);
+	
+	print $input->header;
 }
 
 #*********************************se actualiza el campo linea del encabezado*********************************
 
-if($tipoAccion eq "cambiarOrdenEncabezado"){
-my $idencabezado= $input->param('encabezado');
-my $orden= $input->param('orden');
-my $itemtype =$input->param('itemtype');
-my $action= $input->param('action');
+if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 
-if($action eq "up"){
-	&subirOrden($idencabezado, $orden, $itemtype, $action);
-}else{
-	&bajarOrden($idencabezado, $orden, $itemtype, $action);
-}
-
-print $input->header;
-print $mensajeError;
+	my $idencabezado= $obj->{'encabezado'};
+	my $orden= $obj->{'orden'};
+	my $itemtype =$obj->{'itemtype'};
+	my $action= $obj->{'action'};
+	
+	if($action eq "up"){
+		&subirOrden($idencabezado, $orden, $itemtype, $action);
+	}else{
+		&bajarOrden($idencabezado, $orden, $itemtype, $action);
+	}
+	
+	print $input->header;
 }
 #**************************************************************************************************
-#**************** gurado la catalogacion en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "Insert")&&($tabla eq "estructuraCatalogacion")){
-my $textoPred =$input->param('textoPredecesor');
-my $textoSucc =$input->param('textoSucesor');
-my $campo =$input->param('campo');
-my $subcampo =$input->param('subCampo');
-my $separador =$input->param('separador');
-my $idencabezado =$input->param('encabezados');
 
-# if(&is_Number($idencabezado)){
+#**************** gurado la catalogacion en estructura_catalogacion_opac**************************
+if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
+
+	my $textoPred =$obj->{'textoPredecesor'};
+	my $textoSucc =$obj->{'textoSucesor'};
+	my $campo =$obj->{'campo'};
+	my $subcampo =$obj->{'subCampo'};
+	my $separador =$obj->{'separador'};
+	my $idencabezado =$obj->{'encabezados'};
+	
 	my $cant= 0;
 	$cant= &verificarExistenciaCatalogacion($idencabezado, $campo, $subcampo);
 	if($cant == 0){
- 		&insertarCatalogacion($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
-	}
-# }else{$mensajeError= "Error al ingresar los datos";}
 
-print $input->header;
-print $mensajeError;
+		&insertarCatalogacion(	$campo, 
+					$subcampo, 
+					$textoPred, 
+					$textoSucc, 
+					$separador, 
+					$idencabezado
+				);
+	}
+	
+	print $input->header;
 }
 #**************************************************************************************************
 
 #**************** gurado la catalogacion en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "Update")&&($tabla eq "estructuraCatalogacion")){
-my $textoPred =$input->param('textoPredecesor');
-my $textoSucc =$input->param('textoSucesor');
-my $separador =$input->param('separador');
-my $idestcatopac =$input->param('idestcatopac');
+if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
 
-&UpdateCatalogacion($textoPred, $textoSucc, $separador, $idestcatopac);
-
-print $input->header;
-print $mensajeError;
+	my $textoPred =$obj->{'textoPredecesor'};
+	my $textoSucc =$obj->{'textoSucesor'};
+	my $separador =$obj->{'separador'};
+	my $idestcatopac =$obj->{'idestcatopac'};
+	
+	&UpdateCatalogacion($textoPred, $textoSucc, $separador, $idestcatopac);
+	
+	print $input->header;
 }
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "Delete")&&($tabla eq "estructuraCatalogacion")){
-my $idestcatopac =$input->param('idestcatopac');
+if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
 
-
-# if(&is_Number($idestcatopac)){
+	my $idestcatopac =$obj->{'idestcatopac'};
+	
 	&deleteCatalogacion($idestcatopac);
-# }else{$mensajeError= "Error al eliminar los datos";}
-
-print $input->header;
-print $mensajeError;
+	
+	print $input->header;
 }
 #**************************************************************************************************
 
-#**************** elimino un Encabezado**************************
-if(($tipoAccion eq "Delete")&&($tabla eq "encabezadoCampoOpac")){
+#********************************* elimino un Encabezado*******************************************
+if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
 
-my $encabezado =$input->param('encabezado');
-
-&deleteEncabezado($encabezado);
-
-print $input->header;
+	my $encabezado =$obj->{'encabezado'};
+	
+	my ($error, $codMsg, $message)= &C4::AR::CatalogacionOpac::t_deleteEncabezado($encabezado);
+	
+	print $input->header;
+	($error)?print $message:'';
 }
 #**************************************************************************************************
 

@@ -4,6 +4,7 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
@@ -11,56 +12,51 @@
 <script>
 function cambiarVisibilidad(idEstCat){
 
-var params= 	'id=' +  idEstCat +
-		'&visible=' + $('#' + idEstCat).val() +
-		'&tipoAccion=cambiarVisibilidad';
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					armarTablaVisualizacion();
-				}
-	});
+	objAH=new AjaxHelper(armarTablaVisualizacion);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.id= idEstCat;
+	objAH.visible= $('#' + idEstCat).val();
+	objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
+	//se envia la consulta
+	objAH.sendToServer();
 }
 
 
 function eleccionCampoX(accion){
- 	accion= "seleccionCampo";
 
-var params= 	'campoX=' +  $('#campoX').val() +
- 		'&encabezados=' +  $('#encabezados').val() +
-		'&accion=' + accion +
-		'&nivel=' + $('#nivel').val();
+	objAH=new AjaxHelper();
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.accion= 'SELECCION_CAMPO';
+	objAH.campoX= $('#campoX').val();
+	objAH.encabezados= $('#encabezados').val();
+	objAH.nivel= $('#nivel').val();
+	objAH.onComplete= updateEleccionCampoX;
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
-			data: params,
- 			complete: function(ajax){
-					$('#result').show();
-					$('#result').html(ajax.responseText);
-				}
-	});
+function updateEleccionCampoX(responseText){
+	$('#result').show();
+	$('#result').html(responseText);
 }
 
 function eleccionCampo(accion){
-	accion= "seleccionSubCampo";
 
-var params= 	'campoX=' +  $('#campoX').val() +
-		'&encabezados=' +  $('#encabezados').val() +
-		'&campo=' +  $('#campo').val() +
-		'&accion=' + accion +
-		'&nivel=' + $('#nivel').val() + 
-		'&itemtype=' + $('#comboTiposItems').val();
+	objAH=new AjaxHelper(updateEleccionCampo);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.campoX= $('#campoX').val();
+	objAH.encabezados= $('#encabezados').val();
+	objAH.campo= $('#campo').val();
+	objAH.accion= 'SELECCION_SUB_CAMPO';
+	objAH.nivel= $('#nivel').val();
+	objAH.itemtype= $('#comboTiposItems').val();
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
-			data: params,
- 			complete: function(ajax){
-					$('#result').html(ajax.responseText);
-					$('#guardar')[0].disabled = false;
-				}
-	});
+function updateEleccionCampo(responseText){
+	$('#result').html(responseText);
+	$('#guardar')[0].disabled = false;
 }
 
 function seleccionarEncabezado(id){
@@ -77,62 +73,66 @@ function seleccionarEncabezado(id){
 
 function modificarDatos(){
 
-	var params= 	'&textoPredecesor=' + $('#textoPredecesor').val() + 
-			'&textoSucesor=' + $('#textoSucesor').val() +  
-			'&separador=' + $('#separador').val() +
-			'&idestcatopac=' + idestcatopac +
-			'&tabla=estructuraCatalogacion&tipoAccion=Update';
+	objAH=new AjaxHelper(updateModificarDatos);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.textoPredecesor= $('#textoPredecesor').val();
+	objAH.textoSucesor= $('#textoSucesor').val(); 
+	objAH.separador= $('#separador').val();
+	objAH.idestcatopac= idestcatopac;
+	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
+	objAH.tipoAccion= 'UPDATE';
+	//se envia la consulta
+	objAH.sendToServer();
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					//arma la tabla de configuracion de visualizacion 
-					armarTablaVisualizacion();
-					//eleccionCampoX();
-					$('#result').slideUp('slow');
-					$('#modificar').hide();
-				}
-	});
+}
 
+function updateModificarDatos(){
+	//arma la tabla de configuracion de visualizacion 
+	armarTablaVisualizacion();
+	//eleccionCampoX();
+	$('#result').slideUp('slow');
+	$('#modificar').hide();
 }
 
 //para guardar el id de la fila seleccionada
 var idestcatopac;
 
-function modificarVisualizacion(textpred, textsucc, separador, id, tipo){
+function modificarVisualizacion(textpred, textsucc, separador, id){
 
-	var params= 	'idestcatopac=' + id + 
-			'&tipo=' + tipo;
+	objAH=new AjaxHelper(updateModificarVisualizacion);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.idestcatopac= id;
+	objAH.tipoAccion= 'SELECT';
+	objAH.componente= 'CONF_CAMPO_SUBCAMPO';
 
 	idestcatopac= id;
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
-			data: params,
- 			complete: function(ajax){
- 					$('#result').html(ajax.responseText);	
-					$('#textoPredecesor').val(textpred);
-					$('#textoSucesor').val(textsucc);
-					$('#separador').val(separador);
-					if(tipo == "modificar"){
-						$('#seleccionCampos').hide();
-						$('#guardar').hide();
-						$('#modificar').show();
- 						$('#textoPredecesor').focus();
-					}
-				}
-	});
+function updateModificarVisualizacion(responseText, textpred, textsucc, separador, tipo){
+// como paso los parametros textsucc, separador, etc!!!!!!!!!!
+	$('#result').html(responseText);	
+	$('#textoPredecesor').val(textpred);
+	$('#textoSucesor').val(textsucc);
+	$('#separador').val(separador);
+
+	$('#seleccionCampos').hide();
+	$('#guardar').hide();
+	$('#modificar').show();
+	$('#textoPredecesor').focus();
 }
 
 function seleccionarCampos(){
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl",
- 			complete: function(ajax){
- 					$('#result').html(ajax.responseText);	
-				}
-	});
+	objAH=new AjaxHelper(updateSeleccionarCampos);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateSeleccionarCampos(responseText){
+	$('#result').html(responseText);
 }
 
 function validarDatosEncabezado(){
@@ -146,23 +146,25 @@ function validarDatosEncabezado(){
 }
 
 function saveCatalogacion(){
-var params= 	'&textoPredecesor=' + $('#textoPredecesor').val() + 
-		'&textoSucesor=' + $('#textoSucesor').val() +  
-		'&separador=' + $('#separador').val() +
-		'&campo=' + $('#campo').val() +
-		'&subCampo=' + $('#subCampo').val() +
-		'&encabezados=' + $('#idEncabezado').val() +
-		'&tabla=estructuraCatalogacion&tipoAccion=Insert';
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					//arma la tabla de configuracion de visualizacion 
-					armarTablaVisualizacion();
-					eleccionCampoX();
-				}
-	});
+	objAH=new AjaxHelper(updateSaveCatalogacion);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.textoPredecesor= $('#textoPredecesor').val();
+	objAH.textoSucesor= $('#textoSucesor').val();
+	objAH.separador= $('#separador').val();
+	objAH.campo= $('#campo').val();
+	objAH.subCampo= $('#subCampo').val();
+	objAH.encabezados= $('#idEncabezado').val();
+	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
+ 	objAH.tipoAccion= 'INSERT';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateSaveCatalogacion(){
+	//arma la tabla de configuracion de visualizacion 
+	armarTablaVisualizacion();
+	eleccionCampoX();
 }
 
 //esta al pedo ver!!!!!!!!!!!!!!!!!!!!!!!!
@@ -180,41 +182,38 @@ function mostrarError(responseText){
 
 function deleteRowVisualizacion(OP,ID){
 
-var params= 	'tipoAccion=Delete&tabla=estructuraCatalogacion&idestcatopac=' + ID;
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					armarTablaVisualizacion();
-				}
-	});
+	objAH=new AjaxHelper(armarTablaVisualizacion);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.tipoAccion= 'DELETE';
+	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
+	objAH.idestcatopac= ID;
+	//se envia la consulta
+	objAH.sendToServer();
 
 }
 
 
 function armarTablaVisualizacion(){
 
- var params= 	'encabezados=' + $('#idEncabezado').val() + 		
-		'&tipoAccion=MostrarTablaVisualizacion&componente=closeUpComboEncabezado';
+	objAH=new AjaxHelper(updateArmarTablaVisualizacion);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezados= $('#idEncabezado').val();
+	objAH.tipoAccion= 'MOSTAR_TABLA_VISUALIZACION';
+	objAH.componente= 'CLOSE_UP_COMBO_ENCABEZADO';
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					$('#divTablaVisualizacion').html(ajax.responseText);
+function updateArmarTablaVisualizacion(responseText){
+	$('#divTablaVisualizacion').html(responseText);
 					zebra('tablaVisualizacion');
 					$('#tablaVisualizacion').tablesorter({	
-//  									sortList:[[0,0],[1,0],[2,0]],
  									widgets: ['zebra'],
   									headers: { 0: { sorter: false},
  										   7: { sorter: false},
  										   8: { sorter: false},
  										   9: { sorter: false}}
-// 									,debug: true
 								});
-
-				}
-	});
 }
 
 function validarDatos(){
@@ -279,11 +278,7 @@ function closeWindow(){
 function onChangeNivel(){
 	cargarTablaEncabezados();
 	$('#divTablaVisualizacion').html('');
-// 	$('#divTablaVisualizacion').slideUp('fast');
-// 	$('#divTablaVisualizacion').slideDown('fast');
 	$('#result').html('');
-// 	$('#result').slideUp('fast');
-// 	$('#result').slideDown('fast');
 }
 
 //********************************************Favoritos****************************************************
@@ -302,40 +297,33 @@ function saveEncabezado(){
 	var itemtypesJSON;
 	itemtypesJSON=JSONstring.make(itemtypes_array);
 
-	var params= 	'encabezado='+ $('#nomEncabezadoAlta').val() + 
-			'&tabla=encabezado&tipoAccion=Insert' +
-			'&nivel=' + $('#nivel').val() +
-//    			'&itemtypes=' + itemtypes_array.toJSONString();
-			'&itemtypes=' + itemtypesJSON;
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					clearDataTextArea();
-					cargarTablaEncabezados();
-				}
-	});
+	objAH=new AjaxHelper(updateSaveEncabezado);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezado= $('#nomEncabezadoAlta').val();
+	objAH.tabla= 'ENCABEZADO';
+	objAH.tipoAccion= 'INSERT';
+	objAH.nivel= $('#nivel').val();
+	objAH.itemtypes= itemtypesJSON;
+	//se envia la consulta
+	objAH.sendToServer();
 }
 
-function toObject(JSON){
-//para acceder a las propiedades
-//object[0].propiedades
-	return eval("("+ JSON +")");
+function updateSaveEncabezado(responseText){
+ 	$('#mensajes').html(responseText);
+	clearDataTextArea();
+	cargarTablaEncabezados();
 }
 
 function updateNombreEncabezado(idEncabezado, nombre){
-	var params= 	'encabezado=' + idEncabezado + 		
-			'&nombre=' + nombre + 
-			'&tipoAccion=UpdateEncebezdo';
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					cargarTablaEncabezados();	
-				}
-	});
+	objAH=new AjaxHelper(cargarTablaEncabezados);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezado= idEncabezado;
+	objAH.nombre= nombre;
+	objAH.tipoAccion= 'UPDATE';
+	objAH.tabla= 'ENCABEZADO';
+	//se envia la consulta
+	objAH.sendToServer();
 
 }
 
@@ -420,37 +408,37 @@ function changeTipoItem(){
 //muestra la tabla de los encabezados, segun nivel e itemtype
 function cargarTablaEncabezados(){
 
-	var params= 	'nivel=' + $('#nivel').val() + 		
-			'&itemtype=' + $('#comboTiposItems').val() + 
-			'&tipoAccion=Select' + 
-			'&componente=cargarTablaEncabezados';
+	objAH=new AjaxHelper(updateCargarTablaEncabezados);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.nivel= $('#nivel').val();
+	objAH.itemtype= $('#comboTiposItems').val();
+	objAH.tipoAccion= 'SELECT';
+	objAH.componente= 'CARGAR_TABLA_ENCABEZADOS';
+	//se envia la consulta
+	objAH.sendToServer();
 
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					$('#divTablaEncabezados').html(ajax.responseText);	
-					zebra('tablaEncabezados');
-  					seleccionarFilaEncabezado();
-				}
-	});
+}
 
+function updateCargarTablaEncabezados(responseText){
+	$('#divTablaEncabezados').html(responseText);	
+	zebra('tablaEncabezados');
+	seleccionarFilaEncabezado();
 }
 
 function deleteEncabezado(idEncabezado){
 
-	var params= 	'encabezado=' + idEncabezado +
-			'&tipoAccion=Delete' +
-			'&tabla=encabezadoCampoOpac';
+	objAH=new AjaxHelper(updateDeleteEncabezado);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezado= idEncabezado;
+	objAH.tipoAccion= 'DELETE';
+	objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
+	//se envia la consulta
+	objAH.sendToServer();
+}
 
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					cargarTablaEncabezados();
-				}
-	});
+function updateDeleteEncabezado(responseText){
+	$('#mensajes').html(responseText);
+	cargarTablaEncabezados
 }
 
 function modificarOrden(encabezado, antOrden, action){
@@ -459,20 +447,15 @@ if((antOrden == 1)&&(action == 'up')){
 	alert("no se puede subir mas");
 }else{
 
-	var params= 	'encabezado=' + encabezado +
-			'&orden=' + antOrden +
-			'&itemtype=' + $('#comboTiposItems').val() + 
-			'&tipoAccion=cambiarOrdenEncabezado' +
-			'&action=' + action;
-
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-					cargarTablaEncabezados();
-				}
-	});
+	objAH=new AjaxHelper(cargarTablaEncabezados);
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezado= encabezado;
+	objAH.orden= antOrden;
+	objAH.itemtype= $('#comboTiposItems').val(); 
+	objAH.tipoAccion= 'CAMBIAR_ORDEN_ENCABEZADO';
+	objAH.action= action;
+	//se envia la consulta
+	objAH.sendToServer();
 
 	}
 }
@@ -549,42 +532,23 @@ function cambiarLineaEncabezado(id){
 	linea= 0;
 	if($("#checkbox"+id).val() == 0){linea= 1;}//encabezado en linea
 
-	var params= 	'encabezado=' + id +
-			'&linea=' + linea +
-			'&tipoAccion=Update' +
-			'&tabla=encabezado';
-
-	$.ajax({	type: "POST", 
-			url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
-			data: params,
- 			complete: function(ajax){
-				}
-	});
+	objAH=new AjaxHelper();
+	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.encabezado= id;
+	objAH.linea= linea;
+	objAH.tipoAccion= 'UPDATE';
+	objAH.tabla= 'ENCABEZADO';
+	//se envia la consulta
+	objAH.sendToServer();
 
 }
 
-/*
-function handOver(){
-	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").hover(
-      		function () {
-			$(this).removeClass();
-			$(this).addClass("selected");
-      		}, 
-      		function () {
-			$(this).removeClass("selected");
-			zebra('tablaEncabezados');
-      		}
-    	);
-}
-*/
 
 //al seleccionar una fila se cambia el estilo para que se vea cual es la que se selecciona
 function seleccionarFilaEncabezado(){
 	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").click(
 		function () {
 			zebra('tablaEncabezados');
-// 			$(this).removeClass();
-// 			$(this).addClass("selected");			
 		}
     	);
 }
@@ -646,7 +610,7 @@ $(document).ready(function() {
 
 
 <br>
-<div class="mensajeError" id="resultError" ><!-- TMPL_VAR NAME="mensajeError" --></div>
+<div id="mensajes" class="mensajeError"></div>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>

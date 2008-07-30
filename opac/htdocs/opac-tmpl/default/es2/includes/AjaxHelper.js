@@ -143,7 +143,10 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					complete: function(ajax){
 						//oculta el estado del AJAX
 						_HiddeState();
- 						helper.onComplete(ajax.responseText);
+ 						if(helper.onComplete){
+ 							helper.onComplete(ajax.responseText);
+						}
+
   					}
 				});
 	}

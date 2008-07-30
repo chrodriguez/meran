@@ -38,9 +38,9 @@ var campo= $('#campoHelpId').val();
 var params= 'tipoAccion=Select&componente=ayudaCampoMARKsubcampo&campo=' + campo;
 
 $.ajax({	type: "POST", 
-		url: "/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl",
+		url: '/cgi-bin/koha/autocompletables/ayudaMARKAutocomplete.pl',
 		data: params,
-		beforeSend: Init,
+// 		beforeSend: Init,
 		complete: function parsearSubCampos(ajax){
  			var response = ajax.responseText || "no response text";	
  			var arreglo=response.split("#");
@@ -51,7 +51,7 @@ $.ajax({	type: "POST",
  				  datos= arreglo[i].split("/");
 				  textArea.val(textArea.val() + datos[1] + "\n");
   				}
-			HiddeState();
+// 			HiddeState();
  			}
 	});
 
@@ -62,7 +62,7 @@ $.ajax({	type: "POST",
 function CrearAutocompleteHelp(){
 	// q= valor de campoHelp
 	$("#campoHelp").search();
-	$("#campoHelp").autocomplete(	'/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl',{
+	$("#campoHelp").autocomplete('/cgi-bin/koha/autocompletables/ayudaMARKAutocomplete.pl',{
  		formatItem: function(row){
 			return row[0]+" - "+row[1];
 		},
