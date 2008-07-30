@@ -34,23 +34,31 @@ function filtroPorAutor(id){
 }
 
 function editarNivel1(id1,itemtype){
-	location.href="../acqui.simple/agregarItem.pl?origen=detalle&nivel=1&itemtype="+itemtype+"&id1="+id1;
+	location.href="../acqui.simple/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=1";
 }
 
 function editarGrupo(id1,id2,itemtype){
-	location.href="../acqui.simple/agregarItem.pl?origen=detalle&nivel=2&itemtype="+itemtype+"&id1="+id1+"&id2="+id2;
+	location.href="../acqui.simple/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=2&id2="+id2;
 }
 
 function editarEjemplar(id1,id3,itemtype){
-	var params="itemtype="+itemtype+"&id1="+id1+"&id3="+id3;
-	crearForm("../acqui.simple/editarEjemplar.pl",params);
-// 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id3="+id3;
+	var obj=new objeto_datos();
+	obj.itemtype=itemtype;
+	obj.id1=id1;
+	obj.id3=id3;
+	obj=JSONstring.make(obj);
+	var params="obj="+obj;
+	location.href="../acqui.simple/editarEjemplar.pl?obj="+obj;
 }
 
 function editarEjemplares(id1,id2,itemtype){
-	var params="itemtype="+itemtype+"&id1="+id1+"&id2="+id2+"&json=0";
-	crearForm("../acqui.simple/editarEjemplar.pl",params);
-// 	location.href="../acqui.simple/editarEjemplar.pl?itemtype="+itemtype+"&id1="+id1+"&id2="+id2;
+	var obj=new objeto_datos();
+	obj.itemtype=itemtype;
+	obj.id1=id1;
+	obj.id2=id2;
+	obj.json=0;
+	obj=JSONstring.make(obj);
+	location.href="../acqui.simple/editarEjemplar.pl?obj="+obj;
 }
 
 function borrarGrupo(id1,id2){

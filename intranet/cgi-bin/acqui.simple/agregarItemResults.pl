@@ -19,13 +19,15 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $nivel=$input->param('nivel');
-my $itemtype=$input->param('itemtype')||'ALL';
-my $id1=$input->param('id1') || -1;
-my $id2=$input->param('id2') || -1;
-my $accion=$input->param('accion2')||$input->param('accion')||-1;
-#busca la primera vez la descripcion del itemtype y despues lo toma de la pagina.
-my $descripcion=$input->param('descripcion') || C4::AR::Busquedas::getItemType($itemtype);
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $nivel=$obj->{'nivel'};
+my $itemtype=$obj->{'itemtype'}||'ALL';
+my $id1=$obj->{'id1'} || -1;
+my $id2=$obj->{'id2'} || -1;
+my $accion=$obj->{'accion2'} ||$obj->{'accion'} ||-1;
+
+my $descripcion= C4::AR::Busquedas::getItemType($itemtype);
 
 
 if($accion eq "borrar"){
@@ -50,17 +52,17 @@ elsif($accion eq "modificarN1" && $nivel == 1){
 #GUARDADO de los items
 my $paso;
 if($nivel == 3){
-	$paso=$input->param('paso')||$nivel-1;
+	$paso=$obj->{'paso'}||$nivel-1;
 }
 else{
-	$paso=$input->param('paso')||$nivel;
+	$paso=$obj->{'paso'}||$nivel;
 }
 
 my @nivel1o2;
 my @nivel3;
-my $respuesta= $input->param('respuesta');
-if($respuesta ne ""){
-	my $objetosResp= &C4::AR::Utilidades::from_json_ISO($respuesta);
+
+my $objetosResp= $obj->{'respuesta'};
+if($objetosResp){
 	foreach my $obj(@$objetosResp){
 		if($obj->{'nivel'} < 3){
 			push(@nivel1o2,$obj);
@@ -71,9 +73,9 @@ if($respuesta ne ""){
 	}
 }
 
-my $idAutor=$input->param('idAutor');
-my $cantItems=$input->param('cantitems'); #recupero la cantidad de items del nivel 3 a insertar
-my $barcode=$input->param('codbarra'); #recupero el codigo de barra para el o los items del nivel 3
+my $idAutor=$obj->{'idAutor'};
+my $cantItems=$obj->{'cantitems'}; #recupero la cantidad de items del nivel 3 a insertar
+my $barcode=$obj->{'codbarra'}; #recupero el codigo de barra para el o los items del nivel 3
 
 my $error=0;
 my $codMsg;
@@ -95,12 +97,7 @@ if($paso > 1 && ($accion ne "modificarN1" && $accion ne "agregarN2" && $accion n
 		}
 		else{
 			($error,$codMsg)=guardarNivel3($id1,$id2,$barcode,$cantItems,$tipoDocN2,\@nivel3);
-# 			if($error){
-				$mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-# 			}
-# 			else{
-# 				$mensaje=&C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-# 			}
+			$mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=2;
 		}
 	}
@@ -117,8 +114,11 @@ elsif($accion eq "modificarN1" && $paso==2){
 #BUSQUEDA de los datos ingresados en el nivel 1 y nivel 2 para mostrar en la pagina del paso 2
 if($paso > 1 && $id1 != -1){
 	my $itemNivel1=&buscarNivel1($id1);
-	my $autor=C4::AR::Busquedas::getautor($itemNivel1->{'autor'});
-	$autor=$autor->{'completo'};
+	my $autor;
+	if($itemNivel1->{'autor'} ne ""){
+		$autor=C4::AR::Busquedas::getautor($itemNivel1->{'autor'});
+		$autor=$autor->{'completo'};
+	}
 	my $titulo=$itemNivel1->{'titulo'};
 	my @itemNivel2=&buscarNivel2PorId1($id1);
 	$template->param(

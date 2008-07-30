@@ -12,10 +12,12 @@ my $input = new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
 
-my $paso=$input->param('paso');
-my $itemtype=$input->param('itemtype');
-my $accion=$input->param('accion');
-my $id1=$input->param('id1');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $paso=$obj->{'paso'};
+my $itemtype=$obj->{'itemtype'};
+my $accion=$obj->{'accion'};
+my $id1=$obj->{'id1'};
 
 #BUSQUEDA de campos modificados que se generan dinamicamente para mostrar en el tmpl
 my $modificar;
@@ -34,8 +36,6 @@ if($paso >= 2){
 	push(@resultsdata,@resultsdata2);
 }
 
-
-# my $resultadoJSON = encode_json \@resultsdata;
 my $resultadoJSON = to_json \@resultsdata;#PARA QUE MUESTRE BIEN LOS ACENTOS.
 
 #Para que no valla a un tmpl

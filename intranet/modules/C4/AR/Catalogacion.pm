@@ -1595,10 +1595,10 @@ sub buscarNivel3PorId2{
 	my @result;
 	while (my $data=$sth->fetchrow_hashref){
 		my $holdbranch= &C4::AR::Busquedas::getBranch($data->{'holdingbranch'});
-		$data->{'holdbranch'}=$holdbranch;
+		$data->{'holdbranch'}=$holdbranch->{'branchname'};
 		
 		my $homebranch= &C4::AR::Busquedas::getBranch($data->{'homebranch'});
-		$data->{'hbranch'}=$homebranch;
+		$data->{'hbranch'}=$homebranch->{'branchname'};
 		
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
 		$data->{'disponibilidad'}=$wthdrawn->{'description'};
@@ -1621,15 +1621,20 @@ sub eliminarNivel1{
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
-	my $query="DELETE FROM nivel1 WHERE id1 = ?";
+
+	my $query="SELECT id1,id3 FROM nivel3 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	while(my $data= $sth->fetchrow_hashref){
+		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+		my $sth=$dbh->prepare($query);
+        	$sth->execute($data->{'id3'});
+	}
+	my $query="DELETE FROM nivel3 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
-	my $query="DELETE FROM nivel1_repetibles WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	
-	my $query="SELECT id1,id2 FROM nivel2 WHERE id1 = ?";
+		my $query="SELECT id1,id2 FROM nivel2 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while(my $data= $sth->fetchrow_hashref){
@@ -1641,15 +1646,11 @@ sub eliminarNivel1{
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
-	my $query="SELECT id1,id3 FROM nivel3 WHERE id1 = ?";
+	my $query="DELETE FROM nivel1_repetibles WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
-	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($data->{'id3'});
-	}
-	my $query="DELETE FROM nivel3 WHERE id1 = ?";
+
+	my $query="DELETE FROM nivel1 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
@@ -1668,14 +1669,6 @@ sub eliminarNivel2{
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	
-	my $query="DELETE FROM nivel2 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-
-	my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-	
 	my $query="SELECT id2,id3 FROM nivel3 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
@@ -1688,13 +1681,21 @@ sub eliminarNivel2{
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 
+	my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+	
+	my $query="DELETE FROM nivel2 WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+
 	$dbh->commit;
 	$dbh->{AutoCommit} = 1;
 }
 
 =item
 eliminarNivel3
-Elimina todo la informacion de un item para el nivel 2
+Elimina todo la informacion de un item para el nivel 3
 FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
 =cut
 sub eliminarNivel3{
@@ -1702,12 +1703,12 @@ sub eliminarNivel3{
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
-	
-	my $query="DELETE FROM nivel3 WHERE id3 = ?";
+
+	my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
 
-	my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+	my $query="DELETE FROM nivel3 WHERE id3 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
 

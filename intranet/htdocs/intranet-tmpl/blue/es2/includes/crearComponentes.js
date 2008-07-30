@@ -19,24 +19,21 @@ function objetoRespuesta(nivel,campo,subcampo,idRep,valor){
 }
 
 /*
+ * objJSON
+ * Objeto que contienen los parametros necesarios para poder ejecutar la consultaAjaxJSON
+ * Es un objeto AjaxHelper.
+ */
+var objJSON;
+
+/*
  * consultarAjaxJSON
  * Funcion que realiza el llamado ajax para obtener el string con los datos necesarios para poder crear los 
  * componentes. Cuando se completa se ejecuta la funcion que procesa el texto que viene de respuesta.
  */
-function consultarAjaxJSON(paso,paramsJSON,url){
-	var params="itemtype="+$("#itemtype").val();
-	if(paramsJSON != ""){
-		params=paramsJSON;
-	}
-	params=params+"&paso="+paso;
-	$.ajax({
-		type: "POST",
-		url: url,
-		data: params,
-		complete: function(ajax){
-				procesarInfoJson(ajax.responseText);
-			}
-	});
+function consultarAjaxJSON(){
+	objJSON.url="/cgi-bin/koha/acqui.simple/agregarItemResultsDB.pl";
+	objJSON.onComplete=procesarInfoJson;
+	objJSON.sendToServer();
 }
 
 /*
@@ -126,8 +123,6 @@ function procesarObjeto(objeto){
 				valor=array.join("\n");
 			}
 			comp=(crearComponente("texta",id,"class='unoxlinea'",""));
-// 			var str=($("#label"+id).html());
-// 			str=str+"<br>UNO POR LINEA";
 			$("#label"+id).html($("#label"+id).html()+"<br>UNO POR LINEA");
 		}
 		else{

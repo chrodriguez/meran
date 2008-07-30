@@ -1,24 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: addbiblio.pl,v 1.32.2.7 2004/03/19 08:21:01 tipaul Exp $
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use CGI;
 use C4::Auth;
@@ -28,11 +9,13 @@ use JSON;
 
 my $input = new CGI;
 
-my $id1=$input->param('id1');
-my $id2=$input->param('id2');
-my $itemtype=$input->param('itemtype');
-my $accion=$input->param('accion');
-my $json=$input->param('json');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $id1=$obj->{'id1'};
+my $id2=$obj->{'id2'};
+my $itemtype=$obj->{'itemtype'};
+my $accion=$obj->{'accion'};
+my $json=$obj->{'json'};
 
 if(!$json){
 	my ($template, $loggedinuser, $cookie)
@@ -45,12 +28,11 @@ if(!$json){
 			     });
 
 	if($accion eq "agregarNivel3"){
-		my $barcodes=$input->param('barcodes');
-		my $cantItems=$input->param('cantItems');
+		my $barcodes=$obj->{'barcodes'};
+		my $cantItems=$obj->{'cantItems'};
 		my $nivel2=&buscarNivel2($id2);
 		my $tipoDoc=$nivel2->{'tipo_documento'};
-		my $respuesta=$input->param('respuesta');
-		my $nivel3 = &C4::AR::Utilidades::from_json_ISO($respuesta);
+		my $nivel3 = $obj->{'respuesta'};
 		my $paraMens;
 		my ($error,$codMsg)=&guardarNivel3($id1,$id2,$barcodes,$cantItems,$tipoDoc,$nivel3);
 		my $mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);

@@ -1601,7 +1601,7 @@ sub getBranch{
     my $query = "SELECT * FROM branches WHERE branchcode=?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($branch);
-    return $sth->fetchrow();
+    return $sth->fetchrow_hashref;
 }
 
 

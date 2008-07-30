@@ -1,6 +1,5 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
@@ -8,12 +7,13 @@
 <script src="/intranet-tmpl/blue/es2/includes/autocompletables.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/crearComponentes.js"></script>
 
-<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
-
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
+<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <script>
+
+/*  *****  EL OBJETO objAH SE ENCUENTRA EN LA LIBRERIA DE seleccionCamposMarc.js ***** */
 
 /*
  * CrearAutocomplete1
@@ -27,27 +27,13 @@ function CrearAutocomplete1(nivel){
 }
 
 /*
- * consultarAjax
- * Funcion que realiza el llamado ajax para realizar las operaciones correspondientes segun los parametros, cuando
- * se completa realiza otro llamado ajax para obtener los datos necesarios para crear las componentes 
- * correspondientes a los parametros recibidos.
+ * updateInfoAgregarItem
+ * Funcion que se ejecuta cuando termina el llamado ajax de varias funciones.
  */
-function consultarAjax(params,nivel,paramsJSON){
-	var url="/cgi-bin/koha/acqui.simple/agregarItemResultsDB.pl";
-	var paso=nivel;
-	if(nivel==3){
-		paso=2;
-	}
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/agregarItemResults.pl",
-		data: params,
-		complete: function(ajax){
-				$("#result2").html(ajax.responseText);
-				CrearAutocomplete1(nivel);
-				consultarAjaxJSON(paso,paramsJSON,url);
-			}
-	});
+function updateInfoAgregarItem(responseText){
+	$("#result2").html(responseText);
+	CrearAutocomplete1(objAH.nivel);
+	consultarAjaxJSON();
 }
 
 /*
@@ -56,8 +42,16 @@ function consultarAjax(params,nivel,paramsJSON){
  */
 function seleccionTipoItem(){
 	$("#result").html("");
-	var params="itemtype="+$("#itemtype").val()+"&nivel=1&paso=1";
-	consultarAjax(params,1,"");
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#itemtype").val();
+	objJSON.paso=1;
+
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.nivel=1;
+	objAH.itemtype=$("#itemtype").val();
+	objAH.paso=1;
+	objAH.sendToServer();
 }
 
 /*
@@ -67,8 +61,17 @@ function seleccionTipoItem(){
  */
 function borrarN1(id1){
 	$("#result").html("");
-	var params="id1="+id1+"&itemtype="+$("#itemtype").val() +"&nivel=1&accion2=borrar";
-	consultarAjax(params,1,"");
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#itemtype").val();
+	objJSON.paso=1;
+
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.nivel=1;
+	objAH.itemtype=$("#itemtype").val();
+	objAH.accion2="borrar";
+	objAH.sendToServer();
 }
 
 /*
@@ -78,9 +81,20 @@ function borrarN1(id1){
  */
 function modificarN1(id1){
 	$("#result").html("");
-	var params= "id1="+id1+"&itemtype="+ $("#itemtype").val() +"&nivel=1&accion=modificarN1";
-	var paramsJSON="id1="+id1+"&accion=modificarN1"+"&itemtype=ALL";
-	consultarAjax(params,1,paramsJSON);
+
+	objJSON=new AjaxHelper();
+	objJSON.id1=id1;
+	objJSON.accion="modificarN1";
+	objJSON.itemtype="ALL";
+	objJSON.paso=1;
+
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.nivel=1;
+	objAH.itemtype=$("#itemtype").val();
+	objAH.accion="modificarN1";
+	objAH.sendToServer();
 }
 
 /*
@@ -90,8 +104,19 @@ function modificarN1(id1){
  */
 function borrarGrupo(id1,id2){
 	$("#result").html("");
-	var params= "id1="+id1+"&id2="+id2+"&itemtype="+ $("#itemtype").val() +"&accion2=borrarN2";
-	consultarAjax(params,2,"");
+	
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#itemtype").val();
+	objJSON.paso=2;
+	
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.nivel=2;
+	objAH.itemtype=$("#itemtype").val();
+	objAH.accion2="borrarN2";
+	objAH.sendToServer();
 }
 
 /*
@@ -100,15 +125,21 @@ function borrarGrupo(id1,id2){
  * retorna strign en json.
  */
 function ajaxModificarGrupoJSON(id1,id2){
-	var params="id1="+id1+"&id2="+id2+"&json=1";
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
-		data: params,
-		complete: function(ajax){
-				procesarInfoJson(ajax.responseText);
-			}
-	});
+	objAH=new AjaxHelper(procesarInfoJson);
+	objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.json=1;
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoModGrupo
+ * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modificarGrupo.
+ */
+function updateInfoModGrupo(responseText){
+	$("#contenido").html(responseText);
+	ajaxModificarGrupoJSON(objAH.id1,objAH.id2);
 }
 
 /*
@@ -117,18 +148,22 @@ function ajaxModificarGrupoJSON(id1,id2){
  */
 function modificarGrupo(id1,id2){
 	$("#result").html("");
-	var params="id1="+id1+"&id2="+id2+"&json=0";
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
-		data: params,
-		complete: function(ajax){
-				$("#contenido").html(ajax.responseText);
-				ajaxModificarGrupoJSON(id1,id2);
-			}
-	});
+	
+	objAH=new AjaxHelper(updateInfoModGrupo);
+	objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.json=0;
+	objAH.sendToServer();
 }
 
+/*
+ * redirigirURL
+ * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modNivel2 y agregarNivel3.
+ */
+function redirigirURL(responseText){
+	location.href="agregarItem.pl?origen="+objAH.accion+"&id1="+objAH.id1+"&itemtype="+$("#itemtype").val();
+}
 
 /*
  * modNivel2
@@ -138,18 +173,17 @@ function modNivel2(id1,id2){
 	var ok=1;
 	var cantIds=$("#cantIds").val();
 	ok=obtenerIdsValores(cantIds);
-	var itemtype=$("#itemtype").val();
-	var params="id1="+id1+"&itemtype="+itemtype;
 	if(ok){
-		var str=JSONstring.make(arrayjson);
-		$.ajax({
-			type: "POST",
-			url: "/cgi-bin/koha/acqui.simple/editarGrupo.pl",
-			data: "cantIds="+cantIds+"&id1="+id1+"&id2="+id2+"&respuesta="+str+"&accion=modNivel2&json=0",
-			complete: function(ajax){
-				location.href="agregarItem.pl?origen=ModNivel2&itemtype="+itemtype+"&id1="+id1;
-			}
-		});
+		objAH=new AjaxHelper(redirigirURL);
+		objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+		objAH.id1=id1;
+		objAH.id2=id2;
+		objAH.cantIds=cantIds;
+		objAH.respuesta=arrayjson;
+		objAH.accion="modNivel2";
+		objAH.json=0;
+		objAH.sendToServer();
+		
 	}
 	else{
 		alert("Por favor complete los campos del formulario que son obligatorios");
@@ -161,16 +195,19 @@ function modNivel2(id1,id2){
  * Funcion que realiza el llamado ajax para dibujar los componentes en la pantalla del ejemplar a agregar.
  * retorna strign en json.
  */
-function ajaxAgregarEjemplarJSON(params){
-	params=params + "&json=1";
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
-		data: params,
-		complete: function(ajax){
-				procesarInfoJson(ajax.responseText);
-			}
-	});
+function ajaxAgregarEjemplarJSON(id1,id2,itemtype){
+	objAH=new AjaxHelper(procesarInfoJson);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.itemtype=itemtype;
+	objAH.json=1;
+	objAH.sendToServer();
+}
+
+function updateInfoAgrEjemplar(responseText){
+	$("#contenido").html(responseText);
+	ajaxAgregarEjemplarJSON(objAH.id1,objAH.id2,objAH.itemtype);
 }
 
 /*
@@ -179,16 +216,13 @@ function ajaxAgregarEjemplarJSON(params){
  */
 function agregarEjemplar(id1,id2,itemtype){
 	$("#result").html("");
-	var params="id1="+id1+"&id2="+id2+"&itemtype="+itemtype;
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
-		data: params + "&json=0",
-		complete: function(ajax){
-				$("#contenido").html(ajax.responseText);
-				ajaxAgregarEjemplarJSON(params);
-			}
-	});
+
+	objAH=new AjaxHelper(updateInfoAgrEjemplar);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.itemtype=itemtype;
+	objAH.sendToServer();
 }
 
 /*
@@ -204,15 +238,17 @@ function agregarNivel3(id1,id2){
 	var cantItems=$("#cantitems").val();
 	
 	if(ok){
-		var str=JSONstring.make(arrayjson);
-		$.ajax({
-			type: "POST",
-			url: "/cgi-bin/koha/acqui.simple/agregarEjemplar.pl",
-			data: "cantIds="+cantIds+"&id1="+id1+"&id2="+id2+"&respuesta="+str+"&cantItems="+cantItems+"&barcodes="+barcodes+"&accion=agregarNivel3",
-			complete: function(ajax){
-				location.href="agregarItem.pl?id1="+id1+"&itemtype="+itemtype;
-			}
-		});
+		objAH=new AjaxHelper(redirigirURL);
+		objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+		objAH.id1=id1;
+		objAH.id2=id2;
+		objAH.cantIds=cantIds;
+		objAH.cantItems=cantItems;
+		objAH.barcodes=barcodes;
+		objAH.respuesta=arrayjson;
+		objAH.accion="agregarNivel3";
+		objAH.sendToServer();
+		
 	}
 	else{
 		alert("Por favor complete los campos del formulario que son obligatorios");
@@ -227,22 +263,31 @@ function agregarNivel3(id1,id2){
  * poder mandarlo por parametro y poder guardarlos en la base de datos.
  */
 function guardarDatos(paso){
-	var str=JSONstring.make(arrayjson);
-	var params="paso=" +  paso +
-		"&itemtype=" +  $("#itemtype").val() +
-		"&respuesta=" +  str +
-		"&cantIds=" +  $("#cantIds").val() +
-		"&id1=" +  $("#id1").val();
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#itemtype").val();
+	objJSON.paso=paso;
+	
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.paso=paso;
+	objAH.id1=$("#id1").val();
+	objAH.itemtype=$("#itemtype").val();
+	objAH.respuesta=arrayjson;
+	objAH.cantIds=$("#cantIds").val();
+	
 	if(paso==2){
- 		params=params + "&idAutor=" + $("#idAutor").val() +
-			"&accion=" + $("#accion").val() + "&nivel=" + paso;
+		objAH.idAutor=$("#idAutor").val();
+		objAH.accion=$("#accion").val();
+		objAH.nivel=paso;
 	}
 	if(paso==3){
-		params=params + "&codbarra=" + $("#codbarra").val() +
-			"&cantitems=" + $("#cantitems").val() +
-			"&nivel=2";
+		objJSON.paso=2;
+		
+		objAH.codbarra=$("#codbarra").val();
+		objAH.cantitems=$("#cantitems").val();
+		objAH.nivel=2;
 	}
-	consultarAjax(params,paso,"");
+	objAH.sendToServer();
 }
 
 /*
@@ -262,65 +307,72 @@ function guardarItem(paso){
 	}
 }
 
-
 /*
- * agregarNivel2
- * Carga los componentes necesarios a la pagina para poder agregar un grupo al documento con el id1
- * Esta funcion se ejecuta cuando se viene de la pagina busqEjemplar.pl
+ * updateInfoModDetalleGrupo
+ * Funcion que se ejecuta cuando termina el llamado ajax de la parte de ready, origen=detalle y nivel=2.
  */
-function agregarNivel2(array){
-	var id1=array[0].split('=')[1];
-	var itemtype=array[1].split('=')[1];
-	var paramsJSON="id1="+id1+"&itemtype="+itemtype;
-	var params=paramsJSON + "&accion2=agregarN2&nivel=2&paso=2";
-	consultarAjax(params,2,paramsJSON);
-}
-
-
-function modificarDetalleGrupo(id1,id2,itemtype){
-	$.ajax({
-		type: "POST",
-		url: "/cgi-bin/koha/acqui.simple/agregarItemResults.pl",
-		data: "itemtype="+itemtype+"&id1="+id1+"&accion2=agregarN2&nivel=2&paso=2",
-		complete: function(ajax){
-				$("#result2").html(ajax.responseText);
-				modificarGrupo(id1,id2);
-			}
-	});
+function updateInfoModDetalleGrupo(responseText){
+	$("#result2").html(responseText);
+	modificarGrupo(objAH.id1,objAH.id2);
 }
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
+//SE PUEDE MANDAR UN OBJETO A LA URL Y TRABAJARLO EN EN PL, COMO EN prestamos.pl y devolucion.pl!!!!!
 	var array = location.href.split('?');
 	if (array.length >1){
 		var array=array[1].split('&');
 		var origen=array[0].split('=')[1];
+
+		objAH=new AjaxHelper(updateInfoAgregarItem);
+		objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+		objAH.id1=array[1].split('=')[1];
+		objAH.itemtype=array[2].split('=')[1];
 		switch(origen){
 		  case "detalle":
-			var nivel=array[1].split('=')[1];
-			var itemtype=array[2].split('=')[1];
-			var id1=array[3].split('=')[1];
+			var nivel=array[3].split('=')[1];
 			if(nivel==1){
-				var params="id1="+id1+"&itemtype="+ itemtype +"&nivel=1&accion=modificarN1";
-				var paramsJSON="id1="+id1+"&accion=modificarN1"+"&itemtype=ALL";
-				consultarAjax(params,1,paramsJSON);
+				objJSON=new AjaxHelper();	
+				objJSON.id1=objAH.id1;
+				objJSON.accion="modificarN1";
+				objJSON.itemtype="ALL";
+				objJSON.paso=1;
+
+				objAH.debug=true;
+				objAH.nivel=1;
+				objAH.accion="modificarN1";
+				
 			}
 			if(nivel==2){
 				var id2=array[4].split('=')[1];
-				modificarDetalleGrupo(id1,id2,itemtype);
+				objAH.onComplete=updateInfoModDetalleGrupo;
+				objAH.paso=2;
+				objAH.nivel=2;
+				objAH.id2=id2;
+				objAH.accion2="agregarN2";
 			}
 			break;
-		  case "ModNivel2":
-			var itemtype=array[1].split('=')[1];
-			var id1=array[2].split('=')[1];
-			var params="id1="+id1+"&itemtype="+ itemtype +"&nivel=2&accion=modificarN2";
-			var paramsJSON="id1="+id1+"&itemtype="+itemtype;
-			consultarAjax(params,3,paramsJSON);
+		  case "modNivel2":
+			objJSON=new AjaxHelper();
+			objJSON.id1 = objAH.id1;
+			objJSON.itemtype = objAH.itemtype;
+			objJSON.paso=2;
+
+			objAH.nivel=2;
+			objAH.accion="modificarN2";
 			break;
 		  default:
-			agregarNivel2(array);
+			objJSON=new AjaxHelper();
+			objJSON.id1=objAH.id1;
+			objJSON.itemtype=objAH.itemtype;
+			objJSON.paso=2;
+	
+			objAH.paso=2;
+			objAH.nivel=2;
+			objAH.accion2="agregarN2";
 			break;
 		}
+		objAH.sendToServer();
 	}
 } );
 

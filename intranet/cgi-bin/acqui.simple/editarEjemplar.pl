@@ -10,13 +10,15 @@ use JSON;
 
 my $input = new CGI;
 
-my $id1=$input->param('id1');
-my $id2=$input->param('id2');
-my $id3=$input->param('id3');
-my $itemtype=$input->param('itemtype');
-my $accion=$input->param('accion');
-my $todos=$input->param('todos')||0;
-my $json=$input->param('json');
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $id1=$obj->{'id1'};
+my $id2=$obj->{'id2'};
+my $id3=$obj->{'id3'};
+my $itemtype=$obj->{'itemtype'};
+my $accion=$obj->{'accion'};
+my $todos=$obj->{'todos'}||0;
+my $json=$obj->{'json'};
 
 my @niveles3;
 my $cant=0;
@@ -26,7 +28,7 @@ if($id3 ne ""){
 }
 else{
 	$todos=1;
-	@niveles3=&C4::AR::Catalogacion::buscarNivel3PorId2($id2);
+	@niveles3=C4::AR::Catalogacion::buscarNivel3PorId2($id2);
 }
 
 if(!$json){
@@ -45,11 +47,7 @@ if(!$json){
 	my $cant=0;
 
 	if($accion eq "modNivel3"){
-		my $respuesta=$input->param('respuesta');
-		my $objetosResp;
-		if($respuesta ne ""){
-			$objetosResp= &C4::AR::Utilidades::from_json_ISO($respuesta);
-		}
+		my $objetosResp= $obj->{'respuesta'};
 		if($todos){
 			my @ids3=split(/#/,$id3);
 			foreach my $idN3 (@ids3){

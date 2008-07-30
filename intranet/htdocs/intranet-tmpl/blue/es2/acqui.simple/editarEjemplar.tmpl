@@ -13,11 +13,15 @@
 <script>
 
 $(document).ready(function(){
-	var url="/cgi-bin/koha/acqui.simple/editarEjemplar.pl";
-	var paramsJSON="itemtype="+$("#itemtype").val() 
-			+"&id1="+$("#id1").val() + "&id2=" + $("#id2").val() 
-			+"&id3="+$("#id3").val() + "&json=1";
-	consultarAjaxJSON(3,paramsJSON,url);
+	objAH=new AjaxHelper(procesarInfoJson);
+	objAH.url="/cgi-bin/koha/acqui.simple/editarEjemplar.pl";
+	objAH.id1=$("#id1").val();
+	objAH.id2=$("#id2").val();
+	objAH.id3=$("#id3").val();
+	objAH.itemtype=$("#itemtype").val();
+	objAH.json=1;
+	objAH.paso=3;
+	objAH.sendToServer();
 });
 
 
@@ -30,29 +34,33 @@ function buscarChecked(){
 	return str;
 }
 
+function updateModNivel3(responseText){
+	location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+objAH.id1;
+}
 
 function modNivel3(id1,id3){
 	var ok=1;
+	var str;
 	var cantIds=$("#cantIds").val();
 	ok=obtenerIdsValores(cantIds);
 	if(ok){
-		var respuesta=JSONstring.make(arrayjson);
-		var params="cantIds="+cantIds+"&id1="+id1+"&respuesta="+respuesta+"&accion=modNivel3";
+		objAH=new AjaxHelper(updateModNivel3);
+		objAH.url="/cgi-bin/koha/acqui.simple/editarEjemplar.pl";
+		objAH.id1=$("#id1").val();
+		objAH.cantIds=cantIds;
+		objAH.respuesta=arrayjson;
+		objAH.accion="modNivel3";
 		if(id3 != ""){
-			params=params+"&id3="+id3+"&todos=0";
+			objAH.id3=id3;
+			objAH.todos=0;
 		}
 		else{
-			var str=buscarChecked();
-			params=params+"&id3="+str+"&todos=1";
+			str=buscarChecked();
+			objAH.id3=str;
+			objAH.todos=1;
 		}
-		$.ajax({
-			type: "POST",
-			url: "/cgi-bin/koha/acqui.simple/editarEjemplar.pl",
-			data: params,
-			complete: function(ajax){
-				location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+id1;
-			}
-		});
+		if(str != ""){objAH.sendToServer();}
+		else{alert("Por favor elija un documento para aplicar los cambios");}
 	}
 	else{
 		alert("Por favor complete los campos del formulario que son obligatorios");
