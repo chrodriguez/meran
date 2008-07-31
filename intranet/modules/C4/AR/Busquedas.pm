@@ -48,8 +48,9 @@ use vars qw(@EXPORT @ISA);
 		&buscarDatoDeCampoRepetible
 		&buscarTema
 
-		&MARCDetailfecha
+		&MARCDetail
 	
+		&getLibrarian
 		&getautor
 		&getLevel
 		&getLevels
@@ -240,16 +241,12 @@ getLibrarianMARCSubField
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
 sub getLibrarianMARCSubField{
-	my ($campo, $subcampo, $tipo)= @_;
+	my ($campo, $subcampo)= @_;
 	my $dbh = C4::Context->dbh;
 
 	my $query = " SELECT * ";
 	$query .= " FROM marc_subfield_structure ";
 	$query .= " WHERE (tagfield = ? )and(tagsubfield = ?)";
-
-	if($tipo eq "intra"){
-#  		$query .= " and (obligatorio = 1 )";
-	}
 
 	my $sth=$dbh->prepare($query);
    	$sth->execute($campo, $subcampo);
@@ -262,7 +259,7 @@ getLibrarianIntra
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
 sub getLibrarianIntra{
-	my ($campo, $subcampo,$dato, $itemtype) = @_;
+	my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
 
 #busca librarian segun campo, subcampo e itemtype
 	my $librarian= &getLibrarianEstCat($campo, $subcampo, $dato,$itemtype);
@@ -272,14 +269,14 @@ sub getLibrarianIntra{
 		$librarian= &getLibrarianEstCat($campo, $subcampo, $dato,'ALL');
 	}
 	
-	if($librarian->{'liblibrarian'} && !$librarian->{'visible'}){
+	if($librarian->{'liblibrarian'} && !$librarian->{'visible'} && !$detalleMARC){
 		#Si esta catalogado y pero no esta visible retorna 0 para que no se vea el dato
 		$librarian->{'liblibrarian'}=0;
 		$librarian->{'dato'}="";
 		return $librarian;
 	}
 	elsif(!$librarian->{'liblibrarian'}){
-		$librarian= &getLibrarianMARCSubField($campo, $subcampo, 'intra');
+		$librarian= &getLibrarianMARCSubField($campo, $subcampo);
 		$librarian->{'dato'}=$dato;
 	}
 	return $librarian;
@@ -290,7 +287,7 @@ getLibrarianOpac
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion_opac y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
 sub getLibrarianOpac{
-	my ($campo, $subcampo,$dato, $itemtype) = @_;
+	my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
 	my $textPred;	
 	my $textSucc;
 #busca librarian segun campo, subcampo e itemtype
@@ -299,27 +296,22 @@ sub getLibrarianOpac{
  	if(!$librarian){
  		$librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, 'ALL');
  	}
+	elsif($detalleMARC){
+		$librarian= &getLibrarianMARCSubField($campo, $subcampo);
+		$librarian->{'dato'}=$dato;
+	}
 
-#  	if(!$librarian){
-#  		#Si esta catalogado y pero no esta visible retorna 0 para que no se vea el dato
-#  		return 0;
-#  	}
-
-#         $textPred= $librarian->{'textpred'};
-# 	$textSucc= $librarian->{'textsucc'};
-# 	liblibrarian no se devuelve
-# 	return $textPred." ".$textSucc;
 
 	return $librarian;
 }
 
 sub getLibrarian{
-	my ($campo, $subcampo,$dato,$itemtype, $tipo)=@_;
+	my ($campo, $subcampo,$dato,$itemtype,$tipo,$detalleMARC)=@_;
 	my $librarian;
 	if($tipo eq "intra"){
-		$librarian=&getLibrarianIntra($campo, $subcampo,$dato, $itemtype);
+		$librarian=&getLibrarianIntra($campo, $subcampo,$dato, $itemtype,$detalleMARC);
 	}else{
-		$librarian=&getLibrarianOpac($campo, $subcampo,$dato, $itemtype);
+		$librarian=&getLibrarianOpac($campo, $subcampo,$dato, $itemtype,$detalleMARC);
 	} 
 	return $librarian;
 }
@@ -427,10 +419,10 @@ sub buscarNivel3PorId2YDisponibilidad{
 
 	while(my $data=$sth->fetchrow_hashref){
 		my $holdbranch= getBranch($data->{'holdingbranch'});
-		$data->{'holdingbranchNombre'}=$holdbranch;
+		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
 		
 		my $homebranch= getBranch($data->{'homebranch'});
-		$data->{'homebranchNombre'}=$homebranch;
+		$data->{'homebranchNombre'}=$homebranch->{'branchname'};
 		
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
 		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
@@ -629,7 +621,7 @@ sub obtenerDisponibilidadTotal{
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
 sub MARCDetail{
 
-	my ($id3)= @_;
+	my ($id3,$tipo)= @_;
 
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM nivel3 WHERE id3=?";
@@ -644,8 +636,8 @@ sub MARCDetail{
  	my $nivel1=&C4::AR::Catalogacion::buscarNivel1($id1); #C4::AR::Catalogacion;
  	my @autor=&getautor($nivel1->{'autor'});
 
-	my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1MARC($id1, $nivel1, 'opac');
-	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2MARC($id1,$id2,$id3, 'opac',\@nivel1Loop);
+	my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1MARC($id1, $nivel1,$tipo);
+	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2MARC($id1,$id2,$id3,$tipo,\@nivel1Loop);
 
 	return @nivel2Loop;
 }

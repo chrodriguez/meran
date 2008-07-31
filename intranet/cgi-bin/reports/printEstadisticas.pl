@@ -13,9 +13,6 @@ my $input=new CGI;
 
 my $msg="";
 
-my $branches=C4::AR::Busquedas::getBranches();
-my $branch = C4::AR::Busquedas::getBranch($input->param('branch')) || C4::Context->preference("defaultbranch");
-
 my $chkfecha= $input->param('chkfecha');
 my @chck= $input->param('chck');
 my $chkuser= $input->param('chkuser');

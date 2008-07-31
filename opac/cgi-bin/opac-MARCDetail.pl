@@ -19,7 +19,7 @@ my ($template, $borrowernumber, $cookie)
 
 my $idNivel3=$input->param('id3');
 
-my @nivel2Loop= C4::AR::Busquedas::MARCDetail($idNivel3);
+my @nivel2Loop= C4::AR::Busquedas::MARCDetail($idNivel3,'intra');
 
 $template->param(
  	loopnivel2 => \@nivel2Loop,

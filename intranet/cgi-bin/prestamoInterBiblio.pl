@@ -70,7 +70,7 @@ if($accion eq "ingresarDatos"){
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
 else{
-	my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branch'));
+	my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branch'))->{'branchname'};
 	my $director = $input->param('director')||"___________________";
 	my @autores=split("#",$input->param('autores'));
 	my @titulos=split("#",$input->param('titulos'));

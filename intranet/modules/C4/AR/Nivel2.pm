@@ -120,7 +120,7 @@ sub detalleNivel2MARC{
 		foreach my $llave (keys %$mapeo){
 			$campo=$mapeo->{$llave}->{'campo'};
 			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$librarian=&C4::AR::Busquedas::getLibrarianMARCSubField($campo, $subcampo, 'opac');
+			$librarian=&C4::AR::Busquedas::getLibrarian($campo, $subcampo,"" ,$itemtype,$tipo,1);
 
 			$marcResult[$i]->{'campo'}= $campo;
 			$marcResult[$i]->{'subcampo'}= $subcampo;
@@ -133,10 +133,10 @@ sub detalleNivel2MARC{
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id2);
 		while (my $data=$sth->fetchrow_hashref){
-			$librarian=&C4::AR::Busquedas::getLibrarianMARCSubField($data->{'campo'}, $data->{'subcampo'},'opac');
+			$librarian=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'},$itemtype,$tipo,1);
 			$marcResult[$i]->{'campo'}= $data->{'campo'};
 			$marcResult[$i]->{'subcampo'}= $data->{'subcampo'};
-			$marcResult[$i]->{'dato'}= $data->{'dato'};
+			$marcResult[$i]->{'dato'}= $librarian->{'dato'};
 			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
 
 			$i++;
@@ -329,7 +329,7 @@ sub detalleNivel2{
 
 			$campo=$mapeo->{$llave}->{'campo'};
 			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo,"" ,$itemtype,$tipo);
+			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo,"" ,$itemtype,$tipo,0);
 			$nivel2Comp[$i]->{'campo'}=$campo;
 			$nivel2Comp[$i]->{'subcampo'}=$subcampo;
 			$nivel2Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
@@ -343,7 +343,7 @@ sub detalleNivel2{
 		my $llave2;
 		while (my $data=$sth->fetchrow_hashref){
 			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo);
+			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
 			if(not exists($llaves{$llave2})){
 				$llaves{$llave2}=$i;
 				$nivel2Comp[$i]->{'campo'}=$data->{'campo'};
@@ -353,8 +353,9 @@ sub detalleNivel2{
 				$i++;
 			}
 			else{
+				my $separador=" ".$getLib->{'separador'}." " ||", ";
 				my $pos=$llaves{$llave2};
-				$nivel2Comp[$pos]->{'dato'}.=", ".$getLib->{'dato'};
+				$nivel2Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
 			}
 		}
 		$sth->finish;

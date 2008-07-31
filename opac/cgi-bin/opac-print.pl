@@ -81,7 +81,7 @@ my $mail=$query->param('mail');
 
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
-
+$branchname=$branchname->{'branchname'};
 my $mailFrom=C4::Context->preference("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 

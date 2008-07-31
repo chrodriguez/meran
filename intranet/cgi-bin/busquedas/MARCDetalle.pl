@@ -21,7 +21,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $idNivel3=$obj->{'id3'};
 
-my @nivel2Loop= &C4::AR::Busquedas::MARCDetail($idNivel3);
+my @nivel2Loop= &C4::AR::Busquedas::MARCDetail($idNivel3,'intra');
 
 $template->param(
  	loopnivel2 => \@nivel2Loop,

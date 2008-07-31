@@ -71,7 +71,7 @@ my %bor;
 $bor{'personnumber'}=$pernum;
 
 # Converts the branchcode to the branch name
-$data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'});
+$data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'branchname'};
 
 # Converts the categorycode to the description
 $data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});

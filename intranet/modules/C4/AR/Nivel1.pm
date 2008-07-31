@@ -75,7 +75,7 @@ sub detalleNivel1MARC{
 	$nivel1Comp[$i]->{'campo'}= "245";
 	$nivel1Comp[$i]->{'subcampo'}= "a";
 	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	my $librarian= &C4::AR::Busquedas::getLibrarianMARCSubField('245', 'a', 'opac');
+	my $librarian= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'},'ALL',$tipo,1);
 	$nivel1Comp[$i]->{'librarian'}=  $librarian->{'liblibrarian'}; 
 	$i++;
 
@@ -93,8 +93,8 @@ sub detalleNivel1MARC{
 	while(my $data=$sth->fetchrow_hashref){
 		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
 		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-		$nivel1Comp[$i]->{'dato'}= $data->{'dato'};
-		$librarian= &C4::AR::Busquedas::getLibrarianMARCSubField($data->{'campo'}, $data->{'subcampo'},'opac');
+		$librarian= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo,1);
+		$nivel1Comp[$i]->{'dato'}= $librarian->{'dato'};
 		$nivel1Comp[$i]->{'librarian'}= $librarian->{'liblibrarian'}; 
 	
 		$i++;
@@ -114,7 +114,7 @@ sub detalleNivel1OPAC{
 	$nivel1Comp[$i]->{'campo'}= "245";
 	$nivel1Comp[$i]->{'subcampo'}= "a";
 	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	$getLib= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'}, 'ALL',$tipo);
+	$getLib= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'}, 'ALL',$tipo,0);
 	$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
 	$i++;
 
@@ -132,7 +132,7 @@ sub detalleNivel1OPAC{
 	while(my $data=$sth->fetchrow_hashref){
 		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
 		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-		$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, 'ALL',$tipo);
+		$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, 'ALL',$tipo,0);
 		$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
 		$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
 		$i++;
@@ -152,7 +152,7 @@ sub detalleNivel1{
 	my %llaves;
 	my $i=0;
 	my $autor= $nivel1->{'autor'};
-	my $getLib=&C4::AR::Busquedas::getLibrarian('245', 'a', "",'ALL',$tipo);
+	my $getLib=&C4::AR::Busquedas::getLibrarian('245', 'a', "",'ALL',$tipo,0);
 	$nivel1Comp[$i]->{'campo'}= "245";
 	$nivel1Comp[$i]->{'subcampo'}= "a";
 	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
@@ -173,7 +173,7 @@ sub detalleNivel1{
 	my $llave;
 	while(my $data=$sth->fetchrow_hashref){
 		$llave=$data->{'campo'}.",".$data->{'subcampo'};
-		my $getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo);
+		my $getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo,0);
 		if(not exists($llaves{$llave})){
 			$llaves{$llave}=$i;
 			$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
@@ -183,8 +183,9 @@ sub detalleNivel1{
 			$i++;
 		}
 		else{
+			my $separador=" ".$getLib->{'separador'}." " ||", ";
 			my $pos=$llaves{$llave};
-			$nivel1Comp[$pos]->{'dato'}.=", ".$getLib->{'dato'};
+			$nivel1Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
 		}
 	}
 	$sth->finish;

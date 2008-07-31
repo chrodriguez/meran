@@ -43,6 +43,7 @@ my $result;
 
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
+$branchname=$branchname->{'branchname'};
 $mailSubject=~ s/BRANCH/$branchname/;
                                                                                                                              
 my $mailFrom=C4::Context->preference("mailFrom");

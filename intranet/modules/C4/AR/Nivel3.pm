@@ -23,11 +23,11 @@ detalleDisponibilidad
 Devuelve la disponibilidad del item que viene por paramentro.
 =cut
 sub detalleDisponibilidad{
-        my ($item) = @_;
+        my ($id3) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM availability WHERE item = ? ORDER BY date DESC";
+        my $query = "SELECT * FROM availability WHERE id3 = ? ORDER BY date DESC";
         my $sth = $dbh->prepare($query);
-        $sth->execute($item);
+        $sth->execute($id3);
 	my @results;
 	my $i=0;
 	while (my $data=$sth->fetchrow_hashref){$results[$i]=$data; $i++; }
@@ -58,12 +58,12 @@ sub detalleNivel3MARC{
 		foreach my $llave (keys %$mapeo){
 			$campo=$mapeo->{$llave}->{'campo'};
 			$subcampo=$mapeo->{$llave}->{'subcampo'};
-
-			$librarian=&C4::AR::Busquedas::getLibrarianMARCSubField($campo, $subcampo, 'opac');
+			my $dato=$row->{$mapeo->{$llave}->{'campoTabla'}};
+			$librarian=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, $dato,$itemtype,$tipo,1);
 
 			$marcResult[$i]->{'campo'}= $campo;
 			$marcResult[$i]->{'subcampo'}= $subcampo;
-			$marcResult[$i]->{'dato'}= $row->{$mapeo->{$llave}->{'campoTabla'}};
+			$marcResult[$i]->{'dato'}= $librarian->{'dato'};
 			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
 	
 			$i++;
@@ -73,11 +73,11 @@ sub detalleNivel3MARC{
         	$sth->execute($id3);
 		while (my $data=$sth->fetchrow_hashref){
 
- 			$librarian=&C4::AR::Busquedas::getLibrarianMARCSubField($data->{'campo'}, $data->{'subcampo'}, 'opac');
+ 			$librarian=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},$itemtype,$tipo,1);
 
 			$marcResult[$i]->{'campo'}= $data->{'campo'};
 			$marcResult[$i]->{'subcampo'}= $data->{'subcampo'};
-			$marcResult[$i]->{'dato'}= $data->{'dato'};
+			$marcResult[$i]->{'dato'}= $librarian->{'dato'};
 			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
 
 			$i++;
@@ -123,7 +123,7 @@ sub detalleNivel3OPAC{
 			$nivel3Comp[$i]->{'campo'}=$campo;
 			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
 			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$getLib= &C4::AR::Busquedas::getLibrarian($campo, $subcampo, "", $itemtype,$tipo);
+			$getLib= &C4::AR::Busquedas::getLibrarian($campo, $subcampo, "", $itemtype,$tipo,0);
 			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
 			$nivel3Comp[$i]->{'dato'}= $dato;
 			$i++;
@@ -135,7 +135,7 @@ sub detalleNivel3OPAC{
 		while (my $data=$sth->fetchrow_hashref){
 			$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
 			$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-			$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'}, $itemtype,$tipo);
+			$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'}, $itemtype,$tipo,0);
 			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
 			$nivel3Comp[$i]->{'dato'}= $getLib->{'dato'};
 
@@ -172,7 +172,7 @@ sub detalleNivel3{
 		foreach my $llave (keys %$mapeo){
 			$campo=$mapeo->{$llave}->{'campo'};
 			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, "",$itemtype,$tipo);
+			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, "",$itemtype,$tipo,0);
 			$nivel3Comp[$i]->{'campo'}=$campo;
 			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
 			$nivel3Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
@@ -186,7 +186,7 @@ sub detalleNivel3{
 		my $llave2;
 		while (my $data=$sth->fetchrow_hashref){
 			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo);
+			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
 			if(not exists($llaves{$llave2})){
 				$llaves{$llave2}=$i;
 				$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
@@ -196,8 +196,9 @@ sub detalleNivel3{
 				$i++;
 			}
 			else{
+				my $separador=" ".$getLib->{'separador'}." " ||", ";
 				my $pos=$llaves{$llave2};
-				$nivel3Comp[$pos]->{'dato'}.=", ".$getLib->{'dato'};
+				$nivel3Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
 			}
 		}
 		$sth->finish;

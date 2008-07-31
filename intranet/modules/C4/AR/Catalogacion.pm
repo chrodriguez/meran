@@ -1519,10 +1519,10 @@ sub buscarNivel3{
 	if($data=$sth->fetchrow_hashref){
 
 		my $holdbranch= C4::AR::Busquedas::getBranch($data->{'holdingbranch'});
-		$data->{'holdbranch'}=$holdbranch;
+		$data->{'holdbranch'}=$holdbranch->{'branchname'};
 		
 		my $homebranch= &C4::AR::Busquedas::getBranch($data->{'homebranch'});
-		$data->{'hbranch'}=$homebranch;
+		$data->{'hbranch'}=$homebranch->{'branchname'};
 		
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
 		$data->{'disponibilidad'}=$wthdrawn->{'description'};
