@@ -38,33 +38,11 @@ $(document).ready(function() {
 	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
 	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
 
-// 	alert(usuario.ID + " " + usuario.text);
-
 	detallePrestamos(usuario.ID);
 	detalleReservas(usuario.ID);
 
 });
 
-/*
-function devolver_renovar(accion){
-	var chck=$("input[@name=chkboxPrestamos]:checked");
-	var array=new Array;
-	for(var i=0; i< chck.length; i++){
-		var it=new item();
-		it.id3=chck[i].value;
-		it.barcode=chck[i].id;
-		array[i]=it;
-	}
-	var usuario=new objeto_usuario();
-	usuario.ID=$("#borrnumber").val();
-	usuario.text="<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->";
-	var obj=new objeto_datos();
-	obj.array_ids3=array;
-	obj.usuario=usuario;
-	obj.accion=accion;
-	obj=JSONstring.make(obj);
-	location.href="../circ/devoluciones.pl?obj="+obj;
-}*/
 
 //REDEFINIDO, se encuentra en circulacion.js
 function updateInfoDevRen(responseText){
@@ -105,45 +83,22 @@ function updateInfoPrestarReserva(responseText){
 	detalleReservas(usuario.ID);
 }
 
-
-/*
-function prestar(){
-	var chck=$("input[@name=chkboxReservas]:checked");
-	var array=new Array;
-	for(var i=0; i< chck.length; i++){
-		var it=new item();
-		it.id3=chck[i].value;
-		it.barcode=chck[i].id;
-		array[i]=it;
-	}
-	var usuario=new objeto_usuario();
-	usuario.ID=$("#borrnumber").val();
-	usuario.text="<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->";
-	var obj=new objeto_datos();
-	obj.array_ids3=array;
-	obj.usuario=usuario;
-	obj=JSONstring.make(obj);
-	location.href="../circ/prestamos.pl?obj="+obj;
-}
-*/
-
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
 		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
-		objAH.borrowernumber="<!-- TMPL_VAR NAME='bornum' -->";
-		objAH.reserveNumber=reserveNumber;
+		objAH.borrowernumber= usuario.ID;
+		objAH.reserveNumber= reserveNumber;
 		objAH.sendToServer();
         }
 }
 
 function updateInfoCancelacion(responseText){
-// 	location.href="moremember.pl?bornum=<!-- TMPL_VAR NAME='bornum' -->";
+
 	var Message=JSONstring.toObject(responseText);
 	setMessage(Message);
 	detalleReservas(objAH.borrowernumber);
-// 	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
 function confirm_deletion() {
@@ -158,7 +113,7 @@ function detallePrestamos(borr){
 
 	objAH=new AjaxHelper(updateDetallePrestamos);
 	objAH.url='/cgi-bin/koha/members/detallePrestamos.pl';
-	objAH.borrnumber="<!-- TMPL_VAR NAME='bornum' -->";
+	objAH.borrnumber= borr;
 	objAH.sendToServer();
 }
 
@@ -171,7 +126,7 @@ function detalleReservas(borr){
 
 	objAH=new AjaxHelper(updateDetalleReservas);
 	objAH.url='/cgi-bin/koha/members/detalleReservas.pl';
-	objAH.borrnumber="<!-- TMPL_VAR NAME='bornum' -->";
+	objAH.borrnumber= borr;
 	objAH.sendToServer();
 }
 
@@ -217,6 +172,7 @@ function updateDetalleReservas(responseText){
 	</tr>
 </table>
 <br><br>
+
 <div class="divDatosUsuario">
 	<!-- TMPL_IF NAME="foto_name" -->
 		<img border="0" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"><br>
@@ -355,14 +311,11 @@ function updateDetalleReservas(responseText){
 <div style="clear:both">
 <input type="hidden" id="borrnumber" value="<!-- TMPL_VAR name='bornum' -->">
 
-PRESTAMOS
+<!--DETALLE DE PRESTAMOS-->
 <div id="prestamos"></div>
-FIN PRESTAMOS
 
-
-RESERVAS
+<!-- DETALLE DE RESERVAS -->
 <div id="reservas"></div>
-FIN RESERVAS
 
 
 <!-- TMPL_IF name="sanctions" -->
