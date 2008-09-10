@@ -22,6 +22,7 @@ function openWindowHelp(){
 	$('.windowBlur').show();
 	$('#windowHelp').draggable({opacity: 0.7777});
 	$('#windowHelp').show();
+	$('#windowHelp').centerObject();	
 }
 
 function clearInput(){

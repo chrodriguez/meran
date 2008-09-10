@@ -9,6 +9,7 @@ use C4::AR::Reservas;
 use C4::Interface::CGI::Output;
 use C4::AR::Mensajes;
 use C4::AR::Utilidades;
+use C4::Date;
 
 
 my $input = new CGI;
@@ -42,17 +43,65 @@ $params{'issuesType'}= 'DO';
 my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
 my $acciones;
 
-if($error){
-	$acciones= C4::AR::Mensajes::getAccion($codMsg);
-	if($acciones->{'tablaReservas'}){
-	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
-		my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
+$acciones= C4::AR::Mensajes::getAccion($codMsg);
 
+
+my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
+
+if($error){
+#SE PRODUJO ALGUN ERROR
+
+	if($acciones->{'maximoReservas'}){
+	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
 		$template->param (
 			RESERVES => $reservas
 		);
 	}
+}else{
+# SE REALIZO LA RESERVA CON EXITO
+
+	my $dateformat = C4::Date::get_date_format();
+	my $branches = C4::AR::Busquedas::getBranches();
+	my @realreserves;
+	my $rcount = 0;
+	
+	my @waiting;
+	my $wcount = 0;
+	foreach my $res (@$reservas) {
+
+		if ((C4::Date::Date_Cmp(ParseDate("today"),C4::Date::ParseDate($res->{'rreminderdate'})) > 0)){
+			$res->{'color'} ='red'; 
+		}
+	
+		$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
+		$res->{'rnotificationdate'} = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
+	
+		my $author= C4::AR::Busquedas::getautor($res->{'rautor'});
+		#paso como parametro ID de autor de la reserva
+		#guardo el Apellido, Nombre del autor
+		$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
+		
+		if ($res->{'rid3'}) {
+			#Reservas para retirar
+			$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchname'};
+			push @waiting, $res;
+			$wcount++;
+		}else{
+			push @realreserves, $res;
+			$rcount++;
+		}
+	}#end foreach
+	
+	$template->param(	
+# 				waiting_count => $wcount,
+				WAITING => \@waiting,
+# 				reserves_count => $rcount,
+				RESERVES => \@realreserves,
+	);
 }
+
+
+
 
 $template->param (
 	id1 => $id1,
@@ -60,7 +109,8 @@ $template->param (
 	message	=> $message,
 	error	=> $error,
 	reservaGrupo => $acciones->{'reservaGrupo'},
-	tablaReservas => $acciones->{'tablaReservas'},
+	maximoReservas => $acciones->{'maximoReservas'},
+	materialParaRetirar => $acciones->{'materialParaRetirar'},
 	CirculationEnabled => C4::Context->preference("circulation"),
 );
 

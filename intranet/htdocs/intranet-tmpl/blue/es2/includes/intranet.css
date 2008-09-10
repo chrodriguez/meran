@@ -421,16 +421,6 @@ font-size: 12px;
 
 }
 			
-.tablemsg{
-        border:0;
-        }
-.fontmsg {
-        text-decoration: none;
-        font-size:10pt;
-        font-family:verdana;
-        color:red;
-	font-weight:bold;
-}
 	
 .state {
 background:#3C9EB4 url(../images/medio.png) repeat-x scroll 0%;
@@ -708,5 +698,34 @@ div.detalle{
 	color:blue;
 }
 
+
+.tableMsgUser{
+
+	Background-color: #000000;
+	border:0;
+}
+
+.fontMsgUser{
+
+        text-decoration: none;
+        font-size:12pt;
+        font-family:verdana;
+        color:#f2f2f2;
+	font-weight:bold;
+
+}
+
+.tableMsgConfirmation{
+
+        border:0;
+}
+.fontMsgConfirmation {
+
+        text-decoration: none;
+        font-size:10pt;
+        font-family:verdana;
+        color:red;
+	font-weight:bold;
+}
 
 /* end agregado */

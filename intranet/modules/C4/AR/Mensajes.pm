@@ -133,6 +133,10 @@ my %mensajesINTRA = (
 	'U302' => '',
 	'U303' => '',
 	'U304' => 'El usuario no hizo el curso de koha.',
+	'U305' => 'Disculpe, no se pudo eliminar el item con c&oacute;digo de barras *?*, intente nuevamente.',
+	'U306' => 'Disculpe, no se pudo eliminar el grupo *?*, intente nuevamente.',
+	'U307' => 'Disculpe, no se pudo eliminar el registro *?*, intente nuevamente.',
+	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::prestar.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
@@ -145,6 +149,9 @@ my %mensajesINTRA = (
 	'B409' => 'Error en funcion C4::Auth::t_operacionesDeINTRA',
 	'B410' => 'Error en funcion C4::AR::CatalogacionOpac::t_insertarEncabezado',
 	'B411' => 'Error en funcion C4::AR::CatalogacionOpac::t_deleteEncabezado',
+	'B412' => 'Error en funcion C4::AR::Nivel3::t_deleteItem',
+	'B413' => 'Error en funcion C4::AR::Nivel2::t_deleteGrupo',
+	'B414' => 'Error en funcion C4::AR::Nivel1::t_deleteNivel1',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
@@ -157,6 +164,9 @@ my %mensajesINTRA = (
 	'VO801' => 'Disculpe, no se pudo ingresar el Encabezado, intente nuevamente',
 	'VO802' => 'Disculpe, no se pudo eliminar el Encabezado, intente nuevamente',
 	'VO803' => 'Se elimin&oacute; el encabezado con &eacute;xito',
+	'M901' => 'Se elimin&oacute; con &eacute;xito el item con c&oacute;digo de barras *?* .',
+	'M902' => 'Se elimin&oacute; con &eacute;xito el grupo *?* .',
+	'M903' => 'Se elimin&oacute; con &eacute;xito el Registro *?* .',
 );
 
 sub getMensaje {
@@ -181,8 +191,13 @@ sub getAccion {
 	my %acciones;
 	
 	if($codigo eq 'R001'){
-		$acciones{'tablaReservas'}= 1;
+		$acciones{'maximoReservas'}= 1;
+# 		$acciones{'materialEnEspera'}= 0;
 	}
+
+ 	if($codigo eq 'U302'){
+ 		$acciones{'materialParaRetirar'}= 1;
+ 	}
 
 	if($codigo eq 'U303'){
 		$acciones{'reservaGrupo'}= 1;
@@ -198,6 +213,7 @@ Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 =cut
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
+
 	my $paraMens;
 	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
 	open(A,$path);

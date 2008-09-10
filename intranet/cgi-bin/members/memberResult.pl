@@ -42,6 +42,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
+
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'surname';
 my $member=$obj->{'member'};
@@ -84,6 +85,7 @@ for (my $i=0; $i < $cantR; $i++){
         	cardnumber => $results->[$i]{'cardnumber'},
         	surname => $results->[$i]{'surname'},
         	firstname => $results->[$i]{'firstname'},
+		completo => $results->[$i]{'surname'}.", ".$results->[$i]{'firstname'},
         	categorycode => $results->[$i]{'categorycode'},
         	streetaddress => $results->[$i]{'streetaddress'},
         	documenttype => $results->[$i]{'documenttype'},

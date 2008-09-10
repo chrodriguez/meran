@@ -30,7 +30,6 @@
   	</tr>
    	</thead>
 	<tbody>
-<!--Miguel 05-02-07 comento esto (href) pq sino ordena mal, hay q hacer una fucion para consultar el usuario-->
 
   <!-- TMPL_LOOP NAME=resultsloop -->
   	<tr  align="center" class="inputFontNormal">
@@ -40,7 +39,10 @@
 			<!-- TMPL_VAR NAME=cardnumber -->
 		</td>
      		<td width=250 align="left">
-			<a class="inputFontNormal" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname --></a>
+			<a class="inputFontNormal" 
+			href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->&completo=<!-- TMPL_VAR NAME=completo -->">
+				<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->
+			</a>
 		</td>
       		<td align="left">
 			<!-- TMPL_VAR NAME=documenttype -->&nbsp;<!-- TMPL_VAR NAME=documentnumber -->
@@ -63,11 +65,12 @@
 
  		<td height=25>&nbsp;</td>
     	</tr>
-    	
+
   <!-- /TMPL_LOOP -->
   	<tr>
  		<td class="lineafinaltabla"  align="left" colspan="14"></td>
 	</tr>
 	</tbody>
+
 </table>
 

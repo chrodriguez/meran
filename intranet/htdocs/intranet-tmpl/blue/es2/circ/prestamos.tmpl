@@ -3,6 +3,8 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/KohaHelper.js"></script>	
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
@@ -86,7 +88,13 @@ function updateInfoReservaConChck(responseText){
 </div> 
 <br>
 
-<div id="mensajes"></div>
+<!-- Mensajes de Informacion al Usuario-->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
+
 <div id="detalleUsuario"></div>
 <div id="tablaReservas"></div>
 

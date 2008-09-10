@@ -60,21 +60,25 @@ FIXME
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &t_devolver
-    &t_renovar
-    &DatosPrestamos
-    &DatosPrestamosPorTipo
-    &sepuederenovar
-    &vencimiento
-    &verificarTipoPrestamo
-    &PrestamosMaximos
-    &IssueType
-    &IssuesType
-    &IssuesTypeEnabled
-    &fechaDeVencimiento
-    &enviar_recordatorios_prestamos
-    &crearTicket
-    &estaVencido
+
+	&t_devolver
+	&t_renovar
+	
+	&DatosPrestamos
+	&DatosPrestamosPorTipo
+	&getDatosPrestamoDeId3	
+
+	&sepuederenovar
+	&vencimiento
+	&verificarTipoPrestamo
+	&PrestamosMaximos
+	&IssueType
+	&IssuesType
+	&IssuesTypeEnabled
+	&fechaDeVencimiento
+	&enviar_recordatorios_prestamos
+	&crearTicket
+	&estaVencido
 
    	&getCountPrestamosDeGrupo
 	&prestamosPorUsuario
@@ -212,6 +216,7 @@ sub devolver {
 
 sub getDatosPrestamo{
 	my ($id3)=@_;
+
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3=? AND returndate IS NULL");
 	$sth->execute($id3);
@@ -220,8 +225,10 @@ sub getDatosPrestamo{
 
 sub actualizarPrestamo{
 	my ($id3,$borrowernumber)=@_;
+
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("UPDATE issues SET returndate=NOW() WHERE id3=? AND borrowernumber=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("	UPDATE issues SET returndate=NOW() 
+				WHERE id3=? AND borrowernumber=? AND returndate IS NULL");
 	$sth->execute($id3,$borrowernumber);
 }
 
@@ -232,6 +239,7 @@ fechaDeVencimiento recibe dos parametro, un id3 y la fecha de prestamo lo que ha
 
 sub fechaDeVencimiento {
 	my ($id3,$date_due)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3 = ? AND date_due = ? ");
 	$sth->execute($id3,$date_due);
@@ -344,7 +352,8 @@ sub hayReservasEsperando(){
 	my $sth1=$dbh->prepare("SELECT * FROM reserves WHERE id2=? AND id3 IS NULL ORDER BY timestamp LIMIT 1;");
 	$sth1->execute($id2);
 	my $data1= $sth1->fetchrow_hashref;
-	if ($data1){# esto quiere decir que hay reservas esperando entonces se devuelve un false indicando que no se puede hacer la renovacion del prestamo
+	if ($data1){
+# esto quiere decir que hay reservas esperando entonces se devuelve un false indicando que no se puede hacer la renovacion del prestamo
 		return 1;
 	}
 	else{
@@ -509,6 +518,7 @@ sub IssueType {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM issuetypes WHERE issuecode = ?");
 	$sth->execute($issuetype);
+
 	return($sth->fetchrow_hashref);
 }
 
@@ -592,48 +602,72 @@ DatosPrestamosPorTipo
 Esta funcion retorna los datos de los prestamos de un usuario por tipo de prestamo
 =cut
 sub DatosPrestamosPorTipo {
-	my ($borrowernumber,$issuetype)=@_;
+	my ($borrowernumber,$issuetype_hashref)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $query="SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?";
+	my $query=" SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=? ";
 	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber,$issuetype);
+	$sth->execute($borrowernumber,$issuetype_hashref->{'issuecode'});
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 	my @result;
+
 	while (my $ref= $sth->fetchrow_hashref) {
 		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
 		$ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
 		push @result, $ref;
 	}
 	$sth->finish;
+
 	return(scalar(@result), \@result);
+}
+
+=item
+Esta funcion devuelve la informacion del prestamo junto con el borrower
+=cut
+sub getDatosPrestamoDeId3{
+	my ($id3)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $query= "    SELECT * 
+			FROM issues iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
+	           	INNER JOIN issuetypes ist ON (iss.issuecode=ist.issuecode) 
+			WHERE id3=? AND returndate IS  NULL ";
+
+	my $sth=$dbh->prepare($query);
+    	$sth->execute($id3);
+	
+    	return $sth->fetchrow_hashref;
 }
 
 sub PrestamosMaximos {
   #Esta funcion retorna los prestamos que esten en el maximo
-  my ($borrowernumber)=@_;
-  my $dbh = C4::Context->dbh;
-  
-    my $sth=$dbh->prepare("SELECT * FROM issuetypes;");
-    $sth->execute();
-    my @result;
-   my $cant=0;	
-	my @result;	
-    while (my $iss= $sth->fetchrow_hashref) {
-    	my $issuetype=$iss->{'issuecode'};
-  	my $sth1=$dbh->prepare("SELECT count(*) AS prestamos FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?");
-  	$sth1->execute($borrowernumber,$issuetype);
+	my ($borrowernumber)=@_;
+	my $dbh = C4::Context->dbh;
 	
-	my $tot=$sth1->fetchrow;
-        if ($iss->{'maxissues'} eq $tot) {
-	$result[$cant]= $iss;
-	$cant++;
-	};
-	$sth1->finish;
-  }
-  $sth->finish;
+	my $sth=$dbh->prepare("SELECT * FROM issuetypes;");
+	$sth->execute();
+	my @result;
+	my $cant=0;	
+	my @result;	
 
-  return($cant, @result);
+	while (my $iss= $sth->fetchrow_hashref) {
+		my $issuetype=$iss->{'issuecode'};
+		my $sth1=$dbh->prepare("	SELECT count(*) AS prestamos 
+						FROM issues 
+						WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?");
+		$sth1->execute($borrowernumber,$issuetype);
+		
+		my $tot=$sth1->fetchrow;
+		if ($iss->{'maxissues'} eq $tot) {
+			$result[$cant]= $iss;
+			$cant++;
+		};
+		$sth1->finish;
+	}
+	$sth->finish;
+	
+	return($cant, @result);
 }
 
 =item
@@ -722,12 +756,14 @@ sub enviar_recordatorios_prestamos {
 
 sub crearTicket {
 	my ($id3,$bornum,$loggedinuser)=@_;
+
 	my $dateformat = C4::Date::get_date_format();
 	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation($bornum,0);
 	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation($loggedinuser,0);
 	my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
 	my $ticket_duedate = vencimiento($iteminfo->{'id3'});
 	my %ticket;
+
 	$ticket{'borrowerName'}=CGI::Util::escape($borrower->{'firstname'} . " " . $borrower->{'surname'});
 	$ticket{'borrowerNumber'}=CGI::Util::escape($borrower->{'cardnumber'});
 	$ticket{'documentType'}=CGI::Util::escape($borrower->{'documenttype'});
@@ -742,6 +778,7 @@ sub crearTicket {
 	$ticket{'librarian'}=CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'});
 	$ticket{'issuedescription'}=CGI::Util::escape($iteminfo->{'issuedescription'});
 	$ticket{'librarianNumber'}=CGI::Util::escape($librarian->{'cardnumber'});
+
 	return(\%ticket);
 }
 

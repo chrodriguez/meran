@@ -31,11 +31,19 @@ my $descripcion= C4::AR::Busquedas::getItemType($itemtype);
 
 
 if($accion eq "borrar"){
-	&eliminarNivel1($id1);
+	&C4::AR::Nivel1::t_deleteNivel1($id1);
 	$nivel=1;
 }
 elsif($accion eq "borrarN2"){
-	&eliminarNivel2($id2);
+	my %params;
+	$params{'id2'}= $obj->{'id2'};
+
+	my ($error, $codMsg, $message)= &C4::AR::Nivel2::t_deleteGrupo(\%params);
+
+	$infoRespuesta{'error'}= $error;
+	$infoRespuesta{'codMsg'}= $codMsg;
+	$infoRespuesta{'message'}= $message;
+
 	$nivel=2;
 }
 elsif($accion eq "modificarN1" && $nivel == 1){

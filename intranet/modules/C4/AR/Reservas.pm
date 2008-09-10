@@ -42,6 +42,7 @@ $VERSION = 0.01;
 	&getReservasDeGrupo
 	&cantReservasPorGrupo
 	&DatosReservas
+	&getDatosReservaDeId3
 	&cant_waiting
 
 	&CheckWaiting
@@ -317,6 +318,8 @@ sub t_cancelar_reserva{
 	eval{
 		($error,$codMsg,$paraMens)=cancelar_reserva($params);
 		$dbh->commit;
+
+		$codMsg= 'U308';
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
@@ -611,6 +614,27 @@ sub getReservaDeId3{
 	return ($sth->fetchrow_hashref);
 }
 
+=item
+Esta funcion devuelve la informacion de la reserva sobre un item
+=cut
+sub getDatosReservaDeId3{
+
+	my ($id3)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query= "   	SELECT  * 
+			FROM reserves LEFT JOIN  borrowers ON                      reserves.borrowernumber=borrowers.borrowernumber 
+			WHERE reserves.id3 = ? AND estado <> 'P' ";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id3);
+      	my $result=$sth->fetchrow_hashref;
+        $sth->finish;
+
+        return($result);
+
+}
+
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
         my ($bor)=@_;
@@ -629,15 +653,31 @@ sub cant_reservas{
 
 sub cantReservasPorGrupo{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
-   my ($id2)=@_;
-   my $dbh = C4::Context->dbh;
-   my $sth=$dbh->prepare("	SELECT  count(*) as reservas
-                       		FROM reserves
-                       		WHERE id2 =? AND estado <> 'P' ");
-   $sth->execute($id2);
-   return $sth->fetchrow;
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	SELECT  count(*) as reservas
+				FROM reserves
+				WHERE id2 =? AND estado <> 'P' ");
+	$sth->execute($id2);
+
+	return $sth->fetchrow;
 }
 
+#cuenta las reservas pendientes del grupo
+sub cantReservasPorGrupoEnEspera{
+	my ($id2)=@_;
+	
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	SELECT count(*) as reservas 
+				FROM reserves 
+				WHERE  id2 = ? AND estado <> 'P' AND id3 is Null ");
+	
+	$sth->execute($id2);
+
+	return $sth->fetchrow;
+}
+
+## FIXME reservas por Nivel 1 ?????????????
 sub cantReservasPorNivel1{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
    my ($id1)=@_;
@@ -646,6 +686,7 @@ sub cantReservasPorNivel1{
                        		FROM reserves r INNER JOIN nivel2 n2 ON (r.id2 = n2.id2)
                        		WHERE n2.id1 =? AND estado <> 'P' ");
    $sth->execute($id1);
+
    return $sth->fetchrow;
 }
 
@@ -673,6 +714,15 @@ sub getDisponibilidadGrupo{
 	my $query= "	SELECT count(*) as disponibilidad
 			FROM nivel2 n2 INNER JOIN nivel3 n3 ON (n2.id2 = n3.id2)
 			WHERE (n2.id2 = ?) AND (n3.notforloan = 'DO') ";
+## FIXME
+# Miguel - FALTA VER EL wthdrawn (DISPONIBLE , NO DISPONIBLE) ????????????????
+# puede contar items que sea para prestamo pero que esten perdidos o dados de baja
+# ver como esta en V2
+=item
+SELECT count(*) as disponibilidad
+FROM biblioitems bib INNER JOIN items i ON (bib.biblioitemnumber= i.biblioitemnumber)
+WHERE (bib.biblioitemnumber = 2965) AND(i.notforloan = 0)AND(wthdrawn = 0)
+=cut
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2);
@@ -818,11 +868,14 @@ close(A);
 
 sub verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;
+
 	my $error=0;
-	my $issuetype=C4::AR::Issues::IssueType($issuetype);
-	my $maxissues= $issuetype->{'maxissues'};
-	my ($cantissues, $issues)= C4::AR::Issues::DatosPrestamosPorTipo($borrowernumber,$issuetype);
+	my $issuetype_hashref=C4::AR::Issues::IssueType($issuetype);
+	my $maxissues= $issuetype_hashref->{'maxissues'};
+	my ($cantissues, $issues)= C4::AR::Issues::DatosPrestamosPorTipo($borrowernumber,$issuetype_hashref);
+
 	if ($cantissues >= $maxissues) {$error=1}
+
 	return $error;
 }
 
@@ -1049,10 +1102,10 @@ sub Enviar_Email{
 		my $dateformat = C4::Date::get_date_format();
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
 
-		my $sth=$dbh->prepare("	SELECT n1.titulo,n1.id1 as rid1,n1.autor,reserves.id2 as rid2,
-					FROM reserves INNER JOIN nivel2 n2 ON n2.id3 = reserves.id3
+		my $sth=$dbh->prepare("	SELECT n1.titulo,n1.id1 as rid1,n1.autor,r.id2 as rid2
+					FROM reserves r INNER JOIN nivel2 n2 ON n2.id2 = r.id2
 					INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
-					WHERE  reserves.borrowernumber =? AND reserves.id3= ? ");
+					WHERE  r.borrowernumber =? AND r.id3= ? ");
 
 		$sth->execute($bor,$id3);
 		my $res= $sth->fetchrow_hashref;

@@ -19,6 +19,8 @@ use vars qw(@EXPORT @ISA);
 	&detalleNivel1MARC
 	&detalleNivel1OPAC
 
+	&t_deleteNivel1
+
 );
 
 
@@ -32,13 +34,17 @@ Devuelve los datos del nivel 1 a partir de un id3
 =cut
 sub buscarNivel1PorId3{
         my ($id3) = @_;
+
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT n1.*,a.* FROM nivel1 n1 INNER JOIN nivel3 n3 ON n1.id1 = n3.id1 
-		     LEFT JOIN autores a ON n1.autor = a.id WHERE id3=? ";
+        my $query = "	SELECT n1.*,a.* 
+			FROM nivel1 n1 INNER JOIN nivel3 n3 ON n1.id1 = n3.id1 
+		     	LEFT JOIN autores a ON n1.autor = a.id WHERE id3=? ";
+
         my $sth = $dbh->prepare($query);
         $sth->execute($id3);
         my $res=$sth->fetchrow_hashref;
         $sth->finish();
+
         return $res;
 }
 
@@ -190,4 +196,92 @@ sub detalleNivel1{
 	}
 	$sth->finish;
 	return @nivel1Comp;
+}
+
+
+
+sub t_deleteNivel1 {
+	my($params)=@_;
+
+#se realizan las verificaciones antes de eliminar el Nivel1, reservas sobre el grupo o items
+#y realizar todos los logueos necesarios luego de borrar
+# FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
+	
+	my ($error,$codMsg,$paraMens);
+
+	my $error= 0;
+	if(!$error){
+	#No hay error
+		my $dbh = C4::Context->dbh;
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+		eval {
+			deleteNivel1($params->{'id1'});	
+			$dbh->commit;
+	
+			$codMsg= 'M903';
+			$paraMens->[0]= $params->{'id1'};
+	
+		};
+
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B414';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U307';
+			$paraMens->[0]= $params->{'id1'};
+		}
+		$dbh->{AutoCommit} = 1;
+		
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
+
+=item
+deleteNivel1
+Elimina todo la informacion de un item para el nivel 1
+FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
+=cut
+sub deleteNivel1{
+	my($id1)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query="SELECT id1,id3 FROM nivel3 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	while(my $data= $sth->fetchrow_hashref){
+		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+		my $sth=$dbh->prepare($query);
+        	$sth->execute($data->{'id3'});
+	}
+	my $query="DELETE FROM nivel3 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+
+		my $query="SELECT id1,id2 FROM nivel2 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+	while(my $data= $sth->fetchrow_hashref){
+		my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
+		my $sth=$dbh->prepare($query);
+        	$sth->execute($data->{'id2'});
+	}
+	my $query="DELETE FROM nivel2 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+
+	my $query="DELETE FROM nivel1_repetibles WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+
+	my $query="DELETE FROM nivel1 WHERE id1 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id1);
+
 }

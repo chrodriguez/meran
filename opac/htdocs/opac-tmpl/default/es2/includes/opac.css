@@ -41,11 +41,15 @@ h4{background-color: #A63D3F;
 	color:#606060;
 
 }
+
 .tablemsg{
+
 	Background-color: #000000;
 	border:0;
-	}
+}
+
 .fontmsg{
+
         text-decoration: none;
         font-size:12pt;
         font-family:verdana;

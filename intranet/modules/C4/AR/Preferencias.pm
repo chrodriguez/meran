@@ -28,6 +28,7 @@ Busca todas las variables del sistema o las que correspondan con el parametro qu
 =cut
 sub buscarPreferencias(){
 	my ($str)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my @bind;
 	my $query="SELECT variable,value,explanation,type,options FROM systempreferences ";
@@ -44,17 +45,20 @@ sub buscarPreferencias(){
         	push(@results,$data);
         }
         $sth->finish;
+
 	return (\@results);
 }
 
 sub buscarPreferencia(){
 	my ($var)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM systempreferences WHERE variable=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($var);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
+
 	return($data);
 }
 
@@ -64,6 +68,7 @@ guarda la variable del sistema ingresada.
 =cut
 sub guardarVariable(){
 	my ($var,$val,$exp,$tipo,$op)=@_;
+
 	my $error=0;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM systempreferences WHERE variable=?";
@@ -77,12 +82,14 @@ sub guardarVariable(){
 		$sth->execute($var,$val,$exp,$tipo,$op);
 	}
 	$sth->finish;
+
 	return $error;
 }
 
 
 sub modificarVariable(){
 	my ($var,$valor,$expl)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $query=" UPDATE systempreferences SET value=?,explanation=? WHERE variable=?";
 	my $sth=$dbh->prepare($query);

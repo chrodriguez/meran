@@ -55,10 +55,12 @@ sub buscarBorrower{
 
 sub getBorrower{
 	my ($borrowernumber) = @_;
+
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM borrowers WHERE borrowernumber=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber);
+
 	return ($sth->fetchrow_hashref);
 }
 
@@ -243,6 +245,7 @@ sub ListadoDePersonas  {
 	  	push(@results,$data);
 	}
 	$sth->finish;
+
 	return ($cnt,\@results);
 }
 
@@ -268,6 +271,7 @@ sub obtenerCategoria{
 
 sub obtenerCategorias {
     my $dbh = C4::Context->dbh;
+
     my $sth=$dbh->prepare("SELECT categorycode,description FROM categories ORDER BY description");
     $sth->execute();
     my %labels;
@@ -277,12 +281,14 @@ sub obtenerCategorias {
       $labels{$data->{'categorycode'}}=$data->{'description'};
     }
     $sth->finish;
+
     return(\@codes,\%labels);
 }
 
 
 sub mailIssuesForBorrower{
   	my ($branch,$bornum)=@_;
+
   	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
   	my $sth=$dbh->prepare("SELECT * 
@@ -305,6 +311,7 @@ sub mailIssuesForBorrower{
 		}
   	}
   	$sth->finish;
+
   	return(scalar(@result), \@result);
 }
 

@@ -89,7 +89,8 @@ function detalleUsuario(borrower){
 function updateInfoUsuario(responseText){
 	$('#detalleUsuario').slideDown('slow');
 	//se borran los mensajes de error/informacion del usuario
-	$('#mensajes').html('');
+// 	$('#mensajes').html('');
+	clearMessages();
 	$('#detalleUsuario').html(responseText);
 }
 
@@ -183,8 +184,9 @@ function realizarAccion(accion,chckbox,funcion){
  * prestamos.tmpl---> crea el div para los prestamos
  */
 function generaDivPrestamo(responseText){
+	infoArray= new Array;
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontmsg'>";
+	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var i;
 
 	for(i=0; i<infoArray.length;i++){
@@ -208,6 +210,7 @@ function generaDivPrestamo(responseText){
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
+	scrollTo('confirmar_div');
 }
 
 /*
@@ -234,6 +237,7 @@ function crearCombo(items_array, idSelect){
  * prestamos.tmpl---> se prestan los libros.
  */
 function prestar(){
+
 	for(var i=0; i< infoPrestamos_array.length; i++){
 		//se setea el id3 que se va a prestar
 		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
@@ -249,6 +253,7 @@ function prestar(){
 	objAH.borrowernumber= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
+
 }
 
 /*
@@ -258,13 +263,17 @@ function prestar(){
  */
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-	infoArray= JSONstring.toObject(responseText);
+	clearMessages();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
-	for(var i=0; i<infoArray.length;i++){
-		imprimirTicket(infoArray[i].ticket,i);
-		mensajes= mensajes + infoArray[i].message + '<br>';
+	for(var i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
 	}
-	$('#mensajes').html(mensajes);
+
 	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
@@ -284,6 +293,7 @@ function cancelarDiv(){
  * prestamos.tmpl---> se cancela la reserva.
  */
 function cancelarReserva(reserveNumber){
+
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
@@ -300,8 +310,8 @@ function cancelarReserva(reserveNumber){
  * tabla de reservas.
  */
 function updateInfoCancelacion(responseText){
-	var objJson=JSONstring.toObject(responseText);
-	$('#mensajes').html(objJson.message);
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
 	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
@@ -310,8 +320,10 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevRen(responseText){
+	infoArray= new Array;
+	infoPrestamos_array= new Array();
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontmsg'>";
+	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var accion=infoArray[0].accion;
 	html=html + infoArray[0].accion +":<br>";
 	for(var i=0; i<infoArray.length;i++){
@@ -331,6 +343,7 @@ function generaDivDevRen(responseText){
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
+	scrollTo('confirmar_div');
 }
 
 /*
@@ -355,13 +368,18 @@ function devolver_renovar(accion){
  */
 function updateInfoDevRen(responseText){
 	cancelarDiv();
-	infoArray= JSONstring.toObject(responseText);
+	clearMessages()
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	
 	var mensajes= '';
-	for(i=0; i<infoArray.length;i++){
-		imprimirTicket(infoArray[i].ticket,i);
-		mensajes= mensajes + infoArray[i].message + '<br>';
+	for(i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
 	}
-	$('#mensajes').html(mensajes);
+
 	detallePrestamos(usuario.ID,updateInfoPrestamos);
 }
 
@@ -372,8 +390,16 @@ function updateInfoDevRen(responseText){
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
 function imprimirTicket(ticket,num){
+
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket)
-		window.open ("receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("../circ/receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
+
+function scrollTo(idObj){
+		var divOffset = $('#'+idObj).offset().top;
+		$('html,body').animate({scrollTop: divOffset}, 1000);
+}
+
+

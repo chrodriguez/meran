@@ -114,6 +114,8 @@ print A "desde PRESTAMO \n";
 	my ($error, $codMsg, $message);
 	my %infoOperacion;
 	my @infoOperacionArray;
+	my @infoMessages;
+	my @infoTickets;
 	my @errores;
 
 print A "long: $loop \n";
@@ -154,13 +156,30 @@ print A "id3 antes de setear: $id3\n";
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
 			#guardo los errores
-			my %infoOperacion = (
-        			error => $error,
-        			message => $message,
-				ticket  => $ticketObj,
-    			);
+# 			my %infoOperacion = (
+#         			error => $error,
+#         			message => $message,
+# 				ticket  => $ticketObj,
+#     			);
 
-			push (@infoOperacionArray, \%infoOperacion);
+
+ 			my %messageObj;
+			$messageObj{'error'}= $error;
+			$messageObj{'codMsg'}= $codMsg;
+			$messageObj{'message'}= $message;
+
+			push (@infoMessages, \%messageObj);
+
+			
+			my %infoOperacion = (
+# 						message => \%messageObj,
+						ticket  => $ticketObj,
+			);
+	
+			push (@infoTickets, \%infoOperacion);
+
+
+# 			push (@infoOperacionArray, \%infoOperacion);
 print A "id3: $id3\n";		
 print A "id2: $id2\n";	
 # print A "id1: $id1\n";	
@@ -169,10 +188,20 @@ print A "message: $message \n";
 		}
 	}
 
-	my $infoOperacionJSON = to_json \@infoOperacionArray;
+	my %infoOperaciones;
+	$infoOperaciones{'tickets'}= \@infoTickets;
+	$infoOperaciones{'messages'}= \@infoMessages;
+# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
+	
+	my $infoOperacionJSON = to_json \%infoOperaciones;
 
 	print $input->header;
 	print $infoOperacionJSON;
+
+# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
+# 
+# 	print $input->header;
+# 	print $infoOperacionJSON;
 }
 #*************************************************************************************************************
 
@@ -181,9 +210,11 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $id3;
 	my $barcode;
 	my $ticketObj;
-	my @infoOperacionArray;
+	my @infoTickets;
+	my @infoMessages;
 	my ($error,$codMsg,$message,$paraMens);
 	my %params;
+	my %messageObj;
 	$params{'loggedinuser'}= $loggedinuser;
 	$params{'borrowernumber'}= $borrnumber;
 	$params{'tipo'}= 'INTRA';
@@ -198,11 +229,28 @@ print A "LOOP: $loop\n";
 		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
+			my ($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
+
+  			my %messageObj;
+ 			$messageObj{'error'}= $error;
+ 			$messageObj{'codMsg'}= $codMsg;
+ 			$messageObj{'message'}= $message;
+# 
+ 			push (@infoMessages, \%messageObj);
+
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
 			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
+
+  			my %messageObj;
+ 			$messageObj{'error'}= $error;
+ 			$messageObj{'codMsg'}= $codMsg;
+ 			$messageObj{'message'}= $message;
+# 
+ 			push (@infoMessages, \%messageObj);
+
+
 print A "error: $error --- cod: $codMsg\n";
 			if(C4::Context->preference("print_renew") && !$error){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
@@ -211,15 +259,29 @@ print A "error: $error --- cod: $codMsg\n";
 		}# end elsif($accion eq 'RENOVACION')
 
 		#se genera info para enviar al cliente
-        	my %infoOperacion = (
-					error => $error,
-        			  	message => $message,
+
+# 		my %messageObj;
+# 		$messageObj{'error'}= $error;
+# 		$messageObj{'codMsg'}= $codMsg;
+# 		$messageObj{'message'}= $message;
+
+# 		push (@infoMessages, \%messageObj);		
+
+
+		my %infoOperacion = (
+#         			  	message => \%messageObj,
 				  	ticket  => $ticketObj,
 		);
-		push (@infoOperacionArray, \%infoOperacion);
+
+		push (@infoTickets, \%infoOperacion);
 	}
 
-	my $infoOperacionJSON = to_json \@infoOperacionArray;
+	my %infoOperaciones;
+	$infoOperaciones{'tickets'}= \@infoTickets;
+	$infoOperaciones{'messages'}= \@infoMessages;
+# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
+	
+	my $infoOperacionJSON = to_json \%infoOperaciones;
 
 	print $input->header;
 	print $infoOperacionJSON;

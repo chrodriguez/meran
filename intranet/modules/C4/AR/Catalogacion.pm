@@ -3,7 +3,7 @@ package C4::AR::Catalogacion;
 #Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
 #Tambien en la carga de los items en los distintos niveles y de la creacion del catalogo.
 
-#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -64,9 +64,6 @@ use vars qw(@EXPORT @ISA);
 	&actualizarVisibilidad
 	
 	&eliminarNivelIntranet
-	&eliminarNivel1
-	&eliminarNivel2
-	&eliminarNivel3
 	
 	&guardarCamposModificados
 	&guardarCampoTemporal
@@ -1609,111 +1606,6 @@ sub buscarNivel3PorId2{
 	}
 	return(@result);
 	
-}
-
-=item
-eliminarNivel1
-Elimina todo la informacion de un item para el nivel 1
-FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
-=cut
-sub eliminarNivel1{
-	my($id1)=@_;
-	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-
-	my $query="SELECT id1,id3 FROM nivel3 WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($data->{'id3'});
-	}
-	my $query="DELETE FROM nivel3 WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-
-		my $query="SELECT id1,id2 FROM nivel2 WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($data->{'id2'});
-	}
-	my $query="DELETE FROM nivel2 WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-
-	my $query="DELETE FROM nivel1_repetibles WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-
-	my $query="DELETE FROM nivel1 WHERE id1 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-
-	$dbh->commit;
-	$dbh->{AutoCommit} = 1;
-}
-
-=item
-eliminarNivel2
-Elimina todo la informacion de un item para el nivel 2
-FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
-=cut
-sub eliminarNivel2{
-	my($id2)=@_;
-	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	
-	my $query="SELECT id2,id3 FROM nivel3 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($data->{'id3'});
-	}
-	my $query="DELETE FROM nivel3 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-
-	my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-	
-	my $query="DELETE FROM nivel2 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-
-	$dbh->commit;
-	$dbh->{AutoCommit} = 1;
-}
-
-=item
-eliminarNivel3
-Elimina todo la informacion de un item para el nivel 3
-FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
-=cut
-sub eliminarNivel3{
-	my($id3)=@_;
-	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-
-	my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id3);
-
-	my $query="DELETE FROM nivel3 WHERE id3 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id3);
-
-	$dbh->commit;
-	$dbh->{AutoCommit} = 1;
 }
 
 

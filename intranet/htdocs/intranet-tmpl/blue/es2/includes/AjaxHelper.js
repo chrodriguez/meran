@@ -59,15 +59,17 @@ jQuery.fn.centerObject = function(options) {
 	//se calcula el centro horizontalmente
 	obj.css('left',$(window).width()/2 - this.width()/2);
 
-	if(options.debug){
-		console.log(	"centerObject => \n" +
-				"Total Vertical: " + total + "\n" + 
-				"Dif: " + dif + "\n" + 
-				"Medio: " + (dif + ( $(window).height() )/2) +
-				"\n" +
-				"Total Horizontal: " + $(window).width() + "\n" + 
-				"Medio: " +  $(window).width()/2
-		);
+	if(options){
+		if(options.debug){
+			console.log(	"centerObject => \n" +
+					"Total Vertical: " + total + "\n" + 
+					"Dif: " + dif + "\n" + 
+					"Medio: " + (dif + ( $(window).height() )/2) +
+					"\n" +
+					"Total Horizontal: " + $(window).width() + "\n" + 
+					"Medio: " +  $(window).width()/2
+			);
+		}
 	}
 
 }

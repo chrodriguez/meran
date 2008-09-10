@@ -1,9 +1,18 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/circulacionDetalleItem.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+
+<!-- Ventana para buscar usuarios para prestar -->
+<!-- TMPL_INCLUDE NAME="buscarUsuario.inc" -->
+
 <script>
+
 
 $(document).ready(function(){
 	zebra("tablaResult");
@@ -61,67 +70,9 @@ function editarEjemplares(id1,id2,itemtype){
 	location.href="../acqui.simple/editarEjemplar.pl?obj="+obj;
 }
 
-function borrarGrupo(id1,id2){
-	objAH=new AjaxHelper(updateInfoDetalleConId1);
-	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
-	objAH.id1= id1;
-	objAH.id2= id2;
-	objAH.accion="borrarGrupo";
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateInfoDetalleConId1(responseText){
-	var para="id1="+objAH.id1;
-	crearForm("/cgi-bin/koha/busquedas/detalle.pl",para);
-}
-
-function borrarN1(id1){
-	objAH=new AjaxHelper(updateInfoDetalleSinId1);
-	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
-	objAH.id1= id1;
-	objAH.accion="borrarN1";
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateInfoDetalleSinId1(){
-	crearForm("/cgi-bin/koha/busquedas/filtrado.pl","");
-}
-
-function borrarEjemplar(id1,id3){
-	objAH=new AjaxHelper(updateInfoDetalleConId1);
-	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
-	objAH.id1= id1;
-	objAH.id3= id3;
-	objAH.accion="borrarEjemplar";
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function  cargarImagen(id){
-var params= 'id=' + id  + '&tipo=id2';
-$.ajax({        type: "POST", 
-                url: "/cgi-bin/koha/search-amazon.pl",
-		data: params,
-		complete: function(ajax){
-		if (ajax.responseText != ''){
-		urls=ajax.responseText.split("#");
-		if ((urls[0] != '')&&(urls[1] != '')){
-		$('#' + id).html(  '<a href="/covers/' + urls[1] + '" title="Ver imagen" rel="lightbox"><img src="/covers/' + urls[0] + '" ></a>');
-		}else {
-		if (urls[0] != ''){
-		$('#' + id).html(  '<img src="/covers/' + urls[0] + '" >');
-		}
-		}
-		}
-		
-		}
-	});
-}
 
 /*************************************************CIRCULACUION***************************************************/
-
+// ESTO PARECE QUE NO SE VA A USAR
 function objeto_datos(){
 	this.array_ids3;
 	this.usuario;
@@ -139,56 +90,209 @@ function item(){
 	this.barcode;
 }
 
-function prestar(userId,userNom,id3){
-	if(userId != ""){	
-		var userObj=new objeto_usuario();
-		var array = new Array();
-		var it=new item();
-		var obj=new objeto_datos();
-		userObj.ID=userId;
-		userObj.text=userNom;
-		it.id3=id3;
-		array[0]=it;
-		obj.array_ids3=array;
-		obj.usuario=userObj;
-		obj=JSONstring.make(obj);
-		location.href="../circ/prestamos.pl?obj="+obj;
-	}
-	else{
-		buscarUsuario(id3);
-	}
+
+/******************************************CIRCULACUION DESDE EL DETALLE****************************************/
+var items_array = new Array();
+// parche, ver si se puede hacer mejor
+var grupo;
+
+function buscarUsuario(id3, id2){
+
+	items_array[0]=id3;
+	grupo= id2;
+	openWindow();
 }
 
-function devolver_renovar(accion,userId,userNom,id3){
-	var array=new Array;
-	var it=new item();
-	it.id3=id3;
-	array[0]=it;
-	var usuario=new objeto_usuario();
+
+function renovar(accion,userId,userNom,id2,id3){
+	
+	array=new Array;
+	array[0]= id3;
+	usuario=new objeto_usuario();
 	usuario.ID=userId;
 	usuario.text=userNom;
-	var obj=new objeto_datos();
-	obj.array_ids3=array;
-	obj.usuario=usuario;
-	obj.accion=accion;
-	obj=JSONstring.make(obj);
-	location.href="../circ/devoluciones.pl?obj="+obj;
+
+	objAH=new AjaxHelper(generaDivDevRen);
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'RENOVACION';
+	objAH.datosArray= array;
+	objAH.borrowernumber=usuario.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+// 	scrollTo('confirmar_div');
+	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
+	grupo= id2;
 }
 
-function buscarUsuario(id3){
-// 	window.open ("busquedaDeUsuario.pl?id3="+id3, "Usuario ","width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-alert("FALTA");
-// 	$('.windowBlur').show();
-// 	$('#windowHelp').draggable({opacity: 0.7777});
-// 	$('#windowHelp').show()
+function devolver(accion,userId,userNom,id2,id3){
+
+	array=new Array;
+	array[0]= id3;
+	usuario=new objeto_usuario();
+	usuario.ID=userId;
+	usuario.text=userNom;
+
+	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'DEVOLUCION';
+	objAH.datosArray= array;
+	objAH.borrowernumber= usuario.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+// 	scrollTo('confirmar_div');
+	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
+	grupo= id2;
 }
+
+//esta funcion esta REDEFINIDA, de la funcion que se encuentra en circulacion.js, invocada por la 
+function updateInfoDevRen(responseText){
+// 	alert("ejecuto updateInfoDevRen local!!!!!!!");
+	cancelarDiv();
+	clearMessages();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	var mensajes= '';
+	for(i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+
+	ejemplaresDelGrupo(grupo);
+}
+
+function confirmarPrestamo(){
+
+ 	if(usuario.ID != ""){	
+
+		objAH=new AjaxHelper(generaDivPrestamo);
+		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
+		objAH.datosArray= items_array;
+		objAH.borrowernumber=usuario.ID;
+		//se envia la consulta
+		objAH.sendToServer();
+		closeWindow();
+	}
+}
+
+//muestra los ejemplares del grupo
+function ejemplaresDelGrupo(id2){
+
+	objAH=new AjaxHelper(updateEjemplaresDelGrupo);
+	objAH.url= '/cgi-bin/koha/busquedas/ejemplaresDelGrupo.pl';
+	objAH.id2= id2;
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateEjemplaresDelGrupo(responseText){
+	$('#ejemplaresDelGrupo'+objAH.id2).html(responseText);
+	zebra('tablaResult');
+}
+
+//esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
+function updateInfoPrestarReserva(responseText){
+	cancelarDiv();
+	clearMessages();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	var mensajes= '';
+	for(var i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+	ejemplaresDelGrupo(grupo);
+}
+
+// function scrollTo(idObj){
+// 		var divOffset = $('#'+idObj).offset().top;
+// 		$('html,body').animate({scrollTop: divOffset}, 1000);
+// }
+
 /************************************************FIN CIRCULACUION************************************************/
+
+
+function borrarEjemplar(id1,id2,id3){
+	objAH=new AjaxHelper(updateBorrarEjemplar);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.id2= id2;
+	objAH.id3= id3;
+	objAH.accion="borrarEjemplar";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateBorrarEjemplar(responseText){
+
+	var Message= JSONstring.toObject(responseText);
+	setMessage(Message);
+	ejemplaresDelGrupo(objAH.id2);
+}
+
+function borrarGrupo(id1,id2){
+	objAH=new AjaxHelper(updateBorrarGrupo);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.id2= id2;
+	objAH.accion="borrarGrupo";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateBorrarGrupo(responseText){
+	var Message= JSONstring.toObject(responseText);
+	setMessage(Message);
+	//oculto todo el grupo con los items
+	$('#grupo'+objAH.id2).slideUp('slow');
+	//borro el contenido
+	$('#grupo'+objAH.id2).html('');
+}
+
+
+
+function borrarNivel1(id1){
+	objAH=new AjaxHelper(updateBorrarNivel1);
+	objAH.url= "/cgi-bin/koha/busquedas/detalle.pl";
+	objAH.id1= id1;
+	objAH.accion="borrarN1";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateBorrarNivel1(responseText){
+	var Message= JSONstring.toObject(responseText);
+	setMessage(Message);
+	//oculto todo el registro con los grupos y sus items
+	$('#detalleComun').slideUp('slow');
+	//borro el contenido
+	$('#detalleComun').html('');
+}
+
+
+
 </script>
+
+<div id="confirmar_div" class="pane"></div>
+<br>
+
 
 <!-- PARA PODER CREAR EL FORMULARIO -->
 <div id="formulario"></div>
 
 <div id="detalleMARC"></div>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
 
 <div id="detalleComun">
 <div id="titulo">
@@ -200,7 +304,7 @@ alert("FALTA");
 	</p>
 </div>
 
-<!-----------------Registro de libro TABLE--------->
+<!-- ---------------Registro de libro TABLE------- -->
 <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 	<tr valign="top" height="24" class="tablaresultadoTitle">
 		  <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
@@ -212,7 +316,7 @@ alert("FALTA");
 <div class="detalle">
 	<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png"   border=0 title="Editar Nivel 1" onClick="editarNivel1(<!-- TMPL_VAR NAME='id1' -->,'LIB')">
 
-	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarN1(<!-- TMPL_VAR NAME='id1' -->);} else {return false;}" title="Borrar Nivel 1">
+	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1(<!-- TMPL_VAR NAME='id1' -->);} else {return false;}" title="Borrar Nivel 1">
 	<br>
 	<!-- TMPL_LOOP NAME="loopnivel1" -->
 		<!-- TMPL_IF NAME="librarian" -->
@@ -226,7 +330,7 @@ alert("FALTA");
 </div>
 
 <!-- TMPL_LOOP NAME="loopnivel2" -->
-
+<div id="grupo<!-- TMPL_VAR NAME='id2' -->">
 	<div>
 		<p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
         		<!-- TMPL_VAR NAME="id2" --> GRUPO - <!-- TMPL_VAR NAME="tipoDoc" -->
@@ -235,9 +339,6 @@ alert("FALTA");
 
 	<div class="detalle">
 <!-- NIVEL 2 -->
-		<script>
-// 		cargarImagen('<!-- TMPL_VAR NAME='id2' -->');
-		</script>
 		<div id="<!-- TMPL_VAR NAME='id2' -->" style="position: relative; float:right;"></div>
 		
 		<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" title="Editar Grupo" onClick="editarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->,'<!-- TMPL_VAR NAME='itemtype' -->')">	
@@ -255,12 +356,14 @@ alert("FALTA");
 			<!-- TMPL_IF NAME="cantItems" -->
 				Cantidad de Items: <!-- TMPL_VAR NAME="cantItems" --><br>
 			<!-- /TMPL_IF -->
-	
+		
 			<!-- TMPL_LOOP NAME="loopnivel3" -->
+			<div id="ejemplaresDelGrupo<!-- TMPL_VAR NAME='id2' -->" >
 				<hr>
 				Ejemplares Disponibles:<b> <!-- TMPL_VAR NAME="disponibles" --></b><br>
-				Reservas Realizadas: <b> <!-- TMPL_VAR NAME="reservados" --></b><br>
-				Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="prestados" --></b><br>
+				Reservas Realizadas: <b> <!-- TMPL_VAR NAME="cantReservas" --></b><br>
+				Reservas en Espera: <b> <!-- TMPL_VAR NAME="cantReservasEnEspera" --></b><br>
+				Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="cantPrestados" --></b><br>
 				<hr>
 			<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
 				<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
@@ -280,16 +383,17 @@ alert("FALTA");
 					<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
 
 				</tr>
-	
 				<!-- TMPL_LOOP NAME="nivel3" -->
 				<input type="hidden" name="id2" value="<!-- TMPL_VAR NAME='id2' -->">
 				<tr align="center">
 					<td width="10%" colspan="2" valign="middle" height="25">
+				<!-- TMPL_IF NAME="sePuedeEditar" -->
                 				<input TYPE="image" name="submit"  VALUE="modify" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id3' -->,'<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Ejemplar">
+				<!-- /TMPL_IF -->
             				</td>
             				<td width="6%" valign="middle">
         			<!-- TMPL_IF NAME="sePuedeBorrar" -->
-                				<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
+                				<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
         			<!-- /TMPL_IF -->
             				</td>
 					<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
@@ -316,12 +420,15 @@ alert("FALTA");
 	    				<td valign="middle" colspan="2">
 					<!-- TMPL_UNLESS NAME="wthdrawn" -->
 						<!-- TMPL_IF NAME="prestado" -->
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver_renovar('DEVOLUCION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->')">
+
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver('DEVOLUCION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">
 							<!-- TMPL_IF NAME="renew" -->
-	    						<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->')">
+	    						<!--<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">-->
+
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">
 							<!-- /TMPL_IF -->
 						<!-- TMPL_ELSE -->
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="prestar('<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->');">
+							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="buscarUsuario('<!-- TMPL_VAR name='id3' -->','<!-- TMPL_VAR name='id2' -->');">
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_UNLESS -->
 	    				</td>
@@ -331,11 +438,15 @@ alert("FALTA");
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
+	
 			</table>
 			<br><hr class="lineagruesa"><br>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
+		</div> <!--end <div id="ejemplaresDelGrupo -->
 	</div>
+
+</div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 
 <!-- /TMPL_LOOP -->
 

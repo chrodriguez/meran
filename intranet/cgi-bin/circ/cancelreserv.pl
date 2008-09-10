@@ -44,7 +44,8 @@ $params{'tipo'}="INTRA";
 my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 
 my %infoOperacion = (
-        		error => $error,
+			codMsg	=> $codMsg,
+        		error 	=> $error,
         		message => $message,
 );
 

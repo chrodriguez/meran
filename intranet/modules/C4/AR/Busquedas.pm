@@ -70,7 +70,7 @@ use vars qw(@EXPORT @ISA);
 		&getBranches
 		&getBranch
 
-		&loguearBusqueda
+		&t_loguearBusqueda
 );
 
 =item
@@ -413,9 +413,12 @@ sub buscarNivel3PorId2YDisponibilidad{
 	my $i=0;
 	my $disponibles=0;
 	my %infoNivel3;
-	$infoNivel3{'cantParaSala'}=0;
-	$infoNivel3{'cantParaPrestamo'}=0;
-	$infoNivel3{'cantReservas'}=C4::AR::Reservas::cantReservasPorGrupo($id2);
+	$infoNivel3{'cantParaSala'}= 0;
+	$infoNivel3{'cantParaPrestamo'}= 0;
+	$infoNivel3{'disponibles'}= 0;
+	$infoNivel3{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
+	$infoNivel3{'cantReservas'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
+	$infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
 
 	while(my $data=$sth->fetchrow_hashref){
 		my $holdbranch= getBranch($data->{'holdingbranch'});
@@ -448,68 +451,15 @@ sub buscarNivel3PorId2YDisponibilidad{
 			$data->{'clase'}="salaLectura";
 		}
 
-		disponibilidadItem($data);
+		C4::AR::Nivel3::disponibilidadItem($data);
 		$result[$i]=$data;
 		$i++;
 	}
 
+	$infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
+
 	return(\%infoNivel3,@result);
 }
-
-=item
-disponibilidadItem
-Esta funcion busca el estado en el que se encuentra el item con id3 que viene por parametro, si esta prestado o reservado trae la info del usuario al cual fue asignado.
-=cut
-sub disponibilidadItem{
-	my ($datosItem)=@_;
-	my $dbh=C4::Context->dbh;
-	my $borrowernumber="";
-	my $clase;
-	my $disponibilidad;
-	my $dateformat = C4::Date::get_date_format();
-	$datosItem->{'sePuedeBorrar'}=1;
-	## Esta Prestado??
-   	my $query="SELECT * FROM issues iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
-	           INNER JOIN issuetypes ist ON (iss.issuecode=ist.issuecode) WHERE id3=? AND returndate IS  NULL";
-    	my $sth=$dbh->prepare($query);
-    	$sth->execute($datosItem->{'id3'});
-    	if (my $data=$sth->fetchrow_hashref){
-    		#el item esta prestado
-		$datosItem->{'prestado'}=1;
-		$datosItem->{'clase'}="";
-		$datosItem->{'sePuedeBorrar'}=0;
-		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
-		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
-		$datosItem->{'disponibilidad'}="Prestado a ";
-		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
-     	
-		my ($vencido,$df)= &C4::AR::Issues::estaVencido($data->{'id3'},$data->{'issuecode'});
-		my $returndate=format_date($df,$dateformat);
-		$datosItem->{'vencimiento'}=$returndate;
-		if($vencido){
-			$datosItem->{'claseFecha'}="fechaVencida";
-		}
-      		$datosItem->{'renew'} = C4::AR::Issues::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
-   		$sth->finish;
-	}
-    ## Esta Reservado?? 
-   	$sth=$dbh->prepare("SELECT  * FROM reserves LEFT JOIN  borrowers ON 
-                            reserves.borrowernumber=borrowers.borrowernumber WHERE reserves.id3 = ? 
-                            AND estado <> 'P'");
-    	$sth->execute($datosItem->{'id3'});
-   	if (my $data=$sth->fetchrow_hashref){
-		$datosItem->{'sePuedeBorrar'}=0;
-		$datosItem->{'clase'}="";
-		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
-		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
-		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
-		$datosItem->{'vencimiento'}=$reminderdate;
-		$datosItem->{'disponibilidad'}="Reservado a ";
-      		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
-		$sth->finish;
-	}
-}
-
 
 
 =item
@@ -963,7 +913,7 @@ print A "desde buscar encabezado \n";
 	my $query2="	SELECT *
 			FROM estructura_catalogacion_opac estco INNER JOIN encabezado_campo_opac eco
 			ON (estco.idencabezado = eco.idencabezado)
-			WHERE estco.visible = 1 AND estco.idencabezado = ? AND nivel=?";
+			WHERE estco.visible = 1 AND estco.idencabezado = ? AND nivel=? ";
 # 			ORDER BY eco.orden ";
 
   	foreach my $itemtype (@$itemtypes){
@@ -1469,6 +1419,7 @@ sub getNombreLocalidad{
 loguearBusqueda
 Guarda en la base de datos el tipo de busqueda que se realizo y que se busco.
 =cut
+=item
 sub loguearBusqueda{
 	my ($borrowernumber,$env,$type,$search)=@_;
 
@@ -1548,12 +1499,16 @@ sub loguearBusqueda{
 		$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
 	}
 
-	if($search->{'author'} ne ""){
-		$sth->execute($id, 'author', $search->{'author'}, $desde);
+	if($search->{'autor'} ne ""){
+		$sth->execute($id, 'autor', $search->{'autor'}, $desde);
 	}
 
-	if($search->{'title'} ne ""){
-		$sth->execute($id,'title', $search->{'title'}, $desde);
+	if($search->{'titulo'} ne ""){
+		$sth->execute($id,'titulo', $search->{'title'}, $desde);
+	}
+
+	if($search->{'tipo_documento'} ne ""){
+		$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
 	}
 		
 
@@ -1564,6 +1519,130 @@ sub loguearBusqueda{
 
 	#falta ver bien el tema de la transaccion, pq si no se dispara el error y la segunda consulta falla
 	#se hace rollback solo de la segunda
+}
+=cut
+
+sub t_loguearBusqueda {
+	
+	my($loggedinuser,$env,$desde,$search_array)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $paramsReserva;
+	my ($error, $codMsg,$paraMens);
+	
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+		($error,$codMsg,$paraMens)=loguearBusqueda($loggedinuser,$env,$desde,$search_array);
+		$dbh->commit;	
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B407';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'R011';
+	}
+	$dbh->{AutoCommit} = 1;
+	
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
+sub loguearBusqueda{
+	my ($borrowernumber,$env,$type,$search_array)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+	my $query = "	INSERT INTO `busquedas` ( `borrower` , `fecha` )
+			VALUES ( ?, NOW( ));";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber);
+
+	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM busquedas";
+	$sth=$dbh->prepare($query2);
+	$sth->execute();
+
+	my $id=$sth->fetchrow;
+
+	my $query3;
+	my $campo;
+	my $valor;
+
+	my $desde= "INTRA";
+	if($type eq "opac"){
+		$desde= "OPAC";
+	}
+
+	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor`, `tipo`)
+			VALUES (?, ?, ?, ?);";
+
+	$sth=$dbh->prepare($query3);
+
+	foreach my $search (@$search_array){
+
+
+		if($search->{'keyword'} ne ""){
+			$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
+		}
+	
+		if($search->{'dictionary'} ne ""){
+			$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
+		}
+	
+		if($search->{'virtual'} ne ""){
+			$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
+		}
+	
+		if($search->{'signature'} ne ""){
+			$sth->execute($id, 'signature', $search->{'signature'}, $desde);
+		}	
+	
+		if($search->{'analytical'} ne ""){
+			$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
+		}
+	
+		if($search->{'id3'} ne ""){
+			$sth->execute($id, 'id3', $search->{'id3'}, $desde);
+		}
+	
+		if($search->{'class'} ne ""){
+			$sth->execute($id, 'class', $search->{'class'}, $desde);
+		}
+	
+		if($search->{'subjectitems'} ne ""){
+			$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
+		}
+	
+		if($search->{'isbn'} ne ""){
+			$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
+		}
+	
+		if($search->{'subjectid'} ne ""){
+			$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
+		}
+	
+		if($search->{'autor'} ne ""){
+			$sth->execute($id, 'autor', $search->{'autor'}, $desde);
+		}
+	
+		if($search->{'titulo'} ne ""){
+			$sth->execute($id,'titulo', $search->{'titulo'}, $desde);
+		}
+	
+		if($search->{'tipo_documento'} ne ""){
+			$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
+		}
+
+		if($search->{'barcode'} ne ""){
+			$sth->execute($id,'barcode', $search->{'barcode'}, $desde);
+		}
+	}
+
 }
 
 =item

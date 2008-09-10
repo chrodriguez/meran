@@ -4,6 +4,7 @@ package C4::AR::Nivel3;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Date;
 
 use vars qw(@EXPORT @ISA);
 
@@ -15,8 +16,73 @@ use vars qw(@EXPORT @ISA);
 	&detalleNivel3MARC
 	&detalleNivel3OPAC
 	&detalleNivel3
+
+	&getBarcode
+
+	&disponibilidadItem
+
+	&t_deleteItem
 );
 
+
+=item
+deleteItem
+Elimina todo la informacion de un item para el nivel 3
+=cut
+sub deleteItem{
+	my($params)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+	my $query=" DELETE FROM nivel3_repetibles WHERE id3 = ? ";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($params->{'id3'});
+
+	my $query=" DELETE FROM nivel3 WHERE id3 = ? ";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($params->{'id3'});
+}
+
+sub t_deleteItem {
+	my($params)=@_;
+
+#se realizan las verificaciones antes de eliminar el item
+# FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
+	
+	my ($error,$codMsg,$paraMens);
+	my $barcode= getBarcode($params->{'id3'});
+	my $error= 0;
+	if(!$error){
+	#No hay error
+		my $dbh = C4::Context->dbh;
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+		eval {
+			deleteItem($params);	
+			$dbh->commit;
+	
+			$codMsg= 'M901';
+			$paraMens->[0]= $barcode;
+	
+		};
+
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B412';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U305';
+			$paraMens->[0]= $barcode;
+		}
+		$dbh->{AutoCommit} = 1;
+		
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
+}
 
 =item
 detalleDisponibilidad
@@ -30,8 +96,12 @@ sub detalleDisponibilidad{
         $sth->execute($id3);
 	my @results;
 	my $i=0;
-	while (my $data=$sth->fetchrow_hashref){$results[$i]=$data; $i++; }
+
+	while (my $data=$sth->fetchrow_hashref){
+		$results[$i]=$data; $i++; 
+	}
 	$sth->finish;
+
 	return(scalar(@results),\@results);
 }
 
@@ -150,6 +220,10 @@ sub detalleNivel3OPAC{
 =item
 detalleNivel3
 Trae todos los datos del nivel 3, para poder verlos en el template.
+@params 
+$id2, id de nivel2
+$itemtype, tipo del item
+$tipo, INTRA/OPAC
 =cut
 sub detalleNivel3{
 	my ($id2,$itemtype,$tipo)=@_;
@@ -165,9 +239,10 @@ sub detalleNivel3{
 	my $subcampo;
 	my $getLib;
 	$results[0]->{'nivel3'}=\@nivel3;
-	$results[0]->{'disponibles'}=$infoNivel3->{'cantParaPrestamo'};
-	$results[0]->{'reservados'}=$infoNivel3->{'cantReservas'};
-	$results[0]->{'prestados'}=0;#FALTA !!!!! CUANDO SE EMPIEZE CON LOS PRESTAMOS
+ 	$results[0]->{'disponibles'}= $infoNivel3->{'disponibles'};
+	$results[0]->{'cantReservas'}= $infoNivel3->{'cantReservas'};
+	$results[0]->{'cantReservasEnEspera'}= $infoNivel3->{'cantReservasEnEspera'};
+	$results[0]->{'cantPrestados'}= $infoNivel3->{'cantPrestados'};
 	foreach my $row(@nivel3){
 		foreach my $llave (keys %$mapeo){
 			$campo=$mapeo->{$llave}->{'campo'};
@@ -205,3 +280,71 @@ sub detalleNivel3{
 	}
 	return(\@results,\@nivel3Comp);
 }
+
+
+=item
+disponibilidadItem
+Esta funcion busca el estado en el que se encuentra el item con id3 que viene por parametro, si esta prestado o reservado trae la info del usuario al cual fue asignado.
+=cut
+sub disponibilidadItem{
+	my ($datosItem)=@_;
+
+	my $dbh=C4::Context->dbh;
+	my $borrowernumber="";
+	my $clase;
+	my $disponibilidad;
+	my $dateformat = C4::Date::get_date_format();
+	$datosItem->{'sePuedeBorrar'}=1;
+	$datosItem->{'sePuedeEditar'}=1;
+
+	my $data= &C4::AR::Issues::getDatosPrestamoDeId3($datosItem->{'id3'});
+
+	if ($data){
+    		#el item esta prestado, obtengo la informacion
+		$datosItem->{'prestado'}=1;
+		$datosItem->{'clase'}="";
+		$datosItem->{'sePuedeBorrar'}=0;
+		$datosItem->{'sePuedeEditar'}=0;
+		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
+		$datosItem->{'disponibilidad'}="Prestado a ";
+		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
+     	
+		my ($vencido,$df)= &C4::AR::Issues::estaVencido($data->{'id3'},$data->{'issuecode'});
+		my $returndate=format_date($df,$dateformat);
+		$datosItem->{'vencimiento'}=$returndate;
+		if($vencido){
+			$datosItem->{'claseFecha'}="fechaVencida";
+		}
+      		$datosItem->{'renew'} = C4::AR::Issues::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
+	}
+
+	my $data= &C4::AR::Reservas::getDatosReservaDeId3($datosItem->{'id3'});
+
+	if($data){
+	#Se encuentra resrevado, obtengo la informacion de la reserva	
+		$datosItem->{'sePuedeBorrar'}=0;
+		$datosItem->{'clase'}="";
+		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
+		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
+		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
+		$datosItem->{'vencimiento'}=$reminderdate;
+		$datosItem->{'disponibilidad'}="Reservado a ";
+      		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
+	}
+}
+
+
+sub getBarcode{
+	my($id3)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $query=" 	SELECT barcode
+			FROM nivel3
+			WHERE id3 = ? ";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id3);
+
+	return $sth->fetchrow;
+}
+

@@ -52,18 +52,11 @@ my $dateformat = C4::Date::get_date_format();
 foreach my $it (keys %$issueslist) {
 	my $book= $issueslist->{$it};
 	$book->{'date_due'} = format_date($book->{'date_due'},$dateformat);
-# 	my $err= "Error con la fecha";
-# 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-# 	my $close = ParseDate(C4::Context->preference("close"));
-# 	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-# 		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
-# 	} NO SE USA!!!!!!
 
 	my ($vencido,$df)= &C4::AR::Issues::estaVencido($book->{'id3'},$book->{'issuecode'});
 	$book->{'date_fin'} = format_date($df,$dateformat);
 	if ($vencido){$book->{'color'} ='red';}
 
-# 	$book->{'renew'} = &sepuederenovar($borrnumber, $book->{'id3'});
 	$book->{'issuetype'}=$book->{'issuetype'};
 	if ($book->{'autor'} eq ''){$book->{'autor'}=' ';}
 

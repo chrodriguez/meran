@@ -46,6 +46,14 @@ my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
 my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};
 
+my $valorOPAC= C4::Context->preference("logSearchOPAC");
+my $valorINTRA= C4::Context->preference("logSearchINTRA");
+my $search;
+my @search_array;
+# esto creo q no es necessario
+my $env; 
+
+
 #busqueda desde el top
 my $criteria= $obj->{'criteria'};
 my $searchinc= $obj->{'searchinc'};
@@ -83,6 +91,12 @@ if($isbn ne ""){
 if($codBarra ne ""){
 	$buscoPor.="Codigo de barra: ".$codBarra."&";
 	$nivel3.= "barcode='".&verificarValor($codBarra)."'#";
+
+	if( ($valorOPAC == 1) ){
+		my $search;
+		$search->{'barcode'}= $codBarra;
+		push @search_array, $search;
+	}
 }
 
 if($autor ne ""){
@@ -94,6 +108,14 @@ if($autor ne ""){
 	}
 	$niv1=substr($niv1,2,length($niv1));
 	$nivel1.="(".$niv1.")#";
+
+
+	if( ($valorOPAC == 1) ){
+		my $search;
+		$search->{'autor'}= $autor;
+# 		loguearBusqueda($loggedinuser,$env,'opac',$search);
+		push @search_array, $search;
+	}
 }
 
 if($titulo ne ""){
@@ -104,11 +126,20 @@ if($titulo ne ""){
 	else{
 		$nivel1.="titulo='".&verificarValor($titulo)."'#";
 	}
+
+	if( ($valorOPAC == 1) ){
+		my $search;
+		$search->{'titulo'}= $titulo;
+# 		loguearBusqueda($loggedinuser,$env,'opac',$search);
+		push @search_array, $search;
+	}
 }
 
 if($idTema ne "" ){
 	$buscoPor.="Tema: ".$tema."&";
 	$nivel1rep.= "(n1r.campo='650' AND n1r.subcampo='a'AND n1r.dato='".&verificarValor($idTema)."')#";
+
+	
 }
 
 
@@ -117,7 +148,16 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	my $itemtype=C4::AR::Busquedas::getItemType($comboItemTypes);
 	$buscoPor.="Tipo de documento: ".$itemtype."&";
 	$nivel2.= "tipo_documento='".$comboItemTypes."'#";
+
+	if( ($valorOPAC == 1) ){
+		my $search;
+		$search->{'tipo_documento'}= $comboItemTypes;
+# 		loguearBusqueda($loggedinuser,$env,'opac',$search);
+		push @search_array, $search;
+	}
 }
+
+my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda($loggedinuser,$env,'opac',\@search_array);
 
 my $ini= ($obj->{'ini'}||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);

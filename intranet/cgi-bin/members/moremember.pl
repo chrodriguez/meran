@@ -53,6 +53,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $bornum=$input->param('bornum');
+my $completo=$input->param('completo');
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 
 my $data=C4::AR::Usuarios::getBorrowerInfo($bornum);
@@ -80,12 +81,12 @@ $data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'b
 $data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
 
-my $issues = prestamosPorUsuario($bornum);
+# my $issues = prestamosPorUsuario($bornum);
 my $count=0;
 my $venc=0;
 my $overdues_count = 0;
 my @overdues;
-my @issuedat;
+# my @issuedat;
 my $sanctions = hasSanctions($bornum);
 ####Es regular el Usuario?####
 my $regular =&C4::AR::Usuarios::esRegular($bornum);
@@ -103,13 +104,9 @@ foreach my $san (@$sanctions) {
 }
 #
 
+=item
 foreach my $key (keys %$issues) {
-#     	my $err= "Error con la fecha";
-#     	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-#     	my $close = ParseDate(C4::Context->preference("close"));
-# 	if (Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-# 		 $hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
-# 	} NO SE USA!!!!!!!!!!!!!!!!!!!
+
 	my $issue = $issues->{$key};
     	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
 	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'id3'},$issue->{'issuecode'});
@@ -121,7 +118,9 @@ foreach my $key (keys %$issues) {
     	push @issuedat, $issue;
     	$count++;
 }
+=cut
 
+=item
 my ($rcount, $reserves) = DatosReservas($bornum);
 my @realreserves;
 my @waiting;
@@ -147,6 +146,7 @@ foreach my $res (@$reserves) {
         	$wcount++;
         }
 }
+=cut
 
 #### Verifica si la foto ya esta cargada
 my $picturesDir= C4::Context->config("picturesdir");
@@ -174,13 +174,14 @@ my $msgError=$input->param('error');
 $template->param($data);
 $template->param(
 		bornum          => $bornum,
+		completo	=> $completo,
 		mensaje		=> $mensaje,
 #los libros que tiene "en espera para retirar"
-		waiting		=> \@waiting,
+# 		waiting		=> \@waiting,
 #los libros que tiene esperando un ejemplar
-		realreserves    => \@realreserves,
+# 		realreserves    => \@realreserves,
 ###
-		prestamos       => \@issuedat,
+# 		prestamos       => \@issuedat,
 		foto_name 	=> $foto,
 		sanctions       => $sanctions,
 		mensaje_error_foto   => $msgFoto,

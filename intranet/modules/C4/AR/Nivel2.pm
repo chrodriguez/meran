@@ -15,6 +15,9 @@ use vars qw(@EXPORT @ISA);
 		&getVolume
 		&getVolumeDesc
 		&getISBN
+		&getTipoDocumento
+		
+		&getCantPrestados
 
 		&getIndice
 		&insertIndice
@@ -22,18 +25,17 @@ use vars qw(@EXPORT @ISA);
 		&detalleNivel2
 		&detalleNivel2MARC
 		&detalleNivel2OPAC
+
+		&t_deleteGrupo
 );
 
-
-=item
-
-=cut
 
 =item
 retorna el indice del grupo con correpondiente al parametro $id2
 =cut
 sub getIndice{
 	my ($id2)=@_;
+
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"555","a","2");
 }
 
@@ -42,10 +44,10 @@ sub insertIndice{
 
 	my ($biblioitemnumber, $biblionumber, $infoIndice) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = " UPDATE biblioitems ";
-	$query .= " SET indice = ? ";
-	$query .= " WHERE biblioitemnumber =  ?";
-	$query .= " AND biblionumber = ? ";
+	my $query = " 	UPDATE biblioitems 	
+			SET indice = ?
+			WHERE biblioitemnumber =  ?	
+			AND biblionumber = ? ";
 	
     	my $sth=$dbh->prepare($query);
     	$sth->execute($infoIndice, $biblioitemnumber, $biblionumber);
@@ -304,6 +306,9 @@ sub detalleNivel2OPAC{
 =item
 detalleNivel2
 Trae todos los datos del nivel 2, para poder verlos en el template, tambien busca el detalle del nivel 3 asociados a cada nivel 2.
+@params 
+$id1, id de nivel1
+$tipo, INTRA/OPAC
 =cut
 sub detalleNivel2{
 	my($id1,$tipo)=@_;
@@ -373,4 +378,130 @@ sub detalleNivel2{
 		$j++;
 	}
 	return(@results);
+}
+
+
+=item
+retorna la canitdad de items prestados para el grupo pasado por parametro
+=cut
+sub getCantPrestados{
+
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+	
+	my $query= " 	SELECT count(*) AS cantPrestamos
+			FROM issues i LEFT JOIN nivel3 n3 ON n3.id3 = i.id3
+			INNER JOIN  nivel2 n2 ON n3.id2 = n2.id2
+			WHERE n2.id2 = ? AND i.returndate IS NULL ";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id2);
+
+	return $sth->fetchrow;
+}
+
+=item
+Esta funcion restorna el tipo de documento del grupo (segun id2)
+=cut
+sub getTipoDocumento{
+	my ($id2)=@_;
+	my $dbh = C4::Context->dbh;
+	
+	my $query= " 	SELECT i.description
+			FROM nivel2 n2 INNER JOIN itemtypes i
+			ON (n2.tipo_documento = i.itemtype)
+			WHERE id2 = ? ";
+
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id2);
+
+	return $sth->fetchrow;
+
+}
+
+
+sub t_deleteGrupo {
+	my($params)=@_;
+
+## FIXME
+#se realizan las verificaciones antes de eliminar el GRUPO, reservas sobre el grupo o items
+#y realizar todos los logueos necesarios luego de borrar
+# FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
+
+#Ademas faltaria ver si se deben realizar borrados en cascada, por ej de historicCirculation, donde se 
+#esta guardando el id2 y este ya no tiene sentido guardarlo
+	
+	my ($error,$codMsg,$paraMens);
+
+	my $error= 0;
+	if(!$error){
+	#No hay error
+		my $dbh = C4::Context->dbh;
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+		eval {
+			deleteGrupo($params->{'id2'});	
+			$dbh->commit;
+	
+			$codMsg= 'M902';
+			$paraMens->[0]= $params->{'id2'};
+	
+		};
+
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B413';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U306';
+			$paraMens->[0]= $params->{'id2'};
+		}
+		$dbh->{AutoCommit} = 1;
+		
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
+}
+
+
+=item
+deleteGrupo
+Elimina toda la informacion de un item para el nivel 2
+=cut
+
+## FIXME No se puede eliminar el grupo si se encuentra logueado en la tabla de historicCirculation
+#se podria elimnar la contraint de FK...., y solo verificar q id2 no sea null, de todos modos una vez
+#borrado el grupo, el id2 ya no tiene mas sentido, asi que se podria realizar un borrado en cascada
+
+# [Tue Sep 09 15:14:07 2008] [error] [client 127.0.0.1] DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails (`V2/historicCirculation`, CONSTRAINT `FK_historicCirculation_id2` FOREIGN KEY (`id2`) REFERENCES `nivel2` (`id2`)) at /usr/local/koha/intranet/modules/C4/AR/Nivel2.pm line 493., referer: https://127.0.0.1/cgi-bin/koha/busquedas/detalle.pl
+
+
+sub deleteGrupo{
+	my($id2)=@_;
+
+	my $dbh = C4::Context->dbh;
+	
+	my $query="SELECT id2,id3 FROM nivel3 WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+	while(my $data= $sth->fetchrow_hashref){
+		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+		my $sth=$dbh->prepare($query);
+        	$sth->execute($data->{'id3'});
+	}
+	my $query="DELETE FROM nivel3 WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+
+	my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+	
+	my $query="DELETE FROM nivel2 WHERE id2 = ?";
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
+
 }

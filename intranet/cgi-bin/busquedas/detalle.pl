@@ -9,6 +9,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
 use C4::AR::Catalogacion;
+use JSON;
 
 my $input=new CGI;
 
@@ -46,23 +47,51 @@ output_html_with_http_headers $input, $cookie, $template->output;
 }
 else{
 
-#Cuando viene desde detalle, es un llamado ajax, que se hace con el AjaxHelper
+	my %infoRespuesta;
+	#Cuando viene desde detalle, es un llamado ajax, que se hace con el AjaxHelper
 	$obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+	
+	my $id1=$obj->{'id1'};
+	my $accion=$obj->{'accion'};
 
-my $id1=$obj->{'id1'};
-my $accion=$obj->{'accion'};
+	my %params;
 
-if($accion eq "borrarGrupo"){
-	my $id2=$obj->{'id2'};
-	&eliminarNivel2($id2);
-}
-elsif($accion eq "borrarN1"){
-	&eliminarNivel1($id1);
-}
-elsif($accion eq "borrarEjemplar"){
-	my $id3=$obj->{'id3'};
-	&eliminarNivel3($id3);
-}
-print $input->header;
+	$params{'id1'}= $id1;
+	$params{'id2'}= $obj->{'id2'};
+	$params{'id3'}= $obj->{'id3'};
+	
+	if($accion eq "borrarGrupo"){
+		
+		my ($error, $codMsg, $message)= &C4::AR::Nivel2::t_deleteGrupo(\%params);
+		
+		$infoRespuesta{'error'}= $error;
+		$infoRespuesta{'codMsg'}= $codMsg;
+		$infoRespuesta{'message'}= $message;
+	}
+	elsif($accion eq "borrarN1"){
+# 		&eliminarNivel1($id1);
+		
+		my ($error, $codMsg, $message)= &C4::AR::Nivel1::t_deleteNivel1(\%params);
+		
+		$infoRespuesta{'error'}= $error;
+		$infoRespuesta{'codMsg'}= $codMsg;
+		$infoRespuesta{'message'}= $message;
+
+	}
+	elsif($accion eq "borrarEjemplar"){
+
+		my ($error, $codMsg, $message)= &C4::AR::Nivel3::t_deleteItem(\%params);
+
+		$infoRespuesta{'error'}= $error;
+		$infoRespuesta{'codMsg'}= $codMsg;
+		$infoRespuesta{'message'}= $message;
+	}
+	
+
+	#se convierte el arreglo de respuesta en JSON
+	my $infoRespuestaJSON = to_json \%infoRespuesta;
+	print $input->header;
+	#se envia en JSON al cliente
+	print $infoRespuestaJSON;
 }
 

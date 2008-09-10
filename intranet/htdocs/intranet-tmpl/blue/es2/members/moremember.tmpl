@@ -1,8 +1,11 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 
 <script>
 function openPopup() {
@@ -29,9 +32,20 @@ $(document).ready(function() {
 	checkedAll('checkAllReservas','chkboxReservas');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
 	zebra("tablaResult");
+	
+	//definido en circulacion.js
+	usuario= new object_usuario();
+	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
+	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
+
+// 	alert(usuario.ID + " " + usuario.text);
+
+	detallePrestamos(usuario.ID);
+	detalleReservas(usuario.ID);
 
 });
 
+/*
 function devolver_renovar(accion){
 	var chck=$("input[@name=chkboxPrestamos]:checked");
 	var array=new Array;
@@ -50,8 +64,49 @@ function devolver_renovar(accion){
 	obj.accion=accion;
 	obj=JSONstring.make(obj);
 	location.href="../circ/devoluciones.pl?obj="+obj;
+}*/
+
+//REDEFINIDO, se encuentra en circulacion.js
+function updateInfoDevRen(responseText){
+	alert("ejecuto updateInfoDevRen LOCAL!!!");
+	cancelarDiv();
+	clearMessages()
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	
+	var mensajes= '';
+	for(i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+
+	detallePrestamos(usuario.ID);
+	//puede que llegue al  max de prestamos y se cancelen las reservas
+	detalleReservas(usuario.ID);
 }
 
+//REDEFINIDO, se encuentra en circulacion.js
+function updateInfoPrestarReserva(responseText){
+	alert("ejecuto updateInfoPrestarReserva LOCAL!!!");
+	cancelarDiv();
+	clearMessages();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	var mensajes= '';
+	for(var i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+
+	detalleReservas(usuario.ID);
+}
+
+
+/*
 function prestar(){
 	var chck=$("input[@name=chkboxReservas]:checked");
 	var array=new Array;
@@ -70,7 +125,7 @@ function prestar(){
 	obj=JSONstring.make(obj);
 	location.href="../circ/prestamos.pl?obj="+obj;
 }
-
+*/
 
 function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
@@ -83,8 +138,12 @@ function cancelarReserva(reserveNumber){
         }
 }
 
-function updateInfoCancelacion(){
-	location.href="moremember.pl?bornum=<!-- TMPL_VAR NAME='bornum' -->";
+function updateInfoCancelacion(responseText){
+// 	location.href="moremember.pl?bornum=<!-- TMPL_VAR NAME='bornum' -->";
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
+	detalleReservas(objAH.borrowernumber);
+// 	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
 function confirm_deletion() {
@@ -95,7 +154,46 @@ function confirm_deletion() {
 	}
 }
 
+function detallePrestamos(borr){
+
+	objAH=new AjaxHelper(updateDetallePrestamos);
+	objAH.url='/cgi-bin/koha/members/detallePrestamos.pl';
+	objAH.borrnumber="<!-- TMPL_VAR NAME='bornum' -->";
+	objAH.sendToServer();
+}
+
+function updateDetallePrestamos(responseText){
+	$('#prestamos').html(responseText);
+	zebra('prestamosResult');
+}
+
+function detalleReservas(borr){
+
+	objAH=new AjaxHelper(updateDetalleReservas);
+	objAH.url='/cgi-bin/koha/members/detalleReservas.pl';
+	objAH.borrnumber="<!-- TMPL_VAR NAME='bornum' -->";
+	objAH.sendToServer();
+}
+
+function updateDetalleReservas(responseText){
+	$('#reservas').html(responseText);
+	zebra('reseravsAsignadasResult');
+	zebra('reservasEnEsperaResult');
+}
+
 </script>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
+
+<br>
+<div id="confirmar_div"></div>
+<br>
+
 
 <!-- TMPL_IF NAME="mensaje_error_borrar" -->
 	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje_error_borrar --></font>
@@ -186,17 +284,17 @@ function confirm_deletion() {
 	<!-- TMPL_IF name="I" -->
                 <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
 			<a href="#" onClick="formCarac.submit()" >
-                        <img alt="Modificar Caracter&acutei;stica" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarcaracteristicas.png" border="0""></a>
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
+                        <img alt="Modificar Caracter&acutei;stica" src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0""></a>
+			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->">
 
 		</form>
 
 	<!-- TMPL_ELSE -->
 		<form action=/cgi-bin/koha/members/memberentry.pl method=post name="formCarac2">
 			<a href="#" onClick="formCarac2.submit()" >
-                        <img alt="Modificar Caracter&iacute;stica" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarcaracteristicas.png" border="0""></a>
+                        <img alt="Modificar Caracter&iacute;stica" src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0""></a>
 
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
+			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->">
 
 		</form>
 	<!-- /TMPL_IF -->
@@ -211,7 +309,7 @@ function confirm_deletion() {
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 		</form>
 
-		<form action=/cgi-bin/koha/members/member-flags.pl method=post name="formPerm"><a href="#" onClick="formPerm.submit()" ><img alt="Modificar Permisos" src="<!-- TMPL_VAR NAME="themelang" -->/images/modificarpermisos.png" border="0""></a>
+		<form action=/cgi-bin/koha/members/member-flags.pl method=post name="formPerm"><a href="#" onClick="formPerm.submit()" ><img alt="Modificar Permisos" src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarpermisos.png" border="0""></a>
 
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 
@@ -248,7 +346,7 @@ function confirm_deletion() {
 	<!-- TMPL_ELSE -->
 		<form action=/cgi-bin/koha/members/upload.pl method=post enctype="multipart/form-data" >
 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=image  src="<!-- TMPL_VAR NAME="themelang" -->/images/subirFoto.png" align=center valign="center">
+			<input type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" align=center valign="center">
 			<input type=file name="picture">
 		</form>
 	 <!-- /TMPL_IF -->
@@ -256,233 +354,16 @@ function confirm_deletion() {
 <br>
 <div style="clear:both">
 <input type="hidden" id="borrnumber" value="<!-- TMPL_VAR name='bornum' -->">
-<!-- TMPL_IF NAME="prestamos" -->
-		
-<p align=center><b>EJEMPLARES PRESTADOS</b></p>
-<table class="tablaResult" cellspacing=0  cellpadding=0 border=0  width="100%" >
 
-	<tr valign=middle class="tablaresultadoTitle">
-   		<th width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
-		<th>
-			<a class="click" id="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Seleccionar todos"></a>
-		</th>
-  		<th>T&iacute;tulo</th>
-  		<th>Autor</th>
-  		<th>C. Barra</th>
-  		<th>Sig. Top.</th>
-		<th>Ed.</th>
-  		<th>Vol.</th>
-  		<th>Pr&eacute;stamo</th>
-  		<th>Vencimiento</th>
-   		<th>Tipo</th>
-  		<th width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
-	</tr>
-<!-- TMPL_LOOP NAME="prestamos" -->
-	<tr class="inputFontNormal" align="center">
-		<td height=25 >&nbsp;</td>
-		<td>
-			<input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='id3' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
-		</td>
-		<td width="14%" >
-			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='id1' -->">
-			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML-->
-			<!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
-		</td>
-		<td>
-			<!-- TMPL_IF NAME="autor" -->
-			<!-- TMPL_VAR NAME="autor" -->
-			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-		</td>
-
-		<td>
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
-		</td>
-
-		<td>
-			<!-- TMPL_IF NAME="signatura_topografica" --> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 -->">
-			<!-- TMPL_VAR NAME="signatura_topografica" --> 
-			</a>
-			<!-- TMPL_ELSE -->-<!-- /TMPL_IF -->
-		</td>
-
-		<td>  
-			<!-- TMPL_IF NAME="edicion" --> <!-- TMPL_VAR NAME="edicion" -->
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- 		</td>
-
-		<td>  
-			<!-- TMPL_IF NAME="volume" --> 
-			<!-- TMPL_VAR NAME="volume" -->
-			<!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" -->
-			<!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-		</td>
-		<td>
-			<!-- TMPL_IF NAME="date_due" --> 
-			<!-- TMPL_VAR NAME="date_due" -->
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-		</td>
-
-		<td>
-			<!-- TMPL_IF NAME="date_fin" --> 
-			<font color="<!-- TMPL_VAR NAME='color' -->">
-			<!-- TMPL_VAR NAME="date_fin" --> </font>
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-		</td>
-
-		<td>
-			<!-- TMPL_IF NAME="issuetype" -->
-			<font color="<!-- TMPL_VAR NAME='color' -->">
-			<!-- TMPL_VAR NAME="issuetype" --> </font>
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-		</td>
-		<td>&nbsp;</td>
-<!-- /TMPL_LOOP -->
-	</tr>
-</table>
-<p align="center">
-	<input type="image" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver_renovar('DEVOLUCION')">
-	<!-- TMPL_IF NAME="regular" -->
-		<!-- TMPL_UNLESS NAME="sanctions" -->
-	<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION')">
-		<!-- /TMPL_UNLESS -->
-	<!-- /TMPL_IF -->
-		</p>
-<!-- /TMPL_IF --> <!-- FIN IF prestamos -->
+PRESTAMOS
+<div id="prestamos"></div>
+FIN PRESTAMOS
 
 
+RESERVAS
+<div id="reservas"></div>
+FIN RESERVAS
 
-<!-- TMPL_IF NAME="realreserves" -->
-<br>
-
-<p align=center><B>EJEMPLARES ASIGNADOS</B></p> 
-<table class="tablaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
-	<tr class="tablaresultadoTitle">
-		<th width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
-		<th>
-			<a class="click" id="checkAllReservas"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
-		</th>
-		<th>T&iacute;tulo</th>
- 		<th>Autor</th>
-		<th>C. Barra</th>
-  		<th>Sig. Top.</th>
-		<th>Ed.</th>
-		<th>Vol.</th> 
-		<th>Vencimiento</th>
-		<th width="10%">Retira en</th>
-		<th width="10%">Cancelar</th>
-		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
- 	</tr>
-<!-- TMPL_LOOP NAME="realreserves" -->
-	<tr class="inputFontNormal" align="center">
-		<td height=25>&nbsp;</td>
- 
-		<td>
-			<input type="checkbox"  name="chkboxReservas" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='barcode' -->">
-		</td>
-
- 		<td width="16%">
-			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='rid1' -->">
-			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML-->
-			<!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" -->
-			<!-- /TMPL_IF --></a>
-		</td>
-		<td>
-			<!-- TMPL_IF NAME="rautor" --><!-- TMPL_VAR NAME="rautor" -->
-			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-		</td>
-		<td>
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
-		</td>
-		<td>
-			<!-- TMPL_IF NAME="signatura_topografica" --> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=<!-- TMPL_VAR NAME=rid1 -->">
-			<!-- TMPL_VAR NAME="signatura_topografica" --> 
-			</a>
-			<!-- TMPL_ELSE -->-<!-- /TMPL_IF -->
-		</td>
- 		<td>
-			<!-- TMPL_IF NAME="redicion" --> 
-			<!-- TMPL_VAR NAME="redicion" -->
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- 		</td>
-		<td>
-			<!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->
-			<!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" -->
-			<!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
-		</td>
-		<td>
-			<!-- TMPL_VAR NAME="rreminderdate" -->
-		</td>
-		<td>
-			<b><!-- TMPL_VAR NAME="rbranch" --></b>
-		</td>
-
-		<td>
-			<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva(<!-- TMPL_VAR NAME='reservenumber' -->)" title="Cancelar">
-		</td>
- 		<td height=25>&nbsp;</td>
-
-	</tr>
-<!-- /TMPL_LOOP -->
-</table>
-
-<p align=center>
-	<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="javascript:prestar();return false;">
-</p>
-<!-- /TMPL_IF --> <!-- FIN IF realreserves -->
-
-<!-- TMPL_IF NAME="waiting" -->
-
-
-<br>
-<p  align=center colspan=6><b>RESERVAS</b></p>
-
-<table class="tablaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
-	<tr valign=middle class="tablaresultadoTitle">
-		<th width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
-		<th>T&iacute;tulo</th>
- 		<th>Autor</th>
-		<th>Edici&oacute;n</th>
- 		<th>Volumen</th>
- 		<th>Cancelar</th>
-		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
-	</tr>
-<!-- TMPL_LOOP NAME="waiting" -->
-	<tr align="center" class="inputFontNormal">
- 		<td height=25>&nbsp;</td>
- 		<td width="16%"> 
-			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='rid1' -->">
-			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML-->
-			<!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" -->
-			<!-- /TMPL_IF --></a>
- 		</td>
-		<td>
-			<!-- TMPL_IF NAME="rautor" -->
-			<!-- TMPL_VAR NAME="rautor" -->
-			<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
- 		</td>
- 		<td>  
-			<!-- TMPL_IF NAME="redicion" -->
-			<!-- TMPL_VAR NAME="redicion" -->
-			<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- 		</td>
- 		<td>
-			<!-- TMPL_IF NAME="volume" --> <!-- TMPL_VAR NAME="volume" -->
-			<!-- TMPL_IF NAME="volumeddesc" -->: <!-- TMPL_VAR NAME="volumeddesc" -->
-			<!-- /TMPL_IF --><!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
- 		</td>
- 		<td> 
-			<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">
-			<input type="image" name="cancel"  value="Cancelar" border=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME='reservenumber' -->')" title="Cancelar">
-			</form>
- 		</td>
- 		<td height=25>&nbsp;</td>
-	</tr>
-<!-- /TMPL_LOOP -->
-</table>
-
-<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="sanctions" -->
 <br>
@@ -516,5 +397,7 @@ function confirm_deletion() {
         Historial de Pr&eacute;stamos
 	</a>
 </p>
+
+<div/>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -70,9 +70,6 @@ function cancelar(reserveNumber){
 */
 function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
-// 	cancelar(reserveNumber);
-// 	reservar(id1Nuevo, id2Nuevo);
-
 	objAH=new AjaxHelper(updateInfoCancelarReserva);
 //  	objAH.debug= true;
 	//para busquedas combinables
