@@ -1,0 +1,87 @@
+
+	
+<!-- TMPL_LOOP NAME="loopnivel3" -->
+	<hr>
+	Ejemplares Disponibles:<b> <!-- TMPL_VAR NAME="disponibles" --></b><br>
+	Reservas Realizadas: <b> <!-- TMPL_VAR NAME="cantReservas" --></b><br>
+	Reservas en Espera: <b> <!-- TMPL_VAR NAME="cantReservasEnEspera" --></b><br>
+	Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="cantPrestados" --></b><br>
+	<hr>
+<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+	<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
+
+		<td width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
+		<td colspan="2" >
+			<b>Edici&oacute;n</b>
+			<input TYPE="image" name="submit"  VALUE="modificar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplares('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Todos">
+		</td>
+		<td><b>Sig. Top.</b> </td>
+		<td><b>C&oacute;digo</b></td>
+		<td><b>Disponibilidad</b></td>
+		<td><b>Vencimiento</b></td>
+		<td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
+		<td>MARC</td>
+		<td width="1%" align="right" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
+
+	</tr>
+
+	<!-- TMPL_LOOP NAME="nivel3" -->
+	<input type="hidden" name="id2" value="<!-- TMPL_VAR NAME='id2' -->">
+	<tr align="center">
+		<td width="10%" colspan="2" valign="middle" height="25">
+	<!-- TMPL_IF NAME="sePuedeEditar" -->
+			<input TYPE="image" name="submit"  VALUE="modify" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id3' -->,'<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Ejemplar">
+	<!-- /TMPL_IF -->
+		</td>
+		<td width="6%" valign="middle">
+	<!-- TMPL_IF NAME="sePuedeBorrar" -->
+			<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
+	<!-- /TMPL_IF -->
+		</td>
+		<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
+		<td>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR NAME="barcode" --></a>
+		</td>
+		<td>
+			<span class="<!-- TMPL_VAR NAME='clase' -->">
+			<!-- TMPL_VAR NAME="disponibilidad" -->
+		<!-- TMPL_IF NAME="usuario" -->
+			<b><!-- TMPL_VAR NAME="usuario" --></b>
+		<!-- /TMPL_IF -->
+			</span>
+		</td>
+		<td>
+			<span class="<!-- TMPL_VAR NAME='claseFecha' -->">
+		<!-- TMPL_IF NAME="vencimiento" -->
+			<!-- TMPL_VAR NAME="vencimiento" -->
+		<!-- TMPL_ELSE -->
+			-------
+		<!-- /TMPL_IF -->
+			</span>
+		</td>
+		<td valign="middle" colspan="2">
+		<!-- TMPL_UNLESS NAME="wthdrawn" -->
+			<!-- TMPL_IF NAME="prestado" -->
+
+				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver('DEVOLUCION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">
+				<!-- TMPL_IF NAME="renew" -->
+				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id3' -->')">
+				<!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
+				<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="buscarUsuario('<!-- TMPL_VAR name='id3' -->','<!-- TMPL_VAR name='id2' -->');">
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_UNLESS -->
+		</td>
+	
+		<td colspan="2">
+			<input TYPE="image" name="marc"  VALUE="detalle MARC" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/MARC.png" title="" onClick="detalleMARC('<!-- TMPL_VAR name='id3' -->')">
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<br><hr class="lineagruesa"><br>
+<!-- /TMPL_LOOP -->
