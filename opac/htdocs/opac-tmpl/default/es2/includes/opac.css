@@ -5,20 +5,23 @@
 table.top{
 	background-color: #ececec;
 	}
+
 td.number{
-	border-color="#FFFFFF"; 
+
+	border-color= #FFFFFF; 
 }
 
 td.highnumber{
-	border-color="#FFFFFF";
+	border-color= #FFFFFF;
 	font-weight: bold;
 	text-decoration: underline;
 
 }
 
-h4{background-color: #A63D3F;
+h4{
+	background-color: #9C2029;
 	color:#e3e3db;
-	}
+}
 
 .pagetitulo{
 
@@ -215,4 +218,8 @@ ul li.sancionesOPAC {
 
 .tablaDetalle{
 	background-color:#DDDCD9;
+}
+
+.banner{
+	background-color:#A63D3F;
 }

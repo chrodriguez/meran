@@ -156,7 +156,7 @@ sub devolver {
 		C4::AR::Reservas::borrarReserva($reserva->{'reservenumber'});
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 		my $id1= $dataItems->{'id1'};
 		my $end_date= "null";
 
@@ -421,7 +421,7 @@ sub renovar {
 		my $data = $sth->fetchrow_hashref;
 
 		my $issuetype= $data->{'issuecode'};
-		my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+		my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 		my $id1= $dataItems->{'id1'};
 		my $id2= $dataItems->{'id2'};
 		my $branchcode= $dataItems->{'homebranch'};
@@ -720,7 +720,7 @@ sub Enviar_Recordatorio{
 	}
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-	my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+	my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 	my $id1= $dataItems->{'id1'};
 	my $id2= $dataItems->{'id2'};
 	my $branchcode= $dataItems->{'homebranch'};

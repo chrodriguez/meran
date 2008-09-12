@@ -31,7 +31,7 @@ $params{'id3'}= $id3;
 $params{'loggedinuser'}= $loggedinuser;
 $params{'tipo'}= 'OPAC';
 
-my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 $params{'barcode'}= $dataItems->{'barcode'};
 
 my ($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);

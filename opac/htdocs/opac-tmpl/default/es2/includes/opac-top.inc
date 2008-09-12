@@ -46,9 +46,20 @@ function swap(id,src){
   	<tr>
     	<td><table width="100%"  border="0" cellpadding="0" cellspacing="0">
       	<tr>
-        <td width="737"><p><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png" width="736" height="120" title="Biblioteca, Facultad de Ciencias Econ&oacute;micas"></p></td>
+     <!--   <td width="737"><p><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png" width="736" height="120" title="Biblioteca, Facultad de Ciencias Econ&oacute;micas"></p></td>
         <td width="100%" background="<!-- TMPL_VAR NAME='themelang' -->/images/medio.png"><p>&nbsp;</p></td>
-        <td width="13"><p><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png" width="13" height="120"></p></td>
+        <td width="13"><p><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png" width="13" height="120"></p></td>-->
+
+		<td align="center">
+			<h4>
+			<img class="banner" src="<!-- TMPL_VAR NAME='themelang' -->/images/nuevas/banner.png" 
+			title="Biblioteca, Facultad de Ciencias Econ&oacute;micas">
+			</h4>
+		</td>
+
+
+        <!--<td width="100%" background="<!-- TMPL_VAR NAME='themelang' -->/images/medio.png"><p>&nbsp;</p></td>
+        <td width="13"><p><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png" width="13" height="120"></p></td>-->	
       	</tr>
     	</table>
         

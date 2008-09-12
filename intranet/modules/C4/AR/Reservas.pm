@@ -690,15 +690,15 @@ sub cantReservasPorNivel1{
    return $sth->fetchrow;
 }
 
-sub getItemsParaReserva{
 #Busca los items sin reservas para los prestamos y nuevas reservas.
+sub getItemsParaReserva{
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
 			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
-			AND n3.id3 NOT IN (SELECT reserves.id3 FROM reserves 
-			WHERE id2 = ? AND id3 IS NOT NULL)";#SE SACO!!!!!!!!!! FOR UPDATE ";
+			AND n3.id3 NOT IN (	SELECT r.id3 FROM reserves r 
+						WHERE id2 = ? AND id3 IS NOT NULL   )";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2, $id2);
@@ -1142,7 +1142,7 @@ sub Enviar_Email{
 
 
 #**********************************Se registra el movimiento en historicCirculation***************************
-	my $dataItems= C4::Circulation::Circ2::getDataItems($id3);
+	my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 	my $id1= $dataItems->{'id1'};
 	my $id2= $dataItems->{'id2'};
 	my $issuecode= '-';
@@ -1267,6 +1267,7 @@ a usar mas
 =cut
 sub tiene_reservas {
 	my ($id3)=@_;
+
   	my $dbh = C4::Context->dbh;
   	my $query= "	SELECT * FROM reserves  
 			WHERE cancellationdate is NULL
@@ -1283,6 +1284,7 @@ sub tiene_reservas {
 	} else {
 		 $result=0
 	}
+
         return($result);
 }
 
@@ -1331,5 +1333,127 @@ sub mailReservas{
 	return(scalar(@result), \@result);
 
 }
+
+
+=item
+Esta funcion ....
+Se usa cuando ...
+=cut
+
+## FIXME esta funcion se trae de la V2, tratar de modularizar mas y reusar funciones, puede que haya
+# consultas repetidas..
+sub cambiarReservaEnEspera {
+my ($id2,$id3,$responsable)=@_;
+	my $dbh=C4::Context->dbh;
+
+	#Tiene una reserva asignada??
+	my $query=" SELECT * FROM reserves WHERE (estado <> 'P') AND (id3 = ?) ";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id3);
+	my $reserva=$sth->fetchrow_hashref;
+	
+	if($reserva){
+	#Tenia una reserva asignada hay que cambiarla
+		my $item= getItemsParaReserva($id2); #busco un item libre del grupo
+		if ($item) {
+		#Hay un ejemplar libre para el usuario
+			my $sth2=$dbh->prepare("UPDATE reserves SET id3= ? WHERE reservenumber= ?; ");
+			$sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
+
+		}else {
+		#NO hay ejemplares libres!!! 
+		#Queda algun ejemplar Disponible?? (wthdrawn = 0) y (notforloan = 0)
+# 		my $query2="SELECT * FROM nivel3 WHERE id2 = ? and wthdrawn='0' and notforloan = '0'";
+		my $query2="SELECT * FROM nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
+		my $sth4=$dbh->prepare($query2);
+		$sth4->execute($id2);
+		my $disponibles=$sth4->fetchrow_hashref;
+			if ($disponibles){
+		#Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
+				my $query3="UPDATE reserves SET timestamp='0000-00-00 00:00:00', id3 = NULL
+					    WHERE reservenumber=? ";
+				my $sth5=$dbh->prepare($query3);
+				$sth5->execute($reserva->{'reservenumber'});
+			}
+			else {
+			#Cancelar TODAS las reservas!!! No hay mas ejemplares disponibles
+			cancelar_todas_las_reservas_de_un_grupo($id2,$responsable);
+			}
+		}
+	
+	}
+
+}
+
+
+=item
+Esta funcion cancela todas las reservas que existan sobre el grupo.
+Se usa cuando por ej. se elimina o cambia la disponibilidad de los items de un grupo, de manera tal que
+ya no queden itemes disponibles en el grupo, entonces se deben cancelar todas las reservas sobre el grupo
+=cut
+
+## FIXME esta funcion se trae de la V2, tratar de modularizar mas y reusar funciones, puede que haya
+# consultas repetidas..
+sub cancelar_todas_las_reservas_de_un_grupo{
+my ($id2,$loggedinuser)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+        #Primero busco los datos de las reservas que se quieren borrar
+	my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id2 = ? ");
+	$sth->execute($id2);
+	my @resultado;
+
+	while (my $data=$sth->fetchrow_hashref){
+		push (@resultado,$data);
+	}
+
+	#Elimino las reservas se estan cancelando
+	$sth=$dbh->prepare(" DELETE FROM reserves WHERE id2 = ? ");
+	$sth->execute($id2);
+
+	foreach my $data (@resultado){
+#**********************************Se registra el movimiento en historicCirculation***************************
+		my $id1;
+		my $branchcode;
+
+		if($data->{'id3'}){
+#ES UNA RESERVA ASIGNADA
+# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+			my $sth4=$dbh->prepare("	DELETE FROM sanctions 
+							WHERE reservenumber=? AND (now() < startdate) ");
+
+			$sth4->execute($data->{'reservenumber'});
+	
+			my $dataItems= C4::AR::Nivel3::getDataNivel3($data->{'id3'});
+			$id1= $dataItems->{'id1'};
+			$branchcode= $dataItems->{'homebranch'};
+		}else{
+			my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
+			$id1= $dataBiblioItems->{'id1'};
+			$branchcode= 0;
+		}
+		
+		my $issuetype= '-';
+		my $borrowernumber= $loggedinuser;
+		my $end_date = 'null';
+		C4::Circulation::Circ2::insertHistoricCirculation(
+									'cancel',
+									$borrowernumber,
+									$loggedinuser,
+									$id1,
+									$id2,
+									$data->{'id3'},
+									$branchcode,
+									$issuetype,
+									$end_date
+		); 
+
+	}# end foreach my $data (@resultado)
+#******************************Fin****Se registra el movimiento en historicCirculation*************************
+
+}#end sub cancelar_todas_las_reservas_de_un_grupo{
+
+
 
 1;

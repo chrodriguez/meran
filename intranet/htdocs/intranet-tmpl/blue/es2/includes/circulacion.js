@@ -31,10 +31,10 @@ function infoPrestamo(){
 }
 
 /*
- * object_usuario
+ * objeto_usuario
  * Representa al objeto que contendra la informacion del usuario seleccionado del autocomplete.
  */
-function object_usuario(){
+function objeto_usuario(){
 	this.text;
 	this.ID;
 }
@@ -61,7 +61,7 @@ function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
 		//muestro en el input el usuario seleccioinado
 		$("#"+idInput).val(data[0]);
 	
- 		usuario= new object_usuario();
+ 		usuario= new objeto_usuario();
 		usuario.text= data[0];
 		usuario.ID= data[1];
 		

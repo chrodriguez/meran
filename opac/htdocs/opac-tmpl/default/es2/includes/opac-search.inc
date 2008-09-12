@@ -1,30 +1,3 @@
-<script>
-
-// function searchinc(orden){
-/*
-function searchinc(orden, ini){
-
-var params= 	$('#criteria').val() + '=' + $('#searchinc').val() + 
-		'&comboItemTypes= -1' +
-		'&ini=' + ini +
-  		'&tipo=normal';
-
-	$.ajax({	type: "POST", 
-			url: "busqueda.pl",
-			data: params,
- 			complete: function(ajax){
-					//si estoy logueado, oculta la informacion del usuario
-					$('#datosUsuario').slideUp('slow');
-					$('#result').html(ajax.responseText);
-					pushCache(ajax.responseText, 'result');
-					zebra();
-				}
-	});
-
-}
-*/
-
-</script>
 
 <font size=2>Campos:</font>
 <select size="1"  id="criteria" name="criteria">

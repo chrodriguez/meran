@@ -15,6 +15,8 @@ use vars qw(@EXPORT @ISA);
 	&getColaboradores
 	&getUnititle
 
+	&saveNivel1
+
 	&detalleNivel1
 	&detalleNivel1MARC
 	&detalleNivel1OPAC
@@ -285,3 +287,51 @@ sub deleteNivel1{
         $sth->execute($id1);
 
 }
+
+
+=item
+saveNivel1
+Guarda los campos del nivel 1 tanto los unicos como los repetibles.
+Los parametros que reciben son: $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
+=cut
+sub saveNivel1{
+	my ($autor,$nivel1)=@_;
+	my $query1="";
+	my $query2="";
+	my @bind1=();
+	my @bind2=();
+	my $query3="SELECT MAX(id1) FROM nivel1";
+	my $titulo="";
+	foreach my $obj(@$nivel1){
+		my $campo=$obj->{'campo'};
+		my $subcampo=$obj->{'subcampo'};
+		my $valor=$obj->{'valor'};
+		if($campo eq '245' && $subcampo eq 'a'){
+			$titulo=$valor;
+		}
+		else{
+			if($valor ne ""){
+				if($obj->{'simple'}){
+					$query2.=",(?,?,*?*,?)";
+					push (@bind2,$campo,$subcampo,$valor);
+				}
+				else{
+					foreach my $val (@$valor){
+						$query2.=",(?,?,*?*,?)";
+						push (@bind2,$campo,$subcampo,$val);
+					}
+				}
+			}
+		}
+	}
+	$query1="INSERT INTO nivel1 (titulo,autor) VALUES (?,?) ";
+	push (@bind1,$titulo,$autor);
+	if($query2 ne ""){
+		$query2=substr($query2,1,length($query2));
+		$query2="INSERT INTO nivel1_repetibles (campo,subcampo,id1,dato) VALUES ".$query2;
+	}
+	my($ident,$error,$codMsg)=C4::AR::Catalogacion::transaccion($query1,\@bind1,$query2,\@bind2,$query3);
+
+	return($ident,$error,$codMsg);
+}
+

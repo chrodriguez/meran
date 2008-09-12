@@ -26,6 +26,7 @@ my $itemtype=$obj->{'itemtype'}||'ALL';
 my $id1=$obj->{'id1'} || -1;
 my $id2=$obj->{'id2'} || -1;
 my $accion=$obj->{'accion2'} ||$obj->{'accion'} ||-1;
+my %infoRespuesta;
 
 my $descripcion= C4::AR::Busquedas::getItemType($itemtype);
 
@@ -91,20 +92,20 @@ my $mensaje="";
 my $paraMens;
 if($paso > 1 && ($accion ne "modificarN1" && $accion ne "agregarN2" && $accion ne "borrarN2" && $accion ne "modificarN2")){
 	if(($paso-1)==1){
-		($id1,$error,$codMsg)= guardarNivel1($idAutor,\@nivel1o2);
+		($id1,$error,$codMsg)= C4::AR::Nivel1::saveNivel1($idAutor,\@nivel1o2);
 		if($error){
 			$mensaje= C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=1;
 		}
 	}
 	elsif(($paso-1)==2 && (!$error)){
-		my ($id2,$tipoDocN2,$error,$codMsg)=guardarNivel2($id1,\@nivel1o2);
+		my ($id2,$tipoDocN2,$error,$codMsg)=C4::AR::Nivel2::saveNivel2($id1,\@nivel1o2);
 		if($error){
 			$mensaje= C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=2;
 		}
 		else{
-			($error,$codMsg)=guardarNivel3($id1,$id2,$barcode,$cantItems,$tipoDocN2,\@nivel3);
+			($error,$codMsg)=C4::AR::Nivel3::saveNivel3($id1,$id2,$barcode,$cantItems,$tipoDocN2,\@nivel3);
 			$mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 			$paso=2;
 		}

@@ -59,6 +59,7 @@ Also deals with stocktaking.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
+
 	&getpatroninformation
 	&getiteminformation
 
@@ -72,15 +73,16 @@ Also deals with stocktaking.
 
 	&insertHistoricCirculation
 
-	&getDataItems 
 	&getDataBiblioItems
-	    );
+
+);
 
 
 
 #Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
 sub getDataBiblioItems{
 	my ($id2)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id1 FROM nivel2 WHERE id2 = ? ");
 	$sth->execute($id2);
@@ -88,24 +90,11 @@ sub getDataBiblioItems{
 	return $dataBiblioItems;
 }
 
-#Miguel - No se si existe ya esta funcion!!!!!!!!!!!!!!!!!!!
-sub getDataItems{
-	my ($id3)= @_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2, barcode
-				FROM nivel3
-				WHERE(id3 = ?)");
-	$sth->execute($id3);
-	my $dataItems= $sth->fetchrow_hashref;
-	return $dataItems;
-}
-
 =item
 Registra Movimiento
 =cut
 
 sub insertHistoricCirculation {
-
   my ($type,$borrowernumber,$responsable,$id1,$id2,$id3,$branchcode,$issuetype,$end_date)=@_;
 	
   my $dbh = C4::Context->dbh;

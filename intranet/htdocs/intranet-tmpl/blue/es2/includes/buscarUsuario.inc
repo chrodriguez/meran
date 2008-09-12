@@ -15,7 +15,9 @@ function closeWindow(){
 	$('.windowBlur').hide();
 	$('.ac_results').hide();
 	$('#windowHelp').hide();
-	scrollTo('confirmar_div');
+	if($('#campoUsuario').val() != ''){
+		scrollTo('confirmar_div');
+	}
 }
 
 function openWindow(){

@@ -21,6 +21,8 @@ use vars qw(@EXPORT @ISA);
 
 		&getIndice
 		&insertIndice
+
+		&saveNivel2
 		
 		&detalleNivel2
 		&detalleNivel2MARC
@@ -503,5 +505,80 @@ sub deleteGrupo{
 	my $query="DELETE FROM nivel2 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
+
+}
+
+
+=item
+saveNivel2
+Guarda los campo del nivel 2
+Los parametros que reciben son: $itemType el tipo de item que es; $id1 es el id de la fila insertada para ese item en la tabla nivel1; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
+=cut
+sub saveNivel2{
+	my ($id1,$nivel2)=@_;
+	my $query1="";
+	my $query2="";
+	my @bind1=();
+	my @bind2=();
+	my $query3="SELECT MAX(id2) FROM nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
+	my $nivelBiblio="";
+	my $tipoDoc="";
+	my $soporte="";
+	my $fecha="";
+	my $ciudad="";
+	my $lenguaje="";
+	my $pais="";
+	foreach my $obj(@$nivel2){
+		my $campo=$obj->{'campo'};
+		my $subcampo=$obj->{'subcampo'};
+		my $valor=$obj->{'valor'};
+		
+		if($campo eq '910' && $subcampo eq 'a'){
+			$tipoDoc=$valor;
+		}
+		elsif($campo eq '260' && $subcampo eq 'c' && $fecha eq ""){
+			#Repetibles!!!
+			$fecha=$valor ;
+		}
+		elsif($campo eq '260' && $subcampo eq 'a' && $ciudad eq ""){
+			$ciudad=$valor ;
+		}
+		elsif($campo eq '041' && $subcampo eq 'h' && $lenguaje eq ""){
+			#Repetibles!!!
+			$lenguaje=$valor ;
+		}
+		elsif($campo eq '043' && $subcampo eq 'c' && $pais eq ""){
+			#Repetibles!!!
+			$pais=$valor ;
+		}
+		elsif($campo eq '245' && $subcampo eq 'h'){
+			$soporte=$valor ;
+		}
+		elsif($campo eq '900' && $subcampo eq 'b'){
+			$nivelBiblio=$valor;
+		}
+		else{
+			if($valor ne ""){
+				if($obj->{'simple'}){
+					$query2.=",(?,?,*?*,?)";
+					push (@bind2,$campo,$subcampo,$valor);
+				}
+				else{
+					foreach my $val (@$valor){
+						$query2.=",(?,?,*?*,?)";
+						push (@bind2,$campo,$subcampo,$val);
+					}
+				}
+			}
+		}
+	}
+	$query1="INSERT INTO nivel2 (tipo_documento,id1,nivel_bibliografico,soporte,pais_publicacion,lenguaje,ciudad_publicacion,anio_publicacion) VALUES (?,?,?,?,?,?,?,?)";
+	push (@bind1,$tipoDoc,$id1,$nivelBiblio,$soporte,$pais,$lenguaje,$ciudad,$fecha);
+	if($query2 ne ""){
+		$query2=substr($query2,1,length($query2));
+		$query2="INSERT INTO nivel2_repetibles (campo,subcampo,id2,dato) VALUES ".$query2;
+	}
+	my ($id2,$error,$codMsg) =&C4::AR::Catalogacion::transaccion($query1,\@bind1,$query2,\@bind2,$query3);
+	return($id2,$tipoDoc,$error,$codMsg);
 
 }

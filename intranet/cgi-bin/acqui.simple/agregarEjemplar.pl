@@ -28,14 +28,16 @@ if(!$json){
 			     });
 
 	if($accion eq "agregarNivel3"){
+
 		my $barcodes=$obj->{'barcodes'};
 		my $cantItems=$obj->{'cantItems'};
 		my $nivel2=&buscarNivel2($id2);
 		my $tipoDoc=$nivel2->{'tipo_documento'};
 		my $nivel3 = $obj->{'respuesta'};
 		my $paraMens;
-		my ($error,$codMsg)=&guardarNivel3($id1,$id2,$barcodes,$cantItems,$tipoDoc,$nivel3);
+		my ($error,$codMsg)=&C4::AR::Nivel3::saveNivel3($id1,$id2,$barcodes,$cantItems,$tipoDoc,$nivel3);
 		my $mensaje=C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+
 		$template->param(
 			mensaje	  => $mensaje,
 		);

@@ -1,23 +1,5 @@
 #!/usr/bin/perl
 
-#Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
-#This file is part of Koha-UNLP
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use CGI;
 use C4::Auth;
@@ -135,7 +117,7 @@ print A "id3 antes de setear: $id3\n";
 # FIXME ########################################################################################
 
 		if($id3 ne ""){
-			my $data= C4::Circulation::Circ2::getDataItems($id3);
+			my $data= C4::AR::Nivel3::getDataNivel3($id3);
 			my %params;
 			$params{'id1'}= $data->{'id1'};
 			$params{'id2'}= $data->{'id2'};
@@ -156,30 +138,19 @@ print A "id3 antes de setear: $id3\n";
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
 			#guardo los errores
-# 			my %infoOperacion = (
-#         			error => $error,
-#         			message => $message,
-# 				ticket  => $ticketObj,
-#     			);
-
-
  			my %messageObj;
 			$messageObj{'error'}= $error;
 			$messageObj{'codMsg'}= $codMsg;
 			$messageObj{'message'}= $message;
 
 			push (@infoMessages, \%messageObj);
-
 			
 			my %infoOperacion = (
-# 						message => \%messageObj,
 						ticket  => $ticketObj,
 			);
 	
 			push (@infoTickets, \%infoOperacion);
 
-
-# 			push (@infoOperacionArray, \%infoOperacion);
 print A "id3: $id3\n";		
 print A "id2: $id2\n";	
 # print A "id1: $id1\n";	
@@ -191,17 +162,12 @@ print A "message: $message \n";
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}= \@infoTickets;
 	$infoOperaciones{'messages'}= \@infoMessages;
-# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
 	
 	my $infoOperacionJSON = to_json \%infoOperaciones;
 
 	print $input->header;
 	print $infoOperacionJSON;
 
-# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
-# 
-# 	print $input->header;
-# 	print $infoOperacionJSON;
 }
 #*************************************************************************************************************
 
@@ -231,11 +197,12 @@ print A "LOOP: $loop\n";
 print A "Entra al if de dev\n";
 			my ($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
 
+			#guardo los errores
   			my %messageObj;
  			$messageObj{'error'}= $error;
  			$messageObj{'codMsg'}= $codMsg;
  			$messageObj{'message'}= $message;
-# 
+ 
  			push (@infoMessages, \%messageObj);
 
 		}elsif($accion eq 'RENOVACION') {
@@ -243,11 +210,12 @@ print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
 			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
 
+			#guardo los errores
   			my %messageObj;
  			$messageObj{'error'}= $error;
  			$messageObj{'codMsg'}= $codMsg;
  			$messageObj{'message'}= $message;
-# 
+
  			push (@infoMessages, \%messageObj);
 
 
@@ -258,18 +226,8 @@ print A "error: $error --- cod: $codMsg\n";
 			}
 		}# end elsif($accion eq 'RENOVACION')
 
-		#se genera info para enviar al cliente
-
-# 		my %messageObj;
-# 		$messageObj{'error'}= $error;
-# 		$messageObj{'codMsg'}= $codMsg;
-# 		$messageObj{'message'}= $message;
-
-# 		push (@infoMessages, \%messageObj);		
-
-
+		#se genera info para enviar al cliente	
 		my %infoOperacion = (
-#         			  	message => \%messageObj,
 				  	ticket  => $ticketObj,
 		);
 
@@ -279,11 +237,11 @@ print A "error: $error --- cod: $codMsg\n";
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}= \@infoTickets;
 	$infoOperaciones{'messages'}= \@infoMessages;
-# 	my $infoOperacionJSON = to_json \@infoOperacionArray;
 	
 	my $infoOperacionJSON = to_json \%infoOperaciones;
 
 	print $input->header;
 	print $infoOperacionJSON;
 }
+
 close(A);

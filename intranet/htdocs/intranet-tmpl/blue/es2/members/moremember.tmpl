@@ -1,34 +1,51 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>
+<!--<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script>-->
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script>
+<!-- <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script> -->
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 
 <script>
+
+var objAH;
+
+
+//*************************************Para manejar el historial de prestamos***********************************
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+function mostrarHistorialDePrestamos(){
+	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
+	objAH.url='/cgi-bin/koha/members/historialPrestamos.pl';
+	objAH.borrowernumber= usuario.ID;
+	objAH.funcion= 'changePage';
+	objAH.sendToServer();
+}
+
+function updateMostrarHistorialDePrestamos(responseText){
+	$('#historialPrestamos').html(responseText);
+	zebra('tablaHistorialPrestamos');
+}
+
+
+//*******************************Fin Para manejar el historial de prestamos************************************
+
+
+//************************************Para manejar la circulacion**********************************************
+
 function openPopup() {
 	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
 }
 
-function objeto_datos(){
-	this.array_ids3;
-	this.usuario;
-	this.accion;
-}
-
-function objeto_usuario(){
-	this.text;
-	this.ID;
-}
-
-function item(){
-	this.id3;
-	this.barcode;
-}
-
 $(document).ready(function() {
+
 	checkedAll('checkAllReservas','chkboxReservas');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
 	zebra("tablaResult");
@@ -40,6 +57,16 @@ $(document).ready(function() {
 
 	detallePrestamos(usuario.ID);
 	detalleReservas(usuario.ID);
+
+	$("#historialPrestamosToggle").toggle(	function(){
+// 							$(this).addClass("selected");
+							$('#historialPrestamos').slideUp('slow');
+						},
+						function(){
+// 							$(this).removeClass("selected");
+							$('#historialPrestamos').slideDown('slow');
+						}
+	);
 
 });
 
@@ -130,11 +157,15 @@ function detalleReservas(borr){
 	objAH.sendToServer();
 }
 
+
 function updateDetalleReservas(responseText){
 	$('#reservas').html(responseText);
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 }
+
+//**********************************Fin**Para manejar la circulacion********************************************
+
 
 </script>
 
@@ -346,11 +377,14 @@ function updateDetalleReservas(responseText){
 <!-- /TMPL_IF --> <!-- FIN IF sanctions -->
 
 <p align="center">
-	<a class="inputFontNormal" class=button href="/cgi-bin/koha/members/historialPrestamos.pl?bornum=<!-- TMPL_VAR NAME='bornum' -->">
-        Historial de Pr&eacute;stamos
-	</a>
-</p>
+	<span class="click" onClick="mostrarHistorialDePrestamos()">
+        	Historial de Pr&eacute;stamos
+	</span>
+</p>	
 
-<div/>
+<div id="historialPrestamosToggle" class="click" style="width: 10px; ">[-]</div>
+<div id="historialPrestamos"></div>
+
+</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

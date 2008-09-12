@@ -421,6 +421,7 @@ sub buscarNivel3PorId2YDisponibilidad{
 	$infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
 
 	while(my $data=$sth->fetchrow_hashref){
+
 		my $holdbranch= getBranch($data->{'holdingbranch'});
 		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
 		
