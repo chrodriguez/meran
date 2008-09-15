@@ -18,8 +18,8 @@ var MENU_ITEMS = [
 		['Visualizaci&oacute;n OPAC', '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl'],
 		['Importaci&oacute;n', '/cgi-bin/koha/importacion.pl'],
 		['Control de Autoridades','', null,
-			['Sin&oacute;nimos', '/cgi-bin/koha/controlAutoridadesSinonimos.pl'],
-			['Seud&oacute;nimos', '/cgi-bin/koha/controlAutoridadesSeudonimos.pl'],
+			['Sin&oacute;nimos', '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.pl'],
+			['Seud&oacute;nimos', '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.pl'],
 		]
 	],
 	['Usuarios', '/cgi-bin/koha/members/member.pl', null,

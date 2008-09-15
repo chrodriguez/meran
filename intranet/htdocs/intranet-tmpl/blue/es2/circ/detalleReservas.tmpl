@@ -66,14 +66,19 @@
 			<!-- TMPL_VAR name="rreminderdate" -->
 		</td>
 		<td align="middle"> 
-	       		<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
+	       		<input type="image" name="cancel"  value="cancelar" 
+			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
+			onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
 <!-- /TMPL_LOOP -->
 </table>
 	<p colspan="10" class="inputFontNormal" align=center>
-		<input type="image" name="borrowD"  value="prestar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+		<input type="image" name="borrowD"  value="prestar" 
+		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" 
+		title="Realizar pr&eacute;stamo" 
+		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
 
 <!-- /TMPL_IF -->
@@ -127,7 +132,9 @@
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<input type="image" name="cancel"  value="cancelar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
+			<input type="image" name="cancel"  value="cancelar" 
+			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
+			onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 		<td width="1%">&nbsp;</td>

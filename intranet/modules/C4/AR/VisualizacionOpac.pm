@@ -25,19 +25,20 @@ $VERSION = 0.01;
 	&buscarTiposItemParaEncabezado
 
 	&verificarExistenciaEncabezadoItem
-	&verificarExistenciaCatalogacion
 
 	&traerCampos
 	&traerSubCampos
 	&traerVisualizacion
 	&traerKohaToMARC
+	
+	&t_insertEncabezado
+	&t_insertConfVisualizacion
 
-	&insertarCatalogacion	
-	&t_insertarEncabezado
 	&insertarMapeoKohaToMARC
 
-	&deleteCatalogacion
+	&t_deleteConfVisualizacion
 	&t_deleteEncabezado
+
 	&deleteMapeoKohaToMARC
 	&deleteEncabezado
 
@@ -254,7 +255,7 @@ sub verificarExistenciaEncabezadoItem{
 	return ($data);
 }
 
-sub verificarExistenciaCatalogacion{
+sub verificarExistenciaConfVisualizacion{
 #se verifica la existencia de la tupla $idencabezado, $campo, $subcampo
 	my ($idencabezado, $campo, $subcampo)=@_;
 	
@@ -268,6 +269,7 @@ sub verificarExistenciaCatalogacion{
 	
 	my $data=$sth->fetchrow;
  	$sth->finish;
+
 	return ($data);
 }
 
@@ -301,15 +303,60 @@ sub insertarEncabezadoItem{
 }
 
 
-sub insertarCatalogacion{
+sub insertConfVisualizacion{
 	my ($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
 
 	my $dbh = C4::Context->dbh;
 	my $query="	INSERT INTO estructura_catalogacion_opac
 			(campo, subcampo, textpred, textsucc, separador, idencabezado)
 			VALUES (?,?,?,?,?,?) ";
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
+}
+
+sub t_insertConfVisualizacion {
+	
+	my($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
+
+	my ($error, $codMsg,$paraMens);
+	
+	my $dbh = C4::Context->dbh;
+	my ($paramsReserva);
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+
+		my $cant= 0;
+		$cant= &verificarExistenciaConfVisualizacion($idencabezado, $campo, $subcampo);
+	
+		if($cant eq 0){
+
+			insertConfVisualizacion(	$campo, 
+							$subcampo, 
+							$textoPred, 
+							$textoSucc, 
+							$separador, 
+							$idencabezado
+			);	
+			$dbh->commit;
+			$codMsg= 'VO806';
+		}
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B410';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'VO807';
+	}
+	$dbh->{AutoCommit} = 1;
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
 }
 
 sub UpdateCatalogacion{
@@ -417,7 +464,7 @@ sub modificarOrdenEncabezado{
 	}
 }
 
-sub insertarEncabezado{
+sub insertEncabezado{
 	my ($encabezado, $nivel, $itemtypes_arrayref)=@_;
 
 	my $dbh = C4::Context->dbh;
@@ -443,10 +490,9 @@ sub insertarEncabezado{
  	}
 }
 
-sub t_insertarEncabezado {
+sub t_insertEncabezado {
 	
 	my($encabezado, $nivel, $itemtypes_arrayref)=@_;
-	my $reservaGrupo= 0;
 
 	my ($error, $codMsg,$paraMens);
 	
@@ -461,7 +507,7 @@ sub t_insertarEncabezado {
 	
 		if($cant eq 0){
 
-			insertarEncabezado($encabezado, $nivel, $itemtypes_arrayref);	
+			insertEncabezado($encabezado, $nivel, $itemtypes_arrayref);	
 			$dbh->commit;
 			$codMsg= 'VO800';
 		}
@@ -482,7 +528,7 @@ sub t_insertarEncabezado {
 	return ($error, $codMsg, $message);
 }
 
-sub deleteCatalogacion{
+sub deleteConfVisualizacion{
 	my ($idestcatopac)=@_;
 
 	my $dbh = C4::Context->dbh;
@@ -491,6 +537,38 @@ sub deleteCatalogacion{
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($idestcatopac);
+}
+
+sub t_deleteConfVisualizacion {
+	
+	my($idestcatopac)=@_;
+
+	my ($error, $codMsg,$paraMens);
+	
+	my $dbh = C4::Context->dbh;
+	my ($paramsReserva);
+	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+	$dbh->{RaiseError} = 1;
+	eval {
+
+		deleteConfVisualizacion($idestcatopac);	
+		$dbh->commit;
+		$codMsg= 'VO804';
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		$codMsg= 'B415';
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$error= 1;
+		$codMsg= 'VO805';
+	}
+	$dbh->{AutoCommit} = 1;
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+	return ($error, $codMsg, $message);
 }
 
 sub deleteEncabezado{
@@ -519,7 +597,6 @@ sub deleteEncabezado{
 sub t_deleteEncabezado {
 	
 	my($idencabezado)=@_;
-	my $reservaGrupo= 0;
 
 	my ($error, $codMsg,$paraMens);
 	

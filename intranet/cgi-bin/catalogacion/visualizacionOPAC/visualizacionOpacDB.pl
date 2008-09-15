@@ -6,6 +6,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::VisualizacionOpac;
 use C4::AR::Utilidades;
+use JSON;
 
 my $input = new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
@@ -20,6 +21,7 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $componente= $obj->{'componente'}||"";
 my $tabla= $obj->{'tabla'}||"";
 my $result;
+my %infoRespuesta;
 
 
 #************************* para cargar la tabla de encabezados*************************************
@@ -94,7 +96,7 @@ if(($tipoAccion eq "INSERT")&&($tabla eq "ENCABEZADO")){
 	my $itemtypes= $obj->{'itemtypes'};
 	my $itemtypes_arrayref= from_json_ISO($itemtypes);
 	
-	my ($error, $codMsg, $message)= &t_insertarEncabezado($encabezado, $nivel, $itemtypes_arrayref);
+	my ($error, $codMsg, $message)= &t_insertEncabezado($encabezado, $nivel, $itemtypes_arrayref);
 	
 	print $input->header;
 	($error)?print $message:'';
@@ -143,8 +145,8 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 }
 #**************************************************************************************************
 
-#**************** gurado la catalogacion en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
+#**************** gurado la configuracion de la visualizacion en estructura_catalogacion_opac******************
+if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 	my $textoPred =$obj->{'textoPredecesor'};
 	my $textoSucc =$obj->{'textoSucesor'};
@@ -153,25 +155,29 @@ if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
 	my $separador =$obj->{'separador'};
 	my $idencabezado =$obj->{'encabezados'};
 	
-	my $cant= 0;
-	$cant= &verificarExistenciaCatalogacion($idencabezado, $campo, $subcampo);
-	if($cant == 0){
-
-		&insertarCatalogacion(	$campo, 
-					$subcampo, 
-					$textoPred, 
-					$textoSucc, 
-					$separador, 
-					$idencabezado
-				);
-	}
+	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_insertConfVisualizacion(	$campo, 
+												$subcampo, 
+												$textoPred, 
+												$textoSucc, 
+												$separador, 
+												$idencabezado
+					);
 	
+	#se arma el mensaje
+	$infoRespuesta{'error'}= $error;
+	$infoRespuesta{'codMsg'}= $codMsg;
+	$infoRespuesta{'message'}= $message;
+
+	#se convierte el arreglo de respuesta en JSON
+	my $infoRespuestaJSON = to_json \%infoRespuesta;
 	print $input->header;
+	#se envia en JSON al cliente
+	print $infoRespuestaJSON;
 }
 #**************************************************************************************************
 
 #**************** gurado la catalogacion en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
+if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 	my $textoPred =$obj->{'textoPredecesor'};
 	my $textoSucc =$obj->{'textoSucesor'};
@@ -180,17 +186,27 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
 	
 	&UpdateCatalogacion($textoPred, $textoSucc, $separador, $idestcatopac);
 	
-	print $input->header;
+ 	print $input->header;
 }
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
-if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_CATALOGACION")){
+if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 	my $idestcatopac =$obj->{'idestcatopac'};
 	
-	&deleteCatalogacion($idestcatopac);
+	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_deleteConfVisualizacion($idestcatopac);
 	
+	#se arma el mensaje
+	$infoRespuesta{'error'}= $error;
+	$infoRespuesta{'codMsg'}= $codMsg;
+	$infoRespuesta{'message'}= $message;
+
+	#se convierte el arreglo de respuesta en JSON
+	my $infoRespuestaJSON = to_json \%infoRespuesta;
 	print $input->header;
+	#se envia en JSON al cliente
+	print $infoRespuestaJSON;
+
 }
 #**************************************************************************************************
 
@@ -201,8 +217,16 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
 	
 	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_deleteEncabezado($encabezado);
 	
+	#se arma el mensaje
+	$infoRespuesta{'error'}= $error;
+	$infoRespuesta{'codMsg'}= $codMsg;
+	$infoRespuesta{'message'}= $message;
+
+	#se convierte el arreglo de respuesta en JSON
+	my $infoRespuestaJSON = to_json \%infoRespuesta;
 	print $input->header;
-	($error)?print $message:'';
+	#se envia en JSON al cliente
+	print $infoRespuestaJSON;
 }
 #**************************************************************************************************
 

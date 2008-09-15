@@ -18,7 +18,9 @@
 		<th>Vencimiento</th>
 		<th width="10%">Retira en</th>
 		<th width="10%">Cancelar</th>
-		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
+		<th width="1%" valing="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</th>
  	</tr>
 <!-- TMPL_LOOP NAME="realreserves" -->
 	<tr class="inputFontNormal" align="center">
@@ -81,7 +83,9 @@
 		</td>
 
 		<td>
-			<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="cancelarReserva(<!-- TMPL_VAR NAME='reservenumber' -->)" title="Cancelar">
+			<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
+			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
+			onClick="cancelarReserva(<!-- TMPL_VAR NAME='reservenumber' -->)" title="Cancelar">
 		</td>
  		<td height=25>&nbsp;</td>
 
@@ -90,7 +94,10 @@
 </table>
 
 <p align=center>
-	<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+	<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 
+	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" 
+	title="Realizar pr&eacute;stamo" 
+	onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 </p>
 
 
@@ -104,13 +111,17 @@
 
 <table class="reservasEnEsperaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 	<tr valign=middle class="tablaresultadoTitle">
-		<th width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
+		<th width="1%" align="right" valing="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</th>
 		<th>T&iacute;tulo</th>
  		<th>Autor</th>
 		<th>Edici&oacute;n</th>
  		<th>Volumen</th>
  		<th>Cancelar</th>
-		<th width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
+		<th width="1%" valing="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</th>
 	</tr>
 <!-- TMPL_LOOP NAME="waiting" -->
 	<tr align="center" class="inputFontNormal">

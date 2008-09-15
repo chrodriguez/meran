@@ -3,10 +3,12 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 
 <!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
 
 <script>
+
 function cambiarVisibilidad(idEstCat){
 
 	objAH=new AjaxHelper(armarTablaVisualizacion);
@@ -76,7 +78,7 @@ function modificarDatos(){
 	objAH.textoSucesor= $('#textoSucesor').val(); 
 	objAH.separador= $('#separador').val();
 	objAH.idestcatopac= idestcatopac;
-	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
+	objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
 	objAH.tipoAccion= 'UPDATE';
 	//se envia la consulta
 	objAH.sendToServer();
@@ -134,7 +136,7 @@ function updateSeleccionarCampos(responseText){
 
 function validarDatosEncabezado(){
 	if($('#nomEncabezadoAlta')[0].value == ""){
-		alert("Ingrese el encabezado");
+		alert('Ingrese el encabezado');
 		$('#nomEncabezadoAlta')[0].focus();
 	}else {
 		saveEncabezado();
@@ -142,9 +144,9 @@ function validarDatosEncabezado(){
 	};
 }
 
-function saveCatalogacion(){
+function saveConfVisualizacion(){
 
-	objAH=new AjaxHelper(updateSaveCatalogacion);
+	objAH=new AjaxHelper(updateSaveConfVisualizacion);
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.textoPredecesor= $('#textoPredecesor').val();
 	objAH.textoSucesor= $('#textoSucesor').val();
@@ -152,43 +154,48 @@ function saveCatalogacion(){
 	objAH.campo= $('#campo').val();
 	objAH.subCampo= $('#subCampo').val();
 	objAH.encabezados= $('#idEncabezado').val();
-	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
+	objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
  	objAH.tipoAccion= 'INSERT';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-function updateSaveCatalogacion(){
+function updateSaveConfVisualizacion(responseText){
+
+	clearMessages();
+	var Mensaje= JSONstring.toObject(responseText);
+  	setMessages(Mensaje);
+
 	//arma la tabla de configuracion de visualizacion 
 	armarTablaVisualizacion();
 	eleccionCampoX();
 }
 
-//esta al pedo ver!!!!!!!!!!!!!!!!!!!!!!!!
-function mostrarError(responseText){
-	
-	var error= responseText;
-	if(error != ""){
-		//se informa el error
-		$('#resultError').show();
-		$('#resultError').html(error);
-		//luego de 6 seg ejecuta la funcion
-		delay("$('#resultError').hide()",6); //util.js
-	}
-}
-
 function deleteRowVisualizacion(OP,ID){
 
-	objAH=new AjaxHelper(armarTablaVisualizacion);
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-	objAH.tipoAccion= 'DELETE';
-	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
-	objAH.idestcatopac= ID;
-	//se envia la consulta
-	objAH.sendToServer();
+	var is_confirmed = confirm('Confirma la baja?');
+
+	if (is_confirmed) {
+
+		objAH=new AjaxHelper(updateDeleteRowVisualizacion);
+		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+		objAH.tipoAccion= 'DELETE';
+		objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
+		objAH.idestcatopac= ID;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
 
 }
 
+function updateDeleteRowVisualizacion(responseText){
+
+	clearMessages();
+	var Mensaje= JSONstring.toObject(responseText);
+  	setMessages(Mensaje);
+
+	armarTablaVisualizacion();
+}
 
 function armarTablaVisualizacion(){
 
@@ -215,6 +222,7 @@ function updateArmarTablaVisualizacion(responseText){
 
 function validarDatos(){
 	var ok= true;
+// y esto para que esta!!!!!!!
 	seleccionarEncabezado
 	if($('#campoX').selectedIndex == 0){
 		alert("Seleccione el filtro para campos");
@@ -254,7 +262,7 @@ function validarDatos(){
 	
 	if(ok){
 	//se guarda la configuracion de visualizacion
-		saveCatalogacion();
+		saveConfVisualizacion();
 	}
 }
 
@@ -422,20 +430,30 @@ function updateCargarTablaEncabezados(responseText){
 	seleccionarFilaEncabezado();
 }
 
+
 function deleteEncabezado(idEncabezado){
 
-	objAH=new AjaxHelper(updateDeleteEncabezado);
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-	objAH.encabezado= idEncabezado;
-	objAH.tipoAccion= 'DELETE';
-	objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
-	//se envia la consulta
-	objAH.sendToServer();
+	var is_confirmed = confirm('Confirma la baja del Encabezado?');
+
+	if (is_confirmed) {
+
+		objAH=new AjaxHelper(updateDeleteEncabezado);
+		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+		objAH.encabezado= idEncabezado;
+		objAH.tipoAccion= 'DELETE';
+		objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
+		//se envia la consulta
+		objAH.sendToServer();
+	}
 }
 
 function updateDeleteEncabezado(responseText){
-	$('#mensajes').html(responseText);
-	cargarTablaEncabezados
+	clearMessages();
+
+	var Mensaje= JSONstring.toObject(responseText);
+  	setMessages(Mensaje);
+
+	cargarTablaEncabezados();
 }
 
 function modificarOrden(encabezado, antOrden, action){

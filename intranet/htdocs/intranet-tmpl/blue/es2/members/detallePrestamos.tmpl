@@ -5,7 +5,10 @@
 	<tr valign=middle class="tablaresultadoTitle">
    		<th width="1%" valign="top" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></th>
 		<th>
-			<a class="click" id="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Seleccionar todos"></a>
+			<a class="click" id="checkAllPrestamos">
+			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" 
+				title="Seleccionar todos">
+			</a>
 		</th>
   		<th>T&iacute;tulo</th>
   		<th>Autor</th>
@@ -16,7 +19,9 @@
   		<th>Pr&eacute;stamo</th>
   		<th>Vencimiento</th>
    		<th>Tipo</th>
-  		<th width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></th>
+  		<th width="1%" valign="top">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</th>
 	</tr>
 <!-- TMPL_LOOP NAME="prestamos" -->
 	<tr class="inputFontNormal" align="center">
@@ -109,7 +114,8 @@
 
 <p align="center">
 	<input type="image" BORDER=0 
-	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" 
+	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" 
+	title="Devolver" 
 	onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
 	<!-- TMPL_IF NAME="regular" -->
 		<!-- TMPL_UNLESS NAME="sanctions" -->

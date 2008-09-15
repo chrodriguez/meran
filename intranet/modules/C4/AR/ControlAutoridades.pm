@@ -13,6 +13,7 @@ use vars qw(@EXPORT @ISA);
 		&t_insertSinonimosAutor
 		&t_insertSinonimosTemas 
 		&t_insertSinonimosEditoriales
+
 		&t_insertSeudonimosAutor 
 		&t_insertSeudonimosTemas
 		&t_insertSeudonimosEditoriales 
@@ -20,6 +21,7 @@ use vars qw(@EXPORT @ISA);
 		&t_eliminarSinonimosAutor 
 		&t_eliminarSinonimosTema 
 		&t_eliminarSinonimosEditorial 
+
 		&t_eliminarSeudonimosAutor
 		&t_eliminarSeudonimosTema 
 		&t_eliminarSeudonimosEditorial
@@ -576,12 +578,13 @@ sub t_eliminarSinonimosAutor {
 	eval {
 		eliminarSinonimosAutor($idAutor,$sinonimo);	
 		$dbh->commit;
+		$codMsg= 'U310';
 
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
+		$codMsg= 'B419';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
@@ -624,6 +627,7 @@ sub t_eliminarSinonimosTema {
 	eval {
 		eliminarSinonimosTema($idTema,$sinonimo);	
 		$dbh->commit;
+		$codMsg= 'U310';
 
 	};
 
@@ -673,6 +677,7 @@ sub t_eliminarSinonimosEditorial {
 	eval {
 		eliminarSinonimosEditorial($idEditorial,$sinonimo);	
 		$dbh->commit;
+		$codMsg= 'U310';
 
 	};
 
@@ -919,12 +924,13 @@ sub t_eliminarSeudonimosAutor {
 	eval {
 		eliminarSeudonimosAutor($idAutor,$seudonimo);	
 		$dbh->commit;
+		$codMsg= 'U309';
 
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
+		$codMsg= 'B417';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
@@ -1046,12 +1052,13 @@ sub t_eliminarSeudonimosTema {
 	eval {
 		eliminarSeudonimosTema($idTema,$seudonimo);	
 		$dbh->commit;
+		$codMsg= 'U309';
 
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
+		$codMsg= 'B418';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
