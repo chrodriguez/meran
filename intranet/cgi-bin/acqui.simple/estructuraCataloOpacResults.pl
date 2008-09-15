@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::AR::CatalogacionOpac;
+use C4::AR::VisualizacionOpac;
 use C4::AR::Catalogacion;
 use C4::AR::Utilidades;
 
@@ -39,7 +39,7 @@ my $nivel= $obj->{'nivel'};
 if( ($tipoAccion eq "SELECT")&&($componente eq "CONF_CAMPO_SUBCAMPO") ){
 	my $id= $obj->{'idestcatopac'};
 
-	my ($cant, @result) = &C4::AR::CatalogacionOpac::traerVisualizacion($id);
+	my ($cant, @result) = &C4::AR::VisualizacionOpac::traerVisualizacion($id);
 	
 	my $textpred= $result[0]->{'textpred'};
 	my $textsucc= $result[0]->{'textsucc'};
@@ -84,7 +84,7 @@ if( ($accion eq "SELECCION_CAMPO") || ($accion eq "SELECCION_SUB_CAMPO") ){
 	if($campoX != -1){
 # 	traigo todos los campos que estan catalogados en MARC, segun el campo por ej 1xx
 #    	y los tipos de items q tiene el encabezado
-		@campos= &C4::AR::CatalogacionOpac::traerCampos($idencabezado, $campoX, $nivel);
+		@campos= &C4::AR::VisualizacionOpac::traerCampos($idencabezado, $campoX, $nivel);
 	}
 	push (@campos,'Elegir campo');
 
@@ -107,7 +107,7 @@ if($accion eq "SELECCION_SUB_CAMPO" ){
 
 	my $nombretagCampo=&C4::AR::Catalogacion::buscarNombreCampoMarc($campo);
 	my $itemtype= $obj->{'itemtype'};
-	my @subCampos= &C4::AR::CatalogacionOpac::traerSubCampos($idencabezado,$campo,$itemtype);
+	my @subCampos= &C4::AR::VisualizacionOpac::traerSubCampos($idencabezado,$campo,$itemtype);
 #Combo para los subcampos
 	my @valuesSubCampos;
 # 	my %labelsSubCampos;

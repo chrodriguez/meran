@@ -5,7 +5,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::AR::CatalogacionOpac;
+use C4::AR::VisualizacionOpac;
 
 my $input = new CGI;
 

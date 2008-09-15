@@ -1,4 +1,4 @@
-package C4::AR::CatalogacionOpac;
+package C4::AR::VisualizacionOpac;
 
 #
 #Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
@@ -17,6 +17,7 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT=qw(
+
 	&buscarEncabezados
 	&encabezadoEnLinea
 	&buscarInfoCampo

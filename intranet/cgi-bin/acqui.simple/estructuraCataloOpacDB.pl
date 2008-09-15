@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::AR::CatalogacionOpac;
+use C4::AR::VisualizacionOpac;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
@@ -37,7 +37,7 @@ if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 	my $nivel =$obj->{'nivel'};
 	my $itemtype =$obj->{'itemtype'};
 
-	my ($cant,@results)= &C4::AR::CatalogacionOpac::buscarEncabezados($nivel, $itemtype);
+	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarEncabezados($nivel, $itemtype);
 
 	$template->param( 	
 				RESULTSLOOP      => \@results,
@@ -199,7 +199,7 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
 
 	my $encabezado =$obj->{'encabezado'};
 	
-	my ($error, $codMsg, $message)= &C4::AR::CatalogacionOpac::t_deleteEncabezado($encabezado);
+	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_deleteEncabezado($encabezado);
 	
 	print $input->header;
 	($error)?print $message:'';
