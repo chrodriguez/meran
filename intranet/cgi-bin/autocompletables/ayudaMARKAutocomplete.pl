@@ -16,7 +16,7 @@ my $componente= $input->param('componente')||"";
 if(($tipoAccion eq "Select")&&($componente eq "ayudaCampoMARK")){
 
  	my $campo= $input->param('q');
-	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoCampo($campo); #C4::AR::CatalogacionOpac
+	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoCampo($campo); 
 	my $i=0;
 	my $resultAyudaMARK="";
 	my $field;
@@ -38,7 +38,7 @@ if(($tipoAccion eq "Select")&&($componente eq "ayudaCampoMARKsubcampo")){
 	my $campo= $input->param('campo');
 	my $subcampo= $input->param('subcampo');
 
-	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoSubCampo($campo); #C4::AR::CatalogacionOpac
+	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoSubCampo($campo);
 	my $i=0;
 	my $resultAyudaMARK="";
 	my $field;
