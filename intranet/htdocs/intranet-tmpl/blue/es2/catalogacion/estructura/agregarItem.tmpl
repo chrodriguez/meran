@@ -44,7 +44,7 @@ function seleccionTipoItem(){
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.nivel=1;
 	objAH.itemtype=$("#itemtype").val();
 	objAH.paso=1;
@@ -63,7 +63,7 @@ function borrarN1(id1){
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
 	objAH.itemtype=$("#itemtype").val();
@@ -86,7 +86,7 @@ function modificarN1(id1){
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
 	objAH.itemtype=$("#itemtype").val();
@@ -107,7 +107,7 @@ function borrarGrupo(id1,id2){
 	objJSON.paso=2;
 	
 	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
 	objAH.nivel=2;
@@ -123,7 +123,7 @@ function borrarGrupo(id1,id2){
  */
 function ajaxModificarGrupoJSON(id1,id2){
 	objAH=new AjaxHelper(procesarInfoJson);
-	objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
 	objAH.json=1;
@@ -147,7 +147,7 @@ function modificarGrupo(id1,id2){
 	$("#result").html("");
 	
 	objAH=new AjaxHelper(updateInfoModGrupo);
-	objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
 	objAH.json=0;
@@ -172,7 +172,7 @@ function modNivel2(id1,id2){
 	ok=obtenerIdsValores(cantIds);
 	if(ok){
 		objAH=new AjaxHelper(redirigirURL);
-		objAH.url="/cgi-bin/koha/acqui.simple/editarGrupo.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 		objAH.id1=id1;
 		objAH.id2=id2;
 		objAH.cantIds=cantIds;
@@ -194,7 +194,7 @@ function modNivel2(id1,id2){
  */
 function ajaxAgregarEjemplarJSON(id1,id2,itemtype){
 	objAH=new AjaxHelper(procesarInfoJson);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
 	objAH.itemtype=itemtype;
@@ -215,7 +215,7 @@ function agregarEjemplar(id1,id2,itemtype){
 	$("#result").html("");
 
 	objAH=new AjaxHelper(updateInfoAgrEjemplar);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
 	objAH.itemtype=itemtype;
@@ -236,7 +236,7 @@ function agregarNivel3(id1,id2){
 	
 	if(ok){
 		objAH=new AjaxHelper(redirigirURL);
-		objAH.url="/cgi-bin/koha/acqui.simple/agregarEjemplar.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 		objAH.id1=id1;
 		objAH.id2=id2;
 		objAH.cantIds=cantIds;
@@ -265,7 +265,7 @@ function guardarDatos(paso){
 	objJSON.paso=paso;
 	
 	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.paso=paso;
 	objAH.id1=$("#id1").val();
 	objAH.itemtype=$("#itemtype").val();
@@ -322,7 +322,7 @@ $(document).ready( function() {
 		var origen=array[0].split('=')[1];
 
 		objAH=new AjaxHelper(updateInfoAgregarItem);
-		objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 		objAH.id1=array[1].split('=')[1];
 		objAH.itemtype=array[2].split('=')[1];
 		switch(origen){

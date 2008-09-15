@@ -39,11 +39,11 @@ function filtroPorAutor(id){
 }
 
 function editarNivel1(id1,itemtype){
-	location.href="../acqui.simple/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=1";
+	location.href="../catalogacion/estructura/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=1";
 }
 
 function editarGrupo(id1,id2,itemtype){
-	location.href="../acqui.simple/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=2&id2="+id2;
+	location.href="../catalogacion/estructura/agregarItem.pl?origen=detalle&id1="+id1+"&itemtype="+itemtype+"&nivel=2&id2="+id2;
 }
 
 function editarEjemplar(id1,id3,itemtype){
@@ -53,7 +53,7 @@ function editarEjemplar(id1,id3,itemtype){
 	obj.id3=id3;
 	obj=JSONstring.make(obj);
 	var params="obj="+obj;
-	location.href="../acqui.simple/editarEjemplar.pl?obj="+obj;
+	location.href="../catalogacion/estructura/editarEjemplar.pl?obj="+obj;
 }
 
 function editarEjemplares(id1,id2,itemtype){
@@ -63,7 +63,7 @@ function editarEjemplares(id1,id2,itemtype){
 	obj.id2=id2;
 	obj.json=0;
 	obj=JSONstring.make(obj);
-	location.href="../acqui.simple/editarEjemplar.pl?obj="+obj;
+	location.href="../catalogacion/estructura/editarEjemplar.pl?obj="+obj;
 }
 
 

@@ -33,7 +33,7 @@ else{
 
 if(!$json){
 	my ($template, $loggedinuser, $cookie)
-    		= get_templateexpr_and_user({template_name => "acqui.simple/editarEjemplar.tmpl",
+    		= get_templateexpr_and_user({template_name => "catalogacion/estructura/editarEjemplar.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

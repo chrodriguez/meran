@@ -29,7 +29,7 @@ my $input = new CGI;
 
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/agregarItem.tmpl",
+    = get_template_and_user({template_name => "catalogacion/estructura/agregarItem.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

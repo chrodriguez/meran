@@ -17,10 +17,10 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $tmpl=$obj->{'tmpl'};
 my $url;
 if($tmpl eq 'agregar'){
-	$url="acqui.simple/agregarItemResults3.tmpl";
+	$url="catalogacion/estructura/agregarItemResults3.tmpl";
 }
 else{
-	$url="acqui.simple/estructuraCataloResults2.tmpl"
+	$url="catalogacion/estructura/estructuraCataloResults2.tmpl"
 }
 
 my ($template, $loggedinuser, $cookie)

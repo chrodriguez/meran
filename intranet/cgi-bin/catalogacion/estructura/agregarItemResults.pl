@@ -11,7 +11,7 @@ use C4::AR::Mensajes;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "acqui.simple/agregarItemResults.tmpl",
+    = get_templateexpr_and_user({template_name => "catalogacion/estructura/agregarItemResults.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

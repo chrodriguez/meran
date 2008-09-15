@@ -19,7 +19,7 @@ my $json=$obj->{'json'};
 
 if(!$json){
 	my ($template, $loggedinuser, $cookie)
-    		= get_templateexpr_and_user({template_name => "acqui.simple/agregarEjemplar.tmpl",
+    		= get_templateexpr_and_user({template_name => "catalogacion/estructura/agregarEjemplar.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

@@ -49,7 +49,7 @@ function swap(id,src){
 function agregarEjemplar(id1){
 	var itemtype=$("#"+id1).val();
 	if(itemtype !=  -1){
-		location.href="../acqui.simple/agregarItem.pl?origen=adminEj&id1="+id1+"&itemtype="+itemtype;
+		location.href="../catalogacion/estructura/agregarItem.pl?origen=adminEj&id1="+id1+"&itemtype="+itemtype;
 	}
 	else{
 		alert("Eliga el esquema de catalogo para agregar un item");

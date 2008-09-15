@@ -10,7 +10,7 @@
 function cambiarVisibilidad(idEstCat){
 
 	objAH=new AjaxHelper(armarTablaVisualizacion);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.id= idEstCat;
 	objAH.visible= $('#' + idEstCat).val();
 	objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
@@ -22,7 +22,7 @@ function cambiarVisibilidad(idEstCat){
 function eleccionCampoX(accion){
 
 	objAH=new AjaxHelper();
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
 	objAH.accion= 'SELECCION_CAMPO';
 	objAH.campoX= $('#campoX').val();
 	objAH.encabezados= $('#encabezados').val();
@@ -40,7 +40,7 @@ function updateEleccionCampoX(responseText){
 function eleccionCampo(accion){
 
 	objAH=new AjaxHelper(updateEleccionCampo);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
 	objAH.campoX= $('#campoX').val();
 	objAH.encabezados= $('#encabezados').val();
 	objAH.campo= $('#campo').val();
@@ -71,7 +71,7 @@ function seleccionarEncabezado(id){
 function modificarDatos(){
 
 	objAH=new AjaxHelper(updateModificarDatos);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.textoPredecesor= $('#textoPredecesor').val();
 	objAH.textoSucesor= $('#textoSucesor').val(); 
 	objAH.separador= $('#separador').val();
@@ -97,7 +97,7 @@ var idestcatopac;
 function modificarVisualizacion(textpred, textsucc, separador, id){
 
 	objAH=new AjaxHelper(updateModificarVisualizacion);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
 	objAH.idestcatopac= id;
 	objAH.tipoAccion= 'SELECT';
 	objAH.componente= 'CONF_CAMPO_SUBCAMPO';
@@ -123,7 +123,7 @@ function updateModificarVisualizacion(responseText, textpred, textsucc, separado
 function seleccionarCampos(){
 
 	objAH=new AjaxHelper(updateSeleccionarCampos);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacResults.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -145,7 +145,7 @@ function validarDatosEncabezado(){
 function saveCatalogacion(){
 
 	objAH=new AjaxHelper(updateSaveCatalogacion);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.textoPredecesor= $('#textoPredecesor').val();
 	objAH.textoSucesor= $('#textoSucesor').val();
 	objAH.separador= $('#separador').val();
@@ -180,7 +180,7 @@ function mostrarError(responseText){
 function deleteRowVisualizacion(OP,ID){
 
 	objAH=new AjaxHelper(armarTablaVisualizacion);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.tipoAccion= 'DELETE';
 	objAH.tabla= 'ESTRUCTURA_CATALOGACION';
 	objAH.idestcatopac= ID;
@@ -193,7 +193,7 @@ function deleteRowVisualizacion(OP,ID){
 function armarTablaVisualizacion(){
 
 	objAH=new AjaxHelper(updateArmarTablaVisualizacion);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezados= $('#idEncabezado').val();
 	objAH.tipoAccion= 'MOSTAR_TABLA_VISUALIZACION';
 	objAH.componente= 'CLOSE_UP_COMBO_ENCABEZADO';
@@ -295,7 +295,7 @@ function saveEncabezado(){
 	itemtypesJSON=JSONstring.make(itemtypes_array);
 
 	objAH=new AjaxHelper(updateSaveEncabezado);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= $('#nomEncabezadoAlta').val();
 	objAH.tabla= 'ENCABEZADO';
 	objAH.tipoAccion= 'INSERT';
@@ -314,7 +314,7 @@ function updateSaveEncabezado(responseText){
 function updateNombreEncabezado(idEncabezado, nombre){
 
 	objAH=new AjaxHelper(cargarTablaEncabezados);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= idEncabezado;
 	objAH.nombre= nombre;
 	objAH.tipoAccion= 'UPDATE';
@@ -406,7 +406,7 @@ function changeTipoItem(){
 function cargarTablaEncabezados(){
 
 	objAH=new AjaxHelper(updateCargarTablaEncabezados);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.nivel= $('#nivel').val();
 	objAH.itemtype= $('#comboTiposItems').val();
 	objAH.tipoAccion= 'SELECT';
@@ -425,7 +425,7 @@ function updateCargarTablaEncabezados(responseText){
 function deleteEncabezado(idEncabezado){
 
 	objAH=new AjaxHelper(updateDeleteEncabezado);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= idEncabezado;
 	objAH.tipoAccion= 'DELETE';
 	objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
@@ -445,7 +445,7 @@ if((antOrden == 1)&&(action == 'up')){
 }else{
 
 	objAH=new AjaxHelper(cargarTablaEncabezados);
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= encabezado;
 	objAH.orden= antOrden;
 	objAH.itemtype= $('#comboTiposItems').val(); 
@@ -530,7 +530,7 @@ function cambiarLineaEncabezado(id){
 	if($("#checkbox"+id).val() == 0){linea= 1;}//encabezado en linea
 
 	objAH=new AjaxHelper();
-	objAH.url= '/cgi-bin/koha/acqui.simple/estructuraCataloOpacDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= id;
 	objAH.linea= linea;
 	objAH.tipoAccion= 'UPDATE';

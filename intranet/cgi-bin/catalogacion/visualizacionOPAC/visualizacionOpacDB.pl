@@ -26,7 +26,7 @@ my $result;
 if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 
 	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
-				template_name => "acqui.simple/estructuraCataloOpacTablaEncabezados.tmpl",
+				template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
@@ -64,7 +64,7 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMBO_ENCABEZADO")){
 	
 	my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-				template_name => "acqui.simple/estructuraCataloOpacTabla.tmpl",
+				template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,

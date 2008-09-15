@@ -10,7 +10,7 @@ use C4::AR::VisualizacionOpac;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/estructuraCataloOpac.tmpl",
+    = get_template_and_user({template_name => "catalogacion/visualizacionOPAC/visualizacionOpac.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -42,11 +42,11 @@ my ($template, $loggedinuser, $cookie)
                                   	);
 
  my $selectItemTypeAltaEncabezado=CGI::scrolling_list(  	-name      => 'comboTiposItems',
- 						-id	   => 'comboTiposItemsAltaEncabezado',
-                                 		-values    => \@valuesItemtypes,
- 						-labels    => \%labelsItemtypes,
-                                 		-defaults  => 'LIB',
-                                 		-size      => 1,
+								-id	   => 'comboTiposItemsAltaEncabezado',
+								-values    => \@valuesItemtypes,
+								-labels    => \%labelsItemtypes,
+								-defaults  => 'LIB',
+								-size      => 1,
                                   	);
 #*********************************************fin item type*********************************
 

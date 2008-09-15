@@ -11,7 +11,7 @@ use C4::AR::Catalogacion;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "acqui.simple/estructuraCataloResults.tmpl",
+    = get_templateexpr_and_user({template_name => "catalogacion/estructura/estructuraCataloResults.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -129,7 +129,7 @@ if( $accion==5 && $objResp ne ""){
 			$id=&guardarCamposModificados($nivel,$itemType,$objResp);
 			if($id == -1){ $error = "Error en el guardado del campo, intentelo otra vez."}
 		}
-		else{$error="Error en la información de referencia.";}
+		else{$error="Error en la informaciï¿½n de referencia.";}
 		$accion=1;
 	}
 	elsif($tagsubfield == -1){
@@ -217,7 +217,7 @@ if($accion==10){
 		if($tablasIguales || !$hayDatos){
 			&modificarCampo($id,$objResp);
 		}
-		else{$error="Error en la información de referencia.";}
+		else{$error="Error en la informaciï¿½n de referencia.";}
 	}
 	else{$error="Error en el pasaje de parametros"}
 	$accion=0;

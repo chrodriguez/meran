@@ -22,7 +22,7 @@ function updateInfo(responseText){
  */
 function eleccionCampoX(accion){
 	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 	objAH.campoX=$('#campoX').val();
 	objAH.nivel=$('#nivel').val();
 	objAH.itemtype=$('#itemtype').val();
@@ -38,7 +38,7 @@ function eleccionCampoX(accion){
  */
 function eleccionCampo(accion){
 	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 	objAH.campoX=$('#campoX').val();
 	objAH.nivel=$('#nivel').val();
 	objAH.itemtype=$('#itemtype').val();
@@ -93,7 +93,7 @@ function eleccionSubCampo(accion){
 	objSubCampo.obligatorio=array[2];
 
 	objAH=new AjaxHelper(updateInfoSubCampo);
-	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 	objAH.campoX=$('#campoX').val();
 	objAH.nivel=$('#nivel').val();
 	objAH.itemtype=$('#itemtype').val();
@@ -146,7 +146,7 @@ function updateInfoEstrCatalogo(responseText){
 function eleccionTabla(accion,accion2){
 	if(accion2 == 'Agregar'){
 		objAH=new AjaxHelper(updateInfoEleccionTablaAgr);
-		objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 		objAH.campoX=$('#campoX').val();
 		objAH.nivel=$('#nivel').val();
 		objAH.itemtype=$('#itemtype').val();
@@ -163,7 +163,7 @@ function eleccionTabla(accion,accion2){
 	}
 	if(accion2 == 'Modificar'){
 		objAH=new AjaxHelper(updateInfoEstrCatalogo);
-		objAH.url="/cgi-bin/koha/acqui.simple/estructuraCataloResults.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 		objAH.nivel=$('#nivel').val();
 		objAH.itemtype=$('#itemtype').val();
 		objAH.idMod= $('#idMod').val();
@@ -192,7 +192,7 @@ function agregarCampoTemp(paso,nivel){
 	$("#nivel").val(nivel);
 	
 	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/acqui.simple/seleccionCamposMarc.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 	objAH.nivel=nivel;
 	objAH.itemtype=$('#itemtype').val();
 	objAH.tmpl="agregar";
@@ -267,7 +267,7 @@ function guardarCampoTemp(nivel){
 	}
 
 	objAH=new AjaxHelper(updateInfoCampoTemp);
-	objAH.url="/cgi-bin/koha/acqui.simple/agregarItemResults2.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults2.pl";
 	objAH.nivel=nivel;
 	objAH.itemtype=itemtype;
 	objAH.cant=cantIds;

@@ -19,7 +19,7 @@ my ($itemtype,$cant,$nivel2Comp)=&buscarNivel2Completo($id2);
 
 if(!$json){
 	my ($template, $loggedinuser, $cookie)
-   		= get_templateexpr_and_user({template_name => "acqui.simple/editarGrupo.tmpl",
+   		= get_templateexpr_and_user({template_name => "catalogacion/estructura/editarGrupo.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

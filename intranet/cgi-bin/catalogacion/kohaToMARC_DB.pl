@@ -19,7 +19,7 @@ my $action= $obj->{'action'}||"";
 if(($tabla ne "")&&($action eq "TABLARESULT")){
 
 my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "acqui.simple/kohaToMARCResult.tmpl",
+    = get_templateexpr_and_user({template_name => "catalogacion/kohaToMARCResult.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
