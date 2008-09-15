@@ -1,0 +1,48 @@
+
+<table id="tablaSinonimos" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="tablaresultadoTitle">
+
+		<th width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></th>
+	
+		<th>Sinonimo</th>
+		<th>Eliminar</th>
+		<th>Editar</th>
+	
+		<th width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></th>
+
+	</tr>
+	</thead>
+
+	<tbody>
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<tr class="inputFontNormal" align='center'>
+
+		<td height=25>&nbsp;</td>
+
+		<td id="sinonimo<!-- TMPL_VAR name='nroSinonimo' -->"> 
+			<!-- TMPL_VAR NAME=sinonimo -->
+		</td>
+		<td align="center">
+			<a class="click" 
+			onClick="deleteSinonimo('<!-- TMPL_VAR NAME=idSinonimo -->','<!-- TMPL_VAR NAME=sinonimo -->');"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'></a>
+		</td>
+		<td align="center">
+			<a class="click" 
+			onClick="modificarSinonimo('<!-- TMPL_VAR NAME=idSinonimo -->','<!-- TMPL_VAR NAME=nroSinonimo -->','<!-- TMPL_VAR NAME=sinonimo -->');"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'></a>
+		</td>
+
+		<td height=25>&nbsp;</td>
+
+	</tr>
+<!-- /TMPL_LOOP -->
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+	</tbody>
+</table>
+
+<div id="updateSinonimo" style="display:none">
+	<input class="focus" type="text" id="nombreNuevo" >
+</div>
+

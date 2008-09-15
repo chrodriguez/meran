@@ -1,0 +1,361 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+
+<script language="javascript">
+
+function OnChangeComboTablasSinonimos(){
+	
+	var tipo= $('#tabla').val();
+
+	switch(tipo){
+		case "temas": 
+			$('#content_search_temas').show();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').hide();
+			$('#search_temas').val('');
+		break;
+		case "autores": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').show();
+			$('#content_search_editoriales').hide();
+			$('#search_autores').val('');
+		break;
+		case "editoriales": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').show();
+			$('#search_editoriales').val('');
+		break;
+		case "Sin Seleccionar": ;
+		break;
+	}
+
+}
+
+function updateConsultarTablaSinonimos(responseText){
+	$('#resultSinonimos').html(responseText);
+	$('#tablaSinonimos').tablesorter({	
+						widgets: ['zebra'],
+						headers: { 0: { sorter: false},
+								2: { sorter: false},
+								3: { sorter: false},
+								4: { sorter: false}
+							}
+				});
+}
+
+function consultarTablaSinonimos(sinonimo){
+
+	//verifico que tabla se selecciono
+	var tabla= $("#tabla").val();
+
+	objAH=new AjaxHelper(updateConsultarTablaSinonimos);
+	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.tipo= 'consultaTablasSinonimos';
+	objAH.tabla= tabla;
+	objAH.sinonimo= sinonimo;
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function AutocompleteSinonimos(idInput, tipo){
+	// q= valor de campoHelp
+	$("#"+idInput).search();
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/controlAutoridadesAutocomplete.pl',{
+ 		formatItem: function(row){
+// 			return row[0]+" - "+row[1];
+			return row[1];
+		},
+		minChars:1,
+        	matchSubset:1,
+        	matchContains:1,
+		maxItemsToShow:10,
+        	cacheLength:10,
+        	selectOnly:1,
+		extraParams:{accion: tipo}	
+	});//end autocomplete
+	$("#"+idInput).result(function(event, data, formatted) {
+		$("#"+idInput).val(data[1]);
+
+		//ver si es necesario
+		sinonimo_selected= new object_sinonimo(data[1], data[0]);
+
+ 		consultarTablaSinonimos(data[0]);
+	});
+}
+
+//*********************************************Objeto Sinonimo*************************************************
+
+function object_sinonimo(text, ID){
+	this.text= text;
+	this.ID= ID;
+}
+
+var objects_array= new Array();
+//******************************************Fin***Objeto Sinonimo***********************************************
+
+//******************************************TextArea************************************************************
+
+function pushSinonimo(){
+	var sinonimo= $('#sinonimo').val();
+		
+	if (!exist(sinonimo, objects_array)){
+	
+		d= new object_sinonimo(sinonimo, null);
+		objects_array.push(d);
+		mapToTextArea('textAreaSinonimos', objects_array);
+	}else{
+		alert("Ya existe el elmento");
+	}
+
+	//si hay elementos habilito el boton pop
+	if(objects_array.length > 0){
+		$('#pop').attr('disabled', false);
+	}
+}
+
+function exist(text, vector){
+	var found= false;
+	var long= vector.length;
+	var i= 0;
+	while (!(found) && (i<long)){
+		if(vector[i].text == text){
+			found= true;
+		}else{
+			i++;
+		}
+	}
+	return found;
+}
+
+function mapToTextArea(idTextArea, vector){
+	var sinonimo;
+
+	$('#'+idTextArea).val('');
+	for (var i=0;i<vector.length;i++){
+		sinonimo= vector[i].text;
+		$('#'+idTextArea).val(sinonimo + '\n' + $('#'+idTextArea).val() );
+	}
+	//deshabilito boton pop	
+	$('#pop').attr('disabled', false);
+}
+
+function popSinonimo(){
+	var obj= objects_array.pop();
+	mapToTextArea('textAreaSinonimos', objects_array);
+	//si se vacia, deshabilito el boton pop
+	if(objects_array.length == 0){
+		$('#pop').attr('disabled', true);
+	}
+}
+
+function clearDataTextArea(){
+	//clear inputs
+	$('#sinonimo').val('');
+	//clear data
+	objects_array= new Array();
+	//actualizo el textarea
+	mapToTextArea('textAreaSinonimos', objects_array);
+}
+
+//****************************************************Fin TextArea******************************************
+
+//*********************************************ABM Sinonimos************************************************
+function guardarDatos(){
+
+	var tabla= $('#tabla').val();
+	var sinonimosJSON;
+	//pasa el arreglo a formato json
+	sinonimosJSON=JSONstring.make(objects_array);
+
+	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.tipo= 'insertarSinonimos';
+	objAH.tabla= tabla;
+	objAH.sinonimos= sinonimosJSON;
+	objAH.id= sinonimo_selected.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateGuadarDatos(){
+	consultarTablaSinonimos(sinonimo_selected.ID);
+	clearDataTextArea();
+}
+
+function deleteSinonimo(idDelete, sinonimo_string){
+	var tabla= $('#tabla').val();
+
+	var is_confirmed = confirm('Confirma la baja del sinonimo?');
+
+	if (is_confirmed) {
+
+		objAH=new AjaxHelper(updateDeleteSinonimo);
+		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+		objAH.tipo= 'eliminarSinonimos';
+		objAH.tabla= tabla;
+		objAH.sinonimoDelete_string= sinonimo_string;
+		objAH.id= idDelete;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
+}
+
+function updateDeleteSinonimo(responseText){
+
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
+
+	updateGuadarDatos();
+}
+
+
+function updateNombreSinonimo(idSinonimo, nombre, nombreViejo){
+	
+	var tabla= $('#tabla').val();
+
+	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.tipo= 'UpdateSinonimo';
+	objAH.tabla= tabla;
+	objAH.idSinonimo= idSinonimo;
+	objAH.nombre= nombre;
+	objAH.nombreViejo= nombreViejo;
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+
+function modificarSinonimo(idSinonimo, nroSinonimo, nombreViejo){
+
+	$('#updateSinonimo').slideDown('slow');
+	$('#nombreNuevo').focus();
+	$('#nombreNuevo').val(nombreViejo);
+
+	$('#nombreNuevo').keyup(
+		function () {
+			$('#sinonimo'+nroSinonimo).text($('#nombreNuevo').val());
+		});
+//VER CON ON ENTER DE Util.js
+	$('#nombreNuevo').keypress(
+		function (e) {
+			if(e.which == 13){
+				updateNombreSinonimo(idSinonimo, $('#nombreNuevo').val(), nombreViejo);
+				$('#updateSinonimo').slideUp('slow');
+			}
+		});
+
+}
+
+//****************************************Fin****ABM Sinonimos************************************************
+
+
+
+
+$(document).ready(function(){
+
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+
+	AutocompleteSinonimos('search_temas','autocompleteTemas');
+	$('#content_search_temas').hide();
+	AutocompleteSinonimos('search_autores','autocompleteAutores');
+	$('#content_search_autores').hide();
+	AutocompleteSinonimos('search_editoriales','autocompleteEditoriales');
+	$('#content_search_editoriales').hide();	
+
+	onEnter("sinonimo",pushSinonimo);
+
+});
+
+
+</script>
+
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descripcion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Descripcion breve para lo q sirve la ventana....</p>
+    </div>
+</div>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Control de Autoridades - Sin&oacute;nimos</td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+<br>
+
+<br>
+<div class="formElemets">
+<ul>
+	<li>Seleccione la tabla</li>
+	<li>
+		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSinonimos();">
+			<option value="Sin Seleccionar">Sin Seleccionar</option>
+			<option value="autores">Autores</option>
+			<option value="temas">Temas</option>
+			<option value="editoriales">Editoriales</option>
+		</Select>
+	</li>
+
+	<div id="content_search_autores">
+		<li>Autores:</li>
+		<li><input id="search_autores" type="text" size="50"></li>
+	</div>
+	<div id="content_search_temas">
+		<li>Temas:</li>
+		<li><input id="search_temas" type="text" size="50"></li>
+	</div>
+	<div id="content_search_editoriales">
+		<li>Editoriales:</li>
+		<li><input id="search_editoriales" type="text" size="50"></li>
+	</div>
+
+	<li>Ingrese Sin&oacute;nimo:</li>
+	<li><input id="sinonimo" name="sinonimo" type="text" value="" size="50">
+	</li>
+	<li>
+		<input id="push" type="button" onClick="pushSinonimo();" value=">>" title="Agregar Sin&oacute;nimo"> 
+		<input id="pop" type="button" onClick="popSinonimo();" value="<<" title="Sacar Sin&oacute;nimo" disabled=true>
+	</li>
+	<li>
+		<textarea id="textAreaSinonimos" style="height:60px; width:230px;" readonly></textarea>
+	</li>
+
+	<li><hr></hr></li>
+	<li><input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Sinónimo" title="Guardar Sinónimo" onClick="guardarDatos()">
+	</li>
+	<li><div id="resultSinonimos"></div></li>
+</ul>
+</div>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
