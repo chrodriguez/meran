@@ -5,7 +5,7 @@
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 
-<!-- TMPL_INCLUDE NAME="helpCamposMARC.inc" -->
+<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
 
 <script>
 
@@ -280,7 +280,7 @@ function closeWindow(){
 }
 
 
-function onChangeNivel(){
+function changeNivel(){
 	cargarTablaEncabezados();
 	$('#divTablaVisualizacion').html('');
 	$('#result').html('');
@@ -407,7 +407,7 @@ function EditCell(idObj, id){
 
 function changeTipoItem(){
 	//se llama al mismo evento
-	onChangeNivel();
+	changeNivel();
 }
 
 //muestra la tabla de los encabezados, segun nivel e itemtype
@@ -458,19 +458,19 @@ function updateDeleteEncabezado(responseText){
 
 function modificarOrden(encabezado, antOrden, action){
 	
-if((antOrden == 1)&&(action == 'up')){
-	alert("no se puede subir mas");
-}else{
+	if((antOrden == 1)&&(action == 'up')){
+		alert("no se puede subir mas");
+	}else{
 
-	objAH=new AjaxHelper(cargarTablaEncabezados);
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-	objAH.encabezado= encabezado;
-	objAH.orden= antOrden;
-	objAH.itemtype= $('#comboTiposItems').val(); 
-	objAH.tipoAccion= 'CAMBIAR_ORDEN_ENCABEZADO';
-	objAH.action= action;
-	//se envia la consulta
-	objAH.sendToServer();
+		objAH=new AjaxHelper(cargarTablaEncabezados);
+		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+		objAH.encabezado= encabezado;
+		objAH.orden= antOrden;
+		objAH.itemtype= $('#comboTiposItems').val(); 
+		objAH.tipoAccion= 'CAMBIAR_ORDEN_ENCABEZADO';
+		objAH.action= action;
+		//se envia la consulta
+		objAH.sendToServer();
 
 	}
 }
@@ -573,6 +573,7 @@ function seleccionarFilaEncabezado(){
 //Init Form
 $(document).ready(function() {
 	
+	changeNivel();
 	// Help
 	$("#topichelp").hide();
 	$("#tophelper img.showhelp ").click(function(){
@@ -651,7 +652,7 @@ $(document).ready(function() {
 <!-- contenedor superior -->
 	<ul>
 	<li>
-		<select id="nivel" onChange="onChangeNivel();">
+		<select id="nivel" onChange="changeNivel();">
 		<option value="1">Nivel1</option>
 		<option value="2">Nivel2</option>
 		<option value="3">Nivel3</option>

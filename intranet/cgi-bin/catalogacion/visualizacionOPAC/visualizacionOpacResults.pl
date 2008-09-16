@@ -120,7 +120,8 @@ if($accion eq "SELECCION_SUB_CAMPO" ){
 							-size      => 1,
                                  	);
 
-	$template->param(selecttagsubField    => $selecttagsubField,
+	$template->param(
+			selecttagsubField    => $selecttagsubField,
 			nombreCampo	      => $nombretagCampo,
 			);
 #FIN combo subcampos
