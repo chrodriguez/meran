@@ -1,30 +1,33 @@
 <!-- *********************************Window Help********************************************* -->
 
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 
 
 <script>
 
+// ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
+// if (typeof($.Autocompleter) != "function"){
+		
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");
+// }
+
 function closeWindow(){
 	$('.windowBlur').hide();
 	$('.ac_results').hide();
-	$('#windowHelp').hide();
-	if($('#campoUsuario').val() != ''){
-		scrollTo('confirmar_div');
-	}
+	$('#windowUser').hide();
 }
 
 function openWindow(){
 	$('.windowBlur').show();
-	$('#windowHelp').draggable({opacity: 0.7777});
-	$('#windowHelp').show();
-	$('#windowHelp').centerObject();	
+	$('#windowUser').draggable({opacity: 0.7777});
+	$('#windowUser').show();
+	$('#windowUser').centerObject();	
 	$('#campoUsuario').focus();
 }
 
@@ -98,34 +101,31 @@ $(document).ready(function() {
 
 </script>
 
-<div id=windowHelp class="window" style="display:none; height:200px; width:500px;">
-<div class="windowBlur" style="display:none; height:204px; width:500px;">
-</div> <!-- end div blur -->
-	<div id="headerWindowHelp" class="headerWindowHelp">
-		<span class="click" onClick="closeWindow();">Cerrar</span>
-	</div>
-	<div id="title" class="title">Buscar Usuario</div>
-	<div id="contentWindow" class="formElemets">
-	<ul>
-	<li>
-		<label for="campoUsuario" style="float: left;" >
-		<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
-		</label><br>
-		<input type="text" id="campoUsuario" class="campoHelp" onClick="clearInput();" name="campoUsuario" style="width:90%;">
-		<input type="hidden" id="campoUsuarioId" name="campoUsuarioId">
-	</li>
-	<li>
-		<div id="detalleUsuario"></div>
-	</li>
-	<li>
-		<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
-	</li>
-	</ul>
-	</div>
-</div> <!-- end div windowBlur -->
-</div>
+<div id=windowUser class="window" style="display:none; height:200px; width:500px;">
+	<div class="windowBlur" style="display:none; height:204px; width:500px;"></div> <!-- end div blur -->
+		<div id="headerWindow" class="headerWindow">
+			<span class="click" onClick="closeWindow();">Cerrar</span>
+		</div>
 
-
+		<div id="title" class="title">Buscar Usuario</div>
+		<div id="contentWindow" class="formElemets">
+			<ul>
+			<li>
+				<label for="campoUsuario" style="float: left;" >
+				<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
+				</label><br>
+				<input 	type="text" id="campoUsuario" onClick="clearInput();" 
+					name="campoUsuario" style="width:90%;">
+			</li>
+			<li>
+				<div id="detalleUsuario"></div>
+			</li>
+			<li>
+				<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
+			</li>
+			</ul>
+		</div> <!--end div id="contentWindow"-->
+</div> <!-- end div window -->
 
 <!-- *******************************Fin**Window Help********************************************* -->
 

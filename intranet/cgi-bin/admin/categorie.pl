@@ -65,7 +65,7 @@ my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/categorie.tmpl",
+    = get_template_and_user({template_name => "admin/categorie.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

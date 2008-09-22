@@ -14,6 +14,7 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT=qw(
+
 	&buscarPreferencias
 	&buscarPreferencia
 
@@ -71,14 +72,15 @@ sub guardarVariable(){
 
 	my $error=0;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM systempreferences WHERE variable=?";
+	my $query=" SELECT * FROM systempreferences WHERE variable=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($var);
 	if ($sth->rows){
 		$error=1;
 	}
 	else{
-		my $sth=$dbh->prepare("INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES (?,?,?,?,?)");
+		my $sth=$dbh->prepare("	INSERT INTO systempreferences (variable,value,explanation,type,options) 
+					VALUES (?,?,?,?,?)");
 		$sth->execute($var,$val,$exp,$tipo,$op);
 	}
 	$sth->finish;
@@ -94,5 +96,7 @@ sub modificarVariable(){
 	my $query=" UPDATE systempreferences SET value=?,explanation=? WHERE variable=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($valor,$expl,$var);
+
 	$sth->finish;
 }
+

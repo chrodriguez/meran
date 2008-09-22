@@ -41,36 +41,9 @@ function openPopup() {
 	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
 }
 
-$(document).ready(function() {
-
-	checkedAll('checkAllReservas','chkboxReservas');
-	checkedAll('checkAllPrestamos','chkboxPrestamos');
-	zebra("tablaResult");
-	
-	//definido en circulacion.js
-	usuario= new object_usuario();
-	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
-	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
-
-	detallePrestamos(usuario.ID);
-	detalleReservas(usuario.ID);
-
-	$("#historialPrestamosToggle").toggle(	function(){
-// 							$(this).addClass("selected");
-							$('#historialPrestamos').slideUp('slow');
-						},
-						function(){
-// 							$(this).removeClass("selected");
-							$('#historialPrestamos').slideDown('slow');
-						}
-	);
-
-});
-
-
 //REDEFINIDO, se encuentra en circulacion.js
 function updateInfoDevRen(responseText){
-	alert("ejecuto updateInfoDevRen LOCAL!!!");
+// 	alert("ejecuto updateInfoDevRen LOCAL!!!");
 	cancelarDiv();
 	clearMessages()
 
@@ -87,11 +60,13 @@ function updateInfoDevRen(responseText){
 	detallePrestamos(usuario.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
 	detalleReservas(usuario.ID);
+	//puede que luego de devolver el usuario sea sancionado
+	detalleSanciones(usuario.ID);
 }
 
-//REDEFINIDO, se encuentra en circulacion.js
+//REDEFINIDO, se encuentra en circulacion.js, se llama luego de realizar un prestamo
 function updateInfoPrestarReserva(responseText){
-	alert("ejecuto updateInfoPrestarReserva LOCAL!!!");
+// 	alert("ejecuto updateInfoPrestarReserva LOCAL!!!");
 	cancelarDiv();
 	clearMessages();
 
@@ -105,19 +80,11 @@ function updateInfoPrestarReserva(responseText){
 	}
 
 	detalleReservas(usuario.ID);
+	detallePrestamos(usuario.ID);
 }
 
-function cancelarReserva(reserveNumber){
-	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-        if (is_confirmed) {
-		objAH=new AjaxHelper(updateInfoCancelacion);
-		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
-		objAH.borrowernumber= usuario.ID;
-		objAH.reserveNumber= reserveNumber;
-		objAH.sendToServer();
-        }
-}
 
+//REDEFINIDO, se ejecuta cancelarReserva de circulacion.js y luego se ejecuta esta funcion
 function updateInfoCancelacion(responseText){
 
 	var Message=JSONstring.toObject(responseText);
@@ -160,6 +127,34 @@ function updateDetalleReservas(responseText){
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 }
+
+$(document).ready(function() {
+
+	checkedAll('checkAllReservas','chkboxReservas');
+	checkedAll('checkAllPrestamos','chkboxPrestamos');
+	zebra("tablaResult");
+	
+	//definido en circulacion.js
+	usuario= new objeto_usuario();
+	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
+	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
+
+	detallePrestamos(usuario.ID);
+	detalleReservas(usuario.ID);
+	detalleSanciones(usuario.ID);
+
+	$("#historialPrestamosToggle").toggle(	function(){
+// 							$(this).addClass("selected");
+							$('#historialPrestamos').slideUp('slow');
+						},
+						function(){
+// 							$(this).removeClass("selected");
+							$('#historialPrestamos').slideDown('slow');
+						}
+	);
+
+});
+
 
 //**********************************Fin**Para manejar la circulacion********************************************
 
@@ -345,33 +340,8 @@ function updateDetalleReservas(responseText){
 <!-- DETALLE DE RESERVAS -->
 <div id="reservas"></div>
 
-
-<!-- TMPL_IF name="sanctions" -->
-<br>
-<table class="tablaResult" border=0  width="100%"  cellpadding='0' cellspacing='0'>
-	<tr valign=middle class="tablaresultadoTitle" width="100%">
-		<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-                <td width="98%"><B>SANCIONES</TD>
-                <td width="1%" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-        </tr>
-	<tr valign="top">
-        	<td height=25>&nbsp;</td>
-                <td class="inputFontNormal">
-			<ul><font class="fontmsg">
- 			<!-- TMPL_LOOP NAME="sanctions" -->
-           		<!-- TMPL_IF NAME="description" -->
-			<li>
-			<!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.
-			<!-- /TMPL_IF -->
-			</li>
-			<!-- /TMPL_LOOP -->
-			</font></ul>
-		</td>
-		<td height=25>&nbsp;</td>
-        </tr>
-</table>
-
-<!-- /TMPL_IF --> <!-- FIN IF sanctions -->
+<!-- DETALLE DE SANCIONES -->
+<div id="sanciones"></div>
 
 <p align="center">
 	<span class="click" onClick="mostrarHistorialDePrestamos()">
@@ -380,6 +350,7 @@ function updateDetalleReservas(responseText){
 </p>	
 
 <div id="historialPrestamosToggle" class="click" style="width: 10px; ">[-]</div>
+<!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
 <div id="historialPrestamos"></div>
 
 </div>

@@ -951,10 +951,11 @@ sub itemcountbibitem {
 	}
 	$sth->finish;
 	
-	
+	my $opacUnavail= C4::Context->preference("opacUnavail");
 	my @results;
 	foreach my $key (keys %counts){	
-		if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){ 
+# 		if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){
+		if(($type eq 'opac')&&($opacUnavail eq 0)){  
 		# Si no hay ninguno disponible no lo muestro en el opac
 			if (($counts{$key}->{'cantXbranch'})&&($counts{$key}->{'cantXbranch'} gt $counts{$key}->{'cantXbranchUnavail'})){
 				push(@results,$counts{$key});

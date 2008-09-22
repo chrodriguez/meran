@@ -1,5 +1,3 @@
-<!-- TMPL_IF NAME="borrowernumber" -->
-<!-- TMPL_IF NAME="cantIssues" -->
 
 <table class="tablaPrestamos" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
         <tr>
@@ -8,17 +6,27 @@
         	</td>
      	</tr>
 	<tr class="tablaresultadoTitle">
-        	<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td>
-			<a class="click" id="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+        	<td width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
 		</td>
+
+		<td>
+			<a class="click" id="checkAllPrestamos">
+			<img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" 
+				title="Invertir la selecci&oacute;n">
+			</a>
+		</td>
+
                 <td>T&iacute;tulo</td>
                 <td>Autor</td>
                 <td valign="middle">C&oacute;digo de Barras</td>
                 <td>Pr&eacute;stamo</td>
                 <td>Vencimiento</td>
                 <td>Tipo</td>
-        	<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+
+        	<td width="1%" align="rigth" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
 	</tr>
         <!-- TMPL_LOOP name="issues" -->
 	<tr class="inputFontNormal">
@@ -52,13 +60,16 @@
         <!-- /TMPL_LOOP -->
 </table>
 
+<!-- TMPL_IF NAME="cantIssues" -->
 <center>
-<input type="image" 
-src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" 
-title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
-<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
+	<input type="image" 
+		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" 
+		title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
+
+	<input 	type="image" 
+		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" 
+		title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
 </center>
-<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <br>

@@ -65,8 +65,9 @@ function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
 		usuario.text= data[0];
 		usuario.ID= data[1];
 		
-		detalleUsuario(data[1]);
-		funcionDetalle(data[1],funcionUpdateInfo);//Puede ser detallePrestamo o detalleReserva
+		detalleUsuario(usuario.ID);
+		detalleSanciones(usuario.ID);
+		funcionDetalle(usuario.ID,funcionUpdateInfo);//Puede ser detallePrestamo o detalleReserva
 	});
 }
 
@@ -89,9 +90,25 @@ function detalleUsuario(borrower){
 function updateInfoUsuario(responseText){
 	$('#detalleUsuario').slideDown('slow');
 	//se borran los mensajes de error/informacion del usuario
-// 	$('#mensajes').html('');
 	clearMessages();
 	$('#detalleUsuario').html(responseText);
+}
+
+/*
+ * detalleSanciones
+ * Funcion que se realiza una consulta para mostrar el detalle de las sanciones del borrower
+ */
+function detalleSanciones(borr){
+
+	objAH=new AjaxHelper(updateDetalleSanciones);
+	objAH.url='/cgi-bin/koha/members/detalleSanciones.pl';
+	objAH.borrowernumber= borr;
+	objAH.sendToServer();
+}
+
+
+function updateDetalleSanciones(responseText){
+	$('#sanciones').html(responseText);
 }
 
 /*
@@ -297,7 +314,8 @@ function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
-		objAH.url='/cgi-bin/koha/circ/cancelreserv.pl';
+		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= 'CANCELAR_RESERVA';
 		objAH.borrowernumber=usuario.ID;
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
@@ -397,9 +415,9 @@ function imprimirTicket(ticket,num){
 	}
 }
 
-function scrollTo(idObj){
-		var divOffset = $('#'+idObj).offset().top;
-		$('html,body').animate({scrollTop: divOffset}, 1000);
-}
+// function scrollTo(idObj){
+// 		var divOffset = $('#'+idObj).offset().top;
+// 		$('html,body').animate({scrollTop: divOffset}, 1000);
+// }
 
 

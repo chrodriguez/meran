@@ -77,6 +77,7 @@ use vars qw(@EXPORT @ISA);
 	&checkvalidisbn 
 	&quitarduplicados
 	&buscarCiudades
+	&trim
 	);
 
 =item
@@ -507,6 +508,7 @@ Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta hacie
 =cut
 sub obtenerValoresTablaRef{
 	my ($tabla,$ident,$campos,$orden)=@_;
+
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
 	my $sth=$dbh->prepare($query);
@@ -517,6 +519,7 @@ sub obtenerValoresTablaRef{
 	my $long=scalar(@campos);
 	my $data;
 	my %result;
+
 	while($data=$sth->fetchrow_hashref()){
 		$result{$data->{'id'}}=$data->{$campos[0]};
 		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
@@ -529,6 +532,7 @@ sub obtenerValoresTablaRef{
 	}
 	$strjson=substr($strjson,1,length($strjson));
 	$strjson="[".$strjson."]";
+
 	return($strjson,\%result);
 }
 
@@ -1053,6 +1057,15 @@ sub buscarCiudades{
 	return ($cant, \@results);
 }
 
+
+# Esta funcioin remueve los blancos del principio y el final del string
+sub trim($)
+{
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
+}
 
 
 1;

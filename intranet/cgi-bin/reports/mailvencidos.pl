@@ -58,6 +58,9 @@ my @chkbox=$input->param('chkbox1');
 my $cant=scalar(@chkbox);
 ##Hay que quitar los duplicados ya que un usuario puede llegar a tener muchos ejemplares vencidos!!!!
 my @borrowers=C4::AR::Utilidades::quitarduplicados(@chkbox);
+my $dateformat = C4::Date::get_date_format();
+my $mensajeActual=C4::Context->preference("mailMensajeVencido");
+
 
 for(my $i=0;$i<scalar(@borrowers);$i++){
 	my $bornum=$borrowers[$i];
@@ -75,9 +78,7 @@ for(my $i=0;$i<scalar(@borrowers);$i++){
 		($count,$result)=C4::AR::Usuarios::mailIssuesForBorrower($branch,$bornum);
 		my $mensajeVencidos="";
 
-		my $dateformat = C4::Date::get_date_format();
 		for (my $i=0;$i<$count;$i++){
-			my $mensajeActual=C4::Context->preference("mailMensajeVencido");
 
 			my $title=$result->[$i]{'titulo'};
 			$mensajeActual =~ s/TITLE/$title/;

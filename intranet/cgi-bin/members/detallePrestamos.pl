@@ -49,6 +49,7 @@ foreach my $key (keys %$issues) {
 
 
 $template->param(
+			circulateEnable => $count,
 			bornum          => $borrnumber,
 			prestamos       => \@issuedat,
 );

@@ -1,4 +1,6 @@
 		
+<!-- TMPL_IF NAME="circulateEnable" -->
+
 <p align=center><b>EJEMPLARES PRESTADOS</b></p>
 <table class="prestamosResult" cellspacing=0  cellpadding=0 border=0  width="100%" >
 
@@ -113,16 +115,22 @@
 </table>
 
 <p align="center">
+
+  <!-- TMPL_IF NAME="circulateEnable" -->	
 	<input type="image" BORDER=0 
 	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" 
 	title="Devolver" 
 	onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
-	<!-- TMPL_IF NAME="regular" -->
-		<!-- TMPL_UNLESS NAME="sanctions" -->
+  <!-- /TMPL_IF -->	
+
+  <!-- TMPL_IF NAME="regular" -->
+	<!-- TMPL_UNLESS NAME="sanctions" -->
 	<input type="image" 
 	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" 
 	onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">
-		<!-- /TMPL_UNLESS -->
-	<!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
+  <!-- /TMPL_IF -->
 </p>
+
+<!-- /TMPL_IF -->
 

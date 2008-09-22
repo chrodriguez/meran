@@ -31,52 +31,44 @@ use Date::Manip;
 my $input = new CGI;
 my $branch = $input->param('branch');
 
-# my $today=ParseDate('today');
-my $mensaje; # mensaje que depende del tipo de consulta.
-my $mailSubject; # mensaje para el asunto.
-my $count;
-my $result;
-
-	($count,$result)=C4::AR::Reservas::mailReservas($branch);
-	$mensaje =C4::Context->preference("reserveMessage");
-	$mailSubject=C4::Context->preference("reserveSubject")
+my ($count,$result)=C4::AR::Reservas::mailReservas($branch);
+# mensaje que depende del tipo de consulta.
+my $mensaje =C4::Context->preference("reserveMessage");
+# mensaje para el asunto.
+my $mailSubject=C4::Context->preference("reserveSubject")
 
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
 $branchname=$branchname->{'branchname'};
 $mailSubject=~ s/BRANCH/$branchname/;
-                                                                                                                             
+
 my $mailFrom=C4::Context->preference("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 
+my $horaInicio = C4::Context->preference("open");
+my $horaFin = C4::Context->preference("close");
 my $dateformat = C4::Date::get_date_format();
+
 for (my $i=0;$i<$count;$i++){
 	if ( $result->[$i]{'emailaddress'} ne ''){
 		my $mailMessage = $mensaje;
 		##Reemplazo por los valores correctos
 		my $firstname=$result->[$i]{'firstname'};
 		$mailMessage =~ s/FIRSTNAME/$firstname/;
-                                                                                                                             
 		my $surname=$result->[$i]{'surname'};
 		$mailMessage =~ s/SURNAME/$surname/;
-                                                                                                                             
 		my $title=$result->[$i]{'title'};
 		$mailMessage =~ s/TITLE/$title/;
-                                                                                                                             
 		my $unititle=C4::AR::Nivel1::getUnititle($result->[$i]{'id1'});
 		$mailMessage =~ s/UNITITLE/$unititle/;
-
-			my $dateInicio=format_date($result->[$i]{'notificationdate'},$dateformat);
-        		$mailMessage =~ s/a1/$dateInicio/;
-			my $dateFin= format_date($result->[$i]{'reminderdate'},$dateformat);
-			$mailMessage =~ s/a4/$dateFin/;
-			my $horaInicio = C4::Context->preference("open");
-			$mailMessage =~ s/a2/$horaInicio/;
-			my $horaFin = C4::Context->preference("close");
-			$mailMessage =~ s/a3/$horaFin/;
-			my $author= $result->[$i]{'autor'};
-			$mailMessage =~ s/AUTHOR/$author/;
-	                                                                                                                     
+		my $dateInicio=format_date($result->[$i]{'notificationdate'},$dateformat);
+		$mailMessage =~ s/a1/$dateInicio/;
+		my $dateFin= format_date($result->[$i]{'reminderdate'},$dateformat);
+		$mailMessage =~ s/a4/$dateFin/;
+		$mailMessage =~ s/a2/$horaInicio/;
+		$mailMessage =~ s/a3/$horaFin/;
+		my $author= $result->[$i]{'autor'};
+		$mailMessage =~ s/AUTHOR/$author/;
 		$mailMessage =~ s/BRANCH/$branchname/;
 
 

@@ -54,6 +54,7 @@ function updateInfo(responseText){
  	pushCache(responseText, 'result');
 
 	checkedAll('todos','checkbox');
+	scrollTo('tablaResult');
 }
 
 

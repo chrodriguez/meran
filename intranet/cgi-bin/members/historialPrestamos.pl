@@ -20,7 +20,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $bornum=$obj->{'borrowernumber'};
-my $orden=$obj->{'orden'}||'date_due';
+my $orden=$obj->{'orden'}||'date_due desc';
 my $ini=$obj->{'ini'}||'';
 my $funcion=$obj->{'funcion'};
 

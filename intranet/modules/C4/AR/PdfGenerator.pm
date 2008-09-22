@@ -208,6 +208,7 @@ sub imprimirLinea(){
         	$pdf->addRawText($msg2 ,180,$pos);
         	$pdf->setSize(12);
         	$pos=$pos-15;
+## FIXME esta funcion es llamada dentro de un loop, de manera q consulta demasiado a la base a travez del ##context(), o sea q estos valores se deben recibir como parametro
         	$pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
 		$pdf->setFont("Verdana");
       		$pdf->setSize(10);
@@ -453,9 +454,9 @@ sub libreDeuda(){
 	$titulo{'posx'}=170;
 	my @parrafo;
 	$parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
-	$parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
+	$parrafo[1]=" con nï¿½mero de documento ".$dni.", no adeuda material bibliogrï¿½fico en esta Biblioteca.";
 	$parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-	$parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
+	$parrafo[3]=" validez de 10 dï¿½as corridos a partir de su fecha de emisiï¿½n.";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
 	($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
@@ -489,7 +490,7 @@ sub prestInterBiblio(){
 	$parrafo[1]="de la ".$biblioDestino;
 	$parrafo[2]=$director;
 	$parrafo[3]="S/D";
-	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
+	$parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carï¿½cter de prï¿½stamo"; 
 	$parrafo[5]="interbibliotecario los siguientes items:";
 
 	($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);
@@ -497,12 +498,12 @@ sub prestInterBiblio(){
 	my $cant=scalar(@$datos);
 	($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
-	$parrafo[0]="La(s) misma(s) será(n) retirada(s) por:";
+	$parrafo[0]="La(s) misma(s) serï¿½(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
-	$parrafo[3]="Dirección:".$borrewer->{'streetaddress'}.", ".&C4::AR::Busquedas::getNombreLocalidad($borrewer->{'city'});
-	$parrafo[4]="Teléfono:".$borrewer->{'phone'};
-	$parrafo[5]="Correo electrónico:".$borrewer->{'emailaddress'};
+	$parrafo[3]="Direcciï¿½n:".$borrewer->{'streetaddress'}.", ".&C4::AR::Busquedas::getNombreLocalidad($borrewer->{'city'});
+	$parrafo[4]="Telï¿½fono:".$borrewer->{'phone'};
+	$parrafo[5]="Correo electrï¿½nico:".$borrewer->{'emailaddress'};
 	$parrafo[6]="";
 	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
 	$parrafo[8]="atentamente.";
@@ -534,7 +535,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
 	$categ, categoria de la institucion en la que se va a imprimir el documento;
 	$branchname, nombre de la biblioteca en la que esta asociado el usuario que pidio el documento;
-	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
 	$pagewidth, ancho del documento;
 	$pageheight, largo del documento;
 	$titulo, Titulo del documento;
@@ -567,11 +568,11 @@ imprimirContenido
 Imprime el contenido de del documento.
 @params:
 	$pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
-	$x, tamaño de la sangria. A partir de donde se va a escribir en el renglon;
+	$x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
 	$y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
 	    imprimir;
 	$pageheight, largo del documento;
-	$tamRenglon, tamaño que va a tener el renglon. Espacio entre texto por fila;
+	$tamRenglon, tamaï¿½o que va a tener el renglon. Espacio entre texto por fila;
 	$parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
 =cut
 sub imprimirContenido(){
@@ -600,7 +601,7 @@ sub imprimirFirma(){
 	$pdf->addRawText($linea, 330,$pageheight - $y);
 	$y=$y+10;
 	$pdf->addRawText("Firma", 160,$pageheight - $y);
-	$pdf->addRawText("Aclaración", 360,$pageheight - $y);
+	$pdf->addRawText("Aclaraciï¿½n", 360,$pageheight - $y);
 	return($pdf,$y);
 }
 
@@ -621,7 +622,7 @@ sub imprimirTabla(){
 	$pdf->drawRect(50, $pageheight-$y, 200, $pageheight-($y+20));
 	$pdf->addRawText("Autor/es", 100,$pageheight - ($y+15));
 	$pdf->drawRect(200, $pageheight-$y, 350, $pageheight-($y+20));
-	$pdf->addRawText("Título", 255,$pageheight - ($y+15));
+	$pdf->addRawText("Tï¿½tulo", 255,$pageheight - ($y+15));
 	$pdf->drawRect(350, $pageheight-$y, 500, $pageheight-($y+20));
 	$pdf->addRawText("Otros datos", 395,$pageheight - ($y+15));
 	$y=$y+20;
@@ -657,7 +658,7 @@ sub imprimirPiePag(){
 	$texto[0]="Biblioteca: ".$biblio->{'branchname'};
 	$texto[1]="Calle ".$biblio->{'branchaddress1'};
 	$texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
-	$texto[3]="Atención: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
+	$texto[3]="Atenciï¿½n: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
 	$texto[4]="E-mail: ".$biblio->{'branchemail'};
 	$texto[5]="Sitios web: ".$biblio->{'branchaddress3'};
 	$texto[6]="";

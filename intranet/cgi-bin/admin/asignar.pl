@@ -2,7 +2,7 @@
 #script para administrar el borrado de elementos de las tablas de referencia
 #escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/deleteref.tmpl",
+    = get_template_and_user({template_name => "admin/deleteref.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

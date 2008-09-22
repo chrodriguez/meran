@@ -1,0 +1,48 @@
+
+<!-- TMPL_INCLUDE NAME="paginadorTabla.inc" -->
+
+<table id="tablaResultado" class="tablesorter" cellspacing="0" cellpadding="0" border="0" width="100%">
+	<thead>
+
+	<tr class="tablaresultadoTitle">
+		<th width="1%" align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</th>
+
+		<th width="13%" class="header">Variable</th>
+		<th width="25%" class="header">Valor</th>
+		<th width="39%" class="header">Explicaci&oacute;n</th>
+		<th width="3%">Editar</th>
+
+		<th width="1%" align="right" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</th>
+	</tr>
+
+	</thead>
+	<tbody>
+
+<!-- TMPL_LOOP name="loop" -->
+
+	<tr class="inputFontNormal">
+		<td height="25">&nbsp;</td>
+		<td ><!-- TMPL_VAR name="variable" --></td>
+		<td ><!-- TMPL_VAR name="value" --></td>
+		<td ><!-- TMPL_VAR name="explanation" --></td>
+		<td align="center">
+		<input type="image" 
+		src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png"
+		ALT="Editar" border="0" 
+		onClick="modificarVariable('<!-- TMPL_VAR name='variable' -->','<!-- TMPL_VAR NAME='type' -->')">
+		</td>
+		<td height="25">&nbsp;</td>
+	</tr>
+
+<!-- /TMPL_LOOP -->
+
+	</tbody>
+</table>
+
+<!-- TMPL_INCLUDE NAME="paginadorTabla.inc" -->
+
+<div id="divAgregar"></div>

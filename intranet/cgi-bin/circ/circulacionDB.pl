@@ -21,15 +21,18 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
-my $array_ids3=$obj->{'datosArray'};
 my $borrnumber=$obj->{'borrowernumber'};
-my $loop=scalar(@$array_ids3);
 
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
+
+	my $array_ids3=$obj->{'datosArray'};
+	my $loop=scalar(@$array_ids3);
+
+
 	my @infoDevRen=();
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
@@ -51,6 +54,10 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
+	my $array_ids3=$obj->{'datosArray'};
+	my $loop=scalar(@$array_ids3);
+
+
 	my @infoPrestamo;
 	for(my $i=0;$i<$loop;$i++){
 		my $id3=$array_ids3->[$i];
@@ -60,7 +67,8 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		my @items;
 		my $j=0;
 		foreach (@results){
-			if (!$_->{'prestado'} && (($iteminfo->{'notforloan'} eq 'SA' && $_->{'notforloan'} eq 'SA') || ($iteminfo->{'notforloan'} eq 'DO' && $_->{'forloan'}))){ 
+			if (!$_->{'prestado'} && (($iteminfo->{'notforloan'} eq 'SA' && 
+			$_->{'notforloan'} eq 'SA') || ($iteminfo->{'notforloan'} eq 'DO' && $_->{'forloan'}))){ 
 #solo pone los items que no estan prestados
 				$items[$j]->{'label'}="$_->{'barcode'}";
 				$items[$j]->{'value'}=$_->{'id3'};
@@ -88,6 +96,9 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 if($tipoAccion eq "PRESTAMO"){
 #se realizan los prestamos
 print A "desde PRESTAMO \n";
+	my $array_ids3=$obj->{'datosArray'};
+	my $loop=scalar(@$array_ids3);
+
 
 	my $id3='';
 	my $id3Old;
@@ -169,9 +180,15 @@ print A "message: $message \n";
 	print $infoOperacionJSON;
 
 }
-#*************************************************************************************************************
+#**********************************************FIN*****PRESTAMO**********************************************
+
+#*********************************************DEVOLVER_RENOVAR***********************************************
 
 if($tipoAccion eq "DEVOLVER_RENOVAR"){
+	my $array_ids3=$obj->{'datosArray'};
+	my $loop=scalar(@$array_ids3);
+
+	
 	my $accion=$obj->{'accion'};
 	my $id3;
 	my $barcode;
@@ -184,6 +201,8 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	$params{'loggedinuser'}= $loggedinuser;
 	$params{'borrowernumber'}= $borrnumber;
 	$params{'tipo'}= 'INTRA';
+
+	my $print_renew= C4::Context->preference("print_renew");
 
 print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){
@@ -220,7 +239,7 @@ print A "ID3: $id3\n";
 
 
 print A "error: $error --- cod: $codMsg\n";
-			if(C4::Context->preference("print_renew") && !$error){
+			if($print_renew && !$error){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
@@ -243,5 +262,36 @@ print A "error: $error --- cod: $codMsg\n";
 	print $input->header;
 	print $infoOperacionJSON;
 }
+#******************************************FIN***DEVOLVER_RENOVAR*********************************************
+
+
+#******************************************CANCELAR RESERVA***************************************************
+if($tipoAccion eq "CANCELAR_RESERVA"){
+
+	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	
+	$loggedinuser = getborrowernumber($loggedinuser);
+		
+	my %params;
+	$params{'reservenumber'}=$obj->{'reserveNumber'};
+	$params{'borrowernumber'}=$obj->{'borrowernumber'};
+	$params{'loggedinuser'}=$loggedinuser;
+	$params{'tipo'}="INTRA";
+	
+	my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+	
+	my %infoOperacion = (
+				codMsg	=> $codMsg,
+				error 	=> $error,
+				message => $message,
+	);
+	
+	my $infoOperacionJSON=to_json \%infoOperacion;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+}
+#******************************************FIN***CANCELAR RESERVA*********************************************
+
 
 close(A);

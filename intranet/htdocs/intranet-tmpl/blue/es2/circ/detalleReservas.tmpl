@@ -1,15 +1,18 @@
 
 <br>
-<!-- TMPL_IF NAME="reserves_count" -->
+
 <b>El usuario tiene <!-- TMPL_VAR NAME="reserves_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 <br>
 
-<table class="tablaReservas" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 	<tr>
 		<td colspan="9" class="inputFontNormal" align="center">
 			<b>EJEMPLARES RESERVADOS</b>
 		</td>
 	</tr>
+</table>
+<table class="tablaReservas" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
@@ -74,23 +77,26 @@
 	</tr>
 <!-- /TMPL_LOOP -->
 </table>
+
+<!-- TMPL_IF NAME="reserves_count" -->
 	<p colspan="10" class="inputFontNormal" align=center>
 		<input type="image" name="borrowD"  value="prestar" 
 		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" 
 		title="Realizar pr&eacute;stamo" 
 		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
-
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME="waiting_count" -->
+
 <br>
 <b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="">
 	<tr>
 		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS</b></td>
 	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
@@ -141,8 +147,6 @@
 	</tr>
 	<!-- /TMPL_LOOP -->
 </table>
-
-<!-- /TMPL_IF -->
 
 <br>
 

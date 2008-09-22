@@ -1,15 +1,23 @@
 <!-- *********************************Window Help********************************************* -->
 
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
-<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 
 <script>
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");	
+// ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
+// if (typeof($.Autocompleter) != "function"){
+	
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");	
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+
+// 	alert("se cargo desde help MARC");
+// }
 
 function closeWindowHelp(){
 	$('.windowBlur').hide();
@@ -40,7 +48,6 @@ var params= 'tipoAccion=Select&componente=ayudaCampoMARKsubcampo&campo=' + campo
 $.ajax({	type: "POST", 
 		url: '/cgi-bin/koha/autocompletables/ayudaMARKAutocomplete.pl',
 		data: params,
-// 		beforeSend: Init,
 		complete: function parsearSubCampos(ajax){
  			var response = ajax.responseText || "no response text";	
  			var arreglo=response.split("#");
@@ -51,7 +58,6 @@ $.ajax({	type: "POST",
  				  datos= arreglo[i].split("/");
 				  textArea.val(textArea.val() + datos[1] + "\n");
   				}
-// 			HiddeState();
  			}
 	});
 
@@ -89,42 +95,39 @@ $(document).ready(function() {
 
 </script>
 
-<div style="text-align: right;"><span class="click" onClick="openWindowHelp();">Ayuda MARC</span>
-</div>
+<div style="text-align: right;"><span class="click" onClick="openWindowHelp();">Ayuda MARC</span></div>
 
 <div id=windowHelp class="window" style="display:none; height:300px; width:400px;">
-<div class="windowBlur" style="display:none; height:304px; width:400px;">
-</div> <!-- end div blur -->
+	<div class="windowBlur" style="display:none; height:304px; width:400px;"></div> <!-- end div blur -->
 	<div id="headerWindowHelp" class="headerWindowHelp">
 		<span class="click" onClick="closeWindowHelp();">Cerrar</span>
 	</div>
 	<div id="title" class="title">Ayuda campos MARC</div>
 	<div id="contentWindow" class="formElemets">
-	<ul>
-	<li>
-		<label for="campoHelp" style="float: left; width:15%" >
-		Campo:
-		</label><br>
-		<input type="text" id="campoHelp" class="campoHelp" onClick="clearInput();" name="campoHelp" style="width:90%;">
-		<input type="hidden" id="campoHelpId" name="campoHelpId">
-	</li>
-	<li>
-		<label for="subcampo" style="float: left; width:25%" >
-		Sub Campo:
-		</label>
-		<br>
-		<textarea id="subcampos" name="subcampos" rows="7" style="width:90%;" readonly=readonly></textarea>
-	</li>
-	<li>
-		<a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
-		para mas informaci&oacute;n MARC</a>
-	</li>
-	</ul>
-	</div>
-</div> <!-- end div windowBlur -->
-</div>
-
-
+		<ul>
+		<li>
+			<label for="campoHelp" style="float: left; width:15%" >
+			Campo:
+			</label><br>
+			<input	type="text" id="campoHelp" class="campoHelp" onClick="clearInput();"
+				name="campoHelp" style="width:90%;">
+			<input type="hidden" id="campoHelpId" name="campoHelpId">
+		</li>
+		<li>
+			<label for="subcampo" style="float: left; width:25%" >
+			Sub Campo:
+			</label>
+			<br>
+			<textarea 	id="subcampos" name="subcampos" rows="7" style="width:90%;"
+					readonly=readonly></textarea>
+		</li>
+		<li>
+			<a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
+			para mas informaci&oacute;n MARC</a>
+		</li>
+		</ul>
+	</div> <!--end div contentWindow-->
+</div> <!--end div windowHelp-->
 
 <!-- *******************************Fin**Window Help********************************************* -->
 

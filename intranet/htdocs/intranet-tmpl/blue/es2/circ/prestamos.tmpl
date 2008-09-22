@@ -15,6 +15,7 @@
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete',detalleReservas,updateInfoReservas);
+/*
 	if('<!-- TMPL_VAR NAME=usuarioID -->' != ""){
 		usuario= new object_usuario();
 		usuario.text= '<!-- TMPL_VAR NAME=usuarioText -->';
@@ -26,6 +27,7 @@ $(document).ready(function() {
 	}else{
 		$('#usuarioAutocomplete')[0].focus();
 	}
+*/
 });
 
 /*
@@ -35,6 +37,7 @@ $(document).ready(function() {
  * Tiene que estar en el template, porque recibe variables desde el pl.
  * Despues realiza la funcion realizarAccion que es la que genera el div para el prestamo.
  */
+/*
 function updateInfoReservaConChck(responseText){
 	$('#tablaReservas').slideDown('slow');
 	$('#tablaReservas').html(responseText);
@@ -46,6 +49,7 @@ function updateInfoReservaConChck(responseText){
 	<!-- /TMPL_LOOP -->
 	realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);
 }
+*/
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -92,7 +96,11 @@ function updateInfoReservaConChck(responseText){
 	</b></font>
 </div>
 
+<!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>
+<!-- DELTALLE DE SANCIONES -->
+<div id="sanciones"></div>
+<!-- DETALLE DE PRESTAMOS -->
 <div id="tablaReservas"></div>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -35,6 +35,7 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $venc=0;
+my $cierre= C4::Context->preference("close");
 
 foreach my $key (keys %$issues) {
 	my $issue = $issues->{$key};
@@ -42,7 +43,8 @@ foreach my $key (keys %$issues) {
     	my $err= "Error con la fecha"; 
 
      	my $hoy=C4::Date::format_date_in_iso(C4::Date::ParseDate("today"),$dateformat);
-     	my  $close = C4::Date::ParseDate(C4::Context->preference("close"));
+#      	my  $close = C4::Date::ParseDate(C4::Context->preference("close"));
+	my  $close = C4::Date::ParseDate($cierre);
      	if (Date::Manip::Date_Cmp($close,C4::Date::ParseDate("today"))<0){#Se paso la hora de cierre
      		$hoy=C4::Date::format_date_in_iso(C4::Date::DateCalc($hoy,"+ 1 day",\$err),$dateformat);
      	}

@@ -29,7 +29,7 @@ use C4::AR::Estadisticas;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/referencies.tmpl",
+    = get_template_and_user({template_name => "admin/referencies.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

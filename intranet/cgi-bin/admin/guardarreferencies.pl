@@ -2,7 +2,7 @@
 #script para administrar las tablas de referencia
 #escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2006  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2006  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ my $volver=$input->param('accionvolver');
 my ($template, $loggedinuser, $cookie);
 if ($volver){
 ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/referencies.tmpl",
+    = get_template_and_user({template_name => "admin/referencies.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -41,7 +41,7 @@ if ($volver){
 	}
 	else{
  ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/editref.tmpl",
+    = get_template_and_user({template_name => "admin/editref.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

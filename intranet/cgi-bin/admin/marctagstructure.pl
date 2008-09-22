@@ -50,7 +50,7 @@ my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
 my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/marctagstructure.tmpl",
+    = get_template_and_user({template_name => "admin/marctagstructure.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

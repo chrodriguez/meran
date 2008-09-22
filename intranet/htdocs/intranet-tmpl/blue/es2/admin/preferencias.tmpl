@@ -11,21 +11,6 @@
 var objAH;//Objeto AjaxHelper.
 
 /*
- * tablaOrdenada
- * Hace que la tabla con los resultados, se pueda ordenar por los campos correspondientes y tambien hace que se 
- * pueda usar dos paginadores.
- */
-function tablaOrdenada(){
-	var tabla=$("#tablaResultado").tablesorter({	
-				widgets: ['zebra'],
-				headers: { 0: { sorter: false},
-					   4: { sorter: false},
-					   5: { sorter: false}}
-				});
-	inicializacion(tabla);
-}
-
-/*
  * updateInfoConsulta
  * Actualizacion de los datos despues de una consulta ajax. El resultado se inserta en el div result.
  */
@@ -42,24 +27,10 @@ function updateInfoConsulta(responseText){
  * El resultado se procesa, para mostrar lo que corresponda.
  */
 function updateInfoConsultaJSON(responseText){
+// 	alert(responseText);
 	procesarJSON(responseText,objAH.idComp,objAH.funcionChange);
 }
 
-
-/*
- * buscarPreferencia
- * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
- */
-function buscarPreferencia(){
-	objAH=new AjaxHelper(updateInfoConsulta);
-	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
-	objAH.buscar=$("#buscar").val();
-	objAH.agregar=0;
-	objAH.funcion=1;
-	objAH.sendToServer();
-	var compo=$("#tipoVar");
-	compo.removeAttr("disabled");
-}
 
 /*
  * borrarDiv
@@ -68,19 +39,23 @@ function buscarPreferencia(){
 function borrarDiv(){$("#divAgregar").html("");}
 
 /*
- * agregarPref
+ * agregarPreferencia
  * Muestra la parte de agregado de una variable con los componentes correspondientes con el tipo de variable que
  * se eligio.
  */
-function agregarPref(){
+function agregarPreferencia(){
 	var opcion=$("#tipoVar").val();
 	borrarDiv();
 	var ok=1;
-	objAH=new AjaxHelper(updateInfoConsulta);
-	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
+	objAH=new AjaxHelper(updateAgregarPreferencia);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.opcion=opcion;
-	objAH.agregar=1;
-	objAH.funcion=0;
+// 	objAH.agregar=1;
+// 	objAH.funcion=0;
+// 	objAH.accion= "AGREGAR_VARIABLE";
+	objAH.accion= "SELECCION_CAMPO2";
+
 	if(opcion == "combo"){
 		var tabla=$("#tabla").val();
 		var campo=$("#campo").val();
@@ -89,15 +64,20 @@ function agregarPref(){
 		     objAH.campo=campo;
 		}
 	}
+
 	if(opcion == "valAuto"){
 		var cat=$("#categoria").val();
 		if(cat == -1){ok=0;}
 		else{objAH.categoria=cat;}
 	}
+
 	if(ok){
 		objAH.sendToServer();
-	}
-	else{alert("Elija una tabla de referencia");}
+	}else{alert("Elija una tabla de referencia");}
+}
+
+function updateAgregarPreferencia(responseText){
+	$("#result").html(responseText);
 }
 
 /*
@@ -112,9 +92,12 @@ function selectOpcion(){
 	var tipo=$("#tipoVar").val();
 	borrarDiv();
 	objAH=new AjaxHelper(updateInfoConsultaJSON);
-	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.tipo=tipo;
-	objAH.json=1;
+	objAH.accion= "SELECCION_CAMPO";
+ 	objAH.json=1;
+
 	if(tipo == "combo" && tabla.length == 0){
 		objAH.idComp="tabla";
 		objAH.funcionChange="onChange='elegirCampo()'";
@@ -145,16 +128,19 @@ function selectOpcion(){
  * Cuando se selecciona una tabla de referencia se crea un listado con los campos de esa tabla.
  */
 function elegirCampo(){
+
 	var tabla=$("#tabla");
 	var campo=$("#campo");
 	var tipo=$("#tipoVar").val();
 	borrarDiv();
+
 	if(tipo == "combo" && tabla.length == 1){
 		campo.remove();
 		objAH=new AjaxHelper(updateInfoConsultaJSON);
-		objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
+		objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 		objAH.tipo=tipo;
-		objAH.json=1;
+// 		objAH.json=1;
+		objAH.accion= "SELECCION_CAMPO";
 		objAH.tabla=tabla.val();
 		objAH.idComp="campo";
 		objAH.funcionChange="onChange='borrarDiv()'";
@@ -187,38 +173,92 @@ function respuesta(responseText){
 	else{$("#error").html("La variable "+$("#variable").val()+" ya existe en el sistema");}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
- * guardarVariable
+ * tablaOrdenada
+ * Hace que la tabla con los resultados, se pueda ordenar por los campos correspondientes y tambien hace que se 
+ * pueda usar dos paginadores.
+ */
+function tablaOrdenada(){
+	var tabla=$("#tablaResultado").tablesorter({	
+				widgets: ['zebra'],
+				headers: { 0: { sorter: false},
+					   4: { sorter: false},
+					   5: { sorter: false}}
+				});
+	inicializacion(tabla);
+}
+
+/*
+ * guardarModificacion
  * Hace el llamado ajax para poder guardar los datos ingresados para la variable.
  */
-function guardarVariable(mod){
-	objAH=new AjaxHelper(updateInfoGuardarVar);
-	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
+function guardarModificacion(){
+
+	objAH=new AjaxHelper(updateGuardarModificacion);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.variable=$("#variable").val();
 	objAH.valor=$("#valor").val();
 	objAH.explicacion=$("#explicacion").val();
 	objAH.tipo=$("#tipoVar").val();
-	objAH.json=1;
-	objAH.guardar=1;
-	objAH.modificar=mod;
 	objAH.tabla=$("#tabla").val();
 	objAH.campo=$("#campo").val();
 	objAH.categoria=$("#categoria").val();
+	objAH.accion= "GUARDAR_MODIFICACION_VARIABLE";
 	objAH.sendToServer();
-	if(mod){$("#tipoVar").attr("disabled","")}
+
 }
 
 /*
- * updateInfoGuardarVar
+ * updateGuardarModificacion
  * Funcion que se ejecuta cuando se guarda una variable. Si la variable no existe hace una busqueda para encontrar
  * todas las variables, si existe muestra un mensaje de error en la pantalla.
  */
-function updateInfoGuardarVar(responseText){
+function updateGuardarModificacion(responseText){
+	
 	respuesta(responseText);
 	$("#tabla").remove();
 	$("#campo").remove();
 	$("#categ").remove();
 }
+
+/*
+ * buscarPreferencia
+ * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
+ */
+function buscarPreferencia(){
+	objAH=new AjaxHelper(updateBuscarPreferencia);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.buscar=$("#buscar").val();
+	objAH.accion= "BUSCAR_PREFERENCIAS";
+	objAH.sendToServer();
+}
+
+function updateBuscarPreferencia(responseText){
+
+	var compo=$("#tipoVar");
+	compo.removeAttr("disabled");
+	$("#result").html(responseText);
+	tablaOrdenada();
+}
+
 
 /*
  * limpiar
@@ -227,23 +267,28 @@ function updateInfoGuardarVar(responseText){
 function limpiar(){$("#buscar").val("");}
 
 /*
- * modificarVar
+ * modificarVariable
  * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion de la variables seleccionada.
  */
-function modificarVar(variable,tipo){
+function modificarVariable(variable,tipo){
+
 	var compo=$("#tipoVar");
 	compo.val(tipo);
 	compo.attr("disabled","disabled");
-	objAH=new AjaxHelper(updateInfoConsulta);
-	objAH.url= "/cgi-bin/koha/admin/preferenciasResults.pl";
+
+	objAH=new AjaxHelper(updateModificarVariable);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.variable=variable;
-	objAH.agregar=1;
-	objAH.modificar=1;
+	objAH.accion= "MODIFICAR_VARIABLE";
 	objAH.sendToServer();
 }
 
+function updateModificarVariable(responseText){
+	$("#result").html(responseText);
+}
+
 $(document).ready( function() {
-//  	buscarPreferencia();
 	onEnter("buscar",buscarPreferencia);
 });
 
@@ -254,8 +299,11 @@ $(document).ready( function() {
 <br>
 <p>
 	<input type="text" id="buscar" name="buscar" value="">
-	<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscarPreferencia()">
-	<input type="image" name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" onClick="limpiar()">
+	<input type="image" alt="Buscar"  
+	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" 
+	onClick="buscarPreferencia()">
+	<input type="image" name="clear" id="clear" alt="Limpiar" 
+	src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" onClick="limpiar()">
 </p>
 <!-- PARA AGREGAR -->
 <p>
@@ -266,11 +314,11 @@ $(document).ready( function() {
 		<option value="combo">Lista opci&oacute;n</option>
 		<option value="valAuto">Valores autorizados</option>
 	</select>
-	<input id="boton" type="image" alt="Agregar Preferencia de Sistema"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/agregar.png" onclick="agregarPref()">
+	<input 	id="boton" type="image" alt="Agregar Preferencia de Sistema"  
+		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/agregar.png" 
+		onclick="agregarPreferencia()">
 </p>
 
-<div id="result">
-
-</div>
+<div id="result"></div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

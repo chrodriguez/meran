@@ -40,13 +40,14 @@
 		</td>
 		<td>
 			<!-- TMPL_IF NAME="rautor" -->
-				<!-- TMPL_VAR NAME="rautor" -->
+				<!-- TMPL_VAR NAME="rauthor" -->
 			<!-- TMPL_ELSE -->
 				&nbsp;
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' 
+			Title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
 		</td>
 		<td>
 			<!-- TMPL_IF NAME="signatura_topografica" --> 
@@ -160,9 +161,11 @@
 			<!-- /TMPL_IF -->
  		</td>
  		<td> 
-			<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl">
-			<input type="image" name="cancel"  value="Cancelar" border=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="confirm_cancelation('<!-- TMPL_VAR NAME='reservenumber' -->')" title="Cancelar">
-			</form>
+<!-- 			<form id="resevEspera" method="post" action="/cgi-bin/koha/cancelreserv.pl"> -->
+			<input type="image" name="cancel"  value="Cancelar" border=0 
+			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
+			onClick="confirm_cancelation('<!-- TMPL_VAR NAME='reservenumber' -->')" title="Cancelar">
+<!-- 			</form> -->
  		</td>
  		<td height=25>&nbsp;</td>
 	</tr>

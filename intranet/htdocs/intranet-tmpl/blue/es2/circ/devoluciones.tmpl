@@ -13,6 +13,7 @@
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos,updateInfoPrestamos);
+/*
 	if('<!-- TMPL_VAR NAME=usuarioID -->' != ""){
 		usuario= new object_usuario();
 		usuario.text= '<!-- TMPL_VAR NAME=usuarioText -->';
@@ -24,6 +25,8 @@ $(document).ready(function() {
 	}else{
 		$('#usuarioAutocomplete')[0].focus();
 	}
+*/
+
 });
 
 /*
@@ -33,6 +36,8 @@ $(document).ready(function() {
  * Tiene que estar en el template, porque recibe variables desde el pl.
  * Despues realiza la funcion realizarAccion que es la que genera el div para el prestamo.
  */
+
+/*
 function updateInfoPrestamosConChck(responseText){
 	$('#tablaPrestamos').slideDown('slow');
 	$('#tablaPrestamos').html(responseText);
@@ -44,6 +49,7 @@ function updateInfoPrestamosConChck(responseText){
 	<!-- /TMPL_LOOP -->
 	realizarAccion('<!-- TMPL_VAR NAME=accion -->','chkboxPrestamos',generaDivDevRen);
 }
+*/
 
 </script>
 
@@ -63,24 +69,27 @@ function updateInfoPrestamosConChck(responseText){
 <br>
 
 <div id="buscarUsuario">
-	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
-		<tr class="tablaresultadoTitle">
-			<td align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
-			</td>
-			<td>
-				<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
-			</td>
-			<td valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-		</tr>
-		<tr><td colspan="3">&nbsp;</td></tr>
-		<tr>
-			<td width="1%">&nbsp;</td>
-			<td align="center">
-				<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
-			</td>
-			<td width="1%">&nbsp;</td>
-		</tr>
-	</table>
+<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
+	<tr class="tablaresultadoTitle">
+		<td align="left" valign="top">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
+		<td>
+			<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
+		</td>
+		<td valign="top" align="right">
+		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
+	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
+	<tr>
+		<td width="1%">&nbsp;</td>
+		<td align="center">
+			<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
+		</td>
+		<td width="1%">&nbsp;</td>
+	</tr>
+</table>
 </div>
 
 <!-- Mensajes de Informacion al Usuario-->
@@ -89,7 +98,12 @@ function updateInfoPrestamosConChck(responseText){
 	<div id="mensajes"></div>
 	</b></font>
 </div>
+
+<!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>
+<!-- DELTALLE DE SANCIONES -->
+<div id="sanciones"></div>
+<!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos"></div>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

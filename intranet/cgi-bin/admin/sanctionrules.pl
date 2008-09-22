@@ -39,7 +39,7 @@ if ($action eq 'delete') {
 }
 
 my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "parameters/sanctionrules.tmpl",
+    = get_template_and_user({template_name => "admin/sanctionrules.tmpl",
                              query => $input,
                              type => "intranet",
 			     flagsrequired => {parameters => 1},

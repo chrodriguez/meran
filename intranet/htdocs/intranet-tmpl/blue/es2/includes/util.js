@@ -126,3 +126,12 @@ function onEnter(idInput,funcion){
  	});
 
 }
+
+/*
+* Hace un scroll a donde se encuentra el id del objeto pasado por parametro
+*
+*/
+function scrollTo(idObj){
+		var divOffset = $('#'+idObj).offset().top;
+		$('html,body').animate({scrollTop: divOffset}, 1000);
+}

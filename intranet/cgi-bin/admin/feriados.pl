@@ -50,7 +50,7 @@ use Date::Manip;
 use C4::Date;
 my $input = new CGI;
 my ($template, $borrowernumber, $cookie)
-	= get_template_and_user({template_name => "parameters/feriados.tmpl",
+	= get_template_and_user({template_name => "admin/feriados.tmpl",
 			query => $input,
 			type => "intranet",
 			authnotrequired => 0,

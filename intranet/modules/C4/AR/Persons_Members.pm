@@ -48,6 +48,8 @@ sub addmembers{
   my $result='';
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+  my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+
   foreach my $aux (@member){
   $sth->execute($aux);
   my $data=$sth->fetchrow_hashref;
@@ -58,7 +60,6 @@ sub addmembers{
    if (!$sth2->fetchrow_hashref){#no existe, se agrega
 
 	#Se puede habilitar usurios irregulares??
-	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
 	if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)&&($data->{'categorycode'} eq 'ES')){# No es regular y no se puede habilitar regulares
 	 $result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' es IRREGULAR y no puede ser habilitado!!! <br>';
 	}else{

@@ -3,7 +3,7 @@
 #Para configurar los campos involucrados en los reportes genericos
 #Escrito el 26/9/2007 por matiasp@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2007  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2007  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ if (!$fieldname){ $fieldname='';}
 my $op=$input->param('op');
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/generic_reports.tmpl",
+    = get_template_and_user({template_name => "admin/generic_reports.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

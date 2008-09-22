@@ -28,7 +28,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "parameters/deleteref.tmpl",
+    = get_template_and_user({template_name => "admin/deleteref.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
