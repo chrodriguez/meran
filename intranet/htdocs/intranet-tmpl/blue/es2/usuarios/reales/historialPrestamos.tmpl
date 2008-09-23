@@ -1,0 +1,101 @@
+<center>
+
+<!-- TMPL_VAR NAME="paginador" -->
+
+<p class="inputFontNormal"> 
+	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
+</p>
+
+<table class="tablaHistorialPrestamos" cellspacing=0  cellpadding=0 border=0 width="100%">
+<tr>
+	<td class="tablaresultadoTitle" width="1%" align="right">
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+	</td>
+
+	<td class="tablaresultadoTitleClick" onclick="ordenar('titulo')" Title="Ordenar por Titulo">
+		T&iacute;tulo
+	</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('autor')" Title="Ordenar por Autor">
+		Autor
+	</td>
+        <td class="tablaresultadoTitle">
+        	Edici&oacute;n
+ 	</td>
+        <td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" Title="Ordenar por C&oacute;digo">
+		C&oacute;digo
+ 	</td>
+	<td class="tablaresultadoTitle">
+		Pr&eacute;stamo
+	</td>
+        <td class="tablaresultadoTitle">
+        	Renovaci&oacute;n
+ 	</td>
+	<td class="tablaresultadoTitle">
+		Vencimiento
+	</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('returndate')" Title="Ordenar por Fecha de devoluci&oacute;n">
+		Devoluci&oacute;n
+	</td>
+
+	 <td width="1%" class="tablaresultadoTitle">
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+	</td>
+</tr>
+
+<!-- TMPL_LOOP name="loop_reading" -->
+<tr valign=middle align="center" class="inputFontNormal">
+	<td height=25 >&nbsp;</td>
+	<td>
+		<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->'>
+ 		<!-- TMPL_VAR name="titulo" ESCAPE=HTML-->
+		<!-- TMPL_IF name="unititle" -->
+			:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML-->
+		<!-- /TMPL_IF -->
+    		</a>
+	</td>
+	<td>
+ 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->">
+		<!-- TMPL_VAR name="autor" -->
+		</a>
+	</td>
+	<td>
+        <!-- TMPL_LOOP NAME="grupos" -->
+
+		<!-- TMPL_IF name="edicion" -->
+			<!-- TMPL_VAR NAME="edicion" -->
+		<!-- /TMPL_IF -->
+
+		<!-- TMPL_IF name="publicationyear" -->
+			&nbsp;(<!-- TMPL_VAR NAME="publicationyear" -->)
+        	<!-- /TMPL_IF -->
+	
+		<!-- TMPL_IF NAME="volume" -->
+			        t <!-- TMPL_VAR NAME="volume" -->
+		<!-- /TMPL_IF -->
+
+	<!-- /TMPL_LOOP -->
+        </td>
+	<td align="center" >
+		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>&nbsp;
+	</td>
+	<td>
+		<!-- TMPL_VAR name="date_due" -->&nbsp;
+	</td>
+	<td>
+		<!-- TMPL_VAR name="date_renew" -->&nbsp;
+	</td>
+	<td>
+		<!-- TMPL_VAR name="date_fin" -->&nbsp;
+	</td>
+	<td>
+		<!-- TMPL_VAR name="returndate" -->&nbsp;
+	</td>
+
+	<td height=25>&nbsp;</td>
+
+<!-- /TMPL_LOOP -->
+
+</table>
+
+</center>
+

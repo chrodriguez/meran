@@ -1,0 +1,123 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="pagetitle" >Agregar Nuevo Usuario Hijo</td></tr>
+<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+
+</table>
+<br>
+<form action=/cgi-bin/koha/members/newjmember.pl method=post name=form1>
+	<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
+	<input type=hidden name=updtype value=I>
+	<input type=hidden name=area value="<!-- TMPL_VAR NAME=area -->">
+	<input type=hidden name=city value="<!-- TMPL_VAR NAME=city -->">
+	<input type=hidden name=physstreet value="<!-- TMPL_VAR NAME=physstreet -->">
+	<input type=hidden name=streetaddress value="<!-- TMPL_VAR NAME=streetaddress -->">
+	<input type=hidden name=streetcity value="<!-- TMPL_VAR NAME=streetcity -->">
+	<input type=hidden name=phone value="<!-- TMPL_VAR NAME=phone -->">
+	<input type=hidden name=phoneday value="<!-- TMPL_VAR NAME=phoneday -->">
+	<input type=hidden name=faxnumber value="<!-- TMPL_VAR NAME=faxnumber -->">
+	<input type=hidden name=emailaddress value="<!-- TMPL_VAR NAME=emailaddress -->">
+	<input type=hidden name=contactname value="<!-- TMPL_VAR NAME=contactname -->">
+	<input type=hidden name=altphone value"<!-- TMPL_VAR NAME=altphone -->">
+
+	<table border=0 cellspacing=0 cellpadding=0 width="100%">
+	<tr valign=middle class="tablaresultadoTitle">
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td  colspan=7>
+			<B>PADRE O TUTOR </b>
+		</td>
+		 <td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</tr>
+	<tr valign=middle>
+                 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="inputFontNormal"><b>Salutation</b></td>
+                <td class="inputFontNormal"><b>Nombres de pila*</b></td>
+                <td colspan=2 class="inputFontNormal"><b>Apellido*</b></td>
+                <td class="inputFontNormal"><b>ID de usuario</b></td>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        </tr>
+
+	<tr valign=middle >
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td class="inputFontNormal">
+		<SELECT NAME="title" SIZE="1">
+			<OPTION value=" ">Sin T&iacute;tulo
+			<!-- TMPL_LOOP NAME=titleloop -->
+			<OPTION value="<!-- TMPL_VAR NAME=title -->" <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=title -->
+			<!-- /TMPL_LOOP -->
+		</SELECT>
+		</td>
+		<td><input class="inputFontNormal" type=text name=firstname_guardian size=20 value="<!-- TMPL_VAR NAME=firstname -->"></td>
+		<td colspan=2><input class="inputFontNormal" type=text name=surname_guardian size=20 value="<!-- TMPL_VAR NAME=surname -->"></td>
+		<td><input class="inputFontNormal" type=text name=guardian_number size=20 value="<!-- TMPL_VAR NAME=cardnumber -->"></td>
+		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+
+	<!-- TMPL_LOOP NAME=cmemloop -->
+	<tr><td>&nbsp;</td></tr>
+	<tr valign=middle class="tablaresultadoTitle">
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td COLSPAN=7 >
+			<B>HIJO <!-- TMPL_VAR NAME=count --></b>
+		</td>
+		 <td width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+	</TR>
+	<tr><td>&nbsp;</td></tr>
+	<TR>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td  COLSPAN=6   ALIGN=RIGHT class="inputFontNormal">
+			<!--Usuario# <!-- TMPL_VAR NAME=cmember -->,--> <b>Tarjeta de identificaci&oacute;n*</b>
+		</TD>
+		<TD>
+			<input class="inputFontNormal" type=text name=cardnumber_child_<!-- TMPL_VAR NAME=i --> size=20 value="<!-- TMPL_VAR NAME=jcardnumber -->"><br>
+			<input class="inputFontNormal" type=hidden name=bornumber_child_<!-- TMPL_VAR NAME=i --> value="<!-- TMPL_VAR NAME=cmember -->">
+		</td>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</TR>
+	
+	<tr valign=middle>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                <td class="inputFontNormal"><b>Nombre de pila*</b></td>
+                <td class="inputFontNormal"><b>Apellido*</b></td>
+                <td class="inputFontNormal"><b>Fecha de nacimiento*</b>(<!-- TMPL_VAR NAME=dateformat -->)</td>
+                <td class="inputFontNormal"><b>Sexo*</b></td>
+                <td class="inputFontNormal"><b>Escuela</b></td>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        </tr>
+
+	<tr>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td><input class="inputFontNormal" type=text name=firstname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
+		<td><input class="inputFontNormal" type=text name=surname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
+		<td><input class="inputFontNormal" type=text name=dateofbirth_child_<!-- TMPL_VAR NAME=i --> size=15 value=""></TD>
+		<TD>
+			<input class="inputFontNormal" type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="F"><b>F</b>
+			<input class="inputFontNormal" type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="M"><b>M</b>
+		</td>
+		<TD><input class="inputFontNormal" type=text name=school_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></TD>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+        <tr valign=middle>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+                <td class="inputFontNormal"><b>Notas</b></td>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+        </tr>
+
+	<tr valign=middle>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td  COLSPAN=7><textarea class="inputFontNormal" name=altnotes_child_<!-- TMPL_VAR NAME=i --> wrap=physical cols=70 rows=3></textarea></td>
+		 <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	<tr valign=middle>
+		<td colspan=8 align="center">
+<a href="#" onClick="form1.reset()" ><img name="clear" id="clear" alt="Limpiar" src="<!-- TMPL_VAR NAME="themelang" -->/images/borrar2.png" border="0">
+<!--<input type=reset value="Limpiar todos los campos">-->
+			<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" ALT="Agregar Nuevo Usuario" border=0>
+		</td>
+	</tr>
+
+	</TABLE>
+</form>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
