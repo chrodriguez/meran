@@ -48,11 +48,11 @@ my $error= 0;
 		my $ldaproot = $sth->fetchrow;
 		$sth->execute("ldappass");
 		my $ldappass = $sth->fetchrow;
-                                                                                                                             
+
 		my $db = Net::LDAP->new($ldapserver);
-                                                                                                                           
+
 		my $res = $db->bind( 'cn='.$ldaproot.','.$ldapinfos , password => $ldappass) or die "$@";
-                                                                                                                             
+
 		my $entries = $db->search(
 			base   => $ldapinfos,
 		        filter => "(uid = $userid)"
@@ -61,13 +61,12 @@ my $error= 0;
 		my $cantUser= 0;
 		my $entry;
 		my $dn= 'uid='.$userid.','.$ldapinfos;
-                                                                                                                             
+
 		foreach $entry ($entries->all_entries) {
 		        $cantUser+= 1;
 		}
-                
-		my $mesg;
-                		
+
+		my $mesg;	
 		if ($cantUser){
 		
 		 	$mesg = $db->modify( $dn, replace => { 'userPassword' => $password } );

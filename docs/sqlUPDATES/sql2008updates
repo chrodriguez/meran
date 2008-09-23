@@ -204,3 +204,8 @@ SE TIENE QUE CREAR UN ARCHIVO CON NOMBRE debugErrorDBA.txt CON PERMISOS DE ESCRI
 -- Se eliminaron las siguientes tablas
 
 DROP TABLE `additionalauthors`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliosubject`, `bibliosubtitle`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `printers`, `publisher`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `marc_subfield_table`;
+
+
+--Se agrega preferencia para controlar la longitud minima de la password
+insert into systempreferences (variable,value,explanation) 
+values ('minPassLength','8','Longitud minima de la password');

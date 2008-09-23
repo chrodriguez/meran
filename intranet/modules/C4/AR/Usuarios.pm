@@ -25,7 +25,147 @@ use vars qw(@EXPORT @ISA);
 	&NewBorrowerNumber
 	&findguarantees
 	&updateOpacBorrower
+	&cambiarPassword
 );
+
+
+sub verficarPassword {
+
+	my($params)=@_;
+
+	my $error= 0;
+	my $codMsg= '000';
+	my @paraMens;
+
+	if( !($error) && ($params->{'newpassword'} eq "") ){
+	#password en blanco
+		$error= 1;
+		$codMsg= 'U314';
+	}
+
+	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+	#las password no coinciden
+		$error= 1;
+		$codMsg= 'U315';
+	}
+
+	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+	#la password no respeta la longitud minima
+		$error= 1;
+		$codMsg= 'U316';
+	}
+
+## FIXME faltaria seguir agregando validaciones, tales como:
+# maxPassLength, Maximum length of the password
+# * maxSpace Maximum number of white space characters
+
+# *
+# * minUpper Minimum number of uppercase characters
+# * minLower Minimum number of lowercase characters
+# * minNumeric Minimum number of numeric characters (0-9)
+# * minAlphaNum Minimum number of alphanumeric characters
+# * minAlpha Minimum number of alphabetic characters
+# * minSymbol Minimum number of alphabetic characters
+
+	return ($error, $codMsg,\@paraMens);
+}
+
+sub t_cambiarPassword {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+# 	my ($error, $codMsg, $paraMens);
+
+	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= cambiarPassword($params);	
+			$dbh->commit;
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B420';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U313';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+sub cambiarPassword{
+
+	my ($params) = @_;
+	my $dbh = C4::Context->dbh;
+
+	my ($error,$codMsg,$paraMens);
+	$error= 0;
+	
+	my %env;
+	my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
+
+	$params->{'userid'}= $borrower->{'userid'};
+	$params->{'surename'}= $borrower->{'surename'};
+	$params->{'firstname'}= $borrower->{'firstname'};
+
+	my $digest= C4::Auth::md5_base64($params->{'newpasswrod'});
+	my $dbh=C4::Context->dbh;
+	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+	#Then we need to tell the user and have them create a new one.
+	my $sth2=$dbh->prepare("	SELECT * 
+					FROM borrowers 
+					WHERE userid=? AND borrowernumber != ?");
+
+	$sth2->execute($params->{'userid'},$params->{'usuario'});
+	
+	if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
+	#ya existe el userid
+		$error= 1;
+		$codMsg= 'U311';
+		$paraMens->[0]= $params->{'userid'};
+		$paraMens->[1]= $params->{'surename'};
+		$paraMens->[2]= $params->{'firstname'};
+
+	}else {
+		#Esta todo bien, se puede actualizar la informacion
+		my $sth=$dbh->prepare("	UPDATE borrowers SET userid=?, password=? 
+					WHERE borrowernumber=? ");
+
+		$sth->execute($params->{'userid'}, $digest, $params->{'usuario'});
+		
+		my $sth3=$dbh->prepare("	SELECT cardnumber FROM borrowers 
+						WHERE borrowernumber = ? ");
+
+		$sth3->execute($params->{'usuario'});
+
+		if (my $cardnumber= $sth3->fetchrow) {
+		#Se actualiza el ldap
+## FIXME no se para que se le pasa el $template
+			my $template; 
+			if (C4::Membersldap::addupdateldapuser($dbh,$cardnumber,$digest,$template)){
+# 				$template->param(errorldap => 1);
+			}
+		}
+
+		$codMsg= 'U312';
+	}
+
+	return ($error,$codMsg,$paraMens);
+}
 
 
 sub buscarBorrower{

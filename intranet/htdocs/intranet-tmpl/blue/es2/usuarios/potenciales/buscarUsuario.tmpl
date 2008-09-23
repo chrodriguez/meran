@@ -1,8 +1,5 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script> -->
-<!-- <script src="/intranet-tmpl/blue/es2/includes/json/jsonStringify.js"></script> -->
-<!-- <script src="/intranet-tmpl/blue/es2/includes/AjaxHelper.js"></script> -->
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 
@@ -43,7 +40,7 @@ function changePage(ini){
 
 function actualizarPersonas(cant,arrayPersonNumbers){
 	objAH=new AjaxHelper(updateInfoActualizar);
-	objAH.url= "/cgi-bin/koha/members/actualizarPersonas.pl";
+	objAH.url= "/cgi-bin/koha/usuarios/actualizarPersonas.pl";
 	objAH.cantidad=cant;
 	objAH.accion=$("#accion").val();
 	objAH.personNumbers=arrayPersonNumbers;
@@ -61,7 +58,7 @@ function consultar(){
 	var busqueda = $("#member").val();
 	if(busqueda != ""){
 		objAH=new AjaxHelper(updateInfo);
-		objAH.url= "/cgi-bin/koha/members/member2Result.pl";
+		objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
 		objAH.funcion= "changePage";
 		objAH.member= busqueda;
 		objAH.sendToServer();

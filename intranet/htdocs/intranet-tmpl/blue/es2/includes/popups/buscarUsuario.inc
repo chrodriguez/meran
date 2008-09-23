@@ -35,21 +35,7 @@ function clearInput(){
 	$('#campoUsuario').val("");
 }
 
-
-var infoPrestamos_array= new Array();//Arreglo que contendra los objetos, con info que pertenece a los prestamos.
 var objAH;//Objeto AjaxHelper.
-
-/*
- * infoPrestamo
- * Representa al objeto que contendra la informacion para poder prestar el item. 
- * Que se pasara con json al servidor, en un arreglo (infoPrestamos_array).
- * prestamos.tmpl
- */
-function infoPrestamo(){
-	this.id3= '';
-	this.id3Old= '';
-	this.tipoPrestamo; //este es el tipo de prestamo para el id3
-}
 
 /*
  * object_usuario

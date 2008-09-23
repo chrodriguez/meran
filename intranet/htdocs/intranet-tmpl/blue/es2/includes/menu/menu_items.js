@@ -26,7 +26,7 @@ var MENU_ITEMS = [
 		['Usuarios Reales', '/cgi-bin/koha/usuarios/reales/buscarUsuario.pl'],
 		['Usuarios Potenciales', '/cgi-bin/koha/usuarios/potenciales/buscarUsuario.pl'],
 		['------------------------', null],
-		['Agregar Usuario', '/cgi-bin/koha/members/memberentry.pl?type=Add'],
+		['Agregar Usuario', '/cgi-bin/koha/usuarios/reales/usuario.pl?type=Add'],
 		['Agregar Organizaci&oacute;n', '/cgi-bin/koha/members/imemberentry.pl?type=Add'],
 		['------------------------', null],
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']

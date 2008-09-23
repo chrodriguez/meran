@@ -17,7 +17,7 @@ function consultar(){
 	var busqueda = $('#member').val();
 	if(busqueda != ""){
 		objAH=new AjaxHelper(updateInfo);
-		objAH.url= '/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl';
+		objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
 		objAH.funcion= 'changePage';
 		objAH.member= busqueda;
 		objAH.sendToServer();

@@ -951,6 +951,7 @@ sub prestar{
 		}
 		$dbh->{AutoCommit} = 1;
 	}
+
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }

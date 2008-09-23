@@ -35,7 +35,7 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/reales/buscarUsuaioResult.tmpl",
+    = get_template_and_user({template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
