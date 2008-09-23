@@ -59,12 +59,12 @@ if  (document.forms[0].elements[0].type != 'hidden') {
   	<td class="inputFontNormal"> 
 		<font color='red' size='+2'>
 		<!-- TMPL_IF Name="reserved" -->
-			Reservado:</font> reserva encontrada para <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+			Reservado:</font> reserva encontrada para <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_IF Name="waiting" --> 
 			Ejemplar marcado como En espera:</font><br>
-			Ejemplar esta marcado esperando en <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).<br>
+			Ejemplar esta marcado esperando en <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).<br>
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_IF Name="reserved" -->
@@ -184,7 +184,7 @@ if  (document.forms[0].elements[0].type != 'hidden') {
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_IF Name="errwasreturned" -->
-			El ejemplar estaba prestado a  <a class="inputFontNormal" href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>
+			El ejemplar estaba prestado a  <a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Usuario', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>
 		<!-- TMPL_VAR Name="name" --> y ha sido devuelto.
 		<!-- /TMPL_IF -->
 		

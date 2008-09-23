@@ -25,10 +25,13 @@ use strict;
 use CGI;
 use PDF::Report;
 use C4::AR::PdfGenerator;
+use C4::AR::Usuarios;
+use C4::AR::Sanctions;
+use C4::AR::Issues;
 
 my $input= new CGI;
 my $bornum = $input->param('bornum');
-my $borrewer= C4::AR::Usuarios::getBorrowerInfo($bornum);
+my $borrewer= &C4::AR::Usuarios::getBorrowerInfo($bornum);
 
 my $libreD=C4::Context->preference("libreDeuda");
 my @array=split(//, $libreD);
@@ -53,7 +56,7 @@ if($array[1] eq "1" && $ok){
 	}
 }
 if($array[2] eq "1" && $ok){
-	if(C4::AR::Sanctions::tieneLibroVencido($bornum)){
+	if(&C4::AR::Sanctions::tieneLibroVencido($bornum)){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos vencidos";
 	}
@@ -77,6 +80,6 @@ if($ok){
 }
 else{
 	my $mensaje="<b>No se puede imprimir el certificado de libre deuda ".$msj." </b>";
-	print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum&mensaje=$mensaje");
+	print $input->redirect("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=$bornum&mensaje=$mensaje");
 }
 

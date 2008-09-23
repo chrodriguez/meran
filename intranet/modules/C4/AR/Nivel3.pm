@@ -361,7 +361,7 @@ sub disponibilidadItem{
 		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
 		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$datosItem->{'disponibilidad'}="Prestado a ";
-		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
+		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
      	
 		my ($vencido,$df)= &C4::AR::Issues::estaVencido($data->{'id3'},$data->{'issuecode'});
 		my $returndate=format_date($df,$dateformat);
@@ -382,7 +382,7 @@ sub disponibilidadItem{
 		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
 		$datosItem->{'vencimiento'}=$reminderdate;
 		$datosItem->{'disponibilidad'}="Reservado a ";
-      		$datosItem->{'usuario'}="<a href='../members/moremember.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
+      		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
 	}
 }
 

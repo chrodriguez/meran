@@ -45,7 +45,7 @@
 		<td colspan="2" class="inputFontNormal">
 <!-- TMPL_LOOP name="borrower" -->
 		<input type="hidden" id="borrowernumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-			Nombre y apellido: <b><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
+			Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
 			Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
 			Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><BR>
 			Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --></b><BR>

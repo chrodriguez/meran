@@ -106,7 +106,7 @@
 			<!-- TMPL_ELSE -->
 				Garante:<b>
 				<!-- TMPL_IF NAME="guarantorborrowernumber" -->
-					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
+					<A HREF="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME='guarantorborrowernumber' -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
 				<!-- TMPL_ELSE -->
 					sin garante</b><br>
 				<!-- /TMPL_IF -->

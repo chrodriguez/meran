@@ -37,37 +37,35 @@ my $size= 0;
  
 if (!$foto_name) {
 #Hace el upload de un archivo
-                                                                                                                             
+$msg= "Se subi&oacute; la foto con &eacute;xito";
 my @extensiones_permitidas=("bmp","jpg","gif","png");
 my @nombreYextension=split('\.',$filepath);
   if (scalar(@nombreYextension)==2) { # verifica que el nombre del archivo tenga el punto (.)
         my $ext= @nombreYextension[1];
         my $buff='';
         my $write_file= $picturesDir."/".$bornum.".".$ext;
-                                                                                                                             
+
         if (!grep(/$ext/i,@extensiones_permitidas)) {
                 $msg= "Solo se permiten imagenes (".join(", ",@extensiones_permitidas).")";
         } else {
-                                                                                                                             
+
                 if (!open(WFD,">$write_file")) {
                         $msg="Hay un error y el archivo no puede escribirse en el servidor.";
                 }
-                                                                                                                             
+
                 while ($bytes_read=read($filepath,$buff,2096)) {
                         $size += $bytes_read;
                         binmode WFD;
                         print WFD $buff;
                 }
-                                                                                                                             
+
                 close(WFD);
         }
   } else {
         $msg= "El nombre del archivo no tiene un formato correcto";
   }
-                                                                                                                             
 } else {
 #Borra el archivo previamente subido
-                                                                                                                             
 unlink($picturesDir.'/'.$foto_name);
 }
 return($msg);

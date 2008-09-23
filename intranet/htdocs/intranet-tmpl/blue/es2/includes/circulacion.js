@@ -101,7 +101,7 @@ function updateInfoUsuario(responseText){
 function detalleSanciones(borr){
 
 	objAH=new AjaxHelper(updateDetalleSanciones);
-	objAH.url='/cgi-bin/koha/members/detalleSanciones.pl';
+	objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
 	objAH.borrowernumber= borr;
 	objAH.sendToServer();
 }
@@ -414,10 +414,5 @@ function imprimirTicket(ticket,num){
 		window.open ("../circ/receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
-
-// function scrollTo(idObj){
-// 		var divOffset = $('#'+idObj).offset().top;
-// 		$('html,body').animate({scrollTop: divOffset}, 1000);
-// }
 
 
