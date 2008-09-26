@@ -9,6 +9,8 @@ use C4::Auth;
 use C4::Context;
 use CGI;
 
+#agrego una modificacion para testear el plugin del mantis 
+
 my $dbh = C4::Context->dbh;
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
