@@ -9,7 +9,7 @@ use C4::Auth;
 use C4::Context;
 use CGI;
 
-#agrego una modificacion para testear el plugin del mantissssssssssssss
+#agrego una modificacion para testear el plugin del mantisssssssssssssddddds
 
 my $dbh = C4::Context->dbh;
 my $query = new CGI;
