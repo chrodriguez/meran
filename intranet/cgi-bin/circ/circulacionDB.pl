@@ -119,14 +119,7 @@ print A "long: $loop \n";
 		$id3Old=$array_ids3->[$i]->{'id3Old'};
 
 print A "id3 antes de setear: $id3\n";
-
-# FIXME ########################################################################################
-#si se tiene la preferencia de intranetGroupReserve = 0, te dice q se presta, y esto no es asi
-#deberia decir q no se permite prestar (sin reserva ) desde la INTRA
-
 #Presta 1 o mas al mismo tiempo
-# FIXME ########################################################################################
-
 		if($id3 ne ""){
 			my $data= C4::AR::Nivel3::getDataNivel3($id3);
 			my %params;
@@ -142,7 +135,7 @@ print A "id3 antes de setear: $id3\n";
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		
-			($error, $codMsg, $message)= &C4::AR::Reservas::prestar(\%params);
+			($error, $codMsg, $message)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
 			my $ticketObj=0;
 			if(!$error){
 			#Se crean los ticket para imprimir.
@@ -168,8 +161,9 @@ print A "id2: $id2\n";
 print A "error: $error\n";
 print A "message: $message \n";
 		}
-	}
+	} #end for
 
+	#se arma la info para enviar al cliente
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}= \@infoTickets;
 	$infoOperaciones{'messages'}= \@infoMessages;

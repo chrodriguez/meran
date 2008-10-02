@@ -392,7 +392,8 @@ sub actualizarSancion {
 
 #**********************************Se registra el movimiento en historicSanction***************************
 	my $infoSancion= infoSanction($params->{'reservenumber'});
-	$params->{'sanctiontypecode'}= 'null';
+# 	$params->{'sanctiontypecode'}= 'null';
+	$params->{'sanctiontypecode'}= undef;
 	$params->{'fechaFinSancion'}= $infoSancion->{'enddate'};
 
 	logSanction(

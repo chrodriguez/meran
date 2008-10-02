@@ -54,7 +54,7 @@ foreach my $key (@names){
 }
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "members/newmember.tmpl",
+    = get_template_and_user({template_name => "usuarios/newmember.tmpl",
 			     query => $input,
                              type => "intranet",
                              authnotrequired => 0,

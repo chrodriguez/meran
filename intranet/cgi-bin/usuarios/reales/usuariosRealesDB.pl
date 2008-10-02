@@ -1,16 +1,9 @@
 #!/usr/bin/perl
-#script to set the password, and optionally a userid, for a borrower
-#written 2/5/00
-#by chris@katipo.co.nz
-#converted to using templates 3/16/03 by mwhansen@hmc.edu
 
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;
-use C4::Membersldap;
 use CGI;
-use Digest::MD5 qw(md5_base64);
 use JSON;
 
 my $input = new CGI;
@@ -100,9 +93,6 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 if($tipoAccion eq "CAMBIAR_PASSWORD"){
-
-
-# 	my $usuario= $obj->{'usuario'};
 
 	my %params;
 	$params{'usuario'}= $obj->{'usuario'};

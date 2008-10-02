@@ -122,10 +122,11 @@ sub cambiarPassword{
 	$params->{'surename'}= $borrower->{'surename'};
 	$params->{'firstname'}= $borrower->{'firstname'};
 
-	my $digest= C4::Auth::md5_base64($params->{'newpasswrod'});
+	my $digest= C4::Auth::md5_base64($params->{'newpassword'});
 	my $dbh=C4::Context->dbh;
 	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
 	#Then we need to tell the user and have them create a new one.
+## FIXME el userid parece que no se usa!!!!!!!!!!!!!	
 	my $sth2=$dbh->prepare("	SELECT * 
 					FROM borrowers 
 					WHERE userid=? AND borrowernumber != ?");

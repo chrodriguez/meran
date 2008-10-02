@@ -627,7 +627,7 @@ sub checkpw {
 	
 		if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
 			$md5password=md5_base64($dni);
-			}
+		}
 			
 		
 		if ($password eq md5_base64($md5password.$random_number)) {

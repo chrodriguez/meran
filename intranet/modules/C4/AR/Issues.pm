@@ -158,7 +158,8 @@ sub devolver {
 #**********************************Se registra el movimiento en historicCirculation***************************
 		my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 		my $id1= $dataItems->{'id1'};
-		my $end_date= "null";
+# 		my $end_date= "null";
+		my $end_date= undef;
 
 		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->{'id2'},$id3,$reserva->{'branchcode'},$prestamo->{'issuecode'},$end_date);
 
@@ -727,7 +728,8 @@ sub Enviar_Recordatorio{
 	my $borrowernumber= $bor;
 	my $loggedinuser= $bor;
 	my $issuecode= '-';
-	my $end_date= "null";
+# 	my $end_date= "null";
+	my $end_date= undef;
 		
 	C4::Circulation::Circ2::insertHistoricCirculation('reminder',$borrowernumber,$loggedinuser,$id1,$id2,$id3,$branchcode,$issuecode,$end_date);
 #*******************************Fin***Se registra el movimiento en historicCirculation**********************

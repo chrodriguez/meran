@@ -40,81 +40,63 @@
 		<td colspan="2">Informaci&oacute;n del usuario</td>
 		<td width="1%" valign="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
     	</tr>
-    	<tr>
+</table>
+<!--    	<tr>
 		<td width="1%">&nbsp;</td>
 		<td colspan="2" class="inputFontNormal">
 <!-- TMPL_LOOP name="borrower" -->
 		<input type="hidden" id="borrowernumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-			Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
-			Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
-			Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><BR>
-			Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --></b><BR>
- 			E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
-			ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><BR>
-			Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categoria" --></b><BR>
+		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> 
+		<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
+		Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
+		Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><br>
+		Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --><!-- TMPL_VAR NAME="city" --></b><br>
+ 		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
+		ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
+		Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categoria" --></b><br>
         	</td>
 		<td width="1%">&nbsp;</td>
     	</tr>
-<!-- /TMPL_LOOP -->
 
-<!-- TMPL_IF name="noissues" -->
-	<!-- TMPL_IF NAME="gna" -->
-	<tr>
-		<td valign="top" class="inputFontNormal">
-			<font color="red">GNA</font>
-		</td>
-		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
-			El usuario no posee direcci&oacute;n
-		</td>
-	</tr>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="lost" -->
-	<tr>
-		<td valign="top" class="inputFontNormal">
-			<font color="red">PERDIDO</font>
-		</td>
-		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
-			La tarjeta de identificaci&oacute;n del usuario se encuentra perdida
-		</td>
-	</tr>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="dbarred" -->
-	<tr>
-		<td valign="top">
-			<font color="red">DBARRED</font>
-		</td>
-		<td class="inputFontNormal" bgcolor="<!-- TMPL_VAR name='color' -->">
-			El usuario ha sido excluido
-		</td>
-	</tr>
-	<!-- /TMPL_IF -->
-<!-- TMPL_ELSE -->
-	<!-- TMPL_IF name="waiting" -->
-	<tr>
-		<td valign="top">EN ESPERA</td>
-		<td>
-		<!-- TMPL_LOOP name="itemswaiting" -->
-			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR name='id1' -->"><!-- TMPL_VAR name="barcode" --></a> <!-- TMPL_VAR name="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> (<!-- TMPL_VAR name="branchname" -->)<br>
-		<!-- /TMPL_LOOP -->
-		</td>
-	</tr>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="odues" -->
-		<!-- TMPL_IF name="nonreturns" -->
-	<tr>
-		<td valign="top">Debe ejemplares</td>
-		<td>Si, vea a continuaci&oacute;n</td>
-	</tr>
+<!-- /TMPL_LOOP -->
+</table>-->
+
+<div id="datosUsuario">
+	<div class="vcard">
+	
+	<!-- TMPL_LOOP name="borrower" -->
+		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> 
+		<span class="fn"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></span></a></b><br>
+		Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
+		Documento: Tipo: <b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><br>
+		Direcci&oacute;n: <b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --><!-- TMPL_VAR NAME="city" --></b><br>
+		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><span class="email"><!-- TMPL_VAR NAME="emailaddress" --></span></a></b><br>
+		ID de usuario: <b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
+		Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categoria" --></b><br>
+	
+		<!-- TMPL_IF NAME="contactname" -->
+		Contacto Alternativo: <b> <!-- TMPL_VAR NAME="contactname" --></b><br>
 		<!-- /TMPL_IF -->
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="notes" -->
-	<tr>
-		<td valign="top">NOTAS</td>
-		<td><!-- TMPL_VAR name="notesmsg" --></td>
-	</tr>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-</table>
+	
+		<!-- TMPL_IF NAME="phone" -->
+		<div class="tel">
+			<span class="type">Tel&eacute;fono:</span> <b><!-- TMPL_VAR NAME="phone" --></b><br>
+		</div>	
+		<!-- /TMPL_IF -->
+	
+		<!-- TMPL_IF NAME="altphone" -->
+		<div class="tel">
+			<span class="type">Tel&eacute;fono Alt:</span> <b><!-- TMPL_VAR NAME="altphone" --></b><br>
+		</div>	
+		<!-- /TMPL_IF -->
+		
+		<!-- TMPL_IF NAME="altrelationship" -->
+			Relaci&oacute;n: <b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
+		<!-- /TMPL_IF -->
+	
+	<!-- /TMPL_LOOP -->
+	</div> <!--end vcard-->
+</div>  
 
 
 

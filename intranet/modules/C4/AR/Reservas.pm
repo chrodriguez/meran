@@ -51,7 +51,7 @@ $VERSION = 0.01;
 	&FindNotRegularUsersWithReserves
 	&eliminarReservasVencidas
 
-	&prestar
+	&t_realizarPrestamo
 );
 
 sub t_reservarOPAC {
@@ -162,7 +162,7 @@ sub reservar {
 	my($params)=@_;
 	my $dateformat = C4::Date::get_date_format();
 	my $data;
-	$data->{'id3'}= $params->{'id3'};
+	$data->{'id3'}= $params->{'id3'}||'';
 	if($params->{'tipo'} eq 'OPAC'){
 		$data= getItemsParaReserva($params->{'id2'});
 	}
@@ -217,7 +217,7 @@ sub insertarReserva {
 			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
 			VALUES (?,?,?,?,NOW(),?,?,?) ";
 	my $sth2=$dbh->prepare($query);
-	$sth2->execute( $params->{'id3'},
+	$sth2->execute( $params->{'id3'}||undef,
 			$params->{'id2'},
 			$params->{'borrowernumber'},
 			$params->{'reservedate'},
@@ -379,7 +379,7 @@ sub cancelar_reserva{
 	my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
 	$id1= $dataBiblioItems->{'id1'};
 	my $issuetype= '-';
-	my $end_date = 'null';
+	my $end_date = undef;
 	C4::Circulation::Circ2::insertHistoricCirculation(
 								'cancel',
 								$borrowernumber,
@@ -563,6 +563,10 @@ sub verificarTipoReserva {
 	return ($error);
 }
 
+
+=item
+Esta funcion devuelve la reserva (si existe) de grupo
+=cut
 sub getReservasDeBorrower {
 #devuelve las reservas de grupo del usuario
 	my ($borrowernumber, $id2)=@_;
@@ -813,6 +817,7 @@ print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestam
 print A "Entro al if de maximo de reservas desde OPAC";
 	}
 
+
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
 	if( !($error) && (&C4::AR::Issues::getCountPrestamosDeGrupo($borrowernumber, $id2, $issueType)) ){
 		$error= 1;
@@ -825,7 +830,9 @@ close(A);
 	return ($error, $codMsg,\@paraMens);
 }
 
-#Esta funcion se utiliza para verificar post condiciones luego de un prestamo
+=item
+Esta funcion se utiliza para verificar post condiciones luego de un prestamo, y realizar las operaciones que sean necesarias
+=cut
 sub verificacionesPostPrestamo {
 	my($params)=@_;
 
@@ -847,18 +854,18 @@ print A "id3: $id3\n";
 print A "borrowernumber: $borrowernumber\n";
 print A "issueType: $issueType\n";
 
-#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
-if ($issueType eq "DO"){
-# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
-	my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos($borrowernumber);
-	foreach my $iss (@issuetypes){
-		if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-			$codMsg= 'P108';
-			$params->{'tipo'}="INTRA";
-			C4::AR::Reservas::cancelar_reservas_inmediatas($params);
+	#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
+	if ($issueType eq "DO"){
+	# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
+		my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos($borrowernumber);
+		foreach my $iss (@issuetypes){
+			if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
+				$codMsg= 'P108';
+				$params->{'tipo'}="INTRA";
+				C4::AR::Reservas::cancelar_reservas_inmediatas($params);
+			}
 		}
 	}
-}
 
 print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
@@ -889,6 +896,7 @@ sub verificarHorario{
 	return $error;
 }
 
+## FIXME esto viene mal de la V2, ver!!!!
 sub intercambiarId3{
 	my ($borrowernumber, $id2, $id3, $oldid3)= @_;
         my $dbh = C4::Context->dbh;
@@ -918,6 +926,45 @@ sub intercambiarId3{
 	return ($error,$codMsg);
 }
 
+#intercambiar V2 ARREGLADO
+=item
+sub intercambiar_itemnumber{
+	my ($borrowernumber, $biblioitemnumber, $itemnumbernuevo)= @_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SET autocommit=0");
+	$sth->execute();
+	$sth=$dbh->prepare("Select reservenumber,itemnumber from reserves where biblioitemnumber=? and borrowernumber=? and constrainttype is NULL");
+	$sth->execute($biblioitemnumber,$borrowernumber);
+	my $dataoriginal= $sth->fetchrow_hashref;
+	if ($dataoriginal){
+		$sth=$dbh->prepare("Select reservenumber,itemnumber, constrainttype from reserves where itemnumber=?");
+		$sth->execute($itemnumbernuevo);
+		my $data= $sth->fetchrow_hashref;
+		if($data->{'constrainttype'} eq "P"){
+			$sth=$dbh->prepare("commit ");
+			$sth->execute();
+			return 0; #El item esta prestado a otro usuariobiblioitemnumber
+		}
+		elsif ($data){
+			#Esto quiere decir que hay una reserva para el item que se esta queriendo prestar
+			#entonces la actualizo con el itemnumber de la reserva original
+			$sth=$dbh->prepare("update reserves set itemnumber= ? where reservenumber = ?");
+			$sth->execute($dataoriginal->{'itemnumber'},$data->{'reservenumber'});
+		}
+		#actualizo la reserva original del cliente con el nuevo itemnumber que se esta forzando
+		$sth=$dbh->prepare("update reserves set itemnumber= ? where reservenumber = ?");
+		$sth->execute($itemnumbernuevo,$dataoriginal->{'reservenumber'});
+		$sth=$dbh->prepare("commit ");
+		$sth->execute();
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+=cut
+
 sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
@@ -927,7 +974,7 @@ sub cambiarId3 {
 }
 
 
-sub prestar{
+sub t_realizarPrestamo{
 	my ($params)=@_;
 	
 	my ($error,$codMsg,$paraMens)= &verificaciones($params);
@@ -965,6 +1012,7 @@ open(A,">>/tmp/debugChequeo.txt");
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my ($error, $codMsg, $paraMens);
+	$error=0; #Se setea sin error por defecto
 print A "id2: $id2\n";
 print A "id3: $id3\n";
 #Se verifica si ya se tiene la reserva sobre el grupo
@@ -979,21 +1027,18 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 # Tener en cuenta los prestamos especiales, $issueType ==> ES ---> SA. **** VER!!!!!!
 	my $disponibilidad=getNotForLoan($id3);
 	if($cant == 1 && $disponibilidad eq "DO"){
-		#El usuario ya tiene la reserva
-# 		($error, $codMsg, $paraMens)= &verificaciones($params);
-# 		if(!$error){
-#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+	#El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
+	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
 		if($id3 != $reservas->[0]->{'id3'}){
 		#Los ids son distintos, se intercambian.
 			($error,$codMsg)=&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'});
 		}
-# 		}
 	}
 	elsif($cant==1 && $disponibilidad eq "SA"){
-# 		FALTA!!! SE PUEDE PONER EN EL ELSE???	
-#llamar a la funcion verificaciones!!
-#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
-#es un prestamo ES ?????? ****VER****
+		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
+		#llamar a la funcion verificaciones!!
+		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
+		#es un prestamo ES ?????? ****VER****
 	}
 	else{
 		#Se verifca disponibilidad del item;
@@ -1004,25 +1049,21 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
 			if($datosNivel3){
 				&cambiarId3($datosNivel3->{'id3'},$data->{'reservenumber'});
-# 				el id3 de params quedo libre para ser reservado
+				# el id3 de params quedo libre para ser reservado
 			}
 			else{
-# 				NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE 					REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
+# NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
+# REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
 				$params->{'id3'}="";
 				if(!C4::Context->preference('intranetGroupReserve')){
+				#NO SE PERMITE LA RESERVA DE GRUPO
 					$sePermiteReservaGrupo=0;
 					$error=1;#Hay error no se permite realizar una reserva de grupo en intra.
 					$codMsg='R004';
 				}else{
-					$codMsg='R005';#No hay error, se realiza una reserva de grupo.
-					#Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema
-					if( C4::AR::Usuarios::llegoMaxReservas($borrowernumber) ){
-						$error= 1;
-						$codMsg= 'R001';
-						$paraMens->[0]=C4::Context->preference("maxreserves");
-						$sePermiteReservaGrupo= 0;
-					}
-
+				#SE PERMITE LA RESERVA DE GRUPO
+					$error=1;#No hay error, se realiza una reserva de grupo.
+					$codMsg='R005';
 				}
 			}
 		}
@@ -1032,11 +1073,12 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
 		}
 	}
-	#Se verifica datos del prestamo
-	#Se realiza el pretamo
+	
 	if(!$error){
+	#No hay error, se realiza el pretamo
 		insertarPrestamo($params);
 
+		#se realizan las verificacioines luego de realizar el prestamo
 		($error, $codMsg, $paraMens)=verificacionesPostPrestamo($params);
 	}
 close(A);
@@ -1045,6 +1087,7 @@ close(A);
 
 sub insertarPrestamo {
 	my($params)=@_;
+
 	my $dbh=C4::Context->dbh;
 #Se acutualiza el estado de la reserva a P = Presetado
 	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
@@ -1132,13 +1175,15 @@ sub Enviar_Email{
 		$mailMessage =~ s/a3/$cierre/;
 		$fecha=C4::Date::format_date($fecha,$dateformat);
 		$mailMessage =~ s/a4/$fecha/;
-		my %mail = ( To => $borrower->{'emailaddress'},
-                        From => $mailFrom,
-                        Subject => $mailSubject,
-                        Message => $mailMessage);
+		my %mail = ( 	To => $borrower->{'emailaddress'},
+				From => $mailFrom,
+				Subject => $mailSubject,
+				Message => $mailMessage);
+
 		my $resultado='ok';
 		if ($borrower->{'emailaddress'} && $mailFrom ){
-			sendmail(%mail) or die $resultado='error';
+## FIXME me da error
+# 			sendmail(%mail) or die $resultado='error';
 		}else {$resultado='';}
 
 
@@ -1437,7 +1482,8 @@ my ($id2,$loggedinuser)=@_;
 		
 		my $issuetype= '-';
 		my $borrowernumber= $loggedinuser;
-		my $end_date = 'null';
+# 		my $end_date = 'null';
+		my $end_date = undef;
 		C4::Circulation::Circ2::insertHistoricCirculation(
 									'cancel',
 									$borrowernumber,
