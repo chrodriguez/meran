@@ -1,44 +1,55 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-<tr><td class="pagetitle" ><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname -->
-</td></tr>
-<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr></table>
-<br>
-<form method=post name="form1">
-	<input type=hidden name=member value=<!-- TMPL_VAR NAME=member -->>
-	<input type=hidden name=newflags value=1>
-	<table border=0 width="60%" cellpadding="0" cellspacing="0">
+
+<!-- ************************************Window Permisos Usuario***************************************** -->
+<div id=windowPermisos class="window" style="display:none; height:350px; width:500px;">
+	<div id="windowBlurPermisos" class="windowBlur" style="display:none; height:354px; width:500px;"></div> <!-- end div blur -->
+
+		<div id="headerWindow" class="headerWindow">
+			<span class="click" onClick="closeWindowPermisos();">Cerrar</span>
+		</div>
+
+		<div id="contentWindow" class="formElemets">
+		<center>
+		
+		<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+			<tr><td class="pagetitle" ><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></td></tr>
+			<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+		</table>
+
+		<table border=0 width="100%" cellpadding="0" cellspacing="0">
+		
+			<tr class="tablaresultadoTitle">
+				<td width="1%" align="left" valign="top">
+					<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+				</td>
+				<td colspan=3>PERMISOS DE ACCESO</td>
+				<td width="1%" valign="top" align="right">
+					<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+				</td>
+			</tr>
+		<!-- TMPL_LOOP NAME=loop -->
+			<tr>
+				<td >&nbsp;</td>
+				<td>
+				<input name="chkpermisos" class="inputFontNormal" type=checkbox value=<!-- TMPL_VAR NAME=bit --> <!-- TMPL_VAR NAME=checked -->>
+				</td>
+				<td class="inputFontNormal">
+					<!-- TMPL_VAR NAME=flag -->
+				</td>
+				<td class="inputFontNormal">
+					<!-- TMPL_VAR NAME=flagdesc -->
+				</td>
+				<td >&nbsp;</td>
+			</tr>
+
+		<!-- /TMPL_LOOP -->
+
+		</table>
 	
-	<tr class="tablaresultadoTitle">
-	 <td width="1%" align="left" valign="top">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
-	</td>
-	<td colspan=3>PERMISOS DE ACCESO</td>
-	<td width="1%" valign="top" align="right">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
-	</td>
-	</tr>
-	<!-- TMPL_LOOP NAME=loop -->
-		<tr>
-			<td >&nbsp;</td>
-			<td>
-				<input class="inputFontNormal" type=checkbox name=flag-<!-- TMPL_VAR NAME=bit --> <!-- TMPL_VAR NAME=checked -->>
-			</td>
-			<td class="inputFontNormal">
-				<!-- TMPL_VAR NAME=flag -->
-			</td>
-			<td class="inputFontNormal">
-				<!-- TMPL_VAR NAME=flagdesc -->
-			</td>
-			<td >&nbsp;</td>
-		</tr>
-	<!-- /TMPL_LOOP -->
-	</table>
+			<p><a class="click" onClick="guardarPermisos()" >
+				<img alt="Guardar Permisos" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0">
+			</a></p>
+		</center>
+		</div> <!--end div id="contentWindow"-->
+</div> <!-- end div window -->
 
-	<p>
-	<a href="#" onClick="form1.submit()" >
-        <img alt="Guardar Permisos" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0">
-
-</form>
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- *******************************Fin**Window Permisos Usuario***************************************** -->

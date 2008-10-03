@@ -51,7 +51,7 @@ function updateInfo(responseText){
 	$('#result').html(responseText);
 	zebra('tablaResult');
 	$('#result').slideDown('slow');
- 	pushCache(responseText, 'result');
+//  	pushCache(responseText, 'result');
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');

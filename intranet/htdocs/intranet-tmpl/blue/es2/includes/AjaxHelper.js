@@ -40,7 +40,7 @@ function _HiddeState(){
 
 //Esta funcion sirve para centrar un objeto
 jQuery.fn.centerObject = function(options) {
-
+// FIXME se deberia tener en cuenta centrar un div con conetnido
 	var obj = this;
 	var total= 0;
 	var dif= 0;

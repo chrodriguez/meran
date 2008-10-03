@@ -57,6 +57,7 @@ function habilitarBotones(){
 function pushCache(info, IdDiv){
  	indSig++;
 	actual++;
+alert('push cache');
 
 // 	if(indSig == topeMax){
 	if(actual == topeMax){

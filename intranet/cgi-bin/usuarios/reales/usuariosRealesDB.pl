@@ -13,85 +13,9 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-
 =item
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/reales/cambiar-password.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
-
-my $flagsrequired;
-$flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
-
-my $member=$input->param('member');
-my %env;
-
-my ($bor,$flags)=getpatroninformation(\%env, $member,'');
-my $newpassword = $input->param('newpassword');
-
-if ( $newpassword ) {
-	my $digest=md5_base64($input->param('newpassword'));
-	my $uid = $input->param('newuserid');
-	my $dbh=C4::Context->dbh;
-    	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-    	#Then we need to tell the user and have them create a new one.
-    	my $sth2=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
-	$sth2->execute($uid,$member);
-
-	if ( ($uid ne '') && ($sth2->fetchrow) ) {
-		#The userid exists so we should display a warning.
-		my $warn = 1;
-        	$template->param( warn => $warn,
-			        othernames => $bor->{'othernames'},
-                        	surname     => $bor->{'surname'},
-                        	firstname   => $bor->{'firstname'},
-                        	userid      => $bor->{'userid'},
-                        	defaultnewpassword => $newpassword );
-    	 } else {
-		#Everything is good so we can update the information.
-		my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
-    		$sth->execute($uid, $digest, $member);
-		
-		my $sth3=$dbh->prepare("select cardnumber from borrowers where borrowernumber = ?");
-        	$sth3->execute($member);
-
-		if (my $cardnumber= $sth3->fetchrow) {
-			#Se actualiza el ldap
-			if (addupdateldapuser($dbh,$cardnumber,$digest,$template)){
-				$template->param(errorldap => 1);
-			  }
-	 	}
-
-		$template->param(newpassword => $newpassword);
-	}
-
-} else {
-#if !( $newpassword ) 
-    	my $userid = $bor->{'userid'};
-    	my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    	my $length=int(rand(2))+4;
-    	my $defaultnewpassword='';
-    	for (my $i=0; $i<$length; $i++) {
-	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
-   	}
-	$template->param(	othernames => $bor->{'othernames'},
-				surname     => $bor->{'surname'},
-				firstname   => $bor->{'firstname'},
-				userid      => $bor->{'userid'},
-				defaultnewpassword => $defaultnewpassword );
-}
-
-$template->param( member => $member );
-
-output_html_with_http_headers $input, $cookie, $template->output;
+Aca se maneja el cambio de la password para el usuario
 =cut
-
-
 if($tipoAccion eq "CAMBIAR_PASSWORD"){
 
 	my %params;
@@ -113,3 +37,77 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
+
+=item
+Aca se maneja el cambio de permisos para el usuario
+=cut
+if($tipoAccion eq "GUARDAR_PERMISOS"){
+
+	my %params;
+	$params{'usuario'}= $obj->{'usuario'};
+	$params{'array_permisos'}= $obj->{'array_permisos'};
+	
+ 	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
+
+	#se arma el mensaje para informar al usuario
+	my %infoOperacion = (
+				codMsg	=> $codMsg,
+				error 	=> $error,
+				message => $message,
+	);
+	
+	my $infoOperacionJSON=to_json \%infoOperacion;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+
+} #end if($tipoAccion eq "GUARDAR_PERMISOS")
+
+
+=item
+Se buscan los permisos del usuario y se muestran por pantalla
+=cut
+if($tipoAccion eq "MOSTRAR_PERMISOS"){
+	
+	my $flagsrequired;
+	$flagsrequired->{permissions}=1;
+
+	my ($template, $loggedinuser, $cookie)= get_template_and_user({	template_name => "usuarios/reales/permisos-usuario.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => $flagsrequired,
+									debug => 1,
+				});
+
+
+	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
+	
+	my $dbh=C4::Context->dbh();
+	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM userflags ORDER BY bit");
+	$sth->execute;
+	my @loop;
+
+	while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
+		my $checked='';
+		if ( $accessflags->{$flag} ) {
+			$checked='checked';
+		}
+		
+		my %row = ( 	bit => $bit,
+				flag => $flag,
+				checked => $checked,
+				flagdesc => $flagdesc );
+
+		push @loop, \%row;
+	}
+
+	$template->param(	
+  				surname => $bor->{'surname'},
+  				firstname => $bor->{'firstname'},
+				loop => \@loop
+		);
+	
+	print  $template->output;
+
+} #end if($tipoAccion eq "MOSTRAR_PERMISOS")

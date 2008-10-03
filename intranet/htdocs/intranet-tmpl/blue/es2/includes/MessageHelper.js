@@ -26,6 +26,7 @@ function setMessage(Message){
 	
 	$('#mensajes').html('');
 	$('#mensajes').append(Message.message + '<br>');
+	scrollTo('mensajes');
 }
 
 
@@ -37,6 +38,7 @@ function setMessages(Message){
 //Message.codMsg, codigo del mensaje
 
 	$('#mensajes').append(Message.message + '<br>');
+	scrollTo('mensajes');
 }
 
 function clearMessages(){

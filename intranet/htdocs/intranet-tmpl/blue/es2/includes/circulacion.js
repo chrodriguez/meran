@@ -370,6 +370,7 @@ function generaDivDevRen(responseText){
  */
 function devolver_renovar(accion){
 	objAH=new AjaxHelper(updateInfoDevRen);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
 	objAH.datosArray= infoPrestamos_array;

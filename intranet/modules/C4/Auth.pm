@@ -579,7 +579,9 @@ sub t_operacionesDeINTRA{
 
 	eval{
 		#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Sanctions::getBorrowersSanctions($dbh, C4::Context->preference("defaultissuetype")));
+		&C4::AR::Reservas::cancelar_reservas(	$userid,
+							C4::AR::Sanctions::getBorrowersSanctions($dbh,C4::Context->preference("defaultissuetype"))
+						);
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reservas::FindNotRegularUsersWithReserves());
 		&C4::AR::Reservas::eliminarReservasVencidas($userid);	

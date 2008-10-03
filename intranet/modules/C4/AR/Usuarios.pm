@@ -29,6 +29,72 @@ use vars qw(@EXPORT @ISA);
 );
 
 
+sub t_cambiarPermisos {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+# 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+	my ($error,$codMsg,$paraMens);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= cambiarPermisos($params);	
+			$dbh->commit;
+			#se cambio el permiso con exito
+			$codMsg= 'U317';
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B421';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U318';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+sub cambiarPermisos{
+
+	my ($params) = @_;
+	my $dbh = C4::Context->dbh;
+
+	my ($error,$codMsg,$paraMens);
+	$error= 0;
+	
+	
+	my $array_permisos= $params->{'array_permisos'};
+	my $loop=scalar(@$array_permisos);
+
+	my $flags=0;
+	for(my $i=0;$i<$loop;$i++){
+		my $flag= $array_permisos->[$i];
+ 		$flags=$flags+2**$flag;
+	}
+
+	my $sth=$dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
+	$sth->execute($flags, $params->{'usuario'});
+
+	
+	return ($error,$codMsg,$paraMens);
+}
+
+
 sub verficarPassword {
 
 	my($params)=@_;

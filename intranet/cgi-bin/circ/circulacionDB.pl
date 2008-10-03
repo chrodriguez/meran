@@ -4,9 +4,11 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::AR::Reservas;
+# use C4::AR::Reservas;
 use C4::AR::Mensajes;
 use JSON;
+use C4::Circulation::Circ2;
+
 
 my $input=new CGI;
 
@@ -21,7 +23,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
-my $borrnumber=$obj->{'borrowernumber'};
+my $borrnumber= $obj->{'borrowernumber'};
 
 
 #***************************************************DEVOLUCION**********************************************
