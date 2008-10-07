@@ -359,8 +359,6 @@ sub getpatroninformation {
 		return("error");
 	}
 
-open(A, ">>/tmp/debug");
-print A "antes del while \n";
 # 	$env->{'mess'} = $query;
 	my $borrower = $sth->fetchrow_hashref;
 
@@ -370,17 +368,12 @@ print A "antes del while \n";
 	$sth=$dbh->prepare("SELECT bit,flag FROM userflags");
 	$sth->execute;
 	while (my ($bit, $flag) = $sth->fetchrow) {
-print A "flag: $flag  bit: $bit \n";
-print A "borrower flag: ".$borrower->{'flags'}." \n";
 		if ( $borrower->{'flags'} & 2**$bit ) {
 			$accessflagshash->{$flag}=1;
-print A "entro al if\n";
-print A "accessflag de CIRC2: ".$accessflagshash->{$flag}."\n";
 		}
 	}
 	$sth->finish;
 	$borrower->{'flags'}=$flags;
-close(A);
 	return ($borrower, $flags, $accessflagshash);
 }
 

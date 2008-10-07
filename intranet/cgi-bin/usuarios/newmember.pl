@@ -191,44 +191,39 @@ if ($ok == 0) {
 	push(@inputsloop, \%line);
     }
 
-    #Get the fee
- #   my $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode = ?");
- #   $sth->execute($data{'categorycode'});
- #   my ($fee) = $sth->fetchrow;
- #   $sth->finish;
 
-    $template->param(name => $name,
-		     bornum => $data{'borrowernumber'},
-		     cardnum => $data{'cardnumber'},
-		    studentnumber =>$data{'studentnumber'},		
-		     memcat => $data{'categorycode'},
-		  #   fee => $fee,
-		     joindate => format_date($data{'joining'},$dateformat),
-		     expdate => format_date($data{'expiry'},$dateformat),
-		     branchcode => $data{'branchcode'},
-		     ethnic => $ethnic,
-		     dob => format_date($data{'dateofbirth'},$dateformat),
-		     sex => $sex,
-		     postal => $postal,
-		     home => $home,
+	$template->param(
+			name => $name,
+			bornum => $data{'borrowernumber'},
+			cardnum => $data{'cardnumber'},
+			studentnumber =>$data{'studentnumber'},		
+			memcat => $data{'categorycode'},
+			joindate => format_date($data{'joining'},$dateformat),
+			expdate => format_date($data{'expiry'},$dateformat),
+			branchcode => $data{'branchcode'},
+			ethnic => $ethnic,
+			dob => format_date($data{'dateofbirth'},$dateformat),
+			sex => $sex,
+			postal => $postal,
+			home => $home,
 			zipcode => $data{'zipcode'},
 			homezipcode => $data{'homezipcode'},
-		     phone => $data{'phone'},
-		     phoneday => $data{'phoneday'},
-		     faxnumber => $data{'faxnumber'},
-		     emailaddress => $data{'emailaddress'},
+			phone => $data{'phone'},
+			phoneday => $data{'phoneday'},
+			faxnumber => $data{'faxnumber'},
+			emailaddress => $data{'emailaddress'},
 			textmessaging => $data{'textmessaging'},
-		     contactname => $data{'contactname'},
-		     altphone => $data{'altphone'},
-		     altrelationship => $data{'altrelationship'},
-		     altnotes => $data{'altnotes'},
-	     	    
-		    documenttype => $data{'documenttype'},
-                     documentnumber => $data{'documentnumber'},
+			contactname => $data{'contactname'},
+			altphone => $data{'altphone'},
+			altrelationship => $data{'altrelationship'},
+			altnotes => $data{'altnotes'},
+			documenttype => $data{'documenttype'},
+			documentnumber => $data{'documentnumber'},
 			studentnumber => $data{'studentnumber'},
-		     bornotes => $data{'borrowernotes'},
-		    updatepassword => $data{'updatepassword'},
-		     inputsloop => \@inputsloop);
+			bornotes => $data{'borrowernotes'},
+			updatepassword => $data{'updatepassword'},
+			inputsloop => \@inputsloop
+		);
 
 
 	# Curso de usuarios#

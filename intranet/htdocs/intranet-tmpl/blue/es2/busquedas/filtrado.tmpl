@@ -19,7 +19,7 @@ function updateInfo(responseText){
 function busquedaCombinable(){
 
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
@@ -74,7 +74,7 @@ function buscar(){
 
 function buscarPorCodigoBarra(){
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	objAH.codBarra= $('#codBarra').val();
 	objAH.sendToServer();
@@ -82,7 +82,7 @@ function buscarPorCodigoBarra(){
 
 function buscarPorTema(){
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/tema.pl';
 	objAH.tema= $('#tema').val();
 
@@ -93,7 +93,7 @@ function buscarPorTema(){
 
 function buscarPorISBN(){
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	objAH.isbn= $('#isbn').val();
 	objAH.sendToServer();

@@ -33,6 +33,7 @@ if($obj ne ""){
 	$obj=from_json_ISO($obj);
 }
 
+## FIXME estos parametros que vienen del servidor hay q verificarlos todos y escapar cualquier basura antes de usarlos
 my $signatura= $obj->{'signatura'};
 my $isbn = $obj->{'isbn'};
 my $codBarra= $obj->{'codBarra'};
@@ -74,11 +75,14 @@ my $nivel2rep="";
 my $nivel3rep="";
 my $buscoPor="";
 
+## FIXME si se le ingresa algo como esto se rompe!!!!!!!!!!!!!!!
+# "><script>alert('hola')</script>
 if($idAutor > 0 ){
 	$nivel1="autor=".&verificarValor($idAutor);
 }
 
 if($signatura ne ""){
+## FIXME todas estas entradas se concatenan y no son verificadas y enviadas al cliente, MALLLL
 	$buscoPor.="Signatura topagrafica: ".$signatura."&";
 	$nivel3.= "signatura_topografica like '".&verificarValor($signatura)."%'#";
 }
@@ -107,7 +111,9 @@ if($autor ne ""){
 		$niv1.= "OR autor = ".$aut->{'id'}." ";
 	}
 	$niv1=substr($niv1,2,length($niv1));
-	$nivel1.="(".$niv1.")#";
+	if(scalar(@autores)){
+		$nivel1.="(".$niv1.")#";
+	}
 
 
 	if( ($valorOPAC == 1) ){
@@ -207,7 +213,9 @@ $buscoPor= substr($buscoPor,2,length($buscoPor));
 
 $template->param(
 		SEARCH_RESULTS => \@resultsarray,
-		buscoPor=>	$buscoPor,
+## FIXME hay que tener mucho cuidado con este tipo de cosas, entradas desde el cliente que pasan por el servidor sin controlar
+# y son devueltas al cliente
+ 		buscoPor=>	&verificarValor($buscoPor),
 		cantidad=>	$cantidad
 		);
 

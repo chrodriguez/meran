@@ -215,8 +215,10 @@ $(document).ready(function() {
 	<!-- TMPL_IF name="course" -->
 	<tr>
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont"type="checkbox" name="usercourse" <!-- TMPL_IF NAME=usercourse --> checked <!-- /TMPL_IF -->>&nbsp;Realiz&oacute; el curso de usuario? </td>
-		<td>
+			<input  class="inputFontFont"type="checkbox" name="usercourse" 
+				<!-- TMPL_IF NAME=usercourse --> checked <!-- /TMPL_IF -->>&nbsp;Realiz&oacute; el curso de usuario? 
+		</td>
+<!-- 		<td> -->
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
@@ -234,9 +236,13 @@ $(document).ready(function() {
 	<br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
 	<tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
 		<td COLSPAN=6 width="100%">DIRECCI&Oacute;N DEL USUARIO</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="right">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
 	</tr>
        	<tr valign=middle>
 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
@@ -289,7 +295,8 @@ $(document).ready(function() {
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad de origen</b><br>
-			<input class="wickEnabled" class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
+			<input 	class="wickEnabled" class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" 
+				value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
 
           		<input class="inputFontNormal" type=hidden name="streetcity" id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->">
 		</td>
@@ -311,11 +318,15 @@ $(document).ready(function() {
 	<br>
 <table width="100%" cellpadding='0' cellspacing='0'>
 	<tr valign=middle width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
 		<td  COLSPAN=6 width="100%">
 			NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N
 		</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="right">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
 	</tr>
 </table>
 <table width="100%">

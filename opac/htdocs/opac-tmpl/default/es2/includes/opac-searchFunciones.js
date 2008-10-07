@@ -68,7 +68,7 @@ function busquedaCombinable(){
 	}
 
 	objAH=new AjaxHelper(updateInfo);
-//   	objAH.debug= true;
+   	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.codBarra= $('#codBarra').val();
@@ -89,7 +89,7 @@ function busquedaCombinable(){
 function buscarPorAutor(idAutor){
 
 	objAH=new AjaxHelper(updateInfo);
-//  	objAH.debug= true;
+	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.idAutor= idAutor;	
@@ -101,7 +101,7 @@ function buscarPorAutor(idAutor){
 
 function buscarPorCodigoBarra(){
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.codBarra= $('#codBarra').val();
 	objAH.sendToServer();
@@ -157,7 +157,7 @@ function mostrarHistorialReservas(bornum){
 function searchinc(){
 
 	objAH=new AjaxHelper(updateInfo);
-//  	objAH.debug= true;
+  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
 	objAH.criteria= $('#criteria').val();
