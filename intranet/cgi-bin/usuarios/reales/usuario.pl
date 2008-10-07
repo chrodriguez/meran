@@ -9,6 +9,7 @@ use C4::Members;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Busquedas;
+use C4::AR::Referencias;
 
 my $input = new CGI;
 
@@ -51,8 +52,7 @@ my $data=C4::AR::Usuarios::getBorrower($member);
 					-default=>$data->{'categorycode'},
 					-labels=>$labels);
 
-my @documents = ('DNI', 'LC','LE', 'CI', 'PAS');
-
+my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
         my @documentdata;
         while (@documents) {
                 my $doc = shift @documents;

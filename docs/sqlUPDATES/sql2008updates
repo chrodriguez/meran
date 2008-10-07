@@ -209,3 +209,17 @@ DROP TABLE `additionalauthors`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqor
 --Se agrega preferencia para controlar la longitud minima de la password
 insert into systempreferences (variable,value,explanation) 
 values ('minPassLength','8','Longitud minima de la password');
+
+
+-- TIPOS DE DOCUMENTOS
+CREATE TABLE `tipo_documento` (
+`idTipoDoc` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 50 ) NOT NULL ,
+`descripcion` VARCHAR( 250 ) NOT NULL
+) ENGINE = innodb CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+");
+
+INSERT INTO `tipo_documento` ( `nombre` , `descripcion` ) 
+VALUES ('DNI', 'DNI'), ('LC', 'LC'), ('LE', 'LE'), ('CI', 'CI'), ('PAS', 'PAS') ;
+
+
