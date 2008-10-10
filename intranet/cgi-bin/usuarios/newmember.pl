@@ -98,37 +98,9 @@ if ($data{'cardnumber'} eq ''){
     }
 }
 
-if ($data{'sex'} eq ''){
-    push @errors, "sex";
-    $ok=1;
-}
-if ($data{'firstname'} eq ''){
-    push @errors,"firstname";
-    $ok=1;
-}
-if ($data{'surname'} eq ''){
-    push @errors,"surname";
-    $ok=1;
-}
-if ($data{'address'} eq ''){
-    push @errors, "address";
-    $ok=1;
-}
-if ($data{'city'} eq ''){
-    push @errors, "citycode";
-    $ok=1;
-}
 
-if ($data{'documentnumber'} eq '')
-{   push @errors, "documentnumber";
-    $ok=1;
-    }
-my $ndc= ($data{'documentnumber'} =~ tr/0-9//cd); #Count the non digits characters of the documentnumber 
-if ($ndc){
-    push @errors, "bad_documentnumber";
-    $ok=1;
-}
-
+my(@errores);
+($ok,@errores) = C4::AR::Usuarios::checkUserData(\$data);
 
 # Pass the ok/not ok status and the error message to the template
 $template->param(	OK=> ($ok==0));

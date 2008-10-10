@@ -79,6 +79,7 @@ use vars qw(@EXPORT @ISA);
 	&quitarduplicados
 	&buscarCiudades
 	&trim
+	&validateString
 	);
 
 =item
@@ -1068,5 +1069,16 @@ sub trim($)
 	return $string;
 }
 
+
+#FUNCION QUE VALIDA QUE UN STRING NO SEA SOLAMENTE UNA SECUENCIA DE BLANCOS (USA Trim())
+sub validateString{
+
+	my ($string)=@_;
+	$string = trim($string);
+	if (length($string) == 0){
+		return 1; #EL STRING ERA SOLO BLANCOS, FALSE
+	}
+	return 0; # TODO OK, TRUE
+}
 
 1;

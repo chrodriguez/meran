@@ -26,6 +26,7 @@ use vars qw(@EXPORT @ISA);
 	&findguarantees
 	&updateOpacBorrower
 	&cambiarPassword
+	&checkUserData
 );
 
 
@@ -667,6 +668,54 @@ sub updateOpacBorrower{
 	my $sth=$dbh->prepare($query);
   	$sth->execute($update->{'streetaddress'},$update->{'faxnumber'},$update->{'firstname'},$update->{'emailaddress'},$update->{'city'},$update->{'phone'},$update->{'surname'},$update->{'borrowernumber'});
 	$sth->finish;
+}
+=item
+open(A, ">>/tmp/debug.txt");
+printf A "entrio \n";
+close(A);
+=cut
+
+sub checkUserData{
+
+	my @errors;
+	my $data=@_;
+	my $ok;
+	$ok=0;
+
+	if (C4::AR::Utilidades::validateString($data->{'sex'}) ){
+		push @errors, "sex";
+		$ok=1;
+	}
+	if (C4::AR::Utilidades::validateString($data->{'firstname'}) ){
+		push @errors,"firstname";
+		$ok=1;
+	}
+	if (C4::AR::Utilidades::validateString($data->{'surname'}) ){
+		push @errors,"surname";
+		$ok=1;
+	}
+	if (C4::AR::Utilidades::validateString($data->{'address'}) ){
+		push @errors, "address";
+		$ok=1;
+	}
+	if (C4::AR::Utilidades::validateString($data->{'city'}) ){
+		push @errors, "citycode";
+		$ok=1;
+	}
+	
+	if (C4::AR::Utilidades::validateString($data->{'documentnumber'}) ){
+		push @errors, "documentnumber";
+		$ok=1;
+	}
+   	my $ndc= ($data->{'documentnumber'} =~tr/0-9//cd); #Count the non digits characters of the documentnumber 
+	my $ndc;
+	if ($ndc){
+		push @errors, "bad_documentnumber";
+		$ok=1;
+	}	
+	
+ 	return ($ok,@errors);
+
 }
 
 
