@@ -94,14 +94,6 @@ function updateInfoCancelacion(responseText){
 	detalleReservas(objAH.borrowernumber);
 }
 
-function confirm_deletion() {
-	var is_confirmed = confirm('Confirma la baja ?');
-
-	if (is_confirmed) {
-		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
-	}
-}
-
 function detallePrestamos(borr){
 
 	objAH=new AjaxHelper(updateDetallePrestamos);
@@ -221,6 +213,29 @@ function updateGuardarPermisos(responseText){
 }
 
 //****************************************Fin para cambiar permisos*********************************************
+
+
+function eliminarUsuario(){
+
+	var is_confirmed = confirm('Confirma la baja ?');
+
+	if (is_confirmed) {
+
+		objAH=new AjaxHelper(updateEliminarUsuario);
+		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+		objAH.debug= true;
+		objAH.usuario= usuario.ID;
+		objAH.tipoAccion= 'ELIMINAR_USUARIO';
+		objAH.sendToServer();
+
+	}
+}
+
+function updateEliminarUsuario(responseText){
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
+}
+
 
 </script>
 
@@ -372,14 +387,15 @@ function updateGuardarPermisos(responseText){
 	</li>
 	<!-- /TMPL_IF -->
 	<li>
-		<form action="javascript:confirm_deletion()" name="formElim">
-			<a href="#" onClick="formElim.submit()" >
+<!-- 		<form action="javascript:confirm_deletion()" name="formElim"> -->
+		<!--	<a href="#" onClick="formElim.submit()" >-->
+			<a href="#" onClick="eliminarUsuario()" >
                         <img alt="Cambio de Contrase&ntilde;a" 
 			src="<!-- TMPL_VAR NAME='themelang' -->/images/eliminarusuario.png" border="0"">
 			</a>
 
    	               <input type=hidden name=member value="<!-- TMPL_VAR NAME='bornum' -->">
-		</form>
+<!-- 		</form> -->
 	</li>
 	<li>
 		<a class="click" onClick="openWindow()">

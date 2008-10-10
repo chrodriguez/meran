@@ -111,3 +111,30 @@ if($tipoAccion eq "MOSTRAR_PERMISOS"){
 	print  $template->output;
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")
+
+
+=item
+Se elimina el usuario
+=cut
+if($tipoAccion eq "ELIMINAR_USUARIO"){
+
+	my %params;
+	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'usuario'});
+	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
+   	$params{'borrowernumber'}= $obj->{'borrowernumber'};
+	
+ 	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
+
+	#se arma el mensaje para informar al usuario
+	my %infoOperacion = (
+				codMsg	=> $codMsg,
+				error 	=> $error,
+				message => $message,
+	);
+	
+	my $infoOperacionJSON=to_json \%infoOperacion;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+
+} #end if($tipoAccion eq "ELIMINAR_USUARIO")

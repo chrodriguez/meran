@@ -27,8 +27,105 @@ use vars qw(@EXPORT @ISA);
 	&updateOpacBorrower
 	&cambiarPassword
 	&checkUserData
+
+	&t_eliminarUsuario
 );
 
+sub t_eliminarUsuario {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+
+ 	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= eliminarUsuario($params->{'borrowernumber'});	
+			$dbh->commit;
+			$codMsg= 'U320';
+			$paraMens->[0]= $params->{'usuario'};
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B422';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,'INTRA');
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U319';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+#delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
+
+
+sub eliminarUsuario{
+	my ($borrowernumber)=@_;
+	
+	my $dbh = C4::Context->dbh;
+
+	#   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+	#   $sth->execute(@data);
+	#   $sth->finish;
+	my $sth=$dbh->prepare("DELETE FROM borrowers WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+	$sth=$dbh->prepare("DELETE FROM reserves WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+	$sth=$dbh->prepare("UPDATE persons SET borrowernumber=NULL WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+}
+
+
+sub verficarEliminarUsuario {
+
+	my($params)=@_;
+
+	my $error= 0;
+	my $codMsg= '000';
+	my @paraMens;
+
+	if( !($error) && !( existeUsuario($params->{'borrowernumber'}) ) ){
+	#se verifica la existencia del usuario
+		$error= 1;
+		$codMsg= 'U321';
+		$paraMens[0]= $params->{'usuario'};
+	}
+
+	return ($error, $codMsg,\@paraMens);
+}
+
+=item
+Esta funcion verifica si existe el usuario o no en la base, devuelve 0 = NO EXISTE, 1 (o mas) = EXISTE
+=cut
+sub existeUsuario {
+	my ($borrowernumber)=@_;
+
+  	my $dbh = C4::Context->dbh;
+
+	my $sth=$dbh->prepare("SELECT count(*) FROM borrowers WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+
+	return $sth->fetchrow_array();
+}
 
 sub t_cambiarPermisos {
 	
