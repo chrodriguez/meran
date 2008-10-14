@@ -39,7 +39,7 @@ var objAH;//Objeto AjaxHelper.
 function cambiarPassword(claveUsuario, confirmeClave){
 
 	objAH=new AjaxHelper(updateCambiarPassword);
-	objAH.debug= true;
+	//objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.newpassword= claveUsuario;
 	objAH.newpassword1= confirmeClave;

@@ -34,9 +34,9 @@ VALUES (
 
 INSERT INTO systempreferences (value,variable) VALUES ('0','reminderMail');
 
-insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el d�a VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n','Mensaje del mail de recordatorio de prestamo a vencer', 'reminderMessage');
+insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el d�a VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n','Mensaje del mail de recordatorio de prestamo a vencer', 'reminderMessage');
 
-insert into  systempreferences   (value,explanation,variable) VALUES ('Recordatorio de vencimiento de pr�stamos','Subject del mail de recodatorio de prestamo a vencer','reminderSubject');
+insert into  systempreferences   (value,explanation,variable) VALUES ('Recordatorio de vencimiento de pr�stamos','Subject del mail de recodatorio de prestamo a vencer','reminderSubject');
 
 --Se agrega campo 'enabled' en la tabla issuetypes para habilitar/deshabilitar tipos de prestamos 
 --por ej: prestamos de verano para V2 y V3
@@ -221,5 +221,65 @@ CREATE TABLE `tipo_documento` (
 
 INSERT INTO `tipo_documento` ( `nombre` , `descripcion` ) 
 VALUES ('DNI', 'DNI'), ('LC', 'LC'), ('LE', 'LE'), ('CI', 'CI'), ('PAS', 'PAS') ;
+
+
+
+-- Se agregaron preferencias para validar el password, todas en 0 (cero)
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassAlpha",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassAlphaNum",0,"Longitud Minina de Caracteres alfanuméricos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassLower",0,"Longitud Minina de Caracteres alfabétios minúsculos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassNUmeric",0,"Longitud Minina de Caracteres numericos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassSymbol",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassUpper",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUE ("maxPassWhite",0,"Longitud Maxima de Espacios permitidos");
+
+##########################################################################
+
+(((((((((( ACTUALIZAR LOS COMENTARIOS EN LA TABLA :S)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

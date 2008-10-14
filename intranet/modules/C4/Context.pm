@@ -12,7 +12,7 @@
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,f
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id: Context.pm,v 1.14 2003/06/05 17:03:32 tipaul Exp $
@@ -310,6 +310,7 @@ variable is not set, or in case of error, returns the undefined value.
 # this function should cache the results it finds.
 sub preference
 {
+=item	VERSION ORIGINAL, AHORA HECHA COMO TRANSACCION
 	my $self = shift;
 	my $var = shift;		# The system preference to return
 	my $retval;			# Return value
@@ -323,8 +324,40 @@ sub preference
 		WHERE	variable='$var'
 		LIMIT	1
 EOT
-	return $retval;
+=cut
+	my $self = shift;
+	my ($valueName) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query;
+	my $sth;
+	
+	$query="SELECT value
+		FROM systempreferences
+		WHERE variable=?";
+
+	$sth = $dbh->prepare($query);
+
+	$sth->execute($valueName);
+
+	return ($sth->fetchrow);
 }
+
+sub prefereces{
+	
+	my $query;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+	
+	$query="SELECT value
+		FROM systempreferences";
+
+	$sth = $dbh->prepare($query);
+
+	$sth->execute();
+
+	return ($sth->fetchrow_hashref);
+}
+	
 
 sub boolean_preference ($) {
 	my $self = shift;
