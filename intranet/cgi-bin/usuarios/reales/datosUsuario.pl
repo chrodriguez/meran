@@ -74,50 +74,6 @@ foreach my $san (@$sanctions) {
 }
 #
 
-=item
-foreach my $key (keys %$issues) {
-
-	my $issue = $issues->{$key};
-    	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
-	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'id3'},$issue->{'issuecode'});
-    	$issue->{'date_fin'} = format_date($df,$dateformat);
-	if ($vencido){ 
-		$venc=1;
-          	$issue->{'color'} ='red';
-        }
-    	push @issuedat, $issue;
-    	$count++;
-}
-=cut
-
-=item
-my ($rcount, $reserves) = DatosReservas($bornum);
-my @realreserves;
-my @waiting;
-my $rcount = 0;
-my $wcount = 0;
-
-foreach my $res (@$reserves) {	
-    	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
-
-	my $author=C4::AR::Busquedas::getautor($res->{'rautor'});
-        $res->{'rauthor'} = $author->{'completo'};
-	$res->{'id'} = $author->{'id'}; 
-    	if ($res->{'rid3'}) {
-		my $item=C4::AR::Catalogacion::buscarNivel3($res->{'rid3'});
-		$res->{'barcode'} = $item->{'barcode'};
-		$res->{'signatura_topografica'} = $item->{'signatura_topografica'};
-        	$res->{'rbranch'} = C4::AR::Busquedas::getBranch($res->{'rbranch'})->{'branchname'};
-        	push @realreserves, $res;
-        	$rcount++;
-  	}
-        else{
-        	push @waiting, $res;
-        	$wcount++;
-        }
-}
-=cut
-
 #### Verifica si la foto ya esta cargada
 my $picturesDir= C4::Context->config("picturesdir");
 my $foto;
@@ -146,12 +102,6 @@ $template->param(
 		bornum          => $bornum,
 		completo	=> $completo,
 		mensaje		=> $mensaje,
-#los libros que tiene "en espera para retirar"
-# 		waiting		=> \@waiting,
-#los libros que tiene esperando un ejemplar
-# 		realreserves    => \@realreserves,
-###
-# 		prestamos       => \@issuedat,
 		foto_name 	=> $foto,
 		sanctions       => $sanctions,
 		mensaje_error_foto   => $msgFoto,

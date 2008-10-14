@@ -11,7 +11,7 @@ use C4::AR::Usuarios;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
-@EXPORT = qw(delmember delmembers addmembers sepuedeeliminar checkDocument addborrower updateborrower addperson updateperson);
+@EXPORT = qw( delmembers addmembers sepuedeeliminar checkDocument addborrower updateborrower addperson updateperson);
 
 #delmembers recibe un arreglo de personnumbers y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde member2.pl  
 
@@ -78,33 +78,10 @@ sub addmembers{
   $sth->finish;
 
   
-  return ($result);}
-
-#delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
-
-
-sub delmember{
-  my ($member)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-  $sth->execute($member);
-  if(my @data=$sth->fetchrow_array){#Si existe, se elimina
-  $sth->finish;
-  $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
-  $sth->execute(@data);
-  $sth->finish;
-  $sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
-  $sth->execute($member);
-  $sth->finish;
-  $sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
-  $sth->execute($member);
-  $sth->finish;
-  $sth=$dbh->prepare("Update persons set borrowernumber=NULL where borrowernumber=?");
-  $sth->execute($member);
-  $sth->finish;
- } 
-  return (1);
+  return ($result);
 }
+
+
 sub addmember{
   return (1);
 }

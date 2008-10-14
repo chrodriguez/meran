@@ -138,3 +138,28 @@ if($tipoAccion eq "ELIMINAR_USUARIO"){
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "ELIMINAR_USUARIO")
+
+
+=item
+Se elimina el usuario
+=cut
+if($tipoAccion eq "AGREGAR_USUARIO"){
+
+# 	my %params;
+	
+  	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
+# 	my ($error,$codMsg,$message);
+
+	#se arma el mensaje para informar al usuario
+	my %infoOperacion = (
+				codMsg	=> $codMsg,
+				error 	=> $error,
+				message => $message,
+	);
+	
+	my $infoOperacionJSON=to_json \%infoOperacion;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+
+} #end if($tipoAccion eq "AGREGAR_USUARIO")

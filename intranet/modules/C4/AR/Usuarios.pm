@@ -29,7 +29,117 @@ use vars qw(@EXPORT @ISA);
 	&checkUserData
 
 	&t_eliminarUsuario
+	&t_addBorrower
 );
+
+sub t_addBorrower {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+
+#  	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+	my ($error,$codMsg,$paraMens);
+	$error=0;
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= addBorrower($params);	
+			$dbh->commit;
+			$codMsg= 'U323';
+			$paraMens->[0]= $params->{'usuario'};
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B423';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,'INTRA');
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U322';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+sub addBorrower {
+
+	my ($params)=@_;
+	
+	my $dbh = C4::Context->dbh;
+	
+	$params->{'borrowernumber'}=&NewBorrowerNumber();
+	
+	my $query=" 	INSERT INTO borrowers (	borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+			firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+			altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+			initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
+			lastchangepassword,changepassword,studentnumber)  
+			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?) ";
+	
+	my $sth=$dbh->prepare($query);
+# 	
+# 	$sth->execute(	$params->{'borrowernumber'},$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
+# 			$params->{'sex'},$params->{'ethnotes'},$params->{'address'},$params->{'faxnumber'},
+# 			$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
+# 			$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
+# 			$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
+# 			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
+# 			$params->{'ethnicity'},$params->{'streetaddress'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
+# 			$params->{'documenttype'},$params->{'documentnumber'},$params->{'updatepassword'},$params->{'studentnumber'}
+# 		);
+
+
+	
+	$sth->execute( (	'borrowernumber' => $params->{'borrowernumber'},'title' => undef,'expiry' => $params->{'expiry'},
+			'cardnumber' => $params->{'cardnumber'},
+			'sex' => $params->{'sex'},'ethnotes' => $params->{'ethnotes'},'address' => $params->{'address'},
+			'faxnumber' => $params->{'faxnumber'},'firstname' =>$params->{'firstname'},'altnotes' =>$params->{'altnotes'},
+			'dateofbirth' =>$params->{'dateofbirth'},'contactname' =>$params->{'contactname'},
+			'emailaddress' =>$params->{'emailaddress'},'textmessaging' =>$params->{'textmessaging'},
+			'joining' =>$params->{'joining'},'streetcity'=>$params->{'streetcity'},'altrelationship'=>$params->{'altrelationship'},
+			'othernames' =>$params->{'othernames'},'phoneday' =>$params->{'phoneday'},'categorycode' =>$params->{'categorycode'},
+			'city' =>$params->{'city'},'area' =>$params->{'area'},'phone'=>$params->{'phone'},
+			'borrowernotes' =>$params->{'borrowernotes'},'altphone' =>$params->{'altphone'},'surname' =>$params->{'surname'},
+			'initials'=>$params->{'initials'},'ethnicity'=>$params->{'ethnicity'},'streetaddress'=>$params->{'streetaddress'},
+			'branchcode'=>$params->{'branchcode'},'zipcode' =>$params->{'zipcode'},'homezipcode' =>$params->{'homezipcode'},
+			'documenttype' =>$params->{'documenttype'},'documentnumber'=>$params->{'documentnumber'},
+			'updatepassword' =>$params->{'updatepassword'},'expiry' =>$params->{'studentnumber'} )
+		 );
+
+# $sth->execute(array(':account_type' => $account_type, ':user_name' => $user_name)	
+
+	$sth->finish;
+  
+
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse"))  {
+		my $sql2="";
+		if ($params->{'usercourse'} eq 1){
+			$sql2= "	UPDATE borrowers SET usercourse=NOW() WHERE borrowernumber=? AND usercourse is NULL ; ";}
+		else{
+			$sql2= "	UPDATE borrowers SET usercourse=NULL WHERE borrowernumber=? ;";
+		}
+
+		my $sth3=$dbh->prepare($sql2);
+		$sth3->execute($params->{'borrowernumber'});
+		$sth3->finish;
+	}
+	####################
+	
+# 	return ($data->{'borrowernumber'});
+}
 
 sub t_eliminarUsuario {
 	
@@ -37,6 +147,7 @@ sub t_eliminarUsuario {
 	my $dbh = C4::Context->dbh;
 
  	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+## FIXME faltaria que luego de elminar el usuario se cancelen todas las reservas y se asignen al siguiente en la cola
 
 	if(!$error){
 	#No hay error

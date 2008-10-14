@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
-<!-- <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.js"></script> -->
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
@@ -86,8 +86,50 @@ function CrearAutocomplete(Id){
 	});
 }
 
-$(document).ready(function() {
+//************************************************Agregar Usuario**********************************************
+function agregarUsuario(){
+
+	objAH=new AjaxHelper(updateAgregarUsuario);
+	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug= true;
+	objAH.cardnumber= $('#cardnumber').val();
+	objAH.sex= $('#sex').val();
+	objAH.streetaddress= $('#streetaddress').val();
+	objAH.firstname= $('#firstname').val();
+	objAH.dateofbirth= $('#dateofbirth').val();
+	objAH.emailaddress= $('#emailaddress').val();
+	objAH.dateenrolled= $('#dateenrolled').val();
+	objAH.dstreetcity= $('#dstreetcity').val();
+	objAH.altrelationship= $('#altrelationship').val();
+	objAH.othernames= $('#othernames').val();
+	objAH.phoneday= $('#phoneday').val();
+	objAH.categorycode= $('#categorycode').val();
+	objAH.city= $('#city').val();
+	objAH.phone= $('#phone').val();
+	objAH.borrowernotes= $('#borrowernotes').val();
+	objAH.surname= $('#surname').val();
+	objAH.ethnicity= $('#ethnicity').val();
+	objAH.branchcode= $('#branchcode').val();
+	objAH.zipcode= $('#zipcode').val();
+	objAH.homezipcode= $('#homezipcode').val();
+	objAH.documenttype= $('#documenttype').val();
+	objAH.documentnumber= $('#documentnumber').val();
+	objAH.studentnumber= $('#studentnumber').val();
 	
+	objAH.tipoAccion= 'AGREGAR_USUARIO';
+ 	objAH.sendToServer();
+
+}
+
+function updateAgregarUsuario(responseText){
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
+}
+
+//*********************************************Fin***Agregar Usuario*********************************************
+
+$(document).ready(function() {
+		
 	CrearAutocomplete('city');
 	CrearAutocomplete('dstreetcity');
 });
@@ -124,7 +166,7 @@ $(document).ready(function() {
 	<tr valign=top width="100%">
 		
 		<td  width="50%" ALIGN=RIGHT class="inputFontNormal">
-		 	Tarjeta de identificaci&oacute;n * <input id="1" type=text class="inputFontNormal" name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
+		 Tarjeta de identificaci&oacute;n * <input id="cardnumber" type=text class="inputFontNormal" name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br>
 		</td>
 	</tr>
 
@@ -140,7 +182,7 @@ $(document).ready(function() {
 			<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
 			<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
 			&nbsp; &nbsp;  Fecha de nacimiento (<!-- TMPL_VAR NAME=dateformat -->)
-			<input class="inputFontNormal" type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
+			<input class="inputFontNormal" type=text id="dateofbirth" size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
 		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
 	</tr>
@@ -160,11 +202,11 @@ $(document).ready(function() {
 		<td width="15%">&nbsp;</td>
 		<td width="35%" class="inputFontNormal" align="left">
 	      		<b> Apellido*</b><br>
-	      		<input id="2" class="inputFontNormal" type=text name=surname size=50 value="<!-- TMPL_VAR NAME=surname -->">
+	      		<input id="2" class="inputFontNormal" type=text id="surname" size=50 value="<!-- TMPL_VAR NAME=surname -->">
 		</td>
 		<td width="35%" class="inputFontNormal" align="left">
 			<b> Nombres*</b><br>
-                 	<input id="3" class="inputFontNormal" type=text name=firstname size=50 value="<!-- TMPL_VAR NAME=firstname -->">
+                 	<input id="3" class="inputFontNormal" type=text id="firstname" size=50 value="<!-- TMPL_VAR NAME=firstname -->">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
@@ -172,14 +214,14 @@ $(document).ready(function() {
 		<td width="15%">&nbsp;</td>
 	 	<td width="35%" class="inputFontNormal" align="left">
 	 		<b>Documento (solo digitos)*</b><br>
-                	<select  class="inputFontNormal" name=documenttype size=1><!-- TMPL_LOOP NAME=documentloop -->
+                	<select  class="inputFontNormal" id="documenttype" size=1><!-- TMPL_LOOP NAME=documentloop -->
                  		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
                 	</select>
-			<input id="4" class="inputFontNormal" type=text name=documentnumber size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
+			<input id="4" class="inputFontNormal" type=text id="documentnumber" size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
 		</td>
 	 	<td width="35%" class="inputFontNormal" align="left">
 			<b>Legajo</b><br>
-         		<input  class="inputFontNormal" type=text name=studentnumber size=50 value="<!-- TMPL_VAR NAME=studentnumber -->">
+         		<input  class="inputFontNormal" type=text id="studentnumber" size=50 value="<!-- TMPL_VAR NAME=studentnumber -->">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
@@ -189,10 +231,10 @@ $(document).ready(function() {
 <table width=100%>
 	<tr valign=top >
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont" type="checkbox" name="updatepassword"<!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
+			<input  class="inputFontFont" type="checkbox" id="updatepassword" <!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
 		<td>
 			<!-- TMPL_IF name="ethcatpopup" -->
-				<select class="inputFontNormal" name="ethnicity" size=1>
+				<select class="inputFontNormal" id="ethnicity" size=1>
 					<!-- TMPL_LOOP NAME=ethnicityloop -->
 					<option value=<!-- TMPL_VAR NAME=value --><!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=label -->
 					<!-- /TMPL_LOOP -->
@@ -202,7 +244,7 @@ $(document).ready(function() {
 		<td >
 			<!-- TMPL_IF NAME=ethcatpopup -->
 				<!-- TMPL_VAR NAME=ethcatpopup -->
-				<input  class="inputFontNormal" type=text name=ethnicnotes size=40 >
+				<input  class="inputFontNormal" type=text id=ethnicnotes size=40 >
 			<!-- TMPL_ELSE -->
 				&nbsp;
 			<!-- /TMPL_IF -->
@@ -215,8 +257,11 @@ $(document).ready(function() {
 	<!-- TMPL_IF name="course" -->
 	<tr>
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont"type="checkbox" name="usercourse" 
-				<!-- TMPL_IF NAME=usercourse --> checked <!-- /TMPL_IF -->>&nbsp;Realiz&oacute; el curso de usuario? 
+			<input  class="inputFontFont"type="checkbox" id="usercourse" 
+				<!-- TMPL_IF NAME=usercourse --> 
+					checked 
+			<!-- /TMPL_IF -->>
+			&nbsp;Realiz&oacute; el curso de usuario? 
 		</td>
 <!-- 		<td> -->
 	</tr>
@@ -255,11 +300,11 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	  		<b>Direcci&oacute;n*</b><br>
-	  		<input id="5" class="inputFontNormal" type=text name=address size=50 value="<!-- TMPL_VAR NAME=address -->">
+	  		<input id="5" class="inputFontNormal" type=text id="address" size=50 value="<!-- TMPL_VAR NAME=address -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal</b><br>
-			<input  class="inputFontNormal" type=text name="zipcode" size=50 value="<!-- TMPL_VAR NAME='zipcode'-->">
+			<input  class="inputFontNormal" type=text id="zipcode" size=50 value="<!-- TMPL_VAR NAME='zipcode'-->">
 		</td>
 	</tr>
 	<tr>
@@ -267,11 +312,11 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
   	   		<b>Tel&eacute;fono particular</b><br>
-          		<input class="inputFontNormal" type=text name=phone size=50 value="<!-- TMPL_VAR NAME=phone -->">
+          		<input class="inputFontNormal" type=text id="phone" size=50 value="<!-- TMPL_VAR NAME=phone -->">
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad*</b><br>
-			<input class="wickEnabled" class="inputFontNormal" type=text name="city" id="city" value="<!-- TMPL_VAR NAME='city' -->" size='50' >
+			<input class="wickEnabled" class="inputFontNormal" type=text id="city" value="<!-- TMPL_VAR NAME='city' -->" size='50' >
 		</td>
 	</tr>
 	<tr>
@@ -279,11 +324,11 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	   		<b>Tel&eacute;fono del trabajo</b><br>
-          		<input class="inputFontNormal" type=text name=phoneday size=50 value="<!-- TMPL_VAR NAME=phoneday -->">
+          		<input class="inputFontNormal" type=text id="phoneday" size=50 value="<!-- TMPL_VAR NAME=phoneday -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal de origen</b><br>
-          		<input  class="inputFontNormal" type=text name="homezipcode" size=50 value="<!-- TMPL_VAR NAME='homezipcode' -->">
+          		<input  class="inputFontNormal" type=text id="homezipcode" size=50 value="<!-- TMPL_VAR NAME='homezipcode' -->">
 		</td>
 	</tr>
 	<tr>
@@ -291,14 +336,13 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
  			<b>Direcci&oacute;n de origen</b><br>
-          		<input  class="inputFontNormal" type=text name="streetaddress" size=50 value="<!-- TMPL_VAR NAME=streetaddress -->">
+          		<input  class="inputFontNormal" type=text id="streetaddress" size=50 value="<!-- TMPL_VAR NAME=streetaddress -->">
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad de origen</b><br>
-			<input 	class="wickEnabled" class="inputFontNormal" type=text name="dstreetcity" id="dstreetcity" 
-				value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
+			<input 	class="wickEnabled" class="inputFontNormal" type=text id="dstreetcity" value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
 
-          		<input class="inputFontNormal" type=hidden name="streetcity" id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->">
+          		<input class="inputFontNormal" type=hidden id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->">
 		</td>
         </tr>
  	<tr>
@@ -306,7 +350,7 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
         		<b>E-Mail</b><br>
-          		<input class="inputFontNormal" type=text name=emailaddress size=50 value="<!-- TMPL_VAR NAME=emailaddress -->">
+          		<input class="inputFontNormal" type=text id="emailaddress" size=50 value="<!-- TMPL_VAR NAME=emailaddress -->">
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
@@ -335,7 +379,7 @@ $(document).ready(function() {
 		<td width="5%">&nbsp;</td>
 		<td class="inputFontNormal">
 			<b> Notas</b>
-                	<textarea class="inputFontNormal" name=borrowernotes wrap=physical cols=100 rows=2><!-- TMPL_VAR NAME=borrowernotes --></textarea>
+                	<textarea class="inputFontNormal" id="borrowernotes" wrap=physical cols=100 rows=2><!-- TMPL_VAR NAME=borrowernotes --></textarea>
 		</td>
 	</tr>
 </table>
@@ -367,7 +411,8 @@ $(document).ready(function() {
 	<tr>
 		<td width="50%" align="right">
                 	<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-                	<a onClick="mandarForm()" >
+                	<!--<a onClick="mandarForm()" >-->
+			<a onClick="agregarUsuario()" >
                 	<img alt="Guardar" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
                 </td>
 
