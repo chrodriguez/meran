@@ -115,6 +115,7 @@ function agregarUsuario(){
 	objAH.documenttype= $('#documenttype').val();
 	objAH.documentnumber= $('#documentnumber').val();
 	objAH.studentnumber= $('#studentnumber').val();
+	objAH.updatepassword= $('#updatepassword').val();
 	
 	objAH.tipoAccion= 'AGREGAR_USUARIO';
  	objAH.sendToServer();
@@ -135,6 +136,13 @@ $(document).ready(function() {
 });
 
 </script>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
 
 <center>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -202,11 +210,11 @@ $(document).ready(function() {
 		<td width="15%">&nbsp;</td>
 		<td width="35%" class="inputFontNormal" align="left">
 	      		<b> Apellido*</b><br>
-	      		<input id="2" class="inputFontNormal" type=text id="surname" size=50 value="<!-- TMPL_VAR NAME=surname -->">
+	      		<input id="surname" class="inputFontNormal" type=text size=50 value="<!-- TMPL_VAR NAME=surname -->">
 		</td>
 		<td width="35%" class="inputFontNormal" align="left">
 			<b> Nombres*</b><br>
-                 	<input id="3" class="inputFontNormal" type=text id="firstname" size=50 value="<!-- TMPL_VAR NAME=firstname -->">
+                 	<input  id="firstname" class="inputFontNormal" type=text size=50 value="<!-- TMPL_VAR NAME=firstname -->">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
@@ -217,7 +225,7 @@ $(document).ready(function() {
                 	<select  class="inputFontNormal" id="documenttype" size=1><!-- TMPL_LOOP NAME=documentloop -->
                  		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
                 	</select>
-			<input id="4" class="inputFontNormal" type=text id="documentnumber" size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
+			<input id="documentnumber" class="inputFontNormal" type=text size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
 		</td>
 	 	<td width="35%" class="inputFontNormal" align="left">
 			<b>Legajo</b><br>

@@ -167,27 +167,27 @@ print A "entro a countSymbolChars \n";
 
 	if (!(&countAlphaNumericChars($string) >= 0)){
 print A "entro a countAlphaNumericChars \n";
-		return (1,'U320');
+		return (1,'U324');
 	}
 
 	if (!(&countAlphaChars($string) >= 0)){
 print A "entro a countAlphaChars \n";
-		return (1,'U321');
+		return (1,'U325');
 	}
 
 	if (!(&countNumericChars($string) >= 0)){
 print A "entro a countNumericChars \n";
-		return (1,'U322');
+		return (1,'U326');
 	}
 
 	if (!(&countLowerChars($string) >= 0)){
 print A "entro a countLowerChars \n";
-		return (1,'U323');
+		return (1,'U327');
 	}
 
 	if (!(&countUpperChars($string) >= 0)){
 print A "entro a countUpperChars \n";
-		return (1,'U324');
+		return (1,'U328');
 	}
 
 close(A);

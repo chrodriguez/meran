@@ -28,7 +28,108 @@ use vars qw(@EXPORT @ISA);
 	&updateOpacBorrower
 	&cambiarPassword
 	&checkUserData
+
+	&t_cambiarPassword
+	&t_cambiarPermisos
+	&t_addBorrower
+	&t_eliminarUsuario
 );
+
+sub t_eliminarUsuario {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+
+ 	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= eliminarUsuario($params->{'borrowernumber'});	
+			$dbh->commit;
+			$codMsg= 'U320';
+			$paraMens->[0]= $params->{'usuario'};
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B422';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,'INTRA');
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U319';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+#delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
+
+
+sub eliminarUsuario{
+	my ($borrowernumber)=@_;
+	
+	my $dbh = C4::Context->dbh;
+
+	#   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+	#   $sth->execute(@data);
+	#   $sth->finish;
+	my $sth=$dbh->prepare("DELETE FROM borrowers WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+	$sth=$dbh->prepare("DELETE FROM reserves WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+	$sth=$dbh->prepare("UPDATE persons SET borrowernumber=NULL WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+}
+
+
+sub verficarEliminarUsuario {
+
+	my($params)=@_;
+
+	my $error= 0;
+	my $codMsg= '000';
+	my @paraMens;
+
+	if( !($error) && !( existeUsuario($params->{'borrowernumber'}) ) ){
+	#se verifica la existencia del usuario
+		$error= 1;
+		$codMsg= 'U321';
+		$paraMens[0]= $params->{'usuario'};
+	}
+
+	return ($error, $codMsg,\@paraMens);
+}
+
+=item
+Esta funcion verifica si existe el usuario o no en la base, devuelve 0 = NO EXISTE, 1 (o mas) = EXISTE
+=cut
+sub existeUsuario {
+	my ($borrowernumber)=@_;
+
+  	my $dbh = C4::Context->dbh;
+
+	my $sth=$dbh->prepare("SELECT count(*) FROM borrowers WHERE borrowernumber=?");
+	$sth->execute($borrowernumber);
+
+	return $sth->fetchrow_array();
+}
 
 
 sub t_cambiarPermisos {
@@ -60,7 +161,7 @@ sub t_cambiarPermisos {
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
 			$error= 1;
-			$codMsg= 'U318';
+			$codMsg= 'U331';
 		}
 		$dbh->{AutoCommit} = 1;
 
@@ -108,78 +209,13 @@ sub verficarPassword {
 	($error,$codMsg)= &C4::AR::Validator::check($params);
 
 
-# 	if( !($error) && ($params->{'newpassword'} eq "") ){
-# 	#password en blanco
-# 		$error= 1;
-# 		$codMsg= 'U314';
-# 	}
-# 
-# 	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+ 	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
 # 	#las password no coinciden
-# 		$error= 1;
-# 		$codMsg= 'U315';
-# 	}
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 
-# 	## DESDE ACA SON LOS NUEVOS
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
-# 
-# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-# 	#la password no respeta la longitud minima
-# 		$error= 1;
-# 		$codMsg= 'U316';
-# 	}
+ 		$error= 1;
+ 		$codMsg= 'U315';
+ 	}
 
 
-## FIXME faltaria seguir agregando validaciones, tales como:
-# maxPassLength, Maximum length of the password
-# * maxSpace Maximum number of white space characters
-
-# *
-# * minUpper Minimum number of uppercase characters
-# * minLower Minimum number of lowercase characters
-# * minNumeric Minimum number of numeric characters (0-9)
-# * minAlphaNum Minimum number of alphanumeric characters
-# * minAlpha Minimum number of alphabetic characters
-# * minSymbol Minimum number of alphabetic characters
 
 	return ($error, $codMsg,\@paraMens);
 }
@@ -282,6 +318,93 @@ sub cambiarPassword{
 	return ($error,$codMsg,$paraMens);
 }
 
+sub t_addBorrower {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+ 	my ($error, $codMsg, $paraMens);
+## FIXME falta verificar info antes de dar de alta al borrower
+# 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= addBorrower($params);	
+			$dbh->commit;
+			$codMsg= 'U329';
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B423';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U330';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+sub addBorrower {
+
+	my ($data)=@_;
+
+	my $dbh = C4::Context->dbh;
+	
+# 	$data->{'borrowernumber'}=&NewBorrowerNumber();
+	
+	my $query="	INSERT INTO borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+			firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+			altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+			initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
+			lastchangepassword,changepassword,studentnumber)  
+			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+	
+	my $sth=$dbh->prepare($query);
+	
+	$sth->execute(	$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+			$data->{'sex'},$data->{'ethnotes'},$data->{'streetaddress'},$data->{'faxnumber'},
+			$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
+			$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+			$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+			$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
+			$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+			$data->{'documenttype'},$data->{'documentnumber'},
+# 			$data->{'updatepassword'},
+			1,
+			$data->{'studentnumber'}
+		);
+
+	$sth->finish;
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse"))  {
+		my $sql2="";
+		if ($data->{'usercourse'} eq 1){
+			$sql2= "UPDATE borrowers SET usercourse=NOW() WHERE borrowernumber=? AND usercourse IS NULL ; ";
+		}
+		else{
+			$sql2= "UPDATE borrowers SET usercourse=NULL WHERE borrowernumber=? ;";
+		}
+
+		my $sth3=$dbh->prepare($sql2);
+		$sth3->execute();
+		$sth3->finish;
+	}
+	
+# 	return ($data->{'borrowernumber'});
+}
 
 sub buscarBorrower{
 	my ($busqueda) = @_;
@@ -663,13 +786,17 @@ NewBorrowerNumber
 Devulve el maximo borrowernumber
 Posiblemente no se usa o no sierve!!!!!!! VER!!!!!!!!!!!!
 =cut
+## FIXME BORRAR no es necesario
 sub NewBorrowerNumber{
   	my $dbh = C4::Context->dbh;
+
   	my $sth=$dbh->prepare("SELECT MAX(borrowernumber) FROM borrowers");
   	$sth->execute;
   	my $data=$sth->fetchrow_hashref;
   	$sth->finish;
+
   	$data->{'max(borrowernumber)'}++;
+
   	return($data->{'max(borrowernumber)'});
 }
 

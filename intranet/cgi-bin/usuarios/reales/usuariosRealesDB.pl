@@ -119,9 +119,9 @@ Se elimina el usuario
 if($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
-	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'usuario'});
+	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
 	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
-   	$params{'borrowernumber'}= $obj->{'borrowernumber'};
+   	$params{'borrowernumber'}= $usuario_hash_ref->{'borrowernumber'};
 	
  	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
 

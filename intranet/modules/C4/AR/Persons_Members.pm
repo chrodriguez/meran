@@ -143,53 +143,6 @@ sub checkDocument{
 
 ##############################################################################################################
 
-#addborrober agrega un borrower nuevo
-
-sub addborrower {
-
-my ($data)=@_;
-
-my $dbh = C4::Context->dbh;
-
-$data->{'borrowernumber'}=&NewBorrowerNumber();
-
-my $query="insert into borrowers (borrowernumber,title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
-  	  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
-    	  altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-      	  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,documenttype,documentnumber,
-	  lastchangepassword,changepassword,studentnumber)  
-	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
-
-my $sth=$dbh->prepare($query);
-
-$sth->execute($data->{'borrowernumber'},$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
-   	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
-	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
-	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
-	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
-	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
-	$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
-	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'});
-  $sth->finish;
-  
-
-
-# Curso de usuarios#
-if (C4::Context->preference("usercourse"))  {
-		my $sql2="";
-		if ($data->{'usercourse'} eq 1)
-		{$sql2= "Update borrowers set usercourse=NOW() where borrowernumber=? and usercourse is NULL ; ";}
-		else
-		{$sql2= "Update borrowers set usercourse=NULL where borrowernumber=? ;";}
-
-		my $sth3=$dbh->prepare($sql2);
-		$sth3->execute($data->{'borrowernumber'});
-		$sth3->finish;
-}
-####################
-
-  return ($data->{'borrowernumber'});
-  }
 
 
 #updateborrober actualiza un borrower
