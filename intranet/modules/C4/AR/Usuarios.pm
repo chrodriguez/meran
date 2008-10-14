@@ -100,7 +100,6 @@ sub cambiarPermisos{
 sub verficarPassword {
 
 	my($params)=@_;
-
 	my $error= 0;
 	my $codMsg= '000';
 	my @paraMens;
