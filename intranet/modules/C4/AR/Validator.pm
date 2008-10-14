@@ -25,6 +25,7 @@ sub countUpperChars{
 	my($stringLength)=length($string);
 	my($count)=0;
 	my($fragment);
+	my $charCount;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if ($fragment =~ tr/A-Z//){
@@ -40,6 +41,7 @@ sub countLowerChars{
 	my($stringLength)=length($string);
 	my($count)=0;
 	my($fragment);
+	my $charCount=0;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if ($fragment =~ tr/a-z//){
@@ -52,9 +54,10 @@ sub countLowerChars{
 sub countNumericChars{
 
 	my($string)=@_;
-	my($stringLength)=length($string);
-	my($count)=0;
-	my($fragment);
+	my $stringLength=length($string);
+	my $count=0;
+	my $fragment;
+	my $charCount;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if ($fragment =~ tr/0-9//){
@@ -72,6 +75,7 @@ sub countAlphaNumericChars{
 	my($stringLength)=length($string);
 	my($count)=0;
 	my($fragment);
+	my $charCount=0;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if (($fragment =~ tr/a-z//) 
@@ -92,6 +96,7 @@ sub countAlphaChars{
 	my($stringLength)=length($string);
 	my($count)=0;
 	my($fragment);
+	my $charCount=0;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if (($fragment =~ tr/a-z//) 
@@ -111,6 +116,7 @@ sub countSymbolChars{
 	my($stringLength)=length($string);
 	my($count)=0;
 	my($fragment);
+	my $charCount=0;
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if ($fragment =~ tr/#-.//){
@@ -123,6 +129,7 @@ sub countSymbolChars{
 sub checkLength{
 
 	my($string,$min_length)=@_;
+
 	if (length($string) >= $min_length) {
         	return 0;
     	}
@@ -134,6 +141,7 @@ sub checkLength{
 sub check{
 
 	my($params)=@_;
+
 	my($string) = $params->{'newpassword'};
 
 	if (!(C4::AR::Utilidades::validateString($string))){
@@ -172,22 +180,23 @@ sub check{
 
 }
 
-
-sub checkPattern{
-
-	my($string,$pattern)=@_;
-	my($stringLength)=length($string);
-	my($count)=0;
-	my($fragment);
- 	foreach $specificPattern $pattern {
-		for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
-			$fragment = substr $string,$charCount,1;
-			if ($string =~ tr/$specificPattern/){
-				$count++;
-			}
-		}
-    	}
-}
+# 
+# sub checkPattern{
+# 
+# 	my($string,$pattern)=@_;
+# 	my($stringLength)=length($string);
+# 	my($count)=0;
+# 	my($fragment);
+# 	my $charCount=0; 
+#  	foreach $specificPattern $pattern {
+# 		for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
+# 			$fragment = substr $string,$charCount,1;
+# 			if ($string =~ tr/$specificPattern/){
+# 				$count++;
+# 			}
+# 		}
+#     	}
+# }
 
 
 

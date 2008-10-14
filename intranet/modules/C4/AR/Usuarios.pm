@@ -100,11 +100,12 @@ sub cambiarPermisos{
 sub verficarPassword {
 
 	my($params)=@_;
+
 	my $error= 0;
 	my $codMsg= '000';
 	my @paraMens;
 
-	($error,$codMsg)= &C4::AR::Validator::check($params->{'newpassword'});
+	#($error,$codMsg)= &C4::AR::Validator::check($params->{'newpassword'});
 
 =item
 	if( !($error) && ($params->{'newpassword'} eq "") ){
