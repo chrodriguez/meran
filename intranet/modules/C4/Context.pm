@@ -342,14 +342,13 @@ EOT
 	return ($sth->fetchrow);
 }
 
-sub prefereces{
+sub preferences {
 	
 	my $query;
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	$query="SELECT value
-		FROM systempreferences";
+	$query="SELECT * FROM systempreferences";
 
 	$sth = $dbh->prepare($query);
 

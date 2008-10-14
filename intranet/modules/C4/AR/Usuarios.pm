@@ -37,8 +37,8 @@ sub t_cambiarPermisos {
 	my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-# 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
-	my ($error,$codMsg,$paraMens);
+ 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+# 	my ($error,$codMsg,$paraMens);
 
 	if(!$error){
 	#No hay error
@@ -105,68 +105,68 @@ sub verficarPassword {
 	my $codMsg= '000';
 	my @paraMens;
 
-	#($error,$codMsg)= &C4::AR::Validator::check($params->{'newpassword'});
+	($error,$codMsg)= &C4::AR::Validator::check($params);
 
-=item
-	if( !($error) && ($params->{'newpassword'} eq "") ){
-	#password en blanco
-		$error= 1;
-		$codMsg= 'U314';
-	}
 
-	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
-	#las password no coinciden
-		$error= 1;
-		$codMsg= 'U315';
-	}
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-
-	## DESDE ACA SON LOS NUEVOS
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
-
-	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
-	#la password no respeta la longitud minima
-		$error= 1;
-		$codMsg= 'U316';
-	}
+# 	if( !($error) && ($params->{'newpassword'} eq "") ){
+# 	#password en blanco
+# 		$error= 1;
+# 		$codMsg= 'U314';
+# 	}
+# 
+# 	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+# 	#las password no coinciden
+# 		$error= 1;
+# 		$codMsg= 'U315';
+# 	}
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 
+# 	## DESDE ACA SON LOS NUEVOS
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
+# 
+# 	if( !($error) && ( length($params->{'newpassword'}) < C4::Context->preference("minPassLength") ) ){
+# 	#la password no respeta la longitud minima
+# 		$error= 1;
+# 		$codMsg= 'U316';
+# 	}
 
 
 ## FIXME faltaria seguir agregando validaciones, tales como:
@@ -180,7 +180,7 @@ sub verficarPassword {
 # * minAlphaNum Minimum number of alphanumeric characters
 # * minAlpha Minimum number of alphabetic characters
 # * minSymbol Minimum number of alphabetic characters
-=cut
+
 	return ($error, $codMsg,\@paraMens);
 }
 
