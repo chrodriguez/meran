@@ -255,13 +255,12 @@ close(A);
 
 sub isValidMail{
 
-	my $address = @_;
+	my ($address) = @_;
 	
 open (A, ">>/tmp/debug.txt");
-print A "checkMail \n";
+print A "checkMail ".$address."\n";
 
-# 	if($address =~ /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/){
-	if(1){
+	if ($address =~ m/^(\w¦\-¦\_¦\.)+\@((\w¦\-¦\_)+\.)+[a-zA-Z]{2,}$/){
 
 print A "entro al if \n";
 		return 1;
