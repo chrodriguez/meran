@@ -60,7 +60,7 @@ jQuery.fn.centerObject = function(options) {
 	obj.css('left',$(window).width()/2 - this.width()/2);
 
 	if(options){
-		if(options.debug){
+		if( (options.debug)&&(window.console) ){
 	
 			window.console.log(	"centerObject => \n" +
 					"Total Vertical: " + total + "\n" + 
@@ -97,7 +97,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.sort= function(ord){
 
-			if(this.debug){
+			if( (this.debug)&&(window.console) ){
   				window.console.log("AjaxHelper => sort: " + ord);
  			}
 			
@@ -109,7 +109,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.changePage= function(ini){
 
-				if(this.debug){
+				if( (this.debug)&&(window.console) ){
   					window.console.log("AjaxHelper => changePage: " + ini);
  				}
 
@@ -122,7 +122,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			
 			var params= "obj="+JSONstring.make(helper);
 
-			if(this.debug){
+			if( (this.debug)&&(window.console) ){
   				window.console.log("AjaxHelper => ajaxCallback \n" + params);
 			}
 

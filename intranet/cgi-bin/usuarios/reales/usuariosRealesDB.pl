@@ -144,8 +144,6 @@ if($tipoAccion eq "ELIMINAR_USUARIO"){
 Se elimina el usuario
 =cut
 if($tipoAccion eq "AGREGAR_USUARIO"){
-
-# 	my %params;
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
 # 	my ($error,$codMsg,$message);

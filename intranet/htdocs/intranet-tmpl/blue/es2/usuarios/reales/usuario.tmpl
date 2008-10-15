@@ -116,7 +116,6 @@ function agregarUsuario(){
 	objAH.documentnumber= $('#documentnumber').val();
 	objAH.studentnumber= $('#studentnumber').val();
 	objAH.updatepassword= $('#updatepassword').val();
-	
 	objAH.tipoAccion= 'AGREGAR_USUARIO';
  	objAH.sendToServer();
 
@@ -187,8 +186,8 @@ $(document).ready(function() {
 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
 		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
 		<td   width="65%" ALIGN=RIGHT>*
-			<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
-			<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
+			<input type="radio" name="sex" value="F" <!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
+			<input type="radio" name="sex" value="M" <!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
 			&nbsp; &nbsp;  Fecha de nacimiento (<!-- TMPL_VAR NAME=dateformat -->)
 			<input class="inputFontNormal" type=text id="dateofbirth" size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
