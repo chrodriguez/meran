@@ -323,7 +323,7 @@ sub t_addBorrower {
 	my $dbh = C4::Context->dbh;
 #  	my ($error, $codMsg, $paraMens);
 ## FIXME falta verificar info antes de dar de alta al borrower
-  	my ($error,$codMsg,$paraMens)= &verficarDatosBorrower($params);
+  	my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
 
 	if(!$error){
 	#No hay error
@@ -358,15 +358,17 @@ sub t_addBorrower {
 
 sub verificarDatosBorrower{
 
-	my $data=@_;
-
-	my $emailAddres = $data->{'emailaddress'};
+	my ($data)=@_;
+	my $error=0;
+	my $codError = '000';
 	
-	if (&C4::Validator::checkMail($emailAddres)){
-		open(A,">>/usr/local/koha/ene.txt");
-		print A "se ha comprobado el mail";
+	my $emailAddress = $data->{'emailaddress'};
+	
+	if (!($error) && (!(&C4::AR::Validator::checkMail($emailAddress)))){
+		$codError = 'U332';
+		$error=1;
 	}
-	return "asdsad";
+	return ($error,$codError);
 }
 	
 

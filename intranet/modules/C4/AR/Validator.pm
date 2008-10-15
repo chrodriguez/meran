@@ -3,7 +3,7 @@ package C4::AR::Validator;
 
 use strict;
 use C4::AR::Utilidades;
-use Email::Address;
+use C4::AR::Address;
 
 use vars qw(@EXPORT @ISA);
 
@@ -257,16 +257,14 @@ sub checkMail{
 # 	my $self = shift if ref($_[0]); 
 	my $value = @_;
 	
-	return unless defined($value);
-	
 	#warn $Email::Address::mailbox;
 	
 	my $address;
-	if($value =~ /^$Email::Address::mailbox$/){
-		$address = $&;
+	if($value =~ /^C4::AR::Address::mailbox$/){
+		return 1;
 	}
+	return 0;
 	
-	return $address;
 }
 
 

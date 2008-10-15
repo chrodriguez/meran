@@ -160,6 +160,7 @@ my %mensajesINTRA = (
 	'U329' => 'Se agregr&oacute; el usuario con &eacute;xito.',
 	'U330' => 'Disculpe, no se pudo agregar el usuario, intente nuevamente.',
 	'U331' => 'Disculpe, no se pudo cambiar el permiso, intente nuevamente.',
+	'U332' => 'Disculpe, la direcci&oacute;n de mail es inv&aacute;lida.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
