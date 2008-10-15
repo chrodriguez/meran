@@ -364,7 +364,7 @@ sub verificarDatosBorrower{
 	
 	my $emailAddress = $data->{'emailaddress'};
 	
-	if (!($error) && (!(&C4::AR::Validator::checkMail($emailAddress)))){
+	if (!($error) && ((&C4::AR::Validator::isValidMail($emailAddress)))){
 		$codError = 'U332';
 		$error=1;
 	}

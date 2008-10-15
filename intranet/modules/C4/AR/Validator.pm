@@ -17,7 +17,7 @@ use vars qw(@EXPORT @ISA);
 	&countAlphaNumericChars,
 	&countAlphaChars,
 	&countSymbolChars,
-	&checkMail
+	&isValidMail
 	);
 
 
@@ -253,14 +253,11 @@ close(A);
 ################################# FUNCIONES PARA MAIL ##################################
 
 
-sub checkMail{
-# 	my $self = shift if ref($_[0]); 
-	my $value = @_;
+sub isValidMail{
+
+	my $address = @_;
 	
-	#warn $Email::Address::mailbox;
-	
-	my $address;
-	if($value =~ /^C4::AR::Address::mailbox$/){
+	if($address =~ /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/){
 		return 1;
 	}
 	return 0;
