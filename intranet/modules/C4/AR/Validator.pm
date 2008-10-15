@@ -257,15 +257,12 @@ sub isValidMail{
 
 	my $address = @_;
 	
-<<<<<<< .mine
-	#warn $Email::Address::mailbox;
 open (A, ">>/tmp/debug.txt");
 print A "checkMail \n";
-	my $address;
-	if($value =~ /^C4::AR::Address::mailbox$/){
-=======
-	if($address =~ /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/){
->>>>>>> .r690
+
+# 	if($address =~ /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/){
+	if(1){
+
 print A "entro al if \n";
 		return 1;
 	}
