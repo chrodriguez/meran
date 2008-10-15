@@ -3,22 +3,31 @@ package C4::AR::Validator;
 
 use strict;
 use C4::AR::Utilidades;
+use Email::Address;
 
 use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-	&check,
+	&checkPassword,
 	&checkLength,
 	&countUpperChars,
 	&countLowerChars,
 	&countNumericChars,
 	&countAlphaNumericChars,
 	&countAlphaChars,
-	&countSymbolChars	
+	&countSymbolChars,
+	&checkMail
 	);
 
 
+
+################################# FUNCIONES PARA PASSSWORD ########################
+
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MAYUSCULA 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countUpperChars{
 
 	my($string)=@_;
@@ -35,6 +44,10 @@ sub countUpperChars{
 	return $count;
 }
 
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MINUSCULA 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countLowerChars{
 
 	my($string)=@_;
@@ -51,6 +64,10 @@ sub countLowerChars{
 	return $count;
 }		
 
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES NUMERICOS 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countNumericChars{
 
 	my($string)=@_;
@@ -68,7 +85,10 @@ sub countNumericChars{
 }
 
 
-
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFANUMERICOS 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countAlphaNumericChars{
 
 	my($string)=@_;
@@ -90,6 +110,10 @@ sub countAlphaNumericChars{
 	return $count;
 }
 
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFABETICOS 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countAlphaChars{
 
 	my($string)=@_;
@@ -110,6 +134,10 @@ sub countAlphaChars{
 	return $count;
 }
 
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE SIMBOLOS 
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub countSymbolChars{
 
 	my($string)=@_;
@@ -126,6 +154,10 @@ sub countSymbolChars{
 	return $count;
 }
 
+=item
+FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES  
+DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+=cut
 sub checkLength{
 
 	my($string,$min_length)=@_;
@@ -137,8 +169,11 @@ sub checkLength{
 }
 
 
-
-sub check{
+=item
+FUNCION QUE CHECKEA QUE UN PASSWORD CUMPLA CON TODO LO ANTERIOR,
+ESPECIFICADO SEGUN LA DB.
+=cut
+sub checkPassword{
 
 	my($params)=@_;
 
@@ -150,7 +185,7 @@ print A "check \n";
 print A "string  ".$string."\n";
 
 	if ((C4::AR::Utilidades::validateString($string))){
-print A "entro a validateString \n";
+		print A "entro a validateString \n";
 		return (1,'U314');
 	}					
 print A "minPassLength ".C4::Context->preference('minPassLength')."\n";
@@ -213,9 +248,26 @@ close(A);
 #     	}
 # }
 
+################################# FIN FUNCIONES PARA PASSSWORD ########################
+
+################################# FUNCIONES PARA MAIL ##################################
 
 
-
+sub checkMail{
+# 	my $self = shift if ref($_[0]); 
+	my $value = @_;
+	
+	return unless defined($value);
+	
+	#warn $Email::Address::mailbox;
+	
+	my $address;
+	if($value =~ /^$Email::Address::mailbox$/){
+		$address = $&;
+	}
+	
+	return $address;
+}
 
 
 

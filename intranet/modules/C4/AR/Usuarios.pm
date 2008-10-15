@@ -138,8 +138,8 @@ sub t_cambiarPermisos {
 	my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
- 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
-# 	my ($error,$codMsg,$paraMens);
+#  	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+ 	my ($error,$codMsg,$paraMens);
 
 	if(!$error){
 	#No hay error
@@ -201,12 +201,11 @@ sub cambiarPermisos{
 sub verficarPassword {
 
 	my($params)=@_;
-
 	my $error= 0;
 	my $codMsg= '000';
 	my @paraMens;
 
-	($error,$codMsg)= &C4::AR::Validator::check($params);
+	($error,$codMsg)= &C4::AR::Validator::checkPassword($params);
 
 
  	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
@@ -322,9 +321,9 @@ sub t_addBorrower {
 	
 	my($params)=@_;
 	my $dbh = C4::Context->dbh;
- 	my ($error, $codMsg, $paraMens);
+#  	my ($error, $codMsg, $paraMens);
 ## FIXME falta verificar info antes de dar de alta al borrower
-# 	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+  	my ($error,$codMsg,$paraMens)= &verficarDatosBorrower($params);
 
 	if(!$error){
 	#No hay error
@@ -355,6 +354,23 @@ sub t_addBorrower {
 
 	return ($error, $codMsg, $message);
 }
+
+
+sub verificarDatosBorrower{
+
+	my $data=@_;
+
+	my $emailAddres = $data->{'emailaddress'};
+	
+	if (&C4::Validator::checkMail($emailAddres)){
+		open(A,">>/usr/local/koha/ene.txt");
+		print A "se ha comprobado el mail";
+	}
+	return "asdsad";
+}
+	
+
+
 
 sub addBorrower {
 
@@ -893,6 +909,7 @@ sub checkUserData{
 }
 
 
+	
 
 
 

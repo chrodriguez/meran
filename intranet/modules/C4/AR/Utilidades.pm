@@ -1076,9 +1076,9 @@ sub validateString{
 	my ($string)=@_;
 	$string = trim($string);
 	if (length($string) == 0){
-		return 1; #EL STRING ERA SOLO BLANCOS, FALSE
+		return 0; #EL STRING ERA SOLO BLANCOS, FALSE
 	}
-	return 0; # TODO OK, TRUE
+	return 1; # TODO OK, TRUE
 }
 
 1;
