@@ -368,6 +368,41 @@ sub verificarDatosBorrower{
 		$codError = 'U332';
 		$error=1;
 	}
+	
+	my $cardNumber = $data->{'cardnumber'};
+	if (!($error) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
+		$codError = 'U333';
+		$error=1;
+	}
+
+	my $surname = $data->{'surname'};
+	if (!($error) && (!(&C4::AR::Utilidades::validateString($surname)))){
+		$codError = 'U334';
+		$error=1;
+	}
+
+	my $firstname = $data->{'firstname'};
+	if (!($error) && (!(&C4::AR::Utilidades::validateString($firstname)))){
+		$codError = 'U335';
+		$error=1;
+	}
+
+	my $documentnumber = $data->{'documentnumber'};
+	if (!($error) && (!(&C4::AR::Utilidades::validateString($documentnumber)))){
+		$codError = 'U336';
+		$error=1;
+	}
+
+	my $city = $data->{'city'};
+	if (!($error) && (!(&C4::AR::Utilidades::validateString($city)))){
+		$codError = 'U337';
+		$error=1;
+	}
+
+	#################### VER EN EL TPL, QUE EL INPUT DIRECCION TIENE COMO ID=5, COMO LLEGA A USUARIO.PL????
+
+	
+	
 	return ($error,$codError);
 }
 	

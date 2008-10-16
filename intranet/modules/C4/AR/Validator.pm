@@ -253,22 +253,28 @@ close(A);
 ################################# FUNCIONES PARA MAIL ##################################
 
 
+=item
+FUNCION QUE CHECKEA QUE UNA DIRECCION DE MAIL CUMPLA CON UN PATRON ESTANDAR
+PARA MAIL ADDRESS. RECIBE UN UNICO STRING.
+=cut
 sub isValidMail{
 
 	my ($address) = @_;
 	
-open (A, ">>/tmp/debug.txt");
-print A "checkMail ".$address."\n";
-
-	if ($address =~ m/^(\w¦\-¦\_¦\.)+\@((\w¦\-¦\_)+\.)+[a-zA-Z]{2,}$/){
-
-print A "entro al if \n";
+	if($address =~ /^[A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{2,4}$/){
 		return 1;
 	}
-print A "no entro al if \n";
 	return 0;
-	
 }
+
+
+################################# FIN FUNCIONES PARA MAIL ##################################
+
+
+
+
+
+
 
 
 
