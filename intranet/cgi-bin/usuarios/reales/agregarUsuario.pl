@@ -11,20 +11,22 @@ use C4::Date;
 use C4::AR::Busquedas;
 use C4::AR::Referencias;
 
-my $input = new CGI;
+	my $input = new CGI;
+	
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "usuarios/reales/agregarUsuario.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+				});
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/reales/usuario.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
-my $member=$input->param('bornum');
-my $data=C4::AR::Usuarios::getBorrower($member);
 
-	# %flags: keys=$data-keys, datas=[formname, HTML-explanation]
+=item
+ 	my $member=$input->param('bornum');
+ 	my $data=C4::AR::Usuarios::getBorrower($member);
+
 	my %flags = ('gonenoaddress' => ['gna', 'Direcci&oacute;n actualizada'],
 				#'lost'          => ['lost', 'Perdido'],
 				'debarred'      => ['debarred', 'Habilitado']);
@@ -44,26 +46,27 @@ my $data=C4::AR::Usuarios::getBorrower($member);
 	}
 	push(@flagdata, \%row);
 	}
+=cut
 
 	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
 					-id => 'categorycode',
 					-values=>$categories,
-					-default=>$data->{'categorycode'},
+# 					-default=>$data->{'categorycode'},
 					-labels=>$labels);
 
-my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
+	my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
         my @documentdata;
-        while (@documents) {
-                my $doc = shift @documents;
-                my %row = ('document' => $doc);
-                if ($data->{'documenttype'} eq $doc) {
-                        $row{'selected'}=' selected';
-                } else {
-                        $row{'selected'}='';
-                }
-                push(@documentdata, \%row);
-        }
+	while (@documents) {
+		my $doc = shift @documents;
+		my %row = ('document' => $doc);
+# 		if ($data->{'documenttype'} eq $doc) {
+# 			$row{'selected'}=' selected';
+# 		} else {
+# 			$row{'selected'}='';
+# 		}
+		push(@documentdata, \%row);
+	}
 
 	my @branches;
 	my @select_branch;
@@ -73,23 +76,34 @@ my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
 		push @select_branch, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
-	#agregado por Einar para que quede el branch por defecto
-	my $branchdefecto=$data->{'branchcode'};
-	($branchdefecto ||($branchdefecto=(split("_",(split(";",$cookie))[0]))[1]));
+
+# 	my $branchdefecto=$data->{'branchcode'};
+# 	($branchdefecto ||($branchdefecto=(split("_",(split(";",$cookie))[0]))[1]));
+
+	my $branchdefecto= C4::Context->preference("defaultbranch");
 	#hasta aca y la linea adentro del pasaje por parametros a la CGIbranch
 
-	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
-				-id => 'branchcode',
-				-values   => \@select_branch,
-				-defaults  => $branchdefecto, #tambien agregado para que funcione
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0 );
+	my $CGIbranch=CGI::scrolling_list( 	-name     => 'branchcode',
+						-id => 'branchcode',
+						-values   => \@select_branch,
+						-defaults  => $branchdefecto, #tambien agregado para que funcione
+						-labels   => \%select_branches,
+						-size     => 1,
+						-multiple => 0 );
 
 
-# if ($member eq ''){
-#	$member=NewBorrowerNumber();
-# }
+
+	$template->param(	
+				documentloop     => \@documentdata,
+# 				documentloop	=> \@documents,
+# 				flagloop	=> \@flagdata,
+				CGIbranch => $CGIbranch
+		);
+	
+
+output_html_with_http_headers $input, $cookie, $template->output;
+
+=item
 my $type=$input->param('type') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
@@ -159,7 +173,8 @@ elsif($type eq 'Mod'){
 	output_html_with_http_headers $input, $cookie, $template->output;
 
 }
-else {  # this else goes down the whole script
+else {  
+# this else goes down the whole script
 	if ($type eq 'Add'){
 		$template->param( addAction => 1);
 	} else {
@@ -273,7 +288,4 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 }
-
-# Local Variables:
-# tab-width: 8
-# End:
+=cut

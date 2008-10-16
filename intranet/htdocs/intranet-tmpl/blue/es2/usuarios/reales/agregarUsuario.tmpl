@@ -161,7 +161,8 @@ $(document).ready(function() {
 
 <br>
 
-<form action="/cgi-bin/koha/usuarios/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>
+<!--<form action="/cgi-bin/koha/usuarios/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>-->
+<form method=post  name="form1" AUTOCOMPLETE='off'>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
 	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
 	<input type=hidden name=typeRegister value="borrowers">
