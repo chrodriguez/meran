@@ -1,4 +1,6 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<!-- TMPL_IF NAME=addBorrower -->
+	<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<!-- /TMPL_IF -->
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
@@ -147,7 +149,7 @@ $(document).ready(function() {
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >
-			<!-- TMPL_IF NAME=addAction -->
+			<!-- TMPL_IF NAME=addBorrower -->
 			Agregar usuario real
 			<!-- TMPL_ELSE -->
 			Usuarios Reales - Modificar Datos
@@ -439,9 +441,8 @@ $(document).ready(function() {
 </table>
 <div id="result" style="position: absolute; visibility:hidden"></div>
 </form>
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-        <!-- TMPL_ELSE -->
-	        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-		        <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="addBorrower" -->
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- /TMPL_IF -->
 			

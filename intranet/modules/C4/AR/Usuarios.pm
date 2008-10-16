@@ -459,6 +459,48 @@ sub addBorrower {
 # 	return ($data->{'borrowernumber'});
 }
 
+sub t_updateBorrower {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+#  	my ($error, $codMsg, $paraMens);
+## FIXME falta verificar info antes de dar de alta al borrower
+  	#my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
+	my ($error,$codMsg,$paraMens);
+
+	if(!$error){
+	#No hay error
+
+		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			($error, $codMsg, $paraMens)= updateBorrower($params);	
+			$dbh->commit;
+			$codMsg= 'U338';
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			$codMsg= 'B424';
+			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$error= 1;
+			$codMsg= 'U339';
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+
+	return ($error, $codMsg, $message);
+}
+
+sub updateBorrower {
+}
+
 sub buscarBorrower{
 	my ($busqueda) = @_;
 	my $dbh = C4::Context->dbh;

@@ -1,15 +1,21 @@
 <!-- *********************************Window Help********************************************* -->
 
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
+
 <script>
 
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (typeof($.Autocompleter) != "function"){
 		
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
+// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
 
 // }
 

@@ -5,11 +5,8 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Members;
-use Date::Manip;
-use C4::Date;
-use C4::AR::Busquedas;
-use C4::AR::Referencias;
+# use Date::Manip;
+# use C4::Date;
 
 	my $input = new CGI;
 	
@@ -23,81 +20,17 @@ use C4::AR::Referencias;
 				});
 
 
-=item
- 	my $member=$input->param('bornum');
- 	my $data=C4::AR::Usuarios::getBorrower($member);
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
 
-	my %flags = ('gonenoaddress' => ['gna', 'Direcci&oacute;n actualizada'],
-				#'lost'          => ['lost', 'Perdido'],
-				'debarred'      => ['debarred', 'Habilitado']);
-				
-	my @flagdata;
-	foreach (keys(%flags)) {
-	my $key = $_;
-	my %row =  ('key'   => $key,
-			'name'  => $flags{$key}[0],
-			'html'  => $flags{$key}[1]);
-	if ($data->{$key}) {
-		$row{'yes'}=' checked';
-		$row{'no'}='';
-	} else {
-		$row{'yes'}='';
-		$row{'no'}=' checked';
-	}
-	push(@flagdata, \%row);
-	}
-=cut
+	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 
-	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
-	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
-					-id => 'categorycode',
-					-values=>$categories,
-# 					-default=>$data->{'categorycode'},
-					-labels=>$labels);
-
-	my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
-        my @documentdata;
-	while (@documents) {
-		my $doc = shift @documents;
-		my %row = ('document' => $doc);
-# 		if ($data->{'documenttype'} eq $doc) {
-# 			$row{'selected'}=' selected';
-# 		} else {
-# 			$row{'selected'}='';
-# 		}
-		push(@documentdata, \%row);
-	}
-
-	my @branches;
-	my @select_branch;
-	my %select_branches;
-	my $branches=C4::AR::Busquedas::getBranches();
-	foreach my $branch (keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
-	}
-
-# 	my $branchdefecto=$data->{'branchcode'};
-# 	($branchdefecto ||($branchdefecto=(split("_",(split(";",$cookie))[0]))[1]));
-
-	my $branchdefecto= C4::Context->preference("defaultbranch");
-	#hasta aca y la linea adentro del pasaje por parametros a la CGIbranch
-
-	my $CGIbranch=CGI::scrolling_list( 	-name     => 'branchcode',
-						-id => 'branchcode',
-						-values   => \@select_branch,
-						-defaults  => $branchdefecto, #tambien agregado para que funcione
-						-labels   => \%select_branches,
-						-size     => 1,
-						-multiple => 0 );
-
-
+	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
 
 	$template->param(	
-				documentloop     => \@documentdata,
-# 				documentloop	=> \@documents,
-# 				flagloop	=> \@flagdata,
-				CGIbranch => $CGIbranch
+				documentloop     => $comboDeTipoDeDoc,
+				catcodepopup	=> $comboDeCategorias,
+				CGIbranch => $comboDeBranches,
+				addBorrower	=> 1,
 		);
 	
 

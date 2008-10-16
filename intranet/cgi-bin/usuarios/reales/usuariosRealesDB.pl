@@ -161,3 +161,91 @@ if($tipoAccion eq "AGREGAR_USUARIO"){
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "AGREGAR_USUARIO")
+
+
+=item
+Se guarda la modificacion los datos del usuario
+=cut
+if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
+	
+  	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_updateBorrower($obj);
+# 	my ($error,$codMsg,$message);
+
+	#se arma el mensaje para informar al usuario
+	my %infoOperacion = (
+				codMsg	=> $codMsg,
+				error 	=> $error,
+				message => $message,
+	);
+	
+	my $infoOperacionJSON=to_json \%infoOperacion;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+
+} #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
+
+
+=item
+Se modifican los datos del usuario
+=cut
+if($tipoAccion eq "MODIFICAR_USUARIO"){
+
+	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
+						template_name => "usuarios/reales/agregarUsuario.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => {borrowers => 1},
+						debug => 1,
+	});
+
+	my $borrowernumber =$obj->{'borrowernumber'};
+
+	#Obtenemos los datos del borrower
+	 #my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarEncabezados($nivel, $itemtype);
+	my $datosBorrower_hashref= &C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
+
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
+
+	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
+
+	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
+
+	$template->param(	
+
+				documentloop    => $comboDeTipoDeDoc,
+				catcodepopup	=> $comboDeCategorias,
+				CGIbranch 	=> $comboDeBranches,
+		
+				type		=> $datosBorrower_hashref->{'type'},
+# 				member          => $datosBorrower_hashref->{'$member,
+				address         => $datosBorrower_hashref->{'adress'},
+				firstname       => $datosBorrower_hashref->{'firstname'},
+				surname         => $datosBorrower_hashref->{'surname'},
+				streetaddress   => $datosBorrower_hashref->{'streetaddress'},
+				zipcode 	=> $datosBorrower_hashref->{'zipcode'},
+				streetcity      => $datosBorrower_hashref->{'streetcity'},
+				dstreetcity     => $datosBorrower_hashref->{'dstreetcity'},
+				homezipcode 	=> $datosBorrower_hashref->{'homezipcode'},
+				city		=> $datosBorrower_hashref->{'city'},
+				dcity           => $datosBorrower_hashref->{'dcity'},
+				phone           => $datosBorrower_hashref->{'phone'},
+				phoneday        => $datosBorrower_hashref->{'phoneday'},
+				emailaddress    => $datosBorrower_hashref->{'emailaddress'},
+				borrowernotes	=> $datosBorrower_hashref->{'borrowernotes'},
+				documentnumber  => $datosBorrower_hashref->{'documentnumber'},
+				studentnumber 	=> $datosBorrower_hashref->{'studentnumber'},
+				dateenrolled	=> $datosBorrower_hashref->{'dateenrolled'},
+				expiry		=> $datosBorrower_hashref->{'expiry'},
+				cardnumber	=> $datosBorrower_hashref->{'cardnumber'},
+				dateofbirth	=> $datosBorrower_hashref->{'dateofbirth'},
+				addBorrower	=> 0,
+# 				dateformat      => display_date_format($dateformat),
+		);
+
+ 	print $input->header;
+ 	print  $template->output;
+
+} #end if($tipoAccion eq "MODIFICAR_USUARIO")
+

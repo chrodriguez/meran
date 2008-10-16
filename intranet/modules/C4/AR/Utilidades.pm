@@ -26,6 +26,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
+use C4::AR::Referencias;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
@@ -1079,6 +1080,69 @@ sub validateString{
 		return 0; #EL STRING ERA SOLO BLANCOS, FALSE
 	}
 	return 1; # TODO OK, TRUE
+}
+
+
+sub generarComboCategorias{
+
+	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
+
+	my $catcodepopup = CGI::popup_menu(
+						-name=>'categorycode',
+						-id => 'categorycode',
+						-values=>$categories,
+						-labels=>$labels
+				);
+
+	return $catcodepopup
+}
+
+
+sub generarComboTipoDeDoc {
+
+	my ($tipoActual)=@_;
+
+	my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
+        my @documentdata;
+	while (@documents) {
+		my $doc = shift @documents;
+		my %row = ('document' => $doc);
+
+ 		if ($tipoActual eq $doc) {
+ 			$row{'selected'}=' selected';
+ 		} else {
+ 			$row{'selected'}='';
+ 		}
+
+		push(@documentdata, \%row);
+	}
+
+	return \@documentdata;
+}
+
+sub generarComboDeBranches {
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches=C4::AR::Busquedas::getBranches();
+	foreach my $branch (keys %$branches) {
+		push @select_branch, $branch;
+		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	}
+
+	my $branchdefecto= C4::Context->preference("defaultbranch");
+	#hasta aca y la linea adentro del pasaje por parametros a la CGIbranch
+
+	my $CGIbranch=CGI::scrolling_list( 	-name     => 'branchcode',
+						-id => 'branchcode',
+						-values   => \@select_branch,
+						-defaults  => $branchdefecto, #tambien agregado para que funcione
+						-labels   => \%select_branches,
+						-size     => 1,
+						-multiple => 0 
+				);
+
+	return $CGIbranch; 
 }
 
 1;

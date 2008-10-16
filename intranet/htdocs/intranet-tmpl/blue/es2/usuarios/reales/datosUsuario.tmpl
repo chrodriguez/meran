@@ -239,7 +239,34 @@ function updateEliminarUsuario(responseText){
 //*********************************************Fin***Eliminar Usuario*********************************************
 
 
+//*********************************************Modificar Datos Usuario*********************************************
+function modificarDatosDeUsuario(){
+	objAH=new AjaxHelper(updateModificarDatosDeUsuario);
+	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug= true;
+	objAH.borrowernumber= usuario.ID;
+	objAH.tipoAccion= 'MODIFICAR_USUARIO';
+	objAH.sendToServer();
+}
+
+function updateModificarDatosDeUsuario(responseText){
+	$('#datosUsuario').html(responseText);
+	$('#datosUsuario').draggable({opacity: 0.7777});
+	$('#datosUsuario').show();
+	$('.windowBlur').show();
+	$('#datosUsuario').centerObject();
+	
+	
+// 	$('body').append("<div id='dimmer' style='height: 668px; width: 1009px; visibility: visible; position:absolute'></div>");
+	$('body').append("<div id='dimmer' class='dimmer' style='height: 1000px; width: 100%;top: 0px; visibility: visible; position:absolute'></div>");
+//  	$('#dimmer').centerObject();
+	
+}
+
+
+//*********************************************Fin***Modificar Datos Usuario***************************************
 </script>
+<div id=datosUsuario class="window" style="display:none; height:85%; width:85%;"></div>
 
 <!-- Mensajes de Informacion al Usuario -->
 <div class="tableMsgUser">
@@ -377,13 +404,15 @@ function updateEliminarUsuario(responseText){
 	</li>
 	<!-- TMPL_ELSE -->
 	<li>
-		<form action=/cgi-bin/koha/usuarios/reales/usuario.pl method=post name="formCarac2">
-			<a href="#" onClick="formCarac2.submit()" >
-                        <img alt="Modificar Caracter&iacute;stica" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
+		<!--<form action=/cgi-bin/koha/usuarios/reales/agregarUsuario.pl method=post name="formCarac2">-->
+		<form name="formCarac2">
+			<!--<a href="#" onClick="formCarac2.submit()" >-->
+			<a onClick="modificarDatosDeUsuario()">
+                        <img 	alt="Modificar Caracter&iacute;stica" 
+				src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
 			</a>
 
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->">
+<!-- 			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->"> -->
 
 		</form>
 	</li>

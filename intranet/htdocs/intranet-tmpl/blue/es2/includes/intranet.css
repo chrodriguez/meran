@@ -740,8 +740,38 @@ div.detalle{
 	font-weight: normal;
 	overflow:auto;
 	margin: 6px;
+	z-index: 80;
 }
 /*                                                       FIN  MODULO DE CIRCULACION                                                       */
+
+
+div.dimmer {
+	background-color:#F4F7F9;
+	font-family:verdana;
+	font-weight:bold;
+	left:0;
+	opacity:0.8;
+	padding:40px;
+	position:absolute;
+	top:0;
+	visibility:hidden;
+}
+
+div.dimming {
+	background-color:#FFFFFF;
+	background-image:url(/org-img/MP3/loader1.gif);
+	background-position:center;
+	background-repeat:no-repeat;
+	border:1px solid #999999;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-style:normal;
+	left:16px;
+	position:absolute;
+	top:64px;
+	visibility:hidden;
+	z-index:80;
+} 
 
 
 /* end agregado */
