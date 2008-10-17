@@ -1,0 +1,215 @@
+
+
+
+<!-- TMPL_IF NAME="mensaje_error_borrar" -->
+	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje_error_borrar --></font>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="mensaje" -->
+	<font color="red" size="3"><!-- TMPL_VAR NAME=mensaje --></font>
+<!-- /TMPL_IF -->
+
+<div class="vcard">
+
+<div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<p class="pagetitle" ><span class="fn"><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></span></p>
+</div>
+
+
+<table  cellspacing=0  cellpadding=0 border=0 align=left width="100%" >
+	<tr VALIGN=middle class="tablaresultadoTitle">
+		<td width="1%" align="left" valing="top">
+			<img src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
+		<td colspan=3>REGISTRO DEL USUARIO</td>
+		<td width="1%" valing="top" align="right">
+			<img src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
+	</tr>
+</table>
+<br><br>
+
+<div class="divDatosUsuario">
+	<!-- TMPL_IF NAME="foto_name" -->
+		<img border="0" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"><br>
+	<!-- /TMPL_IF -->
+		
+	Documento:<b> <!-- TMPL_VAR NAME="documenttype" --> &nbsp; <!-- TMPL_VAR NAME="documentnumber" --></b><br>
+
+	Fecha de nacimiento:<b> <!-- TMPL_VAR NAME="dateofbirth" --></b><br>
+	Sexo:<b> <!-- TMPL_VAR NAME="sex" --></b><br>
+			
+	<!-- TMPL_IF NAME="contactname" -->
+		Contacto Alternativo:<b> <!-- TMPL_VAR NAME="contactname" --></b><br>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="phone" -->
+ 	<div class="tel">
+		<span class="type">Tel&eacute;fono:</span><b><!-- TMPL_VAR NAME="phone" --></b><br>
+	</div>	
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="altphone" -->
+ 	<div class="tel">
+		<span class="type">Tel&eacute;fono Alt:</span><b><!-- TMPL_VAR NAME="altphone" --></b><br>
+	</div>	
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="altrelationship" -->
+		Relaci&oacute;n:<b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="emailaddress" -->
+		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->">
+			<span class="email"><!-- TMPL_VAR NAME="emailaddress" --></span></a></b><br>
+	<!-- /TMPL_IF -->
+	<br>
+
+	Tarjeta de identificaci&oacute;n :<b> <!-- TMPL_VAR NAME="cardnumber" --></b><br>
+
+	Legajo :<b> <!-- TMPL_VAR NAME="studentnumber" --></b><br>
+	
+	ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
+
+	Categor&iacute;a del usuario:<b> <!-- TMPL_VAR NAME="categorycode" --></b><br>
+
+	Incorporaci&oacute;n a Biblioteca:<b> <!-- TMPL_VAR NAME="branchcode" --></b><br>
+	<!-- TMPL_IF name="usercourse" -->
+		<center>
+		<b>Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a <!-- TMPL_VAR name="usercourse" -->. </b>
+		</center>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="altnotes" -->
+		Notas:<b> <!-- TMPL_VAR NAME="altnotes" --></b><br>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="borrowernotes" -->
+		Notas generales: <b><a HREF="popbox.html" 
+		onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
+		<!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
+	<!-- /TMPL_IF -->
+<!-- ESTO PARA QUE ESTA -->
+	<!-- TMPL_IF name="IS_ADULT" -->
+		<p align=center>
+		<form action=/cgi-bin/koha/members/jmemberentry.pl method=post name="formHijo">
+			<a href="#" onClick="formHijo.submit()" >
+			<img alt="Agregar Hijo" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/agregarhijo.png" border=0 ">
+			</a>
+			<input type=hidden name=type value=Agregar>
+			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
+		</form>
+                </p>
+	<!-- /TMPL_IF -->
+</div>
+
+</div>  <!--end vcard-->
+
+<div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
+<ul>
+	<!-- TMPL_IF name="I" -->
+<!-- NO SE SI SE USA -->
+	<li>
+                <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
+			<a href="#" onClick="formCarac.submit()" >
+                        <img alt="Modificar Caracter&acutei;stica" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
+			</a>
+
+			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->">
+
+		</form>
+	</li>
+	<!-- TMPL_ELSE -->
+	<li>
+		<form name="formCarac2">
+			<!--<a href="#" onClick="formCarac2.submit()" >-->
+			<a class="click" onClick="modificarDatosDeUsuario()">
+                        <img 	alt="Modificar Caracter&iacute;stica" 
+				src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
+			</a>
+		</form>
+	</li>
+	<!-- /TMPL_IF -->
+	<li>
+			<a href="#" onClick="eliminarUsuario()" >
+                        <img alt="Cambio de Contrase&ntilde;a" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/eliminarusuario.png" border="0"">
+			</a>
+
+   	               <input type=hidden name=member value="<!-- TMPL_VAR NAME='bornum' -->">
+	</li>
+	<li>
+		<a class="click" onClick="openWindow()">
+			<img alt="Cambio de Contrase&ntilde;a" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/cambiocontrasena.png" border=0 ">
+		</a>
+	</li>
+	<li>
+		<a class="click" onClick="modificarPermisos()" > 
+			<img alt="Modificar Permisos" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarpermisos.png" border="0"">
+ 		</a>
+	</li>
+	<li>
+		<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
+		 	<a href="#" onClick="formCarnet.submit()" >
+			<img alt="Generar Carnet" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0"">
+			</a>
+
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+
+		</form>
+	</li>
+	<li>
+		<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
+		 	<a href="#" onClick="formLibre.submit()" >
+			<img alt="Generar Libre Deuda" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/libre_deuda.png" border="0"">
+			</a>
+
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+
+		</form>
+	</li>
+	<li>
+		<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
+		 	<a href="#" onClick="openPopup()" >
+			<img alt="Generar Prestamo Interbibliotecario" 
+			src="<!-- TMPL_VAR NAME='themelang' -->/images/prest_inter.png" border="0"">
+			</a>
+			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
+			<input type="hidden" name="accion" value="ingresarDatos">
+		</form>
+	</li>
+	<!-- TMPL_IF name="mensaje_error_foto" -->	
+	<li>
+		<font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
+	</li>
+ 	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="foto_name" -->
+	<li>
+		<form action=/cgi-bin/koha/usuarios/upload.pl method=post>
+			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+			<input type=submit class="button" value="Eliminar foto" align=center>
+		</form>
+	</li>
+	<!-- TMPL_ELSE -->
+	<li>
+ 		<form  	id="uploadForm" action=/cgi-bin/koha/usuarios/upload.pl method=post 
+			enctype="multipart/form-data" >
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+			<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
+				align=center valign="center">
+			<input id="picture" type=file name="picture">
+ 		</form>
+	</li>
+	 <!-- /TMPL_IF -->
+</ul>
+</div>
+<br>
+
