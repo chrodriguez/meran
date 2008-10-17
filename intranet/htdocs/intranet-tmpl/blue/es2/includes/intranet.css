@@ -760,7 +760,7 @@ div.dimmer {
 
 div.dimming {
 	background-color:#FFFFFF;
-	background-image:url(/org-img/MP3/loader1.gif);
+/* 	background-image:url(/org-img/MP3/loader1.gif); */
 	background-position:center;
 	background-repeat:no-repeat;
 	border:1px solid #999999;
@@ -783,6 +783,11 @@ div.dimming {
 	font-size:13px;
 	font-weight:bold;
 	height:24px;
+}
+
+/* no se si se usa */
+.ventanaContenido {
+	overflow: auto;
 }
 
 /* end agregado */

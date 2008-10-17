@@ -11,64 +11,8 @@
 
 <script language="javascript" type="text/javascript">
 
-function swap(id,src){
-document.getElementById(id).src=src;
-}
-
-function validarInput(campo,error){
-	if(campo.value==""){
-		alert(error);
-		campo.focus();
-		var ancla="blanco"+campo.id;
-		crearAncla(campo.id,ancla);
-		location.href="#"+ancla;
-		return false;
-	}
-	return true;
-}
-
-function chequearCampos(){
-	var i=1;
-	var error="Campo obligatorio vacio, ingrese un valor";
-	var ok=true;
-	var idError;
-	while((i<6) && (ok)){
-		var campo= document.getElementById(i);
-		ok=validarInput(campo,error);
-		if(ok){
-			i++;
-		}
-	}
-	if(ok){
-		var city=document.getElementById('city');
-		ok=validarInput(city,error);
-	}
-	return ok;
-}
+// FIXME FALTA VALIDAD EN EL CLIENTE
 	
-function chequearDocumento(){
-	var docInput=document.getElementById('4');
-	var doc = docInput.value.toString();
-	for (var i=0; i<doc.length; i++) {
-		var caracter = doc.charAt(i);
-		if (caracter<"0" || caracter>"9"){
-			alert("Error al ingresar el numero de documento, no es un numero tiene que ser solo digitos");
-			docInput.focus();
-			var ancla="blanco"+'4num';
-			crearAncla('4',ancla);
-			location.href="#"+ancla;
-			return false;
-		}
-	}
-	return true;
-}
-	
-function mandarForm(){
-	if(chequearCampos() && chequearDocumento()){
-		document.form1.submit();
-	}
-}
-
 function CrearAutocomplete(Id){
 	$("#"+Id).search();
 	// q= valor de campoHelp
@@ -421,9 +365,16 @@ $(document).ready(function() {
 	<tr>
 		<td width="50%" align="right">
                 	<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-                	<!--<a onClick="mandarForm()" >-->
+
+		<!-- TMPL_IF NAME="addBorrower" -->
 			<a onClick="agregarUsuario()" >
                 	<img alt="Guardar" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
+		<!-- TMPL_ELSE -->
+			<a onClick="guardarModificacioUsuario()" >
+                	<img alt="Guardar Modificacion" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
+		<!-- /TMPL_IF -->
+	
+			
                 </td>
 
 	        <td  width="25%" align="left"> 

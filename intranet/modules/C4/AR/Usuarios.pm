@@ -32,6 +32,7 @@ use vars qw(@EXPORT @ISA);
 	&t_cambiarPassword
 	&t_cambiarPermisos
 	&t_addBorrower
+	&t_updateBorrower
 	&t_eliminarUsuario
 );
 
@@ -499,6 +500,53 @@ sub t_updateBorrower {
 }
 
 sub updateBorrower {
+	my ($params)=@_;
+
+	my $dbh = C4::Context->dbh;
+
+	my $query="	UPDATE borrowers SET 
+			title=?,expiry=?,cardnumber=?,
+			sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
+			firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
+			textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
+			phoneday=?,categorycode=?,city=?,area=?,phone=?,
+			borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
+			ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
+			branchcode =?,zipcode =?,homezipcode=?,
+			documenttype =?,documentnumber=?,changepassword=?,studentnumber=?
+	  		WHERE borrowernumber=? ";
+
+	my $sth=$dbh->prepare($query);
+	
+	$sth->execute(		$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
+				$params->{'sex'},$params->{'ethnotes'},$params->{'address'},$params->{'faxnumber'},
+				$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},
+				$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},
+				$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},
+				$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},
+				$params->{'surname'},$params->{'initials'},$params->{'streetaddress'},$params->{'ethnicity'},$params->{'gna'},
+				$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
+				$params->{'documenttype'},$params->{'documentnumber'},$params->{'updatepassword'},$params->{'studentnumber'},
+				$params->{'borrowernumber'}
+	);
+	
+	$sth->finish;
+	
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse"))  {
+		my $sql2="";
+		if ($params->{'usercourse'} eq 1){
+			$sql2= "UPDATE borrowers SET usercourse=NOW() WHERE borrowernumber=? AND usercourse is NULL ; ";}
+		else{
+			$sql2= "UPDATE borrowers SET usercourse=NULL WHERE borrowernumber=? ;";
+		}
+
+		my $sth3=$dbh->prepare($sql2);
+		$sth3->execute($params->{'borrowernumber'});
+		$sth3->finish;
+	}
+	####################
 }
 
 sub buscarBorrower{

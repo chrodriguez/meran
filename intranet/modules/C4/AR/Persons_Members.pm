@@ -146,57 +146,57 @@ sub checkDocument{
 
 
 #updateborrober actualiza un borrower
-
-sub updateborrower {
-
-my ($data)=@_;
-my $dbh = C4::Context->dbh;
-
-my $query="Update borrowers set 
-		title=?,expiry=?,cardnumber=?,
-		sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
-		firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
-		textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
-		phoneday=?,categorycode=?,city=?,area=?,phone=?,
-		borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
-		ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
-		branchcode =?,zipcode =?,homezipcode=?,
-		documenttype =?,documentnumber=?,changepassword=?,studentnumber=?
-	  where borrowernumber=?";
-
-my $sth=$dbh->prepare($query);
-
-   $sth->execute($data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
-  	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
-	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},		
-	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
-	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
-	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},$data->{'streetaddress'},
-	$data->{'ethnicity'},$data->{'gna'},$data->{'lost'},$data->{'debarred'},
-	$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
-	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'},
-	$data->{'borrowernumber'});
-
-
-   $sth->finish;
-  
-
-# Curso de usuarios#
-if (C4::Context->preference("usercourse"))  {
-		my $sql2="";
-		if ($data->{'usercourse'} eq 1)
-		{$sql2= "Update borrowers set usercourse=NOW() where borrowernumber=? and usercourse is NULL ; ";}
-		else
-		{$sql2= "Update borrowers set usercourse=NULL where borrowernumber=? ;";}
-
-		my $sth3=$dbh->prepare($sql2);
-		$sth3->execute($data->{'borrowernumber'});
-		$sth3->finish;
-}
-####################
-
-  return (1);
-}
+# NO VA MASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS    esta en USUARIOS.PM
+# sub updateborrower {
+# 
+# my ($data)=@_;
+# my $dbh = C4::Context->dbh;
+# 
+# my $query="Update borrowers set 
+# 		title=?,expiry=?,cardnumber=?,
+# 		sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
+# 		firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
+# 		textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
+# 		phoneday=?,categorycode=?,city=?,area=?,phone=?,
+# 		borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
+# 		ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
+# 		branchcode =?,zipcode =?,homezipcode=?,
+# 		documenttype =?,documentnumber=?,changepassword=?,studentnumber=?
+# 	  where borrowernumber=?";
+# 
+# my $sth=$dbh->prepare($query);
+# 
+#    $sth->execute($data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
+#   	$data->{'sex'},$data->{'ethnotes'},$data->{'address'},$data->{'faxnumber'},
+# 	$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},		
+# 	$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
+# 	$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
+# 	$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},$data->{'streetaddress'},
+# 	$data->{'ethnicity'},$data->{'gna'},$data->{'lost'},$data->{'debarred'},
+# 	$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+# 	$data->{'documenttype'},$data->{'documentnumber'},$data->{'updatepassword'},$data->{'studentnumber'},
+# 	$data->{'borrowernumber'});
+# 
+# 
+#    $sth->finish;
+#   
+# 
+# # Curso de usuarios#
+# if (C4::Context->preference("usercourse"))  {
+# 		my $sql2="";
+# 		if ($data->{'usercourse'} eq 1)
+# 		{$sql2= "Update borrowers set usercourse=NOW() where borrowernumber=? and usercourse is NULL ; ";}
+# 		else
+# 		{$sql2= "Update borrowers set usercourse=NULL where borrowernumber=? ;";}
+# 
+# 		my $sth3=$dbh->prepare($sql2);
+# 		$sth3->execute($data->{'borrowernumber'});
+# 		$sth3->finish;
+# }
+# ####################
+# 
+#   return (1);
+# }
 
 
 #addperson agrega un person nuevo

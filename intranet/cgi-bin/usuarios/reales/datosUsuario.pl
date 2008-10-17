@@ -50,30 +50,6 @@ $data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'b
 # Converts the categorycode to the description
 $data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 
-
-# my $issues = prestamosPorUsuario($bornum);
-my $count=0;
-my $venc=0;
-my $overdues_count = 0;
-my @overdues;
-# my @issuedat;
-my $sanctions = hasSanctions($bornum);
-####Es regular el Usuario?####
-my $regular =&C4::AR::Usuarios::esRegular($bornum);
-
-$template->param(regular       => $regular);
-####
-foreach my $san (@$sanctions) {
-	if ($san->{'id3'}) {
-		my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
-		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
-	}
-
-	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);
-	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
-}
-#
-
 #### Verifica si la foto ya esta cargada
 my $picturesDir= C4::Context->config("picturesdir");
 my $foto;
@@ -103,7 +79,6 @@ $template->param(
 		completo	=> $completo,
 		mensaje		=> $mensaje,
 		foto_name 	=> $foto,
-		sanctions       => $sanctions,
 		mensaje_error_foto   => $msgFoto,
 		mensaje_error_borrar => $msgError,
 	);

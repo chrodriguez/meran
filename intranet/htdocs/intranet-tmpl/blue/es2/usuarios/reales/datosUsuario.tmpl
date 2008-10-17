@@ -134,6 +134,7 @@ $(document).ready(function() {
 	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
 	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
 
+	datosDeUsuario(usuario.ID)
 	detallePrestamos(usuario.ID);
 	detalleReservas(usuario.ID);
 	detalleSanciones(usuario.ID);
@@ -165,27 +166,12 @@ function modificarPermisos(){
 }
 
 function updateModificarPermisos(responseText){
-// 	$('#cambiar_permisos').html(responseText);
-// 	openWindowPermisos();
-	ventana2=new WindowHelper();
-	ventana2.html=responseText;
-	ventana2.titulo= 'PERMISOS DE ACCESO';
-	ventana2.create();
+//se crea el objeto que maneja la ventana para modificar los permisos
+	vModificarPermisos=new WindowHelper();
+	vModificarPermisos.html=responseText;
+	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
+	vModificarPermisos.create();
 }
-
-/*
-function closeWindowPermisos(){
-	$('#windowBlurPermisos').hide();
-	$('#windowPermisos').hide();
-}
-
-function openWindowPermisos(){
-	clearInput();
-	$('#windowPermisos').centerObject();	
-	$('#windowBlurPermisos').show();
-	$('#windowPermisos').draggable({opacity: 0.7777});
-	$('#windowPermisos').show();
-}*/
 
 function guardarPermisos(){
 
@@ -256,27 +242,68 @@ function modificarDatosDeUsuario(){
 }
 
 function updateModificarDatosDeUsuario(responseText){
-	/*$('#datosUsuario').html(responseText);
-	$('#datosUsuario').draggable({opacity: 0.7777});
-	$('#datosUsuario').show();
-	$('#datosUsuario').centerObject();
-	
-	
-// 	$('body').append("<div id='dimmer' style='height: 668px; width: 1009px; visibility: visible; position:absolute'></div>");
-	$('body').append("<div id='dimmer' class='dimmer' style='height: 1000px; width: 100%;top: 0px; visibility: visible; position:absolute'></div>");
-//  	$('#dimmer').centerObject();*/
-
-	
-	ventana=new WindowHelper();
-	ventana.html=responseText;
-	ventana.create();
-	
+//se crea el objeto que maneja la ventana para modificar los datos del usuario
+	vDatosUsuario=new WindowHelper();
+	vDatosUsuario.html=responseText;
+	vDatosUsuario.create();	
 }
 
+function guardarModificacioUsuario(){
 
+	objAH=new AjaxHelper(updateGuardarModificacioUsuario);
+	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug= true;
+	objAH.borrowernumber= usuario.ID;
+	objAH.cardnumber= $('#cardnumber').val();
+	objAH.sex= $('#sex').val();
+	objAH.streetaddress= $('#streetaddress').val();
+	objAH.firstname= $('#firstname').val();
+	objAH.dateofbirth= $('#dateofbirth').val();
+	objAH.emailaddress= $('#emailaddress').val();
+	objAH.dateenrolled= $('#dateenrolled').val();
+	objAH.dstreetcity= $('#dstreetcity').val();
+	objAH.altrelationship= $('#altrelationship').val();
+	objAH.othernames= $('#othernames').val();
+	objAH.phoneday= $('#phoneday').val();
+	objAH.categorycode= $('#categorycode').val();
+	objAH.city= $('#city').val();
+	objAH.phone= $('#phone').val();
+	objAH.borrowernotes= $('#borrowernotes').val();
+	objAH.surname= $('#surname').val();
+	objAH.ethnicity= $('#ethnicity').val();
+	objAH.branchcode= $('#branchcode').val();
+	objAH.zipcode= $('#zipcode').val();
+	objAH.homezipcode= $('#homezipcode').val();
+	objAH.documenttype= $('#documenttype').val();
+	objAH.documentnumber= $('#documentnumber').val();
+	objAH.studentnumber= $('#studentnumber').val();
+	objAH.updatepassword= $('#updatepassword').val();
+	objAH.tipoAccion= 'GUARDAR_MODIFICACION_USUARIO';
+ 	objAH.sendToServer();
+
+}
+
+function updateGuardarModificacioUsuario(responseText){
+	var Message=JSONstring.toObject(responseText);
+	setMessage(Message);
+	vDatosUsuario.hide();
+	datosDeUsuario();
+}
+
+function datosDeUsuario(){
+	objAH=new AjaxHelper(updateDatosDeUsuario);
+	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug= true;
+	objAH.borrowernumber= usuario.ID;
+	objAH.tipoAccion= 'DATOS_USUARIO';
+	objAH.sendToServer();
+}
+
+function updateDatosDeUsuario(responseText){
+	$('#detalleUsuario').html(responseText);
+}
 //*********************************************Fin***Modificar Datos Usuario***************************************
 </script>
-<!--<div id=ventana class="window" style="display:none; height:85%; width:85%;"></div>-->
 
 <!-- Mensajes de Informacion al Usuario -->
 <div class="tableMsgUser">
@@ -289,238 +316,11 @@ function updateModificarDatosDeUsuario(responseText){
 <div id="confirmar_div"></div>
 <br>
 
-<!-- para agregar el tmpl para permisos -->
-<div id="cambiar_permisos"></div>
-
-<!-- TMPL_IF NAME="mensaje_error_borrar" -->
-	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje_error_borrar --></font>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="mensaje" -->
-	<font color="red" size="3"><!-- TMPL_VAR NAME=mensaje --></font>
-<!-- /TMPL_IF -->
-
-<div class="vcard">
-
-<div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<p class="pagetitle" ><span class="fn"><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></span></p>
-</div>
-
-
-<table  cellspacing=0  cellpadding=0 border=0 align=left width="100%" >
-	<tr VALIGN=middle class="tablaresultadoTitle">
-		<td width="1%" align="left" valing="top">
-			<img src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
-		</td>
-		<td colspan=3>REGISTRO DEL USUARIO</td>
-		<td width="1%" valing="top" align="right">
-			<img src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
-		</td>
-	</tr>
-</table>
-<br><br>
-
-<div class="divDatosUsuario">
-	<!-- TMPL_IF NAME="foto_name" -->
-		<img border="0" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"><br>
-	<!-- /TMPL_IF -->
-		
-	Documento:<b> <!-- TMPL_VAR NAME="documenttype" --> &nbsp; <!-- TMPL_VAR NAME="documentnumber" --></b><br>
-
-	Fecha de nacimiento:<b> <!-- TMPL_VAR NAME="dateofbirth" --></b><br>
-	Sexo:<b> <!-- TMPL_VAR NAME="sex" --></b><br>
-			
-	<!-- TMPL_IF NAME="contactname" -->
-		Contacto Alternativo:<b> <!-- TMPL_VAR NAME="contactname" --></b><br>
-	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="phone" -->
- 	<div class="tel">
-		<span class="type">Tel&eacute;fono:</span><b><!-- TMPL_VAR NAME="phone" --></b><br>
-	</div>	
-	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="altphone" -->
- 	<div class="tel">
-		<span class="type">Tel&eacute;fono Alt:</span><b><!-- TMPL_VAR NAME="altphone" --></b><br>
-	</div>	
-	<!-- /TMPL_IF -->
-	
-	<!-- TMPL_IF NAME="altrelationship" -->
-		Relaci&oacute;n:<b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
-	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="emailaddress" -->
-		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->">
-			<span class="email"><!-- TMPL_VAR NAME="emailaddress" --></span></a></b><br>
-	<!-- /TMPL_IF -->
-	<br>
-
-	Tarjeta de identificaci&oacute;n :<b> <!-- TMPL_VAR NAME="cardnumber" --></b><br>
-
-	Legajo :<b> <!-- TMPL_VAR NAME="studentnumber" --></b><br>
-	
-	ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
-
-	Categor&iacute;a del usuario:<b> <!-- TMPL_VAR NAME="categorycode" --></b><br>
-
-	Incorporaci&oacute;n a Biblioteca:<b> <!-- TMPL_VAR NAME="branchcode" --></b><br>
-	<!-- TMPL_IF name="usercourse" -->
-		<center>
-		<b>Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a <!-- TMPL_VAR name="usercourse" -->. </b>
-		</center>
-	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="altnotes" -->
-		Notas:<b> <!-- TMPL_VAR NAME="altnotes" --></b><br>
-	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="borrowernotes" -->
-		Notas generales: <b><a HREF="popbox.html" 
-		onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
-		<!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
-	<!-- /TMPL_IF -->
-<!-- ESTO PARA QUE ESTA -->
-	<!-- TMPL_IF name="IS_ADULT" -->
-		<p align=center>
-		<form action=/cgi-bin/koha/members/jmemberentry.pl method=post name="formHijo">
-			<a href="#" onClick="formHijo.submit()" >
-			<img alt="Agregar Hijo" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/agregarhijo.png" border=0 ">
-			</a>
-			<input type=hidden name=type value=Agregar>
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
-		</form>
-                </p>
-	<!-- /TMPL_IF -->
-</div>
-
-</div>  <!--end vcard-->
-
-<div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
-<ul>
-	<!-- TMPL_IF name="I" -->
-<!-- NO SE SI SE USA -->
-	<li>
-                <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
-			<a href="#" onClick="formCarac.submit()" >
-                        <img alt="Modificar Caracter&acutei;stica" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
-			</a>
-
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->">
-
-		</form>
-	</li>
-	<!-- TMPL_ELSE -->
-	<li>
-		<!--<form action=/cgi-bin/koha/usuarios/reales/agregarUsuario.pl method=post name="formCarac2">-->
-		<form name="formCarac2">
-			<!--<a href="#" onClick="formCarac2.submit()" >-->
-			<a onClick="modificarDatosDeUsuario()">
-                        <img 	alt="Modificar Caracter&iacute;stica" 
-				src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
-			</a>
-
-<!-- 			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME='bornum' -->"> -->
-
-		</form>
-	</li>
-	<!-- /TMPL_IF -->
-	<li>
-<!-- 		<form action="javascript:confirm_deletion()" name="formElim"> -->
-		<!--	<a href="#" onClick="formElim.submit()" >-->
-			<a href="#" onClick="eliminarUsuario()" >
-                        <img alt="Cambio de Contrase&ntilde;a" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/eliminarusuario.png" border="0"">
-			</a>
-
-   	               <input type=hidden name=member value="<!-- TMPL_VAR NAME='bornum' -->">
-<!-- 		</form> -->
-	</li>
-	<li>
-		<a class="click" onClick="openWindow()">
-			<img alt="Cambio de Contrase&ntilde;a" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/cambiocontrasena.png" border=0 ">
-		</a>
-	</li>
-	<li>
-<!--  		<form action=/cgi-bin/koha/usuarios/reales/permisos-usuario.pl method=post name="formPerm"> -->
- 		<!--<a href="#" onClick="formPerm.submit()" > -->
-		<a class="click" onClick="modificarPermisos()" > 
-			<img alt="Modificar Permisos" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarpermisos.png" border="0"">
- 		</a>
-	</li>
-<!-- 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->> -->
-
-<!--  		</form> -->
-	<li>
-		<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
-		 	<a href="#" onClick="formCarnet.submit()" >
-			<img alt="Generar Carnet" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0"">
-			</a>
-
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-
-		</form>
-	</li>
-	<li>
-		<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
-		 	<a href="#" onClick="formLibre.submit()" >
-			<img alt="Generar Libre Deuda" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/libre_deuda.png" border="0"">
-			</a>
-
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-
-		</form>
-	</li>
-	<li>
-		<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
-		 	<a href="#" onClick="openPopup()" >
-			<img alt="Generar Prestamo Interbibliotecario" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/prest_inter.png" border="0"">
-			</a>
-			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
-			<input type="hidden" name="accion" value="ingresarDatos">
-		</form>
-	</li>
-	<!-- TMPL_IF name="mensaje_error_foto" -->	
-	<li>
-		<font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
-	</li>
- 	<!-- /TMPL_IF -->
-
-	<!-- TMPL_IF NAME="foto_name" -->
-	<li>
-		<form action=/cgi-bin/koha/usuarios/upload.pl method=post>
-			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=submit class="button" value="Eliminar foto" align=center>
-		</form>
-	</li>
-	<!-- TMPL_ELSE -->
-	<li>
- 		<form  	id="uploadForm" action=/cgi-bin/koha/usuarios/upload.pl method=post 
-			enctype="multipart/form-data" >
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-			<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
-				align=center valign="center">
-			<input id="picture" type=file name="picture">
- 		</form>
-	</li>
-	 <!-- /TMPL_IF -->
-</ul>
-</div>
-<br>
-
 <div style="clear:both">
 
-<!-- 	ESTE DATO NO ES NECESARIO ACA -->
-<!-- 	<input type="hidden" id="borrnumber" value="<!-- TMPL_VAR name='bornum' -->"> -->
-	
+	<!-- 	DETALLE USUARIO -->
+	<div id="detalleUsuario"></div>
+		
 	<!--DETALLE DE PRESTAMOS-->
 	<div id="prestamos"></div>
 	
