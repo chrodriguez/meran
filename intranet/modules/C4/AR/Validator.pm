@@ -184,7 +184,7 @@ open(A, ">>/tmp/debug.txt");
 print A "check \n";
 print A "string  ".$string."\n";
 
-	if ((C4::AR::Utilidades::validateString($string))){
+	if (!(C4::AR::Utilidades::validateString($string))){
 		print A "entro a validateString \n";
 		return (1,'U314');
 	}					

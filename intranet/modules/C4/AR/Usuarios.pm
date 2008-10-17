@@ -225,7 +225,7 @@ sub t_cambiarPassword {
 	my $dbh = C4::Context->dbh;
 # 	my ($error, $codMsg, $paraMens);
 
-	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
+	my ($error,$codMsg,$paraMens)= &C4::AR::Validator::checkPassword($params);
 
 	if(!$error){
 	#No hay error
