@@ -1083,6 +1083,8 @@ sub validateString{
 }
 
 
+#********************************************************Generacion de Combos****************************************************
+
 sub generarComboCategorias{
 
 	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
@@ -1094,7 +1096,7 @@ sub generarComboCategorias{
 						-labels=>$labels
 				);
 
-	return $catcodepopup
+	return $catcodepopup;
 }
 
 
@@ -1144,5 +1146,7 @@ sub generarComboDeBranches {
 
 	return $CGIbranch; 
 }
+
+#****************************************************Fin****Generacion de Combos**************************************************
 
 1;

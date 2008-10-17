@@ -187,7 +187,7 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 
 
 =item
-Se modifican los datos del usuario
+Se genra la ventana para modificar los datos del usuario
 =cut
 if($tipoAccion eq "MODIFICAR_USUARIO"){
 
@@ -203,13 +203,15 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $borrowernumber =$obj->{'borrowernumber'};
 
 	#Obtenemos los datos del borrower
-	 #my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarEncabezados($nivel, $itemtype);
 	my $datosBorrower_hashref= &C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
 
+	#se genera el combo de categorias de usuario
 	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
-
+	
+	#se genera el combo de tipos de documento
 	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 
+	#se genera el combo de las bibliotecas
 	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
 
 	$template->param(	
@@ -219,7 +221,6 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 				CGIbranch 	=> $comboDeBranches,
 		
 				type		=> $datosBorrower_hashref->{'type'},
-# 				member          => $datosBorrower_hashref->{'$member,
 				address         => $datosBorrower_hashref->{'adress'},
 				firstname       => $datosBorrower_hashref->{'firstname'},
 				surname         => $datosBorrower_hashref->{'surname'},

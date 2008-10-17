@@ -3,6 +3,7 @@
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/WindowHelper.js"></script>
 
 <!-- TMPL_INCLUDE NAME="../includes/popups/cambiarPassword.inc" -->
 
@@ -164,10 +165,15 @@ function modificarPermisos(){
 }
 
 function updateModificarPermisos(responseText){
-	$('#cambiar_permisos').html(responseText);
-	openWindowPermisos();
+// 	$('#cambiar_permisos').html(responseText);
+// 	openWindowPermisos();
+	ventana2=new WindowHelper();
+	ventana2.html=responseText;
+	ventana2.titulo= 'PERMISOS DE ACCESO';
+	ventana2.create();
 }
 
+/*
 function closeWindowPermisos(){
 	$('#windowBlurPermisos').hide();
 	$('#windowPermisos').hide();
@@ -179,7 +185,7 @@ function openWindowPermisos(){
 	$('#windowBlurPermisos').show();
 	$('#windowPermisos').draggable({opacity: 0.7777});
 	$('#windowPermisos').show();
-}
+}*/
 
 function guardarPermisos(){
 
@@ -250,23 +256,27 @@ function modificarDatosDeUsuario(){
 }
 
 function updateModificarDatosDeUsuario(responseText){
-	$('#datosUsuario').html(responseText);
+	/*$('#datosUsuario').html(responseText);
 	$('#datosUsuario').draggable({opacity: 0.7777});
 	$('#datosUsuario').show();
-	$('.windowBlur').show();
 	$('#datosUsuario').centerObject();
 	
 	
 // 	$('body').append("<div id='dimmer' style='height: 668px; width: 1009px; visibility: visible; position:absolute'></div>");
 	$('body').append("<div id='dimmer' class='dimmer' style='height: 1000px; width: 100%;top: 0px; visibility: visible; position:absolute'></div>");
-//  	$('#dimmer').centerObject();
+//  	$('#dimmer').centerObject();*/
+
+	
+	ventana=new WindowHelper();
+	ventana.html=responseText;
+	ventana.create();
 	
 }
 
 
 //*********************************************Fin***Modificar Datos Usuario***************************************
 </script>
-<div id=datosUsuario class="window" style="display:none; height:85%; width:85%;"></div>
+<!--<div id=ventana class="window" style="display:none; height:85%; width:85%;"></div>-->
 
 <!-- Mensajes de Informacion al Usuario -->
 <div class="tableMsgUser">
