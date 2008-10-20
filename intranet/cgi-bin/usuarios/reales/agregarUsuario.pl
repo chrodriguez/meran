@@ -27,9 +27,9 @@ use CGI;
 	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
 
 	$template->param(	
-				documentloop     => $comboDeTipoDeDoc,
+				document    => $comboDeTipoDeDoc,
 				catcodepopup	=> $comboDeCategorias,
-				CGIbranch => $comboDeBranches,
+				CGIbranch 	=> $comboDeBranches,
 				addBorrower	=> 1,
 		);
 	
