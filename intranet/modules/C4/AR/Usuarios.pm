@@ -362,7 +362,8 @@ sub verificarDatosBorrower{
 	my ($data)=@_;
 	my $error=0;
 	my $codError = '000';
-	
+	my $actionType = $data->{'actionType'};
+
 	my $emailAddress = $data->{'emailaddress'};
 	
 	if (!($error) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
@@ -370,12 +371,15 @@ sub verificarDatosBorrower{
 		$error=1;
 	}
 	
-	my $cardNumber = $data->{'cardnumber'};
-	if (!($error) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
-		$codError = 'U333';
-		$error=1;
-	}
+	#### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
+	if ($actionType eq "new"){
 
+		my $cardNumber = $data->{'cardnumber'};
+		if (!($error) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
+			$codError = 'U333';
+			$error=1;
+		}
+	}
 	my $surname = $data->{'surname'};
 	if (!($error) && (!(&C4::AR::Utilidades::validateString($surname)))){
 		$codError = 'U334';
@@ -463,10 +467,11 @@ sub addBorrower {
 sub t_updateBorrower {
 	
 	my($params)=@_;
+	$params->{'actionType'} = "update";
 	my $dbh = C4::Context->dbh;
 #  	my ($error, $codMsg, $paraMens);
 ## FIXME falta verificar info antes de dar de alta al borrower
-  	#my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
+  	my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
 	my ($error,$codMsg,$paraMens);
 
 	if(!$error){

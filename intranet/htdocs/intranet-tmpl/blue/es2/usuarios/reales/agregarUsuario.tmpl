@@ -175,9 +175,7 @@ $(document).ready(function() {
 		<td width="15%">&nbsp;</td>
 	 	<td width="35%" class="inputFontNormal" align="left">
 	 		<b>Documento (solo digitos)*</b><br>
-                	<select  class="inputFontNormal" id="documenttype" size=1><!-- TMPL_LOOP NAME=documentloop -->
-                 		<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=document --><!-- /TMPL_LOOP -->
-                	</select>
+                	<!-- TMPL_VAR NAME=document -->
 			<input id="documentnumber" class="inputFontNormal" type=text size=41 value="<!-- TMPL_VAR NAME=documentnumber -->">
 		</td>
 	 	<td width="35%" class="inputFontNormal" align="left">

@@ -1084,61 +1084,103 @@ sub validateString{
 
 
 #********************************************************Generacion de Combos****************************************************
-
+#GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboCategorias{
 
+	my ($selectedCategory) = @_;
+	my($catDefault);
+	
+	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR LA CATEGORIA ASIGNADA, SINO SE TOMA 'DO'
+	if ($selectedCategory ne ""){
+		$catDefault= $selectedCategory;
+	}
+	else
+	{
+		$catDefault= 'DO';
+	}
 	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 
-	my $catcodepopup = CGI::popup_menu(
+	my $catcodepopup = CGI::scrolling_list(
 						-name=>'categorycode',
 						-id => 'categorycode',
 						-values=>$categories,
-						-labels=>$labels
+						-defaults=>$catDefault,
+						-labels=>$labels,
+						-size =>1
 				);
 
 	return $catcodepopup;
 }
 
-
+#GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboTipoDeDoc {
 
 	my ($tipoActual)=@_;
-
-	my @documents = &C4::AR::Referencias::obtenerTiposDeDocumentos();
-        my @documentdata;
-	while (@documents) {
-		my $doc = shift @documents;
-		my %row = ('document' => $doc);
-
- 		if ($tipoActual eq $doc) {
- 			$row{'selected'}=' selected';
- 		} else {
- 			$row{'selected'}='';
- 		}
-
-		push(@documentdata, \%row);
+	my ($docDefault);
+	my @select_doc;
+	my %select_docs;
+	my @docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
+	
+	foreach my $doc (@docs) {
+		push @select_doc, $doc;
+		$select_docs{$doc} = $doc;
 	}
 
-	return \@documentdata;
+	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR TIPO DE DOC. ASIGNADO, SINO SE TOMA 'DNI'
+	if ($tipoActual ne ""){
+		$docDefault= $tipoActual;
+	}
+	else
+	{
+		$docDefault= 'DNI';
+	}
+
+	
+
+	my $documents=CGI::scrolling_list( 	-name     => 'documenttype',
+						-id => 'documenttype',
+						-values   => \@select_doc,
+						-defaults  => $docDefault, 
+						-labels   => \%select_docs,
+						-size     => 1,
+						-multiple => 0 
+				);
+
+	return $documents; 
 }
 
+
+#GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboDeBranches {
+	my ($branchCode) = @_;
 	my @branches;
 	my @select_branch;
 	my %select_branches;
 	my $branches=C4::AR::Busquedas::getBranches();
+	
 	foreach my $branch (keys %$branches) {
 		push @select_branch, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
+	my $branchdefecto;
+	
 
-	my $branchdefecto= C4::Context->preference("defaultbranch");
-	#hasta aca y la linea adentro del pasaje por parametros a la CGIbranch
+	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR EL BRANCH ASIGNADO, SINO SE TOMA LA DEFUALT 
+# 	DEL SISTEMA
+	if ($branchCode ne ""){
+		$branchdefecto= $branchCode;
+	}
+	else
+	{
+		$branchdefecto= C4::Context->preference("defaultbranch");
+	}
+
+	
 
 	my $CGIbranch=CGI::scrolling_list( 	-name     => 'branchcode',
 						-id => 'branchcode',
 						-values   => \@select_branch,
-						-defaults  => $branchdefecto, #tambien agregado para que funcione
+						-defaults  => $branchdefecto, 
 						-labels   => \%select_branches,
 						-size     => 1,
 						-multiple => 0 

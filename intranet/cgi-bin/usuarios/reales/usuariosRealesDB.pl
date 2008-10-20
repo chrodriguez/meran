@@ -207,17 +207,17 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $datosBorrower_hashref= &C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
 
 	#se genera el combo de categorias de usuario
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($datosBorrower_hashref->{'categorycode'});
 	
 	#se genera el combo de tipos de documento
-	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
+	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($datosBorrower_hashref->{'documenttype'});
 
 	#se genera el combo de las bibliotecas
-	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
+	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches($datosBorrower_hashref->{'branchcode'});
 
 	$template->param(	
 
-				documentloop    => $comboDeTipoDeDoc,
+				document    => $comboDeTipoDeDoc,
 				catcodepopup	=> $comboDeCategorias,
 				CGIbranch 	=> $comboDeBranches,
 		
