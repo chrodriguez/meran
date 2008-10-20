@@ -137,7 +137,10 @@ $(document).ready(function() {
 	<br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
 	<tr valign=middle class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</td>
+
 		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
 		<td   width="65%" ALIGN=RIGHT>*
 			<input type="radio" name="sex" value="F" <!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
@@ -145,7 +148,10 @@ $(document).ready(function() {
 			&nbsp; &nbsp;  Fecha de nacimiento (<!-- TMPL_VAR NAME=dateformat -->)
 			<input class="inputFontNormal" type=text id="dateofbirth" size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
-		<td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+
+		<td width="1%" valign="top" align="right">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</td>
 	</tr>
 </table>
 
@@ -216,7 +222,7 @@ $(document).ready(function() {
 	<!-- TMPL_IF name="course" -->
 	<tr>
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont"type="checkbox" id="usercourse" 
+			<input  class="inputFontFont" type="checkbox" id="usercourse" 
 				<!-- TMPL_IF NAME=usercourse --> 
 					checked 
 			<!-- /TMPL_IF -->>

@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-# use Date::Manip;
-# use C4::Date;
+
 
 	my $input = new CGI;
 	

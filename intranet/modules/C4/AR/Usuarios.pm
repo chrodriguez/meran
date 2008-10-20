@@ -460,8 +460,6 @@ sub addBorrower {
 		$sth3->execute();
 		$sth3->finish;
 	}
-	
-# 	return ($data->{'borrowernumber'});
 }
 
 sub t_updateBorrower {
@@ -511,31 +509,29 @@ sub updateBorrower {
 	my $dbh = C4::Context->dbh;
 
 	my $query="	UPDATE borrowers SET 
-			title=?,expiry=?,
-			sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
-			firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
-			textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
-			phoneday=?,categorycode=?,city=?,area=?,phone=?,
-			borrowernotes=?,altphone=?,surname=?,initials=?,physstreet=?,
-			ethnicity=?,gonenoaddress=?,lost=?,debarred=?,
-			branchcode =?,zipcode =?,homezipcode=?,
-			documenttype =?,documentnumber=?,changepassword=?,studentnumber=?
+			title=?,expiry=?,sex=?,ethnotes=?,streetaddress=?,
+			faxnumber=?,firstname=?,altnotes=?,dateofbirth=?,
+			contactname=?,emailaddress=?,textmessaging=?,dateenrolled=?,
+			streetcity=?,altrelationship=?,othernames=?,phoneday=?,
+			categorycode=?,city=?,area=?,phone=?,borrowernotes=?,
+			altphone=?,surname=?,initials=?,physstreet=?,
+			ethnicity=?,gonenoaddress=?,lost=?,debarred=?,branchcode =?,
+			zipcode =?,homezipcode=?,documenttype =?,documentnumber=?,
+			changepassword=?,studentnumber=?
 	  		WHERE borrowernumber=? ";
 
 	my $sth=$dbh->prepare($query);
 
 	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
 	
-	$sth->execute(		$params->{'title'},$params->{'expiry'},
-				$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
-				$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},
-				$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},
-				$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},
-				$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},
-				$params->{'surname'},$params->{'initials'},$params->{'physstreet'},$params->{'ethnicity'},$params->{'gna'},
-				$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
-				$params->{'documenttype'},$params->{'documentnumber'},$params->{'updatepassword'},$params->{'studentnumber'},
-				$params->{'borrowernumber'}
+	$sth->execute(		$params->{'title'},$params->{'expiry'},$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},
+				$params->{'faxnumber'},$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},
+				$params->{'contactname'},$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},
+				$params->{'streetcity'},$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},
+				$params->{'categorycode'},$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},
+				$params->{'altphone'},$params->{'surname'},$params->{'initials'},$params->{'physstreet'},
+				$params->{'ethnicity'},$params->{'gonenoaddress'},$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},$params->{'documenttype'},$params->{'documentnumber'},
+				$params->{'updatepassword'},$params->{'studentnumber'},$params->{'borrowernumber'}
 	);
 	
 	$sth->finish;

@@ -12,6 +12,7 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $dateformat = C4::Date::get_date_format();
 
 =item
 Aca se maneja el cambio de la password para el usuario
@@ -241,9 +242,9 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 				dateenrolled	=> $datosBorrower_hashref->{'dateenrolled'},
 				expiry		=> $datosBorrower_hashref->{'expiry'},
 				cardnumber	=> $datosBorrower_hashref->{'cardnumber'},
-				dateofbirth	=> $datosBorrower_hashref->{'dateofbirth'},
+ 				dateofbirth	=> C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat),
 				addBorrower	=> 0,
-# 				dateformat      => display_date_format($dateformat),
+ 				dateformat      => C4::Date::display_date_format($dateformat),
 		);
 
  	print $input->header;
@@ -267,13 +268,10 @@ if($tipoAccion eq "DATOS_USUARIO"){
 				});
 	
 	my $bornum= $obj->{'borrowernumber'};
-# 	my $completo=$input->param('completo');
-# 	my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 	
 	my $data=C4::AR::Usuarios::getBorrowerInfo($bornum);
 	$data->{'updatepassword'}= $data->{'changepassword'};
 	
-	my $dateformat = C4::Date::get_date_format();
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
 		$data->{'course'}=1;
