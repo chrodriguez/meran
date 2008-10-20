@@ -9,6 +9,10 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
+<script src="/intranet-tmpl/blue/es2/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/es2/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+
+
 <script language="javascript" type="text/javascript">
 
 // FIXME FALTA VALIDAD EN EL CLIENTE
@@ -78,6 +82,9 @@ $(document).ready(function() {
 		
 	CrearAutocomplete('city');
 	CrearAutocomplete('dstreetcity');
+
+// 	$('#dateofbirth2').datepicker();
+ 	$('#dateofbirth').datepicker({rangeSelect: true, firstDay: 1});
 });
 
 </script>
