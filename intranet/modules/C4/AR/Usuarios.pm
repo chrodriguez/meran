@@ -412,11 +412,10 @@ sub verificarDatosBorrower{
 
 sub addBorrower {
 
-	my ($data)=@_;
-
+	my ($params)=@_;
+	my $dateformat = C4::Date::get_date_format();
 	my $dbh = C4::Context->dbh;
-	
-# 	$data->{'borrowernumber'}=&NewBorrowerNumber();
+
 	
 	my $query="	INSERT INTO borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 			firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
@@ -427,17 +426,18 @@ sub addBorrower {
 	
 	my $sth=$dbh->prepare($query);
 	
-	$sth->execute(	$data->{'title'},$data->{'expiry'},$data->{'cardnumber'},
-			$data->{'sex'},$data->{'ethnotes'},$data->{'streetaddress'},$data->{'faxnumber'},
-			$data->{'firstname'},$data->{'altnotes'},$data->{'dateofbirth'},$data->{'contactname'},$data->{'emailaddress'},
-			$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
-			$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
-			$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
-			$data->{'ethnicity'},$data->{'physstreet'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
-			$data->{'documenttype'},$data->{'documentnumber'},
+	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
+
+	$sth->execute(	$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
+			$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
+			$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
+			$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
+			$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
+			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
+			$params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
+			$params->{'documenttype'},$params->{'documentnumber'},
 # 			$data->{'updatepassword'},
-			1,
-			$data->{'studentnumber'}
+			1,$params->{'studentnumber'}
 		);
 
 	$sth->finish;
@@ -445,7 +445,7 @@ sub addBorrower {
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse"))  {
 		my $sql2="";
-		if ($data->{'usercourse'} eq 1){
+		if ($params->{'usercourse'} eq 1){
 			$sql2= "UPDATE borrowers SET usercourse=NOW() WHERE borrowernumber=? AND usercourse IS NULL ; ";
 		}
 		else{
@@ -502,6 +502,7 @@ sub t_updateBorrower {
 sub updateBorrower {
 	my ($params)=@_;
 
+	my $dateformat = C4::Date::get_date_format();
 	my $dbh = C4::Context->dbh;
 
 	my $query="	UPDATE borrowers SET 
@@ -517,6 +518,8 @@ sub updateBorrower {
 	  		WHERE borrowernumber=? ";
 
 	my $sth=$dbh->prepare($query);
+
+	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
 	
 	$sth->execute(		$params->{'title'},$params->{'expiry'},
 				$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
