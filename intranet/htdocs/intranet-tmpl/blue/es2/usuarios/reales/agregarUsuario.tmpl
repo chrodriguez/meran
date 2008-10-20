@@ -43,8 +43,9 @@ function agregarUsuario(){
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
 	objAH.cardnumber= $('#cardnumber').val();
-	objAH.sex= $('#sex').val();
+	objAH.sex= $("input[@name=sex]:checked").val();
 	objAH.streetaddress= $('#streetaddress').val();
+	objAH.address= $('#address').val();
 	objAH.firstname= $('#firstname').val();
 	objAH.dateofbirth= $('#dateofbirth').val();
 	objAH.emailaddress= $('#emailaddress').val();
@@ -261,7 +262,7 @@ $(document).ready(function() {
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 	  		<b>Direcci&oacute;n*</b><br>
-	  		<input id="5" class="inputFontNormal" type=text id="address" size=50 value="<!-- TMPL_VAR NAME=address -->">
+	  		<input class="inputFontNormal" type=text id="physstreet" size=50 value="<!-- TMPL_VAR NAME='physstreet' -->">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
 	 		<b>C&oacute;digo Postal</b><br>

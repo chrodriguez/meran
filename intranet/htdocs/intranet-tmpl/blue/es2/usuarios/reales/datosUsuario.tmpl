@@ -255,7 +255,8 @@ function guardarModificacioUsuario(){
 	objAH.debug= true;
 	objAH.borrowernumber= usuario.ID;
 	objAH.cardnumber= $('#cardnumber').val();
-	objAH.sex= $('#sex').val();
+	objAH.sex= $("input[@name=sex]:checked").val();
+	objAH.physstreet= $('#physstreet').val();
 	objAH.streetaddress= $('#streetaddress').val();
 	objAH.firstname= $('#firstname').val();
 	objAH.dateofbirth= $('#dateofbirth').val();

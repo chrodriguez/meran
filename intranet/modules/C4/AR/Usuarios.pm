@@ -433,7 +433,7 @@ sub addBorrower {
 			$data->{'textmessaging'},$data->{'joining'},$data->{'streetcity'},$data->{'altrelationship'},$data->{'othernames'},
 			$data->{'phoneday'},$data->{'categorycode'},$data->{'city'},$data->{'area'},$data->{'phone'},
 			$data->{'borrowernotes'},$data->{'altphone'},$data->{'surname'},$data->{'initials'},
-			$data->{'ethnicity'},$data->{'streetaddress'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
+			$data->{'ethnicity'},$data->{'physstreet'},$data->{'branchcode'},$data->{'zipcode'},$data->{'homezipcode'},
 			$data->{'documenttype'},$data->{'documentnumber'},
 # 			$data->{'updatepassword'},
 			1,
@@ -505,7 +505,7 @@ sub updateBorrower {
 	my $dbh = C4::Context->dbh;
 
 	my $query="	UPDATE borrowers SET 
-			title=?,expiry=?,cardnumber=?,
+			title=?,expiry=?,
 			sex=?,ethnotes=?,streetaddress=?,faxnumber=?,
 			firstname=?,altnotes=?,dateofbirth=?,contactname=?,emailaddress=?,
 			textmessaging=?,dateenrolled=?,streetcity=?,altrelationship=?,othernames=?,
@@ -518,13 +518,13 @@ sub updateBorrower {
 
 	my $sth=$dbh->prepare($query);
 	
-	$sth->execute(		$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
-				$params->{'sex'},$params->{'ethnotes'},$params->{'address'},$params->{'faxnumber'},
+	$sth->execute(		$params->{'title'},$params->{'expiry'},
+				$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
 				$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},
 				$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},
 				$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},
 				$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},
-				$params->{'surname'},$params->{'initials'},$params->{'streetaddress'},$params->{'ethnicity'},$params->{'gna'},
+				$params->{'surname'},$params->{'initials'},$params->{'physstreet'},$params->{'ethnicity'},$params->{'gna'},
 				$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
 				$params->{'documenttype'},$params->{'documentnumber'},$params->{'updatepassword'},$params->{'studentnumber'},
 				$params->{'borrowernumber'}
