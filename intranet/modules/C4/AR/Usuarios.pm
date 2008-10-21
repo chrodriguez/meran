@@ -28,7 +28,6 @@ use vars qw(@EXPORT @ISA);
 	&updateOpacBorrower
 	&cambiarPassword
 	&checkUserData
-
 	&t_cambiarPassword
 	&t_cambiarPermisos
 	&t_addBorrower
@@ -363,6 +362,7 @@ sub verificarDatosBorrower{
 	my $error=0;
 	my $codError = '000';
 	my $actionType = $data->{'actionType'};
+	my $checkStatus;
 
 	my $emailAddress = $data->{'emailaddress'};
 	
@@ -380,6 +380,8 @@ sub verificarDatosBorrower{
 			$error=1;
 		}
 	}
+
+	#### FIN NUEVO BORROWER's CHECKS
 	my $surname = $data->{'surname'};
 	if (!($error) && (!(&C4::AR::Utilidades::validateString($surname)))){
 		$codError = 'U334';
@@ -392,8 +394,10 @@ sub verificarDatosBorrower{
 		$error=1;
 	}
 
+	
 	my $documentnumber = $data->{'documentnumber'};
-	if (!($error) && (!(&C4::AR::Utilidades::validateString($documentnumber)))){
+	$checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
+	if (!($error) && ( $checkStatus == 0)){
 		$codError = 'U336';
 		$error=1;
 	}
@@ -404,9 +408,6 @@ sub verificarDatosBorrower{
 		$error=1;
 	}
 
-	#################### VER EN EL TPL, QUE EL INPUT DIRECCION TIENE COMO ID=5, COMO LLEGA A USUARIO.PL????
-
-	
 	
 	return ($error,$codError);
 }
@@ -466,10 +467,10 @@ sub t_updateBorrower {
 	my($params)=@_;
 	$params->{'actionType'} = "update";
 	my $dbh = C4::Context->dbh;
+	my $paraMens;
 #  	my ($error, $codMsg, $paraMens);
 ## FIXME falta verificar info antes de dar de alta al borrower
-  	my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
-	my ($error,$codMsg,$paraMens);
+  	my ($error,$codMsg)= &verificarDatosBorrower($params);
 
 	if(!$error){
 	#No hay error
@@ -1023,16 +1024,10 @@ sub checkUserData{
 		$ok=1;
 	}
 	
-	if (C4::AR::Utilidades::validateString($data->{'documentnumber'}) ){
+	if (C4::AR::Validator::isValidDocument($data->{'documenttype'},$data->{'documentnumber'}) ){
 		push @errors, "documentnumber";
 		$ok=1;
 	}
-   	my $ndc= ($data->{'documentnumber'} =~tr/0-9//cd); #Count the non digits characters of the documentnumber 
-	my $ndc;
-	if ($ndc){
-		push @errors, "bad_documentnumber";
-		$ok=1;
-	}	
 	
  	return ($ok,@errors);
 
