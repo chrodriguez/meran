@@ -148,7 +148,6 @@ Se elimina el usuario
 if($tipoAccion eq "AGREGAR_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
-# 	my ($error,$codMsg,$message);
 
 	#se arma el mensaje para informar al usuario
 	my %infoOperacion = (
@@ -171,7 +170,6 @@ Se guarda la modificacion los datos del usuario
 if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_updateBorrower($obj);
-# 	my ($error,$codMsg,$message);
 
 	#se arma el mensaje para informar al usuario
 	my %infoOperacion = (
@@ -218,18 +216,20 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 
 	$template->param(	
 
-				document    => $comboDeTipoDeDoc,
+				document    	=> $comboDeTipoDeDoc,
 				catcodepopup	=> $comboDeCategorias,
 				CGIbranch 	=> $comboDeBranches,
 		
+				changepassword	=> $datosBorrower_hashref->{'changepassword'},
 				type		=> $datosBorrower_hashref->{'type'},
-				address         => $datosBorrower_hashref->{'adress'},
+# 				address         => $datosBorrower_hashref->{'address'}, #addres parece q no se usa
+				physstreet      => $datosBorrower_hashref->{'physstreet'},
 				firstname       => $datosBorrower_hashref->{'firstname'},
 				surname         => $datosBorrower_hashref->{'surname'},
 				streetaddress   => $datosBorrower_hashref->{'streetaddress'},
 				zipcode 	=> $datosBorrower_hashref->{'zipcode'},
-				streetcity      => $datosBorrower_hashref->{'streetcity'},
-				dstreetcity     => $datosBorrower_hashref->{'dstreetcity'},
+#  				streetcity      => $datosBorrower_hashref->{'streetcity'},
+				dstreetcity     => $datosBorrower_hashref->{'streetcity'},
 				homezipcode 	=> $datosBorrower_hashref->{'homezipcode'},
 				city		=> $datosBorrower_hashref->{'city'},
 				dcity           => $datosBorrower_hashref->{'dcity'},
@@ -270,7 +270,7 @@ if($tipoAccion eq "DATOS_USUARIO"){
 	my $bornum= $obj->{'borrowernumber'};
 	
 	my $data=C4::AR::Usuarios::getBorrowerInfo($bornum);
-	$data->{'updatepassword'}= $data->{'changepassword'};
+	$data->{'changepassword'}= $data->{'changepassword'};#creo q no es necesario
 	
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){

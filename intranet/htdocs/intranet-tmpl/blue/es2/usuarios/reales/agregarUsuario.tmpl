@@ -45,12 +45,12 @@ function agregarUsuario(){
 	objAH.cardnumber= $('#cardnumber').val();
 	objAH.sex= $("input[@name=sex]:checked").val();
 	objAH.streetaddress= $('#streetaddress').val();
-	objAH.address= $('#address').val();
+	objAH.physstreet= $('#physstreet').val();
 	objAH.firstname= $('#firstname').val();
 	objAH.dateofbirth= $('#dateofbirth').val();
 	objAH.emailaddress= $('#emailaddress').val();
 	objAH.dateenrolled= $('#dateenrolled').val();
-	objAH.dstreetcity= $('#dstreetcity').val();
+	objAH.streetcity= $('#dstreetcity').val();
 	objAH.altrelationship= $('#altrelationship').val();
 	objAH.othernames= $('#othernames').val();
 	objAH.phoneday= $('#phoneday').val();
@@ -66,7 +66,7 @@ function agregarUsuario(){
 	objAH.documenttype= $('#documenttype').val();
 	objAH.documentnumber= $('#documentnumber').val();
 	objAH.studentnumber= $('#studentnumber').val();
-	objAH.updatepassword= $('#updatepassword').val();
+	objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
 	objAH.tipoAccion= 'AGREGAR_USUARIO';
  	objAH.sendToServer();
 
@@ -196,7 +196,11 @@ $(document).ready(function() {
 <table width=100%>
 	<tr valign=top >
 		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont" type="checkbox" id="updatepassword" <!-- TMPL_IF NAME=updatepassword --> checked <!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente</td>
+			<input  class="inputFontFont" type="checkbox" id="changepassword" 
+				<!-- TMPL_IF NAME=changepassword --> 
+					checked 
+				<!-- /TMPL_IF -->>&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente
+		</td>
 		<td>
 			<!-- TMPL_IF name="ethcatpopup" -->
 				<select class="inputFontNormal" id="ethnicity" size=1>
@@ -281,7 +285,7 @@ $(document).ready(function() {
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad*</b><br>
-			<input class="wickEnabled" class="inputFontNormal" type=text id="city" value="<!-- TMPL_VAR NAME='city' -->" size='50' >
+			<input class="inputFontNormal" type=text id="city" value="<!-- TMPL_VAR NAME='city' -->" size='50' >
 		</td>
 	</tr>
 	<tr>
@@ -305,9 +309,9 @@ $(document).ready(function() {
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
 			<b>Ciudad de origen</b><br>
-			<input 	class="wickEnabled" class="inputFontNormal" type=text id="dstreetcity" value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
+			<input 	class="inputFontNormal" type=text id="dstreetcity" value="<!-- TMPL_VAR name='dstreetcity' -->" size='50'>
 
-          		<input class="inputFontNormal" type=hidden id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->">
+<!--           		<input class="inputFontNormal" type=hidden id="streetcity" value="<!-- TMPL_VAR name='streetcity' -->"> -->
 		</td>
         </tr>
  	<tr>

@@ -120,25 +120,25 @@ sub sepuedeeliminar{
     return (1,1,1,1);
   }
 }
-
-sub checkDocument{
-  my ($type,$nro,$tipo,$skipCardnumber)=@_;
-  # skipCardnumber is the id of a borrower that must be skipped in this search
-  my $dbh = C4::Context->dbh;
-  my $query= "Select * from $tipo where documentnumber='$nro' and documenttype='$type'";
-  if ($skipCardnumber) {
-    $query.=" and cardnumber <> '$skipCardnumber'";
-  }
-  my $sth=$dbh->prepare($query);
-  $sth->execute();
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  if ($data) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
+# 
+# sub checkDocument{
+#   my ($type,$nro,$tipo,$skipCardnumber)=@_;
+#   # skipCardnumber is the id of a borrower that must be skipped in this search
+#   my $dbh = C4::Context->dbh;
+#   my $query= "Select * from $tipo where documentnumber='$nro' and documenttype='$type'";
+#   if ($skipCardnumber) {
+#     $query.=" and cardnumber <> '$skipCardnumber'";
+#   }
+#   my $sth=$dbh->prepare($query);
+#   $sth->execute();
+#   my $data=$sth->fetchrow_hashref;
+#   $sth->finish;
+#   if ($data) {
+#     return 1;
+#   } else {
+#     return 0;
+#   }
+# }
 
 
 ##############################################################################################################

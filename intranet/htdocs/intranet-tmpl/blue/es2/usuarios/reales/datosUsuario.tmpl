@@ -278,7 +278,7 @@ function guardarModificacioUsuario(){
 	objAH.documenttype= $('#documenttype').val();
 	objAH.documentnumber= $('#documentnumber').val();
 	objAH.studentnumber= $('#studentnumber').val();
-	objAH.updatepassword= $('#updatepassword').val();
+	objAH.changepassword=  ( $('#changepassword').attr('checked') )?1:0;
 	objAH.tipoAccion= 'GUARDAR_MODIFICACION_USUARIO';
  	objAH.sendToServer();
 

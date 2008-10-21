@@ -440,8 +440,7 @@ sub addBorrower {
 			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
 			$params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
 			$params->{'documenttype'},$params->{'documentnumber'},
-# 			$data->{'updatepassword'},
-			1,$params->{'studentnumber'}
+ 			$params->{'changepassword'},$params->{'studentnumber'}
 		);
 
 	$sth->finish;
@@ -527,11 +526,11 @@ sub updateBorrower {
 	$sth->execute(		$params->{'title'},$params->{'expiry'},$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},
 				$params->{'faxnumber'},$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},
 				$params->{'contactname'},$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},
-				$params->{'streetcity'},$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},
+				$params->{'dstreetcity'},$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},
 				$params->{'categorycode'},$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},
 				$params->{'altphone'},$params->{'surname'},$params->{'initials'},$params->{'physstreet'},
 				$params->{'ethnicity'},$params->{'gonenoaddress'},$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},$params->{'documenttype'},$params->{'documentnumber'},
-				$params->{'updatepassword'},$params->{'studentnumber'},$params->{'borrowernumber'}
+				$params->{'changepassword'},$params->{'studentnumber'},$params->{'borrowernumber'}
 	);
 	
 	$sth->finish;
