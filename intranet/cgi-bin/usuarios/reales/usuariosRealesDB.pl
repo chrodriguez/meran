@@ -43,7 +43,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 =item
 Aca se maneja el cambio de permisos para el usuario
 =cut
-elseif($tipoAccion eq "GUARDAR_PERMISOS"){
+elsif($tipoAccion eq "GUARDAR_PERMISOS"){
 
 	my %params;
 	$params{'usuario'}= $obj->{'usuario'};
@@ -69,7 +69,7 @@ elseif($tipoAccion eq "GUARDAR_PERMISOS"){
 =item
 Se buscan los permisos del usuario y se muestran por pantalla
 =cut
-elseif($tipoAccion eq "MOSTRAR_PERMISOS"){
+elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
@@ -119,7 +119,7 @@ elseif($tipoAccion eq "MOSTRAR_PERMISOS"){
 =item
 Se elimina el usuario
 =cut
-elseif($tipoAccion eq "ELIMINAR_USUARIO"){
+elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
 	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
@@ -146,7 +146,7 @@ elseif($tipoAccion eq "ELIMINAR_USUARIO"){
 =item
 Se elimina el usuario
 =cut
-elseif($tipoAccion eq "AGREGAR_USUARIO"){
+elsif($tipoAccion eq "AGREGAR_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
 
@@ -168,7 +168,7 @@ elseif($tipoAccion eq "AGREGAR_USUARIO"){
 =item
 Se guarda la modificacion los datos del usuario
 =cut
-elseif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
+elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_updateBorrower($obj);
 
@@ -190,7 +190,7 @@ elseif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 =item
 Se genra la ventana para modificar los datos del usuario
 =cut
-elseif($tipoAccion eq "MODIFICAR_USUARIO"){
+elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
 	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
 						template_name => "usuarios/reales/agregarUsuario.tmpl",
@@ -254,7 +254,7 @@ elseif($tipoAccion eq "MODIFICAR_USUARIO"){
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 
-elseif($tipoAccion eq "DATOS_USUARIO"){
+elsif($tipoAccion eq "DATOS_USUARIO"){
 
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
@@ -327,13 +327,13 @@ elseif($tipoAccion eq "DATOS_USUARIO"){
 }
 
 
-elseif($tipoAccion eq "SUBIR_FOTO"){
-	my $bornum= $obj->{'usuario'};
-	my $filepath= $obj->('picture');
-	my $msg= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);
+elsif($tipoAccion eq "SUBIR_FOTO"){
+	my $bornum= $obj->{'borrowernumber'};
+	my $filepath= $obj->{'picture'};
+ 	my $msg= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);
 }	
 
-elseif($tipoAccion eq "ELIMINAR_FOTO"){
+elsif($tipoAccion eq "ELIMINAR_FOTO"){
 	my $foto_name= $obj->{'foto_name'};
 	my $msg= &C4::AR::UploadFile::deletePhoto($foto_name);
 }	

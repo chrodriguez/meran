@@ -31,8 +31,7 @@
 
 <div class="divDatosUsuario">
 	<!-- TMPL_IF NAME="foto_name" -->
-<!-- 		<img border="0" width="96" height="96"  src="<!-- TMPL_VAR NAME='foto_name' -->"><br> -->
-		<img width="96px" height="96px" border="0" src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/es2/pictures/<!-- TMPL_VAR NAME='foto_name' -->">
+		<img width="96px" height="96px" border="0" src=" <!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/es2/pictures/<!-- TMPL_VAR NAME='foto_name' -->"><br>
 	<!-- /TMPL_IF -->
 		
 	Documento:<b> <!-- TMPL_VAR NAME="documenttype" --> &nbsp; <!-- TMPL_VAR NAME="documentnumber" --></b><br>
@@ -125,7 +124,6 @@
 	<!-- TMPL_ELSE -->
 	<li>
 		<form name="formCarac2">
-			<!--<a href="#" onClick="formCarac2.submit()" >-->
 			<a class="click" onClick="modificarDatosDeUsuario()">
                         <img 	alt="Modificar Caracter&iacute;stica" 
 				src="<!-- TMPL_VAR NAME='themelang' -->/images/modificarcaracteristicas.png" border="0"">
@@ -193,21 +191,26 @@
 
 	<!-- TMPL_IF NAME="foto_name" -->
 	<li>
-		<form action=/cgi-bin/koha/usuarios/upload.pl method=post>
-			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=submit class="button" value="Eliminar foto" align=center>
-		</form>
+<!-- 		<form action=/cgi-bin/koha/usuarios/upload.pl method=post> -->
+<!-- 			<input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->> -->
+<!-- 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->> -->
+			<input 	type=button class="button" value="Eliminar foto" align=center 
+				onClick="eliminarFoto('<!-- TMPL_VAR NAME=foto_name -->')">
+<!-- 		</form> -->
 	</li>
 	<!-- TMPL_ELSE -->
 	<li>
- 		<form  	id="uploadForm" action=/cgi-bin/koha/usuarios/upload.pl method=post 
-			enctype="multipart/form-data" >
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+	<iframe if="MyForm"></iframe> 
+	
+  		<form  	id="uploadForm" target="MyForm" action=/cgi-bin/koha/usuarios/upload.pl method=post enctype="multipart/form-data" >
+ 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+			<!--<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
+				align=center valign="center" onClick="subirFoto()">-->
 			<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
 				align=center valign="center">
 			<input id="picture" type=file name="picture">
- 		</form>
+  		</form>
+	
 	</li>
 	 <!-- /TMPL_IF -->
 </ul>
