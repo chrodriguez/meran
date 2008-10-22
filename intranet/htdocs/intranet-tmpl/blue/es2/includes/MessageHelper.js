@@ -23,7 +23,6 @@ function setMessage(Message){
 //Message.message, mensaje para el usuario
 //Message.error, hay error (error=1)
 //Message.codMsg, codigo del mensaje
-	
 	$('#mensajes').html('');
 	$('#mensajes').append(Message.message + '<br>');
 	scrollTo('mensajes');

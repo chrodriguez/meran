@@ -29,7 +29,7 @@ function _WinAddDiv(objWin){
 
 	$('#ventanaContenido').html(objWin.html);	
 	$('#ventana').draggable({opacity: 0.7777});
-	$('#cerrar').click( function (){objWin.hide()} );
+	$('#cerrar').click( function (){objWin.close()} );
 
 }
 
@@ -44,12 +44,12 @@ function WindowHelper(){
 	this.debug= false;	
 	this.titulo= '';
 
-	this.show= function(){
+	this.open= function(){
 			//se muestra la ventana
 			$('#ventana').show();
 	}//end show
 
-	this.hide= function(){
+	this.close= function(){
 			//se oculta la ventana
 			$('#ventana').hide();
 			$('#dimmer').hide();
@@ -58,7 +58,7 @@ function WindowHelper(){
 	this.create= function(){
 			//crea una ventana
 			_WinInit(this);
-			this.show();
+			this.open();
 // 			alert('heignt: ' + $('#ventanaContenido').innerHeight() + 'width: ' + $('#ventanaContenido').innerWidth());
 	}//end create
 

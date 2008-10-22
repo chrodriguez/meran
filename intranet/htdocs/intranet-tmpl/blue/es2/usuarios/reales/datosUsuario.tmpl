@@ -140,11 +140,9 @@ $(document).ready(function() {
 	detalleSanciones(usuario.ID);
 
 	$("#historialPrestamosToggle").toggle(	function(){
-// 							$(this).addClass("selected");
 							$('#historialPrestamos').slideUp('slow');
 						},
 						function(){
-// 							$(this).removeClass("selected");
 							$('#historialPrestamos').slideDown('slow');
 						}
 	);
@@ -199,7 +197,7 @@ function guardarPermisos(){
 
 function updateGuardarPermisos(responseText){
 
-	closeWindowPermisos();	
+	vModificarPermisos.close();
 	var Message=JSONstring.toObject(responseText);
 	setMessage(Message);
 }
@@ -287,16 +285,16 @@ function guardarModificacioUsuario(){
 function updateGuardarModificacioUsuario(responseText){
 	var Message=JSONstring.toObject(responseText);
 	setMessage(Message);
-	vDatosUsuario.hide();
+	vDatosUsuario.close();
 	datosDeUsuario();
 }
 
 function datosDeUsuario(){
 	objAH=new AjaxHelper(updateDatosDeUsuario);
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug= true;
 	objAH.borrowernumber= usuario.ID;
-	objAH.tipoAccion= 'DATOS_USUARIO';
+// // // // // // 	objAH.tipoAccion= 'DATOS_USUARIO';
 	objAH.sendToServer();
 }
 
@@ -305,7 +303,6 @@ function updateDatosDeUsuario(responseText){
 }
 //*********************************************Fin***Modificar Datos Usuario***************************************
 </script>
-
 <!-- Mensajes de Informacion al Usuario -->
 <div class="tableMsgUser">
 	<font class="fontMsgUser"><b>
