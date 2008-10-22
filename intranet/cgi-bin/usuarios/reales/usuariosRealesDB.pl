@@ -256,7 +256,7 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 
 
 
-if($tipoAccion eq "DATOS_USUARIOaaa"){
+if($tipoAccion eq "DATOS_USUARIOaa"){
 
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
