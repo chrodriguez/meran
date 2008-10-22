@@ -1,6 +1,24 @@
 package C4::AR::Validator;
 
 
+###################################################################################################
+###################################################################################################
+###################################################################################################
+###################################################################################################
+###################################################################################################
+####### Este PM tiene como fin contener todas las funciones que estén dedicadas a validar #########
+# # # 	algún patrón específico sobre un string (generalmente). Si se cree que se puede   #########
+# # # 	contener alguna otra función que valide otro tipo de dato, y ésta ultima se utiliza  ######
+# # # 	en diferentes modulos, se incluye.						       ####
+# # #											      #####	
+# # # 		Autor: Gaspar Rajoy							      #####	
+# # # 											      #####
+###################################################################################################
+###################################################################################################
+###################################################################################################
+###################################################################################################
+###################################################################################################
+
 use strict;
 use C4::AR::Utilidades;
 use C4::AR::Address;
@@ -25,10 +43,9 @@ use vars qw(@EXPORT @ISA);
 
 ################################# FUNCIONES PARA PASSSWORD ########################
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MAYUSCULA 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MAYUSCULA 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+
 sub countUpperChars{
 
 	my($string)=@_;
@@ -45,10 +62,9 @@ sub countUpperChars{
 	return $count;
 }
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MINUSCULA 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES EN MINUSCULA 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+
 sub countLowerChars{
 
 	my($string)=@_;
@@ -65,10 +81,10 @@ sub countLowerChars{
 	return $count;
 }		
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES NUMERICOS 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES NUMERICOS 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+
 sub countNumericChars{
 
 	my($string)=@_;
@@ -86,10 +102,9 @@ sub countNumericChars{
 }
 
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFANUMERICOS 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFANUMERICOS 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
 sub countAlphaNumericChars{
 
 	my($string)=@_;
@@ -111,10 +126,9 @@ sub countAlphaNumericChars{
 	return $count;
 }
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFABETICOS 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES ALFABETICOS 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
 sub countAlphaChars{
 
 	my($string)=@_;
@@ -135,10 +149,10 @@ sub countAlphaChars{
 	return $count;
 }
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE SIMBOLOS 
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+
+# FUNCION QUE CUENTA LA CANTIDAD DE SIMBOLOS 
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+
 sub countSymbolChars{
 
 	my($string)=@_;
@@ -155,10 +169,10 @@ sub countSymbolChars{
 	return $count;
 }
 
-=item
-FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES  
-DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
-=cut
+
+# FUNCION QUE CUENTA LA CANTIDAD DE CARACTERES  
+# DE UN STRING, AL CUAL RECIBE COMO PARAMETRO.
+
 sub checkLength{
 
 	my($string,$min_length)=@_;
@@ -170,10 +184,10 @@ sub checkLength{
 }
 
 
-=item
-FUNCION QUE CHECKEA QUE UN PASSWORD CUMPLA CON TODO LO ANTERIOR,
-ESPECIFICADO SEGUN LA DB.
-=cut
+
+# FUNCION QUE CHECKEA QUE UN PASSWORD CUMPLA CON TODO LO ANTERIOR,
+# ESPECIFICADO SEGUN LA DB.
+
 sub checkPassword{
 
 	my($params)=@_;
@@ -243,15 +257,15 @@ close(A);
 ################################# FUNCIONES PARA MAIL ##################################
 
 
-=item
-FUNCION QUE CHECKEA QUE UNA DIRECCION DE MAIL CUMPLA CON UN PATRON ESTANDAR
-PARA MAIL ADDRESS. RECIBE UN UNICO STRING.
-=cut
+
+# FUNCION QUE CHECKEA QUE UNA DIRECCION DE MAIL CUMPLA CON UN PATRON ESTANDAR
+# PARA MAIL ADDRESS. RECIBE UN UNICO STRING.
+
 sub isValidMail{
 
 	my ($address) = @_;
 	
-	if($address =~ /^[A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{2,4}$/){
+	if($address =~ /^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/){ 
 		return 1;
 	}
 	return 0;
@@ -261,14 +275,15 @@ sub isValidMail{
 ################################# FIN FUNCIONES PARA MAIL ##################################
 
 
-
+# FUNCION QUE VALIDA QUE UN NUMERO DE DOCUMENTO SEA VALIDO; RECIBE POR PARAMETRO EL TIPO Y EL NUMERO (EN ESE ORDEN).
+# PARA LOS QUE NO SON DE TIPO DNI, SE COMPRUEBA SOLO QUE LA LONGITUD EN CARACTERES NUMERICOS SEA IGUAL A LA LONGITUD TOTAL.
 
 sub isValidDocument{
 
 	my($docType,$docNumber) = @_;
 	my($checkResult) = 0;
 	
-	$docType = trim($docType); #POR SI LLEGA CON ESPACIOS
+	$docType = trim($docType);
 	
 	if ($docType eq "DNI"){
 		if (&countNumericChars($docNumber) == 8){

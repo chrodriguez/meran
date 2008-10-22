@@ -47,20 +47,22 @@ my @nombreYextension=split('\.',$filepath);
 
         if (!grep(/$ext/i,@extensiones_permitidas)) {
                 $msg= "Solo se permiten imagenes (".join(", ",@extensiones_permitidas).")";
-        } else {
+        } else 
+	    {
 
-                if (!open(WFD,">$write_file")) {
+                if (!(open(WFD,">$write_file"))) {
                         $msg="Hay un error y el archivo no puede escribirse en el servidor.";
                 }
-
-                while ($bytes_read=read($filepath,$buff,2096)) {
-                        $size += $bytes_read;
-                        binmode WFD;
-                        print WFD $buff;
-                }
-
-                close(WFD);
-        }
+		else	
+		  {
+			while ($bytes_read=read($filepath,$buff,2096)) {
+				$size += $bytes_read;
+				binmode WFD;
+				print WFD $buff;
+			}
+			close(WFD);
+		 }
+          }
   } else {
         $msg= "El nombre del archivo no tiene un formato correcto";
   }
@@ -68,6 +70,4 @@ my @nombreYextension=split('\.',$filepath);
 #Borra el archivo previamente subido
 unlink($picturesDir.'/'.$foto_name);
 }
-return($msg);
-
 }

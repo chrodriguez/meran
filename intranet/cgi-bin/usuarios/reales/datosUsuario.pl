@@ -63,6 +63,8 @@ if (opendir(DIR, $picturesDir)) {
 }
 ####
 
+$foto = $picturesDir."/".$foto;
+
 #### Verifica si hay problemas para subir la foto
 my $msgFoto=$input->param('msg');
 ($msgFoto) || ($msgFoto=0);
