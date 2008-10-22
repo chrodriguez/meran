@@ -3,6 +3,7 @@
 <!-- /TMPL_IF -->
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/usuarios/usuariosReales.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
@@ -36,48 +37,6 @@ function CrearAutocomplete(Id){
 	});
 }
 
-//************************************************Agregar Usuario**********************************************
-function agregarUsuario(){
-
-	objAH=new AjaxHelper(updateAgregarUsuario);
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug= true;
-	objAH.cardnumber= $('#cardnumber').val();
-	objAH.sex= $("input[@name=sex]:checked").val();
-	objAH.streetaddress= $('#streetaddress').val();
-	objAH.physstreet= $('#physstreet').val();
-	objAH.firstname= $('#firstname').val();
-	objAH.dateofbirth= $('#dateofbirth').val();
-	objAH.emailaddress= $('#emailaddress').val();
-	objAH.dateenrolled= $('#dateenrolled').val();
-	objAH.streetcity= $('#dstreetcity').val();
-	objAH.altrelationship= $('#altrelationship').val();
-	objAH.othernames= $('#othernames').val();
-	objAH.phoneday= $('#phoneday').val();
-	objAH.categorycode= $('#categorycode').val();
-	objAH.city= $('#city').val();
-	objAH.phone= $('#phone').val();
-	objAH.borrowernotes= $('#borrowernotes').val();
-	objAH.surname= $('#surname').val();
-	objAH.ethnicity= $('#ethnicity').val();
-	objAH.branchcode= $('#branchcode').val();
-	objAH.zipcode= $('#zipcode').val();
-	objAH.homezipcode= $('#homezipcode').val();
-	objAH.documenttype= $('#documenttype').val();
-	objAH.documentnumber= $('#documentnumber').val();
-	objAH.studentnumber= $('#studentnumber').val();
-	objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
-	objAH.tipoAccion= 'AGREGAR_USUARIO';
- 	objAH.sendToServer();
-
-}
-
-function updateAgregarUsuario(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
-}
-
-//*********************************************Fin***Agregar Usuario*********************************************
 
 $(document).ready(function() {
 		

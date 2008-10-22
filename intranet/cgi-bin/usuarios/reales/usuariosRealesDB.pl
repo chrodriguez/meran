@@ -17,7 +17,7 @@ my $dateformat = C4::Date::get_date_format();
 =item
 Aca se maneja el cambio de la password para el usuario
 =cut
-if($tipoAccion eq "CAMBIAR_PASSWORDaaaa"){
+if($tipoAccion eq "CAMBIAR_PASSWORD"){
 
 	my %params;
 	$params{'usuario'}= $obj->{'usuario'};
@@ -256,7 +256,7 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 
 
 
-if($tipoAccion eq "DATOS_USUARIOaa"){
+if($tipoAccion eq "DATOS_USUARIO"){
 
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
