@@ -6,7 +6,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
 use Date::Manip;
-
+use Cwd;
 my $input=new CGI;
 
 my $obj=$input->param('obj');
@@ -59,6 +59,7 @@ if (opendir(DIR, $picturesDir)) {
 } else {
 	$foto= 0;
 }
+
 ####
 	
 #### Verifica si hay problemas para subir la foto

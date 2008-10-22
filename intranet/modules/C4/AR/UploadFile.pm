@@ -24,50 +24,62 @@ require Exporter;
 use C4::Context;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&uploadPicture);
-
-sub uploadPicture {
-
-my ($bornum,$foto_name,$filepath)=@_;
+@EXPORT=qw(&uploadPhoto,
+	   &deletePhoto);
 
 my $picturesDir= C4::Context->config("picturesdir");
-my $msg='';
-my $bytes_read;
-my $size= 0;
- 
-if (!$foto_name) {
-#Hace el upload de un archivo
-$msg= "Se subi&oacute; la foto con &eacute;xito";
-my @extensiones_permitidas=("bmp","jpg","gif","png");
-my @nombreYextension=split('\.',$filepath);
-  if (scalar(@nombreYextension)==2) { # verifica que el nombre del archivo tenga el punto (.)
-        my $ext= @nombreYextension[1];
-        my $buff='';
-        my $write_file= $picturesDir."/".$bornum.".".$ext;
+sub uploadPhoto{
 
-        if (!grep(/$ext/i,@extensiones_permitidas)) {
-                $msg= "Solo se permiten imagenes (".join(", ",@extensiones_permitidas).")";
-        } else 
-	    {
+	my ($bornum,$filepath)=@_;
+	my $msg='';
+	my $bytes_read;
+	my $size= 0;
 
-                if (!(open(WFD,">$write_file"))) {
-                        $msg="Hay un error y el archivo no puede escribirse en el servidor.";
-                }
-		else	
-		  {
-			while ($bytes_read=read($filepath,$buff,2096)) {
-				$size += $bytes_read;
-				binmode WFD;
-				print WFD $buff;
+	$msg= "Se subi&oacute; la foto con &eacute;xito";
+	my @extensiones_permitidas=("bmp","jpg","gif","png");
+	my @nombreYextension=split('\.',$filepath);
+	if (scalar(@nombreYextension)==2) { 
+	# verifica que el nombre del archivo tenga el punto (.)
+		my $ext= @nombreYextension[1];
+		my $buff='';
+		my $write_file= $picturesDir."/".$bornum.".".$ext;
+	
+		if (!grep(/$ext/i,@extensiones_permitidas)) {
+			$msg= "Solo se permiten imagenes (".join(", ",@extensiones_permitidas).")";
+		} else 
+		{
+	
+			if (!(open(WFD,">$write_file"))) {
+				$msg="Hay un error y el archivo no puede escribirse en el servidor.";
 			}
-			close(WFD);
-		 }
-          }
-  } else {
-        $msg= "El nombre del archivo no tiene un formato correcto";
-  }
-} else {
-#Borra el archivo previamente subido
-unlink($picturesDir.'/'.$foto_name);
+			else	
+			{
+				while ($bytes_read=read($filepath,$buff,2096)) {
+					$size += $bytes_read;
+					binmode WFD;
+					print WFD $buff;
+				}
+				close(WFD);
+			}
+		}
+	} else {
+		$msg= "El nombre del archivo no tiene un formato correcto";
+	}
+	return ($msg);
 }
+
+sub deletePhoto{
+
+	my ($foto_name)=@_;
+	my ($msg)="TODO OK, SE BORRO";
+	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
+	    unlink($picturesDir.'/'.$foto_name);
+	}else{
+		$msg="TODO MAL, NO SE BORRO :(";
+	     }
+	return ($msg);
+
+
 }
+
+

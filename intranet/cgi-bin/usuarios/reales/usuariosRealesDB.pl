@@ -3,6 +3,7 @@
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::AR::UploadFile;
 use CGI;
 use JSON;
 
@@ -42,7 +43,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 =item
 Aca se maneja el cambio de permisos para el usuario
 =cut
-if($tipoAccion eq "GUARDAR_PERMISOS"){
+elseif($tipoAccion eq "GUARDAR_PERMISOS"){
 
 	my %params;
 	$params{'usuario'}= $obj->{'usuario'};
@@ -68,7 +69,7 @@ if($tipoAccion eq "GUARDAR_PERMISOS"){
 =item
 Se buscan los permisos del usuario y se muestran por pantalla
 =cut
-if($tipoAccion eq "MOSTRAR_PERMISOS"){
+elseif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
@@ -118,7 +119,7 @@ if($tipoAccion eq "MOSTRAR_PERMISOS"){
 =item
 Se elimina el usuario
 =cut
-if($tipoAccion eq "ELIMINAR_USUARIO"){
+elseif($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
 	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
@@ -145,7 +146,7 @@ if($tipoAccion eq "ELIMINAR_USUARIO"){
 =item
 Se elimina el usuario
 =cut
-if($tipoAccion eq "AGREGAR_USUARIO"){
+elseif($tipoAccion eq "AGREGAR_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
 
@@ -167,7 +168,7 @@ if($tipoAccion eq "AGREGAR_USUARIO"){
 =item
 Se guarda la modificacion los datos del usuario
 =cut
-if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
+elseif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 	
   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_updateBorrower($obj);
 
@@ -189,7 +190,7 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 =item
 Se genra la ventana para modificar los datos del usuario
 =cut
-if($tipoAccion eq "MODIFICAR_USUARIO"){
+elseif($tipoAccion eq "MODIFICAR_USUARIO"){
 
 	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
 						template_name => "usuarios/reales/agregarUsuario.tmpl",
@@ -253,10 +254,7 @@ if($tipoAccion eq "MODIFICAR_USUARIO"){
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 
-
-
-
-if($tipoAccion eq "DATOS_USUARIO"){
+elseif($tipoAccion eq "DATOS_USUARIO"){
 
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
@@ -328,3 +326,14 @@ if($tipoAccion eq "DATOS_USUARIO"){
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
 
+
+elseif($tipoAccion eq "SUBIR_FOTO"){
+	my $bornum= $obj->{'usuario'};
+	my $filepath= $obj->('picture');
+	my $msg= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);
+}	
+
+elseif($tipoAccion eq "ELIMINAR_FOTO"){
+	my $foto_name= $obj->{'foto_name'};
+	my $msg= &C4::AR::UploadFile::deletePhoto($foto_name);
+}	
