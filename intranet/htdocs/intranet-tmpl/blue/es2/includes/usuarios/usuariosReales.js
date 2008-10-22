@@ -6,110 +6,6 @@
  *
  */
 
-//*******************************************Para cambiar permisos***********************************************
-
-function modificarPermisos(){
-	objAH=new AjaxHelper(updateModificarPermisos);
-	objAH.debug= true;
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.usuario= usuario.ID;
-	objAH.tipoAccion= 'MOSTRAR_PERMISOS';
-	objAH.sendToServer();
-}
-
-function updateModificarPermisos(responseText){
-//se crea el objeto que maneja la ventana para modificar los permisos
-	vModificarPermisos=new WindowHelper();
-	vModificarPermisos.html=responseText;
-	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
-	vModificarPermisos.create();
-}
-
-function guardarPermisos(){
-
-	var chck= $("input[@name=chkpermisos]:checked"); //obtengo todos los check seleccionados
-	var array= new Array;
-	var long=chck.length;
- 	if ( long == 0){
- 		alert("Elija al menos un permiso");
- 	}
- 	else{
-
-		for(var i=0; i< long; i++){
-			array[i]=chck[i].value;
-		}
-
-		objAH=new AjaxHelper(updateGuardarPermisos);
-		//objAH.debug= true;
-		objAH.tipoAccion= 'GUARDAR_PERMISOS';
-		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.usuario= usuario.ID;
-		objAH.array_permisos= array;
-		objAH.sendToServer();
- 	}
-}
-
-function updateGuardarPermisos(responseText){
-
-	vModificarPermisos.close();
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
-}
-
-//****************************************Fin para cambiar permisos********************************************
-
-
-//*******************************************Para cambiar permisos***********************************************
-
-function modificarPermisos(){
-	objAH=new AjaxHelper(updateModificarPermisos);
-	objAH.debug= true;
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.usuario= usuario.ID;
-	objAH.tipoAccion= 'MOSTRAR_PERMISOS';
-	objAH.sendToServer();
-}
-
-function updateModificarPermisos(responseText){
-//se crea el objeto que maneja la ventana para modificar los permisos
-	vModificarPermisos=new WindowHelper();
-	vModificarPermisos.html=responseText;
-	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
-	vModificarPermisos.create();
-}
-
-function guardarPermisos(){
-
-	var chck= $("input[@name=chkpermisos]:checked"); //obtengo todos los check seleccionados
-	var array= new Array;
-	var long=chck.length;
- 	if ( long == 0){
- 		alert("Elija al menos un permiso");
- 	}
- 	else{
-
-		for(var i=0; i< long; i++){
-			array[i]=chck[i].value;
-		}
-
-		objAH=new AjaxHelper(updateGuardarPermisos);
-		//objAH.debug= true;
-		objAH.tipoAccion= 'GUARDAR_PERMISOS';
-		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.usuario= usuario.ID;
-		objAH.array_permisos= array;
-		objAH.sendToServer();
- 	}
-}
-
-function updateGuardarPermisos(responseText){
-
-	vModificarPermisos.close();
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
-}
-
-//****************************************Fin para cambiar permisos*********************************************
 
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
@@ -319,3 +215,71 @@ function updateAgregarUsuario(responseText){
 }
 
 //*********************************************Fin***Agregar Usuario******************************************
+
+//*************************************************Cambiar Password*******************************************
+
+//muestra los ejemplares del grupo
+function guardarCambiarPassword(claveUsuario, confirmeClave){
+
+	objAH=new AjaxHelper(updateGuardarCambiarPassword);
+	//objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.newpassword= claveUsuario;
+	objAH.newpassword1= confirmeClave;
+	objAH.usuario= usuario.ID;
+	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateGuardarCambiarPassword(responseText){
+	clearInput();
+	vModificarPassword.close();
+	var Message= JSONstring.toObject(responseText);
+	setMessage(Message);
+}
+
+function verificarClaveUsuario(){
+	var claveUsuario= $('#newpassword').val();
+	var confirmeClave= $('#newpassword1').val();
+	
+
+	if (claveUsuario == ''){
+		alert("Ingrese una contraseña.");
+		clearInput();
+		$('#newpassword').focus();
+
+	}else{
+		if (claveUsuario != confirmeClave){
+			alert("Las claves son distintas.\nIngreselas nuevamente.");
+			clearInput();
+			$('#newpassword').focus();
+	
+		}else{
+			guardarCambiarPassword(claveUsuario, confirmeClave);
+		}
+	}
+}
+
+function clearInput(){
+	$('#newpassword').val('');
+	$('#newpassword1').val('');
+}
+
+function cambiarPassword(){
+	objAH=new AjaxHelper(updateCambiarPassword);
+	objAH.url='/intranet-tmpl/blue/es2/includes/popups/cambiarPassword.inc';
+	objAH.debug= true;
+	objAH.sendToServer();
+}
+
+function updateCambiarPassword(responseText){
+
+	vModificarPassword=new WindowHelper();
+	vModificarPassword.html=responseText;
+ 	vModificarPassword.titulo= 'Cambio de Contrase&ntilde;a';
+	vModificarPassword.create();
+	clearInput();
+}
+
+//***********************************************Fin**Cambiar Password*****************************************

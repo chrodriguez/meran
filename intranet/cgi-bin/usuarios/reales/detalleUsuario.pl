@@ -75,11 +75,9 @@ my $msgError=$input->param('error');
 $template->param($data);
 $template->param(
 			bornum          => $bornum,
-# 			completo	=> $completo,
-# # # # # # 			mensaje		=> $mensaje,
-		foto_name 	=> $foto,
-		mensaje_error_foto   => $msgFoto,
-		mensaje_error_borrar => $msgError,
+			foto_name 	=> $foto,
+			mensaje_error_foto   => $msgFoto,
+			mensaje_error_borrar => $msgError,
 	);
 	
 output_html_with_http_headers $input, $cookie, $template->output;
