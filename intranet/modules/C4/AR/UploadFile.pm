@@ -34,8 +34,9 @@ sub uploadPhoto{
 	my $msg='';
 	my $bytes_read;
 	my $size= 0;
-
-	$msg= "Se subi&oacute; la foto con &eacute;xito";
+	my ($error)=0;
+	my ($paraMens);
+	$msg= 'U340';
 	my @extensiones_permitidas=("bmp","jpg","gif","png");
 	my @nombreYextension=split('\.',$filepath);
 	if (scalar(@nombreYextension)==2) { 
@@ -45,12 +46,14 @@ sub uploadPhoto{
 		my $write_file= $picturesDir."/".$bornum.".".$ext;
 	
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
-			$msg= "Solo se permiten imagenes (".join(", ",@extensiones_permitidas).")";
+			$msg= 'U341';
+			$error=1;
 		} else 
 		{
 	
 			if (!(open(WFD,">$write_file"))) {
-				$msg="Hay un error y el archivo no puede escribirse en el servidor.";
+				$msg='U342';
+				$error=1;
 			}
 			else	
 			{
@@ -63,21 +66,28 @@ sub uploadPhoto{
 			}
 		}
 	} else {
-		$msg= "El nombre del archivo no tiene un formato correcto";
+		$msg= 'U343';
+		$error=1;
 	}
-	return ($msg);
+	my $message= &C4::AR::Mensajes::getMensaje($msg,'INTRA',$paraMens);
+	return ($error, $msg, $message);
 }
 
 sub deletePhoto{
 
 	my ($foto_name)=@_;
-	my ($msg)="TODO OK, SE BORRO";
+	my ($error)=0;
+	my ($paraMens);
+	my ($msg)='U344';
 	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
 	    unlink($picturesDir.'/'.$foto_name);
 	}else{
-		$msg="TODO MAL, NO SE BORRO :(";
+		$msg='U345';
+		$error=1;
 	     }
-	return ($msg);
+	
+	my $message= &C4::AR::Mensajes::getMensaje($msg,'INTRA',$paraMens);
+	return ($error, $msg, $message);
 
 
 }

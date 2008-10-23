@@ -27,7 +27,6 @@ use vars qw(@EXPORT @ISA);
 	&findguarantees
 	&updateOpacBorrower
 	&cambiarPassword
-	&checkUserData
 
 	&t_cambiarPassword
 	&t_cambiarPermisos
@@ -36,6 +35,9 @@ use vars qw(@EXPORT @ISA);
 	&t_eliminarUsuario
 );
 
+
+# Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
+#  borrowernumber y usuario.
 sub t_eliminarUsuario {
 	
 	my($params)=@_;
@@ -46,7 +48,8 @@ sub t_eliminarUsuario {
 	if(!$error){
 	#No hay error
 
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+		# enable transactions, if possible
+		$dbh->{AutoCommit} = 0;  
 		$dbh->{RaiseError} = 1;
 	
 		eval {
@@ -87,6 +90,7 @@ sub eliminarUsuario{
 	$sth->execute($borrowernumber);
 	$sth->finish;
 
+# FIXME cuando se borra la reserva, habria que unificar todo, para que se conceda esa reserva al siguiente en la cola.
 	$sth=$dbh->prepare("DELETE FROM reserves WHERE borrowernumber=?");
 	$sth->execute($borrowernumber);
 	$sth->finish;
@@ -993,42 +997,42 @@ printf A "entrio \n";
 close(A);
 =cut
 
-sub checkUserData{
-
-	my @errors;
-	my $data=@_;
-	my $ok;
-	$ok=0;
-
-	if (C4::AR::Utilidades::validateString($data->{'sex'}) ){
-		push @errors, "sex";
-		$ok=1;
-	}
-	if (C4::AR::Utilidades::validateString($data->{'firstname'}) ){
-		push @errors,"firstname";
-		$ok=1;
-	}
-	if (C4::AR::Utilidades::validateString($data->{'surname'}) ){
-		push @errors,"surname";
-		$ok=1;
-	}
-	if (C4::AR::Utilidades::validateString($data->{'address'}) ){
-		push @errors, "address";
-		$ok=1;
-	}
-	if (C4::AR::Utilidades::validateString($data->{'city'}) ){
-		push @errors, "citycode";
-		$ok=1;
-	}
-	
-	if (C4::AR::Validator::isValidDocument($data->{'documenttype'},$data->{'documentnumber'}) ){
-		push @errors, "documentnumber";
-		$ok=1;
-	}
-	
- 	return ($ok,@errors);
-
-}
+# sub checkUserData{
+# 
+# 	my @errors;
+# 	my $data=@_;
+# 	my $ok;
+# 	$ok=0;
+# 
+# 	if (C4::AR::Utilidades::validateString($data->{'sex'}) ){
+# 		push @errors, "sex";
+# 		$ok=1;
+# 	}
+# 	if (C4::AR::Utilidades::validateString($data->{'firstname'}) ){
+# 		push @errors,"firstname";
+# 		$ok=1;
+# 	}
+# 	if (C4::AR::Utilidades::validateString($data->{'surname'}) ){
+# 		push @errors,"surname";
+# 		$ok=1;
+# 	}
+# 	if (C4::AR::Utilidades::validateString($data->{'address'}) ){
+# 		push @errors, "address";
+# 		$ok=1;
+# 	}
+# 	if (C4::AR::Utilidades::validateString($data->{'city'}) ){
+# 		push @errors, "citycode";
+# 		$ok=1;
+# 	}
+# 	
+# 	if (C4::AR::Validator::isValidDocument($data->{'documenttype'},$data->{'documentnumber'}) ){
+# 		push @errors, "documentnumber";
+# 		$ok=1;
+# 	}
+# 	
+#  	return ($ok,@errors);
+# 
+# }
 
 
 	
