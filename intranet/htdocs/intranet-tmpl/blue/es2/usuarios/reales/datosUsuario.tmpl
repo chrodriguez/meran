@@ -7,7 +7,6 @@
 <script src="/intranet-tmpl/blue/es2/includes/WindowHelper.js"></script>
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.ajaxMultiFileUpload.js"></script>
-<!-- <link href="/intranet-tmpl/blue/es2/includes/jquery/style.css" type="text/css" rel="stylesheet"> -->
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.livequery.min.js"></script>
 
 
@@ -177,16 +176,16 @@ $(document).ready(function() {
 // 	var params= "bornum=1&picture="+$('#myUploadFile').val();
 
 	$("#maincol").ajaxMultiFileUpload({
-        // php script
-        ajaxFile: "../upload.pl",
-        // maximum number of files allowed to upload
-        maxNumFiles: 3,
-        // if set to "demo", files are automatically deleted from server
-        mode: "",
-        // absolute path for upload pictures folder (don't forget to chmod)
-//         uploadFolder: "/intranet-tmpl/blue/es2/pictures/",
-	bornum: 1,
-    });
+						// php script
+						ajaxFile: "../upload.pl",
+						// maximum number of files allowed to upload
+						maxNumFiles: 3,
+						// if set to "demo", files are automatically deleted from server
+						mode: "",
+						// absolute path for upload pictures folder (don't forget to chmod)
+					//         uploadFolder: "/intranet-tmpl/blue/es2/pictures/",
+						bornum: 1,
+    	});
 
 
 // 	$.uploadSetUp.defaults = {
