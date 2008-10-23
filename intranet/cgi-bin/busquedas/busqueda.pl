@@ -127,7 +127,11 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 	$result{$i}->{'grupos'}=$ediciones;
 	my @disponibilidad=&obtenerDisponibilidadTotal($id1, $comboItemTypes);
 	$result{$i}->{'disponibilidad'}=\@disponibilidad;
-
+	
+	#Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+	my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+	if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+	#
 }
 
 my @keys=keys %result;

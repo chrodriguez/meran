@@ -120,7 +120,7 @@ return($url);
 }
 
 sub getImageForId1 {
-my ($id1)=@_;
+my ($id1,$size)=@_;
 my $url='';
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select nivel2_repetibles.dato from nivel2 left join nivel2_repetibles on 
@@ -131,9 +131,7 @@ $sth->execute($id1);
 
 while ((my $isbn=$sth->fetchrow)&&( $url eq '')) {
 	if ($isbn ne ''){
-		$url= getImageByIsbn($isbn,"small");
-		my $urllarge= getImageByIsbn($isbn,"large");
-		$url=$url."#".$urllarge;
+		$url= getCover($isbn,$size);
 		}
 	}
 $sth->finish;
