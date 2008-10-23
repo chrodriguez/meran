@@ -88,14 +88,15 @@
                 data = d.body.innerHTML.replace(/^\s+|\s+$/g, '');
                 eval(data);
                 $('.select.waiting').removeClass('waiting');
+		alert("termino de cargar");
                 
                 // if no problem reported from submit
                 if (typeof pst === 'undefined') {
                     
-                    var problem = '<P>There was a problem during the upload</P>';
-                    if (data.length) problem += '<LI><SPAN>The response from the server was</SPAN> ' + data + '</LI>';
-                    else problem += '<LI>There was no response from the server .</LI>';
-                    $('UL#response').append(problem);
+//                     var problem = '<P>There was a problem during the upload</P>';
+//                     if (data.length) problem += '<LI><SPAN>The response from the server was</SPAN> ' + data + '</LI>';
+//                     else problem += '<LI>There was no response from the server .</LI>';
+//                     $('UL#response').append(problem);
                 } 
                 else if (!pst.problem) {
                     
@@ -128,7 +129,7 @@
                         	}, 4000);
                     }
                     // update file counter
-                    updateCount();
+//                     updateCount();
                 } 
                 else {
                 
@@ -146,7 +147,7 @@
             	.fadeOut(1000, function() {
                 	$(this).remove();
                		$('UL#response').append('<LI>File <SPAN>' + toDelete[0]._name + '</SPAN> deleted. </LI>');
-                	updateCount();
+//                 	updateCount();
             	});
         };
         // normal delete
@@ -180,7 +181,7 @@
             return (fid.contentDocument) ? fid.contentDocument: (fid.contentWindow) ? fid.contentWindow.document: window.frames[fid].document;
         };
 
-        updateCount();
+//         updateCount();
     }
 
 })(jQuery);
