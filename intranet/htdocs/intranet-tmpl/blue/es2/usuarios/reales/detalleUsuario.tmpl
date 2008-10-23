@@ -1,6 +1,5 @@
 
 
-
 <!-- TMPL_IF NAME="mensaje_error_borrar" -->
 	<font color="red" size="5"><!-- TMPL_VAR NAME=mensaje_error_borrar --></font>
 <!-- /TMPL_IF -->
@@ -200,16 +199,16 @@
 	</li>
 	<!-- TMPL_ELSE -->
 	<li>
-	<iframe if="MyForm"></iframe> 
-	
-  		<form  	id="uploadForm" target="MyForm" action=/cgi-bin/koha/usuarios/upload.pl method=post enctype="multipart/form-data" >
- 			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+<!--   		<form  	id="uploadForm" target="MyForm" action=/cgi-bin/koha/usuarios/upload.pl method=post enctype="multipart/form-data" > -->
+<!--  			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->> -->
 			<!--<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
 				align=center valign="center" onClick="subirFoto()">-->
 			<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
 				align=center valign="center">
-			<input id="picture" type=file name="picture">
-  		</form>
+<!-- 			<input id="picture" type=file name="picture"> -->
+
+			<div id="uploader"></div>
+<!--   		</form> -->
 	
 	</li>
 	 <!-- /TMPL_IF -->

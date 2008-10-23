@@ -22,10 +22,13 @@ package C4::AR::UploadFile;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::AR::Mensajes;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&uploadPhoto,
-	   &deletePhoto);
+@EXPORT=qw(
+		&uploadPhoto,
+	   	&deletePhoto
+	);
 
 my $picturesDir= C4::Context->config("picturesdir");
 sub uploadPhoto{
