@@ -6,6 +6,9 @@
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/WindowHelper.js"></script>
 
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.ajaxMultiFileUpload.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.livequery.min.js"></script>
+
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
@@ -170,9 +173,41 @@ $(document).ready(function() {
 						}
 	);
 
+// 	var params= "bornum=1&picture="+$('#myUploadFile').val();
+
+	$("#maincol").ajaxMultiFileUpload({
+        // php script
+        ajaxFile: "../upload.pl",
+        // maximum number of files allowed to upload
+        maxNumFiles: 3,
+        // if set to "demo", files are automatically deleted from server
+        mode: "",
+        // absolute path for upload pictures folder (don't forget to chmod)
+//         uploadFolder: "/intranet-tmpl/blue/es2/pictures/",
+	bornum: 1,
+    });
+
+
+// 	$.uploadSetUp.defaults = {
+//         // image types allowed
+// //         file_types: "jpg,gif,png",
+//         // php script
+//         ajaxFile: "intranet/cgi-bin/usuarios/upload.pl",
+//         // maximum number of files allowed to upload
+//         maxNumFiles: 3,
+//         // if set to "demo", files are automatically deleted from server
+//         mode: "",
+//         // absolute path for upload pictures folder (don't forget to chmod)
+//         uploadFolder: "/intranet-tmpl/blue/es2/pictures/",
+//         // absolute path for thumbnail folder (don't forget to chmod)
+// //         thumbFolder: "/ajaxMultiFileUpload/thumb/"
+//     };
+
+
 });
 
 </script>
+<div id="maincol"></div>
 <!-- Mensajes de Informacion al Usuario -->
 <div class="tableMsgUser">
 	<font class="fontMsgUser"><b>

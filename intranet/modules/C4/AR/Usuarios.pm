@@ -28,6 +28,7 @@ use vars qw(@EXPORT @ISA);
 	&updateOpacBorrower
 	&cambiarPassword
 	&checkUserData
+
 	&t_cambiarPassword
 	&t_cambiarPermisos
 	&t_addBorrower
@@ -74,8 +75,6 @@ sub t_eliminarUsuario {
 }
 
 #delmembers recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
-
-
 sub eliminarUsuario{
 	my ($borrowernumber)=@_;
 	
@@ -321,8 +320,7 @@ sub t_addBorrower {
 	
 	my($params)=@_;
 	my $dbh = C4::Context->dbh;
-#  	my ($error, $codMsg, $paraMens);
-## FIXME falta verificar info antes de dar de alta al borrower
+
   	my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
 
 	if(!$error){
@@ -468,8 +466,7 @@ sub t_updateBorrower {
 	$params->{'actionType'} = "update";
 	my $dbh = C4::Context->dbh;
 	my $paraMens;
-#  	my ($error, $codMsg, $paraMens);
-## FIXME falta verificar info antes de dar de alta al borrower
+
   	my ($error,$codMsg)= &verificarDatosBorrower($params);
 
 	if(!$error){
