@@ -4,6 +4,7 @@ package C4::AR::Nivel2;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::AR::Amazon;
 
 use vars qw(@EXPORT @ISA);
 
@@ -322,6 +323,7 @@ sub detalleNivel2{
 	my $tipoDoc;
 	my $campo;
 	my $subcampo;
+	my $isbn;
 	my @results;
 	my $getLib;
 	my $j=0;
@@ -349,6 +351,11 @@ sub detalleNivel2{
         	$sth->execute($id2);
 		my $llave2;
 		while (my $data=$sth->fetchrow_hashref){
+			
+			#Necesito el  ISBN para recuperar la foto
+			if (($data->{'campo'} eq '020' )and($data->{'subcampo'} eq 'a')) {$isbn=$data->{'dato'};}
+			#
+
 			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
 			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
 			if(not exists($llaves{$llave2})){
@@ -377,6 +384,12 @@ sub detalleNivel2{
 		$results[$j]->{'itemtype'}=$itemtype;
 		$results[$j]->{'tipoDoc'}=$tipoDoc;
 		
+		#Busco si tenemos la imagen de la tapa para mostrar
+		my $url = &C4::AR::Amazon::getCover($isbn,'medium');
+		$results[$j]->{'amazon_cover'}="amazon_covers/".$url;
+		$isbn=''; #Blanqueo la isbn
+		#
+
 		$j++;
 	}
 	return(@results);

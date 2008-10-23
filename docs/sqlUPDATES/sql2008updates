@@ -259,12 +259,15 @@ VALUES ("minPassUpper",0,"Longitud Minina de Caracteres alfabétios");
 INSERT INTO systempreferences(variable, value, explanation)
 VALUE ("maxPassWhite",0,"Longitud Maxima de Espacios permitidos");
 
-##########################################################################
-
 (((((((((( ACTUALIZAR LOS COMENTARIOS EN LA TABLA :S)
 
 
+############################## AMAZON COVERS #################################
 
+INSERT INTO systempreferences(variable, value, explanation)
+VALUE ("amazon-token","09RZQDPDWPQK1WWVSH02","Token para conectarse a Amazon");
+
+##############################################################################
 
 
 
