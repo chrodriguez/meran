@@ -298,30 +298,3 @@ function updateEliminarFoto(){
 	//se resfresca la info de usuario
 	detalleUsuario();
 }
-
-function subirFoto(){
-	objAH=new AjaxHelper(updateSubirFoto);
- 	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.tipoAccion= 'SUBIR_FOTO';
-	objAH.contentType= 'multipart/form-data';
-	objAH.borrowernumber= usuario.ID;
-	objAH.picture= $('#picture').val();
-	objAH.sendToServer();
-
-// 	$.ajax({
-// 		url: '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl',
-// 		contentType: 'multipart/form-data',
-// 		data: 'borrowernumber=' + usuario.ID + '&picture=' + $('#picture').val()
-// 		success: function(html){
-// 			alert('listo');
-//   		}
-// 	});
-
-}
-
-function updateSubirFoto(){
-	//se muestran mensajes
-	//se resfresca la info de usuario
-// 	detalleUsuario();
-}

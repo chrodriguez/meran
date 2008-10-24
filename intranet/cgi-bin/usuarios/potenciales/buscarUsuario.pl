@@ -33,7 +33,7 @@ use C4::AR::Estadisticas;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/reales/buscarUsuario.tmpl",
+    = get_template_and_user({template_name => "usuarios/potenciales/buscarUsuario.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

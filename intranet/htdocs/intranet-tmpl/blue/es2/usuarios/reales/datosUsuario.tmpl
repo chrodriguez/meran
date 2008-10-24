@@ -120,14 +120,22 @@ function updateDetalleUsuario(responseText){
 
 function createFileUploader(){
 
-	$("#uploader").fileUploader({
-					// perl script
-					ajaxFile: "../upload.pl",
-					bornum: 1,
-					funcionOnComplete: function (){
-								detalleUsuario(usuario.ID);
-							}
-    	});
+	if($("#uploader")[0] != null){
+
+
+		$("#uploader").fileUploader({
+						// perl script
+						ajaxFile: "../upload.pl",
+						bornum: 1,
+						funcionOnComplete: function (){
+									detalleUsuario(usuario.ID);
+// 									var responseText= $('#responseText').html();
+// 									var Message= JSONstring.toObject(responseText);
+// 									setMessage(Message);
+								}
+		});
+
+	}
 }
 
 function detallePrestamos(borr){

@@ -21,7 +21,6 @@
 	    $('<input type="hidden" name="bornum" value="' + opt.bornum + '" />'),	
             $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
             $('<div class="select" title="upload new picture"></div>').append($('<input id="myUploadFile" class="myUploadFile file" type="file" value="" name="picture"/>')), 
-//             $('<h2 class="numFiles"></h2>'), 
             $('<ul id="ul_files"></ul>'))
 	);
         init();
