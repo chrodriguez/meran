@@ -32,8 +32,77 @@ use vars qw(@EXPORT @ISA);
 	&t_addBorrower
 	&t_updateBorrower
 	&t_eliminarUsuario
+	
+	&t_addPerson
 );
 
+
+sub delPerson {
+	my (@member)=@_;
+	
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("Select * from persons where personnumber=?");
+	my $result='';
+	
+	foreach my $aux (@member){
+	$sth->execute($aux);
+	my $data=$sth->fetchrow_hashref;
+
+	if ($data->{'borrowernumber'}) { # Si no tiene borrowernumber no esta habilitado
+			delmember($data->{'borrowernumber'});
+		}
+		else {
+		$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' NO se encuentra habilitado!!! <br>';
+		}
+	}
+	$sth->finish;
+	
+	return ($result);
+}
+
+sub addPerson {
+	my (@member)=@_;
+	
+	my $result='';
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+	
+	foreach my $aux (@member){
+		$sth->execute($aux);
+		my $data=$sth->fetchrow_hashref;
+		
+		#Verificar que ya no exista como borrower
+		my $sth2=$dbh->prepare("SELECCT * FROM borrowers WHERE cardnumber=?");
+		$sth2->execute($data->{'cardnumber'});
+
+		if (!$sth2->fetchrow_hashref){
+			#no existe, se agrega
+		
+			#Se puede habilitar usurios irregulares??
+			if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)&&($data->{'categorycode'} eq 'ES')){
+				# No es regular y no se puede habilitar regulares
+				$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' es IRREGULAR y no puede ser habilitado!!! <br>';
+			}else{
+				$data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
+				#Se actualiza la persona con el borrowernumber
+				my $sth3=$dbh->prepare("UPDATE persons SET borrowernumber=".$data->{'borrowernumber'}." WHERE personnumber=?");
+				$sth3->execute($aux);  
+				$sth3->finish;
+			}
+
+		} else {
+			$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' ya se encuentra habilitado!!! <br>';
+		}
+	
+		$sth2->finish;
+	}
+	
+	$sth->finish;
+	
+	
+	return ($result);
+}
 
 # Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
 #  borrowernumber y usuario.
