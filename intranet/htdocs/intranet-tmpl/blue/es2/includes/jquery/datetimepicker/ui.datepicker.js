@@ -83,7 +83,7 @@ function Datepicker() {
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
-		yearRange: '-10:+10', // Range of years to display in drop-down,
+		yearRange: '-80:+10', // Range of years to display in drop-down,
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
 		changeFirstDay: true, // True to click on day name to change, false to remain as set
 		highlightWeek: false, // True to highlight the selected week
