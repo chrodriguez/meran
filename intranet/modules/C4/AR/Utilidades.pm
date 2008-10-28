@@ -835,9 +835,6 @@ sub armarPaginas{
 	}
 	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
 	my $themelang = $template->param('themelang');
-open(A, ">>/tmp/debug.txt");
-print A "themeland $themelang \n";
-close(A);
 
 	my $paginador= "<div id=paginador>";
 	my $class="paginaNormal";

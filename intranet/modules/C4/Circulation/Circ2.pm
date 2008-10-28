@@ -549,8 +549,7 @@ sub patronflags {
 		}
 		$flags{'ODUES'} = \%flaginfo;
 	}
-	my ($nowaiting, $itemswaiting)
-			= &C4::AR::Reservas::CheckWaiting($patroninformation->{'borrowernumber'});
+	my ($nowaiting, $itemswaiting)= &C4::AR::Reservas::CheckWaiting($patroninformation->{'borrowernumber'});
 	if ($nowaiting > 0) {
 		my %flaginfo;
 		$flaginfo{'message'} = "Items reservados disponibles";

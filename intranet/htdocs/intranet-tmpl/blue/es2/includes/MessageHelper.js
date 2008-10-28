@@ -16,7 +16,7 @@
 // EN PRINCIPIO ES NECESARIO QUE EN EL TMPL QUE SE VAYA A UTILIZAR SE CREE UN DIV CON ID "mensajes",
 //estaria bueno que esto se genere dinamicamente
 
-
+/*
 //Esta funcion setea un mensaje enviado desde el servidor
 function setMessage(Message){
 //@params
@@ -27,8 +27,9 @@ function setMessage(Message){
 	$('#mensajes').append(Message.message + '<br>');
 	scrollTo('mensajes');
 }
+*/
 
-
+/*
 //Esta funcion setea varios mensajes enviados desde el servidor
 function setMessages(Message){
 //@params
@@ -39,7 +40,31 @@ function setMessages(Message){
 	$('#mensajes').append(Message.message + '<br>');
 	scrollTo('mensajes');
 }
+*/
 
 function clearMessages(){
 	$('#mensajes').html('');
 }
+
+// FIXME deje setMessages2 hasta q se modifique todo lo referenciado por setMessages q no se usa mas
+//Esta funcion setea varios mensajes enviados desde el servidor
+function setMessages(Messages_hasref){
+//@params
+//Message.messages, arreglo de mensajes mensaje para el usuario
+//Message.error, error=1 o 0
+
+//Mensajes:
+//Message.error, hay error (error=1)
+//Message.messages: [message_1, message_2, ... , message_n]
+//message1: 	codMsg: 'U324'
+//		message: 'Texto para informar'
+
+	clearMessages();
+	var i;
+	for(i=0;i<Messages_hasref.messages.length;i++){
+		$('#mensajes').append(Messages_hasref.messages[i].message + '<br>');
+	}
+
+	scrollTo('mensajes');
+}
+

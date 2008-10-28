@@ -25,19 +25,13 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
 
-	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_cambiarPassword(\%params);
-
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
+	my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPassword(\%params);
 	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;
-
+	
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
 
 =item
@@ -49,16 +43,9 @@ elsif($tipoAccion eq "GUARDAR_PERMISOS"){
 	$params{'usuario'}= $obj->{'usuario'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};
 	
- 	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
-
-	#se arma el mensaje para informar al usuario
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
+ 	my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
 	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;
@@ -126,16 +113,9 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
    	$params{'borrowernumber'}= $usuario_hash_ref->{'borrowernumber'};
 	
- 	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
-
-	#se arma el mensaje para informar al usuario
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
+ 	my ($Message_arrayref)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
 	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;
@@ -148,16 +128,10 @@ Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
 	
-  	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
+#   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
+	my ($Message_arrayref)= C4::AR::Usuarios::t_addBorrower($obj);
 
-	#se arma el mensaje para informar al usuario
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
-	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;
@@ -170,16 +144,9 @@ Se guarda la modificacion los datos del usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 	
-  	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_updateBorrower($obj);
-
-	#se arma el mensaje para informar al usuario
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
+	my ($Message_arrayref)= C4::AR::Usuarios::t_updateBorrower($obj);
 	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;
@@ -223,13 +190,11 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 		
 				changepassword	=> $datosBorrower_hashref->{'changepassword'},
 				type		=> $datosBorrower_hashref->{'type'},
-# 				address         => $datosBorrower_hashref->{'address'}, #addres parece q no se usa
 				physstreet      => $datosBorrower_hashref->{'physstreet'},
 				firstname       => $datosBorrower_hashref->{'firstname'},
 				surname         => $datosBorrower_hashref->{'surname'},
 				streetaddress   => $datosBorrower_hashref->{'streetaddress'},
 				zipcode 	=> $datosBorrower_hashref->{'zipcode'},
-#  				streetcity      => $datosBorrower_hashref->{'streetcity'},
 				dstreetcity     => $datosBorrower_hashref->{'streetcity'},
 				homezipcode 	=> $datosBorrower_hashref->{'homezipcode'},
 				city		=> $datosBorrower_hashref->{'city'},

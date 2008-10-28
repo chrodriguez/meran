@@ -10,6 +10,7 @@ use C4::AR::Validator;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
+
 	&ListadoDeUsuarios
 	&ListadoDePersonas
 	&esRegular
@@ -26,7 +27,7 @@ use vars qw(@EXPORT @ISA);
 	&NewBorrowerNumber
 	&findguarantees
 	&updateOpacBorrower
-	&cambiarPassword
+
 	&t_cambiarPassword
 	&t_cambiarPermisos
 	&t_addBorrower
@@ -34,74 +35,172 @@ use vars qw(@EXPORT @ISA);
 	&t_eliminarUsuario
 	
 	&t_addPerson
+	&t_delPersons
 );
 
 
-sub delPerson {
-	my (@member)=@_;
-	
+sub t_delPersons {	
+	my($persons_array_ref)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from persons where personnumber=?");
-	my $result='';
-	
-	foreach my $aux (@member){
-	$sth->execute($aux);
-	my $data=$sth->fetchrow_hashref;
+open(A, ">>/tmp/debug.txt");
+print A "desde t_delPersons \n";
+	my $msg_object= C4::AR::Mensajes::create();
 
-	if ($data->{'borrowernumber'}) { # Si no tiene borrowernumber no esta habilitado
-			delmember($data->{'borrowernumber'});
-		}
-		else {
-		$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' NO se encuentra habilitado!!! <br>';
-		}
-	}
-	$sth->finish;
+	if(!$msg_object->{'error'}){
+	#No hay error
+
+		# enable transactions, if possible
+		$dbh->{AutoCommit} = 0;  
+		$dbh->{RaiseError} = 1;
 	
-	return ($result);
+		eval {
+			_delPersons($persons_array_ref, $msg_object);	
+			$dbh->commit;
+# 			$codMsg= 'U320';
+# 			$paraMens->[0]= $params->{'usuario'};
+# 			$msg_object->{'error'}= 0;
+# 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => []}) ;
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+# 			$error= 1;
+# 			$codMsg= 'U319';
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	return ($msg_object);
 }
 
-sub addPerson {
-	my (@member)=@_;
-	
-	my $result='';
+sub _verificarInfoDelPerson {
+	my ($person, $msg_object)=@_;
 	my $dbh = C4::Context->dbh;
+
 	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
-	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
-	
-	foreach my $aux (@member){
-		$sth->execute($aux);
-		my $data=$sth->fetchrow_hashref;
-		
-		#Verificar que ya no exista como borrower
-		my $sth2=$dbh->prepare("SELECCT * FROM borrowers WHERE cardnumber=?");
-		$sth2->execute($data->{'cardnumber'});
+	$sth->execute($person);
+	my $personData=$sth->fetchrow_hashref;
 
-		if (!$sth2->fetchrow_hashref){
-			#no existe, se agrega
-		
-			#Se puede habilitar usurios irregulares??
-			if (($habilitar_irregulares eq 0)&&($data->{'regular'} eq 0)&&($data->{'categorycode'} eq 'ES')){
-				# No es regular y no se puede habilitar regulares
-				$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' es IRREGULAR y no puede ser habilitado!!! <br>';
-			}else{
-				$data->{'borrowernumber'}=addborrower($data); #Se agregar en borrower
-				#Se actualiza la persona con el borrowernumber
-				my $sth3=$dbh->prepare("UPDATE persons SET borrowernumber=".$data->{'borrowernumber'}." WHERE personnumber=?");
-				$sth3->execute($aux);  
-				$sth3->finish;
-			}
-
-		} else {
-			$result.='El usuario con tarjeta id: '.$data->{'cardnumber'}.' ya se encuentra habilitado!!! <br>';
-		}
-	
-		$sth2->finish;
+	if (!$personData) { 
+	# El borrower no se encuentra habilitado
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U350', 'params' => [$personData->{'cardnumber'}]} ) ;
 	}
 	
-	$sth->finish;
+}
+
+sub _delPersons {
+	my ($persons_array_ref, $msg_object)=@_;
 	
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+
+	foreach my $person (@$persons_array_ref){
+		$sth->execute($person);
+		my $personData=$sth->fetchrow_hashref;
+
+		_verificarInfoDelPerson($person,$msg_object);
+
+		if (!$msg_object->{'error'}) { 
+		# Si no tiene borrowernumber no esta habilitado
+			_eliminarUsuario($personData->{'borrowernumber'});
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$personData->{'cardnumber'}]}) ;
+		}
+	}
+}
+
+sub t_addPersons {
 	
-	return ($result);
+	my($persons_array_ref)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $msg_object;
+
+	# enable transactions, if possible
+	$dbh->{AutoCommit} = 0;  
+	$dbh->{RaiseError} = 1;
+
+	eval {
+		($msg_object)= addPersons($persons_array_ref);	
+		$dbh->commit;
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B425','INTRA');
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U348', 'params' => []});
+	}
+
+	$dbh->{AutoCommit} = 1;
+
+	
+ 	return ($msg_object);
+}
+
+sub _verificarInfoAddPerson {
+	my ($params, $msg_object)=@_;
+
+ 	my $dbh = C4::Context->dbh;
+	my $error= 0;
+	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+
+	#Verificar que ya no exista como borrower
+	my $sth2=$dbh->prepare("SELECT * FROM borrowers WHERE cardnumber=?");
+	$sth2->execute($params->{'cardnumber'});
+	my $borrower= $sth2->fetchrow_hashref;
+
+	if($borrower){
+		#ya existe el borrower		
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U346', 'params' => [$params->{'cardnumber'}]} ) ;
+	}
+	#Se verifica que el usuario sea regular puede habilitar usurios irregulares??
+	elsif ( !($msg_object->{'error'}) && ($habilitar_irregulares eq 0)&&($params->{'regular'} eq 0)&&($params->{'categorycode'} eq 'ES')){
+		# No es regular y no se puede habilitar regulares
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U349', 'params' => [$params->{'cardnumber'}]} ) ;
+	}
+}
+
+sub addPersons {
+	my ($persons)=@_;
+	
+ 	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+
+	my $msg_object= C4::AR::Mensajes::create();
+	
+	foreach my $person (@$persons){
+		$sth->execute($person);
+		my $borrowerData=$sth->fetchrow_hashref;
+
+		_verificarInfoAddPerson($borrowerData,$msg_object);
+
+		if(!$msg_object->{'error'}){
+			my $borrowernumber= addBorrower($borrowerData);
+			#Se agregar en borrower
+			#Se actualiza la persona con el borrowernumber
+			my $sth3=$dbh->prepare("UPDATE persons SET borrowernumber=? WHERE personnumber=?");
+			$sth3->execute($borrowernumber, $person);
+			$sth3->finish;
+		
+ 			$msg_object->{'error'}= 0;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$borrowerData->{'cardnumber'}]} ) ;
+		}
+
+	}# end foreach my $person (@$persons)
+
+	return ($msg_object);
 }
 
 # Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
@@ -110,45 +209,44 @@ sub t_eliminarUsuario {
 	
 	my($params)=@_;
 	my $dbh = C4::Context->dbh;
+	my $msg_object= C4::AR::Mensajes::create();
 
- 	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+#  	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
+	_verficarEliminarUsuario($params);
 
-	if(!$error){
+	if(!$msg_object->{'error'}){
 	#No hay error
 
 		# enable transactions, if possible
 		$dbh->{AutoCommit} = 0;  
 		$dbh->{RaiseError} = 1;
 	
-		eval {
-			($error, $codMsg, $paraMens)= eliminarUsuario($params->{'borrowernumber'});	
+		eval {	
+			_eliminarUsuario($params->{'borrowernumber'});
 			$dbh->commit;
-			$codMsg= 'U320';
-			$paraMens->[0]= $params->{'usuario'};
+			$msg_object->{'error'}= 0;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
 		};
 	
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B422';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,'INTRA');
+			&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U319';
+			$msg_object->{'error'}= 1;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$params->{'cardnumber'}]} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,'INTRA',$paraMens);
-
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 #eliminarUsuario recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
 
 
-sub eliminarUsuario{
+sub _eliminarUsuario{
 	my ($borrowernumber)=@_;
 	
 	my $dbh = C4::Context->dbh;
@@ -175,33 +273,28 @@ sub eliminarUsuario{
 			   ");
 	$sth->execute($borrowernumber);
 	$sth->finish;
-
 }
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
-sub verficarEliminarUsuario {
-
+sub _verficarEliminarUsuario {
 	my($params)=@_;
 
-	my $error= 0;
-	my $codMsg= '000';
-	my @paraMens;
+	my $msg_object= C4::AR::Mensajes::create();
 
-	if( !($error) && !( existeUsuario($params->{'borrowernumber'}) ) ){
+	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'}) ) ){
 	#se verifica la existencia del usuario
-		$error= 1;
-		$codMsg= 'U321';
-		$paraMens[0]= $params->{'usuario'};
+		$msg_object->{'error'}= 1;
+  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
 
-	return ($error, $codMsg,\@paraMens);
+	return ($msg_object);
 }
 
 =item
 Esta funcion verifica si existe el usuario o no en la base, devuelve 0 = NO EXISTE, 1 (o mas) = EXISTE
 =cut
-sub existeUsuario {
+sub _existeUsuario {
 	my ($borrowernumber)=@_;
 
   	my $dbh = C4::Context->dbh;
@@ -217,54 +310,48 @@ sub existeUsuario {
 
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub t_cambiarPermisos {
-	
 	my($params)=@_;
+
 	my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-#  	my ($error,$codMsg,$paraMens)= &verficarPassword($params);
- 	my ($error,$codMsg,$paraMens);
+	my $msg_object= C4::AR::Mensajes::create();
 
-	if(!$error){
+	if(!$msg_object->{'error'}){
 	#No hay error
 	# enable transactions, if possible
 		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 		$dbh->{RaiseError} = 1;
 	
 		eval {
-			($error, $codMsg, $paraMens)= cambiarPermisos($params);	
+			_cambiarPermisos($params);	
 			$dbh->commit;
 			#se cambio el permiso con exito
-			$codMsg= 'U317';
+			$msg_object->{'error'}= 0;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []} ) ;
 		};
 	
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B421';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			&C4::AR::Mensajes::printErrorDB($@, 'B421',"INTRA");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U331';
+			$msg_object->{'error'}= 1;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U331', 'params' => []} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
-sub cambiarPermisos{
-
+sub _cambiarPermisos{
 	my ($params) = @_;
-	my $dbh = C4::Context->dbh;
 
-	my ($error,$codMsg,$paraMens);
-	$error= 0;
+	my $dbh = C4::Context->dbh;
 	
 	
 	my $array_permisos= $params->{'array_permisos'};
@@ -282,32 +369,24 @@ sub cambiarPermisos{
 			      ");
 	$sth->execute($flags, $params->{'usuario'});
 
-	
-	return ($error,$codMsg,$paraMens);
 }
 
 
 #  Funcion que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. Retortan 0 en caso de exito y 1 en error.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub _verficarPassword {
-
 	my($params)=@_;
-	my $error= 0;
-	my $codMsg= '000';
-	my @paraMens;
 
-	($error,$codMsg)= &C4::AR::Validator::checkPassword($params);
+	my ($msg_object)= &C4::AR::Validator::checkPassword($params);
 
 
- 	if( !($error) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
-# 	#las password no coinciden
- 		$error= 1;
- 		$codMsg= 'U315';
+ 	if( !($msg_object->{'error'}) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+ 	#las password no coinciden
+		$msg_object->{'error'}= 1;
+  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
  	}
 
-
-
-	return ($error, $codMsg,\@paraMens);
+	return ($msg_object);
 }
 
 
@@ -315,52 +394,46 @@ sub _verficarPassword {
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
 sub t_cambiarPassword {
-	
 	my($params)=@_;
-	my $dbh = C4::Context->dbh;
-	my ($error,$codMsg,$paraMens)= _verficarPassword($params);
 
-	if(!$error){
+	my $dbh = C4::Context->dbh;
+	my ($msg_object)= _verficarPassword($params);
+
+	if(!$msg_object->{'error'}){
 	#No hay error
 		# enable transactions, if possible
 		$dbh->{AutoCommit} = 0;  
 		$dbh->{RaiseError} = 1;
 	
 		eval {
-			($error, $codMsg, $paraMens)= cambiarPassword($params);	
+			_cambiarPassword($params,$msg_object);	
 			$dbh->commit;
-			$codMsg= 'U312';
+			$msg_object->{'error'}= 0;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
 		};
 	
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B420';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			&C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U313';
+			$msg_object->{'error'}= 1;
+  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 
 # Cambia el password del usuario. Recibe como parámetro una hash con todos sus datos.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
-sub cambiarPassword{
-
-	my ($params) = @_;
+sub _cambiarPassword{
+	my ($params, $msg_object) = @_;
 	my $dbh = C4::Context->dbh;
-
-	my ($error,$codMsg,$paraMens);
-	$error= 0;
 	
 	my %env;
 	my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
@@ -382,11 +455,9 @@ sub cambiarPassword{
 	
 	if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
 	#ya existe el userid
-		$error= 1;
-		$codMsg= 'U311';
-		$paraMens->[0]= $params->{'userid'};
-		$paraMens->[1]= $params->{'surename'};
-		$paraMens->[2]= $params->{'firstname'};
+		$msg_object->{'error'}= 1;
+  		C4::AR::Mensajes::add(	$msg_object, {	'codMsg'=> 'U311', 
+							'params' => [$params->{'userid'}, $params->{'surename'}, $params->{'firstname'}]} ) ;
 
 	}else {
 		#Esta todo bien, se puede actualizar la informacion
@@ -413,7 +484,8 @@ sub cambiarPassword{
 
 	}
 
-	return ($error,$codMsg,$paraMens);
+# 	return ($error,$codMsg,$paraMens);
+	return ($msg_object);
 }
 
 
@@ -422,95 +494,93 @@ sub t_addBorrower {
 	
 	my($params)=@_;
 	my $dbh = C4::Context->dbh;
-  	my ($error,$codMsg,$paraMens)= &verificarDatosBorrower($params);
 
-	if(!$error){
+# 	my %msg;	
+	my $msg_object= C4::AR::Mensajes::create();
+	_verificarDatosBorrower($params,$msg_object);
+
+	if(!$msg_object->{'error'}){
 	#No hay error
 		# enable transactions, if possible
 		$dbh->{AutoCommit} = 0;  
 		$dbh->{RaiseError} = 1;
 	
 		eval {
-			($error, $codMsg, $paraMens)= addBorrower($params);	
+			my $borrowernumber= addBorrower($params);	
 			$dbh->commit;
-			$codMsg= 'U329';
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+					
 		};
 	
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B423';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			&C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U330';
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 # Esta funcion se utiliza para validar todos los datos de un borrower nuevo o modificación de uno existente.
 # Recibe un hash con todos sus datos.
 # Retorna $error (como siempre, al reves {1 true}) y un $codMsg, en ese orden
-sub verificarDatosBorrower{
+sub _verificarDatosBorrower{
 
-	my ($data)=@_;
-	my $error=0;
-	my $codError = '000';
+	my ($data, $msg_object)=@_;
 	my $actionType = $data->{'actionType'};
 	my $checkStatus;
 
 	my $emailAddress = $data->{'emailaddress'};
 	
-	if (!($error) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
-		$codError = 'U332';
-		$error=1;
+	if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
 	}
 	
 	#### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
 	if ($actionType eq "new"){
 
 		my $cardNumber = $data->{'cardnumber'};
-		if (!($error) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
-			$codError = 'U333';
-			$error=1;
+		if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
 		}
 	}
 
 	#### FIN NUEVO BORROWER's CHECKS
 	my $surname = $data->{'surname'};
-	if (!($error) && (!(&C4::AR::Utilidades::validateString($surname)))){
-		$codError = 'U334';
-		$error=1;
+	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
 	}
 
 	my $firstname = $data->{'firstname'};
-	if (!($error) && (!(&C4::AR::Utilidades::validateString($firstname)))){
-		$codError = 'U335';
-		$error=1;
+	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
 	}
 
 	
 	my $documentnumber = $data->{'documentnumber'};
 	$checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
-	if (!($error) && ( $checkStatus == 0)){
-		$codError = 'U336';
-		$error=1;
+	if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
 	}
 
 	my $city = $data->{'city'};
-	if (!($error) && (!(&C4::AR::Utilidades::validateString($city)))){
-		$codError = 'U337';
-		$error=1;
+	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($city)))){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U337', 'params' => []} ) ;
 	}
 
-	
-	return ($error,$codError);
 }
 	
 
@@ -535,6 +605,7 @@ sub addBorrower {
 	my $sth=$dbh->prepare($query);
 	
 	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
+	$params->{'changepassword'}= $params->{'changepassword'}||1; #si no viene nada por defecto debe cambiar la password
 
 	$sth->execute(	$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
 			$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
@@ -548,6 +619,11 @@ sub addBorrower {
 		);
 
 	$sth->finish;
+
+	#obtengo el borrowernumber recien generado
+	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
+	$sth3->execute();
+	my $borrowernumber= $sth3->fetchrow;
 
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse"))  {
@@ -569,6 +645,8 @@ sub addBorrower {
 		$sth3->execute();
 		$sth3->finish;
 	}
+
+	return $borrowernumber;
 }
 
 sub t_updateBorrower {
@@ -576,39 +654,36 @@ sub t_updateBorrower {
 	my($params)=@_;
 	$params->{'actionType'} = "update";
 	my $dbh = C4::Context->dbh;
-	my $paraMens;
-#  	my ($error, $codMsg, $paraMens);
-## FIXME falta verificar info antes de dar de alta al borrower
-  	my ($error,$codMsg)= &verificarDatosBorrower($params);
 
-	if(!$error){
+  	my $msg_object= C4::AR::Mensajes::create();
+
+	_verificarDatosBorrower($params, $msg_object);
+
+	if(!$msg_object->{'error'}){
 	#No hay error
 
 		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 		$dbh->{RaiseError} = 1;
 	
 		eval {
-			($error, $codMsg, $paraMens)= updateBorrower($params);	
+			updateBorrower($params);		
 			$dbh->commit;
-			$codMsg= 'U338';
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
 		};
 	
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B424';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+			&C4::AR::Mensajes::printErrorDB($@, 'B424',"INTRA");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U339';
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 sub updateBorrower {

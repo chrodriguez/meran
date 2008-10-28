@@ -126,7 +126,7 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "../upload.pl",
-						bornum: 1,
+						bornum: usuario.ID,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
 // 									var responseText= $('#responseText').html();

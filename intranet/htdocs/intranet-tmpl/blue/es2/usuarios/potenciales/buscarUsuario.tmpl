@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 
 
 <script language="javascript" type="text/javascript">
@@ -35,23 +36,24 @@ function ordenar(orden){
 
 function changePage(ini){
 	objAH.changePage(ini);
-	borrarMsj();
 }
 
 function actualizarPersonas(cant,arrayPersonNumbers){
 	objAH=new AjaxHelper(updateInfoActualizar);
-	objAH.url= "/cgi-bin/koha/usuarios/actualizarPersonas.pl";
-	objAH.cantidad=cant;
-	objAH.accion=$("#accion").val();
-	objAH.personNumbers=arrayPersonNumbers;
+	objAH.url= "/cgi-bin/koha/usuarios/potenciales/usuariosPotencialesDB.pl";
+	objAH.debug= true;
+	objAH.cantidad= cant;
+	objAH.tipoAccion= $("#accion").val();
+	objAH.personNumbers= arrayPersonNumbers;
 	objAH.funcion= "changePage";
 	objAH.sendToServer();
 }
 
 function updateInfoActualizar(responseText){
-	if(responseText != ""){$("#msj").html(responseText);}
-	else{$("#msj").html('');}
-	consultar();
+
+ 	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+//   	consultar();
 }
 
 function consultar(){
@@ -78,16 +80,20 @@ function updateInfo(responseText){
 function Borrar(){
 	$("#member").val('');
 }
-function borrarMsj(){
-	$("#msj").html('');
-}
+
 
 $(document).ready(function() {
 	onEnter("member",consultar);
-	borrarMsj();
 });
 
 </script>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
 
 <center>
 
@@ -109,7 +115,7 @@ $(document).ready(function() {
 			<input id="member" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="consultar('');borrarMsj();" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="consultar('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
 			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 

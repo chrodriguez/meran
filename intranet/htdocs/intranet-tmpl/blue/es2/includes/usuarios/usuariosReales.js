@@ -25,8 +25,8 @@ function eliminarUsuario(){
 }
 
 function updateEliminarUsuario(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessage(Messages);
 }
 
 //*********************************************Fin***Eliminar Usuario*********************************************
@@ -86,8 +86,8 @@ function guardarModificacioUsuario(){
 }
 
 function updateGuardarModificacioUsuario(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 	vDatosUsuario.close();
 	detalleUsuario();
 }
@@ -142,8 +142,8 @@ function guardarPermisos(){
 function updateGuardarPermisos(responseText){
 
 	vModificarPermisos.close();
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 //****************************************Fin para cambiar permisos*********************************************
@@ -166,8 +166,8 @@ function eliminarUsuario(){
 }
 
 function updateEliminarUsuario(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 //*********************************************Fin***Eliminar Usuario*********************************************
@@ -210,8 +210,8 @@ function agregarUsuario(){
 }
 
 function updateAgregarUsuario(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 //*********************************************Fin***Agregar Usuario******************************************
@@ -235,8 +235,8 @@ function guardarCambiarPassword(claveUsuario, confirmeClave){
 function updateGuardarCambiarPassword(responseText){
 	clearInput();
 	vModificarPassword.close();
-	var Message= JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 function verificarClaveUsuario(){

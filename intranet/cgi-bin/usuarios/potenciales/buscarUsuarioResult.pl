@@ -53,9 +53,9 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 if($member ne ""){
 	if(length($member) == 1) {
-		($cantidad,$results)=ListadoDePersonas($env,$member,"simple",$orden,$ini,$cantR);
+		($cantidad,$results)=C4::AR::Usuarios::ListadoDePersonas($env,$member,"simple",$orden,$ini,$cantR);
 	} else {	
-		($cantidad,$results)=ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
+		($cantidad,$results)=C4::AR::Usuarios::ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
 C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);

@@ -174,6 +174,11 @@ my %mensajesINTRA = (
 	'U343' => 'El nombre del archivo no tiene un formato correcto',
 	'U344' => 'La foto ha sido eliminada.',
 	'U345' => 'No se pudo eliminar la foto.',
+	'U346' => 'El usuario con tarjeta id: *?* ya se encuentra habilitado!!!',
+	'U347' => 'El usuario con tarjeta id: *?* se ha habilit&oacute; con &eacute;xito', 
+	'U348' => 'Disculple, no se pudo hablitar el usurio, intente nuevamente',
+	'U349' => 'El usuario con tarjeta id: *?* es IRREGULAR y no puede ser habilitado!!!',
+	'U350' => 'El usuario con tarjeta id: *?* NO se encuentra habilitado!!!',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
@@ -199,6 +204,7 @@ my %mensajesINTRA = (
 	'B422' => 'Error en funcion C4::AR::Usuarios::t_eliminarUsuario',
 	'B423' => 'Error en funcion C4::AR::Usuarios::t_addBorrower',
 	'B424' => 'Error en funcion C4::AR::Usuarios::t_updateBorrower',
+	'B425' => 'Error en funcion C4::AR::Usuarios::t_addPersons',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
 	'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
@@ -276,6 +282,75 @@ sub printErrorDB {
 	print A "$@ \n";
 	print A "\n";
 	close(A);
+}
+
+
+
+
+=item
+sub new {
+    my $self = {
+        _error => undef,
+        _messages => [],
+    };
+    bless $self, "Mensajes";
+    return $self;
+}
+
+sub error {
+    my ( $self, $error ) = @_;
+    $self->{_error} = $error if defined($error);
+    return $self->{_error};
+}
+
+sub messages {
+    my ( $self, $messages ) = @_;
+    $self->{_messages} = $messages if defined($messages);
+    return $self->{_messages};
+}
+
+sub messagesPush {
+    my ( $self, $messages , $hash) = @_;
+    $self->{_messages} = $messages if defined($messages);
+    push (@{$self->{_messages}}, $hash);
+    return $self->{_messages};
+}
+=cut
+
+
+sub create {
+
+	#se crea el objetos contenedor de mensajes
+	my %msg_object;
+	$msg_object{'error'}= 0;
+	$msg_object{'messages'}= [];
+
+	return \%msg_object;
+}
+
+#Esta funcion agrega un mensaje al arreglo de objetos mensajes
+sub add {
+	my($Message_hashref, $msg_hashref)=@_;
+#@param $Message_hashref es el objeto mensaje contenedor de los mensajes
+#@param $msg_hashref es un mensaje
+open(A,">>/tmp/debug.txt");
+print A "Mensajes::add \n";
+	#se obtiene el texto del mensaje
+  	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},'INTRA',$msg_hashref->{'params'});	
+	$msg_hashref->{'message'}= $messageString;
+print A "message: ".$messageString."\n";
+print A "params: ".$msg_hashref->{'params'}->[0]."\n";
+
+ 	push (@{$Message_hashref->{'messages'}}, $msg_hashref);
+
+print A "cant: ".scalar(@{$Message_hashref->{'messages'}})."\n";
+
+
+# open(A,">>/tmp/debug.txt");
+# print A "desde add: \n";
+# print A "Error: ".$Message_hashref->{'error'}."\n";
+# print A "codMsg: ".$msg_hashref->{'codMsg'}."\n";
+close(A);
 }
 
 1;

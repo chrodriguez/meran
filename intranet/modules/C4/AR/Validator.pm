@@ -191,47 +191,73 @@ sub checkLength{
 sub checkPassword{
 
 	my($params)=@_;
+	my $msg_object= C4::AR::Mensajes::create();
 
 	#obtengo todas las preferencias
 	my $preferences_hashref= C4::Context->preferences();
 	my($string) = $params->{'newpassword'};
 
 	if (!(C4::AR::Utilidades::validateString($string))){
-		print A "entro a validateString \n";
-		return (1,'U314');
+# 		print A "entro a validateString \n";
+# 		return (1,'U314');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U314', 'params' => []} ) ;
+		return ($msg_object);
 	}					
 
 	if (! ( &checkLength($string, C4::Context->preference('minPassLength') ) ) ){
-		return (1,'U316');
+# 		return (1,'U316');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U316', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countSymbolChars($string) >= 0)){
-		return (1,'U319');
+# 		return (1,'U319');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countAlphaNumericChars($string) >= 0)){
-		return (1,'U324');
+# 		return (1,'U324');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U324', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countAlphaChars($string) >= 0)){
-		return (1,'U325');
+# 		return (1,'U325');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U325', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countNumericChars($string) >= 0)){
-		return (1,'U326');
+# 		return (1,'U326');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U326', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countLowerChars($string) >= 0)){
-		return (1,'U327');
+# 		return (1,'U327');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U327', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
 	if (!(&countUpperChars($string) >= 0)){
-		return (1,'U328');
+# 		return (1,'U328');
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U328', 'params' => []} ) ;
+		return ($msg_object);
 	}
 
-close(A);
-
-	return (0,"NO ERROR");
+# close(A);
+	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U314', 'params' => []} ) ;
+	return ($msg_object);
+# 	return (0,"NO ERROR");
 }
 
 # 
