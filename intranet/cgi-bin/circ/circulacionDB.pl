@@ -137,9 +137,11 @@ print A "id3 antes de setear: $id3\n";
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		
-			($error, $codMsg, $message)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
+# 			($error, $codMsg, $message)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
+			my ($msg_object)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
 			my $ticketObj=0;
-			if(!$error){
+
+			if(!$msg_object->{'error'}){
 			#Se crean los ticket para imprimir.
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
@@ -149,7 +151,8 @@ print A "id3 antes de setear: $id3\n";
 			$messageObj{'codMsg'}= $codMsg;
 			$messageObj{'message'}= $message;
 
-			push (@infoMessages, \%messageObj);
+# 			push (@infoMessages, \%messageObj);
+			push (@infoMessages, $msg_object);
 			
 			my %infoOperacion = (
 						ticket  => $ticketObj,
@@ -191,7 +194,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $ticketObj;
 	my @infoTickets;
 	my @infoMessages;
-	my ($error,$codMsg,$message,$paraMens);
+# 	my ($error,$codMsg,$message,$paraMens);
 	my %params;
 	my %messageObj;
 	$params{'loggedinuser'}= $loggedinuser;
@@ -210,32 +213,36 @@ print A "LOOP: $loop\n";
 		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			my ($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
+# 			my ($error,$codMsg, $message) = C4::AR::Issues::t_devolver(\%params);
+			my ($Message_arrayref) = C4::AR::Issues::t_devolver(\%params);
 
 			#guardo los errores
-  			my %messageObj;
- 			$messageObj{'error'}= $error;
- 			$messageObj{'codMsg'}= $codMsg;
- 			$messageObj{'message'}= $message;
+#   			my %messageObj;
+#  			$messageObj{'error'}= $error;
+#  			$messageObj{'codMsg'}= $codMsg;
+#  			$messageObj{'message'}= $message;
  
- 			push (@infoMessages, \%messageObj);
+#  			push (@infoMessages, \%messageObj);
+			push (@infoMessages, $Message_arrayref);
 
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
-			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
+# 			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
+			my ($Message_arrayref) = C4::AR::Issues::t_renovar(\%params);
 
 			#guardo los errores
-  			my %messageObj;
- 			$messageObj{'error'}= $error;
- 			$messageObj{'codMsg'}= $codMsg;
- 			$messageObj{'message'}= $message;
+#   			my %messageObj;
+#  			$messageObj{'error'}= $error;
+#  			$messageObj{'codMsg'}= $codMsg;
+#  			$messageObj{'message'}= $message;
 
- 			push (@infoMessages, \%messageObj);
+#  			push (@infoMessages, \%messageObj);
+			push (@infoMessages, $Message_arrayref);
 
 
-print A "error: $error --- cod: $codMsg\n";
-			if($print_renew && !$error){
+# print A "error: $error --- cod: $codMsg\n";
+			if($print_renew && !$Message_arrayref->{'error'}){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
 				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
 			}

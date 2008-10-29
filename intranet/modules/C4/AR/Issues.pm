@@ -92,30 +92,35 @@ Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
 =cut
 sub t_devolver {
 	my($params)=@_;
-	my $codMsg;
-	my $error;
-	my $paraMens;
+# 	my $codMsg;
+# 	my $error;
+# 	my $paraMens;
+	my $msg_object;
 	my $dbh = C4::Context->dbh;
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-		($error,$codMsg,$paraMens)= devolver($params);
+# 		($error,$codMsg,$paraMens)= devolver($params);
+		($msg_object)= devolver($params);
 		$dbh->commit;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B406';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+# 		$codMsg= 'B406';
+		&C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-		$error= 1;
-		$paraMens->[0]=$params->{'barcode'};
-		$codMsg= 'P110';
+# 		$error= 1;
+# 		$paraMens->[0]=$params->{'barcode'};
+# 		$codMsg= 'P110';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+# 	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 =item
@@ -128,11 +133,12 @@ sub devolver {
 	my $tipo= $params->{'tipo'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $borrowernumber= $params->{'borrowernumber'};
-	my $codMsg;
-	my $error;
-	my $paraMens;
+# 	my $codMsg;
+# 	my $error;
+# 	my $paraMens;
+	my $msg_object= C4::AR::Mensajes::create();
 	#se setea el barcode para informar al usuario en la devolucion
-	$paraMens->[0]= $params->{'barcode'};
+# 	$paraMens->[0]= $params->{'barcode'};
 
 	my $prestamo= getDatosPrestamo($id3);
 	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
@@ -203,16 +209,21 @@ sub devolver {
 		}
 ### Final del tema sanciones
 		# Si la devolucion se pudo realizar
-		$error= 0;
-		$codMsg= 'P109';
+# 		$error= 0;
+# 		$codMsg= 'P109';
+		$msg_object->{'error'}= 0;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
 	}
 	else {
 		# Si la devolucion dio error
-		$error= 1;
-		$codMsg= 'P110';
+# 		$error= 1;
+# 		$codMsg= 'P110';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
 	}
 
-	return ($error,$codMsg, $paraMens);
+# 	return ($error,$codMsg, $paraMens);
+	return ($msg_object);
 }
 
 sub getDatosPrestamo{
@@ -396,14 +407,15 @@ sub renovar {
 	my $id3= $params->{'id3'};
 	my $tipo= $params->{'tipo'};
 	my $loggedinuser= $params->{'loggedinuser'};
-	my $paraMens;
-	my $codMsg;
-	my $error= 0;
+# 	my $paraMens;
+# 	my $codMsg;
+# 	my $error= 0;
 
 	my $renovacion= &sepuederenovar($borrowernumber,$id3);
-	my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
+# 	my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
+	my ($msg_object)= verificarParaRenovar($params);
 
-	if( ($renovacion) && (!$error) ){
+	if( ($renovacion) && (!$msg_object->{'error'}) ){
 	#Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
 
 		my $dbh = C4::Context->dbh;
@@ -439,14 +451,22 @@ sub renovar {
 									$end_date
 								);
 #****************************Fin******Se registra el movimiento en historicCirculation*************************
-		$codMsg= 'P111';
-		$error= 0;		
+# 		$codMsg= 'P111';
+# 		$error= 0;	
+		$msg_object->{'error'}= 0;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$params->{'barcode'}]} ) ;
+	
 	}else{
 		#el prestamo no se puede renovar
-		$codMsg= 'P112';
-		$error= 1;
+# 		$codMsg= 'P112';
+# 		$error= 1;
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => []} ) ;
+
 	}
-	return ($error,$codMsg, $paraMens);
+# 	return ($error,$codMsg, $paraMens);
+
+	return ($msg_object);
 }
 
 =item
@@ -455,22 +475,27 @@ Se verifica que se cumplan las condiciones para poder renovar
 sub verificarParaRenovar{
 	my ($params)=@_;
 
-	my $error= 0;
-	my $codMsg= '000';
-	my @paraMens;
+# 	my $error= 0;
+# 	my $codMsg= '000';
+# 	my @paraMens;
 	#se setea el barcode para informar al usuario en la renovacion	
-	@paraMens[0]= $params->{'barcode'};	
+# 	@paraMens[0]= $params->{'barcode'};	
+	my $msg_object= C4::AR::Mensajes::create();
 
 	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation($params->{'borrowernumber'},"");
 	$params->{'usercourse'}= $borrower->{'usercourse'};
 
 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
-	if( !($error) && $params->{'tipo'} eq "OPAC" && (C4::Context->preference("usercourse") && ($params->{'usercourse'} == "NULL" ) ) ){
-		$error= 1;
-		$codMsg= 'P114';
+	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::Context->preference("usercourse") 
+		&& ($params->{'usercourse'} == "NULL" ) ) ){
+# 		$error= 1;
+# 		$codMsg= 'P114';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
 	}
 
-	return ($error, $codMsg,\@paraMens);
+# 	return ($error, $codMsg,\@paraMens);
+	return ($msg_object);
 }
 
 =item
@@ -484,23 +509,29 @@ sub t_renovar{
 	$dbh->{AutoCommit} = 0;
 	$dbh->{RaiseError} = 1;
 	my $tipo=$params->{'tipo'};
-	my ($error,$codMsg,$paraMens);
+	my $msg_object;
+# 	my ($error,$codMsg,$paraMens);
 	eval{
-		($error,$codMsg,$paraMens)= renovar($params);
+# 		($error,$codMsg,$paraMens)= renovar($params);
+		($msg_object)= renovar($params);
 		$dbh->commit;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B405';
-		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+# 		$codMsg= 'B405';
+		C4::AR::Mensajes::printErrorDB($@, 'B405',$tipo);
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'P113';
+# 		$error= 1;
+# 		$codMsg= 'P113';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P113', 'params' => []} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
-	return($error,$codMsg,$message);
+# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+# 	return($error,$codMsg,$message);
+
+	return ($msg_object);
 }
 
 sub verificarTipoPrestamo {

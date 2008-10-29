@@ -328,8 +328,8 @@ function cancelarReserva(reserveNumber){
  * tabla de reservas.
  */
 function updateInfoCancelacion(responseText){
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
