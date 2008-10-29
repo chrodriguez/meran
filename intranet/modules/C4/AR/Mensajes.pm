@@ -179,6 +179,7 @@ my %mensajesINTRA = (
 	'U348' => 'Disculple, no se pudo hablitar el usurio, intente nuevamente',
 	'U349' => 'El usuario con tarjeta id: *?* es IRREGULAR y no puede ser habilitado!!!',
 	'U350' => 'El usuario con tarjeta id: *?* NO se encuentra habilitado!!!',
+	'U351' => 'El usuario no se puede borrar ya que cuenta con prestamos activos y/o vencidos!!!',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',

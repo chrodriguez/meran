@@ -6,6 +6,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
+use C4::AR::Issues;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -43,29 +44,24 @@ sub t_delPersons {
 	my $dbh = C4::Context->dbh;
 	my $msg_object= C4::AR::Mensajes::create();
 
-	if(!$msg_object->{'error'}){
-	#No hay error
+	# enable transactions, if possible
+	$dbh->{AutoCommit} = 0;  
+	$dbh->{RaiseError} = 1;
 
-		# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			_delPersons($persons_array_ref, $msg_object);	
-			$dbh->commit;
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+	eval {
+		_delPersons($persons_array_ref, $msg_object);	
+		$dbh->commit;
+	};
 
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
 	}
+	$dbh->{AutoCommit} = 1;
 
 	return ($msg_object);
 }
@@ -213,7 +209,7 @@ sub t_eliminarUsuario {
 	my $msg_object= C4::AR::Mensajes::create();
 
 #  	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
-	_verficarEliminarUsuario($params);
+	_verficarEliminarUsuario($params,$msg_object);
 
 	if(!$msg_object->{'error'}){
 	#No hay error
@@ -278,15 +274,26 @@ sub _eliminarUsuario{
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
+# FIXME fijarse que aca no se checkea nada, por ejemplo si tiene reservas, libros en su poder, etc...
+
 sub _verficarEliminarUsuario {
 	my($params)=@_;
 
 	my $msg_object= C4::AR::Mensajes::create();
 
-	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'}) ) ){
-	#se verifica la existencia del usuario
+	my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
+
+	my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
+
+	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
+	#se verifica la existencia del usuario, que ahora no existe
 		$msg_object->{'error'}= 1;
   		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
+	} 
+	elsif ($cantidadTotalDePrestamos > 0){
+		#se verifica que no tenga prestamos activos
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
 
 	return ($msg_object);

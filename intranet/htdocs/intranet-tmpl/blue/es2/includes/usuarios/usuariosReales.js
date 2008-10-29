@@ -26,7 +26,7 @@ function eliminarUsuario(){
 
 function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
-	setMessage(Messages);
+	setMessages(Messages);
 }
 
 //*********************************************Fin***Eliminar Usuario*********************************************
