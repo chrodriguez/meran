@@ -31,15 +31,15 @@ use vars qw(@EXPORT @ISA);
 	);
 
 my $picturesDir= C4::Context->config("picturesdir");
+
 sub uploadPhoto{
 
 	my ($bornum,$filepath)=@_;
 	my $msg='';
 	my $bytes_read;
 	my $size= 0;
-	my ($error)=0;
-	my ($paraMens);
-	$msg= 'U340';
+	my $msg_object= C4::AR::Mensajes::create();
+
 	my @extensiones_permitidas=("bmp","jpg","gif","png");
 	my @nombreYextension=split('\.',$filepath);
 	if (scalar(@nombreYextension)==2) { 
@@ -49,14 +49,14 @@ sub uploadPhoto{
 		my $write_file= $picturesDir."/".$bornum.".".$ext;
 	
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
-			$msg= 'U341';
-			$error=1;
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;	
 		} else 
 		{
 	
 			if (!(open(WFD,">$write_file"))) {
-				$msg='U342';
-				$error=1;
+				$msg_object->{'error'}= 1;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;	
 			}
 			else	
 			{
@@ -66,33 +66,33 @@ sub uploadPhoto{
 					print WFD $buff;
 				}
 				close(WFD);
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U340', 'params' => []} ) ;	
 			}
 		}
 	} else {
-		$msg= 'U343';
-		$error=1;
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U343', 'params' => []} ) ;	
 	}
-	my $message= &C4::AR::Mensajes::getMensaje($msg,'INTRA',$paraMens);
-	return ($error, $msg, $message);
+
+	return ($msg_object);
 }
 
 sub deletePhoto{
 
 	my ($foto_name)=@_;
-	my ($error)=0;
-	my ($paraMens);
-	my ($msg)='U344';
-	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
-	    unlink($picturesDir.'/'.$foto_name);
-	}else{
-		$msg='U345';
-		$error=1;
-	     }
+	my $msg_object= C4::AR::Mensajes::create();
 	
-	my $message= &C4::AR::Mensajes::getMensaje($msg,'INTRA',$paraMens);
-	return ($error, $msg, $message);
-
-
+	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
+	    	unlink($picturesDir.'/'.$foto_name);
+		$msg_object->{'error'}= 0;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;	
+	}else{
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U345', 'params' => []} ) ;	
+	}
+		
+	return ($msg_object);
 }
 
 

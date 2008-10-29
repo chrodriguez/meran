@@ -125,7 +125,7 @@ function createFileUploader(){
 
 		$("#uploader").fileUploader({
 						// perl script
-						ajaxFile: "../upload.pl",
+						ajaxFile: "uploadPicture.pl",
 						bornum: usuario.ID,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);

@@ -42,8 +42,6 @@ use vars qw(@EXPORT @ISA);
 sub t_delPersons {	
 	my($persons_array_ref)=@_;
 	my $dbh = C4::Context->dbh;
-open(A, ">>/tmp/debug.txt");
-print A "desde t_delPersons \n";
 	my $msg_object= C4::AR::Mensajes::create();
 
 	if(!$msg_object->{'error'}){
@@ -56,10 +54,6 @@ print A "desde t_delPersons \n";
 		eval {
 			_delPersons($persons_array_ref, $msg_object);	
 			$dbh->commit;
-# 			$codMsg= 'U320';
-# 			$paraMens->[0]= $params->{'usuario'};
-# 			$msg_object->{'error'}= 0;
-# 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => []}) ;
 		};
 	
 		if ($@){
@@ -67,8 +61,6 @@ print A "desde t_delPersons \n";
 			&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-# 			$error= 1;
-# 			$codMsg= 'U319';
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
 		}

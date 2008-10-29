@@ -293,8 +293,10 @@ function eliminarFoto(foto){
 	objAH.sendToServer();
 }
 
-function updateEliminarFoto(){
+function updateEliminarFoto(responseText){
 	//se muestran mensajes
 	//se resfresca la info de usuario
 	detalleUsuario();
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }

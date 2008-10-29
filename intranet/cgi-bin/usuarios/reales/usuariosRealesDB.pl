@@ -128,7 +128,6 @@ Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
 	
-#   	my ($error,$codMsg,$message)= C4::AR::Usuarios::t_addBorrower($obj);
 	my ($Message_arrayref)= C4::AR::Usuarios::t_addBorrower($obj);
 
 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -290,15 +289,14 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
-
-
-elsif($tipoAccion eq "SUBIR_FOTO"){
-	my $bornum= $obj->{'borrowernumber'};
-	my $filepath= $obj->{'picture'};
- 	my $msg= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);
-}	
+	
 
 elsif($tipoAccion eq "ELIMINAR_FOTO"){
 	my $foto_name= $obj->{'foto_name'};
-	my $msg= &C4::AR::UploadFile::deletePhoto($foto_name);
+	my ($Message_arrayref)= &C4::AR::UploadFile::deletePhoto($foto_name);
+	
+	my $infoOperacionJSON=to_json $Message_arrayref;
+	
+	print $input->header;
+	print $infoOperacionJSON;
 }	
