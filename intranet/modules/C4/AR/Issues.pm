@@ -175,7 +175,7 @@ sub devolver {
 		my $daysissue=$issuetype->{'daysissues'};
 		my $dateformat = C4::Date::get_date_format();
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-		my $categorycode=C4::AR::Usuarios::obtenerCategoria($borrowernumber);
+		my $categorycode=C4::AR::Usuarios::obtenerCategoriaBorrower($borrowernumber);
                 my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'issuecode'});
 
 		if ($sanctionDays gt 0) {

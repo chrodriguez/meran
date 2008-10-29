@@ -265,26 +265,11 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	} else {
 		$foto= 0;
 	}
-	####
-	
-	#### Verifica si hay problemas para subir la foto
-	my $msgFoto=$input->param('msg');
-	($msgFoto) || ($msgFoto=0);
-	####
-	
-	#### Verifica si hay problemas para borrar un usuario
-	my $msgError=$input->param('error');
-	($msgError) || ($msgError=0);
-	####
 	
 	$template->param($data);
 	$template->param(
 			bornum          => $bornum,
-# 			completo	=> $completo,
-# # # # # # 			mensaje		=> $mensaje,
 			foto_name 	=> $foto,
-			mensaje_error_foto   => $msgFoto,
-			mensaje_error_borrar => $msgError,
 		);
 	
 	output_html_with_http_headers $input, $cookie, $template->output;

@@ -27,13 +27,12 @@ use vars qw(@EXPORT @ISA);
 	&NewBorrowerNumber
 	&findguarantees
 	&updateOpacBorrower
-
+	&obtenerCategoriaBorrower
 	&t_cambiarPassword
 	&t_cambiarPermisos
 	&t_addBorrower
 	&t_updateBorrower
 	&t_eliminarUsuario
-	
 	&t_addPerson
 	&t_delPersons
 );
@@ -75,7 +74,9 @@ sub _verificarInfoDelPerson {
 	my ($person, $msg_object)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+	my $sth=$dbh->prepare("	SELECT * 
+				FROM persons 
+				WHERE personnumber=?");
 	$sth->execute($person);
 	my $personData=$sth->fetchrow_hashref;
 
@@ -91,7 +92,9 @@ sub _delPersons {
 	my ($persons_array_ref, $msg_object)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+	my $sth=$dbh->prepare("	SELECT * 
+				FROM persons 
+				WHERE personnumber=?");
 
 	foreach my $person (@$persons_array_ref){
 		$sth->execute($person);
@@ -147,7 +150,9 @@ sub _verificarInfoAddPerson {
 	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
 
 	#Verificar que ya no exista como borrower
-	my $sth2=$dbh->prepare("SELECT * FROM borrowers WHERE cardnumber=?");
+	my $sth2=$dbh->prepare("SELECT * 
+				FROM borrowers 
+				WHERE cardnumber=?");
 	$sth2->execute($params->{'cardnumber'});
 	my $borrower= $sth2->fetchrow_hashref;
 
@@ -168,7 +173,9 @@ sub addPersons {
 	my ($persons)=@_;
 	
  	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM persons WHERE personnumber=?");
+	my $sth=$dbh->prepare("	SELECT * 
+				FROM persons 
+				WHERE personnumber=?");
 
 	my $msg_object= C4::AR::Mensajes::create();
 	
@@ -182,7 +189,9 @@ sub addPersons {
 			my $borrowernumber= addBorrower($borrowerData);
 			#Se agregar en borrower
 			#Se actualiza la persona con el borrowernumber
-			my $sth3=$dbh->prepare("UPDATE persons SET borrowernumber=? WHERE personnumber=?");
+			my $sth3=$dbh->prepare("UPDATE persons 
+						SET borrowernumber=? 
+						WHERE personnumber=?");
 			$sth3->execute($borrowernumber, $person);
 			$sth3->finish;
 		
@@ -957,7 +966,7 @@ sub ListadoDePersonas  {
 	}
 
 	$query.=$where;
-	$query2.=$where." order by ".$orden." limit ?,?";
+	$query2.=$where." ORDER BY ".$orden." LIMIT ?,?";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute(@bind);
@@ -979,7 +988,7 @@ sub ListadoDePersonas  {
 # ObtenerCategoria
 # Obtiene la categoria de un usuario en particular.
 
-# FIXME PREGUNTARLE AL MONO SI SE PUEDE SEPARAR
+# FIXME OBSOLETO?¿??
 sub obtenerCategoria{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
@@ -998,6 +1007,32 @@ sub obtenerCategoria{
 	$sth->finish();
         return $condicion;
 } 
+# FIXME OBSOLETO??
+sub obtenerCategoriaPersona{
+        my ($bor) = @_;
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("	SELECT categorycode 	
+				 	FROM persons 
+					WHERE borrowernumber = ?");
+        $sth->execute($bor);
+        my $condicion = $sth->fetchrow();
+	$sth->finish();
+        return $condicion;
+} 
+
+sub obtenerCategoriaBorrower{
+        my ($bor) = @_;
+        my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("	SELECT categorycode 
+				FROM borrowers 
+				WHERE borrowernumber = ?");
+	$sth->execute($bor);
+       	my $condicion = $sth->fetchrow();
+	$sth->finish();
+        return $condicion;
+} 
+
+
 
 
 # Obtiene todas las categorías que hay en el sistema, y retorna 2 arreglos: uno con los codigos y otro con las descripciones.

@@ -53,10 +53,10 @@ function updateInfoActualizar(responseText){
 
  	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-//   	consultar();
+   	buscarUsuariosPotenciales();
 }
 
-function consultar(){
+function buscarUsuariosPotenciales(){
 	var busqueda = $("#member").val();
 	if(busqueda != ""){
 		objAH=new AjaxHelper(updateInfo);
@@ -115,7 +115,7 @@ $(document).ready(function() {
 			<input id="member" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="consultar('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
 			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 
