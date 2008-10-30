@@ -149,6 +149,7 @@ function detallePrestamos(borr){
 function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
+	checkedAll('checkAllPrestamos','chkboxPrestamos');	
 }
 
 function detalleReservas(borr){
@@ -164,6 +165,7 @@ function updateDetalleReservas(responseText){
 	$('#reservas').html(responseText);
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
+	checkedAll('checkAllReservas','chkboxReservas');
 }
 
 
@@ -172,9 +174,7 @@ function updateDetalleReservas(responseText){
 
 $(document).ready(function() {
 
-	checkedAll('checkAllReservas','chkboxReservas');
-	checkedAll('checkAllPrestamos','chkboxPrestamos');
-	zebra("tablaResult");
+// 	zebra("tablaResult");
 	
 	//definido en circulacion.js
 	usuario= new objeto_usuario();

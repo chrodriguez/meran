@@ -5,6 +5,7 @@
 
 <script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
 <script src="/opac-tmpl/default/es2/includes/AjaxHelper.js"></script>
+<script src="/opac-tmpl/default/es2/includes/MessageHelper.js"></script>
 <script src="/opac-tmpl/default/es2/includes/json/jsonStringify.js"></script>
 <script src="/opac-tmpl/default/es2/includes/navegador.js"></script>
 <script src="/opac-tmpl/default/es2/includes/util.js"></script>

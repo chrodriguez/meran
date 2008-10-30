@@ -269,7 +269,9 @@ VALUE ("amazon-token","09RZQDPDWPQK1WWVSH02","Token para conectarse a Amazon");
 
 ##############################################################################
 
+#Se modifico nombre de campo de la tabla availability
 
+ALTER TABLE `availability` CHANGE `item` `id3` VARCHAR( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
 
 
 

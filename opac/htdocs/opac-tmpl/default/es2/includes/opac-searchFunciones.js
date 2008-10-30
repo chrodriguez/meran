@@ -249,7 +249,7 @@ function updateInfoDetalle(responseText){
 	$('#result').html(responseText);
 	zebra('tablaDetalleNivel3');
 	$('#result').slideDown('slow');
-	pushCache(responseText, 'result');
+// 	pushCache(responseText, 'result');
 
 }
 

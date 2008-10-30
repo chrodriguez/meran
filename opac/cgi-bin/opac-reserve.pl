@@ -40,15 +40,16 @@ $params{'borrowernumber'}= $borrowernumber;
 $params{'loggedinuser'}= $borrowernumber;
 $params{'issuesType'}= 'DO';
 
-my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
+# my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
+my ($msg_object)= &C4::AR::Reservas::t_reservarOPAC(\%params);	
 my $acciones;
 
-$acciones= C4::AR::Mensajes::getAccion($codMsg);
+$acciones= C4::AR::Mensajes::getAccion($msg_object->{'codMsg'});
 
 
 my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
 
-if($error){
+if($msg_object->{'error'}){
 #SE PRODUJO ALGUN ERROR
 
 	if($acciones->{'maximoReservas'}){
@@ -106,8 +107,8 @@ if($error){
 $template->param (
 	id1 => $id1,
 	id2 => $id2,
-	message	=> $message,
-	error	=> $error,
+	message	=> $msg_object->{'messages'}->[0]->{'message'},
+	error	=>  $msg_object->{'error'},
 	reservaGrupo => $acciones->{'reservaGrupo'},
 	maximoReservas => $acciones->{'maximoReservas'},
 	materialParaRetirar => $acciones->{'materialParaRetirar'},

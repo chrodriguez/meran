@@ -9,27 +9,27 @@
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (typeof($.Autocompleter) != "function"){
 		
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
+	/*$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js")*/;
 // 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");
 // }
 
-function closeWindow(){
-	$('.windowBlur').hide();
-	$('.ac_results').hide();
-	$('#windowUser').hide();
-}
+// function closeWindow(){
+// 	$('.windowBlur').hide();
+// 	$('.ac_results').hide();
+// 	$('#windowUser').hide();
+// }
 
-function openWindow(){
-	$('.windowBlur').show();
-	$('#windowUser').draggable({opacity: 0.7777});
-	$('#windowUser').show();
-	$('#windowUser').centerObject();	
-	$('#campoUsuario').focus();
-}
+// function openWindow(){
+// 	$('.windowBlur').show();
+// 	$('#windowUser').draggable({opacity: 0.7777});
+// 	$('#windowUser').show();
+// 	$('#windowUser').centerObject();	
+// 	$('#campoUsuario').focus();
+// }
 
 function clearInput(){
 	$('#campoUsuario').val("");
@@ -87,31 +87,23 @@ $(document).ready(function() {
 
 </script>
 
-<div id=windowUser class="window" style="display:none; height:200px; width:500px;">
-	<div class="windowBlur" style="display:none; height:204px; width:500px;"></div> <!-- end div blur -->
-		<div id="headerWindow" class="headerWindow">
-			<span class="click" onClick="closeWindow();">Cerrar</span>
-		</div>
-
-		<div id="title" class="title">Buscar Usuario</div>
-		<div id="contentWindow" class="formElemets">
-			<ul>
-			<li>
-				<label for="campoUsuario" style="float: left;" >
-				<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
-				</label><br>
-				<input 	type="text" id="campoUsuario" onClick="clearInput();" 
-					name="campoUsuario" style="width:90%;">
-			</li>
-			<li>
-				<div id="detalleUsuario"></div>
-			</li>
-			<li>
-				<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
-			</li>
-			</ul>
-		</div> <!--end div id="contentWindow"-->
-</div> <!-- end div window -->
+<div id="contentWindow" class="formElemets">
+	<ul>
+	<li>
+		<label for="campoUsuario" style="float: left;" >
+		<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
+		</label><br>
+		<input 	type="text" id="campoUsuario" onClick="clearInput();" 
+			name="campoUsuario" style="width:90%;">
+	</li>
+	<li>
+		<div id="detalleUsuario"></div>
+	</li>
+	<li>
+		<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
+	</li>
+	</ul>
+</div> <!--end div id="contentWindow"-->
 
 <!-- *******************************Fin**Window Help********************************************* -->
 

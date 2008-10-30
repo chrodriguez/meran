@@ -86,8 +86,10 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 * Funcion que muestra el mensaje al usuario, luego de cancelar una reserva
 */
 function updateInfoCancelarReserva(responseText){
-	objJSON= JSONstring.toObject(responseText);
-	showMessage(objJSON.message);
+// 	objJSON= JSONstring.toObject(responseText);
+// 	showMessage(objJSON.message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);	
 	DetalleReservas();
 }
 
@@ -109,12 +111,15 @@ function renovar(id3){
 * Funcion que muestra mensajes al usuario luego de renovar un prestamo
 */
 function updateInfoRenovar(responseText){
-	var infoArray= JSONstring.toObject(responseText);
-	var mensajes= '';
-	for(i=0; i<infoArray.length;i++){
-		mensajes= mensajes + infoArray[i].message + '<br>';
-	}
-	$('#mensajes font').html(mensajes);
+// 	var infoArray= JSONstring.toObject(responseText);
+// 	var mensajes= '';
+// 	for(i=0; i<infoArray.length;i++){
+// 		mensajes= mensajes + infoArray[i].message + '<br>';
+// 	}
+// 	$('#mensajes font').html(mensajes);
+	var Messages=JSONstring.toObject(responseText);
+alert(Messages);
+	setMessages(Messages);
 	DetallePrestamos();	
 }
 

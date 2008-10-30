@@ -37,7 +37,6 @@ $VERSION = 0.01;
 	&t_cancelar_reserva
 	&t_cancelar_y_reservar
 	&cancelar_reservas
-	&verificaciones
 	&cant_reservas
 	&getReservasDeGrupo
 	&cantReservasPorGrupo
@@ -59,9 +58,10 @@ sub t_reservarOPAC {
 	my($params)=@_;
 	my $reservaGrupo= 0;
 
-	my ($error, $codMsg,$paraMens)= &verificaciones($params);
+# 	my ($error, $codMsg,$paraMens)= &verificaciones($params);
+	my ($msg_object)= &_verificaciones($params);
 	
-	if(!$error){
+	if(!$msg_object->{'error'}){
 	#No hay error
 		my $dbh = C4::Context->dbh;
 		my ($paramsReserva);
@@ -74,34 +74,45 @@ sub t_reservarOPAC {
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
 			#SE RESERVO CON EXITO UN EJEMPLAR
-				$codMsg= 'U302';
-				$paraMens->[0]= $paramsReserva->{'desde'};
-				$paraMens->[1]= $paramsReserva->{'desdeh'};
-				$paraMens->[2]= $paramsReserva->{'hasta'};
-				$paraMens->[3]= $paramsReserva->{'hastah'};
+# 				$codMsg= 'U302';
+# 				$paraMens->[0]= $paramsReserva->{'desde'};
+# 				$paraMens->[1]= $paramsReserva->{'desdeh'};
+# 				$paraMens->[2]= $paramsReserva->{'hasta'};
+# 				$paraMens->[3]= $paramsReserva->{'hastah'};
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'},
+													$paramsReserva->{'desdeh'},
+													$paramsReserva->{'hasta'},
+													$paramsReserva->{'hastah'}
+								]} ) ;
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-				$codMsg= 'U303';
+# 				$codMsg= 'U303';
 				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+# 				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
 			}	
 		};
 
 		if ($@){
 			#Se loguea error de Base de Datos
-			$codMsg= 'B400';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+# 			$codMsg= 'B400';
+			&C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'R009';
+# 			$error= 1;
+# 			$codMsg= 'R009';
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R009', 'params' => []} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 		
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-	return ($error, $codMsg, $message);
+# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+# 	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 sub t_cancelar_y_reservar {
@@ -110,32 +121,45 @@ sub t_cancelar_y_reservar {
 
 	my $dbh = C4::Context->dbh;
 	my $paramsReserva;
-	my ($error, $codMsg,$paraMens);
-	
+# 	my ($error, $codMsg,$paraMens);
+	my ($msg_object);	
+
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+# 		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+		_cancelar_reserva($params);
 
-		($error, $codMsg,$paraMens)= &verificaciones($params);
+# 		($error, $codMsg,$paraMens)= &verificaciones($params);
+		my ($msg_object)= &_verificaciones($params);
 
-		if(!$error){
+		
+		if(!$msg_object->{'error'}){
 
 			($paramsReserva)= reservar($params);	
 		
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
 			#SE RESERVO CON EXITO UN EJEMPLAR
-				$codMsg= 'U302';
-				$paraMens->[0]= $paramsReserva->{'desde'};
-				$paraMens->[1]= $paramsReserva->{'desdeh'};
-				$paraMens->[2]= $paramsReserva->{'hasta'};
-				$paraMens->[3]= $paramsReserva->{'hastah'};
+# 				$codMsg= 'U302';
+# 				$paraMens->[0]= $paramsReserva->{'desde'};
+# 				$paraMens->[1]= $paramsReserva->{'desdeh'};
+# 				$paraMens->[2]= $paramsReserva->{'hasta'};
+# 				$paraMens->[3]= $paramsReserva->{'hastah'};
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'}, 
+													$paramsReserva->{'desdeh'},
+													$paramsReserva->{'hasta'},
+													$paramsReserva->{'hastah'}
+						]} ) ;
+
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-				$codMsg= 'U303';
+# 				$codMsg= 'U303';
 				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+# 				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
 			}
 		}
 
@@ -144,18 +168,21 @@ sub t_cancelar_y_reservar {
 
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B407';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+# 		$codMsg= 'B407';
+		&C4::AR::Mensajes::printErrorDB($@, 'B407',"OPAC");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R011';
+# 		$error= 1;
+# 		$codMsg= 'R011';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
 	
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-	return ($error, $codMsg, $message);
+# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+# 	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 sub reservar {
@@ -273,7 +300,7 @@ sub cancelar_reservas{
 		while (my $data= $sth->fetchrow_hashref){
 			$params->{'reservenumber'}= $data->{'reservenumber'};
 			$params->{'id2'}= $data->{'id2'};
-			cancelar_reserva($params);
+			_cancelar_reserva($params);
 		}
 		
 		$sth->finish;
@@ -298,7 +325,8 @@ sub cancelar_reservas_inmediatas{
 
 	while (my $reservenumber= $sth->fetchrow){
 		$params->{'reservenumber'}=$reservenumber;
-		my ($error,$codMsg,$paraMens)=cancelar_reserva($params);
+# 		my ($error,$codMsg,$paraMens)=cancelar_reserva($params);
+		_cancelar_reserva($params);
 	}
 	$sth->finish;
 }
@@ -311,28 +339,38 @@ Transaccion que cancela una reserva.
 sub t_cancelar_reserva{
 	my ($params)=@_;
 	my $dbh = C4::Context->dbh;
+	
+	my $tipo=$params->{'tipo'};
+# 	 my ($error,$codMsg,$paraMens);
+	my $msg_object= C4::AR::Mensajes::create();
 	$dbh->{AutoCommit} = 0;
 	$dbh->{RaiseError} = 1;
-	my $tipo=$params->{'tipo'};
-	my ($error,$codMsg,$paraMens);
+
+
 	eval{
-		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+# 		($error,$codMsg,$paraMens)=cancelar_reserva($params);
+		_cancelar_reserva($params);
 		$dbh->commit;
 
-		$codMsg= 'U308';
+# 		$codMsg= 'U308';
+		$msg_object->{'error'}= 0;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B404';
-		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
+# 		$codMsg= 'B404';
+		C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R010';
+# 		$error= 1;
+# 		$codMsg= 'R010';
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
-	return($error,$codMsg,$message);
+# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
+# 	return($error,$codMsg,$message);
+	return ($msg_object);
 }
 
 
@@ -340,15 +378,15 @@ sub t_cancelar_reserva{
 cancelar_reserva
 Funcion que cancela una reserva
 =cut
-sub cancelar_reserva{
+sub _cancelar_reserva{
 	my ($params)=@_;
 	my $dbh= C4::Context->dbh;
 	my $reservenumber=$params->{'reservenumber'};
 	my $borrowernumber=$params->{'borrowernumber'};
 	my $loggedinuser=$params->{'loggedinuser'};
-	my $error=0;
-	my $codMsg;
-	my $paraMens;
+# 	my $error=0;
+# 	my $codMsg;
+# 	my $paraMens;
 	my $reserva=getDatosReserva($reservenumber);
 	my $id2=$reserva->{'id2'};
 	my $id3=$reserva->{'id3'};
@@ -393,7 +431,7 @@ sub cancelar_reserva{
 							);
 #******************************Fin****Se registra el movimiento en historicCirculation*************************
 
-	return($error,$codMsg,$paraMens);
+# 	return($error,$codMsg,$paraMens);
 }
 
 =item
@@ -733,7 +771,7 @@ WHERE (bib.biblioitemnumber = 2965) AND(i.notforloan = 0)AND(wthdrawn = 0)
 	return ($sth->fetchrow > 0)?'DO':'SA';
 }
 
-sub verificaciones {
+sub _verificaciones {
 	my($params)=@_;
 
 	my $tipo= $params->{'tipo'}; #INTRA u OPAC
@@ -1009,7 +1047,7 @@ sub t_realizarPrestamo{
 	my ($params)=@_;
 	
 # 	my ($error,$codMsg,$paraMens)= &verificaciones($params);
-	my ($msg_object)= &verificaciones($params);
+	my ($msg_object)= &_verificaciones($params);
 	if(!$msg_object->{'error'}){
 	#No hay error
 		my $dbh=C4::Context->dbh;

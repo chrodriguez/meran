@@ -3,9 +3,13 @@
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/WindowHelper.js"></script>
 
-<!-- Ventana para buscar usuarios para prestar -->
-<!-- TMPL_INCLUDE NAME="../includes/popups/buscarUsuario.inc" -->
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
 
 <script>
 
@@ -93,13 +97,31 @@ var items_array = new Array();
 // parche, ver si se puede hacer mejor
 var grupo;
 
+// function buscarUsuario(id3, id2){
+// 
+// 	items_array[0]=id3;
+// 	grupo= id2;
+// 	openWindow();
+// }
+
+
 function buscarUsuario(id3, id2){
+	objAH=new AjaxHelper(updateBuscarUsuario);
+	objAH.url='/intranet-tmpl/blue/es2/includes/popups/buscarUsuario.inc';
+	objAH.debug= true;
+	objAH.sendToServer();
 
 	items_array[0]=id3;
-	grupo= id2;
-	openWindow();
+ 	grupo= id2;
 }
 
+function updateBuscarUsuario(responseText){
+
+	vBuscarUsuario=new WindowHelper();
+	vBuscarUsuario.html=responseText;
+ 	vBuscarUsuario.titulo= 'Buscar Usuario';
+	vBuscarUsuario.create();
+}
 
 function renovar(accion,userId,userNom,id2,id3){
 	
@@ -168,7 +190,8 @@ function confirmarPrestamo(){
 		objAH.borrowernumber=usuario.ID;
 		//se envia la consulta
 		objAH.sendToServer();
-		closeWindow();
+// 		closeWindow();
+		vBuscarUsuario.close();
 	}
 }
 
