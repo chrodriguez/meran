@@ -58,7 +58,6 @@ sub t_reservarOPAC {
 	my($params)=@_;
 	my $reservaGrupo= 0;
 
-# 	my ($error, $codMsg,$paraMens)= &verificaciones($params);
 	my ($msg_object)= &_verificaciones($params);
 	
 	if(!$msg_object->{'error'}){
@@ -74,11 +73,6 @@ sub t_reservarOPAC {
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
 			#SE RESERVO CON EXITO UN EJEMPLAR
-# 				$codMsg= 'U302';
-# 				$paraMens->[0]= $paramsReserva->{'desde'};
-# 				$paraMens->[1]= $paramsReserva->{'desdeh'};
-# 				$paraMens->[2]= $paramsReserva->{'hasta'};
-# 				$paraMens->[3]= $paramsReserva->{'hastah'};
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'},
 													$paramsReserva->{'desdeh'},
@@ -87,9 +81,7 @@ sub t_reservarOPAC {
 								]} ) ;
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-# 				$codMsg= 'U303';
 				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-# 				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
 			}	
@@ -97,12 +89,9 @@ sub t_reservarOPAC {
 
 		if ($@){
 			#Se loguea error de Base de Datos
-# 			$codMsg= 'B400';
 			&C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-# 			$error= 1;
-# 			$codMsg= 'R009';
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R009', 'params' => []} ) ;
 		}
@@ -110,8 +99,6 @@ sub t_reservarOPAC {
 		
 	}
 
-# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-# 	return ($error, $codMsg, $message);
 	return ($msg_object);
 }
 
@@ -121,16 +108,13 @@ sub t_cancelar_y_reservar {
 
 	my $dbh = C4::Context->dbh;
 	my $paramsReserva;
-# 	my ($error, $codMsg,$paraMens);
 	my ($msg_object);	
 
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-# 		($error,$codMsg,$paraMens)=cancelar_reserva($params);
 		_cancelar_reserva($params);
 
-# 		($error, $codMsg,$paraMens)= &verificaciones($params);
 		my ($msg_object)= &_verificaciones($params);
 
 		
@@ -141,11 +125,6 @@ sub t_cancelar_y_reservar {
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
 			#SE RESERVO CON EXITO UN EJEMPLAR
-# 				$codMsg= 'U302';
-# 				$paraMens->[0]= $paramsReserva->{'desde'};
-# 				$paraMens->[1]= $paramsReserva->{'desdeh'};
-# 				$paraMens->[2]= $paramsReserva->{'hasta'};
-# 				$paraMens->[3]= $paramsReserva->{'hastah'};
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'}, 
 													$paramsReserva->{'desdeh'},
@@ -155,9 +134,7 @@ sub t_cancelar_y_reservar {
 
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-# 				$codMsg= 'U303';
 				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-# 				$paraMens->[0]= $borrowerInfo->{'emailaddress'};
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
 			}
@@ -168,25 +145,20 @@ sub t_cancelar_y_reservar {
 
 	if ($@){
 		#Se loguea error de Base de Datos
-# 		$codMsg= 'B407';
 		&C4::AR::Mensajes::printErrorDB($@, 'B407',"OPAC");
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-# 		$error= 1;
-# 		$codMsg= 'R011';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
 	
-
-# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
-# 	return ($error, $codMsg, $message);
 	return ($msg_object);
 }
 
 sub reservar {
 	my($params)=@_;
+
 	my $dateformat = C4::Date::get_date_format();
 	my $data;
 	$data->{'id3'}= $params->{'id3'}||'';
@@ -325,7 +297,6 @@ sub cancelar_reservas_inmediatas{
 
 	while (my $reservenumber= $sth->fetchrow){
 		$params->{'reservenumber'}=$reservenumber;
-# 		my ($error,$codMsg,$paraMens)=cancelar_reserva($params);
 		_cancelar_reserva($params);
 	}
 	$sth->finish;
@@ -341,35 +312,27 @@ sub t_cancelar_reserva{
 	my $dbh = C4::Context->dbh;
 	
 	my $tipo=$params->{'tipo'};
-# 	 my ($error,$codMsg,$paraMens);
 	my $msg_object= C4::AR::Mensajes::create();
 	$dbh->{AutoCommit} = 0;
 	$dbh->{RaiseError} = 1;
 
 
 	eval{
-# 		($error,$codMsg,$paraMens)=cancelar_reserva($params);
 		_cancelar_reserva($params);
 		$dbh->commit;
-
-# 		$codMsg= 'U308';
 		$msg_object->{'error'}= 0;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
-# 		$codMsg= 'B404';
 		C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
 		eval {$dbh->rollback};
 		#Se setea error para el usuario
-# 		$error= 1;
-# 		$codMsg= 'R010';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
 	}
 	$dbh->{AutoCommit} = 1;
-# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
-# 	return($error,$codMsg,$message);
+
 	return ($msg_object);
 }
 
@@ -384,9 +347,6 @@ sub _cancelar_reserva{
 	my $reservenumber=$params->{'reservenumber'};
 	my $borrowernumber=$params->{'borrowernumber'};
 	my $loggedinuser=$params->{'loggedinuser'};
-# 	my $error=0;
-# 	my $codMsg;
-# 	my $paraMens;
 	my $reserva=getDatosReserva($reservenumber);
 	my $id2=$reserva->{'id2'};
 	my $id3=$reserva->{'id3'};
@@ -589,10 +549,10 @@ sub getNotForLoan{
 }
 
 =item
-verificarTipoReserva
+_verificarTipoReserva
 Verifica que el usuario no reserve un item que ya tenga una reserva para el mismo grupo y para el mismo tipo de prestamo
 =cut
-sub verificarTipoReserva {
+sub _verificarTipoReserva {
 	my ($borrowernumber, $id2, $id3, $tipo)=@_;
 	my $error= 0;
 	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
@@ -781,10 +741,7 @@ sub _verificaciones {
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
-# 	my $error= 0;
-# 	my $codMsg= '000';
 	my $msg_object= C4::AR::Mensajes::create();
-# 	my @paraMens;
 	my $dateformat=C4::Date::get_date_format();
 
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
@@ -795,8 +752,6 @@ print A "borrowernumber: $borrowernumber\n";
 print A "issueType: $issueType\n";
 #Se verifica que el usuario sea Regular
 	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
-# 		$error= 1;
-# 		$codMsg= 'U300';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
 print A "Entro al if de regularidad\n";
@@ -805,8 +760,6 @@ print A "Entro al if de regularidad\n";
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
 	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::Context->preference("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
-# 		$error= 1;
-# 		$codMsg= 'U304';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
 print A "Entro al if del curso en el opac\n";
@@ -814,11 +767,7 @@ print A "Entro al if del curso en el opac\n";
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
-# 		$error= 1;
-# 		$codMsg= 'P101';
-# 		$paraMens[0]=$params->{'descripcionTipoPrestamo'};
-# 		$paraMens[1]=$barcode;
+	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  _verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
 print A "Entro al if que verifica la cantidad de prestamos";
@@ -826,9 +775,7 @@ print A "Entro al if que verifica la cantidad de prestamos";
 
 #Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
 #SOLO PARA INTRA, ES UN PRESTAMO ESPECIAL.
-	if(!$msg_object->{'error'} && $tipo eq "INTRA" && $issueType eq 'ES' && verificarHorario()){
-# 		$error=1;
-# 		$codMsg='P102';
+	if(!$msg_object->{'error'} && $tipo eq "INTRA" && $issueType eq 'ES' && _verificarHorario()){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
 print A "Entro al if de prestamos especiales";
@@ -837,26 +784,19 @@ print A "Entro al if de prestamos especiales";
 	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
 print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
-# 		$error= 1;
-# 		$codMsg= 'S200';
-# 		$paraMens[0]=C4::Date::format_date($fechaFin,$dateformat);
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
 print A "Entro al if de sanciones";
 	}
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
 	if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
-# 		$error=1;
-# 		$codMsg='R007';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
 print A "Entro al if de prestamos de sala";
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
-# 		$error= 1;
-# 		$codMsg= 'R002';
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
 print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
@@ -864,9 +804,6 @@ print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestam
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber))){
-# 		$error= 1;
-# 		$codMsg= 'R001';
-# 		$paraMens[0]=C4::Context->preference("maxreserves");
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::Context->preference("maxreserves")]} ) ;
 print A "Entro al if de maximo de reservas desde OPAC";
@@ -875,8 +812,6 @@ print A "Entro al if de maximo de reservas desde OPAC";
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
 	if( !($msg_object->{'error'}) && (&C4::AR::Issues::getCountPrestamosDeGrupo($borrowernumber, $id2, $issueType)) ){
-# 		$error= 1;
-# 		$codMsg= 'P100';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
 print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
@@ -884,14 +819,14 @@ print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de presta
 print A "\n\n";
 # print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
-# 	return ($error, $codMsg,\@paraMens);
+
 	return ($msg_object);
 }
 
 =item
 Esta funcion se utiliza para verificar post condiciones luego de un prestamo, y realizar las operaciones que sean necesarias
 =cut
-sub verificacionesPostPrestamo {
+sub _verificacionesPostPrestamo {
 	my($params, $msg_object)=@_;
 
 	my $id2= $params->{'id2'};
@@ -900,11 +835,7 @@ sub verificacionesPostPrestamo {
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
-# 	my $error= 0;
-	my $codMsg= 'P103'; # Se realizo el prestamo con exito
-# 	my $paraMens;
 	my $dateformat=C4::Date::get_date_format();
-# 	$paraMens->[0]= $barcode;
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "desde verificacionesPostPrestamo\n";
 print A "id2: $id2\n";
@@ -928,19 +859,17 @@ print A "issueType: $issueType\n";
 
 		##el usuario no llego al maximo de prestamos
 		if(scalar(@issuetypes) eq 0){
+			# Se realizo el prestamo con exito
 			$msg_object->{'error'}= 0;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => [$barcode]} ) ;
 		}
 	}
 
-# print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
-# 	return ($error, $codMsg,$paraMens);
-# 	return ($msg_object);
 }
 
 
-sub verificarMaxTipoPrestamo{
+sub _verificarMaxTipoPrestamo{
 	my ($borrowernumber,$issuetype)=@_;
 
 	my $error=0;
@@ -954,12 +883,13 @@ sub verificarMaxTipoPrestamo{
 }
 
 
-sub verificarHorario{
+sub _verificarHorario{
 	my $end = ParseDate(C4::Context->preference("close"));
 	my $begin =calc_beginES();
 	my $actual=ParseDate("today");
 	my $error=0;
 	if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){$error=1;}
+
 	return $error;
 }
 
@@ -971,8 +901,6 @@ sub intercambiarId3{
 	my $sth=$dbh->prepare("SELECT id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
-# 	my $error=0;
-# 	my $codMsg='000';
 
 	if ($data && $data->{'estado'} eq "E"){ 
 		#quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
@@ -981,8 +909,6 @@ sub intercambiarId3{
 		#actualizo la reserva con el viejo id3 para la reserva del otro usuario.
 	}
 	if($data->{'estado'} eq "P"){
-# 		$error=1; #El item esta prestado a otro usuario
-# 		$codMsg='P107';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P107', 'params' => []} ) ;
 	}
@@ -992,47 +918,8 @@ sub intercambiarId3{
 		$sth->execute($id3, $id2, $borrowernumber);
 	}
 
-# 	return ($error,$codMsg);
 }
 
-#intercambiar V2 ARREGLADO
-=item
-sub intercambiar_itemnumber{
-	my ($borrowernumber, $biblioitemnumber, $itemnumbernuevo)= @_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SET autocommit=0");
-	$sth->execute();
-	$sth=$dbh->prepare("Select reservenumber,itemnumber from reserves where biblioitemnumber=? and borrowernumber=? and constrainttype is NULL");
-	$sth->execute($biblioitemnumber,$borrowernumber);
-	my $dataoriginal= $sth->fetchrow_hashref;
-	if ($dataoriginal){
-		$sth=$dbh->prepare("Select reservenumber,itemnumber, constrainttype from reserves where itemnumber=?");
-		$sth->execute($itemnumbernuevo);
-		my $data= $sth->fetchrow_hashref;
-		if($data->{'constrainttype'} eq "P"){
-			$sth=$dbh->prepare("commit ");
-			$sth->execute();
-			return 0; #El item esta prestado a otro usuariobiblioitemnumber
-		}
-		elsif ($data){
-			#Esto quiere decir que hay una reserva para el item que se esta queriendo prestar
-			#entonces la actualizo con el itemnumber de la reserva original
-			$sth=$dbh->prepare("update reserves set itemnumber= ? where reservenumber = ?");
-			$sth->execute($dataoriginal->{'itemnumber'},$data->{'reservenumber'});
-		}
-		#actualizo la reserva original del cliente con el nuevo itemnumber que se esta forzando
-		$sth=$dbh->prepare("update reserves set itemnumber= ? where reservenumber = ?");
-		$sth->execute($itemnumbernuevo,$dataoriginal->{'reservenumber'});
-		$sth=$dbh->prepare("commit ");
-		$sth->execute();
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-=cut
 
 sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
@@ -1046,7 +933,6 @@ sub cambiarId3 {
 sub t_realizarPrestamo{
 	my ($params)=@_;
 	
-# 	my ($error,$codMsg,$paraMens)= &verificaciones($params);
 	my ($msg_object)= &_verificaciones($params);
 	if(!$msg_object->{'error'}){
 	#No hay error
@@ -1054,30 +940,24 @@ sub t_realizarPrestamo{
 		$dbh->{AutoCommit} = 0;
 		$dbh->{RaiseError} = 1;
 		eval{
-# 			($error, $codMsg, $paraMens)= chequeoParaPrestamo($params);
-			chequeoParaPrestamo($params,$msg_object);
+			_chequeoParaPrestamo($params,$msg_object);
 			$dbh->commit;
 		};
 		if ($@){
 			#Se loguea error de Base de Datos
-# 			$codMsg= 'B401';
 			C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
 			eval {$dbh->rollback};
 			#Se setea error para el usuario
-# 			$error= 1;
-# 			$codMsg= 'P106';
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
 		}
 		$dbh->{AutoCommit} = 1;
 	}
 
-# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-# 	return ($error, $codMsg, $message);
 	return ($msg_object);
 }
 
-sub chequeoParaPrestamo {
+sub _chequeoParaPrestamo {
 open(A,">>/tmp/debugChequeo.txt");
 	my($params,$msg_object)=@_;
 	my $dbh=C4::Context->dbh;
@@ -1085,8 +965,6 @@ open(A,">>/tmp/debugChequeo.txt");
 	my $borrowernumber= $params->{'borrowernumber'};
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
-# 	my ($error, $codMsg, $paraMens);
-# 	$error=0; #Se setea sin error por defecto
 print A "id2: $id2\n";
 print A "id3: $id3\n";
 #Se verifica si ya se tiene la reserva sobre el grupo
@@ -1105,7 +983,6 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
 		if($id3 != $reservas->[0]->{'id3'}){
 		#Los ids son distintos, se intercambian.
-# 			($error,$codMsg)=&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'});
 			&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'},$msg_object);
 		}
 	}
@@ -1133,14 +1010,12 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 				if(!C4::Context->preference('intranetGroupReserve')){
 				#NO SE PERMITE LA RESERVA DE GRUPO
 					$sePermiteReservaGrupo=0;
-# 					$error=1;#Hay error no se permite realizar una reserva de grupo en intra.
-# 					$codMsg='R004';
+					#Hay error no se permite realizar una reserva de grupo en intra.
 					$msg_object->{'error'}= 1;
 					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
 				}else{
 				#SE PERMITE LA RESERVA DE GRUPO
-# 					$error=1;#No hay error, se realiza una reserva de grupo.
-# 					$codMsg='R005';
+					#No hay error, se realiza una reserva de grupo.
 					$msg_object->{'error'}= 1;
 					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
 				}
@@ -1158,11 +1033,9 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 		insertarPrestamo($params);
 
 		#se realizan las verificacioines luego de realizar el prestamo
-# 		($error, $codMsg, $paraMens)=verificacionesPostPrestamo($params);
-		verificacionesPostPrestamo($params,$msg_object);
+		_verificacionesPostPrestamo($params,$msg_object);
 	}
 close(A);
-# 	return ($error, $codMsg, $paraMens);
 }
 
 sub insertarPrestamo {

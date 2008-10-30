@@ -1,13 +1,8 @@
 #!/usr/bin/perl
 use strict;
 
-# written 04-09-2005 by Luciano Iglesias (li@info.unlp.edu.ar)
-# script to renew items from the web
-
-use C4::AR::Issues;
 use CGI;
 use C4::Auth;
-use C4::AR::Mensajes;
 use JSON;
 
 my $input = new CGI;
@@ -17,15 +12,11 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my %infoOperacion;
-my $error;
-my $codMsg;
-my $id3= $obj->{'id3'};
-my @infoOperacionArray;
-my $paraMens;
+my $id3= $obj->{'id3'};;
 my %params;
 
 
-my $borrowernumber=getborrowernumber($loggedinuser);
+my $borrowernumber= C4::Auth::getborrowernumber($loggedinuser);
 $params{'borrowernumber'}= $borrowernumber;
 $params{'id3'}= $id3;
 $params{'loggedinuser'}= $loggedinuser;
@@ -34,15 +25,9 @@ $params{'tipo'}= 'OPAC';
 my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 $params{'barcode'}= $dataItems->{'barcode'};
 
-my ($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
+my ($msg_object) = C4::AR::Issues::t_renovar(\%params);
 
-%infoOperacion = (	error => $error,
-        		message => $message,
-		);
-
-push @infoOperacionArray, \%infoOperacion;
-
-my $infoOperacionJSON = to_json \@infoOperacionArray;
+my $infoOperacionJSON = to_json $msg_object;
 
 print $input->header;
 print $infoOperacionJSON;

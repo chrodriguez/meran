@@ -34,20 +34,22 @@ function updateInfoReserva(responseText){
 /*
 * Funcion que muestra el div de mensajes para usuario
 */
-function showMessage(mensaje){
-	if(mensaje != null){
-		$('#mensajes').slideDown();
-		$('#mensajes font').html(objJSON.message);
-	}
-}
+// // ver si se usa
+// function showMessage(mensaje){
+// 	if(mensaje != null){
+// 		$('#mensajes').slideDown();
+// 		$('#mensajes font').html(objJSON.message);
+// 	}
+// }
 
 /*
 * Funcion que oculta el div de mensajes para el usuario
 */
-function hideMessage(){
-	$('#mensajes').slideUp();
-	$('#mensajes font').html('');
-}
+// // ver si se usa
+// function hideMessage(){
+// 	$('#mensajes').slideUp();
+// 	$('#mensajes font').html('');
+// }
 
 /*
 * Funcion Ajax que cancela una reserva
@@ -118,7 +120,6 @@ function updateInfoRenovar(responseText){
 // 	}
 // 	$('#mensajes font').html(mensajes);
 	var Messages=JSONstring.toObject(responseText);
-alert(Messages);
 	setMessages(Messages);
 	DetallePrestamos();	
 }
@@ -176,6 +177,6 @@ function updateDetallePrestamo(responseText){
 }
 
 $(document).ready(function() {
-	hideMessage();
+// 	hideMessage();
 	
 });

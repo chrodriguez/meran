@@ -216,8 +216,8 @@ function deleteSinonimo(idDelete, sinonimo_string){
 
 function updateDeleteSinonimo(responseText){
 
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 
 	updateGuadarDatos();
 }

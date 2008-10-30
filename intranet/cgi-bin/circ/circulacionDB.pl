@@ -184,7 +184,6 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $ticketObj;
 	my @infoTickets;
 	my @infoMessages;
-# 	my ($error,$codMsg,$message,$paraMens);
 	my %params;
 	my %messageObj;
 	$params{'loggedinuser'}= $loggedinuser;
@@ -211,7 +210,6 @@ print A "Entra al if de dev\n";
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
-# 			($error,$codMsg, $message) = C4::AR::Issues::t_renovar(\%params);
 			my ($Message_arrayref) = C4::AR::Issues::t_renovar(\%params);
 
 			#guardo los errores
@@ -257,15 +255,9 @@ if($tipoAccion eq "CANCELAR_RESERVA"){
 	$params{'loggedinuser'}=$loggedinuser;
 	$params{'tipo'}="INTRA";
 	
-	my ($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 	
-	my %infoOperacion = (
-				codMsg	=> $codMsg,
-				error 	=> $error,
-				message => $message,
-	);
-	
-	my $infoOperacionJSON=to_json \%infoOperacion;
+	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
 	print $infoOperacionJSON;

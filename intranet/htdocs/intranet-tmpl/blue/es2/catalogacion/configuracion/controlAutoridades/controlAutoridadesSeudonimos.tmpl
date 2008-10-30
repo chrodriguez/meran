@@ -220,8 +220,8 @@ function deleteSeudonimo(idDelete){
 
 function updateDeleteSeudonimo(responseText){
 
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 
 	consultarTablaSeudonimos(seudonimo_selected.ID);
 }

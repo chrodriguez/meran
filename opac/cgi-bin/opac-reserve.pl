@@ -22,7 +22,8 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
-
+## FIXME se deberia separar el detalle de las resrvas del usuario y aqui solo realizar la reserva e informar al usuario si se realizo
+# con exito o no
 my $obj=$input->param('obj');
 
 $obj=from_json_ISO($obj);

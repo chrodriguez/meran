@@ -243,8 +243,8 @@ function borrarEjemplar(id1,id2,id3){
 
 function updateBorrarEjemplar(responseText){
 
-	var Message= JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
 	ejemplaresDelGrupo(objAH.id2);
 }
 
@@ -259,8 +259,8 @@ function borrarGrupo(id1,id2){
 }
 
 function updateBorrarGrupo(responseText){
-	var Message= JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
 	//oculto todo el grupo con los items
 	$('#grupo'+objAH.id2).slideUp('slow');
 	//borro el contenido
@@ -279,8 +279,8 @@ function borrarNivel1(id1){
 }
 
 function updateBorrarNivel1(responseText){
-	var Message= JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
 	//oculto todo el registro con los grupos y sus items
 	$('#detalleComun').slideUp('slow');
 	//borro el contenido

@@ -3,33 +3,7 @@
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
 
-
 <script>
-
-// ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
-// if (typeof($.Autocompleter) != "function"){
-		
-	/*$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js")*/;
-// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");
-// }
-
-// function closeWindow(){
-// 	$('.windowBlur').hide();
-// 	$('.ac_results').hide();
-// 	$('#windowUser').hide();
-// }
-
-// function openWindow(){
-// 	$('.windowBlur').show();
-// 	$('#windowUser').draggable({opacity: 0.7777});
-// 	$('#windowUser').show();
-// 	$('#windowUser').centerObject();	
-// 	$('#campoUsuario').focus();
-// }
 
 function clearInput(){
 	$('#campoUsuario').val("");

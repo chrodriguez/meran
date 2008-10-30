@@ -100,8 +100,8 @@ function updateInfoPrestarReserva(responseText){
 //REDEFINIDO, se ejecuta cancelarReserva de circulacion.js y luego se ejecuta esta funcion
 function updateInfoCancelacion(responseText){
 
-	var Message=JSONstring.toObject(responseText);
-	setMessage(Message);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 	detalleReservas(objAH.borrowernumber);
 }
 

@@ -25,7 +25,6 @@ my $msg_object;
 
 if($obj->{'accion'} eq 'CANCELAR'){
 
-# 	($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 	($msg_object)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 }
 
@@ -34,15 +33,9 @@ if($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
 	$params{'id1'}=$obj->{'id1Nuevo'};
 	$params{'id2'}=$obj->{'id2Nuevo'};
 
-# 	($error,$codMsg,$message)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
 	($msg_object)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
 }
 
-# my %infoOperacion = (	error => $error,
-#         		message => $message,
-# 		);
-
-# my $infoOperacionJSON = to_json \%infoOperacion;
 my $infoOperacionJSON = to_json $msg_object;	
 
 print $input->header;
