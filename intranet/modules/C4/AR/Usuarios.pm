@@ -100,7 +100,8 @@ sub _delPersons {
 
 		if (!$msg_object->{'error'}) { 
 		# Si no tiene borrowernumber no esta habilitado
-			_eliminarUsuario($personData->{'borrowernumber'});
+			$personData->{'loggedinuser'}= 'falta';
+			_eliminarUsuario($personData);
 			$msg_object->{'error'}= 0;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$personData->{'cardnumber'}]}) ;
 		}
@@ -208,7 +209,6 @@ sub t_eliminarUsuario {
 	my $dbh = C4::Context->dbh;
 	my $msg_object= C4::AR::Mensajes::create();
 
-#  	my ($error,$codMsg,$paraMens)= &verficarEliminarUsuario($params);
 	_verficarEliminarUsuario($params,$msg_object);
 
 	if(!$msg_object->{'error'}){
@@ -219,7 +219,7 @@ sub t_eliminarUsuario {
 		$dbh->{RaiseError} = 1;
 	
 		eval {	
-			_eliminarUsuario($params->{'borrowernumber'});
+			_eliminarUsuario($params);
 			$dbh->commit;
 			$msg_object->{'error'}= 0;
   			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
@@ -241,57 +241,55 @@ sub t_eliminarUsuario {
 }
 
 #eliminarUsuario recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
-
-
 sub _eliminarUsuario{
-	my ($borrowernumber)=@_;
+	my ($params)=@_;
 	
 	my $dbh = C4::Context->dbh;
 
-	#   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
-	#   $sth->execute(@data);
-	#   $sth->finish;
-	my $sth=$dbh->prepare("DELETE FROM borrowers
-			       WHERE borrowernumber=?
+	C4::AR::Reservas::reasignarTodasLasReservasEnEspera($params);
+	#Se eliminan todas las reservas del borrower
+	C4::AR::Reservas::eliminarReservas($params->{'borrowernumber'});
+
+	#Se eliminan todas las sanciones del borrower
+	C4::AR::Sanctions::eliminarSanciones($params->{'borrowernumber'});
+
+	# FIXME faltaria ver si se va a manejar historico de borrowers eliminados
+	
+	# FIXME falta borrar el estante virtual dell borrower
+	
+
+	my $sth=$dbh->prepare("	UPDATE persons 
+			    	SET borrowernumber=NULL 
+			    	WHERE borrowernumber=?
+			   ");
+
+	$sth->execute($params->{'borrowernumber'});
+	$sth->finish;
+
+	my $sth=$dbh->prepare("	DELETE FROM borrowers
+			       	WHERE borrowernumber=?
 			      ");
-	$sth->execute($borrowernumber);
+
+	$sth->execute($params->{'borrowernumber'});
 	$sth->finish;
 
-# FIXME cuando se borra la reserva, habria que unificar todo, para que se conceda esa reserva al siguiente en la cola.
-	$sth=$dbh->prepare("DELETE FROM reserves
-			    WHERE borrowernumber=?
-			   ");
-	$sth->execute($borrowernumber);
-	$sth->finish;
-
-	$sth=$dbh->prepare("UPDATE persons 
-			    SET borrowernumber=NULL 
-			    WHERE borrowernumber=?
-			   ");
-	$sth->execute($borrowernumber);
-	$sth->finish;
+	addBorrower($params);
 }
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
-# FIXME fijarse que aca no se checkea nada, por ejemplo si tiene reservas, libros en su poder, etc...
-
 sub _verficarEliminarUsuario {
-	my($params)=@_;
+	my($params, $msg_object)=@_;
 
-	my $msg_object= C4::AR::Mensajes::create();
-
-	my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
-
-	my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
+	my ($cantPrestamos) = C4::AR::Issues::getCantidadPrestamosActuales($params->{'borrowernumber'});
 
 	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
-	#se verifica la existencia del usuario, que ahora no existe
+	#se verifica la existencia del usuario
 		$msg_object->{'error'}= 1;
   		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
 	} 
-	elsif ($cantidadTotalDePrestamos > 0){
-		#se verifica que no tenga prestamos activos
+	elsif ($cantPrestamos > 0){
+	#se verifica que no tenga prestamos activos
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
@@ -319,11 +317,11 @@ sub _existeUsuario {
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub t_cambiarPermisos {
 	my($params)=@_;
-
 	my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
 	my $msg_object= C4::AR::Mensajes::create();
+
 
 	if(!$msg_object->{'error'}){
 	#No hay error

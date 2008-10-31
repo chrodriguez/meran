@@ -84,6 +84,7 @@ FIXME
 	&prestamosPorUsuario
 	&cantidadDePrestamosPorUsuario
 	&historialPrestamos
+	&getCantidadPrestamosActuales
 );
 
 
@@ -941,6 +942,24 @@ sub cantidadDePrestamosPorUsuario{
 	}
  	$sth->finish;
 	return($overdues,$issues);
+}
+
+=item
+getCantidadPrestamosActuales
+Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro.
+=cut
+sub getCantidadPrestamosActuales{
+	my ($bornum)=@_;
+  	my $dbh = C4::Context->dbh;
+
+  	my $query="SELECT count(*) FROM issues WHERE borrowernumber=? AND returndate IS NULL";
+  	my $sth=$dbh->prepare($query);
+  	$sth->execute($bornum);
+
+	my $data=$sth->fetchrow;
+  
+ 	$sth->finish;
+	return($data);
 }
 
 =item

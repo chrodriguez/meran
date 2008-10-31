@@ -49,8 +49,10 @@ $VERSION = 0.01;
 	&Enviar_Email
 	&FindNotRegularUsersWithReserves
 	&eliminarReservasVencidas
+	&reasignarTodasLasReservasEnEspera
 
 	&t_realizarPrestamo
+	&eliminarReservas
 );
 
 sub t_reservarOPAC {
@@ -336,6 +338,74 @@ sub t_cancelar_reserva{
 	return ($msg_object);
 }
 
+=item
+Esta funcion elimina todas las del borrower pasado por parametro
+=cut
+sub eliminarReservas{
+	my ($borrowernumber)=@_;
+	
+	my $dbh = C4::Context->dbh;	
+	my $sth=$dbh->prepare("	DELETE FROM reserves
+			    	WHERE borrowernumber=?
+			   ");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+}
+
+
+=item
+Esta funcion reasigna todas las reservas de un borrower
+recibe como parametro un borrowernumber y el loggedinuser
+Esta funcion se utiliza por ej. cuando se elimina un usuario
+=cut
+sub reasignarTodasLasReservasEnEspera{
+	my ($params)=@_;
+	my $reservas= _getReservasAsignadas($params->{'borrowernumber'});
+
+	foreach my $reserva ($reservas){
+		$reserva->{'loggedinuser'}= $params->{'loggedinuser'};
+		_reasignarReservaEnEspera($reserva);
+	}
+}
+
+=item
+Dado un borrowernumber, devuelve las reservas asignadas a el
+=cut
+sub _getReservasAsignadas {
+
+	my ($borrowernumber)=@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query= "	SELECT *
+			FROM reserves
+			WHERE (id3 IS NOT NULL) AND (borrowernumber = ?)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($borrowernumber);
+
+	my $data=$sth->fetchrow_hashref;
+
+	return($data);
+}
+
+=item
+Esta funcion recibe como parametro 
+id2 del grupo
+id3 del item
+loggedinuser
+branchcode
+=cut
+sub _reasignarReservaEnEspera{
+	my ($params)=@_;
+
+	my $reservaGrupo=getDatosReservaEnEspera($params->{'id2'});
+
+	if($reservaGrupo){
+		$reservaGrupo->{'id3'}=$params->{'id3'};
+		$reservaGrupo->{'branchcode'}= $params->{'branchcode'};
+		$reservaGrupo->{'loggedinuser'}= $params->{'loggedinuser'};
+		_actualizarDatosReservaEnEspera($reservaGrupo);
+	}
+}
 
 =item
 cancelar_reserva
@@ -350,15 +420,10 @@ sub _cancelar_reserva{
 	my $reserva=getDatosReserva($reservenumber);
 	my $id2=$reserva->{'id2'};
 	my $id3=$reserva->{'id3'};
+	$reserva->{'loggedinuser'}= $loggedinuser;
 	if($id3){
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		my $reservaGrupo=getDatosReservaEnEspera($id2);
-		if($reservaGrupo){
-			$reservaGrupo->{'id3'}=$id3;
-			$reservaGrupo->{'branchcode'}=$reserva->{'branchcode'};
-			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
-			actualizarDatosReservaEnEspera($reservaGrupo);
-		}
+		_reasignarReservaEnEspera($reserva);
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
 	}
@@ -428,7 +493,7 @@ sub getDatosReservaEnEspera{
 actualizarDatosReservaEnEspera
 Funcion que actualiza la reserva que estaba esperando por un ejemplar.
 =cut
-sub actualizarDatosReservaEnEspera{
+sub _actualizarDatosReservaEnEspera{
 	my ($reservaGrupo)=@_;
 
 	my $dbh=C4::Context->dbh;
@@ -456,12 +521,11 @@ sub actualizarDatosReservaEnEspera{
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 	C4::AR::Sanctions::insertSanction(undef, $reservaGrupo->{'reservenumber'} ,$borrowernumber, $startdate, $enddate, undef);
 
-
 	$reservaGrupo->{'cierre'}= $cierre;
 	$reservaGrupo->{'fecha'}= $fecha;
 	$reservaGrupo->{'desde'}= $desde;
 	$reservaGrupo->{'apertura'}= $apertura;
-#Se envia una notificacion al usuario avisando que se le asigno una reserva
+	#Se envia una notificacion al usuario avisando que se le asigno una reserva
 	Enviar_Email($reservaGrupo);
 }
 
@@ -1173,17 +1237,25 @@ sub eliminarReservasVencidas{
 	my $reservasVencidas=reservasVencidas();
 	#Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
 	my @resultado;
+	my %params;
 
 	foreach my $data (@$reservasVencidas){
 		my $reservenumber= $data->{'reservenumber'};
-		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'});
-		if($reservaGrupo){
-		#Quiere decir que hay reservas esperando para este mismo grupo
-			$reservaGrupo->{'id3'}=$data->{'id3'};
-			$reservaGrupo->{'branchcode'}=$data->{'branchcode'};
-			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
-			actualizarDatosReservaEnEspera($reservaGrupo);
-		}
+# 		my $reservaGrupo=getDatosReservaEnEspera($data->{'id2'});
+# 		if($reservaGrupo){
+# 		#Quiere decir que hay reservas esperando para este mismo grupo
+# 			$reservaGrupo->{'id3'}=$data->{'id3'};
+# 			$reservaGrupo->{'branchcode'}=$data->{'branchcode'};
+# 			$reservaGrupo->{'loggedinuser'}=$loggedinuser;
+# 			actualizarDatosReservaEnEspera($reservaGrupo);
+# 		}
+		
+		$params{'id2'}= $data->{'id2'};
+		$params{'id3'}= $data->{'id3'};
+		$params{'branchcode'}= $data->{'branchcode'};
+		$params{'loggedinuser'}= $loggedinuser;
+
+		_reasignarReservaEnEspera(\%params);
 
 		#Actualizo la sancion para que refleje el id3 del item y asi poder informalo
 		my %params;

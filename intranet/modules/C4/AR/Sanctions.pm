@@ -28,7 +28,22 @@ use vars qw(@EXPORT @ISA);
 
 		&borrarSancionReserva
 		&actualizarSancion
+		&eliminarSanciones
 );
+
+=item
+Esta funcion elimina todas las del borrower pasado por parametro
+=cut
+sub eliminarSanciones{
+	my ($borrowernumber)=@_;
+	
+	my $dbh = C4::Context->dbh;	
+	my $sth=$dbh->prepare("	DELETE FROM sanctions
+			    	WHERE borrowernumber=?
+			   ");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+}
 
 # Retorna la informacion de la sancion segun una reserva (antes de que se borre la reserva)
 sub infoSanction {
