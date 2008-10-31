@@ -47,6 +47,8 @@ function updateModificarDatosDeUsuario(responseText){
 	vDatosUsuario=new WindowHelper();
 	vDatosUsuario.html=responseText;
 	vDatosUsuario.create();	
+	vDatosUsuario.height('85%');
+	vDatosUsuario.width('85%');
 }
 
 function guardarModificacioUsuario(){
@@ -113,6 +115,8 @@ function updateModificarPermisos(responseText){
 	vModificarPermisos.html=responseText;
 	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
 	vModificarPermisos.create();
+	vModificarPermisos.height('220px');
+	vModificarPermisos.width('550px');
 }
 
 function guardarPermisos(){
@@ -279,6 +283,8 @@ function updateCambiarPassword(responseText){
 	vModificarPassword.html=responseText;
  	vModificarPassword.titulo= 'Cambio de Contrase&ntilde;a';
 	vModificarPassword.create();
+	vModificarPassword.height('220px');
+	vModificarPassword.width('550px');
 	clearInput();
 }
 

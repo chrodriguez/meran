@@ -80,6 +80,7 @@
 		onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
 		<!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
 	<!-- /TMPL_IF -->
+<!--
 <!-- ESTO PARA QUE ESTA -->
 	<!-- TMPL_IF name="IS_ADULT" -->
 		<p align=center>
@@ -93,6 +94,8 @@
 		</form>
                 </p>
 	<!-- /TMPL_IF -->
+-->
+
 </div>
 
 </div>  <!--end vcard-->
@@ -164,7 +167,7 @@
 
 		</form>
 	</li>
-	<li>
+<!--	<li>
 		<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
 		 	<a href="#" onClick="openPopup()" >
 			<img alt="Generar Prestamo Interbibliotecario" 
@@ -173,7 +176,7 @@
 			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
 			<input type="hidden" name="accion" value="ingresarDatos">
 		</form>
-	</li>
+	</li>-->
 	<!-- TMPL_IF name="mensaje_error_foto" -->	
 	<li>
 		<font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>

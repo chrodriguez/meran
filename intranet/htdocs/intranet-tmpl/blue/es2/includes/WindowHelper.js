@@ -43,11 +43,8 @@ function WindowHelper(){
 	this.opacity= '';	//opacidad de la ventana
 	this.debug= false;	
 	this.titulo= '';
-
-	this.open= function(){
-			//se muestra la ventana
-			$('#ventana').show();
-	}//end show
+// 	this.height= '85%';
+// 	this.width= '85%';
 
 	this.close= function(){
 			//se oculta la ventana
@@ -55,12 +52,27 @@ function WindowHelper(){
 			$('#dimmer').hide();
 	}//end hide
 
+	this.height= function(height){
+			//se modifica el ancho
+			$('#ventana').height(height);
+	}//end height
+
+	this.width= function(width){
+			//se modifica el ancho
+			$('#ventana').width(width);
+	}//end height
+
 	this.create= function(){
 			//crea una ventana
 			_WinInit(this);
 			this.open();
 // 			alert('heignt: ' + $('#ventanaContenido').innerHeight() + 'width: ' + $('#ventanaContenido').innerWidth());
 	}//end create
+
+	this.open= function(){
+			//se muestra la ventana
+			$('#ventana').show();
+	}//end show
 
 }
 
