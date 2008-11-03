@@ -1602,7 +1602,10 @@ sub modificarNivel3Completo{
 	my $query3="DELETE FROM nivel3_repetibles WHERE rep_n3_id=?";
 	my $query4="INSERT INTO nivel3_repetibles (dato,campo,subcampo,id3) VALUES (?,?,?,?)";
 	my %repetibles;
+open(A, ">>/tmp/debbug.txt");
+print A "antes delllll for :...\n";
 	foreach my $obj(@$nivel3){
+print A "obj: ".$obj."\n";
 		my $campo=$obj->{'campo'};
 		my $subcampo=$obj->{'subcampo'};
 		my $idRep=$obj->{'idRep'};
@@ -1689,7 +1692,7 @@ sub modificarNivel3Completo{
 		C4::AR::Nivel3::modificarEstadoItem($obj);
 	}
 
-
+close(A);
 	my $sth=$dbh->prepare($query);
         $sth->execute($holdingbranch,$homebranch,$bulk,$wthdrawn,$notforloan,$id3);
 # 	$dbh->commit;
