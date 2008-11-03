@@ -26,6 +26,70 @@ use vars qw(@EXPORT @ISA);
 );
 
 
+
+
+
+=item
+
+=cut
+sub modificarEstadoItem{
+	my($params)=@_;
+
+	#avail y loan preguntar por estos campos
+	my $disponible= _estaDisponible($params->{'id3'});
+	my $itemActual = C4::AR::Nivel3::getDataNivel3($params->{'id3'});
+	#Si {'wthdrawn'} eq 0 significa DISPONIBLE
+	#Si {'wthdrawn'} mayor q 0 significa NO DISPONIBLE
+	#Si {'notforloan'} eq DO significa PARA PRESTAMO
+	#Si {'notforloan'} eq SA significa PARA SALA
+	#Si el items esta disponible => $disponible=1
+	
+	# ESTE CASO ES MODIFICAR UN ITEMS NO DISPONIBLE A DISPONIBLE PARA PRESTAMO DOMICILIARIO
+	if( ($disponible == 0) && ($params->{'wthdrawn'} eq 0) && ($params->{'notforloan'} eq 'DO') ){
+		_modItemNoDisponibleAPrestamo($params);
+	}
+# 	else{
+		
+# 	}
+	
+}
+
+
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+sub modItemSalaAPrestamo{
+	my($params)=@_;
+
+	C4::AR::Reservas::reasignarReservaEnEspera($params);
+	#FALTARIA CAMBIAR EL ESTADO
+}
+
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+sub _modItemNoDisponibleAPrestamo{
+	my($params)=@_;
+
+	C4::AR::Reservas::reasignarReservaEnEspera($params);
+	#FALTARIA CAMBIAR EL ESTADOs
+}
+
+sub _estaDisponible {
+	my($id3)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $query=" SELECT FROM nivel3 WHERE id3 = ? ";
+
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id3);
+
+	my $data=$sth->fetchrow;
+	
+	if($data == 0) {return 1;} #DISPONIBLE
+	else {return 0;} #NO DISPONIBLE
+}
+
 =item
 deleteItem
 Elimina todo la informacion de un item para el nivel 3
@@ -421,8 +485,6 @@ Guarda los campos del nivel 3
 Los parametros que reciben son: $id1 es el id de la fila insertada para ese item en la tabla nivel1; $id2 es el id de la fila insertada para ese item en la tabla nivel2; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
 =cut
 
-
-## FIXME esto no va aca, pasar a Nivel3.pm, y cambiar todas las referencias
 sub saveNivel3{
 	my ($id1,$id2,$barcodes,$cantItems,$itemType,$nivel3)=@_;
 

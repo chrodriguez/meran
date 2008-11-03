@@ -1588,9 +1588,10 @@ Modifica los datos del nivel 3 y sus repetibles.
 =cut
 sub modificarNivel3Completo{
 	my($id3,$nivel3,$todos)=@_;
+
 	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
+# 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+# 	$dbh->{RaiseError} = 1;
 	my $homebranch="";
 	my $holdingbranch="";
 	my $bulk="";
@@ -1606,6 +1607,7 @@ sub modificarNivel3Completo{
 		my $subcampo=$obj->{'subcampo'};
 		my $idRep=$obj->{'idRep'};
 		my $valor=$obj->{'valor'};
+
 		if($campo eq '995' && $subcampo eq 'd'){
 			$homebranch=$valor;
 		}
@@ -1616,9 +1618,11 @@ sub modificarNivel3Completo{
 			$bulk=$valor ;
 		}
 		elsif($campo eq '995' && $subcampo eq 'e'){
+		#Estado
 			$wthdrawn=$valor ;
 		}
 		elsif($campo eq '995' && $subcampo eq 'o'){
+		#Disponibilidad
 			$notforloan=$valor ;
 		}
 		else{
@@ -1680,11 +1684,16 @@ sub modificarNivel3Completo{
 				}
 			}
 		}
+
+		#si cambio se modifica el estado del item
+		C4::AR::Nivel3::modificarEstadoItem($obj);
 	}
+
+
 	my $sth=$dbh->prepare($query);
         $sth->execute($holdingbranch,$homebranch,$bulk,$wthdrawn,$notforloan,$id3);
-	$dbh->commit;
-	$dbh->{AutoCommit} = 1;
+# 	$dbh->commit;
+# 	$dbh->{AutoCommit} = 1;
 }
 
 =item

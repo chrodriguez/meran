@@ -112,10 +112,10 @@ function eleccionSubCampo(accion){
  */
 function verificarRef(ok){
 	if(ok == 0){
-		$('#tabla').attr("disabled","disabled");
+// 		$('#tabla').attr("disabled","disabled");
 	}
 	else{
-		$('#tabla').attr("enabled","enabled");
+// 		$('#tabla').attr("enabled","enabled");
 	}
 }
 

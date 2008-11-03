@@ -50,6 +50,7 @@ $VERSION = 0.01;
 	&FindNotRegularUsersWithReserves
 	&eliminarReservasVencidas
 	&reasignarTodasLasReservasEnEspera
+	&reasignarReservaEnEspera
 
 	&t_realizarPrestamo
 	&eliminarReservas
@@ -351,48 +352,7 @@ sub eliminarReservas{
 	$sth->execute($borrowernumber);
 	$sth->finish;
 }
-=item
 
-=cut
-sub modificarEstadoItem{
-#avail y loan preguntar por estos campos
-my $disponible= _estaDisponible($id3);
-my $itemActual = getDataNivel3($id3);
-#Si {'wthdrawn'} eq 0 significa DISPONIBLE
-#Si {'wthdrawn'} mayor q 0 significa NO DISPONIBLE
-#Si {'notforloan'} eq DO significa PARA PRESTAMO
-#Si {'notforloan'} eq SA significa PARA SALA
-#Si el items esta disponible => $disponible=1
-
-# ESTE CASO ES MODIFICAR UN ITEMS NO DISPONIBLE A DISPONIBLE PARA PRESTAMO DOMICILIARIO
-if (($disponible == 0))&&($params->{'wthdrawn'} eq 0)&&($params->{'notforloan'} eq 'DO')){
-modItemNoDisponibleAPrestamo();
-}
-else{
-   
-}
-
-}
-
-
-}
-=item
-Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
-=cut
-sub modItemSalaAPrestamo{
-my($params)=@_;
-_reasignarReservaEnEspera($params);
-#FALTARIA CAMBIAR EL ESTADO
-}
-
-=item
-Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
-=cut
-sub modItemNoDisponibleAPrestamo{
-my($params)=@_;
-_reasignarReservaEnEspera($params);
-#FALTARIA CAMBIAR EL ESTADO
-}
 
 =item
 Esta funcion reasigna todas las reservas de un borrower
@@ -405,7 +365,7 @@ sub reasignarTodasLasReservasEnEspera{
 
 	foreach my $reserva ($reservas){
 		$reserva->{'loggedinuser'}= $params->{'loggedinuser'};
-		_reasignarReservaEnEspera($reserva);
+		reasignarReservaEnEspera($reserva);
 	}
 }
 
@@ -435,7 +395,7 @@ id3 del item
 loggedinuser
 branchcode
 =cut
-sub _reasignarReservaEnEspera{
+sub reasignarReservaEnEspera{
 	my ($params)=@_;
 
 	my $reservaGrupo=getDatosReservaEnEspera($params->{'id2'});
@@ -464,7 +424,7 @@ sub _cancelar_reserva{
 	$reserva->{'loggedinuser'}= $loggedinuser;
 	if($id3){
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		_reasignarReservaEnEspera($reserva);
+		reasignarReservaEnEspera($reserva);
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
 	}
@@ -1296,7 +1256,7 @@ sub eliminarReservasVencidas{
 		$params{'branchcode'}= $data->{'branchcode'};
 		$params{'loggedinuser'}= $loggedinuser;
 
-		_reasignarReservaEnEspera(\%params);
+		reasignarReservaEnEspera(\%params);
 
 		#Actualizo la sancion para que refleje el id3 del item y asi poder informalo
 		my %params;
