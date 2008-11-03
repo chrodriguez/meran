@@ -17,11 +17,6 @@ $loggedinuser=getborrowernumber($loggedinuser);
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
-=======
-my $flagsrequired;
-$flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"intranet");
-
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
