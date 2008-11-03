@@ -272,7 +272,6 @@ sub _eliminarUsuario{
 	$sth->execute($params->{'borrowernumber'});
 	$sth->finish;
 
-	addBorrower($params);
 }
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
