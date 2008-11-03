@@ -351,7 +351,48 @@ sub eliminarReservas{
 	$sth->execute($borrowernumber);
 	$sth->finish;
 }
+=item
 
+=cut
+sub modificarEstadoItem{
+#avail y loan preguntar por estos campos
+my $disponible= _estaDisponible($id3);
+my $itemActual = getDataNivel3($id3);
+#Si {'wthdrawn'} eq 0 significa DISPONIBLE
+#Si {'wthdrawn'} mayor q 0 significa NO DISPONIBLE
+#Si {'notforloan'} eq DO significa PARA PRESTAMO
+#Si {'notforloan'} eq SA significa PARA SALA
+#Si el items esta disponible => $disponible=1
+
+# ESTE CASO ES MODIFICAR UN ITEMS NO DISPONIBLE A DISPONIBLE PARA PRESTAMO DOMICILIARIO
+if (($disponible == 0))&&($params->{'wthdrawn'} eq 0)&&($params->{'notforloan'} eq 'DO')){
+modItemNoDisponibleAPrestamo();
+}
+else{
+   
+}
+
+}
+
+
+}
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+sub modItemSalaAPrestamo{
+my($params)=@_;
+_reasignarReservaEnEspera($params);
+#FALTARIA CAMBIAR EL ESTADO
+}
+
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+sub modItemNoDisponibleAPrestamo{
+my($params)=@_;
+_reasignarReservaEnEspera($params);
+#FALTARIA CAMBIAR EL ESTADO
+}
 
 =item
 Esta funcion reasigna todas las reservas de un borrower
