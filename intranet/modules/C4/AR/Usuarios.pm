@@ -20,7 +20,6 @@ use vars qw(@EXPORT @ISA);
 	&getBorrower
 	&getBorrowerInfo
 	&buscarBorrower
-	&obtenerCategoria
 	&obtenerCategorias
 	&mailIssuesForBorrower
 	&personData
@@ -209,7 +208,7 @@ sub t_eliminarUsuario {
 	my $dbh = C4::Context->dbh;
 	my $msg_object= C4::AR::Mensajes::create();
 
-	_verficarEliminarUsuario($params,$msg_object);
+	$msg_object = _verficarEliminarUsuario($params,$msg_object);
 
 	if(!$msg_object->{'error'}){
 	#No hay error
@@ -279,10 +278,11 @@ sub _eliminarUsuario{
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub _verficarEliminarUsuario {
-	my($params, $msg_object)=@_;
+	my($params,$msg_object)=@_;
 
 	my ($cantPrestamos) = C4::AR::Issues::getCantidadPrestamosActuales($params->{'borrowernumber'});
 
+	
 	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
 	#se verifica la existencia del usuario
 		$msg_object->{'error'}= 1;
@@ -293,7 +293,13 @@ sub _verficarEliminarUsuario {
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
-
+	elsif ($params->{'loggedInUser'} eq $params->{'borrowernumber'}){
+	# 	Se verifica que el usuario loggeado no sea el mismo que se va a eliminar
+		$msg_object->{'error'}= 1;
+  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U352', 'params' => [$params->{'cardnumber'}]} ) ;
+	}
+	
+		
 	return ($msg_object);
 }
 
@@ -751,6 +757,10 @@ sub updateBorrower {
 	####################
 }
 
+
+# Devuelve todos los borrowers (borrowernumber, surname, firstname, cardnumber, documentnumber, studentnumber )
+# que cumplan con el string pasado como parámetro. Los resultados son devueltos como un arreglo de hash.
+
 sub buscarBorrower{
 	my ($busqueda) = @_;
 	my $dbh = C4::Context->dbh;
@@ -861,11 +871,11 @@ sub estaSancionado {
 	return $sancionado;
 }
 
-# Funcion que retorna un arreglo de hash, con todos los datos de los usuarios (borrowers) que cumplen con el patrón de búsqueda.
+# Funcion que retorna un arreglo de hashes, con todos los datos de los usuarios (borrowers) que cumplen con el patrón de búsqueda.
 # Recibe como parámetro un string, que puede ser compuesto (varias palabras), además tambien recibe el tipo ($type), para ver si es busqueda simple ó compuesta.
 
 sub ListadoDeUsuarios  {
-	my ($env,$searchstring,$type,$orden,$ini,$cantR)=@_;
+	my ($searchstring,$type,$orden,$ini,$cantR)=@_;
 	my $dbh = C4::Context->dbh;
 	my $count; 
 	my @data;
@@ -993,25 +1003,6 @@ sub ListadoDePersonas  {
 # ObtenerCategoria
 # Obtiene la categoria de un usuario en particular.
 
-# FIXME OBSOLETO?¿??
-sub obtenerCategoria{
-        my ($bor) = @_;
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("	SELECT categorycode 	
-				 	FROM persons 
-					WHERE borrowernumber = ?");
-        $sth->execute($bor);
-        my $condicion = $sth->fetchrow();
-	if (not $condicion){
-		$sth = $dbh->prepare("	SELECT categorycode 
-					FROM borrowers 
-					WHERE borrowernumber = ?");
-       		$sth->execute($bor);
-        	$condicion = $sth->fetchrow();
-			}
-	$sth->finish();
-        return $condicion;
-} 
 # FIXME OBSOLETO??
 sub obtenerCategoriaPersona{
         my ($bor) = @_;
@@ -1028,9 +1019,9 @@ sub obtenerCategoriaPersona{
 sub obtenerCategoriaBorrower{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("	SELECT categorycode 
-				FROM borrowers 
-				WHERE borrowernumber = ?");
+	my $sth = $dbh->prepare("  SELECT categorycode 
+				   FROM borrowers 
+				   WHERE borrowernumber = ?");
 	$sth->execute($bor);
        	my $condicion = $sth->fetchrow();
 	$sth->finish();
@@ -1070,7 +1061,7 @@ sub mailIssuesForBorrower{
 
   	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-  	my $sth=$dbh->prepare("SELECT * 
+  	my $sth=$dbh->prepare(" SELECT * 
 				FROM issues
 				LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
 				LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
@@ -1095,7 +1086,7 @@ sub mailIssuesForBorrower{
 }
 
 
-# Busca los datos de una persona, que viene como parametro.
+# Obtiene los datos de una persona, que viene como parametro.
 sub personData {
   	my ($personNumber)=@_;
  	my $dbh = C4::Context->dbh;

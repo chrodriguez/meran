@@ -21,12 +21,16 @@ function eliminarUsuario(){
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
 
+
 	}
 }
 
 function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
+	location.href = "buscarUsuario.pl";
+
+	
 }
 
 //*********************************************Fin***Eliminar Usuario*********************************************

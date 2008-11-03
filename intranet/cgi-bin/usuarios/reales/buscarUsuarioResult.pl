@@ -33,9 +33,9 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 if($member ne ""){
 	if((length($member) == 1)&&(defined $member)) {
-		($cantidad,$results)=&ListadoDeUsuarios($env,$member,"simple",$orden,$ini,$cantR);
+		($cantidad,$results)=&ListadoDeUsuarios($member,"simple",$orden,$ini,$cantR);
 	} else {
-		($cantidad,$results)=&ListadoDeUsuarios($env,$member,"advanced",$orden,$ini,$cantR);
+		($cantidad,$results)=&ListadoDeUsuarios($member,"advanced",$orden,$ini,$cantR);
 	}
 }
 

@@ -288,3 +288,4 @@ ALTER TABLE `availability` CHANGE `item` `id3` VARCHAR( 10 ) CHARACTER SET latin
 
 
 
+ 0 0 

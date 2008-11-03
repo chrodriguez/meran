@@ -9,9 +9,19 @@ use JSON;
 
 my $input = new CGI;
 
+
+
+# OBTENGO EL BORROWER LOGGEADO
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
+$loggedinuser=getborrowernumber($loggedinuser);
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+
+=======
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"intranet");
+
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
@@ -113,13 +123,15 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
 	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
+	$params{'loggedInUser'} = $loggedinuser;
 	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
 	
    	$params{'borrowernumber'}= $usuario_hash_ref->{'borrowernumber'};
+
 	$params{'loggedinuser'}= $loggedinuser;
 
+
  	my ($Message_arrayref)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
-	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;

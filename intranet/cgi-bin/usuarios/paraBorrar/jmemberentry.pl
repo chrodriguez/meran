@@ -31,7 +31,7 @@ use C4::Members;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/jmemberentry.tmpl",
+    = get_template_and_user({template_name => "usuarios/paraBorrar/jmemberentry.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
