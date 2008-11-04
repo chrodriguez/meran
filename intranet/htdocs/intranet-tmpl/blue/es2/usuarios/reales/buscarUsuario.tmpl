@@ -13,10 +13,17 @@ function changePage(ini){
 	objAH.changePage(ini);
 }
 
-function consultar(){
-	var busqueda = $('#member').val();
-	if(busqueda != ""){
-		objAH=new AjaxHelper(updateInfo);
+function consultar(filtro){
+	objAH=new AjaxHelper(updateInfo);
+	busqueda = jQuery.trim($('#member').val());
+	inicial = '0';
+	if (filtro){
+		inicial = filtro;
+		busqueda = jQuery.trim(filtro);
+		objAH.inicial= inicial;
+		$('#member').val("filtro: "+filtro);
+	}
+	if(busqueda.length > 0){
 		objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
 		objAH.funcion= 'changePage';
 		objAH.member= busqueda;
@@ -24,7 +31,7 @@ function consultar(){
 	}
 	else{
 		alert("Ingrese un dato");
- 		$('#member').focus();
+		$('#member').focus();
 	}
 
 }
@@ -42,9 +49,9 @@ function Borrar(){
 $(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
 	onEnter("member",consultar);
-	if('<!-- TMPL_VAR NAME=member -->' != ""){
+/*	if('<!-- TMPL_VAR NAME=member -->' != ""){
 		consultar();
-	}
+	}*/
 });
 
 </script>
@@ -80,6 +87,36 @@ $(document).ready(function() {
 	</tr>
 </table>
 </center>
+<div id="filterBar" style="text-align:center">
+		<a href="#" onClick="consultar('A')"> A |</a>
+		<a href="#" onClick="consultar('B')"> B |</a>
+		<a href="#" onClick="consultar('C')"> C |</a>
+		<a href="#" onClick="consultar('D')"> D |</a>
+		<a href="#" onClick="consultar('E')"> E |</a>
+		<a href="#" onClick="consultar('F')"> F |</a>
+		<a href="#" onClick="consultar('G')"> G |</a>
+		<a href="#" onClick="consultar('H')"> H |</a>
+		<a href="#" onClick="consultar('I')"> I |</a>
+		<a href="#" onClick="consultar('j')"> J |</a>
+		<a href="#" onClick="consultar('K')"> K |</a>
+		<a href="#" onClick="consultar('L')"> L |</a>
+		<a href="#" onClick="consultar('M')"> M |</a>
+		<a href="#" onClick="consultar('N')"> N |</a>
+		<a href="#" onClick="consultar('O')"> O |</a>
+		<a href="#" onClick="consultar('P')"> P |</a>
+		<a href="#" onClick="consultar('Q')"> Q |</a>
+		<a href="#" onClick="consultar('R')"> R |</a>
+		<a href="#" onClick="consultar('S')"> S |</a>
+		<a href="#" onClick="consultar('T')"> T |</a>
+		<a href="#" onClick="consultar('U')"> U |</a>
+		<a href="#" onClick="consultar('V')"> V |</a>
+		<a href="#" onClick="consultar('W')"> W |</a>
+		<a href="#" onClick="consultar('X')"> X |</a>
+		<a href="#" onClick="consultar('Y')"> Y |</a>
+		<a href="#" onClick="consultar('Z')"> Z |</a>
+		<a href="#" onClick="consultar('TODOS')"> TODOS </a>
+		
+</div>
 
 <br>
 <div id="result"></div>

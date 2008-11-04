@@ -1,5 +1,26 @@
+<script type="text/javascript">
 
+	function prestamosInterBibliotecarios(){
+		objAH=new AjaxHelper(updateModificarDatosDeUsuario);
+		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+		objAH.debug= true;
+		objAH.borrowernumber= usuario.ID;
+		objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
+		objAH.sendToServer();
+	}
+	
+	function updatePrestamosInterBibliotecarios(responseText){
+	//se crea el objeto que maneja la ventana para modificar los datos del usuario
+		vPrestamoInterBibliotecario=new WindowHelper();
+		vPrestamoInterBibliotecario.html=responseText;
+		vPrestamoInterBibliotecario.create();	
 
+// 		vPrestamoInterBibliotecario.height('85%');
+// 		vPrestamoInterBibliotecario.width('85%');
+		
+	}
+
+</script>
 <div class="vcard">
 
 <div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -80,22 +101,6 @@
 		onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
 		<!-- TMPL_VAR NAME="borrowernotes" --></a></b><br>
 	<!-- /TMPL_IF -->
-<!--
-<!-- ESTO PARA QUE ESTA -->
-	<!-- TMPL_IF name="IS_ADULT" -->
-		<p align=center>
-		<form action=/cgi-bin/koha/usuarios/paraBorrar/jmemberentry.pl method=post name="formHijo">
-			<a href="#" onClick="formHijo.submit()" >
-			<img alt="Agregar Hijo" 
-			src="<!-- TMPL_VAR NAME='themelang' -->/images/agregarhijo.png" border=0 ">
-			</a>
-			<input type=hidden name=type value=Agregar>
-			<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
-		</form>
-                </p>
-	<!-- /TMPL_IF -->
--->
-
 </div>
 
 </div>  <!--end vcard-->
@@ -152,7 +157,7 @@
 			src="<!-- TMPL_VAR NAME='themelang' -->/images/generarcarnet.png" border="0"">
 			</a>
 
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->
 
 		</form>
 	</li>
@@ -163,20 +168,21 @@
 			src="<!-- TMPL_VAR NAME='themelang' -->/images/libre_deuda.png" border="0"">
 			</a>
 
-			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+			<input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->
 
 		</form>
 	</li>
+	<li>
 
-		<form action=/cgi-bin/koha/prestamoInterBiblio.pl method=post name="formInterBiblio">
-		 	<a href="#" onClick="openPopup()" >
+		<form action="#" method=post name="formInterBiblio">
+		 	<a href="#" onClick="prestamosInterBibliotecarios()">
 			<img alt="Generar Prestamo Interbibliotecario" 
 			src="<!-- TMPL_VAR NAME='themelang' -->/images/prest_inter.png" border="0"">
 			</a>
 			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
 			<input type="hidden" name="accion" value="ingresarDatos">
 		</form>
-	</li>-->
+	</li>
 	<!-- TMPL_IF name="mensaje_error_foto" -->	
 	<li>
 		<font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
@@ -190,9 +196,7 @@
 	</li>
 	<!-- TMPL_ELSE -->
 	<li>
-<!--			<input 	type=image  src="<!-- TMPL_VAR NAME='themelang' -->/images/subirFoto.png" 
-				align=center valign="center">-->
-			<div id="uploader"></div>
+		<div id="uploader"></div>
 	</li>
 	 <!-- /TMPL_IF -->
 </ul>

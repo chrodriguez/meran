@@ -99,8 +99,7 @@ sub _delPersons {
 
 		if (!$msg_object->{'error'}) { 
 		# Si no tiene borrowernumber no esta habilitado
-			$personData->{'loggedinuser'}= 'falta';
-			_eliminarUsuario($personData);
+			_eliminarUsuario($personData->{'borrowernumber'});
 			$msg_object->{'error'}= 0;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$personData->{'cardnumber'}]}) ;
 		}
@@ -218,7 +217,7 @@ sub t_eliminarUsuario {
 		$dbh->{RaiseError} = 1;
 	
 		eval {	
-			_eliminarUsuario($params);
+			_eliminarUsuario($params->{'borrowernumber'});
 			$dbh->commit;
 			$msg_object->{'error'}= 0;
   			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
@@ -240,64 +239,71 @@ sub t_eliminarUsuario {
 }
 
 #eliminarUsuario recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
+
+
 sub _eliminarUsuario{
-	my ($params)=@_;
+	my ($borrowernumber)=@_;
 	
 	my $dbh = C4::Context->dbh;
 
-	C4::AR::Reservas::reasignarTodasLasReservasEnEspera($params);
-	#Se eliminan todas las reservas del borrower
-	C4::AR::Reservas::eliminarReservas($params->{'borrowernumber'});
-
-	#Se eliminan todas las sanciones del borrower
-	C4::AR::Sanctions::eliminarSanciones($params->{'borrowernumber'});
-
-	# FIXME faltaria ver si se va a manejar historico de borrowers eliminados
-	
-	# FIXME falta borrar el estante virtual dell borrower
-	
-
-	my $sth=$dbh->prepare("	UPDATE persons 
-			    	SET borrowernumber=NULL 
-			    	WHERE borrowernumber=?
-			   ");
-
-	$sth->execute($params->{'borrowernumber'});
-	$sth->finish;
-
-	my $sth=$dbh->prepare("	DELETE FROM borrowers
-			       	WHERE borrowernumber=?
+	#   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+	#   $sth->execute(@data);
+	#   $sth->finish;
+	my $sth=$dbh->prepare("DELETE FROM borrowers
+			       WHERE borrowernumber=?
 			      ");
-
-	$sth->execute($params->{'borrowernumber'});
+	$sth->execute($borrowernumber);
 	$sth->finish;
 
-}
+# FIXME cuando se borra la reserva, habria que unificar todo, para que se conceda esa reserva al siguiente en la cola.
+	$sth=$dbh->prepare("DELETE FROM reserves
+			    WHERE borrowernumber=?
+			   ");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
+	$sth=$dbh->prepare("UPDATE persons 
+			    SET borrowernumber=NULL 
+			    WHERE borrowernumber=?
+			   ");
+	$sth->execute($borrowernumber);
+	$sth->finish;
+
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
+# FIXME fijarse que aca no se checkea nada, por ejemplo si tiene reservas, libros en su poder, etc...
+
 sub _verficarEliminarUsuario {
 	my($params,$msg_object)=@_;
 
-	my ($cantPrestamos) = C4::AR::Issues::getCantidadPrestamosActuales($params->{'borrowernumber'});
+	my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
+
+	my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
 
 	
 	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
-	#se verifica la existencia del usuario
+	#se verifica la existencia del usuario, que ahora no existe
 		$msg_object->{'error'}= 1;
   		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
 	} 
-	elsif ($cantPrestamos > 0){
-	#se verifica que no tenga prestamos activos
+	elsif ($cantidadTotalDePrestamos > 0){
+		#se verifica que no tenga prestamos activos
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
+
+	
+
 	elsif ($params->{'loggedInUser'} eq $params->{'borrowernumber'}){
 	# 	Se verifica que el usuario loggeado no sea el mismo que se va a eliminar
 		$msg_object->{'error'}= 1;
   		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U352', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
-	
+			
+open(A, ">>/tmp/debug.txt");
+printf A $params->{'loggedInUser'}."\n".$params->{'borrowernumber'}."\n";
+close(A);
 		
 	return ($msg_object);
 }
@@ -322,11 +328,11 @@ sub _existeUsuario {
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub t_cambiarPermisos {
 	my($params)=@_;
+
 	my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
 	my $msg_object= C4::AR::Mensajes::create();
-
 
 	if(!$msg_object->{'error'}){
 	#No hay error
@@ -874,56 +880,69 @@ sub estaSancionado {
 # Recibe como parámetro un string, que puede ser compuesto (varias palabras), además tambien recibe el tipo ($type), para ver si es busqueda simple ó compuesta.
 
 sub ListadoDeUsuarios  {
-	my ($searchstring,$type,$orden,$ini,$cantR)=@_;
+	my ($searchstring,$type,$orden,$ini,$cantR,$inicial)=@_;
 	my $dbh = C4::Context->dbh;
 	my $count; 
 	my @data;
 	my @bind=();
-	my $query = "	SELECT COUNT(*) 
-			FROM borrowers b";
-	my $query2 = "	SELECT * 
+	my $queryCount = "	SELECT COUNT(*) 
+			FROM borrowers ";
+	my $querySearch = "	SELECT * 
 			FROM borrowers ";
 	my $where;
 
-	if($type eq "simple")	# simple search for one letter only
+	if ($type eq "simple")	# simple search for one letter only
 	{
 		$where=" WHERE surname LIKE ? ";
-		@bind=("$searchstring%");
+		@bind=("%$searchstring%");
 	}
-	else	# advanced search looking in surname, firstname and othernames
+	elsif ($type eq "advanced")	
+
+# advanced search looking in surname, firstname and othernames
 	{
 		@data=split(' ',$searchstring);
                 $count=@data;
 
 # FIXME VER CONSULTA, REPITE TODO :s
-                $where=" WHERE (surname LIKE ?	OR surname LIKE ?
-				OR  firstname LIKE ? OR firstname LIKE ?
-                		OR  documentnumber  LIKE ? OR documentnumber LIKE ?
-                		OR  cardnumber LIKE ? OR  cardnumber LIKE ?
-				OR  studentnumber LIKE ? OR  studentnumber LIKE ?)";
-
-                @bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
-
-                for (my $i=1;$i<$count;$i++){
-                	$where.=" 	AND  (	surname LIKE ? OR surname LIKE ?
-	     					OR  firstname LIKE ? OR firstname LIKE ?
-                				OR  documentnumber LIKE ? OR documentnumber LIKE ?
-                				OR  cardnumber LIKE ? OR  cardnumber LIKE ?
-						OR  studentnumber LIKE ? OR  studentnumber LIKE ? )";
+                for (my $i=0;$i<$count;$i++){
+			if ($i == 0) {
+				$where=" WHERE (surname LIKE ?
+						OR  firstname LIKE ? 
+						OR  documentnumber  LIKE ?
+						OR  cardnumber LIKE ? 
+						OR  studentnumber LIKE ?)";
+			}
+                	$where.=" 	AND  (	surname LIKE ?
+						OR  firstname LIKE ? 
+        	        			OR  documentnumber  LIKE ?
+                				OR  cardnumber LIKE ? 
+						OR  studentnumber LIKE ?)";
 	
                 	push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
                 }
 
 	}
-	
-	$query.=$where;
-	$query2.=$where." order by ".$orden." limit ?,?";
-	my $sth=$dbh->prepare($query);
+	elsif ($type eq "inicial")
+		{
+			if ($inicial eq "TODOS"){
+				$where = "WHERE TRUE";
+			}
+			else
+			   {
+				$where = "WHERE surname LIKE ?";
+				@bind = ($inicial."%");
+			   }
+		}
+
+
+	$queryCount.=$where;
+	$querySearch.=$where." ORDER BY ".$orden." LIMIT ?,?";
+	my $sth=$dbh->prepare($queryCount);
 	$sth->execute(@bind);
 	my $cnt= $sth->fetchrow;
 	$sth->finish;
 
-	my $sth=$dbh->prepare($query2);
+	my $sth=$dbh->prepare($querySearch);
 	$sth->execute(@bind,$ini,$cantR);
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -1241,52 +1260,7 @@ sub updateOpacBorrower{
   	$sth->execute($update->{'streetaddress'},$update->{'faxnumber'},$update->{'firstname'},$update->{'emailaddress'},$update->{'city'},$update->{'phone'},$update->{'surname'},$update->{'borrowernumber'});
 	$sth->finish;
 }
-=item
-open(A, ">>/tmp/debug.txt");
-printf A "entrio \n";
-close(A);
-=cut
 
-# sub checkUserData{
-# 
-# 	my @errors;
-# 	my $data=@_;
-# 	my $ok;
-# 	$ok=0;
-# 
-# 	if (C4::AR::Utilidades::validateString($data->{'sex'}) ){
-# 		push @errors, "sex";
-# 		$ok=1;
-# 	}
-# 	if (C4::AR::Utilidades::validateString($data->{'firstname'}) ){
-# 		push @errors,"firstname";
-# 		$ok=1;
-# 	}
-# 	if (C4::AR::Utilidades::validateString($data->{'surname'}) ){
-# 		push @errors,"surname";
-# 		$ok=1;
-# 	}
-# 	if (C4::AR::Utilidades::validateString($data->{'address'}) ){
-# 		push @errors, "address";
-# 		$ok=1;
-# 	}
-# 	if (C4::AR::Utilidades::validateString($data->{'city'}) ){
-# 		push @errors, "citycode";
-# 		$ok=1;
-# 	}
-# 	
-# 	if (C4::AR::Validator::isValidDocument($data->{'documenttype'},$data->{'documentnumber'}) ){
-# 		push @errors, "documentnumber";
-# 		$ok=1;
-# 	}
-# 	
-#  	return ($ok,@errors);
-# 
-# }
+;}
 
 
-	
-
-
-
-1;

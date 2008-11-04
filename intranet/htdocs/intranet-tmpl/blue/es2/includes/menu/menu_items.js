@@ -27,7 +27,6 @@ var MENU_ITEMS = [
 		['Usuarios Potenciales', '/cgi-bin/koha/usuarios/potenciales/buscarUsuario.pl'],
 		['------------------------', null],
 		['Agregar Usuario', '/cgi-bin/koha/usuarios/reales/agregarUsuario.pl'],
-		['Agregar Organizaci&oacute;n', '/cgi-bin/koha/members/imemberentry.pl?type=Add'],
 		['------------------------', null],
 		['Generar Carnets','/cgi-bin/koha/reports/users-cards.pl']
 	],

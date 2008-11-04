@@ -46,10 +46,12 @@ for (my $i=0;$i< $cantR;$i++){
  	$line{date_due}=$issues->[$i]->{'date_due'};
     	$line{date_fin} = $issues->[$i]->{'date_fin'};
 	$line{date_renew}="-";
- 	if ($issues->[$i]->{'renewals'}){$line{date_renew}=$issues->[$i]->{'lastreneweddate'};}
+ 	if ($issues->[$i]->{'renewals'}){
+		$line{date_renew}=$issues->[$i]->{'lastreneweddate'};
+	}
 	$line{returndate}=$issues->[$i]->{'returndate'};
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-	($line{grupos})=C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
+	($line{grupos}) = C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
 
 	push(@loop_reading,\%line);
    }

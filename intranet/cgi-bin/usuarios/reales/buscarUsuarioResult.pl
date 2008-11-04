@@ -25,13 +25,18 @@ my $orden=$obj->{'orden'}||'surname';
 my $member=$obj->{'member'};
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
+my $inicial=$obj->{'inicial'};
 my $env;
 
 
 my ($cantidad,$results);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-if($member ne ""){
+
+if (defined($inicial)){
+	($cantidad,$results)=&ListadoDeUsuarios($member,"inicial",$orden,$ini,$cantR,$inicial);
+}
+elsif($member ne ""){
 	if((length($member) == 1)&&(defined $member)) {
 		($cantidad,$results)=&ListadoDeUsuarios($member,"simple",$orden,$ini,$cantR);
 	} else {

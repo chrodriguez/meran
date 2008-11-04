@@ -13,14 +13,16 @@ my $input = new CGI;
 
 # OBTENGO EL BORROWER LOGGEADO
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
-$loggedinuser=getborrowernumber($loggedinuser);
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
+$loggedinuser=getborrowernumber($loggedinuser);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
+
 my $dateformat = C4::Date::get_date_format();
 
 =item
@@ -120,11 +122,7 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
 	$params{'loggedInUser'} = $loggedinuser;
 	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
-	
    	$params{'borrowernumber'}= $usuario_hash_ref->{'borrowernumber'};
-
-	$params{'loggedinuser'}= $loggedinuser;
-
 
  	my ($Message_arrayref)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -297,3 +295,35 @@ elsif($tipoAccion eq "ELIMINAR_FOTO"){
 	print $input->header;
 	print $infoOperacionJSON;
 }	
+
+
+elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
+
+# 	my %params;
+	my $bornum = $obj->{'usuario'};
+
+#  	my ($Message_arrayref)= (\%params);
+	
+# 	my $infoOperacionJSON=to_json $Message_arrayref;
+	
+	my  ($template, $borrowernumber, $cookie)
+                = get_template_and_user({template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 1,
+                             flagsrequired => {borrow => 1}
+                             });
+	my $bibliotecas=C4::AR::Utilidades::generarComboDeBranches();
+
+	$template->param(
+		bibliotecas => $bibliotecas,
+		bornum      => $bornum,
+		);
+	
+
+	output_html_with_http_headers $input, $cookie, $template->output;
+
+
+	
+
+} #end if($tipoAccion eq "GUARDAR_PERMISOS")
