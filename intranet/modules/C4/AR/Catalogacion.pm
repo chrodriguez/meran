@@ -1582,13 +1582,17 @@ sub modificarNivel2Completo{
 	$dbh->{AutoCommit} = 1;
 }
 
+
 =item
 modificarNivel3Completo
 Modifica los datos del nivel 3 y sus repetibles.
 =cut
 sub modificarNivel3Completo{
 	my($id3,$nivel3,$todos)=@_;
-
+#aca hacer consulta para obtener el esatdo anterior de un item
+       # my ($estadoAnterior,$disponibilidadAnterior) =  C4::AR::Nivel3::getEstado($id3);
+        my $datosNivel3= C4::AR::Nivel3::getDataNivel3($id3);
+#fin consulta
 	my $dbh = C4::Context->dbh;
 # 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 # 	$dbh->{RaiseError} = 1;
@@ -1688,11 +1692,17 @@ print A "obj: ".$obj."\n";
 			}
 		}
 
-		#si cambio se modifica el estado del item
-		C4::AR::Nivel3::modificarEstadoItem($obj);
 	}
 
-close(A);
+	close(A);
+	#si cambio se modifica el estado del item
+	#DEBEMOS ARMAR LA HASH PARA PASARLE A LA FUNCION, ID3, WTHDRAWN, NOTFORLOAN, BORROWER, LOGGEDINUSER,ID2
+        $datosNivel3->{'branchcode'}= $datosNivel3->{'homebranch'}; #?????????????
+        #$detalleNivel3->{'loggedinuser'}= $params->{'loggedinuser'}; FALTA PASARLO
+
+	C4::AR::Nivel3::modificarEstadoItem($datosNivel3);
+
+	#
 	my $sth=$dbh->prepare($query);
         $sth->execute($holdingbranch,$homebranch,$bulk,$wthdrawn,$notforloan,$id3);
 # 	$dbh->commit;

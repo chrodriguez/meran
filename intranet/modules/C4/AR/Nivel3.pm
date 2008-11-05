@@ -21,12 +21,25 @@ use vars qw(@EXPORT @ISA);
 	&getDataNivel3
 
 	&disponibilidadItem
-
+	&getEstado
 	&t_deleteItem
+	&modificarEstadoItem
 );
 
 
+=item
+funcion q recibe el id de un item (nivel3) y devuelve el estado
+=cut
+sub getEstado {
 
+        my ($id3) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = " SELECT wthdrawn,notforloan FROM nivel3 WHERE id3 =  ? ";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($id3);
+	my $result = $sth->fetchrow_hashref;
+	return ($result->{'wthdrawn'},$result->{'notforloan'});
+}
 
 
 =item
@@ -34,7 +47,9 @@ use vars qw(@EXPORT @ISA);
 =cut
 sub modificarEstadoItem{
 	my($params)=@_;
-
+	open(A, ">>/tmp/debbug.txt");
+	print  A "entro ";
+	close (A);
 	#avail y loan preguntar por estos campos
 	my $disponible= _estaDisponible($params->{'id3'});
 	my $itemActual = C4::AR::Nivel3::getDataNivel3($params->{'id3'});
