@@ -1594,8 +1594,8 @@ sub modificarNivel3Completo{
         my $datosNivel3= C4::AR::Nivel3::getDataNivel3($id3);
 #fin consulta
 	my $dbh = C4::Context->dbh;
-# 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-# 	$dbh->{RaiseError} = 1;
+ 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
+ 	$dbh->{RaiseError} = 1;
 	my $homebranch="";
 	my $holdingbranch="";
 	my $bulk="";
@@ -1606,10 +1606,9 @@ sub modificarNivel3Completo{
 	my $query3="DELETE FROM nivel3_repetibles WHERE rep_n3_id=?";
 	my $query4="INSERT INTO nivel3_repetibles (dato,campo,subcampo,id3) VALUES (?,?,?,?)";
 	my %repetibles;
-open(A, ">>/tmp/debbug.txt");
-print A "antes delllll for :...\n";
+
 	foreach my $obj(@$nivel3){
-print A "obj: ".$obj."\n";
+
 		my $campo=$obj->{'campo'};
 		my $subcampo=$obj->{'subcampo'};
 		my $idRep=$obj->{'idRep'};
@@ -1705,8 +1704,8 @@ print A "obj: ".$obj."\n";
 	#
 	my $sth=$dbh->prepare($query);
         $sth->execute($holdingbranch,$homebranch,$bulk,$wthdrawn,$notforloan,$id3);
-# 	$dbh->commit;
-# 	$dbh->{AutoCommit} = 1;
+ 	$dbh->commit;
+ 	$dbh->{AutoCommit} = 1;
 }
 
 =item

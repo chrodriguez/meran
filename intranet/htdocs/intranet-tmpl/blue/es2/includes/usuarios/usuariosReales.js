@@ -48,11 +48,13 @@ function modificarDatosDeUsuario(){
 
 function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los datos del usuario
-	vDatosUsuario=new WindowHelper();
+	vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
+	vDatosUsuario.debug= true;
 	vDatosUsuario.html=responseText;
 	vDatosUsuario.create();	
 	vDatosUsuario.height('85%');
 	vDatosUsuario.width('85%');
+	vDatosUsuario.open();
 }
 
 function guardarModificacioUsuario(){
@@ -115,12 +117,14 @@ function modificarPermisos(){
 
 function updateModificarPermisos(responseText){
 //se crea el objeto que maneja la ventana para modificar los permisos
-	vModificarPermisos=new WindowHelper();
+	vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
+	vModificarPermisos.debug= true;
 	vModificarPermisos.html=responseText;
 	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
 	vModificarPermisos.create();
 	vModificarPermisos.height('220px');
 	vModificarPermisos.width('550px');
+	vModificarPermisos.open();
 }
 
 function guardarPermisos(){
@@ -283,12 +287,14 @@ function cambiarPassword(){
 
 function updateCambiarPassword(responseText){
 
-	vModificarPassword=new WindowHelper();
+	vModificarPassword=new WindowHelper({draggable: true, opacity: true});
+	vModificarPassword.debug= true;
 	vModificarPassword.html=responseText;
  	vModificarPassword.titulo= 'Cambio de Contrase&ntilde;a';
 	vModificarPassword.create();
 	vModificarPassword.height('220px');
 	vModificarPassword.width('550px');
+	vModificarPassword.open();
 	clearInput();
 }
 

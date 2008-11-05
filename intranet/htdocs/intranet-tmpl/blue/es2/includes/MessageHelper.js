@@ -13,36 +13,10 @@
 */
 
 // FIXME 
-// EN PRINCIPIO ES NECESARIO QUE EN EL TMPL QUE SE VAYA A UTILIZAR SE CREE UN DIV CON ID "mensajes",
-//estaria bueno que esto se genere dinamicamente
+//Faltaria manejar menor el logged, opcion debug idem a demas helpers
 
-/*
-//Esta funcion setea un mensaje enviado desde el servidor
-function setMessage(Message){
-//@params
-//Message.message, mensaje para el usuario
-//Message.error, hay error (error=1)
-//Message.codMsg, codigo del mensaje
-	$('#mensajes').html('');
-	$('#mensajes').append(Message.message + '<br>');
-	scrollTo('mensajes');
-}
-*/
 
-/*
-//Esta funcion setea varios mensajes enviados desde el servidor
-function setMessages(Message){
-//@params
-//Message.message, mensaje para el usuario
-//Message.error, hay error (error=1)
-//Message.codMsg, codigo del mensaje
-
-	$('#mensajes').append(Message.message + '<br>');
-	scrollTo('mensajes');
-}
-*/
-
-function clearMessages(){
+function _clearMessages(){
 	$('#mensajes').html('');
 }
 
@@ -59,7 +33,8 @@ function setMessages(Messages_hasref){
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
 
-	clearMessages();
+	_clearMessages();
+	_createContentMessages();
 	var i;
 	for(i=0;i<Messages_hasref.messages.length;i++){
 		$('#mensajes').append(Messages_hasref.messages[i].message + '<br>');
@@ -68,3 +43,11 @@ function setMessages(Messages_hasref){
 	scrollTo('mensajes');
 }
 
+function _createContentMessages(){
+
+	var contenedor = $('#mensajes')[0];
+	if(contenedor == null){
+		console.log("MessageHelper: Se crea el div cotenedor");
+		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>")
+	}
+}

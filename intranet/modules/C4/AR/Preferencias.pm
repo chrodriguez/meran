@@ -50,7 +50,7 @@ sub buscarPreferencias(){
 	return (\@results);
 }
 
-sub buscarPreferencia(){
+sub buscarPreferencia{
 	my ($var)=@_;
 
 	my $dbh = C4::Context->dbh;
@@ -67,7 +67,7 @@ sub buscarPreferencia(){
 guardarVariable
 guarda la variable del sistema ingresada.
 =cut
-sub guardarVariable(){
+sub guardarVariable{
 	my ($var,$val,$exp,$tipo,$op)=@_;
 
 	my $error=0;
@@ -89,7 +89,7 @@ sub guardarVariable(){
 }
 
 
-sub modificarVariable(){
+sub modificarVariable{
 	my ($var,$valor,$expl)=@_;
 
 	my $dbh = C4::Context->dbh;

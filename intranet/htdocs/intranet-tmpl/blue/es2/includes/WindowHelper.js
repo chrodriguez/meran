@@ -15,41 +15,105 @@ function _WinInit(objWin){
 function _WinAddDiv(objWin){
 
 	var contenedor = $('#ventana')[0];
+	var opciones= {};
+// 	var d_height= $(window).height();
+// 	var d_width= $(window).width();
+	var d_height= document.height;
+	var d_width= document.width;	
+	var dimmer= {height: d_height, width: d_width };
 
   	if(contenedor == null){
-	//se crea el dimmer que bloquea el fondo
-		$('body').append("<div id='dimmer' class='dimmer' style='height: 1000px; width: 100%;top: 0px; visibility: visible; position:absolute'></div>");
-	//se crea la ventana 
+		//se crea el dimmer que bloquea el fondo
+		$('body').append("<div id='dimmer' class='dimmer' style='height:" + dimmer.height + "px; width: " + dimmer.width + "px;top: 0px; visibility: visible; position:absolute'></div>");
+		//se crea la ventana 
 		$('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='/intranet-tmpl/blue/es2/images/cerrar.gif'/><span width=100px>" + objWin.titulo + "</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");
-	//se loguea 
-		if( (objWin.debug)&&(window.console) ){
-  				console.log("WindowHelper => create()");
-  		}
+
  	}
 
 	$('#ventanaContenido').html(objWin.html);	
-	$('#ventana').draggable({opacity: 0.7777});
+
+
+	if(objWin.opacity == true){
+		opciones.opacity= '0.7777';	
+	}
+
+	if(objWin.draggable == true){
+		$('#ventana').draggable(opciones);
+	}else{
+		$('#ventana').draggable('disable');
+	}
+	
+	//se crea el evento onClick para el boton cerrar
 	$('#cerrar').click( function (){objWin.close()} );
+
+	objWin.log();
+
+}
+
+//Esta funcion sirve para centrar un objeto
+jQuery.fn.centerObject = function(options) {
+// FIXME se deberia tener en cuenta centrar un div con conetnido
+	var obj = this;
+	var total= 0;
+	var dif= 0;
+
+	//se calcula el centro verticalmente
+	if($(window).scrollTop() == 0){
+		obj.css('top',  $(window).height()/2 - this.height()/2);
+	}else{
+	//se hizo scroll
+	
+		total= $(window).height() + $(window).scrollTop();
+		dif= total - $(window).height();
+		obj.css('top', dif + ( $(window).height() )/2);
+	}
+
+	//se calcula el centro horizontalmente
+	obj.css('left',$(window).width()/2 - this.width()/2);
+
+	if(options){
+		if( (options.debug)&&(window.console) ){
+			console.log(	"centerObject => \n" +
+					"Total Vertical: " + total + "\n" + 
+					"Dif: " + dif + "\n" + 
+					"Medio: " + (dif + ( $(window).height() )/2) +
+					"\n" +
+					"Total Horizontal: " + $(window).width() + "\n" + 
+					"Medio: " +  $(window).width()/2
+			);
+		}
+	}
 
 }
 
 
 
-function WindowHelper(){
+function WindowHelper(options){
 
+	this.debug= false;  //para debuggear
+	this.titulo= '';
 	this.html= '';		//respuesta del servidor, responseText
 	this.dimmer= '';	//oscurecimiento y bloqueo del fondo
 	this.showState= true;   //muestra o no el gif animado
-	this.opacity= '';	//opacidad de la ventana
-	this.debug= false;	
-	this.titulo= '';
-// 	this.height= '85%';
-// 	this.width= '85%';
+	this.draggable= true;  //para configurar si se quiere que la ventana sea draggable o no
+
+ 	if(options.draggable == false){
+		this.draggable= options.draggable;
+ 	}	
+
+	this.opacity= true;	//opacidad de la ventana
+
+	if(options.opacity == false){
+		this.opacity= options.opacity;
+ 	}	
+
 
 	this.close= function(){
 			//se oculta la ventana
 			$('#ventana').hide();
 			$('#dimmer').hide();
+			//se elimina el objeto
+			delete this;
 	}//end hide
 
 	this.height= function(height){
@@ -65,14 +129,28 @@ function WindowHelper(){
 	this.create= function(){
 			//crea una ventana
 			_WinInit(this);
-			this.open();
-// 			alert('heignt: ' + $('#ventanaContenido').innerHeight() + 'width: ' + $('#ventanaContenido').innerWidth());
+// 			this.open();
+
 	}//end create
 
 	this.open= function(){
 			//se muestra la ventana
+			$('#ventana').centerObject();
 			$('#ventana').show();
+			$('#dimmer').show();
 	}//end show
+
+	this.log= function(){
+		//se loguea 
+		if( (this.debug)&&(window.console) ){
+				console.log(" 	WindowHelper => create() " + "\n" +
+						"opacity: " + this.opacity + "\n" +	
+						"draggable: " + this.draggable + "\n" +
+						"width: " + $(window).width() + "\n" +
+						"height: " + $(window).height() + "\n"
+				);
+		}
+	}
 
 }
 
