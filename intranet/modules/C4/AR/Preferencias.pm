@@ -67,13 +67,7 @@ sub buscarPreferencia{
 guardarVariable
 guarda la variable del sistema ingresada.
 =cut
-<<<<<<< .mine
-
 sub t_guardarVariable(){
-	
-=======
-sub guardarVariable{
->>>>>>> .r757
 	my ($var,$val,$exp,$tipo,$op)=@_;
 	my $dbh = C4::Context->dbh;
 	my $msg_object= C4::AR::Mensajes::create();
@@ -120,12 +114,7 @@ sub _guardarVariable(){
 }
 
 
-<<<<<<< .mine
 sub t_modificarVariable(){
-	
-=======
-sub modificarVariable{
->>>>>>> .r757
 	my ($var,$valor,$expl)=@_;
 	my $dbh = C4::Context->dbh;
 	my $msg_object= C4::AR::Mensajes::create();
