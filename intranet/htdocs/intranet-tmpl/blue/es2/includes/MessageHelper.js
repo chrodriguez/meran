@@ -33,7 +33,6 @@ function setMessages(Messages_hasref){
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
 
-	_clearMessages();
 	_createContentMessages();
 	var i;
 	for(i=0;i<Messages_hasref.messages.length;i++){
@@ -41,13 +40,23 @@ function setMessages(Messages_hasref){
 	}
 
 	scrollTo('mensajes');
+	_delay(_clearMessages, 10);
 }
 
+//crea el contenedor para los mensajes, si ya esta creado, borra el contenido
 function _createContentMessages(){
 
 	var contenedor = $('#mensajes')[0];
+
 	if(contenedor == null){
+
 		console.log("MessageHelper: Se crea el div cotenedor");
-		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>")
-	}
+		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>");
+
+	}else{_clearMessages();}
+}
+
+//luego de x segundos se ejecuta la funcion pasada por parametro
+function _delay(funcion, segundos){
+	setTimeout(funcion, segundos*600);
 }
