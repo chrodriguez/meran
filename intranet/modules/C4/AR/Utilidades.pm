@@ -27,7 +27,6 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
 use C4::AR::Referencias;
-use C4::AR::Error;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero

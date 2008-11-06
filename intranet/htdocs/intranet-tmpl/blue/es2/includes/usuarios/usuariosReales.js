@@ -28,7 +28,7 @@ function eliminarUsuario(){
 function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-	location.href = "buscarUsuario.pl";
+	location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl";
 
 	
 }

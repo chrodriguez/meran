@@ -908,13 +908,16 @@ sub ListadoDeUsuarios  {
 						OR  cardnumber LIKE ? 
 						OR  studentnumber LIKE ?)";
 			}
-                	$where.=" 	AND  (	surname LIKE ?
-						OR  firstname LIKE ? 
-        	        			OR  documentnumber  LIKE ?
-                				OR  cardnumber LIKE ? 
-						OR  studentnumber LIKE ?)";
+			else
+		 	   {
+				$where.=" 	AND  (	surname LIKE ?
+							OR  firstname LIKE ? 
+							OR  documentnumber  LIKE ?
+							OR  cardnumber LIKE ? 
+							OR  studentnumber LIKE ?)";
+			   }
 	
-                	push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
+                	push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%","% $data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%");
                 }
 
 	}
@@ -989,7 +992,7 @@ sub ListadoDePersonas  {
                 			OR  cardnumber LIKE ? OR  cardnumber LIKE ?
                 			OR  studentnumber  LIKE ? OR  studentnumber LIKE ? )";
 
-        		push(@bind,"$data[$i]%","% $data[$i]%", "$data[$i]%","% $data[$i]%", "$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
+        		push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%","% $data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%");
                 }
 
 	}
