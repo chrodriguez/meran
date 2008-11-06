@@ -917,7 +917,7 @@ sub ListadoDeUsuarios  {
 							OR  studentnumber LIKE ?)";
 			   }
 	
-                	push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%","% $data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%");
+                	push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%");
                 }
 
 	}
@@ -957,6 +957,8 @@ sub ListadoDeUsuarios  {
 # Funcion que retorna un arreglo de hash, con todos los datos de los usuarios (persons) que cumplen con el patrón de búsqueda.
 # Recibe como parámetro un string, que puede ser compuesto (varias palabras), además tambien recibe el tipo ($type), para ver si es busqueda simple ó compuesta.
 
+
+# FIXME SE USA???????????????????????????????????????????????????????????????????????
 sub ListadoDePersonas  {
 	my ($env,$searchstring,$type,$orden,$ini,$cantR)=@_;
 	my $dbh = C4::Context->dbh;
