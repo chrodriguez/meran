@@ -18,9 +18,9 @@ use vars qw(@EXPORT @ISA);
 	&buscarPreferencias
 	&buscarPreferencia
 
-	&guardarVariable
+	&t_guardarVariable
 
-	&modificarVariable
+	&t_modificarVariable
 );
 
 =item
@@ -67,9 +67,42 @@ sub buscarPreferencia{
 guardarVariable
 guarda la variable del sistema ingresada.
 =cut
-sub guardarVariable{
-	my ($var,$val,$exp,$tipo,$op)=@_;
+<<<<<<< .mine
 
+sub t_guardarVariable(){
+	
+=======
+sub guardarVariable{
+>>>>>>> .r757
+	my ($var,$val,$exp,$tipo,$op)=@_;
+	my $dbh = C4::Context->dbh;
+	my $msg_object= C4::AR::Mensajes::create();
+
+	# enable transactions, if possible
+	$dbh->{AutoCommit} = 0;  
+	$dbh->{RaiseError} = 1;
+
+	eval {
+		_guardarVariable($var,$val,$exp,$tipo,$op);	
+		$dbh->commit;
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'SP001','INTRA');
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP001', 'params' => []} ) ;
+	}
+	$dbh->{AutoCommit} = 1;
+
+	return ($msg_object);
+}
+
+
+sub _guardarVariable(){
+	my ($var,$val,$exp,$tipo,$op)=@_;
 	my $error=0;
 	my $dbh = C4::Context->dbh;
 	my $query=" SELECT * FROM systempreferences WHERE variable=? ";
@@ -84,19 +117,50 @@ sub guardarVariable{
 		$sth->execute($var,$val,$exp,$tipo,$op);
 	}
 	$sth->finish;
-
-	return $error;
 }
 
 
+<<<<<<< .mine
+sub t_modificarVariable(){
+	
+=======
 sub modificarVariable{
+>>>>>>> .r757
 	my ($var,$valor,$expl)=@_;
+	my $dbh = C4::Context->dbh;
+	my $msg_object= C4::AR::Mensajes::create();
 
+	# enable transactions, if possible
+	$dbh->{AutoCommit} = 0;  
+	$dbh->{RaiseError} = 1;
+
+	eval {
+		_modificarVariable($var,$valor,$expl);	
+		$dbh->commit;
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'SP002','INTRA');
+		eval {$dbh->rollback};
+		#Se setea error para el usuario
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP002', 'params' => []} ) ;
+	}
+	else
+		{
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP003', 'params' => []} ) ;
+		}	
+	$dbh->{AutoCommit} = 1;
+
+	return ($msg_object);
+}
+sub _modificarVariable(){
+	my ($var,$valor,$expl)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query=" UPDATE systempreferences SET value=?,explanation=? WHERE variable=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($valor,$expl,$var);
-
 	$sth->finish;
 }
 

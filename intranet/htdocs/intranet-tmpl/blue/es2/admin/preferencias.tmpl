@@ -3,6 +3,7 @@
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.doblePaginador.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <link href="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -169,8 +170,8 @@ function procesarJSON(json, id,change){
  * en la pantalla, de lo contrario se guarda la variable.
  */
 function respuesta(responseText){
-	if(responseText == 0){buscarPreferencia();}
-	else{$("#error").html("La variable "+$("#variable").val()+" ya existe en el sistema");}
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 
@@ -293,7 +294,11 @@ $(document).ready( function() {
 });
 
 </script>
-
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
 <p class="pagetitle">Administraci&oacute;n de Preferencias del Sistema</p>
 <!-- PARA BUSCAR -->
 <br>

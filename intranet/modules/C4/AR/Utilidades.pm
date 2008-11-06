@@ -27,6 +27,7 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
 use C4::AR::Referencias;
+use C4::AR::Error;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
@@ -150,7 +151,9 @@ sub crearComponentes(){
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT emailaddress FROM  borrowers WHERE emailaddress IS NOT NULL AND emailaddress <> ''");
+	my $sth=$dbh->prepare("	SELECT emailaddress 
+				FROM  borrowers 
+				WHERE (emailaddress IS NOT NULL) AND (emailaddress <> '')");
 	$sth->execute();
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -193,13 +196,15 @@ sub saveholidays{
 		my $dbh = C4::Context->dbh;
 #Se borran todos los feriados de la tabla
 		if (scalar(@feriados_borrados)) {
-			my $sth=$dbh->prepare("delete from feriados where fecha in (".join(',',map {"('".$_."')"} @feriados_borrados).")");
+			my $sth=$dbh->prepare("	DELETE FROM feriados 
+						WHERE fecha IN (".join(',',map {"('".$_."')"} @feriados_borrados).")");
 			$sth->execute();
 			$sth->finish;
 		}
 #Se dan de alta todos los feriados
 		if (scalar(@feriados_nuevos)) {
-			my $sth=$dbh->prepare("insert into feriados (fecha) values ".join(',',map {"('".$_."')"} @feriados_nuevos));
+			my $sth=$dbh->prepare("	INSERT INTO feriados (fecha) 
+						VALUES ".join(',',map {"('".$_."')"} @feriados_nuevos));
 			$sth->execute();
 			$sth->finish;
 		}
@@ -208,7 +213,9 @@ sub saveholidays{
 
 sub obtenerTiposDeColaboradores{
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select codigo,descripcion from  referenciaColaboradores order by descripcion");
+my $sth=$dbh->prepare("	SELECT codigo,descripcion 
+			FROM referenciaColaboradores 
+			ORDER BY (descripcion)");
 $sth->execute();
 my %results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
@@ -225,7 +232,10 @@ la funcion obtenerParches devuelve toda la informacion sobre los parches de actu
 sub obtenerParches{
 my ($version)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select * from  parches where corresponde > ? order by id");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM parches 
+			WHERE (corresponde > ?) 
+			ORDER BY (id)");
 $sth->execute($version);
 my @results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
@@ -243,7 +253,10 @@ Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones
 sub aplicarParches{
 my ($parche)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select * from  parches_scripts where parche= ? order by id");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM parches_scripts 
+			WHERE (parche= ?) 
+			ORDER BY (id)");
 $sth->execute($parche);
 my $sth2;
 my $error='';
@@ -255,7 +268,9 @@ if ($sth2 -> errstr){ $error=$sth2 -> errstr;
 # while
 $sth->finish;
 if (not $error){
-my $sth3=$dbh->prepare("update parches set aplicado='1' where id=?");
+my $sth3=$dbh->prepare("UPDATE parches 
+			SET aplicado='1' 
+			WHERE id=?");
 $sth3->execute($parche);
 }
 	}
@@ -269,7 +284,8 @@ return($error);
 
 sub getholidays{
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from  feriados");
+	my $sth=$dbh->prepare("	SELECT * 
+				FROM feriados");
         $sth->execute();
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
@@ -282,7 +298,11 @@ sub getholidays{
 sub obtenerReferencia{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select UPPER(concat_ws(', ',apellido,nombre)) from autores where apellido LIKE ? order by apellido limit 0,15");
+	my $sth=$dbh->prepare("	SELECT UPPER(concat_ws(', ',apellido,nombre)) 
+				FROM autores 
+				WHERE apellido LIKE ? 
+				ORDER BY apellido 
+				LIMIT 0,15");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
@@ -294,7 +314,10 @@ sub obtenerReferencia{
 sub obtenerAutores{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select completo, id from autores where apellido LIKE ? order by apellido");
+	my $sth=$dbh->prepare("	SELECT completo, id 
+				FROM autores 
+				WHERE apellido LIKE ? 
+				ORDER BY (apellido)");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -307,7 +330,10 @@ sub obtenerAutores{
 sub obtenerPaises{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select printable_name, iso from countries where printable_name LIKE ? order by printable_name");
+	my $sth=$dbh->prepare("	SELECT printable_name, iso 
+				FROM countries 
+				WHERE printable_name LIKE ? 
+				ORDER BY (printable_name)");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -322,7 +348,11 @@ sub obtenerTemas{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
 # 	my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
-	my $sth=$dbh->prepare("select nombre from temas where nombre LIKE ? order by nombre limit 0,15");
+	my $sth=$dbh->prepare("	SELECT nombre 
+				FROM temas 
+				WHERE nombre LIKE ? 
+				ORDER BY nombre 
+				LIMIT 0,15");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
@@ -333,7 +363,10 @@ sub obtenerTemas{
 sub obtenerTemas2(){
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select nombre, id from temas where nombre LIKE ? order by nombre");
+	my $sth=$dbh->prepare("	SELECT nombre, id 
+				FROM temas 
+				WHERE nombre LIKE ? 
+				ORDER BY nombre");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -347,7 +380,11 @@ sub obtenerTemas2(){
 sub obtenerEditores{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select UPPER(concat_ws(', ',apellido,nombre)) from autores where apellido LIKE ? order by apellido limit 0,15");
+	my $sth=$dbh->prepare("	SELECT UPPER(concat_ws(', ',apellido,nombre)) 
+				FROM autores 
+				WHERE apellido LIKE ? 
+				ORDER BY (apellido) 
+				LIMIT 0,15");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
@@ -358,7 +395,10 @@ sub obtenerEditores{
 sub obtenerBiblios{
 	my ($dato)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select branchname, branchcode as id from branches where branchname LIKE ? order by branchname");
+	my $sth=$dbh->prepare("	SELECT branchname, branchcode AS id 
+				FROM branches 
+				WHERE branchname LIKE ? 
+				ORDER BY branchname");
         $sth->execute($dato.'%');
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -400,7 +440,7 @@ my @feriados= @_;
 sub obtenerCampos{
 my ($tabla)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("show fields from $tabla");
+my $sth=$dbh->prepare("SHOW FIELDS FROM $tabla");
 $sth->execute();#$tabla);
 my @results;
 while (my @data=$sth->fetchrow_array){
@@ -444,11 +484,16 @@ if( ($bloqueIni ne "")&&($bloqueFin ne "") ){
 				ORDER BY $orden limit $ind,$cant ");
 	$sth->execute();
 }else{
-	$sth=$dbh->prepare("select count(*) from $tabla  where $orden like '$search'");
+	$sth=$dbh->prepare("	SELECT COUNT(*) 
+				FROM $tabla  
+				WHERE $orden LIKE '$search'");
 	$sth->execute();
 
 	@cantidad=$sth->fetchrow_array;
-	$sth=$dbh->prepare("select * from $tabla where $orden like '$search' order by $orden limit $ind,$cant");
+	$sth=$dbh->prepare("	SELECT * 
+				FROM $tabla 
+				WHERE $orden LIKE '$search' 
+				ORDER BY $orden LIMIT $ind,$cant");
 	$sth->execute();
 }
 
@@ -479,7 +524,7 @@ sub valoresTabla{
 my ($tabla,$indice,$valor)=@_;
 
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("show fields from $tabla");
+my $sth=$dbh->prepare("SHOW FIELDS FROM $tabla");
 $sth->execute();
 my @results;
 while (my @data=$sth->fetchrow_array){
@@ -488,7 +533,9 @@ while (my @data=$sth->fetchrow_array){
         push(@results,$aux);
         }
 
-$sth=$dbh->prepare("select * from $tabla where $indice=?");
+$sth=$dbh->prepare("	SELECT * 
+			FROM $tabla 
+			WHERE $indice=?");
 $sth->execute($valor);
 my @results2;
 while (my $data=$sth->fetchrow_hashref){
@@ -513,7 +560,9 @@ sub obtenerValoresTablaRef{
 	my ($tabla,$ident,$campos,$orden)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT ".$ident." as id,".$campos." FROM ".$tabla. " ORDER BY ".$orden;
+	my $query="	SELECT ".$ident." as id,".$campos." 
+			FROM ".$tabla. " 
+			ORDER BY ".$orden;
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
 	my $strjson="";
@@ -552,16 +601,21 @@ my $dbh = C4::Context->dbh;
 #autores 	id 		0 		colaboradores 		idColaborador
 #autores 	id 		0 		additionalauthors 	author
 #autores 	id 		0 		analyticalauthors 	author
-my $sth=$dbh->prepare("select * from tablasDeReferencias where referencia= ?");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM tablasDeReferencias 
+			WHERE referencia= ?");
 $sth->execute($tabla);
 my @results;
 while (my $data=$sth->fetchrow_hashref){
         my $aux;
-	my $sth2=$dbh->prepare("select $data->{'nomcamporeferencia'} from $data->{'referencia'} where
-	$indice = ?");
+	my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
+				FROM $data->{'referencia'} 
+				WHERE $indice = ?");
 	$sth2->execute($valor);
 	my $identificador=$sth2->fetchrow_array;
-	$sth2=$dbh->prepare("select count(*) from $data->{'referente'} where $data->{'camporeferente'}= ?");
+	$sth2=$dbh->prepare("	SELECT COUNT(*) 
+				FROM $data->{'referente'} 
+				WHERE $data->{'camporeferente'}= ?");
 	$sth2->execute($identificador);
 	$aux->{'relacionadoTabla'} = $data->{'referente'};
         if (my $canti= $sth2->fetchrow_array){
@@ -583,18 +637,30 @@ my($tabla,$camporeferencia,$id)=@_;
 ($id||($id=0));
 my $dbh = C4::Context->dbh;
 #Obtengo que campo voy a utilizar para buscar similares, es en tablasDeReferenciasInfo
-my $sth=$dbh->prepare("Select similares from tablasDeReferenciasInfo where referencia=? ");
+my $sth=$dbh->prepare("	SELECT similares 
+			FROM tablasDeReferenciasInfo 
+			WHERE referencia=? ");
 $sth->execute($tabla);
 my $similar=$sth->fetchrow_array;
 #Busco el valor del campo similar que corresponde al registro para el cual estoy buscando similares 
-$sth=$dbh->prepare("select $similar from $tabla where $camporeferencia = ? limit 0,1");
+$sth=$dbh->prepare("	SELECT $similar 
+			FROM $tabla 
+			WHERE $camporeferencia = ? 
+			LIMIT 0,1");
 $sth->execute($id);
 my $valorAbuscarSimil=$sth->fetchrow_array;
 my $tamano=(length($valorAbuscarSimil))-1;
 #Busco los valores similares, con una expresion regular que busca aquellas tuplas que coincidan en campo similar en todos los caracteres-1 del original
-$sth=$dbh->prepare("select * from $tabla where $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' and $camporeferencia  != ? order by $similar limit 0,15");
+$sth=$dbh->prepare("	SELECT * 
+			FROM $tabla 
+			WHERE $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' AND $camporeferencia  != ? 
+			ORDER BY $similar 
+			LIMIT 0,15");
 $sth->execute($id);
-my $sth3=$dbh->prepare("Select camporeferencia from tablasDeReferencias where referencia=? limit 0,1");
+my $sth3=$dbh->prepare("SELECT camporeferencia 
+			FROM tablasDeReferencias 
+			WHERE referencia=? 
+			LIMIT 0,1");
 $sth3->execute($tabla);
 my $idnum=$sth3->fetchrow_array;
 
@@ -626,21 +692,28 @@ my $dbh = C4::Context->dbh;
 my $asignar;
 my $sthT=$dbh->prepare("START TRANSACTION");
 $sthT->execute();
-my $sth=$dbh->prepare("select * from tablasDeReferencias where referencia= ?");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM tablasDeReferencias 
+			WHERE referencia= ?");
 $sth->execute($tabla);
 my @results;
 my $asignar=0;
 while (my $data=$sth->fetchrow_hashref){
 	$asignar=1;
         my $aux;
-	my $sth2=$dbh->prepare("select $data->{'nomcamporeferencia'} from $data->{'referencia'} where $indice = ?");
+	my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
+				FROM $data->{'referencia'} 
+				WHERE $indice = ?");
 	$sth2->execute($identificador);
 	my $identificador2=$sth2->fetchrow_array;
-	$sth2=$dbh->prepare("update $data->{'referente'} set $data->{'camporeferente'}= ? where $data->{'camporeferente'}= ?");
+	$sth2=$dbh->prepare("	UPDATE $data->{'referente'} 
+				SET $data->{'camporeferente'}= ? 
+				WHERE $data->{'camporeferente'}= ?");
 	$sth2->execute($valorNuevo,$identificador2);
 	}
 if ($borrar){
-	my $sth3=$dbh->prepare("delete from $tabla where $indice= ?");
+	my $sth3=$dbh->prepare("DELETE FROM $tabla 
+				WHERE $indice= ?");
 	$sth3->execute($identificador);
 	$borrar=1;
 	}
@@ -653,10 +726,12 @@ return ($asignar,$borrar);
 sub obtenerValores{
 my ($tabla,$indice,$valor)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("show fields from ?");
+my $sth=$dbh->prepare("SHOW FIELDS FROM ?");
 $sth->execute($tabla);
 my @data=$sth->fetchrow_array;
-$sth=$dbh->prepare("select * from ? where ?=?");
+$sth=$dbh->prepare("	SELECT * 
+			FROM ? 
+			WHERE ?=?");
 $sth->execute($tabla,$indice,$valor);
 my $data2=$sth->fetchrow_hashref;
 $sth->finish;
@@ -676,7 +751,9 @@ foreach my $key (keys(%valores)){
 $sql.=', '.$key.'="'.$valores{$key}.'"';
 }
 $sql=substr($sql,2);
-my $sth=$dbh->prepare("update $tabla set $sql where $id=?");
+my $sth=$dbh->prepare("	UPDATE $tabla 
+			SET $sql 
+			WHERE $id=?");
 $sth->execute($valores{$id});
 $sth->finish;
 }
@@ -684,7 +761,9 @@ $sth->finish;
 #Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
 sub buscarTablasdeReferencias{
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select distinct(referencia) from tablasDeReferencias order by referencia");
+my $sth=$dbh->prepare("	SELECT DISTINCT(referencia) 
+			FROM tablasDeReferencias 
+			ORDEY BY (referencia)");
 $sth->execute();
 my %results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
@@ -698,11 +777,17 @@ return(%results);#,@results);
 sub buscarTabladeReferencia{
 my ($ref)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from tablasDeReferencias where referencia=? limit 0,1");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM tablasDeReferencias 
+			WHERE referencia=? 
+			LIMIT 0,1");
 $sth->execute($ref);
 my $results=$sth->fetchrow_hashref;
 #se obtiene el orden de la tabla con la que se esta trabajando
-$sth=$dbh->prepare("Select orden from tablasDeReferenciasInfo where referencia=? limit 0,1");
+$sth=$dbh->prepare("	SELECT orden 
+			FROM tablasDeReferenciasInfo 
+			WHERE referencia=? 
+			LIMIT 0,1");
 $sth->execute($ref);
 $results->{'orden'}=$sth->fetchrow_array;
 $sth->finish;
@@ -717,7 +802,9 @@ sub obtenerIdentTablaRef{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query="SELECT nomcamporeferencia FROM tablasDeReferencias WHERE referencia=?";
+	my $query="	SELECT nomcamporeferencia 
+			FROM tablasDeReferencias 
+			WHERE referencia=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla);
 	return($sth->fetchrow);
@@ -727,7 +814,8 @@ sub obtenerIdentTablaRef{
 sub obtenerDefaults{
 
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select * from defaultbiblioitem");
+my $sth=$dbh->prepare("	SELECT * 
+			FROM defaultbiblioitem");
 $sth->execute();
 my @results;
 while (my $data = $sth->fetchrow_hashref) {push(@results, $data); } # while
@@ -740,7 +828,9 @@ sub guardarDefaults
 
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare("update defaultbiblioitem set valor = ? where campo=?");
+my $sth=$dbh->prepare("	UDPATE defaultbiblioitem 
+			SET valor = ? 
+			WHERE campo=?");
 $sth->execute($biblioitem->{'volume'},'volume');
 $sth->execute($biblioitem->{'number'},'number');
 $sth->execute($biblioitem->{'classification'},'selectlevel');
@@ -897,7 +987,9 @@ NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sis
 sub cambiarLibreDeuda(){
 	my ($valor)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("update systempreferences set value=? where variable='libreDeuda'");
+	my $sth=$dbh->prepare("	UPDATE systempreferences 
+				SET value=? 
+				WHERE variable='libreDeuda'");
 	$sth->execute($valor);
 }
 
@@ -919,7 +1011,9 @@ sub checkdigit {
 	#not correct
 	unless ( $nounique ){
 		my $dbh=C4::Context->dbh;
-		my $query=qq{SELECT * FROM borrowers WHERE cardnumber=?};
+		my $query=qq{	SELECT * 
+				FROM borrowers 
+				WHERE cardnumber=?};
 		my $sth=$dbh->prepare($query);
 		$sth->execute($infl);
 		my %results = $sth->fetchrow_hashref();
@@ -1001,18 +1095,19 @@ sub UTF8toISO{
 
 
 sub from_json_ISO{
-	my ($data)=@_;
-	$data= UTF8toISO($data);
-	return from_json($data, {ascii => 1});
-}
 
+		my ($data)=@_;
+		$data= UTF8toISO($data);
+		return from_json($data, {ascii => 0});
+}
 =item
 obtenerValoresAutorizados
 Obtiene todas las categorias, sin repetición de la tabla authorised_values.
 =cut
 sub obtenerValoresAutorizados(){
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT DISTINCT(category) FROM authorised_values";
+        my $query="	SELECT DISTINCT(category) 
+			FROM authorised_values";
         my $sth=$dbh->prepare($query);
 	$sth->execute();
 	my @results;
@@ -1027,7 +1122,9 @@ Obtiene todos los valores de una categoria.
 sub obtenerDatosValorAutorizado(){
 	my ($categoria)=@_;
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT * FROM authorised_values WHERE category=?";
+        my $query="	SELECT * 
+			FROM authorised_values 
+			WHERE category=?";
         my $sth=$dbh->prepare($query);
 	$sth->execute($categoria);
 	my %results;
@@ -1044,7 +1141,17 @@ Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la pa
 sub buscarCiudades{
         my ($ciudad) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT countries.name AS pais, provincias.nombre AS provincia, dptos_partidos.nombre AS partido, localidades.localidad AS localidad,localidades.nombre AS nombre FROM localidades LEFT JOIN dptos_partidos ON localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO LEFT JOIN provincias ON dptos_partidos.provincia = provincias.provincia LEFT JOIN countries ON countries.code = provincias.pais WHERE localidades.nombre LIKE ? OR localidades.nombre LIKE ? ORDER BY localidades.nombre";
+        my $query = "	SELECT 	countries.name AS pais, provincias.nombre AS provincia, 
+				dptos_partidos.nombre AS partido, localidades.localidad AS localidad,
+				localidades.nombre AS nombre 
+			
+			FROM localidades LEFT JOIN dptos_partidos ON 
+						(localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO) 
+						 LEFT JOIN provincias ON 
+								(dptos_partidos.provincia = provincias.provincia) LEFT JOIN countries ON 
+								(countries.code = provincias.pais) 
+			WHERE (localidades.nombre LIKE ?) OR (localidades.nombre LIKE ?)
+			ORDER BY (localidades.nombre)";
 	my $sth = $dbh->prepare($query);
         $sth->execute($ciudad.'%', '% '.$ciudad.'%');
         my @results;
@@ -1141,7 +1248,7 @@ sub generarComboTipoDeDoc {
 						-labels   => \%select_docs,
 						-size     => 1,
 						-multiple => 0 
-				);
+					);
 
 	return $documents; 
 }

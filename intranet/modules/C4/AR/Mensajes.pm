@@ -39,6 +39,7 @@ $VERSION = 0.01;
 #P100 - P199 para Prestamos
 #S200 - S299 para Sanciones
 #U300 - U399 para Usuarios
+#SP000 - SP999 para errores de sistema
 #B400 - B499 para Errores e Informacion de Base de Datos
 #C500 - C599 para Catalogacion
 #CA600 - CA699 para Control de Autoridades
@@ -226,6 +227,11 @@ my %mensajesINTRA = (
 	'M901' => 'Se elimin&oacute; con &eacute;xito el item con c&oacute;digo de barras *?* .',
 	'M902' => 'Se elimin&oacute; con &eacute;xito el grupo *?* .',
 	'M903' => 'Se elimin&oacute; con &eacute;xito el Registro *?* .',
+	'SP001' => 'Se produjo un error al actualizar la preferencia.',
+	'SP002' => 'Se produjo un error al guardar la preferencia.',
+	'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
+	'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.'
+	
 );
 
 sub getMensaje {

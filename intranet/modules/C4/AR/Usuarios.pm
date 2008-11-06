@@ -301,10 +301,6 @@ sub _verficarEliminarUsuario {
   		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U352', 'params' => [$params->{'cardnumber'}]} ) ;
 	}
 			
-open(A, ">>/tmp/debug.txt");
-printf A $params->{'loggedInUser'}."\n".$params->{'borrowernumber'}."\n";
-close(A);
-		
 	return ($msg_object);
 }
 

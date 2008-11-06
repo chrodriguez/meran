@@ -72,7 +72,7 @@ if($accion eq "MODIFICAR_VARIABLE"){
 
 	$template->param(
 		variable    => $variable,
-		explicacion => C4::AR::Utilidades::trim($infoVar->{'explanation'}),
+		explicacion => &C4::AR::Utilidades::trim($infoVar->{'explanation'}),
 		tabla	    => $tabla,
 		categoria   => $op,
 		campo	    => $op,
@@ -85,7 +85,8 @@ if($accion eq "MODIFICAR_VARIABLE"){
 	$compo=&C4::AR::Utilidades::crearComponentes("text","valor",60,\%labels,$valor);
 	$template->param(valor=>$compo);
 
-	print  $template->output;
+	print $input->header;
+	print $template->output;
 
 } #end if($accion eq "MODIFICAR_VARIABLE")
 
@@ -105,11 +106,11 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 		$opciones="authorised_values|".$categ;
 	}
 
-	my $error=0;
-	&C4::AR::Preferencias::modificarVariable($variable,$valor,$expl);
+	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
 
 	print $input->header;
- 	print $error;
+ 	my $infoOperacionJSON=to_json $Message_arrayref;
+	print $infoOperacionJSON;
 } #end GUARDAR_MODIFICACION_VARIABLE
 
 
@@ -139,56 +140,31 @@ if($accion eq "SELECCION_CAMPO"){
 
 	my $guardar=$obj->{'guardar'};
 	my $tipo=$obj->{'tipo'};
-# 	if($guardar){
-# 		my $modificar=$obj->{'modificar'};
-# 		my $variable=$obj->{'variable'};
-# 		my $valor=$obj->{'valor'};
-# 		my $expl=$obj->{'explicacion'};
-# 		my $opciones="";
-# 		if($tipo eq "combo"){$opciones=$tabla."|".$obj->{'campo'};}
-# 
-# 		if($tipo eq "valAuto"){
-# 			my $categ=$obj->{'categoria'};
-# 			$opciones="authorised_values|".$categ;
-# 		}
-# 
-# 		my $error=0;
-# 		if($modificar eq "1"){&modificarVariable($variable,$valor,$expl);}
-# 		else{$error=&guardarVariable($variable,$valor,$expl,$tipo,$opciones);}
-# 
-# 		print $input->header;
-# 		print $error;
-# 	}
-# 	else{
-		my $strjson="";
-		if($tipo eq "combo"){
-			if($tabla){
-			my @campos=&C4::AR::Utilidades::obtenerCampos($tabla);
-
+	my $strjson="";
+	if($tipo eq "combo"){
+		if($tabla){
+		my @campos=&C4::AR::Utilidades::obtenerCampos($tabla);
 				foreach my $campo(@campos){
-					$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
-				}
-			}
-			else{
-				my %tablas=&C4::AR::Utilidades::buscarTablasdeReferencias();
-				foreach my $tabla(keys(%tablas)){
-					$strjson.=",{'clave':'".$tabla."','valor':'".$tabla."'}";
-				}
+				$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
 			}
 		}
 		else{
-			my $valAuto=&C4::AR::Utilidades::obtenerValoresAutorizados();
-			foreach my $val(@$valAuto){
-				$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
+			my %tablas=&C4::AR::Utilidades::buscarTablasdeReferencias();
+			foreach my $tabla(keys(%tablas)){
+				$strjson.=",{'clave':'".$tabla."','valor':'".$tabla."'}";
 			}
 		}
-
-		$strjson=substr($strjson,1,length($strjson));
-		$strjson="[".$strjson."]";
-
-		print $input->header;
-		print $strjson;
-# 	}
+	}
+	else{
+		my $valAuto=&C4::AR::Utilidades::obtenerValoresAutorizados();
+		foreach my $val(@$valAuto){
+			$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
+		}
+	}
+	$strjson=substr($strjson,1,length($strjson));
+	$strjson="[".$strjson."]";
+	print $input->header;
+	print $strjson;
 }
 
 if($accion eq "AGREGAR_VARIABLE"){
@@ -205,11 +181,11 @@ if($accion eq "AGREGAR_VARIABLE"){
 		$opciones="authorised_values|".$categ;
 	}
 
-	my $error=0;
-	$error=&C4::AR::Preferencias::guardarVariable($variable,$valor,$expl,$tipo,$opciones);
+	my $Message_arrayref= &C4::AR::Preferencias::t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
 
 	print $input->header;
-	print $error;
+ 	my $infoOperacionJSON=to_json $Message_arrayref;
+	print $infoOperacionJSON;
 }
 
 
@@ -217,18 +193,7 @@ if($accion eq "AGREGAR_VARIABLE"){
 
 if($accion eq "SELECCION_CAMPO2"){
 
-# 	my ($template, $loggedinuser, $cookie) = 
-# 	get_templateexpr_and_user({
-# 				template_name => "admin/modificarPreferencia.tmpl",
-# 				query => $input,
-# 				type => "intranet",
-# 				authnotrequired => 0,
-# 				flagsrequired => {borrowers => 1},
-# 				debug => 1,
-# 	});
-
  	my $opcion=$obj->{'opcion'};
-# 	my $opcion=$obj->{'tipo'};
 	my $valor="";
 	my $op="";
 	my $compo;
@@ -261,10 +226,6 @@ if($accion eq "SELECCION_CAMPO2"){
 		}
 		$compo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
 	}
-# 
-# 	$template->param(valor=>$compo);
-# 
-# 	print  $template->output;
 	print $input->header;
  	print $compo;
 
