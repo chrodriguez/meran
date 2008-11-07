@@ -53,10 +53,19 @@ function _createContentMessages(){
 		console.log("MessageHelper: Se crea el div cotenedor");
 		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>");
 
-	}else{_clearMessages();}
+	}
+	else{
+		_clearMessages();
+	     }
 }
 
 //luego de x segundos se ejecuta la funcion pasada por parametro
 function _delay(funcion, segundos){
 	setTimeout(funcion, segundos*600);
+}
+
+function hayError(msg){
+	if (msg.error == 1)
+		return (true);
+	return(false);
 }

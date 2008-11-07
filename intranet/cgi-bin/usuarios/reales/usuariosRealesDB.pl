@@ -300,7 +300,7 @@ elsif($tipoAccion eq "ELIMINAR_FOTO"){
 elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 
 # 	my %params;
-	my $bornum = $obj->{'usuario'};
+	my $bornum = $obj->{'borrowernumber'};
 
 #  	my ($Message_arrayref)= (\%params);
 	

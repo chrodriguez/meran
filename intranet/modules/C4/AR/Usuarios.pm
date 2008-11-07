@@ -35,6 +35,7 @@ use vars qw(@EXPORT @ISA);
 	&t_eliminarUsuario
 	&t_addPerson
 	&t_delPersons
+	&existeUsuario
 );
 
 
@@ -321,6 +322,18 @@ sub _existeUsuario {
 	return $sth->fetchrow_array();
 }
 
+
+
+
+sub existeUsuario {
+	my ($borrowernumber)=@_;
+	if (_existeUsuario($borrowernumber)){
+		return 1;
+	}
+	else{
+		return 0;
+	    }
+}
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub t_cambiarPermisos {
 	my($params)=@_;

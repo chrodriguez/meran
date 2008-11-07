@@ -5,6 +5,7 @@
 <script language="javascript" type="text/javascript">
 
 var objAH;
+var globalSearchTemp;
 function ordenar(orden){
 	objAH.sort(orden);
 }
@@ -23,6 +24,27 @@ function consultar(filtro){
 		objAH.inicial= inicial;
 		$('#member').val("filtro: "+filtro);
 	}
+	else
+	   {
+		if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
+				busqueda = busqueda.substr(8,5);
+				$('#member').val(busqueda);
+				consultar(busqueda);
+		}
+		else
+		   {
+			if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
+				busqueda = busqueda.substr(8,1);
+				$('#member').val(busqueda);
+				consultar(busqueda);
+			}
+		   }
+
+			
+	}
+
+
+
 	if(busqueda.length > 0){
 		objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
 		objAH.funcion= 'changePage';
@@ -45,6 +67,22 @@ function Borrar(){
 	$('#member').val('');
 }
 
+function checkFilter(eventType){
+	var str = $('#member').val();
+	
+	if (eventType.toUpperCase() == 'FOCUS'){
+
+		if (str.substr(0,6).toUpperCase() == 'FILTRO'){
+			globalSearchTemp = $('#member').val();
+			Borrar();
+		}
+	}
+	else
+	   {
+		if (jQuery.trim($('#member').val()) == "")
+			$('#member').val(globalSearchTemp);
+	   }
+}
 
 $(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
@@ -70,7 +108,7 @@ $(document).ready(function() {
 <table>
 	<tr>
  		<td>
-			<input id="member" class="inputFontNormal" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+			<input id="member" class="inputFontNormal" type=text name="member" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
 			<input id="buscar" type="image" onClick="consultar('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>

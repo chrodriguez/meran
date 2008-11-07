@@ -7,33 +7,6 @@
  */
 
 
-//************************************************Eliminar Usuario**********************************************
-function eliminarUsuario(){
-
-	var is_confirmed = confirm('Confirma la baja ?');
-
-	if (is_confirmed) {
-
-		objAH=new AjaxHelper(updateEliminarUsuario);
-		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.debug= true;
-		objAH.borrowernumber= usuario.ID;
-		objAH.tipoAccion= 'ELIMINAR_USUARIO';
-		objAH.sendToServer();
-
-
-	}
-}
-
-function updateEliminarUsuario(responseText){
-	var Messages=JSONstring.toObject(responseText);
-	setMessages(Messages);
-	location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl";
-
-	
-}
-
-//*********************************************Fin***Eliminar Usuario*********************************************
 
 
 //*********************************************Modificar Datos Usuario*********************************************
@@ -99,7 +72,7 @@ function updateGuardarModificacioUsuario(responseText){
 	vDatosUsuario.close();
 	detalleUsuario();
 }
-
+usuario
 //*********************************************Fin***Modificar Datos Usuario***************************************
 
 
@@ -147,7 +120,7 @@ function guardarPermisos(){
 		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 		objAH.usuario= usuario.ID;
 		objAH.array_permisos= array;
-		objAH.sendToServer();
+		objAH.sendToServer();usuario
  	}
 }
 
@@ -177,9 +150,15 @@ function eliminarUsuario(){
 	}
 }
 
+
+
+/// FIXME ver que cuando el usuario no haya borrado, no redireccione
 function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
+	if (!(hayError(Messages))){
+		window.location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl";
+	}
 }
 
 //*********************************************Fin***Eliminar Usuario*********************************************

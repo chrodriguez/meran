@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 function imprimir(){
 	var autores="";
 	var titulos="";
@@ -15,18 +15,21 @@ function imprimir(){
 }
 
 </script>
-<div>
+
+
 <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
 	<tr><td>Completar Datos</td></tr>
         <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
-<table class="inputFontNormal" align="center" height="100%" weight="100%">
+
 	<form name="info" id="info" action="/cgi-bin/koha/usuarios/prestamoInterBiblio.pl">
 		<input type="hidden" name="bornum" id="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
 		<input type="hidden" name="autores" id="autores">
 		<input type="hidden" name="titulos" id="titulos" />
 		<input type="hidden" name="otros" id="otros" />
+	</form>
+<table class="inputFontNormal" align="center" height="100%" weight="100%">
 	<tr>
 		<td>
 			Biblioteca:
@@ -87,7 +90,5 @@ function imprimir(){
 			<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png"  onClick="imprimir()"  value="imprimir">
 		</td>
 	</tr>
-	</form>
 </table>
-</div>
 
