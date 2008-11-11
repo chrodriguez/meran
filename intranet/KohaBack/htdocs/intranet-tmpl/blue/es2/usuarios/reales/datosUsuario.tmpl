@@ -1,4 +1,5 @@
-[% INCLUDE $top %] 
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/usuarios/usuariosReales.js"></script>
@@ -179,8 +180,8 @@ $(document).ready(function() {
 	
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
-	usuario.text= "[% completo %]";
-	usuario.ID= "[% bornum %]";
+	usuario.text= "<!-- TMPL_VAR NAME='completo' -->";
+	usuario.ID= "<!-- TMPL_VAR NAME='bornum' -->";
 
 	detalleUsuario(usuario.ID);
 	detallePrestamos(usuario.ID);
@@ -225,4 +226,4 @@ $(document).ready(function() {
 
 </div>
 
-[% INCLUDE "intranet-bottom.inc" %]
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

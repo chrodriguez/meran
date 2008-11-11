@@ -9,14 +9,14 @@ use C4::AR::Preferencias;
 use JSON;
 
 my $input = new CGI;
+
+
 my $obj=&C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-my $json=$obj->{'json'};
-my $tabla=$obj->{'tabla'};
-
-my $tipo=$obj->{'tipo'};
-my $accion=$obj->{'accion'};
-my $tabla=$obj->{'tabla'};
-
+my $json = $obj->{'json'};
+my $tabla = $obj->{'tabla'};
+my $tipo = $obj->{'tipo'};
+my $accion = $obj->{'accion'};
+# my $tabla = $obj->{'tabla'};
 
 
 if($accion eq "BUSCAR_PREFERENCIAS"){
@@ -105,27 +105,13 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 		my $categ=$obj->{'categoria'};
 		$opciones="authorised_values|".$categ;
 	}
-
 	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
 
 	print $input->header;
  	my $infoOperacionJSON=to_json $Message_arrayref;
 	print $infoOperacionJSON;
+
 } #end GUARDAR_MODIFICACION_VARIABLE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

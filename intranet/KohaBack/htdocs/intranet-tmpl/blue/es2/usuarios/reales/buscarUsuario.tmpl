@@ -1,4 +1,4 @@
-[% INCLUDE $top %] 
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -108,12 +108,12 @@ $(document).ready(function() {
 <table>
 	<tr>
  		<td>
-			<input id="member" class="inputFontNormal" type=text name="member" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')" value="[% member %]">
+			<input id="member" class="inputFontNormal" type=text name="member" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')" value="<!-- TMPL_VAR NAME=member -->">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="consultar('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
 
-			<input type="image" onClick="Borrar();" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0" >
+			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
 		</td>
 	</tr>
 	<tr>
@@ -162,4 +162,4 @@ $(document).ready(function() {
 
 
 
-[% INCLUDE "intranet-bottom.inc" %]
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

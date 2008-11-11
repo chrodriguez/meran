@@ -1,0 +1,85 @@
+<table border=0 cellspacing=0 cellpadding=2 width=90%>
+	<tr align="center">
+		<b>La cantidad de usuarios es : <!-- TMPL_VAR NAME=cantidad --></b>
+	</tr>
+
+	<tr align="center">
+		<b>Ha buscado por : <!-- TMPL_VAR NAME=member --></b>
+	</tr>
+</table>
+<br>
+<center>
+<!-- TMPL_VAR NAME="paginador" -->
+</center>
+<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
+	<thead>
+  	<tr>
+    		<th class="tablaresultadoTitle" width="1%" align="left" valign="top">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		</th>
+
+		<th class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" 
+		Title="Ordenar por tarjeta de Id." width="12%">Tarjeta de Id.</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" 
+		Title="Ordenar por apellido" align="left" width="30%">Apellido y Nombres</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('documentnumber')" 
+		Title="Ordenar por DNI" width="15%">Documento</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('studentnumber')" 
+		Title="Ordenar por legajo" align="left">Legajo</th>
+    		<th class="tablaresultadoTitleClick" onclick="ordenar('categorycode')" 
+		Title="Ordenar por categoria">Cat.</th>
+    		<th class="tablaresultadoTitle">Prest.</th>
+    		<th class="tablaresultadoTitle">Ven.</th>
+    		<th class="tablaresultadoTitle">Estado</th>
+
+
+   		<th class="tablaresultadoTitle" width="1%" valign="top" align="right">
+			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		</th>	
+  	</tr>
+   	</thead>
+	<tbody>
+
+  <!-- TMPL_LOOP NAME=resultsloop -->
+  	<tr  align="center" class="inputFontNormal">
+     		<td height=25>&nbsp;</td>
+
+      		<td align='left'>
+			<!-- TMPL_VAR NAME=cardnumber -->
+		</td>
+     		<td width=250 align="left">
+			<a class="inputFontNormal" 
+			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->&completo=<!-- TMPL_VAR NAME=completo -->">
+				<!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname -->
+			</a>
+		</td>
+      		<td align="left">
+			<!-- TMPL_VAR NAME=documenttype -->&nbsp;<!-- TMPL_VAR NAME=documentnumber -->
+		</td>
+      		<td align="left">
+			<!-- TMPL_VAR NAME=studentnumber -->
+		</td>
+      		<td align=center>
+			<!-- TMPL_VAR NAME=categorycode -->
+		</td>
+      		<td align=center>
+			<!-- TMPL_VAR NAME=issue -->
+		</td>
+      		<td align=center>
+			<!-- TMPL_VAR NAME=od -->
+		</td>
+      		<td align="center">
+			<span class="<!-- TMPL_VAR NAME='clase' -->"><b><!-- TMPL_VAR NAME=regular --></b></span>
+		</td>
+
+ 		<td height=25>&nbsp;</td>
+    	</tr>
+
+  <!-- /TMPL_LOOP -->
+  	<tr>
+ 		<td class="lineafinaltabla"  align="left" colspan="14"></td>
+	</tr>
+	</tbody>
+
+</table>
+

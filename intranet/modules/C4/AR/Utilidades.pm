@@ -27,6 +27,7 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
 use C4::AR::Referencias;
+use CGI;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
@@ -1095,9 +1096,15 @@ sub UTF8toISO{
 
 sub from_json_ISO{
 
+	eval {
 		my ($data)=@_;
 		$data= UTF8toISO($data);
 		return from_json($data, {ascii => 0});
+	     }
+	or do {
+		return "0";
+	      }
+		
 }
 =item
 obtenerValoresAutorizados
@@ -1203,7 +1210,7 @@ sub generarComboCategorias{
 	}
 	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 
-	my $catcodepopup = CGI::scrolling_list(
+	my $catcodepopup = &CGI::scrolling_list(
 						-name=>'categorycode',
 						-id => 'categorycode',
 						-values=>$categories,
