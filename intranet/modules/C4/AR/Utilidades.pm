@@ -884,7 +884,7 @@ sub InitPaginador{
 	my $pageNumber;
 	my $ini;
 	my $cantR=cantidadRenglones();
-
+	
 	if (($iniParam eq "")){
         	$ini=0;
 		$pageNumber=1;
@@ -898,12 +898,23 @@ sub InitPaginador{
 
 sub crearPaginador{
 
-	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
+# 	my ($template, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
+# 	my ($params, $cantResult, $cantRenglones, $pagActual, $funcion)=@_;
+	my ($cantResult, $cantRenglones, $pagActual, $funcion)=@_;
 	#cant. de renglones q se pueden mostrar por pagina
 
-	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion, $template);
+# 	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion, $template);
+	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion);
 
-	$template->param(paginador => $paginador);
+# 	$template->param(paginador => $paginador);
+
+# 	$params = {
+# 			paginador => $paginador
+# 	};
+
+
+	return $paginador;
+# 	$template->process($file, $params) || die $template->error(), "\n";
 
 }
 
@@ -913,7 +924,8 @@ sub armarPaginas{
 #@$cantRenglones, cantidad de renglones maximo a mostrar
 #@$template, para obtener el path para las imagenes
 
-	my ($actual, $cantRegistros, $cantRenglones,$funcion, $template)=@_;
+# 	my ($actual, $cantRegistros, $cantRenglones,$funcion, $template)=@_;
+	my ($actual, $cantRegistros, $cantRenglones,$funcion)=@_;
 
 	my $pagAMostrar=C4::Context->preference("paginas")||10;
 	my $numBloq=floor($actual / $pagAMostrar);
@@ -924,7 +936,8 @@ sub armarPaginas{
 		$limSup=$limInf + $pagAMostrar -1;
 	}
 	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
-	my $themelang = $template->param('themelang');
+# 	my $themelang = $template->param('themelang');
+	my $themelang= '/intranet-tmpl/blue/es2/';
 
 	my $paginador= "<div id=paginador>";
 	my $class="paginaNormal";

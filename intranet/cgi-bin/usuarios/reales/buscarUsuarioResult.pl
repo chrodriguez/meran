@@ -8,17 +8,30 @@ use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
 use C4::AR::Utilidades;
+use Template;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+# my ($template, $loggedinuser, $cookie)
+#     = get_template_and_user({template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
+# 			     query => $input,
+# 			     type => "intranet",
+# 			     authnotrequired => 0,
+# 			     flagsrequired => {borrowers => 1},
+# 			     debug => 1,
+# 			     });
+
+print $input->header;
+my $template = Template->new({
+	INCLUDE_PATH => [
+				'/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales',
+ 				'/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes',
+			],
+# 	RELATIVE => 1,
+	ABSOLUTE => 1,
+}) || die "$Template::ERROR\n";
+
+my $file= "buscarUsuarioResult.tmpl";
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'surname';
@@ -44,7 +57,7 @@ elsif($member ne ""){
 	}
 }
 
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+my $paginador= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
@@ -85,10 +98,17 @@ for (my $i=0; $i < $cantR; $i++){
      }
 }
 
-$template->param(
-			member          => $member,
-			resultsloop     => \@resultsdata,
-			cantidad        => $cantidad,
-);
 
-output_html_with_http_headers $input, $cookie, $template->output;
+my $params = {
+
+		'member'        => $member,
+		'resultsloop'   => \@resultsdata,
+		'cantidad'      => $cantidad,
+		'paginador'	=> $paginador,
+
+		'themelang' => '/intranet-tmpl/blue/es2/',	
+	};
+
+
+
+$template->process($file, $params) || die $template->error(), "\n";

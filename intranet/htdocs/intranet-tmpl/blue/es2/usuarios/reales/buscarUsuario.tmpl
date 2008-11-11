@@ -1,4 +1,4 @@
-[% INCLUDE $top %] 
+[% INCLUDE   'intranet-top.inc'  %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -87,9 +87,6 @@ function checkFilter(eventType){
 $(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
 	onEnter("member",consultar);
-/*	if('<!-- TMPL_VAR NAME=member -->' != ""){
-		consultar();
-	}*/
 });
 
 </script>
@@ -113,7 +110,7 @@ $(document).ready(function() {
  		<td>
 			<input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
 
-			<input type="image" onClick="Borrar();" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0" >
+ 			<input type="image" onClick="Borrar();" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0" > 
 		</td>
 	</tr>
 	<tr>
@@ -160,6 +157,5 @@ $(document).ready(function() {
 <div id="result"></div>
 <br>
 
-
-
 [% INCLUDE "intranet-bottom.inc" %]
+
