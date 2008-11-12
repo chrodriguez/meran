@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE $top %]
 <br>
 <br>
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
 		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 			B&uacute;squeda combinada
 			<input type="text" id="keyword" size="20" class="inputFontNormal">
-  			<input type="image" alt="Buscar" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="busquedaCombinada()">
+  			<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="busquedaCombinada()">
     		</td>
   	</tr>
   	<tr>
@@ -58,7 +58,7 @@ $(document).ready(function() {
 			<form action="/cgi-bin/koha/usuarios/reales/buscarUsuario.pl" method="post" name="form2">
 		    	B&uacute;squeda de usuarios &nbsp;
 		    	<input type="text" name="member" size="20" class="inputFontNormal">
-                    	<input type="image" alt="Buscar" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="form2.submit()">
+                    	<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="form2.submit()">
 	  	    	</form>
 		</td>
  	 </tr>
@@ -87,5 +87,5 @@ $(document).ready(function() {
   	</tr>
 </table>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE $menuInc %]
 

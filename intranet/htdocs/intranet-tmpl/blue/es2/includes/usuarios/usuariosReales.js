@@ -72,7 +72,7 @@ function updateGuardarModificacioUsuario(responseText){
 	vDatosUsuario.close();
 	detalleUsuario();
 }
-usuario
+
 //*********************************************Fin***Modificar Datos Usuario***************************************
 
 

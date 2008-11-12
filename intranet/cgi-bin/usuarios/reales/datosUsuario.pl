@@ -22,8 +22,8 @@ my $templateName = "datosUsuario.tmpl";
 
 
 my $param = {
-			bornum          => $bornum,
-			completo	=> $completo,
+			'bornum'          => $bornum,
+			'completo'	=> $completo,
 			'top' => "intranet-top.inc",
 			'menuInc' => "menu.inc",
 			'themelang' => '/intranet-tmpl/blue/es2/',

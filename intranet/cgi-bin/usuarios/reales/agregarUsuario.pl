@@ -26,7 +26,7 @@ my $param = {
 		'CGIbranch' 	=> $comboDeBranches,
 		'addBorrower'	=> 1,
 		'type' => "intranet",
-		'cgi' =>CGI->new,
+		'cgi' =>new CGI,
 		'authnotrequired' => 0,
 		'flagsrequired' => {borrowers => 1},
 		'debug' => 1,

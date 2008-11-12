@@ -21,7 +21,7 @@ my $input = new CGI;
 # 			     debug => 1,
 # 			     });
 
-print $input->header;
+# print $input->header;
 my $template = Template->new({
 	INCLUDE_PATH => [
 				'/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales',

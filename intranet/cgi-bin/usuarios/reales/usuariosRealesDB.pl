@@ -4,8 +4,11 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::UploadFile;
-use CGI;
 use JSON;
+
+
+use Template;
+use CGI;
 
 my $input = new CGI;
 
@@ -168,14 +171,20 @@ Se genra la ventana para modificar los datos del usuario
 =cut
 elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
-	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
-						template_name => "usuarios/reales/agregarUsuario.tmpl",
-						query => $input,
-						type => "intranet",
-						authnotrequired => 0,
-						flagsrequired => {borrowers => 1},
-						debug => 1,
-	});
+# 	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
+# 						template_name => "usuarios/reales/agregarUsuario.tmpl",
+# 						query => $input,
+# 						type => "intranet",
+# 						authnotrequired => 0,
+# 						flagsrequired => {borrowers => 1},
+# 						debug => 1,
+# 	});
+
+	my $input = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
+				ABSOLUTE => 1,
+
+			  });
+	my $template = "agregarUsuario.tmpl";
 
 	my $borrowernumber =$obj->{'borrowernumber'};
 
@@ -191,40 +200,44 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	#se genera el combo de las bibliotecas
 	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches($datosBorrower_hashref->{'branchcode'});
 
-	$template->param(	
+	my $param={	
 
-				document    	=> $comboDeTipoDeDoc,
-				catcodepopup	=> $comboDeCategorias,
-				CGIbranch 	=> $comboDeBranches,
+				'document'    	=> $comboDeTipoDeDoc,
+				'catcodepopup'	=> $comboDeCategorias,
+				'CGIbranch' 	=> $comboDeBranches,
 		
-				changepassword	=> $datosBorrower_hashref->{'changepassword'},
-				type		=> $datosBorrower_hashref->{'type'},
-				physstreet      => $datosBorrower_hashref->{'physstreet'},
-				firstname       => $datosBorrower_hashref->{'firstname'},
-				surname         => $datosBorrower_hashref->{'surname'},
-				streetaddress   => $datosBorrower_hashref->{'streetaddress'},
-				zipcode 	=> $datosBorrower_hashref->{'zipcode'},
-				dstreetcity     => $datosBorrower_hashref->{'streetcity'},
-				homezipcode 	=> $datosBorrower_hashref->{'homezipcode'},
-				city		=> $datosBorrower_hashref->{'city'},
-				dcity           => $datosBorrower_hashref->{'dcity'},
-				phone           => $datosBorrower_hashref->{'phone'},
-				phoneday        => $datosBorrower_hashref->{'phoneday'},
-				emailaddress    => $datosBorrower_hashref->{'emailaddress'},
-				borrowernotes	=> $datosBorrower_hashref->{'borrowernotes'},
-				documentnumber  => $datosBorrower_hashref->{'documentnumber'},
-				studentnumber 	=> $datosBorrower_hashref->{'studentnumber'},
-				dateenrolled	=> $datosBorrower_hashref->{'dateenrolled'},
-				expiry		=> $datosBorrower_hashref->{'expiry'},
-				cardnumber	=> $datosBorrower_hashref->{'cardnumber'},
- 				dateofbirth	=> C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat),
-				addBorrower	=> 0,
- 				dateformat      => C4::Date::display_date_format($dateformat),
-		);
+				'changepassword'	=> $datosBorrower_hashref->{'changepassword'},
+				'type'		=> $datosBorrower_hashref->{'type'},
+				'physstreet'      => $datosBorrower_hashref->{'physstreet'},
+				'firstname'       => $datosBorrower_hashref->{'firstname'},
+				'surname'         => $datosBorrower_hashref->{'surname'},
+				'streetaddress'   => $datosBorrower_hashref->{'streetaddress'},
+				'zipcode' 	=> $datosBorrower_hashref->{'zipcode'},
+				'dstreetcity'     => $datosBorrower_hashref->{'streetcity'},
+				'homezipcode' 	=> $datosBorrower_hashref->{'homezipcode'},
+				'city'		=> $datosBorrower_hashref->{'city'},
+				'dcity'           => $datosBorrower_hashref->{'dcity'},
+				'phone'           => $datosBorrower_hashref->{'phone'},
+				'phoneday'        => $datosBorrower_hashref->{'phoneday'},
+				'emailaddress'    => $datosBorrower_hashref->{'emailaddress'},
+				'borrowernotes'	=> $datosBorrower_hashref->{'borrowernotes'},
+				'documentnumber'  => $datosBorrower_hashref->{'documentnumber'},
+				'studentnumber' 	=> $datosBorrower_hashref->{'studentnumber'},
+				'dateenrolled'	=> $datosBorrower_hashref->{'dateenrolled'},
+				'expiry'		=> $datosBorrower_hashref->{'expiry'},
+				'cardnumber'	=> $datosBorrower_hashref->{'cardnumber'},
+ 				'dateofbirth'	=> C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat),
+				'addBorrower'	=> 0,
+				'sex' => $datosBorrower_hashref->{'sex'},
+ 				'dateformat'      => C4::Date::display_date_format($dateformat),
+				'top' => "intranet-top.inc",
+				'menuInc' => "menu.inc",
+				'themelang' => '/intranet-tmpl/blue/es2/',
+		};
 
- 	print $input->header;
- 	print  $template->output;
+print "Content-type: text/html\n\n";
 
+$input->process($template,$param) || die "Template process failed: ", $input->error(), "\n";
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 

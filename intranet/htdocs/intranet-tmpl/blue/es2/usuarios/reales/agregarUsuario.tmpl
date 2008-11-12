@@ -103,14 +103,14 @@ $(document).ready(function() {
 
 		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
 		<td   width="65%" ALIGN=RIGHT>*
-			<input type="radio" name="sex" value="F" [% IF female %] checked="checked" [% END %]> F
-			<input type="radio" name="sex" value="M" [% IF !female %] checked="checked" M [% END %]> M 
+			<input type="radio" name="sex" value="F" [% IF sex == "F" %] checked="checked" [% END %]> F
+			<input type="radio" name="sex" value="M" [% IF sex == "M" %] checked="checked" M [% END %]> M 
 			&nbsp; &nbsp;  Fecha de nacimiento ([% dateformat %])
 			<input class="inputFontNormal" type=text id="dateofbirth" size=10 value="[% dateofbirth %]">
 		</td>
 
 		<td width="1%" valign="top" align="right">
-			<img src="[% 'interface' %]/[% themelang %]/images/derecha.png">
+			<img src="[% interface %]/[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 </table>
@@ -315,6 +315,8 @@ $(document).ready(function() {
 			<b>Otros </b><br>
 		</td>
 	</tr>
+
+<!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal	 -->
 	[% FOREACH project IN flagloop %]
 		<tr>
 			<td  class="inputFontNormal">
