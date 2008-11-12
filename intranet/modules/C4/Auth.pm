@@ -123,21 +123,30 @@ C4::Auth - Authenticates Koha users
 
 sub get_template_and_user {
 	my $in = shift;
-	my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+# 	my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
 	my ($user, $cookie, $sessionID, $flags)
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
 	my $borrowernumber;
 	if ($user) {
-		$template->param(loggedinusername => $user);
-		$template->param(sessionID => $sessionID);
+# 		$template->param(loggedinusername => $user);
+# 		$template->param(sessionID => $sessionID);
+		$params->{'loggedinusername'}= $user;
+		$params->{'sessionID'}= $sessionID;
+# 		$template->param(sessionID => $sessionID);
 		$borrowernumber = getborrowernumber($user);
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
-		$template->param(USER_INFO => \@bordat);
+# 		$template->param(USER_INFO => \@bordat);
+		$params->{'USER_INFO'}= \@bordat;	
 	}
-	return ($template, $borrowernumber, $cookie);
+	
+	#Se crea el encabezado: Content-Type: text/html
+	print $in->{'query'}->header;
+
+	return ($template, $borrowernumber, $cookie, $params);
 }
 
 sub get_templateexpr_and_user {

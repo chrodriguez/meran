@@ -31,8 +31,11 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use HTML::Template;
-use HTML::Template::Expr;
+use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
+use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
+use Template;
+
+
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -61,17 +64,31 @@ printable string.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&startpage &endpage
-	     &mktablehdr &mktableft &mktablerow &mklink
-	     &startmenu &endmenu &mkheadr
-	     &center &endcenter
-	     &mkform &mkform2 &bold
-	     &gotopage &mkformnotable &mkform3
-	     &getkeytableselectoptions
-	     &pathtotemplate
+@EXPORT = qw(
+
+		&startpage &endpage
+	     	&mktablehdr &mktableft &mktablerow &mklink
+	     	&startmenu &endmenu &mkheadr
+	     	&center &endcenter
+	     	&mkform &mkform2 &bold
+	     	&gotopage &mkformnotable &mkform3
+	     	&getkeytableselectoptions
+	     	&pathtotemplate
 		&themelanguage &gettemplate
 		&gettemplateexpr
 	     );
+
+
+sub printTemplateParams {
+	my ($params) = @_;
+	my $k;
+	my $v;
+
+	while ( ($k,$v) = each %$params ) {
+		print "$k => $v\n";
+	}
+}
+
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
@@ -82,6 +99,11 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
+open (A, ">>/tmp/debug.txt");
+print A "desde gettemplate: \n";
+print A "tmplbase: ".$tmplbase."\n";
+print A "opac: ".$opac."\n";
+
 	my $htdocs;
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
@@ -89,21 +111,58 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
+print A "htdocs: ".$htdocs."\n";
 
+	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
+print A "theme: ".$theme."\n";
+print A "lang: ".$lang."\n";
+
+=item
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
+=cut
+print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
+	my $template = Template->new({
+					INCLUDE_PATH => [
+								"$htdocs/$theme/$lang/$tmplbase",
+								"$htdocs/$theme/$lang/includes/",
+								"$htdocs/$theme/$lang/includes/menu",
+							],
+ 					ABSOLUTE => 1,
+					EVAL_PERL => 1,
+# 					RELATIVE => 1,
+					});	
+
+print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
 
 	# XXX temporary patch for Bug 182 for themelang
-	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
-							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-							theme => $theme,
-							lang => $lang);
-	return $template;
+# 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
+# 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
+# 							theme => $theme,
+# 	
+# 							lang => $lang);
+
+	#se inicializa la hash de los parametros para el templateß
+ 	my %params=();
+
+	#se asignan los parametros que son necesarios para todos los templates
+	%params= (
+			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
+			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
+			theme => $theme,
+			lang => $lang,
+			template_name => "$htdocs/$theme/$lang/$tmplbase", #se setea el nombre del tmpl
+		);
+
+print A "themelang: ".$params{'themelang'}."\n";
+close(A);
+
+	return ($template, \%params);
 }
 
+## FIXME deprecated, con Template::Toolkit esto no deberia ser necesario
 sub gettemplateexpr {
         my ($tmplbase, $opac) = @_;
     
@@ -133,44 +192,42 @@ sub gettemplateexpr {
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-  my ($htdocs, $tmpl, $section) = @_;
-
-  my $dbh = C4::Context->dbh;
-  my @languages;
-  my @themes;
-  if ( $section eq "intranet")
-  {
-    @languages = split " ", C4::Context->preference("opaclanguages");
-    @themes = split " ", C4::Context->preference("template");
-  }
-  else
-  {
-    @languages = split " ", C4::Context->preference("opaclanguages");
-    @themes = split " ", C4::Context->preference("opacthemes");
-  }
-
-  my ($theme, $lang);
-# searches through the themes and languages. First template it find it returns.
-# Priority is for getting the theme right.
-  THEME:
-  foreach my $th (@themes) {
-    foreach my $la (@languages) {
-	for (my $pass = 1; $pass <= 2; $pass += 1) {
-	    $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-	    if (-e "$htdocs/$th/$la/$tmpl") {
-		$theme = $th;
-		$lang = $la;
-		last THEME;
-	    }
-	last unless $la =~ /[-_]/;
+	my ($htdocs, $tmpl, $section) = @_;
+	
+	my $dbh = C4::Context->dbh;
+	my @languages;
+	my @themes;
+	if ( $section eq "intranet"){
+		@languages = split " ", C4::Context->preference("opaclanguages");
+		@themes = split " ", C4::Context->preference("template");
+	}else	{
+		@languages = split " ", C4::Context->preference("opaclanguages");
+		@themes = split " ", C4::Context->preference("opacthemes");
 	}
-    }
-  }
-  if ($theme and $lang) {
-    return ($theme, $lang);
-  } else {
-    return ('default', 'en');
-  }
+	
+	my ($theme, $lang);
+	# searches through the themes and languages. First template it find it returns.
+	# Priority is for getting the theme right.
+	THEME:
+	foreach my $th (@themes) {
+		foreach my $la (@languages) {
+			for (my $pass = 1; $pass <= 2; $pass += 1) {
+			$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+			if (-e "$htdocs/$th/$la/$tmpl") {
+				$theme = $th;
+				$lang = $la;
+				last THEME;
+			}
+			last unless $la =~ /[-_]/;
+			}
+		}
+	}
+
+	if ($theme and $lang) {
+		return ($theme, $lang);
+	} else {
+		return ('default', 'en');
+	}
 }
 
 

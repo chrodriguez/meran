@@ -2,36 +2,25 @@
 
 use strict;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use CGI;
 use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
 use C4::AR::Utilidades;
-use Template;
+
 
 my $input = new CGI;
 
-# my ($template, $loggedinuser, $cookie)
-#     = get_template_and_user({template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
-# 			     query => $input,
-# 			     type => "intranet",
-# 			     authnotrequired => 0,
-# 			     flagsrequired => {borrowers => 1},
-# 			     debug => 1,
-# 			     });
+my ($template, $loggedinuser, $cookie, $params)
+    = get_template_and_user({
+				template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+			     });
 
-# print $input->header;
-my $template = Template->new({
-	INCLUDE_PATH => [
-				'/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales',
- 				'/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes',
-			],
-# 	RELATIVE => 1,
-	ABSOLUTE => 1,
-}) || die "$Template::ERROR\n";
-
-my $file= "buscarUsuarioResult.tmpl";
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'surname';
@@ -98,17 +87,10 @@ for (my $i=0; $i < $cantR; $i++){
      }
 }
 
-
-my $params = {
-
-		'member'        => $member,
-		'resultsloop'   => \@resultsdata,
-		'cantidad'      => $cantidad,
-		'paginador'	=> $paginador,
-
-		'themelang' => '/intranet-tmpl/blue/es2/',	
-	};
+$params->{'resultsloop'}= \@resultsdata;
+$params->{'member'}= $member;
+$params->{'cantidad'}= $cantidad;
+$params->{'paginador'}= $paginador;
 
 
-
-$template->process($file, $params) || die $template->error(), "\n";
+$template->process($params->{'template_name'}, $params) || die $template->error(), "\n";
