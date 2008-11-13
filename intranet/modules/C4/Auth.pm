@@ -144,11 +144,12 @@ print A "get_template_and_user=> despues de getpatronnnnnr \n";
 # 		$template->param(USER_INFO => \@bordat);
 		$params->{'USER_INFO'}= \@bordat;	
 print A "get_template_and_user=> despues de USER_INFO\n";
+print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
 	}
 	
 	#Se crea el encabezado: Content-Type: text/html
 # 	print $in->{'query'}->header;
-	print "Content-Type: text/html";
+# 	print "Content-Type: text/html";
 print A "get_template_and_user=> imprimo header \n";
 	return ($template, $borrowernumber, $cookie, $params);
 }
@@ -236,7 +237,8 @@ has authenticated.
 
 
 sub checkauth {
-	
+open(A, ">>/tmp/debug.txt");
+print A "desde checkauth \n";
 	my $query=shift;
 	# $authnotrequired will be set for scripts which will run without authentication
 	my $authnotrequired = shift;
@@ -478,7 +480,7 @@ sub checkauth {
 #         		my $template = gettemplate($template_name, $type);
 			my ($template, $params) = gettemplate($template_name, $type);
 
-
+print A "passwordrepeted: ".$passwordrepeted."\n";
 # 		        $template->param(passwordrepeted => $passwordrepeted);
 			$params->{'passwordrepeted'}= $passwordrepeted;
 
@@ -486,6 +488,7 @@ sub checkauth {
         		my $random_number= int(rand()*100000);
 #         		$template->param(RANDOM_NUMBER => $random_number);
 			$params->{'RANDOM_NUMBER'}= $random_number;
+print A "random_number: ".$random_number."\n";
         		#---------------------------------------------------------------------------
 
 # 		        $template->param(INPUTS => \@inputs);
@@ -511,7 +514,7 @@ print "Content-type: text/html\n\n";
 # 						-type => guesstype($template->output),
 						-cookie => $cookie
                			 ), $template->process($params->{'template_name'},$params);
-	
+print A "1er EXIT \n";
        			 exit;
 		  }
 		}
@@ -567,6 +570,7 @@ print "Content-type: text/html\n\n";
 #  						-type => guesstype($template->output),
 						-cookie => $cookie
                			 ) , $template->process($params->{'template_name'},$params);
+print A "2do EXIT \n";
 	exit;
 }
 

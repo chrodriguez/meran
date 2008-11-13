@@ -37,8 +37,5 @@ $params->{'NOTMARC'} = !$marc_p;
 # 	    };
 
 print "Content-type: text/html\n\n";
-# 
-# 
-# 
-# 
+
 $template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
