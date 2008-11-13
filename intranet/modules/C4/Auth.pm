@@ -129,6 +129,10 @@ sub get_template_and_user {
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 open(A, ">>/tmp/debug.txt");
 print A "desde: get_template_and_user \n";
+
+print A "Se llamo a checkauth con: \n";
+print A "in-> query: ".$in->{'query'}."\n";
+print A "user: ".$user."\n";
 	my $borrowernumber;
 	if ($user) {
 # 		$template->param(loggedinusername => $user);
@@ -140,6 +144,7 @@ print A "desde: get_template_and_user \n";
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
+print A "get_template_and_user=> user ".$user."\n";
 print A "get_template_and_user=> despues de getpatronnnnnr \n";
 # 		$template->param(USER_INFO => \@bordat);
 		$params->{'USER_INFO'}= \@bordat;	
@@ -149,8 +154,10 @@ print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
 	
 	#Se crea el encabezado: Content-Type: text/html
 # 	print $in->{'query'}->header;
-# 	print "Content-Type: text/html";
+# print "Content-type: text/html\n\n";
+# print $in->{'query'}->header;
 print A "get_template_and_user=> imprimo header \n";
+print A "get_template_and_user=> cookie ".$cookie."\n";
 	return ($template, $borrowernumber, $cookie, $params);
 }
 
@@ -263,18 +270,23 @@ print A "desde checkauth \n";
 	my %info;
 	my ($userid, $cookie, $sessionID, $flags);
 	my $logout = $query->param('logout.x');
+print A "REMOTE_USER 268 fuera del if ".$ENV{'REMOTE_USER'}." \n";
 	if ($userid = $ENV{'REMOTE_USER'}) {
 		# Using Basic Authentication, no cookies required
+print A "creo una cookie \n";
+print A "REMOTE_USER".$ENV{'REMOTE_USER'}." \n";
 		$cookie=$query->cookie(-name => 'sessionID',
 				-value => '',
 				-expires => '');
 		$loggedin = 1;
 	} elsif ($sessionID=$query->cookie('sessionID')) {
+print A "el sessionID esta seteado \n";
 		my ($ip , $lasttime);
 		($userid, $ip, $lasttime) = $dbh->selectrow_array(
 				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
 								undef, $sessionID);
 		if ($logout) {
+print A "logouttttttttt \n";
 		# voluntary logout the user
 		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
 		$sessionID = undef;
@@ -327,7 +339,9 @@ print A "desde checkauth \n";
 								}
 			  }#if de la sesion que existia en la bdd
 		}#eslif se requiere cookie
+
 	unless ($userid) { #si no hay userid, hay que autentificarlo y no existe sesion
+print A "no hay usuario autenticado: 337\n";
 		$sessionID=int(rand()*1000000).'-'.time();
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
@@ -509,11 +523,13 @@ print A "random_number: ".$random_number."\n";
 #                			 -type => guesstype($template->output),
 #                			 -cookie => $cookie
 #                			 ), $template->output;
-print "Content-type: text/html\n\n";
+# print "Content-type: text/html\n\n";
 			 print $query->header(
 # 						-type => guesstype($template->output),
 						-cookie => $cookie
-               			 ), $template->process($params->{'template_name'},$params);
+               			 );#, $template->process($params->{'template_name'},$params);
+print $query->header;
+$template->process($params->{'template_name'},$params);
 print A "1er EXIT \n";
        			 exit;
 		  }
@@ -554,6 +570,7 @@ print A "1er EXIT \n";
 	my $self_url = $query->url(-absolute => 1);
 # 	$template->param(url => $self_url);
 	$params->{'url'}= $self_url;
+print A "self_url: ".$self_url."\n";
 # 	$template->param(\%info);
 	$params->{\%info}; #???
 	$cookie=$query->cookie(		-name => 'sessionID',
@@ -565,11 +582,17 @@ print A "1er EXIT \n";
 # 		-cookie => $cookie
 # 		), $template->output;
 
-print "Content-type: text/html\n\n";
+# print "Content-type: text/html\n\n";
+
 	 print $query->header(
 #  						-type => guesstype($template->output),
 						-cookie => $cookie
-               			 ) , $template->process($params->{'template_name'},$params);
+               			 );#, $template->process($params->{'template_name'},$params);
+
+# print "Content-type: text/html\n\n";
+print A "cookie: ".$cookie."\n";
+print $query->header;
+$template->process($params->{'template_name'},$params);
 print A "2do EXIT \n";
 	exit;
 }

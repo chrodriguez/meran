@@ -16,5 +16,7 @@ my ($template, $loggedinuser, $cookie, $params)
 			     	debug => 1,
 			     });
 
+open(A, ">>/tmp/debug.txt");
+print A "cookie desde buscarUsuario.pl: ".$cookie."\n";
 
 $template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";

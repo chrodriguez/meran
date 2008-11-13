@@ -99,10 +99,10 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
-open (A, ">>/tmp/debug.txt");
-print A "desde gettemplate: \n";
-print A "tmplbase: ".$tmplbase."\n";
-print A "opac: ".$opac."\n";
+# open (A, ">>/tmp/debug.txt");
+# print A "desde gettemplate: \n";
+# print A "tmplbase: ".$tmplbase."\n";
+# print A "opac: ".$opac."\n";
 
 	my $htdocs;
 	if ($opac ne "intranet") {
@@ -111,11 +111,11 @@ print A "opac: ".$opac."\n";
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-print A "htdocs: ".$htdocs."\n";
+# print A "htdocs: ".$htdocs."\n";
 
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
-print A "theme: ".$theme."\n";
-print A "lang: ".$lang."\n";
+# print A "theme: ".$theme."\n";
+# print A "lang: ".$lang."\n";
 
 =item
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
@@ -123,7 +123,7 @@ print A "lang: ".$lang."\n";
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 =cut
-print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
+# print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 	my $template = Template->new({
 					INCLUDE_PATH => [
 								"$htdocs/$theme/$lang/$tmplbase",
@@ -135,7 +135,7 @@ print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 # 					RELATIVE => 1,
 					});	
 
-print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
+# print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
 
 	# XXX temporary patch for Bug 182 for themelang
 # 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
@@ -144,7 +144,7 @@ print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
 # 	
 # 							lang => $lang);
 
-	#se inicializa la hash de los parametros para el templateß
+	#se inicializa la hash de los parametros para el templateï¿½
  	my %params=();
 
 	#se asignan los parametros que son necesarios para todos los templates
@@ -156,7 +156,7 @@ print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
 			template_name => "$htdocs/$theme/$lang/$tmplbase", #se setea el nombre del tmpl
 		);
 
-print A "themelang: ".$params{'themelang'}."\n";
+# print A "themelang: ".$params{'themelang'}."\n";
 close(A);
 
 	return ($template, \%params);
