@@ -36,9 +36,9 @@ $params->{'NOTMARC'} = !$marc_p;
 # 		'themelang' => '/intranet-tmpl/blue/es2/',
 # 	    };
 
-# print "Content-type: text/html\n\n";
+print "Content-type: text/html\n\n";
 # 
 # 
 # 
 # 
-# $template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
+$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";

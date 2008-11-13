@@ -127,7 +127,8 @@ sub get_template_and_user {
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
 	my ($user, $cookie, $sessionID, $flags)
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
-
+open(A, ">>/tmp/debug.txt");
+print A "desde: get_template_and_user \n";
 	my $borrowernumber;
 	if ($user) {
 # 		$template->param(loggedinusername => $user);
@@ -139,14 +140,16 @@ sub get_template_and_user {
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
+print A "get_template_and_user=> despues de getpatronnnnnr \n";
 # 		$template->param(USER_INFO => \@bordat);
 		$params->{'USER_INFO'}= \@bordat;	
+print A "get_template_and_user=> despues de USER_INFO\n";
 	}
 	
 	#Se crea el encabezado: Content-Type: text/html
 # 	print $in->{'query'}->header;
 	print "Content-Type: text/html";
-
+print A "get_template_and_user=> imprimo header \n";
 	return ($template, $borrowernumber, $cookie, $params);
 }
 
@@ -481,7 +484,7 @@ sub checkauth {
 
         		#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
         		my $random_number= int(rand()*100000);
-        		$template->param(RANDOM_NUMBER => $random_number);
+#         		$template->param(RANDOM_NUMBER => $random_number);
 			$params->{'RANDOM_NUMBER'}= $random_number;
         		#---------------------------------------------------------------------------
 
