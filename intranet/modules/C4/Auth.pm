@@ -271,7 +271,9 @@ print A "desde checkauth \n";
 	my ($userid, $cookie, $sessionID, $flags);
 	my $logout = $query->param('logout.x');
 print A "REMOTE_USER 268 fuera del if ".$ENV{'REMOTE_USER'}." \n";
+$ENV{'REMOTE_USER'}= '26320';
 	if ($userid = $ENV{'REMOTE_USER'}) {
+print "Content-type: text/html\n\n";
 		# Using Basic Authentication, no cookies required
 print A "creo una cookie \n";
 print A "REMOTE_USER".$ENV{'REMOTE_USER'}." \n";
