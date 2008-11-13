@@ -13,13 +13,31 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user ({
-	template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
-	query		=> $input,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
-  });
+# my ($template, $loggedinuser, $cookie) = get_template_and_user ({
+# 	template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
+# 	query		=> $input,
+# 	type		=> "intranet",
+# 	authnotrequired	=> 0,
+# 	flagsrequired	=> { circulate => 1 },
+#   });
+
+my $template = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
+				ABSOLUTE => 1,
+
+			  });
+
+my $templateName = "detallePrestamos.tmpl";
+
+
+
+my $param = {
+			'bornum'          => $bornum,
+			'completo'	=> $completo,
+			'top' => "intranet-top.inc",
+			'menuInc' => "menu.inc",
+			'themelang' => '/intranet-tmpl/blue/es2/',
+	};
+
 
 my $obj=$input->param('obj');
 

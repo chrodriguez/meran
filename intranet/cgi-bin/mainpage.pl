@@ -10,30 +10,27 @@ use C4::Auth;
 use Template;
 use CGI;
 
+my $query = new CGI;
 
-my $input = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
-				ABSOLUTE => 1,
+my $input = new Template;
 
-			  });
-my $template = "main.tmpl";
-
-# my ($template, $loggedinuser, $cookie)
-# 	= get_template_and_user({template_name => "main.tmpl",
-# 			query => $query,
-# 			type => "intranet",
-# 			authnotrequired => 0,
-# 			flagsrequired => {catalogue => 1, circulate => 1,
-# 			parameters => 1, borrowers => 1,
-# 			permissions =>1, reserveforothers=>1,
-# 			borrow => 1, reserveforself => 1,
-# 			editcatalogue => 1, updatesanctions => 1, },
-# 			debug => 1,
-# 			});
+my ($template, $loggedinuser, $cookie, $params)
+	= get_template_and_user({template_name => "main.tmpl",
+			query => $query,
+			type => "intranet",
+			authnotrequired => 0,
+			flagsrequired => {catalogue => 1, circulate => 1,
+			parameters => 1, borrowers => 1,
+			permissions =>1, reserveforothers=>1,
+			borrow => 1, reserveforself => 1,
+			editcatalogue => 1, updatesanctions => 1, },
+			debug => 1,
+			});
 
 my $marc_p = C4::Context->boolean_preference("marc");
 
-my $param = {	'NOTMARC' => !$marc_p,
-	     	'top' => "intranet-top.inc",
+my $params->{'NOTMARC'} = !$marc_p;
+$params->{'top'}="intranet-top.inc",
 		'menuInc' => "menu.inc",
 		'themelang' => '/intranet-tmpl/blue/es2/',
 	    };
