@@ -144,7 +144,8 @@ sub get_template_and_user {
 	}
 	
 	#Se crea el encabezado: Content-Type: text/html
-	print $in->{'query'}->header;
+# 	print $in->{'query'}->header;
+	print "Content-Type: text/html";
 
 	return ($template, $borrowernumber, $cookie, $params);
 }
@@ -471,29 +472,43 @@ sub checkauth {
                 		push @inputs, {name => $name , value => $value};
         		}
 
-        		my $template = gettemplate($template_name, $type);
+#         		my $template = gettemplate($template_name, $type);
+			my ($template, $params) = gettemplate($template_name, $type);
 
-		        $template->param(passwordrepeted => $passwordrepeted);
+
+# 		        $template->param(passwordrepeted => $passwordrepeted);
+			$params->{'passwordrepeted'}= $passwordrepeted;
 
         		#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
         		my $random_number= int(rand()*100000);
         		$template->param(RANDOM_NUMBER => $random_number);
+			$params->{'RANDOM_NUMBER'}= $random_number;
         		#---------------------------------------------------------------------------
 
-		        $template->param(INPUTS => \@inputs);
-       			$template->param(loginprompt => 1) unless $info{'nopermission'};
+# 		        $template->param(INPUTS => \@inputs);
+			$params->{'INPUTS'}= \@inputs;
+#        			$template->param(loginprompt => 1) unless $info{'nopermission'};
+			$params->{'loginprompt'}= 1 unless $info{'nopermission'};
 
 		        my $self_url = $query->url(-absolute => 1);
-		        $template->param(url => $self_url);
-		        $template->param(\%info);
+# 		        $template->param(url => $self_url);
+			$params->{'url'}= $self_url;
+# 		        $template->param(\%info);
+			$params->{\%info};###??????????????????????????????????????
 		        $cookie=$query->cookie(-name => 'sessionID',
                                         -value => $sessionID,
                                         -expires => '');
 
-		        print $query->header(
-               			 -type => guesstype($template->output),
-               			 -cookie => $cookie
-               			 ), $template->output;
+# 		        print $query->header(
+#                			 -type => guesstype($template->output),
+#                			 -cookie => $cookie
+#                			 ), $template->output;
+print "Content-type: text/html\n\n";
+			 print $query->header(
+# 						-type => guesstype($template->output),
+						-cookie => $cookie
+               			 ), $template->process($params->{'template_name'},$params);
+	
        			 exit;
 		  }
 		}
@@ -516,27 +531,39 @@ sub checkauth {
 		push @inputs, {name => $name , value => $value};
 	}
 
-	my $template = gettemplate($template_name, $type);
+# 	my $template = gettemplate($template_name, $type);
+	my ($template, $params) = gettemplate($template_name, $type);
 
 	#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
 	my $random_number= int(rand()*100000);
-	$template->param(RANDOM_NUMBER => $random_number);
+# 	$template->param(RANDOM_NUMBER => $random_number);
+	$params->{'RANDOM_NUMBER'}= $random_number;
 	#---------------------------------------------------------------------------
 
-	$template->param(INPUTS => \@inputs);
-	$template->param(loginprompt => 1) unless $info{'nopermission'};
+# # # 	$template->param(INPUTS => \@inputs);
+	$params->{'INPUTS'}= \@inputs;
+# 	$template->param(loginprompt => 1) unless $info{'nopermission'};
+	$params->{'loginprompt'}= 1 unless $info{'nopermission'};
 
 	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url);
-	$template->param(\%info);
-	$cookie=$query->cookie(-name => 'sessionID',
+# 	$template->param(url => $self_url);
+	$params->{'url'}= $self_url;
+# 	$template->param(\%info);
+	$params->{\%info}; #???
+	$cookie=$query->cookie(		-name => 'sessionID',
 					-value => $sessionID,
 					-expires => '');
+# 
+# 	print $query->header(
+# 		-type => guesstype($template->output),
+# 		-cookie => $cookie
+# 		), $template->output;
 
-	print $query->header(
-		-type => guesstype($template->output),
-		-cookie => $cookie
-		), $template->output;
+print "Content-type: text/html\n\n";
+	 print $query->header(
+#  						-type => guesstype($template->output),
+						-cookie => $cookie
+               			 ) , $template->process($params->{'template_name'},$params);
 	exit;
 }
 
