@@ -33,8 +33,6 @@ document.getElementById(id).src=src;
 <h2>Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.</h2>
 [% END %]
 
-[% IF loginprompt %]
-<!-- login prompt time-->
 
 <center>
 
@@ -44,8 +42,7 @@ document.getElementById(id).src=src;
         <input type="hidden" name="nroRandom">
 
 [% FOREACH INPUTS %]
-	<!--<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">-->
-<input type="hidden" name=[% name %] value=[% value %]>
+	<input type="hidden" name=[% name %] value=[% value %]>
 [% END %]
 
 </form>
@@ -111,5 +108,3 @@ document.getElementById(id).src=src;
 </table>
 </form>
 
-
-[% END %]

@@ -35,6 +35,7 @@ use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
 use C4::AR::Issues;
+use CGI::Session;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -123,64 +124,82 @@ C4::Auth - Authenticates Koha users
 
 sub get_template_and_user {
 	my $in = shift;
-# 	my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+# open(A, ">>/tmp/debug.txt");
+
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
 	my ($user, $cookie, $sessionID, $flags)
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
-open(A, ">>/tmp/debug.txt");
-print A "desde: get_template_and_user \n";
 
-print A "Se llamo a checkauth con: \n";
-print A "in-> query: ".$in->{'query'}."\n";
-print A "user: ".$user."\n";
+# print A "desde: get_template_and_user \n";
+# print A "Se llamo a checkauth con: \n";
+# print A "in-> query: ".$in->{'query'}."\n";
+# print A "user: ".$user."\n";
 	my $borrowernumber;
 	if ($user) {
-# 		$template->param(loggedinusername => $user);
-# 		$template->param(sessionID => $sessionID);
 		$params->{'loggedinusername'}= $user;
 		$params->{'sessionID'}= $sessionID;
-# 		$template->param(sessionID => $sessionID);
 		$borrowernumber = getborrowernumber($user);
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
-print A "get_template_and_user=> user ".$user."\n";
-print A "get_template_and_user=> despues de getpatronnnnnr \n";
+# print A "get_template_and_user=> user ".$user."\n";
+# print A "get_template_and_user=> despues de getpatronnnnnr \n";
 # 		$template->param(USER_INFO => \@bordat);
 		$params->{'USER_INFO'}= \@bordat;	
-print A "get_template_and_user=> despues de USER_INFO\n";
-print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
+# print A "get_template_and_user=> despues de USER_INFO\n";
+# print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
 	}
-	
-	#Se crea el encabezado: Content-Type: text/html
-# 	print $in->{'query'}->header;
-# print "Content-type: text/html\n\n";
-# print $in->{'query'}->header;
-print A "get_template_and_user=> imprimo header \n";
-print A "get_template_and_user=> cookie ".$cookie."\n";
+
+# print A "get_template_and_user=> imprimo header \n";
+# print A "get_template_and_user=> cookie ".$cookie."\n";
 	return ($template, $borrowernumber, $cookie, $params);
 }
 
-sub get_templateexpr_and_user {
-        my $in = shift;
-        my $template = gettemplateexpr($in->{'template_name'}, $in->{'type'});
-        my ($user, $cookie, $sessionID, $flags)
-                = checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
-        my $borrowernumber;
-        if ($user) {
-                $template->param(loggedinusername => $user);
-                $template->param(sessionID => $sessionID);
+sub output_html_with_http_headers {
+    	my($query, $cookie, $template, $params) = @_;
+# open(A, ">>/tmp/debug.txt");
+# print A "output_html: \n";
+ 	print "Content-type: text/html\n\n";
+	print $query->header(
+				-cookie => $cookie,
+	);
 
-                $borrowernumber = getborrowernumber($user);
-                my ($borr, $flags) = getpatroninformation($borrowernumber,"");
-                my @bordat;
-                $bordat[0] = $borr;
+# print A "template_name ".$params->{'template_name'}."\n";
+# my $key;
+# print A "\n";
+# print A "SE PARAMS: \n";
+#    foreach $key (sort keys(%$params)) {
+#       print A "$key = $params->{$key} \n";
+#    } 
+# print A "\n";
 
-                $template->param(USER_INFO => \@bordat);
-        }
-        return ($template, $borrowernumber, $cookie);
+	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 }
+
+
+
+# ## FIXME no se va a usar mas con el nuevo Template::Toolkit
+# sub get_templateexpr_and_user {
+#         my $in = shift;
+#         my $template = gettemplateexpr($in->{'template_name'}, $in->{'type'});
+#         my ($user, $cookie, $sessionID, $flags)
+#                 = checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+# 
+#         my $borrowernumber;
+#         if ($user) {
+#                 $template->param(loggedinusername => $user);
+#                 $template->param(sessionID => $sessionID);
+# 
+#                 $borrowernumber = getborrowernumber($user);
+#                 my ($borr, $flags) = getpatroninformation($borrowernumber,"");
+#                 my @bordat;
+#                 $bordat[0] = $borr;
+# 
+#                 $template->param(USER_INFO => \@bordat);
+#         }
+#         return ($template, $borrowernumber, $cookie);
+# }
 
 
 =item checkauth
@@ -247,6 +266,402 @@ sub checkauth {
 open(A, ">>/tmp/debug.txt");
 print A "desde checkauth \n";
 	my $query=shift;
+	my $time=localtime(time());
+
+# my $session = new CGI::Session();
+# my $sessionID = $session->id();
+
+my $session = CGI::Session->load();# or die CGI::Session->errstr();
+    if ( $session->is_expired ) {
+#         print $session->header(),
+#             $cgi->start_html(),
+#             $cgi->p("Your session timed out! Refresh the screen to start new session!")
+#             $cgi->end_html();
+print A "EXPIRO LA SESSION \n";
+        exit(0);
+    }
+
+    if ( $session->is_empty ) {
+print A "SESSION IS EMPTY\n";
+        $session = $session->new() or die $session->errstr;
+    }
+my $sessionID = $session->id();
+print A "sessionID: ".$sessionID."\n";
+# print $session->header();
+# print $session->dump();
+
+=item
+my $key;
+print A "\n";
+print A "SE IMPRIME ENV: \n";
+   foreach $key (sort keys(%ENV)) {
+      print A "$key = $ENV{$key} \n";
+   } 
+print A "\n";
+=cut
+
+	# $authnotrequired will be set for scripts which will run without authentication
+	my $authnotrequired = shift;
+	my $flagsrequired = shift;
+	my $type = shift;
+	$type = 'opac' unless $type;
+
+	my $dbh = C4::Context->dbh;
+	my $timeout = C4::Context->preference('timeout');
+	my $dateformat = C4::Date::get_date_format();
+	$timeout = 600 unless $timeout;
+
+	my $template_name;
+	if ($type eq 'opac') {
+		$template_name = "opac-auth.tmpl";
+	} else {
+		$template_name = "auth.tmpl";
+	}
+
+	# state variables
+	my $loggedin = 0;
+	my %info;
+# 	my ($userid, $cookie, $sessionID, $flags);
+	my ($userid, $cookie, $flags);
+	my $logout = $query->param('logout.x');
+print A "REMOTE_USER 268 fuera del if ".$ENV{'REMOTE_USER'}." \n";
+# $ENV{'REMOTE_USER'}= '26320';
+	if ($userid = $ENV{'REMOTE_USER'}) {
+# print "Content-type: text/html\n\n";
+		# Using Basic Authentication, no cookies required
+print A "creo una cookie \n";
+print A "REMOTE_USER".$ENV{'REMOTE_USER'}." \n";
+		$cookie=$query->cookie(-name => 'sessionID',
+				-value => '',
+				-expires => '');
+		$loggedin = 1;
+	} elsif ($sessionID=$query->cookie('sessionID')) {
+print A "el sessionID esta seteado \n";
+		my ($ip , $lasttime);
+		($userid, $ip, $lasttime) = $dbh->selectrow_array(
+				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",undef, $sessionID);
+		if ($logout) {
+print A "logouttttttttt \n";
+		# voluntary logout the user
+			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+			$sessionID = undef;
+			$userid = undef;
+			#Logueo la sesion que se termino voluntariamente
+			_session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,$time);
+		
+		}
+		if ($userid) { 
+		#la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
+		  	if ($lasttime<time()-$timeout) {
+				# timed logout
+				$info{'timed_out'} = 1;
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				$userid = undef;
+				$sessionID = undef;
+				#Logueo la sesion que se termino por timeout
+				_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,$time);
+				redirectTo('/cgi-bin/koha/auth.pl');
+
+			} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+				# Different ip than originally logged in from
+# 				$info{'oldip'} = $ip;
+# 				$info{'newip'} = $ENV{'REMOTE_ADDR'};
+# 				$info{'different_ip'} = 1;
+
+				$session->param('oldip', $ip);
+				$session->param('newip', $ENV{'REMOTE_ADDR'});
+				$session->param('different_ip', 1);
+				$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+				$sessionID = undef;
+				$userid = undef;
+				#Logueo la sesion que se cambio la ip
+				_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid,$time,$ip,$session->param('newip'));
+		     	} else {
+				$cookie=$query->cookie(-name => 'sessionID',
+							-value => $sessionID,
+							-expires => '');
+				$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",undef, (time(), $sessionID));
+				$flags = haspermission($dbh, $userid, $flagsrequired);
+				if ($flags) {
+					$loggedin = 1;
+				} else {
+# 					$info{'nopermission'} = 1;
+					$session->param('nopermission', 1);
+				}
+			}
+		    }#if de la sesion que existia en la bdd,    END if ($userid)
+		}#eslif se requiere cookie
+
+	unless ($userid) { 
+#si no hay userid, hay que autentificarlo y no existe sesion
+print A "no hay usuario autenticado: 337\n";
+# 		$sessionID=int(rand()*1000000).'-'.time();
+		$userid=$query->param('userid');
+		my $password=$query->param('password');
+		#AGREGADO PARA HACER EL HASH DE LA PASSWORD
+		my $random_number=$query->param('nroRandom');
+		#--------------------------------------------
+
+		# Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
+		# la llamada a la funcion checkpwldap por checkpw
+
+        	my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+        	$sth->execute("ldapenabled");
+
+		my ($return, $cardnumber);
+		# El branch lo agregue para que cada usuario maneje la branch por defecto que quiera
+		my $branch;
+		if ($sth->fetchrow eq 'yes') {
+			($return, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
+		} else {
+			($return, $cardnumber,$branch) = checkpw($dbh,$userid,$password,$random_number);
+		}
+		#------------------------------------------------------------------------------
+
+                $sessionID.="_".$branch;
+		if ($return) {
+			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+				undef, ($sessionID, $userid));
+			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+			#Logueo una nueva sesion
+			_session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
+			$cookie=$query->cookie(
+						-name => 'sessionID',
+						-value => $sessionID,
+						-expires => ''
+					);
+
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$loggedin = 1;
+				#WARNING: REVISAR ver si es solo de intranet el usuario q se loguear Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
+	# Miguel- esta consutla no deberia formar parte de una transaccion????
+				my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
+				$sth->execute();
+				my $lastlogin= $sth->fetchrow;
+				my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
+				my $enter=0;
+				if ($lastlogin){
+					while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
+						# lastlogin es anterior a prevWorkDate
+						# desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
+						$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
+						my $sth=$dbh->prepare("insert into feriados (fecha) values (?)");
+						$sth->execute($lastlogin);
+						$enter=1;
+					}
+					
+					#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
+					my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+					if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+						# lastlogin es anterior a hoy
+						# Hoy no se enviaron nunca los mails de recordacion
+						open L, ">>/tmp/avisos";
+						printf L "Enviar MAIL! \n";
+						close L;
+						C4::AR::Issues::enviar_recordatorios_prestamos();
+					}
+	
+				}
+				if ($enter) {
+					#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en el while anterior
+					my ($count,@holidays)= C4::AR::Utilidades::getholidays();
+					C4::AR::Utilidades::savedatemanip(@holidays);
+				}
+	#-------------------------------------- SECCION CRITICA	--------------------------------------------------------
+				#Se borran las reservas de los usuarios sancionados			
+				if ($type eq 'opac') {
+	
+					t_operacionesDeOPAC($userid);
+	
+				} else {
+					t_operacionesDeINTRA($userid, $cardnumber);
+
+				}
+	#--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
+			} else {
+				$info{'nopermission'} = 1;
+			}
+		} else {
+			if ($userid) {
+				$info{'invalid_username_or_password'} = 1;
+			}
+		}
+	}#end unless ($userid) 
+	
+	  my $insecure = C4::Context->boolean_preference('insecure');
+	# finished authentification, now respond
+	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
+		# Added by Luciano to check if the borrower have to change the password or not
+		if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid)))) {
+
+	 	  my $input = new CGI;
+		  my $newpassword = $input->param('newpassword') || 0;
+	          my $sth=$dbh->prepare("select cardnumber from borrowers where borrowernumber = ?");
+        	  $sth->execute(getborrowernumber($userid));
+                  my $cardnumber= $sth->fetchrow;
+		  my $passwordrepeted= 0;
+	
+		  if ($newpassword) {
+			# Check if the password is repeted
+			if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
+				my $oldpassword= getldappassword($cardnumber,$dbh);
+				$passwordrepeted= ($oldpassword eq $newpassword);
+			} else { 
+			# check in database
+				$sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+				$sth->execute($cardnumber);
+				my $oldpassword= $sth->fetchrow;
+				$passwordrepeted= ($oldpassword eq $newpassword);
+			}
+		  }#end if ($newpassword)
+
+		  if ($newpassword && !$passwordrepeted) {
+			# The new password is sent
+
+			if (C4::Context->preference("ldapenabled") eq "yes") { # update the ldap password
+				addupdateldapuser($dbh,$cardnumber,$newpassword);
+				$sth=$dbh->prepare("update borrowers set lastchangepassword=now() where cardnumber=?");
+		                $sth->execute($cardnumber);
+			} else { # update the database password
+				$sth=$dbh->prepare("update borrowers set password=?, lastchangepassword=now() where cardnumber=?");
+		                $sth->execute($newpassword, $cardnumber);
+			}
+
+		  } else {
+			# The new password is requested
+	
+		   	if ($type eq 'opac') {
+                  	     $template_name = "opac-changepassword.tmpl";
+                  	} else {
+                  	     $template_name = "changepassword.tmpl";
+                  	}
+
+# 			my @inputs =();
+# 			foreach my $name (param $query) {
+#                 		(next) if ($name eq 'userid' || $name eq 'password' || $name eq 'nroRandom' || $name eq 'newpassword'  || $name eq 'newpassword1' || $name eq 'newpassword2');
+#                 		my $value = $query->param($name);
+#                 		push @inputs, {name => $name , value => $value};
+#         		}
+
+#         		my $template = gettemplate($template_name, $type);
+
+# 			my ($template, $params) = gettemplate($template_name, $type);
+# 
+# print A "passwordrepeted: ".$passwordrepeted."\n";
+# 			$params->{'passwordrepeted'}= $passwordrepeted;
+# 
+#         		#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
+#         		my $random_number= int(rand()*100000);
+# 			$params->{'RANDOM_NUMBER'}= $random_number;
+# print A "random_number: ".$random_number."\n";
+#         		#---------------------------------------------------------------------------
+# 
+# 			$params->{'INPUTS'}= \@inputs;
+# 			$params->{'loginprompt'}= 1 unless $info{'nopermission'};
+# 
+# 		        my $self_url = $query->url(-absolute => 1);
+# 			$params->{'url'}= $self_url;
+# 			$params->{\%info};###??????????????????????????????????????
+# 		        $cookie=$query->cookie(-name => 'sessionID',
+#                                         -value => $sessionID,
+#                                         -expires => '');
+
+# print $query->header;
+# $template->process($params->{'template_name'},$params);
+print A "1er EXIT \n";
+redirectTo('/cgi-bin/koha/auth.pl');
+       			 exit;
+		  }
+		}
+		# Added by Luciano
+
+		# successful login
+		unless ($cookie) {
+		$cookie=$query->cookie(-name => 'sessionID',
+					-value => '',
+					-expires => '');
+		}
+
+print A "1er RETURN \n";
+print A "successful login!!!!!!!!!!!!\n";
+print A "userid: ".$userid."\n";
+print A "cookie: ".$cookie."\n";
+print A "sessionID: ".$sessionID."\n";
+		return ($userid, $cookie, $sessionID, $flags);
+	}
+	# else we have a problem...
+	# get the inputs from the incoming query
+# 	my @inputs =();
+# 	foreach my $name (param $query) {
+# 		(next) if ($name eq 'userid' || $name eq 'password' || $name eq 'nroRandom' || $name eq 'newpassword' || $name eq 'newpassword1' || $name eq 'newpassword2');
+# 		my $value = $query->param($name);
+# 		push @inputs, {name => $name , value => $value};
+# 	}
+# 
+# # 	my $template = gettemplate($template_name, $type);
+# # 	my ($template, $params) = gettemplate($template_name, $type);
+# 
+# 	#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
+# 	my $random_number= int(rand()*100000);
+# # 	$template->param(RANDOM_NUMBER => $random_number);
+# 	$params->{'RANDOM_NUMBER'}= $random_number;
+# 	#---------------------------------------------------------------------------
+# 
+# # # # 	$template->param(INPUTS => \@inputs);
+# 	$params->{'INPUTS'}= \@inputs;
+# # 	$template->param(loginprompt => 1) unless $info{'nopermission'};
+# 	$params->{'loginprompt'}= 1 unless $info{'nopermission'};
+# 
+# 	my $self_url = $query->url(-absolute => 1);
+# # 	$template->param(url => $self_url);
+# 	$params->{'url'}= $self_url;
+# print A "self_url: ".$self_url."\n";
+# # 	$template->param(\%info);
+# 	$params->{\%info}; #???
+# 	$cookie=$query->cookie(		-name => 'sessionID',
+# 					-value => $sessionID,
+# 					-expires => '');
+
+# 	 print $query->header(
+# #  						-type => guesstype($template->output),
+# 						-cookie => $cookie
+#                			 );#, $template->process($params->{'template_name'},$params);
+
+# print "Content-type: text/html\n\n";
+# print A "cookie: ".$cookie."\n";
+# print $query->header;
+# $template->process($params->{'template_name'},$params);
+print A "2do EXIT \n";
+# 	exit;
+# C4::Auth::output_html_with_http_headers($query, $cookie, $template, $params);
+redirectTo('/cgi-bin/koha/auth.pl');
+}
+
+
+sub redirectTo {
+	my ($url) = @_;
+
+	print ("Location: ".$url."\n\n");
+	exit;
+}
+
+
+
+=item
+sub checkauth2 {
+open(A, ">>/tmp/debug.txt");
+print A "desde checkauth \n";
+	my $query=shift;
+
+my $key;
+print A "\n";
+print A "SE IMPRIME ENV: \n";
+   foreach $key (sort keys(%ENV)) {
+      print A "$key = $ENV{$key} \n";
+   } 
+print A "\n";
+
 	# $authnotrequired will be set for scripts which will run without authentication
 	my $authnotrequired = shift;
 	my $flagsrequired = shift;
@@ -342,7 +757,8 @@ print A "logouttttttttt \n";
 			  }#if de la sesion que existia en la bdd
 		}#eslif se requiere cookie
 
-	unless ($userid) { #si no hay userid, hay que autentificarlo y no existe sesion
+	unless ($userid) { 
+#si no hay userid, hay que autentificarlo y no existe sesion
 print A "no hay usuario autenticado: 337\n";
 		$sessionID=int(rand()*1000000).'-'.time();
 		$userid=$query->param('userid');
@@ -369,79 +785,79 @@ print A "no hay usuario autenticado: 337\n";
 
                 $sessionID.="_".$branch;
 		if ($return) {
-		$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-			undef, ($sessionID, $userid));
-		$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-			undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-		#Logueo una nueva sesion
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-		close L;
-		$cookie=$query->cookie(-name => 'sessionID',
-					-value => $sessionID,
-					-expires => '');
-		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-			$loggedin = 1;
-			#WARNING: REVISAR ver si es solo de intranet el usuario q se loguear Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
-# Miguel- esta consutla no deberia formar parte de una transaccion????
-			my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
-			$sth->execute();
-			my $lastlogin= $sth->fetchrow;
-			my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
-			my $enter=0;
-			if ($lastlogin){
-			while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
-				# lastlogin es anterior a prevWorkDate
-				# desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
-				$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
-				my $sth=$dbh->prepare("insert into feriados (fecha) values (?)");
-				$sth->execute($lastlogin);
-				$enter=1;
-			}
-			
-			#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
-			my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-			if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
-				# lastlogin es anterior a hoy
-				# Hoy no se enviaron nunca los mails de recordacion
-				open L, ">>/tmp/avisos";
-				printf L "Enviar MAIL! \n";
-				close L;
-				C4::AR::Issues::enviar_recordatorios_prestamos();
-			}
+			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+				undef, ($sessionID, $userid));
+			$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+				undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+			#Logueo una nueva sesion
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+			close L;
+			$cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '');
 
-			}
-			if ($enter) {
-				#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en el while anterior
-				my ($count,@holidays)= C4::AR::Utilidades::getholidays();
-				C4::AR::Utilidades::savedatemanip(@holidays);
-			}
-#-------------------------------------- SECCION CRITICA	--------------------------------------------------------
-			#Se borran las reservas de los usuarios sancionados			
-			if ($type eq 'opac') {
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$loggedin = 1;
+				#WARNING: REVISAR ver si es solo de intranet el usuario q se loguear Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
+	# Miguel- esta consutla no deberia formar parte de una transaccion????
+				my $sth=$dbh->prepare("select max(lastlogin) as lastlogin from borrowers");
+				$sth->execute();
+				my $lastlogin= $sth->fetchrow;
+				my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
+				my $enter=0;
+				if ($lastlogin){
+					while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
+						# lastlogin es anterior a prevWorkDate
+						# desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
+						$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
+						my $sth=$dbh->prepare("insert into feriados (fecha) values (?)");
+						$sth->execute($lastlogin);
+						$enter=1;
+					}
+					
+					#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
+					my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+					if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+						# lastlogin es anterior a hoy
+						# Hoy no se enviaron nunca los mails de recordacion
+						open L, ">>/tmp/avisos";
+						printf L "Enviar MAIL! \n";
+						close L;
+						C4::AR::Issues::enviar_recordatorios_prestamos();
+					}
+	
+				}
+				if ($enter) {
+					#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en el while anterior
+					my ($count,@holidays)= C4::AR::Utilidades::getholidays();
+					C4::AR::Utilidades::savedatemanip(@holidays);
+				}
+	#-------------------------------------- SECCION CRITICA	--------------------------------------------------------
+				#Se borran las reservas de los usuarios sancionados			
+				if ($type eq 'opac') {
+	
+					t_operacionesDeOPAC($userid);
+	
+				} else {
+					t_operacionesDeINTRA($userid, $cardnumber);
 
-				t_operacionesDeOPAC($userid);
-
+				}
+	#--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
 			} else {
-
-				t_operacionesDeINTRA($userid, $cardnumber);
+				$info{'nopermission'} = 1;
 			}
-#--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
 		} else {
-			$info{'nopermission'} = 1;
+			if ($userid) {
+				$info{'invalid_username_or_password'} = 1;
+			}
 		}
-		} else {
-		if ($userid) {
-			$info{'invalid_username_or_password'} = 1;
-		}
-		}
-	}
+	}#end unless ($userid) 
 	
 	  my $insecure = C4::Context->boolean_preference('insecure');
 	# finished authentification, now respond
 	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-
 		# Added by Luciano to check if the borrower have to change the password or not
 		if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid)))) {
 
@@ -453,17 +869,18 @@ print A "no hay usuario autenticado: 337\n";
 		  my $passwordrepeted= 0;
 	
 		  if ($newpassword) {
-		    # Check if the password is repeted
-		    if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
-			my $oldpassword= getldappassword($cardnumber,$dbh);
-			$passwordrepeted= ($oldpassword eq $newpassword);
-		    } else { # check in database
-			$sth=$dbh->prepare("select password from borrowers where cardnumber=?");
-		        $sth->execute($cardnumber);
-		        my $oldpassword= $sth->fetchrow;
-			$passwordrepeted= ($oldpassword eq $newpassword);
-		    }
-		  }
+			# Check if the password is repeted
+			if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
+				my $oldpassword= getldappassword($cardnumber,$dbh);
+				$passwordrepeted= ($oldpassword eq $newpassword);
+			} else { 
+			# check in database
+				$sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+				$sth->execute($cardnumber);
+				my $oldpassword= $sth->fetchrow;
+				$passwordrepeted= ($oldpassword eq $newpassword);
+			}
+		  }#end if ($newpassword)
 
 		  if ($newpassword && !$passwordrepeted) {
 			# The new password is sent
@@ -494,6 +911,7 @@ print A "no hay usuario autenticado: 337\n";
         		}
 
 #         		my $template = gettemplate($template_name, $type);
+
 			my ($template, $params) = gettemplate($template_name, $type);
 
 print A "passwordrepeted: ".$passwordrepeted."\n";
@@ -526,11 +944,12 @@ print A "random_number: ".$random_number."\n";
 #                			 -cookie => $cookie
 #                			 ), $template->output;
 # print "Content-type: text/html\n\n";
+
 			 print $query->header(
 # 						-type => guesstype($template->output),
 						-cookie => $cookie
                			 );#, $template->process($params->{'template_name'},$params);
-print $query->header;
+# print $query->header;
 $template->process($params->{'template_name'},$params);
 print A "1er EXIT \n";
        			 exit;
@@ -544,6 +963,16 @@ print A "1er EXIT \n";
 					-value => '',
 					-expires => '');
 		}
+
+print A "1er RETURN \n";
+print A "successful login!!!!!!!!!!!!\n";
+print A "userid: ".$userid."\n";
+print A "cookie: ".$cookie."\n";
+print A "sessionID: ".$sessionID."\n";
+#  print $query->redirect("/cgi-bin/koha/auth.pl");	
+# print "Location: /cgi-bin/koha/auth.pl\n\n"; 
+# $query->redirect(-uri=>'/cgi-bin/koha/auth.pl', -nph=>1, status=>301);
+# exit;
 		return ($userid, $cookie, $sessionID, $flags);
 	}
 	# else we have a problem...
@@ -593,12 +1022,19 @@ print A "self_url: ".$self_url."\n";
 
 # print "Content-type: text/html\n\n";
 print A "cookie: ".$cookie."\n";
-print $query->header;
+# print $query->header;
 $template->process($params->{'template_name'},$params);
 print A "2do EXIT \n";
 	exit;
 }
+=cut
 
+sub _session_log {
+    (@_) or return 0;
+    open L, ">>/tmp/sessionlog";
+    printf L join("\n",@_);
+    close L;
+}
 
 sub t_operacionesDeOPAC{
 

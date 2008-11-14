@@ -2,17 +2,12 @@
 use HTML::Template;
 use strict;
 require Exporter;
-# use C4::Database;
-use C4::Output;  # contains gettemplate
-use C4::Interface::CGI::Output;
-use C4::Auth;
 
-# use Template;
+use C4::Output;  # contains gettemplate
+use C4::Auth;
 use CGI;
 
 my $query = new CGI;
-
-# my $input = new Template;
 
 my ($template, $loggedinuser, $cookie, $params)
 	= get_template_and_user({
@@ -28,14 +23,9 @@ my ($template, $loggedinuser, $cookie, $params)
 					debug => 1,
 			});
 
+## FIXME para q es???????????????
 my $marc_p = C4::Context->boolean_preference("marc");
 
 $params->{'NOTMARC'} = !$marc_p;
-# $params->{'top'}= "intranet-top.inc",
-# 		'menuInc' => "menu.inc",
-# 		'themelang' => '/intranet-tmpl/blue/es2/',
-# 	    };
 
-print "Content-type: text/html\n\n";
-
-$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
+C4::Auth::output_html_with_http_headers($query, $cookie, $template, $params);
