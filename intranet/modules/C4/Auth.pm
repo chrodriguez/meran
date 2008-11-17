@@ -941,3 +941,49 @@ C4::Output(3)
 Digest::MD5(3)
 
 =cut
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$s = new CGI::Session( 'driver:mysql', $sid);
+$s = new CGI::Session( 'driver:mysql', $sid, {  DataSource  => 'dbi:mysql:test',
+						User        => 'sherzodr',
+						Password    => 'hello',
+						TableName=>'session',
+						IdColName=>'my_id',
+						DataColName=>'my_data',
+						DataSource=>'dbi:mysql:project',
+						Handle=>$dbh,
+        					});
+$s = new CGI::Session( 'driver:mysql', $sid, { Handle => $dbh } );
+
+
+
+
+
+
+

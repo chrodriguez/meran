@@ -4,7 +4,6 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Date;
 use Date::Manip;
 use C4::Date;
@@ -13,7 +12,7 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user ({
+my ($template, $session, $params) = get_template_and_user ({
 	template_name	=> 'usuarios/reales/detalleReservas.tmpl',
 	query		=> $input,
 	type		=> "intranet",
@@ -54,13 +53,12 @@ foreach my $res (@$reserves) {
         }
 }
 
-$template->param(
-		bornum          => $borrnumber,
+$params->{'bornum'}= $borrnumber;
 #los libros que tiene "en espera para retirar"
-		waiting		=> \@waiting,
+$params->{'waiting'}= \@waiting;
 #los libros que tiene esperando un ejemplar
-		realreserves    => \@realreserves,
-);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+if ( (@realreserves) > 0 ){
+	$params->{'realreserves'}= \@realreserves;
+}
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 

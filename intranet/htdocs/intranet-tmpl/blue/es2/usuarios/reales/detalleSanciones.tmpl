@@ -1,34 +1,35 @@
-<!-- TMPL_IF name="sanctions" -->
-<br>
-<table class="tablaSanciones" border=0  width="100%"  cellpadding='0' cellspacing='0'>
-<tr valign=middle class="tablaresultadoTitle" width="100%">
+[% IF sanctions %]
+	<br>
+	<table class="tablaSanciones" border=0  width="100%"  cellpadding='0' cellspacing='0'>
+	<tr valign=middle class="tablaresultadoTitle" width="100%">
+	
+		<td width="1%" align="right" valing="top">
+		<img src="[% interface %]/[% themelang %]/images/izquierda.png">
+		</td>
+		<td width="98%"><B>SANCIONES</td>
+		<td width="1%" valing="top">
+		<img src="[% interface %]/[% themelang %]/images/derecha.png">
+		</td>
+	
+	</tr>
+	
+	<tr valign="top">
+		<td height=25>&nbsp;</td>
+		<td class="inputFontNormal">
+		<ul><font class="fontmsg">
+			[% FOREACH sanctions %]
+				[% IF description %]
+					<li>
+						[% description %] - Desde el [% startdate %] hasta el [% enddate %]
+					</li>
 
-	<td width="1%" align="right" valing="top">
-	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
-	</td>
-	<td width="98%"><B>SANCIONES</td>
-	<td width="1%" valing="top">
-	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
-	</td>
+				[% END %]
+			[% END %]
+			</font>
+		</ul>
+		</td>
+		<td height=25>&nbsp;</td>
+	</tr>
+	</table>
 
-</tr>
-
-<tr valign="top">
-	<td height=25>&nbsp;</td>
-	<td class="inputFontNormal">
-	  <ul><font class="fontmsg">
-		<!-- TMPL_LOOP NAME="sanctions" -->
-		<!-- TMPL_IF NAME="description" -->
-		<li>
-		<!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.
-		<!-- /TMPL_IF -->
-		</li>
-		<!-- /TMPL_LOOP -->
-		</font>
-	  </ul>
-	</td>
-	<td height=25>&nbsp;</td>
-</tr>
-</table>
-
-<!-- /TMPL_IF --> <!-- FIN IF sanctions -->
+[% END %]

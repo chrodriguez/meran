@@ -16,40 +16,40 @@ my $msg_object= C4::AR::Mensajes::create();
 my $dateformat = C4::Date::get_date_format();
 
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
-								query => $input,
-								type => "intranet",
-								authnotrequired => 0,
-								flagsrequired => {borrowers => 1},
-								debug => 1,
-				});
+my ($template, $session, $params) =  C4::Auth::get_template_and_user ({
+			template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
+			query		=> $input,
+			type		=> "intranet",
+			authnotrequired	=> 0,
+			flagsrequired	=> { circulate => 1 },
+    });
 
 my $bornum= $obj->{'borrowernumber'};
 	
 if ( (&C4::AR::Usuarios::existeUsuario($bornum)) && (&C4::AR::Utilidades::validateString($bornum)) ) {
 		
 	my $data=C4::AR::Usuarios::getBorrowerInfo($bornum);
-	$data->{'changepassword'}= $data->{'changepassword'};#creo q no es necesario
+	$params->{'changepassword'}= $data->{'changepassword'};#creo q no es necesario
 	
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
-		$data->{'course'}=1;
-		$data->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
+		$params->{'course'}=1;
+		$params->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 	}
 	#
-	$data->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
-	$data->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
-	$data->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
-	$data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
+	$params->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
+	$params->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
+	$params->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
+	$params->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 	
-	$data->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
-	$data->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
+	$params->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
+	$params->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
 	
 	# Converts the branchcode to the branch name
-	$data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'branchname'};
+	$params->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'branchname'};
 	
 	# Converts the categorycode to the description
-	$data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
+	$params->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 	
 	#### Verifica si la foto ya esta cargada
 	my $picturesDir= C4::Context->config("picturesdir");
@@ -74,30 +74,24 @@ if ( (&C4::AR::Usuarios::existeUsuario($bornum)) && (&C4::AR::Utilidades::valida
 	my $msgError=$input->param('error');
 	($msgError) || ($msgError=0);
 	####error  => 0,
-	$template->param($data);
-	$template->param(
-			bornum          => $bornum,
-			foto_name 	=> $foto,
-			mensaje_error_foto   => $msgFoto,
-			mensaje_error_borrar => $msgError,
-			error 		     => 0,
-	);
+	$params->{'bornum'}= $bornum;
+	$params->{'foto_name'}= $foto;
+	$params->{'mensaje_error_foto'}= $msgFoto;
+	$params->{'mensaje_error_borrar'}= $msgError;
+	$params->{'error'}=0;
 	
 
 	
 	
 }else{
 
-		$template->param(
-					error  		=> 1,
-					error_msg 	=> &C4::AR::Mensajes::getMensaje('U353'),
-					
-				);
+		$params->{'error'}= 1;
+		$params->{'error_msg'}= &C4::AR::Mensajes::getMensaje('U353');
 
-}
+     }
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 
 
 

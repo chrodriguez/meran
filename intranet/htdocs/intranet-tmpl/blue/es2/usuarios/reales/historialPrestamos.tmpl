@@ -1,15 +1,15 @@
 <center>
 
-<!-- TMPL_VAR NAME="paginador" -->
-
+[% paginador %]
+[% USE HTML %]
 <p class="inputFontNormal"> 
-	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
+	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;[% cant %]<br>
 </p>
 
 <table class="tablaHistorialPrestamos" cellspacing=0  cellpadding=0 border=0 width="100%">
 <tr>
 	<td class="tablaresultadoTitle" width="1%" align="right">
-	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+	<img src="[% interface %]/[% theme %]/images/izquierda.png">
 	</td>
 
 	<td class="tablaresultadoTitleClick" onclick="ordenar('titulo')" Title="Ordenar por Titulo">
@@ -38,62 +38,62 @@
 	</td>
 
 	 <td width="1%" class="tablaresultadoTitle">
-	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+	<img src="[% interface %]/[% themelang %]/images/derecha.png">
 	</td>
 </tr>
 
-<!-- TMPL_LOOP name="loop_reading" -->
+[% FOREACH loop_reading %]
 <tr valign=middle align="center" class="inputFontNormal">
 	<td height=25 >&nbsp;</td>
 	<td>
-		<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->'>
- 		<!-- TMPL_VAR name="titulo" ESCAPE=HTML-->
-		<!-- TMPL_IF name="unititle" -->
-			:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML-->
-		<!-- /TMPL_IF -->
+		<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]'>
+ 		[% HTML.escape($titulo) %]
+		[% IF unititle %]
+			&nbsp; [% HTML.escape(unititle) %]
+		[% END %]
     		</a>
 	</td>
 	<td>
- 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->">
-		<!-- TMPL_VAR name="autor" -->
+ 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<[% HTML.escape(idautor) %]">
+		[% autor %]
 		</a>
 	</td>
 	<td>
-        <!-- TMPL_LOOP NAME="grupos" -->
+        [% FOREACH grupos %]
 
-		<!-- TMPL_IF name="edicion" -->
-			<!-- TMPL_VAR NAME="edicion" -->
-		<!-- /TMPL_IF -->
+		[% IF edicion %]
+			[% edicion %]
+		[% END %]
 
-		<!-- TMPL_IF name="publicationyear" -->
-			&nbsp;(<!-- TMPL_VAR NAME="publicationyear" -->)
-        	<!-- /TMPL_IF -->
+		[% IF publicationyear %]
+			&nbsp;([% publicationyear %])
+        	[% END %]
 	
-		<!-- TMPL_IF NAME="volume" -->
-			        t <!-- TMPL_VAR NAME="volume" -->
-		<!-- /TMPL_IF -->
+		[% IF volume %]
+			        t [% volume %]
+		[% END %]
 
-	<!-- /TMPL_LOOP -->
+	[% END %] <!-- ESTE FOREACH -->
         </td>
 	<td align="center" >
-		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>&nbsp;
+		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=<[% id2 %]&id3= [% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>&nbsp;
 	</td>
 	<td>
-		<!-- TMPL_VAR name="date_due" -->&nbsp;
+		[% date_due %]&nbsp;
 	</td>
 	<td>
-		<!-- TMPL_VAR name="date_renew" -->&nbsp;
+		[% date_renew %]&nbsp;
 	</td>
 	<td>
-		<!-- TMPL_VAR name="date_fin" -->&nbsp;
+		[% date_fin %]&nbsp;
 	</td>
 	<td>
-		<!-- TMPL_VAR name="returndate" -->&nbsp;
+		[% returndate %]&nbsp;
 	</td>
 
 	<td height=25>&nbsp;</td>
 
-<!-- /TMPL_LOOP -->
+[% END %] <!-- FOREACH PRIMERO -->
 
 </table>
 

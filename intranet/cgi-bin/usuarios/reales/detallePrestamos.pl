@@ -4,7 +4,6 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::AR::Issues;
 use Date::Manip;
@@ -13,31 +12,13 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-# my ($template, $loggedinuser, $cookie) = get_template_and_user ({
-# 	template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
-# 	query		=> $input,
-# 	type		=> "intranet",
-# 	authnotrequired	=> 0,
-# 	flagsrequired	=> { circulate => 1 },
-#   });
-
-my $template = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
-				ABSOLUTE => 1,
-
-			  });
-
-my $templateName = "detallePrestamos.tmpl";
-
-
-
-my $param = {
-			'bornum'          => $bornum,
-			'completo'	=> $completo,
-			'top' => "intranet-top.inc",
-			'menuInc' => "menu.inc",
-			'themelang' => '/intranet-tmpl/blue/es2/',
-	};
-
+my ($template, $session, $params) =  get_template_and_user ({
+			template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
+			query		=> $input,
+			type		=> "intranet",
+			authnotrequired	=> 0,
+			flagsrequired	=> { circulate => 1 },
+    });
 
 my $obj=$input->param('obj');
 
@@ -48,6 +29,11 @@ my $issues = prestamosPorUsuario($borrnumber);
 my $count=0;
 my $venc=0;
 my @issuedat;
+$params->{'bornum'}= $borrnumber;
+my $completo=$input->param('completo');
+	$params->{'completo'} = $completo;
+
+
 
 foreach my $key (keys %$issues) {
 
@@ -66,11 +52,12 @@ foreach my $key (keys %$issues) {
 }
 
 
-$template->param(
-			circulateEnable => $count,
-			bornum          => $borrnumber,
-			prestamos       => \@issuedat,
-);
+$params->{'circulateEnable'}= $count;
+$params->{'bornum'}= $borrnumber;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+if (@issuedat > 0){
+	$params->{'prestamos'}= \@issuedat;
+}
+
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 

@@ -8,17 +8,17 @@ use CGI;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "usuarios/reales/historialPrestamos.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
-				
-});
+my ($template, $session, $params) =  get_template_and_user ({
+			template_name	=> 'usuarios/reales/historialPrestamos.tmpl',
+			query		=> $input,
+			type		=> "intranet",
+			authnotrequired	=> 0,
+			flagsrequired	=> { circulate => 1 },
+    });
+
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
 my $bornum=$obj->{'borrowernumber'};
 my $orden=$obj->{'orden'}||'date_due desc';
 my $ini=$obj->{'ini'}||'';
@@ -57,11 +57,10 @@ for (my $i=0;$i< $cantR;$i++){
    }
 }
 
-$template->param(
-			cant  => $cant,
-			bornum => $bornum,
-			showfulllink => ($cant > 50),
-			loop_reading => \@loop_reading
-		);
+$params->{'cant'}= $cant;
+$params->{'bornum'}= $bornum;
+$params->{'showfulllink'}= ($cant > 50);
+$params->{'loop_reading'}= \@loop_reading;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);
+
