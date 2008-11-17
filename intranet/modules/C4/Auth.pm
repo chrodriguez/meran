@@ -127,7 +127,9 @@ sub get_template_and_user {
 # open(A, ">>/tmp/debug.txt");
 
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
-	my ($user, $sessionID, $flags)
+# 	my ($user, $sessionID, $flags)
+# 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my ($session)
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
 # print A "desde: get_template_and_user \n";
@@ -135,10 +137,13 @@ sub get_template_and_user {
 # print A "in-> query: ".$in->{'query'}."\n";
 # print A "user: ".$user."\n";
 	my $borrowernumber;
-	if ($user) {
-		$params->{'loggedinusername'}= $user;
-		$params->{'sessionID'}= $sessionID;
-		$borrowernumber = getborrowernumber($user);
+	if ( $session->param('userid') ) {
+# 		$params->{'loggedinusername'}= $user;
+		$params->{'loggedinusername'}= $session->param('userid');
+# 		$params->{'sessionID'}= $sessionID;
+		$params->{'sessionID'}= $session->param('sessionID');
+		$borrowernumber = getborrowernumber($session->param('userid'));
+		$session->param('borrowernumber',$borrowernumber);
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
@@ -151,7 +156,7 @@ sub get_template_and_user {
 	}
 
 # print A "get_template_and_user=> imprimo header \n";
-	return ($template, $borrowernumber, $params);
+	return ($template, $session, $params);
 }
 
 
@@ -519,7 +524,8 @@ print A "session->sessionID: ".$session->param('sessionID')."\n";
 print A "sessionID: ".$sessionID."\n";
 # $session->expire("1s");
 
-		return ($userid, $sessionID, $flags);
+# 		return ($userid, $sessionID, $flags);
+		return ($session);
 	}
 	# else we have a problem...
 	# get the inputs from the incoming query
