@@ -144,7 +144,11 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 						//oculta el estado del AJAX
 						_HiddeState();
 						if(helper.onComplete){
- 							helper.onComplete(ajax.responseText);
+							if(ajax.responseText == 'CLIENT_REDIRECT'){
+								window.location = "/cgi-bin/koha/auth.pl";
+							}else{
+ 								helper.onComplete(ajax.responseText);
+							}
 						}
   					}
 				});

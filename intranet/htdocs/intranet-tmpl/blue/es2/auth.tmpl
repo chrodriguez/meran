@@ -3,9 +3,11 @@
 <title>KOHA: Ingresar al INTRANET</title>
 <LINK REL="stylesheet" HREF="[% themelang %]/includes/intranet.css" TYPE="text/css">
 <script language="javascript" type="text/javascript">
-function swap(id,src){
-document.getElementById(id).src=src;
-}
+
+	function swap(id,src){
+	document.getElementById(id).src=src;
+	}
+
 </script>
 </head>
 <body>
@@ -33,10 +35,12 @@ document.getElementById(id).src=src;
 <h2>Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.</h2>
 [% END %]
 
+<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'>[% mensaje %]</div></b></font></div>
 
 <center>
 
-<form action=[% url %] method="post" name="datosAEnviar">
+<!--<form action=[% url %] method="post" name="datosAEnviar">-->
+<form action='/cgi-bin/koha/mainpage.pl' method="post" name="datosAEnviar">
         <input type="hidden" name="userid">
         <input type="hidden" name="password">
         <input type="hidden" name="nroRandom">
@@ -47,13 +51,13 @@ document.getElementById(id).src=src;
 
 </form>
 
-<form action=[% url %] method="post" name="datos">
+<!--<form action=[% url %] method="post" name="datos">-->
+<form action='/cgi-bin/koha/mainpage.pl' method="post" name="datos">
     <script language="javascript">
 	 [% INCLUDE 'md5.js' %]
     </script>
     <script language="javascript">
         function enviar(){
-//                 nroRandom= <!-- TMPL_VAR NAME="RANDOM_NUMBER" -->;
 		nroRandom=[% RANDOM_NUMBER %];
                 document.datosAEnviar.nroRandom.value= nroRandom;
                 hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
@@ -74,35 +78,32 @@ document.getElementById(id).src=src;
 <table width="100%" height="100%" align="center">
 	<tr>
 		<td valing="middle">
-			<table border="0" align="center" cellpadding="0" width="362" height="261" background="[% themelang %]/images/fondolog.png">
-				<tr>
-					<td >&nbsp;</td>
-				</tr>
-				<tr>
-					<td valign="top">
-
-						<table border="0" align="center"  cellpadding="1"  class="Estilo_Cool" > 
-						<tr>
-						<td >Identificaci&oacute;n:</td>
-						<td ><input size=15  name="userid" onKeyPress="javascript:onEnterSubmit();" >
-						</td>
-						</tr>
-        					<tr>
-						<td >Contrase&ntilde;a:</td>
-						<td ><input size=15 type="password" name="password" onKeyPress="javascript:onEnterSubmit();" >
-						</td>
-						</tr>
-							
-        					<tr>
-						<td  colspan="2" align="center">
-						<a href="#" onClick="enviar(); return(false);" onMouseOut="swap('enter','[% themelang %]/images/menu-entrarkoha.png')" onMouseOver="swap('enter','[% themelang %]/images/menu-entrarkohabis.png')">
-						<input type="image" name="enter" id="enter" src="[% themelang %]/images/menu-entrarkoha.png" border="0"></a>
-						</td>
-        					</tr>
-						</table>
+		<table border="0" align="center" cellpadding="0" width="362" height="261" background="[% themelang %]/images/fondolog.png">
+			<tr>
+				<td >&nbsp;</td>
+			</tr>
+			<tr>
+				<td valign="top">
+				<table border="0" align="center"  cellpadding="1"  class="Estilo_Cool" > 
+					<tr>
+					<td >Identificaci&oacute;n:</td>
+					<td ><input size=15  name="userid" onKeyPress="javascript:onEnterSubmit();" ></td>
+					</tr>
+					<tr>
+					<td>Contrase&ntilde;a:</td>
+					<td><input size=15 type="password" name="password" onKeyPress="javascript:onEnterSubmit();"></td>
+					</tr>
+					<tr>
+					<td colspan="2" align="center">
+					<a href="#" onClick="enviar(); return(false);" onMouseOut="swap('enter','[% themelang %]/images/menu-entrarkoha.png')" onMouseOver="swap('enter','[% themelang %]/images/menu-entrarkohabis.png')">
+					<input type="image" name="enter" id="enter" src="[% themelang %]/images/menu-entrarkoha.png" border="0">
+					</a>
 					</td>
-				</tr>
-			</table>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
 		</td>
 	</tr>
 </table>

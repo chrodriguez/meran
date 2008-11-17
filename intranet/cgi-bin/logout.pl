@@ -22,8 +22,13 @@ use CGI;
 use C4::Context;
 
 my $query=new CGI;
+# PAARECCE Q NO SE USA MAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+open(A,">>/tmp/debug");
+print A "logout: \n";
 
-my $sessionID=$query->cookie('sessionID');
+# my $sessionID=$query->cookie('sessionID');
+my $session = CGI::Session->load();# or die CGI::Session->errstr();
+my $sessionID = $session->param('sessionID');
 
 my $sessions;
 open (S, "/tmp/sessions");
@@ -63,11 +68,35 @@ my $time=localtime(time());
 printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, $time;
 close L;
 
+## FIXME para que hace esto
+=item
 my $cookie=$query->cookie(-name => 'sessionID',
 			  -value => '',
 			  -expires => '+1y');
-
+=cut
 # Should redirect to intranet home page after logging out
+
+print A "desde logout antes de borrar la session: \n";
+print A "session->userid: ".$session->param('userid')."\n";
+print A "session->password: ".$session->param('password')."\n";
+print A "session->nroRandom: ".$session->param('nroRandom')."\n";
+print A "session->sessionID: ".$session->param('sessionID')."\n";
+print A "sessionID: ".$sessionID."\n";
+
+$session->clear();
+if ( $session->is_expired ) {
+	print A "la session EXPIRO\n";
+}
+
+if ( $session->is_empty ) {
+      print A "la session esta EMPTY\n";
+}
+
+print A "session->userid: ".$session->param('userid')."\n";
+print A "session->password: ".$session->param('password')."\n";
+print A "session->nroRandom: ".$session->param('nroRandom')."\n";
+print A "session->sessionID: ".$session->param('sessionID')."\n";
+print A "sessionID: ".$sessionID."\n";
 
 print $query->redirect("userpage.pl");
 exit;

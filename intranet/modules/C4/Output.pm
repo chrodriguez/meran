@@ -99,10 +99,10 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
-open (A, ">>/tmp/debug.txt");
-print A "desde gettemplate: \n";
-print A "tmplbase: ".$tmplbase."\n";
-print A "opac: ".$opac."\n";
+# open (A, ">>/tmp/debug.txt");
+# print A "desde gettemplate: \n";
+# print A "tmplbase: ".$tmplbase."\n";
+# print A "opac: ".$opac."\n";
 
 	my $htdocs;
 	if ($opac ne "intranet") {
@@ -111,11 +111,11 @@ print A "opac: ".$opac."\n";
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-print A "htdocs: ".$htdocs."\n";
+# print A "htdocs: ".$htdocs."\n";
 
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
-print A "theme: ".$theme."\n";
-print A "lang: ".$lang."\n";
+# print A "theme: ".$theme."\n";
+# print A "lang: ".$lang."\n";
 
 =item
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
@@ -156,8 +156,8 @@ print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 			template_name => "$htdocs/$theme/$lang/$tmplbase", #se setea el nombre del tmpl
 		);
 
-print A "themelang: ".$params{'themelang'}."\n";
-close(A);
+# print A "themelang: ".$params{'themelang'}."\n";
+# # # # close(A);
 
 	return ($template, \%params);
 }

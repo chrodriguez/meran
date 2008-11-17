@@ -6,7 +6,7 @@ use CGI;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie, $params)
+my ($template, $loggedinuser, $params)
     = get_template_and_user({
 				template_name => "usuarios/reales/buscarUsuario.tmpl",
 			     	query => $input,
@@ -17,4 +17,4 @@ my ($template, $loggedinuser, $cookie, $params)
 			     });
 
 
-C4::Auth::output_html_with_http_headers($input, $cookie, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $params);

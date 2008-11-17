@@ -339,8 +339,8 @@ fields from the reserves table of the Koha database.
 
 =cut
 sub getpatroninformation {
-open (A, ">>/tmp/debug.txt");
-print A "getpatroninformation \n";
+# open (A, ">>/tmp/debug.txt");
+# print A "getpatroninformation \n";
 	my ($borrowernumber,$cardnumber) = @_;
 	my $dbh = C4::Context->dbh;
 	my $query;
@@ -366,7 +366,7 @@ print A "getpatroninformation \n";
 
 	my $flags = patronflags($borrower);
 	my $accessflagshash;
-print A "getpatroninformation=> antes del select bit\n";
+# print A "getpatroninformation=> antes del select bit\n";
 	$sth=$dbh->prepare("SELECT bit,flag FROM userflags");
 	$sth->execute;
 	while (my ($bit, $flag) = $sth->fetchrow) {
@@ -376,7 +376,7 @@ print A "getpatroninformation=> antes del select bit\n";
 	}
 	$sth->finish;
 	$borrower->{'flags'}=$flags;
-print A "me voy: getpatroninformation \n";
+# print A "me voy: getpatroninformation \n";
 	return ($borrower, $flags, $accessflagshash);
 }
 
