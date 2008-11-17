@@ -18,7 +18,7 @@
 <tr>
 <td valign="top">
 
-<!-- TMPL_IF NAME="waiting_count" -->
+[% IF waiting_count %]
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
   <tr valign="top">
@@ -37,65 +37,66 @@
 	<th>Acci&oacute;n</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-<!-- TMPL_LOOP NAME="WAITING" -->
+[% FOREACH WAITING %]
   <tr bordercolor="#f2f2f2">
 	<td class="impar">
-		<b><a class="click" onClick="detalle(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
-		<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-		<!-- TMPL_IF NAME="runititle" -->:&nbsp;<!-- TMPL_VAR NAME="runititle" --><!-- /TMPL_IF -->
+		<b><a class="click" onClick="detalle([% rid1 %])" title="Mostrar Detalle">
+		[% rtitulo %]
+		[% IF runititle %]:&nbsp;[% runititle %][% END %]
 		</a></b>
 	</td>
 	<td class="impar">
-  	<!-- TMPL_IF NAME="rautor" -->
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='rautor' -->" >
-		<!-- TMPL_VAR NAME="autor" -->
+  	[% IF rautor %]
+		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
+		[% autor %]
 		</a>
-  	<!-- TMPL_ELSE -->
+  	[% ELSE %]
 		&nbsp;
- 	<!-- /TMPL_IF -->
+ 	[% END %]
 	</td> 
 	<td align=center class="impar">  
-	<!-- TMPL_IF NAME="redicion" --> 
-		<!-- TMPL_VAR NAME="redicion" --> - 
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="rpublicationyear" -->&nbsp;(<!-- TMPL_VAR NAME="rpublicationyear" -->)<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" --> <!--/TMPL_IF-->
+	[% IF redicion %]
+		[% redicion %] - 
+	[% END %]
+
+	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
+	[% IF volume %]        t [% volume %] [% END %]
 	</td>
 	<td class="impar" align="center">
-	<!-- TMPL_IF NAME="rnotificationdate" --> 
-		<!-- TMPL_VAR NAME="rnotificationdate" -->
-	<!-- TMPL_ELSE --> 
+	[% IF rnotificationdate %] 
+		[% rnotificationdate %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center">
-	<!-- TMPL_IF NAME="rreminderdate" -->
-		<font color="<!-- TMPL_VAR NAME='color' -->"><!-- TMPL_VAR NAME="rreminderdate" --></font>
-	<!-- TMPL_ELSE --> 
+	[% IF rreminderdate %]
+		<font color="[% color %]">[% rreminderdate %]</font>
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 
 
 	<td class="impar">
-		<b><!-- TMPL_VAR NAME="rbranch" --></b>
+		<b>[% rbranch %]</b>
 	</td>
 	<td class="impar" align="center"> 
-	<!-- TMPL_IF NAME="CirculationEnabled" -->
+	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
-	<!-- TMPL_ELSE -->
+		onClick="cancelar([% reserveNumber %])">Cancelar</a>
+	[% ELSE %]
 		No disponible
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 
   </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 <br>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME="reserves_count" -->
+[% IF reserves_count %]
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
   <tr bordercolor="#f2f2f2">    
@@ -110,45 +111,45 @@
 	<th>Acci&oacute;n </th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-<!-- TMPL_LOOP NAME="RESERVES" -->
+[% FOREACH RESERVES %]
   <tr border="1" bordercolor="#f2f2f2">
 	<td class="impar">
-	<a class="click" onClick="detalleMaterialEnEspera(<!-- TMPL_VAR NAME='rid1' -->)" title="Mostrar Detalle">
-		<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-		<!-- TMPL_IF NAME="runititle" -->
-			:&nbsp;<!-- TMPL_VAR NAME="runititle" -->
-		<!-- /TMPL_IF -->
+	<a class="click" onClick="detalleMaterialEnEspera([% rid1 %])" title="Mostrar Detalle">
+		[% rtitulo %]
+		[% IF runititle %]
+			:&nbsp;[% runititle %]
+		[% END %]
   	</a>
  	</td>
  	<td class="impar">
-	<!-- TMPL_IF NAME="rautor" -->
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='rautor' -->" >
-		<!-- TMPL_VAR NAME="autor" -->
+	[% IF rautor %]
+		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
+		[% autor %]
 		</a>
-	<!-- TMPL_ELSE -->
+	[% ELSE %]
 		&nbsp;
-	<!-- /TMPL_IF -->
+	[% END %]
  	</td>
 	<td align=center class="impar"> 
-	<!-- TMPL_IF NAME="redicion" --> 
-		<!-- TMPL_VAR NAME="redicion" -->
-	<!-- TMPL_ELSE --> 
+	[% IF redicion %]
+		[% redicion %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center">
-	<!-- TMPL_IF NAME="CirculationEnabled" -->
+	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar(<!-- TMPL_VAR NAME='reserveNumber' -->)">Cancelar</a>
-	<!-- TMPL_ELSE -->
+		onClick="cancelar([% reserveNumber %])">Cancelar</a>
+	[% ELSE %]
 		No disponible
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
   </tr>
- <!-- /TMPL_LOOP -->
+ [% END %]
 </table>
 <br>
-<!-- /TMPL_IF -->
+[% END %]
 
 </td>
   </tr>

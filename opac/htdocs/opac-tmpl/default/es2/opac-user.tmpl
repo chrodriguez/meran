@@ -1,12 +1,6 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+[% INCLUDE 'opac-top.inc' %]
 
 <script language=javascript>
-
-// 	function detalleMaterialEnEspera(id1){
-// 		$('#datosUsuario').slideUp('slow');
-// 		detalle(id1);
-// 	}
-
 
 	$(document).ready(function() {
 		DetalleReservas();
@@ -17,8 +11,8 @@
 </script>
 
 <div id="navegador">
-<input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="<!-- TMPL_VAR NAME='themelang' -->/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
-<input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="<!-- TMPL_VAR NAME='themelang' -->/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
+<input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="[% themelang %]/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
+<input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="[% themelang %]/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
 </div>
 
 
@@ -34,7 +28,7 @@
 <table width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
   <tr>
 	<td valign="top">
-<!-- TMPL_IF NAME="sanciones_loop" -->
+[% IF sanciones_loop %]
 		<table cellpadding="0" cellspacing="0" border="0">
 		  <tr>
 			<td>
@@ -42,17 +36,17 @@
 				<b>Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo:
 			  </font></b>
 			  <ul>
-			<!-- TMPL_LOOP NAME="sanciones_loop" -->
-			  <!-- TMPL_IF NAME="description" -->
-				<li class="sancionesOPAC"><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.
+		[% FOREACH sanciones_loop %]
+			  [% IF description %]
+				<li class="sancionesOPAC">[% description %] - Desde el [% startdate %] hasta el [% enddate %]
 				</li>
-			  <!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
+			  [% END %]
+		[% END %]
 			  <ul>
 			</td>
 		  </tr>
 		</table>
-<!-- /TMPL_IF -->
+[% END %]
 	</td>
   </tr>
 </table>
@@ -81,73 +75,74 @@
 		<td class="bordetabla" align="Center">
 		<b>Datos del usuario:</b></td>
 	</tr>
-	<!-- TMPL_IF NAME="foto_name" -->
+	[% IF foto_name %]
 	<tr>
-		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/<!-- TMPL_VAR NAME='foto_name' -->"></td>
+		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/[% foto_name %]"></td>
 	</tr>
-	<!-- /TMPL_IF -->
-<tr><td class="impar" >Tarjeta de la biblioteca: <b><!-- TMPL_VAR NAME="cardnumber" --></b> </td></tr>
-<tr><td class="impar" >Apellido y nombres: <b><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR NAME="firstname" --> </b></td></tr>
-<tr><td class="impar" > Documento: <b> <!-- TMPL_VAR NAME="documenttype" -->  <!-- TMPL_VAR NAME="documentnumber" --></b></td></tr>
-<!-- TMPL_IF NAME="studentnumber" -->
-<tr><td class="impar" >Legajo: <b><!-- TMPL_VAR NAME="studentnumber" --></b> </td></tr>
-<!-- /TMPL_IF -->
-<tr><td class="impar" >Categor&iacute;a: <b><!-- TMPL_VAR NAME="cat" --></b> </td></tr>
-<!-- TMPL_IF NAME="streetaddress" -->
-<tr><td class="impar" >Direcci&oacute;n: <b><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="physstreet" -->
-<tr><td class="impar" >Domicilio y localidad de origen: <b><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="streetcity" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="phone" -->
-<tr><td class="impar" >Tel&eacute;fono: <b><!-- TMPL_VAR NAME="phone" --></b></td></tr>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="emailaddress" -->
-<tr><td class="impar" >Mail: <b><!-- TMPL_VAR NAME="emailaddress" --></b></td></tr>
-<!-- /TMPL_IF -->
+	[% END %]
+<tr><td class="impar" >Tarjeta de la biblioteca: <b>[% cardnumber %]</b> </td></tr>
+<tr><td class="impar" >Apellido y nombres: <b>[% surname %] [% firstname %] </b></td></tr>
+<tr><td class="impar" > Documento: <b> [% documenttype %]  [% documentnumber %]</b></td></tr>
+[% IF studentnumber %]
+<tr><td class="impar" >Legajo: <b>[% studentnumber %]</b> </td></tr>
+[% END %]
+<tr><td class="impar" >Categor&iacute;a: <b>[% cat %]</b> </td></tr>
+[% IF streetaddress %]
+<tr><td class="impar" >Direcci&oacute;n: <b>[% streetaddress %],[% city %]</b></td></tr>
+[% END %]
+[% IF physstreet %]
+<tr><td class="impar" >Domicilio y localidad de origen: <b>[% physstreet %], [% streetcity %]</b></td></tr>
+[% END %]
+[% IF phone %]
+<tr><td class="impar" >Tel&eacute;fono: <b>[% phone %]</b></td></tr>
+[% END %]
+[% IF emailaddress %]
+<tr><td class="impar" >Mail: <b>[% emailaddress %]</b></td></tr>
+[% END %]
 <tr><td class="impar" >&nbsp;</td></tr>
 <!--Esto es un agregado de Einar para validar el tema de los usuarios que puedan ser locales o no, o sea que la biblioteca`pueda o no cambiar los datos de los alumnos, dependera de la variable Guarani que ira en el system preferences de Koha--> 	
 <tr><td class="impar">
-<!-- TMPL_IF NAME="updatedata" -->
-Si alg&uacute;n dato es incorrecto o debe ser modificado,
-avisar al personal de la Biblioteca.
-<!-- TMPL_ELSE --> 
-		Alguno de nuestros registros es incorrecto? Para solucionarlo: <br> <a href="/cgi-bin/koha/opac-userupdate.pl">Actualizar Registro</a>
-        <!-- /TMPL_IF -->
+[% IF updatedata %]
+Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca.
+[% ELSE %]
+Alguno de nuestros registros es incorrecto? Para solucionarlo: <br> <a href="/cgi-bin/koha/opac-userupdate.pl">Actualizar Registro</a>
+[% END %]
 </td></tr>
-<!-- TMPL_IF name="UploadPictureFromOPAC" -->
-         <!-- TMPL_IF name="mensaje_error_foto" -->
+[% IF UploadPictureFromOPAC %]
+         [% IF mensaje_error_foto %]
          <tr><td span=100% class="impar" >
-                <font color="red"><!--  TMPL_VAR NAME="mensaje_error_foto" --></font>
+                <font color="red">[% mensaje_error_foto %]</font>
          </td></tr>
-         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="foto_name" -->
+         [% END %]
+        [% IF foto_name %]
           <tr><td span=100% class="impar" >
                 <form name="foto" action="/cgi-bin/koha/upload.pl" method=post>
-                        <input type=hidden name=foto_name value=<!-- TMPL_VAR NAME=foto_name -->>
-                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+                        <input type=hidden name=foto_name value=[% foto_name %] >
+                        <input type=hidden name=bornum value=[% bornum %]>
 <center>
 
 
-<a onMouseOut="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png')" onMouseOver="swap('delpic','<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-fotobis.png')" >
-<input name="delpic" id="delpic" type="image" onClick="document.foto.submit();" value="Eliminar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-eliminar-foto.png" border="0"  >
+<a 	onMouseOut="swap('delpic','[% themelang %]/images/boton-eliminar-foto.png')" 
+	onMouseOver="swap('delpic','[% themelang %]/images/boton-eliminar-fotobis.png')" >
+<input 	name="delpic" id="delpic" type="image" 
+	onClick="document.foto.submit();" value="Eliminar"  src="[% themelang %]/images/boton-eliminar-foto.png" border="0"  >
 </a>
 </center>
                 </form>
           </td></tr>
-        <!-- TMPL_ELSE -->
+        [% ELSE %]
           <tr><td span=100% align="center" class="impar" >
                 <form action="/cgi-bin/koha/upload.pl" method=post enctype="multipart/form-data">
-                        <input type=hidden name=bornum value=<!-- TMPL_VAR NAME=bornum -->>
+                        <input type=hidden name=bornum value=[% bornum %]>
 
-<a  onMouseOut="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/upload.png')" onMouseOver="swap('up','<!-- TMPL_VAR NAME='themelang' -->/images/uploadbis.png')">
-<input name="up" id="up" type="image" value="Subir Foto"  src="<!-- TMPL_VAR NAME='themelang' -->/images/upload.png" border="0">
+<a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')">
+<input name="up" id="up" type="image" value="Subir Foto"  src="[% themelang %]/images/upload.png" border="0">
 </a>
                         <input type=file name="picture">
                 </form>
            </td></tr>
-         <!-- /TMPL_IF -->
-  <!-- /TMPL_IF -->
+         [% END %]
+  [% END %]
 	
 <!-- Hasta aca llega el agregaro, en el original estaba solo el tema del ELSE -->
 		</font>
@@ -172,24 +167,25 @@ avisar al personal de la Biblioteca.
 <td valign="top">
 
 <p align="center">
-	<a  class="click" onClick="mostrarHistorialPrestamos('<!-- TMPL_VAR NAME='bornum' -->');">
+	<a  class="click" onClick="mostrarHistorialPrestamos('[% bornum %]');">
           Historial de Pr&eacute;stamos
   	</a>
 </p>
 
-<!-- TMPL_IF NAME=showHistoricReserves -->
+[% IF showHistoricReserves %]
 <p align="center">
-  	<a  class="click" onClick="mostrarHistorialReservas('<!-- TMPL_VAR NAME='bornum' -->');">
+  	<a  class="click" onClick="mostrarHistorialReservas('[% bornum %]');">
          	Historial de Reservas
   	</a>
 </p>
-<!-- /TMPL_IF -->
+[% END %]
 	
 <p align="center">
 
-<a  	onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" 	
-	onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir" src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
+<a  	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 	
+	onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir" 
+	src="[% themelang %]/images/menu-imprimir.png" border="0">
 </a>
 
 </p>
@@ -202,5 +198,5 @@ avisar al personal de la Biblioteca.
 
 </div>
 
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+[% INCLUDE 'opac-bottom.inc' %]
 

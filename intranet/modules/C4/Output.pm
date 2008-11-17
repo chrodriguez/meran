@@ -123,7 +123,7 @@ sub gettemplate {
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 =cut
-print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
+# print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 	my $template = Template->new({
 					INCLUDE_PATH => [
 								"$htdocs/$theme/$lang/$tmplbase",

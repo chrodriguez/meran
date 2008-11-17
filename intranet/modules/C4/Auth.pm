@@ -305,10 +305,13 @@ print A "la session EXPIRO\n";
 	$session->param('time', $time);
 
 	my $template_name;
+	my $url;
 	if ($type eq 'opac') {
 		$template_name = "opac-auth.tmpl";
+		$url= "/cgi-bin/opac/auth.pl";
 	} else {
 		$template_name = "auth.tmpl";
+		$url= "/cgi-bin/koha/auth.pl";
 	}
 
 	# state variables
@@ -377,7 +380,7 @@ print A "no hay usuario autenticado 392: \n";
 #modifica el session ID
                 $sessionID.="_".$branch;
 		$session->param('sessionID', $sessionID);
-		$session->expire(0);
+		$session->expire('3m');
 
 		if ($return) {
 			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
@@ -435,20 +438,16 @@ print A "no hay usuario autenticado 392: \n";
 				}
 	#--------------------------------------------FIN---- SECCION CRITICA--------------------------------------------
 			} else {
-# 				$info{'nopermission'} = 1;
 				$session->param('nopermission', 1);
-# 				$session->param('nroRandom', $random_number);
 				$session->param('codMsg', 'U354');
-				redirectTo('/cgi-bin/koha/auth.pl');
+				redirectTo($url);
 				
 			}
 		} else {
 			if ($userid) {
-# 				$info{'invalid_username_or_password'} = 1;
 				$session->param('invalid_username_or_password', 1);
-# 				$session->param('nroRandom', $random_number);
 				$session->param('codMsg', 'U357');
-				redirectTo('/cgi-bin/koha/auth.pl');
+				redirectTo($url);
 			}
 		}
 	}#end unless ($userid) 
@@ -528,7 +527,7 @@ print A "sessionID: ".$sessionID."\n";
 	print A "2do EXIT \n";
 	$session->param('nroRandom', $random_number);
 	$session->param('codMsg', 'U357');
-	redirectTo('/cgi-bin/koha/auth.pl');
+	redirectTo($url);
 }
 
 
@@ -537,6 +536,16 @@ sub _loggedin_Controller {
 my ($session) = @_;
 my $loggedin;
 $loggedin = 0;
+my $url;
+my $template_name;
+if ($session->param('type') eq 'opac') {
+		$template_name = "opac-auth.tmpl";
+		$url= "/cgi-bin/koha/auth.pl";
+	} else {
+		$template_name = "auth.tmpl";
+		$url= "/cgi-bin/koha/auth.pl";
+}
+
 my $dbh = C4::Context->dbh;
 	
 if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
@@ -551,7 +560,7 @@ if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
 			);
 
 	$session->param('codMsg', 'U355');
-	redirectTo('/cgi-bin/koha/auth.pl');
+	redirectTo($url);
 
 } elsif ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
 	# Different ip than originally logged in from
@@ -567,7 +576,7 @@ if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
 												$session->param('newip')
 		);
 	$session->param('codMsg', 'U356');
-	redirectTo('/cgi-bin/koha/auth.pl');
+	redirectTo($url);
 } else {
 	$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",undef, (time(), $session->param('sessionID') ));
 	my $flags = haspermission($dbh, $session->param('userid'), $session->param('flagsrequired'));
@@ -576,7 +585,7 @@ if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
 	} else {
 		$session->param('nopermission', 1);
 		$session->param('codMsg', 'U354');
-		redirectTo('/cgi-bin/koha/auth.pl');
+		redirectTo($url);
 	}
   }
 
@@ -629,7 +638,7 @@ print A "redirectTo: \n";
 	#para saber si fue un llamado con AJAX
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
-print A "CLIENT_REDIRETC\n";
+print A "CLIENT_REDIRECT\n";
 		
 		my $session = new CGI::Session();
 		# send proper HTTP header with cookies:
@@ -639,7 +648,7 @@ print A "CLIENT_REDIRETC\n";
 # 		return ;
 	}else{
 	#redirijo en el servidor
-print A "SERVER_REDIRETC\n";
+print A "SERVER_REDIRECT\n";
 # 		if( $session->param('type') eq 'opac' ){$url= }
 		print ("Location: ".$url."\n\n");
 		exit;

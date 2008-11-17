@@ -3,20 +3,19 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::AR::Reservas; 
 use Date::Manip;
 
 my $input = new CGI;
 
-my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name => "opac-DetallePrestamos.tmpl",
-			     query => $input,
-			     type => "opac",
-			     authnotrequired => 0,
-			     flagsrequired => {borrow => 1},
-			     debug => 1,
+my ($template, $borrowernumber, $params)= get_template_and_user({
+									template_name => "opac-DetallePrestamos.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 0,
+									flagsrequired => {borrow => 1},
+									debug => 1,
 			     });
 
 
@@ -26,7 +25,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $dateformat = C4::Date::get_date_format();
 
-$template->param(borrowernumber => $borrowernumber);
+$params->{'borrowernumber'}= $borrowernumber;
 
 my $issues = C4::AR::Issues::prestamosPorUsuario($borrowernumber);
 
@@ -69,12 +68,12 @@ foreach my $key (keys %$issues) {
 }
 
 
-$template->param(vencimientos => $venc);
-$template->param(ISSUES => \@issuedat);
-$template->param(issues_count => $count);
-$template->param(OVERDUES => \@overdues);
-$template->param(overdues_count => $overdues_count);
-$template->param(CirculationEnabled => C4::Context->preference("circulation"));
+$params->{'vencimientos'}= $venc;
+$params->{'ISSUES'}= \@issuedat;
+$params->{'issues_count'}= $count;
+$params->{'OVERDUES'}= \@overdues;
+$params->{'overdues_count'}= $overdues_count;
+$params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);

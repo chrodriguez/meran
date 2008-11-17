@@ -4,7 +4,6 @@ require Exporter;
 use CGI;
 use C4::Auth;
 use C4::Circulation::Circ2;
-use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::AR::Sanctions;
 use Date::Manip;
@@ -15,13 +14,13 @@ use C4::AR::UpdateData;
 
 my $query = new CGI;
 
-my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name => "opac-user.tmpl",
-			     query => $query,
-			     type => "opac",
-			     authnotrequired => 0,
-			     flagsrequired => {borrow => 1},
-			     debug => 1,
+my ($template, $borrowernumber, $params)= get_template_and_user({
+									template_name => "opac-user.tmpl",
+									query => $query,
+									type => "opac",
+									authnotrequired => 0,
+									flagsrequired => {borrow => 1},
+									debug => 1,
 			     });
 
 
@@ -76,11 +75,12 @@ if (C4::Context->preference("UploadPictureFromOPAC") eq 'yes') {
 my @bordat;
 $bordat[0] = $borr;
 foreach my $aux (keys (%$borr)) {
-		$template->param($aux => ($borr->{$aux}))
+# 		$template->param($aux => ($borr->{$aux}))
+		$params->{$aux}= ($borr->{$aux});
 
 }
 
-$template->param(borrowernumber => $borrowernumber);
+$params->{'borrowernumber'}= $borrowernumber;
 
 my $sanc= hasSanctions($borrowernumber);
 
@@ -92,12 +92,11 @@ if ($san->{'id3'}) {
 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 
-$template->param(sanciones_loop => $sanc);
-$template->param(updatedata=>checkUpdateData());
-$template->param(
-			     LibraryName => C4::Context->preference("LibraryName"),
-			     pagetitle => "Usuarios",
-);
+$params->{'sanciones_loop'}= $sanc;
+$params->{'updatedata'}= checkUpdateData();
+$params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$params->{'pagetitle'}= "Usuarios";
+
 
 # #No se pudo renovar por no tener el curso?
 # $template->param(no_user_course => $query->param('no_user_course'));
@@ -105,6 +104,6 @@ $template->param(
 
 #se verifica la preferencia showHistoricReserves, para mostrar o no el historico de las Reservas
 my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
-$template->param(showHistoricReserves => $showHistoricReserves);
+$params->{'showHistoricReserves'}= $showHistoricReserves;
 
-output_html_with_http_headers $query, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($query, $template, $params);

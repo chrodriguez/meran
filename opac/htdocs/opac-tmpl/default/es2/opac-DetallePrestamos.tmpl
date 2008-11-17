@@ -17,7 +17,7 @@
 <tr>
 <td valign="top">
 
-<!-- TMPL_IF NAME="vencimientos" -->
+[% IF vencimientos %]
         <table cellpadding="0" cellspacing="0" border="0">
                 <tr>
                         <td>
@@ -25,9 +25,9 @@
                         </td>
                 </tr>
         </table>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME="issues_count" -->
+[% IF issues_count %]
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
   <tr bordercolor="#f2f2f2">
@@ -44,69 +44,72 @@
 	<th>Fechas de Pr&eacute;stamo</th>
 	<th>Vencimiento</th>
   </tr>
-<!-- TMPL_LOOP NAME="ISSUES" -->
+[% FOREACH ISSUES %]
   <tr class="tope" bordercolor="#f2f2f2">
 	<td class="impar">
-		<a class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar detalle">
-			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->
+		<a class="click" onClick="detalle([% id1 %])" title="Mostrar detalle">
+			[% titulo %]
+			[% IF unititle %]
+				:&nbsp;[% unititle %]
+			[% END %]
 		</a>
 	</td>
 	<td class="impar">
-	<!-- TMPL_IF NAME="autor" -->
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idautor' -->" >
-		<!-- TMPL_VAR NAME="autor" -->
+	[% IF autor %]
+		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% idautor %]" >
+		[% autor %]
 		</a>
-	<!-- TMPL_ELSE -->
+	[% ELSE %]
 		&nbsp;
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center" >
-	<!-- TMPL_IF NAME="barcode" --> 
-		<!-- TMPL_VAR NAME="barcode" -->
-	<!-- TMPL_ELSE --> 
+	[% IF barcode %] 
+		[% barcode %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center" >
-	<!-- TMPL_IF NAME="signatura_topografica" --> 
-		<!-- TMPL_VAR NAME="signatura_topografica" --> 
-	<!-- TMPL_ELSE -->
+	[% IF signatura_topografica %]
+		[% signatura_topografica %] 
+	[% ELSE %]
 		-
-	<!-- /TMPL_IF --> 
+	[% END %]
 	</td>
 	<td align=center class="impar" align="center" >
-	<!-- TMPL_IF NAME="volume" -->
-		<!-- TMPL_VAR NAME="volume" -->: <!-- TMPL_VAR NAME="volumeddesc" -->
-	<!-- TMPL_ELSE --> 
+	[% IF volume %]
+		[% volume %]: [% volumeddesc %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center" >
-	<!-- TMPL_IF NAME="date_due" --> 
-		<!-- TMPL_VAR NAME="date_due" -->
-	<!-- TMPL_ELSE --> 
+	[% IF date_due %] 
+		[% date_due %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
 	<td class="impar" align="center" >
-	<!-- TMPL_IF NAME="date_due" -->
-		<font color="<!-- TMPL_VAR NAME='color' -->"><!-- TMPL_VAR NAME="date_fin" --></font>
-		<!-- TMPL_IF NAME="CirculationEnabled" --> 
-       			<!-- TMPL_IF NAME="renew" --><br>
-				<a class="click" onClick="renovar(<!-- TMPL_VAR NAME='id3' -->);">Renovar</a>
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE --> 
+	[% IF date_due %]
+		<font color="<!-- TMPL_VAR NAME='color' -->">[% date_fin %]</font>
+		[% IF CirculationEnabled %]
+       			[% IF renew %]<br>
+				<a class="click" onClick="renovar([% id3 %]);">Renovar</a>
+			[% END %]
+		[% END %]
+	[% ELSE %]
 		- 
-	<!-- /TMPL_IF -->
+	[% END %]
 	</td>
   </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 <br>
-<!-- TMPL_ELSE -->
+[% ELSE %]
 	<p>No tiene ejemplares prestados.</p>
-<!-- /TMPL_IF -->
+[% END %]
 
 
 </td>

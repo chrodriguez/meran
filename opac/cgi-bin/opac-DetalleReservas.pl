@@ -4,20 +4,19 @@ require Exporter;
 
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Date;;
 use Date::Manip;
 use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name => "opac-DetalleReservas.tmpl",
-			     query => $input,
-			     type => "opac",
-			     authnotrequired => 0,
-			     flagsrequired => {borrow => 1},
-			     debug => 1,
+my ($template, $borrowernumber, $params)= get_template_and_user({
+									template_name => "opac-DetalleReservas.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 0,
+									flagsrequired => {borrow => 1},
+									debug => 1,
 			     });
 
 
@@ -59,13 +58,12 @@ foreach my $res (@$reserves) {
     	}
 }
 
-$template->param(	RESERVES => \@realreserves);
-$template->param(	reserves_count => $rcount);
-$template->param(	WAITING => \@waiting);
-$template->param(	waiting_count => $wcount,
-			LibraryName => C4::Context->preference("LibraryName"),
-			pagetitle => "Usuarios",
-);
-$template->param(CirculationEnabled => C4::Context->preference("circulation"));
+$params->{'RESERVES'}= \@realreserves;
+$params->{'reserves_count'}= $rcount;
+$params->{'WAITING'}= \@waiting;
+$params->{'waiting_count'}=$wcount;
+$params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$params->{'pagetitle'}= "Usuarios";
+$params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);
