@@ -385,7 +385,8 @@ print A "no hay usuario autenticado 392: \n";
 #modifica el session ID
                 $sessionID.="_".$branch;
 		$session->param('sessionID', $sessionID);
-		$session->expire('3m');
+# 		$session->expire('3m');
+		$session->expire(0);
 
 		if ($return) {
 			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
