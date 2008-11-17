@@ -1,28 +1,5 @@
 [% INCLUDE 'opac-top-login.inc' %]
 
-
-[% IF nopermission %]
-<!-- This is what is displayed if user doesnt have permission -->
-<h4>Disculpe, KOHA no cree que usted tenga permisos en esta p&aacute;gina.<h2>
-[% END %]
-
-[% IF timed_out %]
-<!-- This is what is displayed if Entrar has timed out -->
-<h4>Se vencio su sesi&oacute;n, por favor vuelva a ingresar.<h2>
-[% END %]
-
-[% IF different_ip %]
-<!-- This is what is displayed if user doesnt have permission -->
-<h4>Esta accediendo a Koha desde una IP diferente!! Por favor vuelva a ingresar<h2>
-[% END %]
-
-[% IF invalid_username_or_password %]
-<!-- This is what is displayed if user doesnt have permission -->
-<h4>Ingreso un nombre de usuario o una contrase&ntilde;a err&oacute;nea.<h2>
-[% END %]
-
-<!-- Entrar prompt time-->
-
 <div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'>[% mensaje %]</div></b></font></div>
 
 <table align="center" border="0" class="top" width="100%"><tr><td align="center">
@@ -31,9 +8,6 @@
 	<input type="hidden" name="userid">
 	<input type="hidden" name="password">
 	<input type="hidden" name="nroRandom">
-[% FOREACH INPUTS %]
-  <input type="hidden" name=[% name %] value=[% value %]>
-[% END %]
 </form>
 
 <script language="javascript">

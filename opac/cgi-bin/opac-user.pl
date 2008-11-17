@@ -14,7 +14,7 @@ use C4::AR::UpdateData;
 
 my $query = new CGI;
 
-my ($template, $borrowernumber, $params)= get_template_and_user({
+my ($template, $session, $params)= get_template_and_user({
 									template_name => "opac-user.tmpl",
 									query => $query,
 									type => "opac",
@@ -26,7 +26,7 @@ my ($template, $borrowernumber, $params)= get_template_and_user({
 
 my $dateformat = C4::Date::get_date_format();
 # get borrower information ....
-my ($borr, $flags) = getpatroninformation($borrowernumber,"");
+my ($borr, $flags) = getpatroninformation($session->param('borrowernumber'),"");
 
 $borr->{'city'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'city'});
 $borr->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'streetcity'});
@@ -50,7 +50,7 @@ $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 my $picturesDir= C4::Context->config("picturesdir");
 my $foto;
 if (opendir(DIR, $picturesDir)) {
-        my $pattern= $borrowernumber."[.].";
+        my $pattern= $session->param('borrowernumber')."[.].";
         my @file = grep { /$pattern/ } readdir(DIR);
         $foto= join("",@file);
         closedir DIR;
@@ -65,7 +65,7 @@ my $msgFoto=$query->param('msg');
 
 $borr->{'foto_name'} = $foto;
 $borr->{'mensaje_error_foto'} = $msgFoto;
-$borr->{'bornum'} = $borrowernumber;
+$borr->{'bornum'} = $session->param('borrowernumber');
 if (C4::Context->preference("UploadPictureFromOPAC") eq 'yes') {
 	$borr->{'UploadPictureFromOPAC'}=1;
 } else {
@@ -80,9 +80,9 @@ foreach my $aux (keys (%$borr)) {
 
 }
 
-$params->{'borrowernumber'}= $borrowernumber;
+$params->{'borrowernumber'}= $session->param('borrowernumber');
 
-my $sanc= hasSanctions($borrowernumber);
+my $sanc= hasSanctions($session->param('borrowernumber'));
 
 foreach my $san (@$sanc) {
 if ($san->{'id3'}) {

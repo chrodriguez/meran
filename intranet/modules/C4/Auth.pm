@@ -129,8 +129,7 @@ sub get_template_and_user {
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
 # 	my ($user, $sessionID, $flags)
 # 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
-	my ($session)
-		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my ($session)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
 # print A "desde: get_template_and_user \n";
 # print A "Se llamo a checkauth con: \n";
@@ -141,7 +140,7 @@ sub get_template_and_user {
 # 		$params->{'loggedinusername'}= $user;
 		$params->{'loggedinusername'}= $session->param('userid');
 # 		$params->{'sessionID'}= $sessionID;
-		$params->{'sessionID'}= $session->param('sessionID');
+# 		$params->{'sessionID'}= $session->param('sessionID');
 		$borrowernumber = getborrowernumber($session->param('userid'));
 		$session->param('borrowernumber',$borrowernumber);
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
@@ -150,7 +149,8 @@ sub get_template_and_user {
 # print A "get_template_and_user=> user ".$user."\n";
 # print A "get_template_and_user=> despues de getpatronnnnnr \n";
 # 		$template->param(USER_INFO => \@bordat);
-		$params->{'USER_INFO'}= \@bordat;	
+# 		$params->{'USER_INFO'}= \@bordat;
+		$session->param('USER_INFO', \@bordat);	
 # print A "get_template_and_user=> despues de USER_INFO\n";
 # print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
 	}
@@ -309,13 +309,13 @@ print A "la session EXPIRO\n";
 	$session->param('nroRandom', $random_number);
 	$session->param('time', $time);
 
-	my $template_name;
+# 	my $template_name;
 	my $url;
 	if ($type eq 'opac') {
-		$template_name = "opac-auth.tmpl";
+# 		$template_name = "opac-auth.tmpl";
 		$url= "/cgi-bin/opac/auth.pl";
 	} else {
-		$template_name = "auth.tmpl";
+# 		$template_name = "auth.tmpl";
 		$url= "/cgi-bin/koha/auth.pl";
 	}
 
@@ -361,10 +361,13 @@ print A "no hay usuario autenticado 392: \n";
 		my $random_number= $query->param('nroRandom');
 		#Se guarda la info en la session
 		$session->param('userid', $userid);
+		$session->param('loggedinusername')= $session->param('userid');
 		$session->param('password', $password);
 		$session->param('nroRandom', $random_number);
 		$session->param('type', $type); #OPAC o INTRA
 		$session->param('flagsrequired', $flagsrequired);
+		#$session->expire('3m');
+		$session->expire(0); #para Desarrollar, luego pasar a 3m
 		#--------------------------------------------
 
 		# Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
@@ -382,11 +385,11 @@ print A "no hay usuario autenticado 392: \n";
 			($return, $cardnumber,$branch) = checkpw($dbh,$userid,$password,$random_number);
 		}
 		#------------------------------------------------------------------------------
-#modifica el session ID
+		
+		#modifica el session ID
                 $sessionID.="_".$branch;
 		$session->param('sessionID', $sessionID);
-# 		$session->expire('3m');
-		$session->expire(0);
+
 
 		if ($return) {
 			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
@@ -500,11 +503,11 @@ print A "no hay usuario autenticado 392: \n";
 		  } else {
 		# The new password is requested
 	
-		   	if ($type eq 'opac') {
-                  	     $template_name = "opac-changepassword.tmpl";
-                  	} else {
-                  	     $template_name = "changepassword.tmpl";
-                  	}
+# 		   	if ($type eq 'opac') {
+#                   	     $template_name = "opac-changepassword.tmpl";
+#                   	} else {
+#                   	     $template_name = "changepassword.tmpl";
+#                   	}
 
 			## FIXME hay q redirigirlo a la ventana para cambiar el password
 			print A "1er EXIT \n";
@@ -523,9 +526,8 @@ print A "session->password: ".$session->param('password')."\n";
 print A "session->nroRandom: ".$session->param('nroRandom')."\n";
 print A "session->sessionID: ".$session->param('sessionID')."\n";
 print A "sessionID: ".$sessionID."\n";
-# $session->expire("1s");
 
-# 		return ($userid, $sessionID, $flags);
+
 		return ($session);
 	}
 	# else we have a problem...
@@ -544,12 +546,12 @@ my ($session) = @_;
 my $loggedin;
 $loggedin = 0;
 my $url;
-my $template_name;
+# my $template_name;
 if ($session->param('type') eq 'opac') {
-		$template_name = "opac-auth.tmpl";
+# 		$template_name = "opac-auth.tmpl";
 		$url= "/cgi-bin/koha/auth.pl";
 	} else {
-		$template_name = "auth.tmpl";
+# 		$template_name = "auth.tmpl";
 		$url= "/cgi-bin/koha/auth.pl";
 }
 
@@ -656,7 +658,6 @@ print A "CLIENT_REDIRECT\n";
 	}else{
 	#redirijo en el servidor
 print A "SERVER_REDIRECT\n";
-# 		if( $session->param('type') eq 'opac' ){$url= }
 		print ("Location: ".$url."\n\n");
 		exit;
 	}

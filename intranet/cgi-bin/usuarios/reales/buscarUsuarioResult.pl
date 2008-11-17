@@ -91,14 +91,4 @@ $params->{'member'}= $member;
 $params->{'cantidad'}= $cantidad;
 $params->{'paginador'}= $paginador;
 
-open(A, ">>/tmp/debug.txt");
-print A "desde buscar usuario result\n";
-print A "session->userid: ".$session->param('userid')."\n";
-print A "session->password: ".$session->param('password')."\n";
-print A "session->nroRandom: ".$session->param('nroRandom')."\n";
-print A "session->sessionID: ".$session->param('sessionID')."\n";
-print A "session->borrowernumber: ".$session->param('borrowernumber')."\n";
-print A "\n";
-close(A);
-
 C4::Auth::output_html_with_http_headers($input, $template, $params);

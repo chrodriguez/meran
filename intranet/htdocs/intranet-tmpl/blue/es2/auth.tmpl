@@ -12,29 +12,6 @@
 </head>
 <body>
 
-
-<!------------------------MENUS-------------------------------->
-
-[% IF nopermission %]
-<!-- This is what is displayed if user doesn't have permission -->
-<h2>Disculpe, Koha no cree que usted tenga permiso para esta p&aacute;gina.</h2>
-[% END %]
-
-[% IF timed_out %]
-<!-- This is what is displayed if login has timed out -->
-<h2>Disculpe, su sesi&oacute;n ha caducado. Por favor ingrese nuevamente</h2>
-[% END %]
-
-[% IF different_ip %]
-<!-- This is what is displayed if user's IP has changed -->
-<h2>Esta accediendo a Koha desde una direcci&oacute;n IP diferente! Por favor ingrese nuevamente.</h2>
-[% END %]
-
-[% IF invalid_username_or_password %]
-<!-- This is what is displayed if the username or password doesn't work -->
-<h2>Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.</h2>
-[% END %]
-
 <div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'>[% mensaje %]</div></b></font></div>
 
 <center>
@@ -44,11 +21,6 @@
         <input type="hidden" name="userid">
         <input type="hidden" name="password">
         <input type="hidden" name="nroRandom">
-
-[% FOREACH INPUTS %]
-	<input type="hidden" name=[% name %] value=[% value %]>
-[% END %]
-
 </form>
 
 <!--<form action=[% url %] method="post" name="datos">-->
