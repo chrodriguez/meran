@@ -361,7 +361,7 @@ print A "no hay usuario autenticado 392: \n";
 		my $random_number= $query->param('nroRandom');
 		#Se guarda la info en la session
 		$session->param('userid', $userid);
-		$session->param('loggedinusername')= $session->param('userid');
+		$session->param('loggedinusername',$session->param('userid'));
 		$session->param('password', $password);
 		$session->param('nroRandom', $random_number);
 		$session->param('type', $type); #OPAC o INTRA
