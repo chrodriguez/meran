@@ -1,26 +1,29 @@
-<!-- TMPL_IF NAME="sanctions" -->
+[% IF sanctions %]
       <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
         <tr>
             <td>
               <font class="fontmsg">El usuario est&aacute; sancionado para los tipos de pr&eacute;stamo:</font>
             </td>
           </tr>
-	<!-- TMPL_LOOP NAME="sanctions" -->
+	[% FOREACH sanctions %]
 	  <tr>
 	    <td>
-              <font class="fontmsg"><!-- TMPL_IF NAME="description" --><li><!-- TMPL_VAR NAME="description" --> - Desde el <!-- TMPL_VAR NAME="startdate" --> hasta el <!-- TMPL_VAR NAME="enddate" -->.<!-- /TMPL_IF --></font>
+              <font class="fontmsg">
+			[% IF description %]
+				<li>[% description %] - Desde el [% startdate %] hasta el [% enddate %].
+			[% END %]</font>
 	    </td>
 	  </tr>
-	<!-- /TMPL_LOOP -->
-	<!-- TMPL_IF  NAME="debts" -->
+	[% END %]
+	[% IF debts %]
 	<tr>
             <td>
               <font class="fontmsg">&iexcl;El usuario tiene libros VENCIDOS y por lo tanto no se le pueden realizar pr&eacute;stamos!</font>
             </td>
         </tr>
-	<!-- /TMPL_IF -->
+	[% END %]
       </table>
-<!-- /TMPL_IF -->
+[% END %]
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
@@ -36,65 +39,74 @@
 
 <table border="0" cellpadding="0" cellspacing="0"  width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
 		<td colspan="2">Informaci&oacute;n del usuario</td>
-		<td width="1%" valign="top" align="rigth"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td width="1%" valign="top" align="rigth"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
     	</tr>
 </table>
-<!--    	<tr>
+    	<tr>
 		<td width="1%">&nbsp;</td>
 		<td colspan="2" class="inputFontNormal">
-<!-- TMPL_LOOP name="borrower" -->
-		<input type="hidden" id="borrowernumber" value="<!-- TMPL_VAR name='borrowernumber' -->">
-		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> 
-		<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></a></b><br>
-		Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
-		Documento: Tipo:<b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><br>
-		Direcci&oacute;n:<b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --><!-- TMPL_VAR NAME="city" --></b><br>
- 		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><!-- TMPL_VAR NAME="emailaddress" --></a></b><br>
-		ID de usuario:<b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
-		Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categoria" --></b><br>
+[% FOREACH borrower %]
+		<input type="hidden" id="borrowernumber" value="[% borrowernumber %]">
+		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]"> 
+		[% firstname %] [% surname %]</a></b><br>
+		Tarjeta de identificaci&oacute;n: <b>[% cardnumber %]</b> <br>
+		Documento: Tipo:<b> [% documenttype %] </b>N&uacute;mero: <b>[% documentnumber %]</b><br>
+		Direcci&oacute;n:<b> [% streetaddress %], [% zipcode %][% city %]</b><br>
+ 		E-mail: <b><a href="mailto:[% emailaddress %]">[% emailaddress %]</a></b><br>
+		ID de usuario:<b> [% borrowernumber %]</b><br>
+		Categor&iacute;a del usuario: <b>[% categoria %]</b><br>
         	</td>
 		<td width="1%">&nbsp;</td>
     	</tr>
 
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>-->
 
 <div id="datosUsuario">
 	<div class="vcard">
 	
-	<!-- TMPL_LOOP name="borrower" -->
-		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber' -->"> 
-		<span class="fn"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></span></a></b><br>
-		Tarjeta de identificaci&oacute;n: <b><!-- TMPL_VAR name="cardnumber" --></b> <br>
-		Documento: Tipo: <b> <!-- TMPL_VAR NAME="documenttype" --> </b>N&uacute;mero: <b><!-- TMPL_VAR NAME="documentnumber" --></b><br>
-		Direcci&oacute;n: <b> <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --><!-- TMPL_VAR NAME="city" --></b><br>
-		E-mail: <b><a href="mailto:<!-- TMPL_VAR NAME='emailaddress' -->"><span class="email"><!-- TMPL_VAR NAME="emailaddress" --></span></a></b><br>
-		ID de usuario: <b> <!-- TMPL_VAR NAME="borrowernumber" --></b><br>
-		Categor&iacute;a del usuario: <b><!-- TMPL_VAR NAME="categoria" --></b><br>
+	[% FOREACH borrower %]
+		Nombre y apellido: 
+		   <b>
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber %]"> 
+				<span class="fn">[% firstname %] [% surname %]</span>
+			</a>
+		   </b>
+			<br>
+		Tarjeta de identificaci&oacute;n: <b>[% cardnumber %]</b> <br>
+		Documento: Tipo: <b> [% documenttype %] </b>N&uacute;mero: <b>[% documentnumber %]</b><br>
+		Direcci&oacute;n: <b> [% streetaddress %], [% zipcode %][% city %]</b><br>
+		E-mail: <b><a href="mailto:[% emailaddress %]">
+				<span class="email">[% emailaddress %]</span>
+			   </a>
+			</b>
+			<br>
+		ID de usuario: <b> [% borrowernumber %]</b><br>
+		Categor&iacute;a del usuario: <b>[% categoria %]</b><br>
 	
-		<!-- TMPL_IF NAME="contactname" -->
-		Contacto Alternativo: <b> <!-- TMPL_VAR NAME="contactname" --></b><br>
-		<!-- /TMPL_IF -->
+		[% IF contactname %]
+		Contacto Alternativo: <b> [% contactname %]</b><br>
+		[% END %]
 	
-		<!-- TMPL_IF NAME="phone" -->
+		[% IF phone %]
 		<div class="tel">
-			<span class="type">Tel&eacute;fono:</span> <b><!-- TMPL_VAR NAME="phone" --></b><br>
+			<span class="type">Tel&eacute;fono:</span> <b>[% phone %]</b><br>
 		</div>	
-		<!-- /TMPL_IF -->
+		[% END %]
 	
-		<!-- TMPL_IF NAME="altphone" -->
+		[% IF altphone %]
 		<div class="tel">
-			<span class="type">Tel&eacute;fono Alt:</span> <b><!-- TMPL_VAR NAME="altphone" --></b><br>
+			<span class="type">Tel&eacute;fono Alt:</span> <b>[% altphone %]</b><br>
 		</div>	
-		<!-- /TMPL_IF -->
+		[% END %]
 		
-		<!-- TMPL_IF NAME="altrelationship" -->
-			Relaci&oacute;n: <b> <!-- TMPL_VAR NAME="altrelationship" --></b><br>
-		<!-- /TMPL_IF -->
+		[% IF altrelationship %]
+			Relaci&oacute;n: <b> [% altrelationship %]</b><br>
+		[% END %]
 	
-	<!-- /TMPL_LOOP -->
+	[% END %]
 	</div> <!--end vcard-->
 </div>  
 

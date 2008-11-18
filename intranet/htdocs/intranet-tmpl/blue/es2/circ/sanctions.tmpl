@@ -1,6 +1,6 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<!-- TMPL_IF NAME="superlibrarian" -->
+[% IF superlibrarian %]
 <script language=javascript>
 function todos(){
 	var checks=document.getElementsByTagName("input");
@@ -14,7 +14,7 @@ function todos(){
 	}
 }
 </script>
-<!-- /TMPL_IF -->
+[% END %]
 
 <center>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -29,16 +29,16 @@ function todos(){
 <br>
 <table border="0" cellpadding="0" cellspacing="0" width="99%">
 	<tr class="tablaresultadoTitle">
-  		<td width="1%" align="left" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+  		<td width="1%" align="left" valing="top"><img src="[% interface %]/[% theme %]/images/izquierda.png"></td>
   
-  <!-- TMPL_IF NAME="superlibrarian" -->
+  [% IF superlibrarian %]
   <form name="f1" id="f1" action=deletesanctions.pl method=post>
-  <input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME='loggedinusername' -->">
-  <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME='responsable' -->">
+  <input type="hidden" name="userloggedname" value="[% loggedinusername %]">
+  <input type="hidden" name="borrowernumber" value="[% responsable %]">
 
   
-  		<td align="center"><a href="#" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n"  border=0></a></td>
-  <!-- /TMPL_IF -->
+  		<td align="center"><a href="#" onclick="todos();"><img src="[% themelang %]/images/check.png" title="Invertir la selecci&oacute;n"  border=0></a></td>
+  [% END %]
   
 		<td><a href="sanctions.pl?orden=cardnumber">Tarjeta de Id.</a></td>
   		<td><a href="sanctions.pl?orden=surname">Apellido</a></td>
@@ -48,42 +48,42 @@ function todos(){
   		<td><a href="sanctions.pl?orden=issuecodedescription">Tipo de pr&eacute;stamo</a></td>
   		<td><a href="sanctions.pl?orden=startdate">Fecha inicio</a></td>
   		<td><a href="sanctions.pl?orden=enddate">Fecha fin</a></td>
-  		<td width="1%" align="right" valing="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+  		<td width="1%" align="right" valing="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 	</tr>
-  <!-- TMPL_LOOP NAME="sanctionsloop" -->
-    <tr align="center">
-	<td width="1%" class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
-
-	<!-- TMPL_IF NAME="superlibrarian" -->
-	<td class="<!-- TMPL_VAR NAME=clase -->">
-	<input class="inputFontNormal" type="checkbox"  name="check_group_<!-- TMPL_VAR Name='sanctionnumber' -->">
-	</td>
-	<!-- /TMPL_IF -->
-
-	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=cardnumber --></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=firstname --></a></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=studentnumber --></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><!-- TMPL_VAR NAME=categorydescription --></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->">
-		<!-- TMPL_IF NAME=issuecodedescription -->
-			<!-- TMPL_VAR NAME=issuecodedescription -->
-		<!-- TMPL_ELSE -->
-			Reserva no retirada
-		<!-- /TMPL_IF -->
-	</td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'><!-- TMPL_VAR NAME="startdate"--></font></td>
-	<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'><!-- TMPL_VAR NAME="enddate"--></font></td>
-	<td width="1%" class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
-    </tr>
-  <!-- /TMPL_LOOP -->
+  [% FOREACH sanctionsloop %]
+	<tr align="center">
+		<td width="1%" class="[% clase %]">&nbsp;</td>
+	
+		[% IF superlibrarian %]
+			<td class="[% clase %]">
+			<input class="inputFontNormal" type="checkbox"  name="check_group_[% sanctionnumber %]">
+			</td>
+		[% END %]
+	
+		<td class="[% clase %]"><[% cardnumber %]</td>
+		<td class="[% clase %]"><a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</td>
+		<td class="<!-- TMPL_VAR NAME=clase -->">[% firstname %]</a></td>
+		<td class="<!-- TMPL_VAR NAME=clase -->">[% studentnumber %]</td>
+		<td class="<!-- TMPL_VAR NAME=clase -->">[% categorydescription %]</td>
+		<td class="<!-- TMPL_VAR NAME=clase -->">
+			[% IF issuecodedescription %]
+				[% issuecodedescription %]
+			[% ELSE %]
+				Reserva no retirada
+			[% END %]
+		</td>
+		<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'>[% startdate %]</font></td>
+		<td class="<!-- TMPL_VAR NAME=clase -->"><font color='red'>[% enddate %]</font></td>
+		<td width="1%" class="[% clase %]">&nbsp;</td>
+	</tr>
+  [% END %]
     <tr>
 	<td colspan="10" class="par">&nbsp;</td>
     </tr>
-<!-- TMPL_IF Name="superlibrarian" -->
-<tr><td colspan="10" align="center" class="par">
-<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/edittrash.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrar las sanciones?')) {document.getElementById('act').value='delete';this.f1.submit();} else {return false;}" title="Borrar Sanciones">
-</td></tr>
-<!-- /TMPL_IF  -->
+[% IF superlibrarian %]
+	<tr><td colspan="10" align="center" class="par">
+	<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% interface %]/[% themelang %]/images/edittrash.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrar las sanciones?')) {document.getElementById('act').value='delete';this.f1.submit();} else {return false;}" title="Borrar Sanciones">
+	</td></tr>
+[% END %]
 </table>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

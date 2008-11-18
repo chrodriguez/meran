@@ -29,5 +29,4 @@ $resultBorrower[0]=C4::AR::Usuarios::getBorrowerInfo($borrnumber);
 
 $params->{'borrower'}= \@resultBorrower;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);t;
-
+C4::Auth::output_html_with_http_headers($input, $template, $params);

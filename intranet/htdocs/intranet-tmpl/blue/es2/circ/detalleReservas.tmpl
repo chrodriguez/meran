@@ -1,7 +1,7 @@
-
+[% USE HTML %]
 <br>
 
-<b>El usuario tiene <!-- TMPL_VAR NAME="reserves_count" --> ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
+<b>El usuario tiene [% reserves_count %] ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 <br>
 
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
@@ -15,10 +15,10 @@
 
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
 		</td>
 		<td>
-			<input type="image" id="checkAllReservas" src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Seleccionar todos">
+			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="Seleccionar todos">
 		</td>
 		<td>T&iacute;tulo</td>
 		<td>Autor</td>
@@ -28,69 +28,69 @@
 		<td>&nbsp;</td>
 
 		<td width="1%" align="right" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+			<img src="[% interface %]/[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
-<!-- TMPL_LOOP NAME="RESERVES" -->
+[% FOREACH RESERVES %]
 	<tr align="center" class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			<input type="checkbox" name="chkboxReservas" value="<!-- TMPL_VAR NAME='rid3' -->" id="<!-- TMPL_VAR NAME='rid3' -->">
+			<input type="checkbox" name="chkboxReservas" value="[% rid3 %]" id="[% rid3 %]">
 		</td>
 		<td>
-			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-				<!-- TMPL_IF NAME="runititle" -->
-					:&nbsp;<!-- TMPL_VAR NAME="runititle" -->
-			<!-- /TMPL_IF -->
+			[% HTML.escape(rtitulo) %]
+				[% IF runititle %]
+					:&nbsp;[% runititle %]
+				[% END %]
 		</td>
 		<td>
-			<!-- TMPL_IF NAME="rautor" -->
-				<!-- TMPL_VAR NAME="nomCompleto" -->
-			<!-- TMPL_ELSE -->
+			[% IF rautor %]
+				[% nomCompleto %]
+			[% ELSE %]
 				&nbsp;
-			<!-- /TMPL_IF -->
+			[% END %]
 		</td>
 		<td>
-			<!-- TMPL_IF NAME="redicion" -->
-				<!-- TMPL_VAR NAME="redicion" -->
-			<!-- TMPL_ELSE -->
+			[% IF redicion %]
+				[% redicion %]
+			[% ELSE %]
 				&nbsp;
-			<!-- /TMPL_IF -->
+			[% END %]
 		</td>
 		<td>
-			<!-- TMPL_IF name="rnotificationdate" -->
-				<!-- TMPL_VAR NAME="rnotificationdate" -->
-			<!-- TMPL_ELSE -->
+			[% IF rnotificationdate %]
+				[% rnotificationdate %]
+			[% ELSE %]
 				&nbsp;
-			<!-- /TMPL_IF -->
+			[% END %]
 		</td>
 		<td>
-			<!-- TMPL_VAR name="rreminderdate" -->
+			[% rreminderdate %]
 		</td>
 		<td align="middle"> 
 	       		<input type="image" name="cancel"  value="cancelar" 
-			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
-			onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
+			src="[% interface %]/[% themelang %]/images/borrar.png" 
+			onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
-<!-- TMPL_IF NAME="reserves_count" -->
+[% IF reserves_count %]
 	<p colspan="10" class="inputFontNormal" align=center>
 		<input type="image" name="borrowD"  value="prestar" 
-		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" 
+		src="[% interface %]/[% themelang %]/images/item-prestar.png" 
 		title="Realizar pr&eacute;stamo" 
 		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
-<!-- /TMPL_IF -->
+[% END %]
 
 
 
 <br>
-<b>El usuario tiene <!-- TMPL_VAR NAME="waiting_count" --> reserva(s) en espera.</b>
+<b>El usuario tiene [% waiting_count %] reserva(s) en espera.</b>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="">
 	<tr>
 		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS</b></td>
@@ -99,7 +99,7 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
 		</td>
 
 		<td>T&iacute;tulo</td>
@@ -109,43 +109,43 @@
 		<td>&nbsp;</td>
 
 		<td width="1%" align="right" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+			<img src="[% interface %]/[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-	<!-- TMPL_LOOP NAME="WAITRESERVES" -->
-	<tr valign="top" class="inputFontNormal">
-		<td width="1%">&nbsp;</td>
-                <td>
-			<!-- TMPL_VAR NAME="rtitulo" ESCAPE=HTML -->
-			<!-- TMPL_IF NAME="runititle" -->
-				:&nbsp;
-				<!-- TMPL_VAR NAME="runititle" -->
-			<!-- /TMPL_IF -->
-		</td>
-                <td>
-			<!-- TMPL_IF NAME="rautor" -->
-				<!-- TMPL_VAR NAME="nomCompleto" -->
-			<!-- TMPL_ELSE -->
-				&nbsp;
-			<!-- /TMPL_IF -->
-		</td>
-                <td>
-			<!-- TMPL_IF NAME="redicion" -->		
-				<!-- TMPL_VAR NAME="redicion" -->
-			<!-- TMPL_ELSE -->
-				&nbsp;
-			<!-- /TMPL_IF -->
-		</td>
-		<td>
-			<input type="image" name="cancel"  value="cancelar" 
-			src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" 
-			onClick="cancelarReserva('<!-- TMPL_VAR NAME=reservenumber -->')" title="Cancelar">
-		</td>
-		<td width="1%">&nbsp;</td>
-		<td width="1%">&nbsp;</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
+	[% FOREACH WAITRESERVES %]
+		<tr valign="top" class="inputFontNormal">
+			<td width="1%">&nbsp;</td>
+			<td>
+				[% HTML.escape(rtitulo) %]
+				[% IF runititle %]
+					:&nbsp;
+					[% runititle %]
+				[% END %]
+			</td>
+			<td>
+				[% IF rautor %]
+					[% nomCompleto %]
+				[% ELSE %]
+					&nbsp;
+				[% END %]
+			</td>
+			<td>
+				[% IF redicion %]		
+					[% redicion %]
+				[% ELSE %]
+					&nbsp;
+				[% END %]
+			</td>
+			<td>
+				<input type="image" name="cancel"  value="cancelar" 
+				src="[% interface %]/[% themelang %]/images/borrar.png" 
+				onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
+			</td>
+			<td width="1%">&nbsp;</td>
+			<td width="1%">&nbsp;</td>
+		</tr>
+	[% END %]
 </table>
 
 <br>

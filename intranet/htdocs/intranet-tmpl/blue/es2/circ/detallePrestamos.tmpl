@@ -1,4 +1,5 @@
 
+[% USE HTML %]
 <table class="tablaPrestamos" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
         <tr>
 		<td colspan="10" align="center" class="inputFontNormal">
@@ -7,12 +8,12 @@
      	</tr>
 	<tr class="tablaresultadoTitle">
         	<td width="1%" align="left" valign="top">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		<img src="[% interface %]/[% themelang %]/images/izquierda.png">
 		</td>
 
 		<td>
 			<a class="click" id="checkAllPrestamos">
-			<img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" 
+			<img 	src="[% themelang %]/images/check.png" border="0" 
 				title="Invertir la selecci&oacute;n">
 			</a>
 		</td>
@@ -25,51 +26,54 @@
                 <td>Tipo</td>
 
         	<td width="1%" align="rigth" valign="top">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		<img src="[% interface %]/[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
-        <!-- TMPL_LOOP name="issues" -->
+        [% FOREACH issues %]
 	<tr class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			 <input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='id3' -->" id="<!-- TMPL_VAR NAME='id3' -->">
+			 <input type="checkbox" name="chkboxPrestamos" value="[% id3 %]" id="[% id3 %]">
 		</td>
                 <td>
-			<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML -->
-			<!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->
+			[% HTML.escape(titulo) %]
+			[% IF unititle %]
+				:&nbsp;[% unititle %]
+			[% END %]
 		</td>
             	<td>
-			<!-- TMPL_VAR NAME="autor" -->
+			[% autor %]
 		</td>
             	<td align="center">
-            		<a class="inputFontNormal" href="/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME='id1' -->"><!-- TMPL_VAR NAME="barcode" --></a>
+            		<a class="inputFontNormal" href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% id1 %]">
+				[% barcode %]</a>
                 </td>
           	<td align="center">
-			<!-- TMPL_VAR NAME="date_due" -->
+			[% date_due %]
 		</td>
            	<td align="center">
-                 	<font  color="<!-- TMPL_VAR name='color' -->">
-                	<!-- TMPL_VAR NAME="date_fin" -->
+                 	<font  color="[% color %]">
+                	[% date_fin %]
                		</font>
                	</td>
           	<td  align="center">
-			<!-- TMPL_VAR NAME="issuetype" -->
+			[% issuetype %]
 		</td>
         	<td width="1%">&nbsp;</td>
 	</tr>
-        <!-- /TMPL_LOOP -->
+        [% END %]
 </table>
 
-<!-- TMPL_IF NAME="cantIssues" -->
-<center>
-	<input type="image" 
-		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" 
-		title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
-
-	<input 	type="image" 
-		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" 
-		title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
-</center>
-<!-- /TMPL_IF -->
+[% IF cantIssues %]
+	<center>
+		<input type="image" 
+			src="[% interface %]/[% themelang %]/images/item-return.png" 
+			title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
+	
+		<input 	type="image" 
+			src="[% interface %]/[% themelang %]/images/renew.png" 
+			title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
+	</center>
+[% END %]
 
 <br>

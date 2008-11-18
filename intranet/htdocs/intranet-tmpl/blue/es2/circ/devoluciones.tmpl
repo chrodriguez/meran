@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
@@ -14,11 +14,11 @@ $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos,updateInfoPrestamos);
 /*
-	if('<!-- TMPL_VAR NAME=usuarioID -->' != ""){
+	if('[% usuarioID %]' != ""){
 		usuario= new object_usuario();
-		usuario.text= '<!-- TMPL_VAR NAME=usuarioText -->';
-		usuario.ID= '<!-- TMPL_VAR NAME=usuarioID -->';
-		$('#usuarioAutocomplete').val('<!-- TMPL_VAR NAME=usuarioText -->');
+		usuario.text= '[% usuarioText %]';
+		usuario.ID= '[% usuarioID %]';
+		$('#usuarioAutocomplete').val('[% usuarioText %]');
 		detalleUsuario(usuario.ID);
 		detallePrestamos(usuario.ID,updateInfoPrestamosConChck);
 
@@ -43,11 +43,11 @@ function updateInfoPrestamosConChck(responseText){
 	$('#tablaPrestamos').html(responseText);
  	zebra('tablaPrestamos');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');
-	<!-- TMPL_LOOP NAME=array -->
-		var chk=$("#"+<!-- TMPL_VAR NAME=id3 -->)[0];
+	[% FOREACH array %]
+		var chk=$("#"+[% id3 %])[0];
 		chk.checked=true;
-	<!-- /TMPL_LOOP -->
-	realizarAccion('<!-- TMPL_VAR NAME=accion -->','chkboxPrestamos',generaDivDevRen);
+	[% END %]
+	realizarAccion('[% accion %]','chkboxPrestamos',generaDivDevRen);
 }
 */
 
@@ -72,13 +72,13 @@ function updateInfoPrestamosConChck(responseText){
 <table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
 	<tr class="tablaresultadoTitle">
 		<td align="left" valign="top">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		<img src="[% interface %]/[% themelang %]/images/izquierda.png">
 		</td>
 		<td>
 			<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
 		</td>
 		<td valign="top" align="right">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		<img src="[% interface %]/[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 	<tr><td colspan="3">&nbsp;</td></tr>
@@ -106,4 +106,4 @@ function updateInfoPrestamosConChck(responseText){
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos"></div>
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

@@ -10,13 +10,12 @@ use Date::Manip;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user
-    ({
-	template_name	=> 'circ/detallePrestamos.tmpl',
-	query		=> $input,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
+my ($template, $session, $params) =  get_template_and_user ({
+			template_name	=> 'circ/detallePrestamos.tmpl',
+			query		=> $input,
+			type		=> "intranet",
+			authnotrequired	=> 0,
+			flagsrequired	=> { circulate => 1 },
     });
 
 my $obj=$input->param('obj');
@@ -44,11 +43,9 @@ foreach my $it (keys %$issueslist) {
 
 my $cantIssues=scalar(@issues);
 
-$template->param(
-	issues     	=> \@issues,
-	cantIssues 	=> $cantIssues,
-	borrowernumber  => $borrnumber
-);
+$params->{'issues'}= \@issues;
+$params->{'cantIssues'}= $cantIssues;
+$params->{'borrowernumber'}= $borrnumber;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 
