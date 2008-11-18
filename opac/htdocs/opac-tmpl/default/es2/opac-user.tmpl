@@ -23,6 +23,7 @@
 	</b></font>
 </div>
 
+Test I18N: [% "2 years" | i18n %]
 
 <!-- Tabla de Sanciones -->
 <table width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
@@ -73,31 +74,31 @@
 	<table align="center" cellpadding="5" cellspacing="0" border="0" width="100%" valign="top">
 	<tr>
 		<td class="bordetabla" align="Center">
-		<b>Datos del usuario:</b></td>
+		<b>[% "Datos del usuario:" | i18n %]</b></td>
 	</tr>
 	[% IF foto_name %]
 	<tr>
 		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/[% foto_name %]"></td>
 	</tr>
 	[% END %]
-<tr><td class="impar" >Tarjeta de la biblioteca: <b>[% cardnumber %]</b> </td></tr>
-<tr><td class="impar" >Apellido y nombres: <b>[% surname %] [% firstname %] </b></td></tr>
-<tr><td class="impar" > Documento: <b> [% documenttype %]  [% documentnumber %]</b></td></tr>
+<tr><td class="impar" >[% "Tarjeta de la biblioteca:" | i18n %]<b>[% cardnumber %]</b> </td></tr>
+<tr><td class="impar" >[% "Apellido y nombres:" | i18n %]<b>[% surname %] [% firstname %] </b></td></tr>
+<tr><td class="impar" >[% "Documento:" | i18n %]<b> [% documenttype %]  [% documentnumber %]</b></td></tr>
 [% IF studentnumber %]
-<tr><td class="impar" >Legajo: <b>[% studentnumber %]</b> </td></tr>
+<tr><td class="impar" >[% "Legajo:" | i18n %] <b>[% studentnumber %]</b> </td></tr>
 [% END %]
-<tr><td class="impar" >Categor&iacute;a: <b>[% cat %]</b> </td></tr>
+<tr><td class="impar" >[% "Categor&iacute;a:" | i18n %] <b>[% cat %]</b> </td></tr>
 [% IF streetaddress %]
-<tr><td class="impar" >Direcci&oacute;n: <b>[% streetaddress %],[% city %]</b></td></tr>
+<tr><td class="impar" >[% "Direcci&oacute;n:" | i18n %] <b>[% streetaddress %],[% city %]</b></td></tr>
 [% END %]
 [% IF physstreet %]
-<tr><td class="impar" >Domicilio y localidad de origen: <b>[% physstreet %], [% streetcity %]</b></td></tr>
+<tr><td class="impar" >[% "Domicilio y localidad de origen:" | i18n %] <b>[% physstreet %], [% streetcity %]</b></td></tr>
 [% END %]
 [% IF phone %]
-<tr><td class="impar" >Tel&eacute;fono: <b>[% phone %]</b></td></tr>
+<tr><td class="impar" >[% "Tel&eacute;fono:" | i18n %] <b>[% phone %]</b></td></tr>
 [% END %]
 [% IF emailaddress %]
-<tr><td class="impar" >Mail: <b>[% emailaddress %]</b></td></tr>
+<tr><td class="impar" >[% "Mail:" | i18n %] <b>[% emailaddress %]</b></td></tr>
 [% END %]
 <tr><td class="impar" >&nbsp;</td></tr>
 <!--Esto es un agregado de Einar para validar el tema de los usuarios que puedan ser locales o no, o sea que la biblioteca`pueda o no cambiar los datos de los alumnos, dependera de la variable Guarani que ira en el system preferences de Koha--> 	

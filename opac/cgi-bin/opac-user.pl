@@ -25,6 +25,9 @@ my ($template, $session, $params)= get_template_and_user({
 
 
 my $dateformat = C4::Date::get_date_format();
+
+$session->param('lang', $query->param('lang_server') );
+
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation($session->param('borrowernumber'),"");
 

@@ -34,6 +34,8 @@ use C4::Context;
 use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
 use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
 use Template;
+use Template::Filters;
+use C4::AR::Filtros;
 
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -124,6 +126,11 @@ sub gettemplate {
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 =cut
 # print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
+	my $filter= Template::Filters->new({
+						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n	},
+					});
+
+
 	my $template = Template->new({
 					INCLUDE_PATH => [
 								"$htdocs/$theme/$lang/$tmplbase",
@@ -132,6 +139,7 @@ sub gettemplate {
 							],
  					ABSOLUTE => 1,
 					EVAL_PERL => 1,
+					LOAD_FILTERS => [ $filter ],
 # 					RELATIVE => 1,
 					});	
 

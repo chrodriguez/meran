@@ -281,13 +281,13 @@ print A "desde checkauth \n";
 print A "sessionID 279: ".$sessionID."\n";
 
 
-# my $key;
-# print A "\n";
-# print A "SE IMPRIME ENV: \n";
-#    foreach $key (sort keys(%ENV)) {
-#       print A "$key = $ENV{$key} \n";
-#    } 
-# print A "\n";
+my $key;
+print A "\n";
+print A "SE IMPRIME ENV: \n";
+   foreach $key (sort keys(%ENV)) {
+      print A "$key = $ENV{$key} \n";
+   } 
+print A "\n";
 
 	if ( $session->is_expired ) {
 print A "la session EXPIRO\n";
@@ -366,6 +366,7 @@ print A "no hay usuario autenticado 392: \n";
 		$session->param('nroRandom', $random_number);
 		$session->param('type', $type); #OPAC o INTRA
 		$session->param('flagsrequired', $flagsrequired);
+# 		$session->param('locale', 'es_ES');
 		#$session->expire('3m');
 		$session->expire(0); #para Desarrollar, luego pasar a 3m
 		#--------------------------------------------

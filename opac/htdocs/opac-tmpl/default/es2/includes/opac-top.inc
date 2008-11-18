@@ -22,14 +22,23 @@ function swap(id,src){
 	document.getElementById(id).src=src;
 }
 
+function cambiarIdioma() {
+	$('#lang_server').val($('#language').val());
+	$('#formLang').submit();
+}
+
 </script>
 
 <body>
+<form id="formLang" action="/cgi-bin/koha/opac-user.pl">
+	<input id="lang_server" name="lang_server" type="hidden" value="">
+</form>
+
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
 <tr>
 [% IF loggedinusername %]
         <td align="left" valign="middle">
-  	&nbsp;Ingres&oacute; como:<b> [% loggedinusername %]</b>
+  	[% "&nbsp;Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
 
 	<a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
 		onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
@@ -43,6 +52,12 @@ function swap(id,src){
        </td>
 [% END %]
 </tr>
+<tr>
+	<select id="language" onChange="cambiarIdioma()">
+		<option value="es_ES">ES</option>
+		<option value="en_EN">EN</option>
+	</select>
+<tr>
 <tr><td>&nbsp; </td></tr>
 <tr>
 	<td align="center">
