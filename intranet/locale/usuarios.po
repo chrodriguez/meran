@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2008-11-12 11:06-0300\n"
+"PO-Revision-Date: 2008-11-18 14:08-0300\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:131
+#, c-format
+msgid "<a1> A |</a> <a2> B |</a> <a3> C |</a> <a4> D |</a> <a5> E |</a> <a6> F |</a> <a7> G |</a> <a8> H |</a> <a9> I |</a> <a10> J |</a> <a11> K |</a> <a12> L |</a> <a13> M |</a> <a14> N |</a> <a15> O |</a> <a16> P |</a> <a17> Q |</a> <a18> R |</a> <a19> S |</a> <a20> T |</a> <a21> U |</a> <a22> V |</a> <a23> W |</a> <a24> X |</a> <a25> Y |</a> <a26> Z |</a> <a27> TODOS </a>"
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:101
+msgid "B&uacute;squeda de Usuarios Reales"
+msgstr ""
+
+#. INPUT type=image
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:118
+msgid "Limpiar"
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:124
+msgid "Tipear el apellido, DNI o legajo del usuario. Presionar buscar."
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:97
+msgid "[% END %]"
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:165
+msgid "[% INCLUDE \"intranet-bottom.inc\" %]"
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:1
+msgid "[% INCLUDE 'intranet-top.inc' %]"
+msgstr ""
+
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:94
+msgid "Hello, world!"
+msgstr "Hola, Mundo"
+
+#. INPUT type=text name=member
+#: /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl:113
+#, fuzzy
+msgid "[% member %]"
+msgstr ""
+
