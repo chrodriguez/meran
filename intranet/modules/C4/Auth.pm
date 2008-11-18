@@ -362,7 +362,6 @@ print A "no hay usuario autenticado 392: \n";
 		#Se guarda la info en la session
 		$session->param('userid', $userid);
 		$session->param('loggedinusername',$session->param('userid'));
-# 		$session->param('loggedinusername')= $session->param('userid'); ASI ESTABA, NO SE PUEDE HACER ESTO
 		$session->param('password', $password);
 		$session->param('nroRandom', $random_number);
 		$session->param('type', $type); #OPAC o INTRA
