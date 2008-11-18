@@ -23,7 +23,7 @@ function imprimir(){
 </table>
 
 	<form name="info" id="info" action="/cgi-bin/koha/usuarios/prestamoInterBiblio.pl">
-		<input type="hidden" name="bornum" id="bornum" value="<!-- TMPL_VAR NAME=bornum -->">
+		<input type="hidden" name="bornum" id="bornum" value="[% bornum %]">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
 		<input type="hidden" name="autores" id="autores">
 		<input type="hidden" name="titulos" id="titulos" />
@@ -35,7 +35,7 @@ function imprimir(){
 			Biblioteca:
 		</td>
 		<td colspan="2">
-			<!-- TMPL_VAR NAME=bibliotecas -->
+			[% bibliotecas %]
 		</td>
 	</tr>
 	<tr>
@@ -87,7 +87,7 @@ function imprimir(){
 	<tr>
 		<td align=center colspan="3">
 			<br><br>
-			<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png"  onClick="imprimir()"  value="imprimir">
+			<input type="image" src="[% themelang %]/images/pdf.png"  onClick="imprimir()"  value="imprimir">
 		</td>
 	</tr>
 </table>

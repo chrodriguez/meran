@@ -74,13 +74,14 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
 
-	my ($template, $loggedinuser, $cookie)= get_template_and_user({	template_name => "usuarios/reales/permisos-usuario.tmpl",
+	my ($template, $session, $params) = get_template_and_user({
+									template_name => "usuarios/reales/permisos-usuario.tmpl",
 									query => $input,
 									type => "intranet",
 									authnotrequired => 0,
-									flagsrequired => $flagsrequired,
+									flagsrequired => {borrowers => 1},
 									debug => 1,
-				});
+			    });
 
 
 	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
@@ -104,14 +105,12 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 		push @loop, \%row;
 	}
 
-	$template->param(	
-  				surname => $bor->{'surname'},
-  				firstname => $bor->{'firstname'},
-				loop => \@loop
-		);
-	
-	print $input->header;
-	print  $template->output;
+	$params->{'surname'}= $bor->{'surname'};
+  	$params->{'firstname'}= $bor->{'firstname'};
+	$params->{'loop'}= \@loop;
+
+# 	print $session->header;
+	C4::Auth::output_html_with_http_headers($input, $template, $params);
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")
 
@@ -171,20 +170,14 @@ Se genra la ventana para modificar los datos del usuario
 =cut
 elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
-# 	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
-# 						template_name => "usuarios/reales/agregarUsuario.tmpl",
-# 						query => $input,
-# 						type => "intranet",
-# 						authnotrequired => 0,
-# 						flagsrequired => {borrowers => 1},
-# 						debug => 1,
-# 	});
-
-	my $input = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
-				ABSOLUTE => 1,
-
-			  });
-	my $template = "agregarUsuario.tmpl";
+	my ($template, $session, $params) = get_template_and_user({
+									template_name => "usuarios/reales/agregarUsuario.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
 
 	my $borrowernumber =$obj->{'borrowernumber'};
 
@@ -200,57 +193,51 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	#se genera el combo de las bibliotecas
 	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches($datosBorrower_hashref->{'branchcode'});
 
-	my $param={	
+	$params->{'document'}= $comboDeTipoDeDoc;
+	$params->{'catcodepopup'}= $comboDeCategorias;
+	$params->{'CGIbranch'}= $comboDeBranches;
+	$params->{'changepassword'}= $datosBorrower_hashref->{'changepassword'};
+	$params->{'type'}= $datosBorrower_hashref->{'type'};
+	$params->{'physstreet'}= $datosBorrower_hashref->{'physstreet'};
+	$params->{'firstname'}= $datosBorrower_hashref->{'firstname'};
+	$params->{'surname'}= $datosBorrower_hashref->{'surname'};
+	$params->{'streetaddress'}= $datosBorrower_hashref->{'streetaddress'};
+	$params->{'zipcode'}= $datosBorrower_hashref->{'zipcode'};
+	$params->{'dstreetcity'}= $datosBorrower_hashref->{'streetcity'};
+	$params->{'homezipcode'}= $datosBorrower_hashref->{'homezipcode'};
+	$params->{'city'}= $datosBorrower_hashref->{'city'};
+	$params->{'dcity'}= $datosBorrower_hashref->{'dcity'};
+	$params->{'phone'}= $datosBorrower_hashref->{'phone'};
+	$params->{'phoneday'}= $datosBorrower_hashref->{'phoneday'};
+	$params->{'emailaddress'}= $datosBorrower_hashref->{'emailaddress'};
+	$params->{'borrowernotes'}= $datosBorrower_hashref->{'borrowernotes'};
+	$params->{'documentnumber'}= $datosBorrower_hashref->{'documentnumber'};
+	$params->{'studentnumber'}= $datosBorrower_hashref->{'studentnumber'};
+	$params->{'dateenrolled'}= $datosBorrower_hashref->{'dateenrolled'};
+	$params->{'expiry'}= $datosBorrower_hashref->{'expiry'};
+	$params->{'cardnumber'}= $datosBorrower_hashref->{'cardnumber'};
+ 	$params->{'dateofbirth'}= C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat);
+	$params->{'addBorrower'}= 0;
+	$params->{'sex'}= $datosBorrower_hashref->{'sex'};
+ 	$params->{'dateformat'}= C4::Date::display_date_format($dateformat);
+	$params->{'top'}= "intranet-top.inc";
+	$params->{'menuInc'}= "menu.inc";
+	$params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
-				'document'    	=> $comboDeTipoDeDoc,
-				'catcodepopup'	=> $comboDeCategorias,
-				'CGIbranch' 	=> $comboDeBranches,
-		
-				'changepassword'	=> $datosBorrower_hashref->{'changepassword'},
-				'type'		=> $datosBorrower_hashref->{'type'},
-				'physstreet'      => $datosBorrower_hashref->{'physstreet'},
-				'firstname'       => $datosBorrower_hashref->{'firstname'},
-				'surname'         => $datosBorrower_hashref->{'surname'},
-				'streetaddress'   => $datosBorrower_hashref->{'streetaddress'},
-				'zipcode' 	=> $datosBorrower_hashref->{'zipcode'},
-				'dstreetcity'     => $datosBorrower_hashref->{'streetcity'},
-				'homezipcode' 	=> $datosBorrower_hashref->{'homezipcode'},
-				'city'		=> $datosBorrower_hashref->{'city'},
-				'dcity'           => $datosBorrower_hashref->{'dcity'},
-				'phone'           => $datosBorrower_hashref->{'phone'},
-				'phoneday'        => $datosBorrower_hashref->{'phoneday'},
-				'emailaddress'    => $datosBorrower_hashref->{'emailaddress'},
-				'borrowernotes'	=> $datosBorrower_hashref->{'borrowernotes'},
-				'documentnumber'  => $datosBorrower_hashref->{'documentnumber'},
-				'studentnumber' 	=> $datosBorrower_hashref->{'studentnumber'},
-				'dateenrolled'	=> $datosBorrower_hashref->{'dateenrolled'},
-				'expiry'		=> $datosBorrower_hashref->{'expiry'},
-				'cardnumber'	=> $datosBorrower_hashref->{'cardnumber'},
- 				'dateofbirth'	=> C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat),
-				'addBorrower'	=> 0,
-				'sex' => $datosBorrower_hashref->{'sex'},
- 				'dateformat'      => C4::Date::display_date_format($dateformat),
-				'top' => "intranet-top.inc",
-				'menuInc' => "menu.inc",
-				'themelang' => '/intranet-tmpl/blue/es2/',
-		};
-
-print "Content-type: text/html\n\n";
-
-$input->process($template,$param) || die "Template process failed: ", $input->error(), "\n";
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 
 elsif($tipoAccion eq "DATOS_USUARIO"){
 
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "usuarios/reales/detalleUsuario.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
-				});
+	my ($template, $session, $params) = get_template_and_user({
+									template_name => "usuarios/reales/detalleUsuario.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
 	
 	my $bornum= $obj->{'borrowernumber'};
 	
@@ -259,23 +246,23 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	
 	# Curso de usuarios#
 	if (C4::Context->preference("usercourse")){
-		$data->{'course'}=1;
-		$data->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
+		$params->{'course'}=1;
+		$params->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 	}
 	#
-	$data->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
-	$data->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
-	$data->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
-	$data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
+	$params->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
+	$params->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
+	$params->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);
+	$params->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 	
-	$data->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
-	$data->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
+	$params->{'city'}=C4::AR::Busquedas::getNombreLocalidad($data->{'city'});
+	$params->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($data->{'streetcity'});
 	
 	# Converts the branchcode to the branch name
-	$data->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'branchname'};
+	$params->{'branchcode'} = C4::AR::Busquedas::getBranch($data->{'branchcode'})->{'branchname'};
 	
 	# Converts the categorycode to the description
-	$data->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
+	$params->{'categorycode'} = C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
 	
 	#### Verifica si la foto ya esta cargada
 	my $picturesDir= C4::Context->config("picturesdir");
@@ -289,13 +276,10 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 		$foto= 0;
 	}
 	
-	$template->param($data);
-	$template->param(
-			bornum          => $bornum,
-			foto_name 	=> $foto,
-		);
-	
-	output_html_with_http_headers $input, $cookie, $template->output;
+	$params->{'bornum'}= $bornum;
+	$params->{'foto_name'}= $foto;
+
+	C4::Auth::output_html_with_http_headers($input, $template, $params);
 }
 	
 
@@ -319,22 +303,21 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 	
 # 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
-                             });
+	my ($template, $session, $params) = get_template_and_user({
+									template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
+
 	my $bibliotecas=C4::AR::Utilidades::generarComboDeBranches();
 
-	$template->param(
-		bibliotecas => $bibliotecas,
-		bornum      => $bornum,
-		);
-	
+	$params->{'bibliotecas'}= $bibliotecas;
+	$params->{'bornum'}= $bornum;
 
-	output_html_with_http_headers $input, $cookie, $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $params);
 
 
 	

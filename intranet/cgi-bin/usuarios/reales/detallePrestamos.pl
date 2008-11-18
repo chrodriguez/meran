@@ -25,13 +25,13 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $borrnumber= $obj->{'borrnumber'};
 my $dateformat = C4::Date::get_date_format();
-my $issues = prestamosPorUsuario($borrnumber);
+my $issues = C4::AR::Issues::prestamosPorUsuario($borrnumber);
 my $count=0;
 my $venc=0;
 my @issuedat;
 $params->{'bornum'}= $borrnumber;
 my $completo=$input->param('completo');
-	$params->{'completo'} = $completo;
+$params->{'completo'} = $completo;
 
 
 

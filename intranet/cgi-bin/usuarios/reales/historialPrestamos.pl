@@ -21,14 +21,14 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 my $bornum=$obj->{'borrowernumber'};
 my $orden=$obj->{'orden'}||'date_due desc';
-my $ini=$obj->{'ini'}||'';
+my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cant,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
-&C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
+$params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion);
 
 my @loop_reading;
 for (my $i=0;$i< $cantR;$i++){

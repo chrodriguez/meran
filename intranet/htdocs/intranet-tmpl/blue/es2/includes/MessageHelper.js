@@ -50,7 +50,7 @@ function _createContentMessages(){
 
 	if(contenedor == null){
 
-		console.log("MessageHelper: Se crea el div cotenedor");
+		//console.log("MessageHelper: Se crea el div cotenedor");
 		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>");
 
 	}

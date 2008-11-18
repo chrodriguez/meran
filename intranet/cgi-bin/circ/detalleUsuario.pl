@@ -8,13 +8,16 @@ use HTML::Template;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user ({
-	template_name	=> 'circ/detalleUsuario.tmpl',
-	query		=> $input,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
+my $input=new CGI;
+
+my ($template, $session, $params) =  get_template_and_user ({
+			template_name	=> 'circ/detalleUsuario.tmpl',
+			query		=> $input,
+			type		=> "intranet",
+			authnotrequired	=> 0,
+			flagsrequired	=> { circulate => 1 },
     });
+
 
 my $obj=$input->param('obj');
 
@@ -24,9 +27,7 @@ my $borrnumber= $obj->{'borrowernumber'};
 my @resultBorrower;
 $resultBorrower[0]=C4::AR::Usuarios::getBorrowerInfo($borrnumber);
 
-$template->param(
-	borrower => \@resultBorrower,
-);
+$params->{'borrower'}= \@resultBorrower;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);t;
 

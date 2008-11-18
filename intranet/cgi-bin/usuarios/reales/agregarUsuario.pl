@@ -7,12 +7,16 @@ use Template;
 use CGI;
 
 
-my $input = Template->new({ 	INCLUDE_PATH => ['/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/','/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/includes/menu/'],
-				ABSOLUTE => 1,
+my $input = new CGI;
 
-			  });
-
-my $template = "agregarUsuario.tmpl";
+my ($template, $session, $params) = get_template_and_user({
+									template_name => "usuarios/reales/agregarUsuario.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
 
 my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
 
@@ -20,21 +24,17 @@ my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 
 my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
 
-my $param = {	
-		'document'    => $comboDeTipoDeDoc,
-		'catcodepopup'	=> $comboDeCategorias,
-		'CGIbranch' 	=> $comboDeBranches,
-		'addBorrower'	=> 1,
-		'type' => "intranet",
-		'cgi' =>new CGI,
-		'authnotrequired' => 0,
-		'flagsrequired' => {borrowers => 1},
-		'debug' => 1,
-		'top' => "intranet-top.inc",
-		'menuInc' => "menu.inc",
-		'themelang' => '/intranet-tmpl/blue/es2/',
-	};
+$params->{'document'}= $comboDeTipoDeDoc;
+$params->{'catcodepopup'}=$comboDeCategorias;
+$params->{'CGIbranch'}= $comboDeBranches;
+$params->{'addBorrower'}= 1;
+$params->{'type'}= "intranet";
+$params->{'cgi'}=new CGI;
+$params->{'authnotrequired'}= 0;
+$params->{'flagsrequired'}= {borrowers => 1};
+$params->{'debug'}= 1;
+$params->{'top'}= "intranet-top.inc";
+$params->{'menuInc'}= "menu.inc";
+$params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
-print "Content-type: text/html\n\n";
-
-$input->process($template,$param) || die "Template process failed: ", $input->error(), "\n";
+C4::Auth::output_html_with_http_headers($input, $template, $params);
