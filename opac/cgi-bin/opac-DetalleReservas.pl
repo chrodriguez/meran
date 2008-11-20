@@ -10,7 +10,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $borrowernumber, $params)= get_template_and_user({
+my ($template, $session, $params)= get_template_and_user({
 									template_name => "opac-DetalleReservas.tmpl",
 									query => $input,
 									type => "opac",
@@ -27,7 +27,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $dateformat = C4::Date::get_date_format();
 my $branches = C4::AR::Busquedas::getBranches();
 
-my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($borrowernumber); 
+my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($session->param('borrowernumber')); 
 
 my @realreserves;
 $rcount = 0;

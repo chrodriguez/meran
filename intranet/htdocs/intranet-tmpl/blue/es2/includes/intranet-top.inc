@@ -19,6 +19,12 @@ function swap(id,src){
 	document.getElementById(id).src=src;
 }
 
+function cambiarIdioma() {
+	$('#lang_server').val($('#language').val());
+	$('#url').val(location.pathname);
+	$('#formLang').submit();
+}
+
 </script>
 
 <body>
@@ -39,6 +45,18 @@ function swap(id,src){
 [% ELSE %]
 	<p align="right" class="login"><a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a></p>
 [% END %]
+
+[%  "INTRA" | setComboLang %]
+
+<!--<form id="formLang" action="/cgi-bin/koha/intra-language.pl" method="POST">
+	<input id="lang_server" name="lang_server" type="hidden" value="">
+	<input id="url" name="url" type="hidden" value="">
+	<select id="language" onChange="cambiarIdioma()">
+		<option value="nl_NL">NL</option>
+		<option value="es_ES">ES</option>
+		<option value="en_EN">EN</option>
+	</select>
+</form>-->
 
 </td></tr>
 <tr valign="top">

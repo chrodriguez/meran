@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr-FR-i-opac-t-prog-v-30000\n"
 "POT-Creation-Date: 2008-01-04 11:55+0100\n"
-"PO-Revision-Date: 2008-11-18 21:48-0300\n"
+"PO-Revision-Date: 2008-11-20 20:43-0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -36,8 +36,8 @@ msgstr "Direcci&oacute;n fr:"
 
 #. A
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:102
-msgid "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
-msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
+msgid "Cat&aacute;logo:"
+msgstr "Catálogo fr:"
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
@@ -64,32 +64,32 @@ msgstr "Legajo fr:"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:1
 #, c-format
-msgid "%s -- Self Checkout"
-msgstr "%s -- Prêt auto-contrôlé"
+msgid "B&uacute;squeda combinada"
+msgstr "B&uacute;squeda combinada fr"
 
 #. %1$s: TMPL_VAR name=unititle
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
 #, c-format
-msgid "%s ;"
-msgstr "%s ;"
+msgid "B&uacute;squeda avanzada"
+msgstr "B&uacute;squeda avanzada fr"
 
 #. %1$s: TMPL_VAR name=description
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:16
 #, c-format
-msgid "%s <a1>Top level</a>"
-msgstr "%s <a1>Niveau principal</a>"
+msgid "Usuarios:"
+msgstr "Usuarios fr:"
 
 #. %1$s: TMPL_VAR name=issues_count
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:128
 #, c-format
-msgid "%s Items"
-msgstr "%s document(s)"
+msgid "B&uacute;squeda de Usuarios Reales"
+msgstr "B&uacute;squeda de Usuarios Reales fr"
 
 #. %1$s: TMPL_VAR name=libraryname
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:58
 #, c-format
-msgid "%s Self Checkout"
-msgstr "%s Prêt auto-contrôlé"
+msgid "Tipear el apellido, DNI o legajo del usuario. Presionar buscar"
+msgstr "Tipear el apellido, DNI o legajo del usuario. Presionar buscar fr"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=libraryname
@@ -97,8 +97,8 @@ msgstr "%s Prêt auto-contrôlé"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:7
 #, c-format
-msgid "%s Self Checkout System"
-msgstr "%s Prêt auto-contrôlé"
+msgid "Ha buscado por :"
+msgstr "Ha buscado por fr:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=count

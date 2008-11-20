@@ -24,21 +24,20 @@ function swap(id,src){
 
 function cambiarIdioma() {
 	$('#lang_server').val($('#language').val());
+	$('#url').val(location.pathname);
 	$('#formLang').submit();
 }
 
 </script>
 
 <body>
-<form id="formLang" action="/cgi-bin/koha/opac-user.pl">
-	<input id="lang_server" name="lang_server" type="hidden" value="">
-</form>
 
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
 <tr>
 [% IF loggedinusername %]
         <td align="left" valign="middle">
   	[% "&nbsp;Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
+	[%  "OPAC" | setComboLang %]
 
 	<a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
 		onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
@@ -50,13 +49,22 @@ function cambiarIdioma() {
 	<img src="[% themelang %]/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
         </a>
        </td>
+
+[% ELSE %]
+	lang:[%  "OPAC" | setComboLang %]
 [% END %]
 </tr>
 <tr>
+<!-- este esta funcionando pero se debe setear dinamicamente el lang seleccionado -->
+<!--<form id="formLang" action="/cgi-bin/koha/opac-language.pl" method="POST">
+	<input id="lang_server" name="lang_server" type="hidden" value="">
+	<input id="url" name="url" type="hidden" value="">
 	<select id="language" onChange="cambiarIdioma()">
+		<option value="nl_NL">NL</option>
 		<option value="es_ES">ES</option>
 		<option value="en_EN">EN</option>
 	</select>
+</form>-->
 <tr>
 <tr><td>&nbsp; </td></tr>
 <tr>

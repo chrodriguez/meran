@@ -26,7 +26,13 @@ my ($template, $session, $params)= get_template_and_user({
 
 my $dateformat = C4::Date::get_date_format();
 
+open(A,">>/tmp/debug.txt");
+print A "desde opac-user.pl \n";
+# my $session = CGI::Session->load();
 $session->param('lang', $query->param('lang_server') );
+print A "lang desde el parametro: ".$query->param('lang_server')."\n";
+print A "lang desde la session: ".$session->param('lang')."\n";
+close(A);
 
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation($session->param('borrowernumber'),"");

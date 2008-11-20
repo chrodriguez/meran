@@ -164,9 +164,10 @@ sub output_html_with_http_headers {
     	my($query, $template, $params) = @_;
 # open(A, ">>/tmp/debug.txt");
 # print A "output_html: \n";
- 	my $session = new CGI::Session();
-#     	my $sessionID = $session->id();
+#   	my $session = new CGI::Session();
+ 	my $session = CGI::Session->load();
 
+	printSession($session, 'output_html_with_http_headers: ');
     	# send proper HTTP header with cookies:
     	print $session->header();
 
@@ -275,10 +276,10 @@ print A "desde checkauth \n";
 
 	my $session = CGI::Session->load();# or die CGI::Session->errstr();
 # 	my $sessionID = $session->id();
+printSession($session, 'checkauth despues del load');
 	my $sessionID = $session->param('sessionID');
 	my $self_url = $query->url(-absolute => 1);
 	$session->param('url', $self_url);
-print A "sessionID 279: ".$sessionID."\n";
 
 
 my $key;
@@ -289,9 +290,6 @@ print A "SE IMPRIME ENV: \n";
    } 
 print A "\n";
 
-	if ( $session->is_expired ) {
-print A "la session EXPIRO\n";
-	}
 
 	# $authnotrequired will be set for scripts which will run without authentication
 	my $authnotrequired = shift;
@@ -364,8 +362,11 @@ print A "no hay usuario autenticado 392: \n";
 		$session->param('loggedinusername',$session->param('userid'));
 		$session->param('password', $password);
 		$session->param('nroRandom', $random_number);
+		$session->param('borrowernumber', '0');
 		$session->param('type', $type); #OPAC o INTRA
 		$session->param('flagsrequired', $flagsrequired);
+		$session->param('browser', $ENV{'HTTP_USER_AGENT'});
+	
 # 		$session->param('locale', 'es_ES');
 		#$session->expire('3m');
 		$session->expire(0); #para Desarrollar, luego pasar a 3m
@@ -522,10 +523,8 @@ print A "no hay usuario autenticado 392: \n";
 print A "1er RETURN \n";
 print A "successful login!!!!!!!!!!!!\n";
 print A "userid: ".$userid."\n";
-print A "session->userid: ".$session->param('userid')."\n";
-print A "session->password: ".$session->param('password')."\n";
-print A "session->nroRandom: ".$session->param('nroRandom')."\n";
-print A "session->sessionID: ".$session->param('sessionID')."\n";
+$session->param('REQUEST_URI',$ENV{'REQUEST_URI'});
+printSession($session, 'checkauth: ');
 print A "sessionID: ".$sessionID."\n";
 
 
@@ -540,6 +539,29 @@ print A "sessionID: ".$sessionID."\n";
 	redirectTo($url);
 }
 
+
+sub printSession {
+	my ($session, $desde) = @_;
+
+	open(A, ">>/tmp/debug.txt");
+	print A "\n";
+	print A "*******************************************SESSION******************************************************\n";
+	print A "Desde: ".$desde."\n";
+	print A "session->userid: ".$session->param('userid')."\n";
+	print A "session->loggedinusername: ".$session->param('loggedinusername')."\n";
+	print A "session->borrowernumber: ".$session->param('borrowernumber')."\n";
+	print A "session->password: ".$session->param('password')."\n";
+	print A "session->nroRandom: ".$session->param('nroRandom')."\n";
+	print A "session->sessionID: ".$session->param('sessionID')."\n";
+	print A "session->lang: ".$session->param('lang')."\n";
+	print A "session->type: ".$session->param('type')."\n";
+	print A "session->flagsrequired: ".$session->param('flagsrequired')."\n";
+	print A "session->REQUEST_URI: ".$session->param('REQUEST_URI')."\n";
+	print A "session->browser: ".$session->param('browser')."\n";
+	print A "*****************************************END**SESSION****************************************************\n";
+	print A "\n";
+	close(A);
+}
 
 sub _loggedin_Controller {
 
@@ -650,7 +672,8 @@ print A "redirectTo: \n";
 	#redirijo en el cliente
 print A "CLIENT_REDIRECT\n";
 		
-		my $session = new CGI::Session();
+# 		my $session = new CGI::Session();
+		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
     		print $session->header();
 		print 'CLIENT_REDIRECT';
@@ -659,7 +682,12 @@ print A "CLIENT_REDIRECT\n";
 	}else{
 	#redirijo en el servidor
 print A "SERVER_REDIRECT\n";
-		print ("Location: ".$url."\n\n");
+# 		print ("Location: ".$url."\n\n");
+		my $input = CGI->new(); 
+		print $input->redirect( 
+					-location => $url, 
+					-status => 301,
+		); 
 		exit;
 	}
 }
@@ -969,18 +997,18 @@ Digest::MD5(3)
 
 
 
-
-$s = new CGI::Session( 'driver:mysql', $sid);
-$s = new CGI::Session( 'driver:mysql', $sid, {  DataSource  => 'dbi:mysql:test',
-						User        => 'sherzodr',
-						Password    => 'hello',
-						TableName=>'session',
-						IdColName=>'my_id',
-						DataColName=>'my_data',
-						DataSource=>'dbi:mysql:project',
-						Handle=>$dbh,
-        					});
-$s = new CGI::Session( 'driver:mysql', $sid, { Handle => $dbh } );
+# 
+# $s = new CGI::Session( 'driver:mysql', $sid);
+# $s = new CGI::Session( 'driver:mysql', $sid, {  DataSource  => 'dbi:mysql:test',
+# 						User        => 'sherzodr',
+# 						Password    => 'hello',
+# 						TableName=>'session',
+# 						IdColName=>'my_id',
+# 						DataColName=>'my_data',
+# 						DataSource=>'dbi:mysql:project',
+# 						Handle=>$dbh,
+#         					});
+# $s = new CGI::Session( 'driver:mysql', $sid, { Handle => $dbh } );
 
 
 

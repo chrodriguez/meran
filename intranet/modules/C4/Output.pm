@@ -127,7 +127,9 @@ sub gettemplate {
 =cut
 # print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 	my $filter= Template::Filters->new({
-						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n	},
+						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n,
+								'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #solo para probar
+							},
 					});
 
 

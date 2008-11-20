@@ -12,23 +12,68 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw( 
 
 	&i18n
+	&setComboLang
 );
 
 
 sub i18n {
 
 	my ($text) = @_;
-my $session = CGI::Session->load();
+	my $session = CGI::Session->load();
+open(A, ">>/tmp/debug.txt");
+print A "desde i18n: \n";
 # print $session->header;
 # 	my $locale = "es_ES";
 	my $locale = $session->param('lang');
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
-	bindtextdomain("usuarios", "/usr/local/koha/intranet/locale/");
-	textdomain("usuarios");
+	bindtextdomain("koha", "/usr/local/koha/intranet/locale/");
+	textdomain("koha");
 # # # 	get_handle("es_ES");
-	get_handle($session->param('lang'));
+	get_handle($locale);
         # ...mungify $text...
+# print A "cambio: ".$text."\n";
+print A "lang: ".$session->param('lang')."\n";
 
  	return __($text);
 }
 
+=item
+Este filtro sirve para generar dinamicamente le combo para seleccionar el idioma.
+Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).
+Se le parametriza si el combo es para la INTRA u OPAC
+=cut
+sub setComboLang {
+
+ 	my ($type) = @_;
+	my $session = CGI::Session->load();
+open(A, ">>/tmp/debug.txt");
+print A "desde putHTML: \n";
+	my $html= '';
+	my $lang_Selected= $session->param('lang');
+## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
+	my @array_lang= ('nl_NL', 'es_ES', 'en_EN', 'jp_JP');
+	my $i;
+
+	if($type eq 'OPAC'){
+		$html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST'>";
+	}else{
+		$html="<form id='formLang' action='/cgi-bin/koha/intra-language.pl' method='POST'>";
+	}
+
+	$html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";	
+	$html .="<input id='url' name='url' type='hidden' value=''>";
+	$html .="<select id='language' onChange='cambiarIdioma()'>";
+
+	for($i=0;$i<scalar(@array_lang);$i++){
+		if($session->param('lang') eq @array_lang[$i]){
+			$html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
+		}else{
+			$html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";
+		}
+	}
+
+	$html .="</select>";
+	$html .="</form>";
+close(A);
+ 	return $html;
+}

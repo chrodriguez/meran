@@ -9,13 +9,13 @@ use Date::Manip;
 
 my $input = new CGI;
 
-my ($template, $borrowernumber, $params)= get_template_and_user({
-									template_name => "opac-DetallePrestamos.tmpl",
-									query => $input,
-									type => "opac",
-									authnotrequired => 0,
-									flagsrequired => {borrow => 1},
-									debug => 1,
+my ($template, $session, $params)= get_template_and_user({
+								template_name => "opac-DetallePrestamos.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 0,
+								flagsrequired => {borrow => 1},
+								debug => 1,
 			     });
 
 
@@ -25,9 +25,9 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $dateformat = C4::Date::get_date_format();
 
-$params->{'borrowernumber'}= $borrowernumber;
+$params->{'borrowernumber'}= $session->param('borrowernumber');
 
-my $issues = C4::AR::Issues::prestamosPorUsuario($borrowernumber);
+my $issues = C4::AR::Issues::prestamosPorUsuario($session->param('borrowernumber'));
 
 my $count = 0;
 my $overdues_count = 0;
@@ -54,7 +54,7 @@ foreach my $key (keys %$issues) {
 	  	$issue->{'color'} ='red';
 	}
 
-    	$issue->{'renew'} = &C4::AR::Issues::sepuederenovar($borrowernumber, $issue->{'id3'});
+    	$issue->{'renew'} = &C4::AR::Issues::sepuederenovar($session->param('borrowernumber'), $issue->{'id3'});
     	if ($issue->{'overdue'}) {
 		push @overdues, $issue;
 		$overdues_count++;
