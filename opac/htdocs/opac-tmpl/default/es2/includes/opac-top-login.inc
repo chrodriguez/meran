@@ -4,6 +4,9 @@
 
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 
+<script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
+<script src="/opac-tmpl/default/es2/includes/AjaxHelper.js"></script>
+<script src="/opac-tmpl/default/es2/includes/MessageHelper.js"></script>
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 </head>
@@ -11,6 +14,14 @@
 function swap(id,src){
 document.getElementById(id).src=src;
 }
+
+// FIXME esto esta repetido en el opac-top.inc, ver si se puede unificar
+function cambiarIdioma() {
+	$('#lang_server').val($('#language').val());
+	$('#url').val(location.pathname);
+	$('#formLang').submit();
+}
+
 </script>
 
 <body>
@@ -30,6 +41,8 @@ document.getElementById(id).src=src;
 	<img src="[% themelang %]/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
   </a>
        </td>
+[% ELSE %]
+	[%  "OPAC" | setComboLang %]
 [% END %]
 </tr>
 <tr><td>&nbsp; </td></tr>

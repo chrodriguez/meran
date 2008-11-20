@@ -49,9 +49,6 @@ function cambiarIdioma() {
 	<img src="[% themelang %]/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
         </a>
        </td>
-
-[% ELSE %]
-	lang:[%  "OPAC" | setComboLang %]
 [% END %]
 </tr>
 <tr>
