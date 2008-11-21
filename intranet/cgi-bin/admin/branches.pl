@@ -19,8 +19,8 @@
 #
 # NOTE:  heading() should now be called like this:
 #        1. Use heading() as before
-#        2. $template->param('heading-LISPISHIZED-HEADING-p' => 1);
-#        3. $template->param('use-heading-flags-p' => 1);
+#        2. $params->{''heading-LISPISHIZED-HEADING-p'= 1;
+#        3. $params->{''use-heading-flags-p'= 1;
 #        This ensures that both converted and unconverted templates work
 
 # Finlay working on this file from 26-03-2002
@@ -50,7 +50,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use HTML::Template;
+use Template;
 
 # Fixed variables
 my $linecolor1='par';
@@ -67,91 +67,92 @@ my $branchcode=$input->param('branchcode');
 my $categorycode = $input->param('categorycode');
 my $op = $input->param('op');
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/branches.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $params) = get_template_and_user({
+								template_name => "admin/branches.tmpl",
+								query'} = $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {borrowers => 1},
+								debug => 1,
+			    				});
+
 if ($op) {
-	$template->param(script_name => $script_name,
-				$op         => 1); # we show only the TMPL_VAR names $op
+	$params->{'script_name'}= $script_name;
+	$params->{'$op'}= 1; # we show only the TMPL_VAR names $op
 } else {
-	$template->param(script_name => $script_name,
-				else        => 1); # we show only the TMPL_VAR names $op
+	$params->{'script_name'}= $script_name,
+				else        = 1; # we show only the TMPL_VAR names $op
 }
-$template->param(action => $script_name);
+$params->{'action'}= $script_name;
 if ($op eq 'add') {
 	# If the user has pressed the "add new branch" button.
 	heading("Branches: Add Branch");
-	$template->param('heading-branches-add-branch-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
+	$params->{'heading-branches-add-branch-p'}= 1;
+	$params->{'use-heading-flags-p'}= 1;
 	editbranchform();
 
 } elsif ($op eq 'edit') {
 	# if the user has pressed the "edit branch settings" button.
 	heading("Branches: Edit Branch");
-	$template->param('heading-branches-edit-branch-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
-	$template->param(add => 1);
+	$params->{'heading-branches-edit-branch-p'}= 1;
+	$params->{'use-heading-flags-p'}= 1);
+	$params->{'add'}= 1;
 	editbranchform($branchcode);
 } elsif ($op eq 'add_validate') {
 	# confirm settings change...
-	my $params = $input->Vars;
-	unless ($params->{'branchcode'} && $params->{'branchname'}) {
+	my $paramsInput = $input->Vars;
+	unless ($paramsInput->{'branchcode'} && $paramsInput->{'branchname'}) {
 		default ("No se pudo modificar el registro de la Unidad de Informaci&oacute;n: Debe especificar un Nombre y un C&oacute;digo par la Unidad de Informaci&oacute;n");
 	} else {
-		setbranchinfo($params);
-		$template->param(else => 1);
-		default ("Registro de Unidad de Informaci&oacute;n a cambiado por la Unidad de Informaci&oacute;n: $params->{'branchname'}");
+		setbranchinfo($paramsInput);
+		$params->{'else'}= 1);
+		default ("Registro de Unidad de Informaci&oacute;n a cambiado por la Unidad de Informaci&oacute;n: $paramsInputs->{'branchname'}");
 	}
 } elsif ($op eq 'delete') {
 	# if the user has pressed the "delete branch" button.
 	my $message = checkdatabasefor($branchcode);
 	if ($message) {
-		$template->param(else => 1);
+		$params->{'else'}= 1;
 		default($message);
 	} else {
-		$template->param(delete_confirm => 1);
-		$template->param(branchcode => $branchcode);
+		$params->{'delete_confirm'}= 1;
+		$params->{'branchcode'}= $branchcode;
 	}
 } elsif ($op eq 'delete_confirmed') {
 	# actually delete branch and return to the main screen....
 	deletebranch($branchcode);
-	$template->param(else => 1);
+	$params->{'else'}=1;
 	default("La Unidad de Informaci&oacute;n con el c&oacute;digo $branchcode ha sido eliminada.");
 } elsif ($op eq 'editcategory') {
 	# If the user has pressed the "add new category" or "modify" buttons.
 	heading("Branches: Edit Category");
-	$template->param('heading-branches-edit-category-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
+	$params->{'heading-branches-edit-category-p'}= 1;
+	$params->{'use-heading-flags-p'}= 1;
 	editcatform($categorycode);
 } elsif ($op eq 'addcategory_validate') {
 	# confirm settings change...
-	my $params = $input->Vars;
-	unless ($params->{'categorycode'} && $params->{'categoryname'}) {
+	my $paramsInput = $input->Vars;
+	unless ($paramsInput->{'categorycode'} && $paramsInput->{'categoryname'}) {
 		default ("No se pudo modificar el registro de la Unidad de Informaci&oacute;n: Debe especificar un Nombre y un C&oacute;digo par la Unidad de Informaci&oacute;n");
 	} else {
-		setcategoryinfo($params);
-		$template->param(else => 1);
-		default ("Registro de categor&iacute;a cambiado por la categor&iacute;a: $params->{'categoryname'}");
+		setcategoryinfo($paramsInput);
+		$params->{'else'}= 1;
+		default ("Registro de categor&iacute;a cambiado por la categor&iacute;a: $paramsInput->{'categoryname'}");
 	}
 } elsif ($op eq 'delete_category') {
 	# if the user has pressed the "delete branch" button.
 	my $message = checkcategorycode($categorycode);
 	if ($message) {
-		$template->param(else => 1);
+		$params->{'else'}= 1;
 		default($message);
 	}  else {
-		$template->param(delete_category => 1);
-		$template->param(categorycode => $categorycode);
+		$params->{'delete_category'}= 1;
+		$params->{'categorycode'}= $categorycode;
 	}
 } elsif ($op eq 'categorydelete_confirmed') {
 	# actually delete branch and return to the main screen....
 	deletecategory($categorycode);
-	$template->param(else => 1);
+	$params->{'else'}= 1;
 	default("La categor&iacute;a con c&oacute;digo $categorycode ha sido borrado.");
 
 } else {
@@ -168,17 +169,17 @@ if ($op eq 'add') {
 sub default {
 	my ($message) = @_;
 	heading("Branches");
-	$template->param('heading-branches-p' => 1);
-	$template->param('use-heading-flags-p' => 1);
-	$template->param(message => $message);
-	$template->param(action => $script_name);
+	$params->{'heading-branches-p'}= 1;
+	$params->{'use-heading-flags-p'}= 1;
+	$params->{'message'}= $message;
+	$params->{'action'} = $script_name);
 	branchinfotable();
 }
 
 # FIXME: this function should not exist; otherwise headings are untranslatable
 sub heading {
 	my ($head) = @_;
-	$template->param(head => $head);
+	$params->{'head'} = $headss;
 }
 
 sub editbranchform {
@@ -188,14 +189,14 @@ sub editbranchform {
 	if ($branchcode) {
 		$data = getbranchinfo($branchcode);
 		$data = $data->[0];
-		$template->param(branchcode => $data->{'branchcode'});
-		$template->param(branchname => $data->{'branchname'});
-		$template->param(branchaddress1 => $data->{'branchaddress1'});
-		$template->param(branchaddress2 => $data->{'branchaddress2'});
-		$template->param(branchaddress3 => $data->{'branchaddress3'});
-		$template->param(branchphone => $data->{'branchphone'});
-		$template->param(branchfax => $data->{'branchfax'});
-		$template->param(branchemail => $data->{'branchemail'});
+		$params->{'branchcode'} = $data->{'branchcode'};
+		$params->{'branchname'} = $data->{'branchname'};
+		$params->{'branchaddress1'} = $data->{'branchaddress1'};
+		$params->{'branchaddress2'} = $data->{'branchaddress2'};
+		$params->{'branchaddress3'} = $data->{'branchaddress3'};
+		$params->{'branchphone'} = $data->{'branchphone'};
+		$params->{'branchfax'} = $data->{'branchfax'};
+		$params->{'branchemail'} = $data->{'branchemail'};
     }
 
     # make the checkboxs.....
@@ -215,18 +216,17 @@ sub editbranchform {
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
 		$checked = "checked=\"checked\"";
 	}
-	push @categoryloop, {
-		categoryname    => $cat->{'categoryname'},
-		categorycode    => $cat->{'categorycode'},
-		codedescription => $cat->{'codedescription'},
-		checked         => $checked,
+	push @categoryloop, {'categoryname   '} = $cat->{'categoryname'},
+		{' categorycode   '} = $cat->{'categorycode'},
+		{' codedescription'} = $cat->{'codedescription'},
+		{' checked        '} = $checked,
 	    };
 	}
-	$template->param(categoryloop => \@categoryloop);
+	$params->{'categoryloop'}= \@categoryloop;
 
     # {{{ Leave this here until bug 130 is completely resolved in the templates
 	for my $obsolete ('categoryname', 'categorycode', 'codedescription') {
-		$template->param($obsolete => 'Your template is out of date (bug 130)');
+		$params->{'$obsolete'}= 'Your template is out of date (bug 130)';
 	}
     # }}}
 }
@@ -239,9 +239,9 @@ sub editcatform {
 	if ($categorycode) {
 		$data = getcategoryinfo($categorycode);
 		$data = $data->[0];
-		$template->param(categorycode => $data->{'categorycode'});
-		$template->param(categoryname => $data->{'categoryname'});
-		$template->param(codedescription => $data->{'codedescription'});
+		$params->{'categorycode'} = $data->{'categorycode'};
+		$params->{'categoryname'} = $data->{'categoryname'};
+		$params->{'codedescription'} = $data->{'codedescription'};
     }
 }
 
@@ -308,7 +308,7 @@ sub branchinfotable {
 		my @categories = '';
 		foreach my $cat (@{$branch->{'categories'}}) {
 			my ($catinfo) = @{getcategoryinfo($cat)};
-			push @categories, {'categoryname' => $catinfo->{'categoryname'}};
+			push @categories, {'categoryname'} = $catinfo->{'categoryname'}};
 			$no_categories_p = 0;
 		}
 		# {{{ Leave this here until bug 180 is completely resolved in templates
@@ -332,14 +332,14 @@ sub branchinfotable {
 	foreach my $cat (@$catinfo) {
 		push @branchcategories, {
 			clase  		=> $cat->{'clase'},
-			categoryname    => $cat->{'categoryname'},
-			categorycode    => $cat->{'categorycode'},
-			codedescription => $cat->{'codedescription'},
+			{'categoryname'} = $cat->{'categoryname'},
+			{'categorycode'} = $cat->{'categorycode'},
+			{'ssssssscodedescription'} = $cat->{'codedescription'},
 		};
 	}
 
-	$template->param(branches => \@loop_data,
-							branchcategories => \@branchcategories);
+	$params->{'branches'} = \@loop_data;
+	 $params->{'branchcategories'}= \@branchcategories;
 
 }
 
@@ -351,10 +351,10 @@ sub branchcategoriestable {
     my $color='par';
     foreach my $cat (@$categoryinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	$template->param(clase => $color);
-	$template->param(categoryname => $cat->{'categoryname'});
-	$template->param(categorycode => $cat->{'categorycode'});
-	$template->param(codedescription => $cat->{'codedescription'});
+	$params->{'clase'} = $color;
+	$params->{'categoryname'} = $cat->{'categoryname'};
+	$params->{'categorycode'} = $cat->{'categorycode'};
+	$params->{'codedescription'} = $cat->{'codedescription'};
     }
 }
 
@@ -366,7 +366,7 @@ sub getbranchinfo {
 # returns a reference to an array of hashes containing branches,
 
     my ($branchcode) = @_;
-    my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;si el dominsi el 
     my $sth;
     if ($branchcode) {
 		$sth = $dbh->prepare("Select * from branches where branchcode = ? order by branchcode");
@@ -525,7 +525,7 @@ sub checkcategorycode {
     return $message;
 }
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 
 # Local Variables:
 # tab-width: 8

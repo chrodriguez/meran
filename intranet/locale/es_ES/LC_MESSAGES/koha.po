@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr-FR-i-opac-t-prog-v-30000\n"
 "POT-Creation-Date: 2008-01-04 11:55+0100\n"
-"PO-Revision-Date: 2008-11-20 20:43-0300\n"
+"PO-Revision-Date: 2008-11-21 09:06-0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -105,14 +105,14 @@ msgstr "Ha buscado por fr:"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:58
 #, c-format
-msgid "%s biblios"
-msgstr "%s documents"
+msgid "Entrar en Koha"
+msgstr "Entrar en Koha fr"
 
 #. %1$s: TMPL_VAR name=numberlength
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:81
 #, c-format
-msgid "%s issues"
-msgstr "%s numéros"
+msgid "Contrase&ntilde;a:"
+msgstr "Contrase&ntilde;a fr:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=shelfvirtualcount

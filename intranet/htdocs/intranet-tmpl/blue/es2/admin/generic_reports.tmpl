@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% intranet-top.inc %]
  <script language="javascript" type="text/javascript">
          function swap(id,src){
 	         document.getElementById(id).src=src;
@@ -57,17 +57,17 @@
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" >
  <tr><td width="50%" valign="top">
 
-  <!-- TMPL_IF name="msg" -->
-           <!-- TMPL_VAR name="msg" -->
-  <!-- /TMPL_IF -->
+  [% IF msg %]
+           [% msg %]
+  [% END %]
 
 
 <table align='center'>
 	<tr>
 	<td align='left'>Tablas</td>
-    	<!-- TMPL_IF name="fieldnames" -->
-	<td align='left'>Campos</td>
-	<!-- /TMPL_IF -->
+    	[% fieldnames %]
+		<td align='left'>Campos</td>
+	[% END %]
 	</tr>
 	<tr>
 	<form  method="post" name="tabla" action='generic_reports.pl'>
@@ -75,12 +75,12 @@
 	<input type="hidden" name="table" id="table">
 	<input type="hidden" name="field" id="field">
 		<td>
-			<!-- TMPL_VAR name="tablenames" --> 
+			[% tablenames %] 
 		</td>
 
-    		<!-- TMPL_IF name="fieldnames" -->
+    		[% IF fieldnames %]
 		<td>
-	 <!-- TMPL_VAR name="fieldnames" --> 
+	 [% fieldnames %] 
 		</td>
 		</tr>	
 		<tr>
@@ -91,50 +91,50 @@
 		<input type="text" name="nombre" id="nombre">
 		</td>   
 		<td>
-<input type="image" alt="Agregar" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="table_selected('ADD')">
+<input type="image" alt="Agregar" src="[% interface %]/[% theme %]/images/agregar.png" onclick="table_selected('ADD')">
 		</td>
-		<!-- /TMPL_IF -->
+		[% END %]
 	</tr>	
 	</form>
 </table>
 
-<!-- TMPL_IF name="TABLES" -->
-<br><br><br>
-<table border=0 cellspacing=0 cellpadding=0  width="90%" align='center'>
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-		<td>Tabla</td>
-		<td>Campo</td>
-		<td>Nombre</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-<!-- TMPL_LOOP name="TABLES" -->
-	<tr valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="tabla" -->
-		</td>
-		
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"  align="center">
-			<!-- TMPL_VAR name="campo" -->
-		</td>
-		
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"  align="center">
-			<!-- TMPL_VAR name="nombre" -->
-		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">
-
-	<a class="inputFontNormal" href="#" onclick="table_deleted('<!-- TMPL_VAR name="tabla" -->','<!-- TMPL_VAR name="campo" -->')"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+[% IF TABLES %]
+	<br><br><br>
+	<table border=0 cellspacing=0 cellpadding=0  width="90%" align='center'>
+		<tr class="tablaresultadoTitle">
+			<td width="1%" align="left" valign="top"><img src="[% interface %]/[% theme %]/images/izquierda.png"></td>
+			<td>Tabla</td>
+			<td>Campo</td>
+			<td>Nombre</td>
+			<td width="1%" align="right" valign="top"><img src="[% interface %]/[% theme %]/images/derecha.png"></td>
+		</tr>
+	[% FOREACH TABLES %]
+		<tr valign=middle>
+			<td height=25 class="[% clase %]">&nbsp;</td>
+			
+			<td class="[% clase %]" class="inputFontNormal" align="center">
+				[% tabla %]
+			</td>
+			
+			<td  class="[% clase %]" class="inputFontNormal"  align="center">
+				[% campo %]
+			</td>
+			
+			<td  class="[% clase %]" class="inputFontNormal"  align="center">
+				[% nombre %]
+			</td>
+			<td height=25 class="[% clase %]">
 	
-		</td>
-	</tr>
-<!-- /TMPL_LOOP -->
- 	<tr valign=bottom>
-        	<td class="lineafinaltabla"  align="left" colspan="7"></td>
-        </tr>
-</table>
-<!-- /TMPL_IF -->
+		<a class="inputFontNormal" href="#" onclick="table_deleted('[% tabla %]','[% campo %]')"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+		
+			</td>
+		</tr>
+	[% END %]
+		<tr valign=bottom>
+			<td class="lineafinaltabla"  align="left" colspan="7"></td>
+		</tr>
+	</table>
+[% END %]
 
 </td>
 <td width="50%" valign="top" >
@@ -142,9 +142,9 @@
 <table align="center" valign="top">
 	<tr>
 	<td align='left'>Tablas</td>
-    	<!-- TMPL_IF name="fields1" -->
-	<td align='left'>Campos</td>
-	<!-- /TMPL_IF -->
+    	[% IF fields1 %]
+		<td align='left'>Campos</td>
+	[% END %]
 	</tr>
 
 	<form  method="post" name="join" action='generic_reports.pl'>
@@ -155,85 +155,85 @@
 	<input type="hidden" name="tabla2" id="tabla2">
 	<input type="hidden" name="campo2" id="campo2">
 
-		<td><!-- TMPL_VAR name="tables1" --></td>
+		<td>[% tables1 %]</td>
 
-    		<!-- TMPL_IF name="fields1" -->
-		<td><!-- TMPL_VAR name="fields1" --></td>
-		<td>&nbsp;</td>
-		<!-- /TMPL_IF -->
+    		[% IF fields1 %]
+			<td>[% fields1 %]</td>
+			<td>&nbsp;</td>
+		[% END %]
 	</tr>  
 
-	<!-- TMPL_IF name="fields1" -->
+	[% IF fields1 %]
 	<tr>		
-		<td><!-- TMPL_VAR name="tables2" --></td>
+		<td>[% tables2 %]</td>
 
-    		<!-- TMPL_IF name="fields2" -->
-		<td><!-- TMPL_VAR name="fields2" --></td>
-		<td>
-		&nbsp;
-		</td>
-		<!-- /TMPL_IF -->
+    		[% IF fields2 %]
+			<td>[% fields2 %]</td>
+			<td>
+			&nbsp;
+			</td>
+		[% END %]
 	</tr>
 	<tr>
-	<td>Tipo: <!-- TMPL_VAR name="jointype" --> </td>
+	<td>Tipo: [% jointype %] </td>
 	<td colspan="2">
-	<input type="image" alt="Agregar" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="tablejoin_selected('ADDJOIN')">
+	<input type="image" alt="Agregar" src="[% interface %]/[% theme %]/images/agregar.png" onclick="tablejoin_selected('ADDJOIN')">
 	</td>
 	</tr>
-	<!-- /TMPL_IF -->
+	[% END %]
 	</form>
 </table>
 
-<!-- TMPL_IF name="JOINS" -->
+[% IF JOINS %]
 <br>
 <table border=0 cellspacing=0 cellpadding=0  width="90%" align='center'>
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
 		<td>Tabla</td>
 		<td>Campo</td>
 		<td>Tabla</td>
 		<td>Campo</td>
 		<td>Tipo</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top"><img src="[% interface %]/[% theme %]/images/derecha.png"></td>
 	</tr>
-<!-- TMPL_LOOP name="JOINS" -->
+[% FOREACH JOINS %]
 	<tr valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="[% clase %]">&nbsp;</td>
 		
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="table1" -->
+		<td class="[% clase %]" class="inputFontNormal" align="center">
+			[% table1 %]
 		</td>
 		
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="field1" -->
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% field1 %]
 		</td>
 		
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="table2" -->
+		<td class="[% clase %]" class="inputFontNormal" align="center">
+			[% table2 %]
 		</td>
 		
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="field2" -->
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% field2 %]
 		</td>
 		
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="unionjoin" -->
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% unionjoin %]
 		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">
+		<td height=25 class="[% clase %]">
 
-	<a class="inputFontNormal" href="#" onclick="join_deleted('<!-- TMPL_VAR name="table1" -->','<!-- TMPL_VAR name="field1" -->', '<!-- TMPL_VAR name="table2" -->','<!-- TMPL_VAR name="field2" -->' )"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+	<a class="inputFontNormal" href="#" onclick="join_deleted('[% table1 %]','[% field1 %]', '[% table2 %]','[% field2 %]' )"><img src="[% interface %]/[% themelang %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
 	
 		</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
  	<tr valign=bottom>
         	<td class="lineafinaltabla"  align="left" colspan="7"></td>
         </tr>
 </table>
-<!-- /TMPL_IF -->
+[% END %]
 
  </td></tr>
  </table>
 
 <br>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

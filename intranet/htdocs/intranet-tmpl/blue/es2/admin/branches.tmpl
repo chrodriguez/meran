@@ -1,368 +1,381 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<!-- TMPL_IF NAME="add" -->
+[% IF add %]
 
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
-	<tr>
-		<td>
-	<!-- TMPL_IF NAME="use-heading-flags-p" -->
-		<!-- TMPL_IF NAME="heading-branches-p" -->
-			Unidades de Informaci&oacute;n
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->
-			Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->
-			Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->
-			Unidades de Informaci&oacute;n: Editar Categor&iacute;a
-		<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE -->
-		<!-- TMPL_VAR NAME="head" -->
-	<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
+		<tr>
+			<td>
+		[% IF use-heading-flags-p %]
+			[% IF ssheading-branches-p %]
+				Unidades de Informaci&oacute;n
+			[% END %]
+	
+			[% IF heading-branches-add-branch-p %]
+				Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
+			[% END %]
+	
+			[% IF heading-branches-edit-branch-p %]
+				Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
+			[% END %]
+	
+			[% IF heading-branches-edit-category-p %]
+				Unidades de Informaci&oacute;n: Editar Categor&iacute;a
+			[% END %]
+		[% ELSE %]
+			[% head %]
+		[% END %]
+			</td>
+		</tr>
+		<tr>
+			<td class="lineagruesa"  align="left" colspan="3"></td>
+		</tr>
+	</table>
+	
+	<form action="[% action %]" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<table>
+		<tr>
+			<td class="inputFontNormal">C&oacute;digo de unidad de informaci&oacute;n </td>
+			<td class="inputFontNormal">
+				[% IF branchcode %]
+					<input type="hidden" name="branchcode" value="[% HTML.escape(branchcode ) %]">"
+					[% branchcode %]
+				[% ELSE %]
+					<input class="inputFontNormal" type="text" name="branchcode" size="4" maxlength="4" value="[% HTML.escape(branchcode) %]">
+				[% END %]
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Nombre</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchname" size="40" maxlength="80" value="[% HTML.escape(branchname) %]">&nbsp;
+			</td>
+		</tr>
+	
+		<tr>
+			<td>
+				[% FOREACH categoryloop %]
+					<tr>
+						<td class="inputFontNormal">
+							[% categoryname %]
+						</td>
+						<td class="inputFontNormal">
+							<INPUT class="inputFontNormal" TYPE="checkbox" NAME="[% categorycode %]" [% checked %]>[% codedescription %]
+						</td>
+					</tr>
+				[% END %]
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Direcci&oacute;n</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchaddress1" value="[% HTML.escape(branchaddress1) %]">
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchaddress2" value="[% HTML.escape(branchaddress2) %]">
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Direccion Web</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchaddress3" value="[% HTML.escape(branchaddress3) %]">
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Tel&eacute;fono</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchphone" value="[% HTML.escape(branchphone) %]">
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Fax</td>
+			<td>
+				<input class="inputFontNormal" type="text" name="branchfax" value="[% HTML.escape(branchfax) %]">
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">E-mail</td>
+			<td>
+				<input class="inputFontNormal" size=40 type="text" name="branchemail" value="[% HTML.escape(branchemail) %]">
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="hidden" name="op" value="add">
+				<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
+	
+			</td>
+		</tr>
+	</table>
+	</form>
+[% END %] <!-- IF ADD -->
 
-<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
-<input type="hidden" name="op" value="add_validate">
-<table>
-	<tr>
-		<td class="inputFontNormal">C&oacute;digo de unidad de informaci&oacute;n </td>
-		<td class="inputFontNormal">
-			<!-- TMPL_IF NAME="branchcode" -->
-				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
-				<!-- TMPL_VAR NAME="branchcode" -->
-			<!-- TMPL_ELSE -->
-				<input class="inputFontNormal" type="text" name="branchcode" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
-			<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Nombre</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">&nbsp;
-		</td>
-	</tr>
-
-	<tr>
-		<td>
-			<!-- TMPL_LOOP NAME="categoryloop" -->
-			<tr>
-				<td class="inputFontNormal">
-					<!-- TMPL_VAR NAME="categoryname" -->
-				</td>
-				<td class="inputFontNormal">
-					<INPUT class="inputFontNormal" TYPE="checkbox" NAME="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_VAR NAME="checked" -->><!-- TMPL_VAR NAME="codedescription" -->
-				</td>
-			</tr>
-			<!-- /TMPL_LOOP -->
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Direcci&oacute;n</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchaddress1" value="<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchaddress2" value="<!-- TMPL_VAR NAME="branchaddress2" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Direccion Web</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchaddress3" value="<!-- TMPL_VAR NAME="branchaddress3" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Tel&eacute;fono</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchphone" value="<!-- TMPL_VAR NAME="branchphone" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Fax</td>
-		<td>
-			<input class="inputFontNormal" type="text" name="branchfax" value="<!-- TMPL_VAR NAME="branchfax" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">E-mail</td>
-		<td>
-			<input class="inputFontNormal" size=40 type="text" name="branchemail" value="<!-- TMPL_VAR NAME="branchemail" escape="HTML" -->">
-		</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<input type="hidden" name="op" value="add">
-			<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
-
-		</td>
-	</tr>
-</table>
-</form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="delete_confirm" -->
+[% IF delete_confirm %]
 	Confirme borrado:
-	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<form action="[% action %]" method="post">
 		<input type="hidden" name="op" value="delete_confirmed">
 		<input type="hidden" name="branchcode" value=<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->>
 		<input type="submit" value="SI" class="button">
 	</form>
-	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
+	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="NO" class="button">
+	</form>
+[% ELSE %]
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
+		<tr>
+			<td>
+			[% IF use-heading-flags-p %]
+				[% IF heading-branches-p %]
+					Unidades de Informaci&oacute;n
+				[% END %]
+				[% IF heading-branches-add-branch-p %]
+						Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
+				[% END %]
+				[% IF heading-branches-edit-branch-p %]
+						Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
+				[% END %]
+				[% IF heading-branches-edit-category-p %]
+						Unidades de Informaci&oacute;n: Editar Categor&iacute;a
+				[% END %]
+			[% ELSE %]
+				[% head %]
+			[% END %]
+			</td>
+		<tr>
+		<tr>
+			<td class="lineagruesa"  align="left" colspan="3"></td>
+		</tr>
+	</table>
+	<br>
+	
+	<font color="red">[% message %]</font>
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr class="inputFontNormal">
+			<td colspan="9" align="left">
+				<b>Unidades de Informaci&oacute;n</b>
+			</td>
+		</tr>
+		<tr class="tablaresultadoTitle">
+			<td width="1%" align="left"  valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
+			<th>Nombre</th>
+			<th>C&oacute;digo</th>
+			<th>Direcci&oacute;n</th>
+			<th>Categor&iacute;as</th>
+			<th>&nbsp;</th>
+			<th>Editar</th>
+			<th>Eliminar</th>
+			<td width="1%" align="rigth" valign="top"><img src="[% interface %]/ [% theme %]/images/derecha.png"></td>
+		</tr>
+		[% FOREACH branches %]M;
+			<tr valign="middle">
+				<td heigth=25 class="[% clase %]">&nbsp;</td>
+				<td  class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_name) %]</td>
+				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_code) %]</td>
+				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">
+					[% IF address-empty-p %]
+						(no hay nada ingresado)
+					[% ELSE %]
+						[% IF branchaddress1 %]
+							<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" -->
+						[% END %]
+
+						[% IF branchaddress2 %]
+							<br>[% HTML.escape(branchaddress2) %]
+						[% END %]
+
+						[% IF branchaddress3 %]
+							<br>[% HTML.escape(branchaddress3) %]
+						[% END %]
+
+						[% IF branchphone %]
+							<br>Tel&eacute;fono: [% HTML.escape(branchphone) %]
+						[% END %]
+
+						[% IF sbranchfax %]
+							<br>Fax: [% HTML.escape(branchfax) %]sss
+						[% END %]
+
+						[% IF branchemail %]
+							<br>Email: [% HTML.escape(branchemail) %]
+						[% END %]
+					[% END %]
+				</td>
+				<td class="[% clase %]"  class="inputFontNormal" align="left" valign="top">
+					[% IF no-categories-p %]
+						(no hay categor&iacute;as seteadas)
+					[% ELSE %]
+						[% FOREACH category_list %]
+							[% categoryname %]
+							<br>
+						[% END %]
+					[% END %]
+				</td>
+				<td  class="[% clase %]" class="inputFontNormal" valign="middle" align="center">
+					<form action="[% action %]ss" method="post" name=form1>
+						<input type="hidden" name="op" value="edit">
+						<input type="hidden" name="branchcode" value="[% HTML.escape(value) %]ss">
+					<td  align="center" class="[% clase %]"class="inputFontNormal">
+						<input type="hidden" name="op" value="add">
+						<input type="image" ALT="Editar"  src="[% interface %]/[% theme %]/images/editar.png" onclick="form1.submit">
+					</form>
+					</td>
+					<td  class="[% clase %]" align="center" valign="middle">
+						<form action="[% action %]" method="post" name=form2>
+						<input type="hidden" name="branchcode" value="[% HTML.escape(value) %]">
+						<input type="hidden" name="op" value="delete"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form2.submit">
+						</form>
+					</td>
+					<td class="[% clase %]">&nbsp;</td>
+		
+			</tr>
+		[% END %]
+		<tr>
+			<td class="lineafinaltabla"  align="left" colspan="9"></td>
+		</tr>
+	</table>
+	<br>
+	
+	<center>
+	<form action="[% action %]" method="post" name=formUni>
+		<input type="hidden" name="op" value="add">
+		<input type="image" alt="Agregar Nueva Unidad de Informaci&oacute;n"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="formUni.submit">
+			<!--<input type="submit" class="button" value="Agregar Nueva Unidad de Informaci&oacute;n">-->
+	</form>
+	
+	<br>
+	
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td colspan="7" class="inputFontNormal" align="left">
+				<b>Categor&iacute;as de Unidades de Informaci&oacute;n</b>
+			</td>
+		</tr>
+		
+		<tr class="tablaresultadoTitle">
+			<td width="1%" valign="top" align="left"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
+	
+			<th>Nombre</th>
+			<th>C&oacute;digo</th>
+			<th>Descripci&oacute;n</th>
+			<th  width="70" align="letf">Editar</th>
+			<th  width="70" align="rigth">Eliminar</th>
+	
+			<td width="1%" valign="top" align="right" ><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
+		</tr>
+	
+		[% FOREACH branchcategories %]
+			<tr>
+				<td height=25 class="[% clase %]">&nbsp;</td>
+				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% categoryname %]</td>
+				<td class="[% clase %]"class="inputFontNormal" align="center" valign="top"> [%categorycode %]</td>
+				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% codedescription %]</td>
+				<td class="[% clase %]"class="inputFontNormal" align="center" valign="center">
+					<form action="[% action %]" method="post" name=form3>
+					<input type="hidden" name="op" value="editcategory">
+					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
+					<input type="image" ALT="Editar"  src="[% interface %]/[% themelang %]/images/editar.png" onclick="form3.submit"> 
+					</form>
+				</td>
+				<td class="[% clase %]"align="center" valign="center">
+					<form action="[% action %]" method="post" name=form4>
+					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
+					<input type="hidden" name="op" value="delete_category"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form4.submit">
+					</form>
+				</td>
+				<td  class="[% clase %]">&nbsp;</td>
+			</tr>
+		[% END %]
+	
+		<tr>
+			<td class="lineafinaltabla"  align="left" colspan="9"></td>
+		</tr>
+	
+	</table>
+		<br>
+		
+	<form name=formCat action="[% action %]" method="post">
+		<input type="hidden" name="op" value="editcategory">
+		<input type="image" alt="Agregar Nueva Categor&iacute;a" src="[% interface %]/[% themelang %]/images/agregar.png" onclick="formCat.submit">
+			<!--<input type="submit" class="button" value="Agregar Nueva Categor&iacute;a">-->
+	</form>
+	
+	</center>
+[% END %]
+
+[% IF editcategory %]ss
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle">
+		<tr>
+			<td>	 
+				[% use-heading-flags-p" -->
+					[% heading-branches-p" -->
+						Unidades de Informaci&oacute;n
+					<!-- /TMPL_IF -->
+					[% heading-branches-add-branch-p" -->
+						Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
+					<!-- /TMPL_IF -->
+					[% heading-branches-edit-branch-p" -->
+						Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
+					<!-- /TMPL_IF -->
+					[% heading-branches-edit-category-p" -->
+						Unidades de Informaci&oacute;n: Editar Categor&iacute;a
+					<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_VAR NAME="head" -->
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr>
+			<td class="lineagruesa"  align="left" colspan="3"></td>
+		</tr>
+	
+	</table>
+	<form action="[% action %]" name="Aform" method="post">
+		<input type="hidden" name="op" value="addcategory_validate">
+	
+	
+	<table border="0" cellpadding="5" cellspacing="0" >
+		<tr>
+			<td class="inputFontNormal"><b>C&oacute;digo de categor&iacute;a</b></td>
+			<td>
+				[% categorycode" -->
+					<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+					<!-- TMPL_VAR NAME="categorycode" -->
+				<!-- TMPL_ELSE -->
+					<input class="inmputFontNormal"type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Nombre</td>
+			<td><input class="inputFontNormal" type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="categoryname" escape="HTML" -->">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="inputFontNormal">Descripci&oacute;n</td>
+			<td><input class="inputFontNormal" type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="codedescription" escape="HTML" -->">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
+	
+			</td>					
+		</tr>
+	</table>
+	
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="else" -->
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
-	<tr>
-		<td>
- 		<!-- TMPL_IF NAME="use-heading-flags-p" -->
-			<!-- TMPL_IF NAME="heading-branches-p" -->
-				Unidades de Informaci&oacute;n
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->
-				Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->
-				Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->
-				Unidades de Informaci&oacute;n: Editar Categor&iacute;a
-			<!-- /TMPL_IF -->
-		<!-- TMPL_ELSE -->
-			<!-- TMPL_VAR NAME="head" -->
-		<!-- /TMPL_IF -->
-		</td>
-	<tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
-<br>
-
-<font color="red"><!-- TMPL_VAR NAME="message" --></font>
-<table border="0" cellpadding="0" cellspacing="0">
-	<tr class="inputFontNormal">
-		<td colspan="9" align="left">
-			<b>Unidades de Informaci&oacute;n</b>
-		</td>
-	</tr>
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-		<th>Nombre</th>
-		<th>C&oacute;digo</th>
-		<th>Direcci&oacute;n</th>
-		<th>Categor&iacute;as</th>
-		<th>&nbsp;</th>
-		<th>Editar</th>
-		<th>Eliminar</th>
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-		<!-- TMPL_LOOP NAME="branches" -->
-	<tr valign="middle">
-		<td heigth=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left" valign="top"><!-- TMPL_VAR NAME="branch_name" escape="HTML" --></td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="left" valign="top"><!-- TMPL_VAR NAME="branch_code" escape="HTML" --></td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" align="left" valign="top">
-			<!-- TMPL_IF NAME="address-empty-p" -->
-				(no hay nada ingresado)
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_IF NAME="branchaddress1"-->
-					<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" --><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="branchaddress2" -->
-					<br><!-- TMPL_VAR NAME="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="branchaddress3" -->
-					<br><!-- TMPL_VAR NAME="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="branchphone" -->
-					<br>Tel&eacute;fono: <!-- TMPL_VAR NAME="branchphone" escape="HTML" --><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="branchfax" -->
-					<br>Fax: <!-- TMPL_VAR NAME="branchfax" escape="HTML" --><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="branchemail" -->
-					<br>Email: <!-- TMPL_VAR NAME="branchemail" escape="HTML" --><!-- /TMPL_IF -->
-			<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"  class="inputFontNormal" align="left" valign="top">
-			<!-- TMPL_IF NAME="no-categories-p" -->
-				(no hay categor&iacute;as seteadas)
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_LOOP NAME="category_list" -->
-					<!-- TMPL_VAR NAME="categoryname" --><br>
-				<!-- /TMPL_LOOP -->
-			<!-- /TMPL_IF -->
-		</td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal" valign="middle" align="center">
-			<form action="<!-- TMPL_VAR NAME="action" -->" method="post" name=form1>
-				<input type="hidden" name="op" value="edit">
-				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
-			<td  align="center" class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal">
-				<input type="hidden" name="op" value="add">
-				<input type="image" ALT="Editar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" onclick="form1.submit">
-			</form>
-			</td>
-			<td  class="<!-- TMPL_VAR NAME="clase"-->" align="center" valign="middle">
-				<form action="<!-- TMPL_VAR NAME="action" -->" method="post" name=form2>
-				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
-				<input type="hidden" name="op" value="delete"><input type="image" ALT="Eliminar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onclick="form2.submit">
-				</form>
-			</td>
-			<td class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-
-	</tr>
-		<!-- /TMPL_LOOP -->
-	<tr>
-		<td class="lineafinaltabla"  align="left" colspan="9"></td>
-	</tr>
-</table>
-<br>
-
-<center>
-<form action=<!-- TMPL_VAR NAME="action" --> method="post" name=formUni>
-	<input type="hidden" name="op" value="add">
-	<input type="image" alt="Agregar Nueva Unidad de Informaci&oacute;n"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="formUni.submit">
-		<!--<input type="submit" class="button" value="Agregar Nueva Unidad de Informaci&oacute;n">-->
-</form>
-
-<br>
-
-<table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	 <tr>
-	 	<td colspan="7" class="inputFontNormal" align="left">
-			<b>Categor&iacute;as de Unidades de Informaci&oacute;n</b>
-		</td>
-	 </tr>
-	
-	<tr class="tablaresultadoTitle">
-		<td width="1%" valign="top" align="left"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-
-		<th>Nombre</th>
-		<th>C&oacute;digo</th>
-		<th>Descripci&oacute;n</th>
-		<th  width="70" align="letf">Editar</th>
-		<th  width="70" align="rigth">Eliminar</th>
-
-		<td width="1%" valign="top" align="right" ><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-	</tr>
-
-	<!-- TMPL_LOOP NAME="branchcategories" -->
-	<tr>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left" valign="top"><!-- TMPL_VAR NAME="categoryname" --></td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="center" valign="top"><!-- TMPL_VAR NAME="categorycode" --></td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="left" valign="top"><!-- TMPL_VAR NAME="codedescription" --></td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"class="inputFontNormal" align="center" valign="center">
-			<form action="<!-- TMPL_VAR NAME="action" -->" method="post" name=form3>
-			<input type="hidden" name="op" value="editcategory">
-			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-			<input type="image" ALT="Editar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" onclick="form3.submit"> 
-			</form>
-		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->"align="center" valign="center">
-			<form action="<!-- TMPL_VAR NAME="action" -->" method="post" name=form4>
-			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-			<input type="hidden" name="op" value="delete_category"><input type="image" ALT="Eliminar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" onclick="form4.submit">
-			</form>
-		</td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
-
-	<tr>
-        	<td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
-
-</table>
-	<br>
-	
-<form name=formCat action=<!-- TMPL_VAR NAME="action" --> method="post">
-	<input type="hidden" name="op" value="editcategory">
-	<input type="image" alt="Agregar Nueva Categor&iacute;a" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="formCat.submit">
-		<!--<input type="submit" class="button" value="Agregar Nueva Categor&iacute;a">-->
-</form>
-
-</center>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="editcategory" -->
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle">
-	<tr>
-		<td>	 
-			<!-- TMPL_IF NAME="use-heading-flags-p" -->
-				<!-- TMPL_IF NAME="heading-branches-p" -->
-					Unidades de Informaci&oacute;n
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->
-					Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->
-					Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->
-					Unidades de Informaci&oacute;n: Editar Categor&iacute;a
-				<!-- /TMPL_IF -->
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_VAR NAME="head" -->
-			<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-
-</table>
-<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
-	<input type="hidden" name="op" value="addcategory_validate">
-
-
-<table border="0" cellpadding="5" cellspacing="0" >
-	<tr>
-		<td class="inputFontNormal"><b>C&oacute;digo de categor&iacute;a</b></td>
-		<td>
-			<!-- TMPL_IF NAME="categorycode" -->
-				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-				<!-- TMPL_VAR NAME="categorycode" -->
-			<!-- TMPL_ELSE -->
-				<input class="inmputFontNormal"type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-			<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Nombre</td>
-		<td><input class="inputFontNormal" type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="categoryname" escape="HTML" -->">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal">Descripci&oacute;n</td>
-		<td><input class="inputFontNormal" type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="codedescription" escape="HTML" -->">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-		<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
-
-		</td>					
-	</tr>
-</table>
-
-</form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="delete_category" -->
+[% delete_category" -->
 	Confirme borrado:
-	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<form action="[% action %]" method="post">
 		<input type="hidden" name="op" value="categorydelete_confirmed">
 		<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
 		<input type="submit" value="SI" class="button">
 	</form>
-	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
+	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="NO" class="button">
 	</form>
 <!-- /TMPL_IF -->

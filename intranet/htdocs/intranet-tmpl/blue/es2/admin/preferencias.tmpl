@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
@@ -176,20 +176,6 @@ function respuesta(responseText){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * tablaOrdenada
  * Hace que la tabla con los resultados, se pueda ordenar por los campos correspondientes y tambien hace que se 
@@ -305,10 +291,10 @@ $(document).ready( function() {
 <p>
 	<input type="text" id="buscar" name="buscar" value="">
 	<input type="image" alt="Buscar"  
-	src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" 
+	src="[% interface %]/[% themelang %]/images/boton-buscar.png" 
 	onClick="buscarPreferencia()">
 	<input type="image" name="clear" id="clear" alt="Limpiar" 
-	src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" onClick="limpiar()">
+	src="[% themelang %]/images/borrar2.png" border="0" onClick="limpiar()">
 </p>
 <!-- PARA AGREGAR -->
 <p>
@@ -320,10 +306,10 @@ $(document).ready( function() {
 		<option value="valAuto">Valores autorizados</option>
 	</select>
 	<input 	id="boton" type="image" alt="Agregar Preferencia de Sistema"  
-		src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/agregar.png" 
+		src="[% interface %]/[% themelang %]/images/agregar.png" 
 		onclick="agregarPreferencia()">
 </p>
 
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
