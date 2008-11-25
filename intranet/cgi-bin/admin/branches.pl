@@ -69,7 +69,7 @@ my $op = $input->param('op');
 
 my ($template, $session, $params) = get_template_and_user({
 								template_name => "admin/branches.tmpl",
-								query'} = $input,
+								query = $input,
 								type => "intranet",
 								authnotrequired => 0,
 								flagsrequired => {borrowers => 1},

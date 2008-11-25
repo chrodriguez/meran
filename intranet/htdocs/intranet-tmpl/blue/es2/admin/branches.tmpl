@@ -1,5 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
-
+[% USE HTML %]
 [% IF add %]
 
 	<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle" >
@@ -118,7 +118,7 @@
 	Confirme borrado:
 	<form action="[% action %]" method="post">
 		<input type="hidden" name="op" value="delete_confirmed">
-		<input type="hidden" name="branchcode" value=<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->>
+		<input type="hidden" name="branchcode" value="[% HTML.escape(branchcode) %]">
 		<input type="submit" value="SI" class="button">
 	</form>
 	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
@@ -180,7 +180,7 @@
 						(no hay nada ingresado)
 					[% ELSE %]
 						[% IF branchaddress1 %]
-							<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" -->
+							<br>[% HTML.escape(branchaddress1) %]
 						[% END %]
 
 						[% IF branchaddress2 %]
@@ -306,26 +306,26 @@
 	</center>
 [% END %]
 
-[% IF editcategory %]ss
+[% IF editcategory %]
 	<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" class="pagetitle">
 		<tr>
 			<td>	 
-				[% use-heading-flags-p" -->
-					[% heading-branches-p" -->
+				[% IF use-heading-flags-p %]
+					[% IF heading-branches-p ⅜]
 						Unidades de Informaci&oacute;n
-					<!-- /TMPL_IF -->
-					[% heading-branches-add-branch-p" -->
+					[% END %]
+					[% IF heading-branches-add-branch-p %]
 						Unidades de Informaci&oacute;n: Agregar Unidad de Informaci&oacute;n
-					<!-- /TMPL_IF -->
-					[% heading-branches-edit-branch-p" -->
+					[% END %]
+					[% heading-branches-edit-branch-p %]
 						Unidades de Informaci&oacute;n: Editar Unidad de Informaci&oacute;n
-					<!-- /TMPL_IF -->
-					[% heading-branches-edit-category-p" -->
+					[% END %]
+					[% IF heading-branches-edit-category-p %]
 						Unidades de Informaci&oacute;n: Editar Categor&iacute;a
-					<!-- /TMPL_IF -->
-				<!-- TMPL_ELSE -->
-					<!-- TMPL_VAR NAME="head" -->
-				<!-- /TMPL_IF -->
+					[% END %]
+				[% ELSE %]
+					[% head %]
+				[% END %]
 			</td>
 		</tr>
 		<tr>
@@ -341,43 +341,44 @@
 		<tr>
 			<td class="inputFontNormal"><b>C&oacute;digo de categor&iacute;a</b></td>
 			<td>
-				[% categorycode" -->
-					<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-					<!-- TMPL_VAR NAME="categorycode" -->
-				<!-- TMPL_ELSE -->
-					<input class="inmputFontNormal"type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
-				<!-- /TMPL_IF -->
+		<!-- FIXME QUE ES ESTO??? UN IF DE UNA VARIABLE Y ELSE DE LA MISMA???????  -->
+				[% IF categorycode %]
+					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]>
+					[% HTML.escape(categorycode) %]
+				[% ELSE %]
+					<input class="inmputFontNormal"type="text" name="categorycode" size="5" maxlength="5" value="[% HTML.escape(categorycode) %]">
+				[% END %]
 			</td>
 		</tr>
 		<tr>
 			<td class="inputFontNormal">Nombre</td>
-			<td><input class="inputFontNormal" type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="categoryname" escape="HTML" -->">&nbsp;</td>
+			<td><input class="inputFontNormal" type="text" name="categoryname" size="40" maxlength="80" value="[% HTML.escape(categorycode) %]">&nbsp;</td>
 		</tr>
 		<tr>
 			<td class="inputFontNormal">Descripci&oacute;n</td>
-			<td><input class="inputFontNormal" type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="codedescription" escape="HTML" -->">&nbsp;</td>
+			<td><input class="inputFontNormal" type="text" name="codedescription" size="40" maxlength="80" value="[% HTML.escape(codedescription) %]">&nbsp;</td>
 		</tr>
 		<tr>
 			<td colspan="2">
-			<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
+			<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
 	
 			</td>					
 		</tr>
 	</table>
 	
 	</form>
-<!-- /TMPL_IF -->
+[% END %]
 
-[% delete_category" -->
+[% IF delete_category %]
 	Confirme borrado:
 	<form action="[% action %]" method="post">
 		<input type="hidden" name="op" value="categorydelete_confirmed">
-		<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+		<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
 		<input type="submit" value="SI" class="button">
 	</form>
 	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="NO" class="button">
 	</form>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
