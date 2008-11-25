@@ -27,4 +27,4 @@ my $marc_p = C4::Context->boolean_preference("marc");
 
 $params->{'NOTMARC'} = !$marc_p;
 
-C4::Auth::output_html_with_http_headers($query, $template, $params);
+C4::Auth::output_html_with_http_headers($query, $template, $params,$session);
