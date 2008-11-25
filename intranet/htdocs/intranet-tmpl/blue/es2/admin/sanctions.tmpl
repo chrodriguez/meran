@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 
 <script language="JavaScript">
@@ -36,16 +36,16 @@
 
 <table border=0 cellspacing=0 cellpadding=0 width="80%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
                 <td>Tipos de pr&eacute;stamo</td>
                 <td>Categorias de usuario</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 	</tr>
         <tr valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME=issues_types --></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME=categories --></td>
-                <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="[% clase %]">&nbsp;</td>
+		<td class="inputFontNormal">[% issues_types %]</td>
+		<td class="inputFontNormal">[% categories %]</td>
+                <td height=25 class="[% clase %]">&nbsp;</td>
 	</tr>
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="4"></td>
@@ -55,19 +55,19 @@
 	<br><br>
 <table border=0 cellspacing=0 cellpadding=0 width="80%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/ [% themelang %]/images/izquierda.png"></td>
                 <td>&nbsp;</td>
                 <td>Tipos de pr&eacute;stamo sobre el que se aplica</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top"><img src="[% interface %]/ [% themelang %]/images/derecha.png"></td>
         </tr>
-                <!-- TMPL_LOOP NAME=issues -->
-        <tr valign="middle">
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="inputFontNormal"><input class="inputFontNormal" type="checkbox" name="issuestypes" value="<!-- TMPL_VAR NAME=issuecode -->" <!-- TMPL_IF Name="checked" -->checked<!-- /TMPL_IF -->></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME=description --></td>
- 		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-        </tr>
-                <!-- /TMPL_LOOP -->
+	[% FOREACH issues %]
+		<tr valign="middle">
+			<td height=25 class="[% clase %]">&nbsp;</td>
+			<td class="inputFontNormal"><input class="inputFontNormal" type="checkbox" name="issuestypes" value="[% issuecode %]" [% IF checked %] "checked="checked [% END %] > </td>
+			<td class="inputFontNormal">[% description %]</td>
+			<td height=25 class="[% clase %]">&nbsp;</td>
+		</tr>
+	[% END %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="4"></td>
        	</tr>
@@ -78,7 +78,7 @@
 
 <table border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/ [% themelang %]/images/izquierda.png"></td>
 		<td>Orden</td>
                 <td>Tipo de usuario</td>
                 <td>Tipo de pr&eacute;stamo</td>
@@ -86,28 +86,28 @@
                 <td>D&iacute;as de sanci&oacute;n</td>
                 <td>Cantidad</td>
                 <td> Eliminar</td>
-		<td width="1%" class="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td width="1%" class="right" valign="top"><img src="[% interface %]/ [% themelang %]/images/derecha.png"></td>
         </tr>
-                <!-- TMPL_LOOP NAME=loop_sanctions_types -->
-        <tr valign=middle>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=orden --></td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=desccategory --></td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=descissuetype --></td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=delaydays --></td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=sanctiondays --></td>
-                <td class="inputFontNormal"><!-- TMPL_VAR NAME=amount --></td>
-                <td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('<!-- TMPL_VAR NAME=sanctiontypecode -->','<!-- TMPL_VAR NAME=sanctionrulecode -->');">Eliminar</a></FONT>
-                </td>
-		<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-        </tr>
-                <!-- /TMPL_LOOP -->
+        [% FOREACH loop_sanctions_types %]
+		<tr valign=middle>
+			<td height=25 class="[% clase %]">&nbsp;</td>
+			<td class="inputFontNormal">[% orden %]</td>
+			<td class="inputFontNormal">[% desccategory %]</td>
+			<td class="inputFontNormal">[% descissuetype %]</td>
+			<td class="inputFontNormal">[% delaydays %]/td>
+			<td class="inputFontNormal">[% sanctiondays %]</td>
+			<td class="inputFontNormal">[% amount %]</td>
+			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">Eliminar</a></FONT>
+			</td>
+			<td  class="[% clase %]">&nbsp;</td>
+		</tr>
+	[% FOREACH %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
         </tr>
 
         <tr>
-        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('<!-- TMPL_VAR NAME=sanctiontypecode -->');">Agregar</a>&nbsp;Orden:<!-- TMPL_VAR NAME=orders -->&nbsp;Cantidad:<!-- TMPL_VAR NAME=amounts -->&nbsp;Regla:<!-- TMPL_VAR NAME=sanctions_rules --></FONT>
+        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('[% sanctiontypecode %]');">Agregar</a>&nbsp;Orden:[% orders %]&nbsp;Cantidad:[% amounts  %]&nbsp;Regla:[% sanctions_rules %]</FONT>
 		</td>
         </tr>
 </table>
@@ -116,4 +116,4 @@
 
 	</form>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

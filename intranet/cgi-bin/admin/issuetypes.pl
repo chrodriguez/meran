@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use Template;
 
 
 sub StringSearch  {
@@ -30,23 +31,24 @@ my $issuetype=$input->param('issuetype');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/issuetypes.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+
+my ($template, $session, $params) = get_template_and_user({
+									template_name => "admin/issuetypes.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
 
 
 
 if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+	$params->{'script_name'}= $script_name;
+	$params->{$op}= 1; # we show only the TMPL_VAR names $op
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+	$params->{'script_name'}= $script_name,
+						else              => 1; # we show only the TMPL_VAR names $op
 }
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -61,22 +63,18 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 
-		$template->param(
-                	description => $data->{'description'},
-                        maxissues => $data->{'maxissues'},
-			notforloan => $data->{'notforloan'},
-			daysissues => $data->{'daysissues'},
-			renew => $data->{'renew'},
-			renewdays => $data->{'renewdays'},
-			enabled => $data->{'enabled'},
-			dayscanrenew => $data->{'dayscanrenew'}
-		);
-
-
+		$params->{'description'}= $data->{'description'};
+                $params->{'maxissues'}= $data->{'maxissues'};
+		$params->{'notforloan'}= $data->{'notforloan'};
+		$params->{'daysissues'}= $data->{'daysissues'};
+		$params->{'renew'}= $data->{'renew'};
+		$params->{'renewdays'}= $data->{'renewdays'};
+		$params->{'enabled'}= $data->{'enabled'};
+		$params->{'dayscanrenew'}= $data->{'dayscanrenew'};
  
 	}
 		
-	$template->param(issuetype => $issuetype);
+	$params->{'issuetype'}= $issuetype;
 ;
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -128,16 +126,15 @@ if ($op eq 'add_form') {
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 
-	$template->param(issuetype => $issuetype,
-		description => $data->{'description'},
-		notforloan => $data->{'notforloan'},
-		maxissues => $data->{'maxissues'},
-		renew => $data->{'renew'},
-		renewdays => $data->{'renewdays'},
-		daysissues => $data->{'daysissues'},
-		dayscanrenew => $data->{'dayscanrenew'},
-		total => $total
-	);
+	$params->{'issuetype'}= $issuetype;
+	$params->{'description'}= $data->{'description'};
+	$params->{'notforloan'}= $data->{'notforloan'};
+	$params->{'maxissues'}= $data->{'maxissues'};
+	$params->{'renew'}= $data->{'renew'};
+	$params->{'renewdays'}= $data->{'renewdays'};
+	$params->{'daysissues'}= $data->{'daysissues'};
+	$params->{'dayscanrenew'}= $data->{'dayscanrenew'};
+	$params->{'total'}= $total;
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -179,17 +176,18 @@ if ($op eq 'add_form') {
 		 
 		push(@loop_data, \%row_data);
 	}
-	$template->param(loop => \@loop_data);
+	$params->{'loop'}= \@loop_data;
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
+		$params->{'previous'}= "$script_name?offset=".$prevpage;
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
+		$params->{'next'}= "$script_name?offset=".$nextpage;
 	}
 } #---- END $OP eq DEFAULT
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $params);
 
 # Local Variables:
 # tab-width: 4

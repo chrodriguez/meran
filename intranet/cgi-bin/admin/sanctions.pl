@@ -22,6 +22,8 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::AR::Utilidades;
+use Template;
 
 my $input = new CGI;
 my $issue= $input->param('issuetypes') || undef;
@@ -62,14 +64,14 @@ if ($action eq 'delete') {
 	$sth->execute($sanctiontypecode1, $sanctionrulecode, $order, $amount);
 }
 
-my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "admin/sanctions.tmpl",
-                             query => $input,
-                             type => "intranet",
-			     flagsrequired => {parameters => 1},
-			     authnotrequired => 0,
-                             debug => 1,
-                             });
+my ($template, $session, $params) = get_template_and_user({
+									template_name => "admin/sanctions.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
 
 my $sth = $dbh->prepare("select * from issuetypes order by description");
 $sth->execute();
@@ -81,6 +83,10 @@ while (my $res = $sth->fetchrow_hashref) {
 	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
 }
 $sth->finish;
+
+
+# FIXME esta lista se puede armar con lo que se hizo???????
+
 my $CGIissuetypes=CGI::scrolling_list( 
 			-name => 'issuetypes',
                         -values   => \@issuesvalues,
@@ -100,14 +106,9 @@ while (my $res = $sth->fetchrow_hashref) {
         $categorieslabels{$res->{'categorycode'}} = $res->{'description'};
 }
 $sth->finish;
-my $CGIcategories=CGI::scrolling_list(
-                        -name => 'categories',
-                        -values   => \@categoriesvalues,
-                        -labels   => \%categorieslabels,
-			-default => $category,
-			-onChange => "submit();",
-                        -size     => 1,
-                        -multiple => 0 );
+
+# FIXME esta lista se puede armar con lo que se hizo???????
+my $CGIcategories=C4::AR::Utilidades::generarComboCategorias();
 
 
 my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");
@@ -156,6 +157,8 @@ while (my $res = $sth->fetchrow_hashref) {
 	$ruleslabels{$res->{'sanctionrulecode'}} = "Dias de demora: ".$res->{'delaydays'}.". Dias de sancion: ".$res->{'sanctiondays'};
 }
 $sth->finish;
+
+# FIXME esta???
 my $CGIrules=CGI::scrolling_list(
                         -name => 'rules',
                         -values   => \@rulesvalues,
@@ -177,6 +180,9 @@ for (my $i=1; $i < 21; $i++) {
         $orders{$i} = $i;
 }
 $sth->finish;
+
+
+# FIXME esta???
 my $CGIorders=CGI::scrolling_list(
                         -name => 'orders',
                         -values   => \@orders,
@@ -194,6 +200,9 @@ for (my $i=1; $i < 21; $i++) {
         $amounts{$i} = $i;
 }
 $sth->finish;
+
+
+# FIXME esta???
 my $CGIamounts=CGI::scrolling_list(
                         -name => 'amounts',
                         -values   => \@amounts,
@@ -219,15 +228,13 @@ while (my $res = $sth->fetchrow_hashref) {
 }
 $sth->finish;
 
-$template->param(
-	issues => \@issues,
-	amounts => $CGIamounts,
-	orders => $CGIorders,
-	sanctiontypecode => $sanctiontypecode, 
-	loop_sanctions_types => \@sanctionsarray,
-	sanctions_rules => $CGIrules,
-	issues_types => $CGIissuetypes,
-	categories => $CGIcategories
-);
+$params->{'issues'}= \@issues;
+$params->{'amounts'}= $CGIamounts;
+$params->{'orders'}= $CGIorders;
+$params->{'sanctiontypecode'}= $sanctiontypecode;
+$params->{'loop_sanctions_types'}= \@sanctionsarray;
+$params->{'sanctions_rules'}= $CGIrules;
+$params->{'issues_types'}= $CGIissuetypes;
+$params->{'categories'}= $CGIcategories;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $params);

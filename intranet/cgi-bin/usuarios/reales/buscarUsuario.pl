@@ -15,4 +15,4 @@ my ($template, $session, $params) = get_template_and_user({
 									debug => 1,
 			    });
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $params, $session);

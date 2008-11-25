@@ -92,6 +92,7 @@ C4::Auth - Authenticates Koha users
 	     &get_templateexpr_and_user
              &getborrowernumber
 	     &getuserflags
+             &output_html_with_http_headers
 );
 
 
@@ -161,13 +162,19 @@ sub get_template_and_user {
 
 
 sub output_html_with_http_headers {
-    	my($query, $template, $params) = @_;
+    	my($query, $template, $params, $session) = @_;
 # open(A, ">>/tmp/debug.txt");
 # print A "output_html: \n";
 #   	my $session = new CGI::Session();
- 	my $session = CGI::Session->load();
+#  	my $session = CGI::Session->new();
 
-	printSession($session, 'output_html_with_http_headers: ');
+
+# FIXME este IF es un parche, ya que a veces (especifico de auth.pl) no recibe el parametro session
+	 if ( !(defined($session)) ){
+            $session = CGI::Session->new();
+        }
+            
+#         printSession($session, 'output_html_with_http_headers: ');
     	# send proper HTTP header with cookies:
     	print $session->header();
 
@@ -269,26 +276,17 @@ has authenticated.
 
 
 sub checkauth {
-open(A, ">>/tmp/debug.txt");
-print A "desde checkauth \n";
 	my $query=shift;
 	my $time=localtime(time());
 
 	my $session = CGI::Session->load();# or die CGI::Session->errstr();
 # 	my $sessionID = $session->id();
 printSession($session, 'checkauth despues del load');
-	my $sessionID = $session->param('sessionID');
+
+        my $sessionID = $session->param('sessionID');
 	my $self_url = $query->url(-absolute => 1);
 	$session->param('url', $self_url);
 
-
-my $key;
-print A "\n";
-print A "SE IMPRIME ENV: \n";
-   foreach $key (sort keys(%ENV)) {
-      print A "$key = $ENV{$key} \n";
-   } 
-print A "\n";
 
 
 	# $authnotrequired will be set for scripts which will run without authentication
@@ -323,34 +321,27 @@ print A "\n";
 	my ($userid, $flags);
 	my $logout = $query->param('logout.x');
 
-	if ( $sessionID=$session->param('sessionID') ) {
+	if ( $sessionID = $session->param('sessionID') ) {
 	#Hay una session activa
-print A "el sessionID esta seteado \n";
-print A "se recupera el sessionID: $sessionID\n";
  		my ($ip , $lasttime);
 		($userid, $ip, $lasttime)= _getInfoSession($sessionID);
 		$session->param('lasttime', $lasttime);
 		$session->param('timeout', $timeout);
 		$session->param('ip', $ip);
-print A "userid: $userid\n";
-print A "ip: $ip\n";
-print A "lasttime: $lasttime\n";
 		if ($logout) {
-print A "logouttttttttt \n";
 		# voluntary logout the user
  			_logout_Controller($session);
 		}
 
 		if ($userid) { 
-		#la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
+		#la sesion existia en la bdd, chequeo que no se haya vencido el tiempo
 			$loggedin= _loggedin_Controller($session);
  		}
 	}#eslif se requiere cookie
 
 	unless ($userid) { 
 	#si no hay userid, hay que autentificarlo y no existe sesion
-print A "no hay usuario autenticado 392: \n";
-
+                $session = new CGI::Session();
 		$sessionID= $session->id; #$sessionID=int(rand()*1000000).'-'.time();
 		$userid= $query->param('userid');
 		my $self_url = $query->url(-absolute => 1);
@@ -391,7 +382,7 @@ print A "no hay usuario autenticado 392: \n";
 		#modifica el session ID
                 $sessionID.="_".$branch;
 		$session->param('sessionID', $sessionID);
-
+                
 
 		if ($return) {
 			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
@@ -463,6 +454,7 @@ print A "no hay usuario autenticado 392: \n";
 		}
 	}#end unless ($userid) 
 	
+        
 	my $insecure = C4::Context->boolean_preference('insecure');
 	# finished authentification, now respond
 	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
@@ -512,7 +504,6 @@ print A "no hay usuario autenticado 392: \n";
 #                   	}
 
 			## FIXME hay q redirigirlo a la ventana para cambiar el password
-			print A "1er EXIT \n";
 			$session->param('nroRandom', $random_number);
 			redirectTo('/cgi-bin/koha/changepassword.pl');
        			exit;
@@ -520,12 +511,8 @@ print A "no hay usuario autenticado 392: \n";
 		}
 
 # successful login
-print A "1er RETURN \n";
-print A "successful login!!!!!!!!!!!!\n";
-print A "userid: ".$userid."\n";
 $session->param('REQUEST_URI',$ENV{'REQUEST_URI'});
 printSession($session, 'checkauth: ');
-print A "sessionID: ".$sessionID."\n";
 
 
 		return ($session);
@@ -533,7 +520,6 @@ print A "sessionID: ".$sessionID."\n";
 	# else we have a problem...
 	# get the inputs from the incoming query
 	#Password incorrecta
-	print A "2do EXIT \n";
 	$session->param('nroRandom', $random_number);
 	$session->param('codMsg', 'U357');
 	redirectTo($url);
@@ -602,11 +588,11 @@ if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
 	my ($sessionID, $userid )= _deleteSession(  $session->param('sessionID') );
 	#Logueo la sesion que se cambio la ip
 	_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-												$session->param('userid'),#hay q loggear undef ???
-												$session->param('time'),
-												$session->param('ip'),
-												$session->param('newip')
-		);
+                        $session->param('userid'),#hay q loggear undef ???
+                        $session->param('time'),
+                        $session->param('ip'),
+                        $session->param('newip')
+                    );
 	$session->param('codMsg', 'U356');
 	redirectTo($url);
 } else {
@@ -634,12 +620,6 @@ sub _logout_Controller {
 										$session->param('time')
 			);
 	
-	print A "logout antes de borrar la session: \n";
-	print A "session->userid: ".$session->param('userid')."\n";
-	print A "session->password: ".$session->param('password')."\n";
-	print A "session->nroRandom: ".$session->param('nroRandom')."\n";
-	print A "session->sessionID: ".$session->param('sessionID')."\n";
-	print A "sessionID: ".$sessionID."\n";
 	
 	$session->clear();
 	if ( $session->is_expired ) {
@@ -650,11 +630,6 @@ sub _logout_Controller {
 	print A "la session esta EMPTY\n";
 	}
 	
-	print A "session->userid: ".$session->param('userid')."\n";
-	print A "session->password: ".$session->param('password')."\n";
-	print A "session->nroRandom: ".$session->param('nroRandom')."\n";
-	print A "session->sessionID: ".$session->param('sessionID')."\n";
-	print A "sessionID: ".$sessionID."\n";
 	#AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
 	my $random_number= int(rand()*100000);
  	$session->param('nroRandom', $random_number);
@@ -664,13 +639,10 @@ sub _logout_Controller {
 
 sub redirectTo {
 	my ($url) = @_;
-open(A, ">>/tmp/debug.txt");
-print A "redirectTo: \n";
 
 	#para saber si fue un llamado con AJAX
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
-print A "CLIENT_REDIRECT\n";
 		
 # 		my $session = new CGI::Session();
 		my $session = CGI::Session->load();
@@ -681,7 +653,6 @@ print A "CLIENT_REDIRECT\n";
 # 		return ;
 	}else{
 	#redirijo en el servidor
-print A "SERVER_REDIRECT\n";
 # 		print ("Location: ".$url."\n\n");
 		my $input = CGI->new(); 
 		print $input->redirect( 
