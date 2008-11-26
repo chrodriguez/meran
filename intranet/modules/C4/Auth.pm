@@ -529,24 +529,24 @@ printSession($session, 'checkauth: ');
 sub printSession {
 	my ($session, $desde) = @_;
 
-	open(A, ">>/tmp/debug.txt");
-	print A "\n";
-	print A "*******************************************SESSION******************************************************\n";
-	print A "Desde: ".$desde."\n";
-	print A "session->userid: ".$session->param('userid')."\n";
-	print A "session->loggedinusername: ".$session->param('loggedinusername')."\n";
-	print A "session->borrowernumber: ".$session->param('borrowernumber')."\n";
-	print A "session->password: ".$session->param('password')."\n";
-	print A "session->nroRandom: ".$session->param('nroRandom')."\n";
-	print A "session->sessionID: ".$session->param('sessionID')."\n";
-	print A "session->lang: ".$session->param('lang')."\n";
-	print A "session->type: ".$session->param('type')."\n";
-	print A "session->flagsrequired: ".$session->param('flagsrequired')."\n";
-	print A "session->REQUEST_URI: ".$session->param('REQUEST_URI')."\n";
-	print A "session->browser: ".$session->param('browser')."\n";
-	print A "*****************************************END**SESSION****************************************************\n";
-	print A "\n";
-	close(A);
+	open(S, ">>/tmp/debug.txt");
+	print S "\n";
+	print S "*******************************************SESSION******************************************************\n";
+	print S "Desde: ".$desde."\n";
+	print S "session->userid: ".$session->param('userid')."\n";
+	print S "session->loggedinusername: ".$session->param('loggedinusername')."\n";
+	print S "session->borrowernumber: ".$session->param('borrowernumber')."\n";
+	print S "session->password: ".$session->param('password')."\n";
+	print S "session->nroRandom: ".$session->param('nroRandom')."\n";
+	print S "session->sessionID: ".$session->param('sessionID')."\n";
+	print S "session->lang: ".$session->param('lang')."\n";
+	print S "session->type: ".$session->param('type')."\n";
+	print S "session->flagsrequired: ".$session->param('flagsrequired')."\n";
+	print S "session->REQUEST_URI: ".$session->param('REQUEST_URI')."\n";
+	print S "session->browser: ".$session->param('browser')."\n";
+	print S "*****************************************END**SESSION****************************************************\n";
+	print S "\n";
+	close(S);
 }
 
 sub _loggedin_Controller {

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr-FR-i-opac-t-prog-v-30000\n"
 "POT-Creation-Date: 2008-01-04 11:55+0100\n"
-"PO-Revision-Date: 2008-11-21 09:06-0300\n"
+"PO-Revision-Date: 2008-11-26 16:23-0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Entrar en Koha fr"
 #. %1$s: TMPL_VAR name=numberlength
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:81
 #, c-format
-msgid "Contrase&ntilde;a:"
+msgid "Contrase&ntilde;a: "
 msgstr "Contrase&ntilde;a fr:"
 
 #. For the first occurrence,
@@ -119,14 +119,14 @@ msgstr "Contrase&ntilde;a fr:"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:139
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:164
 #, c-format
-msgid "%s item(s)"
-msgstr "%s document(s)"
+msgid "Tarjeta de identificaci&oacute;n:"
+msgstr "Tarjeta de identificaci&oacute;n fr:"
 
 #. %1$s: TMPL_VAR name=monthlength
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:83
 #, c-format
-msgid "%s months"
-msgstr "%s mois"
+msgid "Contrase&ntilde;a:"
+msgstr "Contrase&ntilde;a fr:"
 
 #. %1$s: TMPL_VAR name=fixedRank
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:72

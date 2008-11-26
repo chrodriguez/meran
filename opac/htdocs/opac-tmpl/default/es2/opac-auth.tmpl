@@ -45,14 +45,18 @@
 
 
     <table border="0" cellpadding="10" cellspacing="0" >
-    <tr><th colspan="2" class="bordetabla"><h3>Entrar en Koha</h3></th></tr>
-    <tr><td class="tope">Tarjeta de identificaci&oacute;n:</td><td class="tope">
-	<input type="text" name="userid" onKeyPress="javascript:onEnterSubmit();"></td></tr>
-    <tr><td class="tope">Contrase&ntilde;a:</td><td class="tope"><input type="password" name="password" onKeyPress="javascript:onEnterSubmit();"></td></tr>
-    <tr><td colspan="2" align="center" class="tope">
+    	<tr><th colspan="2" class="bordetabla"><h3>Entrar en Koha</h3></th></tr>
+    	<tr><td class="tope"> [% "Tarjeta de identificaci&oacute;n:" | i18n %]</td><td class="tope">
+		<input type="text" name="userid" onKeyPress="javascript:onEnterSubmit();"></td></tr>
+    	<tr><td class="tope">[% "Contrase&ntilde;a: " | i18n %]</td><td class="tope">
+		<input type="password" name="password" onKeyPress="javascript:onEnterSubmit();">
+	</td>
+   	 </tr>
+    	<tr><td colspan="2" align="center" class="tope">
 
-	<a href="#" onClick="enviar(); return(false);" onMouseOut="swap('enter','[% themelang %]/images/menu-entrar.png')" onMouseOver="swap('enter','[% themelang %]/images/menu-entrarbis.png')">
-	<img name="enter" id="enter" src="[% themelang %]/images/menu-entrar.png" border="0"></a>
+		<a 	href="#" onClick="enviar(); return(false);" onMouseOut="swap('enter','[% themelang %]/images/menu-entrar.png')" 
+		onMouseOver="swap('enter','[% themelang %]/images/menu-entrarbis.png')">
+		<img name="enter" id="enter" src="[% themelang %]/images/menu-entrar.png" border="0"></a>
 
 	</td></tr>
     </table>

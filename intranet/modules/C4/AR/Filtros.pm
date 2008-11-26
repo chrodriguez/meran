@@ -19,20 +19,15 @@ use vars qw(@EXPORT @ISA);
 sub i18n {
 
 	my ($text) = @_;
-	my $session = CGI::Session->load();
-open(A, ">>/tmp/debug.txt");
-print A "desde i18n: \n";
-# print $session->header;
-# 	my $locale = "es_ES";
-	my $locale = $session->param('lang');
+	my $session = CGI::Session->load();#si esta definida
+## FIXME falta manejar cookie si el usuario no esta logueado
+
+	my $locale = $session->param('lang')|C4::Context->config("defaultLang")|'es_ES';
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
-	bindtextdomain("koha", "/usr/local/koha/intranet/locale/");
-	textdomain("koha");
-# # # 	get_handle("es_ES");
-	get_handle($locale);
-        # ...mungify $text...
-# print A "cambio: ".$text."\n";
-print A "lang: ".$session->param('lang')."\n";
+
+	Locale::Maketext::Gettext::Functions::bindtextdomain("koha", C4::Context->config("locale"));
+	Locale::Maketext::Gettext::Functions::textdomain("koha");
+	Locale::Maketext::Gettext::Functions::get_handle($locale);
 
  	return __($text);
 }
