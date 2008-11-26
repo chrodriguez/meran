@@ -1,22 +1,22 @@
 
 <br>
 
-<!-- TMPL_IF NAME="cantidad" -->
+[% IF cantidad %]
 <center>
 <p class="inputFontNormal"> 
-	<b>Cantidad de reservas realizadas: &nbsp;<!-- TMPL_VAR NAME=cantidad --><br>
+	<b>[% "Cantidad de reservas realizadas: &nbsp;" | i18n %][% cantidad %]<br>
 </p>
 <br>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 <center>
 
 <table width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 
 	<tr bordercolor="#f2f2f2">    
  		<td colspan="5" align="center" class="bordetabla" borde=1>
-			<b> Historial de Reservas </b>
+			<b> [% "Historial de Reservas" | i18n %] </b>
 		</td>
 	</tr> 
 
@@ -25,53 +25,51 @@
 <table id="tablaHistorial" width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">	
 
 	<tr class="bordetabla"  bordercolor="#f2f2f2">
-		<th>T&iacute;tulo</th>
-		<th>Autor</th>
-		<th>Estado</th>
-		<th>F. Reserva </th>
-		<th>F. Vto </th>
+		<th>[% "T&iacute;tulo" | i18n %]</th>
+		<th>[% "Autor" | i18n %]</th>
+		<th>[% "Estado" | i18n %]</th>
+		<th>[% "F. Reserva" | i18n %] </th>
+		<th>[% "F. Vto" | i18n %]</th>
 	</tr>
 
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-<!-- TMPL_LOOP NAME="loop_reservas" -->
+[% FOREACH loop_reservas %]
 	<tr border="1" bordercolor="#f2f2f2">
  		<td> 
-	<!-- TMPL_IF NAME="id1" -->
-		<a class="click" onClick="detalle('<!-- TMPL_VAR NAME='id1' -->')" title="Mostrar Detalle">
-	<!-- TMPL_VAR name="titulo" ESCAPE=HTML--><!-- TMPL_IF name="unititle" -->:&nbsp;<!-- TMPL_VAR name="unititle" ESCAPE=HTML--><!-- /TMPL_IF -->
-		</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+	[% IF id1 %]
+		<a class="click" onClick="detalle('[% id1 %]')" title="Mostrar Detalle">
+	[% titulo %][% IF unititle %]:&nbsp;[% unititle %][% END %]
+		</a> [% ELSE %]&nbsp;[% END %]
  		</td>
  		<td>
-	<!-- TMPL_IF NAME="idAutor" -->
-	<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME='idAutor' -->" >
-	<!-- TMPL_VAR NAME="completo" -->
-	</a> <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+	[% IF idAutor %]
+	<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% idAutor %]" >
+	[% completo %]
+	</a> [% ELSE %]&nbsp;[% END %]
  		</td>
  		<td align=center>  
-	<!-- TMPL_IF NAME="estado" -->
-	<!-- TMPL_VAR NAME="estado" -->
-	<!-- TMPL_ELSE --> - <!-- /TMPL_IF -->
+	[% IF estado %]
+	[% estado %]
+	[% ELSE %] - [% END %]
  		</td>
  		<td align=center>
-		<!-- TMPL_VAR name="fechaReserva" -->&nbsp;
+		[% fechaReserva %]&nbsp;
  		</td>
  		<td align=center>
-			<!-- TMPL_VAR name="fechaVto" -->&nbsp;
+			[% fechaVto %]&nbsp;
  		</td>
 	</tr>
- <!-- /TMPL_LOOP -->
+ [% END %]
 
 </table>
 
 
 <br>
-<!-- <a  href="opac-user.pl">Volver</a> -->
-<a class="click" onClick="volverDesdeHistorial()">Volver</a>
+<a class="click" onClick="volverDesdeHistorial()">[% "Volver" | i18n %]</a>
 <p align="center">
-	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0">
+	<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
+		onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  
+		src="[% themelang %]/images/menu-imprimir.png" border="0">
 	</a>
 </p>
-	
-
-

@@ -12,22 +12,18 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 my $type='public';
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "opac-estanteVirtual.tmpl",
-							query => $input,
-							type => "opac",
-# 							authnotrequired => 1,
-							flagsrequired => {borrow => 1},
+my ($template, $session, $t_params)= get_template_and_user({
+								template_name => "opac-estanteVirtual.tmpl",
+								query => $input,
+								type => "opac",
+# 	 							authnotrequired => 1,
+								flagsrequired => {borrow => 1},
 						});
 
 
-my $themelang = $template->param('themelang');
-open(A, ">>/tmp/debug.txt");
-print A "opac-estantevirtual themeland $themelang \n";
-close(A);
 
 #Para mandar la dir de mail
-my ($borr, $flags) = getpatroninformation($loggedinuser,"");
+my ($borr, $flags) = getpatroninformation($t_params->{'loggedinuser'},"");
 if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 
 my %shelflist;
@@ -44,10 +40,8 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
   %shelflist = &GetShelfList($type);
   ($count)= &getshelfListCount($type);
 
-&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion);
-
-
-$template->param({LibraryName => C4::Context->preference("LibraryName")});
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($count, $cantR, $pageNumber,$funcion);
+$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
 
 my $color='';
@@ -79,6 +73,6 @@ foreach my $element (@keyAux) {
 		push (@shelvesloop, \%line);
 }
 
-$template->param(shelvesloop => \@shelvesloop);
+$t_params->{'shelvesloop'}= \@shelvesloop;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

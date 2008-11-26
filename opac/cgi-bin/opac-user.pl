@@ -14,7 +14,7 @@ use C4::AR::UpdateData;
 
 my $query = new CGI;
 
-my ($template, $session, $params)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
 									template_name => "opac-user.tmpl",
 									query => $query,
 									type => "opac",
@@ -26,14 +26,7 @@ my ($template, $session, $params)= get_template_and_user({
 
 my $dateformat = C4::Date::get_date_format();
 
-open(A,">>/tmp/debug.txt");
-print A "desde opac-user.pl \n";
-# my $session = CGI::Session->load();
-$session->param('lang', $query->param('lang_server') );
-print A "lang desde el parametro: ".$query->param('lang_server')."\n";
-print A "lang desde la session: ".$session->param('lang')."\n";
-close(A);
-
+## FIXME esta info ahora esta en session
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation($session->param('borrowernumber'),"");
 
@@ -85,11 +78,11 @@ my @bordat;
 $bordat[0] = $borr;
 foreach my $aux (keys (%$borr)) {
 # 		$template->param($aux => ($borr->{$aux}))
-		$params->{$aux}= ($borr->{$aux});
+		$t_params->{$aux}= ($borr->{$aux});
 
 }
 
-$params->{'borrowernumber'}= $session->param('borrowernumber');
+$t_params->{'borrowernumber'}= $session->param('borrowernumber');
 
 my $sanc= hasSanctions($session->param('borrowernumber'));
 
@@ -101,18 +94,14 @@ if ($san->{'id3'}) {
 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
 
-$params->{'sanciones_loop'}= $sanc;
-$params->{'updatedata'}= checkUpdateData();
-$params->{'LibraryName'}= C4::Context->preference("LibraryName");
-$params->{'pagetitle'}= "Usuarios";
+$t_params->{'sanciones_loop'}= $sanc;
+$t_params->{'updatedata'}= checkUpdateData();
+$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'pagetitle'}= "Usuarios";
 
-
-# #No se pudo renovar por no tener el curso?
-# $template->param(no_user_course => $query->param('no_user_course'));
-# $template->param(CirculationEnabled => C4::Context->preference("circulation"));
 
 #se verifica la preferencia showHistoricReserves, para mostrar o no el historico de las Reservas
 my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
-$params->{'showHistoricReserves'}= $showHistoricReserves;
+$t_params->{'showHistoricReserves'}= $showHistoricReserves;
 
-C4::Auth::output_html_with_http_headers($query, $template, $params, $session);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

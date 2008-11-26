@@ -31,15 +31,16 @@ use CGI;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-HistorialPrestamos.tmpl",
+my ($template, $session, $t_params)
+= get_template_and_user({
+				template_name => "opac-HistorialPrestamos.tmpl",
 				query => $input,
 				type => "opac",
 				authnotrequired => 1,
 				debug => 1,
-				});
+			});
 
-my $bornum=$loggedinuser;
+my $bornum= $session->param('loggedinuser');
 
 my $obj=$input->param('obj');
 $obj= &C4::AR::Utilidades::from_json_ISO($obj);
@@ -52,12 +53,10 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
-&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion);
 
 
-$template->param(
-			loop_reading 	=> $issues,
-			cantidad	=> $cantidad
-);
+$t_params->{'loop_reading'}= $issues;
+$t_params->{'cantidad'}= $cantidad;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

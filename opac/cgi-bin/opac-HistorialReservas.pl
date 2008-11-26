@@ -26,15 +26,15 @@ use CGI;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-HistorialReservas.tmpl",
-				query => $input,
-				type => "opac",
-				authnotrequired => 1,
-				debug => 1,
-				});
+my ($template, $session, $t_params)= get_template_and_user({
+									template_name => "opac-HistorialReservas.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 1,
+									debug => 1,
+			});
 
-my $bornum=$loggedinuser;
+my $bornum= $session->param('loggedinuser');
 
 my $obj=$input->param('obj');
 $obj= &C4::AR::Utilidades::from_json_ISO($obj);
@@ -46,12 +46,8 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
 
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion);
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'loop_reservas'}= $reservas_hashref;
 
-
-$template->param(
-			cantidad	=> $cantidad,
- 			loop_reservas 	=> $reservas_hashref
-);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -2,8 +2,6 @@
 use strict;
 require Exporter;
 use CGI;
-# use HTML::Template;
-
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 
@@ -26,26 +24,20 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
 			-multiple => 0 );
 $sth->finish;
 
-my ($template, $loggedinuser, $params)
-# my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-main.tmpl",
-			     type => "opac",
-			     query => $input,
-			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+my ($template, $session, $t_params)= get_template_and_user({
+									template_name => "opac-main.tmpl",
+									type => "opac",
+									query => $input,
+									authnotrequired => 1,
+									flagsrequired => {borrow => 1},
 			 });
 
 #AGREGADO PARA MANDARLE AL USUARIO UN NUMERO RANDOM PARA QUE REALICE UN HASH
 my $random_number_i= int(rand()*100000);
 
-# $template->param(CGIitemtype => $CGIitemtype,
-# 		 RANDOM_NUMBER_INICIAL => $random_number_i,
-#  	     LibraryName => C4::Context->preference("LibraryName"),
-# );
-# output_html_with_http_headers $input, $cookie, $template->output;
 
-$params->{'CGIitemtype'}= $CGIitemtype;
-$params->{'RANDOM_NUMBER_INICIAL'}= $random_number_i;
-$params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'CGIitemtype'}= $CGIitemtype;
+$t_params->{'RANDOM_NUMBER_INICIAL'}= $random_number_i;
+$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
-C4::Auth::output_html_with_http_headers($query, $template, $params);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

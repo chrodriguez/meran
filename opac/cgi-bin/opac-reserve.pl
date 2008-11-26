@@ -13,13 +13,13 @@ use C4::Date;
 
 
 my $input = new CGI;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-reserve.tmpl",
-			     query => $input,
-			     type => "opac",
-			     authnotrequired => 0,
-			     flagsrequired => {borrow => 1},
-			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+									template_name => "opac-reserve.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 0,
+									flagsrequired => {borrow => 1},
+									debug => 1,
 			     });
 
 ## FIXME se deberia separar el detalle de las resrvas del usuario y aqui solo realizar la reserva e informar al usuario si se realizo
@@ -55,9 +55,7 @@ if($msg_object->{'error'}){
 
 	if($acciones->{'maximoReservas'}){
 	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
-		$template->param (
-			RESERVES => $reservas
-		);
+		$t_params->{'RESERVES'}= $reservas;
 	}
 }else{
 # SE REALIZO LA RESERVA CON EXITO
@@ -94,30 +92,22 @@ if($msg_object->{'error'}){
 		}
 	}#end foreach
 	
-	$template->param(	
-# 				waiting_count => $wcount,
-				WAITING => \@waiting,
-# 				reserves_count => $rcount,
-				RESERVES => \@realreserves,
+		$t_params->{'WAITING'}= \@waiting;
+		$t_params->{'RESERVES'}= \@realreserves;
 	);
 }
 
 
 
 
-$template->param (
-	id1 => $id1,
-	id2 => $id2,
-	message	=> $msg_object->{'messages'}->[0]->{'message'},
-	error	=>  $msg_object->{'error'},
-	reservaGrupo => $acciones->{'reservaGrupo'},
-	maximoReservas => $acciones->{'maximoReservas'},
-	materialParaRetirar => $acciones->{'materialParaRetirar'},
-	CirculationEnabled => C4::Context->preference("circulation"),
-);
+$t_params->{'id1'}= $id1;
+$t_params->{'id2'}= $id2;
+$t_params->{'message'}= $msg_object->{'messages'}->[0]->{'message'};
+$t_params->{'error'}=  $msg_object->{'error'};
+$t_params->{'reservaGrupo'}= $acciones->{'reservaGrupo'};
+$t_params->{'maximoReservas'}= $acciones->{'maximoReservas'};
+$t_params->{'materialParaRetirar'}= $acciones->{'materialParaRetirar'};
+$t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
 
-# Local Variables:
-# tab-width: 8
-# End:

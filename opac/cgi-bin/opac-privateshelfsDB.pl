@@ -26,7 +26,8 @@ my $pshelf=gotShelf($borrowernumber);
 #***********************************ADD PrivateShelfs*************************************
 if ($op eq 'ADD'){ 
 
-	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs(	$borrowernumber, 											$pshelf,
+	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs(	$borrowernumber,
+										$pshelf,
 										$shelfvalues
 									);
 	

@@ -8,24 +8,19 @@ use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
-use HTML::Template;
 
 my $query = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "busquedaResult.tmpl",
-			     query => $query,
-			     type => "opac",
-#  			     authnotrequired => 0,
-			     authnotrequired => 1,
- 			     flagsrequired => {borrow => 1},
-#  			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+								template_name => "busquedaResult.tmpl",
+								query => $query,
+								type => "opac",
+					#  			     authnotrequired => 0,
+								authnotrequired => 1,
+								flagsrequired => {borrow => 1},
+					#  			     debug => 1,
 			     });
 
-my $themelang = $template->param('themelang');
-open(A, ">>/tmp/debug.txt");
-print A "desde busquedas themeland $themelang \n";
-close(A);
 
 my $obj=$query->param('obj');
 
@@ -163,14 +158,14 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	}
 }
 
-my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda($loggedinuser,$env,'opac',\@search_array);
+my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda($t_params->{'loggedinuser'},$env,'opac',\@search_array);
 
 my $ini= ($obj->{'ini'}||'');
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$resultId1)= &C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,"AND",$ini,$cantR);
 
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion);
 
 my @resultsarray;
 my %result;
@@ -211,13 +206,11 @@ foreach my $str (@busqueda){
 
 $buscoPor= substr($buscoPor,2,length($buscoPor));
 
-$template->param(
-		SEARCH_RESULTS => \@resultsarray,
+$t_params->{'SEARCH_RESULTS'}= \@resultsarray;
 ## FIXME hay que tener mucho cuidado con este tipo de cosas, entradas desde el cliente que pasan por el servidor sin controlar
 # y son devueltas al cliente
- 		buscoPor=>	&verificarValor($buscoPor),
-		cantidad=>	$cantidad
-		);
+$t_params->{'buscoPor'}= &verificarValor($buscoPor);
+$t_params->{'cantidad'}= $cantidad;
 
 
-output_html_with_http_headers $query, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

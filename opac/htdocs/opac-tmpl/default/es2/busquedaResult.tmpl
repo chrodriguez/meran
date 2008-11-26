@@ -1,131 +1,114 @@
 
 
-<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" --></b></br>
-		Cantidad de Registros: <b><!-- TMPL_VAR NAME='cantidad' --></b>
+<p align="center">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %]<b> [% buscoPor %]</b></br>
+		[% "Cantidad de Registros:" | i18n %] <b>[% cantidad %]</b>
 </p>
 
 <center>
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 </center>
 
 <table id="tablaResult" class="tablaResult" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
 	<thead>
 	<tr class="bordetabla" >
-	<!-- TMPL_IF NAME='loggedinusername' -->
+	[% IF loggedinusername %]
 		<th>
-			<!--<a id="todos" class="click" onclick="todos();">-->
 			<a id="todos" class="click">
-			<img 	src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" 
+			<img 	src="[% themelang %]/images/check.png" 
 				title="Invertir la selecci&oacute;n" border=0>
 			</a>
 		</th>
-	<!-- /TMPL_IF-->
+	[% END %]
 		<th align="center" width="30%">
-			<a class="click" onClick="ordenarPor('titulo')">T&iacute;tulo</a>
+			<a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
 		</th>
 		<th align="center" width="30%">
-			<a class="click" onClick="ordenarPor('nomCompleto')"> Autor </a>
+			<a class="click" onClick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
 		</th>
-		<th align="center" width="20%">Edici&oacute;n/A&ntilde;o</th>
-		<th align="center" width="20%"> Disponibilidad </th>
+		<th align="center" width="20%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</th>
+		<th align="center" width="20%">[% "Disponibilidad" | i18n %] </th>
 
 	</tr>
 	</thead>
 	<tbody>
 <!-- Resultados de la busqueda -->
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+[% FOREACH SEARCH_RESULTS %]
 	<tr>
 
-	<!-- TMPL_IF NAME='loggedinusername' -->
+	[% IF loggedinusername %]
 		<td valign="middle" align="center">
-			<input type=checkbox name=checkbox value="<!-- TMPL_VAR NAME='id1' -->" 
-			id="<!-- TMPL_VAR NAME='id1' -->">
+			<input type=checkbox name=checkbox value="[% id1 %]" 
+			id="[% id1 %]">
 		</td>
-	<!-- /TMPL_IF  -->
-		<td class="click" onClick="detalle(<!-- TMPL_VAR NAME='id1' -->)" title="Mostrar Detalle">	
-		  <!-- TMPL_IF NAME=titulo -->
+	[% END %]
+		<td class="click" onClick="detalle([% id1 %])" title="Mostrar Detalle">	
+		  [% IF titulo %]
 
-			<!-- TMPL_VAR NAME=titulo ESCAPE=HTML -->
+			[% titulo %]
 
-		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-		</td>
-
-		<td class="click" onClick="buscarPorAutor(<!-- TMPL_VAR NAME='idAutor' -->)">
-		  <!-- TMPL_IF NAME="nomCompleto" -->
-
-			<!-- TMPL_VAR NAME="nomCompleto" -->
-
-		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		  [% ELSE %]&nbsp;[% END %]
 		</td>
 
-		<td class="inputFontNormal">
-		  <!-- TMPL_IF NAME="grupos" -->
-			<!-- TMPL_LOOP NAME="grupos" -->
-				<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="anio_publicacion" -->(<!-- TMPL_VAR NAME="anio_publicacion" -->)<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --><br>
-			<!-- /TMPL_LOOP -->
-		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		<td class="click" onClick="buscarPorAutor([% idAutor %])">
+		  [% IF nomCompleto %]
+
+			[% nomCompleto %]
+
+		  [% ELSE %]&nbsp;[% END %]
 		</td>
 
 		<td class="inputFontNormal">
-		  <!-- TMPL_IF NAME="disponibilidad" -->
-			<!-- TMPL_LOOP NAME="disponibilidad" -->
-				<b><!-- TMPL_VAR NAME="tipoPrestamo" --></b> <!-- TMPL_VAR NAME="cantTotal" -->
+		  [% IF grupos %]
+			[% FOREACH grupos %]
+				[% IF edicion %][% edicion %] &nbsp;[% END %][% IF anio_publicacion %]([% anio_publicacion %])[% END %]
+				[% IF volume %]        t [% volume %][% END %]<br>
+			[% END %]
+		  [% ELSE %]&nbsp;[% END %]
+		</td>
+
+		<td class="inputFontNormal">
+		  [% IF disponibilidad %]
+			[% FOREACH disponibilidad %]
+				<b>[% tipoPrestamo %]</b> [% cantTotal %]
 				<br>
 				<div style="margin-right:4px">
-				<!-- TMPL_VAR NAME="reservados"-->
+				[% reservados %]
 				<br> 
-				<!-- TMPL_VAR NAME="prestados"-->
+				[% prestados %]
 				<br>
 				</div>
-         		<!-- /TMPL_LOOP -->
-		  <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+         		[% END %]
+		  [% ELSE %]&nbsp;[% END %]
 		</td>	
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 	</tbody>
 </table>
 <br>
 
-
-<!-- <form name="printform" action="/cgi-bin/koha/opac-print.pl"> -->
-<!-- creo q no se usa -->
-<!--<input TYPE="hidden" VALUE="pdf" NAME="type" >
-<input TYPE="hidden" NAME="orden" value="<!-- TMPL_VAR NAME="orden" -->">
-<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="numrecords" -->" NAME="num">-->
 <!-- esto tampoco -->
- <!-- TMPL_LOOP NAME="forminputs" -->
-	<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="value" -->" NAME="<!-- TMPL_VAR NAME="field" -->">
- <!-- /TMPL_LOOP -->
+ [% FOREACH forminputs %]
+	<input TYPE="hidden" VALUE="[% value %]" NAME="[% field %]">
+[% END %]
 
-<!-- TMPL_IF NAME='loggedinusername' -->
+[% IF loggedinusername %]
 <input type="hidden" value="" name="bookmarks" id="bookmarks">
 
-<a  	onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" 		
-	onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">
+<a  	onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
+	onMouseOver="swap('ps','[% themelang %]/images/favoritosbis.png')">
 
 	<input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
-	src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">
+	src="[% themelang %]/images/favoritos.png" border="0" title="Agregar a favoritos">
 </a>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME='MAIL' -->
-<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='MAIL' -->" NAME="mail">
-<a  	onMouseOut="swap('mail','<!-- TMPL_VAR NAME='themelang' -->/images/mail.png')" 
-	onMouseOver="swap('mail','<!-- TMPL_VAR NAME='themelang' -->/images/mailbis.png')">
+[% IF MAIL %]
+<input TYPE="hidden" VALUE="[% MAIL %]" NAME="mail">
+<a  	onMouseOut="swap('mail','[% themelang %]/images/mail.png')" 
+	onMouseOver="swap('mail','[% themelang %]/images/mailbis.png')">
 
-<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  src="<!-- TMPL_VAR NAME='themelang' -->/images/mail.png" border="0" title="Enviar Resultados por Mail">
+<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  
+	src="[% themelang %]/images/mail.png" border="0" title="Enviar Resultados por Mail">
 </a>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- Deshabilitado, no esta funcionando -->
-<!--<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
-<input onClick="printform.target='_blank';printform.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" b
-order="0" title="Imprimir Resultados">
-</a>-->
-
-<!-- Deshabilitado, no esta funcionando -->
-<!--<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME="themelang" -->/images/pdfbis.png')">
-<input onClick="printform.target='_self'; printform.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
-</a>-->
-<!-- </form> -->

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr-FR-i-opac-t-prog-v-30000\n"
 "POT-Creation-Date: 2008-01-04 11:55+0100\n"
-"PO-Revision-Date: 2008-11-26 16:23-0300\n"
+"PO-Revision-Date: 2008-11-26 17:09-0300\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -131,16 +131,16 @@ msgstr "Contrase&ntilde;a fr:"
 #. %1$s: TMPL_VAR name=fixedRank
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:72
 #, c-format
-msgid "%s out of ?"
-msgstr "%s parmi ?"
+msgid "Exacto"
+msgstr "Exacto fr"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=used
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:54
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:92
 #, c-format
-msgid "%s record(s)"
-msgstr "%s notice(s)"
+msgid "C&oacute;digo de Barras:"
+msgstr "C&oacute;digo de Barras fr:"
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
