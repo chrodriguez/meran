@@ -68,28 +68,29 @@ my $itemtype=$input->param('itemtype');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/itemtypes.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+
+my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+						template_name => "admin/itemtypes.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => {borrowers => 1},
+						debug => 1,
+			    });
 
 #Matias: Esta habiltada la Biblioteca Virtual?
 my $virtuallibrary=C4::Context->preference("virtuallibrary");
-$template->param(virtuallibrary => $virtuallibrary);
+$t_params->{'virtuallibrary'}= $virtuallibrary;
 #
 
 
-
+# FIXME VER ESTE IF!!!!!!!!!!!!!!!!!!!!!!!!!!
 if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+    $t_params->{'script_name'}= $script_name;
+    $t_params->{$op}= 1; # we show only the TMPL_VAR names $op
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+    $t_params->{'script_name'}= $script_name;
+	else           => 1; # we show only the TMPL_VAR names $op
 }
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -104,35 +105,32 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 
-		$template->param(
-                                 description => $data->{'description'},
-                                 loanlength => $data->{'loanlength'},
-                                 renewalsallowed => $data->{'renewalsallowed'},
-                                 rentalcharge => $data->{'rentalcharge'},
-                                 notforloan => $data->{'notforloan'},
-			         search => $data->{'search'},
-				 detail => $data->{'detail'} #Para mod. el det.		
-		);
+		$t_params->{'description'}= $data->{'description'};
+                $t_params->{'loanlength'}= $data->{'loanlength'};
+                $t_params->{'renewalsallowed'}= $data->{'renewalsallowed'};
+                $t_params->{'rentalcharge'}= $data->{'rentalcharge'};
+                $t_params->{'notforloan'}= $data->{'notforloan'};
+                $t_params->{'search'}= $data->{'search'};
+                $t_params->{'detail'}= $data->{'detail'}; #Para mod. el det.	
 
 
 #Matias: Biblioteca Virtual
-  if ($virtuallibrary) {
-                my $dbh = C4::Context->dbh;
-                my $sth=$dbh->prepare("select * from virtual_itemtypes where itemtype=?");
-                $sth->execute($itemtype);
-                $data=$sth->fetchrow_hashref;
-                $sth->finish;
-		}
- 
-   if($data){
-	$template->param(virtual => 1,
- 	$data->{'requesttype'} => 1);
-	 }
-#
-	}
-					$template->param(itemtype => $itemtype);
-;
-													# END $OP eq ADD_FORM
+                if ($virtuallibrary) {
+                                my $dbh = C4::Context->dbh;
+                                my $sth=$dbh->prepare("select * from virtual_itemtypes where itemtype=?");
+                                $sth->execute($itemtype);
+                                $data=$sth->fetchrow_hashref;
+                                $sth->finish;
+                }
+                
+                if($data){
+                    $t_params->{'virtual'}= 1;
+                    $data->{'requesttype'} => 1;
+                }
+            #
+            }
+        $t_params->{'itemtype'}= $itemtype;
+                                                                                                                # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
@@ -214,19 +212,19 @@ my $datat;
                 }
 
                 if($datat){
-                        $template->param(virtual => 1,
-                                        $datat->{'requesttype'} => 1);
-                         }
+                        $t_params->{'virtual'}= 1;
+                        $datat->{'requesttype'} => 1;
+                }
 #
 
 
-	$template->param(itemtype => $itemtype,
-			 description => $data->{'description'},
-			 loanlength => $data->{'loanlength'},
-			 renewalsallowed => $data->{'renewalsallowed'},
-			 rentalcharge => $data->{'rentalcharge'},
-			 search => $data->{'search'},
-			 total => $total);
+	$t_params->{'itemtype'}= $itemtype;
+        $t_params->{'description'}= $data->{'description'};
+        $t_params->{'loanlength'}= $data->{'loanlength'};
+        $t_params->{'renewalsallowed'}= $data->{'renewalsallowed'};
+        $t_params->{'rentalcharge'}= $data->{'rentalcharge'};
+        $t_params->{'search'}= $data->{'search'};
+        $t_params->{'total'}= $total;
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -248,7 +246,7 @@ my $datat;
 #
 
 
-
+# FIXME 
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
@@ -291,17 +289,18 @@ my $datat;
 #
 		push(@loop_data, \%row_data);
 	}
-	$template->param(loop => \@loop_data);
+	$t_params->{'loop'}= \@loop_data;
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
+		$t_params->{'previous'}= "$script_name?offset=".$prevpage;
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
+		$t_params->{'next'}= "$script_name?offset=".$nextpage;
 	}
 } #---- END $OP eq DEFAULT
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 # Local Variables:
 # tab-width: 4

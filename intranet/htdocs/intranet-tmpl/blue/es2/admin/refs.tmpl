@@ -1,19 +1,19 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-Seleccione la tabla de referencia sobre la que quiere trabajar
+[% INCLUDE "intranet-top.inc" %]
+[% "Seleccione la tabla de referencia sobre la que quiere trabajar" | i18n %]
 <FORM action="referencies.pl" method="post" id="f3" name="f3">
-<input type="hidden" name="userloggedname" value="<!-- TMPL_VAR NAME="loggedinusername" -->">
+<input type="hidden" name="userloggedname" value="[% loggedinusername %]">
 
 <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0">
-	<tr><td align="center"><!-- TMPL_VAR NAME="lista" --></td></tr>
+	<tr><td align="center">[% lista %]</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 	<tr>
 
 <input type="submit" style="visibility:hidden" align="center">
 <td align="center">
- 	<a href="#" onMouseOut="swap('abrir','<!-- TMPL_VAR NAME='themelang' -->/images/abrir.png')" onMouseOver="swap('abrir','<!-- TMPL_VAR NAME='themelang' -->/images/abrir_1.png')" onClick="document.getElementById('f3').submit()" >
-	<img name="save" id="save" alt="Abrir Tabla" src="<!-- TMPL_VAR NAME="themelang" -->/images/abrir.png" border="0"></a>
+ 	<a href="#" onMouseOut="swap('abrir','[% themelang %]/images/abrir.png')" onMouseOver="swap('abrir','[% themelang %]/images/abrir_1.png')" onClick="document.getElementById('f3').submit()" >
+	<img name="save" id="save" alt="Abrir Tabla" src="[% themelang %]/images/abrir.png" border="0"></a>
 </td>
 </tr>
 </table>
 </FORM>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

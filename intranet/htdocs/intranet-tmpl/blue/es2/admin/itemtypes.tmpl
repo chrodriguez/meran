@@ -1,5 +1,5 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
 <script>
 function swap(id,src){
 document.getElementById(id).src=src;
@@ -47,13 +47,13 @@ function Check(f) {
 		_alertString += "\n- " + _("Tipo de documento perdido");
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "\n- " + _("Descripci&oacute;n perdida");
+		_alertString += "\n- " + _("Descripci&oacute;n perdida" );
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "\n- " + _("Duraci&oacute;n del pr&eacute;stamo no es un n&uacute;mero");
+		_alertString += "\n- " + _("Duraci&oacute;n del pr&eacute;stamo no es un n&uacute;mero" );
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "\n- " + _("Costo de pr&eacute;stamo no es un n&uacute;mero");
+		_alertString += "\n- " + _( "Costo de pr&eacute;stamo no es un n&uacute;mero");
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
@@ -65,296 +65,205 @@ function Check(f) {
 	}
 }
 </SCRIPT>
-<!-- TMPL_IF name="add_form" -->
+[% IF ! add_form %]
 	<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
 		<tr>
-	<!-- TMPL_IF name="itemtype" -->
+	[% IF itemtype %]
 	 
-			<td>Modificar Tipo de Documento</td>
-	<!-- TMPL_ELSE -->
+			<td>[% "Modificar Tipo de Documento" | i18n %]</td>
+	[% ELSE %]
 	
-			<td>Agregar Tipo de Documento</td>
-	<!-- /TMPL_IF -->
-		</tr>
-	 	<tr>
-			<td class="lineagruesa"  align="left" colspan="3"></td>
-		</tr>
+			<td>[% "Agregar Tipo de Documento" | i18n %]</td>
+	[% END %]
+        </tr>
+        <tr>
+                <td class="lineagruesa"  align="left" colspan="3"></td>
+        </tr>
 	</table>
 
-	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
+	<form action='[% script_name %]' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
 		<input type=hidden name=checked value=0>
 		<table class="tablaresultado" width="95%">
-			<!-- TMPL_IF name="itemtype" -->
-				<tr><td class="inputFontNormal">Tipo de documento</td><td class="inputFontNormal"><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
-			<!-- TMPL_ELSE -->
-				<tr><td  class="inputFontNormal">Tipo de documento</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
-			<!-- /TMPL_IF -->
+			[% IF itemtype %]
+				<tr><td class="inputFontNormal">[% "Tipo de documento" | i18n %]</td><td class="inputFontNormal"><input type=hidden name=itemtype value=[% itemtype %]>[% itemtype %]</td></tr>
+			[% ELSE %]
+				<tr><td  class="inputFontNormal">[% "Tipo de documento" | i18n %]</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+			[% END %]
 			<tr>
-				<td  class="inputFontNormal">Descripci&oacute;n</td>
-				<td><input  class="inputFontNormal" type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
+				<td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
+				<td><input  class="inputFontNormal" type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">Para Sala</td>
+				<td  class="inputFontNormal">[% "Para Sala" | i18n %]</td>
 				<td  class="inputFontNormal">
-					<!-- TMPL_IF name="notforloan" -->
+					[% IF notforloan %]
 						<input  class="inputFontNormal" type=checkbox name=notforloan checked value=1>
-					<!-- TMPL_ELSE -->
+					[% ELSE %]
 						<input  class="inputFontNormal" type=checkbox name=notforloan value=1>
-					<!-- /TMPL_IF -->
+					[% END %]
 				si esta seleccionado todos los items de este tipo sera "para sala"
 				</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">Duraci&oacute;n del pr&eacute;stamo</td>
+				<td  class="inputFontNormal">[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
 				<td  class="inputFontNormal">
-					<input type=text  class="inputFontNormal" name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
+					<input type=text  class="inputFontNormal" name=loanlength size=10 value='[% loanlength %]'>
 					significativo solo si no esta seteado "para sala"
 				</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">Renovaciones permitidas</td>
-				<td><input  class="inputFontNormal" type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
+				<td  class="inputFontNormal">[% "Renovaciones permitidas" | i18n %]</td>
+				<td><input  class="inputFontNormal" type=checkbox name=renewalsallowed [% IF renewalsallowed %] checked [% END %] value=1></td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">Costo de pr&eacute;stamo</td>
-				<td><input  class="inputFontNormal" type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'></td>
-			</tr>
-
-			<tr>
-				<td  class="inputFontNormal">Agrupaci&oacute;n en la b&uacute;squeda</td>
-				<td><input  class="inputFontNormal" type=text name=search size=40 value='<!-- TMPL_VAR name="search" -->'></td>
+				<td  class="inputFontNormal">[% "Costo de pr&eacute;stamo" | i18n %]</td>
+				<td><input  class="inputFontNormal" type=text name=rentalcharge size=10 value='[% rentalcharge %]'></td>
 			</tr>
 
 			<tr>
-				<td  class="inputFontNormal">Detalle</td>
-				<td><input  class="inputFontNormal" type=text name=detail size=40 value='<!-- TMPL_VAR name="detail" -->'></td>
+				<td  class="inputFontNormal">[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
+				<td><input  class="inputFontNormal" type=text name=search size=40 value='[% search %]'></td>
 			</tr>
 
-		       <!-- TMPL_IF name="virtuallibrary" -->
 			<tr>
-				<td colspan=2><hr></td>
+				<td  class="inputFontNormal">[% "detalle" | i18n %]</td>
+				<td><input  class="inputFontNormal" type=text name=detail size=40 value='[% detail %]'></td>
 			</tr>
-       		        <tr>
-				<td  class="inputFontNormal">Biblioteca Virtual</td>
-                 		<td><input  class="inputFontNormal" type=checkbox name=virtual <!-- TMPL_IF name="virtual" -->checked<!-- /TMPL_IF --> value=1></td>
-                        </tr>
-			<tr>
-                        	<td  class="inputFontNormal">Tipo de pedido</td>
-                 		<td>	
-				<select  class="inputFontNormal" name="requesttype" size="1">
-				<option  class="inputFontNormal" value="copy" <!-- TMPL_IF name="copy" -->selected<!-- /TMPL_IF --> >Para Copia</option>
-				<option  class="inputFontNormal" value="print" <!-- TMPL_IF name="print" -->selected<!-- /TMPL_IF --> >Para Impresi&oacute;n</option>
-				</select>	
-				</td>
-                        </tr>
 
-		       <!-- /TMPL_IF -->
+		       [% IF virtuallibrary %]
+                            <tr>
+                                    <td colspan=2><hr></td>
+                            </tr>
+                            <tr>
+                                    <td  class="inputFontNormal">[% "Biblioteca Virtual" | i18n %]</td>
+                                    <td><input  class="inputFontNormal" type=checkbox name=virtual [% IF virtual %]checked [% END %]> value=1></td>
+                            </tr>
+                            <tr>
+                                <td  class="inputFontNormal">[% "Tipo de pedido" | i18n %]</td>
+                                <td>	
+                                <select  class="inputFontNormal" name="requesttype" size="1">
+                                <option  class="inputFontNormal" value="copy" [% IF copy %]selected[% END %]>[% "Para Copia" | i18n %]</option>
+                                <option  class="inputFontNormal" value="print" [% IF print %]selected[% END %]>[% "Para Impresi&oacute;n" | i18n %]</option>
+                                </select>	
+                                </td>
+                            </tr>
+
+		       [% END %]
 
 			<tr>
 				<td  class="inputFontNormal">&nbsp;</td>
 				<td>
-				<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/guardar.png" onclick="Aform.submit">
+				<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
 
 				</td>
 			</tr>
 		</table>
 	</form>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF name="delete_confirm" -->
+[% IF delete_confirm %]
 	<TABLE width="90%">
 		<tr>
-			<td  class="inputFontNormal">Tipo de documento</td>
-			<td><!-- TMPL_VAR name="itemtype" --></td>
+			<td  class="inputFontNormal">[% "Tipo de documento" | i18n %]</td>
+			<td>[% itemtype %]</td>
 		</tr>
-		<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+		<form action='[% script_name %]' method=post>
 			<input type=hidden name=op value=delete_confirmed>
-			<input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
+			<input type=hidden name=itemtype value='[% itemtype %]'>
 		<tr>
-			<td  class="inputFontNormal">Descripci&oacute;n</td>
-			<td><!-- TMPL_VAR name="description" --></td>
+			<td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
+			<td>[% description %]</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">Duraci&oacute;n del pr&eacute;stamo</td>
-			<td><!-- TMPL_VAR name="loanlength" --></td>
+			<td  class="inputFontNormal">[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+			<td>[% loanlength %]</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">Renovaciones</td>
-			<td><!-- TMPL_IF name="renewalsallowed" -->
-				Permitido<!-- TMPL_ELSE -->No Permitidas<!-- /TMPL_IF -->
+			<td  class="inputFontNormal">[% "Renovaciones" | i18n %]</td>
+			<td>[% IF renewalsallowed %]
+				[%" Permitido" | i18n %]
+                            [% ELSE %]
+                                [% "No Permitidas" | i18n %]
+                            [% END %]
 			</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">Costo de pr&eacute;stamo</td>
-			<td><!-- TMPL_VAR name="rentalcharge" --></td>
+			<td  class="inputFontNormal">[% "Costo de pr&eacute;stamo" | i18n %]</td>
+			<td>[% rentalcharge %]</td>
 		</tr>
 	 	<tr>
-			<td  class="inputFontNormal">Agrupaci&oacute;n en la b&uacute;squeda</td>
-			<td><!-- TMPL_VAR name="search" --></td>
+			<td  class="inputFontNormal">[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
+			<td>[% search %]</td>
 		</tr>
 		 
-<!-- TMPL_IF name="virtuallibrary" -->
-                <tr>
-			<td colspan=2><hr></td>
-		</tr>
-                <tr>
-			<td  class="inputFontNormal">Biblioteca Virtual</td>
-                 	<td><!-- TMPL_IF name="virtual" -->Si</td> 
-		</tr> 
-		<tr>
-                        <td  class="inputFontNormal">Tipo de pedido</td>
-                        <td  class="inputFontNormal">
-			<!-- TMPL_IF name="copy" -->Para Copia<!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="print" -->Para Impresi&oacute;n<!-- /TMPL_IF -->
-			</td>
-		</tr> 
-			<!-- TMPL_ELSE -->No </td>
-		</tr><!-- /TMPL_IF -->
-		</tr>
-<!-- /TMPL_IF -->
+                [% IF virtuallibrary %]
+                        <tr>
+                                <td colspan=2><hr></td>
+                        </tr>
+                        <tr>
+                                <td  class="inputFontNormal">[% "Biblioteca Virtual" | i18n %]</td>
+                                <td>
+                                [% IF virtual %]
+                                        [% "Si" | i18n %]
+                                                </td> 
+                                        </tr> 
+                                        <tr>
+                                                <td  class="inputFontNormal">[% "Tipo de pedido" | i18n %]</td>
+                                                <td  class="inputFontNormal">
+                                                [% IF copy %]
+                                                    [% "Para Copia" | i18n %]
+                                                [% END %]
+                                                [% IF print %]
+                                                    [% "Para Impresi&oacute;n" | i18n %]
+                                                [% END  %]
+                                                </td>
+                                        </tr> 
+                                [% ELSE %]
+                                        [% "No" | i18n %] </td>
+                        </tr>   [% END %]
+                        </tr>
+                [% END %]
 
 
-<!-- TMPL_IF name="total" -->
+ [% IF total %]
+
+<!-- KASDBNFJKBDSLJBFJLSDBFJLSDBFDSLHBFHDSBFLBDSFBDSLFBDSBFLDSBFLDSBFDSLFBDLS -->
 		<tr>
 			<td colspan=2 align=center  class="inputFontNormal">
-				<b>El registro esta en siendo utilizado <!-- TMPL_VAR name="total" --> veces. No se puede borrar.</b>
+				<b>[% "El registro esta en siendo utilizado" | i18n %] [% total %] [% "veces. No se puede borrar." | i18n %]</b>
 			</td>
 		</tr>
 		<tr>
 			<td colspan=2  class="inputFontNormal">
 		</form>
-		<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+		<form action='[% script_name %]' method=post>
 			<input type=submit value=OK>
 		</form>
 			</td>
 		</tr>
-<!-- TMPL_ELSE -->
+[% ELSE %]
 		<tr>
 			<td colspan=2  class="inputFontNormal" align=center>
-				CONFIRME BORRADO
+				[% "CONFIRME BORRADO" | i18n %]
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+				<form action='[% script_name %]' method=post>
 					<INPUT  class="inputFontNormal" type=submit value='SI'>
 				</form>
 			</td>
 			<td>
-				<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+				<form action='[% script_name %]' method=post>
 					<input type=submit value=NO>
 				</form>
 			</td>
 		</tr>
-<!-- /TMPL_IF -->
+[% END %]
 
 	</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="else" -->
-<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
-	<tr>
-		<td>Administraci&oacute;n de Tipos de Documento</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
-<br>	
-	
-<table border='0' cellpadding='0' cellspacing='0' width='100%'>
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td>C&oacute;digo</td>
-		<td>Descripci&oacute;n</td>
-		<td>Duraci&oacute;n del pr&eacute;stamo</td>
-		<td>Renovable</td>
-		<td>Multa</td>
-		<td>Agrupaci&oacute;n en la b&uacute;squeda</td>
-		<td>Detalle</td>
-
-<!-- TMPL_IF name="virtuallibrary" -->
-  		<td><b>Biblioteca Virtual</b></td>
-<!-- /TMPL_IF -->
-
-		<td width="7%">Editar</td>
-		<td>Eliminar</td>
-
-		<td align="right" width="1%" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-	</tr>
-	<!-- TMPL_LOOP name="loop" -->
-	<tr align="middle">
-		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="itemtype" -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="description" -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal" align="center">
-			<!-- TMPL_VAR name="loanlength" -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal" align="center">
-			<!-- TMPL_IF name="renewalsallowed" -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="rentalcharge" -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="search" -->
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR NAME='detail' -->
-		</td>
-	<!-- TMPL_IF name="virtuallibrary" -->
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<!-- TMPL_VAR NAME='requesttype' -->
-		</td>
-	<!-- /TMPL_IF -->
+[% END %]
 
 
-		<td class="<!-- TMPL_VAR NAME='clase'-->" align="center">
-		<a class="inputFontNormal" 
-		href="<!-- TMPL_VAR name='script_name' -->?op=add_form&itemtype=<!-- TMPL_VAR name='itemtype' escape='HTML' -->">
-		<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" hspace=0 vspace=0 border=0 ALT="Editar">
-		</a>
-		</td>
-		<td class="<!-- TMPL_VAR NAME='clase'-->" align="center"><a  class="inputFontNormal" href="<!-- TMPL_VAR name='script_name' -->?op=delete_confirm&itemtype=<!-- TMPL_VAR name='itemtype' escape='HTML' -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" hspace=0 vspace=0 border=0 ALT="Eliminar"></a></td>
- 		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
- 	<tr valign=bottom>
-        	<td class="lineafinaltabla"  align="left" colspan="10"></td>
-        </tr>
-
-</table>
-
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post name=formDoc>
-<input type=hidden name=op value=add_form>
-<br>
-<center>
-<table width=40%>
-	<tr>
-		<td width="60%" align="right">
-		<input type="image" alt="Agregar Tipo de Documento" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/agregar.png" onclick="formDoc.submit">
-		</td>
-		<td width=10%>
-			<!-- TMPL_IF name="previous" -->
-				<a  class="inputFontNormal" href="<!-- TMPL_VAR name=previous -->">
-				<input type=image src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/1leftarrow.png" title="previous" ALT="previous"
-				BORDER=0></a>
-			<!-- /TMPL_IF -->
-		</td>
-		<td width=10%>
-			<!-- TMPL_IF name="next" -->
-				<a  class="inputFontNormal" href="<!-- TMPL_VAR name=next -->">
-				<input type=image src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a>
-			<!-- /TMPL_IF -->
-		</td>
-	</tr>
-</table>
-</center>
-</form>
-<!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

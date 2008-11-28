@@ -1,29 +1,31 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
 <script language="javascript" type="text/javascript">
 function swap(id,src){
 document.getElementById(id).src=src;
 }
 </script>
 
-<!-- TMPL_IF name="add_form" -->
+<!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
+[% IF ! add_form %]
 <!---------------------------------------------------------------------------->
 
 <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
 		<td>
- 	<!-- TMPL_IF NAME="use-heading-flags-p" -->
- 		<!-- TMPL_IF NAME="heading-modify-authorized-value-p" -->
-			Modificar Valores Autorizados
-		<!-- /TMPL_IF -->
- 		<!-- TMPL_IF NAME="heading-add-new-category-p" -->
-			Agregar Categor&iacute;a
-		<!-- /TMPL_IF -->
- 		<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->
-			Agregar Valores Autorizados
-		<!-- /TMPL_IF -->
- 		<!-- TMPL_ELSE -->
-			<!-- TMPL_VAR name="action" -->
-		<!-- /TMPL_IF -->
+ 	[% IF use-heading-flags-p %]
+ 		[% IF heading-modify-authorized-value-p %]
+			[% "Modificar Valores Autorizados" | i18n %]
+		[% END %]
+ 		[% IF heading-add-new-category-p %]
+			[% "Agregar Categor&iacute;a" | i18n %]
+		[% END %]
+ 		[% IF heading-add-authorized-value-p %]
+			[% "Agregar Valores Autorizados" | i18n %]
+		[% END %]
+ 		[% ELSE %]
+			[% action %]
+		[% END %]
 		</td>
 	</tr>
 	<tr>
@@ -31,164 +33,164 @@ document.getElementById(id).src=src;
 	</tr>
 </table>
 
-<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
+<form action='[% script_name %]' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
 	<tr>
-		<td class="inputFontNormal">Categor&iacute;a</td>
-		<td class="inputFontNormal"><!-- TMPL_VAR name="category" --></td>
+		<td class="inputFontNormal">[% "Categor&iacute;a" | i18n %]</td>
+		<td class="inputFontNormal">[% category %]</td>
 	</tr>
 	<tr>
-		<td class="inputFontNormal">Valor Autorizado</td>
+		<td class="inputFontNormal">[% "Valor Autorizado" | i18n %]</td>
 		<td>
-			<input class="inputFontNormal" type=text name="authorised_value" value='<!-- TMPL_VAR name="authorised_value" escape=HTML -->'>
+			<input class="inputFontNormal" type=text name="authorised_value" value='[% HTML.escape(authorised_value) %]'>
 		</td>
 	</tr>
 	<tr>
-		<td class="inputFontNormal">Lib</td>
+		<td class="inputFontNormal">[% "Lib" | i18n %]</td>
 		<td>
-			<input type=text class="inputFontNormal" name="lib" value='<!-- TMPL_VAR name="lib" -->'>
+			<input type=text class="inputFontNormal" name="lib" value='[% lib %]'>
 		</td>
 	</tr>
 	<tr>
 		<td class="inputFontNormal">&nbsp;</td>
 		<td>
-			<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->">
-			<a href="#"  onClick="Aform.submit()" ><img name="save" id="save" alt="Guardar cambios" src="<!-- TMPL_VAR NAME="themelang" -->/images/guardar.png" border="0"></a>
+			<input type="hidden" name="id" value="[% id %]">
+			<a href="#"  onClick="Aform.submit()" ><img name="save" id="save" alt="Guardar cambios" src="[% themelang %]/images/guardar.png" border="0"></a>
 		</td>
 	</tr>
 	</table>
 </form>
-	<!-- /TMPL_IF -->
+	[% END %]
 
 
-<!-- TMPL_IF name="delete_confirm" -->
+[% IF delete_confirm %]
 <!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top>
-		<td class="inputFontNormal"><b>Variable</b></td>
-		<td class="inputFontNormal"><b>Lib</b></td>
-		<td class="inputFontNormal"><b><!-- TMPL_VAR name="searchfield" --></b></td>
+		<td class="inputFontNormal"><b>[% "Variable" | i18n %]</b></td>
+		<td class="inputFontNormal"><b>[% "Lib" | i18n %]</b></td>
+		<td class="inputFontNormal"><b>[% searchfield %]</b></td>
 	</tr>
 	<tr class="inputFontNormal">
-		<td>Valor</td>
-		<td><!-- TMPL_VAR name="Tvalue" --></td>
+		<td>[% "Valor" | i18n %]</td>
+		<td>[% Tvalue %]</td>
 	</tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<form action='[% script_name %]' method=post>
 		<input type=hidden name=op value=delete_confirmed>
-		<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
-		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
+		<input type=hidden name=id value='[% id %]'>
+		<input type="hidden" name="searchfield" value="[% searchfield %]">
 	<tr>
-		<td colspan=2 align=center>CONFIRME BORRADO</td>
+		<td colspan=2 align=center>[% "CONFIRME BORRADO" | i18n %]</td>
 	</tr>
 	<tr>
 		<td><INPUT type=submit value='SI'></form></td>
 		<td>
-			<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+			<form action='[% script_name %]' method=post>
 				<input type=submit value=NO>
 			</form>
 		</td>
 	</tr>
 </table>
-<!-- /TMPL_IF -->
+[% END %]
 
 <!---------------------------------------------------------------------------->
-<!-- TMPL_IF name="else" -->
+[% IF else %]
 
 <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
-		<td>Administraci&oacute;n de Valores Autorizados</td>
+		<td>[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
 	</tr>
 </table>
 		
-<p class="inputFontNormal">Esta tabla es utilizada en la definici&oacute;n de MARC. Usted puede definir tantas categor&iacute;as como quiera, y tantos valores autorizados como necesite en cada categor&iacute;a. </p>
-<p class="inputFontNormal" >Cuando defina la estructura del subcampo MARC, puede vincular un subcampo con una categor&iacute;a permitida. Cuando el usuario agrega o modifica un libro, el subcampo no se ingresa manualmente, se selecciona de una lista de valores permitidos.</p>
+<p class="inputFontNormal">[% "Esta tabla es utilizada en la definici&oacute;n de MARC. Usted puede definir tantas categor&iacute;as como quiera, y tantos valores autorizados como necesite en cada categor&iacute;a." | i18n %] </p>
+<p class="inputFontNormal" >[% "Cuando defina la estructura del subcampo MARC, puede vincular un subcampo con una categor&iacute;a permitida. Cuando el usuario agrega o modifica un libro, el subcampo no se ingresa manualmente, se selecciona de una lista de valores permitidos." | i18n %]</p>
 <table>
 	<tr>
 		<form action=/cgi-bin/koha/admin/authorised_values.pl method=post name="form1">
-		<td><!-- TMPL_VAR name="tab_list" --></td>
-		<td><a onClick="form1.submit()" href="#"><img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border=0></a>
+		<td>[% tab_list %]</td>
+		<td><a onClick="form1.submit()" href="#"><img name="go" id="go" alt=[% "Comenzar b&uacute;squeda" | i18n %] src="[% themelang %]/images/boton-buscar.png" border=0></a>
 		</td>
-		<td><a class="inputFontNormal" href="authorised_values.pl?op=add_form">Nueva Categor&iacute;a</a>
+		<td><a class="inputFontNormal" href="authorised_values.pl?op=add_form">[% "Nueva Categor&iacute;a" | i18n %]</a>
 		</td>
 		</form>
 	</tr>
 </table>
-<!-- TMPL_VAR name="searchfield" -->
+[% searchfield %]
 <br>
 
 <table border=0 cellspacing=0 cellpadding=0 width="80%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
-		<td>Categor&iacute;a</td>
-		<td>Valor Autorizado</td>
-		<td>Lib</td>
-		<td width="8%">Editar</td>
-		<td width="8%">Eliminar</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-<!-- TMPL_LOOP name="loop" -->
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
+		<td>[% "Categor&iacute;a" | i18n %]</td>
+		<td>[% "Valor Autorizado" | i18n %]</td>
+		<td>[% "Lib" | i18n %]</td>
+		<td width="8%">[% "Editar" | i18n %]</td>
+		<td width="8%">[% "Eliminar" | i18n %]</td>
+		<td width="1%" align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
+[% FOREACH loop %]
 
 	<tr valign=middle >
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="category" -->
+		<td height=25 class="[% clase %]">&nbsp;</td>
+		<td class="[% clase %]" class="inputFontNormal">
+			[% category %]
 		</td>
-		<td align="center" class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal">
-			<!-- TMPL_VAR name="authorised_value" -->
+		<td align="center" class="[% clase %]" class="inputFontNormal">
+			[% authorised_value %]
 		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"> 
-			<!-- TMPL_VAR name="lib" -->
+		<td class="[% clase %]" class="inputFontNormal"> 
+			[% lib %]
 		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" align="center">
-			<a class="inputFontNormal" href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" ALT="Editar" hspace=0 vspace=0 border=0></a>
+		<td class="[% clase %]" align="center">
+			<a class="inputFontNormal" href="[% edit %]"><img src="[% interface %]/[% theme %]/images/editar.png" ALT="Editar" hspace=0 vspace=0 border=0></a>
 		</td>
-		<td class="<!-- TMPL_VAR NAME="clase"-->" align="center">
-			<a class="inputFontNormal" href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+		<td class="[% clase %]" align="center">
+			<a class="inputFontNormal" href="[% delete %]"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
 		</td>
-		<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+		<td height=25 class="[% clase %]">&nbsp;</td>
 
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END  %]
  	<tr valign=bottom>
         	<td class="lineafinaltabla"  align="left" colspan="7"></td>
         </tr>
 </table>
 
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+<form action='[% script_name %]' method=post>
 <input type=hidden name=op value=add_form>
 
 
 <table width=40%>
 	<tr>
 		<td width=50%>
-			<!-- TMPL_IF name="isprevpage" -->
-				<a class="inputFontNormal" ref="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+			[% IF isprevpage %]
+				<a class="inputFontNormal" ref="[% script_name %]?offset=[% prevpage %]&searchfield=[% searchfield %]">
+				<input type=image src="[% interface %]/[% theme %]/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
 				</a>
-			<!-- /TMPL_IF -->
+			[% END %]
 		</td>
 		<td width=50%>
-			<!-- TMPL_IF name="nextpage" -->
-				<a class="inputFontNormal" href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+			[% IF nextpage %]
+				<a class="inputFontNormal" href="[% script_name %]?offset=[% nextpage %]&searchfield=[% searchfield %]">
+					<input type=image src="[% interface %]/[% theme %]/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
 				</a>
-			<!-- /TMPL_IF -->
+			[% END %]
 		</td>
 	</tr>
 </table>
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post name=form2>
+<form action='[% script_name %]' method=post name=form2>
 <input type="hidden" name="op" value="add_form">
-<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+<input type="hidden" name="category" value="[% category %]">
 <br>
 <center>
-<input type="image" alt="Agregar Valor Autorizado"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="form2.submit">
+<input type="image" alt="Agregar Valor Autorizado"  src="[% interface %]/[% theme %]/images/agregar.png" onclick="form2.submit">
 <!--<input type=submit class="button" value="Agregar Valor Autorizado" title="Agregar Valor Autorizado" ALT="Agregar Valor Autorizado">--><br>
 </center>
 </form>
-<!-- /TMPL_IF -->
+[% END %]
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

@@ -65,11 +65,13 @@ function Check(f) {
 	}
 }
 </SCRIPT>
-[% IF add_form %]
+
+<!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
+[% IF !add_form %]     
 	[% IF itemtype %]
             <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
                     <tr>
-                            <td>Modificar Tipo de Pr&eacute;stamo</td>
+                            <td>[% "Modificar Tipo de Pr&eacute;stamo" | i18n %]</td>
                     </tr>
                     <tr>
                             <td class="lineagruesa"  align="left" colspan="3"></td>
@@ -78,35 +80,35 @@ function Check(f) {
 	[% ELSE %]
             <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
                     <tr>
-                            <td>Agregar Tipo de Pr&eacute;stamo</td>
+                            <td>[% "Agregar Tipo de Pr&eacute;stamo" | i18n %]</td>
                     </tr>
                     <tr>
                             <td class="lineagruesa"  align="left" colspan="3"></td>
                     </tr>
             </table>
         [% END %]
-        <form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
+        <form action='[% script_name %]' name=Aform method=post>
                 <input type=hidden name=op value='add_validate'>
                 <input type=hidden name=checked value=0>
                 <table class="tablaresultado" width="95%">
                 [% IF issuetype %]
                         <tr>
-                                <td class="inputFontNormal">Tipo de pr&eacute;stamo</td>
-                                <td class="inputFontNormal"><input type=hidden name=issuetype value=<!-- TMPL_VAR name="issuetype" -->>[% issuetype %]</td>
+                                <td class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td class="inputFontNormal"><input type=hidden name=issuetype value=[% issuetype %]>[% issuetype %]</td>
                         </tr>
                 [% ELSE %]
                         <tr>
-                                <td  class="inputFontNormal">Tipo de pr&eacute;stamo</td>
+                                <td  class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
                                 <td><input type=text name=issuetype size=6 maxlength=4 onBlur="toUC(this)"></td>
                         </tr>
                 [% END %]
                 <tr>
-                        <td  class="inputFontNormal">Descripci&oacute;n</td>
+                        <td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
                         <td><input  class="inputFontNormal"type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">Para Sala</td>
+                        <td  class="inputFontNormal">[% "Para Sala" | i18n %]</td>
                         <td  class="inputFontNormal">
                                 [% IF notforloan %]
                                     <input  class="inputFontNormal" type=checkbox name=notforloan checked value=1>
@@ -116,9 +118,9 @@ function Check(f) {
                         </td>
                 </tr>
                 <tr>
-                        <td  class="inputFontNormal">Habilitado</td>
+                        <td  class="inputFontNormal">[% "Habilitado" | i18n %]</td>
                         <td  class="inputFontNormal">
-                                [% enabled %]
+                                [% IF enabled %]
                                     <input  class="inputFontNormal" type=checkbox name=enabled checked value=1>
                                 [% ELSE %]
                                   <input  class="inputFontNormal" type=checkbox name=enabled value=1>
@@ -127,7 +129,7 @@ function Check(f) {
                 </tr>
                 <tr>
                         <td  class="inputFontNormal">
-                                M&aacute;xima cantidad de pr&eacute;stamos
+                                [% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
                         </td>
                         <td  class="inputFontNormal">
                                 <input type=text  class="inputFontNormal" name=maxissues size=10 value='[% maxissues %]'>
@@ -137,7 +139,7 @@ function Check(f) {
                 
                 <tr>
                         <td  class="inputFontNormal">
-                                D&iacute;as de duraci&oacute;n del pr&eacute;stamo
+                                [% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]
                         </td>
                         <td>
                                 <input  class="inputFontNormal"type=text name=daysissues size=40 maxlength=80 value='[% HTML.escape(daysissues) %]'>&nbsp;
@@ -146,7 +148,7 @@ function Check(f) {
 
                 <tr>
                         <td  class="inputFontNormal">
-                                Renovaciones
+                                [% "Renovaciones" | i18n %]
                         </td>
                         <td>
                                 <input  class="inputFontNormal"type=text name=renew size=40 maxlength=80 value='[% HTML.escape(renew) %]'>&nbsp;
@@ -155,7 +157,7 @@ function Check(f) {
 
                 <tr>
                         <td  class="inputFontNormal">
-                                D&iacute;as de Renovaci&oacute;n
+                                [% "D&iacute;as de Renovaci&oacute;n" | i18n %]
                         </td>
                         <td>
                                 <input  class="inputFontNormal"type=text name=renewdays size=40 maxlength=80 value='[% HTML.escape(renewdays) %]'>&nbsp;
@@ -164,7 +166,7 @@ function Check(f) {
 
                 <tr>
                         <td  class="inputFontNormal">
-                                Cuantos d&iacute;as antes se puede renovar
+                                [% "Cuantos d&iacute;as antes se puede renovar" | i18n %]
                         </td>
                         <td>
                                 <input  class="inputFontNormal"type=text name=dayscanrenew size=40 maxlength=80 value='[% HTML.escape(dayscanrenew) %]'>&nbsp;
@@ -185,40 +187,40 @@ function Check(f) {
 [% IF delete_confirm %]
             <TABLE width="90%">
                     <tr>
-                            <td  class="inputFontNormal">Tipo de pr&eacute;stamo</td>
+                            <td  class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
                             <td>[% issuetype %]</td>
                     </tr>
             <form action='[% script_name %]' method=post>
                             <input type=hidden name=op value=delete_confirmed><input type=hidden name=issuetype value='[% issuetype %]'>
                     <tr>
-                            <td  class="inputFontNormal">Descripci&oacute;n</td>
+                            <td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
                             <td>[% description %]</td>
                     </tr>
                     <tr>
-                            <td  class="inputFontNormal">M&aacute;xima cantidad de pr&eacute;stamos</td>
+                            <td  class="inputFontNormal">[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
                             <td>[% maxissues %]</td>
                     </tr>
                     <tr>
-                            <td  class="inputFontNormal">D&iacute;as de duraci&oacute;n del pr&eacute;stamo</td>
+                            <td  class="inputFontNormal">[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
                             <td>[% daysissues %]</td>
                     </tr>
                     <tr>
-                            <td  class="inputFontNormal">Renovaciones</td>
+                            <td  class="inputFontNormal">[% "Renovaciones" | i18n %]</td>
                             <td>[% renew %]</td>
                     </tr>
                     <tr>
-                            <td  class="inputFontNormal">D&iacute;as de Renovaci&oacute;n</td>
+                            <td  class="inputFontNormal">[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
                             <td>[% renewdays %]</td>
                     </tr>
                     <tr>
-                            <td  class="inputFontNormal">Cuantos d&iacute;as antes se puede renovar</td>
+                            <td  class="inputFontNormal">[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</td>
                             <td>[% dayscanrenew %]</td>
                     </tr>
             
             [% IF total %]
             
                     <tr>
-                            <td colspan=2 align=center  class="inputFontNormal"><b>El registro esta en siendo utilizado [% total %] veces. No se puede borrar.</b></td>
+                            <td colspan=2 align=center  class="inputFontNormal"><b>[% "El registro esta en siendo utilizado" | i18n %] [% total %] [% "veces. No se puede borrar." | i18n %]</b></td>
                     </tr>
                     </form>
                     <tr>
@@ -232,7 +234,7 @@ function Check(f) {
             [% ELSE %]
             
                     <tr>
-                            <td colspan=2  class="inputFontNormal"align=center>CONFIRME BORRADO</td>
+                            <td colspan=2  class="inputFontNormal"align=center>[% "CONFIRME BORRADO" | i18n %]</td>
                     </tr>
                     <tr class="inputFormNormal" >
                             <td>
@@ -253,7 +255,7 @@ function Check(f) {
 [% IF else %]
             <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
                     <tr>
-                            <td>Administraci&oacute;n de Tipos de Pr&eacute;stamo</td>
+                            <td>[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</td>
                     </tr>
                     <tr>
                             <td class="lineagruesa"  align="left" colspan="3"></td>
@@ -265,17 +267,17 @@ function Check(f) {
             <table border='0' cellpadding='0' cellspacing='0' width='100%'>
                     <tr class="tablaresultadoTitle">
                             <td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
-                            <td>C&oacute;digo</td>
-                            <td>Descripci&oacute;n</td>
-                            <td>M&aacute;xima cantidad de pr&eacute;stamos</td>
-                            <td>D&iacute;as de duraci&oacute;n del pr&eacute;stamo</td>
-                            <td>Renovaciones</td>
-                            <td>D&iacute;as de Renovaci&oacute;n</td>
-                            <td>Cantidad de d&iacute;as para renovar</td>
-                            <td>Para Sala</td>
-                            <td>Habilitado</td>
-                            <td width="8%">Editar</td>
-                            <td>Eliminar</td>
+                            <td>[% "C&oacute;digo" | i18n %]</td>
+                            <td>[% "Descripci&oacute;n" | i18n %]</td>
+                            <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
+                            <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+                            <td>[% "Renovaciones" | i18n %]</td>
+                            <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
+                            <td>[% "Cantidad de d&iacute;as para renovar" | i18n %]</td>
+                            <td>[% "Para Sala" | i18n %]</td>
+                            <td>[% "Habilitado" | i18n %]</td>
+                            <td width="8%">[% "Editar" | i18n %]</td>
+                            <td>[% "Eliminar" | i18n %]</td>
                             <td width="1%" align="right"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
                     </tr>
             [% FOREACH loop %]
@@ -304,23 +306,23 @@ function Check(f) {
                             </td>
                             <td class="[% clase %]" class="inputFontNormal" align="center">
                                     [% IF notforloan %]
-                                            Si
+                                            [% "Si" | i18n %]
                                     [% ELSE %]
-                                            No
+                                            [% "No" | i18n %]
                                     [% END %]
                             </td>
                             <td class='[% clase %]' class="inputFontNormal" align="center">
                                     [% IF enabled %]
-                                            Si
+                                            [% "Si" | i18n %]
                                     [% ELSE %]
-                                            No
+                                            [% "No" | i18n %]
                                     [% END %]
                             </td>
                             <td class="[% clase %]" align="center">
-                                    <a  class="inputFontNormal" href="[% script_name %]?op=add_form&issuetype=[% issuetype" escape="HTML %]"><img src="[% interface %]/[% themelang %]/images/editar.png" hspace=0 vspace=0 border=0 ALT="Editar"></a>
+                                    <a  class="inputFontNormal" href="[% script_name %]?op=add_form&issuetype=[% HTML.escape(issuetype) %]"><img src="[% interface %]/[% themelang %]/images/editar.png" hspace=0 vspace=0 border=0 ALT="Editar"></a>
                             </td>
                             <td class="[% clase %]" align="center">
-                                    <a  class="inputFontNormal" href="[% script_name %]?op=delete_confirm&issuetype=[% issuetype" escape="HTML %]"><img src="[% interface %]/[% themelang %]/images/borrar.png" hspace=0 vspace=0 border=0 ALT="Eliminar"></a>
+                                    <a  class="inputFontNormal" href="[% script_name %]?op=delete_confirm&issuetype=[% HTML.escape(issuetype) %]"><img src="[% interface %]/[% themelang %]/images/borrar.png" hspace=0 vspace=0 border=0 ALT="Eliminar"></a>
                             </td>
                             <td height=25 class="[% clase %]">&nbsp;</td>
                     </tr>

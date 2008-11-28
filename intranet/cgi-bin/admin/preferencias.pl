@@ -7,7 +7,7 @@ use CGI;
 
 my $input = new CGI;
 
-my ($template, $session, $params) = get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
 									template_name => "admin/preferencias.tmpl",
 									query => $input,
 									type => "intranet",
@@ -16,4 +16,4 @@ my ($template, $session, $params) = get_template_and_user({
 									debug => 1,
 			    });
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

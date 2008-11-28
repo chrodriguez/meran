@@ -51,7 +51,7 @@ sub StringSearch  {
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
+	   push(@results,$data);
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -64,25 +64,24 @@ my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/categorie.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+								template_name => "admin/categorie.tmpl",
+								query => $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {borrowers => 1},
+								debug => 1,
+			    				});
 
-
-$template->param(script_name => $script_name,
-		 categorycode => $categorycode,
-		 searchfield => $searchfield);
+$t_params->{'script_name'}= $script_name;
+$t_params->{'categorycode'}= $categorycode;
+$t_params->{'searchfield'}= $searchfield;
 
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
-	$template->param(add_form => 1);
+	$t_params->{'add_form'}= 1;
 	
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
@@ -94,20 +93,20 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	}
 
-	$template->param(description             => $data->{'description'},
-				enrolmentperiod         => $data->{'enrolmentperiod'},
-				upperagelimit           => $data->{'upperagelimit'},
-				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-				enrolmentfee            => $data->{'enrolmentfee'},
-				overduenoticerequired   => $data->{'overduenoticerequired'},
-				issuelimit              => $data->{'issuelimit'},
-				borrowingdays           => $data->{'borrowingdays'},
-				reservefee              => $data->{'reservefee'});
+	$t_params->{'description'}= $data->{'description'};
+	$t_params->{'enrolmentperiod'}= $data->{'enrolmentperiod'};
+	$t_params->{'upperagelimit'}= $data->{'upperagelimit'};
+	$t_params->{'dateofbirthrequired'}= $data->{'dateofbirthrequired'};
+	$t_params->{'enrolmentfee'}= $data->{'enrolmentfee'};
+	$t_params->{'overduenoticerequired'}= $data->{'overduenoticerequired'};
+	$t_params->{'issuelimit'}= $data->{'issuelimit'};
+	$t_params->{'borrowingdays'}= $data->{'borrowingdays'};
+	$t_params->{'reservefee'}= $data->{'reservefee'};
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$template->param(add_validate => 1);
+	$t_params->{'add_validate'}= 1;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,borrowingdays) values (?,?,?,?,?,?,?,?,?,?)");
 	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','issuelimit','reservefee','overduenoticerequired','borrowingdays'));
@@ -116,39 +115,39 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	$template->param(delete_confirm => 1);
+	$t_params->{'delete_confirm'}= 1;
 
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode=?");
 	$sth->execute($categorycode);
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
-	$template->param(total => $total->{'total'});
+	$t_params->{'total'}= $total->{'total'};
 	
 	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,borrowingdays from categories where categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
 	if ($total->{'total'} >0) {
-		$template->param(totalgtzero => 1);
+		$t_params->{'totalgtzero'}= 1;
 	}
 
-        $template->param(description             => $data->{'description'},
-                                enrolmentperiod         => $data->{'enrolmentperiod'},
-                                upperagelimit           => $data->{'upperagelimit'},
-                                dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                enrolmentfee            => $data->{'enrolmentfee'},
-                                overduenoticerequired   => $data->{'overduenoticerequired'},
-                                issuelimit              => $data->{'issuelimit'},
-                                reservefee              => $data->{'reservefee'},
-				borrowingdays		=> $data->{'borrowingdays'});
+        $t_params->{'description'}             = $data->{'description'};
+        $t_params->{'enrolmentperiod'}         = $data->{'enrolmentperiod'};
+        $t_params->{'upperagelimit'}           = $data->{'upperagelimit'};
+        $t_params->{'dateofbirthrequired'}     = $data->{'dateofbirthrequired'};
+        $t_params->{'enrolmentfee'}            = $data->{'enrolmentfee'};
+        $t_params->{'overduenoticerequired'}   = $data->{'overduenoticerequired'};
+        $t_params->{'issuelimit'}              = $data->{'issuelimit'};
+        $t_params->{'reservefee'}              = $data->{'reservefee'};
+        $t_params->{'borrowingdays'}	       = $data->{'borrowingdays'};
 
 
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	$template->param(delete_confirmed => 1);
+	$t_params->{'delete_confirmed'} = 1;
 	my $dbh = C4::Context->dbh;
 	my $categorycode=uc($input->param('categorycode'));
 	my $sth=$dbh->prepare("delete from categories where categorycode=?");
@@ -156,7 +155,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 } else { # DEFAULT
-	$template->param(else => 1);
+	$t_params->{'else'}= 1;
 	my $env;
 	my @loop;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -183,7 +182,7 @@ if ($op eq 'add_form') {
 			$toggle = 'par';
 		}
 	}
-	$template->param(loop => \@loop);
+	$t_params->{'loop'}= \@loop;
 
 
 
@@ -191,5 +190,5 @@ if ($op eq 'add_form') {
 
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

@@ -1,6 +1,6 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-
-<!-- TMPL_IF NAME=add_form -->
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
+[% IF add_form %]
 	<script>
 	function swap(id,src){
 	document.getElementById(id).src=src;
@@ -64,299 +64,309 @@
 	}
 	</SCRIPT>
 
-	<!-- TMPL_IF NAME=categorycode -->
-	<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
-		<tr>
-			<td>Modificar Categor&iacute;a</td>
-		</tr>
-	        <tr>
-			<td class="lineagruesa"  align="left" colspan="3"></td>
-		</tr>
-	</table>
+	[% IF categorycode %]
+            <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+                    <tr>
+                            <td>[% "Modificar Categor&iacute;a" | i18n %]</td>
+                    </tr>
+                    <tr>
+                            <td class="lineagruesa"  align="left" colspan="3"></td>
+                    </tr>
+            </table>
 					  
-	<!-- TMPL_ELSE -->
-	<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
-		<tr>
-			<td>Agregar Categor&iacute;a</td>
-		</tr>
-	        <tr>
-			<td class="lineagruesa"  align="left" colspan="3"></td>
-		</tr>
-        </table>
+	[% ELSE %]
+            <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+                    <tr>
+                            <td>[% "Agregar Categor&iacute;a" | i18n %]</td>
+                    </tr>
+                    <tr>
+                            <td class="lineagruesa"  align="left" colspan="3"></td>
+                    </tr>
+            </table>
 					  
-	<!-- /TMPL_IF -->
+	[% END %]
 	
-	<form action=<!-- TMPL_VAR NAME=script_name --> name=Aform method=post>
+	<form action=[% script_name %] name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<input type=hidden name=checked value=0>
 
 	<table>
-	<!-- TMPL_IF NAME=categorycode -->
+	[% IF categorycode %]
 		<tr>
-			<td class="inputFontNormal">C&oacute;digo de categor&iacute;a</td>
+			<td class="inputFontNormal">[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
 			<td class="inputFontNormal">
-				<!-- TMPL_VAR NAME=categorycode -->
-				<input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>
+				[% categorycode %]
+				<input type=hidden name=categorycode value=[% categorycode %]>
 			</td>
 		</tr>
-	<!-- TMPL_ELSE -->
+	[% ELSE %]
 		<tr>
-			<td class="inputFontNormal">C&oacute;digo de categor&iacute;a</td>
+			<td class="inputFontNormal">[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
 			<td>
 				<input class="inputFontNormal"type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)>
 			</td>
 		</tr>
-	<!-- /TMPL_IF -->
+	[% END %]
 
 		<tr>
-			<td class="inputFontNormal">Descripci&oacute;n</td>
+			<td class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
 			<td class="inputFontNormal">
-				<input class="inputFontNormal"type=text name=description size=40 maxlength=80 value="<!-- TMPL_VAR NAME=description escape=HTML -->">
+				<input class="inputFontNormal"type=text name=description size=40 maxlength=80 value="[% HTML.escape(description) %]">
 				&nbsp;
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Per&iacute;odo de inscripci&oacute;n</td>
+			<td class="inputFontNormal">[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
 			<td>
-				<input type=text class="inputFontNormal"name=enrolmentperiod size=3 maxlength=2 value="<!-- TMPL_VAR NAME=enrolmentperiod -->">
+				<input type=text class="inputFontNormal"name=enrolmentperiod size=3 maxlength=2 value="[% enrolmentperiod %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">L&iacute;mite superior de edad</td>
+			<td class="inputFontNormal">[% "L&iacute;mite superior de edad "| i18n %]</td>
 			<td>
-				<input class="inputFontNormal" type=text name=upperagelimit size=3 maxlength=3 value="<!-- TMPL_VAR NAME=upperagelimit -->">
+				<input class="inputFontNormal" type=text name=upperagelimit size=3 maxlength=3 value="[% upperagelimit %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Edad Requerida</td>
+			<td class="inputFontNormal">[% "Edad Requerida" | i18n %]</td>
 			<td>
-				<input type=text class="inputFontNormal" name=dateofbirthrequired value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size=3 maxlength=2>
+				<input type=text class="inputFontNormal" name=dateofbirthrequired value="[% dateofbirthrequired %]" size=3 maxlength=2>
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Tarifa de inscripci&oacute;n</td>
+			<td class="inputFontNormal">[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
 			<td>
-				<input class="inputFontNormal" type=text name=enrolmentfee value="<!-- TMPL_VAR NAME=enrolmentfee -->">
+				<input class="inputFontNormal" type=text name=enrolmentfee value="[% enrolmentfee  %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Se necesita nota de atraso</td>
+			<td class="inputFontNormal">[ "Se necesita nota de atraso" | i18n %]</td>
 			<td class="inputFontNormal">
 				<select class="inputFontNormal" name="overduenoticerequired">
-					<option <!-- TMPL_UNLESS name="overduenoticerequired" -->selected<!-- /TMPL_UNLESS --> value="0">No</option>
-					<option <!-- TMPL_IF name="overduenoticerequired" -->selected<!-- /TMPL_IF --> value="1">Si</option>
+					<option [% UNLESS overduenoticerequired %] selected [% END %] value="0">No</option>
+					<option [% IF overduenoticerequired %] selected [% END %] value="1">Si</option>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">L&iacute;mite de pr&eacute;stamo</td>
+			<td class="inputFontNormal">[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
 			<td class="inputFontNormal">
-				<input type=text class="inputFontNormal" name=issuelimit size=2 maxlength=2 value="<!-- TMPL_VAR NAME=issuelimit -->">
+				<input type=text class="inputFontNormal" name=issuelimit size=2 maxlength=2 value="[% issuelimit %]">
 			</td>
 		</tr>
 		<tr class="inputFontNormal">
-			<td class="inputFontNormal">D&iacute;as de pr&eacute;stamo</td>
+			<td class="inputFontNormal">[% "D&iacute;as de pr&eacute;stamo" | i18n %]</td>
 			<td class="inputFontNormal">
-				<input type=text class="inputFontNormal"name=borrowingdays value="<!-- TMPL_VAR NAME=borrowingdays -->">
+				<input type=text class="inputFontNormal"name=borrowingdays value="[% borrowingdays %]">
 			</td>
 		</tr>
 
 		<tr>
-			<td class="inputFontNormal">Costo de reserva</td>
+			<td class="inputFontNormal">[% "Costo de reserva" | i18n %]</td>
 			<td class="inputFontNormal">
-				<input class="inputFontNormal" type=text name=reservefee value="<!-- TMPL_VAR NAME=reservefee -->">
+				<input class="inputFontNormal" type=text name=reservefee value="[% reservefee %]">
 			</td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 			<td>
-			<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
+			<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
 			</td>
 		</tr>
 	</table>
 	</form>
 
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME=add_validate -->
-	Registro de datos
-	<form action=<!-- TMPL_VAR NAME=script_name --> method=post>
+[% IF add_validate %]
+	[% "Registro de datos" | i18n %]
+	<form action=[% script_name %] method=post>
 		<input type=submit value=OK>
 	</form>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME=delete_confirm -->
-	TOTAL : <!-- TMPL_VAR NAME=categorycode --> : <!-- TMPL_VAR NAME=total --><br>
+[% IF delete_confirm %]
+	[% "TOTAL"  | i18n %]: [% categorycode %] : [% total %]<br>
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr class="tablaresultadoTitle">
 			<td class="inputFontNormal">
-				<b>C&oacute;digo de categor&iacute;a</b>
+				<b>[% "C&oacute;digo de categor&iacute;a" | i18n %]</b>
 			</td>
 			<td class="inputFontNormal">
-				<!-- TMPL_VAR NAME=categorycode -->
+				[% categorycode %]
 			</td>
 		</tr>
-        	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-			<input type=hidden name=op value=delete_confirmed>
-			<input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>        
+        	<form action='[% script_name %]' method=post>
+			<input type=hidden name=op value=[% delete_confirmed %]>
+			<input type=hidden name=categorycode value=[% categorycode %]>        
 		<tr class="tablaresultadoTitle">
-			<td class="inputFontNormal">Descripci&oacute;n</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=description --></td>
+			<td class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
+			<td class="inputFontNormal">[% description %]</td>
 		</tr>
 		<tr >
-			<td class="inputFontNormal">Per&iacute;odo de inscripci&oacute;n</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=enrolmentperiod --></td>
+			<td class="inputFontNormal">[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
+			<td class="inputFontNormal">[% enrolmentperiod %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Upperage limit</td>
-			<td><!-- TMPL_VAR NAME=upperagelimit --></td>
+			<td class="inputFontNormal">[% "Upperage limit" | i18n %]</td>
+			<td>[% upperagelimit %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Edad Requerida</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
+			<td class="inputFontNormal">[% "Edad Requerida" | i18n %]</td>
+			<td class="inputFontNormal">[% dateofbirthrequired %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Tipo de multa</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=finetype --></td>
+			<td class="inputFontNormal">[% "Tipo de multa" | i18n %]</td>
+			<td class="inputFontNormal">[% finetype %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Tarifa de inscripci&oacute;n</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=enrolmentfee --></td>
+			<td class="inputFontNormal">[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
+			<td class="inputFontNormal">[% enrolmentfee %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Se necesita nota de atraso</td>
-			<td class="inputFontNormal"><!-- TMPL_IF NAME=overduenoticerequired -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			<td class="inputFontNormal">[% "Se necesita nota de atraso" | i18n %]</td>
+			<td class="inputFontNormal">[% IF overduenoticerequired %]
+                                                        Si
+                                                    [% ELSE %]
+                                                        No
+                                                    [% END %]
+                        </td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">L&iacute;mite de pr&eacute;stamo</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=issuelimit --></td>
+			<td class="inputFontNormal">[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
+			<td class="inputFontNormal">[% issuelimit %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">d&iacute;s de pr&eacute;stamo</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=borrowingdays --></td>
+			<td class="inputFontNormal">[% "D&iacute;s de pr&eacute;stamo" | i18n %]</td>
+			<td class="inputFontNormal">[% borrowingdays %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Costo de reserva</td>
-			<td class="inputFontNormal"><!-- TMPL_VAR NAME=reservefee --></td>
+			<td class="inputFontNormal">[% "Costo de reserva" | i18n %]</td>
+			<td class="inputFontNormal">[% reservefee %]</td>
 		</tr>
-		<!-- TMPL_IF NAME=totalgtzero -->
-                <tr>
-			<td class="inputFontNormal" colspan=2 align=center><b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b></td>
-		</tr>
-		</form>
-               <tr>
-			<td colspan=2>
-				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-                                <a onMouseOut="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png')" onMouseOver="swap('save','<!-- TMPL_VAR NAME='themelang' -->/images/guardarbis.png')" onClick="Aform.submit()" >
-				<img name="save" id="save" alt="Guardar" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" border="0"></a>
-									
-				<input type=submit value=OK>
-				</form>
-			</td>
-		</tr>
-		<!-- TMPL_ELSE -->
-                <tr>
-			<td class="inputFontNormal" colspan=2 align=center>CONFIRME BORRADO</td>
-		</tr>
-                <tr>
-			<td><INPUT type=submit value='SI'></form></td>
-			<td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value=NO></form></td>
-		</tr>
-</table>
-		<!-- /TMPL_IF -->
+		[% IF totalgtzero %]
+                        <tr>
+                                <td class="inputFontNormal" colspan=2 align=center><b>This record is used [% total %] times. Deletion not possible</b></td>
+                        </tr>
+                        </form>
+                        <tr>
+                                <td colspan=2>
+                                        <form action='[% script_name %]' method=post>
+                                        <a onMouseOut="swap('save','[% themelang %]/images/guardar.png')" onMouseOver="swap('save','[% themelang %]/images/guardarbis.png')" onClick="Aform.submit()" >
+                                        <img name="save" id="save" alt="Guardar" src="[% themelang %]/images/guardar.png" border="0"></a>
+                                                                                
+                                        <input type=submit value=OK>
+                                        </form>
+                                </td>
+                        </tr>
+                        [% ELSE %]
+                        <tr>
+                                <td class="inputFontNormal" colspan=2 align=center>[% "CONFIRME BORRADO" | i18n %]</td>
+                        </tr>
+                        <tr>
+                                <td><INPUT type=submit value='SI'></form></td>
+                                <td><form action='[% script_name %]' method=post><input type=submit value=NO></form></td>
+                        </tr>
+                    </table>
+		[% END %]
 
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME=delete_confirmed -->
-	Borrado de datos
-        <form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
+[% IF delete_confirmed %]
+	[% "Borrado de datos" | i18n %]
+        <form action='[% script_name %]' method=post>
         <input type=submit value=OK>
         </form>
 
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_IF NAME=else -->
-<table width="100%"  border="0" class="pagetitle" cellpadding="0" cellspacing="0" >
-	<tr>
-		<td>Administraci&oacute;n de Categor&iacute;as </td>
-	</tr>
-        <tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
-							   
-	<br>
-	<!-- TMPL_IF NAME=searchfield -->
-		Ha Buscado por <!-- TMPL_VAR name=searchfield -->
-	<!-- /TMPL_IF -->
-<table>
-	<tr>
-	<form action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
-		<td>
-			<input type=text class="inputFontNormal" name=description value=<!-- TMPL_VAR name="searchfield" -->>
-		</td>
-		<td> 
-			<input type="image" name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="form1.submit()">
-		 
-		</td>
-	</form>
-	</tr>
-</table>
-<table border=0 cellspacing=0 cellpadding="0" width="100%">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td >Categor&iacute;a</td>
-		<td width="10%">Descripci&oacute;n</td>
-		<td >Per&iacute;odo de inscripci&oacute;n</td>
-		<td >Tarifa de inscripci&oacute;n</td>
-		<td >L&iacute;mite superior de edad</td>
-	        <td width="8%">Edad Requerida</td>
-		<td width="5%">Multa</td>
-		<td width="7%">Atrasado</td>
-		<td >L&iacute;mite de pr&eacute;stamo</td>
-		<td >D&iacute;as de pr&eacute;stamo</td>
-		<td width="6%">Reserva</td>
-		<td width="6%">Editar </td>
-		<td >Eliminar </td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-	</tr>
-		<!-- TMPL_LOOP NAME=loop -->
-	<tr valign="middle">
-		<td height=20 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=categorycode --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=description --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=enrolmentperiod --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=enrolmentfee --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=upperagelimit --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=finetype --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_IF NAME=overduenoticerequired -->
-			<i>Si</i>
-		<!-- TMPL_ELSE -->
-			<i>No</i>
-		<!-- /TMPL_IF -->
-		</td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=issuelimit --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=borrowingdays --></td>
-                <td class="<!-- TMPL_VAR NAME="clase"-->" class="inputFontNormal"><!-- TMPL_VAR NAME=reservefee --></td>
-                <td align="center"class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a></td>
-                <td align="center"class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" border="0"></a></td>
-		<td height=20 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-	</tr>
-		<!-- /TMPL_LOOP -->
- 	<tr valign=bottom> 
-        	<td class="lineafinaltabla"  align="left" colspan="15"></td>
-        </tr>
+[% IF else %]
+        <table width="100%"  border="0" class="pagetitle" cellpadding="0" cellspacing="0" >
+                <tr>
+                        <td>[% "Administraci&oacute;n de Categor&iacute;as"  | i18n %]</td>
+                </tr>
+                <tr>
+                        <td class="lineagruesa"  align="left" colspan="3"></td>
+                </tr>
+        </table>
+                                                                
+                <br>
+                [% IF searchfield %]
+                        [% "Ha Buscado por"  | i18n %][% searchfield %]
+                [% END %]
+        <table>
+                <tr>
+                <form action='[% script_name %]' method=post name="form1">
+                        <td>
+                                <input type=text class="inputFontNormal" name=description value=[% searchfield %]>
+                        </td>
+                        <td> 
+                                <input type="image" name="go" id="go" alt="Comenzar b&uacute;squeda" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="form1.submit()">
+                        
+                        </td>
+                </form>
+                </tr>
+        </table>
+        <table border=0 cellspacing=0 cellpadding="0" width="100%">
+                <tr class="tablaresultadoTitle">
+                        <td width="1%" align="left"  valign="top"><img src="[% interface %]/[% theme %]/images/izquierda.png"></td>
+                        <td >[% "Categor&iacute;a" | i18n %]</td>
+                        <td width="10%">[% "Descripci&oacute;n" | i18n %]</td>
+                        <td >[% "Per&iacute;odo de inscripci&oacute;n "| i18n %]</td>
+                        <td >[% "Tarifa de inscripci&oacute;n "| i18n %]</td>
+                        <td >[% "L&iacute;mite superior de edad "| i18n %]</td>
+                        <td width="8%">[% "Edad Requerida "| i18n %]</td>
+                        <td width="5%">[% "Multa "| i18n %]</td>
+                        <td width="7%">[% "Atrasado "| i18n %]</td>
+                        <td >[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
+                        <td >[% "D&iacute;as de pr&eacute;stamo "| i18n %]</td>
+                        <td width="6%">[% "Reserva "| i18n %]</td>
+                        <td width="6%">[% "Editar " | i18n %]</td>
+                        <td >[% "Eliminar"  | i18n %]</td>
+                        <td width="1%" align="right" valign="top"><img src="[% interface %]/[% theme %]/images/derecha.png"></td>
+                </tr>
+               [% FOREACH loop %]
+                        <tr valign="middle">
+                                <td height=20 class="[% clase %]">&nbsp;</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% categorycode %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% description %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% enrolmentperiod %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% enrolmentfee %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% upperagelimit %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% dateofbirthrequired %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% finetype %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">
+                                [% IF overduenoticerequired %]
+                                        <i>[% "Si" | i18n %]</i>
+                                [% ELSE %]
+                                        <i>[% "No" | i18n %]</i>
+                                [% END %]
+                                </td>
+                                <td class="[% clase %]" class="inputFontNormal">[% issuelimit %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% borrowingdays %]</td>
+                                <td class="[% clase %]" class="inputFontNormal">[% reservefee %]</td>
+                                <td align="center"class="[% clase %]">
+                                    <a class="inputFontNormal" href="[% script_name %]?op=add_form&categorycode=[% categorycode %]"><img src="[% interface %]/[% themelang %]/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
+                                </td>
+                                <td align="center"class="[% clase %]">
+                                    <a class="inputFontNormal" href="[% script_name %]?op=delete_confirm&categorycode=[% categorycode %]"><img src="[% interface  %]/[% themelang %]/images/borrar.png" ALT="Eliminar" border="0"></a>
+                                </td>
+                                <td height=20 class="[% clase %]">&nbsp;</td>
+                        </tr>
+                [% END %]
+                <tr valign=bottom> 
+                        <td class="lineafinaltabla"  align="left" colspan="15"></td>
+                </tr>
+        
+        </table>
+                <center>
+                <p><form action='[% script_name %]' method=post name=form2>
+                        <input type=hidden name=op value=add_form>
+        <input type="image" alt="Agregar Categor&iacute;a"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="form2.submit">
+                        <!--<input type=submit class="button" value="Agregar Categor&iacute;a"  ALT="Agregar Categor&iacute;a">--><br>
+                </form></p>
+                </center>
+[% END %]
 
-</table>
-	<center>
-	<p><form action='<!-- TMPL_VAR NAME=script_name -->' method=post name=form2>
-		<input type=hidden name=op value=add_form>
-<input type="image" alt="Agregar Categor&iacute;a"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/agregar.png" onclick="form2.submit">
-		<!--<input type=submit class="button" value="Agregar Categor&iacute;a"  ALT="Agregar Categor&iacute;a">--><br>
-	</form></p>
-	</center>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

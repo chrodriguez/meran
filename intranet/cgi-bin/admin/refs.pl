@@ -27,15 +27,17 @@ use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/refs.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+									template_name => "admin/refs.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {borrowers => 1},
+									debug => 1,
+			    });
+
 my %tablas=buscarTablasdeReferencias;
+
 my $lista_Refs=CGI::scrolling_list(      
 					-name      => 'editandotabla',
                                         -values    => \%tablas,
@@ -43,7 +45,7 @@ my $lista_Refs=CGI::scrolling_list(
 					-size	   => 1,
 					-onChange  => 'hacerSubmit()',
                                  );
-$template->param( lista  => $lista_Refs);
+$t_params->{'lista'}= $lista_Refs;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

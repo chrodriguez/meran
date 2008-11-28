@@ -50,23 +50,22 @@ my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/authorised_values.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+                                                        template_name => "admin/authorised_values.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {borrowers => 1},
+                                                        debug => 1,
+			    });
 my $pagesize=20;
 my $op = $input->param('op');
 
 if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+        $t_params->{'script_name'}= $script_name;
+        $t_params->{$op}= 1; # we show only the TMPL_VAR names $op
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+    $t_params->{'script_name'} = $script_name || 1; # we show only the TMPL_VAR names $op
 }
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -82,25 +81,28 @@ if ($op eq 'add_form') {
 		$data->{'category'} = $input->param('category');
 	}
 	if ($searchfield) {
-		$template->param(action => "Modificar Valores Autorizados");
-		$template->param('heading-modify-authorized-value-p' => 1);
+		$t_params->{'action'}= "Modificar Valores Autorizados";
+		$t_params->{'heading-modify-authorized-value-p'}= 1;
 	} elsif ( ! $data->{'category'} ) {
-		$template->param(action => "Agregar Nueva Categor&iacute;a");
-		$template->param('heading-add-new-category-p' => 1);
+		$t_params->{'action'}= "Agregar Nueva Categor&iacute;a";
+		$t_params->{'heading-add-new-category-p'}= 1;
 	} else {
-		$template->param(action => "Agregar Valores Autorizados");
-		$template->param('heading-add-authorized-value-p' => 1);
+		$t_params->{'action'}= "Agregar Valores Autorizados";
+		$t_params->{'heading-add-authorized-value-p'}= 1;
 	}
-	$template->param('use-heading-flags-p' => 1);
-	$template->param(category => $data->{'category'},
-							authorised_value => $data->{'authorised_value'},
-							lib => $data->{'lib'},
-							id => $data->{'id'}
-							);
+	$t_params->{'use-heading-flags-p'}= 1;
+	$t_params->{'category'}= $data->{'category'};
+	$t_params->{'authorised_value'}= $data->{'authorised_value'};
+	$t_params->{'lib'}= $data->{'lib'};
+	$t_params->{'id'}= $data->{'id'};
+
+
 	if ($data->{'category'}) {
-		$template->param(category => "<input type=\"hidden\" name=\"category\" value='$data->{'category'}'>$data->{'category'}");
+	
+	
+$t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->{'category'}.">".$data->{'category'};
 	} else {
-		$template->param(category => "<input type=text name=\"category\" size=8 maxlength=8>");
+		$t_params->{'category'}= "<input type=text name=\'category\' size=8 maxlength=8>";
 	}
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -122,12 +124,12 @@ if ($op eq 'add_form') {
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	$template->param(searchfield => $searchfield,
-							Tvalue => $data->{'authorised_value'},
-							id =>$id,
-							);
+	$t_params->{'searchfield'}= $searchfield;
+	$t_params->{'Tvalue'}= $data->{'authorised_value'};
+	$t_params->{'id'}=$id;
 
-													# END $OP eq DELETE_CONFIRM
+
+#  END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
@@ -179,25 +181,23 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 	}
 
-	$template->param(loop => \@loop_data,
-							tab_list => $tab_list,
-							category => $searchfield);
+	$t_params->{'loop'}= \@loop_data;
+	$t_params->{'tab_list'}= $tab_list;
+	$t_params->{'category'}= $searchfield;
 
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(isprevpage => $offset,
-						prevpage=> $prevpage,
-						searchfield => $searchfield,
-						script_name => $script_name,
-		 );
+		$t_params->{'isprevpage'}= $offset;
+		$t_params->{'prevpage'}= $prevpage;
+		$t_params->{'searchfield'}= $searchfield;
+	        $t_params->{'script_name'}= $script_name;
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(nextpage =>$nextpage,
-						searchfield => $searchfield,
-						script_name => $script_name,
-		);
+		$t_params->{'nextpage'}=$nextpage;
+		$t_params->{'searchfield'}= $searchfield;
+		$t_params->{'script_name'}= $script_name;
 	}
 } #---- END $OP eq DEFAULT
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
