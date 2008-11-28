@@ -37,8 +37,8 @@
 <table border=0 cellspacing=0 cellpadding=0 width="80%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
-                <td>Tipos de pr&eacute;stamo</td>
-                <td>Categorias de usuario</td>
+                <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
+                <td>[% "Categorias de usuario" | i18n %]</td>
 		<td width="1%" align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 	</tr>
         <tr valign=middle>
@@ -57,7 +57,7 @@
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="[% interface %]/ [% themelang %]/images/izquierda.png"></td>
                 <td>&nbsp;</td>
-                <td>Tipos de pr&eacute;stamo sobre el que se aplica</td>
+                <td>[% "Tipos de pr&eacute;stamo sobre el que se aplica" | i18n %]</td>
 		<td width="1%" align="right" valign="top"><img src="[% interface %]/ [% themelang %]/images/derecha.png"></td>
         </tr>
 	[% FOREACH issues %]
@@ -72,20 +72,20 @@
 	        <td class="lineafinaltabla"  align="left" colspan="4"></td>
        	</tr>
 
-	<td colspan="2"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="actualizar();">Guardar</a></FONT></td>
+	<td colspan="2"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="actualizar();">[% "Guardar" | i18n %]</a></FONT></td>
 </table>
 	<br><br>
 
 <table border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top"><img src="[% interface %]/ [% themelang %]/images/izquierda.png"></td>
-		<td>Orden</td>
-                <td>Tipo de usuario</td>
-                <td>Tipo de pr&eacute;stamo</td>
-		<td>D&iacute;as de demora</td>
-                <td>D&iacute;as de sanci&oacute;n</td>
-                <td>Cantidad</td>
-                <td> Eliminar</td>
+		<td>[% "Orden" | i18n %]</td>
+                <td>[% "Tipo de usuario" | i18n %]</td>
+                <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+		<td>[% "D&iacute;as de demora" | i18n %]</td>
+                <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
+                <td>[% "Cantidad" | i18n %]</td>
+                <td> [% "Eliminar" | i18n %]</td>
 		<td width="1%" class="right" valign="top"><img src="[% interface %]/ [% themelang %]/images/derecha.png"></td>
         </tr>
         [% FOREACH loop_sanctions_types %]
@@ -97,7 +97,7 @@
 			<td class="inputFontNormal">[% delaydays %]/td>
 			<td class="inputFontNormal">[% sanctiondays %]</td>
 			<td class="inputFontNormal">[% amount %]</td>
-			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">Eliminar</a></FONT>
+			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">[% "Eliminar" | i18n %]</a></FONT>
 			</td>
 			<td  class="[% clase %]">&nbsp;</td>
 		</tr>
@@ -107,12 +107,12 @@
         </tr>
 
         <tr>
-        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('[% sanctiontypecode %]');">Agregar</a>&nbsp;Orden:[% orders %]&nbsp;Cantidad:[% amounts  %]&nbsp;Regla:[% sanctions_rules %]</FONT>
+        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('[% sanctiontypecode %]');">[% "Agregar" | i18n %]</a>&nbsp;[% "Orden: " | i18n %][% orders %]&nbsp;[% "Cantidad: " | i18n %][% amounts  %]&nbsp;[% "Regla: " | i18n %][% sanctions_rules %]</FONT>
 		</td>
         </tr>
 </table>
 
-<p>Para editar las reglas haga clic <A HREF="/cgi-bin/koha/admin/sanctionrules.pl">aqu&iacute;</a></p>
+<p>[% "Para editar las reglas haga clic " | i18n %]<A HREF="/cgi-bin/koha/admin/sanctionrules.pl">[% "aqu&iacute;" | i18n %]</a></p>
 
 	</form>
 

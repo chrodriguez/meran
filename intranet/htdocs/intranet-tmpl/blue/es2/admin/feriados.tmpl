@@ -1,27 +1,27 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<link rel="stylesheet" href="<!-- TMPL_VAR name='themelang' -->/includes/calendar/themes/winter.css" />
-<link rel="stylesheet" href="<!-- TMPL_VAR name='themelang' -->/includes/calendar/themes/layouts/huge.css" />
+<link rel="stylesheet" href="[% themelang %]/includes/calendar/themes/winter.css" />
+<link rel="stylesheet" href="[% themelang %]/includes/calendar/themes/layouts/huge.css" />
                                                                                                                              
-<!-- <link href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/doc/css/zpcal.css" rel="stylesheet" type="text/css"> -->
-<!-- <link href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/doc/css/template.css" rel="stylesheet" type="text/css"> -->
+<!-- <link href="[% themelang %]/includes/calendar/doc/css/zpcal.css" rel="stylesheet" type="text/css"> -->
+<!-- <link href="[% themelang %]/includes/calendar/doc/css/template.css" rel="stylesheet" type="text/css"> -->
                                                                                                                              
 <!-- import the calendar script -->
-<script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/includes/calendar/src/utils.js"></script>
+<script type="text/javascript" src="[% themelang %]/includes/calendar/src/utils.js"></script>
                                                                                                                              
-<script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/includes/calendar/src/calendar.js"></script>
+<script type="text/javascript" src="[% themelang %]/includes/calendar/src/calendar.js"></script>
                                                                                                                              
 <!-- import the language module -->
-<script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/includes/calendar/lang/calendar-es.js"></script>
+<script type="text/javascript" src="[% themelang %]/includes/calendar/lang/calendar-es.js"></script>
                                                                                                                              
 <!-- import the calendar setup script -->
-<script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/includes/calendar/src/calendar-setup.js"></script>
+<script type="text/javascript" src="[% themelang %]/includes/calendar/src/calendar-setup.js"></script>
 
 
 <table width='90%' align='center'>
 <tr>
 <td class="inputFontNormal">
-        <div class='zpCalSubheader' style='text-align:center'>Seleccione los d&iacute;as de inactividad en la biblioteca (feriados, paros, etc.)</div><br/>
+        <div class='zpCalSubheader' style='text-align:center'>[% "Seleccione los d&iacute;as de inactividad en la biblioteca (feriados, paros, etc.)" | i18n %]</div><br/>
 </td>
 </tr>
 
@@ -45,7 +45,7 @@
 <td align='center'>
 	<form name="feriados" action="feriados.pl">
 		<input type="hidden" name="feriadosh" id="feriadosh" value="">
-		<input type="image" title="Actualiza los d&iacute;as de inactividad"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="cal.submitFlatDates(); submit();">
+		<input type="image" title=[% "Actualiza los d&iacute;as de inactividad" | i18n %]  src="[% interface %]/[% theme %]/images/guardar.png" onclick="cal.submitFlatDates(); submit();">
 	</form>
 </td>
 </tr>
@@ -56,9 +56,9 @@
         // the default multiple dates selected, first time the calendar is instantiated
 
 	var MA= new Array();
-	<!-- TMPL_LOOP name="loop" -->
-		MA[MA.length]= new Date(<!-- TMPL_VAR name="anio" -->, <!-- TMPL_VAR name="mes" -->, <!-- TMPL_VAR name="dia" -->);
-	<!-- /TMPL_LOOP -->
+	[% FOREACH loop %]
+		MA[MA.length]= new Date([% anio %], [% mes %], [% dia %]);
+	[% END %]
 
 
         function flatCallback(cal) {
@@ -93,4 +93,4 @@
                                                             
 </script>
 	
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
