@@ -60,7 +60,7 @@ my ($cant,@resultsdata)=
  &historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
 
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion,$t_params);
 
 
 $template->param( 

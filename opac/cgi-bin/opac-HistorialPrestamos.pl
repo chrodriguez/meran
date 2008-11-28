@@ -53,7 +53,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
-$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
 
 
 $t_params->{'loop_reading'}= $issues;

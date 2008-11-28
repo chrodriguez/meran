@@ -49,7 +49,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cant,@resultsdata)= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
 
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion,$t_params);
 
 $template->param(
 			resultsloop      => \@resultsdata,

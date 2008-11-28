@@ -36,7 +36,7 @@ if($tipo eq "VER_ESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelf($shelves,$ini,$cantR);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion);
+	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
 	
 	$template->param(
 				shelvesloopshelves => @shelvesloop,
@@ -68,7 +68,7 @@ if($tipo eq "VER_SUBESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelfContent($shelves,$ini,$cantR,$orden);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion);
+	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
 	
 	$template->param(
 				bitemsloop => @shelvesloop,

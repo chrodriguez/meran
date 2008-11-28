@@ -109,7 +109,7 @@ if($accion eq "buscar"){
 
 	my ($cantidad,$resultId1)= C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR);
 
-	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsarray;
 my %result;

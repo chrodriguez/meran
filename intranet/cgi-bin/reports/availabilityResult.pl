@@ -34,7 +34,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $availD;
 if ($avail eq 0){

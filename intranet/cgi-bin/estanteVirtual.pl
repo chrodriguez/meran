@@ -45,7 +45,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
   %shelflist = &GetShelfList($type);
   ($count)= &getshelfListCount($type);
 
-&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion);
+&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion,$t_params);
 
 
 $template->param({LibraryName => C4::Context->preference("LibraryName")});

@@ -40,7 +40,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,@resultsdata)= &historicoCirculacion('ok',$fechaIni,$fechaFin,'-1',$id3,$ini,$cantR,$orden,$tipoPres, $tipoOp);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 $template->param(
 		HISTORICO => \@resultsdata,

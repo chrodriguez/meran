@@ -54,7 +54,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,@results)=&DictionaryKeywordSearch('intra',$search,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber, $funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber, $funcion,$t_params);
 
   $template->param(SEARCH_RESULTS => \@results);
   $template->param(numrecords => $cantidad);

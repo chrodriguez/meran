@@ -42,7 +42,7 @@ my $fechaFin = C4::Date::format_date_in_iso($f_fin,$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
 my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
 $template->param( 

@@ -35,7 +35,7 @@ if($member ne ""){
 		($cantidad,$results)=C4::AR::Usuarios::ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsdata;
 

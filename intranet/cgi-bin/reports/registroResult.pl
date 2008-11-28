@@ -72,7 +72,7 @@ my $funcion= $obj->{'funcion'};
 	@resultsdata= registroEntreFechas($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$cantR,$chkuser,$chknum,$user,$numDesde,$numHasta);
 	$cant=cantRegFechas($chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$chkuser,$chknum,$user,$numDesde,$numHasta);
 
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion,$t_params);
 
 $template->param( 
 			resultsloop      => \@resultsdata,

@@ -57,7 +57,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$result)=&C4::AR::Busquedas::buscarGrupos($isbn,$titulo,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
 for (my $i=0; $i<scalar(@$result); $i++ ){

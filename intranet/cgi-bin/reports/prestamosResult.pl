@@ -37,7 +37,7 @@ my ($cantidad,@resultsdata)= prestamos($branch,$orden,$ini,$cantR,$estado,$begin
 my $funcion=$obj->{'funcion'};
 
 if($cantR ne "todos"){
-	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 }
 
 my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);

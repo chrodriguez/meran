@@ -44,7 +44,7 @@ elsif($member ne ""){
 	}
 }
 
-&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion);
+&C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
