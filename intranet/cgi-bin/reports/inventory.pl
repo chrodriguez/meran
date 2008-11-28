@@ -12,14 +12,14 @@ use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/inventory.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {reports => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/inventory.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 #Por los branches
 my $branch=$input->param('branch');
@@ -31,10 +31,8 @@ my $MAX=C4::Circulation::Circ2::getmaxbarcode($branch);
 
 my @barcodePorTipo=C4::Circulation::Circ2::barcodesbytype($branch);
 
-$template->param(
-			MAX => $MAX,
-			MIN => $MIN,
-			barcodePorTipo=>\@barcodePorTipo,
-		);
+$t_params->{'MAX'}= $MAX;
+$t_params->{'MIN'}= $MIN;
+$t_params->{'barcodePorTipo'}=\@barcodePorTipo;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

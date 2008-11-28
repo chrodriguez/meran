@@ -30,15 +30,14 @@ my $input = new CGI;
 
 my $msg = $input->param('msg') || "";
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/prestamos.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
-
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/prestamos.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 #Por los branches
 my @branches;
 my @select_branch;
@@ -51,21 +50,14 @@ foreach my $branch (keys %$branches) {
 
 my $branch= C4::Context->preference('defaultbranch');
 
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-                                        -defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                 );
+my $CGIbranch=C4::AR::Utilidades::generarComboDeBranches();
 #Fin: Por los branches
 
-$template->param( 	
-			unidades         => $CGIbranch,
-			msg		 => $msg,
-		);
+$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'msg'}= $msg;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 
 

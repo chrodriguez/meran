@@ -17,15 +17,14 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $sigtop= $obj->{'sigtop'};
 my $orden= $obj->{'orden'}||'barcode';
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/inventory-sig-topResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {reports => 1},
-			     debug => 1,
-			     });
-
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/inventory-sig-topResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 #Buscar
 my @res;
@@ -34,6 +33,7 @@ if($sigtop ne ''){
 }
 #
 # Generar Planilla
+my $loggedinuser = $session->param('loggedinuser');
 my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
 #
 
@@ -54,10 +54,8 @@ foreach my $element (@res) {
 
 my $cant=scalar(@results);
 
-$template->param(
-			results  => \@results,
-			name     => $planilla,
-			cantidad => $cant,
-		);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+$t_params->{'results'}= \@results;
+$t_params->{'name'}= $planilla;
+$t_params->{'cantidad'}= $cant;
+		
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

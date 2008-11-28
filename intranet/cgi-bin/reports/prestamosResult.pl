@@ -10,14 +10,14 @@ use C4::AR::SxcGenerator;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/prestamosResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/prestamosResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $branch = $obj->{'branch'};
@@ -27,7 +27,7 @@ my $estado=$obj->{'estado'}|| 'TO';
 my $begindate = $obj->{'begindate'};
 my $enddate = $obj->{'enddate'};
 
-
+my $loggedinuser = $session->param('loggedinuser');
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
@@ -43,12 +43,10 @@ if($cantR ne "todos"){
 my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
 
 
-$template->param( 	
-			estado		 => $estado,
-			resultsloop      => \@resultsdata,
-			cantidad         => $cantidad,
-			renglones        => $cantR,
-			planilla	 => $planilla,
-		);
+$t_params->{'estado'}= $estado;
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'renglones'}= $cantR;
+$t_params->{'planilla'}= $planilla;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -9,14 +9,14 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/usersResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/usersResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 my $obj=$input->param('obj');
 $obj= C4::AR::Utilidades::from_json_ISO($obj);
@@ -37,9 +37,8 @@ my ($cantidad,@resultsdata)= usuarios($branch,$orden,$ini,$cantR,$year,$usos,$ca
 C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$template->param( 	orden		 => $orden,
-			resultsloop      => \@resultsdata,
-			cantidad  	 => $cantidad
-		);
+$t_params->{'orden'}= $orden;
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

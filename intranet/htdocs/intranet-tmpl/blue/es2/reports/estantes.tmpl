@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -23,19 +23,19 @@ $(document).ready( function() {
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >Estantes Virtuales</td></tr>
+	<tr><td class="pagetitle" >[% "Estantes Virtuales" | i18n %]</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 <br>
 
 <table border="0" cellspacing="0" cellpadding="0" align="center" >
 <tr>
-	<td class="inputFontNormal">Seleccione un estante: &nbsp;&nbsp;</td>
+	<td class="inputFontNormal">[% "Seleccione un estante: &nbsp;&nbsp;" | i18n %]</td>
 	<td class="inputFontNormal" valign="middle">
-        	<!-- TMPL_VAR NAME=estantes  -->
+        	[% estantes %]
 	</td>
 <tr>
 </table>
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

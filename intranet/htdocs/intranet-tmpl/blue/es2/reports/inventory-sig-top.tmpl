@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -24,7 +24,7 @@ function updateInfo(responseText){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Inventario por signatura topogr&aacute;fica:</td>
+		<td class="pagetitle" >[% "Inventario por signatura topogr&aacute;fica:" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -36,11 +36,11 @@ function updateInfo(responseText){
 
 <table border="0" cellspacing="0" cellpadding="0" align="left">
 	<tr>
-		<td class="inputFontNormal">Buscar signatura topogr&aacute;fica: &nbsp;</td>
+		<td class="inputFontNormal">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</td>
 		<td class="inputFontNormal">
-			<input class="inputFontNormal" type="text" id="sigtop" value="<!-- TMPL_VAR name='sigtop' -->">&nbsp;
+			<input class="inputFontNormal" type="text" id="sigtop" value="[% sigtop %]">&nbsp;
 		</td>
-		<td><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar()"></td>
+		<td><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar()"></td>
 	</tr>
 </table>
 
@@ -50,4 +50,4 @@ function updateInfo(responseText){
 
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

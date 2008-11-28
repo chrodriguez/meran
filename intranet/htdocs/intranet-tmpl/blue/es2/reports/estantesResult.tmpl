@@ -1,47 +1,46 @@
-
 <p class="inputFontNormal" align="center">
-La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
+[% "La cantidad de estantes es :" | i18n %] [% cantidad %]<br></p>
 <br>
 <center>
 <table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
-	<td class="tablaresultadoTitle" width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+	<td class="tablaresultadoTitle" width="1%" align="right"><img src="[% interface %]/[% themelang %]/images/izquierda.png">
 	</td>
-	<th class="tablaresultadoTitle">Estante</th>
-	<th class="tablaresultadoTitle"> T&iacute;tulos</th>
-	<th class="tablaresultadoTitle"> Ejemplares</th>
-	<th class="tablaresultadoTitle"> No Disponibles</th>
-	<th class="tablaresultadoTitle">Para Pr&eacute;stamo</th>
-	<th class="tablaresultadoTitle">Para Sala</th>
+	<th class="tablaresultadoTitle">[% "Estante" | i18n %]</th>
+	<th class="tablaresultadoTitle"> [% "T&iacute;tulos" | i18n %]</th>
+	<th class="tablaresultadoTitle"> [% "Ejemplares" | i18n %]</th>
+	<th class="tablaresultadoTitle"> [% "No Disponibles" | i18n %]</th>
+	<th class="tablaresultadoTitle">[% "Para Pr&eacute;stamo" | i18n %]</th>
+	<th class="tablaresultadoTitle">[% "Para Sala" | i18n %]</th>
 
- 	<td class="tablaresultadoTitle" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+ 	<td class="tablaresultadoTitle" width="1%"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 
-<!-- TMPL_LOOP Name="shelvesloopshelves" -->
+[% FOREACH shelvesloopshelves %]
         <tr>
         <td width="1%">&nbsp;</td>
         <td  align=left width="50%" class="inputFontNormal">
-                        <a  href="/cgi-bin/koha/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelfnumber" -->">
-			<!-- TMPL_VAR Name="shelfname" --></a>
+                        <a  href="/cgi-bin/koha/shelves.pl?viewshelf=[% shelfnumber %]">
+			[% shelfname %]</a>
 	</td>
 	<td width="1%" align="center" class="inputFontNormal">
-                         <!-- TMPL_VAR NAME="titulos" -->
+                         [% titulos %]
         </td>
 
 	<td width="1%" align="center" class="inputFontNormal">
-			 <!-- TMPL_VAR NAME="ejemplares" -->
+			 [% ejemplares %]
 	</td>
 	<td width="1%" align="center" class="inputFontNormal">
-                        <!-- TMPL_VAR NAME="unavailable" -->
+                        [% unavailable %]
         </td>
    	<td width="1%" align="center" class="inputFontNormal">
-                         <!-- TMPL_VAR NAME="forloan" -->
+                         [% forloan %]
         </td>
    	<td width="1%" align="center" class="inputFontNormal">
-                         <!-- TMPL_VAR NAME="notforloan" --> 
+                         [% notforloan %] 
         </td>
 
         <td width="1%">&nbsp;</td>
         </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 
 	<tr>
 	<td colspan="8">&nbsp;</td>
@@ -52,22 +51,22 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 
 	<tr>
         <td width="1%">&nbsp;</td>
-        <td  align=left class="inputFontNormal">            <b>TOTALES</b>
+        <td  align=left class="inputFontNormal">            <b>[% "TOTALES" | i18n %]</b>
 	</td>
-        <td width="1%" align="center" class="inputFontNormal">  <!-- TMPL_VAR NAME="titulostot" -->
+        <td width="1%" align="center" class="inputFontNormal">  [% titulostot %]
         </td>
 
         <td width="1%" align="center" class="inputFontNormal">
-        <!-- TMPL_VAR NAME="ejemplarestot" -->
+                 [% ejemplarestot %]
         </td>
         <td width="1%" align="center" class="inputFontNormal">
-        <!-- TMPL_VAR NAME="unavailabletot" -->
+                  [% unavailabletot %]
         </td>
         <td width="1%" align="center" class="inputFontNormal">
-        <!-- TMPL_VAR NAME="forloantot" -->
+                   [% forloantot %]
         </td>
         <td width="1%" align="center" class="inputFontNormal">
-        <!-- TMPL_VAR NAME="notforloantot" -->
+                [% notforloantot %]
         </td>
 
         <td width="1%">&nbsp;</td>
@@ -78,7 +77,7 @@ La cantidad de estantes es : <!-- TMPL_VAR NAME=cantidad --><br></p>
 
 <br><br>
 
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->">Generar planilla 
-<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
+<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<[% name %]">[% "Generar planilla " | i18n %]
+<img src="[% interface %]/[% themelang %]/images/sxc.png" border="0">
 </a>
 </center>

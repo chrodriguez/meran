@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -46,7 +46,7 @@ function consultar(){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Usuarios</td>
+		<td class="pagetitle" >[% "Usuarios" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -61,49 +61,49 @@ function consultar(){
 	<tr class="inputFontNormal">
 		<td>
 		<input type="checkbox" name="chck" value="AN" id="chck"> 
-			Seleccione el a&ntilde;o: 
+			[% "Seleccione el a&ntilde;o: " | i18n %]
 		</td>
 		<td>
-			<!-- TMPL_VAR NAME="years" -->
+			[% years %]
 		</td>
 	</tr>
 
 	<tr class="inputFontNormal">
 		<td>
  			<br><input type="checkbox" name="chck" value="USO" id="chck"> 
-			Seleccione la cantidad de uso:
+			[% "Seleccione la cantidad de uso:" | i18n %]
 		</td>
 		<td>
 			<br>
 			<select name="usos" id="usos">
-				<option id="MU" value="MU">Mas de un uso</option>
-				<option id="NI" value="NI">Ninguno</option>
+				<option id="MU" value="MU">[% "Mas de un uso<" | i18n %]/option>
+				<option id="NI" value="NI">[% "Ninguno<" | i18n %]/option>
 			</select>
 		</td>
 	</tr>
 	<tr class="inputFontNormal">
 		<td>
 			<br><input type="checkbox" name="chck" value="CAT" id="CAT">
-			Seleccione la categor&iacute;a:
+			[% "Seleccione la categor&iacute;a:" | i18n %]
 		</td>
 		<td>
-			<br><!-- TMPL_VAR NAME="categorias" -->
+			<br>[% categorias %]
 		</td>
 	</tr>
 	<tr class="inputFontNormal">
 		<td>
-			<br>Seleccione una unidad de informaci&oacute;n: &nbsp; 
+			<br>[% "Seleccione una unidad de informaci&oacute;n: &nbsp; " | i18n %]
 		</td>
 		<td>
-			 <br><!-- TMPL_VAR NAME=unidades  -->
+			 <br>[% unidades %]
 		</td>
 	</tr>
 
 	<tr class="inputFontNormal">
 		<td colspan="2">
 			<br>
-			<a href="listaMailUsuarios.pl" class="inputFontNormal" onMouseOut="swap('mails','<!-- TMPL_VAR NAME='themelang' -->/images/lista-mails.png')" onMouseOver="swap('mails','<!-- TMPL_VAR NAME='themelang' -->/images/lista-mailsbis.png')" >
-			<input  name="mails" id="mails" alt="Generar lista de mails" type="image" value="Lista de Mails"  src="<!-- TMPL_VAR NAME='themelang' -->/images/lista-mails.png" border="0" title="Lista de mails" >
+			<a href="listaMailUsuarios.pl" class="inputFontNormal" onMouseOut="swap('mails','<[% themelang %] /images/lista-mails.png')" onMouseOver="swap('mails','[% themelang %] /images/lista-mailsbis.png')" >
+			<input  name="mails" id="mails" alt="Generar lista de mails" type="image" value="Lista de Mails"  src="[% themelang %] /images/lista-mails.png" border="0" title="Lista de mails" >
 			</a>
 		</td>
 	</tr>
@@ -111,9 +111,9 @@ function consultar(){
 </table>
 
 	<br>
-	<input type="image" onClick="consultar()"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+	<input type="image" onClick="consultar()"  src="[% themelang %] /images/boton-buscar.png" border="0">
 
 </center>
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

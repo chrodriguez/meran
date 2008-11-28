@@ -1,12 +1,12 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script type="text/javascript">
 
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -80,16 +80,19 @@ function checkedAll(){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Pr&eacute;stamos</td>
+		<td class="pagetitle" >[% "Pr&eacute;stamos" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
 	</tr>
 </table>
 
-<!-- TMPL_IF NAME="msg" -->
-<p><font color='red' size='2'>Mail enviado a usuarios con pr&eacute;stamos vencidos. </font></p>
-<!-- /TMPL_IF -->
+[% IF msg %]
+    <p>
+        <font color='red' size='2'>[% "Mail enviado a usuarios con pr&eacute;stamos vencidos. " | i18n %]
+        </font>
+    </p>
+[% END %]
 
 <br>
 <center>
@@ -97,35 +100,52 @@ function checkedAll(){
 <table border=0 cellspacing=0 cellpadding=0 width="100%" >
 <!-- 	<form name="prestamos" action="" method=post > -->
 	<input type="hidden" name="accion" value="search">
-	<input type="hidden" name="ini" value="<!-- TMPL_VAR NAME=ini  -->">
-
-	<tr class="inputFontNormal"><td align="left"><b>Fecha de Vencimiento</b></td> <td >&nbsp;</td>  <td align="left"><b>Filtrar por</b></td><td colspan='2'> &nbsp;</td>  </tr>
+	<input type="hidden" name="ini" value="[% ini %]">
 
 	<tr class="inputFontNormal">
-		<td align="right"> Seleccione una fecha de inicio:</td>
+            <td align="left">
+                <b>
+                    [% "Fecha de Vencimiento" | i18n %]
+                </b>
+            </td> 
+            <td >
+                &nbsp;
+            </td>  
+            <td align="left">
+                <b>
+                    [% "Filtrar por" | i18n %]
+                </b>
+            </td>
+            <td colspan='2'> 
+                &nbsp;
+            </td>  
+        </tr>
+
+	<tr class="inputFontNormal">
+		<td align="right"> [% "Seleccione una fecha de inicio:" | i18n %]</td>
 		<td>
-			<input id="begindate" class="inputFontNormal" name="begindate"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			<input id="begindate" class="inputFontNormal" name="begindate"> <a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
 		</td>
-		<td align="right">Seleccione estado de prestamo:&nbsp;</td>
+		<td align="right">[% "Seleccione estado de prestamo:&nbsp;" | i18n %]</td>
 
 		<td>
 			<select name="estado" id="estado">
-				<option value="VE" id="VE">Vencidos</option>
-				<option value="NV" id="NV">No vencidos</option>
-				<option value="TO" id="TO" selected>Todos</option>
+				<option value="VE" id="VE">[% "Vencidos" | i18n %]</option>
+				<option value="NV" id="NV">[% "No vencidos" | i18n %]</option>
+				<option value="TO" id="TO" selected>[% "Todos" | i18n %]</option>
 			</select>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr class="inputFontNormal"><td colspan='5'>&nbsp;</td></tr>
 	<tr class="inputFontNormal">
-		<td align="right"> Seleccione una fecha de fin:</td>
-		<td><input id="enddate" class="inputFontNormal" name="enddate"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
+		<td align="right"> [% "Seleccione una fecha de fin:" | i18n %]</td>
+		<td><input id="enddate" class="inputFontNormal" name="enddate"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a></td>
 		<td align="right">
-			Seleccione una unidad de informaci&oacute;n:&nbsp;
+			[% "Seleccione una unidad de informaci&oacute;n:&nbsp;" | i18n %]
 		</td>
 		<td>
-			<!-- TMPL_VAR NAME=unidades  -->
+			[% unidades %]
 		</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -133,7 +153,7 @@ function checkedAll(){
 	<tr class="inputFontNormal">
 		<td colspan='2'>&nbsp;</td>
 		<td align="right">
-			Cantidad de resultados por p&aacute;gina:
+			[% "Cantidad de resultados por p&aacute;gina:" | i18n %]
 		</td>
 		<td>
 			<select name="renglones" id="renglones">
@@ -144,7 +164,7 @@ function checkedAll(){
 				<option value="25" id="25">25</option>
 				<option value="50" id="50">50</option>
 				<option value="100" id="100">100</option>
-				<option value="todos" id="todos" selected>Todos</option>
+				<option value="todos" id="todos" selected>[% "Todos" | i18n %]</option>
 			</select>
 		</td>
 		<td>&nbsp;</td>
@@ -152,11 +172,11 @@ function checkedAll(){
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="5">
 			<br>
-		<a href="#" title="Buscar" onClick="consultar('','');"><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
+		<a href="#" title="Buscar" onClick="consultar('','');"><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0"></a>
 		</td>
 	</tr>
 </table>
 
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

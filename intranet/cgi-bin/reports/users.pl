@@ -29,15 +29,14 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/users.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
-
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/users.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 #Por los braches
 my @branches;
 my @select_branch;
@@ -50,7 +49,7 @@ foreach my $branch (keys %$branches) {
 
 
 my  $branch=$input->param('branch');
-($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+($branch ||(C4::Context->preference('defaultbranch') ));
 
 my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',
@@ -86,10 +85,8 @@ my $years=CGI::scrolling_list(  -name      => 'year',
                                  );
 #fin a�os
 
-$template->param( 
-			unidades         => $CGIbranch,
-			categorias	 => $CGIcateg,
-			years		 => $years,
-		);
+$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'categorias'}= $CGIcateg;
+$t_params->{'years'}= $years;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

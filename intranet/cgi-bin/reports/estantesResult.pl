@@ -16,16 +16,16 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $shelf=$obj->{'shelf'};
 my $nameShelf=GetShelfName('',$shelf);
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/estantesResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/estantesResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
-
+my $loggedinuser = $session->param('loggedinuser');
 my $env;
 my $titulostot=0;
 my $ejemplarestot=0;
@@ -60,16 +60,17 @@ foreach my $element (@key) {
 my $name=generar_planilla_estantes(\@shelvesloopshelves,$loggedinuser,$nameShelf);
 
 my $cant=scalar(@shelvesloopshelves);
-$template->param(
-			cantidad         => $cant,
-			shelvesloopshelves => \@shelvesloopshelves,
-			shelf => $shelf,
-			name => $name,
-			titulostot => $titulostot,
-			ejemplarestot =>$ejemplarestot,
-			unavailabletot =>$unavailabletot,
-			forloantot =>$forloantot,
-			notforloantot =>$notforloantot
-		);
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+$t_params->{'cantidad'}= $cant;
+$t_params->{'shelvesloopshelves'}= \@shelvesloopshelves;
+$t_params->{'shelf'}= $shelf;
+$t_params->{'name'}= $name;
+$t_params->{'titulostot'}= $titulostot;
+$t_params->{'ejemplarestot'}=$ejemplarestot;
+$t_params->{'unavailabletot'}=$unavailabletot;
+$t_params->{'forloantot'}=$forloantot;
+$t_params->{'notforloantot'}=$notforloantot;
+
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

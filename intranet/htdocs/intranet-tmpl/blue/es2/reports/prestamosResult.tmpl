@@ -1,102 +1,108 @@
 
 <p class="inputFontNormal">
-La cantidad de prestamos es : <!-- TMPL_VAR NAME=cantidad --></p>
+    [% "La cantidad de prestamos es :" | i18n %] [% cantidad %]</p>
 <p align="center">
-<!-- TMPL_VAR NAME="paginador" -->
+    [% paginador %]
 </p>
 
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 		
 		<th>
-			<a class="click" name="checkAllPrestamos"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+			<a class="click" name="checkAllPrestamos"><img src="[% themelang %]/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
 		</th>
 
 		<th class="tablaresultadoTitleClick" onClick="ordenar('surname')">
-			Apellido
+			[% "Apellido" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('firstname')">
-			Nombre
+			[% "Nombre" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('cardnumber')">
-			Tarjeta de Id.
+			[% "Tarjeta de Id." | i18n %]
 		</th>
 
 		<th class="tablaresultadoTitleClick" onClick="ordenar('emailaddress')">
-			E-mail
+			[% "E-mail" %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('date_due')">
-			Fecha de prestamo
+			[% "Fecha de prestamo" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('vencimiento')">
-			Fecha de vencimiento
+			[% "Fecha de vencimiento" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('barcode')">
-			C&oacute;digo de barra
+			[% "C&oacute;digo de barra" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('signatura_topografica')">
-			Signatura Topogr&aacute;fica
+			[% "Signatura Topogr&aacute;fica" | i18n %]
 		</th>
 		<th class="tablaresultadoTitleClick" onClick="ordenar('description')">
-			Tipo de pr&eacute;stamo
+			[% "Tipo de pr&eacute;stamo" | i18n %]
 		</th>
 	
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+		<td width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	<tr align='center'>
 		<td>&nbsp;</td>
 
 		<td class="inputFontNormal"> 
-		<!-- TMPL_IF NAME="vencido" --><input type="checkbox" name="chkboxPrestamos" value="<!-- TMPL_VAR NAME='borrowernumber' -->" id="<!-- TMPL_VAR NAME='borrowernumber' -->"><!-- /TMPL_IF -->
+		[% IF vencido %]
+                    <input type="checkbox" name="chkboxPrestamos" value="[% borrowernumber %]" id="[% borrowernumber %]">
+                [% END %]
 		</td>
 
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=firstname --> 
+			[% firstname %] 
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=cardnumber --> 
+			[% cardnumber %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME= ok --> <!-- TMPL_VAR NAME=emailaddress -->
-        		<!-- TMPL_ELSE --><a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
-        		<!-- /TMPL_IF -->
+			[% IF ok %]
+                            [% emailaddress %]
+        		[% ELSE %]
+                            <a class="inputFontNormal" href="mailto:[% emailaddress %]">
+                                [% emailaddress %]
+                            </a>
+        		[% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=date_due -->
+			[% date_due %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=vencimiento -->
+			[% vencimiento %]
 		</td>
 		<td class="inputFontNormal"> 
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR name="barcode" --></a>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 -->"><!-- TMPL_VAR NAME=signatura_topografica --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=[% id1 %]">[% signatura_topografica %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=description -->
+			[% description %]
 		</td>
 		<td>&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <br>
 <input type="hidden" name="tipo" value="0">
 
 <a href="#" title="Enviar Mail" onClick="enviarMails();">
-<input id="contacto" type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/contactar.png" title="Enviar mail a usuarios con ejemplares atrasados">
+<input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title=[% "Enviar mail a usuarios con ejemplares atrasados" | i18n %]>
 </a>
 &nbsp;&nbsp;&nbsp;
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='planilla' -->">Generar planilla 
-<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
+<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">[% "Generar planilla" | i18n %] 
+<img src="[% themelang %]/images/sxc.png" border="0">
 </a>
 <br>
 

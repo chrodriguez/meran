@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -26,7 +26,7 @@ function updateInfo(responseText){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Inventario:</td>
+		<td class="pagetitle" >[% "Inventario:" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -37,40 +37,40 @@ function updateInfo(responseText){
 <center>
 <table border="0" cellspacing="0" cellpadding="0" width="90%">
 	<tr class="tablaresultadoTitle">
-		<td align="left"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td align="center" width="30%">Tipo</td>
-		<td align="center">M&iacute;nimo</td>
-		<td align="center">M&aacute;ximo</td>
-		<td align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td align="left"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
+		<td align="center" width="30%">[% "Tipo" | i18n %]</td>
+		<td align="center">[% "M&iacute;nimo" | i18n %]</td>
+		<td align="center">[% "M&aacute;ximo" | i18n %]</td>
+		<td align="right"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=barcodePorTipo -->
+[% FOREACH barcodePorTipo %]
   	<tr align="center">
-		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=tipo --> </td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=minimo --> </td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=maximo --> </td>
-		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
+		<td class="[% clase %]">&nbsp;</td>
+	 	<td class="[% clase %]"> [% tipo %] </td>
+	 	<td class="[% clase %]"> [% minimo %] </td>
+	 	<td class="[% clase %]"> [% maximo %] </td>
+		<td class="[% clase %]">&nbsp;</td>
  	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 </center>
 <br>
 <table border="0" cellspacing="0" cellpadding="0" align="left">
 	<tr>
-		<td class="inputFontNormal">Localizaci&oacute;n del ejemplar entre &nbsp;</td>
+		<td class="inputFontNormal">[% "Localizaci&oacute;n del ejemplar entre &nbsp;" | i18n %]</td>
 		<td class="inputFontNormal">
-			<input class="inputFontNormal" type="text" id="desde" value="<!-- TMPL_VAR name='desde' -->">&nbsp; y &nbsp;
-			<input  class="inputFontNormal" type="text" id="hasta" value="<!-- TMPL_VAR name='hasta' -->">&nbsp;
+			<input class="inputFontNormal" type="text" id="desde" value="[% desde %]">&nbsp; y &nbsp;
+			<input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;
 		</td>
-		<td><input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar(0,'barcode')"></td>
+		<td><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar(0,'barcode')"></td>
 	</tr>
 </table>
 
 <br>
-<!-- <p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MIN --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAX --></b>. </p> -->
+<p class="inputFontNormal" align="left">[% "El m&iacute;nimo inventario existente es:" | i18n %] <b>[% MIN %] </b>[% " y el m&aacute;ximo es:" | i18n %] <b>[% MAX %]</b>. </p> 
 
 <div id="result"></div>
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %] 

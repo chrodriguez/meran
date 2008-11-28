@@ -1,59 +1,60 @@
+[% USE HTML %]
 <br>
-<p class="inputFontNormal" align="center">La cantidad Total de ejemplares es: <!-- TMPL_VAR NAME=cantidad --></p>
+<p class="inputFontNormal" align="center">[% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]</p>
 <br>
 
 
 <table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr class="tablaresultadoTitleClick">
-	<td align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-	<th onClick="ordenar('barcode');">Nro. de Inventario</th>
-	<th onClick="ordenar('completo');">Autor</th>
-	<th onClick="ordenar('title');">T&iacute;tulo</th>
-	<th onClick="ordenar('number');">Edic.</th>
-	<th onClick="ordenar('publisher');">Editor</th>
-	<th onClick="ordenar('publicationyear');">A&ntilde;o</th>
-	<th onClick="ordenar('bulk');">Signatura Topogr&aacute;fica</th>
-	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	<td align="left"  valign="top"><img src="[% interface %]/[% themelang %] /images/izquierda.png"></td>
+	<th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
+	<th onClick="ordenar('completo');">[% "Autor" | i18n %]</th>
+	<th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
+	<th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
+	<th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
+	<th onClick="ordenar('publicationyear');">[% "A&ntilde;o" | i18n %]</th>
+	<th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+	<td align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 </tr>
 
-<!-- TMPL_LOOP Name="results" -->
-<tr class="inputFontNormal">
-        <td class="inputFontNormal" width="1%">&nbsp;</td>
-        <td  align=left>
-		<!-- TMPL_VAR Name="barcode" -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR NAME="autor" -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML-->
-		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
-			<!-- TMPL_VAR NAME="unititle" -->
-		<!-- /TMPL_IF -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR NAME="number" -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR NAME="publisher" -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR NAME="anio_publicacion" -->
-	</td>
-	<td align="center">
-		<!-- TMPL_VAR Name="signatura_topografica" -->
-	</td>
-	<td width="1%">&nbsp;</td>
-</tr>
+[% FOREACH results %]
+        <tr class="inputFontNormal">
+                <td class="inputFontNormal" width="1%">&nbsp;</td>
+                <td  align=left>
+                        [% barcode %]
+                </td>
+                <td align="center">
+                        [% autor %]
+                </td>
+                <td align="center">
+                         [% HTML.escape(titulo) %]
+                        [% IF unititle %]:&nbsp;
+                                [% HTML.escape(unititle) %]
+                        [% END %]
+                </td>
+                <td align="center">
+                        [% number %]
+                </td>
+                <td align="center">
+                        [% publisher %]
+                </td>
+                <td align="center">
+                        [% anio_publicacion %]
+                </td>
+                <td align="center">
+                        [% signatura_topografica %]
+                </td>
+                <td width="1%">&nbsp;</td>
+        </tr>
 
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <br><br>
 
 <center>
-	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->">Generar planilla 
-	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/sxc.png" border="0">
+	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">[% "Generar planilla " | i18n %]
+	<img src="[% interface %]/[% themelang %]/images/sxc.png" border="0">
 	</a>
 </center>
 
