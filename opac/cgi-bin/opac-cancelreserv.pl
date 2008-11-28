@@ -8,8 +8,9 @@ use JSON;
 
 my $input = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+my ($session) = checkauth($input, 0,{borrow => 1});
 
+my $loggedinuser= $session->param('loggedinuser');
 my $objJSON=$input->param('obj');
 my $obj=from_json_ISO($objJSON);
 

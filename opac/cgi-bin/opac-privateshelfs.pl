@@ -36,7 +36,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
 my ($count, $resultId1) = &privateShelfs($borrowernumber,$ini,$cantR);
 
-&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion);
+&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion,$t_params);
 
 my %result;
 my $nivel1;

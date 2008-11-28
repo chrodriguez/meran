@@ -34,7 +34,8 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			});
 
-my $bornum= $session->param('loggedinuser');
+# my $bornum= $session->param('loggedinusername');
+my $bornum= C4::Auth::getSessionLoggedUser($session);
 
 my $obj=$input->param('obj');
 $obj= &C4::AR::Utilidades::from_json_ISO($obj);
@@ -46,7 +47,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
 
-$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion);
+&C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'loop_reservas'}= $reservas_hashref;
 

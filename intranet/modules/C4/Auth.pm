@@ -85,15 +85,68 @@ C4::Auth - Authenticates Koha users
 #
 @ISA = qw(Exporter);
 @EXPORT = qw(
-             &checkauth
-	     &t_operacionesDeINTRA
-	     &t_operacionesDeOPAC		
-             &get_template_and_user
-	     &get_templateexpr_and_user
-             &getborrowernumber
-	     &getuserflags
-             &output_html_with_http_headers
+		&checkauth
+		&t_operacionesDeINTRA
+		&t_operacionesDeOPAC		
+		&get_template_and_user
+		&get_templateexpr_and_user
+		&getborrowernumber
+		&getuserflags
+		&output_html_with_http_headers
+
+
+		&getSessionLoggedUser
+		&getSessionUserID
+		&getSessionPassword
+		&getSessionNroRandom
+		&getSessionBorrowerNumber
+		&getSessionFlagsRequired
+		&getSessionBrowser
+		
 );
+
+
+sub getSessionLoggedUser {
+	my ($session) = @_;
+
+	return $session->param('loggedinusername');
+}
+
+sub getSessionUserID {
+	my ($session) = @_;
+
+	return $session->param('userid');
+}
+
+sub getSessionPassword {
+	my ($session) = @_;
+
+	return $session->param('password');
+}
+
+sub getSessionNroRandom {
+	my ($session) = @_;
+
+	return $session->param('nroRandom');
+}
+
+sub getSessionBorrowerNumber {
+	my ($session) = @_;
+
+	return $session->param('borrowernumber');
+}
+
+sub getSessionFlagsRequired {
+	my ($session) = @_;
+
+	return $session->param('flagsrequired');
+}
+
+sub getSessionBrowser {
+	my ($session) = @_;
+
+	return $session->param('browser');
+}
 
 
 =item get_template_and_user

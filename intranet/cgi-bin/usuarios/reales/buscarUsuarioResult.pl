@@ -45,7 +45,7 @@ elsif($member ne ""){
 	}
 }
 
-my $paginador= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+&C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
@@ -89,6 +89,5 @@ for (my $i=0; $i < $cantR; $i++){
 $params->{'resultsloop'}= \@resultsdata;
 $params->{'member'}= $member;
 $params->{'cantidad'}= $cantidad;
-$params->{'paginador'}= $paginador;
 
 C4::Auth::output_html_with_http_headers($input, $template, $params);

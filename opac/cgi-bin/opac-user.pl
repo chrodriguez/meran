@@ -7,9 +7,6 @@ use C4::Circulation::Circ2;
 use C4::Date;
 use C4::AR::Sanctions;
 use Date::Manip;
-
-# Agregado por Einar.
-#para soportar el tema de las que pueden o no modificar a los socios
 use C4::AR::UpdateData;
 
 my $query = new CGI;

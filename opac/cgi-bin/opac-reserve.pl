@@ -31,9 +31,9 @@ $obj=from_json_ISO($obj);
 
 my $id1= $obj->{'id1'};
 my $id2= $obj->{'id2'};
+my $borrowernumber= $session->param('borrowernumber');
 
 my %params;
-
 $params{'tipo'}= 'OPAC'; 
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
@@ -94,7 +94,6 @@ if($msg_object->{'error'}){
 	
 		$t_params->{'WAITING'}= \@waiting;
 		$t_params->{'RESERVES'}= \@realreserves;
-	);
 }
 
 
@@ -109,5 +108,5 @@ $t_params->{'maximoReservas'}= $acciones->{'maximoReservas'};
 $t_params->{'materialParaRetirar'}= $acciones->{'materialParaRetirar'};
 $t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

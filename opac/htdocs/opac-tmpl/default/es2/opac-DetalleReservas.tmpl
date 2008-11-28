@@ -23,18 +23,18 @@
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
   <tr valign="top">
 	<td colspan="7" align="center" class="bordetabla" borde=1>
-		<b>Material para retirar</b>
+		<b>[% "Material para retirar" | i18n %]</b>
  	</td>
   </tr>
 
   <tr class="bordetabla">
-	<th>T&iacute;tulo</th>
-	<th>Autor</th>
-	<th>Edici&oacute;n</th>
-	<th>Disponible desde </th>
-	<th>Disponible hasta </th> 
-	<th>Retira en</th>
-	<th>Acci&oacute;n</th>
+	<th>[% "T&iacute;tulo" | i18n %]</th>
+	<th>[% "Autor" | i18n %]</th>
+	<th>[% "Edici&oacute;n" | i18n %]</th>
+	<th>[% "Disponible desde" | i18n %]</th>
+	<th>[% "Disponible hasta" | i18n %]</th> 
+	<th>[% "Retira en" | i18n %]</th>
+	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
 [% FOREACH WAITING %]
@@ -84,9 +84,9 @@
 	<td class="impar" align="center"> 
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reserveNumber %])">Cancelar</a>
+		onClick="cancelar([% reservenumber %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
-		No disponible
+		[% "No disponible" | i18n %]
 	[% END %]
 	</td>
 
@@ -101,14 +101,14 @@
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
   <tr bordercolor="#f2f2f2">    
 	<td colspan="4" align="center" class="bordetabla" borde=1>
-		<b> Material en espera</b>
+		<b>[% "Material en espera" | i18n %]</b>
 	</td>
   </tr> 	
   <tr class="bordetabla"  bordercolor="#f2f2f2">
-	<th>T&iacute;tulo</th>
-	<th>Autor</th>
-	<th>Edici&oacute;n</th>
-	<th>Acci&oacute;n </th>
+	<th>[% "T&iacute;tulo" | i18n %]</th>
+	<th>[% "Autor" | i18n %]</th>
+	<th>[% "Edici&oacute;n" | i18n %]</th>
+	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
 [% FOREACH RESERVES %]
@@ -140,9 +140,9 @@
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reserveNumber %])">Cancelar</a>
+		onClick="cancelar([% reserveNumber %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
-		No disponible
+		[% "No disponible" | i18n %]
 	[% END %]
 	</td>
   </tr>

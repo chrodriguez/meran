@@ -9,12 +9,12 @@ use C4::AR::Busquedas;
 
 my $input=new CGI;
 
-my ($template, $session, $t_params) 
-    = get_template_and_user({template_name => "opac-detail.tmpl",
-			     query => $input,
-			     type => "opac",
-			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+my ($template, $session, $t_params)= get_template_and_user({
+								template_name => "opac-detail.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
+								flagsrequired => {borrow => 1},
 			     });
 
 
@@ -39,4 +39,4 @@ $t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 $t_params->{'loopnivel2'}= \@nivel2Loop;
 $t_params->{'id1'}= $idNivel1;
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
