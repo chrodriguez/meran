@@ -898,9 +898,9 @@ sub InitPaginador{
 
 sub crearPaginador{
 
-	my ($cantResult, $cantRenglones, $pagActual, $funcion,$params)=@_;
+	my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
-	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$params);
+	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
 
 
 	return $paginador;
@@ -911,10 +911,10 @@ sub armarPaginas{
 #@actual, es la pagina seleccionada por el usuario
 #@cantRegistros, cant de registros que se van a paginar
 #@$cantRenglones, cantidad de renglones maximo a mostrar
-#@$params, para obtener el path para las imagenes
+#@$t_params, para obtener el path para las imagenes
 
 
-	my ($actual, $cantRegistros, $cantRenglones,$funcion, $params)=@_;
+	my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
 	my $pagAMostrar=C4::Context->preference("paginas")||10;
 	my $numBloq=floor($actual / $pagAMostrar);
@@ -926,7 +926,7 @@ sub armarPaginas{
 	}
 	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
 
-	my $themelang= $params->{'themelang'};
+	my $themelang= $t_params->{'themelang'};
 
 	my $paginador= "<div id=paginador>";
 	my $class="paginaNormal";
