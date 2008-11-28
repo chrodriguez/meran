@@ -898,9 +898,9 @@ sub InitPaginador{
 
 sub crearPaginador{
 
-	my ($cantResult, $cantRenglones, $pagActual, $funcion)=@_;
+	my ($cantResult, $cantRenglones, $pagActual, $funcion,$params)=@_;
 
-	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion);
+	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$params);
 
 
 	return $paginador;
@@ -911,10 +911,10 @@ sub armarPaginas{
 #@actual, es la pagina seleccionada por el usuario
 #@cantRegistros, cant de registros que se van a paginar
 #@$cantRenglones, cantidad de renglones maximo a mostrar
-#@$template, para obtener el path para las imagenes
+#@$params, para obtener el path para las imagenes
 
-# 	my ($actual, $cantRegistros, $cantRenglones,$funcion, $template)=@_;
-	my ($actual, $cantRegistros, $cantRenglones,$funcion)=@_;
+
+	my ($actual, $cantRegistros, $cantRenglones,$funcion, $params)=@_;
 
 	my $pagAMostrar=C4::Context->preference("paginas")||10;
 	my $numBloq=floor($actual / $pagAMostrar);
@@ -925,8 +925,8 @@ sub armarPaginas{
 		$limSup=$limInf + $pagAMostrar -1;
 	}
 	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
-# 	my $themelang = $template->param('themelang');
-	my $themelang= '/intranet-tmpl/blue/es2/';
+
+	my $themelang= $params->{'themelang'};
 
 	my $paginador= "<div id=paginador>";
 	my $class="paginaNormal";
@@ -935,7 +935,6 @@ sub armarPaginas{
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
 		<img src='".$themelang."/images/numbers/pag_primera.png' border=0></span>";
-# 		<img src='".$themelang."/images/numbers/prev.gif' border=0></span>";
 
 		$paginador .= "<span> </span>";
 
@@ -958,7 +957,6 @@ sub armarPaginas{
 		#a la primer pagina
 		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
 		<img src='".$themelang."/images/numbers/pag_ultima.png' border=0></span>";
-# 		<img src='".$themelang."/images/numbers/next.gif' border=0></span>";
 	}
 	$paginador .= "</div>";	
 

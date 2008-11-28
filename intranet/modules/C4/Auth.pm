@@ -138,7 +138,6 @@ sub get_template_and_user {
 # print A "user: ".$user."\n";
 	my $borrowernumber;
 	if ( $session->param('userid') ) {
-# 		$params->{'loggedinusername'}= $user;
 		$params->{'loggedinusername'}= $session->param('userid');
 # 		$params->{'sessionID'}= $sessionID;
 # 		$params->{'sessionID'}= $session->param('sessionID');
@@ -147,13 +146,7 @@ sub get_template_and_user {
 		my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 		my @bordat;
 		$bordat[0] = $borr;
-# print A "get_template_and_user=> user ".$user."\n";
-# print A "get_template_and_user=> despues de getpatronnnnnr \n";
-# 		$template->param(USER_INFO => \@bordat);
-# 		$params->{'USER_INFO'}= \@bordat;
 		$session->param('USER_INFO', \@bordat);	
-# print A "get_template_and_user=> despues de USER_INFO\n";
-# print A "get_template_and_user=> USER_INFO: ".$params->{'USER_INFO'}."\n";
 	}
 
 # print A "get_template_and_user=> imprimo header \n";
@@ -165,15 +158,12 @@ sub output_html_with_http_headers {
     	my($query, $template, $params, $session) = @_;
 # open(A, ">>/tmp/debug.txt");
 # print A "output_html: \n";
-#   	my $session = new CGI::Session();
-#  	my $session = CGI::Session->new();
-
 
 # FIXME este IF es un parche, ya que a veces (especifico de auth.pl) no recibe el parametro session
 	 if ( !(defined($session)) ){
             $session = CGI::Session->new();
         }
-            
+
 #         printSession($session, 'output_html_with_http_headers: ');
     	# send proper HTTP header with cookies:
     	print $session->header();
