@@ -94,14 +94,14 @@
 			<td class="inputFontNormal">[% orden %]</td>
 			<td class="inputFontNormal">[% desccategory %]</td>
 			<td class="inputFontNormal">[% descissuetype %]</td>
-			<td class="inputFontNormal">[% delaydays %]/td>
+			<td class="inputFontNormal">[% delaydays %]</td>
 			<td class="inputFontNormal">[% sanctiondays %]</td>
 			<td class="inputFontNormal">[% amount %]</td>
 			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">[% "Eliminar" | i18n %]</a></FONT>
 			</td>
 			<td  class="[% clase %]">&nbsp;</td>
 		</tr>
-	[% FOREACH %]
+	[% END %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
         </tr>
