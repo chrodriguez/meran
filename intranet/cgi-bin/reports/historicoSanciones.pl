@@ -27,7 +27,7 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/historicoSanciones.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -43,7 +43,8 @@ my $orden= "date";
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
-$template->param( todaydate => format_date($today,$dateformat));
+#$template->param( todaydate => format_date($today,$dateformat));
+$t_params->{'todaydate'}=format_date($today,$dateformat);
 
 #Select de usuarios
 my @users;
@@ -67,7 +68,8 @@ my $CGIuser=CGI::scrolling_list(        -name      => 'user',
 					-defaults  => 'SIN SELECCIONAR'
                                  );
 
-$template->param(selectusuarios   => $CGIuser);
+#$template->param(selectusuarios   => $CGIuser);
+$t_params->{'selectusuarios'}=$CGIuser;
 #fin select de usuarios
 
 
@@ -104,7 +106,8 @@ my $CGISelectTiposPrestamos=CGI::scrolling_list(	-name      => 'tiposPrestamos',
 							-defaults  => 'SIN SELECCIONAR'
                                  		);
 #Se lo paso al template
-$template->param(selectTiposPrestamos => $CGISelectTiposPrestamos);
+#$template->param(selectTiposPrestamos => $CGISelectTiposPrestamos);
+$t_params->{'selectTiposPrestamos'}=$CGISelectTiposPrestamos;
 #*******************************Fin**Select Tipos de Prestamos***************************************
 
 #*********************************Select tipo Operacion*****************************************
@@ -140,7 +143,8 @@ my $CGISelectTipoOperacion=CGI::scrolling_list(		-name      => 'tipoOperacion',
 							-defaults  => 'SIN SELECCIONAR'
                                  		);
 #Se lo paso al template
-$template->param(selectTipoOperacion => $CGISelectTipoOperacion);
-#*******************************Fin**Select Tipos de Operacion***************************************
 
-output_html_with_http_headers $input, $cookie, $template->output;
+#$template->param(selectTipoOperacion => $CGISelectTipoOperacion);
+$t_params->{'selectTipoOperacion'}=$CGISelectTipoOperacion;
+#*******************************Fin**Select Tipos de Operacion***************************************
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

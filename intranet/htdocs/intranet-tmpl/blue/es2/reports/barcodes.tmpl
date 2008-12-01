@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 <script>
 function hacerSubmit(){
         document.branches.submit();
@@ -6,38 +6,37 @@ function hacerSubmit(){
 		</script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >C&oacute;digos de Barra</td></tr>
-	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+	<tr><td class="[% pagetitle %]" >C&oacute;digos de Barra</td></tr>
+	<tr><td class="[% lineagruesa %]"  align="left" colspan="3"></td></tr>
 </table>
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
-	<td class="inputFontNormal" >Seleccione una unidad de informaci&oacute;n :</td>
+	<td class="[% inputFontNormal %]" >Seleccione una unidad de informaci&oacute;n :</td>
 	<td><form name="branches" action=/cgi-bin/koha/reports/barcodes.pl method=post >
-        <!-- TMPL_VAR NAME=unidades  --></form>
+        [% unidades %]</form>
 	</td>
 </table>
 
 <br>
 <table border="0" cellspacing="0" cellpadding="0" width="90%">
 	<tr class="tablaresultadoTitle">
-		<td align="left"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+		<td align="left"><img src="[% themelang %]/images/izquierda.png"></td>
 		<td align="center" width="30%">Tipo</td>
 		<td align="center">M&iacute;nimo</td>
 		<td align="center">M&aacute;ximo</td>
-		<td align="right"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+		<td align="right"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
   	<tr align="center">
-		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=tipo --> </td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=minimo --> </td>
-	 	<td class="<!-- TMPL_VAR NAME=clase -->"> <!-- TMPL_VAR NAME=maximo --> </td>
-		<td class="<!-- TMPL_VAR NAME=clase -->">&nbsp;</td>
+		<td class="[% clase %]">&nbsp;</td>
+	 	<td class="[% clase %]">[% tipo %]  </td>
+	 	<td class="[% clase %]">[% minimo %]  </td>
+	 	<td class="[% clase %]">[% maximo %]  </td>
+		<td class="[% clase %]">&nbsp;</td>
  	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 </center>
 <br><br>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

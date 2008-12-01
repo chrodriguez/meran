@@ -1,15 +1,14 @@
 
 <center>
 <p class="inputFontNormal"> 
-	<b>La cantidad de operaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --><br>
-	P&aacute;gina n&uacute;mero: <!-- TMPL_VAR NAME=actual --> de un total de: <!-- TMPL_VAR NAME=paginas --></b>
+	<b>La cantidad de operaciones hechas fueron: &nbsp;[% cant %]<br>
+	P&aacute;gina n&uacute;mero: [% actual %] de un total de: [% paginas %]</b>
 </p><br>
-<!--TMPL_VAR NAME= paginador -->
-
+[% paginador %]
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+			<img src="[% themelang %]/images/izquierda.png">
 		</td>
 
 		<th class="tablaresultadoTitleClick" onclick="ordenar('surnameBor')" Title="Ordenar por Usuario" >Usuario</th>
@@ -20,48 +19,34 @@
 		<th class="tablaresultadoTitleClick" onclick="ordenar('tipoPrestamo')" Title="Ordenar por tipo de prestamo" >Tipo Pr&eacute;stamo<th>
 
 		<td align="right" valign="top" width="1%">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+			<img src="[% themelang  %]/images/derecha.png">
 		</td>
 	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 
   	<tr align='center'>
 
   		<td height=25 >&nbsp;</td>
 
 		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
-				<!-- TMPL_IF NAME=borrowernumber -->
-					<!-- TMPL_VAR NAME=userCompleto -->
-				<!-- /TMPL_IF -->
-			</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% IF borrowernumber %][% userCompleto %][% END %]</a>
 		</td>
   		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
-				<!-- TMPL_IF NAME=responsable -->
-					<!-- TMPL_VAR NAME=respCompleto -->
-				<!-- /TMPL_IF -->
-			</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">[% IF responsable  %][% respCompleto %][% END %]</a>
 		</td>
-  		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=date --> 
+  		<td  class="inputFontNormal">[% date %] 
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=end_date --> 
+		<td  class="inputFontNormal">[% end_date%] 
 		</td>
-  		<td  class="inputFontNormal">
-			<!-- TMPL_VAR NAME=operacion -->
+  		<td  class="inputFontNormal">[% operacion %]
 		</td>
-		<td  class="inputFontNormal">  
-		<!-- TMPL_IF NAME=issuecode -->
-					<!-- TMPL_VAR NAME=tipoPrestamo -->
-			<!-- TMPL_ELSE -->Reserva no Retirada
-		<!-- /TMPL_IF -->
+		<td  class="inputFontNormal"> [% IF issuecode %] [% tipoPrestamo %][% ELSE %]
+			Reserva no Retirada
+		[% END %]
 		</td>
   	
  	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
  	<tr valign=middle>
         	<td class="lineafinaltabla"  align="left" colspan="8"></td>
         </tr>

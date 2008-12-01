@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script type="text/javascript">
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -59,28 +59,24 @@ function consultar(){
 
 			<td valign= "top" class=inputFontNormal><br><br>
 				<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="
-			<!-- TMPL_IF NAME='fechaIni' --><!-- TMPL_VAR NAME='fechaIni' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->">
+			[% IF fechaIni %][% fechaIni  %][% ELSE %][% todaydate %] [% END %]">
 				<a href="javascript:dp_ini.toggle();">
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
 				<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="
-			<!-- TMPL_IF NAME='fechaFin' --><!-- TMPL_VAR NAME='fechaFin' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"">
+[% IF fechaIni %][% fechaIni  %][% ELSE %][% todaydate %] [% END %]">
 				<a href="javascript:dp_fin.toggle();">
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
 			</td>
 
 			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td rowspan="4" valign="top" class="inputFontNormal"> <b>Filtrar por:</b> <br>
 
 			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-				<b>Responsable: </b><!-- TMPL_VAR NAME="selectusuarios" -->
-
+				<b>Responsable: </b>[% selectusuarios %]
 				<br><br>
-
-				<b>Tipo de Pr&eacute;stamo: </b>
-				<!-- TMPL_VAR NAME="selectTiposPrestamos" -->
+				<b>Tipo de Pr&eacute;stamo: </b>[% selectTiposPrestamos %]
 				<br><br>
-				<b>Tipo de Operaci&oacute;n: </b>
-				<!-- TMPL_VAR NAME="selectTipoOperacion" -->
+				<b>Tipo de Operaci&oacute;n: </b>[% selectTipoOperacion %]
 			</td>
 			<td>
 			<td>
@@ -88,12 +84,11 @@ function consultar(){
 		<tr>
 			<td colspan="4" align="center">
 				<br><br>
-				<a  onClick="consultar('')"><img   src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0"></a>
+				<a  onClick="consultar('')"><img   src="[% themelang %]/images/boton-buscar.png" border="0"></a>
 			</td>
    		</tr>
 	</table>
 </form>
 
 <div id="result"></div>
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

@@ -27,7 +27,7 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/historicoSancionesResult.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -63,12 +63,10 @@ my ($cant,@resultsdata)=
 C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$template->param( 
-			resultsloop      => \@resultsdata,
-                        cant             => $cant,
-			user             => $user,
-			tiposPrestamos	 => $tipoPrestamo,
-			tipoOperacion	 => $tipoOperacion,
-		);
+$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'cant'}=$cant;
+$t_params->{'user'}=$user;
+$t_params->{'tiposPrestamos'}=$tipoPrestamo;
+$t_params->{'tipoOperacion'}=$tipoOperacion;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

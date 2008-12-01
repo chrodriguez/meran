@@ -25,7 +25,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/analiticas.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -59,10 +59,8 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
 
 my @resultsdata= cantidadAnaliticas();#Cantidad de analiticas
 
-$template->param( 
-			resultsloop      => \@resultsdata,
-			unidades         => $CGIbranch,
-			branch           => $branch
-		);
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'branch'}= $branch;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
