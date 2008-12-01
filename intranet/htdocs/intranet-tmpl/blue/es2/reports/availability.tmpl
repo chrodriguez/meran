@@ -42,32 +42,36 @@ function consultar(){
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >Disponibilidad de Ejemplares</td></tr>
+	<tr><td class="pagetitle" >[% "Disponibilidad de Ejemplares" | i18n %]</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 <br>
 
-<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='orden' -->" NAME="orden" >
+<input TYPE="hidden" VALUE="[% orden %]" NAME="orden" >
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%" align="left">
 	<tr>
-	  	<td class=inputFontNormal>Seleccione una unidad de informaci&oacute;n :</td>
-	  	<td  class=inputFontNormal> <!-- TMPL_VAR NAME=unidades  --></td>
-	  	<td  class=inputFontNormal><!-- TMPL_VAR NAME=Cavails  --></td>
+	  	<td class=inputFontNormal>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</td>
+	  	<td  class=inputFontNormal> [% "Unidades" | i18n %]</td>
+	  	<td  class=inputFontNormal>[% "Cavails" | i18n %]</td>
 	</tr>
 
 	<tr>
-	  	<td  class=inputFontNormal>Seleccione una fecha de inicio:</td>
-	  	<td  class=inputFontNormal><input id="fechaIni" class="inputFontNormal"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  	<td  class=inputFontNormal>[% "Seleccione una fecha de inicio:" | i18n %]</td>
+	  	<td  class=inputFontNormal>
+                    <input id="fechaIni" class="inputFontNormal"> 
+                        <a href="javascript:dp_ini.toggle();">
+                            <img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]>
+                        </a>
 	  	</td>
 	 	<td></td>
 	<tr>
 
 	<tr>
-	  	<td  class=inputFontNormal>Seleccione una fecha de Fin: </td>	
-	  	<td  class=inputFontNormal><input id="fechaFin" class="inputFontNormal"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
+	  	<td  class=inputFontNormal>[% "Seleccione una fecha de Fin:" | i18n %] </td>	
+	  	<td  class=inputFontNormal><input id="fechaFin" class="inputFontNormal"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
           	<td colspan=2 align="center">
-		<input type="image" name="consulta" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png" onClick="consultar();">
+		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">
 	  	</td>
         </tr>
 </table>

@@ -18,14 +18,14 @@ my %select_catUsuarios_Labels;
 my @select_catUsuarios_Values2;
 my (@select_catUsuarios_Values2,%catUsuarios)= C4::AR::Usuarios::obtenerCategorias(); 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/historico_Prestamos.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/historico_Prestamos.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 
 
@@ -62,7 +62,7 @@ my $CGISelectCatUsuarios=CGI::scrolling_list(	-name      => 'catUsuarios',
 						-defaults  => 'SIN SELECCIONAR'
                                  		);
 #Se lo paso al template
-$template->param(selectCatUsuarios => $CGISelectCatUsuarios);
+$t_params->{'selectCatUsuarios'}= $CGISelectCatUsuarios;
 #*********************************Fin Select de Categoria de Usuarios******************************
 
 #llamo a la funcion en C4::AR::Issues, traer todos los tipos de prestamos
@@ -96,7 +96,7 @@ my $CGISelectTiposPrestamos=CGI::scrolling_list(-name      => 'tipoPrestamos',
 						-defaults  => 'SIN SELECCIONAR'
                                  		);
 #Se lo paso al template
-$template->param(selectTiposPrestamos => $CGISelectTiposPrestamos);
+$t_params->{'selectTiposPrestamos'}= $CGISelectTiposPrestamos;
 #******************************Fin Select de Tipos de Prestamos***********************************
 
 #************************************Select de Tipos de Items************************************
@@ -130,13 +130,11 @@ my $CGISelectTiposItems=CGI::scrolling_list(	-name      => 'tiposItems',
 						-defaults  => 'SIN SELECCIONAR'
                                  		);
 #Se lo paso al template
-$template->param(selectTiposItems => $CGISelectTiposItems);
+$t_params->{'selectTiposItems'}= $CGISelectTiposItems;
 #************************************Fin Select de Tipos de Items*********************************
 
 
-$template->param( 
-			orden 		 => $orden, 
-		);
+$t_params->{'orden'}= $orden;
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

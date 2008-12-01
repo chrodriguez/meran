@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script language="javascript">
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -45,7 +45,7 @@ function consultar(){
 
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >Historial de Pr&eacute;stamos</td></tr>
+	<tr><td class="pagetitle" >[% "Historial de Pr&eacute;stamos" | i18n %]</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 <br>
@@ -54,30 +54,30 @@ function consultar(){
 <table border=0 cellspacing=0 cellpadding=0 width="80%" align="left">
 	<tr>
 	  <td><b>Seleccione una fecha de inicio: </b></td>
-	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="<!-- TMPL_VAR NAME='f_ini' -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="[% f_ini %]"> <a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
 	  </td>
 	<td colspan="2">&nbsp;</td>	
 	<tr>
-	  <td><b>Seleccione una fecha de Fin: </b></td>	
-	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="<!-- TMPL_VAR NAME='f_fin' -->"> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+	  <td><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></td>	
+	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="[% f_fin %]"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
 	  </td>
 	  <td colspan=2 align="center">
-		<input type="image" name="consulta" src="<!-- TMPL_VAR  NAME='themelang' -->/images/generarListado.png" onClick="consultar();">
+		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">
 	  </td>
         </tr>
 	<tr>
 	  <td><b>Categoria de Usuario: </b></td>
-	  <td><!-- TMPL_VAR NAME="selectCatUsuarios" --></td>
+	  <td>[% selectCatUsuarios %]</td>
 	  <td colspan="3">&nbsp;</td>
 	</tr>
 	<tr>
-	  <td><b>Tipo de Pr&eacute;stamo: </b></td>
-	  <td><!-- TMPL_VAR NAME="selectTiposPrestamos" --></td>
+	  <td><b>[% "Tipo de Pr&eacute;stamo:" | i18n %] </b></td>
+	  <td>[% "selectTiposPrestamos" | i18n %]</td>
 	  <td colspan="3">&nbsp;</td>
     	</tr>
 	<tr>
 	  <td><b>Tipo de Item: </b></td>
-	  <td><!-- TMPL_VAR NAME="selectTiposItems" --></td>
+	  <td>[% selectTiposItems %]</td>
 	  <td colspan="3">&nbsp;</td>
 	</tr>
 </table>
@@ -87,4 +87,4 @@ function consultar(){
 <div id="result" width="100%" height="100%"></div>
 
 <br>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

@@ -9,14 +9,14 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/availabilityResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/availabilityResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
@@ -34,7 +34,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($branch,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $availD;
 if ($avail eq 0){
@@ -45,15 +45,13 @@ else{
 	if ($av){$availD=$av->{'description'};}
 }
 
-$template->param( 
-			resultsloop      => \@resultsdata,
-			cantidad	 => $cantidad,
-			branch           => $branch,
-			orden 		 => $orden,
-			avail		 => $avail,
-			availD		 => $availD,
-			fechaIni	 => $fechaIni,
-			fechaFin	 => $fechaFin,
-		);
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'branch'}= $branch;
+$t_params->{'orden'}= $orden;
+$t_params->{'avail'}= $avail;
+$t_params->{'availD'}= $availD;
+$t_params->{'fechaIni'}= $fechaIni;
+$t_params->{'fechaFin'}= $fechaFin;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

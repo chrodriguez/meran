@@ -1,58 +1,62 @@
 <br><br>
 <br><br>
-<p class="inputFontNormal">La cantidad de ejemplares en estado <b><!-- TMPL_VAR NAME=availD --></b>  es: <!-- TMPL_VAR NAME=cantidad --></p>
+<p class="inputFontNormal">[% "La cantidad de ejemplares en estado" | i18n %] 
+                    <b>
+                        [% availD %]
+                    </b>  [% "es:" | i18n %] [% cantidad %]
+</p>
 <br>
 
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 
 <br><br>
 
 <table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
 	<tr height="24">
-		<td class="tablaresultadoTitle" width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+		<td class="tablaresultadoTitle" width="1%" align="left"  valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 
 	<!-- ver si va esta clase ????, falta q se vea la manito-->
-		<td class="tablaresultadoTitleClick" onClick="ordenar('completo');" title="Ordenar por autor">Autor</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('titulo');" title="Ordenar por titulo">T&iacute;tulo</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('signatura_topografica');" title="Ordenar por Sig. Topografica">Signatura Topogr&aacute;fica</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('barcode');" title="Ordenar por cod. de barras">C&oacute;digo de barras</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('number');" title="Ordenar por edicion">Edici&oacute;n</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('anio_publicacion');" title="Ordenar por a&ntilde;o de publicacion">A&ntilde;o de Publicaci&oacute;n</td>
-		<td class="tablaresultadoTitleClick" onClick="ordenar('date');" title="Ordenar por fecha">Fecha</a></th>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('completo');" title=[% "Ordenar por autor" | i18n %]>[% "Autor" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('titulo');" title=[% "Ordenar por titulo" | i18n %]>[% "T&iacute;tulo" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('signatura_topografica');" title=[% "Ordenar por Sig. Topografica" | i18n %]>[% "Signatura Topogr&aacute;fica" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('barcode');" title=[% "Ordenar por cod. de barras" | i18n %]>[% "C&oacute;digo de barras" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('number');" title=[% "Ordenar por edicion" | i18n %]>[% "Edici&oacute;n" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('anio_publicacion');" title=[% "Ordenar por a&ntilde;o de publicacion" | i18n %]>[% "A&ntilde;o de Publicaci&oacute;n" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onClick="ordenar('date');" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</a></th>
 
-		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
 	</tr>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	<tr align="center" class="inputFontNormal">
   		<td height=25>&nbsp;</td>
-  		<td align="left"> <!-- TMPL_VAR NAME=autor --></td>
-  		<td> <!-- TMPL_VAR NAME=titulo ESCAPE=HTML--> </td>
-  		<td> <!-- TMPL_VAR NAME=signatura_topografica --> </td>
-  		<td> <!-- TMPL_VAR NAME=barcode --> </td>
-  		<td> <!-- TMPL_VAR NAME=number --> </td>
-  		<td> <!-- TMPL_VAR NAME=anio_publicacion --> </td>
-  		<td> <!-- TMPL_VAR NAME=date --> </td>  
+  		<td align="left"> [% autor %]</td>
+  		<td> [% HTML.escape(titulo) %] </td>
+  		<td> [% signatura_topografica %] </td>
+  		<td> [% barcode %] </td>
+  		<td> [% number %] </td>
+  		<td> [% anio_publicacion %] </td>
+  		<td> [% date %] </td>  
   		<td height=25>&nbsp;</td>
        </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 
 </table>
 <!--Botones del fondo -->
 <form name="branches" method="post">
 	<!-- Para poder imprimir bien los datos en la pagina y pdf -->
-	<input type="hidden" name="orden" value="<!-- TMPL_VAR NAME='orden' -->">
-	<input type="hidden" name="avail" value="<!-- TMPL_VAR NAME='avail' -->">
-	<input type="hidden" name="fechaIni" value="<!-- TMPL_VAR NAME='fechaIni' -->">
-	<input type="hidden" name="fechaFin" value="<!-- TMPL_VAR NAME='fechaFin' -->">
-	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
+	<input type="hidden" name="orden" value="[% orden %]">
+	<input type="hidden" name="avail" value="[% avail %]">
+	<input type="hidden" name="fechaIni" value="[% fechaIni %]">
+	<input type="hidden" name="fechaFin" value="[% fechaFin %]">
+	<input type="hidden" name="branch" value="[% branch %]">
 
 	<input TYPE="hidden" VALUE="pdf" NAME="type" > 
-		<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+		<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
 		</a>
 
-		<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %] src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
 		</a>
 <form>
 <br><br>
