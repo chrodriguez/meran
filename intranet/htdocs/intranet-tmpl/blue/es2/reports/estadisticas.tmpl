@@ -1,9 +1,9 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc"  %]
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script type="text/javascript">
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -52,7 +52,7 @@ function updateInfo(responseText){
   		<tr>
 			<td valign= "top" class=inputFontNormal>
 			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha" 
-				<!-- TMPL_IF NAME="chkfecha" -->checked<!-- /TMPL_IF -->>
+			[% IF chkfecha %]checked[% END %]>
 			<b>Seleccione para buscar por fecha.</b><br><br>
 			Seleccione una fecha de inicio:<br><br>
 			Seleccione una fecha de Fin:
@@ -61,13 +61,13 @@ function updateInfo(responseText){
 			<td valign= "top" class=inputFontNormal>
 				<br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
-			<!-- TMPL_IF NAME='fechaInicio' --><!-- TMPL_VAR NAME='dateselected' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->"> <a href="javascript:dp_ini.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			[% IF fechaInicio %][% dateselected  %][% ELSE %][% todaydate %][% END %]"
+			<a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 				<br><br>
-			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="<!-- TMPL_IF NAME='fechaFin' --><!-- TMPL_VAR NAME='dateselectedEnd' --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME='todaydate' --><!-- /TMPL_IF -->""> <a href="javascript:dp_fin.toggle();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="
+[% IF fechaFin %][% dateselectedEnd  %][% ELSE %][% todaydate %][% END %]"			
+<a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 			</td>
-
-
-
 			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td rowspan=3 class="inputFontNormal"> <b>Buscar por:</b> <br>
 				<p>Prestamos:</p>
@@ -78,7 +78,7 @@ function updateInfo(responseText){
 				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">Usuario
 				<br><br>
 
-				<input type="image" onClick='consultar()' src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+				<input type="image" onClick='consultar()' src="[% themelang %]/images/boton-buscar.png" border="0">
 			</td>
    		</tr>
 	</table>
@@ -86,5 +86,4 @@ function updateInfo(responseText){
 <br>
 <div id="result"></div>
 
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,11 +1,10 @@
 
-
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 	
 		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" Title="Ordenar por Apellido">Apellido</th>
 		<th class="tablaresultadoTitleClick" onclick="ordenar('firstname')" Title="Ordenar por Nombre">Nombre</th>
@@ -16,41 +15,33 @@
 		<th class="tablaresultadoTitleClick" onclick="ordenar('valor')" Title="Ordenar por Valor">Valor</th>
 		<th class="tablaresultadoTitleClick" onclick="ordenar('tipo')" Title="Ordenar por Tipo">Tipo</th>
 
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+		<td width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	<tr align='center'>
 		<td height=25 >&nbsp;</td>
 
 		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=firstname --> 
+		<td  class="inputFontNormal"> [% firstname %]
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=cardnumber --> 
+		<td  class="inputFontNormal">[% cardnumber %] 
 		</td>
-			<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=description --> 
+			<td  class="inputFontNormal">[% descripcion %] 
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=fecha -->
+		<td  class="inputFontNormal">[% fecha %] 
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=campo -->
+		<td  class="inputFontNormal">[% campo %] 
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=valor -->
+		<td  class="inputFontNormal">[% valor %] 
 		</td>
-		<td  class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=tipo -->
+		<td  class="inputFontNormal">[% tipo %] 
 		</td>
 
 		<td height=25 >&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
         </tr>

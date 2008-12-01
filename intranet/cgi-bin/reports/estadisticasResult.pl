@@ -9,7 +9,7 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/estadisticasResult.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -48,23 +48,18 @@ if(($chkuser eq "false" && $checkbox==0)||$chkuser ne "false"){
 	$cantUsuRenov=cantidadUsuariosRenovados($fechaInicio, $fechaFin, $chkfecha);
 	$cantUsuReser=cantidadUsuariosReservas($fechaInicio, $fechaFin, $chkfecha);
 };
-$template->param( 	
-# 			Esta variables que se pasan son para poder imprimir los resultados
-			chck             => $obj->{'chck'},
-			chkfecha         => $chkfecha,
-			chkuser		 => $chkuser,
-			dateselected     => $obj->{'fechaIni'},
-		        dateselectedEnd  => $obj->{'fechaFin'},
-#			Variables que se muestran en el tmpl
-			domiTotal        => $domiTotal,
-			renovados        => $renovados,
-			devueltos        => $devueltos,
-			foto             => $foto,
-			sala             => $sala,
-			especial         => $especial,
-			cantUsuPrest	 => $cantUsuPrest,
-			cantUsuRenov	 => $cantUsuRenov,
-			cantUsuReser	 => $cantUsuReser,
-		);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+$t_params->{'chck'}=$obj->{'chck'};
+$t_params->{'chkfecha'}=$chkfecha;
+$t_params->{'chkuser'}=$chkuser;
+$t_params->{'dateselect'}=$obj->{'fechaIni'};
+$t_params->{'dateselectEnd'}=$obj->{'fechaFin'};
+$t_params->{'domiTotal'}=$domiTotal;
+$t_params->{'renovados'}=$renovados;
+$t_params->{'devueltos'}=$devueltos;
+$t_params->{'foto'}=$foto;
+$t_params->{'sala'}=$sala;
+$t_params->{'especial'}=$especial;
+$t_params->{'cantUsuPrest'}=$cantUsuPrest;
+$t_params->{'cantUsuRenov'}=$cantUsuRenov;
+$t_params->{'cantUsuReser'}=$cantUsuReser;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

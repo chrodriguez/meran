@@ -8,7 +8,7 @@ use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/logueoBusquedaResult.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -33,11 +33,10 @@ my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaF
 C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
+$t_params->{'resulsloop'}=\@resultsdata;
+$t_params->{'fechaIni'}=$fechaIni;
+$t_params->{'fechaFin'}=$fechaFin;
+$t_params->{'catUsuarios'}=$catUsuarios;
 
-$template->param( 	resultsloop      => \@resultsdata,
-			fechaIni	=> $fechaIni,
-			fechaFin 	=> $fechaFin,
-			catUsuarios	=> $catUsuarios,
-		);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
-output_html_with_http_headers $input, $cookie, $template->output;
