@@ -15,7 +15,7 @@
 
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
+			<img src="[% themelang %]/images/izquierda.png">
 		</td>
 		<td>
 			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="Seleccionar todos">
@@ -28,7 +28,7 @@
 		<td>&nbsp;</td>
 
 		<td width="1%" align="right" valign="top">
-			<img src="[% interface %]/[% themelang %]/images/derecha.png">
+			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
@@ -70,7 +70,7 @@
 		</td>
 		<td align="middle"> 
 	       		<input type="image" name="cancel"  value="cancelar" 
-			src="[% interface %]/[% themelang %]/images/borrar.png" 
+			src="[% themelang %]/images/borrar.png" 
 			onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
@@ -81,7 +81,7 @@
 [% IF reserves_count %]
 	<p colspan="10" class="inputFontNormal" align=center>
 		<input type="image" name="borrowD"  value="prestar" 
-		src="[% interface %]/[% themelang %]/images/item-prestar.png" 
+		src="[% themelang %]/images/item-prestar.png" 
 		title="Realizar pr&eacute;stamo" 
 		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
@@ -99,7 +99,7 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
+			<img src="[% themelang %]/images/izquierda.png">
 		</td>
 
 		<td>T&iacute;tulo</td>
@@ -109,7 +109,7 @@
 		<td>&nbsp;</td>
 
 		<td width="1%" align="right" valign="top">
-			<img src="[% interface %]/[% themelang %]/images/derecha.png">
+			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
@@ -139,7 +139,7 @@
 			</td>
 			<td>
 				<input type="image" name="cancel"  value="cancelar" 
-				src="[% interface %]/[% themelang %]/images/borrar.png" 
+				src="[% themelang %]/images/borrar.png" 
 				onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
 			</td>
 			<td width="1%">&nbsp;</td>

@@ -21,7 +21,7 @@
         <table cellpadding="0" cellspacing="0" border="0">
                 <tr>
                         <td>
-                                <font color="red" size="3"><b>Usted tiene ejemplares vencidos</b></font>
+                                <font color="red" size="3"><b>[% "Usted tiene ejemplares vencidos" | i18n %]</b></font>
                         </td>
                 </tr>
         </table>
@@ -31,23 +31,23 @@
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
   <tr bordercolor="#f2f2f2">
-	<td colspan=7 align="center" class="bordetabla" borde=1><b>Pr&eacute;stamos </b>
+	<td colspan=7 align="center" class="bordetabla" borde=1><b>[% "Pr&eacute;stamos" | i18n %]</b>
  	</td>
   </tr>
 
   <tr class="bordetabla" bordercolor="#f2f2f2">
-	<th>T&iacute;tulo</th>
-	<th>Autor</th>
-	<th>C&oacute;digo de Barras</th>
-	<th>Signatura Topogr&aacute;fica</th>
-	<th>Volumen</th>
-	<th>Fechas de Pr&eacute;stamo</th>
-	<th>Vencimiento</th>
+	<th>[% "T&iacute;tulo" | i18n %]</th>
+	<th>[% "Autor" | i18n %]</th>
+	<th>[% "C&oacute;digo de Barras" | i18n %]</th>
+	<th>[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+	<th>[% "Volumen" | i18n %]</th>
+	<th>[% "Fechas de Pr&eacute;stamo" | i18n %]</th>
+	<th>[% "Vencimiento" | i18n %]</th>
   </tr>
 [% FOREACH ISSUES %]
   <tr class="tope" bordercolor="#f2f2f2">
 	<td class="impar">
-		<a class="click" onClick="detalle([% id1 %])" title="Mostrar detalle">
+		<a class="click" onClick="detalle([% id1 %])" title="[% 'Mostrar detalle' | i18n %]">
 			[% titulo %]
 			[% IF unititle %]
 				:&nbsp;[% unititle %]
@@ -96,7 +96,7 @@
 		<font color="<!-- TMPL_VAR NAME='color' -->">[% date_fin %]</font>
 		[% IF CirculationEnabled %]
        			[% IF renew %]<br>
-				<a class="click" onClick="renovar([% id3 %]);">Renovar</a>
+				<a class="click" onClick="renovar([% id3 %]);">[% "Renovar" | i18n %]</a>
 			[% END %]
 		[% END %]
 	[% ELSE %]
@@ -108,7 +108,7 @@
 </table>
 <br>
 [% ELSE %]
-	<p>No tiene ejemplares prestados.</p>
+	<p>[% "No tiene ejemplares prestados" | i18n %]</p>
 [% END %]
 
 

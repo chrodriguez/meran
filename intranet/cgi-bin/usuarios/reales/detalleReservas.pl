@@ -12,13 +12,13 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-my ($template, $session, $params) = get_template_and_user ({
-	template_name	=> 'usuarios/reales/detalleReservas.tmpl',
-	query		=> $input,
-	type		=> "intranet",
-	authnotrequired	=> 0,
-	flagsrequired	=> { circulate => 1 },
-    });
+my ($template, $session, $t_params) = get_template_and_user ({
+								template_name	=> 'usuarios/reales/detalleReservas.tmpl',
+								query		=> $input,
+								type		=> "intranet",
+								authnotrequired	=> 0,
+								flagsrequired	=> { circulate => 1 },
+    					});
 
 my $obj=$input->param('obj');
 
@@ -53,12 +53,13 @@ foreach my $res (@$reserves) {
         }
 }
 
-$params->{'bornum'}= $borrnumber;
+$t_params->{'bornum'}= $borrnumber;
 #los libros que tiene "en espera para retirar"
-$params->{'waiting'}= \@waiting;
+$t_params->{'waiting'}= \@waiting;
 #los libros que tiene esperando un ejemplar
 if ( (@realreserves) > 0 ){
-	$params->{'realreserves'}= \@realreserves;
+	$t_params->{'realreserves'}= \@realreserves;
 }
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

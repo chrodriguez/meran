@@ -29,13 +29,13 @@ use C4::Interface::CGI::Output;
 my $input=new CGI;
 
 
-my ($template, $session, $params) =  get_template_and_user ({
-			template_name	=> 'circ/prestamos.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
-    });
+my ($template, $session, $t_params) =  get_template_and_user ({
+								template_name	=> 'circ/prestamos.tmpl',
+								query		=> $input,
+								type		=> "intranet",
+								authnotrequired	=> 0,
+								flagsrequired	=> { circulate => 1 },
+    							});
 
 my $obj=$input->param('obj');
 my $usuarioID="";
@@ -47,10 +47,10 @@ if($obj ne ""){
 	$usuarioID=$obj->{'usuario'}->{'ID'};
 	$usuarioText=$obj->{'usuario'}->{'text'};
 
-	$params->{'usuarioText'}= $usuarioText;
-	$params->{'array'}= $array;
+	$t_params->{'usuarioText'}= $usuarioText;
+	$t_params->{'array'}= $array;
 }
 
-$params->{'usuarioID'}= $usuarioID;
+$t_params->{'usuarioID'}= $usuarioID;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
