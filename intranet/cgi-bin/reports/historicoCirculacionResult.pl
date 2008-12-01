@@ -27,14 +27,15 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/historicoCirculacionResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {circulate => 1},
-			     debug => 1,
-			     });
+
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/historicoCirculacionResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 my $orden= "date";  # $input->param('orden')||'operacion';
 
@@ -42,7 +43,7 @@ my $orden= "date";  # $input->param('orden')||'operacion';
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
-$template->param( todaydate => format_date($today,$dateformat));
+$t_params->{'todaydate'}= format_date($today,$dateformat);
 
 
 my $obj=$input->param('obj');
@@ -79,20 +80,17 @@ my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
 my ($cantidad,@resultsdata)=
  &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
-$template->param( 
-			resultsloop      => \@resultsdata,
-                        cantidad         => $cantidad,
-			fechaFin         => $fechaFin,
-			fechaInicio      => $fechaInicio,
-			chkfecha         => $chkfecha,
-			dateselected     => $input->param('fechaIni'),
-		        dateselectedEnd  => $input->param('fechaFin'),
-			user             => $user,
-			tiposPrestamos	 => $tipoPrestamo,
-			tipoOperacion	 => $tipoOperacion
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'fechaFin'}= $fechaFin;
+$t_params->{'fechaInicio'}= $fechaInicio;
+$t_params->{'chkfecha'}= $chkfecha;
+$t_params->{'dateselected'}= $input->param('fechaIni');
+$t_params->{'dateselectedEnd'}= $input->param('fechaFin');
+$t_params->{'user'}= $user;
+$t_params->{'tiposPrestamos'}= $tipoPrestamo;
+$t_params->{'tipoOperacion'}= $tipoOperacion;
 
-		);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

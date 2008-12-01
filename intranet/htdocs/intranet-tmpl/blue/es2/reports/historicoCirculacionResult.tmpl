@@ -3,76 +3,81 @@
 <br>
 <center>
 <p class="inputFontNormal"> 
-	<b>La cantidad de operaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cantidad --><br>
+	<b>[% "La cantidad de operaciones hechas fueron: " | i18n %]&nbsp;[% cantidad %]<br>
 </p><br>
 
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 <br>
 <br>
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+			<img src="[% themelang %]/images/izquierda.png">
 		</td>
 
-		<th>T&iacute;tulo</th>
-		<th>Autor</th>
-		<th>C. Barra</th>
-		<th>Usuario</th>
-		<th>Responsable</th>
-		<th>Fecha</th>
-		<th>Operaci&oacute;n</th>
-		<th>Nota</th>
+		<th>[% "T&iacute;tulo" | i18n %]</th>
+		<th>[% "Autor" | i18n %]</th>
+		<th>[% "C. Barra" | i18n %]</th>
+		<th>[% "Usuario" | i18n %]</th>
+		<th>[% "Responsable" | i18n %]</th>
+		<th>[% "Fecha" | i18n %]</th>
+		<th>[% "Operaci&oacute;n" | i18n %]</th>
+		<th>[% "Nota" | i18n %]</th>
 
 		<td align="right" valign="top" width="1%">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
   	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
 
 		<td>
-			<a href=/cgi-bin/koha/busquedas/detalle.pl?id1=<!-- TMPL_VAR NAME=id1 ESCAPE=URL -->><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+			<a href=/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]>[% HTML.escape(titulo) %]
+                            [% IF unititle %]:&nbsp;
+                                [% unititle %]
+                            [% END %]</a>
 		</td>
 		<td>
-			<a ref="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<!-- TMPL_VAR NAME='idautor' ESCAPE='URL' -->"><!-- TMPL_VAR NAME="completo" -->
+			<a ref="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<[% HTML.escape(idautor) %]">[% completo %]
 			</a>
 		</td>
 		<td>
 			
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle del Item'><!-- TMPL_VAR NAME=barcode --></a> 
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle del Item'>[% barcode %]</a> 
 		</td>	
 		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
-				<!-- TMPL_IF NAME=responsable -->
-					<!-- TMPL_VAR NAME=userCompleto -->
-				<!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
+				[% IF responsable %]
+					[% userCompleto %]
+				[% END %]
 			</a>
 		</td>
+                [% IF responsable %]
+                    <td> 
+                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
+                                    [% nomCompleto %]
+                            </a>
+                    </td>
+                [% END %]
   		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
-				<!-- TMPL_IF NAME=responsable -->
-					<!-- TMPL_VAR NAME=nomCompleto -->
-				<!-- /TMPL_IF -->
-			</a>
-		</td>
-  		<td> 
-			<!-- TMPL_VAR NAME=fecha --> </td>
+			[% fecha %] </td>
   		<td>
-			<!-- TMPL_VAR NAME=operacion -->
-			<!-- TMPL_IF NAME=description -->
-				<br>(<!-- TMPL_VAR NAME=description -->) 
-			<!-- /TMPL_IF -->
+			[% operacion %]
+			[% IF description %]
+				<br>([% description %]) 
+			[% END %]
 		</td>
   		<td>
-			<textarea id="<!-- TMPL_VAR NAME=id -->" class="inputFontNormal" name="notas" cols="15" rows="4"><!-- TMPL_VAR NAME=nota --></textarea>
+			<textarea id="[% id %]" class="inputFontNormal" name="notas" cols="15" rows="4">
+                                [% nota %]
+                        </textarea>
 		<br>
-		<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="guardarNota('<!-- TMPL_VAR NAME=id -->')">
+		<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% id %]')">
 		</td>
  	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
  	<tr valign=middle>
         	<td class="lineafinaltabla"  align="left" colspan="8"></td>
         </tr>

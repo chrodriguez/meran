@@ -8,17 +8,20 @@ use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/estadistica_AnualResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/estadistica_AnualResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 
-my $branch=(split("_",(split(";",$cookie))[0]))[1];
+# my $branch=(split("_",(split(";",$cookie))[0]))[1];
+
+
+my $branch= $input->param('branch') || C4::Context->preference('defaultbranch');
 
 my $obj= C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $year= $obj->{'year'};
@@ -80,9 +83,8 @@ push(@loop,@result);
 
 #********
 
-$template->param( 
-			resultsloop      => \@loop,
-			branch           => $branch,
-		);
+$t_params->{'resultsloop'}= \@loop;
+$t_params->{'branch'}= $branch;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

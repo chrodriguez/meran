@@ -1,61 +1,62 @@
 <center>
 <p class="inputFontNormal">
-La cantidad de reservas es : <!-- TMPL_VAR NAME=cantidad -->
+[% "La cantidad de reservas es : " | i18n %]
+                    [% cantidad %]
 </p>
 <br>
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png"></td>
+		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 
-		<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" title="Ordenar por apellido"> Apellido</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" title="Ordenar por nombre"> Nombre</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" title="Ordenar por numero de socio"> N&uacute;mero de socio</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('emailaddress')" title="Ordenar por mial">E-mail</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('reservedate')" title="Ordenar por fecha de reserva"> Fecha de reserva</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('reminderdate')" title="Ordenar por fecha de vencimiento"> Fecha de vencimiento</td>
-		<td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" title="Ordenar por codigo de barra"> C&oacute;digo de barra</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" title=[% "Ordenar por apellido" | i18n %]> [% "Apellido" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" title=[% "Ordenar por nombre" | i18n %]> [% "Nombre" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('cardnumber')" title=[% "Ordenar por numero de socio" | i18n %]> [% "N&uacute;mero de socio" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('emailaddress')" title=[% "Ordenar por mial" | i18n %]>[% "E-mail" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('reservedate')" title=[% "Ordenar por fecha de reserva" | i18n %]> [% "Fecha de reserva" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('reminderdate')" title=[% "Ordenar por fecha de vencimiento" | i18n %]> [% "Fecha de vencimiento" | i18n %]</td>
+		<td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]> [% "C&oacute;digo de barra" | i18n %]</td>
 
- 		<td align="rigth" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png"></td>
+ 		<td align="rigth" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	<tr align='center'>
 		<td height=25 >&nbsp;</td>
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=firstname --> 
+			[% firstname %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=cardnumber --> 
+			[% cardnumber %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME="mail" --> 
-				<!-- TMPL_VAR NAME=emailaddress -->
-			<!-- TMPL_ELSE -->
-				<a class="inputFontNormal" href="mailto:<!-- TMPL_VAR NAME=emailaddress -->"><!-- TMPL_VAR NAME=emailaddress --> </a>
-			<!-- /TMPL_IF -->
+			[% IF mail %]
+				[% emailaddress %]
+			[% ELSE %]
+				<a class="inputFontNormal" href="mailto:[% emailaddress %]">[% emailaddress %] </a>
+			[% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=reservedate -->
+			[% reservedate %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_VAR NAME=reminderdate -->
+			[% reminderdate %]
 		</td>
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=biblionumber -->"><!-- TMPL_VAR NAME=barcode --></a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% barcode %]</a>
 		</td>
 		<td height=25 >&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <br>
 
 
-<a class="inputFontNormal" href="mail.pl?branch=<!-- TMPL_VAR NAME=branch -->&tipo=1"> 
-<input id="contacto" type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/contactar.png" title="Enviar mail a usuarios con reservas asignadas" >
+<a class="inputFontNormal" href="mail.pl?branch=[% branch %]&tipo=1"> 
+<input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title=[% "Enviar mail a usuarios con reservas asignadas" | i18n %] >
 </a> 
 </center>

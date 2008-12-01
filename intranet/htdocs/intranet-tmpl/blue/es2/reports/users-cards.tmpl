@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script language="javascript">
@@ -46,7 +46,7 @@ function updateInfo(responseText){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Generar Carnets de Usuarios</td>
+		<td class="pagetitle" >[% "Generar Carnets de Usuarios" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -61,18 +61,18 @@ function updateInfo(responseText){
 <table border="0" cellspacing="0" cellpadding="0">
 	
 	<tr class="inputFontNormal">
-	<td>Apellido:</td>
+	<td>[% "Apellido:" | i18n %]</td>
 	<td colspan="2">
-	Desde:&nbsp; <input type='text' id='surname1' name='surname1' value='<!-- TMPL_VAR NAME=surname1  -->'><br>
-	Hasta:&nbsp; <input type='text' id='surname2' name='surname2' value='<!-- TMPL_VAR NAME=surname2  -->'></td>
+	[% "Desde:" | i18n %]&nbsp; <input type='text' id='surname1' name='surname1' value='[% surname1 %]'><br>
+	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='surname2' name='surname2' value='[% surname2 %]'></td>
 	</tr>
 	 <tr class="inputFontNormal">
-	 <td>Unidad de informaci&oacute;n:</td>
-	 <td colspan="2"><!-- TMPL_VAR NAME=unidades  --></td>
+	 <td>[% "Unidad de informaci&oacute;n:" | i18n %]</td>
+	 <td colspan="2">[% unidades %]</td>
 	 </tr>
 	<tr class="inputFontNormal">
-	<td>Categor&iacute;as:</td>
-	<td colspan="2"><!-- TMPL_VAR NAME=categories  --></td>
+	<td>[% "Categor&iacute;as:" | i18n %]</td>
+	<td colspan="2">[% categories %]</td>
 	</tr>
 </table>
 </td>
@@ -82,17 +82,17 @@ function updateInfo(responseText){
 	<tr class="inputFontNormal">
 	<td>Legajo:</td>
 	<td colspan="2">
-	Desde:&nbsp; <input type='text' id='legajo1' name='legajo1' value='<!-- TMPL_VAR NAME=legajo1  -->'><br>
-	Hasta:&nbsp; <input type='text' id='legajo2' name='legajo2' value='<!-- TMPL_VAR NAME=legajo2  -->'></td>
+	Desde:&nbsp; <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'><br>
+	Hasta:&nbsp; <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'></td>
 	</tr>
 	<tr class="inputFontNormal">
 	<td >Regularidad: </td>
-	<td colspan="2"> <!-- TMPL_VAR NAME=regulares  --></td>
+	<td colspan="2"> [% regulares %]</td>
 	</tr>
 </table>
 </td></tr></table>
 <br>
-<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="consultar('search','');">
+<input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar('search','');">
 
 <br><br>
 <div id="result"></div>
@@ -101,4 +101,4 @@ function updateInfo(responseText){
 <div id="formulario">
 </div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

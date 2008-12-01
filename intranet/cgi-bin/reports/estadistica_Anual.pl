@@ -9,36 +9,35 @@ use CGI;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/estadistica_Anual.tmpl",
-
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/estadistica_Anual.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 my  $branch=$input->param('branch');
-($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
+# ($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
 
 
-my $year_Default=2005;
+my $year_Default="Seleccione";
 my @years;
+my @yearsValues;
+push (@years,"Seleccione");
 for (my $i =2005 ; $i < 2036; $i++){
 	push (@years,$i);
 }
 my $year=CGI::scrolling_list(   -name      => 'year',
 				-id	   => 'year',
                                 -values    => \@years,
-                                -defaults  => $year_Default,
+                                -defaults  => 0,
                                 -size      => 1,
                                 -onChange  =>'consultar()'
-                                 );
+                            );
 
-$template->param( 
-			year	  	 => $year,
-			branch           => $branch,
-		);
+$t_params->{'year'}= $year;
+$t_params->{'branch'}= $branch;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

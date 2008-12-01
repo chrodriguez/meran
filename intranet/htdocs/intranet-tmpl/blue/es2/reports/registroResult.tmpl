@@ -1,44 +1,44 @@
 
 <center>
 <p class="inputFontNormal"> 
-	<b>La cantidad de modificaciones hechas fueron: &nbsp;<!-- TMPL_VAR NAME=cant --></b>
+	<b>[% "La cantidad de modificaciones hechas fueron:" | i18n %] &nbsp;[% cant %]</b>
 </p><br>
 
-<!-- TMPL_VAR name="paginador" -->
+[% paginador %]
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr>
-		<td class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" title="Ordenar por usuario">Usuario</th>
-		<th class="tablaresultadoTitleClick" onclick="ordenar('fecha')" title="Ordenar por fecha">Fecha</th>
-		<th class="tablaresultadoTitleClick" onclick="ordenar('operacion')" title="Ordenar por operacion">Operaci&oacute;n</th>
-		<th class="tablaresultadoTitleClick" onclick="ordenar('tipo')" title="Ordenar por tipo">Tipo</th>
-		<th class="tablaresultadoTitleClick" onclick="ordenar('numero')" title="Ordenar por numero de documento">N&uacute;mero</th>
-		<th class="tablaresultadoTitle">Nota</th>
-		<th class="tablaresultadoTitle">Agregar nota</th>
-		<td class="tablaresultadoTitle" align="right" valign="top" width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('operacion')" title=[% "Ordenar por operacion" | i18n %]>[% "Operaci&oacute;n" | i18n %]</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>[% "Tipo" | i18n %]</th>
+		<th class="tablaresultadoTitleClick" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>[% "N&uacute;mero" | i18n %]</th>
+		<th class="tablaresultadoTitle">[% "Nota" | i18n %]</th>
+		<th class="tablaresultadoTitle">[% "Agregar nota" | i18n %]</th>
+		<td class="tablaresultadoTitle" align="right" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	
   	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
-  		<td> <!-- TMPL_VAR NAME=nomCompleto --> </td>
-  		<td> <!-- TMPL_VAR NAME=fecha --> </td>
-  		<td> <!-- TMPL_VAR NAME=operacion --> </td>
-  		<td> <!-- TMPL_VAR NAME=tipo --></td>
-		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=<!-- TMPL_VAR NAME=tipo -->&bib=<!-- TMPL_VAR NAME=numero -->"><!-- TMPL_VAR NAME=numero --></a></td>
+  		<td> [% nomCompleto %] </td>
+  		<td> [% fecha %] </td>
+  		<td> [% operacion %]</td>
+  		<td> [% tipo %]</td>
+		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% tipo %]&bib=[% numero %]">[% numero %]</a></td>
 		
   		<td> 
-			<textarea class="inputFontNormal" id="<!-- TMPL_VAR NAME=idModificacion -->" name="notas2" cols="20" rows="6"><!-- TMPL_VAR NAME=nota --></textarea>
+			<textarea class="inputFontNormal" id="[% idModificacion %]" name="notas2" cols="20" rows="6">[% nota %]</textarea>
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
   		<td> 
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Nota" title="Guardar Nota" onClick="nota('<!-- TMPL_VAR NAME=idModificacion -->')"> 
+			<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="nota('[% idModificacion %]')"> 
 		</td>
  		<td height=25 >&nbsp;</td>
  	</tr>
 	
-<!-- /TMPL_LOOP -->
+[% END %]
 
 </table>
 

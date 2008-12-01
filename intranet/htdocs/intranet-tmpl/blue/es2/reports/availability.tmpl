@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script language="javascript">
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -77,4 +77,4 @@ function consultar(){
 	<div id="result"></div>
 </center>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

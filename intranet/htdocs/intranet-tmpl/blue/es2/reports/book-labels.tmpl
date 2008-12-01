@@ -1,4 +1,4 @@
-
+[% USE HTML %]
 <script language="javascript">
 function hacerSubmit(){
 	document.cards.op.value='search';
@@ -6,27 +6,27 @@ function hacerSubmit(){
 	}
 function ordenar(orden){
 	
-	window.location.href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ini -->&orden="+orden+"&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->";
+	window.location.href="book-labels.pl?ini=[% ini %]&orden="+orden+"&op=search&barcode1=[% barcode1  %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]";
 	}
 function generarEtiquetas(){
-	document.cards.orden.value='<!-- TMPL_VAR NAME=orden  -->';
-	document.cards.barcode1.value='<!-- TMPL_VAR NAME=barcode1  -->';
-	document.cards.barcode2.value='<!-- TMPL_VAR NAME=barcode2  -->';
-	document.cards.bulk1.value='<!-- TMPL_VAR NAME=bulk1  -->';
-	document.cards.bulk2.value='<!-- TMPL_VAR NAME=bulk2  -->';
-	document.cards.bulkbegin.value='<!-- TMPL_VAR NAME=bulkbegin  -->';
-	document.cards.branch.value='<!-- TMPL_VAR NAME=branch  -->';
+	document.cards.orden.value='[% orden  %];
+	document.cards.barcode1.value='[% barcode1 %];
+	document.cards.barcode2.value='[% barcode2 %];
+	document.cards.bulk1.value='[% bulk1 %];
+	document.cards.bulk2.value='[% bulk2 %];
+	document.cards.bulkbegin.value='[% bulkbegin %];
+	document.cards.branch.value='[% branch %];
 
 	document.cards.op.value='pdf';
 	document.cards.submit();
 	}
 </script>
 
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Generar Etiquetas</td>
+		<td class="pagetitle" >[% "Generar Etiquetas" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -36,7 +36,7 @@ function generarEtiquetas(){
 
 <center>
 <form name="cards" action=/cgi-bin/koha/reports/book-labels.pl method=post >
-<input type='hidden' id='orden' name='orden' value='<!-- TMPL_VAR NAME=orden  -->'>
+<input type='hidden' id='orden' name='orden' value='[% orden %]'>
 <input type='hidden' id='op' name='op' value='search'>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr valign="top">
@@ -45,12 +45,17 @@ function generarEtiquetas(){
 	
 	<tr class="inputFontNormal">
 	<td colspan="3">
-	<b>Inventario:</b><br>
-	Desde:&nbsp; <input type='text' id='barcode1' name='barcode1' value='<!-- TMPL_VAR NAME=barcode1  -->'> 
-	Hasta:&nbsp; <input type='text' id='barcode2' name='barcode2' value='<!-- TMPL_VAR NAME=barcode2  -->'></td>
+	<b>[% "Inventario:" | i18n %]</b><br>
+	[% "Desde:" | i18n %]&nbsp; <input type='text' id='barcode1' name='barcode1' value='[% barcode1 %]'> 
+	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='barcode2' name='barcode2' value='[% barcode2 %]'></td>
 	<tr>
 	<td colspan="3">
-	<p class="inputFontNormal" align="left">El m&iacute;nimo inventario existente es: <b><!-- TMPL_VAR NAME=MINB --></b> y el m&aacute;ximo es: <b><!-- TMPL_VAR NAME=MAXB --></b>. </p>
+	<p class="inputFontNormal" align="left">
+            [% "El m&iacute;nimo inventario existente es:" | i18n %] 
+                    <b>[% MINB %]</b> 
+            [% "y el m&aacute;ximo es:" | i18n %] 
+                <b>[% MAXB %]</b>. 
+        </p>
 	</td>
 	</tr>
 
@@ -63,8 +68,8 @@ function generarEtiquetas(){
 <table border="0" cellspacing="0" cellpadding="0">
 <tr class="inputFontNormal">
 	 <td colspan="3">
-	 <b>Unidad de informaci&oacute;n:</b><br>
-	<!-- TMPL_VAR NAME=unidades  --></td>
+	 <b>[% "Unidad de informaci&oacute;n:" | i18n %]</b><br>
+	[% unidades %]</td>
 </tr>
 </table>
 
@@ -76,15 +81,15 @@ function generarEtiquetas(){
 	
 	<tr class="inputFontNormal">
 	<td colspan="3">
-	<b>Signatura Topogr&aacute;fica:</b><br>
+	<b>[% "Signatura Topogr&aacute;fica:" | i18n %]</b><br>
 	<br>
-	Desde:&nbsp; <input type='text' id='bulk1' name='bulk1' value='<!-- TMPL_VAR NAME=bulk1  -->'> 
-	Hasta:&nbsp; <input type='text' id='bulk2' name='bulk2' value='<!-- TMPL_VAR NAME=bulk2  -->'>
+	[% "Desde:" | i18n %]&nbsp; <input type='text' id='bulk1' name='bulk1' value='[% bulk1 %]'> 
+	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='bulk2' name='bulk2' value='[% bulk2 %]'>
 	</td>
 	</tr>
 	<tr>
 	<td colspan="3">
-	<p class="inputFontNormal" align="left">La m&iacute;nima signatura existente es: <b><!-- TMPL_VAR NAME=MINS --></b> y la m&aacute;xima es: <b><!-- TMPL_VAR NAME=MAXS --></b>. </p>
+	<p class="inputFontNormal" align="left">[% "La m&iacute;nima signatura existente es:" | i18n %] <b>[% MINS %]</b> [% "y la m&aacute;xima es:" | i18n %] <b>[% MAXS %]</b>. </p>
 	</td>
 	</tr>
 </table>
@@ -97,7 +102,7 @@ function generarEtiquetas(){
 <tr class="inputFontNormal">
 <td colspan="3">
 <br><b>O</b><br>
-Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!-- TMPL_VAR NAME=bulkbegin  -->'>
+[% "Comienza con:" | i18n %]&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='[% bulkbegin %]'>
 </td>
 </tr>
 </table>
@@ -109,28 +114,30 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 
 </table>
 <br>
-<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
+<input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
 </form>
 <br>
 
 <table border="0" cellspacing="0" cellpadding="0" width="80%">
 <tr class="inputFontNormal">
 <td>
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=ant -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
+[% IF ok2 %]
+	<a class="inputFontNormal" href="book-labels.pl?ini=[% ant %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/ant.gif border=0></a>
+[% END %]
 
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=number -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->" > <u><!-- TMPL_VAR name=number --></u></a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+[% FOREACH numeros %]
+	[% IF actual %]
+		<a class="inputFontNormal" href="book-labels.pl?ini=[% number %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]" > 
+                    <u>[% number %]</u>
+                </a>
+	[% ELSE %]
+        	<u>[% number %]</u>
+	[% END %]
+[% END %]
 
-<!-- TMPL_IF NAME="ok" -->
-		<a class="inputFontNormal" href="book-labels.pl?ini=<!-- TMPL_VAR NAME=sig -->&orden=<!-- TMPL_VAR NAME=orden -->&op=search&barcode1=<!-- TMPL_VAR NAME=barcode1 -->&barcode2=<!-- TMPL_VAR NAME=barcode2 -->&branch=<!-- TMPL_VAR NAME=branch -->&bulk1=<!-- TMPL_VAR NAME=bulk1 -->&bulk2=<!-- TMPL_VAR NAME=bulk2 -->&bulkbegin=<!-- TMPL_VAR NAME=bulkbegin -->"><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
+[% IF ok %]
+	<a class="inputFontNormal" href="book-labels.pl?ini=[% sig %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/next.gif border=0></a>
+[% END %]
 
 </td>
 </tr>
@@ -139,48 +146,54 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 
 <table border="0" cellspacing="0" cellpadding="0"  width="90%" align="center">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td> 
+		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td> 
 
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('barcode')">Nro. de Inventario</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('completo')">Autor</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('titulo')">T&iacute;tulo</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('number')">Edic.</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('publisher')">Editor</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('anio_publicacion')">A&ntilde;o</a></td>
-		<td><a class="inputFontNormal" href="#" onclick="ordenar('signatura_topografica')">Signatura Topogr&aacute;fica</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('barcode')">[% "Nro. de Inventario" | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('completo')">[% "Autor" | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('titulo')">[% "T&iacute;tulo" | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('number')">[% "Edic." | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('publisher')">[% "Editor" | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('anio_publicacion')">[% "A&ntilde;o" | i18n %]</a></td>
+		<td><a class="inputFontNormal" href="#" onclick="ordenar('signatura_topografica')">[% "Signatura Topogr&aacute;fica" | i18n %]</a></td>
 
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td width="1%" align="right" valign="top">
+                    <img src="[% themelang %]/images/derecha.png">
+                </td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-<tr>
-        <td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-        <td  align=left class="<!-- TMPL_VAR Name="clase" -->" >
-		<!-- TMPL_VAR Name="barcode" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="completo" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-<a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="titulo" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle"  --><!-- /TMPL_IF --></a>
+[% FOREACH RESULTSLOOP %]
+    <tr>
+            <td class="[% clase %] width="1%">&nbsp;</td>
+            <td  align=left class="[% clase %]" >
+                    [% barcode %]
+            </td>
+            <td class="[% clase %]  align="center">
+                    [% completo %]
+            </td>
+            <td class="[% clase %]  align="center">
+                <a class="inputFontNormal" href=/cgi-bin/koha/detail.pl?type=intra&bib=[% HTML.escape(biblionumber) %][% HTML.escape(titulo) %]
+                        [% IF unititle %]
+                            :&nbsp;[% unititle %]
+                        [% END %]
+                </a>
+    
+            </td>
+            <td class="[% clase %]  align="center">
+                    [% number %]
+            </td>
+            <td class="[% clase %]  align="center">
+                    [% publisher %]
+            </td>
+            <td class="[% clase %]  align="center">
+                    [% anio_publicacion %]
+            </td>
+            <td class="[% clase %]" align="center">
+                    [% signatura_topografica %]
+            </td>
+            <td class="[% clase %] width="1%">&nbsp;</td>
+    </tr>
 
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="number" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="publisher" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->  align="center">
-		<!-- TMPL_VAR NAME="anio_publicacion" --> 
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" -->" align="center">
-		<!-- TMPL_VAR Name="signatura_topografica" -->
-	</td>
-	<td class="<!-- TMPL_VAR Name="clase" --> width="1%">&nbsp;</td>
-</tr>
-
-<!-- /TMPL_LOOP -->
+[% END %]
 
 
 
@@ -192,18 +205,18 @@ Comienza con:&nbsp; <input type='text' id='bulkbegin' name='bulkbegin' value='<!
 
 <tr>
 <td colspan="9">
-<p class="inputFontNormal" align="left">La cantidad de ejemplares es: <b><!-- TMPL_VAR NAME=cantidad --></b></p>
+<p class="inputFontNormal" align="left">[% "La cantidad de ejemplares es:" | i18n %] <b>[% cantidad %]</b></p>
 </td>
 </tr>
 
 </table>
 
 <p>
-<a href="#" onClick="generarEtiquetas();" class="inputFontNormal" onMouseOut="swap('etiquetas','<!-- TMPL_VAR NAME='themelang' -->/images/etiquetas.png')" onMouseOver="swap('etiquetas','<!-- TMPL_VAR NAME='themelang' -->/images/etiquetasbis.png')" >
-<input  name="etiquetas" id="etiquetas" alt="Generar etiquetas" type="image" value="Generar etiquetas"  src="<!-- TMPL_VAR NAME='themelang' -->/images/etiquetas.png" border="0" title="Generar etiquetas" >
+<a href="#" onClick="generarEtiquetas();" class="inputFontNormal" onMouseOut="swap('etiquetas','[% themelang %]/images/etiquetas.png')" onMouseOver="swap('etiquetas','[% themelang %]/images/etiquetasbis.png')" >
+<input  name="etiquetas" id="etiquetas" alt=[% "Generar etiquetas" | i18n %] type="image" value= [% "Generar etiquetas" | i18n %]  src="[% themelang %]/images/etiquetas.png" border="0" title=[% "Generar etiquetas" | i18n %] >
 </a>
 
 
 </p>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

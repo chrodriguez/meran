@@ -1,56 +1,80 @@
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<th>Mes</th>
-		<th>Prestamos</th>
-		<th>Renovaciones</th>
-		<th>Devoluciones</th>
-		<th>Domiciliarios</th>
-		<th>Fotocopia</th> 
-		<th>Sala de Lectura</th>
-		<th>Prestamos Especiales</th>
-		<td width="1%" align="rigth" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		<td width="1%" align="left"  valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+		<th>[% "Mes" | i18n %]</th>
+		<th>[% "Prestamos" | i18n %]</th>
+		<th>[% "Renovaciones" | i18n %]</th>
+		<th>[% "Devoluciones" | i18n %]</th>
+		<th>[% "Domiciliarios" | i18n %]</th>
+		<th>[% "Fotocopia" | i18n %]</th> 
+		<th>[% "Sala de Lectura" | i18n %]</th>
+		<th>[% "Prestamos Especiales" | i18n %]</th>
+		<td width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-<!-- TMPL_LOOP NAME="resultsloop" -->
+[% FOREACH resultsloop %]
 	<tr align='center'>
 		<td height=25>&nbsp;</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME=mes --> <!-- TMPL_VAR NAME=mes -->
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF-->
+			[% IF mes %]
+                            [% mes %]
+			[% ELSE %]
+                                -- 
+                        [% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME=cantTotal --> <!-- TMPL_VAR NAME=cantTotal --> 
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF--> 
+			[% IF cantTotal %]
+                              [% cantTotal %]
+			[% ELSE %]
+                                -- 
+                        [% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME=renovaciones --> <!-- TMPL_VAR NAME=renovaciones --> 
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF--> 
+			[% IF renovaciones %] 
+                            [% renovaciones %]
+			[% ELSE %]
+                            -- 
+                        [% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			<!-- TMPL_IF NAME=devoluciones --> <!-- TMPL_VAR NAME=devoluciones --> 
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF--> 
+			[% IF devoluciones %] 
+                            [% devoluciones %]
+			[% ELSE %]
+                             -- 
+                        [% END %]
 		</td>
 		<td class="inputFontNormal">
-			<!-- TMPL_IF NAME="DO"--> <!-- TMPL_VAR NAME="DO" -->
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF-->
+			[% IF DO %] 
+                            [% DO %]
+			[% ELSE %]
+                            -- 
+                        [% END %]
 		</td> 
 		<td class="inputFontNormal">
-			<!-- TMPL_IF NAME="FO" --><!-- TMPL_VAR NAME="FO" -->
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF-->
+			[% IF FO %]
+                            [% FO %]
+			[% ELSE %]
+                            -- 
+                        [% END %]
 		</td> 
 		<td class="inputFontNormal">
-			<!-- TMPL_IF NAME="SA" --><!-- TMPL_VAR NAME="SA" -->
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF-->
+			[% IF SA %]
+                            [% SA %]
+			[% ELSE %]
+                            -- 
+                        [% END %]
 		</td>
 		<td class="inputFontNormal">
-			<!-- TMPL_IF NAME="ES" --><!-- TMPL_VAR NAME="ES" -->
-			<!-- TMPL_ELSE--> -- <!-- /TMPL_IF-->
+			[% IF ES %]
+                             [% ES %]
+			[% ELSE %]
+                             -- 
+                        [% END %]
 		</td>
 		<td height=25 >&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 	<tr valign=bottom>
 	<td class="lineafinaltabla"  align="left" colspan="9"></td>
 	</tr>

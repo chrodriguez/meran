@@ -35,14 +35,15 @@ my @results=();
 else
 {
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/users-cards.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/users-cards.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
+#Por los branches
 
 #Por los braches
 my @branches;
@@ -98,12 +99,10 @@ my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
                                         -size      => 1,
 					);
 
-$template->param(
-		unidades => $CGIbranch,
-		categories => $CGIcategories,
-		regulares=>$CGIregular
-		);
+$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'categories'}= $CGIcategories;
+$t_params->{'regulares'}=$CGIregular;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }

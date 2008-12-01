@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -46,7 +46,7 @@ function consultar(){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Reservas</td>
+		<td class="pagetitle" >[% "Reservas" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -59,31 +59,31 @@ function consultar(){
 <table border=0 cellspacing=0 cellpadding=2>
 
 	<tr class="inputFontNormal">
-		<td>    Seleccione el tipo de reserva:
+		<td>    [% "Seleccione el tipo de reserva:" | i18n %]
 	
 		</td>
 
 		<td>
 			<select name="tipoReserva" id="tipoReserva">
-				<option selected="selected" value="EJ" id="EJ">Por ejemplar</option>
-				<option value="GR" id="GR">Por grupo</option>
-				<option value="TO" id="TO">Todas</option>
+				<option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
+				<option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
+				<option value="TO" id="TO">[% "Todas" | i18n %]</option>
 			</select>
 		</td>
 	</tr>
 	<tr class="inputFontNormal">
 	
 		<td class="inputFontNormal">
-			<br>Seleccione una unidad de informaci&oacute;n:
+			<br>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]
 		</td>
 		<td class="inputFontNormal">
-			<br><!-- TMPL_VAR NAME=unidades  -->
+			<br>[% unidades %]
 		</td>
 	</tr>
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="2">
 			<br>
-			<input type="image" onClick="consultar()"  src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border="0">
+			<input type="image" onClick="consultar()"  src="][% themelang %]/images/boton-buscar.png" border="0">
 		</td>
 	</tr>
 </table>
@@ -92,4 +92,4 @@ function consultar(){
 
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

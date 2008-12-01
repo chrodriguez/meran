@@ -1,15 +1,17 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
 <script>
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url= "/cgi-bin/koha/reports/estadistica_AnualResult.pl";
-	objAH.year= $("#year").val();
-	//se envia la consulta
-	objAH.sendToServer();
+        if ( !(isNaN($("#year").val())) ){
+            objAH=new AjaxHelper(updateInfo);
+            objAH.url= "/cgi-bin/koha/reports/estadistica_AnualResult.pl";
+            objAH.year= $("#year").val();
+            //se envia la consulta
+            objAH.sendToServer();
+        }
 }
 
 function updateInfo(responseText){
@@ -21,7 +23,7 @@ function updateInfo(responseText){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Actividades anuales</td>
+		<td class="pagetitle" >[% "Actividades anuales" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -33,8 +35,8 @@ function updateInfo(responseText){
 
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td class="inputFontNormal">Seleccione un a&ntilde;o:  </td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="year" --></td>
+		<td class="inputFontNormal">[% "Seleccione un a&ntilde;o:  " | i18n %]</td>
+		<td class="inputFontNormal">[% year %]</td>
 	</tr>
 </table>
 
@@ -46,4 +48,4 @@ function updateInfo(responseText){
 </center>
 
 <br><br>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

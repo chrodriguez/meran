@@ -27,14 +27,14 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "reports/registro.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                template_name => "reports/registro.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+			    });
 
 
 ###Marca la Fecha de Hoy
@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie)
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
-$template->param( todaydate => format_date($today,$dateformat));
+$t_params->{'todaydate'}= format_date($today,$dateformat);
                                                                                 
 ###
 
@@ -67,6 +67,7 @@ foreach my $userkey (keys %$users) {
         $select_users{$userkey} = $users->{$userkey}->{'nomCompleto'};
 }
 
+# FIXME hacer generarComboDeUsuarios
 my $CGIuser=CGI::scrolling_list(        -name      => 'user',
                                         -id        => 'user',
                                         -values    => \@select_user,
@@ -77,8 +78,6 @@ my $CGIuser=CGI::scrolling_list(        -name      => 'user',
 #fin select de usuarios
 
 
-$template->param( 
-			selectusuarios   => $CGIuser,
-		);
+$t_params->{'selectusuarios'}= $CGIuser;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
