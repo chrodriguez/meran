@@ -29,7 +29,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/userEst.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -67,16 +67,15 @@ my $barras=&userCategHBars($branch,$cantidad, @resultsdata);
 
 
 #Generar planilla.
-my $planilla=generar_planilla_usuario(\@resultsdata,$loggedinuser);
+my $planilla=generar_planilla_usuario(\@resultsdata,$session->{'loggedinuser'});
 
-$template->param( 
-			resultsloop      => \@resultsdata,
-			unidades         => $CGIbranch,
-			cantidad         => $cantidad,
-			branch           => $branch,
-			name		 => $planilla,
-			barras		 => $barras,
-			torta		 => $torta,
-		);
+$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'unidades'}=$CGIbranch;
+$t_params->{'cantidad'}=$cantidad;
+$t_params->{'branch'}=$branch;
+$t_params->{'planilla'}=$planilla;
+$t_params->{'barras'}=$barras;
+$t_params->{'torta'}=$torta;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+

@@ -1,7 +1,7 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script>
-<!-- TMPL_INCLUDE NAME="util.js" -->
+[% INCLUDE "util.js" %]
 function hacerSubmit(){
         document.branches.submit();
 }
@@ -15,8 +15,7 @@ $(document).ready( function() {
 <table border=0 cellspacing=0 cellpadding=2>
 	<th>Seleccione una unidad de informaci&oacute;n :</th>
 	<th>
-		<form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
-        	<!-- TMPL_VAR NAME=unidades  -->
+		<form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >[% unidades %]
 		</form>
 	</th>
 </table>
@@ -26,27 +25,27 @@ $(document).ready( function() {
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="40%">
 	<tr class="tablaresultadoTitle">
- 		<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+ 		<td width="1%" align="right"><img src="[% themelang %]/images/izquierda.png"></td>
 		<th>Tipos de documentos</th>
 		<th>Cantidad</th>
- 		<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+ 		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
   	<tr align='center' class="inputFontNormal">
    		<td height=25>&nbsp;</td>	
-  		<td> <!-- TMPL_VAR NAME=description --> </td>
-  		<td> <!-- TMPL_VAR NAME=cant --> </td>
+  		<td> [% description %]</td>
+  		<td> [% cant %] </td>
  		<td height=25>&nbsp;</td>
  	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <br><br>
 
 				<!-- Scripts con los graficos en flash -->
-<!-- TMPL_VAR NAME='torta'  -->
+[% torta %]
 <br>
-<!-- TMPL_VAR NAME='barras'  -->
+[% barras %]
 <br>
 </center>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

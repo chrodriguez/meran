@@ -28,7 +28,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/avail_year.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -70,14 +70,16 @@ if($input->param('fin')){$fin=$input->param('fin');}
 my ($cantidad,@resultsdata)= availYear($branch,$ini,$fin); 
 
 my $dateformat = C4::Date::get_date_format();
-$template->param( 
-			resultsloop      => \@resultsdata,
-			unidades         => $CGIbranch,
-			cantidad         => $cantidad,
-			branch           => $branch,
-			ini              => $ini,
-                        fin              => $fin,
-			namepng		 => &format_date_in_iso($ini,$dateformat).&format_date_in_iso($fin,$dateformat)
-		);
 
-output_html_with_http_headers $input, $cookie, $template->output;
+$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'unidades'}=$CGIbranch;
+$t_params->{'cantidad'}=$cantidad;
+$t_params->{'branch'}=$branch;
+$t_params->{'ini'}=$ini;
+$t_params->{'fin'}=$fin;
+$t_params->{'namepng'}=&format_date_in_iso($ini,$dateformat).&format_date_in_iso($fin,$dateformat);
+
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+
+

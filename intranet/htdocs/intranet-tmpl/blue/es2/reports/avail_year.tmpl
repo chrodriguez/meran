@@ -1,8 +1,7 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+[% INCLUDE "intranet-top.inc" %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 <script type="text/javascript">
-
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
+[% INCLUDE "epoch_classes.js" %]
 
 /*You can also place this code in a separate file and link to it like epoch_classes.js*/
         var dp_ini,dp_fin;      
@@ -27,15 +26,15 @@ function hacerSubmit(){
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
 <tr>
 <td class="inputFontNormal">Seleccione una unidad de informaci&oacute;n :</td>
-<td class="inputFontNormal"><!-- TMPL_VAR NAME=unidades  --></td>
+<td class="inputFontNormal">[% unidades %]</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td class="inputFontNormal">Seleccione una fecha de inicio:</td>
 <td class="inputFontNormal"> 
-		<input id="ini" name="ini" value="<!-- TMPL_VAR NAME='ini' -->">
+		<input id="ini" name="ini" value="[% ini %]">
 	     	<a href="javascript:dp_ini.toggle();">
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
 		</a>
 </td>
 <td>&nbsp;</td>
@@ -43,13 +42,13 @@ function hacerSubmit(){
 <tr>
 <td class="inputFontNormal">Seleccione una fecha de Fin: </td>
 <td class="inputFontNormal"> 
-		<input  id="fin" name="fin" value="<!-- TMPL_VAR NAME='fin' -->">
+		<input  id="fin" name="fin" value="[% fin %]">
 		<a href="javascript:dp_fin.toggle();">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
+			<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
 		</a>
 </td>
 <td class="inputFontNormal"> 
-	<input type="image" name="consulta" onClick="branches.submit()" src="<!-- TMPL_VAR NAME='themelang' -->/images/generarListado.png">
+	<input type="image" name="consulta" onClick="branches.submit()" src="[% themelang %]/images/generarListado.png">
 </td>	
    </tr>
 <tr><td colspan="3">&nbsp;</td></tr>
@@ -58,28 +57,27 @@ function hacerSubmit(){
 <br>
 <table border=0 cellspacing=0 cellpadding=0 width="100%"  align="left">
 <tr class="tablaresultadoTitle">
-<td width="1%" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png"></td>
+<td width="1%" align="right"><img src="[% themelang %]/images/izquierda.png"></td>
 <td>Mes</td>
 <td>A&ntilde;o</td>
 <td>Disponibilidad</td>
 <td>Cantidad</td>
-<td width="1%"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
+<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 </tr>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
   <tr align='center'>
-  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
-  <td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=mes --> </td>
-  <td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=year --> </td>
-  <td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=avail --> </td>
-  <td class="<!-- TMPL_VAR NAME="clase"-->"> <!-- TMPL_VAR NAME=cantidad --> </td>
+  <td height=25 class="[% clase %]">&nbsp;</td>
+  <td class="[% clase %]"> [% mes %] </td>
+  <td class="[% clase %]"> [% year %] </td>
+  <td class="[% clase %]"> [% avail %] </td>
+  <td class="[% clase %]"> [% cantidad %] </td>
   <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
   </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 </form>
 
 <br><br>
-<!--   <img src="<!-- TMPL_VAR NAME='themelang' -->/images/stats/avail<!-- TMPL_VAR NAME='branch' -->.png" alt="" border=0 > -->
-<!-- <br> -->
 <br>
+[% INCLUDE "intranet-bottom.inc" %]
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
