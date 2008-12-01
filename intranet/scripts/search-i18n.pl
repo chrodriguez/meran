@@ -21,7 +21,7 @@ sub process
 
         while ( $line = <FILE> ) {
 
-	 if ($line =~ /(\[%)\s*[" ']*\s*(.*)\s*[" ']*\s*(\| i18n %])/)
+	 if ($line =~ /(\[%)\s*["]*\s*([^"]*)\s*["]*\s*(\|\s*i18n\s*%])/)
 	{
 	   my $po = new Locale::PO();
 	   $po->msgid("$2");
@@ -34,9 +34,11 @@ sub process
         }
         close FILE;
 
-	#Salvamos el po
-	Locale::PO->save_file_fromarray($output_po,\@outLines);
+    #Salvamos el po
+    open( OUT, ">>$output_po" ) or return undef;
+    foreach (@outLines)  { print OUT $_->dump(); }
+    close OUT;
 
-       undef( @outLines );
+    undef( @outLines );
     }
 }
