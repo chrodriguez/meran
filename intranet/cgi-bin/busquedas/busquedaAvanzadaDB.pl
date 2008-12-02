@@ -85,67 +85,63 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $accion= $obj->{'accion'};
 
 if($accion eq "buscar"){
-	my ($template, $loggedinuser, $cookie)
-    		= get_template_and_user({template_name => "busquedas/busquedaResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+                my ($template, $session, $t_params) = get_template_and_user ({
+                                                                template_name	=> 'busquedas/busquedaResult.tmpl',
+                                                                query		=> $input,
+                                                                type		=> "intranet",
+                                                                authnotrequired	=> 0,
+                                                                flagsrequired	=> { circulate => 1 },
+                                                });
+        
+                my $nivel1=parsearString($obj->{'nivel1'},0);
+                my $nivel2=parsearString($obj->{'nivel2'},0);
+                my $nivel3=parsearString($obj->{'nivel3'},0);
+                my $nivel1rep=parsearString($obj->{'nivel1rep'},"n1r");
+                my $nivel2rep=parsearString($obj->{'nivel2rep'},"n2r");
+                my $nivel3rep=parsearString($obj->{'nivel3rep'},"n3r");
+                my $operador=$obj->{'operador'};
+        
+                my $ini=$obj->{'ini'};
+                my $orden=$obj->{'orden'}||'titulo';
+                my $funcion=$obj->{'funcion'};
+                my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+        
+                my ($cantidad,$resultId1)= C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR);
+        
+                C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+        
+        my @resultsarray;
+        my %result;
+        my $nivel1;
+        my $autor;
+        my $id1;
+        for (my $i=0;$i<scalar(@$resultId1);$i++){
+                $id1=$resultId1->[$i];
+                $result{$i}->{'id1'}= $id1;
+                $nivel1= &buscarNivel1($id1);
+                $result{$i}->{'titulo'}= $nivel1->{'titulo'};
+                $autor= getautor($nivel1->{'autor'});
+                $result{$i}->{'idAutor'}=$autor->{'id'};
+                $result{$i}->{'nomCompleto'}= $autor->{'completo'};
+                my $ediciones=obtenerGrupos($id1, 'ALL','INTRA');
+                $result{$i}->{'grupos'}=$ediciones;
+                my @disponibilidad=&obtenerDisponibilidadTotal($id1, 'ALL');
+                $result{$i}->{'disponibilidad'}=\@disponibilidad;
+        }
+        
+        
+        my @keys=keys %result;
+        @keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys; #PARA EL ORDEN
+        foreach my $row (@keys){
+                push (@resultsarray, $result{$row});
+        }
+        
+        $t_params->{'SEARCH_RESULTS'}= \@resultsarray;
+        
+        
+        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
-	my $nivel1=parsearString($obj->{'nivel1'},0);
-	my $nivel2=parsearString($obj->{'nivel2'},0);
-	my $nivel3=parsearString($obj->{'nivel3'},0);
-	my $nivel1rep=parsearString($obj->{'nivel1rep'},"n1r");
-	my $nivel2rep=parsearString($obj->{'nivel2rep'},"n2r");
-	my $nivel3rep=parsearString($obj->{'nivel3rep'},"n3r");
-	my $operador=$obj->{'operador'};
-
-	my $ini=$obj->{'ini'};
-	my $orden=$obj->{'orden'}||'titulo';
-	my $funcion=$obj->{'funcion'};
-	my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
-	my ($cantidad,$resultId1)= C4::AR::Busquedas::busquedaAvanzada($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR);
-
-	C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
-
-my @resultsarray;
-my %result;
-my $nivel1;
-my $autor;
-my $id1;
-for (my $i=0;$i<scalar(@$resultId1);$i++){
-	$id1=$resultId1->[$i];
-	$result{$i}->{'id1'}= $id1;
-	$nivel1= &buscarNivel1($id1);
-	$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-	$autor= getautor($nivel1->{'autor'});
-	$result{$i}->{'idAutor'}=$autor->{'id'};
-	$result{$i}->{'nomCompleto'}= $autor->{'completo'};
-	my $ediciones=obtenerGrupos($id1, 'ALL','INTRA');
-	$result{$i}->{'grupos'}=$ediciones;
-	my @disponibilidad=&obtenerDisponibilidadTotal($id1, 'ALL');
-	$result{$i}->{'disponibilidad'}=\@disponibilidad;
-}
-
-
-my @keys=keys %result;
-@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys; #PARA EL ORDEN
-foreach my $row (@keys){
-	push (@resultsarray, $result{$row});
-}
-
-$template->param(
-		SEARCH_RESULTS => \@resultsarray,
-		);
-
-
-output_html_with_http_headers $input, $cookie, $template->output;
-
-}
-else{
+}else{
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ catalogue => 1});
 	
 	my $string="";

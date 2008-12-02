@@ -1,8 +1,8 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+[% INCLUDE "popups/helpCamposMARC.inc" %]
 
 <script language="javascript" type="text/javascript">
 
@@ -33,7 +33,7 @@ function busquedaReAvanzada(){
 		objAH.sendToServer();
 	}
 	else{
-		alert("No ingreso datos para consultar");
+		alert([% "No ingreso datos para consultar" | i18n %]);
 	}
 
 }
@@ -239,7 +239,7 @@ $(document).ready(function() {
 
 
 <div id="busqueda">
-	<span class="pagetitle">B&uacute;squeda Experta en el cat&aacute;logo</span>
+	<span class="pagetitle">[% "B&uacute;squeda Experta en el cat&aacute;logo" | i18n %]</span>
 	<br>
 	<div class="formElemets">
 		<ul class="inputFontNormal">
@@ -250,26 +250,28 @@ $(document).ready(function() {
 			
 			<li>
         		<div style="float:left;">
-			Campo: <!-- TMPL_VAR name="mapeo" -->
-			Condici&oacute;n: <select id="cond1">
-						<option value="=">Igual</option>
-						<option value="<>">Distinto</option>
-						<option value=">">Mayor</option>
-						<option value="<">Menor</option>
-						<option value="Empieza">Empieza</option>
-						<option value="Contiene">Contiene</option>
-						<option value="Finaliza">Finaliza</option>
+			[% "Campo:" | i18n %] [% mapeo %]
+			[% "Condici&oacute;n:" | i18n %]
+                                         <select id="cond1">
+						<option value="=">[% "Igual" | i18n %]</option>
+						<option value="<>">[% "Distinto" | i18n %]</option>
+						<option value=">">[% "Mayor" | i18n %]</option>
+						<option value="<">[% "Menor" | i18n %]</option>
+						<option value="Empieza">[% "Empieza" | i18n %]</option>
+						<option value="Contiene">[% "Contiene" | i18n %]</option>
+						<option value="Finaliza">[% "Finaliza" | i18n %]</option>
 					  </select>
 			</div>
 			<div id="div1" style="float:left;">
-				&nbsp;Valor: <input type="text"  id="valor1">
+				&nbsp;[% "Valor:" | i18n %] <input type="text"  id="valor1">
 			</div>
 			&nbsp;<input type="button" id="boton1" value="+" onClick="agregarConsulta('primero')">
 			</li>
 			
 			<li>
-        		Campo Marc: <select id="campoX" onChange="seleccionCampoX()">
-					<option value="-1">Elegir</option>
+        		[% "Campo Marc:" | i18n %]
+                                     <select id="campoX" onChange="seleccionCampoX()">
+					<option value="-1">[% "Elegir" | i18n %]</option>
 					<option value="0">0XX</option>
 					<option value="1">1XX</option>
 					<option value="2">2XX</option>
@@ -282,19 +284,19 @@ $(document).ready(function() {
 					<option value="9">9XX</option>
 				     </select>
 				     <select id="campo" onChange="seleccionCampo()">
-					<option value="-1">Elegir</option>
+					<option value="-1">[% "Elegir" | i18n %]</option>
 				     </select>
 				     <select id="subcampo">
-					<option value="-1">Elegir</option>
+					<option value="-1">[% "Elegir" | i18n %]</option>
 				     </select>
 			Condici&oacute;n: <select id="cond2">
-						<option value="=">Igual</option>
-						<option value="<>">Distinto</option>
-						<option value=">">Mayor</option>
-						<option value="<">Menor</option>
-						<option value="Empieza">Empieza</option>
-						<option value="Contiene">Contiene</option>
-						<option value="Finaliza">Finaliza</option>
+						<option value="=">[% "Igual" | i18n %]</option>
+						<option value="<>">[% "Distinto" | i18n %]</option>
+						<option value=">">[% "Mayor" | i18n %]</option>
+						<option value="<">[% "Menor" | i18n %]</option>
+						<option value=[% "Empieza" | i18n %]>[% "Empieza" | i18n %]</option>
+						<option value=[% "Contiene" | i18n %]>[% "Contiene" | i18n %]</option>
+						<option value=[% "Finaliza" | i18n %]>[% "Finaliza" | i18n %]</option>
 					  </select>
 			Valor: <input type="text"  id="valor2">
 			<input type="button"  value="+" onClick="agregarConsulta('segundo')">
@@ -305,7 +307,7 @@ $(document).ready(function() {
 		
 		<ul class="inputFontNormal">
 			<li>
-				Consulta: <br>
+				[% "Consulta:" | i18n %] <br>
 				<textarea id="consulta" cols="96" rows="7" readonly="readonly"></textarea>
 			</li>
 		</ul>
@@ -313,8 +315,8 @@ $(document).ready(function() {
 		<ul>
 			<li>
 			<input type="hidden" name="type" value="intra">
-			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="busquedaReAvanzada()">
-			<input type="image" alt="Limpiar"  src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" onClick="limpiar()">
+			<input type="image" alt="Buscar"  src="[% themelang %]/images/boton-buscar.png" onClick="busquedaReAvanzada()">
+			<input type="image" alt="Limpiar"  src="[% themelang %]/images/borrar2.png" onClick="limpiar()">
 			</li>
 		</ul>
 		</div>
@@ -332,4 +334,4 @@ $(document).ready(function() {
 
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

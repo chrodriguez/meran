@@ -1,5 +1,5 @@
 
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -308,7 +308,7 @@ $(document).ready(function() {
 </div>
 
 <div id="filtrosBusqueda">
-	<span class="pagetitle">B&uacute;squeda Avanzada en el cat&aacute;logo</span>
+	<span class="pagetitle">[% "B&uacute;squeda Avanzada en el cat&aacute;logo" | i18n %]</span>
 	<br>
 	<div class="formElemets">
 		<table width="70%" height="88%" valign="top"  border="0" align="center" cellpadding="0" cellspacing="0" >
@@ -316,7 +316,7 @@ $(document).ready(function() {
 		<td  valign="top"  align="right"  width="30%">
 		<ul id="simple">
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>B&uacute;squeda combinada</b><br>
+			<b>[% "B&uacute;squeda combinada" | i18n %]</b><br>
                 	<input type="text" id="keyword" size="25" class="inputFontNormal">
 			<p valign="top" align="right">&nbsp;</p>
 			</li>
@@ -327,12 +327,12 @@ $(document).ready(function() {
 			</li>
 			
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    			<b>B&uacute;squeda por diccionario</b><br>
+    			<b>[% "B&uacute;squeda por diccionario" | i18n %]</b><br>
          		<input class="inputFontNormal" type="text" size="25" id="dictionary">
 			</li>		
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>C&oacute;digo de barras</b><br>
+			<b>[% "C&oacute;digo de barras" | i18n %]</b><br>
 			<input class="inputFontNormal" type="text" size="25" id="codBarra">
 			</li>
 
@@ -342,7 +342,7 @@ $(document).ready(function() {
 			</li>
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>Estantes Virtuales</b><br>
+			<b>[% "Estantes Virtuales" | i18n %]</b><br>
 			<input class="inputFontNormal" type="text" size="25" id="estante">
 			</li>
 
@@ -353,16 +353,18 @@ $(document).ready(function() {
 		<ul id="combinada">
 			
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-        		<b>Tipo de documento</b> <br>
-			<!-- TMPL_VAR name="comboItemTypes" -->
+        		<b>[% "Tipo de documento" | i18n %]</b> <br>
+        			[% comboItemTypes %]
 			</li>
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
 			<b>T&iacute;tulo</b><br>
 			<input class="inputFontNormal" type="text"  size="25" id="titulo">
 			<p valign="top" align="right">
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value=normal checked>Normal
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value=exacto>Exacto
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="normal" checked>
+                                [% "Normal" | i18n %]
+			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="exacto">
+                                [% "Exacto" | i18n %]
 			</p>
 			</li>
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
@@ -371,7 +373,7 @@ $(document).ready(function() {
 			</li>
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>Signatura Topogr&aacute;fica</b><br>
+			<b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
 			<input class="inputFontNormal" type="text" size="25" id="signatura">
 			</li>
 	         	
@@ -384,9 +386,9 @@ $(document).ready(function() {
 		<ul>
 			<li>
 			<input type="hidden" name="type" value="intra">
-			<input type="image" alt="Buscar"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png" onClick="buscar('');">
+			<input type="image" alt="Buscar"  src="[% themelang %]/images/boton-buscar.png" onClick="buscar('');">
 
-			<input type="image"   src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/vertodos.png" onClick="mostrarEstantes();" >
+			<input type="image"   src="[% themelang %]/images/vertodos.png" onClick="mostrarEstantes();" >
 		
 			</li>
 		</ul>

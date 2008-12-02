@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/seleccionCamposMarc.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/autocompletables.js"></script>
@@ -6,7 +6,7 @@
 
 <link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+[% INCLUDE "popups/helpCamposMARC.inc" %]
 
 <script>
 
@@ -183,7 +183,7 @@ function modNivel2(id1,id2){
 		
 	}
 	else{
-		alert("Por favor complete los campos del formulario que son obligatorios");
+		alert([% "Por favor complete los campos del formulario que son obligatorios" | i18n %]);
 	}
 }
 
@@ -248,7 +248,7 @@ function agregarNivel3(id1,id2){
 		
 	}
 	else{
-		alert("Por favor complete los campos del formulario que son obligatorios");
+		alert([% "Por favor complete los campos del formulario que son obligatorios" | i18n %]);
 	}
 }
 
@@ -300,7 +300,7 @@ function guardarItem(paso){
 		$("#result").html(""); //limpia la div result (agregar campo temporal)
 	}
 	else{
-		alert("Por favor complete los campos del formulario que son obligatorios");
+		alert([% "Por favor complete los campos del formulario que son obligatorios" | i18n %]);
 	}
 }
 
@@ -379,9 +379,9 @@ $(document).ready( function() {
 
 
 
-<p class="pagetitle" >Agregar Documento</p>
+<p class="pagetitle" >[% "Agregar Documento" | i18n %]</p>
 
-Esquema de ingreso de datos tipo: <!-- TMPL_VAR NAME="selectItemType" -->
+[% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
 <br><br>
 
 <!-- div que se genera con el llamdo de ajax para la parte de llenado de los campos -->
@@ -392,5 +392,5 @@ Esquema de ingreso de datos tipo: <!-- TMPL_VAR NAME="selectItemType" -->
 
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
 

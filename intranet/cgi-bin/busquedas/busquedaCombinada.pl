@@ -27,14 +27,13 @@ $search->{'class'}= $comboItemTypes;
 my $buscoPor="";
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "busquedas/busquedaResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user ({
+                                                        template_name	=> 'busquedas/busquedaResult.tmpl',
+                                                        query		=> $input,
+                                                        type		=> "intranet",
+                                                        authnotrequired	=> 0,
+                                                        flagsrequired	=> { circulate => 1 },
+    					});
 
 if($keyword ne ""){
 	$buscoPor.="Busqueda combinada: ".$keyword."&";
@@ -52,7 +51,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada($search,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsarray;
 my %result;
@@ -101,12 +100,12 @@ foreach my $str (@busqueda){
 $buscoPor= substr($buscoPor,2,length($buscoPor));
 
 
-$template->param(	SEARCH_RESULTS => \@resultsarray,
-		 	buscoPor=>	$buscoPor,
-			cantidad=>	$cantidad
-		);
+$t_params->{'SEARCH_RESULTS'}= \@resultsarray;
+$t_params->{'buscoPor'}=$buscoPor;
+$t_params->{'cantidad'}=$cantidad;
 
-if($outside) {$template->param( HEADERS => 1);}
+if($outside) {
+    $t_params->{'HEADERS'}= 1;
+}
 
-
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

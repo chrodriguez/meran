@@ -39,14 +39,13 @@ my $nivel3rep="";
 my $buscoPor="";
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "busquedas/busquedaResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user ({
+                                                            template_name	=> 'busquedas/busquedaResult.tmpl',
+                                                            query		=> $input,
+                                                            type		=> "intranet",
+                                                            authnotrequired	=> 0,
+                                                            flagsrequired	=> { circulate => 1 },
+    					});
 
 if($idAutor > 0 ){
 	$nivel1="autor=".&verificarValor($idAutor);
@@ -148,11 +147,9 @@ foreach my $str (@busqueda){
 
 $buscoPor= substr($buscoPor,2,length($buscoPor));
 
-$template->param(
-		SEARCH_RESULTS => \@resultsarray,
-		buscoPor=>	$buscoPor,
-		cantidad=>	$cantidad
-		);
+$t_params->{'SEARCH_RESULTS'}= \@resultsarray;
+$t_params->{'buscoPor'}=$buscoPor;
+$t_params->{'cantidad'}=$cantidad;
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -1,86 +1,97 @@
-<!-- TMPL_IF name="HEADERS" -->
+[% IF HEADERS %]
 
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+    [% INCLUDE "intranet-top.inc" %]
 
-<!-- PARA PODER CREAR EL FORMULARIO -->
-<div id="formulario"></div>
-<!-- /TMPL_IF -->
+    <!-- PARA PODER CREAR EL FORMULARIO -->
+    <div id="formulario"></div>
+
+[% END %]
 
 
-<p align="center">T&eacute;rmino de b&uacute;squeda:<b> <!-- TMPL_VAR NAME="buscoPor" ESCAPE=HTML--></b>
-<br>Total de registros: <b><!-- TMPL_VAR NAME='cantidad' --></b></p>
+<p align="center">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %]<b> [% buscoPor %]</b>
+<br>[% "Total de registros:" | i18n %] <b>[% cantidad %]</b></p>
 </div>
 
 <center>
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 </center>
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<tr class="tablaresultadoTitle">
-		<td width="2%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png">
+		<td width="2%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png">
 		</td>
 
 		<td width="5%"  class="tablaresultadoTitle">&nbsp;</td>
 		<td width="35%" class="tablaresultadoTitleClick" 
-			onClick="ordenar('titulo')" Title="Ordenar por T&iacute;tulo">
+			onClick="ordenar('titulo')" Title=[% "Ordenar por T&iacute;tulo" | i18n %]>
 			T&iacute;tulo
 		</td>
 		<td width="35%" class="tablaresultadoTitleClick" 
-			onClick="ordenar('nomCompleto')" Title="Ordenar por Autor">
+			onClick="ordenar('nomCompleto')" Title=[% "Ordenar por Autor" | i18n %]>
 			Autor
 		</td>
-		<td width="12%" class="tablaresultadoTitle">Edici&oacute;n/A&ntilde;o</td>
-		<td width="15%" class="tablaresultadoTitle"> Disponibilidad </td>
+		<td width="12%" class="tablaresultadoTitle">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
+		<td width="15%" class="tablaresultadoTitle"> [% "Disponibilidad" | i18n %] </td>
 
-		<td width="2%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+		<td width="2%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 <!-- Actual Resultados de la b&uacute;squeda -->
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+[% FOREACH SEARCH_RESULTS %]
 	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
 		<td>
-		<!-- TMPL_IF NAME="amazon_cover" -->
-		<img name="cover"  VALUE="" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/<!-- TMPL_VAR name='lang' -->/<!-- TMPL_VAR NAME='amazon_cover' -->" title="Tapa">
-		<!-- /TMPL_IF -->
+                    [% IF amazon_cover %]
+                        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
+                    [% END %]
 		</td>
 		<td>
-			<a class="click" onClick="mostrarDetalle('<!-- TMPL_VAR NAME='id1' -->');" title="Mostrar Detalle">
-				<!-- TMPL_VAR NAME=titulo ESCAPE=HTML -->
+			<a class="click" onClick="mostrarDetalle('[% id1 %]');" title="Mostrar Detalle">
+				[% titulo %]
 			</a>
 
 		</td>
 
 		<td>
-			<a class="click" onClick="buscarPorAutor(<!-- TMPL_VAR NAME='idAutor' -->)" title="Filtrar por Autor">
-				<!-- TMPL_VAR NAME="nomCompleto" -->
+			<a class="click" onClick="buscarPorAutor([% idAutor %])" title=[% "Filtrar por Autor" | i18n %]>
+				[% nomCompleto %]
 			</a>
 		</td>
 
 		<td>
-			<!-- TMPL_LOOP NAME="grupos" -->
-				<!-- TMPL_IF name="edicion" --><!-- TMPL_VAR NAME="edicion" --> &nbsp;<!-- /TMPL_IF --><!-- TMPL_IF name="anio_publicacion" -->(<!-- TMPL_VAR NAME="anio_publicacion" -->)<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="volume" -->        t <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --><br>
-			<!-- /TMPL_LOOP -->
+			[% FOREACH grupos %]
+				[% IF edicion %]
+                                    [% edicion %] &nbsp;
+                                [% END %]
+                                [% IF anio_publicacion %]
+                                    ([% anio_publicacion %])
+                                [% END %]
+				[% IF volume %]
+                                    t [% volume %]
+                                [% END %]
+                                <br>
+			[% END %]
 		</td>
 
 		<td>
-			<!-- TMPL_LOOP NAME="disponibilidad" -->
-				<b><!-- TMPL_VAR NAME="tipoPrestamo" --></b> <!-- TMPL_VAR NAME="cantTotal" -->
+			[% FOREACH disponibilidad %]
+				<b>[% tipoPrestamo %]</b> [% cantTotal %]
 				<br>
 				<div style="margin-right:4px">
-				<!-- TMPL_VAR NAME="reservados"-->
-				<br> 
-				<!-- TMPL_VAR NAME="prestados"-->
-				<br>
+                                    [% reservados %]
+                                    <br> 
+                                    [% prestados %]
+                                    <br>
 				</div>
-         		<!-- /TMPL_LOOP -->
+         		[% END %]
 		</td>	
 
 		<td height=25>&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <br>
-<!-- TMPL_IF name="HEADERS" --><!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --><!-- /TMPL_IF -->
+[% IF HEADERS %]
+    [% INCLUDE "intranet-bottom.inc" %]
+[% END %]

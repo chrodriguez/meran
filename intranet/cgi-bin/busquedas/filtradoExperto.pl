@@ -7,15 +7,15 @@ use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 use C4::AR::Busquedas;
 
-my $query = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "busquedas/filtradoExperto.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my $input = new CGI;
+
+my ($template, $session, $t_params) = get_template_and_user ({
+                                                    template_name	=> 'busquedas/filtradoExperto.tmpl',
+                                                    query		=> $input,
+                                                    type		=> "intranet",
+                                                    authnotrequired	=> 0,
+                                                    flagsrequired	=> { circulate => 1 },
+    					});
 
 my $mapeoHash=&buscarMapeoTotal();
 my @valuesMapeo;
@@ -41,8 +41,7 @@ my $mapeo=CGI::scrolling_list(
 			-onChange  => 'buscarReferencia()',
                 );
 
-$template->param(type => 'intranet',
-		 mapeo=> $mapeo,
-		);
+$t_params->{'type'}= 'intranet';
+$t_params->{'mapeo'}= $mapeo;
 
-output_html_with_http_headers $query, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 
@@ -25,7 +25,7 @@ function consultar(){
 		objAH.sendToServer();
 	}
 	else{
-		alert("Ingrese un dato para realizar la busqueda");
+		alert([% "Ingrese un dato para realizar la busqueda" | i18n %]);
 	}
 
 }
@@ -52,24 +52,24 @@ function agregarEjemplar(id1){
 		location.href="../catalogacion/estructura/agregarItem.pl?origen=adminEj&id1="+id1+"&itemtype="+itemtype;
 	}
 	else{
-		alert("Eliga el esquema de catalogo para agregar un item");
+		alert([% "Eliga el esquema de catalogo para agregar un item" | i18n %]);
 	}
 }
 
 </script>
 
-<p class="pagetitle">Administraci&oacute;n de ejemplares</p>
+<p class="pagetitle">[% "Administraci&oacute;n de ejemplares" | i18n %]</p>
 
-<span class="recuadroAyuda">&nbsp;Para agregar una nueva descripci&oacute;n bibliogr&aacute;fica o un nuevo ejemplar, ingrese el n&uacute;mero de ISBN o ISSN: &nbsp;</span>
+<span class="recuadroAyuda">&nbsp;[% "Para agregar una nueva descripci&oacute;n bibliogr&aacute;fica o un nuevo ejemplar, ingrese el n&uacute;mero de ISBN o ISSN:" | i18n %] &nbsp;</span>
 
 
 <p><label for="isbn" style="float: left; width:15%">ISBN:</label>
 	
 <input type="text" name="isbn" id="isbn">
 
-<a class="inputFontNormal" href="#" onClick="consultar();" onMouseOut="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME='themelang' -->/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-ir.png" border="0"></a>
+<a class="inputFontNormal" href="#" onClick="consultar();" onMouseOut="swap('go','[% themelang %]' -->/images/boton-ir.png')" onMouseOver="swap('go','[% themelang %]/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="[% themelang %]/images/boton-ir.png" border="0"></a>
 </p>
-<label for="titulo" style="float: left; width:15%">T&iacute;tulo:</label>
+<label for="titulo" style="float: left; width:15%">[% "T&iacute;tulo:" | i18n %]</label>
 <input type="text" name="titulo" id="titulo">
 
 <br>
@@ -78,4 +78,4 @@ function agregarEjemplar(id1){
 <div id="result"></div>
 
 
-<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

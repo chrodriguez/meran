@@ -28,14 +28,13 @@ use JSON;
 my $input = new CGI;
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "catalogacion/estructura/agregarItem.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user ({
+                                                template_name	=> 'catalogacion/estructura/agregarItem.tmpl',
+                                                query		=> $input,
+                                                type		=> "intranet",
+                                                authnotrequired	=> 0,
+                                                flagsrequired	=> { circulate => 1 },
+    					});
 
 my $nivel=1;
 
@@ -63,9 +62,8 @@ my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
 
 
 
-$template->param(
-			selectItemType  => $selectItemType,
-			nivel		=> $nivel,
-		);
+$t_params->{'selectItemType'}= $selectItemType;
+$t_params->{'nivel'}= $nivel;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

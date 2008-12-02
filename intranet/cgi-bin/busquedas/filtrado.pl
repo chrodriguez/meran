@@ -8,7 +8,7 @@ use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 use HTML::Template;
 
-my $query = new CGI;
+my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user ({
                                                             template_name	=> 'busquedas/filtrado.tmpl',

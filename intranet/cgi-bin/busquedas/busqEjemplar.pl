@@ -26,14 +26,13 @@ use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-            template_name   => "busquedas/busqEjemplar.tmpl",
-            query           => $input,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
-            debug           => 1,
-        });
+my ($template, $session, $t_params) = get_template_and_user ({
+                                        template_name	=> 'busquedas/busqEjemplar.tmpl',
+                                        query		=> $input,
+                                        type		=> "intranet",
+                                        authnotrequired	=> 0,
+                                        flagsrequired	=> { circulate => 1 },
+    			 });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $isbn = $obj->{'isbn'};
@@ -57,7 +56,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$result)=&C4::AR::Busquedas::buscarGrupos($isbn,$titulo,$ini,$cantR);
 
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber, $funcion, $t_params);
 
 
 for (my $i=0; $i<scalar(@$result); $i++ ){
@@ -67,11 +66,9 @@ for (my $i=0; $i<scalar(@$result); $i++ ){
 	}
 }
 
-$template->param(
-		isbn          	=> $isbn,
-		titulo         	=> $titulo,
-		cantidad      	=> $cantidad,
-		result          => $result,
-);
+$t_params->{'isbn'}= $isbn;
+$t_params->{'titulo'}= $titulo;
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'result'}= $result;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -10,14 +10,15 @@ use C4::AR::Mensajes;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "catalogacion/estructura/agregarItemResults.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
+
+my ($template, $session, $t_params) = get_template_and_user ({
+                                        template_name	=> 'catalogacion/estructura/agregarItemResults.tmpl',
+                                        query		=> $input,
+                                        type		=> "intranet",
+                                        authnotrequired	=> 0,
+                                        flagsrequired	=> { circulate => 1 },
+    			 });
+
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
@@ -53,9 +54,9 @@ elsif($accion eq "modificarN1" && $nivel == 1){
 	my $autor=C4::AR::Busquedas::getautor($idAutor);
 	$autor=$autor->{'completo'};
 	$nivel=1;
-	$template->param(accion  => $accion,
-			 autor 	 => $autor,
-			 idAutor => $idAutor);
+	$t_params->{'accion'}= $accion;
+        $t_params->{'autor'}= $autor;
+	$t_params->{'idAutor'}= $idAutor;
 }
 
 #GUARDADO de los items
@@ -115,10 +116,9 @@ if($paso > 1 && ($accion ne "modificarN1" && $accion ne "agregarN2" && $accion n
 elsif($accion eq "modificarN1" && $paso==2){
 	&modificarNivel1Completo($id1,$idAutor,\@nivel1o2);
 	$accion="";
-	$template->param(
-			accion	  => $accion,
-			)
-}
+	$t_params->{'accion'}= $accion;
+
+    }
 
 #BUSQUEDA de los datos ingresados en el nivel 1 y nivel 2 para mostrar en la pagina del paso 2
 if($paso > 1 && $id1 != -1){
@@ -130,24 +130,21 @@ if($paso > 1 && $id1 != -1){
 	}
 	my $titulo=$itemNivel1->{'titulo'};
 	my @itemNivel2=&buscarNivel2PorId1($id1);
-	$template->param(
-			id1	=> $id1,
-			titulo	=> $titulo,
-			autor	=> $autor,
-			resultsGrupos => \@itemNivel2
-			);
+	$t_params->{'id1'}= $id1;
+	$t_params->{'titulo'}= $titulo;
+	$t_params->{'autor'}= $autor;
+	$t_params->{'resultsGrupos'}= \@itemNivel2;
 }
 #FIN busqueda
 
 
-$template->param(
- 			nivel		  => $nivel,
- 			paso		  => $paso,
- 			itemtype	  => $itemtype,
- 			descripcion	  => $descripcion,
- 			id1		  => $id1,
- 			error		  => $error,
-			mensaje		  => $mensaje,
-		);
+$t_params->{'nivel'}= $nivel;
+$t_params->{'paso'}= $paso;
+$t_params->{'itemtype'}= $itemtype;
+$t_params->{'descripcion'}= $descripcion;
+$t_params->{'id1'}= $id1;
+$t_params->{'error'}= $error;
+$t_params->{'mensaje'}= $mensaje;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
