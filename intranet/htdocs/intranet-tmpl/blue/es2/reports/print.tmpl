@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Formato de Impresi&oacute;n</title>
+<title>[% "Formato de Impresi&oacute;n" | i18n %]</title>
 <style type="text/css">
 
 </style>
@@ -11,50 +11,58 @@
 	<table width="90%"  align="center" cellpadding="4" cellspacing="0" border="0">
 	<tr>
 	   <td align="center" colspan=4>
-        <font class="titulo" >Biblioteca:</font><br>
-        <font class="subtitulo">Facultad de Ciencias Econ&oacute;micas</font>
+        <font class="titulo" >[% "Biblioteca:" | i18n %]</font><br>
+<!-- FIXME  la biblioteca debe ser parametrizable-->
+        <font class="subtitulo">[% "Facultad de Ciencias Econ&oacute;micas" | i18n %]</font>
         </td>
-	<td align="right" colspan=3><img src="<!-- TMPL_VAR NAME='themelang' -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" ></td>
+		<td align="right" colspan=3>
+<!-- FIXME  el atl debe ser parametrizable-->
+		<img src="[% themelang %]/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
+		</td>
 	</tr>
 	<tr><td align="center" colspan="7">
-	<a  onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+	<a  	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
+		onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  
+		src="[% themelang %]/images/menu-imprimir.png" border="0" title="[% 'Imprimir Resultados' | i18n %]">
 	</a>
 	</td></tr>
 
-	 <tr> <td align="center" colspan="7"> <!-- TMPL_VAR NAME="msg" --> 
+	 <tr> <td align="center" colspan="7">[% msg %]
                 </td> </tr>
 
-	<tr> <td align="center" colspan="7"><!-- TMPL_VAR NAME="numrecords" --> resultados encontrados 
+	<tr> <td align="center" colspan="7">[% numrecords %] [% "resultados encontrados" | i18n %] 
 		</td> </tr>
 
 <tr align="center">
-<td><b>Autor</b></td>
-<td><b>T&iacute;tulo</b></td>
-<td><b>Signatura Topografica</b></td>
-<td><b>C&oacute;digo de barras</b></td>
-<td><b>Edici&oacute;n</b></td>
-<td><b>A&ntilde;o de Publicaci&oacute;n</b></td>
-<td><b>Fecha</b></td>
+<td><b>[% "Autor" | i18n %]</b></td>
+<td><b>[% "T&iacute;tulo" | i18n %]</b></td>
+<td><b>[% "Signatura Topografica" | i18n %]</b></td>
+<td><b>[% "C&oacute;digo de barras" | i18n %]</b></td>
+<td><b>[% "Edici&oacute;n" | i18n %]</b></td>
+<td><b>[% "A&ntilde;o de Publicaci&oacute;n" | i18n %]</b></td>
+<td><b>[% "Fecha" | i18n %]</b></td>
 </tr>
 <tr><td colspan="7"><hr></td></tr>
 
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
-  <tr align="center">
- <td> <!-- TMPL_VAR NAME=autor --> </td>
-  <td> <!-- TMPL_VAR NAME=titulo --> </td>
-  <td> <!-- TMPL_VAR NAME=signatura_topografica --> </td>
-  <td> <!-- TMPL_VAR NAME=barcode --> </td>
-  <td> <!-- TMPL_VAR NAME=number --> </td>
-  <td> <!-- TMPL_VAR NAME=anio_publicacion --> </td>
-  <td> <!-- TMPL_VAR NAME=date --> </td>
+[% FOREACH SEARCH_RESULTS %]
+ <tr align="center">
+	<td>[% autor %]</td>
+	<td>[% titulo %]</td>
+	<td>[% signatura_topografica %]</td>
+	<td>[% barcode %]</td>
+	<td>[% number %]</td>
+	<td>[% anio_publicacion %]</td>
+	<td>[% date %] </td>
 </tr>
 <tr><td colspan='7'><hr></td></tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 <tr><td align="center" colspan="7">
 
-<a onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+<a	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
+	onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+<input 	onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]"  
+	src="[% themelang %]/images/menu-imprimir.png" border="0" title="[% 'Imprimir Resultados' | i18n %]">
 </a>
 </td></tr>
 </table>

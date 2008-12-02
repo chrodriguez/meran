@@ -6,8 +6,10 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 use C4::Date;
-my $input=new CGI;
 
+## Usado por availability (Disponibilidad de Ejemplares)
+
+my $input=new CGI;
 my $msg='';
 
 my $branch = $input->param('branch');
@@ -38,21 +40,21 @@ if ($input->param('type') eq 'pdf') {#Para PDF
 	availPdfGenerator($msg2,@results);
 }
 else{ #Para imprimir
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "reports/print.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
+my  ($template, $session, $t_params)= get_template_and_user({
+									template_name => "reports/print.tmpl",
+									query => $input,
+									type => "intranet",
+									authnotrequired => 1,
+									flagsrequired => {borrow => 1}
                              });
 
 my $resultsarray=\@results;
 ($resultsarray) || (@$resultsarray=());
 
-$template->param(SEARCH_RESULTS => $resultsarray,
-		 numrecords => $cantidad,
-		 msg => $msg);
+$t_params->{'SEARCH_RESULTS'}= $resultsarray;
+$t_params->{'numrecords'}= $cantidad;
+$t_params->{'msg'}= $msg;
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

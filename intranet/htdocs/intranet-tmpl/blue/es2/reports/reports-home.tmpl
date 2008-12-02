@@ -1,57 +1,59 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
-<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" ><tr><td>Reportes y Estad&iacute;sticas</td></tr>
-<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
-		                           </table>
+[% INCLUDE 'intranet-top.inc' %]
+
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+	<tr><td>[% "Reportes y Estad&iacute;sticas" | i18n %]</td></tr>
+	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
+
 <br>					   
 
 <table>
 <tr><td>
-<h3>Reportes</h3>
+<h3>[% "Reportes" | i18n %]</h3>
 
 <ul class="inputFontNormal">
-<!--         <li><a class="inputFontNormal" href="/cgi-bin/koha/stats.pl?time=yesterday">Hasta Reconciliar:</a> <b>Reporte diario  (ayer)</b></li> -->
-<!--         <li><a class="inputFontNormal" href="/cgi-bin/koha/stats.pl?time=today">Hasta Reconciliar:</a><b> Reporte diario  (hoy)</b></li> -->
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/generic_reports.pl">Reportes gen&eacute;ricos</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/inventory.pl">Inventario</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/inventory-sig-top.pl">Signatura Topogr&aacute;fica</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/estantes.pl">Estantes Virtuales</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/users.pl">Usuarios</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/prestamos.pl">Pr&eacute;stamos</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/reservas.pl">Reservas</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/registro.pl">Registro de Actividades</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historicoCirculacion.pl">Registro de Circulaci&oacute;n</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/estadistica_Anual.pl">Actividades anuales</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/users-cards.pl">Generar Carnets</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/book-labels.pl">Generar Etiquetas</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browser.pl">Ver Biblios</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browserBiblio.pl">Ver BiblioItems</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browserItem.pl">Ver Items</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/tipos.pl">Ver cantidades por tipo</a></li>
-        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/analiticas.pl">Ver cantidades de anal&iacute;ticas</a></li>
-	 <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/barcodes.pl">C&oacute;digos de Barra por Tipo</a></li>
-        <!-- TMPL_IF name="virtuallibrary" -->
+
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/generic_reports.pl">[% "Reportes gen&eacute;ricos" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/inventory.pl">[% "Inventario" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/inventory-sig-top.pl">[% "Signatura Topogr&aacute;fica" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/estantes.pl">[% "Estantes Virtuales" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/users.pl">[% "Usuarios" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/prestamos.pl">[% "Pr&eacute;stamos" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/reservas.pl">[% "Reservas" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/registro.pl">[% "Registro de Actividades" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historicoCirculacion.pl">[% "Registro de Circulaci&oacute;n" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/estadistica_Anual.pl">[% "Actividades anuales" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/users-cards.pl">[% "Generar Carnets" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/book-labels.pl">[% "Generar Etiquetas" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browser.pl">[% "Ver Biblios" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browserBiblio.pl">[% "Ver BiblioItems" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/browserItem.pl">[% "Ver Items" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/tipos.pl">[% "Ver cantidades por tipo" | i18n %]</a></li>
+        <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/analiticas.pl">[% "Ver cantidades de anal&iacute;ticas" | i18n %]</a></li>
+	 <li><a class="inputFontNormal" href="/cgi-bin/koha/reports/barcodes.pl">[% "C&oacute;digos de Barra por Tipo" | i18n %]</a></li>
+        [% IF virtuallibrary %]
         <hr>
-        <li> <a class="inputFontNormal" href="/cgi-bin/koha/virtual/virtualreport.pl">Biblioteca  Virtual</a></li>
-        <!-- /TMPL_IF -->
+        <li> <a class="inputFontNormal" href="/cgi-bin/koha/virtual/virtualreport.pl">[% "Biblioteca  Virtual" | i18n %]</a></li>
+        [% END %]
 </ul>
 </td>
 <td valign="top">
-<h3>Estad&iacute;sticas B&aacute;sicas</h3>
+<h3>[% "Estad&iacute;sticas B&aacute;sicas" | i18n %]</h3>
 
 <ul>
-   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/availability.pl">Disponibilidad de Ejemplares</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historico_Prestamos.pl">Hist&oacute;rico de pr&eacute;stamos</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historicoSanciones.pl">Hist&oacute;rico de sanciones </a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/availability.pl">Estad. de pr&eacute;stamos</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/logueoBusqueda.pl">Logeo de b&uacute;squedas</a></li>
-	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/userEst.pl">Usuarios por Categor&iacute;a</a></li>
-   	<li><a class="inputFontNormal"  href="/cgi-bin/koha/reports/itemtypes.pl">Tipos de Ejemplares</a></li>
-   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/levels.pl">Niveles bibliogr&aacute;ficos</a></li>
-   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/avail_year.pl">Disponibilidad (Anual)</a></li>
+   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/availability.pl">[% "Disponibilidad de Ejemplares" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historico_Prestamos.pl">[% "Hist&oacute;rico de pr&eacute;stamos" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/historicoSanciones.pl">[% "Hist&oacute;rico de sanciones" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/availability.pl">[% "Estad. de pr&eacute;stamos" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/logueoBusqueda.pl">[% "Logueo de b&uacute;squedas" | i18n %]</a></li>
+	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/userEst.pl">[% "Usuarios por Categor&iacute;a" | i18n %]</a></li>
+   	<li><a class="inputFontNormal"  href="/cgi-bin/koha/reports/itemtypes.pl">[% "Tipos de Ejemplares" | i18n %]</a></li>
+   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/levels.pl">[% "Niveles bibliogr&aacute;ficos" | i18n %]</a></li>
+   	<li><a class="inputFontNormal" href="/cgi-bin/koha/reports/avail_year.pl">[% "Disponibilidad (Anual)" | i18n %]</a></li>
 </ul>
 </td>
 </tr></table>
 </ul>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE 'intranet-bottom.inc' %]
 

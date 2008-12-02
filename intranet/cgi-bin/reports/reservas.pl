@@ -29,12 +29,12 @@ use C4::AR::Busquedas;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/reservas.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
+								template_name => "reports/reservas.tmpl",
+								query => $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {borrowers => 1},
+								debug => 1,
 			    });
 
 
@@ -48,9 +48,6 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-
-# my  $branch=$input->param('branch');
-# ($branch ||($branch=(split("_",(split(";",$cookie))[0]))[1]));
 
 my $CGIbranch=C4::AR::Utilidades::generarComboDeBranches();
 

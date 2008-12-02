@@ -9,19 +9,17 @@ use C4::AR::Busquedas;
 
 my $query = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "reports/reports-home.tmpl",
-                                query => $query,
-                                type => "intranet",
-                                authnotrequired => 0,
-                                flagsrequired => {permissions => 1},
-                                debug => 1,
+my ($template,  $session, $t_params)= get_template_and_user({
+									template_name => "reports/reports-home.tmpl",
+									query => $query,
+									type => "intranet",
+									authnotrequired => 0,
+									flagsrequired => {permissions => 1},
+									debug => 1,
                                 });
 
-#Matias: Esta habilitada la Biblioteca Virtual?
 my $virtuallibrary=C4::Context->preference("virtuallibrary");
-$template->param(virtuallibrary => $virtuallibrary);
-#
+$t_params->{'virtuallibrary'}= $virtuallibrary;
 
 
 #Por los braches
@@ -48,10 +46,8 @@ my $CGIbranch=CGI::scrolling_list(      -name      => 'unidadesInformacion',
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
-$template->param( todaydate => format_date($today,$dateformat));
 
-###
-$template->param( 
-		   listaUnidades        => $CGIbranch
-		);
-output_html_with_http_headers $query, $cookie, $template->output;
+$t_params->{'todaydate'}= format_date($today,$dateformat);
+$t_params->{'listaUnidades'}= $CGIbranch;
+		
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

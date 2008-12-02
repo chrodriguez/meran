@@ -13,7 +13,7 @@ $(document).ready( function() {
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
-	<th>Seleccione una unidad de informaci&oacute;n :</th>
+	<th>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</th>
 	<th><form name="branches" action="/cgi-bin/koha/reports/userEst.pl" method=post >
         	[% unidades %]</form>
 	</th>
@@ -25,13 +25,13 @@ $(document).ready( function() {
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="right"><img src="[% themelang %]/images/izquierda.png"></td>
 		<th>
-			Categor&iacute;as
+			[% "Categor&iacute;as" | i18n %]
 		</th>
 		<th>
-			Cant de usuarios reales
+			[% "Cant de usuarios reales" | i18n %]
 		</th>
 		<th>
-			Cant de usuarios potenciales
+			[% "Cant de usuarios potenciales" | i18n %]
 		</th>
  		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 		</tr>
@@ -49,7 +49,9 @@ $(document).ready( function() {
 
 
 <br>
-	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">Generar planilla <img src="[% themelang %]/images/sxc.png" border="0"></a>
+	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">
+		[% "Generar planilla" | i18n %]<img src="[% themelang %]/images/sxc.png" border="0">
+	</a>
 <br><br>
 				<!-- Scripts con los graficos en flash -->
 [% torta %]

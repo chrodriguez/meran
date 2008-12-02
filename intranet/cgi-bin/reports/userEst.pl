@@ -29,13 +29,13 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params)
-    = get_template_and_user({template_name => "reports/userEst.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+								template_name => "reports/userEst.tmpl",
+								query => $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {borrowers => 1},
+								debug => 1,
 			     });
 
 

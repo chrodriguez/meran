@@ -80,13 +80,13 @@ function updateInfo(responseText){
 <td>
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr class="inputFontNormal">
-	<td>Legajo:</td>
+	<td>[% "Legajo:" | i18n %]</td>
 	<td colspan="2">
-	Desde:&nbsp; <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'><br>
-	Hasta:&nbsp; <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'></td>
+	[% "Desde:" | i18n %]&nbsp; <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'><br>
+	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'></td>
 	</tr>
 	<tr class="inputFontNormal">
-	<td >Regularidad: </td>
+	<td>[% "Regularidad:" | i18n %]</td>
 	<td colspan="2"> [% regulares %]</td>
 	</tr>
 </table>
