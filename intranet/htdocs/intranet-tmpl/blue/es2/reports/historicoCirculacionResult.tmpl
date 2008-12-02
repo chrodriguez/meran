@@ -29,12 +29,12 @@
 		</td>
 	</tr>
 
-[% FOREACH RESULTSLOOP %]
+[% FOREACH resultsloop %]
   	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
 
 		<td>
-			<a href=/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]>[% HTML.escape(titulo) %]
+			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% id1 %]">[% HTML.escape(titulo) %]
                             [% IF unititle %]:&nbsp;
                                 [% unititle %]
                             [% END %]</a>
@@ -74,7 +74,8 @@
                                 [% nota %]
                         </textarea>
 		<br>
-		<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% id %]')">
+		<input  src="[% themelang %]/images/guardar.png" type="image"  value='[% "Guardar Nota" | i18n %]' 
+			title='[% "Guardar Nota" | i18n %]' onClick="guardarNota('[% id %]')">
 		</td>
  	</tr>
 [% END %]

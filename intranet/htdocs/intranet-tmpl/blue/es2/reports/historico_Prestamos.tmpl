@@ -53,13 +53,16 @@ function consultar(){
 
 <table border=0 cellspacing=0 cellpadding=0 width="80%" align="left">
 	<tr>
-	  <td><b>Seleccione una fecha de inicio: </b></td>
-	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="[% f_ini %]"> <a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
+	  <td><b>[% "Seleccione una fecha de inicio:" | i18n %]</b></td>
+	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="[% f_ini %]"> <a href="javascript:dp_ini.toggle();">
+		<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="[% 'Selecciona una fecha' | i18n %]"></a>
 	  </td>
 	<td colspan="2">&nbsp;</td>	
 	<tr>
 	  <td><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></td>	
-	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="[% f_fin %]"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
+	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="[% f_fin %]">
+		<a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 
+		alt="[% 'Selecciona una fecha' | i18n %]"></a>
 	  </td>
 	  <td colspan=2 align="center">
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">
@@ -72,7 +75,7 @@ function consultar(){
 	</tr>
 	<tr>
 	  <td><b>[% "Tipo de Pr&eacute;stamo:" | i18n %] </b></td>
-	  <td>[% "selectTiposPrestamos" | i18n %]</td>
+	  <td>[% selectTiposPrestamos %]</td>
 	  <td colspan="3">&nbsp;</td>
     	</tr>
 	<tr>

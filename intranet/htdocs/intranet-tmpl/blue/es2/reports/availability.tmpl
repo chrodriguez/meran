@@ -51,9 +51,9 @@ function consultar(){
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%" align="left">
 	<tr>
-	  	<td class=inputFontNormal>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</td>
-	  	<td  class=inputFontNormal> [% "Unidades" | i18n %]</td>
-	  	<td  class=inputFontNormal>[% "Cavails" | i18n %]</td>
+	  	<td class=inputFontNormal>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
+	  	<td  class=inputFontNormal> [% unidades %]</td>
+	  	<td  class=inputFontNormal>[% Cavails %]</td>
 	</tr>
 
 	<tr>
@@ -61,7 +61,7 @@ function consultar(){
 	  	<td  class=inputFontNormal>
                     <input id="fechaIni" class="inputFontNormal"> 
                         <a href="javascript:dp_ini.toggle();">
-                            <img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]>
+                            <img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt='[% "Selecciona una fecha" | i18n %]'>
                         </a>
 	  	</td>
 	 	<td></td>
@@ -69,7 +69,12 @@ function consultar(){
 
 	<tr>
 	  	<td  class=inputFontNormal>[% "Seleccione una fecha de Fin:" | i18n %] </td>	
-	  	<td  class=inputFontNormal><input id="fechaFin" class="inputFontNormal"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a></td>
+	  	<td  class=inputFontNormal>
+			<input id="fechaFin" class="inputFontNormal"> 
+			<a href="javascript:dp_fin.toggle();">
+			<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="[% 'Selecciona una fecha' | i18n %]">
+			</a>
+		</td>
           	<td colspan=2 align="center">
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">
 	  	</td>

@@ -27,13 +27,13 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params)
-    = get_template_and_user({template_name => "reports/historicoSancionesResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {circulate => 1},
-			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+								template_name => "reports/historicoSancionesResult.tmpl",
+								query => $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {circulate => 1},
+								debug => 1,
 			     });
 
 
@@ -56,11 +56,8 @@ my $tipoPrestamo= $obj->{'tiposPrestamos'};
 my $tipoOperacion= $obj->{'tipoOperacion'};
 my $funcion=$obj->{'funcion'};
 
-my ($cant,@resultsdata)=
- &historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
-
-
-C4::AR::Utilidades::crearPaginador($template, $cant,$cantR, $pageNumber,$funcion,$t_params);
+my ($cant,@resultsdata)=&historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
 
 $t_params->{'resultsloop'}=\@resultsdata;

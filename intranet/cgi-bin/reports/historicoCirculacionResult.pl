@@ -29,12 +29,12 @@ my $input = new CGI;
 
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/historicoCirculacionResult.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
+								template_name => "reports/historicoCirculacionResult.tmpl",
+								query => $input,
+								type => "intranet",
+								authnotrequired => 0,
+								flagsrequired => {borrowers => 1},
+								debug => 1,
 			    });
 
 my $orden= "date";  # $input->param('orden')||'operacion';
@@ -77,8 +77,7 @@ my $ini= ($obj->{'ini'});
 my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
 
 
-my ($cantidad,@resultsdata)=
- &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+my ($cantidad,@resultsdata)= &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
 
 C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 

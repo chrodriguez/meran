@@ -1,4 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
+
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 <script type="text/javascript">
 [% INCLUDE "epoch_classes.js" %]
@@ -15,7 +16,7 @@ function hacerSubmit(){
         }
 </script>
 
-<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" ><tr><td>Disponibilidad</td></tr>
+<table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" ><tr><td>[% "Disponibilidad" | i18n %]</td></tr>
          <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 
@@ -25,12 +26,12 @@ function hacerSubmit(){
 <form name="branches" action=/cgi-bin/koha/reports/avail_year.pl method=post >
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
 <tr>
-<td class="inputFontNormal">Seleccione una unidad de informaci&oacute;n :</td>
+<td class="inputFontNormal">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
 <td class="inputFontNormal">[% unidades %]</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td class="inputFontNormal">Seleccione una fecha de inicio:</td>
+<td class="inputFontNormal">[% "Seleccione una fecha de inicio:" | i18n %]</td>
 <td class="inputFontNormal"> 
 		<input id="ini" name="ini" value="[% ini %]">
 	     	<a href="javascript:dp_ini.toggle();">
@@ -40,7 +41,7 @@ function hacerSubmit(){
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td class="inputFontNormal">Seleccione una fecha de Fin: </td>
+<td class="inputFontNormal">[% "Seleccione una fecha de Fin:" | i18n %]</td>
 <td class="inputFontNormal"> 
 		<input  id="fin" name="fin" value="[% fin %]">
 		<a href="javascript:dp_fin.toggle();">
@@ -58,20 +59,20 @@ function hacerSubmit(){
 <table border=0 cellspacing=0 cellpadding=0 width="100%"  align="left">
 <tr class="tablaresultadoTitle">
 <td width="1%" align="right"><img src="[% themelang %]/images/izquierda.png"></td>
-<td>Mes</td>
-<td>A&ntilde;o</td>
-<td>Disponibilidad</td>
-<td>Cantidad</td>
+<td>[% "Mes" | i18n %]</td>
+<td>[% "A&ntilde;o" | i18n %]</td>
+<td>[% "Disponibilidad" | i18n %]</td>
+<td>[% "Cantidad" | i18n %]</td>
 <td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 </tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH resultsloop %]
   <tr align='center'>
   <td height=25 class="[% clase %]">&nbsp;</td>
   <td class="[% clase %]"> [% mes %] </td>
   <td class="[% clase %]"> [% year %] </td>
   <td class="[% clase %]"> [% avail %] </td>
   <td class="[% clase %]"> [% cantidad %] </td>
-  <td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
+  <td height=25 class="[% clase %]">&nbsp;</td>
   </tr>
 [% END %]
 </table>
@@ -79,5 +80,6 @@ function hacerSubmit(){
 
 <br><br>
 <br>
+
 [% INCLUDE "intranet-bottom.inc" %]
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+ 

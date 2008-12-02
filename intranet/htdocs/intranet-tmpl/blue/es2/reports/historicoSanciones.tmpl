@@ -65,7 +65,9 @@ function consultar(){
                                         [% todaydate %]
                                      [% END %]">
 				<a href="javascript:dp_ini.toggle();">
-				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a><br><br>
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 
+					alt="[% 'Selecciona una fecha' | i18n %]">
+				</a><br><br>
 				<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="
                                     [% IF fechaIni %]
                                         [% fechaIni  %]
@@ -73,7 +75,8 @@ function consultar(){
                                         [% todaydate %]
                                     [% END %]">
 				<a href="javascript:dp_fin.toggle();">
-				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	alt=[% "Selecciona una fecha" | i18n %]></a>
+				<img 	src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	
+					alt="[% 'Selecciona una fecha' | i18n %]"></a>
 			</td>
 
 			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -99,4 +102,5 @@ function consultar(){
 </form>
 
 <div id="result"></div>
+
 [% INCLUDE "intranet-bottom.inc" %]
