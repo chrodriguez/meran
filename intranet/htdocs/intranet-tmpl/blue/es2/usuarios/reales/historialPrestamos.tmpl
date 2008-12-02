@@ -3,42 +3,48 @@
 [% paginador %]
 [% USE HTML %]
 <p class="inputFontNormal"> 
-	<b>Cantidad de pr&eacute;stamos realizadas: &nbsp;[% cant %]<br>
+	<b>
+            [% "Cantidad de pr&eacute;stamos realizadas:" | i18n %] &nbsp;[% cant %]
+        <br>
 </p>
 
 <table class="tablaHistorialPrestamos" cellspacing=0  cellpadding=0 border=0 width="100%">
 <tr>
 	<td class="tablaresultadoTitle" width="1%" align="right">
-	<img src="[% interface %]/[% theme %]/images/izquierda.png">
+	<img src="[% themelang %]/images/izquierda.png">
 	</td>
 
-	<td class="tablaresultadoTitleClick" onclick="ordenar('titulo')" Title="Ordenar por Titulo">
-		T&iacute;tulo
+	<td class="tablaresultadoTitleClick" onclick="ordenar('titulo')" 
+                Title='[% "Ordenar por Titulo" | i18n %]'>
+		[% "T&iacute;tulo" | i18n %]
 	</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('autor')" Title="Ordenar por Autor">
-		Autor
-	</td>
-        <td class="tablaresultadoTitle">
-        	Edici&oacute;n
- 	</td>
-        <td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" Title="Ordenar por C&oacute;digo">
-		C&oacute;digo
- 	</td>
-	<td class="tablaresultadoTitle">
-		Pr&eacute;stamo
+	<td class="tablaresultadoTitleClick" onclick="ordenar('autor')" 
+                Title='[% "Ordenar por Autor" | i18n %]'>
+		[% "Autor" | i18n %]
 	</td>
         <td class="tablaresultadoTitle">
-        	Renovaci&oacute;n
+        	[% "Edici&oacute;n" | i18n %]
+ 	</td>
+        <td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" 
+            Title='[% "Ordenar por C&oacute;digo" | i18n %]'>
+		[% "C&oacute;digo" | i18n %]
  	</td>
 	<td class="tablaresultadoTitle">
-		Vencimiento
+		[% "Pr&eacute;stamo" | i18n %]
 	</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('returndate')" Title="Ordenar por Fecha de devoluci&oacute;n">
-		Devoluci&oacute;n
+        <td class="tablaresultadoTitle">
+        	[% "Renovaci&oacute;n" | i18n %]
+ 	</td>
+	<td class="tablaresultadoTitle">
+		[% "Vencimiento" | i18n %]
+	</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('returndate')" 
+            Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
+		[% "Devoluci&oacute;n" | i18n %]
 	</td>
 
 	 <td width="1%" class="tablaresultadoTitle">
-	<img src="[% interface %]/[% themelang %]/images/derecha.png">
+	<img src="[% themelang %]/images/derecha.png">
 	</td>
 </tr>
 
@@ -54,7 +60,7 @@
     		</a>
 	</td>
 	<td>
- 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<[% HTML.escape(idautor) %]">
+ 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=[% HTML.escape(idautor) %]">
 		[% autor %]
 		</a>
 	</td>
@@ -76,7 +82,9 @@
 	[% END %] <!-- ESTE FOREACH -->
         </td>
 	<td align="center" >
-		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=<[% id2 %]&id3= [% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>&nbsp;
+		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=<[% id2 %]&id3= [% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' 
+                    title='[% "Detalle de disponibilidad" | i18n %]'>[% barcode %]
+                </a>&nbsp;
 	</td>
 	<td>
 		[% date_due %]&nbsp;

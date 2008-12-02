@@ -8,10 +8,10 @@ use C4::Interface::CGI::Output;
 use HTML::Template;
 use C4::BookShelves;
 
-my $query = new CGI;
-# my $nameShelf = $query->param('viewShelfName');
+my $input = new CGI;
+# my $nameShelf = $input->param('viewShelfName');
 
-my $obj=$query->param('obj');
+my $obj=$input->param('obj');
 
 if($obj ne ""){
 	$obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -23,12 +23,13 @@ my $buscoPor="";
 my %shelflist;
 my $type='public';#Estantes publicos
 
-my ($template, $loggedinuser, $cookie)  = get_template_and_user({template_name => "busquedas/estante.tmpl",
-							query => $query,
-							type => "intranet",
-							authnotrequired => 0,
-							flagsrequired => {catalogue => 1},
-						});
+my ($template, $session, $t_params) = get_template_and_user ({
+                                        template_name	=> 'busquedas/estante.tmpl',
+                                        query		=> $input,
+                                        type		=> "intranet",
+                                        authnotrequired	=> 0,
+                                        flagsrequired	=> { circulate => 1 },
+    			 });
 
 if ($nameShelf) { #Buscar por nombre
 
@@ -56,10 +57,8 @@ foreach my $element (@key) {
 		push (@shelvesloop, \%line);
 }
 
-$template->param(
-		SEARCH_RESULTS => \@shelvesloop,
-		buscoPor=>	$buscoPor,
-		);
+$t_params->{'SEARCH_RESULTS'}= \@shelvesloop;
+$t_params->{'buscoPor'}=$buscoPor;
 
 
-output_html_with_http_headers $query, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

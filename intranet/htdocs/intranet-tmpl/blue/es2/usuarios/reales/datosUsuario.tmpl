@@ -52,7 +52,7 @@ function updateMostrarHistorialDePrestamos(responseText){
 //************************************Para manejar la circulacion**********************************************
 
 function openPopup() {
-	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=<!-- TMPL_VAR NAME=bornum -->','Prestamos interbibliotecarios','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
+	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=[% bornum %]','[% "Prestamos interbibliotecarios" | i18n %]','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
 }
 
 //REDEFINIDO, se encuentra en circulacion.js
@@ -217,7 +217,7 @@ $(document).ready(function() {
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
 	
-	<p align="center"><span class="click" onClick="mostrarHistorialDePrestamos()">Historial de Pr&eacute;stamos</span></p>	
+	<p align="center"><span class="click" onClick="mostrarHistorialDePrestamos()">[% "Historial de Pr&eacute;stamos" | i18n %]</span></p>	
 	
 	<div id="historialPrestamosToggle" class="click" style="width: 10px; ">[-]</div>
 	<!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
@@ -66,7 +66,7 @@ function buscarUsuariosPotenciales(){
 		objAH.sendToServer();
 	}
 	else{
-		alert("Ingrese un dato");
+		alert('[% "Ingrese un dato" | i18n %]');
  		$("#member").focus();
 	}
 
@@ -92,7 +92,9 @@ $(document).ready(function() {
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
-		<td class="pagetitle" >B&uacute;squeda de Usuarios Potenciales</td>
+		<td class="pagetitle" >
+                        [% "B&uacute;squeda de Usuarios Potenciales" | i18n %]
+                </td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -105,19 +107,21 @@ $(document).ready(function() {
 <table>
 	<tr>
   		<td>
-			<input id="member" type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+			<input id="member" type=text name="member" value="[% member %]">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales('');" src="<!-- TMPL_VAR NAME='themelang' -->/images/boton-buscar.png" border='0'>
+			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales('');" 
+                               src="[% themelang %]/images/boton-buscar.png" border='0'>
 
-			<input type="image" onClick="Borrar();" alt="Limpiar" src="<!-- TMPL_VAR NAME='themelang' -->/images/borrar2.png" border="0" >
+			<input type="image" onClick="Borrar();" alt="Limpiar" 
+                               src="[% themelang %]/images/borrar2.png" border="0" >
 
 		</td>
 	</tr>
 		<tr>
 		<td class="inputFontNormal" colspan=2>
 			<p class="recuadroAyuda">
-			Tipear el apellido, DNI o legajo del usuario. Presionar buscar.
+			 [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar." | i18n %]
 			</p>
 		</td>
 	</tr>
@@ -127,5 +131,5 @@ $(document).ready(function() {
 <div id="result"></div>
 </center>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
 

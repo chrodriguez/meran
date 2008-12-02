@@ -25,7 +25,7 @@ function consultar(){
 		objAH.sendToServer();
 	}
 	else{
-		alert([% "Ingrese un dato para realizar la busqueda" | i18n %]);
+		alert('[% "Ingrese un dato para realizar la busqueda" | i18n %]');
 	}
 
 }
@@ -52,7 +52,7 @@ function agregarEjemplar(id1){
 		location.href="../catalogacion/estructura/agregarItem.pl?origen=adminEj&id1="+id1+"&itemtype="+itemtype;
 	}
 	else{
-		alert([% "Eliga el esquema de catalogo para agregar un item" | i18n %]);
+		alert('[% "Eliga el esquema de catalogo para agregar un item" | i18n %]');
 	}
 }
 
@@ -67,7 +67,12 @@ function agregarEjemplar(id1){
 	
 <input type="text" name="isbn" id="isbn">
 
-<a class="inputFontNormal" href="#" onClick="consultar();" onMouseOut="swap('go','[% themelang %]' -->/images/boton-ir.png')" onMouseOver="swap('go','[% themelang %]/images/boton-irbis.png')"><input type="image" name="go" id="go" alt="Ir" src="[% themelang %]/images/boton-ir.png" border="0"></a>
+<a class="inputFontNormal" onClick="consultar();" 
+   onMouseOut="swap('go','[% themelang %]/images/boton-ir.png')" 
+   onMouseOver="swap('go','[% themelang %]/images/boton-irbis.png')">
+
+   <input type="image" name="go" id="go" alt="Ir" src="[% themelang %]/images/boton-ir.png" border="0">
+</a>
 </p>
 <label for="titulo" style="float: left; width:15%">[% "T&iacute;tulo:" | i18n %]</label>
 <input type="text" name="titulo" id="titulo">

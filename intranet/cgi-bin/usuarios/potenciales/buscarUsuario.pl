@@ -32,21 +32,19 @@ use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/potenciales/buscarUsuario.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                            template_name => "usuarios/potenciales/buscarUsuario.tmpl",
+                                                            query => $input,
+                                                            type => "intranet",
+                                                            authnotrequired => 0,
+                                                            flagsrequired => {borrowers => 1},
+                                                            debug => 1,
+			    });
 
 
 
 my $member=$input->param('member');
 
-$template->param(       
-			member  => $member,
-		);
+$t_params->{'member'}= $member;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

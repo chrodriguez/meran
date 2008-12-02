@@ -1,11 +1,11 @@
 [% IF realreserves %]
 	[% USE HTML %]
 	<br>
-	<p align=center><B>EJEMPLARES ASIGNADOS</B></p> 
+	<p align=center><B>[% "EJEMPLARES ASIGNADOS" | i18n %]</B></p> 
 	<table class="reseravsAsignadasResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr class="tablaresultadoTitle">
 			<th width="1%" align="right" valing="top">
-				<img src="[% interface %]/[% theme %]/images/izquierda.png">
+				<img src="[% themelang %]/images/izquierda.png">
 			</th>
 			<th>
 				<a class="click" id="checkAllReservas">
@@ -13,15 +13,15 @@
 				</a>
 			</th>
 	
-			<th>T&iacute;tulo</th>
-			<th>Autor</th>
-			<th>C. Barra</th>
-			<th>Sig. Top.</th>
-			<th>Ed.</th>
-			<th>Vol.</th> 
-			<th>Vencimiento</th>
-			<th width="10%">Retira en</th>
-			<th width="10%">Cancelar</th>
+			<th>[% "T&iacute;tulo" | i18n %]</th>
+			<th>[% "Autor" | i18n %]</th>
+			<th>[% "C. Barra" | i18n %]</th>
+			<th>[% "Sig. Top." | i18n %]</th>
+			<th>[% "Ed." | i18n %]</th>
+			<th>[% "Vol." | i18n %]</th> 
+			<th>[% "Vencimiento" | i18n %]</th>
+			<th width="10%">[% "Retira en" | i18n %]</th>
+			<th width="10%">[% "Cancelar" | i18n %]</th>
 			<th width="1%" valing="top">
 			<img src="[% interface %]/[% theme %]/images/derecha.png">
 			</th>
@@ -50,7 +50,7 @@
 			</td>
 			<td>
 				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2= [%id2%]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' 
-				Title='Detalle de disponibilidad'>[% barcode %]</a>
+				Title='[% "Detalle de disponibilidad" | i18n %]'>[% barcode %]</a>
 			</td>
 			<td>
 				[% IF signatura_topografica %]
@@ -86,8 +86,8 @@
 	
 			<td>
 				<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
-				src="[% interface %]/[% theme %]/images/borrar.png" 
-				onClick="cancelarReserva([% reservenumber %])" title="Cancelar">
+				src="[% themelang %]/images/borrar.png" 
+				onClick="cancelarReserva('[% reservenumber %]')" title='[% "Cancelar" | i18n %]'>
 			</td>
 			<td height=25>&nbsp;</td>
 	
@@ -96,8 +96,8 @@
 	</table>
 	
 	<p align=center>
-		<input type="image" name="borrowD"  VALUE="prestar" BORDER=0 
-		src="[% interface %]/[% theme %]/images/item-prestar.png" 
+		<input type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
+		src="[% themelang %]/images/item-prestar.png" 
 		title="Realizar pr&eacute;stamo" 
 		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
@@ -109,20 +109,20 @@
 [% IF waiting %]
 
 	<br>
-	<p align=center colspan=6><b>RESERVAS</b></p>
+	<p align=center colspan=6><b>[% "RESERVAS" | i18n %]</b></p>
 	
 	<table class="reservasEnEsperaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr valign=middle class="tablaresultadoTitle">
 			<th width="1%" align="right" valing="top">
-				<img src="[% interface %]/[% theme %]/images/izquierda.png">
+				<img src="[% themelang %]/images/izquierda.png">
 			</th>
-			<th>T&iacute;tulo</th>
-			<th>Autor</th>
-			<th>Edici&oacute;n</th>
-			<th>Volumen</th>
-			<th>Cancelar</th>
+			<th>[% "T&iacute;tulo" | i18n %]</th>
+			<th>[% "Autor" | i18n %]</th>
+			<th>[% "Edici&oacute;n" | i18n %]</th>
+			<th>[% "Volumen" | i18n %]</th>
+			<th>[% "Cancelar" | i18n %]</th>
 			<th width="1%" valing="top">
-				<img src="[% interface %]/[% theme %]/images/derecha.png">
+				<img src="[% themelang %]/images/derecha.png">
 			</th>
 		</tr>
 	[% FOREACH waiting %]
@@ -156,8 +156,8 @@
 				[% END %]
 			</td>
 			<td> 
-				<input 	type="image" name="cancel"  value="Cancelar" border=0 
-					src="[% interface %]/[% theme %]/images/borrar.png" 
+				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
+					src="[% themelang %]/images/borrar.png" 
 					onClick="confirm_cancelation('[% reservenumber %]')" title="Cancelar">
 			</td>
 			<td height=25>&nbsp;</td>

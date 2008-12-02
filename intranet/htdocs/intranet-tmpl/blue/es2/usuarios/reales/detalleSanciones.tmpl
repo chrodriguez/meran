@@ -4,11 +4,11 @@
 	<tr valign=middle class="tablaresultadoTitle" width="100%">
 	
 		<td width="1%" align="right" valing="top">
-		<img src="[% interface %]/[% themelang %]/images/izquierda.png">
+		<img src="[% themelang %]/images/izquierda.png">
 		</td>
 		<td width="98%"><B>SANCIONES</td>
 		<td width="1%" valing="top">
-		<img src="[% interface %]/[% themelang %]/images/derecha.png">
+		<img src="[% themelang %]/images/derecha.png">
 		</td>
 	
 	</tr>
@@ -20,7 +20,9 @@
 			[% FOREACH sanctions %]
 				[% IF description %]
 					<li>
-						[% description %] - Desde el [% startdate %] hasta el [% enddate %]
+						[% description %] - 
+                                                    [% "Desde el" | i18n %] [% startdate %] 
+                                                    [% "hasta el" | i18n %] [% enddate %]
 					</li>
 
 				[% END %]

@@ -61,9 +61,9 @@ $(document).ready(function() {
 	<tr>
 		<td class="pagetitle" >
 			[% IF addBorrower %]
-				Agregar usuario real
+				[% "Agregar usuario real" | i18n %]
 			[% ELSE  %]
-				Usuarios Reales - Modificar Datos
+				[% "Usuarios Reales - Modificar Datos" | i18n %]
 			[% END %]
 		</td>
 	</tr>
@@ -87,7 +87,7 @@ $(document).ready(function() {
 	<tr valign=top width="100%">
 		
 		<td  width="50%" ALIGN=RIGHT class="inputFontNormal">
-		 Tarjeta de identificaci&oacute;n * <input id="cardnumber" type=text class="inputFontNormal" name=cardnumber size=10 value="[% cardnumber %]"><br>
+		 [% "Tarjeta de identificaci&oacute;n" | i18n %] * <input id="cardnumber" type=text class="inputFontNormal" name=cardnumber size=10 value="[% cardnumber %]"><br>
 		</td>
 	</tr>
 
@@ -101,11 +101,11 @@ $(document).ready(function() {
 			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
 		</td>
 
-		<td width="35%" >DATOS PERSONALES DEL USUARIO</td>
+		<td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
 		<td   width="65%" ALIGN=RIGHT>*
 			<input type="radio" name="sex" value="F" [% IF sex == "F" %] checked="checked" [% END %]> F
 			<input type="radio" name="sex" value="M" [% IF sex == "M" %] checked="checked" M [% END %]> M 
-			&nbsp; &nbsp;  Fecha de nacimiento ([% dateformat %])
+			&nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% dateformat %])
 			<input class="inputFontNormal" type=text id="dateofbirth" size=10 value="[% dateofbirth %]">
 		</td>
 
@@ -118,7 +118,7 @@ $(document).ready(function() {
 <table width="100%">
 	<tr>
 	    	<td  class="inputFontNormal" align="left">
-			<b>Categor&iacute;a del usuario*</b>
+			<b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
 			<br>
                         [% catcodepopup %]
             	</td>
@@ -126,23 +126,23 @@ $(document).ready(function() {
 	</tr>
 	<tr>
 		<td width="35%" class="inputFontNormal" align="left">
-	      		<b> Apellido*</b><br>
+	      		<b> [% "Apellido" | i18n %] *</b><br>
 	      		<input id="surname" class="inputFontNormal" type=text size=50 value="[% surname %]">
 		</td>
 		<td width="35%" class="inputFontNormal" align="left">
-			<b> Nombres*</b><br>
+			<b> [% "Nombres" | i18n %] *</b><br>
                  	<input  id="firstname" class="inputFontNormal" type=text size=50 value="[% firstname %]">
 		</td>
 		<td width="5%">&nbsp;</td>
 	</tr>
 	<tr>
 	 	<td width="35%" class="inputFontNormal" align="left">
-	 		<b>Documento (solo digitos)*</b><br>
+	 		<b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                 	[% document %]
 			<input id="documentnumber" class="inputFontNormal" type=text size=41 value="[% documentnumber %]">
 		</td>
 	 	<td width="35%" class="inputFontNormal" align="left">
-			<b>Legajo</b><br>
+			<b>[% "Legajo" | i18n %]</b><br>
          		<input  class="inputFontNormal" type=text id="studentnumber" size=50 value="[% studentnumber %]">
 		</td>
 		<td width="5%">&nbsp;</td>
@@ -157,7 +157,7 @@ $(document).ready(function() {
 				[% changepassword %] 
 					checked 
 				>
-			&nbsp;Forzar al usuario a cambiar su contrase&ntilde;a periodicamente
+			&nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
 		</td>
 		<td>
 			[% IF ethcatpopup %]
@@ -188,7 +188,7 @@ $(document).ready(function() {
 					[% usercourse %] 
 						checked 
 				>
-				&nbsp;Realiz&oacute; el curso de usuario? 
+				&nbsp;[% "Realiz&oacute; el curso de usuario?" | i18n %] 
 			</td>
 			<td> 
 		</tr>
@@ -199,7 +199,9 @@ $(document).ready(function() {
 
 	<tr>
 		<td class="inputFontNormal">
-			 <b>Incorporaci&oacute;n a Unidad de Informaci&oacute;n</b>&nbsp;
+			 <b>
+                            [% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]
+                         </b>&nbsp;
           		[% CGIbranch %]
 		</td>	
 	</tr>
@@ -211,7 +213,7 @@ $(document).ready(function() {
 		<td width="1%" align="left" valign="top">
 			<img src="[% 'interface' %]/[% themelang %]/images/izquierda.png">
 		</td>
-		<td COLSPAN=6 width="100%">DIRECCI&Oacute;N DEL USUARIO</td>
+		<td COLSPAN=6 width="100%">[% "DIRECCI&Oacute;N DEL USUARIO" | i18n %]</td>
 		<td width="1%" valign="top" align="right">
 			<img src="[% 'interface' %]/[% themelang %]/images/derecha.png">
 		</td>
@@ -225,22 +227,22 @@ $(document).ready(function() {
        	<tr align="center" valign=middle>
 		<td height=25 class="[% clase %]">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
-	  		<b>Direcci&oacute;n*</b><br>
+	  		<b>[% "Direcci&oacute;n" | i18n %] *</b><br>
 	  		<input class="inputFontNormal" type=text id="physstreet" size=50 value="[% physstreet %]">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
-	 		<b>C&oacute;digo Postal</b><br>
+	 		<b>[% "C&oacute;digo Postal" | i18n %]</b><br>
 			<input class="inputFontNormal" type=text id="zipcode" size=50 value="[% zipcode %]">
 		</td>
 	</tr>
 	<tr>
 	 	<td height=25 class="[% clase %]">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
-  	   		<b>Tel&eacute;fono particular</b><br>
+  	   		<b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
           		<input class="inputFontNormal" type=text id="phone" size=50 value="[% phone %]">
 		</td>
 	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>Ciudad*</b><br>
+			<b>[% "Ciudad" | i18n %] *</b><br>
 			<input class="inputFontNormal" type=text id="city" value="[% city %]" size='50' >
 		</td>
 	</tr>
@@ -248,22 +250,22 @@ $(document).ready(function() {
 	 	<td height=25 class="[% clase %]>&nbsp;</td>
         	<td width="15%">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
-	   		<b>Tel&eacute;fono del trabajo</b><br>
+	   		<b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
           		<input class="inputFontNormal" type=text id="phoneday" size=50 value="[% phoneday %]">
 		</td>
 		<td width="40%" class="inputFontNormal" align="left" valign="top">
-	 		<b>C&oacute;digo Postal de origen</b><br>
+	 		<b>[% "C&oacute;digo Postal de origen" | i18n %]</b><br>
           		<input  class="inputFontNormal" type=text id="homezipcode" size=50 value="[% homezipcode %]">
 		</td>
 	</tr>
 	<tr>
          	<td height=25 class="[% clase %]">&nbsp;</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
- 			<b>Direcci&oacute;n de origen</b><br>
+ 			<b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
           		<input  class="inputFontNormal" type=text id="streetaddress" size=50 value="[% streetaddress %]">
 		</td>
         	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>Ciudad de origen</b><br>
+			<b>[% "Ciudad de origen" | i18n %]</b><br>
 			<input 	class="inputFontNormal" type=text id="dstreetcity" value="[% dstreetcity %]" size='50'>
 
      		<input class="inputFontNormal" type=hidden id="streetcity" value="[% streetcity %]"> 
@@ -287,13 +289,13 @@ $(document).ready(function() {
 <table width="100%" cellpadding='0' cellspacing='0'>
 	<tr valign=middle width="100%" class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="[% 'interface' %]/[% theme %]/images/izquierda.png">
+			<img src="[% themelang %]/images/izquierda.png">
 		</td>
 		<td  COLSPAN=6 width="100%">
-			NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N
+			[% "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N" | i18n %]
 		</td>
 		<td width="1%" valign="top" align="right">
-			<img src="[% 'interface' %]/[% theme %]/images/derecha.png">
+			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 </table>
@@ -355,7 +357,7 @@ $(document).ready(function() {
 		</td>
 		
 		<td  align="left" class="inputFontNormal">
-			<b>(*) Obligatorio</b>
+			<b>(*) [% "Obligatorio " | i18n %]</b>
 		</td>
 		
 	

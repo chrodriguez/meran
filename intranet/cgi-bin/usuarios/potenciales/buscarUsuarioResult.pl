@@ -9,14 +9,14 @@ use C4::AR::Persons_Members;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "usuarios/potenciales/buscarUsuarioResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+my ($template, $session, $t_params) = get_template_and_user({
+                                                                    template_name => "usuarios/potenciales/buscarUsuarioResult.tmpl",
+                                                                    query => $input,
+                                                                    type => "intranet",
+                                                                    authnotrequired => 0,
+                                                                    flagsrequired => {borrowers => 1},
+                                                                    debug => 1,
+			    });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $member=$obj->{'member'};
@@ -35,7 +35,7 @@ if($member ne ""){
 		($cantidad,$results)=C4::AR::Usuarios::ListadoDePersonas($env,$member,"advanced",$orden,$ini,$cantR);
 	}
 }
-C4::AR::Utilidades::crearPaginador($template, $cantidad,$cantR, $pageNumber,$funcion,$t_params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsdata;
 
@@ -81,10 +81,8 @@ for (my $i=0; $i < $cantR; $i++){
 	}
 }
 
-$template->param(
-			member          => $member,
-			resultsloop     => \@resultsdata,
-			cantidad	=> $cantidad,
-);
+$t_params->{'member'}= $member;
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
