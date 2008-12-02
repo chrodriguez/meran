@@ -2,71 +2,71 @@
 <br><br>
 <br><br><br><br>
 
-<p class=inputFontNormal align="center">La cantidad de pr&eacute;stamos es: <!-- TMPL_VAR NAME=cantidad --></p> 
+<p class=inputFontNormal align="center">[% "La cantidad de pr&eacute;stamos es:" | i18n %] [% cantidad %]</p> 
 
 
-<input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='orden' -->" NAME="orden" >
+<input TYPE="hidden" VALUE="[⅜ orden %]" NAME="orden" >
 
 <br>
 <center>
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 </center>
 
 
 <table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr height="24" class="tablaresultadoTitle">
-	<td width="1%" align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
+	<td width="1%" align="left"  valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 
-	<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" title="Ordenar por apellido">Apellido</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" title="Ordenar por nombre">Nombre</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('DNI')" title="Ordenar por DNI">DNI</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('CatUsuario')" title="Ordenar por Categoria">Categor&iacute;a</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('tipoPrestamo')" title="Ordenar por tipo de prestamo">Tipo Pr&eacute;stamo</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" title="Ordenar por codigo de barra">C&oacute;digo de Barras</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('fechaPrestamo')" title="Ordenar por fecha de prestamo">Fecha Pr&eacute;stamo</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('fechaDevolucion')" title="Ordenar por fecha de devolucion">Fecha Devoluci&oacute;n</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('tipoItem')" title="Ordenar por tipo de documento">T&iacute;po</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('surname')" title=[% "Ordenar por apellido" | i18n %]>[% "Apellido" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('firstname')" title=[% "Ordenar por nombre" | i18n %]>[% "Nombre" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('DNI')" title=[% "Ordenar por DNI" | i18n %]>[% "DNI" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('CatUsuario')" title=[% "Ordenar por Categoria" | i18n %]>[% "Categor&iacute;a" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('tipoPrestamo')" title=[% "Ordenar por tipo de prestamo" | i18n %]>[% "Tipo Pr&eacute;stamo" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]>[% "C&oacute;digo de Barras" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('fechaPrestamo')" title=[% "Ordenar por fecha de prestamo" | i18n %]>[% "Fecha Pr&eacute;stamo" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('fechaDevolucion')" title=[% "Ordenar por fecha de devolucion" | i18n %]>[% "Fecha Devoluci&oacute;n" | i18n %]</td>
+	<td class="tablaresultadoTitleClick" onclick="ordenar('tipoItem')" title=[% "Ordenar por tipo de documento" | i18n %]>[% "T&iacute;po" | i18n %]</td>
 
-	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+	<td align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 	
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
        <tr align="center">
   	<td height=25 >&nbsp;</td>
-  	<td align="left" class="inputFontNormal"><!-- TMPL_VAR NAME=surname ESCAPE=HTML--></td>
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=firstname --></td>
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=DNI --> </td>
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=CatUsuario --> </td>
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=tipoPrestamo --> </td>
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=barcode --> </td>
-	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=fechaPrestamo --> </td>  
-  	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=fechaDevolucion --> </td>  
-	<td class="inputFontNormal"> <!-- TMPL_VAR NAME=tipoItem --> </td>  
+  	<td align="left" class="inputFontNormal">[% surname %]</td>
+  	<td class="inputFontNormal"> [% firstname %]</td>
+  	<td class="inputFontNormal"> [% DNI %]</td>
+  	<td class="inputFontNormal"> [% CatUsuario %]</td>
+  	<td class="inputFontNormal"> [% tipoPrestamo %]</td>
+  	<td class="inputFontNormal"> [% barcode %]</td>
+	<td class="inputFontNormal"> [% fechaPrestamo %]</td>  
+  	<td class="inputFontNormal"> [% fechaDevolucion %]</td>  
+	<td class="inputFontNormal"> [% tipoItem %]</td>  
   	<td height=25 >&nbsp;</td>
        </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 </table>
 
 <div align="center">
 		<br><br>
 		<form name="branches" method="post">
 		<!-- Para imprimir correctamentes los datos -->
-		<input type="hidden" name="tiposItems" value="<!-- TMPL_VAR NAME=tipoItem -->">
-		<input type="hidden" name="catUsuarios" value="<!-- TMPL_VAR NAME=catUsuarios -->">
-		<input type="hidden" name="tipoPrestamos" value="<!-- TMPL_VAR NAME=tipoPrestamo -->">
+		<input type="hidden" name="tiposItems" value="[% tipoItem %]">
+		<input type="hidden" name="catUsuarios" value="[% catUsuarios %]">
+		<input type="hidden" name="tipoPrestamos" value="[% tipoPrestamo %]">
 		
-		<input type="hidden" name="ini" value="<!-- TMPL_VAR NAME=ini -->">
-		<input type="hidden" name="fin" value="<!-- TMPL_VAR NAME=fin -->">
-		<input type="hidden" name="orden" value="<!-- TMPL_VAR NAME=orden -->">
+		<input type="hidden" name="ini" value="[% ini %]">
+		<input type="hidden" name="fin" value="[% fin %]">
+		<input type="hidden" name="orden" value="[% orden %]">
 
 		<!-- Para ver que se hace, imprimir o generar un pdf -->
 		<input TYPE="hidden" VALUE="pdf" NAME="type" > 
-		<a onMouseOut="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimirbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+		<a onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value=[% "Imprimir" | i18n %] src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
 		</a>
 	
-		<a  onMouseOut="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png')" onMouseOver="swap('pdf','<!-- TMPL_VAR NAME='themelang' -->/images/pdfbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="<!-- TMPL_VAR NAME='themelang' -->/images/pdf.png" border="0" title="Generar archivo PDF">
+		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
+		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %]  src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
 		</a>
 		</form>
 </div>

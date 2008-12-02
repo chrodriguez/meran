@@ -12,7 +12,7 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-my ($template, $session, $params) =  get_template_and_user ({
+my ($template, $session, $t_params) =  get_template_and_user ({
 			template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
 			query		=> $input,
 			type		=> "intranet",
@@ -29,9 +29,9 @@ my $issues = C4::AR::Issues::prestamosPorUsuario($borrnumber);
 my $count=0;
 my $venc=0;
 my @issuedat;
-$params->{'bornum'}= $borrnumber;
+$t_params->{'bornum'}= $borrnumber;
 my $completo=$input->param('completo');
-$params->{'completo'} = $completo;
+$t_params->{'completo'} = $completo;
 
 
 
@@ -52,12 +52,12 @@ foreach my $key (keys %$issues) {
 }
 
 
-$params->{'circulateEnable'}= $count;
-$params->{'bornum'}= $borrnumber;
+$t_params->{'circulateEnable'}= $count;
+$t_params->{'bornum'}= $borrnumber;
 
 if (@issuedat > 0){
-	$params->{'prestamos'}= \@issuedat;
+	$t_params->{'prestamos'}= \@issuedat;
 }
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

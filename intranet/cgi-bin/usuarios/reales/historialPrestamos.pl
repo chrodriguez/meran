@@ -8,7 +8,7 @@ use CGI;
 
 my $input=new CGI;
 
-my ($template, $session, $params) =  get_template_and_user ({
+my ($template, $session, $t_params) =  get_template_and_user ({
 			template_name	=> 'usuarios/reales/historialPrestamos.tmpl',
 			query		=> $input,
 			type		=> "intranet",
@@ -28,7 +28,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cant,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
 
-$params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
 my @loop_reading;
 for (my $i=0;$i< $cantR;$i++){
@@ -57,10 +57,10 @@ for (my $i=0;$i< $cantR;$i++){
    }
 }
 
-$params->{'cant'}= $cant;
-$params->{'bornum'}= $bornum;
-$params->{'showfulllink'}= ($cant > 50);
-$params->{'loop_reading'}= \@loop_reading;
+$t_params->{'cant'}= $cant;
+$t_params->{'bornum'}= $bornum;
+$t_params->{'showfulllink'}= ($cant > 50);
+$t_params->{'loop_reading'}= \@loop_reading;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

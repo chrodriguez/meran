@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Formato de Impresi&oacute;n</title>
+<title>[% "Formato de Impresi&oacute;n" | i18n %]</title>
 
 </head>
 
@@ -10,29 +10,30 @@
 <table width="90%"  align="center" cellpadding="4" cellspacing="0" border="0">
 	<tr>
 	   	<td align="center" colspan=4>
-        		<font class="titulo" >Biblioteca:</font><br>
-        		<font class="subtitulo">Facultad de Ciencias Econ&oacute;micas</font>
+        		<font class="titulo" >[% "Biblioteca:" | i18n %]</font><br>
+        		<font class="subtitulo">[%"Facultad de Ciencias Econ&oacute;micas" | i18n %]</font>
         	</td>
 		<td align="right" colspan=3>
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
+			<img src="[% themelang %]/images/escudo.png" border="0" alt=[% "Facultad de Ciencias Econ&oacute;micas" | i18n %] >
 		</td>
 	</tr>
 
 	<tr> 
-		<td align="center" colspan="7"> <!-- TMPL_VAR NAME="msg" --> 
+		<td align="center" colspan="7"> 
+                    [% msg %]
                 </td> 
 	</tr>
 
 	<tr>
-		<th colspan="5" align="center">Prestamos</th>
+		<th colspan="5" align="center">[% "Prestamos" | i18n %]</th>
 	</tr>
 
 	<tr>
-		<th width="15%"><b>Usuarios</b></th>
-		<th width="15%"><b>Domciliarios</b></th>
-		<th><b>Sala de lectura</b></th>
-		<th><b>Para fotocopia</b></th>
-		<th><b>Especial</b></th>
+		<th width="15%"><b>[% "Usuarios" | i18n %]</b></th>
+		<th width="15%"><b>[% "Domciliarios" | i18n %]</b></th>
+		<th><b>[% "Sala de lectura" | i18n %]</b></th>
+		<th><b>[% "Para fotocopia" | i18n %]</b></th>
+		<th><b>[% "Especial" | i18n %]</b></th>
 
 	</tr>
 
@@ -40,9 +41,9 @@
 		<td>
 			<table>
 				<tr>
-					<th>Prestamos</th>
-					<th>Reservas</th>
-					<th>Renovados</th>
+					<th>[% "Prestamos" | i18n %]</th>
+					<th>[% "Reservas" | i18n %]</th>
+					<th>[% "Renovados" | i18n %]</th>
 				</tr>
 			</table>
 		</td>
@@ -50,9 +51,9 @@
 		<td>
 			<table>
 				<tr>
-					<th>Total</th>
-					<th>Devueltos</th>
-					<th>Renovados</th>
+					<th>[% "Total" | i18n %]</th>
+					<th>[% "Devueltos" | i18n %]</th>
+					<th>[% "Renovados" | i18n %]</th>
 				</tr>
 			</table>
 		</td>
@@ -66,13 +67,13 @@
 			<table>
 				<tr align="center">
 					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuPrest" -->
+						[% cantUsuPrest %]
 					</td>
 					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuReser" -->
+						[% cantUsuReser %]
 					</td>
 					<td class="inputFontNormal" width="5%">
-						<!-- TMPL_VAR NAME="cantUsuRenov" -->
+						[% cantUsuRenov %]
 					</td>
 				</tr>
 			</table>
@@ -81,20 +82,20 @@
 			<table>
 				<tr>
 					<td class="inputFontNormal" width="11%">
-						<!-- TMPL_VAR NAME="domiTotal" -->
+						[% domiTotal %]
 					</td>
 					<td class="inputFontNormal" width="15%">
-						<!-- TMPL_VAR NAME="devueltos" -->
+						[% devueltos %]
 					</td>
 					<td class="inputFontNormal" width="8%">
-						<!-- TMPL_VAR NAME="renovados" -->
+						[% renovados %]
 					</td>
 				</tr>
 			</table>
 		</td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="sala" --></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="foto" --></td>
-		<td class="inputFontNormal"><!-- TMPL_VAR NAME="especial" --></td>
+		<td class="inputFontNormal">[% sala %]</td>
+		<td class="inputFontNormal">[% foto %]</td>
+		<td class="inputFontNormal">[% especial %]</td>
 	</tr>
 
 
@@ -105,8 +106,8 @@
 
 	<tr>
 		<td align="center" colspan="7">
-			<a onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
-			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+			<a onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
 			</a>
 		</td>
 	</tr>

@@ -1,57 +1,59 @@
 
-<p class="inputFontNormal" align="center">La cantidad de ejemplares es: <!-- TMPL_VAR NAME=cantidad --></p>
+<p class="inputFontNormal" align="center">
+        [% "La cantidad de ejemplares es:" | i18n %] [% cantidad %]
+</p>
 
 <table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
-<tr class="tablaresultadoTitle">
-	<td align="left"  valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme'  -->/images/izquierda.png"></td>
-	<th onClick="ordenar('barcode');">Nro. de Inventario</th>
-	<th onClick="ordenar('completo');">Autor</th> 
-	<th onClick="ordenar('titulo');">T&iacute;tulo</th>
-	<th onClick="ordenar('number');">Edic.</th>
-	<th onClick="ordenar('publisher');">Editor</th>
-	<th onClick="ordenar('anio_publicacion');">A&ntilde;o</th>
-	<th onClick="ordenar('signatura_topografica');">Signatura Topogr&aacute;fica</th>
-	<td align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-</tr>
-<!-- TMPL_LOOP Name="results" -->
-<tr>
-        <td width="1%">&nbsp;</td>
-        <td  align=left class="inputFontNormal">
-		<!-- TMPL_VAR Name="barcode" -->
-	</td>
-	<!-- falta que se ve el campo del autor -->
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR NAME="autor" -->
-	</td>
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR NAME="titulo" ESCAPE=HTML-->
-		<!-- TMPL_IF NAME="unititle" -->:&nbsp;
-				<!-- TMPL_VAR NAME="unititle" -->
-		<!-- /TMPL_IF -->
-	</td>
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR NAME="number" -->
-	</td>
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR NAME="publisher" -->
-	</td>
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR NAME="anio_publicacion" --> 
-	</td>
-	<td align="center" class="inputFontNormal">
-		<!-- TMPL_VAR Name="signatura_topografica" -->
-	</td>
-	<td width="1%">&nbsp;</td>
-</tr>
-
-<!-- /TMPL_LOOP -->
+    <tr class="tablaresultadoTitle">
+            <td align="left"  valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+            <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
+            <th onClick="ordenar('completo');">[% "Autor" | i18n %]</th> 
+            <th onClick="ordenar('titulo');">[% "T&iacute;tulo" | i18n %]</th>
+            <th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
+            <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
+            <th onClick="ordenar('anio_publicacion');">[% "A&ntilde;o" | i18n %]</th>
+            <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+            <td align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+    </tr>
+    [% FOREACH results %]
+        <tr>
+            <td width="1%">&nbsp;</td>
+            <td  align=left class="inputFontNormal">
+                   [% barcode %]
+            </td>
+            <!-- falta que se ve el campo del autor -->
+            <td align="center" class="inputFontNormal">
+                    [% autor %]
+            </td>
+            <td align="center" class="inputFontNormal">
+                    [% titulo %]
+                    [% IF unititle %]:&nbsp;
+                        [% unititle %]
+                    [% END %]
+            </td>
+            <td align="center" class="inputFontNormal">
+                    [% number %]
+            </td>
+            <td align="center" class="inputFontNormal">
+                    [% publisher %]
+            </td>
+            <td align="center" class="inputFontNormal">
+                    [% anio_publicacion %]
+            </td>
+            <td align="center" class="inputFontNormal">
+                    [% signatura_topografica %]
+            </td>
+            <td width="1%">&nbsp;</td>
+        </tr>
+    
+    [% END %]
 </table>
 
 <br><br>
 <center>
-<a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=<!-- TMPL_VAR Name='name' -->" class="inputFontNormal" onMouseOut="swap('planillas','<!-- TMPL_VAR NAME='themelang' -->/images/plantilla.png')" onMouseOver="swap('planillas','<!-- TMPL_VAR NAME='themelang' -->/images/plantillabis.png')" >
-<input  name="planillas" id="planillas" alt="Generar planilla" type="image" value="Generar planilla"  src="<!-- TMPL_VAR NAME='themelang' -->/images/plantilla.png" border="0" title="Generar planilla" >
-</a>
+    <a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]" class="inputFontNormal" onMouseOut="swap('planillas','[% themelang %]/images/plantilla.png')" onMouseOver="swap('planillas','[% themelang %]/images/plantillabis.png')" >
+        <input  name="planillas" id="planillas" alt=[% "Generar planilla" | i18n %] type="image" value=[% "Generar planilla" | i18n %]  src="[% themelang %]/images/plantilla.png" border="0" title=[% "Generar planilla" | i18n %] >
+    </a>
 </center>
 
 

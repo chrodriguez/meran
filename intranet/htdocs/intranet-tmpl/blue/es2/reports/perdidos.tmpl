@@ -1,49 +1,58 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 <script>
 function hacerSubmit(){
 	document.branches.submit();
 	}
 </script>
-<table width="98%"  border="0" cellpadding="0" cellspacing="0"><tr><td class="pagetitle" >Ejemplares perdidos</td></tr>
-<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr></table>
+<table width="98%"  border="0" cellpadding="0" cellspacing="0">
+    <tr><td class="pagetitle" >[% "Ejemplares perdidos" | i18n %]</td></tr>
+    <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
+</table>
 <br>
 
 <center><table border=0 cellspacing=0 cellpadding=2>
-<td class="inputFontNormal" >Seleccione una unidad de informaci&oacute;n :</td>
+<td class="inputFontNormal" >[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</td>
 <td><form name="branches" action=/cgi-bin/koha/reports/perdidos.pl method=post >
-	<!-- TMPL_VAR NAME=unidades  --></form></td>
+	[% unidades %]
+    </form>
+</td>
 </table>
 <br>
 <p class="inputFontNormal">
-La cantidad de ejemplares perdidos es : <!-- TMPL_VAR NAME=cantidad --></p>
+    [% "La cantidad de ejemplares perdidos es :" | i18n %] [% cantidad %]</p>
 <br>
 
-<!-- TMPL_IF NAME="ok2" -->
-<a class="inputFontNormal" href=perdidos.pl?ini=<!-- TMPL_VAR name="ant" -->&branch=<!-- TMPL_VAR name=branch -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0></a>
-<!-- /TMPL_IF -->
+[%  IF ok2 %]
+    <a class="inputFontNormal" href=perdidos.pl?ini=[% ant %]&branch=[% branch %] <img src=[% themelang %]/images/numbers/ant.gif border=0></a>
+[% END %]
 
-<!-- TMPL_LOOP NAME=numeros -->
-        <a  class="inputFontNormal" href=perdidos.pl?ini=<!-- TMPL_VAR NAME=number -->&branch=<!-- TMPL_VAR name=branch -->> <u><!-- TMPL_VAR name=number --></u> </a>
-<!-- /TMPL_LOOP -->
+[% FOREACH numeros %]
+        <a  class="inputFontNormal" href=perdidos.pl?ini=[% number %]&branch=[% branch %]> 
+                <u>[% number %]</u> 
+        </a>
+[% END %]
 
-<!-- TMPL_IF NAME="ok" -->
-<a class="inputFontNormal" href=perdidos.pl?ini=<!-- TMPL_VAR name="sig" -->&branch=<!-- TMPL_VAR name=branch -->> <img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
-<!-- /TMPL_IF -->
+[% IF ok %]
+    <a class="inputFontNormal" href=perdidos.pl?ini=[% sig %]&branch=[% branch %] >
+        <img src=[% themelang %]/images/numbers/next.gif border=0>
+    </a>
+[% END %]
 <br><br>
-<center><table border=2 cellspacing=0 cellpadding=2>
-<th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=title&branch=<!-- TMPL_VAR NAME=branch -->>Titulo</a></th>
-<th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=author&branch=<!-- TMPL_VAR NAME=branch -->>Autor</a></th>
-<th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=bulk&branch=<!-- TMPL_VAR NAME=branch -->>Sigantura Topografica</a></th>
-<th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=barcode&branch=<!-- TMPL_VAR NAME=branch -->>Codigo de barras</a></th>
-
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-  <tr align='center'>
-  <td class="inputFontNormal"> <!-- TMPL_VAR NAME=title --> </td>
-  <td class="inputFontNormal"> <!-- TMPL_VAR NAME=author --> </td>
-  <td class="inputFontNormal"> <!-- TMPL_VAR NAME=bulk --> </td>
-  <td class="inputFontNormal"> <!-- TMPL_VAR NAME=barcode --> </td>
-  </tr>
-<!-- /TMPL_LOOP -->
+<center>
+<table border=2 cellspacing=0 cellpadding=2>
+    <th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=title&branch=[% branch  %]>[% "Titulo" | i18n %]</a></th>
+    <th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=author&branch=[% branch %]>[% "Autor" | i18n %]</a></th>
+    <th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=bulk&branch=[% branch %]>[% "Sigantura Topografica" | i18n %]</a></th>
+    <th class="tablaresultadoTitle"><a class="inputFontNormal" href=perdidos.pl?orden=barcode&branch=[% branch %]>[% "Codigo de barras" | i18n %]</a></th>
+    
+    [% FOREACH RESULTSLOOP %]
+        <tr align='center'>
+            <td class="inputFontNormal"> [% title %] </td>
+            <td class="inputFontNormal"> [% author %] </td>
+            <td class="inputFontNormal"> [% bulk %] </td>
+            <td class="inputFontNormal"> [% barcode %] </td>
+        </tr>
+    [% FOREACH %]
 </table>
 <br><br>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

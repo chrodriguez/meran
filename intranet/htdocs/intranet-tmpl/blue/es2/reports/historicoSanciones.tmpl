@@ -43,7 +43,7 @@ function consultar(){
 </script>
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >Hist&oacute;rico de Sanciones</td></tr>
+	<tr><td class="pagetitle" >[% "Hist&oacute;rico de Sanciones" | i18n %]</td></tr>
 	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 
@@ -52,31 +52,39 @@ function consultar(){
 	<table border="0" cellspacing="0" cellpadding="0">
   		<tr>
 			<td valign= "top" class=inputFontNormal>
-			<b>Seleccione para buscar por fecha.</b><br><br>
-			Seleccione una fecha de inicio:<br><br>
-			Seleccione una fecha de Fin:
+			<b>[% "Seleccione para buscar por fecha." | i18n %]</b><br><br>
+			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
+			[% "Seleccione una fecha de Fin:" | i18n %]
 			</td>
 
 			<td valign= "top" class=inputFontNormal><br><br>
 				<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="
-			[% IF fechaIni %][% fechaIni  %][% ELSE %][% todaydate %] [% END %]">
+			             [% IF fechaIni %]
+                                        [% fechaIni  %]
+                                     [% ELSE %]
+                                        [% todaydate %]
+                                     [% END %]">
 				<a href="javascript:dp_ini.toggle();">
-				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a><br><br>
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a><br><br>
 				<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="
-[% IF fechaIni %][% fechaIni  %][% ELSE %][% todaydate %] [% END %]">
+                                    [% IF fechaIni %]
+                                        [% fechaIni  %]
+                                    [% ELSE %]
+                                        [% todaydate %]
+                                    [% END %]">
 				<a href="javascript:dp_fin.toggle();">
-				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	alt="Selecciona una fecha"></a>
+				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	alt=[% "Selecciona una fecha" | i18n %]></a>
 			</td>
 
 			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan="4" valign="top" class="inputFontNormal"> <b>Filtrar por:</b> <br>
-
-			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-				<b>Responsable: </b>[% selectusuarios %]
+			<td rowspan="4" valign="top" class="inputFontNormal"> 
+                                <b>[% "Filtrar por:" | i18n %]</b> <br>
+        			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
+				<b>[% "Responsable:" | i18n %] </b>[% selectusuarios %]
 				<br><br>
-				<b>Tipo de Pr&eacute;stamo: </b>[% selectTiposPrestamos %]
+				<b>[% "Tipo de Pr&eacute;stamo:" | i18n %] </b>[% selectTiposPrestamos %]
 				<br><br>
-				<b>Tipo de Operaci&oacute;n: </b>[% selectTipoOperacion %]
+				<b>[% "Tipo de Operaci&oacute;n:" | i18n %] </b>[% selectTipoOperacion %]
 			</td>
 			<td>
 			<td>

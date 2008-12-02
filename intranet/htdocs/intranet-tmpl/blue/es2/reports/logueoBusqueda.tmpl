@@ -40,7 +40,7 @@ function consultar(){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Logueo de B&uacute;squedas desde OPAC</td>
+		<td class="pagetitle" >[% "Logueo de B&uacute;squedas desde OPAC" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -52,18 +52,18 @@ function consultar(){
 
 <ul>
 	<li>
-	  <b>Seleccione una fecha de inicio: </b>
+	  <b>[% "Seleccione una fecha de inicio: " | i18n %]</b>
 	</li>
 	<li>
 		<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="[% fechaIni %]"> <a href="javascript:dp_ini.toggle();">
 		<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 	</li>
-	<li><b>Seleccione una fecha de Fin: </b></li>	
+	<li><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></li>	
 	<li>
 	  	<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="[% fechaFin %]"> <a href="javascript:dp_fin.toggle();">
 		<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 	</li>
-	<li><b>Categoria de Usuario: </b></li>
+	<li><b>[% "Categoria de Usuario:" | i18n %] </b></li>
 	<li>[% selectCatUsuarios  %]</li>
 	<li>
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar('');">

@@ -40,7 +40,7 @@ function updateInfo(responseText){
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="pagetitle" >Estadisticas</td>
+		<td class="pagetitle" >[% "Estadisticas" | i18n %]</td>
 	</tr>
 	<tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -53,9 +53,9 @@ function updateInfo(responseText){
 			<td valign= "top" class=inputFontNormal>
 			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha" 
 			[% IF chkfecha %]checked[% END %]>
-			<b>Seleccione para buscar por fecha.</b><br><br>
-			Seleccione una fecha de inicio:<br><br>
-			Seleccione una fecha de Fin:
+			<b>[% "Seleccione para buscar por fecha." | i18n %]</b><br><br>
+			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
+			[% "Seleccione una fecha de Fin:" | i18n %]
 			</td>
 
 			<td valign= "top" class=inputFontNormal>
@@ -65,17 +65,21 @@ function updateInfo(responseText){
 			<a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 				<br><br>
 			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="
-[% IF fechaFin %][% dateselectedEnd  %][% ELSE %][% todaydate %][% END %]"			
-<a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+                            [% IF fechaFin %]
+                                [% dateselectedEnd  %]
+                            [% ELSE %]
+                                [% todaydate %]
+                            [% END %]"			
+                        <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
 			</td>
 			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan=3 class="inputFontNormal"> <b>Buscar por:</b> <br>
+			<td rowspan=3 class="inputFontNormal"> <b>[% "Buscar por:" | i18n %]</b> <br>
 				<p>Prestamos:</p>
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="DO" name="chck">Domiciliario
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="SA" name="chck">Sala de lectura 
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="FO" name="chck">Para fotocopia
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="ES" name="chck">Especial <br><br>
-				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">Usuario
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="DO" name="chck">[% "Domiciliario" | i18n %]
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="SA" name="chck">[% "Sala de lectura" | i18n %]
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="FO" name="chck">[% "Para fotocopia" | i18n %]
+				<input id="chck" class="inputFontNormal" type="checkbox"  value="ES" name="chck">[% "Especial" | i18n %] <br><br>
+				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
 				<br><br>
 
 				<input type="image" onClick='consultar()' src="[% themelang %]/images/boton-buscar.png" border="0">

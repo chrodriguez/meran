@@ -13,7 +13,7 @@ $(document).ready( function() {
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
-	<th>Seleccione una unidad de informaci&oacute;n :</th>
+	<th>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</th>
 	<th>
 		<form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >[% unidades %]
 		</form>
@@ -26,8 +26,8 @@ $(document).ready( function() {
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="40%">
 	<tr class="tablaresultadoTitle">
  		<td width="1%" align="right"><img src="[% themelang %]/images/izquierda.png"></td>
-		<th>Tipos de documentos</th>
-		<th>Cantidad</th>
+		<th>[% "Tipos de documentos" | i18n %]</th>
+		<th>[% "Cantidad" | i18n %]</th>
  		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 [% FOREACH RESULTSLOOP %]

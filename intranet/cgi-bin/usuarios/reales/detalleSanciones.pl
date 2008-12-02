@@ -11,7 +11,7 @@ use C4::AR::Sanctions;
 
 my $input=new CGI;
 
-my ($template, $session, $params) =  get_template_and_user ({
+my ($template, $session, $t_params) =  get_template_and_user ({
 			template_name	=> 'usuarios/reales/detalleSanciones.tmpl',
 			query		=> $input,
 			type		=> "intranet",
@@ -37,7 +37,7 @@ foreach my $san (@$sanctions) {
 }
 
 if (@$sanctions > 0){
-	$params->{'sanctions'}= $sanctions;
+	$t_params->{'sanctions'}= $sanctions;
 }
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

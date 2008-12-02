@@ -74,30 +74,30 @@ if ($input->param('type') eq 'pdf'){#Para PDF
 
 }
 else{ #Para imprimir
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "reports/printEstadisticas.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
-                             });
-
-my $resultsarray=\@estadisticas;
-($estadisticas) || (@$estadisticas=());
-
-$template->param(
-		 domiTotal        => $domiTotal,
-		 renovados        => $renovados,
-		 devueltos        => $devueltos,
-		 foto             => $foto,
-		 sala             => $sala,
-		 especial         => $especial,
-		 cantUsuPrest	  => $cantUsuPrest,
-		 cantUsuRenov	  => $cantUsuRenov,
-		 cantUsuReser	  => $cantUsuReser,
-		 msg              => $msg
-		);
-
-
-output_html_with_http_headers $input, $cookie, $template->output;
+        my ($template, $session, $t_params)
+            = get_template_and_user({template_name => "reports/printEstadisticas.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {borrowers => 1},
+                                    debug => 1,
+                                    });
+        
+        
+        my $resultsarray=\@estadisticas;
+        ($estadisticas) || (@$estadisticas=());
+        
+        $t_params->{'domiTotal'}= $domiTotal;
+        $t_params->{'renovados'}= $renovados;
+        $t_params->{'devueltos'}= $devueltos;
+        $t_params->{'foto'}= $foto;
+        $t_params->{'sala'}= $sala;
+        $t_params->{'especial'}= $especial;
+        $t_params->{'cantUsuPrest'}= $cantUsuPrest;
+        $t_params->{'cantUsuRenov'}= $cantUsuRenov;
+        $t_params->{'cantUsuReser'}= $cantUsuReser;
+        $t_params->{'msg'}= $msg;
+        
+        
+        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
