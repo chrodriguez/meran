@@ -4,7 +4,7 @@
 [% IF cantidad %]
 <center>
 <p class="inputFontNormal"> 
-	<b>[% "Cantidad de reservas realizadas: &nbsp;" | i18n %][% cantidad %]<br>
+	<b>[% "Cantidad de reservas realizadas:" | i18n %]&nbsp;[% cantidad %]<br>
 </p>
 <br>
 [% END %]
@@ -37,7 +37,7 @@
 	<tr border="1" bordercolor="#f2f2f2">
  		<td> 
 	[% IF id1 %]
-		<a class="click" onClick="detalle('[% id1 %]')" title="Mostrar Detalle">
+		<a class="click" onClick="detalle('[% id1 %]')" title="[% 'Mostrar Detalle' | i18n %]">
 	[% titulo %][% IF unititle %]:&nbsp;[% unititle %][% END %]
 		</a> [% ELSE %]&nbsp;[% END %]
  		</td>
@@ -69,7 +69,7 @@
 <p align="center">
 	<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
 		onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-	<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  
+	<input onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]" 
 		src="[% themelang %]/images/menu-imprimir.png" border="0">
 	</a>
 </p>

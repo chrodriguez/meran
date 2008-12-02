@@ -93,7 +93,7 @@
 	</td>
 	<td class="impar" align="center" >
 	[% IF date_due %]
-		<font color="<!-- TMPL_VAR NAME='color' -->">[% date_fin %]</font>
+		<font color="[% color %]">[% date_fin %]</font>
 		[% IF CirculationEnabled %]
        			[% IF renew %]<br>
 				<a class="click" onClick="renovar([% id3 %]);">[% "Renovar" | i18n %]</a>

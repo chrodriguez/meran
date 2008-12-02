@@ -40,7 +40,7 @@
 [% FOREACH WAITING %]
   <tr bordercolor="#f2f2f2">
 	<td class="impar">
-		<b><a class="click" onClick="detalle([% rid1 %])" title="Mostrar Detalle">
+		<b><a class="click" onClick="detalle([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
 		[% rtitulo %]
 		[% IF runititle %]:&nbsp;[% runititle %][% END %]
 		</a></b>
@@ -114,7 +114,7 @@
 [% FOREACH RESERVES %]
   <tr border="1" bordercolor="#f2f2f2">
 	<td class="impar">
-	<a class="click" onClick="detalleMaterialEnEspera([% rid1 %])" title="Mostrar Detalle">
+	<a class="click" onClick="detalleMaterialEnEspera([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
 		[% rtitulo %]
 		[% IF runititle %]
 			:&nbsp;[% runititle %]
