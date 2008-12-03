@@ -1,4 +1,4 @@
-package Usr_persona;
+package Ref_dptos_partidos;
 
 # this class IS a "Usr_persona::DB::Object" 
 # and contains all the methodes that 
@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup
 
   __PACKAGE__->meta->setup
   (
-    table => 'usr_persona',
+    table => 'ref_dptos_partidos',
     auto  => 1,
   );
 
