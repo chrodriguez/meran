@@ -278,6 +278,127 @@ ALTER TABLE `availability` CHANGE `item` `id3` VARCHAR( 10 ) CHARACTER SET latin
 DROP TABLE `historicIssues`
 
 
+##Nuevas tablas que reemplazaran a Borroers y Person
+#####################################################################################################
+
+CREATE TABLE `usr_estado` (                      
+              `id_persona` int(11) NOT NULL,                 
+              `regular` tinyint(1) NOT NULL default '0',     
+              `categoria` char(2) NOT NULL,                  
+              `fuente` varchar(255) NOT NULL default 'koha'  
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+
+
+CREATE TABLE `usr_persona` (                           
+               `id_persona` int(11) NOT NULL auto_increment,        
+               `id_socio` int(11) default NULL,                     
+               `vesion_documento` char(1) NOT NULL default 'P',     
+               `nro_documento` varchar(16) NOT NULL,                
+               `tipo_documento` char(3) NOT NULL,                   
+               `apellido` varchar(255) NOT NULL,                    
+               `nombre` varchar(255) NOT NULL,                      
+               `titulo` varchar(255) default NULL,                  
+               `otros_nombres` varchar(255) default NULL,           
+               `iniciales` varchar(255) NOT NULL,                   
+               `calle` varchar(255) NOT NULL,                       
+               `barrio` varchar(255) default NULL,                  
+               `ciudad` varchar(255) default NULL,                  
+               `telefono` varchar(255) default NULL,                
+               `email` varchar(255) default NULL,                   
+               `fax` varchar(255) default NULL,                     
+               `msg_texto` varchar(255) default NULL,               
+               `alt_calle` varchar(255) default NULL,               
+               `alt_barrio` varchar(255) default NULL,              
+               `alt_ciudad` varchar(255) default NULL,              
+               `alt_telefono` varchar(255) default NULL,            
+               `nacimiento` date default NULL,                      
+               `fecha_alta` date default NULL,                      
+               `sexo` char(1) default NULL,                         
+               `telefono_laboral` varchar(50) default NULL,         
+               `cumple_condicion` tinyint(1) NOT NULL default '0',  
+               PRIMARY KEY  (`id_persona`),                         
+               KEY `personnumber` (`id_persona`)                    
+             ) ENGINE=InnoDB DEFAULT CHARSET=latin1       
+
+
+
+
+ CREATE TABLE `usr_ref_estados` (                
+                   `id_estado` int(11) NOT NULL auto_increment,  
+                   `descripcion` varchar(255) NOT NULL,          
+                   PRIMARY KEY  (`id_estado`)                    
+                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1          
+
+
+
+
+CREATE TABLE `usr_ref_tipo_documento` (                                              
+                          `id_tipo_documento` int(11) NOT NULL auto_increment,                               
+                          `nombre` varchar(50) collate latin1_spanish_ci NOT NULL,                           
+                          `descripcion` varchar(250) collate latin1_spanish_ci NOT NULL,                     
+                          PRIMARY KEY  (`id_tipo_documento`)                                                 
+                        ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=DYNAMIC  
+
+
+usr_socios  CREATE TABLE `usr_socios` (                          
+              `id_persona` int(11) NOT NULL,                     
+              `id_socio` int(11) NOT NULL auto_increment,        
+              `nro_socio` varchar(16) NOT NULL,                  
+              `id_ui` varchar(4) NOT NULL,                       
+              `cod_categoria` char(2) NOT NULL,                  
+              `fecha_alta` date default NULL,                    
+              `expira` date default NULL,                        
+              `flags` int(11) default NULL,                      
+              `password` varchar(30) default NULL,               
+              `lastlogin` datetime default NULL,                 
+              `lastchangepassword` date default NULL,            
+              `changepassword` tinyint(1) NOT NULL default '0',  
+              `cumple_requisito` date default NULL,              
+              `id_estado` int(11) NOT NULL,                      
+              PRIMARY KEY  (`id_socio`),                         
+              UNIQUE KEY `cardnumber` (`nro_socio`),             
+              KEY `borrowernumber` (`id_socio`)                  
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1           
+
+CREATE TABLE `usr_socios_relacionados` (  
+                           `id_socio` int(11) NOT NULL,            
+                           `id_persona` int(11) NOT NULL,          
+                           `id_estado` int(11) NOT NULL,           
+                           `fecha_alta` date NOT NULL              
+                         ) ENGINE=InnoDB DEFAULT CHARSET=latin1    
+
+
+
+
+CREATE TABLE `ref_dptos_partidos` (                
+                      `DPTO_PARTIDO` varchar(11) NOT NULL default '',  
+                      `NOMBRE` varchar(60) default NULL,               
+                      `PROVINCIA` varchar(11) default NULL,            
+                      `ESTADO` char(1) default NULL,                   
+                      PRIMARY KEY  (`DPTO_PARTIDO`)                    
+                    ) ENGINE=MyISAM DEFAULT CHARSET=latin1             
+
+
+
+CREATE TABLE `ref_paises` (             
+              `iso` char(2) NOT NULL default '',    
+              `iso3` char(3) NOT NULL default '',   
+              `nombre` varchar(80) NOT NULL,        
+              `nombre_largo` varchar(80) NOT NULL,  
+              `codigo` varchar(11) NOT NULL,        
+              PRIMARY KEY  (`iso`)                  
+            ) ENGINE=MyISAM DEFAULT CHARSET=latin1  
+
+
+
+CREATE TABLE `ref_provincias` (                  
+                  `PROVINCIA` varchar(11) NOT NULL default '0',  
+                  `NOMBRE` varchar(60) default NULL,             
+                  `PAIS` varchar(11) default '0',                
+                  PRIMARY KEY  (`PROVINCIA`)                     
+                ) ENGINE=MyISAM DEFAULT CHARSET=latin1      
+
 
 
 
