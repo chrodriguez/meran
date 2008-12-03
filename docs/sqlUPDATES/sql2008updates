@@ -341,7 +341,7 @@ CREATE TABLE `usr_ref_tipo_documento` (
                         ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=DYNAMIC  
 
 
-usr_socios  CREATE TABLE `usr_socios` (                          
+usr_socios  CREATE TABLE `usr_socio` (                          
               `id_persona` int(11) NOT NULL,                     
               `id_socio` int(11) NOT NULL auto_increment,        
               `nro_socio` varchar(16) NOT NULL,                  
