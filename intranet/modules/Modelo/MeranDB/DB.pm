@@ -13,7 +13,7 @@ __PACKAGE__->use_private_registry;
 # filling in the registry:
 __PACKAGE__->register_db(
       driver   => 'mysql',
-      database => 'V2',
+      database => 'V3',
       host     => 'localhost',
       username => 'dev',
       password => 'dev',

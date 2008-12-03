@@ -1,4 +1,4 @@
-package Usr_persona::Manager;
+package Ref_provincias::Manager;
 
 # this class IS a "Rose::DB::Object::Manager"
 # and contains all the methodes that 
@@ -8,7 +8,7 @@ use base qw(Rose::DB::Object::Manager);
 # replace the inherited Products->object_class
 # with our own new Product->object_class
 # (yes, it just always returns the value 'Product')
-sub object_class { 'Usr_persona' }
+sub object_class { 'Ref_provincias' }
 
 # use the make_manager_methods to generate methodes 
 # to manage the objects, the methods are called:
@@ -19,6 +19,11 @@ sub object_class { 'Usr_persona' }
 #    delete_usr_persona
 #    update_usr_persona
 #
-__PACKAGE__->make_manager_methods('usr_persona');
+__PACKAGE__->make_manager_methods('ref_provincias');
+
+sub getNombre(){
+    my $fetchObj = @_;
+    return ($fetchObj->NOMBRE);
+}
 
 1;

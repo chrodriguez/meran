@@ -278,7 +278,7 @@ ALTER TABLE `availability` CHANGE `item` `id3` VARCHAR( 10 ) CHARACTER SET latin
 DROP TABLE `historicIssues`
 
 
-##Nuevas tablas que reemplazaran a Borroers y Person
+##Nuevas tablas que reemplazaran a Borrowers y Person
 #####################################################################################################
 
 CREATE TABLE `usr_estado` (                      

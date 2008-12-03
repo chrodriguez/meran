@@ -1,4 +1,4 @@
-package Usr_persona;
+package Ref_provincias;
 
 # this class IS a "Usr_persona::DB::Object" 
 # and contains all the methodes that 
@@ -26,10 +26,21 @@ __PACKAGE__->meta->setup
 
   __PACKAGE__->meta->setup
   (
-    table => 'usr_persona',
+    table => 'ref_provincias',
     auto  => 1,
   );
 
+
+sub getNombre{
+    my ($self) = shift;
+    return ($self->NOMBRE);
+}
+
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+    $self->NOMBRE($nombre);
+}
 
 
 1;
