@@ -25,6 +25,9 @@ use C4::Boolean;
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
 	qw(@context_stack);
+our @ISA = qw (Exporter);
+our @EXPORT = qw (camel);
+our @EXPORT_OK = qw(1024);
 
 $VERSION = do { my @v = '$Revision: 1.14 $' =~ /\d+/g;
 		shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
