@@ -38,17 +38,19 @@ function updateInfoAgregarItem(responseText){
  * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
  */
 function seleccionTipoItem(){
+        var itemTypeValue = $("#itemtype").val();
 	$("#result").html("");
 	objJSON=new AjaxHelper();
-	objJSON.itemtype=$("#itemtype").val();
-	objJSON.paso=1;
-
-	objAH=new AjaxHelper(updateInfoAgregarItem);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-	objAH.nivel=1;
-	objAH.itemtype=$("#itemtype").val();
-	objAH.paso=1;
-	objAH.sendToServer();
+        if (itemTypeValue != -1){ //PARA NO HACER LA PETICION DE AJAX
+            objJSON.itemtype=$("#itemtype").val();
+            objJSON.paso=1;
+            objAH=new AjaxHelper(updateInfoAgregarItem);
+            objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+            objAH.nivel=1;
+            objAH.itemtype=$("#itemtype").val();
+            objAH.paso=1;
+            objAH.sendToServer();
+        }
 }
 
 /*

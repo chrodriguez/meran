@@ -14,7 +14,7 @@
                     [% "Regitro de nivel 1:" | i18n %] [% id1 %]
                     <br>
             
-                    <input type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png"   border=0 title=[% "Modificar Nivel 1" | i18n %] onClick=modificarN1([% id1 " | i18n %])>
+                    <input type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png"   border=0 title=[% "Modificar Nivel 1" | i18n %] onClick=modificarN1(id1)>
             
                     <input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;[% "Est&aacute; seguro que desea borrarlo?" | i18n %]')) {borrarN1([% id1 %]);} else {return false;}" title=[% "Borrar Nivel 1" | i18n %]>
                     </div>
@@ -35,7 +35,7 @@
                                     [% "Nivel bibliogr&aacute;fico:" | i18n %] [% nivel_bibliografico %]<br>
                             [% END %]
         
-                            [% soporte %]
+                            [% IF soporte %]
                                     [% "Soporte:" | i18n %] [% soporte %] <br>
                             [% END %]
                             [% IF pais_publicacion %]
@@ -64,7 +64,7 @@
         
         [% IF titulo %]
             <div id="contenido" style="float:right; width:80%">
-        [% END %]
+        [% ELSE %]
         <div id="contenido">
         [% END %]
         
