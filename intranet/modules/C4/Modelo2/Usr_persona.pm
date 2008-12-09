@@ -1,0 +1,322 @@
+package Usr_persona;
+
+# this class IS a "Usr_persona::DB::Object" 
+# and contains all the methodes that 
+# Usr_persona::DB::Object does
+use base 'C4::Modelo::MeranDB::DB::Object';
+
+# call the methode My::DB::Object->meta->setup() to 
+# announce the layout of our database table;
+=item
+__PACKAGE__->meta->setup
+  (
+    table   => 'products',
+    columns =>
+        [
+            id    => { type => 'integer', not_null => 1 },
+            name  => { type => 'varchar', length => 255, not_null => 1 },
+            price => { type => 'decimal' },
+        ],
+    primary_key_columns => 'id',
+    unique_key => 'name',
+    relationships => [],
+);
+=cut
+
+
+  __PACKAGE__->meta->setup
+  (
+    table => 'usr_persona',
+    auto  => 1,
+  );
+
+
+sub getId_persona{
+    my ($self) = shift;
+    return ($self->id_persona);
+}
+
+sub setId_persona{
+    my ($self) = shift;
+    my ($id_persona) = @_;
+    $self->id_persona($id_persona);
+}
+
+sub getId_socio{
+    my ($self) = shift;
+    return ($self->id_socio);
+}
+
+sub setId_socio{
+    my ($self) = shift;
+    my ($id_socio) = @_;
+    $self->id_socio($id_socio);
+}
+
+sub getVersion_documento{
+    my ($self) = shift;
+    return ($self->version_documento);
+}
+
+sub setVersion_documento{
+    my ($self) = shift;
+    my ($version_documento) = @_;
+    $self->version_documento($version_documento);
+}
+
+
+sub getNro_documento{
+    my ($self) = shift;
+    return ($self->nro_documento);
+}
+
+sub setNro_documento{
+    my ($self) = shift;
+    my ($nro_documento) = @_;
+    $self->nro_documento($nro_documento);
+}
+
+sub getTipo_documento{
+    my ($self) = shift;
+    return ($self->tipo_documento);
+}
+
+sub setTipo_documento{
+    my ($self) = shift;
+    my ($tipo_documento) = @_;
+    $self->tipo_documento($tipo_documento);
+}
+
+sub getApellido{
+    my ($self) = shift;
+    return ($self->apellido);
+}
+
+sub setApellido{
+    my ($self) = shift;
+    my ($apellido) = @_;
+    $self->apellido($apellido);
+}
+
+sub getNombre{
+    my ($self) = shift;
+    return ($self->nombre);
+}
+
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+    $self->nombre($nombre);
+}
+
+sub getTitulo{
+    my ($self) = shift;
+    return ($self->titulo);
+}
+
+sub setTitulo{
+    my ($self) = shift;
+    my ($titulo) = @_;
+    $self->titulo($titulo);
+}
+
+
+sub getOtros_nombres{
+    my ($self) = shift;
+    return ($self->otros_nombres);
+}
+
+sub setOtros_nombres{
+    my ($self) = shift;
+    my ($otros_nombres) = @_;
+    $self->otros_nombres($otros_nombres);
+}
+
+sub getIniciales{
+    my ($self) = shift;
+    return ($self->iniciales);
+}
+
+sub setIniciales{
+    my ($self) = shift;
+    my ($iniciales) = @_;
+    $self->iniciales($iniciales);
+}
+
+sub getCalle{
+    my ($self) = shift;
+    return ($self->calle);
+}
+
+sub setCalle{
+    my ($self) = shift;
+    my ($calle) = @_;
+    $self->calle($calle);
+}
+
+sub getBarrio{
+    my ($self) = shift;
+    return ($self->barrio);
+}
+
+sub setBarrio{
+    my ($self) = shift;
+    my ($barrio) = @_;
+    $self->barrio($barrio);
+}
+
+sub getCiudad{
+    my ($self) = shift;
+    return ($self->ciudad);
+}
+
+sub setCiudad{
+    my ($self) = shift;
+    my ($ciudad) = @_;
+    $self->ciudad($ciudad);
+}
+
+sub getTelefono{
+    my ($self) = shift;
+    return ($self->telefono);
+}
+
+sub setTelefono{
+    my ($self) = shift;
+    my ($telefono) = @_;
+    $self->telefono($telefono);
+}
+
+sub getEmail{
+    my ($self) = shift;
+    return ($self->email);
+}
+
+sub setEmail{
+    my ($self) = shift;
+    my ($email) = @_;
+    $self->email($email);
+}
+
+sub getFax{
+    my ($self) = shift;
+    return ($self->fax);
+}
+
+sub setFax{
+    my ($self) = shift;
+    my ($fax) = @_;
+    $self->fax($fax);
+}
+
+sub getMsg_texto{
+    my ($self) = shift;
+    return ($self->msg_texto);
+}
+
+sub setMsg_texto{
+    my ($self) = shift;
+    my ($msg_texto) = @_;
+    $self->msg_texto($msg_texto);
+}
+
+sub getAlt_calle{
+    my ($self) = shift;
+    return ($self->alt_calle);
+}
+
+sub setAlt_calle{
+    my ($self) = shift;
+    my ($alt_calle) = @_;
+    $self->alt_calle($alt_calle);
+}
+
+sub getAlt_barrio{
+    my ($self) = shift;
+    return ($self->alt_barrio);
+}
+
+sub setAlt_barrio{
+    my ($self) = shift;
+    my ($alt_barrio) = @_;
+    $self->alt_barrio($alt_barrio);
+}
+
+sub getAlt_ciudad{
+    my ($self) = shift;
+    return ($self->alt_ciudad);
+}
+
+sub setAlt_ciudad{
+    my ($self) = shift;
+    my ($alt_ciudad) = @_;
+    $self->alt_ciudad($alt_ciudad);
+}
+
+sub getAlt_telefono{
+    my ($self) = shift;
+    return ($self->alt_telefono);
+}
+
+sub setAlt_telefono{
+    my ($self) = shift;
+    my ($alt_telefono) = @_;
+    $self->alt_telefono($alt_telefono);
+}
+
+sub getNacimiento{
+    my ($self) = shift;
+    return ($self->nacimiento);
+}
+
+sub setNacimiento{
+    my ($self) = shift;
+    my ($nacimiento) = @_;
+    $self->nacimiento($nacimiento);
+}
+
+sub getFecha_alta{
+    my ($self) = shift;
+    return ($self->fecha_alta);
+}
+
+sub setFecha_alta{
+    my ($self) = shift;
+    my ($fecha_alta) = @_;
+    $self->fecha_alta($fecha_alta);
+}
+
+sub getSexo{
+    my ($self) = shift;
+    return ($self->sexo);
+}
+
+sub setSexo{
+    my ($self) = shift;
+    my ($sexo) = @_;
+    $self->sexo($sexo);
+}
+
+sub getTelefono_laboral{
+    my ($self) = shift;
+    return ($self->telefono_laboral);
+}
+
+sub setTelefono_laboral{
+    my ($self) = shift;
+    my ($telefono_laboral) = @_;
+    $self->telefono_laboral($telefono_laboral);
+}
+
+sub getCumple_condicion{
+    my ($self) = shift;
+    return ($self->cumple_condicion);
+}
+
+sub setCumple_condicion{
+    my ($self) = shift;
+    my ($cumple_condicion) = @_;
+    $self->cumple_condicion($cumple_condicion);
+}
+
+1;

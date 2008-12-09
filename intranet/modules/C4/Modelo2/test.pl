@@ -1,0 +1,164 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Data::Dumper;
+
+# use the Rose::DB classes that match your database 
+use C4::Modelo::Ref_paises;
+use C4::Modelo::Ref_paises::Manager;
+use C4::Modelo::Ref_provincias;
+use C4::Modelo::Ref_provincias::Manager;
+use C4::Modelo::Usr_persona;
+use C4::Modelo::Usr_persona::Manager;
+use C4::Modelo::Sanction::Manager;
+use C4::Modelo::Sanction;
+
+# 
+# print "\n###################### Tabla Ref_paises: #############################\n\n\n:";
+# my $products = Ref_paises::Manager->get_ref_paises();
+# foreach my $product (@$products) {
+#     print  $product->getNombre . ' available for ' .
+#            $product->getCodigo . "\n";
+# }
+# 
+# my $product;
+# 
+# #  $product = Ref_paises->new(
+# #                             nombre      => 'Alemania',
+# #                             nombre_largo      => 'Alemania Somnolienta',
+# #                             codigo	=> 68,
+# #                             iso => 'IS',
+# #                             iso3 => 'ISO',
+# #                          );
+# # 
+# #   $product->save;
+# 
+#   $product = Ref_paises->new(   iso => 'IS',   );
+#   $product->load;
+# print "\nNUEVO INGRESO, VIENDO...:.\n\n";
+# print $product->getNombre."\n";
+# print $product->getCodigo."\n";
+# 
+# 
+# print "\n############################ FIN Ref_paises. ##############################\n\n";
+# 
+# 
+# print "\n###################### Tabla Ref_provincias: #############################:\n\n\n";
+# $products = Ref_provincias::Manager->get_ref_provincias();
+# foreach my $product (@$products) {
+#     print  'NOMBRE: '.$product->getNombre."\n".
+#            'PROVINCIA: '.$product->getProvincia."\n".
+#            'PAIS: '.$product->getPais . "\n";
+# }
+# 
+# 
+# 
+# #  $product = Ref_provincias->new(
+# #                             NOMBRE      => 'Bs. AS.',
+# #                             PAIS      => 'BOLIVIA',
+# #                             PROVINCIA	=> 'BA',
+# #                          );
+# # 
+# #   $product->save;
+# 
+#   $product = Ref_provincias->new(   PROVINCIA => 'BA',   );
+#   $product->load;
+# print "\nNUEVO INGRESO, VIENDO...:.\n\n";
+# print $product->getNombre."\n";
+# print $product->getProvincia."\n";
+# print $product->getPais."\n\n\n";
+# 
+# # $product->NOMBRE('JAJA');
+# 
+# $product->setNombre('JOJOJO');
+# 
+# print "NOMBRE CON GETTER:       ".$product->getNombre;
+# 
+# 
+# print "\n############################ FIN Ref_provincias. ##############################\n\n";
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# print "\n###################### Tabla Usr_persona: #############################:\n\n\n";
+# $products = Usr_persona::Manager->get_ref_provincias();
+# foreach my $product (@$products) {
+#     print  'NOMBRE: '.$product->getNombre."\n".
+#            'PROVINCIA: '.$product->getProvincia."\n".
+#            'PAIS: '.$product->getPais . "\n";
+# }
+# 
+
+print "\n\n\n\n\n\n\n\n\n";
+# my $loader = Rose::DB::Object::Loader->new(
+#                     db_dsn       => 'dbi:mysql:dbname=V3_newAspect_EINAR;host=localhost',
+#                     db_username  => 'remote',
+#                     db_password  => 'remoteHOST',
+#                     db_options   => { AutoCommit => 1, ChopBlanks => 1 },
+#                      );
+# $loader->make_modules(  module_dir => "/usr/local/koha/intranet/modules/C4/Modelo/",
+#                                          );
+ my $person = Sanction->new();
+
+    Usr_persona::Manager->delete_usr_persona(where =>
+        [
+                                            id_socio    => { eq => 58987361 },] 
+                                            );
+
+        $person = Sanction::Manager->get_sanctions();
+        foreach my $persona (@$person) {
+             print  'NOMBRE: '.$persona->sanctionnumber."\n".
+                     '************** END TUPLA **********'."\n";
+             print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
+                    '************** END TUPLA **********'."\n";
+             $persona->reservenumber(902487421);
+             $persona->save();
+             print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
+                     '************** END TUPLA **********'."\n";
+
+        }
+#     $person->setId_socio(58987361);
+#     $person->setVersion_documento('Z');
+#     $person->setNro_documento(10949341);
+#     $person->setTipo_documento('DNI');
+#     $person->setApellido('PEREZ');
+#     $person->setNombre('JOJO');
+#     $person->setIniciales('JP');
+#     $person->setCalle('DIAGONAL 74');
+#     $person->setCumple_condicion(1);
+
+
+    
+
+
+print "\n###################### Tabla Usr_persona: #############################:\n\n\n";
+my $products = Usr_persona::Manager->get_usr_persona();
+foreach my $product (@$products) {
+    print  'NOMBRE: '.$product->getNombre."\n".
+           'APELLIDO: '.$product->getApellido."\n".
+           'CALLE: '.$product->getCalle . "\n".
+            '************** END TUPLA **********'."\n";
+            
+}
+#   $product->save;
+# 
+#   $product = Ref_provincias->new(   PROVINCIA => 'BA',   );
+#   $product->load;
+# print "\nNUEVO INGRESO, VIENDO...:.\n\n";
+# print $product->getNombre."\n";
+# print $product->getProvincia."\n";
+# print $product->getPais."\n\n\n";
+# 
+# # $product->NOMBRE('JAJA');
+# 
+# $product->setNombre('JOJOJO');
+# 
+# print "NOMBRE CON GETTER:       ".$product->getNombre;
+# 
+# 
+# print "\n############################ FIN Ref_provincias. ##############################\n\n";
