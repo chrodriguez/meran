@@ -401,7 +401,7 @@ CREATE TABLE `ref_provincias` (
 
 
 
-
+ALTER TABLE `usr_persona` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' COMMENT '1 = activo ; 0 = desactivado (dado de baja)';
 
 
 

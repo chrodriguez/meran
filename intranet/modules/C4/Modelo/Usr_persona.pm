@@ -30,6 +30,27 @@ __PACKAGE__->meta->setup
     auto  => 1,
   );
 
+sub activar(){
+    my ($self) = shift;
+    $self->setActivo(1);
+}    
+
+
+sub eliminar(){
+    my ($self) = shift;
+    $self->setActivo(0);
+}    
+
+sub getActivo{
+    my ($self) = shift;
+    return ($self->activo);
+}
+
+sub setActivo{
+    my ($self) = shift;
+    my ($activo) = @_;
+    $self->activo($activo);
+}
 
 sub getId_persona{
     my ($self) = shift;
