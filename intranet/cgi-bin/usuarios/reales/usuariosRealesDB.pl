@@ -140,7 +140,7 @@ Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
 	
-	my ($Message_arrayref)= C4::AR::Usuarios::t_addBorrower($obj);
+	my ($Message_arrayref)=C4::AR::Usuarios::agregarPersona(); #C4::AR::Usuarios::t_addBorrower($obj);
 
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	

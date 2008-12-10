@@ -7,6 +7,8 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
 use C4::AR::Issues;
+use C4::Modelo::Usr_persona;
+use C4::Modelo::Usr_persona::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -138,33 +140,6 @@ sub t_addPersons {
  	return ($msg_object);
 }
 
-sub _verificarInfoAddPerson {
-	my ($params, $msg_object)=@_;
-
- 	my $dbh = C4::Context->dbh;
-	my $error= 0;
-	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
-
-	#Verificar que ya no exista como borrower
-	my $sth2=$dbh->prepare("SELECT * 
-				FROM borrowers 
-				WHERE cardnumber=?");
-	$sth2->execute($params->{'cardnumber'});
-	my $borrower= $sth2->fetchrow_hashref;
-
-	if($borrower){
-		#ya existe el borrower		
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U346', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
-	#Se verifica que el usuario sea regular puede habilitar usurios irregulares??
-	elsif ( !($msg_object->{'error'}) && ($habilitar_irregulares eq 0)&&($params->{'regular'} eq 0)&&($params->{'categorycode'} eq 'ES')){
-		# No es regular y no se puede habilitar regulares
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U349', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
-}
-
 sub addPersons {
 	my ($persons)=@_;
 	
@@ -199,6 +174,148 @@ sub addPersons {
 
 	return ($msg_object);
 }
+
+
+
+sub t_addBorrower {
+	
+	my($params)=@_;
+	my $dbh = C4::Context->dbh;
+
+# 	my %msg;	
+	my $msg_object= C4::AR::Mensajes::create();
+	_verificarDatosBorrower($params,$msg_object);
+
+	if(!$msg_object->{'error'}){
+	#No hay error
+		# enable transactions, if possible
+		$dbh->{AutoCommit} = 0;  
+		$dbh->{RaiseError} = 1;
+	
+		eval {
+			my $borrowernumber= addBorrower($params);	
+			$dbh->commit;
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+					
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+			eval {$dbh->rollback};
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+		}
+		$dbh->{AutoCommit} = 1;
+
+	}
+
+	return ($msg_object);
+}
+
+sub agregarPersona{
+
+    my ($params)=@_;
+    my $person = Person->new();
+    $person->agregar($params);
+
+}
+   
+
+sub addBorrower {
+
+	my ($params)=@_;
+	my $dateformat = C4::Date::get_date_format();
+	my $dbh = C4::Context->dbh;
+
+	
+	my $query="	INSERT INTO borrowers 
+			(title , expiry , cardnumber , sex , ethnotes , streetaddress , faxnumber,
+			firstname , altnotes , dateofbirth , contactname , emailaddress , textmessaging,
+			dateenrolled , streetcity , altrelationship , othernames , phoneday,
+			categorycode , city , area , phone , borrowernotes , altphone , surname,
+			initials , ethnicity , physstreet , branchcode , zipcode , homezipcode,
+			documenttype , documentnumber , lastchangepassword , changepassword , studentnumber)  
+			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+	
+	my $sth=$dbh->prepare($query);
+	
+	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
+	$params->{'changepassword'}= $params->{'changepassword'}||1; #si no viene nada por defecto debe cambiar la password
+
+	$sth->execute(	$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
+			$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
+			$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
+			$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
+			$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
+			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
+			$params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
+			$params->{'documenttype'},$params->{'documentnumber'},
+ 			$params->{'changepassword'},$params->{'studentnumber'}
+		);
+
+	$sth->finish;
+
+	#obtengo el borrowernumber recien generado
+	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
+	$sth3->execute();
+	my $borrowernumber= $sth3->fetchrow;
+
+	# Curso de usuarios#
+	if (C4::Context->preference("usercourse"))  {
+		my $sql2="";
+		if ($params->{'usercourse'} eq 1){
+			$sql2= "UPDATE borrowers
+				SET usercourse=NOW() 
+				WHERE borrowernumber=? 
+					AND 
+				      usercourse IS NULL ; ";
+		}
+		else{
+			$sql2= "UPDATE borrowers 
+				SET usercourse=NULL 
+				WHERE borrowernumber=? ;";
+		}
+
+		my $sth3=$dbh->prepare($sql2);
+		$sth3->execute();
+		$sth3->finish;
+	}
+
+	return $borrowernumber;
+}
+
+
+sub _verificarInfoAddPerson {
+	my ($params, $msg_object)=@_;
+
+ 	my $dbh = C4::Context->dbh;
+	my $error= 0;
+	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+
+	#Verificar que ya no exista como borrower
+	my $sth2=$dbh->prepare("SELECT * 
+				FROM borrowers 
+				WHERE cardnumber=?");
+	$sth2->execute($params->{'cardnumber'});
+	my $borrower= $sth2->fetchrow_hashref;
+
+	if($borrower){
+		#ya existe el borrower		
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U346', 'params' => [$params->{'cardnumber'}]} ) ;
+	}
+	#Se verifica que el usuario sea regular puede habilitar usurios irregulares??
+	elsif ( !($msg_object->{'error'}) && ($habilitar_irregulares eq 0)&&($params->{'regular'} eq 0)&&($params->{'categorycode'} eq 'ES')){
+		# No es regular y no se puede habilitar regulares
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U349', 'params' => [$params->{'cardnumber'}]} ) ;
+	}
+}
+
+
 
 # Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
 #  borrowernumber y usuario.
@@ -269,7 +386,7 @@ sub _eliminarUsuario{
 			   ");
 	$sth->execute($borrowernumber);
 	$sth->finish;
-
+}
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
@@ -516,43 +633,7 @@ sub _cambiarPassword{
 
 
 # Como todos los manejadores de transacciones
-sub t_addBorrower {
-	
-	my($params)=@_;
-	my $dbh = C4::Context->dbh;
 
-# 	my %msg;	
-	my $msg_object= C4::AR::Mensajes::create();
-	_verificarDatosBorrower($params,$msg_object);
-
-	if(!$msg_object->{'error'}){
-	#No hay error
-		# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			my $borrowernumber= addBorrower($params);	
-			$dbh->commit;
-			$msg_object->{'error'}= 0;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-					
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
-
-	}
-
-	return ($msg_object);
-}
 
 # Esta funcion se utiliza para validar todos los datos de un borrower nuevo o modificación de uno existente.
 # Recibe un hash con todos sus datos.
@@ -612,68 +693,7 @@ sub _verificarDatosBorrower{
 
 
 
-sub addBorrower {
 
-	my ($params)=@_;
-	my $dateformat = C4::Date::get_date_format();
-	my $dbh = C4::Context->dbh;
-
-	
-	my $query="	INSERT INTO borrowers 
-			(title , expiry , cardnumber , sex , ethnotes , streetaddress , faxnumber,
-			firstname , altnotes , dateofbirth , contactname , emailaddress , textmessaging,
-			dateenrolled , streetcity , altrelationship , othernames , phoneday,
-			categorycode , city , area , phone , borrowernotes , altphone , surname,
-			initials , ethnicity , physstreet , branchcode , zipcode , homezipcode,
-			documenttype , documentnumber , lastchangepassword , changepassword , studentnumber)  
-			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
-	
-	my $sth=$dbh->prepare($query);
-	
-	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
-	$params->{'changepassword'}= $params->{'changepassword'}||1; #si no viene nada por defecto debe cambiar la password
-
-	$sth->execute(	$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
-			$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
-			$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
-			$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
-			$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
-			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
-			$params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
-			$params->{'documenttype'},$params->{'documentnumber'},
- 			$params->{'changepassword'},$params->{'studentnumber'}
-		);
-
-	$sth->finish;
-
-	#obtengo el borrowernumber recien generado
-	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
-	$sth3->execute();
-	my $borrowernumber= $sth3->fetchrow;
-
-	# Curso de usuarios#
-	if (C4::Context->preference("usercourse"))  {
-		my $sql2="";
-		if ($params->{'usercourse'} eq 1){
-			$sql2= "UPDATE borrowers
-				SET usercourse=NOW() 
-				WHERE borrowernumber=? 
-					AND 
-				      usercourse IS NULL ; ";
-		}
-		else{
-			$sql2= "UPDATE borrowers 
-				SET usercourse=NULL 
-				WHERE borrowernumber=? ;";
-		}
-
-		my $sth3=$dbh->prepare($sql2);
-		$sth3->execute();
-		$sth3->finish;
-	}
-
-	return $borrowernumber;
-}
 
 sub t_updateBorrower {
 	
@@ -1046,7 +1066,7 @@ sub obtenerCategoriaPersona{
         my $condicion = $sth->fetchrow();
 	$sth->finish();
         return $condicion;
-} 
+}
 
 sub obtenerCategoriaBorrower{
         my ($bor) = @_;
@@ -1058,7 +1078,7 @@ sub obtenerCategoriaBorrower{
        	my $condicion = $sth->fetchrow();
 	$sth->finish();
         return $condicion;
-} 
+}
 
 
 
@@ -1275,6 +1295,9 @@ sub updateOpacBorrower{
 	$sth->finish;
 }
 
-;}
+ 
+
+
+1;
 
 

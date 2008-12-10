@@ -30,16 +30,89 @@ __PACKAGE__->meta->setup
     auto  => 1,
   );
 
-sub activar(){
+
+sub agregar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self-> setNombre($data_hash->{'nombre'});
+    $self-> setApellido($data_hash->{'apellido'});
+    $self-> setVersion_documento($data_hash->{'version_documento'});
+    $self-> setNro_documento($data_hash->{'nro_documento'});
+    $self-> setTipo_documento($data_hash->{'tipo_documento'});
+    $self-> setTitulo($data_hash->{'titulo'});
+    $self-> setOtros_nombres($data_hash->{'otros_nombres'});
+    $self-> setIniciales($data_hash->{'iniciales'});
+    $self-> setCalle($data_hash->{'calle'});
+    $self-> setBarrio($data_hash->{'barrio'});
+    $self-> setCiudad($data_hash->{'ciudad'});
+    $self-> setTelefono($data_hash->{'telefono'});
+    $self-> setEmail($data_hash->{'email'});
+    $self-> setFax($data_hash->{'fax'});
+    $self-> setMsg_texto($data_hash->{'msg_texto'});
+    $self-> setAlt_calle($data_hash->{'alt_calle'});
+    $self-> setAlt_barrio($data_hash->{'alt_barrio'});
+    $self-> setAlt_ciudad($data_hash->{'alt_ciudad'});
+    $self-> setAlt_telefono($data_hash->{'alt_telefono'});
+    $self-> setNacimiento($data_hash->{'nacimiento'});
+    $self-> setFecha_alta($data_hash->{'fecha_alta'});
+    $self-> setSexo($data_hash->{'sexo'});
+    $self-> setTelefono_laboral($data_hash->{'telefono_laboral'});
+    $self-> setCumple_condicion($data_hash->{'cumple_condicion'});
+    $self->save();
+}
+    
+=item
+    $data_hash->{'title'}
+    $data_hash->{'expiry'}
+    $data_hash->{'cardnumber'}
+    $data_hash->{'sex'}
+    $data_hash->{'ethnotes'}
+    $data_hash->{'streetaddress'}
+    $data_hash->{'faxnumber'}
+    $data_hash->{'altnotes'}
+    $data_hash->{'dateofbirth'}
+    $data_hash->{'contactname'}
+    $data_hash->{'emailaddress'}
+    $data_hash->{'textmessaging'}
+    $data_hash->{'joining'}
+    $data_hash->{'streetcity'}
+    $data_hash->{'altrelationship'}		
+    $data_hash->{'othernames'}
+    $data_hash->{'phoneday'}
+    $data_hash->{'categorycode'}
+    $data_hash->{'city'}
+    $data_hash->{'area'}
+    $data_hash->{'phone'}
+    $data_hash->{'borrowernotes'}
+    $data_hash->{'altphone'}
+    $data_hash->{'surname'}
+    $data_hash->{'initials'}
+    $data_hash->{'ethnicity'}
+    $data_hash->{'physstreet'}
+    $data_hash->{'branchcode'}
+    $data_hash->{'zipcode'}
+    $data_hash->{'homezipcode'}
+    $data_hash->{'documenttype'}
+    $data_hash->{'documentnumber'}
+    $data_hash->{'changepassword'}
+    $data_hash->{'studentnumber'}
+=cut 
+    
+
+sub activar{
     my ($self) = shift;
     $self->setActivo(1);
+    $self->save();
 }    
 
 
-sub eliminar(){
+sub eliminar{
     my ($self) = shift;
     $self->setActivo(0);
-}    
+    $self->save();
+}     
+
 
 sub getActivo{
     my ($self) = shift;

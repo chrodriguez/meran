@@ -320,6 +320,10 @@ has authenticated.
 
 sub checkauth {
 	my $query=shift;
+        my $authnotrequired = shift;
+	my $flagsrequired = shift;
+	my $type = shift;
+
 	my $time=localtime(time());
 
 	my $session = CGI::Session->load();# or die CGI::Session->errstr();
@@ -333,9 +337,7 @@ printSession($session, 'checkauth despues del load');
 
 
 	# $authnotrequired will be set for scripts which will run without authentication
-	my $authnotrequired = shift;
-	my $flagsrequired = shift;
-	my $type = shift;
+	
 	$type = 'opac' unless $type;
 
 	my $dbh = C4::Context->dbh;
@@ -376,13 +378,13 @@ printSession($session, 'checkauth despues del load');
  			_logout_Controller($session);
 		}
 
-		if ($userid) { 
+		if ($userid) {
 		#la sesion existia en la bdd, chequeo que no se haya vencido el tiempo
 			$loggedin= _loggedin_Controller($session);
  		}
 	}#eslif se requiere cookie
 
-	unless ($userid) { 
+	unless ($userid) {
 	#si no hay userid, hay que autentificarlo y no existe sesion
                 $session = new CGI::Session();
 		$sessionID= $session->id; #$sessionID=int(rand()*1000000).'-'.time();

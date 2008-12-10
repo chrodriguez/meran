@@ -2,7 +2,7 @@ package EncabezadoCampoOpac;
 
 use strict;
 
-use base qw(Rose::DB::Object::LoaderGenerated::AutoBase2);
+use base 'C4::Modelo::MeranDB::DB::Object';
 
 __PACKAGE__->meta->setup(
     table   => 'encabezado_campo_opac',

@@ -403,7 +403,7 @@ CREATE TABLE `ref_provincias` (
 
 ALTER TABLE `usr_persona` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' COMMENT '1 = activo ; 0 = desactivado (dado de baja)';
 
-
+ALTER TABLE `usr_persona` CHANGE `ciudad` `ciudad` VARCHAR( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'foránea de LOCALIDADES'
 
 
 
