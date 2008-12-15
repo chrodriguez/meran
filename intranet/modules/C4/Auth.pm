@@ -557,10 +557,10 @@ printSession($session, 'checkauth despues del load');
 
 # successful login
 $session->param('REQUEST_URI',$ENV{'REQUEST_URI'});
-printSession($session, 'checkauth: ');
+# printSession($session, 'checkauth: ');
 
-
-		return ($session);
+         return ($session);
+		
 	}
 	# else we have a problem...
 	# get the inputs from the incoming query

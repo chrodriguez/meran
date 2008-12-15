@@ -31,6 +31,17 @@ __PACKAGE__->meta->setup
   );
 
 
+sub convertirEnSocio{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    use C4::Modelo::Usr_socios;
+    
+    my $socio = Usr_socios->new();
+    $data_hash->{'id_persona'} = $self->getId_persona;
+    $socio->agregar($data_hash);
+     
+
 sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;

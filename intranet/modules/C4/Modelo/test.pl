@@ -103,25 +103,67 @@ print "\n\n\n\n\n\n\n\n\n";
 #                      );
 # $loader->make_modules(  module_dir => "/usr/local/koha/intranet/modules/C4/Modelo/",
 #                                          );
- my $person = Sanction->new();
+#  my $person = Sanction->new();
+# 
+#     Usr_persona::Manager->delete_usr_persona(where =>
+#         [
+#                                             id_socio    => { eq => 58987361 },] 
+#                                             );
+# 
+#         $person = Sanction::Manager->get_sanctions();
+#         foreach my $persona (@$person) {
+#              print  'NOMBRE: '.$persona->sanctionnumber."\n".
+#                      '************** END TUPLA **********'."\n";
+#              print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
+#                     '************** END TUPLA **********'."\n";
+#              $persona->reservenumber(902487421);
+#              $persona->save();
+#              print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
+#                      '************** END TUPLA **********'."\n";
+# 
+#         }
 
-    Usr_persona::Manager->delete_usr_persona(where =>
-        [
-                                            id_socio    => { eq => 58987361 },] 
-                                            );
 
-        $person = Sanction::Manager->get_sanctions();
-        foreach my $persona (@$person) {
-             print  'NOMBRE: '.$persona->sanctionnumber."\n".
-                     '************** END TUPLA **********'."\n";
-             print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
-                    '************** END TUPLA **********'."\n";
-             $persona->reservenumber(902487421);
-             $persona->save();
-             print  'RESERVE NUMBER: '.$persona->reservenumber."\n".
-                     '************** END TUPLA **********'."\n";
 
-        }
+
+	my $new = Usr_persona->new();
+       my %data_hash;
+        
+        $data_hash{'nombre'} = "PEPITO NEW";
+        $data_hash{'apellido'} = "PEREZ";
+        $data_hash{'version_documento'} = 'C';
+        $data_hash{'nro_documento'} = 31836547;
+        $data_hash{'tipo_documento'} = 'DNI';
+        $data_hash{'titulo'} = "SEÑOR";
+        $data_hash{'otros_nombres'} = "NI IDEA QUE OTROS NOMBRES";
+        $data_hash{'iniciales'} = "DGR";
+        $data_hash{'calle'} = "DIAGONAL 73";
+        $data_hash{'barrio'} = "MONDONGO";
+        $data_hash{'ciudad'} = "LA PLATA";
+        $data_hash{'telefono'} = "23423034";
+        $data_hash{'email'} = 'gaspo53@gmail.com';
+        $data_hash{'fax'} = "123874234";
+        $data_hash{'msg_texto'} = "HOLA, ESTE ES EL MSG DE TEXTO";
+        $data_hash{'alt_calle'} = "67 y 115";
+        $data_hash{'alt_barrio'} = "MONDONGO";
+        $data_hash{'alt_ciudad'} = "LA PLATA";
+        $data_hash{'alt_telefono'} = "23423034";
+        $data_hash{'nacimiento'} = "1985-10-18";
+        $data_hash{'fecha_alta'} = "2008-10-12";
+        $data_hash{'sexo'} = 'M';
+        $data_hash{'telefono_laboral'} = "4234342";
+        $data_hash{'cumple_condicion'} = '1';
+        $new->agregar(\%data_hash);
+
+
+
+        my $personas = Usr_persona::Manager->get_usr_persona();
+
+            foreach my $person (@$personas) {
+               print  'NOMBRE: '.$person->getNombre."\n".
+                 'APELLIDO: '.$person->getApellido."\n".
+                'SEXO: '.$person->getSexo . "\n";
+            }
 #     $person->setId_socio(58987361);
 #     $person->setVersion_documento('Z');
 #     $person->setNro_documento(10949341);
@@ -135,7 +177,7 @@ print "\n\n\n\n\n\n\n\n\n";
 
     
 
-
+=item
 print "\n###################### Tabla Usr_persona: #############################:\n\n\n";
 my $products = Usr_persona::Manager->get_usr_persona();
 foreach my $product (@$products) {
@@ -162,3 +204,4 @@ foreach my $product (@$products) {
 # 
 # 
 # print "\n############################ FIN Ref_provincias. ##############################\n\n";
+=cut
