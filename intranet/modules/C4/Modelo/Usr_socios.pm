@@ -3,7 +3,7 @@ package Usr_socios;
 # this class IS a "Usr_persona::DB::Object" 
 # and contains all the methodes that 
 # Usr_persona::DB::Object does
-use base 'MeranDB::DB::Object';
+use base 'C4::Modelo::MeranDB::DB::Object';
 
 # call the methode My::DB::Object->meta->setup() to 
 # announce the layout of our database table;
