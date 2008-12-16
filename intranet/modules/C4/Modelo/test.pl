@@ -10,6 +10,8 @@ use C4::Modelo::Ref_provincias;
 use C4::Modelo::Ref_provincias::Manager;
 use C4::Modelo::Usr_persona;
 use C4::Modelo::Usr_persona::Manager;
+use C4::Modelo::Usr_socios;
+use C4::Modelo::Usr_socios::Manager;
 use C4::Modelo::Sanction::Manager;
 use C4::Modelo::Sanction;
 
@@ -126,6 +128,8 @@ print "\n\n\n\n\n\n\n\n\n";
 
 
 
+    Usr_persona::Manager->delete_usr_persona(all => 1);
+#     Usr_socios::Manager->delete_usr_socios(all => 1);
 	my $new = Usr_persona->new();
        my %data_hash;
         
@@ -154,6 +158,25 @@ print "\n\n\n\n\n\n\n\n\n";
         $data_hash{'telefono_laboral'} = "4234342";
         $data_hash{'cumple_condicion'} = '1';
         $new->agregar(\%data_hash);
+
+
+        my %data_hash2;
+
+        $data_hash2{'nro_socio'} = "893247247";
+        $data_hash2{'id_ui'} = 'C';
+        $data_hash2{'cod_categoria'} = 'C3';
+        $data_hash2{'fecha_alta'} = "1985-12-12";
+        $data_hash2{'expira'}="1985-12-14";
+        $data_hash2{'flags'};
+        $data_hash2{'password'} = "MIRA MIRA";
+        $data_hash2{'last_login'}="1985-12-12";
+        $data_hash2{'last_change_password'}="1985-12-12";;
+        $data_hash2{'change_password'}="1985-12-12";;
+        $data_hash2{'cumple_resuiqisto'}="1985-12-12";;
+        $data_hash2{'id_estado'}=1;
+        $new->convertirEnSocio(\%data_hash2);
+
+    
 
 
 

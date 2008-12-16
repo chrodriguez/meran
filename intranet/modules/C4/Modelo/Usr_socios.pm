@@ -43,7 +43,7 @@ sub agregar{
     $self->setExpira($data_hash->{'expira'});
     $self->setFlags($data_hash->{'flags'});
     $self->setPassword($data_hash->{'password'});
-    $self->setLastlogin($data_hash->{'lastlogin'});
+    $self->setLast_login($data_hash->{'last_login'});
     $self->setLast_change_password($data_hash->{'last_change_password'});
     $self->setChange_password($data_hash->{'change_password'});
     $self->setCumple_requisito($data_hash->{'cumple_resuiqisto'});
