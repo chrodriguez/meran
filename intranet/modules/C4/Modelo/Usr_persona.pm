@@ -40,7 +40,7 @@ sub convertirEnSocio{
     my $socio = Usr_socios->new();
     $data_hash->{'id_persona'} = $self->getId_persona;
     $socio->agregar($data_hash);
-     
+}
 
 sub agregar{
     my ($self)=shift;

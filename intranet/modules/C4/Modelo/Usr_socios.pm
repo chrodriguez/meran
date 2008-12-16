@@ -50,7 +50,7 @@ sub agregar{
     $self->setId_estado($data_hash->{'id_estado'});
     
     $self->save();
-    
+}
 
 sub getId_persona{
     my ($self) = shift;
@@ -205,4 +205,3 @@ sub setId_estado{
     my ($id_estado) = @_;
     $self->id_estado($id_estado);
 }
-1;
