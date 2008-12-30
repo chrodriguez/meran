@@ -1,0 +1,19 @@
+package C4::Modelo::UsrRefEstado;
+
+use strict;
+
+use base qw(C4::Modelo::DB::Object::AutoBase2);
+
+__PACKAGE__->meta->setup(
+    table   => 'usr_ref_estados',
+
+    columns => [
+        id_estado   => { type => 'serial', not_null => 1 },
+        descripcion => { type => 'varchar', length => 255, not_null => 1 },
+    ],
+
+    primary_key_columns => [ 'id_estado' ],
+);
+
+1;
+
