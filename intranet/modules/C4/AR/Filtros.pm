@@ -25,8 +25,8 @@ sub i18n {
 	my $locale = $session->param('lang')|C4::Context->config("defaultLang")|'es_ES';
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
-	Locale::Maketext::Gettext::Functions::bindtextdomain("koha", C4::Context->config("locale"));
-	Locale::Maketext::Gettext::Functions::textdomain("koha");
+	Locale::Maketext::Gettext::Functions::bindtextdomain("intra", C4::Context->config("locale"));
+	Locale::Maketext::Gettext::Functions::textdomain("intra");
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
 
  	return __($text);
@@ -46,7 +46,7 @@ print A "desde putHTML: \n";
 	my $html= '';
 	my $lang_Selected= $session->param('lang');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
-	my @array_lang= ('nl_NL', 'es_ES', 'en_EN', 'jp_JP');
+	my @array_lang= ('es_ES', 'en_EN');
 	my $i;
 
 	if($type eq 'OPAC'){

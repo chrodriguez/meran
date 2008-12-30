@@ -11,10 +11,11 @@ __PACKAGE__->use_private_registry;
 __PACKAGE__->register_db
 (
   connect_options => { AutoCommit => 1 },
-  driver          => 'mysql',
-  dsn             => 'dbi:mysql:dbname='.C4::Context->config("database").';host='.C4::Context->config("hostname"),
-  password        => C4::Context->config("pass"),
-  username        => C4::Context->config("user"),
-);
+  driver          =>  "mysql",
+  database 	  => $context->config("database"),
+  host     	  => $context->config("hostname"),
+  password        => $context->config("pass"),
+  username        => $context->config("user"),
+ );
 
 1;
