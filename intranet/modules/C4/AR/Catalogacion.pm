@@ -39,6 +39,7 @@ use vars qw(@EXPORT @ISA);
 
 	&buscarCamposObligatorios
 	&buscarCamposMARC
+	&buscarCamposMARCdeNivel
 	&buscarSubCampo
 	&buscarCamposModificados
 	&buscarInfoReferencia
@@ -306,6 +307,32 @@ sub buscarCamposMARC{
 	$sth->finish;
 	return (@results);
 }
+
+
+=item
+buscarCamposMARCdeNivel
+Busca los campos MARC de la tabla marc_subfield_structure de un nivel dado
+=cut
+sub buscarCamposMARCdeNivel{
+	my ($nivel) =@_;
+	my $dbh = C4::Context->dbh;
+
+	my $query="SELECT * ";
+	$query .= " FROM marc_subfield_structure ";
+	$query .= " WHERE nivel=?";
+	
+	my $sth=$dbh->prepare($query);
+        $sth->execute($nivel);
+	
+	my @results;
+	while(my $data=$sth->fetchrow_hashref){
+		push (@results, $data);
+	}
+
+	$sth->finish;
+	return (@results);
+}
+
 
 =item
 buscarSubCampo

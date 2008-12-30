@@ -7,8 +7,8 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
 use C4::AR::Issues;
-use C4::Modelo::Usr_persona;
-use C4::Modelo::Usr_persona::Manager;
+use C4::Modelo::UsrPersona;
+use C4::Modelo::UsrPersona::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
