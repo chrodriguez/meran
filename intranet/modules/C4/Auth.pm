@@ -102,6 +102,7 @@ C4::Auth - Authenticates Koha users
 		&getSessionBorrowerNumber
 		&getSessionFlagsRequired
 		&getSessionBrowser
+		&_generarNroRandom
 		
 );
 
@@ -178,17 +179,18 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-# open(A, ">>/tmp/debug.txt");
+open(H, ">>/tmp/debug.txt");
 
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
 # 	my ($user, $sessionID, $flags)
 # 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
-	my ($session)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my ($user, $cookie, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
-# print A "desde: get_template_and_user \n";
+print H "desde: get_template_and_user \n";
 # print A "Se llamo a checkauth con: \n";
 # print A "in-> query: ".$in->{'query'}."\n";
 # print A "user: ".$user."\n";
+print H "get_template_and_user=> cookie: ".$cookie."\n";
 	my $borrowernumber;
 	if ( $session->param('userid') ) {
 		$params->{'loggedinusername'}= $session->param('userid');
@@ -201,36 +203,48 @@ sub get_template_and_user {
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
 	}
+close(H);
 
 # print A "get_template_and_user=> imprimo header \n";
-	return ($template, $session, $params);
+	return ($template, $session, $params, $cookie);
 }
 
 
 sub output_html_with_http_headers {
-    	my($query, $template, $params, $session) = @_;
-# open(A, ">>/tmp/debug.txt");
-# print A "output_html: \n";
+    	my($query, $template, $params, $session, $cookie) = @_;
+open(Z, ">>/tmp/debug.txt");
+print Z "output_html: \n";
 
 # FIXME este IF es un parche, ya que a veces (especifico de auth.pl) no recibe el parametro session
 	 if ( !(defined($session)) ){
             $session = CGI::Session->new();
+print Z "output_html=> creo session\n";
         }
 
 #         printSession($session, 'output_html_with_http_headers: ');
     	# send proper HTTP header with cookies:
-    	print $session->header();
+#  my $session = CGI::Session->load();
+#        	print $session->header();
 
-# print A "template_name ".$params->{'template_name'}."\n";
-# my $key;
-# print A "\n";
-# print A "SE PARAMS: \n";
-#    foreach $key (sort keys(%$params)) {
-#       print A "$key = $params->{$key} \n";
-#    } 
-# print A "\n";
+
+#    	print $query->header(
+#    		-cookie => $query->cookie(),
+#        	);
+
+print Z "output_html=> session->sessionID: ".$session->param('sessionID')."\n";
+print Z "output_html=> query->sessionID: ".$query->cookie('sessionID')."\n";
+print Z "output_html=> cookie: ".$cookie."\n";
+print Z "\n";
+close Z;
+=item
+	print $query->header(
+				-cookie => $session->param('sessionID'),
+			);
+=cut
+	print $session->header();
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
+	exit;
 }
 
 
@@ -317,7 +331,7 @@ has authenticated.
 =cut
 
 
-
+=item
 sub checkauth {
 	my $query=shift;
         my $authnotrequired = shift;
@@ -386,13 +400,22 @@ printSession($session, 'checkauth despues del load');
 
 	unless ($userid) {
 	#si no hay userid, hay que autentificarlo y no existe sesion
+
+print A "checkauth=> Usuario no logueado, intento de autenticacion \n";		
+		#No genero un nuevo sessionID, tomo el que viene del cliente
+		#con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
+		my $sessionID= $query->cookie('sessionID');
+		$userid=$query->param('userid');
+		my $password=$query->param('password');
+print A "checkauth=> busco el sessionID: ".$sessionID." de la base \n";
+		my $random_number= _getNroRandom($dbh, $sessionID);
+print A "checkauth=> random_number desde la base: ".$random_number."\n";
+
+
                 $session = new CGI::Session();
-		$sessionID= $session->id; #$sessionID=int(rand()*1000000).'-'.time();
-		$userid= $query->param('userid');
+		$sessionID= $session->id;
 		my $self_url = $query->url(-absolute => 1);
 		$session->param('url', $self_url);
-		my $password= $query->param('password');
-		my $random_number= $query->param('nroRandom');
 		#Se guarda la info en la session
 		$session->param('userid', $userid);
 		$session->param('loggedinusername',$session->param('userid'));
@@ -506,14 +529,10 @@ printSession($session, 'checkauth despues del load');
 		# Added by Luciano to check if the borrower have to change the password or not
 		if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid)))) {
 
-	 	  my $input = new CGI;
-		  my $newpassword = $input->param('newpassword') || 0;
-	          my $sth=$dbh->prepare("select cardnumber from borrowers where borrowernumber = ?");
-        	  $sth->execute(getborrowernumber($userid));
-                  my $cardnumber= $sth->fetchrow;
-		  my $passwordrepeted= 0;
-	
-		  if ($newpassword) {
+	 	#se verifica la password ingresada
+		my ($passwordValida, $cardnumber, $branch)= _verificarPassword($dbh,$userid,$password,$random_number);
+
+		if ($passwordValida) {
 			# Check if the password is repeted
 			if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
 				my $oldpassword= getldappassword($cardnumber,$dbh);
@@ -569,6 +588,755 @@ $session->param('REQUEST_URI',$ENV{'REQUEST_URI'});
 	$session->param('codMsg', 'U357');
 	redirectTo($url);
 }
+=cut
+
+
+sub checkauth {
+	
+	my $query=shift;
+	# $authnotrequired will be set for scripts which will run without authentication
+	my $authnotrequired = shift;
+	my $flagsrequired = shift;
+	my $type = shift;
+	$type = 'opac' unless $type;
+open(A, ">>/tmp/debug.txt");
+print A "desde checkauth============================================================================================================= \n";
+	my $dbh = C4::Context->dbh;
+	my $timeout = C4::Context->preference('timeout');
+	$timeout = 600 unless $timeout;
+
+	my $template_name;
+	if ($type eq 'opac') {
+		$template_name = "opac-auth.tmpl";
+	} else {
+		$template_name = "auth.tmpl";
+	}
+
+print A "checkauth=> template_name: ".$template_name."\n";
+print A "checkauth=> authnotrequired: ".$authnotrequired."\n";
+
+	# state variables
+	my $loggedin = 0;
+	my %info;
+#  	my $session;
+# 	my $session = new CGI::Session();  #recupero la session
+ 	my $session = CGI::Session->load();
+	my ($userid, $cookie, $sessionID, $flags);
+	my $logout = $query->param('logout.x')||0;
+
+	if ($userid = $ENV{'REMOTE_USER'}) {
+		# Using Basic Authentication, no cookies required
+		$cookie= _generarCookie($query,'sessionID', '', '');
+
+		$loggedin = 1;
+print A "checkauth=> entro a REMOTE_USER \n";
+#    	} elsif ($sessionID=$query->cookie('sessionID')) {
+# 	} elsif ($sessionID=$query->cookie('CGISESSID')) {
+ 	} elsif ($sessionID=$session->param('sessionID')) {
+# 	} elsif ($sessionID=$session->param('CGISESSID')) {
+print A "checkauth=> sessionID seteado \n";
+print A "checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n";
+print A "checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n";
+
+		my ($ip , $lasttime, $nroRandom, $flag);
+		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
+				"SELECT userid,ip,lasttime,nroRandom,flag FROM sessions WHERE sessionid=?", undef, $sessionID);
+
+		if ($logout) {
+			#se maneja el logout del usuario
+			_logOut_Controller($dbh, $query, $userid, $ip, $sessionID);
+			$sessionID = undef;
+			$userid = undef;
+# 			$session->clear();
+# 			$session->delete();
+print A "checkauth=> sessionID de CGI-Session: ".$session->id."\n";
+#  			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, 'U358');
+			$session->param('codMsg', 'U358');
+ 			redirectTo('/cgi-bin/koha/auth.pl');
+			#EXIT
+		}
+
+		if ($userid) { 
+		#la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
+		#se verifican algunas condiciones de finalizacion de session
+print A "checkauth=> El usuario se encuentra logueado \n";
+		  if ($lasttime<time()-$timeout) {
+			# timed logout
+			$info{'timed_out'} = 1;
+			#elimino la session del usuario porque caduco
+			_deleteSessionDeUsuario($sessionID, $userid);
+print A "checkauth=> caduco la session \n";
+			#Logueo la sesion que se termino por timeout
+			my $time=localtime(time());
+			_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time);
+			$userid = undef;
+			$sessionID = undef;
+			#redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+# 			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, 'U355');
+			$session->param('codMsg', 'U355');
+			redirectTo('/cgi-bin/koha/auth.pl');
+			#EXIT
+
+ 		     } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+#  		   } elsif ($ip ne '127.0.0.2') {
+			# Different ip than originally logged in from
+			$info{'oldip'} = $ip;
+			$info{'newip'} = $ENV{'REMOTE_ADDR'};
+			$info{'different_ip'} = 1;
+			#elimino la session del usuario porque caduco
+			_deleteSessionDeUsuario($sessionID, $userid);
+print A "checkauth=> cambio la IP, se elimina la session\n";
+			#Logueo la sesion que se cambio la ip
+			my $time=localtime(time());
+			_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+														$userid, 
+														$time, 
+														$ip, 
+														$info{'newip'}
+				  );
+			$sessionID = undef;
+			$userid = undef;	
+			#redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+# 			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, 'U356');
+			$session->param('codMsg', 'U356');
+			redirectTo('/cgi-bin/koha/auth.pl');
+			#EXIT
+			} elsif ($flag eq 'LOGUIN_DUPLICADO') {
+			#Se encuentra una session activa con el mismo userid
+			#se eliminan las sessiones, solo se permite una session activa a la vez
+			$info{'loguin_duplicado'} = 1;
+			#elimino la session del usuario porque caduco
+			_deleteSessionDeUsuario($sessionID, $userid);
+print A "checkauth=> se loguearon con el mismo userid desde otro lado\n";
+			#Logueo la sesion que se cambio la ip
+			my $time=localtime(time());
+			_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+														$userid, 
+														$time, 
+														$ip, 
+														$info{'newip'}
+				  );
+			$sessionID = undef;
+			$userid = undef;	
+			#redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+# 			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, '');
+			$session->param('codMsg', 'U359');
+			redirectTo('/cgi-bin/koha/auth.pl');
+			#EXIT
+			} else {
+		
+			#esta todo OK, continua logueado y se actualiza la session, lasttime
+print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
+				$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+				undef, (time(), $sessionID));
+				$flags = haspermission($dbh, $userid, $flagsrequired);
+print A "checkauth=> imprimo los flags: \n";
+				_printHASH($flags);
+
+				if ($flags) {
+					$loggedin = 1;
+				} else {
+					$info{'nopermission'} = 1;
+					#redirecciono a una pagina informando q no tiene  permisos
+# 					_goToSinPermisos($dbh, $query, $template_name, $userid, $type, \%info);
+					$session->param('codMsg', 'U354');
+					redirectTo('/cgi-bin/koha/auth.pl');
+					#EXIT
+				}
+			}
+		  }#if de la sesion que existia en la bdd
+		}#end ($sessionID=$query->cookie('sessionID'))
+
+
+	#por aca se permite llegar a paginas que no necesitan autenticarse
+	my $insecure = C4::Context->boolean_preference('insecure');
+	# finished authentification, now respond
+	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
+print A "checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n";
+print A "checkauth=> authnotrequired: ".$authnotrequired."\n";
+		#Se verifica si el usuario tiene que cambiar la password
+		if ( ($userid) && ( new_password_is_needed($dbh,getborrowernumber($userid)) ) ) {
+
+			_change_Password_Controller($dbh, $query, $userid, $type,\%info);
+			#EXIT
+		}#end if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid))))
+		
+		$cookie= _generarCookie($query,'sessionID', $sessionID, '');	
+print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
+# print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
+print A "\n";
+close(A);
+		return ($userid, $cookie, $session, $flags);
+	}#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
+
+
+
+	unless ($userid) { 
+		#si no hay userid, hay que autentificarlo y no existe sesion
+print A "checkauth=> Usuario no logueado, intento de autenticacion \n";		
+		#No genero un nuevo sessionID, tomo el que viene del cliente
+		#con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
+#  		my $sessionID= $query->cookie('sessionID');
+ 		my $sessionID= $session->param('sessionID');
+		$userid=$query->param('userid');
+		my $password=$query->param('password');
+print A "checkauth=> busco el sessionID: ".$sessionID." de la base \n";
+		my $random_number= _getNroRandom($dbh, $sessionID);
+print A "checkauth=> random_number desde la base: ".$random_number."\n";
+
+
+		#se verifica la password ingresada
+		my ($passwordValida, $cardnumber, $branch)= _verificarPassword($dbh,$userid,$password,$random_number);
+
+		if ($passwordValida) {
+			#se valido la password y es valida
+
+			# setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
+			_setLoguinDuplicado($dbh, $userid,  $ENV{'REMOTE_ADDR'});
+print A "checkauth=> password valida: ".$sessionID."\n";
+print A "checkauth=> elimino el sessionID de la base: ".$sessionID."\n";
+			#el usuario se logueo bien, se elimina la session de logueo y se genera un sessionID nuevo
+			_deleteSession($sessionID);
+
+			my %params;
+			$params{'userid'}= $userid;
+			$params{'loggedinusername'}= $userid;
+			$params{'password'}= $password;
+			$params{'nroRandom'}= $random_number;
+			$params{'borrowernumber'}= getborrowernumber($userid);
+			$params{'type'}= $type; #OPAC o INTRA
+			$params{'flagsrequired'}= $flagsrequired;
+			$params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+			#genero una nueva session
+			$session= _generarSession(\%params);
+# 			$sessionID= $session->param('sessionID');
+			$sessionID= C4::Auth::_generarSessionID();
+# # print A "checkauth=> sessionID de CGI-Session: ".$session->id."\n";
+print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
+			$sessionID.="_".$branch;
+			$session->param('sessionID', $sessionID);
+			print A "checkauth=> modifico el sessionID: ".$sessionID." \n";
+			
+			#el usuario se logueo bien, ya no es necessario el nroRandom
+			$random_number= 0;
+			#guardo la session en la base
+			_save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+
+			#Logueo una nueva sesion
+			my $time=localtime(time());
+			_session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
+
+			$cookie= _generarCookie($query,'sessionID', $sessionID, '');	
+			$session->header(
+				-cookie => $cookie,
+			);		
+	
+			#por defecto no tiene permisos
+			$info{'nopermission'} = 1;
+			if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+				$info{'nopermission'} = 0;
+				$loggedin = 1;
+				#WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
+				my $sth=$dbh->prepare("SELECT MAX(lastlogin) AS lastlogin FROM borrowers");
+				$sth->execute();
+				my $lastlogin= $sth->fetchrow;
+				my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1));
+				my $enter=0;
+				if ($lastlogin){
+					while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
+					# lastlogin es anterior a prevWorkDate
+					# desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
+						$lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1));
+						my $sth=$dbh->prepare("INSERT INTO feriados (fecha) VALUES (?)");
+						$sth->execute($lastlogin);
+						$enter=1;
+					}
+					
+					#Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
+					my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+					if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+						# lastlogin es anterior a hoy
+						# Hoy no se enviaron nunca los mails de recordacion
+						_enviarCorreosDeRecordacion($today);
+					}
+				}#end if ($lastlogin)
+
+				if ($enter) {
+				#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en 
+				#el while anterior
+					my ($count,@holidays)= C4::AR::Utilidades::getholidays();
+					C4::AR::Utilidades::savedatemanip(@holidays);
+				}
+				
+				#Se borran las reservas de los usuarios sancionados			
+				if ($type eq 'opac') {
+				#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
+# 					_operacionesDeOPAC($dbh,$userid);
+
+					t_operacionesDeOPAC($userid);
+	
+				} else {
+					t_operacionesDeINTRA($userid, $cardnumber);
+
+				##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
+# 					_operacionesDeINTRA($dbh, $userid, $cardnumber);
+				}# end if ($type eq 'opac')
+	
+			}# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
+
+		} else {
+		#usuario o password invalida
+			if ($userid) {
+print A "checkauth=> usuario o password incorrecta dentro del if\n";
+				$info{'invalid_username_or_password'} = 1;
+			}
+print A "checkauth=> usuario o password incorrecta \n";
+# close(A);
+			#elimino la session vieja
+			_deleteSession($sessionID);
+print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
+			$userid= undef;
+			#genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
+# 			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, 'U357');
+			$session->param('codMsg', 'U357');
+			redirectTo('/cgi-bin/koha/auth.pl');
+			#EXIT
+		}#end if ($passwordValida)
+ 
+	}# end unless ($userid) 
+
+	$cookie= _generarCookie($query,'sessionID', $sessionID, '');
+# print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
+print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
+print A "\n";
+close(A);
+	return ($userid, $cookie, $session, $flags);
+
+}# end checkauth
+
+=item
+Esta funcion guarda una session en la base
+=cut
+sub _save_session_db{
+	my ($dbh, $sessionID, $userid, $remote_addr, $random_number) = @_;
+
+	$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime, nroRandom) VALUES (?, ?, ?, ?, ?)", undef, 
+												($sessionID, 
+												$userid, $remote_addr, 
+												time(), 
+												$random_number)
+		);
+
+}
+=item
+Esta funcion recurpera de la base el nroRandom entregado al cliente segun un sessionID
+=cut
+sub _getNroRandom {
+	my ($dbh, $sessionID) = @_;
+
+	my $sth=$dbh->prepare("SELECT nroRandom FROM sessions WHERE sessionID = ?");
+        $sth->execute($sessionID);
+	my $random_number= $sth->fetchrow;
+
+	return $random_number;
+}
+
+
+
+=item
+Esta funcion modifica el flag de todos las sessiones con usuarios duplicados, seteando el mismo a LOGUIN_DUPLICADO
+cuando el usuario remoto con session duplicada intente navegar, sera redireccionado al loguin
+=cut
+sub _setLoguinDuplicado {
+	my ($dbh, $userid, $ip) = @_;
+
+	my $sth=$dbh->prepare("UPDATE sessions SET flag = 'LOGUIN_DUPLICADO' WHERE userid = ? AND ip <> ? ");
+        $sth->execute($userid, $ip);
+
+	my $random_number= $sth->fetchrow;
+}
+
+sub _getCardnumber {
+	my ($dbh, $userid) = @_;
+	
+	my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE borrowernumber = ?");
+	$sth->execute(getborrowernumber($userid));
+	my $cardnumber= $sth->fetchrow;
+
+	return $cardnumber;
+}
+
+=item
+Esta funcion se encarga del logout del usuario
+=cut
+sub _logOut_Controller {
+	my ($dbh, $query, $userid, $ip, $sessionID) = @_;
+	# voluntary logout the user
+open(E, ">>/tmp/debug.txt");
+print E "\n";
+print E "_logOut_Controller=> LOGOUT: \n";
+print E "_logOut_Controller=> sessionID: ".$sessionID."\n";
+print E "_logOut_Controller=> userID: ".$userid."\n";
+	#Logueo la sesion que se termino voluntariamente
+	my $time=localtime(time());
+	_session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time);
+	#se elimina la session del usuario que se esta deslogueando
+	_deleteSessionDeUsuario($sessionID, $userid);
+
+print E "_logOut_Controller=> Elimino de la base la session de userid: ".$userid." sessionID: ".$sessionID."\n";
+print E "\n";
+
+close(E);
+}
+
+=item
+Esta funcion se encarga de manejar el cambio de la password
+=cut
+sub _change_Password_Controller {
+	my ($dbh, $query, $userid, $type, $info) = @_;
+open(J, ">>/tmp/debug.txt");
+print J "\n";
+print J "_change_Password_Controller=> \n";
+	my $input = new CGI;
+print J "_change_Password_Controller=> type: ".$type."\n";
+	my $template_name;
+	my $newpassword = $input->param('newpassword') || 0;
+print J "_change_Password_Controller=> newpassword: ".$newpassword."\n";
+	my $cardnumber= _getCardnumber($dbh, $userid);
+	my $passwordrepeted= 0;
+	
+	if ($newpassword) {
+	# Check if the password is repeted
+		if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
+			my $oldpassword= getldappassword($cardnumber,$dbh);
+			$passwordrepeted= ($oldpassword eq $newpassword);
+		} else { # check in database
+			my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+			$sth->execute($cardnumber);
+			my $oldpassword= $sth->fetchrow;
+			$passwordrepeted= ($oldpassword eq $newpassword);
+		}
+	}#end if ($newpassword)
+
+	if ($newpassword && !$passwordrepeted) {
+	# The new password is sent
+## FIXME esto se hace en memebr-password.pl tb?????	
+		if (C4::Context->preference("ldapenabled") eq "yes") { # update the ldap password
+			addupdateldapuser($dbh,$cardnumber,$newpassword);
+			my $sth=$dbh->prepare("update borrowers set lastchangepassword=now() where cardnumber=?");
+			$sth->execute($cardnumber);
+		} else { # update the database password
+			my $sth=$dbh->prepare("update borrowers set password=?, lastchangepassword=now() where cardnumber=?");
+			$sth->execute($newpassword, $cardnumber);
+		}
+
+	} else {
+		# The new password is requested
+		if ($type eq 'opac') {
+			$template_name = "opac-changepassword.tmpl";
+		} else {
+			$template_name = "changepassword.tmpl";
+		}
+print J "_change_Password_Controller=> template_name: ".$template_name."\n";
+		my @inputs =();
+		foreach my $name (param $query) {
+			(next) if ($name eq 'userid' || $name eq 'password' || $name eq 'nroRandom' || $name eq 'newpassword'  || $name eq 'newpassword1' || $name eq 'newpassword2');
+			my $value = $query->param($name);
+			push @inputs, {name => $name , value => $value};
+		}
+
+
+		my ($template, $t_params) = gettemplate($template_name, $type);
+print J "_change_Password_Controller=> template_name: ".$template_name."\n";	
+# 		$template->param(passwordrepeted => $passwordrepeted);
+		$t_params->{'passwordrepetedv'}= $passwordrepeted;
+
+		#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
+		my $random_number= _generarNroRandom();
+# 		$template->param(RANDOM_NUMBER => $random_number);
+		$t_params->{'RANDOM_NUMBER'}= $random_number;
+print J "_change_Password_Controller=> genera otro random: ".$random_number."\n";
+
+# 		$template->param(INPUTS => \@inputs);
+#  		$template->param(loginprompt => 1) unless $info->{'nopermission'};
+		$t_params->{'loginprompt'}= $info->{'nopermission'};
+
+		my $self_url = $query->url(-absolute => 1);
+# 		$template->param(url => $self_url);
+		$t_params->{'url'}= $self_url;
+# 		$template->param($info);
+		$t_params->{$info};
+	
+		my %params;
+		$params{'userid'}= $userid;
+		$params{'loggedinusername'}= '';
+		$params{'password'}= '';
+		$params{'nroRandom'}= $random_number;
+		$params{'borrowernumber'}=  '';
+		$params{'type'}= $type; #OPAC o INTRA
+		$params{'flagsrequired'}= '';
+		$params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+		
+		my $session= _generarSession(\%params);
+		#se genenra un nuevo sessionID y se guarda en la base junto con el nuevo nroRandom
+	#  	my $sessionID= _generarSessionID();
+		my $sessionID= $session->param('sessionID');
+print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";	
+		#guardo la session en la base
+		_save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
+
+# 		print $query->header(
+# 					-type => guesstype($template->output),
+# 					-cookie => $cookie
+# 				), $template->output;
+		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+print J "\n";
+close(J);
+		exit;
+	
+	}#end  if ($newpassword && !$passwordrepeted)
+}
+
+
+sub _printHASH {
+	my ($hash_ref) = @_;
+open(Z, ">>/tmp/debug.txt");
+print Z "\n";
+print Z "PRINT HASH: \n";
+
+if($hash_ref){
+	while ( my ($key, $value) = each(%$hash_ref) ) {
+        	print Z "key: $key => value: $value\n";
+    	}
+}
+print Z "\n";
+close(Z);
+}
+
+sub _generarNroRandom {
+	#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
+	#Y NO VIAJE LA PASS DEL USUARIO ENCRIPTADA SOLO CON MD5
+	my $random_number= int(rand()*100000);
+
+	return $random_number;
+}
+
+sub _generarSessionID {
+	
+	my $time= localtime(time());
+	my $sessionID= int(rand()*100000).'-'.time();
+
+	return $sessionID;
+}
+
+sub _generarSession {
+	my ($params) = @_;
+
+	my $session = new CGI::Session();
+#	$sessionID= $session->id;
+# 	my $self_url = $query->url(-absolute => 1);
+# 	$session->param('url', $self_url);
+	#Se guarda la info en la session
+	$session->param('userid', $params->{'userid'});
+# 	$session->param('sessionID', $sessionID= _generarSessionID());
+	$session->param('sessionID', $session->id());
+	$session->param('loggedinusername', $params->{'userid'});
+	$session->param('password', $params->{'password'});
+	$session->param('nroRandom', $params->{'random_number'});
+	$session->param('borrowernumber', getborrowernumber($params->{'userid'}));
+	$session->param('type', $params->{'type'}); #OPAC o INTRA
+	$session->param('flagsrequired', $params->{'flagsrequired'});
+	$session->param('browser', $params->{'HTTP_USER_AGENT'});
+	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
+	$session->expire(0); #para Desarrollar, luego pasar a 3m
+
+	return $session;
+}
+
+sub _goToSinPermisos {
+	my ($dbh, $query, $template_name, $userid, $type, $info) = @_;
+
+open(H, ">>/tmp/debug.txt");
+print H "\n";
+	my ($template, $t_params) = gettemplate($template_name, $type);
+	my $sessionID=$query->cookie('sessionID');
+print H "_goToSinPermisos=> recupero sessionID: ".$sessionID."\n";
+print H "_goToSinPermisos=> template_name: ".$template_name."\n";
+	my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
+	$template->param($info);
+  	$template->param(loginprompt => 1) unless $info->{'nopermission'};
+	my $self_url = $query->url(-absolute => 1);
+	$template->param(url => $self_url);
+
+print H "\n";
+close(H);
+
+	print $query->header(
+				-type => guesstype($template->output),
+				-cookie => $cookie,
+		), $template->output;
+
+	exit;
+}
+
+sub _goToLoguin {
+	my ($dbh, $query, $template_name, $userid, $type, $info, $codMsg) = @_;
+
+open(H, ">>/tmp/debug.txt");
+print H "\n";
+	my ($template, $t_params) = gettemplate($template_name, $type);
+	#se genera un nuevo nroRandom para que se autentique el usuario
+	my $random_number= _generarNroRandom();
+	
+print H "goToLoguin=> random_number: ".$random_number."\n";
+	my %params;
+	$params{'userid'}= $userid;
+	$params{'loggedinusername'}= '';
+	$params{'password'}= '';
+	$params{'nroRandom'}= $random_number;
+	$params{'borrowernumber'}=  '';
+	$params{'type'}= $type; #OPAC o INTRA
+	$params{'flagsrequired'}= '';
+	$params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+	#genero una nueva session
+	my $session= _generarSession(\%params);
+	#se genera una nueva session
+#  	my $sessionID= _generarSessionID();
+	my $sessionID= $session->param('sessionID');
+	$session->param('codMsg', $codMsg);
+print H "goToLoguin=> sessionID de CGI-Session: ".$session->id."\n";
+
+print H "goToLoguin=> sessionID: ".$sessionID."\n";
+print H "goToLoguin=> template_name: ".$template_name."\n";
+	my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
+print H "goToLoguin=> cookie: ".$cookie."\n";
+	$session->header(
+				-cookie => $cookie,
+			);
+	#guardo la session en la base
+	_save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+
+	#envio la info necesaria al cliente
+# 	$template->param(RANDOM_NUMBER => $random_number);
+	$t_params->{'RANDOM_NUMBER'}= $random_number;
+	$t_params->{$info};
+	$t_params->{'loginprompt'}= $info->{'nopermission'};
+	$t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),$type,[]);
+#   	$template->param(loginprompt => 1) unless $info->{'nopermission'};
+	my $self_url = $query->url(-absolute => 1);
+	$t_params->{'url'}= $self_url;
+
+print H "\n";
+close(H);
+
+  	C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+	exit;
+}
+
+
+
+=item
+Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
+=cut
+sub _verificarPassword {
+	my ($dbh, $userid, $password, $random_number) = @_;
+open(F, ">>/tmp/debug.txt");
+print F "\n";
+print F "_verificarPassword=> verificarPassword: \n";
+print F "_verificarPassword=> userID: ".$userid."\n";
+print F "_verificarPassword=> nroRandom: ".$random_number."\n";
+# Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
+# la llamada a la funcion checkpwldap por checkpw
+
+	my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable=?");
+	$sth->execute("ldapenabled");
+
+	my ($passwordValida, $cardnumber);
+	
+	my $branch;
+	if ($sth->fetchrow eq 'yes') {
+	#se esta usando LDAP
+		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
+	} else {
+		($passwordValida, $cardnumber,$branch) = checkpw($dbh,$userid,$password,$random_number);
+	}
+print F "_verificarPassword=> password valida?: ".$passwordValida."\n";
+print F "\n";
+close (F);
+	return ($passwordValida, $cardnumber, $branch);
+}
+
+
+=item
+Elimina la session pasada por parametro que se encuentra en la base
+=cut
+sub _deleteSession {
+	my ($sessionID) = @_;
+open(D, ">>/tmp/debug.txt");
+print D "\n";
+print D "_deleteSession=> DELETE SESSION: \n";
+	my $dbh = C4::Context->dbh;
+	my $sth;
+print D "_deleteSession=> elimino el sessionID: ".$sessionID."\n";
+	$sth = $dbh->prepare("DELETE FROM sessions WHERE sessionID = ?");
+	$sth->execute($sessionID);
+print D "\n";
+close(D);
+}
+
+
+=item
+Elimina todos los userid que se encuentran en sessions, solo se permite un userid activo a la vez
+=cut
+sub _deleteUsersFromSessions {
+	my ($userid) = @_;
+open(D, ">>/tmp/debug.txt");
+print D "\n";
+print D "_deleteUsersFromSessions=> DELETE SESSION: \n";
+	my $dbh = C4::Context->dbh;
+	my $sth;
+print D "_deleteUsersFromSessions=> elimino el sessionID: ".$userid."\n";
+	$sth = $dbh->prepare("DELETE FROM sessions WHERE userid = ?");
+	$sth->execute($userid);
+print D "\n";
+close(D);
+}
+
+=item
+Elimina la session pasada por parametro que se encuentra en la base
+=cut
+sub _deleteSessionDeUsuario {
+	my ($sessionID, $userid) = @_;
+open(K, ">>/tmp/debug.txt");
+print K "\n";
+print K "_deleteSessionDeUsuario=> DELETE SESSION: \n";
+	my $dbh = C4::Context->dbh;
+	my $sth;
+print K "_deleteSessionDeUsuario=> elimino el sessionID: ".$sessionID." del usuario: ".$userid."\n";
+	$sth = $dbh->prepare("DELETE FROM sessions WHERE sessionID = ? AND userid=?");
+	$sth->execute($sessionID, $userid);
+print K "\n";
+close(K);
+}
+
+=item
+Genera la cookie segun los parametros
+=cut
+sub _generarCookie {
+	my ($query, $sessionName, $value, $expires) = @_;
+open(G , ">>/tmp/debug.txt");
+print G "\n";
+print G "_generarCookie=> Genero una Cookie: \n";
+	my $cookie= $query->cookie(
+					-name => $sessionName,
+					-value => $value,
+					-expires => $expires
+		);
+print G "_generarCookie=> cookie: ".$cookie."\n";
+print G "\n";
+	return $cookie;
+}
 
 
 sub printSession {
@@ -595,67 +1363,75 @@ sub printSession {
 }
 
 sub _loggedin_Controller {
+	my ($session) = @_;
+open (A, ">>/tmp/debug.txt");	
+print A "\n";
+print A "_loggedin_Controller=> \n";
+	my $loggedin;
+	$loggedin = 0;
+	my $sessionID= $session->id;
+	my $url;
 
-my ($session) = @_;
-my $loggedin;
-$loggedin = 0;
-my $url;
-# my $template_name;
-if ($session->param('type') eq 'opac') {
-# 		$template_name = "opac-auth.tmpl";
-		$url= "/cgi-bin/koha/auth.pl";
-	} else {
-# 		$template_name = "auth.tmpl";
-		$url= "/cgi-bin/koha/auth.pl";
-}
-
-my $dbh = C4::Context->dbh;
-	
-if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
-	# timed logout
-	$session->param('timed_out', 1);
-	my ($sessionID, $userid)= _deleteSession( $session->param('sessionID') );
-	#Logueo la sesion que se termino por timeout
-	_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", 
-										$session->param('userid'),#hay q loggear undef ????
-										$session->param('ip'),
-										$session->param('time')
-			);
-
-	$session->param('codMsg', 'U355');
-	redirectTo($url);
-
-} elsif ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
-	# Different ip than originally logged in from
-	$session->param('oldip', $session->param('ip'));
-	$session->param('newip', $ENV{'REMOTE_ADDR'});
-	$session->param('different_ip', 1);
-	my ($sessionID, $userid )= _deleteSession(  $session->param('sessionID') );
-	#Logueo la sesion que se cambio la ip
-	_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                        $session->param('userid'),#hay q loggear undef ???
-                        $session->param('time'),
-                        $session->param('ip'),
-                        $session->param('newip')
-                    );
-	$session->param('codMsg', 'U356');
-	redirectTo($url);
-} else {
-	$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",undef, (time(), $session->param('sessionID') ));
-	my $flags = haspermission($dbh, $session->param('userid'), $session->param('flagsrequired'));
-	if ($flags) {
-		$loggedin = 1;
-	} else {
-		$session->param('nopermission', 1);
-		$session->param('codMsg', 'U354');
-		redirectTo($url);
+	if ($session->param('type') eq 'opac') {
+			$url= "/cgi-bin/koha/auth.pl";
+		} else {
+			$url= "/cgi-bin/koha/auth.pl";
 	}
-  }
+	
+	my $dbh = C4::Context->dbh;
+		
+	if ( $session->param('lasttime') < time() - $session->param('timeout') ) {
+		# timed logout
+		$session->param('timed_out', 1);
+		#elimino la session del usuario porque caduco
+		_deleteSessionDeUsuario($sessionID, $session->param('userid'));
+print A "_loggedin_Controller=> caduco la session sessionID: ".$sessionID."\n";
+		#Logueo la sesion que se termino por timeout
+		_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", 
+											$session->param('userid'),
+											$session->param('ip'),
+											$session->param('time')
+				);
+	
+		$session->param('codMsg', 'U355');
+		redirectTo($url);
+	
+	} elsif ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
+		# Different ip than originally logged in from
+		$session->param('oldip', $session->param('ip'));
+		$session->param('newip', $ENV{'REMOTE_ADDR'});
+		$session->param('different_ip', 1);
+		_deleteSessionDeUsuario($sessionID, $session->param('userid'));
+print A "_loggedin_Controller=> cambio la IP se elimina la session: ".$sessionID."\n";
+				#Logueo la sesion que se cambio la ip
+		#Logueo la sesion que se cambio la ip
+		_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+				$session->param('userid'),#hay q loggear undef ???
+				$session->param('time'),
+				$session->param('ip'),
+				$session->param('newip')
+			);
+		$session->param('codMsg', 'U356');
+		redirectTo($url);
+	} else {
+		#esta todo OK, continua logueado y se actualiza la session, lasttime
+print A "_loggedin_Controller=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
+		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",undef, (time(), $session->param('sessionID') ));
+		my $flags = haspermission($dbh, $session->param('userid'), $session->param('flagsrequired'));
+		if ($flags) {
+			$loggedin = 1;
+		} else {
+			$session->param('nopermission', 1);
+			$session->param('codMsg', 'U354');
+			redirectTo($url);
+		}
+	}
+close(A);	
 
-  return $loggedin;
+	return $loggedin;
 }
 
-sub _logout_Controller {
+sub _logout_Controller2 {
 	my ($session) = @_;
 	my ($sessionID, $userid)= _deleteSession( $session->param('sessionID') );
 	#Logueo la sesion que se termino voluntariamente
@@ -665,7 +1441,7 @@ sub _logout_Controller {
 										$session->param('time')
 			);
 	
-	
+
 	$session->clear();
 	if ( $session->is_expired ) {
 		print A "la session EXPIRO\n";
@@ -689,8 +1465,11 @@ sub redirectTo {
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
 		
-# 		my $session = new CGI::Session();
-		my $session = CGI::Session->load();
+ 		
+ 		my $session = CGI::Session->load();
+		$session->clear();
+		$session->delete();
+		my $session = new CGI::Session();
 		# send proper HTTP header with cookies:
     		print $session->header();
 		print 'CLIENT_REDIRECT';
@@ -708,34 +1487,6 @@ sub redirectTo {
 	}
 }
 
-=item
-Elimina la session pasada por parametro que se encuentra en la base
-=cut
-sub _deleteSession {
-	my ($sessionID) = @_;
-
-	my $dbh = C4::Context->dbh;
-	my $sth;
-
-	$sth = $dbh->prepare("DELETE FROM sessions WHERE sessionID = ?");
-	$sth->execute($sessionID);
-	$sessionID = undef;
-	my $userid = undef;
-
-	return ($sessionID, $userid);
-}
-
-=item
-Esta funcion guarda en la base la session 
-=cut
-sub _insertSession {
-	my ($sessionID, $userid, $remote_addr, $time) = @_;
-
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	$sth = $dbh->prepare("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)");
-	$sth->execute($sessionID, $userid, $remote_addr, $time);
-}
 
 =item
 Esta retorna userid,ip,lasttime segun el sessionID
@@ -747,10 +1498,6 @@ sub _getInfoSession {
 	my $sth;
 	$sth = $dbh->prepare("SELECT userid,ip,lasttime FROM sessions WHERE sessionid = ?");
  	$sth->execute($sessionID);
-
-# 	my $data= $sth->fetchrow_hashref;
-# 
-# 	return ($data->{'userid'}, $data->{'ip'}, $data->{'lasttime'});
 
 	my ($userid, $ip, $lasttime)= $sth->fetchrow;
 
@@ -987,44 +1734,6 @@ Digest::MD5(3)
 
 =cut
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 
-# $s = new CGI::Session( 'driver:mysql', $sid);
-# $s = new CGI::Session( 'driver:mysql', $sid, {  DataSource  => 'dbi:mysql:test',
-# 						User        => 'sherzodr',
-# 						Password    => 'hello',
-# 						TableName=>'session',
-# 						IdColName=>'my_id',
-# 						DataColName=>'my_data',
-# 						DataSource=>'dbi:mysql:project',
-# 						Handle=>$dbh,
-#         					});
-# $s = new CGI::Session( 'driver:mysql', $sid, { Handle => $dbh } );
 
 
 

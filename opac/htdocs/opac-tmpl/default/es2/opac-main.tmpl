@@ -5,13 +5,15 @@
 </script>
 
 <script language="javascript" type="text/javascript">
+
 	function swap(id,src){
 		document.getElementById(id).src=src;
 	}
 
+[% IF !loggedinusername %]
+
         function enviar(){
-                nroRandom= [% RANDOM_NUMBER_INICIAL %];
-                document.datosAEnviar.nroRandom.value= nroRandom;
+                nroRandom= [% RANDOM_NUMBER %];
                 hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
                 document.datosAEnviar.password.value= hash;
                 document.datosAEnviar.userid.value= document.datos.userid.value;
@@ -26,6 +28,8 @@
                 else
                         return true;
         }
+
+[% END %]
 
 </script>
 <head>
@@ -98,7 +102,6 @@ Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="datosAEnviar">
         <input type="hidden" name="userid">
         <input type="hidden" name="password">
-        <input type="hidden" name="nroRandom">
 [% FOREACH INPUTS %]
   <input type="hidden" name="[% name %]" value="[% value %]">
 [% END %]

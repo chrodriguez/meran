@@ -21,7 +21,7 @@ function updateConsultarFavoritos(responseText){
 	$('#datosUsuario').slideUp('slow');
 	$('#result').show();
 	$('#result').html(responseText);
-	pushCache(responseText, 'result');
+// 	pushCache(responseText, 'result');
 	zebra('zebra');
 
 	checkedAll('todos','checkbox');

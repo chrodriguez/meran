@@ -31,7 +31,7 @@ $classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
 
 my $query = new CGI;
 
-my ($template, $session, $params)= get_template_and_user({
+my ($template, $session, $params, $cookie)= get_template_and_user({
 									template_name => "opac-search.tmpl",
 									query => $query,
 									type => "opac",
@@ -47,4 +47,4 @@ $params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
 $params->{'LibraryName'}= C4::Context->preference("LibraryName");
 $params->{'hiddesearch'}= 1;
 
-C4::Auth::output_html_with_http_headers($query, $template, $params, $session);
+C4::Auth::output_html_with_http_headers($query, $template, $params, $session, $cookie);

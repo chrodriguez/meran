@@ -1,8 +1,9 @@
 
 
-<!-- TMPL_VAR NAME="paginador" -->
+[% paginador %]
 
-<!-- TMPL_IF Name="shelvesloopshelves" -->
+
+[% IF shelvesloopshelves %]
 
 <table WIDTh=100%  align="center" cellpadding="4" cellspacing="0" border="1" align="center">
   <tr class="bordetabla"  bordercolor="#f2f2f2" >
@@ -10,25 +11,25 @@
   </tr>
 
   <tr bordercolor="#f2f2f2">
-	<td valign="middle"><b><i><!-- TMPL_VAR Name="shelfname" -->
+	<td valign="middle"><b><i>[% shelfname %]
 	</td></i></b>
   </tr>
 
-<!-- TMPL_LOOP Name="shelvesloopshelves" -->
+[% FOREACH shelvesloopshelves %]
   <tr  bordercolor="#f2f2f2">
 	<td valign='middle'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
-	<a class="click" onClick="verSubEstanteVirtual('<!-- TMPL_VAR Name='shelfnumber' -->');">
-	<!-- TMPL_IF Name="shelfname" -->
-		<!-- TMPL_VAR Name="shelfname" -->
-	<!-- TMPL_ELSE -->
+	<a class="click" onClick="verSubEstanteVirtual('[% shelfnumber %]');">
+	[% IF shelfname %]
+		[% shelfname %]
+	[% ELSE %]
 		&nbsp;
-	<!-- /TMPL_IF -->
+	[% END %]
 	</a>
 	
 	</td>
   </tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 
   <tr class="bordetabla"  bordercolor="#f2f2f2">
 	<table width=100% align="center" cellpadding="4" cellspacing="0" border="0" align="center">
@@ -38,4 +39,4 @@
 
 </table>
 <br>
-<!-- /TMPL_IF -->
+[% END %]

@@ -18,12 +18,12 @@ my $tipo= $obj->{'tipo'};
 
 if($tipo eq "VER_ESTANTE"){
 
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "opac-verEstanteVirtual.tmpl",
-					query => $input,
-					type => "opac",
-					authnotrequired => 1,
-	# 				debug => 1,
+	my ($template, $session, $t_params, $cookie)= get_template_and_user({
+									template_name => "opac-verEstanteVirtual.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 1,
+					# 				debug => 1,
 					});
 	
 	my $shelves= $obj->{'shelves'};
@@ -35,27 +35,24 @@ if($tipo eq "VER_ESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelf($shelves,$ini,$cantR);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
+	$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
 	
-	$template->param(
-				shelvesloopshelves => @shelvesloop,
-				pagetitle => "Estantes Virtuales",
-				shelves => 1,
-	);
+	$t_params->{'shelvesloopshelves'}= \@shelvesloop;
+	$t_params->{'pagetitle'}= "Estantes Virtuales";
+	$t_params->{'shelves'}= 1;
 	
-	# print  $template->output;
-	output_html_with_http_headers $input, $cookie, $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 }
 
 
 if($tipo eq "VER_SUBESTANTE"){
 
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "opac-verSubEstanteVirtual.tmpl",
-					query => $input,
-					type => "opac",
-					authnotrequired => 1,
-	# 				debug => 1,
+	my ($template, $session, $t_params, $cookie)= get_template_and_user({
+									template_name => "opac-verSubEstanteVirtual.tmpl",
+									query => $input,
+									type => "opac",
+									authnotrequired => 1,
+					# 				debug => 1,
 					});
 	
 	my $shelves= $obj->{'shelves'};
@@ -67,14 +64,10 @@ if($tipo eq "VER_SUBESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelfContent($shelves,$ini,$cantR,$orden);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
+	$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
+	$t_params->{'bitemsloop'}= @shelvesloop;
+	$t_params->{'pagetitle'}= "Estantes Virtuales";
+	$t_params->{'shelves'}= 1;
 	
-	$template->param(
-				bitemsloop => @shelvesloop,
-				pagetitle => "Estantes Virtuales",
-				shelves => 1,
-	);
-	
-	# print  $template->output;
-	output_html_with_http_headers $input, $cookie, $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 }

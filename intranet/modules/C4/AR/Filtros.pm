@@ -41,8 +41,8 @@ sub setComboLang {
 
  	my ($type) = @_;
 	my $session = CGI::Session->load();
-open(A, ">>/tmp/debug.txt");
-print A "desde putHTML: \n";
+# open(A, ">>/tmp/debug.txt");
+# print A "desde putHTML: \n";
 	my $html= '';
 	my $lang_Selected= $session->param('lang');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
@@ -69,6 +69,6 @@ print A "desde putHTML: \n";
 
 	$html .="</select>";
 	$html .="</form>";
-close(A);
+# close(A);
  	return $html;
 }

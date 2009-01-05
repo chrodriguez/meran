@@ -12,22 +12,21 @@ use C4::AR::Utilidades;
 my $input=new CGI;
 
 
-my  ($template, $borrowernumber, $cookie);
-
-($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-privateshelfs.tmpl",
-                             query => $input,
-                             type => "opac",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1},
+my  ($template, $session, $t_params, $cookie) = get_template_and_user({
+								template_name => "opac-privateshelfs.tmpl",
+								query => $input,
+								type => "opac",
+								authnotrequired => 1,
+								flagsrequired => {borrow => 1},
                          });
 
 
+my $borrowernumber= $session->param('borrowernumber');
 my $mail = C4::AR::Usuarios::getBorrower($borrowernumber)->{'emailaddress'};
-$template->param(MAIL => $mail);
+$t_params->{'MAIL'}= $mail;
 
 my $obj=$input->param('obj');
-$obj=from_json_ISO($obj);
+$obj= &C4::AR::Utilidades::from_json_ISO($obj);
 
 my $funcion= $obj->{'funcion'};
 my $ini= $obj->{'ini'}||'';
@@ -36,7 +35,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
 my ($count, $resultId1) = &privateShelfs($borrowernumber,$ini,$cantR);
 
-&C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($count, $cantR, $pageNumber,$funcion,$t_params);
 
 my %result;
 my $nivel1;
@@ -63,12 +62,10 @@ for (my $i=0;$i<scalar(@$resultId1);$i++){
 }
 
 
-$template->param(SEARCH_RESULTS => \@resultsarray);
-$template->param(numrecords => $count);
-$template->param(pagetitle => "Favoritos");
+$t_params->{'SEARCH_RESULTS'}= \@resultsarray;
+$t_params->{'numrecords'}= $count;
+$t_params->{'pagetitle'}= "Favoritos";
+$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
-$template->param(
-			LibraryName => C4::Context->preference("LibraryName")
-		);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+# output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

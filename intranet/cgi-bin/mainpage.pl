@@ -9,7 +9,7 @@ use CGI;
 
 my $query = new CGI;
 
-my ($template, $session, $params)= get_template_and_user({
+my ($template, $session, $params, $cookie)= get_template_and_user({
 									template_name => "main.tmpl",
 									query => $query,
 									type => "intranet",
@@ -27,4 +27,4 @@ my $marc_p = C4::Context->boolean_preference("marc");
 
 $params->{'NOTMARC'} = !$marc_p;
 
-C4::Auth::output_html_with_http_headers($query, $template, $params,$session);
+C4::Auth::output_html_with_http_headers($query, $template, $params,$session, $cookie);

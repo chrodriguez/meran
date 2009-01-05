@@ -16,15 +16,16 @@ my ($template, $session, $t_params)= get_template_and_user({
 								template_name => "opac-estanteVirtual.tmpl",
 								query => $input,
 								type => "opac",
-# 	 							authnotrequired => 1,
+ 	 							authnotrequired => 1,
 								flagsrequired => {borrow => 1},
 						});
 
 
 
 #Para mandar la dir de mail
-my ($borr, $flags) = getpatroninformation($t_params->{'loggedinuser'},"");
-if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
+# my ($borr, $flags) = getpatroninformation($t_params->{'loggedinuser'},"");
+# my $borr= $session->param('borrowernumber');
+# if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 
 my %shelflist;
 

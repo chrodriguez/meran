@@ -11,11 +11,10 @@ use C4::AR::Catalogacion;
 
 my $query = new CGI;
 
-my ($template, $session, $t_params)= get_template_and_user({
+my ($template, $session, $t_params, $cookie)= get_template_and_user({
 								template_name => "busquedaResult.tmpl",
 								query => $query,
 								type => "opac",
-					#  			     authnotrequired => 0,
 								authnotrequired => 1,
 								flagsrequired => {borrow => 1},
 					#  			     debug => 1,
@@ -213,4 +212,4 @@ $t_params->{'buscoPor'}= &verificarValor($buscoPor);
 $t_params->{'cantidad'}= $cantidad;
 
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);

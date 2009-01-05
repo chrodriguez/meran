@@ -8,7 +8,6 @@ use C4::BookShelves;
 use C4::AR::Utilidades;
 
 my $input=new CGI;
-
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
 my $borrowernumber=getborrowernumber($loggedinuser);
 
@@ -31,7 +30,8 @@ if ($op eq 'ADD'){
 										$shelfvalues
 									);
 	
-	print $input->header;
+# 	print $input->header;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 }
 #********************************Fin***ADD PrivateShelfs**********************************
 
@@ -43,7 +43,8 @@ if ($op eq 'DELETE'){
 										$shelfvalues
 									);
 	
-	print $input->header;
+# 	print $input->header;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 }
 #********************************Fin***DELETE PrivateShelfs**********************************
 

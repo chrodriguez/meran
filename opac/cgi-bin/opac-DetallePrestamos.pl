@@ -9,7 +9,7 @@ use Date::Manip;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params)= get_template_and_user({
+my ($template, $session, $t_params, $cookie)= get_template_and_user({
 								template_name => "opac-DetallePrestamos.tmpl",
 								query => $input,
 								type => "opac",
@@ -76,4 +76,4 @@ $t_params->{'overdues_count'}= $overdues_count;
 $t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
 
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
