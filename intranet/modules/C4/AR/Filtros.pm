@@ -25,8 +25,8 @@ sub i18n {
 	my $locale = $session->param('lang')|C4::Context->config("defaultLang")|'es_ES';
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
-	Locale::Maketext::Gettext::Functions::bindtextdomain("intra", C4::Context->config("locale"));
-	Locale::Maketext::Gettext::Functions::textdomain("intra");
+	Locale::Maketext::Gettext::Functions::bindtextdomain("intranet", C4::Context->config("locale"));
+	Locale::Maketext::Gettext::Functions::textdomain("intranet");
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
 
  	return __($text);
