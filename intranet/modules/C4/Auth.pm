@@ -1090,7 +1090,7 @@ print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";
 # 					-type => guesstype($template->output),
 # 					-cookie => $cookie
 # 				), $template->output;
-		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
 print J "\n";
 close(J);
 		exit;
@@ -1230,7 +1230,7 @@ print H "goToLoguin=> cookie: ".$cookie."\n";
 print H "\n";
 close(H);
 
-  	C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+  	C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
 	exit;
 }
 

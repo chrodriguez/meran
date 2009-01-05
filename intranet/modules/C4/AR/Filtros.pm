@@ -46,7 +46,7 @@ sub setComboLang {
 	my $html= '';
 	my $lang_Selected= $session->param('lang');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
-	my @array_lang= ('es_ES', 'en_EN');
+	my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
 	my $i;
 
 	if($type eq 'OPAC'){

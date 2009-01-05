@@ -74,9 +74,7 @@ if (C4::Context->preference("UploadPictureFromOPAC") eq 'yes') {
 my @bordat;
 $bordat[0] = $borr;
 foreach my $aux (keys (%$borr)) {
-# 		$template->param($aux => ($borr->{$aux}))
 		$t_params->{$aux}= ($borr->{$aux});
-
 }
 
 $t_params->{'borrowernumber'}= $session->param('borrowernumber');

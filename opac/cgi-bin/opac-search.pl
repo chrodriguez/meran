@@ -31,7 +31,7 @@ $classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
 
 my $query = new CGI;
 
-my ($template, $session, $params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params, $cookie)= get_template_and_user({
 									template_name => "opac-search.tmpl",
 									query => $query,
 									type => "opac",
@@ -41,10 +41,10 @@ my ($template, $session, $params, $cookie)= get_template_and_user({
 
 my $virtuallibrary=C4::Context->preference("virtuallibrary");
 
-$params->{'virtuallibrary'}= $virtuallibrary;
-$params->{'comboItemTypes'}= $classlist;
-$params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
-$params->{'LibraryName'}= C4::Context->preference("LibraryName");
-$params->{'hiddesearch'}= 1;
+$t_params->{'virtuallibrary'}= $virtuallibrary;
+$t_params->{'comboItemTypes'}= $classlist;
+$t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
+$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'hiddesearch'}= 1;
 
-C4::Auth::output_html_with_http_headers($query, $template, $params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);

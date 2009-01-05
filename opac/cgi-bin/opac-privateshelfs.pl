@@ -67,5 +67,4 @@ $t_params->{'numrecords'}= $count;
 $t_params->{'pagetitle'}= "Favoritos";
 $t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
-# output_html_with_http_headers $input, $cookie, $template->output;
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

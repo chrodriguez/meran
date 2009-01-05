@@ -47,7 +47,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
 
-&C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'loop_reservas'}= $reservas_hashref;
 
