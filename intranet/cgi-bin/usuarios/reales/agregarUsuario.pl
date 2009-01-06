@@ -15,7 +15,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                                     authnotrequired => 0,
                                                                     flagsrequired => {borrowers => 1},
                                                                     debug => 1,
-			    });
+                });
 
 my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
 
