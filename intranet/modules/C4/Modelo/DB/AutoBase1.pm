@@ -6,7 +6,7 @@ use base 'Rose::DB';
     use C4::Context;
 __PACKAGE__->use_private_registry;
 
-  my $context = new C4::Context;
+  my $context = new C4::Context; #jojo
 
   my $driverDB = 'mysql';
 
