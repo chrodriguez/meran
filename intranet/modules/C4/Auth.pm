@@ -738,9 +738,9 @@ print A "checkauth=> imprimo los flags: \n";
 				} else {
 					$info{'nopermission'} = 1;
 					#redirecciono a una pagina informando q no tiene  permisos
-# 					_goToSinPermisos($dbh, $query, $template_name, $userid, $type, \%info);
+ 					_goToSinPermisos($dbh, $query, $session, $template_name, $userid, $type, \%info);
 					$session->param('codMsg', 'U354');
-					redirectTo('/cgi-bin/koha/auth.pl');
+# 					redirectTo('/cgi-bin/koha/auth.pl');
 					#EXIT
 				}
 			}
@@ -1155,28 +1155,28 @@ sub _generarSession {
 }
 
 sub _goToSinPermisos {
-	my ($dbh, $query, $template_name, $userid, $type, $info) = @_;
+	my ($dbh, $query, $session, $template_name, $userid, $type, $info) = @_;
 
 open(H, ">>/tmp/debug.txt");
 print H "\n";
 	my ($template, $t_params) = gettemplate($template_name, $type);
-	my $sessionID=$query->cookie('sessionID');
+	my $sessionID= $query->cookie('sessionID');
 print H "_goToSinPermisos=> recupero sessionID: ".$sessionID."\n";
 print H "_goToSinPermisos=> template_name: ".$template_name."\n";
 	my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-	$template->param($info);
-  	$template->param(loginprompt => 1) unless $info->{'nopermission'};
-	my $self_url = $query->url(-absolute => 1);
-	$template->param(url => $self_url);
+	$t_params->{$info};
+  	$t_params->{'loginprompt'}= 1 unless $info->{'nopermission'};
+# 	my $self_url = $query->url(-absolute => 1);
+# 	$template->param(url => $self_url);
 
 print H "\n";
 close(H);
 
 	print $query->header(
-				-type => guesstype($template->output),
 				-cookie => $cookie,
-		), $template->output;
+		);
 
+	C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
 	exit;
 }
 
