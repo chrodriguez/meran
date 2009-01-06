@@ -17,6 +17,11 @@
 <script language="javascript" type="text/javascript">
 
 // FIXME FALTA VALIDAD EN EL CLIENTE
+
+function getId(IdObj, id){
+    //guardo en hidden el id
+    $('#'+IdObj).val(id);
+}
     
 function CrearAutocomplete(Id){
     $("#"+Id).search();
@@ -34,6 +39,7 @@ function CrearAutocomplete(Id){
     });//end autocomplete
     $("#"+Id).result(function(event, data, formatted) {
         $("#"+Id).val(data[1]);
+        getId(Id, data[0])
     });
 }
 
@@ -87,7 +93,8 @@ $(document).ready(function() {
     <tr valign=top width="100%">
         
         <td  width="50%" ALIGN=RIGHT class="inputFontNormal">
-         [% "Tarjeta de identificaci&oacute;n" | i18n %] * <input id="nro_socio" type=text class="inputFontNormal" name=nro_socio size=10 value="[% nro_socio %]"><br>
+         [% "Tarjeta de identificaci&oacute;n" | i18n %] * 
+        <input id="nro_socio" type=text class="inputFontNormal" name=nro_socio size=10 value="[% nro_socio %]"><br>
         </td>
     </tr>
 
@@ -244,6 +251,7 @@ $(document).ready(function() {
         <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad" | i18n %] *</b><br>
             <input class="inputFontNormal" type=text id="ciudad" value="[% ciudad %]" size='50' >
+            <input type="hidden" id="id_ciudad" value="">
         </td>
     </tr>
     <tr>
@@ -253,10 +261,6 @@ $(document).ready(function() {
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
                 <input class="inputFontNormal" type=text id="telefono_laboral" size=50 value="[% telefono_laboral %]">
         </td>
-        <!--<td width="40%" class="inputFontNormal" align="left" valign="top">
-            <b>[% "C&oacute;digo Postal de origen" | i18n %]</b><br>
-                <input  class="inputFontNormal" type=text id="homezipcode" size=50 value="[% homezipcode %]">
-        </td>-->
     </tr>
     <tr>
             <td height=25 class="[% clase %]">&nbsp;</td>
@@ -267,8 +271,7 @@ $(document).ready(function() {
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
             <input  class="inputFontNormal" type=text id="alt_ciudad" value="[% alt_ciudad %]" size='50'>
-
-            <input class="inputFontNormal" type=hidden id="streetcity" value="[% streetcity %]"> 
+            <input class="inputFontNormal" type=hidden id="id_alt_ciudad" value=""> 
         </td>
         </tr>
     <tr>
@@ -285,38 +288,8 @@ $(document).ready(function() {
     </tr>
 
     <br>
-    <br>
-<!--<table width="100%" cellpadding='0' cellspacing='0'>
-    <tr valign=middle width="100%" class="tablaresultadoTitle">
-        <td width="1%" align="left" valign="top">
-            <img src="[% themelang %]/images/izquierda.png">
-        </td>
-        <td  COLSPAN=6 width="100%">
-            [% "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N" | i18n %]
-        </td>
-        <td width="1%" valign="top" align="right">
-            <img src="[% themelang %]/images/derecha.png">
-        </td>
-    </tr>
-</table>-->
-<!--<table width="100%">
-    <tr>&nbsp;</tr>
-    <tr valign=top align="center">
-        <td width="5%">&nbsp;</td>
-        <td class="inputFontNormal">
-            <b> Notas</b>
-                    <textarea class="inputFontNormal" id="borrowernotes" wrap=physical cols=100 rows=2>[% borrowernotes %]</textarea>
-        </td>
-    </tr>
-</table>-->
-    <br>
 <table width="30%">
     [% modify %]
-    <!--<tr>
-        <td  class="inputFontNormal">
-            <b>Otros </b><br>
-        </td>
-    </tr>-->
 
 <!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal     -->
     [% FOREACH project IN flagloop %]
