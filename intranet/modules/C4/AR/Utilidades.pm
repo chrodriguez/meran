@@ -36,53 +36,53 @@ use POSIX qw(ceil floor); #para redondear cuando divido un numero
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-	&aplicarParches 
-	&obtenerParches 
-	&obtenerTiposDeColaboradores 
-	&obtenerReferencia 
-	&obtenerTemas 
-	&obtenerEditores 
-	&noaccents 
-	&saveholidays 
-	&getholidays 
-	&savedatemanip 
-	&buscarTabladeReferencia 
-	&obtenerValores 
-	&actualizarCampos 
-	&buscarTablasdeReferencias 
-	&listadoTabla 
-	&obtenerCampos 
-	&valoresTabla 
-	&tablasRelacionadas 
-	&valoresSimilares 
-	&asignar 
-	&obtenerDefaults 
-	&guardarDefaults 
-	&mailDeUsuarios 
-	&obtenerAutores 
-	&obtenerPaises 
-	&crearComponentes 
-	&obtenerTemas2 
-	&obtenerBiblios 
-	&verificarValor 
-	&cantidadRenglones 
-	&armarPaginas 
-	&crearPaginador 
-	&InitPaginador
-	&from_json_ISO 
-	&UTF8toISO 
-	&obtenerIdentTablaRef 
-	&obtenerValoresTablaRef 
-	&obtenerValoresAutorizados 
-	&obtenerDatosValorAutorizado
-	&cambiarLibreDeuda 
-	&checkdigit 
-	&checkvalidisbn 
-	&quitarduplicados
-	&buscarCiudades
-	&trim
-	&validateString
-	);
+    &aplicarParches 
+    &obtenerParches 
+    &obtenerTiposDeColaboradores 
+    &obtenerReferencia 
+    &obtenerTemas 
+    &obtenerEditores 
+    &noaccents 
+    &saveholidays 
+    &getholidays 
+    &savedatemanip 
+    &buscarTabladeReferencia 
+    &obtenerValores 
+    &actualizarCampos 
+    &buscarTablasdeReferencias 
+    &listadoTabla 
+    &obtenerCampos 
+    &valoresTabla 
+    &tablasRelacionadas 
+    &valoresSimilares 
+    &asignar 
+    &obtenerDefaults 
+    &guardarDefaults 
+    &mailDeUsuarios 
+    &obtenerAutores 
+    &obtenerPaises 
+    &crearComponentes 
+    &obtenerTemas2 
+    &obtenerBiblios 
+    &verificarValor 
+    &cantidadRenglones 
+    &armarPaginas 
+    &crearPaginador 
+    &InitPaginador
+    &from_json_ISO 
+    &UTF8toISO 
+    &obtenerIdentTablaRef 
+    &obtenerValoresTablaRef 
+    &obtenerValoresAutorizados 
+    &obtenerDatosValorAutorizado
+    &cambiarLibreDeuda 
+    &checkdigit 
+    &checkvalidisbn 
+    &quitarduplicados
+    &buscarCiudades
+    &trim
+    &validateString
+    );
 
 =item
 crearComponentes
@@ -94,75 +94,75 @@ $labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
 $valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
 sub crearComponentes(){
-	my ($tipoInput,$id,$values,$labels,$valor)=@_;
-	my $inputCampos;
-	if ($tipoInput eq 'combo'){
-		$inputCampos=CGI::scrolling_list(  
-			-name      => $id,
-			-id	   => $id,
-			-values    => $values,
-			-labels    => $labels,
-			-default   => $valor,
-			-size	   => 1,
+    my ($tipoInput,$id,$values,$labels,$valor)=@_;
+    my $inputCampos;
+    if ($tipoInput eq 'combo'){
+        $inputCampos=CGI::scrolling_list(  
+            -name      => $id,
+            -id    => $id,
+            -values    => $values,
+            -labels    => $labels,
+            -default   => $valor,
+            -size      => 1,
                 );
-	}
-	elsif($tipoInput eq 'radio'){
-		$inputCampos=CGI::radio_group(
-			-name	   =>$id,
-			-id	   =>$id,
-			-values    => $values,
-			-labels    => $labels,
-			-default   => $valor,
-		);
-	}
-	elsif($tipoInput eq 'check'){
-		$inputCampos=CGI::checkbox_group(
-			-name	=>$id,
-			-id	=>$id,
-			-values    => $values,
-			-labels    => $labels,
-			-default   => $valor,
-		);
-	}
-	elsif($tipoInput eq 'text'){
-		$inputCampos=CGI::textfield(
-			-name	=>$id,
-			-id	=>$id,
-			-value  =>$valor,
-			-size	=>$values,
+    }
+    elsif($tipoInput eq 'radio'){
+        $inputCampos=CGI::radio_group(
+            -name      =>$id,
+            -id    =>$id,
+            -values    => $values,
+            -labels    => $labels,
+            -default   => $valor,
+        );
+    }
+    elsif($tipoInput eq 'check'){
+        $inputCampos=CGI::checkbox_group(
+            -name   =>$id,
+            -id =>$id,
+            -values    => $values,
+            -labels    => $labels,
+            -default   => $valor,
+        );
+    }
+    elsif($tipoInput eq 'text'){
+        $inputCampos=CGI::textfield(
+            -name   =>$id,
+            -id =>$id,
+            -value  =>$valor,
+            -size   =>$values,
                 );
-	}
-	elsif($tipoInput eq 'texta'){
-		$inputCampos=CGI::textarea(
-			-name	 =>$id,
-			-id	 =>$id,
-			-value   =>$valor,
-			-rows	 =>$labels,
-			-cols	 =>$values,
+    }
+    elsif($tipoInput eq 'texta'){
+        $inputCampos=CGI::textarea(
+            -name    =>$id,
+            -id  =>$id,
+            -value   =>$valor,
+            -rows    =>$labels,
+            -cols    =>$values,
                 );
-	}
-	else{
-		$inputCampos= CGI::hidden(-id=>$id,);
-	}
-	return($inputCampos);
+    }
+    else{
+        $inputCampos= CGI::hidden(-id=>$id,);
+    }
+    return($inputCampos);
 }
 
 
 #Obtiene los mail de todos los usuarios
 sub mailDeUsuarios(){
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT emailaddress 
-				FROM  borrowers 
-				WHERE (emailaddress IS NOT NULL) AND (emailaddress <> '')");
-	$sth->execute();
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data); 
-	}
-	  
-	$sth->finish;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT emailaddress 
+                FROM  borrowers 
+                WHERE (emailaddress IS NOT NULL) AND (emailaddress <> '')");
+    $sth->execute();
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data); 
+    }
+      
+    $sth->finish;
 
-	return(@results);
+    return(@results);
 }
 
 sub in_array() {
@@ -175,55 +175,55 @@ sub in_array() {
 
 sub array_diff{
 # A $array1 le resta $array2
-	my ($array1_ref,@array2) = @_;
-	my @array_res;
-	foreach (@$array1_ref) {
-		push(@array_res, $_) unless (&in_array($_,@array2));
-	} 
-	return(@array_res);
+    my ($array1_ref,@array2) = @_;
+    my @array_res;
+    foreach (@$array1_ref) {
+        push(@array_res, $_) unless (&in_array($_,@array2));
+    } 
+    return(@array_res);
 }
 
-sub saveholidays{	
-	my ($hol) = @_;
-	if ($hol){ # FIXME falla si borro todos los feriados
-		my @feriados = split(/,/, $hol);
-		savedatemanip(@feriados);
-		my ($cant,@feriados_anteriores)= &getholidays();
-		my @feriados_nuevos= &array_diff(\@feriados,@feriados_anteriores);
-		my @feriados_borrados= &array_diff(\@feriados_anteriores,@feriados);
-		foreach (@feriados_nuevos) { updateForHoliday($_,"+"); }
-		foreach (@feriados_borrados) { updateForHoliday($_,"-"); }
-		my $dbh = C4::Context->dbh;
+sub saveholidays{   
+    my ($hol) = @_;
+    if ($hol){ # FIXME falla si borro todos los feriados
+        my @feriados = split(/,/, $hol);
+        savedatemanip(@feriados);
+        my ($cant,@feriados_anteriores)= &getholidays();
+        my @feriados_nuevos= &array_diff(\@feriados,@feriados_anteriores);
+        my @feriados_borrados= &array_diff(\@feriados_anteriores,@feriados);
+        foreach (@feriados_nuevos) { updateForHoliday($_,"+"); }
+        foreach (@feriados_borrados) { updateForHoliday($_,"-"); }
+        my $dbh = C4::Context->dbh;
 #Se borran todos los feriados de la tabla
-		if (scalar(@feriados_borrados)) {
-			my $sth=$dbh->prepare("	DELETE FROM feriados 
-						WHERE fecha IN (".join(',',map {"('".$_."')"} @feriados_borrados).")");
-			$sth->execute();
-			$sth->finish;
-		}
+        if (scalar(@feriados_borrados)) {
+            my $sth=$dbh->prepare(" DELETE FROM feriados 
+                        WHERE fecha IN (".join(',',map {"('".$_."')"} @feriados_borrados).")");
+            $sth->execute();
+            $sth->finish;
+        }
 #Se dan de alta todos los feriados
-		if (scalar(@feriados_nuevos)) {
-			my $sth=$dbh->prepare("	INSERT INTO feriados (fecha) 
-						VALUES ".join(',',map {"('".$_."')"} @feriados_nuevos));
-			$sth->execute();
-			$sth->finish;
-		}
-	}
+        if (scalar(@feriados_nuevos)) {
+            my $sth=$dbh->prepare(" INSERT INTO feriados (fecha) 
+                        VALUES ".join(',',map {"('".$_."')"} @feriados_nuevos));
+            $sth->execute();
+            $sth->finish;
+        }
+    }
 }
 
 sub obtenerTiposDeColaboradores{
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT codigo,descripcion 
-			FROM referenciaColaboradores 
-			ORDER BY (descripcion)");
+my $sth=$dbh->prepare(" SELECT codigo,descripcion 
+            FROM referenciaColaboradores 
+            ORDER BY (descripcion)");
 $sth->execute();
 my %results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
   $results{$data->{'codigo'}}=$data->{'descripcion'};
 }
-	  # while
-	$sth->finish;
-	return(%results);#,@results);
+      # while
+    $sth->finish;
+    return(%results);#,@results);
 }
 
 =item obtenerParches
@@ -232,10 +232,10 @@ la funcion obtenerParches devuelve toda la informacion sobre los parches de actu
 sub obtenerParches{
 my ($version)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT * 
-			FROM parches 
-			WHERE (corresponde > ?) 
-			ORDER BY (id)");
+my $sth=$dbh->prepare(" SELECT * 
+            FROM parches 
+            WHERE (corresponde > ?) 
+            ORDER BY (id)");
 $sth->execute($version);
 my @results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
@@ -253,10 +253,10 @@ Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones
 sub aplicarParches{
 my ($parche)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT * 
-			FROM parches_scripts 
-			WHERE (parche= ?) 
-			ORDER BY (id)");
+my $sth=$dbh->prepare(" SELECT * 
+            FROM parches_scripts 
+            WHERE (parche= ?) 
+            ORDER BY (id)");
 $sth->execute($parche);
 my $sth2;
 my $error='';
@@ -269,11 +269,11 @@ if ($sth2 -> errstr){ $error=$sth2 -> errstr;
 $sth->finish;
 if (not $error){
 my $sth3=$dbh->prepare("UPDATE parches 
-			SET aplicado='1' 
-			WHERE id=?");
+            SET aplicado='1' 
+            WHERE id=?");
 $sth3->execute($parche);
 }
-	}
+    }
 
 $sth2->finish;
 
@@ -283,157 +283,157 @@ return($error);
 
 
 sub getholidays{
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT * 
-				FROM feriados");
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM feriados");
         $sth->execute();
-	my @results;
-	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
-	$sth->finish;
-	return(scalar(@results),@results);
+    my @results;
+    while (my $data = $sth->fetchrow) {push(@results, $data); } # while
+    $sth->finish;
+    return(scalar(@results),@results);
 }
 
 #27/03/07 Miguel - Cuando agregaba un autor en Colaboradores
 #obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
 sub obtenerReferencia{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT UPPER(concat_ws(', ',apellido,nombre)) 
-				FROM autores 
-				WHERE apellido LIKE ? 
-				ORDER BY apellido 
-				LIMIT 0,15");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
+                FROM autores 
+                WHERE apellido LIKE ? 
+                ORDER BY apellido 
+                LIMIT 0,15");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow) {push(@results, $data); } # while
+    $sth->finish;
+    return(@results);
 }
 
 #obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
 sub obtenerAutores{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT completo, id 
-				FROM autores 
-				WHERE apellido LIKE ? 
-				ORDER BY (apellido)");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT completo, id 
+                FROM autores 
+                WHERE apellido LIKE ? 
+                ORDER BY (apellido)");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data); 
-	} # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data); 
+    } # while
+    $sth->finish;
+    return(@results);
 }
 
 sub obtenerPaises{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT printable_name, iso 
-				FROM countries 
-				WHERE printable_name LIKE ? 
-				ORDER BY (printable_name)");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT printable_name, iso 
+                FROM countries 
+                WHERE printable_name LIKE ? 
+                ORDER BY (printable_name)");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data);
-	} # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data);
+    } # while
+    $sth->finish;
+    return(@results);
 }
 
 #obtenerTemas devuelve los temas que sean like el parametro
 sub obtenerTemas{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-# 	my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
-	my $sth=$dbh->prepare("	SELECT nombre 
-				FROM temas 
-				WHERE nombre LIKE ? 
-				ORDER BY nombre 
-				LIMIT 0,15");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+#   my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
+    my $sth=$dbh->prepare(" SELECT nombre 
+                FROM temas 
+                WHERE nombre LIKE ? 
+                ORDER BY nombre 
+                LIMIT 0,15");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow) {push(@results, $data); } # while
+    $sth->finish;
+    return(@results);
 }
 
 sub obtenerTemas2(){
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT nombre, id 
-				FROM temas 
-				WHERE nombre LIKE ? 
-				ORDER BY nombre");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT nombre, id 
+                FROM temas 
+                WHERE nombre LIKE ? 
+                ORDER BY nombre");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data);
-	} # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data);
+    } # while
+    $sth->finish;
+    return(@results);
 }
 
 #obtenerEditores devuelve los editores que sean like el parametro
 sub obtenerEditores{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT UPPER(concat_ws(', ',apellido,nombre)) 
-				FROM autores 
-				WHERE apellido LIKE ? 
-				ORDER BY (apellido) 
-				LIMIT 0,15");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
+                FROM autores 
+                WHERE apellido LIKE ? 
+                ORDER BY (apellido) 
+                LIMIT 0,15");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow) {push(@results, $data); } # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow) {push(@results, $data); } # while
+    $sth->finish;
+    return(@results);
 }
 
 sub obtenerBiblios{
-	my ($dato)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT branchname, branchcode AS id 
-				FROM branches 
-				WHERE branchname LIKE ? 
-				ORDER BY branchname");
+    my ($dato)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT branchname, branchcode AS id 
+                FROM branches 
+                WHERE branchname LIKE ? 
+                ORDER BY branchname");
         $sth->execute($dato.'%');
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data);
-	} # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data);
+    } # while
+    $sth->finish;
+    return(@results);
 }
 
 sub noaccents {
-	my $word = @_[0];
-	my @chars = split(//,$word);
-	my $newstr = ""; 
-	foreach my $ch (@chars) {
-		if (ord($ch) == 225 || ord($ch) == 193) {$newstr.= 'a'} 
-		elsif (ord($ch) == 233 || ord($ch) == 201) {$newstr.= 'e'}
-		elsif (ord($ch) == 237 || ord($ch) == 205) {$newstr.= 'i'}
-		elsif (ord($ch) == 243 || ord($ch) == 211) {$newstr.= 'o'}
-		elsif (ord($ch) == 250 || ord($ch) == 218) {$newstr.= 'u'}
-		else {$newstr.= $ch}
-	} 
-	return(uc($newstr));
+    my $word = @_[0];
+    my @chars = split(//,$word);
+    my $newstr = ""; 
+    foreach my $ch (@chars) {
+        if (ord($ch) == 225 || ord($ch) == 193) {$newstr.= 'a'} 
+        elsif (ord($ch) == 233 || ord($ch) == 201) {$newstr.= 'e'}
+        elsif (ord($ch) == 237 || ord($ch) == 205) {$newstr.= 'i'}
+        elsif (ord($ch) == 243 || ord($ch) == 211) {$newstr.= 'o'}
+        elsif (ord($ch) == 250 || ord($ch) == 218) {$newstr.= 'u'}
+        else {$newstr.= $ch}
+    } 
+    return(uc($newstr));
 }
 
 sub savedatemanip {
 my @feriados= @_;
 #Actualizo el archivo de configuracion de DateManip
-	open (F,'>/var/www/.DateManip.cnf'); #FIXME hay que sacar /var/www/ y poner algo asi como $ENV{HOME}
-	printf F "*Holiday\n\n";
-	foreach my $f (@feriados) {
-		my @fecha = split('-',$f);
-		my $fnue = $fecha[2].'/'.$fecha[1].'/'.$fecha[0];
-		printf F $fnue."\t= Feriado\n\n";
-	}
-	close F;
+    open (F,'>/var/www/.DateManip.cnf'); #FIXME hay que sacar /var/www/ y poner algo asi como $ENV{HOME}
+    printf F "*Holiday\n\n";
+    foreach my $f (@feriados) {
+        my @fecha = split('-',$f);
+        my $fnue = $fecha[2].'/'.$fecha[1].'/'.$fecha[0];
+        printf F $fnue."\t= Feriado\n\n";
+    }
+    close F;
 }
 
 #Se obtienen los campos de una tabla que es el parametro que se recibe
@@ -445,7 +445,7 @@ $sth->execute();#$tabla);
 my @results;
 while (my @data=$sth->fetchrow_array){
         my $aux;
-	$aux->{'campo'} = $data[0];
+    $aux->{'campo'} = $data[0];
         push(@results,$aux);
         }
 $sth->finish;
@@ -471,46 +471,46 @@ my @cantidad;
 
 
 if( ($bloqueIni ne "")&&($bloqueFin ne "") ){
-	$sth=$dbh->prepare("	SELECT count(*)
-				FROM $tabla
-				WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' ");
+    $sth=$dbh->prepare("    SELECT count(*)
+                FROM $tabla
+                WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' ");
 
-	$sth->execute();
-	@cantidad=$sth->fetchrow_array;
+    $sth->execute();
+    @cantidad=$sth->fetchrow_array;
 
-	$sth=$dbh->prepare("	SELECT *
-				FROM $tabla
-				WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' 
-				ORDER BY $orden limit $ind,$cant ");
-	$sth->execute();
+    $sth=$dbh->prepare("    SELECT *
+                FROM $tabla
+                WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' 
+                ORDER BY $orden limit $ind,$cant ");
+    $sth->execute();
 }else{
-	$sth=$dbh->prepare("	SELECT COUNT(*) 
-				FROM $tabla  
-				WHERE $orden LIKE '$search'");
-	$sth->execute();
+    $sth=$dbh->prepare("    SELECT COUNT(*) 
+                FROM $tabla  
+                WHERE $orden LIKE '$search'");
+    $sth->execute();
 
-	@cantidad=$sth->fetchrow_array;
-	$sth=$dbh->prepare("	SELECT * 
-				FROM $tabla 
-				WHERE $orden LIKE '$search' 
-				ORDER BY $orden LIMIT $ind,$cant");
-	$sth->execute();
+    @cantidad=$sth->fetchrow_array;
+    $sth=$dbh->prepare("    SELECT * 
+                FROM $tabla 
+                WHERE $orden LIKE '$search' 
+                ORDER BY $orden LIMIT $ind,$cant");
+    $sth->execute();
 }
 
 my @results;
 while (my @data=$sth->fetchrow_array){
         my @results2;
-	my $i;
-	
-	for ($i=0;$i<@data;$i++) {
-		my $aux;
-		$aux->{'campo'} = $data[$i];
-        	push(@results2,$aux);
-	}
-	my $aux2;
-	$aux2->{'registro'}=\@results2;
-	$aux2->{'id'}=$data[$id];
-	push(@results,$aux2);
+    my $i;
+    
+    for ($i=0;$i<@data;$i++) {
+        my $aux;
+        $aux->{'campo'} = $data[$i];
+            push(@results2,$aux);
+    }
+    my $aux2;
+    $aux2->{'registro'}=\@results2;
+    $aux2->{'id'}=$data[$id];
+    push(@results,$aux2);
 }
         
 $sth->finish;
@@ -529,24 +529,24 @@ $sth->execute();
 my @results;
 while (my @data=$sth->fetchrow_array){
         my $aux;
-	$aux->{'campo'} = $data[0];
+    $aux->{'campo'} = $data[0];
         push(@results,$aux);
         }
 
-$sth=$dbh->prepare("	SELECT * 
-			FROM $tabla 
-			WHERE $indice=?");
+$sth=$dbh->prepare("    SELECT * 
+            FROM $tabla 
+            WHERE $indice=?");
 $sth->execute($valor);
 my @results2;
 while (my $data=$sth->fetchrow_hashref){
         my $i;
-	foreach $i (@results){
-		my $aux;
-		$aux->{'campo'} = $i->{'campo'};
-		$aux->{'valor'}=$data->{$i->{'campo'}};
-        	push(@results2,$aux);
-	}
-	}
+    foreach $i (@results){
+        my $aux;
+        $aux->{'campo'} = $i->{'campo'};
+        $aux->{'valor'}=$data->{$i->{'campo'}};
+            push(@results2,$aux);
+    }
+    }
         
 $sth->finish;
 return @results2;
@@ -557,35 +557,35 @@ obtenerValoresTablaRef
 Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
 =cut
 sub obtenerValoresTablaRef{
-	my ($tabla,$ident,$campos,$orden)=@_;
+    my ($tabla,$ident,$campos,$orden)=@_;
 
-	my $dbh = C4::Context->dbh;
-	my $query="	SELECT ".$ident." as id,".$campos." 
-			FROM ".$tabla. " 
-			ORDER BY ".$orden;
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
-	my $strjson="";
-	my $labels;
-	my @campos=split(/,/,$campos);
-	my $long=scalar(@campos);
-	my $data;
-	my %result;
+    my $dbh = C4::Context->dbh;
+    my $query=" SELECT ".$ident." as id,".$campos." 
+            FROM ".$tabla. " 
+            ORDER BY ".$orden;
+    my $sth=$dbh->prepare($query);
+    $sth->execute();
+    my $strjson="";
+    my $labels;
+    my @campos=split(/,/,$campos);
+    my $long=scalar(@campos);
+    my $data;
+    my %result;
 
-	while($data=$sth->fetchrow_hashref()){
-		$result{$data->{'id'}}=$data->{$campos[0]};
-		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
-		$labels="'".$data->{$campos[0]};
-		for(my $i=1;$i<$long;$i++){
-			$labels.="|".$data->{$campos[$i]};
-			$result{$data->{'id'}}.=",".$data->{$campos[$i]};
-		}
-		$strjson.=$labels."'}";
-	}
-	$strjson=substr($strjson,1,length($strjson));
-	$strjson="[".$strjson."]";
+    while($data=$sth->fetchrow_hashref()){
+        $result{$data->{'id'}}=$data->{$campos[0]};
+        $strjson.=",{'clave':'".$data->{'id'}."','valor':";
+        $labels="'".$data->{$campos[0]};
+        for(my $i=1;$i<$long;$i++){
+            $labels.="|".$data->{$campos[$i]};
+            $result{$data->{'id'}}.=",".$data->{$campos[$i]};
+        }
+        $strjson.=$labels."'}";
+    }
+    $strjson=substr($strjson,1,length($strjson));
+    $strjson="[".$strjson."]";
 
-	return($strjson,\%result);
+    return($strjson,\%result);
 }
 
 #devuelve todos los registros relacionados con un elemento de referencia, dependiendo de los valores en tablasDeReferencias, por ej: para el autor id 10 devolvera que tiene asignados 35 biblios
@@ -597,30 +597,30 @@ my $dbh = C4::Context->dbh;
 #Se verfica si tiene referencias
 #Tabla referencias
 #referencia nomcamporeferencia camporeferencia referente             camporeferente
-#autores 	id 		0 		biblio 			author
-#autores 	id 		0 		colaboradores 		idColaborador
-#autores 	id 		0 		additionalauthors 	author
-#autores 	id 		0 		analyticalauthors 	author
-my $sth=$dbh->prepare("	SELECT * 
-			FROM tablasDeReferencias 
-			WHERE referencia= ?");
+#autores    id      0       biblio          author
+#autores    id      0       colaboradores       idColaborador
+#autores    id      0       additionalauthors   author
+#autores    id      0       analyticalauthors   author
+my $sth=$dbh->prepare(" SELECT * 
+            FROM tablasDeReferencias 
+            WHERE referencia= ?");
 $sth->execute($tabla);
 my @results;
 while (my $data=$sth->fetchrow_hashref){
         my $aux;
-	my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
-				FROM $data->{'referencia'} 
-				WHERE $indice = ?");
-	$sth2->execute($valor);
-	my $identificador=$sth2->fetchrow_array;
-	$sth2=$dbh->prepare("	SELECT COUNT(*) 
-				FROM $data->{'referente'} 
-				WHERE $data->{'camporeferente'}= ?");
-	$sth2->execute($identificador);
-	$aux->{'relacionadoTabla'} = $data->{'referente'};
+    my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
+                FROM $data->{'referencia'} 
+                WHERE $indice = ?");
+    $sth2->execute($valor);
+    my $identificador=$sth2->fetchrow_array;
+    $sth2=$dbh->prepare("   SELECT COUNT(*) 
+                FROM $data->{'referente'} 
+                WHERE $data->{'camporeferente'}= ?");
+    $sth2->execute($identificador);
+    $aux->{'relacionadoTabla'} = $data->{'referente'};
         if (my $canti= $sth2->fetchrow_array){
-	$aux->{'relacionadoTablaCantidad'}=$canti;
-	push(@results,$aux);}
+    $aux->{'relacionadoTablaCantidad'}=$canti;
+    push(@results,$aux);}
         }
 
 return @results;
@@ -637,30 +637,30 @@ my($tabla,$camporeferencia,$id)=@_;
 ($id||($id=0));
 my $dbh = C4::Context->dbh;
 #Obtengo que campo voy a utilizar para buscar similares, es en tablasDeReferenciasInfo
-my $sth=$dbh->prepare("	SELECT similares 
-			FROM tablasDeReferenciasInfo 
-			WHERE referencia=? ");
+my $sth=$dbh->prepare(" SELECT similares 
+            FROM tablasDeReferenciasInfo 
+            WHERE referencia=? ");
 $sth->execute($tabla);
 my $similar=$sth->fetchrow_array;
 #Busco el valor del campo similar que corresponde al registro para el cual estoy buscando similares 
-$sth=$dbh->prepare("	SELECT $similar 
-			FROM $tabla 
-			WHERE $camporeferencia = ? 
-			LIMIT 0,1");
+$sth=$dbh->prepare("    SELECT $similar 
+            FROM $tabla 
+            WHERE $camporeferencia = ? 
+            LIMIT 0,1");
 $sth->execute($id);
 my $valorAbuscarSimil=$sth->fetchrow_array;
 my $tamano=(length($valorAbuscarSimil))-1;
 #Busco los valores similares, con una expresion regular que busca aquellas tuplas que coincidan en campo similar en todos los caracteres-1 del original
-$sth=$dbh->prepare("	SELECT * 
-			FROM $tabla 
-			WHERE $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' AND $camporeferencia  != ? 
-			ORDER BY $similar 
-			LIMIT 0,15");
+$sth=$dbh->prepare("    SELECT * 
+            FROM $tabla 
+            WHERE $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' AND $camporeferencia  != ? 
+            ORDER BY $similar 
+            LIMIT 0,15");
 $sth->execute($id);
 my $sth3=$dbh->prepare("SELECT camporeferencia 
-			FROM tablasDeReferencias 
-			WHERE referencia=? 
-			LIMIT 0,1");
+            FROM tablasDeReferencias 
+            WHERE referencia=? 
+            LIMIT 0,1");
 $sth3->execute($tabla);
 my $idnum=$sth3->fetchrow_array;
 
@@ -668,17 +668,17 @@ my $idnum=$sth3->fetchrow_array;
 my @results;
 while (my @data=$sth->fetchrow_array){
         my @results2;
-	my $i;
-	for ($i=0;$i<@data;$i++) {
-		my $aux;
-		$aux->{'campo'} = $data[$i];
-        	push(@results2,$aux);
-	}
-	my $aux2;
-	$aux2->{'registro'}=\@results2;
-	$aux2->{'id'}=$data[$idnum];
-	push(@results,$aux2);
-	}
+    my $i;
+    for ($i=0;$i<@data;$i++) {
+        my $aux;
+        $aux->{'campo'} = $data[$i];
+            push(@results2,$aux);
+    }
+    my $aux2;
+    $aux2->{'registro'}=\@results2;
+    $aux2->{'id'}=$data[$idnum];
+    push(@results,$aux2);
+    }
         
 $sth->finish;
 return (@results);
@@ -692,35 +692,35 @@ my $dbh = C4::Context->dbh;
 my $asignar;
 my $sthT=$dbh->prepare("START TRANSACTION");
 $sthT->execute();
-my $sth=$dbh->prepare("	SELECT * 
-			FROM tablasDeReferencias 
-			WHERE referencia= ?");
+my $sth=$dbh->prepare(" SELECT * 
+            FROM tablasDeReferencias 
+            WHERE referencia= ?");
 $sth->execute($tabla);
 my @results;
 my $asignar=0;
 while (my $data=$sth->fetchrow_hashref){
-	$asignar=1;
+    $asignar=1;
         my $aux;
-	my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
-				FROM $data->{'referencia'} 
-				WHERE $indice = ?");
-	$sth2->execute($identificador);
-	my $identificador2=$sth2->fetchrow_array;
-	$sth2=$dbh->prepare("	UPDATE $data->{'referente'} 
-				SET $data->{'camporeferente'}= ? 
-				WHERE $data->{'camporeferente'}= ?");
-	$sth2->execute($valorNuevo,$identificador2);
-	}
+    my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
+                FROM $data->{'referencia'} 
+                WHERE $indice = ?");
+    $sth2->execute($identificador);
+    my $identificador2=$sth2->fetchrow_array;
+    $sth2=$dbh->prepare("   UPDATE $data->{'referente'} 
+                SET $data->{'camporeferente'}= ? 
+                WHERE $data->{'camporeferente'}= ?");
+    $sth2->execute($valorNuevo,$identificador2);
+    }
 if ($borrar){
-	my $sth3=$dbh->prepare("DELETE FROM $tabla 
-				WHERE $indice= ?");
-	$sth3->execute($identificador);
-	$borrar=1;
-	}
+    my $sth3=$dbh->prepare("DELETE FROM $tabla 
+                WHERE $indice= ?");
+    $sth3->execute($identificador);
+    $borrar=1;
+    }
 $sthT=$dbh->prepare("COMMIT");
 $sthT->execute();
 
-return ($asignar,$borrar);	
+return ($asignar,$borrar);  
 }
 
 sub obtenerValores{
@@ -729,9 +729,9 @@ my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("SHOW FIELDS FROM ?");
 $sth->execute($tabla);
 my @data=$sth->fetchrow_array;
-$sth=$dbh->prepare("	SELECT * 
-			FROM ? 
-			WHERE ?=?");
+$sth=$dbh->prepare("    SELECT * 
+            FROM ? 
+            WHERE ?=?");
 $sth->execute($tabla,$indice,$valor);
 my $data2=$sth->fetchrow_hashref;
 $sth->finish;
@@ -751,9 +751,9 @@ foreach my $key (keys(%valores)){
 $sql.=', '.$key.'="'.$valores{$key}.'"';
 }
 $sql=substr($sql,2);
-my $sth=$dbh->prepare("	UPDATE $tabla 
-			SET $sql 
-			WHERE $id=?");
+my $sth=$dbh->prepare(" UPDATE $tabla 
+            SET $sql 
+            WHERE $id=?");
 $sth->execute($valores{$id});
 $sth->finish;
 }
@@ -761,9 +761,9 @@ $sth->finish;
 #Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
 sub buscarTablasdeReferencias{
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT DISTINCT(referencia) 
-			FROM tablasDeReferencias 
-			ORDEY BY (referencia)");
+my $sth=$dbh->prepare(" SELECT DISTINCT(referencia) 
+            FROM tablasDeReferencias 
+            ORDEY BY (referencia)");
 $sth->execute();
 my %results;
 while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
@@ -777,17 +777,17 @@ return(%results);#,@results);
 sub buscarTabladeReferencia{
 my ($ref)=@_;
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT * 
-			FROM tablasDeReferencias 
-			WHERE referencia=? 
-			LIMIT 0,1");
+my $sth=$dbh->prepare(" SELECT * 
+            FROM tablasDeReferencias 
+            WHERE referencia=? 
+            LIMIT 0,1");
 $sth->execute($ref);
 my $results=$sth->fetchrow_hashref;
 #se obtiene el orden de la tabla con la que se esta trabajando
-$sth=$dbh->prepare("	SELECT orden 
-			FROM tablasDeReferenciasInfo 
-			WHERE referencia=? 
-			LIMIT 0,1");
+$sth=$dbh->prepare("    SELECT orden 
+            FROM tablasDeReferenciasInfo 
+            WHERE referencia=? 
+            LIMIT 0,1");
 $sth->execute($ref);
 $results->{'orden'}=$sth->fetchrow_array;
 $sth->finish;
@@ -799,23 +799,23 @@ obtenerIdentTablaRef
 Obtiene el campo clave de la tabla a la cual se esta asi referencia
 =cut
 sub obtenerIdentTablaRef{
-	my ($tabla)=@_;
-	my $dbh = C4::Context->dbh;
+    my ($tabla)=@_;
+    my $dbh = C4::Context->dbh;
 
-	my $query="	SELECT nomcamporeferencia 
-			FROM tablasDeReferencias 
-			WHERE referencia=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tabla);
-	return($sth->fetchrow);
+    my $query=" SELECT nomcamporeferencia 
+            FROM tablasDeReferencias 
+            WHERE referencia=?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($tabla);
+    return($sth->fetchrow);
 }
 
 #obtenerTemas devuelve los temas que sean like el parametro
 sub obtenerDefaults{
 
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("	SELECT * 
-			FROM defaultbiblioitem");
+my $sth=$dbh->prepare(" SELECT * 
+            FROM defaultbiblioitem");
 $sth->execute();
 my @results;
 while (my $data = $sth->fetchrow_hashref) {push(@results, $data); } # while
@@ -828,9 +828,9 @@ sub guardarDefaults
 
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare("	UDPATE defaultbiblioitem 
-			SET valor = ? 
-			WHERE campo=?");
+my $sth=$dbh->prepare(" UDPATE defaultbiblioitem 
+            SET valor = ? 
+            WHERE campo=?");
 $sth->execute($biblioitem->{'volume'},'volume');
 $sth->execute($biblioitem->{'number'},'number');
 $sth->execute($biblioitem->{'classification'},'selectlevel');
@@ -860,19 +860,19 @@ verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
 sub verificarValor(){
-	my ($valor)=@_;
-	my @array=split(/;/,$valor);
-	if(scalar(@array) > 1){
-		#por si viene un ; saco las palabras peligrosas, que son las de sql.
-		$valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
-	}
-	
-# 	$valor=~ s/'/\\'/g; 
-	#$valor=~ s/-/\\-/g;
-	$valor=~ s/%|"|'|=|\*|-(<,>)//g;	
-	$valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
-	$valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
-	return $valor;
+    my ($valor)=@_;
+    my @array=split(/;/,$valor);
+    if(scalar(@array) > 1){
+        #por si viene un ; saco las palabras peligrosas, que son las de sql.
+        $valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
+    }
+    
+#   $valor=~ s/'/\\'/g; 
+    #$valor=~ s/-/\\-/g;
+    $valor=~ s/%|"|'|=|\*|-(<,>)//g;    
+    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
+    $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
+    return $valor;
 }
 
 #*****************************************Paginador*********************************
@@ -880,30 +880,30 @@ sub verificarValor(){
 #
 
 sub InitPaginador{
-	my ($iniParam)=@_;
-	my $pageNumber;
-	my $ini;
-	my $cantR=cantidadRenglones();
-	
-	if (($iniParam eq "")){
-        	$ini=0;
-		$pageNumber=1;
-	} else {
-		$ini= ($iniParam-1)* $cantR;
-		$pageNumber= $iniParam;
-	};
+    my ($iniParam)=@_;
+    my $pageNumber;
+    my $ini;
+    my $cantR=cantidadRenglones();
+    
+    if (($iniParam eq "")){
+            $ini=0;
+        $pageNumber=1;
+    } else {
+        $ini= ($iniParam-1)* $cantR;
+        $pageNumber= $iniParam;
+    };
 
-	return ($ini,$pageNumber,$cantR);
+    return ($ini,$pageNumber,$cantR);
 }
 
 sub crearPaginador{
 
-	my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
+    my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
-	my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
+    my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
 
         $t_params->{'paginador'} = $paginador;
-	return $paginador;
+    return $paginador;
 
 }
 
@@ -914,53 +914,53 @@ sub armarPaginas{
 #@$t_params, para obtener el path para las imagenes
 
 
-	my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
+    my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
-	my $pagAMostrar=C4::Context->preference("paginas")||10;
-	my $numBloq=floor($actual / $pagAMostrar);
-	my $limInf=($numBloq * $pagAMostrar);
-	my $limSup=$limInf + $pagAMostrar;
-	if($limInf == 0){
-		$limInf= 1;
-		$limSup=$limInf + $pagAMostrar -1;
-	}
-	my $totalPaginas = ceil($cantRegistros/$cantRenglones);
+    my $pagAMostrar=C4::Context->preference("paginas")||10;
+    my $numBloq=floor($actual / $pagAMostrar);
+    my $limInf=($numBloq * $pagAMostrar);
+    my $limSup=$limInf + $pagAMostrar;
+    if($limInf == 0){
+        $limInf= 1;
+        $limSup=$limInf + $pagAMostrar -1;
+    }
+    my $totalPaginas = ceil($cantRegistros/$cantRenglones);
 
-	my $themelang= $t_params->{'themelang'};
+    my $themelang= $t_params->{'themelang'};
 
-	my $paginador= "<div id=paginador>";
-	my $class="paginaNormal";
+    my $paginador= "<div id=paginador>";
+    my $class="paginaNormal";
 
-	if($actual > 1){
-		#a la primer pagina
-		$paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
-		<img src='".$themelang."/images/numbers/pag_primera.png' border=0></span>";
+    if($actual > 1){
+        #a la primer pagina
+        $paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
+        <img src='".$themelang."/images/numbers/pag_primera.png' border=0></span>";
 
-		$paginador .= "<span> </span>";
+        $paginador .= "<span> </span>";
 
-		my $ant= $actual-1;
-		$paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'>
-		<img src='".$themelang."/images/numbers/pag_anterior.png' border=0></span>";
-	}
-	for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
-		if($actual == $i){$class="paginaActual"}
-			else{$class="paginaNormal"}
-		$paginador .= "<span class='".$class."' onClick='".$funcion."(".$i.")'> ".$i." </span>";
-	}
+        my $ant= $actual-1;
+        $paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'>
+        <img src='".$themelang."/images/numbers/pag_anterior.png' border=0></span>";
+    }
+    for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
+        if($actual == $i){$class="paginaActual"}
+            else{$class="paginaNormal"}
+        $paginador .= "<span class='".$class."' onClick='".$funcion."(".$i.")'> ".$i." </span>";
+    }
 
-	if($actual >= 1 && $actual < $totalPaginas){
-		my $sig= $actual+1;
-		$paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'>
-		<img src='".$themelang."/images/numbers/pag_siguiente.png' border=0></span>";
+    if($actual >= 1 && $actual < $totalPaginas){
+        my $sig= $actual+1;
+        $paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'>
+        <img src='".$themelang."/images/numbers/pag_siguiente.png' border=0></span>";
 
-		$paginador .= "<span> </span>";
-		#a la primer pagina
-		$paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
-		<img src='".$themelang."/images/numbers/pag_ultima.png' border=0></span>";
-	}
-	$paginador .= "</div>";	
+        $paginador .= "<span> </span>";
+        #a la primer pagina
+        $paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
+        <img src='".$themelang."/images/numbers/pag_ultima.png' border=0></span>";
+    }
+    $paginador .= "</div>"; 
 
-	return($paginador, $totalPaginas);
+    return($paginador, $totalPaginas);
 }
 
 #
@@ -968,13 +968,13 @@ sub armarPaginas{
 sub cantidadRenglones{
 
         my $dbh = C4::Context->dbh;
-        my $query="	SELECT value
-		   	FROM systempreferences
-                   	WHERE variable='renglones'";
+        my $query=" SELECT value
+            FROM systempreferences
+                    WHERE variable='renglones'";
         my $sth=$dbh->prepare($query);
-	$sth->execute();
+    $sth->execute();
 
-	return($sth->fetchrow_array);
+    return($sth->fetchrow_array);
 }
 
 #**************************************Fins***Paginador*********************************
@@ -985,12 +985,12 @@ guarda el nuevo valor de la variable libreDeuda de la tabla de las preferencias
 NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sistema, esta funcion se utiliza en los archivos adminLibreDeuda.pl y libreDeuda.pl
 =cut
 sub cambiarLibreDeuda(){
-	my ($valor)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	UPDATE systempreferences 
-				SET value=? 
-				WHERE variable='libreDeuda'");
-	$sth->execute($valor);
+    my ($valor)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" UPDATE systempreferences 
+                SET value=? 
+                WHERE variable='libreDeuda'");
+    $sth->execute($valor);
 }
 
 =item 
@@ -1003,36 +1003,36 @@ C<$env> is ignored.
 VIENE DEL PM INPUT QUE FUE ELIMINADO
 =cut
 sub checkdigit {
-	my ($env,$infl, $nounique) =  @_;
-	$infl = uc $infl;
-	#Check to make sure the cardnumber is unique
-	#FIXME: We should make the error for a nonunique cardnumber
-	#different from the one where the checkdigit on the number is
-	#not correct
-	unless ( $nounique ){
-		my $dbh=C4::Context->dbh;
-		my $query=qq{	SELECT * 
-				FROM borrowers 
-				WHERE cardnumber=?};
-		my $sth=$dbh->prepare($query);
-		$sth->execute($infl);
-		my %results = $sth->fetchrow_hashref();
-		if ( $sth->rows != 0 ){return 0;}
-	}
-	if (C4::Context->preference("checkdigit") eq "none") {return 1;}
-	my @weightings = (8,4,6,3,5,2,1);
-	my $sum;
-	my $i = 1;
-	my $valid = 0;
-	foreach $i (1..7) {
-		my $temp1 = $weightings[$i-1];
-		my $temp2 = substr($infl,$i,1);
-		$sum += $temp1 * $temp2;
-	}
-	my $rem = ($sum%11);
-	if ($rem == 10) {$rem = "X";}
-	if ($rem eq substr($infl,8,1)) {$valid = 1;}
-	return $valid;
+    my ($env,$infl, $nounique) =  @_;
+    $infl = uc $infl;
+    #Check to make sure the cardnumber is unique
+    #FIXME: We should make the error for a nonunique cardnumber
+    #different from the one where the checkdigit on the number is
+    #not correct
+    unless ( $nounique ){
+        my $dbh=C4::Context->dbh;
+        my $query=qq{   SELECT * 
+                FROM borrowers 
+                WHERE cardnumber=?};
+        my $sth=$dbh->prepare($query);
+        $sth->execute($infl);
+        my %results = $sth->fetchrow_hashref();
+        if ( $sth->rows != 0 ){return 0;}
+    }
+    if (C4::Context->preference("checkdigit") eq "none") {return 1;}
+    my @weightings = (8,4,6,3,5,2,1);
+    my $sum;
+    my $i = 1;
+    my $valid = 0;
+    foreach $i (1..7) {
+        my $temp1 = $weightings[$i-1];
+        my $temp2 = substr($infl,$i,1);
+        $sum += $temp1 * $temp2;
+    }
+    my $rem = ($sum%11);
+    if ($rem == 10) {$rem = "X";}
+    if ($rem eq substr($infl,8,1)) {$valid = 1;}
+    return $valid;
 } # sub checkdigit
 
 =item
@@ -1048,14 +1048,14 @@ VIENE DEL PM INPUT QUE FUE ELIMINADO
 #   of 10 digits and valid checksum
 # VIENE DEL PM INPUT QUE FUE ELIMINADO
 sub checkvalidisbn {
-        my ($q)=@_ ;	# Input: ISBN number
+        my ($q)=@_ ;    # Input: ISBN number
         my $isbngood = 0; # Return: true or false
         $q=~s/x$/X/g;           # upshift lower case X
         $q=~s/[^X\d]//g;
         $q=~s/X.//g;
-	#return 0 if $q is not ten digits long
-	if (length($q)!=10) {return 0;}
-	#If we get to here, length($q) must be 10
+    #return 0 if $q is not ten digits long
+    if (length($q)!=10) {return 0;}
+    #If we get to here, length($q) must be 10
         my $checksum=substr($q,9,1);
         my $isbn=substr($q,0,9);
         my $i;
@@ -1064,7 +1064,7 @@ sub checkvalidisbn {
             my $digit=substr($q,$i,1);
             $c+=$digit*(10-$i);
         }
-	$c %= 11;
+    $c %= 11;
         ($c==10) && ($c='X');
         $isbngood = $c eq $checksum;
         return $isbngood;
@@ -1078,47 +1078,47 @@ sub quitarduplicados (){
 my  (@arreglo)=@_;
 my @arreglosin=();
 for(my $i=0;$i<scalar(@arreglo);$i++){
-	my $ok=1;
-	for(my $j=0;$j<scalar(@arreglosin);$j++){
-	if ($arreglo[$i] == $arreglosin[$j] ){$ok=0;}
-	}
-	if ($ok eq 1) {push(@arreglosin, $arreglo[$i] );}
+    my $ok=1;
+    for(my $j=0;$j<scalar(@arreglosin);$j++){
+    if ($arreglo[$i] == $arreglosin[$j] ){$ok=0;}
+    }
+    if ($ok eq 1) {push(@arreglosin, $arreglo[$i] );}
 }
 return (@arreglosin);
 }
 
 #pasa de codificacion UTF8 a ISO-8859-1,
 sub UTF8toISO{
-	my ($data)=@_;
-	return $data= Encode::decode('utf8', $data);
+    my ($data)=@_;
+    return $data= Encode::decode('utf8', $data);
 }
 
 
 sub from_json_ISO{
 
-	eval {
-		my ($data)=@_;
-		$data= UTF8toISO($data);
-		return from_json($data, {ascii => 0});
-	     }
-	or do {
-		return "0";
-	      }
-		
+    eval {
+        my ($data)=@_;
+        $data= UTF8toISO($data);
+        return from_json($data, {ascii => 0});
+         }
+    or do {
+        return "0";
+          }
+        
 }
 =item
 obtenerValoresAutorizados
 Obtiene todas las categorias, sin repetición de la tabla authorised_values.
 =cut
 sub obtenerValoresAutorizados(){
-	my $dbh = C4::Context->dbh;
-        my $query="	SELECT DISTINCT(category) 
-			FROM authorised_values";
+    my $dbh = C4::Context->dbh;
+        my $query=" SELECT DISTINCT(category) 
+            FROM authorised_values";
         my $sth=$dbh->prepare($query);
-	$sth->execute();
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {push(@results, $data); }
-	return(\@results);
+    $sth->execute();
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {push(@results, $data); }
+    return(\@results);
 }
 
 =item
@@ -1126,18 +1126,18 @@ obtenerDatosValorAutorizado
 Obtiene todos los valores de una categoria.
 =cut
 sub obtenerDatosValorAutorizado(){
-	my ($categoria)=@_;
-	my $dbh = C4::Context->dbh;
-        my $query="	SELECT * 
-			FROM authorised_values 
-			WHERE category=?";
+    my ($categoria)=@_;
+    my $dbh = C4::Context->dbh;
+        my $query=" SELECT * 
+            FROM authorised_values 
+            WHERE category=?";
         my $sth=$dbh->prepare($query);
-	$sth->execute($categoria);
-	my %results;
-	while (my $data = $sth->fetchrow_hashref){
-		$results{$data->{'authorised_value'}}=$data->{'lib'};
-	}
-	return(%results);
+    $sth->execute($categoria);
+    my %results;
+    while (my $data = $sth->fetchrow_hashref){
+        $results{$data->{'authorised_value'}}=$data->{'lib'};
+    }
+    return(%results);
 }
 
 =item
@@ -1147,49 +1147,49 @@ Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la pa
 sub buscarCiudades{
         my ($ciudad) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "	SELECT 	countries.name AS pais, provincias.nombre AS provincia, 
-				dptos_partidos.nombre AS partido, localidades.localidad AS localidad,
-				localidades.nombre AS nombre 
-			
-			FROM localidades LEFT JOIN dptos_partidos ON 
-						(localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO) 
-						 LEFT JOIN provincias ON 
-								(dptos_partidos.provincia = provincias.provincia) LEFT JOIN countries ON 
-								(countries.code = provincias.pais) 
-			WHERE (localidades.nombre LIKE ?) OR (localidades.nombre LIKE ?)
-			ORDER BY (localidades.nombre)";
-	my $sth = $dbh->prepare($query);
+        my $query = "   SELECT  countries.name AS pais, provincias.nombre AS provincia, 
+                dptos_partidos.nombre AS partido, localidades.localidad AS localidad,
+                localidades.nombre AS nombre 
+            
+            FROM localidades LEFT JOIN dptos_partidos ON 
+                        (localidades.DPTO_PARTIDO = dptos_partidos.DPTO_PARTIDO) 
+                         LEFT JOIN provincias ON 
+                                (dptos_partidos.provincia = provincias.provincia) LEFT JOIN countries ON 
+                                (countries.code = provincias.pais) 
+            WHERE (localidades.nombre LIKE ?) OR (localidades.nombre LIKE ?)
+            ORDER BY (localidades.nombre)";
+    my $sth = $dbh->prepare($query);
         $sth->execute($ciudad.'%', '% '.$ciudad.'%');
         my @results;
-	my $cant;
+    my $cant;
         while (my $data=$sth->fetchrow_hashref){ 
-		push(@results,$data); 
-		$cant++;
-	}
-	$sth->finish;
-	return ($cant, \@results);
+        push(@results,$data); 
+        $cant++;
+    }
+    $sth->finish;
+    return ($cant, \@results);
 }
 
 
 # Esta funcioin remueve los blancos del principio y el final del string
 sub trim($)
 {
-	my $string = shift;
-	$string =~ s/^\s+//;
-	$string =~ s/\s+$//;
-	return $string;
+    my $string = shift;
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+    return $string;
 }
 
 
 #FUNCION QUE VALIDA QUE UN STRING NO SEA SOLAMENTE UNA SECUENCIA DE BLANCOS (USA Trim())
 sub validateString{
 
-	my ($string)=@_;
-	$string = trim($string);
-	if (length($string) == 0){
-		return 0; #EL STRING ERA SOLO BLANCOS, FALSE
-	}
-	return 1; # TODO OK, TRUE
+    my ($string)=@_;
+    $string = trim($string);
+    if (length($string) == 0){
+        return 0; #EL STRING ERA SOLO BLANCOS, FALSE
+    }
+    return 1; # TODO OK, TRUE
 }
 
 
@@ -1197,106 +1197,107 @@ sub validateString{
 #GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboCategorias{
 
-	my ($selectedCategory) = @_;
-	my($catDefault);
-	
-	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR LA CATEGORIA ASIGNADA, SINO SE TOMA 'DO'
-	if ($selectedCategory ne ""){
-		$catDefault= $selectedCategory;
-	}
-	else
-	{
-		$catDefault= 'DO';
-	}
-	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
+    my ($selectedCategory) = @_;
+    my($catDefault);
+    
+    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR LA CATEGORIA ASIGNADA, SINO SE TOMA 'DO'
+    if ($selectedCategory ne ""){
+        $catDefault= $selectedCategory;
+    }
+    else
+    {
+        $catDefault= 'DO';
+    }
+    my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 
-	my $comboDeCategorias = &CGI::scrolling_list(
-						-name=>'cod_categoria',
-						-id => 'cod_categoria',
-						-values=>$categories,
-						-defaults=>$catDefault,
-						-labels=>$labels,
-						-size =>1
-				);
+    my $comboDeCategorias = &CGI::scrolling_list(
+                        -name=>'cod_categoria',
+                        -id => 'cod_categoria',
+                        -values=>$categories,
+                        -defaults=>$catDefault,
+                        -labels=>$labels,
+                        -size =>1
+                );
 
-	return $comboDeCategorias;
+    return $comboDeCategorias;
 }
 
 #GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboTipoDeDoc {
 
-	my ($tipoActual)=@_;
-	my ($docDefault);
-	my @select_doc;
-	my %select_docs;
-	my @docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
-	
-	foreach my $doc (@docs) {
-		push @select_doc, $doc;
-		$select_docs{$doc} = $doc;
-	}
+    my ($tipoActual)=@_;
+    my ($docDefault);
+    my @select_doc;
+    my %select_docs;
+    my @docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
+#     
+#     foreach my $doc (@docs) {
+#         push(@select_doc,$doc->nombre);
+#         $select_docs{$doc->id_tipo_documento} = $doc->id_tipo_documento;
+#         $select_docs{$doc->nombre} = $doc->nombre;
+#     }
 
-	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR TIPO DE DOC. ASIGNADO, SINO SE TOMA 'DNI'
-	if ($tipoActual ne ""){
-		$docDefault= $tipoActual;
-	}
-	else
-	{
-		$docDefault= 'DNI';
-	}
+    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR TIPO DE DOC. ASIGNADO, SINO SE TOMA 'DNI'
+    if ($tipoActual ne ""){
+        $docDefault= $tipoActual;
+    }
+    else
+    {
+        $docDefault= 'DNI';
+    }
 
-	
+    
 
-	my $documents=CGI::scrolling_list( 	-name     => 'tipo_documento',
-						-id => 'tipo_documento',
-						-values   => \@select_doc,
-						-defaults  => $docDefault, 
-						-labels   => \%select_docs,
-						-size     => 1,
-						-multiple => 0 
-					);
+    my $documents=CGI::scrolling_list(  -name     => 'tipo_documento',
+                        -id => 'tipo_documento',
+                        -values   => \@select_doc,
+                        -defaults  => $docDefault, 
+                        -labels   => \%select_docs,
+                        -size     => 1,
+                        -multiple => 0 
+                    );
 
-	return $documents; 
+    return $documents; 
 }
 
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI {
-	my ($ui_code) = @_;
-# 	my @unidades_de_informacion;
-	my @select_ui;
-	my %select_ui;
-	my $unidades_de_informacion=C4::AR::Busquedas::getBranches();
-	
-	foreach my $ui (keys %$unidades_de_informacion) {
-		push @select_ui, $ui;
-		$select_ui{$ui} = $unidades_de_informacion->{$ui}->{'branchname'};
-	}
-	my $uidefecto;
-	
+    my ($ui_code) = @_;
+#   my @unidades_de_informacion;
+    my @select_ui;
+    my %select_ui;
+    my $unidades_de_informacion=C4::AR::Busquedas::getBranches();
+    
+    foreach my $ui (keys %$unidades_de_informacion) {
+        push @select_ui, $ui;
+        $select_ui{$ui} = $unidades_de_informacion->{$ui}->{'branchname'};
+    }
+    my $uidefecto;
+    
 
-	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR EL BRANCH ASIGNADO, SINO SE TOMA LA DEFUALT 
-# 	DEL SISTEMA
-	if ($ui_code ne ""){
-		$uidefecto= $ui_code;
-	}
-	else
-	{
-		$uidefecto= C4::Context->preference("defaultbranch");
-	}
+    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR EL BRANCH ASIGNADO, SINO SE TOMA LA DEFUALT 
+#   DEL SISTEMA
+    if ($ui_code ne ""){
+        $uidefecto= $ui_code;
+    }
+    else
+    {
+        $uidefecto= C4::Context->preference("defaultbranch");
+    }
 
-	
+    
 
-	my $CGIunidadDeInformacion=CGI::scrolling_list( 	-name     => 'id_ui',
-						-id => 'id_ui',
-						-values   => \@select_ui,
-						-defaults  => $uidefecto, 
-						-labels   => \%select_ui,
-						-size     => 1,
-						-multiple => 0 
-				);
+    my $CGIunidadDeInformacion=CGI::scrolling_list(     -name     => 'id_ui',
+                        -id => 'id_ui',
+                        -values   => \@select_ui,
+                        -defaults  => $uidefecto, 
+                        -labels   => \%select_ui,
+                        -size     => 1,
+                        -multiple => 0 
+                );
 
-	return $CGIunidadDeInformacion; 
+    return $CGIunidadDeInformacion; 
 }
 
 #****************************************************Fin****Generacion de Combos**************************************************

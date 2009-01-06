@@ -77,12 +77,14 @@ sub obtenerTiposDeDocumentos {
 
 
 
-    my $tiposDoc = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento();
+    my $tiposDoc = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento;
     my @results;
     foreach my $tipo_doc (@$tiposDoc) {
-        push (@results, $tipo_doc->nombre);
+        print $tipo_doc->nombre;
+        push (@results, $tipo_doc);
     }
     return(@results);
+        
 }
 
 1;
