@@ -10,9 +10,9 @@ __PACKAGE__->register_db
 (
   connect_options => { AutoCommit => 1 },
   driver          => 'mysql',
-  dsn             => 'dbi:mysql:dbname=V2;host=localhost',
-  password        => 'dev',
-  username        => 'dev',
-);
+  dsn             => 'dbi:mysql:dbname=V3_newAspect_EINAR;host=localhost',
+  username        => 'remote',
+  password        => 'remoteHOST',
+)
 
 1;

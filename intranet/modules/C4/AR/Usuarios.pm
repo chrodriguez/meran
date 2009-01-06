@@ -219,7 +219,8 @@ sub agregarPersona{
 
     my ($params)=@_;
     my $msg_object= C4::AR::Mensajes::create();
-    my $person = Usr_persona->new();
+    my ($person) = C4::Modelo::UsrPersona->new();
+    $params->{'iniciales'} = "DGR";
     $person->agregar($params);
     $person->convertirEnSocio($params);
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$person->getApellido]});
