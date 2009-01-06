@@ -9,6 +9,8 @@ use C4::AR::Validator;
 use C4::AR::Issues;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
+use C4::Modelo::UsrEstado;
+use C4::Modelo::UsrEstado::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -221,7 +223,17 @@ sub agregarPersona{
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     $params->{'iniciales'} = "DGR";
-    $params->{'id_ui'} = "IDUI";
+#     $params->{'id_ui'} = "IDUI";
+    #genero un estado de ALTA para la persona
+    my ($estado) = C4::Modelo::UsrEstado->new();
+    my $paramsEstado;
+    $paramsEstado->{'id_persona'} = $person->getId_persona;
+    $paramsEstado->{'fuente'} = $params->{'id_ui'};
+    $paramsEstado->{'regular'} = 1;
+    $paramsEstado->{'categoria'} = $params->{'cod_categoria'};
+    $estado->agregar($paramsEstado);
+## FIXME ciudad
+    $params->{'ciudad'} = 1;
     $person->agregar($params);
     $person->convertirEnSocio($params);
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$person->getApellido]});

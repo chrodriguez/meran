@@ -1,27 +1,26 @@
-package UsrEstado;
+package C4::Modelo::UsrEstado;
 
 # this class IS a "Usr_persona::DB::Object" 
 # and contains all the methodes that 
 # Usr_persona::DB::Object does
-use base 'MeranDB::DB::Object';
+use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 # call the methode My::DB::Object->meta->setup() to 
 # announce the layout of our database table;
-=item
+
 __PACKAGE__->meta->setup
   (
-    table   => 'products',
-    columns =>
-        [
-            id    => { type => 'integer', not_null => 1 },
-            name  => { type => 'varchar', length => 255, not_null => 1 },
-            price => { type => 'decimal' },
-        ],
-    primary_key_columns => 'id',
-    unique_key => 'name',
-    relationships => [],
+    table   => 'usr_estado',
+    columns => [
+        id_estado       => { type => 'serial', not_null => 1, length => 11 },
+        id_persona => { type => 'integer', default => 1, not_null => 1, length => 11 },
+        regular    => { type => 'integer', not_null => 1, length => 1 },
+        categoria   => { type => 'character', length => 2, not_null => 1 },
+        fuente         => { type => 'varchar', length => 255, not_null => 1 },
+    ],
+
+    primary_key_columns => [ 'id_persona' ],
 );
-=cut
 
 
   __PACKAGE__->meta->setup
@@ -29,6 +28,11 @@ __PACKAGE__->meta->setup
     table => 'usr_estado',
     auto  => 1,
   );
+
+sub getId_estado{
+    my ($self) = shift;
+    return ($self->id_estado);
+}
 
 sub getId_persona{
     my ($self) = shift;
@@ -73,5 +77,16 @@ sub setFuente{
     my ($fuente) = @_;
     $self->fuente($fuente);
 }
+
+sub agregar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self-> setId_persona($data_hash->{'id_persona'});
+    $self-> setFuente($data_hash->{'fuente'});
+    $self-> setRegular($data_hash->{'regular'});
+    $self-> setCategoria($data_hash->{'categoria'});
+    $self->save();
+}    
 
 1;

@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'usr_socio',
 
     columns => [
-        id_persona         => { type => 'integer', not_null => 1 },
-        id_socio           => { type => 'serial', not_null => 1 },
+        id_persona         => { type => 'integer', not_null => 1 , length => 11},
+        id_socio           => { type => 'serial', not_null => 1 , length => 11},
         nro_socio          => { type => 'varchar', length => 16, not_null => 1 },
         id_ui              => { type => 'varchar', length => 4, not_null => 1 },
         cod_categoria      => { type => 'character', length => 2, not_null => 1 },
