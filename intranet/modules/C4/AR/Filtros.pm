@@ -31,7 +31,7 @@ print Z "default lang: ".C4::Context->config("defaultLang")."\n";
 print Z "session locale: ".$session->param('locale')."\n";
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 print Z "path locale: ".C4::Context->config("locale")."\n";
-
+## FIXME falta parametrizar si es INTRA u OPAC, como se pasa? creo q no se puede
 	Locale::Maketext::Gettext::Functions::bindtextdomain("intranet", C4::Context->config("locale"));
 	Locale::Maketext::Gettext::Functions::textdomain("intranet");
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
