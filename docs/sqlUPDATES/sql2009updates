@@ -9,3 +9,15 @@ RENAME TABLE usr_socios  TO usr_socio;
 --Se deja el id_persona en usr_socio
 ALTER TABLE `usr_persona`
   DROP `id_socio`;
+
+--se modifico el campo
+ALTER TABLE `usr_persona` CHANGE `vesion_documento` `version_documento` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'P'
+
+--se modificaron los campos
+
+
+ALTER TABLE `usr_socio` CHANGE `lastlogin` `last_login` DATETIME NULL DEFAULT NULL ,
+CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
+CHANGE `changepassword` `change_password` TINYINT( 1 ) NOT NULL DEFAULT '0'
+
+ALTER TABLE `usr_persona` ADD `activo` tinyint( 1 ) unsigned NOT NULL default '1'

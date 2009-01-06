@@ -40,8 +40,8 @@ function CrearAutocomplete(Id){
 
 $(document).ready(function() {
         
-    CrearAutocomplete('city');
-    CrearAutocomplete('dstreetcity');
+    CrearAutocomplete('ciudad');
+    CrearAutocomplete('alt_ciudad');
 
     $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
 });
@@ -286,7 +286,7 @@ $(document).ready(function() {
 
     <br>
     <br>
-<table width="100%" cellpadding='0' cellspacing='0'>
+<!--<table width="100%" cellpadding='0' cellspacing='0'>
     <tr valign=middle width="100%" class="tablaresultadoTitle">
         <td width="1%" align="left" valign="top">
             <img src="[% themelang %]/images/izquierda.png">
@@ -298,7 +298,7 @@ $(document).ready(function() {
             <img src="[% themelang %]/images/derecha.png">
         </td>
     </tr>
-</table>
+</table>-->
 <!--<table width="100%">
     <tr>&nbsp;</tr>
     <tr valign=top align="center">
@@ -312,11 +312,11 @@ $(document).ready(function() {
     <br>
 <table width="30%">
     [% modify %]
-    <tr>
+    <!--<tr>
         <td  class="inputFontNormal">
             <b>Otros </b><br>
         </td>
-    </tr>
+    </tr>-->
 
 <!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal     -->
     [% FOREACH project IN flagloop %]
