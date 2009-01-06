@@ -1,0 +1,1995 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-12-16 16:51-0300\n"
+"Last-Translator: Matías Pagano <matiasp@mail.linti.unlp.edu.ar>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/main.tmpl
+msgid "Cat&aacute;logo:"
+msgstr "Catalogue:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/main.tmpl
+msgid "B&uacute;squeda combinada"
+msgstr "Combined search"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/main.tmpl
+msgid "B&uacute;squeda avanzada"
+msgstr "Advanced search"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/main.tmpl
+msgid "Usuarios:"
+msgstr "Users"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItem.tmpl
+msgid "Por favor complete los campos del formulario que son obligatorios"
+msgstr "Please complete all required fields"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItem.tmpl
+msgid "Agregar Documento"
+msgstr "Add item"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItem.tmpl
+msgid "Esquema de ingreso de datos tipo:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Autor:"
+msgstr "Author:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Regitro de nivel 1:"
+msgstr "Level 1 record:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Modificar Nivel 1"
+msgstr "Modify Level 1"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "id1"
+msgstr "id1"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Est&aacute; seguro que desea borrarlo?"
+msgstr "Are you sure you want to delete?"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Borrar Nivel 1"
+msgstr "Erase Level 1"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Grupo:"
+msgstr "Group:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Modificar Grupo"
+msgstr "Modify group"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Agregar Ejemplar"
+msgstr "Add item"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Borrar Grupo"
+msgstr "Erase group"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Nivel bibliogr&aacute;fico:"
+msgstr "Bibliographic level"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Soporte:"
+msgstr "Medium:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Lugar:"
+msgstr "Location:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Idioma:"
+msgstr "Language:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Agregar Documento:"
+msgstr "Add document:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Agregar campo temporal"
+msgstr "Add temporary field"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "C&oacute;digo de barra:"
+msgstr "Barcode:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Si deja en blanco autogenera"
+msgstr "If left blank this autogenerates"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Cantidad:"
+msgstr "Quantity:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Campos obligatorios"
+msgstr "Required fields"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/catalogacion/estructura/agregarItemResults.tmpl
+msgid "Guardar Item nivel 1"
+msgstr "Save "
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/itemtypes.tmpl
+msgid "Seleccione una unidad de informaci&oacute;n :"
+msgstr "Select information unit:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/itemtypes.tmpl
+msgid "Tipos de documentos"
+msgstr "Document types"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/itemtypes.tmpl
+msgid "Cantidad"
+msgstr "Amount"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Generar Etiquetas"
+msgstr "Generate labels"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Inventario:"
+msgstr "Inventory:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Desde:"
+msgstr "From:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Hasta:"
+msgstr "To:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "El m&iacute;nimo inventario existente es:"
+msgstr "The minimum existing inventory is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "y el m&aacute;ximo es:"
+msgstr "and the maximum is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Unidad de informaci&oacute;n:"
+msgstr "Information unit:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Signatura Topogr&aacute;fica:"
+msgstr "Call number:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "La m&iacute;nima signatura existente es:"
+msgstr "The minimum call number is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "y la m&aacute;xima es:"
+msgstr "and the maximum is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Comienza con:"
+msgstr "Begins with:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Nro. de Inventario"
+msgstr "Inventory number:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Autor"
+msgstr "Author"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "T&iacute;tulo"
+msgstr "Title"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Edic."
+msgstr "Edition"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Editor"
+msgstr "Editor"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "A&ntilde;o"
+msgstr "Year"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Signatura Topogr&aacute;fica"
+msgstr "Call number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "La cantidad de ejemplares es:"
+msgstr "The number of items is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/book-labels.tmpl
+msgid "Generar etiquetas"
+msgstr "Generate labels"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Hist&oacute;rico de Sanciones"
+msgstr "Ban history"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Seleccione para buscar por fecha."
+msgstr "Select to search by date."
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Seleccione una fecha de inicio:"
+msgstr "Select a start date:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Seleccione una fecha de Fin:"
+msgstr "Select an end date:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Selecciona una fecha"
+msgstr "Select a date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Filtrar por:"
+msgstr "Filter by:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Responsable:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Tipo de Pr&eacute;stamo:"
+msgstr "Type of loan:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSanciones.tmpl
+msgid "Tipo de Operaci&oacute;n:"
+msgstr "Type of operation:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/inventory-sig-topResult.tmpl
+msgid "La cantidad Total de ejemplares es:"
+msgstr "The total amount of items is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/inventory-sig-topResult.tmpl
+msgid "Generar planilla"
+msgstr "Generate form"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Usuarios"
+msgstr "Users"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Seleccione el a&ntilde;o:"
+msgstr "Select year:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Seleccione la cantidad de uso:"
+msgstr "Select use:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Mas de un uso"
+msgstr "More than one use:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Ninguno"
+msgstr "None"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Seleccione la categor&iacute;a:"
+msgstr "Select category:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users.tmpl
+msgid "Seleccione una unidad de informaci&oacute;n:"
+msgstr "Select an information unit:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "La cantidad de usuarios es :"
+msgstr "The amount of users is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por apellido"
+msgstr "List by surname"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Apellido"
+msgstr "Surname"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por nombre"
+msgstr "List by name"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Nombre"
+msgstr "Name"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por direccion"
+msgstr "List by address"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Direcci&oacute;n"
+msgstr "Address"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por tarjeta de id."
+msgstr "List by ID card"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Tarjeta de Id."
+msgstr "ID card"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por legajo"
+msgstr "List by file"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Legajo"
+msgstr "File"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ciudad"
+msgstr "City"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por telefono"
+msgstr "List by telephone "
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Telefono"
+msgstr "Telephone"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por mail"
+msgstr "List by e-mail"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "E-mail"
+msgstr "E-mail"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por fecha de ingreso"
+msgstr "List by entry date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ingreso"
+msgstr "Entry date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Ordenar por categoria"
+msgstr "List by category"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Categoria"
+msgstr "Category"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cardsResult.tmpl
+msgid "Generar Carnets"
+msgstr "Generate carnet"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "La cantidad de pr&eacute;stamos es:"
+msgstr "The number of loans is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por DNI"
+msgstr "List by ID"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "DNI"
+msgstr "ID"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por Categoria"
+msgstr "List by category"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Categor&iacute;a"
+msgstr "Category"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por tipo de prestamo"
+msgstr "List by loan type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Tipo Pr&eacute;stamo"
+msgstr "Loan type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por codigo de barra"
+msgstr "List by barcode"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "C&oacute;digo de Barras"
+msgstr "Barcode"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por fecha de prestamo"
+msgstr "List by loan date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Fecha Pr&eacute;stamo"
+msgstr "Loan date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por fecha de devolucion"
+msgstr "List by return date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Fecha Devoluci&oacute;n"
+msgstr "Return date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Ordenar por tipo de documento"
+msgstr "List by document type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "T&iacute;po"
+msgstr "Type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Imprimir"
+msgstr "Print"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Imprimir Resultados"
+msgstr "Print results"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Generar PDF"
+msgstr "Generate PDF"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_PrestamosResult.tmpl
+msgid "Generar archivo PDF"
+msgstr "Generate PDF file"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/avail_year.tmpl
+msgid "Disponibilidad"
+msgstr "Availability"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/avail_year.tmpl
+msgid "Mes"
+msgstr "Month"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "La cantidad de reservas es :"
+msgstr "The number of reserves is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Ordenar por numero de socio"
+msgstr "List by member number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "N&uacute;mero de socio"
+msgstr "Member number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Ordenar por mial"
+msgstr "List by e-mail"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Ordenar por fecha de reserva"
+msgstr "List by reserve date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Fecha de reserva"
+msgstr "Reserve date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Ordenar por fecha de vencimiento"
+msgstr "List by due date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Fecha de vencimiento"
+msgstr "Due date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "C&oacute;digo de barra"
+msgstr "Barcode"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservasResult.tmpl
+msgid "Enviar mail a usuarios con reservas asignadas"
+msgstr "Send e-mail to users with asigned reserves"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Prestamos"
+msgstr "Loans"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Renovaciones"
+msgstr "Renewals"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Devoluciones"
+msgstr "Returns"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Domiciliarios"
+msgstr "Domiciliary"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Fotocopia"
+msgstr "Photocopy"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Sala de Lectura"
+msgstr "Reading room"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_AnualResult.tmpl
+msgid "Prestamos Especiales"
+msgstr "Special loans"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/barcodes.tmpl
+msgid "C&oacute;digos de Barra"
+msgstr "Barcodes"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/barcodes.tmpl
+msgid "Tipo"
+msgstr "Type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/barcodes.tmpl
+msgid "M&iacute;nimo"
+msgstr "Minimum"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/barcodes.tmpl
+msgid "M&aacute;ximo"
+msgstr "Maximum"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "La cantidad de estantes es :"
+msgstr "The number of shelves is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "Estante"
+msgstr "Shelf"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "T&iacute;tulos"
+msgstr "Titles"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "Ejemplares"
+msgstr "Items"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "No Disponibles"
+msgstr "Not available"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "Para Pr&eacute;stamo"
+msgstr "For loan"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "Para Sala"
+msgstr "For room"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantesResult.tmpl
+msgid "TOTALES"
+msgstr "TOTAL"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoCirculacion.tmpl
+msgid "Registro de Circulaci&oacute;n"
+msgstr "Circulation history"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cards.tmpl
+msgid "Generar Carnets de Usuarios"
+msgstr "Generate user cards"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cards.tmpl
+msgid "Apellido:"
+msgstr "Surname:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cards.tmpl
+msgid "Categor&iacute;as:"
+msgstr "Categories:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cards.tmpl
+msgid "Legajo:"
+msgstr "File:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/users-cards.tmpl
+msgid "Regularidad:"
+msgstr "Regularity:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/inventory.tmpl
+msgid "Localizaci&oacute;n del ejemplar entre &nbsp;"
+msgstr "Location of the item between &nbsp;"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/logueoBusqueda.tmpl
+msgid "Logueo de B&uacute;squedas desde OPAC"
+msgstr "Search login from OPAC"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/logueoBusqueda.tmpl
+msgid "Categoria de Usuario:"
+msgstr "User category:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/inventory-sig-top.tmpl
+msgid "Inventario por signatura topogr&aacute;fica:"
+msgstr "Inventory by call number:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/inventory-sig-top.tmpl
+msgid "Buscar signatura topogr&aacute;fica: &nbsp;"
+msgstr "Search call number: &nbsp;"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_Prestamos.tmpl
+msgid "Historial de Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historico_Prestamos.tmpl
+msgid "Tipo de Item:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availability.tmpl
+msgid "Disponibilidad de Ejemplares"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/perdidos.tmpl
+msgid "Ejemplares perdidos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/perdidos.tmpl
+msgid "La cantidad de ejemplares perdidos es :"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/perdidos.tmpl
+msgid "Titulo"
+msgstr "Title"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/perdidos.tmpl
+msgid "Sigantura Topografica"
+msgstr "Call number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/perdidos.tmpl
+msgid "Codigo de barras"
+msgstr "Barcode"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Formato de Impresi&oacute;n"
+msgstr "Print format"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Biblioteca:"
+msgstr "Library:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Facultad de Ciencias Econ&oacute;micas"
+msgstr "Faculty of Economic Sciences"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Domciliarios"
+msgstr "Domiciliary"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Sala de lectura"
+msgstr "Reading room"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Para fotocopia"
+msgstr "For photocopies"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Especial"
+msgstr "Special"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Reservas"
+msgstr "Reserves"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Renovados"
+msgstr "Renewed"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Total"
+msgstr "Total"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/printEstadisticas.tmpl
+msgid "Devueltos"
+msgstr "Returned"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "La cantidad de modificaciones hechas fueron:"
+msgstr "The number of modifications is:"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Ordenar por usuario"
+msgstr "List by user"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Usuario"
+msgstr "User"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Ordenar por fecha"
+msgstr "List by date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Fecha"
+msgstr "Date"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Ordenar por operacion"
+msgstr "List by operation"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Operaci&oacute;n"
+msgstr "Operation"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Ordenar por tipo"
+msgstr "List by type"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Ordenar por numero de documento"
+msgstr "List by ID number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "N&uacute;mero"
+msgstr "Number"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Nota"
+msgstr "Note"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Agregar nota"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registroResult.tmpl
+msgid "Guardar Nota"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Reportes y Estad&iacute;sticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Reportes"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Reportes gen&eacute;ricos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Inventario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Estantes Virtuales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Registro de Actividades"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Actividades anuales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Ver Biblios"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Ver BiblioItems"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Ver Items"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Ver cantidades por tipo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Ver cantidades de anal&iacute;ticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "C&oacute;digos de Barra por Tipo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Biblioteca  Virtual"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Estad&iacute;sticas B&aacute;sicas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Hist&oacute;rico de pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Hist&oacute;rico de sanciones"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Estad. de pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Logueo de b&uacute;squedas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Usuarios por Categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Tipos de Ejemplares"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Niveles bibliogr&aacute;ficos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reports-home.tmpl
+msgid "Disponibilidad (Anual)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Mail enviado a usuarios con pr&eacute;stamos vencidos."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Fecha de Vencimiento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Filtrar por"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Seleccione estado de prestamo:&nbsp;"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Vencidos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "No vencidos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Todos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Seleccione una fecha de fin:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Seleccione una unidad de informaci&oacute;n:&nbsp;"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamos.tmpl
+msgid "Cantidad de resultados por p&aacute;gina:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "La cantidad de ejemplares en estado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "es:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por autor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por titulo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por Sig. Topografica"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por cod. de barras"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "C&oacute;digo de barras"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por edicion"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Edici&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "Ordenar por a&ntilde;o de publicacion"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/availabilityResult.tmpl
+msgid "A&ntilde;o de Publicaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "La cantidad de operaciones hechas fueron:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "P&aacute;gina n&uacute;mero:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "de un total de:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Ordenar por Usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Responsable"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Ordenar por Fecha"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Ordenar por Fecha Fin"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Fecha Fin"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Ordenar por Operacion"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoSancionesResult.tmpl
+msgid "Reserva no Retirada"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadisticas.tmpl
+msgid "Estadisticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadisticas.tmpl
+msgid "Buscar por:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadisticas.tmpl
+msgid "Domiciliario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/userEst.tmpl
+msgid "Categor&iacute;as"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/userEst.tmpl
+msgid "Cant de usuarios reales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/userEst.tmpl
+msgid "Cant de usuarios potenciales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "eleccione para buscar por fecha."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Alta"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Actualizado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Borrado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Libro"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Grupo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "&nbsp;Ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "Nombre de usuario:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "desde:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/registro.tmpl
+msgid "hasta:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/logueoBusquedaResult.tmpl
+msgid "Campo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/logueoBusquedaResult.tmpl
+msgid "Valor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estantes.tmpl
+msgid "Seleccione un estante: &nbsp;&nbsp;"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Apellido"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Nombre"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Direcci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Socio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Socio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Tel&eacute;fono"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por e-mail"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Ingreso"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/usersResult.tmpl
+msgid "Ordenar por Categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/estadistica_Anual.tmpl
+msgid "Seleccione un a&ntilde;o:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/print.tmpl
+msgid "resultados encontrados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/print.tmpl
+msgid "Signatura Topografica"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservas.tmpl
+msgid "Seleccione el tipo de reserva:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservas.tmpl
+msgid "Por ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservas.tmpl
+msgid "Por grupo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/reservas.tmpl
+msgid "Todas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamosResult.tmpl
+msgid "La cantidad de prestamos es :"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamosResult.tmpl
+msgid "Fecha de prestamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamosResult.tmpl
+msgid "Tipo de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/prestamosResult.tmpl
+msgid "Enviar mail a usuarios con ejemplares atrasados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/historicoCirculacionResult.tmpl
+msgid "C. Barra"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/analiticas.tmpl
+msgid "Anal&iacute;ticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/reports/analiticas.tmpl
+msgid "Cantidad de anal&iacute;ticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "EJEMPLARES PRESTADOS"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Seleccionar todos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Sig. Top."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Ed."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Vol."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detallePrestamos.tmpl
+msgid "Vencimiento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "REGISTRO DEL USUARIO"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Documento:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Fecha de nacimiento:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Sexo:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Contacto Alternativo:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Tel&eacute;fono:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Tel&eacute;fono Alt:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Relaci&oacute;n:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Tarjeta de identificaci&oacute;n :"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Legajo :"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "ID de usuario:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Categor&iacute;a del usuario:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Incorporaci&oacute;n a Biblioteca:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Notas:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Notas generales:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Cambio de Contrase&ntilde;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Modificar Permisos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Generar Carnet"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Generar Libre Deuda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleUsuario.tmpl
+msgid "Generar Prestamo Interbibliotecario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Cantidad de pr&eacute;stamos realizadas:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Ordenar por Titulo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Ordenar por Autor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Ordenar por C&oacute;digo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "C&oacute;digo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Renovaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Ordenar por Fecha de devoluci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Devoluci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/historialPrestamos.tmpl
+msgid "Detalle de disponibilidad"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleSanciones.tmpl
+msgid "Desde el"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleSanciones.tmpl
+msgid "hasta el"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl
+msgid "B&uacute;squeda de Usuarios Reales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario.tmpl
+msgid "TODOS"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/datosUsuario.tmpl
+msgid "Prestamos interbibliotecarios"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Agregar usuario real"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Usuarios Reales - Modificar Datos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Tarjeta de identificaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "DATOS PERSONALES DEL USUARIO"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Fecha de nacimiento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Categor&iacute;a del usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Nombres"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "solo digitos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Realiz&oacute; el curso de usuario?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Incorporaci&oacute;n a Unidad de Informaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "DIRECCI&Oacute;N DEL USUARIO"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "C&oacute;digo Postal"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Tel&eacute;fono particular"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Tel&eacute;fono del trabajo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "C&oacute;digo Postal de origen"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Direcci&oacute;n de origen"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Ciudad de origen"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/agregarUsuario.tmpl
+msgid "Obligatorio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "EJEMPLARES ASIGNADOS"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "Retira en"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "Cancelar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "prestar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "RESERVAS"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/detalleReservas.tmpl
+msgid "Volumen"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/printPrestInterBiblio.tmpl
+msgid "Nombre Director:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/printPrestInterBiblio.tmpl
+msgid "DATOS DE LOS DOCUMENTOS"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/printPrestInterBiblio.tmpl
+msgid "Otros Datos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuario2.tmpl
+msgid "2 years"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Ha buscado por :"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Apellido y Nombres"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Cat."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Prest."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Ven."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/reales/buscarUsuarioResult.tmpl
+msgid "Estado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuario.tmpl
+msgid "Ingrese un dato"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuario.tmpl
+msgid "B&uacute;squeda de Usuarios Potenciales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Tarjeta de ID"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Habilitado?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Imposible"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Si"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "No"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Habilitar Seleccionados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/usuarios/potenciales/buscarUsuarioResult.tmpl
+msgid "Deshabilitar Seleccionados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/feriados.tmpl
+msgid "Actualiza los d&iacute;as de inactividad"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Modificar Tipo de Documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Agregar Tipo de Documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Tipo de documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Descripci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Duraci&oacute;n del pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Renovaciones permitidas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Costo de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Agrupaci&oacute;n en la b&uacute;squeda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "detalle"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Biblioteca Virtual"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Tipo de pedido"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Para Copia"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Para Impresi&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "Permitido"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "No Permitidas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "El registro esta en siendo utilizado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "veces. No se puede borrar."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/itemtypes.tmpl
+msgid "CONFIRME BORRADO"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Tipos de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Categorias de usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Tipos de pr&eacute;stamo sobre el que se aplica"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Guardar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Orden"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Tipo de usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "D&iacute;as de demora"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "D&iacute;as de sanci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Eliminar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Agregar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Orden:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Regla:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "Para editar las reglas haga clic"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/sanctions.tmpl
+msgid "aqu&iacute;"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Modificar Tipo de Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Agregar Tipo de Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Habilitado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "M&aacute;xima cantidad de pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "D&iacute;as de duraci&oacute;n del pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "D&iacute;as de Renovaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Cuantos d&iacute;as antes se puede renovar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Administraci&oacute;n de Tipos de Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Cantidad de d&iacute;as para renovar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/issuetypes.tmpl
+msgid "Editar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "Administraci&oacute;n de Libre Deuda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "Elija por quï¿½ causa no se puede realizar la impresi&oacute;n del certificado de libre deuda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "Por tener:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "reservas adjudicadas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "reservas en espera"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "prestamos vencidos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "prestamos en curso"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "sanciones"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/adminLibreDeuda.tmpl
+msgid "todas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Modificar Categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Agregar Categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "C&oacute;digo de categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Per&iacute;odo de inscripci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "L&iacute;mite superior de edad"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Edad Requerida"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Tarifa de inscripci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "L&iacute;mite de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "D&iacute;as de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Costo de reserva"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Registro de datos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "TOTAL"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Upperage limit"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Tipo de multa"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Se necesita nota de atraso"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "D&iacute;s de pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Borrado de datos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Administraci&oacute;n de Categor&iacute;as"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Ha Buscado por"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Multa"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Atrasado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/categorie.tmpl
+msgid "Reserva"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Modificar Valores Autorizados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Agregar Valores Autorizados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Valor Autorizado"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Lib"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Variable"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Administraci&oacute;n de Valores Autorizados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Comenzar b&uacute;squeda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/authorised_values.tmpl
+msgid "Nueva Categor&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/admin/refs.tmpl
+msgid "Seleccione la tabla de referencia sobre la que quiere trabajar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/estante.tmpl
+msgid "T&eacute;rmino de b&uacute;squeda:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Resultados de la B&uacute;squeda de un ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Ha buscado por"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "t&iacute;tulo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Resultados encontrados:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Descripciones bibliogr&aacute;ficas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Esquema de catalogo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Agregar grupo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "No se encontr&oacute; nada"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Descripciones bibliogr&aacute;ficas en breeding farm"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "ISBN"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Viene desde"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Agregar&nbsp;ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busqEjemplar.tmpl
+msgid "Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/adminEjemplares.tmpl
+msgid "Ingrese un dato para realizar la busqueda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/adminEjemplares.tmpl
+msgid "Eliga el esquema de catalogo para agregar un item"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/adminEjemplares.tmpl
+msgid "Administraci&oacute;n de ejemplares"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/adminEjemplares.tmpl
+msgid "T&iacute;tulo:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "No ingreso datos para consultar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "B&uacute;squeda Experta en el cat&aacute;logo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Campo:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Condici&oacute;n:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Igual"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Distinto"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Mayor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Menor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Empieza"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Contiene"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Finaliza"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Valor:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Campo Marc:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Elegir"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtradoExperto.tmpl
+msgid "Consulta:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busquedaResult.tmpl
+msgid "Total de registros:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busquedaResult.tmpl
+msgid "Ordenar por T&iacute;tulo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busquedaResult.tmpl
+msgid "Edici&oacute;n/A&ntilde;o"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/busquedaResult.tmpl
+msgid "Filtrar por Autor"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtrado.tmpl
+msgid "B&uacute;squeda Avanzada en el cat&aacute;logo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtrado.tmpl
+msgid "B&uacute;squeda por diccionario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtrado.tmpl
+msgid "Normal"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/busquedas/filtrado.tmpl
+msgid "Exacto"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/circ/sanctions.tmpl
+msgid "Sanciones"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/circ/sanctions.tmpl
+msgid "Fecha inicio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/circ/sanctions.tmpl
+msgid "Fecha fin"
+msgstr ""
+
