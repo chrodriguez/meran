@@ -10,9 +10,9 @@ __PACKAGE__->register_db
 (
   connect_options => { AutoCommit => 1 },
   driver          => 'mysql',
-  dsn             => 'dbi:mysql:dbname=Econo-V2V3;host=localhost',
-  password        => 'patyalmicro',
-  username        => 'kohaadmin',
+  dsn             => 'dbi:mysql:dbname=V2;host=localhost',
+  password        => 'dev',
+  username        => 'dev',
 );
 
 1;

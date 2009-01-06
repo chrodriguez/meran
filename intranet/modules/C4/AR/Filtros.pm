@@ -23,17 +23,24 @@ sub i18n {
 open(Z, ">>/tmp/debug.txt");
 print Z "\n";
 ## FIXME falta manejar cookie si el usuario no esta logueado
+	my $type= 'opac';
 
- 	my $locale = $session->param('locale')|C4::Context->config("defaultLang")|'es_ES';
-	my $locale = 'en_EN';
+	if ($session){
+	#si hay session seguro esta en INTRA
+		$type= $session->param('type');
+	}
+
+ 	my $locale = $session->param('locale')||C4::Context->config("defaultLang")||'es_ES';
+# 	my $locale = 'en_EN';
+print Z "type: ".$type."\n";
 print Z "locale: ".$locale."\n";
 print Z "default lang: ".C4::Context->config("defaultLang")."\n";
 print Z "session locale: ".$session->param('locale')."\n";
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 print Z "path locale: ".C4::Context->config("locale")."\n";
 ## FIXME falta parametrizar si es INTRA u OPAC, como se pasa? creo q no se puede
-	Locale::Maketext::Gettext::Functions::bindtextdomain("intranet", C4::Context->config("locale"));
-	Locale::Maketext::Gettext::Functions::textdomain("intranet");
+	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
+	Locale::Maketext::Gettext::Functions::textdomain($type);
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
 print Z "\n";
 close(Z);

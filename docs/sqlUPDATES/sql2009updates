@@ -1,3 +1,7 @@
 
 -- No se usa esta tabla
 drop table users
+
+-- Se renombro la tabla
+
+RENAME TABLE usr_socios  TO usr_socio;
