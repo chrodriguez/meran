@@ -167,36 +167,27 @@ function updateEliminarUsuario(responseText){
 //************************************************Agregar Usuario**********************************************
 function agregarUsuario(){
 
-	objAH=new AjaxHelper(updateAgregarUsuario);
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug= true;
-	objAH.cardnumber= $('#cardnumber').val();
-	objAH.sex= $("input[@name=sex]:checked").val();
-	objAH.streetaddress= $('#streetaddress').val();
-	objAH.physstreet= $('#physstreet').val();
-	objAH.firstname= $('#firstname').val();
-	objAH.dateofbirth= $('#dateofbirth').val();
-	objAH.emailaddress= $('#emailaddress').val();
-	objAH.dateenrolled= $('#dateenrolled').val();
-	objAH.streetcity= $('#dstreetcity').val();
-	objAH.altrelationship= $('#altrelationship').val();
-	objAH.othernames= $('#othernames').val();
-	objAH.phoneday= $('#phoneday').val();
-	objAH.categorycode= $('#categorycode').val();
-	objAH.city= $('#city').val();
-	objAH.phone= $('#phone').val();
-	objAH.borrowernotes= $('#borrowernotes').val();
-	objAH.surname= $('#surname').val();
-	objAH.ethnicity= $('#ethnicity').val();
-	objAH.branchcode= $('#branchcode').val();
-	objAH.zipcode= $('#zipcode').val();
-	objAH.homezipcode= $('#homezipcode').val();
-	objAH.documenttype= $('#documenttype').val();
-	objAH.documentnumber= $('#documentnumber').val();
-	objAH.studentnumber= $('#studentnumber').val();
-	objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
-	objAH.tipoAccion= 'AGREGAR_USUARIO';
- 	objAH.sendToServer();
+    objAH=new AjaxHelper(updateAgregarUsuario);
+    objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug= true;
+    objAH.nro_socio= $('#nro_socio').val();
+    objAH.sexo= $("input[@name=sexo]:checked").val();
+    objAH.calle= $('#calle').val();
+    objAH.nombre= $('#nombre').val();
+    objAH.nacimiento= $('#nacimiento').val();
+    objAH.email= $('#email').val();
+    objAH.telefono= $('#telefono').val();
+    objAH.categorycode= $('#categorycode').val();
+    objAH.ciudad= $('#ciudad').val();
+    objAH.alt_telefono= $('#alt_telefono').val();
+    objAH.apellido= $('#apellido').val();
+    objAH.branchcode= $('#branchcode').val();
+    objAH.tipo_documento= $('#tipo_documento').val();
+    objAH.nro_documento= $('#nro_documento').val();
+    objAH.legajo= $('#legajo').val();
+    objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
+    objAH.tipoAccion= 'AGREGAR_USUARIO';
+    objAH.sendToServer();
 
 }
 

@@ -1,5 +1,5 @@
 [% IF addBorrower == 1 %]
-	[% INCLUDE $top %] 
+    [% INCLUDE "intranet-top.inc" %] 
 [% END %]
 
 <script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
@@ -17,355 +17,355 @@
 <script language="javascript" type="text/javascript">
 
 // FIXME FALTA VALIDAD EN EL CLIENTE
-	
+    
 function CrearAutocomplete(Id){
-	$("#"+Id).search();
-	// q= valor de campoHelp
-	$("#"+Id).autocomplete('/cgi-bin/koha/autocompletables/searchcity.pl',{
- 		formatItem: function(row){
-			return row[1];
-		},
-		minChars:1,
-        	matchSubset:1,
-        	matchContains:1,
-		maxItemsToShow:10,
-        	cacheLength:10,
-        	selectOnly:1,
-	});//end autocomplete
-	$("#"+Id).result(function(event, data, formatted) {
-		$("#"+Id).val(data[1]);
-	});
+    $("#"+Id).search();
+    // q= valor de campoHelp
+    $("#"+Id).autocomplete('/cgi-bin/koha/autocompletables/searchcity.pl',{
+        formatItem: function(row){
+            return row[1];
+        },
+        minChars:1,
+            matchSubset:1,
+            matchContains:1,
+        maxItemsToShow:10,
+            cacheLength:10,
+            selectOnly:1,
+    });//end autocomplete
+    $("#"+Id).result(function(event, data, formatted) {
+        $("#"+Id).val(data[1]);
+    });
 }
 
 
 $(document).ready(function() {
-		
-	CrearAutocomplete('city');
-	CrearAutocomplete('dstreetcity');
+        
+    CrearAutocomplete('city');
+    CrearAutocomplete('dstreetcity');
 
-	$('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
 });
 
 </script>
 
 [% IF addBorrower %]
-	<!-- Mensajes de Informacion al Usuario -->
-	<div class="tableMsgUser">
-		<font class="fontMsgUser"><b>
-		<div id="mensajes"></div>
-		</b></font>
-	</div>
+    <!-- Mensajes de Informacion al Usuario -->
+    <div class="tableMsgUser">
+        <font class="fontMsgUser"><b>
+        <div id="mensajes"></div>
+        </b></font>
+    </div>
 [% END %]
 <center>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr>
-		<td class="pagetitle" >
-			[% IF addBorrower %]
-				[% "Agregar usuario real" | i18n %]
-			[% ELSE  %]
-				[% "Usuarios Reales - Modificar Datos" | i18n %]
-			[% END %]
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
+    <tr>
+        <td class="pagetitle" >
+            [% IF addBorrower %]
+                [% "Agregar usuario real" | i18n %]
+            [% ELSE  %]
+                [% "Usuarios Reales - Modificar Datos" | i18n %]
+            [% END %]
+        </td>
+    </tr>
+    <tr>
+        <td class="lineagruesa"  align="left" colspan="3"></td>
+    </tr>
 </table>
 
 <br>
 
 <!--<form action="/cgi-bin/koha/usuarios/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>-->
 <form method=post  name="form1" AUTOCOMPLETE='off'>
-	<input type=hidden name=joining value="[% dateenrolled %]">
-	<input type=hidden name=expiry value="[% expiry %]">
-	<input type=hidden name=typeRegister value="borrowers">
-	<input type=hidden name=id_socio value="[% member %]">
-	<input type=hidden name=updtype value="[% updtype %]">
-	<input type=hidden name=oldcardnumber value="[% cardnumber %]">
+    <input type=hidden name=joining value="[% dateenrolled %]">
+    <input type=hidden name=expiry value="[% expiry %]">
+    <input type=hidden name=typeRegister value="borrowers">
+    <input type=hidden name=id_socio value="[% member %]">
+    <input type=hidden name=updtype value="[% updtype %]">
+    <input type=hidden name=oldcardnumber value="[% cardnumber %]">
 
 <table border=0  width="100%" class="tablaresultado" align="right">
-	<tr valign=top width="100%">
-		
-		<td  width="50%" ALIGN=RIGHT class="inputFontNormal">
-		 [% "Tarjeta de identificaci&oacute;n" | i18n %] * <input id="cardnumber" type=text class="inputFontNormal" name=cardnumber size=10 value="[% cardnumber %]"><br>
-		</td>
-	</tr>
+    <tr valign=top width="100%">
+        
+        <td  width="50%" ALIGN=RIGHT class="inputFontNormal">
+         [% "Tarjeta de identificaci&oacute;n" | i18n %] * <input id="nro_socio" type=text class="inputFontNormal" name=nro_socio size=10 value="[% nro_socio %]"><br>
+        </td>
+    </tr>
 
 </table>
-	<br>
-	<br>
-	<br>
+    <br>
+    <br>
+    <br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
-	<tr valign=middle class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[% interface %]/[% themelang %]/images/izquierda.png">
-		</td>
+    <tr valign=middle class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
 
-		<td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
-		<td   width="65%" ALIGN=RIGHT>*
-			<input type="radio" name="sexo" value="F" [% IF sexo == "F" %] checked="checked" F [% END %]> F
-			<input type="radio" name="sexo" value="M" [% IF sexo == "M" %] checked="checked" M [% END %]> M 
-			&nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% dateformat %])
-			<input class="inputFontNormal" type=text id="nacimiento" size=10 value="[% nacimiento %]">
-		</td>
+        <td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
+        <td   width="65%" ALIGN=RIGHT>*
+            <input type="radio" name="sexo" value="F" [% IF sexo == "F" %] checked="checked" F [% END %]> F
+            <input type="radio" name="sexo" value="M" [% IF sexo == "M" %] checked="checked" M [% END %]> M 
+            &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% dateformat %])
+            <input class="inputFontNormal" type=text id="nacimiento" size=10 value="[% nacimiento %]">
+        </td>
 
-		<td width="1%" valign="top" align="right">
-			<img src="[% interface %]/[% themelang %]/images/derecha.png">
-		</td>
-	</tr>
+        <td width="1%" valign="top" align="right">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
 </table>
 
 <table width="100%">
-	<tr>
-	    	<td  class="inputFontNormal" align="left">
-			<b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
-			<br>
+    <tr>
+            <td  class="inputFontNormal" align="left">
+            <b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
+            <br>
                         [% catcodepopup %]
-            	</td>
-	    	<td width="5%">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="35%" class="inputFontNormal" align="left">
-	      		<b> [% "Apellido" | i18n %] *</b><br>
-	      		<input id="apellido" class="inputFontNormal" type=text size=50 value="[% apellido %]">
-		</td>
-		<td width="35%" class="inputFontNormal" align="left">
-			<b> [% "Nombres" | i18n %] *</b><br>
-                 	<input  id="nombre" class="inputFontNormal" type=text size=50 value="[% nombre %]">
-		</td>
-		<td width="5%">&nbsp;</td>
-	</tr>
-	<tr>
-	 	<td width="35%" class="inputFontNormal" align="left">
-	 		<b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
-                	[% document %]
-			<input id="nro_documento" class="inputFontNormal" type=text size=41 value="[% nro_documento %]">
-		</td>
-	 	<td width="35%" class="inputFontNormal" align="left">
-			<b>[% "Legajo" | i18n %]</b><br>
-         		<input  class="inputFontNormal" type=text id="id_socio" size=50 value="[% id_socio %]">
-		</td>
-		<td width="5%">&nbsp;</td>
-	</tr>
+                </td>
+            <td width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td width="35%" class="inputFontNormal" align="left">
+                <b> [% "Apellido" | i18n %] *</b><br>
+                <input id="apellido" class="inputFontNormal" type=text size=50 value="[% apellido %]">
+        </td>
+        <td width="35%" class="inputFontNormal" align="left">
+            <b> [% "Nombres" | i18n %] *</b><br>
+                    <input  id="nombre" class="inputFontNormal" type=text size=50 value="[% nombre %]">
+        </td>
+        <td width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td width="35%" class="inputFontNormal" align="left">
+            <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
+                    [% document %]
+            <input id="nro_documento" class="inputFontNormal" type=text size=41 value="[% nro_documento %]">
+        </td>
+        <td width="35%" class="inputFontNormal" align="left">
+            <b>[% "Legajo" | i18n %]</b><br>
+                <input  class="inputFontNormal" type=text id="legajo" size=50 value="[% legajo %]">
+        </td>
+        <td width="5%">&nbsp;</td>
+    </tr>
 </table>
 
-	<br>
+    <br>
 <table width=100%>
-	<tr valign=top >
-		<td   width="60%" class="inputFontNormal">
-			<input  class="inputFontFont" type="checkbox" id="changepassword" 
-				[% changepassword %] 
-					checked 
-				>
-			&nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
-		</td>
-		<td>
-			[% IF ethcatpopup %]
-				<select class="inputFontNormal" id="ethnicity" size=1>
-					[% FOREACH project IN ethnicityloop  %]
-						<option value=[% project.value %][% project.selected %]>[% project.label %]
-					[% END %]
-				</select>
-			[% END %]
-		</td>
-		<td >
-			[% IF ethcatpopup %]
-				[% ethcatpopup %]
-				<input  class="inputFontNormal" type=text id=ethnicnotes size=40 >
-			[% ELSE  %]
-				&nbsp;
-			[% END %]
-		</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-	</tr>
+    <tr valign=top >
+        <td   width="60%" class="inputFontNormal">
+            <input  class="inputFontFont" type="checkbox" id="changepassword" 
+                [% changepassword %] 
+                    checked 
+                >
+            &nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
+        </td>
+        <td>
+            [% IF ethcatpopup %]
+                <select class="inputFontNormal" id="ethnicity" size=1>
+                    [% FOREACH project IN ethnicityloop  %]
+                        <option value=[% project.value %][% project.selected %]>[% project.label %]
+                    [% END %]
+                </select>
+            [% END %]
+        </td>
+        <td >
+            [% IF ethcatpopup %]
+                [% ethcatpopup %]
+                <input  class="inputFontNormal" type=text id=ethnicnotes size=40 >
+            [% ELSE  %]
+                &nbsp;
+            [% END %]
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
 
-	[% IF course %]
-		<tr>
-			<td   width="60%" class="inputFontNormal">
-				<input  class="inputFontFont" type="checkbox" id="usercourse" 
-					[% usercourse %] 
-						checked 
-				>
-				&nbsp;[% "Realiz&oacute; el curso de usuario?" | i18n %] 
-			</td>
-			<td> 
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-	[% END %]
+    [% IF course %]
+        <tr>
+            <td   width="60%" class="inputFontNormal">
+                <input  class="inputFontFont" type="checkbox" id="usercourse" 
+                    [% usercourse %] 
+                        checked 
+                >
+                &nbsp;[% "Realiz&oacute; el curso de usuario?" | i18n %] 
+            </td>
+            <td> 
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    [% END %]
 
-	<tr>
-		<td class="inputFontNormal">
-			 <b>
+    <tr>
+        <td class="inputFontNormal">
+             <b>
                             [% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]
                          </b>&nbsp;
-          		[% CGIbranch %]
-		</td>	
-	</tr>
+                [% CGIbranch %]
+        </td>   
+    </tr>
 </table>
-	<br>
-	<br>
+    <br>
+    <br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
-	<tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[% themelang %]/images/izquierda.png">
-		</td>
-		<td COLSPAN=6 width="100%">[% "DIRECCI&Oacute;N DEL USUARIO" | i18n %]</td>
-		<td width="1%" valign="top" align="right">
-			<img src="[% themelang %]/images/derecha.png">
-		</td>
-	</tr>
-       	<tr valign=middle>
-		<td height=25 class="[% clase %] ">&nbsp;</td>
-		<td>&nbsp;</td>	
-		<td height=25 class="[% clase %]" >&nbsp; </td>
-	</tr>
+    <tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
+        <td COLSPAN=6 width="100%">[% "DIRECCI&Oacute;N DEL USUARIO" | i18n %]</td>
+        <td width="1%" valign="top" align="right">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
+        <tr valign=middle>
+        <td height=25 class="[% clase %] ">&nbsp;</td>
+        <td>&nbsp;</td> 
+        <td height=25 class="[% clase %]" >&nbsp; </td>
+    </tr>
 
-       	<tr align="center" valign=middle>
-		<td height=25 class="[% clase %]">&nbsp;</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
-	  		<b>[% "Direcci&oacute;n" | i18n %] *</b><br>
-	  		<input class="inputFontNormal" type=text id="calle" size=50 value="[% physstreet %]">
-		</td>
-		<td width="40%" class="inputFontNormal" align="left" valign="top">
-	 		<b>[% "C&oacute;digo Postal" | i18n %]</b><br>
-			<input class="inputFontNormal" type=text id="codigo_postal" size=50 value="[% codigo_postal %]">
-		</td>
-	</tr>
-	<tr>
-	 	<td height=25 class="[% clase %]">&nbsp;</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
-  	   		<b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
-          		<input class="inputFontNormal" type=text id="telefono" size=50 value="[% telefono %]">
-		</td>
-	 	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>[% "Ciudad" | i18n %] *</b><br>
-			<input class="inputFontNormal" type=text id="ciudad" value="[% ciudad %]" size='50' >
-		</td>
-	</tr>
-	<tr>
-	 	<td height=25 class="[% clase %]>&nbsp;</td>
-        	<td width="15%">&nbsp;</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
-	   		<b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
-          		<input class="inputFontNormal" type=text id="telefono_laboral" size=50 value="[% telefono_laboral %]">
-		</td>
-		<!--<td width="40%" class="inputFontNormal" align="left" valign="top">
-	 		<b>[% "C&oacute;digo Postal de origen" | i18n %]</b><br>
-          		<input  class="inputFontNormal" type=text id="homezipcode" size=50 value="[% homezipcode %]">
-		</td>-->
-	</tr>
-	<tr>
-         	<td height=25 class="[% clase %]">&nbsp;</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
- 			<b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
-          		<input  class="inputFontNormal" type=text id="alt_calle" size=50 value="[% alt_calle %]">
-		</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
-			<b>[% "Ciudad de origen" | i18n %]</b><br>
-			<input 	class="inputFontNormal" type=text id="alt_ciudad" value="[% alt_ciudad %]" size='50'>
+        <tr align="center" valign=middle>
+        <td height=25 class="[% clase %]">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Direcci&oacute;n" | i18n %] *</b><br>
+            <input class="inputFontNormal" type=text id="calle" size=50 value="[% physstreet %]">
+        </td>
+        <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "C&oacute;digo Postal" | i18n %]</b><br>
+            <input class="inputFontNormal" type=text id="codigo_postal" size=50 value="[% codigo_postal %]">
+        </td>
+    </tr>
+    <tr>
+        <td height=25 class="[% clase %]">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
+                <input class="inputFontNormal" type=text id="telefono" size=50 value="[% telefono %]">
+        </td>
+        <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Ciudad" | i18n %] *</b><br>
+            <input class="inputFontNormal" type=text id="ciudad" value="[% ciudad %]" size='50' >
+        </td>
+    </tr>
+    <tr>
+        <td height=25 class="[% clase %]>&nbsp;</td>
+            <td width="15%">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
+                <input class="inputFontNormal" type=text id="telefono_laboral" size=50 value="[% telefono_laboral %]">
+        </td>
+        <!--<td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "C&oacute;digo Postal de origen" | i18n %]</b><br>
+                <input  class="inputFontNormal" type=text id="homezipcode" size=50 value="[% homezipcode %]">
+        </td>-->
+    </tr>
+    <tr>
+            <td height=25 class="[% clase %]">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
+                <input  class="inputFontNormal" type=text id="alt_calle" size=50 value="[% alt_calle %]">
+        </td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <b>[% "Ciudad de origen" | i18n %]</b><br>
+            <input  class="inputFontNormal" type=text id="alt_ciudad" value="[% alt_ciudad %]" size='50'>
 
-     		<input class="inputFontNormal" type=hidden id="streetcity" value="[% streetcity %]"> 
-		</td>
+            <input class="inputFontNormal" type=hidden id="streetcity" value="[% streetcity %]"> 
+        </td>
         </tr>
- 	<tr>
-         	<td height=25 class="[% clase %]>&nbsp;</td>
-        	<td width="15%">&nbsp;</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">
-        		<b>E-Mail</b><br>
-          		<input class="inputFontNormal" type=text id="email" size=50 value="[% email %]">
-		</td>
-        	<td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
+    <tr>
+            <td height=25 class="[% clase %]>&nbsp;</td>
+            <td width="15%">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
+                <b>E-Mail</b><br>
+                <input class="inputFontNormal" type=text id="email" size=50 value="[% email %]">
+        </td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
-	<tr>
-		<td colspan="4">&nbsp;</td>
-	</tr>
+    <tr>
+        <td colspan="4">&nbsp;</td>
+    </tr>
 
-	<br>
-	<br>
+    <br>
+    <br>
 <table width="100%" cellpadding='0' cellspacing='0'>
-	<tr valign=middle width="100%" class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[% themelang %]/images/izquierda.png">
-		</td>
-		<td  COLSPAN=6 width="100%">
-			[% "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N" | i18n %]
-		</td>
-		<td width="1%" valign="top" align="right">
-			<img src="[% themelang %]/images/derecha.png">
-		</td>
-	</tr>
+    <tr valign=middle width="100%" class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
+        <td  COLSPAN=6 width="100%">
+            [% "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N" | i18n %]
+        </td>
+        <td width="1%" valign="top" align="right">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
 </table>
 <!--<table width="100%">
-	<tr>&nbsp;</tr>
-	<tr valign=top align="center">
-		<td width="5%">&nbsp;</td>
-		<td class="inputFontNormal">
-			<b> Notas</b>
-                	<textarea class="inputFontNormal" id="borrowernotes" wrap=physical cols=100 rows=2>[% borrowernotes %]</textarea>
-		</td>
-	</tr>
+    <tr>&nbsp;</tr>
+    <tr valign=top align="center">
+        <td width="5%">&nbsp;</td>
+        <td class="inputFontNormal">
+            <b> Notas</b>
+                    <textarea class="inputFontNormal" id="borrowernotes" wrap=physical cols=100 rows=2>[% borrowernotes %]</textarea>
+        </td>
+    </tr>
 </table>-->
-	<br>
+    <br>
 <table width="30%">
-	[% modify %]
-	<tr>
-		<td  class="inputFontNormal">
-			<b>Otros </b><br>
-		</td>
-	</tr>
+    [% modify %]
+    <tr>
+        <td  class="inputFontNormal">
+            <b>Otros </b><br>
+        </td>
+    </tr>
 
-<!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal	 -->
-	[% FOREACH project IN flagloop %]
-		<tr>
-			<td  class="inputFontNormal">
-				[% project.html %]
-			</td>
-			<td  align="left" class="inputFontNormal">
-				<input class="inputFontNormal" type=radio name="[% name %]" value="1" [% yes %]>Si
-				<input class="inputFontNormal" type=radio name="[% name %]" value="0" [% no %]>No
-			</td>
-		</tr>
-	[% END %]
+<!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal     -->
+    [% FOREACH project IN flagloop %]
+        <tr>
+            <td  class="inputFontNormal">
+                [% project.html %]
+            </td>
+            <td  align="left" class="inputFontNormal">
+                <input class="inputFontNormal" type=radio name="[% name %]" value="1" [% yes %]>Si
+                <input class="inputFontNormal" type=radio name="[% name %]" value="0" [% no %]>No
+            </td>
+        </tr>
+    [% END %]
 
 </table>
 <br>
 <br>
 <table width=100%>
-	<tr>
-		<td width="50%" align="right">
-                	<input type=hidden name=type value="[% type %]">
+    <tr>
+        <td width="50%" align="right">
+                    <input type=hidden name=type value="[% type %]">
 
-		[% IF addBorrower %]
-			<a onClick="agregarUsuario()" >
-                	<img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0"></a>
-		[% ELSE  %]
-			<a onClick="guardarModificacioUsuario()" >
-                	<img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0"></a>
-		[% END %]
-	
-			
+        [% IF addBorrower %]
+            <a onClick="agregarUsuario()" >
+                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0"></a>
+        [% ELSE  %]
+            <a onClick="guardarModificacioUsuario()" >
+                    <img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0"></a>
+        [% END %]
+    
+            
                 </td>
 
-	        <td  width="25%" align="left"> 
-			<a href="#" onClick="form1.reset()" >
-		 	<img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0">
-			</a>
-		</td>
-		
-		<td  align="left" class="inputFontNormal">
-			<b>(*) [% "Obligatorio " | i18n %]</b>
-		</td>
-		
-	
-	</tr>
+            <td  width="25%" align="left"> 
+            <a href="#" onClick="form1.reset()" >
+            <img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0">
+            </a>
+        </td>
+        
+        <td  align="left" class="inputFontNormal">
+            <b>(*) [% "Obligatorio " | i18n %]</b>
+        </td>
+        
+    
+    </tr>
 </table>
 </form>
 
 [% IF addBorrower %]
- 	[% INCLUDE "intranet-bottom.inc" %]
+    [% INCLUDE "intranet-bottom.inc" %]
 [% END %]
-			
+            

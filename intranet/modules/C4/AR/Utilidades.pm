@@ -1247,8 +1247,8 @@ sub generarComboTipoDeDoc {
 
 	
 
-	my $documents=CGI::scrolling_list( 	-name     => 'documenttype',
-						-id => 'documenttype',
+	my $documents=CGI::scrolling_list( 	-name     => 'tipo_documento',
+						-id => 'tipo_documento',
 						-values   => \@select_doc,
 						-defaults  => $docDefault, 
 						-labels   => \%select_docs,

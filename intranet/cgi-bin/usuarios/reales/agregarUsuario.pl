@@ -33,7 +33,6 @@ $t_params->{'cgi'}=new CGI;
 $t_params->{'authnotrequired'}= 0;
 $t_params->{'flagsrequired'}= {borrowers => 1};
 $t_params->{'debug'}= 1;
-$t_params->{'top'}= "intranet-top.inc";
 $t_params->{'menuInc'}= "menu.inc";
 $t_params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 

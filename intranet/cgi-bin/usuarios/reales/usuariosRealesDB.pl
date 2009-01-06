@@ -15,7 +15,7 @@ my $input = new CGI;
 
 
 # OBTENGO EL BORROWER LOGGEADO
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1,{circulate=> 0},"intranet");
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -140,8 +140,9 @@ Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
 	
-	my ($Message_arrayref)=C4::AR::Usuarios::agregarPersona(); #C4::AR::Usuarios::t_addBorrower($obj);
-
+    print $obj->{'nombre'};
+	my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj); #C4::AR::Usuarios::t_addBorrower($obj);
+    
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;
@@ -224,7 +225,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'menuInc'}= "menu.inc";
 	$t_params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
-C4::Auth::output_html_with_http_headers($input, $template, $params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 
@@ -279,7 +280,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	$t_params->{'bornum'}= $bornum;
 	$t_params->{'foto_name'}= $foto;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $params, $session);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 	
 

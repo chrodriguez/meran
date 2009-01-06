@@ -218,8 +218,12 @@ sub t_addBorrower {
 sub agregarPersona{
 
     my ($params)=@_;
-    my $person = Person->new();
+    my $msg_object= C4::AR::Mensajes::create();
+    my $person = Usr_persona->new();
     $person->agregar($params);
+    $person->convertirEnSocio($params);
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$person->getApellido]});
+    return ($msg_object);
 
 }
    
