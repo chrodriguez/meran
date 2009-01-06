@@ -94,7 +94,7 @@ sub agregar{
     $self-> setSexo($data_hash->{'sexo'});
     $self-> setTelefono_laboral($data_hash->{'telefono_laboral'});
     $self-> setCumple_condicion($data_hash->{'cumple_condicion'});
-    $self->save();
+    $self->activar;
 }    
 
 sub activar{
