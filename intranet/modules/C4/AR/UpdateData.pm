@@ -12,7 +12,7 @@ use vars qw(@EXPORT @ISA);
 
 sub checkUpdateData{
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+my $sth=$dbh->prepare("select value from pref_preferencia_sistema where variable=?");
 $sth->execute("CheckUpdateDataEnabled");
  
 return ($sth->fetchrow eq 'no');

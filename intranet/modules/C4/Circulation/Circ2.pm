@@ -367,7 +367,7 @@ sub getpatroninformation {
 	my $flags = patronflags($borrower);
 	my $accessflagshash;
 # print A "getpatroninformation=> antes del select bit\n";
-	$sth=$dbh->prepare("SELECT bit,flag FROM userflags");
+	$sth=$dbh->prepare("SELECT bit,flag FROM usr_permiso");
 	$sth->execute;
 	while (my ($bit, $flag) = $sth->fetchrow) {
 		if ( $borrower->{'flags'} & 2**$bit ) {

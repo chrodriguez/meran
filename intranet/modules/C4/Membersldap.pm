@@ -33,7 +33,7 @@ sub addupdateldapuser {
 
 my ($dbh, $userid, $password, $template) = @_;
 
-my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+my $sth=$dbh->prepare("select value from pref_preferencia_sistema where variable=?");
 $sth->execute("ldapenabled");
 
 my $error= 0;

@@ -45,7 +45,7 @@ my $dbh = C4::Context->dbh;
 
 # Check that this is the ip that created the session before deleting it
 
-my $sth=$dbh->prepare("select userid,ip from sessions where sessionID=?");
+my $sth=$dbh->prepare("select userid,ip from sist_sesion where sessionID=?");
 $sth->execute($sessionID);
 my ($userid, $ip);
 if ($sth->rows) {
@@ -56,7 +56,7 @@ if ($sth->rows) {
     }
 }
 
-$sth=$dbh->prepare("delete from sessions where sessionID=?");
+$sth=$dbh->prepare("delete from sist_sesion where sessionID=?");
 $sth->execute($sessionID);
 open L, ">>/tmp/sessionlog";
 my $time=localtime(time());

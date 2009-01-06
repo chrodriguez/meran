@@ -453,7 +453,7 @@ print A "checkauth=> random_number desde la base: ".$random_number."\n";
                 
 
 		if ($return) {
-			$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
+			$dbh->do("DELETE FROM sist_sesion WHERE sessionID=? AND userid=?",	undef, ($sessionID, $userid));
 			_insertSession($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
 			#Logueo una nueva sesion
 			_session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
@@ -640,7 +640,7 @@ print A "checkauth=> recupero de la cookie con sessionID (desde session->param):
 
 		my ($ip , $lasttime, $nroRandom, $flag);
 		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
-				"SELECT userid,ip,lasttime,nroRandom,flag FROM sessions WHERE sessionid=?", undef, $sessionID);
+				"SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
 
 		if ($logout) {
 			#se maneja el logout del usuario
@@ -727,7 +727,7 @@ print A "checkauth=> se loguearon con el mismo userid desde otro lado\n";
 		
 			#esta todo OK, continua logueado y se actualiza la session, lasttime
 print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
-				$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+				$dbh->do("UPDATE sist_sesion SET lasttime=? WHERE sessionID=?",
 				undef, (time(), $sessionID));
 				$flags = haspermission($dbh, $userid, $flagsrequired);
 print A "checkauth=> imprimo los flags: \n";
@@ -920,7 +920,7 @@ Esta funcion guarda una session en la base
 sub _save_session_db{
 	my ($dbh, $sessionID, $userid, $remote_addr, $random_number) = @_;
 
-	$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime, nroRandom) VALUES (?, ?, ?, ?, ?)", undef, 
+	$dbh->do("INSERT INTO sist_sesion (sessionID, userid, ip,lasttime, nroRandom) VALUES (?, ?, ?, ?, ?)", undef, 
 												($sessionID, 
 												$userid, $remote_addr, 
 												time(), 
@@ -934,7 +934,7 @@ Esta funcion recurpera de la base el nroRandom entregado al cliente segun un ses
 sub _getNroRandom {
 	my ($dbh, $sessionID) = @_;
 
-	my $sth=$dbh->prepare("SELECT nroRandom FROM sessions WHERE sessionID = ?");
+	my $sth=$dbh->prepare("SELECT nroRandom FROM sist_sesion WHERE sessionID = ?");
         $sth->execute($sessionID);
 	my $random_number= $sth->fetchrow;
 
@@ -950,7 +950,7 @@ cuando el usuario remoto con session duplicada intente navegar, sera redireccion
 sub _setLoguinDuplicado {
 	my ($dbh, $userid, $ip) = @_;
 
-	my $sth=$dbh->prepare("UPDATE sessions SET flag = 'LOGUIN_DUPLICADO' WHERE userid = ? AND ip <> ? ");
+	my $sth=$dbh->prepare("UPDATE sist_sesion  SET flag = 'LOGUIN_DUPLICADO' WHERE userid = ? AND ip <> ? ");
         $sth->execute($userid, $ip);
 
 	my $random_number= $sth->fetchrow;
@@ -1249,7 +1249,7 @@ print F "_verificarPassword=> nroRandom: ".$random_number."\n";
 # Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
 # la llamada a la funcion checkpwldap por checkpw
 
-	my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable=?");
+	my $sth=$dbh->prepare("SELECT value FROM pref_preferencia_sistema WHERE variable=?");
 	$sth->execute("ldapenabled");
 
 	my ($passwordValida, $cardnumber);
@@ -1279,7 +1279,7 @@ print D "_deleteSession=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print D "_deleteSession=> elimino el sessionID: ".$sessionID."\n";
-	$sth = $dbh->prepare("DELETE FROM sessions WHERE sessionID = ?");
+	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
 	$sth->execute($sessionID);
 print D "\n";
 close(D);
@@ -1297,7 +1297,7 @@ print D "_deleteUsersFromSessions=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print D "_deleteUsersFromSessions=> elimino el sessionID: ".$userid."\n";
-	$sth = $dbh->prepare("DELETE FROM sessions WHERE userid = ?");
+	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE userid = ?");
 	$sth->execute($userid);
 print D "\n";
 close(D);
@@ -1314,7 +1314,7 @@ print K "_deleteSessionDeUsuario=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print K "_deleteSessionDeUsuario=> elimino el sessionID: ".$sessionID." del usuario: ".$userid."\n";
-	$sth = $dbh->prepare("DELETE FROM sessions WHERE sessionID = ? AND userid=?");
+	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
 	$sth->execute($sessionID, $userid);
 print K "\n";
 close(K);
@@ -1416,7 +1416,7 @@ print A "_loggedin_Controller=> cambio la IP se elimina la session: ".$sessionID
 	} else {
 		#esta todo OK, continua logueado y se actualiza la session, lasttime
 print A "_loggedin_Controller=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
-		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",undef, (time(), $session->param('sessionID') ));
+		$dbh->do("UPDATE sist_sesion SET lasttime=? WHERE sessionID=?",undef, (time(), $session->param('sessionID') ));
 		my $flags = haspermission($dbh, $session->param('userid'), $session->param('flagsrequired'));
 		if ($flags) {
 			$loggedin = 1;
@@ -1496,7 +1496,7 @@ sub _getInfoSession {
 
 	my $dbh = C4::Context->dbh;
 	my $sth;
-	$sth = $dbh->prepare("SELECT userid,ip,lasttime FROM sessions WHERE sessionid = ?");
+	$sth = $dbh->prepare("SELECT userid,ip,lasttime FROM sist_sesion WHERE sessionid = ?");
  	$sth->execute($sessionID);
 
 	my ($userid, $ip, $lasttime)= $sth->fetchrow;
@@ -1648,7 +1648,7 @@ sub getuserflags {
     my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
     $sth->execute($cardnumber);
     my ($flags) = $sth->fetchrow;
-    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
+    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM usr_permiso");
     $sth->execute;
     while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
 	if (($flags & (2**$bit)) || $defaulton) {

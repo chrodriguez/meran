@@ -32,7 +32,7 @@ sub buscarPreferencias(){
 
 	my $dbh = C4::Context->dbh;
 	my @bind;
-	my $query="SELECT variable,value,explanation,type,options FROM systempreferences ";
+	my $query="SELECT variable,value,explanation,type,options FROM pref_preferencia_sistema ";
 	if($str ne ""){
 		$query.=" WHERE variable like ?";
 		$str="%$str%";
@@ -54,7 +54,7 @@ sub buscarPreferencia{
 	my ($var)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM systempreferences WHERE variable=?";
+	my $query="SELECT * FROM pref_preferencia_sistema WHERE variable=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($var);
 	my $data=$sth->fetchrow_hashref;
@@ -99,14 +99,14 @@ sub _guardarVariable(){
 	my ($var,$val,$exp,$tipo,$op)=@_;
 	my $error=0;
 	my $dbh = C4::Context->dbh;
-	my $query=" SELECT * FROM systempreferences WHERE variable=? ";
+	my $query=" SELECT * FROM pref_preferencia_sistema WHERE variable=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($var);
 	if ($sth->rows){
 		$error=1;
 	}
 	else{
-		my $sth=$dbh->prepare("	INSERT INTO systempreferences (variable,value,explanation,type,options) 
+		my $sth=$dbh->prepare("	INSERT INTO pref_preferencia_sistema (variable,value,explanation,type,options) 
 					VALUES (?,?,?,?,?)");
 		$sth->execute($var,$val,$exp,$tipo,$op);
 	}
@@ -147,7 +147,7 @@ sub t_modificarVariable(){
 sub _modificarVariable(){
 	my ($var,$valor,$expl)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query=" UPDATE systempreferences SET value=?,explanation=? WHERE variable=?";
+	my $query=" UPDATE pref_preferencia_sistema SET value=?,explanation=? WHERE variable=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($valor,$expl,$var);
 	$sth->finish;

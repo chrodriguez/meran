@@ -87,7 +87,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
 	
 	my $dbh=C4::Context->dbh();
-	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM userflags ORDER BY bit");
+	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
 	$sth->execute;
 	my @loop;
 

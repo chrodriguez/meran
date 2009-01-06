@@ -968,11 +968,11 @@ sub armarPaginas{
 sub cantidadRenglones{
 
         my $dbh = C4::Context->dbh;
-        my $query=" SELECT value
-            FROM systempreferences
-                    WHERE variable='renglones'";
+        my $query="	SELECT value
+		   	FROM pref_preferencia_sistema
+                   	WHERE variable='renglones'";
         my $sth=$dbh->prepare($query);
-    $sth->execute();
+        $sth->execute();
 
     return($sth->fetchrow_array);
 }
@@ -985,12 +985,12 @@ guarda el nuevo valor de la variable libreDeuda de la tabla de las preferencias
 NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sistema, esta funcion se utiliza en los archivos adminLibreDeuda.pl y libreDeuda.pl
 =cut
 sub cambiarLibreDeuda(){
-    my ($valor)=@_;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" UPDATE systempreferences 
-                SET value=? 
-                WHERE variable='libreDeuda'");
-    $sth->execute($valor);
+	my ($valor)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("	UPDATE pref_preferencia_sistema 
+				SET value=? 
+				WHERE variable='libreDeuda'");
+	$sth->execute($valor);
 }
 
 =item 

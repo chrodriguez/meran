@@ -313,21 +313,6 @@ variable is not set, or in case of error, returns the undefined value.
 # this function should cache the results it finds.
 sub preference
 {
-=item	VERSION ORIGINAL, AHORA HECHA COMO TRANSACCION
-	my $self = shift;
-	my $var = shift;		# The system preference to return
-	my $retval;			# Return value
-	my $dbh = C4::Context->dbh;	# Database handle
-	my $sth;			# Database query handle
-
-	# Look up systempreferences.variable==$var
-	$retval = $dbh->selectrow_array(<<EOT);
-		SELECT	value
-		FROM	systempreferences
-		WHERE	variable='$var'
-		LIMIT	1
-EOT
-=cut
 	my $self = shift;
 	my ($valueName) = @_;
 	my $dbh = C4::Context->dbh;
@@ -335,7 +320,7 @@ EOT
 	my $sth;
 	
 	$query="SELECT value
-		FROM systempreferences
+		FROM pref_preferencia_sistema
 		WHERE variable=?";
 
 	$sth = $dbh->prepare($query);
@@ -351,7 +336,7 @@ sub preferences {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	$query="SELECT * FROM systempreferences";
+	$query="SELECT * FROM pref_preferencia_sistema";
 
 	$sth = $dbh->prepare($query);
 

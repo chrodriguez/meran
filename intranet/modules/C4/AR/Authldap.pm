@@ -71,7 +71,7 @@ sub checkpwldap{
 sub getldappassword {
 #It gets the password for a particular userid
 	my ($userid,$dbh) = @_;
-        my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+        my $sth=$dbh->prepare("select value from pref_preferencia_sistema where variable=?");
         $sth->execute("ldapserver");
         my $ldapserver = $sth->fetchrow;
         $sth->execute("ldapinfos");

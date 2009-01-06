@@ -301,7 +301,7 @@ sub disponibilidad{
 sub cantidadRenglones{
         my $dbh = C4::Context->dbh;
         my $query="select value
-		   from systempreferences
+		   from pref_preferencia_sistema
                    where variable='renglones'";
         my $sth=$dbh->prepare($query);
 	$sth->execute();

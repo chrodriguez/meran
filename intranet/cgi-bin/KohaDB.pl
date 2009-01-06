@@ -19,7 +19,7 @@ my $dbh = C4::Context->dbh;
 if($tipo eq "USUARIOS_CONECTADOS"){
 
 	my $query=" 	SELECT count(*) as cantUsers
-			FROM sessions
+			FROM sist_sesion
 			WHERE (? +  60  > lasttime) AND (? -  60 < lasttime)
 			ORDER BY lasttime DESC ";
 
