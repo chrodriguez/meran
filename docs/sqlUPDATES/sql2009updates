@@ -5,3 +5,7 @@ drop table users
 -- Se renombro la tabla
 
 RENAME TABLE usr_socios  TO usr_socio;
+
+--Se deja el id_persona en usr_socio
+ALTER TABLE `usr_persona`
+  DROP `id_socio`;

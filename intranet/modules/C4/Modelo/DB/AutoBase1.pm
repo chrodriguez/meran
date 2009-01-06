@@ -22,10 +22,18 @@ __PACKAGE__->register_db
 (
     
   connect_options => { AutoCommit => 1 },
+<<<<<<< .mine
+  driver          => 'mysql',
+  dsn             => 'dbi:mysql:dbname=V2;host=localhost',
+  username        => 'dev',
+  password        => 'dev',
+);
+=======
   driver          => $driverDB,
   dsn             => "dbi:mysql:dbname=".$database.";host=".$hostname,
   username        => $user,
   password        => $pass,
 );
+>>>>>>> .r865
 
 1;
