@@ -3,7 +3,6 @@
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use Template;
 use CGI;
 
 
@@ -25,15 +24,10 @@ my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches();
 
 $t_params->{'document'}= $comboDeTipoDeDoc;
-$t_params->{'catcodepopup'}=$comboDeCategorias;
-$t_params->{'CGIbranch'}= $comboDeBranches;
+$t_params->{'comboDeCategorias'}=$comboDeCategorias;
+$t_params->{'comboDeBranches'}= $comboDeBranches;
 $t_params->{'addBorrower'}= 1;
-$t_params->{'type'}= "intranet";
-$t_params->{'cgi'}=new CGI;
-$t_params->{'authnotrequired'}= 0;
-$t_params->{'flagsrequired'}= {borrowers => 1};
-$t_params->{'debug'}= 1;
-$t_params->{'menuInc'}= "menu.inc";
+
 $t_params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

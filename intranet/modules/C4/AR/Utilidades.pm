@@ -1210,16 +1210,16 @@ sub generarComboCategorias{
 	}
 	my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
 
-	my $catcodepopup = &CGI::scrolling_list(
-						-name=>'categorycode',
-						-id => 'categorycode',
+	my $comboDeCategorias = &CGI::scrolling_list(
+						-name=>'cod_categoria',
+						-id => 'cod_categoria',
 						-values=>$categories,
 						-defaults=>$catDefault,
 						-labels=>$labels,
 						-size =>1
 				);
 
-	return $catcodepopup;
+	return $comboDeCategorias;
 }
 
 #GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
@@ -1287,8 +1287,8 @@ sub generarComboDeBranches {
 
 	
 
-	my $CGIbranch=CGI::scrolling_list( 	-name     => 'branchcode',
-						-id => 'branchcode',
+	my $CGIbranch=CGI::scrolling_list( 	-name     => 'id_ui',
+						-id => 'id_ui',
 						-values   => \@select_branch,
 						-defaults  => $branchdefecto, 
 						-labels   => \%select_branches,
