@@ -45,7 +45,7 @@ sub convertirEnSocio{
 
     use C4::Modelo::UsrSocio;
     
-    my $socio = UsrSocio->new();
+    my $socio = C4::Modelo::UsrSocio->new();
     $data_hash->{'id_persona'} = $self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $socio->agregar($data_hash);
