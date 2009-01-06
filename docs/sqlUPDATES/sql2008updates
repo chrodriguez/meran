@@ -407,8 +407,19 @@ ALTER TABLE `usr_persona` CHANGE `ciudad` `ciudad` VARCHAR( 11 ) CHARACTER SET l
 
 
 
+-- Se agrego en la tabla sessions el campo nroRandom para guardar el numero enviado al cliente y no usar mas el nro
+-- que se enviaba desde el cliente, ahora con el sessionID se recupera este numero
+ALTER TABLE `sessions` ADD `nroRandom` VARCHAR( 255 ) NOT NULL ;
+=======
 
 
+--Sa agrega el siguiente campo para loguear tb el browser, y saber si es una peticion de un browser o del robot de google
+ALTER TABLE `historialBusqueda` ADD `HTTP_USER_AGENT` VARCHAR( 255 ) NOT NULL AFTER `tipo` ;
 
+--Se agrego el siguiente campo para poder manejar "sesiones duplicadas", solo se permite un usuario conectado por vez
 
- 0 0 
+ALTER TABLE `sessions` ADD `flag` VARCHAR( 255 ) NULL ;
+
+--Se creo una preferencia para permitir o no relizar busquedas desde el OPAC sin estar logueado
+
+  insert into systempreferences (variable,value,explanation) values ('opacSearchAnonymous','1','Esta preferencia permite (=1) realizar bùsquedas desde el OPAC sin haber iniciado sesiòn')
