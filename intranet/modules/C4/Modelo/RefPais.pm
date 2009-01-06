@@ -1,4 +1,4 @@
-package C4::Modelo::RefPai;
+package C4::Modelo::RefPais;
 
 use strict;
 
