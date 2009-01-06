@@ -41,9 +41,11 @@ RENAME TABLE sanctiontypesrules TO circ_regla_tipo_sancion;
 
 #REFERENCIAS (ref_)
 RENAME TABLE bibliolevel TO ref_nivel_bibliografico;
-RENAME TABLE dptos_partidos TO ref_dpto_partido;
 RENAME TABLE countries TO ref_pais;
-RENAME TABLE localidades TO ref_provincia;
+ALTER TABLE ref_pais CHANGE name nombre VARCHAR( 80 ), CHANGE printable_name nombre_largo VARCHAR( 80 ), CHANGE code codigo VARCHAR( 11 );
+RENAME TABLE provincias TO ref_provincia;
+RENAME TABLE dptos_partidos TO ref_dpto_partido;
+
 RENAME TABLE languages TO ref_idioma;
 RENAME TABLE supports TO ref_soporte;
 RENAME TABLE tipo_documento TO ref_tipo_documento;
@@ -88,7 +90,7 @@ RENAME TABLE sessions TO sist_sesion;
 
 # borrowers 
 # persons
-# provincias
+# localidades
 # sessionqueries
 # uploadedmarc
 # users
