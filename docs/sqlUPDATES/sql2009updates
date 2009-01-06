@@ -21,3 +21,7 @@ CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
 CHANGE `changepassword` `change_password` TINYINT( 1 ) NOT NULL DEFAULT '0'
 
 ALTER TABLE `usr_persona` ADD `activo` tinyint( 1 ) unsigned NOT NULL default '1'
+
+
+ALTER TABLE `usr_estado` ADD `id_estado` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `usr_estado` ADD UNIQUE (`id_persona` ,`fuente`);
