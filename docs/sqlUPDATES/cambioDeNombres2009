@@ -41,16 +41,16 @@ RENAME TABLE sanctiontypesrules TO circ_regla_tipo_sancion;
 
 #REFERENCIAS (ref_)
 RENAME TABLE bibliolevel TO ref_nivel_bibliografico;
-RENAME TABLE ref_dptos_partidos TO ref_dpto_partido;
-RENAME TABLE ref_paises TO ref_pais;
-RENAME TABLE ref_provincias TO ref_provincia;
+RENAME TABLE dptos_partidos TO ref_dpto_partido;
+RENAME TABLE countries TO ref_pais;
+RENAME TABLE localidades TO ref_provincia;
 RENAME TABLE languages TO ref_idioma;
 RENAME TABLE supports TO ref_soporte;
 RENAME TABLE tipo_documento TO ref_tipo_documento;
 RENAME TABLE unavailable TO ref_disponibilidad
 
 #REPORTES (rep_)
-RENAME TABLE  busquedas TO rep_busqueda;
+RENAME TABLE busquedas TO rep_busqueda;
 RENAME TABLE historialBusqueda TO rep_historial_busqueda;
 RENAME TABLE historicCirculation TO rep_historial_circulacion;
 RENAME TABLE historicIssues TO rep_historial_prestamo;
@@ -87,9 +87,6 @@ RENAME TABLE sessions TO sist_sesion;
 #MUEREN!!!!!!!!!!!!!! ?????
 
 # borrowers 
-# countries
-# dptos_partidos
-# localidades
 # persons
 # provincias
 # sessionqueries
