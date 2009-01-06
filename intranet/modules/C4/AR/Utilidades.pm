@@ -1261,42 +1261,42 @@ sub generarComboTipoDeDoc {
 
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
-sub generarComboDeBranches {
-	my ($branchCode) = @_;
-	my @branches;
-	my @select_branch;
-	my %select_branches;
-	my $branches=C4::AR::Busquedas::getBranches();
+sub generarComboUI {
+	my ($ui_code) = @_;
+# 	my @unidades_de_informacion;
+	my @select_ui;
+	my %select_ui;
+	my $unidades_de_informacion=C4::AR::Busquedas::getBranches();
 	
-	foreach my $branch (keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	foreach my $ui (keys %$unidades_de_informacion) {
+		push @select_ui, $ui;
+		$select_ui{$ui} = $unidades_de_informacion->{$ui}->{'branchname'};
 	}
-	my $branchdefecto;
+	my $uidefecto;
 	
 
 	#EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR EL BRANCH ASIGNADO, SINO SE TOMA LA DEFUALT 
 # 	DEL SISTEMA
-	if ($branchCode ne ""){
-		$branchdefecto= $branchCode;
+	if ($ui_code ne ""){
+		$uidefecto= $ui_code;
 	}
 	else
 	{
-		$branchdefecto= C4::Context->preference("defaultbranch");
+		$uidefecto= C4::Context->preference("defaultbranch");
 	}
 
 	
 
-	my $CGIbranch=CGI::scrolling_list( 	-name     => 'id_ui',
+	my $CGIunidadDeInformacion=CGI::scrolling_list( 	-name     => 'id_ui',
 						-id => 'id_ui',
-						-values   => \@select_branch,
-						-defaults  => $branchdefecto, 
-						-labels   => \%select_branches,
+						-values   => \@select_ui,
+						-defaults  => $uidefecto, 
+						-labels   => \%select_ui,
 						-size     => 1,
 						-multiple => 0 
 				);
 
-	return $CGIbranch; 
+	return $CGIunidadDeInformacion; 
 }
 
 #****************************************************Fin****Generacion de Combos**************************************************

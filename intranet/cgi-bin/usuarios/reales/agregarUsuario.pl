@@ -21,13 +21,11 @@ my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
 
 my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 
-my $comboDeUI= &C4::AR::Utilidades::generarComboDeBranches();
+my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
 
 $t_params->{'document'}= $comboDeTipoDeDoc;
 $t_params->{'comboDeCategorias'}=$comboDeCategorias;
-$t_params->{'comboDeUI'}= $comboDeBranches;
+$t_params->{'comboDeUI'}= $comboDeUI;
 $t_params->{'addBorrower'}= 1;
-
-$t_params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
