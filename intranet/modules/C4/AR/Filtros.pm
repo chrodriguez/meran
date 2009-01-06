@@ -22,7 +22,7 @@ sub i18n {
 	my $session = CGI::Session->load();#si esta definida
 ## FIXME falta manejar cookie si el usuario no esta logueado
 
-	my $locale = $session->param('lang')|C4::Context->config("defaultLang")|'es_ES';
+	my $locale = $session->param('locale')|C4::Context->config("defaultLang")|'es_ES';
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
 	Locale::Maketext::Gettext::Functions::bindtextdomain("intranet", C4::Context->config("locale"));
@@ -44,7 +44,7 @@ sub setComboLang {
 # open(A, ">>/tmp/debug.txt");
 # print A "desde putHTML: \n";
 	my $html= '';
-	my $lang_Selected= $session->param('lang');
+	my $lang_Selected= $session->param('locale');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
 	my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
 	my $i;
@@ -60,7 +60,7 @@ sub setComboLang {
 	$html .="<select id='language' onChange='cambiarIdioma()'>";
 
 	for($i=0;$i<scalar(@array_lang);$i++){
-		if($session->param('lang') eq @array_lang[$i]){
+		if($session->param('locale') eq @array_lang[$i]){
 			$html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
 		}else{
 			$html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";

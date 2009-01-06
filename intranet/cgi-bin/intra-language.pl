@@ -9,7 +9,7 @@ my $input = new CGI;
 open(A,">>/tmp/debug.txt");
 print A "intr-language.pl \n";
 my $session = CGI::Session->load();
-$session->param('lang', $input->param('lang_server') );
+$session->param('locale', $input->param('lang_server') );
 print A "lang desde el parametro: ".$input->param('lang_server')."\n";
 print A "lang desde la session: ".$session->param('lang')."\n";
 print A "REQUEST_URI: ".$ENV{'REQUEST_URI'}."\n";
