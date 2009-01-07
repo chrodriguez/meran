@@ -14,7 +14,7 @@ function modificarDatosDeUsuario(){
 	objAH=new AjaxHelper(updateModificarDatosDeUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
-	objAH.borrowernumber= usuario.ID;
+	objAH.numero_socio= usuario.ID;
 	objAH.tipoAccion= 'MODIFICAR_USUARIO';
 	objAH.sendToServer();
 }

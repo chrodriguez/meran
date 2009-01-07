@@ -36,6 +36,16 @@ __PACKAGE__->meta->setup(
         activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
 
+     relationships =>
+    [
+      ciudad_ref => 
+      {
+        class       => 'C4::Modelo::Localidad',
+        key_columns => { ciudad => 'LOCALIDAD' },
+        type        => 'one to one',
+      },
+    ],
+    
     primary_key_columns => [ 'id_persona' ],
 );
 

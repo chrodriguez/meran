@@ -155,12 +155,19 @@ Se guarda la modificacion los datos del usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 	
-	my ($Message_arrayref)= C4::AR::Usuarios::t_updateBorrower($obj);
-	
-	my $infoOperacionJSON=to_json $Message_arrayref;
-	
-	print $input->header;
-	print $infoOperacionJSON;
+# 	my ($Message_arrayref)= C4::AR::Usuarios::t_updateBorrower($obj);
+# 	
+# 	my $infoOperacionJSON=to_json $Message_arrayref;
+# 	
+# 	print $input->header;
+# 	print $infoOperacionJSON;
+
+    my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    print $input->header;
+    print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
 
@@ -182,7 +189,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $numero_socio =$obj->{'numero_socio'};
 
 	#Obtenemos los datos del borrower
-	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
+	my $socio= &C4::AR::Usuarios::getSocioInfo(1);
 
 	#se genera el combo de categorias de usuario
 	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($socio->cod_categoria);
@@ -196,27 +203,24 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
 	$t_params->{'comboDeCategorias'}= $comboDeCategorias;
 	$t_params->{'comboDeUI'}= $comboDeUI;
-	$t_params->{'changepassword'}= $datosBorrower_hashref->{'changepassword'};
-	$t_params->{'nombre'}= $socio->nombre;
-	$t_params->{'apellido'}= $socio->apellido;
-	$t_params->{'streetaddress'}= $datosBorrower_hashref->{'streetaddress'};
-	$t_params->{'zipcode'}= $datosBorrower_hashref->{'zipcode'};
-	$t_params->{'dstreetcity'}= $datosBorrower_hashref->{'streetcity'};
-	$t_params->{'homezipcode'}= $datosBorrower_hashref->{'homezipcode'};
-	$t_params->{'city'}= $datosBorrower_hashref->{'city'};
-	$t_params->{'dcity'}= $datosBorrower_hashref->{'dcity'};
-	$t_params->{'phone'}= $datosBorrower_hashref->{'phone'};
-	$t_params->{'phoneday'}= $datosBorrower_hashref->{'phoneday'};
-	$t_params->{'emailaddress'}= $datosBorrower_hashref->{'emailaddress'};
-	$t_params->{'borrowernotes'}= $datosBorrower_hashref->{'borrowernotes'};
-	$t_params->{'documentnumber'}= $datosBorrower_hashref->{'documentnumber'};
-	$t_params->{'studentnumber'}= $datosBorrower_hashref->{'studentnumber'};
-	$t_params->{'dateenrolled'}= $datosBorrower_hashref->{'dateenrolled'};
-	$t_params->{'expiry'}= $datosBorrower_hashref->{'expiry'};
-	$t_params->{'cardnumber'}= $datosBorrower_hashref->{'cardnumber'};
- 	$t_params->{'dateofbirth'}= C4::Date::format_date($datosBorrower_hashref->{'dateofbirth'},$dateformat);
+	$t_params->{'change_password'}= $socio->getChange_password;
+	$t_params->{'nombre'}= $socio->persona->getNombre;
+	$t_params->{'apellido'}= $socio->persona->getApellido;
+	$t_params->{'calle'}= $socio->persona->getCalle;
+	$t_params->{'barrio'}= $socio->persona->getBarrio;
+	$t_params->{'ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
+	$t_params->{'telefono'}= $socio->persona->getTelefono;
+	$t_params->{'alt_telefono'}= $socio->persona->getAlt_telefono;
+	$t_params->{'email'}= $socio->persona->getEmail;
+	$t_params->{'otros_nombres'}= $socio->persona->getOtros_nombres;
+	$t_params->{'numero_documetno'}= $socio->persona->getNro_documento;
+# 	$t_params->{'studentnumber'}= $socio->studentnumber'};
+	$t_params->{'fecha_alta'}= $socio->getFecha_alta;
+	$t_params->{'expira'}= $socio->getExpira;
+	$t_params->{'nro_socio'}= $socio->getNro_socio;
+ 	$t_params->{'nacimiento'}= C4::Date::format_date($socio->persona->getNacimiento,$dateformat);
 	$t_params->{'addBorrower'}= 0;
-	$t_params->{'sex'}= $datosBorrower_hashref->{'sex'};
+	$t_params->{'sexo'}= $socio->persona->getSexo;
  	$t_params->{'dateformat'}= C4::Date::display_date_format($dateformat);
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

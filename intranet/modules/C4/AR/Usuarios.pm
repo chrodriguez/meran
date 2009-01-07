@@ -664,7 +664,7 @@ sub _verificarDatosBorrower{
 	my $actionType = $data->{'actionType'};
 	my $checkStatus;
 
-	my $emailAddress = $data->{'emailaddress'};
+	my $emailAddress = $data->{'email'};
 	
 	if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
 		$msg_object->{'error'}= 1;
@@ -674,7 +674,7 @@ sub _verificarDatosBorrower{
 	#### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
 	if ($actionType eq "new"){
 
-		my $cardNumber = $data->{'cardnumber'};
+		my $cardNumber = $data->{'nro_socio'};
 		if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
@@ -682,27 +682,27 @@ sub _verificarDatosBorrower{
 	}
 
 	#### FIN NUEVO BORROWER's CHECKS
-	my $surname = $data->{'surname'};
+	my $surname = $data->{'apellido'};
 	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
 	}
 
-	my $firstname = $data->{'firstname'};
+	my $firstname = $data->{'nombre'};
 	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
 	}
 
 	
-	my $documentnumber = $data->{'documentnumber'};
+	my $documentnumber = $data->{'nro_documento'};
 	$checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
 	if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
 	}
 
-	my $city = $data->{'city'};
+	my $city = $data->{'ciudad'};
 	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($city)))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U337', 'params' => []} ) ;
@@ -713,6 +713,44 @@ sub _verificarDatosBorrower{
 
 
 
+
+sub actualizarSocio {
+    use C4::Modelo::UsrSocio::Manager;
+    my($params)=@_;
+    $params->{'actionType'} = "update";
+    my $dbh = C4::Context->dbh;
+
+    my $msg_object= C4::AR::Mensajes::create();
+
+    _verificarDatosBorrower($params, $msg_object);
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+
+        $dbh->{AutoCommit} = 0;  # enable transactions, if possible
+        $dbh->{RaiseError} = 1;
+    
+        eval {
+            my $socio = C4::Modelo::UsrSocio->new(nro_socio => $params->{'nro_socio'});
+            $socio->load();
+            $socio->agregar($params);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B424',"INTRA");
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
 
 
 sub t_updateBorrower {

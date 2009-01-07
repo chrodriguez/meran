@@ -66,5 +66,4 @@ INSERT INTO `usr_ref_categoria_socio` (`categorycode`, `description`, `enrolment
 
 ALTER TABLE `usr_ref_categoria_socio` ADD PRIMARY KEY ( `categorycode` ) ;
 
-ALTER TABLE `usr_persona` CHANGE `ciudad` `id_ciudad` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
-
+ALTER TABLE usr_socio ADD FOREIGN KEY(id_persona) REFERENCES usr_persona(id_persona);
