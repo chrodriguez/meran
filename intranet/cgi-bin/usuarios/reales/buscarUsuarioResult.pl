@@ -42,7 +42,7 @@ my @resultsdata;
 for (my $i=0; $i < $cantidad; $i++){
     my $clase="";
     my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($socios->[$i]->getNro_socio);
-    my $regular= &C4::AR::Usuarios::esRegular($socios->[$i]{'borrowernumber'});
+    my $regular= &C4::AR::Usuarios::esRegular($socios->[$i]->getNro_socio);
 
     if ($regular eq 1){$regular="Regular"; $clase="prestamo";}  
     else{
@@ -55,6 +55,7 @@ for (my $i=0; $i < $cantidad; $i++){
     my %row = (
             clase=>$clase,
             nro_socio => $socios->[$i]->getNro_socio,
+            id_socio => $socios->[$i]->getId_socio,
 #             cardnumber => $socios->[$i]->persona->getNro_socio,
             apellido => $socios->[$i]->persona->getApellido,
             nombre => $socios->[$i]->persona->getNombre,
