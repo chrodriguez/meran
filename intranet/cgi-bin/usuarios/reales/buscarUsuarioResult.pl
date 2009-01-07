@@ -22,7 +22,7 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-my $orden=$obj->{'orden'}||'surname';
+my $orden=$obj->{'orden'}||'apellido';
 my $member=$obj->{'member'};
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
@@ -33,7 +33,7 @@ my $env;
 my ($cantidad,$results);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-
+=item
 if (defined($inicial)){
 	($cantidad,$results)=&ListadoDeUsuarios($member,"inicial",$orden,$ini,$cantR,$inicial);
 }
@@ -44,47 +44,87 @@ elsif($member ne ""){
 		($cantidad,$results)=&ListadoDeUsuarios($member,"advanced",$orden,$ini,$cantR);
 	}
 }
+=cut
+($cantidad,$results)= C4::AR::Usuarios::getSocioLike($member,$orden,$ini,$cantR);
 
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
-C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+# my @resultsdata;
+# for (my $i=0; $i < $cantR; $i++){
+#   #find out stats
+#     if($results->[$i]{'borrowernumber'} ne ""){
+# 	my $clase="";
+#  	my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($results->[$i]{'borrowernumber'});
+#  	my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
+# 
+#  	if ($regular eq 1){$regular="Regular"; $clase="prestamo";}	
+# 	else{
+# 		if($regular eq 0){$regular="Irregular";$clase="fechaVencida";}
+# 		else{
+# 			$regular="---";
+# 		}
+# 	}
+# 
+#   	my %row = (
+# 		clase=>$clase,
+#         	borrowernumber => $results->[$i]{'borrowernumber'},
+#         	cardnumber => $results->[$i]{'cardnumber'},
+#         	surname => $results->[$i]{'surname'},
+#         	firstname => $results->[$i]{'firstname'},
+# 		    completo => $results->[$i]{'surname'}.", ".$results->[$i]{'firstname'},
+#         	categorycode => $results->[$i]{'categorycode'},
+#         	streetaddress => $results->[$i]{'streetaddress'},
+#         	documenttype => $results->[$i]{'documenttype'},
+#         	documentnumber => $results->[$i]{'documentnumber'},
+#         	studentnumber => $results->[$i]{'studentnumber'},
+#         	city => $results->[$i]{'city'},
+#         	odissue => "$od/$issue",
+#         	issue => "$issue",
+#         	od => "$od",
+#         	regular => $regular,
+#         	borrowernotes => $results->[$i]{'borrowernotes'}
+# 	);
+# 	push(@resultsdata, \%row);
+#      }
+# }
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
   #find out stats
-    if($results->[$i]{'borrowernumber'} ne ""){
-	my $clase="";
- 	my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($results->[$i]{'borrowernumber'});
- 	my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
+#     if($results->[$i]{'borrowernumber'} ne ""){
+    my $clase="";
+    my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($results->[$i]{'borrowernumber'});
+    my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
 
- 	if ($regular eq 1){$regular="Regular"; $clase="prestamo";}	
-	else{
-		if($regular eq 0){$regular="Irregular";$clase="fechaVencida";}
-		else{
-			$regular="---";
-		}
-	}
+    if ($regular eq 1){$regular="Regular"; $clase="prestamo";}  
+    else{
+        if($regular eq 0){$regular="Irregular";$clase="fechaVencida";}
+        else{
+            $regular="---";
+        }
+    }
 
-  	my %row = (
-		clase=>$clase,
-        	borrowernumber => $results->[$i]{'borrowernumber'},
-        	cardnumber => $results->[$i]{'cardnumber'},
-        	surname => $results->[$i]{'surname'},
-        	firstname => $results->[$i]{'firstname'},
-		completo => $results->[$i]{'surname'}.", ".$results->[$i]{'firstname'},
-        	categorycode => $results->[$i]{'categorycode'},
-        	streetaddress => $results->[$i]{'streetaddress'},
-        	documenttype => $results->[$i]{'documenttype'},
-        	documentnumber => $results->[$i]{'documentnumber'},
-        	studentnumber => $results->[$i]{'studentnumber'},
-        	city => $results->[$i]{'city'},
-        	odissue => "$od/$issue",
-        	issue => "$issue",
-        	od => "$od",
-        	regular => $regular,
-        	borrowernotes => $results->[$i]{'borrowernotes'}
-	);
-	push(@resultsdata, \%row);
-     }
+    my %row = (
+#             clase=>$clase,
+            borrowernumber => $results->[$i]->persona->getApellido,
+            cardnumber => $results->[$i]{'cardnumber'},
+            surname => $results->[$i]{'surname'},
+            firstname => $results->[$i]{'firstname'},
+            completo => $results->[$i]{'surname'}.", ".$results->[$i]{'firstname'},
+            categorycode => $results->[$i]{'categorycode'},
+            streetaddress => $results->[$i]{'streetaddress'},
+            documenttype => $results->[$i]{'documenttype'},
+            documentnumber => $results->[$i]{'documentnumber'},
+            studentnumber => $results->[$i]{'studentnumber'},
+            city => $results->[$i]{'city'},
+            odissue => "$od/$issue",
+            issue => "$issue",
+            od => "$od",
+            regular => $regular,
+            borrowernotes => $results->[$i]{'borrowernotes'}
+    );
+    push(@resultsdata, \%row);
+#      }
 }
 
 $t_params->{'resultsloop'}= \@resultsdata;

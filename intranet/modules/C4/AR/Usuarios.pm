@@ -899,6 +899,56 @@ sub getSocioInfo {
 #     return (@$socio[0]);
 }
 
+sub getSocioLike {
+    
+    use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrSocio::Manager;
+
+    my ($socio,$orden,$ini,$cantR) = @_;
+# 
+# $products = 
+#       Product::Manager->get_products(
+#         query =>
+#         [
+#           name => { like => '%Hat' },
+#           id   => { ge => 7 },
+#           or   => 
+#           [
+#             price => 15.00,
+#             price => { lt => 10.00 },
+#           ],
+#         ],
+#         sort_by => 'name',
+#         limit   => 10,
+#         offset  => 50);
+# 
+#     $orden= 'apellido';
+#     $ini= 0;
+#     $cantR= 10;
+    my  $socios_array_ref;
+    if($socio eq 'TODOS'){
+         $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+    #                                          sort_by => $orden,
+                                            limit   => $cantR,
+                                            offset  => $ini,
+                                            require_objects => [ 'persona' ]
+                                );
+    }else{
+
+        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                    query => [
+                                                apellido => { like => '%'.$socio.'%' },
+                                            ],
+    #                                          sort_by => $orden,
+                                            limit   => $cantR,
+                                            offset  => $ini,
+                                            require_objects => [ 'persona' ]
+                                );
+    }
+
+    return (scalar(@$socios_array_ref), $socios_array_ref);
+}
+
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
 sub esRegular {
 
