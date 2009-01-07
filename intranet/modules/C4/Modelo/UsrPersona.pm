@@ -356,7 +356,10 @@ sub setAlt_telefono{
 
 sub getNacimiento{
     my ($self) = shift;
-    return ($self->nacimiento);
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date_in_iso($self->nacimiento, $dateformat) );
+#     return ($self->nacimiento);
 }
 
 sub setNacimiento{

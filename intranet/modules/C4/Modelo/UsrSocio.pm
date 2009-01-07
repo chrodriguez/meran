@@ -65,7 +65,7 @@ sub agregar{
     $self->setLast_login($data_hash->{'last_login'});
     $self->setLast_change_password($data_hash->{'last_change_password'});
     $self->setChange_password($data_hash->{'change_password'});
-    $self->setCumple_requisito($data_hash->{'cumple_resuiqisto'});
+    $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
     
     $self->save();
@@ -128,7 +128,10 @@ sub setCod_categoria{
 
 sub getFecha_alta{
     my ($self) = shift;
-    return ($self->fecha_alta);
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->fecha_alta,$dateformat) );
+#     return ($self->fecha_alta);
 }
 
 sub setFecha_alta{
@@ -139,7 +142,10 @@ sub setFecha_alta{
 
 sub getExpira{
     my ($self) = shift;
-    return ($self->expira);
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->expira,$dateformat) );
+#     return ($self->expira);
 }
 
 sub setExpira{

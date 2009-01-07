@@ -110,7 +110,7 @@ function detalleUsuario(){
 	objAH=new AjaxHelper(updateDetalleUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug= true;
-	objAH.borrowernumber= usuario.ID;
+	objAH.id_socio= usuario.ID;
 	objAH.sendToServer();
 }
 
@@ -127,7 +127,7 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "uploadPicture.pl",
-						nro_socio: usuario.ID,
+						id_socio: usuario.ID,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
 // 									var responseText= $('#responseText').html();
@@ -180,7 +180,7 @@ $(document).ready(function() {
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
 	usuario.text= "[% completo %]";
-	usuario.ID= "[% nro_socio %]";
+	usuario.ID= "[% id_socio %]";
 
 	detalleUsuario(usuario.ID);
 	detallePrestamos(usuario.ID);
