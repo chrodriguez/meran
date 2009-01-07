@@ -358,7 +358,7 @@ sub getNacimiento{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
 
-    return ( C4::Date::format_date_in_iso($self->nacimiento, $dateformat) );
+    return ( C4::Date::format_date($self->nacimiento, $dateformat) );
 #     return ($self->nacimiento);
 }
 
@@ -372,7 +372,9 @@ sub setNacimiento{
 
 sub getFecha_alta{
     my ($self) = shift;
-    return ($self->fecha_alta);
+    my $dateformat = C4::Date::get_date_format();
+#     return ($self->fecha_alta);
+    return ( C4::Date::format_date($self->fecha_alta, $dateformat) );
 }
 
 sub setFecha_alta{

@@ -10,12 +10,6 @@ use Date::Manip;
 use Cwd;
 my $input=new CGI;
 
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $msg_object= C4::AR::Mensajes::create();
-my $dateformat = C4::Date::get_date_format();
-
-
 my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 			                                                        template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
 			                                                        query		=> $input,
@@ -24,6 +18,9 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 			                                                        flagsrequired	=> { circulate => 1 },
     });
 
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $msg_object= C4::AR::Mensajes::create();
 my $id_socio= $obj->{'id_socio'};
 	
 # if ( (&C4::AR::Usuarios::existeUsuario($id_socio)) && (&C4::AR::Utilidades::validateString($bornum)) ) {
@@ -37,18 +34,23 @@ my $id_socio= $obj->{'id_socio'};
 # 		$t_params->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 # 	}
 	#
-# 	$t_params->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
+
+    $t_params->{'version_documento'} =  $socio->persona->getVersion_documento;
+    $t_params->{'nro_documento'} =  $socio->persona->getNro_documento;
     $t_params->{'nro_socio'} =  $socio->getNro_socio;
     $t_params->{'fecha_alta'} = $socio->getFecha_alta;
+    $t_params->{'sexo'} =  $socio->persona->getSexo;
 	$t_params->{'expira'} = $socio->getExpira;
+    $t_params->{'telefono'} = $socio->persona->getTelefono;
+    $t_params->{'alt_telefono'} = $socio->persona->getAlt_telefono;
 	$t_params->{'nacimiento'} = $socio->persona->getNacimiento;
 	$t_params->{'IS_ADULT'} = ($socio->getCod_categoria ne 'I');
-	
 	$t_params->{'ciudad'}=C4::AR::Busquedas::getNombreLocalidad($socio->persona->getCiudad);
 	$t_params->{'calle'}=C4::AR::Busquedas::getNombreLocalidad($socio->persona->getCalle);
 	
+## FIXME getBranch deprecated usar ORM, falta hacer
 	# Converts the branchcode to the branch name
-	$t_params->{'ui'} = C4::AR::Busquedas::getBranch($socio->getId_ui);
+	$t_params->{'ui'} = C4::AR::Busquedas::getBranch($socio->getId_ui)->{'branchname'};
 	
 	# Converts the categorycode to the description
 	$t_params->{'cod_categoria'} = C4::AR::Busquedas::getborrowercategory($socio->getCod_categoria);

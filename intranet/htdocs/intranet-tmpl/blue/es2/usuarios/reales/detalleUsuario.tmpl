@@ -14,9 +14,6 @@
 		vPrestamoInterBibliotecario=new WindowHelper();
 		vPrestamoInterBibliotecario.html=responseText;
 		vPrestamoInterBibliotecario.create();	
-
-// 		vPrestamoInterBibliotecario.height('85%');
-// 		vPrestamoInterBibliotecario.width('85%');
 		
 	}
 
@@ -56,37 +53,27 @@
                     [% END %]
                             
                     [% "Documento:" | i18n %]
-                            <b> [% documenttype %]&nbsp; [% documentnumber %]</b><br>
+                            <b> [% version_documento %]&nbsp; [% nro_documento %]</b><br>
             
                     [% "Fecha de nacimiento:" | i18n %]
                             <b> [% nacimiento %]</b><br>
                     [% "Sexo:" | i18n %]    
-                            <b> [% sex %]</b><br>
-                                    
-                    [% IF contactname %]
-                            [% "Contacto Alternativo:" | i18n %]
-                                <b> [% contactname %]</b><br>
-                    [% END %]
-            
-                    [% IF phone %]
+                            <b> [% sexo %]</b><br>
+                                                
+                    [% IF telefono %]
                             <div class="tel">
                                     <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                            <b>[% phone %]</b><br>
+                                            <b>[% telefono %]</b><br>
                             </div>	
                     [% END %]
             
-                    [% IF altphone %]
+                    [% IF alt_telefono %]
                     <div class="tel">
                             <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                                        <b>[% altphone %]</b><br>
+                                        <b>[% alt_telefono %]</b><br>
                     </div>	
                     [% END %]
                     
-                    [% IF altrelationship %]
-                            [% "Relaci&oacute;n:" | i18n %]
-                                    <b> [% altrelationship %]</b><br>
-                    [% END %]
-            
                     [% IF emailaddress %]
                             E-mail: <b><a href="mailto:[% emailaddress %]">
                                     <span class="email"> [% emailaddress %]</span></a></b><br>
@@ -94,10 +81,10 @@
                     <br>
             
                     [% "Tarjeta de identificaci&oacute;n :" | i18n %]
-                                    <b> [% cardnumber %]</b><br>
+                                    <b> [% nro_socio %]</b><br>
             
                     [% "Legajo :" | i18n %]
-                                    <b> [%  studentnumber %]</b><br>
+                                    <b> [%  nro_documento %]</b><br>
                     
                     [% "ID de usuario:" | i18n %]
                                     <b> [%  nro_socio %]</b><br>
@@ -118,20 +105,6 @@
                             </center>
                     [% END %]
             
-                    [% IF altnotes %]
-                            [% "Notas:" | i18n %]
-                                     <b> [%  altnotes %]</b><br>
-                    [% END %]
-            
-                    [% IF borrowernotes %]
-                            [% "Notas generales:" | i18n %] 
-                                <b>
-                                    <a HREF="popbox.html"                            onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">
-                                        [%  borrowernotes %]
-                                    </a>
-                                </b>    
-                                <br>
-                    [% END %]
             </div>
             
             </div>  <!--end vcard-->
