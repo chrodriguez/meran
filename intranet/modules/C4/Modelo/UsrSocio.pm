@@ -27,6 +27,16 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_socio' ],
 
     unique_key => [ 'nro_socio' ],
+
+    relationships =>
+    [
+      persona => 
+      {
+        class       => 'C4::Modelo::UsrPersona',
+        key_columns => { id_persona => 'id_persona' },
+        type        => 'one to one',
+      },
+    ],
 );
 
 sub agregar{
