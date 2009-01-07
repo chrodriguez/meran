@@ -30,10 +30,10 @@ my $inicial=$obj->{'inicial'};
 my $env;
 
 
-my ($cantidad,$results);
+my ($cantidad,$socios);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-($cantidad,$results)= C4::AR::Usuarios::getSocioLike($socio,$orden,$ini,$cantR);
+($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socio,$orden,$ini,$cantR);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
@@ -41,8 +41,8 @@ $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $
 my @resultsdata;
 for (my $i=0; $i < $cantidad; $i++){
     my $clase="";
-    my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($results->[$i]->getNro_socio);
-    my $regular= &C4::AR::Usuarios::esRegular($results->[$i]{'borrowernumber'});
+    my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($socios->[$i]->getNro_socio);
+    my $regular= &C4::AR::Usuarios::esRegular($socios->[$i]{'borrowernumber'});
 
     if ($regular eq 1){$regular="Regular"; $clase="prestamo";}  
     else{
@@ -54,17 +54,17 @@ for (my $i=0; $i < $cantidad; $i++){
 
     my %row = (
             clase=>$clase,
-            nro_socio => $results->[$i]->getNro_socio,
-#             cardnumber => $results->[$i]->persona->getNro_socio,
-            apellido => $results->[$i]->persona->getApellido,
-            nombre => $results->[$i]->persona->getNombre,
-            completo => $results->[$i]->persona->getApellido.", ".$results->[$i]->persona->getNombre,
-            categorycode => $results->[$i]->getCod_categoria,
-            calle => $results->[$i]->persona->getCalle,
-            version_documento => $results->[$i]->persona->getVersion_documento,
-            nro_documento => $results->[$i]->persona->getNro_documento,
-#             studentnumber => $results->[$i]{'studentnumber'},
-            ciudad => $results->[$i]->persona->getCiudad,
+            nro_socio => $socios->[$i]->getNro_socio,
+#             cardnumber => $socios->[$i]->persona->getNro_socio,
+            apellido => $socios->[$i]->persona->getApellido,
+            nombre => $socios->[$i]->persona->getNombre,
+            completo => $socios->[$i]->persona->getApellido.", ".$socios->[$i]->persona->getNombre,
+            categorycode => $socios->[$i]->getCod_categoria,
+            calle => $socios->[$i]->persona->getCalle,
+            version_documento => $socios->[$i]->persona->getVersion_documento,
+            nro_documento => $socios->[$i]->persona->getNro_documento,
+#             studentnumber => $socios->[$i]{'studentnumber'},
+            ciudad => $socios->[$i]->persona->getCiudad,
 #             odissue => "$od/$issue",
             issue => "$issue",
             od => "$od",
