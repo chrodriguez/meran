@@ -50,7 +50,7 @@ CREATE TABLE `usr_ref_categoria_socio` (
   `reservefee` decimal(28,6) default NULL,
   `borrowingdays` smallint(30) NOT NULL default '14',
   UNIQUE KEY `categorycode` (`categorycode`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=innodb DEFAULT CHARSET=latin1;
 
 -- 
 -- Volcar la base de datos para la tabla `categories`
