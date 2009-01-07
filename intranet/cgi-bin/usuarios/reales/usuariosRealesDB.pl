@@ -179,28 +179,26 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 									debug => 1,
 			    });
 
-	my $borrowernumber =$obj->{'borrowernumber'};
+	my $numero_socio =$obj->{'numero_socio'};
 
 	#Obtenemos los datos del borrower
-	my $datosBorrower_hashref= &C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
+	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
 
 	#se genera el combo de categorias de usuario
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($datosBorrower_hashref->{'categorycode'});
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($socio->cod_categoria);
 	
 	#se genera el combo de tipos de documento
-	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($datosBorrower_hashref->{'documenttype'});
+	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($socio->persona->tipo_documento);
 
 	#se genera el combo de las bibliotecas
-	my $comboDeUI= &C4::AR::Utilidades::generarComboUI($datosBorrower_hashref->{'branchcode'});
+	my $comboDeUI= &C4::AR::Utilidades::generarComboUI($socio->id_ui);
 
-	$t_params->{'document'}= $comboDeTipoDeDoc;
-	$t_params->{'catcodepopup'}= $comboDeCategorias;
-	$t_params->{'CGIbranch'}= $comboDeUI;
+	$t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
+	$t_params->{'comboDeCategorias'}= $comboDeCategorias;
+	$t_params->{'comboDeUI'}= $comboDeUI;
 	$t_params->{'changepassword'}= $datosBorrower_hashref->{'changepassword'};
-	$t_params->{'type'}= $datosBorrower_hashref->{'type'};
-	$t_params->{'physstreet'}= $datosBorrower_hashref->{'physstreet'};
-	$t_params->{'firstname'}= $datosBorrower_hashref->{'firstname'};
-	$t_params->{'surname'}= $datosBorrower_hashref->{'surname'};
+	$t_params->{'nombre'}= $socio->nombre;
+	$t_params->{'apellido'}= $socio->apellido;
 	$t_params->{'streetaddress'}= $datosBorrower_hashref->{'streetaddress'};
 	$t_params->{'zipcode'}= $datosBorrower_hashref->{'zipcode'};
 	$t_params->{'dstreetcity'}= $datosBorrower_hashref->{'streetcity'};

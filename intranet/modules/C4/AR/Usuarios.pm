@@ -887,14 +887,16 @@ sub getSocioInfo {
 
     my ($nro_socio) = @_;
 
-#     my  $socio = C4::Modelo::UsrSocio->new(id_socio => $nro_socio);
-#         $socio->load();
-      my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [
-                                                                   id_socio => {eq => $nro_socio }
-                                                                 ],
-                                                                  require_objects => [ 'persona' ]
-                                                                );
-    return (@$socio[0]);
+    my  $socio = C4::Modelo::UsrSocio->new(id_socio => $nro_socio);
+        $socio->load();
+    return ($socio);
+#       my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [
+#                                                                    id_socio => {eq => $nro_socio }
+#                                                                  ],
+#                                                                   require_objects => [ 'persona' ]
+#                                                                 );
+
+#     return (@$socio[0]);
 }
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
