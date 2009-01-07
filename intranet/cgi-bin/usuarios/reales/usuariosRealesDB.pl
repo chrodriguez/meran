@@ -189,7 +189,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $numero_socio =$obj->{'numero_socio'};
 
 	#Obtenemos los datos del borrower
-	my $socio= &C4::AR::Usuarios::getSocioInfo(1);
+	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
 
 	#se genera el combo de categorias de usuario
 	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($socio->cod_categoria);
