@@ -24,6 +24,26 @@ __PACKAGE__->meta->setup(
         id_estado          => { type => 'integer', not_null => 1 },
     ],
 
+#       foreign_keys =>
+#     [
+#       persona =>
+#       {
+#         class       => 'C4::Modelo::UsrPersona',
+#         key_columns => { id_persona => 'id_persona' },
+#         relationship_type => 'one to one',
+#       },
+#     ],
+
+     relationships =>
+    [
+      persona => 
+      {
+        class       => 'C4::Modelo::UsrPersona',
+        key_columns => { id_persona => 'id_persona' },
+        type        => 'one to one',
+      },
+    ],
+
     primary_key_columns => [ 'id_socio' ],
 
     unique_key => [ 'nro_socio' ],

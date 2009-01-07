@@ -40,6 +40,7 @@ use vars qw(@EXPORT @ISA);
 	&t_addPerson
 	&t_delPersons
 	&existeUsuario
+    &getSocioInfo
 );
 
 
@@ -876,6 +877,24 @@ sub getBorrowerInfo {
 	$sth->execute($borrowernumber);
 
 	return ($sth->fetchrow_hashref);
+}
+
+
+sub getSocioInfo {
+    
+    use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrSocio::Manager;
+
+    my ($nro_socio) = @_;
+
+#     my  $socio = C4::Modelo::UsrSocio->new(id_socio => $nro_socio);
+#         $socio->load();
+      my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [
+                                                                   id_socio => {eq => $nro_socio }
+                                                                 ],
+                                                                  require_objects => [ 'persona' ]
+                                                                );
+    return (@$socio[0]);
 }
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto

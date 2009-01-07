@@ -191,11 +191,11 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($datosBorrower_hashref->{'documenttype'});
 
 	#se genera el combo de las bibliotecas
-	my $comboDeBranches= &C4::AR::Utilidades::generarComboDeBranches($datosBorrower_hashref->{'branchcode'});
+	my $comboDeUI= &C4::AR::Utilidades::generarComboUI($datosBorrower_hashref->{'branchcode'});
 
 	$t_params->{'document'}= $comboDeTipoDeDoc;
 	$t_params->{'catcodepopup'}= $comboDeCategorias;
-	$t_params->{'CGIbranch'}= $comboDeBranches;
+	$t_params->{'CGIbranch'}= $comboDeUI;
 	$t_params->{'changepassword'}= $datosBorrower_hashref->{'changepassword'};
 	$t_params->{'type'}= $datosBorrower_hashref->{'type'};
 	$t_params->{'physstreet'}= $datosBorrower_hashref->{'physstreet'};
@@ -220,9 +220,6 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'addBorrower'}= 0;
 	$t_params->{'sex'}= $datosBorrower_hashref->{'sex'};
  	$t_params->{'dateformat'}= C4::Date::display_date_format($dateformat);
-	$t_params->{'top'}= "intranet-top.inc";
-	$t_params->{'menuInc'}= "menu.inc";
-	$t_params->{'themelang'}= '/intranet-tmpl/blue/es2/';
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
