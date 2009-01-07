@@ -16,7 +16,6 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
 
-	&ListadoDeUsuarios
 	&ListadoDePersonas
 	&esRegular
 	&estaSancionado
@@ -937,9 +936,9 @@ sub getSocioLike {
 
         $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                     query => [
-                                                apellido => { like => '%'.$socio.'%' },
+                                                apellido => { like => $socio.'%' },
                                             ],
-    #                                          sort_by => $orden,
+                                            sort_by => 't2.'.$orden,
                                             limit   => $cantR,
                                             offset  => $ini,
                                             require_objects => [ 'persona' ]
@@ -995,87 +994,6 @@ sub estaSancionado {
 
 	return $sancionado;
 }
-
-# Funcion que retorna un arreglo de hashes, con todos los datos de los usuarios (borrowers) que cumplen con el patrón de búsqueda.
-# Recibe como parámetro un string, que puede ser compuesto (varias palabras), además tambien recibe el tipo ($type), para ver si es busqueda simple ó compuesta.
-
-sub ListadoDeUsuarios  {
-	my ($searchstring,$type,$orden,$ini,$cantR,$inicial)=@_;
-	my $dbh = C4::Context->dbh;
-	my $count; 
-	my @data;
-	my @bind=();
-	my $queryCount = "	SELECT COUNT(*) 
-			FROM borrowers ";
-	my $querySearch = "	SELECT * 
-			FROM borrowers ";
-	my $where;
-
-	if ($type eq "simple")	# simple search for one letter only
-	{
-		$where=" WHERE surname LIKE ? ";
-		@bind=("%$searchstring%");
-	}
-	elsif ($type eq "advanced")	
-
-# advanced search looking in surname, firstname and othernames
-	{
-		@data=split(' ',$searchstring);
-                $count=@data;
-
-# FIXME VER CONSULTA, REPITE TODO :s
-                for (my $i=0;$i<$count;$i++){
-			if ($i == 0) {
-				$where=" WHERE (surname LIKE ?
-						OR  firstname LIKE ? 
-						OR  documentnumber  LIKE ?
-						OR  cardnumber LIKE ? 
-						OR  studentnumber LIKE ?)";
-			}
-			else
-		 	   {
-				$where.=" 	AND  (	surname LIKE ?
-							OR  firstname LIKE ? 
-							OR  documentnumber  LIKE ?
-							OR  cardnumber LIKE ? 
-							OR  studentnumber LIKE ?)";
-			   }
-	
-                	push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%");
-                }
-
-	}
-	elsif ($type eq "inicial")
-		{
-			if ($inicial eq "TODOS"){
-				$where = "WHERE TRUE";
-			}
-			else
-			   {
-				$where = "WHERE surname LIKE ?";
-				@bind = ($inicial."%");
-			   }
-		}
-
-
-	$queryCount.=$where;
-	$querySearch.=$where." ORDER BY ".$orden." LIMIT ?,?";
-	my $sth=$dbh->prepare($queryCount);
-	$sth->execute(@bind);
-	my $cnt= $sth->fetchrow;
-	$sth->finish;
-
-	my $sth=$dbh->prepare($querySearch);
-	$sth->execute(@bind,$ini,$cantR);
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-		push(@results,$data);
-	}
-	$sth->finish;
-
-	return ($cnt,\@results);
-}
-
 
 
 # Funcion que retorna un arreglo de hash, con todos los datos de los usuarios (persons) que cumplen con el patrón de búsqueda.

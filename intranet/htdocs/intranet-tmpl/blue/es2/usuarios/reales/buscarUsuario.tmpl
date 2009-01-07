@@ -16,26 +16,26 @@ function changePage(ini){
 
 function consultar(filtro){
 	objAH=new AjaxHelper(updateInfo);
-	busqueda = jQuery.trim($('#member').val());
+	busqueda = jQuery.trim($('#socio').val());
 	inicial = '0';
 	if (filtro){
 		inicial = filtro;
 		busqueda = jQuery.trim(filtro);
 		objAH.inicial= inicial;
-		$('#member').val("filtro: "+filtro);
+		$('#socio').val("filtro: "+filtro);
 	}
 	else
 	   {
 		if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
 				busqueda = busqueda.substr(8,5);
-				$('#member').val(busqueda);
+				$('#socio').val(busqueda);
 				consultar(busqueda);
 		}
 		else
 		   {
 			if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
 				busqueda = busqueda.substr(8,1);
-				$('#member').val(busqueda);
+				$('#socio').val(busqueda);
 				consultar(busqueda);
 			}
 		   }
@@ -48,12 +48,12 @@ function consultar(filtro){
 	if(busqueda.length > 0){
 		objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
 		objAH.funcion= 'changePage';
-		objAH.member= busqueda;
+		objAH.socio= busqueda;
 		objAH.sendToServer();
 	}
 	else{
 		alert("Ingrese un dato");
-		$('#member').focus();
+		$('#socio').focus();
 	}
 
 }
@@ -64,29 +64,29 @@ function updateInfo(responseText){
 }
 
 function Borrar(){
-	$('#member').val('');
+	$('#socio').val('');
 }
 
 function checkFilter(eventType){
-	var str = $('#member').val();
+	var str = $('#socio').val();
 	
 	if (eventType.toUpperCase() == 'FOCUS'){
 
 		if (str.substr(0,6).toUpperCase() == 'FILTRO'){
-			globalSearchTemp = $('#member').val();
+			globalSearchTemp = $('#socio').val();
 			Borrar();
 		}
 	}
 	else
 	   {
-		if (jQuery.trim($('#member').val()) == "")
-			$('#member').val(globalSearchTemp);
+		if (jQuery.trim($('#socio').val()) == "")
+			$('#socio').val(globalSearchTemp);
 	   }
 }
 
 $(document).ready(function() {
 	//onEnter con foco en input, ejecuta la busqueda
-	onEnter("member",consultar);
+	onEnter("socio",consultar);
 });
 
 </script>
@@ -109,7 +109,8 @@ $(document).ready(function() {
 <table>
 	<tr>
  		<td>
-			<input id="member" class="inputFontNormal" type=text name="member" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')" value="[% member %]">
+			<input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
+                onBlur="checkFilter('blur')" value="[% socio %]">
 		</td>
  		<td>
 			<input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
