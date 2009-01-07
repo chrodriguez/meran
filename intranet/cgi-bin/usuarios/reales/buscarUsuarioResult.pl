@@ -11,7 +11,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 
-my ($template, $session, $params)= get_template_and_user({
+my ($template, $session, $t_params, $cookie)= get_template_and_user({
 								template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
 								query => $input,
 								type => "intranet",
@@ -46,7 +46,7 @@ elsif($member ne ""){
 }
 
 
-C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$params);
+C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my @resultsdata;
 for (my $i=0; $i < $cantR; $i++){
@@ -87,8 +87,8 @@ for (my $i=0; $i < $cantR; $i++){
      }
 }
 
-$params->{'resultsloop'}= \@resultsdata;
-$params->{'member'}= $member;
-$params->{'cantidad'}= $cantidad;
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'member'}= $member;
+$t_params->{'cantidad'}= $cantidad;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
