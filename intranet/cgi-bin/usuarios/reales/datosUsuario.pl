@@ -16,14 +16,13 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 
 
 
-my $bornum=$input->param('bornum');
-my $completo=$input->param('completo');
+my $id_socio= $input->param('id_socio');
+# my $completo=$input->param('completo');
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 
+my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
 
-$t_params->{'bornum'}= $bornum;
-
-$t_params->{'completo'} = $completo;
-
+$t_params->{'nro_socio'}= $socio->getNro_socio;
+$t_params->{'completo'} = $socio->persona->getApellido.', '.$socio->persona->getNombre;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

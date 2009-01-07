@@ -52,7 +52,7 @@ function updateMostrarHistorialDePrestamos(responseText){
 //************************************Para manejar la circulacion**********************************************
 
 function openPopup() {
-	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&bornum=[% bornum %]','[% "Prestamos interbibliotecarios" | i18n %]','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
+	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&nro_socio=[% nro_socio %]','[% "Prestamos interbibliotecarios" | i18n %]','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
 }
 
 //REDEFINIDO, se encuentra en circulacion.js
@@ -127,7 +127,7 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "uploadPicture.pl",
-						bornum: usuario.ID,
+						nro_socio: usuario.ID,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
 // 									var responseText= $('#responseText').html();
@@ -180,7 +180,7 @@ $(document).ready(function() {
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
 	usuario.text= "[% completo %]";
-	usuario.ID= "[% bornum %]";
+	usuario.ID= "[% nro_socio %]";
 
 	detalleUsuario(usuario.ID);
 	detallePrestamos(usuario.ID);

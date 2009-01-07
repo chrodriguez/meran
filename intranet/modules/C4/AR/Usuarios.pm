@@ -922,18 +922,12 @@ sub getSocioInfo {
     use C4::Modelo::UsrSocio;
     use C4::Modelo::UsrSocio::Manager;
 
-    my ($nro_socio) = @_;
+    my ($id_socio) = @_;
 
-    my  $socio = C4::Modelo::UsrSocio->new(id_socio => $nro_socio);
+    my  $socio = C4::Modelo::UsrSocio->new(id_socio => $id_socio);
         $socio->load();
-    return ($socio);
-#       my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [
-#                                                                    id_socio => {eq => $nro_socio }
-#                                                                  ],
-#                                                                   require_objects => [ 'persona' ]
-#                                                                 );
 
-#     return (@$socio[0]);
+    return ($socio);
 }
 
 sub getSocioLike {
