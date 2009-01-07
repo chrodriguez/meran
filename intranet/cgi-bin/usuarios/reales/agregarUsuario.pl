@@ -18,12 +18,10 @@ my ($template, $session, $t_params) = get_template_and_user({
                 });
 
 my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
-
 my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
-
 my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
 
-$t_params->{'document'}= $comboDeTipoDeDoc;
+$t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
 $t_params->{'comboDeCategorias'}=$comboDeCategorias;
 $t_params->{'comboDeUI'}= $comboDeUI;
 $t_params->{'addBorrower'}= 1;

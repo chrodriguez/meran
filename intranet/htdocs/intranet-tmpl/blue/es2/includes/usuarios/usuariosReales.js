@@ -178,7 +178,8 @@ function agregarUsuario(){
     objAH.email= $('#email').val();
     objAH.telefono= $('#telefono').val();
     objAH.cod_categoria= $('#cod_categoria').val();
-    objAH.ciudad= $('#ciudad').val();
+    objAH.ciudad= $('#id_ciudad').val();
+    objAH.alt_ciudad= $('#id_alt_ciudad').val();
     objAH.alt_telefono= $('#alt_telefono').val();
     objAH.apellido= $('#apellido').val();
     objAH.id_ui= $('#id_ui').val();

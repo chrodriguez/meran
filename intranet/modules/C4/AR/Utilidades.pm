@@ -1227,37 +1227,32 @@ sub generarComboTipoDeDoc {
 
     my ($tipoActual)=@_;
     my ($docDefault);
-    my @select_doc;
+    my @select_docs_array;
     my %select_docs;
-    my @docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
-#     
-#     foreach my $doc (@docs) {
-#         push(@select_doc,$doc->nombre);
-#         $select_docs{$doc->id_tipo_documento} = $doc->id_tipo_documento;
-#         $select_docs{$doc->nombre} = $doc->nombre;
-#     }
+    my $docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
+    
+    foreach my $doc (@$docs) {
+        push(@select_docs_array, $doc->id_tipo_documento);
+        $select_docs{$doc->id_tipo_documento}= $doc->nombre;
+    }
 
     #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR TIPO DE DOC. ASIGNADO, SINO SE TOMA 'DNI'
     if ($tipoActual ne ""){
         $docDefault= $tipoActual;
-    }
-    else
-    {
+    }else{
         $docDefault= 'DNI';
     }
 
-    
-
-    my $documents=CGI::scrolling_list(  -name     => 'tipo_documento',
-                        -id => 'tipo_documento',
-                        -values   => \@select_doc,
-                        -defaults  => $docDefault, 
-                        -labels   => \%select_docs,
-                        -size     => 1,
-                        -multiple => 0 
+    my $combo_tipo_documento=CGI::scrolling_list(   -name     => 'tipo_documento',
+                                                    -id => 'tipo_documento',
+                                                    -values   => \@select_docs_array,
+                                                    -defaults  => $docDefault, 
+                                                    -labels   => \%select_docs,
+                                                    -size     => 1,
+                                                    -multiple => 0 
                     );
 
-    return $documents; 
+    return $combo_tipo_documento; 
 }
 
 
@@ -1289,12 +1284,12 @@ sub generarComboUI {
     
 
     my $CGIunidadDeInformacion=CGI::scrolling_list(     -name     => 'id_ui',
-                        -id => 'id_ui',
-                        -values   => \@select_ui,
-                        -defaults  => $uidefecto, 
-                        -labels   => \%select_ui,
-                        -size     => 1,
-                        -multiple => 0 
+                                                        -id => 'id_ui',
+                                                        -values   => \@select_ui,
+                                                        -defaults  => $uidefecto, 
+                                                        -labels   => \%select_ui,
+                                                        -size     => 1,
+                                                        -multiple => 0 
                 );
 
     return $CGIunidadDeInformacion; 

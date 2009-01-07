@@ -30,12 +30,9 @@ use JSON;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-    &obtenerTiposDeDocumentos
+                &obtenerTiposDeDocumentos
     );
 
-
-sub obtenerTiposDeDocumentos {
-    package C4::AR::Referencias;
 
 #Este modulo provee funcionalidades varias sobre las tablas de referencias en general
 #Escrito el 8/9/2006 por einar@info.unlp.edu.ar
@@ -74,21 +71,14 @@ use vars qw(@EXPORT @ISA);
 
 
 sub obtenerTiposDeDocumentos {
-
-
-
     my $tiposDoc = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento;
     my @results;
+
     foreach my $tipo_doc (@$tiposDoc) {
-        print $tipo_doc->nombre;
         push (@results, $tipo_doc);
     }
-    return(@results);
-        
-}
 
-1;
-
+    return(\@results);
 }
 
 1;

@@ -223,17 +223,18 @@ sub agregarPersona{
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     $params->{'iniciales'} = "DGR";
-    #genero un estado de ALTA para la persona
+    #genero un estado de ALTA para la persona para una fuente de informacion
     my ($estado) = C4::Modelo::UsrEstado->new();
+    $person->agregar($params);
+
     my $paramsEstado;
     $paramsEstado->{'id_persona'} = $person->getId_persona;
     $paramsEstado->{'fuente'} = $params->{'id_ui'};
     $paramsEstado->{'regular'} = 1;
     $paramsEstado->{'categoria'} = $params->{'cod_categoria'};
     $estado->agregar($paramsEstado);
-## FIXME ciudad
-    $params->{'ciudad'} = 1;
-    $person->agregar($params);
+
+    $params->{'id_estado'}= $estado->getId_estado;
     $person->convertirEnSocio($params);
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$person->getApellido]});

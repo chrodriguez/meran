@@ -19,7 +19,7 @@ __PACKAGE__->meta->setup
         fuente         => { type => 'varchar', length => 255, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'id_persona' ],
+    primary_key_columns => [ 'id_estado' ],
 );
 
 

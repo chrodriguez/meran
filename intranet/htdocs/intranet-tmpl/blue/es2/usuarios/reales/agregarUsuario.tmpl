@@ -23,7 +23,7 @@ function getId(IdObj, id){
     $('#'+IdObj).val(id);
 }
     
-function CrearAutocomplete(Id){
+function CrearAutocomplete(Id, IdHidden){
     $("#"+Id).search();
     // q= valor de campoHelp
     $("#"+Id).autocomplete('/cgi-bin/koha/autocompletables/searchcity.pl',{
@@ -39,15 +39,15 @@ function CrearAutocomplete(Id){
     });//end autocomplete
     $("#"+Id).result(function(event, data, formatted) {
         $("#"+Id).val(data[1]);
-        getId(Id, data[0])
+        getId(IdHidden, data[0])
     });
 }
 
 
 $(document).ready(function() {
         
-    CrearAutocomplete('ciudad');
-    CrearAutocomplete('alt_ciudad');
+    CrearAutocomplete('ciudad', 'id_ciudad');
+    CrearAutocomplete('alt_ciudad', 'id_alt_ciudad');
 
     $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
 });
@@ -145,7 +145,7 @@ $(document).ready(function() {
     <tr>
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
-                    [% document %]
+                    [% combo_tipo_documento %]
             <input id="nro_documento" class="inputFontNormal" type=text size=41 value="[% nro_documento %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
