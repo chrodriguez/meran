@@ -31,6 +31,7 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
                 &obtenerTiposDeDocumentos
+                &obtenerCategoriaDeSocio
     );
 
 
@@ -61,6 +62,8 @@ use Date::Manip;
 use C4::Date;
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
+use C4::Modelo::UsrRefCategoriasSocio;
+use C4::Modelo::UsrRefCategoriasSocio::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
@@ -79,6 +82,20 @@ sub obtenerTiposDeDocumentos {
 
     foreach my $tipo_doc (@$tiposDoc) {
         push (@results, $tipo_doc);
+    }
+
+    return(\@results);
+}
+
+=item
+Esta funcion devuelve un arreglo de objetos de categorias de socios
+=cut
+sub obtenerCategoriaDeSocio {
+    my $categorias_array_ref = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio;
+    my @results;
+
+    foreach my $objeto_categoria (@$categorias_array_ref) {
+        push (@results, $objeto_categoria);
     }
 
     return(\@results);

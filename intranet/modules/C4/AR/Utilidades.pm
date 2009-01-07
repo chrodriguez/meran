@@ -1200,6 +1200,8 @@ sub generarComboCategorias{
     my ($selectedCategory) = @_;
     my($catDefault);
     
+    my @select_categorias_array;
+    my %select_categorias_hash;
     #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR LA CATEGORIA ASIGNADA, SINO SE TOMA 'DO'
     if ($selectedCategory ne ""){
         $catDefault= $selectedCategory;
@@ -1208,15 +1210,20 @@ sub generarComboCategorias{
     {
         $catDefault= 'DO';
     }
-    my ($categories,$labels)=C4::AR::Usuarios::obtenerCategorias();
+
+    my ($categorias_array_ref)= &C4::AR::Referencias::obtenerCategoriaDeSocio();
+    foreach my $categoria (@$categorias_array_ref) {
+        push(@select_categorias_array, $categoria->getCategory_code);
+        $select_categorias_hash{$categoria->getCategory_code}= $categoria->description;
+    }
 
     my $comboDeCategorias = &CGI::scrolling_list(
-                        -name=>'cod_categoria',
-                        -id => 'cod_categoria',
-                        -values=>$categories,
-                        -defaults=>$catDefault,
-                        -labels=>$labels,
-                        -size =>1
+                                                    -name=>'cod_categoria',
+                                                    -id => 'cod_categoria',
+                                                    -values=> \@select_categorias_array,
+                                                    -defaults=> $catDefault,
+                                                    -labels=> \%select_categorias_hash,
+                                                    -size =>1
                 );
 
     return $comboDeCategorias;
@@ -1259,7 +1266,7 @@ sub generarComboTipoDeDoc {
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI {
     my ($ui_code) = @_;
-#   my @unidades_de_informacion;
+
     my @select_ui;
     my %select_ui;
     my $unidades_de_informacion=C4::AR::Busquedas::getBranches();

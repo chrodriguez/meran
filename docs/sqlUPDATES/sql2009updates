@@ -31,3 +31,38 @@ RENAME TABLE userflags TO usr_permiso;
 RENAME TABLE sessions TO sist_sesion;
 RENAME TABLE systempreferences TO pref_preferencia_sistema;
 --
+
+
+NO RENOMBRE LA TABLA CATEGORIES PARA NO ROMPER TODO, SE EXPORTO LA INFO Y SE MODIFICO EL NOMBRE DE LA TABLA
+HAY 2 TABLAS AHORA, MAS ADELANTE SE ELIMINA CATEGORIES
+
+CREATE TABLE `usr_ref_categoria_socio` (
+  `categorycode` char(2) NOT NULL default '',
+  `description` text,
+  `enrolmentperiod` smallint(6) default NULL,
+  `upperagelimit` smallint(6) default NULL,
+  `dateofbirthrequired` tinyint(1) default NULL,
+  `finetype` varchar(30) default NULL,
+  `bulk` tinyint(1) default NULL,
+  `enrolmentfee` decimal(28,6) default NULL,
+  `overduenoticerequired` tinyint(1) default NULL,
+  `issuelimit` smallint(6) default NULL,
+  `reservefee` decimal(28,6) default NULL,
+  `borrowingdays` smallint(30) NOT NULL default '14',
+  UNIQUE KEY `categorycode` (`categorycode`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `categories`
+-- 
+
+INSERT INTO `usr_ref_categoria_socio` (`categorycode`, `description`, `enrolmentperiod`, `upperagelimit`, `dateofbirthrequired`, `finetype`, `bulk`, `enrolmentfee`, `overduenoticerequired`, `issuelimit`, `reservefee`, `borrowingdays`) VALUES 
+('ES', 'Estudiante', 0, 55, 18, NULL, NULL, 0.000000, 0, 0, 0.000000, 14),
+('IN', 'Investigador', 15, 100, 0, NULL, NULL, 0.000000, 0, 8, 0.000000, 14),
+('DO', 'Docente', 10, 80, 0, NULL, NULL, 0.000000, 1, 5, 0.000000, 14),
+('ND', 'No Docente', 10, 0, 0, NULL, NULL, 0.000000, 1, 3, 0.000000, 14),
+('EG', 'Egresado', 10, 0, 0, NULL, NULL, 0.000000, 1, 3, 0.000000, 14),
+('PG', 'Postgrado', NULL, 90, NULL, NULL, NULL, NULL, 1, 3, NULL, 14);
+
+ALTER TABLE `usr_ref_categoria_socio` ADD PRIMARY KEY ( `categorycode` ) ;
+
