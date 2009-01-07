@@ -237,7 +237,7 @@ sub agregarPersona{
     $params->{'id_estado'}= $estado->getId_estado;
     $person->convertirEnSocio($params);
 
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$person->getApellido]});
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
     return ($msg_object);
 

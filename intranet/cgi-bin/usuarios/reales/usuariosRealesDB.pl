@@ -12,14 +12,13 @@ use CGI;
 
 my $input = new CGI;
 
-
-
+my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1,{circulate=> 0},"intranet");
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-$loggedinuser=getborrowernumber($loggedinuser);
+# $loggedinuser=getborrowernumber($loggedinuser);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);

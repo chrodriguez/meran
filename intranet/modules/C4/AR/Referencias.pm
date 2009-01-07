@@ -61,15 +61,18 @@ use Date::Manip;
 use C4::Date;
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
-use JSON;
+# use JSON;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-    &obtenerTiposDeDocumentos
+            &obtenerTiposDeDocumentos
     );
 
 
+=item
+Esta funcion devuelve un arreglo de objetos tipo de documento
+=cut
 sub obtenerTiposDeDocumentos {
     my $tiposDoc = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento;
     my @results;
