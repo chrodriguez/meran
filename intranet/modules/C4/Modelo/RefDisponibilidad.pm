@@ -8,12 +8,41 @@ __PACKAGE__->meta->setup(
     table   => 'ref_disponibilidad',
 
     columns => [
-        code        => { type => 'integer', not_null => 1 },
-        description => { type => 'varchar', default => '', length => 30, not_null => 1 },
+        codigo => { type => 'integer', not_null => 1 },
+        nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'code' ],
+    primary_key_columns => [ 'codigo' ],
+    unique_key => [ 'nombre' ],
 );
+
+sub getCodigo{
+    my ($self) = shift;
+
+    return ($self->codigo);
+}
+    
+sub setCodigo{
+    my ($self) = shift;
+    my ($codigo) = @_;
+
+    $self->codigo($codigo);
+}
+    
+
+sub getNombre{
+    my ($self) = shift;
+
+    return ($self->nombre);
+}
+    
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+
+    $self->nombre($nombre);
+}
+    
 
 1;
 

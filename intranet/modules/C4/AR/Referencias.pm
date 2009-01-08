@@ -66,6 +66,8 @@ use C4::Modelo::UsrRefCategoriasSocio;
 use C4::Modelo::UsrRefCategoriasSocio::Manager;
 use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::PrefUnidadInformacion::Manager;
+use C4::Modelo::RefDisponibilidad;
+use C4::Modelo::RefDisponibilidad::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
@@ -112,6 +114,20 @@ sub obtenerUnidadesDeInformacion {
 
     foreach my $objeto_ui (@$unidades_array_ref) {
         push (@results, $objeto_ui);
+    }
+
+    return(\@results);
+}
+
+=item
+Devuelve un arreglo de objetos Unidades de Informacion
+=cut
+sub obtenerDisponibilidades {
+    my $disponibilidades_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad;
+    my @results;
+
+    foreach my $objeto_disponibilidad (@$disponibilidades_array_ref) {
+        push (@results, $objeto_disponibilidad);
     }
 
     return(\@results);

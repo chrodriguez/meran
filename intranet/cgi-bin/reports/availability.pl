@@ -27,7 +27,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params) = get_template_and_user({
+my ($template, $session, $t_params, $cookie) = get_template_and_user({
 								template_name => "reports/availability.tmpl",
 								query => $input,
 								type => "intranet",
@@ -36,43 +36,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 								debug => 1,
 			    });
 
-# #Por los braches
-# my @branches;
-# my @select_branch;
-# my %select_branches;
-# my $branches=C4::AR::Busquedas::getBranches();
-# 
-# foreach my $branch (keys %$branches) {
-#         push @select_branch, $branch;
-#         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-# }
-
 my  $ui= $input->param('ui') || C4::Context->preference("defaultUI");
 
 my $ComboUI=C4::AR::Utilidades::generarComboUI();
+my $ComboDisponibilidad=C4::AR::Utilidades::generarComboDeDisponibilidad();
 
-
-
-## FIXME usar la fuuncion q genera el combo, esto no va mas
-## Scroll de disponibilidades
-my %availlabels;
-my @availtypes;
-my $avail;
-
- (%availlabels) = C4::AR::Busquedas::getAvails();
-        foreach my $aux ( sort { $availlabels{$a} cmp $availlabels{$b} } keys(%availlabels)){
-        push(@availtypes,$aux);}
-        my $Cavails=CGI::scrolling_list(-name      => 'avail',
-                                        -id        => 'avail',
-                                        -values    => \@availtypes,
-                                        -defaults => $avail,
-                                        -labels    => \%availlabels,
-                                        -size      => 1,
-                                        -multiple  => 0,
-                                 );
-
-
-$t_params->{'Cavails'}= $Cavails;
+$t_params->{'disponibilidades'}= $ComboDisponibilidad;
 $t_params->{'unidades'}= $ComboUI;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

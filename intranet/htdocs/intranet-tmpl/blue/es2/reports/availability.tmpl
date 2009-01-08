@@ -30,11 +30,12 @@ function updateInfo(responseText){
 
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/reports/availabilityResult.pl";
 	objAH.ui=$("#ui_id").val();
 	objAH.fechaIni=$("#fechaIni").val();
 	objAH.fechaFin=$("#fechaFin").val();
-	objAH.avail=$("#avail").val();
+	objAH.disponibilidad=$("#disponibilidad_id").val();
 	objAH.funcion= "changePage";
 	objAH.sendToServer();
 }
@@ -53,7 +54,7 @@ function consultar(){
 	<tr>
 	  	<td class=inputFontNormal>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
 	  	<td  class=inputFontNormal> [% unidades %]</td>
-	  	<td  class=inputFontNormal>[% Cavails %]</td>
+	  	<td  class=inputFontNormal>[% disponibilidades %]</td>
 	</tr>
 
 	<tr>

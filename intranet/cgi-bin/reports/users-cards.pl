@@ -10,6 +10,8 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
+#se verifican los permisos
+&C4::Auth::checkauth($input,0,{borrowers => 1},"intranet");
 my $op=$input->param('op');
 
 if ($op eq 'pdf') {
@@ -35,7 +37,7 @@ my @results=();
 else
 {
 
-my ($template, $session, $t_params) = get_template_and_user({
+my ($template, $session, $t_params, $cookie) = get_template_and_user({
                                                 template_name => "reports/users-cards.tmpl",
                                                 query => $input,
                                                 type => "intranet",
@@ -43,48 +45,14 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                 flagsrequired => {borrowers => 1},
                                                 debug => 1,
 			    });
-#Por los branches
-
-# #Por los braches
-# my @branches;
-# my @select_branch;
-# my %select_branches;
-# my $branches=C4::AR::Busquedas::getBranches();
-# foreach my $branch (keys %$branches) {
-#         push @select_branch, $branch;
-#         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-# }
-# 
-# my $branch= C4::Context->preference('defaultbranch');
-# 
-# my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-#                                         -id        => 'branch',
-#                                         -values    => \@select_branch,
-# 					-defaults  => $branch,
-#                                         -labels    => \%select_branches,
-#                                         -size      => 1,
-#                                  );
-# 
-# #Fin: Por los branches
-
 
 my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 
 my $ComboUI=C4::AR::Utilidades::generarComboUI();
 
-
-## FIXME user la funcion q genera el combo, asi no va
-my ($select_category,$select_categories)=C4::AR::Usuarios::obtenerCategorias();
-
-push @$select_category, 'Todos';
-
-my $CGIcategories=CGI::scrolling_list(  -name      => 'category',
-                                        -id        => 'category',
-                                        -values    => $select_category,
-					-defaults  => 'Todos',
-                                        -labels    => $select_categories,
-                                        -size      => 1,
-                                 );
+my %params;
+$params{'default'}= 'SIN SELECCIONAR';
+my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
 
 ## FIXME user la funcion q genera el combo, asi no va
@@ -107,9 +75,9 @@ my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
 					);
 
 $t_params->{'unidades'}= $ComboUI;
-$t_params->{'categories'}= $CGIcategories;
+$t_params->{'categories'}= $comboCategoriasDeSocio;
 $t_params->{'regulares'}=$CGIregular;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
 }

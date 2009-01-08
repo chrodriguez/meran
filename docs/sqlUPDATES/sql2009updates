@@ -126,4 +126,34 @@ VALUES (
 'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', NULL , NULL
 ); 
 
+<<<<<<< .mine
 
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultDisponibilidad', 'ES', 'Disponibilidad por defecto', NULL , NULL
+); 
+
+
+
+CREATE TABLE `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `ref_disponibilidad`
+-- 
+
+INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES 
+(1, 'Perdido'),
+(2, 'Compartido'),
+(4, 'Baja'),
+(5, 'Ejemplar deteriorado'),
+(6, 'En Encuadernación'),
+(0, 'Disponible');
+
+=======
+
+>>>>>>> .r907

@@ -12,7 +12,7 @@
 				};
 
 function hacerSubmit(){
-        document.branches.submit();
+        document.unidadInformacion.submit();
         }
 </script>
 
@@ -23,7 +23,7 @@ function hacerSubmit(){
 <center>
 <br>
 <br>
-<form name="branches" action=/cgi-bin/koha/reports/avail_year.pl method=post >
+<form name="unidadInformacion" action=/cgi-bin/koha/reports/avail_year.pl method=post >
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
 <tr>
 <td class="inputFontNormal">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
@@ -49,7 +49,7 @@ function hacerSubmit(){
 		</a>
 </td>
 <td class="inputFontNormal"> 
-	<input type="image" name="consulta" onClick="branches.submit()" src="[% themelang %]/images/generarListado.png">
+	<input type="image" name="consulta" onClick="unidadInformacion.submit()" src="[% themelang %]/images/generarListado.png">
 </td>	
    </tr>
 <tr><td colspan="3">&nbsp;</td></tr>

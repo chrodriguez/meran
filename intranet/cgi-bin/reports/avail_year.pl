@@ -37,28 +37,11 @@ my ($template, $session, $t_params)= get_template_and_user({
 								debug => 1,
 			     });
 
+my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 
-#Por los branches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=C4::AR::Busquedas::getBranches();
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
-
-my $branch= C4::Context->preference('defaultbranch');
-           
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-                                        -defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                        -onChange  =>'hacerSubmit()'
-                                 );
-#Fin: Por los branches
+my %params;
+$params{'onChange'}= 'hacerSubmit()';
+my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
 
 #Fechas
 my $ini='';
@@ -67,14 +50,14 @@ if($input->param('ini')){$ini=$input->param('ini');}
 if($input->param('fin')){$fin=$input->param('fin');}
 #
 
-my ($cantidad,@resultsdata)= availYear($branch,$ini,$fin); 
+my ($cantidad,@resultsdata)= availYear($ui,$ini,$fin); 
 
 my $dateformat = C4::Date::get_date_format();
 
 $t_params->{'resultsloop'}=\@resultsdata;
-$t_params->{'unidades'}=$CGIbranch;
 $t_params->{'cantidad'}=$cantidad;
-$t_params->{'branch'}=$branch;
+$t_params->{'unidades'}= $ComboUI;
+$t_params->{'ui'}=$ui;
 $t_params->{'ini'}=$ini;
 $t_params->{'fin'}=$fin;
 $t_params->{'namepng'}=&format_date_in_iso($ini,$dateformat).&format_date_in_iso($fin,$dateformat);

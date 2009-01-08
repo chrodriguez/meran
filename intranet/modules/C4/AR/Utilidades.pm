@@ -1194,6 +1194,41 @@ sub validateString{
 
 
 #********************************************************Generacion de Combos****************************************************
+
+sub generarComboDeDisponibilidad{
+
+    my ($params) = @_;
+    
+    my @select_disponibilidades_array;
+    my %select_disponibilidades_hash;
+
+    my ($disponibilidades_array_ref)= &C4::AR::Referencias::obtenerDisponibilidades();
+    foreach my $disponibilidad (@$disponibilidades_array_ref) {
+        push(@select_disponibilidades_array, $disponibilidad->getCodigo);
+        $select_disponibilidades_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
+    }
+
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
+
+    $options_hash{'name'}= 'disponibilidad_name';
+    $options_hash{'id'}= 'disponibilidad_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultDisponibilidad");
+
+    push (@select_disponibilidades_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_disponibilidades_array;
+    $options_hash{'labels'}= \%select_disponibilidades_hash;
+
+    my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
+
+    return $comboDeDisponibilidades;
+}
+
 #GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboCategoriasDeSocio{
 
@@ -1214,8 +1249,8 @@ sub generarComboCategoriasDeSocio{
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'tipo_documento_name';
-    $options_hash{'id'}= 'tipo_documento_id';
+    $options_hash{'name'}= 'categoria_socio_name';
+    $options_hash{'id'}= 'categoria_socio_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultCategoriaSocio");

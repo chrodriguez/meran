@@ -24,23 +24,23 @@ my $orden = $obj->{'orden'}||'date';
 my $ini =$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $ui = $obj->{'ui'};
-my $avail=$obj->{'avail'}||1;
+my $disponibilidad= $obj->{'disponibilidad'}||1;
 my $fechaIni=$obj->{'fechaIni'};
 my $fechaFin=$obj->{'fechaFin'};
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
-my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($ui,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR);
+my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($ui,$orden,$disponibilidad,$fechaIni,$fechaFin,$ini,$cantR);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $availD;
-if ($avail eq 0){
+if ($disponibilidad eq 0){
 	$availD='Disponible';
 }
 else{
-	my $av=C4::AR::Busquedas::getAvail($avail);
+	my $av=C4::AR::Busquedas::getAvail($disponibilidad);
 	if ($av){$availD=$av->{'description'};}
 }
 
@@ -48,7 +48,7 @@ $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'ui'}= $ui;
 $t_params->{'orden'}= $orden;
-$t_params->{'avail'}= $avail;
+$t_params->{'disponibilidad'}= $disponibilidad;
 $t_params->{'availD'}= $availD;
 $t_params->{'fechaIni'}= $fechaIni;
 $t_params->{'fechaFin'}= $fechaFin;
