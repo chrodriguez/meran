@@ -192,7 +192,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
 
 	#se genera el combo de categorias de usuario
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias($socio->cod_categoria);
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio($socio->cod_categoria);
 	
 	#se genera el combo de tipos de documento
 	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($socio->persona->tipo_documento);

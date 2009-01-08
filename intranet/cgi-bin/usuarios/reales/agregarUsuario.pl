@@ -17,7 +17,7 @@ my ($template, $session, $t_params, $cookie) = get_template_and_user({
                                                                     debug => 1,
                 });
 
-my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategorias();
+my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
 my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc();
 my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
 

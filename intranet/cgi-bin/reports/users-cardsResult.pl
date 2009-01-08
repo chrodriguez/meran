@@ -8,6 +8,17 @@ use CGI;
 
 my $input = new CGI;
 
+
+my ($template, $session, $t_params, $cookie) = get_template_and_user({
+                                                template_name => "reports/users-cardsResult.tmpl",
+                                                query => $input,
+                                                type => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired => {borrowers => 1},
+                                                debug => 1,
+                });
+
+
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'surname';
 my $op=$obj->{'op'};
@@ -17,28 +28,18 @@ my $legajo1=$obj->{'legajo1'};
 my $legajo2=$obj->{'legajo2'};
 my $category=$obj->{'category'};
 my $regular=$obj->{'regular'};
-my $branch=$obj->{'branch'};
+my $ui=$obj->{'ui'};
 my $count=0;
 my @results=();
 
 
 if ($op ne ''){
- ($count,@results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2);
+ ($count,@results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$category,$ui,$orden,$regular,$legajo1,$legajo2);
 }
-
-
-my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/users-cardsResult.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
-			    });
 
 #Se realiza la busqueda si al algun campo no vacio
 $t_params->{'RESULTSLOOP'}=\@results;
 $t_params->{'cantidad'}=$count;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 

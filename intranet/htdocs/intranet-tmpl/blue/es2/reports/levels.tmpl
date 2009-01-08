@@ -3,7 +3,7 @@
 <script>
 [% INCLUDE "util.js" %]
 function hacerSubmit(){
-        document.branches.submit();
+        document.uinidadInformaciones.submit();
         }
 
 $(document).ready( function() {
@@ -15,7 +15,7 @@ $(document).ready( function() {
 <table border=0 cellspacing=0 cellpadding=2>
 	<th>Seleccione una unidad de informaci&oacute;n :</th>
 	<th>
-		<form name="branches" action="/cgi-bin/koha/reports/levels.pl" method=post >[% unidades %]
+		<form name="uinidadInformaciones" action="/cgi-bin/koha/reports/levels.pl" method=post >[% unidades %]
 		</form>
 	</th>
 </table>

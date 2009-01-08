@@ -36,24 +36,24 @@ my ($template, $session, $t_params) = get_template_and_user({
 								debug => 1,
 			    });
 
-#Por los braches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=C4::AR::Busquedas::getBranches();
+# #Por los braches
+# my @branches;
+# my @select_branch;
+# my %select_branches;
+# my $branches=C4::AR::Busquedas::getBranches();
+# 
+# foreach my $branch (keys %$branches) {
+#         push @select_branch, $branch;
+#         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
+# }
 
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
+my  $ui= $input->param('ui') || C4::Context->preference("defaultUI");
 
-my $branch = $input->param('branch');
+my $ComboUI=C4::AR::Utilidades::generarComboUI();
 
-my $CGIbranch=C4::AR::Utilidades::generarComboDeBranches();
 
-$t_params->{'unidades'}= $CGIbranch;
-$t_params->{'branch'}= $branch;
 
+## FIXME usar la fuuncion q genera el combo, esto no va mas
 ## Scroll de disponibilidades
 my %availlabels;
 my @availtypes;
@@ -73,5 +73,6 @@ my $avail;
 
 
 $t_params->{'Cavails'}= $Cavails;
+$t_params->{'unidades'}= $ComboUI;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -1,21 +1,23 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script>
-[% INCLUDE "util.js" %]
-function hacerSubmit(){
-        document.branches.submit();
-}
 
-$(document).ready( function() {
-		zebra("tablaResult");
-});
+[% INCLUDE "util.js" %]
+    function hacerSubmit(){
+            document.ui.submit();
+    }
+    
+    $(document).ready( function() {
+		    zebra("tablaResult");
+    });
+
 </script>
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 	<th>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</th>
 	<th>
-		<form name="branches" action=/cgi-bin/koha/reports/itemtypes.pl method=post >[% unidades %]
+		<form name="ui" action=/cgi-bin/koha/reports/itemtypes.pl method=post >[% unidades %]
 		</form>
 	</th>
 </table>

@@ -45,29 +45,35 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 #Por los branches
 
-#Por los braches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=C4::AR::Busquedas::getBranches();
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
+# #Por los braches
+# my @branches;
+# my @select_branch;
+# my %select_branches;
+# my $branches=C4::AR::Busquedas::getBranches();
+# foreach my $branch (keys %$branches) {
+#         push @select_branch, $branch;
+#         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
+# }
+# 
+# my $branch= C4::Context->preference('defaultbranch');
+# 
+# my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
+#                                         -id        => 'branch',
+#                                         -values    => \@select_branch,
+# 					-defaults  => $branch,
+#                                         -labels    => \%select_branches,
+#                                         -size      => 1,
+#                                  );
+# 
+# #Fin: Por los branches
 
-my $branch= C4::Context->preference('defaultbranch');
 
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-					-defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                 );
+my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 
-#Fin: Por los branches
+my $ComboUI=C4::AR::Utilidades::generarComboUI();
 
 
+## FIXME user la funcion q genera el combo, asi no va
 my ($select_category,$select_categories)=C4::AR::Usuarios::obtenerCategorias();
 
 push @$select_category, 'Todos';
@@ -81,6 +87,7 @@ my $CGIcategories=CGI::scrolling_list(  -name      => 'category',
                                  );
 
 
+## FIXME user la funcion q genera el combo, asi no va
 my @select_regular;
 my %select_regular;
 #Lleno los datos del select de regulares
@@ -99,7 +106,7 @@ my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
                                         -size      => 1,
 					);
 
-$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'unidades'}= $ComboUI;
 $t_params->{'categories'}= $CGIcategories;
 $t_params->{'regulares'}=$CGIregular;
 

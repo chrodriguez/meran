@@ -38,36 +38,20 @@ my ($template, $session, $t_params)
 			     });
 
 
-#Por los branches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=C4::AR::Busquedas::getBranches();
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
+my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 
-my $branch= C4::Context->preference('defaultbranch');
+my %params;
+$params{'onChange'}= 'hacerSubmit()';
+my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
 
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-                                        -defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                        -onChange  =>'hacerSubmit()'
-                                 );
-#Fin: Por los branches
-
-my ($cantidad,@resultsdata)= levelsReport($branch); 
-my $torta=&levelsPie($branch,$cantidad, @resultsdata);
-my $barras=&levelsHBars($branch,$cantidad, @resultsdata);
+my ($cantidad,@resultsdata)= levelsReport($ui); 
+my $torta=&levelsPie($ui,$cantidad, @resultsdata);
+my $barras=&levelsHBars($ui,$cantidad, @resultsdata);
 
 $t_params->{'resultsloop'}=\@resultsdata;
-$t_params->{'unidades'}=$CGIbranch;
+$t_params->{'unidades'}= $ComboUI;
 $t_params->{'cantidad'}=$cantidad;
-$t_params->{'branch'}=$branch;
+$t_params->{'ui'}= $ui;
 $t_params->{'barras'}=$barras;
 $t_params->{'torta'}=$torta;
 

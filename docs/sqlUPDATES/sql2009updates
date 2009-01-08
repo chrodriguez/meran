@@ -106,6 +106,26 @@ CHANGE `branchaddress1` `direccion`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE
 CHANGE `branchaddress2` `alt_direccion`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
 CHANGE `branchphone` `telefono`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
 
-ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` ) 
+ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` )
 
+
+-- Se creo una nueva preferencia, el 'defaultBranch' se conserva para que no se rompa nada, despues se borra
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultUI', 'DEO', 'Unidad de informacion por defecto', NULL , NULL
+); 
+
+
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultTipoDoc', 'DNI', 'Tipo de Documento por defecto', NULL , NULL
+); 
+
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', NULL , NULL
+); 
 

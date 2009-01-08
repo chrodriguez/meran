@@ -29,34 +29,35 @@ use C4::AR::Estadisticas;
 use C4::AR::Busquedas;
 
 my $input = new CGI;
-my  $orden=$input->param('orden');
-my  $op=$input->param('op');
-my  $barcode1=$input->param('barcode1');
-my  $barcode2=$input->param('barcode2');
-my  $bulk1=$input->param('bulk1');
-my  $bulk2=$input->param('bulk2');
-my  $bulkbegin=$input->param('bulkbegin');
 
-my  $branch=$input->param('branch');
+my ($template, $session, $t_params, $cookie) = get_template_and_user({
+                                                                template_name => "reports/book-labels.tmpl",
+                                                                query => $input,
+                                                                type => "intranet",
+                                                                authnotrequired => 0,
+                                                                flagsrequired => {borrowers => 1},
+                                                                debug => 1,
+			    });
+
+## FIXME ver que poner por defecto en los parametros de entrada
+my  $orden=$input->param('orden')||'algo';
+my  $op=$input->param('op')||'algo';
+my  $barcode1=$input->param('barcode1')||'algo';
+my  $barcode2=$input->param('barcode2')||'algo';
+my  $bulk1=$input->param('bulk1')||'algo';
+my  $bulk2=$input->param('bulk2')||'algo';
+my  $bulkbegin=$input->param('bulkbegin')||'algo';
+my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 my  $count=0;
 my  $cantidad=0;
 my  @results=();
-
-my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/book-labels.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
-			    });
 
 # FIXME VER COMO CIERRAN LOS IF... NO ME GUSTA COMO QUEDO
 
 if ($op eq 'pdf') {
 #HAY QUE GENERAR EL PDF CON LOS CARNETS
 
-        ($cantidad,@results)=                   listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$branch,1,"todos",$orden);
+        ($cantidad,@results)=  listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$ui,1,"todos",$orden);
         my $pdf = batchBookLabelGenerator($cantidad,@results);
 
 }
@@ -85,7 +86,7 @@ else{
             #FIN inicializacion
             
             
-            ($cantidad,@results)= listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$branch,$ini,$cantR,$orden);
+            ($cantidad,@results)= listaDeEjemplares($barcode1,$barcode2,$bulk1,$bulk2,$bulkbegin,$ui,$ini,$cantR,$orden);
             
             if ($cantR ne 'todos') {
                 my @numeros= armarPaginasPorRenglones($cantidad,$pageNumber,$cantR);
@@ -114,43 +115,21 @@ else{
         
            }
 
-
     
-    #Por los braches
-    my @branches;
-    my @select_branch;
-    my %select_branches;
-    my $branches=C4::AR::Busquedas::getBranches();
-    
-    foreach my $branch (keys %$branches) {
-            push @select_branch, $branch;
-            $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-    }
-    
-    my $branch= C4::Context->preference('defaultbranch');
-    
-    my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                            -id        => 'branch',
-                                            -values    => \@select_branch,
-                                            -defaults  => $branch,
-                                            -labels    => \%select_branches,
-                                            -size      => 1,
-                                    );
-    
-    #Fin: Por los branches
+    my $ComboUI=C4::AR::Utilidades::generarComboUI();
     
     if ($op eq 'search'){
     #Se realiza la busqueda si al algun campo no vacio
         $t_params->{'RESULTSLOOP'}=\@results;
     }
     
-    my $MINB=C4::Circulation::Circ2::getminbarcode($branch);
-    my $MAXB=C4::Circulation::Circ2::getmaxbarcode($branch);
-    my $MINS= signaturamax($branch);
-    my $MAXS= signaturamin($branch);
+    my $MINB=C4::Circulation::Circ2::getminbarcode($ui);
+    my $MAXB=C4::Circulation::Circ2::getmaxbarcode($ui);
+    my $MINS= signaturamax($ui);
+    my $MAXS= signaturamin($ui);
     $t_params->{'cantidad'}=$cantidad;
-    $t_params->{'unidades'}= $CGIbranch;
-    $t_params->{'branch'}= $branch;
+    $t_params->{'unidades'}= $ComboUI;
+    $t_params->{'ui'}= $ui;
     $t_params->{'orden'}= $orden;
     $t_params->{'barcode1'}= $barcode1;
     $t_params->{'barcode2'}= $barcode2;
@@ -163,6 +142,6 @@ else{
     $t_params->{'bulkbegin'}= $bulkbegin;
     
    } 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
    
 }

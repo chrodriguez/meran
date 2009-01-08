@@ -1195,21 +1195,12 @@ sub validateString{
 
 #********************************************************Generacion de Combos****************************************************
 #GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
-sub generarComboCategorias{
+sub generarComboCategoriasDeSocio{
 
-    my ($selectedCategory) = @_;
-    my($catDefault);
+    my ($params) = @_;
     
     my @select_categorias_array;
     my %select_categorias_hash;
-    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR LA CATEGORIA ASIGNADA, SINO SE TOMA 'DO'
-    if ($selectedCategory ne ""){
-        $catDefault= $selectedCategory;
-    }
-    else
-    {
-        $catDefault= 'DO';
-    }
 
     my ($categorias_array_ref)= &C4::AR::Referencias::obtenerCategoriaDeSocio();
     foreach my $categoria (@$categorias_array_ref) {
@@ -1217,14 +1208,23 @@ sub generarComboCategorias{
         $select_categorias_hash{$categoria->getCategory_code}= $categoria->description;
     }
 
-    my $comboDeCategorias = &CGI::scrolling_list(
-                                                    -name=>'cod_categoria',
-                                                    -id => 'cod_categoria',
-                                                    -values=> \@select_categorias_array,
-                                                    -defaults=> $catDefault,
-                                                    -labels=> \%select_categorias_hash,
-                                                    -size =>1
-                );
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
+
+    $options_hash{'name'}= 'tipo_documento_name';
+    $options_hash{'id'}= 'tipo_documento_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultCategoriaSocio");
+
+    push (@select_categorias_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_categorias_array;
+    $options_hash{'labels'}= \%select_categorias_hash;
+
+    my $comboDeCategorias= CGI::scrolling_list(\%options_hash);
 
     return $comboDeCategorias;
 }
@@ -1232,8 +1232,8 @@ sub generarComboCategorias{
 #GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboTipoDeDoc {
 
-    my ($tipoActual)=@_;
-    my ($docDefault);
+    my ($params)=@_;
+
     my @select_docs_array;
     my %select_docs;
     my $docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
@@ -1243,21 +1243,23 @@ sub generarComboTipoDeDoc {
         $select_docs{$doc->id_tipo_documento}= $doc->nombre;
     }
 
-    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR TIPO DE DOC. ASIGNADO, SINO SE TOMA 'DNI'
-    if ($tipoActual ne ""){
-        $docDefault= $tipoActual;
-    }else{
-        $docDefault= 'DNI';
-    }
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    my $combo_tipo_documento=CGI::scrolling_list(   -name     => 'tipo_documento',
-                                                    -id => 'tipo_documento',
-                                                    -values   => \@select_docs_array,
-                                                    -defaults  => $docDefault, 
-                                                    -labels   => \%select_docs,
-                                                    -size     => 1,
-                                                    -multiple => 0 
-                    );
+    $options_hash{'name'}= 'tipo_documento_name';
+    $options_hash{'id'}= 'tipo_documento_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultTipoDoc");
+
+    push (@select_docs_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_docs_array;
+    $options_hash{'labels'}= \%select_docs;
+
+    my $combo_tipo_documento= CGI::scrolling_list(\%options_hash);
 
     return $combo_tipo_documento; 
 }
@@ -1265,7 +1267,7 @@ sub generarComboTipoDeDoc {
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI {
-    my ($ui_code) = @_;
+    my ($params) = @_;
 
     my @select_ui;
     my %select_ui;
@@ -1277,29 +1279,23 @@ sub generarComboUI {
         $select_ui{$ui->id_ui}= $ui->nombre;
     }
 
-    my $uidefecto;
-    
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    #EN ESTE IF SE CHECKEA SI VINO EL PARAMETRO PARA SELECCIONAR EL BRANCH ASIGNADO, SINO SE TOMA LA DEFUALT 
-#   DEL SISTEMA
-    if ($ui_code ne ""){
-        $uidefecto= $ui_code;
-    }
-    else
-    {
-        $uidefecto= C4::Context->preference("defaultbranch");
-    }
+    $options_hash{'name'}= 'ui_name';
+    $options_hash{'id'}= 'ui_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultUI");
 
-    
+    push (@select_ui, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_ui;
+    $options_hash{'labels'}= \%select_ui;
 
-    my $CGIunidadDeInformacion=CGI::scrolling_list(     -name     => 'id_ui',
-                                                        -id => 'id_ui',
-                                                        -values   => \@select_ui,
-                                                        -defaults  => $uidefecto, 
-                                                        -labels   => \%select_ui,
-                                                        -size     => 1,
-                                                        -multiple => 0 
-                );
+    my $CGIunidadDeInformacion= CGI::scrolling_list(\%options_hash);
 
     return $CGIunidadDeInformacion; 
 }

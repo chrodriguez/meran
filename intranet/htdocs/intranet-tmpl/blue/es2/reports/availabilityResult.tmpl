@@ -24,9 +24,9 @@
 		<td class="tablaresultadoTitleClick" onClick="ordenar('anio_publicacion');" title=[% "Ordenar por a&ntilde;o de publicacion" | i18n %]>[% "A&ntilde;o de Publicaci&oacute;n" | i18n %]</td>
 		<td class="tablaresultadoTitleClick" onClick="ordenar('date');" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</a></th>
 
-		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
+		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH resultsloop %]
 	<tr align="center" class="inputFontNormal">
   		<td height=25>&nbsp;</td>
   		<td align="left"> [% autor %]</td>
@@ -42,21 +42,21 @@
 
 </table>
 <!--Botones del fondo -->
-<form name="branches" method="post">
+<form name="unidadInformacion" method="post">
 	<!-- Para poder imprimir bien los datos en la pagina y pdf -->
 	<input type="hidden" name="orden" value="[% orden %]">
 	<input type="hidden" name="avail" value="[% avail %]">
 	<input type="hidden" name="fechaIni" value="[% fechaIni %]">
 	<input type="hidden" name="fechaFin" value="[% fechaFin %]">
-	<input type="hidden" name="branch" value="[% branch %]">
+	<input type="hidden" name="ui" value="[% ui %]">
 
 	<input TYPE="hidden" VALUE="pdf" NAME="type" > 
 		<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_blank';branches.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
+		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_blank';uinidadInformacion.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
 		</a>
 
 		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/print.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %] src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
+		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_self'; uinidadInformacion.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %] src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
 		</a>
 <form>
 <br><br>

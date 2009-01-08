@@ -1,7 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 <script>
 function hacerSubmit(){
-        document.branches.submit();
+        document.unidadInformacion.submit();
 	        }
 		</script>
 
@@ -13,7 +13,7 @@ function hacerSubmit(){
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 	<td class="[% inputFontNormal %]" >[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</td>
-	<td><form name="branches" action=/cgi-bin/koha/reports/barcodes.pl method=post >
+	<td><form name="unidadInformacion" action=/cgi-bin/koha/reports/barcodes.pl method=post >
         [% unidades %]</form>
 	</td>
 </table>
@@ -27,7 +27,7 @@ function hacerSubmit(){
 		<td align="center">[% "M&aacute;ximo" | i18n %]</td>
 		<td align="right"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH resultsloop %]
   	<tr align="center">
 		<td class="[% clase %]">&nbsp;</td>
 	 	<td class="[% clase %]">[% tipo %]  </td>

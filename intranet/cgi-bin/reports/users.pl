@@ -1,25 +1,5 @@
 #!/usr/bin/perl
 
-
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-#
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -37,36 +17,18 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                 flagsrequired => {borrowers => 1},
                                                 debug => 1,
 			    });
-#Por los braches
-my @branches;
-my @select_branch;
-my %select_branches;
-my $branches=C4::AR::Busquedas::getBranches();
-foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-}
+
+my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
+my $ComboUI=C4::AR::Utilidades::generarComboUI();
 
 
-my  $branch=$input->param('branch');
-($branch ||(C4::Context->preference('defaultbranch') ));
-
-my $CGIbranch=CGI::scrolling_list(      -name      => 'branch',
-                                        -id        => 'branch',
-                                        -values    => \@select_branch,
-					-defaults  => $branch,
-                                        -labels    => \%select_branches,
-                                        -size      => 1,
-                                 );
-
-#Fin: Por los branches
-
+## FIXME estos combos no se deben generan mas asi, usar funcion q genera los combos
 #CATEGORIAS
 my ($valuesCateg,$labelsCateg)=C4::AR::Usuarios::obtenerCategorias();
 my $CGIcateg=CGI::scrolling_list(    -name      => 'categoria',
                                      -id        => 'categoria',
                                      -values    => $valuesCateg,
-				     -defaults  => $branch,
+# 				     -defaults  => $branch,
                                      -labels    => $labelsCateg,
                                      -size      => 1,
                                  );
@@ -85,7 +47,7 @@ my $years=CGI::scrolling_list(  -name      => 'year',
                                  );
 #fin a�os
 
-$t_params->{'unidades'}= $CGIbranch;
+$t_params->{'unidades'}= $ComboUI;
 $t_params->{'categorias'}= $CGIcateg;
 $t_params->{'years'}= $years;
 

@@ -108,7 +108,7 @@ while (my $res = $sth->fetchrow_hashref) {
 $sth->finish;
 
 # FIXME esta lista se puede armar con lo que se hizo???????
-my $CGIcategories=C4::AR::Utilidades::generarComboCategorias();
+my $CGIcategories=C4::AR::Utilidades::generarComboCategoriasDeSocio();
 
 
 my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");

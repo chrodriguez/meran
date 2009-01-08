@@ -1,25 +1,29 @@
 [% USE HTML %]
+
 <script language="javascript">
 function hacerSubmit(){
-	document.cards.op.value='search';
+	document.cards.op.value="search";
 	document.cards.submit();
-	}
+}
+
 function ordenar(orden){
 	
-	window.location.href="book-labels.pl?ini=[% ini %]&orden="+orden+"&op=search&barcode1=[% barcode1  %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]";
-	}
+	window.location.href="book-labels.pl?ini=[% ini %]&orden="+orden+"&op=search&barcode1=[% barcode1  %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]";
+}
+
 function generarEtiquetas(){
-	document.cards.orden.value='[% orden  %];
-	document.cards.barcode1.value='[% barcode1 %];
-	document.cards.barcode2.value='[% barcode2 %];
-	document.cards.bulk1.value='[% bulk1 %];
-	document.cards.bulk2.value='[% bulk2 %];
-	document.cards.bulkbegin.value='[% bulkbegin %];
-	document.cards.branch.value='[% branch %];
+	document.cards.orden.value= [% orden  %];
+	document.cards.barcode1.value= [% barcode1 %];
+	document.cards.barcode2.value=[% barcode2 %];
+	document.cards.bulk1.value=[% bulk1 %];
+	document.cards.bulk2.value=[% bulk2 %];
+	document.cards.bulkbegin.value=[% bulkbegin %];
+	document.cards.ui.value=[% ui %];
 
 	document.cards.op.value='pdf';
 	document.cards.submit();
-	}
+}
+
 </script>
 
 [% INCLUDE "intranet-top.inc" %]
@@ -38,6 +42,7 @@ function generarEtiquetas(){
 <form name="cards" action=/cgi-bin/koha/reports/book-labels.pl method=post >
 <input type='hidden' id='orden' name='orden' value='[% orden %]'>
 <input type='hidden' id='op' name='op' value='search'>
+<input type='hidden' id='ui' name='ui' value='[% ui %]'>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr valign="top">
 <td>
@@ -122,12 +127,12 @@ function generarEtiquetas(){
 <tr class="inputFontNormal">
 <td>
 [% IF ok2 %]
-	<a class="inputFontNormal" href="book-labels.pl?ini=[% ant %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/ant.gif border=0></a>
+	<a class="inputFontNormal" href="book-labels.pl?ini=[% ant %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/ant.gif border=0></a>
 [% END %]
 
 [% FOREACH numeros %]
 	[% IF actual %]
-		<a class="inputFontNormal" href="book-labels.pl?ini=[% number %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]" > 
+		<a class="inputFontNormal" href="book-labels.pl?ini=[% number %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]" > 
                     <u>[% number %]</u>
                 </a>
 	[% ELSE %]
@@ -136,7 +141,7 @@ function generarEtiquetas(){
 [% END %]
 
 [% IF ok %]
-	<a class="inputFontNormal" href="book-labels.pl?ini=[% sig %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&branch=[% branch %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/next.gif border=0></a>
+	<a class="inputFontNormal" href="book-labels.pl?ini=[% sig %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/next.gif border=0></a>
 [% END %]
 
 </td>
