@@ -21,17 +21,9 @@ my ($template, $session, $t_params) = get_template_and_user({
 my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 my $ComboUI=C4::AR::Utilidades::generarComboUI();
 
-
-## FIXME estos combos no se deben generan mas asi, usar funcion q genera los combos
-#CATEGORIAS
-my ($valuesCateg,$labelsCateg)=C4::AR::Usuarios::obtenerCategorias();
-my $CGIcateg=CGI::scrolling_list(    -name      => 'categoria',
-                                     -id        => 'categoria',
-                                     -values    => $valuesCateg,
-# 				     -defaults  => $branch,
-                                     -labels    => $labelsCateg,
-                                     -size      => 1,
-                                 );
+my %params;
+$params{'default'}= 'SIN SELECCIONAR';
+my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 #Para los a�os
 my @date=localtime;
 my $year_Default= $date[5]+1900;
@@ -48,7 +40,7 @@ my $years=CGI::scrolling_list(  -name      => 'year',
 #fin a�os
 
 $t_params->{'unidades'}= $ComboUI;
-$t_params->{'categorias'}= $CGIcateg;
+$t_params->{'categorias'}= $comboCategoriasDeSocio;
 $t_params->{'years'}= $years;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

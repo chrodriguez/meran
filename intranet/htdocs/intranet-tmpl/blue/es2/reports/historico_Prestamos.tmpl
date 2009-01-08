@@ -30,11 +30,12 @@ function changePage(ini){
 
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.debug= true;
 	objAH.f_ini= $('#f_ini').val();
 	objAH.f_fin= $('#f_fin').val();
 	objAH.tiposItems= $('#tiposItems').val();
 	objAH.tipoPrestamos=$('#tipoPrestamos').val();
-	objAH.catUsuarios=$('#catUsuarios').val();
+	objAH.catUsuarios=$('#categoria_socio_id').val();
 	objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
 	objAH.funcion="changePage";
 	objAH.sendToServer();

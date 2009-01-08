@@ -13,12 +13,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my @select_catUsuarios_Values;
-my %select_catUsuarios_Labels;
-my @select_catUsuarios_Values2;
-my (@select_catUsuarios_Values2,%catUsuarios)= C4::AR::Usuarios::obtenerCategorias(); 
-
-my ($template, $session, $t_params) = get_template_and_user({
+my ($template, $session, $t_params, $cookie) = get_template_and_user({
                                                 template_name => "reports/historico_Prestamos.tmpl",
                                                 query => $input,
                                                 type => "intranet",
@@ -28,42 +23,14 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-
 my $orden;
 if ($input->param('orden') eq ""){
 	 $orden='firstname'}
 else {$orden=$input->param('orden')};
 
-
-
-#Cargo todos los Select
-#*********************************Select de Categoria de Usuarios**********************************
-my @select_catUsuarios_Values;
-my %select_catUsuarios_Labels;
-my ($array,$hasheado)=C4::AR::Usuarios::obtenerCategorias();
-
-push @select_catUsuarios_Values, '-1';
-$select_catUsuarios_Labels{'-1'}= 'SIN SELECCIONAR';
-my $i=0;
-my @catUsuarios_Values;
-
-foreach my $codCatUsuario (@$array) {
-
-	push @select_catUsuarios_Values, $codCatUsuario;
-	$select_catUsuarios_Labels{$codCatUsuario} = $hasheado->{$codCatUsuario};
-	$i++;
-}
-
-my $CGISelectCatUsuarios=CGI::scrolling_list(	-name      => 'catUsuarios',
-                                        	-id        => 'catUsuarios',
-                                        	-values    => \@select_catUsuarios_Values,
-                                        	-labels    => \%select_catUsuarios_Labels,
-                                        	-size      => 1,
-						-defaults  => 'SIN SELECCIONAR'
-                                 		);
-#Se lo paso al template
-$t_params->{'selectCatUsuarios'}= $CGISelectCatUsuarios;
-#*********************************Fin Select de Categoria de Usuarios******************************
+my %params;
+$params{'default'}= 'SIN SELECCIONAR';
+my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
 #llamo a la funcion en C4::AR::Issues, traer todos los tipos de prestamos
 #*************************************Select de Tipos de Prestamos*******************************
@@ -95,8 +62,7 @@ my $CGISelectTiposPrestamos=CGI::scrolling_list(-name      => 'tipoPrestamos',
                                         	-size      => 1,
 						-defaults  => 'SIN SELECCIONAR'
                                  		);
-#Se lo paso al template
-$t_params->{'selectTiposPrestamos'}= $CGISelectTiposPrestamos;
+
 #******************************Fin Select de Tipos de Prestamos***********************************
 
 #************************************Select de Tipos de Items************************************
@@ -129,12 +95,12 @@ my $CGISelectTiposItems=CGI::scrolling_list(	-name      => 'tiposItems',
                                         	-size      => 1,
 						-defaults  => 'SIN SELECCIONAR'
                                  		);
-#Se lo paso al template
-$t_params->{'selectTiposItems'}= $CGISelectTiposItems;
 #************************************Fin Select de Tipos de Items*********************************
 
 
 $t_params->{'orden'}= $orden;
+$t_params->{'selectTiposItems'}= $CGISelectTiposItems;
+$t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
+$t_params->{'selectTiposPrestamos'}= $CGISelectTiposPrestamos;
 
-
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

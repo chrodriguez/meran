@@ -29,10 +29,11 @@ function updateInfo(responseText){
 
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/reports/logueoBusquedaResult.pl";
 	objAH.fechaIni=$("#fechaIni").val();
 	objAH.fechaFin=$("#fechaFin").val();
-	objAH.catUsuarios=$("#catUsuarios").val();
+	objAH.catUsuarios=$("#categoria_socio_id").val();
 	objAH.funcion= "changePage";
 	objAH.sendToServer();
 }
