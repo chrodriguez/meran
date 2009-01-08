@@ -1653,6 +1653,7 @@ sub loguearBusqueda{
 getBranches
 Devuelve una hash con todas bibliotecas y sus relaciones.
 =cut
+
 sub getBranches {
 # returns a reference to a hash of references to branches...
 	my %branches;

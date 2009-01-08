@@ -35,10 +35,13 @@ my $id_socio= $obj->{'id_socio'};
 # 	}
 	#
 
+    $t_params->{'apellido'} =  $socio->persona->getApellido;
+    $t_params->{'nombre'} =  $socio->persona->getNombre;
     $t_params->{'version_documento'} =  $socio->persona->getVersion_documento;
     $t_params->{'nro_documento'} =  $socio->persona->getNro_documento;
     $t_params->{'nro_socio'} =  $socio->getNro_socio;
     $t_params->{'fecha_alta'} = $socio->getFecha_alta;
+    $t_params->{'email'} = $socio->persona->getEmail;
     $t_params->{'sexo'} =  $socio->persona->getSexo;
 	$t_params->{'expira'} = $socio->getExpira;
     $t_params->{'telefono'} = $socio->persona->getTelefono;

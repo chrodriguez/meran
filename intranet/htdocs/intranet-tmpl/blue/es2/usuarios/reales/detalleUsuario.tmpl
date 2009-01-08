@@ -52,6 +52,12 @@
                             <img width="96px" height="96px" border="0" src=" [% themelang %]/pictures/[% foto_name %]"><br>
                     [% END %]
                             
+                    [% "Apellido:" | i18n %]
+                            <b> [% apellido %] </b><br>
+
+                    [% "Nombre:" | i18n %]
+                            <b> [% nombre %] </b><br>
+
                     [% "Documento:" | i18n %]
                             <b> [% version_documento %]&nbsp; [% nro_documento %]</b><br>
             
@@ -74,9 +80,9 @@
                     </div>	
                     [% END %]
                     
-                    [% IF emailaddress %]
+                    [% IF email %]
                             E-mail: <b><a href="mailto:[% emailaddress %]">
-                                    <span class="email"> [% emailaddress %]</span></a></b><br>
+                                    <span class="email"> [% email %]</span></a></b><br>
                     [% END %]
                     <br>
             

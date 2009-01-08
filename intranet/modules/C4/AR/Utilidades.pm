@@ -1269,12 +1269,14 @@ sub generarComboUI {
 
     my @select_ui;
     my %select_ui;
-    my $unidades_de_informacion=C4::AR::Busquedas::getBranches();
-    
-    foreach my $ui (keys %$unidades_de_informacion) {
-        push @select_ui, $ui;
-        $select_ui{$ui} = $unidades_de_informacion->{$ui}->{'branchname'};
+
+    my $unidades_de_informacion= C4::AR::Referencias::obtenerUnidadesDeInformacion();
+
+    foreach my $ui (@$unidades_de_informacion) {
+        push(@select_ui, $ui->id_ui);
+        $select_ui{$ui->id_ui}= $ui->nombre;
     }
+
     my $uidefecto;
     
 

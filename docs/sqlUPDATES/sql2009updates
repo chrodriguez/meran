@@ -67,3 +67,45 @@ INSERT INTO `usr_ref_categoria_socio` (`categorycode`, `description`, `enrolment
 ALTER TABLE `usr_ref_categoria_socio` ADD PRIMARY KEY ( `categorycode` ) ;
 
 ALTER TABLE usr_socio ADD FOREIGN KEY(id_persona) REFERENCES usr_persona(id_persona);
+
+
+
+-- LOS BRANCHES
+
+
+CREATE TABLE `pref_unidad_informacion` (
+  `branchcode` varchar(4) NOT NULL default '',
+  `branchname` text NOT NULL,
+  `branchaddress1` text,
+  `branchaddress2` text,
+  `branchaddress3` text,
+  `branchphone` text,
+  `branchfax` text,
+  `branchemail` text,
+  `issuing` tinyint(4) default NULL,
+  UNIQUE KEY `branchcode` (`branchcode`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `branches`
+-- 
+
+INSERT INTO `pref_unidad_informacion` (`branchcode`, `branchname`, `branchaddress1`, `branchaddress2`, `branchaddress3`, `branchphone`, `branchfax`, `branchemail`, `issuing`) VALUES 
+('DEO', 'Facultad de Ciencias Económicas', '6 entre 47 y 48. 1° subusuelo', '', '', '0221-423-6771/6769', '', 'biblio@econo.unlp.edu.ar', NULL),
+('DIF', 'Facultad de Informática', '115 esquina 50. 1° subusuelo', '', '', '', '', 'biblioteca@info.unlp.edu.ar', NULL),
+('CD', 'Centro de Documentación', '7 Nº 445', '', '', '', '', '', NULL);
+
+ALTER TABLE `pref_unidad_informacion` DROP `issuing` ;
+ALTER TABLE `pref_unidad_informacion` DROP `branchaddress3` ;
+
+ALTER TABLE `pref_unidad_informacion` CHANGE `branchemail` `email`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL
+ALTER TABLE `pref_unidad_informacion` CHANGE `branchfax` `fax`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL  DEFAULT NULL 
+ ALTER TABLE `pref_unidad_informacion` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `branchname` `nombre`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `branchaddress1` `direccion`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CHANGE `branchaddress2` `alt_direccion`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CHANGE `branchphone` `telefono`  VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` ) 
+
+

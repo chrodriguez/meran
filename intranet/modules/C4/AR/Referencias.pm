@@ -64,6 +64,8 @@ use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
 use C4::Modelo::UsrRefCategoriasSocio;
 use C4::Modelo::UsrRefCategoriasSocio::Manager;
+use C4::Modelo::PrefUnidadInformacion;
+use C4::Modelo::PrefUnidadInformacion::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
@@ -96,6 +98,20 @@ sub obtenerCategoriaDeSocio {
 
     foreach my $objeto_categoria (@$categorias_array_ref) {
         push (@results, $objeto_categoria);
+    }
+
+    return(\@results);
+}
+
+=item
+Devuelve un arreglo de objetos Unidades de Informacion
+=cut
+sub obtenerUnidadesDeInformacion {
+    my $unidades_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion;
+    my @results;
+
+    foreach my $objeto_ui (@$unidades_array_ref) {
+        push (@results, $objeto_ui);
     }
 
     return(\@results);
