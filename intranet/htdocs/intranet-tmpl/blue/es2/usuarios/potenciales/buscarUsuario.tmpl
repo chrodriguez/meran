@@ -5,6 +5,48 @@
 
 
 <script language="javascript" type="text/javascript">
+var busqueda_armed,incial_armed;
+var flag_armed = false;
+
+function consultar(filtro){
+    
+    busqueda = jQuery.trim($('#persona').val());
+    inicial = '0';
+    if (filtro){
+        inicial = filtro;
+        busqueda = jQuery.trim(filtro);
+        $('#persona').val("filtro: "+filtro);
+    }
+    else
+       {
+        if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
+                busqueda = busqueda.substr(8,5);
+                $('#persona').val(busqueda);
+                consultar(busqueda);
+        }
+        else
+           {
+            if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
+                busqueda = busqueda.substr(8,1);
+                $('#persona').val(busqueda);
+                consultar(busqueda);
+            }
+           }
+
+            
+    }
+    if(busqueda.length > 0){
+        busqueda_armed = busqueda;
+        inicial_armed = inicial;
+        flag_armed = true;
+        buscarUsuariosPotenciales(busqueda, inicial);
+    }
+    else{
+        alert("Ingrese un dato");
+        $('#persona').focus();
+    }
+
+}
 
 function habilitar(){
 	var checks=$("input[@type='checkbox']:checked");
@@ -57,18 +99,29 @@ function updateInfoActualizar(responseText){
 }
 
 function buscarUsuariosPotenciales(){
-	var busqueda = $("#member").val();
-	if(busqueda != ""){
-		objAH=new AjaxHelper(updateInfo);
-		objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
-		objAH.funcion= "changePage";
-		objAH.member= busqueda;
-		objAH.sendToServer();
-	}
-	else{
-		alert('[% "Ingrese un dato" | i18n %]');
- 		$("#member").focus();
-	}
+    objAH=new AjaxHelper(updateInfo);
+    objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
+    objAH.funcion= "changePage";
+
+    if (flag_armed){
+        objAH.persona = busqueda_armed;
+        objAH.inicial = inicial_armed;
+    }else
+      {   
+        var busqueda = $("#persona").val();
+	    if(busqueda != ""){
+		    objAH.persona= busqueda;
+            objAH.habilitados_filter = 0;
+	    }
+	    else{
+		    alert('[% "Ingrese un dato" | i18n %]');
+            $("#persona").focus();
+	    }
+    }
+    if ($("#habilitados_filter").attr('checked'))  
+        objAH.habilitados_filter = 1;
+    objAH.sendToServer();
+
 
 }
 
@@ -78,12 +131,29 @@ function updateInfo(responseText){
 }
 
 function Borrar(){
-	$("#member").val('');
+    $('#persona').val('');
+}
+
+function checkFilter(eventType){
+    var str = $('#persona').val();
+    
+    if (eventType.toUpperCase() == 'FOCUS'){
+
+        if (str.substr(0,6).toUpperCase() == 'FILTRO'){
+            globalSearchTemp = $('#persona').val();
+            Borrar();
+        }
+    }
+    else
+       {
+        if (jQuery.trim($('#persona').val()) == "")
+            $('#persona').val(globalSearchTemp);
+       }
 }
 
 
 $(document).ready(function() {
-	onEnter("member",consultar);
+	onEnter("persona",consultar);
 });
 
 </script>
@@ -107,7 +177,8 @@ $(document).ready(function() {
 <table>
 	<tr>
   		<td>
-			<input id="member" type=text name="member" value="[% member %]">
+			<input id="persona" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" 
+                onBlur="checkFilter('blur')">
 		</td>
  		<td>
 			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales('');" 
@@ -126,6 +197,40 @@ $(document).ready(function() {
 		</td>
 	</tr>
 </table>
+<div id="filterBar" style="text-align:center">
+        <a href="#" onClick="consultar('A')"> A |</a>
+        <a href="#" onClick="consultar('B')"> B |</a>
+        <a href="#" onClick="consultar('C')"> C |</a>
+        <a href="#" onClick="consultar('D')"> D |</a>
+        <a href="#" onClick="consultar('E')"> E |</a>
+        <a href="#" onClick="consultar('F')"> F |</a>
+        <a href="#" onClick="consultar('G')"> G |</a>
+        <a href="#" onClick="consultar('H')"> H |</a>
+        <a href="#" onClick="consultar('I')"> I |</a>
+        <a href="#" onClick="consultar('j')"> J |</a>
+        <a href="#" onClick="consultar('K')"> K |</a>
+        <a href="#" onClick="consultar('L')"> L |</a>
+        <a href="#" onClick="consultar('M')"> M |</a>
+        <a href="#" onClick="consultar('N')"> N |</a>
+        <a href="#" onClick="consultar('O')"> O |</a>
+        <a href="#" onClick="consultar('P')"> P |</a>
+        <a href="#" onClick="consultar('Q')"> Q |</a>
+        <a href="#" onClick="consultar('R')"> R |</a>
+        <a href="#" onClick="consultar('S')"> S |</a>
+        <a href="#" onClick="consultar('T')"> T |</a>
+        <a href="#" onClick="consultar('U')"> U |</a>
+        <a href="#" onClick="consultar('V')"> V |</a>
+        <a href="#" onClick="consultar('W')"> W |</a>
+        <a href="#" onClick="consultar('X')"> X |</a>
+        <a href="#" onClick="consultar('Y')"> Y |</a>
+        <a href="#" onClick="consultar('Z')"> Z |</a>
+        <a href="#" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
+        
+</div>
+
+<div>
+    <input type="checkbox" name="habilitados_filter" id="habilitados_filter"> S&oacute;lo habilitados 
+</div>
 
 <br>
 <div id="result"></div>

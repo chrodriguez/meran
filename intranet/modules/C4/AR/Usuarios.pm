@@ -16,205 +16,205 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
 
-	&ListadoDePersonas
-	&esRegular
-	&estaSancionado
-	&llegoMaxReservas
-	&getBorrower
-	&getBorrowerInfo
-	&buscarBorrower
-	&obtenerCategorias
-	&mailIssuesForBorrower
-	&personData
-	&BornameSearchForCard
-	&NewBorrowerNumber
-	&findguarantees
-	&updateOpacBorrower
-	&obtenerCategoriaBorrower
-	&t_cambiarPassword
-	&t_cambiarPermisos
-	&t_addBorrower
-	&t_updateBorrower
-	&t_eliminarUsuario
-	&t_addPerson
-	&t_delPersons
-	&existeUsuario
+    &ListadoDePersonas
+    &esRegular
+    &estaSancionado
+    &llegoMaxReservas
+    &getBorrower
+    &getBorrowerInfo
+    &buscarBorrower
+    &obtenerCategorias
+    &mailIssuesForBorrower
+    &personData
+    &BornameSearchForCard
+    &NewBorrowerNumber
+    &findguarantees
+    &updateOpacBorrower
+    &obtenerCategoriaBorrower
+    &t_cambiarPassword
+    &t_cambiarPermisos
+    &t_addBorrower
+    &t_updateBorrower
+    &t_eliminarUsuario
+    &t_addPerson
+    &t_delPersons
+    &existeUsuario
     &getSocioInfo
 );
 
 
-sub t_delPersons {	
-	my($persons_array_ref)=@_;
-	my $dbh = C4::Context->dbh;
-	my $msg_object= C4::AR::Mensajes::create();
+sub t_delPersons {  
+    my($persons_array_ref)=@_;
+    my $dbh = C4::Context->dbh;
+    my $msg_object= C4::AR::Mensajes::create();
 
-	# enable transactions, if possible
-	$dbh->{AutoCommit} = 0;  
-	$dbh->{RaiseError} = 1;
+    # enable transactions, if possible
+    $dbh->{AutoCommit} = 0;  
+    $dbh->{RaiseError} = 1;
 
-	eval {
-		_delPersons($persons_array_ref, $msg_object);	
-		$dbh->commit;
-	};
+    eval {
+        _delPersons($persons_array_ref, $msg_object);   
+        $dbh->commit;
+    };
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
-	}
-	$dbh->{AutoCommit} = 1;
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+        eval {$dbh->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
+    }
+    $dbh->{AutoCommit} = 1;
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 sub _verificarInfoDelPerson {
-	my ($person, $msg_object)=@_;
-	my $dbh = C4::Context->dbh;
+    my ($person, $msg_object)=@_;
+    my $dbh = C4::Context->dbh;
 
-	my $sth=$dbh->prepare("	SELECT * 
-				FROM persons 
-				WHERE personnumber=?");
-	$sth->execute($person);
-	my $personData=$sth->fetchrow_hashref;
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM persons 
+                WHERE personnumber=?");
+    $sth->execute($person);
+    my $personData=$sth->fetchrow_hashref;
 
-	if (!$personData) { 
-	# El borrower no se encuentra habilitado
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U350', 'params' => [$personData->{'cardnumber'}]} ) ;
-	}
-	
+    if (!$personData) { 
+    # El borrower no se encuentra habilitado
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U350', 'params' => [$personData->{'cardnumber'}]} ) ;
+    }
+    
 }
 
 sub _delPersons {
-	my ($persons_array_ref, $msg_object)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT * 
-				FROM persons 
-				WHERE personnumber=?");
+    my ($persons_array_ref, $msg_object)=@_;
+    
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM persons 
+                WHERE personnumber=?");
 
-	foreach my $person (@$persons_array_ref){
-		$sth->execute($person);
-		my $personData=$sth->fetchrow_hashref;
+    foreach my $person (@$persons_array_ref){
+        $sth->execute($person);
+        my $personData=$sth->fetchrow_hashref;
 
-		_verificarInfoDelPerson($person,$msg_object);
+        _verificarInfoDelPerson($person,$msg_object);
 
-		if (!$msg_object->{'error'}) { 
-		# Si no tiene borrowernumber no esta habilitado
-			_eliminarUsuario($personData->{'borrowernumber'});
-			$msg_object->{'error'}= 0;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$personData->{'cardnumber'}]}) ;
-		}
-	}
+        if (!$msg_object->{'error'}) { 
+        # Si no tiene borrowernumber no esta habilitado
+            _eliminarUsuario($personData->{'borrowernumber'});
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$personData->{'cardnumber'}]}) ;
+        }
+    }
 }
 
 sub t_addPersons {
-	
-	my($persons_array_ref)=@_;
-	my $dbh = C4::Context->dbh;
+    
+    my($persons_array_ref)=@_;
+    my $dbh = C4::Context->dbh;
 
-	my $msg_object;
+    my $msg_object;
 
-	# enable transactions, if possible
-	$dbh->{AutoCommit} = 0;  
-	$dbh->{RaiseError} = 1;
+    # enable transactions, if possible
+    $dbh->{AutoCommit} = 0;  
+    $dbh->{RaiseError} = 1;
 
-	eval {
-		($msg_object)= addPersons($persons_array_ref);	
-		$dbh->commit;
-	};
+    eval {
+        ($msg_object)= addPersons($persons_array_ref);  
+        $dbh->commit;
+    };
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		&C4::AR::Mensajes::printErrorDB($@, 'B425','INTRA');
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U348', 'params' => []});
-	}
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B425','INTRA');
+        eval {$dbh->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U348', 'params' => []});
+    }
 
-	$dbh->{AutoCommit} = 1;
+    $dbh->{AutoCommit} = 1;
 
-	
- 	return ($msg_object);
+    
+    return ($msg_object);
 }
 
 sub addPersons {
-	my ($persons)=@_;
-	
- 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT * 
-				FROM persons 
-				WHERE personnumber=?");
+    my ($persons)=@_;
+    
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM persons 
+                WHERE personnumber=?");
 
-	my $msg_object= C4::AR::Mensajes::create();
-	
-	foreach my $person (@$persons){
-		$sth->execute($person);
-		my $borrowerData=$sth->fetchrow_hashref;
+    my $msg_object= C4::AR::Mensajes::create();
+    
+    foreach my $person (@$persons){
+        $sth->execute($person);
+        my $borrowerData=$sth->fetchrow_hashref;
 
-		_verificarInfoAddPerson($borrowerData,$msg_object);
+        _verificarInfoAddPerson($borrowerData,$msg_object);
 
-		if(!$msg_object->{'error'}){
-			my $borrowernumber= addBorrower($borrowerData);
-			#Se agregar en borrower
-			#Se actualiza la persona con el borrowernumber
-			my $sth3=$dbh->prepare("UPDATE persons 
-						SET borrowernumber=? 
-						WHERE personnumber=?");
-			$sth3->execute($borrowernumber, $person);
-			$sth3->finish;
-		
- 			$msg_object->{'error'}= 0;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$borrowerData->{'cardnumber'}]} ) ;
-		}
+        if(!$msg_object->{'error'}){
+            my $borrowernumber= addBorrower($borrowerData);
+            #Se agregar en borrower
+            #Se actualiza la persona con el borrowernumber
+            my $sth3=$dbh->prepare("UPDATE persons 
+                        SET borrowernumber=? 
+                        WHERE personnumber=?");
+            $sth3->execute($borrowernumber, $person);
+            $sth3->finish;
+        
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$borrowerData->{'cardnumber'}]} ) ;
+        }
 
-	}# end foreach my $person (@$persons)
+    }# end foreach my $person (@$persons)
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 
 
 sub t_addBorrower {
-	
-	my($params)=@_;
-	my $dbh = C4::Context->dbh;
+    
+    my($params)=@_;
+    my $dbh = C4::Context->dbh;
 
-# 	my %msg;	
-	my $msg_object= C4::AR::Mensajes::create();
-	_verificarDatosBorrower($params,$msg_object);
+#   my %msg;    
+    my $msg_object= C4::AR::Mensajes::create();
+    _verificarDatosBorrower($params,$msg_object);
 
-	if(!$msg_object->{'error'}){
-	#No hay error
-		# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			my $borrowernumber= addBorrower($params);	
-			$dbh->commit;
-			$msg_object->{'error'}= 0;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-					
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+    if(!$msg_object->{'error'}){
+    #No hay error
+        # enable transactions, if possible
+        $dbh->{AutoCommit} = 0;  
+        $dbh->{RaiseError} = 1;
+    
+        eval {
+            my $borrowernumber= addBorrower($params);   
+            $dbh->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+                    
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
 
-	}
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 sub agregarPersona{
@@ -246,93 +246,93 @@ sub agregarPersona{
 
 sub addBorrower {
 
-	my ($params)=@_;
-	my $dateformat = C4::Date::get_date_format();
-	my $dbh = C4::Context->dbh;
+    my ($params)=@_;
+    my $dateformat = C4::Date::get_date_format();
+    my $dbh = C4::Context->dbh;
 
-	
-	my $query="	INSERT INTO borrowers 
-			(title , expiry , cardnumber , sex , ethnotes , streetaddress , faxnumber,
-			firstname , altnotes , dateofbirth , contactname , emailaddress , textmessaging,
-			dateenrolled , streetcity , altrelationship , othernames , phoneday,
-			categorycode , city , area , phone , borrowernotes , altphone , surname,
-			initials , ethnicity , physstreet , branchcode , zipcode , homezipcode,
-			documenttype , documentnumber , lastchangepassword , changepassword , studentnumber)  
-			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
-	
-	my $sth=$dbh->prepare($query);
-	
-	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
-	$params->{'changepassword'}= $params->{'changepassword'}||1; #si no viene nada por defecto debe cambiar la password
+    
+    my $query=" INSERT INTO borrowers 
+            (title , expiry , cardnumber , sex , ethnotes , streetaddress , faxnumber,
+            firstname , altnotes , dateofbirth , contactname , emailaddress , textmessaging,
+            dateenrolled , streetcity , altrelationship , othernames , phoneday,
+            categorycode , city , area , phone , borrowernotes , altphone , surname,
+            initials , ethnicity , physstreet , branchcode , zipcode , homezipcode,
+            documenttype , documentnumber , lastchangepassword , changepassword , studentnumber)  
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?)";
+    
+    my $sth=$dbh->prepare($query);
+    
+    $params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
+    $params->{'changepassword'}= $params->{'changepassword'}||1; #si no viene nada por defecto debe cambiar la password
 
-	$sth->execute(	$params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
-			$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
-			$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
-			$params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
-			$params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
-			$params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
-			$params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
-			$params->{'documenttype'},$params->{'documentnumber'},
- 			$params->{'changepassword'},$params->{'studentnumber'}
-		);
+    $sth->execute(  $params->{'title'},$params->{'expiry'},$params->{'cardnumber'},
+            $params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},$params->{'faxnumber'},
+            $params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},$params->{'contactname'},$params->{'emailaddress'},
+            $params->{'textmessaging'},$params->{'joining'},$params->{'streetcity'},$params->{'altrelationship'},
+            $params->{'othernames'},$params->{'phoneday'},$params->{'categorycode'},$params->{'city'},$params->{'area'},
+            $params->{'phone'},$params->{'borrowernotes'},$params->{'altphone'},$params->{'surname'},$params->{'initials'},
+            $params->{'ethnicity'},$params->{'physstreet'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},
+            $params->{'documenttype'},$params->{'documentnumber'},
+            $params->{'changepassword'},$params->{'studentnumber'}
+        );
 
-	$sth->finish;
+    $sth->finish;
 
-	#obtengo el borrowernumber recien generado
-	my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
-	$sth3->execute();
-	my $borrowernumber= $sth3->fetchrow;
+    #obtengo el borrowernumber recien generado
+    my $sth3=$dbh->prepare(" SELECT LAST_INSERT_ID() ");
+    $sth3->execute();
+    my $borrowernumber= $sth3->fetchrow;
 
-	# Curso de usuarios#
-	if (C4::Context->preference("usercourse"))  {
-		my $sql2="";
-		if ($params->{'usercourse'} eq 1){
-			$sql2= "UPDATE borrowers
-				SET usercourse=NOW() 
-				WHERE borrowernumber=? 
-					AND 
-				      usercourse IS NULL ; ";
-		}
-		else{
-			$sql2= "UPDATE borrowers 
-				SET usercourse=NULL 
-				WHERE borrowernumber=? ;";
-		}
+    # Curso de usuarios#
+    if (C4::Context->preference("usercourse"))  {
+        my $sql2="";
+        if ($params->{'usercourse'} eq 1){
+            $sql2= "UPDATE borrowers
+                SET usercourse=NOW() 
+                WHERE borrowernumber=? 
+                    AND 
+                      usercourse IS NULL ; ";
+        }
+        else{
+            $sql2= "UPDATE borrowers 
+                SET usercourse=NULL 
+                WHERE borrowernumber=? ;";
+        }
 
-		my $sth3=$dbh->prepare($sql2);
-		$sth3->execute();
-		$sth3->finish;
-	}
+        my $sth3=$dbh->prepare($sql2);
+        $sth3->execute();
+        $sth3->finish;
+    }
 
-	return $borrowernumber;
+    return $borrowernumber;
 }
 
 
 sub _verificarInfoAddPerson {
-	my ($params, $msg_object)=@_;
+    my ($params, $msg_object)=@_;
 
- 	my $dbh = C4::Context->dbh;
-	my $error= 0;
-	my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+    my $dbh = C4::Context->dbh;
+    my $error= 0;
+    my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
 
-	#Verificar que ya no exista como borrower
-	my $sth2=$dbh->prepare("SELECT * 
-				FROM borrowers 
-				WHERE cardnumber=?");
-	$sth2->execute($params->{'cardnumber'});
-	my $borrower= $sth2->fetchrow_hashref;
+    #Verificar que ya no exista como borrower
+    my $sth2=$dbh->prepare("SELECT * 
+                FROM borrowers 
+                WHERE cardnumber=?");
+    $sth2->execute($params->{'cardnumber'});
+    my $borrower= $sth2->fetchrow_hashref;
 
-	if($borrower){
-		#ya existe el borrower		
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U346', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
-	#Se verifica que el usuario sea regular puede habilitar usurios irregulares??
-	elsif ( !($msg_object->{'error'}) && ($habilitar_irregulares eq 0)&&($params->{'regular'} eq 0)&&($params->{'categorycode'} eq 'ES')){
-		# No es regular y no se puede habilitar regulares
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U349', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
+    if($borrower){
+        #ya existe el borrower      
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U346', 'params' => [$params->{'cardnumber'}]} ) ;
+    }
+    #Se verifica que el usuario sea regular puede habilitar usurios irregulares??
+    elsif ( !($msg_object->{'error'}) && ($habilitar_irregulares eq 0)&&($params->{'regular'} eq 0)&&($params->{'categorycode'} eq 'ES')){
+        # No es regular y no se puede habilitar regulares
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U349', 'params' => [$params->{'cardnumber'}]} ) ;
+    }
 }
 
 
@@ -340,72 +340,72 @@ sub _verificarInfoAddPerson {
 # Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
 #  borrowernumber y usuario.
 sub t_eliminarUsuario {
-	
-	my($params)=@_;
-	my $dbh = C4::Context->dbh;
-	my $msg_object= C4::AR::Mensajes::create();
+    
+    my($params)=@_;
+    my $dbh = C4::Context->dbh;
+    my $msg_object= C4::AR::Mensajes::create();
 
-	$msg_object = _verficarEliminarUsuario($params,$msg_object);
+    $msg_object = _verficarEliminarUsuario($params,$msg_object);
 
-	if(!$msg_object->{'error'}){
-	#No hay error
+    if(!$msg_object->{'error'}){
+    #No hay error
 
-		# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  
-		$dbh->{RaiseError} = 1;
-	
-		eval {	
-			_eliminarUsuario($params->{'borrowernumber'});
-			$dbh->commit;
-			$msg_object->{'error'}= 0;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$params->{'cardnumber'}]} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+        # enable transactions, if possible
+        $dbh->{AutoCommit} = 0;  
+        $dbh->{RaiseError} = 1;
+    
+        eval {  
+            _eliminarUsuario($params->{'borrowernumber'});
+            $dbh->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$params->{'cardnumber'}]} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
 
-	}
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 #eliminarUsuario recibe un numero de borrower y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde eliminar borrower y desde ls funcion delmembers 
 
 
 sub _eliminarUsuario{
-	my ($borrowernumber)=@_;
-	
-	my $dbh = C4::Context->dbh;
+    my ($borrowernumber)=@_;
+    
+    my $dbh = C4::Context->dbh;
 
-	#   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
-	#   $sth->execute(@data);
-	#   $sth->finish;
-	my $sth=$dbh->prepare("DELETE FROM borrowers
-			       WHERE borrowernumber=?
-			      ");
-	$sth->execute($borrowernumber);
-	$sth->finish;
+    #   $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+    #   $sth->execute(@data);
+    #   $sth->finish;
+    my $sth=$dbh->prepare("DELETE FROM borrowers
+                   WHERE borrowernumber=?
+                  ");
+    $sth->execute($borrowernumber);
+    $sth->finish;
 
 # FIXME cuando se borra la reserva, habria que unificar todo, para que se conceda esa reserva al siguiente en la cola.
-	$sth=$dbh->prepare("DELETE FROM reserves
-			    WHERE borrowernumber=?
-			   ");
-	$sth->execute($borrowernumber);
-	$sth->finish;
+    $sth=$dbh->prepare("DELETE FROM reserves
+                WHERE borrowernumber=?
+               ");
+    $sth->execute($borrowernumber);
+    $sth->finish;
 
-	$sth=$dbh->prepare("UPDATE persons 
-			    SET borrowernumber=NULL 
-			    WHERE borrowernumber=?
-			   ");
-	$sth->execute($borrowernumber);
-	$sth->finish;
+    $sth=$dbh->prepare("UPDATE persons 
+                SET borrowernumber=NULL 
+                WHERE borrowernumber=?
+               ");
+    $sth->execute($borrowernumber);
+    $sth->finish;
 }
 
 # Esta función verifica que un usuario exista en la DB. Recibe una hash conteneniendo: borrowernumber y  usuario.
@@ -413,124 +413,124 @@ sub _eliminarUsuario{
 # FIXME fijarse que aca no se checkea nada, por ejemplo si tiene reservas, libros en su poder, etc...
 
 sub _verficarEliminarUsuario {
-	my($params,$msg_object)=@_;
+    my($params,$msg_object)=@_;
 
-	my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
+    my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
 
-	my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
+    my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
 
-	
-	if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
-	#se verifica la existencia del usuario, que ahora no existe
-		$msg_object->{'error'}= 1;
-  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
-	} 
-	elsif ($cantidadTotalDePrestamos > 0){
-		#se verifica que no tenga prestamos activos
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
+    
+    if( !($msg_object->{'error'}) && !( _existeUsuario($params->{'borrowernumber'})) ){
+    #se verifica la existencia del usuario, que ahora no existe
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$params->{'cardnumber'}]} ) ;
+    } 
+    elsif ($cantidadTotalDePrestamos > 0){
+        #se verifica que no tenga prestamos activos
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U351', 'params' => [$params->{'cardnumber'}]} ) ;
+    }
 
-	
+    
 
-	elsif ($params->{'loggedInUser'} eq $params->{'borrowernumber'}){
-	# 	Se verifica que el usuario loggeado no sea el mismo que se va a eliminar
-		$msg_object->{'error'}= 1;
-  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U352', 'params' => [$params->{'cardnumber'}]} ) ;
-	}
-			
-	return ($msg_object);
+    elsif ($params->{'loggedInUser'} eq $params->{'borrowernumber'}){
+    #   Se verifica que el usuario loggeado no sea el mismo que se va a eliminar
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U352', 'params' => [$params->{'cardnumber'}]} ) ;
+    }
+            
+    return ($msg_object);
 }
 
 =item
 Esta funcion verifica si existe el usuario o no en la base, devuelve 0 = NO EXISTE, 1 (o mas) = EXISTE
 =cut
 sub _existeUsuario {
-	my ($borrowernumber)=@_;
+    my ($borrowernumber)=@_;
 
-  	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
-	my $sth=$dbh->prepare("SELECT count(*) 
-			       FROM borrowers 
-			       WHERE borrowernumber=?
-			      ");
-	$sth->execute($borrowernumber);
+    my $sth=$dbh->prepare("SELECT count(*) 
+                   FROM borrowers 
+                   WHERE borrowernumber=?
+                  ");
+    $sth->execute($borrowernumber);
 
-	return $sth->fetchrow_array();
+    return $sth->fetchrow_array();
 }
 
 
 
 
 sub existeUsuario {
-	my ($borrowernumber)=@_;
-	if (_existeUsuario($borrowernumber)){
-		return 1;
-	}
-	else{
-		return 0;
-	    }
+    my ($borrowernumber)=@_;
+    if (_existeUsuario($borrowernumber)){
+        return 1;
+    }
+    else{
+        return 0;
+        }
 }
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub t_cambiarPermisos {
-	my($params)=@_;
+    my($params)=@_;
 
-	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-	my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object= C4::AR::Mensajes::create();
 
-	if(!$msg_object->{'error'}){
-	#No hay error
-	# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			_cambiarPermisos($params);	
-			$dbh->commit;
-			#se cambio el permiso con exito
-			$msg_object->{'error'}= 0;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []} ) ;
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B421',"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U331', 'params' => []} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+    if(!$msg_object->{'error'}){
+    #No hay error
+    # enable transactions, if possible
+        $dbh->{AutoCommit} = 0;  # enable transactions, if possible
+        $dbh->{RaiseError} = 1;
+    
+        eval {
+            _cambiarPermisos($params);  
+            $dbh->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B421',"INTRA");
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U331', 'params' => []} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
 
-	}
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub _cambiarPermisos{
-	my ($params) = @_;
+    my ($params) = @_;
 
-	my $dbh = C4::Context->dbh;
-	
-	
-	my $array_permisos= $params->{'array_permisos'};
-	my $loop=scalar(@$array_permisos);
+    my $dbh = C4::Context->dbh;
+    
+    
+    my $array_permisos= $params->{'array_permisos'};
+    my $loop=scalar(@$array_permisos);
 
-	my $flags=0;
-	for(my $i=0;$i<$loop;$i++){
-		my $flag= $array_permisos->[$i];
- 		$flags=$flags+2**$flag;
-	}
+    my $flags=0;
+    for(my $i=0;$i<$loop;$i++){
+        my $flag= $array_permisos->[$i];
+        $flags=$flags+2**$flag;
+    }
 
-	my $sth=$dbh->prepare("UPDATE borrowers 
-			       SET flags=? 
-			       WHERE borrowernumber=?
-			      ");
-	$sth->execute($flags, $params->{'usuario'});
+    my $sth=$dbh->prepare("UPDATE borrowers 
+                   SET flags=? 
+                   WHERE borrowernumber=?
+                  ");
+    $sth->execute($flags, $params->{'usuario'});
 
 }
 
@@ -538,18 +538,18 @@ sub _cambiarPermisos{
 #  Funcion que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. Retortan 0 en caso de exito y 1 en error.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 sub _verficarPassword {
-	my($params)=@_;
+    my($params)=@_;
 
-	my ($msg_object)= &C4::AR::Validator::checkPassword($params);
+    my ($msg_object)= &C4::AR::Validator::checkPassword($params);
 
 
- 	if( !($msg_object->{'error'}) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
- 	#las password no coinciden
-		$msg_object->{'error'}= 1;
-  		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
- 	}
+    if( !($msg_object->{'error'}) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+    #las password no coinciden
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 
@@ -557,37 +557,37 @@ sub _verficarPassword {
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
 sub t_cambiarPassword {
-	my($params)=@_;
+    my($params)=@_;
 
-	my $dbh = C4::Context->dbh;
-	my ($msg_object)= _verficarPassword($params);
+    my $dbh = C4::Context->dbh;
+    my ($msg_object)= _verficarPassword($params);
 
-	if(!$msg_object->{'error'}){
-	#No hay error
-		# enable transactions, if possible
-		$dbh->{AutoCommit} = 0;  
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			_cambiarPassword($params,$msg_object);	
-			$dbh->commit;
-			$msg_object->{'error'}= 0;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-  			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+    if(!$msg_object->{'error'}){
+    #No hay error
+        # enable transactions, if possible
+        $dbh->{AutoCommit} = 0;  
+        $dbh->{RaiseError} = 1;
+    
+        eval {
+            _cambiarPassword($params,$msg_object);  
+            $dbh->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
 
-	}
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 
@@ -595,60 +595,60 @@ sub t_cambiarPassword {
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
 sub _cambiarPassword{
-	my ($params, $msg_object) = @_;
-	my $dbh = C4::Context->dbh;
-	
-	my %env;
-	my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
+    my ($params, $msg_object) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my %env;
+    my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
 
-	$params->{'userid'}= $borrower->{'userid'};
-	$params->{'surename'}= $borrower->{'surename'};
-	$params->{'firstname'}= $borrower->{'firstname'};
+    $params->{'userid'}= $borrower->{'userid'};
+    $params->{'surename'}= $borrower->{'surename'};
+    $params->{'firstname'}= $borrower->{'firstname'};
 
-	my $digest= C4::Auth::md5_base64($params->{'newpassword'});
-	my $dbh=C4::Context->dbh;
-	#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-	#Then we need to tell the user and have them create a new one.
-## FIXME el userid parece que no se usa!!!!!!!!!!!!!	
-	my $sth2=$dbh->prepare("	SELECT * 
-					FROM borrowers 
-					WHERE userid=? AND borrowernumber != ?");
+    my $digest= C4::Auth::md5_base64($params->{'newpassword'});
+    my $dbh=C4::Context->dbh;
+    #Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+    #Then we need to tell the user and have them create a new one.
+## FIXME el userid parece que no se usa!!!!!!!!!!!!!    
+    my $sth2=$dbh->prepare("    SELECT * 
+                    FROM borrowers 
+                    WHERE userid=? AND borrowernumber != ?");
 
-	$sth2->execute($params->{'userid'},$params->{'usuario'});
-	
-	if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
-	#ya existe el userid
-		$msg_object->{'error'}= 1;
-  		C4::AR::Mensajes::add(	$msg_object, {	'codMsg'=> 'U311', 
-							'params' => [$params->{'userid'}, $params->{'surename'}, $params->{'firstname'}]} ) ;
+    $sth2->execute($params->{'userid'},$params->{'usuario'});
+    
+    if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
+    #ya existe el userid
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add(  $msg_object, {  'codMsg'=> 'U311', 
+                            'params' => [$params->{'userid'}, $params->{'surename'}, $params->{'firstname'}]} ) ;
 
-	}else {
-		#Esta todo bien, se puede actualizar la informacion
-		my $sth=$dbh->prepare("	UPDATE borrowers 
-				        SET userid=?, password=? 
-					WHERE borrowernumber=? ");
+    }else {
+        #Esta todo bien, se puede actualizar la informacion
+        my $sth=$dbh->prepare(" UPDATE borrowers 
+                        SET userid=?, password=? 
+                    WHERE borrowernumber=? ");
 
-		$sth->execute($params->{'userid'}, $digest, $params->{'usuario'});
-		
-		my $sth3=$dbh->prepare("	SELECT cardnumber 
-						FROM borrowers 
-						WHERE borrowernumber = ? ");
+        $sth->execute($params->{'userid'}, $digest, $params->{'usuario'});
+        
+        my $sth3=$dbh->prepare("    SELECT cardnumber 
+                        FROM borrowers 
+                        WHERE borrowernumber = ? ");
 
-		$sth3->execute($params->{'usuario'});
+        $sth3->execute($params->{'usuario'});
 
-		if (my $cardnumber= $sth3->fetchrow) {
-		#Se actualiza el ldap
+        if (my $cardnumber= $sth3->fetchrow) {
+        #Se actualiza el ldap
 ## FIXME no se para que se le pasa el $template
-			my $template; 
-			if (C4::Membersldap::addupdateldapuser($dbh,$cardnumber,$digest,$template)){
-# 				$template->param(errorldap => 1);
-			}
-		}
+            my $template; 
+            if (C4::Membersldap::addupdateldapuser($dbh,$cardnumber,$digest,$template)){
+#               $template->param(errorldap => 1);
+            }
+        }
 
-	}
+    }
 
-# 	return ($error,$codMsg,$paraMens);
-	return ($msg_object);
+#   return ($error,$codMsg,$paraMens);
+    return ($msg_object);
 }
 
 
@@ -660,56 +660,56 @@ sub _cambiarPassword{
 # Retorna $error (como siempre, al reves {1 true}) y un $codMsg, en ese orden
 sub _verificarDatosBorrower{
 
-	my ($data, $msg_object)=@_;
-	my $actionType = $data->{'actionType'};
-	my $checkStatus;
+    my ($data, $msg_object)=@_;
+    my $actionType = $data->{'actionType'};
+    my $checkStatus;
 
-	my $emailAddress = $data->{'email'};
-	
-	if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
-	}
-	
-	#### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
-	if ($actionType eq "new"){
+    my $emailAddress = $data->{'email'};
+    
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
+    }
+    
+    #### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
+    if ($actionType eq "new"){
 
-		my $cardNumber = $data->{'nro_socio'};
-		if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
-		}
-	}
+        my $cardNumber = $data->{'nro_socio'};
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
+        }
+    }
 
-	#### FIN NUEVO BORROWER's CHECKS
-	my $surname = $data->{'apellido'};
-	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
-	}
+    #### FIN NUEVO BORROWER's CHECKS
+    my $surname = $data->{'apellido'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
+    }
 
-	my $firstname = $data->{'nombre'};
-	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
-	}
+    my $firstname = $data->{'nombre'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
+    }
 
-	
-	my $documentnumber = $data->{'nro_documento'};
-	$checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
-	if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
-	}
+    
+    my $documentnumber = $data->{'nro_documento'};
+    $checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
+    if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
+    }
 
-# 	my $city = $data->{'ciudad'};
-# 	if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($city)))){
-# 		$msg_object->{'error'}= 1;
-# 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U337', 'params' => []} ) ;
-# 	}
+#   my $city = $data->{'ciudad'};
+#   if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($city)))){
+#       $msg_object->{'error'}= 1;
+#       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U337', 'params' => []} ) ;
+#   }
 
 }
-	
+    
 
 
 
@@ -733,7 +733,7 @@ sub actualizarSocio {
         eval {
             my $socio = C4::Modelo::UsrSocio->new(nro_socio => $params->{'nro_socio'});
             $socio->load();
-            $socio->agregar($params);
+            $socio->modificar($params);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
     
@@ -754,99 +754,99 @@ sub actualizarSocio {
 
 
 sub t_updateBorrower {
-	
-	my($params)=@_;
-	$params->{'actionType'} = "update";
-	my $dbh = C4::Context->dbh;
+    
+    my($params)=@_;
+    $params->{'actionType'} = "update";
+    my $dbh = C4::Context->dbh;
 
-  	my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object= C4::AR::Mensajes::create();
 
-	_verificarDatosBorrower($params, $msg_object);
+    _verificarDatosBorrower($params, $msg_object);
 
-	if(!$msg_object->{'error'}){
-	#No hay error
+    if(!$msg_object->{'error'}){
+    #No hay error
 
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-		$dbh->{RaiseError} = 1;
-	
-		eval {
-			updateBorrower($params);		
-			$dbh->commit;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
-		};
-	
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B424',"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
-		}
-		$dbh->{AutoCommit} = 1;
+        $dbh->{AutoCommit} = 0;  # enable transactions, if possible
+        $dbh->{RaiseError} = 1;
+    
+        eval {
+            updateBorrower($params);        
+            $dbh->commit;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B424',"INTRA");
+            eval {$dbh->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
+        }
+        $dbh->{AutoCommit} = 1;
 
-	}
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 sub updateBorrower {
-	my ($params)=@_;
+    my ($params)=@_;
 
-	my $dateformat = C4::Date::get_date_format();
-	my $dbh = C4::Context->dbh;
+    my $dateformat = C4::Date::get_date_format();
+    my $dbh = C4::Context->dbh;
 
-	my $query="	UPDATE borrowers 
+    my $query=" UPDATE borrowers 
 
-			SET 	title=? , expiry=? , sex=? , ethnotes=? , streetaddress=?,
-				faxnumber=? , firstname=? , altnotes=? , dateofbirth=?,
-				contactname=? , emailaddress=? , textmessaging=? , dateenrolled=?,
-				streetcity=? , altrelationship=? , othernames=? , phoneday=?,
-				categorycode=? , city=? , area=? , phone=? , borrowernotes=?,
-				altphone=? , surname=? , initials=? , physstreet=?,
-				ethnicity=? , gonenoaddress=? , lost=? , debarred=? , branchcode =?,
-				zipcode =? , homezipcode=? , documenttype =? , documentnumber=?,
-				changepassword=? , studentnumber=?
-	  		
-			WHERE borrowernumber=? ";
+            SET     title=? , expiry=? , sex=? , ethnotes=? , streetaddress=?,
+                faxnumber=? , firstname=? , altnotes=? , dateofbirth=?,
+                contactname=? , emailaddress=? , textmessaging=? , dateenrolled=?,
+                streetcity=? , altrelationship=? , othernames=? , phoneday=?,
+                categorycode=? , city=? , area=? , phone=? , borrowernotes=?,
+                altphone=? , surname=? , initials=? , physstreet=?,
+                ethnicity=? , gonenoaddress=? , lost=? , debarred=? , branchcode =?,
+                zipcode =? , homezipcode=? , documenttype =? , documentnumber=?,
+                changepassword=? , studentnumber=?
+            
+            WHERE borrowernumber=? ";
 
-	my $sth=$dbh->prepare($query);
+    my $sth=$dbh->prepare($query);
 
-	$params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
-	
-	$sth->execute(		$params->{'title'},$params->{'expiry'},$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},
-				$params->{'faxnumber'},$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},
-				$params->{'contactname'},$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},
-				$params->{'dstreetcity'},$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},
-				$params->{'categorycode'},$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},
-				$params->{'altphone'},$params->{'surname'},$params->{'initials'},$params->{'physstreet'},
-				$params->{'ethnicity'},$params->{'gonenoaddress'},$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},$params->{'documenttype'},$params->{'documentnumber'},
-				$params->{'changepassword'},$params->{'studentnumber'},$params->{'borrowernumber'}
-	);
-	
-	$sth->finish;
-	
+    $params->{'dateofbirth'}=format_date_in_iso($params->{'dateofbirth'},$dateformat);
+    
+    $sth->execute(      $params->{'title'},$params->{'expiry'},$params->{'sex'},$params->{'ethnotes'},$params->{'streetaddress'},
+                $params->{'faxnumber'},$params->{'firstname'},$params->{'altnotes'},$params->{'dateofbirth'},
+                $params->{'contactname'},$params->{'emailaddress'},$params->{'textmessaging'},$params->{'joining'},
+                $params->{'dstreetcity'},$params->{'altrelationship'},$params->{'othernames'},$params->{'phoneday'},
+                $params->{'categorycode'},$params->{'city'},$params->{'area'},$params->{'phone'},$params->{'borrowernotes'},
+                $params->{'altphone'},$params->{'surname'},$params->{'initials'},$params->{'physstreet'},
+                $params->{'ethnicity'},$params->{'gonenoaddress'},$params->{'lost'},$params->{'debarred'},$params->{'branchcode'},$params->{'zipcode'},$params->{'homezipcode'},$params->{'documenttype'},$params->{'documentnumber'},
+                $params->{'changepassword'},$params->{'studentnumber'},$params->{'borrowernumber'}
+    );
+    
+    $sth->finish;
+    
 
-	# Curso de usuarios#
-	if (C4::Context->preference("usercourse"))  {
-		my $sql2="";
-		if ($params->{'usercourse'} eq 1){
-			$sql2= "UPDATE borrowers 
-				SET usercourse=NOW() 
-				WHERE borrowernumber=? 
-					AND 
-				      usercourse is NULL ; ";}
-		else{
-			$sql2= "UPDATE borrowers 
-				SET usercourse=NULL 
-				WHERE borrowernumber=? ;";
-		}
+    # Curso de usuarios#
+    if (C4::Context->preference("usercourse"))  {
+        my $sql2="";
+        if ($params->{'usercourse'} eq 1){
+            $sql2= "UPDATE borrowers 
+                SET usercourse=NOW() 
+                WHERE borrowernumber=? 
+                    AND 
+                      usercourse is NULL ; ";}
+        else{
+            $sql2= "UPDATE borrowers 
+                SET usercourse=NULL 
+                WHERE borrowernumber=? ;";
+        }
 
-		my $sth3=$dbh->prepare($sql2);
-		$sth3->execute($params->{'borrowernumber'});
-		$sth3->finish;
-	}
-	####################
+        my $sth3=$dbh->prepare($sql2);
+        $sth3->execute($params->{'borrowernumber'});
+        $sth3->finish;
+    }
+    ####################
 }
 
 
@@ -854,68 +854,80 @@ sub updateBorrower {
 # que cumplan con el string pasado como parámetro. Los resultados son devueltos como un arreglo de hash.
 
 sub buscarBorrower{
-	my ($busqueda) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query;
-	my $sth;
-	$busqueda .= "%";
+    my ($busqueda) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query;
+    my $sth;
+    $busqueda .= "%";
 
-	my $query= " 	SELECT borrowernumber, surname, firstname, cardnumber, documentnumber, studentnumber 
-			FROM borrowers
-			WHERE 	(surname LIKE ?) OR (firstname LIKE ?)
-				OR (cardnumber LIKE ?) OR (documentnumber LIKE ?)
-					OR (studentnumber LIKE ?) ";
+    my $query= "    SELECT borrowernumber, surname, firstname, cardnumber, documentnumber, studentnumber 
+            FROM borrowers
+            WHERE   (surname LIKE ?) OR (firstname LIKE ?)
+                OR (cardnumber LIKE ?) OR (documentnumber LIKE ?)
+                    OR (studentnumber LIKE ?) ";
 
-	
-	$sth = $dbh->prepare($query);
-	$sth->execute($busqueda, $busqueda, $busqueda, $busqueda, $busqueda);
+    
+    $sth = $dbh->prepare($query);
+    $sth->execute($busqueda, $busqueda, $busqueda, $busqueda, $busqueda);
 
-	my @results;
-	while (my $data = $sth->fetchrow_hashref) {
-		push(@results, $data); 
-	} # while
-	$sth->finish;
-	return(@results);
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) {
+        push(@results, $data); 
+    } # while
+    $sth->finish;
+    return(@results);
 }
 
 # Devuelve informacion del usuario segun un borrowernumber, solo de la tabla borrowers
 # Retorna los datos como una hash
 sub getBorrower{
-	my ($borrowernumber) = @_;
+    my ($borrowernumber) = @_;
 
-	my $dbh = C4::Context->dbh;
-	my $query="	SELECT * 
-			FROM borrowers 
-			WHERE borrowernumber=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber);
+    my $dbh = C4::Context->dbh;
+    my $query=" SELECT * 
+            FROM borrowers 
+            WHERE borrowernumber=?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($borrowernumber);
 
-	return ($sth->fetchrow_hashref);
+    return ($sth->fetchrow_hashref);
 }
 
 # Devuelve toda la informacion del usuario segun un borrowernumber, matching con localidades, categories
 # Retorna los datos como una hash
 sub getBorrowerInfo {
 
-	my ($borrowernumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query;
-	my $sth;
+    my ($borrowernumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query;
+    my $sth;
 
-	$query= "	SELECT borrowers.* , localidades.nombre AS cityname , categories.description AS categoria
-			
-			FROM borrowers LEFT JOIN categories ON 
-							(categories.categorycode = borrowers.categorycode)
-								LEFT JOIN localidades ON 
-									(localidades.localidad = borrowers.city)
-			WHERE (borrowers.borrowernumber = ?); ";
+    $query= "   SELECT borrowers.* , localidades.nombre AS cityname , categories.description AS categoria
+            
+            FROM borrowers LEFT JOIN categories ON 
+                            (categories.categorycode = borrowers.categorycode)
+                                LEFT JOIN localidades ON 
+                                    (localidades.localidad = borrowers.city)
+            WHERE (borrowers.borrowernumber = ?); ";
 
-	$sth = $dbh->prepare($query);
-	$sth->execute($borrowernumber);
+    $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
 
-	return ($sth->fetchrow_hashref);
+    return ($sth->fetchrow_hashref);
 }
 
+# sub getSocioInfo {
+#     
+#     use C4::Modelo::UsrSocio;
+#     use C4::Modelo::UsrSocio::Manager;
+# 
+#     my ($nro_socio) = @_;
+# 
+#     my  $socio = C4::Modelo::UsrSocio->new(nro_socio => $nro_socio);
+#         $socio->load();
+# 
+#     return ($socio);
+# }
 
 sub getSocioInfo {
     
@@ -930,53 +942,52 @@ sub getSocioInfo {
     return ($socio);
 }
 
+sub getPersonaLike {
+    
+    use C4::Modelo::UsrPersona;
+    use C4::Modelo::UsrPersona::Manager;
+
+    my ($persona,$orden,$ini,$cantR,$habilitados) = @_;
+    my  $personas_array_ref;
+    my @filtros;
+    
+    
+    if (($habilitados == 1)){
+        push(@filtros, ( activo=> { eq => 1}) );
+     }
+
+    if($persona ne 'TODOS'){
+        push(@filtros, ( apellido=> { like => $persona.'%' } ) );
+    }
+    
+    $personas_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => \@filtros,
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+     ); 
+
+    return (scalar(@$personas_array_ref), $personas_array_ref);
+}
+
 sub getSocioLike {
     
     use C4::Modelo::UsrSocio;
     use C4::Modelo::UsrSocio::Manager;
 
     my ($socio,$orden,$ini,$cantR) = @_;
-# 
-# $products = 
-#       Product::Manager->get_products(
-#         query =>
-#         [
-#           name => { like => '%Hat' },
-#           id   => { ge => 7 },
-#           or   => 
-#           [
-#             price => 15.00,
-#             price => { lt => 10.00 },
-#           ],
-#         ],
-#         sort_by => 'name',
-#         limit   => 10,
-#         offset  => 50);
-# 
-#     $orden= 'apellido';
-#     $ini= 0;
-#     $cantR= 10;
-    my  $socios_array_ref;
-    if($socio eq 'TODOS'){
-         $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-    #                                          sort_by => $orden,
-                                            limit   => $cantR,
-                                            offset  => $ini,
-                                            require_objects => [ 'persona' ]
-                                );
-    }else{
-
-        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                    query => [
-                                                apellido => { like => $socio.'%' },
-                                            ],
-                                            sort_by => 't2.'.$orden,
-                                            limit   => $cantR,
-                                            offset  => $ini,
-                                            require_objects => [ 'persona' ]
-                                );
+    
+    my @filtros;
+    
+    push (@filtros,(activo => { eq => 1}) );
+    if($socio ne 'TODOS'){
+        push (@filtros, (apellido => { like => $socio.'%' }) );
+        push (@filtros, (activo => { eq => 1}) );
     }
-
+    my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
+                                                                            sort_by => 't2.'.$orden,
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+                                                                            require_objects => [ 'persona' ]
+     ); 
     return (scalar(@$socios_array_ref), $socios_array_ref);
 }
 
@@ -986,45 +997,45 @@ sub esRegular {
         my ($bor) = @_;
 
         my $dbh = C4::Context->dbh;
-	my $regular= 1; #Regular por defecto
-        my $sth = $dbh->prepare(" 	SELECT regular 
-					FROM persons 
-					WHERE borrowernumber = ? 
-						AND 
-					      categorycode='ES' " );
+    my $regular= 1; #Regular por defecto
+        my $sth = $dbh->prepare("   SELECT regular 
+                    FROM persons 
+                    WHERE borrowernumber = ? 
+                        AND 
+                          categorycode='ES' " );
         $sth->execute($bor);
         my $reg = $sth->fetchrow();
 
-	if (($reg eq 1) || ($reg eq 0)){$regular = $reg;}
+    if (($reg eq 1) || ($reg eq 0)){$regular = $reg;}
         $sth->finish();
-	
-	return $regular;
-	
+    
+    return $regular;
+    
 }
 
 #Verifica si el usuario llego al maximo de las resevas que puede relizar sengun la preferencia del sistema
 sub llegoMaxReservas {
 
-	my ($borrowernumber)=@_;
+    my ($borrowernumber)=@_;
 
-	my $cant= &C4::AR::Reservas::cant_reservas($borrowernumber);	
+    my $cant= &C4::AR::Reservas::cant_reservas($borrowernumber);    
 
-	return $cant >= C4::Context->preference("maxreserves");
+    return $cant >= C4::Context->preference("maxreserves");
 }
 
 #Verifica si un usuario esta sancionado segun un tipo de prestamo
 sub estaSancionado {
 
-	my ($borrowernumber,$issuecode)=@_;
-	my $sancionado= 0;
+    my ($borrowernumber,$issuecode)=@_;
+    my $sancionado= 0;
 
-	my @sancion= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issuecode);
+    my @sancion= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issuecode);
 
-	if (($sancion[0]||$sancion[1])) { 
-		$sancionado= 1;
-	}
+    if (($sancion[0]||$sancion[1])) { 
+        $sancionado= 1;
+    }
 
-	return $sancionado;
+    return $sancionado;
 }
 
 
@@ -1034,62 +1045,62 @@ sub estaSancionado {
 
 # FIXME SE USA???????????????????????????????????????????????????????????????????????
 sub ListadoDePersonas  {
-	my ($env,$searchstring,$type,$orden,$ini,$cantR)=@_;
-	my $dbh = C4::Context->dbh;
-	my $count; 
-	my @data;
-	my @bind=();
-	my $query="	SELECT COUNT(*) 
-			FROM persons ";
-	my $query2="	SELECT * 
-			FROM persons ";
-	my $where;
-	if($type eq "simple")	# simple search for one letter only
-	{
-		$where="WHERE surname LIKE ? ";
-		@bind=("$searchstring%");
-	}
-	else	# advanced search looking in surname, firstname and othernames
-	{
-   		@data=split(' ',$searchstring);
+    my ($env,$searchstring,$type,$orden,$ini,$cantR)=@_;
+    my $dbh = C4::Context->dbh;
+    my $count; 
+    my @data;
+    my @bind=();
+    my $query=" SELECT COUNT(*) 
+            FROM persons ";
+    my $query2="    SELECT * 
+            FROM persons ";
+    my $where;
+    if($type eq "simple")   # simple search for one letter only
+    {
+        $where="WHERE surname LIKE ? ";
+        @bind=("$searchstring%");
+    }
+    else    # advanced search looking in surname, firstname and othernames
+    {
+        @data=split(' ',$searchstring);
                 $count=@data;
-                $where="	WHERE ( surname LIKE ? OR surname LIKE ?
-					OR  firstname LIKE ? OR firstname LIKE ?
-                			OR  documentnumber  LIKE ? OR  documentnumber LIKE ?
-                			OR  cardnumber LIKE ? OR  cardnumber LIKE ? 
-					OR  studentnumber  LIKE ? OR  studentnumber LIKE ? )";
+                $where="    WHERE ( surname LIKE ? OR surname LIKE ?
+                    OR  firstname LIKE ? OR firstname LIKE ?
+                            OR  documentnumber  LIKE ? OR  documentnumber LIKE ?
+                            OR  cardnumber LIKE ? OR  cardnumber LIKE ? 
+                    OR  studentnumber  LIKE ? OR  studentnumber LIKE ? )";
 
                 @bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%", "$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%" );
 
                 for (my $i=1;$i<$count;$i++){
-                	$where.=" AND  (surname LIKE ? OR surname LIKE ?
-		  			OR  firstname LIKE ? OR firstname LIKE ?
-                			OR  documentnumber  like ? OR documentnumber LIKE ?
-                			OR  cardnumber LIKE ? OR  cardnumber LIKE ?
-                			OR  studentnumber  LIKE ? OR  studentnumber LIKE ? )";
+                    $where.=" AND  (surname LIKE ? OR surname LIKE ?
+                    OR  firstname LIKE ? OR firstname LIKE ?
+                            OR  documentnumber  like ? OR documentnumber LIKE ?
+                            OR  cardnumber LIKE ? OR  cardnumber LIKE ?
+                            OR  studentnumber  LIKE ? OR  studentnumber LIKE ? )";
 
-        		push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%","% $data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%");
+                push(@bind,"%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","$data[$i]%","% $data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%","%$data[$i]%");
                 }
 
-	}
+    }
 
-	$query.=$where;
-	$query2.=$where." ORDER BY ".$orden." LIMIT ?,?";
+    $query.=$where;
+    $query2.=$where." ORDER BY ".$orden." LIMIT ?,?";
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
-	my $cnt= $sth->fetchrow;
-	$sth->finish;
+    my $sth=$dbh->prepare($query);
+    $sth->execute(@bind);
+    my $cnt= $sth->fetchrow;
+    $sth->finish;
 
-	my $sth=$dbh->prepare($query2);
-	$sth->execute(@bind,$ini,$cantR);
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-	  	push(@results,$data);
-	}
-	$sth->finish;
+    my $sth=$dbh->prepare($query2);
+    $sth->execute(@bind,$ini,$cantR);
+    my @results;
+    while (my $data=$sth->fetchrow_hashref){
+        push(@results,$data);
+    }
+    $sth->finish;
 
-	return ($cnt,\@results);
+    return ($cnt,\@results);
 }
 
 
@@ -1100,24 +1111,24 @@ sub ListadoDePersonas  {
 sub obtenerCategoriaPersona{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("	SELECT categorycode 	
-				 	FROM persons 
-					WHERE borrowernumber = ?");
+        my $sth = $dbh->prepare("   SELECT categorycode     
+                    FROM persons 
+                    WHERE borrowernumber = ?");
         $sth->execute($bor);
         my $condicion = $sth->fetchrow();
-	$sth->finish();
+    $sth->finish();
         return $condicion;
 }
 
 sub obtenerCategoriaBorrower{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("  SELECT categorycode 
-				   FROM borrowers 
-				   WHERE borrowernumber = ?");
-	$sth->execute($bor);
-       	my $condicion = $sth->fetchrow();
-	$sth->finish();
+    my $sth = $dbh->prepare("  SELECT categorycode 
+                   FROM borrowers 
+                   WHERE borrowernumber = ?");
+    $sth->execute($bor);
+        my $condicion = $sth->fetchrow();
+    $sth->finish();
         return $condicion;
 }
 
@@ -1129,9 +1140,9 @@ sub obtenerCategoriaBorrower{
 sub obtenerCategorias {
     my $dbh = C4::Context->dbh;
 
-    my $sth=$dbh->prepare("	SELECT categorycode , description 
-				FROM categories 
-				ORDER BY description");
+    my $sth=$dbh->prepare(" SELECT categorycode , description 
+                FROM categories 
+                ORDER BY description");
     $sth->execute();
     my %labels;
     my @codes;
@@ -1150,121 +1161,121 @@ sub obtenerCategorias {
 # Obtiene todos los prestamos vencidos
  
 sub mailIssuesForBorrower{
-  	my ($branch,$bornum)=@_;
+    my ($branch,$bornum)=@_;
 
-  	my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-  	my $sth=$dbh->prepare(" SELECT * 
-				FROM issues
-				LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
-				LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
-				WHERE issues.returndate IS NULL AND issues.date_due <= now( ) 
-				AND issues.branchcode = ? AND issues.borrowernumber = ? ");
-    	$sth->execute($branch,$bornum);
-  	my @result;
-  	my @datearr = localtime(time);
-	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];	
-  	while (my $data = $sth->fetchrow_hashref) {
-		#Para que solo mande mail a los prestamos vencidos
-		$data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
-		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
-		if ($flag lt 0){
-			#Solo ingresa los prestamos vencidos a el arreglo a retornar
-    			push @result, $data;
-		}
-  	}
-  	$sth->finish;
+    my $dbh = C4::Context->dbh;
+    my $dateformat = C4::Date::get_date_format();
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM issues
+                LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
+                LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
+                WHERE issues.returndate IS NULL AND issues.date_due <= now( ) 
+                AND issues.branchcode = ? AND issues.borrowernumber = ? ");
+        $sth->execute($branch,$bornum);
+    my @result;
+    my @datearr = localtime(time);
+    my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];    
+    while (my $data = $sth->fetchrow_hashref) {
+        #Para que solo mande mail a los prestamos vencidos
+        $data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
+        my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
+        if ($flag lt 0){
+            #Solo ingresa los prestamos vencidos a el arreglo a retornar
+                push @result, $data;
+        }
+    }
+    $sth->finish;
 
-  	return(scalar(@result), \@result);
+    return(scalar(@result), \@result);
 }
 
 
 # Obtiene los datos de una persona, que viene como parametro.
 sub personData {
-  	my ($personNumber)=@_;
- 	my $dbh = C4::Context->dbh;
-  	my $sth=$dbh->prepare("	SELECT * 
-				FROM persons 
-				WHERE personnumber=?");
-  	$sth->execute($personNumber);
+    my ($personNumber)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT * 
+                FROM persons 
+                WHERE personnumber=?");
+    $sth->execute($personNumber);
 
-  	my $data=$sth->fetchrow_hashref;
-  	$sth->finish;
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
 
-  	return($data);
+    return($data);
 }
 
 
 # Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
 sub BornameSearchForCard{
-	my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
-	my @bind=();
-	my $dbh = C4::Context->dbh;
-	my $query = "	SELECT borrowers.*,categories.description AS categoria 
-			
-			FROM borrowers LEFT JOIN categories ON 
-						(categories.categorycode = borrowers.categorycode) 
-			
-			WHERE borrowers.branchcode = ? ";
-	push (@bind,$branch);
+    my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
+    my @bind=();
+    my $dbh = C4::Context->dbh;
+    my $query = "   SELECT borrowers.*,categories.description AS categoria 
+            
+            FROM borrowers LEFT JOIN categories ON 
+                        (categories.categorycode = borrowers.categorycode) 
+            
+            WHERE borrowers.branchcode = ? ";
+    push (@bind,$branch);
 
-	if (($category ne '')&& ($category ne 'Todos')) {
-		$query.= " AND borrowers.categorycode = ? ";
-		push (@bind,$category);
-	}
-	if (($surname1 ne '') || ($surname2 ne '')){
-		if ($surname2 eq ''){ 
-			$query.= " AND borrowers.surname LIKE ? ";
-                       	push (@bind,"$surname1%"); 
-		}
-		else{
-			$query.= " AND borrowers.surname BETWEEN ? AND ? ";
-                	push (@bind,$surname1,$surname2);
-		}
-	}
-	if (($legajo1 ne '') || ($legajo2 ne '')){
-		if ($legajo2 eq '') {
-			$query.= " AND borrowers.studentnumber LIKE ? ";
-                       	push (@bind,"$legajo1%"); 
-		}
-		else{
-			$query.= " AND borrowers.studentnumber BETWEEN ? AND ? ";
-                	push (@bind,$legajo1,$legajo2);
-		}
-	}
+    if (($category ne '')&& ($category ne 'Todos')) {
+        $query.= " AND borrowers.categorycode = ? ";
+        push (@bind,$category);
+    }
+    if (($surname1 ne '') || ($surname2 ne '')){
+        if ($surname2 eq ''){ 
+            $query.= " AND borrowers.surname LIKE ? ";
+                        push (@bind,"$surname1%"); 
+        }
+        else{
+            $query.= " AND borrowers.surname BETWEEN ? AND ? ";
+                    push (@bind,$surname1,$surname2);
+        }
+    }
+    if (($legajo1 ne '') || ($legajo2 ne '')){
+        if ($legajo2 eq '') {
+            $query.= " AND borrowers.studentnumber LIKE ? ";
+                        push (@bind,"$legajo1%"); 
+        }
+        else{
+            $query.= " AND borrowers.studentnumber BETWEEN ? AND ? ";
+                    push (@bind,$legajo1,$legajo2);
+        }
+    }
 
-	if ($orden ne ''){$query.= " ORDER BY  borrowers.$orden ASC ";}
-	else {$query.= " ORDER BY  borrowers.surname ASC ";}
+    if ($orden ne ''){$query.= " ORDER BY  borrowers.$orden ASC ";}
+    else {$query.= " ORDER BY  borrowers.surname ASC ";}
 
-	my $sth = $dbh->prepare($query);
-	$sth->execute(@bind);
- 	my @results;
- 	my $i=-1;
- 	while (my $data=$sth->fetchrow_hashref){
-		my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
-		my $pasa=1;
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind);
+    my @results;
+    my $i=-1;
+    while (my $data=$sth->fetchrow_hashref){
+        my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
+        my $pasa=1;
 
-		if (($regular ne '')&&($regular ne 'Todos')){ #Se tiene que filtrar por regularidad??
- 	  		if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
-		}
-		if ($pasa == 1){ #Pasa el filtro
-			$i++; 
-			$results[$i]=$data; 
-			$results[$i]->{'city'}=C4::AR::Busquedas::getNombreLocalidad($results[$i]->{'city'});
-			if ($results[$i]->{'categorycode'} eq 'ES'){
-				$results[$i]->{'regular'}= $reg;
-				if ($results[$i]->{'regular'} eq 1){
-					$results[$i]->{'regular'}="<font color='green'>Regular</font>";
-				}
-				elsif($results[$i]->{'regular'} eq 0){
-					$results[$i]->{'regular'}="<font color='red'>Irregular</font>";
-				}
-			}
-			else{$results[$i]->{'regular'}="---";};
-		}
-	}
- 	$sth->finish;
- 	return(scalar(@results),@results);
+        if (($regular ne '')&&($regular ne 'Todos')){ #Se tiene que filtrar por regularidad??
+            if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
+        }
+        if ($pasa == 1){ #Pasa el filtro
+            $i++; 
+            $results[$i]=$data; 
+            $results[$i]->{'city'}=C4::AR::Busquedas::getNombreLocalidad($results[$i]->{'city'});
+            if ($results[$i]->{'categorycode'} eq 'ES'){
+                $results[$i]->{'regular'}= $reg;
+                if ($results[$i]->{'regular'} eq 1){
+                    $results[$i]->{'regular'}="<font color='green'>Regular</font>";
+                }
+                elsif($results[$i]->{'regular'} eq 0){
+                    $results[$i]->{'regular'}="<font color='red'>Irregular</font>";
+                }
+            }
+            else{$results[$i]->{'regular'}="---";};
+        }
+    }
+    $sth->finish;
+    return(scalar(@results),@results);
 }
 
 =item 
@@ -1274,17 +1285,17 @@ Posiblemente no se usa o no sirve!!!!!!! VER!!!!!!!!!!!!
 =cut
 ## FIXME BORRAR no es necesario
 sub NewBorrowerNumber{
-  	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
-  	my $sth=$dbh->prepare("	SELECT MAX(borrowernumber) 
-				FROM borrowers");
-  	$sth->execute;
-  	my $data=$sth->fetchrow_hashref;
-  	$sth->finish;
+    my $sth=$dbh->prepare(" SELECT MAX(borrowernumber) 
+                FROM borrowers");
+    $sth->execute;
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
 
-  	$data->{'max(borrowernumber)'}++;
+    $data->{'max(borrowernumber)'}++;
 
-  	return($data->{'max(borrowernumber)'});
+    return($data->{'max(borrowernumber)'});
 }
 
 =item 
@@ -1308,9 +1319,9 @@ POSIBLEMENTE SE PUEDA BORRAR !!!!! BUSCA HIJOS!!!!!!!
 sub findguarantees{
   my ($bornum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("	SELECT cardnumber , borrowernumber , firstname , surname 
-				FROM borrowers 
-				WHERE guarantor=?");
+  my $sth=$dbh->prepare("   SELECT cardnumber , borrowernumber , firstname , surname 
+                FROM borrowers 
+                WHERE guarantor=?");
   $sth->execute($bornum);
 
   my @dat;
@@ -1323,17 +1334,17 @@ sub findguarantees{
 }
 
 sub updateOpacBorrower{
-	my($update) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query="	UPDATE borrowers 
-			SET streetaddress=? , faxnumber=?, firstname=?, emailaddress=?, 
-			    city=?, phone=?, surname=? 
-			
-			WHERE borrowernumber=?";
+    my($update) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query=" UPDATE borrowers 
+            SET streetaddress=? , faxnumber=?, firstname=?, emailaddress=?, 
+                city=?, phone=?, surname=? 
+            
+            WHERE borrowernumber=?";
 
-	my $sth=$dbh->prepare($query);
-  	$sth->execute($update->{'streetaddress'},$update->{'faxnumber'},$update->{'firstname'},$update->{'emailaddress'},$update->{'city'},$update->{'phone'},$update->{'surname'},$update->{'borrowernumber'});
-	$sth->finish;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($update->{'streetaddress'},$update->{'faxnumber'},$update->{'firstname'},$update->{'emailaddress'},$update->{'city'},$update->{'phone'},$update->{'surname'},$update->{'borrowernumber'});
+    $sth->finish;
 }
 
  

@@ -9,6 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_persona       => { type => 'serial', not_null => 1 },
+        legajo    => { type => 'varchar', length => 8, not_null => 1 },
         version_documento => { type => 'character', default => 'P', length => 1, not_null => 1 },
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
@@ -59,6 +60,7 @@ sub convertirEnSocio{
     $data_hash->{'id_persona'} = $self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $socio->agregar($data_hash);
+    $self->activar;
 }
 
 sub _printHASH {
@@ -80,32 +82,66 @@ sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
-    $self-> setNombre($data_hash->{'nombre'});
-    $self-> setApellido($data_hash->{'apellido'});
-    $self-> setVersion_documento($data_hash->{'version_documento'});
-    $self-> setNro_documento($data_hash->{'nro_documento'});
-    $self-> setTipo_documento($data_hash->{'tipo_documento'});
-    $self-> setTitulo($data_hash->{'titulo'});
-    $self-> setOtros_nombres($data_hash->{'otros_nombres'});
-    $self-> setIniciales($data_hash->{'iniciales'});
-    $self-> setCalle($data_hash->{'calle'});
-    $self-> setBarrio($data_hash->{'barrio'});
-    $self-> setCiudad($data_hash->{'ciudad'});
-    $self-> setTelefono($data_hash->{'telefono'});
-    $self-> setEmail($data_hash->{'email'});
-    $self-> setFax($data_hash->{'fax'});
-    $self-> setMsg_texto($data_hash->{'msg_texto'});
-    $self-> setAlt_calle($data_hash->{'alt_calle'});
-    $self-> setAlt_barrio($data_hash->{'alt_barrio'});
-    $self-> setAlt_ciudad($data_hash->{'alt_ciudad'});
-    $self-> setAlt_telefono($data_hash->{'alt_telefono'});
-    $self-> setNacimiento($data_hash->{'nacimiento'});
-    $self-> setFecha_alta($data_hash->{'fecha_alta'});
-    $self-> setSexo($data_hash->{'sexo'});
-    $self-> setTelefono_laboral($data_hash->{'telefono_laboral'});
-    $self-> setCumple_condicion($data_hash->{'cumple_condicion'});
-    $self->activar;
+    $self->setNombre($data_hash->{'nombre'});
+    $self->setLegajo($data_hash->{'legajo'});
+    $self->setApellido($data_hash->{'apellido'});
+    $self->setVersion_documento($data_hash->{'version_documento'});
+    $self->setNro_documento($data_hash->{'nro_documento'});
+    $self->setTipo_documento($data_hash->{'tipo_documento'});
+    $self->setTitulo($data_hash->{'titulo'});
+    $self->setOtros_nombres($data_hash->{'otros_nombres'});
+    $self->setIniciales($data_hash->{'iniciales'});
+    $self->setCalle($data_hash->{'calle'});
+    $self->setBarrio($data_hash->{'barrio'});
+    $self->setCiudad($data_hash->{'ciudad'});
+    $self->setTelefono($data_hash->{'telefono'});
+    $self->setEmail($data_hash->{'email'});
+    $self->setFax($data_hash->{'fax'});
+    $self->setMsg_texto($data_hash->{'msg_texto'});
+    $self->setAlt_calle($data_hash->{'alt_calle'});
+    $self->setAlt_barrio($data_hash->{'alt_barrio'});
+    $self->setAlt_ciudad($data_hash->{'alt_ciudad'});
+    $self->setAlt_telefono($data_hash->{'alt_telefono'});
+    $self->setNacimiento($data_hash->{'nacimiento'});
+    $self->setFecha_alta($data_hash->{'fecha_alta'});
+    $self->setSexo($data_hash->{'sexo'});
+    $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
+    $self->setCumple_condicion($data_hash->{'cumple_condicion'});
+    if (C4::Context->preference("autoActivarPersona")){
+        $self->convertirEnSocio($data_hash);
+    }
 }    
+
+
+sub modificar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self->setNombre($data_hash->{'nombre'});
+    $self->setApellido($data_hash->{'apellido'});
+    $self->setVersion_documento($data_hash->{'version_documento'});
+    $self->setNro_documento($data_hash->{'nro_documento'});
+    $self->setTipo_documento($data_hash->{'tipo_documento'});
+    $self->setTitulo($data_hash->{'titulo'});
+    $self->setOtros_nombres($data_hash->{'otros_nombres'});
+    $self->setIniciales($data_hash->{'iniciales'});
+    $self->setCalle($data_hash->{'calle'});
+    $self->setBarrio($data_hash->{'barrio'});
+    $self->setCiudad($data_hash->{'ciudad'});
+    $self->setTelefono($data_hash->{'telefono'});
+    $self->setEmail($data_hash->{'email'});
+    $self->setFax($data_hash->{'fax'});
+    $self->setMsg_texto($data_hash->{'msg_texto'});
+    $self->setAlt_calle($data_hash->{'alt_calle'});
+    $self->setAlt_barrio($data_hash->{'alt_barrio'});
+    $self->setAlt_ciudad($data_hash->{'alt_ciudad'});
+    $self->setAlt_telefono($data_hash->{'alt_telefono'});
+    $self->setNacimiento($data_hash->{'nacimiento'});
+    $self->setFecha_alta($data_hash->{'fecha_alta'});
+    $self->setSexo($data_hash->{'sexo'});
+    $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
+    $self->save();
+}   
 
 sub activar{
     my ($self) = shift;
@@ -120,6 +156,16 @@ sub eliminar{
     $self->save();
 }     
 
+sub getLegajo{
+    my ($self) = shift;
+    return ($self->legajo);
+}
+
+sub setLegajo{
+    my ($self) = shift;
+    my ($legajo) = @_;
+    $self->legajo($legajo);
+}
 
 sub getActivo{
     my ($self) = shift;

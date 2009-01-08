@@ -1,4 +1,3 @@
-
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
 	<tr align="center">
 		<b>
@@ -9,7 +8,7 @@
 
 	<tr align="center">
 		<b>
-                    [% "Ha buscado por :" | i18n %] [% member %]
+                    [% "Ha buscado por :" | i18n %] [% persona %]
                 </b>
 	</tr>
 </table>
@@ -24,17 +23,11 @@
     		<th class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></th>
     		<th class="tablaresultadoTitle">&nbsp;</th>
 
-		<th align="left" width="12%" class="tablaresultadoTitleClick" onClick="ordenar('cardnumber')">
-                    [% "Tarjeta de ID" | i18n %]
-                </th>
-    		<th align="left" width="28%" class="tablaresultadoTitleClick" onClick="ordenar('surname')">
+    		<th align="left" width="28%" class="tablaresultadoTitleClick" onClick="ordenar('apellido')">
                     [% "Apellido y Nombres" | i18n %]
                 </th>
-    		<th align="left" width="15%" class="tablaresultadoTitleClick" onClick="ordenar('documentnumber')">
+    		<th align="left" width="15%" class="tablaresultadoTitleClick" onClick="ordenar('nro_documento')">
                     [% "Documento" | i18n %]
-                </th>
-    		<th align="left" class="tablaresultadoTitleClick" onClick="ordenar('studentnumber')">
-                    [% "Legajo" | i18n %]
                 </th>
     		<th class="tablaresultadoTitle">
                     [% "Cat." | i18n %]
@@ -60,29 +53,25 @@
 			[% IF nomodificable %]
 				[% "Imposible" | i18n %] 
 			[% ELSE %]
-				<input type=checkbox name="[% personnumber %]" 
-				id="[% documentnumber %]" 
-				value="[% documentnumber %]">
+				<input type=checkbox name="[% nro_documento %]" 
+				id="[% nro_documento %]" 
+				value="[% nro_documento %]">
 			[% END %]
 		</td>
 		
-      		<td align="left">
-			[% cardnumber %]
+      	<td align="left">
+			[% apellido %], [% nombre %]
 		</td>
 
       		<td align="left">
-			[% surname %], [% firstname %]
+			[% tipo_documento %]&nbsp; [% nro_documento %]
 		</td>
 
       		<td align="left">
-			[% documenttype %]&nbsp; [% documentnumber %]
-		</td>
-
-      		<td align="left">
-			[% studentnumber %]
+			[% legajo %]
 		</td>
  		<td>
-			[% categorycode %]
+			[% categoria %]
 		</td> 
       		<td>
 			<span class="[% clase %]">
@@ -90,15 +79,6 @@
                         </span>
 		</td>
 
-	[% IF borrowernumber %]
-      		<td> [% "Si" | i18n %] </td>
-    	[% ELSE %]
-      		<td> [% "No" | i18n %] </td>
-    	[% END %]
-
-    		<td height=25>&nbsp;</td>
-    	</tr>
-  [% END %]
 	<tr valign=bottom>
         	<td class="lineafinaltabla"  align="left" colspan="12"></td>
         </tr>
@@ -125,7 +105,9 @@
 			</select>
 		</td>
 		<td>
-			<input type="image"  src="[% themelang %]/images/seleccionar.png" onClick="javascript:habilitar()">
+			<input type="image" src="[% themelang %]/images/seleccionar.png" onClick="javascript:habilitar()" >
 		</td>
 	</tr>
 </table>
+
+[% END %]

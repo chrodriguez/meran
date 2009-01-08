@@ -221,7 +221,10 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'fecha_alta'}= $socio->getFecha_alta;
 	$t_params->{'expira'}= $socio->getExpira;
 	$t_params->{'nro_socio'}= $socio->getNro_socio;
- 	$t_params->{'nacimiento'}= C4::Date::format_date($socio->persona->getNacimiento,$dateformat);
+ 	$t_params->{'nacimiento'}= $socio->persona->getNacimiento;
+#     open A,">>/tmp/debug2.txt"; 
+#     printf A "\n\n\n\n\n".$socio->persona->getNacimiento."\n\n\n\n\n";
+#     close A;
 	$t_params->{'addBorrower'}= 0;
 	$t_params->{'sexo'}= $socio->persona->getSexo;
 #  	$t_params->{'dateformat'}= C4::Date::display_date_format($dateformat);

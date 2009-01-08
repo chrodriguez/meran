@@ -71,6 +71,18 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    
+    $self->setNro_socio($data_hash->{'nro_socio'});
+    $self->setId_ui($data_hash->{'id_ui'});
+    $self->setCod_categoria($data_hash->{'cod_categoria'});
+    $self->persona->modificar($data_hash);
+
+    $self->save();
+}
 sub getId_persona{
     my ($self) = shift;
     return ($self->id_persona);
