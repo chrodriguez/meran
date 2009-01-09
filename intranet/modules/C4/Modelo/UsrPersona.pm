@@ -157,16 +157,16 @@ sub eliminar{
     $self->save();
 }     
 
-sub getLegajo{
-    my ($self) = shift;
-    return ($self->legajo);
-}
+# sub getLegajo{
+#     my ($self) = shift;
+#     return ($self->legajo);
+# }
 
-sub setLegajo{
-    my ($self) = shift;
-    my ($legajo) = @_;
-    $self->legajo($legajo);
-}
+# sub setLegajo{
+#     my ($self) = shift;
+#     my ($legajo) = @_;
+#     $self->legajo($legajo);
+# }
 
 sub getActivo{
     my ($self) = shift;
