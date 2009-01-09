@@ -32,9 +32,6 @@
     		<th class="tablaresultadoTitle">
                     [% "Cat." | i18n %]
                 </th>
-    		<th class="tablaresultadoTitle">
-                    [% "Estado" | i18n %]
-                </th>
     		<th class="tablaresultadoTitle">  
                     [% "Habilitado?" | i18n %]
                 </th>
@@ -63,20 +60,19 @@
 			<a href="">[% persona.getApellido %], [% persona.getNombre %]</a>
 		</td>
 
-      		<td align="left">
-			[% persona.getTipo_documento %]&nbsp; [% persona.getNro_documento %]
+      	<td align="left">
+			[% persona.getVersion_documento %]&nbsp; [% persona.getNro_documento %]
 		</td>
 
-      		<td align="left">
-			[% persona.getLegajo %]
-		</td>
  		<td>
-			[% persona.categoria.getNombre %]
+            [% IF !persona.esSocio %]
+			    [% comboCategorias %]
+            [% ELSE %]
+                [% persona.getCategoria %]
+            [% END %]
 		</td> 
-      		<td>
-			<span class="[% clase %]">
-                            <b>[% regular %]</b>
-                        </span>
+        <td>
+			<span class="[% clase %]"> <b>[% activo %]</b> </span>
 		</td>
 
     </tr>
@@ -92,7 +88,7 @@
 	<tr>
 		<td>
 		<input name="cantidad" id="cantidad" type="hidden" value="[% modificable %]">
-		</td>
+		</td>   
 	</tr>
 	<tr>
 		<td class="inputFontNormal">

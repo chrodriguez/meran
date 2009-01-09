@@ -949,8 +949,7 @@ sub getPersonaLike {
     my ($persona,$orden,$ini,$cantR,$habilitados) = @_;
     my  $personas_array_ref;
     my @filtros;
-    
-    
+ 
     if (($habilitados == 1)){
         push(@filtros, ( activo=> { eq => 0}) );
      }
@@ -964,7 +963,9 @@ sub getPersonaLike {
                                                                             offset  => $ini,
      ); 
 
-    return (scalar(@$personas_array_ref), $personas_array_ref);
+    my $cant= C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros);
+
+    return ($cant, $personas_array_ref);
 }
 
 sub getSocioLike {

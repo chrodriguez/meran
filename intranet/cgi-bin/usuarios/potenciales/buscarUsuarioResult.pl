@@ -23,31 +23,35 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'apellido';
-my $persona=$obj->{'persona'};
+my $personaBuscada=$obj->{'persona'};
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
-my $env;
-my $regular;
+my $activo;
 
 my ($cantidad,$personas);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 
 my $habilitados = $obj->{'habilitados_filter'};
-($cantidad,$personas)= C4::AR::Usuarios::getPersonaLike($persona,$orden,$ini,$cantR,$habilitados);
+($cantidad,$personas)= C4::AR::Usuarios::getPersonaLike($personaBuscada,$orden,$ini,$cantR,$habilitados);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
+my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
 
 my @resultsdata;
-for (my $i=0; $i < $cantidad; $i++){
+# for (my $i=0; $i < $cantidad; $i++){
+
+# 
+foreach my $persona ($personas){
     my $clase="";
-    if ($personas->[$i]->activo == 0){
-        $regular = "NO";
-    }else{
-        $regular = "SI";
-    }
+#     if ($personas->[$i]->getActivo == 0){
+#     if ($persona->getActivo == 0){
+#         $activo = "NO";
+#     }else{
+#         $activo = "SI";
+#     }
 #     my %row = (
 #             clase=>$clase,
 #             id_persona => $personas->[$i]->getId_persona,
@@ -70,9 +74,10 @@ for (my $i=0; $i < $cantidad; $i++){
 #     );
     
      my %row = (
-            clase=>$clase,
-            persona => $personas->[$i],
-            regular => $regular,
+            clase=> $clase,
+            persona => $persona,
+            comboCategorias => $comboDeCategorias,
+            activo => $activo,
     );
 
     push(@resultsdata, \%row);
@@ -80,5 +85,6 @@ for (my $i=0; $i < $cantidad; $i++){
 
 $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'cantidad'}= $cantidad;
+$t_params->{'persona'}= $personaBuscada;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
