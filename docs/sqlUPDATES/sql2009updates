@@ -153,3 +153,5 @@ INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
 (0, 'Disponible');
 
 ALTER TABLE usr_socio ADD FOREIGN KEY ( cod_categoria ) REFERENCES usr_ref_categoria_socio( categorycode ) ;
+
+ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';

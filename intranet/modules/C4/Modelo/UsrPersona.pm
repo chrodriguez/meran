@@ -37,6 +37,7 @@ __PACKAGE__->meta->setup(
         telefono_laboral => { type => 'varchar', length => 50 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
         activo           => { type => 'integer', default => 1, not_null => 1 },
+        es_socio         => { type => 'integer', default => 0, not_null => 1 },
     ],
 
      relationships =>
@@ -63,7 +64,16 @@ sub convertirEnSocio{
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $socio->agregar($data_hash);
     $self->activar;
+    $self->setEs_socio(1);
 }
+
+sub esSocio{
+    my ($self)=shift;
+    
+    return ($self->getEsSocio);
+}
+
+
 
 sub _printHASH {
     my ($hash_ref) = @_;
@@ -466,5 +476,17 @@ sub setCumple_condicion{
     my ($cumple_condicion) = @_;
     $self->cumple_condicion($cumple_condicion);
 }
+
+sub getEs_socio{
+    my ($self) = shift;
+    return ($self->es_socio);
+}
+
+sub setEs_socio{
+    my ($self) = shift;
+    my ($es_socio) = @_;
+    $self->es_socio($es_socio);
+}
+
 1;
 
