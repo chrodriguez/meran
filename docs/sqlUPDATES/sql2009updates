@@ -157,3 +157,10 @@ ALTER TABLE usr_socio ADD FOREIGN KEY ( cod_categoria ) REFERENCES usr_ref_categ
 ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';
 
 ALTER TABLE `usr_estado` DROP `id_socio` =======
+
+ALTER TABLE `usr_estado` DROP INDEX `id_persona` 
+
+ ALTER TABLE `usr_estado`
+  DROP `id_persona`;
+
+

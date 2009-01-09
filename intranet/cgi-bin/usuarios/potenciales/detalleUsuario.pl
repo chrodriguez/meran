@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+
+use strict;
+use CGI;
+use C4::Auth;
+use C4::Interface::CGI::Output;
+use C4::Date;
+use C4::AR::Usuarios;
+use Date::Manip;
+use Cwd;
+my $input=new CGI;
+
+my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+			                                                        template_name	=> 'usuarios/potenciales/detalleUsuario.tmpl',
+			                                                        query		=> $input,
+			                                                        type		=> "intranet",
+			                                                        authnotrequired	=> 0,
+			                                                        flagsrequired	=> { circulate => 1 },
+    });
+
+    my $obj=$input->param('obj');
+    $obj=C4::AR::Utilidades::from_json_ISO($obj);
+    my $msg_object= C4::AR::Mensajes::create();
+    my $id_persona= $obj->{'id_persona'};
+	my $persona=C4::AR::Usuarios::getPersonaInfo($id_persona);
+
+	$t_params->{'id_persona'}= $id_persona;
+    $t_params->{'persona'}= $persona;
+
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

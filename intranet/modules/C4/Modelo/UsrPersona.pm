@@ -76,11 +76,9 @@ sub getCategoria{
     
     use C4::Modelo::UsrSocio;
 #     NO HACE FALTA CHECKEAR QUE EXISTA, YA QUE SE AFUERA SE PREGUNTA SI esSocio    
-    my $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
-#     $socio->load();
-    $socio->load();
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
 
-    return ($socio->[0]->categoria->getDescription);
+    return ($socio_array_ref->[0]->categoria->getDescription);
 }
 
 sub _printHASH {

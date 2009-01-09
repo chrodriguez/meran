@@ -1,0 +1,80 @@
+[% INCLUDE "intranet-top.inc" %] 
+<script src="/intranet-tmpl/blue/es2/includes/util.js"></script>
+<!--<script src="/intranet-tmpl/blue/es2/includes/circulacion.js"></script>-->
+<!--<script src="/intranet-tmpl/blue/es2/includes/usuarios/usuariosReales.js"></script>-->
+<script src="/intranet-tmpl/blue/es2/includes/MessageHelper.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/WindowHelper.js"></script>
+
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.core.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js"></script>
+<script src="/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js"></script>
+
+
+<script>
+
+/*
+ * objeto_usuario
+ * Representa al objeto que contendra la informacion del usuario seleccionado del autocomplete.
+ */
+function objeto_usuario(){
+    this.text;
+    this.ID;
+}
+
+var objAH;
+
+
+//*************************************Para manejar el historial de prestamos***********************************
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+//*******************************Fin Para manejar el historial de prestamos************************************
+
+
+function detalleUsuario(){
+	objAH=new AjaxHelper(updateDetalleUsuario);
+	objAH.url='/cgi-bin/koha/usuarios/potenciales/detalleUsuario.pl';
+	objAH.debug= true;
+	objAH.id_persona= usuario.ID;
+	objAH.sendToServer();
+}
+
+function updateDetalleUsuario(responseText){
+	$('#detalleUsuario').html(responseText);
+}
+
+$(document).ready(function() {
+
+// 	zebra("tablaResult");
+	
+	//definido en circulacion.js
+	usuario= new objeto_usuario();
+	usuario.text= "[% persona.getApellido %]" + ', ' + "[% persona.getNombre %]";
+	usuario.ID= "[% persona.getId_persona %]";
+
+	detalleUsuario(usuario.ID);
+
+});
+
+</script>
+
+<br>
+<div id="confirmar_div"></div>
+<br>
+
+<div style="clear:both">
+
+	<!-- 	DETALLE USUARIO -->
+	<div id="detalleUsuario"></div>
+
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]
