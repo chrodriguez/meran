@@ -220,15 +220,33 @@ sub t_addBorrower {
 sub agregarPersona{
 
     my ($params)=@_;
+    
+    my $dbh = C4::Context->dbh;
+    my $msg_object= C4::AR::Mensajes::create();
+    $dbh->{AutoCommit} = 0;  
+    $dbh->{RaiseError} = 1;
+    
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
-    my ($estado) = C4::Modelo::UsrEstado->new();
-    $person->agregar($params);
-    $person->convertirEnSocio($params);
+    eval {    
+        $person->agregar($params);
+        $person->convertirEnSocio($params);
+    };
 
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+    if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+         eval {$dbh->rollback};
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+    }else
+        {
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+        }
+    $dbh->{AutoCommit} = 1;
 
     return ($msg_object);
 
@@ -982,19 +1000,6 @@ sub getBorrowerInfo {
 # 
 #     return ($socio);
 # }
-
-sub getPersonaInfo {
-    
-    use C4::Modelo::UsrPersona;
-    use C4::Modelo::UsrPersona::Manager;
-
-    my ($id_persona) = @_;
-
-    my  $persona = C4::Modelo::UsrPersona->new(id_persona => $id_persona);
-        $persona->load();
-
-    return ($persona);
-}
 
 sub getSocioInfo {
     

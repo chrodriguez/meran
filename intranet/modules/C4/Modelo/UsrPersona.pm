@@ -75,7 +75,6 @@ sub getCategoria{
     my ($self)=shift;
     
     use C4::Modelo::UsrSocio;
-#     NO HACE FALTA CHECKEAR QUE EXISTA, YA QUE SE AFUERA SE PREGUNTA SI esSocio    
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
 
     return ($socio_array_ref->[0]->categoria->getDescription);
