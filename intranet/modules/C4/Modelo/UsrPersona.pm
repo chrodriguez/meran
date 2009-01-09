@@ -70,7 +70,7 @@ sub convertirEnSocio{
 sub esSocio{
     my ($self)=shift;
     
-    return ($self->getEsSocio);
+    return ($self->getEs_socio);
 }
 
 sub getCategoria{
