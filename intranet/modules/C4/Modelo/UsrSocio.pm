@@ -24,16 +24,6 @@ __PACKAGE__->meta->setup(
         id_estado          => { type => 'integer', not_null => 1 },
     ],
 
-#       foreign_keys =>
-#     [
-#       persona =>
-#       {
-#         class       => 'C4::Modelo::UsrPersona',
-#         key_columns => { id_persona => 'id_persona' },
-#         relationship_type => 'one to one',
-#       },
-#     ],
-
      relationships =>
     [
       persona => 
@@ -42,12 +32,40 @@ __PACKAGE__->meta->setup(
         key_columns => { id_persona => 'id_persona' },
         type        => 'one to one',
       },
+
+      ui => 
+      {
+        class       => 'C4::Modelo::PrefUnidadInformacion',
+        key_columns => { id_ui => 'id_ui' },
+        type        => 'one to one',
+      },
+
+       categoria => 
+      {
+        class       => 'C4::Modelo::UsrRefCategoriasSocio',
+        key_columns => { cod_categoria => 'categorycode' },
+        type        => 'one to one',
+      },
     ],
 
     primary_key_columns => [ 'id_socio' ],
 
     unique_key => [ 'nro_socio' ],
 );
+
+
+# sub getUI_nombre{
+# 
+#     my ($self) = shift;
+#     my ($id_ui) = @_;
+# 
+#     use C4::Modelo::RefUnidadInformacion;
+# 
+#     my  $ui = C4::Modelo::RefUnidadInformacion->new(id_ui => $id_ui);
+#     $ui->load();
+# 
+#     return ($ui->nombre);   
+# } 
 
 sub agregar{
 

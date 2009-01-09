@@ -9,7 +9,6 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_persona       => { type => 'serial', not_null => 1 },
-        legajo    => { type => 'varchar', length => 8, not_null => 1 },
         version_documento => { type => 'character', default => 'P', length => 1, not_null => 1 },
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
@@ -29,8 +28,10 @@ __PACKAGE__->meta->setup(
         alt_barrio       => { type => 'varchar', length => 255 },
         alt_ciudad       => { type => 'varchar', length => 255 },
         alt_telefono     => { type => 'varchar', length => 255 },
-        nacimiento       => { type => 'date' },
-        fecha_alta       => { type => 'date' },
+#         nacimiento       => { type => 'date' },
+        nacimiento       => { type => 'varchar', length => 255},
+#         fecha_alta       => { type => 'date' },
+        fecha_alta       => { type => 'varchar', length => 255},
         sexo             => { type => 'character', length => 1 },
         telefono_laboral => { type => 'varchar', length => 50 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
@@ -83,7 +84,7 @@ sub agregar{
     my ($data_hash)=@_;
     #Asignando data...
     $self->setNombre($data_hash->{'nombre'});
-    $self->setLegajo($data_hash->{'legajo'});
+#     $self->setLegajo($data_hash->{'legajo'});
     $self->setApellido($data_hash->{'apellido'});
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
@@ -405,7 +406,6 @@ sub getNacimiento{
     my $dateformat = C4::Date::get_date_format();
 
     return ( C4::Date::format_date($self->nacimiento, $dateformat) );
-#     return ($self->nacimiento);
 }
 
 sub setNacimiento{
@@ -419,7 +419,7 @@ sub setNacimiento{
 sub getFecha_alta{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
-#     return ($self->fecha_alta);
+
     return ( C4::Date::format_date($self->fecha_alta, $dateformat) );
 }
 

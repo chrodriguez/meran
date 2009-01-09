@@ -18,5 +18,21 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'LOCALIDAD' ],
 );
 
+sub getIdLocalidad{
+    my ($self) = shift;
+    return ($self->LOCALIDAD);
+}
+
+sub getNombre{
+    my ($self) = shift;
+    return ($self->NOMBRE);
+}
+
+sub setId_persona{
+    my ($self) = shift;
+    my ($nombre) = @_;
+    $self->NOMBRE($nombre);
+}
+
 1;
 

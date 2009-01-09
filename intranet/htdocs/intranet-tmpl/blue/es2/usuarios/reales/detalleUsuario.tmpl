@@ -53,13 +53,13 @@
                     [% END %]
         
                     [% "Apellido:" | i18n %]
-                            <b> [% apellido %] </b><br>
+                            <b> [% socio.persona.getApellido %] </b><br>
 
                     [% "Nombre:" | i18n %]
-                            <b> [% nombre %] </b><br>
+                            <b> [% socio.persona.getNombre %] </b><br>
 
                     [% "Documento:" | i18n %]
-                            <b> [% version_documento %]&nbsp; [% nro_documento %]</b><br>
+                            <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
             
                     [% "Fecha de nacimiento:" | i18n %]
                             <b> [% nacimiento %]</b><br>
@@ -91,6 +91,11 @@
             
                     [% "Legajo :" | i18n %]
                                     <b> [%  nro_documento %]</b><br>
+
+                    [% "Ciudad :" | i18n %]
+                                    <b> [%  ciudad %]</b><br>
+                    [% "Calle :" | i18n %]
+                                    <b> [%  calle %]</b><br>
                     
                     [% "ID de usuario:" | i18n %]
                                     <b> [%  nro_socio %]</b><br>

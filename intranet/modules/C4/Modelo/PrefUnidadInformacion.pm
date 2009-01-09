@@ -20,10 +20,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_ui' ],
 
     unique_key => [ 'id_ui' ],
-);
-
-
-
+); 
 
 sub getId_ui{
     my ($self) = shift;

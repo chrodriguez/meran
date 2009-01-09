@@ -1194,6 +1194,7 @@ sub getItemTypes {
 Given the borrower's category code, the function returns the corresponding
 description for a comprehensive information display.
 =cut
+## FIXME DEPRECATEDDDDDDDDDDDDDDDDDD C4::AR::Busquedas::getborrowercategory
 sub getborrowercategory{
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;
@@ -1407,6 +1408,7 @@ sub buscarGrupos{
 getNombreLocalidad
 Devuelve el nombre de la localidad que se pasa por parametro.
 =cut
+## FIXME DEPRECATEDDDDDDDDDDDDDDDDDD   C4::AR::Busquedas::getNombreLocalidad
 sub getNombreLocalidad{
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;

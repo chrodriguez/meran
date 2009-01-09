@@ -191,14 +191,18 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	#Obtenemos los datos del borrower
 	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
 
+    my %params;
+    $params{'default'}= $socio->cod_categoria;
 	#se genera el combo de categorias de usuario
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio($socio->cod_categoria);
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 	
+    $params{'default'}= $socio->persona->tipo_documento;
 	#se genera el combo de tipos de documento
-	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc($socio->persona->tipo_documento);
+	my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
 
+    $params{'default'}= $socio->persona->tipo_documento;
 	#se genera el combo de las bibliotecas
-	my $comboDeUI= &C4::AR::Utilidades::generarComboUI($socio->id_ui);
+	my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
 
 	$t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
 	$t_params->{'comboDeCategorias'}= $comboDeCategorias;
