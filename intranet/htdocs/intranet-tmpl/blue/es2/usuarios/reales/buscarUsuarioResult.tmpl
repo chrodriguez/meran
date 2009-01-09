@@ -49,22 +49,22 @@ Apellido: [% obj_socio.persona.getApellido %]
      		<td height=25>&nbsp;</td>
 
       		<td align='left'>
-			[% cardnumber %]
+			[% socio.getNro_socio %]
 		</td>
      		<td width=250 align="left">
 			<a class="inputFontNormal" 
 			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=[% id_socio %]">
-				[% apellido %], [% nombre %]
+				[% socio.persona.getApellido %], [% socio.persona.getNombre %]
 			</a>
 		</td>
       		<td align="left">
-			[% version_documento %]&nbsp;[% nro_documento %]
+			[% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
 		</td>
       		<td align="left">
-			[% studentnumber %]
+			[% socio.getLegajo %]
 		</td>
       		<td align=center>
-			[% categorycode %]
+			[% socio.categoria.getDescription %]
 		</td>
       		<td align=center>
 			[% issue %]

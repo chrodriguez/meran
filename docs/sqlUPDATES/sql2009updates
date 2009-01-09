@@ -126,8 +126,6 @@ VALUES (
 'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', NULL , NULL
 ); 
 
-<<<<<<< .mine
-
 INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
 VALUES (
 'defaultDisponibilidad', 'ES', 'Disponibilidad por defecto', NULL , NULL
@@ -154,6 +152,4 @@ INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
 (6, 'En Encuadernación'),
 (0, 'Disponible');
 
-=======
-
->>>>>>> .r907
+ALTER TABLE usr_socio ADD FOREIGN KEY ( cod_categoria ) REFERENCES usr_ref_categoria_socio( categorycode ) ;

@@ -54,19 +54,7 @@ for (my $i=0; $i < $cantidad; $i++){
 
     my %row = (
             clase=>$clase,
-            nro_socio => $socios->[$i]->getNro_socio,
-            id_socio => $socios->[$i]->getId_socio,
-#             cardnumber => $socios->[$i]->persona->getNro_socio,
-            apellido => $socios->[$i]->persona->getApellido,
-            nombre => $socios->[$i]->persona->getNombre,
-#             completo => $socios->[$i]->persona->getApellido.", ".$socios->[$i]->persona->getNombre,
-            categorycode => $socios->[$i]->getCod_categoria,
-            calle => $socios->[$i]->persona->getCalle,
-            version_documento => $socios->[$i]->persona->getVersion_documento,
-            nro_documento => $socios->[$i]->persona->getNro_documento,
-#             studentnumber => $socios->[$i]{'studentnumber'},
-            ciudad => $socios->[$i]->persona->getCiudad,
-#             odissue => "$od/$issue",
+            socio => $socios->[$i],
             issue => "$issue",
             od => "$od",
             regular => $regular,
@@ -75,7 +63,6 @@ for (my $i=0; $i < $cantidad; $i++){
 }
 
 $t_params->{'resultsloop'}= \@resultsdata;
-$t_params->{'socio'}= $socio;
 $t_params->{'cantidad'}= $cantidad;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
