@@ -73,7 +73,15 @@ sub esSocio{
     return ($self->getEsSocio);
 }
 
+sub getCategoria{
+    my ($self)=shift;
+    
+    use C4::Modelo::UsrSocio;
+#     NO HACE FALTA CHECKEAR QUE EXISTA, YA QUE SE AFUERA SE PREGUNTA SI esSocio    
+    my $socio = C4::Modelo::UsrSocio::Manager::new( id_persona => $self->getId_persona );
 
+    return ($socio->categoria->getNombre);
+}
 
 sub _printHASH {
     my ($hash_ref) = @_;
