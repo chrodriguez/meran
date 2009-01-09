@@ -227,15 +227,14 @@ sub agregarPersona{
     my ($estado) = C4::Modelo::UsrEstado->new();
     $person->agregar($params);
 
-    my $paramsEstado;
-    $paramsEstado->{'id_persona'} = $person->getId_persona;
-    $paramsEstado->{'fuente'} = $params->{'id_ui'};
-    $paramsEstado->{'regular'} = 1;
-    $paramsEstado->{'categoria'} = $params->{'cod_categoria'};
-    $estado->agregar($paramsEstado);
+#     my $paramsEstado;
+#     $paramsEstado->{'id_persona'} = $person->getId_persona;
+#     $paramsEstado->{'fuente'} = $params->{'id_ui'};
+#     $paramsEstado->{'regular'} = 1;
+#     $paramsEstado->{'categoria'} = $params->{'categoria_socio_id'};
+#     $estado->agregar($paramsEstado);
 
     $params->{'id_estado'}= $estado->getId_estado;
-    $person->convertirEnSocio($params);
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
@@ -953,7 +952,7 @@ sub getPersonaLike {
     
     
     if (($habilitados == 1)){
-        push(@filtros, ( activo=> { eq => 1}) );
+        push(@filtros, ( activo=> { eq => 0}) );
      }
 
     if($persona ne 'TODOS'){

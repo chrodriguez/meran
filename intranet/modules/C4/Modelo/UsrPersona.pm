@@ -9,6 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_persona       => { type => 'serial', not_null => 1 },
+        legajo             => { type => 'varchar', length => 255, not_null => 1 },
         version_documento => { type => 'character', default => 'P', length => 1, not_null => 1 },
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
@@ -83,8 +84,8 @@ sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
+    $self->setLegajo($data_hash->{'legajo'});
     $self->setNombre($data_hash->{'nombre'});
-#     $self->setLegajo($data_hash->{'legajo'});
     $self->setApellido($data_hash->{'apellido'});
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
@@ -111,6 +112,10 @@ sub agregar{
     if (C4::Context->preference("autoActivarPersona")){
         $self->convertirEnSocio($data_hash);
     }
+    else
+        {
+            $self->save();
+        }
 }    
 
 
@@ -157,16 +162,16 @@ sub eliminar{
     $self->save();
 }     
 
-# sub getLegajo{
-#     my ($self) = shift;
-#     return ($self->legajo);
-# }
+sub getLegajo{
+    my ($self) = shift;
+    return ($self->legajo);
+}
 
-# sub setLegajo{
-#     my ($self) = shift;
-#     my ($legajo) = @_;
-#     $self->legajo($legajo);
-# }
+sub setLegajo{
+    my ($self) = shift;
+    my ($legajo) = @_;
+    $self->legajo($legajo);
+}
 
 sub getActivo{
     my ($self) = shift;

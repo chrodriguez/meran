@@ -53,25 +53,25 @@
 			[% IF nomodificable %]
 				[% "Imposible" | i18n %] 
 			[% ELSE %]
-				<input type=checkbox name="[% nro_documento %]" 
-				id="[% nro_documento %]" 
-				value="[% nro_documento %]">
+				<input type=checkbox name="[% persona.getNro_documento %]" 
+				id="[% persona.getNro_documento %]" 
+				value="[% persona.getNro_documento %]">
 			[% END %]
 		</td>
 		
       	<td align="left">
-			[% persona.getApellido %], [% nombre %]
+			<a href="">[% persona.getApellido %], [% persona.getNombre %]</a>
 		</td>
 
       		<td align="left">
-			[% tipo_documento %]&nbsp; [% nro_documento %]
+			[% persona.getTipo_documento %]&nbsp; [% persona.getNro_documento %]
 		</td>
 
       		<td align="left">
-			[% legajo %]
+			[% persona.getLegajo %]
 		</td>
  		<td>
-			[% categoria %]
+			[% persona.categoria.getNombre %]
 		</td> 
       		<td>
 			<span class="[% clase %]">
