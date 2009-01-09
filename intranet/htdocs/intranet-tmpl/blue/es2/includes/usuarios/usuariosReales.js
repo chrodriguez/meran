@@ -170,6 +170,7 @@ function agregarUsuario(){
     objAH.telefono= $('#telefono').val();
     if ( $('#categoria_socio_id') )
         objAH.cod_categoria= $('#categoria_socio_id').val();
+
     objAH.ciudad= $('#id_ciudad').val();
     objAH.alt_ciudad= $('#id_alt_ciudad').val();
     objAH.alt_telefono= $('#alt_telefono').val();

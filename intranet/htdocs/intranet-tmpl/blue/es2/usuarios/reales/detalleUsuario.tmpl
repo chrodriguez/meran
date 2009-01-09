@@ -1,21 +1,22 @@
 <script type="text/javascript">
 
-	function prestamosInterBibliotecarios(){
-		objAH=new AjaxHelper(updateModificarDatosDeUsuario);
-		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.debug= true;
-		objAH.borrowernumber= usuario.ID;
-		objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
-		objAH.sendToServer();
-	}
-	
-	function updatePrestamosInterBibliotecarios(responseText){
-	//se crea el objeto que maneja la ventana para modificar los datos del usuario
-		vPrestamoInterBibliotecario=new WindowHelper();
-		vPrestamoInterBibliotecario.html=responseText;
-		vPrestamoInterBibliotecario.create();	
-		
-	}
+	 function prestamosInterBibliotecarios(){
+        objAH=new AjaxHelper(updateModificarDatosDeUsuario);
+        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+        objAH.debug= true;
+        objAH.borrowernumber= usuario.ID;
+        objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
+        objAH.sendToServer();
+    }
+    
+    function updatePrestamosInterBibliotecarios(responseText){
+    //se crea el objeto que maneja la ventana para modificar los datos del usuario
+        vPrestamoInterBibliotecario=new WindowHelper();
+        vPrestamoInterBibliotecario.html=responseText;
+        vPrestamoInterBibliotecario.create();   
+        
+    }
+
 
 </script>
 <div class="vcard">
@@ -66,21 +67,21 @@
                     [% "Sexo:" | i18n %]    
                             <b> [% socio.persona.getSexo %]</b><br>
                                                 
-                    [% IF telefono %]
+                    [% IF socio.persona.getEelefono %]
                             <div class="tel">
                                     <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
                                             <b>[% socio.persona.getTelefono %]</b><br>
                             </div>	
                     [% END %]
             
-                    [% IF alt_telefono %]
+                    [% IF socio.persona.getAlt_telefono %]
                     <div class="tel">
                             <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
                                         <b>[% socio.persona.getAlt_telefono %]</b><br>
                     </div>	
                     [% END %]
                     
-                    [% IF email %]
+                    [% IF socio.persona.getEmail %]
                             E-mail: <b><a href="mailto:[% emailaddress %]">
                                     <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
                     [% END %]
@@ -194,7 +195,8 @@
                                     <input type="hidden" name="bornum" value="[% bornum %]">
                                     <input type="hidden" name="accion" value="ingresarDatos">
                             </form>
-                    </li>
+                    </li>             
+    
                     [% IF mensaje_error_foto %]	
                             <li>
                                     <font color="red">[% mensaje_error_foto %]</font>

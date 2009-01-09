@@ -67,12 +67,11 @@
 		</td>
 
  		<td>
-            [% IF !persona.esSocio %]
-			    [% comboCategorias %]
-            [% ELSE %]
+            [% IF persona.getActivo %]
                 [% persona.getCategoria %]
             [% END %]
 		</td> 
+    
         <td>
 			<span class="[% clase %]"> <b>[% activo %]</b> </span>
 		</td>

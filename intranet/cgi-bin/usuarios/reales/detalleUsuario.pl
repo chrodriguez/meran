@@ -10,7 +10,7 @@ use Date::Manip;
 use Cwd;
 my $input=new CGI;
 
-my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+my ($template, $session, $t_params, $cookie) =  C4::Auth::get_template_and_user ({
 			                                                        template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
 			                                                        query		=> $input,
 			                                                        type		=> "intranet",
@@ -26,7 +26,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 # if ( (&C4::AR::Usuarios::existeUsuario($id_socio)) && (&C4::AR::Utilidades::validateString($bornum)) ) {
 		
 	my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
-# 	$t_params->{'changepassword'}= $socio->getChange_password;#creo q no es necesario
 	
 	# Curso de usuarios#
 # 	if (C4::Context->preference("usercourse")){
@@ -35,23 +34,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 # 	}
 	#
 
-#     $t_params->{'apellido'} =  $socio->persona->getApellido;
-#     $t_params->{'nombre'} =  $socio->persona->getNombre;
-#     $t_params->{'version_documento'} =  $socio->persona->getVersion_documento;
-#     $t_params->{'nro_documento'} =  $socio->persona->getNro_documento;
-#     $t_params->{'nro_socio'} =  $socio->getNro_socio;
-#     $t_params->{'fecha_alta'} = $socio->getFecha_alta;
-#     $t_params->{'email'} = $socio->persona->getEmail;
-#     $t_params->{'sexo'} =  $socio->persona->getSexo;
-# 	$t_params->{'expira'} = $socio->getExpira;
-#     $t_params->{'telefono'} = $socio->persona->getTelefono;
-#     $t_params->{'alt_telefono'} = $socio->persona->getAlt_telefono;
-# 	$t_params->{'nacimiento'} = $socio->persona->getNacimiento;
-# 	$t_params->{'IS_ADULT'} = ($socio->getCod_categoria ne 'I');
-#     $t_params->{'ciudad'}= $socio->persona->ciudad_ref->getNombre;
-#     $t_params->{'calle'}= $socio->persona->getCalle;
-#     $t_params->{'ui'} = $socio->ui->getNombre;
-#     $t_params->{'cod_categoria'} = $socio->categoria->getDescription;
 	
 	#### Verifica si la foto ya esta cargada
 	my $picturesDir= C4::Context->config("picturesdir");
@@ -95,9 +77,4 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 #      }
 
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
-
-
-
-
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

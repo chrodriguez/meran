@@ -39,11 +39,7 @@ my $habilitados = $obj->{'habilitados_filter'};
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
-
-my @resultsdata;
-# for (my $i=0; $i < $cantidad; $i++){
-
-# 
+my @resultsdata; 
 my $i=0;
 foreach my $persona (@$personas){
     my $clase="";
@@ -53,26 +49,6 @@ foreach my $persona (@$personas){
       }else{
          $activo = "SI";
      }
-#     my %row = (
-#             clase=>$clase,
-#             id_persona => $personas->[$i]->getId_persona,
-# #             cardnumber => $personas->[$i]->getNro_socio,
-#             apellido => $personas->[$i]->getApellido,
-#             nombre => $personas->[$i]->getNombre,
-# #             completo => $personas->[$i]->getApellido.", ".$personas->[$i]->getNombre,
-#             calle => $personas->[$i]->getCalle,
-#             version_documento => $personas->[$i]->getVersion_documento,
-#             nro_documento => $personas->[$i]->getNro_documento,
-# #             studentnumber => $personas->[$i]{'studentnumber'},
-#             ciudad => $personas->[$i]->getCiudad,
-# #             odissue => "$od/$issue",
-# #             issue => "$issue",
-# #             od => "$od",
-#             regular => $regular,
-#             
-#       
-    
-#     );
     
      my %row = (
             clase=> $clase,

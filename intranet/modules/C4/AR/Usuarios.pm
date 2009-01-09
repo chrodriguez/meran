@@ -928,6 +928,19 @@ sub getBorrowerInfo {
 #     return ($socio);
 # }
 
+sub getPersonaInfo {
+    
+    use C4::Modelo::UsrPersona;
+    use C4::Modelo::UsrPersona::Manager;
+
+    my ($id_persona) = @_;
+
+    my  $persona = C4::Modelo::UsrPersona->new(id_persona => $id_persona);
+        $persona->load();
+
+    return ($persona);
+}
+
 sub getSocioInfo {
     
     use C4::Modelo::UsrSocio;
