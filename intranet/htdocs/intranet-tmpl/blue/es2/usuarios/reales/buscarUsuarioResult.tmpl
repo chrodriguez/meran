@@ -42,8 +42,6 @@
    	</thead>
 	<tbody>
 
-Apellido: [% obj_socio.persona.getApellido %]
-
 [% FOREACH resultsloop %]	
   	<tr  align="center" class="inputFontNormal">
      		<td height=25>&nbsp;</td>
@@ -53,7 +51,7 @@ Apellido: [% obj_socio.persona.getApellido %]
 		</td>
      		<td width=250 align="left">
 			<a class="inputFontNormal" 
-			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=[% id_socio %]">
+			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=[% socio.getId_socio %]">
 				[% socio.persona.getApellido %], [% socio.persona.getNombre %]
 			</a>
 		</td>

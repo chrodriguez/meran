@@ -48,30 +48,37 @@ for (my $i=0; $i < $cantidad; $i++){
     }else{
         $regular = "SI";
     }
-    my %row = (
+#     my %row = (
+#             clase=>$clase,
+#             id_persona => $personas->[$i]->getId_persona,
+# #             cardnumber => $personas->[$i]->getNro_socio,
+#             apellido => $personas->[$i]->getApellido,
+#             nombre => $personas->[$i]->getNombre,
+# #             completo => $personas->[$i]->getApellido.", ".$personas->[$i]->getNombre,
+#             calle => $personas->[$i]->getCalle,
+#             version_documento => $personas->[$i]->getVersion_documento,
+#             nro_documento => $personas->[$i]->getNro_documento,
+# #             studentnumber => $personas->[$i]{'studentnumber'},
+#             ciudad => $personas->[$i]->getCiudad,
+# #             odissue => "$od/$issue",
+# #             issue => "$issue",
+# #             od => "$od",
+#             regular => $regular,
+#             
+#       
+    
+#     );
+    
+     my %row = (
             clase=>$clase,
-            id_persona => $personas->[$i]->getId_persona,
-#             cardnumber => $personas->[$i]->getNro_socio,
-            apellido => $personas->[$i]->getApellido,
-            nombre => $personas->[$i]->getNombre,
-#             completo => $personas->[$i]->getApellido.", ".$personas->[$i]->getNombre,
-            calle => $personas->[$i]->getCalle,
-            version_documento => $personas->[$i]->getVersion_documento,
-            nro_documento => $personas->[$i]->getNro_documento,
-#             studentnumber => $personas->[$i]{'studentnumber'},
-            ciudad => $personas->[$i]->getCiudad,
-#             odissue => "$od/$issue",
-#             issue => "$issue",
-#             od => "$od",
+            persona => $personas->[$i],
             regular => $regular,
-            
-          
     );
+
     push(@resultsdata, \%row);
 }
 
 $t_params->{'resultsloop'}= \@resultsdata;
-$t_params->{'socio'}= $persona;
 $t_params->{'cantidad'}= $cantidad;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

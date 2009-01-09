@@ -62,49 +62,49 @@
                             <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
             
                     [% "Fecha de nacimiento:" | i18n %]
-                            <b> [% nacimiento %]</b><br>
+                            <b> [% socio.persona.getNacimiento %]</b><br>
                     [% "Sexo:" | i18n %]    
-                            <b> [% sexo %]</b><br>
+                            <b> [% socio.persona.getSexo %]</b><br>
                                                 
                     [% IF telefono %]
                             <div class="tel">
                                     <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                            <b>[% telefono %]</b><br>
+                                            <b>[% socio.persona.getTelefono %]</b><br>
                             </div>	
                     [% END %]
             
                     [% IF alt_telefono %]
                     <div class="tel">
                             <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                                        <b>[% alt_telefono %]</b><br>
+                                        <b>[% socio.persona.getAlt_telefono %]</b><br>
                     </div>	
                     [% END %]
                     
                     [% IF email %]
                             E-mail: <b><a href="mailto:[% emailaddress %]">
-                                    <span class="email"> [% email %]</span></a></b><br>
+                                    <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
                     [% END %]
                     <br>
             
                     [% "Tarjeta de identificaci&oacute;n :" | i18n %]
-                                    <b> [% nro_socio %]</b><br>
+                                    <b> [% socio.getNro_socio %]</b><br>
             
                     [% "Legajo :" | i18n %]
-                                    <b> [%  nro_documento %]</b><br>
+                                    <b> [%  socio.persona.getNro_documento %]</b><br>
 
                     [% "Ciudad :" | i18n %]
-                                    <b> [%  ciudad %]</b><br>
+                                    <b> [%  socio.persona.getCiudad %]</b><br>
                     [% "Calle :" | i18n %]
-                                    <b> [%  calle %]</b><br>
+                                    <b> [%  socio.persona.getCalle %]</b><br>
                     
                     [% "ID de usuario:" | i18n %]
-                                    <b> [%  nro_socio %]</b><br>
+                                    <b> [%  socio.nro_socio %]</b><br>
             
                     [% "Categor&iacute;a del usuario:" | i18n %]
-                                    <b> [%  cod_categoria %]</b><br>
+                                    <b> [%  socio.categoria.getDescription %]</b><br>
             
                     [% "Incorporaci&oacute;n a Biblioteca:" | i18n %]
-                                    <b> [%  ui %]</b><br>
+                                    <b> [%  socio.ui.getNombre %]</b><br>
 
 
                     [% IF usercourse %]
@@ -149,7 +149,6 @@
                             <img alt='[% "Cambio de Contrase&ntilde;a" | i18n %]' 
                             src="[% themelang %]/images/eliminarusuario.png" border="0"">
                             </a>
-                            <input type=hidden name=member value="[% bornum %]">
                     </li>
                     <li>
                             <a class="click" onClick="cambiarPassword()">
