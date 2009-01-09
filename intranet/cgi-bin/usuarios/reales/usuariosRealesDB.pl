@@ -208,30 +208,28 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'comboDeCategorias'}= $comboDeCategorias;
 	$t_params->{'comboDeUI'}= $comboDeUI;
 	$t_params->{'change_password'}= $socio->getChange_password;
-	$t_params->{'nombre'}= $socio->persona->getNombre;
-	$t_params->{'apellido'}= $socio->persona->getApellido;
-	$t_params->{'calle'}= $socio->persona->getCalle;
+# # # 	$t_params->{'nombre'}= $socio->persona->getNombre;
+# 	$t_params->{'apellido'}= $socio->persona->getApellido;
+# 	$t_params->{'calle'}= $socio->persona->getCalle;
 	$t_params->{'barrio'}= $socio->persona->getBarrio;
-	$t_params->{'ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
-    $t_params->{'id_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
-#     $t_params->{'alt_ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
-#     $t_params->{'id_alt_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
+# 	$t_params->{'ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
+#     $t_params->{'id_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
+    $t_params->{'alt_ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
+# # # #     $t_params->{'id_alt_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
 	$t_params->{'telefono'}= $socio->persona->getTelefono;
 	$t_params->{'alt_telefono'}= $socio->persona->getAlt_telefono;
-	$t_params->{'email'}= $socio->persona->getEmail;
+# 	$t_params->{'email'}= $socio->persona->getEmail;
 	$t_params->{'otros_nombres'}= $socio->persona->getOtros_nombres;
-	$t_params->{'nro_documento'}= $socio->persona->getNro_documento;
+# 	$t_params->{'nro_documento'}= $socio->persona->getNro_documento;
 # 	$t_params->{'studentnumber'}= $socio->studentnumber'};
 	$t_params->{'fecha_alta'}= $socio->getFecha_alta;
 	$t_params->{'expira'}= $socio->getExpira;
 	$t_params->{'nro_socio'}= $socio->getNro_socio;
  	$t_params->{'nacimiento'}= $socio->persona->getNacimiento;
-#     open A,">>/tmp/debug2.txt"; 
-#     printf A "\n\n\n\n\n".$socio->persona->getNacimiento."\n\n\n\n\n";
-#     close A;
 	$t_params->{'addBorrower'}= 0;
-	$t_params->{'sexo'}= $socio->persona->getSexo;
-#  	$t_params->{'dateformat'}= C4::Date::display_date_format($dateformat);
+# 	$t_params->{'sexo'}= $socio->persona->getSexo;
+
+    $t_params->{'socio'}= $socio;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")

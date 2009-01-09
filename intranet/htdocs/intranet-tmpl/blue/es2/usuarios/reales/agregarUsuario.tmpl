@@ -110,10 +110,10 @@ $(document).ready(function() {
 
         <td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
         <td   width="65%" ALIGN=RIGHT>*
-            <input type="radio" name="sexo" value="F" [% IF sexo == "F" %] checked="checked" F [% END %]> F
-            <input type="radio" name="sexo" value="M" [% IF sexo == "M" %] checked="checked" M [% END %]> M 
+            <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] checked="checked" F [% END %]> F
+            <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] checked="checked" M [% END %]> M 
             &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% dateformat %])
-            <input class="inputFontNormal" type=text id="nacimiento" size=10 value="[% nacimiento %]">
+            <input class="inputFontNormal" type=text id="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
         </td>
 
         <td width="1%" valign="top" align="right">
@@ -134,11 +134,11 @@ $(document).ready(function() {
     <tr>
         <td width="35%" class="inputFontNormal" align="left">
                 <b> [% "Apellido" | i18n %] *</b><br>
-                <input id="apellido" class="inputFontNormal" type=text size=50 value="[% apellido %]">
+                <input id="apellido" class="inputFontNormal" type=text size=50 value="[% socio.persona.getApellido %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
             <b> [% "Nombres" | i18n %] *</b><br>
-                    <input  id="nombre" class="inputFontNormal" type=text size=50 value="[% nombre %]">
+                    <input  id="nombre" class="inputFontNormal" type=text size=50 value="[% socio.persona.getNombre %]">
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
@@ -146,11 +146,11 @@ $(document).ready(function() {
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                     [% combo_tipo_documento %]
-            <input id="nro_documento" class="inputFontNormal" type=text size=41 value="[% nro_documento %]">
+            <input id="nro_documento" class="inputFontNormal" type=text size=41 value="[% socio.persona.getNro_documento %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Legajo" | i18n %]</b><br>
-                <input  class="inputFontNormal" type=text id="legajo" size=50 value="[% legajo %]">
+                <input  class="inputFontNormal" type=text id="legajo" size=50 value="[% socio.persona.getLegajo %]">
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
@@ -235,7 +235,7 @@ $(document).ready(function() {
         <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Direcci&oacute;n" | i18n %] *</b><br>
-            <input class="inputFontNormal" type=text id="calle" size=50 value="[% physstreet %]">
+            <input class="inputFontNormal" type=text id="calle" size=50 value="[% socio.persona.getCalle %]">
         </td>
         <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "C&oacute;digo Postal" | i18n %]</b><br>
@@ -246,12 +246,12 @@ $(document).ready(function() {
         <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
-                <input class="inputFontNormal" type=text id="telefono" size=50 value="[% telefono %]">
+                <input class="inputFontNormal" type=text id="telefono" size=50 value="[% socio.persona.getTelefono %]">
         </td>
         <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad" | i18n %] *</b><br>
-            <input class="inputFontNormal" type=text id="ciudad" value="[% ciudad %]" size='50' >
-            <input type="hidden" id="id_ciudad" value="[% id_ciudad %]">
+            <input class="inputFontNormal" type=text id="ciudad" value="[% socio.persona.ciudad_ref.NOMBRE %]" size='50' >
+            <input type="hidden" id="id_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]">
         </td>
     </tr>
     <tr>
@@ -259,19 +259,19 @@ $(document).ready(function() {
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
-                <input class="inputFontNormal" type=text id="telefono_laboral" size=50 value="[% telefono_laboral %]">
+                <input class="inputFontNormal" type=text id="telefono_laboral" size=50 value="[% socio.persona.getTelefono_laboral %]">
         </td>
     </tr>
     <tr>
             <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
-                <input  class="inputFontNormal" type=text id="alt_calle" size=50 value="[% alt_calle %]">
+                <input  class="inputFontNormal" type=text id="alt_calle" size=50 value="[% socio.persona.getAlt_calle %]">
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
-            <input  class="inputFontNormal" type=text id="alt_ciudad" value="[% alt_ciudad %]" size='50'>
-            <input class="inputFontNormal" type=hidden id="id_alt_ciudad" value="[% id_alt_ciudad %]"> 
+            <input  class="inputFontNormal" type=text id="alt_ciudad" value="[% socio.persona.getAlt_ciudad %]" size='50'>
+            <input class="inputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]"> 
         </td>
         </tr>
     <tr>
@@ -279,7 +279,7 @@ $(document).ready(function() {
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
                 <b>E-Mail</b><br>
-                <input class="inputFontNormal" type=text id="email" size=50 value="[% email %]">
+                <input class="inputFontNormal" type=text id="email" size=50 value="[% socio.persona.getEmail %]">
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
