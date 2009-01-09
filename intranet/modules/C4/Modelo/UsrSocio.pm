@@ -85,7 +85,7 @@ sub agregar{
     $self->setChange_password($data_hash->{'change_password'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
-    
+
     $self->save();
 }
 

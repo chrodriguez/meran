@@ -39,11 +39,12 @@ my $habilitados = $obj->{'habilitados_filter'};
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+
 my @resultsdata; 
 my $i=0;
+
 foreach my $persona (@$personas){
     my $clase="";
-
      if ($persona->getActivo == 0){
          $activo = "NO";
       }else{

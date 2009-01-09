@@ -168,14 +168,13 @@ function agregarUsuario(){
     objAH.nacimiento= $('#nacimiento').val();
     objAH.email= $('#email').val();
     objAH.telefono= $('#telefono').val();
-    if ( $('#categoria_socio_id') )
-        objAH.cod_categoria= $('#categoria_socio_id').val();
+    objAH.cod_categoria= $('#categoria_socio_id').val();
 
     objAH.ciudad= $('#id_ciudad').val();
     objAH.alt_ciudad= $('#id_alt_ciudad').val();
     objAH.alt_telefono= $('#alt_telefono').val();
     objAH.apellido= $('#apellido').val();
-    objAH.id_ui= $('#id_ui').val();
+    objAH.id_ui= $('#ui_id').val();
     objAH.tipo_documento= $('#tipo_documento_id').val();
     objAH.nro_documento= $('#nro_documento').val();
     objAH.legajo= $('#legajo').val();

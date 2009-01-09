@@ -19,14 +19,16 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"i
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
-my $personNumbers= $obj->{'personNumbers'};
+my $id_personas_array_ref= $obj->{'id_personas'};
 # my ($error, $codMsg, $message);
 my $Messages_arrayref;
 
 
 if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
-	($Messages_arrayref)= &C4::AR::Usuarios::t_addPersons($personNumbers);
+    my %hash_data;
+    $hash_data{'categoria_socio_id'}=$obj->{'categoria_socio_id'};
+	($Messages_arrayref)= &C4::AR::Usuarios::habilitarPersona($id_personas_array_ref);
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 
@@ -35,7 +37,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
 }elsif($obj->{'tipoAccion'} eq "DESHABILITAR_PERSON"){
 
-	($Messages_arrayref)= &C4::AR::Usuarios::t_delPersons($personNumbers);
+	($Messages_arrayref)= &C4::AR::Usuarios::deshabilitarPersona($id_personas_array_ref);
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 	

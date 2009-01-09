@@ -12,37 +12,28 @@ __PACKAGE__->meta->setup
   (
     table   => 'usr_estado',
     columns => [
-        id_estado       => { type => 'serial', not_null => 1, length => 11 },
-        id_persona => { type => 'integer', default => 1, not_null => 1, length => 11 },
-        regular    => { type => 'integer', not_null => 1, length => 1 },
-        categoria   => { type => 'character', length => 2, not_null => 1 },
-        fuente         => { type => 'varchar', length => 255, not_null => 1 },
+        id_estado        => { type => 'serial', not_null => 1, length => 11 },
+        regular          => { type => 'integer', not_null => 1, length => 1 },
+        categoria        => { type => 'character', length => 2, not_null => 1 },
+        fuente           => { type => 'varchar', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_estado' ],
 );
 
-
-  __PACKAGE__->meta->setup
-  (
-    table => 'usr_estado',
-    auto  => 1,
-  );
+sub agregar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self->setFuente($data_hash->{'fuente'});
+    $self->setRegular($data_hash->{'regular'});
+    $self->setCategoria($data_hash->{'categoria'});
+    $self->save();
+}
 
 sub getId_estado{
     my ($self) = shift;
     return ($self->id_estado);
-}
-
-sub getId_persona{
-    my ($self) = shift;
-    return ($self->id_persona);
-}
-
-sub setId_persona{
-    my ($self) = shift;
-    my ($id_persona) = @_;
-    $self->id_persona($id_persona);
 }
 
 sub getRegular{
@@ -77,16 +68,5 @@ sub setFuente{
     my ($fuente) = @_;
     $self->fuente($fuente);
 }
-
-sub agregar{
-    my ($self)=shift;
-    my ($data_hash)=@_;
-    #Asignando data...
-    $self-> setId_persona($data_hash->{'id_persona'});
-    $self-> setFuente($data_hash->{'fuente'});
-    $self-> setRegular($data_hash->{'regular'});
-    $self-> setCategoria($data_hash->{'categoria'});
-    $self->save();
-}    
 
 1;

@@ -37,7 +37,6 @@ __PACKAGE__->meta->setup(
         telefono_laboral => { type => 'varchar', length => 50 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
         activo           => { type => 'integer', default => 1, not_null => 1 },
-        es_socio         => { type => 'integer', default => 0, not_null => 1 },
     ],
 
      relationships =>
@@ -58,19 +57,18 @@ sub convertirEnSocio{
     my ($data_hash)=@_;
 
     use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrEstado;
     
     my $socio = C4::Modelo::UsrSocio->new();
     $data_hash->{'id_persona'} = $self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
+    my $estado = C4::Modelo::UsrEstado->new();
+    $data_hash->{'regular'}=1;
+    $data_hash->{'categoria'}='NN';
+    $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
+    $estado->agregar($data_hash);
+    $data_hash->{'id_estado'}= $estado->getId_estado;
     $socio->agregar($data_hash);
-    $self->activar;
-    $self->setEs_socio(1);
-}
-
-sub esSocio{
-    my ($self)=shift;
-    
-    return ($self->getEs_socio);
 }
 
 sub getCategoria{
@@ -80,6 +78,7 @@ sub getCategoria{
 #     NO HACE FALTA CHECKEAR QUE EXISTA, YA QUE SE AFUERA SE PREGUNTA SI esSocio    
     my $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
 #     $socio->load();
+    $socio->load();
 
     return ($socio->[0]->categoria->getDescription);
 }
@@ -128,13 +127,15 @@ sub agregar{
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
     $self->setCumple_condicion($data_hash->{'cumple_condicion'});
+    $data_hash->{'id_persona'}=$self->getId_persona;
+    $data_hash->{'nro_socio'} = $self->getNro_documento;
+    $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
+ 
+    $self->save();
+
     if (C4::Context->preference("autoActivarPersona")){
-        $self->convertirEnSocio($data_hash);
+        $self->activar();
     }
-    else
-        {
-            $self->save();
-        }
 }    
 
 
@@ -165,14 +166,22 @@ sub modificar{
     $self->setFecha_alta($data_hash->{'fecha_alta'});
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
-    $self->save();
+ 
+   $self->save();
 }   
 
 sub activar{
     my ($self) = shift;
     $self->setActivo(1);
     $self->save();
-}    
+}
+
+sub desactivar{
+    my ($self) = shift;
+    $self->setActivo(0);
+    $self->save();
+}
+
 
 
 sub eliminar{
@@ -484,17 +493,6 @@ sub setCumple_condicion{
     my ($self) = shift;
     my ($cumple_condicion) = @_;
     $self->cumple_condicion($cumple_condicion);
-}
-
-sub getEs_socio{
-    my ($self) = shift;
-    return ($self->es_socio);
-}
-
-sub setEs_socio{
-    my ($self) = shift;
-    my ($es_socio) = @_;
-    $self->es_socio($es_socio);
 }
 
 1;

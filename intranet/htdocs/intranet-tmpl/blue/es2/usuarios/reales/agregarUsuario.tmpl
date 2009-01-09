@@ -123,16 +123,14 @@ $(document).ready(function() {
 </table>
 
 <table width="100%">
-    [% IF autoActivarPersonas %]
-        <tr>
-                <td  class="inputFontNormal" align="left">
-                <b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
-                <br>
-                            [% comboDeCategorias %]
-                    </td>
-                <td width="5%">&nbsp;</td>
-        </tr>
-    [% END %]
+    <tr>
+         <td  class="inputFontNormal" align="left">
+         <b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
+         <br>
+                [% comboDeCategorias %]
+         </td>
+         <td width="5%">&nbsp;</td>
+    </tr>
     <tr>
         <td width="35%" class="inputFontNormal" align="left">
                 <b> [% "Apellido" | i18n %] *</b><br>

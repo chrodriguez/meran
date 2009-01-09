@@ -226,15 +226,7 @@ sub agregarPersona{
     #genero un estado de ALTA para la persona para una fuente de informacion
     my ($estado) = C4::Modelo::UsrEstado->new();
     $person->agregar($params);
-
-#     my $paramsEstado;
-#     $paramsEstado->{'id_persona'} = $person->getId_persona;
-#     $paramsEstado->{'fuente'} = $params->{'id_ui'};
-#     $paramsEstado->{'regular'} = 1;
-#     $paramsEstado->{'categoria'} = $params->{'categoria_socio_id'};
-#     $estado->agregar($paramsEstado);
-
-    $params->{'id_estado'}= $estado->getId_estado;
+    $person->convertirEnSocio($params);
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
@@ -242,6 +234,69 @@ sub agregarPersona{
 
 }
    
+sub habilitarPersona{
+
+    my ($id_personas_array_ref)=@_;
+    my $dbh = C4::Context->dbh;
+    my $msg_object= C4::AR::Mensajes::create();
+    $dbh->{AutoCommit} = 0;  
+    $dbh->{RaiseError} = 1;
+    
+    eval {
+        foreach my $persona (@$id_personas_array_ref){
+            my ($person) = C4::Modelo::UsrPersona->new(id_persona => $persona);
+            $person->load();
+            $person->activar;
+        }
+     };
+    
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+         eval {$dbh->rollback};
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+     }
+     $dbh->{AutoCommit} = 1;
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+
+    return ($msg_object);
+
+}
+
+sub deshabilitarPersona{
+
+    my ($id_personas_array_ref)=@_;
+    my $dbh = C4::Context->dbh;
+    my $msg_object= C4::AR::Mensajes::create();
+    $dbh->{AutoCommit} = 0;  
+    $dbh->{RaiseError} = 1;
+    
+    eval {
+        foreach my $persona (@$id_personas_array_ref){
+            my ($person) = C4::Modelo::UsrPersona->new(id_persona => $persona);
+            $person->load();
+            $person->desactivar;
+        }
+     };
+    
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+         eval {$dbh->rollback};
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+     }
+     $dbh->{AutoCommit} = 1;
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+
+    return ($msg_object);
+
+}
 
 sub addBorrower {
 
