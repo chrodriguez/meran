@@ -78,7 +78,7 @@ sub getCategoria{
     
     use C4::Modelo::UsrSocio;
 #     NO HACE FALTA CHECKEAR QUE EXISTA, YA QUE SE AFUERA SE PREGUNTA SI esSocio    
-    my $socio = C4::Modelo::UsrSocio::Manager::new( id_persona => $self->getId_persona );
+    my $socio = C4::Modelo::UsrSocio::new( id_persona => $self->getId_persona );
 
     return ($socio->categoria->getNombre);
 }
