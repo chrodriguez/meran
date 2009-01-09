@@ -82,19 +82,13 @@ $(document).ready(function() {
 
 <!--<form action="/cgi-bin/koha/usuarios/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>-->
 <form method=post  name="form1" AUTOCOMPLETE='off'>
-    <input type=hidden name=joining value="[% dateenrolled %]">
-    <input type=hidden name=expiry value="[% expiry %]">
-    <input type=hidden name=typeRegister value="borrowers">
-    <input type=hidden name=id_socio value="[% member %]">
-    <input type=hidden name=updtype value="[% updtype %]">
-    <input type=hidden name=oldcardnumber value="[% cardnumber %]">
 
 <table border=0  width="100%" class="tablaresultado" align="right">
     <tr valign=top width="100%">
         
         <td  width="50%" ALIGN=RIGHT class="inputFontNormal">
          [% "Tarjeta de identificaci&oacute;n" | i18n %] * 
-        <input id="nro_socio" type=text class="inputFontNormal" name=nro_socio size=10 value="[% nro_socio %]"><br>
+        <input id="nro_socio" type=text class="inputFontNormal" name=nro_socio size=10 value="[% socio.getNro_socio %]"><br>
         </td>
     </tr>
 
@@ -160,10 +154,7 @@ $(document).ready(function() {
 <table width=100%>
     <tr valign=top >
         <td   width="60%" class="inputFontNormal">
-            <input  class="inputFontFont" type="checkbox" id="changepassword" 
-                [% changepassword %] 
-                    checked 
-                >
+            <input  class="inputFontFont" type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
             &nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
         </td>
         <td>
@@ -173,14 +164,6 @@ $(document).ready(function() {
                         <option value=[% project.value %][% project.selected %]>[% project.label %]
                     [% END %]
                 </select>
-            [% END %]
-        </td>
-        <td >
-            [% IF ethcatpopup %]
-                [% ethcatpopup %]
-                <input  class="inputFontNormal" type=text id=ethnicnotes size=40 >
-            [% ELSE  %]
-                &nbsp;
             [% END %]
         </td>
     </tr>
@@ -207,7 +190,7 @@ $(document).ready(function() {
     <tr>
         <td class="inputFontNormal">
              <b>
-                            [% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]
+                [% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]
                          </b>&nbsp;
                 [% comboDeUI %]
         </td>   
@@ -288,23 +271,7 @@ $(document).ready(function() {
     </tr>
 
     <br>
-<table width="30%">
-    [% modify %]
 
-<!-- FIXME no se qué hace este FOREACH, ademas creo que esta mal     -->
-    [% FOREACH project IN flagloop %]
-        <tr>
-            <td  class="inputFontNormal">
-                [% project.html %]
-            </td>
-            <td  align="left" class="inputFontNormal">
-                <input class="inputFontNormal" type=radio name="[% name %]" value="1" [% yes %]>Si
-                <input class="inputFontNormal" type=radio name="[% name %]" value="0" [% no %]>No
-            </td>
-        </tr>
-    [% END %]
-
-</table>
 <br>
 <br>
 <table width=100%>

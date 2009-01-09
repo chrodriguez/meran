@@ -177,7 +177,7 @@ Se genra la ventana para modificar los datos del usuario
 =cut
 elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
-	my ($template, $session, $t_params) = get_template_and_user({
+	my ($template, $session, $t_params, $cookie) = get_template_and_user({
 									template_name => "usuarios/reales/agregarUsuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -207,37 +207,18 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 	$t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
 	$t_params->{'comboDeCategorias'}= $comboDeCategorias;
 	$t_params->{'comboDeUI'}= $comboDeUI;
-	$t_params->{'change_password'}= $socio->getChange_password;
-# # # 	$t_params->{'nombre'}= $socio->persona->getNombre;
-# 	$t_params->{'apellido'}= $socio->persona->getApellido;
-# 	$t_params->{'calle'}= $socio->persona->getCalle;
-	$t_params->{'barrio'}= $socio->persona->getBarrio;
-# 	$t_params->{'ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
-#     $t_params->{'id_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
-    $t_params->{'alt_ciudad'}= $socio->persona->ciudad_ref->NOMBRE;
-# # # #     $t_params->{'id_alt_ciudad'}= $socio->persona->ciudad_ref->LOCALIDAD;
-	$t_params->{'telefono'}= $socio->persona->getTelefono;
-	$t_params->{'alt_telefono'}= $socio->persona->getAlt_telefono;
-# 	$t_params->{'email'}= $socio->persona->getEmail;
-	$t_params->{'otros_nombres'}= $socio->persona->getOtros_nombres;
-# 	$t_params->{'nro_documento'}= $socio->persona->getNro_documento;
-# 	$t_params->{'studentnumber'}= $socio->studentnumber'};
-	$t_params->{'fecha_alta'}= $socio->getFecha_alta;
-	$t_params->{'expira'}= $socio->getExpira;
-	$t_params->{'nro_socio'}= $socio->getNro_socio;
- 	$t_params->{'nacimiento'}= $socio->persona->getNacimiento;
 	$t_params->{'addBorrower'}= 0;
-# 	$t_params->{'sexo'}= $socio->persona->getSexo;
 
+    #paso el objeto socio al cliente
     $t_params->{'socio'}= $socio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 
 elsif($tipoAccion eq "DATOS_USUARIO"){
 
-	my ($template, $session, $t_params) = get_template_and_user({
+	my ($template, $session, $t_params, $cookie) = get_template_and_user({
 									template_name => "usuarios/reales/detalleUsuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -286,7 +267,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	$t_params->{'bornum'}= $bornum;
 	$t_params->{'foto_name'}= $foto;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 }
 	
 
@@ -303,14 +284,9 @@ elsif($tipoAccion eq "ELIMINAR_FOTO"){
 
 elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 
-# 	my %params;
 	my $bornum = $obj->{'borrowernumber'};
-
-#  	my ($Message_arrayref)= (\%params);
 	
-# 	my $infoOperacionJSON=to_json $Message_arrayref;
-	
-	my ($template, $session, $t_params) = get_template_and_user({
+	my ($template, $session, $t_params, $cookie) = get_template_and_user({
 									template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
 									query => $input,
 									type => "intranet",
@@ -324,9 +300,6 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 	$t_params->{'bibliotecas'}= $bibliotecas;
 	$t_params->{'bornum'}= $bornum;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
-
-	
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")
