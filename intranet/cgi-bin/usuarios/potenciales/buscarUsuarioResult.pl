@@ -44,14 +44,15 @@ my @resultsdata;
 # for (my $i=0; $i < $cantidad; $i++){
 
 # 
-foreach my $persona ($personas){
+my $i=0;
+foreach my $persona (@$personas){
     my $clase="";
-#     if ($personas->[$i]->getActivo == 0){
-#     if ($persona->getActivo == 0){
-#         $activo = "NO";
-#     }else{
-#         $activo = "SI";
-#     }
+
+     if ($persona->getActivo == 0){
+         $activo = "NO";
+      }else{
+         $activo = "SI";
+     }
 #     my %row = (
 #             clase=>$clase,
 #             id_persona => $personas->[$i]->getId_persona,
