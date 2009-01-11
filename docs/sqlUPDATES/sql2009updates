@@ -164,3 +164,6 @@ ALTER TABLE `usr_estado` DROP INDEX `id_persona`
   DROP `id_persona`;
 
 
+ALTER TABLE usr_socio ADD FOREIGN KEY ( id_estado ) REFERENCES usr_estado( id_estado ) 
+
+

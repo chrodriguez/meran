@@ -40,10 +40,17 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-       categoria => 
+     categoria => 
       {
         class       => 'C4::Modelo::UsrRefCategoriasSocio',
         key_columns => { cod_categoria => 'categorycode' },
+        type        => 'one to one',
+      },
+
+     estado => 
+      {
+        class       => 'C4::Modelo::UsrEstado',
+        key_columns => { id_estado => 'id_estado' },
         type        => 'one to one',
       },
     ],

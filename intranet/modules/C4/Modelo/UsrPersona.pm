@@ -60,9 +60,15 @@ sub convertirEnSocio{
     use C4::Modelo::UsrEstado;
     
     my $socio = C4::Modelo::UsrSocio->new();
+    my $db = $socio->db;
+## FIXME parece q hay q setear el autocommit por objeto
+    $db->{connect_options}->{AutoCommit} = 0;    
     $data_hash->{'id_persona'} = $self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     my $estado = C4::Modelo::UsrEstado->new();
+    my $db = $estado->db;
+## FIXME parece q hay q setear el autocommit por objeto
+    $db->{connect_options}->{AutoCommit} = 0;   
     $data_hash->{'regular'}=1;
     $data_hash->{'categoria'}='NN';
     $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
@@ -124,6 +130,7 @@ sub agregar{
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
     $self->setCumple_condicion($data_hash->{'cumple_condicion'});
+## FIXME para que es esto?
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};

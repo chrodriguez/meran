@@ -215,7 +215,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
-
+## FIXME parece q no se usa!!!!!!!!!!!!!!!!!!!!!!!!!!
 elsif($tipoAccion eq "DATOS_USUARIO"){
 
 	my ($template, $session, $t_params, $cookie) = get_template_and_user({
@@ -238,6 +238,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 		$t_params->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 	}
 	#
+## FIXME pasar el objeto compelto al cliente
 	$t_params->{'dateenrolled'} = C4::Date::format_date($data->{'dateenrolled'},$dateformat);
 	$t_params->{'expiry'} = C4::Date::format_date($data->{'expiry'},$dateformat);
 	$t_params->{'dateofbirth'} = C4::Date::format_date($data->{'dateofbirth'},$dateformat);

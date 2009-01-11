@@ -220,33 +220,35 @@ sub t_addBorrower {
 sub agregarPersona{
 
     my ($params)=@_;
-    
-    my $dbh = C4::Context->dbh;
-    my $msg_object= C4::AR::Mensajes::create();
-    $dbh->{AutoCommit} = 0;  
-    $dbh->{RaiseError} = 1;
+
+#     my $db= C4::Modelo::DB::AutoBase1->new();
     
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
+    my $db = $person->db;
+    $db->{connect_options}->{AutoCommit} = 0;    
+    $db->{connect_options}->{RaiseError} = 1;
+
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
     eval {    
         $person->agregar($params);
+## FIXME hace roolback de persona y de socio, pero no se estado
         $person->convertirEnSocio($params);
+        $db->commit;
     };
 
     if ($@){
          #Se loguea error de Base de Datos
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-         eval {$dbh->rollback};
+         eval {$db->rollback};
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-    }else
-        {
+    }else {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-        }
-    $dbh->{AutoCommit} = 1;
+    }
+#     $db->{connect_options}->{AutoCommit} = 1;    
 
     return ($msg_object);
 
