@@ -226,6 +226,8 @@ sub agregarPersona{
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     my $db = $person->db;
+#     $db->begin_work; # Start transaction
+# $db->connect_option(AutoCommit => 1);     # set
     $db->{connect_options}->{AutoCommit} = 0;    
     $db->{connect_options}->{RaiseError} = 1;
 

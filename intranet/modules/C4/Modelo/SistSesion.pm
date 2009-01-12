@@ -10,12 +10,71 @@ __PACKAGE__->meta->setup(
     columns => [
         sessionID => { type => 'varchar', length => 255, not_null => 1 },
         userid    => { type => 'varchar', length => 255 },
+        nroRandom    => { type => 'varchar', length => 255 },
         ip        => { type => 'varchar', length => 16 },
         lasttime  => { type => 'integer' },
     ],
 
     primary_key_columns => [ 'sessionID' ],
 );
+
+sub getSessionId{
+    my ($self) = shift;
+    return ($self->sessionID);
+}
+
+sub getUserid{
+    my ($self) = shift;
+    return ($self->userid);
+}
+
+sub setUserid{
+    my ($self) = shift;
+    my ($userid) = @_;
+    $self->userid($userid);
+}
+
+sub getNroRandom{
+    my ($self) = shift;
+    return ($self->nroRandom);
+}
+
+sub setNroRandom{
+    my ($self) = shift;
+    my ($nroRandom) = @_;
+    $self->nroRandom($nroRandom);
+}
+
+sub getIp{
+    my ($self) = shift;
+    return ($self->ip);
+}
+
+sub setIp{
+    my ($self) = shift;
+    my ($ip) = @_;
+    $self->ip($ip);
+}
+
+sub getLasttime{
+    my ($self) = shift;
+    return ($self->lasttime);
+}
+
+sub getSession{
+    my ($self)=shift;
+    my ($sessionID) = @_;
+    
+    use C4::Modelo::SistSesion;
+
+    my $sist_sesion_array_ref = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ sessionID => { eq => $sessionID } ]);
+#     my $sist_sesion_array_ref = C4::Modelo::SistSesion->new(sessionID => $sessionID);
+#     $ui->load();
+    
+    return ($sist_sesion_array_ref->[0]);
+#     return ($sist_sesion_array_ref->[0]);
+}
+
 
 1;
 
