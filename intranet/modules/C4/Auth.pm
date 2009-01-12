@@ -1083,15 +1083,15 @@ print K "_deleteSessionDeUsuario=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print K "_deleteSessionDeUsuario=> elimino el sessionID: ".$sessionID." del usuario: ".$userid."\n";
-# 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
-# 	$sth->execute($sessionID, $userid);
+ 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
+ 	$sth->execute($sessionID, $userid);
 
 #      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-    my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
-                                                                                                sessionID => { eq => $sessionID },
-                                                                                                userid => { eq => $userid }
-                                                                                     ]);
-     $sist_sesion_array_ref->[0]->delete;
+#     my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
+#                                                                                                 sessionID => { eq => $sessionID },
+#                                                                                                 userid => { eq => $userid }
+#                                                                                      ]);
+#      $sist_sesion_array_ref->[0]->delete;
 print K "\n";
 close(K);
 }
