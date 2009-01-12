@@ -12,11 +12,29 @@ __PACKAGE__->meta->setup(
         userid    => { type => 'varchar', length => 255 },
         nroRandom    => { type => 'varchar', length => 255 },
         ip        => { type => 'varchar', length => 16 },
-        lasttime  => { type => 'integer' },
+        lasttime  => { type => 'integer', length => 11 },
+        flag  => { type => 'varchar', length => 255 },
     ],
 
     primary_key_columns => [ 'sessionID' ],
 );
+
+sub load{
+    my $self = $_[0]; # Copy, not shift
+open(Z, ">>/tmp/debug.txt");
+print Z "sist_sesion=> \n";
+
+#       ... # Do your stuff
+
+#     my $object= shift->SUPER::load(@_); # Call superclass
+# print Z "sist_sesion=> object: ".$object."\n";
+
+    unless( $self->SUPER::load(speculative => 1) ){
+print Z "sist_sesion=>  no existe la session \n";
+    }
+
+close(Z); 
+}
 
 sub getSessionId{
     my ($self) = shift;
@@ -32,6 +50,16 @@ sub setUserid{
     my ($self) = shift;
     my ($userid) = @_;
     $self->userid($userid);
+}
+
+sub getFlag{
+    my ($self) = shift;
+    return ($self->flag);
+}
+
+sub setFlag{
+    my ($self) = shift;
+    return ($self->flag);
 }
 
 sub getNroRandom{

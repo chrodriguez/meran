@@ -22,6 +22,7 @@ __PACKAGE__->meta->setup(
         change_password     => { type => 'integer', default => '0', not_null => 1 },
         cumple_requisito   => { type => 'date' },
         id_estado          => { type => 'integer', not_null => 1 },
+        activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
 
      relationships =>
@@ -74,6 +75,23 @@ __PACKAGE__->meta->setup(
 #     return ($ui->nombre);   
 # } 
 
+sub load{
+    my $self = $_[0]; # Copy, not shift
+open(Z, ">>/tmp/debug.txt");
+print Z "usr_socio=> \n";
+
+#       ... # Do your stuff
+
+#     my $object= shift->SUPER::load(@_); # Call superclass
+# print Z "sist_sesion=> object: ".$object."\n";
+
+    unless( $self->SUPER::load(speculative => 1) ){
+print Z "usr_socio=>  no existe la session \n";
+    }
+
+close(Z); 
+}
+
 sub agregar{
 
     my ($self)=shift;
@@ -108,6 +126,30 @@ sub modificar{
 
     $self->save();
 }
+
+sub activar{
+    my ($self) = shift;
+    $self->setActivo(1);
+    $self->save();
+}
+
+sub desactivar{
+    my ($self) = shift;
+    $self->setActivo(0);
+    $self->save();
+}
+
+sub getActivo{
+    my ($self) = shift;
+    return ($self->activo);
+}
+
+sub setActivo{
+    my ($self) = shift;
+    my ($activo) = @_;
+    $self->activo($activo);
+}
+
 sub getId_persona{
     my ($self) = shift;
     return ($self->id_persona);

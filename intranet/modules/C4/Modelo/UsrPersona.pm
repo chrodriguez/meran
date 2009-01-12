@@ -36,7 +36,7 @@ __PACKAGE__->meta->setup(
         sexo             => { type => 'character', length => 1 },
         telefono_laboral => { type => 'varchar', length => 50 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
-        activo           => { type => 'integer', default => 1, not_null => 1 },
+#         activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
 
      relationships =>
@@ -174,23 +174,9 @@ sub modificar{
    $self->save();
 }   
 
-sub activar{
-    my ($self) = shift;
-    $self->setActivo(1);
-    $self->save();
-}
-
-sub desactivar{
-    my ($self) = shift;
-    $self->setActivo(0);
-    $self->save();
-}
-
-
-
 sub eliminar{
     my ($self) = shift;
-    $self->setActivo(0);
+#     $self->setActivo(0);
     $self->save();
 }     
 
@@ -203,17 +189,6 @@ sub setLegajo{
     my ($self) = shift;
     my ($legajo) = @_;
     $self->legajo($legajo);
-}
-
-sub getActivo{
-    my ($self) = shift;
-    return ($self->activo);
-}
-
-sub setActivo{
-    my ($self) = shift;
-    my ($activo) = @_;
-    $self->activo($activo);
 }
 
 sub getId_persona{

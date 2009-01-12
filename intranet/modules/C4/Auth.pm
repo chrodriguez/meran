@@ -37,6 +37,7 @@ use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!
 use C4::AR::Issues;
 use CGI::Session;
 use C4::Modelo::SistSesion;
+use C4::Modelo::SistSesion::Manager;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -379,27 +380,33 @@ print A "checkauth=> sessionID seteado \n";
 print A "checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n";
 print A "checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n";
 
-# my $sist_sesion= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-# my $sist_sesion= C4::Modelo::SistSesion->new();
-# my $sist_sesion->getSession($sessionID);
+#         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+        $sist_sesion->load(sessionID => $sessionID);
+
+print A "session.sessionId: ".$sist_sesion->getSessionId."\n";
+print A "session.userid: ".$sist_sesion->getUserid."\n";
+print A "session.nroRandom: ".$sist_sesion->getNroRandom."\n";
+print A "session.ip: ".$sist_sesion->getIp."\n";
+print A "session.lasttime: ".$sist_sesion->getLasttime."\n";
+print A "session.flag: ".$sist_sesion->getFlag."\n";
 
 		my ($ip , $lasttime, $nroRandom, $flag);
-		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
-				"SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
-        
+#  		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
+#  				"SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
 
-# print A "session.userid: ".$sist_sesion->getUserid."\n";
-# print A "session.nroRandom: ".$sist_sesion->getNroRandom."\n";
-# print A "session.ip: ".$sist_sesion->getIp."\n";
-# print A "session.lasttime: ".$sist_sesion->getLasttime."\n";
+        $userid= $sist_sesion->getUserid;
+        $ip= $sist_sesion->getIp;
+        $lasttime= $sist_sesion->getLasttime;
+        $nroRandom= $sist_sesion->getNroRandom;
+        $flag= $sist_sesion->getFlag;
 
 		if ($logout) {
 			#se maneja el logout del usuario
 			_logOut_Controller($dbh, $query, $userid, $ip, $sessionID);
 			$sessionID = undef;
 			$userid = undef;
-# 			$session->clear();
-# 			$session->delete();
+
 print A "checkauth=> sessionID de CGI-Session: ".$session->id."\n";
 #  			_goToLoguin($dbh, $query, $template_name, $userid, $type, \%info, 'U358');
 			$session->param('codMsg', 'U358');
@@ -407,7 +414,8 @@ print A "checkauth=> sessionID de CGI-Session: ".$session->id."\n";
 			#EXIT
 		}
 
-		if ($userid) { 
+ 		if ($userid) {
+#         if($sist_sesion->getUserid){ 
 		#la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
 		#se verifican algunas condiciones de finalizacion de session
 print A "checkauth=> El usuario se encuentra logueado \n";
@@ -429,7 +437,7 @@ print A "checkauth=> caduco la session \n";
 			#EXIT
 
  		     } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-#  		   } elsif ($ip ne '127.0.0.2') {
+#   		   } elsif ($ip ne '127.0.0.2') {
 			# Different ip than originally logged in from
 			$info{'oldip'} = $ip;
 			$info{'newip'} = $ENV{'REMOTE_ADDR'};
@@ -527,12 +535,15 @@ close(A);
 print A "checkauth=> Usuario no logueado, intento de autenticacion \n";		
 		#No genero un nuevo sessionID, tomo el que viene del cliente
 		#con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-#  		my $sessionID= $query->cookie('sessionID');
+        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+        $sist_sesion->load(sessionID => $sessionID);
+
  		my $sessionID= $session->param('sessionID');
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
 print A "checkauth=> busco el sessionID: ".$sessionID." de la base \n";
-		my $random_number= _getNroRandom($dbh, $sessionID);
+#  		my $random_number= _getNroRandom($dbh, $sessionID);
+        my $random_number= $sist_sesion->getNroRandom;
 print A "checkauth=> random_number desde la base: ".$random_number."\n";
 
 
@@ -682,6 +693,7 @@ sub _save_session_db{
 =item
 Esta funcion recurpera de la base el nroRandom entregado al cliente segun un sessionID
 =cut
+##DEPRECATEDDDDD
 sub _getNroRandom {
 	my ($dbh, $sessionID) = @_;
 
@@ -1010,7 +1022,8 @@ print F "_verificarPassword=> nroRandom: ".$random_number."\n";
 	#se esta usando LDAP
 		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
 	} else {
-		($passwordValida, $cardnumber,$branch) = checkpw($dbh,$userid,$password,$random_number);
+# 		($passwordValida, $cardnumber,$branch) = _checkpw($dbh,$userid,$password,$random_number);
+        ($passwordValida, $cardnumber,$branch) = _checkpwNEW($dbh,$userid,$password,$random_number); 
 	}
 print F "_verificarPassword=> password valida?: ".$passwordValida."\n";
 print F "\n";
@@ -1030,8 +1043,12 @@ print D "_deleteSession=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print D "_deleteSession=> elimino el sessionID: ".$sessionID."\n";
-	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
-	$sth->execute($sessionID);
+# 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
+# 	$sth->execute($sessionID);
+    
+     my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+     $sist_sesion->delete;
+
 print D "\n";
 close(D);
 }
@@ -1065,8 +1082,15 @@ print K "_deleteSessionDeUsuario=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print K "_deleteSessionDeUsuario=> elimino el sessionID: ".$sessionID." del usuario: ".$userid."\n";
-	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
-	$sth->execute($sessionID, $userid);
+# 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
+# 	$sth->execute($sessionID, $userid);
+
+#      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+    my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
+                                                                                                sessionID => { eq => $sessionID },
+                                                                                                userid => { eq => $userid }
+                                                                                     ]);
+     $sist_sesion_array_ref->[0]->delete;
 print K "\n";
 close(K);
 }
@@ -1333,16 +1357,15 @@ sub t_operacionesDeINTRA{
 }
 
 
-sub checkpw {
+sub _checkpw {
 
 # This should be modified to allow a selection of authentication schemes
 # (e.g. LDAP), as well as local authentication through the borrowers
 # tables passwd field
 #
-	#my ($dbh, $userid, $password) = @_;
 
-        my ($dbh, $userid, $password, $random_number) = @_;
-	
+    my ($dbh, $userid, $password, $random_number) = @_;
+## FIXME  esto no se usa nunca	
 	my $sth=$dbh->prepare("SELECT password,cardnumber,branchcode FROM borrowers WHERE userid=?");
 	$sth->execute($userid);
 
@@ -1373,15 +1396,13 @@ sub checkpw {
 		
 	}
 
-
-
-        my $superpasswd=C4::Context->config('pass');
-        my $superbranch=C4::Context->config('branch');
-        $superpasswd= md5_base64(md5_base64($superpasswd).$random_number);
-        if ($userid eq C4::Context->config('user') && $password eq $superpasswd) {
-                # Koha superuser account
-                return 2,0,$superbranch;
-        }
+    my $superpasswd=C4::Context->config('pass');
+    my $superbranch=C4::Context->config('branch');
+    $superpasswd= md5_base64(md5_base64($superpasswd).$random_number);
+    if ($userid eq C4::Context->config('user') && $password eq $superpasswd) {
+            # Koha superuser account
+            return 2,0,$superbranch;
+    }
 
 	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
 		# DEMO => the demo user is allowed to do everything (if demo set to 1 in koha.conf
@@ -1390,6 +1411,79 @@ sub checkpw {
 	}
 
 	return 0;
+}
+
+
+sub _checkpwNEW {
+
+# This should be modified to allow a selection of authentication schemes
+# (e.g. LDAP), as well as local authentication through the borrowers
+# tables passwd field
+#
+
+    my ($dbh, $userid, $password, $random_number) = @_;
+open(Z, ">>/tmp/debug.txt");
+print Z "_checkpwNEW=> \n";
+## FIXME  esto no se usa nunca
+#     my $sth=$dbh->prepare("SELECT password,cardnumber,branchcode FROM borrowers WHERE userid=?");
+#     $sth->execute($userid);
+# 
+#     if ($sth->rows) {
+#         my ($md5password,$cardnumber,$branchcode) = $sth->fetchrow;
+# 
+#         if (md5_base64($password) eq $md5password) {
+#             return 1,$cardnumber,$branchcode;
+#         }
+#     }
+
+#     my $sth=$dbh->prepare("SELECT password,branchcode,documentnumber FROM borrowers WHERE cardnumber=?");
+#     $sth->execute($userid);
+#     
+    my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+#      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+    $socio->load(nro_socio => $userid);
+
+print Z "_checkpwNEW=> ui: ".$socio->getId_ui."\n";
+print Z "_checkpwNEW=> apellido: ".$socio->persona->getApellido."\n";
+print Z "_checkpwNEW=> nombre: ".$socio->persona->getNombre."\n";
+print Z "_checkpwNEW=> DNI: ".$socio->persona->getNro_documento."\n";
+print Z "_checkpwNEW=> pass: ".$socio->getPassword."\n";
+
+    if ($socio->getActivo) {
+        #existe ell socio y se encuentra activo
+#         my ($md5password,$branchcode,$dni) = $sth->fetchrow;
+         my ($md5password,$branchcode,$dni);
+        $md5password= $socio->getPassword;
+        $branchcode= $socio->getId_ui;
+        $dni= $socio->persona->getNro_documento;
+
+        if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
+            $md5password=md5_base64($dni);
+print Z "_checkpwNEW=> es la 1era vez que se loguea, se usa el DNI\n";
+        }
+
+        if ($password eq md5_base64($md5password.$random_number)) {
+print Z "_checkpwNEW=> las pass son = todo OK\n";
+            return 1,$userid,$branchcode;
+        }
+    }
+print Z "_checkpwNEW=> las pass son <> \n";
+
+    my $superpasswd=C4::Context->config('pass');
+    my $superbranch=C4::Context->config('branch');
+    $superpasswd= md5_base64(md5_base64($superpasswd).$random_number);
+    if ($userid eq C4::Context->config('user') && $password eq $superpasswd) {
+            # Koha superuser account
+            return 2,0,$superbranch;
+    }
+
+    if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
+        # DEMO => the demo user is allowed to do everything (if demo set to 1 in koha.conf
+        # some features won't be effective : modify systempref, modify MARC structure,
+        return 2;
+    }
+close(Z);
+    return 0;
 }
 
 sub getuserflags {
