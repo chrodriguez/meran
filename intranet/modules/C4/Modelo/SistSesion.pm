@@ -24,13 +24,17 @@ sub load{
 open(Z, ">>/tmp/debug.txt");
 print Z "sist_sesion=> \n";
 
-#       ... # Do your stuff
+    eval {
+    
+        unless( return $self->SUPER::load(speculative => 1) ){
+                 print Z "sist_sesion=>  SUPER load \n";
+        }
+    };
 
-#     my $object= shift->SUPER::load(@_); # Call superclass
-# print Z "sist_sesion=> object: ".$object."\n";
-
-    unless( $self->SUPER::load(speculative => 1) ){
-print Z "sist_sesion=>  no existe la session \n";
+    if($@){
+        print Z "sist_sesion=>  no existe el socio \n";
+#         my $socio= C4::Modelo::UsrSocio->new();
+        return ( undef );
     }
 
 close(Z); 

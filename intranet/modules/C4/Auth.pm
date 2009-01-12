@@ -380,26 +380,27 @@ print A "checkauth=> sessionID seteado \n";
 print A "checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n";
 print A "checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n";
 
-#         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        $sist_sesion->load();
+#     $sessionID= 1;
+#         my ($sist_sesion)= C4::Modelo::SistSesion->new();
+#         $sist_sesion->load(sessionID => $sessionID);
 
-print A "session.sessionId: ".$sist_sesion->getSessionId."\n";
-print A "session.userid: ".$sist_sesion->getUserid."\n";
-print A "session.nroRandom: ".$sist_sesion->getNroRandom."\n";
-print A "session.ip: ".$sist_sesion->getIp."\n";
-print A "session.lasttime: ".$sist_sesion->getLasttime."\n";
-print A "session.flag: ".$sist_sesion->getFlag."\n";
+
+# print A "session.sessionId: ".$sist_sesion->getSessionId."\n";
+# print A "session.userid: ".$sist_sesion->getUserid."\n";
+# print A "session.nroRandom: ".$sist_sesion->getNroRandom."\n";
+# print A "session.ip: ".$sist_sesion->getIp."\n";
+# print A "session.lasttime: ".$sist_sesion->getLasttime."\n";
+# print A "session.flag: ".$sist_sesion->getFlag."\n";
 
 		my ($ip , $lasttime, $nroRandom, $flag);
-#  		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
-#  				"SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
+  		($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
+  				"SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
 
-        $userid= $sist_sesion->getUserid;
-        $ip= $sist_sesion->getIp;
-        $lasttime= $sist_sesion->getLasttime;
-        $nroRandom= $sist_sesion->getNroRandom;
-        $flag= $sist_sesion->getFlag;
+#         $userid= $sist_sesion->getUserid;
+#         $ip= $sist_sesion->getIp;
+#         $lasttime= $sist_sesion->getLasttime;
+#         $nroRandom= $sist_sesion->getNroRandom;
+#         $flag= $sist_sesion->getFlag;
 
 		if ($logout) {
 			#se maneja el logout del usuario
@@ -535,15 +536,15 @@ close(A);
 print A "checkauth=> Usuario no logueado, intento de autenticacion \n";		
 		#No genero un nuevo sessionID, tomo el que viene del cliente
 		#con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        $sist_sesion->load(sessionID => $sessionID);
+#         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+#         $sist_sesion->load();
 
  		my $sessionID= $session->param('sessionID');
 		$userid=$query->param('userid');
 		my $password=$query->param('password');
 print A "checkauth=> busco el sessionID: ".$sessionID." de la base \n";
-#  		my $random_number= _getNroRandom($dbh, $sessionID);
-        my $random_number= $sist_sesion->getNroRandom;
+  		my $random_number= _getNroRandom($dbh, $sessionID);
+#         my $random_number= $sist_sesion->getNroRandom;
 print A "checkauth=> random_number desde la base: ".$random_number."\n";
 
 
@@ -1022,8 +1023,8 @@ print F "_verificarPassword=> nroRandom: ".$random_number."\n";
 	#se esta usando LDAP
 		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
 	} else {
-# 		($passwordValida, $cardnumber,$branch) = _checkpw($dbh,$userid,$password,$random_number);
-        ($passwordValida, $cardnumber,$branch) = _checkpwNEW($dbh,$userid,$password,$random_number); 
+ 		($passwordValida, $cardnumber,$branch) = _checkpw($dbh,$userid,$password,$random_number);
+#         ($passwordValida, $cardnumber,$branch) = _checkpwNEW($dbh,$userid,$password,$random_number); 
 	}
 print F "_verificarPassword=> password valida?: ".$passwordValida."\n";
 print F "\n";
@@ -1441,20 +1442,23 @@ print Z "_checkpwNEW=> \n";
 #     
 # $userid = 1;
 #     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
-    my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+#     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+    my ($socio) = C4::Modelo::UsrSocio->new();
 #      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-    $socio->load();
+    $socio->load(nro_socio => $userid);
 
-print Z "_checkpwNEW=> ui: ".$socio->getId_ui."\n";
-print Z "_checkpwNEW=> apellido: ".$socio->persona->getApellido."\n";
-print Z "_checkpwNEW=> nombre: ".$socio->persona->getNombre."\n";
-print Z "_checkpwNEW=> DNI: ".$socio->persona->getNro_documento."\n";
-print Z "_checkpwNEW=> pass: ".$socio->getPassword."\n";
-
-    if ($socio->getActivo) {
+     if ( ($socio)&&($socio->getActivo) ) {
+#     if (($socio->getActivo) ) {
         #existe ell socio y se encuentra activo
+# print Z "_checkpwNEW=> ui: ".$socio->getId_ui."\n";
+# print Z "_checkpwNEW=> apellido: ".$socio->persona->getApellido."\n";
+# print Z "_checkpwNEW=> nombre: ".$socio->persona->getNombre."\n";
+# print Z "_checkpwNEW=> DNI: ".$socio->persona->getNro_documento."\n";
+# print Z "_checkpwNEW=> pass: ".$socio->getPassword."\n";
+
+
 #         my ($md5password,$branchcode,$dni) = $sth->fetchrow;
-         my ($md5password,$branchcode,$dni);
+        my ($md5password,$branchcode,$dni);
         $md5password= $socio->getPassword;
         $branchcode= $socio->getId_ui;
         $dni= $socio->persona->getNro_documento;

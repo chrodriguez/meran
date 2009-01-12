@@ -62,31 +62,48 @@ __PACKAGE__->meta->setup(
 );
 
 
-# sub getUI_nombre{
 # 
-#     my ($self) = shift;
-#     my ($id_ui) = @_;
+# sub new{
+#     my $self = $_[0]; # Copy, not shift
+# open(Z, ">>/tmp/debug.txt");
+# print Z "usr_socio=> new\n";
 # 
-#     use C4::Modelo::RefUnidadInformacion;
+#     eval {
+# print Z "usr_socio=> dentro del eval, intento crear el objeto\n";    
+#           return shift->SUPER::new(@_);
+#     };
+#     
+#     if($@){
+# print Z "usr_socio=>  no existe el socio, creo uno vacio \n";
+#         my $socio= C4::Modelo::UsrSocio->new();
+#         $socio->setId_ui('');
+#         $socio->setActive(0);
+#         $socio->persona->setApellido('');
+#         $socio->persona->setNombre('');
+#         $socio->persona->setNro_documento('');
+#         $socio->setPassword('');
 # 
-#     my  $ui = C4::Modelo::RefUnidadInformacion->new(id_ui => $id_ui);
-#     $ui->load();
-# 
-#     return ($ui->nombre);   
-# } 
+#         return ( $socio );
+#     }
+# }
 
 sub load{
     my $self = $_[0]; # Copy, not shift
 open(Z, ">>/tmp/debug.txt");
 print Z "usr_socio=> \n";
 
-#       ... # Do your stuff
+    eval {
+    
+        unless( $self->SUPER::load(speculative => 1) ){
+                 print Z "usr_socio=>  SUPER load \n";
+            return undef;
+        }
+    };
 
-#     my $object= shift->SUPER::load(@_); # Call superclass
-# print Z "sist_sesion=> object: ".$object."\n";
-
-    unless( $self->SUPER::load(speculative => 1) ){
-print Z "usr_socio=>  no existe la session \n";
+    if($@){
+        print Z "usr_socio=>  no existe el socio \n";
+#         my $socio= C4::Modelo::UsrSocio->new();
+        return ( undef );
     }
 
 close(Z); 
