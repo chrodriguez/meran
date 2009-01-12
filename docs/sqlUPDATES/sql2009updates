@@ -169,10 +169,14 @@ ALTER TABLE usr_socio ADD FOREIGN KEY ( id_estado ) REFERENCES usr_estado( id_es
 
 ALTER TABLE `usr_socio` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' AFTER `id_estado` ;
 
-ALTER TABLE `usr_persona` DROP `activo` 
+ALTER TABLE `usr_persona` DROP `activo` ;
 
+ALTER TABLE `usr_persona` ADD `legajo` VARCHAR( 8 ) NOT NULL ;
 
 --- PARA TESTEAR SESSIONES, PARA Q NO SE QUEDEN AFUERA
+
+INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) VALUES
+(20, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');
 
 INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `sexo`, `telefono_laboral`, `cumple_condicion`) VALUES 
 (1, '26329', 'P', '27855859', '1', 'Carbone', 'Miguel', 'titulo', 'otros nombreeeeeessssssssssss', 'DGR', '1', NULL, '343978', '4227804', 'carbon@yahoo.com.ar', NULL, NULL, NULL, NULL, '7920', NULL, '2009-12-24', NULL, 'M', NULL, 0);
@@ -180,10 +184,4 @@ INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_doc
 
 INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `id_estado`, `activo`) VALUES 
 (1, 3, '26320', 'DEO', 'DO', NULL, NULL, NULL, 'ICy5YqxZB1uWSwcVLSNLcA', NULL, NULL, 0, NULL, 20, 1);
-
-
-INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) VALUES 
-(20, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');
-
-
 
