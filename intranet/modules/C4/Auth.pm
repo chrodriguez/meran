@@ -1044,11 +1044,11 @@ print D "_deleteSession=> DELETE SESSION: \n";
 	my $dbh = C4::Context->dbh;
 	my $sth;
 print D "_deleteSession=> elimino el sessionID: ".$sessionID."\n";
-# 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
-# 	$sth->execute($sessionID);
+ 	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
+	$sth->execute($sessionID);
     
-     my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-     $sist_sesion->delete;
+#      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+#      $sist_sesion->delete;
 
 print D "\n";
 close(D);
