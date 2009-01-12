@@ -382,7 +382,7 @@ print A "checkauth=> recupero de la cookie con sessionID (desde session->param):
 
 #         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        $sist_sesion->load(sessionID => $sessionID);
+        $sist_sesion->load();
 
 print A "session.sessionId: ".$sist_sesion->getSessionId."\n";
 print A "session.userid: ".$sist_sesion->getUserid."\n";
@@ -1439,9 +1439,11 @@ print Z "_checkpwNEW=> \n";
 #     my $sth=$dbh->prepare("SELECT password,branchcode,documentnumber FROM borrowers WHERE cardnumber=?");
 #     $sth->execute($userid);
 #     
+# $userid = 1;
+#     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
 #      my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-    $socio->load(nro_socio => $userid);
+    $socio->load();
 
 print Z "_checkpwNEW=> ui: ".$socio->getId_ui."\n";
 print Z "_checkpwNEW=> apellido: ".$socio->persona->getApellido."\n";
