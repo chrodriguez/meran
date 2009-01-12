@@ -111,6 +111,10 @@ sub agregar{
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
 
+    if (C4::Context->preference("autoActivarPersona")){
+        $self->activar();
+    }
+
     $self->save();
 }
 

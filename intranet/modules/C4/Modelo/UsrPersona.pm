@@ -136,10 +136,6 @@ sub agregar{
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
  
     $self->save();
-
-    if (C4::Context->preference("autoActivarPersona")){
-        $self->activar();
-    }
 }    
 
 

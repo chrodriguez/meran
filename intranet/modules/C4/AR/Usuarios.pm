@@ -250,7 +250,8 @@ sub agregarPersona{
     }else {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
     }
-#     $db->{connect_options}->{AutoCommit} = 1;    
+
+    $db->{connect_options}->{AutoCommit} = 1;    
 
     return ($msg_object);
 
