@@ -36,7 +36,7 @@ __PACKAGE__->meta->setup(
         sexo             => { type => 'character', length => 1 },
         telefono_laboral => { type => 'varchar', length => 50 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
-#         activo           => { type => 'integer', default => 1, not_null => 1 },
+#          activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
 
      relationships =>
@@ -52,30 +52,6 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_persona' ],
 );
 
-sub convertirEnSocio{
-    my ($self)=shift;
-    my ($data_hash)=@_;
-
-    use C4::Modelo::UsrSocio;
-    use C4::Modelo::UsrEstado;
-    
-    my $socio = C4::Modelo::UsrSocio->new();
-    my $db = $socio->db;
-## FIXME parece q hay q setear el autocommit por objeto
-    $db->{connect_options}->{AutoCommit} = 0;    
-    $data_hash->{'id_persona'} = $self->getId_persona;
-    $data_hash->{'nro_socio'} = $self->getNro_documento;
-    my $estado = C4::Modelo::UsrEstado->new();
-    my $db = $estado->db;
-## FIXME parece q hay q setear el autocommit por objeto
-    $db->{connect_options}->{AutoCommit} = 0;   
-    $data_hash->{'regular'}=1;
-    $data_hash->{'categoria'}='NN';
-    $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
-    $estado->agregar($data_hash);
-    $data_hash->{'id_estado'}= $estado->getId_estado;
-    $socio->agregar($data_hash);
-}
 
 sub getCategoria{
     my ($self)=shift;
@@ -130,13 +106,44 @@ sub agregar{
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
     $self->setCumple_condicion($data_hash->{'cumple_condicion'});
-## FIXME para que es esto?
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
- 
-    $self->save();
-}    
+
+     my $db = $self->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+        $self->save();
+        $self->convertirEnSocio($data_hash);
+    if ($@){
+        $db->rollback;
+    }
+    else
+        {
+            $db->commit;
+        }
+    $db->{connect_options}->{AutoCommit} = 1;
+
+}
+
+sub convertirEnSocio{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrEstado;
+    my $db = $self->db;
+    my $socio = C4::Modelo::UsrSocio->new(db => $db);
+        $data_hash->{'id_persona'} = $self->getId_persona;
+        $data_hash->{'nro_socio'} = $self->getNro_documento;
+    my $estado = C4::Modelo::UsrEstado->new(db => $db);
+        $data_hash->{'regular'}=1;
+        $data_hash->{'categoria'}='NN';
+        $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
+        $estado->agregar($data_hash);
+        $data_hash->{'id_estado'}= $estado->getId_estado;
+        $socio->agregar($data_hash);
+}
 
 
 sub modificar{
@@ -168,7 +175,7 @@ sub modificar{
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
  
    $self->save();
-}   
+}
 
 sub eliminar{
     my ($self) = shift;

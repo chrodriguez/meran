@@ -33,11 +33,11 @@ Aca se maneja el cambio de la password para el usuario
 if($tipoAccion eq "CAMBIAR_PASSWORD"){
 
 	my %params;
-	$params{'usuario'}= $obj->{'usuario'};
+	$params{'id_socio'}= $obj->{'id_socio'};
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
 
-	my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPassword(\%params);
+	my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	

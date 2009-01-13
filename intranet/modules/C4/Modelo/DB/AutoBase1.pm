@@ -41,7 +41,7 @@ __PACKAGE__->use_private_registry;
 __PACKAGE__->register_db
 (
     
-  connect_options => { AutoCommit => 1 },
+  connect_options => {RaiseError => 1},
   driver          => $driverDB,
   dsn             => "dbi:mysql:dbname=".$database.";host=".$hostname,
   username        => $user,

@@ -226,32 +226,23 @@ sub agregarPersona{
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     my $db = $person->db;
-    $db->begin_work; # Start transaction
-# $db->connect_option(AutoCommit => 1);     # set
-    $db->{connect_options}->{AutoCommit} = 0;    
-    $db->{connect_options}->{RaiseError} = 1;
-
+#     $db->begin_work; # Start transaction
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
-    eval {    
         $person->agregar($params);
-## FIXME hace roolback de persona y de socio, pero no se estado
-        $person->convertirEnSocio($params);
-        $db->commit;
-    };
 
     if ($@){
          #Se loguea error de Base de Datos
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-         eval {$db->rollback};
+#          eval {$db->rollback};
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
     }else {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+#             $db->commit;
     }
 
-    $db->{connect_options}->{AutoCommit} = 1;    
 
     return ($msg_object);
 
@@ -633,7 +624,7 @@ sub _verficarPassword {
 # Controlador de transacción para persistir el cambio de password de un usuario. Recibe una hash con todos los datos del usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
-sub t_cambiarPassword {
+sub cambiarPassword {
     my($params)=@_;
 
     my $dbh = C4::Context->dbh;
@@ -641,27 +632,23 @@ sub t_cambiarPassword {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        # enable transactions, if possible
-        $dbh->{AutoCommit} = 0;  
-        $dbh->{RaiseError} = 1;
-    
-        eval {
-            _cambiarPassword($params,$msg_object);  
-            $dbh->commit;
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
-            eval {$dbh->rollback};
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+        $msg_object->{'error'}= 0;
+        
+        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+        if ($socio->load()){
+          $socio->cambiarPassword($params{'newpassword'});
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
+#         if ($@){
         }
-        $dbh->{AutoCommit} = 1;
-
+        else
+           {
+                #Se loguea error de Base de Datos
+                &C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
+                eval {$dbh->rollback};
+                #Se setea error para el usuario
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+            }
     }
 
     return ($msg_object);
@@ -1252,7 +1239,7 @@ sub mailIssuesForBorrower{
         $sth->execute($branch,$bornum);
     my @result;
     my @datearr = localtime(time);
-    my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];    
+    my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
     while (my $data = $sth->fetchrow_hashref) {
         #Para que solo mande mail a los prestamos vencidos
         $data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);

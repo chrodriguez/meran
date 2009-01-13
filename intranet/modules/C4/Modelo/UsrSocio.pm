@@ -1,7 +1,7 @@
 package C4::Modelo::UsrSocio;
 
 use strict;
-
+#  QUE PASA CON ACTIVO??????????????????????????????????????????????????????????????????????????????????? ACA O EN PERSONA?????
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -22,7 +22,7 @@ __PACKAGE__->meta->setup(
         change_password     => { type => 'integer', default => '0', not_null => 1 },
         cumple_requisito   => { type => 'date' },
         id_estado          => { type => 'integer', not_null => 1 },
-        activo           => { type => 'integer', default => 1, not_null => 1 },
+        activo           => { type => 'integer', default => 0, not_null => 1 },
     ],
 
      relationships =>
@@ -131,15 +131,15 @@ sub agregar{
     if (C4::Context->preference("autoActivarPersona")){
         $self->activar();
     }
-
     $self->save();
+
 }
 
 sub modificar{
 
     my ($self)=shift;
     my ($data_hash)=@_;
-    
+
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
@@ -147,6 +147,18 @@ sub modificar{
 
     $self->save();
 }
+
+sub cambiarPassword{
+
+    my ($self)=shift;
+    my ($password)=@_;
+
+    $self->setPassword($password);
+    $self->setLast_change_password(C4:Date::format_date_in_iso(Date::Manip:ParseDate("today")) );
+    $self->setChange_password(1);
+    
+    $self->save();
+
 
 sub activar{
     my ($self) = shift;
