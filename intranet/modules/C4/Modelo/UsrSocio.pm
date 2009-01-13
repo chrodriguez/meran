@@ -149,12 +149,14 @@ sub modificar{
 }
 
 sub cambiarPassword{
-
+    
+    use C4::Date;
     my ($self)=shift;
     my ($password)=@_;
 
     $self->setPassword($password);
-    $self->setLast_change_password(C4:Date::format_date_in_iso(Date::Manip:ParseDate("today")) );
+    my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+    $self->setLast_change_password( );
     $self->setChange_password(1);
     
     $self->save();

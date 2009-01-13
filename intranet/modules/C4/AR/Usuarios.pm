@@ -638,7 +638,7 @@ sub cambiarPassword {
         
         my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
         if ($socio->load()){
-          $socio->cambiarPassword($params{'newpassword'});
+          $socio->cambiarPassword($params->{'newpassword'});
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
 #         if ($@){
         }
