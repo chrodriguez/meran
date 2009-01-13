@@ -974,19 +974,6 @@ sub getBorrowerInfo {
     return ($sth->fetchrow_hashref);
 }
 
-# sub getSocioInfo {
-#     
-#     use C4::Modelo::UsrSocio;
-#     use C4::Modelo::UsrSocio::Manager;
-# 
-#     my ($nro_socio) = @_;
-# 
-#     my  $socio = C4::Modelo::UsrSocio->new(nro_socio => $nro_socio);
-#         $socio->load();
-# 
-#     return ($socio);
-# }
-
 sub getSocioInfo {
     
     use C4::Modelo::UsrSocio;

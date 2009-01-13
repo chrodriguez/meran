@@ -73,7 +73,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
 
-	my ($template, $session, $t_params) = get_template_and_user({
+	my ($template, $session, $t_params, $cookie) = get_template_and_user({
 									template_name => "usuarios/reales/permisos-usuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -83,33 +83,53 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 			    });
 
 
-	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
-	
-	my $dbh=C4::Context->dbh();
-	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
-	$sth->execute;
-	my @loop;
+# 	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
+# 	
+# 	my $dbh=C4::Context->dbh();
+# 	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
+# 	$sth->execute;
+# 	my @loop;
+# 
+# 	while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
+# 		my $checked='';
+# 		if ( $accessflags->{$flag} ) {
+# 			$checked='checked';
+# 		}
+# 		
+# 		my %row = ( 	bit => $bit,
+# 				flag => $flag,
+# 				checked => $checked,
+# 				flagdesc => $flagdesc );
+# 
+# 		push @loop, \%row;
+# 	}
 
-	while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
-		my $checked='';
-		if ( $accessflags->{$flag} ) {
-			$checked='checked';
-		}
-		
-		my %row = ( 	bit => $bit,
-				flag => $flag,
-				checked => $checked,
-				flagdesc => $flagdesc );
+    my ($socio) = C4::Modelo::UsrSocio->new(id_socio => $obj->{'usuario'});
+    $socio->load();
+    my $flags_hashref= $socio->getPermisos;
 
-		push @loop, \%row;
-	}
+    my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
 
-	$t_params->{'surname'}= $bor->{'surname'};
-  	$t_params->{'firstname'}= $bor->{'firstname'};
+    my @loop;
+
+    foreach my $permiso (@$permisos_array_ref){
+        my $checked='';
+
+        if ( $flags_hashref->{ $permiso->{'flag'} } ) {
+            $checked='checked';
+        }
+        
+        my %row = (     bit => $permiso->{'bit'},
+                        flag =>  $permiso->{'flag'},
+                        checked => $checked,
+                        flagdesc => $permiso->{'flagdesc'} );
+
+        push @loop, \%row;
+    }
+
 	$t_params->{'loop'}= \@loop;
 
-# 	print $session->header;
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")
 

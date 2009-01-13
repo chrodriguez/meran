@@ -1337,4 +1337,20 @@ sub generarComboUI {
 
 #****************************************************Fin****Generacion de Combos**************************************************
 
+
+sub printHASH {
+    my ($hash_ref) = @_;
+    open(Z, ">>/tmp/debug.txt");
+    print Z "\n";
+    print Z "PRINT HASH: \n";
+    
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+                print Z "key: $key => value: $value\n";
+            }
+    }
+    print Z "\n";
+    close(Z);
+}
+
 1;

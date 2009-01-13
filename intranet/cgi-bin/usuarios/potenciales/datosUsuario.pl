@@ -7,11 +7,11 @@ use CGI;
 my $input=new CGI;
 
 my ($template, $session, $t_params, $cookie) =  C4::Auth::get_template_and_user ({
-			template_name	=> 'usuarios/potenciales/datosUsuario.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
+			                                                                        template_name	=> 'usuarios/potenciales/datosUsuario.tmpl',
+			                                                                        query		=> $input,
+			                                                                        type		=> "intranet",
+			                                                                        authnotrequired	=> 0,
+			                                                                        flagsrequired	=> { circulate => 1 },
     });
 
 

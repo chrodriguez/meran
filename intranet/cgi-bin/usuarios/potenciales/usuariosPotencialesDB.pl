@@ -14,13 +14,13 @@ use JSON;
 
 my $input = new CGI;
 my $flagsrequired;
+my $authnotrequired= 0;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 1, $flagsrequired,"intranet");
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired, $flagsrequired, "intranet");
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 my $id_personas_array_ref= $obj->{'id_personas'};
-# my ($error, $codMsg, $message);
 my $Messages_arrayref;
 
 

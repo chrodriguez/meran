@@ -1,22 +1,22 @@
-package C4::Modelo::UsrSocio;
+package C4::Modelo::UsrPermiso;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'usr_socio',
+    table   => 'usr_permiso',
 
     columns => [
         bit         => { type => 'integer', not_null => 1 , length => 11},
         flag           => { type => 'varchar', not_null => 1 , length => 255},
-        flag_desc          => { type => 'varchar', length => 255, not_null => 1 },
-        default_on              => { type => 'integer', length => 11, not_null => 1 }
+        flagdesc          => { type => 'varchar', length => 255, not_null => 1 },
+        defaulton              => { type => 'integer', length => 11, not_null => 1 }
     ],
 
     primary_key_columns => [ 'bit' ],
 
-    unique_key => [ 'flag_desc' ],
+    unique_key => [ 'flagdesc' ],
 );
 
 
@@ -61,25 +61,54 @@ sub setFlag{
 
 sub getFlag_desc{
     my ($self) = shift;
-    return ($self->flag_desc);
+    return ($self->flagdesc);
 }
 
 sub setFlag_desc{
     my ($self) = shift;
-    my ($flag_desc) = @_;
-    $self->flag_desc($flag_desc);
+    my ($flagdesc) = @_;
+    $self->flagdesc($flagdesc);
 }
 
 sub getDefault_on{
     my ($self) = shift;
-    return ($self->default_on);
+    return ($self->defaulton);
 }
 
 sub setDefault_on{
     my ($self) = shift;
-    my ($default_on) = @_;
-    $self->default_on($default_on);
+    my ($defaulton) = @_;
+    $self->defaulton($defaulton);
 }
+
+# sub getPermisos{
+# #     my $dbh=C4::Context->dbh();
+# #     my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
+# #     $sth->execute;
+# 
+# #     use C4::Modelo::UsrSocio;
+#     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
+# 
+# #     return ($socio_array_ref->[0]->categoria->getDescription);
+# #     my @loop;
+# 
+# #     while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
+# #     foreach $permiso ($@permisos_array_ref){
+# #         my $checked='';
+# #         if ( $accessflags->{$flag} ) {
+# #             $checked='checked';
+# #         }
+# #         
+# #         my %row = (     bit => $bit,
+# #                 flag => $flag,
+# #                 checked => $checked,
+# #                 flagdesc => $flagdesc );
+# # 
+# #         push @loop, \%row;
+# #     }
+# 
+#     return ($permisos_array_ref);
+# }
 
 1;
 

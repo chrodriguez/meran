@@ -856,7 +856,7 @@ print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sess
                 undef, (time(), $sessionID));
                 $flags = haspermission($dbh, $userid, $flagsrequired);
 print A "checkauth=> imprimo los flags: \n";
-                _printHASH($flags);
+                C4::AR::Utilidades::printHASH($flags);
 
                 if ($flags) {
                     $loggedin = 1;
@@ -1225,22 +1225,6 @@ close(J);
 		exit;
 	
 	}#end  if ($newpassword && !$passwordrepeted)
-}
-
-
-sub _printHASH {
-	my ($hash_ref) = @_;
-open(Z, ">>/tmp/debug.txt");
-print Z "\n";
-print Z "PRINT HASH: \n";
-
-if($hash_ref){
-	while ( my ($key, $value) = each(%$hash_ref) ) {
-        	print Z "key: $key => value: $value\n";
-    	}
-}
-print Z "\n";
-close(Z);
 }
 
 sub _generarNroRandom {
