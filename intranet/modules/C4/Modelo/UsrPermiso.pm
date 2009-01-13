@@ -81,34 +81,5 @@ sub setDefault_on{
     $self->defaulton($defaulton);
 }
 
-# sub getPermisos{
-# #     my $dbh=C4::Context->dbh();
-# #     my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
-# #     $sth->execute;
-# 
-# #     use C4::Modelo::UsrSocio;
-#     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
-# 
-# #     return ($socio_array_ref->[0]->categoria->getDescription);
-# #     my @loop;
-# 
-# #     while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
-# #     foreach $permiso ($@permisos_array_ref){
-# #         my $checked='';
-# #         if ( $accessflags->{$flag} ) {
-# #             $checked='checked';
-# #         }
-# #         
-# #         my %row = (     bit => $bit,
-# #                 flag => $flag,
-# #                 checked => $checked,
-# #                 flagdesc => $flagdesc );
-# # 
-# #         push @loop, \%row;
-# #     }
-# 
-#     return ($permisos_array_ref);
-# }
-
 1;
 

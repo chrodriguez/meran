@@ -183,28 +183,24 @@ sub cambiarPermisos{
     $self->save();
 }
 
+=item
+Retorna los permisos del socio
+=cut
 sub getPermisos{
     my ($self) = shift;
     
     use C4::Modelo::UsrPermiso;
     use C4::Modelo::UsrPermiso::Manager;
 
-#     my ($permiso) = C4::Modelo::UsrPermiso->new();
-#     $permiso->load();
-#     my $permisos_array_ref= $permiso->getPermisos();
     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
 
-#     $sth=$dbh->prepare("SELECT bit,flag FROM usr_permiso");
-#     $sth->execute;
-#     while (my ($bit, $flag) = $sth->fetchrow) {
     my $accessflagshash;
     foreach my $permiso (@$permisos_array_ref){
         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
             $accessflagshash->{ $permiso->{'flag'} }= 1;
         }
     }
-#     $sth->finish;
-#     $borrower->{'flags'}=$flags;
+
     return ($accessflagshash);
 }
 

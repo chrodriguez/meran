@@ -1,24 +1,5 @@
 #!/usr/bin/perl
 
-# script to generate cards for the borrowers
-# written 03/2005
-# by Luciano Iglesias - li@info.unlp.edu.ar - LINTI, Facultad de Inform�tica, UNLP Argentina
-
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 require Exporter;
 
 use strict;
@@ -29,7 +10,11 @@ use C4::Auth;
 use C4::AR::Busquedas;
 
 my $input= new CGI;
-my $bornum = $input->param('bornum');
+my $authnotrequired= 0;
+# OBTENGO EL BORROWER LOGGEADO Y VERIFICO PERMISOS
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+
+my $id_socio = $input->param('id_socio');
 my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branchcode'));
 $biblioDestino = $biblioDestino->{'branchname'};
@@ -49,8 +34,7 @@ for(my $i=0;$i<scalar(@titulos);$i++){
 	else{$datos[$i]->{'otros'}="";}
 	$datos[$i]->{'titulo'}=$titulos[$i];
 }
-my $borrewer= C4::AR::Usuarios::getBorrower($bornum);
-&prestInterBiblio($bornum,$borrewer,$biblioDestino,$director,\@datos);
 
-
-
+my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
+$socio->persona->getApellido;
+&C4::AR::PdfGenerator::prestInterBiblio($id_socio,$socio,$biblioDestino,$director,\@datos);

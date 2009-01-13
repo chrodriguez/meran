@@ -644,62 +644,62 @@ sub cambiarPassword {
 # Cambia el password del usuario. Recibe como parámetro una hash con todos sus datos.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
 
-sub _cambiarPassword{
-    my ($params, $msg_object) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    my %env;
-    my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
-
-    $params->{'userid'}= $borrower->{'userid'};
-    $params->{'surename'}= $borrower->{'surename'};
-    $params->{'firstname'}= $borrower->{'firstname'};
-
-    my $digest= C4::Auth::md5_base64($params->{'newpassword'});
-    my $dbh=C4::Context->dbh;
-    #Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-    #Then we need to tell the user and have them create a new one.
-## FIXME el userid parece que no se usa!!!!!!!!!!!!!    
-    my $sth2=$dbh->prepare("    SELECT * 
-                    FROM borrowers 
-                    WHERE userid=? AND borrowernumber != ?");
-
-    $sth2->execute($params->{'userid'},$params->{'usuario'});
-    
-    if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
-    #ya existe el userid
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add(  $msg_object, {  'codMsg'=> 'U311', 
-                            'params' => [$params->{'userid'}, $params->{'surename'}, $params->{'firstname'}]} ) ;
-
-    }else {
-        #Esta todo bien, se puede actualizar la informacion
-        my $sth=$dbh->prepare(" UPDATE borrowers 
-                        SET userid=?, password=? 
-                    WHERE borrowernumber=? ");
-
-        $sth->execute($params->{'userid'}, $digest, $params->{'usuario'});
-        
-        my $sth3=$dbh->prepare("    SELECT cardnumber 
-                        FROM borrowers 
-                        WHERE borrowernumber = ? ");
-
-        $sth3->execute($params->{'usuario'});
-
-        if (my $cardnumber= $sth3->fetchrow) {
-        #Se actualiza el ldap
-## FIXME no se para que se le pasa el $template
-            my $template; 
-            if (C4::Membersldap::addupdateldapuser($dbh,$cardnumber,$digest,$template)){
-#               $template->param(errorldap => 1);
-            }
-        }
-
-    }
-
-#   return ($error,$codMsg,$paraMens);
-    return ($msg_object);
-}
+# sub _cambiarPassword{
+#     my ($params, $msg_object) = @_;
+#     my $dbh = C4::Context->dbh;
+#     
+#     my %env;
+#     my ($borrower,$flags)= C4::Circulation::Circ2::getpatroninformation($params->{'usuario'},'');
+# 
+#     $params->{'userid'}= $borrower->{'userid'};
+#     $params->{'surename'}= $borrower->{'surename'};
+#     $params->{'firstname'}= $borrower->{'firstname'};
+# 
+#     my $digest= C4::Auth::md5_base64($params->{'newpassword'});
+#     my $dbh=C4::Context->dbh;
+#     #Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+#     #Then we need to tell the user and have them create a new one.
+# ## FIXME el userid parece que no se usa!!!!!!!!!!!!!    
+#     my $sth2=$dbh->prepare("    SELECT * 
+#                     FROM borrowers 
+#                     WHERE userid=? AND borrowernumber != ?");
+# 
+#     $sth2->execute($params->{'userid'},$params->{'usuario'});
+#     
+#     if ( ($params->{'userid'} ne '') && ($sth2->fetchrow) ) {
+#     #ya existe el userid
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add(  $msg_object, {  'codMsg'=> 'U311', 
+#                             'params' => [$params->{'userid'}, $params->{'surename'}, $params->{'firstname'}]} ) ;
+# 
+#     }else {
+#         #Esta todo bien, se puede actualizar la informacion
+#         my $sth=$dbh->prepare(" UPDATE borrowers 
+#                         SET userid=?, password=? 
+#                     WHERE borrowernumber=? ");
+# 
+#         $sth->execute($params->{'userid'}, $digest, $params->{'usuario'});
+#         
+#         my $sth3=$dbh->prepare("    SELECT cardnumber 
+#                         FROM borrowers 
+#                         WHERE borrowernumber = ? ");
+# 
+#         $sth3->execute($params->{'usuario'});
+# 
+#         if (my $cardnumber= $sth3->fetchrow) {
+#         #Se actualiza el ldap
+# ## FIXME no se para que se le pasa el $template
+#             my $template; 
+#             if (C4::Membersldap::addupdateldapuser($dbh,$cardnumber,$digest,$template)){
+# #               $template->param(errorldap => 1);
+#             }
+#         }
+# 
+#     }
+# 
+# #   return ($error,$codMsg,$paraMens);
+#     return ($msg_object);
+# }
 
 
 # Como todos los manejadores de transacciones
@@ -930,6 +930,7 @@ sub buscarBorrower{
 
 # Devuelve informacion del usuario segun un borrowernumber, solo de la tabla borrowers
 # Retorna los datos como una hash
+## FIXME DEPRECATED, se usa ahora getSocioInfo
 sub getBorrower{
     my ($borrowernumber) = @_;
 
@@ -945,6 +946,7 @@ sub getBorrower{
 
 # Devuelve toda la informacion del usuario segun un borrowernumber, matching con localidades, categories
 # Retorna los datos como una hash
+## FIXME DEPRECATED, se usa ahora getSocioInfo
 sub getBorrowerInfo {
 
     my ($borrowernumber) = @_;

@@ -469,11 +469,12 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 sub prestInterBiblio(){
-	my ($bornum,$borrewer,$biblioDestino,$director,$datos)=@_;
-	my $tmpFileName= "prestInterBiblio".$bornum.".pdf";
-	my $nombre = $borrewer->{'surname'}.", ".$borrewer->{'firstname'};
-	my $dni= $borrewer->{'documentnumber'};
-	my $branchcode=$borrewer->{'branchcode'};
+	my ($id_socio, $socio, $biblioDestino, $director, $datos)=@_;
+
+    my $tmpFileName= "prestInterBiblio".$id_socio.".pdf";
+	my $nombre = $socio->persona->getApellido.', '.$socio->persona->getNombre;
+	my $dni= $socio->persona->getNro_documento;
+	my $branchcode= $socio->getId_ui;
 	my $biblio=&datosBiblio($branchcode);
 	my $categ=$biblio->{'categ'};
 	my $branchname=$biblio->{'branchname'};
@@ -501,9 +502,9 @@ sub prestInterBiblio(){
 	$parrafo[0]="La(s) misma(s) ser�(n) retirada(s) por:";
 	$parrafo[1]="Nombre y apellido:".$nombre;
 	$parrafo[2]="DNI:".$dni;
-	$parrafo[3]="Direcci�n:".$borrewer->{'streetaddress'}.", ".&C4::AR::Busquedas::getNombreLocalidad($borrewer->{'city'});
-	$parrafo[4]="Tel�fono:".$borrewer->{'phone'};
-	$parrafo[5]="Correo electr�nico:".$borrewer->{'emailaddress'};
+    $parrafo[3]="Direcci�n:".$socio->persona->getCalle.", ".$socio->persona->ciudad_ref->getNombre;
+    $parrafo[4]="Tel�fono:".$socio->persona->getTelefono;
+    $parrafo[5]="Correo electr�nico:".$socio->persona->getEmail;
 	$parrafo[6]="";
 	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
 	$parrafo[8]="atentamente.";

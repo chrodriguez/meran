@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 function imprimir(){
 	var autores="";
 	var titulos="";
@@ -23,7 +24,7 @@ function imprimir(){
 </table>
 
 	<form name="info" id="info" action="/cgi-bin/koha/usuarios/prestamoInterBiblio.pl">
-		<input type="hidden" name="bornum" id="bornum" value="[% bornum %]">
+		<input type="hidden" name="id_socio" id="id_socio" value="[% id_socio %]">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
 		<input type="hidden" name="autores" id="autores">
 		<input type="hidden" name="titulos" id="titulos" />
@@ -35,7 +36,7 @@ function imprimir(){
 			[% "Biblioteca:" | i18n %]
 		</td>
 		<td colspan="2">
-			[% bibliotecas %]
+			[% comboDeUI %]
 		</td>
 	</tr>
 	<tr>

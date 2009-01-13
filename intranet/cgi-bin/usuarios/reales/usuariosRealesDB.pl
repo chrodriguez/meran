@@ -106,8 +106,10 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 
     my ($socio) = C4::Modelo::UsrSocio->new(id_socio => $obj->{'usuario'});
     $socio->load();
+    #Obtengo los permisos del socio
     my $flags_hashref= $socio->getPermisos;
 
+    #Obtengo todos los permisos
     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
 
     my @loop;
@@ -300,8 +302,6 @@ elsif($tipoAccion eq "ELIMINAR_FOTO"){
 
 
 elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
-
-	my $bornum = $obj->{'borrowernumber'};
 	
 	my ($template, $session, $t_params, $cookie) = get_template_and_user({
 									template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
@@ -312,10 +312,13 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 									debug => 1,
 			    });
 
-	my $bibliotecas=C4::AR::Utilidades::generarComboDeBranches();
+    my $socio= C4::AR::Usuarios::getSocioInfo($obj->{'id_socio'});
 
-	$t_params->{'bibliotecas'}= $bibliotecas;
-	$t_params->{'bornum'}= $bornum;
+    my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
+
+    $t_params->{'comboDeUI'}= $comboDeUI;
+    $t_params->{'nro_socio'}= $socio->getNro_socio;
+    $t_params->{'id_socio'}= $obj->{'id_socio'};
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
