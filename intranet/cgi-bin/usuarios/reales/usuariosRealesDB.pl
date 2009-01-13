@@ -5,9 +5,6 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::UploadFile;
 use JSON;
-
-
-use Template;
 use CGI;
 
 my $input = new CGI;
@@ -82,30 +79,8 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 									debug => 1,
 			    });
 
-
-# 	my ($bor,$flags,$accessflags)= C4::Circulation::Circ2::getpatroninformation( $obj->{'usuario'},'');
-# 	
-# 	my $dbh=C4::Context->dbh();
-# 	my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM usr_permiso ORDER BY bit");
-# 	$sth->execute;
-# 	my @loop;
-# 
-# 	while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
-# 		my $checked='';
-# 		if ( $accessflags->{$flag} ) {
-# 			$checked='checked';
-# 		}
-# 		
-# 		my %row = ( 	bit => $bit,
-# 				flag => $flag,
-# 				checked => $checked,
-# 				flagdesc => $flagdesc );
-# 
-# 		push @loop, \%row;
-# 	}
-
-    my ($socio) = C4::Modelo::UsrSocio->new(id_socio => $obj->{'usuario'});
-    $socio->load();
+    my ($socio)= C4::AR::Usuarios::getSocioInfo($obj->{'usuario'});
+    
     #Obtengo los permisos del socio
     my $flags_hashref= $socio->getPermisos;
 
@@ -130,6 +105,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
     }
 
 	$t_params->{'loop'}= \@loop;
+    $t_params->{'tiene'}=C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired);
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 

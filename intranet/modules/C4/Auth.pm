@@ -1798,8 +1798,8 @@ print Z "_checkpwNEW=> \n";
 
       if ( ($socio->persona)&&($socio->getActivo) ) {
 print Z "_checkpwNEW=> tengo persona y socio\n";
-#     if (($socio->getActivo) ) {
         #existe ell socio y se encuentra activo
+
 # print Z "_checkpwNEW=> ui: ".$socio->getId_ui."\n";
 # print Z "_checkpwNEW=> apellido: ".$socio->persona->getApellido."\n";
 # print Z "_checkpwNEW=> nombre: ".$socio->persona->getNombre."\n";
@@ -1879,6 +1879,37 @@ sub haspermission {
     foreach (keys %$flagsrequired) {
 	return $flags if $flags->{$_};
     }
+    return 0;
+}
+
+sub tienePermisos {
+    my ($nro_socio, $flagsrequired) = @_;
+#     my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
+#     $sth->execute($userid);
+#     my ($cardnumber) = $sth->fetchrow;
+#     ($cardnumber) || ($cardnumber=$userid);
+#     my $flags=getuserflags($cardnumber,$dbh);
+    my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    #Obtengo los permisos del socio
+    my $flags= $socio->getPermisos;
+
+    my $configfile;
+    if ($nro_socio eq C4::Context->config('user')) {
+        # Super User Account from /etc/koha.conf
+        $flags->{'superlibrarian'}=1;
+    }
+
+    if ($nro_socio eq 'demo' && C4::Context->config('demo')) {
+        # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
+        $flags->{'superlibrarian'}=1;
+    }
+
+    return $flags if $flags->{superlibrarian};
+
+    foreach (keys %$flagsrequired) {
+        return $flags if $flags->{$_};
+    }
+
     return 0;
 }
 

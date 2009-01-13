@@ -968,6 +968,9 @@ sub getBorrowerInfo {
     return ($sth->fetchrow_hashref);
 }
 
+=item
+Esta funcion devuelve la informacion del socio, segun el id_socio
+=cut
 sub getSocioInfo {
     
     use C4::Modelo::UsrSocio;
@@ -980,6 +983,21 @@ sub getSocioInfo {
 
     return ($socio);
 }
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getSocioInfoPorNroSocio{
+
+    use C4::Modelo::UsrSocio;
+
+    my ($nro_socio)= @_;
+
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ nro_socio => { eq => $nro_socio } ]);
+
+    return ($socio_array_ref->[0]);
+}
+
 
 sub getPersonaLike {
     
