@@ -8,7 +8,7 @@
 
 	<tr align="center">
 		<b>
-                    [% "Ha buscado por :" | i18n %] [% persona %]
+                    [% "Ha buscado por :" | i18n %] [% socio %]
                 </b>
 	</tr>
 </table>
@@ -50,25 +50,25 @@
 			[% IF nomodificable %]
 				[% "Imposible" | i18n %] 
 			[% ELSE %]
-				<input type=checkbox name="[% persona.getId_persona %]" 
-				id="[% persona.getId_persona %]" 
-				value="[% persona.getNro_documento %]">
+				<input type=checkbox name="[% socio.getId_socio %]" 
+				id="[% socio.persona.getId_persona %]" 
+				value="[% socio.persona.getNro_documento %]">
 			[% END %]
 		</td>
 		
       	<td align="left">
-			<a href="/cgi-bin/koha/usuarios/potenciales/datosUsuario.pl?id_persona=[% persona.getId_persona %]">
-                [% persona.getApellido %], [% persona.getNombre %]
+			<a href="/cgi-bin/koha/usuarios/potenciales/datosUsuario.pl?id_socio=[% socio.getId_persona %]">
+                [% socio.persona.getApellido %], [% socio.persona.getNombre %]
             </a>
 		</td>
 
       	<td align="left">
-			[% persona.getVersion_documento %]&nbsp; [% persona.getNro_documento %]
+			[% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
 		</td>
 
  		<td>
-            [% IF persona.getActivo %]
-                [% persona.getCategoria %]
+            [% IF socio.getActivo %]
+                [% socio.categoria.getDescription %]
             [% END %]
 		</td> 
         <td>

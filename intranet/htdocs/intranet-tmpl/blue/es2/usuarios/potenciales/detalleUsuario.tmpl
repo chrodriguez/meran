@@ -2,7 +2,7 @@
 <div class="vcard">
 
 <div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<p class="pagetitle" ><span class="fn">[% persona.gerApellido %] [% persona.getNombre %]</span></p>
+	<p class="pagetitle" ><span class="fn">[% socio.persona.getApellido %] [% socio.persona.getNombre %]</span></p>
 </div>
 
 
@@ -22,46 +22,46 @@
 <div class="divDatosUsuario">
         
         [% "Apellido:" | i18n %]
-                <b> [% persona.getApellido %] </b><br>
+                <b> [% socio.persona.getApellido %] </b><br>
 
         [% "Nombre:" | i18n %]
-                <b> [% persona.getNombre %] </b><br>
+                <b> [% socio.persona.getNombre %] </b><br>
 
         [% "Documento:" | i18n %]
-                <b> [% persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+                <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
 
         [% "Fecha de nacimiento:" | i18n %]
-                <b> [% persona.getNacimiento %]</b><br>
+                <b> [% socio.persona.getNacimiento %]</b><br>
         [% "Sexo:" | i18n %]    
-                <b> [% persona.getSexo %]</b><br>
+                <b> [% socio.persona.getSexo %]</b><br>
                                     
-        [% IF persona.getTelefono %]
+        [% IF socio.persona.getTelefono %]
                 <div class="tel">
                         <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                <b>[% persona.getTelefono %]</b><br>
+                                <b>[% socio.persona.getTelefono %]</b><br>
                 </div>	
         [% END %]
 
-        [% IF persona.getAlt_telefono %]
+        [% IF socio.persona.getAlt_telefono %]
         <div class="tel">
                 <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                            <b>[% persona.getAlt_telefono %]</b><br>
+                            <b>[% socio.persona.getAlt_telefono %]</b><br>
         </div>	
         [% END %]
         
-        [% IF persona.getEmail %]
+        [% IF socio.persona.getEmail %]
                 E-mail: <b><a href="mailto:[% emailaddress %]">
-                        <span class="email"> [% persona.getEmail %]</span></a></b><br>
+                        <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
         [% END %]
         <br>
             
         [% "Legajo :" | i18n %]
-                        <b> [%  persona.getNro_documento %]</b><br>
+                        <b> [%  socio.persona.getNro_documento %]</b><br>
 
         [% "Ciudad :" | i18n %]
-                        <b> [%  persona.getCiudad %]</b><br>
+                        <b> [%  socio.persona.getCiudad %]</b><br>
         [% "Calle :" | i18n %]
-                        <b> [%  persona.getCalle %]</b><br>
+                        <b> [%  socio.persona.getCalle %]</b><br>
                     
 
 </div>

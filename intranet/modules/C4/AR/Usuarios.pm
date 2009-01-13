@@ -413,38 +413,30 @@ sub _verificarInfoAddPerson {
 
 # Esta función es el manejador de transacción para eliminarUsuario. Recibe una hash conteniendo los campos:
 #  borrowernumber y usuario.
-sub t_eliminarUsuario {
+sub eliminarUsuario {
     
-    my($params)=@_;
-    my $dbh = C4::Context->dbh;
+    my($socio)=@_;
     my $msg_object= C4::AR::Mensajes::create();
 
-    $msg_object = _verficarEliminarUsuario($params,$msg_object);
+# FIXME esa funcion debe cambiar, porque cambiaron los parametros
+#     $msg_object = _verficarEliminarUsuario($params,$msg_object);
 
     if(!$msg_object->{'error'}){
     #No hay error
 
-        # enable transactions, if possible
-        $dbh->{AutoCommit} = 0;  
-        $dbh->{RaiseError} = 1;
-    
-        eval {  
-            _eliminarUsuario($params->{'borrowernumber'});
-            $dbh->commit;
+        eval {
+            $socio->desactivar;
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$params->{'usuario'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$socio->getNro_socio]} ) ;
         };
     
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-            eval {$dbh->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$params->{'cardnumber'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$socio->getNro_socio]} ) ;
         }
-        $dbh->{AutoCommit} = 1;
-
     }
 
     return ($msg_object);
@@ -616,10 +608,10 @@ sub cambiarPassword {
         $msg_object->{'error'}= 0;
         
         my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+#         if ($@){
         if ($socio->load()){
           $socio->cambiarPassword($params->{'newpassword'});
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
-#         if ($@){
         }
         else
            {

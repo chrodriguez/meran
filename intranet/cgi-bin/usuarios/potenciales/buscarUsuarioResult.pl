@@ -23,18 +23,18 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'apellido';
-my $personaBuscada=$obj->{'persona'};
+my $socioBuscado=$obj->{'persona'};
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
 my $activo;
 
-my ($cantidad,$personas);
+my ($cantidad,$socios);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 
 my $habilitados = $obj->{'habilitados_filter'};
-($cantidad,$personas)= C4::AR::Usuarios::getPersonaLike($personaBuscada,$orden,$ini,$cantR,$habilitados);
+($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,$habilitados);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
@@ -43,9 +43,9 @@ my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
 my @resultsdata; 
 my $i=0;
 
-foreach my $persona (@$personas){
+foreach my $socio (@$socios){
     my $clase="";
-     if ($persona->getActivo == 0){
+     if ($socio->getActivo == 0){
          $activo = "NO";
       }else{
          $activo = "SI";
@@ -53,7 +53,7 @@ foreach my $persona (@$personas){
     
      my %row = (
             clase=> $clase,
-            persona => $persona,
+            socio => $socio,
             comboCategorias => $comboDeCategorias,
             activo => $activo,
     );
@@ -63,6 +63,6 @@ foreach my $persona (@$personas){
 
 $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'cantidad'}= $cantidad;
-$t_params->{'persona'}= $personaBuscada;
+$t_params->{'socio'}= $socioBuscado;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

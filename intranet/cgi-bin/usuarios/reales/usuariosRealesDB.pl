@@ -120,12 +120,8 @@ Se elimina el usuario
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
-	my $usuario_hash_ref= C4::AR::Usuarios::getBorrower($obj->{'borrowernumber'});
-	$params{'loggedInUser'} = $loggedinuser;
-	$params{'usuario'}= $usuario_hash_ref->{'surname'}.', '.$usuario_hash_ref->{'firstname'};
-   	$params{'borrowernumber'}= $usuario_hash_ref->{'borrowernumber'};
-
- 	my ($Message_arrayref)= C4::AR::Usuarios::t_eliminarUsuario(\%params);
+	my $socio= $obj->{'id_socio'};
+ 	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($socio);
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;

@@ -155,7 +155,7 @@ sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
 
-    $self->setPassword($password);
+    $self->setPassword( C4::Auth::md5_base64($password) );
     my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
     $self->setLast_change_password( );
     $self->setChange_password(1);

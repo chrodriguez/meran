@@ -15,11 +15,12 @@ my ($template, $session, $t_params, $cookie) =  C4::Auth::get_template_and_user 
     });
 
 
-my $id_persona= $input->param('id_persona');
+# FIXME en el cliente, siempre queda PERSONA para que se entienda, pero aca no es más que un socio DESHABILITADO
+my $id_socio= $input->param('id_socio');
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 
-my $persona=C4::AR::Usuarios::getPersonaInfo($id_persona);
-$t_params->{'id_persona'}= $id_persona;
-$t_params->{'persona'}= $persona;
+my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
+$t_params->{'id_socio'}= $id_socio;
+$t_params->{'socio'}= $socio;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

@@ -43,7 +43,7 @@ function detalleUsuario(){
 	objAH=new AjaxHelper(updateDetalleUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/potenciales/detalleUsuario.pl';
 	objAH.debug= true;
-	objAH.id_persona= usuario.ID;
+	objAH.id_socio= usuario.ID;
 	objAH.sendToServer();
 }
 
@@ -57,8 +57,8 @@ $(document).ready(function() {
 	
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
-	usuario.text= "[% persona.getApellido %]" + ', ' + "[% persona.getNombre %]";
-	usuario.ID= "[% persona.getId_persona %]";
+	usuario.text= "[% socio.persona.getApellido %]" + ', ' + "[% socio.persona.getNombre %]";
+	usuario.ID= "[% socio.persona.getId_persona %]";
 
 	detalleUsuario(usuario.ID);
 
