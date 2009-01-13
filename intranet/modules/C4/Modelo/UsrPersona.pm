@@ -109,7 +109,7 @@ sub agregar{
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
-
+    
     $self->save();
     $self->convertirEnSocio($data_hash);
     

@@ -106,8 +106,8 @@ $(document).ready(function() {
         <td   width="65%" ALIGN=RIGHT>*
             <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] checked="checked" F [% END %]> F
             <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] checked="checked" M [% END %]> M 
-            &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% dateformat %])
-            <input class="inputFontNormal" type=text id="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
+            &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])
+            <input class="inputFontNormal" type=text id="nacimiento" nacimiento="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
         </td>
 
         <td width="1%" valign="top" align="right">
@@ -233,7 +233,7 @@ $(document).ready(function() {
         </td>
         <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad" | i18n %] *</b><br>
-            <input class="inputFontNormal" type=text id="ciudad" value="[% socio.persona.ciudad_ref.NOMBRE %]" size='50' >
+            <input class="inputFontNormal" type=text id="ciudad" value="[% socio.persona.ciudad_ref.getNombre %]" size='50' >
             <input type="hidden" id="id_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]">
         </td>
     </tr>

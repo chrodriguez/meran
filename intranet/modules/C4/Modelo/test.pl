@@ -135,8 +135,8 @@ print "\n\n\n\n\n\n\n\n\n";
 
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
-	my $new = &C4::AR::Usuarios::getSocioInfo(1);
-    print ($new->persona->apellido."\n\n\n\n\n\n\n");
+	my $new = &C4::AR::Usuarios::getSocioInfo(3);
+    print ("\n\n\n\n\n\n\n".$new->persona->getNacimiento."\n\n\n\n\n\n\n");
        my %data_hash;
         
 #         $data_hash{'nombre'} = "PEPITO NEW";

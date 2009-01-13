@@ -1032,11 +1032,14 @@ sub getSocioLike {
     use C4::Modelo::UsrSocio;
     use C4::Modelo::UsrSocio::Manager;
 
-    my ($socio,$orden,$ini,$cantR) = @_;
+    my ($socio,$orden,$ini,$cantR,$habilitados) = @_;
     
     my @filtros;
     
-    push (@filtros,(activo => { eq => 1}) );
+    if (($habilitados == 1)){
+        push(@filtros, ( activo=> { eq => 0}) );
+     }
+
     if($socio ne 'TODOS'){
         push (@filtros, (apellido => { like => $socio.'%' }) );
         push (@filtros, (activo => { eq => 1}) );

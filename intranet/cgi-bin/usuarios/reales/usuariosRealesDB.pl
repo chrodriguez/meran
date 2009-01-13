@@ -182,10 +182,10 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 									debug => 1,
 			    });
 
-	my $numero_socio =$obj->{'numero_socio'};
+	my $id_socio =$obj->{'id_socio'};
 
 	#Obtenemos los datos del borrower
-	my $socio= &C4::AR::Usuarios::getSocioInfo($numero_socio);
+	my $socio= &C4::AR::Usuarios::getSocioInfo($id_socio);
 
     my %params;
     $params{'default'}= $socio->cod_categoria;

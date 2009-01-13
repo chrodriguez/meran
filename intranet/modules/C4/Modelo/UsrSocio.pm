@@ -126,7 +126,6 @@ sub agregar{
     $self->setFlags($data_hash->{'flags'});
     $self->setPassword($data_hash->{'password'});
     $self->setLast_login($data_hash->{'last_login'});
-    $self->setLast_change_password($data_hash->{'last_change_password'});
     $self->setChange_password($data_hash->{'change_password'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
