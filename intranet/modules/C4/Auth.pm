@@ -854,18 +854,26 @@ print A "checkauth=> se loguearon con el mismo userid desde otro lado\n";
 print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
                 $dbh->do("UPDATE sist_sesion SET lasttime=? WHERE sessionID=?",
                 undef, (time(), $sessionID));
-                $flags = haspermission($dbh, $userid, $flagsrequired);
+#                 $flags = haspermission($dbh, $userid, $flagsrequired);
+                $flags = tienePermisos($userid, $flagsrequired);
+
+print A "checkauth=> permisos de userid: ".$userid."\n";
 print A "checkauth=> imprimo los flags: \n";
                 C4::AR::Utilidades::printHASH($flags);
+print A "checkauth=> imprimo los flagsrequired: \n";
+                C4::AR::Utilidades::printHASH($flagsrequired);
+# print A "checkauth=> imprimo los flags de tienePermisos: \n";
+#                 C4::AR::Utilidades::printHASH( tienePermisos($userid, $flagsrequired) );
+
 
                 if ($flags) {
                     $loggedin = 1;
                 } else {
                     $info{'nopermission'} = 1;
                     #redirecciono a una pagina informando q no tiene  permisos
-                    _goToSinPermisos($dbh, $query, $session, $template_name, $userid, $type, \%info);
+#                      _goToSinPermisos($dbh, $query, $session, $template_name, $userid, $type, \%info);
                     $session->param('codMsg', 'U354');
-#                   redirectTo('/cgi-bin/koha/auth.pl');
+                    redirectTo('/cgi-bin/koha/sinPermisos.pl');
                     #EXIT
                 }
             }
@@ -1585,12 +1593,14 @@ sub _logout_Controller2 {
 
 sub redirectTo {
 	my ($url) = @_;
-
+open(P, ">>/tmp/debug.txt");
+print P "\n";
+print P "redirectTo=> \n";
 	#para saber si fue un llamado con AJAX
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
 		
- 		
+print P "redirectTo=> CLIENT_REDIRECT\n"; 		
  		my $session = CGI::Session->load();
 		$session->clear();
 		$session->delete();
@@ -1599,10 +1609,9 @@ sub redirectTo {
     		print $session->header();
 		print 'CLIENT_REDIRECT';
 		exit;
-# 		return ;
 	}else{
 	#redirijo en el servidor
-# 		print ("Location: ".$url."\n\n");
+print P "redirectTo=> SERVER_REDIRECT\n";       
 		my $input = CGI->new(); 
 		print $input->redirect( 
 					-location => $url, 
@@ -1610,6 +1619,8 @@ sub redirectTo {
 		); 
 		exit;
 	}
+print P "\n";
+close(P);
 }
 
 

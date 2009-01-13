@@ -193,13 +193,22 @@ sub getPermisos{
     use C4::Modelo::UsrPermiso::Manager;
 
     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
-
+open(A, ">>/tmp/debug.txt");
+print A "\n";
+print A "getPermisos=>\n";
     my $accessflagshash;
+    my %hash;
     foreach my $permiso (@$permisos_array_ref){
         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
+print A "getPermisos=> permiso->flag: ".$permiso->{'flag'}."\n";
             $accessflagshash->{ $permiso->{'flag'} }= 1;
+            $hash{ $permiso->{'flag'} }= 1;
+print A "getPermisos=> accessflag: ".$accessflagshash->{ $permiso->{'flag'} }."\n";
         }
     }
+
+print A "\n";
+close(A);
 
     return ($accessflagshash);
 }

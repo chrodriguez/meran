@@ -11,7 +11,9 @@ my $input = new CGI;
 
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+# my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+#verifico los permisos del usuario
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -302,4 +304,4 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
-} #end if($tipoAccion eq "GUARDAR_PERMISOS")
+} #end elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
