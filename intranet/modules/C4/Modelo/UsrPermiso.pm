@@ -42,44 +42,6 @@ __PACKAGE__->meta->setup(
 # close(Z); 
 # }
 
-sub agregar{
-
-    my ($self)=shift;
-    my ($data_hash)=@_;
-    
-    $self->setId_persona($data_hash->{'id_persona'});
-    $self->setNro_socio($data_hash->{'nro_socio'});
-    $self->setId_ui($data_hash->{'id_ui'});
-    $self->setCod_categoria($data_hash->{'cod_categoria'});
-    $self->setFecha_alta($data_hash->{'fecha_alta'});
-    $self->setExpira($data_hash->{'expira'});
-    $self->setFlags($data_hash->{'flags'});
-    $self->setPassword($data_hash->{'password'});
-    $self->setLast_login($data_hash->{'last_login'});
-    $self->setLast_change_password($data_hash->{'last_change_password'});
-    $self->setChange_password($data_hash->{'change_password'});
-    $self->setCumple_requisito($data_hash->{'cumple_requisito'});
-    $self->setId_estado($data_hash->{'id_estado'});
-
-    if (C4::Context->preference("autoActivarPersona")){
-        $self->activar();
-    }
-
-    $self->save();
-}
-
-sub modificar{
-
-    my ($self)=shift;
-    my ($data_hash)=@_;
-    
-    $self->setNro_socio($data_hash->{'nro_socio'});
-    $self->setId_ui($data_hash->{'id_ui'});
-    $self->setCod_categoria($data_hash->{'cod_categoria'});
-    $self->persona->modificar($data_hash);
-
-    $self->save();
-}
 
 sub getBit{
     my ($self) = shift;

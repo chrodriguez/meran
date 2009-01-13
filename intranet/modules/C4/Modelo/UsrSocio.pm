@@ -54,6 +54,7 @@ __PACKAGE__->meta->setup(
         key_columns => { id_estado => 'id_estado' },
         type        => 'one to one',
       },
+
     ],
 
     primary_key_columns => [ 'id_socio' ],
@@ -160,6 +161,31 @@ sub cambiarPassword{
     $self->setChange_password(1);
     
     $self->save();
+}
+
+sub cambiarPermisos{
+    my ($self)=shift;
+    my ($params) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $array_permisos= $params->{'array_permisos'};
+    my $loop=scalar(@$array_permisos);
+
+    my $flags=0;
+    for(my $i=0;$i<$loop;$i++){
+        my $flag= $array_permisos->[$i];
+        $flags=$flags+2**$flag;
+    }
+
+    $self->setFlags($flags);
+    $self->save();
+
+# #     my $sth=$dbh->prepare("UPDATE borrowers 
+# #                    SET flags=? 
+# #                    WHERE borrowernumber=?
+# #                   ");
+# #     $sth->execute($flags, $params->{'usuario'});
 }
 
 sub activar{

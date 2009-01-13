@@ -52,7 +52,7 @@ Aca se maneja el cambio de permisos para el usuario
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
 
 	my %params;
-	$params{'usuario'}= $obj->{'usuario'};
+	$params{'id_socio'}= $obj->{'usuario'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};
 	
  	my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
