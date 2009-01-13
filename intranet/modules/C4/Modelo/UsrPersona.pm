@@ -110,19 +110,9 @@ sub agregar{
     $data_hash->{'nro_socio'} = $self->getNro_documento;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
 
-     my $db = $self->db;
-    $db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
-        $self->save();
-        $self->convertirEnSocio($data_hash);
-    if ($@){
-        $db->rollback;
-    }
-    else
-        {
-            $db->commit;
-        }
-    $db->{connect_options}->{AutoCommit} = 1;
+    $self->save();
+    $self->convertirEnSocio($data_hash);
+    
 
 }
 

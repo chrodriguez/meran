@@ -228,17 +228,23 @@ sub agregarPersona{
   
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
         $person->agregar($params);
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
     if ($@){
-         #Se loguea error de Base de Datos
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-#          eval {$db->rollback};
-         #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+         $db->rollback;
     }
+    else
+        {
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+            $db->commit;
+        }
+
+    $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
 
