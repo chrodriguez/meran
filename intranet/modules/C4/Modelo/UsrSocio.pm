@@ -158,7 +158,7 @@ sub cambiarPassword{
     $self->setChange_password(1);
     
     $self->save();
-
+}
 
 sub activar{
     my ($self) = shift;
