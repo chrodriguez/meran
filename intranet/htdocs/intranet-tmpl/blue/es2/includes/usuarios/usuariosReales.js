@@ -134,7 +134,7 @@ function eliminarUsuario(){
 		objAH=new AjaxHelper(updateEliminarUsuario);
 		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 		objAH.debug= true;
-		objAH.borrowernumber= usuario.ID;
+		objAH.id_socio= usuario.ID;
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
 

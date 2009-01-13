@@ -167,12 +167,6 @@ sub modificar{
    $self->save();
 }
 
-sub eliminar{
-    my ($self) = shift;
-#     $self->setActivo(0);
-    $self->save();
-}     
-
 sub getLegajo{
     my ($self) = shift;
     return ($self->legajo);

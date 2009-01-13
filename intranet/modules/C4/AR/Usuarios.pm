@@ -252,29 +252,25 @@ sub agregarPersona{
    
 sub habilitarPersona{
 
-    my ($id_personas_array_ref)=@_;
+    my ($id_socios_array_ref)=@_;
     my $dbh = C4::Context->dbh;
     my $msg_object= C4::AR::Mensajes::create();
-    $dbh->{AutoCommit} = 0;  
-    $dbh->{RaiseError} = 1;
     
     eval {
-        foreach my $persona (@$id_personas_array_ref){
-            my ($person) = C4::Modelo::UsrPersona->new(id_persona => $persona);
-            $person->load();
-            $person->activar;
+        foreach my $socio (@$id_socios_array_ref){
+            my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
+            $partner->load();
+            $partner->activar;
         }
      };
     
      if ($@){
          #Se loguea error de Base de Datos
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-         eval {$dbh->rollback};
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
      }
-     $dbh->{AutoCommit} = 1;
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
@@ -284,29 +280,25 @@ sub habilitarPersona{
 
 sub deshabilitarPersona{
 
-    my ($id_personas_array_ref)=@_;
+    my ($id_socios_array_ref)=@_;
     my $dbh = C4::Context->dbh;
     my $msg_object= C4::AR::Mensajes::create();
-    $dbh->{AutoCommit} = 0;  
-    $dbh->{RaiseError} = 1;
     
     eval {
-        foreach my $persona (@$id_personas_array_ref){
-            my ($person) = C4::Modelo::UsrPersona->new(id_persona => $persona);
-            $person->load();
-            $person->desactivar;
+        foreach my $socio (@$id_socios_array_ref){
+            my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
+            $partner->load();
+            $partner->desactivar;
         }
      };
     
      if ($@){
          #Se loguea error de Base de Datos
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-         eval {$dbh->rollback};
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
      }
-     $dbh->{AutoCommit} = 1;
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
@@ -1023,13 +1015,12 @@ sub getSocioLike {
     
     my @filtros;
     
-    if (($habilitados == 1)){
-        push(@filtros, ( activo=> { eq => 0}) );
+    if (defined($habilitados)){
+        push(@filtros, ( activo=> { eq => $habilitados}) );
      }
 
     if($socio ne 'TODOS'){
         push (@filtros, (apellido => { like => $socio.'%' }) );
-        push (@filtros, (activo => { eq => 1}) );
     }
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => 't2.'.$orden,
