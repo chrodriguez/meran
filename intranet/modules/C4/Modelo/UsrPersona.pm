@@ -47,6 +47,12 @@ __PACKAGE__->meta->setup(
         key_columns => { ciudad => 'LOCALIDAD' },
         type        => 'one to one',
       },
+     documento => 
+      {
+        class       => 'C4::Modelo::UsrRefTipoDocumento',
+        key_columns => { tipo_documento => 'id_tipo_documento' },
+        type        => 'one to one',
+      },
     ],
     
     primary_key_columns => [ 'id_persona' ],

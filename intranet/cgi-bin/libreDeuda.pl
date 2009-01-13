@@ -29,9 +29,12 @@ use C4::AR::Usuarios;
 use C4::AR::Sanctions;
 use C4::AR::Issues;
 
+
 my $input= new CGI;
-my $bornum = $input->param('bornum');
-my $borrewer= &C4::AR::Usuarios::getBorrowerInfo($bornum);
+my $id_socio = $input->param('id_socio');
+my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
 my $libreD=C4::Context->preference("libreDeuda");
 my @array=split(//, $libreD);
@@ -44,42 +47,42 @@ my $msj="";
 # SANSIONADO           4--------> flag 5; function C4::AR::Sanctions::hasSanctions($borum);
 
 if($array[0] eq "1"){
-	if(C4::AR::Reservas::cant_reservas($bornum)){
+	if(C4::AR::Reservas::cant_reservas($id_socio)){
 		$ok=0;
 		$msj="por tener reservas asignadas";
 	}
 }
 if($array[1] eq "1" && $ok){
-	if(C4::AR::Reservas::cant_waiting($bornum)->{'cant'}){
+	if(C4::AR::Reservas::cant_waiting($id_socio)->{'cant'}){
 		$ok=0;
 		$msj="por tener reservas en espera";
 	}
 }
 if($array[2] eq "1" && $ok){
-	if(&C4::AR::Sanctions::tieneLibroVencido($bornum)){
+	if(&C4::AR::Sanctions::tieneLibroVencido($id_socio)){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos vencidos";
 	}
 }
 if($array[3] eq "1" && $ok){
-	my($cant,$result)=C4::AR::Issues::DatosPrestamos($bornum);
+	my($cant,$result)=C4::AR::Issues::DatosPrestamos($id_socio);
 	if($cant){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos en curso";
 	}
 }
 if($array[4] eq "1" && $ok){
-	my $result=C4::AR::Sanctions::hasSanctions($bornum);
+	my $result=C4::AR::Sanctions::hasSanctions($id_socio);
 	if(scalar(@$result) > 0){
 		$ok=0;
 		$msj="por estar sancionado";
 	}
 }
 if($ok){
-	&libreDeuda($bornum,$borrewer);
+	&C4::AR::PdfGenerator::libreDeuda($socio);
 }
 else{
 	my $mensaje="<b>No se puede imprimir el certificado de libre deuda ".$msj." </b>";
-	print $input->redirect("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=$bornum&mensaje=$mensaje");
+	print $input->redirect("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=$id_socio&mensaje=$mensaje");
 }
 
