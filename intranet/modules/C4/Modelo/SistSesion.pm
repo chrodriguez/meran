@@ -26,15 +26,21 @@ print Z "sist_sesion=> \n";
 
     eval {
     
-        unless( return $self->SUPER::load(speculative => 1) ){
-                 print Z "sist_sesion=>  SUPER load \n";
-        }
+         unless( $self->SUPER::load(speculative => 1) ){
+# #         unless( $self->SUPER::load(@_) ){
+                  print Z "sist_sesion=>  dentro del unless, no existe el objeto SUPER load \n";
+                 return ( 0 );
+         }
+
+        print Z "sist_sesion=>  SUPER load \n";
+        return $self->SUPER::load(@_);
+#         return ( $self->SUPER::load(speculative => 1) );
     };
 
     if($@){
-        print Z "sist_sesion=>  no existe el socio \n";
+        print Z "sist_sesion=>  no existe el sist_sesion \n";
 #         my $socio= C4::Modelo::UsrSocio->new();
-        return ( undef );
+        return ( 0 );
     }
 
 close(Z); 

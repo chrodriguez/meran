@@ -221,15 +221,15 @@ sub agregarPersona{
 
     my ($params)=@_;
 
-#     my $db= C4::Modelo::DB::AutoBase1->new();
     
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     my $db = $person->db;
-#     $db->begin_work; # Start transaction
+  
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
         $person->agregar($params);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
     if ($@){
          #Se loguea error de Base de Datos
@@ -238,11 +238,7 @@ sub agregarPersona{
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-    }else {
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-#             $db->commit;
     }
-
 
     return ($msg_object);
 

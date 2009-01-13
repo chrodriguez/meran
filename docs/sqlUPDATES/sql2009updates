@@ -185,9 +185,19 @@ INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_doc
 INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `id_estado`, `activo`) VALUES 
 (1, 3, '26320', 'DEO', 'DO', NULL, NULL, NULL, 'ICy5YqxZB1uWSwcVLSNLcA', NULL, NULL, 0, NULL, 20, 1);
 
+
+ALTER TABLE `usr_permiso` ADD PRIMARY KEY ( `bit` ) ;
+
+ALTER TABLE `usr_permiso` ADD UNIQUE (`flagdesc`);
+
+ALTER TABLE `usr_permiso` CHANGE `flag` `flag` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CHANGE `flagdesc` `flagdesc` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+
 ALTER TABLE `usr_estado`  ENGINE = innodb
 
 ALTER TABLE `usr_ref_estados`  ENGINE = innodb
 
 ALTER TABLE `usr_permiso`  ENGINE = innodb
+
 
