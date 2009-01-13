@@ -97,14 +97,16 @@ print Z "usr_socio=> \n";
     
         unless( $self->SUPER::load(speculative => 1) ){
                  print Z "usr_socio=>  SUPER load \n";
-            return undef;
+            return 0;
         }
+
+        return $self->SUPER::load(@_);
     };
 
     if($@){
         print Z "usr_socio=>  no existe el socio \n";
 #         my $socio= C4::Modelo::UsrSocio->new();
-        return ( undef );
+        return ( 0 );
     }
 
 close(Z); 
