@@ -105,8 +105,12 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
     }
 
 	$t_params->{'loop'}= \@loop;
-    $t_params->{'tiene'}=C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired);
-
+   
+open(A, ">>/tmp/debug.txt");
+print A "\n";
+C4::AR::Utilidades::printHASH(C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired) );
+close(A);
+print A "\n";
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")

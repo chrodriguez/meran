@@ -529,20 +529,20 @@ sub existeUsuario {
 sub t_cambiarPermisos {
     my($params)=@_;
 
-    my $dbh = C4::Context->dbh;
-
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
 
     if(!$msg_object->{'error'}){
     #No hay error
-    # enable transactions, if possible
-        $dbh->{AutoCommit} = 0;  # enable transactions, if possible
-        $dbh->{RaiseError} = 1;
+        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+        $socio->load();
+        my $db= $socio->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
     
         eval {
-            _cambiarPermisos($params);  
-            $dbh->commit;
+            $socio->cambiarPermisos($params);  
+            $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []} ) ;
@@ -551,43 +551,18 @@ sub t_cambiarPermisos {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B421',"INTRA");
-            eval {$dbh->rollback};
+            eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U331', 'params' => []} ) ;
         }
-        $dbh->{AutoCommit} = 1;
+
+        $db->{connect_options}->{AutoCommit} = 1;
 
     }
 
     return ($msg_object);
 }
-
-
-# Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
-sub _cambiarPermisos{
-    my ($params) = @_;
-
-    my $dbh = C4::Context->dbh;
-    
-    
-    my $array_permisos= $params->{'array_permisos'};
-    my $loop=scalar(@$array_permisos);
-
-    my $flags=0;
-    for(my $i=0;$i<$loop;$i++){
-        my $flag= $array_permisos->[$i];
-        $flags=$flags+2**$flag;
-    }
-
-    my $sth=$dbh->prepare("UPDATE borrowers 
-                   SET flags=? 
-                   WHERE borrowernumber=?
-                  ");
-    $sth->execute($flags, $params->{'usuario'});
-
-}
-
 
 #  Funcion que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. Retortan 0 en caso de exito y 1 en error.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
@@ -619,7 +594,7 @@ sub cambiarPassword {
     if(!$msg_object->{'error'}){
     #No hay error
         $msg_object->{'error'}= 0;
-        
+## FIXME falta eval        
         my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
 #         if ($@){
         if ($socio->load()){
