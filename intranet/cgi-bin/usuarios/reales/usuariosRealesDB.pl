@@ -120,7 +120,7 @@ Se elimina el usuario
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 
 	my %params;
-	my $socio= $obj->{'id_socio'};
+	my $socio= $obj->{'usuario'};
  	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($socio);
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	

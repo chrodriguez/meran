@@ -158,8 +158,8 @@ sub cambiarPassword{
     my ($password)=@_;
 
     $self->setPassword( C4::Auth::md5_base64($password) );
-    my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
-    $self->setLast_change_password( );
+    my $today = Date::Manip::ParseDate("today");
+    $self->setLast_change_password($today);
     $self->setChange_password(1);
     
     $self->save();
@@ -336,7 +336,9 @@ sub getLast_change_password{
 
 sub setLast_change_password{
     my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
     my ($last_change_password) = @_;
+    $last_change_password = C4::Date::format_date_in_iso($last_change_password,$dateformat);
     $self->last_change_password($last_change_password);
 }
 

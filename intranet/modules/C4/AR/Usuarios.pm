@@ -229,12 +229,8 @@ sub agregarPersona{
     $params->{'iniciales'} = "DGR";
     #genero un estado de ALTA para la persona para una fuente de informacion
     $db->{connect_options}->{AutoCommit} = 0;
-    eval {
-        $db->begin_work;
+    $db->begin_work;
         $person->agregar($params);
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-        $db->commit;
-    };
 
     if ($@){
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
@@ -242,11 +238,11 @@ sub agregarPersona{
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
          $db->rollback;
     }
-#     else
-#         {
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-#             $db->commit;
-#         }
+    else
+        {
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+            $db->commit;
+        }
 
     $db->{connect_options}->{AutoCommit} = 1;
 
@@ -415,9 +411,9 @@ sub _verificarInfoAddPerson {
 #  borrowernumber y usuario.
 sub eliminarUsuario {
     
-    my($socio)=@_;
+    my($id_socio)=@_;
     my $msg_object= C4::AR::Mensajes::create();
-
+    my $socio = getSocioInfo($id_socio);
 # FIXME esa funcion debe cambiar, porque cambiaron los parametros
 #     $msg_object = _verficarEliminarUsuario($params,$msg_object);
 
@@ -541,20 +537,20 @@ sub existeUsuario {
 sub t_cambiarPermisos {
     my($params)=@_;
 
+    my $dbh = C4::Context->dbh;
+
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
-    my ($socio) = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
-    $socio->load();
-    my $db = $socio->db;
 
     if(!$msg_object->{'error'}){
     #No hay error
     # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
+        $dbh->{AutoCommit} = 0;  # enable transactions, if possible
+        $dbh->{RaiseError} = 1;
     
         eval {
-            $socio->cambiarPermisos($params);
-            $db->commit;
+            _cambiarPermisos($params);  
+            $dbh->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []} ) ;
@@ -563,16 +559,41 @@ sub t_cambiarPermisos {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B421',"INTRA");
-            eval {$db->rollback};
+            eval {$dbh->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U331', 'params' => []} ) ;
         }
-         $db->{connect_options}->{AutoCommit} = 1;
+        $dbh->{AutoCommit} = 1;
 
     }
 
     return ($msg_object);
+}
+
+
+# Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
+sub _cambiarPermisos{
+    my ($params) = @_;
+
+    my $dbh = C4::Context->dbh;
+    
+    
+    my $array_permisos= $params->{'array_permisos'};
+    my $loop=scalar(@$array_permisos);
+
+    my $flags=0;
+    for(my $i=0;$i<$loop;$i++){
+        my $flag= $array_permisos->[$i];
+        $flags=$flags+2**$flag;
+    }
+
+    my $sth=$dbh->prepare("UPDATE borrowers 
+                   SET flags=? 
+                   WHERE borrowernumber=?
+                  ");
+    $sth->execute($flags, $params->{'usuario'});
+
 }
 
 
