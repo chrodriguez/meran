@@ -10,7 +10,7 @@ use CGI;
 my $input = new CGI;
 
 my $authnotrequired= 0;
-# OBTENGO EL BORROWER LOGGEADO
+# OBTENGO EL BORROWER LOGGEADO GASPAR
 my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 # ENENENNENENENNENNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEee
 
