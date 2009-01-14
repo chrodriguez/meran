@@ -55,4 +55,5 @@ if [ $pregunta2 = S ]
 		mysql Econo -f -p$3 < personsUPDATE.sql 2>> /var/log/actualizacion/erroresMYSQL;
 		echo "Finalizando actualizacion de mysql del día  "`date +%d-%m-%Y_%H:%M` >> /var/log/actualizacion/resultado ;
 	fi
+y si!!!
 echo "Finalizando UPDATE "`date +%d-%m-%Y-%H:%M` >> /var/log/actualizacion/resultado ;
