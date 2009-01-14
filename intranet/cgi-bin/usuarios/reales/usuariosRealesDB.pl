@@ -11,7 +11,7 @@ my $input = new CGI;
 
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
