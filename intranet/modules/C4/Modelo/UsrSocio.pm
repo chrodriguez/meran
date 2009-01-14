@@ -159,7 +159,7 @@ sub cambiarPassword{
     $self->setPassword( C4::Auth::md5_base64($password) );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
-    $self->setChange_password(1);
+    $self->setChange_password(0);
     
     $self->save();
 }
