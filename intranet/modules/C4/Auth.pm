@@ -1523,7 +1523,7 @@ print A "_loggedin_Controller=> caduco la session sessionID: ".$sessionID."\n";
 		_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", 
 											$session->param('userid'),
 											$session->param('ip'),
-											$session->param('time')
+											$session->param('time'),
 				);
 	
 		$session->param('codMsg', 'U355');

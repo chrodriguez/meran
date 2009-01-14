@@ -102,8 +102,12 @@ INSERT INTO `pref_unidad_informacion` (`id_ui`, `nombre`, `direccion`, `alt_dire
 
 
 INSERT  INTO  `pref_preferencia_sistema` (  `variable` ,  `value` ,  `explanation` ,  `options` ,  `type`  ) 
-VALUES ( 'autoActivarPersona',  '0',  'Activa por defecto un alta de una persona',  NULL ,  NULL );=======
-ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` )
+VALUES ( 'autoActivarPersona',  '0',  'Activa por defecto un alta de una persona',  NULL ,  NULL );
+
+
+
+
+ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` );
 
 
 -- Se creo una nueva preferencia, el 'defaultBranch' se conserva para que no se rompa nada, despues se borra

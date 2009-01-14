@@ -33,6 +33,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 
 	my %params;
 	$params{'id_socio'}= $obj->{'usuario'};
+    $params{'actualPassword'}= $obj->{'actualPassword'};
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
 
@@ -63,6 +64,23 @@ elsif($tipoAccion eq "GUARDAR_PERMISOS"){
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")
 
+
+=item
+Aca se maneja el resteo de password del usuario
+=cut
+elsif($tipoAccion eq "RESET_PASSWORD"){
+
+    my %params;
+    $params{'id_socio'}= $obj->{'usuario'};
+    
+    my ($Message_arrayref)= C4::AR::Usuarios::resetPassword(\%params);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    print $input->header;
+    print $infoOperacionJSON;
+
+} #end if($tipoAccion eq "RESET_PASSWORD")
 
 =item
 Se buscan los permisos del usuario y se muestran por pantalla

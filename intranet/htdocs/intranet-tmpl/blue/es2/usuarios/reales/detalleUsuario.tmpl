@@ -147,16 +147,27 @@
 
                     <li>
                             <a href="#" onClick="eliminarUsuario()" >
-                            <img alt='[% "Cambio de Contrase&ntilde;a" | i18n %]' 
+                            <img alt='[% "Eliminar Usuario" | i18n %]' 
                             src="[% themelang %]/images/eliminarusuario.png" border="0"">
                             </a>
                     </li>
-                    <li>
-                            <a class="click" onClick="cambiarPassword()">
-                                    <img alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
-                                    src="[% themelang %]/images/cambiocontrasena.png" border=0 ">
-                            </a>
-                    </li>
+<!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
+                    [% IF nroSocioLoggeado != loggedinusername%]
+                            <li>
+                                    <a class="click" onClick="resetPassword()">
+                                            <img alt='[% "Restablecimiento de Contrase&ntilde;a" | i18n %]'
+                                            src="[% themelang %]/images/cambiocontrasena.png" border=0 ">
+                                            <h2> FALTA CAMBIAR BOTONENENE </h2>
+                                    </a>
+                            </li>
+                    [% ELSE %]
+                            <li>
+                                    <a class="click" onClick="cambiarPassword()">
+                                            <img alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
+                                            src="[% themelang %]/images/cambiocontrasena.png" border=0 ">
+                                    </a>
+                            </li>
+                    [% END %]
                     <li>
                             <a class="click" onClick="modificarPermisos()" > 
                                     <img alt='[% "Modificar Permisos" | i18n %]'

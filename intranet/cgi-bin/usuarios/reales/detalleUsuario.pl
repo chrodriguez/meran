@@ -63,7 +63,9 @@ my ($template, $session, $t_params, $cookie) =  C4::Auth::get_template_and_user 
 	$t_params->{'mensaje_error_foto'}= $msgFoto;
 	$t_params->{'mensaje_error_borrar'}= $msgError;
 	$t_params->{'error'}=0;
-
+ 
+   $t_params->{'nroSocioLoggeado'} = $socio->getNro_socio;
+    
     $t_params->{'socio'}= $socio;
 	
 

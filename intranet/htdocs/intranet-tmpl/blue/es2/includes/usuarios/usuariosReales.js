@@ -201,6 +201,7 @@ function guardarCambiarPassword(claveUsuario, confirmeClave){
 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.newpassword= claveUsuario;
 	objAH.newpassword1= confirmeClave;
+    objAH.actualPassword= confirmeClave;
 	objAH.usuario= usuario.ID;
 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
 	//se envia la consulta
@@ -212,6 +213,24 @@ function updateGuardarCambiarPassword(responseText){
 	vModificarPassword.close();
 	var Messages= JSONstring.toObject(responseText);
 	setMessages(Messages);
+}
+
+function resetPassword(claveUsuario, confirmeClave){
+
+    objAH=new AjaxHelper(updateResetPassword);
+    //objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+    objAH.newpassword= claveUsuario;
+    objAH.newpassword1= confirmeClave;
+    objAH.usuario= usuario.ID;
+    objAH.tipoAccion= 'RESET_PASSWORD';
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function updateResetPassword(responseText){
+    var Messages= JSONstring.toObject(responseText);
+    setMessages(Messages);
 }
 
 function verificarClaveUsuario(){

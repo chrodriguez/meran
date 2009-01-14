@@ -126,7 +126,7 @@ sub agregar{
     $self->setFlags($data_hash->{'flags'});
     $self->setPassword($data_hash->{'password'});
     $self->setLast_login($data_hash->{'last_login'});
-    $self->setChange_password($data_hash->{'change_password'});
+    $self->setChange_password($data_hash->{'changepassword'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
 
@@ -164,6 +164,28 @@ sub cambiarPassword{
     $self->save();
 }
 
+sub resetPassword{
+    my ($self)=shift;
+    use Switch;
+    if ( C4::Context->preference("defaultPassword") ){
+        my $defaultPassword = C4::Context->preference("defaultPassword");
+        
+        switch ($defaultPassword) {
+
+        case "documento"      { $self->setPassword(""); }
+
+        else                 { $self->cambiarPassword($defaultPassword); }
+
+        }
+    } 
+    else
+        {
+            $self->setPassword("");
+        }
+    $self->setChange_password(1);
+    $self->save();
+}
+
 sub cambiarPermisos{
     my ($self)=shift;
     my ($params) = @_;
@@ -196,21 +218,20 @@ sub getPermisos{
 open(A, ">>/tmp/debug.txt");
 print A "\n";
 print A "getPermisos=>\n";
-    my $accessflagshash;
+    my $accessFlagsHash;
     my %hash;
     foreach my $permiso (@$permisos_array_ref){
         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
+            $accessFlagsHash->{ $permiso->{'flag'} }= 1;
 print A "getPermisos=> permiso->flag: ".$permiso->{'flag'}."\n";
-            $accessflagshash->{ $permiso->{'flag'} }= 1;
             $hash{ $permiso->{'flag'} }= 1;
 print A "getPermisos=> accessflag: ".$accessflagshash->{ $permiso->{'flag'} }."\n";
         }
     }
 
+    return ($accessFlagsHash);
 print A "\n";
 close(A);
-
-    return ($accessflagshash);
 }
 
 sub activar{
