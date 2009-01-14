@@ -15,10 +15,10 @@ my ($template, $t_params)= C4::Output::gettemplate("opac-auth.tmpl", 'opac');
 # my $session = CGI::Session->load();
 
 open(F, ">>/tmp/debug.txt");
-print F "desde auth: \n";
+print F "opac auth=>: \n";
 #se genera un nuevo nroRandom para que se autentique el usuario
 my $random_number= C4::Auth::_generarNroRandom();
-print F "numero random: ".$random_number."\n";
+print F "opac auth=> numero random: ".$random_number."\n";
 #se genera una nueva session
 # my $sessionID= C4::Auth::_generarSessionID();
 my %params;
@@ -35,22 +35,19 @@ $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
 # $session->clear();
 # $session->delete();
 my $session= C4::Auth::_generarSession(\%params);
-my $sessionID= C4::Auth::_generarSessionID();
+my $sessionID= $session->param('sessionID');
+# my $sessionID= C4::Auth::_generarSessionID();
+# $session->param('sessionID', $sessionID);
 my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');
-# my $cookie= $query->cookie(
-# 					-name => 'sessionID',
-# 					-value => $sessionID,
-# 					-expires => ''
-# 		);
+
 $session->header(
 				-cookie => $cookie,
 			);	
 
 
-$session->param('sessionID', $sessionID);
-print F "cookie: ".$cookie."\n";
+print F "opac auth=> cookie: ".$cookie."\n";
 my $userid= undef;
-print F "sessionID: ".$sessionID."\n";
+print F "opac auth=> sessionID: ".$sessionID."\n";
 # print A "cookie input->cookie: ".$input->cookie."\n";
 #guardo la session en la base
 C4::Auth::_save_session_db(C4::Context->dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);

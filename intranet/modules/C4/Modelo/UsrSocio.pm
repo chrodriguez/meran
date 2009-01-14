@@ -225,9 +225,9 @@ print A "getPermisos=>\n";
     foreach my $permiso (@$permisos_array_ref){
         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
             $accessFlagsHash->{ $permiso->{'flag'} }= 1;
-print A "getPermisos=> permiso->flag: ".$permiso->{'flag'}."\n";
+# print A "getPermisos=> permiso->flag: ".$permiso->{'flag'}."\n";
             $hash{ $permiso->{'flag'} }= 1;
-print A "getPermisos=> accessflag: ".$accessflagshash->{ $permiso->{'flag'} }."\n";
+# print A "getPermisos=> accessflag: ".$accessFlagsHash->{ $permiso->{'flag'} }."\n";
         }
     }
 

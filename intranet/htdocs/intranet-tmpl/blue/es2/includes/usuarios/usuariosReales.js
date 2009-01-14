@@ -194,14 +194,14 @@ function updateAgregarUsuario(responseText){
 //*************************************************Cambiar Password*******************************************
 
 //muestra los ejemplares del grupo
-function guardarCambiarPassword(claveUsuario, confirmeClave){
+function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 
 	objAH=new AjaxHelper(updateGuardarCambiarPassword);
 	//objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.newpassword= claveUsuario;
 	objAH.newpassword1= confirmeClave;
-    objAH.actualPassword= confirmeClave;
+    objAH.actualPassword= actualPassword;
 	objAH.usuario= usuario.ID;
 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
 	//se envia la consulta
@@ -250,7 +250,7 @@ function verificarClaveUsuario(){
 			$('#newpassword').focus();
 	
 		}else{
-			guardarCambiarPassword(claveUsuario, confirmeClave);
+			guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword);
 		}
 	}
 }

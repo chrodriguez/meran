@@ -20,7 +20,7 @@
 <form action='/cgi-bin/koha/mainpage.pl' method="post" name="datosAEnviar">
         <input type="hidden" name="userid">
         <input type="hidden" name="password">
-        <input type="hidden" name="nroRandom">
+        <!--<input type="hidden" name="nroRandom">-->
 </form>
 
 <!--<form action=[% url %] method="post" name="datos">-->
@@ -30,12 +30,12 @@
     </script>
     <script language="javascript">
         function enviar(){
-		nroRandom=[% RANDOM_NUMBER %];
-                document.datosAEnviar.nroRandom.value= nroRandom;
-                hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
-                document.datosAEnviar.password.value= hash;
-                document.datosAEnviar.userid.value= document.datos.userid.value;
-                document.datosAEnviar.submit();
+		    nroRandom=[% RANDOM_NUMBER %];
+//                 document.datosAEnviar.nroRandom.value= nroRandom;
+            hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
+            document.datosAEnviar.password.value= hash;
+            document.datosAEnviar.userid.value= document.datos.userid.value;
+            document.datosAEnviar.submit();
         }
         function onEnterSubmit() {
           /*Esta Funcion verifica si se presion ENTER y si es asi hace un submit del form*/
