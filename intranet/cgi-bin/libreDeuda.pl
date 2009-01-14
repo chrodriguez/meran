@@ -34,7 +34,7 @@ my $input= new CGI;
 my $id_socio = $input->param('id_socio');
 my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+my ($loggedinuser, $cookie, $sessionID) = C4::Auth::checkauth($input, 0 ,{circulate=> 0},"intranet");
 
 my $libreD=C4::Context->preference("libreDeuda");
 my @array=split(//, $libreD);
