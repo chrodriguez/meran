@@ -11,9 +11,7 @@ my $input = new CGI;
 
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO
-# my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
-#verifico los permisos del usuario
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -41,6 +39,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
+    $params{'session'}= $session;
 
 	my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 	
@@ -130,12 +129,8 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
     }
 
 	$t_params->{'loop'}= \@loop;
-   
-open(A, ">>/tmp/debug.txt");
-print A "\n";
-C4::AR::Utilidades::printHASH(C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired) );
-close(A);
-print A "\n";
+    $t_params->{'tiene'}=C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired);
+
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")
@@ -327,4 +322,4 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 
-} #end elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
+} #end if($tipoAccion eq "GUARDAR_PERMISOS")

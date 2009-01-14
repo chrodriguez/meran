@@ -614,38 +614,39 @@ sub _verficarPassword {
 sub cambiarPassword {
     my($params)=@_;
 
-    my $dbh = C4::Context->dbh;
     my ($msg_object)= _verficarPassword($params);
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-        $msg_object->{'error'}= 0;
-## FIXME falta eval        
-        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
-#         if ($@){
-        if ($socio->load()){
-            my $actualPassword = $socio->getPassword;
-            if ( $actualPassword == C4::Auth::md5_base64($params->{'actualPassword'}) ){
-                my $newPassword = C4::Auth::md5_base64($params->{'newpassword'});
-                $socio->cambiarPassword($params->{'newpassword'});
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
-            }
-            else
-                {
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'cardnumber'}]} ) ;
+    
+    if ( C4::Auth::getSessionUserID($params->{'session'}) == $params->{'id_socio'} ){
+            if(!$msg_object->{'error'}){
+            #No hay error
+                $msg_object->{'error'}= 0;
+                my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+                if ($socio->load()){
+                    my $actualPassword = $socio->getPassword;
+                    if ( $actualPassword == C4::Auth::md5_base64($params->{'actualPassword'}) ){
+                        my $newPassword = C4::Auth::md5_base64($params->{'newpassword'});
+                        $socio->cambiarPassword($params->{'newpassword'});
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
+                    }
+                    else
+                        {
+                            $msg_object->{'error'}= 1;
+                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'cardnumber'}]} ) ;
+                        }
                 }
-        }
-        else
-           {
-                #Se loguea error de Base de Datos
-                &C4::AR::Mensajes::printErrorDB($@, 'B420',"INTRA");
-                eval {$dbh->rollback};
-                #Se setea error para el usuario
-                $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+                else
+                {
+                        #Se setea error para el usuario
+                        $msg_object->{'error'}= 1;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+                    }
             }
     }
+    else
+        {
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'cardnumber'}]} ) ;
+        }
 
     return ($msg_object);
 }
