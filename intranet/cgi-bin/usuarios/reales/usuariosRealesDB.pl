@@ -11,10 +11,10 @@ my $input = new CGI;
 
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO GASPAR
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 0},"intranet");
 # ENENENNENENENNENNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEee
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # $loggedinuser=getborrowernumber($loggedinuser);
 
