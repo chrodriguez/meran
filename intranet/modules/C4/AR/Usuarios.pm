@@ -615,39 +615,43 @@ sub cambiarPassword {
     my($params)=@_;
 
     my ($msg_object)= _verficarPassword($params);
-    
-    if ( C4::Auth::getSessionUserID($params->{'session'}) == $params->{'id_socio'} ){
+open(A, ">>/tmp/debug.txt");
+print A "cambiarPassword=>\n";    
+    if ( C4::Auth::getSessionIdSocio($params->{'session'}) == $params->{'id_socio'} ){
             if(!$msg_object->{'error'}){
             #No hay error
                 $msg_object->{'error'}= 0;
                 my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
                 if ($socio->load()){
                     my $actualPassword = $socio->getPassword;
-                    if ( $actualPassword == C4::Auth::md5_base64($params->{'actualPassword'}) ){
-                        my $newPassword = C4::Auth::md5_base64($params->{'newpassword'});
+#                     if ( $actualPassword == C4::Auth::md5_base64($params->{'actualPassword'}) ){
+                    if ( $actualPassword == $params->{'actualPassword'} ){
+#                         my $newPassword = C4::Auth::md5_base64($params->{'newpassword'}); 
+                        my $newPassword = $params->{'newpassword'};
+print A "cambiarPassword=> llamo a cambiar pass\n";    
                         $socio->cambiarPassword($params->{'newpassword'});
-                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'cardnumber'}]} ) ;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
                     }
                     else
                         {
                             $msg_object->{'error'}= 1;
-                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'cardnumber'}]} ) ;
+                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
                         }
                 }
                 else
                 {
                         #Se setea error para el usuario
                         $msg_object->{'error'}= 1;
-                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'cardnumber'}]} ) ;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
                     }
             }
     }
     else
         {
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'cardnumber'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
         }
-
+close(A);
     return ($msg_object);
 }
 

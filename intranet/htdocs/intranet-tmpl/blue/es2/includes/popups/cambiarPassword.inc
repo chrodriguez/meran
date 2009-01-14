@@ -1,3 +1,6 @@
+<script language="javascript">
+   $.getScript("/intranet-tmpl/blue/es2/includes/md5.js");
+</script>
 
 <!-- ************************************Window Cambiar Password***************************************** -->
 <div id="contentWindow" class="formElemets">

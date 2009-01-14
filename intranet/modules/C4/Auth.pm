@@ -121,6 +121,12 @@ sub getSessionUserID {
 	return $session->param('userid');
 }
 
+sub getSessionIdSocio {
+    my ($session) = @_;
+
+    return $session->param('id_socio');
+}
+
 sub getSessionPassword {
 	my ($session) = @_;
 
@@ -193,15 +199,18 @@ print H "desde: get_template_and_user \n";
 # print A "in-> query: ".$in->{'query'}."\n";
 # print A "user: ".$user."\n";
 print H "get_template_and_user=> cookie: ".$cookie."\n";
-	my $numero_socio;
+	my $nro_socio;
 	if ( $session->param('userid') ) {
 		$params->{'loggedinusername'}= $session->param('userid');
 # 		$params->{'sessionID'}= $sessionID;
 # 		$params->{'sessionID'}= $session->param('sessionID');
-		$numero_socio = getborrowernumber($session->param('userid'));
-		$session->param('borrowernumber',$numero_socio);#se esta pasadon por ahora despues sacar
-        $session->param('numero_socio',$numero_socio);
-		my ($borr, $flags) = getpatroninformation($numero_socio,"");
+		$nro_socio = getborrowernumber($session->param('userid'));
+		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
+
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+        $session->param('nro_socio',$nro_socio);
+        $session->param('id_socio',$socio->getId_socio);
+		my ($borr, $flags) = getpatroninformation($nro_socio,"");
 		my @bordat;
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
@@ -810,13 +819,6 @@ print J "_change_Password_Controller=> newpassword: ".$newpassword."\n";
 			$template_name = "changepassword.tmpl";
 		}
 print J "_change_Password_Controller=> template_name: ".$template_name."\n";
-		my @inputs =();
-		foreach my $name (param $query) {
-			(next) if ($name eq 'userid' || $name eq 'password' || $name eq 'nroRandom' || $name eq 'newpassword'  || $name eq 'newpassword1' || $name eq 'newpassword2');
-			my $value = $query->param($name);
-			push @inputs, {name => $name , value => $value};
-		}
-
 
 		my ($template, $t_params) = gettemplate($template_name, $type);
 print J "_change_Password_Controller=> template_name: ".$template_name."\n";	
@@ -825,41 +827,42 @@ print J "_change_Password_Controller=> template_name: ".$template_name."\n";
 
 		#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
 		my $random_number= _generarNroRandom();
+
+       
 # 		$template->param(RANDOM_NUMBER => $random_number);
 		$t_params->{'RANDOM_NUMBER'}= $random_number;
 print J "_change_Password_Controller=> genera otro random: ".$random_number."\n";
-
-# 		$template->param(INPUTS => \@inputs);
-#  		$template->param(loginprompt => 1) unless $info->{'nopermission'};
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 		$t_params->{'loginprompt'}= $info->{'nopermission'};
-
-		my $self_url = $query->url(-absolute => 1);
-# 		$template->param(url => $self_url);
-		$t_params->{'url'}= $self_url;
-# 		$template->param($info);
-		$t_params->{$info};
+        $t_params->{'userid'}= $userid;
+        $t_params->{'id_socio'}= $socio->getId_socio;
+        $t_params->{'loggedinusername'}= $userid;
 	
-		my %params;
-		$params{'userid'}= $userid;
-		$params{'loggedinusername'}= '';
-		$params{'password'}= '';
-		$params{'nroRandom'}= $random_number;
-		$params{'borrowernumber'}=  '';
-		$params{'type'}= $type; #OPAC o INTRA
-		$params{'flagsrequired'}= '';
-		$params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-		
-		my $session= _generarSession(\%params);
-		#se genenra un nuevo sessionID y se guarda en la base junto con el nuevo nroRandom
-# 	  	my $sessionID= _generarSessionID();
+# 		my %params;
+#  		$params{'userid'}= $userid;
+# # 		$params{'loggedinusername'}= '';
+# # 		$params{'password'}= '';
+# # 		$params{'nroRandom'}= $random_number;
+# # 		$params{'borrowernumber'}=  '';
+# # 		$params{'type'}= $type; #OPAC o INTRA
+# # 		$params{'flagsrequired'}= '';
+# # 		$params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+# # 		
+# # 		my $session= _generarSession(\%params);
+# 		#se genenra un nuevo sessionID y se guarda en la base junto con el nuevo nroRandom
+# # 	  	my $sessionID= _generarSessionID();
+        my $session = CGI::Session->load();
  		my $sessionID= $session->param('sessionID');
+#         my $sth=$dbh->prepare("update sist_sesion set nroRandom=? where sessionID=? and userid=?");
+#         $sth->execute($random_number, $sessionID,$userid);
 print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";	
+#         $userid= undef;
 		#guardo la session en la base
-		_save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+# 		_save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
 		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-         $session->header(
-                -cookie => $cookie,
-            );  
+        $session->header(
+            -cookie => $cookie,
+        );  
 
 		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
 print J "\n";

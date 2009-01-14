@@ -199,9 +199,9 @@ function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 	objAH=new AjaxHelper(updateGuardarCambiarPassword);
 	//objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.newpassword= claveUsuario;
-	objAH.newpassword1= confirmeClave;
-    objAH.actualPassword= actualPassword;
+	objAH.newpassword= b64_md5(claveUsuario);
+	objAH.newpassword1= b64_md5(confirmeClave);
+    objAH.actualPassword= b64_md5(actualPassword);
 	objAH.usuario= usuario.ID;
 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
 	//se envia la consulta
@@ -236,6 +236,7 @@ function updateResetPassword(responseText){
 function verificarClaveUsuario(){
 	var claveUsuario= $('#newpassword').val();
 	var confirmeClave= $('#newpassword1').val();
+    var actualPassword= $('#actualPassword').val();
 	
 
 	if (claveUsuario == ''){
