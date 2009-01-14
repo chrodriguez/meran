@@ -45,7 +45,7 @@ RENAME TABLE countries TO ref_pais;
 ALTER TABLE ref_pais CHANGE name nombre VARCHAR( 80 ), CHANGE printable_name nombre_largo VARCHAR( 80 ), CHANGE code codigo VARCHAR( 11 );
 RENAME TABLE provincias TO ref_provincia;
 RENAME TABLE dptos_partidos TO ref_dpto_partido;
-
+RENAME TABLE localidades TO ref_localidad;
 RENAME TABLE languages TO ref_idioma;
 RENAME TABLE supports TO ref_soporte;
 RENAME TABLE tipo_documento TO ref_tipo_documento;
@@ -86,11 +86,13 @@ RENAME TABLE iso2709 TO pref_iso2709;
 RENAME TABLE sessions TO sist_sesion;
 
 
-#MUEREN!!!!!!!!!!!!!! ?????
-
+#HAY QUE PASAR TODO LO QUE REFERENCIA A:
 # borrowers 
 # persons
-# localidades
+
+
+#MUEREN!!!!!!!!!!!!!! ?????
+
 # sessionqueries
 # uploadedmarc
 # users

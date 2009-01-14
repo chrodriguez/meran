@@ -194,14 +194,13 @@ ALTER TABLE `usr_permiso` ADD PRIMARY KEY ( `bit` ) ;
 
 ALTER TABLE `usr_permiso` ADD UNIQUE (`flagdesc`);
 
-ALTER TABLE `usr_permiso` CHANGE `flag` `flag` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
-CHANGE `flagdesc` `flagdesc` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+ALTER TABLE `usr_permiso` CHANGE `flag` `flag` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL , CHANGE `flagdesc` `flagdesc` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
 
 
-ALTER TABLE `usr_estado`  ENGINE = innodb
+ALTER TABLE `usr_estado`  ENGINE = innodb;
 
-ALTER TABLE `usr_ref_estados`  ENGINE = innodb
+ALTER TABLE `usr_ref_estado`  ENGINE = innodb;
 
-ALTER TABLE `usr_permiso`  ENGINE = innodb
+ALTER TABLE `usr_permiso`  ENGINE = innodb;
 
 
