@@ -138,11 +138,11 @@ use C4::Modelo::UsrPersona;
 #   $meta->columns;
 
 my $p = C4::Modelo::UsrPersona->new();
-my @col = $p->meta->columns;
-foreach my $campo (@col){
-    print $campo."\n";
-}
-    print "\n\n\n\nCANTIDAD: ".scalar(@col)."\n\n\n";
+# my @col = $p->meta->columns;
+# foreach my $campo (@col){
+#     print $campo."\n";
+# }
+    print "\n\n\n\CLASE: ".$p->meta->class."\n\n\n";
 
 
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
