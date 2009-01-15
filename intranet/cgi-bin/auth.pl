@@ -36,6 +36,7 @@ $params{'type'}= 'opac'; #OPAC o INTRA
 $params{'flagsrequired'}= '';
 $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
 
+undef($session);
 $session= C4::Auth::_generarSession(\%params);
 my $sessionID= $session->param('sessionID');
 my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');

@@ -890,7 +890,8 @@ sub _generarSessionID {
 sub _generarSession {
 	my ($params) = @_;
 
-	my $session = new CGI::Session();
+# 	my $session = new CGI::Session();
+    my $session = new CGI::Session(undef, undef, undef);
     #se setea toda la info necesaria en la sesion
 	$session->param('userid', $params->{'userid'});
 #  	$session->param('sessionID', $sessionID= _generarSessionID());
