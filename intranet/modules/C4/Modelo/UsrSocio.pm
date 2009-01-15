@@ -125,7 +125,7 @@ sub agregar{
     $self->setExpira($data_hash->{'expira'});
     $self->setFlags($data_hash->{'flags'});
     $self->setPassword($data_hash->{'password'});
-    $self->setLast_login($data_hash->{'last_login'});
+#     $self->setLast_login($data_hash->{'last_login'});
     $self->setChange_password($data_hash->{'changepassword'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
@@ -209,8 +209,6 @@ sub resetPassword{
 sub cambiarPermisos{
     my ($self)=shift;
     my ($params) = @_;
-
-    my $dbh = C4::Context->dbh;
 
     my $array_permisos= $params->{'array_permisos'};
     my $loop=scalar(@$array_permisos);

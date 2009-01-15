@@ -58,6 +58,19 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_persona' ],
 );
 
+sub toString{
+    my ($self)=shift;
+
+    return 'UsrPersona';
+}
+
+sub log{
+    my ($self)=shift;
+    use C4::AR::Debug;
+    my ($data, $metodoLlamador)=@_;  
+
+    C4::AR::Debug::log($self, $data, $metodoLlamador);
+}
 
 sub getCategoria{
     my ($self)=shift;
@@ -66,21 +79,6 @@ sub getCategoria{
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
 
     return ($socio_array_ref->[0]->categoria->getDescription);
-}
-
-sub _printHASH {
-    my ($hash_ref) = @_;
-    open(Z, ">>/tmp/debug.txt");
-    print Z "\n";
-    print Z "PRINT HASH: \n";
-    
-    if($hash_ref){
-        while ( my ($key, $value) = each(%$hash_ref) ) {
-                print Z "key: $key => value: $value\n";
-            }
-    }
-    print Z "\n";
-    close(Z);
 }
 
 sub agregar{
@@ -125,6 +123,8 @@ sub agregar{
 sub convertirEnSocio{
     my ($self)=shift;
     my ($data_hash)=@_;
+
+    $self->log($data_hash,'convertirEnSocio');
 
     use C4::Modelo::UsrSocio;
     use C4::Modelo::UsrEstado;

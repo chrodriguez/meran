@@ -427,7 +427,7 @@ print A "checkauth=> El usuario se encuentra logueado \n";
             # timed logout
             $info{'timed_out'} = 1;
             #elimino la session del usuario porque caduco
-            _deleteSessionDeUsuario($sessionID, $userid, $sist_sesion);
+            $sist_sesion->delete;
 print A "checkauth=> caduco la session \n";
             #Logueo la sesion que se termino por timeout
             my $time=localtime(time());
@@ -447,7 +447,7 @@ print A "checkauth=> caduco la session \n";
             $info{'newip'} = $ENV{'REMOTE_ADDR'};
             $info{'different_ip'} = 1;
             #elimino la session del usuario porque caduco
-            _deleteSessionDeUsuario($sessionID, $userid, $sist_sesion);
+            $sist_sesion->delete;
 print A "checkauth=> cambio la IP, se elimina la session\n";
             #Logueo la sesion que se cambio la ip
             my $time=localtime(time());
@@ -469,7 +469,7 @@ print A "checkauth=> cambio la IP, se elimina la session\n";
             #se eliminan las sessiones, solo se permite una session activa a la vez
             $info{'loguin_duplicado'} = 1;
             #elimino la session del usuario porque caduco
-            _deleteSessionDeUsuario($sessionID, $userid, $sist_sesion);
+            $sist_sesion->delete;
 print A "checkauth=> se loguearon con el mismo userid desde otro lado\n";
             #Logueo la sesion que se cambio la ip
             my $time=localtime(time());
@@ -579,7 +579,7 @@ print A "checkauth=> random_number desde la base: ".$random_number."\n";
 print A "checkauth=> password valida de sessionID: ".$sessionID."\n";
 print A "checkauth=> elimino el sessionID de la base: ".$sessionID."\n";
             #el usuario se logueo bien, se elimina la session de logueo y se genera un sessionID nuevo
-            _deleteSession($sessionID, $sist_sesion);
+            $sist_sesion->delete;
 
             my %params;
             $params{'userid'}= $userid;
@@ -676,7 +676,7 @@ print A "checkauth=> usuario o password incorrecta dentro del if\n";
 print A "checkauth=> usuario o password incorrecta \n";
 # close(A);
             #elimino la session vieja
-            _deleteSession($sessionID, $sist_sesion);
+            $sist_sesion->delete;
 print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
             $userid= undef;
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
@@ -766,7 +766,7 @@ sub _getCardnumber {
 Esta funcion se encarga del logout del usuario
 =cut
 sub _logOut_Controller {
-	my ($dbh, $query, $userid, $ip, $sessionID, $sist_session) = @_;
+	my ($dbh, $query, $userid, $ip, $sessionID, $sist_sesion) = @_;
 	# voluntary logout the user
 open(E, ">>/tmp/debug.txt");
 print E "\n";
@@ -777,7 +777,7 @@ print E "_logOut_Controller=> userID: ".$userid."\n";
 	my $time=localtime(time());
 	_session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time);
 	#se elimina la session del usuario que se esta deslogueando
-	_deleteSessionDeUsuario($sessionID, $userid, $sist_session);
+    $sist_sesion->delete;
 
 print E "_logOut_Controller=> Elimino de la base la session de userid: ".$userid." sessionID: ".$sessionID."\n";
 print E "\n";
@@ -963,72 +963,6 @@ print F "_verificarPassword=> password valida?: ".$passwordValida."\n";
 print F "\n";
 close (F);
 	return ($passwordValida, $cardnumber, $branch);
-}
-
-
-=item
-Elimina la session pasada por parametro que se encuentra en la base
-=cut
-## FIXME DEPRECATED
-sub _deleteSession {
-	my ($sessionID, $sist_sesion) = @_;
-open(D, ">>/tmp/debug.txt");
-print D "\n";
-print D "_deleteSession=> DELETE SESSION: \n";
-# 	my $dbh = C4::Context->dbh;
-# 	my $sth;
-print D "_deleteSession=> elimino el sessionID: ".$sessionID."\n";
-#  	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ?");
-# 	$sth->execute($sessionID);
-    
-#     my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-    $sist_sesion->delete;
-
-print D "\n";
-close(D);
-}
-
-
-=item
-Elimina todos los userid que se encuentran en sessions, solo se permite un userid activo a la vez
-=cut
-sub _deleteUsersFromSessions {
-	my ($userid) = @_;
-open(D, ">>/tmp/debug.txt");
-print D "\n";
-print D "_deleteUsersFromSessions=> DELETE SESSION: \n";
-	my $dbh = C4::Context->dbh;
-	my $sth;
-print D "_deleteUsersFromSessions=> elimino el sessionID: ".$userid."\n";
-	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE userid = ?");
-	$sth->execute($userid);
-print D "\n";
-close(D);
-}
-
-=item
-Elimina la session pasada por parametro que se encuentra en la base
-=cut
-## FIXME DEPRECATED
-sub _deleteSessionDeUsuario {
-	my ($sessionID, $userid, $sist_sesion) = @_;
-open(K, ">>/tmp/debug.txt");
-print K "\n";
-print K "_deleteSessionDeUsuario=> DELETE SESSION: \n";
-# 	my $dbh = C4::Context->dbh;
-# 	my $sth;
-print K "_deleteSessionDeUsuario=> elimino el sessionID: ".$sessionID." del usuario: ".$userid."\n";
-#  	$sth = $dbh->prepare("DELETE FROM sist_sesion WHERE sessionID = ? AND userid=?");
-#  	$sth->execute($sessionID, $userid);
-
-#     my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
-#                                                                                                 sessionID => { eq => $sessionID },
-#                                                                                                 userid => { eq => $userid }
-#                                                                                      ]);
-#     $sist_sesion_array_ref->[0]->delete;
-    $sist_sesion->delete;
-print K "\n";
-close(K);
 }
 
 =item

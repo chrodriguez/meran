@@ -2,6 +2,7 @@ package C4::Modelo::SistSesion;
 
 use strict;
 
+use C4::Context;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -44,6 +45,42 @@ print Z "sist_sesion=> \n";
     }
 
 close(Z); 
+}
+
+=item
+Se redefine el metodo delte para poder loguear
+=cut
+sub delete{
+    my $self = $_[0]; # Copy, not shift
+    my $context = new C4::Context;
+
+    if($context->config('debug')){
+open(Z, ">>/tmp/debug.txt");
+print Z "\n";
+print Z "SistSesion=> DELETE\n";
+        foreach my $param (@_){
+print Z "SistSesion=> DELETE param: ".$param."\n";            
+        }
+print Z "\n";
+close(Z);        
+    }
+    
+    #se llama a delete
+    return $self->SUPER::delete(@_);
+}
+
+sub toString{
+    my ($self)=shift;
+
+    return 'SistSesion';
+}
+
+sub log{
+    my ($self)=shift;
+    use C4::AR::Debug;
+    my ($data, $metodoLlamador)=@_;  
+
+    C4::AR::Debug::log($self, $data, $metodoLlamador);
 }
 
 sub getSessionId{
