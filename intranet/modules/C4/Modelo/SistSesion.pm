@@ -69,20 +69,6 @@ close(Z);
     return $self->SUPER::delete(@_);
 }
 
-sub toString{
-    my ($self)=shift;
-
-    return 'SistSesion';
-}
-
-sub log{
-    my ($self)=shift;
-    use C4::AR::Debug;
-    my ($data, $metodoLlamador)=@_;  
-
-    C4::AR::Debug::log($self, $data, $metodoLlamador);
-}
-
 sub getSessionId{
     my ($self) = shift;
     return ($self->sessionID);

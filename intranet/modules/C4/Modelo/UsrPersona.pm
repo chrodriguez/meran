@@ -58,20 +58,6 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_persona' ],
 );
 
-sub toString{
-    my ($self)=shift;
-
-    return 'UsrPersona';
-}
-
-sub log{
-    my ($self)=shift;
-    use C4::AR::Debug;
-    my ($data, $metodoLlamador)=@_;  
-
-    C4::AR::Debug::log($self, $data, $metodoLlamador);
-}
-
 sub getCategoria{
     my ($self)=shift;
     
