@@ -230,19 +230,19 @@ sub agregarPersona{
     #genero un estado de ALTA para la persona para una fuente de informacion
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
-
-    eval{
         $person->agregar($params);
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-        $db->commit;
 
-    };
     if ($@){
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
          $db->rollback;
     }
+    else
+        {
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+            $db->commit;
+        }
 
     $db->{connect_options}->{AutoCommit} = 1;
 
@@ -1066,7 +1066,6 @@ sub getSocioLike {
 }
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
-## FIXME DEPRECATEDDDDDDDDDDDD, se mantiene para que no se rompa circulacion, luego sacar, ahora el socio sabe si es regular o no
 sub esRegular {
 
         my ($bor) = @_;
@@ -1287,25 +1286,34 @@ sub BornameSearchForCard{
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
-    if ((C4::AR::Utilidades::validateString($category))&& ($category ne 'Todos')) {
+    if ((C4::AR::Utilidades::validateString($category))&& ($category ne 'SIN SELECCIONAR')) {
            push (@filtros, (cod_categoria => { eq => $category }) );
     }
 
-    if (($apellido1 ne '') || ($apellido2 ne '')){
-        if ($apellido2 eq ''){ 
-            push (@filtros, (apellido => { like => '%'.$apellido1.'%'}) );
+    if ((C4::AR::Utilidades::validateString($apellido1)) || (C4::AR::Utilidades::validateString($apellido2))){
+        if ((C4::AR::Utilidades::validateString($apellido1)) && (C4::AR::Utilidades::validateString($apellido2))){
+                push (@filtros, ('persona.'.apellido => { gt => $apellido1, eq => $apellido1 }) );
+                push (@filtros, ('persona.'.apellido => { lt => $apellido2, eq => $apellido2 }) );
+
         }
-        else{
-            
+        elsif (C4::AR::Utilidades::validateString($apellido1)){ 
+                push (@filtros, ('persona.'.apellido => { like => '%'.$apellido1.'%'}) );
+        }
+        else {
+                 push (@filtros, ('persona.'.apellido => { like => '%'.$apellido2.'%'}) );
         }
     }
 
-    if (($legajo1 ne '') || ($legajo2 ne '')){
-        if ($legajo2 eq '') {
-            push (@filtros, ('persona.'.legajo => { eq => $apellido1}) );
+    if ((C4::AR::Utilidades::validateString($legajo1)) || (C4::AR::Utilidades::validateString($legajo2))){
+        if ((C4::AR::Utilidades::validateString($legajo1)) && (C4::AR::Utilidades::validateString($legajo2))){
+                push (@filtros, ('persona.'.legajo => { gt => $legajo1, eq => $legajo1 }) );
+                push (@filtros, ('persona.'.legajo => { lt => $legajo2, eq => $legajo2 }) );
         }
-        else{
-            push (@filtros, ('persona.'.legajo => { between => $apellido1,$apellido2}) );
+        elsif (C4::AR::Utilidades::validateString($legajo1)) {
+                push (@filtros, ('persona.'.legajo => { eq => $legajo1}) );
+        }
+        else {
+               push (@filtros, ('persona.'.legajo => { eq => $legajo2}) );
         }
     }
 
