@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
         last_login          => { type => 'datetime' },
         last_change_password => { type => 'date' },
         change_password     => { type => 'integer', default => '0', not_null => 1 },
-        cumple_requisito   => { type => 'date' },
+        cumple_requisito   => { type => 'integer', not_null => 1, default => '0'},
         id_estado          => { type => 'integer', not_null => 1 },
         activo           => { type => 'integer', default => 0, not_null => 1 },
     ],
@@ -156,7 +156,7 @@ sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
 
-     $self->setPassword( C4::Auth::md5_base64($password) );
+    $self->setPassword( C4::Auth::md5_base64($password) );
 #     $self->setPassword( $password );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
@@ -372,7 +372,10 @@ sub getLast_login{
 
 sub setLast_login{
     my ($self) = shift;
+
     my ($last_login) = @_;
+    my $dateformat = C4::Date::get_date_format();
+    $last_login = C4::Date::format_date_in_iso($last_login,$dateformat);
     $self->last_login($last_login);
 }
 
@@ -421,5 +424,30 @@ sub setId_estado{
     my ($id_estado) = @_;
     $self->id_estado($id_estado);
 }
+
+sub esRegular{
+    my ($self) = shift;
+
+    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getEstado);
+    $estado->load();
+
+    return $estado->getRegular;
+}
+
+sub tienePermisos {
+    my ($self) = shift;
+    my ($flagsrequired) = @_;
+    #Obtengo los permisos del socio
+    my $flags= $self->getPermisos;
+
+    #se verifica si el socio tiene los permisos pasados por parametro
+    foreach (keys %$flagsrequired) {
+        return $flags if $flags->{$_};
+    }
+
+    return 0;
+}
+
+
 1;
 

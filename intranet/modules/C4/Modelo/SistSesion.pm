@@ -99,6 +99,13 @@ sub getLasttime{
     return ($self->lasttime);
 }
 
+sub setLasttime{
+    my ($self) = shift;
+    my ($lasttime) = @_;    
+    
+    $self->lasttime($lasttime);
+}
+
 sub getSession{
     my ($self)=shift;
     my ($sessionID) = @_;

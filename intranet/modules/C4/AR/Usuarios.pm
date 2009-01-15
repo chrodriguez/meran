@@ -230,19 +230,19 @@ sub agregarPersona{
     #genero un estado de ALTA para la persona para una fuente de informacion
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
-        $person->agregar($params);
 
+    eval{
+        $person->agregar($params);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+        $db->commit;
+
+    };
     if ($@){
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
          $db->rollback;
     }
-    else
-        {
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-            $db->commit;
-        }
 
     $db->{connect_options}->{AutoCommit} = 1;
 
@@ -1066,6 +1066,7 @@ sub getSocioLike {
 }
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
+## FIXME DEPRECATEDDDDDDDDDDDD, se mantiene para que no se rompa circulacion, luego sacar, ahora el socio sabe si es regular o no
 sub esRegular {
 
         my ($bor) = @_;
