@@ -38,13 +38,13 @@ else
 {
 
 my ($template, $session, $t_params, $cookie) = get_template_and_user({
-                                                template_name => "reports/users-cards.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
-			    });
+                                                    template_name => "reports/users-cards.tmpl",
+                                                    query => $input,
+                                                    type => "intranet",
+                                                    authnotrequired => 0,
+                                                    flagsrequired => {borrowers => 1},
+                                                    debug => 1,
+                                              });
 
 my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
 

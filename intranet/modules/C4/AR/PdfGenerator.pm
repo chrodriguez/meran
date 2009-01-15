@@ -305,7 +305,7 @@ sub cardGenerator {
 #  Genera los carnets a partir de una busqueda
 
 sub batchCardsGenerator {
-        my ($count,@results) = @_;
+        my ($count,@socios) = @_;
 #   my $cantidad=$count;
 #   my $hojas= $count / 8;
     my $i=0;
@@ -318,16 +318,16 @@ sub batchCardsGenerator {
         $pdf->openpage($pag);
     #Hoja A4 :  X diferencia 254 - Y diferencia 160 
     
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},14,14,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},14,174,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},14,334,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},14,494,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},14,654,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},270,14,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},270,174,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},270,334,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},270,494,$pdf);$i++;}
-    if ($i<$count){ generateCard($results[$i]->{'borrowernumber'},270,654,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,14,14,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,14,174,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,14,334,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,14,494,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,14,654,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,270,14,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,270,174,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,270,334,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,270,494,$pdf);$i++;}
+    if ($i<$count){ generateCard($socios[$i]->getId_socio,270,654,$pdf);$i++;}
     $pag++;
     }
     my $tmpFileName= "carnets.pdf";

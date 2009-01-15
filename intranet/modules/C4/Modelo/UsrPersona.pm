@@ -173,6 +173,23 @@ sub modificar{
    $self->save();
 }
 
+sub sortByString{
+
+    my ($self)=shift;
+    my ($campo)=@_;
+#     my $fieldsString = "id_persona id_socio nro_socio id_ui cod_categoria fecha_alta expira flags password 
+#                         last_login last_change_password change_password cumple_requisito id_estado activo";
+    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+    my $index = rindex $fieldsString,$campo;
+    if ($index != -1){
+        return ("persona.".$campo);
+    }
+    else
+        {
+            return ("persona.apellido");
+        }
+}
+
 sub getLegajo{
     my ($self) = shift;
     return ($self->legajo);

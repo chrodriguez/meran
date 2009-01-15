@@ -19,7 +19,7 @@ my ($template, $session, $t_params, $cookie) = get_template_and_user({
 
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-my $orden=$obj->{'orden'}||'surname';
+my $orden=$obj->{'orden'}||'apellido';
 my $op=$obj->{'op'};
 my $surname1=$obj->{'surname1'};
 my $surname2=$obj->{'surname2'};
@@ -29,15 +29,21 @@ my $categoria_socio=$obj->{'categoria_socio'};
 my $regular=$obj->{'regular'};
 my $ui=$obj->{'ui'};
 my $count=0;
-my @results=();
+my $results;
+my @resultsdata = ();
 
 
 if ($op ne ''){
- ($count,@results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$categoria_socio,$ui,$orden,$regular,$legajo1,$legajo2);
+ ($count,$results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$categoria_socio,$ui,$orden,$regular,$legajo1,$legajo2);
 }
-
+for (my $i=0; $i < $count; $i++){
+    my %row = (
+            socio => $results->[$i],
+    );
+    push(@resultsdata, \%row);
+}
 #Se realiza la busqueda si al algun campo no vacio
-$t_params->{'RESULTSLOOP'}=\@results;
+$t_params->{'RESULTSLOOP'}=\@resultsdata;
 $t_params->{'cantidad'}=$count;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

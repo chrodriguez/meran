@@ -1057,7 +1057,7 @@ sub getSocioLike {
         push (@filtros, (apellido => { like => $socio.'%' }) );
     }
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
-                                                                            sort_by => 't2.'.$orden,
+                                                                            sort_by => 'persona.'.$orden,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             require_objects => [ 'persona' ]
@@ -1283,76 +1283,40 @@ sub personData {
 
 # Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
 sub BornameSearchForCard{
-    my ($surname1,$surname2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
-    my @bind=();
-    my $dbh = C4::Context->dbh;
-    my $query = "   SELECT borrowers.*,categories.description AS categoria 
-            
-            FROM borrowers LEFT JOIN categories ON 
-                        (categories.categorycode = borrowers.categorycode) 
-            
-            WHERE borrowers.branchcode = ? ";
-    push (@bind,$branch);
+    my ($apellido1,$apellido2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
+    my @filtros;
+    my $socioTemp = C4::Modelo::UsrSocio->new();
 
-    if (($category ne '')&& ($category ne 'Todos')) {
-        $query.= " AND borrowers.categorycode = ? ";
-        push (@bind,$category);
+    if ((C4::AR::Utilidades::validateString($category))&& ($category ne 'Todos')) {
+           push (@filtros, (cod_categoria => { eq => $category }) );
     }
-    if (($surname1 ne '') || ($surname2 ne '')){
-        if ($surname2 eq ''){ 
-            $query.= " AND borrowers.surname LIKE ? ";
-                        push (@bind,"$surname1%"); 
+
+    if (($apellido1 ne '') || ($apellido2 ne '')){
+        if ($apellido2 eq ''){ 
+            push (@filtros, (apellido => { like => '%'.$apellido1.'%'}) );
         }
         else{
-            $query.= " AND borrowers.surname BETWEEN ? AND ? ";
-                    push (@bind,$surname1,$surname2);
+            
         }
     }
+
     if (($legajo1 ne '') || ($legajo2 ne '')){
         if ($legajo2 eq '') {
-            $query.= " AND borrowers.studentnumber LIKE ? ";
-                        push (@bind,"$legajo1%"); 
+            push (@filtros, ('persona.'.legajo => { eq => $apellido1}) );
         }
         else{
-            $query.= " AND borrowers.studentnumber BETWEEN ? AND ? ";
-                    push (@bind,$legajo1,$legajo2);
+            push (@filtros, ('persona.'.legajo => { between => $apellido1,$apellido2}) );
         }
     }
 
-    if ($orden ne ''){$query.= " ORDER BY  borrowers.$orden ASC ";}
-    else {$query.= " ORDER BY  borrowers.surname ASC ";}
+     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
+                                                                            sort_by => ( $socioTemp->sortByString($orden) ),
+                                                                            require_objects => [ 'persona' ]
+     );
 
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    my @results;
-    my $i=-1;
-    while (my $data=$sth->fetchrow_hashref){
-        my $reg=  &C4::AR::Usuarios::esRegular($data->{'borrowernumber'});
-        my $pasa=1;
-
-        if (($regular ne '')&&($regular ne 'Todos')){ #Se tiene que filtrar por regularidad??
-            if (($data->{'categorycode'} ne 'ES') || ($reg ne $regular)){$pasa=0;}
-        }
-        if ($pasa == 1){ #Pasa el filtro
-            $i++; 
-            $results[$i]=$data; 
-            $results[$i]->{'city'}=C4::AR::Busquedas::getNombreLocalidad($results[$i]->{'city'});
-            if ($results[$i]->{'categorycode'} eq 'ES'){
-                $results[$i]->{'regular'}= $reg;
-                if ($results[$i]->{'regular'} eq 1){
-                    $results[$i]->{'regular'}="<font color='green'>Regular</font>";
-                }
-                elsif($results[$i]->{'regular'} eq 0){
-                    $results[$i]->{'regular'}="<font color='red'>Irregular</font>";
-                }
-            }
-            else{$results[$i]->{'regular'}="---";};
-        }
-    }
-    $sth->finish;
-    return(scalar(@results),@results);
+    return (scalar(@$socios_array_ref), $socios_array_ref);
 }
-
+# 
 =item 
 NewBorrowerNumber
 Devulve el maximo borrowernumber

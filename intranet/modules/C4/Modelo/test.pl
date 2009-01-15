@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Data::Dumper;
+# use Data::Dumper;
 
 # use the Rose::DB classes that match your database 
 # use C4::Modelo::Ref_paises;
@@ -10,9 +10,9 @@ use Data::Dumper;
 # use C4::Modelo::Ref_provincias::Manager;
 # use C4::Modelo::Usr_persona;
 # use C4::Modelo::Usr_persona::Manager;
-use C4::Modelo::UsrSocio;
-use C4::Modelo::UsrSocio::Manager;
-use C4::AR::Usuarios;
+# use C4::Modelo::UsrSocio;
+# use C4::Modelo::UsrSocio::Manager;
+# use C4::AR::Usuarios;
 # use C4::Modelo::Sanction::Manager;
 # use C4::Modelo::Sanction;
 
@@ -129,16 +129,28 @@ print "\n\n\n\n\n\n\n\n\n";
 #                      '************** END TUPLA **********'."\n";
 # 
 #         }
+use C4::Modelo::UsrPersona;
+# use Rose::DB::Object::Metadata;
+# 
+# my $meta = Rose::DB::Object::Metadata->new(class => 'UsrPersona');
+#   $meta->table('usr_persona'); # optional if class name ends with "::Product"
+#   $meta->auto_initialize;
+#   $meta->columns;
 
-
+my $p = C4::Modelo::UsrPersona->new();
+my @col = $p->meta->columns;
+foreach my $campo (@col){
+    print $campo."\n";
+}
+    print "\n\n\n\nCANTIDAD: ".scalar(@col)."\n\n\n";
 
 
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
-	my $new = &C4::AR::Usuarios::getSocioInfo(3);
-    print ("\n\n\n\n\n\n\n".$new->persona->getNacimiento."\n\n\n\n\n\n\n");
-       my %data_hash;
-        
+# 	my $new = &C4::AR::Usuarios::getSocioInfo(3);
+#     print ("\n\n\n\n\n\n\n".$new->persona->getNacimiento."\n\n\n\n\n\n\n");
+#        my %data_hash;
+#
 #         $data_hash{'nombre'} = "PEPITO NEW";
 #         $data_hash{'apellido'} = "PEREZ";
 #         $data_hash{'version_documento'} = 'C';

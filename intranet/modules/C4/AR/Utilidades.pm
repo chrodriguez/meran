@@ -82,6 +82,7 @@ use vars qw(@EXPORT @ISA);
     &buscarCiudades
     &trim
     &validateString
+    &joinArrayOfString
     );
 
 =item
@@ -1353,4 +1354,14 @@ sub printHASH {
     close(Z);
 }
 
+sub joinArrayOfString{
+
+    my (@columns) = @_;
+    my ($fieldsString) = "";
+    foreach my $campo (@columns){
+
+        $fieldsString.= $campo." ";
+    }
+    return ($fieldsString);
+}
 1;
