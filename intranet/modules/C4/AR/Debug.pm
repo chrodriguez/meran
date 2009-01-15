@@ -1,0 +1,56 @@
+package C4::AR::Debug;
+
+use strict;
+
+require Exporter;
+# use C4::AR::Authldap;
+# use C4::Membersldap;
+use C4::Context;
+
+use vars qw(@EXPORT @ISA);
+@ISA = qw(Exporter);
+@EXPORT = qw(
+                &log      
+);
+
+
+sub log{
+    my ($object, $data, $metodoLlamador) = @_;
+
+    my $context = new C4::Context;
+
+    if($context->config('debug')){
+open(Z, ">>/tmp/debug.txt");
+print Z "\n";
+print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
+#          foreach my $param (@_){
+# print Z "params: ".$param."\n";            
+#          }
+        _printHASH($data);
+print Z "\n";
+close(Z);        
+    }
+}
+
+
+sub _printHASH {
+    my ($hash_ref) = @_;
+print Z "\n";
+print Z "PRINT HASH: \n";
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+                print Z "key: $key => value: $value\n";
+            }
+    }
+print Z "\n";
+}
+
+=pod
+
+=back
+
+=cut
+
+1;
+
+__END__
