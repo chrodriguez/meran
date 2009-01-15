@@ -672,11 +672,12 @@ print A "checkauth=> t_operacionesDeINTRA\n";
             if ($userid) {
 print A "checkauth=> usuario o password incorrecta dentro del if\n";
                 $info{'invalid_username_or_password'} = 1;
+                $sist_sesion->delete;
             }
 print A "checkauth=> usuario o password incorrecta \n";
 # close(A);
             #elimino la session vieja
-            $sist_sesion->delete;
+#             $sist_sesion->delete;
 print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
             $userid= undef;
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
