@@ -592,10 +592,10 @@ sub t_cambiarPermisos {
 
 #  Funcion que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. Retortan 0 en caso de exito y 1 en error.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
-sub _verficarPassword {
+sub _verificarPassword {
     my($params)=@_;
 
-    my ($msg_object)= &C4::AR::Validator::checkPassword($params);
+    my ($msg_object)= &C4::AR::Validator::checkPassword($params->{'newpassword'});
 
 
     if( !($msg_object->{'error'}) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
@@ -614,22 +614,16 @@ sub _verficarPassword {
 sub cambiarPassword {
     my($params)=@_;
 
-    my ($msg_object)= _verficarPassword($params);
-open(A, ">>/tmp/debug.txt");
-print A "cambiarPassword=>\n";    
+    my ($msg_object)= _verificarPassword($params);
     if ( C4::Auth::getSessionIdSocio($params->{'session'}) == $params->{'id_socio'} ){
-            if(!$msg_object->{'error'}){
+            if(!$msg_object->{'error'}){ #porque NO hay error...
             #No hay error
-                $msg_object->{'error'}= 0;
                 my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
                 if ($socio->load()){
                     my $actualPassword = $socio->getPassword;
-#                     if ( $actualPassword == C4::Auth::md5_base64($params->{'actualPassword'}) ){
-                    if ( $actualPassword == $params->{'actualPassword'} ){
-#                         my $newPassword = C4::Auth::md5_base64($params->{'newpassword'}); 
+                    if ( $actualPassword eq C4::Auth::md5_base64($params->{'actualPassword'}) ){
                         my $newPassword = $params->{'newpassword'};
-print A "cambiarPassword=> llamo a cambiar pass\n";    
-                        $socio->cambiarPassword($params->{'newpassword'});
+                        $socio->cambiarPassword($newPassword);
                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
                     }
                     else
@@ -645,6 +639,11 @@ print A "cambiarPassword=> llamo a cambiar pass\n";
                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
                     }
             }
+            else
+                {
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+                }
     }
     else
         {

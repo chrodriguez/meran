@@ -190,56 +190,51 @@ sub checkLength{
 
 sub checkPassword{
 
-	my($params)=@_;
+	my($password)=@_;
 	my $msg_object= C4::AR::Mensajes::create();
-
-	#obtengo todas las preferencias
-	my $preferences_hashref= C4::Context->preferences();
-	my($string) = $params->{'newpassword'};
-
-	if (!(C4::AR::Utilidades::validateString($string))){
+	if (!(C4::AR::Utilidades::validateString($password))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U314', 'params' => []} ) ;
 		return ($msg_object);
 	}					
 
-	if (! ( &checkLength($string, C4::Context->preference('minPassLength') ) ) ){
+	if (!(&checkLength($password, C4::Context->preference('minPassLength')))) {
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U316', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countSymbolChars($string) >= 0)){
+	if (!(&countSymbolChars($password) >= C4::Context->preference('minPassSymbol'))) {
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countAlphaNumericChars($string) >= 0)){
+	if (!(&countAlphaNumericChars($password) >= C4::Context->preference('minPassAlphaNumeric'))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U324', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countAlphaChars($string) >= 0)){
+	if (!(&countAlphaChars($password) >= C4::Context->preference('minPassAlpha'))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U325', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countNumericChars($string) >= 0)){
+	if (!(&countNumericChars($password) >= C4::Context->preference('minPassNumeric'))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U326', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countLowerChars($string) >= 0)){
+	if (!(&countLowerChars($password) >= C4::Context->preference('minPassLower'))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U327', 'params' => []} ) ;
 		return ($msg_object);
 	}
 
-	if (!(&countUpperChars($string) >= 0)){
+	if (!(&countUpperChars($password) >= C4::Context->preference('minPassUpper'))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U328', 'params' => []} ) ;
 		return ($msg_object);
