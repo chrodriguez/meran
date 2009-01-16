@@ -780,6 +780,62 @@ close(J);
 	}#end  if ($newpassword && !$passwordrepeted)
 }
 
+=item
+Esta funcion inicializa la session para autenticar un usuario, se usa en OPAC e INTRA siempre q se quiere autenticar
+=cut
+sub inicializarAuth{
+    my ($query, $t_params) = @_;
+
+open(F, ">>/tmp/debug.txt");
+print F "intra auth=>: \n";
+#     my $t_params;
+    #se genera un nuevo nroRandom para que se autentique el usuario
+    my $random_number= C4::Auth::_generarNroRandom();
+print F "intra auth=> numero random: ".$random_number."\n";
+    
+    #genero una nueva session
+    my $session = CGI::Session->load();
+    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
+    #se destruye la session anterior
+    $session->clear();
+    $session->delete();
+    
+    #se genera una nueva session
+    my %params;
+    $params{'userid'}= '';
+    $params{'loggedinusername'}= '';
+    $params{'password'}= '';
+    $params{'nroRandom'}= '';
+    $params{'borrowernumber'}= '';
+    $params{'type'}= 'opac'; #OPAC o INTRA
+    $params{'flagsrequired'}= '';
+    $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+    
+    #esto realmente destruye la session
+    undef($session);
+    $session= C4::Auth::_generarSession(\%params);
+    my $sessionID= $session->param('sessionID');
+## FIXME parece q esto no es mas necesario
+    my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');
+    
+    $session->header(
+                    -cookie => $cookie,
+                );   
+    
+print F "intra auth=> cookie: ".$cookie."\n";
+print F "intra auth=> sessionID: ".$sessionID."\n";
+    
+    my $userid= undef;
+    #guardo la session en la base
+    C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+    
+    $t_params->{'RANDOM_NUMBER'}= $random_number;
+    
+close(F);
+
+    return ($session);
+}
+
 sub _generarNroRandom {
 	#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
 	#Y NO VIAJE LA PASS DEL USUARIO ENCRIPTADA SOLO CON MD5

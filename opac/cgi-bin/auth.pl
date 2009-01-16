@@ -13,8 +13,7 @@ my $query = new CGI;
 
 my ($template, $t_params)= C4::Output::gettemplate("opac-auth.tmpl", 'opac');
 
-# my $session = CGI::Session->load();
-
+=item
 open(F, ">>/tmp/debug.txt");
 print F "opac auth=>: \n";
 #se genera un nuevo nroRandom para que se autentique el usuario
@@ -59,5 +58,7 @@ C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_num
 $t_params->{'RANDOM_NUMBER'}= $random_number;
 
 close(F);
+=cut
+my ($session)= C4::Auth::inicializarAuth($query, $t_params);
 
 C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
