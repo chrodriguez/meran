@@ -761,7 +761,6 @@ sub inicializarAuth{
 
 open(F, ">>/tmp/debug.txt");
 print F "C4::Auth::inicializarAuth=> \n";
-#     my $t_params;
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $random_number= C4::Auth::_generarNroRandom();
 print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
