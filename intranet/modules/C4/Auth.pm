@@ -455,13 +455,8 @@ print A "checkauth=> changePassword \n";
             _change_Password_Controller($dbh, $query, $userid, $type,\%info);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid))))
-        
-#         $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
-#         $session->header(
-#                 -cookie => $cookie,
-#             );  
+
 print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
-# print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
 close(A);
         return ($userid, $cookie, $session, $flags);
@@ -523,11 +518,6 @@ print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
             #Logueo una nueva sesion
             my $time=localtime(time());
             _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
-
-#             $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
-#             $session->header(
-#                  -cookie => $cookie,
-#             );      
     
             #por defecto no tiene permisos
             $info{'nopermission'} = 1;
@@ -599,11 +589,6 @@ print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
  
     }# end unless ($userid) 
 
-#     $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-#      $session->header(
-#                 -cookie => $cookie,
-#             );  
-# print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
 print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
 close(A);
@@ -732,7 +717,6 @@ print J "_change_Password_Controller=> template_name: ".$template_name."\n";
 		$t_params->{'RANDOM_NUMBER'}= $random_number;
 print J "_change_Password_Controller=> genera otro random: ".$random_number."\n";
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-		$t_params->{'loginprompt'}= $info->{'nopermission'};
         $t_params->{'userid'}= $userid;
         $t_params->{'id_socio'}= $socio->getId_socio;
         $t_params->{'loggedinusername'}= $userid;
@@ -740,12 +724,7 @@ print J "_change_Password_Controller=> genera otro random: ".$random_number."\n"
         my $session = CGI::Session->load();
  		my $sessionID= $session->param('sessionID');
 print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";	
-# 		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-#         $session->header(
-#             -cookie => $cookie,
-#         );  
 
-# 		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
         C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
 print J "\n";
 close(J);
@@ -787,22 +766,12 @@ print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
     undef($session);
     $session= C4::Auth::_generarSession(\%params);
     my $sessionID= $session->param('sessionID');
-## FIXME parece q esto no es mas necesario
-#     my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');
-#     
-#     $session->header(
-#                     -cookie => $cookie,
-#                 );   
-    
-# print F "C4::Auth::inicializarAuth=> cookie: ".$cookie."\n";
 print F "C4::Auth::inicializarAuth=> sessionID: ".$sessionID."\n";
     
     my $userid= undef;
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
-    
-## FIXME creo q no es necesario
-    $t_params->{'loginprompt'}= 1;
+
     $t_params->{'RANDOM_NUMBER'}= $random_number;
     
 close(F);
@@ -868,26 +837,6 @@ print F "\n";
 close (F);
 	return ($passwordValida, $cardnumber, $branch);
 }
-
-=item
-Genera la cookie segun los parametros
-=cut
-#DEPRECATEDDDDD
-sub _generarCookie {
-	my ($query, $sessionName, $value, $expires) = @_;
-open(G , ">>/tmp/debug.txt");
-print G "\n";
-print G "_generarCookie=> Genero/Recupero una Cookie: \n";
-	my $cookie= $query->cookie(
-					-name => $sessionName,
-					-value => $value,
-					-expires => $expires
-		);
-print G "_generarCookie=> cookie: ".$cookie."\n";
-print G "\n";
-	return $cookie;
-}
-
 
 sub printSession {
 	my ($session, $desde) = @_;
