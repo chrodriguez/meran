@@ -1086,6 +1086,7 @@ sub getPersonaLike {
     my ($persona,$orden,$ini,$cantR,$habilitados) = @_;
     my  $personas_array_ref;
     my @filtros;
+    my $socioTemp = C4::Modelo::UsrSocio->new();
  
     if (($habilitados == 1)){
         push(@filtros, ( activo=> { eq => 0}) );
@@ -1096,6 +1097,7 @@ sub getPersonaLike {
     }
     
     $personas_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => \@filtros,
+                                                                            sort_by => ( $socioTemp->sortByString($orden) ),
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
      ); 
@@ -1113,6 +1115,7 @@ sub getSocioLike {
     my ($socio,$orden,$ini,$cantR,$habilitados) = @_;
     
     my @filtros;
+    my $socioTemp = C4::Modelo::UsrSocio->new();
     
     if (defined($habilitados)){
         push(@filtros, ( activo=> { eq => $habilitados}) );
@@ -1122,7 +1125,7 @@ sub getSocioLike {
         push (@filtros, (apellido => { like => $socio.'%' }) );
     }
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
-                                                                            sort_by => 'persona.'.$orden,
+                                                                            sort_by => ( $socioTemp->sortByString($orden) ),
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             require_objects => [ 'persona' ]
