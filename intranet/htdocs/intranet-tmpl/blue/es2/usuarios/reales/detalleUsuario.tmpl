@@ -154,11 +154,13 @@
 <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
                     [% IF nroSocioLoggeado != loggedinusername%]
                             <li>
-                                    <a class="click" onClick="resetPassword()">
+                                    <!--<a class="click" onClick="resetPassword()">
                                             <img alt='[% "Restablecimiento de Contrase&ntilde;a" | i18n %]'
                                             src="[% themelang %]/images/cambiocontrasena.png" border=0 Title='[% "Reset Password" | i18n %]'>
                                             <h2> FALTA CAMBIAR BOTONENENE </h2>
-                                    </a>
+                                    
+                                    </a>-->
+                                    <input type="button" value="Reset Password" onClick="resetPassword()">
                             </li>
                     [% ELSE %]
                             <li>

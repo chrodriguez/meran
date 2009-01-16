@@ -6,6 +6,9 @@ use C4::Modelo::DB::AutoBase1;
 
 sub init_db { C4::Modelo::DB::AutoBase1->new}
 
+=item
+Imprime el nombre de la clase
+=cut
 sub toString{
     my ($self)=shift;
 
