@@ -42,6 +42,7 @@ print A "desde opac-main: \n";
 if( $session->param('borrowernumber') ){
 print A "tengo borrower: ".$session->param('borrowernumber')."\n";
 }else{
+=item
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $random_number= C4::Auth::_generarNroRandom();
 print A "opac auth=> numero random: ".$random_number."\n";
@@ -81,12 +82,13 @@ print A "opac auth=> sessionID: ".$sessionID."\n";
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
     
+    
     $t_params->{'RANDOM_NUMBER'}= $random_number;
-    $t_params->{'CGIitemtype'}= $CGIitemtype;
-    $t_params->{'RANDOM_NUMBER'}= $random_number;
-    $t_params->{'loginprompt'}= 1;
+=cut
+    ($session)= C4::Auth::inicializarAuth($input, $t_params);
 }
 close(A);
+$t_params->{'CGIitemtype'}= $CGIitemtype;
 $t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

@@ -222,24 +222,7 @@ close(H);
 
 
 sub output_html_with_http_headers {
-    	my($query, $template, $params, $session, $cookie) = @_;
-open(Z, ">>/tmp/debug.txt");
-print Z "output_html: \n";
-
-# FIXME este IF es un parche, ya que a veces (especifico de auth.pl) no recibe el parametro session
-# 	 if ( !(defined($session)) ){
-#             $session = CGI::Session->new();
-# print Z "output_html=> creo session\n";
-#         }
-
-print Z "output_html=> session->session->id: ".$session->id."\n";
-print Z "output_html=> session->header(cookie): ".$session->header()."\n";
-print Z "output_html=> session->sessionID: ".$session->param('sessionID')."\n";
-print Z "output_html=> query->sessionID: ".$query->cookie('sessionID')."\n";
-print Z "output_html=> cookie: ".$cookie."\n";
-print Z "\n";
-close Z;
-
+    my($query, $template, $params, $session, $cookie) = @_;
 	print $session->header();
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
@@ -787,11 +770,11 @@ sub inicializarAuth{
     my ($query, $t_params) = @_;
 
 open(F, ">>/tmp/debug.txt");
-print F "intra auth=>: \n";
+print F "C4::Auth::inicializarAuth=> \n";
 #     my $t_params;
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $random_number= C4::Auth::_generarNroRandom();
-print F "intra auth=> numero random: ".$random_number."\n";
+print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
     
     #genero una nueva session
     my $session = CGI::Session->load();
@@ -822,13 +805,15 @@ print F "intra auth=> numero random: ".$random_number."\n";
                     -cookie => $cookie,
                 );   
     
-print F "intra auth=> cookie: ".$cookie."\n";
-print F "intra auth=> sessionID: ".$sessionID."\n";
+print F "C4::Auth::inicializarAuth=> cookie: ".$cookie."\n";
+print F "C4::Auth::inicializarAuth=> sessionID: ".$sessionID."\n";
     
     my $userid= undef;
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
     
+## FIXME creo q no es necesario
+    $t_params->{'loginprompt'}= 1;
     $t_params->{'RANDOM_NUMBER'}= $random_number;
     
 close(F);
