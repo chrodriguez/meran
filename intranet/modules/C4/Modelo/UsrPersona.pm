@@ -166,7 +166,8 @@ sub sortByString{
 #     my $fieldsString = "id_persona id_socio nro_socio id_ui cod_categoria fecha_alta expira flags password 
 #                         last_login last_change_password change_password cumple_requisito id_estado activo";
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-$self->log($self->meta->columns,'sortByString => columns');
+# $self->log($self->meta,'sortByString => columns');
+
     my $index = rindex $fieldsString,$campo;
     if ($index != -1){
         return ("persona.".$campo);
