@@ -11,12 +11,11 @@ use C4::AR::Utilidades;
 
 my $input=new CGI;
 
-
 my  ($template, $session, $t_params, $cookie) = get_template_and_user({
 								template_name => "opac-privateshelfs.tmpl",
 								query => $input,
 								type => "opac",
-								authnotrequired => 1,
+								authnotrequired => 0,
 								flagsrequired => {borrow => 1},
                          });
 

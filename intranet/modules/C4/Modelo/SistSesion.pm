@@ -69,6 +69,13 @@ close(Z);
     return $self->SUPER::delete(@_);
 }
 
+sub setSessionId{
+    my ($self) = shift;
+    my ($sessionID) = @_;
+
+    $self->sessionID($sessionID);
+}
+
 sub getSessionId{
     my ($self) = shift;
     return ($self->sessionID);

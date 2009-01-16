@@ -555,7 +555,6 @@ print A "checkauth=> Usuario no logueado, intento de autenticacion \n";
         $userid= $query->param('userid');
         my $password= $query->param('password');
 print A "checkauth=> busco el sessionID: ".$sessionID." de la base \n";
-#         my $random_number= _getNroRandom($dbh, $sessionID);
         my $random_number= $sist_sesion->getNroRandom;
 print A "checkauth=> random_number desde la base: ".$random_number."\n";
 
@@ -583,8 +582,6 @@ print A "checkauth=> elimino el sessionID de la base: ".$sessionID."\n";
             #genero una nueva session
             $session= _generarSession(\%params);
             $sessionID= $session->param('sessionID');
-#             $sessionID= C4::Auth::_generarSessionID();
-# # print A "checkauth=> sessionID de CGI-Session: ".$session->id."\n";
 print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
@@ -594,7 +591,7 @@ print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
             #el usuario se logueo bien, ya no es necessario el nroRandom
             $random_number= 0;
             #guardo la session en la base
-            _save_session_db($dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+            _save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
 
             #Logueo una nueva sesion
             my $time=localtime(time());
@@ -693,31 +690,17 @@ close(A);
 Esta funcion guarda una session en la base
 =cut
 sub _save_session_db{
-	my ($dbh, $sessionID, $userid, $remote_addr, $random_number) = @_;
-
-	$dbh->do("INSERT INTO sist_sesion (sessionID, userid, ip,lasttime, nroRandom) VALUES (?, ?, ?, ?, ?)", undef, 
-												($sessionID, 
-												$userid, $remote_addr, 
-												time(), 
-												$random_number)
-		);
+	my ($sessionID, $userid, $remote_addr, $random_number) = @_;
+    my ($sist_sesion)= C4::Modelo::SistSesion->new();
+    $sist_sesion->load();
+    $sist_sesion->setSessionId($sessionID);
+    $sist_sesion->setUserid($userid);
+    $sist_sesion->setIp($remote_addr);
+    $sist_sesion->setLasttime(time());
+    $sist_sesion->setNroRandom($random_number);
+    $sist_sesion->save();
 
 }
-=item
-Esta funcion recurpera de la base el nroRandom entregado al cliente segun un sessionID
-=cut
-##DEPRECATEDDDDD
-sub _getNroRandom {
-	my ($dbh, $sessionID) = @_;
-
-	my $sth=$dbh->prepare("SELECT nroRandom FROM sist_sesion WHERE sessionID = ?");
-        $sth->execute($sessionID);
-	my $random_number= $sth->fetchrow;
-
-	return $random_number;
-}
-
-
 
 =item
 Esta funcion modifica el flag de todos las sessiones con usuarios duplicados, seteando el mismo a LOGUIN_DUPLICADO
@@ -725,10 +708,8 @@ cuando el usuario remoto con session duplicada intente navegar, sera redireccion
 =cut
 sub _setLoguinDuplicado {
 	my ($userid, $ip) = @_;
-
-# 	my $sth=$dbh->prepare("UPDATE sist_sesion  SET flag = 'LOGUIN_DUPLICADO' WHERE userid = ? AND ip <> ? ");
-#         $sth->execute($userid, $ip);
-
+    #Verifica si existe sesiones abiertas con el mismo userid, pero con <> ip, si es asi se les setea un flag de LOGUIN_DIPLICADO
+    #y ni bien intente navegar el usuario será redireccionado al loguin.
     my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
                                                                                                 ip => { ne => $ip },
                                                                                                 userid => { eq => $userid }
@@ -739,16 +720,6 @@ sub _setLoguinDuplicado {
         $sist_sesion_array_ref->[0]->setFlag('LOGUIN_DUPLICADO');
         $sist_sesion_array_ref->[0]->save();
     }
-}
-
-sub _getCardnumber {
-	my ($dbh, $userid) = @_;
-	
-	my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE borrowernumber = ?");
-	$sth->execute(getborrowernumber($userid));
-	my $cardnumber= $sth->fetchrow;
-
-	return $cardnumber;
 }
 
 =item
@@ -826,14 +797,11 @@ print J "_change_Password_Controller=> template_name: ".$template_name."\n";
 
 		my ($template, $t_params) = gettemplate($template_name, $type);
 print J "_change_Password_Controller=> template_name: ".$template_name."\n";	
-# 		$template->param(passwordrepeted => $passwordrepeted);
 		$t_params->{'passwordrepetedv'}= $passwordrepeted;
 
 		#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
 		my $random_number= _generarNroRandom();
 ## FIXME falta cambiar la pass del LDAP
-       
-# 		$template->param(RANDOM_NUMBER => $random_number);
 		$t_params->{'RANDOM_NUMBER'}= $random_number;
 print J "_change_Password_Controller=> genera otro random: ".$random_number."\n";
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
@@ -844,8 +812,6 @@ print J "_change_Password_Controller=> genera otro random: ".$random_number."\n"
 	
         my $session = CGI::Session->load();
  		my $sessionID= $session->param('sessionID');
-#         my $sth=$dbh->prepare("update sist_sesion set nroRandom=? where sessionID=? and userid=?");
-#         $sth->execute($random_number, $sessionID,$userid);
 print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";	
 		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
         $session->header(
@@ -867,22 +833,12 @@ sub _generarNroRandom {
 	return $random_number;
 }
 
-sub _generarSessionID {
-	
-	my $time= localtime(time());
-	my $sessionID= int(rand()*100000).'-'.time();
-
-	return $sessionID;
-}
-
 sub _generarSession {
 	my ($params) = @_;
 
-# 	my $session = new CGI::Session();
     my $session = new CGI::Session(undef, undef, undef);
     #se setea toda la info necesaria en la sesion
 	$session->param('userid', $params->{'userid'});
-#  	$session->param('sessionID', $sessionID= _generarSessionID());
 	$session->param('sessionID', $session->id());
 	$session->param('loggedinusername', $params->{'userid'});
 	$session->param('password', $params->{'password'});
@@ -981,17 +937,9 @@ print P "redirectTo=> \n";
 		
 print P "redirectTo=> CLIENT_REDIRECT\n"; 		
   		my $session = CGI::Session->load();
-# 		$session->clear();
-# 		$session->delete();
-# 		my $session = new CGI::Session();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
         $session->header();
-#         my $input = CGI->new(); 
-#         print $input->redirect( 
-#                      -location => $url, 
-#                      -status => 301,
-#          ); 
 print P "redirectTo=> url: ".$url."\n";
      	print $session->header();
  		print 'CLIENT_REDIRECT';
@@ -1116,13 +1064,6 @@ print Z "_checkpw=> \n";
       if ( ($socio->persona)&&($socio->getActivo) ) {
 print Z "_checkpw=> tengo persona y socio\n";
         #existe el socio y se encuentra activo
-
-# print Z "_checkpw=> ui: ".$socio->getId_ui."\n";
-# print Z "_checkpw=> apellido: ".$socio->persona->getApellido."\n";
-# print Z "_checkpw=> nombre: ".$socio->persona->getNombre."\n";
-# print Z "_checkpw=> DNI: ".$socio->persona->getNro_documento."\n";
-# print Z "_checkpw=> pass: ".$socio->getPassword."\n";
-
         my $md5password= $socio->getPassword;
         my $branchcode= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;

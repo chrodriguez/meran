@@ -51,7 +51,7 @@ my $userid= undef;
 print F "sessionID: ".$sessionID."\n";
 # print A "cookie input->cookie: ".$input->cookie."\n";
 #guardo la session en la base
-C4::Auth::_save_session_db(C4::Context->dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
 
 $t_params->{'RANDOM_NUMBER'}= $random_number;
 # $params->{'RANDOM_NUMBER'}= $session->param('nroRandom');

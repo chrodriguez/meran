@@ -21,6 +21,7 @@ print F "intra auth=> numero random: ".$random_number."\n";
 
 #genero una nueva session
 my $session = CGI::Session->load();
+$t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
 #se destruye la session anterior
 $session->clear();
 $session->delete();
@@ -51,10 +52,9 @@ print F "intra auth=> sessionID: ".$sessionID."\n";
 
 my $userid= undef;
 #guardo la session en la base
-C4::Auth::_save_session_db(C4::Context->dbh, $sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
+C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
 
 $t_params->{'RANDOM_NUMBER'}= $random_number;
-$t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
 
 close(F);
 
