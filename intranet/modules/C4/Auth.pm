@@ -1005,6 +1005,10 @@ print Z "_checkpw=> es la 1era vez que se loguea, se usa el DNI\n";
         }
 
         if ($password eq md5_base64($md5password.$random_number)) {
+print Z "_checkpw=> password del cliente: ".$password."\n";
+print Z "_checkpw=> md5password.random_number: ".$md5password.$random_number."\n";
+print Z "_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n";
+print Z "_checkpw=> md5password de la base: ".$md5password."\n";
 print Z "_checkpw=> las pass son = todo OK\n";
             return 1,$userid,$branchcode;
         }
