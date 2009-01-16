@@ -135,7 +135,7 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
     }
 
 	$t_params->{'loop'}= \@loop;
-    $t_params->{'tiene'}=C4::Auth::tienePermisos($socio->getNro_socio, $flagsrequired);
+    $t_params->{'tiene'}=$socio->tienePermisos($flagsrequired);
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 

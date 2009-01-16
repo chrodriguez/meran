@@ -1292,8 +1292,8 @@ sub BornameSearchForCard{
 
     if ((C4::AR::Utilidades::validateString($apellido1)) || (C4::AR::Utilidades::validateString($apellido2))){
         if ((C4::AR::Utilidades::validateString($apellido1)) && (C4::AR::Utilidades::validateString($apellido2))){
-                push (@filtros, ('persona.'.apellido => { gt => $apellido1, eq => $apellido1 }) );
-                push (@filtros, ('persona.'.apellido => { lt => $apellido2, eq => $apellido2 }) );
+                push (@filtros, ('persona.'.apellido => { gt => $apellido1, eq => $apellido1 }) ); # >=
+                push (@filtros, ('persona.'.apellido => { lt => $apellido2, eq => $apellido2 }) ); # <=
 
         }
         elsif (C4::AR::Utilidades::validateString($apellido1)){ 
@@ -1306,8 +1306,8 @@ sub BornameSearchForCard{
 
     if ((C4::AR::Utilidades::validateString($legajo1)) || (C4::AR::Utilidades::validateString($legajo2))){
         if ((C4::AR::Utilidades::validateString($legajo1)) && (C4::AR::Utilidades::validateString($legajo2))){
-                push (@filtros, ('persona.'.legajo => { gt => $legajo1, eq => $legajo1 }) );
-                push (@filtros, ('persona.'.legajo => { lt => $legajo2, eq => $legajo2 }) );
+                push (@filtros, ('persona.'.legajo => { gt => $legajo1, eq => $legajo1 }) ); # >=
+                push (@filtros, ('persona.'.legajo => { lt => $legajo2, eq => $legajo2 }) ); # <=
         }
         elsif (C4::AR::Utilidades::validateString($legajo1)) {
                 push (@filtros, ('persona.'.legajo => { eq => $legajo1}) );

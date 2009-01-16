@@ -61,7 +61,8 @@ jQuery.fn.centerObject = function(options) {
 
 	if(options){
 		if( (options.debug)&&(window.console) ){
-			console.log(	"centerObject => \n" +
+	
+			window.console.log(	"centerObject => \n" +
 					"Total Vertical: " + total + "\n" + 
 					"Dif: " + dif + "\n" + 
 					"Medio: " + (dif + ( $(window).height() )/2) +
@@ -69,6 +70,7 @@ jQuery.fn.centerObject = function(options) {
 					"Total Horizontal: " + $(window).width() + "\n" + 
 					"Medio: " +  $(window).width()/2
 			);
+	
 		}
 	}
 
@@ -96,7 +98,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.sort= function(ord){
 
 			if( (this.debug)&&(window.console) ){
- 				console.log("AjaxHelper => sort: " + ord);
+  				window.console.log("AjaxHelper => sort: " + ord);
  			}
 			
 			//seteo el orden de los resultados
@@ -108,7 +110,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.changePage= function(ini){
 
 				if( (this.debug)&&(window.console) ){
- 					console.log("AjaxHelper => changePage: " + ini);
+  					window.console.log("AjaxHelper => changePage: " + ini);
  				}
 
 				this.ini= ini;
@@ -121,7 +123,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			var params= "obj="+JSONstring.make(helper);
 
 			if( (this.debug)&&(window.console) ){
- 				console.log("AjaxHelper => ajaxCallback \n" + params);
+  				window.console.log("AjaxHelper => ajaxCallback \n" + params);
 			}
 
 	
@@ -144,9 +146,8 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 						//oculta el estado del AJAX
 						_HiddeState();
 						if(helper.onComplete){
-                            if(ajax.responseText == 'CLIENT_REDIRECT'){
-//  								window.location = "/cgi-bin/koha/auth.pl";
-                                    window.location = "/cgi-bin/koha/redirectController.pl";
+                            				if(ajax.responseText == 'CLIENT_REDIRECT'){
+                                    				window.location = "/cgi-bin/koha/redirectController.pl";
 							}else{
  								helper.onComplete(ajax.responseText);
 							}

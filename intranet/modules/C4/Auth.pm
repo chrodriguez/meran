@@ -372,8 +372,6 @@ print A "checkauth=> authnotrequired: ".$authnotrequired."\n";
     # state variables
     my $loggedin = 0;
     my %info;
-#   my $session;
-#   my $session = new CGI::Session();  #recupero la session
     my $session = CGI::Session->load();
     my ($userid, $cookie, $sessionID, $flags);
     my $logout = $query->param('logout.x')||0;
@@ -383,16 +381,13 @@ print A "checkauth=> recupero de la cookie con sessionID (desde query->cookie): 
 print A "checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n";
 
    if ($sessionID=$session->param('sessionID')) {
-#   } elsif ($sessionID=$session->param('CGISESSID')) {
 print A "checkauth=> sessionID seteado \n";
 print A "checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n";
 print A "checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n";
 
-#         $sessionID= 1;
         #Se recupera la info de la session guardada en la base segun el sessionID
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
         $sist_sesion->load();
-#          $sist_sesion->load(sessionID => $sessionID);
 
         my ($ip , $lasttime, $nroRandom, $flag);
 #         ($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
@@ -496,8 +491,6 @@ print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sess
 
                 my ($socio)= C4::Modelo::UsrSocio->new(nro_socio => $userid);
                 $socio->load();
-#                 $flags = haspermission($dbh, $userid, $flagsrequired);
-#                 $flags = _tienePermisos($userid, $flagsrequired);
                 $flags = $socio->tienePermisos($flagsrequired);
 
 print A "checkauth=> permisos de userid: ".$userid."\n";
@@ -505,19 +498,16 @@ print A "checkauth=> imprimo los flags: \n";
                 C4::AR::Utilidades::printHASH($flags);
 print A "checkauth=> imprimo los flagsrequired: \n";
                 C4::AR::Utilidades::printHASH($flagsrequired);
-# print A "checkauth=> imprimo los flags de tienePermisos: \n";
-#                 C4::AR::Utilidades::printHASH( tienePermisos($userid, $flagsrequired) );
-
 
                 if ($flags) {
                     $loggedin = 1;
                 } else {
                     $info{'nopermission'} = 1;
+print A "checkauth=> NO TIENE PERMISOS: \n";
                     #redirecciono a una pagina informando q no tiene  permisos
-#                      _goToSinPermisos($dbh, $query, $session, $template_name, $userid, $type, \%info);
                     $session->param('codMsg', 'U354');
-                    $session->param('redirectTo', '/cgi-bin/koha/sinPermisos.pl');
-                    redirectTo('/cgi-bin/koha/sinPermisos.pl');
+                    $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+                    redirectTo('/cgi-bin/koha/informacion.pl');
                     #EXIT
                 }
             }
@@ -617,8 +607,6 @@ print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
     
             #por defecto no tiene permisos
             $info{'nopermission'} = 1;
-#             if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-#             if( $flags = _tienePermisos($userid, $flagsrequired) ){
             if( $flags = $socio->tienePermisos($flagsrequired) ){
                 $info{'nopermission'} = 0;
                 $loggedin = 1;
@@ -909,33 +897,6 @@ sub _generarSession {
 	return $session;
 }
 
-sub _goToSinPermisos {
-	my ($dbh, $query, $session, $template_name, $userid, $type, $info) = @_;
-
-open(H, ">>/tmp/debug.txt");
-print H "\n";
-	my ($template, $t_params) = gettemplate($template_name, $type);
-	my $sessionID= $query->cookie('sessionID');
-print H "_goToSinPermisos=> recupero sessionID: ".$sessionID."\n";
-print H "_goToSinPermisos=> template_name: ".$template_name."\n";
-	my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-     $session->header(
-                -cookie => $cookie,
-            );  
-	$t_params->{$info};
-  	$t_params->{'loginprompt'}= 1 unless $info->{'nopermission'};
-
-print H "\n";
-close(H);
-
-	print $query->header(
-				-cookie => $cookie,
-		);
-
-	C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
-	exit;
-}
-
 =item
 Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
 =cut
@@ -1183,6 +1144,7 @@ close(Z);
     return 0;
 }
 
+#DEPRECATED, se mantiene para no romper, luego borrar
 sub getuserflags {
     my $cardnumber=shift;
     my $dbh=shift;
@@ -1200,6 +1162,7 @@ sub getuserflags {
     return $userflags;
 }
 
+#DEPRECATED, se mantiene para no romper, luego borrar
 sub haspermission {
     my ($dbh, $userid, $flagsrequired) = @_;
     my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");

@@ -23,9 +23,7 @@ sub log{
 open(Z, ">>/tmp/debug.txt");
 print Z "\n";
 print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
-#          foreach my $param (@_){
-# print Z "params: ".$param."\n";            
-#          }
+## FIXME falta ver si se le pasa un arreglo en vez de una HASH
         _printHASH($data);
 print Z "\n";
 close(Z);        
@@ -36,10 +34,10 @@ close(Z);
 sub _printHASH {
     my ($hash_ref) = @_;
 print Z "\n";
-print Z "PRINT HASH: \n";
+print Z "   PRINT HASH: \n";
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
-                print Z "key: $key => value: $value\n";
+                print Z "       key: $key => value: $value\n";
             }
     }
 print Z "\n";

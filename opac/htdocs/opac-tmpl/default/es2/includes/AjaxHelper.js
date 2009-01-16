@@ -145,14 +145,13 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					complete: function(ajax){
 						//oculta el estado del AJAX
 						_HiddeState();
- 						if(helper.onComplete){
-							if(ajax.responseText == 'CLIENT_REDIRECT'){
-								window.location = "/cgi-bin/koha/auth.pl";
+						if(helper.onComplete){
+                            				if(ajax.responseText == 'CLIENT_REDIRECT'){
+                                    				window.location = "/cgi-bin/koha/redirectController.pl";
 							}else{
  								helper.onComplete(ajax.responseText);
 							}
 						}
-
   					}
 				});
 	}

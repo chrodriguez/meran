@@ -11,7 +11,7 @@ use CGI::Session;
 
 my $query = new CGI;
 
-my ($template, $t_params)= C4::Output::gettemplate("sinPermisos.tmpl", 'intranet');
+my ($template, $t_params)= C4::Output::gettemplate("informacion.tmpl", 'intranet');
 
 
 my $session = CGI::Session->new();

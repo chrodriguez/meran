@@ -20,4 +20,5 @@ sub log{
     C4::AR::Debug::log($self, $data, $metodoLlamador);
 }
 
+
 1;

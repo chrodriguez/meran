@@ -174,7 +174,6 @@ sub cambiarPassword{
     my ($password)=@_;
 
     $self->setPassword( C4::Auth::md5_base64($password) );
-#     $self->setPassword( $password );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);
@@ -232,24 +231,19 @@ sub getPermisos{
     use C4::Modelo::UsrPermiso;
     use C4::Modelo::UsrPermiso::Manager;
 
+    #retorna todos los permisos
     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
-open(A, ">>/tmp/debug.txt");
-print A "\n";
-print A "getPermisos=>\n";
+
     my $accessFlagsHash;
-    my %hash;
     foreach my $permiso (@$permisos_array_ref){
         if ( $self->getFlags & 2**$permiso->{'bit'} ) {
             $accessFlagsHash->{ $permiso->{'flag'} }= 1;
-# print A "getPermisos=> permiso->flag: ".$permiso->{'flag'}."\n";
-            $hash{ $permiso->{'flag'} }= 1;
-# print A "getPermisos=> accessflag: ".$accessFlagsHash->{ $permiso->{'flag'} }."\n";
         }
     }
 
+    $self->log($accessFlagsHash,'getPermisos => permisos del socio');
+    
     return ($accessFlagsHash);
-print A "\n";
-close(A);
 }
 
 sub activar{
@@ -335,7 +329,6 @@ sub getFecha_alta{
     my $dateformat = C4::Date::get_date_format();
 
     return ( C4::Date::format_date($self->fecha_alta,$dateformat) );
-#     return ($self->fecha_alta);
 }
 
 sub setFecha_alta{
@@ -349,7 +342,6 @@ sub getExpira{
     my $dateformat = C4::Date::get_date_format();
 
     return ( C4::Date::format_date($self->expira,$dateformat) );
-#     return ($self->expira);
 }
 
 sub setExpira{
@@ -452,6 +444,8 @@ sub esRegular{
 sub tienePermisos {
     my ($self) = shift;
     my ($flagsrequired) = @_;
+
+    $self->log($flagsrequired,'tienePermisos => permisos requeridos');
     #Obtengo los permisos del socio
     my $flags= $self->getPermisos;
 

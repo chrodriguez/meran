@@ -129,20 +129,5 @@ sub setLasttime{
     $self->lasttime($lasttime);
 }
 
-sub getSession{
-    my ($self)=shift;
-    my ($sessionID) = @_;
-    
-    use C4::Modelo::SistSesion;
-
-    my $sist_sesion_array_ref = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ sessionID => { eq => $sessionID } ]);
-#     my $sist_sesion_array_ref = C4::Modelo::SistSesion->new(sessionID => $sessionID);
-#     $ui->load();
-    
-    return ($sist_sesion_array_ref->[0]);
-#     return ($sist_sesion_array_ref->[0]);
-}
-
-
 1;
 

@@ -203,4 +203,5 @@ ALTER TABLE `usr_ref_estado`  ENGINE = innodb;
 
 ALTER TABLE `usr_permiso`  ENGINE = innodb;
 
-
+--Se agrego en koha.conf la siguiente variable, si se setea en 1 se loguean "solos" los objetos
+debug=1
