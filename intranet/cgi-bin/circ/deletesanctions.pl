@@ -33,9 +33,11 @@ my $input= new CGI;
 my $dbh = C4::Context->dbh;
 my $responsable=$input->param('userloggedname');
 my $responsableBorrNum=$input->param('borrowernumber');
-my $flags= &getuserflags($responsable ,$dbh);
 
-if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'updatesanctions'})){
+my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{circulate=> 1},"intranet"); 
+# my $flags= &getuserflags($responsable ,$dbh);
+
+# if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'updatesanctions'})){
 	my $query = "select * from sanctions"; 					
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
@@ -53,7 +55,7 @@ if (($responsable eq 'kohaadmin')||($flags->{'superlibrarian'})||($flags->{'upda
 			&delSanction($dbh,$sanction->{'sanctionnumber'});
 		}
 	}
-}
+# }
 
 print $input->redirect("sanctions.pl");
 

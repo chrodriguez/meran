@@ -7,6 +7,15 @@ use C4::Interface::CGI::Output;
 use C4::Context;
 use CGI;
 
+my $query = new CGI;
+
+my ($template, $session, $t_params, $cookie)= get_template_and_user({
+                                    template_name => "opac-search.tmpl",
+                                    query => $query,
+                                    type => "opac",
+                                    authnotrequired => 1,
+                                    flagsrequired => {borrow => 1},
+             });
 
 my $classlist='';
 ## FIXME usar combo de utilidades o crear funcion que devuelva el combo
@@ -28,16 +37,6 @@ while (my ($search,$itemtype) = $sth->fetchrow) {
 			#Falta el ultimo;
 $classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
 
-
-my $query = new CGI;
-
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
-									template_name => "opac-search.tmpl",
-									query => $query,
-									type => "opac",
-									authnotrequired => 1,
-									flagsrequired => {borrow => 1},
-			 });
 
 my $virtuallibrary=C4::Context->preference("virtuallibrary");
 

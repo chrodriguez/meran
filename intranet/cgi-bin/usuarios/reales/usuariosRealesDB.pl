@@ -96,7 +96,6 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
 Se buscan los permisos del usuario y se muestran por pantalla
 =cut
 elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
 

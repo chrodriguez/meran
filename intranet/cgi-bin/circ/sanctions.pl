@@ -27,30 +27,27 @@ use C4::AR::Sanctions;
 
 my $input = new CGI;
 
-my $orden=$input->param('orden')||'surname';
-
-my @sanctionsarray= &sanciones($orden); #Se cambio para que la consulta no este en el .pl
-
 my ($template, $session, $params) =  get_template_and_user ({
-			template_name	=> 'circ/sanctions.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
+            template_name   => 'circ/sanctions.tmpl',
+            query       => $input,
+            type        => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { circulate => 1 },
     });
 
-	
+my $orden=$input->param('orden')||'surname';
+my @sanctionsarray= &sanciones($orden); #Se cambio para que la consulta no este en el .pl	
 my $borrowernumber = $session->param('borrowernumber');
 # El usuario logueado es superlibrarian????????
-if ($borrowernumber eq 0){#es el kohaadmin
-	$params->{'superlibrarian'}=1;
-}
-else{ #es superlibrarian o puede actualizar sanciones??
-	my $data=C4::AR::Usuarios::getBorrower($borrowernumber);
-	my $dbh = C4::Context->dbh;
-	my $flags= &getuserflags($data->{'cardnumber'} ,$dbh);
-	$params->{'superlibrarian'}= $flags->{'superlibrarian'}||$flags->{'updatesanctions'};
-}
+# if ($borrowernumber eq 0){#es el kohaadmin
+# 	$params->{'superlibrarian'}=1;
+# }
+# else{ #es superlibrarian o puede actualizar sanciones??
+# 	my $data=C4::AR::Usuarios::getBorrower($borrowernumber);
+# 	my $dbh = C4::Context->dbh;
+# 	my $flags= &getuserflags($data->{'cardnumber'} ,$dbh);
+# 	$params->{'superlibrarian'}= $flags->{'superlibrarian'}||$flags->{'updatesanctions'};
+# }
 #
 
 

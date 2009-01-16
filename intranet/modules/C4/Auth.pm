@@ -1144,48 +1144,6 @@ close(Z);
     return 0;
 }
 
-#DEPRECATED, se mantiene para no romper, luego borrar
-sub getuserflags {
-    my $cardnumber=shift;
-    my $dbh=shift;
-    my $userflags;
-    my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
-    $sth->execute($cardnumber);
-    my ($flags) = $sth->fetchrow;
-    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM usr_permiso");
-    $sth->execute;
-    while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
-	if (($flags & (2**$bit)) || $defaulton) {
-	    $userflags->{$flag}=1;
-	}
-    }
-    return $userflags;
-}
-
-#DEPRECATED, se mantiene para no romper, luego borrar
-sub haspermission {
-    my ($dbh, $userid, $flagsrequired) = @_;
-    my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
-    $sth->execute($userid);
-    my ($cardnumber) = $sth->fetchrow;
-    ($cardnumber) || ($cardnumber=$userid);
-    my $flags=getuserflags($cardnumber,$dbh);
-    my $configfile;
-    if ($userid eq C4::Context->config('user')) {
-	# Super User Account from /etc/koha.conf
-	$flags->{'superlibrarian'}=1;
-    }
-    if ($userid eq 'demo' && C4::Context->config('demo')) {
-	# Demo user that can do "anything" (demo=1 in /etc/koha.conf)
-	$flags->{'superlibrarian'}=1;
-    }
-    return $flags if $flags->{superlibrarian};
-    foreach (keys %$flagsrequired) {
-	return $flags if $flags->{$_};
-    }
-    return 0;
-}
-
 sub getborrowernumber {
     my ($userid) = @_;
     my $dbh = C4::Context->dbh;
