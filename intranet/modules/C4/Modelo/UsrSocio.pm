@@ -449,9 +449,15 @@ sub tienePermisos {
     #Obtengo los permisos del socio
     my $flags= $self->getPermisos;
 
-    #se verifica si el socio tiene los permisos pasados por parametro
-    foreach (keys %$flagsrequired) {
-        return $flags if $flags->{$_};
+    if($flagsrequired){
+        #se verifica si el socio tiene los permisos pasados por parametro
+        foreach (keys %$flagsrequired) {
+            return $flags if $flags->{'superlibrarian'};
+            return $flags if $flags->{$_};
+        }
+    }else{
+        #si no hay flags requeridos, tiene permisos
+        return 1
     }
 
     return 0;

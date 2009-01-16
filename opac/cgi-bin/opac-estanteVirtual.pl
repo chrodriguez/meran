@@ -17,7 +17,7 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 								query => $input,
 								type => "opac",
  	 							authnotrequired => 1,
-								flagsrequired => {borrow => 1},
+# 								flagsrequired => {borrow => 1},
 						});
 
 

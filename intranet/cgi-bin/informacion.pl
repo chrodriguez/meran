@@ -19,4 +19,4 @@ my $cookie= C4::Auth::_generarCookie($query,'sessionID', $session->param('sessio
 
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
 
-&C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+&C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

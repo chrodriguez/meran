@@ -212,4 +212,4 @@ $t_params->{'buscoPor'}= &verificarValor($buscoPor);
 $t_params->{'cantidad'}= $cantidad;
 
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

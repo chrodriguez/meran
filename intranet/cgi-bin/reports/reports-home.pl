@@ -17,4 +17,4 @@ my ($template,  $session, $t_params, $cookie)= get_template_and_user({
                                 });
 
 		
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

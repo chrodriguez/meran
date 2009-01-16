@@ -604,55 +604,120 @@ sub _verificarPassword {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
     }
 
+    if ( !($msg_object->{'error'}) && ( C4::Auth::getSessionIdSocio($params->{'session'}) != $params->{'id_socio'} ) ){
+    #no coincide el usuario logueado con el usuario al que se le va a cambiar la password
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
+    }
+
     return ($msg_object);
 }
 
 
 # Controlador de transacción para persistir el cambio de password de un usuario. Recibe una hash con todos los datos del usuario.
 # Retorna $error = 1:true // 0:false * $codMsg: codigo de Mensajes.pm * @paraMens * EN ESE ORDEN
+## FIXME demasiados IF y ELSE!!!!
+# sub cambiarPassword {
+#     my($params)=@_;
+# 
+#     my ($msg_object)= _verificarPassword($params);
+#     if ( C4::Auth::getSessionIdSocio($params->{'session'}) == $params->{'id_socio'} ){
+#             if(!$msg_object->{'error'}){ #porque NO hay error...
+#             #No hay error
+#                 my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+#                 if ($socio->load()){
+#                     my $actualPassword = $socio->getPassword;
+# 
+#                     if ( ($params->{'changePassword'})&&($socio->getChange_password) ){
+#                     #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
+#                         my $newPassword = $params->{'newpassword'};
+#                         $socio->cambiarPassword($newPassword);
+#                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
+#                     }
+#                     else
+#                         {
+#                             $msg_object->{'error'}= 1;
+#                             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
+#                         }
+#                   
+#                     if ( $actualPassword eq C4::Auth::md5_base64($params->{'actualPassword'}) ){
+#                     #es un cambio voluntario de la password
+#                         my $newPassword = $params->{'newpassword'};
+#                         $socio->cambiarPassword($newPassword);
+#                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
+#                     }
+#                     else
+#                         {
+#                             $msg_object->{'error'}= 1;
+#                             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
+#                         }
+#                 }
+#                 else
+#                 {
+#                         #Se setea error para el usuario
+#                         $msg_object->{'error'}= 1;
+#                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+#                     }
+#             }
+#             else
+#                 {
+#                     $msg_object->{'error'}= 1;
+#                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+#                 }
+#     }
+#     else
+#         {
+#             $msg_object->{'error'}= 1;
+#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
+#         }
+# close(A);
+#     return ($msg_object);
+# }
+
 
 sub cambiarPassword {
     my($params)=@_;
 
     my ($msg_object)= _verificarPassword($params);
-    if ( C4::Auth::getSessionIdSocio($params->{'session'}) == $params->{'id_socio'} ){
-            if(!$msg_object->{'error'}){ #porque NO hay error...
-            #No hay error
-                my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
-                if ($socio->load()){
-                    my $actualPassword = $socio->getPassword;
-                    if ( $actualPassword eq C4::Auth::md5_base64($params->{'actualPassword'}) ){
-                        my $newPassword = $params->{'newpassword'};
-                        $socio->cambiarPassword($newPassword);
-                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
-                    }
-                    else
-                        {
-                            $msg_object->{'error'}= 1;
-                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
-                        }
-                }
-                else
-                {
-                        #Se setea error para el usuario
-                        $msg_object->{'error'}= 1;
-                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
-                    }
+   
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+        if ($socio->load()){
+            my $actualPassword = $socio->getPassword;
+            my $cambioDePasswordForzado= 1;
+            if( ($params->{'changePassword'} eq 1)&&($socio->getChange_password) ){$cambioDePasswordForzado= 1;}
+
+            if ( $cambioDePasswordForzado ){
+            #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
+                my $newPassword = $params->{'newpassword'};
+                $socio->cambiarPassword($newPassword);
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
+            }
+            elsif ( $actualPassword eq C4::Auth::md5_base64($params->{'actualPassword'}) && !$cambioDePasswordForzado ){
+            #es un cambio voluntario de la password
+                my $newPassword = $params->{'newpassword'};
+                $socio->cambiarPassword($newPassword);
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
             }
             else
                 {
                     $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
                 }
-    }
-    else
-        {
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
         }
+        else
+        {
+                #Se setea error para el usuario
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+            }
+    }
+   
 close(A);
     return ($msg_object);
 }
+
 
 
 # Cambia el password del usuario. Recibe como parámetro una hash con todos sus datos.

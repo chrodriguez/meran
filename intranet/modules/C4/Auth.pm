@@ -202,8 +202,6 @@ print H "get_template_and_user=> cookie: ".$cookie."\n";
 	my $nro_socio;
 	if ( $session->param('userid') ) {
 		$params->{'loggedinusername'}= $session->param('userid');
-# 		$params->{'sessionID'}= $sessionID;
-# 		$params->{'sessionID'}= $session->param('sessionID');
 		$nro_socio = getborrowernumber($session->param('userid'));
 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
 
@@ -229,20 +227,10 @@ open(Z, ">>/tmp/debug.txt");
 print Z "output_html: \n";
 
 # FIXME este IF es un parche, ya que a veces (especifico de auth.pl) no recibe el parametro session
-	 if ( !(defined($session)) ){
-            $session = CGI::Session->new();
-print Z "output_html=> creo session\n";
-        }
-
-#         printSession($session, 'output_html_with_http_headers: ');
-    	# send proper HTTP header with cookies:
-#  my $session = CGI::Session->load();
-#        	print $session->header();
-
-
-#    	print $query->header(
-#    		-cookie => $query->cookie(),
-#        	);
+# 	 if ( !(defined($session)) ){
+#             $session = CGI::Session->new();
+# print Z "output_html=> creo session\n";
+#         }
 
 print Z "output_html=> session->session->id: ".$session->id."\n";
 print Z "output_html=> session->header(cookie): ".$session->header()."\n";
@@ -251,41 +239,12 @@ print Z "output_html=> query->sessionID: ".$query->cookie('sessionID')."\n";
 print Z "output_html=> cookie: ".$cookie."\n";
 print Z "\n";
 close Z;
-=item
-	print $query->header(
-				-cookie => $session->param('sessionID'),
-			);
-=cut
+
 	print $session->header();
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
-
-
-
-# ## FIXME no se va a usar mas con el nuevo Template::Toolkit
-# sub get_templateexpr_and_user {
-#         my $in = shift;
-#         my $template = gettemplateexpr($in->{'template_name'}, $in->{'type'});
-#         my ($user, $cookie, $sessionID, $flags)
-#                 = checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
-# 
-#         my $borrowernumber;
-#         if ($user) {
-#                 $template->param(loggedinusername => $user);
-#                 $template->param(sessionID => $sessionID);
-# 
-#                 $borrowernumber = getborrowernumber($user);
-#                 my ($borr, $flags) = getpatroninformation($borrowernumber,"");
-#                 my @bordat;
-#                 $bordat[0] = $borr;
-# 
-#                 $template->param(USER_INFO => \@bordat);
-#         }
-#         return ($template, $borrowernumber, $cookie);
-# }
-
 
 =item checkauth
 
@@ -493,14 +452,9 @@ print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sess
                 $socio->load();
                 $flags = $socio->tienePermisos($flagsrequired);
 
-print A "checkauth=> permisos de userid: ".$userid."\n";
-print A "checkauth=> imprimo los flags: \n";
-                C4::AR::Utilidades::printHASH($flags);
-print A "checkauth=> imprimo los flagsrequired: \n";
-                C4::AR::Utilidades::printHASH($flagsrequired);
-
                 if ($flags) {
                     $loggedin = 1;
+print A "checkauth=> TIENE PERMISOS: \n";
                 } else {
                     $info{'nopermission'} = 1;
 print A "checkauth=> NO TIENE PERMISOS: \n";
@@ -529,10 +483,10 @@ print A "checkauth=> changePassword \n";
             #EXIT
         }#end if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid))))
         
-        $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
-        $session->header(
-                -cookie => $cookie,
-            );  
+#         $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
+#         $session->header(
+#                 -cookie => $cookie,
+#             );  
 print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
 # print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
@@ -597,10 +551,10 @@ print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
             my $time=localtime(time());
             _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
 
-            $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
-            $session->header(
-                -cookie => $cookie,
-            );      
+#             $cookie= _generarCookie($query,'sessionID', $sessionID, '');    
+#             $session->header(
+#                  -cookie => $cookie,
+#             );      
     
             #por defecto no tiene permisos
             $info{'nopermission'} = 1;
@@ -657,12 +611,10 @@ print A "checkauth=> t_operacionesDeINTRA\n";
             if ($userid) {
 print A "checkauth=> usuario o password incorrecta dentro del if\n";
                 $info{'invalid_username_or_password'} = 1;
+                #elimino la session vieja
                 $sist_sesion->delete;
             }
 print A "checkauth=> usuario o password incorrecta \n";
-# close(A);
-            #elimino la session vieja
-#             $sist_sesion->delete;
 print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
             $userid= undef;
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
@@ -674,10 +626,10 @@ print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
  
     }# end unless ($userid) 
 
-    $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-     $session->header(
-                -cookie => $cookie,
-            );  
+#     $cookie= _generarCookie($query,'sessionID', $sessionID, '');
+#      $session->header(
+#                 -cookie => $cookie,
+#             );  
 # print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
 print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
@@ -758,7 +710,9 @@ print J "_change_Password_Controller=> type: ".$type."\n";
 	my $template_name;
 	my $newpassword = $input->param('newpassword') || 0;
 print J "_change_Password_Controller=> newpassword: ".$newpassword."\n";
-	my $cardnumber= _getCardnumber($dbh, $userid);
+# 	my $cardnumber= _getCardnumber($dbh, $userid);
+## FIXME sacar!!!!
+    my $cardnumber= '26320';
 	my $passwordrepeted= 0;
 	
 	if ($newpassword) {
@@ -813,12 +767,13 @@ print J "_change_Password_Controller=> genera otro random: ".$random_number."\n"
         my $session = CGI::Session->load();
  		my $sessionID= $session->param('sessionID');
 print J "_change_Password_Controller=> genero cookie:".$sessionID."\n";	
-		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
-        $session->header(
-            -cookie => $cookie,
-        );  
+# 		my $cookie= _generarCookie($query,'sessionID', $sessionID, '');
+#         $session->header(
+#             -cookie => $cookie,
+#         );  
 
-		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+# 		C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+        C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
 print J "\n";
 close(J);
 	
@@ -887,6 +842,7 @@ close (F);
 =item
 Genera la cookie segun los parametros
 =cut
+#DEPRECATEDDDDD
 sub _generarCookie {
 	my ($query, $sessionName, $value, $expires) = @_;
 open(G , ">>/tmp/debug.txt");
@@ -939,7 +895,7 @@ print P "redirectTo=> CLIENT_REDIRECT\n";
   		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
-        $session->header();
+#         $session->header();
 print P "redirectTo=> url: ".$url."\n";
      	print $session->header();
  		print 'CLIENT_REDIRECT';
@@ -1107,7 +1063,6 @@ sub new_password_is_needed {
 # lastchangepassword: it has the date when the borrower change the password for last time
 # changepassword: it is a bool that indicate if the password must be change or not
     my ($nro_socio) = @_;
-
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     my $days = C4::Context->preference("keeppasswordalive");
@@ -1118,7 +1073,7 @@ sub new_password_is_needed {
         my $lastChangePasswordDate = Date::Manip::ParseDate($socio->getLastchangepassword);
         return ( $socio->getChange_password && ((Date::Manip::Date_Cmp($today,$lastChangePasswordDate)) > 0) );
     } else {
-        return ( $socio->getChange_password && !$socio->getLast_change_password );
+        return ( $socio->getChange_password && $socio->getLast_change_password eq '0000-00-00');
     }
 }
 

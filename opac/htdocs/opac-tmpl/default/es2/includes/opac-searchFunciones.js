@@ -1,20 +1,6 @@
 
 //opac-searchFunciones.js
 //*******************************************Para agregar a Favoritos*******************************************
-// function todos(){
-// 	var checks=document.getElementsByTagName("input");
-// 	if (checks.length>0){
-// 		for(i=0;i<checks.length;i++)
-// 		{
-// 			if((checks[i].type == "checkbox")&&(checks[i].checked)){
-// 				checks[i].checked=false
-// 			}
-//                         else{
-// 				checks[i].checked=true
-// 			}
-// 		}
-// 	}
-// }
 
 // se va a dejar de usar!!!!!!!!!!!!BORRRRRARR
 function mandarArreglo(valores){
@@ -221,6 +207,8 @@ function consultarEstanteVirtual(){
 }
 
 function updateConsultarEstanteVirutal(responseText){
+    $('#datosUsuario').hide();
+    $('#result').show();
 	$('#result').html(responseText);
 }
 //***************************************Fin****Estantes Virutales*******************************************

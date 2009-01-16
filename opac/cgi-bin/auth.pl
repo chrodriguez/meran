@@ -60,4 +60,4 @@ $t_params->{'RANDOM_NUMBER'}= $random_number;
 
 close(F);
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

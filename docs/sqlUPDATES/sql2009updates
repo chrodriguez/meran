@@ -203,5 +203,22 @@ ALTER TABLE `usr_ref_estado`  ENGINE = innodb;
 
 ALTER TABLE `usr_permiso`  ENGINE = innodb;
 
---Se agrego en koha.conf la siguiente variable, si se setea en 1 se loguean "solos" los objetos
+--Se agrego en koha.conf la siguiente variable, si se setea en 1 se loguean "solos" los objetos, "en Desarrollo" ;)
 debug=1
+
+--Usuario KOHAADMIN, para el MONOOOOOOOOO
+user: kohaadmin
+pass: kohaadmin (cambiar pass)
+
+
+INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) 
+VALUES (46, 1, 'NN', 'MONO TU FUCKING KOHAADMIN SUPERLIBRARIAN');
+
+INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `sexo`, `telefono_laboral`, `cumple_condicion`)
+VALUES (21, '007', 'P', '27000000', '1', 'Kohaadmin', 'Kohaadmin', NULL, NULL, 'DGR', '007', NULL, '16648', '', '', NULL, NULL, NULL, NULL, '', NULL, '2009-12-23', NULL, NULL, NULL, 0);
+
+INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `id_estado`, `activo`) 
+VALUES (21, 12, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'yaI/N9MQNziYMukMdHMW4w', '2009-12-13 00:00:00', '2009-12-13', 0, '0000-00-00', 46, 1);
+
+
+

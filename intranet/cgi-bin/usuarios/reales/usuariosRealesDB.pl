@@ -11,7 +11,7 @@ my $input = new CGI;
 
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO GASPAR
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+# my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -30,28 +30,25 @@ my $dateformat = C4::Date::get_date_format();
 Aca se maneja el cambio de la password para el usuario
 =cut
 if($tipoAccion eq "CAMBIAR_PASSWORD"){
-print A "desde usuariosRealesDB=> CAMBIAR_PASSWORD\n";
+
     my $session = CGI::Session->load();
-#     my $sessionID= $session->param('sessionID');
+
 	my %params;
-#     $session->param('id_socio', $obj->{'usuario'}); ##FIXME para probar
 	$params{'id_socio'}= $obj->{'usuario'};
     $params{'actualPassword'}= $obj->{'actualPassword'};
 
-    if($params{'changePassword'} ){
-        $params{'actualPassword'}= '';
-    }
-print A "cambiarPassword=>\n";    
+#     if($params{'changePassword'} ){
+#         $params{'actualPassword'}= '';
+#     }
+
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
     $params{'session'}= $session;
-print A "desde usuariosRealesDB=> llamo a cambiar pass\n";
+
 	my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-print A "desde usuariosRealesDB=> result: ".$infoOperacionJSON."\n";
-close(A);
 	print $input->header;
 	print $infoOperacionJSON;
 	
