@@ -142,7 +142,7 @@ if($accion eq "buscar"){
         C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }else{
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ catalogue => 1});
+	my ($loggedinuser, $session) = checkauth($input, 0,{ catalogue => 1});
 	
 	my $string="";
 

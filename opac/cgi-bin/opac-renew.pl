@@ -7,7 +7,7 @@ use JSON;
 
 my $input = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+my ($loggedinuser, $sessionID) = checkauth($input, 0,{borrow => 1});
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);

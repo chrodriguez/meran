@@ -51,7 +51,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 Aca se maneja el cambio de permisos para el usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
 	$params{'id_socio'}= $obj->{'usuario'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};
@@ -70,7 +70,7 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
 Aca se maneja el resteo de password del usuario
 =cut
 elsif($tipoAccion eq "RESET_PASSWORD"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
     my %params;
     $params{'id_socio'}= $obj->{'usuario'};
     
@@ -136,7 +136,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 Se elimina el usuario
 =cut
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
 	my $id_socio= $obj->{'id_socio'};
  	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($id_socio);
@@ -152,7 +152,7 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
 Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
     print $obj->{'nombre'};
 	my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj); #C4::AR::Usuarios::t_addBorrower($obj);
     
@@ -168,7 +168,7 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
 Se guarda la modificacion los datos del usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
 # 	my ($Message_arrayref)= C4::AR::Usuarios::t_updateBorrower($obj);
 # 	
 # 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -287,7 +287,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	
 
 elsif($tipoAccion eq "ELIMINAR_FOTO"){
-my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my $foto_name= $obj->{'foto_name'};
 	my ($Message_arrayref)= &C4::AR::UploadFile::deletePhoto($foto_name);
 	

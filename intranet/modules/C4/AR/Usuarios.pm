@@ -261,6 +261,7 @@ sub habilitarPersona{
             my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
             $partner->load();
             $partner->activar;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$partner->getNro_socio]});
         }
      };
     
@@ -271,8 +272,6 @@ sub habilitarPersona{
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
      }
-
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
     return ($msg_object);
 
@@ -289,6 +288,7 @@ sub deshabilitarPersona{
             my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
             $partner->load();
             $partner->desactivar;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U363', 'params' => [$partner->getNro_socio]});
         }
      };
     
@@ -299,8 +299,6 @@ sub deshabilitarPersona{
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
      }
-
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
 
     return ($msg_object);
 

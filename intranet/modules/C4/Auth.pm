@@ -189,7 +189,7 @@ sub get_template_and_user {
 	my $in = shift;
 
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
-	my ($user, $cookie, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my ($user, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
 	my $nro_socio;
 	if ( $session->param('userid') ) {
@@ -322,8 +322,6 @@ print A "checkauth=> recupero de la cookie con sessionID (desde session->param):
         $sist_sesion->load();
 
         my ($ip , $lasttime, $nroRandom, $flag);
-#         ($userid, $ip, $lasttime, $nroRandom, $flag) = $dbh->selectrow_array(
-#                 "SELECT userid,ip,lasttime,nroRandom,flag FROM sist_sesion WHERE sessionid=?", undef, $sessionID);
 
         $userid= $sist_sesion->getUserid;
         $ip= $sist_sesion->getIp;
@@ -416,8 +414,6 @@ print A "checkauth=> se loguearon con el mismo userid desde otro lado\n";
             } else {
             #esta todo OK, continua logueado y se actualiza la session, lasttime
 print A "checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n";
-#                 $dbh->do("UPDATE sist_sesion SET lasttime=? WHERE sessionID=?",
-#                 undef, (time(), $sessionID));
                 $sist_sesion->setLasttime(time());
                 $sist_sesion->save();
 
@@ -459,7 +455,7 @@ print A "checkauth=> changePassword \n";
 print A "checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
 close(A);
-        return ($userid, $cookie, $session, $flags);
+        return ($userid, $session, $flags);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 
 
@@ -592,7 +588,7 @@ print A "checkauth=> eliminino la sesssion ".$sessionID."\n";
 print A "checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n";
 print A "\n";
 close(A);
-    return ($userid, $cookie, $session, $flags);
+    return ($userid, $session, $flags);
 
 }# end checkauth
 

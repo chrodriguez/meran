@@ -192,6 +192,7 @@ my %mensajesINTRA = (
     'U360' => 'El password NO ha sido reseteado, intentelo m&aacute;s tarde.',
     'U361' => 'El password actual NO coincide con el suyo.',
     'U362' => 'UD. no puede personalizar el password de otro usuario.',
+    'U363' => 'El usuario con tarjeta id: *?* se ha deshabilit&oacute; con &eacute;xito', 
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',

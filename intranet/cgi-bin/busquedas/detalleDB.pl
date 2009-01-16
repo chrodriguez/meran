@@ -14,7 +14,7 @@ use JSON;
 my $input=new CGI;
 
 my $obj;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ catalogue => 1});
+my ($loggedinuser, $session) = checkauth($input, 0,{ catalogue => 1});
 
 
 my %infoRespuesta;
