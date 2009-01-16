@@ -18,7 +18,7 @@ my $tipo= $obj->{'tipo'};
 
 if($tipo eq "VER_ESTANTE"){
 
-	my ($template, $session, $t_params, $cookie)= get_template_and_user({
+	my ($template, $session, $t_params)= get_template_and_user({
 									template_name => "opac-verEstanteVirtual.tmpl",
 									query => $input,
 									type => "opac",
@@ -41,13 +41,13 @@ if($tipo eq "VER_ESTANTE"){
 	$t_params->{'pagetitle'}= "Estantes Virtuales";
 	$t_params->{'shelves'}= 1;
 	
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 
 if($tipo eq "VER_SUBESTANTE"){
 
-	my ($template, $session, $t_params, $cookie)= get_template_and_user({
+	my ($template, $session, $t_params)= get_template_and_user({
 									template_name => "opac-verSubEstanteVirtual.tmpl",
 									query => $input,
 									type => "opac",
@@ -69,5 +69,5 @@ if($tipo eq "VER_SUBESTANTE"){
 	$t_params->{'pagetitle'}= "Estantes Virtuales";
 	$t_params->{'shelves'}= 1;
 	
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

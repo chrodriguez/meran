@@ -37,7 +37,7 @@ my @results=();
 else
 {
 
-my ($template, $session, $t_params, $cookie) = get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
                                                     template_name => "reports/users-cards.tmpl",
                                                     query => $input,
                                                     type => "intranet",
@@ -78,6 +78,6 @@ $t_params->{'unidades'}= $ComboUI;
 $t_params->{'categories'}= $comboCategoriasDeSocio;
 $t_params->{'regulares'}=$CGIregular;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }

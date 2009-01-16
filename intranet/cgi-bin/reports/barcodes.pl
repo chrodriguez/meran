@@ -9,7 +9,7 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
                                                                 template_name => "reports/barcodes.tmpl",
 			                                                    query => $input,
 			                                                    type => "intranet",
@@ -31,4 +31,4 @@ $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'unidades'}= $ComboUI;
 $t_params->{'ui'}= $ui;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

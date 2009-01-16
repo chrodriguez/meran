@@ -11,7 +11,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
 								template_name => "usuarios/reales/buscarUsuarioResult.tmpl",
 								query => $input,
 								type => "intranet",
@@ -65,4 +65,4 @@ for (my $i=0; $i < $cantidad; $i++){
 $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -10,7 +10,7 @@ use CGI::Session;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
 									template_name => "opac-main.tmpl",
 									type => "opac",
 									query => $input,
@@ -19,6 +19,7 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 			 });
 
 
+## FIXME usar generador de combo para itemtypes
 my $dbh = C4::Context->dbh;
 my $query="Select itemtype,description from itemtypes order by description";
 my $sth=$dbh->prepare($query);
@@ -91,4 +92,4 @@ close(A);
 $t_params->{'CGIitemtype'}= $CGIitemtype;
 $t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

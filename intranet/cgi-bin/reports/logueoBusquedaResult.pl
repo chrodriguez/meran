@@ -8,7 +8,7 @@ use C4::AR::Estadisticas;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
                                                                 template_name => "reports/logueoBusquedaResult.tmpl",
 			                                                    query => $input,
 			                                                    type => "intranet",
@@ -39,5 +39,5 @@ $t_params->{'fechaIni'}=$fechaIni;
 $t_params->{'fechaFin'}=$fechaFin;
 $t_params->{'catUsuarios'}=$catUsuarios;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

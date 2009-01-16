@@ -9,7 +9,7 @@ use C4::AR::Busquedas;
 
 my $input=new CGI;
 
-my ($template, $borrowernumber, $cookie) 
+my ($template, $session, $t_params) 
     = get_template_and_user({template_name => "opac-MARCdetail.tmpl",
 			     query => $input,
 			     type => "opac",

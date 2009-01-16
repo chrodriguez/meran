@@ -48,7 +48,7 @@ if (($shelves) || ($query->param('criteria') eq 'shelves')) {
 
 
 if ($query->param('virtual')) {#es una busqueda por biblioteca virtual
-	($template, $borrowernumber, $cookie)
+	($template, $session, $t_params)
 		= get_template_and_user({template_name => "virtual/opac-virtualsearchresults.tmpl",
 				query => $query,
 				type => "opac",

@@ -11,6 +11,14 @@ use C4::BookShelves;
 my $input = new CGI;
 # my $nameShelf = $input->param('viewShelfName');
 
+my ($template, $session, $t_params) = get_template_and_user ({
+                                        template_name   => 'busquedas/estante.tmpl',
+                                        query       => $input,
+                                        type        => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => { circulate => 1 },
+                 });
+
 my $obj=$input->param('obj');
 
 if($obj ne ""){
@@ -22,14 +30,6 @@ my $funcion= $obj->{'funcion'};
 my $buscoPor="";
 my %shelflist;
 my $type='public';#Estantes publicos
-
-my ($template, $session, $t_params) = get_template_and_user ({
-                                        template_name	=> 'busquedas/estante.tmpl',
-                                        query		=> $input,
-                                        type		=> "intranet",
-                                        authnotrequired	=> 0,
-                                        flagsrequired	=> { circulate => 1 },
-    			 });
 
 if ($nameShelf) { #Buscar por nombre
 

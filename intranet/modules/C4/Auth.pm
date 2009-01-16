@@ -187,18 +187,10 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-open(H, ">>/tmp/debug.txt");
 
 	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
-# 	my ($user, $sessionID, $flags)
-# 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 	my ($user, $cookie, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
-print H "desde: get_template_and_user \n";
-# print A "Se llamo a checkauth con: \n";
-# print A "in-> query: ".$in->{'query'}."\n";
-# print A "user: ".$user."\n";
-print H "get_template_and_user=> cookie: ".$cookie."\n";
 	my $nro_socio;
 	if ( $session->param('userid') ) {
 		$params->{'loggedinusername'}= $session->param('userid');
@@ -214,10 +206,8 @@ print H "get_template_and_user=> cookie: ".$cookie."\n";
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
 	}
-close(H);
 
-# print A "get_template_and_user=> imprimo header \n";
-	return ($template, $session, $params, $cookie);
+	return ($template, $session, $params);
 }
 
 
@@ -799,13 +789,13 @@ print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
     $session= C4::Auth::_generarSession(\%params);
     my $sessionID= $session->param('sessionID');
 ## FIXME parece q esto no es mas necesario
-    my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');
+#     my $cookie= C4::Auth::_generarCookie($query,'sessionID', $sessionID, '');
+#     
+#     $session->header(
+#                     -cookie => $cookie,
+#                 );   
     
-    $session->header(
-                    -cookie => $cookie,
-                );   
-    
-print F "C4::Auth::inicializarAuth=> cookie: ".$cookie."\n";
+# print F "C4::Auth::inicializarAuth=> cookie: ".$cookie."\n";
 print F "C4::Auth::inicializarAuth=> sessionID: ".$sessionID."\n";
     
     my $userid= undef;

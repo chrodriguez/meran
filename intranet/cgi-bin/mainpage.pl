@@ -9,7 +9,7 @@ use CGI;
 
 my $query = new CGI;
 
-my ($template, $session, $params, $cookie)= get_template_and_user({
+my ($template, $session, $params)= get_template_and_user({
 									template_name => "main.tmpl",
 									query => $query,
 									type => "intranet",

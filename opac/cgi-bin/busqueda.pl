@@ -11,7 +11,7 @@ use C4::AR::Catalogacion;
 
 my $query = new CGI;
 
-my ($template, $session, $t_params, $cookie)= get_template_and_user({
+my ($template, $session, $t_params)= get_template_and_user({
 								template_name => "busquedaResult.tmpl",
 								query => $query,
 								type => "opac",

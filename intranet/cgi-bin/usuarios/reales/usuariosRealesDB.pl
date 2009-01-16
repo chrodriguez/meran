@@ -10,14 +10,8 @@ use CGI;
 my $input = new CGI;
 
 my $authnotrequired= 0;
-# OBTENGO EL BORROWER LOGGEADO GASPAR
-# my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
-
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 open(A, ">>/tmp/debug.txt");
 print A "desde usuariosRealesDB=>\n";
-# $loggedinuser=getborrowernumber($loggedinuser);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -96,7 +90,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	my $flagsrequired;
 	$flagsrequired->{permissions}=1;
 
-	my ($template, $session, $t_params, $cookie) = get_template_and_user({
+	my ($template, $session, $t_params) = get_template_and_user({
 									template_name => "usuarios/reales/permisos-usuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -133,7 +127,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 	$t_params->{'loop'}= \@loop;
     $t_params->{'tiene'}=$socio->tienePermisos($flagsrequired);
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 } #end if($tipoAccion eq "MOSTRAR_PERMISOS")
 
@@ -197,7 +191,7 @@ Se genra la ventana para modificar los datos del usuario
 =cut
 elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
-	my ($template, $session, $t_params, $cookie) = get_template_and_user({
+	my ($template, $session, $t_params) = get_template_and_user({
 									template_name => "usuarios/reales/agregarUsuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -232,13 +226,13 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
     #paso el objeto socio al cliente
     $t_params->{'socio'}= $socio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 ## FIXME parece q no se usa!!!!!!!!!!!!!!!!!!!!!!!!!!
 elsif($tipoAccion eq "DATOS_USUARIO"){
 
-	my ($template, $session, $t_params, $cookie) = get_template_and_user({
+	my ($template, $session, $t_params) = get_template_and_user({
 									template_name => "usuarios/reales/detalleUsuario.tmpl",
 									query => $input,
 									type => "intranet",
@@ -288,7 +282,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	$t_params->{'bornum'}= $bornum;
 	$t_params->{'foto_name'}= $foto;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 	
 
@@ -306,7 +300,7 @@ my ($loggedinuser, $cookie, $session, $flags) = checkauth($input, $authnotrequir
 
 elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 	
-	my ($template, $session, $t_params, $cookie) = get_template_and_user({
+	my ($template, $session, $t_params) = get_template_and_user({
 									template_name => "usuarios/reales/printPrestInterBiblio.tmpl",
 									query => $input,
 									type => "intranet",
@@ -323,6 +317,6 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
     $t_params->{'nro_socio'}= $socio->getNro_socio;
     $t_params->{'id_socio'}= $obj->{'id_socio'};
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")

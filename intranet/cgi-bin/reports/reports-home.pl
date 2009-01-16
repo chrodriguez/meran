@@ -7,7 +7,7 @@ use C4::Interface::CGI::Output;
 
 my $query = new CGI;
 
-my ($template,  $session, $t_params, $cookie)= get_template_and_user({
+my ($template,  $session, $t_params)= get_template_and_user({
 									template_name => "reports/reports-home.tmpl",
 									query => $query,
 									type => "intranet",

@@ -6,7 +6,7 @@ use CGI;
 
 my $input=new CGI;
 
-my ($template, $session, $t_params, $cookie) =  C4::Auth::get_template_and_user ({
+my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 			                                                                        template_name	=> 'usuarios/potenciales/datosUsuario.tmpl',
 			                                                                        query		=> $input,
 			                                                                        type		=> "intranet",
@@ -23,4 +23,4 @@ my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
 $t_params->{'id_socio'}= $id_socio;
 $t_params->{'socio'}= $socio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

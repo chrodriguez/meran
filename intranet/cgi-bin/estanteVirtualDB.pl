@@ -8,8 +8,8 @@ use C4::Interface::CGI::Output;
 
 my $input=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
-my $borrowernumber=getborrowernumber($loggedinuser);
+# my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
+# my $borrowernumber=getborrowernumber($loggedinuser);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -18,7 +18,7 @@ my $tipo= $obj->{'tipo'};
 
 if($tipo eq "VER_ESTANTE"){
 
-	my ($template, $loggedinuser, $cookie)
+	my ($template, $session, $t_params)
 	= get_template_and_user({template_name => "verEstanteVirtual.tmpl",
 					query => $input,
 					type => "intranet",
@@ -36,22 +36,19 @@ if($tipo eq "VER_ESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelf($shelves,$ini,$cantR);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
+	$t_params{'paginador'}= &C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
 	
-	$template->param(
-				shelvesloopshelves => @shelvesloop,
-				pagetitle => "Estantes Virtuales",
-				shelves => 1,
-	);
-	
-	# print  $template->output;
-	output_html_with_http_headers $input, $cookie, $template->output;
+	$t_params->{'shelvesloopshelves'}= @shelvesloop;
+    $t_params->{'pagetitle'}= "Estantes Virtuales";
+    $t_params->{'shelves'}=> 1;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 
 if($tipo eq "VER_SUBESTANTE"){
 
-	my ($template, $loggedinuser, $cookie)
+	my ($template, $session, $t_params)
 	= get_template_and_user({template_name => "verSubEstanteVirtual.tmpl",
 					query => $input,
 					type => "intranet",
@@ -68,14 +65,11 @@ if($tipo eq "VER_SUBESTANTE"){
 	
 	my ($cantidad, @shelvesloop)= C4::BookShelves::viewshelfContent($shelves,$ini,$cantR,$orden);
 	
-	&C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
+	$t_params{'paginador'}= &C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber,$funcion,$t_params);
 	
-	$template->param(
-				bitemsloop => @shelvesloop,
-				pagetitle => "Estantes Virtuales",
-				shelves => 1,
-	);
+	$t_params{'bitemsloop'}= @shelvesloop;
+    $t_params{'pagetitle'}= "Estantes Virtuales";
+    $t_params{'shelves'}= 1;
 	
-	# print  $template->output;
-	output_html_with_http_headers $input, $cookie, $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
