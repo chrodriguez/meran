@@ -18,8 +18,7 @@ my $accion=$obj->{'accion'};
 my $json=$obj->{'json'};
 
 if(!$json){
-	my ($template, $loggedinuser, $cookie)
-    		= get_templateexpr_and_user({template_name => "catalogacion/estructura/agregarEjemplar.tmpl",
+	my ($template, $session, $t_params) = get_templateexpr_and_user({template_name => "catalogacion/estructura/agregarEjemplar.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -46,14 +45,13 @@ if(!$json){
 	my $nivel=3;
 	my $descripcion=C4::AR::Busquedas::getItemType($itemtype);
 
-	$template->param(
-		nivel		  => $nivel,
-		itemtype	  => $itemtype,
-		descripcion	  => $descripcion,
-		id1		  => $id1,
-		id2		  => $id2,
-	);
-	output_html_with_http_headers $input, $cookie, $template->output;
+	$t_params->{'nivel'}= $nivel;
+	$t_params->{'itemtype'}= $itemtype;
+	$t_params->{'descripcion'}=	 $descripcion;
+	$t_params->{'id1'}= $id1;
+	$t_params->{'id2'}=	$id2;
+	
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 else{
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
