@@ -221,4 +221,9 @@ INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_ca
 VALUES (21, 12, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'yaI/N9MQNziYMukMdHMW4w', '2009-12-13 00:00:00', '2009-12-13', 0, '0000-00-00', 46, 1);
 
 
+--Se modifico el nombre del campo
+
+ALTER TABLE `circ_reserva` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+
 
