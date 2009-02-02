@@ -216,7 +216,7 @@ sub insertarReserva {
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
 	my $query="	INSERT INTO circ_reserva 	
-			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
+			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,id_ui,estado) 
 			VALUES (?,?,?,?,NOW(),?,?,?) ";
 	my $sth2=$dbh->prepare($query);
 	$sth2->execute( $params->{'id3'}||undef,

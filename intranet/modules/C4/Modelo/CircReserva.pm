@@ -10,22 +10,19 @@ __PACKAGE__->meta->setup(
     columns => [
         id2              => { type => 'integer', not_null => 1 },
         id3              => { type => 'integer' },
-        reservenumber    => { type => 'serial', not_null => 1 },
-        borrowernumber   => { type => 'integer', default => '0', not_null => 1 },
-        reservedate      => { type => 'date', default => '0000-00-00', not_null => 1 },
-        biblioitemnumber => { type => 'integer', default => '0', not_null => 1 },
+        id_reserva       => { type => 'serial', not_null => 1 },
+        nro_socio	 => { type => 'integer', default => '0', not_null => 1 },
+        fecha_reserva    => { type => 'date', default => '0000-00-00', not_null => 1 },
         estado           => { type => 'character', length => 1 },
-        branchcode       => { type => 'varchar', length => 4 },
-        notificationdate => { type => 'date' },
-        reminderdate     => { type => 'date' },
-        cancellationdate => { type => 'date' },
-        reservenotes     => { type => 'text', length => 65535 },
+        id_ui		 => { type => 'varchar', length => 4 },
+        fecha_notificacion => { type => 'date' },
+        fecha_recodatorio     => { type => 'date' },
         timestamp        => { type => 'timestamp', not_null => 1 },
     ],
 
-    primary_key_columns => [ 'reservenumber' ],
+    primary_key_columns => [ 'id_reserva' ],
 
-    unique_key => [ 'borrowernumber', 'biblioitemnumber' ],
+    unique_key => [ 'nro_socio', 'id3' ],
 
     foreign_keys => [
         cat_nivel3 => {
@@ -34,6 +31,48 @@ __PACKAGE__->meta->setup(
         },
     ],
 );
+
+sub agregar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+	$params->{'id3'}||undef,
+	$params->{'id2'},
+	$params->{'borrowernumber'},
+	$params->{'reservedate'},
+	$params->{'reminderdate'},
+	$params->{'branchcode'},
+	$params->{'estado'}
+
+
+    $self->setFuente($data_hash->{'fuente'});
+    $self->setRegular($data_hash->{'regular'});
+    $self->setCategoria($data_hash->{'categoria'});
+    $self->save();
+}
+
+
+sub getId3{
+    my ($self) = shift;
+    return ($self->id3);
+}
+
+sub setId3{
+    my ($self) = shift;
+    my ($id3) = @_;
+    $self->id3($id3);
+}
+
+sub getId2{
+    my ($self) = shift;
+    return ($self->id2);
+}
+
+sub setId2{
+    my ($self) = shift;
+    my ($id2) = @_;
+    $self->id2($id2);
+}
 
 1;
 
