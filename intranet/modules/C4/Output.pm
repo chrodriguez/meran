@@ -116,6 +116,7 @@ sub gettemplate {
 # print A "htdocs: ".$htdocs."\n";
 
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
+#     $theme= 'blue';
 # print A "theme: ".$theme."\n";
 # print A "lang: ".$lang."\n";
 
@@ -135,9 +136,9 @@ sub gettemplate {
 
 	my $template = Template->new({
 					INCLUDE_PATH => [
-								"$htdocs/$theme/$lang/$tmplbase",
-								"$htdocs/$theme/$lang/includes/",
-								"$htdocs/$theme/$lang/includes/menu",
+								"$htdocs/$theme/$tmplbase",
+								"$htdocs/$theme/includes/",
+								"$htdocs/$theme/includes/menu",
 							],
  					ABSOLUTE => 1,
 					EVAL_PERL => 1,
@@ -159,11 +160,11 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
 	%params= (
-			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
+			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/",
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			theme => $theme,
-			lang => $lang,
-			template_name => "$htdocs/$theme/$lang/$tmplbase", #se setea el nombre del tmpl
+# 			lang => $lang,
+			template_name => "$htdocs/$theme/$tmplbase", #se setea el nombre del tmpl
 		);
 
 # print A "themelang: ".$params{'themelang'}."\n";
@@ -223,7 +224,8 @@ sub themelanguage {
 		foreach my $la (@languages) {
 			for (my $pass = 1; $pass <= 2; $pass += 1) {
 			$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-			if (-e "$htdocs/$th/$la/$tmpl") {
+# 			if (-e "$htdocs/$th/$la/$tmpl") {
+            if (-e "$htdocs/$th/$tmpl") {
 				$theme = $th;
 				$lang = $la;
 				last THEME;
