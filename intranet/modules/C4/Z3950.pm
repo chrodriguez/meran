@@ -88,9 +88,9 @@ sub getz3950servers {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($checked) {
-		$sth = $dbh->prepare("select * from z3950servers where checked=1");
+		$sth = $dbh->prepare("select * from pref_servidor_z3950 where checked=1");
 	} else {
-		$sth = $dbh->prepare("select * from z3950servers");
+		$sth = $dbh->prepare("select * from pref_servidor_z3950");
 	}
 	my @result;
 	while ( my ($host, $port, $db, $userid, $password,$servername) = $sth->fetchrow ) {
@@ -123,7 +123,7 @@ sub z3950servername {
 
 	my $dbh = C4::Context->dbh;
 
-	my $sti=$dbh->prepare("select name from z3950servers where id=?");
+	my $sti=$dbh->prepare("select name from pref_servidor_z3950 where id=?");
 
 	$sti->execute($srvid);
 	if ( ! $sti->err ) {
@@ -199,13 +199,13 @@ sub addz3950queue {
 		if ($server =~ /:/ ) {
 			push @serverlist, $server;
 		} elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
-			$sth=$dbh->prepare("select host,port,db,userid,password ,name,syntax from z3950servers where checked <> 0 ");
+			$sth=$dbh->prepare("select host,port,db,userid,password ,name,syntax from pref_servidor_z3950 where checked <> 0 ");
 			$sth->execute;
 			while ( my ($host, $port, $db, $userid, $password,$servername,$syntax) = $sth->fetchrow ) {
 				push @serverlist, "$servername/$host\:$port/$db/$userid/$password/$syntax";
 			} # while
 		} else {
-			$sth=$dbh->prepare("select host,port,db,userid,password,syntax from z3950servers where id=? ");
+			$sth=$dbh->prepare("select host,port,db,userid,password,syntax from pref_servidor_z3950 where id=? ");
 			$sth->execute($server);
 			my ($host, $port, $db, $userid, $password,$syntax) = $sth->fetchrow;
 			push @serverlist, "$server/$host\:$port/$db/$userid/$password/$syntax";

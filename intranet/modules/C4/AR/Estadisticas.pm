@@ -67,16 +67,16 @@ sub historicoDeBusqueda(){
 	my $filtro3;
 
 	$query2 = " SELECT count(*) as cant
-			FROM busquedas b INNER JOIN historialBusqueda hb 
+			FROM rep_busqueda b INNER JOIN rep_historial_busqueda hb 
 			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
-			ON (b.borrower = bor.borrowernumber) LEFT JOIN categories c
+			ON (b.borrower = bor.borrowernumber) LEFT JOIN usr_ref_categoria_socio c
 			ON (c.categorycode = bor.categorycode) ";
 	
         my $query ="	SELECT bor.borrowernumber,bor.surname, bor.firstname, bor.cardnumber, 
 			b.fecha, hb.campo, hb.valor, c.description, hb.tipo
-			FROM busquedas b INNER JOIN historialBusqueda hb 
+			FROM rep_busqueda b INNER JOIN rep_historial_busqueda hb 
 			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
-			ON (b.borrower = bor.borrowernumber) LEFT JOIN categories c
+			ON (b.borrower = bor.borrowernumber) LEFT JOIN usr_ref_categoria_socio c
 			ON (c.categorycode = bor.categorycode) ";
 
 	if(($fechaIni ne "")&&($fechaFin ne "")&&($catUsuarios ne "SIN SELECCIONAR")){
@@ -173,8 +173,8 @@ sub historicoPrestamos{
 
 	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, n3.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
 
-	my $queryFrom= " 	From issues I, borrowers B, categories C, nivel3 n3, nivel2 n2, 
-				itemtypes ITT, issuetypes ISST ";
+	my $queryFrom= " 	From  circ_prestamo I, borrowers B, usr_ref_categoria_socio C, cat_nivel3 n3, cat_nivel2 n2, 
+				cat_ref_tipo_nivel3 ITT, circ_ref_tipo_prestamo ISST ";
 
 	my $queryWhere= " where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
 	and(n3.id3 = I.id3)and(ISST.issuecode = I.issuecode)
@@ -227,7 +227,7 @@ sub prestamosAnual{
 	my @results;
 	my $query ="SELECT month( date_due ) AS mes, count( * ) AS cantidad,SUM( renewals ) AS 
 			   renovaciones, issuecode
-		    FROM issues 
+		    FROM  circ_prestamo 
 		    WHERE year( date_due ) = ? 
 		    GROUP BY month( date_due ), issuecode";
 
@@ -238,7 +238,7 @@ sub prestamosAnual{
 		push(@results,$data);
         	};
 	$query ="SELECT count( * ) AS devoluciones
-                 FROM issues 
+                 FROM  circ_prestamo 
                  WHERE year( date_due ) = ? and returndate is not null
                  GROUP BY month( date_due ), issuecode";
 	my $sth=$dbh->prepare($query);
@@ -270,10 +270,10 @@ sub disponibilidad{
 	}
 	my $query= "SELECT COUNT(*)";
 	my $query2 = "SELECT DISTINCT n3.*, anio_publicacion, titulo, autor AS id,MAX(av.date) AS date, a.completo AS autor";
-	my $resto= " FROM nivel3 n3 INNER JOIN nivel2 n2 ON (n3.id2 = n2.id2) 
-		     INNER JOIN nivel1 n1 ON (n2.id1=n1.id1) 
-		     INNER JOIN availability av ON ( av.id3 = n3.id3  ) 
-		     INNER JOIN autores a ON (a.id = n1.autor)
+	my $resto= " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON (n3.id2 = n2.id2) 
+		     INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1) 
+		     INNER JOIN cat_detalle_disponibilidad av ON ( av.id3 = n3.id3  ) 
+		     INNER JOIN cat_autor a ON (a.id = n1.autor)
 		     WHERE n3.wthdrawn = ? AND homebranch=? ".$dates." GROUP BY av.id3";
 	
 	$query.=$resto;
@@ -346,7 +346,7 @@ sub armarPaginasPorRenglones {
 sub insertarNota{
 	my ($id,$nota)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="update  modificaciones set nota=?
+        my $query="update  rep_registro_modificacion set nota=?
 		   where idModificacion=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($nota,$id);
@@ -357,8 +357,8 @@ sub cantRegFechas{
         my $dbh = C4::Context->dbh;
 	my @bind;
         my $query ="SELECT  count(*)
-        	    FROM modificaciones INNER JOIN borrowers ON
-		   (modificaciones.responsable=borrowers.cardnumber) ";
+        	    FROM rep_registro_modificacion INNER JOIN borrowers ON
+		   (rep_registro_modificacion.responsable=borrowers.cardnumber) ";
 	my $where = "";
 	
 	if ($chkfecha ne "false"){
@@ -420,8 +420,8 @@ sub registroEntreFechas{
 	my @bind;
         my $query="SELECT idModificacion,nota,operacion,fecha,
 		   responsable,numero,tipo,surname,firstname
-		   FROM modificaciones INNER JOIN borrowers ON
-		   (modificaciones.responsable=borrowers.cardnumber) "; 
+		   FROM rep_registro_modificacion INNER JOIN borrowers ON
+		   (rep_registro_modificacion.responsable=borrowers.cardnumber) "; 
 	my $where = "";
 	
 	if ($chkfecha ne "false"){
@@ -527,8 +527,8 @@ sub cantidadRetrasados{
 	my $dbh = C4::Context->dbh;
 	my @results;
 	my $query ="Select * 
-	              From issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-        	      Where (returndate is NULL and issues.branchcode = ? ) ";
+	              From  circ_prestamo inner join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+        	      Where (returndate is NULL and  circ_prestamo.branchcode = ? ) ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($branch);
 	while (my $data=$sth->fetchrow_hashref){
@@ -546,8 +546,8 @@ sub renovacionesDiarias{
 	my $dbh = C4::Context->dbh;
 	my @results;
 	my $query ="select *
-  		    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    where (returnDate is NULL and issues.branchcode=? and renewals >= 1 )";
+  		    from  circ_prestamo inner join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+		    where (returnDate is NULL and  circ_prestamo.branchcode=? and renewals >= 1 )";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($branch);
 	while (my $data=$sth->fetchrow_hashref){
@@ -564,8 +564,8 @@ sub prestamosEnUnaFecha{
         my $dbh = C4::Context->dbh;
         my @results;
 	my $query ="select *
-		    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    where (issues.date_due=? and issues.branchcode = ?)";
+		    from  circ_prestamo inner join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+		    where ( circ_prestamo.date_due=? and  circ_prestamo.branchcode = ?)";
         my $sth=$dbh->prepare($query);
         $sth->execute($fecha,$branch);
 	while (my $data=$sth->fetchrow_hashref){
@@ -583,8 +583,8 @@ sub devolucionesParaFecha{
         my $dbh = C4::Context->dbh;
 	my @results;
         my $query ="select *
-                    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    where (issues.returndate=? and issues.branchcode=?) ";
+                    from  circ_prestamo inner join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+		    where ( circ_prestamo.returndate=? and  circ_prestamo.branchcode=?) ";
         my $sth=$dbh->prepare($query);
         $sth->execute($fecha,$branch);
 	while (my $data=$sth->fetchrow_hashref){
@@ -599,8 +599,8 @@ sub historialUsuario{
         my ($id,$branch)=@_;
         my $dbh = C4::Context->dbh;
         my $query ="select  *
-                    from issues inner join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    where borrowers.borrowernumber=? and issues.branchcode=?";
+                    from  circ_prestamo inner join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+		    where borrowers.borrowernumber=? and  circ_prestamo.branchcode=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($id,$branch);
 	return($sth->fechtrow_hashref);
@@ -622,12 +622,12 @@ sub usuarios{
 
         my $query ="SELECT  b.phone,b.emailaddress,b.dateenrolled,c.description as categoria ,
 		    b.firstname,b.surname,b.streetaddress,b.cardnumber,b.city,b.borrowernumber
-                    FROM borrowers b inner join categories c on (b.categorycode = c.categorycode)
+                    FROM borrowers b inner join usr_ref_categoria_socio c on (b.categorycode = c.categorycode)
  		    WHERE b.branchcode=? ";
 	my $where="";
 	push(@bind,$branch);
 
-	my $query2 = "SELECT * FROM issues i WHERE b.borrowernumber = i.borrowernumber ";
+	my $query2 = "SELECT * FROM  circ_prestamo i WHERE b.borrowernumber = i.borrowernumber ";
 	my $exists = "";
 	for (my $i=0; $i < scalar(@chck); $i++){
 		if($chck[$i] eq "CAT"){
@@ -696,13 +696,13 @@ sub prestamos{
         my @results;
 	my $query ="select borrowers.borrowernumber AS borrowernumber,
 			   n3.id3 AS id3, n3.id1 AS id1, n3.id2 AS id2,
-			   issuetypes.issuecode AS issuecode,description,
-			   date_due, issues.branchcode AS branchcode, returndate,
+			   circ_ref_tipo_prestamo.issuecode AS issuecode,description,
+			   date_due,  circ_prestamo.branchcode AS branchcode, returndate,
 			   surname,firstname,cardnumber, emailaddress, barcode , n3.signatura_topografica as bulk
-                    from issues left join issuetypes on (issues.issuecode = issuetypes.issuecode)
-		    left join borrowers on (issues.borrowernumber=borrowers.borrowernumber)
-		    left join nivel3 n3 on (issues.id3 = n3.id3)
-                    where issues.branchcode=? and returndate is NULL ";
+                    from  circ_prestamo left join circ_ref_tipo_prestamo on ( circ_prestamo.issuecode = circ_ref_tipo_prestamo.issuecode)
+		    left join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
+		    left join cat_nivel3 n3 on ( circ_prestamo.id3 = n3.id3)
+                    where  circ_prestamo.branchcode=? and returndate is NULL ";
 
         my $sth=$dbh->prepare($query);
 	$sth->execute($branch);
@@ -786,16 +786,16 @@ sub reservas{
         my @results;
 	my $where="";
 	my $queryCount="SELECT  COUNT(*) as cant
-                   	FROM reserves INNER JOIN borrowers ON (reserves.borrowernumber=borrowers.borrowernumber)
+                   	FROM circ_reserva INNER JOIN borrowers ON (circ_reserva.borrowernumber=borrowers.borrowernumber)
 			WHERE ";
 
         my $query ="SELECT surname, firstname, cardnumber, emailaddress, reminderdate,
-		    barcode, reservedate, reserves.id3 AS id3, 
+		    barcode, reservedate, circ_reserva.id3 AS id3, 
 		    borrowers.borrowernumber AS borrowernumber,
-		    reserves.branchcode as branchcode,
+		    circ_reserva.branchcode as branchcode,
 		    n3.id1 AS id1
-                    FROM reserves INNER JOIN borrowers on (reserves.borrowernumber=borrowers.borrowernumber) 
-		    LEFT JOIN nivel3 n3 ON (reserves.id3 = n3.id3 ) WHERE ";
+                    FROM circ_reserva INNER JOIN borrowers on (circ_reserva.borrowernumber=borrowers.borrowernumber) 
+		    LEFT JOIN cat_nivel3 n3 ON (circ_reserva.id3 = n3.id3 ) WHERE ";
 	
 	if($tipo eq "GR"){
 		$where=" estado = 'G'";
@@ -831,7 +831,7 @@ sub cantidadAnaliticas{
         my $dbh = C4::Context->dbh;
         my @results;
         my $query ="SELECT count( * ) AS cantidad
-                    FROM biblioanalysis";
+                    FROM cat_analitica";
         my $sth=$dbh->prepare($query);
         $sth->execute();
         while (my $data=$sth->fetchrow_hashref){
@@ -844,12 +844,12 @@ sub cantidadAnaliticas{
 sub itemtypesReport{
         my ($branch)=@_;
         my $dbh = C4::Context->dbh;
-        my $query=" SELECT itemtypes.description, COUNT( itemtypes.description ) AS cant
-		FROM itemtypes
-		LEFT JOIN nivel2 n2 ON itemtypes.itemtype = n2.tipo_documento
-		INNER JOIN nivel3 n3 ON n2.id2 = n3.id2
+        my $query=" SELECT cat_ref_tipo_nivel3.description, COUNT( cat_ref_tipo_nivel3.description ) AS cant
+		FROM cat_ref_tipo_nivel3
+		LEFT JOIN cat_nivel2 n2 ON itemtypes.itemtype = n2.tipo_documento
+		INNER JOIN cat_nivel3 n3 ON n2.id2 = n3.id2
 		WHERE holdingbranch = ?
-		GROUP BY itemtypes.description  ";
+		GROUP BY cat_ref_tipo_nivel3.description  ";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
@@ -862,12 +862,12 @@ sub itemtypesReport{
 sub levelsReport{
         my ($branch)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="SELECT bibliolevel.description, COUNT( bibliolevel.description ) AS cant
-		FROM bibliolevel
-		LEFT JOIN nivel2 n2 ON bibliolevel.code = n2.nivel_bibliografico
-		INNER JOIN nivel3 n3 ON n2.id2 = n3.id2
+        my $query="SELECT ref_nivel_bibliografico.description, COUNT( ref_nivel_bibliografico.description ) AS cant
+		FROM ref_nivel_bibliografico
+		LEFT JOIN cat_nivel2 n2 ON bibliolevel.code = n2.nivel_bibliografico
+		INNER JOIN cat_nivel3 n3 ON n2.id2 = n3.id2
 		WHERE holdingbranch = ?
-		GROUP BY bibliolevel.description";
+		GROUP BY ref_nivel_bibliografico.description";
         my $sth=$dbh->prepare($query);
         $sth->execute($branch);
         my @results;
@@ -882,7 +882,7 @@ sub availYear {
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
         my $query="SELECT month( date )  AS mes, year( date )  AS year, avail, count( avail )  AS cantidad
-			FROM availability
+			FROM cat_detalle_disponibilidad
 			WHERE branch =  ?  AND date BETWEEN ? AND  ?
 			GROUP  BY year( date ) , month( date )  ORDER  BY month( date ) , year( date )";
         my $sth=$dbh->prepare($query);
@@ -915,7 +915,7 @@ sub estadisticasGenerales{
 	my ($fechaInicio, $fechaFin, $chkfecha, @chck)=@_;
 	my $dbh = C4::Context->dbh;
 	my @bind;
-        my $query="SELECT count(*) as cant, issuecode, renewals FROM issues WHERE (renewals >0 OR renewals=0)";
+        my $query="SELECT count(*) as cant, issuecode, renewals FROM  circ_prestamo WHERE (renewals >0 OR renewals=0)";
 	
 	if ($chkfecha ne "false"){
 		$query.=" AND (date_due>=?) AND (date_due<=?)";
@@ -971,7 +971,7 @@ sub estadisticasGenerales{
 #******Para saber cuantos libros se devolvieron***********
 	if($domiTotal){
 		my @bind2;
-		my $query="SELECT count(*) as devueltos, issuecode FROM issues WHERE returndate IS NOT NULL AND issuecode = 'DO'";
+		my $query="SELECT count(*) as devueltos, issuecode FROM  circ_prestamo WHERE returndate IS NOT NULL AND issuecode = 'DO'";
 		if ($chkfecha ne "false"){
 			$query.=" AND (date_due>=?) AND (date_due<=?)";
 			push(@bind2,$fechaInicio);
@@ -994,7 +994,7 @@ return ($domiTotal,$renovados,$devueltos,$sala,$foto,$especial);
 sub cantidadUsuariosPrestamos{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM issues ";
+        my $query="SELECT borrowernumber FROM  circ_prestamo ";
 	my @bind;
 	if ($chkfecha ne "false"){
 		$query.=" WHERE (date_due>=?) AND (date_due<=?)";
@@ -1016,7 +1016,7 @@ return ($cant);
 sub cantidadUsuariosRenovados{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM issues WHERE renewals <> 0 ";
+        my $query="SELECT borrowernumber FROM  circ_prestamo WHERE renewals <> 0 ";
 	my @bind;
 	if ($chkfecha ne "false"){
 		$query.=" AND (date_due>=?) AND (date_due<=?)";
@@ -1038,7 +1038,7 @@ return ($cant);
 sub cantidadUsuariosReservas{
 	my ($fechaInicio, $fechaFin, $chkfecha)=@_;
 	my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM reserves ";
+        my $query="SELECT borrowernumber FROM circ_reserva ";
 	my @bind;
 	if ($chkfecha ne "false"){
 		$query.=" WHERE (reservedate>=?) AND (reservedate<=?)";
@@ -1069,13 +1069,13 @@ sub historialReservas {
   $querySelect .= " 	h.id2,h.id3,h.branchcode as branchcode, ";
   $querySelect .= " 	it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
 
-  my $queryFrom .= " 	FROM historicCirculation h LEFT JOIN issuetypes it ";
+  my $queryFrom .= " 	FROM rep_historial_circulacion h LEFT JOIN circ_ref_tipo_prestamo it ";
   $queryFrom .= " 	ON(it.issuecode = h.issuetype) ";
-  $queryFrom .= " 	LEFT JOIN nivel1 n1 ";
+  $queryFrom .= " 	LEFT JOIN cat_nivel1 n1 ";
   $queryFrom .= " 	ON (n1.id1 = h.id1) ";
-  $queryFrom .= " 	LEFT JOIN autores a ";
+  $queryFrom .= " 	LEFT JOIN cat_autor a ";
   $queryFrom .= " 	ON (a.id = n1.autor) ";
-  $queryFrom .= " 	LEFT JOIN nivel3 n3 ";
+  $queryFrom .= " 	LEFT JOIN cat_nivel3 n3 ";
   $queryFrom .= " 	ON (n3.id3 = h.id3) "; 
 
   my $queryWhere .= " 	WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
@@ -1133,17 +1133,17 @@ sub historicoCirculacion(){
 	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, titulo,
 			h.id2,h.id3,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, n3.barcode, n3.signatura_topografica, u.firstname as userFirstname, u.surname as userSurname";
 
-	my $from= "	FROM historicCirculation h LEFT JOIN borrowers b 
+	my $from= "	FROM rep_historial_circulacion h LEFT JOIN borrowers b 
 			ON (h.responsable=b.borrowernumber)
 			LEFT JOIN borrowers u
 			ON (h.borrowernumber = u.borrowernumber)
-			LEFT JOIN issuetypes it
+			LEFT JOIN circ_ref_tipo_prestamo it
 			ON(it.issuecode = h.issuetype)
-			LEFT JOIN nivel1 n1
+			LEFT JOIN cat_nivel1 n1
 			ON (n1.id1 = h.id1)
-			LEFT JOIN autores a
+			LEFT JOIN cat_autor a
 			ON (a.id = n1.autor) 
-			LEFT JOIN nivel3 n3
+			LEFT JOIN cat_nivel3 n3
 			ON (n3.id3 = h.id3) ";
 
 	my $where = "";
@@ -1214,13 +1214,13 @@ sub historicoSanciones(){
 			hs.end_date, hs.date, st.issuecode, hs.timestamp, hs.sanctiontypecode, 
 			it.description AS tipoPrestamo";
 
-	my $from= "	FROM historicSanctions hs INNER JOIN borrowers b
+	my $from= "	FROM rep_historial_sancion hs INNER JOIN borrowers b
 			ON (hs.borrowernumber = b.borrowernumber)
 			LEFT JOIN borrowers resp
 			ON (hs.responsable = resp.borrowernumber)
-			LEFT JOIN sanctiontypes st
+			LEFT JOIN circ_tipo_sancion st
 			ON (st.sanctiontypecode = hs.sanctiontypecode) 
-			LEFT JOIN issuetypes it
+			LEFT JOIN circ_ref_tipo_prestamo it
 			ON (it.issuecode = st.issuecode) ";
 
 	my $where = "";
@@ -1290,7 +1290,7 @@ sub tipoDeOperacion(){
 sub insertarNotaHistCirc(){
 	my ($id,$nota)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="update  historicCirculation set nota=?
+        my $query="update  rep_historial_circulacion set nota=?
 		   where id=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($nota,$id);
@@ -1343,7 +1343,7 @@ SE USA EN EL REPORTE Generar Etiquetas
 sub signaturamax {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MAX(signatura_topografica) AS max FROM nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MAX(signatura_topografica) AS max FROM cat_nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'max'};
 	return $res;
@@ -1355,7 +1355,7 @@ SE USA EN EL REPORTE Generar Etiquetas
 sub signaturamin {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MIN(signatura_topografica) AS min FROM nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MIN(signatura_topografica) AS min FROM cat_nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'min'};
 	return $res;
@@ -1372,8 +1372,8 @@ sub listaDeEjemplares {
 	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
-	FROM ((nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2)
-	INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
+	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
+	INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
 	WHERE ";
 	
 	if ($beginlocation ne '') {

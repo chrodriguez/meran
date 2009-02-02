@@ -86,7 +86,7 @@ CREATE TABLE `pref_unidad_informacion` (
   `fax` varchar(255) default NULL,
   `email` varchar(255) default NULL,
   PRIMARY KEY  (`id_ui`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=Innodb DEFAULT CHARSET=latin1;
 
 -- 
 -- Volcar la base de datos para la tabla `pref_unidad_informacion`

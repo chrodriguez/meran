@@ -406,8 +406,8 @@ sub datosBiblio(){
     my ($branchcode)=@_;
     my $dbh = C4::Context->dbh;
     my $biblio;
-    my $sth=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, branchcategories.categoryname as categ
-    FROM branches inner join branchrelations on branches.branchcode=branchrelations.branchcode inner join branchcategories on branchcategories.categorycode = branchrelations.categorycode WHERE branches.branchcode=?");
+    my $sth=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, pref_categoria_unidad_informacion.categoryname as categ
+    FROM pref_unidad_informacion inner join pref_relacion_unidad_informacion on pref_unidad_informacion.branchcode=pref_relacion_unidad_informacion.branchcode inner join pref_categoria_unidad_informacion on pref_categoria_unidad_informacion.categorycode = pref_relacion_unidad_informacion.categorycode WHERE pref_unidad_informacion.branchcode=?");
     $sth->execute($branchcode);
     $biblio=$sth->fetchrow_hashref();
     $sth->finish;

@@ -108,7 +108,7 @@ sub datosCompletos{
 sub mostrarCamposMARC{
        my $dbh = C4::Context->dbh;
 	my @results;
-       my $query ="select distinct (tagfield) from marc_subfield_structure order by tagfield";
+       my $query ="select distinct (tagfield) from pref_estructura_subcampo_marc order by tagfield";
        my $sth=$dbh->prepare($query);
         $sth->execute();
 	while (my $data=$sth->fetchrow_hashref){
@@ -123,7 +123,7 @@ sub mostrarCamposMARC{
 sub mostrarSubCamposMARC{
        my $dbh = C4::Context->dbh;
 	my @results;
-       my $query ="select tagfield,tagsubfield,liblibrarian,repeatable from marc_subfield_structure order by tagfield";
+       my $query ="select tagfield,tagsubfield,liblibrarian,repeatable from pref_estructura_subcampo_marc order by tagfield";
        my $sth=$dbh->prepare($query);
         $sth->execute();
        while (my $data=$sth->fetchrow_hashref){

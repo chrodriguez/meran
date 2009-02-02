@@ -98,10 +98,10 @@ print A " dictionary: $keyword \n";
 
   my @queries=(
     "SELECT biblionumber, title, unititle FROM biblio WHERE title".$condition,
-    "SELECT biblio.biblionumber, autores.completo FROM biblio inner join autores on biblio.author = autores.id WHERE autores.completo".$condition,
+    "SELECT biblio.biblionumber, autores.completo FROM biblio inner join cat_autor on biblio.author = cat_autor.id WHERE cat_autor.completo".$condition,
     "SELECT biblionumber, subtitle FROM bibliosubtitle WHERE subtitle".$condition,
-    "SELECT additionalauthors.biblionumber, autores.completo FROM additionalauthors inner join autores on additionalauthors.author = autores.id  WHERE autores.completo".$condition,
-    "SELECT colaboradores.biblionumber, autores.completo FROM colaboradores inner join autores on colaboradores.idColaborador = autores.id  WHERE autores.completo".$condition,
+    "SELECT additionalauthors.biblionumber, cat_autor.completo FROM additionalauthors inner join cat_autor on additionalauthors.author = autores.id  WHERE cat_autor.completo".$condition,
+    "SELECT cat_colaborador.biblionumber, cat_autor.completo FROM cat_colaborador inner join cat_autor on cat_colaborador.idColaborador = cat_autor.id  WHERE cat_autor.completo".$condition,
     "SELECT biblionumber, subject FROM bibliosubject WHERE subject".$condition,
     "SELECT biblioitems.biblionumber, publisher.publisher FROM biblioitems INNER JOIN publisher 
 	ON biblioitems.biblioitemnumber = publisher.biblioitemnumber
@@ -141,7 +141,7 @@ print A " dictionary: $keyword \n";
 	%row = (keyword => $res, jump => 0, biblionumber => $bib, direct => 0, keyword2 => $res1, show => 0);
      }else{ 
 #Si es unico lo muestro en detalle
-	my $query="SELECT biblio.title,biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
+	my $query="SELECT biblio.title,biblio.unititle, cat_autor.completo FROM biblio inner join cat_autor on biblio.author=cat_autor.id WHERE biblio.biblionumber= ".$bib;
       	my $sth=$dbh->prepare($query);
       	$sth->execute();
       	my ($title,$unititle,$author) = $sth->fetchrow_array;
@@ -161,7 +161,7 @@ print A " dictionary: $keyword \n";
       		$bib= $results[$index]->{biblionumber};
 
 
-		my $query="SELECT biblio.title, biblio.unititle, autores.completo FROM biblio inner join autores on biblio.author=autores.id WHERE biblio.biblionumber= ".$bib;
+		my $query="SELECT biblio.title, biblio.unititle, cat_autor.completo FROM biblio inner join cat_autor on biblio.author=cat_autor.id WHERE biblio.biblionumber= ".$bib;
       		my $sth=$dbh->prepare($query);
       		$sth->execute();
       		my ($title,$unititle,$author) = $sth->fetchrow_array;

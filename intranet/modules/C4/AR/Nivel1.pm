@@ -39,8 +39,8 @@ sub buscarNivel1PorId3{
 
         my $dbh = C4::Context->dbh;
         my $query = "	SELECT n1.*,a.* 
-			FROM nivel1 n1 INNER JOIN nivel3 n3 ON n1.id1 = n3.id1 
-		     	LEFT JOIN autores a ON n1.autor = a.id WHERE id3=? ";
+			FROM cat_nivel1 n1 INNER JOIN cat_nivel3 n3 ON n1.id1 = n3.id1 
+		     	LEFT JOIN cat_autor a ON n1.autor = a.id WHERE id3=? ";
 
         my $sth = $dbh->prepare($query);
         $sth->execute($id3);
@@ -95,7 +95,7 @@ sub detalleNivel1MARC{
 	$i++;
 
 #trae nive1_repetibles
-	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
+	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while(my $data=$sth->fetchrow_hashref){
@@ -134,7 +134,7 @@ sub detalleNivel1OPAC{
 	$i++;
 
 #trae nive1_repetibles
-	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
+	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while(my $data=$sth->fetchrow_hashref){
@@ -175,7 +175,7 @@ sub detalleNivel1{
 	$i++;
 
 #trae nive1_repetibles
-	my $query="SELECT * FROM nivel1_repetibles WHERE id1=? ORDER BY campo,subcampo";
+	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=? ORDER BY campo,subcampo";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	my $llave;
@@ -254,35 +254,35 @@ sub deleteNivel1{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query="SELECT id1,id3 FROM nivel3 WHERE id1 = ?";
+	my $query="SELECT id1,id3 FROM cat_nivel3 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+		my $query="DELETE FROM cat_nivel3_repetible WHERE id3 = ?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($data->{'id3'});
 	}
-	my $query="DELETE FROM nivel3 WHERE id1 = ?";
+	my $query="DELETE FROM cat_nivel3 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
-		my $query="SELECT id1,id2 FROM nivel2 WHERE id1 = ?";
+		my $query="SELECT id1,id2 FROM cat_nivel2 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
+		my $query="DELETE FROM cat_nivel2_repetible WHERE id2 = ?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($data->{'id2'});
 	}
-	my $query="DELETE FROM nivel2 WHERE id1 = ?";
+	my $query="DELETE FROM cat_nivel2 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
-	my $query="DELETE FROM nivel1_repetibles WHERE id1 = ?";
+	my $query="DELETE FROM cat_nivel1_repetible WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
-	my $query="DELETE FROM nivel1 WHERE id1 = ?";
+	my $query="DELETE FROM cat_nivel1 WHERE id1 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 
@@ -300,7 +300,7 @@ sub saveNivel1{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="SELECT MAX(id1) FROM nivel1";
+	my $query3="SELECT MAX(id1) FROM cat_nivel1";
 	my $titulo="";
 	foreach my $obj(@$nivel1){
 		my $campo=$obj->{'campo'};
@@ -324,11 +324,11 @@ sub saveNivel1{
 			}
 		}
 	}
-	$query1="INSERT INTO nivel1 (titulo,autor) VALUES (?,?) ";
+	$query1="INSERT INTO cat_nivel1 (titulo,autor) VALUES (?,?) ";
 	push (@bind1,$titulo,$autor);
 	if($query2 ne ""){
 		$query2=substr($query2,1,length($query2));
-		$query2="INSERT INTO nivel1_repetibles (campo,subcampo,id1,dato) VALUES ".$query2;
+		$query2="INSERT INTO cat_nivel1_repetible (campo,subcampo,id1,dato) VALUES ".$query2;
 	}
 	my($ident,$error,$codMsg)=C4::AR::Catalogacion::transaccion($query1,\@bind1,$query2,\@bind2,$query3);
 

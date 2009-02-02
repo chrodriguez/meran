@@ -206,7 +206,7 @@ sub updateForHoliday{
 	my $fecha_nueva_fin = C4::Date::format_date_in_iso(DateCalc($fecha_nueva_inicio,"+ $daysOfSanctions days",\$err),$dateformat);
 	my $dbh = C4::Context->dbh;
 
-	my $sth = $dbh->prepare("update sanctions set startdate=?, enddate=? where sanctiontypecode is null and startdate = ?");
+	my $sth = $dbh->prepare("update circ_sancion set startdate=?, enddate=? where sanctiontypecode is null and startdate = ?");
 
 	$sth->execute($fecha_nueva_inicio,$fecha_nueva_fin,$fecha);
 }
@@ -237,7 +237,7 @@ sub proximoHabil{
 	######Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM feriados WHERE fecha >= ?");
+	my $sth=$dbh->prepare("SELECT * FROM pref_feriado WHERE fecha >= ?");
 	$sth->execute($hasta);
 	while ((my $date= $sth->fetchrow_hashref)) {
 		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {
@@ -290,7 +290,7 @@ sub proximosHabiles{
 	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM feriados WHERE fecha >= ?");
+	my $sth=$dbh->prepare("SELECT * FROM pref_feriado WHERE fecha >= ?");
 	$sth->execute($hasta);
 	while ((my $date= $sth->fetchrow_hashref)) {
 		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {

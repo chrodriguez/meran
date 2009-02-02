@@ -180,8 +180,8 @@ FROM virtual_request
 INNER JOIN biblioitems ON virtual_request.biblioitemnumber = biblioitems.biblioitemnumber
 INNER JOIN biblio ON biblio.biblionumber = biblioitems.biblionumber
 LEFT JOIN virtual_itemtypes ON virtual_itemtypes.itemtype = biblioitems.itemtype
-INNER JOIN itemtypes ON virtual_itemtypes.itemtype = itemtypes.itemtype
-INNER JOIN branches ON branches.branchcode = virtual_request.branchcode
+INNER JOIN cat_ref_tipo_nivel3 ON virtual_itemtypes.itemtype = cat_ref_tipo_nivel3.itemtype
+INNER JOIN pref_unidad_informacion ON pref_unidad_informacion.branchcode = virtual_request.branchcode
 WHERE virtual_request.borrowernumber = ? AND virtual_request.date_aquire IS NULL
 ORDER BY virtual_request.date_request DESC";
         my $sth=$dbh->prepare($query);
@@ -273,13 +273,13 @@ sub virtualRequests{
 	my @results;
 	my $query ="SELECT virtual_request.borrowernumber, virtual_request.date_request, virtual_request.timestamp, 
 		virtual_request.biblioitemnumber,virtual_itemtypes.requesttype, biblio.title, biblio.author, borrowers.surname, borrowers.firstname, 
-			biblioitems.volumeddesc, biblioitems.itemtype, branches.branchname , virtual_request.date_aquire ,
+			biblioitems.volumeddesc, biblioitems.itemtype, pref_unidad_informacion.branchname , virtual_request.date_aquire ,
 			virtual_request.date_complete  
 			FROM virtual_request
 			INNER JOIN biblioitems ON virtual_request.biblioitemnumber = biblioitems.biblioitemnumber
 			INNER JOIN biblio ON biblioitems.biblionumber = biblio.biblionumber
 			INNER JOIN borrowers ON borrowers.borrowernumber = virtual_request.borrowernumber
-			INNER JOIN branches ON branches.branchcode = virtual_request.branchcode
+			INNER JOIN pref_unidad_informacion ON pref_unidad_informacion.branchcode = virtual_request.branchcode
 			INNER JOIN virtual_itemtypes on virtual_itemtypes.itemtype = biblioitems.itemtype
 			WHERE virtual_request.date_aquire IS NULL 
 			AND virtual_request.biblioitemnumber = ?
@@ -304,12 +304,12 @@ sub requestsReport{
         my $dbh = C4::Context->dbh;
         my @results;
         my $query ="SELECT virtual_request.borrowernumber, virtual_request.date_request, virtual_request.timestamp, virtual_request.condition, virtual_request.biblioitemnumber,virtual_itemtypes.requesttype, biblio.title, biblio.author,biblio.biblionumber, borrowers.surname, borrowers.firstname,
-                        biblioitems.volumeddesc, biblioitems.itemtype, branches.branchname, borrowers.emailaddress
+                        biblioitems.volumeddesc, biblioitems.itemtype, pref_unidad_informacion.branchname, borrowers.emailaddress
                         FROM virtual_request
                         INNER JOIN biblioitems ON virtual_request.biblioitemnumber = biblioitems.biblioitemnumber
                         INNER JOIN biblio ON biblioitems.biblionumber = biblio.biblionumber
                         INNER JOIN borrowers ON borrowers.borrowernumber = virtual_request.borrowernumber
-                        INNER JOIN branches ON branches.branchcode = virtual_request.branchcode
+                        INNER JOIN pref_unidad_informacion ON pref_unidad_informacion.branchcode = virtual_request.branchcode
 			INNER JOIN virtual_itemtypes on virtual_itemtypes.itemtype = biblioitems.itemtype
                         WHERE virtual_request.date_complete IS NULL AND virtual_request.branchcode= ?
                         ORDER BY virtual_request.date_request DESC";
@@ -333,12 +333,12 @@ sub completeReport{
         my @results;
         my $query ="SELECT virtual_request.borrowernumber, virtual_request.date_request,virtual_request.date_complete, virtual_request.timestamp,
                 virtual_request.biblioitemnumber,virtual_itemtypes.requesttype, biblio.title, biblio.author,biblio.biblionumber, borrowers.surname, borrowers.firstname,
-                        biblioitems.volumeddesc, biblioitems.itemtype, branches.branchname, borrowers.emailaddress
+                        biblioitems.volumeddesc, biblioitems.itemtype, pref_unidad_informacion.branchname, borrowers.emailaddress
                         FROM virtual_request
                         INNER JOIN biblioitems ON virtual_request.biblioitemnumber = biblioitems.biblioitemnumber
                         INNER JOIN biblio ON biblioitems.biblionumber = biblio.biblionumber
                         INNER JOIN borrowers ON borrowers.borrowernumber = virtual_request.borrowernumber
-                        INNER JOIN branches ON branches.branchcode = virtual_request.branchcode
+                        INNER JOIN pref_unidad_informacion ON pref_unidad_informacion.branchcode = virtual_request.branchcode
                         INNER JOIN virtual_itemtypes on virtual_itemtypes.itemtype = biblioitems.itemtype
                         WHERE virtual_request.date_complete IS NOT NULL AND virtual_request.date_aquire IS NULL AND virtual_request.branchcode= ?
                         ORDER BY virtual_request.date_request DESC";
@@ -360,12 +360,12 @@ sub aquireReport{
         my $dbh = C4::Context->dbh;
         my @results;
         my $query ="SELECT virtual_request.borrowernumber, virtual_request.date_request,virtual_request.date_complete, virtual_request.date_aquire , virtual_request.timestamp, virtual_request.biblioitemnumber,virtual_itemtypes.requesttype, biblio.title, biblio.author,biblio.biblionumber, borrowers.surname, borrowers.firstname,
-                        biblioitems.volumeddesc, biblioitems.itemtype, branches.branchname, borrowers.emailaddress
+                        biblioitems.volumeddesc, biblioitems.itemtype, pref_unidad_informacion.branchname, borrowers.emailaddress
                         FROM virtual_request
                         INNER JOIN biblioitems ON virtual_request.biblioitemnumber = biblioitems.biblioitemnumber
                         INNER JOIN biblio ON biblioitems.biblionumber = biblio.biblionumber
                         INNER JOIN borrowers ON borrowers.borrowernumber = virtual_request.borrowernumber
-                        INNER JOIN branches ON branches.branchcode = virtual_request.branchcode
+                        INNER JOIN pref_unidad_informacion ON pref_unidad_informacion.branchcode = virtual_request.branchcode
                         INNER JOIN virtual_itemtypes on virtual_itemtypes.itemtype = biblioitems.itemtype
                         WHERE virtual_request.date_aquire IS NOT NULL AND virtual_request.borrowernumber = ?
                         ORDER BY $order $limit";

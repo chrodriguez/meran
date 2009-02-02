@@ -63,7 +63,7 @@ my $pagesize=20;
 #######################################################################################
 # Main loop....
 my $input = new CGI;
-my $branchcode=$input->param('branchcode');
+my $branchcode=$input->param('ui_id');
 my $categorycode = $input->param('categorycode');
 my $op = $input->param('op');
 

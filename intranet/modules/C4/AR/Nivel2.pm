@@ -101,7 +101,7 @@ sub detalleNivel2MARC{
 	my $dbh = C4::Context->dbh;
 	#Busca el nivel 2 segun id1 e id2, (retorna solo uno)
 	my @nivel2=&C4::AR::Catalogacion::buscarNivel2PorId1Id2($id1,$id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel2');
 	my $id2;
 	my $itemtype;
 	my $tipoDoc;
@@ -134,7 +134,7 @@ sub detalleNivel2MARC{
 
 			$i++;
 		}
-		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
+		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id2);
 		while (my $data=$sth->fetchrow_hashref){
@@ -317,7 +317,7 @@ sub detalleNivel2{
 	my($id1,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 	my @nivel2=&C4::AR::Catalogacion::buscarNivel2PorId1($id1);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel2');
 	my $id2;
 	my $itemtype;
 	my $tipoDoc;
@@ -346,7 +346,7 @@ sub detalleNivel2{
 			$nivel2Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
 			$i++;
 		}
-		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
+		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id2);
 		my $llave2;
@@ -405,8 +405,8 @@ sub getCantPrestados{
 	my $dbh = C4::Context->dbh;
 	
 	my $query= " 	SELECT count(*) AS cantPrestamos
-			FROM issues i LEFT JOIN nivel3 n3 ON n3.id3 = i.id3
-			INNER JOIN  nivel2 n2 ON n3.id2 = n2.id2
+			FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
+			INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
 			WHERE n2.id2 = ? AND i.returndate IS NULL ";
 
 	my $sth=$dbh->prepare($query);
@@ -423,7 +423,7 @@ sub getTipoDocumento{
 	my $dbh = C4::Context->dbh;
 	
 	my $query= " 	SELECT i.description
-			FROM nivel2 n2 INNER JOIN itemtypes i
+			FROM nivel2 n2 INNER JOIN cat_ref_tipo_nivel3 i
 			ON (n2.tipo_documento = i.itemtype)
 			WHERE id2 = ? ";
 
@@ -499,23 +499,23 @@ sub deleteGrupo{
 
 	my $dbh = C4::Context->dbh;
 	
-	my $query="SELECT id2,id3 FROM nivel3 WHERE id2 = ?";
+	my $query="SELECT id2,id3 FROM cat_nivel3 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM nivel3_repetibles WHERE id3 = ?";
+		my $query="DELETE FROM cat_nivel3_repetible WHERE id3 = ?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($data->{'id3'});
 	}
-	my $query="DELETE FROM nivel3 WHERE id2 = ?";
+	my $query="DELETE FROM cat_nivel3 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 
-	my $query="DELETE FROM nivel2_repetibles WHERE id2 = ?";
+	my $query="DELETE FROM cat_nivel2_repetible WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 	
-	my $query="DELETE FROM nivel2 WHERE id2 = ?";
+	my $query="DELETE FROM cat_nivel2 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 
@@ -533,7 +533,7 @@ sub saveNivel2{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="SELECT MAX(id2) FROM nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
+	my $query3="SELECT MAX(id2) FROM cat_nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
 	my $nivelBiblio="";
 	my $tipoDoc="";
 	my $soporte="";
@@ -585,11 +585,11 @@ sub saveNivel2{
 			}
 		}
 	}
-	$query1="INSERT INTO nivel2 (tipo_documento,id1,nivel_bibliografico,soporte,pais_publicacion,lenguaje,ciudad_publicacion,anio_publicacion) VALUES (?,?,?,?,?,?,?,?)";
+	$query1="INSERT INTO cat_nivel2 (tipo_documento,id1,nivel_bibliografico,soporte,pais_publicacion,lenguaje,ciudad_publicacion,anio_publicacion) VALUES (?,?,?,?,?,?,?,?)";
 	push (@bind1,$tipoDoc,$id1,$nivelBiblio,$soporte,$pais,$lenguaje,$ciudad,$fecha);
 	if($query2 ne ""){
 		$query2=substr($query2,1,length($query2));
-		$query2="INSERT INTO nivel2_repetibles (campo,subcampo,id2,dato) VALUES ".$query2;
+		$query2="INSERT INTO cat_nivel2_repetible (campo,subcampo,id2,dato) VALUES ".$query2;
 	}
 	my ($id2,$error,$codMsg) =&C4::AR::Catalogacion::transaccion($query1,\@bind1,$query2,\@bind2,$query3);
 	return($id2,$tipoDoc,$error,$codMsg);

@@ -120,7 +120,7 @@ sub getLibrarianEstCat{
 
 	my $dbh = C4::Context->dbh;
 	my $query = "SELECT ec.*, idinforef, ir.referencia as tabla, campos, separador, orden";
-	$query .= " FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ";
+	$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 	$query .= " ON (ec.id = ir.idestcat) ";
 	$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
 
@@ -167,8 +167,8 @@ sub getLibrarianEstCatOpac{
 # print A "dato: $dato \n";
 
 my $query = " SELECT * ";
-$query .= " FROM estructura_catalogacion_opac eco INNER JOIN";
-$query .= " encabezado_item_opac eio ";
+$query .= " FROM cat_estructura_catalogacion_opac eco INNER JOIN";
+$query .= " cat_encabezado_item_opac eio ";
 $query .= " ON (eco.idencabezado = eio.idencabezado) ";
 $query .= " WHERE(eco.campo = ?)and(eco.subcampo = ?) and (visible = 1) ";
 $query .= " and (eio.itemtype = ?)";
@@ -188,7 +188,7 @@ $query .= " and (eio.itemtype = ?)";
 
 		my $dbh = C4::Context->dbh;
 		my $query = "SELECT ec.*, idinforef, ir.referencia as tabla, campos, separador, orden";
-		$query .= " FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ";
+		$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 		$query .= " ON (ec.id = ir.idestcat) ";
 		$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
 
@@ -245,7 +245,7 @@ sub getLibrarianMARCSubField{
 	my $dbh = C4::Context->dbh;
 
 	my $query = " SELECT * ";
-	$query .= " FROM marc_subfield_structure ";
+	$query .= " FROM pref_estructura_subcampo_marc ";
 	$query .= " WHERE (tagfield = ? )and(tagsubfield = ?)";
 
 	my $sth=$dbh->prepare($query);
@@ -325,7 +325,7 @@ sub buscarMapeo{
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
 	my $llave;
-	my $query = " SELECT * FROM kohaToMARC WHERE tabla = ? ";
+	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla = ? ";
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla);
@@ -347,7 +347,7 @@ sub buscarMapeoTotal{
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
 	my $llave;
-	my $query = " SELECT * FROM kohaToMARC WHERE tabla like 'nivel%' ORDER BY tabla";
+	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' ORDER BY tabla";
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
@@ -367,7 +367,7 @@ sub buscarMapeoCampoSubcampo{
 	my $dbh = C4::Context->dbh;
 	my $tabla="nivel".$nivel;
 	my $campoTabla=0;
-	my $query = " SELECT campoTabla FROM kohaToMARC WHERE tabla =? AND campo=? AND subcampo=?";
+	my $query = " SELECT campoTabla FROM cat_pref_mapeo_koha_marc WHERE tabla =? AND campo=? AND subcampo=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla,$campo,$subcampo);
 	if(my $data=$sth->fetchrow_hashref){
@@ -385,7 +385,7 @@ sub buscarSubCamposMapeo{
 	my $dbh = C4::Context->dbh;
 	my %mapeo;
 	my $llave;
-	my $query = " SELECT * FROM kohaToMARC WHERE tabla like 'nivel%' AND campo = ?";
+	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' AND campo = ?";
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo);
@@ -405,7 +405,7 @@ Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 sub buscarNivel3PorId2YDisponibilidad{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel3 WHERE id2 = ?";
+	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
@@ -471,7 +471,7 @@ sub obtenerEdiciones{
 	my ($id1,$itemtype)=@_;
 	my @ediciones;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel2 WHERE id1=? ";
+	my $query="SELECT * FROM cat_nivel2 WHERE id1=? ";
 
 	if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
 		$query .=" and tipo_documento = '".$itemtype."'";
@@ -494,11 +494,11 @@ Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un
 sub obtenerGrupos {
 	my ($id1,$itemtype,$type)=@_;
   	my $dbh = C4::Context->dbh;
-  	my $query="SELECT * FROM nivel2 LEFT JOIN nivel1 ON nivel1.id1=nivel2.id1 WHERE nivel2.id1=?";
+  	my $query="SELECT * FROM cat_nivel2 LEFT JOIN cat_nivel1 ON cat_nivel1.id1=cat_nivel2.id1 WHERE cat_nivel2.id1=?";
 	my @bind;
 	push(@bind,$id1);
   	if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
-		$query .=" AND nivel2.tipo_documento = ?";
+		$query .=" AND cat_nivel2.tipo_documento = ?";
 		push(@bind,$itemtype);
 	}
 
@@ -510,7 +510,7 @@ sub obtenerGrupos {
 	my $opacUnavail= C4::Context->preference("opacUnavail");
 
   	while ( $data=$sth->fetchrow_hashref){
-		my $query2="SELECT COUNT(*) AS cant FROM nivel3 n3 WHERE n3.id2 = ?";
+		my $query2="SELECT COUNT(*) AS cant FROM cat_nivel3 n3 WHERE n3.id2 = ?";
 #  		if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
 		if (($type ne 'intra')&&($opacUnavail eq 0)){
     			$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL  OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
@@ -536,7 +536,7 @@ sub obtenerDisponibilidadTotal{
 	my ($id1,$itemtype)=@_;
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT count(*) as cant, notforloan FROM nivel3 WHERE id1=? ";
+	my $query="SELECT count(*) as cant, notforloan FROM cat_nivel3 WHERE id1=? ";
 	my $sth;
 
 	if($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL"){
@@ -545,7 +545,7 @@ sub obtenerDisponibilidadTotal{
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1);
 	}else{#Filtro tb por tipo de item
-	  $query .= " AND id2 IN ( SELECT id2 FROM nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
+	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
 
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1, $itemtype);
@@ -578,7 +578,7 @@ sub MARCDetail{
 	my ($id3,$tipo)= @_;
 
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel3 WHERE id3=?";
+	my $query="SELECT * FROM cat_nivel3 WHERE id3=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
 
@@ -604,7 +604,7 @@ Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de f
 sub buscarCamposMARC{
 	my ($campoX) =@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT nivel,tagfield FROM marc_subfield_structure ";
+	my $query="SELECT DISTINCT nivel,tagfield FROM pref_estructura_subcampo_marc ";
 	$query .=" WHERE nivel > 0 AND tagfield LIKE ? ORDER BY nivel";
 	
 	my $sth=$dbh->prepare($query);
@@ -626,7 +626,7 @@ Busca los subcampos correspondiente al parametro de campo y que no sean propios 
 sub buscarSubCamposMARC{
 	my ($campo) =@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT tagsubfield FROM marc_subfield_structure ";
+	my $query="SELECT tagsubfield FROM pref_estructura_subcampo_marc ";
 	$query .=" WHERE nivel > 0 AND tagfield = ? ";
 	my $mapeo=&buscarSubCamposMapeo($campo);
 	foreach my $llave (keys %$mapeo){
@@ -661,11 +661,11 @@ sub busquedaAvanzada{
 #*********************************** busqueda NIVEL 1****************************************
 my $from1 = "";
 my $where1 = "";
-my $subcon1= "FROM nivel1 n1 INNER JOIN nivel1_repetibles n1r ON (n1.id1 = n1r.id1) WHERE ";
+my $subcon1= "FROM cat_nivel1 n1 INNER JOIN cat_nivel1_repetible n1r ON (n1.id1 = n1r.id1) WHERE ";
 my @Subconsultas1;
 
 if($nivel1 ne ""){
-	$from1 = "nivel1 n1";
+	$from1 = "cat_nivel1 n1";
 	my @array1= split(/#/,$nivel1);
 	
 	for(my $i;$i<scalar(@array1);$i++){
@@ -688,12 +688,12 @@ if($where1 ne ""){
 #*********************************** busqueda NIVEL 2****************************************
 my $from2 = "";
 my $where2 = "";
-my $subcon2= "FROM nivel2 n2 INNER JOIN nivel2_repetibles n2r ON (n2.id2 = n2r.id2) WHERE ";
+my $subcon2= "FROM cat_nivel2 n2 INNER JOIN cat_nivel2_repetible n2r ON (n2.id2 = n2r.id2) WHERE ";
 my @Subconsultas2;
 
 if($nivel2 ne ""){
 	
-	$from2 = "nivel2 n2";
+	$from2 = "cat_nivel2 n2";
 	my @array2= split(/#/,$nivel2);
 	
 	for(my $i;$i<scalar(@array2);$i++){
@@ -716,11 +716,11 @@ if($where2 ne ""){
 #*********************************** busqueda NIVEL 3****************************************
 my $from3 = "";
 my $where3 = "";
-my $subcon3= "FROM nivel3 n3 INNER JOIN nivel3_repetibles n3r ON (n3.id3 = n3r.id3) WHERE ";
+my $subcon3= "FROM cat_nivel3 n3 INNER JOIN cat_nivel3_repetible n3r ON (n3.id3 = n3r.id3) WHERE ";
 my @Subconsultas3;
 
 if($nivel3 ne ""){
-	$from3 = "nivel3 n3";
+	$from3 = "cat_nivel3 n3";
 	my @array3= split(/#/,$nivel3);
 	
 	for(my $i;$i<scalar(@array3);$i++){
@@ -752,7 +752,7 @@ if($from1 ne "" || $nivel1rep ne ""){
 		$pare1=")";
 	}
 	if($nivel1rep ne ""){
-	#Se hizo una busqueda en el nivel1_repetibles
+	#Se hizo una busqueda en el nivel1_repetible
 		if(scalar(@Subconsultas1)>1){
 			$pare1=")";
 		}
@@ -778,7 +778,7 @@ if($from2 ne "" || $nivel2rep ne ""){
 		$pare2=")";
 	}
 	if($nivel2rep ne ""){
-		#Se hizo una busqueda en el nivel2_repetibles
+		#Se hizo una busqueda en el nivel2_repetible
 		if(scalar(@Subconsultas2)>1){
 			$pare1=")";
 		}
@@ -804,7 +804,7 @@ if($from3 ne "" || $nivel3rep ne ""){
 		$pare3=")";
 	}
 	if($nivel3rep ne ""){
-		#Se hizo una busqueda en el nivel3_repetibles
+		#Se hizo una busqueda en el nivel3_repetible
 		if(scalar(@Subconsultas3)>1){
 			$pare3=")";
 		}
@@ -882,7 +882,7 @@ Busca los distintos tipos de documentos que tiene una tupla del nivel1, se pasa 
 sub buscarItemtypes{
 	my ($id1)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT tipo_documento FROM nivel2 WHERE id1=?";
+	my $query="SELECT DISTINCT ref_tipo_documento FROM cat_nivel2 WHERE id1=?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
@@ -915,7 +915,7 @@ print A "desde buscar encabezado \n";
 #PQ DEBERIAMOS TRAER TODOS LOS ENCABEZADOS SEGUN UN TIPO DE ITEM!!!!!!!!!!!!!!!!!!!!!1
 #ordeno el resultado del arreglo por tipo de item
 	my $query2="	SELECT *
-			FROM estructura_catalogacion_opac estco INNER JOIN encabezado_campo_opac eco
+			FROM cat_estructura_catalogacion_opac estco INNER JOIN cat_encabezado_campo_opac eco
 			ON (estco.idencabezado = eco.idencabezado)
 			WHERE estco.visible = 1 AND estco.idencabezado = ? AND nivel=? ";
 # 			ORDER BY eco.orden ";
@@ -924,7 +924,7 @@ print A "desde buscar encabezado \n";
 		my @infoEncabezado;
 	#busca los idencabezado para un tipo de item
 		my $dbh = C4::Context->dbh;
-		my $query="SELECT * FROM encabezado_item_opac WHERE itemtype=?";
+		my $query="SELECT * FROM cat_encabezado_item_opac WHERE itemtype=?";
 		my $sth=$dbh->prepare($query);
 		$sth->execute($itemtype);
 
@@ -979,7 +979,7 @@ sub buscarNivel2EnMARC{
 # print A "desde buscarNivel2EnMARC \n";
 	my $dbh = C4::Context->dbh;
 	my @nivel2=&buscarNivel2PorId1($id1);
-	my $mapeo=&buscarMapeo('nivel2');
+	my $mapeo=&buscarMapeo('cat_nivel2');
 	my $id2;
 	my $itemtype;
 	my $llave;
@@ -1003,7 +1003,7 @@ sub buscarNivel2EnMARC{
 			$nivel2Comp[$i]->{'subcampo'}= $mapeo->{$llave}->{'subcampo'};
 # 			$i++;
 		}
-		my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
+		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id2);
 		while (my $data=$sth->fetchrow_hashref){
@@ -1031,7 +1031,7 @@ sub buscarNivel2EnMARC{
 sub buscarAutorPorCond{
 	my ($cond)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM autores WHERE completo".$cond." ORDER BY apellido";
+	my $query="SELECT * FROM cat_autor WHERE completo".$cond." ORDER BY apellido";
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
 	my @autores;
@@ -1046,7 +1046,7 @@ sub buscarDatoDeCampoRepetible {
 	
 	my $niveln;
 	my $idn;
-	if ($nivel eq "1") {$niveln='nivel1_repetibles';$idn='id1';} elsif ($nivel eq "2"){$niveln='nivel2_repetibles';$idn='id2';} else {$niveln='nivel3_repetibles';$idn='id3';}
+	if ($nivel eq "1") {$niveln='cat_nivel1_repetible';$idn='id1';} elsif ($nivel eq "2"){$niveln='cat_nivel2_repetible';$idn='id2';} else {$niveln='cat_nivel3_repetible';$idn='id3';}
 
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT dato FROM ".$niveln." WHERE campo = ? and subcampo = ? and ".$idn." = ?;";
@@ -1061,7 +1061,7 @@ sub getautor {
     my ($idAutor) = @_;
     my $dbh   = C4::Context->dbh;
     my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
-				FROM autores WHERE id = ?");
+				FROM cat_autor WHERE id = ?");
     $sth->execute($idAutor);
     my $data=$sth->fetchrow_hashref; 
     $sth->finish();
@@ -1071,7 +1071,7 @@ sub getautor {
 sub getLevel{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from bibliolevel where code = ? ";
+        my $query = "SELECT * from ref_nivel_bibliografico where code = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
@@ -1082,7 +1082,7 @@ sub getLevel{
 #Nivel bibliografico
 sub getLevels {
  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("select * from bibliolevel");
+  	my $sth   = $dbh->prepare("select * from ref_nivel_bibliografico");
   	my %resultslabels;
   	$sth->execute;
   	while (my $data = $sth->fetchrow_hashref) {
@@ -1095,7 +1095,7 @@ sub getLevels {
 sub  getCountry{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM countries WHERE iso = ? ";
+        my $query = "SELECT * FROM ref_pais WHERE iso = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
@@ -1105,7 +1105,7 @@ sub  getCountry{
 
 sub getCountryTypes{
   	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM countries ");
+  	my $sth   = $dbh->prepare("SELECT * FROM ref_pais ");
  	 my %resultslabels;
   	$sth->execute;
   	while (my $data = $sth->fetchrow_hashref) {
@@ -1118,7 +1118,7 @@ sub getCountryTypes{
 sub getSupport{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from supports where idSupport = ? ";
+        my $query = "SELECT * from ref_soporte where idSupport = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
@@ -1129,7 +1129,7 @@ sub getSupport{
 
 sub getSupportTypes{
   	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM supports");
+  	my $sth   = $dbh->prepare("SELECT * FROM ref_soporte");
   	my %resultslabels;
   	$sth->execute;
   	while (my $data = $sth->fetchrow_hashref) {
@@ -1142,7 +1142,7 @@ sub getSupportTypes{
 sub getLanguage{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM languages WHERE idLanguage = ? ";
+        my $query = "SELECT * FROM ref_idioma WHERE idLanguage = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
@@ -1152,7 +1152,7 @@ sub getLanguage{
 
 sub getLanguages{
  	 my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM languages");
+  	my $sth   = $dbh->prepare("SELECT * FROM ref_idioma");
   	my %resultslabels;
   	$sth->execute;
   	while (my $data = $sth->fetchrow_hashref) {
@@ -1165,7 +1165,7 @@ sub getLanguages{
 sub getItemType {
  	my ($type)=@_;
   	my $dbh = C4::Context->dbh;
-  	my $sth=$dbh->prepare("SELECT description FROM itemtypes WHERE itemtype=?");
+  	my $sth=$dbh->prepare("SELECT description FROM cat_ref_tipo_nivel3 WHERE itemtype=?");
   	$sth->execute($type);
   	my $dat=$sth->fetchrow_hashref;
   	$sth->finish;
@@ -1175,7 +1175,7 @@ sub getItemType {
 
 sub getItemTypes {
  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM itemtypes ORDER BY description");
+  	my $sth   = $dbh->prepare("SELECT * FROM cat_ref_tipo_nivel3 ORDER BY description");
   	my $count = 0;
   	my @results;
 
@@ -1198,7 +1198,7 @@ description for a comprehensive information display.
 sub getborrowercategory{
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT description FROM categories WHERE categorycode = ?");
+	my $sth = $dbh->prepare("SELECT description FROM usr_ref_categoria_socio WHERE categorycode = ?");
 	$sth->execute($catcode);
 	my $description = $sth->fetchrow();
 	$sth->finish();
@@ -1208,7 +1208,7 @@ sub getborrowercategory{
 sub getAvail{
         my ($cod) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from unavailable where code = ? ";
+        my $query = "SELECT * from ref_disponibilidad where codigo = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($cod);
         my $res=$sth->fetchrow_hashref;
@@ -1219,11 +1219,11 @@ sub getAvail{
 #Disponibilidad
 sub getAvails {
   	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("select * from unavailable");
+  	my $sth   = $dbh->prepare("select * from ref_disponibilidad");
   	my %resultslabels;
   	$sth->execute;
   	while (my $data = $sth->fetchrow_hashref) {
-    		$resultslabels{$data->{'code'}}= $data->{'description'};
+    		$resultslabels{$data->{'codigo'}}= $data->{'nombre'};
   	}
   	$sth->finish;
   	return(%resultslabels);
@@ -1234,7 +1234,7 @@ sub getAvails {
 sub getTema{
 	my ($idTema)=@_;
 	my $dbh = C4::Context->dbh;
-        my $query = "SELECT * from temas where id = ? ";
+        my $query = "SELECT * from cat_tema where id = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($idTema);
         my $tema=$sth->fetchrow_hashref;
@@ -1254,12 +1254,12 @@ sub buscarTema{
 	my $count=@key;
 	my $i=1;
 
-	$query="Select distinct temas.id, temas.nombre from nivel1_repetibles inner join 
-			temas on temas.id= nivel1_repetibles.dato  where (campo='650' and subcampo='a') and
-			((temas.nombre like ? or temas.nombre like ?)";
+	$query="Select distinct cat_tema.id, cat_tema.nombre from cat_nivel1_repetible inner join 
+			cat_tema on cat_tema.id= cat_nivel1_repetible.dato  where (campo='650' and subcampo='a') and
+			((cat_tema.nombre like ? or cat_tema.nombre like ?)";
 	@bind=("$key[0]%","% $key[0]%");
 	while ($i < $count){
-		$query .= " and (temas.nombre like ? or temas.nombre like ?)";
+		$query .= " and (cat_tema.nombre like ? or cat_tema.nombre like ?)";
 		push(@bind,"$key[$i]%","% $key[$i]%");
 		$i++;
 	}
@@ -1299,7 +1299,7 @@ sub busquedaCombinada {
 	foreach my $keyword (@key) {push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");}
 
 	#Campos para las condiciones, se tienen que corresponder con las queries
-	foreach my $field (qw(titulo autores.completo temas.nombre nivel1_repetibles.dato nivel2_repetibles.dato nivel3_repetibles.dato)){ 
+	foreach my $field (qw(titulo cat_autor.completo cat_tema.nombre cat_nivel1_repetible.dato cat_nivel2_repetible.dato cat_nivel3_repetible.dato)){ 
 		my @subclauses = ();
 		foreach my $keyword (@key) { push @subclauses, "$field LIKE ? OR $field LIKE ?";}
 		$condiciones[$index]= "(" . join(")\n\tOR (", @subclauses) . ")";
@@ -1308,13 +1308,13 @@ sub busquedaCombinada {
 	
 	#CONSULTAS
 	my @queries=(
-		"SELECT id1 FROM nivel1 WHERE ".$condiciones[0], #TITULO
-		"SELECT id1 FROM nivel1 left join autores on nivel1.autor = autores.id WHERE ".$condiciones[1], #AUTOR
-		"SELECT id1 FROM nivel1_repetibles left join autores on nivel1_repetibles.dato = autores.id WHERE campo='700' and subcampo='a' and ".$condiciones[1], #Autores adicionales 700 a
-		"SELECT id1 FROM nivel1_repetibles left join temas on nivel1_repetibles.dato = temas.id WHERE campo='650' and subcampo='a' and ".$condiciones[2], #Tema 650 a
-		"SELECT id1 FROM nivel1_repetibles WHERE ".$condiciones[3], #nivel1_repetibles
-		"SELECT nivel2.id1 FROM nivel2 right join nivel2_repetibles on nivel2.id2 = nivel2_repetibles.id2 WHERE ".$condiciones[4], #nivel2_repetibles
-		"SELECT nivel3.id1 FROM nivel3 right join nivel3_repetibles on nivel3.id3 = nivel3_repetibles.id3 WHERE ".$condiciones[5], #nivel3_repetibles
+		"SELECT id1 FROM cat_nivel1 WHERE ".$condiciones[0], #TITULO
+		"SELECT id1 FROM cat_nivel1 left join cat_autor on cat_nivel1.autor = cat_autor.id WHERE ".$condiciones[1], #AUTOR
+		"SELECT id1 FROM cat_nivel1_repetible left join cat_autor on cat_nivel1_repetible.dato = cat_autor.id WHERE campo='700' and subcampo='a' and ".$condiciones[1], #Autores adicionales 700 a
+		"SELECT id1 FROM cat_nivel1_repetible left join cat_tema on cat_nivel1_repetible.dato = cat_tema.id WHERE campo='650' and subcampo='a' and ".$condiciones[2], #Tema 650 a
+		"SELECT id1 FROM cat_nivel1_repetible WHERE ".$condiciones[3], #nivel1_repetible
+		"SELECT cat_nivel2.id1 FROM cat_nivel2 right join cat_nivel2_repetible on cat_nivel2.id2 = cat_nivel2_repetible.id2 WHERE ".$condiciones[4], #nivel2_repetible
+		"SELECT cat_nivel3.id1 FROM cat_nivel3 right join cat_nivel3_repetible on cat_nivel3.id3 = cat_nivel3_repetible.id3 WHERE ".$condiciones[5], #nivel3_repetible
 	) ;
 
 	#Realizamos las consultas
@@ -1362,8 +1362,8 @@ sub buscarGrupos{
 		#issn 022a
 		#isbn 020a
 		$query2="SELECT * ";
-		$resto="FROM nivel2_repetibles n2r INNER JOIN nivel2 n2 ON (n2r.id2=n2.id2)";
-		$resto.=" INNER JOIN nivel1 n1 ON (n2.id1=n1.id1)";
+		$resto="FROM cat_nivel2_repetible n2r INNER JOIN cat_nivel2 n2 ON (n2r.id2=n2.id2)";
+		$resto.=" INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)";
 		$resto.=" WHERE (campo=020 and subcampo='a' and dato=?) or (campo=022 and subcampo='a' and dato=?) ";
 # 		$sth=$dbh->prepare($query);
 #         	$sth->execute($isbn,$isbn);
@@ -1372,7 +1372,7 @@ sub buscarGrupos{
 	}
 	else{
 		$query2="SELECT DISTINCT n1.* ";
-		$resto="FROM nivel1 n1 WHERE titulo like ? ";
+		$resto="FROM cat_nivel1 n1 WHERE titulo like ? ";
 		$titulo.="%";
 		push(@bind,$titulo);
 # 		$sth=$dbh->prepare($query);
@@ -1412,7 +1412,7 @@ Devuelve el nombre de la localidad que se pasa por parametro.
 sub getNombreLocalidad{
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT nombre FROM localidades WHERE localidad = ?");
+	my $sth = $dbh->prepare("SELECT nombre FROM ref_localidad WHERE localidad = ?");
 	$sth->execute($catcode);
 	my $description = $sth->fetchrow();
 	$sth->finish();
@@ -1439,12 +1439,12 @@ sub loguearBusqueda{
 	#comienza la transaccion
 	{
 
-	my $query = "	INSERT INTO `busquedas` ( `borrower` , `fecha` )
+	my $query = "	INSERT INTO rep_busqueda ( `borrower` , `fecha` )
 			VALUES ( ?, NOW( ));";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber);
 
-	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM busquedas";
+	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
 	$sth=$dbh->prepare($query2);
 	$sth->execute();
 
@@ -1459,7 +1459,7 @@ sub loguearBusqueda{
 		$desde= "OPAC";
 	}
 
-	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor`, `tipo`)
+	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
 			VALUES (?, ?, ?, ?);";
 
 	$sth=$dbh->prepare($query3);
@@ -1564,12 +1564,12 @@ sub loguearBusqueda{
 
 	my $dbh = C4::Context->dbh;
 
-	my $query = "	INSERT INTO `busquedas` ( `borrower` , `fecha` )
+	my $query = "	INSERT INTO rep_busqueda ( `borrower` , `fecha` )
 			VALUES ( ?, NOW( ));";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber);
 
-	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM busquedas";
+	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
 	$sth=$dbh->prepare($query2);
 	$sth->execute();
 
@@ -1584,7 +1584,7 @@ sub loguearBusqueda{
 		$desde= "OPAC";
 	}
 
-	$query3= "	INSERT INTO `historialBusqueda` (`idBusqueda` , `campo` , `valor`, `tipo`)
+	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
 			VALUES (?, ?, ?, ?);";
 
 	$sth=$dbh->prepare($query3);
@@ -1660,12 +1660,12 @@ sub getBranches {
 # returns a reference to a hash of references to branches...
 	my %branches;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT branches.*,categorycode 
-				FROM branches INNER JOIN branchrelations 
-				ON branches.branchcode=branchrelations.branchcode");
+	my $sth=$dbh->prepare("	SELECT pref_unidad_informacion.*,categorycode 
+				FROM pref_unidad_informacion INNER JOIN pref_relacion_unidad_informacion 
+				ON pref_unidad_informacion.id_ui=pref_relacion_unidad_informacion.branchcode");
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
-		$branches{$branch->{'branchcode'}}=$branch;
+		$branches{$branch->{'id_ui'}}=$branch;
 	}
 	return (\%branches);
 }
@@ -1676,7 +1676,7 @@ getBranch
 sub getBranch{
     my($branch) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM branches WHERE branchcode=?";
+    my $query = "SELECT * FROM pref_unidad_informacion WHERE id_ui=?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($branch);
     return $sth->fetchrow_hashref;

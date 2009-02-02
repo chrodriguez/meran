@@ -524,7 +524,7 @@ sub _new_stopwords
 {
 	my $dbh = C4::Context->dbh;
 	my $stopwordlist;
-	my $sth = $dbh->prepare("select word from stopwords");
+	my $sth = $dbh->prepare("select word from pref_palabra_frecuente");
 	$sth->execute;
 	while (my $stopword = $sth->fetchrow_array) {
 		my $retval = {};

@@ -182,7 +182,7 @@ Se usa en la funcion creaCatalogo.
 sub buscarCampoTemporal{
 	my($campo,$subcampo,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM estructura_catalogacion WHERE campo=? AND subcampo=? AND itemtype =? AND intranet_habilitado = 0";
+	my $query="SELECT * FROM cat_estructura_catalogacion WHERE campo=? AND subcampo=? AND itemtype =? AND intranet_habilitado = 0";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo,$subcampo,$itemtype);
 	my @results;
@@ -241,7 +241,7 @@ sub buscarCamposObligatorios{
 	
 	my $dbh = C4::Context->dbh;
 	my $query = "SELECT nivel, obligatorio, liblibrarian, kohafield ";
-	$query .=" FROM marc_subfield_structure ";
+	$query .=" FROM pref_estructura_subcampo_marc ";
 	$query .=" WHERE nivel = '1' AND obligatorio = '1'";
 
 	my $sth=$dbh->prepare($query);
@@ -265,7 +265,7 @@ sub buscarNombreCampoMarc{
 	my $nombre="";
 	my $rep="";
 	my $query = "SELECT liblibrarian, repeatable";
-	$query .=" FROM marc_tag_structure ";
+	$query .=" FROM pref_estructura_campo_marc ";
 	$query .=" WHERE tagfield=?";
 
 	my $sth=$dbh->prepare($query);
@@ -293,7 +293,7 @@ sub buscarCamposMARC{
 	my $dbh = C4::Context->dbh;
 
 	my $query="SELECT DISTINCT tagfield ";
-	$query .= " FROM marc_subfield_structure ";
+	$query .= " FROM pref_estructura_subcampo_marc ";
 	$query .= " WHERE nivel=? AND tagfield LIKE '".$campoX."%'";
 	
 	my $sth=$dbh->prepare($query);
@@ -318,7 +318,7 @@ sub buscarCamposMARCdeNivel{
 	my $dbh = C4::Context->dbh;
 
 	my $query="SELECT * ";
-	$query .= " FROM marc_subfield_structure ";
+	$query .= " FROM pref_estructura_subcampo_marc ";
 	$query .= " WHERE nivel=?";
 	
 	my $sth=$dbh->prepare($query);
@@ -346,7 +346,7 @@ sub buscarSubCampo{
 	my $dbh = C4::Context->dbh;
 	#Busco en la tabla estructura_catalogacion por si ya esta ingresado
 	my $query="SELECT subcampo as tagsubfield,liblibrarian, intranet_habilitado,obligatorio ";
-	$query .= "FROM estructura_catalogacion ";
+	$query .= "FROM cat_estructura_catalogacion ";
 	$query .= "WHERE campo = ? AND nivel=? AND itemtype=? ";
 	$query .= "AND intranet_habilitado <> 0 "; 
 	$query .= "ORDER BY subcampo ";
@@ -361,7 +361,7 @@ sub buscarSubCampo{
 
 	#Busco en la tabla marc_subfield_structure todos los subcampos
 	$query="SELECT tagsubfield,liblibrarian,repeatable,obligatorio ";
-	$query.=" FROM marc_subfield_structure ";
+	$query.=" FROM pref_estructura_subcampo_marc ";
 	$query.=" WHERE tagfield = ? AND nivel=? ORDER BY tagsubfield";
 	
 	my $sth=$dbh->prepare($query);
@@ -390,7 +390,7 @@ sub buscarCamposModificados{
 	my $dbh = C4::Context->dbh;
 
 	my $query="SELECT * ";
-	$query .= "FROM estructura_catalogacion ";
+	$query .= "FROM cat_estructura_catalogacion ";
 	$query .= "WHERE intranet_habilitado > '0' AND nivel=? ";
 	$query .= "AND itemtype=? ORDER BY intranet_habilitado ";
 	
@@ -414,7 +414,7 @@ sub actualizarCamposModificados{
 	my ($id,$textoMod,$tipoInput,$intra,$ref)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE estructura_catalogacion ";
+	my $query="UPDATE cat_estructura_catalogacion ";
 	$query .= "SET liblibrarian = ?,tipo=?, referencia=?";
 	if($intra){
 		$query.=", intranet_habilitado='".$intra."'";
@@ -433,7 +433,7 @@ Si no hay info de referencia del campo se inserta en la tabla.
 sub actualizarInfoReferencia{
 	my ($idinforef,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE informacion_referencias ";
+	my $query="UPDATE pref_informacion_referencia ";
 	$query .= "SET referencia = ?, orden= ?, campos=?, separador=? WHERE idinforef=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla,$orden,$campoRef,$separador,$idinforef);
@@ -449,7 +449,7 @@ sub actualizarVisibilidad{
 	my ($idestcat,$visible)=@_;
 	my $dbh = C4::Context->dbh;
 	$visible= ($visible +1)% 2;
-	my $query="UPDATE estructura_catalogacion SET visible = ? WHERE id=?";
+	my $query="UPDATE cat_estructura_catalogacion SET visible = ? WHERE id=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($visible,$idestcat);
 	$sth->finish;
@@ -463,11 +463,11 @@ Deshabilita el campo marc para la vista en intranet
 sub eliminarNivelIntranet{
 	my ($id,$intra,$nivel,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE estructura_catalogacion SET intranet_habilitado='0' WHERE id=? ";
+	my $query="UPDATE cat_estructura_catalogacion SET intranet_habilitado='0' WHERE id=? ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id);
 	
-	$query="UPDATE estructura_catalogacion ec SET intranet_habilitado=ec.intranet_habilitado-1 WHERE intranet_habilitado > ? AND nivel = ? AND itemtype = ?";
+	$query="UPDATE cat_estructura_catalogacion ec SET intranet_habilitado=ec.intranet_habilitado-1 WHERE intranet_habilitado > ? AND nivel = ? AND itemtype = ?";
 	$sth=$dbh->prepare($query);
         $sth->execute($intra,$nivel,$itemtype);
 }
@@ -479,7 +479,7 @@ Busca el maximo campo para generar un nuevo maximo para generar el orden del cam
 sub buscarMaximoHabilitado{
 	my($tmpl,$itemType,$nivel)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT max(".$tmpl."_habilitado) FROM estructura_catalogacion WHERE itemtype=? AND nivel=?";
+	my $query="SELECT max(".$tmpl."_habilitado) FROM cat_estructura_catalogacion WHERE itemtype=? AND nivel=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($itemType,$nivel);
 	my $nuevoMax=$sth->fetchrow + 1;
@@ -508,7 +508,7 @@ sub modificarCampo{
 		&guardarInfoReferencia($id,$tabla,$ordenMod,$camposRefMod,$separadorMod);
 	}
 	else{
-		my $query="DELETE FROM informacion_referencias WHERE idestcat = ?";
+		my $query="DELETE FROM pref_informacion_referencia WHERE idestcat = ?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id);
 	}
@@ -535,7 +535,7 @@ sub guardarCamposModificados{
 	my $tabla=$objeto->{'tabla'};
 	my $intra=&buscarMaximoHabilitado("intranet",$itemType,$nivel);#El orden, como se van a ver en el tmpl
 	my $ref =($tabla != -1);
-	my $query="SELECT * FROM estructura_catalogacion WHERE campo=? AND subcampo=? AND itemtype=? AND intranet_habilitado=0 ";
+	my $query="SELECT * FROM cat_estructura_catalogacion WHERE campo=? AND subcampo=? AND itemtype=? AND intranet_habilitado=0 ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo,$subcampo,$itemType);
 	if(my $data=$sth->fetchrow_hashref){
@@ -567,12 +567,12 @@ Hace el insert en la tabla estructura_catalogacion.
 sub insertarCamposMod{
 	my ($field,$subfield,$itemType,$textoLib,$obligatorio,$tipoInput,$ref,$nivel,$intra)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="INSERT INTO estructura_catalogacion ";
+	my $query="INSERT INTO cat_estructura_catalogacion ";
 	$query .= " (campo,subcampo,itemtype,liblibrarian,tipo,referencia,nivel,obligatorio,intranet_habilitado)";
 	$query .= " VALUES (?,?,?,?,?,?,?,?,?)";
 	my $sth=$dbh->prepare($query);
         $sth->execute($field,$subfield,$itemType,$textoLib,$tipoInput,$ref,$nivel,$obligatorio,$intra);
-	my $query2="SELECT MAX(id) FROM estructura_catalogacion";
+	my $query2="SELECT MAX(id) FROM cat_estructura_catalogacion";
 	$sth=$dbh->prepare($query2);
 	$sth->execute;
 	my $id=$sth->fetchrow;
@@ -591,7 +591,7 @@ sub guardarCampoTemporal{
 	$dbh->{RaiseError} = 1;
 	my $campo=$objeto->{'campo'};
 	my $subcampo=$objeto->{'subcampo'};
-	my $query="SELECT id FROM estructura_catalogacion WHERE campo=? AND subcampo=? AND nivel=? AND (itemtype=? OR itemtype='ALL')"; #PARA VER SI YA ESTA GUARDADO!!!
+	my $query="SELECT id FROM cat_estructura_catalogacion WHERE campo=? AND subcampo=? AND nivel=? AND (itemtype=? OR itemtype='ALL')"; #PARA VER SI YA ESTA GUARDADO!!!
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo,$subcampo,$nivel,$itemtype);
 	my $id=$sth->fetchrow_hashref;
@@ -657,7 +657,7 @@ sub buscarDatosCampoMARC{
 	my $hayDatos=0;
 	my $sth;
 	if(!$campoTabla){
-		my $tablaRep=$tabla."_repetibles";
+		my $tablaRep=$tabla."_repetible";
 		my $id="id".$nivel;
 		$query ="SELECT dato FROM ".$tabla." t INNER JOIN ".$tablaRep." tr ON (t.".$id."=tr.".$id.") ";
 		$query.="WHERE campo=? AND subcampo=?";
@@ -683,7 +683,7 @@ Guarda los datos en la tabla informacion_referencias, si ya exite la informacion
 sub guardarInfoReferencia{
 	my ($idestcat,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM informacion_referencias WHERE idestcat=?";
+	my $query="SELECT * FROM pref_informacion_referencia WHERE idestcat=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($idestcat);
 	
@@ -703,7 +703,7 @@ Hace el insert en la tabla informacion_referencia.
 sub insertarInfoRef{
 	my($idestcat,$tabla,$orden,$campoRef,$separador)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="INSERT INTO informacion_referencias ";
+	my $query="INSERT INTO pref_informacion_referencia ";
 	$query .= "(idestcat,referencia,orden,campos,separador) VALUES (?,?,?,?,?)";
 	my $sth=$dbh->prepare($query);
         $sth->execute($idestcat,$tabla,$orden,$campoRef,$separador);
@@ -745,7 +745,7 @@ sub obtenerIdentTablaRef2{
 	my ($tabla)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query="SELECT nomcamporeferencia,camporeferente FROM tablasDeReferencias WHERE referencia=?";
+	my $query="SELECT nomcamporeferencia,camporeferente FROM pref_tabla_referencia WHERE referencia=?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($tabla);
 	return($sth->fetchrow_hashref());
@@ -784,7 +784,7 @@ sub buscarInfoReferencia{
 	my $dbh = C4::Context->dbh;
 
 	my $query="SELECT referencia AS tabla, campos, orden,separador "; 
-	$query .= "FROM informacion_referencias "; 
+	$query .= "FROM pref_informacion_referencia "; 
 	$query .= "WHERE idestcat=? ";
 
 	my $sth=$dbh->prepare($query);
@@ -798,7 +798,7 @@ sub buscarInfoRefCampoSubcampo{
 	my $tabla=-1;
 	my $habilitado=0;
 	my @bind;
-	my $query="SELECT id,ir.referencia AS tabla,intranet_habilitado FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ON (ec.id=ir.idestcat) WHERE ec.campo=? AND ec.subcampo=?";
+	my $query="SELECT id,ir.referencia AS tabla,intranet_habilitado FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ON (ec.id=ir.idestcat) WHERE ec.campo=? AND ec.subcampo=?";
 	push(@bind,$campo);
 	push(@bind,$subcampo);
 	if($itemtype ne "" && $itemtype ne "ALL"){
@@ -827,7 +827,7 @@ sub buscarCamposModificadosInfoReferencia{
 	my $dbh = C4::Context->dbh;
 
 	my $query="SELECT ec.*, ir.referencia AS tabla, idinforef, campos, orden,separador "; 
-	$query .= "FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ";
+	$query .= "FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 	$query .= "ON (ec.id=ir.idestcat) WHERE ec.id=? ";
 
 	my $sth=$dbh->prepare($query);
@@ -848,7 +848,7 @@ sub buscarCamposModificadosYObligatorios{
 	my $query;
 	#Busco en la tabla estructura_catalogacion por si ya esta ingresado
 	$query = "SELECT ec.*, ir.referencia AS tabla, idinforef, campos, orden,separador "; 
-	$query.= "FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ";
+	$query.= "FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 	$query.= "ON (ec.id=ir.idestcat) ";
 	$query.= "WHERE nivel=? AND itemtype=? AND intranet_habilitado > '0' ORDER BY intranet_habilitado ";
 	my $sth=$dbh->prepare($query);
@@ -861,14 +861,14 @@ sub buscarCamposModificadosYObligatorios{
 		$llaves{$llave}=$llave;#Hash que tiene los campos y subcampos
 		$orden=$data->{'intranet_habilitado'};
 	}
-	$query="(SELECT campo FROM estructura_catalogacion ";
+	$query="(SELECT campo FROM cat_estructura_catalogacion ";
 	$query .="WHERE nivel=? AND itemtype=? AND intranet_habilitado > '0' ";
 	$query .="AND campo = c AND subcampo = s) ORDER BY intranet_habilitado";
 
 
 	my $query2="SELECT id,campo AS c, subcampo AS s,liblibrarian,intranet_habilitado, ec.referencia, tipo, ";
 	$query2 .= "ec.itemtype, ec.obligatorio , ir.referencia AS tabla, idinforef, campos, orden,separador ";
-	$query2 .= "FROM estructura_catalogacion ec LEFT JOIN informacion_referencias ir ON (ec.id=ir.idestcat) ";
+	$query2 .= "FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ON (ec.id=ir.idestcat) ";
 	$query2 .= "WHERE nivel=? AND itemtype='ALL' AND intranet_habilitado > '0' AND campo NOT IN ";
 	$query2 .=$query;
 	
@@ -886,7 +886,7 @@ sub buscarCamposModificadosYObligatorios{
 
 	#Busco en la tabla marc_subfield_structure todos los campos obligatorios
 	$query ="SELECT tagfield,tagsubfield,liblibrarian, obligatorio ";
-	$query.=" FROM marc_subfield_structure ";
+	$query.=" FROM pref_estructura_subcampo_marc ";
 	$query.=" WHERE obligatorio = '1' AND nivel=? ";
 
 	my $sth=$dbh->prepare($query);
@@ -907,28 +907,28 @@ sub buscarCamposModificadosYObligatorios{
 			if($llave2 eq "910,a"){
 				$data->{'referencia'}=1;
 				$data->{'tipo'}='combo';
-				$data->{'tabla'}='itemtypes';
+				$data->{'tabla'}='cat_ref_tipo_nivel3';
 				$data->{'campos'}='description';
 				$data->{'orden'}="'description'";
 			}
 			elsif($llave2 eq "995,c" || $llave2 eq "995,d"){
 				$data->{'referencia'}=1;
 				$data->{'tipo'}='combo';
-				$data->{'tabla'}='branches';
+				$data->{'tabla'}='pref_unidad_informacion';
 				$data->{'campos'}='branchname';
 				$data->{'orden'}="'branchname'";
 			}
 			elsif($llave2 eq "995,e"){
 				$data->{'referencia'}=1;
 				$data->{'tipo'}='combo';
-				$data->{'tabla'}='unavailable';
+				$data->{'tabla'}='ref_disponibilidad';
 				$data->{'campos'}='description';
 				$data->{'orden'}="'code'";
 			}
 			elsif($llave2 eq "995,o"){
 				$data->{'referencia'}=1;
 				$data->{'tipo'}='combo';
-				$data->{'tabla'}='issuetypes';
+				$data->{'tabla'}='circ_ref_tipo_prestamo';
 				$data->{'campos'}='description';
 				$data->{'orden'}="'issuecode'";
 			}
@@ -947,7 +947,7 @@ Busca toda la informacion que hay de un campo en particular, que fue modificado 
 sub buscarCampo{
 	my($id)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM estructura_catalogacion WHERE id=?");
+	my $sth=$dbh->prepare("SELECT * FROM cat_estructura_catalogacion WHERE id=?");
 	$sth->execute($id);
 	my @results;
 	if(my $data=$sth->fetchrow_hashref){
@@ -1015,7 +1015,7 @@ Busca la informacion de nivel 1 de un item. solo de la tabla nivel1
 sub buscarNivel1{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel1 WHERE id1 = ?";
+	my $query="SELECT * FROM cat_nivel1 WHERE id1 = ?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
@@ -1040,7 +1040,7 @@ sub buscarNivel1Completo{
 	$nivel1Comp{$llave}->{'idRep'}="";
 	$nivel1Comp{$llave}->{'visto'}=0;
 	$i++;
-	my $query="SELECT * FROM nivel1_repetibles WHERE id1=?";
+	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
 	while (my $data=$sth->fetchrow_hashref){
@@ -1070,7 +1070,7 @@ Busca la informacion de nivel 2 de un item.
 sub buscarNivel2{
 	my($id2)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel2 WHERE id2 = ?";
+	my $query="SELECT * FROM cat_nivel2 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 	my $data;
@@ -1096,7 +1096,7 @@ sub buscarNivel2Completo{
 	my($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nivel2=&buscarNivel2($id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel2');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel2');
 	my %nivel2Comp;
 	my $i=0;
 	my $llave="";
@@ -1110,7 +1110,7 @@ sub buscarNivel2Completo{
 		$nivel2Comp{$llave}->{'visto'}=0;
 		$i++;
 	}
-	my $query="SELECT * FROM nivel2_repetibles WHERE id2=?";
+	my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 	while (my $data=$sth->fetchrow_hashref){
@@ -1144,7 +1144,7 @@ sub buscarNivel2PorId1{
 
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel2 WHERE id1 = ?";
+	my $query="SELECT * FROM cat_nivel2 WHERE id1 = ?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
@@ -1187,7 +1187,7 @@ Busca la informacion de nivel 2 de un item. para un  id1 de la tabla nivel 1 e i
 sub buscarNivel2PorId1Id2{
 	my($id1, $id2)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel2 WHERE id1 = ? and id2 = ?";
+	my $query="SELECT * FROM cat_nivel2 WHERE id1 = ? and id2 = ?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1, $id2);
@@ -1229,7 +1229,7 @@ sub cantidadItem{
 	my($nivel,$id)=@_;
 	my $dbh = C4::Context->dbh;
 	my $cant=0;
-	my $query="SELECT COUNT(*) as cant FROM nivel3 WHERE ";
+	my $query="SELECT COUNT(*) as cant FROM cat_nivel3 WHERE ";
 	if($nivel==1){
 		$query.="id1=?";
 	}
@@ -1251,7 +1251,7 @@ Busca la informacion del nivel 3 perteneciente a un documento por su id3.
 sub buscarNivel3{
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel3 WHERE id3 = ?";
+	my $query="SELECT * FROM cat_nivel3 WHERE id3 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
 	my $data;
@@ -1285,7 +1285,7 @@ sub buscarNivel3Completo{
 	my($id3)=@_;
 	my $dbh = C4::Context->dbh;
 	my $nivel3=&buscarNivel3($id3);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel3');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my %nivel3Comp;
 	my $i=0;
 	my $llave="";
@@ -1297,7 +1297,7 @@ sub buscarNivel3Completo{
 		$nivel3Comp{$llave}->{'visto'}=0;
 		$i++;
 	}
-	my $query="SELECT * FROM nivel3_repetibles WHERE id3=?";
+	my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
 	while (my $data=$sth->fetchrow_hashref){
@@ -1329,7 +1329,7 @@ Se usa en editarEjemplar, Se llama igual que en Busquedas.pm ver cual queda. (Sa
 sub buscarNivel3PorId2{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM nivel3 WHERE id2 = ?";
+	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id2);
 	my @result;
@@ -1385,16 +1385,16 @@ sub actualizarOrden{
 	if($intra != $intraNuevo){
 		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 		$dbh->{RaiseError} = 1;
-		my $query="SELECT id FROM estructura_catalogacion WHERE nivel=? AND itemtype=? AND intranet_habilitado=?";
+		my $query="SELECT id FROM cat_estructura_catalogacion WHERE nivel=? AND itemtype=? AND intranet_habilitado=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($nivel,$itemtype,$intraNuevo);
 		if(my $data=$sth->fetchrow){
-			$query="UPDATE estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
+			$query="UPDATE cat_estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
 			my $sth=$dbh->prepare($query);
 			my $idMod=$data;
 			$sth->execute($intra,$idMod);	
 		}
-		$query="UPDATE estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
+		$query="UPDATE cat_estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($intraNuevo,$id);	
 	
@@ -1414,10 +1414,10 @@ sub modificarNivel1Completo{
 	$dbh->{RaiseError} = 1;
 	my @blind=();
 	my $titulo="";
-	my $query="UPDATE nivel1 SET titulo=?, autor=? WHERE id1=?";
-	my $query2="UPDATE nivel1_repetibles SET dato=? WHERE campo=? AND subcampo=? AND id1=? AND rep_n1_id=?";
-	my $query3="DELETE FROM nivel1_repetibles WHERE rep_n1_id=?";
-	my $query4="INSERT INTO nivel1_repetibles (dato,campo,subcampo,id1) VALUES (?,?,?,?)";
+	my $query="UPDATE cat_nivel1 SET titulo=?, autor=? WHERE id1=?";
+	my $query2="UPDATE cat_nivel1_repetible SET dato=? WHERE campo=? AND subcampo=? AND id1=? AND rep_n1_id=?";
+	my $query3="DELETE FROM cat_nivel1_repetible WHERE rep_n1_id=?";
+	my $query4="INSERT INTO cat_nivel1_repetible (dato,campo,subcampo,id1) VALUES (?,?,?,?)";
 # open(A,">>/tmp/pruebaMod.txt");
 	foreach my $obj(@$nivel1){
 		my $campo=$obj->{'campo'};
@@ -1513,10 +1513,10 @@ sub modificarNivel2Completo{
 	my $pais="";
 	my $soporte="";
 	my $nivelBiblio="";
-	my $query="UPDATE nivel2 SET tipo_documento=?, nivel_bibliografico=?, soporte=?, pais_publicacion=?, ciudad_publicacion=?, anio_publicacion=?, lenguaje=? WHERE id2=?";
-	my $query2="UPDATE nivel2_repetibles SET dato=? WHERE campo=? AND subcampo=? AND id2=? AND rep_n2_id=?";
-	my $query3="DELETE FROM nivel2_repetibles WHERE rep_n2_id=?";
-	my $query4="INSERT INTO nivel2_repetibles (dato,campo,subcampo,id2) VALUES (?,?,?,?)";
+	my $query="UPDATE cat_nivel2 SET tipo_documento=?, nivel_bibliografico=?, soporte=?, pais_publicacion=?, ciudad_publicacion=?, anio_publicacion=?, lenguaje=? WHERE id2=?";
+	my $query2="UPDATE cat_nivel2_repetible SET dato=? WHERE campo=? AND subcampo=? AND id2=? AND rep_n2_id=?";
+	my $query3="DELETE FROM cat_nivel2_repetible WHERE rep_n2_id=?";
+	my $query4="INSERT INTO cat_nivel2_repetible (dato,campo,subcampo,id2) VALUES (?,?,?,?)";
 	foreach my $obj(@$nivel2){
 		my $campo=$obj->{'campo'};
 		my $subcampo=$obj->{'subcampo'};
@@ -1628,10 +1628,10 @@ sub modificarNivel3Completo{
 	my $bulk="";
 	my $wthdrawn="";
 	my $notforloan="";
-	my $query="UPDATE nivel3 SET holdingbranch=?, homebranch=?, signatura_topografica=?, wthdrawn=?, notforloan=? WHERE id3=?";
-	my $query2="UPDATE nivel3_repetibles SET dato=? WHERE campo=? AND subcampo=? AND id3=? AND rep_n3_id=?";
-	my $query3="DELETE FROM nivel3_repetibles WHERE rep_n3_id=?";
-	my $query4="INSERT INTO nivel3_repetibles (dato,campo,subcampo,id3) VALUES (?,?,?,?)";
+	my $query="UPDATE cat_nivel3 SET holdingbranch=?, homebranch=?, signatura_topografica=?, wthdrawn=?, notforloan=? WHERE id3=?";
+	my $query2="UPDATE cat_nivel3_repetible SET dato=? WHERE campo=? AND subcampo=? AND id3=? AND rep_n3_id=?";
+	my $query3="DELETE FROM cat_nivel3_repetible WHERE rep_n3_id=?";
+	my $query4="INSERT INTO cat_nivel3_repetible (dato,campo,subcampo,id3) VALUES (?,?,?,?)";
 	my %repetibles;
 
 	foreach my $obj(@$nivel3){
@@ -1743,7 +1743,7 @@ Sirve para cuando se quieren modificar varios ejemplares a la vez, el idRep de l
 sub dameIdReptible{
 	my ($dbh,$id3,$campo,$subcampo,$repModificados)=@_;
 	my $llave=$campo.",".$subcampo;
-	my $query="SELECT rep_n3_id FROM nivel3_repetibles WHERE id3 = ? AND campo=? AND subcampo=? ";
+	my $query="SELECT rep_n3_id FROM cat_nivel3_repetible WHERE id3 = ? AND campo=? AND subcampo=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3,$campo,$subcampo);
 	my $idRep="";
@@ -1767,7 +1767,7 @@ sub guardarModificacion{
 	my ($operacion,$responsable,$numero,$tipo)=@_;
 
         my $dbh= C4::Context->dbh;
-	my $sth = $dbh->prepare ("	INSERT INTO modificaciones (operacion,fecha,responsable,numero,tipo)
+	my $sth = $dbh->prepare ("	INSERT INTO rep_registro_modificacion (operacion,fecha,responsable,numero,tipo)
                            		VALUES (?,NOW(),?,?,?);");
         $sth->execute($operacion,$responsable,$numero,$tipo);
         $sth->finish;

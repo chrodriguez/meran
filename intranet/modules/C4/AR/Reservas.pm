@@ -215,7 +215,7 @@ sub reservar {
 sub insertarReserva {
 	my($params)=@_;
 	my $dbh=C4::Context->dbh;
-	my $query="	INSERT INTO reserves 	
+	my $query="	INSERT INTO circ_reserva 	
 			(id3,id2,borrowernumber,reservedate,notificationdate,reminderdate,branchcode,estado) 
 			VALUES (?,?,?,?,NOW(),?,?,?) ";
 	my $sth2=$dbh->prepare($query);
@@ -267,7 +267,7 @@ sub cancelar_reservas{
 	$params->{'tipo'}= 'INTRA';
         my $dbh = C4::Context->dbh;
 	foreach (@borrowersnumbers) {
-		my $sth=$dbh->prepare("	SELECT id2,reservenumber FROM reserves 
+		my $sth=$dbh->prepare("	SELECT id2,reservenumber FROM circ_reserva 
 					WHERE borrowernumber = ? AND estado <> 'P'");
 		$sth->execute($_);
 
@@ -294,7 +294,7 @@ sub cancelar_reservas_inmediatas{
 	my $loggedinuser=$params->{'loggedinuser'};
 
 	my $sth=$dbh->prepare("	SELECT reservenumber 
-				FROM reserves 
+				FROM circ_reserva 
 				WHERE borrowernumber = ? AND estado <> 'P' AND id3 IS NOT NULL ");
 	$sth->execute($borrowernumber);
 
@@ -346,7 +346,7 @@ sub eliminarReservas{
 	my ($borrowernumber)=@_;
 	
 	my $dbh = C4::Context->dbh;	
-	my $sth=$dbh->prepare("	DELETE FROM reserves
+	my $sth=$dbh->prepare("	DELETE FROM circ_reserva
 			    	WHERE borrowernumber=?
 			   ");
 	$sth->execute($borrowernumber);
@@ -378,7 +378,7 @@ sub _getReservasAsignadas {
 	my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT *
-			FROM reserves
+			FROM circ_reserva
 			WHERE (id3 IS NOT NULL) AND (borrowernumber = ?)";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber);
@@ -468,7 +468,7 @@ sub getDatosReserva{
 	my ($reservenumber)=@_;
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT * 
-				FROM reserves 
+				FROM circ_reserva 
 				WHERE reservenumber= ?");#SE SACO EL 'FOR UPDATE' VER!!!!!
 
 	$sth->execute($reservenumber);
@@ -483,7 +483,7 @@ sub getDatosReservaEnEspera{
 	my ($id2)=@_;
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT *
-				FROM reserves
+				FROM circ_reserva
 				WHERE id2=? AND id3 IS NULL
 				ORDER BY timestamp LIMIT 1 ");
 	$sth->execute($id2);
@@ -504,7 +504,7 @@ sub _actualizarDatosReservaEnEspera{
 	my $loggedinuser=$reservaGrupo->{'loggedinuser'};
 	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::Context->preference("reserveGroup"),1);
 
-	my $sth=$dbh->prepare("	UPDATE reserves 
+	my $sth=$dbh->prepare("	UPDATE circ_reserva 
 				SET id3=?, reservedate=?, notificationdate=NOW(), reminderdate=?, 
 				branchcode=?, estado='E'
 				WHERE id2=? AND borrowernumber=? ");
@@ -537,7 +537,7 @@ Funcion que elimina la reserva de la base de datos.
 sub borrarReserva{
 	my ($reservenumber)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("DELETE FROM reserves WHERE reservenumber=?");
+	my $sth=$dbh->prepare("DELETE FROM circ_reserva WHERE reservenumber=?");
 	$sth->execute($reservenumber);
 }
 
@@ -555,10 +555,10 @@ sub DatosReservas {
 			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
 			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, r.reservenumber,
 			r.estado, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.branchcode as rbranch
-			FROM reserves r
-			INNER JOIN nivel2 n2 ON  n2.id2 = r.id2
-			INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
-			LEFT JOIN autores a ON (a.id = n1.autor)
+			FROM circ_reserva r
+			INNER JOIN cat_nivel2 n2 ON  n2.id2 = r.id2
+			INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1 
+			LEFT JOIN cat_autor a ON (a.id = n1.autor)
 			WHERE r.borrowernumber = ?
 			AND cancellationdate is NULL AND r.estado <> 'P' ";
 	
@@ -586,8 +586,8 @@ sub datosReservaRealizada{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my $query="SELECT * FROM nivel2 n2 INNER JOIN nivel1 n1 ON (n2.id1=n1.id1)
-		   LEFT JOIN nivel2_repetibles n2r ON (n2.id2=n2r.id2) 
+	my $query="SELECT * FROM cat_nivel2 n2 INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)
+		   LEFT JOIN cat_nivel2_repetible n2r ON (n2.id2=n2r.id2) 
 		   WHERE n2.id2=?";
 
 	my $sth=$dbh->prepare($query);
@@ -606,7 +606,7 @@ sub getNotForLoan{
 	my ($id3)=@_;	
 	my $dbh = C4::Context->dbh;
 	my $query= "	SELECT notforloan
-			FROM nivel3
+			FROM cat_nivel3
 			WHERE (id3 = ?)";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
@@ -635,7 +635,7 @@ sub getReservasDeBorrower {
 	my ($borrowernumber, $id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query= "	SELECT *
-			FROM reserves
+			FROM circ_reserva
 			WHERE (borrowernumber = ?) AND (id2 = ?)
 			AND (estado <> 'P')";
 	my $sth=$dbh->prepare($query);
@@ -656,7 +656,7 @@ sub getReservasDeId2 {
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query= "	SELECT *
-			FROM reserves
+			FROM circ_reserva
 			WHERE (id2 = ?) AND (estado <> 'P')";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2);
@@ -676,7 +676,7 @@ sub getReservaDeId3{
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
 	
-	my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id3 = ? ");
+	my $sth=$dbh->prepare("SELECT * FROM circ_reserva WHERE id3 = ? ");
 	$sth->execute($id3);
 	return ($sth->fetchrow_hashref);
 }
@@ -690,8 +690,8 @@ sub getDatosReservaDeId3{
 	my $dbh = C4::Context->dbh;
 
 	my $query= "   	SELECT  * 
-			FROM reserves LEFT JOIN  borrowers ON                      reserves.borrowernumber=borrowers.borrowernumber 
-			WHERE reserves.id3 = ? AND estado <> 'P' ";
+			FROM circ_reserva LEFT JOIN  borrowers ON                      circ_reserva.borrowernumber=borrowers.borrowernumber 
+			WHERE circ_reserva.id3 = ? AND estado <> 'P' ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
@@ -706,7 +706,7 @@ sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="	SELECT count(*) as cant FROM reserves"; 
+        my $query="	SELECT count(*) as cant FROM circ_reserva"; 
         $query .= " 	WHERE  borrowernumber = ? 
                         AND cancellationdate IS NULL AND estado <> 'P'";
 
@@ -723,7 +723,7 @@ sub cantReservasPorGrupo{
 	my ($id2)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT  count(*) as reservas
-				FROM reserves
+				FROM circ_reserva
 				WHERE id2 =? AND estado <> 'P' ");
 	$sth->execute($id2);
 
@@ -736,7 +736,7 @@ sub cantReservasPorGrupoEnEspera{
 	
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT count(*) as reservas 
-				FROM reserves 
+				FROM circ_reserva 
 				WHERE  id2 = ? AND estado <> 'P' AND id3 is Null ");
 	
 	$sth->execute($id2);
@@ -750,7 +750,7 @@ sub cantReservasPorNivel1{
    my ($id1)=@_;
    my $dbh = C4::Context->dbh;
    my $sth=$dbh->prepare("	SELECT  count(*) as reservas
-                       		FROM reserves r INNER JOIN nivel2 n2 ON (r.id2 = n2.id2)
+                       		FROM circ_reserva r INNER JOIN cat_nivel2 n2 ON (r.id2 = n2.id2)
                        		WHERE n2.id1 =? AND estado <> 'P' ");
    $sth->execute($id1);
 
@@ -763,8 +763,8 @@ sub getItemsParaReserva{
         my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
-			FROM nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
-			AND n3.id3 NOT IN (	SELECT r.id3 FROM reserves r 
+			FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
+			AND n3.id3 NOT IN (	SELECT r.id3 FROM circ_reserva r 
 						WHERE id2 = ? AND id3 IS NOT NULL   )";
 
 	my $sth=$dbh->prepare($query);
@@ -779,7 +779,7 @@ sub getDisponibilidadGrupo{
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
 	my $query= "	SELECT count(*) as disponibilidad
-			FROM nivel2 n2 INNER JOIN nivel3 n3 ON (n2.id2 = n3.id2)
+			FROM cat_nivel2 n2 INNER JOIN cat_nivel3 n3 ON (n2.id2 = n3.id2)
 			WHERE (n2.id2 = ?) AND (n3.notforloan = 'DO') ";
 ## FIXME
 # Miguel - FALTA VER EL wthdrawn (DISPONIBLE , NO DISPONIBLE) ????????????????
@@ -963,13 +963,13 @@ sub intercambiarId3{
 	my ($borrowernumber, $id2, $id3, $oldid3, $msg_object)= @_;
         my $dbh = C4::Context->dbh;
 
-	my $sth=$dbh->prepare("SELECT id3, estado FROM reserves WHERE id3=? FOR UPDATE ");
+	my $sth=$dbh->prepare("SELECT id3, estado FROM circ_reserva WHERE id3=? FOR UPDATE ");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
 
 	if ($data && $data->{'estado'} eq "E"){ 
 		#quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
-		$sth=$dbh->prepare("UPDATE reserves SET id3= ? WHERE id3 = ?");
+		$sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id3 = ?");
 		$sth->execute($oldid3, $id3);
 		#actualizo la reserva con el viejo id3 para la reserva del otro usuario.
 	}
@@ -979,7 +979,7 @@ sub intercambiarId3{
 	}
 	else{
 		#el item con id3 esta libre se actualiza la reserva del usuario al que se va a prestar el item.
-		$sth=$dbh->prepare("UPDATE reserves SET id3= ? WHERE id2=? AND borrowernumber=?");
+		$sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id2=? AND borrowernumber=?");
 		$sth->execute($id3, $id2, $borrowernumber);
 	}
 
@@ -989,7 +989,7 @@ sub intercambiarId3{
 sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE reserves SET id3= ? WHERE reservenumber = ?";
+	my $query="UPDATE circ_reserva SET id3= ? WHERE reservenumber = ?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3Libre,$reservenumber);
 }
@@ -1108,19 +1108,19 @@ sub insertarPrestamo {
 
 	my $dbh=C4::Context->dbh;
 #Se acutualiza el estado de la reserva a P = Presetado
-	my $sth=$dbh->prepare("	UPDATE reserves SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
+	my $sth=$dbh->prepare("	UPDATE circ_reserva SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
 
 	$sth->execute(	
 			$params->{'id2'},
 			$params->{'borrowernumber'}
 	);
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-	my $sth2=$dbh->prepare("	DELETE FROM sanctions 
+	my $sth2=$dbh->prepare("	DELETE FROM circ_sancion 
 					WHERE reservenumber = ? ");
 
 	$sth2->execute(	$params->{'reservenumber'});
 #Se realiza el prestamo del item
-	my $sth3=$dbh->prepare("	INSERT INTO issues 		
+	my $sth3=$dbh->prepare("	INSERT INTO  circ_prestamo 		
 					(borrowernumber,id3,date_due,branchcode,issuingbranch,renewals,issuecode) 
 					VALUES (?,?,NOW(),?,?,?,?) ");
 
@@ -1165,8 +1165,8 @@ sub Enviar_Email{
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
 
 		my $sth=$dbh->prepare("	SELECT n1.titulo,n1.id1 as rid1,n1.autor,r.id2 as rid2
-					FROM reserves r INNER JOIN nivel2 n2 ON n2.id2 = r.id2
-					INNER JOIN nivel1 n1 ON n2.id1 = n1.id1 
+					FROM circ_reserva r INNER JOIN cat_nivel2 n2 ON n2.id2 = r.id2
+					INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1 
 					WHERE  r.borrowernumber =? AND r.id3= ? ");
 
 		$sth->execute($bor,$id3);
@@ -1278,7 +1278,7 @@ sub reservasVencidas{
 	my $dbh = C4::Context->dbh;
 	my @results;
 	my $query= "	SELECT * 
-			FROM reserves 
+			FROM circ_reserva 
 			WHERE estado <> 'P' AND reminderdate < NOW() AND id3 IS NOT NULL";
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
@@ -1294,7 +1294,7 @@ Esta funcion retorna la cantidad de reservas en espera
 sub cant_waiting{
         my ($borrowernumber)=@_;
         my $dbh = C4::Context->dbh;
-        my $query="	SELECT count(*) as cant FROM reserves
+        my $query="	SELECT count(*) as cant FROM circ_reserva
    			WHERE borrowernumber = ?
 			AND cancellationdate IS NULL
 			AND estado <> 'P'
@@ -1314,12 +1314,12 @@ sub CheckWaiting {
     	my @itemswaiting;
 
 	my $sth=$dbh->prepare("	SELECT n3.barcode, n1.titulo, b.branchname, n2.id2, it.description, r. * 
-				FROM reserves r
-				INNER JOIN nivel3 n3 ON r.id3 = n3.id3
-				INNER JOIN nivel1 n1 ON n1.id1 = n3.id1
-				INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
-				INNER JOIN itemtypes it ON it.itemtype = n2.tipo_documento
-				INNER JOIN branches b ON b.branchcode = r.branchcode
+				FROM circ_reserva r
+				INNER JOIN cat_nivel3 n3 ON r.id3 = n3.id3
+				INNER JOIN cat_nivel1 n1 ON n1.id1 = n3.id1
+				INNER JOIN cat_nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
+				INNER JOIN cat_ref_tipo_nivel3 it ON it.itemtype = n2.tipo_documento
+				INNER JOIN pref_unidad_informacion b ON b.branchcode = r.branchcode
 				WHERE borrowernumber =? AND cancellationdate IS NULL");
 
  	$sth->execute($borrowernumber);
@@ -1341,7 +1341,7 @@ sub tiene_reservas {
 	my ($id3)=@_;
 
   	my $dbh = C4::Context->dbh;
-  	my $query= "	SELECT * FROM reserves  
+  	my $query= "	SELECT * FROM circ_reserva  
 			WHERE cancellationdate is NULL
 			AND estado <> 'P'
 			AND id3 = ?";
@@ -1362,11 +1362,11 @@ sub tiene_reservas {
 
 sub FindNotRegularUsersWithReserves {
 	my $dbh = C4::Context->dbh;
-	my $query="	SELECT reserves.borrowernumber 
-			FROM reserves INNER JOIN persons ON reserves.borrowernumber = persons.borrowernumber
+	my $query="	SELECT circ_reserva.borrowernumber 
+			FROM circ_reserva INNER JOIN persons ON circ_reserva.borrowernumber = persons.borrowernumber
 			WHERE regular = '0'
 			AND cancellationdate IS NULL
-			AND reserves.estado IS NULL";
+			AND circ_reserva.estado IS NULL";
 
         my $sth=$dbh->prepare($query);
         $sth->execute();
@@ -1388,11 +1388,11 @@ Para poder mandarles un mail.
 sub mailReservas{
 	my ($branch)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM reserves 
-		INNER JOIN borrowers ON (reserves.borrowernumber=borrowers.borrowernumber) 
-		LEFT JOIN nivel3 n3 ON (reserves.id3 = n3.id3 )
-		INNER JOIN nivel1 n1 ON (n3.id1 = n1.id1)
-		WHERE reserves.branchcode=? AND estado <> 'P'");
+	my $sth=$dbh->prepare("SELECT * FROM circ_reserva 
+		INNER JOIN borrowers ON (circ_reserva.borrowernumber=borrowers.borrowernumber) 
+		LEFT JOIN cat_nivel3 n3 ON (circ_reserva.id3 = n3.id3 )
+		INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
+		WHERE circ_reserva.branchcode=? AND estado <> 'P'");
 	$sth->execute($branch);
 	my @result;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -1419,7 +1419,7 @@ my ($id2,$id3,$responsable)=@_;
 	my $dbh=C4::Context->dbh;
 
 	#Tiene una reserva asignada??
-	my $query=" SELECT * FROM reserves WHERE (estado <> 'P') AND (id3 = ?) ";
+	my $query=" SELECT * FROM circ_reserva WHERE (estado <> 'P') AND (id3 = ?) ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
 	my $reserva=$sth->fetchrow_hashref;
@@ -1429,20 +1429,20 @@ my ($id2,$id3,$responsable)=@_;
 		my $item= getItemsParaReserva($id2); #busco un item libre del grupo
 		if ($item) {
 		#Hay un ejemplar libre para el usuario
-			my $sth2=$dbh->prepare("UPDATE reserves SET id3= ? WHERE reservenumber= ?; ");
+			my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE reservenumber= ?; ");
 			$sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
 
 		}else {
 		#NO hay ejemplares libres!!! 
 		#Queda algun ejemplar Disponible?? (wthdrawn = 0) y (notforloan = 0)
 # 		my $query2="SELECT * FROM nivel3 WHERE id2 = ? and wthdrawn='0' and notforloan = '0'";
-		my $query2="SELECT * FROM nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
+		my $query2="SELECT * FROM cat_nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
 		my $sth4=$dbh->prepare($query2);
 		$sth4->execute($id2);
 		my $disponibles=$sth4->fetchrow_hashref;
 			if ($disponibles){
 		#Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
-				my $query3="UPDATE reserves SET timestamp='0000-00-00 00:00:00', id3 = NULL
+				my $query3="UPDATE circ_reserva SET timestamp='0000-00-00 00:00:00', id3 = NULL
 					    WHERE reservenumber=? ";
 				my $sth5=$dbh->prepare($query3);
 				$sth5->execute($reserva->{'reservenumber'});
@@ -1472,7 +1472,7 @@ my ($id2,$loggedinuser)=@_;
 	my $dbh = C4::Context->dbh;
 
         #Primero busco los datos de las reservas que se quieren borrar
-	my $sth=$dbh->prepare("SELECT * FROM reserves WHERE id2 = ? ");
+	my $sth=$dbh->prepare("SELECT * FROM circ_reserva WHERE id2 = ? ");
 	$sth->execute($id2);
 	my @resultado;
 
@@ -1481,7 +1481,7 @@ my ($id2,$loggedinuser)=@_;
 	}
 
 	#Elimino las reservas se estan cancelando
-	$sth=$dbh->prepare(" DELETE FROM reserves WHERE id2 = ? ");
+	$sth=$dbh->prepare(" DELETE FROM circ_reserva WHERE id2 = ? ");
 	$sth->execute($id2);
 
 	foreach my $data (@resultado){
@@ -1492,7 +1492,7 @@ my ($id2,$loggedinuser)=@_;
 		if($data->{'id3'}){
 #ES UNA RESERVA ASIGNADA
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-			my $sth4=$dbh->prepare("	DELETE FROM sanctions 
+			my $sth4=$dbh->prepare("	DELETE FROM circ_sancion 
 							WHERE reservenumber=? AND (now() < startdate) ");
 
 			$sth4->execute($data->{'reservenumber'});

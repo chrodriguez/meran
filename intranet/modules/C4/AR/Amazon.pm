@@ -27,17 +27,17 @@ sub insertCover {
 my ($isbn,$url,$size)=@_;
 my $sql="";
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select count(*) from amazon_covers where isbn = ? ;");
+my $sth=$dbh->prepare("Select count(*) from cat_tapa_amazon where isbn = ? ;");
 $sth->execute($isbn);
 
 if ($sth->fetchrow > 0) { #Existe, hay que actualizarlo
-	if ($size eq 'small') {$sql = "Update amazon_covers set small =? where isbn = ? ;";}
-	elsif ($size eq 'medium'){$sql = "Update amazon_covers set medium=? where isbn = ? ;";}	
-        else {$sql = "Update amazon_covers set large=? where isbn = ? ;";}
+	if ($size eq 'small') {$sql = "Update cat_tapa_amazon set small =? where isbn = ? ;";}
+	elsif ($size eq 'medium'){$sql = "Update cat_tapa_amazon set medium=? where isbn = ? ;";}	
+        else {$sql = "Update cat_tapa_amazon set large=? where isbn = ? ;";}
 } else { #NO existe, hay que agregarlo
-if ($size eq 'small') {$sql = "Insert into amazon_covers (small,isbn) values (?,?) ;";}
-         elsif ($size eq 'medium') {$sql = "Insert into amazon_covers (medium,isbn) values (?,?) ;";}
-		else {$sql = "Insert into amazon_covers (large,isbn) values (?,?) ;";}
+if ($size eq 'small') {$sql = "Insert into cat_tapa_amazon (small,isbn) values (?,?) ;";}
+         elsif ($size eq 'medium') {$sql = "Insert into cat_tapa_amazon (medium,isbn) values (?,?) ;";}
+		else {$sql = "Insert into cat_tapa_amazon (large,isbn) values (?,?) ;";}
 }
 
 my $sth2=$dbh->prepare($sql);
@@ -48,9 +48,9 @@ sub getCover { #Recupero una URL de la base
 my ($isbn,$size)=@_;
 my $url='';
 my $sql='';
-if ($size eq 'small') {$sql = "Select small from amazon_covers where isbn= ? and small is not NULL;"}
-	elsif($size eq 'medium') {$sql = "Select medium from amazon_covers where isbn= ? and medium is not NULL;"}
-        else {$sql = "Select large from amazon_covers where isbn= ? and large is not NULL;"}
+if ($size eq 'small') {$sql = "Select small from cat_tapa_amazon where isbn= ? and small is not NULL;"}
+	elsif($size eq 'medium') {$sql = "Select medium from cat_tapa_amazon where isbn= ? and medium is not NULL;"}
+        else {$sql = "Select large from cat_tapa_amazon where isbn= ? and large is not NULL;"}
 
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare($sql);
@@ -123,9 +123,9 @@ sub getImageForId1 {
 my ($id1,$size)=@_;
 my $url='';
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select nivel2_repetibles.dato from nivel2 left join nivel2_repetibles on 
-			nivel2.id2 = nivel2_repetibles.id2 where nivel2_repetibles.campo='020' 
-			and nivel2_repetibles.subcampo='a' and  nivel2.id1= ? ;");
+my $sth=$dbh->prepare("Select cat_nivel2_repetible.dato from cat_nivel2 left join cat_nivel2_repetible on 
+			cat_nivel2.id2 = cat_nivel2_repetible.id2 where cat_nivel2_repetible.campo='020' 
+			and cat_nivel2_repetible.subcampo='a' and  cat_nivel2.id1= ? ;");
 $sth->execute($id1);
 
 
@@ -143,9 +143,9 @@ sub getImageForId2 {
 my ($id2,$size)=@_;
 my $url='';
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select nivel2_repetibles.dato from nivel2_repetibles where 
-			nivel2_repetibles.campo='020' and nivel2_repetibles.subcampo='a' 
-			and  nivel2_repetibles.id2= ? ;");
+my $sth=$dbh->prepare("Select cat_nivel2_repetible.dato from cat_nivel2_repetible where 
+			cat_nivel2_repetible.campo='020' and cat_nivel2_repetible.subcampo='a' 
+			and  cat_nivel2_repetible.id2= ? ;");
 $sth->execute($id2);
 
 my $isbn=$sth->fetchrow;
@@ -165,7 +165,7 @@ my $dbh = C4::Context->dbh;
 
 open (L,">>/tmp/amazon_covers");
 
-my $query = " SELECT dato FROM nivel2_repetibles WHERE campo = '020' and subcampo = 'a' ;";
+my $query = " SELECT dato FROM cat_nivel2_repetible WHERE campo = '020' and subcampo = 'a' ;";
 my $sth=$dbh->prepare($query);
    $sth->execute();
 

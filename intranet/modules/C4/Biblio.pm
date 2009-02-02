@@ -48,7 +48,7 @@ $autor =~ s/\r+$//; #elimina los \r
 $autor =~ s/\s+$//; #elimina el espacio del final
 $autor =~ s/^\s+//; #elimina el espacio del principio
 
-my $sth = $dbh->prepare("Select id from autores where completo=?");
+my $sth = $dbh->prepare("Select id from cat_autor where completo=?");
 $sth->execute($autor);
 my $data   = $sth->fetchrow_arrayref;
 unless($data){ #El autor no existe, entonces lo agrego a la tabla de autores
@@ -61,12 +61,12 @@ unless($data){ #El autor no existe, entonces lo agrego a la tabla de autores
 			$aux=~ s/^\s+//; #elimina el espacio del principio
 			$ar=$aux;
 			}
-		$sth = $dbh->prepare ("insert into autores (nombre,apellido,completo) 
+		$sth = $dbh->prepare ("insert into cat_autor (nombre,apellido,completo) 
 					values (?,?,?);");
             	(($ars[0])||($ars[0]=''));
 		(($ars[1])||($ars[1]=''));
 	    	$sth->execute($ars[1],$ars[0],$autor);
-            	$sth = $dbh->prepare("Select id from autores where completo=?");
+            	$sth = $dbh->prepare("Select id from cat_autor where completo=?");
 	  	$sth->execute($autor);
 	  	$data= $sth->fetchrow_arrayref;
 	}
@@ -99,7 +99,7 @@ sub agregarColaboradores {
 		$funcion =~ s/\s+$//; #Quita los espacios al final
 			
 		($funcion ne ''||($funcion='indefinida'));
-       		$sth = $dbh->prepare ("insert into colaboradores (biblionumber, idColaborador,tipo) values (?,?,?);");
+       		$sth = $dbh->prepare ("insert into cat_colaborador (biblionumber, idColaborador,tipo) values (?,?,?);");
 	    	$sth->execute($bibnro,$idCol,$funcion);
 	    	$sth->finish;
 				
@@ -111,7 +111,7 @@ sub agregarColaboradores {
 sub delcolaboradores {
     my ($dbh,$biblio)=@_;
     #   my $dbh   = C4Connect;
-        my $sth = $dbh->prepare("Delete from colaboradores where biblionumber = ?");
+        my $sth = $dbh->prepare("Delete from cat_colaborador where biblionumber = ?");
 	$sth->execute($biblio);
 	$sth->finish;
     }
@@ -120,7 +120,7 @@ sub delcolaboradores {
 =item
 sub getbookshelf {
   my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bookshelf where parent=0 ");
+  my $sth   = $dbh->prepare("select * from cat_estante where parent=0 ");
   my %resultslabels;
   $sth->execute;
   while (my $data = $sth->fetchrow_hashref) {
@@ -133,7 +133,7 @@ sub getbookshelf {
 sub getbooksubshelf {
 my ($shelf) = @_;
   my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from bookshelf where parent=? ");
+  my $sth   = $dbh->prepare("select * from cat_estante where parent=? ");
   my %resultslabels;
   $sth->execute($shelf);
   while (my $data = $sth->fetchrow_hashref) {

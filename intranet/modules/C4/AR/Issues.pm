@@ -231,7 +231,7 @@ sub getDatosPrestamo{
 	my ($id3)=@_;
 
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND returndate IS NULL");
 	$sth->execute($id3);
 	return ($sth->fetchrow_hashref);
 }
@@ -240,7 +240,7 @@ sub actualizarPrestamo{
 	my ($id3,$borrowernumber)=@_;
 
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("	UPDATE issues SET returndate=NOW() 
+	my $sth=$dbh->prepare("	UPDATE  circ_prestamo SET returndate=NOW() 
 				WHERE id3=? AND borrowernumber=? AND returndate IS NULL");
 	$sth->execute($id3,$borrowernumber);
 }
@@ -254,7 +254,7 @@ sub fechaDeVencimiento {
 	my ($id3,$date_due)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3 = ? AND date_due = ? ");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3 = ? AND date_due = ? ");
 	$sth->execute($id3,$date_due);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -280,7 +280,7 @@ vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que
 sub vencimiento {
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM issues WHERE id3=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND returndate IS NULL");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -305,9 +305,9 @@ sub sepuederenovar{
 my ($borrowernumber,$id3)=@_;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare(" SELECT * FROM reserves INNER JOIN issues ON issues.id3=reserves.id3 
-			AND reserves.borrowernumber=issues.borrowernumber  WHERE reserves.id3=? 
-			AND reserves.borrowernumber=? AND reserves.estado='P' AND returndate IS NULL");
+my $sth=$dbh->prepare(" SELECT * FROM circ_reserva INNER JOIN  circ_prestamo ON  circ_prestamo.id3=circ_reserva.id3 
+			AND circ_reserva.borrowernumber= circ_prestamo.borrowernumber  WHERE circ_reserva.id3=? 
+			AND circ_reserva.borrowernumber=? AND circ_reserva.estado='P' AND returndate IS NULL");
 
 $sth->execute($id3,$borrowernumber);
 
@@ -362,7 +362,7 @@ sub hayReservasEsperando(){
 	my ($id2)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth1=$dbh->prepare("SELECT * FROM reserves WHERE id2=? AND id3 IS NULL ORDER BY timestamp LIMIT 1;");
+	my $sth1=$dbh->prepare("SELECT * FROM circ_reserva WHERE id2=? AND id3 IS NULL ORDER BY timestamp LIMIT 1;");
 	$sth1->execute($id2);
 	my $data1= $sth1->fetchrow_hashref;
 	if ($data1){
@@ -420,7 +420,7 @@ sub renovar {
 	#Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
 
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("	UPDATE issues 
+		my $sth=$dbh->prepare("	UPDATE  circ_prestamo 
 					SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() 
 					WHERE id3 = ? AND borrowernumber = ?");
 		$sth->execute($id3, $borrowernumber);
@@ -429,7 +429,7 @@ sub renovar {
 #esto se podria cruzar con la lo trae getDataItms para hacer una sola funcion
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare(" SELECT issuecode
-					FROM issues
+					FROM  circ_prestamo
 					WHERE(id3 = ? AND borrowernumber = ?) ");
 		$sth->execute($id3, $borrowernumber);
 		my $data = $sth->fetchrow_hashref;
@@ -539,7 +539,7 @@ sub verificarTipoPrestamo {
 #retorna verdadero si se puede hacer un determinado tipo de prestamo
 	my ($issuetype,$notforloan)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM issuetypes WHERE issuecode = ? AND notforloan = ?");
+	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo WHERE issuecode = ? AND notforloan = ?");
 	$sth->execute($issuetype,$notforloan);
 	return($sth->fetchrow_hashref);
 }
@@ -549,7 +549,7 @@ sub IssueType {
 #retorna los datos del tipo de prestamo
 	my ($issuetype)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM issuetypes WHERE issuecode = ?");
+	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo WHERE issuecode = ?");
 	$sth->execute($issuetype);
 
 	return($sth->fetchrow_hashref);
@@ -558,7 +558,7 @@ sub IssueType {
 sub IssuesType {
 #Trae todos los tipos de Prestamos existentes
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT issuecode, description FROM issuetypes ORDER BY description");
+	my $sth=$dbh->prepare("SELECT issuecode, description FROM circ_ref_tipo_prestamo ORDER BY description");
 	$sth->execute();
 	my @result;
 	while (my $ref= $sth->fetchrow_hashref) {
@@ -577,11 +577,11 @@ sub IssuesTypeEnabled {
 	my $dbh = C4::Context->dbh;
   	my $sth;
 #Trae todos los tipos de prestamos que estan habilitados
-  	my $query= " SELECT * FROM issuetypes WHERE enabled = 1 ";
-	$query .= " AND issuecode NOT IN (SELECT issuetypes.issuecode FROM sanctions 
-	INNER JOIN sanctiontypes ON sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
-	INNER JOIN sanctionissuetypes ON sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode 
-	INNER JOIN issuetypes ON sanctionissuetypes.issuecode = issuetypes.issuecode 
+  	my $query= " SELECT * FROM circ_ref_tipo_prestamo WHERE enabled = 1 ";
+	$query .= " AND issuecode NOT IN (SELECT circ_ref_tipo_prestamo.issuecode FROM circ_sancion 
+	INNER JOIN circ_tipo_sancion ON circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
+	INNER JOIN circ_tipo_prestamo_sancion ON circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
+	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
 	WHERE borrowernumber = ? AND (now() between startdate AND enddate)) ";
 
   	if ($notforloan ne undef){
@@ -617,7 +617,7 @@ sub DatosPrestamos {
 	my ($borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ?");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE returndate IS NULL AND borrowernumber = ?");
 	$sth->execute($borrowernumber);
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 	my @result;
@@ -639,7 +639,7 @@ sub DatosPrestamosPorTipo {
 
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $query=" SELECT * FROM issues WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=? ";
+	my $query=" SELECT * FROM  circ_prestamo WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber,$issuetype_hashref->{'issuecode'});
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
@@ -663,8 +663,8 @@ sub getDatosPrestamoDeId3{
 
 	my $dbh = C4::Context->dbh;
 	my $query= "    SELECT * 
-			FROM issues iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
-	           	INNER JOIN issuetypes ist ON (iss.issuecode=ist.issuecode) 
+			FROM  circ_prestamo iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
+	           	INNER JOIN circ_ref_tipo_prestamo ist ON (iss.issuecode=ist.issuecode) 
 			WHERE id3=? AND returndate IS  NULL ";
 
 	my $sth=$dbh->prepare($query);
@@ -678,7 +678,7 @@ sub PrestamosMaximos {
 	my ($borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;
 	
-	my $sth=$dbh->prepare("SELECT * FROM issuetypes;");
+	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo;");
 	$sth->execute();
 	my @result;
 	my $cant=0;	
@@ -687,7 +687,7 @@ sub PrestamosMaximos {
 	while (my $iss= $sth->fetchrow_hashref) {
 		my $issuetype=$iss->{'issuecode'};
 		my $sth1=$dbh->prepare("	SELECT count(*) AS prestamos 
-						FROM issues 
+						FROM  circ_prestamo 
 						WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?");
 		$sth1->execute($borrowernumber,$issuetype);
 		
@@ -714,11 +714,11 @@ sub Enviar_Recordatorio{
 
 		my $dbh = C4::Context->dbh;
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
-		my $sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, reserves.id3 AS rid3
-				    FROM reserves
-				    INNER JOIN nivel2 n2 ON n2.id2 = reserves.id2
-				    INNER JOIN nivel1 n1 ON n2.id1 = n1.id1
-				    WHERE  reserves.borrowernumber =? AND reserves.id3= ?");
+		my $sth=$dbh->prepare("SELECT titulo, n1.id1 AS rid1, n2.id2 AS rid2, autor, circ_reserva.id3 AS rid3
+				    FROM circ_reserva
+				    INNER JOIN cat_nivel2 n2 ON n2.id2 = circ_reserva.id2
+				    INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1
+				    WHERE  circ_reserva.borrowernumber =? AND circ_reserva.id3= ?");
 		$sth->execute($bor,$id3);
 		my $res= $sth->fetchrow_hashref;	
 
@@ -774,7 +774,7 @@ sub Enviar_Recordatorio{
 sub enviar_recordatorios_prestamos {
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SELECT * FROM issues iss LEFT JOIN issuetypes isst ON iss.issuecode=isst.issuecode 
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo iss LEFT JOIN circ_ref_tipo_prestamo isst ON iss.issuecode=isst.issuecode 
 			       WHERE iss.returndate IS NULL AND isst.notforloan = 0");
 	$sth->execute();
 
@@ -853,8 +853,8 @@ sub getCountPrestamosDeGrupo() {
 	my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT count(*) AS cantPrestamos
-        		FROM issues i LEFT JOIN nivel3 n3 ON n3.id3 = i.id3
-        		INNER JOIN  nivel2 n2 ON n3.id2 = n2.id2
+        		FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
+        		INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
          		WHERE i.borrowernumber = ? AND n2.id2 = ?
 			AND n3.notforloan = ? AND i.returndate IS NULL ";
 
@@ -873,11 +873,11 @@ sub prestamosPorUsuario {
 	my $select= " 	SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
                 	n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico,
 			n1.titulo AS titulo, n1.autor, isst.description AS issuetype
-			FROM issues iss INNER JOIN issuetypes isst ON ( iss.issuecode = isst.issuecode )
-			INNER JOIN nivel3 n3 ON ( iss.id3 = n3.id3 )
-			INNER JOIN nivel1 n1 ON ( n3.id1 = n1.id1)
-			INNER JOIN nivel2 n2 ON ( n2.id2 = n3.id2 )
-			INNER JOIN itemtypes it ON ( it.itemtype = n2.tipo_documento )
+			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.issuecode = isst.issuecode )
+			INNER JOIN cat_nivel3 n3 ON ( iss.id3 = n3.id3 )
+			INNER JOIN cat_nivel1 n1 ON ( n3.id1 = n1.id1)
+			INNER JOIN cat_nivel2 n2 ON ( n2.id2 = n3.id2 )
+			INNER JOIN cat_ref_tipo_nivel3 it ON ( it.itemtype = n2.tipo_documento )
 			WHERE iss.borrowernumber = ?
 			AND iss.returndate IS NULL
 			ORDER BY iss.date_due desc";
@@ -922,7 +922,7 @@ sub cantidadDePrestamosPorUsuario{
 	my ($bornum)=@_;
   	my $dbh = C4::Context->dbh;
   	my $dateformat = C4::Date::get_date_format();
-  	my $query="SELECT * FROM issues WHERE borrowernumber=? AND returndate IS NULL";
+  	my $query="SELECT * FROM  circ_prestamo WHERE borrowernumber=? AND returndate IS NULL";
   	my $sth=$dbh->prepare($query);
   	$sth->execute($bornum);
   	my $issues=0;
@@ -952,7 +952,7 @@ sub getCantidadPrestamosActuales{
 	my ($bornum)=@_;
   	my $dbh = C4::Context->dbh;
 
-  	my $query="SELECT count(*) FROM issues WHERE borrowernumber=? AND returndate IS NULL";
+  	my $query="SELECT count(*) FROM  circ_prestamo WHERE borrowernumber=? AND returndate IS NULL";
   	my $sth=$dbh->prepare($query);
   	$sth->execute($bornum);
 
@@ -975,13 +975,13 @@ sub historialPrestamos {
   	my $querySelect= " 	SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, 
 				signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
 
-  	my $queryFrom = " FROM nivel3 n3 INNER JOIN nivel2 n2";
+  	my $queryFrom = " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2";
   	$queryFrom .= " ON (n3.id2 = n2.id2) ";
-  	$queryFrom .= " INNER JOIN issues iss ";
+  	$queryFrom .= " INNER JOIN  circ_prestamo iss ";
   	$queryFrom .= " ON (n3.id3 = iss.id3) ";
-  	$queryFrom .= " INNER JOIN nivel1 n1 ";
+  	$queryFrom .= " INNER JOIN cat_nivel1 n1 ";
   	$queryFrom .= " ON (n3.id1 = n1.id1) ";
-  	$queryFrom .= " INNER JOIN autores a ";
+  	$queryFrom .= " INNER JOIN cat_autor a ";
   	$queryFrom .= " ON (a.id = n1.autor) ";
 
  	my $queryWhere= " WHERE borrowernumber= ? ";

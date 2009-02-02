@@ -472,7 +472,7 @@ sub _eliminarUsuario{
     $sth->finish;
 
 # FIXME cuando se borra la reserva, habria que unificar todo, para que se conceda esa reserva al siguiente en la cola.
-    $sth=$dbh->prepare("DELETE FROM reserves
+    $sth=$dbh->prepare("DELETE FROM circ_reserva
                 WHERE borrowernumber=?
                ");
     $sth->execute($borrowernumber);
@@ -1031,12 +1031,12 @@ sub getBorrowerInfo {
     my $query;
     my $sth;
 
-    $query= "   SELECT borrowers.* , localidades.nombre AS cityname , categories.description AS categoria
+    $query= "   SELECT borrowers.* , ref_localidad.nombre AS cityname , usr_ref_categoria_socio.description AS categoria
             
-            FROM borrowers LEFT JOIN categories ON 
-                            (categories.categorycode = borrowers.categorycode)
-                                LEFT JOIN localidades ON 
-                                    (localidades.localidad = borrowers.city)
+            FROM borrowers LEFT JOIN usr_ref_categoria_socio ON 
+                            (usr_ref_categoria_socio.categorycode = borrowers.categorycode)
+                                LEFT JOIN ref_localidad ON 
+                                    (ref_localidad.localidad = borrowers.city)
             WHERE (borrowers.borrowernumber = ?); ";
 
     $sth = $dbh->prepare($query);
@@ -1281,7 +1281,7 @@ sub obtenerCategorias {
     my $dbh = C4::Context->dbh;
 
     my $sth=$dbh->prepare(" SELECT categorycode , description 
-                FROM categories 
+                FROM usr_ref_categoria_socio 
                 ORDER BY description");
     $sth->execute();
     my %labels;
@@ -1306,11 +1306,11 @@ sub mailIssuesForBorrower{
     my $dbh = C4::Context->dbh;
     my $dateformat = C4::Date::get_date_format();
     my $sth=$dbh->prepare(" SELECT * 
-                FROM issues
-                LEFT JOIN nivel3 n3 ON n3.id3 = issues.id3
-                LEFT JOIN nivel1 n1 ON n3.id1 = n1.id1
-                WHERE issues.returndate IS NULL AND issues.date_due <= now( ) 
-                AND issues.branchcode = ? AND issues.borrowernumber = ? ");
+                FROM  circ_prestamo
+                LEFT JOIN cat_nivel3 n3 ON n3.id3 =  circ_prestamo.id3
+                LEFT JOIN cat_nivel1 n1 ON n3.id1 = n1.id1
+                WHERE  circ_prestamo.returndate IS NULL AND  circ_prestamo.date_due <= now( ) 
+                AND  circ_prestamo.branchcode = ? AND  circ_prestamo.borrowernumber = ? ");
         $sth->execute($branch,$bornum);
     my @result;
     my @datearr = localtime(time);
@@ -1349,6 +1349,7 @@ sub personData {
 # Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
 sub BornameSearchForCard{
     my ($apellido1,$apellido2,$category,$branch,$orden,$regular,$legajo1,$legajo2) = @_;
+
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 

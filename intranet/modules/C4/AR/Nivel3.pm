@@ -34,7 +34,7 @@ sub getEstado {
 
         my ($id3) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = " SELECT wthdrawn,notforloan FROM nivel3 WHERE id3 =  ? ";
+	my $query = " SELECT wthdrawn,notforloan FROM cat_nivel3 WHERE id3 =  ? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3);
 	my $result = $sth->fetchrow_hashref;
@@ -94,7 +94,7 @@ sub _estaDisponible {
 	my($id3)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $query=" SELECT FROM nivel3 WHERE id3 = ? ";
+	my $query=" SELECT FROM cat_nivel3 WHERE id3 = ? ";
 
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
@@ -114,11 +114,11 @@ sub deleteItem{
 
 	my $dbh = C4::Context->dbh;
 
-	my $query=" DELETE FROM nivel3_repetibles WHERE id3 = ? ";
+	my $query=" DELETE FROM cat_nivel3_repetible WHERE id3 = ? ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($params->{'id3'});
 
-	my $query=" DELETE FROM nivel3 WHERE id3 = ? ";
+	my $query=" DELETE FROM cat_nivel3 WHERE id3 = ? ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($params->{'id3'});
 }
@@ -223,7 +223,7 @@ Devuelve la disponibilidad del item que viene por paramentro.
 sub detalleDisponibilidad{
         my ($id3) = @_;
         my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM availability WHERE id3 = ? ORDER BY date DESC";
+        my $query = "SELECT * FROM cat_detalle_disponibilidad WHERE id3 = ? ORDER BY date DESC";
         my $sth = $dbh->prepare($query);
         $sth->execute($id3);
 	my @results;
@@ -248,7 +248,7 @@ sub detalleNivel3MARC{
 	my $dbh = C4::Context->dbh;
 	my (@nivel3)=&C4::AR::Catalogacion::buscarNivel3($id3);
 	my $disponibles;
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel3');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my $i=0;
 	my $dato;
 	my $campo;
@@ -270,7 +270,7 @@ sub detalleNivel3MARC{
 	
 			$i++;
 		}
-		my $query="SELECT * FROM nivel3_repetibles WHERE id3=?";
+		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id3);
 		while (my $data=$sth->fetchrow_hashref){
@@ -300,7 +300,7 @@ sub detalleNivel3OPAC{
 	my $dbh = C4::Context->dbh;
 
 	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel3');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my @nivel3Comp;
 	my @results;
 	my $i=0;
@@ -331,7 +331,7 @@ sub detalleNivel3OPAC{
 			$i++;
 		}
 		$id3=$row->{'id3'};
-		my $query="SELECT * FROM nivel3_repetibles WHERE id3=?";
+		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id3);
 		while (my $data=$sth->fetchrow_hashref){
@@ -361,7 +361,7 @@ sub detalleNivel3{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('nivel3');
+	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my @nivel3Comp;
 	my %llaves;
 	my @results;
@@ -387,7 +387,7 @@ sub detalleNivel3{
 			$i++;
 		}
 		$id3=$row->{'id3'};
-		my $query="SELECT * FROM nivel3_repetibles WHERE id3=?";
+		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
 		my $sth=$dbh->prepare($query);
         	$sth->execute($id3);
 		my $llave2;
@@ -471,7 +471,7 @@ sub getBarcode{
 
 	my $dbh = C4::Context->dbh;
 	my $query=" 	SELECT barcode
-			FROM nivel3
+			FROM cat_nivel3
 			WHERE id3 = ? ";
 	my $sth=$dbh->prepare($query);
         $sth->execute($id3);
@@ -485,7 +485,7 @@ sub getDataNivel3{
 	my $dbh = C4::Context->dbh;
 # 	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2, barcode
 	my $sth=$dbh->prepare("	SELECT *
-				FROM nivel3
+				FROM cat_nivel3
 				WHERE(id3 = ?)");
 	$sth->execute($id3);
 	my $dataNivel3= $sth->fetchrow_hashref;
@@ -507,7 +507,7 @@ sub saveNivel3{
 	my $query2="";
 	my @bind1=();
 	my @bind2=();
-	my $query3="SELECT MAX(id3) FROM nivel3";
+	my $query3="SELECT MAX(id3) FROM cat_nivel3";
 	my %parametros;
 	my $homebranch="";
 	my $holdingbranch="";
@@ -550,14 +550,14 @@ sub saveNivel3{
 			}
 		}
 	}
-	$query1= "INSERT INTO nivel3 (id1,id2,barcode,";
+	$query1= "INSERT INTO cat_nivel3 (id1,id2,barcode,";
 	$query1.="signatura_topografica,holdingbranch,homebranch,wthdrawn,notforloan) ";
 	$query1.="VALUES (?,?,*?*,?,?,?,?,?) ";
 	push (@bind1,$id1,$id2,$bulk,$holdingbranch,$homebranch,$wthdrawn,$notforloan);
 
 	if($query2 ne ""){
 		$query2=substr($query2,1,length($query2));
-		$query2="INSERT INTO nivel3_repetibles (campo,subcampo,id3,dato) VALUES ".$query2;
+		$query2="INSERT INTO cat_nivel3_repetible (campo,subcampo,id3,dato) VALUES ".$query2;
 	}
 	$parametros{'homebranch'}=$homebranch;
 	$parametros{'itemtype'}=$itemType;
@@ -602,7 +602,7 @@ sub transaccionNivel3{
 		#EL BARCODE VIENE DESDE LA INTERFACE - separados por "," se utiliza el barcode asosiado al indice que corresponde al item que se va agregar.
 			my @barcodes2=split(/,/,$barcodes);
 			$barcode="'".$barcodes2[%$parametros->{'indice'}-1]."'";
-			my $query="SELECT * FROM nivel3 WHERE barcode= ?";
+			my $query="SELECT * FROM cat_nivel3 WHERE barcode= ?";
 			my $sth=$dbh->prepare($query);
 			$sth->execute($barcode);
 			if($sth->fetchrow_hashref){
@@ -667,7 +667,7 @@ sub generaCodigoBarra{
 	}
 
 	my $sth2=$dbh->prepare("SELECT MAX(CAST(substring(barcode,INSTR(barcode,?)+?,100) AS SIGNED)) AS maximo 
-				FROM nivel3 
+				FROM cat_nivel3 
 				WHERE barcode LIKE (?) ");
 
 	$sth2->execute($like.'%',length($like)+1,$like.'%');

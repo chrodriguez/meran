@@ -84,7 +84,7 @@ sub getDataBiblioItems{
 	my ($id2)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id1 FROM nivel2 WHERE id2 = ? ");
+	my $sth=$dbh->prepare("	SELECT id1 FROM cat_nivel2 WHERE id2 = ? ");
 	$sth->execute($id2);
 	my $dataBiblioItems= $sth->fetchrow_hashref;
 	return $dataBiblioItems;
@@ -99,7 +99,7 @@ sub insertHistoricCirculation {
 	
   my $dbh = C4::Context->dbh;
 
-  my $sth=$dbh->prepare("	INSERT INTO historicCirculation(type,borrowernumber,responsable,date,id1,
+  my $sth=$dbh->prepare("	INSERT INTO rep_historial_circulacion (type,borrowernumber,responsable,date,id1,
 				id2,id3,branchcode,issuetype,end_date)
   				VALUES (?,?,?,NOW(),?,?,?,?,?,?) ");
 
@@ -114,7 +114,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (invento
 sub getmaxbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MAX(barcode) as max FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MAX(barcode) as max FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'max'};
 	return $res;
@@ -126,7 +126,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (invento
 sub getminbarcode {
  my ($branch) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MIN(barcode) as min FROM nivel3 where barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
+	my $sth = $dbh->prepare("SELECT MIN(barcode) as min FROM cat_nivel3 where barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
 	$sth->execute($branch);
 	my $res= ($sth->fetchrow_hashref)->{'min'};
 	return $res;
@@ -150,7 +150,7 @@ sub barcodesbytype {
 	if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {push @results,$row };
 
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemtype FROM itemtypes;");
+	my $sth = $dbh->prepare("SELECT itemtype FROM cat_ref_tipo_nivel3;");
 	$sth->execute();
 	
 	while (my $it = $sth->fetchrow_hashref) {
@@ -159,11 +159,11 @@ sub barcodesbytype {
 
 		my $inicio=$branch."-".$it->{'itemtype'}."-%";
 		
-		my $sth2 = $dbh->prepare("SELECT MIN(barcode) AS min FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
+		my $sth2 = $dbh->prepare("SELECT MIN(barcode) AS min FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
 		$sth2->execute($branch,$inicio);
 	 	$row->{'minimo'} = ($sth2->fetchrow_hashref)->{'min'};
 
-		my $sth3 = $dbh->prepare("SELECT MAX(barcode) AS max FROM nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
+		my $sth3 = $dbh->prepare("SELECT MAX(barcode) AS max FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
 		$sth3->execute($branch,$inicio);
 	 	$row->{'maximo'} = ($sth3->fetchrow_hashref)->{'max'};
 
@@ -187,7 +187,7 @@ sub listitemsforinventory {
 	my $dbh = C4::Context->dbh;
 	# unititle,number,
 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch
-	FROM (( nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
+	FROM (( cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
 	WHERE (barcode BETWEEN ? AND ?) AND n3.homebranch= ? ORDER BY barcode, titulo ");
 		
 	$sth->execute($minlocation,$maxlocation,$branchcode);
@@ -235,7 +235,7 @@ sub listitemsforinventorysigtop {
 	my $dbh = C4::Context->dbh;
 	#FALTA unititle,number es la edicion,
 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
-	FROM ((nivel3 n3 INNER JOIN nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN nivel1 n1 ON n1.id1 = n2.id1)
+	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
 	WHERE signatura_topografica LIKE ?
 	ORDER BY barcode, titulo");
 		
@@ -346,11 +346,9 @@ sub getpatroninformation {
 	my $query;
 	my $sth;
 	if ($borrowernumber) {
-		$sth = $dbh->prepare("SELECT borrowers.*,localidades.nombre as cityname , categories.description AS cat
-					FROM borrowers
-					LEFT JOIN categories ON categories.categorycode = borrowers.categorycode
-					LEFT JOIN localidades on localidades.localidad=borrowers.city
-					WHERE borrowers.borrowernumber = ? ;");
+		$sth = $dbh->prepare("SELECT borrowers.*,ref_localidad.nombre as cityname, usr_ref_categoria_socio.description AS cat FROM borrowers LEFT JOIN usr_ref_categoria_socio ON usr_ref_categoria_socio.categorycode = borrowers.categorycode
+		LEFT JOIN ref_localidad on ref_localidad.localidad=borrowers.city
+		WHERE borrowers.borrowernumber = ? ;");
 		$sth->execute($borrowernumber);
 	} elsif ($cardnumber) {
 		$sth = $dbh->prepare("select * from borrowers where cardnumber=?");
@@ -420,15 +418,15 @@ sub getiteminformation {
 	my $sth;
 	if ($id3) {
 		$sth=$dbh->prepare("	SELECT * 
-					FROM nivel1 n1 INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 
-					INNER JOIN nivel3 n3 ON  n2.id2=n3.id2 
+					FROM cat_nivel1 n1 INNER JOIN cat_nivel2 n2 ON n1.id1 = n2.id1 
+					INNER JOIN cat_nivel3 n3 ON  n2.id2=n3.id2 
 					WHERE n3.id3=? ");
 		$sth->execute($id3);
 	} elsif ($barcode) {
 		#Cuando se busca por barcode puede darse el caso de tener repetidos con disponibilidad "Compartido"
 		$sth=$dbh->prepare("	SELECT * 
-					FROM nivel1 n1 INNER JOIN nivel2 n2 ON n1.id1 = n2.id1 
-					INNER JOIN nivel3 n3 ON  n2.id2=n3.id2 
+					FROM cat_nivel1 n1 INNER JOIN cat_nivel2 n2 ON n1.id1 = n2.id1 
+					INNER JOIN cat_nivel3 n3 ON  n2.id2=n3.id2 
 					WHERE n3.barcode=? AND n3.wthdrawn <> 2 ;");
 
 		$sth->execute($barcode);
@@ -440,11 +438,11 @@ sub getiteminformation {
 	my $iteminformation=$sth->fetchrow_hashref;
 	$sth->finish;
 	if ($iteminformation) {
-		$sth=$dbh->prepare("	SELECT date_due, borrowers.borrowernumber, issuetypes.issuecode,
-					issuetypes.description AS issuedescription, categorycode 
-					FROM issues INNER JOIN borrowers 
-					ON issues.borrowernumber = borrowers.borrowernumber 
-					INNER JOIN issuetypes ON issuetypes.issuecode = issues.issuecode 
+		$sth=$dbh->prepare("	SELECT date_due, borrowers.borrowernumber, circ_ref_tipo_prestamo.issuecode,
+					circ_ref_tipo_prestamo.description AS issuedescription, categorycode 
+					FROM  circ_prestamo INNER JOIN borrowers 
+					ON  circ_prestamo.borrowernumber = borrowers.borrowernumber 
+					INNER JOIN circ_ref_tipo_prestamo ON circ_ref_tipo_prestamo.issuecode =  circ_prestamo.issuecode 
 					WHERE id3=? AND returndate IS NULL ");
 
 		$sth->execute($iteminformation->{'id3'});
@@ -461,7 +459,7 @@ sub getiteminformation {
 		$iteminformation->{'issuedescription'}=$issuedescription;
 		$sth->finish;
 		($iteminformation->{'dewey'} == 0) && ($iteminformation->{'dewey'}='');
-		$sth=$dbh->prepare("	SELECT * FROM itemtypes WHERE itemtype=? ");
+		$sth=$dbh->prepare("	SELECT * FROM cat_ref_tipo_nivel3 WHERE itemtype=? ");
 		$sth->execute($iteminformation->{'tipo_documento'});
 		my $itemtype=$sth->fetchrow_hashref;
 		$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
@@ -572,9 +570,10 @@ sub checkoverdues {
 	my @overdueitems;
 	my $count = 0;
 	my $dbh=C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM issues i INNER JOIN nivel3 n3 ON (i.id3 = n3.id3)
-				INNER JOIN nivel2 n2 ON (n3.id2 = n2.id2)
-				INNER JOIN nivel1 n1 ON (n3.id1 = n1.id1)
+	my $sth = $dbh->prepare("SELECT * FROM  circ_prestamo i 
+				INNER JOIN cat_nivel3 n3 ON (i.id3 = n3.id3)
+				INNER JOIN cat_nivel2 n2 ON (n3.id2 = n2.id2)
+				INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
 				WHERE i.borrowernumber  = ? AND i.returndate IS NULL AND i.date_due < ?");
 	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {

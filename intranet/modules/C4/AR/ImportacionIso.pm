@@ -31,7 +31,7 @@ use vars qw(@EXPORT @ISA);
 sub checkDescription{
 	my $dbh = C4::Context->dbh;
 	my $query ="Select descripcion 
-	              From iso2709 
+	              From pref_iso2709 
         	      Where (campoIso=? and subCampoIso=?  and ui=?) ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute(&ui,&campoIso,&subCampoIso);
@@ -46,7 +46,7 @@ sub checkDescription{
 sub insertDescripcion{ 
         my ($descripcion,$id)=@_; 
         my $dbh = C4::Context->dbh;
-	my $query ="update  iso2709 set descripcion=?
+	my $query ="update  pref_iso2709 set descripcion=?
 	    	     Where (id=?)";
  	my $sth=$dbh->prepare($query);
 	$sth->execute($descripcion,$id);
@@ -56,7 +56,7 @@ sub insertDescripcion{
 
 sub insertUnidadInformacion{
 	my $dbh = C4::Context->dbh;
-	my $query ="Insert into iso2709 (ui) values (?)";
+	my $query ="Insert into pref_iso2709 (ui) values (?)";
 	my $sth=$dbh->prepare($query);
 	$sth->execute(&ui);
 	$sth->finish;
@@ -69,7 +69,7 @@ sub datosCompletos{
 	my ($campoIso,$branchcode)=@_;
 	my $dbh = C4::Context->dbh;
 	my @results;
-	my $query ="Select * from iso2709 ";
+	my $query ="Select * from pref_iso2709 ";
 	$query.= "where campoIso = ".$campoIso." and ui='".$branchcode."'"; #Comentar para lograr el listado completo
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
@@ -130,7 +130,7 @@ sub mostrarCampos{
 sub insertTablaKoha{
         my ($kohaTabla,$id)=@_;
         my $dbh = C4::Context->dbh;
-        my $query ="update  iso2709 set kohaTabla=?
+        my $query ="update  pref_iso2709 set kohaTabla=?
                      Where (id=?)";
         my $sth=$dbh->prepare($query);
         $sth->execute($kohaTabla,$id);
@@ -146,7 +146,7 @@ sub insertNuevo{
 	if ($kohaTabla eq "") {$kohaTabla= undef;}
 	if ($campoKoha eq "") {$campoKoha= undef;}
         my $dbh = C4::Context->dbh;
-        my $query ="update  iso2709 set descripcion=?,kohaTabla=?,kohaCampo=?,orden=?,separador=?,interfazWeb=?
+        my $query ="update  pref_iso2709 set descripcion=?,kohaTabla=?,kohaCampo=?,orden=?,separador=?,interfazWeb=?
                      Where (id=?)";
         my $sth=$dbh->prepare($query);
         $sth->execute($descripcion,$kohaTabla,$campoKoha,$orden,$separador,$campoK,$id);
@@ -156,7 +156,7 @@ sub insertNuevo{
 sub listadoDeCodigosDeCampo{
         my $dbh = C4::Context->dbh;
         my @results;
-        my $query ="select campoIso from iso2709 group by campoIso order by campoIso";
+        my $query ="select campoIso from pref_iso2709 group by campoIso order by campoIso";
         my $sth=$dbh->prepare($query);
         $sth->execute();
         while (my $data=$sth->fetchrow_hashref){
@@ -167,7 +167,7 @@ sub listadoDeCodigosDeCampo{
 sub list{
         my $dbh = C4::Context->dbh;
         my %results;
-        my $query ="select campoIso,subCampoIso,kohaCampo,kohaTabla from iso2709 order by campoIso";
+        my $query ="select campoIso,subCampoIso,kohaCampo,kohaTabla from pref_iso2709 order by campoIso";
         my $sth=$dbh->prepare($query);
         $sth->execute();
         while (my $data=$sth->fetchrow_hashref){

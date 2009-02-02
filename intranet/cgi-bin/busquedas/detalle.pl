@@ -14,14 +14,13 @@ use C4::AR::Catalogacion;
 my $input=new CGI;
 
 # my $obj;
-my ($template, $loggedinuser, $cookie);
 
 # if($input->param('obj') eq ""){
 
 # 	my ($template, $loggedinuser, $cookie) = get_template_and_user({
 ## FIXME cambie esto hasta que se saque toda la logica para borrar nivel 1, 2 y 3 de aca
 
-	my ($template, $loggedinuser, $cookie) = get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
 		template_name   => ('busquedas/detalle.tmpl'),
 		query           => $input,
 		type            => "intranet",
@@ -38,16 +37,14 @@ my ($template, $loggedinuser, $cookie);
 	my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1($id1, $nivel1,"intra");
 	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2($id1,"intra");
 
-	$template->param(
-		loopnivel1 => \@nivel1Loop,
-		loopnivel2 => \@nivel2Loop,
-		titulo     => $nivel1->{'titulo'},
-		id1	   => $id1,
-		cantItemN1 => $cantItemN1,
-		datosautor => \@autor,
-	);
+	$t_params->{'loopnivel1'} = \@nivel1Loop;
+	$t_params->{'loopnivel2'} = \@nivel2Loop;
+	$t_params->{'titulo'}     = $nivel1->{'titulo'};
+	$t_params->{'id1'}	  = $id1;
+	$t_params->{'cantItemN1'} = $cantItemN1;
+	$t_params->{'datosautor'} = \@autor;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 	
 # }
 # else{

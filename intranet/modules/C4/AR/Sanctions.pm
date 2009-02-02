@@ -38,7 +38,7 @@ sub eliminarSanciones{
 	my ($borrowernumber)=@_;
 	
 	my $dbh = C4::Context->dbh;	
-	my $sth=$dbh->prepare("	DELETE FROM sanctions
+	my $sth=$dbh->prepare("	DELETE FROM circ_sancion
 			    	WHERE borrowernumber=?
 			   ");
 	$sth->execute($borrowernumber);
@@ -51,7 +51,7 @@ sub infoSanction {
 	my ($reserveNumber)=@_;
   	my $dbh = C4::Context->dbh;
 	#traigo la info de la sancion
-	my $sth=$dbh->prepare(" SELECT * FROM sanctions WHERE reservenumber = ?");
+	my $sth=$dbh->prepare(" SELECT * FROM circ_sancion WHERE reservenumber = ?");
 	$sth->execute($reserveNumber);
 
 	return $sth->fetchrow_hashref;
@@ -85,7 +85,7 @@ sub SanctionDays {
  
 
 #Corresponde una sancion
-  	my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");
+  	my $sth = $dbh->prepare("select *,circ_ref_tipo_prestamo.description as descissuetype, usr_ref_categoria_socio.description as desccategory from circ_tipo_sancion inner join circ_regla_tipo_sancion on circ_tipo_sancion.sanctiontypecode = circ_regla_tipo_sancion.sanctiontypecode inner join circ_regla_sancion on circ_regla_tipo_sancion.sanctionrulecode = circ_regla_sancion.sanctionrulecode inner join circ_ref_tipo_prestamo on circ_tipo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode inner join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = circ_tipo_sancion.categorycode where circ_tipo_sancion.issuecode = ? and circ_tipo_sancion.categorycode = ? order by circ_regla_tipo_sancion.orden");
 	$sth->execute($issuecode, $categorycode);
 	my $err;
 	my $delta= &DateCalc($date_due,$returndate,\$err);
@@ -130,10 +130,10 @@ sub hasSanctions {
   my $dbh = C4::Context->dbh;
   my $dateformat = C4::Date::get_date_format();
   #Esta primera consulta es por la devolucion atrasada de libros
-  my $sth = $dbh->prepare("select * from sanctions 
-	inner join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode 
-	inner join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode 
-	inner join issuetypes on sanctionissuetypes.issuecode = issuetypes.issuecode 
+  my $sth = $dbh->prepare("select * from circ_sancion 
+	inner join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
+	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
+	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
 	where borrowernumber = ? and (now() between startdate and enddate)");
   $sth->execute($borrowernumber);
   my @results;
@@ -144,7 +144,7 @@ sub hasSanctions {
   }
   $sth->finish;
   #Esta segunda consulta es por las reservas que fueron retiradas
-  my $sth = $dbh->prepare("select * from sanctions 
+  my $sth = $dbh->prepare("select * from circ_sancion 
 	where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and  sanctiontypecode is null");
   $sth->execute($borrowernumber);
   while (my $res= $sth->fetchrow_hashref) {
@@ -161,7 +161,7 @@ sub hasSanctions {
 sub isSanction {
   #Esta funcion determina si un usuario ($borrowernumber) tiene derecho (o sea no esta sancionado) a retirar un biblio para un tipo de prestamo ($issuecode)
   my ($dbh, $borrowernumber, $issuecode)=@_;
-  my $sth = $dbh->prepare("select * from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and ((sanctionissuetypes.issuecode = ?) or (sanctionissuetypes.issuecode is null))");
+  my $sth = $dbh->prepare("select * from circ_sancion left join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
   $sth->execute($borrowernumber, $issuecode);
   return($sth->fetchrow_hashref); 
 }
@@ -171,7 +171,7 @@ sub tieneLibroVencido {
   	my ($borrowernumber)=@_;
   	my $dbh = C4::Context->dbh;
   	my $dateformat = C4::Date::get_date_format();
-  	my $sth=$dbh->prepare("Select * from issues where returndate is NULL and borrowernumber = ?");
+  	my $sth=$dbh->prepare("Select * from  circ_prestamo where returndate is NULL and borrowernumber = ?");
   	$sth->execute($borrowernumber);
   	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   	while (my $ref= $sth->fetchrow_hashref) {
@@ -200,7 +200,7 @@ sub permitionToLoan {
 sub sanctionSelect {
   my ($dbh, $defaultValue, $onChange,$notforloan)=@_;
   my $sth;
-  my $query= "select * from issuetypes";
+  my $query= "select * from circ_ref_tipo_prestamo";
   if ($notforloan ne undef) {
     $query.=" where notforloan = ? order by description";
     $sth = $dbh->prepare($query);
@@ -239,7 +239,7 @@ sub insertSanction {
  #Si existe se sanciona con la matoy cantidad de dias
  #Busco si tiene una sancion pendiente
  my $sth1 = $dbh->prepare("	select * 
-				from sanctions 
+				from circ_sancion 
 				where borrowernumber = ? and startdate is null and enddate is null");
  $sth1->execute($borrowernumber);
   if (my $res= $sth1->fetchrow_hashref){
@@ -256,13 +256,13 @@ sub insertSanction {
 		my $err;
 		$edate= C4::Date::format_date_in_iso(DateCalc($startdate,"+ ".$ddays." days",\$err),$dateformat);
 	}
- 	my $sth2 = $dbh->prepare("	Update sanctions set sanctiontypecode = ? , delaydays = 		
+ 	my $sth2 = $dbh->prepare("	Update circ_sancion set sanctiontypecode = ? , delaydays = 		
 		?,startdate=?,enddate=?  where borrowernumber = ? and startdate is null and enddate is null");
  	$sth2->execute($sanctiontype,$ddays,$startdate,$edate,$borrowernumber);
 	  
   }else { #No tiene sanciones pendientes
  
- 	my $sth3=$dbh->prepare("INSERT INTO sanctions 	
+ 	my $sth3=$dbh->prepare("INSERT INTO circ_sancion 	
 			(sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays)
 			VALUES (?,?,?,?,?,?)");
   
@@ -279,7 +279,7 @@ sub insertPendingSanction {
 my $dbh= C4::Context->dbh;
  #Busco si tiene una sancion pendiente
  my $sth1 = $dbh->prepare("	select * 
-				from sanctions 
+				from circ_sancion 
 				where borrowernumber = ? and startdate is null and enddate is null");
  $sth1->execute($borrowernumber);
  if (my $res= $sth1->fetchrow_hashref){
@@ -287,13 +287,13 @@ my $dbh= C4::Context->dbh;
 
 	if ($res->{'delaydays'} < $delaydays ){ 
 #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion
- 		 my $sth2 = $dbh->prepare("Update sanctions set delaydays = ?, sanctiontypecode = ?  where borrowernumber = ? and startdate is null and enddate is null");
+ 		 my $sth2 = $dbh->prepare("Update circ_sancion set delaydays = ?, sanctiontypecode = ?  where borrowernumber = ? and startdate is null and enddate is null");
 		$sth2->execute($delaydays,$sanctiontypecode,$borrowernumber);
 	 
 	}
   }else { #No tiene sanciones pendientes
 	my $sth3=$dbh->prepare("	
-	INSERT INTO sanctions (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) 
+	INSERT INTO circ_sancion (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) 
 	VALUES (?,?,?,NULL,NULL,?)");
   
    	$sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $delaydays);
@@ -304,7 +304,7 @@ sub getSanctionTypeCode {
   #Esta funcion recupera el sanctiontypecode a partir del issuecode y el categorycode
 	my ($issuecode, $categorycode)=@_;
 	my $dbh=C4::Context->dbh;
-  	my $sth=$dbh->prepare("select sanctiontypecode from sanctiontypes where issuecode = ? and categorycode = ?");
+  	my $sth=$dbh->prepare("select sanctiontypecode from circ_tipo_sancion where issuecode = ? and categorycode = ?");
   	$sth->execute($issuecode, $categorycode);
   	my $res= $sth->fetchrow_hashref;
   	return($res->{'sanctiontypecode'});
@@ -313,7 +313,7 @@ sub getSanctionTypeCode {
 sub getBorrowersSanctions {
   #Esta funcion retorna un array con todos los borrowernumbers de los usuarios que estan sancionados para un determinado issuecode o cuyo issuecode es null (o sea es una sancion por no retirar una reserva)
   my ($dbh, $issuecode)=@_;
-  my $sth = $dbh->prepare("select borrowernumber from sanctions left join sanctiontypes on sanctions.sanctiontypecode = sanctiontypes.sanctiontypecode left join sanctionissuetypes on sanctiontypes.sanctiontypecode = sanctionissuetypes.sanctiontypecode where (now() between startdate and enddate) and ((sanctionissuetypes.issuecode = ?) or (sanctionissuetypes.issuecode is null))");
+  my $sth = $dbh->prepare("select borrowernumber from circ_sancion left join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where (now() between startdate and enddate) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
   $sth->execute($issuecode);
   my @results;
   while (my $data=$sth->fetchrow){
@@ -326,7 +326,7 @@ sub getBorrowersSanctions {
 sub logSanction{
 	my ($type,$borrowernumber,$responsable,$dateEnd,$issueType)=@_;
         my $dbh= C4::Context->dbh;
-	my $sth = $dbh->prepare ("	INSERT INTO historicSanctions 
+	my $sth = $dbh->prepare ("	INSERT INTO rep_historial_sancion 
 					(type,borrowernumber,responsable,date,end_date,sanctiontypecode)
                            		VALUES (?,?,?,NOW(),?,?);");
 
@@ -338,7 +338,7 @@ sub delSanction {
   #Esta funcion elimina una sancion
    my ($dbh,$sanctionnumber)=@_;
 
-   my $sth=$dbh->prepare("delete from sanctions where sanctionnumber = ?");
+   my $sth=$dbh->prepare("delete from circ_sancion where sanctionnumber = ?");
    $sth->execute($sanctionnumber);
    $sth->finish;
 }          
@@ -353,12 +353,12 @@ sub sanciones{
 	$orden=&C4::AR::Utilidades::verificarValor($orden);
 	my $dateformat = C4::Date::get_date_format();
 	my $dbh = C4::Context->dbh;
-	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, issuetypes.description as issuecodedescription 
-	from sanctions  
-	left  join borrowers on borrowers.borrowernumber = sanctions.borrowernumber 
-	left join categories on categories.categorycode = borrowers.categorycode 
-	left join sanctiontypes on sanctiontypes.sanctiontypecode = sanctions.sanctiontypecode 
-	left join issuetypes on issuetypes.issuecode = sanctiontypes.issuecode 
+	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, circ_ref_tipo_prestamo.description as issuecodedescription 
+	from circ_sancion  
+	left  join borrowers on borrowers.borrowernumber = circ_sancion.borrowernumber 
+	left join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = borrowers.categorycode 
+	left join circ_tipo_sancion on circ_tipo_sancion.sanctiontypecode = circ_sancion.sanctiontypecode 
+	left join issuetypes on circ_ref_tipo_prestamo.issuecode = circ_tipo_sancion.issuecode 
 	where (startdate <= now()) AND (enddate >= now())  order by ".$orden;
 	my $sth=$dbh->prepare($query);
 	$sth->execute();
@@ -379,7 +379,7 @@ sub sanciones{
 sub borrarSancionReserva{
 	my ($reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	DELETE FROM sanctions 
+	my $sth=$dbh->prepare("	DELETE FROM circ_sancion 
 				WHERE reservenumber=? AND (now() < startdate)");
 	$sth->execute($reservenumber);
 }
@@ -399,7 +399,7 @@ sub actualizarSancion {
 	my ($params)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
+	my $sth=$dbh->prepare(" UPDATE circ_sancion SET id3 = ? WHERE reservenumber = ? ");
 	$sth->execute(
 			$params->{'id3'},
 			$params->{'reservenumber'}

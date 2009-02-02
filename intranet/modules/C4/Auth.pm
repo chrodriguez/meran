@@ -531,7 +531,7 @@ print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
                     # lastlogin es anterior a prevWorkDate
                     # desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
                         $lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1));
-                        my $sth=$dbh->prepare("INSERT INTO feriados (fecha) VALUES (?)");
+                        my $sth=$dbh->prepare("INSERT INTO pref_feriado (fecha) VALUES (?)");
                         $sth->execute($lastlogin);
                         $enter=1;
                     }

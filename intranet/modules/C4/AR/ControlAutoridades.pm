@@ -52,7 +52,7 @@ sub search_temas(){
 
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id, nombre
-			       	FROM `temas`
+			       	FROM cat_tema
 				WHERE nombre like ?
 			       	ORDER BY nombre");
 
@@ -74,7 +74,7 @@ sub search_autores(){
 
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id, nombre
-			       	FROM `autores`
+			       	FROM cat_autor
 				WHERE nombre like ?
 			       	ORDER BY nombre");
 
@@ -117,7 +117,7 @@ sub traerSinonimosAutor(){
 	my $dbh = C4::Context->dbh;
 
 	my $query="	SELECT id as idSinonimo, autor as sinonimo
-			FROM `control_autores_sinonimos`
+			FROM cat_control_sinonimo_autor
 			WHERE id= ?
 			ORDER BY autor";
 
@@ -140,7 +140,7 @@ sub traerSinonimosTemas(){
 	my ($tema)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query="	SELECT id as idSinonimo, tema as sinonimo
-			FROM `control_temas_sinonimos`
+			FROM cat_control_sinonimo_tema
 			WHERE id= ?
 			ORDER BY tema";
 
@@ -233,7 +233,7 @@ sub insertSinonimosAutor(){
 		$sinonimo= $sinonimos_arrayref->[$i]->{'text'};
 		#verifico la existencia del registro
 		my $queryExist="SELECT count(*) 
-				FROM `control_autores_sinonimos` 
+				FROM cat_control_sinonimo_autor 
 				WHERE(id = ?)AND(autor = ?)";
 		$sth=$dbh->prepare($queryExist);
 		$sth->execute($idAutor, $sinonimo);
@@ -242,7 +242,7 @@ sub insertSinonimosAutor(){
 
 		#si no existe el registro
 		if($Existe eq 0){		
-			my $query="INSERT INTO `control_autores_sinonimos`(id, autor)
+			my $query="INSERT INTO cat_control_sinonimo_autor (id, autor)
 				   VALUES(?,?)";
 			$sth=$dbh->prepare($query);
 			$sth->execute($idAutor, $sinonimo);
@@ -298,7 +298,7 @@ sub insertSinonimosTemas(){
 		$sinonimo= $sinonimos_arrayref->[$i]->{'text'};
 		#verifico la existencia del registro
 		my $queryExist="SELECT count(*) 
-				FROM `control_temas_sinonimos` 
+				FROM cat_control_sinonimo_tema 
 				WHERE(id = ?)AND(tema = ?)";
 
 		$sth=$dbh->prepare($queryExist);
@@ -308,7 +308,7 @@ sub insertSinonimosTemas(){
 
 		#si no existe el registro
 		if($Existe eq 0){
-			my $query="INSERT INTO `control_temas_sinonimos`(id, tema)
+			my $query="INSERT INTO cat_control_sinonimo_tema (id, tema)
 				   VALUES(?,?)";
 			$sth=$dbh->prepare($query);
 			$sth->execute($idTema, $sinonimo);
@@ -424,7 +424,7 @@ sub updateSinonimosAutores{
 	my $sth;
 
 	my $queryExist= " 	SELECT count(*) 
-				FROM `control_autores_sinonimos`
+				FROM cat_control_sinonimo_autor
 				WHERE(id = ?)AND(autor = ?) ";
 
 	$sth=$dbh->prepare($queryExist);
@@ -435,7 +435,7 @@ sub updateSinonimosAutores{
 	#si no existe el registro
 	if($Existe eq 0){
 
-		my $query=	"UPDATE `control_autores_sinonimos` 
+		my $query=	"UPDATE cat_control_sinonimo_autor 
 				SET autor = ?
 				WHERE(id = ?)AND(autor = ?)";
 
@@ -483,7 +483,7 @@ sub updateSinonimosTemas{
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	my $queryExist= " 	SELECT count(*) 
-				FROM `control_temas_sinonimos`
+				FROM cat_control_sinonimo_tema
 				WHERE(id = ?)AND(tema = ?) ";
 
 	$sth=$dbh->prepare($queryExist);
@@ -494,7 +494,7 @@ sub updateSinonimosTemas{
 	#si no existe el registro
 	if($Existe eq 0){
 
-		my $query=	"UPDATE `control_temas_sinonimos` 
+		my $query=	"UPDATE cat_control_sinonimo_tema 
 				SET tema = ?
 				WHERE(id = ?)AND(tema = ?)";
 
@@ -554,7 +554,7 @@ sub updateSinonimosEditoriales{
 	#si no existe el registro
 	if($Existe eq 0){
 
-		my $query=	"UPDATE `control_temas_sinonimos` 
+		my $query=	"UPDATE cat_control_sinonimo_tema 
 				SET editorial = ?
 				WHERE(id = ?)AND(editorial = ?)";
 
@@ -606,7 +606,7 @@ sub eliminarSinonimosAutor(){
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	my $query="	DELETE FROM `control_autores_sinonimos` 
+	my $query="	DELETE FROM cat_control_sinonimo_autor 
 			WHERE(id = ?)AND(autor = ?)";
 	$sth=$dbh->prepare($query);
 	$sth->execute($idAutor, $sinonimo);
@@ -655,7 +655,7 @@ sub eliminarSinonimosTema(){
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	my $query="	DELETE FROM `control_temas_sinonimos` 
+	my $query="	DELETE FROM cat_control_sinonimo_tema 
 			WHERE(id = ?)AND(tema = ?)";
 
 	$sth=$dbh->prepare($query);
@@ -722,14 +722,14 @@ sub traerSeudonimosAutor(){
 	my $dbh = C4::Context->dbh;
 
 	my $query="	SELECT id, id2
-		   	FROM `control_autores_seudonimos` 
+		   	FROM cat_control_seudonimo_autor 
 		   	WHERE id= ? or id2= ?";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($idAutor, $idAutor);
 
 	$query="	SELECT completo
-			FROM `autores` 
+			FROM cat_autor 
 			WHERE id= ?
 			ORDER BY completo";
 	
@@ -762,14 +762,14 @@ sub traerSeudonimosTemas(){
 	my $dbh = C4::Context->dbh;
 
 	my $query="	SELECT id, id2
-		   	FROM `control_temas_seudonimos` 
+		   	FROM cat_control_seudonimo_tema 
 		   	WHERE id= ? or id2= ?";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($idTema, $idTema);
 
 	$query="	SELECT nombre 
-			FROM `temas` 
+			FROM cat_tema 
 			WHERE id= ?
 			ORDER BY nombre";
 	
@@ -802,7 +802,7 @@ sub traerSeudonimosEditoriales(){
 	my $dbh = C4::Context->dbh;
 
 	my $query="	SELECT id, id2
-		   	FROM `control_editoriales_seudonimos` 
+		   	FROM cat_control_seudonimo_editorial 
 		   	WHERE id= ? OR id2= ?";
 
 	my $sth=$dbh->prepare($query);
@@ -885,7 +885,7 @@ sub insertSeudonimosAutor(){
 		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
 		#verifico la existencia del registro
 		my $queryExist="	SELECT count(*) 
-					FROM `control_autores_seudonimos` 
+					FROM cat_control_seudonimo_autor 
 					WHERE((id = ?)AND(id2 = ?))
 					OR((id2 = ?)AND(id = ?))";
 
@@ -901,7 +901,7 @@ sub insertSeudonimosAutor(){
 
 		#si no existe el registro
 		if($Existe eq 0){		
-			my $query="	INSERT INTO `control_autores_seudonimos`(id, id2)
+			my $query="	INSERT INTO cat_control_seudonimo_autor(id, id2)
 				   	VALUES(?,?)";
 			$sth=$dbh->prepare($query);
 			$sth->execute($idAutor, $seudonimo);
@@ -953,7 +953,7 @@ sub eliminarSeudonimosAutor(){
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	my $queryExist="	DELETE FROM `control_autores_seudonimos` 
+	my $queryExist="	DELETE FROM cat_control_seudonimo_autor 
 				WHERE((id = ?)AND(id2 = ?))
 				OR(id2 = ?)AND(id = ?)";
 
@@ -1013,7 +1013,7 @@ sub insertSeudonimosTemas(){
 		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
 		#verifico la existencia del registro
 		my $queryExist="	SELECT count(*) 
-					FROM `control_temas_seudonimos` 
+					FROM cat_control_seudonimo_tema 
 					WHERE((id = ?)AND(id2 = ?))
 					OR((id2 = ?)AND(id = ?))";
 
@@ -1029,7 +1029,7 @@ sub insertSeudonimosTemas(){
 
 		#si no existe el registro
 		if($Existe eq 0){		
-			my $query="	INSERT INTO `control_temas_seudonimos`(id, id2)
+			my $query="	INSERT INTO cat_control_seudonimo_tema (id, id2)
 				   	VALUES(?,?)";
 
 			$sth=$dbh->prepare($query);
@@ -1079,7 +1079,7 @@ sub eliminarSeudonimosTema(){
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	
-	my $queryExist="	DELETE FROM `control_temas_seudonimos` 
+	my $queryExist="	DELETE FROM cat_control_seudonimo_tema 
 				WHERE((id = ?)AND(id2 = ?))
 				OR((id2 = ?)AND(id = ?))";
 
@@ -1138,7 +1138,7 @@ sub insertSeudonimosEditoriales(){
 		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
 		#verifico la existencia del registro
 		my $queryExist="	SELECt count(*) 
-					FROM `control_editoriales_seudonimos` 
+					FROM cat_control_seudonimo_editorial 
 					WHERE((id = ?)AND(id2 = ?))
 					OR((id2 = ?)AND(id = ?))";
 
@@ -1154,7 +1154,7 @@ sub insertSeudonimosEditoriales(){
 
 		#si no existe el registro
 		if($Existe eq 0){		
-			my $query="	INSERT INTO `control_editoriales_seudonimos`(id, id2)
+			my $query="	INSERT INTO cat_control_seudonimo_editorial (id, id2)
 				   	VALUES(?,?)";
 
 			$sth=$dbh->prepare($query);
@@ -1202,7 +1202,7 @@ sub eliminarSeudonimosEditorial(){
 	my $dbh = C4::Context->dbh;
 	my $sth;
 
-	my $query="	DELETE FROM `control_editoriales_seudonimos` 
+	my $query="	DELETE FROM cat_control_seudonimo_editorial 
 				WHERE((id = ?)AND(id2 = ?))
 				OR((id2 = ?)AND(id = ?))";
 

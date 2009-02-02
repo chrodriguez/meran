@@ -62,7 +62,7 @@ sub getSubjectID{
 	my ($subjectId)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query ="SELECT id, nombre  FROM temas WHERE id = ? ";
+	my $query ="SELECT id, nombre  FROM cat_tema WHERE id = ? ";
         my $sth=$dbh->prepare($query);
         $sth->execute($subjectId);
         my @results;
@@ -91,13 +91,13 @@ sub getKeywordsLike{
 sub BiblioAnalysisData{
         my ($bibnum, $bibitemnumber) = @_;
         my $dbh = C4::Context->dbh;
-        my $query ="SELECT * FROM biblioanalysis  WHERE biblionumber=? and biblioitemnumber=?";
+        my $query ="SELECT * FROM cat_analitica  WHERE biblionumber=? and biblioitemnumber=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($bibnum, $bibitemnumber);
         my @results;
         while (my $data=$sth->fetchrow_hashref){
 
-	my  $sth2   = $dbh->prepare("Select * from analyticalsubject  where analyticalnumber = ?");
+	my  $sth2   = $dbh->prepare("Select * from cat_tema_analitica  where analyticalnumber = ?");
 	 $sth2->execute($data->{'analyticalnumber'});
 	 while (my $dat = $sth2->fetchrow_hashref){
 	 	$data->{'subject'} .= "$dat->{'subject'}, ";
@@ -158,13 +158,13 @@ sub BiblioAnalysisData{
 sub BiblioAnalysisSingularData {
         my ($analitycalnumber) = @_;
         my $dbh = C4::Context->dbh;
-        my $query ="SELECT * FROM biblioanalysis  WHERE analyticalnumber=?";
+        my $query ="SELECT * FROM cat_analitica  WHERE analyticalnumber=?";
         my $sth=$dbh->prepare($query);
         $sth->execute($analitycalnumber);
         my @results;
         while (my $data=$sth->fetchrow_hashref){
 
-	my  $sth2   = $dbh->prepare("Select * from analyticalsubject  where analyticalnumber = ?");
+	my  $sth2   = $dbh->prepare("Select * from cat_tema_analitica  where analyticalnumber = ?");
 	 $sth2->execute($data->{'analyticalnumber'});
 	 while (my $dat = $sth2->fetchrow_hashref){
 	 $data->{'subject'} .= "$dat->{'subject'}, ";
@@ -234,7 +234,7 @@ sub BiblioSingleAnalysisDelete
 	   
 	   &eliminarAnalyticalAutores($dbh,$analyticalnumber);
 	   &eliminarAnalyticalMaterias($dbh,$analyticalnumber);
-           my $query ="DELETE FROM biblioanalysis  WHERE analyticalnumber=? ";
+           my $query ="DELETE FROM cat_analitica  WHERE analyticalnumber=? ";
            my $sth=$dbh->prepare ($query);
            $sth->execute($analyticalnumber);
 
@@ -244,14 +244,14 @@ sub BiblioAnalysisDelete
 {          my ($bibnum,$bibnumitems)= @_;
            my $dbh = C4::Context->dbh;
 		
-		my  $sth2   = $dbh->prepare("Select analyticalnumber FROM biblioanalysis WHERE biblionumber=? and biblioitemnumber=?");
+		my  $sth2   = $dbh->prepare("Select analyticalnumber FROM cat_analitica WHERE biblionumber=? and biblioitemnumber=?");
 		$sth2->execute($bibnum,$bibnumitems);
 		while (my $dat = $sth2->fetchrow_hashref){
 	             &eliminarAnalyticalAutores($dbh,$dat->{'analyticalnumber'});
 		      &eliminarAnalyticalMaterias($dbh,$dat->{'analyticalnumber'});
 				}
 	   
-           my $query ="DELETE FROM biblioanalysis WHERE biblionumber=? and biblioitemnumber=?";
+           my $query ="DELETE FROM cat_analitica WHERE biblionumber=? and biblioitemnumber=?";
            my $sth=$dbh->prepare ($query);
            $sth->execute($bibnum,$bibnumitems);
 
@@ -268,7 +268,7 @@ sub BiblioAnalysisUpdate
 	&eliminarAnalyticalKeywords($dbh,$analyticalnumber,$keywords);
            
 	   
-	my $sth=$dbh->prepare("	UPDATE biblioanalysis  SET analyticaltitle=?, biblionumber=?, 						analyticalunititle=?, biblioitemnumber=?, parts=?, classification=?,  	
+	my $sth=$dbh->prepare("	UPDATE cat_analitica  SET analyticaltitle=?, biblionumber=?, 						analyticalunititle=?, biblioitemnumber=?, parts=?, classification=?,  	
 				resumen=?, url=?
 				WHERE analyticalnumber=? ");
 
@@ -285,12 +285,12 @@ sub BiblioAnalysisInsert{
  	my ($analyticaltitle,$analyticalunititle,$subjectheadings,$classification,$bibnum,$analyticalauthor,$bibnumitems,$parts,$resumen,$url,$keywords)=@_;
  
  	my $dbh = C4::Context->dbh;
- 	my $sth = $dbh->prepare("Select max(analyticalnumber) from biblioanalysis");
+ 	my $sth = $dbh->prepare("Select max(analyticalnumber) from cat_analitica");
  	$sth->execute;
  	my $data = $sth->fetchrow_arrayref;
 	my $analyticalnumber = $$data[0] + 1;
 			  
- 	my $query ="	INSERT INTO `biblioanalysis` 
+ 	my $query ="	INSERT INTO cat_analitica 
         		( `analyticaltitle` , `biblionumber` , `analyticalunititle` , `biblioitemnumber` , `parts`,`classification` , `timestamp`,`analyticalnumber`,`resumen`,`url`) 
         		VALUES (?, ?, ?, ?, ?,?, NOW( ),?,?,?);";
 
@@ -318,7 +318,7 @@ sub eliminarAnalyticalMaterias{
 
    my ($dbh,$analyticalnumber)=@_;
    my $sth; 
-    $sth=$dbh->prepare("Delete from analyticalsubject  where analyticalnumber=?;");
+    $sth=$dbh->prepare("Delete from cat_tema_analitica  where analyticalnumber=?;");
     $sth->execute($analyticalnumber);
     $sth->finish;			    
 }
@@ -326,7 +326,7 @@ sub eliminarAnalyticalMaterias{
 sub eliminarAnalyticalAutores{
    my ($dbh,$analyticalnumber)=@_;
    my $sth; 
-   $sth=$dbh->prepare("Delete from analyticalauthors  where analyticalnumber=?;");
+   $sth=$dbh->prepare("Delete from cat_autor_analitica  where analyticalnumber=?;");
    $sth->execute($analyticalnumber);
    $sth->finish;
 }
@@ -384,12 +384,12 @@ sub agregarAnalyticalMaterias{
 		$aux =~ s/\n//; #elimina los \n
 		$aux=~ s/\s+$//;#elimina el espacio del final
 		if ($aux ne '') {
-			$sth=$dbh->prepare("Select count(*) from analyticalsubject  where analyticalnumber=? and subject=?;");
+			$sth=$dbh->prepare("Select count(*) from cat_tema_analitica  where analyticalnumber=? and subject=?;");
 			$sth->execute($analyticalnumber,$aux);
 			my $data=$sth->fetchrow;
 			$sth->finish;
 			if ($data eq 0) {
-				$sth = $dbh->prepare ("insert into analyticalsubject (analyticalnumber, subject) values ( ? , ?);");
+				$sth = $dbh->prepare ("insert into cat_tema_analitica (analyticalnumber, subject) values ( ? , ?);");
 				$sth->execute($analyticalnumber,uc($aux));
 				$sth->finish;
 				$sth=$dbh->prepare("Select count(*) from catalogueentry  where catalogueentry=?;");
@@ -418,7 +418,7 @@ sub agregarAnalyticalAutores {
 	  $aux =~ s/\s+$//; #Quita los espacios al final
 													  
 	my $idCol=obtenerReferenciaAutor($dbh,$aux);
-	$sth = $dbh->prepare ("insert into analyticalauthors (analyticalnumber, author) values (?, ?);");
+	$sth = $dbh->prepare ("insert into cat_autor_analitica (analyticalnumber, author) values (?, ?);");
 	$sth->execute($analyticalnumber,$idCol);
 	$sth->finish;
 }}
@@ -427,7 +427,7 @@ sub getanalyticalautors{
     	my ($analyticalnumber) = @_;
         my @result;
 	my $dbh   = C4::Context->dbh;
-	my $sth   = $dbh->prepare("Select id,apellido,nombre,completo from autores inner join analyticalauthors  on analyticalauthors.author=autores.id where analyticalnumber= ?");
+	my $sth   = $dbh->prepare("Select id,apellido,nombre,completo from cat_autor inner join cat_autor_analitica  on cat_autor_analitica.author=cat_autor.id where analyticalnumber= ?");
 	$sth->execute($analyticalnumber);
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -447,17 +447,17 @@ my $query;                    # The SQL query
 my @clauses = ();             # The search clauses
 my @bind = ();                # The term bindings
 
-$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal   from 
+$query = " SELECT distinct cat_analitica.analyticalnumber, biblio.*,biblioitems.*,cat_analitica.*,biblio.author as autorppal   from 
 biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
-inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
-left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
-inner join autores on analyticalauthors.author = autores.id
-left join analyticalsubject on biblioanalysis.analyticalnumber = analyticalsubject.analyticalnumber
+inner join cat_analitica on biblioitems.biblioitemnumber=cat_analitica.biblioitemnumber 
+left join  cat_autor_analitica on cat_analitica.analyticalnumber = cat_autor_analitica.analyticalnumber
+inner join cat_autor on cat_autor_analitica.author = cat_autor.id
+left join cat_tema_analitica on cat_analitica.analyticalnumber = cat_tema_analitica.analyticalnumber
 where ";
 foreach my $keyword (@key)
   {
   my @subclauses = ();
-  foreach my $field (qw(analyticaltitle analyticalunititle autores.completo analyticalsubject.subject))
+  foreach my $field (qw(analyticaltitle analyticalunititle cat_autor.completo cat_tema_analitica.subject))
   {
   push @subclauses,
   "$field LIKE ? OR $field LIKE ?";
@@ -508,25 +508,25 @@ my @bind = ();                # The term bindings
 
 # if (($search->{'subjectitems'} ne '') or ($type eq 'subject')){
 if (($search->{'subjectitems'} ne '') or ($search->{'subjectid'} ne '') ){
-	$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal,analyticalsubject.subject   from biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
-	inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
-	left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
-	inner join autores on analyticalauthors.author = autores.id
-	left join analyticalsubject on biblioanalysis.analyticalnumber = analyticalsubject.analyticalnumber
+	$query = " SELECT distinct cat_analitica.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal,cat_tema_analitica.subject   from biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
+	inner join cat_analitica on biblioitems.biblioitemnumber=cat_analitica.biblioitemnumber 
+	left join  cat_autor_analitica on cat_analitica.analyticalnumber = cat_autor_analitica.analyticalnumber
+	inner join cat_autor on cat_autor_analitica.author = cat_autor.id
+	left join cat_tema_analitica on cat_analitica.analyticalnumber = cat_tema_analitica.analyticalnumber
 	where ";	              
 
 }
 else {
-	$query = " SELECT distinct biblioanalysis.analyticalnumber, biblio.*,biblioitems.*,biblioanalysis.*,biblio.author as autorppal   from 
+	$query = " SELECT distinct cat_analitica.analyticalnumber, biblio.*,biblioitems.*,cat_analitica.*,biblio.author as autorppal   from 
 	biblio left join biblioitems on biblio.biblionumber=biblioitems.biblionumber 
-	inner join biblioanalysis on biblioitems.biblioitemnumber=biblioanalysis.biblioitemnumber 
-	left join  analyticalauthors on biblioanalysis.analyticalnumber = analyticalauthors.analyticalnumber
-	inner join autores on analyticalauthors.author = autores.id
+	inner join cat_analitica on biblioitems.biblioitemnumber=cat_analitica.biblioitemnumber 
+	left join  cat_autor_analitica on cat_analitica.analyticalnumber = cat_autor_analitica.analyticalnumber
+	inner join cat_autor on cat_autor_analitica.author = cat_autor.id
 	where ";
 }
 
 if ($search->{'subjectitems'} ne ''){
-	$query .= "  analyticalsubject.subject= '".$search->{'subjectitems'}."'" ;
+	$query .= "  cat_tema_analitica.subject= '".$search->{'subjectitems'}."'" ;
 			
 }else {
 	# if ($type eq 'subject'){
@@ -542,7 +542,7 @@ if ($search->{'subjectitems'} ne ''){
 		$subjectName= getSubjectID($search->{'subjectid'});
 	
 		my $i=1;
-		$query.=" ( analyticalsubject.subject like ? or analyticalsubject.subject like ? or analyticalsubject.subject like ?)";
+		$query.=" ( cat_tema_analitica.subject like ? or cat_tema_analitica.subject like ? or cat_tema_analitica.subject like ?)";
 	#   	@bind=("$subject[0]%","% $subject[0]%","%($subject[0])%");
 		@bind=("$subjectName%","% $subjectName%","%($subjectName)%");
 	
@@ -562,7 +562,7 @@ if ($search->{'subjectitems'} ne ''){
 	my $countA=@autor;
 		foreach my $keyword (@autor)
 			{my @subclauses = ();
-			foreach my $field (qw(autores.completo))
+			foreach my $field (qw(cat_autor.completo))
 				{push @subclauses, "$field LIKE ? OR $field LIKE ?";
 				push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");
 				}
@@ -573,7 +573,7 @@ if ($search->{'subjectitems'} ne ''){
 	
 	if ($search->{'authorid'} ne ''){ 	
 		 push(@bind,$search->{'authorid'}); 
-		$query .= "(  autores.id = ? )";
+		$query .= "(  cat_autor.id = ? )";
 	}
 	
 	if ($search->{'title'} ne ''){
