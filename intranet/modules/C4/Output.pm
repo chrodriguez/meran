@@ -160,7 +160,7 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
 	%params= (
-			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/",
+			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme",
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			theme => $theme,
 # 			lang => $lang,
