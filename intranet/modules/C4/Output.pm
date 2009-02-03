@@ -116,7 +116,6 @@ sub gettemplate {
 # print A "htdocs: ".$htdocs."\n";
 
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
-#     $theme= 'blue';
 # print A "theme: ".$theme."\n";
 # print A "lang: ".$lang."\n";
 

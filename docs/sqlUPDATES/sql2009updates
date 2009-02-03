@@ -233,5 +233,19 @@ CHANGE `reminderdate` `fecha_recodatorio` DATE NULL DEFAULT NULL ;
 
 ALTER TABLE `circ_reserva` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
+--Se elimino la siguiente tabla, se usa usr_ref_tipo_documento (DNI, LE, LC, etc)
+DROP TABLE `ref_tipo_documento`
+
+ALTER TABLE `cat_ref_tipo_nivel3`
+  DROP `loanlength`,
+  DROP `renewalsallowed`,
+  DROP `rentalcharge`,
+  DROP `search`,
+  DROP `detail`;
+
+ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+
 
 
