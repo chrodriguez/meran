@@ -1,150 +1,151 @@
-<!-- TMPL_IF EXPR="(nivel ne 'Niveles')" -->
-<br>
-<!-- TMPL_IF NAME="error" -->
-	<div class="mensajeError"><!-- TMPL_VAR NAME="error" --></div>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF EXPR="(cant != 0)" -->
-<table id="tablaCamposMod" class="tablaResult" width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr>
-		
-		<td colspan="7" class=inputFontNormal> 
-			<b>Campos Modificados del nivel <!-- TMPL_VAR NAME="nivel" --> </b>
-		</td>
-		
-	</tr>
-
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td width="21%">MARC</td>
-		<td width="20%">Vista en Intranet</td>
-		<td >Orden</td>
-		<td >Visible</td>
-		<td >Editar</td>
-		<td >Deshabilitar</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-	</tr>
-
-<!-- TMPL_LOOP NAME="RESULTDATA" -->
-	<tr align="center" class=inputFontNormal>
-		<td><br>&nbsp;</td>
-		<td>
-			
-			Campo: <b><!-- TMPL_VAR NAME="campo" --></b>, Subcampo: <b><!-- TMPL_VAR NAME="subcampo" --></b>
-		</td>
-		<td>
-			<!-- TMPL_VAR NAME='liblibrarian' -->
-		</td>
-		<td>
-			<input id="orden,<!-- TMPL_VAR NAME='campo' -->,<!-- TMPL_VAR NAME='subcampo' -->" type="hidden" value="<!-- TMPL_VAR NAME='intranet_habilitado' -->">
-
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" onClick="modificarOrden('<!-- TMPL_VAR NAME='id' -->','<!-- TMPL_VAR NAME='intranet_habilitado' -->',7)">
-
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" onClick="modificarOrden('<!-- TMPL_VAR NAME='id' -->','<!-- TMPL_VAR NAME='intranet_habilitado' -->',8)">
-		</td>
-		<td>
-			<input type="checkbox" id="<!-- TMPL_VAR NAME='id' -->" value="<!-- TMPL_VAR NAME='visible' -->" onChange="visibilidad('<!-- TMPL_VAR NAME='id' -->')" 
-			value="<!-- TMPL_VAR NAME='visible' -->" <!-- TMPL_IF NAME="visible" --> checked
-			<!-- /TMPL_IF --> >
-		</td>
-		<td>
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" onClick="editarCampo('<!-- TMPL_VAR NAME='id' -->',9)">
-
-		</td>
-		<td>
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" onClick="eliminarCampo('<!-- TMPL_VAR NAME='id' -->','<!-- TMPL_VAR NAME='intranet_habilitado' -->',6)">
-
-		</td>
-		<td><br>&nbsp;</td>
-	</tr>
-<!-- /TMPL_LOOP -->
-
-</table>
-
-<!-- /TMPL_IF -->
-
-<br>
-<center>
-<input src="<!-- TMPL_VAR NAME='themelang' -->/images/agregar.png" type="image"  value="Agregar Campo" title="Agregar Campo" onClick="agregarCampo(1)">
-</center>
-<br>
-
-
-
-<!-- TABLA PARA LA MODIFICACION DE LOS CAMPOS DE LA TABLA ESTRUCTURA_CATALOGACION -->
-
-<!-- TMPL_IF EXPR="(accion eq 9)" -->
-
-<!-- TMPL_LOOP NAME="modificacion" -->
-<br>
-<div id="modificar">
-<input type="hidden" id="campoMod" value="<!-- TMPL_VAR NAME='campo' -->">
-<input type="hidden" id="subcampoMod" value="<!-- TMPL_VAR NAME='subcampo' -->">
-
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td colspan="2">Modificar campo: <!-- TMPL_VAR NAME='campo' --> subcampo:<!-- TMPL_VAR NAME='subcampo' --> en el nivel <!-- TMPL_VAR NAME="nivel" --></td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-	</tr>
-</table>
-
-<br>
-
-	<!--  Texto intranet -->
-<label for="textoMod" style="float: left; width:25%" >
-	Vista intranet:
-</label>
-<input id="textoMod" type="text" value='<!-- TMPL_VAR NAME="liblibrarian" -->'>&nbsp;
-
-<br><br>
-
-<label for="selectTipo" style="float: left; width:25%" >
-	Tipo de input:
-</label>
-<select id="selectTipo">
-	<option value="text" <!-- TMPL_IF EXPR="(tipoInput eq 'text')" --> selected="selected" <!-- /TMPL_IF -->>Texto</option>
-	<option value="texta" <!-- TMPL_IF EXPR="(tipoInput eq 'texta')" --> selected="selected" <!-- /TMPL_IF -->>Texto area</option>
-	<option value="texa2" <!-- TMPL_IF EXPR="(tipoInput eq 'texa2')" -->selected="selected" <!-- /TMPL_IF -->>Texto 1 por linea</option>
-	<!--<option value="radio" <!-- TMPL_IF EXPR="(tipoInput eq 'radio')" --> selected="selected" <!-- /TMPL_IF -->>Radio button</option>-->
-	<option value="combo" <!-- TMPL_IF EXPR="(tipoInput eq 'combo')" --> selected="selected" <!-- /TMPL_IF -->>Combo box</option>
-</select>
-
-<br><br>
-
-<label for="tablaMod" style="float: left; width:25%" >
-	Tabla de refencia:
-</label>
-<!-- TMPL_VAR NAME = "selecttablaMod" -->
-
-<!-- TMPL_IF EXPR="((tablaMod ne '') && (tablaMod != -1))" -->
-<input type="hidden" id="idinforef" value="<!-- TMPL_VAR NAME = 'idinforef' -->">
-
-Orden: <!-- TMPL_VAR NAME = "selectordenMod" -->
-<br><br>
-
-<label for="camposRefMod" style="float: left; width:25%" >
-	Campos:
-</label>
-<input type="text" size="50" id="camposRefMod" name="camposRefMod" value="<!-- TMPL_VAR NAME = 'stringCamposMod' -->">
-<br><br>
-<label for="separadorMod" style="float: left; width:25%" >
-	Separador:
-</label>
-<input type="text" id="separadorMod" name="separadorMod" value="<!-- TMPL_VAR NAME = 'separador' -->">
-<br>
-
-<p>Ejemplo: <!-- TMPL_VAR NAME = "ejemploMod" --></p>
-<p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
-<!-- /TMPL_IF -->
-
-<center>
-<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Campo" title="Guardar Campo" onClick="guardarModificaciones(10)">
-</center>
-</div>
-<!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
-<br>
-<!-- /TMPL_IF -->
+[% IF nivel ne 'Niveles' %]
+        <br>
+        [% IF error %]
+	        <div class="mensajeError">[% error %]</div>
+        [% END %]
+        [% IF cant != 0 %]
+            <table id="tablaCamposMod" class="tablaResult" width="100%" cellspacing="0" cellpadding="0" border="0">
+	                <tr>
+		                
+		                <td colspan="7" class=inputFontNormal> 
+			                <b>Campos Modificados del nivel [% nivel %] </b>
+		                </td>
+		                
+	                </tr>
+                
+	                <tr class="tablaresultadoTitle">
+		                <td width="1%" align="left" valign="top"><img src="[% themelang %]images/izquierda.png"></td>
+		                <td width="21%">MARC</td>
+		                <td width="20%">Vista en Intranet</td>
+		                <td >Orden</td>
+		                <td >Visible</td>
+		                <td >Editar</td>
+		                <td >Deshabilitar</td>
+		                <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+	                </tr>
+                
+                [% FOREACH RESULTDATA %]
+	                <tr align="center" class=inputFontNormal>
+		                <td><br>&nbsp;</td>
+		                <td>
+			                
+			                Campo: <b>[% campo %]</b>, Subcampo: <b>[% subcampo %]</b>
+		                </td>
+		                <td>
+			                [% liblibrarian %]
+		                </td>
+		                <td>
+			                <input id="orden,[% campo %],[% subcampo %]" type="hidden" value="[% intranet_habilitado %]">
+                
+			                <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" onClick="modificarOrden('[% id %]','[% intranet_habilitado %]',7)">
+                
+			                <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" onClick="modificarOrden('[% id %]','[% intranet_habilitado %]',8)">
+		                </td>
+		                <td>
+			                <input type="checkbox" id="[% id %]" value="[% visible %]" onChange="visibilidad('[% id %]')" 
+			                value="[% visible %]" [% IF visible %] 
+                                                    checked
+			                                    [% END %] 
+                            >
+		                </td>
+		                <td>
+			                <input  src="[% themelang %]/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" onClick="editarCampo('[% id %]',9)">
+                
+		                </td>
+		                <td>
+			                <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" onClick="eliminarCampo('[% id %]','[% intranet_habilitado %]',6)">
+                
+		                </td>
+		                <td><br>&nbsp;</td>
+	                </tr>
+                [% END %]
+                
+                </table>
+        
+        [% END %]
+        
+        <br>
+        <center>
+        <input src="[% themelang %]/images/agregar.png" type="image"  value="Agregar Campo" title="Agregar Campo" onClick="agregarCampo(1)">
+        </center>
+        <br>
+        
+        
+        
+        <!-- TABLA PARA LA MODIFICACION DE LOS CAMPOS DE LA TABLA ESTRUCTURA_CATALOGACION -->
+        
+        [% IF accion eq 9 %]
+        
+            [% FOREACH modificacion %]
+                    <br>
+                    <div id="modificar">
+                    <input type="hidden" id="campoMod" value="[% campo %]">
+                    <input type="hidden" id="subcampoMod" value="[% subcampo %]">
+                    
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+	                    <tr class="tablaresultadoTitle">
+		                    <td width="1%" align="left" valign="top"><img src="[% themelang %]images/izquierda.png"></td>
+		                    <td colspan="2">Modificar campo: [% campo %] subcampo:[% subcampo %] en el nivel [% nivel %]</td>
+		                    <td width="1%" align="right" valign="top"><img src="[% themelang %]images/derecha.png"></td>
+	                    </tr>
+                    </table>
+                    
+                    <br>
+                    
+	                    <!--  Texto intranet -->
+                    <label for="textoMod" style="float: left; width:25%" >
+	                    Vista intranet:
+                    </label>
+                    <input id="textoMod" type="text" value='[% liblibrarian %]'>&nbsp;
+                    
+                    <br><br>
+                    
+                    <label for="selectTipo" style="float: left; width:25%" >
+	                    Tipo de input:
+                    </label>
+                    <select id="selectTipo">
+	                    <option value="text" [% IF tipoInput eq 'text' %] selected="selected" [% END %] >Texto</option>
+	                    <option value="texta" [% IF tipoInput eq 'texta' %] selected="selected" [% END %] >Texto area</option>
+	                    <option value="texa2" [% IF tipoInput eq 'texa2' %] selected="selected" [% END %] >Texto 1 por linea</option>
+	                    <option value="combo" [% IF tipoInput eq 'combo' %] selected="selected" [% END %] >Combo box</option>
+                    </select>
+                    
+                    <br><br>
+                    
+                    <label for="tablaMod" style="float: left; width:25%" >
+	                    Tabla de refencia:
+                    </label>
+                    [% selecttablaMod %]
+                    
+                    [% IF (tablaMod ne '') && (tablaMod != -1)) %]
+                            <input type="hidden" id="idinforef" value="[% idinforef %]">
+                            
+                            Orden: [% selectordenMod %]
+                            <br><br>
+                            
+                            <label for="camposRefMod" style="float: left; width:25%" >
+	                            Campos:
+                            </label>
+                            <input type="text" size="50" id="camposRefMod" name="camposRefMod" value="[% stringCamposMod %]">
+                            <br><br>
+                            <label for="separadorMod" style="float: left; width:25%" >
+	                            Separador:
+                            </label>
+                            <input type="text" id="separadorMod" name="separadorMod" value="[% separador %]">
+                            <br>
+                            
+                            <p>Ejemplo: [% ejemploMod %]</p>
+                            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+                    [% END %]
+                    
+                    <center>
+                    <input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Campo" title="Guardar Campo" onClick="guardarModificaciones(10)">
+                    </center>
+                    </div>
+            [% END %]
+        [% END %]
+        <br>
+[% END %] <!-- END IF niveles -->
 
 
 
