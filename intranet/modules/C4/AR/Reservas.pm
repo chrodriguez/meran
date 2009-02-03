@@ -1320,7 +1320,7 @@ sub CheckWaiting {
 				INNER JOIN cat_nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
 				INNER JOIN cat_ref_tipo_nivel3 it ON it.id_tipo_doc = n2.tipo_documento
 				INNER JOIN pref_unidad_informacion b ON b.id_ui = r.id_ui
-				WHERE borrowernumber =? AND cancellationdate IS NULL");
+				WHERE nro_socio =? AND cancellationdate IS NULL");
 
  	$sth->execute($borrowernumber);
 

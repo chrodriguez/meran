@@ -20,7 +20,9 @@ var MENU_ITEMS = [
 		['Control de Autoridades','', null,
 			['Sin&oacute;nimos', '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.pl'],
 			['Seud&oacute;nimos', '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.pl'],
-		]
+		],
+        ['------Configuraci&oacute;n Nueva-----', null],
+        ['Creaci&oacute;n Catalogo', '/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCatalo.pl'],
 	],
 	['Usuarios', '/cgi-bin/koha/usuarios/reales/buscarUsuario.pl', null,
 		['Usuarios Reales', '/cgi-bin/koha/usuarios/reales/buscarUsuario.pl'],

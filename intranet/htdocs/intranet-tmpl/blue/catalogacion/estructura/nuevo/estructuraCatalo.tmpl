@@ -1,0 +1,181 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
+<script src="/intranet-tmpl/blue/includes/util.js"></script>
+
+[% INCLUDE "helpCamposMARC.inc" %]
+
+<script>
+
+//funciones para ajax recibe el parametro tipo, para identificar en que nivel de consulta estoy.
+function eleccionDeNivel(tipo){
+	var nivel=$("#nivel").val();
+	var ObjDiv = $("#divitemtype");
+	if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
+	else{ObjDiv.show();}
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=nivel;
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.sendToServer();
+
+	$("#result").html("");
+}
+
+function objetoRespuesta(campo,subcampo,lib,tipo,oblig,tabla){
+	this.campo=campo;
+	this.subcampo=subcampo;
+	this.lib=lib;
+	this.tipoInput=tipo;
+	this.obligatorio=oblig;
+	this.tabla=tabla;
+	this.orden="";
+	this.camposRef="";
+	this.separador="";
+}
+
+function guardarCamposModificados(accion){
+
+	var objeto=new objetoRespuesta($('#tagField').val(),$('#subcampo').val(),$('#lib').val(),$('#tipoInput').val(),$('#obligatorio').val(),$('#tabla').val());
+	if ($('#tabla').val() != -1){
+		objeto.orden=$('#orden').val();
+		objeto.camposRef=$('#camposRef').val();
+		objeto.separador=$('#separador').val();
+	}
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.objeto=objeto;
+	objAH.accion=accion;
+	objAH.sendToServer();
+	$("#result").html("");
+}
+
+function guardarModificaciones(accion){
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.idMod=$('#idMod').val();
+	objAH.accion=accion;
+	
+	var objeto=new objetoRespuesta($('#campoMod').val(),$('#subcampoMod').val(),$('#textoMod').val(),$('#selectTipo').val(),"",$('#tablaMod').val());
+	if($('#tablaMod').val() != -1){
+		objAH.idinforef=$('#idinforef').val();
+		objeto.orden=$('#ordenMod').val();
+		objeto.camposRef=$('#camposRefMod').val();
+		objeto.separador=$('#separadorMod').val();
+	}
+	objAH.objeto=objeto;
+	objAH.sendToServer();
+}
+
+function agregarCampo(accion){
+	$("#modificar").hide();
+	objAH=new AjaxHelper(updateInfo);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.tmpl= "catalogacion";
+	objAH.accion=accion;
+	objAH.sendToServer();
+}
+
+//Elimina el campo en la estructura inicial del catalogo
+function eliminarCampo(id,intra,accion){
+	$("#result").html("");
+	$('#idMod').val(id);
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.idMod=id;
+	objAH.intra=intra;
+	objAH.accion=accion;
+	objAH.sendToServer();
+}
+
+function modificarOrden(id,intra,accion){
+	$("#result").html("");
+ 	$('#idMod').val(id);
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.idMod=id;
+	objAH.intra=intra;
+	objAH.accion=accion;
+	objAH.sendToServer();
+}
+
+function editarCampo(id,accion){
+	$("#result").html("");
+	$('#idMod').val(id);
+	
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.idMod=id;
+	objAH.accion=accion;
+	objAH.sendToServer();
+}
+
+function visibilidad(id){
+	var visible=$('#'+id).val();
+
+	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+	objAH.nivel=$('#nivel').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
+	objAH.id=id;
+	objAH.visible=visible;
+	objAH.accion=11;
+	objAH.sendToServer();
+}
+
+</script>
+
+
+<!-- Me guardo el subcampo -->
+<input type="hidden" id="subcampo">
+<input type="hidden" id="nivelMod">
+<input type="hidden" id="idMod">
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Modificaci&oacute;n de campos MARC </td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+
+<br><br>
+<label for="nivel" style="float: left; width:13%" >
+	Nivel:
+</label>
+[% selectNivel %]
+
+
+<div id="divitemtype" style="display:none;">
+
+<p>
+<label for="itemtype" style="float: left; width:13%;">
+	Tipo de item: 
+</label>
+[% selectItemType %]
+</p>
+</div>
+
+<div id= "result2"></div>
+<div id= "result"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]
+
