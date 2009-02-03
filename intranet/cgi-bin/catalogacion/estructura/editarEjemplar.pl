@@ -32,8 +32,8 @@ else{
 }
 
 if(!$json){
-	my ($template, $loggedinuser, $cookie)
-    		= get_templateexpr_and_user({template_name => "catalogacion/estructura/editarEjemplar.tmpl",
+        my ($template, $session, $t_params) = get_template_and_user({
+	             template_name => "catalogacion/estructura/editarEjemplar.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -59,18 +59,16 @@ if(!$json){
 		}
 	}
 
-	$template->param(
-		itemloop	=> \@niveles3,
-		nivel		=> 3,
-		itemtype	=> $itemtype,
-		id1		=> $id1,
-		id2		=> $id2,
-		id3		=> $id3,
-		titulo		=> $titulo,
-		datosautor	=> $autor->{'completo'},
-		todos  		=> $todos,
-	);
-	output_html_with_http_headers $input, $cookie, $template->output;
+    $t_params->{'itemloop'}= \@niveles3;
+	$t_params->{'nivel'}= 3;
+	$t_params->{'itemtype'}= $itemtype;
+	$t_params->{'id1'}= $id1;
+	$t_params->{'id2'}= $id2;
+	$t_params->{'id3'}= $id3;
+	$t_params->{'titulo'}= $titulo;
+	$t_params->{'datosautor'}= $autor->{'completo'};
+	$t_params->{'todos'}= $todos;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 else{
 

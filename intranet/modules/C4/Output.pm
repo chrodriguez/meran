@@ -136,9 +136,10 @@ sub gettemplate {
 
 	my $template = Template->new({
 					INCLUDE_PATH => [
-								"$htdocs/$theme/$tmplbase",
-								"$htdocs/$theme/includes/",
-								"$htdocs/$theme/includes/menu",
+								"$htdocs/$theme/$lang/$tmplbase",
+								"$htdocs/$theme/$lang/includes/",
+                                "$htdocs/$theme/$lang/includes/popups",
+								"$htdocs/$theme/$lang/includes/menu",
 							],
  					ABSOLUTE => 1,
 					EVAL_PERL => 1,

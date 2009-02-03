@@ -9,8 +9,8 @@ use C4::AR::Catalogacion;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "catalogacion/estructura/estructuraCatalo.tmpl",
+        my ($template, $session, $t_params) = get_template_and_user({
+                 template_name => "catalogacion/estructura/estructuraCatalo.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -58,9 +58,8 @@ my $selectNivel=CGI::scrolling_list(  -name      => 'nivel',
                                  );
 #fin niveles
 
-$template->param(
-			selectNivel	=> $selectNivel,
-			selectItemType  => $selectItemType,
-);
+$t_params->{'selectNivel'}=$selectNivel;
+$t_params->{'selectItemType'}= $selectItemType;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
