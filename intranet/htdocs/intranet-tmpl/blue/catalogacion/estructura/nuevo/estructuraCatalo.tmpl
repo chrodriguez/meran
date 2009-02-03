@@ -6,7 +6,7 @@
 [% INCLUDE "helpCamposMARC.inc" %]
 
 <script>
-
+// ********************************************REVISADO***************************************************
 //funciones para ajax recibe el parametro tipo, para identificar en que nivel de consulta estoy.
 function eleccionDeNivel(tipo){
 	var nivel=$("#nivel").val();
@@ -15,13 +15,30 @@ function eleccionDeNivel(tipo){
 	else{ObjDiv.show();}
 	
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
+    objAH.debug= true;
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.nivel=nivel;
+    objAH.tipoAccion= 'MOSTRAR_CAMPOS';
 	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.sendToServer();
 
 	$("#result").html("");
 }
+
+//FIXME accion no se usa mas
+function agregarCampo(accion){
+    $("#modificar").hide();
+    objAH=new AjaxHelper(updateInfo);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
+    objAH.nivel=$('#nivel').val();
+    objAH.itemtype=$('#tipo_nivel3_id').val();
+    objAH.tmpl= "catalogacion";
+    objAH.accion=accion;
+    objAH.sendToServer();
+}
+
+
+// ********************************************FIN REVISADO***************************************************
 
 function objetoRespuesta(campo,subcampo,lib,tipo,oblig,tabla){
 	this.campo=campo;
@@ -73,16 +90,6 @@ function guardarModificaciones(accion){
 	objAH.sendToServer();
 }
 
-function agregarCampo(accion){
-	$("#modificar").hide();
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.tmpl= "catalogacion";
-	objAH.accion=accion;
-	objAH.sendToServer();
-}
 
 //Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id,intra,accion){

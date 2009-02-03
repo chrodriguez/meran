@@ -151,6 +151,8 @@ sub modificar{
 }
 
 sub defaultSort{
+     my ($campo)=@_;
+
      my $personaTemp = C4::Modelo::UsrPersona->new();
      return ($personaTemp->sortByString($campo));
 }

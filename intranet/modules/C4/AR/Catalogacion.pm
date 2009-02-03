@@ -385,6 +385,7 @@ sub buscarSubCampo{
 buscarCamposModificados
 Busca los campos que se encuentran en la tabla estructura_catalogacion que estan habilitados
 =cut
+## FIXME DEPRECATED
 sub buscarCamposModificados{
 	my ($nivel,$itemType)=@_;
 	my $dbh = C4::Context->dbh;
