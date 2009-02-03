@@ -1,4 +1,4 @@
-[% IF nivel ne 'Niveles' %]
+[% IF nivel == 'Niveles' %]
         <br>
         [% IF error %]
 	        <div class="mensajeError">[% error %]</div>
@@ -74,7 +74,7 @@
         
         <!-- TABLA PARA LA MODIFICACION DE LOS CAMPOS DE LA TABLA ESTRUCTURA_CATALOGACION -->
         
-        [% IF accion eq 9 %]
+        [% IF accion == 9 %]
         
             [% FOREACH modificacion %]
                     <br>
@@ -104,10 +104,10 @@
 	                    Tipo de input:
                     </label>
                     <select id="selectTipo">
-	                    <option value="text" [% IF tipoInput eq 'text' %] selected="selected" [% END %] >Texto</option>
-	                    <option value="texta" [% IF tipoInput eq 'texta' %] selected="selected" [% END %] >Texto area</option>
-	                    <option value="texa2" [% IF tipoInput eq 'texa2' %] selected="selected" [% END %] >Texto 1 por linea</option>
-	                    <option value="combo" [% IF tipoInput eq 'combo' %] selected="selected" [% END %] >Combo box</option>
+	                    <option value="text" [% IF tipoInput == 'text' %] selected="selected" [% END %] >Texto</option>
+	                    <option value="texta" [% IF tipoInput == 'texta' %] selected="selected" [% END %] >Texto area</option>
+	                    <option value="texa2" [% IF tipoInput == 'texa2' %] selected="selected" [% END %] >Texto 1 por linea</option>
+	                    <option value="combo" [% IF tipoInput == 'combo' %] selected="selected" [% END %] >Combo box</option>
                     </select>
                     
                     <br><br>
@@ -117,7 +117,7 @@
                     </label>
                     [% selecttablaMod %]
                     
-                    [% IF (tablaMod ne '') && (tablaMod != -1)) %]
+                    [% IF ( (tablaMod != '') && (tablaMod != -1) ) %]
                             <input type="hidden" id="idinforef" value="[% idinforef %]">
                             
                             Orden: [% selectordenMod %]
