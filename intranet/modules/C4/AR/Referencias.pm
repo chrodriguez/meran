@@ -74,6 +74,7 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
             &obtenerTiposDeDocumentos
+            &obtenerTiposNivel3
     );
 
 
@@ -86,6 +87,20 @@ sub obtenerTiposDeDocumentos {
 
     foreach my $tipo_doc (@$tiposDoc) {
         push (@results, $tipo_doc);
+    }
+
+    return(\@results);
+}
+
+=item
+Esta funcion devuelve un arreglo de objetos con los tipos de nivel3
+=cut
+sub obtenerTiposNivel3 {
+    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3;
+    my @results;
+
+    foreach my $tipo_nivel3 (@$tiposNivel3) {
+        push (@results, $tipo_nivel3);
     }
 
     return(\@results);

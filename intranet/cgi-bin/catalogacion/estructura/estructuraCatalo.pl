@@ -40,7 +40,8 @@ my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
 				-onChange  => 'eleccionDeNivel("0")',
                                  );
 #fin item type
-
+my $comboTiposNivel3= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+$t_params->{'selectItemType'}= $comboTiposNivel3;
 
 #Niveles
 my @nivel;
@@ -59,7 +60,7 @@ my $selectNivel=CGI::scrolling_list(  -name      => 'nivel',
 #fin niveles
 
 $t_params->{'selectNivel'}=$selectNivel;
-$t_params->{'selectItemType'}= $selectItemType;
+# $t_params->{'selectItemType'}= $selectItemType;
 
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

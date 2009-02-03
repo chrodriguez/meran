@@ -246,6 +246,6 @@ ALTER TABLE `cat_ref_tipo_nivel3`
 ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
 CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
 
-
+UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultTipoNivel3' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultitemtype' LIMIT 1 ;
 
 

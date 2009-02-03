@@ -128,17 +128,17 @@ sub gettemplate {
 # print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n,
-								'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #solo para probar
+								        'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #solo para probar
 							},
 					});
 
 
 	my $template = Template->new({
 					INCLUDE_PATH => [
-								"$htdocs/$theme/$lang/$tmplbase",
-								"$htdocs/$theme/$lang/includes/",
-                                "$htdocs/$theme/$lang/includes/popups",
-								"$htdocs/$theme/$lang/includes/menu",
+								"$htdocs/$theme/$tmplbase",
+								"$htdocs/$theme/includes/",
+                                "$htdocs/$theme/includes/popups",
+								"$htdocs/$theme/includes/menu",
 							],
  					ABSOLUTE => 1,
 					EVAL_PERL => 1,
