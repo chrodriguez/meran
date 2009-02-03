@@ -9,37 +9,14 @@ use C4::AR::Catalogacion;
 
 my $input = new CGI;
 
-        my ($template, $session, $t_params) = get_template_and_user({
-                 template_name => "catalogacion/estructura/estructuraCatalo.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
+my ($template, $session, $t_params) = get_template_and_user({
+                                                                template_name => "catalogacion/estructura/estructuraCatalo.tmpl",
+			                                                    query => $input,
+			                                                    type => "intranet",
+			                                                    authnotrequired => 0,
+			                                                    flagsrequired => {editcatalogue => 1},
+			                                                    debug => 1,
 			     });
-
-
-# #item type
-# my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
-# my @valuesItemtypes;
-# my %labelsItemtypes;
-# my $i=0;
-# push(@valuesItemtypes,'ALL');
-# $labelsItemtypes{'ALL'}='TODOS';
-# for ($i; $i<scalar(@results); $i++){
-# 	push(@valuesItemtypes,$results[$i]->{'itemtype'});
-# 	$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
-# }
-# 
-# my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
-# 				-id	   => 'itemtype',
-#                                 -values    => \@valuesItemtypes,
-# 				-labels    => \%labelsItemtypes,
-#                                 -defaults  => 'LIB',
-#                                 -size      => 1,
-# 				-onChange  => 'eleccionDeNivel("0")',
-#                                  );
-# #fin item type
 
 my %params_combo;
 $params_combo{'onChange'}= 'eleccionDeNivel("0")';
