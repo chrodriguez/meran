@@ -41,6 +41,123 @@ __PACKAGE__->meta->setup(
 
 );
 
+
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+}
+
+sub getCampo{
+    my ($self) = shift;
+    return ($self->campo);
+}
+
+sub setCampo{
+    my ($self) = shift;
+    my ($campo) = @_;
+    $self->campo($campo);
+}
+
+sub getSubCampo{
+    my ($self) = shift;
+    return ($self->subcampo);
+}
+
+sub setSubCampo{
+    my ($self) = shift;
+    my ($subcampo) = @_;
+    $self->subcampo($subcampo);
+}
+       
+sub getItemType{
+    my ($self) = shift;
+    return ($self->itemtype);
+}
+
+sub setItemType{
+    my ($self) = shift;
+    my ($itemtype) = @_;
+    $self->itemtype($itemtype);
+}
+      
+sub getLiblibrarian{
+    my ($self) = shift;
+    return ($self->liblibrarian);
+}
+
+sub setLiblibrarian{
+    my ($self) = shift;
+    my ($liblibrarian) = @_;
+    $self->liblibrarian($liblibrarian);
+}
+
+sub getTipo{
+    my ($self) = shift;
+    return ($self->tipo);
+}
+
+sub setCampo{
+    my ($self) = shift;
+    my ($tipo) = @_;
+    $self->tipo($tipo);
+}
+        
+sub getReferencia{
+    my ($self) = shift;
+    return ($self->referencia);
+}
+
+sub setReferencia{
+    my ($self) = shift;
+    my ($referencia) = @_;
+    $self->referencia($referencia);
+}
+       
+sub getNivel{
+    my ($self) = shift;
+    return ($self->nivel);
+}
+
+sub setNivel{
+    my ($self) = shift;
+    my ($nivel) = @_;
+    $self->nivel($nivel);
+}
+        
+sub getObligatorio{
+    my ($self) = shift;
+    return ($self->obligatorio);
+}
+
+sub setObligatorio{
+    my ($self) = shift;
+    my ($obligatorio) = @_;
+    $self->obligatorio($obligatorio);
+}
+       
+sub getIntranet_habilitado{
+    my ($self) = shift;
+    return ($self->intranet_habilitado);
+}
+
+sub setIntranet_habilitado{
+    my ($self) = shift;
+    my ($intranet_habilitado) = @_;
+    $self->intranet_habilitado($intranet_habilitado);
+}
+        
+sub getVisible{
+    my ($self) = shift;
+    return ($self->visible);
+}
+
+sub setVisible{
+    my ($self) = shift;
+    my ($visible) = @_;
+    $self->visible($visible);
+}
+
+
 sub agregar{
 
     my ($self)=shift;
