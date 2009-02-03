@@ -3,15 +3,15 @@
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 
-<script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
-<script src="/opac-tmpl/default/es2/includes/AjaxHelper.js"></script>
-<script src="/opac-tmpl/default/es2/includes/MessageHelper.js"></script>
-<script src="/opac-tmpl/default/es2/includes/json/jsonStringify.js"></script>
-<script src="/opac-tmpl/default/es2/includes/navegador.js"></script>
-<script src="/opac-tmpl/default/es2/includes/util.js"></script>
-<script src="/opac-tmpl/default/es2/includes/opac-searchFunciones.js"></script>
-<script src="/opac-tmpl/default/es2/includes/circulacionOPAC.js"></script>
-<script src="/opac-tmpl/default/es2/includes/favoritos.js"></script>
+<script src="/opac-tmpl/default/includes/jquery/jquery.js"></script>
+<script src="/opac-tmpl/default/includes/AjaxHelper.js"></script>
+<script src="/opac-tmpl/default/includes/MessageHelper.js"></script>
+<script src="/opac-tmpl/default/includes/json/jsonStringify.js"></script>
+<script src="/opac-tmpl/default/includes/navegador.js"></script>
+<script src="/opac-tmpl/default/includes/util.js"></script>
+<script src="/opac-tmpl/default/includes/opac-searchFunciones.js"></script>
+<script src="/opac-tmpl/default/includes/circulacionOPAC.js"></script>
+<script src="/opac-tmpl/default/includes/favoritos.js"></script>
 
 
 

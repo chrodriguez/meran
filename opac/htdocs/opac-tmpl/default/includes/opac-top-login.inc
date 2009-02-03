@@ -4,9 +4,9 @@
 
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 
-<script src="/opac-tmpl/default/es2/includes/jquery/jquery.js"></script>
-<script src="/opac-tmpl/default/es2/includes/AjaxHelper.js"></script>
-<script src="/opac-tmpl/default/es2/includes/MessageHelper.js"></script>
+<script src="/opac-tmpl/default/includes/jquery/jquery.js"></script>
+<script src="/opac-tmpl/default/includes/AjaxHelper.js"></script>
+<script src="/opac-tmpl/default/includes/MessageHelper.js"></script>
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 </head>

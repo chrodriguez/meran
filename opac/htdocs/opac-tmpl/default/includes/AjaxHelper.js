@@ -20,7 +20,7 @@ function _AddDiv(){
 	var contenedor = $('#state')[0];
 	if(contenedor == null){
 		$('body').append("<div id='state' class='loading' style='position:absolute'></div>");
-		$('#state').html("<img src='/opac-tmpl/default/es2/images/indicator.gif' />");
+		$('#state').html("<img src='/opac-tmpl/default/images/indicator.gif' />");
 		$('#state').css('top', '0px');
 		$('#state').css('left', '0px');
 
