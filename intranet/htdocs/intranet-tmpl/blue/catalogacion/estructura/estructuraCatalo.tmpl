@@ -17,7 +17,7 @@ function eleccionDeNivel(tipo){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=nivel;
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.sendToServer();
 
 	$("#result").html("");
@@ -47,7 +47,7 @@ function guardarCamposModificados(accion){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.objeto=objeto;
 	objAH.accion=accion;
 	objAH.sendToServer();
@@ -58,7 +58,7 @@ function guardarModificaciones(accion){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.idMod=$('#idMod').val();
 	objAH.accion=accion;
 	
@@ -78,7 +78,7 @@ function agregarCampo(accion){
 	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.tmpl= "catalogacion";
 	objAH.accion=accion;
 	objAH.sendToServer();
@@ -92,7 +92,7 @@ function eliminarCampo(id,intra,accion){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.idMod=id;
 	objAH.intra=intra;
 	objAH.accion=accion;
@@ -106,7 +106,7 @@ function modificarOrden(id,intra,accion){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.idMod=id;
 	objAH.intra=intra;
 	objAH.accion=accion;
@@ -120,7 +120,7 @@ function editarCampo(id,accion){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.idMod=id;
 	objAH.accion=accion;
 	objAH.sendToServer();
@@ -132,7 +132,7 @@ function visibilidad(id){
 	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
 	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
+	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.id=id;
 	objAH.visible=visible;
 	objAH.accion=11;

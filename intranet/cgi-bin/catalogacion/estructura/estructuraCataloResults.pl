@@ -10,13 +10,13 @@ use C4::AR::Catalogacion;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "catalogacion/estructura/estructuraCataloResults.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
+ my ($template, $session, $t_params) = get_template_and_user({
+                                                    template_name => "catalogacion/estructura/estructuraCataloResults.tmpl",
+			                                        query => $input,
+			                                        type => "intranet",
+			                                        authnotrequired => 0,
+			                                        flagsrequired => {editcatalogue => 1},
+			                                        debug => 1,
 			     });
 
 #FUNCIONES INTERNAS
@@ -182,18 +182,19 @@ if($accion == 9){
 	if($tabla != -1){
 		my $ordDef=$result->[0]->{'orden'};
 		my($ejemplo,$stringCampos,$ordenMod)=&generarSelectOrden('ordenMod',$ordDef,$tabla);
-		$template->param(selectordenMod	 => $ordenMod,
-				stringCamposMod  => $stringCampos,
-				ejemploMod       => $ejemplo,
-				);
+		
+        $t_params->{'selectordenMod'}= $ordenMod;
+		$t_params->{'stringCamposMod'}= $stringCampos;
+		$t_params->{'ejemploMod'}= $ejemplo;
+			
 	}
-	$template->param(modificacion    => $result,
-			idMod		 => $id,
-			selecttablaMod   => $tablaMod,
-			tablaMod         => $tabla,
-			campo		 => $campo,
-			subcampo	 => $subcampo,
-			);
+
+        $t_params->{'modificacion'}= $result;
+		$t_params->{'idMod'}= $id;
+		$t_params->{'selecttablaMod'}= $tablaMod;
+		$t_params->{'tablaMod'}= $tabla;
+		$t_params->{'campo'}= $campo;
+		$t_params->{'subcampo'}= $subcampo;
 
 }
 
@@ -237,12 +238,11 @@ my @results = &buscarCamposModificados($nivel,$itemType);
 #fin busqueda
 my $cant= scalar(@results); #Para ver si se muestar la tabla o no en el template
 
-$template->param(
-			RESULTDATA	  => \@results,
-			accion		  => $accion,
-			nivel		  => $nivel,
-			cant		  => $cant,
-			error		  => $error,
-			);
+$t_params->{'RESULTDATA'}= \@results;
+$t_params->{'accion'}= $accion;
+$t_params->{'nivel'}= $nivel;
+$t_params->{'cant'}= $cant;
+$t_params->{'error'}= $error;
+		
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

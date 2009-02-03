@@ -19,27 +19,27 @@ my $input = new CGI;
 			     });
 
 
-#item type
-my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
-my @valuesItemtypes;
-my %labelsItemtypes;
-my $i=0;
-push(@valuesItemtypes,'ALL');
-$labelsItemtypes{'ALL'}='TODOS';
-for ($i; $i<scalar(@results); $i++){
-	push(@valuesItemtypes,$results[$i]->{'itemtype'});
-	$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
-}
-
-my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
-				-id	   => 'itemtype',
-                                -values    => \@valuesItemtypes,
-				-labels    => \%labelsItemtypes,
-                                -defaults  => 'LIB',
-                                -size      => 1,
-				-onChange  => 'eleccionDeNivel("0")',
-                                 );
-#fin item type
+# #item type
+# my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
+# my @valuesItemtypes;
+# my %labelsItemtypes;
+# my $i=0;
+# push(@valuesItemtypes,'ALL');
+# $labelsItemtypes{'ALL'}='TODOS';
+# for ($i; $i<scalar(@results); $i++){
+# 	push(@valuesItemtypes,$results[$i]->{'itemtype'});
+# 	$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
+# }
+# 
+# my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
+# 				-id	   => 'itemtype',
+#                                 -values    => \@valuesItemtypes,
+# 				-labels    => \%labelsItemtypes,
+#                                 -defaults  => 'LIB',
+#                                 -size      => 1,
+# 				-onChange  => 'eleccionDeNivel("0")',
+#                                  );
+# #fin item type
 
 my %params_combo;
 $params_combo{'onChange'}= 'eleccionDeNivel("0")';
@@ -53,17 +53,18 @@ push(@nivel, "Niveles");
 for (my $i=1; $i<=$cantNivel; $i++){
 	push(@nivel, $i);
 }
-my $selectNivel=CGI::scrolling_list(  -name      => 'nivel',
-				-id	   => 'nivel',
-                                -values    => \@nivel,
-                                -defaults  => 'Niveles',
-                                -size      => 1,
-				-onChange  => 'eleccionDeNivel("0")',
+my $selectNivel=CGI::scrolling_list(  
+                                    -name      => 'nivel',
+				                    -id	   => 'nivel',
+                                    -values    => \@nivel,
+                                    -defaults  => 'Niveles',
+                                    -size      => 1,
+				                    -onChange  => 'eleccionDeNivel("0")',
                                  );
 #fin niveles
 
 $t_params->{'selectNivel'}=$selectNivel;
-# $t_params->{'selectItemType'}= $selectItemType;
+
 
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
