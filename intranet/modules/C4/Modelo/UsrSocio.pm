@@ -150,22 +150,9 @@ sub modificar{
     $self->save();
 }
 
-sub sortByString{
-
-    my ($self)=shift;
-    my ($campo)=@_;
-    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-# $self->log($self->meta->columns,'sortByString => columns');
-
-    my $index = rindex $fieldsString,$campo;
-    if ($index != -1){
-        return ($campo);
-    }
-    else
-        {
-            my $personaTemp = C4::Modelo::UsrPersona->new();
-            return ($personaTemp->sortByString($campo));
-        }
+sub defaultSort{
+     my $personaTemp = C4::Modelo::UsrPersona->new();
+     return ($personaTemp->sortByString($campo));
 }
 
 

@@ -21,8 +21,71 @@ __PACKAGE__->meta->setup(
         visible             => { type => 'integer', default => 1, not_null => 1 },
     ],
 
+    
     primary_key_columns => [ 'id' ],
+
+    tipoItem => 
+      {
+        class       => 'C4::Modelo::CatRefTipoNivel3',
+        key_columns => { itemtype => 'id_tipo_doc' },
+        type        => 'one to one',
+      },
+
+     refCampo => 
+      {
+        class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
+        key_columns => { campo => 'tagfield',
+                         subcampo => 'tagsubfield' },
+        type        => 'one to one',
+      },
+
 );
+
+sub agregar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubcampo($data_hash->{'subcampo'});
+    $self->setItemtype($data_hash->{'itemtype'});
+    $self->setLiblibrarian($data_hash->{'liblibrarian'});
+    $self->setTipo($data_hash->{'tipo'});
+    $self->setReferencia($data_hash->{'referencia'});
+    $self->setNivel($data_hash->{'nivel'});
+    $self->setObligatorio($data_hash->{'obligatorio'});
+    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+    $self->setVisible($data_hash->{'visible'});
+
+    $self->save();
+
+}
+
+sub modificar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubcampo($data_hash->{'subcampo'});
+    $self->setItemtype($data_hash->{'itemtype'});
+    $self->setLiblibrarian($data_hash->{'liblibrarian'});
+    $self->setTipo($data_hash->{'tipo'});
+    $self->setReferencia($data_hash->{'referencia'});
+    $self->setNivel($data_hash->{'nivel'});
+    $self->setObligatorio($data_hash->{'obligatorio'});
+    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+    $self->setVisible($data_hash->{'visible'});
+
+    $self->save();
+
+}
+
+sub defaultSort{
+
+    return ("liblibrarian");
+}
+
 
 1;
 
