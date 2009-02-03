@@ -223,9 +223,8 @@ VALUES (21, 12, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'yaI/N9MQNziYMukMdHMW4w
 
 --Modificaciones en Reservas (`circ_reserva`)
 ALTER TABLE `circ_reserva`  DROP `cancellationdate`, DROP `reservenotes`, DROP `biblioitemnumber`;
-ALTER TABLE `circ_reserva` CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0' 
+ALTER TABLE `circ_reserva` CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0';
 ALTER TABLE `circ_reserva` DROP INDEX `IdUnico` , ADD UNIQUE `IdUnico` ( `nro_socio` , `id3` );
-
 ALTER TABLE `circ_reserva` CHANGE `reservenumber` `id_reserva` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
@@ -234,7 +233,7 @@ CHANGE `reminderdate` `fecha_recodatorio` DATE NULL DEFAULT NULL ;
 ALTER TABLE `circ_reserva` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 --Se elimino la siguiente tabla, se usa usr_ref_tipo_documento (DNI, LE, LC, etc)
-DROP TABLE `ref_tipo_documento`
+DROP TABLE `ref_tipo_documento`;
 
 ALTER TABLE `cat_ref_tipo_nivel3`
   DROP `loanlength`,
@@ -244,7 +243,7 @@ ALTER TABLE `cat_ref_tipo_nivel3`
   DROP `detail`;
 
 ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
-CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
 
 UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultTipoNivel3' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultitemtype' LIMIT 1 ;
 
