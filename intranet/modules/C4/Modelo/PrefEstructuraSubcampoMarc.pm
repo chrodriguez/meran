@@ -24,6 +24,13 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'tagfield', 'tagsubfield' ],
+
+        campoRef => 
+      {
+        class       => 'C4::Modelo::PrefEstructuraCampoMarc',
+        key_columns => { tagfield => 'tagfield' },
+        type        => 'one to one',
+      },
 );
 
 1;
