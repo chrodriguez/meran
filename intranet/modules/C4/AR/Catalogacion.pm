@@ -407,6 +407,25 @@ sub buscarCamposModificados{
 }
 
 =item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getCatalogaciones{
+    my ($nivel,$itemType)=@_;
+
+    use C4::Modelo::CatEstructuraCatalogacion;
+    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   query => [ 
+                                                                                                nivel => { eq => $nivel },
+                                                                                                itemtype => { eq => $itemType },
+                                                                                                intranet_habilitado => { gt => 0 } 
+                                                                                    ]);
+# WHERE intranet_habilitado > '0' AND nivel=? ";
+#     $query .= "AND itemtype=? ORDER BY intranet_habilitado
+## FIXME falta el sortby 
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+=item
 actualizarCamposModificados
 Actualiza los cambios hecho en un campo modificado; recibe como parametro el id del campo que se modifico junto con el texto nuevo para el campo y el tipo de input deseado para mostrar los datos.
 Y si el campo estaba deshabilitado el parametro intra toma el ultimo lugar en el orden, si esta habilitado intra tiene el valor 0.

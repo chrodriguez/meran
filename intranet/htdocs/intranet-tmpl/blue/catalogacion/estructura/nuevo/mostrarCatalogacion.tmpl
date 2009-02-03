@@ -1,8 +1,5 @@
 [% IF nivel != 'Niveles' %]
     <br>
-    [% IF error %]
-	    <div class="mensajeError">[% error %]</div>
-    [% END %]
 
     [% IF cant != 0 %]
         <table id="tablaCamposMod" class="tablaResult" width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -24,42 +21,45 @@
 		        <td >Deshabilitar</td>
 		        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	        </tr>
-            
-            [% FOREACH RESULTDATA %]
+        [% FOREACH RESULTDATA %]
 	        <tr align="center" class=inputFontNormal>
 		        <td><br>&nbsp;</td>
 		        <td>
 			        
-			        Campo: <b>[% campo %]</b>, Subcampo: <b>[% subcampo %]</b>
+			        Campo: <b>[% catalogacion.getCampo %]</b>, Subcampo: <b>[% catalogacion.getSubCampo %]</b>
 		        </td>
 		        <td>
-			        [% liblibrarian %]
+			        [% catalogacion.getLiblibrarian %]
 		        </td>
 		        <td>
-			        <input id="orden,[% campo %],[% subcampo %]" type="hidden" value="[% intranet_habilitado %]">
+			        <input id="orden,[% catalogacion.getSubcampo %],[% catalogacion.getSubcampo %]" type="hidden" 
+                            value="[% catalogacion.getIntranet_habilitado %]">
         
-			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" onClick="modificarOrden('[% id %]','[% intranet_habilitado %]',7)">
+			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
+                    onClick="modificarOrden('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',7)">
         
-			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" onClick="modificarOrden('[% id %]','[% intranet_habilitado %]',8)">
+			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
+                    onClick="modificarOrden('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',8)">
 		        </td>
 		        <td>
-			        <input type="checkbox" id="[% id %]" value="[% visible %]" onChange="visibilidad('[% id %]')" 
-			        value="[% visible %]" [% IF visible %] 
-                                            checked
-			                            [% END %] 
+			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
+			        value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
+                                                                checked
+			                                                [% END %] 
                     >
 		        </td>
 		        <td>
-			        <input  src="[% themelang %]/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" onClick="editarCampo('[% id %]',9)">
+			        <input  src="[% themelang %]/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" onClick="editarCampo('[% catalogacion.getId %]',9)">
         
 		        </td>
 		        <td>
-			        <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" onClick="eliminarCampo('[% id %]','[% intranet_habilitado %]',6)">
+			        <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" 
+                    onClick="eliminarCampo('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',6)">
         
 		        </td>
 		        <td><br>&nbsp;</td>
 	        </tr>
-            [% END %]
+        [% END %]
             
         </table>
     

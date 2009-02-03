@@ -34,14 +34,19 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			                                            debug => 1,
 			        });
 
-
-    my @results = &buscarCamposModificados($nivel,$itemType);
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType);
+    my @results;
+    for (my $i=0; $i < $cant; $i++){
+        
+        my %row = (
+                catalogacion => $catalogaciones_array_ref->[$i],
+        );
     
-    my $cant= scalar(@results); #Para ver si se muestra la tabla o no en el template
-    
+        push(@results, \%row);
+    }
+   
     $t_params->{'RESULTDATA'}= \@results;
     $t_params->{'nivel'}= $nivel;
-    $t_params->{'cant'}= $cant;
 		    
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

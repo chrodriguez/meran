@@ -24,20 +24,23 @@ __PACKAGE__->meta->setup(
     
     primary_key_columns => [ 'id' ],
 
-    tipoItem => 
-      {
-        class       => 'C4::Modelo::CatRefTipoNivel3',
-        key_columns => { itemtype => 'id_tipo_doc' },
-        type        => 'one to one',
-      },
-
-     refCampo => 
-      {
-        class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
-        key_columns => { campo => 'tagfield',
-                         subcampo => 'tagsubfield' },
-        type        => 'one to one',
-      },
+    relationships =>
+    [
+        tipoItem => 
+        {
+            class       => 'C4::Modelo::CatRefTipoNivel3',
+            key_columns => { itemtype => 'id_tipo_doc' },
+            type        => 'one to one',
+        },
+    
+        refCampo => 
+        {
+            class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
+            key_columns => { campo => 'tagfield',
+                            subcampo => 'tagsubfield' },
+            type        => 'one to one',
+        },
+    ]
 
 );
 
