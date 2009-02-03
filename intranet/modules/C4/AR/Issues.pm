@@ -877,7 +877,7 @@ sub prestamosPorUsuario {
 			INNER JOIN cat_nivel3 n3 ON ( iss.id3 = n3.id3 )
 			INNER JOIN cat_nivel1 n1 ON ( n3.id1 = n1.id1)
 			INNER JOIN cat_nivel2 n2 ON ( n2.id2 = n3.id2 )
-			INNER JOIN cat_ref_tipo_nivel3 it ON ( it.itemtype = n2.tipo_documento )
+			INNER JOIN cat_ref_tipo_nivel3 it ON ( it.id_tipo_doc = n2.tipo_documento )
 			WHERE iss.borrowernumber = ?
 			AND iss.returndate IS NULL
 			ORDER BY iss.date_due desc";

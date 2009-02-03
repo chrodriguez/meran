@@ -137,7 +137,7 @@ sub gettemplate {
 					INCLUDE_PATH => [
 								"$htdocs/$theme/$tmplbase",
 								"$htdocs/$theme/includes/",
-                                "$htdocs/$theme/includes/popups",
+                                "$htdocs/$theme/includes/popups/",
 								"$htdocs/$theme/includes/menu",
 							],
  					ABSOLUTE => 1,

@@ -1,9 +1,9 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
 <script src="/intranet-tmpl/blue/includes/util.js"></script>
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+[% INCLUDE "helpCamposMARC.inc" %]
 
 <script>
 
@@ -161,7 +161,7 @@ function visibilidad(id){
 <label for="nivel" style="float: left; width:13%" >
 	Nivel:
 </label>
-<!-- TMPL_VAR NAME="selectNivel" -->
+[% selectNivel %]
 
 
 <div id="divitemtype" style="display:none;">
@@ -170,14 +170,12 @@ function visibilidad(id){
 <label for="itemtype" style="float: left; width:13%;">
 	Tipo de item: 
 </label>
-<!-- TMPL_VAR NAME="selectItemType" -->
+[% selectItemType %]
 </p>
 </div>
 
 <div id= "result2"></div>
 <div id= "result"></div>
 
-
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
 

@@ -40,7 +40,10 @@ my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
 				-onChange  => 'eleccionDeNivel("0")',
                                  );
 #fin item type
-my $comboTiposNivel3= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+
+my %params_combo;
+$params_combo{'onChange'}= 'eleccionDeNivel("0")';
+my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
 
 #Niveles

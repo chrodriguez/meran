@@ -26,7 +26,7 @@ function _WinAddDiv(objWin){
 		//se crea el dimmer que bloquea el fondo
 		$('body').append("<div id='dimmer' class='dimmer' style='height:" + dimmer.height + "px; width: " + dimmer.width + "px;top: 0px; visibility: visible; position:absolute'></div>");
 		//se crea la ventana 
-		$('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='/intranet-tmpl/blue/es2/images/cerrar.gif'/><span width=100px>" + objWin.titulo + "</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");
+		$('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='/intranet-tmpl/blue/images/cerrar.gif'/><span width=100px>" + objWin.titulo + "</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");
 
  	}
 

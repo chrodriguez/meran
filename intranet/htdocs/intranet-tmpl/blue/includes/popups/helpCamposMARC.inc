@@ -1,20 +1,21 @@
 <!-- *********************************Window Help********************************************* -->
 
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
-<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 
 <script>
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");	
+	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");	
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (typeof($.Autocompleter) != "function"){
-	
-// 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js");	
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+
+	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
+    $.getScript("/intranet-tmpl/blue/includes/jquery/ui.core.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.mouse.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js");
+
 
 // 	alert("se cargo desde help MARC");
 // }

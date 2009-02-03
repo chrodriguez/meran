@@ -1308,8 +1308,8 @@ sub generarComboTipoNivel3{
     my %select_tipo_nivel3_hash;
 
     my ($tipoNivel3_array_ref)= &C4::AR::Referencias::obtenerTiposNivel3();
-    foreach my $tipoNivel3 (@$disponibilidades_array_ref) {
-        push(@select_tipo_nivel3_array, $tipoNivel3->getCodigo);
+    foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
+        push(@select_tipo_nivel3_array, $tipoNivel3->id_tipo_doc);
         $select_tipo_nivel3_hash{$tipoNivel3->id_tipo_doc}= $tipoNivel3->nombre;
     }
 
@@ -1325,7 +1325,7 @@ sub generarComboTipoNivel3{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultTipoNivel3");
 
-    push (@select_disponibilidades_array, 'SIN SELECCIONAR');
+    push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_tipo_nivel3_array;
     $options_hash{'labels'}= \%select_tipo_nivel3_hash;
 

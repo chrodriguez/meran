@@ -1176,7 +1176,7 @@ sub getItemType {
 ## FIXME DEPRECATED
 sub getItemTypes {
  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM cat_ref_tipo_nivel3 ORDER BY description");
+  	my $sth   = $dbh->prepare("SELECT * FROM cat_ref_tipo_nivel3 ORDER BY nombre");
   	my $count = 0;
   	my @results;
 

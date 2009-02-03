@@ -1,7 +1,7 @@
 <!-- *********************************Window Help********************************************* -->
 
-<link href="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/es2/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
 
 <script>
 

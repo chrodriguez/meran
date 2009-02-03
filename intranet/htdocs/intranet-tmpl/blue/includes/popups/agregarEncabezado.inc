@@ -5,11 +5,11 @@
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (!$.ui.draggable){
 
- 	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.bgiframe.min.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/jquery.dimensions.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.mouse.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/es2/includes/jquery/ui.draggable.ext.js");
+ 	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.mouse.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.js");
+	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js");
 // 	alert("se cargo desde agregar encabezado");
 // }
 
@@ -156,7 +156,7 @@ function updateSaveEncabezado(responseText){
 	<div class="controls" id="controls">
 		<p>
 		   <a onClick="validarDatosEncabezado();">
-			<img 	id="save" border="0" src="/intranet-tmpl/blue/es2/images/guardar.png" 
+			<img 	id="save" border="0" src="/intranet-tmpl/blue/images/guardar.png" 
 				alt="Guardar" name="save" title="Guardar Encabezado"/>
 		   </a>
 		</p>

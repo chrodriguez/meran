@@ -68,6 +68,8 @@ use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::PrefUnidadInformacion::Manager;
 use C4::Modelo::RefDisponibilidad;
 use C4::Modelo::RefDisponibilidad::Manager;
+use C4::Modelo::CatRefTipoNivel3;
+use C4::Modelo::CatRefTipoNivel3::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
