@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE  "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
 <script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
@@ -309,166 +309,164 @@ function updateBorrarNivel1(responseText){
 <div id="detalleComun">
 <div id="titulo">
 	<p class="pagetitle"> 
-		<!-- TMPL_VAR NAME="titulo"--> 
-		<!-- TMPL_LOOP NAME="datosautor" -->
-			(<a class="click" onClick="filtroPorAutor(<!-- TMPL_VAR NAME='id' -->)"><!-- TMPL_VAR NAME="completo" --></a>)
-		<!-- /TMPL_LOOP -->
+		[% titulo %]
+		[% FOREACH datosautor %]
+			(<a class="click" onClick="filtroPorAutor([% id %])">[% completo %]</a>)
+		[% END %]
 	</p>
 </div>
 
 <!-- ---------------Registro de libro TABLE------- -->
 <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 	<tr valign="top" height="24" class="tablaresultadoTitle">
-		  <td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		  <td  valign="middle" height="24"><b>Registro de Documento</b> <!-- TMPL_VAR NAME="id1" --></td>
-		  <td width="1%" valign="top" align="right"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
+		  <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+		  <td  valign="middle" height="24"><b>Registro de Documento</b> [% id1 %]</td>
+		  <td width="1%" valign="top" align="right"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 </table>
 
 <div class="detalle">
-	<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png"   border=0 title="Editar Nivel 1" onClick="editarNivel1(<!-- TMPL_VAR NAME='id1' -->,'LIB')">
+	<input type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png"   border=0 title="Editar Nivel 1" onClick="editarNivel1([% id1 %],'LIB')">
 
-	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1(<!-- TMPL_VAR NAME='id1' -->);} else {return false;}" title="Borrar Nivel 1">
+	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1([% id1 %]);} else {return false;}" title="Borrar Nivel 1">
 	<br>
-	<!-- TMPL_LOOP NAME="loopnivel1" -->
-		<!-- TMPL_IF NAME="librarian" -->
-			<!-- TMPL_IF NAME="dato" -->
-				<!-- TMPL_VAR NAME="librarian" -->: <b><!-- TMPL_VAR NAME="dato" --></b><br>
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
+	[% FOREACH loopnivel1 %]
+		[% IF librarian %]
+			[% IF dato %]
+				[% librarian %]: <b>[% dato %]</b><br>
+			[% END %]
+		[% END %]
+	[% END %]
 	<hr>
-	N&uacute;mero Total de Ejemplares:<b> <!-- TMPL_VAR NAME="cantItemN1" --></b> 
+	N&uacute;mero Total de Ejemplares:<b> [% cantItemN1 %]</b> 
 </div>
 
-<!-- TMPL_LOOP NAME="loopnivel2" -->
-<div id="grupo<!-- TMPL_VAR NAME='id2' -->">
-	<div>
-		<p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
-        		<!-- TMPL_VAR NAME="id2" --> GRUPO - <!-- TMPL_VAR NAME="tipoDoc" -->
-        	</p>
-	</div>
+[% FOREACH loopnivel2 %]
+        <div id="grupo[% id2 %]">
+	        <div>
+		        <p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
+                        [% id2 %] GRUPO - [% tipoDoc %]
+                    </p>
+	        </div>
+        
+	        <div class="detalle">
+        <!-- NIVEL 2 -->
+		        <div id="[% id2 %]" style="position: relative; float:right;"></div>
+		        
+		        <input type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" title="Editar Grupo" onClick="editarGrupo([% id1 %],[% id2 %],'[% itemtype %]')">	
+        
+		        <input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo([% id1 %],[% id2 %]);} else {return false;}" title="Borrar Grupo">
+		        <br>
+		        [% IF amazon_cover %]
+		            <div class='amazon_cover_detail' style="position: relative; float:right;">
+		                  <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
+		            </div>
+		            <br>
+		        [% END %]
+        
+		        [% FOREACH resultado %]
+			        
+				        [% IF librarian %]
+				            [% IF dato %]
+				                [% librarian %]: <b>[% dato %]</b><br>
+				            [% END %]
+			            [% END %]
+	        
+			        [% IF cantItems %]
+				        Cantidad de Items: [% cantItems %]<br>
+			        [% END %]
+		        
+			        [% FOREACH loopnivel3 %]
+			                <div id="ejemplaresDelGrupo[% id2 %]" >
+				                <hr>
+				                Ejemplares Disponibles:<b> [% disponibles %]</b><br>
+				                Reservas Realizadas: <b> [% cantReservas %]</b><br>
+				                Reservas en Espera: <b> [% cantReservasEnEspera %]</b><br>
+				                Ejemplares Prestados:<b> [% cantPrestados %]</b><br>
+				                <hr>
+			                <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+				                    <tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
+                    
+					                    <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png">
+					                    </td>
+					                    <td colspan="2" >
+						                    <b>Edici&oacute;n</b>
+                                                <input TYPE="image" name="submit"  VALUE="modificar" src="[% themelang %]/images/editar.png" onClick="editarEjemplares('[% id1 %]','[% id2 %]','[% itemtype %]')" title="Editar Todos">
+					                    </td>
+					                    <td><b>Sig. Top.</b> </td>
+                                            <td><b>C&oacute;digo</b></td>
+                                            <td><b>Disponibilidad</b></td>
+                                            <td><b>Vencimiento</b></td>
+					                    <td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
+					                    <td>MARC</td>
+					                    <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+                    
+				                    </tr>
+				                    [% FOREACH nivel3 %]
+				                        <input type="hidden" name="id2" value="[% id2 %]">
+				                        <tr align="center">
+					                        <td width="10%" colspan="2" valign="middle" height="25">
+                                                [% IF sePuedeEditar %]
+                                                    <input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" onClick="editarEjemplar([% id1 %],[% id3 %],'[% itemtype %]')" title="Editar Ejemplar">
+	                                            [% END %]
+                                            </td>
+                                            <td width="6%" valign="middle">
+                                                [% IF sePuedeBorrar %]
+                                                            <input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('[% id1 %]','[% id2 %]','[% id3 %]')} else {return false;}" title="Borrar Ejemplar">
+                                                [% END %]
+                                            </td>
+					                        <td>[% signatura_topografica %]</td>
+					                            <td>
+						                            <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>
+					                            </td>
+					                            <td>
+						                            <span class="[% clase %]">
+						                            [% disponibilidad %]
+					                            [% IF usuario %]
+						                            <b>[% usuario %]</b>
+					                            [% END %]
+						                            </span>
+					                            </td>
+					                            <td>
+						                            <span class="[% claseFecha %]">
+					                                    [% IF vencimiento %]
+						                                    [% vencimiento %]
+					                                    [% ELSE %]
+						                                    -------
+					                                    [% END %]
+						                            </span>
+					                            </td>
+	                                            <td valign="middle" colspan="2">
+					                                [% UNLESS wthdrawn %]
+						                                [% IF prestado %]
+                                
+							                                <input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" onClick="devolver('DEVOLUCION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+							                                [% IF renew %]
+							                                    <input type="image" src="[% themelang %]/images/renew.png" title="Renovar" onClick="renovar('RENOVACION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+							                                [% END %]
+						                                [% ELSE %]
+							                                <input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="buscarUsuario('[% id3 %]','[% id2 %]');">
+						                                [% END %]
+					                                [% END %]
+	                                            </td>
+				                        
+					                        <td colspan="2">
+						                        <input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="" onClick="detalleMARC('[% id3 %]')">
+					                        </td>
+				                        </tr>
+				            [% END %] <!-- END FOREACH -->
+	        
+			             </table>
+			        <br><hr class="lineagruesa"><br>
+			        [% END %]<!-- END FOREACH -->
+		        [% END %]<!-- END FOREACH -->
+		        </div> <!--end <div id="ejemplaresDelGrupo -->
+	        </div>
+        
+        </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 
-	<div class="detalle">
-<!-- NIVEL 2 -->
-		<div id="<!-- TMPL_VAR NAME='id2' -->" style="position: relative; float:right;"></div>
-		
-		<input type="image" name="submit" value="modify" border="0"  src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" title="Editar Grupo" onClick="editarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->,'<!-- TMPL_VAR NAME='itemtype' -->')">	
-
-		<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id2' -->);} else {return false;}" title="Borrar Grupo">
-		<br>
-		<!-- TMPL_IF NAME="amazon_cover" -->
-		<div class='amazon_cover_detail' style="position: relative; float:right;">
-		<img name="cover"  VALUE="" BORDER=0 src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/<!-- TMPL_VAR name='lang' -->/<!-- TMPL_VAR NAME='amazon_cover' -->" title="Tapa" >
-		</div>
-		<br>
-		<!-- /TMPL_IF -->
-
-		<!-- TMPL_LOOP NAME="resultado" -->
-			
-				<!-- TMPL_IF NAME="librarian" -->
-				<!-- TMPL_IF NAME="dato" -->
-				<!-- TMPL_VAR NAME="librarian" -->: <b><!-- TMPL_VAR NAME="dato" --></b><br>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_IF -->
-	
-			<!-- TMPL_IF NAME="cantItems" -->
-				Cantidad de Items: <!-- TMPL_VAR NAME="cantItems" --><br>
-			<!-- /TMPL_IF -->
-		
-			<!-- TMPL_LOOP NAME="loopnivel3" -->
-			<div id="ejemplaresDelGrupo<!-- TMPL_VAR NAME='id2' -->" >
-				<hr>
-				Ejemplares Disponibles:<b> <!-- TMPL_VAR NAME="disponibles" --></b><br>
-				Reservas Realizadas: <b> <!-- TMPL_VAR NAME="cantReservas" --></b><br>
-				Reservas en Espera: <b> <!-- TMPL_VAR NAME="cantReservasEnEspera" --></b><br>
-				Ejemplares Prestados:<b> <!-- TMPL_VAR NAME="cantPrestados" --></b><br>
-				<hr>
-			<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
-				<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
-
-					<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
-					</td>
-					<td colspan="2" >
-						<b>Edici&oacute;n</b>
-       	 					<input TYPE="image" name="submit"  VALUE="modificar" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplares('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Todos">
-					</td>
-					<td><b>Sig. Top.</b> </td>
-        				<td><b>C&oacute;digo</b></td>
-        				<td><b>Disponibilidad</b></td>
-        				<td><b>Vencimiento</b></td>
-					<td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
-					<td>MARC</td>
-					<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png"></td>
-
-				</tr>
-				<!-- TMPL_LOOP NAME="nivel3" -->
-				<input type="hidden" name="id2" value="<!-- TMPL_VAR NAME='id2' -->">
-				<tr align="center">
-					<td width="10%" colspan="2" valign="middle" height="25">
-				<!-- TMPL_IF NAME="sePuedeEditar" -->
-                				<input TYPE="image" name="submit"  VALUE="modify" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" onClick="editarEjemplar(<!-- TMPL_VAR NAME='id1' -->,<!-- TMPL_VAR NAME='id3' -->,'<!-- TMPL_VAR NAME='itemtype' -->')" title="Editar Ejemplar">
-				<!-- /TMPL_IF -->
-            				</td>
-            				<td width="6%" valign="middle">
-        			<!-- TMPL_IF NAME="sePuedeBorrar" -->
-                				<input TYPE="image" name="delete"  VALUE="delete" src="<!-- TMPL_VAR 	name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id2' -->','<!-- TMPL_VAR name='id3' -->')} else {return false;}" title="Borrar Ejemplar">
-        			<!-- /TMPL_IF -->
-            				</td>
-					<td><!-- TMPL_VAR NAME="signatura_topografica" --></td>
-					<td>
-						<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=<!-- TMPL_VAR NAME="id1" -->&id2=<!-- TMPL_VAR NAME="id2" -->&id3=<!-- TMPL_VAR NAME="id3" -->&barcode=<!-- TMPL_VAR NAME="barcode" -->&signatura_topografica=<!-- TMPL_VAR NAME="signatura_topografica" -->' title='Detalle de disponibilidad'><!-- TMPL_VAR NAME="barcode" --></a>
-					</td>
-					<td>
-						<span class="<!-- TMPL_VAR NAME='clase' -->">
-						<!-- TMPL_VAR NAME="disponibilidad" -->
-					<!-- TMPL_IF NAME="usuario" -->
-						<b><!-- TMPL_VAR NAME="usuario" --></b>
-					<!-- /TMPL_IF -->
-						</span>
-					</td>
-					<td>
-						<span class="<!-- TMPL_VAR NAME='claseFecha' -->">
-					<!-- TMPL_IF NAME="vencimiento" -->
-						<!-- TMPL_VAR NAME="vencimiento" -->
-					<!-- TMPL_ELSE -->
-						-------
-					<!-- /TMPL_IF -->
-						</span>
-					</td>
-	    				<td valign="middle" colspan="2">
-					<!-- TMPL_UNLESS NAME="wthdrawn" -->
-						<!-- TMPL_IF NAME="prestado" -->
-
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-return.png" title="Devolver" onClick="devolver('DEVOLUCION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">
-							<!-- TMPL_IF NAME="renew" -->
-	    						<!--<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="devolver_renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">-->
-
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/renew.png" title="Renovar" onClick="renovar('RENOVACION','<!-- TMPL_VAR NAME='borrowernumber' -->','<!-- TMPL_VAR NAME='usuarioNombre' -->','<!-- TMPL_VAR name='id2' -->','<!-- TMPL_VAR name='id3' -->')">
-							<!-- /TMPL_IF -->
-						<!-- TMPL_ELSE -->
-							<input type="image" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="buscarUsuario('<!-- TMPL_VAR name='id3' -->','<!-- TMPL_VAR name='id2' -->');">
-						<!-- /TMPL_IF -->
-					<!-- /TMPL_UNLESS -->
-	    				</td>
-				
-					<td colspan="2">
-						<input TYPE="image" name="marc"  VALUE="detalle MARC" src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name='theme' -->/images/MARC.png" title="" onClick="detalleMARC('<!-- TMPL_VAR name='id3' -->')">
-					</td>
-				</tr>
-				<!-- /TMPL_LOOP -->
-	
-			</table>
-			<br><hr class="lineagruesa"><br>
-			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_LOOP -->
-		</div> <!--end <div id="ejemplaresDelGrupo -->
-	</div>
-
-</div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
-
-<!-- /TMPL_LOOP -->
+ [% END %]<!-- END FOREACH -->
 
 </div> <!-- Fin DIV detalleComun -->
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

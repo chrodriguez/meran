@@ -1,171 +1,172 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
 <script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
 <script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script>
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+[% INCLUDE "helpCamposMARC.inc" %]
 
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 <script>
 
 $(document).ready(function(){
-	objAH=new AjaxHelper(procesarInfoJson);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarEjemplar.pl";
-	objAH.id1=$("#id1").val();
-	objAH.id2=$("#id2").val();
-	objAH.id3=$("#id3").val();
-	objAH.itemtype=$("#itemtype").val();
-	objAH.json=1;
-	objAH.paso=3;
-	objAH.sendToServer();
+    objAH=new AjaxHelper(procesarInfoJson);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/editarEjemplar.pl";
+    objAH.id1=$("#id1").val();
+    objAH.id2=$("#id2").val();
+    objAH.id3=$("#id3").val();
+    objAH.itemtype=$("#itemtype").val();
+    objAH.json=1;
+    objAH.paso=3;
+    objAH.sendToServer();
 });
 
 
 function buscarChecked(){
-	var str="";
-	var checks=$("#todosEj :checked");
-	for (var i=0 ; i < checks.length; i++){
-		str=str+checks[i].value+"#";
-	}
-	return str;
+    var str="";
+    var checks=$("#todosEj :checked");
+    for (var i=0 ; i < checks.length; i++){
+        str=str+checks[i].value+"#";
+    }
+    return str;
 }
 
 function updateModNivel3(responseText){
-	location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+objAH.id1;
+    location.href="/cgi-bin/koha/busquedas/detalle.pl?id1="+objAH.id1;
 }
 
 function modNivel3(id1,id3){
-	var ok=1;
-	var str;
-	var cantIds=$("#cantIds").val();
-	ok=obtenerIdsValores(cantIds);
-	if(ok){
-		objAH=new AjaxHelper(updateModNivel3);
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/editarEjemplar.pl";
-		objAH.id1=$("#id1").val();
-		objAH.cantIds=cantIds;
-		objAH.respuesta=arrayjson;
-		objAH.accion="modNivel3";
-		if(id3 != ""){
-			objAH.id3=id3;
-			objAH.todos=0;
-		}
-		else{
-			str=buscarChecked();
-			objAH.id3=str;
-			objAH.todos=1;
-		}
-		if(str != ""){objAH.sendToServer();}
-		else{alert("Por favor elija un documento para aplicar los cambios");}
-	}
-	else{
-		alert("Por favor complete los campos del formulario que son obligatorios");
-	}
+    var ok=1;
+    var str;
+    var cantIds=$("#cantIds").val();
+    ok=obtenerIdsValores(cantIds);
+    if(ok){
+        objAH=new AjaxHelper(updateModNivel3);
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/editarEjemplar.pl";
+        objAH.id1=$("#id1").val();
+        objAH.cantIds=cantIds;
+        objAH.respuesta=arrayjson;
+        objAH.accion="modNivel3";
+        if(id3 != ""){
+            objAH.id3=id3;
+            objAH.todos=0;
+        }
+        else{
+            str=buscarChecked();
+            objAH.id3=str;
+            objAH.todos=1;
+        }
+        if(str != ""){objAH.sendToServer();}
+        else{alert("Por favor elija un documento para aplicar los cambios");}
+    }
+    else{
+        alert("Por favor complete los campos del formulario que son obligatorios");
+    }
 }
 
 function todos(){
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++){
-			if(checks[i].type == "checkbox"){
-				if(checks[i].checked){checks[i].checked=false}
-                   	 	else{checks[i].checked=true}
-			}
-		}
-	}
+    var checks=document.getElementsByTagName("input");
+    if (checks.length>0){
+        for(i=0;i<checks.length;i++){
+            if(checks[i].type == "checkbox"){
+                if(checks[i].checked){checks[i].checked=false}
+                        else{checks[i].checked=true}
+            }
+        }
+    }
 }
 
 
 </script>
 
 <div id="titulo">
-	<p class="pagetitle"> 
-		<!-- TMPL_VAR NAME="titulo"--> 
-		<!-- TMPL_IF NAME="datosautor" -->
-			(<!-- TMPL_VAR NAME="datosautor" -->)
-		<!-- /TMPL_IF -->
-	</p>
+    <p class="pagetitle"> 
+        [% IF titulo %]
+            [% datosautor %]
+                ([% datosautor %])
+        [% END %]
+    </p>
 </div>
-
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/izquierda.png"></td>
-		<td colspan="7" class=inputFontNormal>
-			<!-- TMPL_IF NAME="todos" -->
-			<b>Modificar Ejemplares del grupo:<!-- TMPL_VAR NAME="id2" --></b>
-			<!-- TMPL_ELSE -->
-			<b>Modificar Ejemplar:<!-- TMPL_VAR NAME="id3" --></b>
-			<!-- /TMPL_IF -->
-		</td>
-		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png"></td>
-	</tr>
+    <tr class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+
+     
+        <td colspan="7" class=inputFontNormal>
+            [% IF todos %]
+                <b>Modificar Ejemplares del grupo:[% id2 %]</b>
+            [% ELSE %]
+                <b>Modificar Ejemplar:[% id3 %]</b>
+            [% END %]
+        </td>
+        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+    </tr>
 </table>
 
-<!-- TMPL_IF NAME="todos" -->
+[% IF todos %]
 
-<table id="todosEj" align="center" width="100%">
-	<tr>
-		<td colspan=5 class="inputFontNormal">
-			<b>EJEMPLARES QUE SE VERAN AFECTADOS<br>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-			<a class="click" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
-		</td>
-			<td align="center" class="inputFontNormal">C&oacute;digo de Barras</td>
-			<td align="center" class="inputFontNormal">Localizaci&oacute;n</td>
-		<td align="center" class="inputFontNormal">Disponibilidad</td>
-		<td align="center" class="inputFontNormal">&Uacute;ltima vista</td>
-	</tr>
-
-	<!-- TMPL_LOOP Name="itemloop" -->
-	<tr valign=top gcolor=#ffffcc>
-		<td align="center">
-			<input class="inputFontNormal" type="checkbox" value="<!-- TMPL_VAR NAME='id3' -->">
-		</td>
-		<td align="center">
-			<a class="click"><!-- TMPL_VAR Name="barcode" --></a>
-		</td>
-		<td class="inputFontNormal" align="center"><!-- TMPL_VAR Name="holdbranch" --></td>
-		<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="issuetype" -->-<!-- TMPL_VAR Name="disponibilidad" --></td>
-		<td align="center" class="inputFontNormal"><!-- TMPL_VAR Name="datelastseen" --></td>
-	</tr>
-	<!-- /TMPL_LOOP -->
-</table>
-<hr>
-
-<br>
-<!-- /TMPL_IF -->
+    <table id="todosEj" align="center" width="100%">
+        <tr>
+            <td colspan=5 class="inputFontNormal">
+                <b>EJEMPLARES QUE SE VERAN AFECTADOS<br>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <a class="click" onclick="todos();"><img src="[% themelang %]/images/check.png" border="0" title="Invertir la selecci&oacute;n"></a>
+            </td>
+                <td align="center" class="inputFontNormal">C&oacute;digo de Barras</td>
+                <td align="center" class="inputFontNormal">Localizaci&oacute;n</td>
+            <td align="center" class="inputFontNormal">Disponibilidad</td>
+            <td align="center" class="inputFontNormal">&Uacute;ltima vista</td>
+        </tr>
+    
+        [% FOREACH itemloop %]
+            <tr valign=top gcolor=#ffffcc>
+                <td align="center">
+                    <input class="inputFontNormal" type="checkbox" value="[% id3 %]">
+                </td>
+                <td align="center">
+                    <a class="click">[% barcode %]</a>
+                </td>
+                <td class="inputFontNormal" align="center">[% holdbranch %]</td>
+                <td align="center" class="inputFontNormal">[% issuetype %]-[% disponibilidad %]</td>
+                <td align="center" class="inputFontNormal">[% datelastseen %]</td>
+            </tr>
+        [% END %]
+    </table>
+    <hr>
+    
+    <br>
+[% END %]
 
 
 <div id="parrafo2">
 
 </div>
 
-<div style="clear:both" id="input1" class="boton" onClick="agregarCampoTemp(3,3)"><img title="Agregar campo temporal" src="<!-- TMPL_VAR name='themelang' -->/images/agregar_temporal.png"></div>
+<div style="clear:both" id="input1" class="boton" onClick="agregarCampoTemp(3,3)"><img title="Agregar campo temporal" src="[% themelang %]/images/agregar_temporal.png"></div>
 
 <div id="ocultos">
 <!-- Cantidad de campos generados dinamicamente -->
-<input type="hidden" id="cantIds" value="<!-- TMPL_VAR NAME='cantIds' -->">
+<input type="hidden" id="cantIds" value="[% cantIds %]">
 <!-- id de la tupla generada en la tabla del nivel1 -->
-<input type="hidden" id="id1" value="<!-- TMPL_VAR NAME='id1' -->">
-<input type="hidden" id="id2" value="<!-- TMPL_VAR NAME='id2' -->">
-<input type="hidden" id="id3" value="<!-- TMPL_VAR NAME='id3' -->">
-<input type="hidden" id="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->">
-<input type="hidden" id="nivel" value="<!-- TMPL_VAR NAME='nivel' -->">
-<input type="hidden" id="accion" value="<!-- TMPL_VAR NAME='accion' -->">
+<input type="hidden" id="id1" value="[% id1 %]">
+<input type="hidden" id="id2" value="[% id2 %]">
+<input type="hidden" id="id3" value="[% id3 %]">
+<input type="hidden" id="itemtype" value="[% itemtype %]">
+<input type="hidden" id="nivel" value="[% nivel %]">
+<input type="hidden" id="accion" value="[% accion %]">
 </div>
 
 <center>
-	<input type="image" src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" value="Modificar ejemplar" title="Guardar Item" onClick="modNivel3('<!-- TMPL_VAR NAME='id1' -->','<!-- TMPL_VAR NAME='id3' -->')">
+    <input type="image" src="[% themelang %]/images/guardar.png" value="Modificar ejemplar" title="Guardar Item" onClick="modNivel3('[% id1 %]','[% id3 %]')">
 </center>
 
 <!-- Div para seleccionar los campos temporales -->
 <div id="result"></div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]
 
 

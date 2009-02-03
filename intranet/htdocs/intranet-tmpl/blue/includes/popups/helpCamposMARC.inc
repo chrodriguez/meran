@@ -9,6 +9,7 @@
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (typeof($.Autocompleter) != "function"){
 
+
 	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
 	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
     $.getScript("/intranet-tmpl/blue/includes/jquery/ui.core.js");

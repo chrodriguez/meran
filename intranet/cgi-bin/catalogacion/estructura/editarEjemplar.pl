@@ -31,7 +31,7 @@ else{
 	@niveles3=C4::AR::Catalogacion::buscarNivel3PorId2($id2);
 }
 
-if(!$json){
+if(defined($json)){
         my ($template, $session, $t_params) = get_template_and_user({
 	             template_name => "catalogacion/estructura/editarEjemplar.tmpl",
 			     query => $input,
