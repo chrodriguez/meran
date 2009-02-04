@@ -1721,7 +1721,6 @@ sub getCamposXLike{
                                                                                                     query => \@filtros,
                                                                                                     sort_by => ('tagfield'),
                                                                                                     distinct => 1,
-                                                                                                    limit => 1,
                                                                                                  );
     return($db_campos_MARC);
 }

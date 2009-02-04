@@ -51,9 +51,12 @@ use Rose::DB::Object::Helpers;
     my $campoX = $obj->{'campoX'};
 
     my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
-
-    
-    my $infoOperacionJSON=to_json $campos_array->[0]->as_json;
+#     my $info= "[ ";
+#     for(my $i=0; $i<scalar(@$campos_array); $i++ ){
+#         $info= $info.$campos_array
+#     }
+#     my $infoOperacionJSON= $campos_array->[0]->as_json;
+    my $infoOperacionJSON= $campos_array->[0]->as_json;
 
     print $input->header;
     print $infoOperacionJSON;
