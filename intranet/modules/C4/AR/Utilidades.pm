@@ -1373,6 +1373,39 @@ sub generarComboUI {
     return $CGIunidadDeInformacion; 
 }
 
+
+sub generarComboCampoX{
+
+
+    my $onReadyFunction = shift;
+    my $defaultCampoX = shift;
+    #Filtro de numero de campo
+    my %camposX;
+    my @values;
+    push (@values, -1);
+    $camposX{-1}="Elegir";
+
+    my $option;
+    for (my $i =0 ; $i <= 9; $i++){
+        push (@values, $i);
+        $option= $i."xx";
+        $camposX{$i}=$option;
+    }
+    my $defaulCX= $defaultCampoX || 'Elegir';
+
+    my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
+                    -id    => 'campoX',
+                    -values    => \@values,
+                    -labels    => \%camposX,
+                    -defaults  => $defaulCX,
+                    -size      => 1,
+                    -onChange  => $onReadyFunction,
+    );
+
+    return ($selectCampoX);
+}
+
+
 #****************************************************Fin****Generacion de Combos**************************************************
 
 

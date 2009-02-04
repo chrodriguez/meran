@@ -148,7 +148,8 @@ sub setIntranet_habilitado{
     my ($intranet_habilitado) = @_;
     $self->intranet_habilitado($intranet_habilitado);
 }
-        
+
+
 sub getVisible{
     my ($self) = shift;
     return ($self->visible);

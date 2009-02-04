@@ -15,21 +15,7 @@ function updateInfo(responseText){
 	foco();
 }
 
-/*
- * eleccionCampoX
- * Funcion que se ejecuta cuando se selecciona un valor del combo campoX (ej. 1xx), y hace un llamado a la 
- * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
- */
-function eleccionCampoX(accion){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/seleccionCamposMarc.pl";
-	objAH.campoX=$('#campoX').val();
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#itemtype').val();
-	objAH.tmpl= $('#tmpl').val();
-	objAH.accion=accion;
-	objAH.sendToServer();
-}
+
 
 /*
  * eleccionCampo

@@ -38,7 +38,6 @@ use vars qw(@EXPORT @ISA);
 	&cantidadItem	
 
 	&buscarCamposObligatorios
-	&buscarCamposMARC
 	&buscarCamposMARCdeNivel
 	&buscarSubCampo
 	&buscarCamposModificados
@@ -281,31 +280,6 @@ sub buscarNombreCampoMarc{
 	$nombre.=" ".$rep;
 	return ($nombre);
 }
-
-=item
-buscarCamposMARC
-Busca los campos MARC de la tabla marc_subfield_structure, recibe como parametro el primer digito de los campos a buscar y devuelve un arreglo con los distintos campos (no repetidos) que empienzan con ese digito
-=cut
-sub buscarCamposMARC{
-	my ($campoX,$nivel) =@_;
-	my $dbh = C4::Context->dbh;
-
-	my $query="SELECT DISTINCT tagfield ";
-	$query .= " FROM pref_estructura_subcampo_marc ";
-	$query .= " WHERE nivel=? AND tagfield LIKE '".$campoX."%'";
-	
-	my $sth=$dbh->prepare($query);
-        $sth->execute($nivel);
-	
-	my @results;
-	while(my $data=$sth->fetchrow_hashref){
-		push (@results, $data->{'tagfield'});
-	}
-
-	$sth->finish;
-	return (@results);
-}
-
 
 =item
 buscarCamposMARCdeNivel
@@ -1725,3 +1699,31 @@ sub guardarModificacion{
         $sth->execute($operacion,$responsable,$numero,$tipo);
         $sth->finish;
 }
+
+
+
+
+
+################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
+
+sub getCamposXLike{
+
+    use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+    use C4::Modelo::PrefEstructuraSubcampoMarc;
+    my ($nivel,$campoX) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( tagfield => { like => $campoX.'%'} ) );
+    push(@filtros, ( nivel => { eq => $nivel } ) );
+
+    my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                                    query => \@filtros,
+                                                                                                    sort_by => ('tagfield'),
+                                                                                                    distinct => 1,
+                                                                                                    limit => 1,
+                                                                                                 );
+    return($db_campos_MARC);
+}
+
+

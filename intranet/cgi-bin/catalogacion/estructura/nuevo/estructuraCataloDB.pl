@@ -40,12 +40,44 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
     $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
     $t_params->{'nivel'}= $nivel;
-		    
+    
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
+elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
+#Se muestran las catalogaciones
+use Rose::DB::Object::Helpers;
+    my $nivel = $obj->{'nivel'};
+    my $campoX = $obj->{'campoX'};
+
+    my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
+
+    
+    my $infoOperacionJSON=to_json $campos_array->[0]->as_json;
+
+    print $input->header;
+    print $infoOperacionJSON;
+}
+
+elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
+#Se muestran las catalogaciones
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                                        template_name => "catalogacion/estructura/nuevo/agregarCampoMARC.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {editcatalogue => 1},
+                                                        debug => 1,
+                    });
+
+
+    $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
 #Sube el orden en la vista del campo seleccionado
-if($tipoAccion eq 'SUBIR_ORDEN'){
+elsif($tipoAccion eq 'SUBIR_ORDEN'){
     my $id=$obj->{'idMod'};
     my $intra = $obj->{'intra'};
 
@@ -58,7 +90,7 @@ if($tipoAccion eq 'SUBIR_ORDEN'){
 }
 
 #Baja el orden en la vista del campo seleccionado
-if($tipoAccion eq 'BAJAR_ORDEN'){
+elsif($tipoAccion eq 'BAJAR_ORDEN'){
     my $id=$obj->{'idMod'};
     my $intra = $obj->{'intra'};
 
@@ -70,7 +102,7 @@ if($tipoAccion eq 'BAJAR_ORDEN'){
 }
 
 #Se cambia la visibilidad del campo.
-if($tipoAccion eq 'CAMBIAR_VISIBILIDAD'){
+elsif($tipoAccion eq 'CAMBIAR_VISIBILIDAD'){
     my $idestcat=$obj->{'id'};
 
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $idestcat);
@@ -81,11 +113,18 @@ if($tipoAccion eq 'CAMBIAR_VISIBILIDAD'){
 }
 
 #Se deshabilita el campo seleccionado para la vista en intranet
-if($tipoAccion eq 'ELIMINAR_CAMPO'){
+elsif($tipoAccion eq 'ELIMINAR_CAMPO'){
     my $id=$obj->{'idMod'};
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catalogacion->load();
     $catalogacion->delete();
 
+    print $input->header;
+}
+
+elsif($tipoAccion eq 'AGREGAR_CAMPO'){
+    my $id=$obj->{'idMod'};
+    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
+    $catalogacion->delete();
     print $input->header;
 }

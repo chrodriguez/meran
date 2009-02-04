@@ -4,6 +4,8 @@ use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
+
+
 __PACKAGE__->meta->setup(
     table   => 'pref_estructura_subcampo_marc',
 
