@@ -1,0 +1,74 @@
+<!-- TEMPLATE DE CAMPOS TEMPORALES -->
+[% IF accion == agregar %]
+    <hr>
+    <div width="100%">
+        <b>Agregar campo Marc para el nivel [% nivel %]:</b>
+        <div id="div1">
+    <p>
+    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
+    [% selectCampoX %]
+    </p>
+</div>
+<div id="id2">
+        <p>
+        <label for="tagField" style="float:left; width:13%">Campo: </label>
+            <select name="campo" id="campo">
+                <option value="-1">Seleccionar CampoX</option>
+            </select>
+        Nombre: <span id="nombre_campo"></span>
+        </p>
+    </div>
+    <div id="id3">
+        <p align="left">
+        <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
+        <select name="campo" id="campo">
+                <option value="-1">Seleccionar SubCampo</option>
+         </select>
+        <input id="obligatorio" type="hidden" value="">
+        Liblibrarian: <input id="lib" type="text" value="" size="30"> 
+        </p>
+        <p>
+        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+
+        <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
+
+        <select name="tipoInput" id="tipoInput">
+            <option value="-1">Seleccione anteriores</option>
+        </select>
+
+        <select>
+            <option value="text" [% IF tipoInput == "text" %] selected [% END %] >Texto</option>
+            <option value="texta" [% IF tipoInput == "texta" %] selected [% END %]>Texto area</option>
+            <option value="texa2" [% IF tipoInput == "texa2" %] selected [% END %]>Texto 1 por linea</option>
+            <!--<option value="radio" <!-- TMPL_IF EXPR="(tipoInput eq 'radio')" -->selected <!-- /TMPL_IF -->>Radio button</option>-->
+            <option value="combo" [% IF tipoInput == "combo" %] selected [% END %]>Combo box</option>
+        </select>
+        </p>
+    </div>
+    <div id="id4" valign="top" style="display:none">
+        <label for="orden" style="float:left; width:13%">Orden: </label>
+         <select name="tipoInput" id="tipoInput">
+            <option value="-1">Seleccione anteriores</option>
+        </select>
+
+        Campos: <input size="43" id="camposRef" name="camposRef" value="">
+        separador: <input type="text" id="separador" name="separador">
+        </p>
+        <p>Ejemplo: <!-- TMPL_VAR NAME = "ejemplo" --></p>
+        <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+
+    </div>
+
+<!-- <input type="hidden" id="ok" value="<!-- TMPL_VAR NAME='ok' -->"> -->
+    </div>
+    <br>
+
+      <div align="center">
+            <input type="image" src="[% themelang %]/images/guardar.png" value="Guardar Campo temporal" title="Guardar Campo Temp" onClick="guardarCampoTemp([% nivel %])">
+            <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" onClick="cancelar()">
+        </div>
+
+        <input type="hidden" id="subcampo" value="[% tagsubField %]">
+
+
+[% END %]
