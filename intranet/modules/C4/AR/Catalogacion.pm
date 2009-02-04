@@ -64,8 +64,6 @@ use vars qw(@EXPORT @ISA);
 	&actualizarInfoReferencia
 	&actualizarVisibilidad
 	
-	&eliminarNivelIntranet
-	
 	&guardarCamposModificados
 	&guardarCampoTemporal
 	&guardarInfoReferencia
@@ -410,18 +408,22 @@ sub buscarCamposModificados{
 Este funcion devuelve la informacion del usuario segun un nro_socio
 =cut
 sub getCatalogaciones{
-    my ($nivel,$itemType)=@_;
+    my ($nivel,$itemType,$orden)=@_;
 
     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
-    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   query => [ 
-                                                                                                nivel => { eq => $nivel },
-                                                                                                itemtype => { eq => $itemType },
-                                                                                                intranet_habilitado => { gt => 0 } 
-                                                                                    ]);
-# WHERE intranet_habilitado > '0' AND nivel=? ";
-#     $query .= "AND itemtype=? ORDER BY intranet_habilitado
-## FIXME falta el sortby 
+
+    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
+
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                        query => [ 
+                                                                                    nivel => { eq => $nivel },
+                                                                                    itemtype => { eq => $itemType },
+                                                                                    intranet_habilitado => { gt => 0 }, 
+                                                                               ],
+                                                                        sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                 );
+
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }
 
@@ -473,23 +475,6 @@ sub actualizarVisibilidad{
 	my $sth=$dbh->prepare($query);
 	$sth->execute($visible,$idestcat);
 	$sth->finish;
-}
-
-
-=item
-eliminarNivelIntranet
-Deshabilita el campo marc para la vista en intranet
-=cut
-sub eliminarNivelIntranet{
-	my ($id,$intra,$nivel,$itemtype)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="UPDATE cat_estructura_catalogacion SET intranet_habilitado='0' WHERE id=? ";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id);
-	
-	$query="UPDATE cat_estructura_catalogacion ec SET intranet_habilitado=ec.intranet_habilitado-1 WHERE intranet_habilitado > ? AND nivel = ? AND itemtype = ?";
-	$sth=$dbh->prepare($query);
-        $sth->execute($intra,$nivel,$itemtype);
 }
 
 =item
@@ -1369,58 +1354,6 @@ sub buscarNivel3PorId2{
 	}
 	return(@result);
 	
-}
-
-
-=item
-subirOrden
-Sube el orden en la vista, del campo seleccionado.
-=cut
-sub subirOrden{
-	my($id,$intra,$nivel,$itemtype)=@_;
-	my $intraNuevo=1;
-	if($intra > 1){
-		$intraNuevo=$intra-1;
-	}
-	actualizarOrden($id,$intra,$intraNuevo,$nivel,$itemtype);
-}
-
-=item
-subirOrden
-Baja el orden en la vista, del campo seleccionado.
-=cut
-sub bajarOrden{
-	my($id,$intra,$nivel,$itemtype)=@_;
-	my $intraNuevo=$intra+1;
-	actualizarOrden($id,$intra,$intraNuevo,$nivel,$itemtype);
-}
-
-=item
-actualizarOrden
-actualiza el orden del campo seleccionado
-=cut
-sub actualizarOrden{
-	my($id,$intra,$intraNuevo,$nivel,$itemtype)=@_;
-	my $dbh = C4::Context->dbh;
-	if($intra != $intraNuevo){
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-		$dbh->{RaiseError} = 1;
-		my $query="SELECT id FROM cat_estructura_catalogacion WHERE nivel=? AND itemtype=? AND intranet_habilitado=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($nivel,$itemtype,$intraNuevo);
-		if(my $data=$sth->fetchrow){
-			$query="UPDATE cat_estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
-			my $sth=$dbh->prepare($query);
-			my $idMod=$data;
-			$sth->execute($intra,$idMod);	
-		}
-		$query="UPDATE cat_estructura_catalogacion SET intranet_habilitado =? WHERE id = ? ";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($intraNuevo,$id);	
-	
-		$dbh->commit;
-		$dbh->{AutoCommit} = 1;
-	}
 }
 
 =item

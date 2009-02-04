@@ -201,9 +201,40 @@ sub modificar{
 
 }
 
-sub defaultSort{
+=item
+subirOrden
+Sube el orden en la vista, del campo seleccionado.
+=cut
+sub subirOrden{
 
-    return ("liblibrarian");
+    my ($self)=shift;
+
+    $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
+    $self->save();
+}
+
+=item
+bajarOrden
+Baja el orden en la vista, del campo seleccionado.
+=cut
+sub bajarOrden{
+
+    my ($self)=shift;
+
+    $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
+    $self->save();
+}
+
+sub cambiarVisibilidad{
+
+    my ($self)=shift;
+
+    $self->setVisible(!$self->getVisible);
+    $self->save();
+}
+
+sub defaultSort{
+    return ("intranet_habilitado");
 }
 
 

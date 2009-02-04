@@ -14,14 +14,14 @@
 	        <tr class="tablaresultadoTitle">
 		        <td width="1%" align="left" valign="top"><img src="[% themelang %]images/izquierda.png"></td>
 		        <td width="21%">MARC</td>
-		        <td width="20%">Vista en Intranet</td>
-		        <td >Orden</td>
+		        <td width="20%"> Vista en Intranet</td>
+		        <td>Orden</td>
 		        <td >Visible</td>
 		        <td >Editar</td>
 		        <td >Deshabilitar</td>
 		        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	        </tr>
-        [% FOREACH RESULTDATA %]
+        [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center" class=inputFontNormal>
 		        <td><br>&nbsp;</td>
 		        <td>
@@ -36,10 +36,10 @@
                             value="[% catalogacion.getIntranet_habilitado %]">
         
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',7)">
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')">
         
 			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',8)">
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
 		        </td>
 		        <td>
 			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
@@ -54,7 +54,7 @@
 		        </td>
 		        <td>
 			        <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" 
-                    onClick="eliminarCampo('[% catalogacion.getId %]','[% catalogacion.getIntranet_habilitado %]',6)">
+                    onClick="eliminarCampo('[% catalogacion.getId %]')">
         
 		        </td>
 		        <td><br>&nbsp;</td>

@@ -7,14 +7,24 @@
 
 <script>
 // ********************************************REVISADO***************************************************
-//funciones para ajax recibe el parametro tipo, para identificar en que nivel de consulta estoy.
-function eleccionDeNivel(tipo){
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+
+//Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
+function eleccionDeNivel(){
 	var nivel=$("#nivel").val();
 	var ObjDiv = $("#divitemtype");
 	if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
 	else{ObjDiv.show();}
 	
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
+	objAH=new AjaxHelper(updateEleccionDeNivel);
     objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.nivel=nivel;
@@ -22,8 +32,42 @@ function eleccionDeNivel(tipo){
 	objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.sendToServer();
 
-	$("#result").html("");
 }
+
+function updateEleccionDeNivel(responseText){
+    $("#resultCatalogacion").html(responseText);
+    zebra("tablaResult");
+}
+
+function modificarOrden(id, accion){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.idMod=id;
+    objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
+    objAH.sendToServer();
+}
+
+function visibilidad(id){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.id=id;
+    objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
+    objAH.sendToServer();
+}
+
+//Elimina el campo en la estructura inicial del catalogo
+function eliminarCampo(id){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.idMod=id;
+    objAH.tipoAccion= 'ELIMINAR_CAMPO';
+    objAH.sendToServer();
+}
+
+// ********************************************FIN REVISADO***************************************************
 
 //FIXME accion no se usa mas
 function agregarCampo(accion){
@@ -37,8 +81,6 @@ function agregarCampo(accion){
     objAH.sendToServer();
 }
 
-
-// ********************************************FIN REVISADO***************************************************
 
 function objetoRespuesta(campo,subcampo,lib,tipo,oblig,tabla){
 	this.campo=campo;
@@ -90,36 +132,6 @@ function guardarModificaciones(accion){
 	objAH.sendToServer();
 }
 
-
-//Elimina el campo en la estructura inicial del catalogo
-function eliminarCampo(id,intra,accion){
-	$("#result").html("");
-	$('#idMod').val(id);
-
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.idMod=id;
-	objAH.intra=intra;
-	objAH.accion=accion;
-	objAH.sendToServer();
-}
-
-function modificarOrden(id,intra,accion){
-	$("#result").html("");
- 	$('#idMod').val(id);
-	
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.idMod=id;
-	objAH.intra=intra;
-	objAH.accion=accion;
-	objAH.sendToServer();
-}
-
 function editarCampo(id,accion){
 	$("#result").html("");
 	$('#idMod').val(id);
@@ -133,18 +145,7 @@ function editarCampo(id,accion){
 	objAH.sendToServer();
 }
 
-function visibilidad(id){
-	var visible=$('#'+id).val();
 
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.id=id;
-	objAH.visible=visible;
-	objAH.accion=11;
-	objAH.sendToServer();
-}
 
 </script>
 
@@ -182,8 +183,12 @@ function visibilidad(id){
 
 </div>
 
+<!-- estos dos no se si usan -->
 <div id= "result2"></div>
 <div id= "result"></div>
+
+<!-- PARA MOSTRAR LO CATALOGADO -->
+<div id= "resultCatalogacion"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 
