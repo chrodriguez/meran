@@ -1714,16 +1714,14 @@ sub getCamposXLike{
 
     my @filtros;
 
-#     push(@filtros, ( tagfield => { like => $campoX.'%'} ) );
-#     push(@filtros, ( nivel => { eq => $nivel } ) );
+    push(@filtros, ( tagfield => { like => $campoX.'%'} ) );
+    push(@filtros, ( nivel => { eq => $nivel } ) );
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                                         query => \@filtros,
                                                                                         sort_by => ('tagfield'),
-                                                                                        distinct => 1,
-                                                                                        select   => [ 'tagfield', 'liblibrarian' ],
-#             query => 'SELECT DISTINCT (tagfield), liblibrarian FROM pref_estructura_subcampo_marc 
-#                     WHERE nivel = '.$nivel.' tagfield like '.$campoX.'%',  
+                                                                                        select   => [ 'tagfield', 'liblibrarian'],
+                                                                                        group_by => [ 'tagfield'],
                                                                        );
     return($db_campos_MARC);
 }
@@ -1742,7 +1740,8 @@ sub getSubCamposLike{
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                 query => \@filtros,
                                                                 sort_by => ('tagsubfield'),
-                                                                select   => [ 'tagsubfield' ],
+                                                                select   => [ 'tagsubfield', 'liblibrarian' ],
+                                                                group_by => [ 'tagsubfield'],
                                                             );
     return($db_campos_MARC);
 }
