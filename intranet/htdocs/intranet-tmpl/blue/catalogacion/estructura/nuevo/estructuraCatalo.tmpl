@@ -8,6 +8,12 @@
 <script>
 // ********************************************REVISADO***************************************************
 
+//Arreglos globales de objetos
+//arreglo de objetos campo
+CAMPOS_ARRAY= new Array();
+//arreglo de objetos subcampo
+SUBCAMPOS_ARRAY= new Array();
+
 function ordenar(orden){
     objAH.sort(orden);
 }
@@ -96,12 +102,14 @@ function eleccionCampoX(){
 
 //se genera el combo en el cliente
 function updateEleccionCampoX(responseText){
+    //Arreglo de Objetos Global
     var campos_array=JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#campo").html('')
     var options = "<option value='-1'>Seleccionar CampoX</option>";
     
     for (x=0;x < campos_array.length;x++){
+         CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
          options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
     }
     //se agrega la info al combo
@@ -109,6 +117,7 @@ function updateEleccionCampoX(responseText){
 }
 
 function eleccionCampo(){
+
     objAH=new AjaxHelper(updateEleccionCampo);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -120,12 +129,17 @@ function eleccionCampo(){
 
 //se genera el combo en el cliente
 function updateEleccionCampo(responseText){
+// alert('campo: '+$("#campo").val());
+// alert('liblibrarian: '+CAMPOS_ARRAY[$("#campo").val()]);
+    $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
+    //Arreglo de Objetos Global
     var subcampos_array=JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     
     for (x=0;x < subcampos_array.length;x++){
+         SUBCAMPOS_ARRAY[subcampos_array[x].subtagfield]= $.trim(subcampos_array[x].liblibrarian);
          options+= "<option value=" + subcampos_array[x].tagsubfield +" >" + subcampos_array[x].tagsubfield + "</option>";
     }
     //se agrega la info al combo
