@@ -1726,6 +1726,15 @@ sub getCamposXLike{
     return($db_campos_MARC);
 }
 
+sub getTablaRef{
+
+    use C4::Modelo::PrefTablaReferenciaInfo::Manager;
+    use C4::Modelo::PrefTablaReferenciaInfo;
+
+    my $db_tabla_ref = C4::Modelo::PrefTablaReferenciaInfo::Manager->Pref_tabla_teferencia_info();
+    return($db_tabla_ref);
+}
+
 sub getSubCamposLike{
 
     use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;

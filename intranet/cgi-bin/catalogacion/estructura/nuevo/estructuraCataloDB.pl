@@ -64,14 +64,29 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
+    my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
+    
+    my ($json_string_tabla) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
+
     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
 
     my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
-     my $infoOperacionJSON= $info;
+    my $infoOperacionJSON= $info;
 
     print $input->header;
     print $infoOperacionJSON;
+}
+
+elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
+
+    my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
+    
+    my ($infoOperacionJSON) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
+    
+    print $input->header;
+    print $infoOperacionJSON;
+
 }
 
 elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){

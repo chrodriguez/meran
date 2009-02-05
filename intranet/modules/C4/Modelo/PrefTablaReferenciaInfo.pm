@@ -16,5 +16,38 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'referencia' ],
 );
 
+sub getOrden{
+    my ($self) = shift;
+    return ($self->orden);
+}
+
+sub setOrden{
+    my ($self) = shift;
+    my ($orden) = @_;
+    $self->orden($orden);
+}
+
+sub getReferencia{
+    my ($self) = shift;
+    return ($self->referencia);
+}
+
+sub setReferencia{
+    my ($self) = shift;
+    my ($referencia) = @_;
+    $self->referencia($referencia);
+}
+
+sub getSimilares{
+    my ($self) = shift;
+    return ($self->similares);
+}
+
+sub setSimilares{
+    my ($self) = shift;
+    my ($similares) = @_;
+    $self->similares($similares);
+}
+
 1;
 
