@@ -94,17 +94,42 @@ function eleccionCampoX(){
     objAH.sendToServer();
 }
 
+//se genera el combo en el cliente
 function updateEleccionCampoX(responseText){
-    var campos=JSONstring.toObject(responseText);
-    options = "";
-
-    for (x=0;campos.length;x++){
-        options+= "<option value=" + campos[x].tagfield +" >" + campos[x].tagfield + "</option>";
-// alert( campos[x].tagfield);
+    var campos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#campo").html('')
+    var options = "<option value='-1'>Seleccionar CampoX</option>";
+    
+    for (x=0;x < campos_array.length;x++){
+         options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
     }
-// alert(options);
-// options+= "<option value=" + campos.tagfield +" >" + campos.tagfield + "</option>";
+    //se agrega la info al combo
     $("#campo").append(options);
+}
+
+function eleccionCampo(){
+    objAH=new AjaxHelper(updateEleccionCampo);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.campo=$('#campo').val();
+    objAH.nivel=$('#nivel').val();
+    objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
+    objAH.sendToServer();
+}
+
+//se genera el combo en el cliente
+function updateEleccionCampo(responseText){
+    var subcampos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#subcampo").html('');
+    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    
+    for (x=0;x < subcampos_array.length;x++){
+         options+= "<option value=" + subcampos_array[x].tagsubfield +" >" + subcampos_array[x].tagsubfield + "</option>";
+    }
+    //se agrega la info al combo
+    $("#subcampo").append(options);
 }
 
 // ********************************************FIN REVISADO***************************************************
@@ -178,12 +203,6 @@ function editarCampo(id,accion){
 
 
 </script>
-
-
-<!-- Me guardo el subcampo -->
-<input type="hidden" id="subcampo">
-<input type="hidden" id="nivelMod">
-<input type="hidden" id="idMod">
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>

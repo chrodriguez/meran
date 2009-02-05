@@ -1434,4 +1434,20 @@ sub joinArrayOfString{
     }
     return ($fieldsString);
 }
+
+=item
+Esta funcion convierte el arreglo de objetos (Rose::DB) a JSON
+=cut
+sub arrayObjectsToJSONString {
+    my ($objects_array) = @_;
+    my @objects_array_JSON;
+
+    for(my $i=0; $i<scalar(@$objects_array); $i++ ){
+        push (@objects_array_JSON, $objects_array->[$i]->as_json);
+    }
+
+    my $infoJSON= '[' . join(',' ,@objects_array_JSON) . ']';
+
+    return $infoJSON;
+}
 1;

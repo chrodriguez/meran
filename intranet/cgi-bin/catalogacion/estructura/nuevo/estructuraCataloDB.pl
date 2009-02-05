@@ -51,12 +51,26 @@ use Rose::DB::Object::Helpers;
     my $campoX = $obj->{'campoX'};
 
     my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
-#     my $info= "[ ";
-#     for(my $i=0; $i<scalar(@$campos_array); $i++ ){
-#         $info= $info.$campos_array
-#     }
-#     my $infoOperacionJSON= $campos_array->[0]->as_json;
-    my $infoOperacionJSON= $campos_array->[0]->as_json;
+
+    my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+     my $infoOperacionJSON= $info;
+
+    print $input->header;
+    print $infoOperacionJSON;
+}
+
+elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
+#Se muestran las catalogaciones
+use Rose::DB::Object::Helpers;
+    my $nivel = $obj->{'nivel'};
+    my $campo = $obj->{'campo'};
+
+    my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
+
+    my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+     my $infoOperacionJSON= $info;
 
     print $input->header;
     print $infoOperacionJSON;
@@ -128,6 +142,6 @@ elsif($tipoAccion eq 'ELIMINAR_CAMPO'){
 elsif($tipoAccion eq 'AGREGAR_CAMPO'){
     my $id=$obj->{'idMod'};
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
-    $catalogacion->delete();
+    $catalogacion->agregar();
     print $input->header;
 }

@@ -23,6 +23,7 @@ $params_combo{'onChange'}= 'eleccionDeNivel("0")';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
 
+## FIXME armar funcion para generar combo y llevar a Utilidades
 #Niveles
 my @nivel;
 my $cantNivel=3;

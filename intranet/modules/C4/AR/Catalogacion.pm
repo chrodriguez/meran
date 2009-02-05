@@ -1721,6 +1721,27 @@ sub getCamposXLike{
                                                                                                     query => \@filtros,
                                                                                                     sort_by => ('tagfield'),
                                                                                                     distinct => 1,
+                                                                                                    select   => [ 'tagfield' ],
+                                                                                                 );
+    return($db_campos_MARC);
+}
+
+sub getSubCamposLike{
+
+    use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+    use C4::Modelo::PrefEstructuraSubcampoMarc;
+    my ($nivel,$campo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( tagfield => { eq => $campo} ) );
+    push(@filtros, ( nivel => { eq => $nivel } ) );
+
+    my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                                    query => \@filtros,
+                                                                                                    sort_by => ('tagsubfield'),
+                                                                                                    distinct => 1,
+                                                                                                    select   => [ 'tagsubfield' ],
                                                                                                  );
     return($db_campos_MARC);
 }

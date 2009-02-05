@@ -12,7 +12,7 @@
 <div id="id2">
         <p>
         <label for="tagField" style="float:left; width:13%">Campo: </label>
-            <select name="campo" id="campo">
+            <select name="campo" id="campo" onChange="eleccionCampo()">
                 <option value="-1">Seleccionar CampoX</option>
             </select>
         Nombre: <span id="nombre_campo"></span>
@@ -21,7 +21,7 @@
     <div id="id3">
         <p align="left">
         <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
-        <select name="campo" id="campo">
+        <select name="subcampo" id="subcampo">
                 <option value="-1">Seleccionar SubCampo</option>
          </select>
         <input id="obligatorio" type="hidden" value="">
@@ -67,8 +67,6 @@
             <input type="image" src="[% themelang %]/images/guardar.png" value="Guardar Campo temporal" title="Guardar Campo Temp" onClick="guardarCampoTemp([% nivel %])">
             <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" onClick="cancelar()">
         </div>
-
-        <input type="hidden" id="subcampo" value="[% tagsubField %]">
 
 
 [% END %]
