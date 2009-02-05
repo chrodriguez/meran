@@ -45,8 +45,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
-#Se muestran las catalogaciones
-use Rose::DB::Object::Helpers;
+#     use Rose::DB::Object::Helpers;
     my $nivel = $obj->{'nivel'};
     my $campoX = $obj->{'campoX'};
 
@@ -61,8 +60,7 @@ use Rose::DB::Object::Helpers;
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
-#Se muestran las catalogaciones
-use Rose::DB::Object::Helpers;
+#     use Rose::DB::Object::Helpers;
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
