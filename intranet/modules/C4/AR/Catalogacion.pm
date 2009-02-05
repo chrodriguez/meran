@@ -1731,7 +1731,7 @@ sub getTablaRef{
     use C4::Modelo::PrefTablaReferenciaInfo::Manager;
     use C4::Modelo::PrefTablaReferenciaInfo;
 
-    my $db_tabla_ref = C4::Modelo::PrefTablaReferenciaInfo::Manager->Pref_tabla_teferencia_info();
+    my $db_tabla_ref = C4::Modelo::PrefTablaReferenciaInfo::Manager->Pref_tabla_referencia_info();
     return($db_tabla_ref);
 }
 

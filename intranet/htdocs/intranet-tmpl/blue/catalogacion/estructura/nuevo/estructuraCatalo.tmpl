@@ -43,6 +43,7 @@ function eleccionDeNivel(){
 function updateEleccionDeNivel(responseText){
     $("#resultCatalogacion").html(responseText);
     zebra("tablaResult");
+    mostrarTablaRef();
 }
 
 function modificarOrden(id, accion){
@@ -89,6 +90,29 @@ function updateMostrarAgregarCampo(responseText){
     $("#subcampo").attr('disabled',true);
     $("#tipoInput").attr('disabled',true);
 
+}
+
+
+
+function mostrarTablaRef(){
+    objAH=new AjaxHelper(updateMostrarAgregarCampo);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
+    objAH.sendToServer();
+}
+
+function updateMostrarTablaRef(responseText){
+    var tablaRef_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("tablaRef").html('')
+    var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
+    
+    for (x=0;x < tablaRef_array.length;x++){
+         options+= "<option value=" + tablaRef_array[x].referencia +" >" + tablaRef_array[x].referencia + "</option>";
+    }
+    $("#tablaRef").append(options);
+    $("#tabalRef").removeAttr("disabled"); 
+   
 }
 
 /*
