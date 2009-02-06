@@ -14,6 +14,21 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
+sub getAlias(){
+    return ("temas");
+}
 
+sub lastTable(){
+    return (1);
+}
+
+sub nextMember(){
+
+#     return(C4::Modelo::CatTema()->new());
+}
+
+sub default(){
+    return (0);
+}
 1;
 

@@ -16,6 +16,37 @@ sub toString{
     return $self->meta->class;
 }
 
+
+sub createFromAlias(){
+    my ($self)=shift;
+    print "DESDE ".$self->meta->class."\n\n\n";
+    my $classAlias = shift;
+    print "\n ALIAS: ".$classAlias;
+    if ($classAlias eq $self->getAlias()){
+        return (bless($self));
+    }else
+        {
+            return($self->nextChain($classAlias));
+        }
+}
+
+sub nextChain(){
+    my ($self)=shift;
+    my $classAlias = shift;
+    if ($self->lastTable()){
+        return ($self->default());
+    }
+    else
+        {
+            return($self->nextMember()->createFromAlias($classAlias));
+        }
+}
+
+sub getCampos(){
+    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+    return($fieldsString);
+}
+
 sub log{
     my ($self)=shift;
     use C4::AR::Debug;
@@ -28,7 +59,7 @@ sub sortByString{
 
     my ($self)=shift;
     my ($campo)=@_;
-    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+    my $fieldsString = $self->getCampos();
 # $self->log($self->meta->columns,'sortByString => columns');
 
     my $index = rindex $fieldsString,$campo;

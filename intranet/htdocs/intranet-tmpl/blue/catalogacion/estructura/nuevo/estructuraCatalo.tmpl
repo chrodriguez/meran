@@ -94,10 +94,7 @@ function updateMostrarAgregarCampo(responseText){
     $("#resultAgregarCampo").show();
     $("#resultAgregarCampo").html(responseText);
     scrollTo('resultAgregarCampo');
-    $("#tablaRef").attr('disabled',true);
-    $("#campo").attr('disabled',true);
-    $("#subcampo").attr('disabled',true);
-    $("#tipoInput").attr('disabled',true);
+    enable_disableSelects();
 
 }
 
@@ -125,8 +122,7 @@ function updateMostrarTablaRef(responseText){
          options+= "<option value=" + tablaRef_array[x].referencia +" >" + tablaRef_array[x].referencia + "</option>";
     }
     $("#tablaRef").append(options);
-    $("#tablaRef").removeAttr("disabled"); 
-   
+    enable_disableSelects();
 }
 
 /*
@@ -135,9 +131,6 @@ function updateMostrarTablaRef(responseText){
  * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
  */
 function eleccionCampoX(){
-    $("#campo").attr('disabled',true);
-    $("#subcampo").attr('disabled',true);
-    $("#tablaRef").attr('disabled',true);
     if ( $("#campoX").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampoX);
         objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -145,13 +138,10 @@ function eleccionCampoX(){
         objAH.nivel=$('#nivel').val();
         objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
-    }else
-        {
-            $("#campo").attr('disabled',true);
-            $("#subcampo").attr('disabled',true);
-            $("#tipoInput").attr('disabled',true);
-            $("#tablaRef").attr('disabled',true);
-        }
+    }
+    else
+        enable_disableSelects();
+
 }
 
 //se genera el combo en el cliente
@@ -166,9 +156,10 @@ function updateEleccionCampoX(responseText){
          CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
          options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
     }
-    //se agrega la info al combo
     $("#campo").append(options);
-    $("#campo").removeAttr("disabled"); 
+    //se agrega la info al combo
+    enable_disableSelects();
+
 }
 
 function eleccionCampo(){
@@ -182,10 +173,10 @@ function eleccionCampo(){
         objAH.sendToServer();
     }
     else
-        {
-            $("#subcampo").attr('disabled',true);
-        }
+        enable_disableSelects();
+
 }
+
 
 //se genera el combo en el cliente
 function updateEleccionCampo(responseText){
@@ -202,20 +193,79 @@ function updateEleccionCampo(responseText){
     }
     //se agrega la info al combo
     $("#subcampo").append(options);
-    $("#subcampo").removeAttr("disabled"); 
+    enable_disableSelects();
 }
 
+
+function enable_disableSelects(){
+    $("#campo").removeAttr('disabled');
+    $("#subcampo").removeAttr('disabled');
+    $("#tablaRef").removeAttr('disabled');
+    $("#tipoInput").removeAttr('disabled');
+    if ( $('#campoX').val() == -1){
+         $("#campo").attr('disabled',true);
+         $("#subcampo").attr('disabled',true);
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+    }
+    else
+      if ( $('#campo').val() == -1){
+         $("#subcampo").attr('disabled',true);
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+      }
+    else
+       if ( $('#subcampo').val() == -1){
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+        }
+    else
+      if ( $('#tablaRef').val() == -1){
+         $("#tipoInput").attr('disabled',true);
+       }
+}
+
+
+function armarComboCampos()(){
+    objAH=new AjaxHelper(updateEleccionCampo);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tabla=$('#tablaRef').val();
+    objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS_REFERENCIA";
+    objAH.sendToServer();
+}
+
+function updateArmarComboCampos(){
+    //Arreglo de Objetos Global
+    var camposSelect_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#camposSelect").html('');
+    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var joinedFields = "";
+    for (x=0;x < camposSelect_array.length;x++){
+         joinedFields+= camposSelect_array[x]+", ";
+         options+= "<option value=" + camposSelect_array[x] +" >" + camposSelect_array[x] + "</option>";
+    }
+    //se agrega la info al combo
+    $("#camposSelect").append(options);
+    enable_disableSelects();
+}
+
+function eleccionTablaRef(){
+
+    armarComboCampos();
+    enable_disableSelects();
+
+}
 
 function eleccionSubCampo(){
 
     if ($('#subcampo').val() != -1){
         $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
-        $("#tipoInput").removeAttr("disabled");
         mostrarTablaRef();
-    } else
-        {
-            $("#tipoInput").attr('disabled',true);
-        }
+    }
+    else 
+        enable_disableSelects();
 }
 
 

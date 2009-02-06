@@ -129,7 +129,8 @@ print "\n\n\n\n\n\n\n\n\n";
 #                      '************** END TUPLA **********'."\n";
 # 
 #         }
-use C4::Modelo::UsrPersona;
+use C4::Modelo::CatAutor;
+use C4::Modelo::CatTema;
 # use Rose::DB::Object::Metadata;
 # 
 # my $meta = Rose::DB::Object::Metadata->new(class => 'UsrPersona');
@@ -137,12 +138,16 @@ use C4::Modelo::UsrPersona;
 #   $meta->auto_initialize;
 #   $meta->columns;
 
-my $p = C4::Modelo::UsrPersona->new();
+my $p = C4::Modelo::CatAutor->new();
 # my @col = $p->meta->columns;
 # foreach my $campo (@col){
 #     print $campo."\n";
 # }
-    print "\n\n\n\CLASE: ".$p->meta->class."\n\n\n";
+    my $c = $p->createFromAlias("sdfsdfsd")."\n\n\n";
+
+    print "\n\n\n\RETURN: ".$c."\n\n\n";
+    print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
+    
 
 
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
