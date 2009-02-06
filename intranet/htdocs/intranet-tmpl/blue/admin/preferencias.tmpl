@@ -14,7 +14,7 @@ var objAH;//Objeto AjaxHelper.
  * Actualizacion de los datos despues de una consulta ajax. El resultado se inserta en el div result.
  */
 function updateInfoConsulta(responseText){
-	$("#result").html(responseText);
+	$("#divResultado").html(responseText);
 	if(objAH.funcion == 1){
 		tablaOrdenada();
 	}
@@ -43,19 +43,18 @@ function borrarDiv(){$("#divAgregar").html("");}
  * se eligio.
  */
 function agregarPreferencia(){
-	var opcion=$("#tipoVar").val();
+	var tipo=$("#tipoVar").val();
 	borrarDiv();
 	var ok=1;
 	objAH=new AjaxHelper(updateAgregarPreferencia);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
-	objAH.opcion=opcion;
+	objAH.tipo=tipo;
 // 	objAH.agregar=1;
 // 	objAH.funcion=0;
-// 	objAH.accion= "AGREGAR_VARIABLE";
-	objAH.accion= "SELECCION_CAMPO2";
-
-	if(opcion == "combo"){
+ 	objAH.accion= "NUEVA_VARIABLE";
+	
+	if(tipo == "referencia"){
 		var tabla=$("#tabla").val();
 		var campo=$("#campo").val();
 		if(tabla == -1 || campo == -1){ok=0;}
@@ -64,7 +63,7 @@ function agregarPreferencia(){
 		}
 	}
 
-	if(opcion == "valAuto"){
+	if(tipo == "valAuto"){
 		var cat=$("#categoria").val();
 		if(cat == -1){ok=0;}
 		else{objAH.categoria=cat;}
@@ -76,7 +75,7 @@ function agregarPreferencia(){
 }
 
 function updateAgregarPreferencia(responseText){
-	$("#result").html(responseText);
+	$("#divResultado").html(responseText);
 }
 
 /*
@@ -97,13 +96,13 @@ function selectOpcion(){
 	objAH.accion= "SELECCION_CAMPO";
  	objAH.json=1;
 
-	if(tipo == "combo" && tabla.length == 0){
+	if(tipo == "referencia" && tabla.length == 0){
 		objAH.idComp="tabla";
 		objAH.funcionChange="onChange='elegirCampo()'";
 		objAH.sendToServer();
 	}
 	else{
-		if(tipo == "combo" && tabla.length == 1){tabla.show();campo.show();}
+		if(tipo == "referencia" && tabla.length == 1){tabla.show();campo.show();}
 	}
 
 	if(tipo == "valAuto" && categ.length == 0){
@@ -115,7 +114,7 @@ function selectOpcion(){
 		if(tipo == "valAuto" && categ.length == 1){categ.show();}
 	}
 
-	if(tipo != "combo"){
+	if(tipo != "referencia"){
 		tabla.hide();
 		campo.hide();
 	}
@@ -133,7 +132,7 @@ function elegirCampo(){
 	var tipo=$("#tipoVar").val();
 	borrarDiv();
 
-	if(tipo == "combo" && tabla.length == 1){
+	if(tipo == "referencia" && tabla.length == 1){
 		campo.remove();
 		objAH=new AjaxHelper(updateInfoConsultaJSON);
 		objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
@@ -190,6 +189,18 @@ function tablaOrdenada(){
 }
 
 /*
+ * getRadioButtonSelectedValue
+ * Funcion retorna el valor seleccionado en un radiobutton
+ */
+
+function getRadioButtonSelectedValue(ctrl)
+{
+    for(i=0;i<ctrl.length;i++)
+        if(ctrl[i].checked) return ctrl[i].value;
+}
+
+
+/*
  * guardarModificacion
  * Hace el llamado ajax para poder guardar los datos ingresados para la variable.
  */
@@ -200,11 +211,17 @@ function guardarModificacion(){
 	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.variable=$("#variable").val();
 	objAH.valor=$("#valor").val();
+
+	
+	if ($("#tipoVar").val() == 'bool'){
+	objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
+	}
+
 	objAH.explicacion=$("#explicacion").val();
-	objAH.tipo=$("#tipoVar").val();
-	objAH.tabla=$("#tabla").val();
-	objAH.campo=$("#campo").val();
-	objAH.categoria=$("#categoria").val();
+//	objAH.tipo=$("#tipoVar").val();
+//	objAH.tabla=$("#tabla").val();
+//	objAH.campo=$("#campo").val();
+//	objAH.categoria=$("#categoria").val();
 	objAH.accion= "GUARDAR_MODIFICACION_VARIABLE";
 	objAH.sendToServer();
 
@@ -220,7 +237,7 @@ function updateGuardarModificacion(responseText){
 	respuesta(responseText);
 	$("#tabla").remove();
 	$("#campo").remove();
-	$("#categ").remove();
+	$("#categoria").remove();
 }
 
 /*
@@ -240,7 +257,7 @@ function updateBuscarPreferencia(responseText){
 
 	var compo=$("#tipoVar");
 	compo.removeAttr("disabled");
-	$("#result").html(responseText);
+	$("#divResultado").html(responseText);
 	tablaOrdenada();
 }
 
@@ -270,10 +287,45 @@ function modificarVariable(variable,tipo){
 }
 
 function updateModificarVariable(responseText){
-	$("#result").html(responseText);
+	$("#divResultado").html(responseText);
 }
 
+/*
+ * guardarNuevaVariable
+ * Hace el llamado ajax para poder guardar los datos ingresados para la nueva variable.
+ */
+function guardarNuevaVariable(){
+
+	objAH=new AjaxHelper(updateGuardarModificacion);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.variable=$("#variable").val();
+	objAH.valor=$("#valor").val();
+	objAH.explicacion=$("#explicacion").val();
+	objAH.tipo=$("#tipo").val();
+	objAH.tabla=$("#tabla").val();
+	objAH.campo=$("#campo").val();
+	objAH.categoria=$("#categoria").val();
+	objAH.accion= "GUARDAR_NUEVA_VARIABLE";
+	objAH.sendToServer();
+
+}
+
+/*
+ * updateGuardarNuevaVariable
+ * Funcion que se ejecuta cuando se guarda una nueva variable. Si la variable existe muestra un mensaje de error en la pantalla.
+ */
+function updateGuardarModificacion(responseText){
+	
+	respuesta(responseText);
+	$("#tabla").remove();
+	$("#campo").remove();
+	$("#categoria").remove();
+}
+
+
 $(document).ready( function() {
+	buscarPreferencia();
 	onEnter("buscar",buscarPreferencia);
 });
 
@@ -283,31 +335,35 @@ $(document).ready( function() {
 	<div id="mensajes"></div>
 	</b></font>
 </div>
-<p class="pagetitle">Administraci&oacute;n de Preferencias del Sistema</p>
+<p class="pagetitle">[% "Administraci&oacute;n de Preferencias del Sistema" | i18n %]</p>
 <!-- PARA BUSCAR -->
 <br>
 <p>
 	<input type="text" id="buscar" name="buscar" value="">
 	<input type="image" alt="Buscar"  
-	src="[% interface %]/[% themelang %]/images/boton-buscar.png" 
+	src="[% themelang %]/images/boton-buscar.png" 
 	onClick="buscarPreferencia()">
 	<input type="image" name="clear" id="clear" alt="Limpiar" 
 	src="[% themelang %]/images/borrar2.png" border="0" onClick="limpiar()">
 </p>
+
+
 <!-- PARA AGREGAR -->
 <p>
 	<select id="tipoVar" onChange="selectOpcion()">
-		<option value="bool">Si-No</option>
-		<option value="texta">Texto grande</option>
-		<option value="text">Texto com&uacute;n</option>
-		<option value="combo">Lista opci&oacute;n</option>
-		<option value="valAuto">Valores autorizados</option>
+		<option value="bool">[% "Si-No" | i18n %]</option>
+		<option value="texta">[% "Texto grande" | i18n %]</option>
+		<option value="text">[% "Texto com&uacute;n" | i18n %]</option>
+		<option value="referencia">[% "Referencia" | i18n %]</option>
+		<option value="valAuto">[% "Valores autorizados" | i18n %]</option>
 	</select>
 	<input 	id="boton" type="image" alt="Agregar Preferencia de Sistema"  
-		src="[% interface %]/[% themelang %]/images/agregar.png" 
+		src="[% themelang %]/images/agregar.png"
 		onclick="agregarPreferencia()">
 </p>
+<div id="divAgregar"></div>
 
-<div id="result"></div>
+<div id="divResultado"></div>
+
 
 [% INCLUDE "intranet-bottom.inc" %]

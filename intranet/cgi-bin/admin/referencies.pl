@@ -28,8 +28,8 @@ use C4::AR::Utilidades;
 use C4::AR::Estadisticas;
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/referencies.tmpl",
+my ($template, $session, $t_params) = get_template_and_user 
+				({template_name => "admin/referencies.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -82,41 +82,32 @@ my @numeros=armarPaginas($total);
 my $paginas = scalar(@numeros)||1;
 my $pagActual = $input->param('ini')||1;
 
-$template->param( paginas   => $paginas,
-		  actual    => $pagActual,
-		);
+				$t_params->{'paginas'} = $paginas;
+				$t_params->{'actual'}= $pagActual;
 
 if ( $total > $cantR ){#Para ver si tengo que poner la flecha de siguiente pagina o la de anterior
         my $sig = $pagActual+1;
         if ($sig <= $paginas){
-                 $template->param(
-                                ok    =>'1',
-                                sig   => $sig);
+				$t_params->{'ok'} = '1';
+				$t_params->{'sig'}= $sig;
         };
         if ($sig > 2 ){
                 my $ant = $pagActual-1;
-                $template->param(
-                                ok2     => '1',
-                                ant     => $ant)}
+				$t_params->{'ok2'} = '1';
+				$t_params->{'ant'}= $ant;}
 }
 
+$t_params->{'camposloop'}= \@campos;
+$t_params->{'loop'}= \@loop;
+$t_params->{'editandoind'} = $ind;
+$t_params->{'editandocant'}= $cant;
+$t_params->{'search'}= $search;
+$t_params->{'editandoorden'}= $orden;
+$t_params->{'editandotabla'}= $tabla;
+$t_params->{'editandoidentificador'}= $valores->{'nomcamporeferencia'};
+$t_params->{'editandototal'}= $total;
+$t_params->{'bloqueFin'}= $bloqueFin;
+$t_params->{'bloqueIni'}= $bloqueIni;
+$t_params->{'numeros'}= \@numeros;
 
-
-$template->param(
-		camposloop => \@campos,
-		loop=> \@loop,
-		editandoind=> $ind,
-		editandocant=> $cant,
-		search=> $search,
-		editandoorden=> $orden,
-		editandotabla=> $tabla,
-		editandoidentificador=> $valores->{'nomcamporeferencia'},
-		editandototal=> $total,
-		bloqueFin=> $bloqueFin,
-		bloqueIni=> $bloqueIni,
-		numeros=> \@numeros,
-);
-
-
-output_html_with_http_headers $input, $cookie, $template->output;
-
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -247,4 +247,7 @@ CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1
 
 UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultTipoNivel3' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultitemtype' LIMIT 1 ;
 
+--Modificaciones en Valores Autorizados
+
+ALTER TABLE `pref_valor_autorizado` CHANGE `category` `category` CHAR( 40 );
 

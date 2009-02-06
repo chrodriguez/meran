@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 <SCRIPT>
 function enviarContenido(adonde,codigo){
 	document.getElementById("editandoCONTENIDO").action=adonde;
@@ -19,38 +19,39 @@ function search(){
 </table>
 							   
 	<br>
+	[% IF searchfield %]
 	<!-- TMPL_IF NAME=searchfield -->
-		Ha Buscado por <!-- TMPL_VAR name=searchfield -->
-	<!-- /TMPL_IF -->
+		Ha Buscado por [% searchfield %]
+	[% END %]
 	<FORM id="editandoCONTENIDO" method="POST">
-	<input type="hidden" name="editandotabla" value="<!-- TMPL_VAR NAME="editandotabla" -->" >
-	<input type="hidden" name="editandoidentificador" value="<!-- TMPL_VAR NAME="editandoidentificador" -->" >
+	<input type="hidden" name="editandotabla" value="[% editandotabla %]" >
+	<input type="hidden" name="editandoidentificador" value="[% editandoidentificador %]" >
 	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="" >
-	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="<!-- TMPL_VAR NAME="editandoorden" -->" >
-	<INPUT type="hidden" name="search" id="editandoorden" value="<!-- TMPL_VAR NAME='search' -->" >
+	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="[% editandoorden %]" >
+	<INPUT type="hidden" name="search" id="editandoorden" value="[% search %]" >
 <!--         <table> -->
 <!-- 	<tr>      -->
-	<form id="form1" action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
+	<form id="form1" action='[% script_name %]' method=post name="form1">
 <!-- 		<td> -->
 			<b>B&uacute;queda Simple:<b><br>
-			<input type=text class="inputFontNormal" name=description value='<!-- TMPL_VAR name="search" -->'>
+			<input type=text class="inputFontNormal" name=description value='[% search %]'>
 <!-- 		</td> -->
 <!-- 		<td> -->
 			<a class="inputFontNormal" href="javascript:search()">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			<img src="[% themelang %]/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
 			</a><br><br>		
 <!--  		</td> -->
 <!-- 	</tr> -->
 <!-- 	<tr> -->
 <!-- 		<td> -->
 			<b>B&uacute;queda en Bloque:</b><br>
-			Desde: <input type=text class="inputFontNormal" name=bloqueIni value="<!-- TMPL_VAR NAME='bloqueIni' -->"><br>
-			Hasta: <input type=text class="inputFontNormal" name=bloqueFin value="<!-- TMPL_VAR NAME='bloqueFin' -->">
+			Desde: <input type=text class="inputFontNormal" name=bloqueIni value="[% bloqueIni %]"><br>
+			Hasta: <input type=text class="inputFontNormal" name=bloqueFin value="[% bloqueFin %]">
 <!-- 		</td> -->
 <!-- 		<td> -->
 <!-- 		<td> -->
 			<a class="inputFontNormal" href="javascript:search()">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			<img src="[% themelang %]/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
 			</a>
 <!-- 		</td> -->
 <!-- 	</tr> -->
@@ -58,70 +59,65 @@ function search(){
         <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
 		<tr class="tablaresultadoTitle" height="24" valign="top">
 			<td width="1%" align="left" >
-				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
+				<img src="[% themelang %]/images/izquierda.png">
 			</td>
-		<!-- TMPL_LOOP NAME=camposloop -->
-			<td valign="middle" height="24"><!-- TMPL_VAR NAME="campo"--></td>
-		<!-- /TMPL_LOOP -->
+		[% FOREACH camposloop %]
+			<td valign="middle" height="24">[% campo %]</td>
+		[% END %]
 			<td valign="middle" height="24">Editar </td>
 			<td valign="middle" height="24">Eliminar </td>
 			<td width="1%"  align="right">
-				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/derecha.png">
+				<img src="[% themelang %]/images/derecha.png">
 			</td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
-	<!-- TMPL_LOOP NAME=loop -->
+	[% FOREACH  loop %]
 		<tr valign="middle">
 		<td width="1%" class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
-	     <!-- TMPL_LOOP NAME=registro -->
+	   [% FOREACH registro %]
 		<td align="center" class="<!-- TMPL_VAR NAME='clase'-->">
-		<!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF -->
+		 [% IF campo %] [% campo %] [% ELSE %] --- [% END %]
 		</td>
-	     <!-- /TMPL_LOOP -->
-		 <td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido('editref.pl',<!-- TMPL_VAR NAME=id -->)"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
+	     [% END %]
+		 <td align="center" class="[% clase %]>"><a class="inputFontNormal" href="javascript:enviarContenido('editref.pl',[% id %])"><img src="[% themelang %]/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
 		</td>
-                 <td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido('deleteref.pl',<!-- TMPL_VAR NAME=id -->)">
-		<img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Eliminar" border="0"></a>
+                 <td align="center" class="[% clase %]"><a class="inputFontNormal" href="javascript:enviarContenido('deleteref.pl',[% id %])">
+		<img src="[% themelang %]/images/borrar.png" ALT="Eliminar" border="0"></a>
 		</td>
-			 <td  class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+			 <td  class="[% clase %]">&nbsp;</td>
 		</tr>
-	<!-- /TMPL_LOOP -->
+	[% END %]
  	<tr> 
         <td   align="left" colspan="15"><hr></td>
         </tr>
-	<!--<tr>
-	<td colspan="100%">Mostrando: 
-		<INPUT type="text" size="4" name="editandocant" id="editandocant" value="<!-- TMPL_VAR NAME="editandocant" -->" > registros desde el registro nro
-		<INPUT type="text" size="4" name="editandoind" id="editandoind" value="<!-- TMPL_VAR NAME="editandoind" -->" > sobre un total de <!-- TMPL_VAR NAME="editandototal"-->&nbsp;<a class="inputFontNormal" href="javascript:reloading()"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/boton-mostrar.png"  ALT="Recargar" hspace=0 vspace=0 border=0></a>
-	</td>
-	</tr>-->
+
 	</table>
 	</FORM>	
 
 <center>
 <br>
-<!-- TMPL_IF NAME="ok2" -->
-		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=ant -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->" >
-			<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/ant.gif border=0>
+[% IF ok2 %]
+		<a class="inputFontNormal" href="referencies.pl?ini=[% ant %]&editandotabla=[% editandotabla %]&editandoind=[% editandoind %]&editandocant=[% editandocant %]&editandoorden=[% editandoorden %]&orden=[% orden %]&bloqueIni=[% bloqueIni %]&bloqueFin=[% bloqueFin %]&search=[% search %]&description=[% search %]" >
+			<img src=[% themelang %]/images/numbers/ant.gif border=0>
 		</a>
-<!-- /TMPL_IF -->
+[% END %]
 
-<!-- TMPL_LOOP NAME=numeros -->
-	<!-- TMPL_IF NAME="actual" -->
+[% FOREACH  numeros %]
+		[% IF actual %]
 		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=number -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->"> 
-			<u><!-- TMPL_VAR name=number --></u>
+			<u>[% number %]</u>
 		</a>
-	<!-- TMPL_ELSE -->
-        	<u><!-- TMPL_VAR name=number --></u>
-	<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+	[% ELSE %]
+        	<u>[% number %]</u>
+	[% END %]
+[% END %]
 
-<!-- TMPL_IF NAME="ok" -->
+[% IF ok %]
 		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=sig -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->" >
-			<img src=<!-- TMPL_VAR name='themelang' -->/images/numbers/next.gif border=0>
+			<img src=[% themelang %]/images/numbers/next.gif border=0>
 		</a>
-<!-- /TMPL_IF -->
+[% END %]
 <br>
 </center>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

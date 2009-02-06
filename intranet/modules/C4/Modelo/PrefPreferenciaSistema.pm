@@ -18,5 +18,85 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'variable' ],
 );
 
+sub defaultSort {
+     return ('variable');
+}
+
+sub getVariable{
+    my ($self) = shift;
+    return ($self->variable);
+}
+
+sub setVariable{
+    my ($self) = shift;
+    my ($variable) = @_;
+    $self->variable($variable);
+}
+
+sub getValue{
+    my ($self) = shift;
+    return ($self->value);
+}
+
+sub setValue{
+    my ($self) = shift;
+    my ($value) = @_;
+    $self->value($value);
+}
+
+sub getExplanation{
+    my ($self) = shift;
+    return ($self->explanation);
+}
+
+sub setExplanation{
+    my ($self) = shift;
+    my ($explanation) = @_;
+    $self->explanation($explanation);
+}
+
+sub getOptions{
+    my ($self) = shift;
+    return ($self->options);
+}
+
+sub setOptions{
+    my ($self) = shift;
+    my ($options) = @_;
+    $self->options($options);
+}
+
+sub getType{
+    my ($self) = shift;
+    return ($self->type);
+}
+
+sub setType{
+    my ($self) = shift;
+    my ($type) = @_;
+    $self->type($type);
+}
+
+sub agregar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self->setVariable($data_hash->{'variable'});
+    $self->setValue($data_hash->{'value'});
+    $self->setExplanation($data_hash->{'explanation'});
+    $self->setOptions($data_hash->{'options'});
+    $self->setType($data_hash->{'type'});
+    $self->save();
+}
+
+sub modificar{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+	$self->setValue($data_hash->{'value'});
+    $self->setExplanation($data_hash->{'explanation'});
+    $self->save();
+}
+
+
 1;
 

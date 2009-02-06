@@ -244,7 +244,8 @@ my %mensajesINTRA = (
 	'SP001' => 'Se produjo un error al actualizar la preferencia.',
 	'SP002' => 'Se produjo un error al guardar la preferencia.',
 	'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
-	'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.'
+	'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.',
+	'SP005' => 'La preferencia ya existe, no puede ser agregada.',
 	
 );
 

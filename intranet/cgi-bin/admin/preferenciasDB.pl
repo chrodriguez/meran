@@ -10,19 +10,19 @@ use JSON;
 
 my $input = new CGI;
 
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $obj=&C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $json = $obj->{'json'};
 my $tabla = $obj->{'tabla'};
 my $tipo = $obj->{'tipo'};
 my $accion = $obj->{'accion'};
-# my $tabla = $obj->{'tabla'};
 
 
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
-my ($template, $borrowernumber, $cookie)
+my ($template, $session, $t_params)
   = get_template_and_user({template_name => "admin/preferenciasResults.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -32,61 +32,96 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 	my $buscar=$obj->{'buscar'};
-
-	my $loop=&buscarPreferencias($buscar);
-	$template->param(loop => $loop);
-
-	output_html_with_http_headers $input, $cookie, $template->output;
-}
+	my $orden=$obj->{'orden'};
+	my ($cant,$preferencias)=&C4::AR::Preferencias::getPreferenciaLike($buscar,$orden);
+	$t_params->{'preferencias'}= $preferencias;
+	$t_params->{'cant'}= $cant;
+	
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}#end if($accion eq "BUSCAR_PREFERENCIAS")
 
 if($accion eq "MODIFICAR_VARIABLE"){
 #Muestra el tmpl para modificar una preferencias
 
-	my ($template, $loggedinuser, $cookie) = 
-	get_templateexpr_and_user({
+my ($template, $session, $t_params) = 
+	get_template_and_user({
 				template_name => "admin/modificarPreferencia.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
 				flagsrequired => {borrowers => 1},
 				debug => 1,
-	});
+				});
 
 	my $infoVar;
 	my $valor="";
 	my $op="";
+	my $campo="";
+	my $categoria="";
 
 	my $variable=$obj->{'variable'};
-	$infoVar=&C4::AR::Preferencias::buscarPreferencia($variable);
+	$infoVar=&C4::AR::Preferencias::getPreferencia($variable);
 	$valor=$infoVar->{'value'};
 	$op=$infoVar->{'options'};
 	my $tipo=$infoVar->{'type'};
-	my @array;
-
-	if($op ne ""){
-		@array=split(/\|/,$op);
-		$op=$array[1];
+	if($op ne ""){	
+		if($tipo eq "referencia"){my @array;
+								  @array=split(/\|/,$op);
+								  $tabla=$array[0];
+							 	  $campo=$array[1];}
+		elsif($tipo eq "valAuto"){$categoria=$op}
 	}
+	
 
-	if($tipo eq "combo"){$tabla=$array[0];}
+	$t_params->{'variable'}= $variable;
+	$t_params->{'explicacion'}= &C4::AR::Utilidades::trim($infoVar->{'explanation'});
+	$t_params->{'tabla'}= $tabla;
+	$t_params->{'categoria'}= $categoria;
+	$t_params->{'campo'}= $campo;
 
-	$template->param(
-		variable    => $variable,
-		explicacion => &C4::AR::Utilidades::trim($infoVar->{'explanation'}),
-		tabla	    => $tabla,
-		categoria   => $op,
-		campo	    => $op,
-	);
-
-	my $compo;
+	my $nuevoCampo;
 	my %labels;
 	my @values;
+	
+	if($tipo eq "bool"){
+		push(@values,1);
+		push(@values,0);
+		$labels{1}="Si";
+		$labels{0}="No";
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("radio","valor",\@values,\%labels,$valor);
+	}
+	elsif($tipo eq "texta"){
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("texta","valor",60,4,$valor);
+	}
+	elsif($tipo eq "valAuto"){
+		my $categoria=$obj->{'categoria'}||$op;
+		%labels=&C4::AR::Utilidades::obtenerDatosValorAutorizado($categoria);
+		@values=keys(%labels);
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
+		$t_params->{'categoria'}= $categoria;
+	}
+	elsif($tipo eq "referencia"){
+		my $campo=$obj->{'campo'}||$op;
+		my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
+		my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
+		@values=keys %$valores;
+		foreach my $val(@values){
+			$labels{$val}=$valores->{$val};
+		}
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
+		$t_params->{'tabla'}= $tabla;
+		$t_params->{'campo'}= $campo;
+	}	elsif($tipo eq "text"){
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",60,0,$valor);
+	}
 
-	$compo=&C4::AR::Utilidades::crearComponentes("text","valor",60,\%labels,$valor);
-	$template->param(valor=>$compo);
+	$t_params->{'tipo'}= $tipo;
+	$t_params->{'valor'}= $nuevoCampo;
 
-	print $input->header;
-	print $template->output;
+
+
+
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 } #end if($accion eq "MODIFICAR_VARIABLE")
 
@@ -97,44 +132,30 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
  	my $valor=$obj->{'valor'};
  	my $expl=$obj->{'explicacion'};
 
-	my $opciones="";
-
-	if($tipo eq "combo"){$opciones=$tabla."|".$obj->{'campo'};}
-
-	if($tipo eq "valAuto"){
-		my $categ=$obj->{'categoria'};
-		$opciones="authorised_values|".$categ;
-	}
 	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
-
-	print $input->header;
- 	my $infoOperacionJSON=to_json $Message_arrayref;
-	print $infoOperacionJSON;
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    print $input->header;
+    print $infoOperacionJSON;
 
 } #end GUARDAR_MODIFICACION_VARIABLE
 
-
-
-
-## FIXME FALTA TERMINAR CON ESTAS OPCIONES !!!!!!!!!!!!!!!!!!!!!
-
-
-# if($accion eq "SELECCION_CAMPO"){
-# if($json ne ""){
 if($accion eq "SELECCION_CAMPO"){
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ parameters => 1});
 
 	my $guardar=$obj->{'guardar'};
 	my $tipo=$obj->{'tipo'};
 	my $strjson="";
-	if($tipo eq "combo"){
+	if($tipo eq "referencia"){
 		if($tabla){
+		#Se buscan los campos de la tabla seleccionada
 		my @campos=&C4::AR::Utilidades::obtenerCampos($tabla);
 				foreach my $campo(@campos){
 				$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
 			}
 		}
 		else{
+		#Se buscan las tablas de referencia
 			my %tablas=&C4::AR::Utilidades::buscarTablasdeReferencias();
 			foreach my $tabla(keys(%tablas)){
 				$strjson.=",{'clave':'".$tabla."','valor':'".$tabla."'}";
@@ -142,6 +163,7 @@ if($accion eq "SELECCION_CAMPO"){
 		}
 	}
 	else{
+		#Se buscan los valores autorizados
 		my $valAuto=&C4::AR::Utilidades::obtenerValoresAutorizados();
 		foreach my $val(@$valAuto){
 			$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
@@ -151,58 +173,47 @@ if($accion eq "SELECCION_CAMPO"){
 	$strjson="[".$strjson."]";
 	print $input->header;
 	print $strjson;
-}
+}#end SELECCION_CAMPO
 
-if($accion eq "AGREGAR_VARIABLE"){
+if($accion eq "NUEVA_VARIABLE"){
+#Muestra el tmpl para agregar una preferencias
 
-	my $variable=$obj->{'variable'};
-	my $valor=$obj->{'valor'};
-	my $expl=$obj->{'explicacion'};
-	my $opciones="";
-
-	if($tipo eq "combo"){$opciones=$tabla."|".$obj->{'campo'};}
-
-	if($tipo eq "valAuto"){
-		my $categ=$obj->{'categoria'};
-		$opciones="authorised_values|".$categ;
-	}
-
-	my $Message_arrayref= &C4::AR::Preferencias::t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
-
-	print $input->header;
- 	my $infoOperacionJSON=to_json $Message_arrayref;
-	print $infoOperacionJSON;
-}
+my ($template, $session, $t_params) = 
+	get_template_and_user({
+				template_name => "admin/modificarPreferencia.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+				});
 
 
 
-
-if($accion eq "SELECCION_CAMPO2"){
-
- 	my $opcion=$obj->{'opcion'};
 	my $valor="";
 	my $op="";
-	my $compo;
+	my $nuevoCampo;
 	my %labels;
 	my @values;
 	
-	if($opcion eq "bool"){
+	if($tipo eq "bool"){
 		push(@values,1);
 		push(@values,0);
 		$labels{1}="Si";
 		$labels{0}="No";
-		$compo=&C4::AR::Utilidades::crearComponentes("radio","valor",\@values,\%labels,$valor);
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("radio","valor",\@values,\%labels,$valor);
 	}
-	elsif($opcion eq "texta"){
-		$compo=&C4::AR::Utilidades::crearComponentes("texta","valor",60,4,$valor);
+	elsif($tipo eq "texta"){
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("texta","valor",60,4,$valor);
 	}
-	elsif($opcion eq "valAuto"){
+	elsif($tipo eq "valAuto"){
 		my $categoria=$obj->{'categoria'}||$op;
 		%labels=&C4::AR::Utilidades::obtenerDatosValorAutorizado($categoria);
 		@values=keys(%labels);
-		$compo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,"");
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
+		$t_params->{'categoria'}= $categoria;
 	}
-	elsif($opcion eq "combo"){
+	elsif($tipo eq "referencia"){
 		my $campo=$obj->{'campo'}||$op;
 		my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 		my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
@@ -210,10 +221,39 @@ if($accion eq "SELECCION_CAMPO2"){
 		foreach my $val(@values){
 			$labels{$val}=$valores->{$val};
 		}
-		$compo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
+		$t_params->{'tabla'}= $tabla;
+		$t_params->{'campo'}= $campo;
+	}	elsif($tipo eq "text"){
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",60);
 	}
-	print $input->header;
- 	print $compo;
 
-}
+	$t_params->{'tipo'}= $tipo;
+	$t_params->{'valor'}= $nuevoCampo;
+
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}#end NUEVA_VARIABLE
+
+
+if($accion eq "GUARDAR_NUEVA_VARIABLE"){
+
+#Se guarda la nueva preferencias
+
+	my $variable=$obj->{'variable'};
+	my $valor=$obj->{'valor'};
+	my $expl=$obj->{'explicacion'};
+	my $opciones="";
+
+	if($tipo eq "referencia"){$opciones=$tabla."|".$obj->{'campo'};}
+
+	if($tipo eq "valAuto"){ $opciones=$obj->{'categoria'};}
+
+	my $Message_arrayref= &C4::AR::Preferencias::t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
+ 
+	my $infoOperacionJSON=to_json $Message_arrayref;
+
+	print $input->header;
+	print $infoOperacionJSON;
+
+}#end GUARDAR_NUEVA_VARIABLE
 

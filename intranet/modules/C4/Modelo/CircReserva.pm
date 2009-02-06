@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
         estado           => { type => 'character', length => 1 },
         id_ui		 => { type => 'varchar', length => 4 },
         fecha_notificacion => { type => 'date' },
-        fecha_recodatorio     => { type => 'date' },
+        fecha_recodatorio  => { type => 'date' },
         timestamp        => { type => 'timestamp', not_null => 1 },
     ],
 
@@ -74,5 +74,48 @@ sub setId2{
     $self->id2($id2);
 }
 
+sub getNro_socio{
+    my ($self) = shift;
+    return ($self->nro_socio);
+}
+
+sub setNro_socio{
+    my ($self) = shift;
+    my ($nro_socio) = @_;
+    $self->nro_socio($nro_socio);
+}
+
+sub getFecha_reserva{
+    my ($self) = shift;
+    return ($self->fecha_reserva);
+}
+
+sub setFecha_reserva{
+    my ($self) = shift;
+    my ($fecha_reserva) = @_;
+    $self->fecha_reserva($fecha_reserva);
+}
+
+sub getFecha_notificacion{
+    my ($self) = shift;
+    return ($self->fecha_notificacion);
+}
+
+sub setFecha_notificacion{
+    my ($self) = shift;
+    my ($fecha_notificacion) = @_;
+    $self->fecha_notificacion($fecha_notificacion);
+}
+
+sub getUi_id{
+    my ($self) = shift;
+    return ($self->ui_id);
+}
+
+sub setUi_id{
+    my ($self) = shift;
+    my ($ui_id) = @_;
+    $self->ui_id($ui_id);
+}
 1;
 

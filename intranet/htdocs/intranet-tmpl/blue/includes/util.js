@@ -135,3 +135,15 @@ function scrollTo(idObj){
 		var divOffset = $('#'+idObj).offset().top;
 		$('html,body').animate({scrollTop: divOffset}, 1000);
 }
+
+
+/*
+ * getRadioButtonSelectedValue
+ * Funcion retorna el valor seleccionado en un radiobutton
+ */
+
+function getRadioButtonSelectedValue(ctrl)
+{
+    for(i=0;i<ctrl.length;i++)
+        if(ctrl[i].checked) return ctrl[i].value;
+}
