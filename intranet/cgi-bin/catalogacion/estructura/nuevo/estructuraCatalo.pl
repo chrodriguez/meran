@@ -19,7 +19,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			     });
 
 my %params_combo;
-$params_combo{'onChange'}= 'eleccionDeNivel("0")';
+$params_combo{'onChange'}= 'eleccionDeNivel()';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
 
@@ -37,7 +37,7 @@ my $selectNivel=CGI::scrolling_list(
                                     -values    => \@nivel,
                                     -defaults  => 'Niveles',
                                     -size      => 1,
-				                    -onChange  => 'eleccionDeNivel("0")',
+				                    -onChange  => 'eleccionDeNivel()',
                                  );
 #fin niveles
 

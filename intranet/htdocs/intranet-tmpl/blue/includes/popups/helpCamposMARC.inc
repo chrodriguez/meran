@@ -3,36 +3,7 @@
 <script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
-
 <script>
-	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");	
-// ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
-// if (typeof($.Autocompleter) != "function"){
-
-
-	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
-	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
-    $.getScript("/intranet-tmpl/blue/includes/jquery/ui.core.js");
-	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.mouse.js");
-	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.js");
-	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js");
-
-
-// 	alert("se cargo desde help MARC");
-// }
-
-function closeWindowHelp(){
-	$('.windowBlur').hide();
-	$('.ac_results').hide();
-	$('#windowHelp').hide();
-}
-
-function openWindowHelp(){
-	$('.windowBlur').show();
-	$('#windowHelp').draggable({opacity: 0.7777});
-	$('#windowHelp').show();
-	$('#windowHelp').centerObject();	
-}
 
 function clearInput(){
 	$('#campoHelp').val("");
@@ -97,14 +68,7 @@ $(document).ready(function() {
 
 </script>
 
-<div style="text-align: right;"><span class="click" onClick="openWindowHelp();">Ayuda MARC</span></div>
-
-<div id=windowHelp class="window" style="display:none; height:300px; width:400px;">
-	<div class="windowBlur" style="display:none; height:304px; width:400px;"></div> <!-- end div blur -->
-	<div id="headerWindowHelp" class="headerWindowHelp">
-		<span class="click" onClick="closeWindowHelp();">Cerrar</span>
-	</div>
-	<div id="title" class="title">Ayuda campos MARC</div>
+<div id=windowHelp>
 	<div id="contentWindow" class="formElemets">
 		<ul>
 		<li>
@@ -132,5 +96,3 @@ $(document).ready(function() {
 </div> <!--end div windowHelp-->
 
 <!-- *******************************Fin**Window Help********************************************* -->
-
-

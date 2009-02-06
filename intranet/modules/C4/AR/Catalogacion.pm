@@ -570,7 +570,8 @@ sub guardarCampoTemporal{
 	$dbh->{RaiseError} = 1;
 	my $campo=$objeto->{'campo'};
 	my $subcampo=$objeto->{'subcampo'};
-	my $query="SELECT id FROM cat_estructura_catalogacion WHERE campo=? AND subcampo=? AND nivel=? AND (itemtype=? OR itemtype='ALL')"; #PARA VER SI YA ESTA GUARDADO!!!
+    #PARA VER SI YA ESTA GUARDADO!!!
+	my $query="SELECT id FROM cat_estructura_catalogacion WHERE campo=? AND subcampo=? AND nivel=? AND (itemtype=? OR itemtype='ALL')"; 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo,$subcampo,$nivel,$itemtype);
 	my $id=$sth->fetchrow_hashref;
@@ -1731,7 +1732,7 @@ sub getTablaRef{
     use C4::Modelo::PrefTablaReferenciaInfo::Manager;
     use C4::Modelo::PrefTablaReferenciaInfo;
 
-    my $db_tabla_ref = C4::Modelo::PrefTablaReferenciaInfo::Manager->Pref_tabla_referencia_info();
+    my $db_tabla_ref = C4::Modelo::PrefTablaReferenciaInfo::Manager->get_pref_tabla_referencia_info();
     return($db_tabla_ref);
 }
 
@@ -1755,4 +1756,42 @@ sub getSubCamposLike{
     return($db_campos_MARC);
 }
 
+=item
+Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
+=cut
+sub t_guardarEnEstructuraCatalogacion {
+    my($params)=@_;
 
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
+        my $db= $estrCatalogacion->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+    
+        eval {
+            $estrCatalogacion->agregar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}

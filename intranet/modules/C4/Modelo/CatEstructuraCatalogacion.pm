@@ -71,7 +71,18 @@ sub setSubCampo{
     my ($subcampo) = @_;
     $self->subcampo($subcampo);
 }
-       
+      
+sub getTipo{
+    my ($self) = shift;
+    return ($self->tipo);
+}
+
+sub setTipo{
+    my ($self) = shift;
+    my ($tipo) = @_;
+    $self->tipo($tipo);
+}
+ 
 sub getItemType{
     my ($self) = shift;
     return ($self->itemtype);
@@ -99,7 +110,7 @@ sub getTipo{
     return ($self->tipo);
 }
 
-sub setCampo{
+sub setTipo{
     my ($self) = shift;
     my ($tipo) = @_;
     $self->tipo($tipo);
@@ -168,10 +179,10 @@ sub agregar{
     my ($data_hash)=@_;
 
     $self->setCampo($data_hash->{'campo'});
-    $self->setSubcampo($data_hash->{'subcampo'});
-    $self->setItemtype($data_hash->{'itemtype'});
+    $self->setSubCampo($data_hash->{'subcampo'});
+    $self->setItemType($data_hash->{'itemtype'}||'ALL');
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setTipo($data_hash->{'tipo'});
+    $self->setTipo($data_hash->{'tipoInput'});
     $self->setReferencia($data_hash->{'referencia'});
     $self->setNivel($data_hash->{'nivel'});
     $self->setObligatorio($data_hash->{'obligatorio'});
@@ -188,8 +199,8 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setCampo($data_hash->{'campo'});
-    $self->setSubcampo($data_hash->{'subcampo'});
-    $self->setItemtype($data_hash->{'itemtype'});
+    $self->setSubCampo($data_hash->{'subcampo'});
+    $self->setItemType($data_hash->{'itemtype'});
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
     $self->setTipo($data_hash->{'tipo'});
     $self->setReferencia($data_hash->{'referencia'});

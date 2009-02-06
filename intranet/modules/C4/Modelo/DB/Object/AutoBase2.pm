@@ -3,6 +3,7 @@ package C4::Modelo::DB::Object::AutoBase2;
 use base 'Rose::DB::Object';
 
 use C4::Modelo::DB::AutoBase1;
+use base qw(Rose::DB::Object::Helpers);
 
 sub init_db { C4::Modelo::DB::AutoBase1->new}
 

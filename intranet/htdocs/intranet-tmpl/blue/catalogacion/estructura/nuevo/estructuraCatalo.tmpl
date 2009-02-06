@@ -1,9 +1,11 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
-<script src="/intranet-tmpl/blue/includes/util.js"></script>
-
-[% INCLUDE "helpCamposMARC.inc" %]
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/ui.core.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/ui.draggable.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/ui.mouse.js"></script>
 
 <script>
 // ********************************************REVISADO***************************************************
@@ -14,6 +16,14 @@ CAMPOS_ARRAY= new Array();
 //arreglo de objetos subcampo
 SUBCAMPOS_ARRAY= new Array();
 
+function inicializar(){
+    //arreglo de objetos campo
+    CAMPOS_ARRAY= new Array();
+    //arreglo de objetos subcampo
+    SUBCAMPOS_ARRAY= new Array();
+    $("#resultAgregarCampo").html('');
+}
+
 function ordenar(orden){
     objAH.sort(orden);
 }
@@ -21,7 +31,6 @@ function ordenar(orden){
 function changePage(ini){
     objAH.changePage(ini);
 }
-
 
 //Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
 function eleccionDeNivel(){
@@ -43,7 +52,6 @@ function eleccionDeNivel(){
 function updateEleccionDeNivel(responseText){
     $("#resultCatalogacion").html(responseText);
     zebra("tablaResult");
-    mostrarTablaRef();
 }
 
 function modificarOrden(id, accion){
@@ -74,7 +82,7 @@ function eliminarCampo(id){
     objAH.sendToServer();
 }
 
-function mostrarAgregarCampo(accion){
+function mostrarAgregarCampo(){
     $("#modificar").hide();
     objAH=new AjaxHelper(updateMostrarAgregarCampo);
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -83,6 +91,7 @@ function mostrarAgregarCampo(accion){
 }
 
 function updateMostrarAgregarCampo(responseText){
+    $("#resultAgregarCampo").show();
     $("#resultAgregarCampo").html(responseText);
     scrollTo('resultAgregarCampo');
     $("#tablaRef").attr('disabled',true);
@@ -92,10 +101,15 @@ function updateMostrarAgregarCampo(responseText){
 
 }
 
-
+function cancelarEstructuraCatalogacion(){
+    $("#resultAgregarCampo").slideUp('slow');
+    //y borrar variables, objetos y arrays
+    inicializar();
+}   
 
 function mostrarTablaRef(){
-    objAH=new AjaxHelper(updateMostrarAgregarCampo);
+    objAH=new AjaxHelper(updateMostrarTablaRef);
+    objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
@@ -104,14 +118,14 @@ function mostrarTablaRef(){
 function updateMostrarTablaRef(responseText){
     var tablaRef_array=JSONstring.toObject(responseText);
     //se inicializa el combo
-    $("tablaRef").html('')
+    $("#tablaRef").html('');
     var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
     
     for (x=0;x < tablaRef_array.length;x++){
          options+= "<option value=" + tablaRef_array[x].referencia +" >" + tablaRef_array[x].referencia + "</option>";
     }
     $("#tablaRef").append(options);
-    $("#tabalRef").removeAttr("disabled"); 
+    $("#tablaRef").removeAttr("disabled"); 
    
 }
 
@@ -175,8 +189,6 @@ function eleccionCampo(){
 
 //se genera el combo en el cliente
 function updateEleccionCampo(responseText){
-// alert('campo: '+$("#campo").val());
-// alert('liblibrarian: '+CAMPOS_ARRAY[$("#campo").val()]);
     $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
     //Arreglo de Objetos Global
     var subcampos_array=JSONstring.toObject(responseText);
@@ -197,13 +209,67 @@ function updateEleccionCampo(responseText){
 function eleccionSubCampo(){
 
     if ($('#subcampo').val() != -1){
-        $('#lib').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
+        $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
         $("#tipoInput").removeAttr("disabled");
+        mostrarTablaRef();
     } else
         {
             $("#tipoInput").attr('disabled',true);
         }
 }
+
+
+/*
+ * agregarEstructuraCatalogacion
+ */
+function agregarEstructuraCatalogacion(){ 
+    objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.nivel= $('#nivel').val();
+    objAH.itemtype= $('#itemtype').val();
+    objAH.campo= $('#campo').val();
+    objAH.subcampo= $('#subcampo').val();
+    objAH.liblibrarian= $('#liblibrarian').val();
+    objAH.tipoInput= $('#tipoInput').val();
+    objAH.tabla= $('#tabla').val();
+    objAH.referencia= $('#referencia').val();
+//     objAH.varios= $('#nivel').val();
+    objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
+    objAH.sendToServer();
+}
+
+function updateAgregarEstructuraCatalogacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
+
+
+function abrirVentanaHelperMARC(){
+    objAH=new AjaxHelper(updateAbrirVentanaHelperMARC);
+    objAH.url='/intranet-tmpl/blue/includes/popups/helpCamposMARC.inc';
+    objAH.debug= true;
+    objAH.sendToServer();
+}
+
+function updateAbrirVentanaHelperMARC(responseText){
+//se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
+    vHelperMARC=new WindowHelper({draggable: false, opacity: true});
+    vHelperMARC.debug= true;
+    vHelperMARC.html=responseText;
+    vHelperMARC.titulo= 'Ayuda campos MARC';
+    vHelperMARC.draggable= true;
+    vHelperMARC.create(); 
+    vHelperMARC.dimmer_On= false;
+    vHelperMARC.height('60%');
+    vHelperMARC.width('50%');
+    vHelperMARC.open();
+}
+
 // ********************************************FIN REVISADO***************************************************
 
 
@@ -275,7 +341,7 @@ function editarCampo(id,accion){
 
 
 </script>
-
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="pagetitle" >Modificaci&oacute;n de campos MARC </td>

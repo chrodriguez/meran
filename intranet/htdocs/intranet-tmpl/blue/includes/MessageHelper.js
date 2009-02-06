@@ -67,5 +67,5 @@ function _delay(funcion, segundos){
 function hayError(msg){
 	if (msg.error == 1)
 		return (true);
-	return(false);
+	return (false);
 }

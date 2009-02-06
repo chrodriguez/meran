@@ -106,8 +106,19 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
+    # Se guardan los datos en estructura de catalogacion    
+    #estan todos habilidatos
+    $obj->{'intranet_habilitado'}= 1;
+    my ($Message_arrayref)= C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    print $input->header;
+    print $infoOperacionJSON;
+}
 #Sube el orden en la vista del campo seleccionado
-elsif($tipoAccion eq 'SUBIR_ORDEN'){
+elsif($tipoAccion eq "SUBIR_ORDEN"){
     my $id=$obj->{'idMod'};
     my $intra = $obj->{'intra'};
 
@@ -120,7 +131,7 @@ elsif($tipoAccion eq 'SUBIR_ORDEN'){
 }
 
 #Baja el orden en la vista del campo seleccionado
-elsif($tipoAccion eq 'BAJAR_ORDEN'){
+elsif($tipoAccion eq "BAJAR_ORDEN"){
     my $id=$obj->{'idMod'};
     my $intra = $obj->{'intra'};
 
@@ -132,7 +143,7 @@ elsif($tipoAccion eq 'BAJAR_ORDEN'){
 }
 
 #Se cambia la visibilidad del campo.
-elsif($tipoAccion eq 'CAMBIAR_VISIBILIDAD'){
+elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
     my $idestcat=$obj->{'id'};
 
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $idestcat);
@@ -143,7 +154,7 @@ elsif($tipoAccion eq 'CAMBIAR_VISIBILIDAD'){
 }
 
 #Se deshabilita el campo seleccionado para la vista en intranet
-elsif($tipoAccion eq 'ELIMINAR_CAMPO'){
+elsif($tipoAccion eq "ELIMINAR_CAMPO"){
     my $id=$obj->{'idMod'};
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catalogacion->load();
@@ -152,7 +163,7 @@ elsif($tipoAccion eq 'ELIMINAR_CAMPO'){
     print $input->header;
 }
 
-elsif($tipoAccion eq 'AGREGAR_CAMPO'){
+elsif($tipoAccion eq "AGREGAR_CAMPO"){
     my $id=$obj->{'idMod'};
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
     $catalogacion->agregar();

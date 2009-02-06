@@ -94,6 +94,7 @@ function WindowHelper(options){
 	this.titulo= '';
 	this.html= '';		//respuesta del servidor, responseText
 	this.dimmer= '';	//oscurecimiento y bloqueo del fondo
+    this.dimmer_On= true;  //muestra o no el dimmer
 	this.showState= true;   //muestra o no el gif animado
 	this.draggable= true;  //para configurar si se quiere que la ventana sea draggable o no
 
@@ -137,7 +138,7 @@ function WindowHelper(options){
 			//se muestra la ventana
 			$('#ventana').centerObject();
 			$('#ventana').show();
-			$('#dimmer').show();
+			if(this.dimmer_On == true){$('#dimmer').show();}
 	}//end show
 
 	this.log= function(){

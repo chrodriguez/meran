@@ -30,11 +30,6 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 	my %params;
 	$params{'id_socio'}= $obj->{'usuario'};
     $params{'actualPassword'}= $obj->{'actualPassword'};
-
-#     if($params{'changePassword'} ){
-#         $params{'actualPassword'}= '';
-#     }
-
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
     $params{'session'}= $session;

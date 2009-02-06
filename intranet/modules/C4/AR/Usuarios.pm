@@ -828,13 +828,6 @@ sub _verificarDatosBorrower{
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
     }
-
-#   my $city = $data->{'ciudad'};
-#   if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($city)))){
-#       $msg_object->{'error'}= 1;
-#       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U337', 'params' => []} ) ;
-#   }
-
 }
     
 
