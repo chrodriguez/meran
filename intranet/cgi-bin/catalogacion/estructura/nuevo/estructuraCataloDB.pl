@@ -45,7 +45,6 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
-#     use Rose::DB::Object::Helpers;
     my $nivel = $obj->{'nivel'};
     my $campoX = $obj->{'campoX'};
 
@@ -60,7 +59,6 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
-#     use Rose::DB::Object::Helpers;
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 

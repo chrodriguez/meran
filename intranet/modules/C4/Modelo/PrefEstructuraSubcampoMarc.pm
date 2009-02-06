@@ -3,7 +3,6 @@ package C4::Modelo::PrefEstructuraSubcampoMarc;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
-use base qw(Rose::DB::Object::Helpers);
 
 
 __PACKAGE__->meta->setup(
