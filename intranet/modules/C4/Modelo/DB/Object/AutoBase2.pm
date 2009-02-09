@@ -16,7 +16,15 @@ sub toString{
     return $self->meta->class;
 }
 
+=item
 
+    CHAIN OF RESPONSIBILITY
+
+    HandleReques = createFromAlias, implementado como un  TemplateMethod compuesto por 
+
+    createFromAlias (TemplateMethod), nextChain, nextMember (HooksMethods)
+
+=cut
 sub createFromAlias{
     my ($self)=shift;
     my $classAlias = shift;
@@ -46,7 +54,6 @@ sub getCamposArray{
 # open(A, ">>/tmp/debug.txt");
 # print A "desde getCamposArray\n";
     my $camposArray = $self->meta->columns;
-
      foreach my $campo (@$camposArray){
 # print A "foreach=> ".$campo."\n";
 ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
