@@ -19,7 +19,7 @@ __PACKAGE__->meta->setup(
 );
 
 sub getAlias{
-    return ("autor");
+    return ("autores");
 }
 
 sub lastTable{

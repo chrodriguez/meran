@@ -19,10 +19,7 @@ sub toString{
 
 sub createFromAlias{
     my ($self)=shift;
-    print "DESDE ".$self->meta->class."\n\n\n";
     my $classAlias = shift;
-    print "\n ALIAS: ".$classAlias;
-    print "\n SELF ALIAS: ".$self->getAlias."\n\n";
     if ($classAlias eq $self->getAlias){
         return ($self);
     }else
@@ -43,8 +40,20 @@ sub nextChain{
         }
 }
 
+sub getCamposArray{
+    my ($self)=shift;
+    my @arregloJSON;
+    
+    my $camposArray = $self->meta->columns;
+    for ($x = 0; $x<scalar(@$camposArray) ; $x++){
+        push (@arregloJSON,( {campo => $camposArray->[$x]} ));
+    }
+    close A;
+    return(\@arregloJSON);
+}
+
 sub getCampos{
-	my ($self)=shift;
+    my ($self)=shift;
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
     return($fieldsString);
 }
@@ -52,7 +61,7 @@ sub getCampos{
 sub log{
     my ($self)=shift;
     use C4::AR::Debug;
-    my ($data, $metodoLlamador)=@_;  
+    my ($data, $metodoLlamador)=@_;
 
     C4::AR::Debug::log($self, $data, $metodoLlamador);
 }

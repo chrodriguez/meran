@@ -143,7 +143,7 @@ my $p = C4::Modelo::CatAutor->new();
 # foreach my $campo (@col){
 #     print $campo."\n";
 # }
-    my $c = $p->createFromAlias("autor");
+    my $c = $p->createFromAlias("temas");
     if ($c){
         $c = $c->toString;
     }

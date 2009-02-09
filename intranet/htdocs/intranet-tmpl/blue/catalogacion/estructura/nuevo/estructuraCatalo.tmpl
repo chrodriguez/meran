@@ -226,11 +226,11 @@ function enable_disableSelects(){
 }
 
 
-function armarComboCampos()(){
-    objAH=new AjaxHelper(updateEleccionCampo);
+function armarComboCampos(){
+    objAH=new AjaxHelper(updateArmarComboCampos);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.tabla=$('#tablaRef').val();
+    objAH.tableAlias=$('#tablaRef').val();
     objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS_REFERENCIA";
     objAH.sendToServer();
 }
