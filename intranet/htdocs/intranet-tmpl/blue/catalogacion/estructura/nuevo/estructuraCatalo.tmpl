@@ -80,9 +80,10 @@ function eliminarCampo(id){
     objAH.sendToServer();
 }
 
-function mostrarAgregarCampo(){
+function mostrarAgregarCampo(id){
     $("#modificar").hide();
     objAH=new AjaxHelper(updateMostrarAgregarCampo);
+    objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion="MOSTRAR_FORM_AGREGAR_CAMPOS";
     objAH.sendToServer();
@@ -94,6 +95,25 @@ function updateMostrarAgregarCampo(responseText){
     scrollTo('resultAgregarCampo');
     enable_disableSelects();
 
+}
+
+function mostrarModificarCampo(id){
+    objAH=new AjaxHelper(updateMostrarModificarCampo);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion="MOSTRAR_FORM_MODIFICAR_CAMPOS";
+    objAH.id= id;
+    objAH.sendToServer();
+}
+
+function updateMostrarModificarCampo(responseText){
+    $("#resultModificarCampo").show();
+    $("#resultModificarCampo").html(responseText);
+    scrollTo('resultModificarCampo');
+//     enable_disableSelects();
+//      $("#campo").removeAttr('disabled');
+//     $("#subcampo").removeAttr('disabled');
+//     $("#tablaRef").removeAttr('disabled');
+//     $("#tipoInput").removeAttr('disabled');
 }
 
 function cancelarEstructuraCatalogacion(){
@@ -365,6 +385,8 @@ function updateAbrirVentanaHelperMARC(responseText){
 
 </div>
 
+<!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
+<div id= "resultModificarCampo"></div>
 <!-- PARA MOSTRAR TEMPLATE PARA AGREGAR CAMPOS -->
 <div id= "resultAgregarCampo"></div>
 <!-- PARA MOSTRAR LO CATALOGADO -->

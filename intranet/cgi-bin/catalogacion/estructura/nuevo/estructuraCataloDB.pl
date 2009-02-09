@@ -117,6 +117,29 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+
+elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
+#Se muestran las catalogaciones
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                                        template_name => "catalogacion/estructura/nuevo/modificarCampoMARC.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {editcatalogue => 1},
+                                                        debug => 1,
+                    });
+
+    my $id=$obj->{'id'};
+
+    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
+    $catalogacion->load();
+
+    $t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+    $t_params->{'catalogacion'}= $catalogacion;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
 elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
     # Se guardan los datos en estructura de catalogacion    
     #estan todos habilidatos
