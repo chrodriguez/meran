@@ -14,20 +14,20 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
-sub getAlias(){
+sub getAlias{
     return ("temas");
 }
 
-sub lastTable(){
+sub lastTable{
     return (1);
 }
 
-sub nextMember(){
+sub nextMember{
 
 #     return(C4::Modelo::CatTema()->new());
 }
 
-sub default(){
+sub default{
     return (0);
 }
 1;

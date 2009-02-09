@@ -143,10 +143,12 @@ my $p = C4::Modelo::CatAutor->new();
 # foreach my $campo (@col){
 #     print $campo."\n";
 # }
-    my $c = $p->createFromAlias("sdfsdfsd")."\n\n\n";
-
+    my $c = $p->createFromAlias("autor");
+    if ($c){
+        $c = $c->toString;
+    }
     print "\n\n\n\RETURN: ".$c."\n\n\n";
-    print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
+#     print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
     
 
 

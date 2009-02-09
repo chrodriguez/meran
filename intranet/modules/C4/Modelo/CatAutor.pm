@@ -18,20 +18,20 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-sub getAlias(){
+sub getAlias{
     return ("autor");
 }
 
-sub lastTable(){
+sub lastTable{
     return (0);
 }
 
-sub nextMember(){
+sub nextMember{
     use C4::Modelo::CatTema;
-    return(bless(C4::Modelo::CatTema->new()));
+    return(C4::Modelo::CatTema->new());
 }
 
-sub default(){
+sub default{
     return (0);
 }
 1;

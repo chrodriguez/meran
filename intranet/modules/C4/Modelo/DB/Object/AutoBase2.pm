@@ -17,32 +17,33 @@ sub toString{
 }
 
 
-sub createFromAlias(){
+sub createFromAlias{
     my ($self)=shift;
     print "DESDE ".$self->meta->class."\n\n\n";
     my $classAlias = shift;
     print "\n ALIAS: ".$classAlias;
-    if ($classAlias eq $self->getAlias()){
-        return (bless($self));
+    print "\n SELF ALIAS: ".$self->getAlias."\n\n";
+    if ($classAlias eq $self->getAlias){
+        return ($self);
     }else
         {
             return($self->nextChain($classAlias));
         }
 }
 
-sub nextChain(){
+sub nextChain{
     my ($self)=shift;
     my $classAlias = shift;
-    if ($self->lastTable()){
-        return ($self->default());
+    if ($self->lastTable){
+        return ($self->default);
     }
     else
         {
-            return($self->nextMember()->createFromAlias($classAlias));
+            return($self->nextMember->createFromAlias($classAlias));
         }
 }
 
-sub getCampos(){
+sub getCampos{
 	my ($self)=shift;
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
     return($fieldsString);
