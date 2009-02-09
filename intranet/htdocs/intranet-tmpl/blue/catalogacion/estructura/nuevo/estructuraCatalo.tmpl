@@ -200,26 +200,31 @@ function enable_disableSelects(){
     $("#subcampo").removeAttr('disabled');
     $("#tablaRef").removeAttr('disabled');
     $("#tipoInput").removeAttr('disabled');
+    $("#divCamposRef").show();
     if ( $('#campoX').val() == -1){
          $("#campo").attr('disabled',true);
          $("#subcampo").attr('disabled',true);
          $("#tablaRef").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
     }
     else
       if ( $('#campo').val() == -1){
          $("#subcampo").attr('disabled',true);
          $("#tablaRef").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
       }
     else
        if ( $('#subcampo').val() == -1){
          $("#tablaRef").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
         }
     else
       if ( $('#tablaRef').val() == -1){
          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
        }
 }
 
@@ -241,11 +246,16 @@ function updateArmarComboCampos(responseText){
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     var joinedFields = "";
     for (x=0;x < camposSelect_array.length;x++){
+        if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
+         joinedFields+= camposSelect_array[x].campo;
+        else
          joinedFields+= camposSelect_array[x].campo+", ";
          options+= "<option value=" + camposSelect_array[x].campo +" >" + camposSelect_array[x].campo + "</option>";
     }
     //se agrega la info al combo
     $("#camposSelect").append(options);
+    $("#camposRef").val(joinedFields);
+    $("#divCamposRef").show();
     enable_disableSelects();
 }
 
@@ -280,9 +290,16 @@ function agregarEstructuraCatalogacion(){
     objAH.subcampo= $('#subcampo').val();
     objAH.liblibrarian= $('#liblibrarian').val();
     objAH.tipoInput= $('#tipoInput').val();
-    objAH.tabla= $('#tabla').val();
-    objAH.referencia= $('#referencia').val();
-//     objAH.varios= $('#nivel').val();
+    objAH.tabla= $('#tablaRef').val();
+    
+    if ($('#tablaRef').val() != -1){
+        objAH.referencia=1;
+        objAH.orden= $('#camposSelect').val();
+        objAH.campos= $('#camposRef').val();
+        objAH.separador= $('#separador').val();
+    }else{
+         objAH.referencia=0;
+    }
     objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
     objAH.sendToServer();
 }

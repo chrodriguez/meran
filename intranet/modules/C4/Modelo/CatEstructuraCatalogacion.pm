@@ -45,6 +45,90 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub agregar{
+
+    use C4::Modelo::PrefInformacionReferencia;
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubCampo($data_hash->{'subcampo'});
+    $self->setItemType($data_hash->{'itemtype'}||'ALL');
+    $self->setLiblibrarian($data_hash->{'liblibrarian'});
+    $self->setTipo($data_hash->{'tipoInput'});
+    $self->setReferencia($data_hash->{'referencia'});
+    $self->setNivel($data_hash->{'nivel'});
+    $self->setObligatorio($data_hash->{'obligatorio'});
+    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+    $self->setVisible($data_hash->{'visible'});
+    $self->save();
+    $data_hash->{'id_est_cat'}=$self->id;
+    my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
+       $pref_temp->agregar($data_hash);
+
+}
+
+sub modificar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubCampo($data_hash->{'subcampo'});
+    $self->setItemType($data_hash->{'itemtype'});
+    $self->setLiblibrarian($data_hash->{'liblibrarian'});
+    $self->setTipo($data_hash->{'tipo'});
+    $self->setReferencia($data_hash->{'referencia'});
+    $self->setNivel($data_hash->{'nivel'});
+    $self->setObligatorio($data_hash->{'obligatorio'});
+    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+    $self->setVisible($data_hash->{'visible'});
+
+    $self->save();
+
+}
+
+=item
+subirOrden
+Sube el orden en la vista, del campo seleccionado.
+=cut
+sub subirOrden{
+
+    my ($self)=shift;
+
+    $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
+    $self->save();
+}
+
+=item
+bajarOrden
+Baja el orden en la vista, del campo seleccionado.
+=cut
+sub bajarOrden{
+
+    my ($self)=shift;
+
+    $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
+    $self->save();
+}
+
+sub cambiarVisibilidad{
+
+    my ($self)=shift;
+
+    $self->setVisible(!$self->getVisible);
+    $self->save();
+}
+
+sub defaultSort{
+    return ("intranet_habilitado");
+}
+
+
+
+
+
+
 sub getId{
     my ($self) = shift;
     return ($self->id);
@@ -173,81 +257,7 @@ sub setVisible{
 }
 
 
-sub agregar{
 
-    my ($self)=shift;
-    my ($data_hash)=@_;
-
-    $self->setCampo($data_hash->{'campo'});
-    $self->setSubCampo($data_hash->{'subcampo'});
-    $self->setItemType($data_hash->{'itemtype'}||'ALL');
-    $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setTipo($data_hash->{'tipoInput'});
-    $self->setReferencia($data_hash->{'referencia'});
-    $self->setNivel($data_hash->{'nivel'});
-    $self->setObligatorio($data_hash->{'obligatorio'});
-    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
-    $self->setVisible($data_hash->{'visible'});
-
-    $self->save();
-
-}
-
-sub modificar{
-
-    my ($self)=shift;
-    my ($data_hash)=@_;
-
-    $self->setCampo($data_hash->{'campo'});
-    $self->setSubCampo($data_hash->{'subcampo'});
-    $self->setItemType($data_hash->{'itemtype'});
-    $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setTipo($data_hash->{'tipo'});
-    $self->setReferencia($data_hash->{'referencia'});
-    $self->setNivel($data_hash->{'nivel'});
-    $self->setObligatorio($data_hash->{'obligatorio'});
-    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
-    $self->setVisible($data_hash->{'visible'});
-
-    $self->save();
-
-}
-
-=item
-subirOrden
-Sube el orden en la vista, del campo seleccionado.
-=cut
-sub subirOrden{
-
-    my ($self)=shift;
-
-    $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
-    $self->save();
-}
-
-=item
-bajarOrden
-Baja el orden en la vista, del campo seleccionado.
-=cut
-sub bajarOrden{
-
-    my ($self)=shift;
-
-    $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
-    $self->save();
-}
-
-sub cambiarVisibilidad{
-
-    my ($self)=shift;
-
-    $self->setVisible(!$self->getVisible);
-    $self->save();
-}
-
-sub defaultSort{
-    return ("intranet_habilitado");
-}
 
 
 1;

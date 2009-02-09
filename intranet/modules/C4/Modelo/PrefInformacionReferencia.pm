@@ -17,7 +17,87 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'idinforef' ],
+    
+     relationships =>
+    [
+        tipoItem => 
+        {
+            class       => 'C4::Modelo::CatEstructuraCatalogacion',
+            key_columns => { idinforef => 'idestcat' },
+            type        => 'one to one',
+        },
+    ],
+
 );
+
+sub agregar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setIdEstCat($data_hash->{'id_est_cat'});
+    $self->setReferencia($data_hash->{'tabla'});
+    $self->setOrden($data_hash->{'orden'}||'ALL');
+    $self->setCampos($data_hash->{'campos'});
+    $self->setSeparador($data_hash->{'separador'});
+
+    $self->save();
+}
+
+sub getIdEstCat{
+    my ($self) = shift;
+    return ($self->idestcat);
+}
+
+sub setIdEstCat{
+    my ($self) = shift;
+    my ($idestcat) = @_;
+    $self->idestcat($idestcat);
+}
+
+sub getReferencia{
+    my ($self) = shift;
+    return ($self->referencia);
+}
+
+sub setReferencia{
+    my ($self) = shift;
+    my ($referencia) = @_;
+    $self->referencia($referencia);
+}
+
+sub getOrden{
+    my ($self) = shift;
+    return ($self->orden);
+}
+
+sub setOrden{
+    my ($self) = shift;
+    my ($orden) = @_;
+    $self->orden($orden);
+}
+
+sub getCampos{
+    my ($self) = shift;
+    return ($self->campos);
+}
+
+sub setCampos{
+    my ($self) = shift;
+    my ($campos) = @_;
+    $self->campos($campos);
+}
+
+sub getSeparador{
+    my ($self) = shift;
+    return ($self->separador);
+}
+
+sub setSeparador{
+    my ($self) = shift;
+    my ($separador) = @_;
+    $self->separador($separador);
+}
 
 1;
 
