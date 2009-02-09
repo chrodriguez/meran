@@ -23,23 +23,9 @@ $params_combo{'onChange'}= 'eleccionDeNivel()';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
 
-## FIXME armar funcion para generar combo y llevar a Utilidades
-#Niveles
-my @nivel;
-my $cantNivel=3;
-push(@nivel, "Niveles");
-for (my $i=1; $i<=$cantNivel; $i++){
-	push(@nivel, $i);
-}
-my $selectNivel=CGI::scrolling_list(  
-                                    -name      => 'nivel',
-				                    -id	   => 'nivel',
-                                    -values    => \@nivel,
-                                    -defaults  => 'Niveles',
-                                    -size      => 1,
-				                    -onChange  => 'eleccionDeNivel()',
-                                 );
-#fin niveles
+my %params_combo;
+$params_combo{'onChange'}= 'eleccionDeNivel()';
+my $selectNivel= &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
 
 $t_params->{'selectNivel'}=$selectNivel;
 

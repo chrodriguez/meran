@@ -50,7 +50,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my ($campos_array) = C4::AR::Catalogacion::getCamposDeTablaRef($tableAlias);
 
 #     my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
-    my $info = to_json $campos_array;
+    my $info = to_json($campos_array);
      my $infoOperacionJSON= $info;
 
     print $input->header;

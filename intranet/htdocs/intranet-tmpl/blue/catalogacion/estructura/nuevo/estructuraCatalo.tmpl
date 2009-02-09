@@ -8,8 +8,6 @@
 <script src="/intranet-tmpl/blue/includes/jquery/ui.mouse.js"></script>
 
 <script>
-// ********************************************REVISADO***************************************************
-
 //Arreglos globales de objetos
 //arreglo de objetos campo
 CAMPOS_ARRAY= new Array();
@@ -34,7 +32,7 @@ function changePage(ini){
 
 //Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
 function eleccionDeNivel(){
-	var nivel=$("#nivel").val();
+	var nivel=$("#niveles_id").val();
 	var ObjDiv = $("#divitemtype");
 	if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
 	else{ObjDiv.show();}
@@ -135,7 +133,7 @@ function eleccionCampoX(){
         objAH=new AjaxHelper(updateEleccionCampoX);
         objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
         objAH.campoX=$('#campoX').val();
-        objAH.nivel=$('#nivel').val();
+        objAH.nivel=$('#niveles_id').val();
         objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
     }
@@ -168,7 +166,7 @@ function eleccionCampo(){
         objAH.debug= true;
         objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
         objAH.campo=$('#campo').val();
-        objAH.nivel=$('#nivel').val();
+        objAH.nivel=$('#niveles_id').val();
         objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
     }
@@ -235,7 +233,7 @@ function armarComboCampos(){
     objAH.sendToServer();
 }
 
-function updateArmarComboCampos(){
+function updateArmarComboCampos(responseText){
     //Arreglo de Objetos Global
     var camposSelect_array=JSONstring.toObject(responseText);
     //se inicializa el combo
@@ -243,8 +241,8 @@ function updateArmarComboCampos(){
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     var joinedFields = "";
     for (x=0;x < camposSelect_array.length;x++){
-         joinedFields+= camposSelect_array[x]+", ";
-         options+= "<option value=" + camposSelect_array[x] +" >" + camposSelect_array[x] + "</option>";
+         joinedFields+= camposSelect_array[x].campo+", ";
+         options+= "<option value=" + camposSelect_array[x].campo +" >" + camposSelect_array[x].campo + "</option>";
     }
     //se agrega la info al combo
     $("#camposSelect").append(options);
@@ -276,7 +274,7 @@ function agregarEstructuraCatalogacion(){
     objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.nivel= $('#nivel').val();
+    objAH.nivel= $('#niveles_id').val();
     objAH.itemtype= $('#tipo_nivel3_id').val();
     objAH.campo= $('#campo').val();
     objAH.subcampo= $('#subcampo').val();
@@ -320,76 +318,6 @@ function updateAbrirVentanaHelperMARC(responseText){
     vHelperMARC.open();
 }
 
-// ********************************************FIN REVISADO***************************************************
-
-
-
-
-function objetoRespuesta(campo,subcampo,lib,tipo,oblig,tabla){
-	this.campo=campo;
-	this.subcampo=subcampo;
-	this.lib=lib;
-	this.tipoInput=tipo;
-	this.obligatorio=oblig;
-	this.tabla=tabla;
-	this.orden="";
-	this.camposRef="";
-	this.separador="";
-}
-
-function guardarCamposModificados(accion){
-
-	var objeto=new objetoRespuesta($('#tagField').val(),$('#subcampo').val(),$('#lib').val(),$('#tipoInput').val(),$('#obligatorio').val(),$('#tabla').val());
-	if ($('#tabla').val() != -1){
-		objeto.orden=$('#orden').val();
-		objeto.camposRef=$('#camposRef').val();
-		objeto.separador=$('#separador').val();
-	}
-
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.objeto=objeto;
-	objAH.accion=accion;
-	objAH.sendToServer();
-	$("#result").html("");
-}
-
-function guardarModificaciones(accion){
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.idMod=$('#idMod').val();
-	objAH.accion=accion;
-	
-	var objeto=new objetoRespuesta($('#campoMod').val(),$('#subcampoMod').val(),$('#textoMod').val(),$('#selectTipo').val(),"",$('#tablaMod').val());
-	if($('#tablaMod').val() != -1){
-		objAH.idinforef=$('#idinforef').val();
-		objeto.orden=$('#ordenMod').val();
-		objeto.camposRef=$('#camposRefMod').val();
-		objeto.separador=$('#separadorMod').val();
-	}
-	objAH.objeto=objeto;
-	objAH.sendToServer();
-}
-
-function editarCampo(id,accion){
-	$("#result").html("");
-	$('#idMod').val(id);
-	
-	objAH=new AjaxHelper(updateInfoEstrCatalogo);//La funcion y el objeto estan en seleccionCamposMarc.js
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloResults.pl";
-	objAH.nivel=$('#nivel').val();
-	objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.idMod=id;
-	objAH.accion=accion;
-	objAH.sendToServer();
-}
-
-
-
 </script>
 <div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
@@ -403,7 +331,7 @@ function editarCampo(id,accion){
 </table>
 
 <br><br>
-<label for="nivel" style="float: left; width:13%" >
+<label for="niveles_id" style="float: left; width:13%" >
 	Nivel:
 </label>
 [% selectNivel %]
@@ -419,10 +347,6 @@ function editarCampo(id,accion){
     </p>
 
 </div>
-
-<!-- estos dos no se si usan -->
-<div id= "result2"></div>
-<div id= "result"></div>
 
 <!-- PARA MOSTRAR TEMPLATE PARA AGREGAR CAMPOS -->
 <div id= "resultAgregarCampo"></div>

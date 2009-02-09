@@ -42,13 +42,18 @@ sub nextChain{
 
 sub getCamposArray{
     my ($self)=shift;
-    my @arregloJSON;
-    
+    my $arregloJSON;
+# open(A, ">>/tmp/debug.txt");
+# print A "desde getCamposArray\n";
     my $camposArray = $self->meta->columns;
-    for ($x = 0; $x<scalar(@$camposArray) ; $x++){
-        push (@arregloJSON,( {campo => $camposArray->[$x]} ));
+
+     foreach my $campo (@$camposArray){
+# print A "foreach=> ".$campo."\n";
+## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
+        push (@arregloJSON, {'campo' => $campo."" });
     }
-    close A;
+
+# close(A);
     return(\@arregloJSON);
 }
 

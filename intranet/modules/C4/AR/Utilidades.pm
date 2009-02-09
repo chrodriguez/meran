@@ -1405,6 +1405,53 @@ sub generarComboCampoX{
     return ($selectCampoX);
 }
 
+sub generarComboNiveles {
+
+    my ($params) = @_;
+
+    my @nivel;
+    my $cantNivel=3;
+    push(@nivel, "Niveles");
+    for (my $i=1; $i<=$cantNivel; $i++){
+        push(@nivel, $i);
+    }
+# my $selectNivel=CGI::scrolling_list(  
+#                                     -name      => 'nivel',
+#                                     -id    => 'nivel',
+#                                     -values    => \@nivel,
+#                                     -defaults  => 'Niveles',
+#                                     -size      => 1,
+#                                     -onChange  => 'eleccionDeNivel()',
+#                                  );
+
+    my @select_niveles;
+    my %select_niveles;
+
+    foreach my $nivel (@nivel) {
+        push(@select_niveles, $nivel);
+        $select_niveles{$nivel}= $nivel;
+    }
+
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
+
+    $options_hash{'name'}= 'niveles_name';
+    $options_hash{'id'}= 'niveles_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || 'Niveles';
+
+    push (@select_niveles, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_niveles;
+    $options_hash{'labels'}= \%select_niveles;
+
+    my $CGINiveles= CGI::scrolling_list(\%options_hash);
+
+    return $CGINiveles; 
+}
 
 #****************************************************Fin****Generacion de Combos**************************************************
 
