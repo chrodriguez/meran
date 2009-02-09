@@ -43,6 +43,7 @@ sub nextChain(){
 }
 
 sub getCampos(){
+	my ($self)=shift;
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
     return($fieldsString);
 }
