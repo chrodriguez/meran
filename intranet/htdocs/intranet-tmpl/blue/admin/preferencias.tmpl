@@ -37,6 +37,20 @@ function updateInfoConsultaJSON(responseText){
  */
 function borrarDiv(){$("#divAgregar").html("");}
 
+
+/*
+ * OcultarCombos
+ * Oculta los combos.
+ */
+function ocultarCombos(){$("#divCombos").hide();}
+/*
+ * MostrarCombos
+ * _Muestra los combos.
+ */
+function mostrarCombos(){
+	$("#divCombos").show();}
+
+
 /*
  * agregarPreferencia
  * Muestra la parte de agregado de una variable con los componentes correspondientes con el tipo de variable que
@@ -44,20 +58,20 @@ function borrarDiv(){$("#divAgregar").html("");}
  */
 function agregarPreferencia(){
 	var tipo=$("#tipoVar").val();
-	borrarDiv();
+	ocultarCombos();
 	var ok=1;
 	objAH=new AjaxHelper(updateAgregarPreferencia);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.tipo=tipo;
-// 	objAH.agregar=1;
-// 	objAH.funcion=0;
  	objAH.accion= "NUEVA_VARIABLE";
 	
+	if(tipo == "0"){ok=0;alert("Debe seleccionar al menos una opcion");}
+
 	if(tipo == "referencia"){
 		var tabla=$("#tabla").val();
 		var campo=$("#campo").val();
-		if(tabla == -1 || campo == -1){ok=0;}
+		if(tabla == -1 || campo == -1){ok=0;alert("Debe seleccionar una tabla de referencia");}
 		else{objAH.tabla=tabla;
 		     objAH.campo=campo;
 		}
@@ -65,13 +79,14 @@ function agregarPreferencia(){
 
 	if(tipo == "valAuto"){
 		var cat=$("#categoria").val();
-		if(cat == -1){ok=0;}
+		if(cat == -1){ok=0;alert("Debe seleccionar un valor autorizado");}
 		else{objAH.categoria=cat;}
 	}
 
 	if(ok){
+		borrarDiv();
 		objAH.sendToServer();
-	}else{alert("Elija una tabla de referencia");}
+	}else{mostrarCombos();}
 }
 
 function updateAgregarPreferencia(responseText){
@@ -218,10 +233,6 @@ function guardarModificacion(){
 	}
 
 	objAH.explicacion=$("#explicacion").val();
-//	objAH.tipo=$("#tipoVar").val();
-//	objAH.tabla=$("#tabla").val();
-//	objAH.campo=$("#campo").val();
-//	objAH.categoria=$("#categoria").val();
 	objAH.accion= "GUARDAR_MODIFICACION_VARIABLE";
 	objAH.sendToServer();
 
@@ -238,6 +249,9 @@ function updateGuardarModificacion(responseText){
 	$("#tabla").remove();
 	$("#campo").remove();
 	$("#categoria").remove();
+	$("#tipoVar").val(0);
+	borrarDiv();
+	buscarPreferencia();
 }
 
 /*
@@ -255,8 +269,7 @@ function buscarPreferencia(){
 
 function updateBuscarPreferencia(responseText){
 
-	var compo=$("#tipoVar");
-	compo.removeAttr("disabled");
+	mostrarCombos();
 	$("#divResultado").html(responseText);
 	tablaOrdenada();
 }
@@ -276,7 +289,13 @@ function modificarVariable(variable,tipo){
 
 	var compo=$("#tipoVar");
 	compo.val(tipo);
-	compo.attr("disabled","disabled");
+	borrarDiv();
+	ocultarCombos();
+
+	//compo.attr("disabled","disabled");
+	//$("#tabla").remove();
+	//$("#campo").remove();
+	//$("#categoria").remove();
 
 	objAH=new AjaxHelper(updateModificarVariable);
 	objAH.debug= true;
@@ -300,12 +319,25 @@ function guardarNuevaVariable(){
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
 	objAH.variable=$("#variable").val();
-	objAH.valor=$("#valor").val();
 	objAH.explicacion=$("#explicacion").val();
-	objAH.tipo=$("#tipo").val();
-	objAH.tabla=$("#tabla").val();
-	objAH.campo=$("#campo").val();
-	objAH.categoria=$("#categoria").val();
+	objAH.tipo=$("#tipoVar").val();
+
+	if (objAH.tipo == 'bool'){
+	objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
+	}
+	else
+	{objAH.valor=$("#valor").val();
+	
+	if (objAH.tipo == "valAuto" ){
+			objAH.categoria=$("#categoria").val();
+							}
+	if (objAH.tipo == "referencia"){	
+			objAH.tabla=$("#tabla").val();
+			objAH.campo=$("#campo").val();
+							}
+	}
+
+
 	objAH.accion= "GUARDAR_NUEVA_VARIABLE";
 	objAH.sendToServer();
 
@@ -321,6 +353,10 @@ function updateGuardarModificacion(responseText){
 	$("#tabla").remove();
 	$("#campo").remove();
 	$("#categoria").remove();
+	$("#tipoVar").val(0);
+	borrarDiv();
+	buscarPreferencia();
+
 }
 
 
@@ -347,10 +383,11 @@ $(document).ready( function() {
 	src="[% themelang %]/images/borrar2.png" border="0" onClick="limpiar()">
 </p>
 
-
+<div id="divCombos">
 <!-- PARA AGREGAR -->
 <p>
 	<select id="tipoVar" onChange="selectOpcion()">
+		<option value="0">[% "Seleccionar ..." | i18n %]</option>
 		<option value="bool">[% "Si-No" | i18n %]</option>
 		<option value="texta">[% "Texto grande" | i18n %]</option>
 		<option value="text">[% "Texto com&uacute;n" | i18n %]</option>
@@ -362,6 +399,7 @@ $(document).ready( function() {
 		onclick="agregarPreferencia()">
 </p>
 <div id="divAgregar"></div>
+</div>
 
 <div id="divResultado"></div>
 

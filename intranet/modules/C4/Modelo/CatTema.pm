@@ -15,7 +15,9 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-
+=item
+Devuelve si es o no la ultima tabla de la cadena de referencias
+=cut
 sub lastTable{
     return (1);
 }
@@ -25,8 +27,5 @@ sub nextMember{
 #     return(C4::Modelo::CatTema()->new());
 }
 
-sub default{
-    return (0);
-}
 1;
 

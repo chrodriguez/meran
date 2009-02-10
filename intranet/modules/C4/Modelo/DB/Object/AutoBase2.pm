@@ -80,6 +80,16 @@ sub getAlias{
     return($prefTablaRef->getAliasForTable($nombreTabla));
 }
 
+=item
+Devuelve si es o no la ultima tabla de la cadena de referencias
+=cut
+sub lastTable {
+    return (0);
+}
+
+sub default {
+    return (0);
+}
 
 sub log{
     my ($self)=shift;

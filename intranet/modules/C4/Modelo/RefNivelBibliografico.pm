@@ -15,5 +15,10 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'code' ],
 );
 
+sub nextMember{
+    use C4::Modelo::CatTema;
+    return(C4::Modelo::CatTema->new());
+}
+
 1;
 

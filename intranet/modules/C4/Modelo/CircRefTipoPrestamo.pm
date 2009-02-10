@@ -22,5 +22,10 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'issuecode' ],
 );
 
+sub nextMember{
+    use C4::Modelo::RefSoporte;
+    return(C4::Modelo::RefSoporte->new());
+}
+
 1;
 

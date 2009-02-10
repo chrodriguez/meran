@@ -18,7 +18,7 @@ my $tabla = $obj->{'tabla'};
 my $tipo = $obj->{'tipo'};
 my $accion = $obj->{'accion'};
 
-
+	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ parameters => 1});
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
@@ -68,7 +68,8 @@ my ($template, $session, $t_params) =
 		if($tipo eq "referencia"){my @array;
 								  @array=split(/\|/,$op);
 								  $tabla=$array[0];
-							 	  $campo=$array[1];}
+							 	  $campo=$array[1];
+								}
 		elsif($tipo eq "valAuto"){$categoria=$op}
 	}
 	
@@ -94,14 +95,12 @@ my ($template, $session, $t_params) =
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("texta","valor",60,4,$valor);
 	}
 	elsif($tipo eq "valAuto"){
-		my $categoria=$obj->{'categoria'}||$op;
 		%labels=&C4::AR::Utilidades::obtenerDatosValorAutorizado($categoria);
 		@values=keys(%labels);
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
 		$t_params->{'categoria'}= $categoria;
 	}
 	elsif($tipo eq "referencia"){
-		my $campo=$obj->{'campo'}||$op;
 		my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 		my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
 		@values=keys %$valores;
@@ -141,7 +140,6 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 } #end GUARDAR_MODIFICACION_VARIABLE
 
 if($accion eq "SELECCION_CAMPO"){
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ parameters => 1});
 
 	my $guardar=$obj->{'guardar'};
 	my $tipo=$obj->{'tipo'};
@@ -244,7 +242,7 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
 	my $expl=$obj->{'explicacion'};
 	my $opciones="";
 
-	if($tipo eq "referencia"){$opciones=$tabla."|".$obj->{'campo'};}
+	if($tipo eq "referencia"){$opciones=$obj->{'tabla'}."|".$obj->{'campo'};}
 
 	if($tipo eq "valAuto"){ $opciones=$obj->{'categoria'};}
 

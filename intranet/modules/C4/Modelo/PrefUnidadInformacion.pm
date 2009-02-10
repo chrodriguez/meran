@@ -122,5 +122,11 @@ sub agregar{
     $self->save();
 }
 
+
+sub nextMember{
+    use C4::Modelo::RefIdioma;
+    return(C4::Modelo::RefIdioma->new());
+}
+
 1;
 

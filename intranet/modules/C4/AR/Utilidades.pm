@@ -1112,14 +1112,21 @@ obtenerValoresAutorizados
 Obtiene todas las categorias, sin repetición de la tabla authorised_values.
 =cut
 sub obtenerValoresAutorizados(){
-    my $dbh = C4::Context->dbh;
-        my $query=" SELECT DISTINCT(category) 
-            FROM pref_valor_autorizado";
-        my $sth=$dbh->prepare($query);
-    $sth->execute();
-    my @results;
-    while (my $data = $sth->fetchrow_hashref) {push(@results, $data); }
-    return(\@results);
+
+	use C4::Modelo::PrefValorAutorizado;
+	use C4::Modelo::PrefValorAutorizado::Manager;
+
+    my $valAuto_array_ref;
+    my @filtros;
+    my $valTemp = C4::Modelo::PrefValorAutorizado->new();
+  
+    $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
+										select => ['category'],
+										group_by => ['category'],
+     							); 
+
+    return ($valAuto_array_ref);
+
 }
 
 =item
@@ -1127,18 +1134,16 @@ obtenerDatosValorAutorizado
 Obtiene todos los valores de una categoria.
 =cut
 sub obtenerDatosValorAutorizado(){
-    my ($categoria)=@_;
-    my $dbh = C4::Context->dbh;
-        my $query=" SELECT * 
-            FROM pref_valor_autorizado 
-            WHERE category=?";
-        my $sth=$dbh->prepare($query);
-    $sth->execute($categoria);
-    my %results;
-    while (my $data = $sth->fetchrow_hashref){
-        $results{$data->{'authorised_value'}}=$data->{'lib'};
-    }
-    return(%results);
+    my ($categoria)= @_;
+
+    use C4::Modelo::PrefValorAutorizado;
+    my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( query => [ category => { eq => $categoria} ]);
+
+    my %autoValueHash;
+    foreach my $av (@$valAuto_array_ref){
+       $autoValueHash{trim($av->getAuthorisedValue)}= trim($av->getLib);
+        }
+    return (%autoValueHash);
 }
 
 =item

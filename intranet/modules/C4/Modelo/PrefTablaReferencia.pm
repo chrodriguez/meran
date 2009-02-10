@@ -33,7 +33,9 @@ sub getAliasForTable{
 
 #SE REDEFINE createFromAlias PORQUE ES QUIEN DEFINE CUAL ES LA PRIMER CLASE (TABLA) DE LA CADENA
 
-#EL ORDEN DE LA CADENA ESTA COMPRENDIDO POR: CatAutor, CatTema, 
+#EL ORDEN DE LA CADENA ESTA COMPRENDIDO POR: 
+
+# cat_autor -> cat_ref_tipo_nivel3 -> pref_unidad_informacion -> ref_idioma -> ref_pais -> ref_disponibilidad -> circ_ref_tipo_prestamo -> ref_soporte -> ref_nivel_bibliografico -> cat_tema
 
 sub createFromAlias{
 

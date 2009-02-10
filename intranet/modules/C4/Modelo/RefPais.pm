@@ -18,5 +18,10 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'iso' ],
 );
 
+sub nextMember{
+    use C4::Modelo::RefDisponibilidad;
+    return(C4::Modelo::RefDisponibilidad->new());
+}
+
 1;
 

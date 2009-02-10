@@ -18,17 +18,10 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-sub lastTable{
-    return (0);
-}
-
 sub nextMember{
-    use C4::Modelo::CatTema;
-    return(C4::Modelo::CatTema->new());
+    use C4::Modelo::CatRefTipoNivel3;
+    return(C4::Modelo::CatRefTipoNivel3->new());
 }
 
-sub default{
-    return (0);
-}
 1;
 

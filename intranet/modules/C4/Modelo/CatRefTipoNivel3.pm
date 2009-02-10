@@ -38,5 +38,10 @@ sub setNombre{
     $self->nombre($nombre);
 }
 
+sub nextMember{
+    use C4::Modelo::PrefUnidadInformacion;
+    return(C4::Modelo::PrefUnidadInformacion->new());
+}
+
 1;
 

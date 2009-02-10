@@ -265,7 +265,19 @@ DROP TABLE `pref_tabla_referencia`;
 
 CREATE TABLE `pref_tabla_referencia` (
   `id` int(11) unsigned NOT NULL auto_increment,
-  `nombre_tabla` varchar(20) NOT NULL,
+  `nombre_tabla` varchar(40) NOT NULL,
   `alias_tabla` varchar(20) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`) VALUES
+('cat_autor', 'autor'),
+('cat_ref_tipo_nivel3', 'tipo_ejemplar'),
+('pref_unidad_informacion', 'ui'),
+('ref_idioma', 'idioma'),
+('ref_pais', 'pais'),
+('ref_disponibilidad', 'disponibilidad'),
+('circ_ref_tipo_prestamo', 'tipo_prestamo'),
+('ref_soporte', 'soporte'),
+('ref_nivel_bibliografico', 'nivel_bibliografico'),
+('cat_tema', 'tema');

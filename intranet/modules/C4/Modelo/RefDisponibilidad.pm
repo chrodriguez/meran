@@ -42,7 +42,11 @@ sub setNombre{
 
     $self->nombre($nombre);
 }
-    
+
+sub nextMember{
+    use C4::Modelo::CircRefTipoPrestamo;
+    return(C4::Modelo::CircRefTipoPrestamo->new());
+}
 
 1;
 

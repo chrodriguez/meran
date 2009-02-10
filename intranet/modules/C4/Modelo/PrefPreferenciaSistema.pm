@@ -44,6 +44,29 @@ sub setValue{
     $self->value($value);
 }
 
+sub getShowValue{
+    my ($self) = shift;
+	my $show='';
+	if ($self->getType eq 'bool'){
+		if($self->getValue){ $show="Si";}else{$show="No";}
+	}
+	elsif($self->getType eq 'valAuto'){
+	    	use C4::Modelo::PrefValorAutorizado;
+			use C4::AR::Utilidades;
+    		my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
+										query => [ category => { eq => trim($self->getOptions)} , 
+										authorised_value => { eq => trim($self->getValue)}]);
+			$show=$valAuto_array_ref->[0]->getLib;
+		}
+	elsif($self->getType eq 'referencia'){
+	
+	}
+	else{$show=$self->getValue;}
+
+    return ($show);
+}
+
+
 sub getExplanation{
     my ($self) = shift;
     return ($self->explanation);

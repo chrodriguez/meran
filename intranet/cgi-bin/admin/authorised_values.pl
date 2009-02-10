@@ -30,7 +30,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from authorised_values where (category like ?) order by category,authorised_value");
+	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from pref_valor_autorizado where (category like ?) order by category,authorised_value");
 	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
@@ -73,7 +73,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select id,category,authorised_value,lib from authorised_values where id=?");
+		my $sth=$dbh->prepare("select id,category,authorised_value,lib from pref_valor_autorizado where id=?");
 		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -108,7 +108,7 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+	my $sth=$dbh->prepare("replace pref_valor_autorizado (id,category,authorised_value,lib) values (?,?,?,?)");
 	my $lib = $input->param('lib');
 	undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
 	
@@ -120,7 +120,7 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select category,authorised_value,lib from authorised_values where id=?");
+	my $sth=$dbh->prepare("select category,authorised_value,lib from pref_valor_autorizado where id=?");
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -134,7 +134,7 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("delete from authorised_values where id=?");
+	my $sth=$dbh->prepare("delete from pref_valor_autorizado where id=?");
 	$sth->execute($id);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
@@ -144,7 +144,7 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	# build categories list
-	my $sth = $dbh->prepare("select distinct category from authorised_values");
+	my $sth = $dbh->prepare("select distinct category from pref_valor_autorizado");
 	$sth->execute;
 	my @category_list;
 	while ( my ($category) = $sth->fetchrow_array) {
