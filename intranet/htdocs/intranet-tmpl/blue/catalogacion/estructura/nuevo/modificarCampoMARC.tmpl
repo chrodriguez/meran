@@ -12,7 +12,7 @@
         <p>
         <label for="tagField" style="float:left; width:13%">Campo: </label>
             <select name="campo" id="campo" onChange="eleccionCampo()">
-                <option value="-1">Seleccionar CampoX</option>
+                <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
             </select>
         Nombre: <span id="nombre_campo"></span>
         </p>
@@ -21,15 +21,15 @@
         <p align="left">
         <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
+                <option value='[% catalogacion.getSubCampo %]'>[% catalogacion.getSubCampo %]</option>
          </select>
         <input id="obligatorio" type="hidden" value="">
-        Liblibrarian: <input id="liblibrarian" type="text" value='[% catalogacion.getLiblibrarian %]' size="30"> 
+        Liblibrarian: <input id="liblibrarian" type="text" value='[% catalogacion.getLiblibrarian %]' size="90"> 
         </p>
         <p>
         <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
          <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
-                <option value='[% catalogacion.getSubCampo %]'>[% catalogacion.getSubCampo %]</option>
+                 <option value="-1">Seleccionar TablaRef</option>
          </select>
         <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
         <p>
@@ -43,16 +43,15 @@
         </p>
         </p>
     </div>
-    <div id="id4" valign="top" style="display:none">
+    <div id="divCamposRef" valign="top" style="display:none">
         <label for="orden" style="float:left; width:13%">Orden: </label>
-        <select name="camposSelect" id="tipoInput">
+        <select name="camposSelect" id="camposSelect">
             <option value="-1">Seleccione anteriores</option>
         </select>
 
         Campos: <input size="43" id="camposRef" name="camposRef" value="">
         separador: <input type="text" id="separador" name="separador">
         </p>
-        <p>Ejemplo: <!-- TMPL_VAR NAME = "ejemplo" --></p>
         <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
 
     </div>
@@ -62,7 +61,7 @@
 <br>
 <div align="center">
     <input type="image" src="[% themelang %]/images/guardar.png" value="Guardar Campo temporal" title="Guardar Campo Temp"      
-            onClick="modificarEstructuraCatalogacion([% nivel %])">
+            onClick="modificarEstructuraCatalogacion([% catalogacion.getId %])">
     <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" 
             onClick="cancelarEstructuraCatalogacion()">
 </div>

@@ -251,3 +251,8 @@ UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultTipoNivel3' WHERE CON
 
 ALTER TABLE `pref_valor_autorizado` CHANGE `category` `category` CHAR( 40 );
 
+--Se modifico en pref_informacion_referencia, campos y orden pueden ser null
+
+ALTER TABLE `pref_informacion_referencia` CHANGE `orden` `orden` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+CHANGE `campos` `campos` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+

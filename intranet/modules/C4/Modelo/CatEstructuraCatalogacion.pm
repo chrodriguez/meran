@@ -77,7 +77,7 @@ sub modificar{
     $self->setSubCampo($data_hash->{'subcampo'});
     $self->setItemType($data_hash->{'itemtype'});
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setTipo($data_hash->{'tipo'});
+    $self->setTipo($data_hash->{'tipoInput'});
     $self->setReferencia($data_hash->{'referencia'});
     $self->setNivel($data_hash->{'nivel'});
     $self->setObligatorio($data_hash->{'obligatorio'});
@@ -85,6 +85,9 @@ sub modificar{
     $self->setVisible($data_hash->{'visible'});
 
     $self->save();
+#     $data_hash->{'id_est_cat'}=$self->id;
+    my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(id_est_cat => $self->id);
+       $pref_temp->modificar($data_hash);
 
 }
 
@@ -123,11 +126,6 @@ sub cambiarVisibilidad{
 sub defaultSort{
     return ("intranet_habilitado");
 }
-
-
-
-
-
 
 sub getId{
     my ($self) = shift;

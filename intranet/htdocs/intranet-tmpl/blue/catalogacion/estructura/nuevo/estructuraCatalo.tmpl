@@ -20,6 +20,7 @@ function inicializar(){
     //arreglo de objetos subcampo
     SUBCAMPOS_ARRAY= new Array();
     $("#resultAgregarCampo").html('');
+    $("#resultModificarCampo").html('');
 }
 
 function ordenar(orden){
@@ -48,6 +49,7 @@ function eleccionDeNivel(){
 }
 
 function updateEleccionDeNivel(responseText){
+    inicializar();
     $("#resultCatalogacion").html(responseText);
     zebra("tablaResult");
 }
@@ -81,7 +83,6 @@ function eliminarCampo(id){
 }
 
 function mostrarAgregarCampo(id){
-    $("#modificar").hide();
     objAH=new AjaxHelper(updateMostrarAgregarCampo);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -90,11 +91,11 @@ function mostrarAgregarCampo(id){
 }
 
 function updateMostrarAgregarCampo(responseText){
+    inicializar();
     $("#resultAgregarCampo").show();
     $("#resultAgregarCampo").html(responseText);
     scrollTo('resultAgregarCampo');
     enable_disableSelects();
-
 }
 
 function mostrarModificarCampo(id){
@@ -106,14 +107,18 @@ function mostrarModificarCampo(id){
 }
 
 function updateMostrarModificarCampo(responseText){
+    inicializar();
     $("#resultModificarCampo").show();
     $("#resultModificarCampo").html(responseText);
     scrollTo('resultModificarCampo');
-//     enable_disableSelects();
-//      $("#campo").removeAttr('disabled');
+
+    enable_disableSelects();
+//     $("#campo").removeAttr('disabled');
 //     $("#subcampo").removeAttr('disabled');
 //     $("#tablaRef").removeAttr('disabled');
 //     $("#tipoInput").removeAttr('disabled');
+//     $("#campo").attr('disabled',true);
+//     $("#subcampo").attr('disabled',true);
 }
 
 function cancelarEstructuraCatalogacion(){
@@ -333,6 +338,43 @@ function updateAgregarEstructuraCatalogacion(responseText){
     }
 }
 
+
+/*
+ * modificarEstructuraCatalogacion
+ */
+function modificarEstructuraCatalogacion(id){ 
+    objAH=new AjaxHelper(updateModificarEstructuraCatalogacion);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.nivel= $('#niveles_id').val();
+    objAH.id= id;
+    objAH.itemtype= $('#tipo_nivel3_id').val();
+    objAH.campo= $('#campo').val();
+    objAH.subcampo= $('#subcampo').val();
+    objAH.liblibrarian= $('#liblibrarian').val();
+    objAH.tipoInput= $('#tipoInput').val();
+    objAH.tabla= $('#tablaRef').val();
+    
+    if ($('#tablaRef').val() != -1){
+        objAH.referencia=1;
+        objAH.orden= $('#camposSelect').val();
+        objAH.campos= $('#camposRef').val();
+        objAH.separador= $('#separador').val();
+    }else{
+         objAH.referencia=0;
+    }
+    objAH.tipoAccion= "MODIFICAR_ESTRUCTURA_CATALOGACION";
+    objAH.sendToServer();
+}
+
+function updateModificarEstructuraCatalogacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
 
 function abrirVentanaHelperMARC(){
     objAH=new AjaxHelper(updateAbrirVentanaHelperMARC);

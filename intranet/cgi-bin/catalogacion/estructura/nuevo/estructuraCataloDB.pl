@@ -151,6 +151,18 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
     print $input->header;
     print $infoOperacionJSON;
 }
+
+elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
+    # Se guardan los datos en estructura de catalogacion    
+    #estan todos habilidatos
+    $obj->{'intranet_habilitado'}= 1;
+    my ($Message_arrayref)= C4::AR::Catalogacion::t_modificarEnEstructuraCatalogacion($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    print $input->header;
+    print $infoOperacionJSON;
+}
 #Sube el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "SUBIR_ORDEN"){
     my $id=$obj->{'idMod'};
@@ -199,7 +211,11 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
 
 elsif($tipoAccion eq "AGREGAR_CAMPO"){
     my $id=$obj->{'idMod'};
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
-    $catalogacion->agregar();
+
+    my ($Message_arrayref)= C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
     print $input->header;
+    print $infoOperacionJSON;
 }

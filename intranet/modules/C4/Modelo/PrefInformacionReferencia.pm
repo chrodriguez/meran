@@ -44,6 +44,20 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    $self->setIdEstCat($data_hash->{'id_est_cat'});
+    $self->setReferencia($data_hash->{'tabla'});
+    $self->setOrden($data_hash->{'orden'}||'ALL');
+    $self->setCampos($data_hash->{'campos'});
+    $self->setSeparador($data_hash->{'separador'});
+
+    $self->save();
+}
+
 sub getIdEstCat{
     my ($self) = shift;
     return ($self->idestcat);

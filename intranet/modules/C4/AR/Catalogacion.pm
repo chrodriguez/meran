@@ -1812,3 +1812,44 @@ sub t_guardarEnEstructuraCatalogacion {
 
     return ($msg_object);
 }
+
+=item
+Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
+=cut
+sub t_modificarEnEstructuraCatalogacion {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $params->{'id'});
+        $estrCatalogacion->load();
+        my $db= $estrCatalogacion->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+    
+        eval {
+            $estrCatalogacion->modificar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U366', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U367', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}

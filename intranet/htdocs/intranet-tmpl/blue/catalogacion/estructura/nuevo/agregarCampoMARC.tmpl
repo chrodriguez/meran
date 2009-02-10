@@ -1,5 +1,4 @@
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
-[% IF accion == agregar %]
     <hr>
     <div width="100%">
         <b>Agregar campo Marc para el nivel [% nivel %]:</b>
@@ -25,7 +24,7 @@
                 <option value="-1">Seleccionar SubCampo</option>
          </select>
         <input id="obligatorio" type="hidden" value="">
-        Liblibrarian: <input id="liblibrarian" type="text" value="" size="30"> 
+        Liblibrarian: <input id="liblibrarian" type="text" value="" size="90"> 
         </p>
         <p>
         <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
@@ -67,6 +66,3 @@
     <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" 
             onClick="cancelarEstructuraCatalogacion()">
 </div>
-
-
-[% END %]

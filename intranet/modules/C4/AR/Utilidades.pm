@@ -1415,14 +1415,6 @@ sub generarComboNiveles {
     for (my $i=1; $i<=$cantNivel; $i++){
         push(@nivel, $i);
     }
-# my $selectNivel=CGI::scrolling_list(  
-#                                     -name      => 'nivel',
-#                                     -id    => 'nivel',
-#                                     -values    => \@nivel,
-#                                     -defaults  => 'Niveles',
-#                                     -size      => 1,
-#                                     -onChange  => 'eleccionDeNivel()',
-#                                  );
 
     my @select_niveles;
     my %select_niveles;
