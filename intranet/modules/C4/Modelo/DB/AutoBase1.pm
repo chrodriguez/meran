@@ -29,7 +29,7 @@ __PACKAGE__->use_private_registry;
     {
         $driverDB = 'mysql';
     
-        $database = "V3_newAspect_EINAR";
+        $database = "V3_NEW";
         
         $hostname = "localhost";
         

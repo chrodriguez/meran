@@ -18,10 +18,6 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-sub getAlias{
-    return ("autores");
-}
-
 sub lastTable{
     return (0);
 }

@@ -61,10 +61,10 @@ sub modificar{
 sub createFromAlias{
 
     use C4::Modelo::CatAutor;
-    
+
     my ($self)=shift;
     my $classAlias = shift;
-    
+
     my $autorTemp = C4::Modelo::CatAutor->new();
 
     return ($autorTemp->createFromAlias($classAlias));

@@ -138,7 +138,7 @@ use C4::Modelo::CatTema;
 #   $meta->auto_initialize;
 #   $meta->columns;
 
-my $p = C4::Modelo::CatAutor->new();
+my $p = C4::Modelo::PrefTablaReferencia->new();
 # my @col = $p->meta->columns;
 # foreach my $campo (@col){
 #     print $campo."\n";
@@ -147,7 +147,8 @@ my $p = C4::Modelo::CatAutor->new();
     if ($c){
         $c = $c->toString;
     }
-    print "\n\n\n\RETURN: ".$c."\n\n\n";
+    print "\n\n\nRETURN: ".$c."\n\n\n";
+#     print "\n\n\nTABLE NAME: ".$c->meta->table."\n\n\n";
 #     print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
     
 

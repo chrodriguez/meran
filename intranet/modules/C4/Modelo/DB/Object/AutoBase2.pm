@@ -70,6 +70,17 @@ sub getCampos{
     return($fieldsString);
 }
 
+
+sub getAlias{
+    use C4::Modelo::PrefTablaReferencia;
+    my ($self)=shift;
+    my $nombreTabla = $self->meta->table;
+    my $prefTablaRef = C4::Modelo::PrefTablaReferencia->new();
+
+    return($prefTablaRef->getAliasForTable($nombreTabla));
+}
+
+
 sub log{
     my ($self)=shift;
     use C4::AR::Debug;
