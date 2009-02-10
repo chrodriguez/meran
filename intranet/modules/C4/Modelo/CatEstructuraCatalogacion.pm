@@ -154,7 +154,7 @@ sub getId{
 
 sub getCampo{
     my ($self) = shift;
-    return ($self->campo);
+    return (C4::AR::Utilidades::trim($self->campo));
 }
 
 sub setCampo{
@@ -178,11 +178,12 @@ sub setSubCampo{
     my ($subcampo) = @_;
     $self->subcampo($subcampo);
 }
-      
+
 sub getTipo{
     my ($self) = shift;
-    return ($self->tipo);
+    return (C4::AR::Utilidades::trim($self->tipo));
 }
+      
 
 sub setTipo{
     my ($self) = shift;
@@ -210,17 +211,6 @@ sub setLiblibrarian{
     my ($self) = shift;
     my ($liblibrarian) = @_;
     $self->liblibrarian($liblibrarian);
-}
-
-sub getTipo{
-    my ($self) = shift;
-    return ($self->tipo);
-}
-
-sub setTipo{
-    my ($self) = shift;
-    my ($tipo) = @_;
-    $self->tipo($tipo);
 }
         
 sub getReferencia{

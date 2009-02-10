@@ -1,3 +1,16 @@
+<script>
+
+$(document).ready(function() {
+ 
+    [% IF catalogacion.getReferencia == '1' %] 
+        armarComboCampos();
+        $("#tipoInput").removeAttr('disabled');
+    [% END %]
+    
+}); 
+
+</script>
+
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
     <hr>
 DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %]
@@ -31,19 +44,31 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
         </p>
         <p>
         <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
-         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
-                <option value="[% catalogacion.infoReferencia.getReferencia %]">[% catalogacion.infoReferencia.getReferencia %]</option>
-         </select>
+            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]">
+        </p>
+        <!--<div id="divCamposRef" valign="top" style="display:none">-->
+        <div id="divCamposReferencia" valign="top">
+            <label for="orden" style="float:left; width:13%">Orden: </label>
+            <select name="camposSelect" id="camposSelect">
+                <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
+            </select>
+    
+            Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
+            separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
+            </p>
+            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+        </div>
+
+
         <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
         <p>
             <select name="tipoInput" id="tipoInput">
                 <option value="-1">Seleccione tipo</option>
-                <option value="text">Texto</option>
-                <option value="texta">Texto area</option>
-                <option value="texa2">Texto 1 por linea</option>
-                <option value="combo">Combo box</option>
+                <option value="text" [% IF catalogacion.getTipo == 'text' %] selected [% END %]>Texto</option>
+                <option value="texta" [% IF catalogacion.getTipo == 'texta' %] selected [% END %]>Texto area</option>
+                <option value="texa2" [% IF catalogacion.getTipo == 'texta2' %] selected [% END %]>Texto 1 por linea</option>
+                <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo box</option>
             </select>
-        </p>
         </p>
     </div>
 [% IF catalogacion.infoReferencia.getReferencia %]
@@ -51,19 +76,6 @@ DEBUG=>     TIENE REFERENCIA
 [% ELSE %]
 DEBUG=>     NO TIENE REFERENCIA
 [% END %]
-    <div id="divCamposRef" valign="top" style="display:none">
-        <label for="orden" style="float:left; width:13%">Orden: </label>
-        <select name="camposSelect" id="camposSelect">
-             <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
-        </select>
-
-        Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
-        separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
-        </p>
-        <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
-
-    </div>
-
 </div>
 
 <br>
