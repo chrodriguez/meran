@@ -256,3 +256,5 @@ ALTER TABLE `pref_valor_autorizado` CHANGE `category` `category` CHAR( 40 );
 ALTER TABLE `pref_informacion_referencia` CHANGE `orden` `orden` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
 CHANGE `campos` `campos` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
 
+ALTER TABLE `cat_estructura_catalogacion` ADD `idinforef` INT( 11 ) NULL AFTER `visible` ;
+

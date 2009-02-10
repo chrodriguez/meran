@@ -19,6 +19,7 @@ __PACKAGE__->meta->setup(
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
         intranet_habilitado => { type => 'integer', default => '0' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
+        idinforef           => { type => 'integer', length => 11, not_null => 0 },
     ],
 
     
@@ -38,6 +39,13 @@ __PACKAGE__->meta->setup(
             class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
             key_columns => { campo => 'tagfield',
                             subcampo => 'tagsubfield' },
+            type        => 'one to one',
+        },
+
+        infoReferencia => 
+        {
+            class       => 'C4::Modelo::PrefInformacionReferencia',
+            key_columns => { idinforef=> 'idinforef' },
             type        => 'one to one',
         },
     ]
@@ -84,11 +92,23 @@ sub modificar{
     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
     $self->setVisible($data_hash->{'visible'});
 
-    $self->save();
-#     $data_hash->{'id_est_cat'}=$self->id;
-    my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(id_est_cat => $self->id);
-       $pref_temp->modificar($data_hash);
+    if($self->tieneReferencia){
+        my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
+        $pref_temp->load(); 
+        $pref_temp->modificar($data_hash);
+    }
 
+    $self->save();
+
+}
+
+=item
+indica si la estructura de catalogacion tiene (=1) o no (=0) informacion de referencia
+=cut
+sub tieneReferencia{
+    my ($self)=shift;
+
+    return $self->getReferencia;
 }
 
 =item
@@ -141,6 +161,11 @@ sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
     $self->campo($campo);
+}
+
+sub getIdInfoRef{
+    my ($self) = shift;
+    return ($self->idinforef);
 }
 
 sub getSubCampo{
