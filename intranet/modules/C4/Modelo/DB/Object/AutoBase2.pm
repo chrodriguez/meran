@@ -48,7 +48,10 @@ sub nextChain{
         }
 }
 
-sub getCamposArrayJSON{
+=item
+Esta funcion devuelve los campos de la tabla del objeto llamador
+=cut
+sub getCamposFromObject{
     my ($self)=shift;
     my $arregloJSON;
 # open(A, ">>/tmp/debug.txt");
