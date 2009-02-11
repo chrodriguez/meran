@@ -137,8 +137,7 @@ sub obtenerValoresCampo {
 						  sort_by => ($campo) );
 
     return (scalar(@$ref_valores), $ref_valores);
+}
 
-
-	}
 1;
 

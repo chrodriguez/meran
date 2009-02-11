@@ -397,6 +397,25 @@ function updateAbrirVentanaHelperMARC(responseText){
     vHelperMARC.open();
 }
 
+function eleccionCampoTabla(){
+    var nivel=$("#niveles_id").val();
+    var ObjDiv = $("#divitemtype");
+    if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
+    else{ObjDiv.show();}
+    
+    objAH=new AjaxHelper(updateEleccionCampoTabla);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.campo= $('#camposSelect').val();
+    objAH.tabla= $('#tablaRef').val();
+    objAH.tipoAccion= 'ELECCION_CAMPO_TABLA';
+    objAH.sendToServer();
+
+}
+
+function updateEleccionCampoTabla(responseText){
+}
+
 </script>
 <div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">

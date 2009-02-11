@@ -222,3 +222,25 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     print $input->header;
     print $infoOperacionJSON;
 }
+## FIXME esto es una prueba para el MONO
+elsif($tipoAccion eq "ELECCION_CAMPO_TABLA"){
+    my $tabla = $obj->{'tabla'};
+    my $campo = $obj->{'campo'};
+
+#     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
+    my $ref = C4::Modelo::PrefTablaReferencia->new();
+    my $tablaObject= $ref->createFromAlias($tabla);
+    my $objects_array= $tablaObject->obtenerValoresCampo($campo);
+    my @objects_array_JSON;
+
+    for(my $i=0; $i<scalar(@$objects_array); $i++ ){
+        push (@objects_array_JSON, $objects_array->[$i]->as_json);
+    }
+
+    my $infoJSON= '[' . join(',' ,@objects_array_JSON) . ']';
+
+    my $infoOperacionJSON= $infoJSON;
+
+    print $input->header;
+    print $infoOperacionJSON;
+}
