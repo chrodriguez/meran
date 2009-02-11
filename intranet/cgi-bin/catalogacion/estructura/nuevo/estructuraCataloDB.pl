@@ -47,7 +47,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my $tableAlias= $obj->{'tableAlias'};
     
-    my ($campos_array) = C4::AR::Catalogacion::getCamposDeTablaRef($tableAlias);
+    my ($campos_array) = C4::AR::Referencias::getCamposDeTablaRef($tableAlias);
     my $info = to_json($campos_array);
     my $infoOperacionJSON= $info;
     print $input->header;

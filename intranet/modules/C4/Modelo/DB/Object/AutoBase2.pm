@@ -48,7 +48,7 @@ sub nextChain{
         }
 }
 
-sub getCamposArray{
+sub getCamposArrayJSON{
     my ($self)=shift;
     my $arregloJSON;
 # open(A, ">>/tmp/debug.txt");
@@ -63,6 +63,16 @@ sub getCamposArray{
 # close(A);
     return(\@arregloJSON);
 }
+
+sub getCamposArray{
+    my ($self)=shift;
+    my $arreglo;
+    my $camposArray = $self->meta->columns;
+
+    return($camposArray);
+}
+
+
 
 sub getCampos{
     my ($self)=shift;

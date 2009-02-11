@@ -437,21 +437,6 @@ my @feriados= @_;
     close F;
 }
 
-#Se obtienen los campos de una tabla que es el parametro que se recibe
-sub obtenerCampos{
-my ($tabla)=@_;
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("SHOW FIELDS FROM $tabla");
-$sth->execute();#$tabla);
-my @results;
-while (my @data=$sth->fetchrow_array){
-        my $aux;
-    $aux->{'campo'} = $data[0];
-        push(@results,$aux);
-        }
-$sth->finish;
-return @results;
-}
 
 sub listadoTabla{
 my($tabla,$ind,$cant,$id,$orden,$search,$bloqueIni,$bloqueFin)=@_;

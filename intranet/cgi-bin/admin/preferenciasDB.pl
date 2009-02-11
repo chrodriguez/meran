@@ -147,16 +147,16 @@ if($accion eq "SELECCION_CAMPO"){
 	if($tipo eq "referencia"){
 		if($tabla){
 		#Se buscan los campos de la tabla seleccionada
-		my @campos=&C4::AR::Utilidades::obtenerCampos($tabla);
-				foreach my $campo(@campos){
+		my $campos=&C4::AR::Referencias::getCamposDeTablaRef($tabla);
+				foreach my $campo(@$campos){
 				$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
 			}
 		}
 		else{
 		#Se buscan las tablas de referencia
-			my %tablas=&C4::AR::Utilidades::buscarTablasdeReferencias();
-			foreach my $tabla(keys(%tablas)){
-				$strjson.=",{'clave':'".$tabla."','valor':'".$tabla."'}";
+			my $tablas=&C4::AR::Referencias::obtenerTablasDeReferencia();
+			foreach my $tabla (@$tablas) {
+				$strjson.=",{'clave':'".$tabla->getAlias_tabla."','valor':'".$tabla->getAlias_tabla."'}";
 			}
 		}
 	}
@@ -213,8 +213,7 @@ my ($template, $session, $t_params) =
 	}
 	elsif($tipo eq "referencia"){
 		my $campo=$obj->{'campo'}||$op;
-		my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
-		my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
+		my ($js,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
 		@values=keys %$valores;
 		foreach my $val(@values){
 			$labels{$val}=$valores->{$val};

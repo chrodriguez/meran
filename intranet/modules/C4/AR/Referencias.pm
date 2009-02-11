@@ -32,6 +32,9 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
                 &obtenerTiposDeDocumentos
                 &obtenerCategoriaDeSocio
+				&getCamposDeTablaRef
+				&obtenerValoresTablaRef
+				&obtenerTablasDeReferencia
     );
 
 
@@ -60,6 +63,8 @@ require Exporter;
 use C4::Context;
 use Date::Manip;
 use C4::Date;
+use C4::Modelo::PrefTablaReferencia;
+use C4::Modelo::PrefTablaReferencia::Manager;
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
 use C4::Modelo::UsrRefCategoriasSocio;
@@ -78,7 +83,6 @@ use vars qw(@EXPORT @ISA);
             &obtenerTiposDeDocumentos
             &obtenerTiposNivel3
     );
-
 
 =item
 Esta funcion devuelve un arreglo de objetos tipo de documento
@@ -149,5 +153,76 @@ sub obtenerDisponibilidades {
 
     return(\@results);
 }
+
+
+=item
+Devuelve un arreglo de objetos PrefTablaReferencia
+=cut
+sub obtenerTablasDeReferencia {
+    my $referencias_array_ref = C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia;
+    my @results;
+
+    foreach my $objeto_ref (@$referencias_array_ref) {
+        push (@results, $objeto_ref);
+    }
+
+    return(\@results);
+}
+
+
+sub getCamposDeTablaRef{
+
+    # (Chain Of Responsibility Object Pattern)
+    use C4::Modelo::PrefTablaReferencia;
+    my ($tableAlias) = @_;
+
+    my $db = C4::Modelo::PrefTablaReferencia->new();
+       $db = $db->createFromAlias($tableAlias);
+    if ($db){
+        return( $db->getCamposArrayJSON );
+    }else{
+        return ($db);
+    }
+}
+
+
+=item
+obtenerValoresTablaRef
+Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
+=cut
+sub obtenerValoresTablaRef{
+    my ($tableAlias,$campo)=@_;
+
+    use C4::Modelo::PrefTablaReferencia;
+    my $ref = C4::Modelo::PrefTablaReferencia->new();
+	my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo);
+
+    	my %result;
+    	my $strjson="";
+#     	my $labels;
+#         my $data;	
+# 	    foreach my $valor (@$valores){
+# 		$result{$data->{'id'}}=$data->{$campos[0]};
+#    		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
+# 
+# 		}
+# 
+#     while($data=$sth->fetchrow_hashref()){
+#         
+#      
+#         $labels="'".$data->{$campos[0]};
+#         for(my $i=1;$i<$long;$i++){
+#             $labels.="|".$data->{$campos[$i]};
+#             $result{$data->{'id'}}.=",".$data->{$campos[$i]};
+#         }
+#         $strjson.=$labels."'}";
+#     }
+#     $strjson=substr($strjson,1,length($strjson));
+#     $strjson="[".$strjson."]";
+
+    return($strjson,\%result);
+
+}
+
 
 1;

@@ -73,5 +73,16 @@ sub setAlias_tabla{
     $self->alias_tabla($alias_tabla);
 }
 
+
+sub obtenerValoresTablaRef{
+	my ($self) = shift;
+	my ($alias_tabla, $campo) = @_;
+	
+	my $ref=$self->createFromAlias($alias_tabla);
+
+	my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo);
+
+	return ($cantidad,$valores);
+}
 1;
 

@@ -1708,22 +1708,6 @@ sub guardarModificacion{
 ################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
 
 
-sub getCamposDeTablaRef{
-
-    #Pongo CatAuto por ser la primer tabla de la cadena (Chain Of Responsibility Object Pattern)
-    use C4::Modelo::CatAutor;
-    my ($tableAlias) = @_;
-
-    my $db = C4::Modelo::CatAutor->new();
-       $db = $db->createFromAlias($tableAlias);
-    if ($db){
-        return( $db->getCamposArray );
-    }else{
-        return ($db);
-    }
-}
-
-
 sub getCamposXLike{
 
     use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;

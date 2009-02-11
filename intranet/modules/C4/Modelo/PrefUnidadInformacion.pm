@@ -128,5 +128,17 @@ sub nextMember{
     return(C4::Modelo::RefIdioma->new());
 }
 
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	
+ 	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
+						( select   => [$self->meta->primary_key." as id" , $campo." as valor"],
+						  sort_by => ($campo) );
+
+    return (scalar(@$ref_valores), $ref_valores);
+
+
+	}
 1;
 
