@@ -28,6 +28,9 @@ sub toString{
 sub createFromAlias{
     my ($self)=shift;
     my $classAlias = shift;
+    open A,">>/tmp/debug.txt";
+    print A "\n\n\nSELF->getAlias: ".$self->getAlias."  // INCOMING ALIAS: ".$classAlias."\n\n\n";
+    close A;
     if ($classAlias eq $self->getAlias){
         return ($self);
     }else
@@ -88,7 +91,6 @@ sub getAlias{
     my ($self)=shift;
     my $nombreTabla = $self->meta->table;
     my $prefTablaRef = C4::Modelo::PrefTablaReferencia->new();
-
     return($prefTablaRef->getAliasForTable($nombreTabla));
 }
 

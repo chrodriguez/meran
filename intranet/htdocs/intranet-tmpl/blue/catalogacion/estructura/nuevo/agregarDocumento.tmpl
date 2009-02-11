@@ -1,0 +1,398 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
+<script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
+<script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script>
+
+<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
+[% INCLUDE "popups/helpCamposMARC.inc" %]
+
+<script>
+
+/*  *****  EL OBJETO objAH SE ENCUENTRA EN LA LIBRERIA DE seleccionCamposMarc.js ***** */
+
+/*
+ * CrearAutocomplete1
+ * Asigna la funcion de autocomplete a el input text del autor.
+ */
+function CrearAutocomplete1(nivel){
+	if(nivel==1){
+		crearAuto("autor","autores","reemplazar","idAutor");
+	}
+	
+}
+
+/*
+ * updateInfoAgregarItem
+ * Funcion que se ejecuta cuando termina el llamado ajax de varias funciones.
+ */
+function updateInfoAgregarItem(responseText){
+	$("#result2").html(responseText);
+	CrearAutocomplete1(objAH.nivel);
+	consultarAjaxJSON();
+}
+
+/*
+ * seleccionTipoItem
+ * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
+ */
+function seleccionTipoItem(){
+        var itemTypeValue = $("#id_tipo_doc").val();
+	$("#result").html("");
+	objJSON=new AjaxHelper();
+        if (itemTypeValue != -1){ //PARA NO HACER LA PETICION DE AJAX
+            objJSON.itemtype=$("#id_tipo_doc").val();
+            objJSON.paso=1;
+            objAH=new AjaxHelper(updateInfoAgregarItem);
+            objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+            objAH.nivel=1;
+            objAH.itemtype=$("#id_tipo_doc").val();
+            objAH.paso=1;
+            objAH.sendToServer();
+        }
+}
+
+/*
+ * borrarN1
+ * Elimina de la base de datos el documento con id1 igual al parametro que ingresa y todos los otros datos 
+ * correspondiente a los otros niveles que hacen referencia al id1.
+ */
+function borrarN1(id1){
+	$("#result").html("");
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#id_tipo_doc").val();
+	objJSON.paso=1;
+
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.nivel=1;
+	objAH.itemtype=$("#id_tipo_doc").val();
+	objAH.accion2="borrar";
+	objAH.sendToServer();
+}
+
+/*
+ * modificarN1
+ * Funcion que obtiene los datos ingresados en el nivel 1 para poder crear los componentes con los valores
+ * guardados en la base de datos y poder modificarlos.
+ */
+function modificarN1(id1){
+	$("#result").html("");
+
+	objJSON=new AjaxHelper();
+	objJSON.id1=id1;
+	objJSON.accion="modificarN1";
+	objJSON.itemtype="ALL";
+	objJSON.paso=1;
+
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.nivel=1;
+	objAH.itemtype=$("#id_tipo_doc").val();
+	objAH.accion="modificarN1";
+	objAH.sendToServer();
+}
+
+/*
+ * borrarGrupo
+ * Elimina de la base de datos el grupo correspodiente a los parametros que ingresan, y los ejemplares que hay en 
+ * ese grupo.
+ */
+function borrarGrupo(id1,id2){
+	$("#result").html("");
+	
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#id_tipo_doc").val();
+	objJSON.paso=2;
+	
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.nivel=2;
+	objAH.itemtype=$("#id_tipo_doc").val();
+	objAH.accion2="borrarN2";
+	objAH.sendToServer();
+}
+
+/*
+ * ajaxModificarGrupo
+ * Funcion que realiza el llamado ajax para dibujar los componentes en la pantalla de un grupo.
+ * retorna strign en json.
+ */
+function ajaxModificarGrupoJSON(id1,id2){
+	objAH=new AjaxHelper(procesarInfoJson);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.json=1;
+	objAH.sendToServer();
+}
+
+/*
+ * updateInfoModGrupo
+ * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modificarGrupo.
+ */
+function updateInfoModGrupo(responseText){
+	$("#contenido").html(responseText);
+	ajaxModificarGrupoJSON(objAH.id1,objAH.id2);
+}
+
+/*
+ * modificarGrupo
+ * Dibuja la pagina donde se van a colocar los componentes que se creen a partir del llamado ajax con json.
+ */
+function modificarGrupo(id1,id2){
+	$("#result").html("");
+	
+	objAH=new AjaxHelper(updateInfoModGrupo);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.json=0;
+	objAH.sendToServer();
+}
+
+/*
+ * redirigirURL
+ * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modNivel2 y agregarNivel3.
+ */
+function redirigirURL(responseText){
+	location.href="agregarItem.pl?origen="+objAH.accion+"&id1="+objAH.id1+"&itemtype="+$("#id_tipo_doc").val();
+}
+
+/*
+ * modNivel2
+ * Guarda en la base de datos los cambios hechos al grupo con id= id2.
+ */
+function modNivel2(id1,id2){
+	var ok=1;
+	var cantIds=$("#cantIds").val();
+	ok=obtenerIdsValores(cantIds);
+	if(ok){
+		objAH=new AjaxHelper(redirigirURL);
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
+		objAH.id1=id1;
+		objAH.id2=id2;
+		objAH.cantIds=cantIds;
+		objAH.respuesta=arrayjson;
+		objAH.accion="modNivel2";
+		objAH.json=0;
+		objAH.sendToServer();
+		
+	}
+	else{
+		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
+	}
+}
+
+/*
+ * ajaxAgregarEjemplarJSON
+ * Funcion que realiza el llamado ajax para dibujar los componentes en la pantalla del ejemplar a agregar.
+ * retorna strign en json.
+ */
+function ajaxAgregarEjemplarJSON(id1,id2,itemtype){
+	objAH=new AjaxHelper(procesarInfoJson);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.itemtype=itemtype;
+	objAH.json=1;
+	objAH.sendToServer();
+}
+
+function updateInfoAgrEjemplar(responseText){
+	$("#contenido").html(responseText);
+	ajaxAgregarEjemplarJSON(objAH.id1,objAH.id2,objAH.itemtype);
+}
+
+/*
+ * agregarEjemplar
+ * Dibuja la pagina donde se van a colocar los componentes que se generen a partir de la consulta ajax
+ */
+function agregarEjemplar(id1,id2,itemtype){
+	$("#result").html("");
+
+	objAH=new AjaxHelper(updateInfoAgrEjemplar);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
+	objAH.id1=id1;
+	objAH.id2=id2;
+	objAH.itemtype=itemtype;
+	objAH.sendToServer();
+}
+
+/*
+ * agregarNivel3
+ * Guarda en la base de datos el ejemplar que se quiere agregar.
+ */
+function agregarNivel3(id1,id2){
+	var ok=1;
+	var itemtype=$("#id_tipo_doc").val();
+	var cantIds=$("#cantIds").val();
+	ok=obtenerIdsValores(cantIds);
+	var barcodes=$("#codbarra").val();
+	var cantItems=$("#cantitems").val();
+	
+	if(ok){
+		objAH=new AjaxHelper(redirigirURL);
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
+		objAH.id1=id1;
+		objAH.id2=id2;
+		objAH.cantIds=cantIds;
+		objAH.cantItems=cantItems;
+		objAH.barcodes=barcodes;
+		objAH.respuesta=arrayjson;
+		objAH.accion="agregarNivel3";
+		objAH.sendToServer();
+		
+	}
+	else{
+		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
+	}
+}
+
+
+
+/*
+ * guardarDatos
+ * Combierte el arreglo con los datos de los componentes y los valores ingresado en un string (con json) para
+ * poder mandarlo por parametro y poder guardarlos en la base de datos.
+ */
+function guardarDatos(paso){
+	objJSON=new AjaxHelper();
+	objJSON.itemtype=$("#itemtype").val();
+	objJSON.paso=paso;
+	
+	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+	objAH.paso=paso;
+	objAH.id1=$("#id1").val();
+	objAH.itemtype=$("#id_tipo_doc").val();
+	objAH.respuesta=arrayjson;
+	objAH.cantIds=$("#cantIds").val();
+	
+	if(paso==2){
+		objAH.idAutor=$("#idAutor").val();
+		objAH.accion=$("#accion").val();
+		objAH.nivel=paso;
+	}
+	if(paso==3){
+		objJSON.paso=2;
+		
+		objAH.codbarra=$("#codbarra").val();
+		objAH.cantitems=$("#cantitems").val();
+		objAH.nivel=2;
+	}
+	objAH.sendToServer();
+}
+
+/*
+ * guardarItem
+ * Obtiene los valores de los datos ingresados. Y si los campos obligatorios no estan en blanco los guarda.
+ */
+function guardarItem(paso){
+	var ok=1;
+	var cantIds=$("#cantIds").val();
+	ok=obtenerIdsValores(cantIds);
+	if(ok){
+		guardarDatos(paso+1);
+		$("#result").html(""); //limpia la div result (agregar campo temporal)
+	}
+	else{
+		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
+	}
+}
+
+/*
+ * updateInfoModDetalleGrupo
+ * Funcion que se ejecuta cuando termina el llamado ajax de la parte de ready, origen=detalle y nivel=2.
+ */
+function updateInfoModDetalleGrupo(responseText){
+	$("#result2").html(responseText);
+	modificarGrupo(objAH.id1,objAH.id2);
+}
+
+//Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
+$(document).ready( function() {
+//SE PUEDE MANDAR UN OBJETO A LA URL Y TRABAJARLO EN EN PL, COMO EN prestamos.pl y devolucion.pl!!!!!
+	var array = location.href.split('?');
+	if (array.length >1){
+		var array=array[1].split('&');
+		var origen=array[0].split('=')[1];
+
+		objAH=new AjaxHelper(updateInfoAgregarItem);
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
+		objAH.id1=array[1].split('=')[1];
+		objAH.itemtype=array[2].split('=')[1];
+		switch(origen){
+		  case "detalle":
+			var nivel=array[3].split('=')[1];
+			if(nivel==1){
+				objJSON=new AjaxHelper();	
+				objJSON.id1=objAH.id1;
+				objJSON.accion="modificarN1";
+				objJSON.itemtype="ALL";
+				objJSON.paso=1;
+
+				objAH.debug=true;
+				objAH.nivel=1;
+				objAH.accion="modificarN1";
+				
+			}
+			if(nivel==2){
+				var id2=array[4].split('=')[1];
+				objAH.onComplete=updateInfoModDetalleGrupo;
+				objAH.paso=2;
+				objAH.nivel=2;
+				objAH.id2=id2;
+				objAH.accion2="agregarN2";
+			}
+			break;
+		  case "modNivel2":
+			objJSON=new AjaxHelper();
+			objJSON.id1 = objAH.id1;
+			objJSON.itemtype = objAH.itemtype;
+			objJSON.paso=2;
+
+			objAH.nivel=2;
+			objAH.accion="modificarN2";
+			break;
+		  default:
+			objJSON=new AjaxHelper();
+			objJSON.id1=objAH.id1;
+			objJSON.itemtype=objAH.itemtype;
+			objJSON.paso=2;
+	
+			objAH.paso=2;
+			objAH.nivel=2;
+			objAH.accion2="agregarN2";
+			break;
+		}
+		objAH.sendToServer();
+	}
+} );
+
+
+
+</script>
+
+
+
+<p class="pagetitle" >[% "Agregar Documento" | i18n %]</p>
+
+[% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
+<br><br>
+
+<!-- div que se genera con el llamdo de ajax para la parte de llenado de los campos -->
+<div id= "result2"></div>
+<br>
+<!-- div que se genera con el llamdo de ajax para la parte del agregado temporal de campos -->
+<div id= "result" style="clear:both"></div>
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]
+
