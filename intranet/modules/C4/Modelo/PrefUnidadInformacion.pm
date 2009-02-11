@@ -25,7 +25,7 @@ __PACKAGE__->meta->setup(
 sub getId_ui{
     my ($self) = shift;
 
-    return ($self->id_ui);   
+    return ($self->id_ui);
 }  
  
 sub getNombre{
@@ -133,7 +133,7 @@ sub obtenerValoresCampo {
     my ($campo)=@_;
 	
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
-						( select   => [$self->meta->primary_key." as id" , $campo." as valor"],
+						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($campo) );
 
     return (scalar(@$ref_valores), $ref_valores);

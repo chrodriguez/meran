@@ -148,24 +148,27 @@ if($accion eq "SELECCION_CAMPO"){
 		if($tabla){
 		#Se buscan los campos de la tabla seleccionada
 		my $campos=&C4::AR::Referencias::getCamposDeTablaRef($tabla);
-				foreach my $campo(@$campos){
-				$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
-			}
+		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($campos);
+		#	foreach my $campo(@$campos){
+		#		$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
+		#	}
 		}
 		else{
 		#Se buscan las tablas de referencia
 			my $tablas=&C4::AR::Referencias::obtenerTablasDeReferencia();
-			foreach my $tabla (@$tablas) {
-				$strjson.=",{'clave':'".$tabla->getAlias_tabla."','valor':'".$tabla->getAlias_tabla."'}";
-			}
+			$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($tablas);
+# 			foreach my $tabla (@$tablas) {
+# 				$strjson.=",{'clave':'".$tabla->getAlias_tabla."','valor':'".$tabla->getAlias_tabla."'}";
+# 			}
 		}
 	}
 	else{
 		#Se buscan los valores autorizados
 		my $valAuto=&C4::AR::Utilidades::obtenerValoresAutorizados();
-		foreach my $val(@$valAuto){
-			$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
-		}
+		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($valAuto);
+# 		foreach my $val(@$valAuto){
+# 			$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
+# 		}
 	}
 	$strjson=substr($strjson,1,length($strjson));
 	$strjson="[".$strjson."]";

@@ -163,7 +163,8 @@ sub obtenerTablasDeReferencia {
     my @results;
 
     foreach my $objeto_ref (@$referencias_array_ref) {
-        push (@results, $objeto_ref);
+        #push (@results, $objeto_ref->createFromAlias($objeto_ref->getAlias_tabla));
+		push (@results, $objeto_ref);
     }
 
     return(\@results);
@@ -187,7 +188,6 @@ sub obtenerTablasDeReferenciaAsString {
 
 
 sub getCamposDeTablaRef{
-
     # (Chain Of Responsibility Object Pattern)
     use C4::Modelo::PrefTablaReferencia;
     my ($tableAlias) = @_;
