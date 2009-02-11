@@ -141,7 +141,8 @@ function updateMostrarTablaRef(responseText){
     var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
     
     for (x=0;x < tablaRef_array.length;x++){
-         options+= "<option value=" + tablaRef_array[x].referencia +" >" + tablaRef_array[x].referencia + "</option>";
+//          options+= "<option value=" + tablaRef_array[x].referencia +" >" + tablaRef_array[x].referencia + "</option>";
+            options+= "<option value=" + tablaRef_array[x] +" >" + tablaRef_array[x] + "</option>";
     }
     $("#tablaRef").append(options);
     enable_disableSelects();
@@ -252,7 +253,7 @@ function enable_disableSelects(){
        }
 }
 
-
+//esta funcion genera el combo de los campos segun la tabla de referencia seleccionada
 function armarComboCampos(){
     objAH=new AjaxHelper(updateArmarComboCampos);
     objAH.debug= true;

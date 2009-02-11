@@ -3,7 +3,8 @@
 $(document).ready(function() {
  
     [% IF catalogacion.getReferencia == '1' %] 
-        armarComboCampos();
+//         armarComboCampos();
+        mostrarTablaRef();
         $("#tipoInput").removeAttr('disabled');
     [% END %]
     

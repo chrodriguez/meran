@@ -169,6 +169,22 @@ sub obtenerTablasDeReferencia {
     return(\@results);
 }
 
+=item
+Devuelve un arreglo de los alias de objetos PrefTablaReferencia en string
+=cut
+sub obtenerTablasDeReferenciaAsString {
+   
+    my $referencias_array_ref = obtenerTablasDeReferencia();
+    my @results;
+
+    foreach my $objeto_ref (@$referencias_array_ref) {
+        push (@results, $objeto_ref->getAlias_tabla);
+    }
+
+    return(\@results);
+}
+
+
 
 sub getCamposDeTablaRef{
 

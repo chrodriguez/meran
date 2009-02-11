@@ -48,10 +48,11 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my $tableAlias= $obj->{'tableAlias'};
     
     my ($campos_array) = C4::AR::Referencias::getCamposDeTablaRef($tableAlias);
-    my $info = to_json($campos_array);
-    my $infoOperacionJSON= $info;
+#     my $info = to_json($campos_array);
+#     my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+#     my $infoOperacionJSON= $info;
     print $input->header;
-    print $infoOperacionJSON;
+#     print $infoOperacionJSON;
 
 }
 
@@ -73,9 +74,11 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
-    my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
-    
-    my ($json_string_tabla) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
+#     my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
+## FIXME para que esta esto!!!!!!!!!!!!!!!!!!!!!!
+#     my ($tablaRef_array) = C4::AR::Referencias::obtenerTablasDeReferencia();
+#     
+#     my ($json_string_tabla) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
 
     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
 
@@ -89,9 +92,10 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
 
-    my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
+    my ($tablaRef_array) = C4::AR::Referencias::obtenerTablasDeReferenciaAsString();
     
-    my ($infoOperacionJSON) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
+    my ($infoOperacionJSON) = to_json($tablaRef_array);
+
     
     print $input->header;
     print $infoOperacionJSON;
