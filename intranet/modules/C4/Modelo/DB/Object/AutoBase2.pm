@@ -51,24 +51,22 @@ sub nextChain{
 =item
 Esta funcion devuelve los campos de la tabla del objeto llamador
 =cut
-sub getCamposFromObject{
+sub getCamposAsHash{
     my ($self)=shift;
     my $arregloJSON;
-# open(A, ">>/tmp/debug.txt");
-# print A "desde getCamposArray\n";
     my $camposArray = $self->meta->columns;
-     foreach my $campo (@$camposArray){
-# print A "foreach=> ".$campo."\n";
+
+    foreach my $campo (@$camposArray){
 ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
         push (@arregloJSON, {'campo' => $campo."" });
     }
 
-# close(A);
     return(\@arregloJSON);
 }
 
-sub getCamposArray{
+sub getCamposAsArray{
     my ($self)=shift;
+
     my $arreglo;
     my $camposArray = $self->meta->columns;
 
@@ -80,6 +78,7 @@ sub getCamposArray{
 sub getCampos{
     my ($self)=shift;
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+
     return($fieldsString);
 }
 

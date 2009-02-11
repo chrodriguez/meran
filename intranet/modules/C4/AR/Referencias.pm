@@ -195,7 +195,7 @@ sub getCamposDeTablaRef{
     my $db = C4::Modelo::PrefTablaReferencia->new();
        $db = $db->createFromAlias($tableAlias);
     if ($db){
-        return( $db->getCamposFromObject );
+        return( $db->getCamposAsHash );
     }else{
         return ($db);
     }
