@@ -1,8 +1,8 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
+<!-- <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script> -->
 <script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
-<script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script>
+<!-- <script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script> -->
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 
@@ -12,6 +12,9 @@
 <script>
 
 //************************************************REVISADO******************************************************************
+
+//arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
+COMPONENTES_ARRAY= new Array();
 
 /*
  * seleccionTipoItem
@@ -46,6 +49,8 @@ function procesarInfoJson(json){
     arrayjson=[];
     $("#cantIds").val(objetos.length);
     for(var i=0; i< objetos.length; i++){
+        //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
+        COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
     }
 }
@@ -57,78 +62,51 @@ function procesarInfoJson(json){
  * objeto, elemento que contiene toda la info necesaria.
  */
 function procesarObjeto(objeto){
-    var libtext=objeto.liblibrarian;
-    var tipo= objeto.tipo;
-    var ref=objeto.referencia;
-    var id=objeto.indice;
-    var valor=objeto.valor;
-    var varios=objeto.varios;
-    var idComp=id;
+    var libtext= $.trim(objeto.liblibrarian);
+    var tipo= $.trim(objeto.tipo);
+    var ref= objeto.referencia;
+    var id= objeto.indice;
+    var valor= objeto.valor;
+    var varios= objeto.varios;
+    var idComp= id;
     var comp;
     var hidden=" ";
     var strComp;
     var auto=0;
     var unoLinea=0;
-    var divParrafo="#parrafo1";
-    if(objeto.nivel == "3"){
-        divParrafo="#parrafo2";
-    }
     var idDiv="div"+id;
     var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
     var divLabel="<div id='label"+id+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
     strComp="<div id='strComp"+id+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
-    $(strComp).appendTo(divParrafo);
-    var objetoResp=new objetoRespuesta(objeto.nivel,objeto.campo,objeto.subcampo,objeto.idRep,"");
-    arrayjson[id]=objetoResp;
-    if(ref==1){
-        //id para identificar el input(text) que va a tener el autocomplete
-        var accion="reemplazar";
-        switch(tipo){
-            case "text":
-            idComp=parseInt(id)+100;
-            comp=crearComponente(tipo,idComp,"","");
-            hidden="<br>"+crearComponente("hidden",id,"",valor);
-            comp=comp+hidden;
+    $(strComp).appendTo('#estructuraCatalogacion');
+    switch(tipo){
+        case "text":
+            idComp= parseInt(id)+100;
+            //tipo,id,opciones,valor
+            comp= crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
             $("#"+idComp).val(objeto.valText);
-            auto=1;
-            break;
-            case "combo":
-            var opciones=JSONstring.toObject(objeto.opciones);
-            comp=crearComponente(tipo,id,opciones,valor);
+            auto= objeto.referencia;
+        break;
+        case "combo":
+            var opciones= JSONstring.toObject(objeto.opciones);
+            comp= crearComponente(tipo,id,opciones,valor);
             $(comp).appendTo("#"+idDiv);
-            break;
-            default:
+        break;
+        case "texta2":
             idComp=parseInt(id)+100;
-            accion="concatenar";
             compText=crearComponente("text",idComp,"","");
             comp=crearComponente("texta","texta"+id,"readonly='readonly'","");
-            hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
-            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='/images/sacar.png'>";
+//             hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
+            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='[% themelang %]/images/sacar.png'>";
             comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+hidden+"</div>";
             
             compText=compText+" "+boton;
             $(compText).appendTo("#"+idDiv);
             $(comp).appendTo("#strComp"+id);
             $("#texta"+id).val(objeto.valTextArea);
-            auto=1;
-            break;
-        }
-    }
-    else{
-        if(tipo == "texa2"){
-            if(varios){
-                var array=valor.split("#");
-                valor=array.join("\n");
-            }
-            comp=(crearComponente("texta",id,"class='unoxlinea'",""));
-            $("#label"+id).html($("#label"+id).html()+"<br>UNO POR LINEA");
-        }
-        else{
-            comp=crearComponente(tipo,id,"","");
-        }
-        $(comp).appendTo("#"+idDiv);
-        $("#"+id).val(valor);
+            auto= objeto.referencia;
+        break;
     }
 
     //Se agregan clases para cuando tenga que recuperar los datos.
@@ -137,13 +115,13 @@ function procesarObjeto(objeto){
         $("<b> * </b>").insertAfter($("#"+idComp));
     }
     //Para crear el autocomplete correspondiente
-    if(auto){
-        var tabla=objeto.tabla;
-        var campos=objeto.campos;
-        var orden=objeto.orden;
-        var separador=objeto.separador;
-        crearAuto(idComp,tabla,accion,id,campos,orden,separador);
-    }
+//     if(auto){
+//         var tabla=objeto.tabla;
+//         var campos=objeto.campos;
+//         var orden=objeto.orden;
+//         var separador=objeto.separador;
+//         crearAuto(idComp,tabla,accion,id,campos,orden,separador);
+//     }
 }
 
 /*
@@ -156,6 +134,7 @@ function procesarObjeto(objeto){
  */
 function crearComponente(tipo,id,opciones,valor){
     var comp;
+
     switch(tipo){
         case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"'>";
         break;
@@ -556,12 +535,6 @@ $(document).ready( function() {
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
 <br><br>
 
-<!-- div que se genera con el llamdo de ajax para la parte de llenado de los campos -->
-<div id= "result2"></div>
-<br>
-<!-- div que se genera con el llamdo de ajax para la parte del agregado temporal de campos -->
-<div id= "result" style="clear:both"></div>
-
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
     <tr class="tablaresultadoTitle">
@@ -569,7 +542,7 @@ $(document).ready( function() {
             <img src="[% themelang %]/images/izquierda.png">
         </td>
         <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: [% paso %] de 2) </b>
+                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: 1 de 2) </b>
         </td>
         <td width="1%" align="right" valign="top">
             <img src="[% themelang %]/images/derecha.png">
@@ -577,6 +550,15 @@ $(document).ready( function() {
     </tr>
 </table>
 <div id= "estructuraCatalogacion"></div>
+
+<br>
+<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+
+<center>
+<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumento()">
+</center>
+
 
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -181,6 +181,11 @@ sub setSubCampo{
 
 sub getTipo{
     my ($self) = shift;
+open(D, ">>/tmp/debug.txt");
+print D "CatEStr=>\n";
+print D "CatEStr=>con trim -".C4::AR::Utilidades::trim($self->tipo)."-\n";
+print D "CatEStr=>sin trim -".$self->tipo."-\n";
+close(D);
     return (C4::AR::Utilidades::trim($self->tipo));
 }
       
