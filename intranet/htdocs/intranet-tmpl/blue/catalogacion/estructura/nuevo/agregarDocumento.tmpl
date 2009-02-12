@@ -16,6 +16,13 @@
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
 
+//esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
+function syncComponentesArray(){
+    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
+        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+    }
+}
+
 /*
  * seleccionTipoItem
  * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
@@ -40,13 +47,13 @@ function updateSeleccionTipoItem(responseText){
 function guardarDocumento(){
 
     syncComponentesArray();
-//     objAH=new AjaxHelper(updateGuardarDocumento);
-//     objAH.debug= true;
-//     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-//     objAH.tipoAccion= "GUARDAR_NIVEL_1";
-//     objAH.id_tipo_doc= $("#id_tipo_doc").val();
-//     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
-//     objAH.sendToServer();
+    objAH=new AjaxHelper(updateGuardarDocumento);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "GUARDAR_NIVEL_1";
+    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.sendToServer();
 }
 
 function updateGuardarDocumento(responseText){
@@ -54,12 +61,6 @@ function updateGuardarDocumento(responseText){
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
      
-    }
-}
-
-function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.lengh; i++){
-        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
     }
 }
 
@@ -94,7 +95,7 @@ function procesarObjeto(objeto){
     var id= objeto.indice;
     var valor= objeto.valor;
     var varios= objeto.varios;
-    var idComp= id;
+    var idComp= objeto.idCompCliente;
     var comp;
     var hidden=" ";
     var strComp;
@@ -107,7 +108,7 @@ function procesarObjeto(objeto){
     $(strComp).appendTo('#estructuraCatalogacion');
     switch(tipo){
         case "text":
-            idComp= parseInt(id)+100;
+//             idComp= parseInt(id)+100;
             //tipo,id,opciones,valor
             comp= crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
