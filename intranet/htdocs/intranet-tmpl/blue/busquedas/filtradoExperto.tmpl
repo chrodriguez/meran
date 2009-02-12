@@ -1,6 +1,8 @@
 [% INCLUDE "intranet-top.inc" %]
 
-[% INCLUDE "popups/helpCamposMARC.inc" %]
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
 
 <script language="javascript" type="text/javascript">
 
@@ -230,7 +232,7 @@ $(document).ready(function() {
 	eventoEnter("#valor2","segundo");
 });
 </script>
-
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 
 <!-- PARA PODER CREAR EL FORMULARIO -->
 <div id="formulario"></div>

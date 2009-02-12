@@ -2,7 +2,9 @@
 
 <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
 
-[% INCLUDE "helpCamposMARC.inc" %]
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
 
 <script>
 
@@ -139,7 +141,7 @@ function visibilidad(id){
 }
 
 </script>
-
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 
 <!-- Me guardo el subcampo -->
 <input type="hidden" id="subcampo">

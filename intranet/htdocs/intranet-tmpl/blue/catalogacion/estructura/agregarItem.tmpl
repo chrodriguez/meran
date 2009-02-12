@@ -6,7 +6,9 @@
 
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
-[% INCLUDE "popups/helpCamposMARC.inc" %]
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
 
 <script>
 
@@ -378,7 +380,7 @@ $(document).ready( function() {
 
 
 </script>
-
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 
 
 <p class="pagetitle" >[% "Agregar Documento" | i18n %]</p>

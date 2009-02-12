@@ -3,7 +3,9 @@
 <script src="/intranet-tmpl/blue/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
 
 <script>
 
@@ -98,6 +100,7 @@ $(document).ready(function() {
 });
 
 </script>
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 
 <div style="position: static;" id="tophelper">
 <img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">

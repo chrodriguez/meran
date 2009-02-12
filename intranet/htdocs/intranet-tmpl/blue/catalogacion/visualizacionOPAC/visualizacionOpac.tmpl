@@ -3,7 +3,9 @@
 <script src="/intranet-tmpl/blue/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 
-<!-- TMPL_INCLUDE NAME="../includes/popups/helpCamposMARC.inc" -->
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
 <!-- TMPL_INCLUDE NAME="../includes/popups/agregarEncabezado.inc" -->
 
 <script>
@@ -467,6 +469,7 @@ $(document).ready(function() {
 });
 
 </script>
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 
 <input type="hidden" id="idEncabezado">
 <div style="position: static;" id="tophelper">
