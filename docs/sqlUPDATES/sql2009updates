@@ -281,3 +281,6 @@ INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`) VALUES
 ('ref_soporte', 'soporte'),
 ('ref_nivel_bibliografico', 'nivel_bibliografico'),
 ('cat_tema', 'tema');
+
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `idCompCliente` VARCHAR( 255 ) NOT NULL AFTER `idinforef` ;

@@ -37,6 +37,31 @@ function updateSeleccionTipoItem(responseText){
     procesarInfoJson(responseText);
 }
 
+function guardarDocumento(){
+
+    objAH=new AjaxHelper(updateGuardarDocumento);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "GUARDAR_NIVEL_1";
+    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.sendToServer();
+}
+
+function updateGuardarDocumento(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+     
+    }
+}
+
+function syncComponentesArray(){
+    for(var i=0; i < COMPONENTES_ARRAY.lengh; i++){
+        
+    }
+}
+
 
 /*
  * procesarInfoJson
