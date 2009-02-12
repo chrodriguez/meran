@@ -23,6 +23,7 @@ var MENU_ITEMS = [
 		],
         ['------Configuraci&oacute;n Nueva-----', null],
         ['Creaci&oacute;n Catalogo', '/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCatalo.pl'],
+        ['Agregar Documento', '/cgi-bin/koha/catalogacion/estructura/nuevo/agregarDocumento.pl'],
 	],
 	['Usuarios', '/cgi-bin/koha/usuarios/reales/buscarUsuario.pl', null,
 		['Usuarios Reales', '/cgi-bin/koha/usuarios/reales/buscarUsuario.pl'],

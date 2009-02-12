@@ -3,12 +3,20 @@
 <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script>
 <script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
 <script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script>
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
-[% INCLUDE "popups/helpCamposMARC.inc" %]
 
 <script>
+
+//************************************************REVISADO******************************************************************
+
+
+
+//************************************************FIN REVISADO**************************************************************
+
 
 /*  *****  EL OBJETO objAH SE ENCUENTRA EN LA LIBRERIA DE seleccionCamposMarc.js ***** */
 
@@ -378,9 +386,7 @@ $(document).ready( function() {
 
 
 </script>
-
-
-
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
 <p class="pagetitle" >[% "Agregar Documento" | i18n %]</p>
 
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
