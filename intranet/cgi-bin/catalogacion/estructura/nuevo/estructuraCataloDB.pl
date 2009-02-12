@@ -252,5 +252,31 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_DOCUMENTO"){
 #     
 #     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+
+elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
+#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::guardarNivel1($obj);
+    
+    my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+    
+    print $input->header;
+    print $infoOperacionJSON;
+# 
+#     my ($template, $session, $t_params) = get_template_and_user({
+#                                                         template_name => "catalogacion/estructura/nuevo/formAgregarDocumento.tmpl",
+#                                                         query => $input,
+#                                                         type => "intranet",
+#                                                         authnotrequired => 0,
+#                                                         flagsrequired => {editcatalogue => 1},
+#                                                         debug => 1,
+#                     });
+# 
+#     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+#     
+#     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
+#     $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
+#     
+#     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
 # **********************************************FIN ABM CATALOGACION****************************************************************
 

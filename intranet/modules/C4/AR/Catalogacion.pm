@@ -1828,3 +1828,42 @@ sub t_modificarEnEstructuraCatalogacion {
 
     return ($msg_object);
 }
+
+
+sub t_guardarNivel1 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel1= C4::Modelo::CatNivel1->new();
+        my $db= $catNivel1->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel1->agregar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
