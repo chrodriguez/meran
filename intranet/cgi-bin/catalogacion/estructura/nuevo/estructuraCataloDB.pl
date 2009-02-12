@@ -222,25 +222,35 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     print $input->header;
     print $infoOperacionJSON;
 }
-## FIXME esto es una prueba para el MONO
-elsif($tipoAccion eq "ELECCION_CAMPO_TABLA"){
-    my $tabla = $obj->{'tabla'};
-    my $campo = $obj->{'campo'};
 
-#     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
-    my $ref = C4::Modelo::PrefTablaReferencia->new();
-    my $tablaObject= $ref->createFromAlias($tabla);
-    my $objects_array= $tablaObject->obtenerValoresCampo($campo);
-    my @objects_array_JSON;
+# ***********************************************ABM CATALOGACION*****************************************************************
+elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_DOCUMENTO"){
+#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+    my $id_tipo_doc=$obj->{'id_tipo_doc'};
+    my $nivel= 1;
 
-    for(my $i=0; $i<scalar(@$objects_array); $i++ ){
-        push (@objects_array_JSON, $objects_array->[$i]->as_json);
-    }
-
-    my $infoJSON= '[' . join(',' ,@objects_array_JSON) . ']';
-
-    my $infoOperacionJSON= $infoJSON;
-
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+    
+    my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+    
     print $input->header;
     print $infoOperacionJSON;
+# 
+#     my ($template, $session, $t_params) = get_template_and_user({
+#                                                         template_name => "catalogacion/estructura/nuevo/formAgregarDocumento.tmpl",
+#                                                         query => $input,
+#                                                         type => "intranet",
+#                                                         authnotrequired => 0,
+#                                                         flagsrequired => {editcatalogue => 1},
+#                                                         debug => 1,
+#                     });
+# 
+#     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+#     
+#     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
+#     $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
+#     
+#     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+# **********************************************FIN ABM CATALOGACION****************************************************************
+

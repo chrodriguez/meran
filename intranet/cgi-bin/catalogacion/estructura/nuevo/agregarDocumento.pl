@@ -38,31 +38,9 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 my $nivel=1;
 
-#item type
-my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
-my @valuesItemtypes;
-my %labelsItemtypes;
-my $i=0;
-push(@valuesItemtypes,-1);
-$labelsItemtypes{-1}="Elegir tipo Item";
-for ($i; $i<scalar(@results); $i++){
-	push(@valuesItemtypes,$results[$i]->{'itemtype'});
-	$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
-}
-
-my $selectItemType=CGI::scrolling_list(  -name      => 'itemtype',
-				-id	   => 'itemtype',
-                                -values    => \@valuesItemtypes,
-				-labels    => \%labelsItemtypes,
-                                -defaults  => 'Elegir tipo Item',
-                                -size      => 1,
-				-onChange  => 'seleccionTipoItem()',
-                                 );
-#fin item type
-
-
 my %params_combo;
 $params_combo{'onChange'}= 'seleccionTipoItem()';
+$params_combo{'default'}= 'SIN SELECCIONAR';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
 $t_params->{'nivel'}= $nivel;

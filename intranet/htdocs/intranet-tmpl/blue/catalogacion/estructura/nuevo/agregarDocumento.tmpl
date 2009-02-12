@@ -13,7 +13,172 @@
 
 //************************************************REVISADO******************************************************************
 
+/*
+ * seleccionTipoItem
+ * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
+ */
+function seleccionTipoItem(){
 
+    objAH=new AjaxHelper(updateSeleccionTipoItem);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_FORM_AGREGAR_DOCUMENTO";
+    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.sendToServer();
+}
+
+function updateSeleccionTipoItem(responseText){
+    $("#estructuraCatalogacion").html("");
+    //proceso la info del servidor y se crean las componentes en el cliente
+//     $("#estructuraCatalogacion").html(responseText);
+    procesarInfoJson(responseText);
+}
+
+
+/*
+ * procesarInfoJson
+ * procesa la informacion que esta en notacion json, que viene del llamado ajax.
+ * @params
+ * json, string con formato json.
+ */
+function procesarInfoJson(json){
+    objetos=JSONstring.toObject(json);
+    arrayjson=[];
+    $("#cantIds").val(objetos.length);
+    for(var i=0; i< objetos.length; i++){
+        procesarObjeto(objetos[i]);
+    }
+}
+
+/*
+ * procesarObjeto
+ * procesa el objeto json, para poder crear el componente adecuado al tipo de datos que vienen en el objeto.
+ * @params
+ * objeto, elemento que contiene toda la info necesaria.
+ */
+function procesarObjeto(objeto){
+    var libtext=objeto.liblibrarian;
+    var tipo= objeto.tipo;
+    var ref=objeto.referencia;
+    var id=objeto.indice;
+    var valor=objeto.valor;
+    var varios=objeto.varios;
+    var idComp=id;
+    var comp;
+    var hidden=" ";
+    var strComp;
+    var auto=0;
+    var unoLinea=0;
+    var divParrafo="#parrafo1";
+    if(objeto.nivel == "3"){
+        divParrafo="#parrafo2";
+    }
+    var idDiv="div"+id;
+    var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
+    var divLabel="<div id='label"+id+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
+    strComp="<div id='strComp"+id+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo(divParrafo);
+    var objetoResp=new objetoRespuesta(objeto.nivel,objeto.campo,objeto.subcampo,objeto.idRep,"");
+    arrayjson[id]=objetoResp;
+    if(ref==1){
+        //id para identificar el input(text) que va a tener el autocomplete
+        var accion="reemplazar";
+        switch(tipo){
+            case "text":
+            idComp=parseInt(id)+100;
+            comp=crearComponente(tipo,idComp,"","");
+            hidden="<br>"+crearComponente("hidden",id,"",valor);
+            comp=comp+hidden;
+            $(comp).appendTo("#"+idDiv);
+            $("#"+idComp).val(objeto.valText);
+            auto=1;
+            break;
+            case "combo":
+            var opciones=JSONstring.toObject(objeto.opciones);
+            comp=crearComponente(tipo,id,opciones,valor);
+            $(comp).appendTo("#"+idDiv);
+            break;
+            default:
+            idComp=parseInt(id)+100;
+            accion="concatenar";
+            compText=crearComponente("text",idComp,"","");
+            comp=crearComponente("texta","texta"+id,"readonly='readonly'","");
+            hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
+            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='/images/sacar.png'>";
+            comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+hidden+"</div>";
+            
+            compText=compText+" "+boton;
+            $(compText).appendTo("#"+idDiv);
+            $(comp).appendTo("#strComp"+id);
+            $("#texta"+id).val(objeto.valTextArea);
+            auto=1;
+            break;
+        }
+    }
+    else{
+        if(tipo == "texa2"){
+            if(varios){
+                var array=valor.split("#");
+                valor=array.join("\n");
+            }
+            comp=(crearComponente("texta",id,"class='unoxlinea'",""));
+            $("#label"+id).html($("#label"+id).html()+"<br>UNO POR LINEA");
+        }
+        else{
+            comp=crearComponente(tipo,id,"","");
+        }
+        $(comp).appendTo("#"+idDiv);
+        $("#"+id).val(valor);
+    }
+
+    //Se agregan clases para cuando tenga que recuperar los datos.
+    if(objeto.obligatorio == "1"){
+        $("#"+idComp).addClass("obligatorio");
+        $("<b> * </b>").insertAfter($("#"+idComp));
+    }
+    //Para crear el autocomplete correspondiente
+    if(auto){
+        var tabla=objeto.tabla;
+        var campos=objeto.campos;
+        var orden=objeto.orden;
+        var separador=objeto.separador;
+        crearAuto(idComp,tabla,accion,id,campos,orden,separador);
+    }
+}
+
+/*
+ * crearComponente
+ * crea el string HTML del componente correspondiente al parametro tipo.
+ * @params
+ * tipo, corresponde a la clase de componente html que se quiere crear.
+ * id, identificador para el componente que se va a crear.
+ * opciones, son las opciones que se generan si el componente es un combobox, para los demas esta en blanco.
+ */
+function crearComponente(tipo,id,opciones,valor){
+    var comp;
+    switch(tipo){
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"'>";
+        break;
+        case "hidden": comp="<input type='"+tipo+"' "+opciones+" id='"+id+"' value='"+valor+"'>";
+        break;
+        case "combo": comp="<select id='"+id+"'>\n<option value=''>Elegir opci&oacute;n</option>\n";
+            var op="";
+            var def="";
+            for(var i=0; i< opciones.length; i++){
+                if(valor == opciones[i].clave){
+                    def=" selected='selected' ";
+                }
+                op=op+"<option value='"+opciones[i].clave+ "'" + def +"'>"+opciones[i].valor+"</option>\n";
+                def="";
+            }
+            comp=comp+op+"</select>";
+        break;
+        case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4'>"+valor+"</textarea>";
+        break;
+    }
+
+    return comp;
+}
 
 //************************************************FIN REVISADO**************************************************************
 
@@ -42,26 +207,6 @@ function updateInfoAgregarItem(responseText){
 }
 
 /*
- * seleccionTipoItem
- * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
- */
-function seleccionTipoItem(){
-        var itemTypeValue = $("#id_tipo_doc").val();
-	$("#result").html("");
-	objJSON=new AjaxHelper();
-        if (itemTypeValue != -1){ //PARA NO HACER LA PETICION DE AJAX
-            objJSON.itemtype=$("#id_tipo_doc").val();
-            objJSON.paso=1;
-            objAH=new AjaxHelper(updateInfoAgregarItem);
-            objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-            objAH.nivel=1;
-            objAH.itemtype=$("#id_tipo_doc").val();
-            objAH.paso=1;
-            objAH.sendToServer();
-        }
-}
-
-/*
  * borrarN1
  * Elimina de la base de datos el documento con id1 igual al parametro que ingresa y todos los otros datos 
  * correspondiente a los otros niveles que hacen referencia al id1.
@@ -69,10 +214,12 @@ function seleccionTipoItem(){
 function borrarN1(id1){
 	$("#result").html("");
 	objJSON=new AjaxHelper();
+    objJSON.debug= true;
 	objJSON.itemtype=$("#id_tipo_doc").val();
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateInfoAgregarItem);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
@@ -90,12 +237,14 @@ function modificarN1(id1){
 	$("#result").html("");
 
 	objJSON=new AjaxHelper();
+    objJSON.debug= true;
 	objJSON.id1=id1;
 	objJSON.accion="modificarN1";
 	objJSON.itemtype="ALL";
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateInfoAgregarItem);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
@@ -113,10 +262,12 @@ function borrarGrupo(id1,id2){
 	$("#result").html("");
 	
 	objJSON=new AjaxHelper();
+    objJSON.debug= true;
 	objJSON.itemtype=$("#id_tipo_doc").val();
 	objJSON.paso=2;
 	
 	objAH=new AjaxHelper(updateInfoAgregarItem);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
@@ -133,6 +284,7 @@ function borrarGrupo(id1,id2){
  */
 function ajaxModificarGrupoJSON(id1,id2){
 	objAH=new AjaxHelper(procesarInfoJson);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
@@ -157,6 +309,7 @@ function modificarGrupo(id1,id2){
 	$("#result").html("");
 	
 	objAH=new AjaxHelper(updateInfoModGrupo);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
@@ -182,6 +335,7 @@ function modNivel2(id1,id2){
 	ok=obtenerIdsValores(cantIds);
 	if(ok){
 		objAH=new AjaxHelper(redirigirURL);
+        objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
 		objAH.id1=id1;
 		objAH.id2=id2;
@@ -204,6 +358,7 @@ function modNivel2(id1,id2){
  */
 function ajaxAgregarEjemplarJSON(id1,id2,itemtype){
 	objAH=new AjaxHelper(procesarInfoJson);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
@@ -225,6 +380,7 @@ function agregarEjemplar(id1,id2,itemtype){
 	$("#result").html("");
 
 	objAH=new AjaxHelper(updateInfoAgrEjemplar);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 	objAH.id1=id1;
 	objAH.id2=id2;
@@ -246,6 +402,7 @@ function agregarNivel3(id1,id2){
 	
 	if(ok){
 		objAH=new AjaxHelper(redirigirURL);
+        objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
 		objAH.id1=id1;
 		objAH.id2=id2;
@@ -271,10 +428,12 @@ function agregarNivel3(id1,id2){
  */
 function guardarDatos(paso){
 	objJSON=new AjaxHelper();
+    objJSON.debug= true;
 	objJSON.itemtype=$("#itemtype").val();
 	objJSON.paso=paso;
 	
 	objAH=new AjaxHelper(updateInfoAgregarItem);
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 	objAH.paso=paso;
 	objAH.id1=$("#id1").val();
@@ -332,6 +491,7 @@ $(document).ready( function() {
 		var origen=array[0].split('=')[1];
 
 		objAH=new AjaxHelper(updateInfoAgregarItem);
+        objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
 		objAH.id1=array[1].split('=')[1];
 		objAH.itemtype=array[2].split('=')[1];
@@ -340,6 +500,7 @@ $(document).ready( function() {
 			var nivel=array[3].split('=')[1];
 			if(nivel==1){
 				objJSON=new AjaxHelper();	
+                objJSON.debug= true;
 				objJSON.id1=objAH.id1;
 				objJSON.accion="modificarN1";
 				objJSON.itemtype="ALL";
@@ -361,6 +522,7 @@ $(document).ready( function() {
 			break;
 		  case "modNivel2":
 			objJSON=new AjaxHelper();
+            objJSON.debug= true;
 			objJSON.id1 = objAH.id1;
 			objJSON.itemtype = objAH.itemtype;
 			objJSON.paso=2;
@@ -370,6 +532,7 @@ $(document).ready( function() {
 			break;
 		  default:
 			objJSON=new AjaxHelper();
+            objJSON.debug= true;
 			objJSON.id1=objAH.id1;
 			objJSON.itemtype=objAH.itemtype;
 			objJSON.paso=2;
@@ -387,6 +550,7 @@ $(document).ready( function() {
 
 </script>
 <div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
+
 <p class="pagetitle" >[% "Agregar Documento" | i18n %]</p>
 
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
@@ -398,6 +562,21 @@ $(document).ready( function() {
 <!-- div que se genera con el llamdo de ajax para la parte del agregado temporal de campos -->
 <div id= "result" style="clear:both"></div>
 
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
+        <td colspan="7" class=inputFontNormal> 
+                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: [% paso %] de 2) </b>
+        </td>
+        <td width="1%" align="right" valign="top">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
+</table>
+<div id= "estructuraCatalogacion"></div>
 
 
 [% INCLUDE "intranet-bottom.inc" %]
