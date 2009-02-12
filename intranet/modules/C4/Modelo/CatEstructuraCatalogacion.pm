@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
         intranet_habilitado => { type => 'integer', default => '0' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
+        idCompCliente        => { type => 'varchar', length => 255, not_null => 1 },
     ],
 
     
@@ -161,6 +162,17 @@ sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
     $self->campo($campo);
+}
+
+sub getIdCompCliente{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->idCompCliente));
+}
+
+sub setIdCompCliente{
+    my ($self) = shift;
+    my ($IdCompCliente) = @_;
+    $self->idCompCliente($IdCompCliente);
 }
 
 sub getIdInfoRef{
