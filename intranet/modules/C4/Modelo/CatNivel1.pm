@@ -23,14 +23,24 @@ __PACKAGE__->meta->setup(
 sub agregar{
 
     my ($self)=shift;
+    use C4::Modelo::CatNivel1Repetible;
+
     my ($data_hash)=@_;
-    $self->setTitulo(data_hash->{'titulo'});
-    $self->setAutor(data_hash->{'autor'});
-    $self->save();
-    if (data_hash->{'hayRepetibles'}){
-        my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new();
-           $nivel1Repetible->agregar($data_hash);
+    $self->setTitulo($data_hash->{'titulo'});
+    $self->setAutor($data_hash->{'autor'});
+## FIXME no esta guardando los repetibles, ademas esta fijo el id1 = 1
+
+    if ($data_hash->{'hayRepetibles'}){
+        my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+        foreach my $infoNivel1 (@$infoArrayNivel1){
+#             $infoNivel1->{'id1'}= $self->getId1;
+            $infoNivel1->{'id1'}= '1';
+            my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new();
+            $nivel1Repetible->agregar($infoNivel1);   
+        }
     }
+
+    $self->save();
 
 }
 sub getId1{

@@ -27,6 +27,8 @@ use C4::Context;
 use C4::AR::Busquedas;
 use C4::Date;
 use C4::AR::Utilidades;
+use C4::Modelo::CatNivel1::Manager;
+use C4::Modelo::CatNivel1;
 
 use vars qw(@EXPORT @ISA);
 

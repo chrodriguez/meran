@@ -16,6 +16,11 @@
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
 
+function inicializar(){
+    //arreglo de objetos campo
+    COMPONENTES_ARRAY= new Array();
+}
+
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
@@ -40,7 +45,6 @@ function seleccionTipoItem(){
 function updateSeleccionTipoItem(responseText){
     $("#estructuraCatalogacion").html("");
     //proceso la info del servidor y se crean las componentes en el cliente
-//     $("#estructuraCatalogacion").html(responseText);
     procesarInfoJson(responseText);
 }
 
@@ -52,11 +56,13 @@ function guardarDocumento(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
     objAH.sendToServer();
 }
 
 function updateGuardarDocumento(responseText){
+    inicializar();
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
@@ -108,7 +114,6 @@ function procesarObjeto(objeto){
     $(strComp).appendTo('#estructuraCatalogacion');
     switch(tipo){
         case "text":
-//             idComp= parseInt(id)+100;
             //tipo,id,opciones,valor
             comp= crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
@@ -117,21 +122,19 @@ function procesarObjeto(objeto){
         break;
         case "combo":
             var opciones= JSONstring.toObject(objeto.opciones);
-            comp= crearComponente(tipo,id,opciones,valor);
+            comp= crearComponente(tipo,idComp,opciones,valor);
             $(comp).appendTo("#"+idDiv);
         break;
         case "texta2":
-            idComp=parseInt(id)+100;
             compText=crearComponente("text",idComp,"","");
-            comp=crearComponente("texta","texta"+id,"readonly='readonly'","");
-//             hidden="<br>"+crearComponente("hidden",id,"class='oculto'",valor);
-            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+id+")' src='[% themelang %]/images/sacar.png'>";
-            comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+hidden+"</div>";
+            comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
+            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
+            comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
             
             compText=compText+" "+boton;
             $(compText).appendTo("#"+idDiv);
-            $(comp).appendTo("#strComp"+id);
-            $("#texta"+id).val(objeto.valTextArea);
+            $(comp).appendTo("#strComp"+idComp);
+            $("#texta"+idComp).val(objeto.valTextArea);
             auto= objeto.referencia;
         break;
     }

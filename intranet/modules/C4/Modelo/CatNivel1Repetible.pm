@@ -22,6 +22,7 @@ __PACKAGE__->meta->setup(
         cat_nivel1 => {
             class       => 'C4::Modelo::CatNivel1',
             key_columns => { id1 => 'id1' },
+            type        => 'one to one',
         },
     ],
 );
@@ -30,11 +31,11 @@ sub agregar{
 
     my ($self)=shift;
     my ($data_hash)=@_;
-    $self->setCampo(data_hash->{'campo'});
-    $self->setSubcampo(data_hash->{'subcampo'});
-    $self->setDato(data_hash->{'dato'});
+    $self->setId1($data_hash->{'id1'});
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubcampo($data_hash->{'subcampo'});
+    $self->setDato($data_hash->{'dato'});
     $self->save();
-
 }
 
 sub getRep_n1_id{
