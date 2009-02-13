@@ -28,21 +28,25 @@ sub agregar{
     my ($data_hash)=@_;
     $self->setTitulo($data_hash->{'titulo'});
     $self->setAutor($data_hash->{'autor'});
-## FIXME no esta guardando los repetibles, ademas esta fijo el id1 = 1
+    $self->save();
+    my $id1= $self->getId1;
 
     if ($data_hash->{'hayRepetibles'}){
         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
         foreach my $infoNivel1 (@$infoArrayNivel1){
-#             $infoNivel1->{'id1'}= $self->getId1;
-            $infoNivel1->{'id1'}= '1';
-            my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new();
-            $nivel1Repetible->agregar($infoNivel1);   
+            $infoNivel1->{'id1'}= $id1;
+            my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
+
+            $nivel1Repetible->setId1($infoNivel1->{'id1'});
+            $nivel1Repetible->setCampo($infoNivel1->{'campo'});
+            $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
+            $nivel1Repetible->setDato($infoNivel1->{'dato'});
+            $nivel1Repetible->save(); 
         }
     }
-
-    $self->save();
-
 }
+
+
 sub getId1{
     my ($self) = shift;
     return ($self->id1);

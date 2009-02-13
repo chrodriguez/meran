@@ -1844,7 +1844,7 @@ sub t_guardarNivel1 {
         my $db= $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
+         $db->begin_work;
     
         eval {
             $catNivel1->agregar($params);  

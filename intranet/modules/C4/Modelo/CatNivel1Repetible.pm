@@ -9,16 +9,16 @@ __PACKAGE__->meta->setup(
 
     columns => [
         rep_n1_id => { type => 'serial', not_null => 1 },
-        id1       => { type => 'integer', not_null => 1 },
+        id1       => { type => 'integer', length => 11 ,not_null => 1 },
         campo     => { type => 'varchar', length => 3 },
         subcampo  => { type => 'varchar', length => 3, not_null => 1 },
-        dato      => { type => 'varchar', length => 250, not_null => 1 },
+        dato      => { type => 'varchar', length => 255, not_null => 1 },
         timestamp => { type => 'timestamp' },
     ],
 
     primary_key_columns => [ 'rep_n1_id' ],
 
-    foreign_keys => [
+    relationships => [
         cat_nivel1 => {
             class       => 'C4::Modelo::CatNivel1',
             key_columns => { id1 => 'id1' },

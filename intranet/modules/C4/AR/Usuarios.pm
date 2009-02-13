@@ -218,9 +218,7 @@ sub t_addBorrower {
 }
 
 sub agregarPersona{
-
     my ($params)=@_;
-
     
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
@@ -230,7 +228,12 @@ sub agregarPersona{
     #genero un estado de ALTA para la persona para una fuente de informacion
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
+
+    eval{
         $person->agregar($params);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+        $db->commit;
+    };
 
     if ($@){
          &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
@@ -238,11 +241,6 @@ sub agregarPersona{
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
          $db->rollback;
     }
-    else
-        {
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-            $db->commit;
-        }
 
     $db->{connect_options}->{AutoCommit} = 1;
 

@@ -284,3 +284,8 @@ INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`) VALUES
 
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `idCompCliente` VARCHAR( 255 ) NOT NULL AFTER `idinforef` ;
+
+ALTER TABLE `cat_nivel1` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+ALTER TABLE `cat_nivel1_repetible` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+
