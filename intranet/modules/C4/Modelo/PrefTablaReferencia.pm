@@ -17,13 +17,13 @@ __PACKAGE__->meta->setup(
 );
 
 
-sub getAliasForTable{
+sub getAliasForTable {
     use C4::Modelo::PrefTablaReferencia::Manager;
     my ($self) = shift;
     my ($nombre_tabla) = @_;
     
     my $db = C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia(
-                                                                                query => [ 
+                                                                                query => [
                                                                                            nombre_tabla => { eq  => $nombre_tabla } ,
                                                                                          ],
                                                                             );

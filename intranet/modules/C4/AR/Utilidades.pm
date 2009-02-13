@@ -1480,4 +1480,37 @@ sub arrayObjectsToJSONString {
 
     return $infoJSON;
 }
+
+=item
+Esta funcion convierte el arreglo de valores a JSON {campo->campo}
+=cut
+sub arrayToJSONString {
+    my ($array) = @_;
+	my @array_JSON;
+
+    for(my $i=0; $i<scalar(@$array); $i++ ){
+        push (@array_JSON,"{'campo':'".$array->[$i]->{'campo'}."'}");
+    }
+
+    my $infoJSON= '[' . join(',' ,@array_JSON) . ']';
+
+    return $infoJSON;
+}
+
+=item
+Esta funcion convierte el arreglo de los pares clave/valor a JSON {clave->clave,valor->valor}
+=cut
+sub arrayClaveValorToJSONString {
+    my ($array) = @_;
+	my @array_JSON;
+
+    for(my $i=0; $i<scalar(@$array); $i++ ){
+        push (@array_JSON,"{'clave':'".$array->[$i]->{'clave'}."',valor':'".$array->[$i]->{'valor'}."'}");
+    }
+
+    my $infoJSON= '[' . join(',' ,@array_JSON) . ']';
+
+    return $infoJSON;
+}
+
 1;

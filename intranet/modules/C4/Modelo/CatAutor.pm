@@ -18,29 +18,109 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+    
+sub getId{
+    my ($self) = shift;
+
+    return ($self->id);
+}
+    
+sub setId{
+    my ($self) = shift;
+    my ($id) = @_;
+
+    $self->id($id);
+}
+
+    
+sub getNombre{
+    my ($self) = shift;
+
+    return ($self->nombre);
+}
+    
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+
+    $self->nombre($nombre);
+}
+
+    
+sub getApellido{
+    my ($self) = shift;
+
+    return ($self->apellido);
+}
+    
+sub setApellido{
+    my ($self) = shift;
+    my ($apellido) = @_;
+
+    $self->apellido($apellido);
+}
+
+sub getNacionalidad{
+    my ($self) = shift;
+
+    return ($self->nacionalidad);
+}
+    
+sub setNacionalidad{
+    my ($self) = shift;
+    my ($nacionalidad) = @_;
+
+    $self->nacionalidad($nacionalidad);
+}
+
+sub getCompleto{
+    my ($self) = shift;
+
+    return ($self->completo);
+}
+    
+sub setCompleto{
+    my ($self) = shift;
+    my ($completo) = @_;
+
+    $self->completo($completo);
+}
+
 sub nextMember{
     use C4::Modelo::CatRefTipoNivel3;
     return(C4::Modelo::CatRefTipoNivel3->new());
 }
 
 sub obtenerValoresCampo {
-    my ($self)=shift;
+	my ($self)=shift;
     my ($campo)=@_;
-    use C4::Modelo::CatAutor::Manager;
-    
-# method_name('get')
-# $self->meta->alias_column($campo => 'campo');
+	use C4::Modelo::CatAutor::Manager;
+ 	my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
 
-    my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor( 
-                                                select   => [$self->meta->primary_key , $campo],
-                                                sort_by => ($campo),
-#                                                 limit => 10,
-                                     );
-# open(A, ">>/tmp/debug.txt");
-# print A "restult: ".$ref_valores->[0]->campo."\n";
-# close(A);
-    return (scalar(@$ref_valores), $ref_valores);
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getId;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
 }
 
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "id") {return $self->getId;}
+	if ($campo eq "nombre") {return $self->getNombre;}
+	if ($campo eq "apellido") {return $self->getApellido;}
+	if ($campo eq "completo") {return $self->getCompleto;}
+	if ($campo eq "nacionalidad") {return $self->getNacionalidad;}
+
+	return (0);
+}
 1;
 

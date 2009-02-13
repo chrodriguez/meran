@@ -43,5 +43,35 @@ sub nextMember{
     return(C4::Modelo::PrefUnidadInformacion->new());
 }
 
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	
+ 	my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getId_tipo_doc;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "id_tipo_doc") {return $self->getId_tipo_doc;}
+	if ($campo eq "nombre") {return $self->getNombre;}
+
+	return (0);
+}
+
 1;
 

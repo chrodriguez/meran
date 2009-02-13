@@ -27,7 +27,7 @@ function updateInfoConsulta(responseText){
  */
 function updateInfoConsultaJSON(responseText){
 // 	alert(responseText);
-	procesarJSON(responseText,objAH.idComp,objAH.funcionChange);
+	procesarJSON(responseText,objAH.idComp,objAH.funcionChange,objAH.tipo);
 }
 
 
@@ -166,12 +166,21 @@ function elegirCampo(){
  * Procesa el string json que viene como parametro, y crea el listado de opciones correspondiente y se inserta en
  * en donde corresponda.
  */
-function procesarJSON(json, id,change){
+function procesarJSON(json, id,change,tipo){
 	var objetos=JSONstring.toObject(json);
 	var opciones="<option value='-1'>Elegir Opcion</option>";
 	for(var i=0; i< objetos.length; i++){
-		opciones=opciones+"<option value= '"+objetos[i].clave+"'> "+objetos[i].valor+"</option>";
-	}
+		
+			if (id == "tabla"){	// Mostrar Tablas
+			opciones=opciones+"<option value= '"+objetos[i].alias_tabla+"'> "+objetos[i].alias_tabla+"</option>";
+			}
+			if (id == "campo"){ // Mostrar Campo
+			opciones=opciones+"<option value= '"+objetos[i].campo+"'> "+objetos[i].campo+"</option>";
+			}
+			if (tipo == "valAuto"){	// Mostrar Valor Autorizado
+				opciones=opciones+"<option value= '"+objetos[i].category+"'> "+objetos[i].category+"</option>";
+			}
+		}
 	var sel="<select id='"+id+"'"+change+">"+opciones+"</select>";
 	$(sel).insertBefore("#boton");
 }

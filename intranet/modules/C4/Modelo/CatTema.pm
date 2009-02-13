@@ -15,6 +15,67 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+
+sub getId{
+    my ($self) = shift;
+
+    return ($self->id);
+}
+    
+sub setId{
+    my ($self) = shift;
+    my ($id) = @_;
+
+    $self->id($id);
+}
+
+    
+sub getNombre{
+    my ($self) = shift;
+
+    return ($self->nombre);
+}
+    
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+
+    $self->nombre($nombre);
+}
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	use C4::Modelo::CatTema::Manager;
+ 	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getId;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "id") {return $self->getId;}
+	if ($campo eq "nombre") {return $self->getNombre;}
+
+	return (0);
+}
+
+
+
+
+
 =item
 Devuelve si es o no la ultima tabla de la cadena de referencias
 =cut

@@ -148,30 +148,20 @@ if($accion eq "SELECCION_CAMPO"){
 		if($tabla){
 		#Se buscan los campos de la tabla seleccionada
 		my $campos=&C4::AR::Referencias::getCamposDeTablaRef($tabla);
-		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($campos);
-		#	foreach my $campo(@$campos){
-		#		$strjson.=",{'clave':'".$campo->{'campo'}."','valor':'".$campo->{'campo'}."'}";
-		#	}
+		$strjson=C4::AR::Utilidades::arrayToJSONString($campos);
 		}
 		else{
 		#Se buscan las tablas de referencia
 			my $tablas=&C4::AR::Referencias::obtenerTablasDeReferencia();
 			$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($tablas);
-# 			foreach my $tabla (@$tablas) {
-# 				$strjson.=",{'clave':'".$tabla->getAlias_tabla."','valor':'".$tabla->getAlias_tabla."'}";
-# 			}
 		}
 	}
 	else{
 		#Se buscan los valores autorizados
 		my $valAuto=&C4::AR::Utilidades::obtenerValoresAutorizados();
 		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($valAuto);
-# 		foreach my $val(@$valAuto){
-# 			$strjson.=",{'clave':'".$val->{'category'}."','valor':'".$val->{'category'}."'}";
-# 		}
+
 	}
-	$strjson=substr($strjson,1,length($strjson));
-	$strjson="[".$strjson."]";
 	print $input->header;
 	print $strjson;
 }#end SELECCION_CAMPO
@@ -216,10 +206,10 @@ my ($template, $session, $t_params) =
 	}
 	elsif($tipo eq "referencia"){
 		my $campo=$obj->{'campo'}||$op;
-		my ($js,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
-		@values=keys %$valores;
-		foreach my $val(@values){
-			$labels{$val}=$valores->{$val};
+		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
+		foreach my $val(@$valores){
+			$labels{$val->{"clave"}}=$val->{"valor"};	
+			push(@values,$val->{"clave"});
 		}
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
 		$t_params->{'tabla'}= $tabla;

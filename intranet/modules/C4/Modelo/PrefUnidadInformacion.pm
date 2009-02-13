@@ -131,12 +131,35 @@ sub nextMember{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo)=@_;
-	
+	use C4::Modelo::PrefUnidadInformacion::Manager;
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
 						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($campo) );
+    my @array_valores;
 
-    return (scalar(@$ref_valores), $ref_valores);
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getId_ui;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "id_ui") {return $self->getId_ui;}
+	if ($campo eq "nombre") {return $self->getNombre;}
+	if ($campo eq "direccion") {return $self->getDireccion;}
+	if ($campo eq "alt_direccion") {return $self->getAlt_direccion;}
+	if ($campo eq "telefono") {return $self->getTelefono;}
+	if ($campo eq "fax") {return $self->getFax;}
+	if ($campo eq "email") {return $self->getEmail;}
+
+	return (0);
 }
 
 1;

@@ -32,15 +32,42 @@ sub setCodigo{
 
 sub getNombre{
     my ($self) = shift;
-
     return ($self->nombre);
 }
     
 sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
-
     $self->nombre($nombre);
+}
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	use C4::Modelo::RefDisponibilidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getCodigo;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "codigo") {return $self->getCodigo;}
+	if ($campo eq "nombre") {return $self->getNombre;}
+
+	return (0);
 }
 
 sub nextMember{

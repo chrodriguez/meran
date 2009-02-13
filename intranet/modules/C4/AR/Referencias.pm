@@ -213,30 +213,7 @@ sub obtenerValoresTablaRef{
     my $ref = C4::Modelo::PrefTablaReferencia->new();
 	my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo);
 
-    	my %result;
-    	my $strjson="";
-#     	my $labels;
-#         my $data;	
-# 	    foreach my $valor (@$valores){
-# 		$result{$data->{'id'}}=$data->{$campos[0]};
-#    		$strjson.=",{'clave':'".$data->{'id'}."','valor':";
-# 
-# 		}
-# 
-#     while($data=$sth->fetchrow_hashref()){
-#         
-#      
-#         $labels="'".$data->{$campos[0]};
-#         for(my $i=1;$i<$long;$i++){
-#             $labels.="|".$data->{$campos[$i]};
-#             $result{$data->{'id'}}.=",".$data->{$campos[$i]};
-#         }
-#         $strjson.=$labels."'}";
-#     }
-#     $strjson=substr($strjson,1,length($strjson));
-#     $strjson="[".$strjson."]";
-
-    return($strjson,\%result);
+    return($cantidad,$valores);
 
 }
 

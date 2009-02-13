@@ -15,6 +15,65 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'idLanguage' ],
 );
 
+    
+sub getIdLanguage{
+    my ($self) = shift;
+
+    return ($self->idLanguage);
+}
+    
+sub setIdLanguage{
+    my ($self) = shift;
+    my ($idLanguage) = @_;
+
+    $self->idLanguage($idLanguage);
+}
+
+    
+sub getDescription{
+    my ($self) = shift;
+
+    return ($self->description);
+}
+    
+sub setDescription{
+    my ($self) = shift;
+    my ($description) = @_;
+
+    $self->description($description);
+}
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	use C4::Modelo::RefIdioma::Manager;
+ 	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getIdLanguage;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "idLanguage") {return $self->getIdLanguage;}
+	if ($campo eq "description") {return $self->getDescription;}
+
+	return (0);
+}
+
+
+
 sub nextMember{
     use C4::Modelo::RefPais;
     return(C4::Modelo::RefPais->new());
