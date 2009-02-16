@@ -224,12 +224,25 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
 }
 
 # ***********************************************ABM CATALOGACION*****************************************************************
-elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_DOCUMENTO"){
-#Se muestran la estructura de catalogacion para que el usuario agregue un documento
-    my $id_tipo_doc=$obj->{'id_tipo_doc'};
-    my $nivel= 1;
+# elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_DOCUMENTO"){
+# #Se muestran la estructura de catalogacion para que el usuario agregue un documento
+#     my $id_tipo_doc=$obj->{'id_tipo_doc'};
+#     my $nivel= 1;
+# 
+#     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+#     
+#     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+#     
+#     print $input->header;
+#     print $infoOperacionJSON;
+# }
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
+#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+    my $id_tipo_doc= $obj->{'id_tipo_doc'};
+    my $nivel= $obj->{'nivel'};
+
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$id_tipo_doc,$orden);
     
     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
     
@@ -241,6 +254,18 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 #Se muestran la estructura de catalogacion para que el usuario agregue un documento
     $obj->{'titulo'}= 'TEST';
     $obj->{'autor'}= '222';
+    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    print $input->header;
+    print $infoOperacionJSON;
+}
+
+elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
+#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+#     $obj->{'titulo'}= 'TEST';
+#     $obj->{'autor'}= '222';
     my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;

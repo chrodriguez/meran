@@ -33,6 +33,7 @@ sub agregar{
 
     if ($data_hash->{'hayRepetibles'}){
         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+        #se agrega el nivel 1 repetible
         foreach my $infoNivel1 (@$infoArrayNivel1){
             $infoNivel1->{'id1'}= $id1;
             my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);

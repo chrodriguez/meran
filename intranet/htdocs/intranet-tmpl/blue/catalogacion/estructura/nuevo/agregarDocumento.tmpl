@@ -28,22 +28,98 @@ function syncComponentesArray(){
     }
 }
 
+//para mantener el nivel que se esta procesando
+_nivelActual= 1;
+
+function getDivDelNivel(){
+    
+    switch(_nivelActual){
+        case 1:
+            return 'estructuraDelNivel1';   
+        break;
+        case 2:
+            return 'estructuraDelNivel2';
+        break;
+        case 3:
+            return 'estructuraDelNivel3';
+        break;
+    }
+}
+
 /*
  * seleccionTipoItem
  * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
  */
-function seleccionTipoItem(){
+// function seleccionTipoItem(){
+// 
+//     objAH=new AjaxHelper(updateSeleccionTipoItem);
+//     objAH.debug= true;
+//     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+//     objAH.tipoAccion= "MOSTRAR_FORM_AGREGAR_DOCUMENTO";
+//     objAH.id_tipo_doc= $("#id_tipo_doc").val();
+//     objAH.sendToServer();
+// }
+// 
+// function updateSeleccionTipoItem(responseText){
+//     $("#estructuraDelNivel1").html("");
+//     //proceso la info del servidor y se crean las componentes en el cliente
+//     procesarInfoJson(responseText);
+// }
 
-    objAH=new AjaxHelper(updateSeleccionTipoItem);
+
+
+// FIXME esto podria ser generico para los 3 niveles
+function mostrarEstructuraDelNivel1(){
+    _nivelActual= 1;
+    
+    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_FORM_AGREGAR_DOCUMENTO";
-    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel= _nivelActual;
+    
+    objAH.id_tipo_doc= 'ALL';//$("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
 
-function updateSeleccionTipoItem(responseText){
-    $("#estructuraCatalogacion").html("");
+function updateMostrarEstructuraDelNivel1(responseText){
+    $("#estructuraDelNivel1").html("");
+    //proceso la info del servidor y se crean las componentes en el cliente
+    procesarInfoJson(responseText);
+}
+
+function mostrarEstructuraDelNivel2(){
+    _nivelActual= 2;
+
+    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel= _nivelActual;
+    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    objAH.sendToServer();
+}
+
+function updateMostrarEstructuraDelNivel2(responseText){
+    $("#estructuraDelNivel2").html("");
+    //proceso la info del servidor y se crean las componentes en el cliente
+    procesarInfoJson(responseText);
+}
+
+function mostrarEstructuraDelNivel3(){
+    _nivelActual= 3;
+
+    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel= _nivelActual;
+    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    objAH.sendToServer();
+}
+
+function updateMostrarEstructuraDelNivel3(responseText){
+    $("#estructuraDelNivel3").html("");
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -111,7 +187,7 @@ function procesarObjeto(objeto){
     var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
     var divLabel="<div id='label"+id+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
     strComp="<div id='strComp"+id+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
-    $(strComp).appendTo('#estructuraCatalogacion');
+    $(strComp).appendTo('#'+getDivDelNivel());
     switch(tipo){
         case "text":
             //tipo,id,opciones,valor
@@ -579,7 +655,8 @@ $(document).ready( function() {
         </td>
     </tr>
 </table>
-<div id= "estructuraCatalogacion"></div>
+
+<div id= "estructuraDelNivel1"></div>
 
 <br>
 <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
@@ -589,6 +666,54 @@ $(document).ready( function() {
         onClick="guardarDocumento()">
 </center>
 
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
+        <td colspan="7" class=inputFontNormal> 
+                <b>[% "Agregar Grupo:" | i18n %] [% descripcion %]  (paso: 2 de 2) </b>
+        </td>
+        <td width="1%" align="right" valign="top">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
+</table>
+
+<div id= "estructuraDelNivel2"></div>
+
+<br>
+<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+
+<center>
+<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumento()">
+</center>
+
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
+        <td colspan="7" class=inputFontNormal> 
+                <b>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  (paso: 2 de 2) </b>
+        </td>
+        <td width="1%" align="right" valign="top">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
+    </tr>
+</table>
+
+<div id= "estructuraDelNivel3"></div>
+
+<br>
+<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+
+<center>
+<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumento()">
+</center>
 
 
 [% INCLUDE "intranet-bottom.inc" %]

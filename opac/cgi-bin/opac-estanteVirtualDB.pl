@@ -19,7 +19,8 @@ if($tipo eq "VER_ESTANTE"){
 									template_name => "opac-verEstanteVirtual.tmpl",
 									query => $input,
 									type => "opac",
-									authnotrequired => 1,
+									authnotrequired => 0,
+                                    flagsrequired => {borrow => 1},
 					# 				debug => 1,
 					});
 	
