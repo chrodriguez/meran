@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'cat_nivel1_repetible',
 
     columns => [
-        rep_n1_id => { type => 'serial', not_null => 1 },
+        rep_n1_id => { type => 'serial'},
         id1       => { type => 'integer', length => 11 ,not_null => 1 },
         campo     => { type => 'varchar', length => 3 },
         subcampo  => { type => 'varchar', length => 3, not_null => 1 },

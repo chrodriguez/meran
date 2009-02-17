@@ -71,6 +71,8 @@ sub agregar{
     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
     $self->setVisible($data_hash->{'visible'});
     $self->save();
+    $self->setIdCompCliente("LVL_".$self->getId);
+    $self->save();
     $data_hash->{'id_est_cat'}=$self->id;
     my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
        $pref_temp->agregar($data_hash);

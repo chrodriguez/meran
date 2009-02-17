@@ -103,10 +103,9 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(responseText);
 }
 
-function guardarDocumento(){
-
+function guardarDocumentoN1(){
     syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarDocumento);
+    objAH=new AjaxHelper(updateGuardarDocumentoN1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
@@ -116,13 +115,35 @@ function guardarDocumento(){
     objAH.sendToServer();
 }
 
-function updateGuardarDocumento(responseText){
+function updateGuardarDocumentoN1(responseText){
+    inicializar();
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+      mostrarEstructuraDelNivel2();
+    }
+}
+
+function guardarDocumentoN2(){
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarDocumentoN1);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "GUARDAR_NIVEL_2";
+    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.hayRepetibles= COMPONENTES_ARRAY.length;
+    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.sendToServer();
+}
+
+function updateGuardarDocumentoN2(responseText){
     inicializar();
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
      
     }
+
 }
 
 
@@ -627,7 +648,7 @@ $(document).ready( function() {
             <img src="[% themelang %]/images/izquierda.png">
         </td>
         <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: 1 de 2) </b>
+                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: 1 de 3) </b>
         </td>
         <td width="1%" align="right" valign="top">
             <img src="[% themelang %]/images/derecha.png">
@@ -641,8 +662,8 @@ $(document).ready( function() {
 <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
 
 <center>
-<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumento()">
+   <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumentoN1()">
 </center>
 
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -651,7 +672,7 @@ $(document).ready( function() {
             <img src="[% themelang %]/images/izquierda.png">
         </td>
         <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Grupo:" | i18n %] [% descripcion %]  (paso: 2 de 2) </b>
+                <b>[% "Agregar Grupo:" | i18n %] [% descripcion %]  (paso: 2 de 3) </b>
         </td>
         <td width="1%" align="right" valign="top">
             <img src="[% themelang %]/images/derecha.png">
@@ -665,8 +686,8 @@ $(document).ready( function() {
 <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
 
 <center>
-<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumento()">
+<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumentoN2()">
 </center>
 
 
@@ -676,7 +697,7 @@ $(document).ready( function() {
             <img src="[% themelang %]/images/izquierda.png">
         </td>
         <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  (paso: 2 de 2) </b>
+                <b>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  (paso: 3 de 3) </b>
         </td>
         <td width="1%" align="right" valign="top">
             <img src="[% themelang %]/images/derecha.png">
@@ -690,8 +711,8 @@ $(document).ready( function() {
 <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
 
 <center>
-<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumento()">
+<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+        onClick="guardarDocumentoN3()">
 </center>
 
 
