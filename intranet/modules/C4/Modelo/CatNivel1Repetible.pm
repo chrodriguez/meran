@@ -52,15 +52,6 @@ sub setRep_n1_id{
 sub getId1{
     my ($self) = shift;
     return ($self->id1);
-}sub getId1{
-    my ($self) = shift;
-    return ($self->id1);
-}
-
-sub setId1{
-    my ($self) = shift;
-    my ($id1) = @_;
-    $self->id1($id1);
 }
 
 sub setId1{

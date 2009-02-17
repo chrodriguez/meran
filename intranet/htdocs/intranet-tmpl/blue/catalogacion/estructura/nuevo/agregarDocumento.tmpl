@@ -46,27 +46,6 @@ function getDivDelNivel(){
     }
 }
 
-/*
- * seleccionTipoItem
- * Funcion que se ejecuta cuando se seleccion un valor del combo itemtype.
- */
-// function seleccionTipoItem(){
-// 
-//     objAH=new AjaxHelper(updateSeleccionTipoItem);
-//     objAH.debug= true;
-//     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-//     objAH.tipoAccion= "MOSTRAR_FORM_AGREGAR_DOCUMENTO";
-//     objAH.id_tipo_doc= $("#id_tipo_doc").val();
-//     objAH.sendToServer();
-// }
-// 
-// function updateSeleccionTipoItem(responseText){
-//     $("#estructuraDelNivel1").html("");
-//     //proceso la info del servidor y se crean las componentes en el cliente
-//     procesarInfoJson(responseText);
-// }
-
-
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
@@ -242,7 +221,7 @@ function crearComponente(tipo,id,opciones,valor){
     var comp;
 
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"'>";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80'>";
         break;
         case "hidden": comp="<input type='"+tipo+"' "+opciones+" id='"+id+"' value='"+valor+"'>";
         break;

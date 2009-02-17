@@ -31,5 +31,50 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub getId2{
+    my ($self) = shift;
+    return ($self->id2);
+}
+
+sub setId2{
+    my ($self) = shift;
+    my ($id2) = @_;
+    $self->id2($id2);
+}
+
+sub getId1{
+    my ($self) = shift;
+    return ($self->id1);
+}
+
+sub setId1{
+    my ($self) = shift;
+    my ($id1) = @_;
+    $self->id1($id1);
+}
+
+sub setTipo_documento{
+    my ($self) = shift;
+    my ($tipo_documento) = @_;
+    $self->tipo_documento($tipo_documento);
+}
+
+sub getTipo_documento{
+    my ($self) = shift;
+    return ($self->tipo_documento);
+}
+
+sub getTimestamp{
+    my ($self) = shift;
+    return ($self->timestamp);
+}
+
+sub setTimestamp{
+    my ($self) = shift;
+    my ($timestamp) = @_;
+    $self->timestamp($timestamp);
+}
+
+
 1;
 
