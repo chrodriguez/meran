@@ -174,7 +174,6 @@ function procesarObjeto(objeto){
     var libtext= $.trim(objeto.liblibrarian);
     var tipo= $.trim(objeto.tipo);
     var ref= objeto.referencia;
-    var id= objeto.indice;
     var valor= objeto.valor;
     var varios= objeto.varios;
     var idComp= objeto.idCompCliente;
@@ -183,10 +182,10 @@ function procesarObjeto(objeto){
     var strComp;
     var auto=0;
     var unoLinea=0;
-    var idDiv="div"+id;
+    var idDiv="div"+idComp;
     var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
-    var divLabel="<div id='label"+id+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
-    strComp="<div id='strComp"+id+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
+    var divLabel="<div id='label"+idDiv+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
+    strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo('#'+getDivDelNivel());
     switch(tipo){
         case "text":
