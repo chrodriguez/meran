@@ -186,7 +186,11 @@ function procesarObjeto(objeto){
     var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
     var divLabel="<div id='label"+idDiv+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
     strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
-    $(strComp).appendTo('#'+getDivDelNivel());
+    $(strComp).appendTo("#"+getDivDelNivel());
+
+
+#################### EL PROBLEMA ESTA ACA, CON UN #  (NYUMERAL), ESTUVE MOVIENDO EL ALERT PARA VER DONDE ROMPE, HASTA
+###################  AHORA NO LO ENCONTRE
     switch(tipo){
         case "text":
             //tipo,id,opciones,valor
@@ -205,7 +209,6 @@ function procesarObjeto(objeto){
             comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
             var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
             comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
-            
             compText=compText+" "+boton;
             $(compText).appendTo("#"+idDiv);
             $(comp).appendTo("#strComp"+idComp);
