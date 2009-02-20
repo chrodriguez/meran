@@ -34,6 +34,18 @@ __PACKAGE__->meta->setup(
             column_map => { tipo_documento => 'id_tipo_doc' },
             type       => 'one to many',
         },
+
+        ref_soporte => {
+            class      => 'C4::Modelo::RefSoporte',
+            column_map => { soporte => 'idSupport' },
+            type       => 'one to many',
+        },
+
+        ref_idioma => {
+            class      => 'C4::Modelo::RefIdioma',
+            column_map => { lenguaje => 'idLanguage' },
+            type       => 'one to many',
+        },
     ],
 );
 
@@ -56,7 +68,7 @@ sub agregar{
     $self->setSoporte('PAP');
     $self->setNivel_bibliografico('AL');
     $self->setPais_publicacion('AR');
-    $self->setLenguaje('ES');
+    $self->setLenguaje('es');
     $self->setCiudad_publicacion('LA PLATA');
     $self->setAnio_publicacion('2009');
 

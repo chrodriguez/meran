@@ -299,3 +299,5 @@ ALTER TABLE `cat_nivel3` CHANGE `homebranch` `id_ui_origen` VARCHAR( 4 ) CHARACT
 
 ALTER TABLE `cat_nivel3` CHANGE `holdingbranch` `id_ui_poseedora` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
 
+ALTER TABLE `ref_idioma` ADD PRIMARY KEY ( `idLanguage` ) 
+
