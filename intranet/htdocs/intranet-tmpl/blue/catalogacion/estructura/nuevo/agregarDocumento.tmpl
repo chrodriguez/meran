@@ -63,6 +63,9 @@ function mostrarEstructuraDelNivel1(){
 
 function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel1").html("");
+    $("#estructuraDelNivel2").html("");
+    $("#estructuraDelNivel3").html("");
+    $("#nivel1Tabla").show();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -189,6 +192,33 @@ function updateGuardarDocumentoN2(responseText){
     }
 }
 
+
+function guardarDocumentoN3(){
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarDocumentoN3);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "GUARDAR_NIVEL_3";
+    objAH.tipo_documento= $("#tipo_nivel3_id").val();
+    objAH.hayRepetibles= COMPONENTES_ARRAY.length;
+    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.sendToServer();
+}
+
+function updateGuardarDocumentoN3(responseText){
+//     inicializar();d
+//     var Messages=JSONstring.toObject(responseText);
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.messages;
+    var id2= info.id2;
+    setMessages(Messages);
+//     if (! (hayError(Messages) ) ){
+//         inicializar();
+//         //carga la barra lateral con info de nivel 1
+//         mostrarInfoAltaNivel3(id2);
+//         mostrarEstructuraDelNivel3();
+//     }
+}
 
 /*
  * procesarInfoJson
