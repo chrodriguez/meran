@@ -13,8 +13,8 @@ __PACKAGE__->meta->setup(
         id2                   => { type => 'integer', not_null => 1 },
         barcode               => { type => 'varchar', length => 20 },
         signatura_topografica => { type => 'varchar', length => 30 },
-        id_ui_poseedora       => { type => 'varchar', length => 15 }, #ui que tiene el item
-        id_ui_origen          => { type => 'varchar', length => 15 }, #ui de donde viene el item
+        id_ui_poseedora       => { type => 'varchar', length => 4 }, #ui que tiene el item
+        id_ui_origen          => { type => 'varchar', length => 4 }, #ui de donde viene el item
         id_disponibilidad     => { type => 'integer', length => 5, default => '0', not_null => 1 },
         para_sala             => { type => 'character', default => '0', length => 2 },
         timestamp             => { type => 'timestamp', not_null => 1 },

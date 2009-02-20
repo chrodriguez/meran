@@ -103,6 +103,38 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(responseText);
 }
 
+//esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
+function mostrarInfoAltaNivel1(id1){
+    objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_INFO_NIVEL1_LATERARL";
+    objAH.id1= id1;
+    objAH.sendToServer();
+}
+
+function updateMostrarInfoAltaNivel1(responseText){
+    $('#nivel1').html(responseText);
+    $('#nivel1Tabla').slideUp('slow');
+    $('#estructuraDelNivel1').html('');
+}
+
+//esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
+function mostrarInfoAltaNivel2(id2){
+    objAH=new AjaxHelper(updateMostrarInfoAltaNivel2);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_INFO_NIVEL2_LATERARL";
+    objAH.id2= id2;
+    objAH.sendToServer();
+}
+
+function updateMostrarInfoAltaNivel2(responseText){
+    $('#nivel2').html(responseText);
+    $('#nivel2Tabla').slideUp('slow');
+    $('#estructuraDelNivel2').html('');
+}
+
 function guardarDocumentoN1(){
     syncComponentesArray();
     objAH=new AjaxHelper(updateGuardarDocumentoN1);
@@ -117,11 +149,16 @@ function guardarDocumentoN1(){
 
 function updateGuardarDocumentoN1(responseText){
 //     inicializar();
-    var Messages=JSONstring.toObject(responseText);
+//     var Messages=JSONstring.toObject(responseText);
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.Message_arrayref;
+    var id1= info.id1;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-      inicializar();
-      mostrarEstructuraDelNivel2();
+        inicializar();
+        //carga la barra lateral con info de nivel 1
+        mostrarInfoAltaNivel1(id1);
+        mostrarEstructuraDelNivel2();
     }
 }
 
@@ -139,34 +176,16 @@ function guardarDocumentoN2(){
 
 function updateGuardarDocumentoN2(responseText){
 //     inicializar();d
-    var Messages=JSONstring.toObject(responseText);
+//     var Messages=JSONstring.toObject(responseText);
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.Message_arrayref;
+    var id2= info.id2;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
+        //carga la barra lateral con info de nivel 1
+        mostrarInfoAltaNivel2(id2);
         mostrarEstructuraDelNivel3();
-    }
-}
-
-
-function guardarDocumentoN3(){
-    syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarDocumentoN3);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.tipoAccion= "GUARDAR_NIVEL_3";
-    objAH.tipo_documento= $("#tipo_nivel3_id").val();
-    objAH.hayRepetibles= COMPONENTES_ARRAY.length;
-    objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-    objAH.sendToServer();
-}
-
-function updateGuardarDocumentoN3(responseText){
-//     inicializar();d
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-    if (! (hayError(Messages) ) ){
-        inicializar();
-//         mostrarEstructuraDelNivel3();
     }
 }
 
@@ -665,79 +684,92 @@ $(document).ready( function() {
 <br><br>
 
 
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-    <tr class="tablaresultadoTitle">
-        <td width="1%" align="left" valign="top">
-            <img src="[% themelang %]/images/izquierda.png">
-        </td>
-        <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: 1 de 3) </b>
-        </td>
-        <td width="1%" align="right" valign="top">
-            <img src="[% themelang %]/images/derecha.png">
-        </td>
-    </tr>
-</table>
+<div class="lateral">
+    <div id="nivel1"></div>
+    <div id="nivel2"></div>
+</div>
 
-<div id= "estructuraDelNivel1"></div>
+<div class="centro">
 
-<br>
-<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+<span id="nivel1Tabla">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tr class="tablaresultadoTitle">
+            <td width="1%" align="left" valign="top">
+                <img src="[% themelang %]/images/izquierda.png">
+            </td>
+            <td colspan="7" class=inputFontNormal> 
+                    <b>[% "Agregar Documento:" | i18n %] [% descripcion %]  (paso: 1 de 3) </b>
+            </td>
+            <td width="1%" align="right" valign="top">
+                <img src="[% themelang %]/images/derecha.png">
+            </td>
+        </tr>
+    </table>
+    
+    <div id= "estructuraDelNivel1"></div>
 
-<center>
-   <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumentoN1()">
-</center>
+    <br>
+    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    
+    <center>
+    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+            onClick="guardarDocumentoN1()">
+    </center>
+</span>
 
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-    <tr class="tablaresultadoTitle">
-        <td width="1%" align="left" valign="top">
-            <img src="[% themelang %]/images/izquierda.png">
-        </td>
-        <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Grupo:" | i18n %] [% descripcion %]  (paso: 2 de 3) </b>
-        </td>
-        <td width="1%" align="right" valign="top">
-            <img src="[% themelang %]/images/derecha.png">
-        </td>
-    </tr>
-</table>
+<span id="nivel2Tabla">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tr class="tablaresultadoTitle">
+            <td width="1%" align="left" valign="top">
+                <img src="[% themelang %]/images/izquierda.png">
+            </td>
+            <td colspan="7" class=inputFontNormal> 
+                    <b>[% "Agregar Grupo:" | i18n %] [% descripcion %]  (paso: 2 de 3) </b>
+            </td>
+            <td width="1%" align="right" valign="top">
+                <img src="[% themelang %]/images/derecha.png">
+            </td>
+        </tr>
+    </table>
+    
+    <div id= "estructuraDelNivel2"></div>
 
-<div id= "estructuraDelNivel2"></div>
+    <br>
+    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    
+    <center>
+    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+            onClick="guardarDocumentoN2()">
+    </center>
+</span>
 
-<br>
-<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+<span id="nivel3Tabla">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tr class="tablaresultadoTitle">
+            <td width="1%" align="left" valign="top">
+                <img src="[% themelang %]/images/izquierda.png">
+            </td>
+            <td colspan="7" class=inputFontNormal> 
+                    <b>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  (paso: 3 de 3) </b>
+            </td>
+            <td width="1%" align="right" valign="top">
+                <img src="[% themelang %]/images/derecha.png">
+            </td>
+        </tr>
+    </table>
+    
+    <div id= "estructuraDelNivel3"></div>
 
-<center>
-<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumentoN2()">
-</center>
+    <br>
+    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    
+    <center>
+    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+            onClick="guardarDocumentoN3()">
+    </center>
+</span>
 
-
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-    <tr class="tablaresultadoTitle">
-        <td width="1%" align="left" valign="top">
-            <img src="[% themelang %]/images/izquierda.png">
-        </td>
-        <td colspan="7" class=inputFontNormal> 
-                <b>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  (paso: 3 de 3) </b>
-        </td>
-        <td width="1%" align="right" valign="top">
-            <img src="[% themelang %]/images/derecha.png">
-        </td>
-    </tr>
-</table>
-
-<div id= "estructuraDelNivel3"></div>
-
-<br>
-<p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
-
-<center>
-<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-        onClick="guardarDocumentoN3()">
-</center>
-
+</div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

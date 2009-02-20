@@ -16,6 +16,14 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id1' ],
 
+    relationships => [
+        cat_autor => {
+            class      => 'C4::Modelo::CatAutor',
+            column_map => { autor => 'id' },
+            type       => 'one to many',
+        },
+    ],
+
 );
 
 

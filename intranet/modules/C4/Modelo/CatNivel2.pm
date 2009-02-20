@@ -28,6 +28,12 @@ __PACKAGE__->meta->setup(
             column_map => { id2 => 'id2' },
             type       => 'one to many',
         },
+    
+        cat_ref_tipo_nivel3 => {
+            class      => 'C4::Modelo::CatRefTipoNivel3',
+            column_map => { tipo_documento => 'id_tipo_doc' },
+            type       => 'one to many',
+        },
     ],
 );
 

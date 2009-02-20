@@ -240,26 +240,34 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 #Se guarda informacion del NIVEL 1
-    $obj->{'titulo'}= 'TEST';
-    $obj->{'autor'}= '222';
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
+    $obj->{'titulo'}= 'Libro de Prueba';
+    $obj->{'autor'}= '3954';
+    my ($Message_arrayref, $id1) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $id1;
 
     print $input->header;
-    print $infoOperacionJSON;
+#     print $infoOperacionJSON;
+    print to_json \%info;
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
 #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
 #     $obj->{'titulo'}= 'TEST';
 #     $obj->{'autor'};
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
+    my ($Message_arrayref, $id2) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id2'}= $id2;
 
     print $input->header;
-    print $infoOperacionJSON;
+#     print $infoOperacionJSON;
+    print to_json \%info;
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
@@ -272,6 +280,49 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 
     print $input->header;
     print $infoOperacionJSON;
+}
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
+#Se muestran las catalogaciones
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel1.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {editcatalogue => 1},
+                                                        debug => 1,
+                    });
+
+    my $id1=$obj->{'id1'};
+
+    my $nivel1 = C4::Modelo::CatNivel1->new(id1 => $id1);
+    $nivel1->load();
+
+    $t_params->{'nivel1'}= $nivel1;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
+#Se muestran las catalogaciones
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel2.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {editcatalogue => 1},
+                                                        debug => 1,
+                    });
+
+    my $id2=$obj->{'id2'};
+
+    my $nivel2 = C4::Modelo::CatNivel2->new(id2 => $id2);
+    $nivel2->load();
+
+    $t_params->{'nivel2'}= $nivel2;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 # **********************************************FIN ABM CATALOGACION****************************************************************
 

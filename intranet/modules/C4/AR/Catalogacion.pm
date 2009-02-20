@@ -1842,6 +1842,7 @@ sub t_guardarNivel1 {
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
+    my $id1;
 
     if(!$msg_object->{'error'}){
     #No hay error
@@ -1853,6 +1854,7 @@ sub t_guardarNivel1 {
     
         eval {
             $catNivel1->agregar($params);  
+            $id1 = $catNivel1->getId1;
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
@@ -1872,7 +1874,7 @@ sub t_guardarNivel1 {
 
     }
 
-    return ($msg_object);
+    return ($msg_object, $id1);
 }
 
 sub t_guardarNivel2 {
@@ -1880,6 +1882,7 @@ sub t_guardarNivel2 {
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
+    my $id2;
 
     if(!$msg_object->{'error'}){
     #No hay error
@@ -1892,6 +1895,7 @@ sub t_guardarNivel2 {
         eval {
             $catNivel2->agregar($params);  
             $db->commit;
+            $id2 = $catNivel2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => []} ) ;
@@ -1910,7 +1914,7 @@ sub t_guardarNivel2 {
 
     }
 
-    return ($msg_object);
+    return ($msg_object,, $id2);
 }
 
 sub t_guardarNivel3 {
