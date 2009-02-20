@@ -792,9 +792,9 @@ div.dimming {
 
 .centro {
     margin-bottom:10px;
-    margin-left:10px;
+    margin-left:1%;
     text-align:justify;
-    width:80%;
+    width: 79%;
     overflow: auto;
 }
 
@@ -804,7 +804,7 @@ div.dimming {
     height:400px;
     margin-left: 1%;
 /*     padding: 0%; */
-    width: 20%;
+    width: 19%;
 }
 
 /* end agregado */
