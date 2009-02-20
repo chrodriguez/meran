@@ -138,20 +138,21 @@ use C4::Modelo::CatTema;
 #   $meta->auto_initialize;
 #   $meta->columns;
 
-my $p = C4::Modelo::PrefTablaReferencia->new();
+# my $p = C4::Modelo::PrefTablaReferencia->new();
 # my @col = $p->meta->columns;
 # foreach my $campo (@col){
 #     print $campo."\n";
 # }
-    my $c = $p->createFromAlias("tema");
-    if ($c){
-        $c = $c->toString;
-    }
-    print "\n\n\nRETURN: ".$c."\n\n\n";
-    print "\n\n\nKEYS: ".$c->meta->column_accessor_method_name('id')."\n\n\n";
+#     my $c = $p->createFromAlias("tema");
+#     if ($c){
+#         $c = $c->toString;
+#     }
+#     print "\n\n\nRETURN: ".$c."\n\n\n";
+#     print "\n\n\nKEYS: ".$c->meta->column_accessor_method_name('id')."\n\n\n";
 #     print "\n\n\nTABLE NAME: ".$c->meta->table."\n\n\n";
 #     print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
     
+     print "\n\n\n\TIME: ".time()."\n\n\n";
 
 
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
