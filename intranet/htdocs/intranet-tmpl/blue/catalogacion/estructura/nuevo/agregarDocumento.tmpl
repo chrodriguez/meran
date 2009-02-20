@@ -109,41 +109,65 @@ function guardarDocumentoN1(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
-    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
     objAH.sendToServer();
 }
 
 function updateGuardarDocumentoN1(responseText){
-    inicializar();
+//     inicializar();
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
+      inicializar();
       mostrarEstructuraDelNivel2();
     }
 }
 
 function guardarDocumentoN2(){
     syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarDocumentoN1);
+    objAH=new AjaxHelper(updateGuardarDocumentoN2);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
-    objAH.id_tipo_doc= $("#id_tipo_doc").val();
+    objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
-    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
     objAH.sendToServer();
 }
 
 function updateGuardarDocumentoN2(responseText){
-    inicializar();
+//     inicializar();d
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-     
+        inicializar();
+        mostrarEstructuraDelNivel3();
     }
+}
 
+
+function guardarDocumentoN3(){
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarDocumentoN3);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "GUARDAR_NIVEL_3";
+    objAH.tipo_documento= $("#tipo_nivel3_id").val();
+    objAH.hayRepetibles= COMPONENTES_ARRAY.length;
+    objAH.infoArrayNivel3= COMPONENTES_ARRAY;
+    objAH.sendToServer();
+}
+
+function updateGuardarDocumentoN3(responseText){
+//     inicializar();d
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        inicializar();
+//         mostrarEstructuraDelNivel3();
+    }
 }
 
 
@@ -188,9 +212,6 @@ function procesarObjeto(objeto){
     strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo("#"+getDivDelNivel());
 
-
-#################### EL PROBLEMA ESTA ACA, CON UN #  (NYUMERAL), ESTUVE MOVIENDO EL ALERT PARA VER DONDE ROMPE, HASTA
-###################  AHORA NO LO ENCONTRE
     switch(tipo){
         case "text":
             //tipo,id,opciones,valor

@@ -36,13 +36,13 @@ sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
-	$params->{'id3'}||undef,
-	$params->{'id2'},
-	$params->{'borrowernumber'},
-	$params->{'reservedate'},
-	$params->{'reminderdate'},
-	$params->{'branchcode'},
-	$params->{'estado'}
+# 	$params->{'id3'}||undef,
+# 	$params->{'id2'},
+# 	$params->{'borrowernumber'},
+# 	$params->{'reservedate'},
+# 	$params->{'reminderdate'},
+# 	$params->{'branchcode'},
+# 	$params->{'estado'}
 
 
     $self->setFuente($data_hash->{'fuente'});

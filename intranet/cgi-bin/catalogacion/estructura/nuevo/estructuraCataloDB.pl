@@ -239,7 +239,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
-#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+#Se guarda informacion del NIVEL 1
     $obj->{'titulo'}= 'TEST';
     $obj->{'autor'}= '222';
     my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
@@ -251,10 +251,10 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
-#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+#Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
 #     $obj->{'titulo'}= 'TEST';
-#     $obj->{'autor'}= '222';
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
+#     $obj->{'autor'};
+    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
 
@@ -266,7 +266,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 #Se muestran la estructura de catalogacion para que el usuario agregue un documento
 #     $obj->{'titulo'}= 'TEST';
 #     $obj->{'autor'}= '222';
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
+    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel3($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
 

@@ -30,7 +30,7 @@ sub agregar{
     $self->setAutor($data_hash->{'autor'});
     $self->save();
     my $id1= $self->getId1;
-    $self->save();
+#     $self->save(); que hace aca esto???????????
 
     if ($data_hash->{'hayRepetibles'}){
         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};

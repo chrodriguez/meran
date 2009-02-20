@@ -29,6 +29,11 @@ use C4::Date;
 use C4::AR::Utilidades;
 use C4::Modelo::CatNivel1::Manager;
 use C4::Modelo::CatNivel1;
+use C4::Modelo::CatNivel2::Manager;
+use C4::Modelo::CatNivel2;
+use C4::Modelo::CatNivel3::Manager;
+use C4::Modelo::CatNivel3;
+
 
 use vars qw(@EXPORT @ISA);
 
@@ -1851,16 +1856,92 @@ sub t_guardarNivel1 {
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
         };
     
         if ($@){
             #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+sub t_guardarNivel2 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel2= C4::Modelo::CatNivel2->new();
+        my $db= $catNivel2->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel2->agregar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B428',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U372', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+sub t_guardarNivel3 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel3= C4::Modelo::CatNivel3->new();
+        my $db= $catNivel3->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel3->agregar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;

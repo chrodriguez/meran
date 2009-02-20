@@ -26,5 +26,83 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub agregar{
+
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    $self->setId3($data_hash->{'id3'});
+    $self->setCampo($data_hash->{'campo'});
+    $self->setSubcampo($data_hash->{'subcampo'});
+    $self->setDato($data_hash->{'dato'});
+    $self->save();
+}
+
+sub getRep_n3_id{
+    my ($self) = shift;
+    return ($self->rep_n3_id);
+}
+
+sub setRep_n3_id{
+    my ($self) = shift;
+    my ($rep_n3_id) = @_;
+    $self->rep_n3_id($rep_n3_id);
+}
+
+sub getId3{
+    my ($self) = shift;
+    return ($self->id3);
+}
+
+sub setId3{
+    my ($self) = shift;
+    my ($id3) = @_;
+    $self->id3($id3);
+}
+
+sub getCampo{
+    my ($self) = shift;
+    return ($self->campo);
+}
+
+sub setCampo{
+    my ($self) = shift;
+    my ($campo) = @_;
+    $self->campo($campo);
+}
+
+sub getSubcampo{
+    my ($self) = shift;
+    return ($self->subcampo);
+}
+
+sub setSubcampo{
+    my ($self) = shift;
+    my ($subcampo) = @_;
+    $self->subcampo($subcampo);
+}
+
+sub getDato{
+    my ($self) = shift;
+    return ($self->dato);
+}
+
+sub setDato{
+    my ($self) = shift;
+    my ($dato) = @_;
+    $self->dato($dato);
+}
+
+sub getTimestamp{
+    my ($self) = shift;
+    return ($self->timestamp);
+}
+
+sub setTimestamp{
+    my ($self) = shift;
+    my ($timestamp) = @_;
+    $self->timestamp($timestamp);
+}
+
+
 1;
 

@@ -31,6 +31,113 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub agregar{
+
+    my ($self)=shift;
+    use C4::Modelo::CatNivel2Repetible;
+
+    my ($data_hash)=@_;
+#     $self->setId1($data_hash->{'id1'});
+    $self->setId1('7005');
+#     $self->setTipo_documento($data_hash->{'tipo_documento'});
+#     $self->setSoporte($data_hash->{'soporte'});
+#     $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
+#     $self->setPais_publicacion($data_hash->{'pais_publicacion'});
+#     $self->setLenguaje($data_hash->{'lenguaje'});
+#     $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
+#     $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
+    $self->setTipo_documento('LIB');
+    $self->setSoporte('PAP');
+    $self->setNivel_bibliografico('AL');
+    $self->setPais_publicacion('AR');
+    $self->setLenguaje('ES');
+    $self->setCiudad_publicacion('LA PLATA');
+    $self->setAnio_publicacion('2009');
+
+    $self->save();
+    my $id2= $self->getId2;
+
+    if ($data_hash->{'hayRepetibles'}){
+        my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
+        #se agrega el nivel 2 repetible
+        foreach my $infoNivel2 (@$infoArrayNivel2){
+            $infoNivel2->{'id2'}= $id2;
+            my $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+            $nivel2Repetible->setId2($infoNivel2->{'id2'});
+            $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+            $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+            $nivel2Repetible->setDato($infoNivel2->{'dato'});
+            $nivel2Repetible->save(); 
+        }
+    }
+}
+
+sub getAnio_publicacion{
+    my ($self) = shift;
+    return ($self->anio_publicacion);
+}
+
+sub setAnio_publicacion{
+    my ($self) = shift;
+    my ($anio_publicacion) = @_;
+    $self->anio_publicacion($anio_publicacion);
+}
+
+sub getCiudad_publicacion{
+    my ($self) = shift;
+    return ($self->ciudad_publicacion);
+}
+
+sub setCiudad_publicacion{
+    my ($self) = shift;
+    my ($ciudad_publicacion) = @_;
+    $self->ciudad_publicacion($ciudad_publicacion);
+}
+
+sub getLenguaje{
+    my ($self) = shift;
+    return ($self->lenguaje);
+}
+
+sub setLenguaje{
+    my ($self) = shift;
+    my ($lenguaje) = @_;
+    $self->lenguaje($lenguaje);
+}
+
+sub getPais_publicacion{
+    my ($self) = shift;
+    return ($self->pais_publicacion);
+}
+
+sub setPais_publicacion{
+    my ($self) = shift;
+    my ($pais_publicacion) = @_;
+    $self->pais_publicacion($pais_publicacion);
+}
+
+sub getSoporte{
+    my ($self) = shift;
+    return ($self->soporte);
+}
+
+sub setSoporte{
+    my ($self) = shift;
+    my ($soporte) = @_;
+    $self->soporte($soporte);
+}
+
+sub getNivel_bibliografico{
+    my ($self) = shift;
+    return ($self->nivel_bibliografico);
+}
+
+sub setNivel_bibliografico{
+    my ($self) = shift;
+    my ($nivel_bibliografico) = @_;
+    $self->nivel_bibliografico($nivel_bibliografico);
+}
+
 sub getId2{
     my ($self) = shift;
     return ($self->id2);

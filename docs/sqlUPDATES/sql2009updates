@@ -289,3 +289,13 @@ ALTER TABLE `cat_nivel1` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURR
 
 ALTER TABLE `cat_nivel1_repetible` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
 
+-- Se modifico la tabla de cat_nivel3
+
+ALTER TABLE `cat_nivel3` CHANGE `notforloan` `id_disponibilidad` TINYINT( 5 ) NULL DEFAULT '0'
+
+ALTER TABLE `cat_nivel3` CHANGE `wthdrawn` `para_sala` SMALLINT( 1 ) NOT NULL DEFAULT '0'
+
+ALTER TABLE `cat_nivel3` CHANGE `homebranch` `id_ui_origen` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+ALTER TABLE `cat_nivel3` CHANGE `holdingbranch` `id_ui_poseedora` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
