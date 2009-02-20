@@ -104,10 +104,10 @@ sub t_guardarVariable {
 	
 	my $params;
 	$params->{'variable'}= $var;
-    $params->{'value'}= $val;
+    	$params->{'value'}= $val;
 	$params->{'explanation'}= $exp;
 	$params->{'options'}= $op;
-    $params->{'type'}= $tipo;
+    	$params->{'type'}= $tipo;
 
     my $msg_object= C4::AR::Mensajes::create();
     _verificarDatosVariable($params,$msg_object);

@@ -33,21 +33,16 @@ sub addupdateldapuser {
 
 my ($dbh, $userid, $password, $template) = @_;
 
-my $sth=$dbh->prepare("select value from pref_preferencia_sistema where variable=?");
-$sth->execute("ldapenabled");
 
 my $error= 0;
 
-	if ($sth->fetchrow eq 'yes') {
+	if ( C4::Context->preference('ldapenabled')) {
+	#se esta usando LDAP
 
-		$sth->execute("ldapserver");
-		my $ldapserver = $sth->fetchrow;
-		$sth->execute("ldapinfos");
-		my $ldapinfos = $sth->fetchrow;
-		$sth->execute("ldaproot");
-		my $ldaproot = $sth->fetchrow;
-		$sth->execute("ldappass");
-		my $ldappass = $sth->fetchrow;
+		my $ldapserver = C4::Context->preference('ldapserver');
+		my $ldapinfos = C4::Context->preference('ldapinfos');
+		my $ldaproot = C4::Context->preference('ldaproot');
+		my $ldappass = C4::Context->preference('ldappass');
 
 		my $db = Net::LDAP->new($ldapserver);
 

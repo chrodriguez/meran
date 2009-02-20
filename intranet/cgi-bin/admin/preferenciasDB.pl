@@ -74,7 +74,7 @@ my ($template, $session, $t_params) =
 	}
 	
 
-	$t_params->{'variable'}= $variable;
+	$t_params->{'variable'}= &C4::AR::Utilidades::trim($variable);
 	$t_params->{'explicacion'}= &C4::AR::Utilidades::trim($infoVar->{'explanation'});
 	$t_params->{'tabla'}= $tabla;
 	$t_params->{'categoria'}= $categoria;
@@ -99,17 +99,18 @@ my ($template, $session, $t_params) =
 		@values=keys(%labels);
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
 		$t_params->{'categoria'}= $categoria;
+
 	}
 	elsif($tipo eq "referencia"){
-		my $id=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
-		my ($js,$valores)=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$id,$campo,$campo);
-		@values=keys %$valores;
-		foreach my $val(@values){
-			$labels{$val}=$valores->{$val};
+		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
+		foreach my $val(@$valores){
+			$labels{$val->{"clave"}}=$val->{"valor"};	
+			push(@values,$val->{"clave"});
 		}
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("combo","valor",\@values,\%labels,$valor);
 		$t_params->{'tabla'}= $tabla;
 		$t_params->{'campo'}= $campo;
+
 	}	elsif($tipo eq "text"){
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",60,0,$valor);
 	}
@@ -128,7 +129,7 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 #Guarda la modificacion realizada a la preferencia
 
  	my $variable=$obj->{'variable'};
- 	my $valor=$obj->{'valor'};
+ 	my $valor= &C4::AR::Utilidades::trim($obj->{'valor'});
  	my $expl=$obj->{'explicacion'};
 
 	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
@@ -230,8 +231,8 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
 #Se guarda la nueva preferencias
 
 	my $variable=$obj->{'variable'};
-	my $valor=$obj->{'valor'};
-	my $expl=$obj->{'explicacion'};
+	my $valor= &C4::AR::Utilidades::trim($obj->{'valor'});
+	my $expl= &C4::AR::Utilidades::trim($obj->{'explicacion'});
 	my $opciones="";
 
 	if($tipo eq "referencia"){$opciones=$obj->{'tabla'}."|".$obj->{'campo'};}

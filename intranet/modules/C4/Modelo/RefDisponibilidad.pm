@@ -60,6 +60,18 @@ sub obtenerValoresCampo {
     return (scalar(@array_valores), \@array_valores);
 }
 
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::RefDisponibilidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
+						( select   => [$campo],
+						  query =>[ codigo => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;

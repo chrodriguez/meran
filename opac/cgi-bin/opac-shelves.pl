@@ -68,7 +68,7 @@ my ($borr, $flags) = getpatroninformation($loggedinuser,"");
 if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 #
 
-if (C4::Context->boolean_preference('marc') eq '1') {
+if (C4::Context->preference('marc')) {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "opac-detail.pl");

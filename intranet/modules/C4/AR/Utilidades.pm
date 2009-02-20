@@ -46,7 +46,6 @@ use vars qw(@EXPORT @ISA);
     &saveholidays 
     &getholidays 
     &savedatemanip 
-    &buscarTabladeReferencia 
     &obtenerValores 
     &actualizarCampos 
     &buscarTablasdeReferencias 
@@ -744,57 +743,57 @@ $sth->execute($valores{$id});
 $sth->finish;
 }
 
-#Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
-sub buscarTablasdeReferencias{
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare(" SELECT DISTINCT(referencia) 
-            FROM pref_tabla_referencia 
-            ORDER BY (referencia)");
-$sth->execute();
-my %results;
-while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
-  $results{$data->{'referencia'}}=$data->{'referencia'};
-}
-$sth->finish;
-return(%results);#,@results);
-}
-
-#Esta funcion devuelve la tabla de referencia que se esta buscando para modificar
-sub buscarTabladeReferencia{
-my ($ref)=@_;
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare(" SELECT * 
-            FROM pref_tabla_referencia 
-            WHERE referencia=? 
-            LIMIT 0,1");
-$sth->execute($ref);
-my $results=$sth->fetchrow_hashref;
-#se obtiene el orden de la tabla con la que se esta trabajando
-$sth=$dbh->prepare("    SELECT orden 
-            FROM pref_tabla_referencia_info 
-            WHERE referencia=? 
-            LIMIT 0,1");
-$sth->execute($ref);
-$results->{'orden'}=$sth->fetchrow_array;
-$sth->finish;
-return($results);
-}
-
-=item
-obtenerIdentTablaRef
-Obtiene el campo clave de la tabla a la cual se esta asi referencia
-=cut
-sub obtenerIdentTablaRef{
-    my ($tabla)=@_;
-    my $dbh = C4::Context->dbh;
-
-    my $query=" SELECT nomcamporeferencia 
-            FROM pref_tabla_referencia 
-            WHERE referencia=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($tabla);
-    return($sth->fetchrow);
-}
+# #Esta funcion retorna todas las tablas de referencia las sistema de acuerdo a las tablas que esten en la tabla tablasDeReferencias de la base de datos, no recibe parametros
+# sub buscarTablasdeReferencias{
+# my $dbh = C4::Context->dbh;
+# my $sth=$dbh->prepare(" SELECT DISTINCT(referencia) 
+#             FROM pref_tabla_referencia 
+#             ORDER BY (referencia)");
+# $sth->execute();
+# my %results;
+# while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+#   $results{$data->{'referencia'}}=$data->{'referencia'};
+# }
+# $sth->finish;
+# return(%results);#,@results);
+# }
+# 
+# #Esta funcion devuelve la tabla de referencia que se esta buscando para modificar
+# sub {
+# my ($ref)=@_;
+# my $dbh = C4::Context->dbh;
+# my $sth=$dbh->prepare(" SELECT * 
+#             FROM pref_tabla_referencia 
+#             WHERE referencia=? 
+#             LIMIT 0,1");
+# $sth->execute($ref);
+# my $results=$sth->fetchrow_hashref;
+# #se obtiene el orden de la tabla con la que se esta trabajando
+# $sth=$dbh->prepare("    SELECT orden 
+#             FROM pref_tabla_referencia_info 
+#             WHERE referencia=? 
+#             LIMIT 0,1");
+# $sth->execute($ref);
+# $results->{'orden'}=$sth->fetchrow_array;
+# $sth->finish;
+# return($results);
+# }
+# 
+# =item
+# obtenerIdentTablaRef
+# Obtiene el campo clave de la tabla a la cual se esta asi referencia
+# =cut
+# sub obtenerIdentTablaRef{
+#     my ($tabla)=@_;
+#     my $dbh = C4::Context->dbh;
+# 
+#     my $query=" SELECT nomcamporeferencia 
+#             FROM pref_tabla_referencia 
+#             WHERE referencia=?";
+#     my $sth=$dbh->prepare($query);
+#     $sth->execute($tabla);
+#     return($sth->fetchrow);
+# }
 
 #obtenerTemas devuelve los temas que sean like el parametro
 sub obtenerDefaults{

@@ -217,5 +217,19 @@ sub obtenerValoresTablaRef{
 
 }
 
+=item
+obtenerIdentTablaRef
+Obtiene el campo clave de la tabla a la cual se esta asi referencia
+=cut
+sub obtenerIdentTablaRef{
+    my ($tableAlias)=@_;
+
+    use C4::Modelo::PrefTablaReferencia;
+    my $ref = C4::Modelo::PrefTablaReferencia->new();
+
+    return($ref->obtenerIdentTablaRef($tableAlias));
+}
+
+
 
 1;

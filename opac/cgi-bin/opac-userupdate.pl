@@ -3,7 +3,6 @@ use strict;
 require Exporter;
 use CGI;
 use Mail::Sendmail;
-use C4::AR::UpdateData;
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
@@ -46,7 +45,7 @@ if ($updateemailaddress eq '') {
     exit;
 }
 
-if ( C4::Context->preference('CheckUpdateDataEnabled') == 'yes') {
+if ( C4::Context->preference('CheckUpdateDataEnabled')) {
 
 
 if ($query->{'surname'}) {
@@ -96,7 +95,7 @@ $template->param(BORROWER_INFO => \@bordat,
 
 #otra vez einar con Guarani
 
-$template->param(updatedata=>checkUpdateData());
+$template->param(updatedata=>(!C4::Context->preference('CheckUpdateDataEnabled')));
 
 
 $template->param(pagetitle => "Actualizaci&oacute;n de datos personales");

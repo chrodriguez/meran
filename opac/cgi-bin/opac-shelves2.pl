@@ -58,7 +58,7 @@ my ($template, $loggedinuser, $cookie)
 							flagsrequired => {catalogue => 1},
 						});
 
-if (C4::Context->boolean_preference('marc') eq '1') {
+if (C4::Context->preference('marc')) {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "detail.pl");

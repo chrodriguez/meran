@@ -52,14 +52,20 @@ sub getShowValue{
 	}
 	elsif($self->getType eq 'valAuto'){
 	    	use C4::Modelo::PrefValorAutorizado;
-			use C4::AR::Utilidades;
+		use C4::AR::Utilidades;
     		my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
 										query => [ category => { eq => trim($self->getOptions)} , 
 										authorised_value => { eq => trim($self->getValue)}]);
 			$show=$valAuto_array_ref->[0]->getLib;
 		}
+
 	elsif($self->getType eq 'referencia'){
-	
+		my @array=split(/\|/,$self->getOptions);
+		my $tabla=$array[0];
+		my $campo=$array[1];
+		use C4::Modelo::PrefTablaReferencia;
+		$show=C4::Modelo::PrefTablaReferencia->obtenerValorDeReferencia($tabla,$campo,$self->getValue);
+
 	}
 	else{$show=$self->getValue;}
 

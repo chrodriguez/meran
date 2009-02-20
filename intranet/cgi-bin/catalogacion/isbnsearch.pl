@@ -33,7 +33,7 @@ my $showoffset = $offset + 1;
 my $total;
 my $count;
 my @results;
-my $marc_p = C4::Context->boolean_preference("marc");
+my $marc_p = C4::Context->preference("marc");
 if ( !$isbn && !$title ) {
     print $input->redirect('addbooks.pl');
 }

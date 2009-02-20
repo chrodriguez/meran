@@ -32,7 +32,7 @@ my $showoffset = $offset + 1;
 my $total;
 my $count;
 my @results;
-my $marc_p = C4::Context->boolean_preference("marc");
+my $marc_p = C4::Context->preference("marc");
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "catalogue/isbnsearchresult.tmpl",

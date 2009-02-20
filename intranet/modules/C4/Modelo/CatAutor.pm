@@ -110,6 +110,18 @@ sub obtenerValoresCampo {
     return (scalar(@array_valores), \@array_valores);
 }
 
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::CatAutor::Manager;
+ 	my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
+						( select   => [$campo],
+						  query =>[ id => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;

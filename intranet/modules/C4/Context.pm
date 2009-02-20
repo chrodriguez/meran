@@ -20,7 +20,6 @@
 package C4::Context;
 use strict;
 use DBI;
-use C4::Boolean;
 
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
@@ -346,12 +345,12 @@ sub preferences {
 }
 	
 
-sub boolean_preference ($) {
-	my $self = shift;
-	my $var = shift;		# The system preference to return
-	my $it = preference($self, $var);
-	return defined($it)? C4::Boolean::true_p($it): undef;
-}
+# sub boolean_preference ($) {
+# 	my $self = shift;
+# 	my $var = shift;		# The system preference to return
+# 	my $it = preference($self, $var);
+# 	return defined($it)? C4::Boolean::true_p($it): undef;
+# }
 
 # AUTOLOAD
 # This implements C4::Config->foo, and simply returns

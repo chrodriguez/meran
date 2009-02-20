@@ -169,4 +169,51 @@ sub setBorrowing_days{
     my ($borrowing_days) = @_;
     $self->borrowing_days($borrowing_days);
 }
+
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    	my ($campo)=@_;
+	use C4::Modelo::UsrRefCategoriasSocio::Manager;
+ 	my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getCategory_code;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::UsrRefCategoriasSocio::Manager;
+ 	my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio
+						( select   => [$campo],
+						  query =>[ categorycode => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "categorycode") {return $self->getCategory_code;}
+	if ($campo eq "description") {return $self->getDescription;}
+
+	return (0);
+}
+
+
+sub nextMember{
+    use C4::Modelo::CatTema;
+    return(C4::Modelo::CatTema->new());
+}
 1;

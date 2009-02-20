@@ -62,7 +62,7 @@ my ($template, $loggedinuser, $cookie)
 my $prevshelfnumber=$query->param('shelfnumber');
 $template->param(prevshelfnumber => $prevshelfnumber);
 
-if (C4::Context->boolean_preference('marc') eq '1') {
+if (C4::Context->preference('marc') eq '1') {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "detail.pl");

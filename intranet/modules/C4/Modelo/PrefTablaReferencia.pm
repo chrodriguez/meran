@@ -77,10 +77,38 @@ sub obtenerValoresTablaRef{
 	my ($alias_tabla, $campo) = @_;
 	
 	my $ref=$self->createFromAlias($alias_tabla);
-
-	my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo);
-
-	return ($cantidad,$valores);
+	if ($ref){
+		my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo);
+		return ($cantidad,$valores);
+		}
+	else {
+	return 0;
+	}
+	
 }
+
+
+sub obtenerValorDeReferencia{
+	my ($self) = shift;
+	my ($alias_tabla, $campo , $id) = @_;
+	
+	my $ref=$self->createFromAlias($alias_tabla);
+	if ($ref){
+		my $valor=$ref->obtenerValorCampo($campo,$id);
+		return $valor;
+		}
+	else {
+	return 0;
+	}
+	
+}
+
+sub obtenerIdentTablaRef{
+	my ($self) = shift;
+	my ($alias_tabla) = @_;
+	my $ref=$self->createFromAlias($alias_tabla);
+	return ($ref->meta->primary_key);
+}
+
 1;
 

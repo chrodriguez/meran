@@ -23,7 +23,7 @@ my ($template, $session, $params)= get_template_and_user({
 			});
 
 ## FIXME para q es???????????????
-my $marc_p = C4::Context->boolean_preference("marc");
+my $marc_p = C4::Context->preference("marc");
 
 $params->{'NOTMARC'} = !$marc_p;
 

@@ -285,19 +285,56 @@ INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`) VALUES
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `idCompCliente` VARCHAR( 255 ) NOT NULL AFTER `idinforef` ;
 
-ALTER TABLE `cat_nivel1` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+ALTER TABLE `cat_nivel1` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE `cat_nivel1_repetible` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+ALTER TABLE `cat_nivel1_repetible` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 -- Se modifico la tabla de cat_nivel3
 
-ALTER TABLE `cat_nivel3` CHANGE `notforloan` `id_disponibilidad` TINYINT( 5 ) NULL DEFAULT '0'
+ALTER TABLE `cat_nivel3` CHANGE `notforloan` `id_disponibilidad` TINYINT( 5 ) NULL DEFAULT '0';
+ALTER TABLE `cat_nivel3` CHANGE `wthdrawn` `para_sala` SMALLINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `cat_nivel3` CHANGE `homebranch` `id_ui_origen` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `cat_nivel3` CHANGE `holdingbranch` `id_ui_poseedora` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
-ALTER TABLE `cat_nivel3` CHANGE `wthdrawn` `para_sala` SMALLINT( 1 ) NOT NULL DEFAULT '0'
+--Modificaciones en PREFERENCIAS
+UPDATE pref_preferencia_sistema SET type = 'text';
 
-ALTER TABLE `cat_nivel3` CHANGE `homebranch` `id_ui_origen` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+--Los que cambiaron a bool
+UPDATE pref_preferencia_sistema SET value = '0',type = 'bool' WHERE variable = 'insecure';
+UPDATE pref_preferencia_sistema SET value = '0',type = 'bool' WHERE variable = 'ldapenabled';
+UPDATE pref_preferencia_sistema SET value = '1',type = 'bool' WHERE variable = 'UploadPictureFromOPAC';
+UPDATE pref_preferencia_sistema SET value = '1',type = 'bool' WHERE variable = 'sanctions';
 
-ALTER TABLE `cat_nivel3` CHANGE `holdingbranch` `id_ui_poseedora` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+--Todos los demas bool
+UPDATE pref_preferencia_sistema SET type = 'bool' WHERE variable = 'autoActivarPersona' OR variable = 'autoMemberNum' OR variable = 'CheckUpdateDataEnabled' OR variable = 'circulation' OR variable = 'EnabledMailSystem' OR variable = 'habilitar_irregulares' OR variable = 'keeppasswordalive' OR variable = 'logSearchINTRA' OR variable = 'logSearchOPAC' OR variable = 'marc' OR variable = 'opacSearchAnonymous' OR variable = 'opacUnavail' OR variable = 'print_renew' OR variable = 'reminderMail' OR variable = 'selectHomeBranch' OR variable = 'showHistoricReserves' OR variable = 'susp' OR variable = 'usercourse' OR variable = 'viewDetail' OR variable = 'virtuallibrary';
 
-ALTER TABLE `ref_idioma` ADD PRIMARY KEY ( `idLanguage` ) 
+-- Los Valores Autorizados
+UPDATE pref_preferencia_sistema SET options = 'dateformat', type = 'valAuto' WHERE variable = 'dateformat';
+UPDATE pref_preferencia_sistema SET options = 'acquisitions', type = 'valAuto' WHERE variable = 'acquisitions';
 
+-- Tablas de Referencia
+UPDATE pref_preferencia_sistema SET options = 'ui|nombre', type = 'referencia' WHERE variable = 'defaultbranch';
+UPDATE pref_preferencia_sistema SET options = 'soporte|description',value='1', type = 'referencia' WHERE variable = 'defaultsuport';
+UPDATE pref_preferencia_sistema SET options = 'nivel_bibliografico|description', type = 'referencia' WHERE variable = 'defaultlevel';
+UPDATE pref_preferencia_sistema SET options = 'tipo_documento_usr|descripcion', type = 'referencia' WHERE variable = 'defaultTipoDoc';
+UPDATE pref_preferencia_sistema SET options = 'tipo_prestamo|description', type = 'referencia' WHERE variable = 'defaultissuetype';
+UPDATE pref_preferencia_sistema SET options = 'tipo_ejemplar|nombre', type = 'referencia' WHERE variable = 'defaultTipoNivel3';
+UPDATE pref_preferencia_sistema SET options = 'disponibilidad|nombre',value='0', type = 'referencia' WHERE variable = 'defaultDisponibilidad';
+UPDATE pref_preferencia_sistema SET options = 'tipo_socio|description', type = 'referencia' WHERE variable = 'defaultCategoriaSocio';
+
+--Los TextaArea
+UPDATE pref_preferencia_sistema SET type = 'texta' WHERE variable = 'mailMessage' OR variable = 'reserveMessage' OR  variable = 'reminderMessage' OR  variable = 'mailMensajeVencido';
+
+--Tipos de socios
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla` , `alias_tabla`) VALUES ('usr_ref_categoria_socio', 'tipo_socio');
+--Tipos de documento
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla` , `alias_tabla`) VALUES ('usr_ref_tipo_documento', 'tipo_documento_usr');
+
+TRUNCATE TABLE `usr_ref_tipo_documento`;
+ALTER TABLE `usr_ref_tipo_documento` DROP `id_tipo_documento`;
+ALTER TABLE `usr_ref_tipo_documento` ADD PRIMARY KEY ( `nombre` );
+
+INSERT INTO `usr_ref_tipo_documento` (`nombre`, `descripcion`) VALUES ('DNI', 'DNI'),('LC', 'LC'),('PAS', 'PAS'),('LE', 'LE');
+
+--Idioma
+ALTER TABLE `ref_idioma` ADD PRIMARY KEY ( `idLanguage` ) ;

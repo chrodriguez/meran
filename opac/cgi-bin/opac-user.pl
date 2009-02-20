@@ -7,7 +7,6 @@ use C4::Circulation::Circ2;
 use C4::Date;
 use C4::AR::Sanctions;
 use Date::Manip;
-use C4::AR::UpdateData;
 
 my $query = new CGI;
 
@@ -65,7 +64,7 @@ my $msgFoto=$query->param('msg');
 $borr->{'foto_name'} = $foto;
 $borr->{'mensaje_error_foto'} = $msgFoto;
 $borr->{'bornum'} = $session->param('borrowernumber');
-if (C4::Context->preference("UploadPictureFromOPAC") eq 'yes') {
+if (C4::Context->preference("UploadPictureFromOPAC")) {
 	$borr->{'UploadPictureFromOPAC'}=1;
 } else {
 	$borr->{'UploadPictureFromOPAC'}=0;
@@ -90,7 +89,7 @@ if ($san->{'id3'}) {
 }
 
 $t_params->{'sanciones_loop'}= $sanc;
-$t_params->{'updatedata'}= checkUpdateData();
+$t_params->{'updatedata'}= (!C4::Context->preference('CheckUpdateDataEnabled'));
 $t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 

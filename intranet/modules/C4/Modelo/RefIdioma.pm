@@ -62,6 +62,17 @@ sub obtenerValoresCampo {
     return (scalar(@array_valores), \@array_valores);
 }
 
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::RefIdioma::Manager;
+ 	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
+						( select   => [$campo],
+						  query =>[ idLanguage => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;

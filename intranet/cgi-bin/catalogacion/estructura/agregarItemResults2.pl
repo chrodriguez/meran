@@ -27,8 +27,8 @@ my $tipoInput=$objetoResp->{'tipo'};
 my $campos=$objetoResp->{'campos'};
 my $orden=$objetoResp->{'orden'};
 if($tabla != -1 && $tipoInput eq "combo"){
-	my $ident=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
-	my $opciones=&C4::AR::Utilidades::obtenerValoresTablaRef($tabla,$ident,$campos,$orden);
+	#my $ident=&C4::AR::Referencias::obtenerIdentTablaRef($tabla);
+	my $opciones=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campos); #FIX FIX FIX 
 	$objetoResp->{'opciones'}=$opciones
 }
 

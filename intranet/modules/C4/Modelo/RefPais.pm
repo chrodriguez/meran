@@ -93,6 +93,16 @@ sub obtenerValoresCampo {
     return (scalar(@array_valores), \@array_valores);
 }
 
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::RefPais::Manager;
+ 	my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
+						( select   => [$campo],
+						  query =>[ iso => { eq => $id} ]);
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;

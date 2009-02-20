@@ -439,10 +439,11 @@ print A "checkauth=> NO TIENE PERMISOS: \n";
 
 
     #por aca se permite llegar a paginas que no necesitan autenticarse
-    my $insecure = C4::Context->boolean_preference('insecure');
+    my $insecure = C4::Context->preference('insecure');
     # finished authentification, now respond
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
 print A "checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n";
+print A "checkauth=> insecure: ".$insecure."\n";
 print A "checkauth=> authnotrequired: ".$authnotrequired."\n";
         #Se verifica si el usuario tiene que cambiar la password
         if ( ($userid) && ( new_password_is_needed($userid) ) ) {
@@ -816,13 +817,10 @@ print F "_verificarPassword=> nroRandom: ".$random_number."\n";
 # Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
 # la llamada a la funcion checkpwldap por checkpw
 
-	my $sth=$dbh->prepare("SELECT value FROM pref_preferencia_sistema WHERE variable=?");
-	$sth->execute("ldapenabled");
-
 	my ($passwordValida, $cardnumber);
 ## FIXME falta verificar la pass en LDAP si esta esta usando
 	my $branch;
-	if ($sth->fetchrow eq 'yes') {
+	if ( C4::Context->preference('ldapenabled')) {
 	#se esta usando LDAP
 		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
 	} else {

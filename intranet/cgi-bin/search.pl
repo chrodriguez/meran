@@ -373,7 +373,7 @@ if ($count>$num) {
 }#end if ($count>$num)
 
 	$template->param(numbers => \@numbers);
-	if (C4::Context->boolean_preference('marc') eq '1') {
+	if (C4::Context->preference('marc') eq '1') {
 		$template->param(script => "MARCdetail.pl");
 	} else {
 		$template->param(script => "detail.pl");

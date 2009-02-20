@@ -63,6 +63,18 @@ sub obtenerValoresCampo {
     return (scalar(@array_valores), \@array_valores);
 }
 
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::CatRefTipoNivel3::Manager;
+ 	my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
+						( select   => [$campo],
+						  query =>[ id_tipo_doc => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
