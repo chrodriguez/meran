@@ -209,7 +209,7 @@ function updateGuardarDocumentoN3(responseText){
 //     inicializar();d
 //     var Messages=JSONstring.toObject(responseText);
     var info=JSONstring.toObject(responseText);
-    var Messages= info.messages;
+    var Messages= info;
     var id2= info.id2;
     setMessages(Messages);
 //     if (! (hayError(Messages) ) ){

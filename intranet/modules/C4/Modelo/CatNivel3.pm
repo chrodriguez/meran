@@ -55,8 +55,8 @@ sub agregar{
     $self->setId2('7307'); 
     $self->setBarcode('BARCODE');
     $self->setSignatura_topografica('SIG TOPO');
-    $self->setId_ui_poseedora('ES');
-    $self->setId_ui_origen('LA PLATA');
+    $self->setId_ui_poseedora('DEO');
+    $self->setId_ui_origen('DEO');
     $self->setId_disponibilidad('2009');
     $self->setParaSala(0);
 
@@ -73,7 +73,7 @@ sub agregar{
             $nivel3Repetible->setCampo($infoNivel3->{'campo'});
             $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
             $nivel3Repetible->setDato($infoNivel3->{'dato'});
-            $nivel3Repetible->save(); 
+            $nivel3Repetible->save();
         }
     }
 }

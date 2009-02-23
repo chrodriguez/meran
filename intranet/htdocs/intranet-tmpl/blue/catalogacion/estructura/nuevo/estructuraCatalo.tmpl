@@ -39,7 +39,10 @@ function eleccionDeNivel(){
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.nivel=nivel;
     objAH.tipoAccion= 'MOSTRAR_CAMPOS';
-	objAH.itemtype=$('#tipo_nivel3_id').val();
+    if (nivel == 1)
+	   objAH.itemtype='ALL';
+   else
+      objAH.itemtype=$('#tipo_nivel3_id').val();
 	objAH.sendToServer();
 
 }
@@ -306,7 +309,10 @@ function agregarEstructuraCatalogacion(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.nivel= $('#niveles_id').val();
-    objAH.itemtype= $('#tipo_nivel3_id').val();
+    if (objAH.nivel == 1)
+      objAH.itemtype= 'ALL';
+    else
+      objAH.itemtype= $('#tipo_nivel3_id').val();
     objAH.campo= $('#campo').val();
     objAH.subcampo= $('#subcampo').val();
     objAH.liblibrarian= $('#liblibrarian').val();
