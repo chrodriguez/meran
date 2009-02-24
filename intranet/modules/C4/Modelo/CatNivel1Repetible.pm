@@ -38,6 +38,12 @@ sub agregar{
     $self->save();
 }
 
+sub eliminar{
+
+   my ($self)=shift;   
+   $self->delete();
+}
+
 sub getRep_n1_id{
     my ($self) = shift;
     return ($self->rep_n1_id);

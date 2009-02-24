@@ -56,7 +56,7 @@ __PACKAGE__->meta->setup(
 
 sub agregar{
 
-    use Digest::MD5 qw(md5_base64);
+    use Digest::MD5 qw(md5_hex);
     use C4::Modelo::PrefInformacionReferencia;
     my ($self)=shift;
     my ($data_hash)=@_;
@@ -71,13 +71,13 @@ sub agregar{
     $self->setObligatorio($data_hash->{'obligatorio'});
     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
     $self->setVisible($data_hash->{'visible'});
-    $self->setIdCompCliente(md5_base64(time()));
+    $self->setIdCompCliente(md5_hex(time()));
     $self->save();
     $data_hash->{'id_est_cat'}=$self->id;
     my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
        $pref_temp->agregar($data_hash);
 
-}
+} 
 
 sub modificar{
 

@@ -90,6 +90,30 @@ sub agregar{
     }
 }
 
+
+sub eliminar{
+
+    my ($self)=shift;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+
+
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel_3_repetible(id2 => $self->getId2());
+    foreach my $n3Rep (@$repetiblesNivel3){
+      $n3Rep->eliminar();
+    }
+
+
+    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel_2_repetible(id2 => $self->getId2());
+    foreach my $n2Rep (@$repetiblesNivel2){
+      $n2Rep->delete();
+    }
+    $self->delete();
+
+}
+
+
 sub getAnio_publicacion{
     my ($self) = shift;
     return ($self->anio_publicacion);

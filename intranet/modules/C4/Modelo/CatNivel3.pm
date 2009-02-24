@@ -78,6 +78,24 @@ sub agregar{
     }
 }
 
+
+sub eliminar{
+
+    my ($self)=shift;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+
+
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel_3_repetible(id3 => $self->getId3());
+    foreach my $n3Rep (@$repetiblesNivel3){
+      $n3Rep->eliminar();
+    }
+    $self->delete();
+
+}
+
+
 sub getId_ui_poseedora{
     my ($self) = shift;
     return ($self->id_ui_poseedora);

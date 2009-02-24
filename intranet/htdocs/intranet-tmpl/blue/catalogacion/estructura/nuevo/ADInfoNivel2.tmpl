@@ -4,7 +4,7 @@
 <input  type="image" border="0" onclick="modificarGrupo(nivel2.getId1,nivel2.getId2)" title="Modificar Grupo" 
         src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
 <input type="button" border="0" onclick="agregarEjemplar(53,60,'LIB')" title="Agregar Ejemplar" value="+" name="agregar"/>
-<input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo(nivel2.getId1,nivel2.getId2)"  
+<input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])"  
         src="/intranet-tmpl/blue/images/borrar.png" value="delete" name="delete"/>
 <br/>
 Nivel bibliográfico: [% nivel2.getNivel_bibliografico %]

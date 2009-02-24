@@ -43,7 +43,7 @@ use vars qw(@EXPORT @ISA);
 	&crearCatalogo
 
 	&cantidadItem	
-
+   
 	&buscarCamposObligatorios
 	&buscarCamposMARCdeNivel
 	&buscarSubCampo
@@ -87,6 +87,9 @@ use vars qw(@EXPORT @ISA);
 	&bajarOrden
 
 	&guardarModificacion
+
+
+   &t_eliminarNivel1
 );
 
 
@@ -1953,4 +1956,48 @@ sub t_guardarNivel3 {
     }
 
     return ($msg_object);
+}
+
+
+sub t_eliminarNivel1{
+   
+   my($id1)=@_;
+   
+   my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        open A, "/tmp/debug.txt";
+        print A "ENTRO A ELIMINAR CAT1";
+        close A;
+        my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $id1);
+            $catNivel1->load;
+        my $db= $catNivel1->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel1->eliminar;  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+
 }

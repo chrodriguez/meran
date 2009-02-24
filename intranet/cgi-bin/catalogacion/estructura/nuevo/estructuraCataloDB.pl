@@ -16,6 +16,10 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
+
+open A,"/tmp/debug.txt";
+print A "dsDFKDSNFJDFNDKJSfj";
+close A;
 my $nivel=$obj->{'nivel'};
 my $orden=$obj->{'orden'}||"intranet_habilitado";
 my $itemType='ALL';
@@ -223,6 +227,28 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     print $infoOperacionJSON;
 }
 
+elsif($tipoAccion eq "ELIMINAR_NIVEL"){
+
+   print "\n\nKADSNFKDSNFDSNFDSNDSFNDSDSF\n\n";
+    my $nivel= $obj->{'nivel'};
+    my $id= $obj->{'id'};
+    my ($Message_arrayref);
+   
+    if ($nivel == 1){
+      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel1($id);
+    }
+    elsif($nivel == 2){
+      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel2($id);
+    }
+    elsif($nivel == 3){
+      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel3($id);
+    }
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    print $input->header;
+    print $infoOperacionJSON;
+}
 # ***********************************************ABM CATALOGACION*****************************************************************
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
