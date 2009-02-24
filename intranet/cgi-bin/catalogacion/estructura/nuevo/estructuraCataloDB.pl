@@ -229,9 +229,8 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
 
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 
-   print "\n\nKADSNFKDSNFDSNFDSNDSFNDSDSF\n\n";
     my $nivel= $obj->{'nivel'};
-    my $id= $obj->{'id'};
+    my $id= $obj->{'id1'} || $obj->{'id2'} || $obj->{'id3'};
     my ($Message_arrayref);
    
     if ($nivel == 1){

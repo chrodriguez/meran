@@ -99,13 +99,13 @@ sub eliminar{
     use C4::Modelo::CatNivel3Repetible::Manager;
 
 
-    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel_3_repetible(id2 => $self->getId2());
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3::Manager::get_cat_nivel3(id2 => $self->getId2());
     foreach my $n3Rep (@$repetiblesNivel3){
       $n3Rep->eliminar();
     }
 
 
-    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel_2_repetible(id2 => $self->getId2());
+    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(id2 => $self->getId2());
     foreach my $n2Rep (@$repetiblesNivel2){
       $n2Rep->delete();
     }

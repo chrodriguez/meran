@@ -1967,9 +1967,6 @@ sub t_eliminarNivel1{
 
     if(!$msg_object->{'error'}){
     #No hay error
-        open A, "/tmp/debug.txt";
-        print A "ENTRO A ELIMINAR CAT1";
-        close A;
         my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $id1);
             $catNivel1->load;
         my $db= $catNivel1->db;

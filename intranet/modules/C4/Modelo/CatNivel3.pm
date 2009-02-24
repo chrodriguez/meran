@@ -87,7 +87,7 @@ sub eliminar{
     use C4::Modelo::CatNivel3Repetible::Manager;
 
 
-    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel_3_repetible(id3 => $self->getId3());
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(id3 => $self->getId3());
     foreach my $n3Rep (@$repetiblesNivel3){
       $n3Rep->eliminar();
     }
