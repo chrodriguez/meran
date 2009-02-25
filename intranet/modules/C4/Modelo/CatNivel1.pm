@@ -64,16 +64,12 @@ sub eliminar{
     use C4::Modelo::CatNivel2Repetible;
     use C4::Modelo::CatNivel2Repetible::Manager;
 
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-
-
-    my ($repetiblesNivel2) = C4::Modelo::CatNivel2::Manager::get_cat_nivel2(id1 => $self->getId1());
-    foreach my $n2Rep (@$repetiblesNivel2){
-      $n2Rep->eliminar();
+    my ($nivel2) = C4::Modelo::CatNivel2::Manager::get_cat_nivel2(id1 => $self->getId1());
+    foreach my $n2 (@$nivel2){
+      $n2->eliminar();
     }
-
-
+   
+   
     my ($repetiblesNivel1) = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(id1 => $self->getId1());
     foreach my $n1Rep (@$repetiblesNivel1){
       $n1Rep->delete();

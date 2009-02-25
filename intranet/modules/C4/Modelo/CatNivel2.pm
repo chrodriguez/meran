@@ -56,7 +56,7 @@ sub agregar{
 
     my ($data_hash)=@_;
 #     $self->setId1($data_hash->{'id1'});
-    $self->setId1('7005');
+    $self->setId1($data_hash->{'id1'});
 #     $self->setTipo_documento($data_hash->{'tipo_documento'});
 #     $self->setSoporte($data_hash->{'soporte'});
 #     $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
@@ -99,9 +99,9 @@ sub eliminar{
     use C4::Modelo::CatNivel3Repetible::Manager;
 
 
-    my ($repetiblesNivel3) = C4::Modelo::CatNivel3::Manager::get_cat_nivel3(id2 => $self->getId2());
-    foreach my $n3Rep (@$repetiblesNivel3){
-      $n3Rep->eliminar();
+    my ($nivel3) = C4::Modelo::CatNivel3::Manager::get_cat_nivel3(id2 => $self->getId2());
+    foreach my $n3 (@$nivel3){
+      $n3->eliminar();
     }
 
 

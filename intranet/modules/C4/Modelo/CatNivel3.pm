@@ -51,8 +51,10 @@ sub agregar{
 
     my ($data_hash)=@_;
 #     $self->setId1($data_hash->{'id1'});
-    $self->setId1('7005');
-    $self->setId2('7307'); 
+    $self->setId1($data_hash->{'id1'});
+    $self->setId2($data_hash->{'id2'}); 
+
+    print 
     $self->setBarcode('BARCODE');
     $self->setSignatura_topografica('SIG TOPO');
     $self->setId_ui_poseedora('DEO');

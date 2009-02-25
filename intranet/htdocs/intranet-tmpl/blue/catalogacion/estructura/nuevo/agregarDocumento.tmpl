@@ -12,6 +12,8 @@
 <script>
 
 //************************************************REVISADO******************************************************************
+id1=0; //para saber el id del nivel 1
+id2=0; //para saber el id del nivel 2
 
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
@@ -25,6 +27,7 @@ function inicializar(){
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
         COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+        
     }
 }
 
@@ -155,7 +158,7 @@ function updateGuardarDocumentoN1(responseText){
 //     var Messages=JSONstring.toObject(responseText);
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;
-    var id1= info.id1;
+    id1= info.id1;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -174,6 +177,7 @@ function guardarDocumentoN2(){
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.id1 = id1;
     objAH.sendToServer();
 }
 
@@ -182,7 +186,7 @@ function updateGuardarDocumentoN2(responseText){
 //     var Messages=JSONstring.toObject(responseText);
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;
-    var id2= info.id2;
+    id2= info.id2;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -202,6 +206,8 @@ function guardarDocumentoN3(){
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.id1 = id1;
+    objAH.id2 = id2;
     objAH.sendToServer();
 }
 
@@ -434,12 +440,11 @@ function borrarGrupo(id1,id2){
 	
 	objAH=new AjaxHelper(updateInfoAgregarItem);
     objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-	objAH.id1=id1;
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.id2=id2;
 	objAH.nivel=2;
 	objAH.itemtype=$("#id_tipo_doc").val();
-	objAH.accion2="borrarN2";
+	objAH.accion2="ELIMINAR_NIVEL";
 	objAH.sendToServer();
 }
 
