@@ -338,3 +338,18 @@ INSERT INTO `usr_ref_tipo_documento` (`nombre`, `descripcion`) VALUES ('DNI', 'D
 
 --Idioma
 ALTER TABLE `ref_idioma` ADD PRIMARY KEY ( `idLanguage` ) ;
+
+TRUNCATE pref_valor_autorizado;
+INSERT INTO `pref_valor_autorizado` (`id`, `category`, `authorised_value`, `lib`) VALUES
+(6, 'loan', '1', 'Para Sala'),
+(7, 'loan', '0', 'Domiciliario'),
+(8, 'wthdrawn', '0', 'Disponible'),
+(9, 'wthdrawn', '1', 'Perdido'),
+(10, 'wthdrawn', '4', 'Baja'),
+(11, 'wthdrawn', '5', 'Ejemplar deteriorado'),
+(12, 'wthdrawn', '6', 'En Encuadernación'),
+(13, 'dateformat', 'metric', 'metric'),
+(14, 'dateformat', 'us', 'us'),
+(15, 'dateformat', 'iso', 'iso'),
+(18, 'acquisitions', 'simple', 'simple'),
+(19, 'acquisitions', 'normal', 'normal');
