@@ -1,7 +1,7 @@
 package C4::Modelo::CircReserva;
 
 use strict;
-
+use Date::Manip;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -31,26 +31,6 @@ __PACKAGE__->meta->setup(
         },
     ],
 );
-
-sub agregar{
-    my ($self)=shift;
-    my ($data_hash)=@_;
-    #Asignando data...
-# 	$params->{'id3'}||undef,
-# 	$params->{'id2'},
-# 	$params->{'borrowernumber'},
-# 	$params->{'reservedate'},
-# 	$params->{'reminderdate'},
-# 	$params->{'branchcode'},
-# 	$params->{'estado'}
-
-
-    $self->setFuente($data_hash->{'fuente'});
-    $self->setRegular($data_hash->{'regular'});
-    $self->setCategoria($data_hash->{'categoria'});
-    $self->save();
-}
-
 
 sub getId3{
     my ($self) = shift;
@@ -107,15 +87,64 @@ sub setFecha_notificacion{
     $self->fecha_notificacion($fecha_notificacion);
 }
 
-sub getUi_id{
+sub getFecha_recodatorio{
     my ($self) = shift;
-    return ($self->ui_id);
+    return ($self->fecha_recodatorio);
 }
 
-sub setUi_id{
+sub setFecha_recodatorio{
     my ($self) = shift;
-    my ($ui_id) = @_;
-    $self->ui_id($ui_id);
+    my ($fecha_recodatorio) = @_;
+    $self->fecha_recodatorio($fecha_recodatorio);
+}
+
+sub getId_ui{
+    my ($self) = shift;
+    return ($self->id_ui);
+}
+
+sub setId_ui{
+    my ($self) = shift;
+    my ($id_ui) = @_;
+    $self->id_ui($id_ui);
+}
+
+sub getEstado{
+    my ($self) = shift;
+    return ($self->estado);
+}
+
+sub setEstado{
+    my ($self) = shift;
+    my ($estado) = @_;
+    $self->estado($estado);
+}
+
+=item
+agregar
+Funcion que agrega una reserva
+=cut
+
+sub agregar {
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self->setId3($data_hash->{'id3'}||undef);
+    $self->setId2($data_hash->{'id2'});
+    $self->setNro_socio($data_hash->{'nro_socio'});
+    $self->setFecha_reserva($data_hash->{'fecha_reserva'});
+    $self->setFecha_recodatorio($data_hash->{'fecha_recodatorio'});
+    $self->setFecha_notificacion($data_hash->{'fecha_notificacion'});
+    $self->setId_ui($data_hash->{'id_ui'});
+    $self->setEstado($data_hash->{'estado'});
+    $self->save();
+
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new();
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+
 }
 1;
 

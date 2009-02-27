@@ -413,7 +413,7 @@ sub actualizarSancion {
 
 	logSanction(
 			'Update',
-			$params->{'borrowernumber'},
+			$infoSancion->{'borrowernumber'},
 			$params->{'loggedinuser'},
 			$params->{'fechaFinSancion'},
 			$params->{'sanctiontypecode'}

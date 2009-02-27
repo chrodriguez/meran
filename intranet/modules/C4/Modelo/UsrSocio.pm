@@ -455,5 +455,20 @@ sub tienePermisos {
 }
 
 
+=item
+Retorna la persona que corresponde al socio
+=cut
+sub getPersona{
+    my ($self) = shift;
+    
+    use C4::Modelo::UsrPersona;
+    use C4::Modelo::UsrPersona::Manager;
+
+    my $persona = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
+
+    return ($persona);
+}
+
+
 1;
 

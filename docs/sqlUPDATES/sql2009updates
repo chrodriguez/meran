@@ -353,3 +353,12 @@ INSERT INTO `pref_valor_autorizado` (`id`, `category`, `authorised_value`, `lib`
 (15, 'dateformat', 'iso', 'iso'),
 (18, 'acquisitions', 'simple', 'simple'),
 (19, 'acquisitions', 'normal', 'normal');
+
+--HISTORICO DE CIRCULACION!!!
+
+ALTER TABLE `rep_historial_circulacion` CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `rep_historial_circulacion` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NULL DEFAULT NULL;
+ALTER TABLE `rep_historial_circulacion` CHANGE `type` `tipo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `end_date` `fecha_fin` DATE NULL DEFAULT NULL ,
+CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;

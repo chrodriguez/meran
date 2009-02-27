@@ -1,7 +1,7 @@
 package C4::Modelo::RepHistorialCirculacion;
 
 use strict;
-
+use Date::Manip;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -12,19 +12,176 @@ __PACKAGE__->meta->setup(
         id1            => { type => 'integer', not_null => 1 },
         id2            => { type => 'integer', not_null => 1 },
         id3            => { type => 'integer', not_null => 1 },
-        type           => { type => 'varchar', default => '', length => 15, not_null => 1 },
-        borrowernumber => { type => 'integer', default => '0', not_null => 1 },
+        tipo           => { type => 'varchar', default => '', length => 15, not_null => 1 },
+        nro_socio      => { type => 'integer', default => '0', not_null => 1 },
         responsable    => { type => 'varchar', length => 20, not_null => 1 },
-        branchcode     => { type => 'varchar', length => 4 },
+        id_ui	       => { type => 'varchar', length => 4 },
         timestamp      => { type => 'timestamp', not_null => 1 },
-        date           => { type => 'date', default => '0000-00-00', not_null => 1 },
+        fecha           => { type => 'date', default => '0000-00-00', not_null => 1 },
         nota           => { type => 'varchar', length => 50 },
-        end_date       => { type => 'date' },
-        issuetype      => { type => 'character', length => 2 },
+        fecha_fin       => { type => 'date' },
+        tipo_prestamo      => { type => 'character', length => 2 },
     ],
 
     primary_key_columns => [ 'id' ],
 );
 
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+}
+
+sub setId{
+    my ($self) = shift;
+    my ($id) = @_;
+    $self->id($id);
+}
+
+sub getId1{
+    my ($self) = shift;
+    return ($self->id1);
+}
+
+sub setId1{
+    my ($self) = shift;
+    my ($id1) = @_;
+    $self->id1($id1);
+}
+
+
+sub getId2{
+    my ($self) = shift;
+    return ($self->id2);
+}
+
+sub setId2{
+    my ($self) = shift;
+    my ($id2) = @_;
+    $self->id2($id2);
+}
+
+sub getId3{
+    my ($self) = shift;
+    return ($self->id3);
+}
+
+sub setId3{
+    my ($self) = shift;
+    my ($id3) = @_;
+    $self->id3($id3);
+}
+
+sub getTipo{
+    my ($self) = shift;
+    return ($self->tipo);
+}
+
+sub setTipo{
+    my ($self) = shift;
+    my ($tipo) = @_;
+    $self->tipo($tipo);
+}
+
+sub getNro_socio{
+    my ($self) = shift;
+    return ($self->nro_socio);
+}
+
+sub setNro_socio{
+    my ($self) = shift;
+    my ($nro_socio) = @_;
+    $self->nro_socio($nro_socio);
+}
+
+sub getResponsable{
+    my ($self) = shift;
+    return ($self->responsable);
+}
+
+sub setResponsable{
+    my ($self) = shift;
+    my ($responsable) = @_;
+    $self->responsable($responsable);
+}
+
+sub getFecha{
+    my ($self) = shift;
+    return ($self->fecha);
+}
+
+sub setFecha{
+    my ($self) = shift;
+    my ($fecha) = @_;
+    $self->fecha($fecha);
+}
+
+sub getFecha_fin{
+    my ($self) = shift;
+    return ($self->fecha_fin);
+}
+
+sub setFecha_fin{
+    my ($self) = shift;
+    my ($fecha_fin) = @_;
+    $self->fecha_fin($fecha_fin);
+}
+
+sub getId_ui{
+    my ($self) = shift;
+    return ($self->id_ui);
+}
+
+sub setId_ui{
+    my ($self) = shift;
+    my ($id_ui) = @_;
+    $self->id_ui($id_ui);
+}
+
+sub getTipo_prestamo{
+    my ($self) = shift;
+    return ($self->tipo_prestamo);
+}
+
+sub setTipo_prestamo{
+    my ($self) = shift;
+    my ($tipo_prestamo) = @_;
+    $self->tipo_prestamo($tipo_prestamo);
+}
+
+
+
+
+
+sub agregar {
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    if ($data_hash->{'tipo'}){
+	$self->setTipo($data_hash->{'tipo'});
+  	}
+	else{
+    	#Asignando data...
+    	if($data_hash->{'estado'} eq 'E'){
+		#es una reserva sobre el ITEM
+		$self->setTipo('reserve');
+		}else{
+		#es una reserva sobre el GRUPO
+		$self->setTipo('queue');
+		$data_hash->{'id3'}= 0;
+		}
+   	}
+
+    $self->setId1($data_hash->{'id1'});
+    $self->setId2($data_hash->{'id2'}); 
+    $self->setId3($data_hash->{'id3'});
+    $self->setNro_socio($data_hash->{'nro_socio'});
+    $self->setResponsable($data_hash->{'loggedinuser'});
+    $self->setFecha(ParseDate("today"));
+    $self->setFecha_fin($data_hash->{'end_date'});
+    $self->setTipo_prestamo($data_hash->{'issuesType'});
+    $self->setId_ui($data_hash->{'id_ui'});
+
+    $self->save();
+}
 1;
 
