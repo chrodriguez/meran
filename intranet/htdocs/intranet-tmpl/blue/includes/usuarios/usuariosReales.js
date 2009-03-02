@@ -158,7 +158,6 @@ function updateEliminarUsuario(responseText){
 //************************************************Agregar Usuario**********************************************
 function agregarUsuario(){
 
-   if (checkUserData()){
       objAH=new AjaxHelper(updateAgregarUsuario);
       objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
       objAH.debug= true;
@@ -170,7 +169,6 @@ function agregarUsuario(){
       objAH.email= $('#email').val();
       objAH.telefono= $('#telefono').val();
       objAH.cod_categoria= $('#categoria_socio_id').val();
-   
       objAH.ciudad= $('#id_ciudad').val();
       objAH.alt_ciudad= $('#id_alt_ciudad').val();
       objAH.alt_telefono= $('#alt_telefono').val();
@@ -182,7 +180,6 @@ function agregarUsuario(){
       objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion= 'AGREGAR_USUARIO';
       objAH.sendToServer();
-   }
 }
 
 function checkUserData(){
