@@ -158,29 +158,36 @@ function updateEliminarUsuario(responseText){
 //************************************************Agregar Usuario**********************************************
 function agregarUsuario(){
 
-    objAH=new AjaxHelper(updateAgregarUsuario);
-    objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-    objAH.debug= true;
-    objAH.nro_socio= $('#nro_socio').val();
-    objAH.sexo= $("input[@name=sexo]:checked").val();
-    objAH.calle= $('#calle').val();
-    objAH.nombre= $('#nombre').val();
-    objAH.nacimiento= $('#nacimiento').val();
-    objAH.email= $('#email').val();
-    objAH.telefono= $('#telefono').val();
-    objAH.cod_categoria= $('#categoria_socio_id').val();
+   if (checkUserData()){
+      objAH=new AjaxHelper(updateAgregarUsuario);
+      objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+      objAH.debug= true;
+      objAH.nro_socio= $('#nro_socio').val();
+      objAH.sexo= $("input[@name=sexo]:checked").val();
+      objAH.calle= $('#calle').val();
+      objAH.nombre= $('#nombre').val();
+      objAH.nacimiento= $('#nacimiento').val();
+      objAH.email= $('#email').val();
+      objAH.telefono= $('#telefono').val();
+      objAH.cod_categoria= $('#categoria_socio_id').val();
+   
+      objAH.ciudad= $('#id_ciudad').val();
+      objAH.alt_ciudad= $('#id_alt_ciudad').val();
+      objAH.alt_telefono= $('#alt_telefono').val();
+      objAH.apellido= $('#apellido').val();
+      objAH.id_ui= $('#ui_id').val();
+      objAH.tipo_documento= $('#tipo_documento_id').val();
+      objAH.nro_documento= $('#nro_documento').val();
+      objAH.legajo= $('#legajo').val();
+      objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
+      objAH.tipoAccion= 'AGREGAR_USUARIO';
+      objAH.sendToServer();
+   }
+}
 
-    objAH.ciudad= $('#id_ciudad').val();
-    objAH.alt_ciudad= $('#id_alt_ciudad').val();
-    objAH.alt_telefono= $('#alt_telefono').val();
-    objAH.apellido= $('#apellido').val();
-    objAH.id_ui= $('#ui_id').val();
-    objAH.tipo_documento= $('#tipo_documento_id').val();
-    objAH.nro_documento= $('#nro_documento').val();
-    objAH.legajo= $('#legajo').val();
-    objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
-    objAH.tipoAccion= 'AGREGAR_USUARIO';
-    objAH.sendToServer();
+function checkUserData(){
+
+   $('#userDataForm').validate();
 
 }
 
