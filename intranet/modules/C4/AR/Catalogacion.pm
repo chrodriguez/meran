@@ -1969,13 +1969,53 @@ sub t_eliminarNivel1{
     #No hay error
         my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $id1);
             $catNivel1->load;
-        my $db= $catNivel1->db;
+        my $db= $catNivel1->dbh; #SI SE PONE ->db QUEDA EN LOCK, ES MUY RARO, ASI ANDA, Y LAS TRANSACCIONES ANDAN BIEN
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
         eval {
             $catNivel1->eliminar;  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+
+}
+
+sub t_eliminarNivel2{
+   
+   my($id2)=@_;
+   
+   my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
+            $catNivel2->load;
+        my $db= $catNivel2->dbh;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel2->eliminar;  
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;

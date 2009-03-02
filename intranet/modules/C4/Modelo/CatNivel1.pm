@@ -61,18 +61,18 @@ sub eliminar{
     use C4::Modelo::CatNivel1Repetible;
     use C4::Modelo::CatNivel1Repetible::Manager;
     
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
+    use C4::Modelo::CatNivel2;
+    use C4::Modelo::CatNivel2::Manager;
 
-    my ($nivel2) = C4::Modelo::CatNivel2::Manager::get_cat_nivel2(id1 => $self->getId1());
+    my ($nivel2) = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(query => [ id1 => { eq => $self->getId1() } ] );
     foreach my $n2 (@$nivel2){
       $n2->eliminar();
     }
    
    
-    my ($repetiblesNivel1) = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(id1 => $self->getId1());
+    my ($repetiblesNivel1) = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(query => [ id1 => { eq => $self->getId1() } ] );
     foreach my $n1Rep (@$repetiblesNivel1){
-      $n1Rep->delete();
+      $n1Rep->eliminar();
     }
     $self->delete();
 }

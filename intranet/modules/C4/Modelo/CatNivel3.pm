@@ -54,7 +54,6 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'}); 
 
-    print 
     $self->setBarcode('BARCODE');
     $self->setSignatura_topografica('SIG TOPO');
     $self->setId_ui_poseedora('DEO');
@@ -88,8 +87,7 @@ sub eliminar{
     use C4::Modelo::CatNivel3Repetible;
     use C4::Modelo::CatNivel3Repetible::Manager;
 
-
-    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(id3 => $self->getId3());
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => [ id3 => { eq => $self->getId3 } ] );
     foreach my $n3Rep (@$repetiblesNivel3){
       $n3Rep->eliminar();
     }
