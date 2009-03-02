@@ -1265,8 +1265,8 @@ sub generarComboTipoDeDoc {
     my $docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
     
     foreach my $doc (@$docs) {
-        push(@select_docs_array, $doc->id_tipo_documento);
-        $select_docs{$doc->id_tipo_documento}= $doc->nombre;
+        push(@select_docs_array, $doc->nombre);
+        $select_docs{$doc->nombre}= $doc->descripcion;
     }
 
     my %options_hash; 

@@ -71,7 +71,7 @@ function cambiarIdioma() {
     <td width="20" ><img src="[% themelang %]/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top"></td>
       </tr>
 </table>
-        <table width="100%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
+        <table width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
 	 <tr> <td width="9" class="includePNGizquierdo"></td>
 	 <td>
  <table align="left" bgcolor="#f7f6f6" width="99%" height="100%" border="0" cellspacing="0" cellpadding="0" class="texto">
