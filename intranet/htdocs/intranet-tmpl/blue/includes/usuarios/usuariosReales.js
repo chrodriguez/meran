@@ -124,6 +124,92 @@ function updateGuardarPermisos(responseText){
 
 //****************************************Fin para cambiar permisos*********************************************
 
+
+
+// ***************************************** Validaciones ******************************************************
+
+function validateForm(){
+
+if( jQuery.browser.mozilla ) {
+   // do when DOM is ready
+   $( function() {
+      // search form, hide it, search labels to modify, filter classes nocmx and error
+      $( '#userDataForm' ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
+         var $this = $(this);
+         var labelContent = $this.html();
+         var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
+         // create block element with width of label
+         var labelSpan = $("<span>")
+            .css("display", "block")
+            .width(labelWidth)
+            .html(labelContent);
+         // change display to mozilla specific inline-box
+         $this.css("display", "-moz-inline-box")
+            // remove children
+            .empty()
+            // add span element
+            .append(labelSpan);
+      // show form again
+      }).end().show();
+   });
+};
+      $.validator.setDefaults({
+         submitHandler: function() { agregarUsuario(); }
+      });
+      
+      $().ready(function() {
+         // validate the comment form when it is submitted
+//          $("#userDataForm").validate();
+         
+         // validate signup form on keyup and submit
+         $("#userDataForm").validate({
+            rules: {
+               apellido: "required",
+               nombre: "required",
+               legajo: "required",
+               nro_socio: "required",
+               sexo: "required",
+               calle: "required",
+               ciudad: "required",
+               nacimiento: "required",
+               telefono: "required",
+               telefono_laboral: "required",
+               alt_calle: "required",
+               codigo_postal: "required",
+
+               nro_documento: {
+                  required: true,
+                  number: true,
+                  minlength: 8,
+                  maxlength: 8
+               },
+               email: {
+                  required: true,
+                  email: true
+               },
+            },
+            messages: {
+               apellido: "Por favor, ingrese su apellido",
+               nombre: "Por favor, ingrese su/s nombre/s",
+               legajo: "El legajo es obligatorio",
+               nro_socio: "La tarjeta de id. es obligatoria",
+               sexo: "El sexo es obligatorio",
+               calle: "La calle en donde vive es obligatoria",
+               ciudad: "La ciudad en donde vive es obligatoria",
+               nacimiento: "La fecha de nacimiento es obligatoria",
+               telefono: "El tel&eacute;fono es obligatorio",
+               codigo_postal: "El c&oacute;digo postal debe ser ingresado",
+               nro_documento: {
+                  required: "Por favor, ingrese su nro. de documento",
+                  number: "Por favor, ingrese s&oacute;lo d&iacute;gitos",
+                  minlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado menos)",
+                  maxlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingersado m&aacute;s)",
+               },
+               email: "Ingrese una dirección de email v&aacute;lida",
+            }
+         });
+      });
+}
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
 

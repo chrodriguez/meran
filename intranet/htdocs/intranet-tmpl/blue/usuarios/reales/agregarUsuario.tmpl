@@ -15,83 +15,6 @@
 
 <script type="text/javascript">
 //    apply inline-box only for mozilla
-if( jQuery.browser.mozilla ) {
-   // do when DOM is ready
-   $( function() {
-      // search form, hide it, search labels to modify, filter classes nocmx and error
-      $( '#userDataForm' ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
-         var $this = $(this);
-         var labelContent = $this.html();
-         var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
-         // create block element with width of label
-         var labelSpan = $("<span>")
-            .css("display", "block")
-            .width(labelWidth)
-            .html(labelContent);
-         // change display to mozilla specific inline-box
-         $this.css("display", "-moz-inline-box")
-            // remove children
-            .empty()
-            // add span element
-            .append(labelSpan);
-      // show form again
-      }).end().show();
-   });
-};
-      $.validator.setDefaults({
-         submitHandler: function() { agregarUsuario(); }
-      });
-      
-      $().ready(function() {
-         // validate the comment form when it is submitted
-//          $("#userDataForm").validate();
-         
-         // validate signup form on keyup and submit
-         $("#userDataForm").validate({
-            rules: {
-               apellido: "required",
-               nombre: "required",
-               legajo: "required",
-               nro_socio: "required",
-               sexo: "required",
-               calle: "required",
-               ciudad: "required",
-               nacimiento: "required",
-               telefono: "required",
-               telefono_laboral: "required",
-               alt_calle: "required",
-               codigo_postal: "required",
-
-               nro_documento: {
-                  required: true,
-                  minlength: 8,
-                  maxlength: 8
-               },
-               email: {
-                  required: true,
-                  email: true
-               },
-            },
-            messages: {
-               apellido: "Por favor, ingrese su apellido",
-               nombre: "Por favor, ingrese su/s nombre/s",
-               legajo: "El legajo es obligatorio",
-               nro_socio: "La tarjeta de id. es obligatoria",
-               sexo: "El sexo es obligatorio",
-               calle: "La calle en donde vive es obligatoria",
-               ciudad: "La ciudad en donde vive es obligatoria",
-               nacimiento: "La fecha de nacimiento es obligatoria",
-               telefono: "El tel&eacute;fono es obligatorio",
-               codigo_postal: "El c&oacute;digo postal debe ser ingresado",
-               nro_documento: {
-                  required: "Por favor, ingrese su nro. de documento",
-                  minlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado menos)",
-                  maxlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingersado m&aacute;s)",
-               },
-               email: "Ingrese una dirección de email v&aacute;lida",
-            }
-         });
-      });
 
 </script>
 
@@ -124,6 +47,7 @@ function CrearAutocomplete(Id, IdHidden){
     });
 }
 </script>
+
 <style type="text/css">
       #userDataForm label { width: 250px; }
       #userDataForm label.error, #userDataForm input.submit { margin-left: 253px;
@@ -140,7 +64,9 @@ function CrearAutocomplete(Id, IdHidden){
 
 <script>
 $(document).ready(function() {
-     $("#userDataForm").validate();
+//      $("#userDataForm").validate();
+    validateForm();
+    $("#userDataForm").validate();
     CrearAutocomplete('ciudad', 'id_ciudad');
     CrearAutocomplete('alt_ciudad', 'id_alt_ciudad');
     $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
@@ -202,7 +128,7 @@ $(document).ready(function() {
             <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] class="required" checked="checked" F [% END %]> F
             <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] class="required" checked="checked" M [% END %]> M 
             &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])
-            <input class="required" type=text id="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
+            <input type=text id="nacimiento" class="required" size=10 value="[% socio.persona.getNacimiento %]">
         </td>
 
         <td width="1%" valign="top" align="right">
