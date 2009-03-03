@@ -821,3 +821,24 @@ div.dimming {
 }
 
 /* end agregado */
+
+
+
+
+
+
+/* ESTILOS PARA FORMS DE VALIDACION */
+
+#userDataForm label { width: 250px; }
+#userDataForm label.error, #userDataForm input.submit { 
+                                                         margin-left: 253px;
+                                                         color:red;
+                                                         font-weight:bold; 
+                                                      }
+#userDataForm label.error {
+         margin-left: 10px;
+         width: auto;
+         display: block;;
+         color:red;
+         font:bold; 
+}

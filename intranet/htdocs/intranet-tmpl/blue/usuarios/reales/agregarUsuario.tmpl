@@ -43,24 +43,13 @@ function CrearAutocomplete(Id, IdHidden){
 }
 </script>
 
-<style type="text/css">
-      #userDataForm label { width: 250px; }
-      #userDataForm label.error, #userDataForm input.submit { margin-left: 253px;
-                                                              color:red;
-                                                              font-weight:bold; }
-      #userDataForm label.error {
-         margin-left: 10px;
-         width: auto;
-         display: block;;
-         color:red;
-         font:bold; 
-      }
-</style>
-
 <script>
 $(document).ready(function() {
-//      $("#userDataForm").validate();
-    validateForm();
+   [% IF addBorrower %]
+      validateForm(agregarUsuario);
+   [% ELSE %]
+      validateForm(modificarDatosDeUsuario);
+   [% END %]
     $("#userDataForm").validate();
     CrearAutocomplete('ciudad', 'id_ciudad');
     CrearAutocomplete('alt_ciudad', 'id_alt_ciudad');
@@ -160,7 +149,7 @@ $(document).ready(function() {
         </td>
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Legajo" | i18n %]</b><br>
-                <input  class="required" type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
+                <input  class="inputFontNormal" type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
@@ -170,7 +159,7 @@ $(document).ready(function() {
 <table width=100%>
     <tr valign=top >
         <td   width="60%" class="inputFontNormal">
-            <input  class="required" type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
+            <input  class="inputFontNormal" type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
             &nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
         </td>
         <td>
@@ -245,7 +234,7 @@ $(document).ready(function() {
         <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
-                <input class="required" type=text id="telefono" name="telefono" size=50 value="[% socio.persona.getTelefono %]">
+                <input class="inputFontNormal" type=text id="telefono" name="telefono" size=50 value="[% socio.persona.getTelefono %]">
         </td>
         <td width="40%" class="required" align="left" valign="top">
             <b>[% "Ciudad" | i18n %] *</b><br>
@@ -258,14 +247,14 @@ $(document).ready(function() {
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
-                <input class="required" type=text id="telefono_laboral" name="telefono_laboral" size=50 value="[% socio.persona.getTelefono_laboral %]">
+                <input class="inputFontNormal" type=text id="telefono_laboral" name="telefono_laboral" size=50 value="[% socio.persona.getTelefono_laboral %]">
         </td>
     </tr>
     <tr>
             <td height=25 class="[% clase %]">&nbsp;</td>
-            <td width="40%" class="required" align="left" valign="top">
+            <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
-                <input  class="required" type=text id="alt_calle" name="alt_calle" size=50 value="[% socio.persona.getAlt_calle %]">
+                <input  class="inputFontNormal" type=text id="alt_calle" name="alt_calle" size=50 value="[% socio.persona.getAlt_calle %]">
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
@@ -278,9 +267,9 @@ $(document).ready(function() {
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
                 <b>E-Mail</b><br>
-                <input class="required email" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
+                <input class="email" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
         </td>
-            <td width="40%" class="required" align="left" valign="top">&nbsp;</td>
+            <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
     <tr>
         <td colspan="4">&nbsp;</td>
@@ -296,10 +285,10 @@ $(document).ready(function() {
                     <input type=hidden name=type value="[% type %]">
 
         [% IF addBorrower %]
-            <a onClick="$('#userDataForm').submit()" >
+            <a onClick="save()" >
                     <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0"></a>
         [% ELSE  %]
-            <a onClick="guardarModificacioUsuario()" >
+            <a onClick="save()" >
                     <img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0"></a>
         [% END %]
     
