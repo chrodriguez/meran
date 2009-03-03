@@ -82,9 +82,6 @@ use vars qw(@EXPORT @ISA);
 	&obtenerCamposTablaRef
 	&obtenerValorTablaRef
  	&obtenerIdentTablaRef2
-	
-	&subirOrden
-	&bajarOrden
 
 	&guardarModificacion
 
