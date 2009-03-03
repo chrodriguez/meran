@@ -408,6 +408,51 @@ sub getCatalogaciones{
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }
 
+
+sub getCatalogacionesConDatos{
+    my ($nivel,$id)=@_;
+
+    use C4::Modelo::CatNivel1Repetible;
+    use C4::Modelo::CatNivel1Repetible::Manager;
+      
+    use C4::Modelo::CatNivel2Repetible;
+    use C4::Modelo::CatNivel2Repetible::Manager;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+    my $catalogaciones_array_ref;
+
+   if ($nivel == 1){
+         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                                                              query => [ 
+                                                                                          id1 => { eq => $id },
+                                                                                    ],
+                                                                                                                                                                        require_objects => [ 'cat_nivel1' ]
+
+                                                                     );
+   }
+   elsif ($nivel == 2){
+         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+                                                                              query => [ 
+                                                                                          id2 => { eq => $id },
+                                                                                    ],
+                                                                                          require_objects => [ 'cat_nivel2' ]
+
+                                                                     );
+   }
+   else{
+         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+                                                                              query => [ 
+                                                                                          id3 => { eq => $id },
+                                                                                    ],
+                                                                                          require_objects => [ 'cat_nivel3' ]
+
+                                                                     );
+   }
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
 =item
 actualizarCamposModificados
 Actualiza los cambios hecho en un campo modificado; recibe como parametro el id del campo que se modifico junto con el texto nuevo para el campo y el tipo de input deseado para mostrar los datos.

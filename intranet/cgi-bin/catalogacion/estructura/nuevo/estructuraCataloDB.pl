@@ -263,6 +263,20 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     print $infoOperacionJSON;
 }
 
+elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
+#Se muestran la estructura de catalogacion segun el nivel pasado por parametro
+    my $id_tipo_doc= $obj->{'id_tipo_doc'};
+    my $nivel= $obj->{'nivel'};
+    my $id = $obj->{'id'};
+
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogacionesConDatos($nivel,$id);
+    
+    my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+    
+    print $input->header;
+    print $infoOperacionJSON;
+}
+
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 #Se guarda informacion del NIVEL 1
     $obj->{'titulo'}= 'Libro de Prueba';

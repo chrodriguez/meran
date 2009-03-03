@@ -831,12 +831,12 @@ div.dimming {
 #userDataForm label.error {
          margin-left: 10px;
          width: auto;
-         display: block;;
+         display: block;
          color:red;
          font:bold; 
 }
 
-#userDataForm #sexo label.error {
+#sexo label.error {
          margin-left: 10px;
          width: auto;
          display: inline;

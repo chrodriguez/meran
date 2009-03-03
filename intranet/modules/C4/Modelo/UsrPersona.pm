@@ -50,7 +50,7 @@ __PACKAGE__->meta->setup(
      documento => 
       {
         class       => 'C4::Modelo::UsrRefTipoDocumento',
-        key_columns => { tipo_documento => 'id_tipo_documento' },
+        key_columns => { tipo_documento => 'nombre' },
         type        => 'one to one',
       },
     ],

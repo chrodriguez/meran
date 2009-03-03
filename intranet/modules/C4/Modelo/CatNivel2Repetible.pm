@@ -18,10 +18,11 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'rep_n2_id' ],
 
-    foreign_keys => [
+    relationships => [
         cat_nivel2 => {
             class       => 'C4::Modelo::CatNivel2',
             key_columns => { id2 => 'id2' },
+            type        => 'one to one',
         },
     ],
 );

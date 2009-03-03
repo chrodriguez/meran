@@ -426,24 +426,19 @@ function updateBorrarN1(responseText){
  */
 function modificarN1(id1){
 	$("#result").html("");
-
-	objJSON=new AjaxHelper();
-    objJSON.debug= true;
-	objJSON.id1=id1;
-	objJSON.accion="modificarN1";
-	objJSON.itemtype="ALL";
-	objJSON.paso=1;
-
-	objAH=new AjaxHelper(updateInfoAgregarItem);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-	objAH.id1=id1;
-	objAH.nivel=1;
-	objAH.itemtype=$("#id_tipo_doc").val();
-	objAH.accion="modificarN1";
+	objAH=new AjaxHelper(updateModificarN1);
+   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+   objAH.debug= true;
+	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	objAH.itemtype="ALL";
+   objAH.id = id1;
+   objAH.nivel = 1;
 	objAH.sendToServer();
 }
 
+function updateModificarN1(){
+   mostrarEstructuraDelNivel1();
+}
 /*
  * borrarGrupo
  * Elimina de la base de datos el grupo correspodiente a los parametros que ingresan, y los ejemplares que hay en 
