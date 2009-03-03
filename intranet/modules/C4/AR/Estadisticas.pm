@@ -54,7 +54,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-sub historicoDeBusqueda(){
+sub historicoDeBusqueda{
         my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden)=@_;
 
         my $dbh = C4::Context->dbh;

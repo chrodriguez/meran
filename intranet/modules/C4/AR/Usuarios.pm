@@ -1066,7 +1066,7 @@ sub getSocioInfoPorNroSocio{
     return ($socio_array_ref->[0]);
 }
 
-
+# FIXME parece q no se usa???????????????????
 sub getPersonaLike {
     
     use C4::Modelo::UsrPersona;
@@ -1091,9 +1091,10 @@ sub getPersonaLike {
                                                                             offset  => $ini,
      ); 
 
-    my $cant= C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros);
+    #Obtengo la cant total de socios para el paginador
+    my $personas_array_ref_count= C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros);
 
-    return ($cant, $personas_array_ref);
+    return (scalar(@$personas_array_ref_count), $personas_array_ref);
 }
 
 sub getSocioLike {
@@ -1108,18 +1109,25 @@ sub getSocioLike {
     
     if (defined($habilitados)){
         push(@filtros, ( activo=> { eq => $habilitados}) );
-     }
+    }
 
     if($socio ne 'TODOS'){
-        push (@filtros, (apellido => { like => $socio.'%' }) );
+        push (@filtros, ( apellido => { like => $socio.'%' }) );
     }
+
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($orden) ),
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             require_objects => [ 'persona' ]
      ); 
-    return (scalar(@$socios_array_ref), $socios_array_ref);
+
+    #Obtengo la cant total de socios para el paginador
+    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros,
+                                                                               require_objects => [ 'persona' ]
+                                                                     );
+
+    return (scalar(@$socios_array_ref_count), $socios_array_ref);
 }
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto

@@ -887,7 +887,7 @@ sub crearPaginador{
 
     my ($paginador, $cantPaginas)=armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
 
-        $t_params->{'paginador'} = $paginador;
+#         $t_params->{'paginador'} = $paginador;
     return $paginador;
 
 }
