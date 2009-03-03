@@ -202,7 +202,7 @@ $(document).ready(function() {
             <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] class="required" checked="checked" F [% END %]> F
             <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] class="required" checked="checked" M [% END %]> M 
             &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])
-            <input class="required" type=text id="nacimiento" name="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
+            <input class="required" type=text id="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
         </td>
 
         <td width="1%" valign="top" align="right">
