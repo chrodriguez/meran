@@ -901,7 +901,7 @@ sub armarPaginas{
 
     my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
-    my $pagAMostrar=C4::Context->preference("paginas")||10;
+    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas")||10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;
@@ -1004,7 +1004,7 @@ sub checkdigit {
         my %results = $sth->fetchrow_hashref();
         if ( $sth->rows != 0 ){return 0;}
     }
-    if (C4::Context->preference("checkdigit") eq "none") {return 1;}
+    if (C4::AR::Preferencias->getValorPreferencia("checkdigit") eq "none") {return 1;}
     my @weightings = (8,4,6,3,5,2,1);
     my $sum;
     my $i = 1;
@@ -1209,7 +1209,7 @@ sub generarComboDeDisponibilidad{
     $options_hash{'id'}= 'disponibilidad_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultDisponibilidad");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultDisponibilidad");
 
     push (@select_disponibilidades_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_disponibilidades_array;
@@ -1244,7 +1244,7 @@ sub generarComboCategoriasDeSocio{
     $options_hash{'id'}= 'categoria_socio_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultCategoriaSocio");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
 
     push (@select_categorias_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_categorias_array;
@@ -1279,7 +1279,7 @@ sub generarComboTipoDeDoc {
     $options_hash{'id'}= 'tipo_documento_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultTipoDoc");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
 
     push (@select_docs_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_docs_array;
@@ -1313,7 +1313,7 @@ sub generarComboTipoNivel3{
     $options_hash{'id'}= 'tipo_nivel3_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultTipoNivel3");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
 
     push (@select_tipo_nivel3_array, 'ALL');
     $select_tipo_nivel3_hash{'ALL'}= 'TODOS';
@@ -1352,7 +1352,7 @@ sub generarComboUI {
     $options_hash{'id'}= 'ui_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::Context->preference("defaultUI");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
     push (@select_ui, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_ui;

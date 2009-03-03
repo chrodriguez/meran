@@ -20,7 +20,7 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 			     });
 
 
-my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
+my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 my %params;
 $params{'onChange'}= 'hacerSubmit()';
 my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);

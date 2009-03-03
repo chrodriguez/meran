@@ -210,7 +210,7 @@ sub imprimirLinea(){
             $pdf->setSize(12);
             $pos=$pos-15;
 ## FIXME esta funcion es llamada dentro de un loop, de manera q consulta demasiado a la base a travez del ##context(), o sea q estos valores se deben recibir como parametro
-            $pdf->addImg( C4::Context->config('opacdir').'/htdocs/opac-tmpl/'.C4::Context->preference('opacthemes').'/'.C4::Context->preference('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
+            $pdf->addImg( C4::AR::Preferencias->getValorPreferencia('opacdir').'/htdocs/opac-tmpl/'.C4::AR::Preferencias->getValorPreferencia('opacthemes').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-print.png', 500, $pageheight - 77);
         $pdf->setFont("Verdana");
             $pdf->setSize(10);
         $pos=$pos-40;
@@ -535,7 +535,7 @@ sub imprimirEncabezado(){
     my $mes=&C4::Date::mesString($datearr[4]+1);
     my $dia=$datearr[3];
 #fin fecha
-        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 160);
+        $pdf->addImg( C4::AR::Preferencias->getValorPreferencia('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 160);
     $pdf->setFont("Arial-Bold");
         $pdf->setSize(10);
     $pdf->addRawText(uc($categ), $x,$pageheight - 180);
@@ -645,7 +645,7 @@ sub imprimirPiePag(){
     $texto[0]="Biblioteca: ".$biblio->{'branchname'};
     $texto[1]="Calle ".$biblio->{'branchaddress1'};
     $texto[2]="Tel/Fax: ".$biblio->{'branchphone'}."/".$biblio->{'branchfax'};
-    $texto[3]="Atenci�n: lunes a viernes, ".C4::Context->preference('open')." a ".C4::Context->preference('close');
+    $texto[3]="Atenci�n: lunes a viernes, ".C4::AR::Preferencias->getValorPreferencia('open')." a ".C4::AR::Preferencias->getValorPreferencia('close');
     $texto[4]="E-mail: ".$biblio->{'branchemail'};
     $texto[5]="Sitios web: ".$biblio->{'branchaddress3'};
     $texto[6]="";
@@ -704,10 +704,10 @@ sub generateBookLabel {
     $pdf->drawBarcode($x+150,$y, 50/100 ,1,"3of9",$codigo,undef, 10, 10, 25, 10);
 
     my $posy=105;
-    my $escudo = C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-'.$branchcode.'.png';
+    my $escudo = C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-'.$branchcode.'.png';
 
     if (!( (-e $escudo) && (-r $escudo) ) ){
-        $escudo = C4::Context->config('intrahtdocs').'/'.C4::Context->preference('template').'/'.C4::Context->preference('opaclanguages').'/images/escudo-uni.png';
+        $escudo = C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-uni.png';
     }
 
      $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);

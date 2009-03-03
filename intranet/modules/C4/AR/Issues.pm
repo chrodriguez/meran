@@ -487,7 +487,7 @@ sub verificarParaRenovar{
 	$params->{'usercourse'}= $borrower->{'usercourse'};
 
 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
-	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::Context->preference("usercourse") 
+	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::AR::Preferencias->getValorPreferencia("usercourse") 
 		&& ($params->{'usercourse'} == "NULL" ) ) ){
 # 		$error= 1;
 # 		$codMsg= 'P114';
@@ -710,7 +710,7 @@ mail de recordatorio envia los mails a los due�os de los items que vencen el p
 sub Enviar_Recordatorio{
 	my ($id3,$bor,$vencimiento)=@_;
 
-	if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
+	if ((C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem"))&&(C4::AR::Preferencias->getValorPreferencia("reminderMail"))){
 
 		my $dbh = C4::Context->dbh;
 		my $borrower= C4::AR::Usuarios::getBorrower($bor);
@@ -722,9 +722,9 @@ sub Enviar_Recordatorio{
 		$sth->execute($bor,$id3);
 		my $res= $sth->fetchrow_hashref;	
 
-		my $mailFrom=C4::Context->preference("mailFrom");
-		my $mailSubject =C4::Context->preference("reminderSubject");
-		my $mailMessage =C4::Context->preference("reminderMessage");
+		my $mailFrom=C4::AR::Preferencias->getValorPreferencia("mailFrom");
+		my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reminderSubject");
+		my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reminderMessage");
 		my $branchname= C4::AR::Busquedas::getBranch($borrower->{'branchcode'})->{'branchname'};
 
 	$res->{'autor'}=(C4::AR::Busquedas::getautor($res->{'autor'}))->{'completo'};
@@ -829,7 +829,7 @@ sub estaVencido(){
    		if ($tipoPres ne 'ES'){return(0,$venc);}
    		else{#Prestamo especial
 			if (Date_Cmp($venc, $hoy) == 0){#Se tiene que devolver hoy	
-				my $begin = ParseDate(C4::Context->preference("open"));
+				my $begin = ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
 				my $end =calc_endES();
 				my $actual=ParseDate("today");
 				if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
@@ -930,7 +930,7 @@ sub cantidadDePrestamosPorUsuario{
   
  	my $err= "Error con la fecha";
  	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
- 	my $close = ParseDate(C4::Context->preference("close"));
+ 	my $close = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
 	if(Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
 		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
 	}

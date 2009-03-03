@@ -38,12 +38,12 @@ while (my ($search,$itemtype) = $sth->fetchrow) {
 $classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
 
 
-my $virtuallibrary=C4::Context->preference("virtuallibrary");
+my $virtuallibrary=C4::AR::Preferencias->getValorPreferencia("virtuallibrary");
 
 $t_params->{'virtuallibrary'}= $virtuallibrary;
 $t_params->{'comboItemTypes'}= $classlist;
 $t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
-$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'hiddesearch'}= 1;
 
 C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

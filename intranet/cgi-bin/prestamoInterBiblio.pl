@@ -52,7 +52,7 @@ if($accion eq "ingresarDatos"){
         	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
 
-	my $branch= C4::Context->preference('defaultbranch');
+	my $branch= C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 
 	my $bibliotecas=CGI::scrolling_list(      -name      => 'branch',
                                         -id        => 'branch',

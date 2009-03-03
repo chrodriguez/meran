@@ -62,8 +62,8 @@ $t_params->{'RESERVES'}= \@realreserves;
 $t_params->{'reserves_count'}= $rcount;
 $t_params->{'WAITING'}= \@waiting;
 $t_params->{'waiting_count'}=$wcount;
-$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
-$t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
+$t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

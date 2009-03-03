@@ -654,7 +654,7 @@ sub generaCodigoBarra{
 	#VER COMO SE GENERA EL BARCODE!!! VER SI ESTA BIEN!!!!!!!!
 	my($dbh,$parametros)=@_;
 	my $barcode;
-	my @estructurabarcode=split(',',C4::Context->preference("barcodeFormat"));
+	my @estructurabarcode=split(',',C4::AR::Preferencias->getValorPreferencia("barcodeFormat"));
         my $like='';
 
 	for (my $i=0; $i<@estructurabarcode; $i++){

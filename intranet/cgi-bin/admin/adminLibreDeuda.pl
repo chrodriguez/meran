@@ -53,7 +53,7 @@ if ($input->param('newflags')) {
 	&cambiarLibreDeuda($flags);
 }
 
-my $libreD=C4::Context->preference("libreDeuda");
+my $libreD=C4::AR::Preferencias->getValorPreferencia("libreDeuda");
 
 $t_params{'libreD'}= $libreD;
 

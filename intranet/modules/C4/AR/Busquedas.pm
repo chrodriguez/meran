@@ -507,7 +507,7 @@ sub obtenerGrupos {
   	my @result;
   	my $res=0;
   	my $data;
-	my $opacUnavail= C4::Context->preference("opacUnavail");
+	my $opacUnavail= C4::AR::Preferencias->getValorPreferencia("opacUnavail");
 
   	while ( $data=$sth->fetchrow_hashref){
 		my $query2="SELECT COUNT(*) AS cant FROM cat_nivel3 n3 WHERE n3.id2 = ?";

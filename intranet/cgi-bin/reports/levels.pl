@@ -38,7 +38,7 @@ my ($template, $session, $t_params)
 			     });
 
 
-my  $ui= $input->param('ui_name') || C4::Context->preference("defaultUI");
+my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
 my %params;
 $params{'onChange'}= 'hacerSubmit()';

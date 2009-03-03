@@ -288,7 +288,7 @@ sub checkauth {
 open(A, ">>/tmp/debug.txt");
 print A "desde checkauth============================================================================================================= \n";
     my $dbh = C4::Context->dbh;
-    my $timeout = C4::Context->preference('timeout');
+    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout');
     $timeout = 600 unless $timeout;
 
     my $template_name;
@@ -439,7 +439,7 @@ print A "checkauth=> NO TIENE PERMISOS: \n";
 
 
     #por aca se permite llegar a paginas que no necesitan autenticarse
-    my $insecure = C4::Context->preference('insecure');
+    my $insecure = C4::AR::Preferencias->getValorPreferencia('insecure');
     # finished authentification, now respond
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
 print A "checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n";
@@ -672,7 +672,7 @@ print J "_change_Password_Controller=> newpassword: ".$newpassword."\n";
 	
 	if ($newpassword) {
 	# Check if the password is repeted
-		if (C4::Context->preference("ldapenabled") eq "yes") { # check in ldap
+		if (C4::AR::Preferencias->getValorPreferencia("ldapenabled") eq "yes") { # check in ldap
 			my $oldpassword= getldappassword($cardnumber,$dbh);
 			$passwordrepeted= ($oldpassword eq $newpassword);
 		} else { # check in database
@@ -686,7 +686,7 @@ print J "_change_Password_Controller=> newpassword: ".$newpassword."\n";
 	if ($newpassword && !$passwordrepeted) {
 	# The new password is sent
 ## FIXME esto se hace en memebr-password.pl tb?????	
-		if (C4::Context->preference("ldapenabled") eq "yes") { # update the ldap password
+		if (C4::AR::Preferencias->getValorPreferencia("ldapenabled") eq "yes") { # update the ldap password
 			addupdateldapuser($dbh,$cardnumber,$newpassword);
 			my $sth=$dbh->prepare("update borrowers set lastchangepassword=now() where cardnumber=?");
 			$sth->execute($cardnumber);
@@ -820,7 +820,7 @@ print F "_verificarPassword=> nroRandom: ".$random_number."\n";
 	my ($passwordValida, $cardnumber);
 ## FIXME falta verificar la pass en LDAP si esta esta usando
 	my $branch;
-	if ( C4::Context->preference('ldapenabled')) {
+	if ( C4::AR::Preferencias->getValorPreferencia('ldapenabled')) {
 	#se esta usando LDAP
 		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
 	} else {
@@ -924,7 +924,7 @@ sub t_operacionesDeOPAC{
 
 	eval{
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-		my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::Context->preference("defaultissuetype"));
+		my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::AR::Preferencias->getValorPreferencia("defaultissuetype"));
         my $regular= $socio->esRegular;
 				
 		if ($isSanction || !$regular ){
@@ -959,7 +959,7 @@ sub t_operacionesDeINTRA{
 	eval{
 		#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
 		&C4::AR::Reservas::cancelar_reservas(	$userid,
-							C4::AR::Sanctions::getBorrowersSanctions($dbh,C4::Context->preference("defaultissuetype"))
+							C4::AR::Sanctions::getBorrowersSanctions($dbh,C4::AR::Preferencias->getValorPreferencia("defaultissuetype"))
 						);
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reservas::FindNotRegularUsersWithReserves());
@@ -1042,7 +1042,7 @@ sub new_password_is_needed {
     my ($nro_socio) = @_;
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-    my $days = C4::Context->preference("keeppasswordalive");
+    my $days = C4::AR::Preferencias->getValorPreferencia("keeppasswordalive");
 
     if ($days ne '0') {
         my $err;

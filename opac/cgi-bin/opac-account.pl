@@ -50,7 +50,7 @@ foreach my $row (@$accts) {
 
 
 $template->param( ACCOUNT_LINES => $accts,
-			     LibraryName => C4::Context->preference("LibraryName"),
+			     LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName"),
  );
 
 $template->param( total => $total );

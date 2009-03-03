@@ -79,7 +79,7 @@ my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
 			    });
 
 #Matias: Esta habiltada la Biblioteca Virtual?
-my $virtuallibrary=C4::Context->preference("virtuallibrary");
+my $virtuallibrary=C4::AR::Preferencias->getValorPreferencia("virtuallibrary");
 $t_params->{'virtuallibrary'}= $virtuallibrary;
 #
 

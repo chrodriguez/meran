@@ -77,10 +77,10 @@ my $mail=$query->param('mail');
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
 $branchname=$branchname->{'branchname'};
-my $mailFrom=C4::Context->preference("mailFrom");
+my $mailFrom=C4::AR::Preferencias->getValorPreferencia("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 
-my $mailSubject =C4::Context->preference("mailSubject");
+my $mailSubject =C4::AR::Preferencias->getValorPreferencia("mailSubject");
 
 my $mailMessage;
 

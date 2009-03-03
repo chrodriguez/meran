@@ -39,15 +39,15 @@ my $branch=$input->param('branch');
 my $return_url ="prestamos.pl?ini=$ini&branch=$branch&estado=$estado&orden=$orden&renglones=$renglones";
 
 
-my $mensaje =C4::Context->preference("mailMessage");
-my $mailSubject=C4::Context->preference("mailSubject");
+my $mensaje =C4::AR::Preferencias->getValorPreferencia("mailMessage");
+my $mailSubject=C4::AR::Preferencias->getValorPreferencia("mailSubject");
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
 $branchname=$branchname->{'branchname'};
 $mailSubject=~ s/BRANCH/$branchname/;
 $mensaje=~ s/BRANCH/$branchname/;
 
-my $mailFrom=C4::Context->preference("mailFrom");
+my $mailFrom=C4::AR::Preferencias->getValorPreferencia("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 
 my $count;
@@ -59,7 +59,7 @@ my $cant=scalar(@chkbox);
 ##Hay que quitar los duplicados ya que un usuario puede llegar a tener muchos ejemplares vencidos!!!!
 my @borrowers=C4::AR::Utilidades::quitarduplicados(@chkbox);
 my $dateformat = C4::Date::get_date_format();
-my $mensajeActual=C4::Context->preference("mailMensajeVencido");
+my $mensajeActual=C4::AR::Preferencias->getValorPreferencia("mailMensajeVencido");
 
 
 for(my $i=0;$i<scalar(@borrowers);$i++){

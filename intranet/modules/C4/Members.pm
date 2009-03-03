@@ -64,7 +64,7 @@ my @weightings = (8,4,6,3,5,2,1);
 
 sub fixup_cardnumber ($) {
     my($cardnumber) = @_;
-    my $autonumber_members = C4::Context->preference('autoMemberNum');
+    my $autonumber_members = C4::AR::Preferencias->getValorPreferencia('autoMemberNum');
     $autonumber_members = 0 unless defined $autonumber_members;
     # Find out whether member numbers should be generated
     # automatically. Should be either "1" or something else.

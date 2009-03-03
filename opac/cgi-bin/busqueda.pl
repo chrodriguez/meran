@@ -41,8 +41,8 @@ my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
 my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};
 
-my $valorOPAC= C4::Context->preference("logSearchOPAC");
-my $valorINTRA= C4::Context->preference("logSearchINTRA");
+my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
+my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
 my $search;
 my @search_array;
 # esto creo q no es necessario

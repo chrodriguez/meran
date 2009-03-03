@@ -35,7 +35,7 @@ for (my $i=0; $i < scalar(@nivel2Loop); $i++){
 }
 	
 
-$t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
+$t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 $t_params->{'loopnivel2'}= \@nivel2Loop;
 $t_params->{'id1'}= $idNivel1;
 

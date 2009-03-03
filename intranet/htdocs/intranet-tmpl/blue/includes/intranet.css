@@ -167,13 +167,6 @@ tr.parametro{
    border-left-width: 0px;
    padding: 2px;
       }
-.includePNGizquierdo {
-   background : url(backmidleizquierda.png) repeat-y 100%;
-}
-
-.includePNGderecho {
-   background : url(backmedioderecha.png) repeat-y 100%;
-   }
 
 .fondoPixelCeleste {
    background : url(pixelceleste.png) repeat-x 100%;

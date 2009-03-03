@@ -36,7 +36,7 @@ use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
 use Template;
 use Template::Filters;
 use C4::AR::Filtros;
-
+use C4::AR::Preferencias;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -204,16 +204,15 @@ sub gettemplateexpr {
 # FIXME - POD
 sub themelanguage {
 	my ($htdocs, $tmpl, $section) = @_;
-	
 	my $dbh = C4::Context->dbh;
 	my @languages;
 	my @themes;
 	if ( $section eq "intranet"){
-		@languages = split " ", C4::Context->preference("opaclanguages");
-		@themes = split " ", C4::Context->preference("template");
+		push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+		push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
 	}else	{
-		@languages = split " ", C4::Context->preference("opaclanguages");
-		@themes = split " ", C4::Context->preference("opacthemes");
+		push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+		push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
 	}
 	
 	my ($theme, $lang);
@@ -326,9 +325,9 @@ sub pathtotemplate {
   else {$type = $ptype . '/'; }
 
   my %returns;
-  my $theme = C4::Context->preference("theme") || "default";
+  my $theme = C4::AR::Preferencias->getValorPreferencia("theme") || "default";
   if ($themeor and
-      C4::Context->preference("allowthemeoverride") =~ qr/$themeor/i)
+      C4::AR::Preferencias->getValorPreferencia("allowthemeoverride") =~ qr/$themeor/i)
   {
     $theme = $themeor;
   }
@@ -394,7 +393,7 @@ sub getlanguageorder () {
 
   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
     @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
-  } elsif (my $order = C4::Context->preference("languageorder")) {
+  } elsif (my $order = C4::AR::Preferencias->getValorPreferencia("languageorder")) {
     @languageorder = split (/\s*,\s*/ ,lc($order));
   } else { # here should be another elsif checking for apache's languageorder
     @languageorder = ('en');

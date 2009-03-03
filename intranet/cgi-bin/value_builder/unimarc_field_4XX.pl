@@ -301,7 +301,7 @@ sub plugin {
 		} else {
 			$to = (($startfrom+1)*$resultsperpage);
 		}
-		my $defaultview = 'BiblioDefaultView'.C4::Context->preference('BiblioDefaultView');
+		my $defaultview = 'BiblioDefaultView'.C4::AR::Preferencias->getValorPreferencia('BiblioDefaultView');
 		$template->param(result => $results,
 						index => $query->param('index')."",
 								startfrom=> $startfrom,

@@ -34,7 +34,7 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $venc=0;
-my $cierre= C4::Context->preference("close");
+my $cierre= C4::AR::Preferencias->getValorPreferencia("close");
 
 foreach my $key (keys %$issues) {
 	my $issue = $issues->{$key};
@@ -73,7 +73,7 @@ $t_params->{'ISSUES'}= \@issuedat;
 $t_params->{'issues_count'}= $count;
 $t_params->{'OVERDUES'}= \@overdues;
 $t_params->{'overdues_count'}= $overdues_count;
-$t_params->{'CirculationEnabled'}= C4::Context->preference("circulation");
+$t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

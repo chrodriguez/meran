@@ -21,7 +21,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 # my $branch=(split("_",(split(";",$cookie))[0]))[1];
 
 
-my $branch= $input->param('branch') || C4::Context->preference('defaultbranch');
+my $branch= $input->param('branch') || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 
 my $obj= C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $year= $obj->{'year'};

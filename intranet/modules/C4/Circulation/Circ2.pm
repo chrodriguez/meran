@@ -183,7 +183,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
-	my $branchcode=  $branch || C4::Context->preference('defaultbranch');
+	my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 	my $dbh = C4::Context->dbh;
 	# unititle,number,
 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch
@@ -505,7 +505,7 @@ sub patronflags {
 	my $amount = 0;#checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
 	if ($amount > 0) {
 		my %flaginfo;
-		my $noissuescharge = C4::Context->preference("noissuescharge");
+		my $noissuescharge = C4::AR::Preferencias->getValorPreferencia("noissuescharge");
 		$flaginfo{'message'}= sprintf "Debe \$%.02f", $amount;
 		if ($amount > $noissuescharge) {
 		$flaginfo{'noissues'} = 1;

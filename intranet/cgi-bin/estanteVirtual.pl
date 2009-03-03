@@ -48,7 +48,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 &C4::AR::Utilidades::crearPaginador($template, $count, $cantR, $pageNumber,$funcion,$t_params);
 
 
-$template->param({LibraryName => C4::Context->preference("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
 
 
 my $color='';

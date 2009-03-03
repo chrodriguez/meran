@@ -199,7 +199,7 @@ if ($ok == 0) {
 
 
 	# Curso de usuarios#
-	if (C4::Context->preference("usercourse")){
+	if (C4::AR::Preferencias->getValorPreferencia("usercourse")){
 		$template->param( course => 1, usercourse => $data{'usercourse'});
 	}
 	####################

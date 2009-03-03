@@ -245,7 +245,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	$data->{'changepassword'}= $data->{'changepassword'};#creo q no es necesario
 	
 	# Curso de usuarios#
-	if (C4::Context->preference("usercourse")){
+	if (C4::AR::Preferencias->getValorPreferencia("usercourse")){
 		$t_params->{'course'}=1;
 		$t_params->{'usercourse'} = C4::Date::format_date($data->{'usercourse'},$dateformat);
 	}

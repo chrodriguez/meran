@@ -83,7 +83,7 @@ print A " dictionary: $keyword \n";
 
   my $DictionaryCaseSensitive;
   if ($type eq 'intra') {
-	$DictionaryCaseSensitive= C4::Context->preference("DictionaryCaseSensitive");
+	$DictionaryCaseSensitive= C4::AR::Preferencias->getValorPreferencia("DictionaryCaseSensitive");
   } else{
 	#En el opac ignoro la variable y pongo todos los resultados en mayúsculas y sin acentos
 	$DictionaryCaseSensitive='no';
@@ -254,7 +254,7 @@ sub DictionarySignatureSearch {
 
   my $DictionaryCaseSensitive;
   if ($type eq 'intra') {
-	$DictionaryCaseSensitive= C4::Context->preference("DictionaryCaseSensitive");
+	$DictionaryCaseSensitive= C4::AR::Preferencias->getValorPreferencia("DictionaryCaseSensitive");
   } else{
 	#En el opac ignoro la variable y pongo todos los resultados en mayúsculas y sin acentos
 	$DictionaryCaseSensitive='no';

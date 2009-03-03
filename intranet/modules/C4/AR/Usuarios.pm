@@ -342,7 +342,7 @@ sub addBorrower {
     my $borrowernumber= $sth3->fetchrow;
 
     # Curso de usuarios#
-    if (C4::Context->preference("usercourse"))  {
+    if (C4::AR::Preferencias->getValorPreferencia("usercourse"))  {
         my $sql2="";
         if ($params->{'usercourse'} eq 1){
             $sql2= "UPDATE borrowers
@@ -371,7 +371,7 @@ sub _verificarInfoAddPerson {
 
     my $dbh = C4::Context->dbh;
     my $error= 0;
-    my $habilitar_irregulares= C4::Context->preference("habilitar_irregulares");
+    my $habilitar_irregulares= C4::AR::Preferencias->getValorPreferencia("habilitar_irregulares");
 
     #Verificar que ya no exista como borrower
     my $sth2=$dbh->prepare("SELECT * 
@@ -946,7 +946,7 @@ sub updateBorrower {
     
 
     # Curso de usuarios#
-    if (C4::Context->preference("usercourse"))  {
+    if (C4::AR::Preferencias->getValorPreferencia("usercourse"))  {
         my $sql2="";
         if ($params->{'usercourse'} eq 1){
             $sql2= "UPDATE borrowers 
@@ -1159,7 +1159,7 @@ sub llegoMaxReservas {
 
     my $cant= &C4::AR::Reservas::cant_reservas($borrowernumber);    
 
-    return $cant >= C4::Context->preference("maxreserves");
+    return $cant >= C4::AR::Preferencias->getValorPreferencia("maxreserves");
 }
 
 #Verifica si un usuario esta sancionado segun un tipo de prestamo

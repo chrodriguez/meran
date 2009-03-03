@@ -132,7 +132,7 @@ print A "id3 antes de setear: $id3\n";
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'borrowernumber'}=$borrnumber;
 			$params{'loggedinuser'}=$loggedinuser;
-			$params{'defaultbranch'}=C4::Context->preference('defaultbranch');
+			$params{'defaultbranch'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
 		
@@ -190,7 +190,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	$params{'borrowernumber'}= $borrnumber;
 	$params{'tipo'}= 'INTRA';
 
-	my $print_renew= C4::Context->preference("print_renew");
+	my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 
 print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){

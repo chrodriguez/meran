@@ -70,7 +70,7 @@ sub SanctionDays {
    		else{#Prestamo especial
 			if (Date_Cmp($date_due, $returndate) == 0){#Se tiene que devolver hoy	
 				
-				my $begin = ParseDate(C4::Context->preference("open"));
+				my $begin = ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
 				my $end =calc_endES();
 				my $actual=ParseDate("today");
 				if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite

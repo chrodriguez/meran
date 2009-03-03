@@ -63,7 +63,7 @@ if (my $data2=$sth->fetchrow_hashref){
   }
 
 	# Curso de usuarios#
-  	if (C4::Context->preference("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
+  	if (C4::AR::Preferencias->getValorPreferencia("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
 	$data->{'usercourse'}=1;
   	} else {
 	$data->{'usercourse'}=0;
@@ -100,7 +100,7 @@ updateperson($data); #Se actualiza en person
   }
 
 	# Curso de usuarios#
-  	if (C4::Context->preference("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
+  	if (C4::AR::Preferencias->getValorPreferencia("usercourse") && $data->{'usercourse'} && ($data->{'usercourse'} eq 'on')) {
 	$data->{'usercourse'}=1;
   	} else {
 	$data->{'usercourse'}=0;
@@ -112,7 +112,7 @@ updateperson($data); #Se actualiza en person
 
 ### Added by Luciano, when a new borrower is inserted the documentnumber is set as password
   my $digest= md5_base64($data->{'documentnumber'});
-  if (C4::Context->preference("ldapenabled") eq "yes") { # update the ldap password
+  if (C4::AR::Preferencias->getValorPreferencia("ldapenabled")) { # update the ldap password
     addupdateldapuser($dbh,$data->{'cardnumber'},$digest);
   } else { # update the database password
     $sth=$dbh->prepare("update borrowers set password=? where cardnumber=?");

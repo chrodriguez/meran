@@ -48,7 +48,7 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-my $branch= C4::Context->preference('defaultbranch');
+my $branch= C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 
 my $CGIbranch=C4::AR::Utilidades::generarComboDeBranches();
 #Fin: Por los branches

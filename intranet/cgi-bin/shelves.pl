@@ -62,7 +62,7 @@ my ($template, $loggedinuser, $cookie)
 my $prevshelfnumber=$query->param('shelfnumber');
 $template->param(prevshelfnumber => $prevshelfnumber);
 
-if (C4::Context->preference('marc') eq '1') {
+if (C4::AR::Preferencias->getValorPreferencia('marc') eq '1') {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "detail.pl");
@@ -142,7 +142,7 @@ if ($count>$cantR) {
         push @$numbers, { number => $i+1, highlight => $highlight , break => $break, startfrom => (($i)*$cantR) };
    }
 }$template->param({numbers => $numbers});
-$template->param({LibraryName => C4::Context->preference("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion
@@ -201,7 +201,7 @@ if ($count>$cantR) {
    }
 }
 $template->param({numbers => $numbers});
-$template->param({LibraryName => C4::Context->preference("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion

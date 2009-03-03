@@ -28,7 +28,7 @@ my $dateformat = C4::Date::get_date_format();
 my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
 my $update;
 $update->{'borrowernumber'}=$borrowernumber;
-my $updateemailaddress= C4::Context->preference('KohaAdminEmailAddress');
+my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmailAddress');
 if ($updateemailaddress eq '') {
     warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $borr->{'firstname'} $borr->{'surname'} (#$borrowernumber)\n";
     my($template) = get_template_and_user({template_name => "kohaerror.tmpl",
@@ -45,7 +45,7 @@ if ($updateemailaddress eq '') {
     exit;
 }
 
-if ( C4::Context->preference('CheckUpdateDataEnabled')) {
+if ( C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled')) {
 
 
 if ($query->{'surname'}) {
@@ -90,12 +90,12 @@ my @bordat;
 $bordat[0] = $borr;
 
 $template->param(BORROWER_INFO => \@bordat,
-			     LibraryName => C4::Context->preference("LibraryName"),
+			     LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName"),
 );
 
 #otra vez einar con Guarani
 
-$template->param(updatedata=>(!C4::Context->preference('CheckUpdateDataEnabled')));
+$template->param(updatedata=>(!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled')));
 
 
 $template->param(pagetitle => "Actualizaci&oacute;n de datos personales");

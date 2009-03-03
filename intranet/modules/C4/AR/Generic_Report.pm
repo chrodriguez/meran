@@ -3,7 +3,7 @@ package C4::AR::Generic_Report;
 #Este modulo provee funcionalidades para Reportes Genericos
 #Escrito el 26/9/2007 por matiasp@info.unlp.edu.ar
 #
-#Copyright (C) 2003-2007  Linti, Facultad de Informática, UNLP
+#Copyright (C) 2003-2007  Linti, Facultad de Informï¿½tica, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -266,7 +266,7 @@ sub reportSearch {
 	   #PAGINADO
 	   #
 	   ($startfrom) || ($startfrom=0);#Si no tiene valor es 0 por defecto
-	   my $num=C4::Context->preference("renglones");
+	   my $num=C4::AR::Preferencias->getValorPreferencia("renglones");
 	   $SQL.=" LIMIT ".$startfrom." , ".$num." ;"; #Se arma el limit
 	   #
 	   ##
@@ -411,7 +411,7 @@ my $sheet=new ooolib("sxc");
 $sheet->oooSet("builddir","./plantillas");
 #
 ## - Set Meta.xml data
-$sheet->oooSet("title","Resultado de búsqueda genérica");
+$sheet->oooSet("title","Resultado de bï¿½squeda genï¿½rica");
 $sheet->oooSet("author","KOHA");
 # - Set name of first sheet
 $sheet->oooSet("subject","Reporte");

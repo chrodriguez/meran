@@ -44,7 +44,7 @@ sub countPrint{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $DAYSRENEW= C4::Context->preference("virtualprintrenew");
+	my $DAYSRENEW= C4::AR::Preferencias->getValorPreferencia("virtualprintrenew");
 
 	my @datearr = localtime(time);
 	my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
@@ -78,7 +78,7 @@ sub countPrint{
 sub canPrint{
         my ($bor) = @_;
 	my $cant= countPrint($bor);	
-	my $MAX_PRINT = C4::Context->preference("maxvirtualprint");
+	my $MAX_PRINT = C4::AR::Preferencias->getValorPreferencia("maxvirtualprint");
 	if ($cant >= $MAX_PRINT){return 0} else {return 1};
 		}
 #Revisa si el usuario puede realizar una copia
@@ -87,7 +87,7 @@ sub countCopy{
         my ($bor) = @_;
         my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-        my $DAYSRENEW = C4::Context->preference("virtualcopyrenew");
+        my $DAYSRENEW = C4::AR::Preferencias->getValorPreferencia("virtualcopyrenew");
 
         my @datearr = localtime(time);
         my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
@@ -124,7 +124,7 @@ sub countCopy{
 sub canCopy{
         my ($bor) = @_;
         my $cant = countCopy($bor);
-        my $MAX_COPY = C4::Context->preference("maxvirtualcopy");
+        my $MAX_COPY = C4::AR::Preferencias->getValorPreferencia("maxvirtualcopy");
         if ($cant >= $MAX_COPY){return 0} else {return 1};
                 }
 

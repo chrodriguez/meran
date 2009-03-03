@@ -48,6 +48,6 @@ print A "tengo borrower: ".$session->param('borrowernumber')."\n";
 }
 close(A);
 $t_params->{'CGIitemtype'}= $CGIitemtype;
-$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

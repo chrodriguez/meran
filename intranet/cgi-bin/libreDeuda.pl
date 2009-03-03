@@ -36,7 +36,7 @@ my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
 
 my ($loggedinuser, $cookie, $sessionID) = C4::Auth::checkauth($input, 0 ,{circulate=> 0},"intranet");
 
-my $libreD=C4::Context->preference("libreDeuda");
+my $libreD=C4::AR::Preferencias->getValorPreferencia("libreDeuda");
 my @array=split(//, $libreD);
 my $ok=1;
 my $msj="";

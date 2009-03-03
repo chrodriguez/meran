@@ -64,7 +64,7 @@ my $msgFoto=$query->param('msg');
 $borr->{'foto_name'} = $foto;
 $borr->{'mensaje_error_foto'} = $msgFoto;
 $borr->{'bornum'} = $session->param('borrowernumber');
-if (C4::Context->preference("UploadPictureFromOPAC")) {
+if (C4::AR::Preferencias->getValorPreferencia("UploadPictureFromOPAC")) {
 	$borr->{'UploadPictureFromOPAC'}=1;
 } else {
 	$borr->{'UploadPictureFromOPAC'}=0;
@@ -89,13 +89,13 @@ if ($san->{'id3'}) {
 }
 
 $t_params->{'sanciones_loop'}= $sanc;
-$t_params->{'updatedata'}= (!C4::Context->preference('CheckUpdateDataEnabled'));
-$t_params->{'LibraryName'}= C4::Context->preference("LibraryName");
+$t_params->{'updatedata'}= (!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
+$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 
 
 #se verifica la preferencia showHistoricReserves, para mostrar o no el historico de las Reservas
-my $showHistoricReserves= C4::Context->preference("showHistoricReserves");
+my $showHistoricReserves= C4::AR::Preferencias->getValorPreferencia("showHistoricReserves");
 $t_params->{'showHistoricReserves'}= $showHistoricReserves;
 
 C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

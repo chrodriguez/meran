@@ -38,7 +38,7 @@ my $reqsel="";
 my $reqdel="delete from bibliothesaurus where id='$id'";
 my $script_name="/cgi-bin/koha/admin/thesaurus.pl";
 my $dbh = C4::Context->dbh;
-my $authoritysep = C4::Context->preference("authoritysep");
+my $authoritysep = C4::AR::Preferencias->getValorPreferencia("authoritysep");
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/thesaurus.tmpl",

@@ -68,7 +68,7 @@ sub reservar {
 		$item= C4::AR::Reservas->getItemsParaReserva($params->{'id2'});
 	}
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
-	my $numeroDias= C4::AR::Preferencias->getPreferencia("reserveItem");
+	my $numeroDias= C4::AR::Preferencias->getValorPreferencia("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
 	my %paramsReserva;
@@ -79,7 +79,7 @@ sub reservar {
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recodatorio'}= $hasta;
-	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getPreferencia("defaultbranch");
+	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
 	$paramsReserva{'estado'}= ($item->{'id3'} ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
@@ -99,7 +99,7 @@ sub reservar {
 		my $err= "Error con la fecha";
 		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
 		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions= C4::AR::Preferencias->getPreferencia("daysOfSanctionReserves");
+		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
 		my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 
@@ -466,7 +466,7 @@ sub _actualizarDatosReservaEnEspera{
 	my ($reservaGrupo,$loggedinuser)=@_;
 
 #Se agrega actualiza la reserva
-	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getPreferencia("reserveGroup"),1);
+	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
 	$reservaGrupo->setEstado('E');
 	$reservaGrupo->setFecha_reserva($desde);
 	$reservaGrupo->setFecha_notificacion(ParseDate("today"));
@@ -478,7 +478,7 @@ sub _actualizarDatosReservaEnEspera{
 	my $dateformat=C4::Date::get_date_format();
 	my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
 	$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-	my $daysOfSanctions= C4::AR::Preferencias->getPreferencia("daysOfSanctionReserves");
+	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
 	my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 	C4::AR::Sanctions::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
@@ -515,15 +515,15 @@ sub DatosReservas {
 # biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc
 
 	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
-			a.completo as nomCompleto, r.id2 as rid2, r.reservedate as rreservedate, 
-			r.notificationdate as rnotificationdate,r.reminderdate as rreminderdate, r.reservenumber,
-			r.estado, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.branchcode as rbranch
+			a.completo as nomCompleto, r.id2 as rid2, r.fecha_reserva as rreservedate, 
+			r.fecha_notificacion as rnotificationdate,r.fecha_recodatorio as rreminderdate, r.id_reserva,
+			r.estado, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.id_ui as rbranch
 			FROM circ_reserva r
 			INNER JOIN cat_nivel2 n2 ON  n2.id2 = r.id2
 			INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1 
 			LEFT JOIN cat_autor a ON (a.id = n1.autor)
-			WHERE r.borrowernumber = ?
-			AND cancellationdate is NULL AND r.estado <> 'P' ";
+			WHERE r.nro_socio = ?
+			AND r.estado <> 'P' ";
 	
 	my $sth=$dbh->prepare($query);
 	$sth->execute($bor);
@@ -599,7 +599,7 @@ sub getReservasDeBorrower {
 	my $dbh = C4::Context->dbh;
 	my $query= "	SELECT *
 			FROM circ_reserva
-			WHERE (borrowernumber = ?) AND (id2 = ?)
+			WHERE (nro_socio = ?) AND (id2 = ?)
 			AND (estado <> 'P')";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber, $id2);
@@ -653,7 +653,8 @@ sub getDatosReservaDeId3{
 	my $dbh = C4::Context->dbh;
 
 	my $query= "   	SELECT  * 
-			FROM circ_reserva LEFT JOIN  borrowers ON                      circ_reserva.borrowernumber=borrowers.borrowernumber 
+			FROM circ_reserva LEFT JOIN  usr_socio ON
+			circ_reserva.nro_socio=usr_socio.id_socio  
 			WHERE circ_reserva.id3 = ? AND estado <> 'P' ";
 
 	my $sth=$dbh->prepare($query);
@@ -670,8 +671,8 @@ sub cant_reservas{
         my ($bor)=@_;
         my $dbh = C4::Context->dbh;
         my $query="	SELECT count(*) as cant FROM circ_reserva"; 
-        $query .= " 	WHERE  borrowernumber = ? 
-                        AND cancellationdate IS NULL AND estado <> 'P'";
+        $query .= " 	WHERE  nro_socio = ? 
+                        AND estado <> 'P'";
 
         my $sth=$dbh->prepare($query);
         $sth->execute($bor);
@@ -787,7 +788,7 @@ print A "Entro al if de regularidad\n";
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
 	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getPreferencia("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
 print A "Entro al if del curso en el opac\n";
@@ -833,7 +834,7 @@ print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestam
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber))){
 		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getPreferencia("maxreserves")]} ) ;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
 print A "Entro al if de maximo de reservas desde OPAC";
 	}
 
@@ -912,7 +913,7 @@ sub _verificarMaxTipoPrestamo{
 
 
 sub _verificarHorario{
-	my $end = ParseDate(C4::AR::Preferencias->getPreferencia("close"));
+	my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
 	my $begin =calc_beginES();
 	my $actual=ParseDate("today");
 	my $error=0;
@@ -942,7 +943,7 @@ sub intercambiarId3{
 	}
 	else{
 		#el item con id3 esta libre se actualiza la reserva del usuario al que se va a prestar el item.
-		$sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id2=? AND borrowernumber=?");
+		$sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id2=? AND nro_socio=?");
 		$sth->execute($id3, $id2, $borrowernumber);
 	}
 
@@ -952,7 +953,7 @@ sub intercambiarId3{
 sub cambiarId3 {
 	my ($id3Libre,$reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="UPDATE circ_reserva SET id3= ? WHERE reservenumber = ?";
+	my $query="UPDATE circ_reserva SET id3= ? WHERE id_reserva = ?";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id3Libre,$reservenumber);
 }
@@ -1035,7 +1036,7 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
 # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
 				$params->{'id3'}="";
-				if(!C4::AR::Preferencias->getPreferencia('intranetGroupReserve')){
+				if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
 				#NO SE PERMITE LA RESERVA DE GRUPO
 					$sePermiteReservaGrupo=0;
 					#Hay error no se permite realizar una reserva de grupo en intra.
@@ -1071,7 +1072,7 @@ sub insertarPrestamo {
 
 	my $dbh=C4::Context->dbh;
 #Se acutualiza el estado de la reserva a P = Presetado
-	my $sth=$dbh->prepare("	UPDATE circ_reserva SET estado='P' WHERE id2 = ? AND borrowernumber = ? ");
+	my $sth=$dbh->prepare("	UPDATE circ_reserva SET estado='P' WHERE id2 = ? AND nro_socio = ? ");
 
 	$sth->execute(	
 			$params->{'id2'},
@@ -1120,7 +1121,7 @@ sub Enviar_Email{
 	my $branchcode= $reserva->getId_ui;
 	my $id3= $reserva->getId3;
 
-	if (C4::AR::Preferencias->getPreferencia("EnabledMailSystem")){
+	if (C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem")){
 
 		my $dateformat = C4::Date::get_date_format();
 		my $socio= C4::AR::Usuarios::getSocioInfo($reserva->getNro_socio);
@@ -1129,9 +1130,9 @@ sub Enviar_Email{
 		my $nivel1=C4::AR::Catalogacion::buscarNivel1($reserva->getId1);
 		$nivel1->{'autor'}=(C4::AR::Busquedas::getautor($nivel1->{'autor'}))->{'completo'};
 		
-		my $mailFrom=C4::AR::Preferencias->getPreferencia("reserveFrom");
-		my $mailSubject =C4::AR::Preferencias->getPreferencia("reserveSubject");
-		my $mailMessage =C4::AR::Preferencias->getPreferencia("reserveMessage");
+		my $mailFrom=C4::AR::Preferencias->getValorPreferencia("reserveFrom");
+		my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reserveSubject");
+		my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
 		my $branchname= C4::AR::Busquedas::getBranch($reserva->getId_ui)->{'branchname'};
 
 
@@ -1237,8 +1238,7 @@ sub cant_waiting{
         my ($borrowernumber)=@_;
         my $dbh = C4::Context->dbh;
         my $query="	SELECT count(*) as cant FROM circ_reserva
-   			WHERE borrowernumber = ?
-			AND cancellationdate IS NULL
+   			WHERE nro_socio = ?
 			AND estado <> 'P'
 			AND id3 IS NULL ";
         my $sth=$dbh->prepare($query);
@@ -1285,8 +1285,7 @@ sub tiene_reservas {
 
   	my $dbh = C4::Context->dbh;
   	my $query= "	SELECT * FROM circ_reserva  
-			WHERE cancellationdate is NULL
-			AND estado <> 'P'
+			WHERE estado <> 'P'
 			AND id3 = ?";
 
 	my $sth=$dbh->prepare($query);
@@ -1305,10 +1304,10 @@ sub tiene_reservas {
 
 sub FindNotRegularUsersWithReserves {
 	my $dbh = C4::Context->dbh;
-	my $query="	SELECT circ_reserva.borrowernumber 
-			FROM circ_reserva INNER JOIN persons ON circ_reserva.borrowernumber = persons.borrowernumber
-			WHERE regular = '0'
-			AND cancellationdate IS NULL
+	my $query="	SELECT circ_reserva.nro_socio 
+			FROM circ_reserva INNER JOIN usr_socio ON circ_reserva.nro_socio = usr_socio.id_socio
+			INNER JOIN usr_estado ON usr_estado.id_estado = usr_socio.id_estado
+			WHERE usr_estado.regular = '0'
 			AND circ_reserva.estado IS NULL";
 
         my $sth=$dbh->prepare($query);
@@ -1332,10 +1331,10 @@ sub mailReservas{
 	my ($branch)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("SELECT * FROM circ_reserva 
-		INNER JOIN borrowers ON (circ_reserva.borrowernumber=borrowers.borrowernumber) 
+		INNER JOIN usr_socio ON (circ_reserva.nro_socio=usr_socio.id_socio) 
 		LEFT JOIN cat_nivel3 n3 ON (circ_reserva.id3 = n3.id3 )
 		INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
-		WHERE circ_reserva.branchcode=? AND estado <> 'P'");
+		WHERE circ_reserva.id_ui=? AND estado <> 'P'");
 	$sth->execute($branch);
 	my @result;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -1372,7 +1371,7 @@ my ($id2,$id3,$responsable)=@_;
 		my $item= getItemsParaReserva($id2); #busco un item libre del grupo
 		if ($item) {
 		#Hay un ejemplar libre para el usuario
-			my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE reservenumber= ?; ");
+			my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id_reserva= ?; ");
 			$sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
 
 		}else {
@@ -1386,7 +1385,7 @@ my ($id2,$id3,$responsable)=@_;
 			if ($disponibles){
 		#Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
 				my $query3="UPDATE circ_reserva SET timestamp='0000-00-00 00:00:00', id3 = NULL
-					    WHERE reservenumber=? ";
+					    WHERE id_reserva=? ";
 				my $sth5=$dbh->prepare($query3);
 				$sth5->execute($reserva->{'reservenumber'});
 			}

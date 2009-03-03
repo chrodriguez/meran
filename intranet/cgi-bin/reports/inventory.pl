@@ -23,7 +23,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 #Por los branches
 my $branch=$input->param('branch');
-($branch ||($branch=C4::Context->preference("defaultbranch")));
+($branch ||($branch=C4::AR::Preferencias->getValorPreferencia("defaultbranch")));
 #
 
 my $MIN=C4::Circulation::Circ2::getminbarcode($branch);

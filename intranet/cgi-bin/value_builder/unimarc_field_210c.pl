@@ -55,11 +55,11 @@ my $function_name= "210c".(int(rand(100000))+1);
 #---- the editor list is built from the "EDITORS" thesaurus
 #---- this thesaurus category must be filled as follow :
 #---- isbn_identifier authorityseparator editor authorityseparator collection
-#---- sample : 2224 -- Cerf -- Sources chrétiennes
+#---- sample : 2224 -- Cerf -- Sources chrï¿½tiennes
 my $sth = $dbh->prepare("select father,stdlib from bibliothesaurus where category='EDITORS' and level=2");
 $sth->execute;
 my @editors;
-my $authoritysep = C4::Context->preference("authoritysep");
+my $authoritysep = C4::AR::Preferencias->getValorPreferencia("authoritysep");
 while (my ($father,$stdlib) = $sth->fetchrow) {
 	push(@editors,"$father $stdlib");
 }
