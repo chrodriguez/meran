@@ -842,3 +842,12 @@ div.dimming {
          color:red;
          font:bold; 
 }
+
+#userDataForm #sexo label.error {
+         margin-left: 10px;
+         width: auto;
+         display: inline;
+         color:red;
+         font:bold; 
+         float:left;
+}
