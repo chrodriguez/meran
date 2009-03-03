@@ -16,24 +16,26 @@ $(document).ready(function() {
     <hr>
 DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %]
         infoReferencia=> referencia: [% catalogacion.infoReferencia.getReferencia %] 
-    <div width="100%">
-        <b>Modificar campo Marc para el nivel [% nivel %]:</b>
-        <div id="div1">
+<div width="100%">
+    <b>Modificar campo Marc para el nivel [% nivel %]:</b>
+<!--     <div id="div1"> -->
     <p>
     <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
     [% selectCampoX %]
     </p>
 </div>
-<div id="id2">
-        <p>
-        <label for="tagField" style="float:left; width:13%">Campo: </label>
-            <select name="campo" id="campo" onChange="eleccionCampo()">
-                <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
-            </select>
-        Nombre: <span id="nombre_campo"></span>
-        </p>
-    </div>
-    <div id="id3">
+<!--<div id="id2">-->
+<div id="content">
+    <p>
+    <label for="tagField" style="float:left; width:13%">Campo: </label>
+        <select name="campo" id="campo" onChange="eleccionCampo()">
+            <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
+        </select>
+    Nombre: <span id="nombre_campo"></span>
+    </p>
+<!--     </div> -->
+    <!--<div id="id3">-->
+    <div id="subcontent">
         <p align="left">
         <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
@@ -43,23 +45,6 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
         <input id="obligatorio" type="hidden" value="">
         Liblibrarian: <input id="liblibrarian" type="text" value='[% catalogacion.getLiblibrarian %]' size="90"> 
         </p>
-        <p>
-        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
-            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]">
-        </p>
-        <!--<div id="divCamposRef" valign="top" style="display:none">-->
-        <div id="divCamposReferencia" valign="top">
-            <label for="orden" style="float:left; width:13%">Orden: </label>
-            <select name="camposSelect" id="camposSelect">
-                <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
-            </select>
-    
-            Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
-            separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
-            </p>
-            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
-        </div>
-
 
         <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
         <p>
@@ -71,13 +56,30 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
                 <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo box</option>
             </select>
         </p>
-    </div>
+
+        <p>
+        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]">
+        </p>
+        
+        <div id="divCamposReferencia" valign="top">
+            <label for="orden" style="float:left; width:13%">Orden: </label>
+            <select name="camposSelect" id="camposSelect">
+                <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
+            </select>
+    
+            Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
+            separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
+            </p>
+            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+        </div>  <!--END divCamposReferencia-->
+    </div>  <!--END subcontent-->
 [% IF catalogacion.infoReferencia.getReferencia %]
 DEBUG=>     TIENE REFERENCIA
 [% ELSE %]
 DEBUG=>     NO TIENE REFERENCIA
 [% END %]
-</div>
+</div> <!--END <div id="content">-->
 
 <br>
 <div align="center">

@@ -1,6 +1,6 @@
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
-    <hr>
-    <div width="100%">
+<hr>
+<div width="100%">
         <b>Agregar campo Marc para el nivel [% nivel %]:</b>
         <div id="div1">
     <p>
@@ -8,6 +8,7 @@
     [% selectCampoX %]
     </p>
 </div>
+
 <div id="id2">
         <p>
         <label for="tagField" style="float:left; width:13%">Campo: </label>
@@ -17,7 +18,7 @@
         Nombre: <span id="nombre_campo"></span>
         </p>
     </div>
-    <div id="id3">
+<!--     <div id="id3"> -->
         <p align="left">
         <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
@@ -26,11 +27,6 @@
         <input id="obligatorio" type="hidden" value="">
         Liblibrarian: <input id="liblibrarian" type="text" value="" size="90"> 
         </p>
-        <p>
-        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
-         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
-                <option value="-1">Seleccionar TablaRef</option>
-         </select>
         <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
         <p>
             <select name="tipoInput" id="tipoInput">
@@ -41,15 +37,21 @@
                 <option value="combo">Combo box</option>
             </select>
         </p>
+        <p>
+        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
+                <option value="-1">Seleccionar TablaRef</option>
+         </select>
         </p>
-    </div>
+<!--     </div> -->
     <div id="divCamposRef" valign="top" style="display:none">
+        <p>
         <label for="orden" style="float:left; width:13%">Orden: </label>
         <select name="camposSelect" id="camposSelect">
             <option value="-1">Seleccione anteriores</option>
         </select>
 
-        <p>
+       <!-- <p>-->
         Campos: <input size="43" id="camposRef" name="camposRef" value="">
         separador: <input type="text" id="separador" name="separador">
         </p>

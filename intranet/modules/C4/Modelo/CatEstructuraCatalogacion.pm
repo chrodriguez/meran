@@ -74,7 +74,8 @@ sub agregar{
     $self->setIdCompCliente(md5_hex(time()));
     $self->save();
 
-    if($data_hash->{'referencia'}){
+#     if($data_hash->{'referencia'}){
+    if($self->tieneReferencia){
     #si tiene referencia....
         $data_hash->{'id_est_cat'}= $self->id;
         my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);

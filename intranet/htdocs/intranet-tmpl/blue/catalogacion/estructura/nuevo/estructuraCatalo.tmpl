@@ -31,20 +31,25 @@ function changePage(ini){
 function eleccionDeNivel(){
 	var nivel=$("#niveles_id").val();
 	var ObjDiv = $("#divitemtype");
-	if((nivel == '1') || (nivel == 'Niveles')){ObjDiv.hide();}
-	else{ObjDiv.show();}
+	if((nivel == '1') || (nivel == 'Niveles')){
+        ObjDiv.hide();
+    }else{
+        ObjDiv.show();
+    }
 	
 	objAH=new AjaxHelper(updateEleccionDeNivel);
     objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.nivel=nivel;
     objAH.tipoAccion= 'MOSTRAR_CAMPOS';
-    if (nivel == 1)
-	   objAH.itemtype='ALL';
-   else
-      objAH.itemtype=$('#tipo_nivel3_id').val();
-	objAH.sendToServer();
 
+    if (nivel == 1){
+	   objAH.itemtype='ALL';
+    }else {
+      objAH.itemtype=$('#tipo_nivel3_id').val();
+    }
+
+	objAH.sendToServer();
 }
 
 function updateEleccionDeNivel(responseText){
@@ -247,7 +252,7 @@ function enable_disableSelects(){
         }
     else
       if ( $('#tablaRef').val() == -1){
-         $("#tipoInput").attr('disabled',true);
+//          $("#tipoInput").attr('disabled',true);
          $("#divCamposRef").hide();
        }
 }
