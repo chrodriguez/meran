@@ -14,6 +14,7 @@
 //************************************************REVISADO******************************************************************
 id1=0; //para saber el id del nivel 1
 id2=0; //para saber el id del nivel 2
+id3=0; //para saber el id del nivel 3
 
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
@@ -182,10 +183,9 @@ function guardarDocumentoN2(){
 }
 
 function updateGuardarDocumentoN2(responseText){
-//     inicializar();d
-//     var Messages=JSONstring.toObject(responseText);
+
     var info=JSONstring.toObject(responseText);
-    var Messages= info.Message_arrayref;
+    var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
     id2= info.id2;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
@@ -212,23 +212,42 @@ function guardarDocumentoN3(){
 }
 
 function updateGuardarDocumentoN3(responseText){
-//     inicializar();d
-//     var Messages=JSONstring.toObject(responseText);
+
     var info=JSONstring.toObject(responseText);
-    var Messages= info;
-    var id2= info.id2;
+    var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
+//     var id2= info.id2;
+//     var id1= info.id1;
+    id3= info.id3;
     setMessages(Messages);
 
    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
    var allInputs = $('#estructuraDelNivel3 :input');
        for (x=0; x< allInputs.length; x++)
             allInputs[x].value="";
-//     if (! (hayError(Messages) ) ){
-//         inicializar();
-//         //carga la barra lateral con info de nivel 1
-//         mostrarInfoAltaNivel3(id2);
-//         mostrarEstructuraDelNivel3();
-//     }
+//     mostrarInfoAltaNivel3(info.id1, info.id2);
+    if (! (hayError(Messages) ) ){
+        inicializar();
+        //muestra la tabla con los ejemplares agregados
+        mostrarInfoAltaNivel3(info.id1, info.id2);
+    }
+}
+
+//esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
+function mostrarInfoAltaNivel3(id1, id2){
+    objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
+    objAH.id1= id1;
+    objAH.id2= id2;
+    objAH.sendToServer();
+}
+
+function updateMostrarInfoAltaNivel3(responseText){
+//     $('#nivel2Tabla').slideUp('slow');
+//     $('#estructuraDelNivel2').html('');
+    $('#detalleDelNivel3').html(responseText);
+    zebra('tablaResult');
 }
 
 /*
@@ -814,6 +833,8 @@ $(document).ready( function() {
 </span>
 
 </div>
+
+<div id="detalleDelNivel3"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

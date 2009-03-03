@@ -71,6 +71,10 @@ sub createFromAlias{
 }
 
 
+sub getIdInfoRef{
+    my ($self) = shift;
+    return ($self->idinforef);
+}
 
 sub getIdEstCat{
     my ($self) = shift;

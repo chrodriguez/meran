@@ -299,12 +299,18 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 #Se muestran la estructura de catalogacion para que el usuario agregue un documento
 #     $obj->{'titulo'}= 'TEST';
 #     $obj->{'autor'}= '222';
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_guardarNivel3($obj);
+    my ($Message_arrayref, $nivel3) = &C4::AR::Catalogacion::t_guardarNivel3($obj);
     
-    my $infoOperacionJSON=to_json $Message_arrayref;
+#     my $infoOperacionJSON=to_json $Message_arrayref;
+#     my $infoOperacionJSON=to_json $Message_arrayref;
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $nivel3->getId1;
+    $info{'id2'}= $nivel3->getId2;
+    $info{'id3'}= $nivel3->getId3;
 
     print $input->header;
-    print $infoOperacionJSON;
+    print to_json \%info;
 }
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 #Se muestran las catalogaciones
@@ -346,6 +352,32 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
     $nivel2->load();
 
     $t_params->{'nivel2'}= $nivel2;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
+#Se muestran las catalogaciones
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel3.tmpl",
+                                                        query => $input,
+                                                        type => "intranet",
+                                                        authnotrequired => 0,
+                                                        flagsrequired => {editcatalogue => 1},
+                                                        debug => 1,
+                    });
+
+    my $id1= $obj->{'id1'};
+    my $id2= $obj->{'id2'};
+
+#   FIXME trae todos los ejemplares (nivel3) segun un id1 e id2, hacer una funcion en Catalogacion
+    my $nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                        query => [ id1 => { eq => $id1 },
+                                                                   id2 => { eq => $id2 } ]      
+                                                );
+
+    $t_params->{'nivel3_array'}= $nivel3;
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

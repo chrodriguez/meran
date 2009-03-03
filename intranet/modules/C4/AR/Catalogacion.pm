@@ -1925,10 +1925,11 @@ sub t_guardarNivel3 {
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
+    my  $catNivel3;
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel3= C4::Modelo::CatNivel3->new();
+        $catNivel3= C4::Modelo::CatNivel3->new();
         my $db= $catNivel3->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -1955,7 +1956,7 @@ sub t_guardarNivel3 {
 
     }
 
-    return ($msg_object);
+    return ($msg_object, $catNivel3);
 }
 
 
@@ -1996,7 +1997,6 @@ sub t_eliminarNivel1{
     }
 
     return ($msg_object);
-
 }
 
 sub t_eliminarNivel2{

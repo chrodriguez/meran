@@ -73,10 +73,16 @@ sub agregar{
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
     $self->save();
-    $data_hash->{'id_est_cat'}=$self->id;
-    my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
-       $pref_temp->agregar($data_hash);
 
+    if($data_hash->{'referencia'}){
+    #si tiene referencia....
+        $data_hash->{'id_est_cat'}= $self->id;
+        my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
+        $pref_temp->agregar($data_hash);
+
+        $self->setIdInfoRef($pref_temp->getIdInfoRef);
+        $self->save();
+    }
 } 
 
 sub modificar{
@@ -175,6 +181,14 @@ sub setIdCompCliente{
     my ($self) = shift;
     my ($IdCompCliente) = @_;
     $self->idCompCliente($IdCompCliente);
+}
+
+# FIXME hace falta esto?
+sub setIdInfoRef{
+    my ($self) = shift;
+    my ($id_info_ref) = @_;
+    
+    $self->idinforef($id_info_ref);
 }
 
 sub getIdInfoRef{
