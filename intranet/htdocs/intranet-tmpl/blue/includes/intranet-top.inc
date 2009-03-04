@@ -12,9 +12,10 @@
 
 <head>
 <noscript>
-    <div class='tableMsgUser'><font class='fontMsgUser'>
-            <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
-                            </font>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
     </div>
 </noscript>
 

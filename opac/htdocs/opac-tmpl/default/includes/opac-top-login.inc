@@ -4,6 +4,14 @@
 
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 
+<noscript>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
+    </div>
+</noscript>
+
 <script src="/opac-tmpl/default/includes/jquery/jquery.js"></script>
 <script src="/opac-tmpl/default/includes/AjaxHelper.js"></script>
 <script src="/opac-tmpl/default/includes/MessageHelper.js"></script>
