@@ -39,7 +39,7 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 	my $picturesDir= C4::Context->config("picturesdir");
 	my $foto;
 	if (opendir(DIR, $picturesDir)) {
-		my $pattern= $id_socio."[.].";
+		my $pattern= $socio->getNro_socio."[.].";
 		my @file = grep { /$pattern/ } readdir(DIR);
 		$foto= join("",@file);
 		closedir DIR;
@@ -48,7 +48,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 	}
 	
 	####
-		
 	#### Verifica si hay problemas para subir la foto
 	my $msgFoto=$input->param('msg');
 	($msgFoto) || ($msgFoto=0);
@@ -67,6 +66,7 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
    $t_params->{'nroSocioLoggeado'} = $socio->getNro_socio;
     
     $t_params->{'socio'}= $socio;
+    $t_params->{'relativePicturesDir'}= C4::Context->config("relativePicturesDir");
 	
 
 	

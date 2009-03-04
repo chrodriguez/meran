@@ -5,7 +5,7 @@ use C4::AR::UploadFile;
 use JSON;
 
 my $query=new CGI;
-my $bornum= $query->param('bornum');
+my $bornum= $query->param('nro_socio');
 my $filepath= $query->param('picture');
 
 my ($error,$codMsg,$message)= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);

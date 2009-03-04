@@ -83,8 +83,8 @@ sub deletePhoto{
 	my ($foto_name)=@_;
 	my $msg_object= C4::AR::Mensajes::create();
 	
-	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
-	    	unlink($picturesDir.'/'.$foto_name);
+# 	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
+	if (unlink(C4::AR::Utilidades::trim($picturesDir."/".$foto_name))) { 
 		$msg_object->{'error'}= 0;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;	
 	}else{

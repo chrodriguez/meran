@@ -124,7 +124,7 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "uploadPicture.pl",
-						id_socio: usuario.ID,
+						nro_socio: usuario.nro_socio,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
 // 									var responseText= $('#responseText').html();
@@ -176,8 +176,9 @@ $(document).ready(function() {
 	
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
-	usuario.text= "[% completo %]";
-	usuario.ID= "[% id_socio %]";
+	usuario.text= "[% socio.persona.getApellido %], [% socio.persona.getNombre %]";
+	usuario.ID= [% id_socio %];
+   usuario.nro_socio= [% socio.getNro_socio %];
 
 	detalleUsuario(usuario.ID);
 	detallePrestamos(usuario.ID);

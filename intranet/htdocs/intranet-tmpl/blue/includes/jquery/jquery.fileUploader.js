@@ -18,7 +18,7 @@
         $('body').append($('<div></div>').append($('<iframe src="about:blank" id="myFrame" name="myFrame" style="display: none;"></iframe>')));
         $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
             .append(
-	    $('<input type="hidden" name="bornum" value="' + opt.bornum + '" />'),	
+	    $('<input type="hidden" name="nro_socio" value="' + opt.nro_socio + '" />'),	
             $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
             $('<div class="select" title="upload new picture"></div>').append($('<input id="myUploadFile" class="myUploadFile file" type="file" value="" name="picture"/>')), 
             $('<ul id="ul_files"></ul>'))
