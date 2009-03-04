@@ -126,7 +126,6 @@ subirOrden
 Sube el orden en la vista, del campo seleccionado.
 =cut
 sub subirOrden{
-
     my ($self)=shift;
 
     $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
@@ -143,6 +142,31 @@ sub bajarOrden{
 
     $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
     $self->save();
+}
+
+=item
+Esta funcion verifica si es el ultimo en orden de las catalogaciones segun el nivel e itemtype
+=cut
+sub soyElUltimo{
+    my ($self)=shift;
+
+    my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+                                                            query => [
+                                                                    itemtype=> { eq => $self->getItemType},
+                                                                    nivel=> { eq => $self->getNivel},               
+                                                            ]
+                                        );
+
+    return ($self->getIntranet_habilitado eq scalar(@$catalogaciones_count));
+}
+
+=item
+Esta funcion retorna 1 si es el primero en el orden a mostrar segun intranet_habilitado
+=cut
+sub soyElPrimero{
+    my ($self)=shift;
+
+    return $self->getIntranet_habilitado eq 1;
 }
 
 sub cambiarVisibilidad{

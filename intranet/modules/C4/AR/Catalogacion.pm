@@ -68,7 +68,6 @@ use vars qw(@EXPORT @ISA);
 
 	&actualizarCamposModificados
 	&actualizarInfoReferencia
-	&actualizarVisibilidad
 	
 	&guardarCamposModificados
 	&guardarCampoTemporal
@@ -86,7 +85,7 @@ use vars qw(@EXPORT @ISA);
 	&guardarModificacion
 
 
-   &t_eliminarNivel1
+    &t_eliminarNivel1
 );
 
 
@@ -487,20 +486,6 @@ sub actualizarInfoReferencia{
 	$sth->execute($tabla,$orden,$campoRef,$separador,$idinforef);
 	$sth->finish;
 	
-}
-
-=item
-actualizarVisibilidad
-Cambia la visibilidad del campo modificado, para ver si se muestra o no en el detalle del documento.
-=cut
-sub actualizarVisibilidad{
-	my ($idestcat,$visible)=@_;
-	my $dbh = C4::Context->dbh;
-	$visible= ($visible +1)% 2;
-	my $query="UPDATE cat_estructura_catalogacion SET visible = ? WHERE id=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($visible,$idestcat);
-	$sth->finish;
 }
 
 =item
@@ -1758,6 +1743,66 @@ sub guardarModificacion{
 
 
 ################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
+=item
+Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
+=cut
+sub subirOrden{
+    my ($id) = @_;
+
+    my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
+    $catAModificar->load();
+
+    #verifico que no sea el primero en la lista, si es el primero no puede subir mas
+    if(!$catAModificar->soyElPrimero){
+        #obtengo todas las catalogaciones que tienen el mismo intranet_habilitado, nivel y itemtype
+        my $otrasCatalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+                                                                query => [
+                                                                        intranet_habilitado=> { eq => $catAModificar->getIntranet_habilitado - 1},
+                                                                        itemtype=> { eq => $catAModificar->getItemType},
+                                                                        nivel=> { eq => $catAModificar->getNivel},               
+                                                                ]
+                                            ); 
+    
+        #actualizo el intranet_habilitado de las catalogaciones con el intranet_habilitado de la catalogacion que quiero modificar
+        foreach my $cat (@$otrasCatalogaciones){
+            $cat->setIntranet_habilitado($catAModificar->getIntranet_habilitado);
+            $cat->save();
+        }
+    
+        $catAModificar->subirOrden;
+    }
+}
+
+=item
+Esta funcion baja el orden como se va a mostrar del campo, subcampo catalogado
+=cut
+sub bajarOrden{
+    my ($id) = @_;
+
+    my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
+    $catAModificar->load();
+
+    #verifico que no sea el ultimo en la lista, si es el ulitmo no puede bajar mas
+    if (!$catAModificar->soyElUltimo){
+
+        #obtengo todas las catalogaciones que tienen el mismo intranet_habilitado, nivel y itemtype
+        my $otrasCatalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+                                                                query => [
+                                                                        intranet_habilitado=> { eq => $catAModificar->getIntranet_habilitado + 1},
+                                                                        itemtype=> { eq => $catAModificar->getItemType},
+                                                                        nivel=> { eq => $catAModificar->getNivel},               
+                                                                ]
+                                            ); 
+    
+        #actualizo el intranet_habilitado de las catalogaciones con el intranet_habilitado de la catalogacion que quiero modificar
+        foreach my $cat (@$otrasCatalogaciones){
+            $cat->setIntranet_habilitado($catAModificar->getIntranet_habilitado);
+            $cat->save();
+        }
+    
+        $catAModificar->bajarOrden;
+    }
+}
 
 
 sub getCamposXLike{

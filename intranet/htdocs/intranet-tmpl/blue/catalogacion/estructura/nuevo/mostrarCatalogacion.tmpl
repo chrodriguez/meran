@@ -32,14 +32,16 @@
 			        [% catalogacion.getLiblibrarian %]
 		        </td>
 		        <td>
-			        <input id="orden,[% catalogacion.getSubcampo %],[% catalogacion.getSubcampo %]" type="hidden" 
-                            value="[% catalogacion.getIntranet_habilitado %]">
-        
+<!--                 Si no soy el prmiero muestro el boton para subir el orden -->
+                [% IF catalogacion.soyElPrimero != 1 %]                            
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
                     onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')">
-        
+                [% END %]
+<!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
+                [% IF catalogacion.soyElUltimo != 1 %]                                    
 			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
                     onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
+                [% END %]
 		        </td>
 		        <td>
 			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 

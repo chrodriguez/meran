@@ -173,12 +173,8 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 #Sube el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "SUBIR_ORDEN"){
     my $id=$obj->{'idMod'};
-    my $intra = $obj->{'intra'};
 
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catalogacion->load();
-
-    $catalogacion->subirOrden;
+    C4::AR::Catalogacion::subirOrden($id);
 
     print $input->header;
 }
@@ -186,11 +182,8 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
 #Baja el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "BAJAR_ORDEN"){
     my $id=$obj->{'idMod'};
-    my $intra = $obj->{'intra'};
 
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catalogacion->load();
-    $catalogacion->bajarOrden;
+    C4::AR::Catalogacion::bajarOrden($id);
 
     print $input->header;
 }
