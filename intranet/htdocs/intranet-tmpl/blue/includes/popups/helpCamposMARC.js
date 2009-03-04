@@ -21,8 +21,8 @@ function updateAbrirVentanaHelperMARC(responseText){
     vHelperMARC.html=responseText;
     vHelperMARC.titulo= 'Ayuda campos MARC';
     vHelperMARC.draggable= true;
-    vHelperMARC.create(); 
     vHelperMARC.dimmer_On= false;
+    vHelperMARC.create(); 
     vHelperMARC.height('60%');
     vHelperMARC.width('50%');
     vHelperMARC.open();
