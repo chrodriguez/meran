@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-09 18:38-0300\n"
+"PO-Revision-Date: 2009-12-22 12:41-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1992,4 +1992,8 @@ msgstr ""
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/circ/sanctions.tmpl
 msgid "Fecha fin"
 msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/auth.tmpl
+msgid "Su navegador no soporta o no tiene habilidato Javascript"
+msgstr "Your browser does not support JavaScript!"
 
