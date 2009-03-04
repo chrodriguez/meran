@@ -24,7 +24,17 @@ __PACKAGE__->meta->setup(
             key_columns => { id1 => 'id1' },
             type        => 'one to one',
         },
+
+        idCompCliente => {
+            class       => 'C4::Modelo::CatEstructuraCatalogacion',
+            key_columns => { 
+                             campo => 'campo',
+                             subcampo => 'subcampo' },
+            type        => 'one to one',
+        },
     ],
+
+   
 );
 
 sub agregar{

@@ -156,8 +156,17 @@ use C4::Modelo::CatTema;
      print "\n\n\n\TIME: ".md5_hex(time())."\n\n\n";
 use C4::AR::Catalogacion;
 
-      &C4::AR::Catalogacion::t_eliminarNivel1(7060);
+#       &C4::AR::Catalogacion::t_eliminarNivel1(7060);
 
+      my $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                                                              query => [ 
+                                                                                          id1 => { eq => 7082 },
+                                                                                          'cat_estructura_catalogacion.nivel' =>  {eq => 1},
+
+                                                                                    ],
+                                                                                                                                                                        require_objects => [ 'cat_nivel1','idCompCliente' ]
+
+                                                                     );
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
 # 	my $new = &C4::AR::Usuarios::getSocioInfo(3);
