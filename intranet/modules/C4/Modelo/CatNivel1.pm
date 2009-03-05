@@ -45,7 +45,16 @@ sub agregar{
         #se agrega el nivel 1 repetible
         foreach my $infoNivel1 (@$infoArrayNivel1){
             $infoNivel1->{'id1'}= $id1;
-            my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
+               
+            my $nivel1Repetible;
+
+            if ($data_hash->{'modificado'}){
+               $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
+               $nivel1Repetible->load();
+            }else{
+               $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
+            }
+
             $nivel1Repetible->setId1($infoNivel1->{'id1'});
             $nivel1Repetible->setCampo($infoNivel1->{'campo'});
             $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});

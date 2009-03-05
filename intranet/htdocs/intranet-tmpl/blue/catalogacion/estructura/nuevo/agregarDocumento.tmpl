@@ -15,6 +15,8 @@
 id1=0; //para saber el id del nivel 1
 id2=0; //para saber el id del nivel 2
 id3=0; //para saber el id del nivel 3
+dataModif = 0;
+modificar = 0;
 
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
@@ -65,13 +67,27 @@ function mostrarEstructuraDelNivel1(){
     objAH.sendToServer();
 }
 
+
+
+function mostrarDataNivel1(){
+
+    if (modificar){
+      for (x=0; x<dataModif.length; x++){
+         $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+         COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
+      }
+   }
+}
+
 function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel1").html("");
     $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
     $("#nivel1Tabla").show();
     //proceso la info del servidor y se crean las componentes en el cliente
-    procesarInfoJson(responseText);
+    procesarInfoJson(responseText); 
+    //Para ver si se llamó a modificar o no...
+    mostrarDataNivel1();
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -142,16 +158,34 @@ function updateMostrarInfoAltaNivel2(responseText){
     $('#nivel2').html(responseText);
 }
 
+// function filtrarRepetiblesNivel1(arreglo_componentes, nivel){
+// 
+//    var
+//       filteredCompos = Array();
+//       cont = 0;
+//       for (x=0;x<arreglo_componentes.length;x++)
+//          if (arreglo_componentes[x].nivel == nivel)
+//             filteredCompos[cont++] = arreglo_componentes[x];
+//       
+//       return (filteredCompos);
+// 
+// }
+
 function guardarDocumentoN1(){
-    syncComponentesArray();
+// var composArray; 
+   syncComponentesArray();
     objAH=new AjaxHelper(updateGuardarDocumentoN1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+//     composArray = filtrarRepetiblesNivel1(COMPONENTES_ARRAY,1);
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.modificado = modificar;
+    objAH.id1 = id1;
     objAH.sendToServer();
+    modificar = 0;
 }
 
 function updateGuardarDocumentoN1(responseText){
@@ -406,7 +440,7 @@ function borrarN1(id1){
 	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateBorrarN1);
-    objAH.debug= true;
+   objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
@@ -425,6 +459,7 @@ function updateBorrarN1(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
+   inicializar();
 	$("#result").html("");
 	objAH=new AjaxHelper(updateModificarN1);
    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -435,9 +470,12 @@ function modificarN1(id1){
    objAH.nivel = 1;
 	objAH.sendToServer();
 }
-
-function updateModificarN1(){
+function updateModificarN1(responseText){
+   modificar = 1;
+   dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel1();
+   
+   
 }
 /*
  * borrarGrupo

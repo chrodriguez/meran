@@ -25,7 +25,7 @@ __PACKAGE__->meta->setup(
             type        => 'one to one',
         },
 
-        idCompCliente => {
+        CEC => {
             class       => 'C4::Modelo::CatEstructuraCatalogacion',
             key_columns => { 
                              campo => 'campo',

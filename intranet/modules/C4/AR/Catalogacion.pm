@@ -428,8 +428,8 @@ sub getCatalogacionesConDatos{
                                                                                           'cat_estructura_catalogacion.nivel' =>  {eq => 1},
                                                                                           
                                                                                     ], 
-                    select => ['cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo','cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
-                                                                                                                                                                                                                           require_objects => [ 'cat_nivel1','idCompCliente' ]
+                    select => ['cat_nivel1_repetible.rep_n1_id','cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo','cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
+                                                                                                                                                                                                                           require_objects => [ 'cat_nivel1','CEC' ]
 
                                                                      );
    }
@@ -1939,7 +1939,15 @@ sub t_guardarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel1= C4::Modelo::CatNivel1->new();
+        my  $catNivel1;
+
+         if ($params->{'modificado'}){
+            $catNivel1= C4::Modelo::CatNivel1->new(id1 => $params->{'id1'});
+            $catNivel1->load();
+         }else{
+            $catNivel1= C4::Modelo::CatNivel1->new();
+         }
+
         my $db= $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
