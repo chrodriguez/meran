@@ -801,16 +801,50 @@ div.dimming {
     margin-left:1%;
     text-align:justify;
     width: 79%;
-    overflow: auto;
+/*     overflow: auto; */
+    float:right;
 }
 
 .lateral {
     clear:left;
     float:left;
     height:400px;
-    margin-left: 1%;
+/*     margin-left: 1%; */
 /*     padding: 0%; */
-    width: 19%;
+    width: 20%;
+}
+
+.nivel1Lateral {
+    border:1px solid #999999;
+    padding:11px;
+/*     height:30%; */
+}
+
+.nivel2Lateral {
+    border:1px solid #999999;
+    overflow: auto;
+    height: 80%;
+    padding:11px;
+    cursor: pointer;
+
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+
+p.nivel2Selected:hover{
+    color: #BC3131;
+    text-decoration: none;    
+}
+
+.nivel3Footer {
+    width: 100%;
+}
+
+.todo {
+    height:100%;
+    width:100%;
 }
 
 /* end agregado */

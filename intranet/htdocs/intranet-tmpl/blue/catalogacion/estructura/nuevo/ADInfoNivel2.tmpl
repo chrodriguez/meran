@@ -1,27 +1,23 @@
-<p class="inputFontNormal">
-<b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
-<br/>
-<input  type="image" border="0" onclick="modificarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])" title="Modificar Grupo" 
-        src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
-<input type="button" border="0" onclick="agregarEjemplar(53,60,'LIB')" title="Agregar Ejemplar" value="+" name="agregar"/>
-<input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])"  
-        src="/intranet-tmpl/blue/images/borrar.png" value="delete" name="delete"/>
-<br/>
-Nivel bibliográfico: [% nivel2.getNivel_bibliografico %]
-<br/>
-Soporte: [% nive2.ref_soporte.getDescription %]
-<br/>
-Lugar: [% nivel2.getCiudad_publicacion %]
-<br/>
-Idioma: [% nivel2.ref_idioma.getDescription %]
-<br/>
-Fecha: [% nivel2.getAnio_publicacion %]
-<br/>
-Cantidad Ejemplares: [% cant_ejemplares %]
-</p>
-<!--
-<script>
-// FIXME para q esta esto??
-   id2 = nivel2.id2;
-</script>-->
-<!-- FIXME FALTA TERMINAR ESTE TMPL -->
+[% FOREACH nivel2 IN nivel2_array %]    
+    <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( [% nivel2.getId1 %],  [% nivel2.getId2 %])">
+    <b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
+    <br/>
+    <input  type="image" border="0" onclick="modificarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])" title="Modificar Grupo" 
+            src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
+    <input type="button" border="0" onclick="agregarEjemplar(53,60,'LIB')" title="Agregar Ejemplar" value="+" name="agregar"/>
+    <input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])"  
+            src="/intranet-tmpl/blue/images/borrar.png" value="delete" name="delete"/>
+    <br/>
+    Nivel bibliográfico: [% nivel2.getNivel_bibliografico %]
+    <br/>
+    Soporte: [% nive2.ref_soporte.getDescription %]
+    <br/>
+    Lugar: [% nivel2.getCiudad_publicacion %]
+    <br/>
+    Idioma: [% nivel2.ref_idioma.getDescription %]
+    <br/>
+    Fecha: [% nivel2.getAnio_publicacion %]
+    <br/>
+    Cantidad Ejemplares: [% cant_ejemplares %]
+    </p>
+[% END %]

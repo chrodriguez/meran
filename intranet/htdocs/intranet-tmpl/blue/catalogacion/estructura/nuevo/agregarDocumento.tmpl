@@ -1,12 +1,10 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<!-- <script src="/intranet-tmpl/blue/includes/seleccionCamposMarc.js"></script> -->
 <script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
-<!-- <script src="/intranet-tmpl/blue/includes/crearComponentes.js"></script> -->
+<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
-
-<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 
 <script>
@@ -104,6 +102,8 @@ function mostrarEstructuraDelNivel2(){
 
 function updateMostrarEstructuraDelNivel2(responseText){
     $("#estructuraDelNivel2").html("");
+    $('#nivel2Tabla').show();
+    $('#nivel3Tabla').hide();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -122,6 +122,8 @@ function mostrarEstructuraDelNivel3(){
 
 function updateMostrarEstructuraDelNivel3(responseText){
     $("#estructuraDelNivel3").html("");
+//      $('#nivel2Tabla').show();
+    $('#nivel3Tabla').show();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -148,7 +150,8 @@ function mostrarInfoAltaNivel2(id2){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL2_LATERARL";
-    objAH.id2= id2;
+    objAH.id2= id2; //voy a mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
+    objAH.id1= id1;
     objAH.sendToServer();
 }
 
@@ -189,8 +192,7 @@ function guardarDocumentoN1(){
 }
 
 function updateGuardarDocumentoN1(responseText){
-//     inicializar();
-//     var Messages=JSONstring.toObject(responseText);
+
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;
     id1= info.id1;
@@ -221,6 +223,7 @@ function updateGuardarDocumentoN2(responseText){
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
     id2= info.id2;
+//     id1= info.id1;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -321,8 +324,10 @@ function procesarObjeto(objeto){
     var unoLinea=0;
     var idDiv="div"+idComp;
     var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
-    var divLabel="<div id='label"+idDiv+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
-    strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
+//     var divLabel="<div id='label"+idDiv+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
+    var divLabel="<div style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
+//     strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
+    strComp="<div style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo("#"+getDivDelNivel());
 
     switch(tipo){
@@ -380,8 +385,8 @@ function crearComponente(tipo,id,opciones,valor){
     switch(tipo){
         case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80'>";
         break;
-        case "hidden": comp="<input type='"+tipo+"' "+opciones+" id='"+id+"' value='"+valor+"'>";
-        break;
+/*        case "hidden": comp="<input type='"+tipo+"' "+opciones+" id='"+id+"' value='"+valor+"'>";
+        break;*/
         case "combo": comp="<select id='"+id+"'>\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
@@ -779,11 +784,12 @@ $(document).ready( function() {
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% selectItemType %]
 <br><br>
 
+<div class="todo">
 
 <div class="lateral">
-    <div id="nivel1"></div>
-    <div id="nivel2"></div>
-</div>
+    <div id="nivel1" class="nivel1Lateral"></div>
+    <div id="nivel2" class="nivel2Lateral"></div>
+</div>   <!--END <div class="lateral">-->
 
 <div class="centro">
 
@@ -865,9 +871,12 @@ $(document).ready( function() {
     </center>
 </span>
 
-</div>
+</div> <!--END <div class="centro">-->
 
-<div id="detalleDelNivel3"></div>
+<!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
+<div id="detalleDelNivel3" class="nivel3Footer"></div>
+
+</div> <!--END <div class="todo">-->
 
 [% INCLUDE "intranet-bottom.inc" %]
 

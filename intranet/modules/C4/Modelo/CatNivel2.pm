@@ -88,6 +88,8 @@ sub agregar{
             $nivel2Repetible->save(); 
         }
     }
+
+    return $self;
 }
 
 

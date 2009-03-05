@@ -79,12 +79,6 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
-#     my ($tablaRef_array) = C4::AR::Catalogacion::getTablaRef();
-## FIXME para que esta esto!!!!!!!!!!!!!!!!!!!!!!
-#     my ($tablaRef_array) = C4::AR::Referencias::obtenerTablasDeReferencia();
-#     
-#     my ($json_string_tabla) = C4::AR::Utilidades::arrayObjectsToJSONString($tablaRef_array);
-
     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
 
     my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
@@ -282,34 +276,27 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
     $info{'id1'}= $id1;
 
     print $input->header;
-#     print $infoOperacionJSON;
     print to_json \%info;
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
-#Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
-#     $obj->{'titulo'}= 'TEST';
-#     $obj->{'autor'};
-    my ($Message_arrayref, $id2) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
+    #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
+    my ($Message_arrayref, $nivel2) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id2'}= $id2;
+    $info{'id1'}= $nivel2->getId1;
+    $info{'id2'}= $nivel2->getId2;
 
     print $input->header;
-#     print $infoOperacionJSON;
     print to_json \%info;
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 #Se muestran la estructura de catalogacion para que el usuario agregue un documento
-#     $obj->{'titulo'}= 'TEST';
-#     $obj->{'autor'}= '222';
     my ($Message_arrayref, $nivel3) = &C4::AR::Catalogacion::t_guardarNivel3($obj);
     
-#     my $infoOperacionJSON=to_json $Message_arrayref;
-#     my $infoOperacionJSON=to_json $Message_arrayref;
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
     $info{'id1'}= $nivel3->getId1;
@@ -353,12 +340,24 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                                                         debug => 1,
                     });
 
-    my $id2=$obj->{'id2'};
+#     my $id2=$obj->{'id2'};
+# 
+#     my $nivel2 = C4::Modelo::CatNivel2->new(id2 => $id2);
+#     $nivel2->load();
+# 
+#     $t_params->{'nivel2'}= $nivel2;
 
-    my $nivel2 = C4::Modelo::CatNivel2->new(id2 => $id2);
-    $nivel2->load();
+    my $id1=$obj->{'id1'};
 
-    $t_params->{'nivel2'}= $nivel2;
+    my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(
+                                                    query => [
+                                                                id1=> { eq => $id1},
+                                                            ]
+                                                );
+#     $nivel2->load();
+
+    $t_params->{'nivel2_array'}= $nivel2_array_ref;
+
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
