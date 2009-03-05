@@ -11,14 +11,6 @@
 <script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
 
 <head>
-<noscript>
-    <div class='tableMsgUser'>
-        <font class='fontMsgUser'>
-                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
-        </font>
-    </div>
-</noscript>
-
 <title>Koha::UNLP</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/intranet.css">
 <meta http-equiv="Content-Tipo" content="text/html; charset=iso-8859-1">
@@ -39,8 +31,6 @@ function cambiarIdioma() {
 </script>
 
 <body>
-
-
 <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 
 <tr id="menu" valign="top" align="center" height="16" >

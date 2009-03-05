@@ -2,7 +2,7 @@
     <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( [% nivel2.getId1 %],  [% nivel2.getId2 %])">
     <b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
     <br/>
-    <input  type="image" border="0" onclick="modificarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])" title="Modificar Grupo" 
+    <input  type="image" border="0" onclick="modificarN2([% nivel2.getId2 %])" title="Modificar Grupo" 
             src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
     <input type="button" border="0" onclick="agregarEjemplar(53,60,'LIB')" title="Agregar Ejemplar" value="+" name="agregar"/>
     <input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo([% nivel2.getId1 %],[% nivel2.getId2 %])"  

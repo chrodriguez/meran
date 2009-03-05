@@ -73,6 +73,8 @@ function mostrarDataNivel1(){
       for (x=0; x<dataModif.length; x++){
          $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
          COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
+         if (_nivelActual == 2)
+            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
       }
    }
 }
@@ -214,7 +216,9 @@ function guardarDocumentoN2(){
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.modificado = modificar;
     objAH.id1 = id1;
+    objAH.id2 = id2; //por si se modificó
     objAH.sendToServer();
 }
 
@@ -479,6 +483,26 @@ function updateModificarN1(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel1();
+   
+   
+}
+
+function modificarN2(id2){
+   inicializar();
+   $("#result").html("");
+   objAH=new AjaxHelper(updateModificarN2);
+   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+   objAH.debug= true;
+   objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+   objAH.itemtype="ALL";
+   objAH.id = id2;
+   objAH.nivel = 2;
+   objAH.sendToServer();
+}
+function updateModificarN1(responseText){
+   modificar = 1;
+   dataModif = JSONstring.toObject(responseText);
+   mostrarEstructuraDelNivel2();
    
    
 }

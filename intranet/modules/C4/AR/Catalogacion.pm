@@ -438,7 +438,7 @@ sub getCatalogacionesConDatos{
                                                                               query => [ 
                                                                                           id2 => { eq => $id },
                                                                                     ],
-                                                                                          require_objects => [ 'cat_nivel2' ]
+                                                                                          require_objects => [ 'cat_nivel2', 'CEC' ]
 
                                                                      );
    }
@@ -1988,7 +1988,12 @@ sub t_guardarNivel2 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        $catNivel2= C4::Modelo::CatNivel2->new();
+         if ($params->{'modificado'}){
+            $catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
+            $catNivel2->load();
+         }else{
+            $catNivel2= C4::Modelo::CatNivel2->new();
+         }
         my $db= $catNivel2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
