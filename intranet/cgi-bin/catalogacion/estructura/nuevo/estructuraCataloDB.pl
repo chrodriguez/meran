@@ -340,13 +340,6 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                                                         debug => 1,
                     });
 
-#     my $id2=$obj->{'id2'};
-# 
-#     my $nivel2 = C4::Modelo::CatNivel2->new(id2 => $id2);
-#     $nivel2->load();
-# 
-#     $t_params->{'nivel2'}= $nivel2;
-
     my $id1=$obj->{'id1'};
 
     my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(
@@ -354,8 +347,8 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                                                                 id1=> { eq => $id1},
                                                             ]
                                                 );
-#     $nivel2->load();
 
+    #se envia al cliente todos los objetos nivel2 segun id1
     $t_params->{'nivel2_array'}= $nivel2_array_ref;
 
 

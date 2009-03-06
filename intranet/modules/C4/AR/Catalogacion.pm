@@ -33,6 +33,8 @@ use C4::Modelo::CatNivel2::Manager;
 use C4::Modelo::CatNivel2;
 use C4::Modelo::CatNivel3::Manager;
 use C4::Modelo::CatNivel3;
+use C4::Modelo::CatPrefMapeoKohaMarc;
+use C4::Modelo::CatPrefMapeoKohaMarc::Manager;
 
 
 use vars qw(@EXPORT @ISA);
@@ -403,6 +405,16 @@ sub getCatalogaciones{
                                                                                ],
                                                                         sort_by => ( $catalogacionTemp->sortByString($orden) ),
                                                                  );
+
+=item
+     my $mapeos_array_ref = C4::Modelo::CatPrefMapeoKohaMarc::Manager->get_cat_pref_mapeo_koha_marc(   
+                                                                        query => [ 
+                                                                                    tabla => { eq => 'nivel'.$nivel },
+                                                                               ],
+                                                                 );
+
+    push (@$catalogaciones_array_ref, @$mapeos_array_ref);
+=cut
 
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }

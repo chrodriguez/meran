@@ -43,7 +43,22 @@ $params_combo{'onChange'}= 'mostrarEstructuraDelNivel1()';
 $params_combo{'default'}= 'SIN SELECCIONAR';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;
-$t_params->{'nivel'}= $nivel;
 
+# Campos fijos del nivel 2 y 3
+$params_combo{'default'}= 'SIN SELECCIONAR';
+$params_combo{'id'}= 'id_ui_origen';
+my $comboSelectUIOrigen= &C4::AR::Utilidades::generarComboUI(\%params_combo);
+$t_params->{'selectUIOrigen'}= $comboSelectUIOrigen;
+
+$params_combo{'default'}= 'SIN SELECCIONAR';
+$params_combo{'id'}= 'id_ui_poseedora';
+my $comboSelectUIPoseedora= &C4::AR::Utilidades::generarComboUI(\%params_combo);
+$t_params->{'selectUIPoseedora'}= $comboSelectUIPoseedora;
+
+$params_combo{'id'}= 'id_tipo_documento';
+my $comboTipoNivel3Fijo= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'comboTipoDocumento'}= $comboTipoNivel3Fijo;
+
+$t_params->{'nivel'}= $nivel;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

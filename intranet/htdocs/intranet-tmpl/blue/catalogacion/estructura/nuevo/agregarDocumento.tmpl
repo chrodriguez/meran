@@ -3,6 +3,7 @@
 <script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
+ <script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 
@@ -15,6 +16,7 @@ id2=0; //para saber el id del nivel 2
 id3=0; //para saber el id del nivel 3
 dataModif = 0;
 modificar = 0;
+// array_info_combo= 0; //para guardar las opciones de los combos que se generan en el cliente
 
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 COMPONENTES_ARRAY= new Array();
@@ -84,6 +86,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
     $("#nivel1Tabla").show();
+    //muestra los campos fijos del Nivel1
+    crearComponentesNivel1();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText); 
     //Para ver si se llamó a modificar o no...
@@ -106,6 +110,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
     $("#estructuraDelNivel2").html("");
     $('#nivel2Tabla').show();
     $('#nivel3Tabla').hide();
+    //muestra los campos fijos del Nivel2
+    crearComponentesNivel2();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -124,8 +130,9 @@ function mostrarEstructuraDelNivel3(){
 
 function updateMostrarEstructuraDelNivel3(responseText){
     $("#estructuraDelNivel3").html("");
-//      $('#nivel2Tabla').show();
     $('#nivel3Tabla').show();
+    //muestra los campos fijos del Nivel3
+//     crearComponentesNivel3();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 }
@@ -163,28 +170,14 @@ function updateMostrarInfoAltaNivel2(responseText){
     $('#nivel2').html(responseText);
 }
 
-// function filtrarRepetiblesNivel1(arreglo_componentes, nivel){
-// 
-//    var
-//       filteredCompos = Array();
-//       cont = 0;
-//       for (x=0;x<arreglo_componentes.length;x++)
-//          if (arreglo_componentes[x].nivel == nivel)
-//             filteredCompos[cont++] = arreglo_componentes[x];
-//       
-//       return (filteredCompos);
-// 
-// }
-
 function guardarDocumentoN1(){
-// var composArray; 
-   syncComponentesArray();
+
+    syncComponentesArray();
     objAH=new AjaxHelper(updateGuardarDocumentoN1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
-//     composArray = filtrarRepetiblesNivel1(COMPONENTES_ARRAY,1);
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
     objAH.modificado = modificar;
@@ -256,8 +249,6 @@ function updateGuardarDocumentoN3(responseText){
 
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
-//     var id2= info.id2;
-//     var id1= info.id1;
     id3= info.id3;
     setMessages(Messages);
 
@@ -265,7 +256,6 @@ function updateGuardarDocumentoN3(responseText){
    var allInputs = $('#estructuraDelNivel3 :input');
        for (x=0; x< allInputs.length; x++)
             allInputs[x].value="";
-//     mostrarInfoAltaNivel3(info.id1, info.id2);
     if (! (hayError(Messages) ) ){
         inicializar();
         //muestra la tabla con los ejemplares agregados
@@ -274,19 +264,18 @@ function updateGuardarDocumentoN3(responseText){
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
-function mostrarInfoAltaNivel3(id1, id2){
+function mostrarInfoAltaNivel3(id1, idNivel2){
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
     objAH.id1= id1;
-    objAH.id2= id2;
+    objAH.id2= idNivel2;
+    id2= idNivel2;
     objAH.sendToServer();
 }
 
 function updateMostrarInfoAltaNivel3(responseText){
-//     $('#nivel2Tabla').slideUp('slow');
-//     $('#estructuraDelNivel2').html('');
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
 }
@@ -299,8 +288,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  */
 function procesarInfoJson(json){
     objetos=JSONstring.toObject(json);
-    arrayjson=[];
-    $("#cantIds").val(objetos.length);
+    
     for(var i=0; i< objetos.length; i++){
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
@@ -327,11 +315,9 @@ function procesarObjeto(objeto){
     var auto=0;
     var unoLinea=0;
     var idDiv="div"+idComp;
-    var divComp="<div id='"+idDiv+"' style='float: left;padding-right:1%; padding-bottom: 1%;'></div>";
-//     var divLabel="<div id='label"+idDiv+"' style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
-    var divLabel="<div style='float: left; width: 25%;' class='inputFontNormal'>  "+libtext+": </div>";
-//     strComp="<div id='strComp"+idDiv+"' style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
-    strComp="<div style='clear:both; padding-top:1%'> "+divLabel+divComp+"</div>";
+    var divComp= crearDivComponente(idDiv);
+    var divLabel= crearDivLabel(libtext);
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo("#"+getDivDelNivel());
 
     switch(tipo){
@@ -343,7 +329,7 @@ function procesarObjeto(objeto){
             auto= objeto.referencia;
         break;
         case "combo":
-            var opciones= JSONstring.toObject(objeto.opciones);
+//             var opciones= JSONstring.toObject(objeto.opciones);
             comp= crearComponente(tipo,idComp,opciones,valor);
             $(comp).appendTo("#"+idDiv);
         break;
@@ -362,8 +348,7 @@ function procesarObjeto(objeto){
 
     //Se agregan clases para cuando tenga que recuperar los datos.
     if(objeto.obligatorio == "1"){
-        $("#"+idComp).addClass("obligatorio");
-        $("<b> * </b>").insertAfter($("#"+idComp));
+        hacerComponenteObbligatoria(idComp);
     }
     //Para crear el autocomplete correspondiente
 //     if(auto){
@@ -389,8 +374,6 @@ function crearComponente(tipo,id,opciones,valor){
     switch(tipo){
         case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80'>";
         break;
-/*        case "hidden": comp="<input type='"+tipo+"' "+opciones+" id='"+id+"' value='"+valor+"'>";
-        break;*/
         case "combo": comp="<select id='"+id+"'>\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
@@ -410,6 +393,137 @@ function crearComponente(tipo,id,opciones,valor){
     return comp;
 }
 
+function crearComponentesNivel1(){
+    var comp= crearComponente('text','titulo',[],'');
+    var divComp= crearDivComponente('divTitulo');
+    var divLabel= crearDivLabel('Título');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel1");
+    $(comp).appendTo("#divTitulo");    
+
+    hacerComponenteObbligatoria('titulo');
+}
+
+function crearComponentesNivel2(){
+
+    var comp= crearComponente('text','tipo_documento',[],'');
+    hacerComponenteObbligatoria('tipo_documento');
+    var divComp= crearDivComponente('divTipoDocumento');  
+    var divLabel= crearDivLabel('Tipo de Documento');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");
+    $(comp).appendTo("#divTipoDocumento");  
+
+    comp= crearComponente('text','nivel_bibliografico',[],'');
+    hacerComponenteObbligatoria('nivel_bibliografico');
+    divComp= crearDivComponente('divNivelBibliografico');
+    divLabel= crearDivLabel('Nivel Bibliográfico');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divNivelBibliografico");
+    
+    comp= crearComponente('text','soporte',[],'');
+    hacerComponenteObbligatoria('soporte');
+    divComp= crearDivComponente('divSoporte');
+    divLabel= crearDivLabel('Soporte');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divSoporte");
+
+    comp= crearComponente('text','pais_publicacion',[],'');
+    hacerComponenteObbligatoria('pais_publicacion');
+    divComp= crearDivComponente('divPaisPublicacion');
+    divLabel= crearDivLabel('Pais de Publicacion');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divPaisPublicacion");
+
+    comp= crearComponente('text','lenguaje',[],'');
+    hacerComponenteObbligatoria('lenguaje');
+    divComp= crearDivComponente('divLenguaje');
+    divLabel= crearDivLabel('Lenguaje');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divLenguaje");
+
+    comp= crearComponente('text','ciudad_publicacion',[],'');
+    hacerComponenteObbligatoria('ciudad_publicacion');
+    divComp= crearDivComponente('divCiudadPublicacion');
+    divLabel= crearDivLabel('Ciudad de Publicacion');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divCiudadPublicacion");
+
+    comp= crearComponente('text','anio_publicacion',[],'');
+    hacerComponenteObbligatoria('anio_publicacion');
+    divComp= crearDivComponente('divAnioPublicacion');
+    divLabel= crearDivLabel('Año de Publicacion');
+    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    $(strComp).appendTo("#estructuraDelNivel2");    
+    $(comp).appendTo("#divAnioPublicacion");
+}
+
+
+// function crearComponentesNivel3(){
+//     getOptionsComboUI();//recupero el arreglo de opcciones de UI
+// 
+//     var comp= crearComponente('text','barcode',[],'');
+//     hacerComponenteObbligatoria('barcode');
+//     var divComp= crearDivComponente('divCodigoBarra');  
+//     var divLabel= crearDivLabel('Codigo de Barra');
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     $(strComp).appendTo("#estructuraDelNivel3");
+//     $(comp).appendTo("#divCodigoBarra");  
+// 
+//     comp= crearComponente('text','signatura_topografica',[],'');
+//     hacerComponenteObbligatoria('signatura_topografica');
+//     divComp= crearDivComponente('divSignaturaTopografica');
+//     divLabel= crearDivLabel('Signatura Topografica');
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     $(strComp).appendTo("#estructuraDelNivel3");    
+//     $(comp).appendTo("#divSignaturaTopografica");
+//     
+// alert(array_info_combo);
+//     comp= crearComponente('combo','id_ui_poseedora',array_info_combo,'');
+//     hacerComponenteObbligatoria('id_ui_poseedora');
+//     divComp= crearDivComponente('divUIPoseedora');
+//     divLabel= crearDivLabel('UI Poseedora');
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     $(strComp).appendTo("#estructuraDelNivel3");    
+//     $(comp).appendTo("#divUIPoseedora");
+// 
+//     comp= crearComponente('combo','id_ui_origen',array_info_combo,'');
+//     hacerComponenteObbligatoria('id_ui_origen');
+//     divComp= crearDivComponente('divUIOrigen');
+//     divLabel= crearDivLabel('UI Origen');
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     $(strComp).appendTo("#estructuraDelNivel3");    
+//     $(comp).appendTo("#divUIOrigen");
+// 
+//     comp= crearComponente('text','para_sala',[],'');
+//     hacerComponenteObbligatoria('para_sala');
+//     divComp= crearDivComponente('divParaSala');
+//     divLabel= crearDivLabel('Para Sala');
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     $(strComp).appendTo("#estructuraDelNivel3");    
+//     $(comp).appendTo("#divParaSala");
+// }
+
+// Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
+function hacerComponenteObbligatoria(idObj){
+    $("#"+idObj).addClass("obligatorio");
+    $("<b> * </b>").insertAfter($("#"+idObj));    
+}
+
+// Esta funcion crea un divComponente con un id segun parametro idObj
+function crearDivComponente(idObj){
+    return "<div id='"+idObj+"' class='divComponente'></div>";
+}
+
+// Esta funcion crea un divLabel con un Label segun parametro
+function crearDivLabel(label){
+    return "<div class='divLabelComponente'>  "+label+": </div>";
+}
 //************************************************FIN REVISADO**************************************************************
 
 
@@ -812,7 +926,9 @@ $(document).ready( function() {
 
 <div class="lateral">
     <div id="nivel1" class="nivel1Lateral"></div>
-    <div id="nivel2" class="nivel2Lateral"></div>
+    <div class="nivel2Barra">
+        <div id="nivel2" class="nivel2Lateral"></div>
+    </div>
 </div>   <!--END <div class="lateral">-->
 
 <div class="centro">
@@ -831,7 +947,16 @@ $(document).ready( function() {
             </td>
         </tr>
     </table>
+
+<!--     CAMPOS FIJOS DEL NIVEL 1 -->
+    <div class="divContentComponente">
+    <div class="divLabelComponente"> T&iacute;tulo: </div>
+        <div id="divTitulo" class="divComponente">
+            <input id="titulo" class="obligatorio" type="text" size="80" value=""/><b> * </b>
+        </div>
+    </div>
     
+<!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
 
     <br>
@@ -858,6 +983,43 @@ $(document).ready( function() {
         </tr>
     </table>
     
+
+    <div class="divContentComponente">
+        <div class="divLabelComponente">  Tipo de Documento: </div>
+            <div id="divTipoDocumento" class="divComponente">[% comboTipoDocumento %]</div>
+    </div>
+
+    <div class="divContentComponente"> 
+        <div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
+            <div id="divNivelBibliografico" class="divComponente"><input id="nivel_bibliografico" value="" size="80" type="text"></div>
+    </div>
+
+    <div class="divContentComponente">
+        <div class="divLabelComponente">  Soporte: </div>
+            <div id="divSoporte" class="divComponente"> generar combo tipo soporte en el servidor </div>
+    </div>
+
+    <div class="divContentComponente"> 
+        <div class="divLabelComponente">  Pais de Publicaci&oacute;n: </div>
+            <div id="divPaisPublicacion" class="divComponente">generar combo en el server<input id="pais_publicacion" value="" size="80" type="text"></div>
+    </div>
+
+    <div class="divContentComponente"> 
+        <div class="divLabelComponente">  Lenguaje: </div>
+            <div id="divLenguaje" class="divComponente">generar combo en el server<input id="lenguaje" value="" size="80" type="text"></div>
+    </div>
+    
+    <div class="divContentComponente">
+        <div class="divLabelComponente">  Ciudad de Publicaci&oacute;n: </div>
+            <div id="divCiudadPublicacion" class="divComponente">generar combo en el server<input id="ciudad_publicacion" value="" size="80" type="text"></div>
+    </div>
+
+    <div class="divContentComponente">
+        <div class="divLabelComponente">  A&ntilde;o de Publicaci&oacute;n: </div>
+            <div id="divAnioPublicacion" class="divComponente"><input id="anio_publicacion" value="" size="80" type="text"></div>
+    </div>
+
+<!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
 
     <br>
@@ -883,11 +1045,34 @@ $(document).ready( function() {
             </td>
         </tr>
     </table>
-    
+
+<!--     CAMPOS FIJOS DEL NIVEL 3   -->
+    <div class="divContentComponente"> 
+        <div class="divLabelComponente">  Codigo de Barra: </div>
+        <div id="divCodigoBarra" class="divComponente"><input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b></div>
+    </div>
+    <div class="divContentComponente"> 
+        <div class="divLabelComponente">  Signatura Topografica: </div><div id="divSignaturaTopografica" class="divComponente">
+            <input class="obligatorio" id="signatura_topografica" value="" size="80" type="text"><b> * </b></div>
+    </div>
+    <div class="divContentComponente"> <div class="divLabelComponente">  UI Poseedora: </div>
+        <div id="divUIPoseedora" class="divComponente">
+            [% selectUIPoseedora %]<b> * </b>
+        </div>
+    </div>
+    <div class="divContentComponente"> <div class="divLabelComponente">  UI Origen: </div>
+        <div id="divUIOrigen" class="divComponente">
+            [% selectUIOrigen %]<b> * </b>
+        </div>
+    </div>
+    <div class="divContentComponente"> <div class="divLabelComponente">  Para Sala: </div><div id="divParaSala" class="divComponente">
+        <input class="obligatorio" id="para_sala" value="" size="80" type="text"><b> * </b></div>
+    </div>
+
+<!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
 
-    <br>
-    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    <br><p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  

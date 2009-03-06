@@ -40,6 +40,18 @@ __PACKAGE__->meta->setup(
             column_map => { id_disponibilidad => 'codigo' },
             type       => 'one to many',
         },
+
+#         ref_ui_poseedora => {
+#             class      => 'C4::Modelo::RefUnidadInformacion',
+#             column_map => { id_ui_poseedora => 'id_ui' },
+#             type       => 'one to many',
+#         },
+#         
+#         ref_ui_origen => {
+#             class      => 'C4::Modelo::RefUnidadInformacion',
+#             column_map => { id_ui_origen => 'id_ui' },
+#             type       => 'one to many',
+#         },
     ],
 );
 
@@ -50,15 +62,14 @@ sub agregar{
     use C4::Modelo::CatNivel2Repetible;
 
     my ($data_hash)=@_;
-#     $self->setId1($data_hash->{'id1'});
+
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'}); 
-
     $self->setBarcode('BARCODE');
     $self->setSignatura_topografica('SIG TOPO');
     $self->setId_ui_poseedora('DEO');
     $self->setId_ui_origen('DEO');
-    $self->setId_disponibilidad('2009');
+    $self->setId_disponibilidad(0);
     $self->setParaSala(0);
 
     $self->save();

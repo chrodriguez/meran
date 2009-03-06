@@ -816,40 +816,48 @@ div.dimming {
 }
 
 .lateral {
-    clear:left;
-    float:left;
-    height:400px;
-/*     margin-left: 1%; */
-/*     padding: 0%; */
+    clear: left;
+    float: left;
+    height: 600px;
+/*     overflow: auto; */
     width: 20%;
+}
+
+.nivel2Barra {
+    height: 50%;
+    overflow: auto;
+    width: 100%;
 }
 
 .nivel1Lateral {
     border:1px solid #999999;
     padding:11px;
+    height: 30%;
 /*     height:30%; */
 }
 
 .nivel2Lateral {
     border:1px solid #999999;
-    overflow: auto;
-    height: 80%;
+    /*overflow: auto;*/
+    height: 100%;
     padding:11px;
     cursor: pointer;
-
     font-family: "Trebuchet MS", "Verdana", "Arial";
     font-size: 10pt;
     color: #000000;
     font-weight: normal;
+    padding: 22px;
 }
 
 p.nivel2Selected:hover{
     color: #BC3131;
+    border:2px solid #C3C0C0;
     text-decoration: none;    
 }
 
 .nivel3Footer {
     width: 100%;
+    float: left;
 }
 
 .todo {
@@ -860,7 +868,27 @@ p.nivel2Selected:hover{
 /* end agregado */
 
 
+/* para agregar documento */
+.divContentComponente{
+    clear:both; 
+    padding-top:1%;
+}
 
+.divComponente{
+    float: left;
+    padding-right:1%; 
+    padding-bottom: 1%;
+}
+
+.divLabelComponente{
+    float: left; 
+    width: 25%;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+/* fin para agregar documento */
 
 
 

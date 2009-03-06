@@ -1205,8 +1205,8 @@ sub generarComboDeDisponibilidad{
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'disponibilidad_name';
-    $options_hash{'id'}= 'disponibilidad_id';
+    $options_hash{'name'}= $params->{'name'}||'disponibilidad_name';
+    $options_hash{'id'}= $params->{'id'}||'disponibilidad_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultDisponibilidad");
@@ -1240,8 +1240,8 @@ sub generarComboCategoriasDeSocio{
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'categoria_socio_name';
-    $options_hash{'id'}= 'categoria_socio_id';
+    $options_hash{'name'}= $params->{'name'}||'categoria_socio_name';
+    $options_hash{'id'}= $params->{'id'}||'categoria_socio_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
@@ -1275,8 +1275,8 @@ sub generarComboTipoDeDoc {
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'tipo_documento_name';
-    $options_hash{'id'}= 'tipo_documento_id';
+    $options_hash{'name'}= $params->{'name'}||'tipo_documento_name';
+    $options_hash{'id'}= $params->{'id'}||'tipo_documento_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
@@ -1309,8 +1309,8 @@ sub generarComboTipoNivel3{
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'tipo_nivel3_name';
-    $options_hash{'id'}= 'tipo_nivel3_id';
+    $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
+    $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
@@ -1348,8 +1348,8 @@ sub generarComboUI {
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= 'ui_name';
-    $options_hash{'id'}= 'ui_id';
+    $options_hash{'name'}= $params->{'name'}||'ui_name';
+    $options_hash{'id'}= $params->{'id'}||'ui_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
