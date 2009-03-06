@@ -147,3 +147,29 @@ function getRadioButtonSelectedValue(ctrl)
     for(i=0;i<ctrl.length;i++)
         if(ctrl[i].checked) return ctrl[i].value;
 }
+
+
+function getId(IdObj, id){
+    //guardo en hidden el id
+    $('#'+IdObj).val(id);
+}
+    
+function CrearAutocomplete(Id, IdHidden, url){
+    $("#"+Id).search();
+    // q= valor de campoHelp
+    $("#"+Id).autocomplete(url,{
+        formatItem: function(row){
+            return row[1];
+        },
+        minChars:1,
+            matchSubset:1,
+            matchContains:1,
+        maxItemsToShow:10,
+            cacheLength:10,
+            selectOnly:1,
+    });//end autocomplete
+    $("#"+Id).result(function(event, data, formatted) {
+        $("#"+Id).val(data[1]);
+        getId(IdHidden, data[0])
+    });
+}
