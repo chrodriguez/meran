@@ -126,10 +126,20 @@ color:black;
         font-size: 15px
 }
 
-.click {
-	 cursor: pointer;
+.listaMenuBotones {
+   width: 160px;
+   height: 160px; 
+   
 }
-
+.textOverBoton {
+	cursor: pointer;
+   font-family: helvetica;
+   text-align:center;
+}
+.botonBehindText {
+   margin-right: -135px; 
+   margin-bottom:-3px
+}
 a:link {
 	color: #000000;
 	text-decoration: none;
