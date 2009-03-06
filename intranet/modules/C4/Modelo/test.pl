@@ -151,22 +151,24 @@ use C4::Modelo::CatTema;
 #     print "\n\n\nKEYS: ".$c->meta->column_accessor_method_name('id')."\n\n\n";
 #     print "\n\n\nTABLE NAME: ".$c->meta->table."\n\n\n";
 #     print "\n\n\n\CLASE: ".$c->toString."\n\n\n";
-    use Digest::MD5 qw(md5_hex);
-
-     print "\n\n\n\TIME: ".md5_hex(time())."\n\n\n";
-use C4::AR::Catalogacion;
-
-#       &C4::AR::Catalogacion::t_eliminarNivel1(7060);
-
-      my $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                                              query => [ 
-                                                                                          id1 => { eq => 7082 },
-                                                                                          'cat_estructura_catalogacion.nivel' =>  {eq => 1},
-
-                                                                                    ],
-                                                                                                                                                                        require_objects => [ 'cat_nivel1','idCompCliente' ]
-
-                                                                     );
+#     use Digest::MD5 qw(md5_hex);
+# 
+#      print "\n\n\n\TIME: ".md5_hex(time())."\n\n\n";
+# use C4::AR::Catalogacion;
+# 
+# #       &C4::AR::Catalogacion::t_eliminarNivel1(7060);
+# 
+#       my $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+#                                                                               query => [ 
+#                                                                                           id1 => { eq => 7082 },
+#                                                                                           'cat_estructura_catalogacion.nivel' =>  {eq => 1},
+# 
+#                                                                                     ],
+#                                                                                                                                                                         require_objects => [ 'cat_nivel1','idCompCliente' ]
+# 
+#                                                                      );
+      use C4::AR::Utilidades;
+      my ($c,$d) = C4::AR::Utilidades::buscarLenguajes("LA PL");
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
 # 	my $new = &C4::AR::Usuarios::getSocioInfo(3);

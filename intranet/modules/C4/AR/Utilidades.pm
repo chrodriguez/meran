@@ -82,6 +82,7 @@ use vars qw(@EXPORT @ISA);
     &trim
     &validateString
     &joinArrayOfString
+    &buscarLenguajes
     );
 
 =item
@@ -1160,6 +1161,18 @@ sub buscarCiudades{
     return ($cant, \@results);
 }
 
+
+=item
+buscarCiudades
+Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
+=cut
+sub buscarLenguajes{
+      my ($ciudad) = @_;
+      
+      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(query => [ description => { like => '%'.$ciudad.'%' } ]);
+      
+      return (scalar(@$lenguajes), $lenguajes);
+}
 
 # Esta funcioin remueve los blancos del principio y el final del string
 sub trim($)
