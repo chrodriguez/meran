@@ -154,6 +154,13 @@ function getId(IdObj, id){
     $('#'+IdObj).val(id);
 }
     
+/*
+Esta funcion necesita:
+Id = es el id del input sombre el que se va hacer ingreso de datos
+IdHidden= id del input hidden donde se guarda el id del resultado seleccionado
+url= url donde se realiza la consulta
+*/
+
 function CrearAutocomplete(Id, IdHidden, url){
     $("#"+Id).search();
     // q= valor de campoHelp
