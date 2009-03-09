@@ -161,7 +161,7 @@ function CrearAutocomplete(Id, IdHidden, url){
         formatItem: function(row){
             return row[1];
         },
-        minChars:1,
+        minChars:3,
             matchSubset:1,
             matchContains:1,
         maxItemsToShow:10,

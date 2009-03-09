@@ -1,6 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/blue/includes/autocompletables.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
  <script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
@@ -137,10 +138,6 @@ function updateMostrarEstructuraDelNivel3(responseText){
 //     crearComponentesNivel3();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-    CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
-    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
-    CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
-
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -399,121 +396,6 @@ function crearComponente(tipo,id,opciones,valor){
     return comp;
 }
 
-// function crearComponentesNivel1(){
-//     var comp= crearComponente('text','titulo',[],'');
-//     var divComp= crearDivComponente('divTitulo');
-//     var divLabel= crearDivLabel('Título');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel1");
-//     $(comp).appendTo("#divTitulo");    
-// 
-//     hacerComponenteObbligatoria('titulo');
-// }
-
-// function crearComponentesNivel2(){
-// 
-//     var comp= crearComponente('text','tipo_documento',[],'');
-//     hacerComponenteObbligatoria('tipo_documento');
-//     var divComp= crearDivComponente('divTipoDocumento');  
-//     var divLabel= crearDivLabel('Tipo de Documento');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");
-//     $(comp).appendTo("#divTipoDocumento");  
-// 
-//     comp= crearComponente('text','nivel_bibliografico',[],'');
-//     hacerComponenteObbligatoria('nivel_bibliografico');
-//     divComp= crearDivComponente('divNivelBibliografico');
-//     divLabel= crearDivLabel('Nivel Bibliográfico');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divNivelBibliografico");
-//     
-//     comp= crearComponente('text','soporte',[],'');
-//     hacerComponenteObbligatoria('soporte');
-//     divComp= crearDivComponente('divSoporte');
-//     divLabel= crearDivLabel('Soporte');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divSoporte");
-// 
-//     comp= crearComponente('text','pais_publicacion',[],'');
-//     hacerComponenteObbligatoria('pais_publicacion');
-//     divComp= crearDivComponente('divPaisPublicacion');
-//     divLabel= crearDivLabel('Pais de Publicacion');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divPaisPublicacion");
-// 
-//     comp= crearComponente('text','lenguaje',[],'');
-//     hacerComponenteObbligatoria('lenguaje');
-//     divComp= crearDivComponente('divLenguaje');
-//     divLabel= crearDivLabel('Lenguaje');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divLenguaje");
-// 
-//     comp= crearComponente('text','ciudad_publicacion',[],'');
-//     hacerComponenteObbligatoria('ciudad_publicacion');
-//     divComp= crearDivComponente('divCiudadPublicacion');
-//     divLabel= crearDivLabel('Ciudad de Publicacion');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divCiudadPublicacion");
-// 
-//     comp= crearComponente('text','anio_publicacion',[],'');
-//     hacerComponenteObbligatoria('anio_publicacion');
-//     divComp= crearDivComponente('divAnioPublicacion');
-//     divLabel= crearDivLabel('Año de Publicacion');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel2");    
-//     $(comp).appendTo("#divAnioPublicacion");
-// }
-// 
-
-// function crearComponentesNivel3(){
-//     getOptionsComboUI();//recupero el arreglo de opcciones de UI
-// 
-//     var comp= crearComponente('text','barcode',[],'');
-//     hacerComponenteObbligatoria('barcode');
-//     var divComp= crearDivComponente('divCodigoBarra');  
-//     var divLabel= crearDivLabel('Codigo de Barra');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel3");
-//     $(comp).appendTo("#divCodigoBarra");  
-// 
-//     comp= crearComponente('text','signatura_topografica',[],'');
-//     hacerComponenteObbligatoria('signatura_topografica');
-//     divComp= crearDivComponente('divSignaturaTopografica');
-//     divLabel= crearDivLabel('Signatura Topografica');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel3");    
-//     $(comp).appendTo("#divSignaturaTopografica");
-//     
-// alert(array_info_combo);
-//     comp= crearComponente('combo','id_ui_poseedora',array_info_combo,'');
-//     hacerComponenteObbligatoria('id_ui_poseedora');
-//     divComp= crearDivComponente('divUIPoseedora');
-//     divLabel= crearDivLabel('UI Poseedora');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel3");    
-//     $(comp).appendTo("#divUIPoseedora");
-// 
-//     comp= crearComponente('combo','id_ui_origen',array_info_combo,'');
-//     hacerComponenteObbligatoria('id_ui_origen');
-//     divComp= crearDivComponente('divUIOrigen');
-//     divLabel= crearDivLabel('UI Origen');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel3");    
-//     $(comp).appendTo("#divUIOrigen");
-// 
-//     comp= crearComponente('text','para_sala',[],'');
-//     hacerComponenteObbligatoria('para_sala');
-//     divComp= crearDivComponente('divParaSala');
-//     divLabel= crearDivLabel('Para Sala');
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
-//     $(strComp).appendTo("#estructuraDelNivel3");    
-//     $(comp).appendTo("#divParaSala");
-// }
 
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
 function hacerComponenteObbligatoria(idObj){
@@ -530,7 +412,6 @@ function crearDivComponente(idObj){
 function crearDivLabel(label){
     return "<div class='divLabelComponente'>  "+label+": </div>";
 }
-//************************************************FIN REVISADO**************************************************************
 
 function CrearAutocompleteCiudades(Id, IdHidden, url){
     CrearAutocomplete(Id, IdHidden, url);
@@ -544,28 +425,6 @@ function CrearAutocompleteLenguajes(Id, IdHidden, url){
     CrearAutocomplete(Id, IdHidden, url);
 }
 
-/*  *****  EL OBJETO objAH SE ENCUENTRA EN LA LIBRERIA DE seleccionCamposMarc.js ***** */
-
-/*
- * CrearAutocomplete1
- * Asigna la funcion de autocomplete a el input text del autor.
- */
-function CrearAutocomplete1(nivel){
-	if(nivel==1){
-		crearAuto("autor","autores","reemplazar","idAutor");
-	}
-	
-}
-
-/*
- * updateInfoAgregarItem
- * Funcion que se ejecuta cuando termina el llamado ajax de varias funciones.
- */
-function updateInfoAgregarItem(responseText){
-	$("#result2").html(responseText);
-	CrearAutocomplete1(objAH.nivel);
-	consultarAjaxJSON();
-}
 
 /*
  * borrarN1
@@ -630,6 +489,7 @@ function modificarN2(id2){
    objAH.nivel = 2;
    objAH.sendToServer();
 }
+
 function updateModificarN1(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
@@ -650,7 +510,7 @@ function borrarGrupo(id1,id2){
 	objJSON.itemtype=$("#id_tipo_doc").val();
 	objJSON.paso=2;
 	
-	objAH=new AjaxHelper(updateInfoAgregarItem);
+	objAH=new AjaxHelper(updateBorrarGrupo);
     objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.id2=id2;
@@ -660,280 +520,18 @@ function borrarGrupo(id1,id2){
 	objAH.sendToServer();
 }
 
-/*
- * ajaxModificarGrupo
- * Funcion que realiza el llamado ajax para dibujar los componentes en la pantalla de un grupo.
- * retorna strign en json.
- */
-function ajaxModificarGrupoJSON(id1,id2){
-	objAH=new AjaxHelper(procesarInfoJson);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
-	objAH.id1=id1;
-	objAH.id2=id2;
-	objAH.json=1;
-	objAH.sendToServer();
+function updateBorrarGrupo(){
 }
 
-/*
- * updateInfoModGrupo
- * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modificarGrupo.
- */
-function updateInfoModGrupo(responseText){
-	$("#contenido").html(responseText);
-	ajaxModificarGrupoJSON(objAH.id1,objAH.id2);
-}
-
-/*
- * modificarGrupo
- * Dibuja la pagina donde se van a colocar los componentes que se creen a partir del llamado ajax con json.
- */
-function modificarGrupo(id1,id2){
-	$("#result").html("");
-	
-	objAH=new AjaxHelper(updateInfoModGrupo);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
-	objAH.id1=id1;
-	objAH.id2=id2;
-	objAH.json=0;
-	objAH.sendToServer();
-}
-
-/*
- * redirigirURL
- * Funcion que se ejecuta cuando termina el llamado ajax de la funcion modNivel2 y agregarNivel3.
- */
-function redirigirURL(responseText){
-	location.href="agregarItem.pl?origen="+objAH.accion+"&id1="+objAH.id1+"&itemtype="+$("#id_tipo_doc").val();
-}
-
-/*
- * modNivel2
- * Guarda en la base de datos los cambios hechos al grupo con id= id2.
- */
-function modNivel2(id1,id2){
-	var ok=1;
-	var cantIds=$("#cantIds").val();
-	ok=obtenerIdsValores(cantIds);
-	if(ok){
-		objAH=new AjaxHelper(redirigirURL);
-        objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/editarGrupo.pl";
-		objAH.id1=id1;
-		objAH.id2=id2;
-		objAH.cantIds=cantIds;
-		objAH.respuesta=arrayjson;
-		objAH.accion="modNivel2";
-		objAH.json=0;
-		objAH.sendToServer();
-		
-	}
-	else{
-		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
-	}
-}
-
-/*
- * ajaxAgregarEjemplarJSON
- * Funcion que realiza el llamado ajax para dibujar los componentes en la pantalla del ejemplar a agregar.
- * retorna strign en json.
- */
-function ajaxAgregarEjemplarJSON(id1,id2,itemtype){
-	objAH=new AjaxHelper(procesarInfoJson);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
-	objAH.id1=id1;
-	objAH.id2=id2;
-	objAH.itemtype=itemtype;
-	objAH.json=1;
-	objAH.sendToServer();
-}
-
-function updateInfoAgrEjemplar(responseText){
-	$("#contenido").html(responseText);
-	ajaxAgregarEjemplarJSON(objAH.id1,objAH.id2,objAH.itemtype);
-}
-
-/*
- * agregarEjemplar
- * Dibuja la pagina donde se van a colocar los componentes que se generen a partir de la consulta ajax
- */
-function agregarEjemplar(id1,id2,itemtype){
-	$("#result").html("");
-
-	objAH=new AjaxHelper(updateInfoAgrEjemplar);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
-	objAH.id1=id1;
-	objAH.id2=id2;
-	objAH.itemtype=itemtype;
-	objAH.sendToServer();
-}
-
-/*
- * agregarNivel3
- * Guarda en la base de datos el ejemplar que se quiere agregar.
- */
-function agregarNivel3(id1,id2){
-	var ok=1;
-	var itemtype=$("#id_tipo_doc").val();
-	var cantIds=$("#cantIds").val();
-	ok=obtenerIdsValores(cantIds);
-	var barcodes=$("#codbarra").val();
-	var cantItems=$("#cantitems").val();
-	
-	if(ok){
-		objAH=new AjaxHelper(redirigirURL);
-        objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarEjemplar.pl";
-		objAH.id1=id1;
-		objAH.id2=id2;
-		objAH.cantIds=cantIds;
-		objAH.cantItems=cantItems;
-		objAH.barcodes=barcodes;
-		objAH.respuesta=arrayjson;
-		objAH.accion="agregarNivel3";
-		objAH.sendToServer();
-		
-	}
-	else{
-		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
-	}
-}
-
-
-
-/*
- * guardarDatos
- * Combierte el arreglo con los datos de los componentes y los valores ingresado en un string (con json) para
- * poder mandarlo por parametro y poder guardarlos en la base de datos.
- */
-function guardarDatos(paso){
-	objJSON=new AjaxHelper();
-    objJSON.debug= true;
-	objJSON.itemtype=$("#itemtype").val();
-	objJSON.paso=paso;
-	
-	objAH=new AjaxHelper(updateInfoAgregarItem);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-	objAH.paso=paso;
-	objAH.id1=$("#id1").val();
-	objAH.itemtype=$("#id_tipo_doc").val();
-	objAH.respuesta=arrayjson;
-	objAH.cantIds=$("#cantIds").val();
-	
-	if(paso==2){
-		objAH.idAutor=$("#idAutor").val();
-		objAH.accion=$("#accion").val();
-		objAH.nivel=paso;
-	}
-	if(paso==3){
-		objJSON.paso=2;
-		
-		objAH.codbarra=$("#codbarra").val();
-		objAH.cantitems=$("#cantitems").val();
-		objAH.nivel=2;
-	}
-	objAH.sendToServer();
-}
-
-/*
- * guardarItem
- * Obtiene los valores de los datos ingresados. Y si los campos obligatorios no estan en blanco los guarda.
- */
-function guardarItem(paso){
-	var ok=1;
-	var cantIds=$("#cantIds").val();
-	ok=obtenerIdsValores(cantIds);
-	if(ok){
-		guardarDatos(paso+1);
-		$("#result").html(""); //limpia la div result (agregar campo temporal)
-	}
-	else{
-		alert('[% "Por favor complete los campos del formulario que son obligatorios" | i18n %]');
-	}
-}
-
-/*
- * updateInfoModDetalleGrupo
- * Funcion que se ejecuta cuando termina el llamado ajax de la parte de ready, origen=detalle y nivel=2.
- */
-function updateInfoModDetalleGrupo(responseText){
-	$("#result2").html(responseText);
-	modificarGrupo(objAH.id1,objAH.id2);
-}
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
-//SE PUEDE MANDAR UN OBJETO A LA URL Y TRABAJARLO EN EN PL, COMO EN prestamos.pl y devolucion.pl!!!!!
-	var array = location.href.split('?');
-	if (array.length >1){
-		var array=array[1].split('&');
-		var origen=array[0].split('=')[1];
 
-		objAH=new AjaxHelper(updateInfoAgregarItem);
-        objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/agregarItemResults.pl";
-		objAH.id1=array[1].split('=')[1];
-		objAH.itemtype=array[2].split('=')[1];
-		switch(origen){
-		  case "detalle":
-			var nivel=array[3].split('=')[1];
-			if(nivel==1){
-				objJSON=new AjaxHelper();	
-                objJSON.debug= true;
-				objJSON.id1=objAH.id1;
-				objJSON.accion="modificarN1";
-				objJSON.itemtype="ALL";
-				objJSON.paso=1;
-
-				objAH.debug=true;
-				objAH.nivel=1;
-				objAH.accion="modificarN1";
-				
-			}
-			if(nivel==2){
-				var id2=array[4].split('=')[1];
-				objAH.onComplete=updateInfoModDetalleGrupo;
-				objAH.paso=2;
-				objAH.nivel=2;
-				objAH.id2=id2;
-				objAH.accion2="agregarN2";
-			}
-			break;
-		  case "modNivel2":
-			objJSON=new AjaxHelper();
-            objJSON.debug= true;
-			objJSON.id1 = objAH.id1;
-			objJSON.itemtype = objAH.itemtype;
-			objJSON.paso=2;
-
-			objAH.nivel=2;
-			objAH.accion="modificarN2";
-			break;
-		  default:
-			objJSON=new AjaxHelper();
-            objJSON.debug= true;
-			objJSON.id1=objAH.id1;
-			objJSON.itemtype=objAH.itemtype;
-			objJSON.paso=2;
+    CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
+    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
+    CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
 	
-			objAH.paso=2;
-			objAH.nivel=2;
-			objAH.accion2="agregarN2";
-			break;
-		}
-		objAH.sendToServer();
-	}
 } );
-
-
-
-$(document).ready(function() {
-
-});
 
 </script>
 
@@ -1026,7 +624,7 @@ $(document).ready(function() {
     <div class="divContentComponente"> 
         <div class="divLabelComponente">  Pais de Publicaci&oacute;n: </div>
             <div id="divPaisPublicacion" class="divComponente">
-                <input id="pais_publicacion" value="" size="80" type="text">
+                <input id="pais_publicacion" name="pais_publicacion" value="" size="80" type="text">
                 <input id="pais_publicacion_hidden" value="" type="hidden">
             </div>
     </div>
@@ -1034,7 +632,7 @@ $(document).ready(function() {
     <div class="divContentComponente"> 
         <div class="divLabelComponente">  Lenguaje: </div>
             <div id="divLenguaje" class="divComponente">
-                <input id="lenguaje" value="" size="80" type="text">
+                <input id="lenguaje" name="lenguaje" value="" size="80" type="text">
                 <input id="lenguaje_hidden" value="" type="hidden">
             </div>
     </div>
@@ -1042,7 +640,7 @@ $(document).ready(function() {
     <div class="divContentComponente">
         <div class="divLabelComponente">  Ciudad de Publicaci&oacute;n: </div>
             <div id="divCiudadPublicacion" class="divComponente">
-                <input id="ciudad_publicacion" value="" size="80" type="text">
+                <input id="ciudad_publicacion" name="ciudad_publicacion" value="" size="80" type="text">
                 <input id="ciudad_publicacion_hidden" value="" type="hidden">
             </div>
     </div>

@@ -13,7 +13,7 @@ my $textout="";
 my @result=obtenerPaises($autorStr);
 
 foreach my $pais (@result){
-	$textout.=$pais->{'printable_name'}."|".$pais->{'iso'}."\n";
+	$textout.=$pais->{'nombre_largo'}."|".$pais->{'iso'}."\n";
 }
 
 print "Content-type: text/html\n\n";
