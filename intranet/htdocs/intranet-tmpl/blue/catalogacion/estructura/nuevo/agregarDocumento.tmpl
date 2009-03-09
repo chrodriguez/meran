@@ -28,8 +28,10 @@ function inicializar(){
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
+    for(var i=0; i < COMPONENTES_ARRAY.length; i++){        
        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+         if (_nivelActual == 2)
+            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
     }
 }
 
@@ -74,8 +76,6 @@ function mostrarDataNivel1(){
       for (x=0; x<dataModif.length; x++){
          $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
          COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
-         if (_nivelActual == 2)
-            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
       }
    }
 }
@@ -445,15 +445,15 @@ function updateBorrarN1(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
-   inicializar();
-	$("#result").html("");
-	objAH=new AjaxHelper(updateModificarN1);
-   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-   objAH.debug= true;
+    inicializar();
+    $("#result").html("");
+    objAH=new AjaxHelper(updateModificarN1);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype="ALL";
-   objAH.id = id1;
-   objAH.nivel = 1;
+    objAH.id = id1;
+    objAH.nivel = 1;
 	objAH.sendToServer();
 }
 
