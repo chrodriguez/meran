@@ -87,8 +87,6 @@ function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
     $("#nivel1Tabla").show();
-    $("#nivel2Tabla").hide();
-    $("#nivel3Tabla").hide();
     //muestra los campos fijos del Nivel1
 //     crearComponentesNivel1();
     //proceso la info del servidor y se crean las componentes en el cliente
@@ -528,7 +526,7 @@ function updateBorrarGrupo(){
 $(document).ready( function() {
 
     CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
-    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
+    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/lenguajesAutocomplete.pl');
     CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
 	
 } );
