@@ -29,7 +29,8 @@ function inicializar(){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+       
+
         
     }
 }
@@ -95,13 +96,11 @@ function updateMostrarEstructuraDelNivel1(responseText){
 }
 
 function mostrarEstructuraDelNivel2(){
-    _nivelActual= 2;
-
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= _nivelActual;
+    objAH.nivel= 2;
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
@@ -208,7 +207,10 @@ function guardarDocumentoN2(){
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
-    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    if (modificar)
+      objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    else
+      objAH.infoArrayNivel2= COMPONENTES_ARRAY;
     objAH.modificado = modificar;
     objAH.id1 = id1;
     objAH.id2 = id2; //por si se modificó
@@ -432,6 +434,7 @@ function borrarN1(id1){
 	objAH.tipoAccion="ELIMINAR_NIVEL";
 	objAH.sendToServer();
 }
+
 function updateBorrarN1(responseText){
     var info=JSONstring.toObject(responseText);  
     mostrarEstructuraDelNivel2();
