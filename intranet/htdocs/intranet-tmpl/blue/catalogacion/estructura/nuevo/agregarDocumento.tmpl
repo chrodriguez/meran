@@ -29,9 +29,7 @@ function inicializar(){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-       
-
-        
+       COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
     }
 }
 
