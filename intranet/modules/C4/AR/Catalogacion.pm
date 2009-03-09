@@ -435,12 +435,12 @@ sub getCatalogacionesConDatos{
 
    if ($nivel == 1){
          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                                              query => [ 
-                                                                                          id1 => { eq => $id },
-                                                                                          'cat_estructura_catalogacion.nivel' =>  {eq => 1},
-                                                                                          
-                                                                                    ], 
-                    select => ['cat_nivel1_repetible.rep_n1_id','cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo','cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
+                                                query => [ 
+                                                            id1 => { eq => $id },
+                                                            'cat_estructura_catalogacion.nivel' =>  {eq => 1},
+                                                            
+                                                    ], 
+                select => ['cat_nivel1.titulo','cat_nivel1_repetible.rep_n1_id','cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo','cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
                                                                                                                                                                                                                            require_objects => [ 'cat_nivel1','CEC' ]
 
                                                                      );

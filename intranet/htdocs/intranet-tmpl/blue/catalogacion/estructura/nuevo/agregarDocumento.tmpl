@@ -73,10 +73,11 @@ function mostrarEstructuraDelNivel1(){
 function mostrarDataNivel1(){
 
     if (modificar){
-      for (x=0; x<dataModif.length; x++){
-         $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
-         COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
-      }
+//         $('#titulo').val(dataModif[x].cat_nivel1.titulo);
+        for (x=0; x<dataModif.length; x++){
+            $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+            COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
+        }
    }
 }
 
@@ -85,11 +86,10 @@ function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
     $("#nivel1Tabla").show();
-    //muestra los campos fijos del Nivel1
-//     crearComponentesNivel1();
     //proceso la info del servidor y se crean las componentes en el cliente
+    //ademas se carga el arreglo COMPONENTES_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
-    //Para ver si se llamó a modificar o no...
+    //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
 }
 
@@ -458,10 +458,10 @@ function modificarN1(id1){
 }
 
 function updateModificarN1(responseText){
-   modificar = 1;
-   dataModif = JSONstring.toObject(responseText);
-   mostrarEstructuraDelNivel1();
-
+    modificar = 1;
+    //se genera un arreglo de objetos con la informacion guardada, campo, subcampo    
+    dataModif = JSONstring.toObject(responseText);
+    mostrarEstructuraDelNivel1();
 }
 
 function modificarN2(id2){
