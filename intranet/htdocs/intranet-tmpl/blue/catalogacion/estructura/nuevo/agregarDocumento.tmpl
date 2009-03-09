@@ -86,6 +86,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
     $("#nivel1Tabla").show();
+    $("#nivel2Tabla").hide();
+    $("#nivel3Tabla").hide();
     //muestra los campos fijos del Nivel1
 //     crearComponentesNivel1();
     //proceso la info del servidor y se crean las componentes en el cliente
@@ -608,6 +610,7 @@ function modificarN1(id1){
    objAH.nivel = 1;
 	objAH.sendToServer();
 }
+
 function updateModificarN1(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
