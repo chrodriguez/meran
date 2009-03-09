@@ -27,6 +27,15 @@ function inicializar(){
     dataModif = new Array();
 }
 
+
+function armarValidador(){
+   
+   for(var i=0; i < COMPONENTES_ARRAY.length; i++){
+         if (COMPONENTES_ARRAY[i].obligatorio)
+             $('#'+COMPONENTES_ARRAY[i].idCompCliente).addClass('required ');
+      }
+}
+
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
@@ -80,6 +89,7 @@ function mostrarDataNivel1(){
             COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
         }
    }
+   armarValidador();
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
@@ -112,6 +122,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
 //     crearComponentesNivel2();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
+    armarValidador();
+
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -133,6 +145,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
 //     crearComponentesNivel3();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
+    armarValidador();
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
