@@ -14,7 +14,7 @@
 id1=0; //para saber el id del nivel 1
 id2=0; //para saber el id del nivel 2
 id3=0; //para saber el id del nivel 3
-dataModif = 0;
+dataModif = new Array();
 modificar = 0;
 // array_info_combo= 0; //para guardar las opciones de los combos que se generan en el cliente
 
@@ -24,14 +24,13 @@ COMPONENTES_ARRAY= new Array();
 function inicializar(){
     //arreglo de objetos campo
     COMPONENTES_ARRAY= new Array();
+    dataModif = new Array();
 }
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.length; i++){        
+    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
-         if (_nivelActual == 2)
-            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
     }
 }
 
@@ -57,7 +56,9 @@ function getDivDelNivel(){
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
     _nivelActual= 1;
-    
+    $("#nivel1Tabla").show();
+    $("#nivel2Tabla").hide();
+    $("#nivel3Tabla").hide();
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -205,10 +206,7 @@ function guardarDocumentoN2(){
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
-    if (modificar)
-      objAH.infoArrayNivel2= COMPONENTES_ARRAY;
-    else
-      objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
     objAH.modificado = modificar;
     objAH.id1 = id1;
     objAH.id2 = id2; //por si se modificó
@@ -445,15 +443,15 @@ function updateBorrarN1(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
-    inicializar();
-    $("#result").html("");
-    objAH=new AjaxHelper(updateModificarN1);
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.debug= true;
+   inicializar();
+	$("#result").html("");
+	objAH=new AjaxHelper(updateModificarN1);
+   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+   objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype="ALL";
-    objAH.id = id1;
-    objAH.nivel = 1;
+   objAH.id = id1;
+   objAH.nivel = 1;
 	objAH.sendToServer();
 }
 
@@ -471,7 +469,7 @@ function modificarN2(id2){
    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
    objAH.debug= true;
    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-   objAH.itemtype="ALL";
+   objAH.itemtype=$("#id_tipo_doc").val();
    objAH.id = id2;
    objAH.nivel = 2;
    objAH.sendToServer();
