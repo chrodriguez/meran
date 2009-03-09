@@ -135,6 +135,10 @@ function updateMostrarEstructuraDelNivel3(responseText){
 //     crearComponentesNivel3();
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
+    CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
+    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
+    CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
+
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -608,8 +612,7 @@ function updateModificarN1(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel1();
-   
-   
+
 }
 
 function modificarN2(id2){
@@ -926,10 +929,6 @@ $(document).ready( function() {
 
 
 $(document).ready(function() {
-
-    CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
-    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
-    CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
 
 });
 
