@@ -1,19 +1,14 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script> -->
-<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script> -->
-<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
+[% INCLUDE "AutocompleteHelper.inc" %]
 
- <script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
+<script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 
 
 <script>
-// $.include("http://usr/local/koha/intranet/htdocs/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
-// $.include("http://usr/local/koha/intranet/htdocs/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");
-$.include("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
-$.include("/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");
 
 //************************************************REVISADO******************************************************************
 id1=0; //para saber el id del nivel 1
@@ -413,18 +408,6 @@ function crearDivComponente(idObj){
 // Esta funcion crea un divLabel con un Label segun parametro
 function crearDivLabel(label){
     return "<div class='divLabelComponente'>  "+label+": </div>";
-}
-
-function CrearAutocompleteCiudades(Id, IdHidden, url){
-    CrearAutocomplete(Id, IdHidden, url);
-}
-
-function CrearAutocompletePaises(Id, IdHidden, url){
-    CrearAutocomplete(Id, IdHidden, url);
-}
-
-function CrearAutocompleteLenguajes(Id, IdHidden, url){
-    CrearAutocomplete(Id, IdHidden, url);
 }
 
 
