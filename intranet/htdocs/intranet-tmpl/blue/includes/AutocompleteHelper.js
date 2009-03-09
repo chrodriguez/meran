@@ -53,3 +53,11 @@ function CrearAutocompletePaises(Id, IdHidden, url){
 function CrearAutocompleteLenguajes(Id, IdHidden, url){
     _CrearAutocomplete(Id, IdHidden, url);
 }
+
+function CrearAutocompleteAutores(Id, IdHidden, url){
+    _CrearAutocomplete(Id, IdHidden, url);
+}
+
+function CrearAutocompleteSoportes(Id, IdHidden, url){
+    _CrearAutocomplete(Id, IdHidden, url);
+}

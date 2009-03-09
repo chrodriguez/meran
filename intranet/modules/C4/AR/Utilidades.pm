@@ -83,7 +83,10 @@ use vars qw(@EXPORT @ISA);
     &validateString
     &joinArrayOfString
     &buscarLenguajes
-    );
+    &buscarSoportes
+    &buscarNivelesBibliograficos
+
+);
 
 =item
 crearComponentes
@@ -1163,15 +1166,38 @@ sub buscarCiudades{
 
 
 =item
-buscarCiudades
-Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
+buscarLenguajes
 =cut
 sub buscarLenguajes{
-      my ($ciudad) = @_;
+      my ($lenguaje) = @_;
       
-      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(query => [ description => { like => '%'.$ciudad.'%' } ]);
+      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(query => [ description => { like => '%'.$lenguaje.'%' } ]);
       
       return (scalar(@$lenguajes), $lenguajes);
+}
+
+=item
+buscarSoportes
+=cut
+sub buscarSoportes{
+      my ($soporte) = @_;
+      
+      my $soportes = C4::Modelo::RefSoporte::Manager->get_ref_soporte(query => [ description => { like => '%'.$soporte.'%' } ]);
+      
+      return (scalar(@$soportes), $soportes);
+}
+
+=item
+buscarSoportes
+=cut
+sub buscarNivelesBibliograficos{
+      my ($nivelBibliografico) = @_;
+      
+      my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
+                                                                          query => [ description => { like => '%'.$nivelBibliografico.'%' } ]
+                                                                                );
+      
+      return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
 }
 
 # Esta funcioin remueve los blancos del principio y el final del string

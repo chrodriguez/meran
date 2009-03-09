@@ -7,7 +7,6 @@
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 
-
 <script>
 
 //************************************************REVISADO******************************************************************
@@ -83,7 +82,11 @@ function mostrarEstructuraDelNivel1(){
 function mostrarDataNivel1(){
 
     if (modificar){
-//         $('#titulo').val(dataModif[x].cat_nivel1.titulo);
+        //se recupera y setea la info de los campos fijos del nivel 1
+        $('#titulo').val(dataModif[0].cat_nivel1.titulo);
+        $('#autor').val(dataModif[0].cat_nivel1.cat_autor[0].completo);
+        $('#autor_hidden').val(dataModif[0].cat_nivel1.autor);
+
         for (x=0; x<dataModif.length; x++){
             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
             COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
@@ -93,10 +96,8 @@ function mostrarDataNivel1(){
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
-    $("#estructuraDelNivel1").html("");
-    $("#estructuraDelNivel2").html("");
-    $("#estructuraDelNivel3").html("");
-    $("#nivel1Tabla").show();
+    _clearContentsEstructuraDelNivel();
+    _showAndHiddeEstructuraDelNivel(1);
     //proceso la info del servidor y se crean las componentes en el cliente
     //ademas se carga el arreglo COMPONENTES_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
@@ -115,11 +116,8 @@ function mostrarEstructuraDelNivel2(){
 }
 
 function updateMostrarEstructuraDelNivel2(responseText){
-    $("#estructuraDelNivel2").html("");
-    $('#nivel2Tabla').show();
-    $('#nivel3Tabla').hide();
-    //muestra los campos fijos del Nivel2
-//     crearComponentesNivel2();
+    _clearContentsEstructuraDelNivel();
+    _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
     armarValidador();
@@ -138,11 +136,32 @@ function mostrarEstructuraDelNivel3(){
     objAH.sendToServer();
 }
 
-function updateMostrarEstructuraDelNivel3(responseText){
+function _clearContentsEstructuraDelNivel(){
+    $("#estructuraDelNivel1").html("");
+    $("#estructuraDelNivel2").html("");
     $("#estructuraDelNivel3").html("");
-    $('#nivel3Tabla').show();
-    //muestra los campos fijos del Nivel3
-//     crearComponentesNivel3();
+}
+
+// muestra/oculta los divs de la estructura segun el nivel que se este procesando
+function _showAndHiddeEstructuraDelNivel(nivel){
+    if(nivel == 1){
+        $'#nivel1Tabla').show();
+        $('#nivel2Tabla').hide();
+        $('#nivel3Tabla').hide();
+    }else if(nivel == 2){
+        $('#nivel2Tabla').show();
+        $('#nivel1Tabla').hide();
+        $('#nivel3Tabla').hide();
+    }else if(nivel == 3){
+        $('#nivel3Tabla').show();
+        $('#nivel1Tabla').hide();
+        $('#nivel2Tabla').hide();
+    }
+}
+
+function updateMostrarEstructuraDelNivel3(responseText){
+    _clearContentsEstructuraDelNivel();
+    _showAndHiddeEstructuraDelNivel(3);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
     armarValidador();
@@ -189,6 +208,10 @@ function guardarDocumentoN1(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    //seteo valores a los campos fijos del nivel 1
+    objAH.titulo= $("#titulo").val();
+    objAH.autor= $("#autor_hidden").val();
+
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
     objAH.modificado = modificar;
@@ -217,7 +240,15 @@ function guardarDocumentoN2(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
+    //seteo valores a los campos fijos del nivel 2
+    objAH.nivel_bibliografico= $("#nivel_bibliografico_hidden").val();
+    objAH.soporte= $("#soporte_hidden").val();
+    objAH.pais_publicacion= $("#pais_publicacion_hidden").val();
+    objAH.lenguaje= $("#lenguaje_hidden").val();
+    objAH.ciudad_publicacion= $("#ciudad_publicacion_hidden").val();
+    objAH.anio_publicacion= $("#anio_publicacion").val();
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
+
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
     objAH.modificado = modificar;
@@ -231,7 +262,6 @@ function updateGuardarDocumentoN2(responseText){
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
     id2= info.id2;
-//     id1= info.id1;
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -248,6 +278,12 @@ function guardarDocumentoN3(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_3";
+    //seteo valores a los campos fijos del nivel 3
+    objAH.barcode= $("#barcode").val();
+    objAH.sig_topografica= $("#signatura_topografica").val();
+    objAH.id_ui_poseedora= $("#id_ui_poseedora").val();
+    objAH.id_ui_origen= $("#id_ui_origen").val();
+
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
@@ -522,11 +558,19 @@ function updateBorrarGrupo(){
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
+    //autocomplete nivel 1
+    CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 
+    //autocomplete nivel 2
+    CrearAutocompletePaises(    'nivel_bibliografico', 
+                                'nivel_bibliografico_hidden', 
+                                '/cgi-bin/koha/autocompletables/nivelBibliograficoAutocomplete.pl'
+                        );
+    CrearAutocompletePaises('soporte', 'soporte_hidden', '/cgi-bin/koha/autocompletables/soportesAutocomplete.pl');
     CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
     CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/lenguajesAutocomplete.pl');
     CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
-	
+
 } );
 
 </script>
@@ -572,6 +616,13 @@ $(document).ready( function() {
         </div>
     </div>
     
+    <div class="divContentComponente">
+    <div class="divLabelComponente"> Autor: </div>
+        <div id="divTitulo" class="divComponente">
+            <input id="autor" name="autor" class="obligatorio" type="text" size="80" value=""/><b> * </b>
+            <input id="autor_hidden" value="" type="hidden">
+        </div>
+    </div>
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
 
@@ -607,13 +658,17 @@ $(document).ready( function() {
 
     <div class="divContentComponente"> 
         <div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
-            <div id="divNivelBibliografico" class="divComponente"><input id="nivel_bibliografico" value="" size="80" type="text"></div>
+            <div id="divNivelBibliografico" class="divComponente">
+                <input id="nivel_bibliografico" value="" size="80" type="text">
+                <input id="nivel_bibliografico_hidden" value="" size="80" type="hidden">
+            </div>
     </div>
 
     <div class="divContentComponente">
         <div class="divLabelComponente">  Soporte: </div>
             <div id="divSoporte" class="divComponente">
-                <input id="id_soporte_hidden" value="" type="hidden">
+                <input id="soporte" name="soporte" value="" size="80" type="text">
+                <input id="soporte_hidden" value="" type="hidden">
             </div>
     </div>
 
@@ -643,7 +698,9 @@ $(document).ready( function() {
 
     <div class="divContentComponente">
         <div class="divLabelComponente">  A&ntilde;o de Publicaci&oacute;n: </div>
-            <div id="divAnioPublicacion" class="divComponente"><input id="anio_publicacion" value="" size="80" type="text"></div>
+            <div id="divAnioPublicacion" class="divComponente">
+                <input id="anio_publicacion" value="" size="10" type="text">
+            </div>
     </div>
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
@@ -676,11 +733,15 @@ $(document).ready( function() {
 <!--     CAMPOS FIJOS DEL NIVEL 3   -->
     <div class="divContentComponente"> 
         <div class="divLabelComponente">  Codigo de Barra: </div>
-        <div id="divCodigoBarra" class="divComponente"><input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b></div>
+        <div id="divCodigoBarra" class="divComponente">
+            <input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b>
+        </div>
     </div>
     <div class="divContentComponente"> 
-        <div class="divLabelComponente">  Signatura Topografica: </div><div id="divSignaturaTopografica" class="divComponente">
-            <input class="obligatorio" id="signatura_topografica" value="" size="80" type="text"><b> * </b></div>
+        <div class="divLabelComponente">  Signatura Topografica: </div>
+        <div id="divSignaturaTopografica" class="divComponente">
+            <input class="obligatorio" id="signatura_topografica" value="" size="80" type="text"><b> * </b>
+        </div>
     </div>
     <div class="divContentComponente"> <div class="divLabelComponente">  UI Poseedora: </div>
         <div id="divUIPoseedora" class="divComponente">

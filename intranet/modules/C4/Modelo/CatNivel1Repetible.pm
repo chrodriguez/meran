@@ -19,13 +19,15 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'rep_n1_id' ],
 
     relationships => [
+        # relacion a cat_nivel1
         cat_nivel1 => {
             class       => 'C4::Modelo::CatNivel1',
             key_columns => { id1 => 'id1' },
             type        => 'one to one',
         },
 
-        CEC => {
+       # relacion a cat_estructura_catalogacion
+       CEC => {  
             class       => 'C4::Modelo::CatEstructuraCatalogacion',
             key_columns => { 
                              campo => 'campo',

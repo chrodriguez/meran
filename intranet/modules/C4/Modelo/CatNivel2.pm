@@ -55,22 +55,22 @@ sub agregar{
     use C4::Modelo::CatNivel2Repetible;
 
     my ($data_hash)=@_;
-#     $self->setId1($data_hash->{'id1'});
+
     $self->setId1($data_hash->{'id1'});
-#     $self->setTipo_documento($data_hash->{'tipo_documento'});
-#     $self->setSoporte($data_hash->{'soporte'});
-#     $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
-#     $self->setPais_publicacion($data_hash->{'pais_publicacion'});
-#     $self->setLenguaje($data_hash->{'lenguaje'});
-#     $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
-#     $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
-    $self->setTipo_documento('LIB');
-    $self->setSoporte('PAP');
-    $self->setNivel_bibliografico('AL');
-    $self->setPais_publicacion('AR');
-    $self->setLenguaje('es');
-    $self->setCiudad_publicacion('LA PLATA');
-    $self->setAnio_publicacion('2009');
+    $self->setTipo_documento($data_hash->{'tipo_documento'});
+    $self->setSoporte($data_hash->{'soporte'});
+    $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
+    $self->setPais_publicacion($data_hash->{'pais_publicacion'});
+    $self->setLenguaje($data_hash->{'lenguaje'});
+    $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
+    $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
+#     $self->setTipo_documento('LIB');
+#     $self->setSoporte('PAP');
+#     $self->setNivel_bibliografico('AL');
+#     $self->setPais_publicacion('AR');
+#     $self->setLenguaje('es');
+#     $self->setCiudad_publicacion('LA PLATA');
+#     $self->setAnio_publicacion('2009');
 
     $self->save();
     my $id2= $self->getId2;

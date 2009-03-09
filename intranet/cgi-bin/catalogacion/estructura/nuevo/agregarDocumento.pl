@@ -47,11 +47,13 @@ $t_params->{'selectItemType'}= $comboTiposNivel3;
 # Campos fijos del nivel 2 y 3
 $params_combo{'default'}= 'SIN SELECCIONAR';
 $params_combo{'id'}= 'id_ui_origen';
+$params_combo{'onChange'}= '';
 my $comboSelectUIOrigen= &C4::AR::Utilidades::generarComboUI(\%params_combo);
 $t_params->{'selectUIOrigen'}= $comboSelectUIOrigen;
 
 $params_combo{'default'}= 'SIN SELECCIONAR';
 $params_combo{'id'}= 'id_ui_poseedora';
+$params_combo{'onChange'}= '';
 my $comboSelectUIPoseedora= &C4::AR::Utilidades::generarComboUI(\%params_combo);
 $t_params->{'selectUIPoseedora'}= $comboSelectUIPoseedora;
 

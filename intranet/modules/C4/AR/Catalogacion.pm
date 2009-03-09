@@ -440,8 +440,10 @@ sub getCatalogacionesConDatos{
                                                             'cat_estructura_catalogacion.nivel' =>  {eq => 1},
                                                             
                                                     ], 
-                select => ['cat_nivel1.titulo','cat_nivel1_repetible.rep_n1_id','cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo','cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
-                                                                                                                                                                                                                           require_objects => [ 'cat_nivel1','CEC' ]
+#     select => ['cat_nivel1.titulo','cat_nivel1.autor','cat_autor.completo','cat_nivel1_repetible.rep_n1_id',
+#                 'cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo',
+#                 'cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
+                                                                                                                                                    require_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
 
                                                                      );
    }
@@ -450,7 +452,7 @@ sub getCatalogacionesConDatos{
                                                                               query => [ 
                                                                                           id2 => { eq => $id },
                                                                                     ],
-                                                                                          require_objects => [ 'cat_nivel2', 'CEC' ]
+                                                                require_objects => [ 'cat_nivel2', 'CEC' ]
 
                                                                      );
    }

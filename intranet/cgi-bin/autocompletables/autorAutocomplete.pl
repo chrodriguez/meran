@@ -13,7 +13,7 @@ my $textout="";
 my @result=obtenerAutores($autorStr);
 
 foreach my $autor (@result){
-	$textout.=$autor->{'completo'}."|".$autor->{'id'}."\n";
+	$textout.=$autor->{'id'}."|".$autor->{'completo'}."\n";
 }
 
 print "Content-type: text/html\n\n";

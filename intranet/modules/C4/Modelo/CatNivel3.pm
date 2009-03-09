@@ -65,10 +65,10 @@ sub agregar{
 
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'}); 
-    $self->setBarcode('BARCODE');
-    $self->setSignatura_topografica('SIG TOPO');
-    $self->setId_ui_poseedora('DEO');
-    $self->setId_ui_origen('DEO');
+    $self->setBarcode($data_hash->{'barcode'});
+    $self->setSignatura_topografica($data_hash->{'sig_topografica'});
+    $self->setId_ui_poseedora($data_hash->{'id_ui_poseedora'});
+    $self->setId_ui_origen($data_hash->{'id_ui_origen'});
     $self->setId_disponibilidad(0);
     $self->setParaSala(0);
 
