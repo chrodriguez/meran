@@ -446,7 +446,8 @@ function borrarN1(id1){
 	objAH.sendToServer();
 }
 function updateBorrarN1(responseText){
-    var info=JSONstring.toObject(responseText);
+    var info=JSONstring.toObject   mostrarEstructuraDelNivel2();
+(responseText);
     var Messages= info.Message_arrayref;
     setMessages(Messages);
 }
@@ -469,7 +470,6 @@ function modificarN1(id1){
 }
 
 function updateModificarN1(responseText){
-
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel1();
@@ -493,8 +493,6 @@ function updateModificarN2(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel2();
-   
-   
 }
 /*
  * borrarGrupo
