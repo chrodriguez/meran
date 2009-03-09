@@ -161,6 +161,11 @@ IdHidden= id del input hidden donde se guarda el id del resultado seleccionado
 url= url donde se realiza la consulta
 */
 
+<script>
+$.include("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+$.include("/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");
+</script>
+
 function CrearAutocomplete(Id, IdHidden, url){
     $("#"+Id).search();
     // q= valor de campoHelp

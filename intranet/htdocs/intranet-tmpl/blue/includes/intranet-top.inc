@@ -7,6 +7,7 @@
 <script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/includes/WindowHelper.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery-include.js"></script>
 <script src="/intranet-tmpl/blue/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
 

@@ -15,44 +15,20 @@
 
 <script language="javascript" type="text/javascript">
 
-// FIXME FALTA VALIDAD EN EL CLIENTE
-
-function getId(IdObj, id){
-    //guardo en hidden el id
-    $('#'+IdObj).val(id);
+function CrearAutocompleteCiudades(Id, IdHidden, url){
+    CrearAutocomplete(Id, IdHidden, url);
 }
-    
-function CrearAutocomplete(Id, IdHidden){
-    $("#"+Id).search();
-    // q= valor de campoHelp
-    $("#"+Id).autocomplete('/cgi-bin/koha/autocompletables/searchcity.pl',{
-        formatItem: function(row){
-            return row[1];
-        },
-        minChars:1,
-            matchSubset:1,
-            matchContains:1,
-        maxItemsToShow:10,
-            cacheLength:10,
-            selectOnly:1,
-    });//end autocomplete
-    $("#"+Id).result(function(event, data, formatted) {
-        $("#"+Id).val(data[1]);
-        getId(IdHidden, data[0])
-    });
-}
-</script>
 
-<script>
 $(document).ready(function() {
    [% IF addBorrower %]
       validateForm(agregarUsuario);
    [% ELSE %]
       validateForm(modificarDatosDeUsuario);
    [% END %]
+
     $("#userDataForm").validate();
-    CrearAutocomplete('ciudad', 'id_ciudad');
-    CrearAutocomplete('alt_ciudad', 'id_alt_ciudad');
+    CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+    CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
     $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
     
 });

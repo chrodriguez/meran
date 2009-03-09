@@ -1,7 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
+<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script> -->
+<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script> -->
 <link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
  <script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
@@ -10,6 +10,10 @@
 
 
 <script>
+// $.include("http://usr/local/koha/intranet/htdocs/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+// $.include("http://usr/local/koha/intranet/htdocs/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");
+$.include("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+$.include("/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js");
 
 //************************************************REVISADO******************************************************************
 id1=0; //para saber el id del nivel 1
@@ -446,8 +450,8 @@ function borrarN1(id1){
 	objAH.sendToServer();
 }
 function updateBorrarN1(responseText){
-    var info=JSONstring.toObject   mostrarEstructuraDelNivel2();
-(responseText);
+    var info=JSONstring.toObject(responseText);  
+    mostrarEstructuraDelNivel2();
     var Messages= info.Message_arrayref;
     setMessages(Messages);
 }
@@ -600,11 +604,11 @@ $(document).ready( function() {
         </tr>
     </table>
     
-
-    <div class="divContentComponente">
+<!-- FIXME Ver si es necesario -->
+   <!-- <div class="divContentComponente">
         <div class="divLabelComponente">  Tipo de Documento: </div>
             <div id="divTipoDocumento" class="divComponente">[% comboTipoDocumento %]</div>
-    </div>
+    </div>-->
 
     <div class="divContentComponente"> 
         <div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
