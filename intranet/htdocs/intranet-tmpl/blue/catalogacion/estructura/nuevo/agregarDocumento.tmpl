@@ -28,7 +28,7 @@ function inicializar(){
 
 
 function armarValidador(){
-   
+// FIXME creo q esto se puede hacer cuando se entan creando las componentes, asi recorremos una sola vez las componentes   
    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
          if (COMPONENTES_ARRAY[i].obligatorio)
              $('#'+COMPONENTES_ARRAY[i].idCompCliente).addClass('required ');
@@ -64,9 +64,9 @@ function getDivDelNivel(){
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
     _nivelActual= 1;
-    $("#nivel1Tabla").show();
-    $("#nivel2Tabla").hide();
-    $("#nivel3Tabla").hide();
+//     $("#nivel1Tabla").show();
+//     $("#nivel2Tabla").hide();
+//     $("#nivel3Tabla").hide();
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -92,7 +92,7 @@ function mostrarDataNivel1(){
             COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
         }
    }
-   armarValidador();
+//    armarValidador();
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
@@ -103,6 +103,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
+//     armarValidador();
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -120,8 +121,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-    armarValidador();
-
+//     armarValidador();
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -164,7 +164,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
     _showAndHiddeEstructuraDelNivel(3);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-    armarValidador();
+//     armarValidador();
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -334,7 +334,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  * json, string con formato json.
  */
 function procesarInfoJson(json){
-    objetos=JSONstring.toObject(json);
+    var objetos=JSONstring.toObject(json);
     
     for(var i=0; i< objetos.length; i++){
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
@@ -357,7 +357,7 @@ function procesarObjeto(objeto){
     var varios= objeto.varios;
     var idComp= objeto.idCompCliente;
     var comp;
-    var hidden=" ";
+//     var hidden=" ";
     var strComp;
     var auto=0;
     var unoLinea=0;
@@ -444,6 +444,7 @@ function crearComponente(tipo,id,opciones,valor){
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
 function hacerComponenteObbligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
+    $("#"+idObj).addClass("required");
     $("<b> * </b>").insertAfter($("#"+idObj));    
 }
 
