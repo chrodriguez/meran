@@ -469,6 +469,7 @@ function modificarN1(id1){
 }
 
 function updateModificarN1(responseText){
+alert("ENTRO");
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel1();
@@ -488,7 +489,7 @@ function modificarN2(id2){
    objAH.sendToServer();
 }
 
-function updateModificarN1(responseText){
+function updateModificarN2(responseText){
    modificar = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel2();
