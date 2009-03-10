@@ -588,26 +588,23 @@ function validateForm(func){
          $.validator.setDefaults({
             submitHandler:  func ,
          });
-   
-         $().ready(function() {
+
             var _message= "Llene el campo";
             // validate signup form on keyup and submit
             $("#formNivel1").validate({
                rules: {
                   titulo: "required",
                   autor: "required",
-                  },              
+                  },
                messages: {
                   titulo: _message,
                   autor: _message,
                   }
               });
-        });
 }
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
-     $("#formNivel1").validate();
     validateForm(guardarDocumentoN1);
     //autocomplete nivel 1
     CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
