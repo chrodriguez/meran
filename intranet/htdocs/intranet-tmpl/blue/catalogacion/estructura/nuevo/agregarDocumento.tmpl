@@ -107,6 +107,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
 }
 
 function mostrarEstructuraDelNivel2(){
+    _nivelActual= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
