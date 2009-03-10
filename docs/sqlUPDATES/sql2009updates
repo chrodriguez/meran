@@ -362,3 +362,9 @@ ALTER TABLE `rep_historial_circulacion` CHANGE `type` `tipo` VARCHAR( 15 ) CHARA
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `end_date` `fecha_fin` DATE NULL DEFAULT NULL ,
 CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+-- se modifico la tabla cat_estructura_catalogacion, se agrego el siguiente campo
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `fijo` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'modificable = 0, No modificable = 1' AFTER `idCompCliente` ;
+
+

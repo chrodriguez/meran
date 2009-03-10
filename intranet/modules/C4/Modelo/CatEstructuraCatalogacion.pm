@@ -21,6 +21,7 @@ __PACKAGE__->meta->setup(
         visible             => { type => 'integer', default => 1, not_null => 1 },
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
         idCompCliente        => { type => 'varchar', length => 255, not_null => 1 },
+        fijo        => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
 
     
@@ -167,6 +168,27 @@ sub soyElPrimero{
     my ($self)=shift;
 
     return $self->getIntranet_habilitado eq 1;
+}
+
+=item
+Esta funcion retorna 1 si la tupla es fija (no se puede modificar) 0  si no es fijo (se puede modificar)
+=cut
+sub soyFijo{
+    my ($self)=shift;
+
+    return $self->getFijo eq 1;
+}
+
+sub getFijo{
+    my ($self)=shift;
+
+    return $self->fijo;
+}
+
+sub setFijo{
+    my ($self) = shift;
+    my ($fijo) = @_;
+    $self->fijo($fijo);
 }
 
 sub cambiarVisibilidad{

@@ -399,11 +399,14 @@ sub getCatalogaciones{
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                         query => [ 
-                                                                                    nivel => { eq => $nivel },
-                                                                                    itemtype => { eq => $itemType },
+                                                                                     nivel => { eq => $nivel },
+#                                                                                     itemtype => { eq => $itemType },
+                                                                          or   => [ itemtype => { eq => $itemType },
+                                                                                    itemtype => { eq => 'ALL' },    
+                                                                                   ],
                                                                                     intranet_habilitado => { gt => 0 }, 
                                                                                ],
-                                                                        sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                         sort_by => ( $catalogacionTemp->sortByString($orden) ),
                                                                  );
 
 =item
