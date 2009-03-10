@@ -6,6 +6,8 @@
 <script src="/intranet-tmpl/blue/includes/CombosHelper.js"></script> 
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+<!-- para validar -->
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.validate.js"></script>
 
 <script>
 
@@ -558,8 +560,55 @@ function updateBorrarGrupo(){
 }
 
 
+function validateForm(func){
+
+   if( jQuery.browser.mozilla ) {
+      // do when DOM is ready
+      $( function() {
+         // search form, hide it, search labels to modify, filter classes nocmx and error
+         $( '#formNivel1' ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
+            var $this = $(this);
+            var labelContent = $this.html();
+            var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
+            // create block element with width of label
+            var labelSpan = $("<span>")
+               .css("display", "block")
+               .width(labelWidth)
+               .html(labelContent);
+            // change display to mozilla specific inline-box
+            $this.css("display", "-moz-inline-box")
+               // remove children
+               .empty()
+               // add span element
+               .append(labelSpan);
+         // show form again
+         }).end().show();
+      });
+   };
+         $.validator.setDefaults({
+            submitHandler:  func ,
+         });
+   
+         $().ready(function() {
+            var _message= "Llene el campo";
+            // validate signup form on keyup and submit
+            $("#formNivel1").validate({
+               rules: {
+                  titulo: "required",
+                  autor: "required",
+                  },              
+               messages: {
+                  titulo: _message,
+                  autor: _message,
+                  }
+              });
+        });
+}
+
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
+     $("#formNivel1").validate();
+    validateForm(guardarDocumentoN1);
     //autocomplete nivel 1
     CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 
@@ -612,22 +661,23 @@ $(document).ready( function() {
 
 <!--     CAMPOS FIJOS DEL NIVEL 1 -->
     <div class="divContentComponente">
+<form id="formNivel1" name="formNivel1">
     <div class="divLabelComponente"> T&iacute;tulo: </div>
         <div id="divTitulo" class="divComponente">
-            <input id="titulo" class="obligatorio" type="text" size="80" value=""/><b> * </b>
+            <input id="titulo" name="titulo" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
         </div>
     </div>
     
     <div class="divContentComponente">
     <div class="divLabelComponente"> Autor: </div>
         <div id="divTitulo" class="divComponente">
-            <input id="autor" name="autor" class="obligatorio" type="text" size="80" value=""/><b> * </b>
+            <input id="autor" name="autor" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
             <input id="autor_hidden" value="" type="hidden">
         </div>
     </div>
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
-
+</form>
     <br>
     <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
@@ -659,6 +709,7 @@ $(document).ready( function() {
     </div>-->
 
     <div class="divContentComponente"> 
+<form id="formNivel2" name="formNivel2">
         <div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
             <div id="divNivelBibliografico" class="divComponente">
                 <input id="nivel_bibliografico" value="" size="80" type="text">
@@ -707,7 +758,7 @@ $(document).ready( function() {
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
-
+</form>
     <br>
     <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
@@ -734,6 +785,7 @@ $(document).ready( function() {
 
 <!--     CAMPOS FIJOS DEL NIVEL 3   -->
     <div class="divContentComponente"> 
+<form id="formNivel3" name="formNivel3">
         <div class="divLabelComponente">  Codigo de Barra: </div>
         <div id="divCodigoBarra" class="divComponente">
             <input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b>
@@ -763,7 +815,7 @@ $(document).ready( function() {
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
-
+</form>
     <br><p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
