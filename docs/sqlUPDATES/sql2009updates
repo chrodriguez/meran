@@ -367,11 +367,14 @@ CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `fijo` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'modificable = 0, No modificable = 1' AFTER `idCompCliente` ;
 
-ALTER TABLE `cat_estructura_catalogacion` ADD `repetible` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'repetible = 1 (es repetible)' AFTER `fijo` ;
+ALTER TABLE `cat_estructura_catalogacion` ADD `repetible` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'repetible = 1 (es petible)' AFTER `fijo` ;
 
 ALTER TABLE `cat_nivel1` CHANGE `autor` `autor` INT( 11 ) NULL 
 
 insert into `pref_tabla_referencia`(`id`,`nombre_tabla`,`alias_tabla`) values ( NULL,'ref_estado','estado')
+
+--Poner rename de ref_disponibilidad y agregar DISPONIBILIDAD GASPAR
+
 
 -- ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
 
@@ -400,11 +403,6 @@ INSERT INTO `cat_estructura_catalogacion` (`id`, `campo`, `subcampo`, `itemtype`
 -- FIN ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
 
 
-ALTER TABLE ref_disponibilidad
- RENAME TO ref_estado;
-
-
-
 -- se creo la tabla de disponibilidad
 
 CREATE TABLE `ref_disponibilidad` (
@@ -415,5 +413,15 @@ CREATE TABLE `ref_disponibilidad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+ALTER TABLE `cat_nivel2` CHANGE `id2` `id2` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `tipo_documento` `tipo_documento` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `id1` `id1` INT( 11 ) NOT NULL ,
+CHANGE `nivel_bibliografico` `nivel_bibliografico` VARCHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `soporte` `soporte` VARCHAR( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `pais_publicacion` `pais_publicacion` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `lenguaje` `lenguaje` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `anio_publicacion` `anio_publicacion` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
 
 

@@ -75,6 +75,7 @@ sub agregar{
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
     $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
+    $self->setRepetible(1); 
     $self->save();
 
 #     if($data_hash->{'referencia'}){
@@ -235,6 +236,18 @@ sub setCampo{
     my ($campo) = @_;
     $self->campo($campo);
 }
+
+sub getRepetible{
+    my ($self) = shift;
+    return ($self->repetible);
+}
+
+sub setRepetible{
+    my ($self) = shift;
+    my ($repetible) = @_;
+    $self->repetible($repetible);
+}
+
 
 sub getIdCompCliente{
     my ($self) = shift;

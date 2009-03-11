@@ -49,6 +49,52 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+# sub agregar{
+# 
+#     my ($self)=shift;
+#     use C4::Modelo::CatNivel2Repetible;
+# 
+#     my ($data_hash)=@_;
+# 
+#     $self->setId1($data_hash->{'id1'});
+#     $self->setTipo_documento($data_hash->{'tipo_documento'});
+#     $self->setSoporte($data_hash->{'soporte'});
+#     $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
+#     $self->setPais_publicacion($data_hash->{'pais_publicacion'});
+#     $self->setLenguaje($data_hash->{'lenguaje'});
+#     $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
+#     $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
+# 
+#     $self->save();
+#     my $id2= $self->getId2;
+# 
+#     if ($data_hash->{'hayRepetibles'}){
+#         my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
+#         #se agrega el nivel 2 repetible
+#         foreach my $infoNivel2 (@$infoArrayNivel2){
+#             $infoNivel2->{'id2'}= $id2;
+#             
+#             my $nivel2Repetible;
+# 
+#             if ($data_hash->{'modificado'}){
+#                $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
+#                $nivel2Repetible->load();
+#             }else{
+#                $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+#             }
+# 
+#             $nivel2Repetible->setId2($infoNivel2->{'id2'});
+#             $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+#             $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+#             $nivel2Repetible->setDato($infoNivel2->{'dato'});
+#             $nivel2Repetible->save(); 
+#         }
+#     }
+# 
+#     return $self;
+# }
+
+
 sub agregar{
 
     my ($self)=shift;
@@ -56,51 +102,84 @@ sub agregar{
 
     my ($data_hash)=@_;
 
-    $self->setId1($data_hash->{'id1'});
-    $self->setTipo_documento($data_hash->{'tipo_documento'});
-    $self->setSoporte($data_hash->{'soporte'});
-    $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
-    $self->setPais_publicacion($data_hash->{'pais_publicacion'});
-    $self->setLenguaje($data_hash->{'lenguaje'});
-    $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
-    $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
-#     $self->setTipo_documento('LIB');
-#     $self->setSoporte('PAP');
-#     $self->setNivel_bibliografico('AL');
-#     $self->setPais_publicacion('AR');
-#     $self->setLenguaje('es');
-#     $self->setCiudad_publicacion('LA PLATA');
-#     $self->setAnio_publicacion('2009');
+    my @arrayNivel2;
+    my @arrayNivel2Repetibles;
 
+    my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
+    foreach my $infoNivel2 (@$infoArrayNivel2){
+
+        if($infoNivel2->{'repetible'}){
+            push(@arrayNivel2Repetibles, $infoNivel2);
+        }else{
+            push(@arrayNivel2, $infoNivel2);
+        }
+    }
+    
+    #se guardan los datos de Nivel2
+    foreach my $infoNivel2 (@arrayNivel2){  
+        if( ($infoNivel2->{'campo'} eq '910')&&($infoNivel2->{'subcampo'} eq 'a') ){
+        #tipo de documento
+            $self->setTipo_documento($infoNivel2->{'dato'});
+        }
+
+        if( ($infoNivel2->{'campo'} eq '245')&&($infoNivel2->{'subcampo'} eq 'h') ){
+        #soporte
+            $self->setSoporte($infoNivel2->{'dato'});
+        }
+
+        if( ($infoNivel2->{'campo'} eq '900')&&($infoNivel2->{'subcampo'} eq 'b') ){
+        #nivel bibliografico
+            $self->setNivel_bibliografico($infoNivel2->{'dato'});
+        }
+
+        if( ($infoNivel2->{'campo'} eq '043')&&($infoNivel2->{'subcampo'} eq 'c') ){
+        #pais publicacion
+            $self->setPais_publicacion($infoNivel2->{'dato'});
+        }
+
+        if( ($infoNivel2->{'campo'} eq '041')&&($infoNivel2->{'subcampo'} eq 'h') ){
+        #lenguaje
+            $self->setLenguaje($infoNivel2->{'dato'});
+        }
+
+        if( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'a') ){
+        #ciudad de publicacion
+            $self->setCiudad_publicacion($infoNivel2->{'dato'});
+        }
+    
+        if( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'c') ){
+        #anio de publicacion
+            $self->setAnio_publicacion($infoNivel2->{'dato'});
+        }
+    } #END foreach my $infoNivel2 (@arrayNivel2)
+
+    $self->setId1($data_hash->{'id1'});
     $self->save();
+
     my $id2= $self->getId2;
 
-    if ($data_hash->{'hayRepetibles'}){
-        my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
-        #se agrega el nivel 2 repetible
-        foreach my $infoNivel2 (@$infoArrayNivel2){
-            $infoNivel2->{'id2'}= $id2;
+    #Se guradan los datos en Nivel 2 repetibles
+    foreach my $infoNivel2 (@arrayNivel2Repetibles){
+        $infoNivel2->{'id2'}= $id2;
             
-            my $nivel2Repetible;
+        my $nivel2Repetible;
 
-            if ($data_hash->{'modificado'}){
-               $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
-               $nivel2Repetible->load();
-            }else{
-               $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-            }
-
-            $nivel2Repetible->setId2($infoNivel2->{'id2'});
-            $nivel2Repetible->setCampo($infoNivel2->{'campo'});
-            $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-            $nivel2Repetible->setDato($infoNivel2->{'dato'});
-            $nivel2Repetible->save(); 
+        if ($data_hash->{'modificado'}){
+            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
+            $nivel2Repetible->load();
+        }else{
+            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
         }
+
+        $nivel2Repetible->setId2($infoNivel2->{'id2'});
+        $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+        $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+        $nivel2Repetible->setDato($infoNivel2->{'dato'});
+        $nivel2Repetible->save(); 
     }
 
     return $self;
 }
-
 
 sub eliminar{
 

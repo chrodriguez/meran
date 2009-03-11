@@ -56,40 +56,121 @@ __PACKAGE__->meta->setup(
 );
 
 
+# sub agregar{
+# 
+#     my ($self)=shift;
+#     use C4::Modelo::CatNivel2Repetible;
+# 
+#     my ($data_hash)=@_;
+# 
+#     $self->setId1($data_hash->{'id1'});
+#     $self->setId2($data_hash->{'id2'}); 
+#     $self->setBarcode($data_hash->{'barcode'});
+#     $self->setSignatura_topografica($data_hash->{'sig_topografica'});
+#     $self->setId_ui_poseedora($data_hash->{'id_ui_poseedora'});
+#     $self->setId_ui_origen($data_hash->{'id_ui_origen'});
+#     $self->setId_disponibilidad(0);
+#     $self->setParaSala(0);
+# 
+#     $self->save();
+#     my $id3= $self->getId3;
+# 
+#     if ($data_hash->{'hayRepetibles'}){
+#         my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
+#         #se agrega el nivel 2 repetible
+#         foreach my $infoNivel3 (@$infoArrayNivel3){
+#             $infoNivel3->{'id3'}= $id3;
+#             my $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
+#             $nivel3Repetible->setId3($infoNivel3->{'id3'});
+#             $nivel3Repetible->setCampo($infoNivel3->{'campo'});
+#             $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
+#             $nivel3Repetible->setDato($infoNivel3->{'dato'});
+#             $nivel3Repetible->save();
+#         }
+#     }
+# }
+
+
 sub agregar{
 
     my ($self)=shift;
     use C4::Modelo::CatNivel2Repetible;
-
     my ($data_hash)=@_;
 
-    $self->setId1($data_hash->{'id1'});
-    $self->setId2($data_hash->{'id2'}); 
-    $self->setBarcode($data_hash->{'barcode'});
-    $self->setSignatura_topografica($data_hash->{'sig_topografica'});
-    $self->setId_ui_poseedora($data_hash->{'id_ui_poseedora'});
-    $self->setId_ui_origen($data_hash->{'id_ui_origen'});
-    $self->setId_disponibilidad(0);
-    $self->setParaSala(0);
+    my @arrayNivel3;
+    my @arrayNivel3Repetibles;
 
-    $self->save();
-    my $id3= $self->getId3;
+    my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
+    foreach my $infoNivel3 (@$infoArrayNivel3){
 
-    if ($data_hash->{'hayRepetibles'}){
-        my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
-        #se agrega el nivel 2 repetible
-        foreach my $infoNivel3 (@$infoArrayNivel3){
-            $infoNivel3->{'id3'}= $id3;
-            my $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
-            $nivel3Repetible->setId3($infoNivel3->{'id3'});
-            $nivel3Repetible->setCampo($infoNivel3->{'campo'});
-            $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
-            $nivel3Repetible->setDato($infoNivel3->{'dato'});
-            $nivel3Repetible->save();
+        if($infoNivel3->{'repetible'}){
+            push(@arrayNivel3Repetibles, $infoNivel3);
+        }else{
+            push(@arrayNivel3, $infoNivel3);
         }
     }
-}
 
+    $self->setId1($data_hash->{'id1'});
+    $self->setId2($data_hash->{'id2'});     
+
+    #se guardan los datos de Nivel3
+    foreach my $infoNivel3 (@arrayNivel3){  
+        if( ($infoNivel3->{'campo'} eq '910')&&($infoNivel3->{'subcampo'} eq 'a') ){
+        #tipo de documento
+            $self->setBarcode($infoNivel3->{'dato'});
+        }
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){
+        #signatura_topografica
+            $self->setSignatura_topografica($infoNivel3->{'dato'});
+        }
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'c') ){
+        #UI poseedora
+            $self->setId_ui_poseedora($infoNivel3->{'dato'});
+        }
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'd') ){
+        #UI origen
+            $self->setId_ui_origen($infoNivel3->{'dato'});
+        }
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
+        #disponibilidad
+            $self->setId_disponibilidad($infoNivel3->{'dato'});
+        }
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
+        #estado del ejemplar
+            $self->setParaSala($infoNivel3->{'dato'});
+        }
+   
+    } #END foreach my $infoNivel3 (@arrayNivel3)
+
+    $self->save();
+
+    my $id3= $self->getId3;
+
+    #Se guradan los datos en Nivel 3 repetibles
+    foreach my $infoNivel3 (@arrayNivel3Repetibles){
+        $infoNivel3->{'id3'}= $id3;
+            
+        my $nivel3Repetible;
+
+        if ($data_hash->{'modificado'}){
+            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db, rep_n3_id => $infoNivel3->{'rep_n3_id'});
+            $nivel3Repetible->load();
+        }else{
+            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
+        }
+
+        $nivel3Repetible->setId3($infoNivel3->{'id3'});
+        $nivel3Repetible->setCampo($infoNivel3->{'campo'});
+        $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
+        $nivel3Repetible->setDato($infoNivel3->{'dato'});
+        $nivel3Repetible->save();
+    }
+}
 
 sub eliminar{
 

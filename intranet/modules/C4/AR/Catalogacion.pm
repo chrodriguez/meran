@@ -389,28 +389,11 @@ sub buscarCamposModificados{
 =item
 Este funcion devuelve la informacion del usuario segun un nro_socio
 =cut
-sub getCatalogaciones{
+sub getHashCatalogaciones{
     my ($nivel,$itemType,$orden)=@_;
 
-    use C4::Modelo::CatEstructuraCatalogacion;
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
-
-    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-                                                                query => [ 
-                                                                                nivel => { eq => $nivel },
-
-                                                                    or   => [ itemtype => { eq => $itemType },
-                                                                            itemtype => { eq => 'ALL' },    
-                                                                            ],
-
-                                                                        intranet_habilitado => { gt => 0 }, 
-                                                                        ],
-                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-
-                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
-                                                                 );
+    my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType,$orden);
+    
 
     my @result;
     foreach my $cat  (@$catalogaciones_array_ref){
@@ -445,9 +428,39 @@ sub getCatalogaciones{
         push (@result, \%hash_temp);
     }
 
-#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
     return (scalar(@$catalogaciones_array_ref), \@result);
 }
+
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getCatalogaciones{
+    my ($nivel,$itemType,$orden)=@_;
+
+    use C4::Modelo::CatEstructuraCatalogacion;
+    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+
+    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
+
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                query => [ 
+                                                                                nivel => { eq => $nivel },
+
+                                                                    or   => [ itemtype => { eq => $itemType },
+                                                                            itemtype => { eq => 'ALL' },    
+                                                                            ],
+
+                                                                        intranet_habilitado => { gt => 0 }, 
+                                                                        ],
+                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+
+                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                 );
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
 
 
 sub getCatalogacionesConDatos{

@@ -70,9 +70,6 @@ sub agregar{
     use C4::Modelo::CatNivel1Repetible;
 
     my ($data_hash)=@_;
-#     $self->setTitulo($data_hash->{'titulo'});
-#     $self->setAutor($data_hash->{'autor'});
-#     $self->save();
 
     my @arrayNivel1;
     my @arrayNivel1Repetibles;
@@ -87,6 +84,7 @@ sub agregar{
         }
     }
     
+    #se guardan los datos de Nivel1
     foreach my $infoNivel1 (@arrayNivel1){  
         if( ($infoNivel1->{'campo'} eq '245')&&($infoNivel1->{'subcampo'} eq 'a') ){
         #titulo
@@ -97,37 +95,32 @@ sub agregar{
         #autor
             $self->setAutor($infoNivel1->{'dato'});
         }
-
+        
         $self->save();
     }
 
-
-
     my $id1= $self->getId1;
 
-    if ($data_hash->{'hayRepetibles'}){
-    #tiene repetibles, se agregan a Nivel1_repetible
-        my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
-        #se agrega el nivel 1 repetible
-        foreach my $infoNivel1 (@arrayNivel1Repetibles){
-            $infoNivel1->{'id1'}= $id1;
-               
-            my $nivel1Repetible;
+    #Se guradan los datos en Nivel 1 repetibles
+    foreach my $infoNivel1 (@arrayNivel1Repetibles){
+        $infoNivel1->{'id1'}= $id1;
+            
+        my $nivel1Repetible;
 
-            if ($data_hash->{'modificado'}){
-               $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
-               $nivel1Repetible->load();
-            }else{
-               $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
-            }
-
-            $nivel1Repetible->setId1($infoNivel1->{'id1'});
-            $nivel1Repetible->setCampo($infoNivel1->{'campo'});
-            $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
-            $nivel1Repetible->setDato($infoNivel1->{'dato'});
-            $nivel1Repetible->save(); 
+        if ($data_hash->{'modificado'}){
+            $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
+            $nivel1Repetible->load();
+        }else{
+            $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
         }
+
+        $nivel1Repetible->setId1($infoNivel1->{'id1'});
+        $nivel1Repetible->setCampo($infoNivel1->{'campo'});
+        $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
+        $nivel1Repetible->setDato($infoNivel1->{'dato'});
+        $nivel1Repetible->save(); 
     }
+    
 }
 
 sub eliminar{

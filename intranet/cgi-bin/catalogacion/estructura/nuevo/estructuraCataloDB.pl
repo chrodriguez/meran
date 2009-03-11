@@ -242,7 +242,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     my $id_tipo_doc= $obj->{'id_tipo_doc'};
     my $nivel= $obj->{'nivel'};
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$id_tipo_doc,$orden);
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($nivel,$id_tipo_doc,$orden);
     
 #     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
