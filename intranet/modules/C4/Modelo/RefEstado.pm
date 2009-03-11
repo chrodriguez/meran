@@ -45,7 +45,7 @@ sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo)=@_;
 	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_disponibilidad
+ 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($campo) );
     my @array_valores;
@@ -64,7 +64,7 @@ sub obtenerValorCampo {
 	my ($self)=shift;
     	my ($campo,$id)=@_;
 	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_disponibilidad
+ 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [$campo],
 						  query =>[ codigo => { eq => $id} ]);
     	
@@ -82,9 +82,9 @@ sub getCampo{
 	return (0);
 }
 
-sub nextMember{
-    use C4::Modelo::CircRefTipoPrestamo;
-    return(C4::Modelo::CircRefTipoPrestamo->new());
+sub lastTable{
+    
+    return(1);
 }
 
 1;

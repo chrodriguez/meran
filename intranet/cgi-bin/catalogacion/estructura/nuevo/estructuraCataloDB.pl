@@ -244,7 +244,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$id_tipo_doc,$orden);
     
-    my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+#     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+    my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
     print $input->header;
     print $infoOperacionJSON;

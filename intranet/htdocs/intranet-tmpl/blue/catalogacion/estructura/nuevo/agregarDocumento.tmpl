@@ -212,8 +212,8 @@ function guardarDocumentoN1(){
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
     //seteo valores a los campos fijos del nivel 1
-    objAH.titulo= $("#titulo").val();
-    objAH.autor= $("#autor_hidden").val();
+//     objAH.titulo= $("#titulo").val();
+//     objAH.autor= $("#autor_hidden").val();
 
     objAH.hayRepetibles= COMPONENTES_ARRAY.length;
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
@@ -379,8 +379,7 @@ function procesarObjeto(objeto){
             auto= objeto.referencia;
         break;
         case "combo":
-//             var opciones= JSONstring.toObject(objeto.opciones);
-            comp= crearComponente(tipo,idComp,opciones,valor);
+            comp= crearComponente(tipo,idComp,objeto,valor);
             $(comp).appendTo("#"+idDiv);
         break;
         case "texta2":
@@ -418,7 +417,7 @@ function procesarObjeto(objeto){
  * id, identificador para el componente que se va a crear.
  * opciones, son las opciones que se generan si el componente es un combobox, para los demas esta en blanco.
  */
-function crearComponente(tipo,id,opciones,valor){
+function crearComponente(tipo,id,objeto,valor){
     var comp;
 
     switch(tipo){
@@ -427,6 +426,8 @@ function crearComponente(tipo,id,opciones,valor){
         case "combo": comp="<select id='"+id+"'>\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
+            var opciones= objeto.opciones;
+
             for(var i=0; i< opciones.length; i++){
                 if(valor == opciones[i].clave){
                     def=" selected='selected' ";
@@ -434,6 +435,7 @@ function crearComponente(tipo,id,opciones,valor){
                 op=op+"<option value='"+opciones[i].clave+ "'" + def +"'>"+opciones[i].valor+"</option>\n";
                 def="";
             }
+
             comp=comp+op+"</select>";
         break;
         case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4'>"+valor+"</textarea>";
@@ -657,9 +659,9 @@ $(document).ready( function() {
     </table>
 
 <!--     CAMPOS FIJOS DEL NIVEL 1 -->
-    <div class="divContentComponente">
+<!--     <div class="divContentComponente"> -->
 <form id="formNivel1" name="formNivel1">
-    <div class="divLabelComponente"> T&iacute;tulo: </div>
+<!--    <div class="divLabelComponente"> T&iacute;tulo: </div>
         <div id="divTitulo" class="divComponente">
             <input id="titulo" name="titulo" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
         </div>
@@ -671,7 +673,7 @@ $(document).ready( function() {
             <input id="autor" name="autor" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
             <input id="autor_hidden" value="" type="hidden">
         </div>
-    </div>
+    </div>-->
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
 </form>
@@ -705,9 +707,9 @@ $(document).ready( function() {
             <div id="divTipoDocumento" class="divComponente">[% comboTipoDocumento %]</div>
     </div>-->
 
-    <div class="divContentComponente"> 
+<!--     <div class="divContentComponente">  -->
 <form id="formNivel2" name="formNivel2">
-        <div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
+        <!--<div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
             <div id="divNivelBibliografico" class="divComponente">
                 <input id="nivel_bibliografico" value="" size="80" type="text">
                 <input id="nivel_bibliografico_hidden" value="" size="80" type="hidden">
@@ -751,7 +753,7 @@ $(document).ready( function() {
             <div id="divAnioPublicacion" class="divComponente">
                 <input id="anio_publicacion" value="" size="10" type="text">
             </div>
-    </div>
+    </div>-->
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
@@ -781,9 +783,9 @@ $(document).ready( function() {
     </table>
 
 <!--     CAMPOS FIJOS DEL NIVEL 3   -->
-    <div class="divContentComponente"> 
+<!--     <div class="divContentComponente">  -->
 <form id="formNivel3" name="formNivel3">
-        <div class="divLabelComponente">  Codigo de Barra: </div>
+  <!--  <div class="divLabelComponente">  Codigo de Barra: </div>
         <div id="divCodigoBarra" class="divComponente">
             <input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b>
         </div>
@@ -808,7 +810,7 @@ $(document).ready( function() {
         Si<input type=radio class="obligatorio" name="para_sala" value="1">
         No<input type=radio class="obligatorio" name="para_sala" value="0">
         <b> * </b></div>
-    </div>
+    </div>-->
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>

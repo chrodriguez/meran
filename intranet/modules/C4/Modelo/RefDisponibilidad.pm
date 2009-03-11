@@ -44,8 +44,8 @@ sub setNombre{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo)=@_;
-	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_disponibilidad
+	use C4::Modelo::RefDisponibilidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($campo) );
     my @array_valores;
@@ -63,8 +63,8 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
 	my ($self)=shift;
     	my ($campo,$id)=@_;
-	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_disponibilidad
+	use C4::Modelo::RefDisponibilidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [$campo],
 						  query =>[ codigo => { eq => $id} ]);
     	

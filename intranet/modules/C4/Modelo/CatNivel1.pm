@@ -28,6 +28,42 @@ __PACKAGE__->meta->setup(
 
 
 
+# sub agregar{
+# 
+#     my ($self)=shift;
+#     use C4::Modelo::CatNivel1Repetible;
+# 
+#     my ($data_hash)=@_;
+#     $self->setTitulo($data_hash->{'titulo'});
+#     $self->setAutor($data_hash->{'autor'});
+#     $self->save();
+#     my $id1= $self->getId1;
+# 
+#     if ($data_hash->{'hayRepetibles'}){
+#         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+#         #se agrega el nivel 1 repetible
+#         foreach my $infoNivel1 (@$infoArrayNivel1){
+#             $infoNivel1->{'id1'}= $id1;
+#                
+#             my $nivel1Repetible;
+# 
+#             if ($data_hash->{'modificado'}){
+#                $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
+#                $nivel1Repetible->load();
+#             }else{
+#                $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
+#             }
+# 
+#             $nivel1Repetible->setId1($infoNivel1->{'id1'});
+#             $nivel1Repetible->setCampo($infoNivel1->{'campo'});
+#             $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
+#             $nivel1Repetible->setDato($infoNivel1->{'dato'});
+#             $nivel1Repetible->save(); 
+#         }
+#     }
+# }
+
+
 sub agregar{
 
     my ($self)=shift;
@@ -38,7 +74,6 @@ sub agregar{
     $self->setAutor($data_hash->{'autor'});
     $self->save();
     my $id1= $self->getId1;
-#     $self->save(); que hace aca esto???????????
 
     if ($data_hash->{'hayRepetibles'}){
         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};

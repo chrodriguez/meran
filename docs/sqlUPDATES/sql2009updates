@@ -367,4 +367,48 @@ CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `fijo` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'modificable = 0, No modificable = 1' AFTER `idCompCliente` ;
 
+ALTER TABLE `cat_estructura_catalogacion` ADD `repetible` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'repetible = 1 (es petible)' AFTER `fijo` ;
+
+insert into `pref_tabla_referencia`(`id`,`nombre_tabla`,`alias_tabla`) values ( NULL,'ref_estado','estado')
+
+--Poner rename de ref_disponibilidad y agregar DISPONIBILIDAD GASPAR
+
+
+-- ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
+
+
+INSERT INTO `pref_informacion_referencia` (`idinforef`, `idestcat`, `referencia`, `orden`, `campos`, `separador`) VALUES 
+(1, 45, 'autores', 'nacionalidad', 'id, nombre, apellido, nacionalidad, completo', '?'),
+(2, 46, 'temas', 'nombre', 'nombre', ','),
+(3, 47, 'bibliolevel', 'description', 'description', ','),
+(4, 47, 'soporte', 'description', 'idSupport, description', ','),
+(5, 45, 'countries', 'printable_name', 'printable_name', '/'),
+(6, 45, 'languages', 'description', 'description', '/'),
+(7, 44, 'ui', 'nombre', 'id_ui, nombre', ','),
+(8, 45, 'tipo_ejemplar', 'nombre', 'id_tipo_doc, nombre', ','),
+(9, 45, 'disponibilidad', 'nombre', 'codigo, nombre', ',');
+
+
+
+INSERT INTO `cat_estructura_catalogacion` (`id`, `campo`, `subcampo`, `itemtype`, `liblibrarian`, `tipo`, `referencia`, `nivel`, `obligatorio`, `intranet_habilitado`, `visible`, `idinforef`, `idCompCliente`, `fijo`) VALUES 
+(51, '245', 'a', 'ALL', 'Título', 'text', 0, 1, 1, 1, 1, 0, '1', 1),
+(52, '995', 'd', 'ALL', 'Unidad de Información de Origen', 'combo', 1, 3, 1, 2, 1, 7, '2', 1),
+(53, '995', 'c', 'ALL', 'Unidad de Información', 'combo', 1, 3, 1, 3, 1, 7, '3', 1),
+(54, '995', 'o', 'ALL', 'Disponibilidad', 'combo', 1, 3, 1, 4, 1, 9, '4', 1),
+(55, '995', 'e', 'ALL', 'Estado', 'combo', 1, 3, 1, 5, 1, 9, '5', 1),
+(56, '910', 'a', 'ALL', 'Tipo de Documento', 'combo', 1, 2, 1, 6, 1, 8, '6', 1);
+
+-- FIN ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
+
+
+-- se creo la tabla de disponibilidad
+
+CREATE TABLE `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 

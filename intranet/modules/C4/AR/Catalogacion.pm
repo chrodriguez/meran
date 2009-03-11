@@ -398,28 +398,54 @@ sub getCatalogaciones{
     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-                                                                        query => [ 
-                                                                                     nivel => { eq => $nivel },
-#                                                                                     itemtype => { eq => $itemType },
-                                                                          or   => [ itemtype => { eq => $itemType },
-                                                                                    itemtype => { eq => 'ALL' },    
-                                                                                   ],
-                                                                                    intranet_habilitado => { gt => 0 }, 
-                                                                               ],
-                                                                         sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                query => [ 
+                                                                                nivel => { eq => $nivel },
+
+                                                                    or   => [ itemtype => { eq => $itemType },
+                                                                            itemtype => { eq => 'ALL' },    
+                                                                            ],
+
+                                                                        intranet_habilitado => { gt => 0 }, 
+                                                                        ],
+                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+
+                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
                                                                  );
 
-=item
-     my $mapeos_array_ref = C4::Modelo::CatPrefMapeoKohaMarc::Manager->get_cat_pref_mapeo_koha_marc(   
-                                                                        query => [ 
-                                                                                    tabla => { eq => 'nivel'.$nivel },
-                                                                               ],
-                                                                 );
+    my @result;
+    foreach my $cat  (@$catalogaciones_array_ref){
 
-    push (@$catalogaciones_array_ref, @$mapeos_array_ref);
-=cut
+        my %hash_temp;
+        $hash_temp{'campo'}= $cat->{'campo'};
+        $hash_temp{'subcampo'}= $cat->{'subcampo'};
+        $hash_temp{'nivel'}= $cat->{'nivel'};
+#         $hash_temp{'visible'}= $cat->{'visible'};
+        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
+        $hash_temp{'itemtype'}= $cat->{'itemtype'};
+        $hash_temp{'fijo'}= $cat->{'fijo'};
+        $hash_temp{'tipo'}= $cat->{'tipo'};
+        $hash_temp{'referencia'}= $cat->{'referencia'};
+        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
+        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
+#         $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
+#         $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
 
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+
+        if( $cat->{'referencia'} ){
+        #tiene una referencia
+            $cat->{'infoReferencia'}->{'campos'}; 
+            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
+                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
+                                                                                        $cat->{'infoReferencia'}->{'campos'}  #campo
+                                                                                );
+            $hash_temp{'opciones'}= $valores;
+        }
+
+        push (@result, \%hash_temp);
+    }
+
+#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+    return (scalar(@$catalogaciones_array_ref), \@result);
 }
 
 

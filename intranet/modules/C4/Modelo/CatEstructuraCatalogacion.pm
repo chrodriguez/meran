@@ -73,6 +73,7 @@ sub agregar{
     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
+    $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
     $self->save();
 
 #     if($data_hash->{'referencia'}){
@@ -113,6 +114,16 @@ sub modificar{
 
 }
 
+sub delete{
+    my $self = $_[0]; # Copy, not shift
+
+    if ($self->soyFijo){
+    #NO ESTA PERMITIDO ELIMINAR UNA TUPLA QUE SEA FIJA
+    }else{
+        $self->SUPER::delete();
+    }
+}
+
 =item
 indica si la estructura de catalogacion tiene (=1) o no (=0) informacion de referencia
 =cut
@@ -150,15 +161,20 @@ Esta funcion verifica si es el ultimo en orden de las catalogaciones segun el ni
 =cut
 sub soyElUltimo{
     my ($self)=shift;
-
+# FIXME OJO hace varias subconsultas, ver si queda asi
+=item
     my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
                                                             query => [
                                                                     itemtype=> { eq => $self->getItemType},
                                                                     nivel=> { eq => $self->getNivel},               
                                                             ]
+
                                         );
+#  FIXME hay q sacar el max
 
     return ($self->getIntranet_habilitado eq scalar(@$catalogaciones_count));
+=cut
+    return 0;
 }
 
 =item

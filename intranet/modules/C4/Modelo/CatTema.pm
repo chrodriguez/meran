@@ -85,19 +85,10 @@ sub getCampo{
 }
 
 
-
-
-
-=item
-Devuelve si es o no la ultima tabla de la cadena de referencias
-=cut
-sub lastTable{
-    return (1);
-}
-
 sub nextMember{
+    use C4::Modelo::RefEstado;
 
-#     return(C4::Modelo::CatTema()->new());
+    return(C4::Modelo::RefEstado->new());
 }
 
 1;
