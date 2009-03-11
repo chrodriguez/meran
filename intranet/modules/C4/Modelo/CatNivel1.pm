@@ -70,15 +70,46 @@ sub agregar{
     use C4::Modelo::CatNivel1Repetible;
 
     my ($data_hash)=@_;
-    $self->setTitulo($data_hash->{'titulo'});
-    $self->setAutor($data_hash->{'autor'});
-    $self->save();
+#     $self->setTitulo($data_hash->{'titulo'});
+#     $self->setAutor($data_hash->{'autor'});
+#     $self->save();
+
+    my @arrayNivel1;
+    my @arrayNivel1Repetibles;
+
+    my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+    foreach my $infoNivel1 (@$infoArrayNivel1){
+
+        if($infoNivel1->{'repetible'}){
+            push(@arrayNivel1Repetibles, $infoNivel1);
+        }else{
+            push(@arrayNivel1, $infoNivel1);
+        }
+    }
+    
+    foreach my $infoNivel1 (@arrayNivel1){  
+        if( ($infoNivel1->{'campo'} eq '245')&&($infoNivel1->{'subcampo'} eq 'a') ){
+        #titulo
+            $self->setTitulo($infoNivel1->{'dato'});
+        }
+        
+        if( ($infoNivel1->{'campo'} eq '110')&&($infoNivel1->{'subcampo'} eq 'a') ){  
+        #autor
+            $self->setAutor($infoNivel1->{'dato'});
+        }
+
+        $self->save();
+    }
+
+
+
     my $id1= $self->getId1;
 
     if ($data_hash->{'hayRepetibles'}){
+    #tiene repetibles, se agregan a Nivel1_repetible
         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
         #se agrega el nivel 1 repetible
-        foreach my $infoNivel1 (@$infoArrayNivel1){
+        foreach my $infoNivel1 (@arrayNivel1Repetibles){
             $infoNivel1->{'id1'}= $id1;
                
             my $nivel1Repetible;

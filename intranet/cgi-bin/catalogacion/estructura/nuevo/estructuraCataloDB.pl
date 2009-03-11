@@ -267,8 +267,6 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 #Se guarda informacion del NIVEL 1
-#     $obj->{'titulo'}= 'Libro de Prueba';
-#     $obj->{'autor'}= '3954';
     my ($Message_arrayref, $id1) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;

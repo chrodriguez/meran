@@ -369,6 +369,8 @@ ALTER TABLE `cat_estructura_catalogacion` ADD `fijo` TINYINT( 1 ) NOT NULL DEFAU
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `repetible` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'repetible = 1 (es petible)' AFTER `fijo` ;
 
+ALTER TABLE `cat_nivel1` CHANGE `autor` `autor` INT( 11 ) NULL 
+
 insert into `pref_tabla_referencia`(`id`,`nombre_tabla`,`alias_tabla`) values ( NULL,'ref_estado','estado')
 
 --Poner rename de ref_disponibilidad y agregar DISPONIBILIDAD GASPAR

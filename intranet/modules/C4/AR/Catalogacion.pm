@@ -422,6 +422,7 @@ sub getCatalogaciones{
 #         $hash_temp{'visible'}= $cat->{'visible'};
         $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
         $hash_temp{'itemtype'}= $cat->{'itemtype'};
+        $hash_temp{'repetible'}= $cat->{'repetible'};
         $hash_temp{'fijo'}= $cat->{'fijo'};
         $hash_temp{'tipo'}= $cat->{'tipo'};
         $hash_temp{'referencia'}= $cat->{'referencia'};
