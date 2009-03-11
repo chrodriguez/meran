@@ -17,9 +17,6 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-open A,"/tmp/debug.txt";
-print A "dsDFKDSNFJDFNDKJSfj";
-close A;
 my $nivel=$obj->{'nivel'};
 my $orden=$obj->{'orden'}||"intranet_habilitado";
 my $itemType='ALL';
