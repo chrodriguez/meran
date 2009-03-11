@@ -17,6 +17,14 @@ id2=0; //para saber el id del nivel 2
 id3=0; //para saber el id del nivel 3
 dataModif = new Array();
 modificar = 0;
+
+//Hashes para el formValidator
+// hashOfRules=new HashMap();
+// 
+// hashOfMsg=new HashMap();
+
+_message= "El campo no puede estar en blanco";
+
 // array_info_combo= 0; //para guardar las opciones de los combos que se generan en el cliente
 
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
@@ -317,7 +325,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  */
 function procesarInfoJson(json){
     var objetos=JSONstring.toObject(json);
-    
+ validateForm(guardarDocumentoN1);
     for(var i=0; i< objetos.length; i++){
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
@@ -331,6 +339,15 @@ function procesarInfoJson(json){
  * @params
  * objeto, elemento que contiene toda la info necesaria.
  */
+
+function crearRegla(comp,idComp){
+//    $("#firstname"+current).rules("add", { required:true,minlength:2 });
+   $('#'+idComp).rules("add", { required:true } );
+//    $('#'+idComp).messages("add", { idCompCliente: "HOLANENENNENENEN" } );
+
+
+}
+
 function procesarObjeto(objeto){
     var libtext= $.trim(objeto.liblibrarian);
     var tipo= $.trim(objeto.tipo);
@@ -339,7 +356,6 @@ function procesarObjeto(objeto){
     var varios= objeto.varios;
     var idComp= objeto.idCompCliente;
     var comp;
-//     var hidden=" ";
     var strComp;
     var auto=0;
     var unoLinea=0;
@@ -348,7 +364,6 @@ function procesarObjeto(objeto){
     var divLabel= crearDivLabel(libtext);
     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo("#"+getDivDelNivel());
-
     switch(tipo){
         case "text":
             //tipo,id,opciones,valor
@@ -373,11 +388,15 @@ function procesarObjeto(objeto){
             auto= objeto.referencia;
         break;
     }
-
-    //Se agregan clases para cuando tenga que recuperar los datos.
+    crearRegla(comp,idComp);
+   //Se agregan clases para cuando tenga que recuperar los datos.
     if(objeto.obligatorio == "1"){
         hacerComponenteObbligatoria(idComp);
     }
+
+ 
+
+
     //Para crear el autocomplete correspondiente
 //     if(auto){
 //         var tabla=objeto.tabla;
@@ -429,7 +448,7 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObbligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
-    $("<b> * </b>").insertAfter($("#"+idObj));    
+    $("<b> * </b>").insertAfter($("#"+idObj));
 }
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
@@ -571,17 +590,8 @@ function validateForm(func){
          });
 
             var _message= "Llene el campo";
-            // validate signup form on keyup and submit
-            $("#formNivel1").validate({
-               rules: {
-                  titulo: "required",
-                  autor: "required",
-                  },
-               messages: {
-                  titulo: _message,
-                  autor: _message,
-                  }
-              });
+//             validate signup form on keyup and submit
+            $("#formNivel1").validate();
 }
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
