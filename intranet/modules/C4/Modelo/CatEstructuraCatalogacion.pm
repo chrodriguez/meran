@@ -19,9 +19,10 @@ __PACKAGE__->meta->setup(
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
         intranet_habilitado => { type => 'integer', default => '0' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
+        repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
-        idCompCliente        => { type => 'varchar', length => 255, not_null => 1 },
-        fijo        => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
+        idCompCliente       => { type => 'varchar', length => 255, not_null => 1 },
+        fijo                => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
 
     
