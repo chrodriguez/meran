@@ -20,37 +20,62 @@
 <script language="javascript" type="text/javascript">
 
 function swap(id,src){
-	document.getElementById(id).src=src;
+   document.getElementById(id).src=src;
 }
 
 function cambiarIdioma() {
-	$('#lang_server').val($('#language').val());
-	$('#url').val(location.pathname);
-	$('#formLang').submit();
+   $('#lang_server').val($('#language').val());
+   $('#url').val(location.pathname);
+   $('#formLang').submit();
 }
 
 </script>
+<link rel="stylesheet" href="[% themelang %]/includes/menu/menu.css">
+<script language="JavaScript" src="[% themelang %]/includes/menu/menu.js"></script>
+<script language="JavaScript" src="[% themelang %]/includes/menu/menu_items.js"></script>
+<script language="JavaScript" src="[% themelang %]/includes/menu/menu_tpl.js"></script>
+
+<script language="JavaScript">
+//    new menu (MENU_ITEMS, MENU_TPL);
+</script>
 
 <body>
-<table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<script type="text/javascript">
+function mainmenu(){
+// Oculto los submenus
+// $(" #nav2 ul ").css({display: "none"});
+// Defino que submenus deben estar visibles cuando se pasa el mouse por encima
+$(" #nav2 li").hover(function(){
+    $(this).find('li:first').slideDown(400);
+    },function(){
+        $(this).find('li:first').slideUp(400);
+    });
+}
 
-<tr id="menu" valign="top" align="center" height="16" >
-<td width="100%">
+function toggleMenu(){
+
+    $('#nav2').toggle(400); 
+}
+
+$(document).ready(function(){
+    mainmenu();
+});
+</script>
 [% INCLUDE   'menu.inc'  %]
-</td>
-</tr>
-<tr>
-<td align="right">  
+            
+
+<!--<tr>
+<td align="right" class="tdRight">  
 
 [% IF loggedinusername %]
-    	<p align="right" class="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1>Salir</a>]</p>
+      <p align="right" class="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1>Salir</a>]</p>
 [% ELSE %]
-	<p align="right" class="login"><a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a></p>
+   <p align="right" class="login"><a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a></p>
 [% END %]
 
 [%  "INTRA" | setComboLang %]
 
-</td></tr>
+</td></tr>-->
 <tr valign="top">
   <td align="center" colspan="2">
   <table  width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -61,9 +86,9 @@ function cambiarIdioma() {
       </tr>
 </table>
         <table width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
-	 <tr> <td width="9" class="includePNGizquierdo"></td>
-	 <td>
+    <tr> <td width="9" class="includePNGizquierdo"></td>
+    <td>
  <table align="left" bgcolor="#f7f6f6" width="99%" height="100%" border="0" cellspacing="0" cellpadding="0" class="texto">
-	 <tr valign="top"><td align="left"> 
-	 
+    <tr valign="top"><td align="left"> 
+    
 <div id="end_top"></div>

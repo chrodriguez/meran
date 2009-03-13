@@ -62,15 +62,15 @@ sub setComboLang {
 	my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
 	my $i;
 
-	if($type eq 'OPAC'){
-		$html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST'>";
-	}else{
-		$html="<form id='formLang' action='/cgi-bin/koha/intra-language.pl' method='POST'>";
-	}
-
-	$html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";	
-	$html .="<input id='url' name='url' type='hidden' value=''>";
-	$html .="<select id='language' onChange='cambiarIdioma()'>";
+# 	if($type eq 'OPAC'){
+# 		$html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST'>";
+# 	}else{
+# 		$html="<form id='formLang' class='selectLang' action='/cgi-bin/koha/intra-language.pl' method='POST'>";
+# 	}
+# 
+# 	$html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";	
+# 	$html .="<input id='url' name='url' type='hidden' value=''>";
+	$html .="<select id='language' class='selectLang' onChange='cambiarIdioma()'>";
 
 	for($i=0;$i<scalar(@array_lang);$i++){
 		if($session->param('locale') eq @array_lang[$i]){
@@ -81,7 +81,7 @@ sub setComboLang {
 	}
 
 	$html .="</select>";
-	$html .="</form>";
+# 	$html .="</form>";
 # close(A);
  	return $html;
 }
