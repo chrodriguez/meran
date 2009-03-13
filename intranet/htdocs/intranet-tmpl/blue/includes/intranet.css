@@ -926,6 +926,9 @@ p.nivel2Selected:hover{
          float:left;
 }
 
+.click{
+    cursor: pointer;
+}
 
 /* MENUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU */
 
@@ -942,7 +945,7 @@ p.nivel2Selected:hover{
    background:rgb(220,220,220) url(http://www.openwebdesign.org/design/3499/multiflex32/css/../img/bg_head_bottom_nav.jpg) repeat-x; color:rgb(75,75,75); 
    font-size:1.0em; 
    font-size:130%;
-   width: 90%;
+   width: 100%;
 
 } /*Color navigation bar normal mode*/
 
@@ -1055,15 +1058,15 @@ p.nivel2Selected:hover{
    position:absolute;
    z-index:997; 
    top:3.1em; 
-   t\op:3.0em; 
+   top:3.0em; 
    left:0; 
-   marg\in-top:0.1em;
+   margin-top:0.1em;
 }
 
 .nav2 ul li a:hover ul li a {
 
    display:block; 
-   w\idth:10em; 
+   width:10em; 
    height:1px; 
    line-height:1.3em; 
    padding:4px 16px 4px 16px; 

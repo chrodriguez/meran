@@ -4,6 +4,8 @@
         <a href="#" onclick="toggleMenu()"> Mostrar/Ocultar men&uacute; </a>
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2" id="nav2">
+
+<!-- FIXME FALTA i18n -->
    
           <!-- Navigation item -->
           <ul>
@@ -19,7 +21,7 @@
                   <li><a href="/cgi-bin/koha/busquedas/filtrado.pl">B&uacute;squeda Avanzada</a></li>
                   <li><a href="/cgi-bin/koha/busquedas/filtradoExperto.pl">B&uacute;squeda Experta</a></li>
                   <li><a href="#">---------Cat&aacute;logo---------</a></li>
-                  <li><a href="/cgi-bin/koha/catalogacion/estructura/nuevo/agregarItem.pl">Agregar Documento</a></li>
+                  <li><a href="/cgi-bin/koha/catalogacion/estructura/nuevo/agregarDocumento.pl">Agregar Documento</a></li>
                   <li><a href="/cgi-bin/koha/busquedas/adminEjemplares.pl">B&uacute;squeda Ejemplar Documento</a></li>
                   <li><a href="/cgi-bin/koha/busquedas/estante.pl">Estante Virtual</a></li>
                   <li><a href="#">---------MARC---------</a></li>

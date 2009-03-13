@@ -61,21 +61,16 @@ $(document).ready(function(){
     mainmenu();
 });
 </script>
-[% INCLUDE   'menu.inc'  %]
+
             
 
-<!--<tr>
-<td align="right" class="tdRight">  
+<table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 
-[% IF loggedinusername %]
-      <p align="right" class="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1>Salir</a>]</p>
-[% ELSE %]
-   <p align="right" class="login"><a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a></p>
-[% END %]
-
-[%  "INTRA" | setComboLang %]
-
-</td></tr>-->
+<tr id="menu" valign="top" align="left" height="16" >
+<td width="100%">
+    [% INCLUDE   'menu.inc'  %]
+</td>
+</tr>
 <tr valign="top">
   <td align="center" colspan="2">
   <table  width="100%"  border="0" cellspacing="0" cellpadding="0">
