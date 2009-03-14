@@ -33,6 +33,7 @@
 		        </td>
 		        <td>
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
+				soyElPrimero: [% catalogacion.soyElPrimero %]
                 [% IF catalogacion.soyElPrimero != 1 %]  
 					([% catalogacion.getIntranet_habilitado - 1%])                          
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
