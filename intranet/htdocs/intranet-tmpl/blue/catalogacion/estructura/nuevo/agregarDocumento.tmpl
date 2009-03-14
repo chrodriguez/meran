@@ -7,7 +7,7 @@
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 <!-- para validar -->
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.validate.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
 
 <script>
 
@@ -654,27 +654,12 @@ $(document).ready( function() {
         </tr>
     </table>
 
-<!--     CAMPOS FIJOS DEL NIVEL 1 -->
-<!--     <div class="divContentComponente"> -->
 <form id="formNivel1" name="formNivel1">
-<!--    <div class="divLabelComponente"> T&iacute;tulo: </div>
-        <div id="divTitulo" class="divComponente">
-            <input id="titulo" name="titulo" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
-        </div>
-    </div>
-    
-    <div class="divContentComponente">
-    <div class="divLabelComponente"> Autor: </div>
-        <div id="divTitulo" class="divComponente">
-            <input id="autor" name="autor" class="obligatorio required" type="text" size="80" value=""/><b> * </b>
-            <input id="autor_hidden" value="" type="hidden">
-        </div>
-    </div>-->
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
 </form>
     <br>
-    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
@@ -697,65 +682,12 @@ $(document).ready( function() {
         </tr>
     </table>
     
-<!-- FIXME Ver si es necesario -->
-   <!-- <div class="divContentComponente">
-        <div class="divLabelComponente">  Tipo de Documento: </div>
-            <div id="divTipoDocumento" class="divComponente">[% comboTipoDocumento %]</div>
-    </div>-->
-
-<!--     <div class="divContentComponente">  -->
 <form id="formNivel2" name="formNivel2">
-        <!--<div class="divLabelComponente">  Nivel Bibliogr&aacute;fico: </div>
-            <div id="divNivelBibliografico" class="divComponente">
-                <input id="nivel_bibliografico" value="" size="80" type="text">
-                <input id="nivel_bibliografico_hidden" value="" size="80" type="hidden">
-            </div>
-    </div>
-
-    <div class="divContentComponente">
-        <div class="divLabelComponente">  Soporte: </div>
-            <div id="divSoporte" class="divComponente">
-                <input id="soporte" name="soporte" value="" size="80" type="text">
-                <input id="soporte_hidden" value="" type="hidden">
-            </div>
-    </div>
-
-    <div class="divContentComponente"> 
-        <div class="divLabelComponente">  Pais de Publicaci&oacute;n: </div>
-            <div id="divPaisPublicacion" class="divComponente">
-                <input id="pais_publicacion" name="pais_publicacion" value="" size="80" type="text">
-                <input id="pais_publicacion_hidden" value="" type="hidden">
-            </div>
-    </div>
-
-    <div class="divContentComponente"> 
-        <div class="divLabelComponente">  Lenguaje: </div>
-            <div id="divLenguaje" class="divComponente">
-                <input id="lenguaje" name="lenguaje" value="" size="80" type="text">
-                <input id="lenguaje_hidden" value="" type="hidden">
-            </div>
-    </div>
-    
-    <div class="divContentComponente">
-        <div class="divLabelComponente">  Ciudad de Publicaci&oacute;n: </div>
-            <div id="divCiudadPublicacion" class="divComponente">
-                <input id="ciudad_publicacion" name="ciudad_publicacion" value="" size="80" type="text">
-                <input id="ciudad_publicacion_hidden" value="" type="hidden">
-            </div>
-    </div>
-
-    <div class="divContentComponente">
-        <div class="divLabelComponente">  A&ntilde;o de Publicaci&oacute;n: </div>
-            <div id="divAnioPublicacion" class="divComponente">
-                <input id="anio_publicacion" value="" size="10" type="text">
-            </div>
-    </div>-->
-
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
 </form>
     <br>
-    <p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
@@ -778,40 +710,12 @@ $(document).ready( function() {
         </tr>
     </table>
 
-<!--     CAMPOS FIJOS DEL NIVEL 3   -->
-<!--     <div class="divContentComponente">  -->
 <form id="formNivel3" name="formNivel3">
-  <!--  <div class="divLabelComponente">  Codigo de Barra: </div>
-        <div id="divCodigoBarra" class="divComponente">
-            <input class="obligatorio" id="barcode" value="" size="80" type="text"><b> * </b>
-        </div>
-    </div>
-    <div class="divContentComponente"> 
-        <div class="divLabelComponente">  Signatura Topografica: </div>
-        <div id="divSignaturaTopografica" class="divComponente">
-            <input class="obligatorio" id="signatura_topografica" value="" size="80" type="text"><b> * </b>
-        </div>
-    </div>
-    <div class="divContentComponente"> <div class="divLabelComponente">  UI Poseedora: </div>
-        <div id="divUIPoseedora" class="divComponente">
-            [% selectUIPoseedora %]<b> * </b>
-        </div>
-    </div>
-    <div class="divContentComponente"> <div class="divLabelComponente">  UI Origen: </div>
-        <div id="divUIOrigen" class="divComponente">
-            [% selectUIOrigen %]<b> * </b>
-        </div>
-    </div>
-    <div class="divContentComponente"> <div class="divLabelComponente">  Para Sala: </div><div id="divParaSala" class="divComponente">
-        Si<input type=radio class="obligatorio" name="para_sala" value="1">
-        No<input type=radio class="obligatorio" name="para_sala" value="0">
-        <b> * </b></div>
-    </div>-->
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
 </form>
-    <br><p><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
