@@ -195,7 +195,6 @@ function validateForm(func){
                   ciudad: "La ciudad en donde vive es obligatoria",
                   nacimiento: "La fecha de nacimiento es obligatoria",
                   telefono: "El tel&eacute;fono es obligatorio",
-                  codigo_postal: "El c&oacute;digo postal debe ser ingresado",
                   nro_documento: {
                      required: "Por favor, ingrese su nro. de documento",
                      number: "Por favor, ingrese s&oacute;lo d&iacute;gitos",

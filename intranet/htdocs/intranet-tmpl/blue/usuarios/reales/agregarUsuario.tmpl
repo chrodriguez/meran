@@ -16,7 +16,7 @@ $(document).ready(function() {
    [% IF addBorrower %]
       validateForm(agregarUsuario);
    [% ELSE %]
-      validateForm(modificarDatosDeUsuario);
+      validateForm(guardarModificacioUsuario);
    [% END %]
 
     $("#userDataForm").validate();
@@ -196,7 +196,7 @@ $(document).ready(function() {
         </td>
         <td width="40%" class="required" align="left" valign="top">
             <b>[% "C&oacute;digo Postal" | i18n %]</b><br>
-            <input class="required" type="text" name="codigo_postal"  id="codigo_postal" size=50 value="[% codigo_postal %]">
+            <input type="text" name="codigo_postal"  id="codigo_postal" size=50 value="[% codigo_postal %]">
         </td>
     </tr>
     <tr>

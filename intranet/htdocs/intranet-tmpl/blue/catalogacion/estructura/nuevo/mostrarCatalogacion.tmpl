@@ -33,9 +33,10 @@
 		        </td>
 		        <td>
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
-                [% IF catalogacion.soyElPrimero != 1 %]                            
+                [% IF catalogacion.soyElPrimero != 1 %]  
+					([% catalogacion.getIntranet_habilitado - 1%])                          
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> ([% catalogacion.getIntranet_habilitado - 1%])
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> 
                 [% END %]
                 (Actual: [% catalogacion.getIntranet_habilitado %])
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->

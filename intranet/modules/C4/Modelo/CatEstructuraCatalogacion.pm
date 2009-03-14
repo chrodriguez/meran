@@ -166,19 +166,23 @@ Esta funcion verifica si es el ultimo en orden de las catalogaciones segun el ni
 sub soyElUltimo{
     my ($self)=shift;
 # FIXME OJO hace varias subconsultas, ver si queda asi
-=item
-    my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+
+    my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
                                                             query => [
                                                                     itemtype=> { eq => $self->getItemType},
                                                                     nivel=> { eq => $self->getNivel},               
-                                                            ]
+                                                            ],
+															sort_by => 'intranet_habilitado DESC',
 
                                         );
-#  FIXME hay q sacar el max
+	
+	my $max= 1;
+	if( scalar(@$catalogaciones_array) > 0){
+		#obtengo el intranet_habilitado con el menor orden
+		$max= $catalogaciones_array->[0]->getIntranet_habilitado;
+	}
 
-    return ($self->getIntranet_habilitado eq scalar(@$catalogaciones_count));
-=cut
-    return 0;
+    return $max eq $self->getIntranet_habilitado;
 }
 
 =item
@@ -186,8 +190,23 @@ Esta funcion retorna 1 si es el primero en el orden a mostrar segun intranet_hab
 =cut
 sub soyElPrimero{
     my ($self)=shift;
+# FIXME OJO hace varias subconsultas, ver si queda asi
+	my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+														query => [
+																itemtype=> { eq => $self->getItemType},
+																nivel=> { eq => $self->getNivel},               
+														],
+														sort_by => 'intranet_habilitado',
 
-    return $self->getIntranet_habilitado eq 1;
+									);
+	
+	my $min= 1;
+	if( scalar(@$catalogaciones_array) > 0){
+		#obtengo el intranet_habilitado con el menor orden
+		$min= $catalogaciones_array->[0]->getIntranet_habilitado;
+	}
+
+    return $min eq $self->getIntranet_habilitado;
 }
 
 =item
