@@ -35,12 +35,13 @@
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
                 [% IF catalogacion.soyElPrimero != 1 %]                            
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')">
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> ([% catalogacion.getIntranet_habilitado - 1%])
                 [% END %]
+                (Actual: [% catalogacion.getIntranet_habilitado %])
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
                 [% IF catalogacion.soyElUltimo != 1 %]                                    
 			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">     ([% catalogacion.getIntranet_habilitado + 1%])
                 [% END %]
 		        </td>
 		        <td>
@@ -51,16 +52,23 @@
                     >
 		        </td>
 		        <td>
+                [% IF catalogacion.soyFijo != 1 %]
 			        <input  src="[% themelang %]/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" 
                     onClick="mostrarModificarCampo('[% catalogacion.getId %]')">
-        
+                [% END %]
 		        </td>
 		        <td>
+                [% IF catalogacion.soyFijo != 1 %]
 			        <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" 
                     onClick="eliminarCampo('[% catalogacion.getId %]')">
-        
+                [% END %]
 		        </td>
-		        <td><br>&nbsp;</td>
+		        <td>    
+                        <!-- AGREGADO SOLO PARA DEBUGUEAR -->
+                        <br>&nbsp;  [% IF catalogacion.soyFijo == 1 %]
+                                            Campo Fijo
+                                    [% END %]
+                </td>
 	        </tr>
         [% END %]
             

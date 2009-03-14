@@ -120,27 +120,27 @@ sub agregar{
             $self->setBarcode($infoNivel3->{'dato'});
         }
 
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){
+        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){
         #signatura_topografica
             $self->setSignatura_topografica($infoNivel3->{'dato'});
         }
 
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'c') ){
+        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'c') ){
         #UI poseedora
             $self->setId_ui_poseedora($infoNivel3->{'dato'});
         }
 
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'd') ){
+        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'd') ){
         #UI origen
             $self->setId_ui_origen($infoNivel3->{'dato'});
         }
 
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
+        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
         #disponibilidad
             $self->setId_disponibilidad($infoNivel3->{'dato'});
         }
 
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
+        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
         #estado del ejemplar
             $self->setParaSala($infoNivel3->{'dato'});
         }

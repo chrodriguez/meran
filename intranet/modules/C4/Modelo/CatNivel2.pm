@@ -122,32 +122,32 @@ sub agregar{
             $self->setTipo_documento($infoNivel2->{'dato'});
         }
 
-        if( ($infoNivel2->{'campo'} eq '245')&&($infoNivel2->{'subcampo'} eq 'h') ){
+        elsif( ($infoNivel2->{'campo'} eq '245')&&($infoNivel2->{'subcampo'} eq 'h') ){
         #soporte
             $self->setSoporte($infoNivel2->{'dato'});
         }
 
-        if( ($infoNivel2->{'campo'} eq '900')&&($infoNivel2->{'subcampo'} eq 'b') ){
+        elsif( ($infoNivel2->{'campo'} eq '900')&&($infoNivel2->{'subcampo'} eq 'b') ){
         #nivel bibliografico
             $self->setNivel_bibliografico($infoNivel2->{'dato'});
         }
 
-        if( ($infoNivel2->{'campo'} eq '043')&&($infoNivel2->{'subcampo'} eq 'c') ){
+        elsif( ($infoNivel2->{'campo'} eq '043')&&($infoNivel2->{'subcampo'} eq 'c') ){
         #pais publicacion
             $self->setPais_publicacion($infoNivel2->{'dato'});
         }
 
-        if( ($infoNivel2->{'campo'} eq '041')&&($infoNivel2->{'subcampo'} eq 'h') ){
+        elsif( ($infoNivel2->{'campo'} eq '041')&&($infoNivel2->{'subcampo'} eq 'h') ){
         #lenguaje
             $self->setLenguaje($infoNivel2->{'dato'});
         }
 
-        if( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'a') ){
+        elsif( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'a') ){
         #ciudad de publicacion
             $self->setCiudad_publicacion($infoNivel2->{'dato'});
         }
     
-        if( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'c') ){
+        elsif( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'c') ){
         #anio de publicacion
             $self->setAnio_publicacion($infoNivel2->{'dato'});
         }

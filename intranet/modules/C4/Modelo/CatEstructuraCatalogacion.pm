@@ -95,24 +95,26 @@ sub modificar{
     my ($self)=shift;
     my ($data_hash)=@_;
 
-    $self->setCampo($data_hash->{'campo'});
-    $self->setSubCampo($data_hash->{'subcampo'});
-    $self->setItemType($data_hash->{'itemtype'});
-    $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setTipo($data_hash->{'tipoInput'});
-    $self->setReferencia($data_hash->{'referencia'});
-    $self->setNivel($data_hash->{'nivel'});
-    $self->setObligatorio($data_hash->{'obligatorio'});
-    $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
-    $self->setVisible($data_hash->{'visible'});
-
-    if($self->tieneReferencia){
-        my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
-        $pref_temp->load(); 
-        $pref_temp->modificar($data_hash);
+    if (!$self->soyFijo){
+        $self->setCampo($data_hash->{'campo'});
+        $self->setSubCampo($data_hash->{'subcampo'});
+        $self->setItemType($data_hash->{'itemtype'});
+        $self->setLiblibrarian($data_hash->{'liblibrarian'});
+        $self->setTipo($data_hash->{'tipoInput'});
+        $self->setReferencia($data_hash->{'referencia'});
+        $self->setNivel($data_hash->{'nivel'});
+        $self->setObligatorio($data_hash->{'obligatorio'});
+        $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+        $self->setVisible($data_hash->{'visible'});
+    
+        if($self->tieneReferencia){
+            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
+            $pref_temp->load(); 
+            $pref_temp->modificar($data_hash);
+        }
+    
+        $self->save();
     }
-
-    $self->save();
 
 }
 

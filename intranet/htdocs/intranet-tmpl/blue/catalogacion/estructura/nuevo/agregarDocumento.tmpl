@@ -36,13 +36,10 @@ function inicializar(){
     dataModif = new Array();
 }
 
-
-function armarValidador(){
-// FIXME creo q esto se puede hacer cuando se entan creando las componentes, asi recorremos una sola vez las componentes   
-   for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-         if (COMPONENTES_ARRAY[i].obligatorio)
-             $('#'+COMPONENTES_ARRAY[i].idCompCliente).addClass('required ');
-      }
+function _clearDataFromComponentesArray(){
+    for(var i=0;i< COMPONENTES_ARRAY.length;i++){
+        COMPONENTES_ARRAY[i].dato= '';
+    }
 }
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
@@ -74,16 +71,13 @@ function getDivDelNivel(){
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
     _nivelActual= 1;
-//     $("#nivel1Tabla").show();
-//     $("#nivel2Tabla").hide();
-//     $("#nivel3Tabla").hide();
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _nivelActual;
     
-    objAH.id_tipo_doc= 'ALL';//$("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc= 'ALL';
     objAH.sendToServer();
 }
 
@@ -93,16 +87,15 @@ function mostrarDataNivel1(){
 
     if (modificar){
         //se recupera y setea la info de los campos fijos del nivel 1
-        $('#titulo').val(dataModif[0].cat_nivel1.titulo);
-        $('#autor').val(dataModif[0].cat_nivel1.cat_autor[0].completo);
-        $('#autor_hidden').val(dataModif[0].cat_nivel1.autor);
+//         $('#titulo').val(dataModif[0].cat_nivel1.titulo);
+//         $('#autor').val(dataModif[0].cat_nivel1.cat_autor[0].completo);
+//         $('#autor_hidden').val(dataModif[0].cat_nivel1.autor);
 
         for (x=0; x<dataModif.length; x++){
             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
             COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
         }
    }
-//    armarValidador();
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
@@ -113,7 +106,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
-//     armarValidador();
+    scrollTo('nivel1Tabla');
+    validateForm('formNivel1',guardarDocumentoN1);
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -132,7 +126,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-//     armarValidador();
+    scrollTo('nivel2Tabla');
+    validateForm('formNivel2',guardarDocumentoN2);
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -175,7 +170,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
     _showAndHiddeEstructuraDelNivel(3);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-//     armarValidador();
+    scrollTo('nivel3Tabla');
+    validateForm('formNivel3',guardarDocumentoN3);
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -293,10 +289,22 @@ function updateGuardarDocumentoN3(responseText){
        for (x=0; x< allInputs.length; x++)
             allInputs[x].value="";
     if (! (hayError(Messages) ) ){
-// FIXME no hay q borrar el arreglo, sino borrar el campo dato
-//         inicializar();
+        //deja la misma estructura, solo borra el campo dato
+        _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
         mostrarInfoAltaNivel3(info.id1, info.id2);
+    }
+}
+
+function guardar(nivel){
+    if(nivel == 1){
+        $('#formNivel1').submit();        
+    } 
+    if(nivel == 2){
+        $('#formNivel2').submit();
+    }
+    if(nivel == 3){
+        $('#formNivel3').submit();
     }
 }
 
@@ -325,7 +333,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  */
 function procesarInfoJson(json){
     var objetos=JSONstring.toObject(json);
- validateForm(guardarDocumentoN1);
+//     validateForm(guardarDocumentoN1);
     for(var i=0; i< objetos.length; i++){
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
@@ -388,7 +396,7 @@ function procesarObjeto(objeto){
             auto= objeto.referencia;
         break;
     }
-    crearRegla(comp,idComp);
+//     crearRegla(comp,idComp);
    //Se agregan clases para cuando tenga que recuperar los datos.
     if(objeto.obligatorio == "1"){
         hacerComponenteObbligatoria(idComp);
@@ -560,13 +568,13 @@ function updateBorrarGrupo(){
 }
 
 
-function validateForm(func){
+function validateForm(formID, func){
 
    if( jQuery.browser.mozilla ) {
       // do when DOM is ready
       $( function() {
          // search form, hide it, search labels to modify, filter classes nocmx and error
-         $( '#formNivel1' ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
+        $( '#'+formID ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
             var $this = $(this);
             var labelContent = $this.html();
             var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
@@ -591,12 +599,11 @@ function validateForm(func){
 
             var _message= "Llene el campo";
 //             validate signup form on keyup and submit
-            $("#formNivel1").validate();
+            $("#"+formID).validate();
 }
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
-    validateForm(guardarDocumentoN1);
     //autocomplete nivel 1
     CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 
@@ -671,7 +678,7 @@ $(document).ready( function() {
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-            onClick="guardarDocumentoN1()">
+            onClick="guardar(1)">
     </center>
 </span>
 
@@ -752,7 +759,7 @@ $(document).ready( function() {
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-            onClick="guardarDocumentoN2()">
+            onClick="guardar(2)">
     </center>
 </span>
 
@@ -808,7 +815,7 @@ $(document).ready( function() {
     
     <center>
     <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-            onClick="guardarDocumentoN3()">
+            onClick="guardar(3)">
     </center>
 </span>
 
