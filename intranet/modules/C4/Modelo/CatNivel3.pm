@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
         id_ui_poseedora       => { type => 'varchar', length => 4 }, #ui que tiene el item
         id_ui_origen          => { type => 'varchar', length => 4 }, #ui de donde viene el item
         id_disponibilidad     => { type => 'integer', length => 5, default => '0', not_null => 1 },
-        para_sala             => { type => 'character', default => '0', length => 2 },
+        id_estado             => { type => 'character', default => '0', length => 2 },
         timestamp             => { type => 'timestamp', not_null => 1 },
     ],
 
@@ -38,6 +38,12 @@ __PACKAGE__->meta->setup(
         ref_disponibilidad => {
             class      => 'C4::Modelo::RefDisponibilidad',
             column_map => { id_disponibilidad => 'codigo' },
+            type       => 'one to many',
+        },
+
+	 	ref_estado => {
+            class      => 'C4::Modelo::RefEstado',
+            column_map => { id_estado => 'codigo' },
             type       => 'one to many',
         },
 
@@ -108,7 +114,7 @@ sub agregar{
 
         elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
         #estado del ejemplar
-            $self->setParaSala($infoNivel3->{'dato'});
+            $self->setId_estado($infoNivel3->{'dato'});
         }
    
     } #END foreach my $infoNivel3 (@arrayNivel3)
@@ -149,6 +155,7 @@ sub eliminar{
     foreach my $n3Rep (@$repetiblesNivel3){
       $n3Rep->eliminar();
     }
+
     $self->delete();
 
 }
@@ -184,7 +191,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'e';
-	$hash{'dato'}= $self->getPara_Sala;
+	$hash{'dato'}= $self->getId_estado;
 	$hash{'ident'}= 'estado';
 
 	push (@marc_array, \%hash);
@@ -258,7 +265,7 @@ sub setId3{
 
 sub getBarcode{
     my ($self) = shift;
-    return ($self->barcode);
+    return (C4::AR::Utilidades::trim($self->barcode));
 }
 
 sub setBarcode{
@@ -269,7 +276,7 @@ sub setBarcode{
 
 sub getSignatura_topografica{
     my ($self) = shift;
-    return ($self->signatura_topografica);
+    return (C4::AR::Utilidades::trim($self->signatura_topografica));
 }
 
 sub setSignatura_topografica{
@@ -280,7 +287,7 @@ sub setSignatura_topografica{
 
 sub getId_disponibilidad{
     my ($self) = shift;
-    return ($self->id_disponibilidad);
+    return (C4::AR::Utilidades::trim($self->id_disponibilidad));
 }
 
 sub setId_disponibilidad{
@@ -289,15 +296,15 @@ sub setId_disponibilidad{
     $self->id_disponibilidad($id_disponibilidad);
 }
 
-sub setParaSala{
+sub setId_estado{
     my ($self) = shift;
-    my ($para_sala) = @_;
-    $self->para_sala($para_sala);
+    my ($id_estado) = @_;
+    $self->id_estado($id_estado);
 }
 
-sub getPara_Sala{
+sub getId_estado{
     my ($self) = shift;
-    return ($self->para_sala);
+    return (C4::AR::Utilidades::trim($self->id_estado));
 }
 
 sub getTimestamp{

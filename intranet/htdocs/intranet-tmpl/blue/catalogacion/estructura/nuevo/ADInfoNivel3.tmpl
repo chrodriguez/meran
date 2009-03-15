@@ -1,4 +1,4 @@
-<hr>
+
 <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
     <tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
 
@@ -9,7 +9,7 @@
         <td><b>Disponibilidad</b></td>
         <td><b>Origen UI</b></td>
         <td><b>Due&ntilde;o UI</b></td>
-        <td><b>Tipo Pr&eacute;stamo</b></td>
+        <td><b>Estado</b></td>
         <td><b>Acci&oacute;n</b></td>
 
         <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
@@ -33,16 +33,13 @@
                 [% nivel3.getId_ui_poseedora %]
             </td>
             <td>
-                [% IF nivel3.getPara_Sala == 1%]
-                    Para Sala
-                [% ELSE %]
-                    Domiciliario
-                [% END %]
+                [% nivel3.ref_estado.getNombre %]
             </td>
             <td>
                 <input  type="image" value="modificar" src="[% themelang %]/images/editar.png" 
                         onClick="modificarN3('[% nivel3.getId3 %]')" title="Editar Ejemplar">
-                   <input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('[% id3 %]')} else {return false;}" title="Borrar Ejemplar">
+                   <input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
+						onClick="borrarN3('[% nivel3.getId3 %]');" title="Borrar Ejemplar">
             </td>
             <td></td>
 

@@ -218,46 +218,38 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     my ($Message_arrayref);
    
     if ($nivel == 1){
-      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel1($id);
+      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel1($id);
     }
     elsif($nivel == 2){
-      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel2($id);
+      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel2($id);
     }
     elsif($nivel == 3){
-      $Message_arrayref= &C4::AR::Catalogacion::t_eliminarNivel3($id);
+      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel3($id);
     }
 
-    my $infoOperacionJSON=to_json $Message_arrayref;
+	my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
     
     print $input->header;
-    print $infoOperacionJSON;
+	print to_json \%info;
 }
 # ***********************************************ABM CATALOGACION*****************************************************************
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-#     my $id_tipo_doc= $obj->{'id_tipo_doc'};
-#     my $nivel= $obj->{'nivel'};
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($obj);
     
-#     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
     print $input->header;
-    print $infoOperacionJSON;
+	print $infoOperacionJSON;
 }
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-#     my $id_tipo_doc= $obj->{'id_tipo_doc'};
-#     my $nivel= $obj->{'nivel'};
-#     my $id = $obj->{'id'};
-
-#     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogacionesConDatos($obj);
 	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogacionesConDatos($obj);
     
-#     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
 	my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
     print $input->header;
@@ -268,7 +260,6 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 #Se guarda informacion del NIVEL 1
     my ($Message_arrayref, $id1) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
     
-    my $infoOperacionJSON=to_json $Message_arrayref;
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
     $info{'id1'}= $id1;
@@ -281,7 +272,6 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
     #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
     my ($Message_arrayref, $nivel2) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
     
-    my $infoOperacionJSON=to_json $Message_arrayref;
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
     $info{'id1'}= $nivel2->getId1;

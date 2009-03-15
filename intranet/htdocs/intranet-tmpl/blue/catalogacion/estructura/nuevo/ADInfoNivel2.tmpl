@@ -5,14 +5,14 @@
     <input  type="image" border="0" onclick="modificarN2('[% nivel2.getId2 %]')" title="Modificar Grupo" 
             src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
     <input type="button" border="0" onclick="agregarN3()" title="Agregar Ejemplar" value="+" name="agregar"/>
-    <input  type="image" border="0" title="Borrar Grupo" onclick="borrarGrupo('[% nivel2.getId1 %]','[% nivel2.getId2 %]')"  
+    <input  type="image" border="0" title="Borrar Grupo" onclick="borrarN2('[% nivel2.getId2 %]')"  
             src="/intranet-tmpl/blue/images/borrar.png" value="delete" name="delete"/>
     <br/>
-    Nivel bibliográfico: [% nivel2.ref_nivel_bibliografico.getDescription %]
+    Nivel bibliogr&aacute;fico: [% nivel2.ref_nivel_bibliografico.getDescription %]
     <br/>
-    Soporte: [% nive2.ref_soporte.getDescription %]
+    Soporte: [% nivel2.ref_soporte.getDescription %]
     <br/>
-    Lugar: [% nivel2.getCiudad_publicacion %]
+    Lugar: [% nivel2.pais_publicacion.getNombre_largo %]
     <br/>
     Idioma: [% nivel2.ref_idioma.getDescription %]
     <br/>

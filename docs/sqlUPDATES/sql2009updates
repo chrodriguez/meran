@@ -380,15 +380,15 @@ insert into `pref_tabla_referencia`(`id`,`nombre_tabla`,`alias_tabla`) values ( 
 
 
 INSERT INTO `pref_informacion_referencia` (`idinforef`, `idestcat`, `referencia`, `orden`, `campos`, `separador`) VALUES 
-(1, 45, 'autores', 'nacionalidad', 'id, nombre, apellido, nacionalidad, completo', '?'),
-(2, 46, 'temas', 'nombre', 'nombre', ','),
-(3, 47, 'bibliolevel', 'description', 'description', ','),
-(4, 47, 'soporte', 'description', 'idSupport, description', ','),
-(5, 45, 'countries', 'printable_name', 'printable_name', '/'),
-(6, 45, 'languages', 'description', 'description', '/'),
-(7, 44, 'ui', 'nombre', 'id_ui, nombre', ','),
-(8, 45, 'tipo_ejemplar', 'nombre', 'id_tipo_doc, nombre', ','),
-(9, 45, 'disponibilidad', 'nombre', 'codigo, nombre', ',');
+(1, 0, 'autores', 'nacionalidad', 'id, nombre, apellido, nacionalidad, completo', '?'),
+(2, 0, 'temas', 'nombre', 'nombre', ','),
+(3, 0, 'bibliolevel', 'description', 'description', ','),
+(4, 0, 'soporte', 'description', 'idSupport, description', ','),
+(5, 0, 'countries', 'printable_name', 'printable_name', '/'),
+(6, 0, 'languages', 'description', 'description', '/'),
+(7, 0, 'ui', 'nombre', 'id_ui, nombre', ','),
+(8, 0, 'tipo_ejemplar', 'nombre', 'id_tipo_doc, nombre', ','),
+(9, 0, 'disponibilidad', 'nombre', 'codigo, nombre', ',');
 
 
 
@@ -424,4 +424,6 @@ CHANGE `lenguaje` `lenguaje` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedi
 CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
 CHANGE `anio_publicacion` `anio_publicacion` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
 
+-- se modifico el campo para_sala a id_estado en cat_nivel3, ahora id_estado es una referencia a ref_estado
+ ALTER TABLE `cat_nivel3` CHANGE `para_sala` `id_estado` TINYINT( 5 ) NOT NULL DEFAULT '0' 
 

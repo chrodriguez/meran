@@ -88,6 +88,8 @@ use vars qw(@EXPORT @ISA);
 
 
     &t_eliminarNivel1
+	&t_eliminarNivel2
+	&t_eliminarNivel3
 );
 
 
@@ -1974,7 +1976,12 @@ sub t_guardarNivel3 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        $catNivel3= C4::Modelo::CatNivel3->new();
+		 if ($params->{'modificado'}){
+            $catNivel3= C4::Modelo::CatNivel3->new(id3 => $params->{'id3'});
+            $catNivel3->load();
+         }else{
+            $catNivel3= C4::Modelo::CatNivel3->new();
+         }
         my $db= $catNivel3->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -2011,6 +2018,8 @@ sub t_eliminarNivel1{
    
    my $msg_object= C4::AR::Mensajes::create();
 
+# FIXME falta verificar si es posible eliminar el nivel 1
+
     if(!$msg_object->{'error'}){
     #No hay error
         my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $id1);
@@ -2025,7 +2034,7 @@ sub t_eliminarNivel1{
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U374', 'params' => []} ) ;
         };
     
         if ($@){
@@ -2034,7 +2043,7 @@ sub t_eliminarNivel1{
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U377', 'params' => []} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -2050,6 +2059,8 @@ sub t_eliminarNivel2{
    
    my $msg_object= C4::AR::Mensajes::create();
 
+# FIXME falta verificar si es posible eliminar el nivel 2
+
     if(!$msg_object->{'error'}){
     #No hay error
         my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
@@ -2064,7 +2075,7 @@ sub t_eliminarNivel2{
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => []} ) ;
         };
     
         if ($@){
@@ -2073,7 +2084,49 @@ sub t_eliminarNivel2{
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+
+}
+
+sub t_eliminarNivel3{
+   
+   my($id3)=@_;
+   
+   my $msg_object= C4::AR::Mensajes::create();
+
+# FIXME falta verificar si es posible eliminar el nivel 3
+	
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel3= C4::Modelo::CatNivel3->new(id3 => $id3);
+            $catNivel3->load;
+        my $db= $catNivel3->dbh;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel3->eliminar;  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => []} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -2319,7 +2372,7 @@ sub _obtenerEstructuraYDatos{
 	elsif( $params->{'nivel'} eq '3'){
 		$nivel1_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
 																							query => [ 
-																										id3 => { eq => $params->{'id'} },
+																										id3 => { eq => $params->{'id3'} },
 																								], 
 	
 												);

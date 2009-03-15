@@ -105,6 +105,7 @@ sub eliminar{
     foreach my $n1Rep (@$repetiblesNivel1){
       $n1Rep->eliminar();
     }
+
     $self->delete();
 }
 

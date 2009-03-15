@@ -20,9 +20,8 @@ function _clearMessages(){
 	$('#mensajes').html('');
 }
 
-// FIXME deje setMessages2 hasta q se modifique todo lo referenciado por setMessages q no se usa mas
 //Esta funcion setea varios mensajes enviados desde el servidor
-function setMessages(Messages_hasref){
+function setMessages(Messages_hashref){
 //@params
 //Message.messages, arreglo de mensajes mensaje para el usuario
 //Message.error, error=1 o 0
@@ -35,8 +34,8 @@ function setMessages(Messages_hasref){
 
 	_createContentMessages();
 	var i;
-	for(i=0;i<Messages_hasref.messages.length;i++){
-		$('#mensajes').append(Messages_hasref.messages[i].message + '<br>');
+	for(i=0;i<Messages_hashref.messages.length;i++){
+		$('#mensajes').append(Messages_hashref.messages[i].message + '<br>');
 	}
 
 	scrollTo('mensajes');

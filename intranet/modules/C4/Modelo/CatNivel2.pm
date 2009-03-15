@@ -51,6 +51,16 @@ __PACKAGE__->meta->setup(
             column_map => { nivel_bibliografico => 'code' },
             type       => 'one to many',
         },
+		ref_pais_publicacion => {
+            class      => 'C4::Modelo::RefNivelBibliografico',
+            column_map => { pais_publicacion => 'iso' },
+            type       => 'one to many',
+        },
+# 		ref_ciudad_publicacion => {
+#             class      => 'C4::Modelo::RefNivelBibliografico',
+#             column_map => { ciudad_publicacion => 'code' },
+#             type       => 'one to many',
+#         },
 		
     ],
 );
@@ -161,6 +171,7 @@ sub eliminar{
     foreach my $n2Rep (@$repetiblesNivel2){
       $n2Rep->eliminar();
     }
+
     $self->delete();
 
 }
