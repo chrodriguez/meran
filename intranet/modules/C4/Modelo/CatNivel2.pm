@@ -46,54 +46,14 @@ __PACKAGE__->meta->setup(
             column_map => { lenguaje => 'idLanguage' },
             type       => 'one to many',
         },
+		ref_nivel_bibliografico => {
+            class      => 'C4::Modelo::RefNivelBibliografico',
+            column_map => { nivel_bibliografico => 'code' },
+            type       => 'one to many',
+        },
+		
     ],
 );
-
-# sub agregar{
-# 
-#     my ($self)=shift;
-#     use C4::Modelo::CatNivel2Repetible;
-# 
-#     my ($data_hash)=@_;
-# 
-#     $self->setId1($data_hash->{'id1'});
-#     $self->setTipo_documento($data_hash->{'tipo_documento'});
-#     $self->setSoporte($data_hash->{'soporte'});
-#     $self->setNivel_bibliografico($data_hash->{'nivel_bibliografico'});
-#     $self->setPais_publicacion($data_hash->{'pais_publicacion'});
-#     $self->setLenguaje($data_hash->{'lenguaje'});
-#     $self->setCiudad_publicacion($data_hash->{'ciudad_publicacion'});
-#     $self->setAnio_publicacion($data_hash->{'anio_publicacion'});
-# 
-#     $self->save();
-#     my $id2= $self->getId2;
-# 
-#     if ($data_hash->{'hayRepetibles'}){
-#         my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
-#         #se agrega el nivel 2 repetible
-#         foreach my $infoNivel2 (@$infoArrayNivel2){
-#             $infoNivel2->{'id2'}= $id2;
-#             
-#             my $nivel2Repetible;
-# 
-#             if ($data_hash->{'modificado'}){
-#                $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
-#                $nivel2Repetible->load();
-#             }else{
-#                $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-#             }
-# 
-#             $nivel2Repetible->setId2($infoNivel2->{'id2'});
-#             $nivel2Repetible->setCampo($infoNivel2->{'campo'});
-#             $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-#             $nivel2Repetible->setDato($infoNivel2->{'dato'});
-#             $nivel2Repetible->save(); 
-#         }
-#     }
-# 
-#     return $self;
-# }
-
 
 sub agregar{
 
@@ -205,6 +165,68 @@ sub eliminar{
 
 }
 
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '910';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getTipo_documento;
+	$hash{'ident'}= 'tipo_documento';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '043';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getPais_publicacion;
+	$hash{'ident'}= 'pais_publicacion';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '260';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getAnio_publicacion;
+	$hash{'ident'}= 'anio_publicacion';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '260';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getCiudad_publicacion;
+	$hash{'ident'}= 'ciudad_publicacion';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '041';
+	$hash{'subcampo'}= 'h';
+	$hash{'dato'}= $self->getLenguaje;
+	$hash{'ident'}= 'lenguaje';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '245';
+	$hash{'subcampo'}= 'h';
+	$hash{'dato'}= $self->getSoporte;
+	$hash{'ident'}= 'soporte';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '900';
+	$hash{'subcampo'}= 'b';
+	$hash{'dato'}= $self->getNivel_bibliografico;
+	$hash{'ident'}= 'nivel_bibliografico';
+
+	push (@marc_array, \%hash);
+	
+	return (\@marc_array);
+}
 
 sub getAnio_publicacion{
     my ($self) = shift;

@@ -24,6 +24,13 @@ __PACKAGE__->meta->setup(
             key_columns => { id3 => 'id3' },
             type        => 'one to one',
         },
+		CEC => {  
+            class       => 'C4::Modelo::CatEstructuraCatalogacion',
+            key_columns => { 
+                             campo => 'campo',
+                             subcampo => 'subcampo' },
+            type        => 'one to one',
+        },
     ],
 );
 

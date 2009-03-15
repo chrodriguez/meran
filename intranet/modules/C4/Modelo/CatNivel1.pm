@@ -27,43 +27,6 @@ __PACKAGE__->meta->setup(
 );
 
 
-
-# sub agregar{
-# 
-#     my ($self)=shift;
-#     use C4::Modelo::CatNivel1Repetible;
-# 
-#     my ($data_hash)=@_;
-#     $self->setTitulo($data_hash->{'titulo'});
-#     $self->setAutor($data_hash->{'autor'});
-#     $self->save();
-#     my $id1= $self->getId1;
-# 
-#     if ($data_hash->{'hayRepetibles'}){
-#         my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
-#         #se agrega el nivel 1 repetible
-#         foreach my $infoNivel1 (@$infoArrayNivel1){
-#             $infoNivel1->{'id1'}= $id1;
-#                
-#             my $nivel1Repetible;
-# 
-#             if ($data_hash->{'modificado'}){
-#                $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
-#                $nivel1Repetible->load();
-#             }else{
-#                $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
-#             }
-# 
-#             $nivel1Repetible->setId1($infoNivel1->{'id1'});
-#             $nivel1Repetible->setCampo($infoNivel1->{'campo'});
-#             $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
-#             $nivel1Repetible->setDato($infoNivel1->{'dato'});
-#             $nivel1Repetible->save(); 
-#         }
-#     }
-# }
-
-
 sub agregar{
 
     my ($self)=shift;
@@ -154,6 +117,29 @@ sub setId1{
     my ($self) = shift;
     my ($id1) = @_;
     $self->id1($id1);
+}
+
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '245';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getTitulo;
+	$hash{'ident'}= 'TITULO';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '110';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getAutor;
+	$hash{'ident'}= 'AUTOR';
+
+	push (@marc_array, \%hash);
+	
+	return (\@marc_array);
 }
 
 sub getTitulo{

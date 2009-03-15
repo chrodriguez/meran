@@ -902,29 +902,31 @@ p.nivel2Selected:hover{
 
 
 /* ESTILOS PARA FORMS DE VALIDACION */
-
-#userDataForm label { width: 250px; }
-#userDataForm label.error, #userDataForm input.submit { 
+/* estilo generico para todos los forms validables */
+.validateDataForm label { width: 250px; }
+.validateDataForm label.error, .validateDataForm input.submit { 
                                                          margin-left: 253px;
                                                          color:red;
                                                          font-weight:bold; 
                                                       }
-#userDataForm label.error {
+
+/* estilo generico para todos los forms validables */
+.validateDataForm label.error {
          margin-left: 10px;
          width: auto;
          display: block;
          color:red;
          font:bold; 
 }
-
-#sexo label.error {
+/*
+label.error {
          margin-left: 10px;
          width: auto;
          display: inline;
          color:red;
          font:bold; 
          float:left;
-}
+}*/
 
 .click{
     cursor: pointer;

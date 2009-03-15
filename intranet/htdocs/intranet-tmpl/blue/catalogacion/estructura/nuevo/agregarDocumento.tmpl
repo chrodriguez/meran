@@ -12,11 +12,11 @@
 <script>
 
 //************************************************REVISADO******************************************************************
-id1=0; //para saber el id del nivel 1
-id2=0; //para saber el id del nivel 2
-id3=0; //para saber el id del nivel 3
+ID_N1=0; //para saber el id del nivel 1
+ID_N2=0; //para saber el id del nivel 2
+ID_N3=0; //para saber el id del nivel 3
 dataModif = new Array();
-modificar = 0;
+MODIFICAR = 0;
 
 //Hashes para el formValidator
 // hashOfRules=new HashMap();
@@ -39,6 +39,29 @@ function inicializar(){
 function _clearDataFromComponentesArray(){
     for(var i=0;i< COMPONENTES_ARRAY.length;i++){
         COMPONENTES_ARRAY[i].dato= '';
+    }
+}
+
+function _clearContentsEstructuraDelNivel(){
+    $("#estructuraDelNivel1").html("");
+    $("#estructuraDelNivel2").html("");
+    $("#estructuraDelNivel3").html("");
+}
+
+// muestra/oculta los divs de la estructura segun el nivel que se este procesando
+function _showAndHiddeEstructuraDelNivel(nivel){
+    if(nivel == 1){
+        $('#nivel1Tabla').show();
+        $('#nivel2Tabla').hide();
+        $('#nivel3Tabla').hide();
+    }else if(nivel == 2){
+        $('#nivel2Tabla').show();
+        $('#nivel1Tabla').hide();
+        $('#nivel3Tabla').hide();
+    }else if(nivel == 3){
+        $('#nivel3Tabla').show();
+        $('#nivel1Tabla').hide();
+        $('#nivel2Tabla').hide();
     }
 }
 
@@ -82,18 +105,36 @@ function mostrarEstructuraDelNivel1(){
 }
 
 
-
+// FIXME ver si se puede hacer solo una funcion
 function mostrarDataNivel1(){
 
-    if (modificar){
-        //se recupera y setea la info de los campos fijos del nivel 1
-//         $('#titulo').val(dataModif[0].cat_nivel1.titulo);
-//         $('#autor').val(dataModif[0].cat_nivel1.cat_autor[0].completo);
-//         $('#autor_hidden').val(dataModif[0].cat_nivel1.autor);
-
+    if (MODIFICAR){
         for (x=0; x<dataModif.length; x++){
-            $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+//             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
             COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
+        }
+   }
+}
+
+function mostrarDataNivel2(){
+
+    if (MODIFICAR){
+        for (x=0; x<dataModif.length; x++){
+//             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
+            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
+        }
+   }
+}
+
+function mostrarDataNivel3(){
+
+    if (MODIFICAR){
+        for (x=0; x<dataModif.length; x++){
+//             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
+			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
+            COMPONENTES_ARRAY[x].rep_n3_id = dataModif[x].rep_n3_id;
         }
    }
 }
@@ -126,6 +167,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
+	mostrarDataNivel2();
     scrollTo('nivel2Tabla');
     validateForm('formNivel2',guardarDocumentoN2);
 }
@@ -142,36 +184,24 @@ function mostrarEstructuraDelNivel3(){
     objAH.sendToServer();
 }
 
-function _clearContentsEstructuraDelNivel(){
-    $("#estructuraDelNivel1").html("");
-    $("#estructuraDelNivel2").html("");
-    $("#estructuraDelNivel3").html("");
-}
-
-// muestra/oculta los divs de la estructura segun el nivel que se este procesando
-function _showAndHiddeEstructuraDelNivel(nivel){
-    if(nivel == 1){
-        $('#nivel1Tabla').show();
-        $('#nivel2Tabla').hide();
-        $('#nivel3Tabla').hide();
-    }else if(nivel == 2){
-        $('#nivel2Tabla').show();
-        $('#nivel1Tabla').hide();
-        $('#nivel3Tabla').hide();
-    }else if(nivel == 3){
-        $('#nivel3Tabla').show();
-        $('#nivel1Tabla').hide();
-        $('#nivel2Tabla').hide();
-    }
-}
-
 function updateMostrarEstructuraDelNivel3(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(3);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
+	mostrarDataNivel3();
     scrollTo('nivel3Tabla');
     validateForm('formNivel3',guardarDocumentoN3);
+}
+
+function agregarN2(){
+	MODIFICAR = 0;
+	mostrarEstructuraDelNivel2();
+}
+
+function agregarN3(){
+	MODIFICAR = 0;
+	mostrarEstructuraDelNivel3();
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -180,7 +210,7 @@ function mostrarInfoAltaNivel1(id1){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL1_LATERARL";
-    objAH.id1= id1;
+    objAH.id1= ID_N1;
     objAH.sendToServer();
 }
 
@@ -196,8 +226,8 @@ function mostrarInfoAltaNivel2(id2){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL2_LATERARL";
-    objAH.id2= id2; //voy a mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
-    objAH.id1= id1;
+    objAH.id2= id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
+    objAH.id1= ID_N1;
     objAH.sendToServer();
 }
 
@@ -216,22 +246,22 @@ function guardarDocumentoN1(){
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
-    objAH.modificado = modificar;
-    objAH.id1 = id1;
+    objAH.modificado = MODIFICAR;
+    objAH.id1 = ID_N1;
     objAH.sendToServer();
-    modificar = 0;
+    MODIFICAR = 0;
 }
 
 function updateGuardarDocumentoN1(responseText){
 
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;
-    id1= info.id1;
+    ID_N1= info.id1; //recupero el id desde el servidor
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 1
-        mostrarInfoAltaNivel1(id1);
+        mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
     }
 }
@@ -243,9 +273,9 @@ function guardarDocumentoN2(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
-    objAH.modificado = modificar;
-    objAH.id1 = id1;
-    objAH.id2 = id2; //por si se modificó
+    objAH.modificado = MODIFICAR;
+    objAH.id1 = ID_N1;
+    objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
 }
 
@@ -253,12 +283,12 @@ function updateGuardarDocumentoN2(responseText){
 
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
-    id2= info.id2;
+    ID_N2= info.id2; //recupero el id desde el servidor
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 1
-        mostrarInfoAltaNivel2(id2);
+        mostrarInfoAltaNivel2(ID_N2);
         mostrarEstructuraDelNivel3();
     }
 }
@@ -272,8 +302,9 @@ function guardarDocumentoN3(){
     objAH.tipoAccion= "GUARDAR_NIVEL_3";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-    objAH.id1 = id1;
-    objAH.id2 = id2;
+	objAH.modificado = MODIFICAR;
+    objAH.id1 = ID_N1;
+    objAH.id2 = ID_N2;
     objAH.sendToServer();
 }
 
@@ -281,7 +312,7 @@ function updateGuardarDocumentoN3(responseText){
 
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
-    id3= info.id3;
+    ID_N3= info.id3;
     setMessages(Messages);
 
    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
@@ -316,7 +347,7 @@ function mostrarInfoAltaNivel3(id1, idNivel2){
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
     objAH.id1= id1;
     objAH.id2= idNivel2;
-    id2= idNivel2;
+    ID_N2= idNivel2;
     objAH.sendToServer();
 }
 
@@ -333,7 +364,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  */
 function procesarInfoJson(json){
     var objetos=JSONstring.toObject(json);
-//     validateForm(guardarDocumentoN1);
+
     for(var i=0; i< objetos.length; i++){
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
@@ -476,14 +507,9 @@ function crearDivLabel(label){
  * correspondiente a los otros niveles que hacen referencia al id1.
  */
 function borrarN1(id1){
-	$("#result").html("");
-	objJSON=new AjaxHelper();
-    objJSON.debug= true;
-	objJSON.itemtype=$("#id_tipo_doc").val();
-	objJSON.paso=1;
 
 	objAH=new AjaxHelper(updateBorrarN1);
-   objAH.debug= true;
+    objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 	objAH.id1=id1;
 	objAH.nivel=1;
@@ -504,20 +530,19 @@ function updateBorrarN1(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
-   inicializar();
-	$("#result").html("");
+	inicializar();
 	objAH=new AjaxHelper(updateModificarN1);
-   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-   objAH.debug= true;
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype="ALL";
-   objAH.id = id1;
-   objAH.nivel = 1;
+	objAH.id = id1;
+	objAH.nivel = 1;
 	objAH.sendToServer();
 }
 
 function updateModificarN1(responseText){
-    modificar = 1;
+    MODIFICAR = 1;
     //se genera un arreglo de objetos con la informacion guardada, campo, subcampo    
     dataModif = JSONstring.toObject(responseText);
     mostrarEstructuraDelNivel1();
@@ -525,7 +550,6 @@ function updateModificarN1(responseText){
 
 function modificarN2(id2){
    inicializar();
-   $("#result").html("");
    objAH=new AjaxHelper(updateModificarN2);
    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
    objAH.debug= true;
@@ -537,23 +561,34 @@ function modificarN2(id2){
 }
 
 function updateModificarN2(responseText){
-   modificar = 1;
+   MODIFICAR = 1;
    dataModif = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel2();
+}
+
+function modificarN3(id3){
+   inicializar();
+   objAH=new AjaxHelper(updateModificarN3);
+   objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+   objAH.debug= true;
+   objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+   objAH.itemtype=$("#id_tipo_doc").val();
+   objAH.id = id3;
+   objAH.nivel = 3;
+   objAH.sendToServer();
+}
+
+function updateModificarN3(responseText){
+   MODIFICAR = 1;
+   dataModif = JSONstring.toObject(responseText);
+   mostrarEstructuraDelNivel3();
 }
 /*
  * borrarGrupo
  * Elimina de la base de datos el grupo correspodiente a los parametros que ingresan, y los ejemplares que hay en 
  * ese grupo.
  */
-function borrarGrupo(id1,id2){
-	$("#result").html("");
-	
-	objJSON=new AjaxHelper();
-    objJSON.debug= true;
-	objJSON.itemtype=$("#id_tipo_doc").val();
-	objJSON.paso=2;
-	
+function borrarGrupo(id1,id2){	
 	objAH=new AjaxHelper(updateBorrarGrupo);
     objAH.debug= true;
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -654,7 +689,7 @@ $(document).ready( function() {
         </tr>
     </table>
 
-<form id="formNivel1" name="formNivel1" class="cmxform">
+<form id="formNivel1" name="formNivel1" class="validateDataForm">
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
 </form>
@@ -682,7 +717,7 @@ $(document).ready( function() {
         </tr>
     </table>
     
-<form id="formNivel2" name="formNivel2" class="cmxform">
+<form id="formNivel2" name="formNivel2" class="validateDataForm">
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
 </form>
@@ -710,7 +745,7 @@ $(document).ready( function() {
         </tr>
     </table>
 
-<form id="formNivel3" name="formNivel3" class="cmxform">
+<form id="formNivel3" name="formNivel3" class="validateDataForm">
 
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
@@ -718,8 +753,12 @@ $(document).ready( function() {
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
-    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-            onClick="guardar(3)">
+    <!--<input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 3' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
+            onClick="guardar(3)">-->
+		<a onClick="guardar(3)" >
+                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0" value="[% 'Guardar nivel 3' | i18n %]" 
+					title="[% 'Guardar nivel 3' | i18n %]">
+		</a>
     </center>
 </span>
 

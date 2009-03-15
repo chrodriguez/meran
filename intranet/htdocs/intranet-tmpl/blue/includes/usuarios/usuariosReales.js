@@ -168,6 +168,7 @@ function validateForm(func){
             // validate signup form on keyup and submit
             $("#userDataForm").validate({
                rules: {
+				  categoria_socio_name: "required",	
                   apellido: "required",
                   nombre: "required",
                   nro_socio: "required",
@@ -187,6 +188,7 @@ function validateForm(func){
                   },
                },
                messages: {
+				  categoria_socio_name: "Por favor, seleccione la categoría",
                   apellido: "Por favor, ingrese su apellido",
                   nombre: "Por favor, ingrese su/s nombre/s",
                   nro_socio: "La tarjeta de id. es obligatoria",

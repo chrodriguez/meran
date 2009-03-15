@@ -236,10 +236,10 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-    my $id_tipo_doc= $obj->{'id_tipo_doc'};
-    my $nivel= $obj->{'nivel'};
+#     my $id_tipo_doc= $obj->{'id_tipo_doc'};
+#     my $nivel= $obj->{'nivel'};
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($nivel,$id_tipo_doc,$orden);
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($obj);
     
 #     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
@@ -250,13 +250,15 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-    my $id_tipo_doc= $obj->{'id_tipo_doc'};
-    my $nivel= $obj->{'nivel'};
-    my $id = $obj->{'id'};
+#     my $id_tipo_doc= $obj->{'id_tipo_doc'};
+#     my $nivel= $obj->{'nivel'};
+#     my $id = $obj->{'id'};
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogacionesConDatos($nivel,$id);
+#     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogacionesConDatos($obj);
+	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogacionesConDatos($obj);
     
-    my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+#     my $infoOperacionJSON= C4::AR::Utilidades::arrayObjectsToJSONString($catalogaciones_array_ref);
+	my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
     print $input->header;
     print $infoOperacionJSON;

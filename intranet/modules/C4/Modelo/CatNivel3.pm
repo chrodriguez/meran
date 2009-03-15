@@ -56,40 +56,6 @@ __PACKAGE__->meta->setup(
 );
 
 
-# sub agregar{
-# 
-#     my ($self)=shift;
-#     use C4::Modelo::CatNivel2Repetible;
-# 
-#     my ($data_hash)=@_;
-# 
-#     $self->setId1($data_hash->{'id1'});
-#     $self->setId2($data_hash->{'id2'}); 
-#     $self->setBarcode($data_hash->{'barcode'});
-#     $self->setSignatura_topografica($data_hash->{'sig_topografica'});
-#     $self->setId_ui_poseedora($data_hash->{'id_ui_poseedora'});
-#     $self->setId_ui_origen($data_hash->{'id_ui_origen'});
-#     $self->setId_disponibilidad(0);
-#     $self->setParaSala(0);
-# 
-#     $self->save();
-#     my $id3= $self->getId3;
-# 
-#     if ($data_hash->{'hayRepetibles'}){
-#         my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
-#         #se agrega el nivel 2 repetible
-#         foreach my $infoNivel3 (@$infoArrayNivel3){
-#             $infoNivel3->{'id3'}= $id3;
-#             my $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
-#             $nivel3Repetible->setId3($infoNivel3->{'id3'});
-#             $nivel3Repetible->setCampo($infoNivel3->{'campo'});
-#             $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
-#             $nivel3Repetible->setDato($infoNivel3->{'dato'});
-#             $nivel3Repetible->save();
-#         }
-#     }
-# }
-
 
 sub agregar{
 
@@ -187,6 +153,53 @@ sub eliminar{
 
 }
 
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'd';
+	$hash{'dato'}= $self->getId_ui_origen;
+	$hash{'ident'}= 'id_ui_origen';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getId_ui_poseedora;
+	$hash{'ident'}= 'id_ui_poseedora';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 't';
+	$hash{'dato'}= $self->getSignatura_topografica;
+	$hash{'ident'}= 'signatura_topografica';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'e';
+	$hash{'dato'}= $self->getPara_Sala;
+	$hash{'ident'}= 'estado';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'o';
+	$hash{'dato'}= $self->getId_disponibilidad;
+	$hash{'ident'}= 'id_disponibilidad';
+
+	push (@marc_array, \%hash);
+
+	
+	return (\@marc_array);
+}
 
 sub getId_ui_poseedora{
     my ($self) = shift;

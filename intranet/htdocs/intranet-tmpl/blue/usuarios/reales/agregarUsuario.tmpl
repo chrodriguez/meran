@@ -23,6 +23,8 @@ $(document).ready(function() {
     CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
     CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
     $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
+
+	$('#categoria_socio_id').addClass('required');
     
 });
 
@@ -54,13 +56,13 @@ $(document).ready(function() {
 
 <br>
 
-<!--<form action="/cgi-bin/koha/usuarios/newmember.pl" method=post  name="form1" AUTOCOMPLETE='off'>-->
-<form method=post  name="userDataForm" id="userDataForm" AUTOCOMPLETE='off'>
+<!--<form method=post  name="userDataForm" id="userDataForm" AUTOCOMPLETE='off'>-->
+<form method=post  name="userDataForm" id="userDataForm" class="validateDataForm" AUTOCOMPLETE='off'>
 
 <table border=0  width="100%" class="tablaresultado" align="right">
     <tr valign=top width="100%">
         
-        <td  width="50%" ALIGN=RIGHT class="required">
+        <td  width="50%" ALIGN=RIGHT>
          [% "Tarjeta de identificaci&oacute;n" | i18n %] * 
         <input id="nro_socio" type=text class="required" name=nro_socio size=10 value="[% socio.getNro_socio %]"><br>
         </td>
@@ -92,7 +94,7 @@ $(document).ready(function() {
 
 <table width="100%">
     <tr>
-         <td  class="required" align="left">
+         <td align="left">
          <b>[% "Categor&iacute;a del usuario" | i18n %] *</b>
          <br>
                 [% comboDeCategorias %]
@@ -251,14 +253,17 @@ $(document).ready(function() {
 <table width=100%>
     <tr>
         <td width="50%" align="right">
-                    <input type=hidden name=type value="[% type %]">
+<!-- FIXME parece q no se usa -->
+<!--                     <input type=hidden name=type value="[% type %]"> -->
 
         [% IF addBorrower %]
             <a onClick="save()" >
-                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0"></a>
+                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0">
+			</a>
         [% ELSE  %]
             <a onClick="save()" >
-                    <img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0"></a>
+                    <img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0">
+			</a>
         [% END %]
     
             

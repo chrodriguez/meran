@@ -386,131 +386,6 @@ sub buscarCamposModificados{
 	return (@results);
 }
 
-=item
-Este funcion devuelve la informacion del usuario segun un nro_socio
-=cut
-sub getHashCatalogaciones{
-    my ($nivel,$itemType,$orden)=@_;
-
-    my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType,$orden);
-    
-
-    my @result;
-    foreach my $cat  (@$catalogaciones_array_ref){
-
-        my %hash_temp;
-        $hash_temp{'campo'}= $cat->{'campo'};
-        $hash_temp{'subcampo'}= $cat->{'subcampo'};
-        $hash_temp{'nivel'}= $cat->{'nivel'};
-#         $hash_temp{'visible'}= $cat->{'visible'};
-        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
-        $hash_temp{'itemtype'}= $cat->{'itemtype'};
-        $hash_temp{'repetible'}= $cat->{'repetible'};
-        $hash_temp{'fijo'}= $cat->{'fijo'};
-        $hash_temp{'tipo'}= $cat->{'tipo'};
-        $hash_temp{'referencia'}= $cat->{'referencia'};
-        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
-        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
-#         $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
-#         $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
-
-
-        if( $cat->{'referencia'} ){
-        #tiene una referencia
-            $cat->{'infoReferencia'}->{'campos'}; 
-            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
-                                                                                        $cat->{'infoReferencia'}->{'campos'}  #campo
-                                                                                );
-            $hash_temp{'opciones'}= $valores;
-        }
-
-        push (@result, \%hash_temp);
-    }
-
-    return (scalar(@$catalogaciones_array_ref), \@result);
-}
-
-
-=item
-Este funcion devuelve la informacion del usuario segun un nro_socio
-=cut
-sub getCatalogaciones{
-    my ($nivel,$itemType,$orden)=@_;
-
-    use C4::Modelo::CatEstructuraCatalogacion;
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
-
-    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-                                                                query => [ 
-                                                                                nivel => { eq => $nivel },
-
-                                                                    or   => [ itemtype => { eq => $itemType },
-                                                                            itemtype => { eq => 'ALL' },    
-                                                                            ],
-
-                                                                        intranet_habilitado => { gt => 0 }, 
-                                                                        ],
-                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-
-                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
-                                                                 );
-
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
-}
-
-
-
-sub getCatalogacionesConDatos{
-    my ($nivel,$id)=@_;
-
-    use C4::Modelo::CatNivel1Repetible;
-    use C4::Modelo::CatNivel1Repetible::Manager;
-      
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-    my $catalogaciones_array_ref;
-
-   if ($nivel == 1){
-         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                query => [ 
-                                                            id1 => { eq => $id },
-                                                            'cat_estructura_catalogacion.nivel' =>  {eq => 1},
-                                                            
-                                                    ], 
-#     select => ['cat_nivel1.titulo','cat_nivel1.autor','cat_autor.completo','cat_nivel1_repetible.rep_n1_id',
-#                 'cat_nivel1_repetible.id1','cat_estructura_catalogacion.nivel','cat_nivel1_repetible.campo',
-#                 'cat_nivel1_repetible.subcampo','cat_nivel1_repetible.dato','cat_estructura_catalogacion.idCompCliente'],
-                                                                                                                                                    require_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
-
-                                                                     );
-   }
-   elsif ($nivel == 2){
-         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
-                                                                              query => [ 
-                                                                                          id2 => { eq => $id },
-                                                                                    ],
-                                                                require_objects => [ 'cat_nivel2', 'CEC' ]
-
-                                                                     );
-   }
-   else{
-         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
-                                                                              query => [ 
-                                                                                          id3 => { eq => $id },
-                                                                                    ],
-                                                                                          require_objects => [ 'cat_nivel3' ]
-
-                                                                     );
-   }
-
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
-}
 
 =item
 actualizarCamposModificados
@@ -2207,4 +2082,281 @@ sub t_eliminarNivel2{
 
     return ($msg_object);
 
+}
+
+
+#======================================================ESTRUCTURA CATALOGACION============================================================
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getHashCatalogaciones{
+    my ($params)=@_;
+
+	my $nivel= $params->{'nivel'};
+	my $itemType= $params->{'id_tipo_doc'};
+	my $orden= $params->{'orden'};
+
+    my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType,$orden);
+    
+
+    my @result;
+    foreach my $cat  (@$catalogaciones_array_ref){
+
+        my %hash_temp;
+        $hash_temp{'campo'}= $cat->{'campo'};
+        $hash_temp{'subcampo'}= $cat->{'subcampo'};
+        $hash_temp{'nivel'}= $cat->{'nivel'};
+        $hash_temp{'visible'}= $cat->{'visible'};
+        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
+        $hash_temp{'itemtype'}= $cat->{'itemtype'};
+        $hash_temp{'repetible'}= $cat->{'repetible'};
+        $hash_temp{'fijo'}= $cat->{'fijo'};
+        $hash_temp{'tipo'}= $cat->{'tipo'};
+        $hash_temp{'referencia'}= $cat->{'referencia'};
+        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
+        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
+        $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
+
+        if( $cat->{'referencia'} ){
+        #tiene una referencia
+            $cat->{'infoReferencia'}->{'campos'}; 
+            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
+                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
+                                                                                        $cat->{'infoReferencia'}->{'campos'}  #campo
+                                                                                );
+            $hash_temp{'opciones'}= $valores;
+        }
+
+        push (@result, \%hash_temp);
+    }
+
+    return (scalar(@$catalogaciones_array_ref), \@result);
+}
+
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getCatalogaciones{
+    my ($nivel,$itemType,$orden)=@_;
+
+    use C4::Modelo::CatEstructuraCatalogacion;
+    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+
+    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
+
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                query => [ 
+                                                                                nivel => { eq => $nivel },
+
+                                                                    or   => [ 	
+																				itemtype => { eq => $itemType },
+                                                                            	itemtype => { eq => 'ALL' },    
+                                                                            ],
+
+                                                                        		intranet_habilitado => { gt => 0 }, 
+                                                                        ],
+
+                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+
+                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                             );
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+
+
+sub getCatalogacionesConDatos{
+    my ($params)=@_;
+
+	my $nivel= $params->{'nivel'};
+	my $id= $params->{'id'};
+
+	use C4::Modelo::CatNivel1;
+    use C4::Modelo::CatNivel1::Manager;
+
+    use C4::Modelo::CatNivel1Repetible;
+    use C4::Modelo::CatNivel1Repetible::Manager;
+      
+    use C4::Modelo::CatNivel2Repetible;
+    use C4::Modelo::CatNivel2Repetible::Manager;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+    my $catalogaciones_array_ref;
+	my $nivel1_array_ref;
+
+   if ($nivel == 1){
+
+         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                                query => [ 
+#                                                             id1 => { eq => $id },
+ 															'cat_nivel1.id1' => { eq => $id },
+#                                                             'cat_estructura_catalogacion.nivel' =>  {eq => 1},
+                                                            
+                                                    ], 
+
+	 										with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
+
+                                                                     );
+	
+   }
+   elsif ($nivel == 2){
+         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+                                                                              query => [ 
+                                                                                          id2 => { eq => $id },
+                                                                                    ],
+                                                                require_objects => [ 'cat_nivel2', 'CEC' ]
+
+                                                                     );
+   }
+   else{
+         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+                                                                              query => [ 
+                                                                                          id3 => { eq => $id },
+                                                                                    ],
+                                                                              require_objects => [ 'cat_nivel3', 'CEC' ]
+
+                                                                     );
+   }
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+
+=item
+Este funcion devuelve la informacion de la estructura de catalogacion de un campo, subcampo
+=cut
+sub _getEstructuraFromCampoSubCampo{
+    my ($campo, $subcampo)=@_;
+
+	my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+																				query => [ 
+																							campo => { eq => $campo },
+																							subcampo => { eq => $subcampo },
+																					], 
+
+										);	
+
+    return ($cat_estruct_info_array);
+}
+
+
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getHashCatalogacionesConDatos{
+    my ($params)=@_;
+
+    my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
+    
+# MAPEO Y FILTRO DE INFO AL CLIENTE
+    my @result;
+    foreach my $cat  (@$catalogaciones_array_ref){
+
+        my %hash_temp;
+        $hash_temp{'campo'}= $cat->{'campo'};
+        $hash_temp{'subcampo'}= $cat->{'subcampo'};
+		$hash_temp{'dato'}= $cat->{'dato'};
+        $hash_temp{'nivel'}= $cat->{'nivel'};
+        $hash_temp{'visible'}= $cat->{'visible'};
+        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
+        $hash_temp{'itemtype'}= $cat->{'itemtype'};
+        $hash_temp{'repetible'}= $cat->{'repetible'};
+        $hash_temp{'fijo'}= $cat->{'fijo'};
+        $hash_temp{'tipo'}= $cat->{'tipo'};
+        $hash_temp{'referencia'}= $cat->{'referencia'};
+        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
+        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
+        $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
+
+
+        if( $cat->{'referencia'} ){
+        #tiene una referencia
+            $cat->{'infoReferencia'}->{'campos'}; 
+            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
+                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
+                                                                                       $cat->{'infoReferencia'}->{'campos'}  #campo
+                                                                                );
+			#se guardan los valores para generar el combo en el cliente
+            $hash_temp{'opciones'}= $valores;
+        }
+
+        push (@result, \%hash_temp);
+    }
+
+	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
+
+    return (scalar(@result), \@resultEstYDatos);
+}
+
+
+sub _obtenerEstructuraYDatos{
+	my ($params)=@_;
+
+	my @result;
+	my $nivel1_array_ref;
+
+	if( $params->{'nivel'} eq '1'){
+		$nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
+																							query => [ 
+																										id1 => { eq => $params->{'id'} },
+																								], 
+	
+												);
+	}
+	elsif( $params->{'nivel'} eq '2'){
+		$nivel1_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
+																							query => [ 
+																										id2 => { eq => $params->{'id'} },
+																								], 
+	
+												);
+	}
+	elsif( $params->{'nivel'} eq '3'){
+		$nivel1_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+																							query => [ 
+																										id3 => { eq => $params->{'id'} },
+																								], 
+	
+												);
+	}
+
+	#paso todo a MARC
+	my $nivel1_info_marc_array = $nivel1_array_ref->[0]->toMARC;
+
+	#se genera la estructura de catalogacion para envia al cliente
+	for(my $i=0;$i<scalar(@$nivel1_info_marc_array);$i++){
+
+		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
+																	$nivel1_info_marc_array->[$i]->{'campo'}, 
+																	$nivel1_info_marc_array->[$i]->{'subcampo'}
+											);
+	
+		my %hash;
+
+		if(scalar(@$cat_estruct_array) > 0){		
+
+			$hash{'campo'}= $nivel1_info_marc_array->[$i]->{'campo'};
+			$hash{'subcampo'}= $nivel1_info_marc_array->[$i]->{'subcampo'};
+			$hash{'dato'}= $nivel1_info_marc_array->[$i]->{'dato'};
+	
+			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
+			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
+			$hash{'liblibrarian'}= $cat_estruct_array->[0]->getLiblibrarian;
+			$hash{'itemtype'}= $cat_estruct_array->[0]->getItemType;
+			$hash{'repetible'}= $cat_estruct_array->[0]->getRepetible;
+			$hash{'fijo'}= $cat_estruct_array->[0]->getFijo;
+			$hash{'tipo'}= $cat_estruct_array->[0]->getTipo;
+			$hash{'referencia'}= $cat_estruct_array->[0]->getReferencia;
+			$hash{'obligatorio'}= $cat_estruct_array->[0]->getObligatorio;
+				
+			push(@result, \%hash);
+		}
+	}
+
+	return @result;
 }
