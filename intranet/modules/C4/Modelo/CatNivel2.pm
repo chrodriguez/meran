@@ -184,7 +184,7 @@ sub toMARC{
 	$hash{'campo'}= '910';
 	$hash{'subcampo'}= 'a';
 	$hash{'dato'}= $self->getTipo_documento;
-	$hash{'ident'}= 'tipo_documento';
+	$hash{'ident'}= 'tipo_documento'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
@@ -192,7 +192,7 @@ sub toMARC{
 	$hash{'campo'}= '043';
 	$hash{'subcampo'}= 'c';
 	$hash{'dato'}= $self->getPais_publicacion;
-	$hash{'ident'}= 'pais_publicacion';
+	$hash{'ident'}= 'pais_publicacion'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 

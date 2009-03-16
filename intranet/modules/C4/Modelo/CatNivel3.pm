@@ -168,7 +168,7 @@ sub toMARC{
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'd';
 	$hash{'dato'}= $self->getId_ui_origen;
-	$hash{'ident'}= 'id_ui_origen';
+	$hash{'ident'}= 'id_ui_origen'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
@@ -176,7 +176,7 @@ sub toMARC{
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'c';
 	$hash{'dato'}= $self->getId_ui_poseedora;
-	$hash{'ident'}= 'id_ui_poseedora';
+	$hash{'ident'}= 'id_ui_poseedora'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
@@ -184,7 +184,7 @@ sub toMARC{
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 't';
 	$hash{'dato'}= $self->getSignatura_topografica;
-	$hash{'ident'}= 'signatura_topografica';
+	$hash{'ident'}= 'signatura_topografica'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 

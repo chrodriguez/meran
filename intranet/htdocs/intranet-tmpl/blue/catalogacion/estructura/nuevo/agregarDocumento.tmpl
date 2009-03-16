@@ -39,7 +39,22 @@ function inicializar(){
 }
 
 function _setFoco(){
-	$("input[tabindex='1']")[0].focus();
+	//obtengo cualquer componente que tenga tabindex = 1
+	if($("[tabindex='1']")[0]){
+		$("[tabindex='1']")[0].focus();
+	}
+}
+
+//esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
+function _sacarOpciones(){
+	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
+		if(COMPONENTES_ARRAY[i].opciones){//si esta definido...
+			if(COMPONENTES_ARRAY[i].opciones.length > 0){
+				//elimino la propiedad opciones, para enviar menos info al servidor
+				COMPONENTES_ARRAY[i].opciones= [];
+			}
+		}
+	}
 }
 
 function _clearDataFromComponentesArray(){
@@ -151,7 +166,6 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
     scrollTo('nivel1Tabla');
-	_setFoco();
     validateForm('formNivel1',guardarDocumentoN1);
 }
 
@@ -173,7 +187,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     procesarInfoJson(responseText);
 	mostrarDataNivel2();
     scrollTo('nivel2Tabla');
-	_setFoco();
     validateForm('formNivel2',guardarDocumentoN2);
 }
 
@@ -192,11 +205,11 @@ function mostrarEstructuraDelNivel3(){
 function updateMostrarEstructuraDelNivel3(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(3);
+	TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
 	mostrarDataNivel3();
     scrollTo('nivel3Tabla');
-	_setFoco();
     validateForm('formNivel3',guardarDocumentoN3);
 }
 
@@ -251,6 +264,7 @@ function guardarDocumentoN1(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+	_sacarOpciones();
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
     objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
@@ -278,6 +292,7 @@ function guardarDocumentoN2(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
+	_sacarOpciones();
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
     objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
@@ -307,6 +322,7 @@ function guardarDocumentoN3(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_3";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
+	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
 	objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
@@ -377,6 +393,8 @@ function procesarInfoJson(json){
         COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
     }
+	//hago foco en la primer componente
+	_setFoco();
 }
 
 /*
@@ -500,9 +518,7 @@ function hacerComponenteObbligatoria(idObj){
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
 function crearDivComponente(idObj){
-//     return "<div id='"+idObj+"' class='divComponente'></div>";
-	return "<div class='divComponente'></div>";
-// FIXME creo q no es necesario el id para este div
+    return "<div id='"+idObj+"' class='divComponente'></div>";
 }
 
 // Esta funcion crea un divLabel con un Label segun parametro

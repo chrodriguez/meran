@@ -128,7 +128,7 @@ sub toMARC{
 	$hash{'campo'}= '245';
 	$hash{'subcampo'}= 'a';
 	$hash{'dato'}= $self->getTitulo;
-	$hash{'ident'}= 'TITULO';
+	$hash{'ident'}= 'TITULO'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
@@ -136,7 +136,7 @@ sub toMARC{
 	$hash{'campo'}= '110';
 	$hash{'subcampo'}= 'a';
 	$hash{'dato'}= $self->getAutor;
-	$hash{'ident'}= 'AUTOR';
+	$hash{'ident'}= 'AUTOR'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 	
