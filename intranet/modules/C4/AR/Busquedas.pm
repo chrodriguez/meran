@@ -513,7 +513,8 @@ sub obtenerGrupos {
 		my $query2="SELECT COUNT(*) AS cant FROM cat_nivel3 n3 WHERE n3.id2 = ?";
 #  		if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
 		if (($type ne 'intra')&&($opacUnavail eq 0)){
-    			$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL  OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
+#     			$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL  OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
+				$query2.=" AND (id_estado=0 OR id_estado IS NULL  OR id_estado=2)"; #wthdrawn=2 es COMPARTIDO
   		}
 		my $sth2=$dbh->prepare($query2);
   		$sth2->execute($data->{'id2'});
@@ -536,16 +537,18 @@ sub obtenerDisponibilidadTotal{
 	my ($id1,$itemtype)=@_;
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT count(*) as cant, notforloan FROM cat_nivel3 WHERE id1=? ";
+	my $query="SELECT count(*) as cant, id_disponibilidad FROM cat_nivel3 WHERE id1=? ";
 	my $sth;
 
 	if($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL"){
-	  $query .=" GROUP BY notforloan";
+# 	  $query .=" GROUP BY notforloan";
+	$query .=" GROUP BY id_disponibilidad";
 	
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1);
 	}else{#Filtro tb por tipo de item
-	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
+# 	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
+		$query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
 
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1, $itemtype);
@@ -882,7 +885,7 @@ Busca los distintos tipos de documentos que tiene una tupla del nivel1, se pasa 
 sub buscarItemtypes{
 	my ($id1)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT ref_tipo_documento FROM cat_nivel2 WHERE id1=?";
+	my $query="SELECT DISTINCT tipo_documento FROM cat_nivel2 WHERE id1=?";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($id1);
@@ -1165,12 +1168,12 @@ sub getLanguages{
 sub getItemType {
  	my ($type)=@_;
   	my $dbh = C4::Context->dbh;
-  	my $sth=$dbh->prepare("SELECT description FROM cat_ref_tipo_nivel3 WHERE itemtype=?");
+  	my $sth=$dbh->prepare("SELECT nombre FROM cat_ref_tipo_nivel3 WHERE id_tipo_doc=?");
   	$sth->execute($type);
   	my $dat=$sth->fetchrow_hashref;
   	$sth->finish;
 
-  	return ($dat->{'description'});
+  	return ($dat->{'nombre'});
 }
 
 ## FIXME DEPRECATED

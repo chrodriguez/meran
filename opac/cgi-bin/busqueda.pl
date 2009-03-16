@@ -17,7 +17,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 								type => "opac",
 								authnotrequired => 1,
 								flagsrequired => {borrow => 1},
-					#  			     debug => 1,
 			     });
 
 
@@ -36,7 +35,7 @@ my $titulo= $obj->{'titulo'};
 my $tipo= $obj->{'tipo'};
 my $idTema= $obj->{'idTema'};
 my $tema= $obj->{'tema'};
-my $comboItemTypes= $obj->{'comboItemTypes'};
+my $comboItemTypes= $obj->{'id_tipo_documento'};
 my $idAutor= $obj->{'idAutor'};#Viene por get desde un link de autor
 my $orden= $obj->{'orden'}||'titulo';#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};

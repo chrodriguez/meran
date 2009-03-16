@@ -10,38 +10,23 @@ use CGI;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "opac-search.tmpl",
-                                    query => $query,
-                                    type => "opac",
-                                    authnotrequired => 1,
-                                    flagsrequired => {borrow => 1},
+																	template_name => "opac-search.tmpl",
+																	query => $query,
+																	type => "opac",
+																	authnotrequired => 1,
+																	flagsrequired => {borrow => 1},
              });
 
-my $classlist='';
-## FIXME usar combo de utilidades o crear funcion que devuelva el combo
-my $dbh=C4::Context->dbh;
-my $sth=$dbh->prepare("select search,itemtype from itemtypes order by search");
-$sth->execute;
-my ($search2,$itemtypelist) = $sth->fetchrow;
 
-while (my ($search,$itemtype) = $sth->fetchrow) {
-
-        if ($search eq $search2){
-	                $itemtypelist.="|".$itemtype;
-			        }else{
-				$classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
-				$search2=$search;
-				$itemtypelist=$itemtype;
-				}
-			}
-			#Falta el ultimo;
-$classlist.="<option value=\"$itemtypelist\">$search2</option>\n";
+my %params_combo;
+$params_combo{'id'}= 'id_tipo_documento';
+my $comboTipoNivel3Fijo= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'comboTipoDocumento'}= $comboTipoNivel3Fijo;
 
 
 my $virtuallibrary=C4::AR::Preferencias->getValorPreferencia("virtuallibrary");
 
 $t_params->{'virtuallibrary'}= $virtuallibrary;
-$t_params->{'comboItemTypes'}= $classlist;
 $t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'hiddesearch'}= 1;
