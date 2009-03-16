@@ -176,69 +176,6 @@ sub eliminar{
 
 }
 
-sub toMARC{
-    my ($self) = shift;
-	my @marc_array;
-
-	my %hash;
-	$hash{'campo'}= '910';
-	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getTipo_documento;
-	$hash{'ident'}= 'tipo_documento'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '043';
-	$hash{'subcampo'}= 'c';
-	$hash{'dato'}= $self->getPais_publicacion;
-	$hash{'ident'}= 'pais_publicacion'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '260';
-	$hash{'subcampo'}= 'c';
-	$hash{'dato'}= $self->getAnio_publicacion;
-	$hash{'ident'}= 'anio_publicacion';
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '260';
-	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getCiudad_publicacion;
-	$hash{'ident'}= 'ciudad_publicacion';
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '041';
-	$hash{'subcampo'}= 'h';
-	$hash{'dato'}= $self->getLenguaje;
-	$hash{'ident'}= 'lenguaje';
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '245';
-	$hash{'subcampo'}= 'h';
-	$hash{'dato'}= $self->getSoporte;
-	$hash{'ident'}= 'soporte';
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '900';
-	$hash{'subcampo'}= 'b';
-	$hash{'dato'}= $self->getNivel_bibliografico;
-	$hash{'ident'}= 'nivel_bibliografico';
-
-	push (@marc_array, \%hash);
-	
-	return (\@marc_array);
-}
-
 sub getAnio_publicacion{
     my ($self) = shift;
     return ($self->anio_publicacion);
@@ -348,6 +285,76 @@ sub setTimestamp{
     my ($timestamp) = @_;
     $self->timestamp($timestamp);
 }
+
+# ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
+
+=item
+Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '910';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getTipo_documento;
+	$hash{'ident'}= 'tipo_documento'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '043';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getPais_publicacion;
+	$hash{'ident'}= 'pais_publicacion'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '260';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getAnio_publicacion;
+	$hash{'ident'}= 'anio_publicacion';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '260';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getCiudad_publicacion;
+	$hash{'ident'}= 'ciudad_publicacion';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '041';
+	$hash{'subcampo'}= 'h';
+	$hash{'dato'}= $self->getLenguaje;
+	$hash{'ident'}= 'lenguaje';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '245';
+	$hash{'subcampo'}= 'h';
+	$hash{'dato'}= $self->getSoporte;
+	$hash{'ident'}= 'soporte';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '900';
+	$hash{'subcampo'}= 'b';
+	$hash{'dato'}= $self->getNivel_bibliografico;
+	$hash{'ident'}= 'nivel_bibliografico';
+
+	push (@marc_array, \%hash);
+	
+	return (\@marc_array);
+}
+
+# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 
 1;

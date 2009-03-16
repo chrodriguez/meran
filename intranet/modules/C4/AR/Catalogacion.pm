@@ -2138,7 +2138,7 @@ sub t_eliminarNivel3{
 }
 
 
-#======================================================ESTRUCTURA CATALOGACION============================================================
+#======================================================SOPORTE PARA ESTRUCTURA CATALOGACION====================================================
 
 =item
 Este funcion devuelve la informacion del usuario segun un nro_socio
@@ -2351,51 +2351,54 @@ sub _obtenerEstructuraYDatos{
 	my ($params)=@_;
 
 	my @result;
-	my $nivel1_array_ref;
+	my $nivel_array_ref;
 
 	if( $params->{'nivel'} eq '1'){
-		$nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
-																							query => [ 
-																										id1 => { eq => $params->{'id'} },
-																								], 
-	
-												);
+# 		$nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
+# 																							query => [ 
+# 																										id1 => { eq => $params->{'id'} },
+# 																								], 
+# 	
+# 												);
+		$nivel_array_ref= getNivel1FromId1($params->{'id'});
 	}
 	elsif( $params->{'nivel'} eq '2'){
-		$nivel1_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-																							query => [ 
-																										id2 => { eq => $params->{'id'} },
-																								], 
-	
-												);
+# 		$nivel1_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
+# 																							query => [ 
+# 																										id2 => { eq => $params->{'id'} },
+# 																								], 
+# 	
+# 												);
+		$nivel_array_ref= getNivel2FromId2($params->{'id'});
 	}
 	elsif( $params->{'nivel'} eq '3'){
-		$nivel1_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																							query => [ 
-																										id3 => { eq => $params->{'id3'} },
-																								], 
-	
-												);
+# 		$nivel1_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+# 																							query => [ 
+# 																										id3 => { eq => $params->{'id3'} },
+# 																								], 
+# 	
+# 												);
+		$nivel_array_ref= getNivel3FromId3($params->{'id3'});
 	}
 
 	#paso todo a MARC
-	my $nivel1_info_marc_array = $nivel1_array_ref->[0]->toMARC;
+	my $nivel_info_marc_array = $nivel_array_ref->[0]->toMARC;
 
 	#se genera la estructura de catalogacion para envia al cliente
-	for(my $i=0;$i<scalar(@$nivel1_info_marc_array);$i++){
+	for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
 
 		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
-																	$nivel1_info_marc_array->[$i]->{'campo'}, 
-																	$nivel1_info_marc_array->[$i]->{'subcampo'}
+																	$nivel_info_marc_array->[$i]->{'campo'}, 
+																	$nivel_info_marc_array->[$i]->{'subcampo'}
 											);
 	
 		my %hash;
 
 		if(scalar(@$cat_estruct_array) > 0){		
 
-			$hash{'campo'}= $nivel1_info_marc_array->[$i]->{'campo'};
-			$hash{'subcampo'}= $nivel1_info_marc_array->[$i]->{'subcampo'};
-			$hash{'dato'}= $nivel1_info_marc_array->[$i]->{'dato'};
+			$hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
+			$hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
+			$hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
 	
 			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
 			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
@@ -2413,3 +2416,52 @@ sub _obtenerEstructuraYDatos{
 
 	return @result;
 }
+
+=item
+Recupero un nivel 1 a partir de un id1
+=cut
+sub getNivel1FromId1{
+	my ($id1) = @_;
+
+	my $nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
+																							query => [ 
+																										id1 => { eq => $id1 },
+																								], 
+																);
+
+	return ($nivel1_array_ref);
+}
+
+=item
+Recupero un nivel 2 a partir de un id2
+=cut
+sub getNivel2FromId2{
+	my ($id2) = @_;
+
+	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
+																							query => [ 
+																										id2 => { eq => $id2 },
+																								], 
+																);
+
+	return ($nivel2_array_ref);
+}
+
+=item
+Recupero un nivel 3 a partir de un id3
+=cut
+sub getNivel3FromId3{
+	my ($id3) = @_;
+
+	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+																							query => [ 
+																										id3 => { eq => $id3
+ },
+																								], 
+																);
+
+	return ($nivel3_array_ref);
+}
+
+
+#====================================================FIN==SOPORTE PARA ESTRUCTURA CATALOGACION==================================================

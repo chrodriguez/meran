@@ -120,29 +120,6 @@ sub setId1{
     $self->id1($id1);
 }
 
-sub toMARC{
-    my ($self) = shift;
-	my @marc_array;
-
-	my %hash;
-	$hash{'campo'}= '245';
-	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getTitulo;
-	$hash{'ident'}= 'TITULO'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '110';
-	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getAutor;
-	$hash{'ident'}= 'AUTOR'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-	
-	return (\@marc_array);
-}
-
 sub getTitulo{
     my ($self) = shift;
     return ($self->titulo);
@@ -175,6 +152,36 @@ sub setTimestamp{
     my ($timestamp) = @_;
     $self->timestamp($timestamp);
 }
+
+# ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
+
+=item
+Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '245';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getTitulo;
+	$hash{'ident'}= 'TITULO'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '110';
+	$hash{'subcampo'}= 'a';
+	$hash{'dato'}= $self->getAutor;
+	$hash{'ident'}= 'AUTOR'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+	
+	return (\@marc_array);
+}
+
+# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 1;
 

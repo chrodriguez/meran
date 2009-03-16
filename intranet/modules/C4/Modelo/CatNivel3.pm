@@ -160,54 +160,6 @@ sub eliminar{
 
 }
 
-sub toMARC{
-    my ($self) = shift;
-	my @marc_array;
-
-	my %hash;
-	$hash{'campo'}= '995';
-	$hash{'subcampo'}= 'd';
-	$hash{'dato'}= $self->getId_ui_origen;
-	$hash{'ident'}= 'id_ui_origen'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '995';
-	$hash{'subcampo'}= 'c';
-	$hash{'dato'}= $self->getId_ui_poseedora;
-	$hash{'ident'}= 'id_ui_poseedora'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '995';
-	$hash{'subcampo'}= 't';
-	$hash{'dato'}= $self->getSignatura_topografica;
-	$hash{'ident'}= 'signatura_topografica'; #parece q no es necesario
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '995';
-	$hash{'subcampo'}= 'e';
-	$hash{'dato'}= $self->getId_estado;
-	$hash{'ident'}= 'estado';
-
-	push (@marc_array, \%hash);
-
-	my %hash;
-	$hash{'campo'}= '995';
-	$hash{'subcampo'}= 'o';
-	$hash{'dato'}= $self->getId_disponibilidad;
-	$hash{'ident'}= 'id_disponibilidad';
-
-	push (@marc_array, \%hash);
-
-	
-	return (\@marc_array);
-}
-
 sub getId_ui_poseedora{
     my ($self) = shift;
     return ($self->id_ui_poseedora);
@@ -317,6 +269,61 @@ sub setTimestamp{
     my ($timestamp) = @_;
     $self->timestamp($timestamp);
 }
+
+# ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
+
+=item
+Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub toMARC{
+    my ($self) = shift;
+	my @marc_array;
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'd';
+	$hash{'dato'}= $self->getId_ui_origen;
+	$hash{'ident'}= 'id_ui_origen'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'c';
+	$hash{'dato'}= $self->getId_ui_poseedora;
+	$hash{'ident'}= 'id_ui_poseedora'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 't';
+	$hash{'dato'}= $self->getSignatura_topografica;
+	$hash{'ident'}= 'signatura_topografica'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'e';
+	$hash{'dato'}= $self->getId_estado;
+	$hash{'ident'}= 'estado';
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'o';
+	$hash{'dato'}= $self->getId_disponibilidad;
+	$hash{'ident'}= 'id_disponibilidad';
+
+	push (@marc_array, \%hash);
+
+	
+	return (\@marc_array);
+}
+
+# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 1;
 
