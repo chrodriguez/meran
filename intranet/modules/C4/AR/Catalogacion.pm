@@ -240,27 +240,6 @@ sub obtenerValoresRef{
 	}
 }
 
-=item
-buscarCamposObligatorios
-Busca los campos MARC de la tabla marc_subfield_structure que son obligatorios para el standar de catalogacion MARC
-=cut
-sub buscarCamposObligatorios{
-	
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT nivel, obligatorio, liblibrarian, kohafield ";
-	$query .=" FROM pref_estructura_subcampo_marc ";
-	$query .=" WHERE nivel = '1' AND obligatorio = '1'";
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute();
-
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results, $data);
-	}
-	$sth->finish;
-	return (@results);
-}
 
 =item
 buscarNombreCampoMarc
@@ -2354,30 +2333,12 @@ sub _obtenerEstructuraYDatos{
 	my $nivel_array_ref;
 
 	if( $params->{'nivel'} eq '1'){
-# 		$nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
-# 																							query => [ 
-# 																										id1 => { eq => $params->{'id'} },
-# 																								], 
-# 	
-# 												);
 		$nivel_array_ref= getNivel1FromId1($params->{'id'});
 	}
 	elsif( $params->{'nivel'} eq '2'){
-# 		$nivel1_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-# 																							query => [ 
-# 																										id2 => { eq => $params->{'id'} },
-# 																								], 
-# 	
-# 												);
 		$nivel_array_ref= getNivel2FromId2($params->{'id'});
 	}
 	elsif( $params->{'nivel'} eq '3'){
-# 		$nivel1_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-# 																							query => [ 
-# 																										id3 => { eq => $params->{'id3'} },
-# 																								], 
-# 	
-# 												);
 		$nivel_array_ref= getNivel3FromId3($params->{'id3'});
 	}
 

@@ -120,7 +120,6 @@ sub traerKohaToMARC{
 }
 
 =item
-buscarCamposObligatorios
 Busca los campos MARC de la tabla marc_subfield_structure que son obligatorios para el standar de catalogacion MARC
 =cut
 sub buscarInfoCampo{
