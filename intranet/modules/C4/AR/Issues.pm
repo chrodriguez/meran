@@ -145,13 +145,13 @@ sub devolver {
 	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
 	actualizarPrestamo($id3,$borrowernumber);
 
-	my $notforloan=C4::AR::Reservas::getNotForLoan($id3);
+	my $notforloan=C4::AR::Reservas::getDisponibilidad($id3);
 	
 	my $reserva=C4::AR::Reservas::getReservaDeId3($id3);
-	if($reserva->{'id3'}){
+	if($reserva->getId3){
 	#Si la reserva que voy a borrar existia realmente sino hubo un error
-		if($notforloan eq 'DO'){#si no es para sala
-			my $reservaGrupo=C4::AR::Reservas::getDatosReservaEnEspera($reserva->{'id2'});
+		if($notforloan eq 'Domiciliario'){#si no es para sala
+			my $reservaGrupo=C4::AR::Reservas::getDatosReservaEnEspera($reserva->getId2);
 			if($reservaGrupo){
 				$reservaGrupo->{'id3'}=$id3;
 				$reservaGrupo->{'branchcode'}=$prestamo->{'branchcode'};
@@ -160,7 +160,7 @@ sub devolver {
 			}
 		}
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-		C4::AR::Reservas::borrarReserva($reserva->{'reservenumber'});
+		C4::AR::Reservas::borrarReserva($reserva->getId_reserva);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
 		my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
@@ -168,7 +168,7 @@ sub devolver {
 # 		my $end_date= "null";
 		my $end_date= undef;
 
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->{'id2'},$id3,$reserva->{'branchcode'},$prestamo->{'issuecode'},$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->getId2,$id3,$reserva->getId_ui,$prestamo->{'issuecode'},$end_date);
 
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 

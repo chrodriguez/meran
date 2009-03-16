@@ -32,6 +32,17 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub getId_reserva{
+    my ($self) = shift;
+    return ($self->id_reserva);
+}
+
+sub setId_reserva{
+    my ($self) = shift;
+    my ($id_reserva) = @_;
+    $self->id_reserva($id_reserva);
+}
+
 sub getId3{
     my ($self) = shift;
     return ($self->id3);

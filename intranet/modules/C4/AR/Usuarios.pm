@@ -1093,7 +1093,7 @@ sub getPersonaLike {
 
     #Obtengo la cant total de socios para el paginador
     my $personas_array_ref_count= C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros);
-
+# FIXME aca hay algo raro!!
     return (scalar(@$personas_array_ref_count), $personas_array_ref);
 }
 

@@ -187,7 +187,7 @@ $query .= " and (eio.itemtype = ?)";
 		$textSucc= $data1->{'textsucc'};
 
 		my $dbh = C4::Context->dbh;
-		my $query = "SELECT ec.*, idinforef, ir.referencia as tabla, campos, separador, orden";
+		my $query = "SELECT ec.*, ir.idinforef, ir.referencia as tabla, campos, separador, orden";
 		$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 		$query .= " ON (ec.id = ir.idestcat) ";
 		$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
@@ -422,31 +422,32 @@ sub buscarNivel3PorId2YDisponibilidad{
 
 	while(my $data=$sth->fetchrow_hashref){
 
-		my $holdbranch= getBranch($data->{'holdingbranch'});
+		my $holdbranch= getBranch($data->{'id_ui_poseedora'});
 		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
 		
-		my $homebranch= getBranch($data->{'homebranch'});
+		my $homebranch= getBranch($data->{'id_ui_origen'});
 		$data->{'homebranchNombre'}=$homebranch->{'branchname'};
 		
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
 		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
 		
-		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
+		my $issuetype=&C4::AR::Issues::IssueType($data->{'id_disponibilidad'});
 		$data->{'issuetype'}=$issuetype->{'description'};
 		
-		if($data->{'wthdrawn'}){
+		if($data->{'id_estado'}){
 		#wthdrawn = 0, Disponible
 			$data->{'disponibilidad'}=C4::AR::Utilidades::noaccents($wthdrawn->{'description'});
 			$data->{'clase'}="fechaVencida";
 			$disponibles++;
 		}
 		
-		if($data->{'notforloan'} eq 'DO' && !$data->{'wthdrawn'}){
+	#	if($data->{'notforloan'} eq 'DO' && !$data->{'wthdrawn'}){
+		if($data->{'id_disponibilidad'} == 0 && !$data->{'id_estado'}){
 			$data->{'forloan'}=1;
 			$data->{'disponibilidad'}="PRESTAMO";
 			$data->{'clase'}="prestamo";
 			$infoNivel3{'cantParaPrestamo'}++;
-		}elsif(!$data->{'wthdrawn'}){
+		}elsif(!$data->{'id_estado'}){
 			$infoNivel3{'cantParaSala'}++;
 			$data->{'disponibilidad'}="SALA DE LECTURA";
 			$data->{'clase'}="salaLectura";
@@ -513,8 +514,7 @@ sub obtenerGrupos {
 		my $query2="SELECT COUNT(*) AS cant FROM cat_nivel3 n3 WHERE n3.id2 = ?";
 #  		if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
 		if (($type ne 'intra')&&($opacUnavail eq 0)){
-#     			$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL  OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
-				$query2.=" AND (id_estado=0 OR id_estado IS NULL  OR id_estado=2)"; #wthdrawn=2 es COMPARTIDO
+    			$query2.=" AND (id_estado=0 OR id_estado IS NULL  OR id_estado=2)"; #wthdrawn=2 es COMPARTIDO
   		}
 		my $sth2=$dbh->prepare($query2);
   		$sth2->execute($data->{'id2'});
@@ -541,14 +541,12 @@ sub obtenerDisponibilidadTotal{
 	my $sth;
 
 	if($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL"){
-# 	  $query .=" GROUP BY notforloan";
-	$query .=" GROUP BY id_disponibilidad";
+	  $query .=" GROUP BY id_disponibilidad";
 	
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1);
 	}else{#Filtro tb por tipo de item
-# 	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY notforloan";
-		$query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
+	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
 
 	  $sth=$dbh->prepare($query);
 	  $sth->execute($id1, $itemtype);
@@ -556,7 +554,8 @@ sub obtenerDisponibilidadTotal{
 	
 	my $i=0;
 	while(my $data=$sth->fetchrow_hashref){
-		if($data->{'notforloan'} eq 'DO'){
+	#	if($data->{'notforloan'} eq 'DO'){
+		if($data->{'id_disponibilidad'} == 0){
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Domicilio:";
 			$disponibilidad[$i]->{'prestados'}="Prestados: ";
 			$disponibilidad[$i]->{'prestados'}.=0;#VER MAS ADELANTE!!!!!!!!!

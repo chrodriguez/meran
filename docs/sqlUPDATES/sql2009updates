@@ -461,30 +461,8 @@ CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
 --
 
 INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
-(3, 'Descarga'),
-(2, 'Domiciliario'),
-(1, 'Para Sala');
+(0, 'Domiciliario'),
+(1, 'Para Sala'),
+(2, 'Descarga');
 
 
---
--- Estructura de tabla para la tabla `ref_estado`
---
-
-CREATE TABLE IF NOT EXISTS `ref_estado` (
-  `codigo` tinyint(5) NOT NULL default '0',
-  `nombre` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`codigo`),
-  UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcar la base de datos para la tabla `ref_estado`
---
-
-INSERT INTO `ref_estado` (`codigo`, `nombre`) VALUES
-(4, 'Baja'),
-(2, 'Compartido'),
-(0, 'Disponible'),
-(5, 'Ejemplar deteriorado'),
-(6, 'En Encuadernación'),
-(1, 'Perdido');

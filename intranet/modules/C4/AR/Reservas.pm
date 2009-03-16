@@ -429,8 +429,6 @@ getReserva
 Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
 =cut
 sub getReserva{
-    use C4::Modelo::CircReserva;
-    use C4::Modelo::CircReserva::Manager;
     my ($id)=@_;
     my ($reserva) = C4::Modelo::CircReserva->new(id => $id);
     $reserva->load();
@@ -451,7 +449,7 @@ sub getReservaEnEspera{
     push(@filtros, ( id2 => { eq => $id2}));
     push(@filtros, ( id3 => undef ));
 
-    my $reservas_array_ref = C4::Modelo::UsrPersona::Manager->get_circ_reserva( query => \@filtros,
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros,
                                                                             sort_by => 'timestamp',
                                                                             limit   => 1,
 									); 
@@ -510,70 +508,79 @@ Busca todas las reservas que tiene el usuario que llega como parametro, trae tod
 =cut
 sub DatosReservas {
 	my ($bor)=@_;
-	my $dbh = C4::Context->dbh;
-# FALTAN!!!!!!!!!!!!!!!!!!!!!!
-# biblioitems.volume as volume, biblioitems.volumeddesc as volumeddesc
 
-	my $query= "	SELECT n1.titulo as rtitulo, n1.id1 as rid1, n1.autor as rautor, 
-			a.completo as nomCompleto, r.id2 as rid2, r.fecha_reserva as rreservedate, 
-			r.fecha_notificacion as rnotificationdate,r.fecha_recodatorio as rreminderdate, r.id_reserva,
-			r.estado, n2.anio_publicacion as rpublicationyear, r.id3 as rid3, r.id_ui as rbranch
-			FROM circ_reserva r
-			INNER JOIN cat_nivel2 n2 ON  n2.id2 = r.id2
-			INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1 
-			LEFT JOIN cat_autor a ON (a.id = n1.autor)
-			WHERE r.nro_socio = ?
-			AND r.estado <> 'P' ";
-	
-	my $sth=$dbh->prepare($query);
-	$sth->execute($bor);
+	my $reservas_array_ref =obtenerReservasDeSocio($bor);
 	my $dateformat = C4::Date::get_date_format();
 	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-		$data->{'rreminderdate'}=C4::Date::format_date($data->{'rreminderdate'},$dateformat);
-		$data->{'rreservedate'}=C4::Date::format_date($data->{'rreservedate'},$dateformat);
-		$data->{'rnotificationdate'}= C4::Date::format_date($data->{'rnotificationdate'},$dateformat);
-		$data->{'redicion'}=C4::AR::Nivel2::getEdicion($data->{'rid2'});
+
+	foreach my $reserva (@$reservas_array_ref){
+		my $data;
+
+		$data->{'rid3'}=$reserva->getId_ui;
+		$data->{'rbranch'}=$reserva->getId2;
+		$data->{'id_reserva'}=$reserva->getId_reserva;
+		$data->{'estado'}=$reserva->getEstado;
+
+		my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $reserva->getId2);
+                $catNivel2->load;
+		my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $catNivel2->getId1);
+                $catNivel1->load;
+		my  $catAutor= C4::Modelo::CatAutor->new(id => $catNivel1->getAutor);
+                $catAutor->load;
+
+		$data->{'rtitulo'}=$catNivel1->getTitulo;
+		$data->{'rid1'}=$catNivel1->getId1;
+		$data->{'rid2'}=$catNivel2->getId2;
+		$data->{'anio_publicacion'}=$catNivel2->getAnio_publicacion;
+		$data->{'rautor'}=$catAutor->getId;
+		$data->{'nomCompleto'}=$catAutor->getCompleto;
+
+		$data->{'rreminderdate'}=C4::Date::format_date($reserva->getFecha_recodatorio,$dateformat);
+		$data->{'rreservedate'}=C4::Date::format_date($reserva->getFecha_reserva,$dateformat);
+		$data->{'rnotificationdate'}= C4::Date::format_date($reserva->getFecha_notificacion,$dateformat);
+		$data->{'redicion'}=C4::AR::Nivel2::getEdicion($reserva->getId2);
+
 		push (@results,$data);
 	}
-	
-	$sth->finish;
+
+
 	return($#results+1,\@results);
 }
 
-=item
-datosReservaRealizada
-Trae los datos de todo el nivel2 (y nivel2_repetibles) con el nivel1 para la reserva que realizo el usuario.
-=cut
-sub datosReservaRealizada{
-	my ($id2)=@_;
-	my $dbh = C4::Context->dbh;
+# =item
+# datosReservaRealizada
+# Trae los datos de todo el nivel2 (y nivel2_repetibles) con el nivel1 para la reserva que realizo el usuario.
+# =cut
+# sub datosReservaRealizada{
+# 	my ($id2)=@_;
+# 	my $dbh = C4::Context->dbh;
+# 
+# 	my $query="SELECT * FROM cat_nivel2 n2 INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)
+# 		   LEFT JOIN cat_nivel2_repetible n2r ON (n2.id2=n2r.id2) 
+# 		   WHERE n2.id2=?";
+# 
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute($id2);
+# 	my @results;
+# 	while (my $data=$sth->fetchrow_hashref){
+# 
+# 		push (@results,$data);
+# 	}
+# 	
+# 	$sth->finish;
+# }
 
-	my $query="SELECT * FROM cat_nivel2 n2 INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)
-		   LEFT JOIN cat_nivel2_repetible n2r ON (n2.id2=n2r.id2) 
-		   WHERE n2.id2=?";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id2);
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-
-		push (@results,$data);
-	}
-	
-	$sth->finish;
-}
-
-sub getNotForLoan{
-#Devuelve la disponibilidad del item ('SA'= Sala, 'DO'= Domiciliaria)
+sub getDisponibilidad{
+#Devuelve la disponibilidad del item ('Para Sala', 'Domiciliario')
 	my ($id3)=@_;	
-	my $dbh = C4::Context->dbh;
-	my $query= "	SELECT notforloan
-			FROM cat_nivel3
-			WHERE (id3 = ?)";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id3);
-	return $sth->fetchrow();
+
+	my  $catNivel3= C4::Modelo::CatNivel3->new(id3 => $id3);
+        $catNivel3->load;
+
+	my  $refDisp= C4::Modelo::RefDisponibilidad->new(codigo => $catNivel3->getId_disponibilidad);
+        $refDisp->load;
+
+	return $refDisp->getNombre;
 }
 
 =item
@@ -583,68 +590,82 @@ Verifica que el usuario no reserve un item que ya tenga una reserva para el mism
 sub _verificarTipoReserva {
 	my ($borrowernumber, $id2, $id3, $tipo)=@_;
 	my $error= 0;
-	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);
+	my ($cant, $reservas)= getReservasDeSocio($borrowernumber, $id2);
 #Se intento reservar desde el OPAC sobre el mismo GRUPO
 	if ($cant == 1){$error= 1;}
 	return ($error);
 }
 
 
-=item
-Esta funcion devuelve la reserva (si existe) de grupo
-=cut
-sub getReservasDeBorrower {
+# =item
+# Esta funcion devuelve la reserva (si existe) de grupo
+# =cut
+# sub getReservasDeBorrower {
+# #devuelve las reservas de grupo del usuario
+# #DEPRECATED!!! se usa getReservasDeSocio
+# 	my ($borrowernumber, $id2)=@_;
+# 	my $dbh = C4::Context->dbh;
+# 	my $query= "SELECT *
+# 			FROM circ_reserva
+# 			WHERE (nro_socio = ?) AND (id2 = ?)
+# 			AND (estado <> 'P')";
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute($borrowernumber, $id2);
+# 
+# 	my @results;
+# 	my $cant= 0;
+# 	while (my $data=$sth->fetchrow_hashref){
+# 		push (@results,$data);
+# 		$cant++;
+# 	}
+# 	$sth->finish;
+# 	return($cant,\@results);
+# }
+	
+sub getReservasDeSocio {
 #devuelve las reservas de grupo del usuario
-	my ($borrowernumber, $id2)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query= "	SELECT *
-			FROM circ_reserva
-			WHERE (nro_socio = ?) AND (id2 = ?)
-			AND (estado <> 'P')";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber, $id2);
+    my ($nro_socio,$id2)=@_;
 
-	my @results;
-	my $cant= 0;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results,$data);
-		$cant++;
-	}
-	$sth->finish;
-	return($cant,\@results);
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2 	=> { eq => $id2}));
+    push(@filtros, ( nro_socio 	=> { eq => $nro_socio} ));
+    push(@filtros, ( estado 	=> { ne => 'P'} ));
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+    return ($reservas_array_ref,scalar(@$reservas_array_ref));
+
 }
 
 sub getReservasDeId2 {
 #devuelve las reservas de grupo
 	my ($id2)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query= "	SELECT *
-			FROM circ_reserva
-			WHERE (id2 = ?) AND (estado <> 'P')";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id2);
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+    	my @filtros;
+    	push(@filtros, ( id2 	=> { eq => $id2}));
+    	push(@filtros, ( estado 	=> { ne => 'P'} ));
 
-	my @results;
-	my $cant= 0;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results,$data);
-		$cant++;
-	}
-	$sth->finish;
-	return($cant,\@results);
+    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+    	return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
 sub getReservaDeId3{
-	#devuelve las reservas del item
+	#devuelve la reserva del item
 	my ($id3)=@_;
-	my $dbh = C4::Context->dbh;
-	
-	my $sth=$dbh->prepare("SELECT * FROM circ_reserva WHERE id3 = ? ");
-	$sth->execute($id3);
-	return ($sth->fetchrow_hashref);
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+    	my @filtros;
+    	push(@filtros, ( id3 	=> { eq => $id3}));
+    	push(@filtros, ( estado 	=> { ne => 'P'} ));
+
+    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+    	return ($reservas_array_ref->[0]);
 }
 
 =item
+DEPRECATED!!!!
 Esta funcion devuelve la informacion de la reserva sobre un item
 =cut
 sub getDatosReservaDeId3{
@@ -668,44 +689,45 @@ sub getDatosReservaDeId3{
 
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
-        my ($bor)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="	SELECT count(*) as cant FROM circ_reserva"; 
-        $query .= " 	WHERE  nro_socio = ? 
-                        AND estado <> 'P'";
+        my ($socio)=@_;
+	
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+    	my @filtros;
+    	push(@filtros, ( nro_socio 	=> { eq => $socio}));
+    	push(@filtros, ( estado 	=> { ne => 'P'} ));
 
-        my $sth=$dbh->prepare($query);
-        $sth->execute($bor);
-        my $result=$sth->fetchrow();
-        $sth->finish;
-
-        return($result);
+    	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+    	return ($reservas_count);
 }
 
 sub cantReservasPorGrupo{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
 	my ($id2)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT  count(*) as reservas
-				FROM circ_reserva
-				WHERE id2 =? AND estado <> 'P' ");
-	$sth->execute($id2);
 
-	return $sth->fetchrow;
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+    	my @filtros;
+    	push(@filtros, ( id2 	=> { eq => $id2}));
+    	push(@filtros, ( estado => { ne => 'P'} ));
+
+    	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+    	return ($reservas_count);
 }
 
 #cuenta las reservas pendientes del grupo
 sub cantReservasPorGrupoEnEspera{
 	my ($id2)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT count(*) as reservas 
-				FROM circ_reserva 
-				WHERE  id2 = ? AND estado <> 'P' AND id3 is Null ");
-	
-	$sth->execute($id2);
 
-	return $sth->fetchrow;
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+    	my @filtros;
+    	push(@filtros, ( id2 	=> { eq => $id2}));
+	push(@filtros, ( id3 	=> { eq => undef}));
+    	push(@filtros, ( estado => { ne => 'P'} ));
+
+    	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+    	return ($reservas_count);
 }
 
 ## FIXME reservas por Nivel 1 ?????????????
@@ -997,25 +1019,25 @@ open(A,">>/tmp/debugChequeo.txt");
 print A "id2: $id2\n";
 print A "id3: $id3\n";
 #Se verifica si ya se tiene la reserva sobre el grupo
-	my ($cant, $reservas)= getReservasDeBorrower($borrowernumber, $id2);# ver lo que sigue.
-	$params->{'reservenumber'}= $reservas->[0]->{'reservenumber'};
-print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
+	my ($reservas, $cant)= getReservasDeSocio($borrowernumber, $id2);# ver lo que sigue.
+	$params->{'reservenumber'}= $reservas->[0]->getId_reserva;
+print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
 # Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
 # Si esta prestado la clase de prestamo que se quiere hacer en este momento. 
 # Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
 # Tener en cuenta los prestamos especiales, $issueType ==> ES ---> SA. **** VER!!!!!!
-	my $disponibilidad=getNotForLoan($id3);
-	if($cant == 1 && $disponibilidad eq "DO"){
+	my $disponibilidad=getDisponibilidad($id3);
+	if($cant == 1 && $disponibilidad eq "Domiciliario"){
 	#El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
 	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
-		if($id3 != $reservas->[0]->{'id3'}){
+		if($id3 != $reservas->[0]->getId3){
 		#Los ids son distintos, se intercambian.
-			&intercambiarId3($borrowernumber,$id2,$id3,$reservas->{'id3'},$msg_object);
+			&intercambiarId3($borrowernumber,$id2,$id3,$reservas->[0]->getId3,$msg_object);
 		}
 	}
-	elsif($cant==1 && $disponibilidad eq "SA"){
+	elsif($cant==1 && $disponibilidad eq "Para Sala"){
 		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
 		#llamar a la funcion verificaciones!!
 		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
@@ -1029,7 +1051,7 @@ print A "reservenumber de reserva: $reservas->[0]->{'reservenumber'}\n";
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
 			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
 			if($datosNivel3){
-				&cambiarId3($datosNivel3->{'id3'},$data->{'reservenumber'});
+				&cambiarId3($datosNivel3->{'id3'},$data->getId_reserva);
 				# el id3 de params quedo libre para ser reservado
 			}
 			else{
