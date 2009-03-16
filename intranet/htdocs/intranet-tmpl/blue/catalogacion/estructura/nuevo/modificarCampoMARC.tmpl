@@ -25,7 +25,8 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
     </p>
 </div>
 <!--<div id="id2">-->
-<div id="content">
+<!--<div id="content">-->
+<div>
     <p>
     <label for="tagField" style="float:left; width:13%">Campo: </label>
         <select name="campo" id="campo" onChange="eleccionCampo()">
@@ -51,9 +52,10 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
             <select name="tipoInput" id="tipoInput">
                 <option value="-1">Seleccione tipo</option>
                 <option value="text" [% IF catalogacion.getTipo == 'text' %] selected [% END %]>Texto</option>
-                <option value="texta" [% IF catalogacion.getTipo == 'texta' %] selected [% END %]>Texto area</option>
+                <option value="texta" [% IF catalogacion.getTipo == 'texta' %] selected [% END %]>Texto Area</option>
                 <option value="texa2" [% IF catalogacion.getTipo == 'texta2' %] selected [% END %]>Texto 1 por linea</option>
-                <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo box</option>
+                <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo Box</option>
+				<option value="auto" [% IF catalogacion.getTipo == 'auto' %] selected [% END %]>Autocompletable</option>
             </select>
         </p>
 
