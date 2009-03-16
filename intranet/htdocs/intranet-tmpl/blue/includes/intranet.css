@@ -5,7 +5,7 @@ body {
 	font-size: 10px;
 	font-style: normal;
 	color: #000000;
-				 
+	behavior: url("http://www.xs4all.nl/~peterned/htc/csshover3.htc");
 }
 
 .header{
@@ -14,15 +14,23 @@ body {
    width: 70%;
 }
 
-.login
+#login
 {	
    display:inline;
+      
+}
+
+#login a{
+
+   width: 30px;
 }
 
 .tdRight{
-width: 23%;
-float: right;
+   width: 35%;
+   float: right;
+   margin-bottom:12px;
 }
+
 .Estilo_Cool {
 	font-family: "Trebuchet MS", "Verdana", "Arial";
 	font-size: 10px;
@@ -934,167 +942,185 @@ label.error {
 
 /* MENUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU */
 
-.header-bottom {
-   background:#FFFFFF url(../img/bg_head_breadcrumbs.jpg) repeat-y scroll 0 0;
-   height:40px;
-   width:100%;
-}
-.nav2 {
+/* CSS Menus - Horizontal CSS Menu with Dropdown and Popout Menus - 20050131 */
 
-   float:left; 
-   width:900px;
-   border:none; 
-   background:rgb(220,220,220) url(http://www.openwebdesign.org/design/3499/multiflex32/css/../img/bg_head_bottom_nav.jpg) repeat-x; color:rgb(75,75,75); 
-   font-size:1.0em; 
-   font-size:130%;
-   width: 100%;
 
-} /*Color navigation bar normal mode*/
 
-.nav2 ul {
-
-   list-style-type:none;
-   width: 67%;
+/* Begin CSS Popout Menu */
+.menu-alone-link{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   border-width:1px;
+   border-style:solid;
+   border-color:#ccc #888 #555 #bbb;
+   white-space:nowrap;
+   margin:0;color:#fff;
+   background:black;
+   text-transform:uppercase;
+   padding:0 5px; 
 }
 
-.nav2 ul li {
-
-   float:left; 
-   position:relative; 
-   border-right:solid 1px rgb(175,175,175);
+#menu{
+width:1024px;
+float:left;
 }
 
-.nav2 ul li ul {
 
-   display:none; 
-   border:none;
+
+#menu a{
+   font:normal 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   border-width:1px;
+   border-style:solid;
+   border-color:#ccc #888 #555 #bbb;
+   white-space:nowrap;
+   margin:0;
+   padding:0 1px;
+/*    width:112px; */
 }
 
-.nav2 ul li ul {
-
-   margin-left:-30px; 
-   padding:0 30px 30px 30px; 
-   background:url(http://www.openwebdesign.org/design/3499/multiflex32/css/../img/bg_head_bottom_nav_hover.gif) top center;
-
-} /*Sticky hover zones*/
-.nav2 ul li a {
-
-   float:left; 
-   display:block; 
-   height:3.1em; 
-   line-height:3.1em; 
-   padding:0 16px 0 16px; 
-   text-decoration:none; 
-   font-weight:bold; 
-   color: rgb(100,100,100);
+#menu h3{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+display:block;
+border-width:1px;
+border-style:solid;
+border-color:#ccc #888 #555 #bbb;
+white-space:nowrap;
+margin:0;
+padding:0 5px;
+/* width: 104px; */
 }
 
-.nav2 ul li:hover {
-
-   width:auto;
+#menu h3{
+color:#fff;
+background:#000 url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat 100% 100%;
+text-transform:uppercase
 }
 
-.nav2 table {
-
-   position:absolute; 
-   z-index:999;
-   top:0; 
-   left:0; 
-   border-collapse:collapse;
+#menu a{
+background:#eee;
+text-decoration:none;
 }
 
-/*Non-IE6*/
-.nav2 ul li:hover a {
-
-   background-color:rgb(210,210,210); 
-   text-decoration:none;
-
-} /*Color main cells hovering mode*/
-
-.nav2 ul li:hover ul {
-
-   display:block; 
-   position:absolute; 
-   z-index:998; 
-   top:3.0em; 
-   margin-top:0.1em; 
-   left:0;
+#menu a, #menu a:visited{
+color:#000;
 }
 
-.nav2 ul li:hover ul li ul {
-
-   display: none;
+#menu a:hover{
+color:#a00;
+background:#ddd;
 }
 
-.nav2 ul li:hover ul li a {
-
-   display:block; 
-   width:10em; 
-   height:auto; 
-   line-height:1.3em; 
-   margin-left:-1px; 
-   padding:4px 16px 4px 16px; 
-   border-left:solid 1px rgb(175,175,175); 
-   border-bottom: solid 1px rgb(175,175,175); 
-   background-color:rgb(237,237,237); 
-   font-weight:normal; 
-   color:rgb(50,50,50);
-} /*Color subcells normal mode*/
-
-.nav2 ul li:hover ul li a:hover {
-
-   background-color:rgb(210,210,210); 
-   text-decoration:none;
-
-} /*Color subcells hovering mode*/
-
-/*IE6*/
-.nav2 ul li a:hover {
-
-   background-color:rgb(210,210,210);
-   text-decoration:none;
-} /*Color main cells hovering mode*/
-
-.nav2 ul li a:hover ul {
-   display:block; 
-   position:absolute;
-   z-index:997; 
-   top:3.1em; 
-   top:3.0em; 
-   left:0; 
-   margin-top:0.1em;
+#menu a:active{
+color:#060;
+background:#ccc;
 }
 
-.nav2 ul li a:hover ul li a {
-
-   display:block; 
-   width:10em; 
-   height:1px; 
-   line-height:1.3em; 
-   padding:4px 16px 4px 16px; 
-   border-left:solid 1px rgb(175,175,175); 
-   border-bottom: solid 1px rgb(175,175,175); 
-   background-color:rgb(237,237,237); 
-   font-weight:normal; 
-   color:rgb(50,50,50);
-} /*Color subcells normal mode*/
-
-.nav2 ul li a:hover ul li a ul {
-
-   visibility:hidden; 
-   height:0px; 
-   width:0px; 
-   position:absolute; 
-   z-index: 997;
+#menu ul{
+list-style:none;
+margin:0;
+padding:0;
+float:left;
+width:11.5em;
 }
 
-.nav2 ul li a:hover ul li a:hover {
+#menu li{
+position:relative;
+}
 
-   background-color:rgb(210,210,210); 
-   text-decoration:none;
-} /*Color subcells hovering mode*/
+#menu ul ul{
+position:absolute;
+z-index:500;
+top:auto;
+display:none;
+}
 
+#menu ul ul ul{
+top:0;
+left:100%;
+}
 
+/* Begin non-anchor hover selectors */
+
+/* Enter the more specific element (div) selector
+on non-anchor hovers for IE5.x to comply with the
+older version of csshover.htc - V1.21.041022. It
+improves IE's performance speed to use the older
+file and this method */
+
+div#menu h3:hover{
+background:#000 url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat -999px -9999px;
+}
+
+div#menu li:hover{
+cursor:pointer;
+z-index:100;
+}
+
+div#menu li:hover ul ul,
+div#menu li li:hover ul ul,
+div#menu li li li:hover ul ul,
+div#menu li li li li:hover ul ul
+{display:none;}
+
+div#menu li:hover ul,
+div#menu li li:hover ul,
+div#menu li li li:hover ul,
+div#menu li li li li:hover ul
+{display:block;}
+
+/* End of non-anchor hover selectors */
+
+/* Styling for Expand */
+
+#menu a.x, #menu a.x:visited{
+font-weight:normal;
+color:#000;
+background:#eee url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat 100% 100%;
+}
+
+#menu a.x:hover{
+color:#fff;
+background:#000;
+}
+
+#menu a.x:active{
+color:#060;
+background:#ccc;
+}
+
+.main-header{
+
+   width:1024px;
+   float:left;
+}
+
+/* End CSS Popout Menu */
+
+/* Begin Content Area - Not Part of CSS Popout Menu */
+
+#content{position:absolute;top:3.0em;left:0;margin:0 .5em .5em .5em;padding:0.5em;border:1px solid #000;clear:both;}
+#content a:link{color:#a00;}
+#content a:visited{color:#a00;}
+#content a:hover{color:#a00;background:#eee;}
+#content a:active{color:#060;background:#ddd;}
+#content h1, #content h2, #content h3{font:bold 1.0em arial,sans-serif;margin:0.5em 0.25em;padding:0;}
+#content img{border:none;}
+#content p{font:normal 0.9em/1.5em verdana,sans-serif;margin:1.0em;}
+#content ul, #content ul ul{font:normal 0.95em/1.45em verdana,tahoma,arial,sans-serif;margin:1.0em 4.0em 1.5em 4.0em;}
+#content ul li{font:normal 0.9em/1.4em verdana,tahoma,arial,sans-serif;margin:1.0em 0;}
+#content ul ul li{font:normal 1.1em/1.6em verdana,tahoma,arial,sans-serif;margin:0;}
+#content .fr{float:right;margin:0 0 1.0em 1.0em;}
+#content .mod{font:normal .7em arial,sans-serif;margin:.25em;}
+div.vv{position:relative;top:0;float:right;margin:0 0 15px 15px;}
+span.as300250{float:right;margin:0 1.0em .2em 1.0em;}
+span.as300250l{float:left;margin:0 1.0em .2em 1.0em;}
+span.as120240{float:right;margin:0 1.0em .2em 1.0em;}
+span.as120240l{float:left;margin:0 1.0em .2em 1.0em;}
 .selectLang{
+
+   width: 55px;
+   display:inline;
 }
 /* FIN MENU */
+

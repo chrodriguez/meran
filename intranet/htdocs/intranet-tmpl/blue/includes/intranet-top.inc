@@ -46,16 +46,11 @@ function mainmenu(){
 // Oculto los submenus
 // $(" #nav2 ul ").css({display: "none"});
 // Defino que submenus deben estar visibles cuando se pasa el mouse por encima
-$(" #nav2 li").hover(function(){
+$(" #menu li").hover(function(){
     $(this).find('li:first').slideDown(400);
     },function(){
         $(this).find('li:first').slideUp(400);
     });
-}
-
-function toggleMenu(){
-
-    $('#nav2').toggle(400); 
 }
 
 $(document).ready(function(){
@@ -67,8 +62,8 @@ $(document).ready(function(){
 
 <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 
-<tr id="menu" valign="top" align="left" height="16" >
-<td width="100%">
+<tr id="menu-container" class="main-header">
+<td class="main-header">
     [% INCLUDE   'menu.inc'  %]
 </td>
 </tr>

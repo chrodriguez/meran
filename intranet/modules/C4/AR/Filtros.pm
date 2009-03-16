@@ -63,9 +63,9 @@ sub setComboLang {
     my $i;
 
     if($type eq 'OPAC'){
-        $html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST'>";
+        $html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST' class='selectLang'>";
     }else{
-        $html="<form id='formLang' action='/cgi-bin/koha/intra-language.pl' method='POST'>";
+        $html="<form id='formLang' action='/cgi-bin/koha/intra-language.pl' method='POST' class='selectLang'>";
     }
 
     $html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";   
