@@ -178,7 +178,7 @@ $(document).ready(function() {
 	usuario= new objeto_usuario();
 	usuario.text= "[% socio.persona.getApellido %], [% socio.persona.getNombre %]";
 	usuario.ID= [% id_socio %];
-   usuario.nro_socio= [% socio.getNro_socio %];
+    usuario.nro_socio= '[% socio.getNro_socio %]';
 
 	detalleUsuario(usuario.ID);
 	detallePrestamos(usuario.ID);
