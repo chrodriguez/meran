@@ -427,3 +427,64 @@ CHANGE `anio_publicacion` `anio_publicacion` VARCHAR( 15 ) CHARACTER SET latin1 
 -- se modifico el campo para_sala a id_estado en cat_nivel3, ahora id_estado es una referencia a ref_estado
  ALTER TABLE `cat_nivel3` CHANGE `para_sala` `id_estado` TINYINT( 5 ) NOT NULL DEFAULT '0' 
 
+-- se creo la siguiente tabla para manejar los estados del ejemplar
+CREATE TABLE IF NOT EXISTS `ref_estado` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcar la base de datos para la tabla `ref_estado`
+--
+
+INSERT INTO `ref_estado` (`codigo`, `nombre`) VALUES
+(4, 'Baja'),
+(2, 'Compartido'),
+(0, 'Disponible'),
+(5, 'Ejemplar deteriorado'),
+(6, 'En Encuadernación'),
+(1, 'Perdido');
+
+
+
+CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcar la base de datos para la tabla `ref_disponibilidad`
+--
+
+INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
+(3, 'Descarga'),
+(2, 'Domiciliario'),
+(1, 'Para Sala');
+
+
+--
+-- Estructura de tabla para la tabla `ref_estado`
+--
+
+CREATE TABLE IF NOT EXISTS `ref_estado` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcar la base de datos para la tabla `ref_estado`
+--
+
+INSERT INTO `ref_estado` (`codigo`, `nombre`) VALUES
+(4, 'Baja'),
+(2, 'Compartido'),
+(0, 'Disponible'),
+(5, 'Ejemplar deteriorado'),
+(6, 'En Encuadernación'),
+(1, 'Perdido');

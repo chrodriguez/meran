@@ -15,6 +15,7 @@
 ID_N1=0; //para saber el id del nivel 1
 ID_N2=0; //para saber el id del nivel 2
 ID_N3=0; //para saber el id del nivel 3
+TAB_INDEX= 0//tabindex para las componentes
 dataModif = new Array();
 MODIFICAR = 0;
 
@@ -34,6 +35,11 @@ function inicializar(){
     //arreglo de objetos campo
     COMPONENTES_ARRAY= new Array();
     dataModif = new Array();
+	TAB_INDEX= 0;
+}
+
+function _setFoco(){
+	$("input[tabindex='1']")[0].focus();
 }
 
 function _clearDataFromComponentesArray(){
@@ -120,7 +126,6 @@ function mostrarDataNivel2(){
 
     if (MODIFICAR){
         for (x=0; x<dataModif.length; x++){
-//             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
 			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
             COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
         }
@@ -131,7 +136,6 @@ function mostrarDataNivel3(){
 
     if (MODIFICAR){
         for (x=0; x<dataModif.length; x++){
-//             $('#'+dataModif[x].CEC.idCompCliente).val(dataModif[x].dato);
 			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
             COMPONENTES_ARRAY[x].rep_n3_id = dataModif[x].rep_n3_id;
         }
@@ -147,6 +151,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
     scrollTo('nivel1Tabla');
+	_setFoco();
     validateForm('formNivel1',guardarDocumentoN1);
 }
 
@@ -168,6 +173,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     procesarInfoJson(responseText);
 	mostrarDataNivel2();
     scrollTo('nivel2Tabla');
+	_setFoco();
     validateForm('formNivel2',guardarDocumentoN2);
 }
 
@@ -190,6 +196,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(responseText);
 	mostrarDataNivel3();
     scrollTo('nivel3Tabla');
+	_setFoco();
     validateForm('formNivel3',guardarDocumentoN3);
 }
 
@@ -456,11 +463,12 @@ function procesarObjeto(objeto){
  */
 function crearComponente(tipo,id,objeto,valor){
     var comp;
+	TAB_INDEX++;
 
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80'>";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+">";
         break;
-        case "combo": comp="<select id='"+id+"'>\n<option value=''>Elegir opci&oacute;n</option>\n";
+        case "combo": comp="<select id='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
             var opciones= objeto.opciones;
@@ -475,7 +483,7 @@ function crearComponente(tipo,id,objeto,valor){
 
             comp=comp+op+"</select>";
         break;
-        case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4'>"+valor+"</textarea>";
+        case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
         break;
     }
 
@@ -492,7 +500,9 @@ function hacerComponenteObbligatoria(idObj){
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
 function crearDivComponente(idObj){
-    return "<div id='"+idObj+"' class='divComponente'></div>";
+//     return "<div id='"+idObj+"' class='divComponente'></div>";
+	return "<div class='divComponente'></div>";
+// FIXME creo q no es necesario el id para este div
 }
 
 // Esta funcion crea un divLabel con un Label segun parametro
