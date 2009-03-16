@@ -21,7 +21,7 @@ function modificarDatosDeUsuario(){
 
 function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
-	vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
+	vDatosUsuario=new WindowHelper({draggable: true, opacity: true});
 	vDatosUsuario.debug= true;
 	vDatosUsuario.html=responseText;
 	vDatosUsuario.create();	
@@ -179,9 +179,6 @@ function validateForm(func){
    
                   nro_documento: {
                      required: true,
-                     number: true,
-                     minlength: 8,
-                     maxlength: 8
                   },
                   email: {
                      email: true
