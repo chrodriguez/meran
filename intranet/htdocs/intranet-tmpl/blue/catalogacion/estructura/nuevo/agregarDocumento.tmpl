@@ -18,7 +18,7 @@ ID_N3=0; //para saber el id del nivel 3
 TAB_INDEX= 0//tabindex para las componentes
 dataModif = new Array();
 MODIFICAR = 0;
-
+ID3_ARRAY = new Array();
 //Hashes para el formValidator
 // hashOfRules=new HashMap();
 // 
@@ -43,6 +43,23 @@ function _setFoco(){
 	if($("[tabindex='1']")[0]){
 		$("[tabindex='1']")[0].focus();
 	}
+}
+
+function _recuperarSeleccionados(chckbox){
+	var chck=$("input[name="+chckbox+"]:checked");
+	var array= new Array;
+	var long=chck.length;
+	if ( long == 0){
+		alert("Elija al menos un ejemplar para realizar la acci&oacute;n");
+	}
+	else{
+
+		for(var i=0; i< long; i++){
+			array[i]=chck[i].value;
+		}
+	}
+	
+	return array;
 }
 
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
@@ -328,15 +345,16 @@ function guardarDocumentoN3(){
 	objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
-	objAH.id3 = ID_N3; //por si se modificó
+// 	objAH.id3 = ID_N3; //por si se modificó
+	objAH.ID3_ARRAY= ID3_ARRAY;
     objAH.sendToServer();
 }
 
 function updateGuardarDocumentoN3(responseText){
 
+	ID3_ARRAY= [];
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
-//     ID_N3= info.id3;
     setMessages(Messages);
 
    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
@@ -378,6 +396,7 @@ function mostrarInfoAltaNivel3(id1, idNivel2){
 function updateMostrarInfoAltaNivel3(responseText){
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
+	checkedAll('checkAllEjemplares','checkEjemplares');
 }
 
 /*
@@ -586,7 +605,7 @@ function borrarN3(id3){
 		objAH=new AjaxHelper(updateBorrarN3);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-		objAH.id3=id3;
+ 		objAH.id3_array= [id3];
 		objAH.nivel=3;
 		objAH.itemtype=$("#id_tipo_doc").val();
 		objAH.tipoAccion="ELIMINAR_NIVEL";
@@ -595,6 +614,29 @@ function borrarN3(id3){
 }
 
 function updateBorrarN3(responseText){
+    var info=JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
+	inicializar();
+	mostrarEstructuraDelNivel3();
+	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+}
+
+function borrarEjemplaresN3(id3){
+	if( window.confirm("[% 'Est&aacute; seguro que desea borrarlo?' | i18n %]") ){
+		objAH=new AjaxHelper(updateBorrarEjemplaresN3);
+		objAH.debug= true;
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+		var id3_array= _recuperarSeleccionados("checkEjemplares");
+		objAH.id3_array= id3_array;
+		objAH.nivel=3;
+		objAH.itemtype=$("#id_tipo_doc").val();
+		objAH.tipoAccion="ELIMINAR_NIVEL";
+		objAH.sendToServer();
+	}
+}
+
+function updateBorrarEjemplaresN3(responseText){
     var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
@@ -652,15 +694,42 @@ function modificarN3(id3){
 	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
-	objAH.id3 = ID_N3;
+// 	objAH.id3 = [id3];
+// 	objAH.id3 = id3;
+	ID3_ARRAY[0]= id3;
+	objAH.ID3_ARRAY= ID3_ARRAY;
 	objAH.nivel = 3;
 	objAH.sendToServer();
 }
 
 function updateModificarN3(responseText){
-   MODIFICAR = 1;
-   dataModif = JSONstring.toObject(responseText);
-   mostrarEstructuraDelNivel3();
+	MODIFICAR = 1;
+	dataModif = JSONstring.toObject(responseText);
+	$('#cantEjemplares').hide();	
+	mostrarEstructuraDelNivel3();
+}
+
+function modificarEjemplaresN3(id3){
+	inicializar();
+	ID_N3= id3;	
+	objAH=new AjaxHelper(updateModificarEjemplaresN3);
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+	objAH.debug= true;
+	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	objAH.itemtype=$("#id_tipo_doc").val();
+// 	var id3_array= _recuperarSeleccionados("checkEjemplares");
+	ID3_ARRAY= _recuperarSeleccionados("checkEjemplares");
+	objAH.id3= ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
+// 	objAH.id3 = ID_N3;
+	objAH.nivel = 3;
+	objAH.sendToServer();
+}
+
+function updateModificarEjemplaresN3(responseText){
+	MODIFICAR = 1;
+	$('#cantEjemplares').hide();	
+	dataModif = JSONstring.toObject(responseText);
+	mostrarEstructuraDelNivel3();
 }
 /*
  * borrarGrupo
@@ -829,7 +898,7 @@ $(document).ready( function() {
 	<div class="divContentComponente">
 		<div class="divLabelComponente"> Cant. Ejemplares: </div>
 		<div id="divCantEjemplares" class="divComponente">
-			<input id="cantEjemplares" type="text" tabindex="5" size="10" value="1" class="required"/>
+			<input id="cantEjemplares" type="text" tabindex="1" size="10" value="1" class="required"/>
 		</div>
 	</div>
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->

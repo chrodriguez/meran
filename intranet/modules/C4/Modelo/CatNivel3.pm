@@ -157,9 +157,13 @@ sub eliminar{
     use C4::Modelo::CatNivel3Repetible;
     use C4::Modelo::CatNivel3Repetible::Manager;
 
-    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => [ id3 => { eq => $self->getId3 } ] );
+    my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( 
+																
+																					query => [ id3 => { eq => $self->getId3 } ] 
+																				);
     foreach my $n3Rep (@$repetiblesNivel3){
-      $n3Rep->eliminar();
+	  	$n3Rep->load( db => $self->db );
+		$n3Rep->eliminar();
     }
 
     $self->delete();

@@ -103,11 +103,13 @@ function tomarTiempo(){
  */
 function checkedAll(id,nombreCheckbox){
 	$("#"+id).toggle(function(){
-			$("input[@name="+nombreCheckbox+"]").each(function(){
+// 			$("input[@name="+nombreCheckbox+"]").each(function(){
+			$("input[name="+nombreCheckbox+"]").each(function(){
 			this.checked=true;})
 			},
 			function(){
-  			$("input[@name="+nombreCheckbox+"]").each(function(){
+//   			$("input[@name="+nombreCheckbox+"]").each(function(){
+			$("input[name="+nombreCheckbox+"]").each(function(){
 			this.checked=false;})
 			}
 		);

@@ -214,7 +214,7 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 
     my $nivel= $obj->{'nivel'};
-    my $id= $obj->{'id1'} || $obj->{'id2'} || $obj->{'id3'};
+	my $id= $obj->{'id1'} || $obj->{'id2'};
     my ($Message_arrayref);
    
     if ($nivel == 1){
@@ -224,7 +224,7 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
       ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel2($id);
     }
     elsif($nivel == 3){
-      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel3($id);
+		($Message_arrayref)= &C4::AR::Nivel3::t_eliminarNivel3($obj);
     }
 
 	my %info;
@@ -283,13 +283,10 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 #Se muestran la estructura de catalogacion para que el usuario agregue un documento
-    my ($Message_arrayref, $nivel3) = &C4::AR::Catalogacion::t_guardarNivel3($obj);
+    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
-#     $info{'id1'}= $nivel3->getId1;
-#     $info{'id2'}= $nivel3->getId2;
-#     $info{'id3'}= $nivel3->getId3;
 
     print $input->header;
     print to_json \%info;
