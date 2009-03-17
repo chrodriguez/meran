@@ -27,7 +27,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $dateformat = C4::Date::get_date_format();
 my $branches = C4::AR::Busquedas::getBranches();
 
-my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($session->param('borrowernumber')); 
+my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($session->param('nro_socio')); 
 
 my @realreserves;
 $rcount = 0;

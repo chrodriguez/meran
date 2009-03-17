@@ -520,20 +520,12 @@ sub DatosReservas {
 		$data->{'rbranch'}=$reserva->getId2;
 		$data->{'id_reserva'}=$reserva->getId_reserva;
 		$data->{'estado'}=$reserva->getEstado;
-
-		my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $reserva->getId2);
-                $catNivel2->load;
-		my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $catNivel2->getId1);
-                $catNivel1->load;
-		my  $catAutor= C4::Modelo::CatAutor->new(id => $catNivel1->getAutor);
-                $catAutor->load;
-
-		$data->{'rtitulo'}=$catNivel1->getTitulo;
-		$data->{'rid1'}=$catNivel1->getId1;
-		$data->{'rid2'}=$catNivel2->getId2;
-		$data->{'anio_publicacion'}=$catNivel2->getAnio_publicacion;
-		$data->{'rautor'}=$catAutor->getId;
-		$data->{'nomCompleto'}=$catAutor->getCompleto;
+		$data->{'rtitulo'}=$reserva->nivel2->nivel1->getTitulo;
+		$data->{'rid1'}=$reserva->nivel2->nivel1->getId1;
+		$data->{'rid2'}=$reserva->nivel2->getId2;
+		$data->{'anio_publicacion'}=$reserva->nivel2->getAnio_publicacion;
+		$data->{'rautor'}=$reserva->nivel2->nivel1->cat_autor->getId;
+		$data->{'nomCompleto'}=$reserva->nivel2->nivel1->cat_autor->getCompleto;
 
 		$data->{'rreminderdate'}=C4::Date::format_date($reserva->getFecha_recodatorio,$dateformat);
 		$data->{'rreservedate'}=C4::Date::format_date($reserva->getFecha_reserva,$dateformat);
@@ -577,10 +569,7 @@ sub getDisponibilidad{
 	my  $catNivel3= C4::Modelo::CatNivel3->new(id3 => $id3);
         $catNivel3->load;
 
-	my  $refDisp= C4::Modelo::RefDisponibilidad->new(codigo => $catNivel3->getId_disponibilidad);
-        $refDisp->load;
-
-	return $refDisp->getNombre;
+	return $catNivel3->ref_disponibilidad->getNombre;
 }
 
 =item

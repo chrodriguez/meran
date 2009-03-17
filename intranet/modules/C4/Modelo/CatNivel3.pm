@@ -23,6 +23,12 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id3' ],
 
     relationships => [
+	    nivel2 => {
+            class      => 'C4::Modelo::CatNivel2',
+            column_map => { id2 => 'id2' },
+            type       => 'one to one',
+        },
+	
         cat_nivel3_repetible => {
             class      => 'C4::Modelo::CatNivel3Repetible',
             column_map => { id3 => 'id3' },

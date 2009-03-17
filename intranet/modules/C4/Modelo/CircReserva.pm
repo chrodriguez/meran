@@ -24,11 +24,27 @@ __PACKAGE__->meta->setup(
 
     unique_key => [ 'nro_socio', 'id3' ],
 
-    foreign_keys => [
-        cat_nivel3 => {
+    relationships => [
+        nivel3 => {
             class       => 'C4::Modelo::CatNivel3',
             key_columns => { id3 => 'id3' },
+	    type        => 'one to one',
         },
+        nivel2 => {
+            class       => 'C4::Modelo::CatNivel2',
+            key_columns => { id2 => 'id2' },
+	    type        => 'one to one',
+        },
+	socio => {
+            class       => 'C4::Modelo::UsrSocio',
+            key_columns => { nro_socio => 'nro_socio' },
+	    type        => 'one to one',
+        },
+      ui =>  {
+        class       => 'C4::Modelo::PrefUnidadInformacion',
+        key_columns => { id_ui => 'id_ui' },
+        type        => 'one to one',
+      },
     ],
 );
 

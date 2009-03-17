@@ -60,10 +60,11 @@ my ($template, $session, $t_params) =
 	my $categoria="";
 
 	my $variable=$obj->{'variable'};
-	$infoVar=&C4::AR::Preferencias::getPreferencia($variable);
-	$valor=$infoVar->{'value'};
-	$op=$infoVar->{'options'};
-	my $tipo=$infoVar->{'type'};
+	$infoVar=C4::AR::Preferencias->getPreferencia(&C4::AR::Utilidades::trim($variable));
+	if($infoVar){
+	$valor=$infoVar->getValue;
+	$op=$infoVar->getOptions;
+	my $tipo=$infoVar->getType;
 	if($op ne ""){	
 		if($tipo eq "referencia"){my @array;
 								  @array=split(/\|/,$op);
@@ -75,7 +76,7 @@ my ($template, $session, $t_params) =
 	
 
 	$t_params->{'variable'}= &C4::AR::Utilidades::trim($variable);
-	$t_params->{'explicacion'}= &C4::AR::Utilidades::trim($infoVar->{'explanation'});
+	$t_params->{'explicacion'}= &C4::AR::Utilidades::trim($infoVar->getExplanation);
 	$t_params->{'tabla'}= $tabla;
 	$t_params->{'categoria'}= $categoria;
 	$t_params->{'campo'}= $campo;
@@ -122,7 +123,15 @@ my ($template, $session, $t_params) =
 
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
+	}#No existe la variable
+	else{
+	    my $msg_object = C4::AR::Mensajes::create();
+	    $msg_object->{'error'}= 1;
+	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
+	    my $infoOperacionJSON=to_json $msg_object;
+	    print $input->header;
+    	    print $infoOperacionJSON;
+	}
 } #end if($accion eq "MODIFICAR_VARIABLE")
 
 if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){

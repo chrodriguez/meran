@@ -263,6 +263,7 @@ my %mensajesINTRA = (
 	'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
 	'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.',
 	'SP005' => 'La preferencia ya existe, no puede ser agregada.',
+	'SP006' => 'La preferencia no existe.',
 	
 );
 

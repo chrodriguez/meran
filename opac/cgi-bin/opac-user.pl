@@ -3,10 +3,10 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use C4::Circulation::Circ2;
 use C4::Date;
 use C4::AR::Sanctions;
 use Date::Manip;
+use C4::AR::Usuarios;
 
 my $query = new CGI;
 
@@ -22,33 +22,18 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $dateformat = C4::Date::get_date_format();
 
-## FIXME esta info ahora esta en session
-# get borrower information ....
-my ($borr, $flags) = getpatroninformation($session->param('borrowernumber'),"");
+my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+my $persona=$socio->getPersona;
 
-$borr->{'city'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'city'});
-$borr->{'streetcity'}=C4::AR::Busquedas::getNombreLocalidad($borr->{'streetcity'});
-$borr->{'dateenrolled'} = C4::Date::format_date($borr->{'dateenrolled'},$dateformat);
-$borr->{'expiry'}       = C4::Date::format_date($borr->{'expiry'},$dateformat);
-$borr->{'dateofbirth'}  = C4::Date::format_date($borr->{'dateofbirth'},$dateformat);
-if ($borr->{'amountoutstanding'} > 5) {
-    $borr->{'amountoverfive'} = 1;
-}
-if (5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
-    $borr->{'amountoverzero'} = 1;
-}
-if ($borr->{'amountoutstanding'} < 0) {
-    $borr->{'amountlessthanzero'} = 1;
-    $borr->{'amountoutstanding'} = -1*($borr->{'amountoutstanding'});
-}
 
-$borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
+$t_params->{'socio'}=$socio;
+$t_params->{'persona'}=$persona;
 
 #### Verifica si la foto ya esta cargada
 my $picturesDir= C4::Context->config("picturesdir");
 my $foto;
 if (opendir(DIR, $picturesDir)) {
-        my $pattern= $session->param('borrowernumber')."[.].";
+        my $pattern= $session->param('userid')."[.].";
         my @file = grep { /$pattern/ } readdir(DIR);
         $foto= join("",@file);
         closedir DIR;
@@ -61,24 +46,16 @@ my $msgFoto=$query->param('msg');
 ($msgFoto) || ($msgFoto=0);
 ####
 
-$borr->{'foto_name'} = $foto;
-$borr->{'mensaje_error_foto'} = $msgFoto;
-$borr->{'bornum'} = $session->param('borrowernumber');
+$t_params->{'foto_name'} = $foto;
+$t_params->{'mensaje_error_foto'} = $msgFoto;
+
 if (C4::AR::Preferencias->getValorPreferencia("UploadPictureFromOPAC")) {
-	$borr->{'UploadPictureFromOPAC'}=1;
+	$t_params->{'UploadPictureFromOPAC'}=1;
 } else {
-	$borr->{'UploadPictureFromOPAC'}=0;
+	$t_params->{'UploadPictureFromOPAC'}=0;
 }
 
-my @bordat;
-$bordat[0] = $borr;
-foreach my $aux (keys (%$borr)) {
-		$t_params->{$aux}= ($borr->{$aux});
-}
-
-$t_params->{'borrowernumber'}= $session->param('borrowernumber');
-
-my $sanc= hasSanctions($session->param('borrowernumber'));
+my $sanc= hasSanctions($session->param('userid'));
 
 foreach my $san (@$sanc) {
 if ($san->{'id3'}) {
@@ -87,8 +64,7 @@ if ($san->{'id3'}) {
 	$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
 }
-
-$t_params->{'sanciones_loop'}= $sanc;
+if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
 $t_params->{'updatedata'}= (!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";

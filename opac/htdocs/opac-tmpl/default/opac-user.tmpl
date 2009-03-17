@@ -8,6 +8,7 @@
 	
 	});
 
+
 </script>
 
 <div id="navegador">
@@ -70,87 +71,106 @@
 	  <tr><td>
 	</table>
 	</td>
-	<td width="20%" valign="top">
-	<table align="center" cellpadding="5" cellspacing="0" border="0" width="100%" valign="top">
-	<tr>
-		<td class="bordetabla" align="Center">
-		<b>[% "Datos del usuario:" | i18n %]</b></td>
-	</tr>
+	<td width="20%" valign="top" >
+
+	<div class="divDatosUsuario" >
+		<div class="bordetabla" align="Center"> 
+		<b>[% "Datos del usuario:" | i18n %]</b><br>
+		</div>
+
+	<div id="divFoto" align="Center"> 
 	[% IF foto_name %]
-	<tr>
-		<td class="impar" align="center"><img border="1" width="96" height="96"  src="/pictures/[% foto_name %]"></td>
-	</tr>
+	<img border="1" width="96" height="96"  src="/pictures/[% foto_name %]">
 	[% END %]
-<tr><td class="impar" >[% "Tarjeta de la biblioteca:" | i18n %]<b>[% cardnumber %]</b> </td></tr>
-<tr><td class="impar" >[% "Apellido y nombres:" | i18n %]<b>[% surname %] [% firstname %] </b></td></tr>
-<tr><td class="impar" >[% "Documento:" | i18n %]<b> [% documenttype %]  [% documentnumber %]</b></td></tr>
-[% IF studentnumber %]
-<tr><td class="impar" >[% "Legajo:" | i18n %] <b>[% studentnumber %]</b> </td></tr>
-[% END %]
-<tr><td class="impar" >[% "Categor&iacute;a:" | i18n %] <b>[% cat %]</b> </td></tr>
-[% IF streetaddress %]
-<tr><td class="impar" >[% "Direcci&oacute;n:" | i18n %] <b>[% streetaddress %],[% city %]</b></td></tr>
-[% END %]
-[% IF physstreet %]
-<tr><td class="impar" >[% "Domicilio y localidad de origen:" | i18n %] <b>[% physstreet %], [% streetcity %]</b></td></tr>
-[% END %]
-[% IF phone %]
-<tr><td class="impar" >[% "Tel&eacute;fono:" | i18n %] <b>[% phone %]</b></td></tr>
-[% END %]
-[% IF emailaddress %]
-<tr><td class="impar" >[% "Mail:" | i18n %] <b>[% emailaddress %]</b></td></tr>
-[% END %]
-<tr><td class="impar" >&nbsp;</td></tr>
-<!--Esto es un agregado de Einar para validar el tema de los usuarios que puedan ser locales o no, o sea que la biblioteca`pueda o no cambiar los datos de los alumnos, dependera de la variable Guarani que ira en el system preferences de Koha--> 	
-<tr><td class="impar">
-[% IF updatedata %]
-	[% "Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca." | i18n %]
-[% ELSE %]
+	</div> 
+	
+
+        [% "Tarjeta de la biblioteca:" | i18n %]
+		<b>[% socio.getNro_socio %]</b><br>
+	[% "Categor&iacute;a:" | i18n %] 
+		<b>[% socio.categoria.getDescription %]</b><br>
+        [% "Apellido:" | i18n %]
+                <b> [% socio.persona.getApellido %] </b><br>
+
+        [% "Nombre:" | i18n %]
+                <b> [% socio.persona.getNombre %] </b><br>
+
+        [% "Documento:" | i18n %]
+                <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+
+        [% "Fecha de nacimiento:" | i18n %]
+                <b> [% socio.persona.getNacimiento %]</b><br>
+        [% "Sexo:" | i18n %]    
+                <b> [% socio.persona.getSexo %]</b><br>
+                                    
+        [% IF socio.persona.getTelefono %]
+                <div class="tel">
+                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                                <b>[% socio.persona.getTelefono %]</b><br>
+                </div>	
+        [% END %]
+
+        [% IF socio.persona.getAlt_telefono %]
+        <div class="tel">
+                <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
+                            <b>[% socio.persona.getAlt_telefono %]</b><br>
+        </div>	
+        [% END %]
+        
+        [% IF socio.persona.getEmail %]
+                E-mail: <b><a href="mailto:[% emailaddress %]">
+                        <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
+        [% END %]
+            
+        [% "Legajo :" | i18n %]
+                        <b> [%  socio.persona.getLegajo %]</b><br>
+
+        [% "Ciudad :" | i18n %]
+                        <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
+        [% "Calle :" | i18n %]
+                        <b> [%  socio.persona.getCalle %]</b><br>
+
+	<br>
+	[% IF updatedata %]
+	[% "Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca." | i18n %]<br>
+	[% ELSE %]
 	[% "Alguno de nuestros registros es incorrecto? Para solucionarlo:" | i18n %]<br> 
 	<a href="/cgi-bin/koha/opac-userupdate.pl">[% "Actualizar Registro" | i18n %]</a>
-[% END %]
-</td></tr>
-[% IF UploadPictureFromOPAC %]
+	</br>
+	[% END %]
+
+	[% IF UploadPictureFromOPAC %]
          [% IF mensaje_error_foto %]
-         <tr><td span=100% class="impar" >
+         <div>
                 <font color="red">[% mensaje_error_foto %]</font>
-         </td></tr>
+         </div>
          [% END %]
         [% IF foto_name %]
-          <tr><td span=100% class="impar" >
-                <form name="foto" action="/cgi-bin/koha/upload.pl" method=post>
+               <form  action="/cgi-bin/koha/upload.pl" method=post>
                         <input type=hidden name=foto_name value=[% foto_name %] >
-                        <input type=hidden name=bornum value=[% bornum %]>
-<center>
-
-
-<a 	onMouseOut="swap('delpic','[% themelang %]/images/boton-eliminar-foto.png')" 
-	onMouseOver="swap('delpic','[% themelang %]/images/boton-eliminar-fotobis.png')" >
-<input 	name="delpic" id="delpic" type="image" 
-	onClick="document.foto.submit();" value="[% 'Eliminar' | i18n %]"  src="[% themelang %]/images/boton-eliminar-foto.png" border="0"  >
-</a>
-</center>
-                </form>
-          </td></tr>
+                        <input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
+		<center>
+		<a onMouseOut="swap('delpic','[% themelang %]/images/boton-eliminar-foto.png')"  onMouseOver="swap('delpic','[% themelang %]/images/boton-eliminar-fotobis.png')" >
+		<input 	name="delpic" id="delpic" type="image" 
+	onClick="eliminarFoto();" value="[% 'Eliminar' | i18n %]"  src="[% themelang %]/images/boton-eliminar-foto.png" border="0"  >
+		</a>
+	</center>
+               </form>
+          <br>
         [% ELSE %]
-          <tr><td span=100% align="center" class="impar" >
-                <form action="/cgi-bin/koha/upload.pl" method=post enctype="multipart/form-data">
-                        <input type=hidden name=bornum value=[% bornum %]>
+                <form name="foto" method=post enctype="multipart/form-data"  action="/cgi-bin/koha/upload.pl" >
+                <input type=file name="filepath" id="filepath">
+		<input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
 
-<a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')">
-<input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
-</a>
-                        <input type=file name="picture">
+		<a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">
+		<input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
+		</a>
                 </form>
-           </td></tr>
+           <br>
          [% END %]
   [% END %]
-	
-<!-- Hasta aca llega el agregaro, en el original estaba solo el tema del ELSE -->
-		</font>
-		</td>
-	</tr>
-</table>
+
+</div>
 
 </td>
 </tr>
@@ -169,14 +189,14 @@
 <td valign="top">
 
 <p align="center">
-	<a  class="click" onClick="mostrarHistorialPrestamos('[% bornum %]');">
+	<a  class="click" onClick="mostrarHistorialPrestamos('[% socio.getNro_socio %]');">
           [% "Historial de Pr&eacute;stamos" | i18n %]
   	</a>
 </p>
 
 [% IF showHistoricReserves %]
 <p align="center">
-  	<a  class="click" onClick="mostrarHistorialReservas('[% bornum %]');">
+  	<a  class="click" onClick="mostrarHistorialReservas('[% socio.getNro_socio %]');">
          	[% "Historial de Reservas" | i18n %]
   	</a>
 </p>
