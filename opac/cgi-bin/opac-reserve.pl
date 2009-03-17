@@ -31,14 +31,14 @@ $obj=from_json_ISO($obj);
 
 my $id1= $obj->{'id1'};
 my $id2= $obj->{'id2'};
-my $borrowernumber= $session->param('borrowernumber');
+my $socio= $session->param('nro_socio');
 
 my %params;
 $params{'tipo'}= 'OPAC'; 
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
-$params{'borrowernumber'}= $borrowernumber;
-$params{'loggedinuser'}= $borrowernumber;
+$params{'nro_socio'}= $socio;
+$params{'loggedinuser'}= $socio;
 $params{'issuesType'}= 'DO';
 
 # my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
@@ -48,7 +48,7 @@ my $acciones;
 $acciones= C4::AR::Mensajes::getAccion($msg_object->{'codMsg'});
 
 
-my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($borrowernumber);
+my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($socio);
 
 if($msg_object->{'error'}){
 #SE PRODUJO ALGUN ERROR

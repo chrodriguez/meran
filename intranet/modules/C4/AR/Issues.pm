@@ -856,7 +856,7 @@ sub getCountPrestamosDeGrupo() {
         		FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
         		INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
          		WHERE i.borrowernumber = ? AND n2.id2 = ?
-			AND n3.notforloan = ? AND i.returndate IS NULL ";
+			AND n3.id_disponibilidad = ? AND i.returndate IS NULL ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber, $id2, $issuesType);

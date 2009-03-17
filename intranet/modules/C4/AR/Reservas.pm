@@ -75,7 +75,7 @@ sub reservar {
 	$paramsReserva{'id1'}= $params->{'id1'};
 	$paramsReserva{'id2'}= $params->{'id2'};
 	$paramsReserva{'id3'}= $item->{'id3'};
-	$paramsReserva{'nro_socio'}= $params->{'borrowernumber'};
+	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recodatorio'}= $hasta;
@@ -105,7 +105,7 @@ sub reservar {
 
 		C4::AR::Sanctions::insertSanction(	undef,
 							$reservenumber,
-							$params->{'borrowernumber'}, 
+							$params->{'nro_socio'}, 
 							$startdate, 
 							$enddate, 
 							undef
@@ -144,7 +144,7 @@ sub t_reservarOPAC {
 								]} ) ;
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
+				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'nro_socio'});
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
 			}	
@@ -738,7 +738,7 @@ sub getItemsParaReserva{
         my $dbh = C4::Context->dbh;
 
 	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
-			FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.notforloan='DO' AND n3.wthdrawn='0' 
+			FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.id_disponibilidad=0 AND n3.id_estado=0 
 			AND n3.id3 NOT IN (	SELECT r.id3 FROM circ_reserva r 
 						WHERE id2 = ? AND id3 IS NOT NULL   )";
 
@@ -755,7 +755,7 @@ sub getDisponibilidadGrupo{
         my $dbh = C4::Context->dbh;
 	my $query= "	SELECT count(*) as disponibilidad
 			FROM cat_nivel2 n2 INNER JOIN cat_nivel3 n3 ON (n2.id2 = n3.id2)
-			WHERE (n2.id2 = ?) AND (n3.notforloan = 'DO') ";
+			WHERE (n2.id2 = ?) AND (n3.id_disponibilidad = 0) ";
 ## FIXME
 # Miguel - FALTA VER EL wthdrawn (DISPONIBLE , NO DISPONIBLE) ????????????????
 # puede contar items que sea para prestamo pero que esten perdidos o dados de baja
@@ -778,7 +778,7 @@ sub _verificaciones {
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my $barcode= $params->{'barcode'};
-	my $borrowernumber= $params->{'borrowernumber'};
+	my $socio= $params->{'nro_socio'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
 	my $msg_object= C4::AR::Mensajes::create();
@@ -788,17 +788,17 @@ open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por
 print A "tipo: $tipo\n";
 print A "id2: $id2\n";
 print A "id3: $id3\n";
-print A "borrowernumber: $borrowernumber\n";
+print A "socio: $socio\n";
 print A "issueType: $issueType\n";
 #Se verifica que el usuario sea Regular
-	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
+	if( !&C4::AR::Usuarios::esRegular($socio) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
 print A "Entro al if de regularidad\n";
 	}
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($borrowernumber);
+	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($socio);
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
@@ -807,7 +807,7 @@ print A "Entro al if del curso en el opac\n";
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  _verificarMaxTipoPrestamo($borrowernumber, $issueType) ){
+	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  _verificarMaxTipoPrestamo($socio, $issueType) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
 print A "Entro al if que verifica la cantidad de prestamos";
@@ -821,7 +821,7 @@ print A "Entro al if que verifica la cantidad de prestamos";
 print A "Entro al if de prestamos especiales";
 	}
 #Se verfica si el usuario esta sancionado
-	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issueType);
+	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($socio, $issueType);
 print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
 		$msg_object->{'error'}= 1;
@@ -836,14 +836,14 @@ print A "Entro al if de prestamos de sala";
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($borrowernumber, $id2, $id3, $tipo)) ){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($socio, $id2, $id3, $tipo)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
 print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
 	}
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($borrowernumber))){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($socio))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
 print A "Entro al if de maximo de reservas desde OPAC";
@@ -851,7 +851,7 @@ print A "Entro al if de maximo de reservas desde OPAC";
 
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && (&C4::AR::Issues::getCountPrestamosDeGrupo($borrowernumber, $id2, $issueType)) ){
+	if( !($msg_object->{'error'}) && (&C4::AR::Issues::getCountPrestamosDeGrupo($socio, $id2, $issueType)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
 print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
