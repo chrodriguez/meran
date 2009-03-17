@@ -322,6 +322,7 @@ function guardarDocumentoN3(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_3";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
+	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
 	objAH.modificado = MODIFICAR;
@@ -335,7 +336,7 @@ function updateGuardarDocumentoN3(responseText){
 
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
-    ID_N3= info.id3;
+//     ID_N3= info.id3;
     setMessages(Messages);
 
    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
@@ -346,7 +347,7 @@ function updateGuardarDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-        mostrarInfoAltaNivel3(info.id1, info.id2);
+        mostrarInfoAltaNivel3(ID_N1, ID_N2);
     }
 }
 
@@ -825,6 +826,12 @@ $(document).ready( function() {
 
 <form id="formNivel3" name="formNivel3" class="validateDataForm">
 
+	<div class="divContentComponente">
+		<div class="divLabelComponente"> Cant. Ejemplares: </div>
+		<div id="divCantEjemplares" class="divComponente">
+			<input id="cantEjemplares" type="text" tabindex="5" size="10" value="1" class="required"/>
+		</div>
+	</div>
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
 </form>

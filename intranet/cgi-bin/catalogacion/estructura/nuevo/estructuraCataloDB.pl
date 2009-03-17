@@ -287,9 +287,9 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $nivel3->getId1;
-    $info{'id2'}= $nivel3->getId2;
-    $info{'id3'}= $nivel3->getId3;
+#     $info{'id1'}= $nivel3->getId1;
+#     $info{'id2'}= $nivel3->getId2;
+#     $info{'id3'}= $nivel3->getId3;
 
     print $input->header;
     print to_json \%info;

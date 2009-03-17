@@ -1951,27 +1951,47 @@ sub t_guardarNivel3 {
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
-    my  $catNivel3;
+    my $catNivel3;
+	my $db;
 
     if(!$msg_object->{'error'}){
     #No hay error
-		 if ($params->{'modificado'}){
-            $catNivel3= C4::Modelo::CatNivel3->new(id3 => $params->{'id3'});
-            $catNivel3->load();
-         }else{
-            $catNivel3= C4::Modelo::CatNivel3->new();
-         }
-        my $db= $catNivel3->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-         $db->begin_work;
-    
+# 		if ($params->{'modificado'}){
+# 			$catNivel3= C4::Modelo::CatNivel3->new(id3 => $params->{'id3'});
+# 			$catNivel3->load();
+# 		}else{
+# 			$catNivel3= C4::Modelo::CatNivel3->new();
+# 		}
+# 		
+# 		my $db= $catNivel3->db;
+# 		# enable transactions, if possible
+# 		$db->{connect_options}->{AutoCommit} = 0;
+# 		$db->begin_work;
+		
+			my	$catNivel2= C4::Modelo::CatNivel2->new();
+			my	$db2= $catNivel2->db;
+				# enable transactions, if possible
+				$db2->{connect_options}->{AutoCommit} = 0;
+	
         eval {
-            $catNivel3->agregar($params);  
-            $db->commit;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+			for(my $i=0;$i<$params->{'cantEjemplares'};$i++){
+				my $catNivel3;
+				if ($params->{'modificado'}){
+					$catNivel3= C4::Modelo::CatNivel3->new(id3 => $params->{'id3'});
+					$catNivel3->load();
+				}else{
+# 					$catNivel3= C4::Modelo::CatNivel3->new();
+					$catNivel3= C4::Modelo::CatNivel3->new(db => $db2);
+				}
+				
+# 				$db= $catNivel3->db;				
+				$catNivel3->agregar($params);  
+				
+				#se cambio el permiso con exito
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+			}
+			$db2->commit;
         };
     
         if ($@){
@@ -1983,11 +2003,12 @@ sub t_guardarNivel3 {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
         }
 
-        $db->{connect_options}->{AutoCommit} = 1;
+        $db2->{connect_options}->{AutoCommit} = 1;
 
     }
 
-    return ($msg_object, $catNivel3);
+#     return ($msg_object, $catNivel3);
+	return ($msg_object);
 }
 
 

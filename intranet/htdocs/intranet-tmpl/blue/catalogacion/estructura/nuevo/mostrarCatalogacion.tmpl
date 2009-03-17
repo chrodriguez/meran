@@ -47,11 +47,13 @@
                 [% END %]
 		        </td>
 		        <td>
+				[% IF catalogacion.getObligatorio != 1 %]
 			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
 			        value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
                                                                 checked
 			                                                [% END %] 
                     >
+				[% END %]
 		        </td>
 		        <td>
                 [% IF catalogacion.soyFijo != 1 %]
@@ -69,6 +71,9 @@
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
                         <br>&nbsp;  [% IF catalogacion.soyFijo == 1 %]
                                             Campo Fijo
+                                    [% END %]
+						-  [% IF catalogacion.getObligatorio == 1 %]
+                                            Obligatorio
                                     [% END %]
                 </td>
 	        </tr>

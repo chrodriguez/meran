@@ -652,6 +652,7 @@ Los parametros son el manejador de la base de datos y los parametros que necesit
 =cut
 sub generaCodigoBarra{
 	#VER COMO SE GENERA EL BARCODE!!! VER SI ESTA BIEN!!!!!!!!
+# FIXME si cambia el itemtype de nivel 2 esto se deberia ver reflejado en todos los barcode del grupo, lo mismo si cambia el homebranch
 	my($dbh,$parametros)=@_;
 	my $barcode;
 	my @estructurabarcode=split(',',C4::AR::Preferencias->getValorPreferencia("barcodeFormat"));
