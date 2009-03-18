@@ -757,9 +757,16 @@ sub t_guardarNivel3 {
 			my $cat_estruct_info_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'f');
 
 			if(scalar(@$barcodes_array) > 0){
-			#se intentan agregar varios BARCODES
 				$cant= scalar(@$barcodes_array);
+				#se intentan agregar varios BARCODES
 				$params->{'agregarPorBarcodes'}= 1;
+			}else{
+				$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+			}# END if(scalar(@$barcodes_array) > 0)
+		
+# 			if(scalar(@$barcodes_array) > 0){
+			
+				
 				for(my $b;$b<$cant;$b++){
 					$esBlanco= 0;
 					$msg_object->{'error'}= 0;
@@ -782,6 +789,13 @@ sub t_guardarNivel3 {
 							}
 						}
 
+					}else{	
+						#verifico si el BARCODE EXISTE
+						if( existeBarcode($barcodes_array->[$b]) ){
+							#se cambio el permiso con exito
+							$msg_object->{'error'}= 1;
+							C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
+						}
 					}# END if($cat_estruct_info_array->[0]->getObligatorio)
 		
 					if(!$msg_object->{'error'}){
@@ -790,10 +804,10 @@ sub t_guardarNivel3 {
 					
 				}# END for(my $b;$b<$cant;$b++)	
 	
+# 			if($params->{'agregarPorBarcodes'}){
 				$cant= scalar(@barcodes_para_agregar);
-			}else{
-				$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
-			}# END if(scalar(@$barcodes_array) > 0)
+# 			}
+# 			}# END if(scalar(@$barcodes_array) > 0)
 
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
