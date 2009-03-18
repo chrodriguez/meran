@@ -18,7 +18,7 @@ ID_N3=0; //para saber el id del nivel 3
 TAB_INDEX= 0;//tabindex para las componentes
 dataModif = new Array();
 MODIFICAR = 0;
-ID3_ARRAY = new Array();
+ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 //Hashes para el formValidator
 // hashOfRules=new HashMap();
 // 
@@ -279,6 +279,10 @@ function updateMostrarInfoAltaNivel2(responseText){
     $('#nivel2').html(responseText);
 }
 
+/*
+Esta funcion es la asignada al handler del validate, ejecuta guardarModificacionDocumentoN1 o guardarDocumentoN1
+dependiendo de si se esta modificando o agregando
+*/
 function guardarModificarDocumentoN1(){
 	if(MODIFICAR){
 		guardarModificacionDocumentoN1();
@@ -287,6 +291,10 @@ function guardarModificarDocumentoN1(){
 	}
 }
 
+/*
+Esta funcion es la asignada al handler del validate, ejecuta guardarModificacionDocumentoN2 o guardarDocumentoN2
+dependiendo de si se esta modificando o agregando
+*/
 function guardarModificarDocumentoN2(){
 	if(MODIFICAR){
 		guardarModificacionDocumentoN2();
@@ -295,6 +303,10 @@ function guardarModificarDocumentoN2(){
 	}
 }
 
+/*
+Esta funcion es la asignada al handler del validate, ejecuta guardarModificacionDocumentoN3 o guardarDocumentoN3
+dependiendo de si se esta modificando o agregando
+*/
 function guardarModificarDocumentoN3(){
 	if(MODIFICAR){
 		guardarModificacionDocumentoN3();
@@ -339,7 +351,6 @@ function guardarDocumentoN2(){
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
-//     objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -370,10 +381,8 @@ function guardarDocumentoN3(){
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-// 	objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
-// 	objAH.id3 = ID_N3; //por si se modificó
 	objAH.ID3_ARRAY= ID3_ARRAY;
     objAH.sendToServer();
 }
@@ -434,7 +443,6 @@ function guardarModificacionDocumentoN2(){
     objAH.tipoAccion= "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
-//     objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -465,10 +473,8 @@ function guardarModificacionDocumentoN3(){
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-// 	objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
-// 	objAH.id3 = ID_N3; //por si se modificó
 	objAH.ID3_ARRAY= ID3_ARRAY;
     objAH.sendToServer();
 }
@@ -521,6 +527,7 @@ function mostrarInfoAltaNivel3(id1, idNivel2){
 }
 
 function updateMostrarInfoAltaNivel3(responseText){
+	$('#divCantEjemplares').show();	
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
 	checkedAll('checkAllEjemplares','checkEjemplares');
@@ -829,11 +836,17 @@ function modificarN3(id3){
 
 function updateModificarN3(responseText){
 	MODIFICAR = 1;
+	$('#divCantEjemplares').hide();	
 	dataModif = JSONstring.toObject(responseText);
-	$('#cantEjemplares').hide();	
 	mostrarEstructuraDelNivel3();
 }
 
+/*
+Esta funcion modifica 1 a n Ejemplares, los ID_N3 se encuentran en ID3_ARRAY
+se toma el 1er elemento del arreglo ID3_ARRAY como Ejemplar a modificar, ya
+que se puede haber seleccionado por ej. 3 ejemplares distintos, luego se envia
+lo modificado al servidor y a los 3 ID_N3 se les modifica esta informacion 
+*/
 function modificarEjemplaresN3(id3){
 	inicializar();
 	ID_N3= id3;	
@@ -842,17 +855,16 @@ function modificarEjemplaresN3(id3){
 	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
-// 	var id3_array= _recuperarSeleccionados("checkEjemplares");
+	//obtengo todos los ejemplares seleccionados para modificar
 	ID3_ARRAY= _recuperarSeleccionados("checkEjemplares");
 	objAH.id3= ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
-// 	objAH.id3 = ID_N3;
 	objAH.nivel = 3;
 	objAH.sendToServer();
 }
 
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
-	$('#cantEjemplares').hide();	
+	$('#divCantEjemplares').hide();	
 	dataModif = JSONstring.toObject(responseText);
 	mostrarEstructuraDelNivel3();
 }
@@ -1020,11 +1032,11 @@ $(document).ready( function() {
 
 <form id="formNivel3" name="formNivel3" class="validateDataForm">
 
-	<div class="divContentComponente">
+	<div id="divCantEjemplares" class="divContentComponente">
 		<div class="divLabelComponente"> Cant. Ejemplares: </div>
-		<div id="divCantEjemplares" class="divComponente">
+<!-- 		<div id="divCantEjemplares" class="divComponente"> -->
 			<input id="cantEjemplares" type="text" tabindex="1" size="10" value="1" class="required"/>
-		</div>
+<!-- 		</div> -->
 	</div>
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>

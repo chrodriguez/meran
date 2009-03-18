@@ -609,12 +609,7 @@ sub t_guardarNivel2 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-#          if ($params->{'modificado'}){
-#             $catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
-#             $catNivel2->load();
-#          }else{
-            $catNivel2= C4::Modelo::CatNivel2->new();
-#          }
+		$catNivel2= C4::Modelo::CatNivel2->new();
         my $db= $catNivel2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -626,7 +621,7 @@ sub t_guardarNivel2 {
             $id2 = $catNivel2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$catNivel2->getId2]} ) ;
         };
     
         if ($@){
@@ -655,12 +650,8 @@ sub t_modificarNivel2 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-         if ($params->{'modificado'}){
-            $catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
-            $catNivel2->load();
-         }else{
-            $catNivel2= C4::Modelo::CatNivel2->new();
-         }
+		$catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
+		$catNivel2->load();
         my $db= $catNivel2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -672,7 +663,7 @@ sub t_modificarNivel2 {
             $id2 = $catNivel2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$catNivel2->getId2]} ) ;
         };
     
         if ($@){
@@ -681,7 +672,7 @@ sub t_modificarNivel2 {
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => [$catNivel2->getId2]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -705,6 +696,7 @@ sub t_eliminarNivel2{
     #No hay error
         my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
             $catNivel2->load;
+		my $id2= $catNivel2->getId2;
         my $db= $catNivel2->dbh;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -715,7 +707,7 @@ sub t_eliminarNivel2{
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => [$id2]} ) ;
         };
     
         if ($@){
@@ -724,7 +716,7 @@ sub t_eliminarNivel2{
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => [$id2]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;

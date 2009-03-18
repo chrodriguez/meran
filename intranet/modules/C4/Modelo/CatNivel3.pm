@@ -93,7 +93,7 @@ sub agregar{
 
     #se guardan los datos de Nivel3
     foreach my $infoNivel3 (@arrayNivel3){  
-        if( ($infoNivel3->{'campo'} eq '910')&&($infoNivel3->{'subcampo'} eq 'a') ){
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'f') ){
         #tipo de documento
             $self->setBarcode($infoNivel3->{'dato'});
         }
@@ -294,6 +294,14 @@ sub toMARC{
 	$hash{'subcampo'}= 'd';
 	$hash{'dato'}= $self->getId_ui_origen;
 	$hash{'ident'}= 'id_ui_origen'; #parece q no es necesario
+
+	push (@marc_array, \%hash);
+
+	my %hash;
+	$hash{'campo'}= '995';
+	$hash{'subcampo'}= 'f';
+	$hash{'dato'}= $self->getBarcode;
+	$hash{'ident'}= 'barcode'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 

@@ -711,7 +711,7 @@ sub t_guardarNivel3 {
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} ) ;
 			}
 			$db->commit;
         };
@@ -765,7 +765,7 @@ sub t_modificarNivel3 {
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => []} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$catNivel3->getBarcode]} ) ;
 			}
 			$db->commit;
         };
@@ -776,7 +776,7 @@ sub t_modificarNivel3 {
             eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => [$catNivel3->getBarcode]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -790,7 +790,8 @@ sub t_eliminarNivel3{
    
    my($params)=@_;
    
-   my $msg_object= C4::AR::Mensajes::create();
+   	my $msg_object= C4::AR::Mensajes::create();
+	my $barcode;
 
 # FIXME falta verificar si es posible eliminar el nivel 3
 	
@@ -798,38 +799,41 @@ sub t_eliminarNivel3{
     #No hay error
 
 		my	$catNivel2= C4::Modelo::CatNivel2->new();
-		my	$db2= $catNivel2->db;
+		my	$db= $catNivel2->db;
 			# enable transactions, if possible
-			$db2->{connect_options}->{AutoCommit} = 0;
+			$db->{connect_options}->{AutoCommit} = 0;
 		my $id3_array= $params->{'id3_array'};
 
         eval {
 			for(my $i=0;$i<scalar(@$id3_array);$i++){
 				my $catNivel3;
+				
 				$catNivel3= C4::Modelo::CatNivel3->new(
-														db => $db2,
+														db => $db,
 														id3 => $id3_array->[$i]
 													);
-				
+
+				$catNivel3->load();
+				my $barcode= $catNivel3->getBarcode;	
 				$catNivel3->eliminar;  
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => []} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
 			}
-			$db2->commit;
+			$db->commit;
         };
 
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
-            eval {$db2->rollback};
+            eval {$db->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;
         }
 
-        $db2->{connect_options}->{AutoCommit} = 1;
+        $db->{connect_options}->{AutoCommit} = 1;
 
     }
 
