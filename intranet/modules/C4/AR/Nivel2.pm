@@ -595,3 +595,144 @@ sub saveNivel2{
 	return($id2,$tipoDoc,$error,$codMsg);
 
 }
+
+#=======================================================================ABM Nivel 1=======================================================
+
+
+sub t_guardarNivel2 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+    my $id2;
+    my $catNivel2;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+#          if ($params->{'modificado'}){
+#             $catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
+#             $catNivel2->load();
+#          }else{
+            $catNivel2= C4::Modelo::CatNivel2->new();
+#          }
+        my $db= $catNivel2->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel2->agregar($params);  
+            $db->commit;
+            $id2 = $catNivel2->getId2;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B428',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U372', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $catNivel2);
+}
+
+sub t_modificarNivel2 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+    my $id2;
+    my $catNivel2;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+         if ($params->{'modificado'}){
+            $catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
+            $catNivel2->load();
+         }else{
+            $catNivel2= C4::Modelo::CatNivel2->new();
+         }
+        my $db= $catNivel2->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel2->agregar($params);  
+            $db->commit;
+            $id2 = $catNivel2->getId2;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B431',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $catNivel2);
+}
+
+
+
+sub t_eliminarNivel2{
+   
+   my($id2)=@_;
+   
+   my $msg_object= C4::AR::Mensajes::create();
+
+# FIXME falta verificar si es posible eliminar el nivel 2
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
+            $catNivel2->load;
+        my $db= $catNivel2->dbh;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel2->eliminar;  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+
+}
+
+#===================================================================Fin====ABM Nivel 1====================================================

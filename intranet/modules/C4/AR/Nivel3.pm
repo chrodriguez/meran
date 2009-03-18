@@ -691,48 +691,31 @@ sub t_guardarNivel3 {
     if(!$msg_object->{'error'}){
     #No hay error
 		my	$catNivel2= C4::Modelo::CatNivel2->new();
-		my	$db2= $catNivel2->db;
+		my	$db= $catNivel2->db;
 			# enable transactions, if possible
-			$db2->{connect_options}->{AutoCommit} = 0;
+			$db->{connect_options}->{AutoCommit} = 0;
 	
         eval {
-# 			ID3_ARRAY
+			#ID3_ARRAY
 			#$params->{'cantEjemplares'} agregar tantos ejemplares como $params->{'cantEjemplares'} indique
 			#$params->{'BARCODE_'}
 			#modificar los ejemplates que se encuentren en NIVEL3_ARRAY (puede)
-open(A, ">>/tmp/miguel");
-print A "antes del for \n";
+
 			my $cant= $params->{'cantEjemplares'};
-			if ($params->{'modificado'}){
-				my $id3_array= $params->{'ID3_ARRAY'}; 
-				$cant= scalar(@$id3_array);
-			}
 
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
 
-				if ($params->{'modificado'}){
-					$catNivel3= C4::Modelo::CatNivel3->new(
-															db => $db2,
-# 															id3 => $params->{'id3'}
-															id3 => $params->{'ID3_ARRAY'}->[$i]
-															);
-
-print A "id3 para modificar :".$params->{'ID3_ARRAY'}->[$i]."\n";
-					$catNivel3->load();
-				}else{
-					$catNivel3= C4::Modelo::CatNivel3->new(db => $db2);
-				}
-				
+				$catNivel3= C4::Modelo::CatNivel3->new(db => $db);
 				$catNivel3->agregar($params);  
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => []} ) ;
 			}
-			$db2->commit;
+			$db->commit;
         };
-close(A);
+
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
@@ -742,7 +725,61 @@ close(A);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
         }
 
-        $db2->{connect_options}->{AutoCommit} = 1;
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+	return ($msg_object);
+}
+
+
+sub t_modificarNivel3 {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+    my $catNivel3;
+	my $db;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+		my	$catNivel2= C4::Modelo::CatNivel2->new();
+		my	$db= $catNivel2->db;
+			# enable transactions, if possible
+			$db->{connect_options}->{AutoCommit} = 0;
+	
+        eval {
+			my $id3_array= $params->{'ID3_ARRAY'}; 
+			my $cant= scalar(@$id3_array);
+
+			for(my $i=0;$i<$cant;$i++){
+				my $catNivel3;
+
+				$catNivel3= C4::Modelo::CatNivel3->new(
+																db => $db,
+																id3 => $params->{'ID3_ARRAY'}->[$i]
+												);
+
+				$catNivel3->load();
+				$catNivel3->agregar($params);  
+				
+				#se cambio el permiso con exito
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => []} ) ;
+			}
+			$db->commit;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
 
     }
 
@@ -785,7 +822,7 @@ sub t_eliminarNivel3{
 
         if ($@){
             #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+            &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
             eval {$db2->rollback};
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;

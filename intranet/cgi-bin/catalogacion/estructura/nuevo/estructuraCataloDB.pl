@@ -210,29 +210,6 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     print $input->header;
     print $infoOperacionJSON;
 }
-
-elsif($tipoAccion eq "ELIMINAR_NIVEL"){
-
-    my $nivel= $obj->{'nivel'};
-	my $id= $obj->{'id1'} || $obj->{'id2'};
-    my ($Message_arrayref);
-   
-    if ($nivel == 1){
-      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel1($id);
-    }
-    elsif($nivel == 2){
-      ($Message_arrayref)= &C4::AR::Catalogacion::t_eliminarNivel2($id);
-    }
-    elsif($nivel == 3){
-		($Message_arrayref)= &C4::AR::Nivel3::t_eliminarNivel3($obj);
-    }
-
-	my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-    
-    print $input->header;
-	print to_json \%info;
-}
 # ***********************************************ABM CATALOGACION*****************************************************************
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
@@ -256,41 +233,6 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     print $infoOperacionJSON;
 }
 
-elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
-#Se guarda informacion del NIVEL 1
-    my ($Message_arrayref, $id1) = &C4::AR::Catalogacion::t_guardarNivel1($obj);
-    
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $id1;
-
-    print $input->header;
-    print to_json \%info;
-}
-
-elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
-    #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
-    my ($Message_arrayref, $nivel2) = &C4::AR::Catalogacion::t_guardarNivel2($obj);
-    
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $nivel2->getId1;
-    $info{'id2'}= $nivel2->getId2;
-
-    print $input->header;
-    print to_json \%info;
-}
-
-elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
-#Se muestran la estructura de catalogacion para que el usuario agregue un documento
-    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
-    
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-
-    print $input->header;
-    print to_json \%info;
-}
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 #Se muestran las catalogaciones
 
@@ -366,4 +308,100 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 # **********************************************FIN ABM CATALOGACION****************************************************************
+
+#============================================================= ABM Catalogo==============================================================
+elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
+#Se guarda informacion del NIVEL 1
+    my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_guardarNivel1($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $id1;
+
+    print $input->header;
+    print to_json \%info;
+}
+
+elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
+    #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
+    my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_guardarNivel2($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $nivel2->getId1;
+    $info{'id2'}= $nivel2->getId2;
+
+    print $input->header;
+    print to_json \%info;
+}
+
+elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
+#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+
+    print $input->header;
+    print to_json \%info;
+}
+
+elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
+
+    my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_modificarNivel1($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $id1;
+
+    print $input->header;
+    print to_json \%info;
+}
+
+elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
+
+    my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_modificarNivel2($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'id1'}= $nivel2->getId1;
+    $info{'id2'}= $nivel2->getId2;
+
+    print $input->header;
+    print to_json \%info;
+}
+
+elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
+
+    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_modificarNivel3($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+
+    print $input->header;
+    print to_json \%info;
+}
+elsif($tipoAccion eq "ELIMINAR_NIVEL"){
+
+    my $nivel= $obj->{'nivel'};
+	my $id= $obj->{'id1'} || $obj->{'id2'};
+    my ($Message_arrayref);
+   
+    if ($nivel == 1){
+      ($Message_arrayref)= &C4::AR::Nivel1::t_eliminarNivel1($id);
+    }
+    elsif($nivel == 2){
+      ($Message_arrayref)= &C4::AR::Nivel2::t_eliminarNivel2($id);
+    }
+    elsif($nivel == 3){
+		($Message_arrayref)= &C4::AR::Nivel3::t_eliminarNivel3($obj);
+    }
+
+	my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+    
+    print $input->header;
+	print to_json \%info;
+}
+#=============================================================FIN ABM Catalogo===============================================================
 

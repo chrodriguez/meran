@@ -15,7 +15,7 @@
 ID_N1=0; //para saber el id del nivel 1
 ID_N2=0; //para saber el id del nivel 2
 ID_N3=0; //para saber el id del nivel 3
-TAB_INDEX= 0//tabindex para las componentes
+TAB_INDEX= 0;//tabindex para las componentes
 dataModif = new Array();
 MODIFICAR = 0;
 ID3_ARRAY = new Array();
@@ -183,7 +183,9 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel1();
     scrollTo('nivel1Tabla');
-    validateForm('formNivel1',guardarDocumentoN1);
+    
+	//asigno el handler para el validador
+	validateForm('formNivel1',guardarModificarDocumentoN1);
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -204,7 +206,9 @@ function updateMostrarEstructuraDelNivel2(responseText){
     procesarInfoJson(responseText);
 	mostrarDataNivel2();
     scrollTo('nivel2Tabla');
-    validateForm('formNivel2',guardarDocumentoN2);
+    
+	//asigno el handler para el validador
+	validateForm('formNivel2',guardarModificarDocumentoN2);
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -227,7 +231,9 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(responseText);
 	mostrarDataNivel3();
     scrollTo('nivel3Tabla');
-    validateForm('formNivel3',guardarDocumentoN3);
+	
+	//asigno el handler para el validador
+	validateForm('formNivel3',guardarModificarDocumentoN3);
 }
 
 function agregarN2(){
@@ -273,6 +279,30 @@ function updateMostrarInfoAltaNivel2(responseText){
     $('#nivel2').html(responseText);
 }
 
+function guardarModificarDocumentoN1(){
+	if(MODIFICAR){
+		guardarModificacionDocumentoN1();
+	}else{
+		guardarDocumentoN1();
+	}
+}
+
+function guardarModificarDocumentoN2(){
+	if(MODIFICAR){
+		guardarModificacionDocumentoN2();
+	}else{
+		guardarDocumentoN2();
+	}
+}
+
+function guardarModificarDocumentoN3(){
+	if(MODIFICAR){
+		guardarModificacionDocumentoN3();
+	}else{
+		guardarDocumentoN3();
+	}
+}
+
 function guardarDocumentoN1(){
 
     syncComponentesArray();
@@ -283,10 +313,8 @@ function guardarDocumentoN1(){
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
 	_sacarOpciones();
     objAH.infoArrayNivel1= COMPONENTES_ARRAY;
-    objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.sendToServer();
-    MODIFICAR = 0;
 }
 
 function updateGuardarDocumentoN1(responseText){
@@ -311,7 +339,7 @@ function guardarDocumentoN2(){
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2= COMPONENTES_ARRAY;
-    objAH.modificado = MODIFICAR;
+//     objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -342,7 +370,7 @@ function guardarDocumentoN3(){
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-	objAH.modificado = MODIFICAR;
+// 	objAH.modificado = MODIFICAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
 // 	objAH.id3 = ID_N3; //por si se modificó
@@ -368,6 +396,105 @@ function updateGuardarDocumentoN3(responseText){
         mostrarInfoAltaNivel3(ID_N1, ID_N2);
     }
 }
+
+function guardarModificacionDocumentoN1(){
+
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarModificacionDocumentoN1);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MODIFICAR_NIVEL_1";
+    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+	_sacarOpciones();
+    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.id1 = ID_N1;
+    objAH.sendToServer();
+}
+
+function updateGuardarModificacionDocumentoN1(responseText){
+
+	MODIFICAR=0;
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.Message_arrayref;
+    ID_N1= info.id1; //recupero el id desde el servidor
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        inicializar();
+        //carga la barra lateral con info de nivel 1
+        mostrarInfoAltaNivel1(ID_N1);
+        mostrarEstructuraDelNivel2();
+    }
+}
+
+function guardarModificacionDocumentoN2(){
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarModificacionDocumentoN2);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MODIFICAR_NIVEL_2";
+	_sacarOpciones();
+    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+//     objAH.modificado = MODIFICAR;
+    objAH.id1 = ID_N1;
+    objAH.id2 = ID_N2; //por si se modificó
+    objAH.sendToServer();
+}
+
+function updateGuardarModificacionDocumentoN2(responseText){
+
+	MODIFICAR=0;
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
+    ID_N2= info.id2; //recupero el id desde el servidor
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        inicializar();
+        //carga la barra lateral con info de nivel 2
+        mostrarInfoAltaNivel2(ID_N2);
+        mostrarEstructuraDelNivel3();
+    }
+}
+
+function guardarModificacionDocumentoN3(){
+    syncComponentesArray();
+    objAH=new AjaxHelper(updateGuardarModificacionDocumentoN3);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion= "MODIFICAR_NIVEL_3";
+    objAH.tipo_documento= $("#tipo_nivel3_id").val();
+	objAH.cantEjemplares= $("#cantEjemplares").val();
+	_sacarOpciones();
+    objAH.infoArrayNivel3= COMPONENTES_ARRAY;
+// 	objAH.modificado = MODIFICAR;
+    objAH.id1 = ID_N1;
+    objAH.id2 = ID_N2;
+// 	objAH.id3 = ID_N3; //por si se modificó
+	objAH.ID3_ARRAY= ID3_ARRAY;
+    objAH.sendToServer();
+}
+
+function updateGuardarModificacionDocumentoN3(responseText){
+
+	ID3_ARRAY= [];
+	MODIFICAR=0;
+    var info=JSONstring.toObject(responseText);
+    var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
+    setMessages(Messages);
+
+   	//PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
+  	var allInputs = $('#estructuraDelNivel3 :input');
+	for (x=0; x< allInputs.length; x++){
+		allInputs[x].value="";
+	}
+
+    if (! (hayError(Messages) ) ){
+        //deja la misma estructura, solo borra el campo dato
+        _clearDataFromComponentesArray();
+        //muestra la tabla con los ejemplares agregados
+        mostrarInfoAltaNivel3(ID_N1, ID_N2);
+    }
+}
+
 
 function guardar(nivel){
     if(nivel == 1){
