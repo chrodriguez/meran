@@ -652,6 +652,7 @@ sub t_modificarNivel2 {
     #No hay error
 		$catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
 		$catNivel2->load();
+		$params->{'modificado'}=1;
         my $db= $catNivel2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;

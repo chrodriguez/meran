@@ -91,11 +91,16 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'});     
 
+	my $barcode;	
     #se guardan los datos de Nivel3
     foreach my $infoNivel3 (@arrayNivel3){  
         if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'f') ){
         #tipo de documento
-            $self->setBarcode($infoNivel3->{'dato'});
+			if($data_hash->{'agregarPorBarcodes'}){
+				$barcode= $data_hash->{'barcode'};
+			}else {$barcode= $infoNivel3->{'dato'}}
+
+            $self->setBarcode($barcode);
         }
 
         elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){

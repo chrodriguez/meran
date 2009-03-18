@@ -19,6 +19,7 @@ TAB_INDEX= 0;//tabindex para las componentes
 dataModif = new Array();
 MODIFICAR = 0;
 ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
+BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 //Hashes para el formValidator
 // hashOfRules=new HashMap();
 // 
@@ -62,6 +63,28 @@ function _recuperarSeleccionados(chckbox){
 	return array;
 }
 
+/*
+Esta funcion retorna el ID de la componente en COMPONENTE_ARRAY segun campo, subcampo
+*/
+function _getIdComponente(campo, subcampo){
+	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
+		if( (COMPONENTES_ARRAY[i].campo == campo) && (COMPONENTES_ARRAY[i].subcampo == subcampo) ){
+			return COMPONENTES_ARRAY[i].idCompCliente;
+		}
+	}
+
+	return 0;
+}
+
+function _getBarcodes(){
+	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
+	BARCODES_ARRAY= [];
+
+	if(barcodes_string != ''){
+		BARCODES_ARRAY = barcodes_string.split(",");
+	}
+}
+
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
 function _sacarOpciones(){
 	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
@@ -88,7 +111,11 @@ function _clearContentsEstructuraDelNivel(){
 
 // muestra/oculta los divs de la estructura segun el nivel que se este procesando
 function _showAndHiddeEstructuraDelNivel(nivel){
-    if(nivel == 1){
+	 if(nivel == 0){
+        $('#nivel1Tabla').hide();
+        $('#nivel2Tabla').hide();
+        $('#nivel3Tabla').hide();	
+    }else if(nivel == 1){
         $('#nivel1Tabla').show();
         $('#nivel2Tabla').hide();
         $('#nivel3Tabla').hide();
@@ -243,6 +270,7 @@ function agregarN2(){
 
 function agregarN3(){
 	MODIFICAR = 0;
+	$('#divCantEjemplares').show();
 	mostrarEstructuraDelNivel3();
 }
 
@@ -378,12 +406,14 @@ function guardarDocumentoN3(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_3";
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
+	//recupero todos los barcodes, 0 o mas
+	_getBarcodes();
+	objAH.BARCODES_ARRAY= BARCODES_ARRAY;
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= COMPONENTES_ARRAY;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
-	objAH.ID3_ARRAY= ID3_ARRAY;
     objAH.sendToServer();
 }
 
@@ -766,7 +796,7 @@ function borrarEjemplaresN3(id3){
 		objAH.nivel=3;
 		objAH.itemtype=$("#id_tipo_doc").val();
 		objAH.tipoAccion="ELIMINAR_NIVEL";
-		objAH.sendToServer();
+		if(id3_array.length > 0){objAH.sendToServer();}
 	}
 }
 
@@ -924,6 +954,8 @@ function validateForm(formID, func){
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
+	//oculto todas las tabls
+	_showAndHiddeEstructuraDelNivel(0);
     //autocomplete nivel 1
     CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 

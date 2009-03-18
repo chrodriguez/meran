@@ -678,6 +678,51 @@ sub generaCodigoBarra{
 }
 
 
+
+
+
+=item
+Recupero un nivel 3 a partir de un id3
+=cut
+sub getNivel3FromId3{
+	my ($id3) = @_;
+
+	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+																							query => [ 
+																										id3 => { eq => $id3
+ },
+																								], 
+																);
+
+	return ($nivel3_array_ref);
+}
+
+=item
+Recupero un nivel 3 a partir de un barcode
+=cut
+sub getNivel3FromBarcode{
+	my ($barcode) = @_;
+
+	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+																							query => [ 
+																										barcode => { eq => $barcode
+ },
+																								], 
+																);
+
+	return ($nivel3_array_ref);
+}
+
+=item
+Verifica si existe el barcode pasado por parametro
+=cut
+sub existeBarcode{
+	my($barcode)=@_;
+
+	my $nivel_array_ref= C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+	
+	return ( scalar(@$nivel_array_ref) > 0);
+}
 #=======================================================================ABM Nivel 3======================================================
 
 sub t_guardarNivel3 {
@@ -701,11 +746,62 @@ sub t_guardarNivel3 {
 			#$params->{'BARCODE_'}
 			#modificar los ejemplates que se encuentren en NIVEL3_ARRAY (puede)
 
-			my $cant= $params->{'cantEjemplares'};
+			my $nivel_array_ref;
+			my $cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+			my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
+			my @barcodes_para_agregar;
+			$params->{'agregarPorBarcodes'}= 0;
+			my $existe;
+			my $esBlanco;
+			#obtengo la info de la estructura de catalogacion del barcode
+			my $cat_estruct_info_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'f');
+
+			if(scalar(@$barcodes_array) > 0){
+			#se intentan agregar varios BARCODES
+				$cant= scalar(@$barcodes_array);
+				$params->{'agregarPorBarcodes'}= 1;
+				for(my $b;$b<$cant;$b++){
+					$esBlanco= 0;
+					$msg_object->{'error'}= 0;
+					
+					if($cat_estruct_info_array->[0]->getObligatorio){
+					#el barcode es obligatorio
+					#no puede existir, y no puede ser blanco	
+			
+						if($barcodes_array->[$b] eq ''){
+						#no puede ser blanco
+							$esBlanco= 1;
+							$msg_object->{'error'}= 1;
+							C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U387', 'params' => [$barcodes_array->[$b]]} ) ;
+						}else{
+							#verifico si el BARCODE EXISTE
+							if( existeBarcode($barcodes_array->[$b]) ){
+								#se cambio el permiso con exito
+								$msg_object->{'error'}= 1;
+								C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
+							}
+						}
+
+					}# END if($cat_estruct_info_array->[0]->getObligatorio)
+		
+					if(!$msg_object->{'error'}){
+							push (@barcodes_para_agregar, $barcodes_array->[$b]);
+					}
+					
+				}# END for(my $b;$b<$cant;$b++)	
+	
+				$cant= scalar(@barcodes_para_agregar);
+			}else{
+				$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+			}# END if(scalar(@$barcodes_array) > 0)
 
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
-
+		
+				if($params->{'agregarPorBarcodes'} == 1){
+					$params->{'barcode'}= @barcodes_para_agregar[$i];	
+				}
+				
 				$catNivel3= C4::Modelo::CatNivel3->new(db => $db);
 				$catNivel3->agregar($params);  
 				
@@ -713,6 +809,7 @@ sub t_guardarNivel3 {
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} ) ;
 			}
+
 			$db->commit;
         };
 
@@ -745,6 +842,7 @@ sub t_modificarNivel3 {
     #No hay error
 		my	$catNivel2= C4::Modelo::CatNivel2->new();
 		my	$db= $catNivel2->db;
+		$params->{'modificado'}=1;
 			# enable transactions, if possible
 			$db->{connect_options}->{AutoCommit} = 0;
 	

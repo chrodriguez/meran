@@ -2075,7 +2075,7 @@ sub _obtenerEstructuraYDatos{
 		$nivel_array_ref= getNivel2FromId2($params->{'id'});
 	}
 	elsif( $params->{'nivel'} eq '3'){
-		$nivel_array_ref= getNivel3FromId3($params->{'id3'});
+		$nivel_array_ref= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
 	}
 
 	#paso todo a MARC
@@ -2142,22 +2142,6 @@ sub getNivel2FromId2{
 																);
 
 	return ($nivel2_array_ref);
-}
-
-=item
-Recupero un nivel 3 a partir de un id3
-=cut
-sub getNivel3FromId3{
-	my ($id3) = @_;
-
-	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																							query => [ 
-																										id3 => { eq => $id3
- },
-																								], 
-																);
-
-	return ($nivel3_array_ref);
 }
 
 

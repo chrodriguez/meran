@@ -390,6 +390,7 @@ sub t_modificarNivel1 {
         my  $catNivel1;
 		$catNivel1= C4::Modelo::CatNivel1->new(id1 => $params->{'id1'});
 		$catNivel1->load();
+		$params->{'modificado'}=1;
 
         my $db= $catNivel1->db;
         # enable transactions, if possible
