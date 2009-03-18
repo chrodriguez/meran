@@ -2161,7 +2161,8 @@ sub getCatalogacionesConDatos{
    else{
          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
                                                                               query => [ 
-                                                                                          id3 => { eq => $id },
+                                                                                           id3 => { eq => $id },
+# 																							 id3 => { eq => $params->{'ID3_ARRAY'}->[0] }
                                                                                     ],
                                                                               require_objects => [ 'cat_nivel3', 'CEC' ]
 

@@ -694,10 +694,8 @@ function modificarN3(id3){
 	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
-// 	objAH.id3 = [id3];
-// 	objAH.id3 = id3;
-	ID3_ARRAY[0]= id3;
-	objAH.ID3_ARRAY= ID3_ARRAY;
+ 	objAH.id3 = id3;
+ 	ID3_ARRAY[0]= id3;
 	objAH.nivel = 3;
 	objAH.sendToServer();
 }
