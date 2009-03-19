@@ -104,7 +104,7 @@ sub agregar{
 			}
 
             $self->setBarcode($barcode);
-			$self->debug ("se agrega un barcode: ".$barcode."\n");
+			$self->debug ("Se agrega el BARCODE: ".$barcode."\n");
         }
 
         elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){
