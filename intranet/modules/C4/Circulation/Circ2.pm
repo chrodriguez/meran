@@ -67,8 +67,11 @@ Also deals with stocktaking.
 	&listitemsforinventory 
 	&listitemsforinventorysigtop
 
-	&getmaxbarcode
-	&getminbarcode
+	&getMaxBarcode
+	&getMinBarcode
+   &getMaxBarcodeLike
+   &getMinBarcodeLike
+
 	&barcodesbytype
 
 	&insertHistoricCirculation
@@ -111,26 +114,45 @@ sub insertHistoricCirculation {
 =item
 SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl) TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
 =cut
-sub getmaxbarcode {
- my ($branch) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MAX(barcode) as max FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
-	$sth->execute($branch);
-	my $res= ($sth->fetchrow_hashref)->{'max'};
-	return $res;
+sub getMaxBarcode {
+   my ($branch) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         select => ['MAX(t1.barcode) as barcode'],
+                                                         );
+   return ($max->[0]->barcode);
 }
 
+sub getMinBarcode {
+   my ($branch) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         select => ['MIN(t1.barcode) as barcode'],
+                                                         );
+   return ($min->[0]->barcode);
+}
 =item
-SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl), TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
+SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl), TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.($sth3->fetchrow_hashref)->{'max'};
 =cut
-sub getminbarcode {
- my ($branch) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MIN(barcode) as min FROM cat_nivel3 where barcode IS NOT NULL AND barcode <> '' AND homebranch = ?");
-	$sth->execute($branch);
-	my $res= ($sth->fetchrow_hashref)->{'min'};
-	return $res;
-	}
+sub getMinBarcodeLike {
+   my ($branch,$part_barcode) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         query => [ barcode => { like => $part_barcode } ],
+                                                         select => ['MIN(t1.barcode) as barcode'],
+                                                         );
+   return ($min->[0]->barcode);
+}
+
+sub getMaxBarcodeLike {
+   my ($branch,$part_barcode) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         query => [ barcode => { like => $part_barcode } ],
+                                                         select => ['MAX(t1.barcode) as barcode'],
+                                                         );
+   return ($max->[0]->barcode);
+}
 
 
 
@@ -138,41 +160,42 @@ sub getminbarcode {
 =item
 SE USA EN EL REPORTE DE BARCODES POR TIPO - PERO NO SE SI ANDA SE PUEDE PASAR A ESTADISTICAS.PM
 =cut
-sub barcodesbytype {
+sub barcodesPorTipo{
 	my ($branch) = @_;
 	
 	my $clase='par';
 	my @results;
 	my $row;
 	$row->{'tipo'}='TODOS';
-	$row->{'minimo'}=&getminbarcode($branch);
-	$row->{'maximo'}=&getmaxbarcode($branch);
-	if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {push @results,$row };
-
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT itemtype FROM cat_ref_tipo_nivel3;");
-	$sth->execute();
+	$row->{'minimo'}= &getMinBarcode($branch);
+	$row->{'maximo'}= &getMaxBarcode($branch);
 	
-	while (my $it = $sth->fetchrow_hashref) {
-		my $row;	
-		$row->{'tipo'}=$it->{'itemtype'};	
+   if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne '')){
+      push @results,$row 
+   }
 
-		my $inicio=$branch."-".$it->{'itemtype'}."-%";
-		
-		my $sth2 = $dbh->prepare("SELECT MIN(barcode) AS min FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
-		$sth2->execute($branch,$inicio);
-	 	$row->{'minimo'} = ($sth2->fetchrow_hashref)->{'min'};
+	my $cat_ref_tipo_nivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+                                                                                          select => ['id_tipo_doc'],
+                                                                                       );
 
-		my $sth3 = $dbh->prepare("SELECT MAX(barcode) AS max FROM cat_nivel3 WHERE barcode IS NOT NULL AND barcode <> '' AND homebranch = ? AND barcode LIKE ? ");
-		$sth3->execute($branch,$inicio);
-	 	$row->{'maximo'} = ($sth3->fetchrow_hashref)->{'max'};
+	
+   foreach my $it (@$cat_ref_tipo_nivel3) {
+      my $row;
+      my $id_tipo_doc = $it->{'id_tipo_doc'};
+      
+      $row->{'tipo'}=  $id_tipo_doc;
 
-		if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {push @results,$row };
-		$sth2->finish;
-		$sth3->finish;
-	}
-	 $sth->finish;
-	return @results;
+      my $inicio=$branch."-".$it->{'id_tipo_doc'}."-%";
+
+      $row->{'minimo'} = getMinBarcodeLike($branch,$inicio);
+
+      $row->{'maximo'} = getMinBarcodeLike($branch,$inicio);
+
+      if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {
+         push @results,$row 
+      }
+   }
+   return @results;
 }
 
 

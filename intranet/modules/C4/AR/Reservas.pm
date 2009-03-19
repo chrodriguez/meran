@@ -1010,7 +1010,7 @@ print A "id3: $id3\n";
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($reservas, $cant)= getReservasDeSocio($borrowernumber, $id2);# ver lo que sigue.
 	$params->{'reservenumber'}= $reservas->[0]->getId_reserva;
-print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
+# print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
 # Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)

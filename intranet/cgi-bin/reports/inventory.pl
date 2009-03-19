@@ -23,13 +23,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 #Por los branches
 my $branch=$input->param('branch');
-($branch ||($branch=C4::AR::Preferencias->getValorPreferencia("defaultbranch")));
+( $branch || ($branch=C4::AR::Preferencias->getValorPreferencia("defaultbranch")) );
 #
 
-my $MIN=C4::Circulation::Circ2::getminbarcode($branch);
-my $MAX=C4::Circulation::Circ2::getmaxbarcode($branch);
+my $MIN=C4::Circulation::Circ2::getMinBarcode($branch);
+my $MAX=C4::Circulation::Circ2::getMaxBarcode($branch);
 
-my @barcodePorTipo=C4::Circulation::Circ2::barcodesbytype($branch);
+my @barcodePorTipo=C4::Circulation::Circ2::barcodesPorTipo($branch);
 
 $t_params->{'MAX'}= $MAX;
 $t_params->{'MIN'}= $MIN;

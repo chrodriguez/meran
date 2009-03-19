@@ -4,6 +4,7 @@
 <html>
 
 <script src="/intranet-tmpl/blue/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.menu.js"></script>
 <script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/includes/WindowHelper.js"></script>
@@ -42,20 +43,17 @@ function cambiarIdioma() {
 
 <body>
 <script type="text/javascript">
-function mainmenu(){
-// Oculto los submenus
-// $(" #nav2 ul ").css({display: "none"});
-// Defino que submenus deben estar visibles cuando se pasa el mouse por encima
-$(" #menu li").hover(function(){
-    $(this).find('li:first').slideDown(400);
-    },function(){
-        $(this).find('li:first').slideUp(400);
-    });
-}
 
-$(document).ready(function(){
-    mainmenu();
-});
+      function mainmenu(){
+
+        var options = {minWidth: 140};  
+        $('#menu').menu(options);  
+     }
+ 
+     $(document).ready(function(){
+         mainmenu();
+      });
+
 </script>
 
             

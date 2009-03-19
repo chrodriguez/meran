@@ -14,19 +14,15 @@
             [%  "INTRA" | setComboLang %]
          </div>
 
-        <div class="menu" id="menu">
+
 
 <!-- FIXME FALTA i18n -->
-            
-           
+      <ul id="menu">
           <!-- Navigation item -->
-          <ul>
             <li><a href="/cgi-bin/koha/mainpage.pl" class="menu-alone-link">Inicio</a></li>
-          </ul>
           
           <!-- Navigation item -->
 
-          <ul>
             <li><h3>Cat&aacute;logo</h3>
                 <ul>
                   <li><h3>B&uacute;squedas</h3>
@@ -63,10 +59,8 @@
                 </ul>
            
             </li>
-          </ul>          
 
           <!-- Navigation item -->
-          <ul>
             <li><h3>Usuarios</h3>
 
                 <ul>
@@ -77,25 +71,18 @@
                 </ul>
            
             </li>
-          </ul>          
 
           <!-- Navigation item -->
-          <ul>
             <li><h3>Circulaci&oacute;n</h3>
-
-          
                 <ul>
                   <li><a href="/cgi-bin/koha/circ/prestamos.pl">Pr&eacute;stamos</a></li>
                   <li><a href="/cgi-bin/koha/circ/devoluciones.pl">Devol. y Renov.</a></li>
                   <li><a href="/cgi-bin/koha/circ/sanctions.pl">Sanciones</a></li>
                 </ul>
-             
             </li>
-          </ul>          
 
 
           <!-- Navigation item -->
-          <ul>
             <li><h3>Preferencias</h3>
                 <ul>
                   <li><a href="/cgi-bin/koha/admin/preferencias.pl">Preferencias</a></li>
@@ -124,14 +111,10 @@
                         <li><a href="/cgi-bin/koha/import/breeding.pl">Importaci&oacute;n</a></li>
                      </ul>
                   </li>
-
-                </ul>
-             
-            </li>
-          </ul>          
+               </ul>
+           </li>
 
           <!-- Navigation item -->
-          <ul>
             <li><h3>Reportes</h3>
                 <ul>
                   <li><a href="/cgi-bin/koha/reports/generic_reports.pl">Reportes Gen&eacute;ricos</a></li>
@@ -146,38 +129,30 @@
                   <li><a href="/cgi-bin/koha/reports/estadistica_Anual.pl">Actividades anuales</a></li>
                   <li><a href="/cgi-bin/koha/reports/users-cards.pl">Generar carnets</a></li>
                   <li><a href="/cgi-bin/koha/reports/book-labels.pl">Generar etiquetas</a></li>
-            </ul>
-
+               </ul>
             </li>
-         </ul>          
 
           <!-- Navigation item -->
-          <ul>
               <li><h3>Estad&iacute;sticas</h3>
-              <ul>    
-                  <li><a href="/cgi-bin/koha/reports/availability.pl">Disp. de ejemplares</a></li>
-                  <li><a href="/cgi-bin/koha/reports/historico_Prestamos.pl">Hist&oacute;rico de pr&eacute;stamos</a></li>
-                  <li><a href="/cgi-bin/koha/reports/historicoSanciones.pl">Hist&oacute;rico de sanciones</a></li>
-                  <li><a href="/cgi-bin/koha/reports/estadisticas.pl">Estad. de pr&eacute;stamos</a></li>
-                  <li><a href="/cgi-bin/koha/reports/logueoBusqueda.pl">Logueo de b&uacute;squedas</a></li>
-                  <li><a href="/cgi-bin/koha/reports/userEst.pl">Usuarios por categor&iacute;s</a></li>
-                  <li><a href="/cgi-bin/koha/reports/itemtypes.pl">Tipos de ejemplares</a></li>
-                  <li><a href="/cgi-bin/koha/reports/levels.pl">Niveles bibliogr&aacute;ficos</a></li>
-                  <li><a href="/cgi-bin/koha/reports/avail_year.pl">Disponibilidad</a></li>
-
-             </ul>
-              
+                  <ul>    
+                        <li><a href="/cgi-bin/koha/reports/availability.pl">Disp. de ejemplares</a></li>
+                        <li><a href="/cgi-bin/koha/reports/historico_Prestamos.pl">Hist&oacute;rico de pr&eacute;stamos</a></li>
+                        <li><a href="/cgi-bin/koha/reports/historicoSanciones.pl">Hist&oacute;rico de sanciones</a></li>
+                        <li><a href="/cgi-bin/koha/reports/estadisticas.pl">Estad. de pr&eacute;stamos</a></li>
+                        <li><a href="/cgi-bin/koha/reports/logueoBusqueda.pl">Logueo de b&uacute;squedas</a></li>
+                        <li><a href="/cgi-bin/koha/reports/userEst.pl">Usuarios por categor&iacute;s</a></li>
+                        <li><a href="/cgi-bin/koha/reports/itemtypes.pl">Tipos de ejemplares</a></li>
+                        <li><a href="/cgi-bin/koha/reports/levels.pl">Niveles bibliogr&aacute;ficos</a></li>
+                        <li><a href="/cgi-bin/koha/reports/avail_year.pl">Disponibilidad</a></li>
+                  </ul>
             </li>
-          </ul>          
 
           <!-- Navigation item -->
-          <ul>
               <li><h3>Ayuda</h3>
               <ul>
                   <li><a href="/cgi-bin/koha/about.pl">Acerca de</a></li>
-             </ul>
+              </ul>
             </li>
-          </ul>  
-    </div>
+    </ul>
 </div>
       <!-- A.4 HEADER BREADCRUMBS -->

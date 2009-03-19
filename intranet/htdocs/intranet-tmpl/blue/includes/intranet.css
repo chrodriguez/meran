@@ -580,6 +580,8 @@ ul li {
       list-style-type:none;
       display:block;
       margin:0;
+   float:left;
+   width:100px;  
 }
 
 div.formElemets ul li {
@@ -965,7 +967,18 @@ width:1024px;
 float:left;
 }
 
-
+.menu-div {
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   border-width:1px;
+   border-style:solid;
+   border-color:#ccc #888 #555 #bbb;
+   white-space:nowrap;
+   margin:0;color:#fff;
+   background:grey;
+   text-transform:uppercase;
+   padding:0 5px; 
+}
 
 #menu a{
    font:normal 100%/205% tahoma,arial,helvetica,sans-serif;
@@ -979,7 +992,7 @@ float:left;
 /*    width:112px; */
 }
 
-#menu h3{
+h3{
 font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
 display:block;
 border-width:1px;
@@ -991,7 +1004,7 @@ padding:0 5px;
 /* width: 104px; */
 }
 
-#menu h3{
+h3{
 color:#fff;
 background:#000 url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat 100% 100%;
 text-transform:uppercase
@@ -1006,18 +1019,8 @@ text-decoration:none;
 color:#000;
 }
 
-#menu a:hover{
-color:#a00;
-background:#ddd;
-}
-
-#menu a:active{
-color:#060;
-background:#ccc;
-}
 
 #menu ul{
-list-style:none;
 margin:0;
 padding:0;
 float:left;
@@ -1040,6 +1043,13 @@ top:0;
 left:100%;
 }
 
+#menu ul li{
+
+   float:left;
+   width:100px;   
+}
+
+
 /* Begin non-anchor hover selectors */
 
 /* Enter the more specific element (div) selector
@@ -1052,22 +1062,6 @@ div#menu h3:hover{
 background:#000 url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat -999px -9999px;
 }
 
-div#menu li:hover{
-cursor:pointer;
-z-index:100;
-}
-
-div#menu li:hover ul ul,
-div#menu li li:hover ul ul,
-div#menu li li li:hover ul ul,
-div#menu li li li li:hover ul ul
-{display:none;}
-
-div#menu li:hover ul,
-div#menu li li:hover ul,
-div#menu li li li:hover ul,
-div#menu li li li li:hover ul
-{display:block;}
 
 /* End of non-anchor hover selectors */
 
@@ -1079,15 +1073,6 @@ color:#000;
 background:#eee url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat 100% 100%;
 }
 
-#menu a.x:hover{
-color:#fff;
-background:#000;
-}
-
-#menu a.x:active{
-color:#060;
-background:#ccc;
-}
 
 .main-header{
 

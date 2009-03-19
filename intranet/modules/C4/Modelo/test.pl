@@ -167,8 +167,11 @@ use C4::Modelo::CatTema;
 #                                                                                                                                                                         require_objects => [ 'cat_nivel1','idCompCliente' ]
 # 
 #                                                                      );
-      use C4::AR::Utilidades;
-      my ($c,$d) = C4::AR::Utilidades::buscarLenguajes("LA PL");
+#       use C4::AR::Utilidades;
+#       my ($c,$d) = C4::AR::Utilidades::buscarLenguajes("LA PL");
+      use C4::Circulation::Circ2;
+      my $nene = C4::Circulation::Circ2::getmaxbarcode('DEO');
+      print "\n HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAA ".$nene."\n";
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
 # 	my $new = &C4::AR::Usuarios::getSocioInfo(3);

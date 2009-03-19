@@ -188,7 +188,7 @@ sub getSessionBrowser {
 sub get_template_and_user {
 	my $in = shift;
 
-	my ($template, $params) = gettemplate($in->{'template_name'}, $in->{'type'});
+	my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'});
 	my ($user, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
 	my $nro_socio;

@@ -67,8 +67,6 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-
-
 sub agregar{
 
     my ($self)=shift;
