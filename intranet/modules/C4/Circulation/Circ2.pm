@@ -252,33 +252,28 @@ sub listitemsforinventory {
 
 =item
 SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
-=cut
-sub listitemsforinventorysigtop {
+=cutsignatura_topografica
+sub listaritemsDeInventorioSigTop{
 	my ($sigtop,$orden) = @_;
-	my $dbh = C4::Context->dbh;
 	#FALTA unititle,number es la edicion,
-	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
-	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-	WHERE signatura_topografica LIKE ?
-	ORDER BY barcode, titulo");
+# 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
+# 	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
+# 	WHERE signatura_topografica LIKE ?
+# 	ORDER BY barcode, titulo");
+   
+   my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
+                                                                     query => [ signatura_topografica => { like => $sigtop.'%' } ], 
+                                                                     require_objects ['nivel2'],
+                                                                   );
 		
-	$sth->execute($sigtop."%");
 	
-	my @results;
-	while (my $row = $sth->fetchrow_hashref) {
-# 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
-		$row->{'id'}=$row->{'autor'};
-		$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
-		push @results,$row;
-	}
-	
-	if ($orden){
-	# Da el ORDEN al arreglo
-	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-	@results=@sorted;
-	}
+# 	if ($orden){
+# 	   # Da el ORDEN al arreglo
+# 	   my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+# 	   @results=@sorted;
+# 	}
 
-	return @results;
+   
 }
 
 

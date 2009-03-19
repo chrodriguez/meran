@@ -49,7 +49,7 @@ function cambiarIdioma() {
       function mainmenu(){
 
         var options = {minWidth: 140};  
-        $('#menu').menu(options);  
+        $('#menu').menu();  
      }
  
      $(document).ready(function(){

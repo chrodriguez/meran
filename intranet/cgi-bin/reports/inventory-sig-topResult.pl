@@ -29,15 +29,15 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my @res;
 if($sigtop ne ''){
-	@res = C4::Circulation::Circ2::listitemsforinventorysigtop($sigtop,$orden);
+	$cat_nivel3 = C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
 }
 #
 # Generar Planilla
-my $loggedinuser = $session->param('loggedinuser');
-my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
+# my $loggedinuser = $session->param('loggedinuser');
+# my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
 #
 
-foreach my $element (@res) {
+foreach my $element ($sigtop."%") {
         my %line;
 	$line{'barcode'}=$element->{'barcode'};
 	$line{'id2'}=$element->{'id2'};
