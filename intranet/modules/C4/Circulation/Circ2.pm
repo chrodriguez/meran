@@ -189,7 +189,7 @@ sub barcodesPorTipo{
 
       $row->{'minimo'} = getMinBarcodeLike($branch,$inicio);
 
-      $row->{'maximo'} = getMinBarcodeLike($branch,$inicio);
+      $row->{'maximo'} = getMaxBarcodeLike($branch,$inicio);
 
       if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {
          push @results,$row 
