@@ -745,8 +745,7 @@ sub t_guardarNivel3 {
 			#$params->{'cantEjemplares'} agregar tantos ejemplares como $params->{'cantEjemplares'} indique
 			#$params->{'BARCODE_'}
 			#modificar los ejemplates que se encuentren en NIVEL3_ARRAY (puede)
-
-			my $nivel_array_ref;
+=item	
 			my $cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
 			my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
 			my @barcodes_para_agregar;
@@ -763,9 +762,9 @@ sub t_guardarNivel3 {
 			}else{
 				$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
 			}# END if(scalar(@$barcodes_array) > 0)
+=cut
 		
-# 			if(scalar(@$barcodes_array) > 0){
-			
+=item			
 				
 				for(my $b;$b<$cant;$b++){
 					$esBlanco= 0;
@@ -790,8 +789,8 @@ sub t_guardarNivel3 {
 						}
 
 					}else{	
-						#verifico si el BARCODE EXISTE
-						if( existeBarcode($barcodes_array->[$b]) ){
+						#verifico si el BARCODE EXISTE, puede ser blanco
+						if( existeBarcode($barcodes_array->[$b]) && ($barcodes_array->[$b] ne '') ){
 							#se cambio el permiso con exito
 							$msg_object->{'error'}= 1;
 							C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
@@ -803,17 +802,17 @@ sub t_guardarNivel3 {
 					}
 					
 				}# END for(my $b;$b<$cant;$b++)	
+=cut
+
+			my ($barcodes_para_agregar)= _verificarBarcodes($params, $msg_object);
 	
-# 			if($params->{'agregarPorBarcodes'}){
-				$cant= scalar(@barcodes_para_agregar);
-# 			}
-# 			}# END if(scalar(@$barcodes_array) > 0)
+			my $cant= scalar(@$barcodes_para_agregar);
 
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
 		
 				if($params->{'agregarPorBarcodes'} == 1){
-					$params->{'barcode'}= @barcodes_para_agregar[$i];	
+					$params->{'barcode'}= $barcodes_para_agregar->[$i];	
 				}
 				
 				$catNivel3= C4::Modelo::CatNivel3->new(db => $db);
@@ -843,6 +842,84 @@ sub t_guardarNivel3 {
 	return ($msg_object);
 }
 
+=item
+Lo que hace la funcion es verificar cada barcode y devolver un arreglo de barcodes permitidos para agregar junto con sus
+respectivos mensajes, ya sea que se AGREGO con EXITO o NO se pudo AGREGAR (por algun motivo)
+
+Tiene PRIORIDAD la carga multiple de varios barcodes sobre la carga multiple de varios ejemplares
+
+Si el barcode ES obligatorio:
+
+	- No puede ser blanco
+	- No puede Existir
+
+Si el barcode NO es obligatorio:
+	
+	- Se permite barcode en blanco
+	- Si se ingresa un barcode, NO PUEDE EXISTIR
+
+=cut
+sub _verificarBarcodes{
+	
+	my($params, $msg_object)=@_;
+ 
+	my $cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+	my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
+	my @barcodes_para_agregar;
+	$params->{'agregarPorBarcodes'}= 0;
+	my $existe;
+	#obtengo la info de la estructura de catalogacion del barcode
+	my $cat_estruct_info_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'f');
+
+	if(scalar(@$barcodes_array) > 0){
+		$cant= scalar(@$barcodes_array);
+		#se intentan agregar varios BARCODES
+		$params->{'agregarPorBarcodes'}= 1;
+	}else{
+		$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+	}# END if(scalar(@$barcodes_array) > 0)
+
+	for(my $b;$b<$cant;$b++){
+		$existe= 0;
+		
+		if($cat_estruct_info_array->[0]->getObligatorio){
+		#el barcode es OBLIGATORIO
+		#no puede existir, y no puede ser blanco	
+
+			if($barcodes_array->[$b] eq ''){
+			#no puede ser blanco
+				$msg_object->{'error'}= 1;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U387', 'params' => [$barcodes_array->[$b]]} ) ;
+			}else{
+				#verifico si el BARCODE EXISTE
+				if( existeBarcode($barcodes_array->[$b]) ){
+					#se cambio el permiso con exito
+					$msg_object->{'error'}= 1;
+					$existe= 1;
+					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
+				}
+			}
+
+		}else{	
+		#el barcode NO es OBLIGATORIO
+			#verifico si el BARCODE EXISTE, puede ser blanco
+			if( existeBarcode($barcodes_array->[$b]) && ($barcodes_array->[$b] ne '') ){
+				#se cambio el permiso con exito
+				$msg_object->{'error'}= 1;
+				$existe= 1;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
+			}
+		}# END if($cat_estruct_info_array->[0]->getObligatorio)
+
+		if(!$existe){
+		#si no existe, lo agrego al arreglo de barcodes para insertar
+				push (@barcodes_para_agregar, $barcodes_array->[$b]);
+		}
+		
+	}# END for(my $b;$b<$cant;$b++)	
+
+	return (\@barcodes_para_agregar);
+}
 
 sub t_modificarNivel3 {
     my($params)=@_;

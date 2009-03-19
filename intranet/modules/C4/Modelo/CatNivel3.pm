@@ -97,10 +97,14 @@ sub agregar{
         if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'f') ){
         #tipo de documento
 			if($data_hash->{'agregarPorBarcodes'}){
+			#se esta haciendo un alta de 1 o mas barcodes
 				$barcode= $data_hash->{'barcode'};
-			}else {$barcode= $infoNivel3->{'dato'}}
+			}else {		
+				$barcode= $infoNivel3->{'dato'}
+			}
 
             $self->setBarcode($barcode);
+			$self->debug ("se agrega un barcode: ".$barcode."\n");
         }
 
         elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){

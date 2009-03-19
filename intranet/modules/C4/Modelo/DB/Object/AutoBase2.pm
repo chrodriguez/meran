@@ -113,6 +113,23 @@ sub log{
     C4::AR::Debug::log($self, $data, $metodoLlamador);
 }
 
+sub debug
+{
+    my $self = shift;
+
+#     if ($self->{DEBUG})
+#     {
+#         foreach my $msg (@_)
+#         {
+#             print STDERR "DEBUG: OpenCA::DBI->".$msg."\n";
+#         }
+#     }
+
+	 foreach my $msg (@_){
+			C4::AR::Debug::debug($self, $msg);
+     }
+}
+
 sub sortByString{
 
     my ($self)=shift;
