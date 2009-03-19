@@ -741,68 +741,6 @@ sub t_guardarNivel3 {
 			$db->{connect_options}->{AutoCommit} = 0;
 	
         eval {
-			#ID3_ARRAY
-			#$params->{'cantEjemplares'} agregar tantos ejemplares como $params->{'cantEjemplares'} indique
-			#$params->{'BARCODE_'}
-			#modificar los ejemplates que se encuentren en NIVEL3_ARRAY (puede)
-=item	
-			my $cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
-			my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
-			my @barcodes_para_agregar;
-			$params->{'agregarPorBarcodes'}= 0;
-			my $existe;
-			my $esBlanco;
-			#obtengo la info de la estructura de catalogacion del barcode
-			my $cat_estruct_info_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'f');
-
-			if(scalar(@$barcodes_array) > 0){
-				$cant= scalar(@$barcodes_array);
-				#se intentan agregar varios BARCODES
-				$params->{'agregarPorBarcodes'}= 1;
-			}else{
-				$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
-			}# END if(scalar(@$barcodes_array) > 0)
-=cut
-		
-=item			
-				
-				for(my $b;$b<$cant;$b++){
-					$esBlanco= 0;
-					$msg_object->{'error'}= 0;
-					
-					if($cat_estruct_info_array->[0]->getObligatorio){
-					#el barcode es obligatorio
-					#no puede existir, y no puede ser blanco	
-			
-						if($barcodes_array->[$b] eq ''){
-						#no puede ser blanco
-							$esBlanco= 1;
-							$msg_object->{'error'}= 1;
-							C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U387', 'params' => [$barcodes_array->[$b]]} ) ;
-						}else{
-							#verifico si el BARCODE EXISTE
-							if( existeBarcode($barcodes_array->[$b]) ){
-								#se cambio el permiso con exito
-								$msg_object->{'error'}= 1;
-								C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
-							}
-						}
-
-					}else{	
-						#verifico si el BARCODE EXISTE, puede ser blanco
-						if( existeBarcode($barcodes_array->[$b]) && ($barcodes_array->[$b] ne '') ){
-							#se cambio el permiso con exito
-							$msg_object->{'error'}= 1;
-							C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
-						}
-					}# END if($cat_estruct_info_array->[0]->getObligatorio)
-		
-					if(!$msg_object->{'error'}){
-							push (@barcodes_para_agregar, $barcodes_array->[$b]);
-					}
-					
-				}# END for(my $b;$b<$cant;$b++)	
-=cut
 
 			my ($barcodes_para_agregar)= _verificarBarcodes($params, $msg_object);
 	
@@ -902,7 +840,7 @@ sub _verificarBarcodes{
 
 		}else{	
 		#el barcode NO es OBLIGATORIO
-			#verifico si el BARCODE EXISTE, puede ser blanco
+			#verifico si el BARCODE EXISTE en la base de datos, puede ser blanco
 			if( existeBarcode($barcodes_array->[$b]) && ($barcodes_array->[$b] ne '') ){
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 1;
@@ -910,6 +848,14 @@ sub _verificarBarcodes{
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
 			}
 		}# END if($cat_estruct_info_array->[0]->getObligatorio)
+
+		if(_existeBarcodeEnArray($barcodes_array->[$b], $barcodes_array)){
+		#se envió desde el cliente dos o mas BARCODES IGUALES
+		#el barcode que se esta intentando agregar ya existe en el arreglo de barcodes enviado desde el cliente
+			$msg_object->{'error'}= 1;
+			$existe= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcodes_array->[$b]]} ) ;
+		}
 
 		if(!$existe){
 		#si no existe, lo agrego al arreglo de barcodes para insertar
@@ -921,8 +867,22 @@ sub _verificarBarcodes{
 	return (\@barcodes_para_agregar);
 }
 
+sub _existeBarcodeEnArray{
+	my ($barcode, $barcodes_array)= @_;
+
+	for(my $i=0;$i<scalar(@$barcodes_array);$i++){
+		if($barcodes_array->[$i] eq $barcode){
+			#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
+			return 1;
+		}
+	}
+		
+	#no existe el barcode en el arreglo de barcodes
+	return 0;
+}
+
 sub t_modificarNivel3 {
-    my($params)=@_;
+    my ($params)= @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();

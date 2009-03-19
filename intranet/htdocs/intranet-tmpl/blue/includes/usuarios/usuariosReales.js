@@ -7,11 +7,10 @@
  */
 
 
-
-
 //*********************************************Modificar Datos Usuario*********************************************
 function modificarDatosDeUsuario(){
 	objAH=new AjaxHelper(updateModificarDatosDeUsuario);
+	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
 	objAH.id_socio= usuario.ID;

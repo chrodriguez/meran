@@ -5,7 +5,9 @@
 
 <script src="/intranet-tmpl/blue/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/includes/jquery/jquery.menu.js"></script>
+<script src="/intranet-tmpl/blue/includes/md5.js"></script>
 <script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/blue/includes/jquery/jquery.jCache.js"></script>  
 <script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
 <script src="/intranet-tmpl/blue/includes/WindowHelper.js"></script>
 <!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery-include.js"></script> -->

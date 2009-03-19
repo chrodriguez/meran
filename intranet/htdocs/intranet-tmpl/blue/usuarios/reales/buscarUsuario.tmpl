@@ -42,6 +42,8 @@ function consultar(filtro){
 	}
 	if(busqueda.length > 0){
 		objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
+		objAH.debug= true;
+		objAH.cache= true;
 		objAH.funcion= 'changePage';
 		objAH.socio= busqueda;
 		objAH.sendToServer();

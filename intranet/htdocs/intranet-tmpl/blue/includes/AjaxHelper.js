@@ -76,7 +76,6 @@ jQuery.fn.centerObject = function(options) {
 
 }
 
-
 function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.ini= '';		//para manejar el actual del paginador
@@ -87,6 +86,8 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.onComplete= fncUpdateInfo;  //se ejecuta cuando se completa el ajax
 	this.onBeforeSend= fncInit;	//se ejecuta antes de consultar al servidor con ajax
 	this.showState= true;
+	this.cache= false; //para cachear los resultados
+
 
 	this.sendToServer= function(){
 
@@ -125,9 +126,19 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			if( (this.debug)&&(window.console) ){
   				window.console.log("AjaxHelper => ajaxCallback \n" + params);
 			}
+			
+			var _hash_key;
+			if(this.cache){
+				_hash_key= b64_md5(params);
+		
+				if ( $.jCache.hasItem(_hash_key) ){
+				//antes de hacer la peticion al servidor, se verifica si la info esta en la cache
+					return helper.onComplete($.jCache.getItem(_hash_key));
+				}
+			}	
 
-	
-			$.ajax({	type: "POST", 
+			$.ajax({	
+					type: "POST", 
 					url: helper.url,
 					data: params,
  					beforeSend: function(){
@@ -146,10 +157,17 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 						//oculta el estado del AJAX
 						_HiddeState();
 						if(helper.onComplete){
-                            				if(ajax.responseText == 'CLIENT_REDIRECT'){
+							if(ajax.responseText == 'CLIENT_REDIRECT'){
                                     				window.location = "/cgi-bin/koha/redirectController.pl";
 							}else{
- 								helper.onComplete(ajax.responseText);
+
+								if(helper.cache){
+									//guardo la respuesta del servidor en la cache
+									$.jCache.setItem(_hash_key, ajax.responseText);
+ 								}
+
+								//respuesta normal
+								helper.onComplete(ajax.responseText);
 							}
 						}
   					}
