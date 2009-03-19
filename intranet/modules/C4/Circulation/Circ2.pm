@@ -261,11 +261,11 @@ sub listaritemsDeInventorioSigTop{
 # 	WHERE signatura_topografica LIKE ?
 # 	ORDER BY barcode, titulo");
    
-   my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
-                                                                     query => [ signatura_topografica => { like => $sigtop.'%' } ], 
-                                                                     require_objects ['nivel2'],
-                                                                   );
-		
+#    my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
+#                                                                      query => [ signatura_topografica => { like => $sigtop.'%' } ], 
+#                                                                      require_objects ['nivel2'],
+#                                                                    );
+# 		
 	
 # 	if ($orden){
 # 	   # Da el ORDEN al arreglo
