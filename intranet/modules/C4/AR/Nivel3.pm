@@ -867,13 +867,20 @@ sub _verificarBarcodes{
 	return (\@barcodes_para_agregar);
 }
 
+=item
+Esta funcion verifica si en el arreglo de barcodes no existe 1 o mas barcodes iguales
+=cut
 sub _existeBarcodeEnArray{
 	my ($barcode, $barcodes_array)= @_;
-
+	my $cant=0;
+	
 	for(my $i=0;$i<scalar(@$barcodes_array);$i++){
 		if($barcodes_array->[$i] eq $barcode){
-			#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
-			return 1;
+			$cant++;
+			if($cant > 1){
+				#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
+				return 1;
+			}
 		}
 	}
 		

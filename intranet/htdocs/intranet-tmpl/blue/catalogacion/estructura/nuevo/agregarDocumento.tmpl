@@ -35,9 +35,17 @@ COMPONENTES_ARRAY= new Array();
 function inicializar(){
 // FIXME falta liberar memoria, hacer delete de COMPONENTES[i], sino no se libera la memoria, esto para todos los arreglos
     //arreglo de objetos campo
-    COMPONENTES_ARRAY= new Array();
-    dataModif = new Array();
+//     COMPONENTES_ARRAY= new Array();
+	_freeMemory(COMPONENTES_ARRAY);
+//     dataModif = new Array();
+	_freeMemory(dataModif);
 	TAB_INDEX= 0;
+}
+
+function _freeMemory(array){
+	for(var i=0;i<array.length;i++){
+		delete array[i];
+	}
 }
 
 function _setFoco(){
@@ -79,7 +87,8 @@ function _getIdComponente(campo, subcampo){
 
 function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
-	BARCODES_ARRAY= [];
+// 	BARCODES_ARRAY= [];
+	_freeMemory(BARCODES_ARRAY);
 
 	if(barcodes_string != ''){
 		BARCODES_ARRAY = barcodes_string.split(",");
@@ -421,7 +430,8 @@ function guardarDocumentoN3(){
 
 function updateGuardarDocumentoN3(responseText){
 
-	ID3_ARRAY= [];
+// 	ID3_ARRAY= [];
+	_freeMemory(ID3_ARRAY);
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
@@ -513,7 +523,8 @@ function guardarModificacionDocumentoN3(){
 
 function updateGuardarModificacionDocumentoN3(responseText){
 
-	ID3_ARRAY= [];
+// 	ID3_ARRAY= [];
+	_freeMemory(ID3_ARRAY);
 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
