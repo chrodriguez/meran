@@ -18,7 +18,7 @@
 <tr>
 <td valign="top">
 
-[% IF waiting_count %]
+[% IF reservas_asignadas_count %]
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
   <tr valign="top">
@@ -37,54 +37,50 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-[% FOREACH WAITING %]
+[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
   <tr bordercolor="#f2f2f2">
 	<td class="impar">
-		<b><a class="click" onClick="detalle([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-		[% rtitulo %]
-		[% IF runititle %]:&nbsp;[% runititle %][% END %]
+		<b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+		[% reserva.nivel2.nivel1.getTitulo %]
+	<!--	[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
 		</a></b>
 	</td>
 	<td class="impar">
-  	[% IF rautor %]
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
-		[% autor %]
+  	[% IF reserva.nivel2.nivel1.getAutor %]
+		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
 		</a>
   	[% ELSE %]
 		&nbsp;
  	[% END %]
 	</td> 
 	<td align=center class="impar">  
-	[% IF redicion %]
-		[% redicion %] - 
-	[% END %]
-
+<!--	[% IF redicion %] [% redicion %] - [% END %]
 	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
-	[% IF volume %]        t [% volume %] [% END %]
+	[% IF volume %]        t [% volume %] [% END %]-->
 	</td>
-	<td class="impar" align="center">
-	[% IF rnotificationdate %] 
-		[% rnotificationdate %]
+	<td class="impar" align="center">[% reserva.getFecha_notificacion %]
+	[% IF reserva.getFecha_notificacion %] 
+		[% reserva.getFecha_notificacion_formateada %]
 	[% ELSE %]
 		- 
 	[% END %]
 	</td>
-	<td class="impar" align="center">
-	[% IF rreminderdate %]
-		<font color="[% color %]">[% rreminderdate %]</font>
+	<td class="impar" align="center">[% reserva.getFecha_recordatorio %]
+	[% IF reserva.getFecha_recordatorio %]
+		<font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
 	[% ELSE %]
 		- 
 	[% END %]
 	</td>
-
 
 	<td class="impar">
-		<b>[% rbranch %]</b>
+		<b>[% reserva.ui.getNombre %]</b>
 	</td>
 	<td class="impar" align="center"> 
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reservenumber %])">[% "Cancelar" | i18n %]</a>
+		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]
@@ -96,7 +92,7 @@
 <br>
 [% END %]
 
-[% IF reserves_count %]
+[% IF reservas_espera_count %]
 
 <table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
   <tr bordercolor="#f2f2f2">    
@@ -111,36 +107,36 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-[% FOREACH RESERVES %]
+[% FOREACH reserva IN RESERVAS_ESPERA %]
   <tr border="1" bordercolor="#f2f2f2">
 	<td class="impar">
-	<a class="click" onClick="detalleMaterialEnEspera([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-		[% rtitulo %]
-		[% IF runititle %]
+	<a class="click" onClick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
+		[% reserva.nivel2.nivel1.getTitulo %]
+<!--		[% IF runititle %]
 			:&nbsp;[% runititle %]
-		[% END %]
+		[% END %]-->
   	</a>
  	</td>
  	<td class="impar">
-	[% IF rautor %]
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
-		[% autor %]
+	[% IF reserva.nivel2.nivel1.getAutor %]
+		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
 		</a>
 	[% ELSE %]
 		&nbsp;
 	[% END %]
  	</td>
 	<td align=center class="impar"> 
-	[% IF redicion %]
+<!--	[% IF redicion %]
 		[% redicion %]
 	[% ELSE %]
 		- 
-	[% END %]
+	[% END %]-->
 	</td>
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reserveNumber %])">[% "Cancelar" | i18n %]</a>
+		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]

@@ -34,7 +34,7 @@ use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use CGI::Session;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
@@ -924,7 +924,7 @@ sub t_operacionesDeOPAC{
 
 	eval{
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-		my ($isSanction,$endDate)= C4::AR::Sanctions::permitionToLoan(getborrowernumber($userid), C4::AR::Preferencias->getValorPreferencia("defaultissuetype"));
+		my ($isSanction,$endDate)= C4::AR::Sanciones::permitionToLoan(getborrowernumber($userid), C4::AR::Preferencias->getValorPreferencia("defaultissuetype"));
         my $regular= $socio->esRegular;
 				
 		if ($isSanction || !$regular ){
@@ -959,7 +959,7 @@ sub t_operacionesDeINTRA{
 	eval{
 		#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
 		&C4::AR::Reservas::cancelar_reservas(	$userid,
-							C4::AR::Sanctions::getBorrowersSanctions($dbh,C4::AR::Preferencias->getValorPreferencia("defaultissuetype"))
+							C4::AR::Sanciones::getBorrowersSanctions($dbh,C4::AR::Preferencias->getValorPreferencia("defaultissuetype"))
 						);
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reservas::FindNotRegularUsersWithReserves());

@@ -1,4 +1,4 @@
-package C4::AR::Sanctions;
+package C4::AR::Sanciones;
 
 #
 # Modulo para hacer calculos de dias a sancionar
@@ -39,7 +39,7 @@ sub eliminarSanciones{
 	
 	my $dbh = C4::Context->dbh;	
 	my $sth=$dbh->prepare("	DELETE FROM circ_sancion
-			    	WHERE borrowernumber=?
+			    	WHERE nro_socio=?
 			   ");
 	$sth->execute($borrowernumber);
 	$sth->finish;
@@ -51,7 +51,7 @@ sub infoSanction {
 	my ($reserveNumber)=@_;
   	my $dbh = C4::Context->dbh;
 	#traigo la info de la sancion
-	my $sth=$dbh->prepare(" SELECT * FROM circ_sancion WHERE reservenumber = ?");
+	my $sth=$dbh->prepare(" SELECT * FROM circ_sancion WHERE id_reserva = ?");
 	$sth->execute($reserveNumber);
 
 	return $sth->fetchrow_hashref;
@@ -131,25 +131,25 @@ sub hasSanctions {
   my $dateformat = C4::Date::get_date_format();
   #Esta primera consulta es por la devolucion atrasada de libros
   my $sth = $dbh->prepare("select * from circ_sancion 
-	inner join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
+	inner join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.sanctiontypecode 
 	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
 	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
-	where borrowernumber = ? and (now() between startdate and enddate)");
+	where nro_socio = ? and (now() between fecha_comienzo and fecha_final)");
   $sth->execute($borrowernumber);
   my @results;
   while (my $res= $sth->fetchrow_hashref) {
-	$res->{'enddate'}=format_date($res->{'enddate'},$dateformat);
-        $res->{'startdate'}=format_date($res->{'startdate'},$dateformat);
+	$res->{'fecha_final'}=format_date($res->{'fecha_final'},$dateformat);
+        $res->{'fecha_comienzo'}=format_date($res->{'fecha_comienzo'},$dateformat);
 	push(@results,$res);
   }
   $sth->finish;
   #Esta segunda consulta es por las reservas que fueron retiradas
   my $sth = $dbh->prepare("select * from circ_sancion 
-	where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and  sanctiontypecode is null");
+	where nro_socio = ? and (fecha_comienzo <= now()  and fecha_final >= now()) and  tipo_sancion is null");
   $sth->execute($borrowernumber);
   while (my $res= $sth->fetchrow_hashref) {
-        $res->{'enddate'}=format_date($res->{'enddate'},$dateformat);
-        $res->{'startdate'}=format_date($res->{'startdate'},$dateformat);
+        $res->{'fecha_final'}=format_date($res->{'fecha_final'},$dateformat);
+        $res->{'fecha_comienzo'}=format_date($res->{'fecha_comienzo'},$dateformat);
 	$res->{'description'}="Reserva no retirada";
 	$res->{'reservaNoRetiradaVencida'}= 1; #se setea flag de reservaNoRetirada vencida
         push(@results,$res);
@@ -160,9 +160,9 @@ sub hasSanctions {
 
 sub isSanction {
   #Esta funcion determina si un usuario ($borrowernumber) tiene derecho (o sea no esta sancionado) a retirar un biblio para un tipo de prestamo ($issuecode)
-  my ($dbh, $borrowernumber, $issuecode)=@_;
-  my $sth = $dbh->prepare("select * from circ_sancion left join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where borrowernumber = ? and (startdate <= now()  and enddate >= now()) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
-  $sth->execute($borrowernumber, $issuecode);
+  my ($dbh, $nro_socio, $issuecode)=@_;
+  my $sth = $dbh->prepare("select * from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where nro_socio = ? and (fecha_comienzo <= now()  and fecha_final >= now()) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
+  $sth->execute($nro_socio, $issuecode);
   return($sth->fetchrow_hashref); 
 }
 
@@ -171,11 +171,11 @@ sub tieneLibroVencido {
   	my ($borrowernumber)=@_;
   	my $dbh = C4::Context->dbh;
   	my $dateformat = C4::Date::get_date_format();
-  	my $sth=$dbh->prepare("Select * from  circ_prestamo where returndate is NULL and borrowernumber = ?");
+  	my $sth=$dbh->prepare("Select * from  circ_prestamo where fecha_devolucion is NULL and nro_socio = ?");
   	$sth->execute($borrowernumber);
   	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
   	while (my $ref= $sth->fetchrow_hashref) {
-    		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+    		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($ref->{'id3'});
     		return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
   	}
   	return(0);
@@ -240,7 +240,7 @@ sub insertSanction {
  #Busco si tiene una sancion pendiente
  my $sth1 = $dbh->prepare("	select * 
 				from circ_sancion 
-				where borrowernumber = ? and startdate is null and enddate is null");
+				where nro_socio = ? and fecha_comienzo is null and fecha_final is null");
  $sth1->execute($borrowernumber);
   if (my $res= $sth1->fetchrow_hashref){
 #Hay sancion pendiente
@@ -256,14 +256,13 @@ sub insertSanction {
 		my $err;
 		$edate= C4::Date::format_date_in_iso(DateCalc($startdate,"+ ".$ddays." days",\$err),$dateformat);
 	}
- 	my $sth2 = $dbh->prepare("	Update circ_sancion set sanctiontypecode = ? , delaydays = 		
-		?,startdate=?,enddate=?  where borrowernumber = ? and startdate is null and enddate is null");
+ 	my $sth2 = $dbh->prepare("	Update circ_sancion set tipo_sancion = ? , dias_sancion =? ,fecha_comienzo=?,fecha_final=?  where nro_socio = ? and fecha_comienzo is null and fecha_final is null");
  	$sth2->execute($sanctiontype,$ddays,$startdate,$edate,$borrowernumber);
 	  
   }else { #No tiene sanciones pendientes
  
  	my $sth3=$dbh->prepare("INSERT INTO circ_sancion 	
-			(sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays)
+			(tipo_sancion,id_reserva,nro_socio,fecha_comienzo,fecha_final,dias_sancion)
 			VALUES (?,?,?,?,?,?)");
   
   	$sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays);
@@ -280,20 +279,20 @@ my $dbh= C4::Context->dbh;
  #Busco si tiene una sancion pendiente
  my $sth1 = $dbh->prepare("	select * 
 				from circ_sancion 
-				where borrowernumber = ? and startdate is null and enddate is null");
+				where nro_socio = ? and fecha_comienzo is null and fecha_final is null");
  $sth1->execute($borrowernumber);
  if (my $res= $sth1->fetchrow_hashref){
 #Hay sancion pendiente
 
 	if ($res->{'delaydays'} < $delaydays ){ 
 #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion
- 		 my $sth2 = $dbh->prepare("Update circ_sancion set delaydays = ?, sanctiontypecode = ?  where borrowernumber = ? and startdate is null and enddate is null");
+ 		 my $sth2 = $dbh->prepare("Update circ_sancion set dias_sancion = ?, tipo_sancion = ?  where nro_socio = ? and fecha_comienzo is null and fecha_final is null");
 		$sth2->execute($delaydays,$sanctiontypecode,$borrowernumber);
 	 
 	}
   }else { #No tiene sanciones pendientes
 	my $sth3=$dbh->prepare("	
-	INSERT INTO circ_sancion (sanctiontypecode,reservenumber,borrowernumber,startdate,enddate,delaydays) 
+	INSERT INTO circ_sancion (tipo_sancion,id_reserva,nro_socio,fecha_comienzo,fecha_final,dias_sancion) 
 	VALUES (?,?,?,NULL,NULL,?)");
   
    	$sth3->execute($sanctiontypecode, $reservenumber, $borrowernumber, $delaydays);
@@ -313,7 +312,7 @@ sub getSanctionTypeCode {
 sub getBorrowersSanctions {
   #Esta funcion retorna un array con todos los borrowernumbers de los usuarios que estan sancionados para un determinado issuecode o cuyo issuecode es null (o sea es una sancion por no retirar una reserva)
   my ($dbh, $issuecode)=@_;
-  my $sth = $dbh->prepare("select borrowernumber from circ_sancion left join circ_tipo_sancion on circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where (now() between startdate and enddate) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
+  my $sth = $dbh->prepare("select nro_socio from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.sanctiontypecode left join circ_tipo_prestamo_sancion on circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode where (now() between fecha_comienzo and fecha_final) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
   $sth->execute($issuecode);
   my @results;
   while (my $data=$sth->fetchrow){
@@ -338,7 +337,7 @@ sub delSanction {
   #Esta funcion elimina una sancion
    my ($dbh,$sanctionnumber)=@_;
 
-   my $sth=$dbh->prepare("delete from circ_sancion where sanctionnumber = ?");
+   my $sth=$dbh->prepare("delete from circ_sancion where id_sancion = ?");
    $sth->execute($sanctionnumber);
    $sth->finish;
 }          
@@ -380,7 +379,7 @@ sub borrarSancionReserva{
 	my ($reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	DELETE FROM circ_sancion 
-				WHERE reservenumber=? AND (now() < startdate)");
+				WHERE id_reserva=? AND (now() < fecha_comienzo)");
 	$sth->execute($reservenumber);
 }
 
@@ -399,7 +398,7 @@ sub actualizarSancion {
 	my ($params)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare(" UPDATE circ_sancion SET id3 = ? WHERE reservenumber = ? ");
+	my $sth=$dbh->prepare(" UPDATE circ_sancion SET id3 = ? WHERE id_reserva = ? ");
 	$sth->execute(
 			$params->{'id3'},
 			$params->{'reservenumber'}

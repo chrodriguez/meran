@@ -8,7 +8,7 @@ use C4::Date;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Reservas;
-use C4::AR::Sanctions;
+use C4::AR::Sanciones;
 
 my $input=new CGI;
 

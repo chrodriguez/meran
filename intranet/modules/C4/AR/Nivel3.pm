@@ -429,7 +429,7 @@ sub disponibilidadItem{
 	$datosItem->{'sePuedeBorrar'}=1;
 	$datosItem->{'sePuedeEditar'}=1;
 
-	my $data= &C4::AR::Issues::getDatosPrestamoDeId3($datosItem->{'id3'});
+	my $data= &C4::AR::Prestamos::getDatosPrestamoDeId3($datosItem->{'id3'});
 
 	if ($data){
     	#el item esta prestado, obtengo la informacion
@@ -442,13 +442,13 @@ sub disponibilidadItem{
 		$datosItem->{'disponibilidad'}="Prestado a ";
 		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
      	
-		my ($vencido,$df)= &C4::AR::Issues::estaVencido($data->{'id3'},$data->{'issuecode'});
+		my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($data->{'id3'},$data->{'issuecode'});
 		my $returndate=format_date($df,$dateformat);
 		$datosItem->{'vencimiento'}=$returndate;
 		if($vencido){
 			$datosItem->{'claseFecha'}="fechaVencida";
 		}
-      		$datosItem->{'renew'} = C4::AR::Issues::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
+      		$datosItem->{'renew'} = C4::AR::Prestamos::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
 	}
 
 	my $data= &C4::AR::Reservas::getDatosReservaDeId3($datosItem->{'id3'});

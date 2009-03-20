@@ -79,7 +79,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 			}
 		}
 
-		my ($tipoPrestamos)=&C4::AR::Issues::IssuesTypeEnabled($iteminfo->{'notforloan'}, $borrnumber);
+		my ($tipoPrestamos)=&C4::AR::Prestamos::IssuesTypeEnabled($iteminfo->{'notforloan'}, $borrnumber);
 			
 		$infoPrestamo[$i]->{'id3Old'}=$id3;
 		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
@@ -141,7 +141,7 @@ print A "id3 antes de setear: $id3\n";
 
 			if(!$msg_object->{'error'}){
 			#Se crean los ticket para imprimir.
-				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
+				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
 			#guardo los errores
 			push (@infoMessages, $msg_object);
@@ -202,7 +202,7 @@ print A "LOOP: $loop\n";
 		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";
-			my ($Message_arrayref) = C4::AR::Issues::t_devolver(\%params);
+			my ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
 
 			#guardo los errores
 			push (@infoMessages, $Message_arrayref);
@@ -210,7 +210,7 @@ print A "Entra al if de dev\n";
 		}elsif($accion eq 'RENOVACION') {
 print A "Entra al if de ren\n";
 print A "ID3: $id3\n";
-			my ($Message_arrayref) = C4::AR::Issues::t_renovar(\%params);
+			my ($Message_arrayref) = C4::AR::Prestamos::t_renovar(\%params);
 
 			#guardo los errores
 			push (@infoMessages, $Message_arrayref);
@@ -218,7 +218,7 @@ print A "ID3: $id3\n";
 
 			if($print_renew && !$Message_arrayref->{'error'}){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-				$ticketObj=C4::AR::Issues::crearTicket($id3,$borrnumber,$loggedinuser);
+				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$borrnumber,$loggedinuser);
 			}
 		}# end elsif($accion eq 'RENOVACION')
 

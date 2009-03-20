@@ -27,41 +27,30 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $dateformat = C4::Date::get_date_format();
 my $branches = C4::AR::Busquedas::getBranches();
 
-my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($session->param('nro_socio')); 
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('userid'));
 
-my @realreserves;
-$rcount = 0;
+my @reservas_asignadas;
+my $racount = 0;
+my @reservas_espera;
+my $recount = 0;
 
-my @waiting;
-my $wcount = 0;
-foreach my $res (@$reserves) {
-	if ((Date_Cmp(ParseDate("today"),ParseDate($res->{'rreminderdate'})) > 0)){
-		$res->{'color'} ='red'; 
-	}
-    
-	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
-    	$res->{'rnotificationdate'} = format_date($res->{'rnotificationdate'},$dateformat);
 
- 	my $author= C4::AR::Busquedas::getautor($res->{'rautor'});
-	#paso como parametro ID de autor de la reserva
-	#guardo el Apellido, Nombre del autor
-	$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
-	
-    	if ($res->{'rid3'}) {
+foreach my $reserva (@$reservas) {
+	if ($reserva->getId3) {
 		#Reservas para retirar
-		$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchname'};
-		push @waiting, $res;
-		$wcount++;
-    	}else{
-		push @realreserves, $res;
-		$rcount++;
-    	}
+		push @reservas_asignadas, $reserva;
+		$racount++;
+   	}else{
+		#Reservas en espera
+		push @reservas_espera, $reserva;
+		$recount++;
+   	}
 }
 
-$t_params->{'RESERVES'}= \@realreserves;
-$t_params->{'reserves_count'}= $rcount;
-$t_params->{'WAITING'}= \@waiting;
-$t_params->{'waiting_count'}=$wcount;
+$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+$t_params->{'reservas_asignadas_count'}= $racount;
+$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+$t_params->{'reservas_espera_count'}=$recount;
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");

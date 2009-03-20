@@ -2,6 +2,7 @@ package C4::Modelo::CircReserva;
 
 use strict;
 use Date::Manip;
+use C4::Date;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -97,6 +98,12 @@ sub getFecha_reserva{
     return ($self->fecha_reserva);
 }
 
+sub getFecha_reserva_formateada{
+    my ($self) = shift; 
+	my $dateformat = C4::Date::get_date_format();
+    return (format_date($self->getFecha_reserva,$dateformat));
+}
+
 sub setFecha_reserva{
     my ($self) = shift;
     my ($fecha_reserva) = @_;
@@ -108,6 +115,12 @@ sub getFecha_notificacion{
     return ($self->fecha_notificacion);
 }
 
+sub getFecha_notificacion_formateada{
+    my ($self) = shift; 
+	my $dateformat = C4::Date::get_date_format();
+    return (format_date($self->getFecha_notificacion,$dateformat));
+}
+
 sub setFecha_notificacion{
     my ($self) = shift;
     my ($fecha_notificacion) = @_;
@@ -117,6 +130,12 @@ sub setFecha_notificacion{
 sub getFecha_recodatorio{
     my ($self) = shift;
     return ($self->fecha_recodatorio);
+}
+
+sub getFecha_recodatorio_formateada{
+    my ($self) = shift; 
+	my $dateformat = C4::Date::get_date_format();
+    return (format_date($self->getFecha_recodatorio,$dateformat));
 }
 
 sub setFecha_recodatorio{
@@ -147,6 +166,11 @@ sub setEstado{
     $self->estado($estado);
 }
 
+sub getTimestamp{
+    my ($self) = shift;
+    return ($self->timestamp);
+}
+
 =item
 agregar
 Funcion que agrega una reserva
@@ -168,10 +192,73 @@ sub agregar {
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new();
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
+}
+
+=item
+agregar
+Funcion para reservar
+=cut
+
+sub reservar {
+	my ($self)=shift;
+	my($params)=@_;
+
+	my $dateformat = C4::Date::get_date_format();
+	my $item;
+	$item->{'id3'}= $params->{'id3'}||'';
+	if($params->{'tipo'} eq 'OPAC'){
+		$item= C4::AR::Reservas::getItemsParaReserva($params->{'id2'});
+	}
+	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
+	my $numeroDias= C4::AR::Preferencias->getValorPreferencia("reserveItem");
+	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
+
+	my %paramsReserva;
+	$paramsReserva{'id1'}= $params->{'id1'};
+	$paramsReserva{'id2'}= $params->{'id2'};
+	$paramsReserva{'id3'}= $item->{'id3'};
+	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
+	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
+	$paramsReserva{'fecha_reserva'}= $desde;
+	$paramsReserva{'fecha_recodatorio'}= $hasta;
+	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
+	$paramsReserva{'estado'}= ($item->{'id3'} ne '')?'E':'G';
+	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
+	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
+	$paramsReserva{'desdeh'}= $apertura;
+	$paramsReserva{'hastah'}= $cierre;	
+	$paramsReserva{'tipo_prestamo'}= $params->{'tipo_prestamo'};
+
+	$self->agregar(\%paramsReserva);
+	
+	$paramsReserva{'id_reserva'}= $self->getId_reserva;
+
+	if( ($item->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
+	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
+	#al ultimo dia que tiene el usuario para ir a retirar el libro
+		my $err= "Error con la fecha";
+		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
+		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+		my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+		
+		use C4::Modelo::CircSancion;
+		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
+		my %paramsSancion;
+		$paramsSancion{'tipo_sancion'}= undef;
+		$paramsSancion{'id_reserva'}= $self->getId_reserva;
+		$paramsSancion{'nro_socio'}= $params->{'nro_socio'};
+		$paramsSancion{'fecha_comienzo'}= $startdate;
+		$paramsSancion{'fecha_final'}= $enddate;
+		$paramsSancion{'dias_sancion'}= undef;
+		$sancion->insertar_sancion(\%paramsSancion);
+	}
+	return (\%paramsReserva);
 }
 1;
 

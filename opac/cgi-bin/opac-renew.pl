@@ -25,7 +25,7 @@ $params{'tipo'}= 'OPAC';
 my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
 $params{'barcode'}= $dataItems->{'barcode'};
 
-my ($msg_object) = C4::AR::Issues::t_renovar(\%params);
+my ($msg_object) = C4::AR::Prestamos::t_renovar(\%params);
 
 my $infoOperacionJSON = to_json $msg_object;
 

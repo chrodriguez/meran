@@ -431,7 +431,7 @@ sub buscarNivel3PorId2YDisponibilidad{
 		my $wthdrawn=getAvail($data->{'wthdrawn'});
 		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
 		
-		my $issuetype=&C4::AR::Issues::IssueType($data->{'id_disponibilidad'});
+		my $issuetype=&C4::AR::Prestamos::IssueType($data->{'id_disponibilidad'});
 		$data->{'issuetype'}=$issuetype->{'description'};
 		
 		if($data->{'id_estado'}){

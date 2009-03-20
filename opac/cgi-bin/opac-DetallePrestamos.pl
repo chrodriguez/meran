@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 use strict;
 require Exporter;
 use CGI;
@@ -25,9 +26,9 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $dateformat = C4::Date::get_date_format();
 
-$t_params->{'borrowernumber'}= C4::Auth::getSessionBorrowerNumber($session);
+$t_params->{'borrowernumber'}= $session->param('userid');
 
-my $issues = C4::AR::Issues::prestamosPorUsuario(C4::Auth::getSessionBorrowerNumber($session));
+my $issues = C4::AR::Prestamos::prestamosPorUsuario($session->param('userid'));
 
 my $count = 0;
 my $overdues_count = 0;
@@ -47,14 +48,14 @@ foreach my $key (keys %$issues) {
      	if (Date::Manip::Date_Cmp($close,C4::Date::ParseDate("today"))<0){#Se paso la hora de cierre
      		$hoy=C4::Date::format_date_in_iso(C4::Date::DateCalc($hoy,"+ 1 day",\$err),$dateformat);
      	}
-   	my $df=C4::Date::format_date_in_iso(C4::AR::Issues::vencimiento($issue->{'id3'}),$dateformat);
+   	my $df=C4::Date::format_date_in_iso(C4::AR::Prestamos::vencimiento($issue->{'id3'}),$dateformat);
     	$issue->{'date_fin'} = C4::Date::format_date($df,$dateformat);
     	if (Date::Manip::Date_Cmp($df,$hoy)<0){ 
 		$venc=1;
 	  	$issue->{'color'} ='red';
 	}
 
-    	$issue->{'renew'} = &C4::AR::Issues::sepuederenovar(C4::Auth::getSessionBorrowerNumber($session), $issue->{'id3'});
+    	$issue->{'renew'} = &C4::AR::Prestamos::sepuederenovar(C4::Auth::getSessionBorrowerNumber($session), $issue->{'id3'});
     	if ($issue->{'overdue'}) {
 		push @overdues, $issue;
 		$overdues_count++;

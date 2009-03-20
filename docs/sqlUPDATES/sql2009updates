@@ -465,4 +465,35 @@ INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
 (1, 'Para Sala'),
 (2, 'Descarga');
 
+--
+-- Para PRESTAMOS!!
+--
 
+DROP TABLE`circ_prestamo`;
+CREATE TABLE `circ_prestamo` (
+  `id_prestamo` int(11) NOT NULL auto_increment,
+  `id3` int(11) NOT NULL,
+  `nro_socio` int(11) NOT NULL default '0',
+  `tipo_prestamo` char(2) NOT NULL default 'DO',
+  `fecha_prestamo` date default NULL,
+  `id_ui` char(4) default NULL,
+  `id_ui_prestamo` char(4) default NULL,
+  `fecha_devolucion` date default NULL,
+  `renovaciones` tinyint(4) default NULL,
+  `fecha_ultima_renovacion` date default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id_prestamo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- Sanciones!!
+
+ ALTER TABLE `circ_sancion` CHANGE `sanctionnumber` `id_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0',
+CHANGE `reservenumber` `id_reserva` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `startdate` `fecha_comienzo` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `enddate` `fecha_final` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `delaydays` `dias_sancion` INT( 11 ) NULL DEFAULT '0',
+CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL ;
+
+ ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;

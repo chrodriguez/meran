@@ -26,7 +26,7 @@ my $funcion=$obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cant,$issues)=C4::AR::Issues::historialPrestamos($bornum,$ini,$cantR,$orden);
+my ($cant,$issues)=C4::AR::Prestamos::historialPrestamos($bornum,$ini,$cantR,$orden);
 
 $t_params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 

@@ -6,7 +6,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
@@ -19,7 +19,7 @@ use vars qw(@EXPORT @ISA);
     &ListadoDePersonas
     &esRegular
     &estaSancionado
-    &llegoMaxReservas
+    &
     &getBorrower
     &getBorrowerInfo
     &buscarBorrower
@@ -491,7 +491,7 @@ sub _eliminarUsuario{
 sub _verficarEliminarUsuario {
     my($params,$msg_object)=@_;
 
-    my ($cantVencidos,$cantIssues) = C4::AR::Issues::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
+    my ($cantVencidos,$cantIssues) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($params->{'borrowernumber'});
 
     my ($cantidadTotalDePrestamos) = $cantVencidos + $cantIssues;
 
@@ -1155,9 +1155,9 @@ sub esRegular {
 #Verifica si el usuario llego al maximo de las resevas que puede relizar sengun la preferencia del sistema
 sub llegoMaxReservas {
 
-    my ($borrowernumber)=@_;
+    my ($usr_socio)=@_;
 
-    my $cant= &C4::AR::Reservas::cant_reservas($borrowernumber);    
+    my $cant= &C4::AR::Reservas::cant_reservas($usr_socio);
 
     return $cant >= C4::AR::Preferencias->getValorPreferencia("maxreserves");
 }
@@ -1168,7 +1168,7 @@ sub estaSancionado {
     my ($borrowernumber,$issuecode)=@_;
     my $sancionado= 0;
 
-    my @sancion= C4::AR::Sanctions::permitionToLoan($borrowernumber, $issuecode);
+    my @sancion= C4::AR::Sanciones::permitionToLoan($borrowernumber, $issuecode);
 
     if (($sancion[0]||$sancion[1])) { 
         $sancionado= 1;
@@ -1316,7 +1316,7 @@ sub mailIssuesForBorrower{
     my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
     while (my $data = $sth->fetchrow_hashref) {
         #Para que solo mande mail a los prestamos vencidos
-        $data->{'vencimiento'}=format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
+        $data->{'vencimiento'}=format_date(C4::AR::Prestamos::vencimiento($data->{'id3'}),$dateformat);
         my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);
         if ($flag lt 0){
             #Solo ingresa los prestamos vencidos a el arreglo a retornar

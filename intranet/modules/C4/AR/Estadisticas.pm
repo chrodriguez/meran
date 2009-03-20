@@ -711,7 +711,7 @@ sub prestamos{
 	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 
 	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Issues::vencimiento($data->{'id3'}),$dateformat);
+		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Prestamos::vencimiento($data->{'id3'}),$dateformat);
 		#Se filtra por Fechas de Vencimiento 
 		
 		if ( estaEnteFechas($begindate,$enddate,$data->{'vencimiento'}) ) {

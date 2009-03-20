@@ -5,7 +5,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use Date::Manip;
 
 my $input=new CGI;
@@ -23,7 +23,7 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $borrnumber= $obj->{'borrnumber'};
 
-my $issueslist = C4::AR::Issues::prestamosPorUsuario($borrnumber);
+my $issueslist = C4::AR::Prestamos::prestamosPorUsuario($borrnumber);
 my @issues;
 my $dateformat = C4::Date::get_date_format();
 
@@ -31,7 +31,7 @@ foreach my $it (keys %$issueslist) {
 	my $book= $issueslist->{$it};
 	$book->{'date_due'} = format_date($book->{'date_due'},$dateformat);
 
-	my ($vencido,$df)= &C4::AR::Issues::estaVencido($book->{'id3'},$book->{'issuecode'});
+	my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($book->{'id3'},$book->{'issuecode'});
 	$book->{'date_fin'} = format_date($df,$dateformat);
 	if ($vencido){$book->{'color'} ='red';}
 

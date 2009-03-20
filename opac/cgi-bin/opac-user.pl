@@ -4,7 +4,7 @@ require Exporter;
 use CGI;
 use C4::Auth;
 use C4::Date;
-use C4::AR::Sanctions;
+use C4::AR::Sanciones;
 use Date::Manip;
 use C4::AR::Usuarios;
 
@@ -55,14 +55,14 @@ if (C4::AR::Preferencias->getValorPreferencia("UploadPictureFromOPAC")) {
 	$t_params->{'UploadPictureFromOPAC'}=0;
 }
 
-my $sanc= hasSanctions($session->param('userid'));
+my $sanc= C4::AR::Sanciones::hasSanctions($session->param('userid'));
 
 foreach my $san (@$sanc) {
 if ($san->{'id3'}) {
 	my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
 	$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; }
-	$san->{'enddate'}=format_date($san->{'enddate'},$dateformat);
-	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
+	$san->{'fecha_final'}=format_date($san->{'fecha_final'},$dateformat);
+	$san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);
 }
 if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
 $t_params->{'updatedata'}= (!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));

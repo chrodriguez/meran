@@ -218,7 +218,7 @@ if($accion eq "buscar"){
 			$labels=\%labelsMapeo;
 		}
 		elsif($campo eq "notforloan"){
-			my @labels=&C4::AR::Issues::IssuesType();
+			my @labels=&C4::AR::Prestamos::IssuesType();
 			my $key;
 			foreach my $issuetype (@labels){
 				$key=$issuetype->{'issuecode'};

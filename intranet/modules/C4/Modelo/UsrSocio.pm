@@ -426,7 +426,7 @@ sub setId_estado{
 sub esRegular{
     my ($self) = shift;
 
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getEstado);
+    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
     $estado->load();
 
     return $estado->getRegular;

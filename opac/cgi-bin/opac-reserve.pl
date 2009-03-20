@@ -31,7 +31,7 @@ $obj=from_json_ISO($obj);
 
 my $id1= $obj->{'id1'};
 my $id2= $obj->{'id2'};
-my $socio= $session->param('nro_socio');
+my $socio= $session->param('userid');
 
 my %params;
 $params{'tipo'}= 'OPAC'; 
@@ -39,20 +39,16 @@ $params{'id1'}= $id1;
 $params{'id2'}= $id2;
 $params{'nro_socio'}= $socio;
 $params{'loggedinuser'}= $socio;
-$params{'issuesType'}= 'DO';
+$params{'tipo_prestamo'}= 'DO';
 
-# my ($error, $codMsg, $message)= &C4::AR::Reservas::t_reservarOPAC(\%params);
 my ($msg_object)= &C4::AR::Reservas::t_reservarOPAC(\%params);	
 my $acciones;
 
 $acciones= C4::AR::Mensajes::getAccion($msg_object->{'codMsg'});
-
-
-my ($cant, $reservas)= C4::AR::Reservas::DatosReservas($socio);
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('userid'));
 
 if($msg_object->{'error'}){
 #SE PRODUJO ALGUN ERROR
-
 	if($acciones->{'maximoReservas'}){
 	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
 		$t_params->{'RESERVES'}= $reservas;
@@ -60,47 +56,31 @@ if($msg_object->{'error'}){
 }else{
 # SE REALIZO LA RESERVA CON EXITO
 
-	my $dateformat = C4::Date::get_date_format();
-	my $branches = C4::AR::Busquedas::getBranches();
-	my @realreserves;
-	my $rcount = 0;
-	
-	my @waiting;
-	my $wcount = 0;
-	foreach my $res (@$reservas) {
+	my @reservas_asignadas;
+	my $racount = 0;
+	my @reservas_espera;
+	my $recount = 0;
 
-		if ((C4::Date::Date_Cmp(ParseDate("today"),C4::Date::ParseDate($res->{'rreminderdate'})) > 0)){
-			$res->{'color'} ='red'; 
-		}
-	
-		$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
-		$res->{'rnotificationdate'} = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
-	
-		my $author= C4::AR::Busquedas::getautor($res->{'rautor'});
-		#paso como parametro ID de autor de la reserva
-		#guardo el Apellido, Nombre del autor
-		$res->{'autor'} = $author->{'completo'}; #le paso Apellido y Nombre
-		
-		if ($res->{'rid3'}) {
+
+	foreach my $reserva (@$reservas) {
+		if ($reserva->getId3) {
 			#Reservas para retirar
-			$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchname'};
-			push @waiting, $res;
-			$wcount++;
-		}else{
-			push @realreserves, $res;
-			$rcount++;
-		}
-	}#end foreach
-	
-		$t_params->{'WAITING'}= \@waiting;
-		$t_params->{'RESERVES'}= \@realreserves;
+			push @reservas_asignadas, $reserva;
+			$racount++;
+   		}else{
+			#Reservas en espera
+			push @reservas_espera, $reserva;
+			$recount++;
+   		}
+	}
+
+	$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+	$t_params->{'reservas_asignadas_count'}= $racount;
+	$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+	$t_params->{'reservas_espera_count'}=$recount;
 }
 
 
-
-
-$t_params->{'id1'}= $id1;
-$t_params->{'id2'}= $id2;
 $t_params->{'message'}= $msg_object->{'messages'}->[0]->{'message'};
 $t_params->{'error'}=  $msg_object->{'error'};
 $t_params->{'reservaGrupo'}= $acciones->{'reservaGrupo'};

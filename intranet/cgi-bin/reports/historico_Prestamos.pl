@@ -7,7 +7,7 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use C4::Biblio;
 use C4::AR::Busquedas;
 
@@ -32,11 +32,11 @@ my %params;
 $params{'default'}= 'SIN SELECCIONAR';
 my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
-#llamo a la funcion en C4::AR::Issues, traer todos los tipos de prestamos
+#llamo a la funcion en C4::AR::Prestamos, traer todos los tipos de prestamos
 #*************************************Select de Tipos de Prestamos*******************************
 my @select_tiposPrestamos_Values;
 my %select_tiposPrestamos_Labels;
-my @tipoDePrestamos=&IssuesType(); #Funcion de C4::AR::Issues, traer los tipos de prestamos
+my @tipoDePrestamos=&IssuesType(); #Funcion de C4::AR::Prestamos, traer los tipos de prestamos
 
 push @select_tiposPrestamos_Values, '-1';
 $select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';

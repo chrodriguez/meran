@@ -24,6 +24,9 @@ require Exporter;
 
 use Mail::Sendmail;
 use C4::AR::Mensajes;
+use C4::AR::Prestamos;
+use C4::Modelo::CircReserva;
+use C4::Modelo::CircReserva::Manager;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -56,85 +59,31 @@ $VERSION = 0.01;
 	&eliminarReservas
 );
 
-
-
-sub reservar {
-	my($params)=@_;
-
-	my $dateformat = C4::Date::get_date_format();
-	my $item;
-	$item->{'id3'}= $params->{'id3'}||'';
-	if($params->{'tipo'} eq 'OPAC'){
-		$item= C4::AR::Reservas->getItemsParaReserva($params->{'id2'});
-	}
-	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
-	my $numeroDias= C4::AR::Preferencias->getValorPreferencia("reserveItem");
-	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
-
-	my %paramsReserva;
-	$paramsReserva{'id1'}= $params->{'id1'};
-	$paramsReserva{'id2'}= $params->{'id2'};
-	$paramsReserva{'id3'}= $item->{'id3'};
-	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
-	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
-	$paramsReserva{'fecha_reserva'}= $desde;
-	$paramsReserva{'fecha_recodatorio'}= $hasta;
-	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
-	$paramsReserva{'estado'}= ($item->{'id3'} ne '')?'E':'G';
-	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
-	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
-	$paramsReserva{'desdeh'}= $apertura;
-	$paramsReserva{'hastah'}= $cierre;	
-	$paramsReserva{'issuesType'}= $params->{'issuesType'};
-
-	my ($reserva) = C4::Modelo::CircReserva->new();
-	$reserva->agregar(\%paramsReserva);
-	
-	my $reservenumber= $reserva->id_reserva;
-	$paramsReserva{'reservenumber'}= $reservenumber;
-
-	if( ($item->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
-	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
-	#al ultimo dia que tiene el usuario para ir a retirar el libro
-		my $err= "Error con la fecha";
-		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
-		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
-		my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-
-		C4::AR::Sanctions::insertSanction(	undef,
-							$reservenumber,
-							$params->{'nro_socio'}, 
-							$startdate, 
-							$enddate, 
-							undef
-		);	
-	}
-	return (\%paramsReserva);
-}
-
 sub t_reservarOPAC {
 	
 	my($params)=@_;
 	my $reservaGrupo= 0;
-
+	C4::AR::Debug::debug("Antes de verificar");
 	my ($msg_object)= &_verificaciones($params);
 	
 	if(!$msg_object->{'error'}){
 	#No hay error
+		C4::AR::Debug::debug("No hay error");
 		my ($paramsReserva);
+		C4::AR::Debug::debug("antes de reservar!!!");
+		my  $reserva = C4::Modelo::CircReserva->new();
+        my $db = $reserva->db;
+		   $db->{connect_options}->{AutoCommit} = 0;
+           $db->begin_work;
 
-		my ($reserva) = C4::Modelo::CircReserva->new();
-        	my $db = $reserva->db;
-		$db->{connect_options}->{AutoCommit} = 0;
-        	$db->begin_work;
 		eval {
-			($paramsReserva)= reservar($params);	
+			C4::AR::Debug::debug("Se va a reservar!!!");
+			($paramsReserva)= $reserva->reservar($params);	
 			$db->commit;
-	
+			C4::AR::Debug::debug("Termino de  reservar!!!");
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
+			C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!!");
 			#SE RESERVO CON EXITO UN EJEMPLAR
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'},
@@ -144,13 +93,15 @@ sub t_reservarOPAC {
 								]} ) ;
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'nro_socio'});
+				C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO");
+				my $socio= C4::AR::Usuarios::getSocioInfo($params->{'nro_socio'});
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
 			}	
 		};
 
 		if ($@){
+			C4::AR::Debug::debug("ERROR");
 			#Se loguea error de Base de Datos
 			&C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
 			eval {$db->rollback};
@@ -173,9 +124,10 @@ sub t_cancelar_y_reservar {
 	my ($msg_object);	
 
 	my ($reserva) = C4::Modelo::CircReserva->new();
-        my $db = $reserva->db;
+    
+	my $db = $reserva->db;
 	$db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
+    $db->begin_work;
 
 	eval {
 		_cancelar_reserva($params);
@@ -396,13 +348,13 @@ sub _cancelar_reserva{
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
 		reasignarReservaEnEspera($reserva,$loggedinuser);
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-		C4::AR::Sanctions::borrarSancionReserva($reservenumber);
+		C4::AR::Sanciones::borrarSancionReserva($reservenumber);
 	}
 
 #Actualizo la sancion para que refleje el id3 y asi poder informalo
 	$params->{'id3'}= $id3;
 	$params->{'reservenumber'}= $reservenumber;
-	C4::AR::Sanctions::actualizarSancion($params);
+	C4::AR::Sanciones::actualizarSancion($params);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $data_hash;
@@ -479,7 +431,7 @@ sub _actualizarDatosReservaEnEspera{
 	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
 	my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-	C4::AR::Sanctions::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
+	C4::AR::Sanciones::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
 
 	my $params;
 	$params->{'cierre'}= $cierre;
@@ -503,31 +455,33 @@ Funcion que elimina la reserva de la base de datos.
 # }
 
 =item
+DEPRECATED  -- se usa directamente obtenerReservasDeSocio
 DatosReservas
 Busca todas las reservas que tiene el usuario que llega como parametro, trae todo los datos de los documentos asociados a la reserva.
 =cut
 sub DatosReservas {
-	my ($bor)=@_;
+	my ($nro_socio)=@_;
 
-	my $reservas_array_ref =obtenerReservasDeSocio($bor);
-	my $dateformat = C4::Date::get_date_format();
+	my $reservas_array_ref =obtenerReservasDeSocio($nro_socio);
+	
+my $dateformat = C4::Date::get_date_format();
 	my @results;
 
 	foreach my $reserva (@$reservas_array_ref){
 		my $data;
 
-		$data->{'rid3'}=$reserva->getId_ui;
-		$data->{'rbranch'}=$reserva->getId2;
+		$data->{'rid3'}=$reserva->getId3;
+		$data->{'rbranch'}=$reserva->getId_ui;
 		$data->{'id_reserva'}=$reserva->getId_reserva;
 		$data->{'estado'}=$reserva->getEstado;
 		$data->{'rtitulo'}=$reserva->nivel2->nivel1->getTitulo;
 		$data->{'rid1'}=$reserva->nivel2->nivel1->getId1;
 		$data->{'rid2'}=$reserva->nivel2->getId2;
 		$data->{'anio_publicacion'}=$reserva->nivel2->getAnio_publicacion;
-		$data->{'rautor'}=$reserva->nivel2->nivel1->cat_autor->getId;
-		$data->{'nomCompleto'}=$reserva->nivel2->nivel1->cat_autor->getCompleto;
+ 		$data->{'rautor'}=$reserva->nivel2->nivel1->cat_autor->getId;
+ 		$data->{'nomCompleto'}=$reserva->nivel2->nivel1->cat_autor->getCompleto;
 
-		$data->{'rreminderdate'}=C4::Date::format_date($reserva->getFecha_recodatorio,$dateformat);
+		$data->{'fecha_recodatorio'}=C4::Date::format_date($reserva->getFecha_recodatorio,$dateformat);
 		$data->{'rreservedate'}=C4::Date::format_date($reserva->getFecha_reserva,$dateformat);
 		$data->{'rnotificationdate'}= C4::Date::format_date($reserva->getFecha_notificacion,$dateformat);
 		$data->{'redicion'}=C4::AR::Nivel2::getEdicion($reserva->getId2);
@@ -536,7 +490,7 @@ sub DatosReservas {
 	}
 
 
-	return($#results+1,\@results);
+	return(scalar(@$reservas_array_ref),$reservas_array_ref);
 }
 
 # =item
@@ -574,13 +528,13 @@ sub getDisponibilidad{
 
 =item
 _verificarTipoReserva
-Verifica que el usuario no reserve un item que ya tenga una reserva para el mismo grupo y para el mismo tipo de prestamo
+Verifica que el usuario no reserve un item y que ya tenga una reserva para el mismo grupo
 =cut
 sub _verificarTipoReserva {
-	my ($borrowernumber, $id2, $id3, $tipo)=@_;
+	my ($nro_socio, $id2)=@_;
 	my $error= 0;
-	my ($cant, $reservas)= getReservasDeSocio($borrowernumber, $id2);
-#Se intento reservar desde el OPAC sobre el mismo GRUPO
+	my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);
+	#Se intento reservar desde el OPAC sobre el mismo GRUPO
 	if ($cant == 1){$error= 1;}
 	return ($error);
 }
@@ -737,7 +691,7 @@ sub getItemsParaReserva{
 	my ($id2)=@_;
         my $dbh = C4::Context->dbh;
 
-	my $query= "	SELECT n3.id1, n3.id3, n3.holdingbranch 
+	my $query= "	SELECT n3.id1, n3.id3, n3.id_ui_poseedora 
 			FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.id_disponibilidad=0 AND n3.id_estado=0 
 			AND n3.id3 NOT IN (	SELECT r.id3 FROM circ_reserva r 
 						WHERE id2 = ? AND id3 IS NOT NULL   )";
@@ -750,25 +704,17 @@ sub getItemsParaReserva{
 }
 
 sub getDisponibilidadGrupo{
-#Busca los items sin reservas para los prestamos y nuevas reservas.
+#Busca si el grupo tiene solo ejemplares para prestamo en sala o no.
 	my ($id2)=@_;
-        my $dbh = C4::Context->dbh;
-	my $query= "	SELECT count(*) as disponibilidad
-			FROM cat_nivel2 n2 INNER JOIN cat_nivel3 n3 ON (n2.id2 = n3.id2)
-			WHERE (n2.id2 = ?) AND (n3.id_disponibilidad = 0) ";
-## FIXME
-# Miguel - FALTA VER EL wthdrawn (DISPONIBLE , NO DISPONIBLE) ????????????????
-# puede contar items que sea para prestamo pero que esten perdidos o dados de baja
-# ver como esta en V2
-=item
-SELECT count(*) as disponibilidad
-FROM biblioitems bib INNER JOIN items i ON (bib.biblioitemnumber= i.biblioitemnumber)
-WHERE (bib.biblioitemnumber = 2965) AND(i.notforloan = 0)AND(wthdrawn = 0)
-=cut
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id2);
-	return ($sth->fetchrow > 0)?'DO':'SA';
+	my @filtros;
+	push(@filtros, ( id2 => { eq => $id2}) );
+	push(@filtros, ( id_disponibilidad => { eq => 0}) ); # Es Domiciliario
+	push(@filtros, ( id_estado => { eq => 0}) ); # Esta Disponible
+
+	my $cantidad_prestamos= C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros);
+
+	return ($cantidad_prestamos > 0)?'DO':'SA';
 }
 
 sub _verificaciones {
@@ -778,36 +724,38 @@ sub _verificaciones {
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my $barcode= $params->{'barcode'};
-	my $socio= $params->{'nro_socio'};
+	my $nro_socio= $params->{'nro_socio'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
 	my $msg_object= C4::AR::Mensajes::create();
 	my $dateformat=C4::Date::get_date_format();
 
+	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
 open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
 print A "tipo: $tipo\n";
 print A "id2: $id2\n";
 print A "id3: $id3\n";
-print A "socio: $socio\n";
+print A "socio: $nro_socio\n";
 print A "issueType: $issueType\n";
+
 #Se verifica que el usuario sea Regular
-	if( !&C4::AR::Usuarios::esRegular($socio) ){
+	if( !$socio->esRegular ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
-print A "Entro al if de regularidad\n";
+	print A "Entro al if de regularidad\n";
 	}
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-	my $infoBorr=C4::AR::Usuarios::getBorrowerInfo($socio);
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && ($infoBorr->{'usercourse'} == "NULL" ) ){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && (!$socio->getCumple_requisito) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
-print A "Entro al if del curso en el opac\n";
+	print A "Entro al if de si cumple o no requisito\n";
 	}
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  _verificarMaxTipoPrestamo($socio, $issueType) ){
+	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::_verificarMaxTipoPrestamo($nro_socio, $issueType) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
 print A "Entro al if que verifica la cantidad de prestamos";
@@ -821,7 +769,7 @@ print A "Entro al if que verifica la cantidad de prestamos";
 print A "Entro al if de prestamos especiales";
 	}
 #Se verfica si el usuario esta sancionado
-	my ($sancionado,$fechaFin)= C4::AR::Sanctions::permitionToLoan($socio, $issueType);
+	my ($sancionado,$fechaFin)= C4::AR::Sanciones::permitionToLoan($nro_socio, $issueType);
 print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
 	if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
 		$msg_object->{'error'}= 1;
@@ -835,15 +783,15 @@ print A "Entro al if de sanciones";
 print A "Entro al if de prestamos de sala";
 	}
 
-#Se verifica que el usuario no tenga dos reservas sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($socio, $id2, $id3, $tipo)) ){
+#Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
 print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
 	}
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($socio))){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($nro_socio))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
 print A "Entro al if de maximo de reservas desde OPAC";
@@ -851,12 +799,14 @@ print A "Entro al if de maximo de reservas desde OPAC";
 
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && (&C4::AR::Issues::getCountPrestamosDeGrupo($socio, $id2, $issueType)) ){
+	if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupo($nro_socio, $id2, $issueType)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
 print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
 	}
-print A "\n\n";
+
+print A "FIN ".$msg_object->{'error'}." !!!\n\n";
+print A "FIN VERIFICACION !!!\n\n";
 # print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
 close(A);
 
@@ -886,7 +836,7 @@ print A "issueType: $issueType\n";
 	#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
 	if ($issueType eq "DO"){
 	# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
-		my ($cant, @issuetypes) = C4::AR::Issues::PrestamosMaximos($borrowernumber);
+		my ($cant, @issuetypes) = C4::AR::Prestamos::PrestamosMaximos($borrowernumber);
 		foreach my $iss (@issuetypes){
 			if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 # 				$codMsg= 'P108';
@@ -906,20 +856,6 @@ print A "issueType: $issueType\n";
 	}
 
 close(A);
-}
-
-
-sub _verificarMaxTipoPrestamo{
-	my ($borrowernumber,$issuetype)=@_;
-
-	my $error=0;
-	my $issuetype_hashref=C4::AR::Issues::IssueType($issuetype);
-	my $maxissues= $issuetype_hashref->{'maxissues'};
-	my ($cantissues, $issues)= C4::AR::Issues::DatosPrestamosPorTipo($borrowernumber,$issuetype_hashref);
-
-	if ($cantissues >= $maxissues) {$error=1}
-
-	return $error;
 }
 
 
@@ -1216,7 +1152,7 @@ sub eliminarReservasVencidas{
 		$params{'id3'}=$reserva->getId3;
 		$params{'reservenumber'}=$reserva->getId;
 		$params{'loggedinuser'}= $loggedinuser;
-		C4::AR::Sanctions::actualizarSancion(\%params);
+		C4::AR::Sanciones::actualizarSancion(\%params);
 
 		#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 		$reserva->delete();

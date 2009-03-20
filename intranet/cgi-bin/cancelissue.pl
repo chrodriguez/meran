@@ -23,7 +23,7 @@
 
 use strict;
 use CGI;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use C4::Auth;
 
 my $input = new CGI;

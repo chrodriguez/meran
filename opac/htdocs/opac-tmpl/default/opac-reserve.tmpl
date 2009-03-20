@@ -5,7 +5,7 @@
 	[% message %]
 	[% IF reservaGrupo %]
 		<center> 
-			<a href="opac-userupdate.pl?borrnumber=[% borrowernumber %]">
+			<a href="opac-userupdate.pl">
 				<input title="[% 'Modificar'| i18n %]" type="button" value="[% 'Modificar' | i18n %]">
 			</a> 
 		</center>
@@ -31,37 +31,37 @@
 		<th>[% "Fecha de Vencimiento" | i18n %]</th>
 		<th>[% "Acci&oacute;n" | i18n %]</th>
 	</tr>
-[% FOREACH RESERVES %]
+[% FOREACH reserva IN RESERVES %]
 	<tr border="1" bordercolor="#f2f2f2">
  		<td class="impar">
-			<a class="click" onClick="detalle([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-				[% rtitulo %]
+			<a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+				[% reserva.nivel2.nivel1.getTitulo %]
 			</a>
  		</td>			
  		<td class="impar">
-		[% IF rautor %]
-			[% nomCompleto %]
+		[% IF reserva.nivel2.nivel1.getAutor %]
+			[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
 		[% ELSE %]
 			&nbsp;
 		[% END %]
  		</td>
  		<td align=center class="impar">
-		[% IF redicion %]
+<!--		[% IF redicion %]
 			[% redicion %]
 		[% ELSE %] 
 			- 
-		[% END %]
+		[% END %]-->
 		</td>
  		<td class="impar" align="center">
-			[% rreservedate %]
+			[% reserva.getFecha_reserva_formateada %]
 		</td>
 		<td class="impar" align="center">
-			[% rreminderdate %]
+			[% reserva.getFecha_recordatorio_formateada %]
 		</td>
 
 		<td class="impar">
 		[% IF CirculationEnabled %]
-			<a class="click" onClick="cancelarYReservar([% reservenumber %],[% id1 %],[% id2 %])">[% "Cancelar" | i18n %]</a> 
+			<a class="click" onClick="cancelarYReservar([% reserva.getId_reserva %],[% reserva.nivel2.nivel1.getId1 %],[% reserva.nivel2.getId2 %])">[% "Cancelar" | i18n %]</a> 
 		[% ELSE %]
 			[% "No disponible" | i18n %]
 		[% END %]
@@ -90,36 +90,36 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-[% FOREACH RESERVES %]
+[% FOREACH reserva IN  RESERVAS_ASIGNADAS %]
   <tr border="1" bordercolor="#f2f2f2">
 	<td class="impar">
-	<a class="click" onClick="detalleMaterialEnEspera([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-		[% rtitulo %]
-		[% IF runititle %]
+	<a class="click" onClick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+		[% reserva.nivel2.nivel1.getTitulo %]
+<!--		[% IF runititle %]
 			:&nbsp;[% runititle %]
-		[% END %]
+		[% END %]-->
   	</a>
  	</td>
  	<td class="impar">
 	[% IF rautor %]
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
-		[% autor %]
+		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
 		</a>
 	[% ELSE %]
 		&nbsp;
 	[% END %]
  	</td>
 	<td align=center class="impar"> 
-	[% IF redicion %]
+<!--	[% IF redicion %]
 		[% redicion %]
 	[% ELSE %] 
 		- 
-	[% END %]
+	[% END %]-->
 	</td>
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reservenumber %])">[% "Cancelar" | i18n %]</a>
+		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]
@@ -150,53 +150,52 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-[% FOREACH WAITING %]
+[% FOREACH reserva IN RESERVAS_ESPERA %]
   <tr bordercolor="#f2f2f2">
 	<td class="impar">
-		<b><a class="click" onClick="detalle([% rid1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-		[% rtitulo %]
-		[% IF runititle %]:&nbsp;[% runititle %][% END %]
+		<b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+		[% reserva.nivel2.nivel1.getTitulo %]
+<!--		[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
 		</a></b>
 	</td>
 	<td class="impar">
-  	[% IF rautor %]
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% rautor %]" >
-		[% autor %]
+  	[% IF reserva.nivel2.nivel1.getAutor %]
+		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
 		</a>
   	[% ELSE %]
 		&nbsp;
  	[% END %]
 	</td> 
 	<td align=center class="impar">  
-	[% IF redicion %]
+<!--	[% IF redicion %]
 		[% redicion %]
 	[% END %]
 	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
-	[% IF volume %]        t [% volume %] [% END %]
+	[% IF volume %]        t [% volume %] [% END %]-->
 	</td>
 	<td class="impar" align="center">
-	[% IF rnotificationdate %]
-		[% rnotificationdate %]
-	[% ELSE %] 
+	[% IF reserva.getFecha_notificacion %] 
+		[% reserva.getFecha_notificacion_formateada %]
+	[% ELSE %]
 		- 
 	[% END %]
 	</td>
 	<td class="impar" align="center">
-	[% IF rreminderdate %]
-		<font color="[% color %]">[% rreminderdate %]</font>
-	[% ELSE %] 
+	[% IF reserva.getFecha_recordatorio %]
+		<font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+	[% ELSE %]
 		- 
 	[% END %]
 	</td>
-
 
 	<td class="impar">
-		<b>[% rbranch %]</b>
+		<b>[% reserva.ui.getNombre %]</b>
 	</td>
 	<td class="impar" align="center"> 
 	[% IF CirculationEnabled %]
 		<a class="click"
-		onClick="cancelar([% reservenumber %])">[% "Cancelar" | i18n %]</a>
+		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]

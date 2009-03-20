@@ -26,8 +26,8 @@ use CGI;
 use PDF::Report;
 use C4::AR::PdfGenerator;
 use C4::AR::Usuarios;
-use C4::AR::Sanctions;
-use C4::AR::Issues;
+use C4::AR::Sanciones;
+use C4::AR::Prestamos;
 
 
 my $input= new CGI;
@@ -42,9 +42,9 @@ my $ok=1;
 my $msj="";
 # RESERVAS ADJUDICADAS 0--------> flag 1; function C4::AR::Reservas::cant_reservas($borum);
 # RESERVAS EN ESPERA   1--------> flag 2; function C4::AR::Reserves::cant_waiting($borum);
-# PRESTAMOS VENCIDOS   2--------> flag 3; fucntion C4::AR::Sanctions::hasDebts("",$borum); 1 tiene vencidos. 0 no.
-# PRESTAMOS EN CURSO   3--------> flag 4; fucntion C4::AR::Issues::DatosPrestamos($borum);
-# SANSIONADO           4--------> flag 5; function C4::AR::Sanctions::hasSanctions($borum);
+# PRESTAMOS VENCIDOS   2--------> flag 3; fucntion C4::AR::Sanciones::hasDebts("",$borum); 1 tiene vencidos. 0 no.
+# PRESTAMOS EN CURSO   3--------> flag 4; fucntion C4::AR::Prestamos::DatosPrestamos($borum);
+# SANSIONADO           4--------> flag 5; function C4::AR::Sanciones::hasSanctions($borum);
 
 if($array[0] eq "1"){
 	if(C4::AR::Reservas::cant_reservas($id_socio)){
@@ -59,20 +59,20 @@ if($array[1] eq "1" && $ok){
 	}
 }
 if($array[2] eq "1" && $ok){
-	if(&C4::AR::Sanctions::tieneLibroVencido($id_socio)){
+	if(&C4::AR::Sanciones::tieneLibroVencido($id_socio)){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos vencidos";
 	}
 }
 if($array[3] eq "1" && $ok){
-	my($cant,$result)=C4::AR::Issues::DatosPrestamos($id_socio);
+	my($cant,$result)=C4::AR::Prestamos::DatosPrestamos($id_socio);
 	if($cant){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos en curso";
 	}
 }
 if($array[4] eq "1" && $ok){
-	my $result=C4::AR::Sanctions::hasSanctions($id_socio);
+	my $result=C4::AR::Sanciones::hasSanctions($id_socio);
 	if(scalar(@$result) > 0){
 		$ok=0;
 		$msj="por estar sancionado";

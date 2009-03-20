@@ -41,7 +41,7 @@ $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $
 my @resultsdata;
 for (my $i=0; $i < $cantidad; $i++){
     my $clase="";
-    my ($od,$issue)=C4::AR::Issues::cantidadDePrestamosPorUsuario($socios->[$i]->getNro_socio);
+    my ($od,$issue)=C4::AR::Prestamos::cantidadDePrestamosPorUsuario($socios->[$i]->getNro_socio);
     my $regular= &C4::AR::Usuarios::esRegular($socios->[$i]->getNro_socio);
 
     if ($regular eq 1){$regular="Regular"; $clase="prestamo";}  

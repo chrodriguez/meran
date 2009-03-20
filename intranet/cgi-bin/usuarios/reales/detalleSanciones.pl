@@ -4,10 +4,10 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Date;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use Date::Manip;
 use C4::Date;
-use C4::AR::Sanctions;
+use C4::AR::Sanciones;
 
 my $input=new CGI;
 

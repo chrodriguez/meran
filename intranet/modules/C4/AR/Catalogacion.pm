@@ -1200,7 +1200,7 @@ sub buscarNivel3{
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
 		$data->{'disponibilidad'}=$wthdrawn->{'description'};
 		
-		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
+		my $issuetype=&C4::AR::Prestamos::IssueType($data->{'notforloan'});
 		if($data->{'notforloan'}=='DO'){
 			$data->{'forloan'}=1;
 		}
@@ -1276,7 +1276,7 @@ sub buscarNivel3PorId2{
 		my $wthdrawn=&C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
 		$data->{'disponibilidad'}=$wthdrawn->{'description'};
 		
-		my $issuetype=&C4::AR::Issues::IssueType($data->{'notforloan'});
+		my $issuetype=&C4::AR::Prestamos::IssueType($data->{'notforloan'});
 		$data->{'issuetype'}=$issuetype->{'description'};
 		push(@result,$data);
 	}

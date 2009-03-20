@@ -407,7 +407,7 @@ sub getCantPrestados{
 	my $query= " 	SELECT count(*) AS cantPrestamos
 			FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
 			INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
-			WHERE n2.id2 = ? AND i.returndate IS NULL ";
+			WHERE n2.id2 = ? AND i.fecha_devolucion IS NULL ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($id2);

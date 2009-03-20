@@ -5,10 +5,10 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Date;
-use C4::AR::Issues;
+use C4::AR::Prestamos;
 use Date::Manip;
 use C4::Date;
-use C4::AR::Sanctions;
+use C4::AR::Sanciones;
 
 my $input=new CGI;
 
@@ -25,7 +25,7 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $borrnumber= $obj->{'borrnumber'};
 my $dateformat = C4::Date::get_date_format();
-my $issues = C4::AR::Issues::prestamosPorUsuario($borrnumber);
+my $issues = C4::AR::Prestamos::prestamosPorUsuario($borrnumber);
 my $count=0;
 my $venc=0;
 my @issuedat;
@@ -39,7 +39,7 @@ foreach my $key (keys %$issues) {
 
 	my $issue = $issues->{$key};
     	$issue->{'date_due'} = format_date($issue->{'date_due'},$dateformat);
-	my ($vencido,$df)= &C4::AR::Issues::estaVencido($issue->{'id3'},$issue->{'issuecode'});
+	my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($issue->{'id3'},$issue->{'issuecode'});
     	$issue->{'date_fin'} = format_date($df,$dateformat);
 
 	if ($vencido){ 

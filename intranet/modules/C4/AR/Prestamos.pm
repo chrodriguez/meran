@@ -1,34 +1,34 @@
-# -*- tab-width: 8 -*-
-# NOTE: This file uses standard 8-character tabs
+package C4::AR::Prestamos;
 
-package C4::AR::Issues;
-
-# $Id: C4::AR::Reserves.pm,v 1.0.0.2 2005/08/25  Exp $
-
-# Copyright 2000-2002 Katipo Communications
+#Este modulo provee funcionalidades para el prestamo de documentos
 #
-# This file is part of Koha.
+#Copyright (C) 2003-2008  Linti, Facultad de Informatica, UNLP
+#This file is part of Koha-UNLP
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 use strict;
 require Exporter;
 use DBI;
 use C4::Date;
-use C4::Circulation::Circ2;
-use C4::AR::Sanctions;
 use C4::AR::Reservas;
+use C4::Modelo::CircPrestamo;
+use C4::Modelo::CircPrestamo::Manager;
+
+use C4::Circulation::Circ2;
+use C4::AR::Sanciones;
 use Date::Manip;
 use Time::HiRes qw(gettimeofday);
 use Thread;
@@ -38,24 +38,6 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 0.01;
-
-=head1 NAME
-
-C4::AR::Issues
-
-=head1 SYNOPSIS
-
-  use C4::AR::Issues;
-
-=head1 DESCRIPTION
-
-FIXME
-
-=head1 FUNCTIONS
-
-=over 2
-
-=cut
 
 @ISA = qw(Exporter);
 
@@ -85,6 +67,7 @@ FIXME
 	&cantidadDePrestamosPorUsuario
 	&historialPrestamos
 	&getCantidadPrestamosActuales
+
 );
 
 
@@ -231,7 +214,7 @@ sub getDatosPrestamo{
 	my ($id3)=@_;
 
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND fecha_devolucion IS NULL");
 	$sth->execute($id3);
 	return ($sth->fetchrow_hashref);
 }
@@ -240,8 +223,8 @@ sub actualizarPrestamo{
 	my ($id3,$borrowernumber)=@_;
 
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("	UPDATE  circ_prestamo SET returndate=NOW() 
-				WHERE id3=? AND borrowernumber=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("	UPDATE  circ_prestamo SET fecha_devolucion=NOW() 
+				WHERE id3=? AND nro_socio=? AND fecha_devolucion IS NULL");
 	$sth->execute($id3,$borrowernumber);
 }
 
@@ -254,7 +237,7 @@ sub fechaDeVencimiento {
 	my ($id3,$date_due)=@_;
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3 = ? AND date_due = ? ");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3 = ? AND fecha_prestamo = ? ");
 	$sth->execute($id3,$date_due);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -280,7 +263,7 @@ vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que
 sub vencimiento {
 	my ($id3)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND returndate IS NULL");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND fecha_devolucion IS NULL");
 	$sth->execute($id3);
 	my $data= $sth->fetchrow_hashref;
 	if ($data){
@@ -306,8 +289,8 @@ my ($borrowernumber,$id3)=@_;
 my $dbh = C4::Context->dbh;
 
 my $sth=$dbh->prepare(" SELECT * FROM circ_reserva INNER JOIN  circ_prestamo ON  circ_prestamo.id3=circ_reserva.id3 
-			AND circ_reserva.borrowernumber= circ_prestamo.borrowernumber  WHERE circ_reserva.id3=? 
-			AND circ_reserva.borrowernumber=? AND circ_reserva.estado='P' AND returndate IS NULL");
+			AND circ_reserva.nro_socio= circ_prestamo.nro_socio  WHERE circ_reserva.id3=? 
+			AND circ_reserva.nro_socio=? AND circ_reserva.estado='P' AND fecha_devolucion IS NULL");
 
 $sth->execute($id3,$borrowernumber);
 
@@ -421,16 +404,16 @@ sub renovar {
 
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("	UPDATE  circ_prestamo 
-					SET renewals= IFNULL(renewals,0) + 1, lastreneweddate = now() 
-					WHERE id3 = ? AND borrowernumber = ?");
+					SET renovaciones= IFNULL(renovaciones,0) + 1, fecha_ultima_renovacion = now() 
+					WHERE id3 = ? AND nro_socio = ?");
 		$sth->execute($id3, $borrowernumber);
 
 #**********************************Se registra el movimiento en historicCirculation***************************
 #esto se podria cruzar con la lo trae getDataItms para hacer una sola funcion
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare(" SELECT issuecode
+		my $sth=$dbh->prepare(" SELECT tipo_prestamo
 					FROM  circ_prestamo
-					WHERE(id3 = ? AND borrowernumber = ?) ");
+					WHERE(id3 = ? AND nro_socio = ?) ");
 		$sth->execute($id3, $borrowernumber);
 		my $data = $sth->fetchrow_hashref;
 
@@ -439,7 +422,7 @@ sub renovar {
 		my $id1= $dataItems->{'id1'};
 		my $id2= $dataItems->{'id2'};
 		my $branchcode= $dataItems->{'homebranch'};
-		my $end_date= C4::AR::Issues::vencimiento($id3);
+		my $end_date= C4::AR::Prestamos::vencimiento($id3);
 
 		C4::Circulation::Circ2::insertHistoricCirculation(	'renew',
 									$borrowernumber,
@@ -582,7 +565,7 @@ sub IssuesTypeEnabled {
 	INNER JOIN circ_tipo_sancion ON circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
 	INNER JOIN circ_tipo_prestamo_sancion ON circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
 	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
-	WHERE borrowernumber = ? AND (now() between startdate AND enddate)) ";
+	WHERE nro_socio = ? AND (now() between startdate AND enddate)) ";
 
   	if ($notforloan ne undef){
 		$query.=" AND notforloan = ? ORDER BY description";
@@ -617,12 +600,12 @@ sub DatosPrestamos {
 	my ($borrowernumber)=@_;
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE returndate IS NULL AND borrowernumber = ?");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE fecha_devolucion IS NULL AND nro_socio = ?");
 	$sth->execute($borrowernumber);
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 	my @result;
 	while (my $ref= $sth->fetchrow_hashref) {
-		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($ref->{'id3'});
 		$ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
 		push @result, $ref;
 	}
@@ -639,14 +622,14 @@ sub DatosPrestamosPorTipo {
 
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $query=" SELECT * FROM  circ_prestamo WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=? ";
+	my $query=" SELECT * FROM  circ_prestamo WHERE fecha_devolucion IS NULL AND nro_socio = ? AND tipo_prestamo=? ";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber,$issuetype_hashref->{'issuecode'});
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 	my @result;
 
 	while (my $ref= $sth->fetchrow_hashref) {
-		my $fechaDeVencimiento= C4::AR::Issues::vencimiento($ref->{'id3'});
+		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($ref->{'id3'});
 		$ref->{'overdue'}= (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
 		push @result, $ref;
 	}
@@ -663,9 +646,9 @@ sub getDatosPrestamoDeId3{
 
 	my $dbh = C4::Context->dbh;
 	my $query= "    SELECT * 
-			FROM  circ_prestamo iss INNER JOIN borrowers bor ON (iss.borrowernumber=bor.borrowernumber)
-	           	INNER JOIN circ_ref_tipo_prestamo ist ON (iss.issuecode=ist.issuecode) 
-			WHERE id3=? AND returndate IS  NULL ";
+			FROM  circ_prestamo iss INNER JOIN usr_socio bor ON (iss.nro_socio=bor.nro_socio)
+	           	INNER JOIN circ_ref_tipo_prestamo ist ON (iss.tipo_prestamo=ist.issuecode) 
+			WHERE id3=? AND fecha_devolucion IS  NULL ";
 
 	my $sth=$dbh->prepare($query);
     	$sth->execute($id3);
@@ -688,7 +671,7 @@ sub PrestamosMaximos {
 		my $issuetype=$iss->{'issuecode'};
 		my $sth1=$dbh->prepare("	SELECT count(*) AS prestamos 
 						FROM  circ_prestamo 
-						WHERE returndate IS NULL AND borrowernumber = ? AND issuecode=?");
+						WHERE fecha_devolucion IS NULL AND nro_socio = ? AND tipo_prestamo=?");
 		$sth1->execute($borrowernumber,$issuetype);
 		
 		my $tot=$sth1->fetchrow;
@@ -718,7 +701,7 @@ sub Enviar_Recordatorio{
 				    FROM circ_reserva
 				    INNER JOIN cat_nivel2 n2 ON n2.id2 = circ_reserva.id2
 				    INNER JOIN cat_nivel1 n1 ON n2.id1 = n1.id1
-				    WHERE  circ_reserva.borrowernumber =? AND circ_reserva.id3= ?");
+				    WHERE  circ_reserva.nro_socio =? AND circ_reserva.id3= ?");
 		$sth->execute($bor,$id3);
 		my $res= $sth->fetchrow_hashref;	
 
@@ -774,8 +757,8 @@ sub Enviar_Recordatorio{
 sub enviar_recordatorios_prestamos {
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo iss LEFT JOIN circ_ref_tipo_prestamo isst ON iss.issuecode=isst.issuecode 
-			       WHERE iss.returndate IS NULL AND isst.notforloan = 0");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo iss LEFT JOIN circ_ref_tipo_prestamo isst ON iss.tipo_prestamo=isst.issuecode 
+			       WHERE iss.fecha_devolucion IS NULL AND isst.notforloan = 0");
 	$sth->execute();
 
 	while(my $data= $sth->fetchrow_hashref) {
@@ -847,40 +830,23 @@ sub estaVencido(){
 
 #********************************AGREGADO PARA V3******************************************************
 
-sub getCountPrestamosDeGrupo() {
-#devuelve los prestamos de grupo del usuario
-	my ($borrowernumber, $id2, $issuesType)=@_;
-	my $dbh = C4::Context->dbh;
-
-	my $query= "	SELECT count(*) AS cantPrestamos
-        		FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
-        		INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
-         		WHERE i.borrowernumber = ? AND n2.id2 = ?
-			AND n3.id_disponibilidad = ? AND i.returndate IS NULL ";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber, $id2, $issuesType);
-	my $cant=$sth->fetchrow();
-	$sth->finish;
-	return($cant);
-}
 
 sub prestamosPorUsuario {
 	my ($borrowernumber) = @_;
 	my $dbh = C4::Context->dbh;
 	my %currentissues;
 
-	my $select= " 	SELECT  iss.timestamp AS timestamp, iss.date_due AS date_due, iss.issuecode AS issuecode,
+	my $select= " SELECT  iss.timestamp AS timestamp, iss.fecha_prestamo AS fecha_prestamo, iss.tipo_prestamo AS tipo_prestamo,
                 	n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico,
 			n1.titulo AS titulo, n1.autor, isst.description AS issuetype
-			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.issuecode = isst.issuecode )
+			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.tipo_prestamo = isst.issuecode )
 			INNER JOIN cat_nivel3 n3 ON ( iss.id3 = n3.id3 )
 			INNER JOIN cat_nivel1 n1 ON ( n3.id1 = n1.id1)
 			INNER JOIN cat_nivel2 n2 ON ( n2.id2 = n3.id2 )
 			INNER JOIN cat_ref_tipo_nivel3 it ON ( it.id_tipo_doc = n2.tipo_documento )
-			WHERE iss.borrowernumber = ?
-			AND iss.returndate IS NULL
-			ORDER BY iss.date_due desc";
+			WHERE iss.nro_socio = ?
+			AND iss.fecha_devolucion IS NULL
+			ORDER BY iss.fecha_prestamo desc";
 
 # FALTA!!!!!!!!!
 # 		biblioitems.dewey     		AS dewey,
@@ -922,7 +888,7 @@ sub cantidadDePrestamosPorUsuario{
 	my ($bornum)=@_;
   	my $dbh = C4::Context->dbh;
   	my $dateformat = C4::Date::get_date_format();
-  	my $query="SELECT * FROM  circ_prestamo WHERE borrowernumber=? AND returndate IS NULL";
+  	my $query="SELECT * FROM  circ_prestamo WHERE nro_socio=? AND fecha_devolucion IS NULL";
   	my $sth=$dbh->prepare($query);
   	$sth->execute($bornum);
   	my $issues=0;
@@ -952,7 +918,7 @@ sub getCantidadPrestamosActuales{
 	my ($bornum)=@_;
   	my $dbh = C4::Context->dbh;
 
-  	my $query="SELECT count(*) FROM  circ_prestamo WHERE borrowernumber=? AND returndate IS NULL";
+  	my $query="SELECT count(*) FROM  circ_prestamo WHERE nro_socio=? AND fecha_devolucion IS NULL";
   	my $sth=$dbh->prepare($query);
   	$sth->execute($bornum);
 
@@ -972,8 +938,8 @@ sub historialPrestamos {
   	my $dateformat = C4::Date::get_date_format();
   	my $querySelectCount = " SELECT count(*) AS cant ";
 
-  	my $querySelect= " 	SELECT n1.*, a.completo, iss.date_due, iss.returndate, n3.id3, 
-				signatura_topografica, lastreneweddate, barcode, iss.renewals,n2.*";
+  	my $querySelect= " 	SELECT n1.*, a.completo, iss.fecha_prestamo , iss.fecha_devolucion, n3.id3, 
+				signatura_topografica, lastreneweddate, barcode, iss.renovaciones ,n2.*";
 
   	my $queryFrom = " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2";
   	$queryFrom .= " ON (n3.id2 = n2.id2) ";
@@ -984,7 +950,7 @@ sub historialPrestamos {
   	$queryFrom .= " INNER JOIN cat_autor a ";
   	$queryFrom .= " ON (a.id = n1.autor) ";
 
- 	my $queryWhere= " WHERE borrowernumber= ? ";
+ 	my $queryWhere= " WHERE nro_socio= ? ";
   	my $queryFinal= " ORDER BY $orden";
   	$queryFinal .= " limit ?,? ";
 
@@ -1005,7 +971,7 @@ sub historialPrestamos {
   	my $i=0;
 
   	while (my $data=$sth->fetchrow_hashref){
-		my $df=C4::AR::Issues::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
+		my $df=C4::AR::Prestamos::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
 		$data->{'date_fin'}=C4::Date::format_date($df,$dateformat);
 		$data->{'date_due'}=  C4::Date::format_date($data->{'date_due'},$dateformat);
 		$data->{'returndate'}=  C4::Date::format_date($data->{'returndate'},$dateformat);
@@ -1020,3 +986,69 @@ sub historialPrestamos {
 
   	return($count,\@result);
 }
+
+
+#
+# NUEVAS FUNCIONES
+#
+
+=item
+Esta funcion devuelve la informacion del tipo de prestamo, segun el issuecode
+=cut
+sub getTipoPrestamo {
+    
+    use C4::Modelo::CircRefTipoPrestamo;
+    use C4::Modelo::CircRefTipoPrestamo::Manager;
+
+    my ($tipo_prestamo) = @_;
+
+    my  $tipo = C4::Modelo::CircRefTipoPrestamo->new(issuecode => $tipo_prestamo);
+        $tipo->load();
+
+    return ($tipo);
+}
+
+sub _verificarMaxTipoPrestamo{
+	my ($nro_socio,$tipo_prestamo)=@_;
+
+	my $error=0;
+
+	#Obtengo la cant maxima de prestamos de ese tipo que se puede tener
+	my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
+	my $prestamos_maximos= $tipo->getMaxissues;
+	#
+
+	#Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
+	my @filtros;
+	push(@filtros, ( nro_socio => { eq => $nro_socio}) );
+	push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo}) );
+	my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
+	#
+	
+	if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
+
+	return $error;
+}
+
+sub getCountPrestamosDeGrupo() {
+#devuelve la cantidad de prestamos de grupo del usuario
+	my ($nro_socio, $id2, $tipo_prestamo)=@_;
+
+    	use C4::Modelo::CircPrestamo;
+    	use C4::Modelo::CircPrestamo::Manager;
+
+    	my @filtros;
+    	push(@filtros, ( id2 	=> { eq => $id2 } ));
+    	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+		push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo } ));
+
+    	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
+											with_objects => [ 'nivel3' ]);
+
+    	return ($prestamos_grupo_count);
+}
+
+
+
+
+

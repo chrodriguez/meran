@@ -92,7 +92,7 @@ sub addmember{
 sub sepuedeeliminar{
   my ($member)=@_;
   my %env;
-  my $issues=C4::AR::Issues::prestamosPorUsuario($member);
+  my $issues=C4::AR::Prestamos::prestamosPorUsuario($member);
   my $i=0;
   foreach (sort keys %$issues) {
     $i++;
