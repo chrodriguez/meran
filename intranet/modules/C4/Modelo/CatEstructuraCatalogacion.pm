@@ -296,7 +296,7 @@ sub getIdInfoRef{
 
 sub getSubCampo{
     my ($self) = shift;
-    return ($self->subcampo);
+    return (C4::AR::Utilidades::trim($self->subcampo));
 }
 
 sub setSubCampo{
@@ -307,11 +307,7 @@ sub setSubCampo{
 
 sub getTipo{
     my ($self) = shift;
-open(D, ">>/tmp/debug.txt");
-print D "CatEStr=>\n";
-print D "CatEStr=>con trim -".C4::AR::Utilidades::trim($self->tipo)."-\n";
-print D "CatEStr=>sin trim -".$self->tipo."-\n";
-close(D);
+
     return (C4::AR::Utilidades::trim($self->tipo));
 }
       
@@ -324,7 +320,7 @@ sub setTipo{
  
 sub getItemType{
     my ($self) = shift;
-    return ($self->itemtype);
+    return (C4::AR::Utilidades::trim($self->itemtype));
 }
 
 sub setItemType{
@@ -335,7 +331,7 @@ sub setItemType{
       
 sub getLiblibrarian{
     my ($self) = shift;
-    return ($self->liblibrarian);
+    return (C4::AR::Utilidades::trim($self->liblibrarian));
 }
 
 sub setLiblibrarian{

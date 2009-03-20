@@ -141,6 +141,38 @@ sub obtenerUnidadesDeInformacion {
 }
 
 =item
+Devuelve un arreglo de objetos Autor
+=cut
+sub obtenerAutores {
+    my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor;
+    my @results;
+
+    foreach my $objeto_autor (@$autores_array_ref) {
+        push (@results, $objeto_autor);
+    }
+
+    return(\@results);
+}
+
+=item
+Devuelve un arreglo de objetos Autor
+=cut
+sub obtenerAutoresLike {
+	my ($autor) = @_;
+
+    my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
+																query => [ completo => { like => '%'.$autor.'%' } ]
+											);
+    my @results;
+
+    foreach my $objeto_autor (@$autores_array_ref) {
+        push (@results, $objeto_autor);
+    }
+
+    return(\@results);
+}
+
+=item
 Devuelve un arreglo de objetos Unidades de Informacion
 =cut
 sub obtenerDisponibilidades {

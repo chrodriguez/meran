@@ -1871,29 +1871,35 @@ sub getHashCatalogaciones{
     foreach my $cat  (@$catalogaciones_array_ref){
 
         my %hash_temp;
-        $hash_temp{'campo'}= $cat->{'campo'};
-        $hash_temp{'subcampo'}= $cat->{'subcampo'};
-        $hash_temp{'nivel'}= $cat->{'nivel'};
-        $hash_temp{'visible'}= $cat->{'visible'};
-        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
-        $hash_temp{'itemtype'}= $cat->{'itemtype'};
-        $hash_temp{'repetible'}= $cat->{'repetible'};
-        $hash_temp{'fijo'}= $cat->{'fijo'};
-        $hash_temp{'tipo'}= $cat->{'tipo'};
-        $hash_temp{'referencia'}= $cat->{'referencia'};
-        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
-        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
-        $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
+        $hash_temp{'campo'}= $cat->getCampo;
+        $hash_temp{'subcampo'}= $cat->getSubCampo;
+        $hash_temp{'nivel'}= $cat->getNivel;
+        $hash_temp{'visible'}= $cat->getVisible;
+        $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
+        $hash_temp{'itemtype'}= $cat->getItemType;
+        $hash_temp{'repetible'}= $cat->getRepetible;
+        $hash_temp{'fijo'}= $cat->getFijo;
+        $hash_temp{'tipo'}= $cat->getTipo;
+        $hash_temp{'referencia'}= $cat->getReferencia;
+        $hash_temp{'obligatorio'}= $cat->getObligatorio;
+		$hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
+        $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
 
-        if( $cat->{'referencia'} ){
-        #tiene una referencia
+        if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
+        #tiene una referencia, y no es un autocomplete			
+			C4::AR::Debug::debug('tiene referencia y no es auto');
             $cat->{'infoReferencia'}->{'campos'}; 
             my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
-                                                                                        $cat->{'infoReferencia'}->{'campos'}  #campo
+																						$cat->infoReferencia->getReferencia,  #tabla  
+                                                                                        $cat->infoReferencia->getCampos  #campo
                                                                                 );
             $hash_temp{'opciones'}= $valores;
         }
+
+		if($cat->getTipo eq 'auto'){
+		#es un autocomplete
+			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
+		}
 
         push (@result, \%hash_temp);
     }

@@ -27,7 +27,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my $cat_nivel3;
 if($sigtop ne ''){
-   $cat_nivel3 = &C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
+   $cat_nivel3 = listaritemsDeInventorioSigTop($sigtop,$orden);
 }
 #
 # Generar Planilla

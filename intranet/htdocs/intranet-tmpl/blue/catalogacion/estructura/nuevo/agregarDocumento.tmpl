@@ -625,7 +625,7 @@ function procesarInfoJson(json){
     var objetos=JSONstring.toObject(json);
 
     for(var i=0; i< objetos.length; i++){
-        //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
+		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
     }
@@ -641,11 +641,7 @@ function procesarInfoJson(json){
  */
 
 function crearRegla(comp,idComp){
-//    $("#firstname"+current).rules("add", { required:true,minlength:2 });
    $('#'+idComp).rules("add", { required:true } );
-//    $('#'+idComp).messages("add", { idCompCliente: "HOLANENENNENENEN" } );
-
-
 }
 
 function procesarObjeto(objeto){
@@ -670,7 +666,6 @@ function procesarObjeto(objeto){
             comp= crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
             $("#"+idComp).val(objeto.valText);
-            auto= objeto.referencia;
         break;
         case "combo":
             comp= crearComponente(tipo,idComp,objeto,valor);
@@ -685,7 +680,17 @@ function procesarObjeto(objeto){
             $(compText).appendTo("#"+idDiv);
             $(comp).appendTo("#strComp"+idComp);
             $("#texta"+idComp).val(objeto.valTextArea);
-            auto= objeto.referencia;
+        break;
+		 case "auto":
+            //tipo,id,opciones,valor
+            comp= crearComponente(tipo,idComp,"","");
+            $(comp).appendTo("#"+idDiv);
+            $("#"+idComp).val(objeto.valText);
+			_cearAutocompleteParaCamponente(objeto);
+			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
+			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
+			 $(comp).appendTo("#"+idDiv);
+			_cambiarIdDeAutocomplete();
         break;
     }
 //     crearRegla(comp,idComp);
@@ -694,17 +699,42 @@ function procesarObjeto(objeto){
         hacerComponenteObbligatoria(idComp);
     }
 
- 
+}
 
 
-    //Para crear el autocomplete correspondiente
-//     if(auto){
-//         var tabla=objeto.tabla;
-//         var campos=objeto.campos;
-//         var orden=objeto.orden;
-//         var separador=objeto.separador;
-//         crearAuto(idComp,tabla,accion,id,campos,orden,separador);
-//     }
+function _cambiarIdDeAutocomplete(){
+	 for(var i=0; i< COMPONENTES_ARRAY.length; i++){
+       	//si es un autocomplete, guardo el ID del input hidden
+		if(COMPONENTES_ARRAY[i].tipo == 'auto'){	
+			COMPONENTES_ARRAY[i].idCompCliente= COMPONENTES_ARRAY[i].idCompCliente + '_hidden';
+		}
+    }
+}
+
+function _cearAutocompleteParaCamponente(o){
+
+	switch(o.referenciaTabla){
+        case "autor": CrearAutocompleteAutores(	o.idCompCliente, 
+												o.idCompCliente + '_hidden', 
+												'/cgi-bin/koha/autocompletables/autorAutocomplete.pl'
+									);
+        break;
+		case "pais": CrearAutocompletePaises(	o.idCompCliente, 
+												o.idCompCliente + '_hidden', 
+												'/cgi-bin/koha/autocompletables/paisesAutocomplete.pl'
+									);
+        break;
+		case "lenguaje": CrearAutocompleteLenguajes(	o.idCompCliente, 
+														o.idCompCliente + '_hidden', 
+														'/cgi-bin/koha/autocompletables/lenguajesAutocomplete.pl'
+									);
+        break;
+		case "ciudad": CrearAutocompleteCiudades(	o.idCompCliente, 
+													o.idCompCliente + '_hidden',
+													'/cgi-bin/koha/autocompletables/searchcity.pl'
+									);
+        break;
+	}
 }
 
 /*
@@ -738,6 +768,10 @@ function crearComponente(tipo,id,objeto,valor){
             comp=comp+op+"</select>";
         break;
         case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
+        break;
+		case "auto": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+">";
+        break;
+		case "hidden": comp="<input type='hidden' id='"+id+"' value=''>";
         break;
     }
 
@@ -1009,7 +1043,7 @@ $(document).ready( function() {
 	//oculto todas las tabls
 	_showAndHiddeEstructuraDelNivel(0);
     //autocomplete nivel 1
-    CrearAutocompleteCiudades('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
+    CrearAutocompleteAutores('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 
     //autocomplete nivel 2
     CrearAutocompletePaises(    'nivel_bibliografico', 

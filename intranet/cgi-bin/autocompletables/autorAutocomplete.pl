@@ -10,11 +10,11 @@ my $autorStr=$input->param('q');
 my $textout="";
 
 
-my @result=obtenerAutores($autorStr);
+my $autores_array_ref= C4::AR::Referencias::obtenerAutoresLike($autorStr);
 
-foreach my $autor (@result){
-	$textout.=$autor->{'id'}."|".$autor->{'completo'}."\n";
+foreach my $autor (@$autores_array_ref){
+	$textout.= $autor->getId."|".$autor->getCompleto."\n";
 }
 
-print "Content-type: text/html\n\n";
+print $input->header;
 print $textout;

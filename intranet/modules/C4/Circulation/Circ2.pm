@@ -77,6 +77,7 @@ Also deals with stocktaking.
 	&insertHistoricCirculation
 
 	&getDataBiblioItems
+	&listaritemsDeInventorioSigTop
 
 );
 
