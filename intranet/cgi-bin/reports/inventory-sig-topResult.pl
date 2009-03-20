@@ -9,11 +9,10 @@ use C4::AR::SxcGenerator;
 use C4::Circulation::Circ2;
 
 my $input = new CGI;
-
 my @results;
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $sigtop= $obj->{'sigtop'};
-my $orden= $obj->{'orden'}||'barcode';
+my $orden= $obj->{'orden'} || 'barcode';
 
 my ($template, $session, $t_params) = get_template_and_user({
                                                 template_name => "reports/inventory-sig-topResult.tmpl",
@@ -50,9 +49,19 @@ if($sigtop ne ''){
 #         push (@results, \%line);
 # }
 # 
+my @results;
 my $cant=scalar(@$cat_nivel3);
+foreach my $cat_nivel3 (@$cat_nivel3){
+   my %row = (
+               cat_nivel3 => $cat_nivel3,
+               );
+   push(@results, \%row);
+}
+$t_params->{'results'}= \@results;
 
-$t_params->{'results'}= $cat_nivel3;
+open A,">>/tmp/debug.txt";
+print A "\n\n\n".$cat_nivel3->[0]->getBarcode."\n\n\n";
+close A;
 
 # print $cat_nivel3->[0]->nivel2->nivel1->autor;
 # $t_params->{'name'}= $planilla;

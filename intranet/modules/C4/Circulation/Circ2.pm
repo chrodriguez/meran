@@ -594,7 +594,7 @@ sub checkoverdues {
 				INNER JOIN cat_nivel3 n3 ON (i.id3 = n3.id3)
 				INNER JOIN cat_nivel2 n2 ON (n3.id2 = n2.id2)
 				INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
-				WHERE i.borrowernumber  = ? AND i.returndate IS NULL AND i.date_due < ?");
+				WHERE i.nro_socio  = ? AND i.fecha_devolucion IS NULL AND i.fecha_prestamo < ?");
 	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {
 	push (@overdueitems, $data);

@@ -50,7 +50,7 @@ foreach my $branch (keys %$branches) {
 
 my $branch= C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 
-my $CGIbranch=C4::AR::Utilidades::generarComboDeBranches();
+my $CGIbranch=C4::AR::Utilidades::generarComboUI();
 #Fin: Por los branches
 
 $t_params->{'unidades'}= $CGIbranch;

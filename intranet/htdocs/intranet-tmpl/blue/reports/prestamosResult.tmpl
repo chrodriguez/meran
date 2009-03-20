@@ -52,25 +52,25 @@
 
 		<td class="inputFontNormal"> 
 		[% IF vencido %]
-                    <input type="checkbox" name="chkboxPrestamos" value="[% borrowernumber %]" id="[% borrowernumber %]">
+                    <input type="checkbox" name="chkboxPrestamos" value="[% socio.getNro_socio %]" id="[% socio.getNro_socio %]">
                 [% END %]
 		</td>
 
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% socio.getNro_socio %]">[% surname %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			[% firstname %] 
+			[% socio.getNombre %] 
 		</td>
 		<td class="inputFontNormal"> 
-			[% cardnumber %]
+			[% socio.Nro_documento %]
 		</td>
 		<td class="inputFontNormal"> 
 			[% IF ok %]
-                            [% emailaddress %]
+                            [% socio.getEmail %]
         		[% ELSE %]
                             <a class="inputFontNormal" href="mailto:[% emailaddress %]">
-                                [% emailaddress %]
+                                [% socio.getEmail %]
                             </a>
         		[% END %]
 		</td>

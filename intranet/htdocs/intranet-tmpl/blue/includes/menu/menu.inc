@@ -117,11 +117,11 @@
           <!-- Navigation item -->
             <li><h3>Reportes</h3>
                 <ul>
-                  <li><a href="/cgi-bin/koha/reports/generic_reports.pl">Reportes Gen&eacute;ricos</a></li>
+                  <li><a href="/cgi-bin/koha/reports/generic_reports.pl">Reportes Gen&eacute;ricos (FALTA) </a></li>
                   <li><a href="/cgi-bin/koha/reports/inventory.pl">Inventario</a></li>
                   <li><a href="/cgi-bin/koha/reports/inventory-sig-top.pl">Signatura topogr&aacute;fica.</a></li>
-                  <li><a href="/cgi-bin/koha/reports/estantes.pl">Estantes virtuales</a></li>
-                  <li><a href="/cgi-bin/koha/reports/users.pl">Usuarios</a></li>
+                  <li><a href="/cgi-bin/koha/reports/estantes.pl">Estantes virtuales (FALTA DB MODEL) </a></li>
+                  <li><a href="/cgi-bin/koha/reports/users.pl">Usuarios (PREGUNTARLE A FER)</a></li>
                   <li><a href="/cgi-bin/koha/reports/prestamos.pl">Pr&eacute;stamos no devueltos</a></li>
                   <li><a href="/cgi-bin/koha/reports/reservas.pl">Reservas</a></li>
                   <li><a href="/cgi-bin/koha/reports/registro.pl">Registro de actividades</a></li>

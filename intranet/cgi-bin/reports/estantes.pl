@@ -44,7 +44,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Por los shelfs
 my @select_shelfs;
 my %select_shelfs;
-my ($count)=      &getshelfListCount('public');
+use C4::Modelo::CatEstante::Manager;
+my ($count)=C4::Modelo::CatEstante::Manager->get_cat_estante_count(  
+                                                                     query => [ type => {eq => 'public'},
+                                                                                parent => {eq => 0} ],
+                                                                   );
+
 my  %shelflist = &GetShelfList('public',0, $count);
  
 foreach my $she (keys %shelflist) {
