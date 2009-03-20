@@ -113,6 +113,7 @@ function detalleUsuario(){
 function updateDetalleUsuario(responseText){
 	$('#detalleUsuario').html(responseText);
 	createFileUploader();
+	detalleReservas(usuario.ID);
 }
 
 function createFileUploader(){
@@ -126,9 +127,6 @@ function createFileUploader(){
 						nro_socio: usuario.nro_socio,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
-// 									var responseText= $('#responseText').html();
-// 									var Message= JSONstring.toObject(responseText);
-// 									setMessage(Message);
 								}
 		});
 
@@ -147,6 +145,7 @@ function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');	
+	detalleSanciones(usuario.ID);
 }
 
 function detalleReservas(borr){
@@ -163,6 +162,7 @@ function updateDetalleReservas(responseText){
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 	checkedAll('checkAllReservas','chkboxReservas');
+	detallePrestamos(usuario.ID);
 }
 
 
@@ -180,9 +180,11 @@ $(document).ready(function() {
     usuario.nro_socio= '[% socio.getNro_socio %]';
 
 	detalleUsuario(usuario.ID);
-	detallePrestamos(usuario.ID);
-	detalleReservas(usuario.ID);
-	detalleSanciones(usuario.ID);
+// FIXME tarda mucho si se disparan todos al mismo tiempo, pruebo detalleUsuarioUsuario=> detalleReservas => detallePrestamos => detalleSanciones
+// 	detalleUsuario(usuario.ID);
+// 	detallePrestamos(usuario.ID);
+// 	detalleReservas(usuario.ID);
+// 	detalleSanciones(usuario.ID);
 
 	$("#historialPrestamosToggle").toggle(	function(){
 							$('#historialPrestamos').slideUp('slow');

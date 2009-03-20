@@ -863,7 +863,6 @@ sub _verificarBarcodes{
 		}
 		
 	}# END for(my $b;$b<$cant;$b++)	
-
 	return (\@barcodes_para_agregar);
 }
 
@@ -872,18 +871,22 @@ Esta funcion verifica si en el arreglo de barcodes no existe 1 o mas barcodes ig
 =cut
 sub _existeBarcodeEnArray{
 	my ($barcode, $barcodes_array)= @_;
+C4::AR::Debug::debug("desde _existeBarcodeEnArray=> \n");
 	my $cant=0;
-	
+	my $existe= 0;
+
 	for(my $i=0;$i<scalar(@$barcodes_array);$i++){
-		if($barcodes_array->[$i] eq $barcode){
+C4::AR::Debug::debug("_existeBarcodeEnArray=> cmp ".$barcodes_array->[$i]." con ".$barcode."\n");
+		if(C4::AR::Utilidades::trim($barcodes_array->[$i]) eq C4::AR::Utilidades::trim($barcode) ){
 			$cant++;
-			if($cant > 1){
+			if($cant gt 1){
+C4::AR::Debug::debug("_existeBarcodeEnArray=> EXISTE: ".$barcodes_array->[$i]."\n");
 				#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
-				return 1;
+ 				return 1;
+				$existe= 1;
 			}
 		}
 	}
-		
 	#no existe el barcode en el arreglo de barcodes
 	return 0;
 }

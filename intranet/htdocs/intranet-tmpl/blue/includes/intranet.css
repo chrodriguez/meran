@@ -843,6 +843,7 @@ div.dimming {
 }
 
 .nivel2Barra {
+	border:1px solid;
     height: 50%;
     overflow: auto;
     width: 100%;
@@ -856,7 +857,6 @@ div.dimming {
 }
 
 .nivel2Lateral {
-    border:1px solid #999999;
     /*overflow: auto;*/
     height: 100%;
     padding:11px;

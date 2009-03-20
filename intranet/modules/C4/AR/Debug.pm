@@ -34,7 +34,7 @@ close(Z);
 =item
 debug por linea
 =cut
-sub debug{
+sub debugObject{
     my ($object, $data) = @_;
 
     my $context = new C4::Context;
@@ -42,8 +42,25 @@ sub debug{
     if($context->config('debug')){
 		open(Z, ">>/tmp/debug.txt");
 		print Z "\n";
-		print Z "Object: ".$object->toString."=> ".$data."\n";
-		print Z "\n";
+		if($object){
+			print Z "Object: ".$object->toString."=> ".$data."\n";
+			print Z "\n";
+		}
+		close(Z);        
+    }
+}
+
+=item
+debug por linea
+=cut
+sub debug{
+    my ($data) = @_;
+
+    my $context = new C4::Context;
+
+    if($context->config('debug')){
+		open(Z, ">>/tmp/debug.txt");
+		print Z "DEBUG=> ".$data."\n";
 		close(Z);        
     }
 }

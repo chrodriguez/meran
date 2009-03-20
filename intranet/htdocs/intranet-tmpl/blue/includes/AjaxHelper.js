@@ -170,7 +170,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 								helper.onComplete(ajax.responseText);
 							}
 						}
-  					}
+  					} 
 				});
 	}
 
