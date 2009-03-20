@@ -21,25 +21,25 @@
         <tr class="inputFontNormal">
                 <td class="inputFontNormal" width="1%">&nbsp;</td>
                 <td  align=left>
-                        [% barcode %]
+                        [% cant_nivel3.barcode %]
                 </td>
                 <td align="center">
-                        [% autor %]
+                        [% nivel2.nivel1.autor %]
                 </td>
                 <td align="center">
-                         [% HTML.escape(titulo) %]
+                        [% HTML.escape(nivel2.nivel1.getTitulo) %]
                         [% IF unititle %]:&nbsp;
                                 [% HTML.escape(unititle) %]
                         [% END %]
                 </td>
                 <td align="center">
-                        [% number %]
+<!--                         [% number %] -->
                 </td>
                 <td align="center">
-                        [% publisher %]
+<!--                         [% publisher %] -->
                 </td>
                 <td align="center">
-                        [% anio_publicacion %]
+                        [% nivel2.anio_publicacion %]
                 </td>
                 <td align="center">
                         [% signatura_topografica %]
