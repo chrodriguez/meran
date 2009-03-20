@@ -871,7 +871,7 @@ Esta funcion verifica si en el arreglo de barcodes no existe 1 o mas barcodes ig
 =cut
 sub _existeBarcodeEnArray{
 	my ($barcode, $barcodes_array)= @_;
-C4::AR::Debug::debug("desde _existeBarcodeEnArray=> \n");
+
 	my $cant=0;
 	my $existe= 0;
 

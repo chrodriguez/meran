@@ -16,29 +16,23 @@ ID_N1=0; //para saber el id del nivel 1
 ID_N2=0; //para saber el id del nivel 2
 ID_N3=0; //para saber el id del nivel 3
 TAB_INDEX= 0;//tabindex para las componentes
-dataModif = new Array();
+//arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
+COMPONENTES_ARRAY= new Array();
+//arreglo con datos del servidor para modificar las componentes
+DATA_ARRAY = new Array();
 MODIFICAR = 0;
 ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
-//Hashes para el formValidator
-// hashOfRules=new HashMap();
-// 
-// hashOfMsg=new HashMap();
 
 _message= "El campo no puede estar en blanco";
 
-// array_info_combo= 0; //para guardar las opciones de los combos que se generan en el cliente
 
-//arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
-COMPONENTES_ARRAY= new Array();
+
 
 function inicializar(){
-// FIXME falta liberar memoria, hacer delete de COMPONENTES[i], sino no se libera la memoria, esto para todos los arreglos
-    //arreglo de objetos campo
-//     COMPONENTES_ARRAY= new Array();
+
 	_freeMemory(COMPONENTES_ARRAY);
-//     dataModif = new Array();
-	_freeMemory(dataModif);
+	_freeMemory(DATA_ARRAY);
 	TAB_INDEX= 0;
 }
 
@@ -46,6 +40,45 @@ function _freeMemory(array){
 	for(var i=0;i<array.length;i++){
 		delete array[i];
 	}
+	
+	array= [];
+}
+
+function _existeEnArray(array, elemento){
+	var cant=0;
+
+	for(var i=0;i<array.length;i++){
+		if( jQuery.trim(array[i]) == jQuery.trim(elemento) ){
+			cant++;
+			if(cant > 1){
+			//el elemento existe mas de 1 vez, esta repetido
+				return 1;	
+			}			
+		}
+	}
+	return 0;
+}
+
+function verificarAgregarDocumentoN3(){
+	var repetidos_array= new Array();
+	var existe= 0;
+
+	if(_getBarcodes()){
+		//verifico que los barcodes no esten repetidos
+		for(var i=0;i<BARCODES_ARRAY.length;i++){
+			if( _existeEnArray(BARCODES_ARRAY, BARCODES_ARRAY[i]) ){
+				existe= 1;
+				repetidos_array.push(BARCODES_ARRAY[i]);
+			}
+		}
+	
+		if(existe){
+			alert('Hay barcodes repetidos');
+			return 0;
+		}
+	}
+
+	return 1;
 }
 
 function _setFoco(){
@@ -87,12 +120,15 @@ function _getIdComponente(campo, subcampo){
 
 function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
-// 	BARCODES_ARRAY= [];
+	//inicializo el arreglo
 	_freeMemory(BARCODES_ARRAY);
 
 	if(barcodes_string != ''){
 		BARCODES_ARRAY = barcodes_string.split(",");
+		return 1;
 	}
+	
+	return 0;
 }
 
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
@@ -184,9 +220,9 @@ function mostrarEstructuraDelNivel1(){
 function mostrarDataNivel1(){
 
     if (MODIFICAR){
-        for (x=0; x<dataModif.length; x++){
-			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
-            COMPONENTES_ARRAY[x].rep_n1_id = dataModif[x].rep_n1_id;
+        for (x=0; x<DATA_ARRAY.length; x++){
+			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].rep_n1_id;
         }
    }
 }
@@ -194,9 +230,9 @@ function mostrarDataNivel1(){
 function mostrarDataNivel2(){
 
     if (MODIFICAR){
-        for (x=0; x<dataModif.length; x++){
-			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
-            COMPONENTES_ARRAY[x].rep_n2_id = dataModif[x].rep_n2_id;
+        for (x=0; x<DATA_ARRAY.length; x++){
+			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].rep_n2_id;
         }
    }
 }
@@ -204,9 +240,9 @@ function mostrarDataNivel2(){
 function mostrarDataNivel3(){
 
     if (MODIFICAR){
-        for (x=0; x<dataModif.length; x++){
-			$('#'+dataModif[x].idCompCliente).val(dataModif[x].dato);
-            COMPONENTES_ARRAY[x].rep_n3_id = dataModif[x].rep_n3_id;
+        for (x=0; x<DATA_ARRAY.length; x++){
+			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].rep_n3_id;
         }
    }
 }
@@ -410,27 +446,28 @@ function updateGuardarDocumentoN2(responseText){
 
 
 function guardarDocumentoN3(){
-    syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarDocumentoN3);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
-    objAH.tipoAccion= "GUARDAR_NIVEL_3";
-    objAH.tipo_documento= $("#tipo_nivel3_id").val();
-// FIXME falta verificar en el cliente cuando se agregar varios barcodes, que no sean iguales
-	//recupero todos los barcodes, 0 o mas
-	_getBarcodes();
-	objAH.BARCODES_ARRAY= BARCODES_ARRAY;
-	objAH.cantEjemplares= $("#cantEjemplares").val();
-	_sacarOpciones();
-    objAH.infoArrayNivel3= COMPONENTES_ARRAY;
-    objAH.id1 = ID_N1;
-    objAH.id2 = ID_N2;
-    objAH.sendToServer();
+	if( verificarAgregarDocumentoN3() ){
+		syncComponentesArray();
+		objAH=new AjaxHelper(updateGuardarDocumentoN3);
+		objAH.debug= true;
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+		objAH.tipoAccion= "GUARDAR_NIVEL_3";
+		objAH.tipo_documento= $("#tipo_nivel3_id").val();
+		//recupero todos los barcodes, 0 o mas
+// 		_getBarcodes();
+		objAH.BARCODES_ARRAY= BARCODES_ARRAY;
+		objAH.cantEjemplares= $("#cantEjemplares").val();
+		_sacarOpciones();
+		objAH.infoArrayNivel3= COMPONENTES_ARRAY;
+		objAH.id1 = ID_N1;
+		objAH.id2 = ID_N2;
+		objAH.sendToServer();
+	}
 }
 
 function updateGuardarDocumentoN3(responseText){
 
-// 	ID3_ARRAY= [];
+	//inicializo el arreglo
 	_freeMemory(ID3_ARRAY);
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
@@ -523,7 +560,7 @@ function guardarModificacionDocumentoN3(){
 
 function updateGuardarModificacionDocumentoN3(responseText){
 
-// 	ID3_ARRAY= [];
+	//inicializo el arreglo
 	_freeMemory(ID3_ARRAY);
 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);
@@ -843,7 +880,7 @@ function modificarN1(id1){
 function updateModificarN1(responseText){
     MODIFICAR = 1;
     //se genera un arreglo de objetos con la informacion guardada, campo, subcampo    
-    dataModif = JSONstring.toObject(responseText);
+    DATA_ARRAY = JSONstring.toObject(responseText);
     mostrarEstructuraDelNivel1();
 }
 
@@ -861,7 +898,7 @@ function modificarN2(id2){
 
 function updateModificarN2(responseText){
    MODIFICAR = 1;
-   dataModif = JSONstring.toObject(responseText);
+   DATA_ARRAY = JSONstring.toObject(responseText);
    mostrarEstructuraDelNivel2();
 }
 
@@ -882,7 +919,7 @@ function modificarN3(id3){
 function updateModificarN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	dataModif = JSONstring.toObject(responseText);
+	DATA_ARRAY = JSONstring.toObject(responseText);
 	mostrarEstructuraDelNivel3();
 }
 
@@ -910,7 +947,7 @@ function modificarEjemplaresN3(id3){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	dataModif = JSONstring.toObject(responseText);
+	DATA_ARRAY = JSONstring.toObject(responseText);
 	mostrarEstructuraDelNivel3();
 }
 /*
