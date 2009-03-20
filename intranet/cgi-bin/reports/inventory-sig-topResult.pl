@@ -6,6 +6,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::AR::SxcGenerator;
+use C4::Circulation::Circ2;
 
 my $input = new CGI;
 
@@ -26,7 +27,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my $cat_nivel3;
 if($sigtop ne ''){
-   $cat_nivel3 = C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
+   $cat_nivel3 = &C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
 }
 #
 # Generar Planilla
