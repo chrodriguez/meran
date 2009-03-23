@@ -8,17 +8,15 @@ use JSON;
 
 my $input = new CGI;
 
-my ($session) = checkauth($input, 0,{borrow => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
 
-my $loggedinuser= $session->param('loggedinuser');
 my $objJSON=$input->param('obj');
 my $obj=from_json_ISO($objJSON);
 
-my $borrowernumber=getborrowernumber($loggedinuser);
 my %params;
 $params{'id_reserva'}=$obj->{'id_reserva'};
-$params{'nro_socio'}=$session->param('userid');
-$params{'loggedinuser'}=$session->param('userid');
+$params{'nro_socio'}=$userid;
+$params{'loggedinuser'}=$userid;
 $params{'tipo'}="OPAC";
 
 # my ($error,$codMsg,$message);

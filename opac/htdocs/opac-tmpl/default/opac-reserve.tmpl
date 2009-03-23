@@ -1,8 +1,12 @@
 
 <!-- Mensajes de Informacion al Usuario-->
 <div class="tablemsg">
-	<font class="fontmsg"><b>
+	<font class="fontmsg">
+	
+	<b>
+	<br>
 	[% message %]
+	<br>
 	[% IF reservaGrupo %]
 		<center> 
 			<a href="opac-userupdate.pl">
@@ -31,7 +35,7 @@
 		<th>[% "Fecha de Vencimiento" | i18n %]</th>
 		<th>[% "Acci&oacute;n" | i18n %]</th>
 	</tr>
-[% FOREACH reserva IN RESERVES %]
+[% FOREACH reserva IN RESERVAS %]
 	<tr border="1" bordercolor="#f2f2f2">
  		<td class="impar">
 			<a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
@@ -46,11 +50,7 @@
 		[% END %]
  		</td>
  		<td align=center class="impar">
-<!--		[% IF redicion %]
-			[% redicion %]
-		[% ELSE %] 
-			- 
-		[% END %]-->
+		[% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] - [% END %]
 		</td>
  		<td class="impar" align="center">
 			[% reserva.getFecha_reserva_formateada %]
@@ -90,7 +90,7 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-[% FOREACH reserva IN  RESERVAS_ASIGNADAS %]
+[% FOREACH reserva IN  RESERVAS_ESPERA %]
   <tr border="1" bordercolor="#f2f2f2">
 	<td class="impar">
 	<a class="click" onClick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
@@ -110,11 +110,7 @@
 	[% END %]
  	</td>
 	<td align=center class="impar"> 
-<!--	[% IF redicion %]
-		[% redicion %]
-	[% ELSE %] 
-		- 
-	[% END %]-->
+   [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
 	</td>
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]
@@ -150,7 +146,7 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-[% FOREACH reserva IN RESERVAS_ESPERA %]
+[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
   <tr bordercolor="#f2f2f2">
 	<td class="impar">
 		<b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
@@ -168,11 +164,11 @@
  	[% END %]
 	</td> 
 	<td align=center class="impar">  
-<!--	[% IF redicion %]
-		[% redicion %]
+	[% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] -[% END %]
+<!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
+	[% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
+		[% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
 	[% END %]
-	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
-	[% IF volume %]        t [% volume %] [% END %]-->
 	</td>
 	<td class="impar" align="center">
 	[% IF reserva.getFecha_notificacion %] 

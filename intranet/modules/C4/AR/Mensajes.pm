@@ -83,6 +83,7 @@ my %mensajesOPAC = (
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
+	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
 	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
 	'B401' => '',
 	'B402' => '',
@@ -379,6 +380,7 @@ sub create {
 	my %msg_object;
 	$msg_object{'error'}= 0;
 	$msg_object{'messages'}= [];
+	$msg_object{'tipo'}='INTRA';
 
 	return \%msg_object;
 }
@@ -391,7 +393,7 @@ sub add {
 # open(A,">>/tmp/debug.txt");
 # print A "Mensajes::add => \n";
 	#se obtiene el texto del mensaje
-  	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},'INTRA',$msg_hashref->{'params'});	
+  	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
 	$msg_hashref->{'message'}= $messageString;
 # print A "Mensajes::add => message: ".$messageString."\n";
 # print A "Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n";

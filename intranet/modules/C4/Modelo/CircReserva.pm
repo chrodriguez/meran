@@ -14,11 +14,11 @@ __PACKAGE__->meta->setup(
         id3              => { type => 'integer' },
         id_reserva       => { type => 'serial', not_null => 1 },
         nro_socio	 => { type => 'integer', default => '0', not_null => 1 },
-        fecha_reserva    => { type => 'date', default => '0000-00-00', not_null => 1 },
+        fecha_reserva    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         estado           => { type => 'character', length => 1 },
         id_ui		 => { type => 'varchar', length => 4 },
-        fecha_notificacion => { type => 'date' },
-        fecha_recodatorio  => { type => 'date' },
+        fecha_notificacion => { type => 'varchar' },
+        fecha_recodatorio  => { type => 'varchar' },
         timestamp        => { type => 'timestamp', not_null => 1 },
     ],
 
@@ -233,7 +233,7 @@ sub reservar {
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
 	$paramsReserva{'desdeh'}= $apertura;
-	$paramsReserva{'hastah'}= $cierre;	
+	$paramsReserva{'hastah'}= $cierre;
 	$paramsReserva{'tipo_prestamo'}= $params->{'tipo_prestamo'};
 
 	$self->agregar(\%paramsReserva);
@@ -263,5 +263,168 @@ sub reservar {
 	}
 	return (\%paramsReserva);
 }
+
+
+# 
+# =item
+# cancelar_reserva
+# Funcion que cancela una reserva
+# =cut
+sub cancelar_reserva{
+	my ($self)=shift;
+	my ($params)=@_;
+	my $nro_socio=$params->{'nro_socio'};
+	my $loggedinuser=$params->{'loggedinuser'};
+
+	if($self->getId3){
+		$self->debug("Es una reserva asignada se trata de reasignar");
+#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
+		$self->reasignarReservaEnEspera($nro_socio);
+# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+		$self->debug("Se borra la sancion de la reserva");
+		$self->borrar_sancion_de_reserva();
+	}
+
+#FIXME y esto??? porque no se hace arriba?? solo actualiza la sancion y hace el logueo -> los paso a actualizarDatosReservaEnEspera
+#Actualizo la sancion para que refleje el id3 y asi poder informalo 
+# 	$params->{'id3'}= $self->getId3;
+# 	$params->{'id_reserva'}= $self->getId_reserva;
+# 	C4::AR::Sanciones::actualizarSancion($params);
+	$self->debug("Se loguea en historico de circulacion la cancelacion");
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   my $data_hash;
+   $data_hash->{'id1'}=$self->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}=$self->getId2;
+   $data_hash->{'id3'}=$self->getId3;
+   $data_hash->{'nro_socio'}=$self->getNro_socio;
+   $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'end_date'}=undef;
+   $data_hash->{'issuesType'}='-';
+   $data_hash->{'id_ui'}=$self->getId_ui;
+   $data_hash->{'tipo'}='cancel';
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+	$self->debug("Se cancela efectivamente");
+#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+	$self->delete();
+}
+
+
+=item
+Esta funcion recibe como parametro 
+id2 del grupo
+id3 del item
+loggedinuser
+branchcode
+=cut
+sub reasignarReservaEnEspera{
+	my ($self)=shift;
+	my ($responsable)=@_;
+
+	my $reservaGrupo=$self->getReservaEnEspera();
+	if($reservaGrupo){
+		#Si hay ejemplares esperando se reasigna
+		$reservaGrupo->setId3($self->getId3);
+		$reservaGrupo->setId_ui($self->getId_ui);
+		$reservaGrupo->actualizarDatosReservaEnEspera($responsable);
+	}
+}
+
+=item
+actualizarDatosReservaEnEspera
+Funcion que actualiza la reserva que estaba esperando por un ejemplar.
+=cut
+sub actualizarDatosReservaEnEspera{
+	my ($self)=shift;
+	my ($loggedinuser)=@_;
+
+	my $dateformat = C4::Date::get_date_format();
+	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+#Se actualiza la reserva
+	my ($desde,$hasta,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
+	$self->setEstado('E');
+	$self->setFecha_reserva($desde);
+	$self->setFecha_notificacion($hoy);
+	$self->setFecha_recodatorio($hasta);
+	$self->save();
+
+# Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
+	my $err= "Error con la fecha";
+	my $dateformat=C4::Date::get_date_format();
+	my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
+	$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+	my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+	
+	use C4::Modelo::CircSancion;
+	my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
+	my %paramsSancion;
+	$paramsSancion{'tipo_sancion'}= undef;
+	$paramsSancion{'id_reserva'}= $self->getId_reserva;
+	$paramsSancion{'nro_socio'}= $self->getNro_socio;
+	$paramsSancion{'fecha_comienzo'}= $startdate;
+	$paramsSancion{'fecha_final'}= $enddate;
+	$paramsSancion{'dias_sancion'}= undef;
+	$sancion->insertar_sancion(\%paramsSancion);
+	# Se registra la actualizacion
+	$paramsSancion{'id3'}= $self->getId3;
+	$paramsSancion{'loggedinuser'}= $loggedinuser;
+	$sancion->actualizar_sancion(\%paramsSancion);
+	#
+
+	my $params;
+	$params->{'cierre'}= $cierre;
+	$params->{'fecha'}= $hasta;
+	$params->{'desde'}= $desde;
+	$params->{'apertura'}= $apertura;
+	$params->{'loggedinuser'}= $loggedinuser;
+	#Se envia una notificacion al usuario avisando que se le asigno una reserva
+	C4::AR::Reservas::Enviar_Email($self,$params);
+}
+
+=item
+getReservaEnEspera
+Funcion que trae los datos de la primer reserva de la cola que estaba esperando que se desocupe un ejemplar del grupo de esta misma reserva.
+=cut
+sub getReservaEnEspera{
+	my ($self)=shift;
+
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2 => { eq => $self->getId2}));
+    push(@filtros, ( id3 => undef ));
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db=> $self->db,
+																			query => \@filtros,
+                                                                            sort_by => 'timestamp',
+                                                                            limit   => 1); 
+    return ($reservas_array_ref->[0]);
+}
+
+=item
+borrar_sancion_de_reserva
+Borra la sancion que corresponde a esta reserva
+=cut
+sub borrar_sancion_de_reserva
+{		my ($self)=shift;
+
+		my $dateformat = C4::Date::get_date_format();
+		my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+		use C4::Modelo::CircSancion::Manager;
+		use C4::Modelo::CircSancion;
+		my @filtros;
+		push(@filtros, ( id_reserva => { eq => $self->getId_reserva}));
+    	push(@filtros, ( fecha_comienzo => { gt => $hoy} ));
+    	my $sancion_reserva_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion(db=>$self->db,query => \@filtros);
+     	if($sancion_reserva_ref->[0])
+			{$sancion_reserva_ref->[0]->delete();}
+}
+
+
 1;
 

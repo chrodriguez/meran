@@ -497,3 +497,13 @@ CHANGE `delaydays` `dias_sancion` INT( 11 ) NULL DEFAULT '0',
 CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL ;
 
  ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+
+ALTER TABLE `rep_historial_sancion` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `type` `tipo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `responsable` `responsable` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `end_date` `fecha_final` DATE NULL DEFAULT NULL ,
+CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0' ;

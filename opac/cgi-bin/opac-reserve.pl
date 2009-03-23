@@ -41,17 +41,18 @@ $params{'nro_socio'}= $socio;
 $params{'loggedinuser'}= $socio;
 $params{'tipo_prestamo'}= 'DO';
 
-my ($msg_object)= &C4::AR::Reservas::t_reservarOPAC(\%params);	
-my $acciones;
+my ($msg_object)= &C4::AR::Reservas::t_reservarOPAC(\%params);
 
-$acciones= C4::AR::Mensajes::getAccion($msg_object->{'codMsg'});
-my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('userid'));
+my $acciones;
+$acciones= C4::AR::Mensajes::getAccion($msg_object->{'messages'}->[0]->{'codMsg'});
+
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($socio);
 
 if($msg_object->{'error'}){
 #SE PRODUJO ALGUN ERROR
 	if($acciones->{'maximoReservas'}){
 	#EL USUARIO LLEGO AL MAXIMO DE RESERVAS, Y SE MUESTRAN LAS RESERVAS HECHAS
-		$t_params->{'RESERVES'}= $reservas;
+		$t_params->{'RESERVAS'}= $reservas;
 	}
 }else{
 # SE REALIZO LA RESERVA CON EXITO

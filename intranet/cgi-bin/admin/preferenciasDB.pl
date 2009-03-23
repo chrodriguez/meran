@@ -9,11 +9,10 @@ use C4::AR::Preferencias;
 use JSON;
 
 my $input = new CGI;
-
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $json = $obj->{'json'};
+# my $json = $obj->{'json'};
 my $tabla = $obj->{'tabla'};
 my $tipo = $obj->{'tipo'};
 my $accion = $obj->{'accion'};

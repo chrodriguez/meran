@@ -392,5 +392,51 @@ sub toMARC{
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 
+=item
+Esta funcion retorna la edicion segun un id2
+=cut
+sub getEdicion{
+    my ($self) = shift;
+	my $aux="";
+	foreach my $repetible ($self->cat_nivel2_repetible){
+		if(($repetible->getCampo eq "250")and($repetible->getSubcampo eq "a")){
+			if ($aux eq "")
+				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+		}
+	}
+	return $aux;
+}
+
+=item
+Esta funcion retorna el volumen segun un id2
+=cut
+
+sub getVolumen{
+    my ($self) = shift;
+	my $aux="";
+	foreach my $repetible ($self->cat_nivel2_repetible){
+		if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "n")){
+			if ($aux eq "")
+				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+		}
+	}
+	return $aux;
+}
+
+=item
+Esta funcion retorna la descripcion del volumen segun un id2
+=cut
+sub getVolumenDesc{
+    my ($self) = shift;
+	my $aux="";
+	foreach my $repetible ($self->cat_nivel2_repetible){
+		if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "a")){
+			if ($aux eq "")
+				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+		}
+	}
+	return $aux;
+}
+
 1;
 

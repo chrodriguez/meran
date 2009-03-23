@@ -46,7 +46,6 @@ $VERSION = 0.01;
 	&DatosReservas
 	&getDatosReservaDeId3
 	&cant_waiting
-
 	&CheckWaiting
 	&tiene_reservas
 	&Enviar_Email
@@ -70,20 +69,17 @@ sub t_reservarOPAC {
 	#No hay error
 		C4::AR::Debug::debug("No hay error");
 		my ($paramsReserva);
-		C4::AR::Debug::debug("antes de reservar!!!");
 		my  $reserva = C4::Modelo::CircReserva->new();
         my $db = $reserva->db;
 		   $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
 
 		eval {
-			C4::AR::Debug::debug("Se va a reservar!!!");
-			($paramsReserva)= $reserva->reservar($params);	
+			($paramsReserva)= $reserva->reservar($params);
 			$db->commit;
-			C4::AR::Debug::debug("Termino de  reservar!!!");
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
-			C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!!");
+			C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
 			#SE RESERVO CON EXITO UN EJEMPLAR
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'},
@@ -93,7 +89,7 @@ sub t_reservarOPAC {
 								]} ) ;
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
-				C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO");
+				C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
 				my $socio= C4::AR::Usuarios::getSocioInfo($params->{'nro_socio'});
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
@@ -101,7 +97,6 @@ sub t_reservarOPAC {
 		};
 
 		if ($@){
-			C4::AR::Debug::debug("ERROR");
 			#Se loguea error de Base de Datos
 			&C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
 			eval {$db->rollback};
@@ -123,20 +118,20 @@ sub t_cancelar_y_reservar {
 	my $paramsReserva;
 	my ($msg_object);	
 
-	my ($reserva) = C4::Modelo::CircReserva->new();
-    
+	my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
+	$reserva->load();
 	my $db = $reserva->db;
 	$db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
 	eval {
-		_cancelar_reserva($params);
+		$reserva->cancelar_reserva($params);
 
 		my ($msg_object)= &_verificaciones($params);
 		
 		if(!$msg_object->{'error'}){
 
-			($paramsReserva)= reservar($params);
+			($paramsReserva)= $reserva->reservar($params);
 
 			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
 			if($paramsReserva->{'estado'} eq 'E'){
@@ -185,9 +180,7 @@ sub cancelar_reservas{
 		
 		my $reservas_array_ref=obtenerReservasDeSocio($_);
 		foreach my $reserva (@$reservas_array_ref){
-			$params->{'reservenumber'}= $reserva->getId;
-			$params->{'id2'}= $reserva->getId2;
-			_cancelar_reserva($params);
+			$reserva->cancelar_reserva($params);
 		}
 	}
 }
@@ -223,8 +216,7 @@ sub cancelar_reservas_inmediatas{
      							); 
     	
 	foreach my $reserva (@$reservas_array_ref){
-		$params->{'reservenumber'}=$reserva->getId;
-		_cancelar_reserva($params);
+		$reserva->cancelar_reserva($params);
 	}
 
 }
@@ -239,20 +231,24 @@ sub t_cancelar_reserva{
 		
 	my $tipo=$params->{'tipo'};
 	my $msg_object= C4::AR::Mensajes::create();
+	$msg_object->{'tipo'}=$tipo;
 
-
-	my ($reserva) = C4::Modelo::CircReserva->new();
+		my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
+		$reserva->load();
         my $db = $reserva->db;
-	$db->{connect_options}->{AutoCommit} = 0;
+		$db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
 
 	eval{
-		_cancelar_reserva($params);
+		C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
+		$reserva->cancelar_reserva($params);
 		$db->commit;
 		$msg_object->{'error'}= 0;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
+		C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
 	};
 	if ($@){
+		C4::AR::Debug::debug("ERROR");
 		#Se loguea error de Base de Datos
 		C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
 		eval {$db->rollback};
@@ -312,83 +308,18 @@ sub _getReservasAsignadas {
 }
 
 =item
-Esta funcion recibe como parametro 
-id2 del grupo
-id3 del item
-loggedinuser
-branchcode
-=cut
-sub reasignarReservaEnEspera{
-	my ($reserva,$responsable)=@_;
-
-	my $reservaGrupo=getReservaEnEspera($reserva->getId2);
-	if($reservaGrupo){
-		$reservaGrupo->setId3($reserva->getId3);
-		$reservaGrupo->setId_ui($reserva->getId_ui);
-		_actualizarDatosReservaEnEspera($reservaGrupo,$responsable);
-	}
-}
-# 
-# =item
-# cancelar_reserva
-# Funcion que cancela una reserva
-# =cut
-sub _cancelar_reserva{
-	my ($params)=@_;
-	my $dbh= C4::Context->dbh;
-	my $id_reserva=$params->{'id_reserva'};
-	my $nro_socio=$params->{'nro_socio'};
-	my $loggedinuser=$params->{'loggedinuser'};
-	my $reserva=getReserva($id_reserva);
-
-	my $id2=$reserva->getId2;
-	my $id3=$reserva->getId3;
-
-	if($id3){
-#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		reasignarReservaEnEspera($reserva,$nro_socio);
-# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-		C4::AR::Sanciones::borrarSancionReserva($id_reserva);
-	}
-
-#Actualizo la sancion para que refleje el id3 y asi poder informalo
-	$params->{'id3'}= $id3;
-	$params->{'id_reserva'}= $id_reserva;
-	C4::AR::Sanciones::actualizarSancion($params);
-
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   my $data_hash;
-   $data_hash->{'id1'}=$reserva->getId1;
-   $data_hash->{'id2'}=$reserva->getId2;
-   $data_hash->{'id3'}=$reserva->getId3;
-   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'end_date'}=undef;
-   $data_hash->{'issuesType'}='-';
-   $data_hash->{'id_ui'}=$reserva->getId_ui;
-   $data_hash->{'tipo'}='cancel';
-   use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new();
-   $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
-#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-	$reserva->delete();
-}
-
-=item
 getReserva
 Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
 =cut
 sub getReserva{
     my ($id)=@_;
-    my ($reserva) = C4::Modelo::CircReserva->new(id => $id);
+    my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $id);
     $reserva->load();
     return ($reserva);
 }
 
 =item
-getReservaEnEspera
+getReservaEnEspera #DEPRECATED paso a CircReserva
 Funcion que trae los datos de la primer reserva de la cola que estaba esperando que se desocupe un ejemplar del grupo devuelto o cancelado.
 =cut
 sub getReservaEnEspera{
@@ -415,11 +346,14 @@ Funcion que actualiza la reserva que estaba esperando por un ejemplar.
 sub _actualizarDatosReservaEnEspera{
 	my ($reservaGrupo,$loggedinuser)=@_;
 
+	my $dateformat = C4::Date::get_date_format();
+	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
 #Se agrega actualiza la reserva
 	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
 	$reservaGrupo->setEstado('E');
 	$reservaGrupo->setFecha_reserva($desde);
-	$reservaGrupo->setFecha_notificacion(ParseDate("today"));
+	$reservaGrupo->setFecha_notificacion($hoy);
 	$reservaGrupo->setFecha_recodatorio($fecha);
 	$reservaGrupo->save();
 
@@ -728,6 +662,8 @@ sub _verificaciones {
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
 	my $msg_object= C4::AR::Mensajes::create();
+	$msg_object->{'tipo'}=$tipo;
+
 	my $dateformat=C4::Date::get_date_format();
 
 	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
@@ -1171,8 +1107,11 @@ sub reservasVencidas{
 
     my ($socio)=@_;
 
+	my $dateformat = C4::Date::get_date_format();
+	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
-							query => [ fecha_recodatorio => { lt => ParseDate("today") }, 
+							query => [ fecha_recodatorio => { lt => $hoy }, 
 								   estado => {ne => 'P'}, 
 								   id3 => {ne => undef}]
      							); 

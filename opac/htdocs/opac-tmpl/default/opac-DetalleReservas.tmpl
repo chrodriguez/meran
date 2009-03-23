@@ -55,9 +55,11 @@
  	[% END %]
 	</td> 
 	<td align=center class="impar">  
-<!--	[% IF redicion %] [% redicion %] - [% END %]
-	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
-	[% IF volume %]        t [% volume %] [% END %]-->
+	[% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+<!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
+	[% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
+		[% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
+	[% END %]
 	</td>
 	<td class="impar" align="center">
 	[% IF reserva.getFecha_notificacion %] 
@@ -127,11 +129,7 @@
 	[% END %]
  	</td>
 	<td align=center class="impar"> 
-<!--	[% IF redicion %]
-		[% redicion %]
-	[% ELSE %]
-		- 
-	[% END %]-->
+[% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
 	</td>
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]

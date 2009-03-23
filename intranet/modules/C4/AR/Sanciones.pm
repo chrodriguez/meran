@@ -374,7 +374,7 @@ sub sanciones{
 	return @sanctionsarray;
 }
 
-
+#DEPRECATED
 sub borrarSancionReserva{
 	my ($reservenumber)=@_;
 	my $dbh = C4::Context->dbh;
