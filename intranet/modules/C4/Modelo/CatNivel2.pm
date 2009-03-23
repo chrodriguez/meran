@@ -58,15 +58,15 @@ __PACKAGE__->meta->setup(
             type       => 'one to many',
         },
 		ref_pais_publicacion => {
-            class      => 'C4::Modelo::RefNivelBibliografico',
+            class      => 'C4::Modelo::RefPais',
             column_map => { pais_publicacion => 'iso' },
             type       => 'one to many',
         },
-# 		ref_ciudad_publicacion => {
-#             class      => 'C4::Modelo::RefNivelBibliografico',
-#             column_map => { ciudad_publicacion => 'code' },
-#             type       => 'one to many',
-#         },
+		ref_ciudad_publicacion => {
+            class      => 'C4::Modelo::RefLocalidad',
+            column_map => { ciudad_publicacion => 'LOCALIDAD' },
+            type       => 'one to many',
+        },
 		
     ],
 );
@@ -304,16 +304,24 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= '910';
 	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getTipo_documento;
-	$hash{'ident'}= 'tipo_documento'; #parece q no es necesario
+	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('910', 'a');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+		$hash{'datoReferencia'}= $self->getTipo_documento
+	}
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '043';
 	$hash{'subcampo'}= 'c';
-	$hash{'dato'}= $self->getPais_publicacion;
-	$hash{'ident'}= 'pais_publicacion'; #parece q no es necesario
+	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('043', 'c');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+		$hash{'datoReferencia'}= $self->getPais_publicacion;
+	}
 
 	push (@marc_array, \%hash);
 
@@ -321,40 +329,61 @@ sub toMARC{
 	$hash{'campo'}= '260';
 	$hash{'subcampo'}= 'c';
 	$hash{'dato'}= $self->getAnio_publicacion;
-	$hash{'ident'}= 'anio_publicacion';
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('260', 'c');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '260';
 	$hash{'subcampo'}= 'a';
-	$hash{'dato'}= $self->getCiudad_publicacion;
-	$hash{'ident'}= 'ciudad_publicacion';
+ 	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('260', 'a');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getCiudad_publicacion;
+	}
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '041';
 	$hash{'subcampo'}= 'h';
-	$hash{'dato'}= $self->getLenguaje;
-	$hash{'ident'}= 'lenguaje';
+	$hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('041', 'h');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getLenguaje;
+	}
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '245';
 	$hash{'subcampo'}= 'h';
-	$hash{'dato'}= $self->getSoporte;
-	$hash{'ident'}= 'soporte';
+	$hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('245', 'h');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getSoporte;
+	}
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '900';
 	$hash{'subcampo'}= 'b';
-	$hash{'dato'}= $self->getNivel_bibliografico;
-	$hash{'ident'}= 'nivel_bibliografico';
-
+	$hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('900', 'b');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getNivel_bibliografico;
+	}
+	
 	push (@marc_array, \%hash);
 	
 	return (\@marc_array);

@@ -4,7 +4,7 @@ use strict;
 
 use base qw(Rose::DB::Object::Manager);
 
-use C4::Modelo.:Localidad;
+use C4::Modelo::RefLocalidad;
 
 sub object_class { 'C4::Modelo::RefLocalidad' }
 

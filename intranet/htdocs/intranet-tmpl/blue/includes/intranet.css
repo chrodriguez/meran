@@ -576,14 +576,6 @@ div.title{
 	height: 15;
 }
 
-ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-   float:left;
-   width:100px;  
-}
-
 div.formElemets ul li {
       list-style-type:none;
       display:block;
@@ -1098,6 +1090,15 @@ background:#000 url(http://www.seoconsultants.com/css/images/expand3.gif) no-rep
 font-weight:normal;
 color:#000;
 background:#eee url(http://www.seoconsultants.com/css/images/expand3.gif) no-repeat 100% 100%;
+}
+
+/* FIXME esto esta rompiendo todo */
+#menu ul li {
+      list-style-type:none;
+      display:block;
+      margin:0;
+   float:left;
+   width:100px;  
 }
 
 

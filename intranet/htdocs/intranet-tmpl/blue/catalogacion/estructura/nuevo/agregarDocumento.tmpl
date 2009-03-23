@@ -26,7 +26,10 @@ BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 
 _message= "El campo no puede estar en blanco";
 
-
+//objeto generico para enviar parametros a cualquier funcion, se le van creando dinamicamente los mismos
+function objeto_params(){
+	
+}
 
 
 function inicializar(){
@@ -322,6 +325,7 @@ function agregarN3(){
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
 function mostrarInfoAltaNivel1(id1){
+	ID_N1= id1;
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -690,7 +694,12 @@ function procesarObjeto(objeto){
 			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
 			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
 			 $(comp).appendTo("#"+idDiv);
-			_cambiarIdDeAutocomplete();
+// FIXME falta recuperar la data y dejar el ID en el input hidden
+			if(!MODIFICAR){
+				_cambiarIdDeAutocomplete();
+			}else{	
+			//busco el dato segun el ID $('#' + objeto.idCompCliente + '_hidden').val() y lo agrego en $('#' + objeto.idCompCliente ).val()
+			}
         break;
     }
 //     crearRegla(comp,idComp);
@@ -1003,6 +1012,33 @@ function borrarGrupo(id1,id2){
 function updateBorrarGrupo(){
 }
 
+/*
+Esta funcion es usada cuando se quiere editar N1, N2 o N3 desde otra ventana, se redirecciona aqui
+*/
+function cargarNivel1(params){
+/*
+	params.id1
+	params.id2
+	params.id3
+	params.tipoAccion= ('MODIFICAR_NIVEL_1'|'MODIFICAR_NIVEL_2'|'MODIFICAR_NIVEL_3') por defecto 'MODIFICAR_NIVEL_1'
+*/
+	ID_N1= params.id1;
+	ID_N2= params.id2;
+// FIXME este funciona pero tarda mucho, ver como ir llamando de a uno por vez asi parece mas rapido
+	mostrarInfoAltaNivel1(params.id1);
+	mostrarInfoAltaNivel2(params.id2);	
+	mostrarInfoAltaNivel3(params.id1, params.id2);	
+
+	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
+		modificarN2(params.id2);
+	}else	
+	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
+		modificarN3(params.id3);
+	}else{
+		//por defecto se carga el Nivel 1 para modificar
+		modificarN1(params.id1);
+	}
+}
 
 function validateForm(formID, func){
 
@@ -1042,18 +1078,36 @@ function validateForm(formID, func){
 $(document).ready( function() {
 	//oculto todas las tabls
 	_showAndHiddeEstructuraDelNivel(0);
-    //autocomplete nivel 1
-    CrearAutocompleteAutores('autor', 'autor_hidden', '/cgi-bin/koha/autocompletables/autorAutocomplete.pl');
 
-    //autocomplete nivel 2
-    CrearAutocompletePaises(    'nivel_bibliografico', 
-                                'nivel_bibliografico_hidden', 
-                                '/cgi-bin/koha/autocompletables/nivelBibliograficoAutocomplete.pl'
-                        );
-    CrearAutocompletePaises('soporte', 'soporte_hidden', '/cgi-bin/koha/autocompletables/soportesAutocomplete.pl');
-    CrearAutocompletePaises('pais_publicacion', 'pais_publicacion_hidden', '/cgi-bin/koha/autocompletables/paisesAutocomplete.pl');
-    CrearAutocompleteLenguajes('lenguaje', 'lenguaje_hidden', '/cgi-bin/koha/autocompletables/lenguajesAutocomplete.pl');
-    CrearAutocompleteCiudades('ciudad_publicacion', 'ciudad_publicacion_hidden', '/cgi-bin/koha/autocompletables/searchcity.pl');
+	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
+
+		params= new objeto_params();
+		params.id1= [% id1 %];
+		params.id2= [% id2 %];
+		params.id3= [% id3 %];
+		params.tipoAccion= '[% tipoAccion %]';
+		cargarNivel1(params);
+	[% ELSE %]
+		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
+	
+			params= new objeto_params();
+			params.id1= [% id1 %];
+			params.id2= [% id2 %];
+			params.id3= [% id3 %];
+			params.tipoAccion= '[% tipoAccion %]';
+			cargarNivel1(params);
+		[% ELSE %]	
+			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
+		
+				params= new objeto_params();
+				params.id1= [% id1 %];
+				params.id2= [% id2 %];
+				params.id3= [% id3 %];
+				params.tipoAccion= '[% tipoAccion %]';
+				cargarNivel1(params);
+			[% END %]
+		[% END %]
+	[% END %]
 
 } );
 

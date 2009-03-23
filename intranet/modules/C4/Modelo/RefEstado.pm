@@ -82,9 +82,9 @@ sub getCampo{
 	return (0);
 }
 
-sub lastTable{
-    
-    return(1);
+sub nextMember{
+    use C4::Modelo::RefLocalidad;
+    return(C4::Modelo::RefLocalidad->new());
 }
 
 1;

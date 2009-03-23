@@ -26,9 +26,9 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-=item
 
-=cut
+
+
 
 =item
 buscarNivel1PorId3
@@ -334,6 +334,32 @@ sub saveNivel1{
 
 	return($ident,$error,$codMsg);
 }
+
+
+
+
+
+
+
+
+
+
+
+=item
+Recupero un nivel 1 a partir de un id1
+=cut
+sub getNivel1FromId1{
+	my ($id1) = @_;
+
+	my $nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
+																							query => [ 
+																										id1 => { eq => $id1 },
+																								], 
+																);
+
+	return ($nivel1_array_ref);
+}
+
 
 
 #=======================================================================ABM Nivel 1=======================================================

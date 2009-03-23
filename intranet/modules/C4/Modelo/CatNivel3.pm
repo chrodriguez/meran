@@ -299,8 +299,13 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'd';
-	$hash{'dato'}= $self->getId_ui_origen;
-	$hash{'ident'}= 'id_ui_origen'; #parece q no es necesario
+	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_origen);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'd');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getId_ui_origen;
+	}
 
 	push (@marc_array, \%hash);
 
@@ -308,15 +313,19 @@ sub toMARC{
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'f';
 	$hash{'dato'}= $self->getBarcode;
-	$hash{'ident'}= 'barcode'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'c';
-	$hash{'dato'}= $self->getId_ui_poseedora;
-	$hash{'ident'}= 'id_ui_poseedora'; #parece q no es necesario
+	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_poseedora);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'c');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getId_ui_poseedora;
+	}
 
 	push (@marc_array, \%hash);
 
@@ -324,23 +333,33 @@ sub toMARC{
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 't';
 	$hash{'dato'}= $self->getSignatura_topografica;
-	$hash{'ident'}= 'signatura_topografica'; #parece q no es necesario
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'e';
-	$hash{'dato'}= $self->getId_estado;
-	$hash{'ident'}= 'estado';
+	$hash{'dato'}= C4::AR::Referencias::getNombreEstado($self->getId_estado);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'e');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getId_estado;
+	}
 
 	push (@marc_array, \%hash);
 
 	my %hash;
 	$hash{'campo'}= '995';
 	$hash{'subcampo'}= 'o';
-	$hash{'dato'}= $self->getId_disponibilidad;
-	$hash{'ident'}= 'id_disponibilidad';
+	$hash{'dato'}= C4::AR::Referencias::getNombreDisponibilidad($self->getId_disponibilidad);
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'o');
+	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+	if($estructura->[0]->getReferencia){
+	#tiene referencia
+		$hash{'datoReferencia'}= $self->getId_disponibilidad;
+	}
+
 
 	push (@marc_array, \%hash);
 

@@ -596,6 +596,39 @@ sub saveNivel2{
 
 }
 
+
+
+=item
+Recupero todos los nivel 2 a partir de un id1
+=cut
+sub getNivel2FromId1{
+	my ($id1) = @_;
+
+	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
+																							query => [ 
+																										id1 => { eq => $id1 },
+																								], 
+										);
+
+	return ($nivel2_array_ref);
+}
+
+=item
+Recupero un nivel 2 a partir de un id2
+=cut
+sub getNivel2FromId2{
+	my ($id2) = @_;
+
+	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
+																							query => [ 
+																										id2 => { eq => $id2 },
+																								], 
+																);
+
+	return ($nivel2_array_ref);
+}
+
+
 #=======================================================================ABM Nivel 1=======================================================
 
 

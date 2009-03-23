@@ -34,5 +34,10 @@ sub setId_persona{
     $self->NOMBRE($nombre);
 }
 
+sub lastTable{
+    
+    return(1);
+}
+
 1;
 

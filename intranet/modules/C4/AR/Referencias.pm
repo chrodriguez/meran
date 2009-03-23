@@ -75,6 +75,8 @@ use C4::Modelo::RefDisponibilidad;
 use C4::Modelo::RefDisponibilidad::Manager;
 use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatRefTipoNivel3::Manager;
+use C4::Modelo::RefLocalidad;
+use C4::Modelo::RefLocalidad::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
@@ -262,6 +264,157 @@ sub obtenerIdentTablaRef{
     return($ref->obtenerIdentTablaRef($tableAlias));
 }
 
+
+=item
+Devuelve el nombre del pais segun el iso pasado por paramentro, si no existe devuelve 0
+=cut
+sub getNombrePais {
+	my ($iso)= @_;
+
+    my $pais_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+																	query => [ iso => $iso]
+														);
+
+	if(scalar(@$pais_array_ref) > 0){
+ 		return $pais_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+
+=item
+Devuelve el nombre del del tipo de documento segun el id_tipo_doc pasado por paramentro, si no existe devuelve 0
+=cut
+sub getNombreTipoDocumento {
+	my ($id_tipo_doc)= @_;
+
+    my $tipo_doc_array_ref = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+																	query => [ id_tipo_doc => $id_tipo_doc]
+														);
+
+	if(scalar(@$tipo_doc_array_ref) > 0){
+ 		return $tipo_doc_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+=item
+Devuelve el nombre del la ciudad segun el paramentro pasado, si no existe devuelve 0
+=cut
+sub getNombreCiudad {
+	my ($localidad)= @_;
+
+    my $localidad_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_localidad(
+																	query => [ LOCALIDAD => $localidad ]
+														);
+
+	if(scalar(@$localidad_array_ref) > 0){
+ 		return $localidad_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreLenguaje {
+	my ($id_lenguaje)= @_;
+
+    my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+																	query => [ idLanguage => $id_lenguaje ]
+														);
+
+	if(scalar(@$idioma_array_ref) > 0){
+ 		return $idioma_array_ref->[0]->getDescription;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreSoporte {
+	my ($idSupport)= @_;
+
+    my $soporte_array_ref = C4::Modelo::RefSoporte::Manager->get_ref_soporte(
+																	query => [ idSupport => $idSupport ]
+														);
+
+	if(scalar(@$soporte_array_ref) > 0){
+ 		return $soporte_array_ref->[0]->getDescription;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreNivelBibliografico {
+	my ($code)= @_;
+
+    my $nivel_bibliografico_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
+																	query => [ code => $code ]
+														);
+
+	if(scalar(@$nivel_bibliografico_array_ref) > 0){
+ 		return $nivel_bibliografico_array_ref->[0]->getDescription;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreUI {
+	my ($id_ui)= @_;
+
+    my $ui_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+																	query => [ id_ui => $id_ui ]
+														);
+
+	if(scalar(@$ui_array_ref) > 0){
+ 		return $ui_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreEstado {
+	my ($codigo)= @_;
+
+    my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
+																	query => [ codigo => $codigo ]
+														);
+
+	if(scalar(@$estado_array_ref) > 0){
+ 		return $estado_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+sub getNombreDisponibilidad {
+	my ($codigo)= @_;
+
+    my $disponibilidad_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
+																	query => [ codigo => $codigo ]
+														);
+
+	if(scalar(@$disponibilidad_array_ref) > 0){
+ 		return $disponibilidad_array_ref->[0]->getNombre;
+	}else{
+		return 0;
+	}
+}
+
+
+sub getNombreAutor {
+	my ($id)= @_;
+
+    my $autor_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
+																	query => [ id => $id ]
+														);
+
+	if(scalar(@$autor_array_ref) > 0){
+ 		return $autor_array_ref->[0]->getCompleto;
+	}else{
+		return 0;
+	}
+}
 
 
 1;

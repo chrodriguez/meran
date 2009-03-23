@@ -945,6 +945,7 @@ sub transaccion{
 buscarNivel1
 Busca la informacion de nivel 1 de un item. solo de la tabla nivel1
 =cut
+# FIXME DEPRECATED borrar
 sub buscarNivel1{
 	my($id1)=@_;
 	my $dbh = C4::Context->dbh;
@@ -2014,7 +2015,7 @@ sub _getEstructuraFromCampoSubCampo{
 
 										);	
 
-    return ($cat_estruct_info_array);
+	return $cat_estruct_info_array;
 }
 
 
@@ -2032,32 +2033,38 @@ sub getHashCatalogacionesConDatos{
     foreach my $cat  (@$catalogaciones_array_ref){
 
         my %hash_temp;
-        $hash_temp{'campo'}= $cat->{'campo'};
-        $hash_temp{'subcampo'}= $cat->{'subcampo'};
+        $hash_temp{'campo'}= $cat->getCampo;
+        $hash_temp{'subcampo'}= $cat->getSubCampo;
 		$hash_temp{'dato'}= $cat->{'dato'};
-        $hash_temp{'nivel'}= $cat->{'nivel'};
-        $hash_temp{'visible'}= $cat->{'visible'};
-        $hash_temp{'liblibrarian'}= $cat->{'liblibrarian'};
-        $hash_temp{'itemtype'}= $cat->{'itemtype'};
-        $hash_temp{'repetible'}= $cat->{'repetible'};
-        $hash_temp{'fijo'}= $cat->{'fijo'};
-        $hash_temp{'tipo'}= $cat->{'tipo'};
-        $hash_temp{'referencia'}= $cat->{'referencia'};
-        $hash_temp{'obligatorio'}= $cat->{'obligatorio'};
-        $hash_temp{'idCompCliente'}= $cat->{'idCompCliente'};
-        $hash_temp{'intranet_habilitado'}= $cat->{'intranet_habilitado'};
+        $hash_temp{'nivel'}= $cat->getNivel;
+        $hash_temp{'visible'}= $cat->getVisible;
+        $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
+        $hash_temp{'itemtype'}= $cat->getItemType;
+        $hash_temp{'repetible'}= $cat->getRepetible;
+        $hash_temp{'fijo'}= $cat->getFijo;
+        $hash_temp{'tipo'}= $cat->getTipo;
+        $hash_temp{'referencia'}= $cat->getReferencia;
+        $hash_temp{'obligatorio'}= $cat->getObligatorio;
+        $hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
+        $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
 
-
-        if( $cat->{'referencia'} ){
-        #tiene una referencia
+		 if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
+        #tiene una referencia, y no es un autocomplete			
+			C4::AR::Debug::debug('tiene referencia y no es auto');
             $cat->{'infoReferencia'}->{'campos'}; 
             my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-                                                                                       $cat->{'infoReferencia'}->{'referencia'},  #tabla  
-                                                                                       $cat->{'infoReferencia'}->{'campos'}  #campo
+																						$cat->infoReferencia->getReferencia,  #tabla  
+                                                                                        $cat->infoReferencia->getCampos  #campo
                                                                                 );
-			#se guardan los valores para generar el combo en el cliente
             $hash_temp{'opciones'}= $valores;
         }
+
+		if($cat->getTipo eq 'auto'){
+		#es un autocomplete
+			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
+# 			$hash_temp{'datoReferencia'}= obtenerValorCampo()
+		}
+
 
         push (@result, \%hash_temp);
     }
@@ -2075,13 +2082,16 @@ sub _obtenerEstructuraYDatos{
 	my $nivel_array_ref;
 
 	if( $params->{'nivel'} eq '1'){
-		$nivel_array_ref= getNivel1FromId1($params->{'id'});
+		$nivel_array_ref= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
 	}
 	elsif( $params->{'nivel'} eq '2'){
-		$nivel_array_ref= getNivel2FromId2($params->{'id'});
+		$nivel_array_ref= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
 	}
 	elsif( $params->{'nivel'} eq '3'){
 		$nivel_array_ref= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 	}
 
 	#paso todo a MARC
@@ -2118,36 +2128,6 @@ sub _obtenerEstructuraYDatos{
 	}
 
 	return @result;
-}
-
-=item
-Recupero un nivel 1 a partir de un id1
-=cut
-sub getNivel1FromId1{
-	my ($id1) = @_;
-
-	my $nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
-																							query => [ 
-																										id1 => { eq => $id1 },
-																								], 
-																);
-
-	return ($nivel1_array_ref);
-}
-
-=item
-Recupero un nivel 2 a partir de un id2
-=cut
-sub getNivel2FromId2{
-	my ($id2) = @_;
-
-	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-																							query => [ 
-																										id2 => { eq => $id2 },
-																								], 
-																);
-
-	return ($nivel2_array_ref);
 }
 
 
