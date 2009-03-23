@@ -336,24 +336,24 @@ sub reasignarReservaEnEspera{
 sub _cancelar_reserva{
 	my ($params)=@_;
 	my $dbh= C4::Context->dbh;
-	my $reservenumber=$params->{'reservenumber'};
-	my $borrowernumber=$params->{'borrowernumber'};
+	my $id_reserva=$params->{'id_reserva'};
+	my $nro_socio=$params->{'nro_socio'};
 	my $loggedinuser=$params->{'loggedinuser'};
-	my $reserva=getReserva($reservenumber);
+	my $reserva=getReserva($id_reserva);
 
 	my $id2=$reserva->getId2;
 	my $id3=$reserva->getId3;
 
 	if($id3){
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		reasignarReservaEnEspera($reserva,$loggedinuser);
+		reasignarReservaEnEspera($reserva,$nro_socio);
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-		C4::AR::Sanciones::borrarSancionReserva($reservenumber);
+		C4::AR::Sanciones::borrarSancionReserva($id_reserva);
 	}
 
 #Actualizo la sancion para que refleje el id3 y asi poder informalo
 	$params->{'id3'}= $id3;
-	$params->{'reservenumber'}= $reservenumber;
+	$params->{'id_reserva'}= $id_reserva;
 	C4::AR::Sanciones::actualizarSancion($params);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************

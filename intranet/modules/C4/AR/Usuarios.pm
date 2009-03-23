@@ -19,7 +19,6 @@ use vars qw(@EXPORT @ISA);
     &ListadoDePersonas
     &esRegular
     &estaSancionado
-    &
     &getBorrower
     &getBorrowerInfo
     &buscarBorrower

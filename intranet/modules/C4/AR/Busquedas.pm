@@ -23,6 +23,7 @@ use C4::Context;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Catalogacion;
+use C4::AR::Utilidades;
 use C4::AR::Reservas;
 use C4::AR::Nivel1;
 use C4::AR::Nivel2;
@@ -80,7 +81,7 @@ Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla
 sub buscarDatoReferencia{
 	my ($dato,$tabla,$campos,$separador)=@_;
 	
-	my $ident=&C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
+	my $ident=C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 
 	my $dbh = C4::Context->dbh;
 	my @camposArr=split(/,/,$campos);
@@ -119,7 +120,7 @@ sub getLibrarianEstCat{
 	my ($campo, $subcampo,$dato, $itemtype)= @_;
 
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT ec.*, idinforef, ir.referencia as tabla, campos, separador, orden";
+	my $query = "SELECT ec.*,ir.idinforef, ir.referencia as tabla, campos, separador, orden";
 	$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
 	$query .= " ON (ec.id = ir.idestcat) ";
 	$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
@@ -131,7 +132,8 @@ sub getLibrarianEstCat{
 
 	if($data && $data->{'visible'}){
 		if($data->{'referencia'} && $dato ne ""){
-			$nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
+		#DA ERROR FIXME	
+		#$nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
 			$data->{'dato'}=$nuevoDato;
 		}
 		else{

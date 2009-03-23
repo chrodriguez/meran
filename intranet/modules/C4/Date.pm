@@ -32,7 +32,6 @@ $VERSION = 0.01;
 sub get_date_format
 {
 	#Get the database handle
-	my $dbh = C4::Context->dbh;
 	return C4::AR::Preferencias->getValorPreferencia('dateformat');
 }
 

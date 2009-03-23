@@ -2,7 +2,8 @@ package C4::Modelo::CircReserva;
 
 use strict;
 use Date::Manip;
-use C4::Date;
+use C4::Date;#formatdate
+use C4::AR::Utilidades;#trim
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -101,7 +102,7 @@ sub getFecha_reserva{
 sub getFecha_reserva_formateada{
     my ($self) = shift; 
 	my $dateformat = C4::Date::get_date_format();
-    return (format_date($self->getFecha_reserva,$dateformat));
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_reserva),$dateformat);
 }
 
 sub setFecha_reserva{
@@ -118,7 +119,8 @@ sub getFecha_notificacion{
 sub getFecha_notificacion_formateada{
     my ($self) = shift; 
 	my $dateformat = C4::Date::get_date_format();
-    return (format_date($self->getFecha_notificacion,$dateformat));
+		$self->debug("Fecha de notificacion: ".$self->getFecha_notificacion);
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_notificacion),$dateformat);
 }
 
 sub setFecha_notificacion{
@@ -135,7 +137,8 @@ sub getFecha_recodatorio{
 sub getFecha_recodatorio_formateada{
     my ($self) = shift; 
 	my $dateformat = C4::Date::get_date_format();
-    return (format_date($self->getFecha_recodatorio,$dateformat));
+	$self->debug("Fecha de recordatorio: ".$self->getFecha_recodatorio);
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_recodatorio),$dateformat);
 }
 
 sub setFecha_recodatorio{

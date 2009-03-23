@@ -59,14 +59,14 @@
 	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]
 	[% IF volume %]        t [% volume %] [% END %]-->
 	</td>
-	<td class="impar" align="center">[% reserva.getFecha_notificacion %]
+	<td class="impar" align="center">
 	[% IF reserva.getFecha_notificacion %] 
 		[% reserva.getFecha_notificacion_formateada %]
 	[% ELSE %]
 		- 
 	[% END %]
 	</td>
-	<td class="impar" align="center">[% reserva.getFecha_recordatorio %]
+	<td class="impar" align="center">
 	[% IF reserva.getFecha_recordatorio %]
 		<font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
 	[% ELSE %]

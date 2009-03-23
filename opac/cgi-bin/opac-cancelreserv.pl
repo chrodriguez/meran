@@ -16,9 +16,9 @@ my $obj=from_json_ISO($objJSON);
 
 my $borrowernumber=getborrowernumber($loggedinuser);
 my %params;
-$params{'reservenumber'}=$obj->{'reserveNumber'};
-$params{'borrowernumber'}=$borrowernumber;
-$params{'loggedinuser'}=$borrowernumber;
+$params{'id_reserva'}=$obj->{'id_reserva'};
+$params{'nro_socio'}=$session->param('userid');
+$params{'loggedinuser'}=$session->param('userid');
 $params{'tipo'}="OPAC";
 
 # my ($error,$codMsg,$message);
