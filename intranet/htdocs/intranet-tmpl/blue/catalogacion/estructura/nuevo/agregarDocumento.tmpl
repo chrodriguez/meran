@@ -211,6 +211,7 @@ function mostrarEstructuraDelNivel1(){
     _nivelActual= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
+	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _nivelActual;
@@ -269,6 +270,7 @@ function mostrarEstructuraDelNivel2(){
     _nivelActual= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
+	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= 2;
@@ -293,6 +295,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
+	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _nivelActual;
@@ -1026,9 +1029,9 @@ function cargarNivel1(params){
 	ID_N1= params.id1;
 	ID_N2= params.id2;
 // FIXME este funciona pero tarda mucho, ver como ir llamando de a uno por vez asi parece mas rapido
-	mostrarInfoAltaNivel1(params.id1);
-	mostrarInfoAltaNivel2(params.id2);	
-	mostrarInfoAltaNivel3(params.id1, params.id2);	
+// 	mostrarInfoAltaNivel1(params.id1);
+// 	mostrarInfoAltaNivel2(params.id2);	
+// 	mostrarInfoAltaNivel3(params.id1, params.id2);	
 
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 		modificarN2(params.id2);
@@ -1039,6 +1042,10 @@ function cargarNivel1(params){
 		//por defecto se carga el Nivel 1 para modificar
 		modificarN1(params.id1);
 	}
+
+	mostrarInfoAltaNivel1(params.id1);
+	mostrarInfoAltaNivel2(params.id2);	
+	mostrarInfoAltaNivel3(params.id1, params.id2);	
 }
 
 function validateForm(formID, func){
