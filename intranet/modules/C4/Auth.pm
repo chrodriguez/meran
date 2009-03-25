@@ -194,7 +194,8 @@ sub get_template_and_user {
 	my $nro_socio;
 	if ( $session->param('userid') ) {
 		$params->{'loggedinusername'}= $session->param('userid');
-		$nro_socio = getborrowernumber($session->param('userid'));
+# 		$nro_socio = getborrowernumber($session->param('userid'));
+		$nro_socio = $session->param('userid');
 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
 
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
@@ -494,7 +495,7 @@ print A "checkauth=> elimino el sessionID de la base: ".$sessionID."\n";
             $params{'loggedinusername'}= $userid;
             $params{'password'}= $password;
             $params{'nroRandom'}= $random_number;
-            $params{'borrowernumber'}= getborrowernumber($userid);
+#             $params{'borrowernumber'}= getborrowernumber($userid);
             $params{'type'}= $type; #OPAC o INTRA
             $params{'flagsrequired'}= $flagsrequired;
             $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
@@ -794,7 +795,7 @@ sub _generarSession {
 	$session->param('loggedinusername', $params->{'userid'});
 	$session->param('password', $params->{'password'});
 	$session->param('nroRandom', $params->{'random_number'});
-	$session->param('borrowernumber', getborrowernumber($params->{'userid'}));
+# 	$session->param('borrowernumber', getborrowernumber($params->{'userid'}));
 	$session->param('type', $params->{'type'}); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
 	$session->param('browser', $params->{'HTTP_USER_AGENT'});
