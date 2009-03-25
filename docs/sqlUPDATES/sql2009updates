@@ -515,3 +515,8 @@ ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20
 CHANGE `fecha_devolucion` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `fecha_ultima_renovacion` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ;
  ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+
+ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NULL DEFAULT '0000-00-00' ,
+CHANGE fecha_notificacion fecha_notificacion VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE fecha_recodatorio fecha_recodatorio VARCHAR( 20 ) NULL DEFAULT NULL ;
