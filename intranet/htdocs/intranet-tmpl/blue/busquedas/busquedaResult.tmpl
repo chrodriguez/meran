@@ -46,7 +46,10 @@
                     [% END %]
 		</td>
 		<td>
-			<a class="click" onClick="mostrarDetalle('[% id1 %]');" title="Mostrar Detalle">
+			<!--<a class="click" onClick="mostrarDetalle('[% id1 %]');" title="Mostrar Detalle">
+				[% titulo %]
+			</a>-->
+			<a href="/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl?id1=[% id1 %]" title="Mostrar Detalle" class="click" >
 				[% titulo %]
 			</a>
 

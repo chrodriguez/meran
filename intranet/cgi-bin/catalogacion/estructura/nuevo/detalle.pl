@@ -22,7 +22,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 	#Cuando viene desde otra pagina que llama al detalle.
 	my $id1=$input->param('id1');
-	$id1= '7209';
 
 	my $nivel1_array_ref= &C4::AR::Nivel1::getNivel1FromId1($id1);
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1_array_ref->[0]->getId1);
