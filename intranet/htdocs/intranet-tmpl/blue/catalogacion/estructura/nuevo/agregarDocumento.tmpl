@@ -136,7 +136,7 @@ function _getBarcodes(){
 
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
 function _sacarOpciones(){
-	for(var i=0;i<COMPONENTES_ARRAY.length - 1;i++){
+	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
 		if(COMPONENTES_ARRAY[i].opciones){//si esta definido...
 			if(COMPONENTES_ARRAY[i].opciones.length > 0){
 				//elimino la propiedad opciones, para enviar menos info al servidor
@@ -147,7 +147,7 @@ function _sacarOpciones(){
 }
 
 function _clearDataFromComponentesArray(){
-    for(var i=0;i< COMPONENTES_ARRAY.length - 1;i++){
+    for(var i=0;i< COMPONENTES_ARRAY.length;i++){
         COMPONENTES_ARRAY[i].dato= '';
 		$('#'+COMPONENTES_ARRAY[i].idCompCliente).val('');
     }
@@ -182,7 +182,7 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.length - 1; i++){
+    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
     }
 }
@@ -695,11 +695,11 @@ function procesarObjeto(objeto){
 			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
 			 $(comp).appendTo("#"+idDiv);
 // FIXME falta recuperar la data y dejar el ID en el input hidden
-			if(!MODIFICAR){
+// 			if(MODIFICAR != 1){
 				_cambiarIdDeAutocomplete();
-			}else{	
+// 			}else{	
 			//busco el dato segun el ID $('#' + objeto.idCompCliente + '_hidden').val() y lo agrego en $('#' + objeto.idCompCliente ).val()
-			}
+// 			}
         break;
     }
 //     crearRegla(comp,idComp);
@@ -715,6 +715,7 @@ function _cambiarIdDeAutocomplete(){
 	 for(var i=0; i< COMPONENTES_ARRAY.length; i++){
        	//si es un autocomplete, guardo el ID del input hidden
 		if(COMPONENTES_ARRAY[i].tipo == 'auto'){	
+			//si es un autocomplete, el dato es un ID y se encuentra en el hidden
 			COMPONENTES_ARRAY[i].idCompCliente= COMPONENTES_ARRAY[i].idCompCliente + '_hidden';
 		}
     }
