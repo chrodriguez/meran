@@ -53,6 +53,29 @@ function updateEjemplaresDelGrupo(responseText){
 	zebra('tablaResult');
 }
 
+
+function buscarUsuario(id3, id2){
+	objAH=new AjaxHelper(updateBuscarUsuario);
+	objAH.url='/intranet-tmpl/blue/includes/popups/buscarUsuario.inc';
+	objAH.debug= true;
+	objAH.sendToServer();
+
+	items_array[0]=id3;
+ 	grupo= id2;
+}
+
+function updateBuscarUsuario(responseText){
+
+	vBuscarUsuario=new WindowHelper({draggable: true, opacity: true});
+	vBuscarUsuario.debug= true;
+	vBuscarUsuario.html=responseText;
+	vBuscarUsuario.create();	
+	vBuscarUsuario.titulo= 'Buscar Usuario';
+	vBuscarUsuario.height('40%');
+	vBuscarUsuario.width('40%');
+	vBuscarUsuario.open();
+}
+
 $(document).ready(function(){
 	zebra("tablaResult");	
 
@@ -128,24 +151,6 @@ var grupo;
 // 	openWindow();
 // }
 
-
-function buscarUsuario(id3, id2){
-	objAH=new AjaxHelper(updateBuscarUsuario);
-	objAH.url='/intranet-tmpl/blue/includes/popups/buscarUsuario.inc';
-	objAH.debug= true;
-	objAH.sendToServer();
-
-	items_array[0]=id3;
- 	grupo= id2;
-}
-
-function updateBuscarUsuario(responseText){
-
-	vBuscarUsuario=new WindowHelper();
-	vBuscarUsuario.html=responseText;
- 	vBuscarUsuario.titulo= 'Buscar Usuario';
-	vBuscarUsuario.create();
-}
 
 function renovar(accion,userId,userNom,id2,id3){
 	
