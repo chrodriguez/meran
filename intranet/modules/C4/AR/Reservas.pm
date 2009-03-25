@@ -25,6 +25,8 @@ require Exporter;
 use Mail::Sendmail;
 use C4::AR::Mensajes;
 use C4::AR::Prestamos;
+use Date::Manip;
+use C4::Date;#formatdate
 use C4::Modelo::CircReserva;
 use C4::Modelo::CircReserva::Manager;
 
@@ -90,7 +92,7 @@ sub t_reservarOPAC {
 			}else{
 			#SE REALIZO UN RESERVA DE GRUPO
 				C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
-				my $socio= C4::AR::Usuarios::getSocioInfo($params->{'nro_socio'});
+				my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
 			}	
@@ -1003,54 +1005,53 @@ sub Enviar_Email{
  	my $apertura= $params->{'apertura'};
  	my $cierre= $params->{'cierre'};
  	my $loggedinuser= $params->{'loggedinuser'};
-	my $branchcode= $reserva->getId_ui;
-	my $id3= $reserva->getId3;
 
 	if (C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem")){
 
 		my $dateformat = C4::Date::get_date_format();
-		my $socio= C4::AR::Usuarios::getSocioInfo($reserva->getNro_socio);
-		my $persona= $socio->getPersona;
-
-		my $nivel1=C4::AR::Catalogacion::buscarNivel1($reserva->getId1);
-		$nivel1->{'autor'}=(C4::AR::Busquedas::getautor($nivel1->{'autor'}))->{'completo'};
+		my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
 		
 		my $mailFrom=C4::AR::Preferencias->getValorPreferencia("reserveFrom");
 		my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reserveSubject");
 		my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
-		my $branchname= C4::AR::Busquedas::getBranch($reserva->getId_ui)->{'branchname'};
-
-
-		my $edicion=C4::AR::Nivel2::getEdicion($reserva->getId2);
-		$mailSubject =~ s/BRANCH/$branchname/;
-		$mailMessage =~ s/BRANCH/$branchname/;
-		$mailMessage =~ s/FIRSTNAME/$persona->getNombre/;
-		$mailMessage =~ s/SURNAME/$persona->getApellido/;
-		my $unititle=C4::AR::Nivel1::getUnititle($reserva->getId1);
+		
+		$mailSubject =~ s/BRANCH/$reserva->ui->getNombre/;
+		$mailMessage =~ s/BRANCH/$reserva->ui->getNombre/;
+		$mailMessage =~ s/FIRSTNAME/$socio->persona->getNombre/;
+		$mailMessage =~ s/SURNAME/$socio->persona->getApellido/;
+		
+		my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
 		$mailMessage =~ s/UNITITLE/$unititle/;
-		$mailMessage =~ s/TITLE/$nivel1->{'titulo'}/;
-		$mailMessage =~ s/AUTHOR/$nivel1->{'autor'}/;
+		
+		$mailMessage =~ s/TITLE/$reserva->nivel2->nivel1->getTitulo/;
+		$mailMessage =~ s/AUTHOR/$reserva->nivel2->nivel1->cat_autor->getCompleto/;
+		
+		my $edicion=C4::AR::Nivel2::getEdicion($reserva->getId2);
 		$mailMessage =~ s/EDICION/$edicion/;
+
 		$mailMessage =~ s/a2/$apertura/;
 		$desde=C4::Date::format_date($desde,$dateformat);
 		$mailMessage =~ s/a1/$desde/;
 		$mailMessage =~ s/a3/$cierre/;
 		$fecha=C4::Date::format_date($fecha,$dateformat);
 		$mailMessage =~ s/a4/$fecha/;
-		my %mail = ( 	To => $persona->getEmail,
+		my %mail = ( 	To => $socio->persona->getEmail,
 				From => $mailFrom,
 				Subject => $mailSubject,
 				Message => $mailMessage);
 
 		my $resultado='ok';
-		if ($persona->getEmail && $mailFrom ){
-## FIXME me da error
-		sendmail(%mail) or die $resultado='error';
+		if ($socio->persona->getEmail && $mailFrom ){
+			if (!sendmail(%mail))
+				{$resultado='error'};
 		}else {$resultado='';}
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   my $dateformat=C4::Date::get_date_format();
+   $fecha= C4::Date::format_date_in_iso($fecha,$dateformat);
+
    my $data_hash;
-   $data_hash->{'id1'}=$reserva->getId1;
+   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
    $data_hash->{'id2'}=$reserva->getId2;
    $data_hash->{'id3'}=$reserva->getId3;
    $data_hash->{'nro_socio'}=$reserva->getNro_socio;
@@ -1061,7 +1062,7 @@ sub Enviar_Email{
    $data_hash->{'tipo'}='notification';
 
    use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new();
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 

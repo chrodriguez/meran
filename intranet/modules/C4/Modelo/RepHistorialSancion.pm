@@ -1,7 +1,7 @@
 package C4::Modelo::RepHistorialSancion;
 
 use strict;
-
+use Date::Manip;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -110,7 +110,6 @@ sub agregar {
     $self->setFecha(ParseDate("today"));
     $self->setFecha_final($data_hash->{'fecha_final'});
     $self->setTipo_sancion($data_hash->{'tipo_sancion'});
-    $self->setId_ui($data_hash->{'id_ui'});
 
     $self->save();
 }

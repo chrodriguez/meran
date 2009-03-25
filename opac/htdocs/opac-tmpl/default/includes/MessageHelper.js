@@ -13,42 +13,15 @@
 */
 
 // FIXME 
-// EN PRINCIPIO ES NECESARIO QUE EN EL TMPL QUE SE VAYA A UTILIZAR SE CREE UN DIV CON ID "mensajes",
-//estaria bueno que esto se genere dinamicamente
+//Faltaria manejar menor el logged, opcion debug idem a demas helpers
 
-/*
-//Esta funcion setea un mensaje enviado desde el servidor
-function setMessage(Message){
-//@params
-//Message.message, mensaje para el usuario
-//Message.error, hay error (error=1)
-//Message.codMsg, codigo del mensaje
-	$('#mensajes').html('');
-	$('#mensajes').append(Message.message + '<br>');
-	scrollTo('mensajes');
-}
-*/
 
-/*
-//Esta funcion setea varios mensajes enviados desde el servidor
-function setMessages(Message){
-//@params
-//Message.message, mensaje para el usuario
-//Message.error, hay error (error=1)
-//Message.codMsg, codigo del mensaje
-
-	$('#mensajes').append(Message.message + '<br>');
-	scrollTo('mensajes');
-}
-*/
-
-function clearMessages(){
+function _clearMessages(){
 	$('#mensajes').html('');
 }
 
-// FIXME deje setMessages2 hasta q se modifique todo lo referenciado por setMessages q no se usa mas
 //Esta funcion setea varios mensajes enviados desde el servidor
-function setMessages(Messages_hasref){
+function setMessages(Messages_hashref){
 //@params
 //Message.messages, arreglo de mensajes mensaje para el usuario
 //Message.error, error=1 o 0
@@ -59,12 +32,39 @@ function setMessages(Messages_hasref){
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
 
-	clearMessages();
+	_createContentMessages();
 	var i;
-	for(i=0;i<Messages_hasref.messages.length;i++){
-		$('#mensajes').append(Messages_hasref.messages[i].message + '<br>');
+	for(i=0;i<Messages_hashref.messages.length;i++){
+		$('#mensajes').append(Messages_hashref.messages[i].message + '<br>');
 	}
 
 	scrollTo('mensajes');
+	_delay(_clearMessages, 10);
 }
 
+//crea el contenedor para los mensajes, si ya esta creado, borra el contenido
+function _createContentMessages(){
+
+	var contenedor = $('#mensajes')[0];
+
+	if(contenedor == null){
+
+		//console.log("MessageHelper: Se crea el div cotenedor");
+		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>");
+
+	}
+	else{
+		_clearMessages();
+	     }
+}
+
+//luego de x segundos se ejecuta la funcion pasada por parametro
+function _delay(funcion, segundos){
+	setTimeout(funcion, segundos*600);
+}
+
+function hayError(msg){
+	if (msg.error == 1)
+		return (true);
+	return (false);
+}

@@ -295,7 +295,7 @@ sub cancelar_reserva{
    my $data_hash;
    $data_hash->{'id1'}=$self->nivel2->nivel1->getId1;
    $data_hash->{'id2'}=$self->getId2;
-   $data_hash->{'id3'}=$self->getId3;
+   $data_hash->{'id3'}=$self->getId3 || 0 ; #Si era una reserva de grupo 
    $data_hash->{'nro_socio'}=$self->getNro_socio;
    $data_hash->{'loggedinuser'}=$loggedinuser;
    $data_hash->{'end_date'}=undef;

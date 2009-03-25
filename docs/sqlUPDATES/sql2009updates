@@ -498,16 +498,6 @@ CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL ;
 
 ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
 
--- CAMBIOS GASPAREÑOS EL 23/03/2009
-
-ALTER TABLE `circ_prestamo` CHANGE `id_ui` `id_ui_origen` CHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
-CHANGE `fecha_devolucion` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
-CHANGE `fecha_ultima_renovacion` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ;=======
- ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
-
-
 ALTER TABLE `rep_historial_sancion` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `type` `tipo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
 CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
@@ -516,3 +506,12 @@ CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DE
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `end_date` `fecha_final` DATE NULL DEFAULT NULL ,
 CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0' ;
+
+-- CAMBIOS GASPAREÑOS EL 23/03/2009
+
+ALTER TABLE `circ_prestamo` CHANGE `id_ui` `id_ui_origen` CHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE `fecha_devolucion` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE `fecha_ultima_renovacion` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ;
+ ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;

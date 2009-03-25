@@ -180,7 +180,7 @@ sub actualizar_sancion {
 	$self->save();
 
 #**********************************Se registra el movimiento en historicSanction***************************
-   use C4::Modelo::RepHistorialCirculacion;
+   use C4::Modelo::RepHistorialSancion;
    my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
    $params->{'tipo'}= 'Update';
    $historial_sancion->agregar($params);

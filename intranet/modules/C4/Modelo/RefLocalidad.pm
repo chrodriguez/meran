@@ -34,6 +34,50 @@ sub setId_persona{
     $self->NOMBRE($nombre);
 }
 
+
+sub obtenerValoresCampo {
+	my ($self)=shift;
+    my ($campo)=@_;
+	use C4::Modelo::RefLocalidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
+						( select   => [$self->meta->primary_key , $campo],
+						  sort_by => ($campo) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+		my $valor;
+		$valor->{"clave"}=$ref_valores->[$i]->getIdLocalidad;
+		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+	
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub obtenerValorCampo {
+	my ($self)=shift;
+    	my ($campo,$id)=@_;
+	use C4::Modelo::RefLocalidad::Manager;
+ 	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
+						( select   => [$campo],
+						  query =>[ LOCALIDAD => { eq => $id} ]);
+    	
+	return ($ref_valores->[0]->getCampo($campo));
+}
+
+sub getCampo{
+    my ($self) = shift;
+	my ($campo)=@_;
+    
+	if ($campo eq "LOCALIDAD") {return $self->LOCALIDAD;}
+	if ($campo eq "NOMBRE") {return $self->NOMBRE;}
+	if ($campo eq "NOMBRE_ABREVIADO") {return $self->NOMBRE_ABREVIADO;}
+	if ($campo eq "DPTO_PARTIDO") {return $self->DPTO_PARTIDO;}
+	if ($campo eq "DDN") {return $self->DDN;}
+	return (0);
+}
+
+
 sub lastTable{
     
     return(1);
