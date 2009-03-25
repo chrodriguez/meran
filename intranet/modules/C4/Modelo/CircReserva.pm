@@ -13,12 +13,12 @@ __PACKAGE__->meta->setup(
         id2              => { type => 'integer', not_null => 1 },
         id3              => { type => 'integer' },
         id_reserva       => { type => 'serial', not_null => 1 },
-        nro_socio	 => { type => 'integer', default => '0', not_null => 1 },
+        nro_socio    	 => { type => 'integer', default => '0', not_null => 1 },
         fecha_reserva    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         estado           => { type => 'character', length => 1 },
-        id_ui		 => { type => 'varchar', length => 4 },
+        id_ui	      	 => { type => 'varchar', length => 4 },
         fecha_notificacion => { type => 'varchar' },
-        fecha_recodatorio  => { type => 'varchar' },
+        fecha_recordatorio  => { type => 'varchar' },
         timestamp        => { type => 'timestamp', not_null => 1 },
     ],
 
@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
             key_columns => { id2 => 'id2' },
 	    type        => 'one to one',
         },
-	socio => {
+   	socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
 	    type        => 'one to one',
@@ -131,7 +131,7 @@ sub setFecha_notificacion{
 
 sub getFecha_recodatorio{
     my ($self) = shift;
-    return ($self->fecha_recodatorio);
+    return ($self->fecha_recordatorio);
 }
 
 sub getFecha_recodatorio_formateada{
@@ -144,7 +144,7 @@ sub getFecha_recodatorio_formateada{
 sub setFecha_recodatorio{
     my ($self) = shift;
     my ($fecha_recodatorio) = @_;
-    $self->fecha_recodatorio($fecha_recodatorio);
+    $self->fecha_recordatorio($fecha_recodatorio);
 }
 
 sub getId_ui{
@@ -295,7 +295,7 @@ sub cancelar_reserva{
    my $data_hash;
    $data_hash->{'id1'}=$self->nivel2->nivel1->getId1;
    $data_hash->{'id2'}=$self->getId2;
-   $data_hash->{'id3'}=$self->getId3 || 0 ; #Si era una reserva de grupo 
+   $data_hash->{'id3'}=$self->getId3;
    $data_hash->{'nro_socio'}=$self->getNro_socio;
    $data_hash->{'loggedinuser'}=$loggedinuser;
    $data_hash->{'end_date'}=undef;

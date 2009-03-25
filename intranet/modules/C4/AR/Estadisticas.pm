@@ -791,51 +791,44 @@ sub prestamos{
 }
 
 sub reservas{
-        my ($branch,$orden,$ini,$fin,$tipo)=@_;
-        my $dbh = C4::Context->dbh;
+   my ($id_ui,$orden,$offset,$limit,$tipo)=@_;
 	my $dateformat = C4::Date::get_date_format();
-        my @results;
-	my $where="";
-	my $queryCount="SELECT  COUNT(*) as cant
-                   	FROM circ_reserva INNER JOIN borrowers ON (circ_reserva.borrowernumber=borrowers.borrowernumber)
-			WHERE ";
+   my @filtros;
+   my @results;
 
-        my $query ="SELECT surname, firstname, cardnumber, emailaddress, reminderdate,
-		    barcode, reservedate, circ_reserva.id3 AS id3, 
-		    borrowers.borrowernumber AS borrowernumber,
-		    circ_reserva.branchcode as branchcode,
-		    n3.id1 AS id1
-                    FROM circ_reserva INNER JOIN borrowers on (circ_reserva.borrowernumber=borrowers.borrowernumber) 
-		    LEFT JOIN cat_nivel3 n3 ON (circ_reserva.id3 = n3.id3 ) WHERE ";
-	
+   push (@filtros, ( id_ui => { eq => $id_ui}) );
 	if($tipo eq "GR"){
-		$where=" estado = 'G'";
+		 push (@filtros, ( estado => { eq => 'G'}) );
+
 	}
 	elsif($tipo eq "EJ"){
-		$where=" estado = 'E' ";
+		 push (@filtros, ( estado => { eq => 'E'}) );
 	}
 	else {
-		$where=" estado = 'E' OR estado = 'G' ";
+	    push (@filtros, ( estado => { eq => 'E', eq => 'G'}) );
 	}
-	$query.=$where." ORDER BY $orden LIMIT $ini , $fin";
 
-        my $sth=$dbh->prepare($query);
-	$sth->execute();
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'reminderdate'}=format_date($data->{'reminderdate'},$dateformat);
-		$data->{'reservedate'}=format_date($data->{'reservedate'},$dateformat);
-		if ($data->{'id3'} eq "" ){$data->{'id3'}='-' };
-                if ($data->{'emailaddress'} eq "" ){
-			$data->{'emailaddress'}='-';
-			$data->{'mail'}=1;
-		};
-                push(@results,$data);
-        }
-	$queryCount.=$where;
-	$sth=$dbh->prepare($queryCount);
-	$sth->execute();
-	my $cant=$sth->fetchrow;
-        return ($cant,@results);
+   my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(   query => \@filtros,
+                                                                        sorty_by => [$orden],
+                                                                        limit => $limit,
+                                                                        offset => $offset,
+                                                                        require_objects => ['socio','nivel3'],
+                                                                      );
+
+   foreach my $reserva (@$reservas){
+		$reserva->setReminderdate(format_date($reserva->getReminderdate,$dateformat));
+		$reserva->setReservedate(format_date($reserva->getReservedate,$dateformat));
+		if ($reserva->getId3 eq "" ){
+         $reserva->setId3("\-") 
+      }
+      if ($reserva->getEmailaddress eq "" ){
+			$reserva->setEmailaddress("\-");
+			$reserva->{'mail'}=1;
+      }
+      push(@results,$reserva);
+      return (scalar(@results),\@results);
+   }
+
 }
 
 sub cantidadAnaliticas{

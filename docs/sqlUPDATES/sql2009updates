@@ -514,6 +514,14 @@ ALTER TABLE `circ_prestamo` CHANGE `id_ui` `id_ui_origen` CHAR( 4 ) CHARACTER SE
 ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `fecha_devolucion` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `fecha_ultima_renovacion` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+ALTER TABLE `circ_reserva` CHANGE `reservenumber` `id_reserva` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00'
+
+ALTER TABLE `circ_reserva` CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
+CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL =======
  ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
 
 

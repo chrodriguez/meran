@@ -20,33 +20,33 @@
 
  		<td align="rigth" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH reserva IN resultsloop %]
 	<tr align='center'>
 		<td height=25 >&nbsp;</td>
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% reserva.socio.getNro_socio %]">[% reserva.socio.getApellido %]</a>
 		</td>
 		<td class="inputFontNormal"> 
-			[% firstname %]
+			[% reserva.socio.persona.getNombre%]
 		</td>
 		<td class="inputFontNormal"> 
-			[% cardnumber %]
+			[% reserva.socio.getNro_socio%]
 		</td>
 		<td class="inputFontNormal"> 
 			[% IF mail %]
-				[% emailaddress %]
+				[% reserva.socio.persona.getEmail %]
 			[% ELSE %]
-				<a class="inputFontNormal" href="mailto:[% emailaddress %]">[% emailaddress %] </a>
+				<a class="inputFontNormal" href="mailto:[% reserva.socio.persona.getEmail %]">[% reserva.socio.persona.getEmail %] </a>
 			[% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% reservedate %]
+			[% reserva.getFecha_reserva %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% reminderdate %]
+			[% reserva.getFecha_recordatorio %]
 		</td>
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% barcode %]</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% reserva.nivel3.getBarcode %]</a>
 		</td>
 		<td height=25 >&nbsp;</td>
 	</tr>

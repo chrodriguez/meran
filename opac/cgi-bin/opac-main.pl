@@ -11,13 +11,12 @@ use CGI::Session;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-main.tmpl",
-									type => "opac",
-									query => $input,
-									authnotrequired => 1,
-									flagsrequired => {borrow => 1},
-			 });
-
+									                                    template_name => "opac-main.tmpl",
+									                                    type => "opac",
+									                                    query => $input,
+									                                    authnotrequired => 1,
+									                                    flagsrequired => {borrow => 1},
+			                                                  });
 
 if( $session->param('borrowernumber') ){
 }else{

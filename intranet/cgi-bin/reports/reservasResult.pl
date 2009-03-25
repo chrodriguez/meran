@@ -34,7 +34,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                 authnotrequired => 0,
                                                 flagsrequired => {borrowers => 1},
                                                 debug => 1,
-			    });
+			                                   });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $branch=$obj->{'branch'};
@@ -47,7 +47,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
 
-my ($cant,@resultsdata)= reservas($branch,$orden,$ini,$cantR,$tipoReserva);
+my ($cant,@resultsdata)= C4::AR::Estadisticas::reservas($branch,$orden,$ini,$cantR,$tipoReserva);
 
 C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
