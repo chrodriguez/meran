@@ -690,93 +690,104 @@ sub estaEnteFechas {
 }
 
 sub prestamos{
-        my ($branch,$orden,$ini,$fin,$estado,$begindate,$enddate)=@_;
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-        my @results;
-	my $query ="select borrowers.borrowernumber AS borrowernumber,
-			   n3.id3 AS id3, n3.id1 AS id1, n3.id2 AS id2,
-			   circ_ref_tipo_prestamo.issuecode AS issuecode,description,
-			   date_due,  circ_prestamo.branchcode AS branchcode, returndate,
-			   surname,firstname,cardnumber, emailaddress, barcode , n3.signatura_topografica as bulk
-                    from  circ_prestamo left join circ_ref_tipo_prestamo on ( circ_prestamo.issuecode = circ_ref_tipo_prestamo.issuecode)
-		    left join borrowers on ( circ_prestamo.borrowernumber=borrowers.borrowernumber)
-		    left join cat_nivel3 n3 on ( circ_prestamo.id3 = n3.id3)
-                    where  circ_prestamo.branchcode=? and returndate is NULL ";
+         my ($id_ui,$orden,$ini,$fin,$estado,$fecha_inicio,$fecha_fin)=@_;
+         my @results;
+      
+           my @filtros;
 
-        my $sth=$dbh->prepare($query);
-	$sth->execute($branch);
-	
-	my @datearr = localtime(time);
-	my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+         if ((length($fecha_inicio) > 5)){
+             push(@filtros, ( fecha_prestamo => { gt => $fecha_inicio, eq => $fecha_inicio }) );
+         }
 
-	while (my $data=$sth->fetchrow_hashref){
-		$data->{'vencimiento'}=C4::Date::format_date(C4::AR::Prestamos::vencimiento($data->{'id3'}),$dateformat);
-		#Se filtra por Fechas de Vencimiento 
+         if (($fecha_fin > 5)){
+             push(@filtros, ( fecha_prestamo => { lt => $fecha_fin, eq => $fecha_fin }) );
+         }
+         push(@filtros, ( id_ui_origen => { eq => $id_ui }  ) );
+
+         my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                             query => \@filtros,
+                                                                             require_objects => ['socio','nivel3'],
+                                                                             );
+
+	      my @datearr = localtime(time);
+	      my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+      
+	      foreach my $prestamo (@$prestamos){
+            my $dateformat = C4::Date::get_date_format();
+		      $prestamo->{'vencimiento'}=C4::Date::format_date(C4::AR::Prestamos::vencimiento($prestamo),$dateformat);
+		      #Se filtra por Fechas de Vencimiento 
+		      if ( estaEnteFechas($fecha_inicio,$fecha_fin,$prestamo->{'vencimiento'}) ) {
+      
+               if ($prestamo->socio->persona->getTelefono eq "" ){
+                  $prestamo->socio->persona->setTelefono('-');
+               }
 		
-		if ( estaEnteFechas($begindate,$enddate,$data->{'vencimiento'}) ) {
 
-                if ($data->{'phone'} eq "" ){$data->{'phone'}='-';};
-		
+		         if (!($prestamo->socio->persona->getEmail)){
+					         $prestamo->socio->persona->setEmail('-');
+					         $prestamo->{'ok'}=1;
+				   }
 
-		if ($data->{'emailaddress'} eq "" ){
-					$data->{'emailaddress'}='-';
-					$data->{'ok'}=1;
-				 };
-		if ($data->{'returndate'} eq "" ){$data->{'returndate'}='-';}
-		else  { $data->{'returndate'} =  C4::Date::format_date($data->{'returndate'},$dateformat)};
-		$data->{'date_due'}= C4::Date::format_date($data->{'date_due'},$dateformat);
+		         if (!($prestamo->getFecha_devolucion)){
+                  $prestamo->setFecha_devolucion('-');
+               }
+		         else{
+                  $prestamo->setFecha_devolucion(C4::Date::format_date($prestamo->getFecha_devolucion,$dateformat));
+               }
 
-		my $flag=Date::Manip::Date_Cmp($data->{'vencimiento'},$hoy);		
-		#Se marcan los prestamos vencidos
-		if ($flag lt 0){$data->{'vencido'}='1';}
-		#
-		
-		if ($estado eq "VE"){
-				if ($flag lt 0){
-				push(@results,$data);
-			}
-		}
-		elsif($estado eq "NV"){
-			if($flag gt 0 || $flag == 0){
-				push(@results,$data);
-			}
-		}
-		else{
-			push(@results,$data);
-		}
-        }
-	}
+               $prestamo->setFecha_prestamo(C4::Date::format_date($prestamo->getFecha_prestamo,$dateformat));;
 
-# Da el ORDEN al arreglo
-	if (($orden ne "vencimiento") and ($orden ne "date_due")) {
-	#ordeno alfabeticamente
-	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-	@results=@sorted;
-	}
-	else
-	{#ordeno Fechas
-	my @sorted = sort { Date::Manip::Date_Cmp($a->{$orden},$b->{$orden}) } @results;
-	@results=@sorted;
-	}
-#
-	my $cantReg=scalar(@results);
-#Se chequean si se quieren devolver todos
-	if(($cantReg > $fin)&&($fin ne "todos")){
-		my $cantFila=$fin-1+$ini;
-		my @results2;
-		if($cantReg < $cantFila ){
-			@results2=@results[$ini..$cantReg];
-		}
-		else{
-			@results2=@results[$ini..$fin-1+$ini];
-		}
+		         my $flag=Date::Manip::Date_Cmp($prestamo->{'vencimiento'},$hoy);
+		         #Se marcan los prestamos vencidos
+		         if ($flag lt 0){
+                  $prestamo->{'vencido'}='1';
+               }
 
-		return($cantReg,@results2);
-	}
-        else{
-		return ($cantReg,@results);
-	}
+		         if ($estado eq "VE"){
+				         if ($flag lt 0){
+				           push(@results,$prestamo);
+			         }
+		         }
+		         elsif ($estado eq "NV"){
+			         if($flag gt 0 || $flag == 0){
+				         push(@results,$prestamo);
+			         }
+		         }
+		         else{
+			         push(@results,$prestamo);
+		         }
+           }
+       } # foreach
+      
+#       # Da el ORDEN al arreglo
+# 	      if (($orden ne "vencimiento") and ($orden ne "date_due")) {
+# 	      #ordeno alfabeticamente
+# 	         my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+# 	         @results=@sorted;
+# 	      }
+# 	      else
+# 	      {#ordeno Fechas
+# 	         my @sorted = sort { Date::Manip::Date_Cmp($a->{$orden},$b->{$orden}) } @results;
+# 	         @results=@sorted;
+# 	      }
+      #  
+	      my $cantReg=scalar(@results);
+      #Se chequean si se quieren devolver todos
+	      if(($cantReg > $fin)&&($fin ne "todos")){
+		      my $cantFila=$fin-1+$ini;
+		      my @results2;
+		      if($cantReg < $cantFila ){
+			      @results2=@results[$ini..$cantReg];
+		      }
+		      else{
+			      @results2=@results[$ini..$fin-1+$ini];
+		      }
+      
+		      return($cantReg,@results2);
+	      }
+            else{
+		        return ($cantReg,@results);
+	      }
 }
 
 sub reservas{

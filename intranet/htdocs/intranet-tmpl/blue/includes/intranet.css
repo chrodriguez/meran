@@ -1049,6 +1049,8 @@ width:11.5em;
 
 #menu li{
 position:relative;
+float:left;
+width:112px;
 }
 
 #menu ul ul{

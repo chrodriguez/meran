@@ -46,49 +46,62 @@
 		<td width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-[% FOREACH RESULTSLOOP %]
+[% FOREACH prestamo IN resultsloop %]
+
 	<tr align='center'>
 		<td>&nbsp;</td>
-
 		<td class="inputFontNormal"> 
-		[% IF vencido %]
-                    <input type="checkbox" name="chkboxPrestamos" value="[% socio.getNro_socio %]" id="[% socio.getNro_socio %]">
-                [% END %]
+		      [% IF prestamo.vencido %]
+               <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.socio.getNro_socio %]" id="[% prestamo.socio.getNro_socio %]">
+            [% END %]
 		</td>
 
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% socio.getNro_socio %]">[% surname %]</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% prestamo.socio.getNro_socio %]">
+            [%  prestamo.socio.persona.getNombre %]
+         </a>
 		</td>
+
 		<td class="inputFontNormal"> 
-			[% socio.getNombre %] 
+			[% prestamo.socio.persona.getNombre %] 
 		</td>
+
 		<td class="inputFontNormal"> 
-			[% socio.Nro_documento %]
+			[% prestamo.socio.getNro_socio %]
 		</td>
+
 		<td class="inputFontNormal"> 
-			[% IF ok %]
-                            [% socio.getEmail %]
-        		[% ELSE %]
-                            <a class="inputFontNormal" href="mailto:[% emailaddress %]">
-                                [% socio.getEmail %]
-                            </a>
-        		[% END %]
+			[% IF prestamo.socio.persona.getEmail %]
+               <a class="inputFontNormal" href="mailto:[% prestamo.socio.persona.getEmail %]">
+                    [% prestamo.socio.persona.getEmail %]
+              </a>
+   		[% ELSE %]
+                    [% prestamo.socio.persona.getEmail %]
+        [% END %]
 		</td>
+
 		<td class="inputFontNormal"> 
-			[% date_due %]
+			[% prestamo.getFecha_prestamo %]
 		</td>
+
 		<td class="inputFontNormal"> 
-			[% vencimiento %]
+			[% prestamo.getFecha_vencimiento %]
 		</td>
+
 		<td class="inputFontNormal"> 
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>
+			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>
+            [% prestamo.nivel3.getBarcode %]
+         </a>
 		</td>
+
 		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=[% id1 %]">[% signatura_topografica %]</a>
+			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=[% prestamo.nivel3.getId1 %]">
+            [% prestamo.nivel3.getSignatura_topografica %]
+         </a>
 		</td>
-		<td class="inputFontNormal"> 
+	<!--	<td class="inputFontNormal"> 
 			[% description %]
-		</td>
+		</td>-->
 		<td>&nbsp;</td>
 	</tr>
 [% END %]

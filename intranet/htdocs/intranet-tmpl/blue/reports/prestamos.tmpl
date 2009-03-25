@@ -45,7 +45,7 @@ function ordenar(orden){
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/reports/prestamosResult.pl";
-	objAH.branch=$("#branch").val();
+	objAH.id_ui=$("#ui_id").val();
 	objAH.begindate=$("#begindate").val();
 	objAH.enddate=$("#enddate").val();
 	objAH.estado=$("#estado").val();

@@ -261,23 +261,17 @@ sub fechaDeVencimiento {
 vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que vence el prestamo
 =cut
 sub vencimiento {
-	my ($id3)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo WHERE id3=? AND fecha_devolucion IS NULL");
-	$sth->execute($id3);
-	my $data= $sth->fetchrow_hashref;
-	if ($data){
-		my $issuetype=IssueType($data->{'issuecode'}); 
+	my ($prestamo)=@_;
+		my $tipo_prestamo=IssueType($prestamo->getTipo_prestamo); 
 		my $plazo_actual;
-		if ($data->{'renewals'} > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-	 	 	$plazo_actual=$issuetype->{'renewdays'};
-			return (proximoHabil($plazo_actual,0,$data->{'lastreneweddate'}));
+		if ($prestamo->getRenovaciones > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 	$plazo_actual=$tipo_prestamo->getRenewdays;
+			return (proximoHabil($plazo_actual,0,$prestamo->getFecha_ultima_renovacion));
 		} 
 		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
-		 $plazo_actual=$issuetype->{'daysissues'};
-		 return (proximoHabil($plazo_actual,0,$data->{'date_due'}));
+		 $plazo_actual=$tipo_prestamo->getDaysissues;
+		 return (proximoHabil($plazo_actual,0,$prestamo->getFecha_prestamo));
 		}
-	}
 }
 
 
@@ -530,12 +524,10 @@ sub verificarTipoPrestamo {
 
 sub IssueType {
 #retorna los datos del tipo de prestamo
-	my ($issuetype)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo WHERE issuecode = ?");
-	$sth->execute($issuetype);
-
-	return($sth->fetchrow_hashref);
+	my ($tipo_prestamo)=@_;
+   my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( issuecode => $tipo_prestamo );
+   $circ_ref_tipo_prestamo->load();
+	return($circ_ref_tipo_prestamo);
 }
 
 sub IssuesType {
