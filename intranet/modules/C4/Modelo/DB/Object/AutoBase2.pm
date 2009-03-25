@@ -28,9 +28,9 @@ sub toString{
 sub createFromAlias{
     my ($self)=shift;
     my $classAlias = shift;
-    open A,">>/tmp/debug.txt";
-    print A "\n\n\nSELF->getAlias: ".$self->getAlias."  // INCOMING ALIAS: ".$classAlias."\n\n\n";
-    close A;
+#     open A,">>/tmp/debug.txt";
+#     print A "\n\n\nSELF->getAlias: ".$self->getAlias."  // INCOMING ALIAS: ".$classAlias."\n\n\n";
+#     close A;
     if ($classAlias eq $self->getAlias){
         return ($self);
     }else

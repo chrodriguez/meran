@@ -9,6 +9,50 @@
 
 /*=================================================================REVISADO===================================================================*/
 
+
+ID_N1=0; //para saber el id del nivel 1
+ID_N2=0; //para saber el id del nivel 2
+ID_N3=0; //para saber el id del nivel 3
+
+function borrarN3(id2, id3){
+	if( window.confirm("[% 'Esta; seguro que desea borrarlo?' | i18n %]") ){
+		ID_N2= id2;
+		objAH=new AjaxHelper(updateBorrarN3);
+		objAH.debug= true;
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+ 		objAH.id3_array= [id3];
+		objAH.nivel=3;
+		objAH.itemtype=$("#id_tipo_doc").val();
+		objAH.tipoAccion="ELIMINAR_NIVEL";
+		objAH.sendToServer();
+	}
+}
+
+function updateBorrarN3(responseText){
+    var info=JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
+	ejemplaresDelGrupo(ID_N2);
+}
+
+//muestra los ejemplares del grupo
+function ejemplaresDelGrupo(id2){
+
+	objAH=new AjaxHelper(updateEjemplaresDelGrupo);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl';
+	objAH.id2= id2;
+	objAH.tipoAccion= 'MOSTRAR_DETALLE_NIVEL3';
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateEjemplaresDelGrupo(responseText){
+	$('#ejemplaresDelGrupo'+objAH.id2).html(responseText);
+	zebra('tablaResult');
+}
+
 $(document).ready(function(){
 	zebra("tablaResult");	
 
@@ -175,21 +219,6 @@ function confirmarPrestamo(){
 	}
 }
 
-//muestra los ejemplares del grupo
-function ejemplaresDelGrupo(id2){
-
-	objAH=new AjaxHelper(updateEjemplaresDelGrupo);
-	objAH.url= '/cgi-bin/koha/busquedas/ejemplaresDelGrupo.pl';
-	objAH.id2= id2;
-	//se envia la consulta
-	objAH.sendToServer();
-
-}
-
-function updateEjemplaresDelGrupo(responseText){
-	$('#ejemplaresDelGrupo'+objAH.id2).html(responseText);
-	zebra('tablaResult');
-}
 
 //esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
 function updateInfoPrestarReserva(responseText){
@@ -208,25 +237,6 @@ function updateInfoPrestarReserva(responseText){
 }
 
 /************************************************FIN CIRCULACUION************************************************/
-
-
-function borrarEjemplar(id1,id2,id3){
-	objAH=new AjaxHelper(updateBorrarEjemplar);
-	objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
-	objAH.id1= id1;
-	objAH.id2= id2;
-	objAH.id3= id3;
-	objAH.accion="BORRAR_NIVEL3";
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateBorrarEjemplar(responseText){
-
-	var Messages= JSONstring.toObject(responseText);
-	setMessages(Messages);
-	ejemplaresDelGrupo(objAH.id2);
-}
 
 function borrarGrupo(id1,id2){
 	objAH=new AjaxHelper(updateBorrarGrupo);
@@ -368,13 +378,14 @@ function updateBorrarNivel1(responseText){
 		Cantidad de Items: [% cantItems %]<br>
 	[% END %]
 		
-	<div id="ejemplaresDelGrupo[% id2 %]" >
-		<hr>
+	<hr>
 		Ejemplares Disponibles:<b> [% disponibles %]</b><br>
 		Reservas Realizadas: <b> [% cantReservas %]</b><br>
 		Reservas en Espera: <b> [% cantReservasEnEspera %]</b><br>
 		Ejemplares Prestados:<b> [% cantPrestados %]</b><br>
-		<hr>
+	<hr>
+	<div id="ejemplaresDelGrupo[% id2 %]" >
+		
 
 	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
 		<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
@@ -409,7 +420,7 @@ function updateBorrarNivel1(responseText){
 			<td width="6%" valign="middle">
 <!-- 			IF sePuedeBorrar -->
 				<input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
-				onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('[% id1 %]','[% id2 %]','[% id3 %]')} else {return false;}" title="Borrar Ejemplar">
+				onClick="borrarN3('[% id2 %]','[% id3 %]')" title="Borrar Ejemplar">
 <!-- 			END  -->
 			</td>
 			<td>[% nivel3_array.getSignatura_topografica %]</td>

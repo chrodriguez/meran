@@ -13,7 +13,118 @@ my $input = new CGI;
 
 
 my $obj=$input->param('obj');
+C4::AR::Debug::debug("desde estructuraCataloDB=> ".$obj."\n");
+# $obj= ' {"ini":"",
+# "funcion":"",
+# "url":"/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl",
+# "orden":"",
+# "debug":true,
+# "showState":true,
+# "cache":false,
+# "tipoAccion":"GUARDAR_NIVEL_3",
+# "tipo_documento":"LIB",
+# "BARCODES_ARRAY":[],
+# "cantEjemplares":"3",
+# "infoArrayNivel3":[{"visible":"1",
+# "liblibrarian":"Unidad de Información de Origen",
+# "itemtype":"ALL",
+# "opciones":[],
+# "campo":"995",
+# "fijo":"1",
+# "dato":"CD",
+# "repetible":"0",
+# "referencia":"1",
+# "tipo":"combo",
+# "intranet_habilitado":"2",
+# "obligatorio":"1",
+# "idCompCliente":"2",
+# "subcampo":"d",
+# "nivel":"3"},
+# {"visible":"1",
+# "liblibrarian":"Unidad de Información",
+# "itemtype":"ALL",
+# "opciones":[],
+# "campo":"995",
+# "fijo":"1",
+# "dato":"CD",
+# "repetible":"0",
+# "referencia":"1",
+# "tipo":"combo",
+# "intranet_habilitado":"3",
+# "obligatorio":"1",
+# "idCompCliente":"3",
+# "subcampo":"c",
+# "nivel":"3"},
+# {"visible":"1",
+# "liblibrarian":"Disponibilidad",
+# "itemtype":"ALL",
+# "opciones":[],
+# "campo":"995",
+# "fijo":"1",
+# "dato":"3",
+# "repetible":"0",
+# "referencia":"1",
+# "tipo":"combo",
+# "intranet_habilitado":"4",
+# "obligatorio":"1",
+# "idCompCliente":"4",
+# "subcampo":"o",
+# "nivel":"3"},
+# {"visible":"1",
+# "liblibrarian":"Estado",
+# "itemtype":"ALL",
+# "opciones":[],
+# "campo":"995",
+# "fijo":"1",
+# "dato":"4",
+# "repetible":"0",
+# "referencia":"1",
+# "tipo":"combo",
+# "intranet_habilitado":"5",
+# "obligatorio":"1",
+# "idCompCliente":"5",
+# "subcampo":"e",
+# "nivel":"3"},
+# {"visible":"1",
+# "liblibrarian":"Signatura Topográfica",
+# "itemtype":"ALL",
+# "campo":"995",
+# "fijo":"0",
+# "dato":"",
+# "repetible":"0",
+# "referencia":"0",
+# "tipo":"text",
+# "intranet_habilitado":"1",
+# "obligatorio":"0",
+# "idCompCliente":"6bab6f3097531cc673b716beecb02291",
+# "subcampo":"t",
+# "nivel":"3"},
+# {"visible":"1",
+# "liblibrarian":"Código de Barras",
+# "itemtype":"ALL",
+# "campo":"995",
+# "fijo":"1",
+# "dato":"",
+# "repetible":"0",
+# "referencia":"0",
+# "tipo":"text",
+# "intranet_habilitado":"1",
+# "obligatorio":"0",
+# "idCompCliente":"62fe2d3dcb85e12ed75812bbac9f9e5a",
+# "subcampo":"f",
+# "nivel":"3"}],
+# "id1":"7215",
+# "id2":"7495"}
+# ';
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
+# my $json = new JSON;
+#    $json->allow_nonref->escape_slash->encode("/");
+
+# $obj= decode_json($obj);
+#  $string = $json->incr_text;
+#     $string =~ s/\s*,\s*//;
+#     $json->incr_text( $string );
+# C4::AR::Debug::debug("desde estructuraCataloDB=> ".$obj."\n");
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
@@ -405,3 +516,21 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 }
 #=============================================================FIN ABM Catalogo===============================================================
 
+elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
+
+	 my ($template, $session, $t_params)  = get_template_and_user({
+															template_name   => ('catalogacion/estructura/nuevo/ejemplaresDelGrupo.tmpl'),
+															query           => $input,
+															type            => "intranet",
+															authnotrequired => 0,
+															flagsrequired   => {catalogue => 1},
+	});
+
+	#Cuando viene desde otra pagina que llama al detalle.
+	my $id2= $obj->{'id2'};
+	my($nivel2_hashref)=&C4::AR::Nivel3::detalleNivel3($id2);
+	
+	$t_params->{'nivel3'}= $nivel2_hashref->{'nivel3'},
+    
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}

@@ -357,62 +357,81 @@ $id2, id de nivel2
 $itemtype, tipo del item
 $tipo, INTRA/OPAC
 =cut
+# sub detalleNivel3{
+# 	my ($id2,$itemtype,$tipo)=@_;
+# 	my $dbh = C4::Context->dbh;
+# 	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
+# 	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
+# 	my @nivel3Comp;
+# 	my %llaves;
+# 	my @results;
+# 	my $i=0;
+# 	my $id3;
+# 	my $campo;
+# 	my $subcampo;
+# 	my $getLib;
+# 	$results[0]->{'nivel3'}=\@nivel3;
+#  	$results[0]->{'disponibles'}= $infoNivel3->{'disponibles'};
+# 	$results[0]->{'cantReservas'}= $infoNivel3->{'cantReservas'};
+# 	$results[0]->{'cantReservasEnEspera'}= $infoNivel3->{'cantReservasEnEspera'};
+# 	$results[0]->{'cantPrestados'}= $infoNivel3->{'cantPrestados'};
+# 	foreach my $row(@nivel3){
+# 		foreach my $llave (keys %$mapeo){
+# 			$campo=$mapeo->{$llave}->{'campo'};
+# 			$subcampo=$mapeo->{$llave}->{'subcampo'};
+# 			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, "",$itemtype,$tipo,0);
+# 			$nivel3Comp[$i]->{'campo'}=$campo;
+# 			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
+# 			$nivel3Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
+# 			$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
+# 			$i++;
+# 		}
+# 		$id3=$row->{'id3'};
+# 		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
+# 		my $sth=$dbh->prepare($query);
+#         	$sth->execute($id3);
+# 		my $llave2;
+# 		while (my $data=$sth->fetchrow_hashref){
+# 			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
+# 			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
+# 			if(not exists($llaves{$llave2})){
+# 				$llaves{$llave2}=$i;
+# 				$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
+# 				$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
+# 				$nivel3Comp[$i]->{'dato'}=$getLib->{'dato'};
+# 				$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
+# 				$i++;
+# 			}
+# 			else{
+# 				my $separador=" ".$getLib->{'separador'}." " ||", ";
+# 				my $pos=$llaves{$llave2};
+# 				$nivel3Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
+# 			}
+# 		}
+# 		$sth->finish;
+# 	}
+# 	return(\@results,\@nivel3Comp);
+# }
 sub detalleNivel3{
-	my ($id2,$itemtype,$tipo)=@_;
-	my $dbh = C4::Context->dbh;
-	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
-	my @nivel3Comp;
-	my %llaves;
-	my @results;
-	my $i=0;
-	my $id3;
-	my $campo;
-	my $subcampo;
-	my $getLib;
-	$results[0]->{'nivel3'}=\@nivel3;
- 	$results[0]->{'disponibles'}= $infoNivel3->{'disponibles'};
-	$results[0]->{'cantReservas'}= $infoNivel3->{'cantReservas'};
-	$results[0]->{'cantReservasEnEspera'}= $infoNivel3->{'cantReservasEnEspera'};
-	$results[0]->{'cantPrestados'}= $infoNivel3->{'cantPrestados'};
-	foreach my $row(@nivel3){
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, "",$itemtype,$tipo,0);
-			$nivel3Comp[$i]->{'campo'}=$campo;
-			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
-			$nivel3Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
-			$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
-			$i++;
-		}
-		$id3=$row->{'id3'};
-		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id3);
-		my $llave2;
-		while (my $data=$sth->fetchrow_hashref){
-			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
-			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
-			if(not exists($llaves{$llave2})){
-				$llaves{$llave2}=$i;
-				$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
-				$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-				$nivel3Comp[$i]->{'dato'}=$getLib->{'dato'};
-				$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
-				$i++;
-			}
-			else{
-				my $separador=" ".$getLib->{'separador'}." " ||", ";
-				my $pos=$llaves{$llave2};
-				$nivel3Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
-			}
-		}
-		$sth->finish;
-	}
-	return(\@results,\@nivel3Comp);
-}
+	my ($id2)=@_;
 
+	my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
+	my @nivel3;
+	my %hash_nivel2;
+			
+	for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
+		my %hash_nivel3;
+			$nivel3_array_ref->[$i]->load();
+			$hash_nivel3{'nivel3_array'}= $nivel3_array_ref->[$i];
+			$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
+
+			push(@nivel3, \%hash_nivel3);
+	}
+
+	$hash_nivel2{'nivel3'}= \@nivel3;
+
+	return (\%hash_nivel2);
+}
 
 =item
 disponibilidadItem

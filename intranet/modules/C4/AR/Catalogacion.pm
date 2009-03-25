@@ -1856,7 +1856,7 @@ sub t_modificarEnEstructuraCatalogacion {
 #======================================================SOPORTE PARA ESTRUCTURA CATALOGACION====================================================
 
 =item
-Este funcion devuelve la informacion del usuario segun un nro_socio
+Este funcion devuelve la estructura de catalogacion para armar los componentes en el cliente
 =cut
 sub getHashCatalogaciones{
     my ($params)=@_;
@@ -1874,19 +1874,76 @@ sub getHashCatalogaciones{
         my %hash_temp;
         $hash_temp{'campo'}= $cat->getCampo;
         $hash_temp{'subcampo'}= $cat->getSubCampo;
+		$hash_temp{'dato'}= '';
         $hash_temp{'nivel'}= $cat->getNivel;
         $hash_temp{'visible'}= $cat->getVisible;
         $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
         $hash_temp{'itemtype'}= $cat->getItemType;
         $hash_temp{'repetible'}= $cat->getRepetible;
-        $hash_temp{'fijo'}= $cat->getFijo;
+#         $hash_temp{'fijo'}= $cat->getFijo;
         $hash_temp{'tipo'}= $cat->getTipo;
         $hash_temp{'referencia'}= $cat->getReferencia;
         $hash_temp{'obligatorio'}= $cat->getObligatorio;
 		$hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
         $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
 
-        if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
+#         if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
+		if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
+        #tiene una referencia, y no es un autocomplete			
+			C4::AR::Debug::debug('tiene referencia y es un combo');
+            $cat->{'infoReferencia'}->{'campos'}; 
+            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
+																						$cat->infoReferencia->getReferencia,  #tabla  
+                                                                                        $cat->infoReferencia->getCampos  #campo
+                                                                                );
+            $hash_temp{'opciones'}= $valores;
+        }
+
+		if( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
+		#es un autocomplete
+			C4::AR::Debug::debug('tiene referencia y es un autocomplete');
+			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
+			$hash_temp{'datoReferencia'}= '';
+		}
+
+        push (@result, \%hash_temp);
+    }
+
+    return (scalar(@$catalogaciones_array_ref), \@result);
+}
+
+
+=item
+Este funcion devuelve la informacion del usuario segun un nro_socio
+=cut
+sub getHashCatalogacionesConDatos{
+    my ($params)=@_;
+
+	#obtengo la estructura de catalogacion de los niveles repetibles
+    my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
+    
+# MAPEO Y FILTRO DE INFO AL CLIENTE
+    my @result;
+    foreach my $cat  (@$catalogaciones_array_ref){
+
+        my %hash_temp;
+        $hash_temp{'campo'}= $cat->getCampo;
+        $hash_temp{'subcampo'}= $cat->getSubCampo;
+		$hash_temp{'dato'}= $cat->{'dato'};
+        $hash_temp{'nivel'}= $cat->getNivel;
+        $hash_temp{'visible'}= $cat->getVisible;
+        $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
+        $hash_temp{'itemtype'}= $cat->getItemType;
+        $hash_temp{'repetible'}= $cat->getRepetible;
+#         $hash_temp{'fijo'}= $cat->getFijo; #no es necesario enviar al cliente
+        $hash_temp{'tipo'}= $cat->getTipo;
+        $hash_temp{'referencia'}= $cat->getReferencia;
+        $hash_temp{'obligatorio'}= $cat->getObligatorio;
+        $hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
+        $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
+
+# 		 if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
+		if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y no es un autocomplete			
 			C4::AR::Debug::debug('tiene referencia y no es auto');
             $cat->{'infoReferencia'}->{'campos'}; 
@@ -1897,15 +1954,22 @@ sub getHashCatalogaciones{
             $hash_temp{'opciones'}= $valores;
         }
 
-		if($cat->getTipo eq 'auto'){
+		if( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
 		#es un autocomplete
+			C4::AR::Debug::debug('tiene referencia y es un autocomplete');
 			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
+			$hash_temp{'datoReferencia'}= '';
 		}
+
 
         push (@result, \%hash_temp);
     }
 
-    return (scalar(@$catalogaciones_array_ref), \@result);
+# FIXME para que se hace esto??????????????, todo lo anterior NO SE ESTA USANDO!!!!!!!!!!!!!
+	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
+
+#     return (scalar(@result), \@resultEstYDatos);
+	return (scalar(@resultEstYDatos), \@resultEstYDatos);
 }
 
 
@@ -2020,61 +2084,6 @@ sub _getEstructuraFromCampoSubCampo{
 
 
 
-=item
-Este funcion devuelve la informacion del usuario segun un nro_socio
-=cut
-sub getHashCatalogacionesConDatos{
-    my ($params)=@_;
-
-    my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
-    
-# MAPEO Y FILTRO DE INFO AL CLIENTE
-    my @result;
-    foreach my $cat  (@$catalogaciones_array_ref){
-
-        my %hash_temp;
-        $hash_temp{'campo'}= $cat->getCampo;
-        $hash_temp{'subcampo'}= $cat->getSubCampo;
-		$hash_temp{'dato'}= $cat->{'dato'};
-        $hash_temp{'nivel'}= $cat->getNivel;
-        $hash_temp{'visible'}= $cat->getVisible;
-        $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
-        $hash_temp{'itemtype'}= $cat->getItemType;
-        $hash_temp{'repetible'}= $cat->getRepetible;
-        $hash_temp{'fijo'}= $cat->getFijo;
-        $hash_temp{'tipo'}= $cat->getTipo;
-        $hash_temp{'referencia'}= $cat->getReferencia;
-        $hash_temp{'obligatorio'}= $cat->getObligatorio;
-        $hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
-        $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
-
-		 if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
-        #tiene una referencia, y no es un autocomplete			
-			C4::AR::Debug::debug('tiene referencia y no es auto');
-            $cat->{'infoReferencia'}->{'campos'}; 
-            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-																						$cat->infoReferencia->getReferencia,  #tabla  
-                                                                                        $cat->infoReferencia->getCampos  #campo
-                                                                                );
-            $hash_temp{'opciones'}= $valores;
-        }
-
-		if($cat->getTipo eq 'auto'){
-		#es un autocomplete
-			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
-# 			$hash_temp{'datoReferencia'}= obtenerValorCampo()
-		}
-
-
-        push (@result, \%hash_temp);
-    }
-
-	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
-
-    return (scalar(@result), \@resultEstYDatos);
-}
-
-
 sub _obtenerEstructuraYDatos{
 	my ($params)=@_;
 
@@ -2112,6 +2121,10 @@ C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 			$hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
 			$hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
 			$hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
+
+			if($cat_estruct_array->[0]->getReferencia){
+				$hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
+			}
 	
 			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
 			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;

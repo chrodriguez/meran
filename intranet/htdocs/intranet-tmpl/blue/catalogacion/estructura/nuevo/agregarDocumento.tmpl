@@ -35,7 +35,9 @@ function objeto_params(){
 function inicializar(){
 
 	_freeMemory(COMPONENTES_ARRAY);
+	COMPONENTES_ARRAY= [];
 	_freeMemory(DATA_ARRAY);
+	DATA_ARRAY= [];
 	TAB_INDEX= 0;
 }
 
@@ -43,8 +45,6 @@ function _freeMemory(array){
 	for(var i=0;i<array.length;i++){
 		delete array[i];
 	}
-	
-	array= [];
 }
 
 function _existeEnArray(array, elemento){
@@ -136,7 +136,7 @@ function _getBarcodes(){
 
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
 function _sacarOpciones(){
-	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
+	for(var i=0;i<COMPONENTES_ARRAY.length - 1;i++){
 		if(COMPONENTES_ARRAY[i].opciones){//si esta definido...
 			if(COMPONENTES_ARRAY[i].opciones.length > 0){
 				//elimino la propiedad opciones, para enviar menos info al servidor
@@ -147,8 +147,9 @@ function _sacarOpciones(){
 }
 
 function _clearDataFromComponentesArray(){
-    for(var i=0;i< COMPONENTES_ARRAY.length;i++){
+    for(var i=0;i< COMPONENTES_ARRAY.length - 1;i++){
         COMPONENTES_ARRAY[i].dato= '';
+		$('#'+COMPONENTES_ARRAY[i].idCompCliente).val('');
     }
 }
 
@@ -181,7 +182,7 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
+    for(var i=0; i < COMPONENTES_ARRAY.length - 1; i++){
        COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
     }
 }
@@ -457,8 +458,6 @@ function guardarDocumentoN3(){
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
-		//recupero todos los barcodes, 0 o mas
-// 		_getBarcodes();
 		objAH.BARCODES_ARRAY= BARCODES_ARRAY;
 		objAH.cantEjemplares= $("#cantEjemplares").val();
 		_sacarOpciones();
@@ -626,9 +625,10 @@ function updateMostrarInfoAltaNivel3(responseText){
  * json, string con formato json.
  */
 function procesarInfoJson(json){
+
     var objetos=JSONstring.toObject(json);
 
-    for(var i=0; i< objetos.length; i++){
+    for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
