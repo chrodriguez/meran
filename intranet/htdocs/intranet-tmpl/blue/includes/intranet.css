@@ -977,7 +977,9 @@ label.error {
    margin:0;
    padding:0;
    text-transform:uppercase;
+	list-style-type:none;
 }
+
 
 .menu-item {
    font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
@@ -1014,6 +1016,7 @@ label.error {
 
 h3{
 font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+cursor: pointer;
 display:block;
 border-width:1px;
 border-style:solid;
@@ -1049,12 +1052,14 @@ width:11.5em;
 
 #menu li{
 position:relative;
+list-style-type:none;
 float:left;
 width:112px;
 }
 
 #menu ul ul{
 position:absolute;
+list-style-type:none;
 z-index:500;
 /* top:auto; */
 display:none;
