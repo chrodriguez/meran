@@ -370,7 +370,7 @@ function updateCambiarPassword(responseText){
 
 function eliminarFoto(foto){
 	objAH=new AjaxHelper(updateEliminarFoto);
-// 	objAH.debug= true;
+ 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.tipoAccion= 'ELIMINAR_FOTO';
 	objAH.foto_name= foto;
