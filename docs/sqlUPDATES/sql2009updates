@@ -527,4 +527,4 @@ CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL =======
 
 ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NULL DEFAULT '0000-00-00' ,
 CHANGE fecha_notificacion fecha_notificacion VARCHAR( 20 ) NULL DEFAULT NULL ,
-CHANGE fecha_recodatorio fecha_recodatorio VARCHAR( 20 ) NULL DEFAULT NULL ;
+CHANGE fecha_recodatorio fecha_recordatorio VARCHAR( 20 ) NULL DEFAULT NULL ;

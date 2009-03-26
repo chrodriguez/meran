@@ -543,8 +543,68 @@ sub IssuesType {
 	return(@result);
 }
 
+
 =item
 IssuesTypeEnabled
+Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
+=cut
+sub prestamosHabilitadosPorTipo {
+ 	my ($id_disponibilidad, $nro_socio)=@_;
+
+	#Trae todos los tipos de prestamos que estan habilitados
+	my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
+																		query => [ 
+																					notforloan => { eq => $id_disponibilidad },
+																					enabled    => { eq => 1}
+																			], 
+										);
+
+	my @tipos;
+	foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
+		my $tipo;
+		$tipo->{'value'}=$tipo_prestamo->getIssuecode;
+		$tipo->{'label'}=$tipo_prestamo->getDescription;
+		push(@tipos,$tipo)
+	}
+	return(\@tipos);
+# 
+# 	return ($nivel3_array_ref);
+# 
+#   	my $query= " SELECT * FROM circ_ref_tipo_prestamo WHERE enabled = 1 ";
+# 	$query .= " AND issuecode NOT IN (SELECT circ_ref_tipo_prestamo.issuecode FROM circ_sancion 
+# 	INNER JOIN circ_tipo_sancion ON circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
+# 	INNER JOIN circ_tipo_prestamo_sancion ON circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
+# 	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
+# 	WHERE nro_socio = ? AND (now() between startdate AND enddate)) ";
+# 
+#   	if ($notforloan ne undef){
+# 		$query.=" AND notforloan = ? ORDER BY description";
+#     		$sth = $dbh->prepare($query);
+#     		$sth->execute($borrowernumber, $notforloan);
+#   	} 
+# 	else{
+#     		$query.=" ORDER BY description";
+#     		$sth = $dbh->prepare($query);
+#     		$sth->execute($borrowernumber);
+#   	}
+# 
+#   	my %issueslabels;
+#  	my @issuesvalues;
+# 	my @issuesType;
+# 	my $i=0;
+#   	while (my $res = $sth->fetchrow_hashref) {
+# 		$issuesType[$i]->{'value'}=$res->{'issuecode'};
+# 		$issuesType[$i]->{'label'}=$res->{'description'};
+# 		$i++;
+# 		
+#  	}
+#   	$sth->finish;
+# 	return(\@issuesType);
+}
+
+
+=item
+IssuesTypeEnabled DEPRECATED
 Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
 =cut
 sub IssuesTypeEnabled {
@@ -583,6 +643,7 @@ sub IssuesTypeEnabled {
   	$sth->finish;
 	return(\@issuesType);
 }
+
 
 =item
 DatosPrestamos

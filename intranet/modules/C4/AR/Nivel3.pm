@@ -697,10 +697,36 @@ sub generaCodigoBarra{
 }
 
 
+=item
+buscarNiveles3PorDisponibilidad
+Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad
+=cut
+sub buscarNivel3PorDisponibilidad{
+	my ($nivel3aPrestar)=@_;
+	
+	my ($nivel3_array_ref)= getNivel3FromId2($nivel3aPrestar->getId2)
+	my @items;
+	my $j=0;
+	foreach my $n3 (@$nivel3_array_ref){
+		
+		if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getId_disponibilidad eq $n3->getId_disponibilidad)){
+		#Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
+				$item->{'label'}=$n3->getBarcode;
+				$item->{'value'}=$n3->getId3;
+				push (@items,$item);
+			}
+
+
+	}
+
+	return(\@items);
+}
+
+
 
 
 =item
-buscarNivel3PorId2Disponibilidad
+buscarNivel3PorId2Disponibilidad DEPRECATED????
 Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
 sub buscarNivel3PorId2YDisponibilidad{

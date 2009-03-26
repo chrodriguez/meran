@@ -287,6 +287,16 @@ sub setTimestamp{
     $self->timestamp($timestamp);
 }
 
+sub estaPrestado{
+	my ($self) = shift;
+	return 0;
+}
+
+sub estadoDisponible{
+	my ($self) = shift;
+	return ($self->ref_estado->getNombre eq "Disponible");
+}
+
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 =item

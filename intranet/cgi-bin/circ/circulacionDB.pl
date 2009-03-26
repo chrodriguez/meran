@@ -12,20 +12,18 @@ use C4::Circulation::Circ2;
 
 my $input=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, 0,{circulate=> 1},"intranet");
 
-$loggedinuser=getborrowernumber($loggedinuser);
+C4::AR::Debug::debug("CirculacionDB:: responsable -> ".$userid);
 
 my $obj=$input->param('obj');
-open(A, ">>/tmp/debug.txt");
-print A "obj: $obj \n";
-print A "loggedinuser: ".$loggedinuser."\n";
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
-my $borrnumber= $obj->{'borrowernumber'};
-
+my $nro_socio= $obj->{'nro_socio'};
+C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
+C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
@@ -58,38 +56,29 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
 	my $array_ids3=$obj->{'datosArray'};
-	my $loop=scalar(@$array_ids3);
+	my $cant= scalar(@$array_ids3_a_prestar);
 
 
 	my @infoPrestamo;
-	for(my $i=0;$i<$loop;$i++){
-		my $id3=$array_ids3->[$i];
-		my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
-		my ($infoN3,@results)=C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($iteminfo->{'id2'});
-#Los disponibles son los prestados + los reservados + los que se pueden prestar + los de sala
-		my @items;
-		my $j=0;
-		foreach (@results){
-			if (!$_->{'prestado'} && (($iteminfo->{'notforloan'} eq 'SA' && 
-			$_->{'notforloan'} eq 'SA') || ($iteminfo->{'notforloan'} eq 'DO' && $_->{'forloan'}))){ 
-#solo pone los items que no estan prestados
-				$items[$j]->{'label'}="$_->{'barcode'}";
-				$items[$j]->{'value'}=$_->{'id3'};
-				$j++;
-			}
-		}
-
-		my ($tipoPrestamos)=&C4::AR::Prestamos::IssuesTypeEnabled($iteminfo->{'notforloan'}, $borrnumber);
+	for(my $i=0;$i<$cant;$i++){
+		my $id3_a_prestar= $array_ids3_a_prestar->[$i];
+		my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3_a_prestar);
+		#Busco ejemplares no prestados con estado disponible e igual disponibilidad que el que se quiere prestar
+		my $items_array_ref= C4::AR::Nivel3::buscarNivel3PorDisponibilidad($nivel3aPrestar);
+		#Busco los tipos de prestamo habilitados y con la misma disponibilidad del nivel 3 a prestar
+		my ($tipoPrestamos)=&C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getId_disponibilidad,$nro_socio);
 			
-		$infoPrestamo[$i]->{'id3Old'}=$id3;
-		$infoPrestamo[$i]->{'autor'}=$iteminfo->{'autor'};
-		$infoPrestamo[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
-		$infoPrestamo[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
-		$infoPrestamo[$i]->{'items'}=\@items;
+		$infoPrestamo[$i]->{'id3Old'}= $id3_a_prestar;
+		$infoPrestamo[$i]->{'autor'}=$nivel3aPrestar->nivel2->nivel1->cat_autor->getCompleto;
+		$infoPrestamo[$i]->{'titulo'}=$nivel3aPrestar->nivel2->nivel1->getTitulo;
+		#$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
+		$infoPrestamo[$i]->{'edicion'}=$nivel3aPrestar->nivel2->getEdicion;
+		$infoPrestamo[$i]->{'items'}= $items_array_ref;
 		$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
 	}
+
 	my $infoPrestamoJSON = to_json \@infoPrestamo;
+
 	print $input->header;
 	print $infoPrestamoJSON;
 }
