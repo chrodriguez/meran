@@ -18,6 +18,7 @@ C4::AR::Debug::debug("CirculacionDB:: responsable -> ".$userid);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $loggedinuser= $userid;
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion= $obj->{'tipoAccion'}||"";
@@ -55,7 +56,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
-	my $array_ids3=$obj->{'datosArray'};
+	my $array_ids3_a_prestar=$obj->{'datosArray'};
 	my $cant= scalar(@$array_ids3_a_prestar);
 
 
@@ -69,12 +70,13 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		my ($tipoPrestamos)=&C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getId_disponibilidad,$nro_socio);
 			
 		$infoPrestamo[$i]->{'id3Old'}= $id3_a_prestar;
-		$infoPrestamo[$i]->{'autor'}=$nivel3aPrestar->nivel2->nivel1->cat_autor->getCompleto;
-		$infoPrestamo[$i]->{'titulo'}=$nivel3aPrestar->nivel2->nivel1->getTitulo;
+		my ($nivel2)= C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);
+ 		$infoPrestamo[$i]->{'autor'}= C4::AR::Referencias::getNombreAutor($nivel2->nivel1->getAutor);
+ 		$infoPrestamo[$i]->{'titulo'}= $nivel3aPrestar->nivel2->nivel1->getTitulo;
 		#$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
-		$infoPrestamo[$i]->{'edicion'}=$nivel3aPrestar->nivel2->getEdicion;
+		$infoPrestamo[$i]->{'edicion'}= $nivel3aPrestar->nivel2->getEdicion;
 		$infoPrestamo[$i]->{'items'}= $items_array_ref;
-		$infoPrestamo[$i]->{'tipoPrestamo'}=$tipoPrestamos;
+		$infoPrestamo[$i]->{'tipoPrestamo'}= $tipoPrestamos;
 	}
 
 	my $infoPrestamoJSON = to_json \@infoPrestamo;
@@ -119,8 +121,8 @@ print A "id3 antes de setear: $id3\n";
 			$params{'id3Old'}=$id3Old;
 			$params{'barcode'}= $array_ids3->[$i]->{'barcode'};
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
-			$params{'borrowernumber'}=$borrnumber;
-			$params{'loggedinuser'}=$loggedinuser;
+			$params{'nro_socio'}=$nro_socio;
+			$params{'loggedinuser'}= $loggedinuser;
 			$params{'defaultbranch'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'tipo'}="INTRA";
 			$params{'issuesType'}= $tipoPrestamo;
@@ -130,7 +132,7 @@ print A "id3 antes de setear: $id3\n";
 
 			if(!$msg_object->{'error'}){
 			#Se crean los ticket para imprimir.
-				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$borrnumber,$loggedinuser);
+				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$loggedinuser);
 			}
 			#guardo los errores
 			push (@infoMessages, $msg_object);
@@ -176,7 +178,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my %params;
 	my %messageObj;
 	$params{'loggedinuser'}= $loggedinuser;
-	$params{'borrowernumber'}= $borrnumber;
+	$params{'nro_socio'}= $nro_socio;
 	$params{'tipo'}= 'INTRA';
 
 	my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
@@ -207,7 +209,7 @@ print A "ID3: $id3\n";
 
 			if($print_renew && !$Message_arrayref->{'error'}){
 			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$borrnumber,$loggedinuser);
+				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$loggedinuser);
 			}
 		}# end elsif($accion eq 'RENOVACION')
 
@@ -236,12 +238,12 @@ if($tipoAccion eq "CANCELAR_RESERVA"){
 
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 	
-	$loggedinuser = getborrowernumber($loggedinuser);
+# 	$loggedinuser = $session->param('userid');#getborrowernumber($loggedinuser);
 		
 	my %params;
-	$params{'reservenumber'}=$obj->{'reserveNumber'};
-	$params{'borrowernumber'}=$obj->{'borrowernumber'};
-	$params{'loggedinuser'}=$loggedinuser;
+	$params{'reservenumber'}= $obj->{'reserveNumber'};
+	$params{'nro_socio'}= $obj->{'nro_socio'};
+	$params{'loggedinuser'}= $loggedinuser;
 	$params{'tipo'}="INTRA";
 	
 	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);

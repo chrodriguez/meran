@@ -347,6 +347,7 @@ sub saveNivel1{
 
 =item
 Recupero un nivel 1 a partir de un id1
+retorna un objeto o 0 si no existe
 =cut
 sub getNivel1FromId1{
 	my ($id1) = @_;
@@ -357,7 +358,11 @@ sub getNivel1FromId1{
 																								], 
 																);
 
-	return ($nivel1_array_ref);
+	if( scalar(@$nivel1_array_ref) > 0){
+		return ($nivel1_array_ref->[0]);
+	}else{
+		return 0;
+	}
 }
 
 

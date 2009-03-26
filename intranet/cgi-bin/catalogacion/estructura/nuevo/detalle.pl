@@ -23,8 +23,8 @@ my ($template, $session, $t_params) = get_template_and_user({
 	#Cuando viene desde otra pagina que llama al detalle.
 	my $id1=$input->param('id1');
 
-	my $nivel1_array_ref= &C4::AR::Nivel1::getNivel1FromId1($id1);
-	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1_array_ref->[0]->getId1);
+	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1($id1);
+	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
 	
@@ -54,7 +54,7 @@ C4::AR::Debug::debug("Procesando Nivel3: ".$nivel3_array_ref->[$i]->getId3."\n")
 			push(@nivel2, \%hash_nivel2);
 	}
 
-	$t_params->{'nivel1'}= ($nivel1_array_ref->[0])->toMARC,
+	$t_params->{'nivel1'}= $nivel1->toMARC,
 	$t_params->{'id1'}	  = $id1;
 	$t_params->{'nivel2'}= \@nivel2,
 

@@ -299,7 +299,7 @@ sub detalleNivel3OPAC{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2YDisponibilidad($id2);
+	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
 	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my @nivel3Comp;
 	my @results;
@@ -704,11 +704,12 @@ Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad
 sub buscarNivel3PorDisponibilidad{
 	my ($nivel3aPrestar)=@_;
 	
-	my ($nivel3_array_ref)= getNivel3FromId2($nivel3aPrestar->getId2)
+	my ($nivel3_array_ref)= getNivel3FromId2($nivel3aPrestar->getId2);
 	my @items;
 	my $j=0;
 	foreach my $n3 (@$nivel3_array_ref){
-		
+		my $item;
+
 		if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getId_disponibilidad eq $n3->getId_disponibilidad)){
 		#Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
 				$item->{'label'}=$n3->getBarcode;
@@ -731,12 +732,11 @@ Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
 sub buscarNivel3PorId2YDisponibilidad{
 	my ($id2)=@_;
-# 	my $dbh = C4::Context->dbh;
-# 	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
-	my ($nivel3_array_ref)= getNivel3FromId2($id2)
+	my $dbh = C4::Context->dbh;
+	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
 
-# 	my $sth=$dbh->prepare($query);
-#         $sth->execute($id2);
+	my $sth=$dbh->prepare($query);
+        $sth->execute($id2);
 	my @result;
 	my $i=0;
 	my $disponibles=0;
@@ -807,18 +807,22 @@ sub getNivel3FromId2{
 
 =item
 Recupero un nivel 3 a partir de un id3
+retorna un objeto o 0 si no existe
 =cut
 sub getNivel3FromId3{
 	my ($id3) = @_;
 
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																							query => [ 
-																										id3 => { eq => $id3
- },
-																								], 
+																			query => [ 
+																					id3 => { eq => $id3},
+																				], 
 																);
 
-	return ($nivel3_array_ref);
+	if( scalar(@$nivel3_array_ref) > 0){
+		return ($nivel3_array_ref->[0]);
+	}else{
+		return 0;
+	}
 }
 
 =item

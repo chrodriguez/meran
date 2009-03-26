@@ -54,8 +54,9 @@ function updateEjemplaresDelGrupo(responseText){
 }
 
 
-function buscarUsuario(id3, id2){
+function buscarUsuario(id2, id3){
 	objAH=new AjaxHelper(updateBuscarUsuario);
+	objAH.debug= true;
 	objAH.url='/intranet-tmpl/blue/includes/popups/buscarUsuario.inc';
 	objAH.debug= true;
 	objAH.sendToServer();
@@ -85,6 +86,7 @@ $(document).ready(function(){
 
 function detalleMARC(id3){
 	objAH=new AjaxHelper(updateInfoMARC);
+	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/busquedas/MARCDetalle.pl";
 	objAH.id3= id3;
 	//se envia la consulta
@@ -110,6 +112,7 @@ function filtroPorAutor(id){
 
 function editarEjemplares(id1,id2,itemtype){
 	var obj=new objeto_datos();
+	objAH.debug= true;
 	obj.itemtype=itemtype;
 	obj.id1=id1;
 	obj.id2=id2;
@@ -161,6 +164,7 @@ function renovar(accion,userId,userNom,id2,id3){
 	usuario.text=userNom;
 
 	objAH=new AjaxHelper(generaDivDevRen);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
 	objAH.datosArray= array;
@@ -180,6 +184,7 @@ function devolver(accion,userId,userNom,id2,id3){
 	usuario.text=userNom;
 
 	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= array;
@@ -213,6 +218,7 @@ function confirmarPrestamo(){
  	if(usuario.ID != ""){	
 
 		objAH=new AjaxHelper(generaDivPrestamo);
+		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
 		objAH.datosArray= items_array;
@@ -244,6 +250,7 @@ function updateInfoPrestarReserva(responseText){
 
 function borrarGrupo(id1,id2){
 	objAH=new AjaxHelper(updateBorrarGrupo);
+	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
 	objAH.id1= id1;
 	objAH.id2= id2;
@@ -265,6 +272,7 @@ function updateBorrarGrupo(responseText){
 
 function borrarNivel1(id1){
 	objAH=new AjaxHelper(updateBorrarNivel1);
+	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
 	objAH.id1= id1;
 	objAH.accion="BORRAR_NIVEL1";
@@ -461,7 +469,7 @@ function updateBorrarNivel1(responseText){
 				[% END %]
 			[% ELSE %]
 				<input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 
-						onClick="buscarUsuario('[% id3 %]','[% id2 %]');">
+						onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
 			[% END %]
 			</td>
 		

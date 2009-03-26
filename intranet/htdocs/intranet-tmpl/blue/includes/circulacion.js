@@ -77,6 +77,7 @@ function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
  */
 function detalleUsuario(borrower){
 	objAH=new AjaxHelper(updateInfoUsuario);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
 	objAH.borrowernumber= borrower;
 	//se envia la consulta
@@ -101,6 +102,7 @@ function updateInfoUsuario(responseText){
 function detalleSanciones(borr){
 
 	objAH=new AjaxHelper(updateDetalleSanciones);
+	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
 	objAH.borrowernumber= borr;
 	objAH.sendToServer();
@@ -120,6 +122,7 @@ function updateDetalleSanciones(responseText){
  */
 function detalleReservas(borrower,funcion){
 	objAH=new AjaxHelper(funcion);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -145,6 +148,7 @@ function updateInfoReservas(responseText){
  */
 function detallePrestamos(borrower,funcion){
 	objAH=new AjaxHelper(funcion);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
 	objAH.borrnumber= borrower;
 	//se envia la consulta
@@ -184,6 +188,7 @@ function realizarAccion(accion,chckbox,funcion){
 			array[i]=chck[i].value;
 		}
 		objAH=new AjaxHelper(funcion);
+		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= accion;
 		objAH.datosArray= array;
@@ -264,6 +269,7 @@ function prestar(){
 	}
 	
 	objAH=new AjaxHelper(updateInfoPrestarReserva);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
 	objAH.datosArray= infoPrestamos_array;
@@ -314,6 +320,7 @@ function cancelarReserva(reserveNumber){
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
         if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
+		objAH.debug= true;
 		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CANCELAR_RESERVA';
 		objAH.borrowernumber=usuario.ID;

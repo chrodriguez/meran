@@ -615,6 +615,7 @@ sub getNivel2FromId1{
 
 =item
 Recupero un nivel 2 a partir de un id2
+retorna un objeto o 0 si no existe
 =cut
 sub getNivel2FromId2{
 	my ($id2) = @_;
@@ -625,7 +626,11 @@ sub getNivel2FromId2{
 																								], 
 																);
 
-	return ($nivel2_array_ref);
+	if( scalar(@$nivel2_array_ref) > 0){
+		return ($nivel2_array_ref->[0]);
+	}else{
+		return 0;
+	}
 }
 
 

@@ -2092,23 +2092,28 @@ sub _obtenerEstructuraYDatos{
 	my ($params)=@_;
 
 	my @result;
-	my $nivel_array_ref;
+# 	my $nivel_array_ref;
+	my $nivel;
 
 	if( $params->{'nivel'} eq '1'){
-		$nivel_array_ref= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+# 		$nivel_array_ref= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
 C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
 	}
 	elsif( $params->{'nivel'} eq '2'){
-		$nivel_array_ref= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+# 		$nivel_array_ref= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+		$nivel= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
 C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
 	}
 	elsif( $params->{'nivel'} eq '3'){
-		$nivel_array_ref= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+# 		$nivel_array_ref= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+		$nivel= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
 C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 	}
 
 	#paso todo a MARC
-	my $nivel_info_marc_array = $nivel_array_ref->[0]->toMARC;
+# 	my $nivel_info_marc_array = $nivel_array_ref->[0]->toMARC;
+	my $nivel_info_marc_array = $nivel->toMARC;
 
 	#se genera la estructura de catalogacion para envia al cliente
 	for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){

@@ -294,7 +294,7 @@ sub estaPrestado{
 
 sub estadoDisponible{
 	my ($self) = shift;
-	return ($self->ref_estado->getNombre eq "Disponible");
+	return (C4::AR::Referencias::getNombreEstado($self->getId_estado) eq "Disponible");
 }
 
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
