@@ -299,7 +299,7 @@ sub detalleNivel3OPAC{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
+	my ($infoNivel3,@nivel3)=&buscarNivel3PorId2YDisponibilidad($id2);
 	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my @nivel3Comp;
 	my @results;
@@ -699,7 +699,68 @@ sub generaCodigoBarra{
 
 
 
+=item
+buscarNivel3PorId2Disponibilidad
+Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
+=cut
+sub buscarNivel3PorId2YDisponibilidad{
+	my ($id2)=@_;
+# 	my $dbh = C4::Context->dbh;
+# 	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
+	my ($nivel3_array_ref)= getNivel3FromId2($id2)
 
+# 	my $sth=$dbh->prepare($query);
+#         $sth->execute($id2);
+	my @result;
+	my $i=0;
+	my $disponibles=0;
+	my %infoNivel3;
+	$infoNivel3{'cantParaSala'}= 0;
+	$infoNivel3{'cantParaPrestamo'}= 0;
+	$infoNivel3{'disponibles'}= 0;
+	$infoNivel3{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
+	$infoNivel3{'cantReservas'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
+	$infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+
+	while(my $data=$sth->fetchrow_hashref){
+
+		my $holdbranch= getBranch($data->{'id_ui_poseedora'});
+		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
+		
+		my $homebranch= getBranch($data->{'id_ui_origen'});
+		$data->{'homebranchNombre'}=$homebranch->{'branchname'};
+		
+		my $wthdrawn=getAvail($data->{'wthdrawn'});
+		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
+		
+		if($data->{'id_estado'}){
+		#wthdrawn = 0, Disponible
+			$data->{'disponibilidad'}=C4::AR::Utilidades::noaccents($wthdrawn->{'description'});
+			$data->{'clase'}="fechaVencida";
+			$disponibles++;
+		}
+		
+	#	if($data->{'notforloan'} eq 'DO' && !$data->{'wthdrawn'}){
+		if($data->{'id_disponibilidad'} == 0 && !$data->{'id_estado'}){
+			$data->{'forloan'}=1;
+			$data->{'disponibilidad'}="PRESTAMO";
+			$data->{'clase'}="prestamo";
+			$infoNivel3{'cantParaPrestamo'}++;
+		}elsif(!$data->{'id_estado'}){
+			$infoNivel3{'cantParaSala'}++;
+			$data->{'disponibilidad'}="SALA DE LECTURA";
+			$data->{'clase'}="salaLectura";
+		}
+
+		C4::AR::Nivel3::disponibilidadItem($data);
+		$result[$i]=$data;
+		$i++;
+	}
+
+	$infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
+
+	return(\%infoNivel3,@result);
+}
 
 
 =item
