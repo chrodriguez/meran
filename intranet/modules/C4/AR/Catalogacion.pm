@@ -862,8 +862,8 @@ sub buscarCamposModificadosYObligatorios{
 				$data->{'referencia'}=1;
 				$data->{'tipo'}='combo';
 				$data->{'tabla'}='circ_ref_tipo_prestamo';
-				$data->{'campos'}='description';
-				$data->{'orden'}="'issuecode'";
+				$data->{'campos'}='descripcion';
+				$data->{'orden'}="'id_tipo_prestamo'";
 			}
 			($results{$llave2}=$data);
 		}

@@ -151,7 +151,7 @@ sub devolver {
 # 		my $end_date= "null";
 		my $end_date= undef;
 
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->getId2,$id3,$reserva->getId_ui,$prestamo->{'issuecode'},$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->getId2,$id3,$reserva->getId_ui,$prestamo->{'tipo_prestamo'},$end_date);
 
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
@@ -161,16 +161,16 @@ sub devolver {
 		my $fechaFinSancion;
 
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
-		my $issuetype=IssueType($prestamo->{'issuecode'});
-		my $daysissue=$issuetype->{'daysissues'};
+		my $issuetype=IssueType($prestamo->{'tipo_prestamo'});
+		my $daysissue=$issuetype->{'dias_prestamo'};
 		my $dateformat = C4::Date::get_date_format();
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 		my $categorycode=C4::AR::Usuarios::obtenerCategoriaBorrower($borrowernumber);
-                my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'issuecode'});
+                my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'tipo_prestamo'});
 
 		if ($sanctionDays gt 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
-			my $sanctiontypecode = getSanctionTypeCode($prestamo->{'issuecode'}, $categorycode);
+			my $sanctiontypecode = getSanctionTypeCode($prestamo->{'tipo_prestamo'}, $categorycode);
 			if (tieneLibroVencido($borrowernumber)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
 				$hasdebts = 1;
@@ -516,7 +516,7 @@ sub verificarTipoPrestamo {
 #retorna verdadero si se puede hacer un determinado tipo de prestamo
 	my ($issuetype,$notforloan)=@_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo WHERE issuecode = ? AND notforloan = ?");
+	my $sth=$dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo WHERE id_tipo_prestamo = ? AND id_disponibilidad = ?");
 	$sth->execute($issuetype,$notforloan);
 	return($sth->fetchrow_hashref);
 }
@@ -525,7 +525,7 @@ sub verificarTipoPrestamo {
 sub IssueType {
 #retorna los datos del tipo de prestamo
 	my ($tipo_prestamo)=@_;
-   my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( issuecode => $tipo_prestamo );
+   my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( id_tipo_prestamo => $tipo_prestamo );
    $circ_ref_tipo_prestamo->load();
 	return($circ_ref_tipo_prestamo);
 }
@@ -533,7 +533,7 @@ sub IssueType {
 sub IssuesType {
 #Trae todos los tipos de Prestamos existentes
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT issuecode, description FROM circ_ref_tipo_prestamo ORDER BY description");
+	my $sth=$dbh->prepare("SELECT id_tipo_prestamo, descripcion FROM circ_ref_tipo_prestamo ORDER BY descripcion");
 	$sth->execute();
 	my @result;
 	while (my $ref= $sth->fetchrow_hashref) {
@@ -554,16 +554,16 @@ sub prestamosHabilitadosPorTipo {
 	#Trae todos los tipos de prestamos que estan habilitados
 	my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
 																		query => [ 
-																					notforloan => { eq => $id_disponibilidad },
-																					enabled    => { eq => 1}
+																				id_disponibilidad => { eq => $id_disponibilidad },
+																				habilitado    => { eq => 1}
 																			], 
 										);
 
 	my @tipos;
 	foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
 		my $tipo;
-		$tipo->{'value'}=$tipo_prestamo->getIssuecode;
-		$tipo->{'label'}=$tipo_prestamo->getDescription;
+		$tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
+		$tipo->{'label'}=$tipo_prestamo->getDescripcion;
 		push(@tipos,$tipo)
 	}
 	return(\@tipos);
@@ -612,11 +612,11 @@ sub IssuesTypeEnabled {
 	my $dbh = C4::Context->dbh;
   	my $sth;
 #Trae todos los tipos de prestamos que estan habilitados
-  	my $query= " SELECT * FROM circ_ref_tipo_prestamo WHERE enabled = 1 ";
-	$query .= " AND issuecode NOT IN (SELECT circ_ref_tipo_prestamo.issuecode FROM circ_sancion 
+  	my $query= " SELECT * FROM circ_ref_tipo_prestamo WHERE habilitado = 1 ";
+	$query .= " AND id_tipo_prestamo NOT IN (SELECT circ_ref_tipo_prestamo.id_tipo_prestamo FROM circ_sancion 
 	INNER JOIN circ_tipo_sancion ON circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
 	INNER JOIN circ_tipo_prestamo_sancion ON circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
-	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
+	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.id_tipo_prestamo 
 	WHERE nro_socio = ? AND (now() between startdate AND enddate)) ";
 
   	if ($notforloan ne undef){
@@ -635,8 +635,8 @@ sub IssuesTypeEnabled {
 	my @issuesType;
 	my $i=0;
   	while (my $res = $sth->fetchrow_hashref) {
-		$issuesType[$i]->{'value'}=$res->{'issuecode'};
-		$issuesType[$i]->{'label'}=$res->{'description'};
+		$issuesType[$i]->{'value'}=$res->{'id_tipo_prestamo'};
+		$issuesType[$i]->{'label'}=$res->{'descripcion'};
 		$i++;
 		
  	}
@@ -677,7 +677,7 @@ sub DatosPrestamosPorTipo {
 	my $dateformat = C4::Date::get_date_format();
 	my $query=" SELECT * FROM  circ_prestamo WHERE fecha_devolucion IS NULL AND nro_socio = ? AND tipo_prestamo=? ";
 	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber,$issuetype_hashref->{'issuecode'});
+	$sth->execute($borrowernumber,$issuetype_hashref->{'id_tipo_prestamo'});
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
 	my @result;
 
@@ -700,7 +700,7 @@ sub getDatosPrestamoDeId3{
 	my $dbh = C4::Context->dbh;
 	my $query= "    SELECT * 
 			FROM  circ_prestamo iss INNER JOIN usr_socio bor ON (iss.nro_socio=bor.nro_socio)
-	           	INNER JOIN circ_ref_tipo_prestamo ist ON (iss.tipo_prestamo=ist.issuecode) 
+	           	INNER JOIN circ_ref_tipo_prestamo ist ON (iss.tipo_prestamo=ist.id_tipo_prestamo) 
 			WHERE id3=? AND fecha_devolucion IS  NULL ";
 
 	my $sth=$dbh->prepare($query);
@@ -721,7 +721,7 @@ sub PrestamosMaximos {
 	my @result;	
 
 	while (my $iss= $sth->fetchrow_hashref) {
-		my $issuetype=$iss->{'issuecode'};
+		my $issuetype=$iss->{'id_tipo_prestamo'};
 		my $sth1=$dbh->prepare("	SELECT count(*) AS prestamos 
 						FROM  circ_prestamo 
 						WHERE fecha_devolucion IS NULL AND nro_socio = ? AND tipo_prestamo=?");
@@ -810,15 +810,15 @@ sub Enviar_Recordatorio{
 sub enviar_recordatorios_prestamos {
 	my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo iss LEFT JOIN circ_ref_tipo_prestamo isst ON iss.tipo_prestamo=isst.issuecode 
-			       WHERE iss.fecha_devolucion IS NULL AND isst.notforloan = 0");
+	my $sth=$dbh->prepare("SELECT * FROM  circ_prestamo iss LEFT JOIN circ_ref_tipo_prestamo isst ON iss.tipo_prestamo=isst.id_tipo_prestamo 
+			       WHERE iss.fecha_devolucion IS NULL AND isst.id_disponibilidad = 0");
 	$sth->execute();
 
 	while(my $data= $sth->fetchrow_hashref) {
 		my $fechaDeVencimiento=vencimiento ($data->{'id3'});
 		my $proximohabil=proximoHabil(1,0);
 		if (Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil) == 0) {
-			Enviar_Recordatorio($data->{'id3'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
+			Enviar_Recordatorio($data->{'id3'},$data->{'nro_socio'},&C4::Date::format_date($fechaDeVencimiento,$dateformat));
 		};
 	}
 }
@@ -892,7 +892,7 @@ sub prestamosPorUsuario {
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.fecha_prestamo AS fecha_prestamo, iss.tipo_prestamo AS tipo_prestamo,
                 	n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico,
 			n1.titulo AS titulo, n1.autor, isst.description AS issuetype
-			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.tipo_prestamo = isst.issuecode )
+			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.tipo_prestamo = isst.id_tipo_prestamo )
 			INNER JOIN cat_nivel3 n3 ON ( iss.id3 = n3.id3 )
 			INNER JOIN cat_nivel1 n1 ON ( n3.id1 = n1.id1)
 			INNER JOIN cat_nivel2 n2 ON ( n2.id2 = n3.id2 )
@@ -1055,7 +1055,7 @@ sub getTipoPrestamo {
 
     my ($tipo_prestamo) = @_;
 
-    my  $tipo = C4::Modelo::CircRefTipoPrestamo->new(issuecode => $tipo_prestamo);
+    my  $tipo = C4::Modelo::CircRefTipoPrestamo->new(id_tipo_prestamo => $tipo_prestamo);
         $tipo->load();
 
     return ($tipo);

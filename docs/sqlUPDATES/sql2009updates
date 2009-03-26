@@ -528,3 +528,25 @@ CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL =======
 ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NULL DEFAULT '0000-00-00' ,
 CHANGE fecha_notificacion fecha_notificacion VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE fecha_recodatorio fecha_recordatorio VARCHAR( 20 ) NULL DEFAULT NULL ;
+
+
+--TIPOS DE PRESTAMO (26/03/2209 13:00)
+
+ ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `issuecode` `id_tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
+CHANGE `description` `descripcion` TEXT CHARACTER SET latin1 COLLATE latin1_spanish_ci NULL DEFAULT NULL ,
+CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0',
+CHANGE `maxissues` `prestamos` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `daysissues` `dias_prestamo` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `renewdays` `dias_renovacion` TINYINT( 3 ) NOT NULL DEFAULT '0',
+CHANGE `dayscanrenew` `dias_antes_renovacion` TINYINT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `enabled` `habilitado` TINYINT( 4 ) NULL DEFAULT '1';
+
+--TIPOS DE SANCION (26/03/2209 14:00)
+
+ ALTER TABLE `circ_tipo_prestamo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+ ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
+CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;

@@ -458,11 +458,11 @@ sub getiteminformation {
 	my $iteminformation=$sth->fetchrow_hashref;
 	$sth->finish;
 	if ($iteminformation) {
-		$sth=$dbh->prepare("	SELECT date_due, borrowers.borrowernumber, circ_ref_tipo_prestamo.issuecode,
-					circ_ref_tipo_prestamo.description AS issuedescription, categorycode 
+		$sth=$dbh->prepare("	SELECT date_due, borrowers.borrowernumber, circ_ref_tipo_prestamo.id_tipo_prestamo,
+					circ_ref_tipo_prestamo.descripcion AS issuedescription, categorycode 
 					FROM  circ_prestamo INNER JOIN borrowers 
 					ON  circ_prestamo.borrowernumber = borrowers.borrowernumber 
-					INNER JOIN circ_ref_tipo_prestamo ON circ_ref_tipo_prestamo.issuecode =  circ_prestamo.issuecode 
+					INNER JOIN circ_ref_tipo_prestamo ON circ_ref_tipo_prestamo.id_tipo_prestamo =  circ_prestamo.issuecode 
 					WHERE id3=? AND returndate IS NULL ");
 
 		$sth->execute($iteminformation->{'id3'});

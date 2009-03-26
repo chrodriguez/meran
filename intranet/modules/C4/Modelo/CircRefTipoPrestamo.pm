@@ -8,123 +8,131 @@ __PACKAGE__->meta->setup(
     table   => 'circ_ref_tipo_prestamo',
 
     columns => [
-        issuecode    => { type => 'character', length => 2, not_null => 1 },
-        description  => { type => 'text', length => 65535 },
-        notforloan   => { type => 'integer', default => '0', not_null => 1 },
-        maxissues    => { type => 'integer', default => '0', not_null => 1 },
-        daysissues   => { type => 'integer', default => '0', not_null => 1 },
-        renew        => { type => 'integer', default => '0', not_null => 1 },
-        renewdays    => { type => 'integer', default => '0', not_null => 1 },
-        dayscanrenew => { type => 'integer', default => '0', not_null => 1 },
-        enabled      => { type => 'integer', default => 1 },
+        id_tipo_prestamo    => { type => 'character', length => 2, not_null => 1 },
+        descripcion  => { type => 'text', length => 65535 },
+        id_disponibilidad   => { type => 'integer', default => '0', not_null => 1 },
+        prestamos    => { type => 'integer', default => '0', not_null => 1 },
+        dias_prestamo   => { type => 'integer', default => '0', not_null => 1 },
+        renovaciones        => { type => 'integer', default => '0', not_null => 1 },
+        dias_renovacion    => { type => 'integer', default => '0', not_null => 1 },
+        dias_antes_renovacion => { type => 'integer', default => '0', not_null => 1 },
+        habilitado      => { type => 'integer', default => 1 },
     ],
 
-    primary_key_columns => [ 'issuecode' ],
+    primary_key_columns => [ 'id_tipo_prestamo' ],
+    
+	relationships => [
+	    disponibilidad => {
+            class      => 'C4::Modelo::RefDisponibilidad',
+            column_map => { id_disponibilidad => 'codigo' },
+            type       => 'one to one',
+        },
+    ],
 );
 
-sub getIssuecode{
+sub getId_tipo_prestamo{
     my ($self) = shift;
-    return ($self->issuecode);
+    return ($self->id_tipo_prestamo);
 }
     
-sub setIssuecode{
+sub setId_tipo_prestamo{
     my ($self) = shift;
-    my ($issuecode) = @_;
-    $self->issuecode($issuecode);
+    my ($id_tipo_prestamo) = @_;
+    $self->id_tipo_prestamo($id_tipo_prestamo);
 }
 
-sub getDescription{
+sub getDescripcion{
     my ($self) = shift;
 
-    return ($self->description);
+    return ($self->descripcion);
 }
     
-sub setDescription{
+sub setDescripcion{
     my ($self) = shift;
-    my ($description) = @_;
+    my ($descripcion) = @_;
 
-    $self->description($description);
+    $self->descripcion($descripcion);
 }
 
-sub getNotforloan{
+sub getId_disponibilidad{
     my ($self) = shift;
 
-    return ($self->notforloan);
+    return ($self->id_disponibilidad);
 }
     
-sub setNotforloan{
+sub setId_disponibilidad{
     my ($self) = shift;
-    my ($notforloan) = @_;
+    my ($id_disponibilidad) = @_;
 
-    $self->notforloan($notforloan);
+    $self->id_disponibilidad($id_disponibilidad);
 }
 
-sub getMaxissues{
+sub getPrestamos{
     my ($self) = shift;
-    return ($self->maxissues);
+    return ($self->prestamos);
 }
     
-sub setMaxissues{
+sub setPrestamos{
     my ($self) = shift;
-    my ($maxissues) = @_;
-    $self->maxissues($maxissues);
+    my ($prestamos) = @_;
+    $self->prestamos($prestamos);
 }
 
-sub getDaysissues{
+sub getDias_prestamo{
     my ($self) = shift;
-    return ($self->daysissues);
+    return ($self->dias_prestamo);
 }
     
-sub setDaysissues{
+sub setDias_prestamo{
     my ($self) = shift;
-    my ($daysissues) = @_;
-    $self->daysissues($daysissues);
+    my ($dias_prestamo) = @_;
+    $self->dias_prestamo($dias_prestamo);
 }
 
 
-sub getRenewdays{
+sub getRenovaciones{
     my ($self) = shift;
-    return ($self->renewdays);
+    return ($self->renovaciones);
 }
     
-sub setRenewdays{
+sub setRenovaciones{
     my ($self) = shift;
-    my ($renewdays) = @_;
-    $self->renewdays($renewdays);
+    my ($renovaciones) = @_;
+    $self->renovaciones($renovaciones);
 }
 
 
-sub getRenew{
+sub getDias_renovacion{
     my ($self) = shift;
-    return ($self->renew);
+    return ($self->dias_renovacion);
 }
     
-sub setRenew{
+sub setDias_renovacion{
     my ($self) = shift;
-    my ($renew) = @_;
-    $self->renew($renew);
+    my ($dias_renovacion) = @_;
+    $self->renew($dias_renovacion);
 }
 
-sub getDayscanrenew{
+sub getDias_antes_renovacion{
     my ($self) = shift;
-    return ($self->dayscanrenew);
+    return ($self->dias_antes_renovacion);
 }
     
-sub setDayscanrenew{
+sub setDias_antes_renovacion{
     my ($self) = shift;
-    my ($dayscanrenew) = @_;
-    $self->dayscanrenew($dayscanrenew);
+    my ($dias_antes_renovacion) = @_;
+    $self->dias_antes_renovacion($dias_antes_renovacion);
 }
 
-sub getEnabled{
+sub getHabilitado{
     my ($self) = shift;
-    return ($self->enabled);
+    return ($self->habilitado);
 }
     
-sub setEenabled{
+sub setHabilitado{
     my ($self) = shift;
-    my ($enabled) = @_;
-    $self->enabled($enabled);
+    my ($habilitado) = @_;
+    $self->habilitado($habilitado);
 }
 
 sub obtenerValoresCampo {
@@ -138,7 +146,7 @@ sub obtenerValoresCampo {
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getIssuecode;
+		$valor->{"clave"}=$ref_valores->[$i]->getId_tipo_prestamo;
 		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
@@ -152,7 +160,7 @@ sub obtenerValorCampo {
 	use C4::Modelo::CircRefTipoPrestamo::Manager;
  	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
 						( select   => [$campo],
-						  query =>[ issuecode => { eq => $id} ]);
+						  query =>[ id_tipo_prestamo => { eq => $id} ]);
     	
 	return ($ref_valores->[0]->getCampo($campo));
 }
@@ -160,20 +168,19 @@ sub obtenerValorCampo {
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
-    
-	if ($campo eq "issuecode") {return $self->getIssuecode;}
-	if ($campo eq "description") {return $self->getDescription;}
-	if ($campo eq "notforloan") {return $self->getNotforloan;}
-	if ($campo eq "maxissues") {return $self->getMaxissues;}
-	if ($campo eq "daysissues") {return $self->getDaysissues;}
-	if ($campo eq "renew") {return $self->getRenew;}
-	if ($campo eq "renewdays") {return $self->getRenewdays;}
-	if ($campo eq "dayscanrenew") {return $self->getDayscanrenew;}
-	if ($campo eq "enabled") {return $self->getEnabled;}
+
+	if ($campo eq "id_tipo_prestamo") {return $self->getId_tipo_prestamo;}
+	if ($campo eq "descripcion") {return $self->getDescripcion;}
+	if ($campo eq "id_disponibilidad") {return $self->getId_disponibilidad;}
+	if ($campo eq "prestamos") {return $self->getPrestamos;}
+	if ($campo eq "dias_prestamo") {return $self->getDias_prestamo;}
+	if ($campo eq "renovaciones") {return $self->getRenovaciones;}
+	if ($campo eq "dias_renovacion") {return $self->getDias_renovacion;}
+	if ($campo eq "dias_antes_renovacion") {return $self->getDias_antes_renovacion;}
+	if ($campo eq "habilitado") {return $self->getHabilitado;}
 
 	return (0);
 }
-
 
 sub nextMember{
     use C4::Modelo::RefSoporte;

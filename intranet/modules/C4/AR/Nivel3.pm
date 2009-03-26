@@ -299,7 +299,7 @@ sub detalleNivel3OPAC{
 	my ($id2,$itemtype,$tipo)=@_;
 	my $dbh = C4::Context->dbh;
 
-	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
+	my ($infoNivel3,@nivel3)=&C4::AR::Nivel3::buscarNivel3PorId2YDisponibilidad($id2);
 	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
 	my @nivel3Comp;
 	my @results;

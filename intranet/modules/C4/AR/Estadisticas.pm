@@ -177,7 +177,7 @@ sub historicoPrestamos{
 				cat_ref_tipo_nivel3 ITT, circ_ref_tipo_prestamo ISST ";
 
 	my $queryWhere= " where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
-	and(n3.id3 = I.id3)and(ISST.issuecode = I.issuecode)
+	and(n3.id3 = I.id3)and(ISST.id_tipo_prestamo = I.issuecode)
 	and(n2.id2 = n3.id2)and(ITT.itemtype = n2.tipo_documento)
 	and not(I.returndate is null) ";
 
@@ -1074,7 +1074,7 @@ sub historialReservas {
   $querySelect .= " 	it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
 
   my $queryFrom .= " 	FROM rep_historial_circulacion h LEFT JOIN circ_ref_tipo_prestamo it ";
-  $queryFrom .= " 	ON(it.issuecode = h.issuetype) ";
+  $queryFrom .= " 	ON(it.id_tipo_prestamo = h.issuetype) ";
   $queryFrom .= " 	LEFT JOIN cat_nivel1 n1 ";
   $queryFrom .= " 	ON (n1.id1 = h.id1) ";
   $queryFrom .= " 	LEFT JOIN cat_autor a ";
@@ -1142,7 +1142,7 @@ sub historicoCirculacion(){
 			LEFT JOIN borrowers u
 			ON (h.borrowernumber = u.borrowernumber)
 			LEFT JOIN circ_ref_tipo_prestamo it
-			ON(it.issuecode = h.issuetype)
+			ON(it.id_tipo_prestamo = h.issuetype)
 			LEFT JOIN cat_nivel1 n1
 			ON (n1.id1 = h.id1)
 			LEFT JOIN cat_autor a
@@ -1225,7 +1225,7 @@ sub historicoSanciones(){
 			LEFT JOIN circ_tipo_sancion st
 			ON (st.sanctiontypecode = hs.sanctiontypecode) 
 			LEFT JOIN circ_ref_tipo_prestamo it
-			ON (it.issuecode = st.issuecode) ";
+			ON (it.id_tipo_prestamo = st.issuecode) ";
 
 	my $where = "";
 

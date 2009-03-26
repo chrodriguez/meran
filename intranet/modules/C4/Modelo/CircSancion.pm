@@ -19,6 +19,14 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'id_sancion' ],
+
+	relationships => [
+	    reserva => {
+            class      => 'C4::Modelo::CircReserva',
+            column_map => { id_reserva => 'id_reserva' },
+            type       => 'one to one',
+        },
+    ],
 );
 
 
