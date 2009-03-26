@@ -49,10 +49,17 @@ function consultar(){
 	objAH.sendToServer();
 }
 
-function nota(id){
-	objAH.id=id;
-	objAH.notas=$("#"+id).val();
+function guardarNota(idNota){
+   objAH=new AjaxHelper(updateGuardarNota);
+   objAH.url="/cgi-bin/koha/reports/reportesDB.pl";
+   objAH.tipoAccion="GUARDAR_NOTA";
+	objAH.idModificacion=idNota;
+	objAH.nota=$("#"+idNota).val();
 	objAH.sendToServer();
+}
+
+function updateGuardarNota(responseText){
+   alert("LA NOTA SE GUARDO");
 }
 
 </script>

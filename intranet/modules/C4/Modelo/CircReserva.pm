@@ -129,7 +129,7 @@ sub setFecha_notificacion{
     $self->fecha_notificacion($fecha_notificacion);
 }
 
-sub getFecha_recodatorio{
+sub getFecha_recordatorio{
     my ($self) = shift;
     return ($self->fecha_recordatorio);
 }
@@ -141,7 +141,7 @@ sub getFecha_recodatorio_formateada{
     return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_recodatorio),$dateformat);
 }
 
-sub setFecha_recodatorio{
+sub setFecha_recordatorio{
     my ($self) = shift;
     my ($fecha_recodatorio) = @_;
     $self->fecha_recordatorio($fecha_recodatorio);

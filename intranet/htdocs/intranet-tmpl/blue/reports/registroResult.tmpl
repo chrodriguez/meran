@@ -18,22 +18,22 @@
 		<td class="tablaresultadoTitle" align="right" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
-[% FOREACH RESULTSLOOP %]
+[% FOREACH registro IN resultsloop %]
 	
   	<tr align='center' class="inputFontNormal">
   		<td height=25 >&nbsp;</td>
-  		<td> [% nomCompleto %] </td>
-  		<td> [% fecha %] </td>
-  		<td> [% operacion %]</td>
-  		<td> [% tipo %]</td>
-		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% tipo %]&bib=[% numero %]">[% numero %]</a></td>
+  		<td> [% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )  </td>
+  		<td> [% registro.fecha %] </td>
+  		<td> [% registro.operacion %]</td>
+  		<td> [% registro.tipo %]</td>
+		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>
 		
   		<td> 
-			<textarea class="inputFontNormal" id="[% idModificacion %]" name="notas2" cols="20" rows="6">[% nota %]</textarea>
+			<textarea class="inputFontNormal" id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
   		<td> 
-			<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="nota('[% idModificacion %]')"> 
+			<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% registro.idModificacion %]')"> 
 		</td>
  		<td height=25 >&nbsp;</td>
  	</tr>

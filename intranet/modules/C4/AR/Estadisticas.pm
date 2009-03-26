@@ -414,74 +414,48 @@ sub cantRegFechas{
 
 
 sub registroEntreFechas{
-        my ($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$fin,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-	my @bind;
-        my $query="SELECT idModificacion,nota,operacion,fecha,
-		   responsable,numero,tipo,surname,firstname
-		   FROM rep_registro_modificacion INNER JOIN borrowers ON
-		   (rep_registro_modificacion.responsable=borrowers.cardnumber) "; 
-	my $where = "";
-	
-	if ($chkfecha ne "false"){
-		$where = "WHERE";
-		$query.= $where." fecha>=? AND fecha<=?";
-		push(@bind,$fechaInicio);
-		push(@bind,$fechaFin);
+   my ($params_obj)=@_;
+
+   my @filtros;
+
+   use C4::Modelo::RepRegistroModificacion::Manager;
+
+	if ($params_obj->{'chkfecha'} ne "false"){
+      push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaInicio'}, 
+                                       gt => $params_obj->{'fechaInicio'}, 
+                                       eq=> $params_obj->{'fechaFin'}, 
+                                       lt => $params_obj->{'fechaFin'}  }
+                     ) );
 	}
 
-	if ($operacion ne ''){
-		if ($where eq ''){
-			$where = "WHERE";
-			$query.= $where." operacion=?";
-		}
-		else {$query.= " AND operacion=?";}
-		push(@bind,$operacion);
+	if ($params_obj->{'operacion'} ne ''){
+      push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
 	}
 
-	if ($tipo ne ''){
-		if ($where eq ''){
-			$where = "WHERE";
-			$query.= $where." tipo=?";
-		}
-		else {$query.= " AND tipo=?";}
-		push(@bind,$tipo);
-	}
+	if ($params_obj->{'tipo'} ne ''){
+      push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
+   }
 
-	if ($chkuser ne "false"){
-		if ($where eq ''){
-			$where = "WHERE";
-			$query.= $where." responsable=?";
-		}
-		else {$query.= " AND responsable=?";}
-		push(@bind,$user);
+	if ($params_obj->{'chkuser'} ne "false"){
+		push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
 	}
 	
-	if ($chknum ne "false"){
-		if ($where eq ''){
-			$where = "WHERE";
-			$query.= $where." numero >= ? AND numero <= ?";
-		}
-		else {$query.= " AND numero >= ? AND numero <= ?";}
-		push(@bind,$numDesde);
-		push(@bind,$numHasta);
+	if ($params_obj->{'chknum'} ne "false"){
+		push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
+                                    gt => $params_obj->{'numDesde'},
+                                    eq=> $params_obj->{'numHasta'},
+                                    lt => $params_obj->{'numHasta'}  }
+                     ) );
 	}
 
-	$query.=" ORDER BY ".$orden." limit $ini,$fin";
-        my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-        my @results;
+   my $registros = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
+                                                                        query => \@filtros,
+                                                                        sorty_by => $params_obj->{'orden'},
+                                                                        #limit => [$params_obj->{'ini'},$params_obj->{'fin'}],
+                                                                        require_objects => ['socio_responsable'],
+                                                                        );
 
-	my $IdModificacion;
-
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'fecha'}=format_date($data->{'fecha'},$dateformat);
-		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};	
-
-                push(@results,$data);
-        }
-        return (@results);
+   return (scalar(@$registros),$registros);
 }
 
 =item
@@ -693,7 +667,7 @@ sub prestamos{
          my ($id_ui,$orden,$ini,$fin,$estado,$fecha_inicio,$fecha_fin)=@_;
          my @results;
       
-           my @filtros;
+         my @filtros;
 
          if ((length($fecha_inicio) > 5)){
              push(@filtros, ( fecha_prestamo => { gt => $fecha_inicio, eq => $fecha_inicio }) );
@@ -791,12 +765,13 @@ sub prestamos{
 }
 
 sub reservas{
-   my ($id_ui,$orden,$offset,$limit,$tipo)=@_;
+   my ($id_ui,$orden,$ini,$cantR,$tipo)=@_;
 	my $dateformat = C4::Date::get_date_format();
    my @filtros;
    my @results;
 
    push (@filtros, ( id_ui => { eq => $id_ui}) );
+
 	if($tipo eq "GR"){
 		 push (@filtros, ( estado => { eq => 'G'}) );
 
@@ -810,23 +785,23 @@ sub reservas{
 
    my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(   query => \@filtros,
                                                                         sorty_by => [$orden],
-                                                                        limit => $limit,
-                                                                        offset => $offset,
+                                                                        limit => $cantR,
+                                                                        offset => $ini,
                                                                         require_objects => ['socio','nivel3'],
                                                                       );
 
    foreach my $reserva (@$reservas){
-		$reserva->setReminderdate(format_date($reserva->getReminderdate,$dateformat));
-		$reserva->setReservedate(format_date($reserva->getReservedate,$dateformat));
+		$reserva->setFecha_recordatorio(format_date($reserva->getFecha_recordatorio,$dateformat));
+		$reserva->setFecha_reserva(format_date($reserva->getFecha_reserva,$dateformat));
 		if ($reserva->getId3 eq "" ){
          $reserva->setId3("\-") 
       }
-      if ($reserva->getEmailaddress eq "" ){
-			$reserva->setEmailaddress("\-");
+      if ($reserva->socio->persona->getEmail eq "" ){
+			$reserva->socio->persona->setEmail("\-");
 			$reserva->{'mail'}=1;
       }
       push(@results,$reserva);
-      return (scalar(@results),\@results);
+      return (scalar(@results),@results);
    }
 
 }

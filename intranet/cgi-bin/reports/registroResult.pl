@@ -28,19 +28,20 @@ use C4::Date;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/registroResult.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
-			    });
+                                                            template_name => "reports/registroResult.tmpl",
+                                                            query => $input,
+                                                            type => "intranet",
+                                                            authnotrequired => 0,
+                                                            flagsrequired => {borrowers => 1},
+                                                            debug => 1,
+                                                       });
 
 my $obj=$input->param('obj');
 $obj= C4::AR::Utilidades::from_json_ISO($obj);
 
 my $nota = $obj->{'notas'};
 my $id   = $obj->{'id'};
+
 if ($id ne ""){
         insertarNota($id,$nota);
 }
@@ -54,27 +55,19 @@ my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
 my $fechaInicio =  format_date_in_iso($obj->{'dateselected'},$dateformat);
 my $fechaFin    =  format_date_in_iso($obj->{'dateselectedEnd'},$dateformat);
-my @resultsdata;
 my $cant;
 
 
-my $orden= $obj->{'orden'}||'surname';
-my $tipo = $obj->{'tipo'};
-my $operacion = $obj->{'operacion'};
-my $user= $obj->{'user'};# 10/04/2007 - Agregado para buscar por responsable.
-my $numDesde= $obj->{'numDesde'}; # Agregado para buscar por numero de elemento.
-my $numHasta= $obj->{'numHasta'};
-my $chkuser= $obj->{'chkuser'}; # checkbox que busca por usuario
-my $chknum= $obj->{'chknum'}; # checkbox que busca por numero
-my $chkfecha= $obj->{'chkfecha'}; #checkbox que busca por fecha
-my $funcion= $obj->{'funcion'};
-#Estoy ya en la pagina de registro
-	@resultsdata= registroEntreFechas($orden,$chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$ini,$cantR,$chkuser,$chknum,$user,$numDesde,$numHasta);
-	$cant=cantRegFechas($chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$chkuser,$chknum,$user,$numDesde,$numHasta);
+$obj->{'orden'}|= $obj->{'orden'}||'surname';
+$obj->{'fechaInicio'} = $fechaInicio;
+$obj->{'fechaFin'} = $fechaFin;
 
-C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
+my ($cant,$resultsdata) = C4::AR::Estadisticas::registroEntreFechas($obj);
 
-$t_params->{'resultsloop'}= \@resultsdata;
+
+# C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
+
+$t_params->{'resultsloop'}= $resultsdata;
 $t_params->{'cant'}= $cant;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

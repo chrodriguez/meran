@@ -529,6 +529,8 @@ ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NU
 CHANGE fecha_notificacion fecha_notificacion VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE fecha_recodatorio fecha_recordatorio VARCHAR( 20 ) NULL DEFAULT NULL ;
 
+ALTER TABLE `rep_registro_modificacion` CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '0';
+
 
 --TIPOS DE PRESTAMO (26/03/2209 13:00)
 
@@ -550,3 +552,4 @@ CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
  ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
 CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
+>>>>>>> .r1244

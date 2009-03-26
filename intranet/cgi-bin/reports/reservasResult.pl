@@ -37,7 +37,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			                                   });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-my $branch=$obj->{'branch'};
+my $branch=$obj->{'id_ui'};
 my $orden = $obj->{'orden'} || 'cardnumber';
 my $tipoReserva=$obj->{'tipoReserva'}; # Tipo de reserva
 my $funcion=$obj->{'funcion'};
@@ -45,6 +45,7 @@ my $funcion=$obj->{'funcion'};
 my $ini=$obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
+
 
 
 my ($cant,@resultsdata)= C4::AR::Estadisticas::reservas($branch,$orden,$ini,$cantR,$tipoReserva);

@@ -34,7 +34,7 @@ function consultar(){
 	tipoReserva=$("#tipoReserva").val();
 	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/reports/reservasResult.pl";
-	objAH.branch=$("#branch").val();
+	objAH.id_ui=$("#ui_id").val();
 	objAH.tipoReserva=tipoReserva;
 	objAH.funcion= "changePage";
 	objAH.sendToServer();
