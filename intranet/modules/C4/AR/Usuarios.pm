@@ -1106,13 +1106,16 @@ sub getSocioLike {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
     
-    if (defined($habilitados)){
+    if($socio ne 'TODOS'){
+        push (	@filtros, ( or   => [ apellido => { like => $socio.'%'}, 
+				nro_documento => { like => $socio.'%' }, 
+				legajo => { like => $socio.'%' }  ]) );
+    }
+
+	if (defined($habilitados)){
         push(@filtros, ( activo=> { eq => $habilitados}) );
     }
 
-    if($socio ne 'TODOS'){
-        push (@filtros, ( apellido => { like => $socio.'%' }) );
-    }
 
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($orden) ),

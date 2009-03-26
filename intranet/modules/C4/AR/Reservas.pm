@@ -939,10 +939,10 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 		}
 		#Se realiza una reserva
 		if($sePermiteReservaGrupo){
-			my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
+			my ($reserva) = C4::Modelo::CircReserva->new();
 			$reserva->load();
-			my $db = $reserva->db;
-# FIXME faltan devolver los parametros
+# 			my $db = $reserva->db;
+# # FIXME faltan devolver los parametros
 # 			my ($paraReservas)= reservar($params);
 # 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
 		}
