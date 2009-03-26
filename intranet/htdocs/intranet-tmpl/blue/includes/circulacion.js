@@ -75,11 +75,11 @@ function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
  * detalleUsuario
  * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
  */
-function detalleUsuario(borrower){
+function detalleUsuario(nro_socio){
 	objAH=new AjaxHelper(updateInfoUsuario);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
-	objAH.borrowernumber= borrower;
+	objAH.nro_socio= nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -97,14 +97,14 @@ function updateInfoUsuario(responseText){
 
 /*
  * detalleSanciones
- * Funcion que se realiza una consulta para mostrar el detalle de las sanciones del borrower
+ * Funcion que se realiza una consulta para mostrar el detalle de las sanciones del nro_socio
  */
-function detalleSanciones(borr){
+function detalleSanciones(nro_socio){
 
 	objAH=new AjaxHelper(updateDetalleSanciones);
 	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
-	objAH.borrowernumber= borr;
+	objAH.nro_socio= nro_socio;
 	objAH.sendToServer();
 }
 
@@ -120,11 +120,11 @@ function updateDetalleSanciones(responseText){
  * (updateInfoReservas o updateInfoReservaConChck -- esta definida en prestamos.tmpl)
  * prestamos.tmpl---> tabla de reservas para poder prestar.
  */
-function detalleReservas(borrower,funcion){
+function detalleReservas(nro_socio,funcion){
 	objAH=new AjaxHelper(funcion);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
-	objAH.borrnumber= borrower;
+	objAH.nro_socio= nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -146,11 +146,11 @@ function updateInfoReservas(responseText){
  * Funcion que hace la consulta Ajax para traer los prestamos del usuario seleccionado.
  * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
  */
-function detallePrestamos(borrower,funcion){
+function detallePrestamos(nro_socio,funcion){
 	objAH=new AjaxHelper(funcion);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
-	objAH.borrnumber= borrower;
+	objAH.nro_socio= nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -192,7 +192,7 @@ function realizarAccion(accion,chckbox,funcion){
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= accion;
 		objAH.datosArray= array;
-		objAH.borrowernumber=usuario.ID;
+		objAH.nro_socio=usuario.ID;
 		//se envia la consulta
 		objAH.sendToServer();
 	}
@@ -273,7 +273,7 @@ function prestar(){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
 	objAH.datosArray= infoPrestamos_array;
-	objAH.borrowernumber= usuario.ID;
+	objAH.nro_socio= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -286,7 +286,7 @@ function prestar(){
  */
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-	clearMessages();
+// 	clearMessages();
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
@@ -323,7 +323,7 @@ function cancelarReserva(reserveNumber){
 		objAH.debug= true;
 		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CANCELAR_RESERVA';
-		objAH.borrowernumber=usuario.ID;
+		objAH.nro_socio= usuario.ID;
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
@@ -381,7 +381,7 @@ function devolver_renovar(accion){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
 	objAH.datosArray= infoPrestamos_array;
-	objAH.borrowernumber= usuario.ID;
+	objAH.nro_socio= usuario.ID;
 	objAH.accion=accion;
 	//se envia la consulta
 	objAH.sendToServer();

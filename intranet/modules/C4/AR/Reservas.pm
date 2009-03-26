@@ -459,7 +459,7 @@ sub getDisponibilidad{
 	my  $catNivel3= C4::Modelo::CatNivel3->new(id3 => $id3);
         $catNivel3->load;
 
-	return $catNivel3->ref_disponibilidad->getNombre;
+	return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getId_disponibilidad);
 }
 
 =item
@@ -513,8 +513,8 @@ sub getReservasDeSocio {
     push(@filtros, ( estado 	=> { ne => 'P'} ));
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
-    return ($reservas_array_ref,scalar(@$reservas_array_ref));
 
+    return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
 sub getReservasDeId2 {
@@ -760,7 +760,7 @@ sub _verificacionesPostPrestamo {
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
 	my $barcode= $params->{'barcode'};
-	my $borrowernumber= $params->{'borrowernumber'};
+	my $nro_socio= $params->{'nro_socio'};
 	my $loggedinuser= $params->{'loggedinuser'};
 	my $issueType= $params->{'issuesType'};
 	my $dateformat=C4::Date::get_date_format();
@@ -768,13 +768,13 @@ open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por
 print A "desde verificacionesPostPrestamo\n";
 print A "id2: $id2\n";
 print A "id3: $id3\n";
-print A "borrowernumber: $borrowernumber\n";
+print A "nro_socio: $nro_socio\n";
 print A "issueType: $issueType\n";
 
 	#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
 	if ($issueType eq "DO"){
 	# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
-		my ($cant, @issuetypes) = C4::AR::Prestamos::PrestamosMaximos($borrowernumber);
+		my ($cant, @issuetypes) = C4::AR::Prestamos::PrestamosMaximos($nro_socio);
 		foreach my $iss (@issuetypes){
 			if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
 # 				$codMsg= 'P108';
@@ -872,18 +872,18 @@ sub t_realizarPrestamo{
 }
 
 sub _chequeoParaPrestamo {
-open(A,">>/tmp/debugChequeo.txt");
 	my($params,$msg_object)=@_;
 	my $dbh=C4::Context->dbh;
 
-	my $borrowernumber= $params->{'borrowernumber'};
+	my $nro_socio= $params->{'nro_socio'};
 	my $id2= $params->{'id2'};
 	my $id3= $params->{'id3'};
-print A "id2: $id2\n";
-print A "id3: $id3\n";
+C4::AR::Debug::debug("_chequeoParaPrestamo=> id2: ".$id2);
+C4::AR::Debug::debug("_chequeoParaPrestamo=> id3: ".$id3);
+C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 #Se verifica si ya se tiene la reserva sobre el grupo
-	my ($reservas, $cant)= getReservasDeSocio($borrowernumber, $id2);# ver lo que sigue.
-	$params->{'reservenumber'}= $reservas->[0]->getId_reserva;
+	my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);# ver lo que sigue.
+# 	$params->{'reservenumber'}= $reservas->[0]->getId_reserva;
 
 # print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
 
@@ -899,7 +899,7 @@ print A "id3: $id3\n";
 	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
 		if($id3 != $reservas->[0]->getId3){
 		#Los ids son distintos, se intercambian.
-			&intercambiarId3($borrowernumber,$id2,$id3,$reservas->[0]->getId3,$msg_object);
+			&intercambiarId3($nro_socio,$id2,$id3,$reservas->[0]->getId3,$msg_object);
 		}
 	}
 	elsif($cant==1 && $disponibilidad eq "Para Sala"){
@@ -939,8 +939,12 @@ print A "id3: $id3\n";
 		}
 		#Se realiza una reserva
 		if($sePermiteReservaGrupo){
-			my ($paraReservas)= reservar($params);
-			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
+			my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
+			$reserva->load();
+			my $db = $reserva->db;
+# FIXME faltan devolver los parametros
+# 			my ($paraReservas)= reservar($params);
+# 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
 		}
 	}
 	
@@ -951,7 +955,6 @@ print A "id3: $id3\n";
 		#se realizan las verificacioines luego de realizar el prestamo
 		_verificacionesPostPrestamo($params,$msg_object);
 	}
-close(A);
 }
 
 sub insertarPrestamo {
@@ -1138,8 +1141,9 @@ sub cant_waiting{
         return($result);
 }
 
+# FIXME falta pasar CheckWaiting
 sub CheckWaiting {
-    	my ($borrowernumber)=@_;
+    	my ($nro_socio)=@_;
 
     	my $dbh = C4::Context->dbh;
     	my @itemswaiting;
@@ -1154,13 +1158,14 @@ sub CheckWaiting {
 				WHERE nro_socio =?");
 
 
- 	$sth->execute($borrowernumber);
+ 	$sth->execute($nro_socio);
 
-    	while (my $data=$sth->fetchrow_hashref) {
+	while (my $data=$sth->fetchrow_hashref) {
 		push(@itemswaiting,$data);
-    	}
-    	$sth->finish;
-    	return (scalar(@itemswaiting),\@itemswaiting);
+	}
+	$sth->finish;
+
+	return (scalar(@itemswaiting),\@itemswaiting);
 }
 
 

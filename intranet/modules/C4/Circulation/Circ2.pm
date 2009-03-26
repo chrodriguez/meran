@@ -559,8 +559,7 @@ sub patronflags {
 		$flaginfo{'message'} = "$patroninformation->{'borrowernotes'}";
 		$flags{'NOTES'} = \%flaginfo;
 	}
-	my ($odues, $itemsoverdue)
-			= checkoverdues($patroninformation->{'borrowernumber'});
+	my ($odues, $itemsoverdue)= checkoverdues($patroninformation->{'nro_socio'});
 	if ($odues > 0) {
 		my %flaginfo;
 		$flaginfo{'message'} = "Yes";
@@ -570,7 +569,8 @@ sub patronflags {
 		}
 		$flags{'ODUES'} = \%flaginfo;
 	}
-	my ($nowaiting, $itemswaiting)= &C4::AR::Reservas::CheckWaiting($patroninformation->{'borrowernumber'});
+# FIXME falta pasar CheckWaiting
+	my ($nowaiting, $itemswaiting)= &C4::AR::Reservas::CheckWaiting($patroninformation->{'nro_socio'});
 	if ($nowaiting > 0) {
 		my %flaginfo;
 		$flaginfo{'message'} = "Items reservados disponibles";
@@ -581,10 +581,11 @@ sub patronflags {
 }
 
 # Not exported
+# FIXME falta pasar checkoverdues
 sub checkoverdues {
 # From Main.pm, modified to return a list of overdueitems, in addition to a count
   #checks whether a borrower has overdue items
-	my ($bornum)=@_;
+	my ($nro_socio)=@_;
 	my @datearr = localtime;
 	my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
 	my @overdueitems;
@@ -595,12 +596,14 @@ sub checkoverdues {
 				INNER JOIN cat_nivel2 n2 ON (n3.id2 = n2.id2)
 				INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
 				WHERE i.nro_socio  = ? AND i.fecha_devolucion IS NULL AND i.fecha_prestamo < ?");
-	$sth->execute($bornum,$today);
+
+	$sth->execute($nro_socio,$today);
 	while (my $data = $sth->fetchrow_hashref) {
-	push (@overdueitems, $data);
-	$count++;
+		push (@overdueitems, $data);
+		$count++;
 	}
-	$sth->finish;
+	$sth->finish;	
+
 	return ($count, \@overdueitems);
 }
 

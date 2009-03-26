@@ -1,6 +1,7 @@
 [% INCLUDE  "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
+<script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
 
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
@@ -72,7 +73,7 @@ function updateBuscarUsuario(responseText){
 	vBuscarUsuario.html=responseText;
 	vBuscarUsuario.create();	
 	vBuscarUsuario.titulo= 'Buscar Usuario';
-	vBuscarUsuario.height('40%');
+	vBuscarUsuario.height('30%');
 	vBuscarUsuario.width('40%');
 	vBuscarUsuario.open();
 }
@@ -131,28 +132,11 @@ function objeto_datos(){
 	this.accion;
 }
 
-// function objeto_usuario(){
-// 	this.text;
-// 	this.ID;
-// }
-
-// function item(){
-// 	this.id3;
-// 	this.barcode;
-// }
-
 
 /******************************************CIRCULACUION DESDE EL DETALLE****************************************/
 var items_array = new Array();
 // parche, ver si se puede hacer mejor
 var grupo;
-
-// function buscarUsuario(id3, id2){
-// 
-// 	items_array[0]=id3;
-// 	grupo= id2;
-// 	openWindow();
-// }
 
 
 function renovar(accion,userId,userNom,id2,id3){
@@ -168,7 +152,7 @@ function renovar(accion,userId,userNom,id2,id3){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
 	objAH.datosArray= array;
-	objAH.borrowernumber=usuario.ID;
+	objAH.nro_socio= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
@@ -188,7 +172,7 @@ function devolver(accion,userId,userNom,id2,id3){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= array;
-	objAH.borrowernumber= usuario.ID;
+	objAH.nro_socio= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
@@ -222,7 +206,7 @@ function confirmarPrestamo(){
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
 		objAH.datosArray= items_array;
-		objAH.borrowernumber=usuario.ID;
+		objAH.nro_socio=usuario.ID;
 		//se envia la consulta
 		objAH.sendToServer();
 		vBuscarUsuario.close();
@@ -233,7 +217,7 @@ function confirmarPrestamo(){
 //esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-	clearMessages();
+// 	clearMessages();
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
@@ -462,10 +446,10 @@ function updateBorrarNivel1(responseText){
 			[% IF prestado %]
 
 				<input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
-					onClick="devolver('DEVOLUCION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+					onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
 				[% IF renew %]
 					<input type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
-							onClick="renovar('RENOVACION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+							onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
 				[% END %]
 			[% ELSE %]
 				<input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 

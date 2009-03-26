@@ -6,15 +6,14 @@ use CGI;
 use C4::AR::Usuarios;
 
 my $input = new CGI;
-my $usuarioStr=$input->param('q');
+my $usuarioStr= $input->param('q');
 my $textout="";
 
+my ($cant, $usuarios_array_ref)= C4::AR::Usuarios::getSocioLike($usuarioStr);
 
-my @result= C4::AR::Usuarios::buscarBorrower($usuarioStr);
-
-foreach my $usuario (@result){
-	$textout.=$usuario->{'surname'}.", ".$usuario->{'firstname'}."|".$usuario->{'borrowernumber'}."\n";
+foreach my $usuario (@$usuarios_array_ref){
+	$textout.= $usuario->persona->getApellido.", ".$usuario->persona->getNombre."|".$usuario->getNro_socio."\n";
 }
 
-print "Content-type: text/html\n\n";
+print $input->header;
 print $textout;
