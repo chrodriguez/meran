@@ -522,7 +522,7 @@ CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00'
 
 ALTER TABLE `circ_reserva` CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
 CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL =======
- ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
 
 
 ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NULL DEFAULT '0000-00-00' ,
@@ -552,4 +552,26 @@ CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
  ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
 CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
->>>>>>> .r1244
+
+-- GASPAR EL 27/03/2009
+
+CREATE TABLE `V3`.`cat_historico_disponibilidad` (
+`id_detalle` int( 11 ) NOT NULL AUTO_INCREMENT ,
+`id3` int( 11 ) NOT NULL ,
+`detalle` varchar( 30 ) NOT NULL ,
+`timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+`fecha` varchar( 10 ) NOT NULL default '0000-00-00',
+`tipo_prestamo` varchar( 40 ) NOT NULL ,
+`id_ui` varchar( 5 ) NOT NULL ,
+PRIMARY KEY ( `id_detalle` )
+) ENGINE = InnoDB DEFAULT CHARSET = latin1 AUTO_INCREMENT =2736;
+
+INSERT INTO `V3`.`cat_historico_disponibilidad`
+SELECT *
+FROM `V3_NEW`.`cat_detalle_disponibilidad` ;
+
+DROP TABLE `V3_NEW`.`cat_detalle_disponibilidad` ;
+
+UPDATE `ref_disponibilidad` SET `nombre` = 'PRESTAMO' WHERE `ref_disponibilidad`.`codigo` =3 LIMIT 1 ;
+
+UPDATE `ref_disponibilidad` SET `nombre` = 'SALA DE LECTURA' WHERE `ref_disponibilidad`.`codigo` =2 LIMIT 1 ;

@@ -25,22 +25,22 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $tipoItem = $obj->{'tiposItems'};
 my $tipoPrestamo = $obj->{'tipoPrestamos'};
 my $catUsuarios = $obj->{'catUsuarios'};
-my $orden=$obj->{'orden'}||'firstname';
+my $orden = $obj->{'orden'} = $obj->{'orden'}||'firstname';
 my $funcion=$obj->{'funcion'};
 
 
 #Fechas
-my $f_ini=$obj->{'f_ini'}||'';
-my $f_fin=$obj->{'f_fin'}||'';
+$obj->{'f_ini'}=$obj->{'f_ini'}||'';
+$obj->{'f_fin'}=$obj->{'f_fin'}||'';
 
 my $ini= ($obj->{'ini'});
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my $dateformat = C4::Date::get_date_format();
-my $fechaIni = C4::Date::format_date_in_iso($f_ini,$dateformat);
-my $fechaFin = C4::Date::format_date_in_iso($f_fin,$dateformat);
+my $fechaIni = C4::Date::format_date_in_iso($obj->{'f_ini'},$dateformat);
+my $fechaFin = C4::Date::format_date_in_iso($obj->{'f_fin'},$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($orden,$ini,$cantR,$fechaIni,$fechaFin,$tipoItem,$tipoPrestamo,$catUsuarios);
+my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($obj);
 
 C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 

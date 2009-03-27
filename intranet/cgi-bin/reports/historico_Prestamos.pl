@@ -45,25 +45,6 @@ my $i=0;
 my $hash;
 my $value = "";
 my $key = "";
-foreach (@tipoDePrestamos) {
-	#obtengo el hash
- 	$hash = @tipoDePrestamos[$i];
-	$value = $hash->{'description'};
-	$key = $hash->{'issuecode'};
-	push @select_tiposPrestamos_Values, $key;
-	$select_tiposPrestamos_Labels{$key} = $value;
-	$i++;
-}
-
-my $CGISelectTiposPrestamos=CGI::scrolling_list(-name      => 'tipoPrestamos',
-                                        	-id        => 'tipoPrestamos',
-                                        	-values    => \@select_tiposPrestamos_Values,
-                                        	-labels    => \%select_tiposPrestamos_Labels,
-                                        	-size      => 1,
-						-defaults  => 'SIN SELECCIONAR'
-                                 		);
-
-#******************************Fin Select de Tipos de Prestamos***********************************
 
 #************************************Select de Tipos de Items************************************
 my @select_tiposItems_Values;
@@ -88,16 +69,20 @@ foreach (@tiposDeItems) {
 	$i++;
 }
 
-my $CGISelectTiposItems=CGI::scrolling_list(	-name      => 'tiposItems',
-                                        	-id        => 'tiposItems',
-                                        	-values    => \@select_tiposItems_Values,
-                                        	-labels    => \%select_tiposItems_Labels,
-                                        	-size      => 1,
-						-defaults  => 'SIN SELECCIONAR'
-                                 		);
+my $CGISelectTiposPrestamos=C4::AR::Utilidades::generarComboTipoPrestamo();
+
+
+# CGI::scrolling_list(	-name      => 'tiposItems',
+#                                         	-id        => 'tiposItems',
+#                                         	-values    => \@select_tiposItems_Values,
+#                                         	-labels    => \%select_tiposItems_Labels,
+#                                         	-size      => 1,
+# 						-defaults  => 'SIN SELECCIONAR'
+#                                  		);
 #************************************Fin Select de Tipos de Items*********************************
 
-
+my $comboCategoriasDeSocio = C4::AR::Utilidades::generarComboCategoriasDeSocio();
+my $CGISelectTiposItems = C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'orden'}= $orden;
 $t_params->{'selectTiposItems'}= $CGISelectTiposItems;
 $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;

@@ -85,6 +85,7 @@ use vars qw(@EXPORT @ISA);
     &buscarLenguajes
     &buscarSoportes
     &buscarNivelesBibliograficos
+    &generarComboTipoPrestamo
 
 );
 
@@ -1332,21 +1333,30 @@ sub generarComboTipoDeDoc {
 sub generarComboTipoNivel3{
 
     my ($params) = @_;
-    
+
     my @select_tipo_nivel3_array;
     my %select_tipo_nivel3_hash;
 
     my ($tipoNivel3_array_ref)= &C4::AR::Referencias::obtenerTiposNivel3();
+
     foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
         push(@select_tipo_nivel3_array, $tipoNivel3->id_tipo_doc);
         $select_tipo_nivel3_hash{$tipoNivel3->id_tipo_doc}= $tipoNivel3->nombre;
     }
 
     my %options_hash; 
-   
-    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
-    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
-    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}= $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
 
     $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
     $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
@@ -1366,6 +1376,51 @@ sub generarComboTipoNivel3{
     return $comboTipoNivel3;
 }
 
+sub generarComboTipoPrestamo{
+
+    my ($params) = @_;
+
+    my @select_tipo_nivel3_array;
+    my %select_tipo_prestamo_hash;
+    use C4::Modelo::CircRefTipoPrestamo::Manager;
+    my ($tipoPrestamo_array)= C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo();
+
+    foreach my $tipoPrestamo (@$tipoPrestamo_array) {
+        push(@select_tipo_nivel3_array, $tipoPrestamo->id_tipo_prestamo);
+        $select_tipo_prestamo_hash{$tipoPrestamo->id_tipo_prestamo}= $tipoPrestamo->descripcion;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}= $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
+    $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+
+#FIXME falta un default no?
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+
+
+    push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_tipo_nivel3_array;
+    $options_hash{'labels'}= \%select_tipo_prestamo_hash;
+
+    my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
+
+    return $comboTipoNivel3;
+}
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI {

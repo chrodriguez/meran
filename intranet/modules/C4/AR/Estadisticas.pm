@@ -147,75 +147,18 @@ sub historicoPrestamos{
 	#Apellido y Nombre, DNI,Categoria del Usuario, Tipo de Prestamo, Codigo de Barras, 
 	#Fecha de Prestamo, Fecha de Devolucion, Tipo de Item
 	
-	my ($orden,$ini,$fin,$f_ini,$f_fin,$tipoItem,$tipoPrestamo,$catUsuario)=@_;
-	my $dbh = C4::Context->dbh;
+	my ($params_obj)=@_;
+
 	my $dateformat = C4::Date::get_date_format();
 
-	my $datesSQL='';
-	if (($f_ini ne '') and ($f_fin ne '')){
-		$datesSQL=' AND I.date_due BETWEEN "'.format_date_in_iso($f_ini,$dateformat).'" AND "'.format_date_in_iso($f_fin,$dateformat).'" ';
-	}
+   my @filtros;
 
-	my $tipoDePrestamoSQL;
-	if ($tipoPrestamo ne "-1"){
-		$tipoDePrestamoSQL= 'and ISST.issuecode = "'.$tipoPrestamo.'"';
-	}	
+   my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                        );	
 
-	my $tipoDeItemSQL = '';
-	if ($tipoItem ne "-1"){
-		$tipoDeItemSQL= 'and ITT.itemtype = "'.$tipoItem.'"';
-	}
-
-	my $catUsuarioSQL = '';
-	if ($catUsuario ne "-1"){
-		$catUsuarioSQL= 'and C.categorycode = "'.$catUsuario.'"';
-	}
-
-	my $querySelect=" Select B.firstname, B.surname, B.documentnumber as DNI, C.description as CatUsuario, ISST.description as tipoPrestamo, n3.barcode, I.date_due as fechaPrestamo, I.returndate as fechaDevolucion, ITT.description as tipoItem ";
-
-	my $queryFrom= " 	From  circ_prestamo I, borrowers B, usr_ref_categoria_socio C, cat_nivel3 n3, cat_nivel2 n2, 
-				cat_ref_tipo_nivel3 ITT, circ_ref_tipo_prestamo ISST ";
-
-	my $queryWhere= " where (B.borrowernumber = I.borrowernumber)and(C.categorycode = B.categorycode)
-	and(n3.id3 = I.id3)and(ISST.id_tipo_prestamo = I.issuecode)
-	and(n2.id2 = n3.id2)and(ITT.itemtype = n2.tipo_documento)
-	and not(I.returndate is null) ";
-
-	my $queryCount= " 	Select count(*) as cant 
-				$queryFrom
-				$queryWhere
-				$datesSQL
-				$tipoDeItemSQL
-				$tipoDePrestamoSQL
-				$catUsuarioSQL ";
-
-	my $sth=$dbh->prepare($queryCount);
-        $sth->execute();
-	my $dataResult= $sth->fetchrow_hashref;
-	my $cant= $dataResult->{'cant'};
-
-        my $query ="	$querySelect
-			$queryFrom
-			$queryWhere
-			$datesSQL
-			$tipoDeItemSQL
-			$tipoDePrestamoSQL
-			$catUsuarioSQL
-			Order By ".$orden;
-
-	$query .= " limit ".$ini.",".$fin;
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute();
-
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-		$data->{'fechaPrestamo'}=format_date($data->{'fechaPrestamo'},$dateformat);
-		$data->{'fechaDevolucion'}=format_date($data->{'fechaDevolucion'},$dateformat);
-		push(@results,$data);
-
-        };
-	return($cant,@results);
+	return(scalar(@$prestamos),$prestamos);
 }
 
 
@@ -255,46 +198,41 @@ sub prestamosAnual{
 #
 #Ejemplares perdidos del branch que le paso por parametro
 sub disponibilidad{
-        my ($branch,$orden,$avail,$fechaIni,$fechaFin,$ini,$cantR)=@_;
-        my $dbh = C4::Context->dbh;
+   my ($params_obj)=@_;
+   use C4::Modelo::CatHistoricoDisponibilidad::Manager;
 	my $dateformat = C4::Date::get_date_format();
-	my @results;
 	my $dates='';
-	my @bind;
-	push(@bind,$avail);
-	push(@bind,$branch);
-	if (($fechaIni ne '') && ($fechaFin ne '')){
-		$dates=" AND av.date between ? AND ? ";
-		push(@bind,format_date_in_iso($fechaIni,$dateformat));
-		push(@bind,format_date_in_iso($fechaFin,$dateformat));
-	}
-	my $query= "SELECT COUNT(*)";
-	my $query2 = "SELECT DISTINCT n3.*, anio_publicacion, titulo, autor AS id,MAX(av.date) AS date, a.completo AS autor";
-	my $resto= " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON (n3.id2 = n2.id2) 
-		     INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1) 
-		     INNER JOIN cat_detalle_disponibilidad av ON ( av.id3 = n3.id3  ) 
-		     INNER JOIN cat_autor a ON (a.id = n1.autor)
-		     WHERE n3.wthdrawn = ? AND homebranch=? ".$dates." GROUP BY av.id3";
-	
-	$query.=$resto;
-        my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	my $cant=$sth->rows;
+   my @filtros;
 
-	$query2.=$resto." ORDER BY ".$orden;
-	if($ini ne ""){
-		$query2.=" limit ?,?";
-		push(@bind,$ini);
-		push(@bind,$cantR);
+	if (($params_obj->{'fechaInicio'} ne '') && ($params_obj->{'fechaInicio'} ne '')){
+		push(@filtros, ( fecha => {      eq=> format_date_in_iso($params_obj->{'fechaInicio'},$dateformat), 
+                                       gt => format_date_in_iso($params_obj->{'fechaInicio'},$dateformat), 
+                                 }
+                      ) );
+      
+      push(@filtros, ( fecha => {      eq=> format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                       lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                }
+                     ) );
 	}
-	$sth=$dbh->prepare($query2);
-	$sth->execute(@bind);
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'date'}=format_date($data->{'date'},$dateformat);
-		$data->{'number'}=C4::AR::Nivel2::getEdicion($data->{'id2'});
-		push(@results,$data);
-        }
-        return ($cant,@results);
+
+   push(@filtros, ( id_ui => { eq => $params_obj->{'ui'} } ) );
+
+   push(@filtros, ( tipo_prestamo => { eq => $params_obj->{'disponibilidad'} } ) );
+
+   my $det_disponibilidad = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(
+                                                                                                          query => \@filtros,
+                                                                                                          distinct => 1,
+                                                                                                          require_objects => ['nivel3'],
+                                                                                                          limit => $params_obj->{'cantR'},
+                                                                                                          offset => $params_obj->{'ini'},
+                                                                                                          sorty_by => $params_obj->{'orden'},
+                                                                                                         );
+
+
+
+
+   return (scalar(@$det_disponibilidad),$det_disponibilidad);
 }
 
 #Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
@@ -422,11 +360,16 @@ sub registroEntreFechas{
 	if ($params_obj->{'chkfecha'} ne "false"){
       push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaInicio'}, 
                                        gt => $params_obj->{'fechaInicio'}, 
-                                       eq=> $params_obj->{'fechaFin'}, 
-                                       lt => $params_obj->{'fechaFin'}  }
+                                 }
+                      ) );
+      
+      push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaFin'},
+                                       lt => $params_obj->{'fechaFin'}  
+                                }
                      ) );
 	}
 
+   C4::AR::Debug::debug($params_obj->{'tipo'});
 	if ($params_obj->{'operacion'} ne ''){
       push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
 	}
@@ -441,16 +384,21 @@ sub registroEntreFechas{
 	
 	if ($params_obj->{'chknum'} ne "false"){
 		push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
-                                    gt => $params_obj->{'numDesde'},
+                                    gt => $params_obj->{'numDesde'}, 
+                                 } ) );
+
+      push(@filtros, ( numero => {
                                     eq=> $params_obj->{'numHasta'},
-                                    lt => $params_obj->{'numHasta'}  }
+                                    lt => $params_obj->{'numHasta'}, 
+                                 }
                      ) );
 	}
 
    my $registros = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
                                                                         query => \@filtros,
                                                                         sorty_by => $params_obj->{'orden'},
-                                                                        #limit => [$params_obj->{'ini'},$params_obj->{'fin'}],
+                                                                        limit => $params_obj->{'cantR'},
+                                                                        offset => $params_obj->{'fin'},
                                                                         require_objects => ['socio_responsable'],
                                                                         );
 

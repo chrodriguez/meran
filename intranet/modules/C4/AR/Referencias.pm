@@ -30,8 +30,8 @@ use JSON;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-                &obtenerTiposDeDocumentos
-                &obtenerCategoriaDeSocio
+            &obtenerTiposDeDocumentos
+            &obtenerCategoriaDeSocio
 				&getCamposDeTablaRef
 				&obtenerValoresTablaRef
 				&obtenerTablasDeReferencia
@@ -84,7 +84,7 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
             &obtenerTiposDeDocumentos
             &obtenerTiposNivel3
-    );
+          );
 
 =item
 Esta funcion devuelve un arreglo de objetos tipo de documento

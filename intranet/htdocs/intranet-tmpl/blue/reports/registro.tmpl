@@ -41,8 +41,9 @@ function consultar(){
 	objAH.dateselected=$("#dateselected").val();
 	objAH.dateselectedEnd=$("#dateselectedEnd").val();
 	objAH.operacion=$("input[@name='operacion']:checked").val();
-	objAH.tipo=$("input[@name='tipo']:checked").val();
+	objAH.tipo=     $("input[@name='tipo']:checked").val();
 	objAH.user=$("#user").val();
+   alert("TIPO SELECCIONADO: "+objAH.tipo);
 	objAH.numDesde=$("#numDesde").val();
 	objAH.numHasta=$("#numHasta").val();
 	objAH.funcion= "changePage";
@@ -74,7 +75,7 @@ function updateGuardarNota(responseText){
 </table>
 
 
-
+<!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
 <br>
 <table border="0" cellspacing="0" cellpadding="0">
   	<tr>

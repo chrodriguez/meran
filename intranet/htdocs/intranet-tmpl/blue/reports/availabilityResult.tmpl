@@ -26,16 +26,16 @@
 
 		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH resultsloop %]
+[% FOREACH historico IN resultsloop %]
 	<tr align="center" class="inputFontNormal">
   		<td height=25>&nbsp;</td>
-  		<td align="left"> [% autor %]</td>
-  		<td> [% HTML.escape(titulo) %] </td>
-  		<td> [% signatura_topografica %] </td>
-  		<td> [% barcode %] </td>
+  		<td align="left"> [% historico.nivel3.nivel2.nivel1.cat_autor.getNombre %]</td>
+  		<td> [% HTML.escape(historico.nivel3.nivel2.nivel1.getTitulo) %] </td>
+  		<td> [% historico.nivel3.getSignatura_topografica %] </td>
+  		<td> [% historico.nivel3.barcode %] </td>
   		<td> [% number %] </td>
-  		<td> [% anio_publicacion %] </td>
-  		<td> [% date %] </td>  
+  		<td> [% historico.nivel3.nivel2.getAnio_publicacion %] </td>
+  		<td> [% historico.fecha %] </td>  
   		<td height=25>&nbsp;</td>
        </tr>
 [% END %]

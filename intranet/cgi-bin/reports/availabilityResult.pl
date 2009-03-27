@@ -20,35 +20,44 @@ my ($template, $session, $t_params, $cookie) = get_template_and_user({
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
-my $orden = $obj->{'orden'}||'date';
+$obj->{'orden'} = $obj->{'orden'}||'date';
 my $ini =$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $ui = $obj->{'ui'};
-my $disponibilidad= $obj->{'disponibilidad'}||1;
+$obj->{'disponibilidad'}= C4::Modelo::RefDisponibilidad->new(codigo => $obj->{'disponibilidad'} );
+   $obj->{'disponibilidad'}->load();
+my $disponibilidad = $obj->{'disponibilidad'} = $obj->{'disponibilidad'}->getNombre;
 my $fechaIni=$obj->{'fechaIni'};
 my $fechaFin=$obj->{'fechaFin'};
 
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
-my ($cantidad, @resultsdata)= C4::AR::Estadisticas::disponibilidad($ui,$orden,$disponibilidad,$fechaIni,$fechaFin,$ini,$cantR);
+$obj->{'ini'} = $ini;
+$obj->{'cantR'} = $cantR;
+
+my ($cantidad, $resultsdata)= C4::AR::Estadisticas::disponibilidad($obj);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $availD;
-if ($disponibilidad eq 0){
-	$availD='Disponible';
-}
-else{
-	my $av=C4::AR::Busquedas::getAvail($disponibilidad);
-	if ($av){$availD=$av->{'description'};}
+   if ($disponibilidad eq 0){
+	   $availD='Disponible';
+   }
+   else{
+   
+	   my $av=C4::AR::Busquedas::getAvail($disponibilidad);
+   
+	   if ($av){
+         $availD=$av->{'description'};
+      }
 }
 
-$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'resultsloop'}= $resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'ui'}= $ui;
-$t_params->{'orden'}= $orden;
-$t_params->{'disponibilidad'}= $disponibilidad;
+$t_params->{'orden'}= $obj->{'orden'};
+$t_params->{'disponibilidad'}= $obj->{'disponibilidad'};
 $t_params->{'availD'}= $availD;
 $t_params->{'fechaIni'}= $fechaIni;
 $t_params->{'fechaFin'}= $fechaFin;

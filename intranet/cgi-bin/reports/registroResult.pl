@@ -50,7 +50,8 @@ if ($id ne ""){
 my $ini=$obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
-
+$obj->{'cantR'} = $cantR;
+$obj->{'fin'} = $ini;
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
 my $fechaInicio =  format_date_in_iso($obj->{'dateselected'},$dateformat);
@@ -62,9 +63,7 @@ $obj->{'orden'}|= $obj->{'orden'}||'surname';
 $obj->{'fechaInicio'} = $fechaInicio;
 $obj->{'fechaFin'} = $fechaFin;
 
-# FIXME lo comente hasta q se suba el PM C4/Modelo/RepRegistroModificacion/Manager.pm
-# my ($cant,$resultsdata) = C4::AR::Estadisticas::registroEntreFechas($obj);
-my ($cant,$resultsdata);
+my ($cant,$resultsdata) = C4::AR::Estadisticas::registroEntreFechas($obj);
 
 
 # C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
