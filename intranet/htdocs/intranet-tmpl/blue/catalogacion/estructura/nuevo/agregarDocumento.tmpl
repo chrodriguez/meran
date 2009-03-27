@@ -38,6 +38,8 @@ function inicializar(){
 	COMPONENTES_ARRAY= [];
 	_freeMemory(DATA_ARRAY);
 	DATA_ARRAY= [];
+	_freeMemory(BARCODES_ARRAY);
+	BARCODES_ARRAY= [];
 	TAB_INDEX= 0;
 }
 
@@ -474,11 +476,6 @@ function guardarDocumentoN3(){
 
 function updateGuardarDocumentoN3(responseText){
 
-	//inicializo el arreglo
-	_freeMemory(ID3_ARRAY);
-	ID3_ARRAY= [];
-	_freeMemory(BARCODES_ARRAY);
-	BARCODES_ARRAY= [];
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
@@ -488,6 +485,11 @@ function updateGuardarDocumentoN3(responseText){
        for (x=0; x< allInputs.length; x++)
             allInputs[x].value="";
     if (! (hayError(Messages) ) ){
+		//inicializo el arreglo
+		_freeMemory(ID3_ARRAY);
+		ID3_ARRAY= [];
+		_freeMemory(BARCODES_ARRAY);
+		BARCODES_ARRAY= [];
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
@@ -881,12 +883,12 @@ function borrarN3(id3){
 }
 
 function updateBorrarN3(responseText){
-    var info=JSONstring.toObject(responseText);  
-    var Messages= info.Message_arrayref;
-    setMessages(Messages);
 	inicializar();
 	mostrarEstructuraDelNivel3();
 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+	var info=JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
 }
 
 function borrarEjemplaresN3(id3){
