@@ -27,13 +27,14 @@ __PACKAGE__->meta->setup(
           nivel3 => {
             class       => 'C4::Modelo::CatNivel3',
             key_columns => { id3 => 'id3' },
-	         type        => 'one to one',
-         },
-         tipo => {
-               class       => 'C4::Modelo::CircRefTipoPrestamo',
-               key_columns => { tipo_prestamo => 'issuecode' },
-	            type        => 'one to one',
-         },
+	    type        => 'one to one',
+        },
+        tipo => {
+            class       => 'C4::Modelo::CircRefTipoPrestamo',
+            key_columns => { tipo_prestamo => 'id_tipo_prestamo' },
+	    type        => 'one to one',
+        },
+
 	   socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
@@ -186,5 +187,93 @@ sub agregar {
     $self->save();
 
 }
+
+
+sub prestar {
+    my ($self)=shift;
+    my ($params,$msg_object)=@_;
+
+	my $nro_socio= $params->{'nro_socio'};
+	my $id2= $params->{'id2'};
+	my $id3= $params->{'id3'};
+	C4::AR::Debug::debug("_chequeoParaPrestamo=> id2: ".$id2);
+	C4::AR::Debug::debug("_chequeoParaPrestamo=> id3: ".$id3);
+	C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
+
+#Se verifica si ya se tiene la reserva sobre el grupo
+	my ($reservas, $cant)= C4::AR::Reservas::getReservasDeSocio($nro_socio, $id2);
+
+#********************************        VER!!!!!!!!!!!!!! *************************************************
+# Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
+# Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
+# Si esta prestado la clase de prestamo que se quiere hacer en este momento. 
+# Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
+# Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
+	my $disponibilidad= C4::AR::Reservas::getDisponibilidad($id3);
+	if($cant == 1 && $disponibilidad eq "Domiciliario"){
+	#El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
+	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+		if($id3 != $reservas->[0]->getId3){
+		#Los ids son distintos, se intercambian.
+			$reservas->[0]->db=$self->db;
+			$reservas->[0]->intercambiarId3($id3,$msg_object);
+		}
+	}
+	elsif($cant==1 && $disponibilidad eq "Para Sala"){
+		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
+		#llamar a la funcion verificaciones!!
+		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
+		#es un prestamo ES ?????? ****VER****
+	}
+	else{
+		#Se verifca disponibilidad del item;
+		my $data=getReservaDeId3($id3);
+		my $sePermiteReservaGrupo=1;
+		if ($data){
+		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
+			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
+			if($datosNivel3){
+				&cambiarId3($datosNivel3->{'id3'},$data->getId_reserva);
+				# el id3 de params quedo libre para ser reservado
+			}
+			else{
+# NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
+# REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
+				$params->{'id3'}="";
+				if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
+				#NO SE PERMITE LA RESERVA DE GRUPO
+					$sePermiteReservaGrupo=0;
+					#Hay error no se permite realizar una reserva de grupo en intra.
+					$msg_object->{'error'}= 1;
+					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
+				}else{
+				#SE PERMITE LA RESERVA DE GRUPO
+					#No hay error, se realiza una reserva de grupo.
+					$msg_object->{'error'}= 1;
+					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
+				}
+			}
+		}
+		#Se realiza una reserva
+		if($sePermiteReservaGrupo){
+			my ($reserva) = C4::Modelo::CircReserva->new();
+			$reserva->load();
+# 			my $db = $reserva->db;
+# # FIXME faltan devolver los parametros
+# 			my ($paraReservas)= reservar($params);
+# 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
+		}
+	}
+	
+	if(!$msg_object->{'error'}){
+	#No hay error, se realiza el pretamo
+		insertarPrestamo($params);
+
+		#se realizan las verificacioines luego de realizar el prestamo
+		_verificacionesPostPrestamo($params,$msg_object);
+	}
+
+
+	}
 1;
 

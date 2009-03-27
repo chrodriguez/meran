@@ -73,7 +73,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		my ($nivel2)= C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);
  		$infoPrestamo[$i]->{'autor'}= C4::AR::Referencias::getNombreAutor($nivel2->nivel1->getAutor);
  		$infoPrestamo[$i]->{'titulo'}= $nivel3aPrestar->nivel2->nivel1->getTitulo;
-		#$infoPrestamo[$i]->{'unititle'}=C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
+		$infoPrestamo[$i]->{'unititle'}='';#C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
 		$infoPrestamo[$i]->{'edicion'}= $nivel3aPrestar->nivel2->getEdicion;
 		$infoPrestamo[$i]->{'items'}= $items_array_ref;
 		$infoPrestamo[$i]->{'tipoPrestamo'}= $tipoPrestamos;
@@ -89,7 +89,6 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #***************************************************PRESTAMO*************************************************
 if($tipoAccion eq "PRESTAMO"){
 #se realizan los prestamos
-print A "desde PRESTAMO \n";
 	my $array_ids3=$obj->{'datosArray'};
 	my $loop=scalar(@$array_ids3);
 
@@ -103,29 +102,32 @@ print A "desde PRESTAMO \n";
 	my @infoTickets;
 	my @errores;
 
-print A "long: $loop \n";
+C4::AR::Debug::debug("SE PRESTAN ".$loop." EJEMPLARES");
+	
 	for(my $i=0;$i<$loop;$i++){
 		#obtengo el id3 de un item a prestar
  		$id3= $array_ids3->[$i]->{'id3'};
 		$tipoPrestamo= $array_ids3->[$i]->{'tipoPrestamo'};
-		$id3Old=$array_ids3->[$i]->{'id3Old'};
+		$id3Old=$array_ids3->[$i]->{'id3Old'}; #Esto nunca viene
 
-print A "id3 antes de setear: $id3\n";
 #Presta 1 o mas al mismo tiempo
 		if($id3 ne ""){
-			my $data= C4::AR::Nivel3::getDataNivel3($id3);
+
+			C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON EL TIPO :".$array_ids3->[$i]->{'descripcionTipoPrestamo'}." Y BARCODE ".$array_ids3->[$i]->{'barcode'});
+
+			my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
 			my %params;
-			$params{'id1'}= $data->{'id1'};
-			$params{'id2'}= $data->{'id2'};
-			$params{'id3'}= $id3;
+			$params{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
+			$params{'id2'}= $nivel3aPrestar->nivel2->getId2;
+			$params{'id3'}= $nivel3aPrestar->getId3;
+			$params{'barcode'}= $nivel3aPrestar->getBarcode;
 			$params{'id3Old'}=$id3Old;
-			$params{'barcode'}= $array_ids3->[$i]->{'barcode'};
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'nro_socio'}=$nro_socio;
 			$params{'loggedinuser'}= $loggedinuser;
 			$params{'defaultbranch'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'tipo'}="INTRA";
-			$params{'issuesType'}= $tipoPrestamo;
+			$params{'tipo_prestamo'}= $tipoPrestamo;
 		
 			my ($msg_object)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
 			my $ticketObj=0;
@@ -143,9 +145,6 @@ print A "id3 antes de setear: $id3\n";
 	
 			push (@infoTickets, \%infoOperacion);
 
-print A "id3: $id3\n";		
-print A "id2: $id2\n";	
-# print A "id1: $id1\n";	
 		}
 	} #end for
 

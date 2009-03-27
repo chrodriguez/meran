@@ -350,6 +350,7 @@ sub cantRegFechas{
 
 }
 
+
 sub registroEntreFechas{
    my ($params_obj)=@_;
 

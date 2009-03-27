@@ -116,7 +116,7 @@ sub devolver {
 	my $id3= $params->{'id3'};
 	my $tipo= $params->{'tipo'};
 	my $loggedinuser= $params->{'loggedinuser'};
-	my $borrowernumber= $params->{'borrowernumber'};
+	my $nro_socio= $params->{'nro_socio'};
 # 	my $codMsg;
 # 	my $error;
 # 	my $paraMens;
@@ -126,7 +126,7 @@ sub devolver {
 
 	my $prestamo= getDatosPrestamo($id3);
 	my $fechaVencimiento= vencimiento($id3); # tiene que estar aca porque despues ya se marco como devuelto
-	actualizarPrestamo($id3,$borrowernumber);
+	actualizarPrestamo($id3,$nro_socio);
 
 	my $notforloan=C4::AR::Reservas::getDisponibilidad($id3);
 	
@@ -151,7 +151,7 @@ sub devolver {
 # 		my $end_date= "null";
 		my $end_date= undef;
 
-		C4::Circulation::Circ2::insertHistoricCirculation('return',$borrowernumber,$loggedinuser,$id1,$reserva->getId2,$id3,$reserva->getId_ui,$prestamo->{'tipo_prestamo'},$end_date);
+		C4::Circulation::Circ2::insertHistoricCirculation('return',$nro_socio,$loggedinuser,$id1,$reserva->getId2,$id3,$reserva->getId_ui,$prestamo->{'tipo_prestamo'},$end_date);
 
 #*******************************Fin***Se registra el movimiento en historicCirculation*************************
 
@@ -161,34 +161,34 @@ sub devolver {
 		my $fechaFinSancion;
 
 # Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion 	
-		my $issuetype=IssueType($prestamo->{'tipo_prestamo'});
-		my $daysissue=$issuetype->{'dias_prestamo'};
+		my $tipo_prestamo=getTipoPrestamo($prestamo->{'tipo_prestamo'});
+		my $daysissue=$tipo_prestamo->getDias_prestamo;
 		my $dateformat = C4::Date::get_date_format();
 		my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-		my $categorycode=C4::AR::Usuarios::obtenerCategoriaBorrower($borrowernumber);
+		my $categorycode=C4::AR::Usuarios::obtenerCategoriaBorrower($nro_socio);
                 my $sanctionDays= SanctionDays($fechaHoy, $fechaVencimiento, $categorycode, $prestamo->{'tipo_prestamo'});
 
 		if ($sanctionDays gt 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
 			my $sanctiontypecode = getSanctionTypeCode($prestamo->{'tipo_prestamo'}, $categorycode);
-			if (tieneLibroVencido($borrowernumber)) {
+			if (tieneLibroVencido($nro_socio)) {
 # El borrower tiene libros vencidos en su poder (es moroso)
 				$hasdebts = 1;
-			 	insertPendingSanction($sanctiontypecode, undef, $borrowernumber, $sanctionDays);
+			 	insertPendingSanction($sanctiontypecode, undef, $nro_socio, $sanctionDays);
 			}
 			else{
 				my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
 				$fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$sanctionDays." days",\$err),$dateformat);
-				insertSanction($sanctiontypecode, undef, $borrowernumber, $fechaHoy, $fechaFinSancion, $sanctionDays);
+				insertSanction($sanctiontypecode, undef, $nro_socio, $fechaHoy, $fechaFinSancion, $sanctionDays);
 				$sanction = 1;
 #**********************************Se registra el movimiento en historicSanction***************************
 				my $responsable= $loggedinuser;
-				logSanction('Insert',$borrowernumber,$responsable,$fechaFinSancion,$sanctiontypecode);
+				logSanction('Insert',$nro_socio,$responsable,$fechaFinSancion,$sanctiontypecode);
 #**********************************Fin registra el movimiento en historicSanction***************************
 
 #Se borran las reservas del usuario sancionado
-				C4::AR::Reservas::cancelar_reservas($loggedinuser,$borrowernumber);
+				C4::AR::Reservas::cancelar_reservas($loggedinuser,$nro_socio);
 			}
 		}
 ### Final del tema sanciones
@@ -254,24 +254,6 @@ sub fechaDeVencimiento {
 		}
 
 	}
-}
-
-
-=item
-vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que vence el prestamo
-=cut
-sub vencimiento {
-	my ($prestamo)=@_;
-		my $tipo_prestamo=IssueType($prestamo->getTipo_prestamo); 
-		my $plazo_actual;
-		if ($prestamo->getRenovaciones > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
-	 	 	$plazo_actual=$tipo_prestamo->getRenewdays;
-			return (proximoHabil($plazo_actual,0,$prestamo->getFecha_ultima_renovacion));
-		} 
-		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
-		 $plazo_actual=$tipo_prestamo->getDaysissues;
-		 return (proximoHabil($plazo_actual,0,$prestamo->getFecha_prestamo));
-		}
 }
 
 
@@ -523,7 +505,7 @@ sub verificarTipoPrestamo {
 
 
 sub IssueType {
-#retorna los datos del tipo de prestamo
+#DEPRECATED::retorna los datos del tipo de prestamo
 	my ($tipo_prestamo)=@_;
    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( id_tipo_prestamo => $tipo_prestamo );
    $circ_ref_tipo_prestamo->load();
@@ -551,6 +533,9 @@ Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un a
 sub prestamosHabilitadosPorTipo {
  	my ($id_disponibilidad, $nro_socio)=@_;
 
+	#Se buscan todas las sanciones de un usuario
+	my $sanciones=C4::AR::Sanciones::tieneSanciones($nro_socio);
+
 	#Trae todos los tipos de prestamos que estan habilitados
 	my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
 																		query => [ 
@@ -561,45 +546,31 @@ sub prestamosHabilitadosPorTipo {
 
 	my @tipos;
 	foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
-		my $tipo;
-		$tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
-		$tipo->{'label'}=$tipo_prestamo->getDescripcion;
-		push(@tipos,$tipo)
+		my $estaSancionado=0;
+		
+		foreach my $sancion (@$sanciones){
+			if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
+			#tipos de prestamo que afecta
+			my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
+				foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
+					if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
+						$estaSancionado=1;
+					}
+				}
+			}
+			else{#Si es una sancion por reserva???
+			}
+		}
+
+		if(!$estaSancionado){
+			#solo se agrega si no esta sancionado para ese tipo de prestamo
+			my $tipo;
+			$tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
+			$tipo->{'label'}=$tipo_prestamo->getDescripcion;
+			push(@tipos,$tipo)
+		}
 	}
 	return(\@tipos);
-# 
-# 	return ($nivel3_array_ref);
-# 
-#   	my $query= " SELECT * FROM circ_ref_tipo_prestamo WHERE enabled = 1 ";
-# 	$query .= " AND issuecode NOT IN (SELECT circ_ref_tipo_prestamo.issuecode FROM circ_sancion 
-# 	INNER JOIN circ_tipo_sancion ON circ_sancion.sanctiontypecode = circ_tipo_sancion.sanctiontypecode 
-# 	INNER JOIN circ_tipo_prestamo_sancion ON circ_tipo_sancion.sanctiontypecode = circ_tipo_prestamo_sancion.sanctiontypecode 
-# 	INNER JOIN circ_ref_tipo_prestamo ON circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.issuecode 
-# 	WHERE nro_socio = ? AND (now() between startdate AND enddate)) ";
-# 
-#   	if ($notforloan ne undef){
-# 		$query.=" AND notforloan = ? ORDER BY description";
-#     		$sth = $dbh->prepare($query);
-#     		$sth->execute($borrowernumber, $notforloan);
-#   	} 
-# 	else{
-#     		$query.=" ORDER BY description";
-#     		$sth = $dbh->prepare($query);
-#     		$sth->execute($borrowernumber);
-#   	}
-# 
-#   	my %issueslabels;
-#  	my @issuesvalues;
-# 	my @issuesType;
-# 	my $i=0;
-#   	while (my $res = $sth->fetchrow_hashref) {
-# 		$issuesType[$i]->{'value'}=$res->{'issuecode'};
-# 		$issuesType[$i]->{'label'}=$res->{'description'};
-# 		$i++;
-# 		
-#  	}
-#   	$sth->finish;
-# 	return(\@issuesType);
 }
 
 
@@ -1068,7 +1039,7 @@ sub _verificarMaxTipoPrestamo{
 
 	#Obtengo la cant maxima de prestamos de ese tipo que se puede tener
 	my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
-	my $prestamos_maximos= $tipo->getMaxissues;
+	my $prestamos_maximos= $tipo->getPrestamos;
 	#
 
 	#Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
@@ -1101,7 +1072,46 @@ sub getCountPrestamosDeGrupo() {
     	return ($prestamos_grupo_count);
 }
 
+=item
+getPrestamosDeSocio
+Esta funcion retorna los prestamos actuales de un socio
+=cut
+sub getPrestamosDeSocio {
+	my ($nro_socio)=@_;
 
+    	use C4::Modelo::CircPrestamo;
+    	use C4::Modelo::CircPrestamo::Manager;
 
+    	my @filtros;
+    	push(@filtros, ( fecha_devolucion => { eq => undef } ));
+    	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
 
+    	my $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(query => \@filtros);
+
+    	return ($prestamos__array_ref);
+}
+
+=item
+vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que vence el prestamo
+=cut
+sub vencimiento {
+	my ($prestamo)=@_;
+		my $plazo_actual;
+		if ($prestamo->getRenovaciones > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 	$plazo_actual=$prestamo->tipo->getDias_renovacion;
+			return (proximoHabil($plazo_actual,0,$prestamo->getFecha_ultima_renovacion));
+		} 
+		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
+		 $plazo_actual=$prestamo->tipo->getDias_prestamo;
+		 return (proximoHabil($plazo_actual,0,$prestamo->getFecha_prestamo));
+		}
+}
+
+sub getTipoPrestamo {
+#retorna los datos del tipo de prestamo
+   my ($tipo_prestamo)=@_;
+   my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( id_tipo_prestamo => $tipo_prestamo );
+   $circ_ref_tipo_prestamo->load();
+   return($circ_ref_tipo_prestamo);
+}
 

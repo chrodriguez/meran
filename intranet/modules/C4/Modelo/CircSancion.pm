@@ -1,7 +1,9 @@
 package C4::Modelo::CircSancion;
 
 use strict;
-
+use Date::Manip;
+use C4::Date;#formatdate
+use C4::AR::Utilidades;#trim
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -25,6 +27,16 @@ __PACKAGE__->meta->setup(
             class      => 'C4::Modelo::CircReserva',
             column_map => { id_reserva => 'id_reserva' },
             type       => 'one to one',
+        },
+	    ref_tipo_sancion => {
+            class      => 'C4::Modelo::CircTipoSancion',
+            column_map => { tipo_sancion => 'tipo_sancion' },
+            type       => 'one to one',
+        },
+		ref_tipo_prestamo_sancion => {
+            class      => 'C4::Modelo::CircTipoPrestamoSancion',
+            column_map => { tipo_sancion => 'tipo_sancion' },
+            type       => 'one to many',
         },
     ],
 );
@@ -90,6 +102,12 @@ sub getFecha_comienzo{
     return ($self->fecha_comienzo);
 }
 
+sub getFecha_comienzo_formateada {
+    my ($self) = shift;
+	my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_comienzo),$dateformat);
+}
+
 sub setFecha_comienzo{
     my ($self) = shift;
     my ($fecha_comienzo) = @_;
@@ -101,11 +119,18 @@ sub getFecha_final{
     return ($self->fecha_final);
 }
 
+sub getFecha_final_formateada {
+    my ($self) = shift;
+	my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_final),$dateformat);
+}
+
 sub setFecha_final{
     my ($self) = shift;
     my ($fecha_final) = @_;
     $self->fecha_final($fecha_final);
 }
+
 
 sub getDias_sancion{
     my ($self) = shift;

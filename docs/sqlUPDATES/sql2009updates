@@ -521,7 +521,7 @@ ALTER TABLE `circ_reserva` CHANGE `reservenumber` `id_reserva` INT( 11 ) NOT NUL
 CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00'
 
 ALTER TABLE `circ_reserva` CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
-CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL =======
+CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL 
 ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
 
 
@@ -552,6 +552,7 @@ CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
  ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
 CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
+
 
 -- GASPAR EL 27/03/2009
 

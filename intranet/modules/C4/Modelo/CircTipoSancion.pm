@@ -23,6 +23,12 @@ __PACKAGE__->meta->setup(
             column_map => { tipo_prestamo => 'id_tipo_prestamo' },
             type       => 'one to one',
         },
+
+		ref_tipo_prestamo_sancion => {
+            class      => 'C4::Modelo::CircTipoPrestamoSancion',
+            column_map => { tipo_prestamo => 'tipo_prestamo' },
+            type       => 'one to many',
+        },
 	    ref_categoria_socio => {
             class      => 'C4::Modelo::UsrRefCategoriasSocio',
             column_map => { categoria_socio => 'categorycode' },

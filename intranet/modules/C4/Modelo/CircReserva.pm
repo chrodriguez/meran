@@ -426,5 +426,38 @@ sub borrar_sancion_de_reserva
 }
 
 
+sub intercambiarId3{
+	my ($self)=shift;
+	my ($nuevoId3,$msg_object)= @_;
+	
+	use C4::Modelo::CircReserva::Manager;
+	my @filtros;
+	push(@filtros, ( id3 => { eq => $nuevoId3} ));
+    my $reserva_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db=>$self->db,query => \@filtros);
+
+	if ($reserva_ref){ #Ya existe una reserva sobre ese Id3
+	  	if($reserva_ref->getEstado eq "E"){ 
+			#quiere decir que hay una reserva sobre el nuevoId3 y NO esta prestado el item -> SE HACE EL INTERCAMBIO
+			#actualizo la reserva con el viejo id3 para la reserva del otro usuario.
+			$reserva_ref->setId3($self->getId3);
+			$reserva_ref->save();
+			#luego actualizo la actual
+			$self->setId3($nuevoId3);
+			$self->save();
+			
+		}
+		elsif($reserva_ref->getEstado eq "P"){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P107', 'params' => []} ) ;
+		}
+	}
+	else{
+		#el item con id3 esta libre se actualiza la reserva del usuario al que se va a prestar el item.
+		$self->setId3($nuevoId3);
+		$self->save();
+	}
+
+}
+
 1;
 

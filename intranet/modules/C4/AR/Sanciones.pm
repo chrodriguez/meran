@@ -9,6 +9,9 @@ require Exporter;
 use C4::Context;
 use C4::Date;
 use Date::Manip;
+use C4::Modelo::CircSancion;
+use C4::Modelo::CircSancion::Manager;
+
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(	&SanctionDays 
@@ -124,6 +127,8 @@ sub SanctionDays {
 return($amountOfDays);
 }
 
+
+#DEPRECATED
 sub hasSanctions {
   #Esta funcion retorna un arreglo con los tipos de prestamo para los que el usuario esta sancionado
   my ($borrowernumber)=@_;
@@ -133,7 +138,7 @@ sub hasSanctions {
   my $sth = $dbh->prepare("select * from circ_sancion 
 	inner join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion 
 	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.tipo_sancion 
-	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.id_tipo_prestamo 
+	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
 	where nro_socio = ? and (now() between fecha_comienzo and fecha_final)");
   $sth->execute($borrowernumber);
   my @results;
@@ -158,31 +163,8 @@ sub hasSanctions {
   return(\@results);
 }
 
-sub isSanction {
-  #Esta funcion determina si un usuario ($borrowernumber) tiene derecho (o sea no esta sancionado) a retirar un biblio para un tipo de prestamo ($issuecode)
-  my ($dbh, $nro_socio, $issuecode)=@_;
-  my $sth = $dbh->prepare("select * from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion left join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.sanctiontypecode where nro_socio = ? and (fecha_comienzo <= now()  and fecha_final >= now()) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
-  $sth->execute($nro_socio, $issuecode);
-  return($sth->fetchrow_hashref); 
-}
-
-sub tieneLibroVencido {
-  #Esta funcion determina si un usuario ($borrowernumber) tiene algun biblio vencido que no le permite realizar reservas o prestamos
-  	my ($borrowernumber)=@_;
-  	my $dbh = C4::Context->dbh;
-  	my $dateformat = C4::Date::get_date_format();
-  	my $sth=$dbh->prepare("Select * from  circ_prestamo where fecha_devolucion is NULL and nro_socio = ?");
-  	$sth->execute($borrowernumber);
-  	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
-  	while (my $ref= $sth->fetchrow_hashref) {
-    		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($ref->{'id3'});
-    		return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
-  	}
-  	return(0);
-}
-
 sub permitionToLoan {
-#Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
+#DEPRECATED::::Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
   	my ($borrowernumber, $issuecode)=@_;
 	my $dbh = C4::Context->dbh;
   	my $debtOrSanction= 0; #Se supone que no esta sancionado
@@ -312,7 +294,7 @@ sub getSanctionTypeCode {
 sub getBorrowersSanctions {
   #Esta funcion retorna un array con todos los borrowernumbers de los usuarios que estan sancionados para un determinado issuecode o cuyo issuecode es null (o sea es una sancion por no retirar una reserva)
   my ($dbh, $issuecode)=@_;
-  my $sth = $dbh->prepare("select nro_socio from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion left join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.sanctiontypecode where (now() between fecha_comienzo and fecha_final) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
+  my $sth = $dbh->prepare("select nro_socio from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion left join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.tipo_sancion where (now() between fecha_comienzo and fecha_final) and ((circ_tipo_prestamo_sancion.tipo_prestamo = ?) or (circ_tipo_prestamo_sancion.tipo_prestamo is null))");
   $sth->execute($issuecode);
   my @results;
   while (my $data=$sth->fetchrow){
@@ -382,7 +364,13 @@ sub borrarSancionReserva{
 				WHERE id_reserva=? AND (now() < fecha_comienzo)");
 	$sth->execute($reservenumber);
 }
-
+sub isSanction {
+  #Esta funcion determina si un usuario ($borrowernumber) tiene derecho (o sea no esta sancionado) a retirar un biblio para un tipo de prestamo ($issuecode)
+  my ($dbh, $nro_socio, $issuecode)=@_;
+  my $sth = $dbh->prepare("select * from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion left join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.sanctiontypecode where nro_socio = ? and (fecha_comienzo <= now()  and fecha_final >= now()) and ((circ_tipo_prestamo_sancion.issuecode = ?) or (circ_tipo_prestamo_sancion.issuecode is null))");
+  $sth->execute($nro_socio, $issuecode);
+  return($sth->fetchrow_hashref); 
+}
 
 # MIGUEL ESTOY PROBANDO LA FUNCION ACTUALIZARSANCION DE ABAJO, DESPUES BORRAR
 =item
@@ -420,3 +408,76 @@ sub actualizarSancion {
 #*******************************Fin***Se registra el movimiento en historicSanction*************************
 }
 
+sub tieneSanciones {
+  #Se buscan todas las sanciones actuales de un socio
+  my ($nro_socio)=@_;
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  
+  my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
+																	query => [ 
+																			nro_socio 		=> { eq => $nro_socio },
+																			fecha_comienzo 	=> { le => $hoy },
+																			fecha_final    	=> { ge => $hoy},
+																		],
+									);
+
+  return(\@$sanciones_array_ref);
+}
+
+
+sub permisoParaPrestamo {
+#Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
+  	my ($nro_socio, $tipo_prestamo)=@_;
+
+  	my $deudaOsancion= 0; #Se supone que no esta sancionado
+  	my $hasta= undef;
+  	if (tieneLibroVencido($nro_socio)) {
+    		$deudaOsancion= 1; #Tiene biblos vencidos 
+  	}
+	elsif (my $sancion= estaSancionado($nro_socio, $tipo_prestamo)) {
+    		$deudaOsancion= 1; #Tiene una sancion vigente
+    		$hasta= $sancion->getFecha_final;
+  	}
+  	return($deudaOsancion, $hasta);
+}
+
+
+sub estaSancionado {
+  #Esta funcion determina si un usuario ($nro_socio) tiene derecho (o sea no esta sancionado) a retirar un ejemplar para un tipo de prestamo ($tipo_prestamo)
+  my ($nro_socio, $tipo_prestamo)=@_;
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  
+  my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
+																	query => [ 
+																			nro_socio 		=> { eq => $nro_socio },
+																			fecha_comienzo 	=> { le => $hoy },
+																			fecha_final    	=> { ge => $hoy},
+																			tipo_prestamo 	=> { eq => $tipo_prestamo },
+																			or   => [
+																				tipo_prestamo => { eq => 0 },
+                                                                            ],
+																		],
+																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
+									);
+  return($sanciones_array_ref->[0] || undef);
+
+}
+
+sub tieneLibroVencido {
+  #Esta funcion determina si un usuario ($nro_socio) tiene algun biblio vencido que no le permite realizar reservas o prestamos
+  my ($nro_socio)=@_;
+
+  my $prestamos_array_ref=C4::AR::Prestamos::getPrestamosDeSocio($nro_socio);
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  foreach my $prestamo (@$prestamos_array_ref) {
+    		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($prestamo->getId3);
+    		return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
+  	}
+  	return(0);
+}
