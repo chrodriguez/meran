@@ -71,7 +71,7 @@ sub agregar{
     #Se guradan los datos en Nivel 1 repetibles
     foreach my $infoNivel1 (@arrayNivel1Repetibles){
         $infoNivel1->{'id1'}= $id1;
-            
+
         my $nivel1Repetible;
 
         if ($data_hash->{'modificado'}){
@@ -88,7 +88,7 @@ C4::AR::Debug::debug('Se va a modificar CatNivel1, rep_n1_id: '. $infoNivel1->{'
         $nivel1Repetible->setDato($infoNivel1->{'dato'});
         $nivel1Repetible->save(); 
     }
-    
+
 }
 
 sub eliminar{
