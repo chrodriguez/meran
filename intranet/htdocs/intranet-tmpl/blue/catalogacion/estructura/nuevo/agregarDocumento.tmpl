@@ -125,6 +125,7 @@ function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
 	//inicializo el arreglo
 	_freeMemory(BARCODES_ARRAY);
+	BARCODES_ARRAY= [];
 
 	if(barcodes_string != ''){
 		BARCODES_ARRAY = barcodes_string.split(",");
@@ -475,6 +476,9 @@ function updateGuardarDocumentoN3(responseText){
 
 	//inicializo el arreglo
 	_freeMemory(ID3_ARRAY);
+	ID3_ARRAY= [];
+	_freeMemory(BARCODES_ARRAY);
+	BARCODES_ARRAY= [];
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
