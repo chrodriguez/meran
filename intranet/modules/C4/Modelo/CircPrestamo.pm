@@ -8,32 +8,32 @@ __PACKAGE__->meta->setup(
     table   => 'circ_prestamo',
 
     columns => [
-        id_prestamo      => { type => 'serial', not_null => 1 },
-        id3              => { type => 'integer' },
-        nro_socio	       => { type => 'integer', default => '0', not_null => 1 },
-	    tipo_prestamo    => { type => 'character', length => 2, default => 'DO', not_null => 1 },
-        fecha_prestamo   => { type => 'varchar', not_null => 1 },
-        id_ui_origen     => { type => 'varchar', length => 4 },
-	    id_ui_prestamo	 => { type => 'varchar', length => 4 },
-        fecha_devolucion => { type => 'varchar' },
-        renovaciones     => { type => 'integer', default => '0', not_null => 1},
+        id_prestamo              => { type => 'serial', not_null => 1 },
+        id3                      => { type => 'integer' },
+        nro_socio	               => { type => 'integer', default => '0', not_null => 1 },
+	     tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
+        fecha_prestamo           => { type => 'varchar', not_null => 1 },
+        id_ui_origen             => { type => 'varchar', length => 4 },
+	     id_ui_prestamo	         => { type => 'varchar', length => 4 },
+        fecha_devolucion         => { type => 'varchar' },
+        renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
-        timestamp        => { type => 'timestamp', not_null => 1 },
+        timestamp                => { type => 'timestamp', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_prestamo' ],
 
     relationships => [
-        nivel3 => {
+          nivel3 => {
             class       => 'C4::Modelo::CatNivel3',
             key_columns => { id3 => 'id3' },
-	    type        => 'one to one',
-        },
-        tipo => {
-            class       => 'C4::Modelo::CircRefTipoPrestamo',
-            key_columns => { tipo_prestamo => 'issuecode' },
-	    type        => 'one to one',
-        },
+	         type        => 'one to one',
+         },
+         tipo => {
+               class       => 'C4::Modelo::CircRefTipoPrestamo',
+               key_columns => { tipo_prestamo => 'issuecode' },
+	            type        => 'one to one',
+         },
 	   socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
