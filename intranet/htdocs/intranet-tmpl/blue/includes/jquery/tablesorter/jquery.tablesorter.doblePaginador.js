@@ -5,7 +5,7 @@
  */
 
 function inicializacion(tabla){
-	var paginador=$("div[@name='paginador']");
+	var paginador=$("div[name='paginador']");
 
 	for (var i=0; i< paginador.length; i++){
 		paginador[i].id="pager"+i;

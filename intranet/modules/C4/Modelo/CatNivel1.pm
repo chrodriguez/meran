@@ -56,7 +56,11 @@ sub agregar{
         
         if( ($infoNivel1->{'campo'} eq '110')&&($infoNivel1->{'subcampo'} eq 'a') ){  
         #autor
-            $self->setAutor($infoNivel1->{'dato'});
+			if($infoNivel1->{'modificado'}){
+				$self->setAutor($infoNivel1->{'datoReferencia'});
+			}else{
+				$self->setAutor($infoNivel1->{'dato'});
+			}
         }
         
         $self->save();
@@ -71,6 +75,7 @@ sub agregar{
         my $nivel1Repetible;
 
         if ($data_hash->{'modificado'}){
+C4::AR::Debug::debug('Se va a modificar CatNivel1, rep_n1_id: '. $infoNivel1->{'rep_n1_id'});
             $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
             $nivel1Repetible->load();
         }else{

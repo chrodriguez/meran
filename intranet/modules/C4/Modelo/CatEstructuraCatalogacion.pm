@@ -64,7 +64,7 @@ sub agregar{
     my ($data_hash)=@_;
 
     $self->setCampo($data_hash->{'campo'});
-    $self->setSubCampo($data_hash->{'subcampo'});
+    $self->setSubcampo($data_hash->{'subcampo'});
     $self->setItemType($data_hash->{'itemtype'}||'ALL');
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
     $self->setTipo($data_hash->{'tipoInput'});
@@ -97,7 +97,7 @@ sub modificar{
 
     if (!$self->soyFijo){
         $self->setCampo($data_hash->{'campo'});
-        $self->setSubCampo($data_hash->{'subcampo'});
+        $self->setSubcampo($data_hash->{'subcampo'});
         $self->setItemType($data_hash->{'itemtype'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
         $self->setTipo($data_hash->{'tipoInput'});
@@ -299,7 +299,7 @@ sub getSubcampo{
     return (C4::AR::Utilidades::trim($self->subcampo));
 }
 
-sub setSubCampo{
+sub setSubcampo{
     my ($self) = shift;
     my ($subcampo) = @_;
     $self->subcampo($subcampo);

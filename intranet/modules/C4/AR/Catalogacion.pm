@@ -1864,7 +1864,8 @@ sub getHashCatalogaciones{
 	my $nivel= $params->{'nivel'};
 	my $itemType= $params->{'id_tipo_doc'};
 	my $orden= $params->{'orden'};
-
+	
+	#obtengo toda la informacion de la estructura de catalogacion
     my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType,$orden);
     
 
@@ -1887,7 +1888,6 @@ sub getHashCatalogaciones{
 		$hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
         $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
 
-#         if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
 		if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y no es un autocomplete			
 			C4::AR::Debug::debug('tiene referencia y es un combo');
@@ -1916,10 +1916,12 @@ sub getHashCatalogaciones{
 =item
 Este funcion devuelve la estructura de catalogacion con los datos de los Niveles Repetibles 1, 2 y 3
 =cut
+=item
+# FIXME ESTA FUNCION ESTA ANDANDO, ESTOY PROBANDO OTRA
 sub getHashCatalogacionesConDatos{
     my ($params)=@_;
 
-	#obtengo la estructura de catalogacion de los niveles repetibles
+	#obtengo la estructura de catalogacion de los NIVELES REPETIBLES
     my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
 
     
@@ -1943,7 +1945,6 @@ sub getHashCatalogacionesConDatos{
         $hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
         $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
 
-# 		 if( ($cat->getReferencia) && ($cat->getTipo ne 'auto') ){
 		if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y no es un autocomplete			
 			C4::AR::Debug::debug('tiene referencia y no es auto');
@@ -1966,12 +1967,142 @@ sub getHashCatalogacionesConDatos{
         push (@result, \%hash_temp);
     }
 
-# FIXME para que se hace esto??????????????, todo lo anterior NO SE ESTA USANDO!!!!!!!!!!!!!
+	#obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
 	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
 	push(@resultEstYDatos,@result);
 
-#     return (scalar(@result), \@resultEstYDatos);
 	return (scalar(@resultEstYDatos), \@resultEstYDatos);
+}
+=cut
+
+sub getHashCatalogacionesConDatos{
+    my ($params)=@_;
+
+	#obtengo la estructura de catalogacion de los NIVELES REPETIBLES
+    my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
+
+    
+# MAPEO Y FILTRO DE INFO AL CLIENTE
+    my @result;
+    foreach my $cat  (@$catalogaciones_array_ref){
+		
+		#busco la informacion de estructura de catalogacion
+		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
+																	$cat->getCampo, 
+																	$cat->getSubcampo
+											);
+
+		if(scalar(@$cat_estruct_array) > 0){	
+	
+			my %hash_temp;
+			$hash_temp{'campo'}= $cat->getCampo;
+			$hash_temp{'subcampo'}= $cat->getSubcampo;
+			$hash_temp{'dato'}= $cat->{'dato'};
+			$hash_temp{'nivel'}=  $cat_estruct_array->[0]->getNivel;
+			$hash_temp{'visible'}=  $cat_estruct_array->[0]->getVisible;
+			$hash_temp{'liblibrarian'}=  $cat_estruct_array->[0]->getLiblibrarian;
+			$hash_temp{'itemtype'}=  $cat_estruct_array->[0]->getItemType;
+			$hash_temp{'id_rep'}=  $catalogaciones_array_ref->[0]->getId_rep; #obtengo el id_repetible del nivel repetible 1, 2 o 3
+			$hash_temp{'repetible'}=  $cat_estruct_array->[0]->getRepetible;
+	#         $hash_temp{'fijo'}=  $cat_estruct_array->[0]->getFijo; #no es necesario enviar al cliente
+			$hash_temp{'tipo'}=  $cat_estruct_array->[0]->getTipo;
+			$hash_temp{'referencia'}=  $cat_estruct_array->[0]->getReferencia;
+			$hash_temp{'obligatorio'}=  $cat_estruct_array->[0]->getObligatorio;
+			$hash_temp{'idCompCliente'}=  $cat_estruct_array->[0]->getIdCompCliente;
+			$hash_temp{'intranet_habilitado'}=  $cat_estruct_array->[0]->getIntranet_habilitado;
+	
+			if( ( $cat_estruct_array->[0]->getReferencia) && ( $cat_estruct_array->[0]->getTipo eq 'combo') ){
+			#tiene una referencia, y no es un autocomplete			
+				C4::AR::Debug::debug('tiene referencia y no es auto');
+				$cat->{'infoReferencia'}->{'campos'}; 
+				my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
+																	$cat_estruct_array->[0]->infoReferencia->getReferencia,  #tabla  
+																	$cat_estruct_array->[0]->infoReferencia->getCampos  #campo
+																					);
+				$hash_temp{'opciones'}= $valores;
+			}
+	
+			if( ( $cat_estruct_array->[0]->getReferencia) && ( $cat_estruct_array->[0]->getTipo eq 'auto') ){
+			#es un autocomplete
+				C4::AR::Debug::debug('tiene referencia y es un autocomplete');
+				$hash_temp{'referenciaTabla'}=  $cat_estruct_array->[0]->infoReferencia->getReferencia;
+				$hash_temp{'datoReferencia'}= $cat->{'dato'};
+			}
+	
+	
+			push (@result, \%hash_temp);
+		}
+	
+	}
+
+	#obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
+	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
+	push(@resultEstYDatos,@result);
+
+	return (scalar(@resultEstYDatos), \@resultEstYDatos);
+}
+
+=item
+Esta funcion retorna la estructura de catalogacion con los datos de un Nivel.
+Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
+=cut
+sub _obtenerEstructuraYDatos{
+	my ($params)=@_;
+
+	my @result;
+	my $nivel;
+
+	if( $params->{'nivel'} eq '1'){
+		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
+	}
+	elsif( $params->{'nivel'} eq '2'){
+		$nivel= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
+	}
+	elsif( $params->{'nivel'} eq '3'){
+		$nivel= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
+	}
+
+	#paso todo a MARC
+	my $nivel_info_marc_array = $nivel->toMARC;
+
+	#se genera la estructura de catalogacion para envia al cliente
+	for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+
+		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
+																	$nivel_info_marc_array->[$i]->{'campo'}, 
+																	$nivel_info_marc_array->[$i]->{'subcampo'}
+											);
+	
+		my %hash;
+
+		if(scalar(@$cat_estruct_array) > 0){		
+
+			$hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
+			$hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
+			$hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
+
+			if($cat_estruct_array->[0]->getReferencia){
+				$hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
+			}
+	
+			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
+			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
+			$hash{'liblibrarian'}= $cat_estruct_array->[0]->getLiblibrarian;
+			$hash{'itemtype'}= $cat_estruct_array->[0]->getItemType;
+			$hash{'repetible'}= $cat_estruct_array->[0]->getRepetible;
+			$hash{'fijo'}= $cat_estruct_array->[0]->getFijo;
+			$hash{'tipo'}= $cat_estruct_array->[0]->getTipo;
+			$hash{'referencia'}= $cat_estruct_array->[0]->getReferencia;
+			$hash{'obligatorio'}= $cat_estruct_array->[0]->getObligatorio;
+				
+			push(@result, \%hash);
+		}
+	}
+
+	return @result;
 }
 
 
@@ -2085,75 +2216,5 @@ sub _getEstructuraFromCampoSubCampo{
 
 	return $cat_estruct_info_array;
 }
-
-
-=item
-Esta funcion retorna la estructura de catalogacion con los datos de un Nivel.
-Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
-=cut
-sub _obtenerEstructuraYDatos{
-	my ($params)=@_;
-
-	my @result;
-# 	my $nivel_array_ref;
-	my $nivel;
-
-	if( $params->{'nivel'} eq '1'){
-# 		$nivel_array_ref= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
-	}
-	elsif( $params->{'nivel'} eq '2'){
-# 		$nivel_array_ref= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-		$nivel= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
-	}
-	elsif( $params->{'nivel'} eq '3'){
-# 		$nivel_array_ref= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-		$nivel= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
-	}
-
-	#paso todo a MARC
-# 	my $nivel_info_marc_array = $nivel_array_ref->[0]->toMARC;
-	my $nivel_info_marc_array = $nivel->toMARC;
-
-	#se genera la estructura de catalogacion para envia al cliente
-	for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
-
-		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
-																	$nivel_info_marc_array->[$i]->{'campo'}, 
-																	$nivel_info_marc_array->[$i]->{'subcampo'}
-											);
-	
-		my %hash;
-
-		if(scalar(@$cat_estruct_array) > 0){		
-
-			$hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
-			$hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
-			$hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
-
-			if($cat_estruct_array->[0]->getReferencia){
-				$hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
-			}
-	
-			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
-			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
-			$hash{'liblibrarian'}= $cat_estruct_array->[0]->getLiblibrarian;
-			$hash{'itemtype'}= $cat_estruct_array->[0]->getItemType;
-			$hash{'repetible'}= $cat_estruct_array->[0]->getRepetible;
-			$hash{'fijo'}= $cat_estruct_array->[0]->getFijo;
-			$hash{'tipo'}= $cat_estruct_array->[0]->getTipo;
-			$hash{'referencia'}= $cat_estruct_array->[0]->getReferencia;
-			$hash{'obligatorio'}= $cat_estruct_array->[0]->getObligatorio;
-				
-			push(@result, \%hash);
-		}
-	}
-
-	return @result;
-}
-
 
 #====================================================FIN==SOPORTE PARA ESTRUCTURA CATALOGACION==================================================

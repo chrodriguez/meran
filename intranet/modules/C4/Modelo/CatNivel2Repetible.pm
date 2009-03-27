@@ -52,6 +52,10 @@ sub eliminar{
    $self->delete();
 }
 
+sub getId_rep{
+    my ($self) = shift;
+    return ($self->rep_n2_id);
+}
 
 sub getRep_n2_id{
     my ($self) = shift;

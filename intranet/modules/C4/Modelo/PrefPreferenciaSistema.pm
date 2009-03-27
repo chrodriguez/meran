@@ -55,7 +55,8 @@ sub getShowValue{
 		use C4::AR::Utilidades;
     		my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
 										query => [ category => { eq => trim($self->getOptions)} , 
-										authorised_value => { eq => trim($self->getValue)}]);
+										authorised_value => { eq => trim($self->getValue)}]
+								);
 			$show=$valAuto_array_ref->[0]->getLib;
 		}
 
@@ -86,7 +87,7 @@ sub setExplanation{
 
 sub getOptions{
     my ($self) = shift;
-    return ($self->options);
+    return (C4::AR::Utilidades::trim($self->options));
 }
 
 sub setOptions{

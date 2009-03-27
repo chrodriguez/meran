@@ -19,23 +19,7 @@ my ($template, $session, $t_params) = get_template_and_user ({
     					});
 
 #combo itemtype
-# 	my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
-# 	my @valuesItemtypes;
-# 	my %labelsItemtypes;
-# 	my $i=0;
-# 	push(@valuesItemtypes,-1);
-# 	$labelsItemtypes{-1}="Cualquiera";
-# 	for ($i; $i<scalar(@results); $i++){
-# 		push(@valuesItemtypes,$results[$i]->{'itemtype'});
-# 		$labelsItemtypes{$results[$i]->{'itemtype'}}=$results[$i]->{'description'};
-# 	}
-# #fin combo
-# 	my $comboItemTypes= &crearComponentes('combo',
-# 						'comboItemTypes',
-# 						\@valuesItemtypes,
-# 						\%labelsItemtypes,'');
 my %params_combo;
-# $params_combo{'onChange'}= 'mostrarEstructuraDelNivel1()';
 $params_combo{'default'}= 'SIN SELECCIONAR';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'comboTipoDocumento'}= $comboTiposNivel3;
