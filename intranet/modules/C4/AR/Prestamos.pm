@@ -885,13 +885,13 @@ sub estaVencido(){
 
 
 sub prestamosPorUsuario {
-	my ($borrowernumber) = @_;
+	my ($nro_socio) = @_;
 	my $dbh = C4::Context->dbh;
 	my %currentissues;
 
 	my $select= " SELECT  iss.timestamp AS timestamp, iss.fecha_prestamo AS fecha_prestamo, iss.tipo_prestamo AS tipo_prestamo,
                 	n3.id1, n2.id2, n3.id3, n3.barcode AS barcode, signatura_topografica, nivel_bibliografico,
-			n1.titulo AS titulo, n1.autor, isst.description AS issuetype
+			n1.titulo AS titulo, n1.autor, isst.descripcion AS issuetype
 			FROM  circ_prestamo iss INNER JOIN circ_ref_tipo_prestamo isst ON ( iss.tipo_prestamo = isst.id_tipo_prestamo )
 			INNER JOIN cat_nivel3 n3 ON ( iss.id3 = n3.id3 )
 			INNER JOIN cat_nivel1 n1 ON ( n3.id1 = n1.id1)
@@ -906,7 +906,7 @@ sub prestamosPorUsuario {
 # 		biblioitems.subclass  		AS subclass,
 
 	my $sth=$dbh->prepare($select);
-	$sth->execute($borrowernumber);
+	$sth->execute($nro_socio);
 	my $counter = 0;
 	while (my $data = $sth->fetchrow_hashref) {
 		$data->{'dewey'} =~ s/0*$//;

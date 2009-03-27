@@ -132,7 +132,7 @@ sub hasSanctions {
   #Esta primera consulta es por la devolucion atrasada de libros
   my $sth = $dbh->prepare("select * from circ_sancion 
 	inner join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion 
-	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.sanctiontypecode 
+	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.tipo_sancion 
 	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.issuecode = circ_ref_tipo_prestamo.id_tipo_prestamo 
 	where nro_socio = ? and (now() between fecha_comienzo and fecha_final)");
   $sth->execute($borrowernumber);

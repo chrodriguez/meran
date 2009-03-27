@@ -62,7 +62,9 @@ $obj->{'orden'}|= $obj->{'orden'}||'surname';
 $obj->{'fechaInicio'} = $fechaInicio;
 $obj->{'fechaFin'} = $fechaFin;
 
-my ($cant,$resultsdata) = C4::AR::Estadisticas::registroEntreFechas($obj);
+# FIXME lo comente hasta q se suba el PM C4/Modelo/RepRegistroModificacion/Manager.pm
+# my ($cant,$resultsdata) = C4::AR::Estadisticas::registroEntreFechas($obj);
+my ($cant,$resultsdata);
 
 
 # C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);

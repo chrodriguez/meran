@@ -412,7 +412,8 @@ sub cantRegFechas{
 
 }
 
-
+# FIXME comentado hasta que se suba el pm C4/Modelo/RepRegistroModificacion/Manager.pm
+=item
 sub registroEntreFechas{
    my ($params_obj)=@_;
 
@@ -457,6 +458,7 @@ sub registroEntreFechas{
 
    return (scalar(@$registros),$registros);
 }
+=cut
 
 =item
 sub cantRegDiarias{
