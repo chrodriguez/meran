@@ -1873,7 +1873,7 @@ sub getHashCatalogaciones{
 
         my %hash_temp;
         $hash_temp{'campo'}= $cat->getCampo;
-        $hash_temp{'subcampo'}= $cat->getSubCampo;
+        $hash_temp{'subcampo'}= $cat->getSubcampo;
 		$hash_temp{'dato'}= '';
         $hash_temp{'nivel'}= $cat->getNivel;
         $hash_temp{'visible'}= $cat->getVisible;
@@ -1921,6 +1921,7 @@ sub getHashCatalogacionesConDatos{
 
 	#obtengo la estructura de catalogacion de los niveles repetibles
     my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
+
     
 # MAPEO Y FILTRO DE INFO AL CLIENTE
     my @result;
@@ -1928,7 +1929,7 @@ sub getHashCatalogacionesConDatos{
 
         my %hash_temp;
         $hash_temp{'campo'}= $cat->getCampo;
-        $hash_temp{'subcampo'}= $cat->getSubCampo;
+        $hash_temp{'subcampo'}= $cat->getSubcampo;
 		$hash_temp{'dato'}= $cat->{'dato'};
         $hash_temp{'nivel'}= $cat->getNivel;
         $hash_temp{'visible'}= $cat->getVisible;
@@ -2037,7 +2038,9 @@ sub getCatalogacionesConDatos{
                                                             
                                                     ], 
 
-	 										with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
+ 	 										with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
+# 				with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor' ],
+# 				require_objects => [ 'CEC' ],
 
                                                                      );
 	
@@ -2134,25 +2137,6 @@ C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 			if($cat_estruct_array->[0]->getReferencia){
 				$hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
 			}
-
-# 			if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
-# 			#tiene una referencia, y no es un autocomplete			
-# 				C4::AR::Debug::debug('tiene referencia y no es auto');
-# 				$cat->{'infoReferencia'}->{'campos'}; 
-# 				my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-# 																							$cat->infoReferencia->getReferencia,  #tabla  
-# 																							$cat->infoReferencia->getCampos  #campo
-# 																					);
-# 				$hash_temp{'opciones'}= $valores;
-# 			}
-# 	
-# 			if( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
-# 			#es un autocomplete
-# 				C4::AR::Debug::debug('tiene referencia y es un autocomplete');
-# 				$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
-# 				$hash_temp{'datoReferencia'}= $cat->{'dato'};
-# 			}
-
 	
 			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
 			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;

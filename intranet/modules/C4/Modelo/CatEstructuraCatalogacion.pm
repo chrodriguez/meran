@@ -294,7 +294,7 @@ sub getIdInfoRef{
     return ($self->idinforef);
 }
 
-sub getSubCampo{
+sub getSubcampo{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->subcampo));
 }

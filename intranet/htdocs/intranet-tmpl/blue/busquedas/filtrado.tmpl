@@ -24,7 +24,7 @@ function busquedaCombinable(){
 	objAH.titulo=  $('#titulo').val();
 	objAH.autor= $('#autor').val();
 	objAH.signatura= $('#signatura').val()
-	objAH.comboItemTypes= $('#comboItemTypes').val();
+	objAH.comboItemTypes= $('#tipo_nivel3_id').val();
 	
 	var radio= $(":checked");
 	var tipo=radio[0].value;
@@ -352,7 +352,7 @@ $(document).ready(function() {
 			
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
         		<b>[% "Tipo de documento" | i18n %]</b> <br>
-        			[% comboItemTypes %]
+        			[% comboTipoDocumento %]
 			</li>
 
 			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
