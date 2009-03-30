@@ -152,7 +152,12 @@ sub agregar{
         $nivel3Repetible->setId3($infoNivel3->{'id3'});
         $nivel3Repetible->setCampo($infoNivel3->{'campo'});
         $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
-        $nivel3Repetible->setDato($infoNivel3->{'dato'});
+#         $nivel3Repetible->setDato($infoNivel3->{'dato'});
+		if( ($infoNivel3->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$nivel3Repetible->dato($infoNivel3->{'datoReferencia'});
+			}else{
+				$nivel3Repetible->dato($infoNivel3->{'dato'});
+		}
         $nivel3Repetible->save();
     }
 }
