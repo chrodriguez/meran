@@ -196,6 +196,7 @@ sub agregar {
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $data_hash->{'tipo'}='reserva';
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
@@ -298,10 +299,10 @@ sub cancelar_reserva{
    $data_hash->{'id3'}=$self->getId3;
    $data_hash->{'nro_socio'}=$self->getNro_socio;
    $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'end_date'}=undef;
-   $data_hash->{'issuesType'}='-';
+   $data_hash->{'hasta'}=undef;
+   $data_hash->{'tipo_prestamo'}='-';
    $data_hash->{'id_ui'}=$self->getId_ui;
-   $data_hash->{'tipo'}='cancel';
+   $data_hash->{'tipo'}='cancelacion';
    use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
@@ -333,6 +334,7 @@ sub reasignarReservaEnEspera{
 }
 
 =item
+				&cambia
 actualizarDatosReservaEnEspera
 Funcion que actualiza la reserva que estaba esperando por un ejemplar.
 =cut
@@ -455,6 +457,31 @@ sub intercambiarId3{
 		#el item con id3 esta libre se actualiza la reserva del usuario al que se va a prestar el item.
 		$self->setId3($nuevoId3);
 		$self->save();
+	}
+
+}
+
+
+
+=item
+cancelar_reservas_inmediatas
+Se cancelan todas las reservas del usuario que viene por parametro cuando este llega al maximo de prestamos de un tipo determinado.
+=cut
+sub cancelar_reservas_inmediatas{
+	my ($self)=shift;
+	my ($params)=@_;
+	my $socio=$params->{'nro_socio'};
+	
+    	use C4::Modelo::CircReserva;
+    	use C4::Modelo::CircReserva::Manager;
+
+    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
+					db=>$self->db,
+					query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}, id3 => undef ]
+     				);
+    	
+	foreach my $reserva (@$reservas_array_ref){
+		$reserva->cancelar_reserva($params);
 	}
 
 }

@@ -135,27 +135,6 @@ sub cancelar_reservas{
 }
 
 =item
-cancelar_reservas_inmediatas
-Se cancelan todas las reservas del usuario que viene por parametro cuando este llega al maximo de prestamos de un tipo determinado.
-=cut
-sub cancelar_reservas_inmediatas{
-	my ($params)=@_;
-	my $socio=$params->{'borrowernumber'};
-	
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-					query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}, id3 => undef ]
-     							); 
-    	
-	foreach my $reserva (@$reservas_array_ref){
-		$reserva->cancelar_reserva($params);
-	}
-
-}
-
-=item
 Esta funcion elimina todas las del borrower pasado por parametro
 =cut
 sub eliminarReservas{
@@ -405,22 +384,7 @@ sub cantReservasPorNivel1{
    return $sth->fetchrow;
 }
 
-#Busca los items sin reservas para los prestamos y nuevas reservas.
-sub getItemsParaReserva{
-	my ($id2)=@_;
-        my $dbh = C4::Context->dbh;
 
-	my $query= "	SELECT n3.id1, n3.id3, n3.id_ui_poseedora 
-			FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.id_disponibilidad=0 AND n3.id_estado=0 
-			AND n3.id3 NOT IN (	SELECT r.id3 FROM circ_reserva r 
-						WHERE id2 = ? AND id3 IS NOT NULL   )";
-
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id2, $id2);
-
-	return $sth->fetchrow_hashref;
-
-}
 
 sub getDisponibilidadGrupo{
 #Busca si el grupo tiene solo ejemplares para prestamo en sala o no.
@@ -435,52 +399,6 @@ sub getDisponibilidadGrupo{
 
 	return ($cantidad_prestamos > 0)?'DO':'SA';
 }
-
-=item
-Esta funcion se utiliza para verificar post condiciones luego de un prestamo, y realizar las operaciones que sean necesarias
-=cut
-sub _verificacionesPostPrestamo {
-	my($params, $msg_object)=@_;
-
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
-	my $barcode= $params->{'barcode'};
-	my $nro_socio= $params->{'nro_socio'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $tipo_prestamo= $params->{'tipo_prestamo'};
-	my $dateformat=C4::Date::get_date_format();
-open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
-print A "desde verificacionesPostPrestamo\n";
-print A "id2: $id2\n";
-print A "id3: $id3\n";
-print A "nro_socio: $nro_socio\n";
-print A "tipo_prestamo: $tipo_prestamo\n";
-
-	#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
-	if ($tipo_prestamo eq "DO"){
-	# FIXME VER SI ES NECESARIO VERIFICAR OTROS TIPOS DE PRESTAMOS COMO POR EJ "DP", "DD", "DR"
-		my ($cant, @issuetypes) = C4::AR::Prestamos::PrestamosMaximos($nro_socio);
-		foreach my $iss (@issuetypes){
-			if ($iss->{'issuecode'} eq "DO"){#Domiciliario al maximo
-# 				$codMsg= 'P108';
- 				$params->{'tipo'}="INTRA";
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P108', 'params' => [$barcode]} ) ;
-				C4::AR::Reservas::cancelar_reservas_inmediatas($params);
-			}
-		}
-
-		##el usuario no llego al maximo de prestamos
-		if(scalar(@issuetypes) eq 0){
-			# Se realizo el prestamo con exito
-			$msg_object->{'error'}= 0;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => [$barcode]} ) ;
-		}
-	}
-
-close(A);
-}
-
 
 
 ## FIXME esto viene mal de la V2, ver!!!!
@@ -606,47 +524,6 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 	}
 }
 
-sub insertarPrestamo {
-	my($params)=@_;
-
-	my $dbh=C4::Context->dbh;
-#Se acutualiza el estado de la reserva a P = Presetado
-	my $sth=$dbh->prepare("	UPDATE circ_reserva SET estado='P' WHERE id2 = ? AND nro_socio = ? ");
-
-	$sth->execute(	
-			$params->{'id2'},
-			$params->{'borrowernumber'}
-	);
-# Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-	my $sth2=$dbh->prepare("	DELETE FROM circ_sancion 
-					WHERE reservenumber = ? ");
-
-	$sth2->execute(	$params->{'reservenumber'});
-#Se realiza el prestamo del item
-	my $sth3=$dbh->prepare("	INSERT INTO  circ_prestamo 		
-					(borrowernumber,id3,date_due,branchcode,issuingbranch,renewals,issuecode) 
-					VALUES (?,?,NOW(),?,?,?,?) ");
-
-	$sth3->execute(	$params->{'borrowernumber'}, 
-			$params->{'id3'}, 
-			$params->{'defaultbranch'}, 
-			$params->{'defaultbranch'}, 
-			0, 
-			$params->{'issuesType'}
-	);
-#*********************************Se registra el movimiento en historicCirculation***************************
-	C4::Circulation::Circ2::insertHistoricCirculation(	'issue',
-								$params->{'borrowernumber'},
-								$params->{'loggedinuser'},
-								$params->{'id1'},
-								$params->{'id2'},
-								$params->{'id3'},
-								$params->{'defaultbranch'},
-								$params->{'issuesType'},
-								$params->{'hasta'}
-							);
-#*******************************Fin***Se registra el movimiento en historicCirculation*************************
-}#end insertarPrestamo
 
 #para enviar un mail cuando al usuario se le vence la reserva
 sub Enviar_Email{
@@ -1015,6 +892,44 @@ my ($id2,$loggedinuser)=@_;
 #######################################################ESTO ES LO NUEVO###################################################
 #######################################################ESTO ES LO NUEVO###################################################
 
+
+
+#Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
+sub getNivel3ParaReserva{
+	my ($id2)=@_;
+#FIXME NO CRUZA BIEN
+    use C4::Modelo::CatNivel3::Manager;
+	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+																		query => [ 
+																				id2 => { eq => $id2},
+																			'ref_disponibilidad.nombre' => { eq => "Disponible"},
+																			'ref_estado.nombre' => { eq => "Disponible"},
+																				],
+																		with_objects => ['ref_disponibilidad','ref_estado']
+																);
+
+	foreach my $nivel3 (@$nivel3_array_ref)
+	{
+		if(estaLibre($nivel3->getId3)){return($nivel3);}
+	}
+return 0;
+}
+
+sub estaLibre{
+#Devuelve si esta libre: sin prestamos ni reservas
+	my ($id3)=@_;	
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id3 	=> { eq => $id3}));
+    push(@filtros, ( estado => { ne => undef}));
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+	if ($reservas_array_ref){return 1;}else{return 0;}
+}
+
+
+
 sub _verificarHorario{
 	my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
 	my $begin =C4::Date::calc_beginES();
@@ -1059,7 +974,7 @@ sub getReservasDeSocio {
     push(@filtros, ( nro_socio 	=> { eq => $nro_socio} ));
     push(@filtros, ( estado 	=> { ne => 'P'} ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
 
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
@@ -1345,41 +1260,6 @@ sub t_cancelar_reserva{
 
 	return ($msg_object);
 }
-
-
-
-
-
-#funcion que realiza la transaccion del Prestamo
-sub t_realizarPrestamo{
-	my ($params)=@_;
-		C4::AR::Debug::debug("Antes de verificar");	
-	my ($msg_object)= &_verificaciones($params);
-	if(!$msg_object->{'error'}){
-		C4::AR::Debug::debug("No hay error en las verificaciones");
-		my  $prestamo = C4::Modelo::CircPrestamo->new();
-        my $db = $prestamo->db;
-		   $db->{connect_options}->{AutoCommit} = 0;
-           $db->begin_work;
-		eval{
-#			_chequeoParaPrestamo($params,$msg_object);
-			$prestamo->prestar($params,$msg_object);
-			$db->commit;
-		};
-		if ($@){
-			#Se loguea error de Base de Datos
-			C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
-			eval {$db->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
-		}
-		$db->{connect_options}->{AutoCommit} = 1;
-	}
-
-	return ($msg_object);
-}
-
 
 
 1;

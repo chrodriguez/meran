@@ -176,16 +176,24 @@ Funcion que agrega un prestamo
 sub agregar {
     my ($self)=shift;
     my ($data_hash)=@_;
+    $self->debug("SE AGREGO EL PRESTAMO");
     #Asignando data...
     $self->setId3($data_hash->{'id3'});
     $self->setNro_socio($data_hash->{'nro_socio'});
-    $self->setFecha_prestamo($data_hash->{'fecha_prestamo'});
+    $self->setFecha_prestamo(ParseDate("today"));
     $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setId_ui_prestamo($data_hash->{'id_ui_prestamo'});
     $self->setRenovaciones(0);
     $self->save();
 
+	#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   $self->debug("Se loguea en historico de circulacion la cancelacion");
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $data_hash->{'tipo'}='prestamo';
+   $historial_circulacion->agregar($data_hash);
+  #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 }
 
 
@@ -211,43 +219,58 @@ sub prestar {
 # Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
 	my $disponibilidad= C4::AR::Reservas::getDisponibilidad($id3);
 	if($cant == 1 && $disponibilidad eq "Domiciliario"){
-	#El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
-	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+	#El usuario ya tiene la reserva, 
+	 $self->debug("El usuario ya tiene una reserva");
+
 		if($id3 != $reservas->[0]->getId3){
+		$self->debug("Los ids son distintos, se intercambian");
+		#se le esta entregando un item que es <> al que se le asigno al relizar la reserva
+		#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
 		#Los ids son distintos, se intercambian.
 			$reservas->[0]->db=$self->db;
 			$reservas->[0]->intercambiarId3($id3,$msg_object);
+			$params->{'id_reserva'}= $reservas->[0]->getId_reserva;
 		}
 	}
-	elsif($cant==1 && $disponibilidad eq "Para Sala"){
+	elsif($cant ==1 && $disponibilidad eq "Para Sala"){
 		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
 		#llamar a la funcion verificaciones!!
 		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
 		#es un prestamo ES ?????? ****VER****
 	}
-	else{
-		#Se verifca disponibilidad del item;
-		my $data=getReservaDeId3($id3);
-		my $sePermiteReservaGrupo=1;
-		if ($data){
+	else{#NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
+		$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
+		my $seReserva=1;
+		#Se verifica disponibilidad del item;
+		my $reserva=C4::AR::Reservas::getReservaDeId3($id3);
+		if ($reserva){
+		$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
-			if($datosNivel3){
-				&cambiarId3($datosNivel3->{'id3'},$data->getId_reserva);
+			my ($nivel3)= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'});
+			if($nivel3){
+				#CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
+				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR");
+				$reserva->db=$self->db;
+				$reserva->setId3($nivel3->getId3);
+				$reserva->save();
 				# el id3 de params quedo libre para ser reservado
+				
 			}
 			else{
+				$self->debug("NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO");
 # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
 # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
 				$params->{'id3'}="";
 				if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
 				#NO SE PERMITE LA RESERVA DE GRUPO
-					$sePermiteReservaGrupo=0;
+					$seReserva=0;
 					#Hay error no se permite realizar una reserva de grupo en intra.
+					$self->debug("Hay error no se permite realizar una reserva de grupo en intra");
 					$msg_object->{'error'}= 1;
 					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
 				}else{
 				#SE PERMITE LA RESERVA DE GRUPO
+					$self->debug("No hay error, se realiza una reserva de grupo");
 					#No hay error, se realiza una reserva de grupo.
 					$msg_object->{'error'}= 1;
 					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
@@ -255,25 +278,71 @@ sub prestar {
 			}
 		}
 		#Se realiza una reserva
-		if($sePermiteReservaGrupo){
-			my ($reserva) = C4::Modelo::CircReserva->new();
-			$reserva->load();
-# 			my $db = $reserva->db;
-# # FIXME faltan devolver los parametros
-# 			my ($paraReservas)= reservar($params);
-# 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
+		if($seReserva){
+			my ($reserva) = C4::Modelo::CircReserva->new(db=>$self->db);
+			my ($paramsReserva)= $reserva->reservar($params);
+ 			$params->{'id_reserva'}= $reserva->getId_reserva;
+			$self->debug("Se realiza una reserva ID: ".$params->{'id_reserva'});
 		}
 	}
 	
 	if(!$msg_object->{'error'}){
 	#No hay error, se realiza el pretamo
-		insertarPrestamo($params);
+		$self->debug("Se va a insertar el prestamo");
+		$self->insertarPrestamo($params);
 
+		$self->debug("se realizan las verificacioines luego de realizar el prestamo");
 		#se realizan las verificacioines luego de realizar el prestamo
-		_verificacionesPostPrestamo($params,$msg_object);
+		$self->_verificacionesPostPrestamo($params,$msg_object);
+	}
+
 	}
 
 
+sub insertarPrestamo {
+	my ($self)=shift;
+	my($params)=@_;
+
+	use C4::Modelo::CircReserva;
+    my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
+    $reserva->load();
+#Se actualiza el estado de la reserva a P = Prestado
+	$reserva->setEstado('P');
+	$reserva->save();
+
+# Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
+	use C4::Modelo::CircSancion::Manager;
+	C4::Modelo::CircSancion::Manager->delete_circ_sancion(db=>$self->db,query => [ id_reserva =>{eq => $reserva->getId_reserva }]);
+
+#Se realiza el prestamo del item
+	$self->agregar($params);
+
+}#end insertarPrestamo
+
+
+
+=item
+Esta funcion se utiliza para verificar post condiciones luego de un prestamo, y realizar las operaciones que sean necesarias
+=cut
+sub _verificacionesPostPrestamo {
+	my ($self)=shift;
+	my($params, $msg_object)=@_;
+
+	#Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas
+	if(C4::AR::Prestamos::_verificarMaxTipoPrestamo($params->{'nro_socio'}, $params->{'tipo_prestamo'})){
+				$self->debug("Se verifica si el usuario llego al maximo de prestamos, se caen las demas reservas");
+ 				$params->{'tipo'}="INTRA";
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P108', 'params' => [$params->{'barcode'}]});
+				my ($reserva) = C4::Modelo::CircReserva->new(db=>$self->db);
+				$reserva->cancelar_reservas_inmediatas($params);
 	}
+	else{
+			# Se realizo el prestamo con exito
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => [$params->{'barcode'}]} ) ;
+		}
+}
+
 1;
 

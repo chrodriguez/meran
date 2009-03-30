@@ -1115,3 +1115,55 @@ sub getTipoPrestamo {
    return($circ_ref_tipo_prestamo);
 }
 
+
+
+
+
+###################################################################################################################################
+###################################################################################################################################
+###################################################################################################################################
+###################################################################################################################################
+
+#funcion que realiza la transaccion del Prestamo
+sub t_realizarPrestamo{
+	my ($params)=@_;
+		C4::AR::Debug::debug("Antes de verificar");	
+	my ($msg_object)= C4::AR::Reservas::_verificaciones($params);
+	if(!$msg_object->{'error'}){
+		C4::AR::Debug::debug("No hay error en las verificaciones");
+		my  $prestamo = C4::Modelo::CircPrestamo->new();
+        my $db = $prestamo->db;
+		   $db->{connect_options}->{AutoCommit} = 0;
+           $db->begin_work;
+		eval{
+#			_chequeoParaPrestamo($params,$msg_object);
+			$prestamo->prestar($params,$msg_object);
+			if(!$msg_object->{'error'}){$db->commit;}
+				else {$db->rollback;}
+		};
+		if ($@){
+			C4::AR::Debug::debug("ERROR");
+			#Se loguea error de Base de Datos
+			C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
+			eval {$db->rollback};
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
+		}
+		$db->{connect_options}->{AutoCommit} = 1;
+	}
+
+	return ($msg_object);
+}
+
+
+
+
+
+
+
+
+
+
+
+

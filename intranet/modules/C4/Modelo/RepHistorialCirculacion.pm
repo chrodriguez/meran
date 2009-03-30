@@ -177,8 +177,8 @@ sub agregar {
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setResponsable($data_hash->{'loggedinuser'});
     $self->setFecha(ParseDate("today"));
-    $self->setFecha_fin($data_hash->{'end_date'});
-    $self->setTipo_prestamo($data_hash->{'issuesType'});
+    $self->setFecha_fin($data_hash->{'hasta'});
+    $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
     $self->setId_ui($data_hash->{'id_ui'});
 
     $self->save();

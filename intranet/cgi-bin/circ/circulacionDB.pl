@@ -125,15 +125,17 @@ C4::AR::Debug::debug("SE PRESTAN ".$loop." EJEMPLARES");
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'nro_socio'}=$nro_socio;
 			$params{'loggedinuser'}= $loggedinuser;
-			$params{'defaultbranch'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+			$params{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+			$params{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'tipo'}="INTRA";
 			$params{'tipo_prestamo'}= $tipoPrestamo;
 		
-			my ($msg_object)= &C4::AR::Reservas::t_realizarPrestamo(\%params);
+			my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo(\%params);
 			my $ticketObj=0;
 
 			if(!$msg_object->{'error'}){
 			#Se crean los ticket para imprimir.
+				C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
 				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$loggedinuser);
 			}
 			#guardo los errores
