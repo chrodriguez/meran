@@ -38,6 +38,7 @@ sub agregar{
     my @arrayNivel1Repetibles;
 
     my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+	#separo los datos del Nivel1 de los datos del Nivel1_repetible
     foreach my $infoNivel1 (@$infoArrayNivel1){
 
         if($infoNivel1->{'repetible'}){
@@ -56,7 +57,7 @@ sub agregar{
         
         if( ($infoNivel1->{'campo'} eq '110')&&($infoNivel1->{'subcampo'} eq 'a') ){  
         #autor
-			if($infoNivel1->{'modificado'}){
+			if( ($infoNivel1->{'modificado'})&&($data_hash->{'referencia'}) ){
 				$self->setAutor($infoNivel1->{'datoReferencia'});
 			}else{
 				$self->setAutor($infoNivel1->{'dato'});
@@ -85,7 +86,13 @@ C4::AR::Debug::debug('Se va a modificar CatNivel1, rep_n1_id: '. $infoNivel1->{'
         $nivel1Repetible->setId1($infoNivel1->{'id1'});
         $nivel1Repetible->setCampo($infoNivel1->{'campo'});
         $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
-        $nivel1Repetible->setDato($infoNivel1->{'dato'});
+#         $nivel1Repetible->setDato($infoNivel1->{'dato'});
+# FIXME ver si esto es asi, TODAS LAS REFERENCIAS SI SE ESTAN MODIFICANDO SE DEBEN GUARDAR LA REFERENCIA
+		if( ($infoNivel1->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$nivel1Repetible->dato($infoNivel1->{'datoReferencia'});
+			}else{
+				$nivel1Repetible->dato($infoNivel1->{'dato'});
+		}
         $nivel1Repetible->save(); 
     }
 

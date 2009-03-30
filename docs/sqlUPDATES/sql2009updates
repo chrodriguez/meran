@@ -552,6 +552,13 @@ CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
  ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
 CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
+<<<<<<< .mine
+>>>>>>> .r1244
+
+-- Se modifico el siguiente campo de cat_estructra_catalogacion (30/03/09)
+
+ ALTER TABLE `cat_estructura_catalogacion` CHANGE `tipo` `tipo` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL  
+=======
 
 
 -- GASPAR EL 27/03/2009
@@ -576,3 +583,4 @@ DROP TABLE `V3_NEW`.`cat_detalle_disponibilidad` ;
 UPDATE `ref_disponibilidad` SET `nombre` = 'PRESTAMO' WHERE `ref_disponibilidad`.`codigo` =3 LIMIT 1 ;
 
 UPDATE `ref_disponibilidad` SET `nombre` = 'SALA DE LECTURA' WHERE `ref_disponibilidad`.`codigo` =2 LIMIT 1 ;
+>>>>>>> .r1256

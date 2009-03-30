@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         subcampo            => { type => 'character', length => 1, not_null => 1 },
         itemtype            => { type => 'varchar', length => 4, not_null => 1 },
         liblibrarian        => { type => 'varchar', length => 255, not_null => 1 },
-        tipo                => { type => 'character', length => 5, not_null => 1 },
+        tipo                => { type => 'varchar', length => 255, not_null => 1 },
         referencia          => { type => 'integer', default => '0', not_null => 1 },
         nivel               => { type => 'integer', not_null => 1 },
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },

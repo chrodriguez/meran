@@ -76,7 +76,7 @@ sub agregar{
     my @arrayNivel3;
     my @arrayNivel3Repetibles;
     my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
-
+	#se guardan los datos de Nivel3
     foreach my $infoNivel3 (@$infoArrayNivel3){
 
         if($infoNivel3->{'repetible'}){

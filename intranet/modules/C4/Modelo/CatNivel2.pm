@@ -82,6 +82,7 @@ sub agregar{
     my @arrayNivel2Repetibles;
 
     my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
+	#se guardan los datos de Nivel2
     foreach my $infoNivel2 (@$infoArrayNivel2){
 
         if($infoNivel2->{'repetible'}){
@@ -150,7 +151,12 @@ sub agregar{
         $nivel2Repetible->setId2($infoNivel2->{'id2'});
         $nivel2Repetible->setCampo($infoNivel2->{'campo'});
         $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-        $nivel2Repetible->setDato($infoNivel2->{'dato'});
+#         $nivel2Repetible->setDato($infoNivel2->{'dato'});
+		if( ($infoNivel2->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
+			}else{
+				$nivel2Repetible->dato($infoNivel2->{'dato'});
+		}
         $nivel2Repetible->save(); 
     }
 

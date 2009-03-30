@@ -8,6 +8,9 @@
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 <!-- para validar -->
 <script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
+<!-- para el calendario -->
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
 
 <script>
 
@@ -713,6 +716,13 @@ function procesarObjeto(objeto){
 			//busco el dato segun el ID $('#' + objeto.idCompCliente + '_hidden').val() y lo agrego en $('#' + objeto.idCompCliente ).val()
 // 			}
         break;
+		case "calendar":
+            //tipo,id,opciones,valor
+            comp= crearComponente(tipo,idComp,"","");
+            $(comp).appendTo("#"+idDiv);
+            $("#"+idComp).val(objeto.valText);
+			$("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
+		break;
     }
 //     crearRegla(comp,idComp);
    //Se agregan clases para cuando tenga que recuperar los datos.
@@ -796,6 +806,8 @@ function crearComponente(tipo,id,objeto,valor){
 		case "auto": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+">";
         break;
 		case "hidden": comp="<input type='hidden' id='"+id+"' value=''>";
+        break;
+		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
     }
 
