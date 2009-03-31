@@ -47,104 +47,23 @@ my $dateformat = C4::Date::get_date_format();
 $t_params->{'todaydate'}=format_date($today,$dateformat);
 
 #Select de usuarios
-my @users;
-my @select_user;
-my %select_users;
-my $users=getuser(); #funcion agregada en C4::AR::Estadisticas para buscar a los administradores.
+my $CGIuser=C4::AR::Utilidades::generarComboDeSocios();
 
-push @select_user, '-1';
-$select_users{'-1'}= 'SIN SELECCIONAR';
-
-foreach my $userkey (keys %$users) {
-        push @select_user, $users->{$userkey}->{'borrowernumber'};
-        $select_users{$users->{$userkey}->{'borrowernumber'}} = $users->{$userkey}->{'nomCompleto'};
-}
-
-my $CGIuser=CGI::scrolling_list(        -name      => 'user',
-                                        -id        => 'user',
-                                        -values    => \@select_user,
-                                        -labels    => \%select_users,
-                                        -size      => 1,
-					-defaults  => 'SIN SELECCIONAR'
-                                 );
-
-#$template->param(selectusuarios   => $CGIuser);
 $t_params->{'selectusuarios'}=$CGIuser;
 #fin select de usuarios
 
 
 #*********************************Select Tipos de Prestamos*****************************************
-#Miguel no se si existe una funcion q devuelva los tipos de items, si esta vuela
-my $dbh= C4::Context->dbh;
 
-my $query= "SELECT * FROM issuetypes ";
-my $sth= $dbh->prepare($query);
-$sth->execute();
+my $CGISelectTiposPrestamos=C4::AR::Utilidades::generarComboTipoPrestamo();
 
-my @select_tiposPrestamos_Values;
-my %select_tiposPrestamos_Labels;
-
-push @select_tiposPrestamos_Values, '-1';
-$select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';
-my @result;
-
-while (my $data=$sth->fetchrow_hashref){
-	push @result, $data;
-}
-
-
-foreach my $tipoPrestamo (@result) {
- 	push @select_tiposPrestamos_Values, $tipoPrestamo->{'issuecode'};
-   	$select_tiposPrestamos_Labels{$tipoPrestamo->{'issuecode'}} = $tipoPrestamo->{'description'};
-}
-
-my $CGISelectTiposPrestamos=CGI::scrolling_list(	-name      => 'tiposPrestamos',
-                                        		-id        => 'tiposPrestamos',
-                                        		-values    => \@select_tiposPrestamos_Values,
-                                        		-labels    => \%select_tiposPrestamos_Labels,
-                                        		-size      => 1,
-							-defaults  => 'SIN SELECCIONAR'
-                                 		);
 #Se lo paso al template
 #$template->param(selectTiposPrestamos => $CGISelectTiposPrestamos);
 $t_params->{'selectTiposPrestamos'}=$CGISelectTiposPrestamos;
 #*******************************Fin**Select Tipos de Prestamos***************************************
 
 #*********************************Select tipo Operacion*****************************************
-#Miguel no se si existe una funcion q devuelva los tipos de items, si esta vuela
-my $dbh= C4::Context->dbh;
-my @select_tipoOperacion_Values;
-my %select_tipoOperacion_Labels;
 
-#Miguel - deberia haber una tabla de referencia
-my @result= (
-		{type => '-1',
-		description => 'SIN SELECCIONAR'
-		},
-		{type => 'Insert',
-		description => 'Agregado'
-		},
-		{type => 'Delete',
-		description => 'Borrado'
-		}
-);
-
-
-foreach my $tipoOperacion (@result) {
-	push @select_tipoOperacion_Values, $tipoOperacion->{'type'};
-  	$select_tipoOperacion_Labels{$tipoOperacion->{'type'}} = $tipoOperacion->{'description'};
-}
-
-my $CGISelectTipoOperacion=CGI::scrolling_list(		-name      => 'tipoOperacion',
-                                        		-id        => 'tipoOperacion',
-                                        		-values    => \@select_tipoOperacion_Values,
-                                        		-labels    => \%select_tipoOperacion_Labels,
-                                        		-size      => 1,
-							-defaults  => 'SIN SELECCIONAR'
-                                 		);
-#Se lo paso al template
-
-#$template->param(selectTipoOperacion => $CGISelectTipoOperacion);
-$t_params->{'selectTipoOperacion'}=$CGISelectTipoOperacion;
+$t_params->{'selectTipoOperacion'}=C4::AR::Utilidades::generarComboTipoDeOperacion();
 #*******************************Fin**Select Tipos de Operacion***************************************
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

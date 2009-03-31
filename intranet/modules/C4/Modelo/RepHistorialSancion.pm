@@ -8,17 +8,35 @@ __PACKAGE__->meta->setup(
     table   => 'rep_historial_sancion',
 
     columns => [
-        id               => { type => 'serial', not_null => 1 },
-        tipo             => { type => 'varchar', default => '', length => 15, not_null => 1 },
-        nro_socio		 => { type => 'integer', default => '0', not_null => 1 },
-        responsable      => { type => 'varchar', length => 20, not_null => 1 },
-        timestamp        => { type => 'timestamp', not_null => 1 },
-        fecha             => { type => 'varchar', default => '0000-00-00', not_null => 1 },
-        fecha_final       => { type => 'varchar' },
-        tipo_sancion      => { type => 'integer', default => '0' },
+        id                    => { type => 'serial', not_null => 1 },
+        tipo_operacion        => { type => 'varchar', default => '', length => 15, not_null => 1 },
+        nro_socio		         => { type => 'varchar', length => 16, not_null => 1 },
+        responsable           => { type => 'varchar', length => 16, not_null => 1 },
+        timestamp             => { type => 'timestamp', not_null => 1 },
+        fecha                 => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        fecha_final           => { type => 'varchar' },
+        tipo_sancion          => { type => 'integer', default => '0' },
     ],
 
     primary_key_columns => [ 'id' ],
+    
+   relationships => [
+         usr_responsable => {
+               class      => 'C4::Modelo::UsrSocio',
+               column_map => { responsable => 'nro_socio' },
+               type       => 'one to one',
+         },
+          usr_nro_socio => {
+            class      => 'C4::Modelo::UsrSocio',
+            column_map => { nro_socio => 'nro_socio' },
+            type       => 'one to one',
+        },
+#          circ_tipo_sancion  => {
+#             class      => 'C4::Modelo::CatNivel2',
+#             column_map => { tipo_sancion => 'tipo_sancion' },
+#             type       => 'one to one',
+#         },
+   ],
 );
 
 

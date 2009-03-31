@@ -1126,76 +1126,39 @@ sub historicoCirculacion(){
         return ($cant,@results);
 }
 
-sub historicoSanciones(){
-	my ($fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
-	$tipoPrestamo,$tipoOperacion)=@_;
-	
-        my $dbh = C4::Context->dbh;
-	my @bind;
-	my $query="";
-	my $cant=0;
+sub historicoSanciones{
+	my ($params_obj)=@_;
+   use C4::Modelo::RepHistorialSancion::Manager;
+   my @filtros;
+   my @results;
+
+   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaIni'}),
+                                 gt => format_date_in_iso($params_obj->{'fechaIni'}) }) );
+
+   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaFin'}),
+                                 lt => format_date_in_iso($params_obj->{'fechaFin'}) }) );
 
 
-	my $select= " 	SELECT hs.borrowernumber, hs.responsable,hs.type, b.firstname AS firstnameBor, 
-			b.surname AS surnameBor,resp.firstname AS firstnameResp, resp.surname AS surnameResp,
-			hs.end_date, hs.date, st.issuecode, hs.timestamp, hs.sanctiontypecode, 
-			it.description AS tipoPrestamo";
+   if ( ($params_obj->{'user'}) && ($params_obj->{'user'} ne '-1') ){
+      push (@filtros, ( responsable => { eq => $params_obj->{'user'} },) );
+   }
 
-	my $from= "	FROM rep_historial_sancion hs INNER JOIN borrowers b
-			ON (hs.borrowernumber = b.borrowernumber)
-			LEFT JOIN borrowers resp
-			ON (hs.responsable = resp.borrowernumber)
-			LEFT JOIN circ_tipo_sancion st
-			ON (st.sanctiontypecode = hs.sanctiontypecode) 
-			LEFT JOIN circ_ref_tipo_prestamo it
-			ON (it.id_tipo_prestamo = st.issuecode) ";
+   if( ($params_obj->{'tipoOperacion'}) && ($params_obj->{'tipoOperacion'} ne '-1') ){
+      push (@filtros, ( tipo_operacion => { eq => $params_obj->{'tipoOperacion'} },) );
+   }
+   if ( ($params_obj->{'tipoPrestamo'}) && ($params_obj->{'tipoPrestamo'} ne '-1') ){
+      push (@filtros, ( 'circ_tipo_sancion.tipo_operacion' => { eq => $params_obj->{'tipoPrestamo'} },) );
+   }
 
-	my $where = "";
-
-	$where = " WHERE (date>=?) AND (date<=?) ";
-	push(@bind,$fechaIni);
-	push(@bind,$fechaFin);
-
-
-	if (($user)&&($user ne '-1')){	
-		if ($where eq ''){$where = " WHERE responsable=? ";}
-		else {$where.= " AND responsable=? ";}
-		push(@bind,$user);
-	}
-
-	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
-		if ($where eq ''){$where = " WHERE hs.type = ? ";}
-		else{$where .= " AND hs.type = ? ";}
-		push(@bind, $tipoOperacion);
-	}
-
-	if(($tipoPrestamo)&&($tipoPrestamo ne '-1')){
-		if ($where eq ''){ $where = " WHERE st.issuecode = ? ";}
-		else{$where .= " AND st.issuecode = ? ";}
-		push(@bind, $tipoPrestamo);
-	}
-
-	my $finCons=" ORDER BY $orden DESC LIMIT $ini,$cantR ";
-
-	$query="SELECT count(*) as cant ".$from.$where;
-        my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	$cant=$sth->fetchrow_array;
-	
-	$query=$select.$from.$where.$finCons;
-	$sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	my @results;
-	my $dateformat = C4::Date::get_date_format();
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
-		$data->{'respCompleto'}=$data->{'surnameResp'}.", ".$data->{'firstnameResp'};
-		$data->{'userCompleto'}=$data->{'surnameBor'}.", ".$data->{'firstnameBor'};
-		$data->{'date'}=format_date($data->{'date'},$dateformat);
-		$data->{'end_date'}=format_date($data->{'end_date'},$dateformat);
-                push(@results,$data);
-        }
-        return ($cant,@results);
+   my $sanciones = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion(
+                                                                              query => \@filtros,
+                                                                              sorty_by => $params_obj->{'orden'},
+                                                                              limit => $params_obj->{'cantR'},
+                                                                              offset => $params_obj->{'ini'},
+                                                                              #FIXME falta circ_tipo_sancion
+                                                                              with_objects => ['usr_responsable','usr_nro_socio'],
+                                                                           );
+   return (scalar(@$sanciones),$sanciones);
 }
 
 

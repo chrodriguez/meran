@@ -86,6 +86,9 @@ use vars qw(@EXPORT @ISA);
     &buscarSoportes
     &buscarNivelesBibliograficos
     &generarComboTipoPrestamo
+    &generarComboDeSocios
+    &generarComboTipoDeOperacion
+    
 
 );
 
@@ -1457,6 +1460,43 @@ sub generarComboUI {
     return $CGIunidadDeInformacion; 
 }
 
+sub generarComboDeSocios {
+    my ($params) = @_;
+
+    my @select_socios;
+    my %select_socios;
+
+    my $socios= C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ 
+                                                                          activo => {eq => 1},
+                                                                       ],);
+
+    foreach my $socio (@$socios) {
+        push(@select_socios, $socio->getId_socio);
+        $select_socios{$socio->getId_socio}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
+    }
+
+    my %options_hash; 
+   
+    if ( $params->{'onChange'} ){$options_hash{'onChange'}= $params->{'onChange'};}
+    if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
+    if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
+
+    $options_hash{'name'}= $params->{'name'}||'ui_name';
+    $options_hash{'id'}= $params->{'id'}||'ui_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || '-1';
+
+    push (@select_socios, 'SIN SELECCIONAR');
+    $select_socios{'-1'}='SIN SELECCIONAR';
+    $options_hash{'values'}= \@select_socios;
+    $options_hash{'labels'}= \%select_socios;
+
+    my $CGIsocios= CGI::scrolling_list(\%options_hash);
+
+    return $CGIsocios; 
+}
+
 
 sub generarComboCampoX{
 
@@ -1487,6 +1527,28 @@ sub generarComboCampoX{
     );
 
     return ($selectCampoX);
+}
+
+sub generarComboTipoDeOperacion {
+   
+   my ($params) = @_;
+   use C4::Modelo::RefTipoOperacion::Manager;
+   my @select_tipoOperacion_Values;
+   my %select_tipoOperacion_Labels;
+   my $result = C4::Modelo::RefTipoOperacion::Manager->get_ref_tipo_operacion();
+
+   foreach my $tipoOperacion (@$result) {
+      push (@select_tipoOperacion_Values, $tipoOperacion->id);
+      $select_tipoOperacion_Labels{$tipoOperacion->id} = $tipoOperacion->descripcion;
+   }
+
+   my $CGISelectTipoOperacion=CGI::scrolling_list(    -name      => 'tipoOperacion',
+                                                      -id        => 'tipoOperacion',
+                                                      -values    => \@select_tipoOperacion_Values,
+                                                      -labels    => \%select_tipoOperacion_Labels,
+                                                      -size      => 1,
+                                                      -defaults  => 'SIN SELECCIONAR'
+                                                 );
 }
 
 sub generarComboNiveles {

@@ -36,7 +36,7 @@
 			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH sancion IN resultsloop %]
 
   	<tr align='center'>
 
@@ -44,20 +44,24 @@
 
 		<td  class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
-				[% IF borrowernumber %][% userCompleto %][% END %]
+				[% IF sancion.usr_nro_socio.getNro_socio %]
+               [% sancion.usr_nro_socio.getApellido %], [% sancion.usr_nro_socio.getNombre %]
+            [% END %]
 			</a>
 		</td>
   		<td  class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
-				[% IF responsable  %][% respCompleto %][% END %]
+				[% IF sancion.responsable %]
+               [% sancion.responsable.getApellido %], [% sancion.responsable.getNombre %]
+            [% END %]
 			</a>
 		</td>
   		<td  class="inputFontNormal">[% date %]</td>
 		<td  class="inputFontNormal">[% end_date%]</td>
   		<td  class="inputFontNormal">[% operacion %]</td>
 		<td  class="inputFontNormal"> 
-		[% IF issuecode %] 
-			[% tipoPrestamo %]
+		[% IF sancion.circ_tipo_sancion %] 
+			[% sancion.circ_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 		[% ELSE %]
 			[% "Reserva no Retirada" | i18n %]
 		[% END %]

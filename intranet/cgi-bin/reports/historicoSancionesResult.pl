@@ -47,20 +47,22 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaIni =  C4::Date::format_date_in_iso($obj->{'fechaIni'},$dateformat);
-my $fechaFin    =  C4::Date::format_date_in_iso($obj->{'fechaFin'},$dateformat);
+$obj->{'fechaIni'} =  C4::Date::format_date_in_iso($obj->{'fechaIni'},$dateformat);
+$obj->{'fechaFin'} =  C4::Date::format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
-my $orden= $obj->{'orden'} ||'date';
+$obj->{'orden'}= $obj->{'orden'} ||'date';
 my $user= $obj->{'user'};
 my $tipoPrestamo= $obj->{'tiposPrestamos'};
 my $tipoOperacion= $obj->{'tipoOperacion'};
 my $funcion=$obj->{'funcion'};
+$obj->{'cantR'} = $cantR;
+$obj->{'ini'} = $ini;
 
-my ($cant,@resultsdata)=&historicoSanciones($fechaIni,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+my ($cant,$resultsdata)=C4::AR::Estadisticas::historicoSanciones($obj);
 C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'cant'}=$cant;
 $t_params->{'user'}=$user;
 $t_params->{'tiposPrestamos'}=$tipoPrestamo;
