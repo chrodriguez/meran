@@ -25,8 +25,8 @@ my $chkuser= $obj->{'chkuser'};
 
 my $dateformat = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
-my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
+$obj->{'fechaInicio'} =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+$obj->{'fechaFin'}    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
 my $domiTotal;
 my $renovados;
@@ -39,14 +39,16 @@ my $cantUsuRenov;
 my $cantUsuReser;
 my $checkbox=scalar(@chck);
 
+$obj->{'chck_array'} = @chck;
+
 if( $checkbox>0 || ($checkbox==0 && $chkuser eq "false")){
-	($domiTotal,$renovados,$devueltos,$sala,$foto,$especial)=estadisticasGenerales($fechaInicio, $fechaFin, $chkfecha, @chck);
+	($domiTotal,$renovados,$devueltos,$sala,$foto,$especial)=C4::AR::Utilidades::estadisticasGenerales($obj);
 }
 
 if(($chkuser eq "false" && $checkbox==0)||$chkuser ne "false"){
-	$cantUsuPrest=cantidadUsuariosPrestamos($fechaInicio, $fechaFin, $chkfecha);
-	$cantUsuRenov=cantidadUsuariosRenovados($fechaInicio, $fechaFin, $chkfecha);
-	$cantUsuReser=cantidadUsuariosReservas($fechaInicio, $fechaFin, $chkfecha);
+	$cantUsuPrest=cantidadUsuariosPrestamos($obj->{'fechaInicio'}, $obj->{'fechaFin'}, $chkfecha);
+	$cantUsuRenov=cantidadUsuariosRenovados($obj->{'fechaInicio'}, $obj->{'fechaFin'}, $chkfecha);
+	$cantUsuReser=cantidadUsuariosReservas($obj->{'fechaInicio'}, $obj->{'fechaFin'}, $chkfecha);
 };
 $t_params->{'chck'}=$obj->{'chck'};
 $t_params->{'chkfecha'}=$chkfecha;

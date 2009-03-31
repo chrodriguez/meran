@@ -55,91 +55,43 @@ use vars qw(@EXPORT @ISA);
 
 
 sub historicoDeBusqueda{
-        my ($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden)=@_;
+   my ($params_obj)=@_;
 
-        my $dbh = C4::Context->dbh;
 	my $dateformat = C4::Date::get_date_format();
-	my $olddate;
-	my $newdate;	
-	my $query2;
-	my $filtro1;
-	my $filtro2;
-	my $filtro3;
+   my @filtros;
+    
+   $params_obj{'fechaIni'}= format_date_in_iso($params_obj{'fechaIni'}=,$dateformat)." 00:00:00";
+   $params_obj{'fechaFin'}= format_date_in_iso($params_obj{'fechaFin'}=,$dateformat)." 23:59:59";
 
-	$query2 = " SELECT count(*) as cant
-			FROM rep_busqueda b INNER JOIN rep_historial_busqueda hb 
-			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
-			ON (b.borrower = bor.borrowernumber) LEFT JOIN usr_ref_categoria_socio c
-			ON (c.categorycode = bor.categorycode) ";
-	
-        my $query ="	SELECT bor.borrowernumber,bor.surname, bor.firstname, bor.cardnumber, 
-			b.fecha, hb.campo, hb.valor, c.description, hb.tipo
-			FROM rep_busqueda b INNER JOIN rep_historial_busqueda hb 
-			ON (b.idBusqueda = hb.idBusqueda) LEFT JOIN borrowers bor
-			ON (b.borrower = bor.borrowernumber) LEFT JOIN usr_ref_categoria_socio c
-			ON (c.categorycode = bor.categorycode) ";
 
-	if(($fechaIni ne "")&&($fechaFin ne "")&&($catUsuarios ne "SIN SELECCIONAR")){
 
-		$fechaIni=format_date_in_iso($fechaIni,$dateformat)." 00:00:00";
-		$fechaFin=format_date_in_iso($fechaFin,$dateformat)." 23:59:59";
+	if ($params_obj{'fechaIni'} = ne ""){
+      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
+                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
+                                 }
+                      ) );
+   }
 
-		$filtro1 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
-		$filtro1 .= " AND bor.categorycode = '".$catUsuarios."'";
-		$query2 .= $filtro1;
-		$query .= $filtro1;
+   if ($params_obj{'fechaIni'} = ne ""){
+      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                                   lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                }
+                     ) );
 
-	}else{
-		if(($fechaIni ne "")&&($fechaFin ne "")){
 
-			$fechaIni=format_date_in_iso($fechaIni,$dateformat)." 00:00:00";
-			$fechaFin=format_date_in_iso($fechaFin,$dateformat)." 23:59:59";
+	if($catUsuarios ne "SIN SELECCIONAR"){
+      push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $catUsuarios, }) );
+   }
 
-			$filtro2 = " WHERE fecha BETWEEN  '".$fechaIni."' AND '".$fechaFin."'";
-			$query2 .= $filtro2;
-			$query .= $filtro2;
-		}else{
-			if($catUsuarios ne "SIN SELECCIONAR"){
-				$filtro3 = " WHERE bor.categorycode = '".$catUsuarios."'";
-				$query2 .= $filtro3;
-				$query .= $filtro3;
-			}
-		}
-	}	
 
-	$query .= " ORDER BY $orden limit ?,?";
+   my $busquedas = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
+                                                                                          query => \@filtros,
+                                                                                          sorty_by => $params_obj->{'orden'},
+                                                                                          with_objects => ['busqueda'],
+                                                                                        );
+	return(scalar(@$busquedas),$busquedas);
 
-        my $sth=$dbh->prepare($query);
-        $sth->execute($ini,$cantR);
-
-	my $sth2=$dbh->prepare($query2);
-	$sth2->execute();
-	my $cantidad=$sth2->fetchrow_hashref;
-
-	my @results;
-	my $olddate;
-	my $newdate;
-
-	while (my $data=$sth->fetchrow_hashref){
- 		
-		$olddate= $data->{'fecha'};
-		
-		C4::Date::Date_Init("DateFormat=US");
-		$olddate = C4::Date::ParseDate($olddate);
-		$newdate = C4::Date::UnixDate($olddate,'%m/%d/%Y %H:%M');
-
-		$data->{'fecha'}= $newdate;
-
-		if($data->{'borrowernumber'} eq ""){
-			$data->{'surname'}= "USUARIO NO LOGUEADO";
-		}
-
-		push(@results,$data);
-        };
-	
-	return($cantidad->{'cant'},@results);      	
-
-}   
+}
 
 
 sub historicoPrestamos{
@@ -839,32 +791,39 @@ sub getuser{
 
 #Damian - 04/05/2007 - Para buscar la cantidad de prestamos de cada tipo (estadisticas generales).
 sub estadisticasGenerales{
-	my ($fechaInicio, $fechaFin, $chkfecha, @chck)=@_;
-	my $dbh = C4::Context->dbh;
-	my @bind;
-        my $query="SELECT count(*) as cant, issuecode, renewals FROM  circ_prestamo WHERE (renewals >0 OR renewals=0)";
-	
-	if ($chkfecha ne "false"){
-		$query.=" AND (date_due>=?) AND (date_due<=?)";
-		push(@bind,$fechaInicio);
-		push(@bind,$fechaFin);
-	}
+	my ($params_obj)=@_;
+	my @filtros;
+   
+	if ($params_obj->{'chkfecha'} ne "false"){
+      push(@filtros, ( fecha => {      eq => $params_obj->{'fechaInicio'}, 
+                                       gt => $params_obj->{'fechaInicio'}, 
+                                 }
+                        ) );
+      
+      push(@filtros, ( fecha => {      eq => $params_obj->{'fechaFin'},
+                                       lt => $params_obj->{'fechaFin'},
+                                 }
+                     ) );
+   }
 
-	my $loop=scalar(@chck);
-	my $subquery="";
+   my @filtros_temp;
+	my $loop=scalar($params_obj->{'chck_array'});
+   my @loop_array = $params_obj->{'chck_array'};
 	if ($loop>0){
-		my $i;
-		for ($i=0; $i<$loop-1; $i++){
-			$subquery.=" issuecode = ? OR";
-			push(@bind,$chck[$i]);
+      my @filtros_temp;
+		for (my $i=0; $i<$loop-1; $i++){
+			 push (@filtros_temp, (tipo_prestamo => { eq=>@loop_array[$i] }));
 		}
-		$subquery =" AND (".$subquery." issuecode = ?)";
-		push(@bind,$chck[$loop-1]);
+      push (@filtros,@filtros_temp);
 	}
-	$query .= $subquery." GROUP BY issuecode, renewals";
 
-	my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
+   push (@filtros_temp, (renovaciones => { eq=> 0, gt=>0 }));
+
+	my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                     query => \@filtros,
+                                                                     group_by => ['tipo_prestamo',],
+#                                                                      select => ['*','SUM (renovaciones) AS agregacion_temp'],
+                                                                    );
 
 	my $domiTotal=0;
 	#my $noRenovados;
@@ -874,44 +833,50 @@ sub estadisticasGenerales{
 	my $foto;
 	my $especial;
 
+#FIXME que es esto????????????????????????????????????????????????????????????
+=item
 	while (my $data=$sth->fetchrow_hashref){
-	if($data->{'issuecode'} eq 'DO'){
-		if($data->{'renewals'}!=0){
-			$renovados=$data->{'cant'};
-		}
-		#else{
-		#	$noRenovados=$data->{'cant'};
-		#}
-		$domiTotal=$domiTotal + $data->{'cant'};
+	   if($data->{'issuecode'} eq 'DO'){
+		   if($data->{'renewals'}!=0){
+			   $renovados=$data->{'cant'};
+		   }
+		   $domiTotal=$domiTotal + $data->{'cant'};
+	   }
+	   elsif($data->{'issuecode'} eq 'SA'){
+		   $sala=$data->{'cant'};
+	   }
+	   elsif($data->{'issuecode'} eq 'FO'){
+		   $foto=$data->{'cant'};
+	   }
+	   else{
+		   $especial=$data->{'cant'};
+	   }
 	}
-	elsif($data->{'issuecode'} eq 'SA'){
-		$sala=$data->{'cant'};
-	}
-	elsif($data->{'issuecode'} eq 'FO'){
-		$foto=$data->{'cant'};
-	}
-	else{
-		$especial=$data->{'cant'};
-	}
-	}
-
+=cut
+$domiTotal = $especial = $prestamos->[0]->agregacion_temp; #ARREGLO TEMPORAL POR EL FIXME DE ARRIBA
 #******Para saber cuantos libros se devolvieron***********
-	if($domiTotal){
-		my @bind2;
-		my $query="SELECT count(*) as devueltos, issuecode FROM  circ_prestamo WHERE returndate IS NOT NULL AND issuecode = 'DO'";
-		if ($chkfecha ne "false"){
-			$query.=" AND (date_due>=?) AND (date_due<=?)";
-			push(@bind2,$fechaInicio);
-			push(@bind2,$fechaFin);
-		}
-		$query.=" GROUP BY issuecode";
-		
-		my $sth=$dbh->prepare($query);
-        	$sth->execute(@bind2);
-		my $data=$sth->fetchrow_hashref;
-		$devueltos=$data->{'devueltos'};
-	}
-	else {$domiTotal="";} # Si no es una busqueda por domiciliario para que no muestre 0 en el tmpl
+   if($domiTotal){
+      if ($params_obj->{'chkfecha'} ne "false"){
+
+         push(@filtros, ( fecha => {      eq => $params_obj->{'fechaInicio'}, 
+                                          gt => $params_obj->{'fechaInicio'}, 
+                                    }
+                           ) );
+
+         push(@filtros, ( fecha => {      eq => $params_obj->{'fechaFin'},
+                                          lt => $params_obj->{'fechaFin'},
+                                    }
+                        ) );
+      }
+      push(@filtros, ( tipo_prestamo => { eq => 'DO'},));
+      my $prestamos_domiciliarios = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                          query => \@filtros,
+                                                                                          group_by => ['tipo_prestamo',],
+                                                                                       );
+#       $devueltos=$data->{'devueltos'};
+	}else {
+            $domiTotal="";
+         } # Si no es una busqueda por domiciliario para que no muestre 0 en el tmpl
 
 
 return ($domiTotal,$renovados,$devueltos,$sala,$foto,$especial); 
@@ -1002,334 +967,6 @@ sub historialReservas {
   $queryFrom .= " 	ON (n1.id1 = h.id1) ";
   $queryFrom .= " 	LEFT JOIN cat_autor a ";
   $queryFrom .= " 	ON (a.id = n1.autor) ";
-  $queryFrom .= " 	LEFT JOIN cat_nivel3 n3 ";
-  $queryFrom .= " 	ON (n3.id3 = h.id3) "; 
-
-  my $queryWhere .= " 	WHERE h.borrowernumber = ? and h.type in ('reserve','cancel','notification') ";
-
-  my $queryFinal .= " 	ORDER BY h.timestamp desc ";	
-  $queryFinal .= " 	limit $ini,$cantR ";
-
-  my $consulta= $querySelectCount.$queryFrom.$queryWhere;
-
-  #obtengo la cantidad total para el paginador
-  my $sth=$dbh->prepare($consulta);
-  $sth->execute($bornum);
-  my $data= $sth->fetchrow_hashref;
-  my $count= $data->{'cant'};
-  #se realiza la consulta
-  $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
-  my $sth=$dbh->prepare($consulta);
-  $sth->execute($bornum);
-
-  #proceso los datos
-  my @result;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-	if (( $data->{'type'} eq 'reserve' )||( $data->{'type'} eq 'notification' )) {
-		$data->{'estado'}= 'Otorgada';
-		$data->{'fechaVto'}= format_date($data->{'fechaVto'},$dateformat);
-	}else{
-		if (( $data->{'type'} eq 'cancel' )&&($data->{'fechaVto'} eq '0000-00-00')) {
-			$data->{'estado'}= 'Anulada';
-			$data->{'fechaVto'}= '-';
-		}else{
-			$data->{'estado'}= 'Vencida';
-			$data->{'fechaVto'}= format_date($data->{'fechaVto'},$dateformat);
-		}
-	}
-
-	$data->{'fechaReserva'}= format_date($data->{'fechaReserva'},$dateformat);
-
-    	$result[$i]=$data;
-    	$i++;
-  }
-  $sth->finish;
-  return($count,\@result);
+  $queryFrom .= " 	LEFT ";
 }
-
-sub historicoCirculacion(){
-	my ($chkfecha,$fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
-	$tipoPrestamo,$tipoOperacion)=@_;
-	
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-	my @bind;
-	my $query="";
-	my $cant=0;
-	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, titulo,
-			h.id2,h.id3,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, n3.barcode, n3.signatura_topografica, u.firstname as userFirstname, u.surname as userSurname";
-
-	my $from= "	FROM rep_historial_circulacion h LEFT JOIN borrowers b 
-			ON (h.responsable=b.borrowernumber)
-			LEFT JOIN borrowers u
-			ON (h.borrowernumber = u.borrowernumber)
-			LEFT JOIN circ_ref_tipo_prestamo it
-			ON(it.id_tipo_prestamo = h.issuetype)
-			LEFT JOIN cat_nivel1 n1
-			ON (n1.id1 = h.id1)
-			LEFT JOIN cat_autor a
-			ON (a.id = n1.autor) 
-			LEFT JOIN cat_nivel3 n3
-			ON (n3.id3 = h.id3) ";
-
-	my $where = "";
-	if ($chkfecha ne 'false'){
-		$where = " WHERE (date>=?) AND (date<=?) ";
-		push(@bind,$fechaIni);
-		push(@bind,$fechaFin);
-	}
-	if (($user)&&($user ne '-1')){	
-		if ($where eq ''){$where = " WHERE responsable=? ";}
-		else {$where.= " AND responsable=? ";}
-		push(@bind,$user);
-	}
-	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
-		if ($where eq ''){$where = " WHERE h.type = ? ";}
-		else{$where .= " AND h.type = ? ";}
-		push(@bind, $tipoOperacion);
-	}
-
-	if(($tipoPrestamo)&&($tipoPrestamo ne '-1')){
-		if ($where eq ''){ $where = " WHERE h.issuetype = ? ";}
-		else{$where .= " AND h.issuetype = ? ";}
-		push(@bind, $tipoPrestamo);
-	}
-
-# 	my $finCons=" ORDER BY ".$orden." limit $ini,$cantR ";
-#Miguel solo para testear, despues sacar
-	my $finCons=" ORDER BY h.timestamp desc limit $ini,$cantR ";
-
-#para buscar las operaciones sobre un item, viene desde el pl detalleItemResult.pl
-	if($id3 ne ''){
-		$where.=" AND n3.id3 = ?";
-		push(@bind,$id3);
-	}
-	
-	$query="SELECT count(*) as cant ".$from.$where;
-        my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	$cant=$sth->fetchrow_array;
-	
-	$query=$select.$from.$where.$finCons;
-	$sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	my @results;
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'fecha'}=format_date($data->{'date'},$dateformat);
-		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
-		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
-		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};
-		$data->{'unititle'}=C4::AR::Nivel1::getUnititle($data->{'id1'});
-                push(@results,$data);
-        }
-        return ($cant,@results);
-}
-
-sub historicoSanciones{
-	my ($params_obj)=@_;
-   use C4::Modelo::RepHistorialSancion::Manager;
-   my @filtros;
-   my @results;
-
-   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaIni'}),
-                                 gt => format_date_in_iso($params_obj->{'fechaIni'}) }) );
-
-   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaFin'}),
-                                 lt => format_date_in_iso($params_obj->{'fechaFin'}) }) );
-
-
-   if ( ($params_obj->{'user'}) && ($params_obj->{'user'} ne '-1') ){
-      push (@filtros, ( responsable => { eq => $params_obj->{'user'} },) );
-   }
-
-   if( ($params_obj->{'tipoOperacion'}) && ($params_obj->{'tipoOperacion'} ne '-1') ){
-      push (@filtros, ( tipo_operacion => { eq => $params_obj->{'tipoOperacion'} },) );
-   }
-   if ( ($params_obj->{'tipoPrestamo'}) && ($params_obj->{'tipoPrestamo'} ne '-1') ){
-      push (@filtros, ( 'circ_tipo_sancion.tipo_operacion' => { eq => $params_obj->{'tipoPrestamo'} },) );
-   }
-
-   my $sanciones = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion(
-                                                                              query => \@filtros,
-                                                                              sorty_by => $params_obj->{'orden'},
-                                                                              limit => $params_obj->{'cantR'},
-                                                                              offset => $params_obj->{'ini'},
-                                                                              #FIXME falta circ_tipo_sancion
-                                                                              with_objects => ['usr_responsable','usr_nro_socio'],
-                                                                           );
-   return (scalar(@$sanciones),$sanciones);
-}
-
-
-sub tipoDeOperacion(){
-	my ($tipo)=@_;
-	if($tipo eq "issue"){$tipo="Prestamo";}
-	elsif($tipo eq "return"){$tipo="Devoluci&oacute;n";}
-	elsif($tipo eq "cancel"){$tipo="Cancelaci&oacute;n";}
-	elsif($tipo eq "notification"){$tipo="Notificaci&oacute;n (Vto. Reserva)";}
-	elsif($tipo eq "queue"){$tipo="R. en Espera";}
-	elsif($tipo eq "reserve"){$tipo="Reservado";}
-	elsif($tipo eq "renew"){$tipo="Renovado";}
-	elsif($tipo eq "reminder"){$tipo="Notificaci&oacute;n (Vto. Pr&eacute;stamo)";}
-	elsif($tipo eq "Insert"){$tipo="Agregado";}	
-	elsif($tipo eq "Delete"){$tipo="Borrado";}
-	return $tipo;
-}
-
-sub insertarNotaHistCirc(){
-	my ($id,$nota)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="update  rep_historial_circulacion set nota=?
-		   where id=?";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($nota,$id);
-}
-
-sub userCategReport{
-	my ($branch)=@_;
-	my $dbh = C4::Context->dbh;
-        my $query=" SELECT categorycode, count( categorycode ) as cant FROM borrowers WHERE branchcode = ? GROUP BY categorycode  ";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($branch);
-        my @results;
- 	my $clase='par';
-	my $catcode;
-	my $i=0;
-	my %indices;
-        while (my $data=$sth->fetchrow_hashref){
-	        if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-		$catcode=$data->{'categorycode'};
-		$indices{$catcode}=$i;
-		$results[$i]->{'reales'}=$data->{'cant'};
-		$results[$i]->{'categoria'}=C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
-		$results[$i]->{'clase'}=$clase;
-		$i++;
-        }
-
-	my $query=" SELECT categorycode, count( categorycode ) as cant FROM persons WHERE branchcode = ? AND borrowernumber IS NULL GROUP BY categorycode  ";
-	$sth=$dbh->prepare($query);
-        $sth->execute($branch);
-	while (my $data=$sth->fetchrow_hashref){
-		$catcode=$data->{'categorycode'};
-		if (not exists($indices{$catcode})){
-			if ($clase eq 'par') {$clase='impar'} else {$clase='par'};
-			$results[$i]->{'reales'}=0;
-			$results[$i]->{'potenciales'}=$data->{'cant'};
-			$results[$i]->{'categoria'}=C4::AR::Busquedas::getborrowercategory($data->{'categorycode'});
-			$results[$i]->{'clase'}=$clase;
-			$i++;
-		}
-		else{
-			$results[$indices{$catcode}]->{'potenciales'}=$data->{'cant'};
-		}
-	}
-         return (scalar(@results),@results);
-}
-
-=item
-SE USA EN EL REPORTE Generar Etiquetas
-=cut
-sub signaturamax {
- my ($branch) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MAX(signatura_topografica) AS max FROM cat_nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
-	$sth->execute($branch);
-	my $res= ($sth->fetchrow_hashref)->{'max'};
-	return $res;
-}
-
-=item
-SE USA EN EL REPORTE Generar Etiquetas
-=cut
-sub signaturamin {
- my ($branch) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT MIN(signatura_topografica) AS min FROM cat_nivel3 WHERE signatura_topografica IS NOT NULL AND signatura_topografica <> '' AND homebranch = ?");
-	$sth->execute($branch);
-	my $res= ($sth->fetchrow_hashref)->{'min'};
-	return $res;
-	}
-
-
-=item
-SE USA EN EL REPORTE Generar Etiquetas
-=cut
-
-sub listaDeEjemplares {
-	my ($minbarcode,$maxbarcode,$minlocation,$maxlocation,$beginlocation,$branch,$ini,$fin,$orden) = @_;
-	my @bind;
-	my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
-	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
-	INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-	WHERE ";
-	
-	if ($beginlocation ne '') {
-		$query.=" (signatura_topografica LIKE '".$beginlocation."%') ";
-	}
-	else {
-	
-		if (($minbarcode ne '') and ($maxbarcode ne '')) {
-			$query.=" (barcode BETWEEN ? AND ?) ";
-			push(@bind,$minbarcode);
-			push(@bind,$maxbarcode);
-		}
-		if (($minlocation ne '') and ($maxlocation ne '')) {
-			if (($minbarcode ne '') and ($maxbarcode ne '')) {$query.=" AND ";} #Se van a hacer las 2 consultas
-		
-			$query.=" (signatura_topografica BETWEEN ? AND ?) ";
-			push(@bind,$minlocation);
-			push(@bind,$maxlocation);
-		}
-	}
-	my @results;
-	if (($beginlocation ne '') or (($minbarcode ne '') and ($maxbarcode ne '')) or (($minlocation ne '') and ($maxlocation ne ''))) {
-	#Se va a hacer la consulta
-
-		$query.=" AND (homebranch= ?) ;";
-		push(@bind,$branchcode);	
-		my $sth = $dbh->prepare($query);
-		$sth->execute(@bind);
-	
-		while (my $row = $sth->fetchrow_hashref) {
-# 			$row->{'publisher'}=C4::Circulation::Circ2::getpublishers($row->{'biblioitemnumber'});
-			$row->{'number'}=C4::AR::Nivel2::getEdicion($row->{'id2'});
-			$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
-			$row->{'unititle'}=C4::AR::Nivel1::getUnititle($row->{'id1'});
-			$row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
-			push @results,$row;
-		}
-
-		if ($orden){
-		# Da el ORDEN al arreglo
-			my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-			@results=@sorted;
-		}
-
-		my $cantReg=scalar(@results);
-
-		#Se chequean si se quieren devolver todos
-		if(($cantReg > $fin)&&($fin ne "todos")){
-			my $cantFila=$fin-1+$ini;
-			my @results2;
-			if($cantReg < $cantFila ){
-				@results2=@results[$ini..$cantReg];
-			}
-			else{
-				@results2=@results[$ini..$fin-1+$ini];
-			}
-
-			return($cantReg,@results2);
-		}
-        	else{
-			return ($cantReg,@results);
-		}
-
-	}
-	else {# NO se hace la consulta
-		return (0,@results);
-	}	
-}
-
+1;

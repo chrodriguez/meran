@@ -19,6 +19,7 @@ __PACKAGE__->meta->setup(
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
         timestamp                => { type => 'timestamp', not_null => 1 },
+        agregacion_temp          => { type => 'varchar', length => 255, not_null => 0 },
     ],
 
     primary_key_columns => [ 'id_prestamo' ],

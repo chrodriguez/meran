@@ -15,7 +15,15 @@ __PACKAGE__->meta->setup(
         tipo        => { type => 'varchar', length => 10 },
     ],
 
-    primary_key_columns => [ 'idHistorial' ],
+   primary_key_columns => [ 'idHistorial' ],
+   relationships => [
+         busqueda =>  {
+            class       => 'C4::Modelo::RepBusqueda',
+            key_columns => { idBusqueda => 'idBusqueda' },
+            type        => 'one to one',
+      },
+         
+    ],
 );
 
 1;

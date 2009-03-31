@@ -552,13 +552,10 @@ CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1
  ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
 CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
 CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
-<<<<<<< .mine
->>>>>>> .r1244
 
 -- Se modifico el siguiente campo de cat_estructra_catalogacion (30/03/09)
 
  ALTER TABLE `cat_estructura_catalogacion` CHANGE `tipo` `tipo` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL  
-=======
 
 
 -- GASPAR EL 27/03/2009
@@ -613,4 +610,10 @@ CREATE TABLE `ref_tipo_operacion` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `descripcion` VARCHAR( 20 ) NOT NULL
 ) ENGINE = InnoDB ;
->>>>>>> .r1260
+
+-- CADA VEZ QUE EN UNA TABLA SE NECESITEN USAR FUNCIONES DE AGREGACION (MAX, MIN, AVG, etc...), CREAR (SI YA NO ESTÁ) UN CAMPO EN LA ESTRUCTURA DE
+-- LA TABLA, POR CONVENCION SE PUEDE NOMBRAR `agregacion_temp`, VARCHAR (255)
+
+ ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
+
+ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;=======

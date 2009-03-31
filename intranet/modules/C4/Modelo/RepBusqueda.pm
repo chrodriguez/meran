@@ -9,11 +9,20 @@ __PACKAGE__->meta->setup(
 
     columns => [
         idBusqueda => { type => 'serial', not_null => 1 },
-        borrower   => { type => 'integer' },
+        id_socio   => { type => 'integer' },
         fecha      => { type => 'timestamp', not_null => 1 },
     ],
 
     primary_key_columns => [ 'idBusqueda' ],
+   
+    relationships => [
+         socio =>  {
+            class       => 'C4::Modelo::UsrSocio',
+            key_columns => { id_socio => 'id_socio' },
+            type        => 'one to one',
+      },
+         
+    ],
 );
 
 1;

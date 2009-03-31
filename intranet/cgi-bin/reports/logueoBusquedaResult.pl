@@ -23,13 +23,13 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $fechaIni=$obj->{'fechaIni'};
 my $fechaFin=$obj->{'fechaFin'};
 my $catUsuarios=$obj->{'catUsuarios'};
-my $orden= $obj->{'orden'}||'surname';
+my $orden = $obj->{'orden'} = $obj->{'orden'}||'apellido';
 my $funcion=$obj->{'funcion'};
 
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #historial de busquedas desde OPAC
-my ($cantidad, @resultsdata)= &historicoDeBusqueda($ini,$cantR,$fechaIni,$fechaFin,$catUsuarios,$orden);
+my ($cantidad, $resultsdata)= C4::AR::Estadisticas::historicoDeBusqueda($obj);
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 

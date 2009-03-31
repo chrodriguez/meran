@@ -22,26 +22,26 @@
 
 		<td width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH resulsloop %]
+[% FOREACH busqueda IN resulsloop %]
 	<tr align='center'>
 		<td height=25 >&nbsp;</td>
 
 		<td  class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
 		</td>
-		<td  class="inputFontNormal"> [% firstname %]
+		<td  class="inputFontNormal"> [% busqueda.busqueda.socio.persona.getNombre %]
 		</td>
-		<td  class="inputFontNormal">[% cardnumber %] 
+		<td  class="inputFontNormal">[% busqueda.busqueda.socio.getNro_socio %] 
 		</td>
-			<td  class="inputFontNormal">[% descripcion %] 
+			<td  class="inputFontNormal">[% busqueda.busqueda.descripcion %] 
 		</td>
-		<td  class="inputFontNormal">[% fecha %] 
+		<td  class="inputFontNormal">[% busqueda.busqueda.fecha %] 
 		</td>
-		<td  class="inputFontNormal">[% campo %] 
+		<td  class="inputFontNormal">[% busqueda.campo %] 
 		</td>
-		<td  class="inputFontNormal">[% valor %] 
+		<td  class="inputFontNormal">[% busqueda.valor %] 
 		</td>
-		<td  class="inputFontNormal">[% tipo %] 
+		<td  class="inputFontNormal">[% busqueda.tipo %] 
 		</td>
 
 		<td height=25 >&nbsp;</td>
