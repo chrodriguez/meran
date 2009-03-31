@@ -15,6 +15,21 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'idSupport' ],
 );
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getDescription);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::RefSoporte->new(idSupport => $id);
+	$objecto->load();
+	return $objecto;
+}
+
 sub getIdSupport{
     my ($self) = shift;
 

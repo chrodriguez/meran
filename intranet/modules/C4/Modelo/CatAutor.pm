@@ -18,7 +18,21 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-    
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getCompleto);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $autor= C4::Modelo::CatAutor->new(id => $id);
+	$autor->load();
+	return $autor;
+}
+
 sub getId{
     my ($self) = shift;
 

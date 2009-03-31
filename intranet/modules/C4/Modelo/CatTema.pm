@@ -16,6 +16,22 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getNombre);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::CatTema->new(id => $id);
+	$objecto->load();
+	return $objecto;
+}
+
+
 sub getId{
     my ($self) = shift;
 

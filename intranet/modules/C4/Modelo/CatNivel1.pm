@@ -50,22 +50,10 @@ sub agregar{
     
     #se guardan los datos de Nivel1
     foreach my $infoNivel1 (@arrayNivel1){  
-        if( ($infoNivel1->{'campo'} eq '245')&&($infoNivel1->{'subcampo'} eq 'a') ){
-        #titulo
-            $self->setTitulo($infoNivel1->{'dato'});
-        }
-        
-        if( ($infoNivel1->{'campo'} eq '110')&&($infoNivel1->{'subcampo'} eq 'a') ){  
-        #autor
-			if( ($infoNivel1->{'modificado'})&&($data_hash->{'referencia'}) ){
-				$self->setAutor($infoNivel1->{'datoReferencia'});
-			}else{
-				$self->setAutor($infoNivel1->{'dato'});
-			}
-        }
-        
-        $self->save();
+		$self->setDato($infoNivel1);
     }
+
+	$self->save();
 
     my $id1= $self->getId1;
 
@@ -119,6 +107,29 @@ sub eliminar{
     }
 
     $self->delete();
+}
+
+sub setDato{
+	my ($self) = shift;
+	my ($data_hash) = @_;
+
+	if( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'a') ){
+	#titulo
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+			$self->setTitulo($data_hash->{'datoReferencia'});
+		}else{
+			$self->setTitulo($data_hash->{'dato'});
+		}
+	}
+	
+	if( ($data_hash->{'campo'} eq '110')&&($data_hash->{'subcampo'} eq 'a') ){  
+	#autor
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+			$self->setAutor($data_hash->{'datoReferencia'});
+		}else{
+			$self->setAutor($data_hash->{'dato'});
+		}
+	}
 }
 
 sub getId1{

@@ -18,6 +18,22 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'iso' ],
 );
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getIso);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::RefPais->new(codigo => $id);
+	$objecto->load();
+	return $objecto;
+}
+
+
 sub getIso{
     my ($self) = shift;
 

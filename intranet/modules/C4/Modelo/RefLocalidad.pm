@@ -18,6 +18,22 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'LOCALIDAD' ],
 );
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getNombre);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::RefLocalidad->new(LOCALIDAD => $id);
+	$objecto->load();
+	return $objecto;
+}
+
+
 sub getIdLocalidad{
     my ($self) = shift;
     return ($self->LOCALIDAD);

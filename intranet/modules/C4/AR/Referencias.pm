@@ -197,7 +197,6 @@ sub obtenerTablasDeReferencia {
     my @results;
 
     foreach my $objeto_ref (@$referencias_array_ref) {
-        #push (@results, $objeto_ref->createFromAlias($objeto_ref->getAlias_tabla));
 		push (@results, $objeto_ref);
     }
 
@@ -263,7 +262,6 @@ sub obtenerIdentTablaRef{
 
     return($ref->obtenerIdentTablaRef($tableAlias));
 }
-
 
 =item
 Devuelve el nombre del pais segun el iso pasado por paramentro, si no existe devuelve 0

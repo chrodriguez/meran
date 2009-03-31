@@ -583,6 +583,24 @@ DROP TABLE `V3_NEW`.`cat_detalle_disponibilidad` ;
 UPDATE `ref_disponibilidad` SET `nombre` = 'PRESTAMO' WHERE `ref_disponibilidad`.`codigo` =3 LIMIT 1 ;
 
 UPDATE `ref_disponibilidad` SET `nombre` = 'SALA DE LECTURA' WHERE `ref_disponibilidad`.`codigo` =2 LIMIT 1 ;
+<<<<<<< .mine
+>>>>>>> .r1256
+
+-- (30-03-09)
+--no me funciono el sql update anterior asi q arme este, pal q le sirve ;)
+
+ ALTER TABLE `cat_detalle_disponibilidad` CHANGE `id3` `id3` VARCHAR( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `avail` `detalle` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `loan` `tipo_prestamo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `branch` `id_ui` VARCHAR( 5 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL 
+
+
+ALTER TABLE `cat_detalle_disponibilidad` ADD `id_detalle` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+RENAME TABLE `cat_detalle_disponibilidad`  TO `cat_historico_disponibilidad` ;
+
+=======
 
 
 --GASPAR 30/03/2009 casi a las 16:00
@@ -595,3 +613,4 @@ CREATE TABLE `ref_tipo_operacion` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `descripcion` VARCHAR( 20 ) NOT NULL
 ) ENGINE = InnoDB ;
+>>>>>>> .r1260

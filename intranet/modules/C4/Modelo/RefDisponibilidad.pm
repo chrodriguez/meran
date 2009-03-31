@@ -16,6 +16,22 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'nombre' ],
 );
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getNombre);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::RefDisponibilidad->new(codigo => $id);
+	$objecto->load();
+	return $objecto;
+}
+
+
 sub getCodigo{
     my ($self) = shift;
 

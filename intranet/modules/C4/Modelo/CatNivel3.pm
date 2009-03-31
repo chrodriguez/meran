@@ -89,47 +89,9 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'});     
 
-	my $barcode;	
     #se guardan los datos de Nivel3
     foreach my $infoNivel3 (@arrayNivel3){  
-        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'f') ){
-        #tipo de documento
-			if($data_hash->{'agregarPorBarcodes'}){
-			#se esta haciendo un alta de 1 o mas barcodes
-				$barcode= $data_hash->{'barcode'};
-			}else {		
-				$barcode= $infoNivel3->{'dato'}
-			}
-
-            $self->setBarcode($barcode);
-			$self->debug ("Se agrega el BARCODE: ".$barcode."\n");
-        }
-
-        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 't') ){
-        #signatura_topografica
-            $self->setSignatura_topografica($infoNivel3->{'dato'});
-        }
-
-        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'c') ){
-        #UI poseedora
-            $self->setId_ui_poseedora($infoNivel3->{'dato'});
-        }
-
-        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'd') ){
-        #UI origen
-            $self->setId_ui_origen($infoNivel3->{'dato'});
-        }
-
-        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
-        #disponibilidad
-            $self->setId_disponibilidad($infoNivel3->{'dato'});
-        }
-
-        elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
-        #estado del ejemplar
-            $self->setId_estado($infoNivel3->{'dato'});
-        }
-   
+        $self->setDato($infoNivel3);
     } #END foreach my $infoNivel3 (@arrayNivel3)
 
     $self->save();
@@ -180,6 +142,70 @@ sub eliminar{
 
     $self->delete();
 
+}
+
+sub setDato{
+	my ($self) = shift;
+	my ($data_hash)=@_;
+	my $barcode;
+
+	if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
+	#tipo de documento
+		if($data_hash->{'agregarPorBarcodes'}){
+		#se esta haciendo un alta de 1 o mas barcodes
+			$barcode= $data_hash->{'barcode'};
+		}else {		
+			$barcode= $data_hash->{'dato'}
+		}
+
+		$self->setBarcode($barcode);
+		$self->debug ("Se agrega el BARCODE: ".$barcode."\n");
+	}
+
+	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
+	#signatura_topografica
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setSignatura_topografica($data_hash->{'datoReferencia'});
+			}else{
+				$self->setSignatura_topografica($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'c') ){
+	#UI poseedora
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setId_ui_poseedora($data_hash->{'datoReferencia'});
+			}else{
+				$self->setId_ui_poseedora($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'd') ){
+	#UI origen
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setId_ui_origen($data_hash->{'datoReferencia'});
+			}else{
+				$self->setId_ui_origen($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'o') ){
+	#disponibilidad
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setId_disponibilidad($data_hash->{'datoReferencia'});
+			}else{
+				$self->setId_disponibilidad($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'e') ){
+	#estado del ejemplar
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setId_estado($data_hash->{'datoReferencia'});
+			}else{
+				$self->setId_estado($data_hash->{'dato'});
+		}
+	}
 }
 
 sub getId_ui_poseedora{

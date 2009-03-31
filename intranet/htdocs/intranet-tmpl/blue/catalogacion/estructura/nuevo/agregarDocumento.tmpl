@@ -233,7 +233,6 @@ function mostrarDataNivel1(){
     if (MODIFICAR){
         for (x=0; x<DATA_ARRAY.length; x++){
 			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//             COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].rep_n1_id;
 			COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
         }
    }
@@ -244,7 +243,6 @@ function mostrarDataNivel2(){
     if (MODIFICAR){
         for (x=0; x<DATA_ARRAY.length; x++){
 			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//             COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].rep_n2_id;
 				COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
         }
    }
@@ -255,7 +253,6 @@ function mostrarDataNivel3(){
     if (MODIFICAR){
         for (x=0; x<DATA_ARRAY.length; x++){
 			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//             COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].rep_n3_id;
 				COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
         }
    }
@@ -580,6 +577,7 @@ function updateGuardarModificacionDocumentoN3(responseText){
 
 	//inicializo el arreglo
 	_freeMemory(ID3_ARRAY);
+	ID3_ARRAY= [];
 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
@@ -803,7 +801,7 @@ function crearComponente(tipo,id,objeto,valor){
         break;
         case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
         break;
-		case "auto": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+">";
+		case "auto": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+">";
         break;
 		case "hidden": comp="<input type='hidden' id='"+id+"' value=''>";
         break;

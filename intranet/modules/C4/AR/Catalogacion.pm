@@ -1913,68 +1913,6 @@ sub getHashCatalogaciones{
 }
 
 
-=item
-Este funcion devuelve la estructura de catalogacion con los datos de los Niveles Repetibles 1, 2 y 3
-=cut
-=item
-# FIXME ESTA FUNCION ESTA ANDANDO, ESTOY PROBANDO OTRA
-sub getHashCatalogacionesConDatos{
-    my ($params)=@_;
-
-	#obtengo la estructura de catalogacion de los NIVELES REPETIBLES
-    my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
-
-    
-# MAPEO Y FILTRO DE INFO AL CLIENTE
-    my @result;
-    foreach my $cat  (@$catalogaciones_array_ref){
-
-        my %hash_temp;
-        $hash_temp{'campo'}= $cat->getCampo;
-        $hash_temp{'subcampo'}= $cat->getSubcampo;
-		$hash_temp{'dato'}= $cat->{'dato'};
-        $hash_temp{'nivel'}= $cat->getNivel;
-        $hash_temp{'visible'}= $cat->getVisible;
-        $hash_temp{'liblibrarian'}= $cat->getLiblibrarian;
-        $hash_temp{'itemtype'}= $cat->getItemType;
-        $hash_temp{'repetible'}= $cat->getRepetible;
-#         $hash_temp{'fijo'}= $cat->getFijo; #no es necesario enviar al cliente
-        $hash_temp{'tipo'}= $cat->getTipo;
-        $hash_temp{'referencia'}= $cat->getReferencia;
-        $hash_temp{'obligatorio'}= $cat->getObligatorio;
-        $hash_temp{'idCompCliente'}= $cat->getIdCompCliente;
-        $hash_temp{'intranet_habilitado'}= $cat->getIntranet_habilitado;
-
-		if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
-        #tiene una referencia, y no es un autocomplete			
-			C4::AR::Debug::debug('tiene referencia y no es auto');
-            $cat->{'infoReferencia'}->{'campos'}; 
-            my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
-																						$cat->infoReferencia->getReferencia,  #tabla  
-                                                                                        $cat->infoReferencia->getCampos  #campo
-                                                                                );
-            $hash_temp{'opciones'}= $valores;
-        }
-
-		if( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
-		#es un autocomplete
-			C4::AR::Debug::debug('tiene referencia y es un autocomplete');
-			$hash_temp{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
-			$hash_temp{'datoReferencia'}= $cat->{'dato'};
-		}
-
-
-        push (@result, \%hash_temp);
-    }
-
-	#obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
-	my @resultEstYDatos= _obtenerEstructuraYDatos($params);
-	push(@resultEstYDatos,@result);
-
-	return (scalar(@resultEstYDatos), \@resultEstYDatos);
-}
-=cut
-
 sub getHashCatalogacionesConDatos{
     my ($params)=@_;
 
@@ -2022,11 +1960,15 @@ sub getHashCatalogacionesConDatos{
 				$hash_temp{'opciones'}= $valores;
 			}
 	
-			if( ( $cat_estruct_array->[0]->getReferencia) && ( $cat_estruct_array->[0]->getTipo eq 'auto') ){
+			if( ( $cat_estruct_array->[0]->getReferencia) && ( $cat_estruct_array->[0]->getTipo eq 'auto') && ($cat->getDato ne '') ){
 			#es un autocomplete
 				C4::AR::Debug::debug('tiene referencia y es un autocomplete');
 				$hash_temp{'referenciaTabla'}=  $cat_estruct_array->[0]->infoReferencia->getReferencia;
-				$hash_temp{'datoReferencia'}= $cat->{'dato'};
+				my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+				my $obj_generico= $pref_tabla_referencia->getObjeto($cat_estruct_array->[0]->infoReferencia->getReferencia, $cat->{'dato'});
+				$obj_generico= $obj_generico->getObjeto($cat->{'dato'});
+				$hash_temp{'dato'}= $obj_generico->toString;
+				$hash_temp{'datoReferencia'}= $cat->{'dato'};#sobreescribo el dato
 			}
 	
 	
@@ -2143,7 +2085,6 @@ sub getCatalogacionesConDatos{
     my ($params)=@_;
 
 	my $nivel= $params->{'nivel'};
-	my $id= $params->{'id'};
 
 	use C4::Modelo::CatNivel1;
     use C4::Modelo::CatNivel1::Manager;
@@ -2163,23 +2104,17 @@ sub getCatalogacionesConDatos{
 
          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
                                                 query => [ 
-#                                                             id1 => { eq => $id },
- 															'cat_nivel1.id1' => { eq => $id },
-#                                                             'cat_estructura_catalogacion.nivel' =>  {eq => 1},
-                                                            
+ 															'cat_nivel1.id1' => { eq => $params->{'id'} },
                                                     ], 
-
  	 										with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
-# 				with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor' ],
-# 				require_objects => [ 'CEC' ],
 
-                                                                     );
+							);
 	
    }
    elsif ($nivel == 2){
          $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
                                                                               query => [ 
-                                                                                          id2 => { eq => $id },
+                                                                                          id2 => { eq => $params->{'id'} },
                                                                                     ],
                                                                 require_objects => [ 'cat_nivel2', 'CEC' ]
 
@@ -2188,11 +2123,9 @@ sub getCatalogacionesConDatos{
    else{
          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
                                                                               query => [ 
-                                                                                           id3 => { eq => $id },
-# 																							 id3 => { eq => $params->{'ID3_ARRAY'}->[0] }
+                                                                                           id3 => { eq => $params->{'id3'} },
                                                                                     ],
                                                                               require_objects => [ 'cat_nivel3', 'CEC' ]
-
                                                                      );
    }
 

@@ -40,7 +40,16 @@ sub createFromAlias{
     my ($self)=shift;
     my $classAlias = shift;
     my $firstTable = C4::Modelo::CatAutor->new();
-       return( $firstTable->createFromAlias($classAlias) );
+       
+	return( $firstTable->createFromAlias($classAlias) );
+}
+
+sub getObjeto{
+	my ($self)=shift;
+    my $classAlias = shift;
+    my $firstTable = C4::Modelo::CatAutor->new();
+       
+	return( $firstTable->createFromAlias($classAlias) );
 }
 
 sub getId{

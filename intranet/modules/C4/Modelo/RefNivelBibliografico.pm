@@ -15,6 +15,22 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'code' ],
 );
 
+sub toString{
+	my ($self) = shift;
+
+    return ($self->getDescription);
+}    
+
+sub getObjeto{
+	my ($self) = shift;
+	my ($id) = @_;
+
+	my $objecto= C4::Modelo::RefNivelBibliografico->new(code => $id);
+	$objecto->load();
+	return $objecto;
+}
+
+
 sub getCode{
     my ($self) = shift;
 

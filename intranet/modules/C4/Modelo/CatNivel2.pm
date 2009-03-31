@@ -94,40 +94,7 @@ sub agregar{
     
     #se guardan los datos de Nivel2
     foreach my $infoNivel2 (@arrayNivel2){  
-        if( ($infoNivel2->{'campo'} eq '910')&&($infoNivel2->{'subcampo'} eq 'a') ){
-        #tipo de documento
-            $self->setTipo_documento($infoNivel2->{'dato'});
-        }
-
-        elsif( ($infoNivel2->{'campo'} eq '245')&&($infoNivel2->{'subcampo'} eq 'h') ){
-        #soporte
-            $self->setSoporte($infoNivel2->{'dato'});
-        }
-
-        elsif( ($infoNivel2->{'campo'} eq '900')&&($infoNivel2->{'subcampo'} eq 'b') ){
-        #nivel bibliografico
-            $self->setNivel_bibliografico($infoNivel2->{'dato'});
-        }
-
-        elsif( ($infoNivel2->{'campo'} eq '043')&&($infoNivel2->{'subcampo'} eq 'c') ){
-        #pais publicacion
-            $self->setPais_publicacion($infoNivel2->{'dato'});
-        }
-
-        elsif( ($infoNivel2->{'campo'} eq '041')&&($infoNivel2->{'subcampo'} eq 'h') ){
-        #lenguaje
-            $self->setLenguaje($infoNivel2->{'dato'});
-        }
-
-        elsif( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'a') ){
-        #ciudad de publicacion
-            $self->setCiudad_publicacion($infoNivel2->{'dato'});
-        }
-    
-        elsif( ($infoNivel2->{'campo'} eq '260')&&($infoNivel2->{'subcampo'} eq 'c') ){
-        #anio de publicacion
-            $self->setAnio_publicacion($infoNivel2->{'dato'});
-        }
+		$self->setDato($infoNivel2);
     } #END foreach my $infoNivel2 (@arrayNivel2)
 
     $self->setId1($data_hash->{'id1'});
@@ -186,6 +153,74 @@ sub eliminar{
 
     $self->delete();
 
+}
+
+sub setDato{
+	my ($self) = shift;
+	my ($data_hash)=@_;
+
+	 if( ($data_hash->{'campo'} eq '910')&&($data_hash->{'subcampo'} eq 'a') ){
+	#tipo de documento
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setTipo_documento($data_hash->{'datoReferencia'});
+			}else{
+				$self->setTipo_documento($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'h') ){
+	#soporte
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setSoporte($data_hash->{'datoReferencia'});
+			}else{
+				$self->setSoporte($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '900')&&($data_hash->{'subcampo'} eq 'b') ){
+	#nivel bibliografico
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setNivel_bibliografico($data_hash->{'datoReferencia'});
+			}else{
+				$self->setNivel_bibliografico($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '043')&&($data_hash->{'subcampo'} eq 'c') ){
+	#pais publicacion
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setPais_publicacion($data_hash->{'datoReferencia'});
+			}else{
+				$self->setPais_publicacion($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '041')&&($data_hash->{'subcampo'} eq 'h') ){
+	#lenguaje
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setLenguaje($data_hash->{'datoReferencia'});
+			}else{
+				$self->setLenguaje($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'a') ){
+	#ciudad de publicacion
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setCiudad_publicacion($data_hash->{'datoReferencia'});
+			}else{
+				$self->setCiudad_publicacion($data_hash->{'dato'});
+		}
+	}
+
+	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'c') ){
+	#anio de publicacion
+		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+				$self->setAnio_publicacion($data_hash->{'datoReferencia'});
+			}else{
+				$self->setAnio_publicacion($data_hash->{'dato'});
+		}
+	}
 }
 
 sub getAnio_publicacion{

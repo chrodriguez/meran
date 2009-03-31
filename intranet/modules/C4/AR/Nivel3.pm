@@ -1038,7 +1038,7 @@ sub t_modificarNivel3 {
         eval {
 			my $id3_array= $params->{'ID3_ARRAY'}; 
 			my $cant= scalar(@$id3_array);
-
+C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
 
