@@ -60,27 +60,27 @@ sub historicoDeBusqueda{
 	my $dateformat = C4::Date::get_date_format();
    my @filtros;
     
-   $params_obj{'fechaIni'}= format_date_in_iso($params_obj{'fechaIni'}=,$dateformat)." 00:00:00";
-   $params_obj{'fechaFin'}= format_date_in_iso($params_obj{'fechaFin'}=,$dateformat)." 23:59:59";
+   $params_obj->{'fechaIni'}= format_date_in_iso($params_obj->{'fechaIni'},$dateformat)." 00:00:00";
+   $params_obj->{'fechaFin'}= format_date_in_iso($params_obj->{'fechaFin'},$dateformat)." 23:59:59";
 
 
 
-	if ($params_obj{'fechaIni'} = ne ""){
+	if ($params_obj->{'fechaIni'} ne ""){
       push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
                                                    gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
                                  }
                       ) );
    }
 
-   if ($params_obj{'fechaIni'} = ne ""){
+   if ($params_obj->{'fechaIni'} ne ""){
       push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                                    lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                 }
                      ) );
+   }
 
-
-	if($catUsuarios ne "SIN SELECCIONAR"){
-      push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $catUsuarios, }) );
+	if($params_obj->{'catUsuarios'} ne "SIN SELECCIONAR"){
+      push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
    }
 
 
