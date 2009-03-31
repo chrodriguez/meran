@@ -359,43 +359,43 @@ fields from the reserves table of the Koha database.
 
 =cut
 sub getpatroninformation {
-# open (A, ">>/tmp/debug.txt");
-# print A "getpatroninformation \n";
-	my ($borrowernumber,$cardnumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query;
-	my $sth;
-	if ($borrowernumber) {
-		$sth = $dbh->prepare("SELECT borrowers.*,ref_localidad.nombre as cityname, usr_ref_categoria_socio.description AS cat FROM borrowers LEFT JOIN usr_ref_categoria_socio ON usr_ref_categoria_socio.categorycode = borrowers.categorycode
-		LEFT JOIN ref_localidad on ref_localidad.localidad=borrowers.city
-		WHERE borrowers.borrowernumber = ? ;");
-		$sth->execute($borrowernumber);
-	} elsif ($cardnumber) {
-		$sth = $dbh->prepare("select * from borrowers where cardnumber=?");
-		$sth->execute($cardnumber);
-	} else {
-		#$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
-		# FIXME VER CON LOS CODIGO DE ERROR DEL PM DE MENSAJES!!!!!!!
-		return("error");
-	}
-
-# 	$env->{'mess'} = $query;
-	my $borrower = $sth->fetchrow_hashref;
-
-	my $flags = patronflags($borrower);
-	my $accessflagshash;
-# print A "getpatroninformation=> antes del select bit\n";
-	$sth=$dbh->prepare("SELECT bit,flag FROM usr_permiso");
-	$sth->execute;
-	while (my ($bit, $flag) = $sth->fetchrow) {
-		if ( $borrower->{'flags'} & 2**$bit ) {
-			$accessflagshash->{$flag}=1;
-		}
-	}
-	$sth->finish;
-	$borrower->{'flags'}=$flags;
-# print A "me voy: getpatroninformation \n";
-	return ($borrower, $flags, $accessflagshash);
+# # open (A, ">>/tmp/debug.txt");
+# # print A "getpatroninformation \n";
+# 	my ($borrowernumber,$cardnumber) = @_;
+# 	my $dbh = C4::Context->dbh;
+# 	my $query;
+# 	my $sth;
+# 	if ($borrowernumber) {
+# 		$sth = $dbh->prepare("SELECT borrowers.*,ref_localidad.nombre as cityname, usr_ref_categoria_socio.description AS cat FROM borrowers LEFT JOIN usr_ref_categoria_socio ON usr_ref_categoria_socio.categorycode = borrowers.categorycode
+# 		LEFT JOIN ref_localidad on ref_localidad.localidad=borrowers.city
+# 		WHERE borrowers.borrowernumber = ? ;");
+# 		$sth->execute($borrowernumber);
+# 	} elsif ($cardnumber) {
+# 		$sth = $dbh->prepare("select * from borrowers where cardnumber=?");
+# 		$sth->execute($cardnumber);
+# 	} else {
+# 		#$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
+# 		# FIXME VER CON LOS CODIGO DE ERROR DEL PM DE MENSAJES!!!!!!!
+# 		return("error");
+# 	}
+# 
+# # 	$env->{'mess'} = $query;
+# 	my $borrower = $sth->fetchrow_hashref;
+# 
+# 	my $flags = patronflags($borrower);
+# 	my $accessflagshash;
+# # print A "getpatroninformation=> antes del select bit\n";
+# 	$sth=$dbh->prepare("SELECT bit,flag FROM usr_permiso");
+# 	$sth->execute;
+# 	while (my ($bit, $flag) = $sth->fetchrow) {
+# 		if ( $borrower->{'flags'} & 2**$bit ) {
+# 			$accessflagshash->{$flag}=1;
+# 		}
+# 	}
+# 	$sth->finish;
+# 	$borrower->{'flags'}=$flags;
+# # print A "me voy: getpatroninformation \n";
+# 	return ($borrower, $flags, $accessflagshash);
 }
 
 =item getiteminformation

@@ -143,8 +143,8 @@ sub getFecha_recodatorio_formateada{
 
 sub setFecha_recordatorio{
     my ($self) = shift;
-    my ($fecha_recodatorio) = @_;
-    $self->fecha_recordatorio($fecha_recodatorio);
+    my ($fecha_recordatorio) = @_;
+    $self->fecha_recordatorio($fecha_recordatorio);
 }
 
 sub getId_ui{
@@ -187,7 +187,7 @@ sub agregar {
     $self->setId2($data_hash->{'id2'});
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setFecha_reserva($data_hash->{'fecha_reserva'});
-    $self->setFecha_recodatorio($data_hash->{'fecha_recodatorio'});
+    $self->setFecha_recordatorio($data_hash->{'fecha_recordatorio'});
     $self->setFecha_notificacion($data_hash->{'fecha_notificacion'});
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setEstado($data_hash->{'estado'});
@@ -211,12 +211,17 @@ sub reservar {
 	my ($self)=shift;
 	my($params)=@_;
 
+
+	$self->debug("RESERVA: tipo: ".$params->{'tipo'}." id3: ".$params->{'id3'}." tipo_p:".$params->{'tipo_prestamo'});
+	$self->debug("RESERVA: socio: ".$params->{'nro_socio'}." resp: ".$params->{'loggedinuser'});
+
 	my $dateformat = C4::Date::get_date_format();
-	my $item;
-	$item->{'id3'}= $params->{'id3'}||'';
+	my $id3= $params->{'id3'}||'';
 	if($params->{'tipo'} eq 'OPAC'){
-		$item= C4::AR::Reservas::getItemsParaReserva($params->{'id2'});
+		my $nivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},'Domiciliario');
+		if($nivel3){ $id3=$nivel3->getId3;}
 	}
+
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 	my $numeroDias= C4::AR::Preferencias->getValorPreferencia("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
@@ -224,24 +229,27 @@ sub reservar {
 	my %paramsReserva;
 	$paramsReserva{'id1'}= $params->{'id1'};
 	$paramsReserva{'id2'}= $params->{'id2'};
-	$paramsReserva{'id3'}= $item->{'id3'};
+	$paramsReserva{'id3'}= $id3;
 	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recodatorio'}= $hasta;
 	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
-	$paramsReserva{'estado'}= ($item->{'id3'} ne '')?'E':'G';
+	$paramsReserva{'estado'}= ($id3 ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
 	$paramsReserva{'desdeh'}= $apertura;
 	$paramsReserva{'hastah'}= $cierre;
 	$paramsReserva{'tipo_prestamo'}= $params->{'tipo_prestamo'};
 
+
+$self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsReserva{'id_ui'});
+
 	$self->agregar(\%paramsReserva);
 	
 	$paramsReserva{'id_reserva'}= $self->getId_reserva;
 
-	if( ($item->{'id3'} ne '')&&($params->{'tipo'} eq 'OPAC') ){
+	if( ($id3 ne '')&&($params->{'tipo'} eq 'OPAC') ){
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
 		my $err= "Error con la fecha";

@@ -28,7 +28,13 @@ __PACKAGE__->meta->setup(
             column_map => { id2 => 'id2' },
             type       => 'one to one',
         },
-	
+
+		nivel1 => {
+            class      => 'C4::Modelo::CatNivel1',
+            column_map => { id1 => 'id1' },
+            type       => 'one to one',
+        },
+
         cat_nivel3_repetible => {
             class      => 'C4::Modelo::CatNivel3Repetible',
             column_map => { id3 => 'id3' },
@@ -44,13 +50,13 @@ __PACKAGE__->meta->setup(
         ref_disponibilidad => {
             class      => 'C4::Modelo::RefDisponibilidad',
             column_map => { id_disponibilidad => 'codigo' },
-            type       => 'one to many',
+            type       => 'one to one',
         },
 
 	 	ref_estado => {
             class      => 'C4::Modelo::RefEstado',
             column_map => { id_estado => 'codigo' },
-            type       => 'one to many',
+            type       => 'one to one',
         },
 
 #         ref_ui_poseedora => {

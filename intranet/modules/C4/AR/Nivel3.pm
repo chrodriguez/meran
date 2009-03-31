@@ -750,13 +750,13 @@ sub buscarNivel3PorId2YDisponibilidad{
 
 	while(my $data=$sth->fetchrow_hashref){
 
-		my $holdbranch= getBranch($data->{'id_ui_poseedora'});
+		my $holdbranch= C4::AR::Busquedas::getBranch($data->{'id_ui_poseedora'});
 		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
 		
-		my $homebranch= getBranch($data->{'id_ui_origen'});
+		my $homebranch= C4::AR::Busquedas::getBranch($data->{'id_ui_origen'});
 		$data->{'homebranchNombre'}=$homebranch->{'branchname'};
 		
-		my $wthdrawn=getAvail($data->{'wthdrawn'});
+		my $wthdrawn=C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
 		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
 		
 		if($data->{'id_estado'}){

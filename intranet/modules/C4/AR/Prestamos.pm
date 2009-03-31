@@ -1092,7 +1092,7 @@ sub getPrestamosDeSocio {
 }
 
 =item
-vencimiento recibe un parametro, un id3  lo que hace es devolver la fecha en que vence el prestamo
+vencimiento recibe un parametro, un prestamo  lo que hace es devolver la fecha en que vence el prestamo
 =cut
 sub vencimiento {
 	my ($prestamo)=@_;
@@ -1158,7 +1158,18 @@ sub t_realizarPrestamo{
 
 
 
+sub obtenerPrestamosDeSocio {
+    
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
 
+    my ($socio)=@_;
+
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+							query => [ fecha_devolucion  => { eq => undef }]
+     							); 
+    return ($prestamos_array_ref);
+}
 
 
 

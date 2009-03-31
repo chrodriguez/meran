@@ -14,7 +14,7 @@ __PACKAGE__->meta->setup(
 	     tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', not_null => 1 },
         id_ui_origen             => { type => 'varchar', length => 4 },
-	     id_ui_prestamo	         => { type => 'varchar', length => 4 },
+	    id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
@@ -183,13 +183,13 @@ sub agregar {
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setFecha_prestamo(ParseDate("today"));
     $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
-    $self->setId_ui($data_hash->{'id_ui'});
+    $self->setId_ui_origen($data_hash->{'id_ui'});
     $self->setId_ui_prestamo($data_hash->{'id_ui_prestamo'});
     $self->setRenovaciones(0);
     $self->save();
 
 	#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   $self->debug("Se loguea en historico de circulacion la cancelacion");
+   $self->debug("Se loguea en historico de circulacion el prestamo");
    use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $data_hash->{'tipo'}='prestamo';
@@ -221,8 +221,9 @@ sub prestar {
 	my $disponibilidad= C4::AR::Reservas::getDisponibilidad($id3);
 	if($cant == 1 && $disponibilidad eq "Domiciliario"){
 	#El usuario ya tiene la reserva, 
-	 $self->debug("El usuario ya tiene una reserva");
-
+	$self->debug("El usuario ya tiene una reserva ID::: ".$reservas->[0]->getId_reserva);
+	$params->{'id_reserva'}= $reservas->[0]->getId_reserva;
+	
 		if($id3 != $reservas->[0]->getId3){
 		$self->debug("Los ids son distintos, se intercambian");
 		#se le esta entregando un item que es <> al que se le asigno al relizar la reserva
@@ -230,7 +231,6 @@ sub prestar {
 		#Los ids son distintos, se intercambian.
 			$reservas->[0]->db=$self->db;
 			$reservas->[0]->intercambiarId3($id3,$msg_object);
-			$params->{'id_reserva'}= $reservas->[0]->getId_reserva;
 		}
 	}
 	elsif($cant ==1 && $disponibilidad eq "Para Sala"){
@@ -247,7 +247,7 @@ sub prestar {
 		if ($reserva){
 		$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-			my ($nivel3)= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'});
+			my ($nivel3)= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$disponibilidad);
 			if($nivel3){
 				#CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
 				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR");
@@ -280,10 +280,12 @@ sub prestar {
 		}
 		#Se realiza una reserva
 		if($seReserva){
+			$self->debug("Se realiza una reserva!! ");
+
 			my ($reserva) = C4::Modelo::CircReserva->new(db=>$self->db);
 			my ($paramsReserva)= $reserva->reservar($params);
  			$params->{'id_reserva'}= $reserva->getId_reserva;
-			$self->debug("Se realiza una reserva ID: ".$params->{'id_reserva'});
+			$self->debug("Se realizo la reserva ID: ".$params->{'id_reserva'});
 		}
 	}
 	
@@ -307,14 +309,18 @@ sub insertarPrestamo {
 	use C4::Modelo::CircReserva;
     my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
     $reserva->load();
+	$self->debug("Se actualiza el estado de la reserva a P = Prestado");
 #Se actualiza el estado de la reserva a P = Prestado
 	$reserva->setEstado('P');
 	$reserva->save();
 
+	$self->debug("Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo");
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
 	use C4::Modelo::CircSancion::Manager;
-	C4::Modelo::CircSancion::Manager->delete_circ_sancion(db=>$self->db,query => [ id_reserva =>{eq => $reserva->getId_reserva }]);
+	my $sancion= C4::Modelo::CircSancion::Manager->get_circ_sancion(db=>$self->db,query =>[id_reserva =>{eq => $reserva->getId_reserva }]);
+	if ($sancion->[0]){$sancion->[0]->delete();}
 
+	$self->debug("Se realiza el prestamo del item");
 #Se realiza el prestamo del item
 	$self->agregar($params);
 
@@ -344,6 +350,37 @@ sub _verificacionesPostPrestamo {
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => [$params->{'barcode'}]} ) ;
 		}
 }
+
+
+
+sub estaVencido{
+	my ($self)=shift;
+	
+	my $dateformat = C4::Date::get_date_format();
+	my $hoy=C4::Date::format_date_in_iso(C4::Date::ParseDate("today"),$dateformat);
+	my $cierre= C4::AR::Preferencias->getValorPreferencia("close");
+	my $close = C4::Date::ParseDate($cierre);
+	my $err;
+   if (Date::Manip::Date_Cmp($close,C4::Date::ParseDate("today"))<0){#Se paso la hora de cierre
+     		$hoy=C4::Date::format_date_in_iso(C4::Date::DateCalc($hoy,"+ 1 day",\$err),$dateformat);}
+
+   	my $df=C4::Date::format_date_in_iso(C4::AR::Prestamos::vencimiento($self),$dateformat);
+   	if (Date::Manip::Date_Cmp($df,$hoy)<0){ return 1;}
+	return 0;
+}
+
+sub getFecha_vencimiento{
+	my ($self)=shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date_in_iso(C4::AR::Prestamos::vencimiento($self),$dateformat);
+}
+
+
+sub sePuedeRenovar{
+	my ($self)=shift;
+	return 0;
+}
+
 
 1;
 

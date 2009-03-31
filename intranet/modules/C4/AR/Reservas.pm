@@ -481,9 +481,9 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 		my $sePermiteReservaGrupo=1;
 		if ($data){
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-			my ($datosNivel3)= getItemsParaReserva($params->{'id2'});
+		    my $datosNivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$disponibilidad);
 			if($datosNivel3){
-				&cambiarId3($datosNivel3->{'id3'},$data->getId_reserva);
+				&cambiarId3($datosNivel3->getId3,$data->getId_reserva);
 				# el id3 de params quedo libre para ser reservado
 			}
 			else{
@@ -773,50 +773,49 @@ Se usa cuando ...
 =cut
 
 ## FIXME esta funcion se trae de la V2, tratar de modularizar mas y reusar funciones, puede que haya
-# consultas repetidas..
-sub cambiarReservaEnEspera {
-my ($id2,$id3,$responsable)=@_;
-	my $dbh=C4::Context->dbh;
-
-	#Tiene una reserva asignada??
-	my $query=" SELECT * FROM circ_reserva WHERE (estado <> 'P') AND (id3 = ?) ";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id3);
-	my $reserva=$sth->fetchrow_hashref;
-	
-	if($reserva){
-	#Tenia una reserva asignada hay que cambiarla
-		my $item= getItemsParaReserva($id2); #busco un item libre del grupo
-		if ($item) {
-		#Hay un ejemplar libre para el usuario
-			my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id_reserva= ?; ");
-			$sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
-
-		}else {
-		#NO hay ejemplares libres!!! 
-		#Queda algun ejemplar Disponible?? (wthdrawn = 0) y (notforloan = 0)
-# 		my $query2="SELECT * FROM nivel3 WHERE id2 = ? and wthdrawn='0' and notforloan = '0'";
-		my $query2="SELECT * FROM cat_nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
-		my $sth4=$dbh->prepare($query2);
-		$sth4->execute($id2);
-		my $disponibles=$sth4->fetchrow_hashref;
-			if ($disponibles){
-		#Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
-				my $query3="UPDATE circ_reserva SET timestamp='0000-00-00 00:00:00', id3 = NULL
-					    WHERE id_reserva=? ";
-				my $sth5=$dbh->prepare($query3);
-				$sth5->execute($reserva->{'reservenumber'});
-			}
-			else {
-			#Cancelar TODAS las reservas!!! No hay mas ejemplares disponibles
-			cancelar_todas_las_reservas_de_un_grupo($id2,$responsable);
-			}
-		}
-	
-	}
-
-}
-
+# # consultas repetidas..
+# sub cambiarReservaEnEspera {
+# my ($id2,$id3,$responsable)=@_;
+# 	my $dbh=C4::Context->dbh;
+# 
+# 	#Tiene una reserva asignada??
+# 	my $query=" SELECT * FROM circ_reserva WHERE (estado <> 'P') AND (id3 = ?) ";
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute($id3);
+# 	my $reserva=$sth->fetchrow_hashref;
+# 	
+# 	if($reserva){
+# 	#Tenia una reserva asignada hay que cambiarla
+# 		my $item= getItemsParaReserva($id2); #busco un item libre del grupo
+# 		if ($item) {
+# 		#Hay un ejemplar libre para el usuario
+# 			my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id_reserva= ?; ");
+# 			$sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
+# 
+# 		}else {
+# 		#NO hay ejemplares libres!!! 
+# 		#Queda algun ejemplar Disponible?? (wthdrawn = 0) y (notforloan = 0)
+# # 		my $query2="SELECT * FROM nivel3 WHERE id2 = ? and wthdrawn='0' and notforloan = '0'";
+# 		my $query2="SELECT * FROM cat_nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
+# 		my $sth4=$dbh->prepare($query2);
+# 		$sth4->execute($id2);
+# 		my $disponibles=$sth4->fetchrow_hashref;
+# 			if ($disponibles){
+# 		#Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
+# 				my $query3="UPDATE circ_reserva SET timestamp='0000-00-00 00:00:00', id3 = NULL
+# 					    WHERE id_reserva=? ";
+# 				my $sth5=$dbh->prepare($query3);
+# 				$sth5->execute($reserva->{'reservenumber'});
+# 			}
+# 			else {
+# 			#Cancelar TODAS las reservas!!! No hay mas ejemplares disponibles
+# 			cancelar_todas_las_reservas_de_un_grupo($id2,$responsable);
+# 			}
+# 		}
+# 	
+# 	}
+# 
+# }
 
 =item
 Esta funcion cancela todas las reservas que existan sobre el grupo.
@@ -896,13 +895,12 @@ my ($id2,$loggedinuser)=@_;
 
 #Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
 sub getNivel3ParaReserva{
-	my ($id2)=@_;
-#FIXME NO CRUZA BIEN
+	my ($id2,$disponibilidad)=@_;
     use C4::Modelo::CatNivel3::Manager;
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
 																		query => [ 
 																				id2 => { eq => $id2},
-																			'ref_disponibilidad.nombre' => { eq => "Disponible"},
+																			'ref_disponibilidad.nombre' => { eq => $disponibilidad},
 																			'ref_estado.nombre' => { eq => "Disponible"},
 																				],
 																		with_objects => ['ref_disponibilidad','ref_estado']
