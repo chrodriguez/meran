@@ -27,20 +27,20 @@ my %params;
 $params{'onChange'}= 'hacerSubmit()';
 my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
 
-my ($cantidad,@resultsdata)= &userCategReport($ui);
-my $torta=&userCategPie($ui,$cantidad, @resultsdata);
-my $barras=&userCategHBars($ui,$cantidad, @resultsdata);
+my ($cantidad,$resultsdata)= C4::AR::Estadisticas::userCategReport($ui);
+# my $torta=&userCategPie($ui,$cantidad, @resultsdata);
+# my $barras=&userCategHBars($ui,$cantidad, @resultsdata);
+# 
+# #Generar planilla.
+# my $planilla=generar_planilla_usuario(\@resultsdata,$session->{'loggedinuser'});
 
-#Generar planilla.
-my $planilla=generar_planilla_usuario(\@resultsdata,$session->{'loggedinuser'});
-
-$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'unidades'}= $ComboUI;
 $t_params->{'cantidad'}=$cantidad;
 $t_params->{'ui'}= $ui;
-$t_params->{'planilla'}=$planilla;
-$t_params->{'barras'}=$barras;
-$t_params->{'torta'}=$torta;
+# $t_params->{'planilla'}=$planilla;
+# $t_params->{'barras'}=$barras;
+# $t_params->{'torta'}=$torta;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

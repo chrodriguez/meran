@@ -21,21 +21,23 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $branch = $obj->{'id_ui'};
-my $orden = $obj->{'orden'} || 'cardnumber';
-my $estado=$obj->{'estado'}|| 'TO';
+my $orden = $obj->{'orden'} = $obj->{'orden'} || 'cardnumber';
+my $estado = $obj->{'estado'} = $obj->{'estado'}|| 'TO';
 #Fechas 
-my $begindate = $obj->{'begindate'};
-my $enddate = $obj->{'enddate'};
+$obj->{'fechaIni'} = $obj->{'begindate'};
+$obj->{'fechaFin'} = $obj->{'enddate'};
 
 my $loggedinuser = $session->param('loggedinuser');
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+$obj->{'ini'} = $ini;
+$obj->{'cantR'} = $cantR;
 
 if ($obj->{'renglones'}){
    $cantR=$obj->{'renglones'};
 }
 
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::prestamos($branch,$orden,$ini,$cantR,$estado,$begindate,$enddate);#Prestamos sin devolver (vencidos y no vencidos)
+my ($cantidad,@resultsdata)= C4::AR::Estadisticas::prestamos($obj);#Prestamos sin devolver (vencidos y no vencidos)
 my $funcion=$obj->{'funcion'};
 
 if($cantR ne "todos"){

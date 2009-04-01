@@ -822,7 +822,7 @@ sub crearTicket {
 	return(\%ticket);
 }
 #DEPRECATED paso a CircPrestamo
-sub estaVencido(){
+sub estaVencido{
 	my($id3,$tipoPres)=@_;
 # 	my @datearr = localtime(time);
 	my $err;

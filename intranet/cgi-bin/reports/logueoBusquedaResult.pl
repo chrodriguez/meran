@@ -28,12 +28,14 @@ my $funcion=$obj->{'funcion'};
 
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+$obj->{'ini'} = $ini;
+$obj->{'cantR'} = $cantR;
 #historial de busquedas desde OPAC
 my ($cantidad, $resultsdata)= C4::AR::Estadisticas::historicoDeBusqueda($obj);
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$t_params->{'resulsloop'}=\@resultsdata;
+$t_params->{'resulsloop'}=$resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'fechaIni'}=$fechaIni;
 $t_params->{'fechaFin'}=$fechaFin;

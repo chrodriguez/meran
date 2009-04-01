@@ -23,6 +23,7 @@ __PACKAGE__->meta->setup(
         cumple_requisito   => { type => 'integer', not_null => 1, default => '0'},
         id_estado          => { type => 'integer', not_null => 1 },
         activo           => { type => 'integer', default => 0, not_null => 1 },
+        agregacion_temp  => { type => 'varchar', length => 255 },
     ],
 
      relationships =>

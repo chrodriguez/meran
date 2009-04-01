@@ -25,28 +25,28 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_prestamo' ],
 
     relationships => [
-          nivel3 => {
+      nivel3 => {
             class       => 'C4::Modelo::CatNivel3',
             key_columns => { id3 => 'id3' },
-	    type        => 'one to one',
+	         type        => 'one to one',
         },
-        tipo => {
+      tipo => {
             class       => 'C4::Modelo::CircRefTipoPrestamo',
             key_columns => { tipo_prestamo => 'id_tipo_prestamo' },
-	    type        => 'one to one',
+	         type        => 'one to one',
         },
 
 	   socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
-	    type        => 'one to one',
+	         type        => 'one to one',
         },
-      	ui =>  {
+      ui =>  {
             class       => 'C4::Modelo::PrefUnidadInformacion',
             key_columns => { id_ui_origen => 'id_ui' },
             type        => 'one to one',
       },
-      	ui_prestamo =>  {
+      ui_prestamo =>  {
             class       => 'C4::Modelo::PrefUnidadInformacion',
             key_columns => { id_ui_prestamo => 'id_ui' },
             type        => 'one to one',
