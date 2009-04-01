@@ -41,7 +41,7 @@
 	<th>[% "C&oacute;digo de Barras" | i18n %]</th>
 	<th>[% "Signatura Topogr&aacute;fica" | i18n %]</th>
 	<th>[% "Volumen" | i18n %]</th>
-	<th>[% "Fechas de Pr&eacute;stamo" | i18n %]</th>
+	<th>[% "Fecha de Pr&eacute;stamo" | i18n %]</th>
 	<th>[% "Vencimiento" | i18n %]</th>
   </tr>
 [% FOREACH prestamo IN PRESTAMOS %]
@@ -87,14 +87,14 @@
 	</td>
 	<td class="impar" align="center" >
 	[% IF prestamo.getFecha_prestamo %] 
-		[% prestamo.getFecha_prestamo %]
+		[% prestamo.getFecha_prestamo_formateada %]
 	[% ELSE %]
 		- 
 	[% END %]
 	</td>
 	<td class="impar" align="center" >
 	[% IF prestamo.nivel3.getBarcode %]
-		<font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento %]</font>
+		<font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento_formateada %]</font>
 		[% IF CirculationEnabled %]
        			[% IF prestamo.sePuedeRenovar %]<br>
 				<a class="click" onClick="renovar([% prestamo.getId3 %]);">[% "Renovar" | i18n %]</a>

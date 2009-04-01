@@ -51,15 +51,15 @@ sub setId{
     $self->id($id);
 }
 
-sub getTipo{
+sub getTipo_operacion{
     my ($self) = shift;
-    return ($self->tipo);
+    return ($self->tipo_operacion);
 }
 
-sub setTipo{
+sub setTipo_operacion{
     my ($self) = shift;
-    my ($tipo) = @_;
-    $self->tipo($tipo);
+    my ($tipo_operacion) = @_;
+    $self->tipo_operacion($tipo_operacion);
 }
 
 sub getNro_socio{
@@ -122,7 +122,7 @@ sub agregar {
     my ($self)=shift;
     my ($data_hash)=@_;
 
-	$self->setTipo($data_hash->{'tipo'});
+	$self->setTipo_operacion($data_hash->{'tipo_operacion'});
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setResponsable($data_hash->{'loggedinuser'});
     $self->setFecha(ParseDate("today"));

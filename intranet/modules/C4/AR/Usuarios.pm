@@ -1300,7 +1300,7 @@ sub obtenerCategorias {
 # FIXME el nombre de la funcion no parece ser el adecuado
 
 # Obtiene todos los prestamos vencidos
- 
+#DEPRECATED
 sub mailIssuesForBorrower{
     my ($branch,$bornum)=@_;
 

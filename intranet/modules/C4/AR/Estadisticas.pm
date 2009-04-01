@@ -585,12 +585,10 @@ sub prestamos{
 
 	      my @datearr = localtime(time);
 	      my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-      
+      	my $dateformat = C4::Date::get_date_format();
 	      foreach my $prestamo (@$prestamos){
-            my $dateformat = C4::Date::get_date_format();
-		      $prestamo->{'vencimiento'}=C4::Date::format_date(C4::AR::Prestamos::vencimiento($prestamo),$dateformat);
-		      #Se filtra por Fechas de Vencimiento 
-		      if ( estaEnteFechas($fecha_inicio,$fecha_fin,$prestamo->{'vencimiento'}) ) {
+              #Se filtra por Fechas de Vencimiento 
+		      if ( estaEnteFechas($fecha_inicio,$fecha_fin,$prestamo->getFecha_vencimiento_formateada) ) {
       
                if ($prestamo->socio->persona->getTelefono eq "" ){
                   $prestamo->socio->persona->setTelefono('-');
@@ -611,7 +609,7 @@ sub prestamos{
 
                $prestamo->setFecha_prestamo(C4::Date::format_date($prestamo->getFecha_prestamo,$dateformat));;
 
-		         my $flag=Date::Manip::Date_Cmp($prestamo->{'vencimiento'},$hoy);
+		         my $flag=Date::Manip::Date_Cmp($prestamo->getFecha_vencimiento,$hoy);
 		         #Se marcan los prestamos vencidos
 		         if ($flag lt 0){
                   $prestamo->{'vencido'}='1';

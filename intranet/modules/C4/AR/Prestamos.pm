@@ -51,7 +51,6 @@ $VERSION = 0.01;
 	&getDatosPrestamoDeId3	
 
 	&sepuederenovar
-	&vencimiento
 	&verificarTipoPrestamo
 	&PrestamosMaximos
 	&IssueType
@@ -358,7 +357,7 @@ sub chequeoDeFechas(){
 	return 0;
 }
 
-=item
+=item DEPRECATED   REHACER
 renovar recibe dos parametros un id3 y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.
 =cut
 sub renovar {
@@ -398,7 +397,7 @@ sub renovar {
 		my $id1= $dataItems->{'id1'};
 		my $id2= $dataItems->{'id2'};
 		my $branchcode= $dataItems->{'homebranch'};
-		my $end_date= C4::AR::Prestamos::vencimiento($id3);
+		my $end_date= C4::AR::Prestamos::vencimiento($id3); 
 
 		C4::Circulation::Circ2::insertHistoricCirculation(	'renew',
 									$borrowernumber,
@@ -794,7 +793,7 @@ sub enviar_recordatorios_prestamos {
 	}
 }
 
-
+# REHACER
 sub crearTicket {
 	my ($id3,$bornum,$loggedinuser)=@_;
 
@@ -822,7 +821,7 @@ sub crearTicket {
 
 	return(\%ticket);
 }
-
+#DEPRECATED paso a CircPrestamo
 sub estaVencido(){
 	my($id3,$tipoPres)=@_;
 # 	my @datearr = localtime(time);
@@ -902,36 +901,6 @@ sub prestamosPorUsuario {
 	$sth->finish;
 
 	return(\%currentissues);
-}
-
-=item
-cantidadDePrestamosPorUsuario
-Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro y la cantidad de vencidos.
-=cut
-sub cantidadDePrestamosPorUsuario{
-	my ($bornum)=@_;
-  	my $dbh = C4::Context->dbh;
-  	my $dateformat = C4::Date::get_date_format();
-  	my $query="SELECT * FROM  circ_prestamo WHERE nro_socio=? AND fecha_devolucion IS NULL";
-  	my $sth=$dbh->prepare($query);
-  	$sth->execute($bornum);
-  	my $issues=0;
-  	my $overdues=0;
-  
- 	my $err= "Error con la fecha";
- 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
- 	my $close = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
-	if(Date::Manip::Date_Cmp($close,ParseDate("today"))<0){#Se paso la hora de cierre
-		$hoy=C4::Date::format_date_in_iso(DateCalc($hoy,"+ 1 day",\$err),$dateformat);
-	}
-	while (my $data=$sth->fetchrow_hashref){
-		#Pregunto si esta vencido
-       	 	my $df=C4::Date::format_date_in_iso(vencimiento($data->{'id3'}),$dateformat);
-		if (Date::Manip::Date_Cmp($df,$hoy)<0){ $overdues++;}
-		$issues++;
-	}
- 	$sth->finish;
-	return($overdues,$issues);
 }
 
 =item
@@ -1091,11 +1060,12 @@ sub getPrestamosDeSocio {
     	return ($prestamos__array_ref);
 }
 
-=item
+=item DEPRECATED se paso a CircPrestamo
 vencimiento recibe un parametro, un prestamo  lo que hace es devolver la fecha en que vence el prestamo
 =cut
 sub vencimiento {
 	my ($prestamo)=@_;
+		use C4::Modelo::CircPrestamo;
 		my $plazo_actual;
 		if ($prestamo->getRenovaciones > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 	 	 	$plazo_actual=$prestamo->tipo->getDias_renovacion;
@@ -1166,13 +1136,31 @@ sub obtenerPrestamosDeSocio {
     my ($socio)=@_;
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-							query => [ fecha_devolucion  => { eq => undef }]
+							query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $socio }]
      							); 
     return ($prestamos_array_ref);
 }
 
 
 
+=item
+cantidadDePrestamosPorUsuario
+Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro y la cantidad de vencidos.
+=cut
+sub cantidadDePrestamosPorUsuario{
+	my ($nro_socio)=@_;
+
+	my $prestamos= obtenerPrestamosDeSocio($nro_socio);
+
+  	my $prestados=0;
+  	my $vencidos=0;
+	foreach my $prestamo (@$prestamos){
+		$prestados++;
+		if($prestamo->estaVencido){$vencidos++;}
+	}
+	
+	return($vencidos,$prestados);
+}
 
 
 

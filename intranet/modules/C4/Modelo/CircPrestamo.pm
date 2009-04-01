@@ -103,6 +103,12 @@ sub getFecha_prestamo{
     return ($self->fecha_prestamo);
 }
 
+sub getFecha_prestamo_formateada{
+	my ($self)=shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date($self->getFecha_prestamo,$dateformat);
+}
+
 sub setFecha_prestamo{
     my ($self) = shift;
     my ($fecha_prestamo) = @_;
@@ -136,11 +142,18 @@ sub getFecha_devolucion{
     return ($self->fecha_devolucion);
 }
 
+sub getFecha_devolucion_formateada{
+	my ($self)=shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date($self->getFecha_devolucion,$dateformat);
+}
+
 sub setFecha_devolucion{
     my ($self) = shift;
     my ($fecha_devolucion) = @_;
     $self->fecha_devolucion($fecha_devolucion);
 }
+
 
 sub getRenovaciones{
     my ($self) = shift;
@@ -157,6 +170,13 @@ sub getFecha_ultima_renovacion{
     my ($self) = shift;
     return ($self->fecha_ultima_renovacion);
 }
+
+sub getFecha_ultima_renovacion_formateada{
+	my ($self)=shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date($self->getFecha_ultima_renovacion,$dateformat);
+}
+
 
 sub setFecha_ultima_renovacion{
     my ($self) = shift;
@@ -295,7 +315,7 @@ sub prestar {
 		$self->insertarPrestamo($params);
 
 		$self->debug("se realizan las verificacioines luego de realizar el prestamo");
-		#se realizan las verificacioines luego de realizar el prestamo
+		#se realizan lgetFecha_vencimiento_formateadaas verificacioines luego de realizar el prestamo
 		$self->_verificacionesPostPrestamo($params,$msg_object);
 	}
 
@@ -364,17 +384,46 @@ sub estaVencido{
    if (Date::Manip::Date_Cmp($close,C4::Date::ParseDate("today"))<0){#Se paso la hora de cierre
      		$hoy=C4::Date::format_date_in_iso(C4::Date::DateCalc($hoy,"+ 1 day",\$err),$dateformat);}
 
-   	my $df=C4::Date::format_date_in_iso(C4::AR::Prestamos::vencimiento($self),$dateformat);
+   	my $df=C4::Date::format_date_in_iso($self->getFecha_vencimiento,$dateformat);
    	if (Date::Manip::Date_Cmp($df,$hoy)<0){ return 1;}
+		else {
+			if ($self->getTipo_prestamo eq 'ES'){#Prestamo especial
+				if (Date::Manip::Date_Cmp($df,$hoy)==0){#Se tiene que devolver hoy	
+					my $end = Date::Manip::calc_endES();
+					my $actual= Date::Manip::ParseDate("today");
+					if (Date::Manip::Date_Cmp($actual, $end) > 0){#Se devuelve despues del limite
+						return(1);
+					}
+				}
+		   	}#Fin ES
+			}
+#No esta vencido
 	return 0;
 }
+	
+=item
+la fecha en que vence el prestamo
+=cut
 
 sub getFecha_vencimiento{
 	my ($self)=shift;
-	my $dateformat = C4::Date::get_date_format();
-	return C4::Date::format_date_in_iso(C4::AR::Prestamos::vencimiento($self),$dateformat);
+
+		my $plazo_actual;
+		if ($self->getRenovaciones > 0){#quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+	 	 	$plazo_actual=$self->tipo->getDias_renovacion;
+			return (C4::Date::proximoHabil($plazo_actual,0,$self->getFecha_ultima_renovacion));
+		} 
+		else{#es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
+		 $plazo_actual=$self->tipo->getDias_prestamo;
+		 return (C4::Date::proximoHabil($plazo_actual,0,$self->getFecha_prestamo));
+		}
 }
 
+sub getFecha_vencimiento_formateada{
+	my ($self)=shift;
+	my $dateformat = C4::Date::get_date_format();
+	return C4::Date::format_date($self->getFecha_vencimiento,$dateformat);
+}
 
 sub sePuedeRenovar{
 	my ($self)=shift;

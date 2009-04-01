@@ -476,8 +476,7 @@ sub tieneLibroVencido {
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   foreach my $prestamo (@$prestamos_array_ref) {
-    		my $fechaDeVencimiento= C4::AR::Prestamos::vencimiento($prestamo->getId3);
-    		return(1) if (Date::Manip::Date_Cmp($fechaDeVencimiento,$hoy)<0);
+    		return(1) if ($prestamo->estaVencido);
   	}
   	return(0);
 }
