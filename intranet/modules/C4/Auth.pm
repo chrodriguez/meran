@@ -950,7 +950,6 @@ sub t_operacionesDeINTRA{
 
 	my ($userid, $cardnumber, $socio) = @_;
 ## FIXME mantengo userid y cardnumber para q no se rompa, cuando se termine circulacion, sacar
-    my $dbh = C4::Context->dbh;
 
 	my ($error,$codMsg,$paraMens);
 	my $tipo= 'INTRA';
@@ -959,13 +958,14 @@ sub t_operacionesDeINTRA{
     $db->begin_work;
 
 	eval{
-		#Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-		&C4::AR::Reservas::cancelar_reservas(	$userid,
-							C4::AR::Sanciones::getBorrowersSanctions($dbh,C4::AR::Preferencias->getValorPreferencia("defaultissuetype"))
-						);
+		use C4::Modelo::CircReserva;
+		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
+		#Se borran las reservas de todos los usuarios sancionados
+		$reserva->cancelar_reservas_sancionados($userid);
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-		&C4::AR::Reservas::cancelar_reservas($userid,C4::AR::Reservas::FindNotRegularUsersWithReserves());
-		&C4::AR::Reservas::eliminarReservasVencidas($userid);	
+		$reserva->cancelar_reservas_no_regulares($userid);
+		#Ademas, se borran las reservas vencidas
+		$reserva->cancelar_reservas_vencidas($userid);	
 		#Si se logueo correctamente en intranet entonces guardo la fecha
         my $today = Date::Manip::ParseDate("today");
         $socio->setLast_login($today);

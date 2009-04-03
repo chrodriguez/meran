@@ -291,7 +291,9 @@ sub getSanctionTypeCode {
   	return($res->{'tipo_sancion'});
 }
 
+
 sub getBorrowersSanctions {
+#DEPRECATED paso a ser getSociosSancionados
   #Esta funcion retorna un array con todos los borrowernumbers de los usuarios que estan sancionados para un determinado issuecode o cuyo issuecode es null (o sea es una sancion por no retirar una reserva)
   my ($dbh, $issuecode)=@_;
   my $sth = $dbh->prepare("select nro_socio from circ_sancion left join circ_tipo_sancion on circ_sancion.tipo_sancion = circ_tipo_sancion.tipo_sancion left join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.tipo_sancion where (now() between fecha_comienzo and fecha_final) and ((circ_tipo_prestamo_sancion.tipo_prestamo = ?) or (circ_tipo_prestamo_sancion.tipo_prestamo is null))");
@@ -480,3 +482,32 @@ sub tieneLibroVencido {
   	}
   	return(0);
 }
+
+sub getSociosSancionados {
+  #Esta funcion retorna los socios sancionados para un determinado tipo de prestamo o su tipo_prestamo es 0 (o sea es una sancion por no retirar una reserva)
+  my ($tipo_prestamo)=@_;
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  
+  my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
+																	query => [ 
+																			fecha_comienzo 	=> { le => $hoy },
+																			fecha_final    	=> { ge => $hoy},
+																			tipo_prestamo 	=> { eq => $tipo_prestamo },
+																			or   => [
+																				tipo_prestamo => { eq => 0 },
+                                                                            ],
+																		],
+																	select => ['nro_socio'],
+																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
+									);
+
+  my @socios_sancionados;
+  foreach my $sancion (@$sanciones_array_ref){
+  	push (@socios_sancionados,$sancion->getNro_socio);
+  }
+
+  return(\@socios_sancionados);
+}
+

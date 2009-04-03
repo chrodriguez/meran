@@ -116,6 +116,7 @@ sub t_cancelar_y_reservar {
 	return ($msg_object);
 }
 
+#DEPRECATED ---> paso a CircReserva
 sub cancelar_reservas{
 # Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
 	my ($loggedinuser,@borrowersnumbers)= @_;
@@ -600,6 +601,7 @@ sub Enviar_Email{
 
 
 =item
+DEPRECATED pasa a CircReserva
 eliminarReservasVencidas
 Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grupo, si es que exiten, para los item liberados.
 =cut
@@ -719,7 +721,7 @@ sub tiene_reservas {
 
         return($result);
 }
-
+# DEPRECATED pasa a CircReserva
 sub FindNotRegularUsersWithReserves {
 	my $dbh = C4::Context->dbh;
 	my $query="	SELECT circ_reserva.nro_socio 
@@ -1050,8 +1052,6 @@ sub reservasVencidas{
 
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
-
-    my ($socio)=@_;
 
 	my $dateformat = C4::Date::get_date_format();
 	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);

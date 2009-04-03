@@ -30,7 +30,7 @@ function changePage(ini){
 function mostrarHistorialDePrestamos(){
 	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
 	objAH.url='/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
-	objAH.borrowernumber= usuario.ID;
+	objAH.nro_socio= usuario.ID;
 	objAH.funcion= 'changePage';
 	objAH.sendToServer();
 }
@@ -99,7 +99,7 @@ function updateInfoCancelacion(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-	detalleReservas(objAH.borrowernumber);
+	detalleReservas(objAH.nro_socio);
 }
 
 function detalleUsuario(){
@@ -133,11 +133,11 @@ function createFileUploader(){
 	}
 }
 
-function detallePrestamos(borr){
+function detallePrestamos(socio){
 
 	objAH=new AjaxHelper(updateDetallePrestamos);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detallePrestamos.pl';
-	objAH.borrnumber= borr;
+	objAH.id_socio= socio;
 	objAH.sendToServer();
 }
 
@@ -148,11 +148,11 @@ function updateDetallePrestamos(responseText){
 	detalleSanciones(usuario.ID);
 }
 
-function detalleReservas(borr){
+function detalleReservas(socio){
 
 	objAH=new AjaxHelper(updateDetalleReservas);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleReservas.pl';
-	objAH.borrnumber= borr;
+	objAH.id_socio= socio;
 	objAH.sendToServer();
 }
 
@@ -178,8 +178,7 @@ $(document).ready(function() {
 	usuario.text= "[% socio.persona.getApellido %], [% socio.persona.getNombre %]";
 	usuario.ID= [% id_socio %];
     usuario.nro_socio= '[% socio.getNro_socio %]';
-
-	detalleUsuario(usuario.ID);
+	detalleUsuario();
 // FIXME tarda mucho si se disparan todos al mismo tiempo, pruebo detalleUsuarioUsuario=> detalleReservas => detallePrestamos => detalleSanciones
 // 	detalleUsuario(usuario.ID);
 // 	detallePrestamos(usuario.ID);

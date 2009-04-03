@@ -134,11 +134,11 @@ sub getFecha_recordatorio{
     return ($self->fecha_recordatorio);
 }
 
-sub getFecha_recodatorio_formateada{
+sub getFecha_recordatorio_formateada{
     my ($self) = shift; 
 	my $dateformat = C4::Date::get_date_format();
-	$self->debug("Fecha de recordatorio: ".$self->getFecha_recodatorio);
-    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_recodatorio),$dateformat);
+	$self->debug("Fecha de recordatorio: ".$self->getFecha_recordatorio);
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_recordatorio),$dateformat);
 }
 
 sub setFecha_recordatorio{
@@ -188,7 +188,6 @@ sub agregar {
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setFecha_reserva($data_hash->{'fecha_reserva'});
     $self->setFecha_recordatorio($data_hash->{'fecha_recordatorio'});
-    $self->setFecha_notificacion($data_hash->{'fecha_notificacion'});
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setEstado($data_hash->{'estado'});
     $self->save();
@@ -233,7 +232,7 @@ sub reservar {
 	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
-	$paramsReserva{'fecha_recodatorio'}= $hasta;
+	$paramsReserva{'fecha_recordatorio'}= $hasta;
 	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
 	$paramsReserva{'estado'}= ($id3 ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
@@ -493,6 +492,134 @@ sub cancelar_reservas_inmediatas{
 	}
 
 }
+
+
+sub cancelar_reservas{
+# Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
+	my ($self)=shift;
+	my ($loggedinuser,$nro_socios)= @_;
+	my $params;
+	
+	$params->{'loggedinuser'}= $loggedinuser;
+	$params->{'tipo'}= 'INTRA';
+
+	foreach (@$nro_socios) {
+		my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
+									query => [ nro_socio => { eq => $_ }, estado => {ne => 'P'}]); 
+
+		foreach my $reserva (@$reservas_array_ref){
+			$reserva->cancelar_reserva($params);
+		}
+	}
+}
+
+
+=item
+cancelar_reservas_sancionados
+Se cancelan todas las reservas de usuarios sancionados.
+=cut
+sub cancelar_reservas_sancionados {
+	my ($self)=shift;
+	my ($loggedinuser)= @_;
+
+	#Se buscan los socios sancionados
+	my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  	my $tipo_prestamo=C4::AR::Preferencias->getValorPreferencia("defaultissuetype");
+	use C4::Modelo::CircSancion::Manager;
+    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion ( db=>$self->db, 
+																	query => [ 
+																			fecha_comienzo 	=> { le => $hoy },
+																			fecha_final    	=> { ge => $hoy},
+																			tipo_prestamo 	=> { eq => $tipo_prestamo },
+																			or   => [
+																				tipo_prestamo => { eq => 0 },
+                                                                            ],
+																		],
+																	select => ['nro_socio'],
+																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
+									);
+
+  my @socios_sancionados;
+  foreach my $sancion (@$sanciones_array_ref){
+  	push (@socios_sancionados,$sancion->getNro_socio);
+  }
+
+
+	$self->cancelar_reservas($loggedinuser,\@socios_sancionados);
+}
+
+
+=item
+cancelar_reservas_no_regulares
+Se cancelan todas las reservas de usuarios que perdieron la regularidad.
+=cut
+sub cancelar_reservas_no_regulares {
+	my ($self)=shift;
+	my ($loggedinuser)= @_;
+
+    my $params;
+    $params->{'loggedinuser'}= $loggedinuser;
+    $params->{'tipo'}= 'INTRA';
+
+	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
+													          query => [ estado => {ne => 'P'}, 'socio.estado.regular' =>{eq => 0}],
+															  with_objects => ['socio']);
+
+	foreach my $reserva (@$reservas_array_ref){
+        $reserva->cancelar_reserva($params);
+	}
+}
+
+=item
+eliminarReservasVencidas
+Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grupo, si es que exiten, para los item liberados.
+=cut
+sub cancelar_reservas_vencidas {
+	my ($self)=shift;
+    my ($loggedinuser)=@_;
+
+
+    #Se buscan las reservas vencidas!!!!
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+    my $reservasVencidas = C4::Modelo::CircReserva::Manager->get_circ_reserva(db =>$self->db,
+                            query => [ fecha_recordatorio => { lt => $hoy }, 
+                                   estado => {ne => 'P'},
+                                   id3 => {ne => undef}]
+                                );
+
+
+    #Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
+
+    foreach my $reserva (@$reservasVencidas){
+       $reserva->reasignarReservaEnEspera($loggedinuser);
+        #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+
+    $self->debug("Se loguea en historico de circulacion la cancelacion");
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   my $data_hash;
+   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}=$reserva->getId2;
+   $data_hash->{'id3'}=$reserva->getId3;
+   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+   $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'hasta'}=undef;
+   $data_hash->{'tipo_prestamo'}='-';
+   $data_hash->{'id_ui'}=$reserva->getId_ui;
+   $data_hash->{'tipo'}='cancelacion';
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+
+
+       $reserva->delete();
+    }
+
+}
+
 
 1;
 

@@ -62,14 +62,14 @@
 	[% END %]
 	</td>
 	<td class="impar" align="center">
-	[% IF reserva.getFecha_notificacion %] 
-		[% reserva.getFecha_notificacion_formateada %]
+	[% IF reserva.getFecha_reserva_formateada %] 
+		[% reserva.getFecha_reserva_formateada %]
 	[% ELSE %]
 		- 
 	[% END %]
 	</td>
 	<td class="impar" align="center">
-	[% IF reserva.getFecha_recordatorio %]
+	[% IF reserva.getFecha_recordatorio_formateada %]
 		<font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
 	[% ELSE %]
 		- 

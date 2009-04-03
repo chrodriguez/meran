@@ -1,5 +1,5 @@
 		
-[% IF circulateEnable %]
+[% IF prestamos_cant %]
 	[% USE HTML %]
 	<p align=center><b>[% "EJEMPLARES PRESTADOS" | i18n %]</b></p>
 	<table class="prestamosResult" cellspacing=0  cellpadding=0 border=0  width="100%" > 
@@ -30,92 +30,88 @@
 			<img src="[% themelang %]/images/derecha.png">
 			</th>
 		</tr>
-	[% FOREACH prestamos %]
+	[% FOREACH prestamo IN PRESTAMOS %]
 		<tr class="inputFontNormal" align="center">
 			<td height=25 >&nbsp;</td>
 			<td>
-				<input type="checkbox" name="chkboxPrestamos" value="[% id3 %]" id="[% barcode %]">
+				<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId3 %]" id="[% barcode %]">
 			</td>
 			<td width="14%" >
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% id1 %]">
-					[% IF unititle %]
+				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
+					[% prestamo.nivel3.nivel1.getTitulo %]
+					<!--[% IF unititle %]
 						:&nbsp;[% HTML.escape(unititle) %]
-					[% END %]
+					[% END %]-->
 				</a>
 			</td>
 			<td>
-				[% IF autor %]
-					[% autor %]
+				[% IF prestamo.nivel3.nivel1.getAutor %]
+					[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
 				[% ELSE %]
 					&nbsp;
 				[% END %]
 			</td>
 	
 			<td>
-				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>[% barcode %]</a>
+				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+				[% prestamo.nivel3.getBarcode %]</a>
 			</td>
 	
 			<td>
-				[% IF signatura_topografica %] 
+				[% IF prestamo.nivel3.getSignatura_topografica %] 
 					<a class="inputFontNormal" 
-						href="/cgi-bin/koha/detalle.pl?id1="[% id1 %]">
-						[% signatura_topografica %] 
+						href="/cgi-bin/koha/detalle.pl?id1="[% prestamo.nivel3.nivel1.getId1 %]">
+						[% prestamo.nivel3.getSignatura_topografica %] 
 					</a>
 				[% END %]
 			</td>
 	
 			<td>  
-				[% IF edicion %]
-					[% edicion %]
-				[% END %]
+			[% IF prestamo.nivel3.nivel2.getEdicion %] [% prestamo.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 			</td>
 	
-			<td>  
-				[% IF volume %] 
-					[% volume %]
-	
-					[% IF volumeddesc %]
-						: [% volumeddesc %]
-					[% END %]
-	
-				[% END %]
+			<td> 
+			[% IF prestamo.nivel3.nivel2.getVolumen %] t [% prestamo.nivel3.nivel2.getVolumen %] 
+				[% IF prestamo.nivel3.nivel2.getVolumenDesc %] ([% prestamo.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+			[% END %]
 			</td>
 			<td>
-				[% IF date_due %]
-					[% date_due %]
-				[% END %]
+			[% IF prestamo.getFecha_prestamo %] 
+				[% prestamo.getFecha_prestamo_formateada %]
+			[% ELSE %]
+				- 
+			[% END %]
 			</td>
 	
 			<td>
-				[% IF date_fin %] 
-					<font color="[% color %]">
-						[% date_fin %]
-					</font>
+				[% IF prestamo.getFecha_vencimiento %]
+			<font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento_formateada %]</font>
+				[% ELSE %]
+					- 
 				[% END %]
 			</td>
 	
 			<td>
-				[% IF issuetype %]
-					<font color="[% color %]">
-						[% issuetype %]
-					</font>
+				[% IF prestamo.tipo.id_tipo_prestamo %]
+						[% prestamo.tipo.getDescripcion %]
 				[% END %]
 			</td>
-			<td>&nbsp;</td>
-	[% END %] <!-- FOREACH prestamos -->
+			<td>&nbsp;</td>	
 		</tr>
+	[% END %] <!-- FOREACH prestamos -->
+	
 	</table>
 	
 	<p align="center">
 	
-	[% IF circulateEnable %]	
+	[% IF prestamos_cant %]	
 		<input type="image" BORDER=0 
 		src="[% themelang %]/images/item-return.png" 
 		title="Devolver" 
 		onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
 	[% END %]	
 	
-	[% IF regular %]
+	[% IF socio.esRegular %]
 		[% UNLESS sanctions %]
 			<input type="image" 
 			src="[% themelang %]/images/renew.png" title="Renovar" 
@@ -123,6 +119,4 @@
 		[% END %]
 	[% END %]
 	</p>
-
-[% END %] <!-- END CIRCULATE ENABLE -->
-
+[% END %]
