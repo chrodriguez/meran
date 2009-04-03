@@ -614,6 +614,8 @@ CREATE TABLE `ref_tipo_operacion` (
 -- CADA VEZ QUE EN UNA TABLA SE NECESITEN USAR FUNCIONES DE AGREGACION (MAX, MIN, AVG, etc...), CREAR (SI YA NO ESTÁ) UN CAMPO EN LA ESTRUCTURA DE
 -- LA TABLA, POR CONVENCION SE PUEDE NOMBRAR `agregacion_temp`, VARCHAR (255)
 
- ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
+ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
 
-ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;=======
+ALTER TABLE `usr_socio` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
+
+ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;
