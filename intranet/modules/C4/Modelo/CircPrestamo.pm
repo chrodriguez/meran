@@ -431,5 +431,122 @@ sub sePuedeRenovar{
 }
 
 
+
+
+=item  DEPRECATED paso a CircPrestamo
+la funcion devolver recibe una hash y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
+=cut 
+
+sub devolver {
+    my ($self)=shift;
+    my($params)=@_;
+
+    my $id3= $params->{'id3'};
+    my $tipo= $params->{'tipo'};
+    my $loggedinuser= $params->{'loggedinuser'};
+    my $nro_socio= $params->{'nro_socio'};
+#   my $codMsg;
+#   my $error;
+#   my $paraMens;
+    my $msg_object= C4::AR::Mensajes::create();
+    #se setea el barcode para informar al usuario en la devolucion
+#   $paraMens->[0]= $params->{'barcode'};
+
+
+    my $fechaVencimiento= $self->getFecha_vencimiento; # tiene que estar aca porque despues ya se marco como devuelto
+    #Actualizo la fecha de devolucion!!!!
+    my $dateformat = C4::Date::get_date_format();
+    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+    $self->setFecha_devolucion($fechaHoy);
+    $self->save();
+
+    my $disponibilidad= C4::AR::Reservas::getDisponibilidad($id3);
+
+   #Busco la reserva del prestamo
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $self->db,
+                                                query => [ id3 => { eq => $id3 }, estado => {eq => 'P'}]);
+    my $reserva=$reservas_array_ref->[0];
+    if($reserva){
+    #Si la reserva que voy a borrar existia realmente sino hubo un error
+        if($disponibilidad eq 'Domiciliario'){#si no es para sala
+            $self->reasignarReservaEnEspera($loggedinuser);
+            }
+
+    $self->debug("Se borra la reserva");
+    #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+    $reserva->delete();
+
+
+   $self->debug("Se loguea en historico de circulacion la devolucion");
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   my $data_hash;
+   $data_hash->{'id1'}=$self->nivel3->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}=$self->nivel3->nivel2->getId2;
+   $data_hash->{'id3'}=$self->getId3;
+   $data_hash->{'nro_socio'}=$self->getNro_socio;
+   $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'hasta'}=undef;
+   $data_hash->{'tipo_prestamo'}=$self->getTipo_prestamo;
+   $data_hash->{'id_ui'}=$self->getId_ui_prestamo;
+   $data_hash->{'tipo'}='devolucion';
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+
+### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
+        my $hasdebts=0;
+        my $sanction=0;
+        my $fechaFinSancion;
+
+# Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion    
+        my $daysissue=$self->tipo->getDias_prestamo;
+
+        my $diasSancion= C4::AR::Sanciones::DiasDeSancion($fechaHoy, $fechaVencimiento, $self->socio->getCod_categoria, $self->getTipo_prestamo);
+
+        if ($diasSancion gt 0) {
+# Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
+            my $sanctiontypecode = getSanctionTypeCode($self->getTipo_prestamo, $self->socio->getCod_categoria);
+            if (tieneLibroVencido($nro_socio)) {
+# El borrower tiene libros vencidos en su poder (es moroso)
+                $hasdebts = 1;
+                insertPendingSanction($sanctiontypecode, undef, $nro_socio, $diasSancion);
+            }
+            else{
+                my $err;
+# Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
+                $fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$diasSancion." days",\$err),$dateformat);
+                insertSanction($sanctiontypecode, undef, $nro_socio, $fechaHoy, $fechaFinSancion, $diasSancion);
+                $sanction = 1;
+#**********************************Se registra el movimiento en historicSanction***************************
+                my $responsable= $loggedinuser;
+                logSanction('Insert',$nro_socio,$responsable,$fechaFinSancion,$sanctiontypecode);
+#**********************************Fin registra el movimiento en historicSanction***************************
+
+#Se borran las reservas del usuario sancionado
+                my $reserva=C4::Modelo::CircReserva->new(db=>$self->db);
+                $reserva->cancelar_reservas_socio($loggedinuser,$nro_socio);
+            }
+        }
+### Final del tema sanciones
+        # Si la devolucion se pudo realizar
+#       $error= 0;
+#       $codMsg= 'P109';
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
+    }
+    else {
+        # Si la devolucion dio error
+#       $error= 1;
+#       $codMsg= 'P110';
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
+    }
+
+#   return ($error,$codMsg, $paraMens);
+    return ($msg_object);
+}
+
+
 1;
 

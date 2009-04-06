@@ -1,4 +1,4 @@
-[% IF realreserves %]
+[% IF reservas_asignadas_count %]
 	[% USE HTML %]
 	<br>
 	<p align=center><B>[% "EJEMPLARES ASIGNADOS" | i18n %]</B></p> 
@@ -26,68 +26,69 @@
 			<img src="[% interface %]/[% theme %]/images/derecha.png">
 			</th>
 		</tr>
-	[% FOREACH realreserves %]
+	[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 		<tr class="inputFontNormal" align="center">
 			<td height=25>&nbsp;</td>
 	
 			<td>
-				<input type="checkbox"  name="chkboxReservas" value="[% rid3 %]" id="[% barcode %]">
+				<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
 			</td>
 	
 			<td width="16%">
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% rid1 %]">
-					[% IF runititle %]
+				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
+                    [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
+<!--					[% IF runititle %]
 						:&nbsp;[% HTML.escape(runititle) %]
-					[% END %]
+					[% END %]-->
 				</a>
 			</td>
 			<td>
-				[% IF rauthor %]
-					[% rauthor %]
-				[% ELSE %]
-					&nbsp;
-				[% END %]
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
 			</td>
 			<td>
-				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2= [%id2%]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' 
-				Title='[% "Detalle de disponibilidad" | i18n %]'>[% barcode %]</a>
+                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% reserva.nivel3.nivel1.getId1 %]&id2=[% reserva.nivel3.nivel2.getId2 %]&id3=[% reserva.getId3 %]&barcode=[% reserva.nivel3.getBarcode %]&signatura_topografica=[% reserva.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+                [% reserva.nivel3.getBarcode %]</a>
 			</td>
 			<td>
-				[% IF signatura_topografica %]
-					<a class="inputFontNormal" 
-					href="/cgi-bin/koha/detalle.pl?id1= [% rid1 %]">
-					[% signatura_topografica %]
-					</a>
-				[% END %]
+                [% IF reserva.nivel3.getSignatura_topografica %] 
+                    <a class="inputFontNormal" 
+                        href="/cgi-bin/koha/detalle.pl?id1="[% reserva.nivel3.nivel1.getId1 %]">
+                        [% reserva.nivel3.getSignatura_topografica %] 
+                    </a>
+                [% END %]
+			</td>
+            <td>  
+            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+            </td>
+    
+            <td> 
+            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
+                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+            [% END %]
+            </td>
+			<td>
+            [% IF reserva.getFecha_recordatorio_formateada %]
+            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+            [% ELSE %]
+               - 
+            [% END %]
 			</td>
 			<td>
-				[% IF redicion %]
-					[% redicion %]
-				[% END %]
-			</td>
-			<td>
-				[% IF volume %]
-					[% volume %]
-					[% IF volumeddesc %]
-						: [% IF volumeddesc %]
-					[% END %]
-				[% END %]	 
-			</td>
-			<td>
-				[% IF rreminderdate %]
-					[% rreminderdate %]
-				[% END %]
-			</td>
-			<td>
-				[% IF rbranch %]
-				<b> [% rbranch %]</b>
-				[% END %]
+            [% IF reserva.getId_ui %] 
+                [% reserva.ui.getNombre %]
+            [% ELSE %]
+                - 
+            [% END %]
 			</td>
 	
 			<td>
 				<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
 				src="[% themelang %]/images/borrar.png" 
-				onClick="cancelarReserva('[% reservenumber %]')" title='[% "Cancelar" | i18n %]'>
+				onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
 			</td>
 			<td height=25>&nbsp;</td>
 	
@@ -106,7 +107,7 @@
 [% END %]
 
 
-[% IF waiting %]
+[% IF reservas_espera_count %]
 
 	<br>
 	<p align=center colspan=6><b>[% "RESERVAS" | i18n %]</b></p>
@@ -125,44 +126,40 @@
 				<img src="[% themelang %]/images/derecha.png">
 			</th>
 		</tr>
-	[% FOREACH waiting %]
+    [% FOREACH reserva IN RESERVAS_ESPERA %]
 		<tr align="center" class="inputFontNormal">
 			<td height=25>&nbsp;</td>
 			<td width="16%"> 
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% rid1 %]">
-					[% HTML.escape(rtitulo) %]
-					[% IF runititle %]
+				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
+					[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
+<!--					[% IF runititle %]
 						:&nbsp; [% runititle %]
-					[% END %]
+					[% END %]-->
 				</a>
 			</td>
 			<td>
-				[% IF rautor %]
-					[% rautor %]
-					&nbsp;
-				[% END %]
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
 			</td>
-			<td>  
-				[% IF redicion %]
-					[% redicion %]
-				[% END %]
-			</td>
-			<td>
-				[% IF volume %]
-					[% volume %]
-					[% IF volumeddesc %]
-						: [% volumeddesc %]
-					[% END %]
-				[% END %]
-			</td>
+           <td>  
+            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+            </td>
+    
+            <td> 
+            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
+                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+            [% END %]
+            </td>
 			<td> 
 				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
 					src="[% themelang %]/images/borrar.png" 
-					onClick="confirm_cancelation('[% reservenumber %]')" title="Cancelar">
+					onClick="confirm_cancelation('[% reserva.getId_reserva %]')" title="Cancelar">
 			</td>
 			<td height=25>&nbsp;</td>
 		</tr>
 	[% END %]
 	</table>
 [% END %]
-[% END %] <!-- FIXME  PORQUE SI ESTA CERRADO TODO??????? PERO LO NECESITA, SINO NO COMPILA :( -->

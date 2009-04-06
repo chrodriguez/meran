@@ -23,43 +23,33 @@ my ($template, $session, $t_params) = get_template_and_user ({
 my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $borrnumber= $obj->{'borrnumber'};
+my $id_socio= $obj->{'id_socio'};
 my $dateformat = C4::Date::get_date_format();
+my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($socio->getNro_socio);
 
-my ($rcount, $reserves) = C4::AR::Reservas::DatosReservas($borrnumber);
-my @realreserves;
-my @waiting;
-my $rcount = 0;
-my $wcount = 0;
+my @reservas_asignadas;
+my $racount = 0;
+my @reservas_espera;
+my $recount = 0;
 
-foreach my $res (@$reserves) {	
-    	$res->{'rreminderdate'} = format_date($res->{'rreminderdate'},$dateformat);
 
-	my $author=C4::AR::Busquedas::getautor($res->{'rautor'});
-        $res->{'rauthor'} = $author->{'completo'};
-	$res->{'id'} = $author->{'id'}; 
-
-    	if ($res->{'rid3'}) {
-		my $item=C4::AR::Catalogacion::buscarNivel3($res->{'rid3'});
-		$res->{'barcode'} = $item->{'barcode'};
-		$res->{'signatura_topografica'} = $item->{'signatura_topografica'};
-        	$res->{'rbranch'} = C4::AR::Busquedas::getBranch($res->{'rbranch'})->{'branchname'};
-        	push @realreserves, $res;
-        	$rcount++;
-  	}
-        else{
-        	push @waiting, $res;
-        	$wcount++;
-        }
+foreach my $reserva (@$reservas) {
+    if ($reserva->getId3) {
+        #Reservas para retirar
+        push @reservas_asignadas, $reserva;
+        $racount++;
+    }else{
+        #Reservas en espera
+        push @reservas_espera, $reserva;
+        $recount++;
+    }
 }
-
-$t_params->{'bornum'}= $borrnumber;
-#los libros que tiene "en espera para retirar"
-$t_params->{'waiting'}= \@waiting;
-#los libros que tiene esperando un ejemplar
-if ( (@realreserves) > 0 ){
-	$t_params->{'realreserves'}= \@realreserves;
-}
+$t_params->{'socio'}= $socio;
+$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+$t_params->{'reservas_asignadas_count'}= $racount;
+$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+$t_params->{'reservas_espera_count'}=$recount;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

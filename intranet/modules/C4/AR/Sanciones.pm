@@ -511,3 +511,60 @@ sub getSociosSancionados {
   return(\@socios_sancionados);
 }
 
+
+sub DiasDeSancion {
+# Retorna la cantidad de dias de sancion que corresponden a una devolucion
+# Si retorna 0 (cero) entonces no corresponde una sancion
+# Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
+    my ($devolucion, $fecha, $categoria, $tipo_prestamo)=@_;
+    my $dbh= C4::Context->dbh;
+    my $late=0; #Se devuelve tarde
+    if (Date_Cmp($fecha, $devolucion) >= 0) {
+        #Si es un prestamo especial debe devolverlo antes de una determinada hora
+        if ($tipo_prestamo ne 'ES'){return(0);}
+        else{#Prestamo especial
+            if (Date_Cmp($fecha, $devolucion) == 0){#Se tiene que devolver hoy   
+                
+                my $begin = ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
+                my $end =calc_endES();
+                my $actual=ParseDate("today");
+                if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
+                    return(0);
+                }
+            }
+            else {#Se devuelve antes de la fecha de devolucion
+                return(0);
+            }
+        }#else ES
+    }#if Date_Cmp
+
+
+#Corresponde una sancion
+    my $sth = $dbh->prepare("select *,circ_ref_tipo_prestamo.descripcion as descissuetype, usr_ref_categoria_socio.description as desccategory from circ_tipo_sancion inner join circ_regla_tipo_sancion on circ_tipo_sancion.tipo_sancion = circ_regla_tipo_sancion.sanctiontypecode inner join circ_regla_sancion on circ_regla_tipo_sancion.sanctionrulecode = circ_regla_sancion.sanctionrulecode inner join circ_ref_tipo_prestamo on circ_tipo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo inner join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = circ_tipo_sancion.categoria_socio where circ_tipo_sancion.tipo_prestamo = ? and circ_tipo_sancion.categoria_socio = ? order by circ_regla_tipo_sancion.orden");
+    $sth->execute($tipo_prestamo, $categoria);
+    my $err;
+    my $delta= &DateCalc($fecha,$devolucion,\$err);
+    my $days= &Delta_Format($delta,0,"%dh");
+
+    #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
+    if ($tipo_prestamo eq 'ES'){$days++;}
+
+    my $daysExceeded= $days;
+    my $amountOfDays= 0;
+    my $i;
+    my $sanctiondays;
+    #Este while busca el resultado de la consulta.
+    while ((my $res = $sth->fetchrow_hashref) && ($daysExceeded > 0)) {
+        my $amount= $res->{'amount'};
+            my $delaydays= $res->{'delaydays'};
+        $sanctiondays= $res->{'sanctiondays'};
+        #($amount==0) ===> INFINITO
+        for ($i=0; (($i < $amount) || ($amount==0)) && ($daysExceeded > 0); $i++) {
+            $daysExceeded-= $delaydays;
+            $amountOfDays+= $sanctiondays;  
+        }
+    }
+    $sth->finish;
+
+return($amountOfDays);
+}

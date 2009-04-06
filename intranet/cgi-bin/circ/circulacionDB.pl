@@ -7,8 +7,6 @@ use C4::Interface::CGI::Output;
 # use C4::AR::Reservas;
 use C4::AR::Mensajes;
 use JSON;
-use C4::Circulation::Circ2;
-
 
 my $input=new CGI;
 
@@ -31,21 +29,23 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
 
-	my $array_ids3=$obj->{'datosArray'};
-	my $loop=scalar(@$array_ids3);
+	my $array_ids=$obj->{'datosArray'};
+	my $loop=scalar(@$array_ids);
 
 
 	my @infoDevRen=();
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
-		my $id3=$array_ids3->[$i];
-		my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
-		$infoDevRen[$i]->{'id3'}=$id3;
-		$infoDevRen[$i]->{'barcode'}=$iteminfo->{'barcode'};
-		$infoDevRen[$i]->{'autor'}=$iteminfo->{'autor'};
-		$infoDevRen[$i]->{'titulo'}=$iteminfo->{'titulo'};
-		$infoDevRen[$i]->{'unititle'}=C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
-		$infoDevRen[$i]->{'edicion'}=C4::AR::Nivel2::getEdicion($iteminfo->{'id2'});
+		my $id_prestamo=$array_ids->[$i];
+        my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
+        $prestamo->load();
+		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
+        $infoDevRen[$i]->{'id3'}=$prestamo->getId3;
+ 		$infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
+  		$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->[0]->getCompleto;
+ 		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
+  		$infoDevRen[$i]->{'unititle'}="";
+ 		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
 	print $input->header;
@@ -173,6 +173,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $accion=$obj->{'accion'};
 	my $id3;
 	my $barcode;
+    my $id_prestamo;
 	my $ticketObj;
 	my @infoTickets;
 	my @infoMessages;
@@ -188,9 +189,11 @@ print A "LOOP: $loop\n";
 	for(my $i=0;$i<$loop;$i++){
 		$id3= $array_ids3->[$i]->{'id3'};
 		$barcode= $array_ids3->[$i]->{'barcode'};
+        $id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
 		$ticketObj=0;
 		$params{'id3'}= $id3;
 		$params{'barcode'}= $barcode;
+        $params{'id_prestamo'}= $id_prestamo;
 		
 		if ($accion eq 'DEVOLUCION') {
 print A "Entra al if de dev\n";

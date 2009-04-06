@@ -70,43 +70,7 @@ $VERSION = 0.01;
 );
 
 
-=item
-Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
-=cut
-sub t_devolver {
-	my($params)=@_;
-# 	my $codMsg;
-# 	my $error;
-# 	my $paraMens;
-	my $msg_object;
-	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-# 		($error,$codMsg,$paraMens)= devolver($params);
-		($msg_object)= devolver($params);
-		$dbh->commit;
-	};
-	if ($@){
-		#Se loguea error de Base de Datos
-# 		$codMsg= 'B406';
-		&C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-# 		$error= 1;
-# 		$paraMens->[0]=$params->{'barcode'};
-# 		$codMsg= 'P110';
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
-	}
-	$dbh->{AutoCommit} = 1;
-
-# 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-# 	return ($error, $codMsg, $message);
-	return ($msg_object);
-}
-
-=item
+=item  DEPRECATED paso a CircPrestamo
 la funcion devolver recibe una hash y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
 =cut 
 
@@ -1162,6 +1126,45 @@ sub cantidadDePrestamosPorUsuario{
 	return($vencidos,$prestados);
 }
 
+
+
+
+=item
+Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
+=cut
+sub t_devolver {
+    my($params)=@_;
+#   my $codMsg;
+#   my $error;
+#   my $paraMens;
+    my $msg_object;
+    my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $params->{'id_prestamo'});
+    $prestamo->load();
+    my $db = $prestamo->db;
+       $db->{connect_options}->{AutoCommit} = 0;
+       $db->begin_work;
+    eval {
+        ($msg_object)= $prestamo->devolver($params);
+        $db->commit;
+    };
+    if ($@){
+        #Se loguea error de Base de Datos
+#       $codMsg= 'B406';
+        &C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
+        eval {$db->rollback};
+        #Se setea error para el usuario
+#       $error= 1;
+#       $paraMens->[0]=$params->{'barcode'};
+#       $codMsg= 'P110';
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+
+#   my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+#   return ($error, $codMsg, $message);
+    return ($msg_object);
+}
 
 
 

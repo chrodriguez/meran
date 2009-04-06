@@ -620,6 +620,23 @@ sub cancelar_reservas_vencidas {
 
 }
 
+sub cancelar_reservas_socio{
+# Este procedimiento cancela todas las reservas del usuario recibidos como parametro
+    my ($self)=shift;
+    my ($loggedinuser,$nro_socio)= @_;
+    my $params;
+    
+    $params->{'loggedinuser'}= $loggedinuser;
+    $params->{'tipo'}= 'INTRA';
+
+        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
+                                    query => [ nro_socio => { eq => $nro_socio }, estado => {ne => 'P'}]);
+
+        foreach my $reserva (@$reservas_array_ref){
+            $reserva->cancelar_reserva($params);
+        }
+
+}
 
 1;
 
