@@ -615,11 +615,9 @@ CREATE TABLE `ref_tipo_operacion` (
 
 ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
 
+ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;
 ALTER TABLE `usr_socio` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
 
-ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;
-
-ALTER TABLE `cat_nivel3` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
 
 ALTER TABLE `cat_detalle_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL ,
 CHANGE `avail` `estado` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,

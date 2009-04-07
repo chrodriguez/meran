@@ -25,10 +25,11 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_prestamo' ],
 
     relationships => [
-      nivel3 => {
+
+       nivel3 => {
             class       => 'C4::Modelo::CatNivel3',
             key_columns => { id3 => 'id3' },
-	         type        => 'one to one',
+	        type        => 'one to one',
         },
       tipo => {
             class       => 'C4::Modelo::CircRefTipoPrestamo',

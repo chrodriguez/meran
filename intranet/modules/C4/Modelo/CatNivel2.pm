@@ -479,5 +479,27 @@ sub getVolumenDesc{
 	return $aux;
 }
 
+=item
+retorna la canitdad de items prestados para el grupo pasado por parametro
+=cut
+sub getCantPrestados{
+	my ($self) = shift;
+	my ($id2)=@_;
+
+	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                               	query => [ 	id2 => { eq => $self->getId2 },
+# FIXME #ojo no se si funciona el NULL
+ 																			fecha_devolucion => { eq => 'NULL' }  
+																		 ],
+																require_objects => ['nivel3.nivel2'],
+																with_objects => ['nivel3'],
+										);
+
+	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+
+	return $cantPrestamos_count;
+}
+
+
 1;
 

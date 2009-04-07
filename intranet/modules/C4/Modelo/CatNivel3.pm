@@ -335,6 +335,17 @@ sub estadoDisponible{
 	return (C4::AR::Referencias::getNombreEstado($self->getId_estado) eq "Disponible");
 }
 
+sub esParaSala{
+	my ($self) = shift;
+	return (C4::AR::Referencias::getNombreDisponibilidad($self->getId_estado) eq "Sala de Lectura");
+}
+
+sub getEstado{
+	my ($self) = shift;
+
+	return (C4::AR::Referencias::getNombreEstado($self->getId_estado));
+}
+
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 =item

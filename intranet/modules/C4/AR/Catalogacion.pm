@@ -84,8 +84,6 @@ use vars qw(@EXPORT @ISA);
 	&obtenerValorTablaRef
  	&obtenerIdentTablaRef2
 
-	&guardarModificacion
-
 
     &t_eliminarNivel1
 	&t_eliminarNivel2
@@ -1641,21 +1639,6 @@ sub dameIdReptible{
 	}
 	return $idRep;
 }
-
-# FIXME
-# FALTA LOGUEAR LAS MODIFICACIONES EN V3
-#Esta funcion es para guardar un log de que persona modifica que parte del biblio
-sub guardarModificacion{
-	my ($operacion,$responsable,$numero,$tipo)=@_;
-
-        my $dbh= C4::Context->dbh;
-	my $sth = $dbh->prepare ("	INSERT INTO rep_registro_modificacion (operacion,fecha,responsable,numero,tipo)
-                           		VALUES (?,NOW(),?,?,?);");
-        $sth->execute($operacion,$responsable,$numero,$tipo);
-        $sth->finish;
-}
-
-
 
 
 

@@ -21,25 +21,8 @@ use vars qw(@EXPORT @ISA);
 	&getDataNivel3
 
 	&disponibilidadItem
-	&getEstado
-	&t_deleteItem
 	&modificarEstadoItem
 );
-
-
-=item
-funcion q recibe el id de un item (nivel3) y devuelve el estado
-=cut
-sub getEstado {
-
-        my ($id3) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = " SELECT wthdrawn,notforloan FROM cat_nivel3 WHERE id3 =  ? ";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id3);
-	my $result = $sth->fetchrow_hashref;
-	return ($result->{'wthdrawn'},$result->{'notforloan'});
-}
 
 
 =item
@@ -105,116 +88,6 @@ sub _estaDisponible {
 	else {return 0;} #NO DISPONIBLE
 }
 
-=item
-deleteItem
-Elimina todo la informacion de un item para el nivel 3
-=cut
-sub deleteItem{
-	my($params)=@_;
-
-	my $dbh = C4::Context->dbh;
-
-	my $query=" DELETE FROM cat_nivel3_repetible WHERE id3 = ? ";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($params->{'id3'});
-
-	my $query=" DELETE FROM cat_nivel3 WHERE id3 = ? ";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($params->{'id3'});
-}
-
-
-sub verificarDeleteItem {
-	my($params)=@_;
-
-	my $tipo= $params->{'tipo'}; #INTRA
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
-	my $barcode= $params->{'barcode'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $error= 0;
-	my $codMsg= '000';
-	my @paraMens;
-	my $dateformat=C4::Date::get_date_format();
-
-open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
-print A "tipo: $tipo\n";
-print A "id2: $id2\n";
-print A "id3: $id3\n";
-
-#Se verifica que el item no se encuentre prestado
-
-=item
-Deje este codigo a modo de ejemplo para que se hagan las verificaciones que sean necesarias
-	if( !&C4::AR::Usuarios::esRegular($borrowernumber) ){
-		$error= 1;
-		$codMsg= 'U300';
-print A "Entro al if de regularidad\n";
-	}
-=cut
-
-close(A);
-
-	return ($error, $codMsg,\@paraMens);
-}
-
-
-sub t_deleteItem {
-	my($params)=@_;
-
-#se realizan las verificaciones antes de eliminar el item
-# FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
-	
-	my ($error,$codMsg,$paraMens)= &verificarDeleteItem($params);
-
-	my $barcode= getBarcode($params->{'id3'});
-	my $error= 0;
-	if(!$error){
-	#No hay error
-		my $dbh = C4::Context->dbh;
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-		$dbh->{RaiseError} = 1;
-		eval {
-
-			my $dataNivel3_hashref= getDataNivel3($params->{'id3'});
-			### Si tenia reservas hay que reasignarlas!! antes de eliminar
-			if (	($dataNivel3_hashref->{'notforloan'} eq 'DO') && 
-				($dataNivel3_hashref->{'wthdrawn'} eq 0) ) {
-
-				C4::AR::Reservas::cambiarReservaEnEspera(
-										$params->{'id2'},
-										$params->{'id3'},
-										$params->{'responsable'}
-									);
-			}
-			###
-			#Se elimina el item
-			deleteItem($params);	
-
-			$dbh->commit;
-	
-			$codMsg= 'M901';
-			$paraMens->[0]= $barcode;
-	
-		};
-
-		if ($@){
-			#Se loguea error de Base de Datos
-			$codMsg= 'B412';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U305';
-			$paraMens->[0]= $barcode;
-		}
-		$dbh->{AutoCommit} = 1;
-		
-	}
-
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
 
 =item
 detalleDisponibilidad
@@ -354,64 +227,7 @@ detalleNivel3
 Trae todos los datos del nivel 3, para poder verlos en el template.
 @params 
 $id2, id de nivel2
-$itemtype, tipo del item
-$tipo, INTRA/OPAC
 =cut
-# sub detalleNivel3{
-# 	my ($id2,$itemtype,$tipo)=@_;
-# 	my $dbh = C4::Context->dbh;
-# 	my ($infoNivel3,@nivel3)=&C4::AR::Busquedas::buscarNivel3PorId2YDisponibilidad($id2);
-# 	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
-# 	my @nivel3Comp;
-# 	my %llaves;
-# 	my @results;
-# 	my $i=0;
-# 	my $id3;
-# 	my $campo;
-# 	my $subcampo;
-# 	my $getLib;
-# 	$results[0]->{'nivel3'}=\@nivel3;
-#  	$results[0]->{'disponibles'}= $infoNivel3->{'disponibles'};
-# 	$results[0]->{'cantReservas'}= $infoNivel3->{'cantReservas'};
-# 	$results[0]->{'cantReservasEnEspera'}= $infoNivel3->{'cantReservasEnEspera'};
-# 	$results[0]->{'cantPrestados'}= $infoNivel3->{'cantPrestados'};
-# 	foreach my $row(@nivel3){
-# 		foreach my $llave (keys %$mapeo){
-# 			$campo=$mapeo->{$llave}->{'campo'};
-# 			$subcampo=$mapeo->{$llave}->{'subcampo'};
-# 			$getLib=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, "",$itemtype,$tipo,0);
-# 			$nivel3Comp[$i]->{'campo'}=$campo;
-# 			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
-# 			$nivel3Comp[$i]->{'dato'}=$row->{$mapeo->{$llave}->{'campoTabla'}};
-# 			$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
-# 			$i++;
-# 		}
-# 		$id3=$row->{'id3'};
-# 		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
-# 		my $sth=$dbh->prepare($query);
-#         	$sth->execute($id3);
-# 		my $llave2;
-# 		while (my $data=$sth->fetchrow_hashref){
-# 			$llave2=$data->{'campo'}.",".$data->{'subcampo'};
-# 			$getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, $itemtype,$tipo,0);
-# 			if(not exists($llaves{$llave2})){
-# 				$llaves{$llave2}=$i;
-# 				$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
-# 				$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-# 				$nivel3Comp[$i]->{'dato'}=$getLib->{'dato'};
-# 				$nivel3Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
-# 				$i++;
-# 			}
-# 			else{
-# 				my $separador=" ".$getLib->{'separador'}." " ||", ";
-# 				my $pos=$llaves{$llave2};
-# 				$nivel3Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
-# 			}
-# 		}
-# 		$sth->finish;
-# 	}
-# 	return(\@results,\@nivel3Comp);
-# }
 sub detalleNivel3{
 	my ($id2)=@_;
 
@@ -429,6 +245,10 @@ sub detalleNivel3{
 	}
 
 	$hash_nivel2{'nivel3'}= \@nivel3;
+	$hash_nivel2{'disponibles'}= '0';
+	$hash_nivel2{'cantReservas'}= '0';
+	$hash_nivel2{'cantReservasEnEspera'}= '0';
+	$hash_nivel2{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
 
 	return (\%hash_nivel2);
 }
@@ -514,156 +334,6 @@ sub getDataNivel3{
 
 
 =item
-saveNivel3
-Guarda los campos del nivel 3
-Los parametros que reciben son: $id1 es el id de la fila insertada para ese item en la tabla nivel1; $id2 es el id de la fila insertada para ese item en la tabla nivel2; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
-=cut
-
-sub saveNivel3{
-	my ($id1,$id2,$barcodes,$cantItems,$itemType,$nivel3)=@_;
-
-	my $query1="";
-	my $query2="";
-	my @bind1=();
-	my @bind2=();
-	my $query3="SELECT MAX(id3) FROM cat_nivel3";
-	my %parametros;
-	my $homebranch="";
-	my $holdingbranch="";
-	my $bulk="";
-	my $wthdrawn="";
-	my $notforloan="";
-	my $error=0;
-	my $codMsg;
-	foreach my $obj(@$nivel3){
-		my $campo=$obj->{'campo'};
-		my $subcampo=$obj->{'subcampo'};
-		my $valor=$obj->{'valor'};
-		if($campo eq '995' && $subcampo eq 'd'){
-			$homebranch=$valor;
-		}
-		elsif($campo eq '995' && $subcampo eq 'c'){
-			$holdingbranch=$valor ;
-		}
-		elsif($campo eq '995' && $subcampo eq 't'){
-			$bulk=$valor ;
-		}
-		elsif($campo eq '995' && $subcampo eq 'e'){
-			$wthdrawn=$valor ;
-		}
-		elsif($campo eq '995' && $subcampo eq 'o'){
-			$notforloan=$valor ;
-		}
-		else{
-			if($valor ne ""){
-				if($obj->{'simple'}){
-					$query2.=",(?,?,*?*,?)";
-					push (@bind2,$campo,$subcampo,$valor);
-				}
-				else{
-					foreach my $val (@$valor){
-						$query2.=",(?,?,*?*,?)";
-						push (@bind2,$campo,$subcampo,$val);
-					}
-				}
-			}
-		}
-	}
-	$query1= "INSERT INTO cat_nivel3 (id1,id2,barcode,";
-	$query1.="signatura_topografica,holdingbranch,homebranch,wthdrawn,notforloan) ";
-	$query1.="VALUES (?,?,*?*,?,?,?,?,?) ";
-	push (@bind1,$id1,$id2,$bulk,$holdingbranch,$homebranch,$wthdrawn,$notforloan);
-
-	if($query2 ne ""){
-		$query2=substr($query2,1,length($query2));
-		$query2="INSERT INTO cat_nivel3_repetible (campo,subcampo,id3,dato) VALUES ".$query2;
-	}
-	$parametros{'homebranch'}=$homebranch;
-	$parametros{'itemtype'}=$itemType;
-	for(my $i=1; $i<=$cantItems;$i++){
-		$parametros{'indice'}=$i;
-	($error,$codMsg)=transaccionNivel3($barcodes,$query1,\@bind1,$query2,\@bind2,$query3,\%parametros);
-		if($error){
-			return($error,$codMsg);
-		}
-	}
-
-## FIXME esto viene de V2 ultimo parche...
-=item	
-###Si el ejemplar que se agrego esta disponible hay que chequear si no existian reservas en espera!!!!
-# item->{'notforloan'} eq 0 => PARA SALA
-
-if (($item->{'notforloan'} eq 0)&&($item->{'wthdrawn'} eq 0))
-	{C4::AR::Reserves::asignarReservaEnEspera($item->{'biblioitemnumber'},$itemnumber,$responsable);}
-=cut
-
-	return($error,$codMsg);
-}
-
-=item
-transaccionNivel3
-Funcion interna al pm
-Realiza el guardado en la base de datos de los campos del nivel 3, por medio de una transaccion.
-los paramentros que recibe son: $barcodes es un string con los barcodes para los items, este string puede estar en blanco, de ser asi se autogeneran en la transaccion; $query1 es el insert a la tabla del nivel 3; $query2 es el insert en la tabla repetibles del nivel 3; $query3 es la consulta que devuelve el id de la fila insertada en la tabla nivel3.
-=cut
-sub transaccionNivel3{
-	my($barcodes,$query1,$bind1,$query2,$bind2,$query3,$parametros)=@_;
-	my $dbh = C4::Context->dbh;
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	my $barcode="";
-	my $error=0;
-	my $codMsg='C500';
-	my $ident=-1;
-	eval{
-		if($barcodes eq ""){$barcode=&generaCodigoBarra($dbh,$parametros);}
-		else{
-		#EL BARCODE VIENE DESDE LA INTERFACE - separados por "," se utiliza el barcode asosiado al indice que corresponde al item que se va agregar.
-			my @barcodes2=split(/,/,$barcodes);
-			$barcode="'".$barcodes2[%$parametros->{'indice'}-1]."'";
-			my $query="SELECT * FROM cat_nivel3 WHERE barcode= ?";
-			my $sth=$dbh->prepare($query);
-			$sth->execute($barcode);
-			if($sth->fetchrow_hashref){
-				$error=1;
-				$codMsg='C502';
-			}
-		}
-		if(!$error){
-	#reemplaza el string *?* por el barcode generado
-			$query1=~ s/\*\?\*/$barcode/g;
-			my $sth=$dbh->prepare($query1);
-			$sth->execute(@$bind1);
-	
-			$sth=$dbh->prepare($query3);
-			$sth->execute;
-			$ident=$sth->fetchrow;
-
-			if ($query2 ne ""){
-			#Reemplaza el string *?* por el id de la nueva fila en la tabla nivel
-				$query2=~ s/\*\?\*/$ident/g; 
-				$sth=$dbh->prepare($query2);
-        			$sth->execute(@$bind2);
-			}
-			$dbh->commit;
-		}
-	};
-	if($@){
-			#Se loguea error de Base de Datos
-			my $codMsg= 'B403';
-			C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'C501';
-	}
-	$dbh->{AutoCommit} = 1;
-
-	return($error,$codMsg);
-}
-
-
-=item
 generaCodigoBarra
 Funcion interna al pm
 Genera el codigo de barras del item automanticamente por medio de una consulta a la base de datos, esta funcion es llamada desde una transaccion.
@@ -716,8 +386,6 @@ sub buscarNivel3PorDisponibilidad{
 				$item->{'value'}=$n3->getId3;
 				push (@items,$item);
 			}
-
-
 	}
 
 	return(\@items);
@@ -727,19 +395,17 @@ sub buscarNivel3PorDisponibilidad{
 
 
 =item
-buscarNivel3PorId2Disponibilidad DEPRECATED????
+detalleNivel3YDisponibilidad
 Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
-sub buscarNivel3PorId2YDisponibilidad{
+sub detalleNivel3YDisponibilidad{
 	my ($id2)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM cat_nivel3 WHERE id2 = ?";
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
+	my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
 	my @result;
+	my %hash_nivel2;
+
 	my $i=0;
-	my $disponibles=0;
+	my $cantDisponibles=0;
 	my %infoNivel3;
 	$infoNivel3{'cantParaSala'}= 0;
 	$infoNivel3{'cantParaPrestamo'}= 0;
@@ -747,46 +413,75 @@ sub buscarNivel3PorId2YDisponibilidad{
 	$infoNivel3{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
 	$infoNivel3{'cantReservas'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
 	$infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+			
+	for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
+		my %hash_nivel3;
+		$nivel3_array_ref->[$i]->load();
+		$hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i];
+		$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
 
-	while(my $data=$sth->fetchrow_hashref){
+		my $UI_poseedora= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_poseedora'});
+		$hash_nivel3{'UI_poseedora'}= $UI_poseedora;
 
-		my $holdbranch= C4::AR::Busquedas::getBranch($data->{'id_ui_poseedora'});
-		$data->{'holdingbranchNombre'}=$holdbranch->{'branchname'};
-		
-		my $homebranch= C4::AR::Busquedas::getBranch($data->{'id_ui_origen'});
-		$data->{'homebranchNombre'}=$homebranch->{'branchname'};
-		
-		my $wthdrawn=C4::AR::Busquedas::getAvail($data->{'wthdrawn'});
-		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
-		
-		if($data->{'id_estado'}){
-		#wthdrawn = 0, Disponible
-			$data->{'disponibilidad'}=C4::AR::Utilidades::noaccents($wthdrawn->{'description'});
-			$data->{'clase'}="fechaVencida";
-			$disponibles++;
+		my $UI_origen= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_origen'});
+		$hash_nivel3{'UI_origen'}= $UI_origen;
+# FIXME falta esto no se para q es		
+# 		my $wthdrawn=getAvail($data->{'wthdrawn'});
+# 		$data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
+
+		if($nivel3_array_ref->[$i]->estadoDisponible){
+		#Disponible
+			$hash_nivel3{'disponibilidad'}= $nivel3_array_ref->[$i]->getEstado;
+			$hash_nivel3{'clase'}= "fechaVencida";
+			$cantDisponibles++;
 		}
 		
-	#	if($data->{'notforloan'} eq 'DO' && !$data->{'wthdrawn'}){
-		if($data->{'id_disponibilidad'} == 0 && !$data->{'id_estado'}){
-			$data->{'forloan'}=1;
-			$data->{'disponibilidad'}="PRESTAMO";
-			$data->{'clase'}="prestamo";
+		if( ($nivel3_array_ref->[$i]->estadoDisponible) && (!$nivel3_array_ref->[$i]->esParaSala) ){
+		#esta DISPONIBLE y es PARA PRESTAMO
+			$hash_nivel3{'paraPrestamo'}= 1;
+			$hash_nivel3{'disponibilidad'}= "PRESTAMO";
+			$hash_nivel3{'clase'}= "prestamo";
 			$infoNivel3{'cantParaPrestamo'}++;
-		}elsif(!$data->{'id_estado'}){
+		}elsif($nivel3_array_ref->[$i]->esParaSala){
+		#es PARA SALA
 			$infoNivel3{'cantParaSala'}++;
-			$data->{'disponibilidad'}="SALA DE LECTURA";
-			$data->{'clase'}="salaLectura";
+			$hash_nivel3{'disponibilidad'}= "SALA DE LECTURA";
+			$hash_nivel3{'clase'}= "salaLectura";
 		}
 
-		C4::AR::Nivel3::disponibilidadItem($data);
-		$result[$i]=$data;
+ 		$result[$i]= \%hash_nivel3;
 		$i++;
+
+# 		push(@result, \%infoNivel3);
 	}
 
-	$infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
+ 	$infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
 
 	return(\%infoNivel3,@result);
 }
+
+
+
+sub _verificarDeleteItem {
+	my($params)=@_;
+# FIXME falta implementar
+	
+	my $msg_object= C4::AR::Mensajes::create();
+
+	my $tipo= $params->{'tipo'}; #INTRA
+	my $id2= $params->{'id2'};
+	my $id3= $params->{'id3'};
+	my $barcode= $params->{'barcode'};
+	my $loggedinuser= $params->{'loggedinuser'};
+	my $codMsg= '000';
+	my @paraMens;
+	my $dateformat=C4::Date::get_date_format();
+	$msg_object->{'error'}= 0;
+
+
+	return ($msg_object);
+}
+
 
 
 =item
@@ -1075,12 +770,10 @@ C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: 
 
 sub t_eliminarNivel3{
    
-   my($params)=@_;
-   
-   	my $msg_object= C4::AR::Mensajes::create();
+   	my($params)=@_;
 	my $barcode;
 
-# FIXME falta verificar si es posible eliminar el nivel 3
+	my ($msg_object)= _verificarDeleteItem($params);
 	
     if(!$msg_object->{'error'}){
     #No hay error

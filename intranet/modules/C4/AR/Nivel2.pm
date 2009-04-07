@@ -22,14 +22,10 @@ use vars qw(@EXPORT @ISA);
 
 		&getIndice
 		&insertIndice
-
-		&saveNivel2
 		
 		&detalleNivel2
 		&detalleNivel2MARC
 		&detalleNivel2OPAC
-
-		&t_deleteGrupo
 );
 
 
@@ -400,19 +396,20 @@ sub detalleNivel2{
 retorna la canitdad de items prestados para el grupo pasado por parametro
 =cut
 sub getCantPrestados{
-
 	my ($id2)=@_;
-	my $dbh = C4::Context->dbh;
-	
-	my $query= " 	SELECT count(*) AS cantPrestamos
-			FROM  circ_prestamo i LEFT JOIN cat_nivel3 n3 ON n3.id3 = i.id3
-			INNER JOIN  cat_nivel2 n2 ON n3.id2 = n2.id2
-			WHERE n2.id2 = ? AND i.fecha_devolucion IS NULL ";
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id2);
+	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                               	query => [ 	id2 => { eq => $id2 },
+# FIXME #ojo no se si funciona el NULL
+ 																			fecha_devolucion => { eq => 'NULL' }  
+																		 ],
+																require_objects => ['nivel3.nivel2'],
+																with_objects => ['nivel3'],
+										);
 
-	return $sth->fetchrow;
+	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+
+	return $cantPrestamos_count;
 }
 
 =item
@@ -431,168 +428,6 @@ sub getTipoDocumento{
 	$sth->execute($id2);
 
 	return $sth->fetchrow;
-
-}
-
-
-sub t_deleteGrupo {
-	my($params)=@_;
-
-## FIXME
-#se realizan las verificaciones antes de eliminar el GRUPO, reservas sobre el grupo o items
-#y realizar todos los logueos necesarios luego de borrar
-# FALTA VER SI TIENE EJEMPLARES RESERVADOS O PRESTADOS EN ESE CASO NO SE TIENE QUE ELIMINAR
-
-#Ademas faltaria ver si se deben realizar borrados en cascada, por ej de historicCirculation, donde se 
-#esta guardando el id2 y este ya no tiene sentido guardarlo
-	
-	my ($error,$codMsg,$paraMens);
-
-	my $error= 0;
-	if(!$error){
-	#No hay error
-		my $dbh = C4::Context->dbh;
-		$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-		$dbh->{RaiseError} = 1;
-		eval {
-			deleteGrupo($params->{'id2'});	
-			$dbh->commit;
-	
-			$codMsg= 'M902';
-			$paraMens->[0]= $params->{'id2'};
-	
-		};
-
-		if ($@){
-			#Se loguea error de Base de Datos
-			$codMsg= 'B413';
-			&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-			eval {$dbh->rollback};
-			#Se setea error para el usuario
-			$error= 1;
-			$codMsg= 'U306';
-			$paraMens->[0]= $params->{'id2'};
-		}
-		$dbh->{AutoCommit} = 1;
-		
-	}
-
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
-
-
-=item
-deleteGrupo
-Elimina toda la informacion de un item para el nivel 2
-=cut
-
-## FIXME No se puede eliminar el grupo si se encuentra logueado en la tabla de historicCirculation
-#se podria elimnar la contraint de FK...., y solo verificar q id2 no sea null, de todos modos una vez
-#borrado el grupo, el id2 ya no tiene mas sentido, asi que se podria realizar un borrado en cascada
-
-# [Tue Sep 09 15:14:07 2008] [error] [client 127.0.0.1] DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails (`V2/historicCirculation`, CONSTRAINT `FK_historicCirculation_id2` FOREIGN KEY (`id2`) REFERENCES `nivel2` (`id2`)) at /usr/local/koha/intranet/modules/C4/AR/Nivel2.pm line 493., referer: https://127.0.0.1/cgi-bin/koha/busquedas/detalle.pl
-
-
-sub deleteGrupo{
-	my($id2)=@_;
-
-	my $dbh = C4::Context->dbh;
-	
-	my $query="SELECT id2,id3 FROM cat_nivel3 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-	while(my $data= $sth->fetchrow_hashref){
-		my $query="DELETE FROM cat_nivel3_repetible WHERE id3 = ?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($data->{'id3'});
-	}
-	my $query="DELETE FROM cat_nivel3 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-
-	my $query="DELETE FROM cat_nivel2_repetible WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-	
-	my $query="DELETE FROM cat_nivel2 WHERE id2 = ?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id2);
-
-}
-
-
-=item
-saveNivel2
-Guarda los campo del nivel 2
-Los parametros que reciben son: $itemType el tipo de item que es; $id1 es el id de la fila insertada para ese item en la tabla nivel1; $ids es la referencia a un arreglo que tiene los ids de los inputs de la interface que es un string compuesto por el campo y subcampo; $valores es la referencia a un arreglo que tiene los valores de los inputs de la interface.
-=cut
-sub saveNivel2{
-	my ($id1,$nivel2)=@_;
-	my $query1="";
-	my $query2="";
-	my @bind1=();
-	my @bind2=();
-	my $query3="SELECT MAX(id2) FROM cat_nivel2";#PARA RECUPERAR LA TUPLA QUE SE INGRESA.
-	my $nivelBiblio="";
-	my $tipoDoc="";
-	my $soporte="";
-	my $fecha="";
-	my $ciudad="";
-	my $lenguaje="";
-	my $pais="";
-	foreach my $obj(@$nivel2){
-		my $campo=$obj->{'campo'};
-		my $subcampo=$obj->{'subcampo'};
-		my $valor=$obj->{'valor'};
-		
-		if($campo eq '910' && $subcampo eq 'a'){
-			$tipoDoc=$valor;
-		}
-		elsif($campo eq '260' && $subcampo eq 'c' && $fecha eq ""){
-			#Repetibles!!!
-			$fecha=$valor ;
-		}
-		elsif($campo eq '260' && $subcampo eq 'a' && $ciudad eq ""){
-			$ciudad=$valor ;
-		}
-		elsif($campo eq '041' && $subcampo eq 'h' && $lenguaje eq ""){
-			#Repetibles!!!
-			$lenguaje=$valor ;
-		}
-		elsif($campo eq '043' && $subcampo eq 'c' && $pais eq ""){
-			#Repetibles!!!
-			$pais=$valor ;
-		}
-		elsif($campo eq '245' && $subcampo eq 'h'){
-			$soporte=$valor ;
-		}
-		elsif($campo eq '900' && $subcampo eq 'b'){
-			$nivelBiblio=$valor;
-		}
-		else{
-			if($valor ne ""){
-				if($obj->{'simple'}){
-					$query2.=",(?,?,*?*,?)";
-					push (@bind2,$campo,$subcampo,$valor);
-				}
-				else{
-					foreach my $val (@$valor){
-						$query2.=",(?,?,*?*,?)";
-						push (@bind2,$campo,$subcampo,$val);
-					}
-				}
-			}
-		}
-	}
-	$query1="INSERT INTO cat_nivel2 (tipo_documento,id1,nivel_bibliografico,soporte,pais_publicacion,lenguaje,ciudad_publicacion,anio_publicacion) VALUES (?,?,?,?,?,?,?,?)";
-	push (@bind1,$tipoDoc,$id1,$nivelBiblio,$soporte,$pais,$lenguaje,$ciudad,$fecha);
-	if($query2 ne ""){
-		$query2=substr($query2,1,length($query2));
-		$query2="INSERT INTO cat_nivel2_repetible (campo,subcampo,id2,dato) VALUES ".$query2;
-	}
-	my ($id2,$error,$codMsg) =&C4::AR::Catalogacion::transaccion($query1,\@bind1,$query2,\@bind2,$query3);
-	return($id2,$tipoDoc,$error,$codMsg);
 
 }
 
