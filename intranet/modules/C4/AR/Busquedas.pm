@@ -1657,22 +1657,28 @@ sub busquedaAvanzada_newTemp{
 
    my $nivel3_result = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
                                                                         query => \@filtros,
-#                                                                         select => ['nivel1.titulo','nivel1.id1'],
                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
                                                                         limit => $cantR,
                                                                         offset => $ini,
+#   																		select => ['cat_nivel3.id1'],
 #                                                                         distinct => 1,
                                                                      );
+
    my $nivel3_result_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
                                                                         query => \@filtros,
                                                                         select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
-#                                                                         distinct => ['nivel1.id1'],
                                                                      );
 
 
-   return ($nivel3_result_count->[0]->agregacion_temp,$nivel3_result);
+	my @id1_array;
+	
+	foreach my $nivel3 (@$nivel3_result){
+# FIXME no me funciona el disctinct
+			push(@id1_array,$nivel3->getId1);
+	}
 
+	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
 }
 
 
@@ -1754,6 +1760,7 @@ sub busquedaCombinada_newTemp{
                                                                                        distinct => 1,
                                                                                        require_objects => ['cat_nivel1'],
                                                                               );
+
    my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
                                                                               query => [
                                                                                           or => [
@@ -1767,26 +1774,29 @@ sub busquedaCombinada_newTemp{
                                                                               );
 
    my @id1_array;
+# 	#se sacan los repetidos
+#    foreach my $nivel1 (@$nivel1_repetible){
+#       if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
+#           push(@id1_array,$nivel1->cat_nivel1->id1);
+#       }
+#    }
 
-   foreach my $nivel1 (@$nivel1_repetible){
-      if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
-          push(@id1_array,$nivel1->cat_nivel1->id1);
-      }
-   }
+	#se sacan los repetidos
    foreach my $nivel2 (@$nivel2_repetible){
       if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
         push(@id1_array,$nivel2->cat_nivel2->id1);
       }
    }
+
+	#se sacan los repetidos
    foreach my $nivel3 (@$nivel3_repetible){
       if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
          push(@id1_array,$nivel3->cat_nivel3->id1);
       }
    }
-   
-# FIXME falta filtrar los id1 repetidos del arreglo
 
-   my $cant_total = $nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + $nivel3_repetible_count->[0]->agregacion_temp;
+   my $cant_total = 	$nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + 
+						$nivel3_repetible_count->[0]->agregacion_temp;
 
    return ($cant_total,@id1_array);
 }
@@ -1801,30 +1811,32 @@ sub armarInfoNivel1{
    my $autor;
    my $i=0;
    
+C4::AR::Debug::debug("cant: ".scalar(@resultId1));
    if($cantidad > 0){
    #si busquedaCombianda devuelve algo se busca la info siguiente
       foreach my $id1 (@resultId1) {
+C4::AR::Debug::debug("id1: ".$id1);
 
-         $result{$i}->{'id1'}= $id1;
-         $nivel1= &C4::AR::Catalogacion::buscarNivel1($id1);
-         $result{$i}->{'titulo'}= $nivel1->{'titulo'};
-         $autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
-         $result{$i}->{'idAutor'}=$autor->{'id'};
-         $result{$i}->{'nomCompleto'}= $autor->{'completo'};
+		$result{$i}->{'id1'}= $id1;
+		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
+		$result{$i}->{'titulo'}= $nivel1->getTitulo;
+		$result{$i}->{'idAutor'}= $nivel1->getAutor;
+        $result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
+# 		getVolumenDesc()
+# FIXME falta pasar!!!!!
          my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
          $result{$i}->{'grupos'}=$ediciones;
          my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
          $result{$i}->{'disponibilidad'}=\@disponibilidad;
-         #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-         my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-         if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
-         #
+#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
    
          $i++;
       }
    }
    
-   #PARA EL ORDEN VER SI QUEDA, PUEDE SER CAMBIADO POR JQUERY!!!!!!!!!!!!!!!
+   #se ordenan los resultados
    my @keys=keys %result;
    @keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
    foreach my $row (@keys){
@@ -1833,5 +1845,8 @@ sub armarInfoNivel1{
    
    return (\@resultsarray);
 }
+
+
+
 1;
 __END__

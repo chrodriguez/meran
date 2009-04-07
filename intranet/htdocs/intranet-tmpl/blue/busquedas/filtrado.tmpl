@@ -99,7 +99,7 @@ function buscarPorISBN(){
 
 function buscarPorDiccionario(){
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+    objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
 	objAH.dictionary= $('#dictionary').val();
 	//se setea la funcion para cambiar de pagina
@@ -110,7 +110,7 @@ function buscarPorDiccionario(){
 function busquedaPorKeyword(){
 
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+    objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
 	objAH.keyword= $('#keyword').val();
 	//se setea la funcion para cambiar de pagina
@@ -121,7 +121,7 @@ function busquedaPorKeyword(){
 function buscarEstante(){
 
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+    objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/estante.pl';
 	objAH.viewShelfName= $('#estante').val();
 	objAH.orden= 'title';
@@ -195,7 +195,7 @@ function updateVerEstanteVirtual(responseText){
 function verTema(idtema,tema){
 
 	objAH=new AjaxHelper(updateInfo);
-// 	objAH.debug= true;
+    objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	objAH.idTema= idtema;
 	objAH.tema= tema;

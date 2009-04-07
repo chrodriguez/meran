@@ -56,6 +56,7 @@ sub insertIndice{
 =item
 Esta funcion retorna la edicion segun un id2
 =cut
+# FIXME DEPRECATED
 sub getEdicion {
 	my ($id2) = @_;
 	
@@ -65,6 +66,7 @@ sub getEdicion {
 =item
 Esta funcion retorna el volumen segun un id2
 =cut
+# FIXME DEPRECATED
 sub getVolume {
 	my($id2)= @_;
 
@@ -74,6 +76,7 @@ sub getVolume {
 =item
 Esta funcion retorna la descripcion del volumen segun un id2
 =cut
+# FIXME DEPRECATED
 sub getVolumeDesc {
 	my($id2)= @_;
 
@@ -83,6 +86,7 @@ sub getVolumeDesc {
 =item
 retorna el primer isbn del grupo con correpondiente al parametro $id2
 =cut
+# FIXME DEPRECATED
 sub getISBN{
 	my ($id2)=@_;
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"020","a","2");

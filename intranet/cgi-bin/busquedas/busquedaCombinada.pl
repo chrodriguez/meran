@@ -7,6 +7,14 @@ use C4::Interface::CGI::Output;
 use C4::AR::Utilidades;
 my $input = new CGI;
 
+my ($template, $session, $t_params) = get_template_and_user ({
+                                                        template_name	=> 'busquedas/busquedaResult.tmpl',
+                                                        query		=> $input,
+                                                        type		=> "intranet",
+                                                        authnotrequired	=> 0,
+                                                        flagsrequired	=> { circulate => 1 },
+    					});
+
 my $obj=$input->param('obj');
 
 if($obj ne ""){
@@ -14,7 +22,6 @@ if($obj ne ""){
 }
 
 my $outside= $input->param('outside');
-
 my $keyword= $obj->{'keyword'};
 my $comboItemTypes= $obj->{'comboItemTypes'};
 my $orden= $obj->{'orden'};#PARA EL ORDEN
@@ -26,19 +33,9 @@ $search->{'class'}= $comboItemTypes;
 
 my $buscoPor="";
 
-
-my ($template, $session, $t_params) = get_template_and_user ({
-                                                        template_name	=> 'busquedas/busquedaResult.tmpl',
-                                                        query		=> $input,
-                                                        type		=> "intranet",
-                                                        authnotrequired	=> 0,
-                                                        flagsrequired	=> { circulate => 1 },
-    					});
-
 if($keyword ne ""){
 	$buscoPor.="Busqueda combinada: ".$keyword."&";
 }
-
 
 if($comboItemTypes != -1 && $comboItemTypes ne ""){
 	$comboItemTypes=&verificarValor($comboItemTypes);
@@ -53,6 +50,7 @@ my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$c
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
+#se arma el arreglo con la info para mostrar en el template
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($cantidad,$comboItemTypes,$orden,@resultId1);
 
 my @busqueda=split(/&/,$buscoPor);
@@ -63,7 +61,6 @@ foreach my $str (@busqueda){
 }
 
 $buscoPor= substr($buscoPor,2,length($buscoPor));
-
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}=$buscoPor;
