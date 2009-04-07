@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         subcampo  => { type => 'varchar', length => 3, not_null => 1 },
         dato      => { type => 'varchar', length => 250 },
         timestamp => { type => 'timestamp' },
+         agregacion_temp      => { type => 'varchar', length => 255},
     ],
 
     primary_key_columns => [ 'rep_n2_id' ],

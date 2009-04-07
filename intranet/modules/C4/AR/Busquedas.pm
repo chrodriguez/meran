@@ -1692,11 +1692,12 @@ sub busquedaCombinada_newTemp{
                                                                      ],
                                                                      limit => $cantR,
                                                                      offset => $ini,
-                                                                     select => ['DISTINCT(t2.id1)'],
+                                                                     select => ['cat_nivel3.id1'],
+                                                                     distinct => 1,
                                                                      require_objects => ['cat_nivel3'],
                                                             );
 
-   my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible_count(
+   my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
                                                                query => [
                                                                            or =>[
                                                                                  dato => {like => '%'.$string.'%'},
@@ -1704,7 +1705,7 @@ sub busquedaCombinada_newTemp{
                                                                                  'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
                                                                            ],
                                                                         ],
-                                                                        select => ['DISTINCT(id1)'],
+                                                                        select => ['COUNT(DISTINCT(id1)) AS agregacion_temp'],
                                                                         require_objects => ['cat_nivel3'],
                                                                );
 
@@ -1720,11 +1721,12 @@ sub busquedaCombinada_newTemp{
                                                                            ],
                                                                            limit => $cantR,
                                                                            offset => $ini,
-                                                                           select => ['DISTINCT(t2.id1)'],
+                                                                           select => ['cat_nivel2.id1'],
+                                                                           distinct => 1,
                                                                            require_objects => ['cat_nivel2'],
                                                                   );
 
-   my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible_count(
+   my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
                                                                      query => [
                                                                                  or => [
                                                                                     dato => {like => '%'.$string.'%'},
@@ -1734,7 +1736,7 @@ sub busquedaCombinada_newTemp{
                                                                                     'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
                                                                                  ],
                                                                               ],
-                                                                              select => ['DISTINCT(t2.id1)'],
+                                                                              select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
                                                                               require_objects => ['cat_nivel2'],
                                                                      );
 
@@ -1748,10 +1750,11 @@ sub busquedaCombinada_newTemp{
                                                                                        ],
                                                                                        limit => $cantR,
                                                                                        offset => $ini,
-                                                                                       select => ['DISTINCT(t2.id1)'],
+                                                                                       select => ['cat_nivel1.id1'],
+                                                                                       distinct => 1,
                                                                                        require_objects => ['cat_nivel1'],
                                                                               );
-   my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible_count(
+   my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
                                                                               query => [
                                                                                           or => [
                                                                                              dato => {like => '%'.$string.'%'},
@@ -1759,33 +1762,33 @@ sub busquedaCombinada_newTemp{
                                                                                              'cat_nivel1.autor' => {like => '%'.$string.'%'},
                                                                                           ],
                                                                                        ],
-                                                                                       select => ['DISTINCT(t2.id1)'],
+                                                                                       select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
                                                                                        require_objects => ['cat_nivel1'],
                                                                               );
-# 
-#    my @id1_array;
-# 
-#    foreach my $nivel1 (@$nivel1_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
-#           push(@id1_array,$nivel1->cat_nivel1->id1);
-#       }
-#    }
-#    foreach my $nivel2 (@$nivel2_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
-#         push(@id1_array,$nivel2->cat_nivel2->id1);
-#       }
-#    }
-#    foreach my $nivel3 (@$nivel3_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
-#          push(@id1_array,$nivel3->cat_nivel3->id1);
-#       }
-#    }
-#    
-# # FIXME falta filtrar los id1 repetidos del arreglo
-# 
-#    my $cant_total = $nivel1_repetible_count + $nivel2_repetible_count + $nivel3_repetible_count;
-# 
-#    return ($cant_total,@id1_array);
+
+   my @id1_array;
+
+   foreach my $nivel1 (@$nivel1_repetible){
+      if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
+          push(@id1_array,$nivel1->cat_nivel1->id1);
+      }
+   }
+   foreach my $nivel2 (@$nivel2_repetible){
+      if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
+        push(@id1_array,$nivel2->cat_nivel2->id1);
+      }
+   }
+   foreach my $nivel3 (@$nivel3_repetible){
+      if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
+         push(@id1_array,$nivel3->cat_nivel3->id1);
+      }
+   }
+   
+# FIXME falta filtrar los id1 repetidos del arreglo
+
+   my $cant_total = $nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + $nivel3_repetible_count->[0]->agregacion_temp;
+
+   return ($cant_total,@id1_array);
 }
 
 

@@ -630,3 +630,9 @@ ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL,
 ADD `id_detalle_disponibilidad` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
 ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ,
 ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel1_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel2_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel3_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
