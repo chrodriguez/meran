@@ -1,16 +1,19 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
 
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function() {
+    $('#dateselected').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#dateselectedEnd').datepicker({ dateFormat: 'dd/mm/yy' });
+
+});
+</script>
 <script type="text/javascript">
-<!-- TMPL_INCLUDE NAME="epoch_classes.js" -->
-
-/*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('dateselected'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('dateselectedEnd'));
-				};
 
 //Funcion que guarda la nota de la modificacion, es llamada desde regitroResult.tmpl
 var notas="";
@@ -89,9 +92,9 @@ function updateGuardarNota(responseText){
 		<td valign= "top" class=inputFontNormal><br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
 			[% todaydate %]">
-			<a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a><br><br>
+			<br><br>
 			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="[% todaydate %]"> 
-			<a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" 	alt=[% "Selecciona una fecha" | i18n %]></a>
+			
 		</td>
 
 		<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

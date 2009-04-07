@@ -1,0 +1,3 @@
+El archivo intranet/cgi-bin/reports/estadistica_AnualResult.pl parece deprecated.
+
+

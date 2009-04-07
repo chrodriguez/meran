@@ -514,15 +514,15 @@ sub itemtypesPie(){
 	return ($g->render());
 }
 
-sub levelsHBars(){
-	my ($branch,$cant,@results)=@_;
+sub levelsHBars{
+	my ($branch,$cant,$results)=@_;
 	my $g = &inicializarGrafico("Niveles Bibliograficos (Barras)");
 
 	my @descriptions;
 	my @values;
     	for (my $i=0; $i < $cant ; $i++ ) {
-                 push (@descriptions,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
-                 push (@values,$results[$i]->{'cant'});
+                 push (@descriptions,C4::AR::Utilidades::noaccents("mumancha")); #FIXME no toma la description
+                 push (@values,$results->[$i]->agregacion_temp);
         };
 
 #para generar las barras.
@@ -538,8 +538,8 @@ sub levelsHBars(){
 	return ($g->render());
 }
 
-sub levelsPie(){
-	my ($branch,$cant,@results)=@_;
+sub levelsPie{
+	my ($branch,$cant,$results)=@_;
 	my $g = &inicializarGrafico("Niveles Bibliograficos (Torta)");
 
 	my @descriptions;
@@ -552,14 +552,14 @@ sub levelsPie(){
 	my $totallevels=0;
 	my $totalVar=0;
 	for (my $i=0; $i < $cant ; $i++ ) {
-		$totallevels+=$results[$i]->{'cant'};
+		$totallevels+=$results->[$i]->agregacion_temp;
 	}
     	for (my $i=0; $i < $cant ; $i++ ) {
-		$cantlevels=$results[$i]->{'cant'};
+		$cantlevels=$results->[$i]->agregacion_temp;
 		#Para quedar acorde al pm (Si la cantidad es menor a 3% los suma en una misma porcion de la torta)
 		$porclevels=sprintf("%.1f", ($cantlevels/ $totallevels) * 100.0);
 		if($porclevels >= 3){
-			push(@descriptions,C4::AR::Utilidades::noaccents($results[$i]->{'description'}));
+			push(@descriptions,C4::AR::Utilidades::noaccents("mumancha"));
      			push(@values,$cantlevels);
 		}
 		else{

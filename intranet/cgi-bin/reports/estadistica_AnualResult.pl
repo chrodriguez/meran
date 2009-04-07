@@ -26,7 +26,7 @@ my $branch= $input->param('branch') || C4::AR::Preferencias->getValorPreferencia
 my $obj= C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $year= $obj->{'year'};
 
-my @resultsdata= prestamosAnual($branch,$year);
+my @resultsdata= C4::AR::Estadisticas::prestamosAnual($branch,$year);
 
 #******** 18/05/2007 - Damian - Se agrego para que se vea la cantidad de prestamos por tipo, antes
 #                               no se veia. Se cambio la consulta prestamosAnual en Estadisticas.pm

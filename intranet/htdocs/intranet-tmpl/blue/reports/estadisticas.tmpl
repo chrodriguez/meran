@@ -2,17 +2,20 @@
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
+
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function() {
+    $('#dateselected').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#dateselectedEnd').datepicker({ dateFormat: 'dd/mm/yy' });
+
+});
+</script>
+
 <script type="text/javascript">
-[% INCLUDE "epoch_classes.js" %]
-
-/*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('dateselected'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('dateselectedEnd'));
-				};
-
-
 
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
@@ -62,7 +65,7 @@ function updateInfo(responseText){
 				<br><br>
 			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
 			[% IF fechaInicio %][% dateselected  %][% ELSE %][% todaydate %][% END %]"
-			<a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+			
 				<br><br>
 			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="
                             [% IF fechaFin %]
@@ -70,7 +73,7 @@ function updateInfo(responseText){
                             [% ELSE %]
                                 [% todaydate %]
                             [% END %]"			
-                        <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha"></a>
+                        
 			</td>
 			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td rowspan=3 class="inputFontNormal"> <b>[% "Buscar por:" | i18n %]</b> <br>

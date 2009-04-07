@@ -20,11 +20,11 @@ function busquedaCombinable(){
  	objAH.debug= true;
 
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	objAH.url= '/cgi-bin/koha/busquedas/busquedaAvanzada.pl';
 	objAH.titulo=  $('#titulo').val();
 	objAH.autor= $('#autor').val();
 	objAH.signatura= $('#signatura').val()
-	objAH.comboItemTypes= $('#tipo_nivel3_id').val();
+	objAH.tipo_nivel3_name= $('#tipo_nivel3_id').val();
 	
 	var radio= $(":checked");
 	var tipo=radio[0].value;

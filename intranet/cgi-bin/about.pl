@@ -12,10 +12,10 @@ use CGI;
 #agrego una modificacion para testear el plugin del mantisssssssssssssdddfasas
 
 my $dbh = C4::Context->dbh;
-my $query = new CGI;
-my ($template, $loggedinuser, $cookie)
+my $input = new CGI;
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "about.tmpl",
-			     query => $query,
+			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {parameters => 1},
@@ -34,12 +34,10 @@ my $mysqlVersion = ($sti->fetchrow_array)[0]; # `mysql -V`
 # The web server may not be httpd, and/or may not be in the PATH
 my $apacheVersion =  $ENV{SERVER_SOFTWARE} || `httpd -v`;
 
-$template->param(
-					kohaVersion => $kohaVersion,
-					osVersion          => $osVersion,
-					perlVersion        => $perlVersion,
-					mysqlVersion       => $mysqlVersion,
-					apacheVersion      => $apacheVersion,
-		);
+$t_params->{'kohaVersion'} = $kohaVersion;
+$t_params->{'osVersion'}= $osVersion;
+$t_params->{'perlVersion'}= $perlVersion;
+$t_params->{'mysqlVersion'}= $mysqlVersion;
+$t_params->{'apacheVersion'}= $apacheVersion;
 
-output_html_with_http_headers $query, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params,$session);

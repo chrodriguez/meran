@@ -20,19 +20,19 @@ my ($template, $session, $t_params, $cookie)= get_template_and_user({
 			     });
 
 
-my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+my $ui= $input->param('id_ui') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 my %params;
 $params{'onChange'}= 'hacerSubmit()';
 my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
-my ($cantidad,@resultsdata)= itemtypesReport($ui); 
-my $torta=&itemtypesPie($ui,$cantidad, @resultsdata);
-my $barras=&itemtypesHBars($ui,$cantidad, @resultsdata);
+my ($cantidad,$resultsdata)= C4::AR::Estadisticas::tiposDeItem_reporte($ui); 
+# my $torta=&itemtypesPie($ui,$cantidad, @resultsdata);
+# my $barras=&itemtypesHBars($ui,$cantidad, @resultsdata);
 
 $t_params->{'unidades'}= $ComboUI;
-$t_params->{'resultsloop'}=\@resultsdata;
-$t_params->{'cantidad'}=$cantidad;
-$t_params->{'barras'}=$barras;
-$t_params->{'torta'}=$torta;
+$t_params->{'resultsloop'}=$resultsdata;
+$t_params->{'cantidad'}=$ui;
+# $t_params->{'barras'}=$barras;
+# $t_params->{'torta'}=$torta;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
 

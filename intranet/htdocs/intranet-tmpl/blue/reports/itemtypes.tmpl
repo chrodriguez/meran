@@ -4,7 +4,7 @@
 
 [% INCLUDE "util.js" %]
     function hacerSubmit(){
-            document.ui.submit();
+            document.id_ui_form.submit();
     }
     
     $(document).ready( function() {
@@ -17,7 +17,8 @@
 <table border=0 cellspacing=0 cellpadding=2>
 	<th>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</th>
 	<th>
-		<form name="ui" action=/cgi-bin/koha/reports/itemtypes.pl method=post >[% unidades %]
+		<form name="id_ui_form" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
+         [% unidades %]
 		</form>
 	</th>
 </table>
@@ -32,11 +33,12 @@
 		<th>[% "Cantidad" | i18n %]</th>
  		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH item IN resultsloop %]
   	<tr align='center' class="inputFontNormal">
    		<td height=25>&nbsp;</td>	
-  		<td> [% description %]</td>
-  		<td> [% cant %] </td>
+  		<td> [% item.nivel2.cat_ref_tipo_nivel3.nombre%]</td>
+  		<td> [% item.agregacion_temp %] </td>
+       
  		<td height=25>&nbsp;</td>
  	</tr>
 [% END %]

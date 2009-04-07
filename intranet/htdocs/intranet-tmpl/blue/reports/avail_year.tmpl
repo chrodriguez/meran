@@ -1,15 +1,20 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
-<script type="text/javascript">
-[% INCLUDE "epoch_classes.js" %]
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
 
-/*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('ini'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fin'));
-				};
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function() {
+    $('#ini').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#fin').datepicker({ dateFormat: 'dd/mm/yy' });
+
+});
+</script>
+<script type="text/javascript">
+
 
 function hacerSubmit(){
         document.unidadInformacion.submit();
@@ -34,9 +39,7 @@ function hacerSubmit(){
 <td class="inputFontNormal">[% "Seleccione una fecha de inicio:" | i18n %]</td>
 <td class="inputFontNormal"> 
 		<input id="ini" name="ini" value="[% ini %]">
-	     	<a href="javascript:dp_ini.toggle();">
-				<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
-		</a>
+	     	
 </td>
 <td>&nbsp;</td>
 </tr>
@@ -44,9 +47,7 @@ function hacerSubmit(){
 <td class="inputFontNormal">[% "Seleccione una fecha de Fin:" | i18n %]</td>
 <td class="inputFontNormal"> 
 		<input  id="fin" name="fin" value="[% fin %]">
-		<a href="javascript:dp_fin.toggle();">
-			<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
-		</a>
+		
 </td>
 <td class="inputFontNormal"> 
 	<input type="image" name="consulta" onClick="unidadInformacion.submit()" src="[% themelang %]/images/generarListado.png">
@@ -65,13 +66,13 @@ function hacerSubmit(){
 <td>[% "Cantidad" | i18n %]</td>
 <td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 </tr>
-[% FOREACH resultsloop %]
+[% FOREACH disponibilidad IN resultsloop %]
   <tr align='center'>
   <td height=25 class="[% clase %]">&nbsp;</td>
-  <td class="[% clase %]"> [% mes %] </td>
-  <td class="[% clase %]"> [% year %] </td>
-  <td class="[% clase %]"> [% avail %] </td>
-  <td class="[% clase %]"> [% cantidad %] </td>
+  <td class="[% clase %]"> [% disponibilidad.mes_agregacion %] </td>
+  <td class="[% clase %]"> [% disponibilidad.anio_agregacion %] </td>
+  <td class="[% clase %]"> [% disponibilidad.estado %] </td>
+  <td class="[% clase %]"> [% disponibilidad.agregacion_temp %] </td>
   <td height=25 class="[% clase %]">&nbsp;</td>
   </tr>
 [% END %]

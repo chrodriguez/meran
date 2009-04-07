@@ -1445,8 +1445,8 @@ sub generarComboUI {
     if ( $params->{'onFocus'} ){$options_hash{'onFocus'}= $params->{'onFocus'};}
     if ( $params->{'onBlur'} ){$options_hash{'onBlur'}= $params->{'onBlur'};}
 
-    $options_hash{'name'}= $params->{'name'}||'ui_name';
-    $options_hash{'id'}= $params->{'id'}||'ui_id';
+    $options_hash{'name'}= $params->{'name'}||'id_ui';
+    $options_hash{'id'}= $params->{'id'}||'id_ui';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
@@ -1472,7 +1472,7 @@ sub generarComboDeSocios {
 
     foreach my $socio (@$socios) {
         push(@select_socios, $socio->getId_socio);
-        $select_socios{$socio->getId_socio}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
+        $select_socios{$socio->getId_socio}= $socio->persona->getApellido.", ".$socio->persona->getNombre." (".$socio->getNro_socio.")" ;
     }
 
     my %options_hash; 

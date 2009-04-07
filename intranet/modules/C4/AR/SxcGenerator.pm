@@ -22,7 +22,7 @@ $VERSION = 0.01;
 );
 
 
-#Genera la planilla del reporte  "Préstamos sin devolver"
+#Genera la planilla del reporte  "Prï¿½stamos sin devolver"
 
 sub generar_planilla_prestamos {
 	my ($results,$loggedinuser) = @_;
@@ -43,7 +43,16 @@ my $pos=1;
 my $count=1;
 $sheet->oooSet("bold", "on");
 #Titulos
-my @campos=("Apellido","Nombre","Número de socio","E-mail","Fecha de prestamo","Fecha de vencimiento","Código de barra","Signatura Topográfica","Tipo de préstamo");
+my @campos=(C4::AR::Filtros::i18n("Apellido"),
+            C4::AR::Filtros::i18n("Nombre"),
+            C4::AR::Filtros::i18n("Nï¿½mero de socio"),
+            C4::AR::Filtros::i18n("E-mail"),
+            C4::AR::Filtros::i18n("Fecha de prestamo"),
+            C4::AR::Filtros::i18n("Fecha de vencimiento"),
+            C4::AR::Filtros::i18n("Cï¿½digo de barra"),
+            C4::AR::Filtros::i18n("Signatura Topogrï¿½fica"),
+            C4::AR::Filtros::i18n("Tipo de prï¿½stamo")
+           );
 
 $sheet->oooSet("bold", "on");
 
@@ -60,31 +69,27 @@ $pos++;
 ##
 
 #Datos
-for(my $i = 0 ; $i <= $#{$results} ; $i++)
-{
-if ( @$results[$i]) {
-$sheet->oooSet("cell-loc", 1, $pos);
-
-$sheet->oooData("cell-text", @$results[$i]->{'surname'});
-$sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'firstname'});
-$sheet->oooSet("cell-loc", 3, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'cardnumber'});
-$sheet->oooSet("cell-loc", 4, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'emailaddress'});
-$sheet->oooSet("cell-loc", 5, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'date_due'});
-$sheet->oooSet("cell-loc", 6, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'vencimiento'});
-$sheet->oooSet("cell-loc", 7, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'barcode'});
-$sheet->oooSet("cell-loc", 8, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'bulk'});
-$sheet->oooSet("cell-loc", 9, $pos);
-$sheet->oooData("cell-text", @$results[$i]->{'description'});
-
-}
-$pos++;
+foreach my $prestamo (@$results){
+   $sheet->oooSet("cell-loc", 1, $pos);
+   $sheet->oooData("cell-text", $prestamo->socio->persona->getApellido);
+   $sheet->oooSet("cell-loc", 2, $pos);
+   $sheet->oooData("cell-text", $prestamo->socio->persona->getNombre);
+   $sheet->oooSet("cell-loc", 3, $pos);
+   $sheet->oooData("cell-text", $prestamo->socio->getNro_socio);
+   $sheet->oooSet("cell-loc", 4, $pos);
+   $sheet->oooData("cell-text", $prestamo->socio->persona->getEmail);
+   $sheet->oooSet("cell-loc", 5, $pos);
+   $sheet->oooData("cell-text", $prestamo->getFecha_prestamo);
+   $sheet->oooSet("cell-loc", 6, $pos);
+   $sheet->oooData("cell-text", C4::AR::Prestamos::fechaDeVencimiento($prestamo->getId3,$prestamo->getFecha_prestamo) );
+   $sheet->oooSet("cell-loc", 7, $pos);
+   $sheet->oooData("cell-text", $prestamo->nivel3->getBarcode);
+   $sheet->oooSet("cell-loc", 8, $pos);
+   $sheet->oooData("cell-text", $prestamo->nivel3->nivel2->getSignatura_topografica);
+   $sheet->oooSet("cell-loc", 9, $pos);
+   $sheet->oooData("cell-text", $prestamo->tipo->getDescripcion);
+   
+   $pos++;
 }
 ##
 my $name="prestamos-vencidos-".$loggedinuser;
@@ -109,7 +114,7 @@ $sheet->oooSet("bold", "on");
 my $pos=1;
 $sheet->oooSet("text-size", 11);
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Ministerio de Educación
+$sheet->oooData("cell-text", "Ministerio de Educaciï¿½n
 Universidad Nacional de La Plata
 ");
 $sheet->oooSet("text-size", 10);
@@ -122,16 +127,16 @@ $sheet->oooSet("cell-loc", 2, $pos);
 $sheet->oooData("cell-text", "Autor");
 #$sheet->set_colwidth (4, 4000);
 $sheet->oooSet("cell-loc", 3, $pos);
-$sheet->oooData("cell-text", "Título");
+$sheet->oooData("cell-text", "Tï¿½tulo");
 #$sheet->set_colwidth (5, 10000);
 $sheet->oooSet("cell-loc", 4, $pos);
 $sheet->oooData("cell-text", "Edic.");
 $sheet->oooSet("cell-loc", 5, $pos);
 $sheet->oooData("cell-text", "Editor");
 $sheet->oooSet("cell-loc", 6, $pos);
-$sheet->oooData("cell-text", "Año");
+$sheet->oooData("cell-text", "Aï¿½o");
 $sheet->oooSet("cell-loc", 7, $pos);
-$sheet->oooData("cell-text", "Signatura Topográfica");
+$sheet->oooData("cell-text", "Signatura Topogrï¿½fica");
 #$sheet->set_colwidth (9, 1000);
 $sheet->oooSet("bold", "off");
 
@@ -212,7 +217,7 @@ $pos++;
 $sheet->oooSet("cell-loc", 1, $pos);
 $sheet->oooData("cell-text", "Estantes");
 $sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", "Títulos");
+$sheet->oooData("cell-text", "Tï¿½tulos");
 $sheet->oooSet("cell-loc", 3, $pos);
 $sheet->oooData("cell-text", "Ejemplares");
 $sheet->oooSet("cell-loc", 4, $pos);
@@ -284,7 +289,7 @@ return($name);
 
 
 
-#Genera la planilla del reporte  "Usuarios por Categoría"
+#Genera la planilla del reporte  "Usuarios por Categorï¿½a"
 
 sub generar_planilla_usuario {
 	my ($results,$loggedinuser) = @_;
@@ -293,40 +298,38 @@ sub generar_planilla_usuario {
 #Genero la hoja de calculo Openoffice
 my $sheet=new ooolib("sxc");
 $sheet->oooSet("builddir","./plantillas");
-$sheet->oooSet("title","Estadística Usuarios por categoría");
+$sheet->oooSet("title",C4::AR::Filtros::i18n("EstadadÃ­stica Usuarios por categorÃ­a"));
 $sheet->oooSet("author","KOHA");
-$sheet->oooSet("subject","Estadistica");
+$sheet->oooSet("subject",C4::AR::Filtros::i18n("Estadistica"));
 $sheet->oooSet("bold", "on");
 my $pos=1;
 $sheet->oooSet("text-size", 11);
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Ministerio de Educación
+$sheet->oooData("cell-text", C4::AR::Filtros::i18n("Ministerio de EducaciÃ³n
 Universidad Nacional de La Plata
-");
+"));
 $sheet->oooSet("text-size", 10);
 $pos++;
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Categoría");
+$sheet->oooData("cell-text", "CategorÃ­a");
 $sheet->oooSet("cell-loc", 2, $pos);
-$sheet->oooData("cell-text", "Cantidad de Usuarios Reales");
+$sheet->oooData("cell-text", C4::AR::Filtros::i18n("Cantidad de Usuarios Reales"));
 $sheet->oooSet("cell-loc", 3, $pos);
-$sheet->oooData("cell-text", "Cantidad de Usuarios Potenciales");
+$sheet->oooData("cell-text", C4::AR::Filtros::i18n("Cantidad de Usuarios Potenciales"));
 $sheet->oooSet("bold", "off");
 $pos++;
 ##
 
 #Datos
-for(my $i = 0 ; $i <= $#{$results} ; $i++)
-{
-if ( @$results[$i]) {
+foreach my $prestamo (@$results){
 	$sheet->oooSet("cell-loc", 1, $pos);
-	$sheet->oooData("cell-text", @$results[$i]->{'categoria'});
+	$sheet->oooData("cell-text", $prestamo->categoria->description);
 	$sheet->oooSet("cell-loc", 2, $pos);
-	$sheet->oooData("cell-text", @$results[$i]->{'reales'});
-	$sheet->oooSet("cell-loc", 3, $pos);
-	$sheet->oooData("cell-text", @$results[$i]->{'potenciales'});
-}
-	$pos++;
+	$sheet->oooData("cell-text", $prestamo->agregacion_temp);
+# FIXME falta calcular potenciales en userEst.pl
+# 	$sheet->oooSet("cell-loc", 3, $pos);
+# 	$sheet->oooData("cell-text", @$results[$i]->{'potenciales'});
+   $pos++;
 }
 
 my $name='usuarioEstadistica-'.$loggedinuser;
@@ -344,14 +347,14 @@ my ($results,$loggedinuser) = @_;
 #Genero la hoja de calculo Openoffice
 my $sheet=new ooolib("sxc");
 $sheet->oooSet("builddir","./plantillas");
-$sheet->oooSet("title","Reporte de Inventario (Signatura topográfica)");
+$sheet->oooSet("title","Reporte de Inventario (Signatura topogrï¿½fica)");
 $sheet->oooSet("author","KOHA");
 $sheet->oooSet("subject","Reporte");
 $sheet->oooSet("bold", "on");
 my $pos=1;
 $sheet->oooSet("text-size", 11);
 $sheet->oooSet("cell-loc", 1, $pos);
-$sheet->oooData("cell-text", "Ministerio de Educación
+$sheet->oooData("cell-text", "Ministerio de Educaciï¿½n
 Universidad Nacional de La Plata
 ");
 $sheet->oooSet("text-size", 10);
@@ -364,16 +367,16 @@ $sheet->oooSet("cell-loc", 2, $pos);
 $sheet->oooData("cell-text", "Autor");
 #$sheet->set_colwidth (4, 4000);
 $sheet->oooSet("cell-loc", 3, $pos);
-$sheet->oooData("cell-text", "Título");
+$sheet->oooData("cell-text", "Tï¿½tulo");
 #$sheet->set_colwidth (5, 10000);
 $sheet->oooSet("cell-loc", 4, $pos);
 $sheet->oooData("cell-text", "Edic.");
 $sheet->oooSet("cell-loc", 5, $pos);
 $sheet->oooData("cell-text", "Editor");
 $sheet->oooSet("cell-loc", 6, $pos);
-$sheet->oooData("cell-text", "Año");
+$sheet->oooData("cell-text", "Aï¿½o");
 $sheet->oooSet("cell-loc", 7, $pos);
-$sheet->oooData("cell-text", "Signatura Topográfica");
+$sheet->oooData("cell-text", "Signatura Topogrï¿½fica");
 #$sheet->set_colwidth (9, 1000);
 $sheet->oooSet("bold", "off");
 

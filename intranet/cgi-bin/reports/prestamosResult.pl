@@ -37,7 +37,7 @@ if ($obj->{'renglones'}){
    $cantR=$obj->{'renglones'};
 }
 
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::prestamos($obj);#Prestamos sin devolver (vencidos y no vencidos)
+my ($cantidad,$resultsdata)= C4::AR::Estadisticas::prestamos($obj);#Prestamos sin devolver (vencidos y no vencidos)
 my $funcion=$obj->{'funcion'};
 
 if($cantR ne "todos"){
@@ -46,14 +46,14 @@ if($cantR ne "todos"){
 
 # La planilla se debe generar si se la pide explicitamente!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-# my $planilla=generar_planilla_prestamos(\@resultsdata,$loggedinuser);
+my $planilla=C4::AR::SxcGenerator::generar_planilla_prestamos($resultsdata,$loggedinuser);
 
 
 $t_params->{'estado'}= $estado;
-$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'resultsloop'}= $resultsdata;
 # $t_params->{'nene'} = @resultsdata[0]->socio->persona->getNombre;
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'renglones'}= $cantR;
-# $t_params->{'planilla'}= $planilla;
+$t_params->{'planilla'}= $planilla;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

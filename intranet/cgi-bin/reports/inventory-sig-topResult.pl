@@ -26,7 +26,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my $cat_nivel3;
 if($sigtop ne ''){
-   $cat_nivel3 = listaritemsDeInventorioSigTop($sigtop,$orden);
+   $cat_nivel3 = C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
 }
 #
 # Generar Planilla
@@ -58,10 +58,6 @@ foreach my $cat_nivel3 (@$cat_nivel3){
    push(@results, \%row);
 }
 $t_params->{'results'}= \@results;
-
-open A,">>/tmp/debug.txt";
-print A "\n\n\n".$cat_nivel3->[0]->getBarcode."\n\n\n";
-close A;
 
 # print $cat_nivel3->[0]->nivel2->nivel1->autor;
 # $t_params->{'name'}= $planilla;

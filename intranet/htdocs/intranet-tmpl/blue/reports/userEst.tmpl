@@ -39,8 +39,8 @@ $(document).ready( function() {
 [% FOREACH socio IN resultsloop %]
   	<tr align='center' class="inputFontNormal">
    		<td height=25>&nbsp;</td>	
-  		<td>[% categoria %] </td>
-  		<td>[% reales %] </td>
+  		<td>[% socio.categoria.getDescription %] </td>
+  		<td>[% socio.agregacion_temp %] </td>
 		<td>[% potenciales %] </td>
  		<td height=25 >&nbsp;</td>
  	</tr>
@@ -49,7 +49,7 @@ $(document).ready( function() {
 
 
 <br>
-	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">
+	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">
 		[% "Generar planilla" | i18n %]<img src="[% themelang %]/images/sxc.png" border="0">
 	</a>
 <br><br>

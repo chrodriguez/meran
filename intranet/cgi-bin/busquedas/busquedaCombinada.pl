@@ -49,46 +49,11 @@ if($comboItemTypes != -1 && $comboItemTypes ne ""){
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada($search,$ini,$cantR);
+my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$cantR,$search->{'keyword'});
 
-C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
-my @resultsarray;
-my %result;
-my $nivel1;
-my $autor;
-my $i=0;
-
-if($cantidad > 0){
-#si busquedaCombianda devuelve algo se busca la info siguiente
-	foreach my $id1 (@resultId1) {
-	
-		$result{$i}->{'id1'}= $id1;
-		$nivel1= &C4::AR::Catalogacion::buscarNivel1($id1);
-		$result{$i}->{'titulo'}= $nivel1->{'titulo'};
-		$autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
-		$result{$i}->{'idAutor'}=$autor->{'id'};
-		$result{$i}->{'nomCompleto'}= $autor->{'completo'};
-		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $comboItemTypes,"INTRA");
-		$result{$i}->{'grupos'}=$ediciones;
-		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $comboItemTypes);
-		$result{$i}->{'disponibilidad'}=\@disponibilidad;
-	
-		#Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-		my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-		if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
-		#
-
-		$i++;
-	}
-}
-
-#PARA EL ORDEN VER SI QUEDA, PUEDE SER CAMBIADO POR JQUERY!!!!!!!!!!!!!!!
-my @keys=keys %result;
-@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
-foreach my $row (@keys){
-	push (@resultsarray, $result{$row});
-}
+my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($cantidad,$comboItemTypes,$orden,@resultId1);
 
 my @busqueda=split(/&/,$buscoPor);
 $buscoPor="";
@@ -100,7 +65,7 @@ foreach my $str (@busqueda){
 $buscoPor= substr($buscoPor,2,length($buscoPor));
 
 
-$t_params->{'SEARCH_RESULTS'}= \@resultsarray;
+$t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}=$buscoPor;
 $t_params->{'cantidad'}=$cantidad;
 

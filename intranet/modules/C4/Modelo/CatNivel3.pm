@@ -18,6 +18,7 @@ __PACKAGE__->meta->setup(
         id_disponibilidad     => { type => 'integer', length => 5, default => '0', not_null => 1 },
         id_estado             => { type => 'character', default => '0', length => 2 },
         timestamp             => { type => 'timestamp', not_null => 1 },
+        agregacion_temp       => { type => 'varchar', length => 255 },
     ],
 
     primary_key_columns => [ 'id3' ],

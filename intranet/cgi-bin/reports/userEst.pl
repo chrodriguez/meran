@@ -21,7 +21,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+my  $ui= $input->param('id_ui') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
 my %params;
 $params{'onChange'}= 'hacerSubmit()';
@@ -32,13 +32,13 @@ my ($cantidad,$resultsdata)= C4::AR::Estadisticas::userCategReport($ui);
 # my $barras=&userCategHBars($ui,$cantidad, @resultsdata);
 # 
 # #Generar planilla.
-# my $planilla=generar_planilla_usuario(\@resultsdata,$session->{'loggedinuser'});
+my $planilla=C4::AR::SxcGenerator::generar_planilla_usuario($resultsdata,$session->{'loggedinuser'});
 
 $t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'unidades'}= $ComboUI;
 $t_params->{'cantidad'}=$cantidad;
 $t_params->{'ui'}= $ui;
-# $t_params->{'planilla'}=$planilla;
+$t_params->{'planilla'}=$planilla;
 # $t_params->{'barras'}=$barras;
 # $t_params->{'torta'}=$torta;
 

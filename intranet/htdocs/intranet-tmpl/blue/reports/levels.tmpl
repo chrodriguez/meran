@@ -30,11 +30,11 @@ $(document).ready( function() {
 		<th>Cantidad</th>
 		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
-[% FOREACH RESULTSLOOP %]
+[% FOREACH nivel IN resultsloop %]
   	<tr align='center' class="inputFontNormal">
   		<td height=25>&nbsp;</td>
-  		<td>[% description %] </td>
-  		<td>[% cant %] </td>
+  		<td>[% nivel.nivel2.ref_nivel_bibliografico.getDescription %] </td>
+  		<td>[% nivel.agregacion_temp %] </td>
 		<td height=25>&nbsp;</td>
  	</tr>
 [% END %]

@@ -38,17 +38,18 @@ my ($template, $session, $t_params)
 			     });
 
 
-my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+my  $ui= $input->param('id_ui') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
 my %params;
 $params{'onChange'}= 'hacerSubmit()';
 my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
 
-my ($cantidad,@resultsdata)= levelsReport($ui); 
-my $torta=&levelsPie($ui,$cantidad, @resultsdata);
-my $barras=&levelsHBars($ui,$cantidad, @resultsdata);
+my ($cantidad,$resultsdata)= C4::AR::Estadisticas::reporteNiveles($ui); 
 
-$t_params->{'resultsloop'}=\@resultsdata;
+my $torta=C4::AR::StatGraphs::levelsPie($ui,$cantidad,$resultsdata);
+my $barras=C4::AR::StatGraphs::levelsHBars($ui,$cantidad, $resultsdata);
+
+$t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'unidades'}= $ComboUI;
 $t_params->{'cantidad'}=$cantidad;
 $t_params->{'ui'}= $ui;

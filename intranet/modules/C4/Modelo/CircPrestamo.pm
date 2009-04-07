@@ -14,7 +14,7 @@ __PACKAGE__->meta->setup(
 	     tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', not_null => 1 },
         id_ui_origen             => { type => 'varchar', length => 4 },
-	    id_ui_prestamo	         => { type => 'varchar', length => 4 },
+	     id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },

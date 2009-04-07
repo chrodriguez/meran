@@ -1,16 +1,22 @@
 [% INCLUDE "intranet-top.inc" %]
 
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
+
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function() {
+    $('#fechaIni').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#fechaFin').datepicker({ dateFormat: 'dd/mm/yy' });
+
+});
+</script>
+
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
 <script language="javascript">
-[% INCLUDE "epoch_classes.js" %]
 
-/*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('fechaIni'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('fechaFin'));
-				};
 var objAH;
 
 function ordenar(orden){
@@ -59,9 +65,6 @@ function consultar(){
 	  	<td  class=inputFontNormal>[% "Seleccione una fecha de inicio:" | i18n %]</td>
 	  	<td  class=inputFontNormal>
                     <input id="fechaIni" class="inputFontNormal"> 
-                        <a href="javascript:dp_ini.toggle();">
-                            <img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt='[% "Selecciona una fecha" | i18n %]'>
-                        </a>
 	  	</td>
 	 	<td></td>
 	<tr>
@@ -70,9 +73,6 @@ function consultar(){
 	  	<td  class=inputFontNormal>[% "Seleccione una fecha de Fin:" | i18n %] </td>	
 	  	<td  class=inputFontNormal>
 			<input id="fechaFin" class="inputFontNormal"> 
-			<a href="javascript:dp_fin.toggle();">
-			<img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt="[% 'Selecciona una fecha' | i18n %]">
-			</a>
 		</td>
           	<td colspan=2 align="center">
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">

@@ -729,58 +729,91 @@ sub cantidadAnaliticas{
 }
 
 
-sub itemtypesReport{
-        my ($branch)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query=" SELECT cat_ref_tipo_nivel3.description, COUNT( cat_ref_tipo_nivel3.description ) AS cant
-		FROM cat_ref_tipo_nivel3
-		LEFT JOIN cat_nivel2 n2 ON itemtypes.itemtype = n2.tipo_documento
-		INNER JOIN cat_nivel3 n3 ON n2.id2 = n3.id2
-		WHERE holdingbranch = ?
-		GROUP BY cat_ref_tipo_nivel3.description  ";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($branch);
-        my @results;
-        while (my $data=$sth->fetchrow_hashref){
-                push(@results,$data);
-        }
-        return (scalar(@results),@results);
+sub tiposDeItem_reporte{
+      my ($id_ui)=@_;
+      my @filtros;
+      push (@filtros, ( id_ui_poseedora => { eq => $id_ui}) );
+
+      my $tipos_item = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                        query => \@filtros,  
+                                                                        select => ['nivel2.*','COUNT(tipo_documento) AS agregacion_temp'],
+                                                                        group_by => ['tipo_documento'],
+                                                                        with_objects => ['nivel2'],
+
+                                                                     );
+      my $tipos_item_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+                                                                        query => \@filtros,  
+                                                                        with_objects => ['nivel2'],
+
+                                                                     );
+
+      return ($tipos_item_count,$tipos_item);
 }
 
-sub levelsReport{
-        my ($branch)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="SELECT ref_nivel_bibliografico.description, COUNT( ref_nivel_bibliografico.description ) AS cant
-		FROM ref_nivel_bibliografico
-		LEFT JOIN cat_nivel2 n2 ON bibliolevel.code = n2.nivel_bibliografico
-		INNER JOIN cat_nivel3 n3 ON n2.id2 = n3.id2
-		WHERE holdingbranch = ?
-		GROUP BY ref_nivel_bibliografico.description";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($branch);
-        my @results;
-        while (my $data=$sth->fetchrow_hashref){
-                push(@results,$data);
-        }
-        return (scalar(@results),@results);
+sub reporteNiveles{
+      my ($id_ui)=@_;
+        
+
+#       my $query="SELECT ref_nivel_bibliografico.description, COUNT( ref_nivel_bibliografico.description ) AS cant
+# 		FROM ref_nivel_bibliografico
+# 		LEFT JOIN cat_nivel2 n2 ON bibliolevel.code = n2.nivel_bibliografico
+# 		INNER JOIN cat_nivel3 n3 ON n2.id2 = n3.id2
+# 		WHERE holdingbranch = ?
+# 		GROUP BY ref_nivel_bibliografico.description";
+
+      my @filtros;
+
+      push (@filtros, ( id_ui_poseedora => { eq => $id_ui}) );
+
+      my $niveles = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                     query => \@filtros,
+                                                                     select => ['*','COUNT(nivel_bibliografico) AS agregacion_temp'],
+                                                                     group_by => ['nivel_bibliografico'],
+                                                                     sort_by => ['ref_nivel_bibliografico.description'],
+                                                                     with_objects => ['nivel2.ref_nivel_bibliografico'],
+                                                                  );
+
+      return (scalar(@$niveles),$niveles);
 }
 
-sub availYear {
-        my ($branch,$ini,$fin)=@_;
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-        my $query="SELECT month( date )  AS mes, year( date )  AS year, avail, count( avail )  AS cantidad
-			FROM cat_detalle_disponibilidad
-			WHERE branch =  ?  AND date BETWEEN ? AND  ?
-			GROUP  BY year( date ) , month( date )  ORDER  BY month( date ) , year( date )";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($branch,format_date_in_iso($ini,$dateformat),format_date_in_iso($fin,$dateformat));
-        my @results;
-        while (my $data=$sth->fetchrow_hashref){
-                push(@results,$data);
-        }
-        return (scalar(@results),@results);
-	}
+sub disponibilidadAnio {
+
+      my ($id_ui,$ini,$fin)=@_;
+      my @filtros;
+      my $dateformat = C4::Date::get_date_format();
+      use C4::Modelo::CatDetalleDisponibilidad::Manager;
+#       my $query="SELECT month( date )  AS mes, year( date )  AS year, avail, count( avail )  AS cantidad
+#       FROM cat_detalle_disponibilidad
+#       WHERE branch =  ?  AND date BETWEEN ? AND  ?
+#       GROUP  BY year( date ) , month( date )  ORDER  BY month( date ) , year( date )";
+
+   push (@filtros, ( id_ui => { eq => $id_ui}) );
+
+   if ($ini ne ""){
+      push(@filtros, ( 'fecha' => {       eq=> format_date_in_iso($ini,$dateformat), 
+                                          gt => format_date_in_iso($ini,$dateformat), 
+                                  }
+                      ) );
+   }
+   if ($fin ne ""){
+      push(@filtros, ( 'fecha' => {       eq=> format_date_in_iso($fin,$dateformat), 
+                                          lt => format_date_in_iso($fin,$dateformat), 
+                                  }
+                     ) );
+   }
+
+   my $detalle_disponibilidad =
+                     C4::Modelo::CatDetalleDisponibilidad::Manager->get_cat_detalle_disponibilidad(
+                                                                                                query => \@filtros,
+                                                                                                select => [ 'estado',
+                                                                                                            'YEAR(fecha) AS anio_agregacion',  
+                                                                                                            'MONTH(fecha) AS mes_agregacion',
+                                                                                                            'COUNT(estado) AS agregacion_temp'],
+                                                                                                group_by => ['YEAR(fecha), MONTH(fecha)'],
+                                                                                                sort_by => ['MONTH(fecha), YEAR(fecha)'],
+                                                                                                  );
+   return (scalar(@$detalle_disponibilidad),$detalle_disponibilidad);
+}
 
 #Damian - 11/04/2007 - Para buscar a los usuarios que administran el sistema.
 sub getuser{
@@ -826,8 +859,9 @@ sub estadisticasGenerales{
    }
    my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                      query => \@filtros,
+                                                                     select => ['*','SUM(renovaciones) AS agregacion_temp'],
                                                                      group_by => ['tipo_prestamo',],
-#                                                                      select => ['*','SUM (renovaciones) AS agregacion_temp'],
+
                                                                     );
    my $domiTotal=0;
    #my $noRenovados;
@@ -858,7 +892,9 @@ sub estadisticasGenerales{
       }
    }
 =cut
-$domiTotal = $especial = $prestamos->[0]->agregacion_temp; #ARREGLO TEMPORAL POR EL FIXME DE ARRIBA
+if ($prestamos->[0]){
+   $domiTotal = $especial = $prestamos->[0]->agregacion_temp; #ARREGLO TEMPORAL POR EL FIXME DE ARRIBA
+}
 #******Para saber cuantos libros se devolvieron***********
    if($domiTotal){
       if ($params_obj->{'chkfecha'} ne "false"){
@@ -1117,6 +1153,7 @@ sub userCategReport{
 	my ($id_ui)=@_;
 #         my $query=" SELECT categorycode, count( categorycode ) as cant FROM borrowers WHERE branchcode = ? GROUP BY categorycode  ";
    my @filtros;
+   use C4::Modelo::UsrSocio::Manager;
    push (@filtros, ( id_ui => { eq => $id_ui },) );
    my $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio(
                                                                query => \@filtros,

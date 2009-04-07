@@ -581,237 +581,6 @@ sub buscarSubCamposMARC{
 	return (@results);
 }
 
-=item
-busquedaAvanzada
-Busca los id1 dependiendo de los strings que viene desde el pl.
-=cut
-sub busquedaAvanzada{
-	my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR)= @_;
-	my $dbh = C4::Context->dbh;
-#Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
-	if($operador eq "AND"){
-		$operador=$operador." ";
-	}
-	else{
-		$operador=$operador."  ";
-	}
-
-#*********************************** busqueda NIVEL 1****************************************
-my $from1 = "";
-my $where1 = "";
-my $subcon1= "FROM cat_nivel1 n1 INNER JOIN cat_nivel1_repetible n1r ON (n1.id1 = n1r.id1) WHERE ";
-my @Subconsultas1;
-
-if($nivel1 ne ""){
-	$from1 = "cat_nivel1 n1";
-	my @array1= split(/#/,$nivel1);
-	
-	for(my $i;$i<scalar(@array1);$i++){
-		$where1.= $operador.$array1[$i]." ";
-	}
-}
-	
-if($nivel1rep ne ""){
-	my @array1rep= split(/#/,$nivel1rep);
-	for(my $i;$i<scalar(@array1rep);$i++){
-		push(@Subconsultas1, $subcon1.$array1rep[$i]);
-	}
-}
-
-if($where1 ne ""){
-	#se saca el primir AND
-	$where1= substr($where1,3,length($where1));
-}
-
-#*********************************** busqueda NIVEL 2****************************************
-my $from2 = "";
-my $where2 = "";
-my $subcon2= "FROM cat_nivel2 n2 INNER JOIN cat_nivel2_repetible n2r ON (n2.id2 = n2r.id2) WHERE ";
-my @Subconsultas2;
-
-if($nivel2 ne ""){
-	
-	$from2 = "cat_nivel2 n2";
-	my @array2= split(/#/,$nivel2);
-	
-	for(my $i;$i<scalar(@array2);$i++){
-		$where2.= $operador.$array2[$i]." ";
-	}
-}
-	
-if($nivel2rep ne ""){
-	my @array2rep= split(/#/,$nivel2rep);
-	for(my $i;$i<scalar(@array2rep);$i++){
-		push(@Subconsultas2, $subcon2.$array2rep[$i]);
-	}
-}
-
-if($where2 ne ""){
-	#se saca el primir AND
-	$where2= substr($where2,3,length($where2));
-}
-
-#*********************************** busqueda NIVEL 3****************************************
-my $from3 = "";
-my $where3 = "";
-my $subcon3= "FROM cat_nivel3 n3 INNER JOIN cat_nivel3_repetible n3r ON (n3.id3 = n3r.id3) WHERE ";
-my @Subconsultas3;
-
-if($nivel3 ne ""){
-	$from3 = "cat_nivel3 n3";
-	my @array3= split(/#/,$nivel3);
-	
-	for(my $i;$i<scalar(@array3);$i++){
-		$where3.= $operador.$array3[$i]." ";
-	}
-}
-	
-if($nivel3rep ne ""){
-
-	my @array3rep= split(/#/,$nivel3rep);
-	for(my $i;$i<scalar(@array3rep);$i++){
-		push(@Subconsultas3, $subcon3.$array3rep[$i]);
-	}
-}
-
-if($where3 ne ""){
-	#se saca el primir AND
-	$where3= substr($where3,3,length($where3));
-}
-
-my $strSubCons1Rep="";
-my $pare1="";
-my $consultaN1;
-if($from1 ne "" || $nivel1rep ne ""){
-	my $select1="SELECT DISTINCT (n1.id1) as id1 ";
-	if($from1 ne ""){
-		#Se hizo una busqueda en el nivel1
-		$consultaN1=$select1." FROM (".$from1.") WHERE ".$where1;
-		$pare1=")";
-	}
-	if($nivel1rep ne ""){
-	#Se hizo una busqueda en el nivel1_repetible
-		if(scalar(@Subconsultas1)>1){
-			$pare1=")";
-		}
-		foreach my $cons (@Subconsultas1){
-			$strSubCons1Rep.= $operador."n1.id1 IN (".$select1.$cons;
-		}
-		if($from1 eq ""){
-			#SACO el operador y n1.id1. IN ( si es que no si hizo una consulta por nivel1
-			$strSubCons1Rep= substr($strSubCons1Rep,15,length($strSubCons1Rep));
-		}
-		$consultaN1=$consultaN1.$strSubCons1Rep.$pare1;
-	}
-}
-
-my $strSubCons2Rep="";
-my $pare2="";
-my $consultaN2;
-if($from2 ne "" || $nivel2rep ne ""){
-	my $select2="SELECT DISTINCT (n2.id1) as id1 ";
-	if($from2 ne ""){
-		#Se hizo una busqueda en el nivel2
-		$consultaN2=$select2." FROM (".$from2.") WHERE ".$where2;
-		$pare2=")";
-	}
-	if($nivel2rep ne ""){
-		#Se hizo una busqueda en el nivel2_repetible
-		if(scalar(@Subconsultas2)>1){
-			$pare1=")";
-		}
-		foreach my $cons (@Subconsultas2){
-			$strSubCons2Rep.= $operador."n2.id1 IN (".$select2.$cons;
-		}
-		if($from2 eq ""){
-			#SACO el operador y n2.id1. IN ( si es que no si hizo una consulta por nivel2
-			$strSubCons2Rep= substr($strSubCons2Rep,15,length($strSubCons2Rep));
-		}
-		$consultaN2=$consultaN2.$strSubCons2Rep.$pare2;
-	}
-}
-
-my $strSubCons3Rep="";
-my $pare3="";
-my $consultaN3;
-if($from3 ne "" || $nivel3rep ne ""){
-	my $select3="SELECT DISTINCT (n3.id1) as id1 ";
-	if($from3 ne ""){
-		#Se hizo una busqueda en el nivel3
-		$consultaN3=$select3." FROM (".$from3.") WHERE ".$where3;
-		$pare3=")";
-	}
-	if($nivel3rep ne ""){
-		#Se hizo una busqueda en el nivel3_repetible
-		if(scalar(@Subconsultas3)>1){
-			$pare3=")";
-		}
-		foreach my $cons (@Subconsultas3){
-			$strSubCons3Rep.= $operador."n3.id1 IN (".$select3.$cons;
-		}
-		if($from3 eq ""){
-			#SACO el operador y n3.id1. IN ( si es que no si hizo una consulta por nivel3
-			$strSubCons3Rep= substr($strSubCons3Rep,15,length($strSubCons3Rep));
-		}
-		$consultaN3=$consultaN3.$strSubCons3Rep.$pare3;
-	}
-}
-
-my @resultsId1;
-my $query="";
-my $queryCant="";
-my $n="";
-# Se concatenan todas las consultas.
-if($consultaN1 ne ""){
-	$n="n1.id1";
-	$query=$consultaN1;
-}
-if($consultaN2 ne ""){
-	if($query ne ""){
-		$query.=" ".$operador."*?* IN (".$consultaN2.")";
-	}
-	else{
-		$n="n2.id1";
-		$query=$consultaN2;
-	}
-}
-if($consultaN3 ne ""){
-	if($query ne ""){
-		$query.=" ".$operador."*?* IN (".$consultaN3.")";
-	}
-	else{
-		$n="n3.id1";
-		$query=$consultaN3;
-	}
-}
-
-$query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
-$queryCant=$query;
-#Se reemplaza la 1� subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
-$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(DISTINCT(*?*)) /o;
-
-#Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la
-$queryCant=~ s/\*\?\*/$n/g; 
-
-if (defined $ini && defined $cantR) {
-	$query.= " limit $ini,$cantR";
-}
-
-my $sth=$dbh->prepare($query);
-$sth->execute();
-while(my $data=$sth->fetchrow_hashref){
-	push(@resultsId1, $data->{'id1'});
-}
-
-$sth=$dbh->prepare($queryCant);
-$sth->execute();
-my $cantidad=$sth->fetchrow;
-
-$sth->finish;
-
-return ($cantidad,\@resultsId1);
-
-}#end busquedaAvanzada
 
 =item
 buscarItemtypes
@@ -1622,6 +1391,442 @@ sub getBranch{
 }
 
 
+=item
+busquedaAvanzada
+Busca los id1 dependiendo de los strings que viene desde el pl.
+=cut
+sub busquedaAvanzada{
+   my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR)= @_;
+   my $dbh = C4::Context->dbh;
+#Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
+   if($operador eq "AND"){
+      $operador=$operador." ";
+   }
+   else{
+      $operador=$operador."  ";
+   }
 
+#*********************************** busqueda NIVEL 1****************************************
+my $from1 = "";
+my $where1 = "";
+my $subcon1= "FROM cat_nivel1 n1 INNER JOIN cat_nivel1_repetible n1r ON (n1.id1 = n1r.id1) WHERE ";
+my @Subconsultas1;
+
+if($nivel1 ne ""){
+   $from1 = "cat_nivel1 n1";
+   my @array1= split(/#/,$nivel1);
+   
+   for(my $i;$i<scalar(@array1);$i++){
+      $where1.= $operador.$array1[$i]." ";
+   }
+}
+   
+if($nivel1rep ne ""){
+   my @array1rep= split(/#/,$nivel1rep);
+   for(my $i;$i<scalar(@array1rep);$i++){
+      push(@Subconsultas1, $subcon1.$array1rep[$i]);
+   }
+}
+
+if($where1 ne ""){
+   #se saca el primir AND
+   $where1= substr($where1,3,length($where1));
+}
+
+#*********************************** busqueda NIVEL 2****************************************
+my $from2 = "";
+my $where2 = "";
+my $subcon2= "FROM cat_nivel2 n2 INNER JOIN cat_nivel2_repetible n2r ON (n2.id2 = n2r.id2) WHERE ";
+my @Subconsultas2;
+
+if($nivel2 ne ""){
+   
+   $from2 = "cat_nivel2 n2";
+   my @array2= split(/#/,$nivel2);
+   
+   for(my $i;$i<scalar(@array2);$i++){
+      $where2.= $operador.$array2[$i]." ";
+   }
+}
+   
+if($nivel2rep ne ""){
+   my @array2rep= split(/#/,$nivel2rep);
+   for(my $i;$i<scalar(@array2rep);$i++){
+      push(@Subconsultas2, $subcon2.$array2rep[$i]);
+   }
+}
+
+if($where2 ne ""){
+   #se saca el primir AND
+   $where2= substr($where2,3,length($where2));
+}
+
+#*********************************** busqueda NIVEL 3****************************************
+my $from3 = "";
+my $where3 = "";
+my $subcon3= "FROM cat_nivel3 n3 INNER JOIN cat_nivel3_repetible n3r ON (n3.id3 = n3r.id3) WHERE ";
+my @Subconsultas3;
+
+if($nivel3 ne ""){
+   $from3 = "cat_nivel3 n3";
+   my @array3= split(/#/,$nivel3);
+   
+   for(my $i;$i<scalar(@array3);$i++){
+      $where3.= $operador.$array3[$i]." ";
+   }
+}
+   
+if($nivel3rep ne ""){
+
+   my @array3rep= split(/#/,$nivel3rep);
+   for(my $i;$i<scalar(@array3rep);$i++){
+      push(@Subconsultas3, $subcon3.$array3rep[$i]);
+   }
+}
+
+if($where3 ne ""){
+   #se saca el primir AND
+   $where3= substr($where3,3,length($where3));
+}
+
+my $strSubCons1Rep="";
+my $pare1="";
+my $consultaN1;
+if($from1 ne "" || $nivel1rep ne ""){
+   my $select1="SELECT DISTINCT (n1.id1) as id1 ";
+   if($from1 ne ""){
+      #Se hizo una busqueda en el nivel1
+      $consultaN1=$select1." FROM (".$from1.") WHERE ".$where1;
+      $pare1=")";
+   }
+   if($nivel1rep ne ""){
+   #Se hizo una busqueda en el nivel1_repetible
+      if(scalar(@Subconsultas1)>1){
+         $pare1=")";
+      }
+      foreach my $cons (@Subconsultas1){
+         $strSubCons1Rep.= $operador."n1.id1 IN (".$select1.$cons;
+      }
+      if($from1 eq ""){
+         #SACO el operador y n1.id1. IN ( si es que no si hizo una consulta por nivel1
+         $strSubCons1Rep= substr($strSubCons1Rep,15,length($strSubCons1Rep));
+      }
+      $consultaN1=$consultaN1.$strSubCons1Rep.$pare1;
+   }
+}
+
+my $strSubCons2Rep="";
+my $pare2="";
+my $consultaN2;
+if($from2 ne "" || $nivel2rep ne ""){
+   my $select2="SELECT DISTINCT (n2.id1) as id1 ";
+   if($from2 ne ""){
+      #Se hizo una busqueda en el nivel2
+      $consultaN2=$select2." FROM (".$from2.") WHERE ".$where2;
+      $pare2=")";
+   }
+   if($nivel2rep ne ""){
+      #Se hizo una busqueda en el nivel2_repetible
+      if(scalar(@Subconsultas2)>1){
+         $pare1=")";
+      }
+      foreach my $cons (@Subconsultas2){
+         $strSubCons2Rep.= $operador."n2.id1 IN (".$select2.$cons;
+      }
+      if($from2 eq ""){
+         #SACO el operador y n2.id1. IN ( si es que no si hizo una consulta por nivel2
+         $strSubCons2Rep= substr($strSubCons2Rep,15,length($strSubCons2Rep));
+      }
+      $consultaN2=$consultaN2.$strSubCons2Rep.$pare2;
+   }
+}
+
+my $strSubCons3Rep="";
+my $pare3="";
+my $consultaN3;
+if($from3 ne "" || $nivel3rep ne ""){
+   my $select3="SELECT DISTINCT (n3.id1) as id1 ";
+   if($from3 ne ""){
+      #Se hizo una busqueda en el nivel3
+      $consultaN3=$select3." FROM (".$from3.") WHERE ".$where3;
+      $pare3=")";
+   }
+   if($nivel3rep ne ""){
+      #Se hizo una busqueda en el nivel3_repetible
+      if(scalar(@Subconsultas3)>1){
+         $pare3=")";
+      }
+      foreach my $cons (@Subconsultas3){
+         $strSubCons3Rep.= $operador."n3.id1 IN (".$select3.$cons;
+      }
+      if($from3 eq ""){
+         #SACO el operador y n3.id1. IN ( si es que no si hizo una consulta por nivel3
+         $strSubCons3Rep= substr($strSubCons3Rep,15,length($strSubCons3Rep));
+      }
+      $consultaN3=$consultaN3.$strSubCons3Rep.$pare3;
+   }
+}
+
+my @resultsId1;
+my $query="";
+my $queryCant="";
+my $n="";
+# Se concatenan todas las consultas.
+if($consultaN1 ne ""){
+   $n="n1.id1";
+   $query=$consultaN1;
+}
+if($consultaN2 ne ""){
+   if($query ne ""){
+      $query.=" ".$operador."*?* IN (".$consultaN2.")";
+   }
+   else{
+      $n="n2.id1";
+      $query=$consultaN2;
+   }
+}
+if($consultaN3 ne ""){
+   if($query ne ""){
+      $query.=" ".$operador."*?* IN (".$consultaN3.")";
+   }
+   else{
+      $n="n3.id1";
+      $query=$consultaN3;
+   }
+}
+
+$query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
+$queryCant=$query;
+#Se reemplaza la 1� subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
+$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(DISTINCT(*?*)) /o;
+
+#Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la
+$queryCant=~ s/\*\?\*/$n/g; 
+
+if (defined $ini && defined $cantR) {
+   $query.= " limit $ini,$cantR";
+}
+
+my $sth=$dbh->prepare($query);
+$sth->execute();
+while(my $data=$sth->fetchrow_hashref){
+   push(@resultsId1, $data->{'id1'});
+}
+
+$sth=$dbh->prepare($queryCant);
+$sth->execute();
+my $cantidad=$sth->fetchrow;
+
+$sth->finish;
+
+return ($cantidad,\@resultsId1);
+
+}#end busquedaAvanzada
+
+
+########################################################## NUEVOS!!!!!!!!!!!!!!!!!!!!!!!!!! #################################################
+
+
+sub busquedaAvanzada_newTemp{
+
+   my ($ini,$cantR,$params_obj) = @_;
+   
+   my @filtros;
+
+   if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
+      push(@filtros, ( 'nivel1.cat_autor.nombre' => { like => '%'.$params_obj->{'autor'}.'%' }) );
+   }
+   
+   if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
+      push(@filtros, ( 'signatura_topografica' => { like => '%'.$params_obj->{'signatura'}.'%' }) );
+   }
+
+   if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
+      push(@filtros, ( 'nivel2.tipo_documento' => { eq => $params_obj->{'tipo_nivel3_name'} }) );
+   }
+   
+   if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
+      if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
+         push(@filtros, ( 'nivel1.titulo' => { like => '%'.$params_obj->{'titulo'}.'%' }) );
+      }else{
+         push(@filtros, ( 'nivel1.titulo' => { eq => $params_obj->{'titulo'} }) );
+      }
+   }
+
+   use C4::Modelo::CatNivel3::Manager;
+
+   my $nivel3_result = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                        query => \@filtros,
+#                                                                         select => ['nivel1.titulo','nivel1.id1'],
+                                                                        require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
+                                                                        limit => $cantR,
+                                                                        offset => $ini,
+#                                                                         distinct => 1,
+                                                                     );
+   my $nivel3_result_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                        query => \@filtros,
+                                                                        select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
+                                                                        require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
+#                                                                         distinct => ['nivel1.id1'],
+                                                                     );
+
+
+   return ($nivel3_result_count->[0]->agregacion_temp,$nivel3_result);
+
+}
+
+
+sub busquedaCombinada_newTemp{
+
+   my ($ini,$cantR,$string) = @_;
+   
+   my @filtros;
+
+   my $nivel3_repetible = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
+                                                                                    query => [
+                                                                                                or =>[
+                                                                                                      dato => {like => '%'.$string.'%'},
+                                                                                                      'cat_nivel3.barcode' => {like => '%'.$string.'%'},
+                                                                                                      'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             limit => $cantR,
+                                                                                             offset => $ini,
+                                                                                             select => ['cat_nivel3.id1'],
+                                                                                             require_objects => ['cat_nivel3'],
+                                                                                  );
+
+   my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible_count(
+                                                                                    query => [
+                                                                                                or =>[
+                                                                                                      dato => {like => '%'.$string.'%'},
+                                                                                                      'cat_nivel3.barcode' => {like => '%'.$string.'%'},
+                                                                                                      'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             select => ['cat_nivel3.id1'],
+                                                                                             require_objects => ['cat_nivel3'],
+                                                                                  );
+
+   my $nivel2_repetible = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
+                                                                                    query => [
+                                                                                                or => [
+                                                                                                   dato => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.soporte' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             limit => $cantR,
+                                                                                             offset => $ini,
+                                                                                             select => ['cat_nivel2.id1'],
+                                                                                             require_objects => ['cat_nivel2'],
+                                                                                   );
+
+   my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible_count(
+                                                                                    query => [
+                                                                                                or => [
+                                                                                                   dato => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.soporte' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             select => ['cat_nivel2.id1'],
+                                                                                             require_objects => ['cat_nivel2'],
+                                                                                   );
+
+   my $nivel1_repetible = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
+                                                                                    query => [
+                                                                                                or => [
+                                                                                                   dato => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel1.titulo' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel1.autor' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             limit => $cantR,
+                                                                                             offset => $ini,
+                                                                                             select => ['cat_nivel1.id1'],
+                                                                                             require_objects => ['cat_nivel1'],
+                                                                                  );
+   my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible_count(
+                                                                                    query => [
+                                                                                                or => [
+                                                                                                   dato => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel1.titulo' => {like => '%'.$string.'%'},
+                                                                                                   'cat_nivel1.autor' => {like => '%'.$string.'%'},
+                                                                                                ],
+                                                                                             ],
+                                                                                             select => ['cat_nivel1.id1'],
+                                                                                             require_objects => ['cat_nivel1'],
+                                                                                  );
+
+   my @id1_array;
+   my $cont = 0;
+
+   C4::AR::Debug::debug("\nCANTIDADES: ".scalar(@$nivel1_repetible)." // ".scalar(@$nivel2_repetible)." // ".scalar(@$nivel3_repetible)." // \n");
+
+
+   foreach my $nivel1 (@$nivel1_repetible){
+      @id1_array[$cont++] = $nivel1->id1;
+   }
+   foreach my $nivel2 (@$nivel2_repetible){
+      @id1_array[$cont++] = $nivel2->cat_nivel2->id1;
+   }
+   foreach my $nivel3 (@$nivel3_repetible){
+      @id1_array[$cont++] = $nivel3->cat_nivel3->id1;
+   }
+   
+# FIXME falta filtrar los id1 repetidos del arreglo
+
+   my $cant_total = $nivel1_repetible_count + $nivel2_repetible_count + $nivel3_repetible_count;
+
+   return ($cant_total,@id1_array);
+}
+
+
+sub armarInfoNivel1{
+
+   my ($cantidad,$tipo_nivel3_name,$orden,@resultId1) = @_;
+   my @resultsarray;
+   my %result;
+   my $nivel1;
+   my $autor;
+   my $i=0;
+   
+   if($cantidad > 0){
+   #si busquedaCombianda devuelve algo se busca la info siguiente
+      foreach my $id1 (@resultId1) {
+
+         $result{$i}->{'id1'}= $id1;
+         $nivel1= &C4::AR::Catalogacion::buscarNivel1($id1);
+         $result{$i}->{'titulo'}= $nivel1->{'titulo'};
+         $autor= C4::AR::Busquedas::getautor($nivel1->{'autor'});
+         $result{$i}->{'idAutor'}=$autor->{'id'};
+         $result{$i}->{'nomCompleto'}= $autor->{'completo'};
+         my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
+         $result{$i}->{'grupos'}=$ediciones;
+         my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
+         $result{$i}->{'disponibilidad'}=\@disponibilidad;
+         #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+         my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+         if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+         #
+   
+         $i++;
+      }
+   }
+   
+   #PARA EL ORDEN VER SI QUEDA, PUEDE SER CAMBIADO POR JQUERY!!!!!!!!!!!!!!!
+   my @keys=keys %result;
+   @keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+   foreach my $row (@keys){
+      push (@resultsarray, $result{$row});
+   }
+   
+   return (\@resultsarray);
+}
 1;
 __END__

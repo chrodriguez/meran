@@ -37,7 +37,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 								debug => 1,
 			     });
 
-my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+my  $ui= $input->param('id_ui') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
 my %params;
 $params{'onChange'}= 'hacerSubmit()';
@@ -46,15 +46,19 @@ my $ComboUI=C4::AR::Utilidades::generarComboUI(\%params);
 #Fechas
 my $ini='';
 my $fin='';
-if($input->param('ini')){$ini=$input->param('ini');}
-if($input->param('fin')){$fin=$input->param('fin');}
+if($input->param('ini')){
+   $ini=$input->param('ini');
+}
+if($input->param('fin')){
+   $fin=$input->param('fin');
+}
 #
 
-my ($cantidad,@resultsdata)= availYear($ui,$ini,$fin); 
+my ($cantidad,$resultsdata)= C4::AR::Estadisticas::disponibilidadAnio($ui,$ini,$fin); 
 
 my $dateformat = C4::Date::get_date_format();
 
-$t_params->{'resultsloop'}=\@resultsdata;
+$t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'cantidad'}=$cantidad;
 $t_params->{'unidades'}= $ComboUI;
 $t_params->{'ui'}=$ui;
@@ -64,5 +68,3 @@ $t_params->{'namepng'}=&format_date_in_iso($ini,$dateformat).&format_date_in_iso
 
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
-

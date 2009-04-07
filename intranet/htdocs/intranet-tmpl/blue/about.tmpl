@@ -1,6 +1,6 @@
-<!-- TMPL_INCLUDE name="intranet-top.inc" -->
-
-<!-- TMPL_VAR NAME=about -->
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
+[% about %]
 <br>
 <p>Datos acerca de la vesi&oacute;n actual de Koha para reporte de errores (or general
 interest).
@@ -9,23 +9,23 @@ interest).
 <table border=0 class="texto">
 	<tr bgcolor="white">
 		<td width=25%>Version de Koha:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=kohaVersion --></td>
+		<td>[% HTML.escape(kohaVersion) %]</td>
 	</tr>
 	<tr bgcolor="white">
 		<td>Versi&oacute;n del S.O. (from 'uname -a'):</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=osVersion --></td>
+		<td>[% osVersion %]</td>
 	</tr>
 	<tr bgcolor="white">
 		<td>Versi&oacute;n de Perl:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=perlVersion --></td>
+		<td>[% HTML.escape(perlVersion) %]</td>
 	</tr>
 	<tr bgcolor="white">
 		<td>Versi&oacute;n de MySQL:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=mysqlVersion --></td>
+		<td>[% HTML.escape(mysqlVersion) %]</td>
 	</tr>
 	<tr bgcolor="white">
 		<td>Versi&oacute;n de Apache:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=apacheVersion --></td>
+		<td>[% HTML.escape(apacheVersion) %]</td>
 	</tr>
 	<tr bgcolor="white">
  		<td valign="top">Cr&eacute;ditos</td>
@@ -76,7 +76,7 @@ interest).
 						Francisco M. Marzoa Alonso<br/>
 						Glen Stewart<br/>
 						Henri-Damien Laurent<br/>
-						Jérome Vizcaino (Esiee Escuela)<br/>
+						Jï¿½rome Vizcaino (Esiee Escuela)<br/>
 						Kip DeGraaf<br/>
 						Marco Gaiarin<br/>
 						Md. Aftabuddin<br/>
@@ -100,4 +100,4 @@ interest).
 </table>
 <br>
 </center>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+[% INCLUDE "intranet-bottom.inc" %]

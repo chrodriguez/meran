@@ -2,16 +2,21 @@
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
+<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
+
+<script language="javascript" type="text/javascript">
+
+$(document).ready(function() {
+    $('#begindate').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#enddate').datepicker({ dateFormat: 'dd/mm/yy' });
+
+});
+</script>
+
 <script type="text/javascript">
 
-[% INCLUDE "epoch_classes.js" %]
-
-/*You can also place this code in a separate file and link to it like epoch_classes.js*/
-        var dp_ini,dp_fin;      
-	window.onload = function () {
-		        dp_ini  = new Epoch('epoch_popup','popup',document.getElementById('begindate'));
-			dp_fin  = new Epoch('epoch_popup','popup',document.getElementById('enddate'));
-				};
 </script>
 
 
@@ -122,7 +127,7 @@ function checkedAll(){
 	<tr class="inputFontNormal">
 		<td align="right"> [% "Seleccione una fecha de inicio:" | i18n %]</td>
 		<td>
-			<input id="begindate" class="inputFontNormal" name="begindate"> <a href="javascript:dp_ini.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a>
+			<input id="begindate" class="inputFontNormal" name="begindate"></a>
 		</td>
 		<td align="right">[% "Seleccione estado de prestamo:&nbsp;" | i18n %]</td>
 
@@ -138,7 +143,7 @@ function checkedAll(){
 	<tr class="inputFontNormal"><td colspan='5'>&nbsp;</td></tr>
 	<tr class="inputFontNormal">
 		<td align="right"> [% "Seleccione una fecha de fin:" | i18n %]</td>
-		<td><input id="enddate" class="inputFontNormal" name="enddate"> <a href="javascript:dp_fin.toggle();"><img src="[% themelang %]/images/cal.gif" width="16" height="16" border="0" alt=[% "Selecciona una fecha" | i18n %]></a></td>
+		<td><input id="enddate" class="inputFontNormal" name="enddate"></td>
 		<td align="right">
 			[% "Seleccione una unidad de informaci&oacute;n:&nbsp;" | i18n %]
 		</td>
