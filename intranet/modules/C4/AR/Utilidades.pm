@@ -88,6 +88,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboTipoPrestamo
     &generarComboDeSocios
     &generarComboTipoDeOperacion
+    &existeInArray
     
 
 );
@@ -1668,4 +1669,11 @@ sub arrayClaveValorToJSONString {
     return $infoJSON;
 }
 
+sub existeInArray{
+   my ($string,@array) = @_;
+   if (grep {$_ eq $string} @array) {
+      return 1;
+   }
+   return 0;
+}
 1;

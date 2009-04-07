@@ -20,7 +20,6 @@ my $signatura= $obj->{'signatura'};
 my $isbn = $obj->{'isbn'};
 my $codBarra= $obj->{'codBarra'};
 my $autor= $obj->{'autor'};
-C4::AR::Debug::debug("\n OBJ BUSQUEDA: ".$autor."\n");
 my $titulo= $obj->{'titulo'};
 my $tipo= $obj->{'tipo'};
 my $idTema= $obj->{'idTema'};
@@ -60,13 +59,15 @@ foreach my $nivel3 (@$resultsdata){
       push(@id1_array,$nivel3->getId1);
 }
 
-my $array_nivel1 = C4:AR::Busquedas::armarInfoNivel1($cantidad,@id1_array);
+my $array_nivel1 = C4::AR::Busquedas::armarInfoNivel1($cantidad,@id1_array);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 $t_params->{'SEARCH_RESULTS'}=$array_nivel1;
 
-$t_params->{'cant'}=$cantidad;
+$t_params->{'cantidad'}=$cantidad;
+
+$t_params->{'buscoPor'}=$obj->{'titulo'};
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
