@@ -9,17 +9,19 @@ use C4::AR::Busquedas;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
 
-my $query = new CGI;
+my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
 								template_name => "busquedaResult.tmpl",
-								query => $query,
+								query => $input,
 								type => "opac",
 								authnotrequired => 1,
 								flagsrequired => {borrow => 1},
 			     });
 
 
+
+=item
 my $obj=$query->param('obj');
 
 if($obj ne ""){
@@ -209,6 +211,57 @@ $t_params->{'SEARCH_RESULTS'}= \@resultsarray;
 # y son devueltas al cliente
 $t_params->{'buscoPor'}= &verificarValor($buscoPor);
 $t_params->{'cantidad'}= $cantidad;
+=cut
+my $obj=$input->param('obj');
 
+if($obj ne ""){
+	$obj= C4::AR::Utilidades::from_json_ISO($obj);
+}
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+my $keyword= $obj->{'keyword'};
+my $comboItemTypes= $obj->{'comboItemTypes'};
+my $orden= $obj->{'orden'};#PARA EL ORDEN
+my $funcion= $obj->{'funcion'};
+
+my $search;
+$search->{'keyword'}= $keyword;
+$search->{'class'}= $comboItemTypes;
+
+my $buscoPor="";
+
+if($keyword ne ""){
+	$buscoPor.="Busqueda combinada: ".$keyword."&";
+}
+
+if($comboItemTypes != -1 && $comboItemTypes ne ""){
+	$comboItemTypes=&verificarValor($comboItemTypes);
+	my $itemtype=C4::AR::Busquedas::getItemType($comboItemTypes);
+	$buscoPor.="Tipo de documento: ".$itemtype."&";
+}
+
+my $ini= $obj->{'ini'};
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$cantR,$search->{'keyword'});
+
+$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+
+#se arma el arreglo con la info para mostrar en el template
+$obj->{'cantidad'}= $cantidad;
+$obj->{'loggedinuser'}= $session->{'loggedinuser'};
+my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
+
+my @busqueda=split(/&/,$buscoPor);
+$buscoPor="";
+
+foreach my $str (@busqueda){
+	$buscoPor.=", ".$str;
+}
+
+$buscoPor= substr($buscoPor,2,length($buscoPor));
+
+$t_params->{'SEARCH_RESULTS'}= $resultsarray;
+$t_params->{'buscoPor'}=$buscoPor;
+$t_params->{'cantidad'}=$cantidad;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

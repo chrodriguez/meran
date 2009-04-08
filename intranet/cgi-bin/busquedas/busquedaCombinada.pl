@@ -51,7 +51,9 @@ my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$c
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 #se arma el arreglo con la info para mostrar en el template
-my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($cantidad,$comboItemTypes,$orden,@resultId1);
+$obj->{'cantidad'}= $cantidad;
+$obj->{'loggedinuser'}= $session->{'loggedinuser'};
+my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
 
 my @busqueda=split(/&/,$buscoPor);
 $buscoPor="";

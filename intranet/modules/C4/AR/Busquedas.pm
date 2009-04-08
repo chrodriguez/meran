@@ -1129,116 +1129,9 @@ sub getNombreLocalidad{
 }
 
 
-=item
-loguearBusqueda
-Guarda en la base de datos el tipo de busqueda que se realizo y que se busco.
-=cut
-=item
-sub loguearBusqueda{
-	my ($borrowernumber,$env,$type,$search)=@_;
-
-	my $dbh = C4::Context->dbh;
-
-	my $old_pe = $dbh->{PrintError}; # save and reset
-	my $old_re = $dbh->{RaiseError}; # error-handling
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-  	$dbh->{RaiseError} = 0; #si lo dejo, para la aplicacion y muestra error
-
-	#comienza la transaccion
-	{
-
-	my $query = "	INSERT INTO rep_busqueda ( `borrower` , `fecha` )
-			VALUES ( ?, NOW( ));";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber);
-
-	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
-	$sth=$dbh->prepare($query2);
-	$sth->execute();
-
-	my $id=$sth->fetchrow;
-
-	my $query3;
-	my $campo;
-	my $valor;
-
-	my $desde= "INTRA";
-	if($type eq "opac"){
-		$desde= "OPAC";
-	}
-
-	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
-			VALUES (?, ?, ?, ?);";
-
-	$sth=$dbh->prepare($query3);
-
-
-	if($search->{'keyword'} ne ""){
-		$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
-	}
-
-	if($search->{'dictionary'} ne ""){
-		$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
-	}
-
-	if($search->{'virtual'} ne ""){
-		$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
-	}
-
-	if($search->{'signature'} ne ""){
-		$sth->execute($id, 'signature', $search->{'signature'}, $desde);
-	}	
-
-	if($search->{'analytical'} ne ""){
-		$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
-	}
-
-	if($search->{'id3'} ne ""){
-		$sth->execute($id, 'id3', $search->{'id3'}, $desde);
-	}
-
-	if($search->{'class'} ne ""){
-		$sth->execute($id, 'class', $search->{'class'}, $desde);
-	}
-
-	if($search->{'subjectitems'} ne ""){
-		$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
-	}
-
-	if($search->{'isbn'} ne ""){
-		$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
-	}
-
-	if($search->{'subjectid'} ne ""){
-		$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
-	}
-
-	if($search->{'autor'} ne ""){
-		$sth->execute($id, 'autor', $search->{'autor'}, $desde);
-	}
-
-	if($search->{'titulo'} ne ""){
-		$sth->execute($id,'titulo', $search->{'title'}, $desde);
-	}
-
-	if($search->{'tipo_documento'} ne ""){
-		$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
-	}
-		
-
-	$dbh->commit ();
-	};
-	$dbh->rollback () if $@;    # rollback if transaction failed
-	$dbh->{AutoCommit} = 1;    # restore auto-commit mode
-
-	#falta ver bien el tema de la transaccion, pq si no se dispara el error y la segunda consulta falla
-	#se hace rollback solo de la segunda
-}
-=cut
-
 sub t_loguearBusqueda {
 	
-	my($loggedinuser,$env,$desde,$search_array)=@_;
+	my($loggedinuser,$desde,$search_array)=@_;
 
 	my $dbh = C4::Context->dbh;
 	my $paramsReserva;
@@ -1247,7 +1140,7 @@ sub t_loguearBusqueda {
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
-		($error,$codMsg,$paraMens)=loguearBusqueda($loggedinuser,$env,$desde,$search_array);
+		($error,$codMsg,$paraMens)=loguearBusqueda($loggedinuser,$desde,$search_array);
 		$dbh->commit;	
 	};
 
@@ -1268,7 +1161,7 @@ sub t_loguearBusqueda {
 }
 
 sub loguearBusqueda{
-	my ($borrowernumber,$env,$type,$search_array)=@_;
+	my ($borrowernumber,$type,$search_array)=@_;
 
 	my $dbh = C4::Context->dbh;
 
@@ -1803,47 +1696,91 @@ sub busquedaCombinada_newTemp{
 
 
 sub armarInfoNivel1{
+	my ($params,@resultId1) = @_;
+	
+	my $cantidad= $params->{'cantidad'};
+	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
+	my $orden= $params->{'orden'};
+	my @resultsarray;
+	my %result;
+ 	my $nivel1;
+# 	my $autor;
+	my $i=0;
 
-   my ($cantidad,$tipo_nivel3_name,$orden,@resultId1) = @_;
-   my @resultsarray;
-   my %result;
-   my $nivel1;
-   my $autor;
-   my $i=0;
-   
-C4::AR::Debug::debug("cant: ".scalar(@resultId1));
-   if($cantidad > 0){
-   #si busquedaCombianda devuelve algo se busca la info siguiente
-      foreach my $id1 (@resultId1) {
-C4::AR::Debug::debug("id1: ".$id1);
+	my @search_array;
+	my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
+	my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
 
-		$result{$i}->{'id1'}= $id1;
-		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
-		$result{$i}->{'titulo'}= $nivel1->getTitulo;
-		$result{$i}->{'idAutor'}= $nivel1->getAutor;
-        $result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
-# 		getVolumenDesc()
-# FIXME falta pasar!!!!!
-         my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
-         $result{$i}->{'grupos'}=$ediciones;
-         my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
-         $result{$i}->{'disponibilidad'}=\@disponibilidad;
-#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+	if($params->{'codBarra'} ne ""){
+		if( ($valorOPAC == 1) ){
+			my $search;
+			$search->{'barcode'}= $params->{'codBarra'};
+			push (@search_array, $search);
+		}
+	}
+
+	if($params->{'autor'} ne ""){
+		if( ($valorOPAC == 1) ){
+			my $search;
+			$search->{'autor'}= $params->{'autor'};
+			push (@search_array, $search);
+		}
+	}
+	
+	if($params->{'titulo'} ne ""){
+		if( ($valorOPAC == 1) ){
+			my $search;
+			$search->{'titulo'}= $params->{'titulo'};
+			push(@search_array, $search);
+		}
+	}
+	
+	if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
+		if( ($valorOPAC == 1) ){
+			my $search;
+			$search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
+			push (@search_array, $search);
+		}
+	}
+	
+	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
+																			$params->{'loggedinuser'},
+																			$params->{'type'},
+																			\@search_array
+														);
+
    
-         $i++;
-      }
-   }
+	if($cantidad > 0){
+	#si busquedaCombianda devuelve algo se busca la info siguiente
+		foreach my $id1 (@resultId1) {
+	
+			$result{$i}->{'id1'}= $id1;
+			$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
+			$result{$i}->{'titulo'}= $nivel1->getTitulo;
+			$result{$i}->{'idAutor'}= $nivel1->getAutor;
+			$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
+	# 		getVolumenDesc()
+	# FIXME falta pasar!!!!!
+			my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
+			$result{$i}->{'grupos'}=$ediciones;
+			my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
+			$result{$i}->{'disponibilidad'}=\@disponibilidad;
+	#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+	#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+	#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+	
+			$i++;
+		}
+	}
    
-   #se ordenan los resultados
-   my @keys=keys %result;
-   @keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
-   foreach my $row (@keys){
-      push (@resultsarray, $result{$row});
-   }
-   
-   return (\@resultsarray);
+	#se ordenan los resultados
+	my @keys=keys %result;
+	@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+	foreach my $row (@keys){
+		push (@resultsarray, $result{$row});
+	}
+	
+	return (\@resultsarray);
 }
 
 
