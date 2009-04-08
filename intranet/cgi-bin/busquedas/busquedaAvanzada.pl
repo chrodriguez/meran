@@ -6,7 +6,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
 use C4::AR::Utilidades;
-use C4::AR::Catalogacion;
+# use C4::AR::Catalogacion;
 
 my $input = new CGI;
 

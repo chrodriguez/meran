@@ -32,7 +32,7 @@ sub agregarSimple{
    
    my $self = shift;
    my($id_rep_busqueda,$tipo_busqueda,$valor,$desde)=@_;
-
+C4::AR::Debug::debug("agregar simple");
    $self->setIdBusqueda($id_rep_busqueda);
    $self->setCampo($tipo_busqueda);
    $self->setValor($valor);
