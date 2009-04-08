@@ -499,9 +499,11 @@ print A "checkauth=> elimino el sessionID de la base: ".$sessionID."\n";
 #             $params{'borrowernumber'}= getborrowernumber($userid);
             $params{'type'}= $type; #OPAC o INTRA
             $params{'flagsrequired'}= $flagsrequired;
+C4::AR::Debug::debug("user_agent".$ENV{'HTTP_USER_AGENT'});
             $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
             #genero una nueva session
             $session= _generarSession(\%params);
+C4::AR::Debug::debug("user_agent desde sesion".$session->param('browser'));
             $sessionID= $session->param('sessionID');
 print A "checkauth=> genero un nuevo sessionID ".$sessionID."\n";
             $sessionID.="_".$branch;
@@ -799,7 +801,7 @@ sub _generarSession {
 # 	$session->param('borrowernumber', getborrowernumber($params->{'userid'}));
 	$session->param('type', $params->{'type'}); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
-	$session->param('browser', $params->{'HTTP_USER_AGENT'});
+ 	$session->param('browser', "".C4::AR::Utilidades::trim($params->{'HTTP_USER_AGENT'})."" );
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
 	$session->expire(0); #para Desarrollar, luego pasar a 3m
 
