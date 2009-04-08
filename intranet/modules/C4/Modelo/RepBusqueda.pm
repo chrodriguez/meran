@@ -25,5 +25,37 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub getIdBusqueda{
+
+   my $self = shift;
+   return ($self->idBusqueda);
+}
+
+sub getId_socio{
+
+   my $self = shift;
+   return ($self->id_socio);
+}
+
+sub getFecha{
+
+   my $self = shift;
+   return ($self->fecha);
+}
+
+sub setId_socio{
+
+   my $self = shift;
+   my $nro_socio = @_;
+   $self->id_socio($nro_socio);
+}
+
+sub setFecha{
+
+   my $self = shift;
+   my $fecha = @_;
+   $self->fecha($fecha);
+}
+
 1;
 

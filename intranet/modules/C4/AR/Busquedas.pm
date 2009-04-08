@@ -1131,129 +1131,129 @@ sub getNombreLocalidad{
 
 sub t_loguearBusqueda {
 
-my $browser= 'ROBOT';
+   my $browser= 'ROBOT';
 	if( C4::AR::Utilidades::isBrowser() ){$browser= 'BROWSER'}
 	
-	my($loggedinuser,$desde,$search_array)=@_;
-
-	my $dbh = C4::Context->dbh;
+	my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
 	my $paramsReserva;
 	my ($error, $codMsg,$paraMens);
-	
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
+	$desde = $desde || 'SIN_TIPO';
+	my $historial = C4::Modelo::RepHistorialBusqueda->new();
+   my $db = $historial->db;
+   $db->{connect_options}->{AutoCommit} = 0;
 	eval {
-		($error,$codMsg,$paraMens)=loguearBusqueda($loggedinuser,$desde,$search_array);
-		$dbh->commit;	
+# 		($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
+      $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
+		$db->commit;	
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B407';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
-		eval {$dbh->rollback};
+		eval {$db->rollback};
 		#Se setea error para el usuario
 		$error= 1;
 		$codMsg= 'R011';
 	}
-	$dbh->{AutoCommit} = 1;
+	$db->{connect_options}->{AutoCommit} = 1;
 	
 
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
 	return ($error, $codMsg, $message);
 }
 
-sub loguearBusqueda{
-	my ($borrowernumber,$type,$search_array)=@_;
-
-	my $dbh = C4::Context->dbh;
-
-	my $query = "	INSERT INTO rep_busqueda ( `id_socio` , `fecha` )
-			VALUES ( ?, NOW( ));";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($borrowernumber);
-
-	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
-	$sth=$dbh->prepare($query2);
-	$sth->execute();
-
-	my $id=$sth->fetchrow;
-
-	my $query3;
-	my $campo;
-	my $valor;
-
-	my $desde= "INTRA";
-	if($type eq "opac"){
-		$desde= "OPAC";
-	}
-
-	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
-			VALUES (?, ?, ?, ?);";
-
-	$sth=$dbh->prepare($query3);
-
-	foreach my $search (@$search_array){
-
-
-		if($search->{'keyword'} ne ""){
-			$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
-		}
-	
-		if($search->{'dictionary'} ne ""){
-			$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
-		}
-	
-		if($search->{'virtual'} ne ""){
-			$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
-		}
-	
-		if($search->{'signature'} ne ""){
-			$sth->execute($id, 'signature', $search->{'signature'}, $desde);
-		}	
-	
-		if($search->{'analytical'} ne ""){
-			$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
-		}
-	
-		if($search->{'id3'} ne ""){
-			$sth->execute($id, 'id3', $search->{'id3'}, $desde);
-		}
-	
-		if($search->{'class'} ne ""){
-			$sth->execute($id, 'class', $search->{'class'}, $desde);
-		}
-	
-		if($search->{'subjectitems'} ne ""){
-			$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
-		}
-	
-		if($search->{'isbn'} ne ""){
-			$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
-		}
-	
-		if($search->{'subjectid'} ne ""){
-			$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
-		}
-	
-		if($search->{'autor'} ne ""){
-			$sth->execute($id, 'autor', $search->{'autor'}, $desde);
-		}
-	
-		if($search->{'titulo'} ne ""){
-			$sth->execute($id,'titulo', $search->{'titulo'}, $desde);
-		}
-	
-		if($search->{'tipo_documento'} ne ""){
-			$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
-		}
-
-		if($search->{'barcode'} ne ""){
-			$sth->execute($id,'barcode', $search->{'barcode'}, $desde);
-		}
-	}
-
-}
+# sub loguearBusqueda{
+# 	my ($borrowernumber,$type,$search_array)=@_;
+# 
+# 	my $dbh = C4::Context->dbh;
+# 
+# 	my $query = "	INSERT INTO rep_busqueda ( `id_socio` , `fecha` )
+# 			VALUES ( ?, NOW( ));";
+# 	my $sth=$dbh->prepare($query);
+# 	$sth->execute($borrowernumber);
+# 
+# 	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
+# 	$sth=$dbh->prepare($query2);
+# 	$sth->execute();
+# 
+# 	my $id=$sth->fetchrow;
+# 
+# 	my $query3;
+# 	my $campo;
+# 	my $valor;
+# 
+# 	my $desde= "INTRA";
+# 	if($type eq "opac"){
+# 		$desde= "OPAC";
+# 	}
+# 
+# 	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
+# 			VALUES (?, ?, ?, ?);";
+# 
+# 	$sth=$dbh->prepare($query3);
+# 
+# 	foreach my $search (@$search_array){
+# 
+# 
+# 		if($search->{'keyword'} ne ""){
+# 			$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
+# 		}
+# 	
+# 		if($search->{'dictionary'} ne ""){
+# 			$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
+# 		}
+# 	
+# 		if($search->{'virtual'} ne ""){
+# 			$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
+# 		}
+# 	
+# 		if($search->{'signature'} ne ""){
+# 			$sth->execute($id, 'signature', $search->{'signature'}, $desde);
+# 		}	
+# 	
+# 		if($search->{'analytical'} ne ""){
+# 			$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
+# 		}
+# 	
+# 		if($search->{'id3'} ne ""){
+# 			$sth->execute($id, 'id3', $search->{'id3'}, $desde);
+# 		}
+# 	
+# 		if($search->{'class'} ne ""){
+# 			$sth->execute($id, 'class', $search->{'class'}, $desde);
+# 		}
+# 	
+# 		if($search->{'subjectitems'} ne ""){
+# 			$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
+# 		}
+# 	
+# 		if($search->{'isbn'} ne ""){
+# 			$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
+# 		}
+# 	
+# 		if($search->{'subjectid'} ne ""){
+# 			$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
+# 		}
+# 	
+# 		if($search->{'autor'} ne ""){
+# 			$sth->execute($id, 'autor', $search->{'autor'}, $desde);
+# 		}
+# 	
+# 		if($search->{'titulo'} ne ""){
+# 			$sth->execute($id,'titulo', $search->{'titulo'}, $desde);
+# 		}
+# 	
+# 		if($search->{'tipo_documento'} ne ""){
+# 			$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
+# 		}
+# 
+# 		if($search->{'barcode'} ne ""){
+# 			$sth->execute($id,'barcode', $search->{'barcode'}, $desde);
+# 		}
+# 	}
+# 
+# }
 
 =item
 getBranches
@@ -1466,7 +1466,7 @@ sub busquedaCombinada_newTemp{
 
 
 sub logBusqueda{
-	my ($params) = @_;
+	my ($params,$session) = @_;
 	#esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
 	#la preferencia del OPAC es 1 y estoy buscando desde OPAC  
 	#la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
@@ -1505,6 +1505,7 @@ sub logBusqueda{
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 																			$params->{'loggedinuser'},
 																			$params->{'type'},
+                                                         $session->{'HTTP_USER_AGENT'},
 																			\@search_array
 														);
 }
