@@ -31,7 +31,7 @@ sub agregar{
    my $self = shift;
    my $nro_socio = @_;
    $self->setId_socio($nro_socio);
-   $self->setFecha(C4::AR::Date::today());
+   $self->setFecha(C4::AR::Utilidades::getToday());
    $self->save();
 }
 
