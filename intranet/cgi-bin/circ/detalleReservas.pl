@@ -20,37 +20,31 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $borrowernumber= $obj->{'borrnumber'};
+my $nro_socio= $obj->{'nro_socio'};
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
-# now the reserved items....
-my ($rescount, $reserves) = C4::AR::Reservas::DatosReservas ($borrowernumber);
-my @realreserves;
-my @waiting;
-my $rcount = 0;
-my $wcount = 0;
-my $clase1='par';
-my $clase2='par';
+my @reservas_asignadas;
+my $racount = 0;
+my @reservas_espera;
+my $recount = 0;
 
-foreach my $res (@$reserves) {
 
-# 	$res->{'rreminderdate'} = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
-# 	$res->{'rnotificationdate'}  = C4::Date::format_date($res->{'rnotificationdate'},$dateformat);
-# 	$res->{'rreminderdate'}  = C4::Date::format_date($res->{'rreminderdate'},$dateformat);
+foreach my $reserva (@$reservas) {
+    if ($reserva->getId3) {
+        #Reservas para retirar
+        push @reservas_asignadas, $reserva;
+        $racount++;
+    }else{
+        #Reservas en espera
+        push @reservas_espera, $reserva;
+        $recount++;
+    }
+}
 
-	if ($res->{'estado'} eq 'E') {
-# 		$res->{'rbranch'} = $branches->{$res->{'rbranch'}}->{'branchcode'};
-		push @realreserves, $res;
-		$rcount++;
-	} else { 
-		push @waiting, $res;
-		$wcount++;
-	} 
-}#end for
+$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+$t_params->{'reservas_asignadas_count'}= $racount;
+$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+$t_params->{'reservas_espera_count'}=$recount;
 
-$t_params->{'RESERVES'}= \@realreserves;
-$t_params->{'reserves_count'}= $rcount;
-$t_params->{'WAITRESERVES'}= \@waiting;
-$t_params->{'waiting_count'}= $wcount;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-

@@ -8,25 +8,21 @@ use HTML::Template;
 
 my $input=new CGI;
 
-my $input=new CGI;
-
-my ($template, $session, $params) =  get_template_and_user ({
-			template_name	=> 'circ/detalleUsuario.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
-    });
-
+my ($template, $session, $t_params) =  get_template_and_user ({
+                                template_name   => 'circ/detalleUsuario.tmpl',
+                                query       => $input,
+                                type        => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired   => { circulate => 1 },
+                                });
 
 my $obj=$input->param('obj');
-
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $borrnumber= $obj->{'borrowernumber'};
+my $msg_object= C4::AR::Mensajes::create();
+my $nro_socio= $obj->{'nro_socio'};
 
-my @resultBorrower;
-$resultBorrower[0]=C4::AR::Usuarios::getBorrowerInfo($borrnumber);
+my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-$params->{'borrower'}= \@resultBorrower;
+$t_params->{'socio'}= $socio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -1,13 +1,13 @@
 [% USE HTML %]
+[% IF reservas_asignadas_count %]
 <br>
-
-<b>El usuario tiene [% reserves_count %] ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
+<b>El usuario tiene [% reservas_asignadas_count %] ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 <br>
 
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 	<tr>
 		<td colspan="9" class="inputFontNormal" align="center">
-			<b>EJEMPLARES RESERVADOS</b>
+			<b>EJEMPLARES ASIGNADOS</b>
 		</td>
 	</tr>
 </table>
@@ -32,65 +32,67 @@
 		</td>
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
-[% FOREACH RESERVES %]
+    [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 	<tr align="center" class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			<input type="checkbox" name="chkboxReservas" value="[% rid3 %]" id="[% rid3 %]">
+			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.getId3 %]">
+		</td>
+            <td width="16%">
+                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
+                    [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
+<!--                    [% IF runititle %]
+                        :&nbsp;[% HTML.escape(runititle) %]
+                    [% END %]-->
+                </a>
+            </td>
+            <td>
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+		<td>
+        [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 		</td>
 		<td>
-			[% HTML.escape(rtitulo) %]
-				[% IF runititle %]
-					:&nbsp;[% runititle %]
-				[% END %]
+            [% IF reserva.getFecha_notificacion_formateada %]
+            [% reserva.getFecha_notificacion_formateada %] 
+            [% ELSE %]
+               - 
+            [% END %]
 		</td>
 		<td>
-			[% IF rautor %]
-				[% nomCompleto %]
-			[% ELSE %]
-				&nbsp;
-			[% END %]
-		</td>
-		<td>
-			[% IF redicion %]
-				[% redicion %]
-			[% ELSE %]
-				&nbsp;
-			[% END %]
-		</td>
-		<td>
-			[% IF rnotificationdate %]
-				[% rnotificationdate %]
-			[% ELSE %]
-				&nbsp;
-			[% END %]
-		</td>
-		<td>
-			[% rreminderdate %]
+            [% IF reserva.getFecha_recordatorio_formateada %]
+            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+            [% ELSE %]
+               - 
+            [% END %]
 		</td>
 		<td align="middle"> 
 	       		<input type="image" name="cancel"  value="cancelar" 
 			src="[% themelang %]/images/borrar.png" 
-			onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
+			onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="Cancelar">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
-[% END %]
+    [% END %] 
 </table>
-
-[% IF reserves_count %]
-	<p colspan="10" class="inputFontNormal" align=center>
-		<input type="image" name="borrowD"  value="prestar" 
-		src="[% themelang %]/images/item-prestar.png" 
-		title="Realizar pr&eacute;stamo" 
-		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
-	</p>
+    <p colspan="10" class="inputFontNormal" align=center>
+        <input type="image" name="borrowD"  value="prestar" 
+        src="[% themelang %]/images/item-prestar.png" 
+        title="Realizar pr&eacute;stamo" 
+        onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+    </p>
+[% ELSE %]
+<br>
+<b>El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
 [% END %]
 
-
-
+[% IF reservas_espera_count %]
 <br>
-<b>El usuario tiene [% waiting_count %] reserva(s) en espera.</b>
+<b>El usuario tiene [% reservas_espera_count %] reserva(s) en espera.</b>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="">
 	<tr>
 		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS</b></td>
@@ -113,34 +115,31 @@
 		</td>
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-	[% FOREACH WAITRESERVES %]
+    [% FOREACH reserva IN RESERVAS_ESPERA %]
 		<tr valign="top" class="inputFontNormal">
 			<td width="1%">&nbsp;</td>
 			<td>
-				[% HTML.escape(rtitulo) %]
-				[% IF runititle %]
-					:&nbsp;
-					[% runititle %]
-				[% END %]
+                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
+                    [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
+<!--                    [% IF runititle %]
+                        :&nbsp; [% runititle %]
+                    [% END %]-->
+                </a>
 			</td>
 			<td>
-				[% IF rautor %]
-					[% nomCompleto %]
-				[% ELSE %]
-					&nbsp;
-				[% END %]
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
 			</td>
 			<td>
-				[% IF redicion %]		
-					[% redicion %]
-				[% ELSE %]
-					&nbsp;
-				[% END %]
+            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 			</td>
 			<td>
 				<input type="image" name="cancel"  value="cancelar" 
 				src="[% themelang %]/images/borrar.png" 
-				onClick="cancelarReserva('[% reservenumber %]')" title="Cancelar">
+				onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="Cancelar">
 			</td>
 			<td width="1%">&nbsp;</td>
 			<td width="1%">&nbsp;</td>
@@ -149,4 +148,8 @@
 </table>
 
 <br>
-
+[% ELSE %]
+<br>
+<b>El usuario no tiene reserva(s) en espera.
+</b>
+[% END %]

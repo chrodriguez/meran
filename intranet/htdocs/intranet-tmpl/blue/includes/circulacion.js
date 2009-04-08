@@ -91,7 +91,7 @@ function detalleUsuario(nro_socio){
 function updateInfoUsuario(responseText){
 	$('#detalleUsuario').slideDown('slow');
 	//se borran los mensajes de error/informacion del usuario
-	clearMessages();
+// 	clearMessages();
 	$('#detalleUsuario').html(responseText);
 }
 

@@ -21,31 +21,18 @@ my ($template, $session, $params) =  get_template_and_user ({
 my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $borrnumber= $obj->{'borrnumber'};
 
-my $issueslist = C4::AR::Prestamos::prestamosPorUsuario($borrnumber);
-my @issues;
-my $dateformat = C4::Date::get_date_format();
+my $nro_socio= $obj->{'nro_socio'};
+my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
 
-foreach my $it (keys %$issueslist) {
-	my $book= $issueslist->{$it};
-	$book->{'date_due'} = format_date($book->{'date_due'},$dateformat);
+$t_params->{'PRESTAMOS'}= $prestamos;
+$t_params->{'prestamos_cant'}= scalar(@$prestamos);
 
-	my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($book->{'id3'},$book->{'issuecode'});
-	$book->{'date_fin'} = format_date($df,$dateformat);
-	if ($vencido){$book->{'color'} ='red';}
-
-	$book->{'issuetype'}=$book->{'issuetype'};
-	if ($book->{'autor'} eq ''){$book->{'autor'}=' ';}
-
-	push @issues,$book
+my $vencidos=0;
+foreach my $prestamo (@$prestamos) {
+if($prestamo->estaVencido){$vencidos++;}
 }
-
-my $cantIssues=scalar(@issues);
-
-$params->{'issues'}= \@issues;
-$params->{'cantIssues'}= $cantIssues;
-$params->{'borrowernumber'}= $borrnumber;
+$t_params->{'vencidos'}= $vencidos;
 
 C4::Auth::output_html_with_http_headers($input, $template, $params);
 

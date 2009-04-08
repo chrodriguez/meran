@@ -1272,7 +1272,7 @@ sub loguearBusqueda{
 
 	my $dbh = C4::Context->dbh;
 
-	my $query = "	INSERT INTO rep_busqueda ( `borrower` , `fecha` )
+	my $query = "	INSERT INTO rep_busqueda ( `id_socio` , `fecha` )
 			VALUES ( ?, NOW( ));";
 	my $sth=$dbh->prepare($query);
 	$sth->execute($borrowernumber);

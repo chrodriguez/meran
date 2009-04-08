@@ -1,112 +1,57 @@
-[% IF sanctions %]
-      <table cellpadding="5" cellspacing="0" border="0" class="tablemsg" width="80%"  align="center">
-        <tr>
-            <td>
-              <font class="fontmsg">El usuario est&aacute; sancionado para los tipos de pr&eacute;stamo:</font>
-            </td>
-          </tr>
-	[% FOREACH sanctions %]
-	  <tr>
-	    <td>
-              <font class="fontmsg">
-			[% IF description %]
-				<li>[% description %] - Desde el [% startdate %] hasta el [% enddate %].
-			[% END %]</font>
-	    </td>
-	  </tr>
-	[% END %]
-	[% IF debts %]
-	<tr>
-            <td>
-              <font class="fontmsg">&iexcl;El usuario tiene libros VENCIDOS y por lo tanto no se le pueden realizar pr&eacute;stamos!</font>
-            </td>
-        </tr>
-	[% END %]
-      </table>
-[% END %]
 
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr>
-		<td class="pagetitle" >
-			Detalle Usuario
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
-
-
-<table border="0" cellpadding="0" cellspacing="0"  width="100%">
-	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
-		<td colspan="2">Informaci&oacute;n del usuario</td>
-		<td width="1%" valign="top" align="rigth"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
-    	</tr>
-</table>
-    	<tr>
-		<td width="1%">&nbsp;</td>
-		<td colspan="2" class="inputFontNormal">
-[% FOREACH borrower %]
-		<input type="hidden" id="borrowernumber" value="[% borrowernumber %]">
-		Nombre y apellido: <b><a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]"> 
-		[% firstname %] [% surname %]</a></b><br>
-		Tarjeta de identificaci&oacute;n: <b>[% cardnumber %]</b> <br>
-		Documento: Tipo:<b> [% documenttype %] </b>N&uacute;mero: <b>[% documentnumber %]</b><br>
-		Direcci&oacute;n:<b> [% streetaddress %], [% zipcode %][% city %]</b><br>
- 		E-mail: <b><a href="mailto:[% emailaddress %]">[% emailaddress %]</a></b><br>
-		ID de usuario:<b> [% borrowernumber %]</b><br>
-		Categor&iacute;a del usuario: <b>[% categoria %]</b><br>
-        	</td>
-		<td width="1%">&nbsp;</td>
-    	</tr>
-
-[% END %]
-</table>-->
 
 <div id="datosUsuario">
 	<div class="vcard">
+                    [% "Apellido:" | i18n %]
+                            <b> [% socio.persona.getApellido %] </b><br>
+
+                    [% "Nombre:" | i18n %]
+                            <b> [% socio.persona.getNombre %] </b><br>
+
+                    [% "Documento:" | i18n %]
+                            <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+            
+                    [% "Fecha de nacimiento:" | i18n %]
+                            <b> [% socio.persona.getNacimiento %]</b><br>
+                    [% "Sexo:" | i18n %]    
+                            <b> [% socio.persona.getSexo %]</b><br>
+                                                
+                    [% IF socio.persona.getTelefono %]
+                            <div class="tel">
+                                    <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                                            <b>[% socio.persona.getTelefono %]</b><br>
+                            </div>  
+                    [% END %]
+            
+                    [% IF socio.persona.getAlt_telefono %]
+                    <div class="tel">
+                            <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
+                                        <b>[% socio.persona.getAlt_telefono %]</b><br>
+                    </div>  
+                    [% END %]
+                    
+                    [% IF socio.persona.getEmail %]
+                            E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
+                                    <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
+                    [% END %]
+            
+                    [% "Tarjeta de identificaci&oacute;n :" | i18n %]
+                                    <b> [% socio.getNro_socio %]</b><br>
+            
+                    [% "Legajo :" | i18n %]
+                                    <b> [%  socio.persona.getNro_documento %]</b><br>
+
+                    [% "Ciudad :" | i18n %]
+                                    <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
+                    [% "Calle :" | i18n %]
+                                    <b> [%  socio.persona.getCalle %]</b><br>
+                    
+                    [% "ID de usuario:" | i18n %]
+                                    <b> [%  socio.nro_socio %]</b><br>
+            
+                    [% "Categor&iacute;a del usuario:" | i18n %]
+                                    <b> [%  socio.categoria.getDescription %]</b><br>
 	
-	[% FOREACH borrower %]
-		Nombre y apellido: 
-		   <b>
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR name='borrowernumber %]"> 
-				<span class="fn">[% firstname %] [% surname %]</span>
-			</a>
-		   </b>
-			<br>
-		Tarjeta de identificaci&oacute;n: <b>[% cardnumber %]</b> <br>
-		Documento: Tipo: <b> [% documenttype %] </b>N&uacute;mero: <b>[% documentnumber %]</b><br>
-		Direcci&oacute;n: <b> [% streetaddress %], [% zipcode %][% city %]</b><br>
-		E-mail: <b><a href="mailto:[% emailaddress %]">
-				<span class="email">[% emailaddress %]</span>
-			   </a>
-			</b>
-			<br>
-		ID de usuario: <b> [% borrowernumber %]</b><br>
-		Categor&iacute;a del usuario: <b>[% categoria %]</b><br>
-	
-		[% IF contactname %]
-		Contacto Alternativo: <b> [% contactname %]</b><br>
-		[% END %]
-	
-		[% IF phone %]
-		<div class="tel">
-			<span class="type">Tel&eacute;fono:</span> <b>[% phone %]</b><br>
-		</div>	
-		[% END %]
-	
-		[% IF altphone %]
-		<div class="tel">
-			<span class="type">Tel&eacute;fono Alt:</span> <b>[% altphone %]</b><br>
-		</div>	
-		[% END %]
-		
-		[% IF altrelationship %]
-			Relaci&oacute;n: <b> [% altrelationship %]</b><br>
-		[% END %]
-	
-	[% END %]
 	</div> <!--end vcard-->
 </div>  
 

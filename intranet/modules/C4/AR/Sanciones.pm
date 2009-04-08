@@ -326,7 +326,7 @@ sub delSanction {
    $sth->finish;
 }          
 
-
+#DEPRECATED
 sub sanciones{
 	my ($orden)=@_;
  #Esta funcion muestra toda las sanciones que hay
