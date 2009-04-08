@@ -1130,6 +1130,9 @@ sub getNombreLocalidad{
 
 
 sub t_loguearBusqueda {
+
+my $browser= 'ROBOT';
+	if( C4::AR::Utilidades::isBrowser() ){$browser= 'BROWSER'}
 	
 	my($loggedinuser,$desde,$search_array)=@_;
 

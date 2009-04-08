@@ -1676,4 +1676,44 @@ sub existeInArray{
    }
    return 0;
 }
+
+=item
+Esta funcion verifica si el user_agent es un browser
+=cut
+sub isBrowser {
+=item
+open(Z, ">>/tmp/debug.txt");
+print Z "\n";
+print Z "PRINT HASH de logueo de busqueda: \n";
+
+	while ( my ($key, $value) = each(%ENV) ) {
+        	print Z "key: $key => value: $value\n";
+    	}
+=cut
+	my $browser= $ENV{'HTTP_USER_AGENT'};
+	my $ok=1;
+
+	if ( $browser =~ s/Mozilla// ) {
+		if ($browser =~ s/(MSIE)//){
+# print Z "IE \n";	
+		}
+		if($browser =~ s/(Chrome)//){
+# print Z "Chrome \n";		
+		}
+
+		if($browser =~ s/(Iceweasel)//){
+# print Z "Iceweasel \n";		
+		}
+	}elsif( $browser =~ s/(Opera)//) {
+# print Z "Opera \n";	
+	}else{
+# print Z "otro \n";
+		$ok= 0;
+	}
+# print Z "\n";
+# close(Z);
+
+	return $ok;
+}
+
 1;
