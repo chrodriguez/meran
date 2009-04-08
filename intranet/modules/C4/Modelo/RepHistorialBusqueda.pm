@@ -58,7 +58,7 @@ sub agregar{
 
       my $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
 
-      if (C4::AR::Utilidades::validateString($search->{'keyword'}){
+      if (C4::AR::Utilidades::validateString($search->{'keyword'}) ){
          $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'keyword', $search->{'keyword'}, $desde);
       }
    

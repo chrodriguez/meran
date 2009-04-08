@@ -1510,18 +1510,21 @@ sub logBusqueda{
 														);
 }
 
+=item
+Esta funcion arma el string para informar al cliente por que parametros se busco
+=cut
 sub armarBuscoPor{
 	my ($params) = @_;
 	
 	my $buscoPor="";
 	
-	if($obj->{'keyword'} ne ""){
-		$buscoPor.="Busqueda combinada: ".$obj->{'keyword'}."&";
+	if($params->{'keyword'} ne ""){
+		$buscoPor.="Busqueda combinada: ".$params->{'keyword'}."&";
 	}
 	
-	if( $obj->{'tipo_nivel3_name'} != -1 &&  $obj->{'tipo_nivel3_name'} ne ""){
+	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
 # 		my $itemtype=C4::AR::Busquedas::getItemType($tipo_documento);
-		$buscoPor.="Tipo de documento: ".$obj->{'tipo_nivel3_name'}."&";
+		$buscoPor.="Tipo de documento: ".$params->{'tipo_nivel3_name'}."&";
 	}
 
 	my @busqueda=split(/&/,$buscoPor);

@@ -35,16 +35,16 @@ my $search;
 # $search->{'keyword'}= $keyword;
 $search->{'class'}= $comboTipoDocumento;
 
-my $buscoPor="";
+# my $buscoPor="";
 
 # if($keyword ne ""){
 # 	$buscoPor.="Busqueda combinada: ".$keyword."&";
 # }
 
-if($comboTipoDocumento != -1 && $comboTipoDocumento ne ""){
-	my $itemtype=C4::AR::Busquedas::getItemType($comboTipoDocumento);
-	$buscoPor.="Tipo de documento: ".$comboTipoDocumento."&";
-}
+# if($comboTipoDocumento != -1 && $comboTipoDocumento ne ""){
+# 	my $itemtype=C4::AR::Busquedas::getItemType($comboTipoDocumento);
+# 	$buscoPor.="Tipo de documento: ".$comboTipoDocumento."&";
+# }
 
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
@@ -60,17 +60,18 @@ my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
 #se loguea la busqueda
 C4::AR::Busquedas::logBusqueda($obj, $session);
 
-my @busqueda=split(/&/,$buscoPor);
-$buscoPor="";
+# my @busqueda=split(/&/,$buscoPor);
+# $buscoPor="";
+# 
+# foreach my $str (@busqueda){
+# 	$buscoPor.=", ".$str;
+# }
 
-foreach my $str (@busqueda){
-	$buscoPor.=", ".$str;
-}
-
-$buscoPor= substr($buscoPor,2,length($buscoPor));
+# $buscoPor= substr($buscoPor,2,length($buscoPor));
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
-$t_params->{'buscoPor'}= $buscoPor;
+# $t_params->{'buscoPor'}= $buscoPor;
+$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}= $cantidad;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

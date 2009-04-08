@@ -42,6 +42,7 @@ $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $
 $t_params->{'SEARCH_RESULTS'}= $array_nivel1;
 $t_params->{'cantidad'}= $cantidad;
 # FIXME siempre buscar por titulo?????????
-$t_params->{'buscoPor'}=$obj->{'titulo'};
+# $t_params->{'buscoPor'}=$obj->{'titulo'};
+$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
