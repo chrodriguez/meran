@@ -1514,6 +1514,7 @@ sub logBusqueda{
 Esta funcion arma el string para informar al cliente por que parametros se busco
 =cut
 sub armarBuscoPor{
+# FIXME OJO aca filtrar bien todos los parametros de entrada que se van a reflejar en el cliente, posible XSS
 	my ($params) = @_;
 	
 	my $buscoPor="";
@@ -1523,9 +1524,28 @@ sub armarBuscoPor{
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
-# 		my $itemtype=C4::AR::Busquedas::getItemType($tipo_documento);
 		$buscoPor.="Tipo de documento: ".$params->{'tipo_nivel3_name'}."&";
 	}
+
+	if( $params->{'titulo'} ne "" ){
+		$buscoPor.="Titulo: ".$params->{'titulo'}."&";
+	}
+	
+	if( $params->{'autor'} ne "" ){
+		$buscoPor.="Titulo: ".$params->{'autor'}."&";
+	}
+
+	if( $params->{'signatura'} ne "" ){
+		$buscoPor.="Signatura: ".$params->{'signatura'}."&";
+	}
+
+	if( $params->{'isbm'} ne "" ){
+		$buscoPor.="ISBN: ".$params->{'isbn'}."&";
+	}		
+
+	if( $params->{'codBarra'} ne "" ){
+		$buscoPor.="Código de Barra: ".$params->{'codBarra'}."&";
+	}		
 
 	my @busqueda=split(/&/,$buscoPor);
 	$buscoPor="";
