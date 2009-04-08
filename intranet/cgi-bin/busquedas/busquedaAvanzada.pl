@@ -35,10 +35,13 @@ my ($cantidad, @resultsdata)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->{'loggedinuser'};
 my $array_nivel1 = C4::AR::Busquedas::armarInfoNivel1($obj,@resultsdata);
+#se loguea la busqueda
+C4::AR::Busquedas::logBusqueda($obj, $session);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-$t_params->{'SEARCH_RESULTS'}=$array_nivel1;
-$t_params->{'cantidad'}=$cantidad;
+$t_params->{'SEARCH_RESULTS'}= $array_nivel1;
+$t_params->{'cantidad'}= $cantidad;
+# FIXME siempre buscar por titulo?????????
 $t_params->{'buscoPor'}=$obj->{'titulo'};
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

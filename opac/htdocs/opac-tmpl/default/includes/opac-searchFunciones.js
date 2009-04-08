@@ -62,7 +62,7 @@ function busquedaCombinable(){
 	objAH.autor= $('#autor').val();
 	objAH.titulo= $('#titulo').val();
  	objAH.tipo= tipo;
- 	objAH.id_tipo_documento= $('#id_tipo_documento').val();
+ 	objAH.tipo_nivel3_name= $('#id_tipo_documento').val();
 	
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
@@ -149,7 +149,7 @@ function searchinc(){
 	objAH.criteria= $('#criteria').val();
 	objAH.searchinc= $('#searchinc').val();
 	objAH.tipo= 'normal';
-	objAH.id_tipo_documento= '-1';
+	objAH.tipo_nivel3_name= '-1';
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
 	//se envia la consulta

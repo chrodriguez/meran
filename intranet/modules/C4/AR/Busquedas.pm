@@ -1284,239 +1284,6 @@ sub getBranch{
 }
 
 
-=item
-busquedaAvanzada
-Busca los id1 dependiendo de los strings que viene desde el pl.
-=cut
-sub busquedaAvanzada{
-   my($nivel1, $nivel2, $nivel3, $nivel1rep, $nivel2rep, $nivel3rep,$operador,$ini,$cantR)= @_;
-   my $dbh = C4::Context->dbh;
-#Se hace para despues sacar los primeros operadores del string que no van. Se AND u OR, los dos ocupan 4 lugares.
-   if($operador eq "AND"){
-      $operador=$operador." ";
-   }
-   else{
-      $operador=$operador."  ";
-   }
-
-#*********************************** busqueda NIVEL 1****************************************
-my $from1 = "";
-my $where1 = "";
-my $subcon1= "FROM cat_nivel1 n1 INNER JOIN cat_nivel1_repetible n1r ON (n1.id1 = n1r.id1) WHERE ";
-my @Subconsultas1;
-
-if($nivel1 ne ""){
-   $from1 = "cat_nivel1 n1";
-   my @array1= split(/#/,$nivel1);
-   
-   for(my $i;$i<scalar(@array1);$i++){
-      $where1.= $operador.$array1[$i]." ";
-   }
-}
-   
-if($nivel1rep ne ""){
-   my @array1rep= split(/#/,$nivel1rep);
-   for(my $i;$i<scalar(@array1rep);$i++){
-      push(@Subconsultas1, $subcon1.$array1rep[$i]);
-   }
-}
-
-if($where1 ne ""){
-   #se saca el primir AND
-   $where1= substr($where1,3,length($where1));
-}
-
-#*********************************** busqueda NIVEL 2****************************************
-my $from2 = "";
-my $where2 = "";
-my $subcon2= "FROM cat_nivel2 n2 INNER JOIN cat_nivel2_repetible n2r ON (n2.id2 = n2r.id2) WHERE ";
-my @Subconsultas2;
-
-if($nivel2 ne ""){
-   
-   $from2 = "cat_nivel2 n2";
-   my @array2= split(/#/,$nivel2);
-   
-   for(my $i;$i<scalar(@array2);$i++){
-      $where2.= $operador.$array2[$i]." ";
-   }
-}
-   
-if($nivel2rep ne ""){
-   my @array2rep= split(/#/,$nivel2rep);
-   for(my $i;$i<scalar(@array2rep);$i++){
-      push(@Subconsultas2, $subcon2.$array2rep[$i]);
-   }
-}
-
-if($where2 ne ""){
-   #se saca el primir AND
-   $where2= substr($where2,3,length($where2));
-}
-
-#*********************************** busqueda NIVEL 3****************************************
-my $from3 = "";
-my $where3 = "";
-my $subcon3= "FROM cat_nivel3 n3 INNER JOIN cat_nivel3_repetible n3r ON (n3.id3 = n3r.id3) WHERE ";
-my @Subconsultas3;
-
-if($nivel3 ne ""){
-   $from3 = "cat_nivel3 n3";
-   my @array3= split(/#/,$nivel3);
-   
-   for(my $i;$i<scalar(@array3);$i++){
-      $where3.= $operador.$array3[$i]." ";
-   }
-}
-   
-if($nivel3rep ne ""){
-
-   my @array3rep= split(/#/,$nivel3rep);
-   for(my $i;$i<scalar(@array3rep);$i++){
-      push(@Subconsultas3, $subcon3.$array3rep[$i]);
-   }
-}
-
-if($where3 ne ""){
-   #se saca el primir AND
-   $where3= substr($where3,3,length($where3));
-}
-
-my $strSubCons1Rep="";
-my $pare1="";
-my $consultaN1;
-if($from1 ne "" || $nivel1rep ne ""){
-   my $select1="SELECT DISTINCT (n1.id1) as id1 ";
-   if($from1 ne ""){
-      #Se hizo una busqueda en el nivel1
-      $consultaN1=$select1." FROM (".$from1.") WHERE ".$where1;
-      $pare1=")";
-   }
-   if($nivel1rep ne ""){
-   #Se hizo una busqueda en el nivel1_repetible
-      if(scalar(@Subconsultas1)>1){
-         $pare1=")";
-      }
-      foreach my $cons (@Subconsultas1){
-         $strSubCons1Rep.= $operador."n1.id1 IN (".$select1.$cons;
-      }
-      if($from1 eq ""){
-         #SACO el operador y n1.id1. IN ( si es que no si hizo una consulta por nivel1
-         $strSubCons1Rep= substr($strSubCons1Rep,15,length($strSubCons1Rep));
-      }
-      $consultaN1=$consultaN1.$strSubCons1Rep.$pare1;
-   }
-}
-
-my $strSubCons2Rep="";
-my $pare2="";
-my $consultaN2;
-if($from2 ne "" || $nivel2rep ne ""){
-   my $select2="SELECT DISTINCT (n2.id1) as id1 ";
-   if($from2 ne ""){
-      #Se hizo una busqueda en el nivel2
-      $consultaN2=$select2." FROM (".$from2.") WHERE ".$where2;
-      $pare2=")";
-   }
-   if($nivel2rep ne ""){
-      #Se hizo una busqueda en el nivel2_repetible
-      if(scalar(@Subconsultas2)>1){
-         $pare1=")";
-      }
-      foreach my $cons (@Subconsultas2){
-         $strSubCons2Rep.= $operador."n2.id1 IN (".$select2.$cons;
-      }
-      if($from2 eq ""){
-         #SACO el operador y n2.id1. IN ( si es que no si hizo una consulta por nivel2
-         $strSubCons2Rep= substr($strSubCons2Rep,15,length($strSubCons2Rep));
-      }
-      $consultaN2=$consultaN2.$strSubCons2Rep.$pare2;
-   }
-}
-
-my $strSubCons3Rep="";
-my $pare3="";
-my $consultaN3;
-if($from3 ne "" || $nivel3rep ne ""){
-   my $select3="SELECT DISTINCT (n3.id1) as id1 ";
-   if($from3 ne ""){
-      #Se hizo una busqueda en el nivel3
-      $consultaN3=$select3." FROM (".$from3.") WHERE ".$where3;
-      $pare3=")";
-   }
-   if($nivel3rep ne ""){
-      #Se hizo una busqueda en el nivel3_repetible
-      if(scalar(@Subconsultas3)>1){
-         $pare3=")";
-      }
-      foreach my $cons (@Subconsultas3){
-         $strSubCons3Rep.= $operador."n3.id1 IN (".$select3.$cons;
-      }
-      if($from3 eq ""){
-         #SACO el operador y n3.id1. IN ( si es que no si hizo una consulta por nivel3
-         $strSubCons3Rep= substr($strSubCons3Rep,15,length($strSubCons3Rep));
-      }
-      $consultaN3=$consultaN3.$strSubCons3Rep.$pare3;
-   }
-}
-
-my @resultsId1;
-my $query="";
-my $queryCant="";
-my $n="";
-# Se concatenan todas las consultas.
-if($consultaN1 ne ""){
-   $n="n1.id1";
-   $query=$consultaN1;
-}
-if($consultaN2 ne ""){
-   if($query ne ""){
-      $query.=" ".$operador."*?* IN (".$consultaN2.")";
-   }
-   else{
-      $n="n2.id1";
-      $query=$consultaN2;
-   }
-}
-if($consultaN3 ne ""){
-   if($query ne ""){
-      $query.=" ".$operador."*?* IN (".$consultaN3.")";
-   }
-   else{
-      $n="n3.id1";
-      $query=$consultaN3;
-   }
-}
-
-$query=~ s/\*\?\*/$n/g; #Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la consulta.
-$queryCant=$query;
-#Se reemplaza la 1� subcadena (DISTINCT (n1.id1) as id1) por COUNT(*) para saber el total de documentos que hay con la consulta que se hizo, sirve para el paginador.
-$queryCant=~ s/DISTINCT \(n.\.id1\) as id1/COUNT(DISTINCT(*?*)) /o;
-
-#Se reemplaza la subcadena (*?*) por el nX.id1 donde X es la primera tabla que se hace la
-$queryCant=~ s/\*\?\*/$n/g; 
-
-if (defined $ini && defined $cantR) {
-   $query.= " limit $ini,$cantR";
-}
-
-my $sth=$dbh->prepare($query);
-$sth->execute();
-while(my $data=$sth->fetchrow_hashref){
-   push(@resultsId1, $data->{'id1'});
-}
-
-$sth=$dbh->prepare($queryCant);
-$sth->execute();
-my $cantidad=$sth->fetchrow;
-
-$sth->finish;
-
-return ($cantidad,\@resultsId1);
-
-}#end busquedaAvanzada
-
-
 ########################################################## NUEVOS!!!!!!!!!!!!!!!!!!!!!!!!!! #################################################
 
 
@@ -1695,48 +1462,37 @@ sub busquedaCombinada_newTemp{
 }
 
 
-sub armarInfoNivel1{
-	my ($params,@resultId1) = @_;
-	
-	my $cantidad= $params->{'cantidad'};
-	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-	my $orden= $params->{'orden'};
-	my @resultsarray;
-	my %result;
- 	my $nivel1;
-# 	my $autor;
-	my $i=0;
+sub logBusqueda{
+	my ($params) = @_;
+	#esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
+	#la preferencia del OPAC es 1 y estoy buscando desde OPAC  
+	#la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
 
 	my @search_array;
 	my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
 	my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
 
-	if($params->{'codBarra'} ne ""){
-		if( ($valorOPAC == 1) ){
+	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'OPAC')) ){
+
+		if($params->{'codBarra'} ne ""){
 			my $search;
 			$search->{'barcode'}= $params->{'codBarra'};
 			push (@search_array, $search);
 		}
-	}
 
-	if($params->{'autor'} ne ""){
-		if( ($valorOPAC == 1) ){
+		if($params->{'autor'} ne ""){
 			my $search;
 			$search->{'autor'}= $params->{'autor'};
 			push (@search_array, $search);
 		}
-	}
 	
-	if($params->{'titulo'} ne ""){
-		if( ($valorOPAC == 1) ){
+		if($params->{'titulo'} ne ""){
 			my $search;
 			$search->{'titulo'}= $params->{'titulo'};
 			push(@search_array, $search);
 		}
-	}
 	
-	if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
-		if( ($valorOPAC == 1) ){
+		if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
 			my $search;
 			$search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
 			push (@search_array, $search);
@@ -1748,6 +1504,44 @@ sub armarInfoNivel1{
 																			$params->{'type'},
 																			\@search_array
 														);
+}
+
+sub armarBuscoPor{
+	my ($params) = @_;
+	
+	my $buscoPor="";
+	
+	if($obj->{'keyword'} ne ""){
+		$buscoPor.="Busqueda combinada: ".$obj->{'keyword'}."&";
+	}
+	
+	if( $obj->{'tipo_nivel3_name'} != -1 &&  $obj->{'tipo_nivel3_name'} ne ""){
+# 		my $itemtype=C4::AR::Busquedas::getItemType($tipo_documento);
+		$buscoPor.="Tipo de documento: ".$obj->{'tipo_nivel3_name'}."&";
+	}
+
+	my @busqueda=split(/&/,$buscoPor);
+	$buscoPor="";
+	
+	foreach my $str (@busqueda){
+		$buscoPor.=", ".$str;
+	}
+	
+	$buscoPor= substr($buscoPor,2,length($buscoPor));
+
+	return $buscoPor;
+}
+
+sub armarInfoNivel1{
+	my ($params,@resultId1) = @_;
+	
+	my $cantidad= $params->{'cantidad'};
+	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
+	my $orden= $params->{'orden'};
+	my @resultsarray;
+	my %result;
+ 	my $nivel1;
+	my $i=0;
 
    
 	if($cantidad > 0){

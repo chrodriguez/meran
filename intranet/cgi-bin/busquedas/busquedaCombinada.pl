@@ -23,13 +23,13 @@ if($obj ne ""){
 
 my $outside= $input->param('outside');
 my $keyword= $obj->{'keyword'};
-my $comboItemTypes= $obj->{'comboItemTypes'};
+my $tipo_documento= $obj->{'tipo_nivel3_name'};
 my $orden= $obj->{'orden'};#PARA EL ORDEN
 my $funcion= $obj->{'funcion'};
 
 my $search;
 $search->{'keyword'}= $keyword;
-$search->{'class'}= $comboItemTypes;
+$search->{'class'}= $tipo_documento;
 
 my $buscoPor="";
 
@@ -37,9 +37,8 @@ if($keyword ne ""){
 	$buscoPor.="Busqueda combinada: ".$keyword."&";
 }
 
-if($comboItemTypes != -1 && $comboItemTypes ne ""){
-	$comboItemTypes=&verificarValor($comboItemTypes);
-	my $itemtype=C4::AR::Busquedas::getItemType($comboItemTypes);
+if($tipo_documento != -1 && $tipo_documento ne ""){
+	my $itemtype=C4::AR::Busquedas::getItemType($tipo_documento);
 	$buscoPor.="Tipo de documento: ".$itemtype."&";
 }
 
@@ -54,6 +53,8 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->{'loggedinuser'};
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
+#se loguea la busqueda
+C4::AR::Busquedas::logBusqueda($obj, $session);
 
 my @busqueda=split(/&/,$buscoPor);
 $buscoPor="";
