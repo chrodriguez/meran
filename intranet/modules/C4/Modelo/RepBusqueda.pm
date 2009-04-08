@@ -25,6 +25,16 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+
+sub agregar{
+
+   my $self = shift;
+   my $nro_socio = @_;
+   $self->setId_socio($nro_socio);
+   $self->setFecha(C4::AR::Date::today());
+   $self->save();
+}
+
 sub getIdBusqueda{
 
    my $self = shift;

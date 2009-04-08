@@ -1131,17 +1131,18 @@ sub getNombreLocalidad{
 
 sub t_loguearBusqueda {
 
-   my $browser= 'ROBOT';
-	if( C4::AR::Utilidades::isBrowser() ){$browser= 'BROWSER'}
-	
 	my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
 	my $paramsReserva;
 	my ($error, $codMsg,$paraMens);
 	$desde = $desde || 'SIN_TIPO';
 	my $historial = C4::Modelo::RepHistorialBusqueda->new();
    my $db = $historial->db;
+
+   C4::AR::Debug::debug("ENTRO A LOGUEO DE BUSQUEDA");
    $db->{connect_options}->{AutoCommit} = 0;
 	eval {
+
+      C4::AR::Debug::debug("ENTRO A LA TRANSACCION DE LOGUEO DE BUSQUEDA");
 # 		($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
       $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
 		$db->commit;	
@@ -1150,7 +1151,7 @@ sub t_loguearBusqueda {
 	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B407';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"OPAC");
+		&C4::AR::Mensajes::printErrorDB($@, $codMsg,$desde);
 		eval {$db->rollback};
 		#Se setea error para el usuario
 		$error= 1;
@@ -1159,7 +1160,7 @@ sub t_loguearBusqueda {
 	$db->{connect_options}->{AutoCommit} = 1;
 	
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"OPAC",$paraMens);
+	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
 	return ($error, $codMsg, $message);
 }
 
@@ -1510,9 +1511,6 @@ sub logBusqueda{
 														);
 }
 
-=item
-Esta funcion arma el string para informar al cliente por que parametros se busco
-=cut
 sub armarBuscoPor{
 # FIXME OJO aca filtrar bien todos los parametros de entrada que se van a reflejar en el cliente, posible XSS
 	my ($params) = @_;

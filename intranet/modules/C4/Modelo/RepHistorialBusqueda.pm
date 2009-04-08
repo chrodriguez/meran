@@ -49,11 +49,8 @@ sub agregar{
 
    my $db = $self->db;
    my $rep_busqueda = C4::Modelo::RepBusqueda->new(db => $db);
-      $rep_busqueda->setId_socio($nro_socio);
-      $rep_busqueda->setFecha(C4::AR::Date::today());
-      $rep_busqueda->save();
-   
-
+      $rep_busqueda->agregar($nro_socio);
+   C4::AR::Debug::debug("ENTRO A AGREGAR");
    foreach my $search (@$search_array){
 
       my $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
@@ -114,6 +111,10 @@ sub agregar{
          $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'barcode', $search->{'barcode'}, $desde);
       }
    
+      if( !C4::AR::Utilidades::isBrowser($http_user_agent) ){
+            $http_user_agent= 'ROBOT';
+      }
+      
       $historial_temp->setAgent($http_user_agent);
 
       $historial_temp->save();
