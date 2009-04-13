@@ -228,64 +228,6 @@ function clearAll(){
 
 //************************************Fin****Busqueda Avanzada**************************************************
 
-//*******************************************Detalles***********************************************************
-
-function updateInfoDetalle(responseText){
-
-	$('#datosUsuario').slideUp('slow');
-	$('#resultHistoriales').slideUp('slow');
-	$('#result').html(responseText);
-	zebra('tablaDetalleNivel3');
-	$('#result').slideDown('slow');
-// 	pushCache(responseText, 'result');
-
-}
-
-function detalle(id1){
-
-	objAH=new AjaxHelper(updateInfoDetalle);
-//   	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-detail.pl';
-	objAH.id1= id1;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function MARCDetail(id3, IdDivDetalle, IdDivMARC){
-
-	var params= 'id3=' + id3;
-
-	$.ajax({	type: "POST", 
-			url: "opac-MARCDetail.pl",
-			data: params,
-// 			beforeSend: Init,
- 			complete: function(ajax){
-					//seteo el estado en cached
-// 					$('#content'+IdDivMARC).attr('state', 'cached');
-					//se oculta el Detalle Normal
-					$('#'+IdDivDetalle).slideUp('slow');
-					//se agrega resultado MARC
-					$('#'+IdDivMARC).html(ajax.responseText);
-					//se muestra el resultado MARC
-					$('#'+IdDivMARC).slideDown('slow');
-					//se muestra el boton volver
-					$('#volver'+IdDivMARC).show();
-				}
-	});
-}
-
-function Volver(IdDivDetalle, IdDivMARC){
-	//se oculta el Detalle MARC
-	$('#'+IdDivMARC).slideUp('slow');
-	//se oculta el boton volver
-	$('#volver'+IdDivMARC).hide();
-	//se muestra el Detalle Normal
-	$('#'+IdDivDetalle).slideDown('slow');
-}
-
-//**************************************Fin*****Detalles*********************************************************
-
 
 function buscar(){
 

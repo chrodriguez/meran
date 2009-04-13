@@ -681,9 +681,6 @@ Busca los datos de la tabla nivel2 y nivel2_repetibles y los devuelve en formato
 =cut
 sub buscarNivel2EnMARC{
 	my ($id1)=@_;
-# open(A, ">>/tmp/debug.txt");
-# print A "\n";
-# print A "desde buscarNivel2EnMARC \n";
 	my $dbh = C4::Context->dbh;
 	my @nivel2=&buscarNivel2PorId1($id1);
 	my $mapeo=&buscarMapeo('cat_nivel2');
@@ -697,18 +694,12 @@ sub buscarNivel2EnMARC{
 		$id2=$row->{'id2'};
 		$itemtype=$row->{'itemtype'};
 		$nivel2Comp[$i]->{'id2'}=$id2;
-# print A "			fila: ".$i."\n";
-# print A "			id2: ".$id2."\n";
-# print A "			itemtype: ".$itemtype."\n";
 		$nivel2Comp[$i]->{'itemtype'}=$itemtype;
 		foreach my $llave (keys %$mapeo){
 			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
 			$nivel2Comp[$i]->{$llave}=$dato;
-# print A "llave ".$llave."\n";
-# print A "dato ".$dato."\n";
 			$nivel2Comp[$i]->{'campo'}= $mapeo->{$llave}->{'campo'};
 			$nivel2Comp[$i]->{'subcampo'}= $mapeo->{$llave}->{'subcampo'};
-# 			$i++;
 		}
 		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 		my $sth=$dbh->prepare($query);
@@ -725,12 +716,8 @@ sub buscarNivel2EnMARC{
 			else{
 				$nivel2Comp[$i]->{$llave}.= " *?* ".$data->{'dato'};
 			}
-# 			$i++;
-# print A "llave ".$llave."\n";
-# print A "dato ".$data->{'dato'}."\n";
 		}
  		$i++;
-# print A "*****************************************Otra HASH********************************************** \n"
 	}
 	return \@nivel2Comp;
 }
@@ -1257,7 +1244,7 @@ sub getBranch{
 
 sub busquedaAvanzada_newTemp{
 
-   my ($ini,$cantR,$params_obj) = @_;
+   my ($ini,$cantR,$params_obj, $session) = @_;
    
    my @filtros;
 
@@ -1305,6 +1292,8 @@ sub busquedaAvanzada_newTemp{
 # FIXME no me funciona el disctinct
 			push(@id1_array,$nivel3->getId1);
 	}
+
+   	C4::AR::Busquedas::logBusqueda($params_obj, $session);
 
 	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
 }
@@ -1402,13 +1391,6 @@ sub busquedaCombinada_newTemp{
                                                                               );
 
    my @id1_array;
-# 	#se sacan los repetidos
-#    foreach my $nivel1 (@$nivel1_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
-#           push(@id1_array,$nivel1->cat_nivel1->id1);
-#       }
-#    }
-
 	#se sacan los repetidos
    foreach my $nivel2 (@$nivel2_repetible){
       if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
@@ -1425,9 +1407,6 @@ sub busquedaCombinada_newTemp{
 
    my $cant_total = 	$nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + 
 						$nivel3_repetible_count->[0]->agregacion_temp;
-
-
-   $obj_for_log->{'cantidad'}= $cant_total;
 
    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
@@ -1518,7 +1497,7 @@ sub logBusqueda{
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 																			$params->{'loggedinuser'},
 																			$params->{'type'},
-                                                         $session->param('browser'),
+                                                         					$session->param('browser'),
 																			\@search_array
 														);
 }

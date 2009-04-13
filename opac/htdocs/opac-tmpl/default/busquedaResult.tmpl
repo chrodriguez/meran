@@ -41,10 +41,12 @@
 			id="[% id1 %]">
 		</td>
 	[% END %]
-		<td class="click" onClick="detalle([% id1 %])" title="Mostrar Detalle">	
+		<td class="click" title="Mostrar Detalle">	
 		  [% IF titulo %]
 
-			[% titulo %]
+			<a href="/cgi-bin/koha/opac-detail.pl?id1=[% id1 %]" title="Mostrar Detalle" class="click" >
+				[% titulo %]
+			</a>
 
 		  [% ELSE %]&nbsp;[% END %]
 		</td>

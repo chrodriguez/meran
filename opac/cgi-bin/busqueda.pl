@@ -29,7 +29,7 @@ if($obj ne ""){
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj);
+my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 

@@ -12,27 +12,27 @@
 
 <!--*****************************************MARC DETAIL*****************************************************  -->
 <ul>
-<!-- TMPL_LOOP NAME="loopnivel2" -->
+[% FOREACH loopnivel2 %]
 
-<!-- TMPL_LOOP NAME="marcResult" -->
+[% marcResult %]
 
-  <!-- TMPL_IF NAME="campoMARC" -->
+  [% IF campoMARC %]
 	<li class="MARCheader">
-	<!-- TMPL_VAR NAME="campoMARC" -->&nbsp;<!-- TMPL_VAR NAME="nombreCampo" -->
+	[% campoMARC %]&nbsp;[% nombreCampo %]
 	</li>
-  <!-- /TMPL_IF -->  
+  [% END %]  
 
-  <!-- TMPL_IF NAME="subcampo" -->
-    <!-- TMPL_IF NAME="dato" -->
+  [% IF subcampo %]
+	[% IF dato %]
 	<li class="detalleMARC">
-	&nbsp;&nbsp;<!-- TMPL_VAR NAME="subcampo" -->
-	&nbsp;<!-- TMPL_VAR NAME="librarian" -->: &nbsp;<b><!-- TMPL_VAR NAME="dato" --></b>
+	&nbsp;&nbsp;[% subcampo %]
+	&nbsp;[% librarian %]: &nbsp;<b>[% dato %]</b>
 	</li>
-    <!-- /TMPL_IF -->
-  <!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+    [% END %]
+  [% END %]
+[% END %]
 
-<!-- /TMPL_LOOP -->
+[% END %]
 </ul>
 
 

@@ -300,8 +300,6 @@ sub detalleNivel2OPAC{
 		$grupoInd++;
 
 	
-	print A "\n";
-	
   	}#end foreach my $nivel2
 	return @result;
 }

@@ -11,7 +11,7 @@
 function reservar(id1, id2){
 
 	objAH=new AjaxHelper(updateInfoReserva);
-//   	objAH.debug= true;
+   	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-reserve.pl';
 	objAH.id1= id1;
