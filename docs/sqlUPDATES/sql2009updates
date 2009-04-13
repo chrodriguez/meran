@@ -638,3 +638,5 @@ ALTER TABLE `cat_nivel2_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL
 ALTER TABLE `cat_nivel3_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
 
 ALTER TABLE `cat_nivel3` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `rep_busqueda` CHANGE `fecha` `fecha` VARCHAR( 12 ) NOT NULL ;

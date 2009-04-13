@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         idBusqueda => { type => 'serial', not_null => 1 },
         id_socio   => { type => 'integer' },
-        fecha      => { type => 'timestamp', not_null => 1 },
+        fecha      => { type => 'varchar', length => 12, not_null => 1 },
     ],
 
     primary_key_columns => [ 'idBusqueda' ],
@@ -28,8 +28,8 @@ __PACKAGE__->meta->setup(
 
 sub agregar{
 
-   my $self = shift;
-   my $nro_socio = @_;
+   my ($self) = shift;
+   my ($nro_socio) = @_;
    $self->setId_socio($nro_socio);
    $self->setFecha(C4::AR::Utilidades::getToday());
    $self->save();
@@ -37,33 +37,33 @@ sub agregar{
 
 sub getIdBusqueda{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->idBusqueda);
 }
 
 sub getId_socio{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->id_socio);
 }
 
 sub getFecha{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->fecha);
 }
 
 sub setId_socio{
 
-   my $self = shift;
-   my $nro_socio = @_;
+   my ($self) = shift;
+   my ($nro_socio) = @_;
    $self->id_socio($nro_socio);
 }
 
 sub setFecha{
 
-   my $self = shift;
-   my $fecha = @_;
+   my ($self) = shift;
+   my ($fecha) = @_;
    $self->fecha($fecha);
 }
 

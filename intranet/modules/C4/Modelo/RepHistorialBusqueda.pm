@@ -13,17 +13,18 @@ __PACKAGE__->meta->setup(
         campo              => { type => 'varchar', length => 100, not_null => 1 },
         valor              => { type => 'varchar', length => 100, not_null => 1 },
         tipo               => { type => 'varchar', length => 10 },
-        agent              => { type => 'varchar'},
+        agent              => { type => 'varchar', length => 500},
     ],
 
    primary_key_columns => [ 'idHistorial' ],
+
    relationships => [
          busqueda =>  {
             class       => 'C4::Modelo::RepBusqueda',
             key_columns => { idBusqueda => 'idBusqueda' },
             type        => 'one to one',
       },
-         
+
     ],
 );
 
@@ -31,19 +32,20 @@ __PACKAGE__->meta->setup(
 sub agregarSimple{
    
    my $self = shift;
-   my($id_rep_busqueda,$tipo_busqueda,$valor,$desde)=@_;
+   my($id_rep_busqueda,$tipo_busqueda,$valor,$desde,$user_agent)=@_;
 
    $self->setIdBusqueda($id_rep_busqueda);
    $self->setCampo($tipo_busqueda);
    $self->setValor($valor);
    $self->setTipo($desde);
-   $self->save();
+   $self->setAgent($user_agent);
+   $self->save;
 
 }
 
 
 sub agregar{
-   
+
    my $self = shift;
    my($nro_socio,$desde,$http_user_agent,$search_array)=@_;
 
@@ -52,140 +54,137 @@ sub agregar{
       $rep_busqueda->agregar($nro_socio);
 
    foreach my $search (@$search_array){
-      C4::AR::Utilidades::printHASH($search);
+
+      if (!C4::AR::Utilidades::isBrowser($http_user_agent)) { 
+            $http_user_agent =  'ROBOT';
+      }
 
       my $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
-
       if (C4::AR::Utilidades::validateString($search->{'keyword'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'keyword', $search->{'keyword'}, $desde);
+#EN CADA IF HAY QUE CREAR DE NUEVO SINO SOLAMENTE SE ACTUALIZA
+         $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'keyword', $search->{'keyword'}, $desde,$http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'dictionary'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'dictionary', $search->{'dictionary'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'dictionary', $search->{'dictionary'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'virtual'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'virtual', $search->{'virtual'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'virtual', $search->{'virtual'}, $desde,$http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'signature'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'signature', $search->{'signature'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'signature', $search->{'signature'}, $desde, $http_user_agent);
       }  
    
       if (C4::AR::Utilidades::validateString($search->{'analytical'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'analytical', $search->{'analytical'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'analytical', $search->{'analytical'}, $desde,$http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'id3'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'id3', $search->{'id3'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'id3', $search->{'id3'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'class'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'class', $search->{'class'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'class', $search->{'class'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'subjectitems'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectitems', $search->{'subjectitems'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectitems', $search->{'subjectitems'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'isbn'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'isbn', $search->{'isbn'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'isbn', $search->{'isbn'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'subjectid'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectid', $search->{'subjectid'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'subjectid', $search->{'subjectid'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'autor'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'autor', $search->{'autor'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'autor', $search->{'autor'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'titulo'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'titulo', $search->{'titulo'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'titulo', $search->{'titulo'}, $desde, $http_user_agent);
       }
    
       if (C4::AR::Utilidades::validateString($search->{'tipo_documento'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'tipo_documento', $search->{'tipo_documento'}, $desde);
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'tipo_documento', $search->{'tipo_documento'}, $desde, $http_user_agent);
       }
 
       if (C4::AR::Utilidades::validateString($search->{'barcode'}) ){
-         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'barcode', $search->{'barcode'}, $desde);
-      }
-   
-      if( !C4::AR::Utilidades::isBrowser($http_user_agent) ){
-            $http_user_agent= 'ROBOT';
+         $historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'barcode', $search->{'barcode'}, $desde, $http_user_agent);
       }
 
-      $historial_temp->setAgent($http_user_agent);
-
-      $historial_temp->save();
    }
 
 }
 
 sub getIdBusqueda{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->idBusqueda);
 }
 
 sub setIdBusqueda{
 
-   my $self = shift;
-   my $id_busqueda = @_;
+   my ($self) = shift;
+   my ($id_busqueda) = @_;
    $self->idBusqueda($id_busqueda);
 }
 
 
 sub getAgent{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->agent);
 }
 
 sub setAgent{
 
-   my $self = shift;
-   my $http_user_agent = @_;
+   my ($self) = shift;
+   my ($http_user_agent) = @_;
    $self->agent($http_user_agent);
 }
 
 sub getCampo{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->campo);
 }
 
 sub setCampo{
 
-   my $self = shift;
-   my $campo = @_;
+   my ($self) = shift;
+   my ($campo) = @_;
    $self->campo($campo);
 }
 
 sub getValor{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->valor);
 }
 
 sub setValor{
 
-   my $self = shift;
-   my $valor = @_;
+   my ($self) = shift;
+   my ($valor) = @_;
    $self->valor($valor);
 }
 
 sub getTipo{
 
-   my $self = shift;
+   my ($self) = shift;
    return ($self->tipo);
 }
 
 sub setTipo{
 
-   my $self = shift;
-   my $tipo = @_;
+   my ($self) = shift;
+   my ($tipo) = @_;
    $self->tipo($tipo);
 }
 

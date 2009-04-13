@@ -33,20 +33,16 @@ $search->{'class'}= $tipo_documento;
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$cantR,$search->{'keyword'});
+$obj->{'type'} = 'INTRA';
+
+my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$cantR,$search->{'keyword'},$session,$obj);
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 
 #se arma el arreglo con la info para mostrar en el template
-$obj->{'cantidad'}= $cantidad;
-$obj->{'loggedinuser'}= $session->{'loggedinuser'};
+
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
 #se loguea la busqueda
-
-# FIXME RRRRRRRRRRRRRRRRRE FIXED, ARREGLAR
-
-$obj->{'type'} = 'INTRA';
-C4::AR::Busquedas::logBusqueda($obj, $session);
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);

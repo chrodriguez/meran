@@ -1312,7 +1312,7 @@ sub busquedaAvanzada_newTemp{
 
 sub busquedaCombinada_newTemp{
 
-   my ($ini,$cantR,$string) = @_;
+   my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
    
    my @filtros;
 
@@ -1426,6 +1426,11 @@ sub busquedaCombinada_newTemp{
    my $cant_total = 	$nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + 
 						$nivel3_repetible_count->[0]->agregacion_temp;
 
+
+   $obj_for_log->{'cantidad'}= $cant_total;
+
+   C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+
    return ($cant_total,@id1_array);
 }
 
@@ -1445,7 +1450,7 @@ sub t_loguearBusqueda {
 
 #     ($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
       $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
-      $db->commit;   
+      $db->commit;
    };
 
    if ($@){
@@ -1458,7 +1463,7 @@ sub t_loguearBusqueda {
       $codMsg= 'R011';
    }
    $db->{connect_options}->{AutoCommit} = 1;
-   
+
 
    my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
    return ($error, $codMsg, $message);
@@ -1472,6 +1477,8 @@ sub logBusqueda{
 	#la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
 
 	my @search_array;
+
+   $params->{'loggedinuser'}= $session->param('nro_socio');
 	my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
 	my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
    C4::AR::Debug::debug($params->{'type'});
