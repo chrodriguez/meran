@@ -40,9 +40,9 @@
 	<tr class="inputFontNormal">
 		<td>&nbsp;</td>
 		<td>
-                    [% IF amazon_cover %]
-                        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
-                    [% END %]
+		[% IF amazon_cover %]
+			<img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
+		[% END %]
 		</td>
 		<td>
 			<!--<a class="click" onClick="mostrarDetalle('[% id1 %]');" title="Mostrar Detalle">
@@ -63,15 +63,14 @@
 		<td>
 			[% FOREACH grupos %]
 				[% IF edicion %]
-                                    [% edicion %] &nbsp;
-                                [% END %]
-                                [% IF anio_publicacion %]
-                                    ([% anio_publicacion %])
-                                [% END %]
+					[% edicion %] &nbsp;
+				[% END %]
+				[% IF anio_publicacion %]
+					([% anio_publicacion %])
+				[% END %]
 				[% IF volume %]
-                                    t [% volume %]
-                                [% END %]
-                                <br>
+					t [% volume %]
+				[% END %]<br>
 			[% END %]
 		</td>
 

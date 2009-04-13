@@ -35,10 +35,8 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
-$obj->{'loggedinuser'}= $session->{'loggedinuser'};
+$obj->{'loggedinuser'}= $session->param('nro_socio');
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
-#se loguea la busqueda
-C4::AR::Busquedas::logBusqueda($obj, $session);
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);

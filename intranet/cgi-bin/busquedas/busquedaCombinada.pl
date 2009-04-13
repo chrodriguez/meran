@@ -40,13 +40,13 @@ my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$c
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 
 #se arma el arreglo con la info para mostrar en el template
-
+$obj->{'cantidad'}= $cantidad;
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
 #se loguea la busqueda
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
-$t_params->{'cantidad'}=$cantidad;
+$t_params->{'cantidad'}= $cantidad;
 
 if($outside) {
     $t_params->{'HEADERS'}= 1;

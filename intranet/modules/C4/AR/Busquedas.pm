@@ -1563,7 +1563,7 @@ sub armarInfoNivel1{
 	if($cantidad > 0){
 	#si busquedaCombianda devuelve algo se busca la info siguiente
 		foreach my $id1 (@resultId1) {
-	
+	C4::AR::Debug::debug("procesando id1: ".$id1);
 			$result{$i}->{'id1'}= $id1;
 			$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
 			$result{$i}->{'titulo'}= $nivel1->getTitulo;
@@ -1587,6 +1587,7 @@ sub armarInfoNivel1{
 	my @keys=keys %result;
 	@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
 	foreach my $row (@keys){
+C4::AR::Debug::debug("row: ".$result{$row});
 		push (@resultsarray, $result{$row});
 	}
 	
