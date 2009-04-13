@@ -1128,42 +1128,6 @@ sub getNombreLocalidad{
 	else{return "";}
 }
 
-
-sub t_loguearBusqueda {
-
-	my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
-	my $paramsReserva;
-	my ($error, $codMsg,$paraMens);
-	$desde = $desde || 'SIN_TIPO';
-	my $historial = C4::Modelo::RepHistorialBusqueda->new();
-   my $db = $historial->db;
-
-   C4::AR::Debug::debug("ENTRO A LOGUEO DE BUSQUEDA");
-   $db->{connect_options}->{AutoCommit} = 0;
-	eval {
-
-      C4::AR::Debug::debug("ENTRO A LA TRANSACCION DE LOGUEO DE BUSQUEDA");
-# 		($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
-      $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
-		$db->commit;	
-	};
-
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B407';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,$desde);
-		eval {$db->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R011';
-	}
-	$db->{connect_options}->{AutoCommit} = 1;
-	
-
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
-	return ($error, $codMsg, $message);
-}
-
 # sub loguearBusqueda{
 # 	my ($borrowernumber,$type,$search_array)=@_;
 # 
@@ -1466,6 +1430,41 @@ sub busquedaCombinada_newTemp{
 }
 
 
+
+sub t_loguearBusqueda {
+
+   my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
+   my $paramsReserva;
+   my ($error, $codMsg,$paraMens);
+   $desde = $desde || 'SIN_TIPO';
+   my $historial = C4::Modelo::RepHistorialBusqueda->new();
+   my $db = $historial->db;
+
+   $db->{connect_options}->{AutoCommit} = 0;
+   eval {
+
+#     ($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
+      $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
+      $db->commit;   
+   };
+
+   if ($@){
+      #Se loguea error de Base de Datos
+      $codMsg= 'B407';
+      &C4::AR::Mensajes::printErrorDB($@, $codMsg,$desde);
+      eval {$db->rollback};
+      #Se setea error para el usuario
+      $error= 1;
+      $codMsg= 'R011';
+   }
+   $db->{connect_options}->{AutoCommit} = 1;
+   
+
+   my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
+   return ($error, $codMsg, $message);
+}
+
+
 sub logBusqueda{
 	my ($params,$session) = @_;
 	#esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
@@ -1475,9 +1474,8 @@ sub logBusqueda{
 	my @search_array;
 	my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
 	my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
-
-	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'OPAC')) ){
-
+   C4::AR::Debug::debug($params->{'type'});
+	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
 		if($params->{'codBarra'} ne ""){
 			my $search;
 			$search->{'barcode'}= $params->{'codBarra'};
@@ -1501,12 +1499,19 @@ sub logBusqueda{
 			$search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
 			push (@search_array, $search);
 		}
+
+      
+      if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
+         my $search;
+         $search->{'keyword'}= $params->{'keyword'};
+         push (@search_array, $search);
+      }
 	}
-	
+
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 																			$params->{'loggedinuser'},
 																			$params->{'type'},
-                                                         $session->{'HTTP_USER_AGENT'},
+                                                         $session->param('browser'),
 																			\@search_array
 														);
 }
@@ -1518,7 +1523,7 @@ sub armarBuscoPor{
 	my $buscoPor="";
 	
 	if($params->{'keyword'} ne ""){
-		$buscoPor.="Busqueda combinada: ".$params->{'keyword'}."&";
+		$buscoPor.="Busqueda combinada2: ".$params->{'keyword'}."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){

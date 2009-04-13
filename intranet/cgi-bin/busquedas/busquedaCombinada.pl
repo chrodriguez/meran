@@ -42,6 +42,10 @@ $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->{'loggedinuser'};
 my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj,@resultId1);
 #se loguea la busqueda
+
+# FIXME RRRRRRRRRRRRRRRRRE FIXED, ARREGLAR
+
+$obj->{'type'} = 'INTRA';
 C4::AR::Busquedas::logBusqueda($obj, $session);
 
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;

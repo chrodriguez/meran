@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         campo              => { type => 'varchar', length => 100, not_null => 1 },
         valor              => { type => 'varchar', length => 100, not_null => 1 },
         tipo               => { type => 'varchar', length => 10 },
-        HTTP_USER_AGENT    => { type => 'varchar', length => 255 },
+        agent              => { type => 'varchar'},
     ],
 
    primary_key_columns => [ 'idHistorial' ],
@@ -32,7 +32,7 @@ sub agregarSimple{
    
    my $self = shift;
    my($id_rep_busqueda,$tipo_busqueda,$valor,$desde)=@_;
-C4::AR::Debug::debug("agregar simple");
+
    $self->setIdBusqueda($id_rep_busqueda);
    $self->setCampo($tipo_busqueda);
    $self->setValor($valor);
@@ -50,8 +50,9 @@ sub agregar{
    my $db = $self->db;
    my $rep_busqueda = C4::Modelo::RepBusqueda->new(db => $db);
       $rep_busqueda->agregar($nro_socio);
-   C4::AR::Debug::debug("ENTRO A AGREGAR");
+
    foreach my $search (@$search_array){
+      C4::AR::Utilidades::printHASH($search);
 
       my $historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
 
@@ -114,7 +115,7 @@ sub agregar{
       if( !C4::AR::Utilidades::isBrowser($http_user_agent) ){
             $http_user_agent= 'ROBOT';
       }
-      
+
       $historial_temp->setAgent($http_user_agent);
 
       $historial_temp->save();
@@ -139,14 +140,14 @@ sub setIdBusqueda{
 sub getAgent{
 
    my $self = shift;
-   return ($self->HTTP_USER_AGENT);
+   return ($self->agent);
 }
 
 sub setAgent{
 
    my $self = shift;
    my $http_user_agent = @_;
-   $self->HTTP_USER_AGENT($http_user_agent);
+   $self->agent($http_user_agent);
 }
 
 sub getCampo{
