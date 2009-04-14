@@ -72,16 +72,13 @@ function crearForm(url,params){
 /*
  * zebra
  * Le da la clase de estilo a las filas de las tabla, dependiendo si es impar o par.
- * necesita jquery para funcionar, se le tiene que pasar el id de la tabla a la que se
+ * necesita jquery para funcionar, se le tiene que pasar el nombre de la clase de la tabla a la que se
  * le quiere realizar la zebra
  */
+function zebra(classObj){
 
-//dibuja la zebra para los resultados
-function zebra(IdObj){
-
-	$("."+ IdObj + " tr:nth-child(even)").addClass("impar");
-  	$("."+ IdObj + " tr:gt(0):even").addClass("par");
-
+	$("."+ classObj + " tr:gt(0):odd").addClass("impar");
+	$("."+ classObj + " tr:gt(0):even").addClass("par");		
 }
 
 

@@ -1,17 +1,15 @@
 [% INCLUDE 'opac-top.inc' %]
 
 <script>
+
 	function MARCDetail(id3, IdDivDetalle, IdDivMARC){
 
-	var params= 'id3=' + id3;
+		var params= 'id3=' + id3;
 
 		$.ajax({	type: "POST", 
 				url: "opac-MARCDetail.pl",
 				data: params,
-	// 			beforeSend: Init,
 				complete: function(ajax){
-						//seteo el estado en cached
-	// 					$('#content'+IdDivMARC).attr('state', 'cached');
 						//se oculta el Detalle Normal
 						$('#'+IdDivDetalle).slideUp('slow');
 						//se agrega resultado MARC
@@ -32,6 +30,11 @@
 		//se muestra el Detalle Normal
 		$('#'+IdDivDetalle).slideDown('slow');
 	}
+
+
+	$(document).ready(function(){
+		zebra('tablaDetalleNivel3');
+	});
 
 </script>
 
@@ -72,6 +75,7 @@
 [% END %]
 </ul>
 
+<!-- FIXME faltan los encabezados -->
 [% FOREACH loopEncabezados %]
 	<div align="left">
 		<span class="Encabezados">[% encabezado %]</span>

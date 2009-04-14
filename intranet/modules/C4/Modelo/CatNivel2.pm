@@ -430,6 +430,29 @@ sub toMARC{
 	return (\@marc_array);
 }
 
+=item
+Esta funcion devuelve los campos de nivel 2 y nivel2Repetible mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub nivel2CompletoToMARC{
+    my ($self) = shift;
+
+	my (@marc_array)= $self->toMARC;
+	my ($nivel2Repetible_object_array) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( 
+																						query => [ id2 => { eq => $self->getId2 } ]
+																		);
+	
+	foreach my $marc_object (@$nivel2Repetible_object_array){
+		my %hash;
+		$hash{'campo'}= $marc_object->getCampo;
+		$hash{'subcampo'}= $marc_object->getSubcampo;
+		$hash{'dato'}= $marc_object->getDato;
+# FIXME faltan los headers
+ 		push(@marc_array, \%hash);
+	}
+	
+	return (\@marc_array);
+}
+
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 

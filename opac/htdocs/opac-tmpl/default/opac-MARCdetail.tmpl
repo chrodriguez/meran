@@ -12,26 +12,18 @@
 
 <!--*****************************************MARC DETAIL*****************************************************  -->
 <ul>
-[% FOREACH loopnivel2 %]
+[% FOREACH MARCDetail_array %]
 
-[% marcResult %]
-
-  [% IF campoMARC %]
+	[% IF campoMARC %]
 	<li class="MARCheader">
 	[% campoMARC %]&nbsp;[% nombreCampo %]
 	</li>
-  [% END %]  
+	[% END %]  
 
-  [% IF subcampo %]
-	[% IF dato %]
 	<li class="detalleMARC">
-	&nbsp;&nbsp;[% subcampo %]
+	[% campo %],&nbsp;&nbsp;[% subcampo %]
 	&nbsp;[% librarian %]: &nbsp;<b>[% dato %]</b>
 	</li>
-    [% END %]
-  [% END %]
-[% END %]
-
 [% END %]
 </ul>
 

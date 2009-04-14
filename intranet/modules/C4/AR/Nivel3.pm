@@ -312,6 +312,8 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
 		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
 		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
+		$hash_nivel2->{'DivMARC'}="MARCDetail".$i;
+		$hash_nivel2->{'DivDetalle'}="Detalle".$i;
 	
 		push(@nivel2, $hash_nivel2);
 	}

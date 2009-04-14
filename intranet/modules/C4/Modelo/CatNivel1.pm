@@ -179,7 +179,7 @@ sub setTimestamp{
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 =item
-Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
+Esta funcion devuelve los campos de nivel 1 mapeados en un arreglo de {campo, subcampo, dato}
 =cut
 sub toMARC{
     my ($self) = shift;
@@ -213,6 +213,29 @@ sub toMARC{
 	return (\@marc_array);
 }
 
+
+=item
+Esta funcion devuelve los campos de nivel 1 y nivel1Repetible mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub nivel1CompletoToMARC{
+    my ($self) = shift;
+
+	my (@marc_array)= $self->toMARC;
+	my ($nivel1Repetible_object_array) = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( 
+																						query => [ id1 => { eq => $self->getId1 } ]
+																		);
+	
+	foreach my $marc_object (@$nivel1Repetible_object_array){
+		my %hash;
+		$hash{'campo'}= $marc_object->getCampo;
+		$hash{'subcampo'}= $marc_object->getSubcampo;
+		$hash{'dato'}= $marc_object->getDato;
+# FIXME faltan los headers
+ 		push(@marc_array, \%hash);
+	}
+	
+	return (\@marc_array);
+}
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 1;

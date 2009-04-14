@@ -32,26 +32,6 @@ function updateInfoReserva(responseText){
 }
 
 /*
-* Funcion que muestra el div de mensajes para usuario
-*/
-// // ver si se usa
-// function showMessage(mensaje){
-// 	if(mensaje != null){
-// 		$('#mensajes').slideDown();
-// 		$('#mensajes font').html(objJSON.message);
-// 	}
-// }
-
-/*
-* Funcion que oculta el div de mensajes para el usuario
-*/
-// // ver si se usa
-// function hideMessage(){
-// 	$('#mensajes').slideUp();
-// 	$('#mensajes font').html('');
-// }
-
-/*
 * Funcion Ajax que cancela una reserva
 */
 function cancelar(id_reserva){

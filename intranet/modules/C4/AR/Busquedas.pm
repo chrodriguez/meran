@@ -515,6 +515,32 @@ sub MARCDetail{
 
 	my ($id3,$tipo)= @_;
 
+	my @MARC_result;
+	my $marc_array_nivel1;
+	my $marc_array_nivel2;
+	my $marc_array_nivel3;
+
+	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
+	if($nivel3_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel3');
+		($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
+	}
+
+	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
+	
+	if($nivel2_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel2');
+		($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
+	}
+	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
+	if($nivel1_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel1');
+		($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
+	}
+
+	push(@$marc_array_nivel1, $marc_array_nivel2);
+	push(@$marc_array_nivel1, $marc_array_nivel3);
+=item
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT * FROM cat_nivel3 WHERE id3=?";
 	my $sth=$dbh->prepare($query);
@@ -532,6 +558,8 @@ sub MARCDetail{
 	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2MARC($id1,$id2,$id3,$tipo,\@nivel1Loop);
 
 	return @nivel2Loop;
+=cut
+	return ($marc_array_nivel1);
 }
 
 
