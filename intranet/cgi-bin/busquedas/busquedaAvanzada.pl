@@ -29,7 +29,7 @@ my $ini= ($obj->{'ini'}||'');
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad, @resultsdata)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj);
+my ($cantidad, @resultsdata)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
