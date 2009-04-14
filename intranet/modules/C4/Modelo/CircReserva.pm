@@ -563,11 +563,10 @@ sub cancelar_reservas_no_regulares {
     $params->{'tipo'}= 'INTRA';
 
 	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
-													          query => [ estado => {ne => 'P'}, 'socio.estado.regular' =>{eq => 0}],
-															  with_objects => ['socio']);
+													          query => [ estado => {ne => 'P'}]);
 
 	foreach my $reserva (@$reservas_array_ref){
-        $reserva->cancelar_reserva($params);
+        if(! $reserva->socio->estado->regular){$reserva->cancelar_reserva($params)};
 	}
 }
 

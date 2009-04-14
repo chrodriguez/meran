@@ -22,22 +22,22 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 my $obj=$input->param('obj');
 
 my $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $bornum= $obj->{'borrowernumber'};
-my $dateformat = C4::Date::get_date_format();
-my $sanctions = hasSanctions($bornum);
+my $nro_socio= $obj->{'nro_socio'};
 
-foreach my $san (@$sanctions) {
-	if ($san->{'id3'}) {
-		my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
-		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
-	}
+my $sanciones = C4::AR::Sanciones::tieneSanciones($nro_socio);
 
-	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);
-	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
-}
+# foreach my $san (@$sanctions) {
+# 	if ($san->{'id3'}) {
+# 		my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
+# 		$san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
+# 	}
+# 
+# 	$san->{'nddate'}=format_date($san->{'enddate'},$dateformat);
+# 	$san->{'startdate'}=format_date($san->{'startdate'},$dateformat);
+# }
 
-if (@$sanctions > 0){
-	$t_params->{'sanctions'}= $sanctions;
+if (@$sanciones > 0){
+	$t_params->{'SANCIONES'}= $sanciones;
 }
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

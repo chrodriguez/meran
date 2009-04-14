@@ -281,7 +281,7 @@ my $dbh= C4::Context->dbh;
   }
 }
 
-sub getSanctionTypeCode {
+sub getSanctionTypeCode { # DEPRECATED
   #Esta funcion recupera el sanctiontypecode a partir del issuecode y el categorycode
 	my ($issuecode, $categorycode)=@_;
 	my $dbh=C4::Context->dbh;
@@ -567,4 +567,24 @@ sub DiasDeSancion {
     $sth->finish;
 
 return($amountOfDays);
+}
+
+
+sub getSanctionTypeCode {
+  #Esta funcion recupera el tipo de sancion a partir del tipo de prestamo y la categoria del usuario
+    my ($tipo_prestamo, $categoria_socio)=@_;
+
+
+  my $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (   
+                                                                    query => [ 
+                                                                            categoria_socio => { eq => $categoria_socio},
+                                                                            tipo_prestamo   => { eq => $tipo_prestamo },
+                                                                        ],
+                                    );
+    my $tipo_sancion=undef;
+    if ($tipo_sanciones_array_ref->[0])
+    {$tipo_sancion=$tipo_sanciones_array_ref->[0]->getTipo_sancion;}
+
+  return($tipo_sancion);
+
 }

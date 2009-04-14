@@ -28,7 +28,7 @@ use C4::Interface::CGI::Output;
 
 my $input=new CGI;
 
-my ($template, $session, $params) =  get_template_and_user ({
+my ($template, $session, $t_params) =  get_template_and_user ({
 			template_name	=> 'circ/devoluciones.tmpl',
 			query		=> $input,
 			type		=> "intranet",
@@ -46,13 +46,12 @@ if($obj ne ""){
 	$usuarioID=$obj->{'usuario'}->{'ID'};
 	$usuarioText=$obj->{'usuario'}->{'text'};
 
-	$template->param(
-		usuarioText => $usuarioText,
-		array	    => $array,
-		accion	    => $obj->{'accion'},
-	);
+    $t_params->{'usuarioText'}= $usuarioText;
+    $t_params->{'array'}= $array;
+    $t_params->{'accion'}= $obj->{'accion'};
+
 }
 
-$params->{'usuarioID'}= $usuarioID;
+$t_params->{'usuarioID'}= $usuarioID;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

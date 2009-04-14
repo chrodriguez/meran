@@ -1,4 +1,5 @@
 
+[% IF prestamos_cant %]
 [% USE HTML %]
 <table class="tablaPrestamos" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
         <tr>
@@ -8,7 +9,7 @@
      	</tr>
 	<tr class="tablaresultadoTitle">
         	<td width="1%" align="left" valign="top">
-		<img src="[% interface %]/[% themelang %]/images/izquierda.png">
+		<img src="[% themelang %]/images/izquierda.png">
 		</td>
 
 		<td>
@@ -26,54 +27,74 @@
                 <td>Tipo</td>
 
         	<td width="1%" align="rigth" valign="top">
-		<img src="[% interface %]/[% themelang %]/images/derecha.png">
+		<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
-        [% FOREACH issues %]
+     [% FOREACH prestamo IN PRESTAMOS %]
 	<tr class="inputFontNormal">
 		<td width="1%">&nbsp;</td>
 		<td>
-			 <input type="checkbox" name="chkboxPrestamos" value="[% id3 %]" id="[% id3 %]">
+			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 		</td>
                 <td>
-			[% HTML.escape(titulo) %]
-			[% IF unititle %]
-				:&nbsp;[% unititle %]
-			[% END %]
+                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
+                    [% prestamo.nivel3.nivel1.getTitulo %]
+                    <!--[% IF unititle %]
+                        :&nbsp;[% HTML.escape(unititle) %]
+                    [% END %]-->
+                </a>
 		</td>
             	<td>
-			[% autor %]
+		        [% IF prestamo.nivel3.nivel1.getAutor %]
+                    [% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
 		</td>
             	<td align="center">
-            		<a class="inputFontNormal" href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% id1 %]">
-				[% barcode %]</a>
+                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+                [% prestamo.nivel3.getBarcode %]</a>
                 </td>
           	<td align="center">
-			[% date_due %]
+			            [% IF prestamo.getFecha_prestamo %] 
+                [% prestamo.getFecha_prestamo_formateada %]
+            [% ELSE %]
+                - 
+            [% END %]
 		</td>
            	<td align="center">
-                 	<font  color="[% color %]">
-                	[% date_fin %]
-               		</font>
+                [% IF prestamo.getFecha_vencimiento %]
+                <font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento_formateada %]</font>
+                [% ELSE %]
+                    - 
+                [% END %]
                	</td>
           	<td  align="center">
-			[% issuetype %]
+                [% IF prestamo.tipo.id_tipo_prestamo %]
+                        [% prestamo.tipo.getDescripcion %]
+                [% END %]
 		</td>
         	<td width="1%">&nbsp;</td>
 	</tr>
         [% END %]
 </table>
 
-[% IF cantIssues %]
-	<center>
-		<input type="image" 
-			src="[% interface %]/[% themelang %]/images/item-return.png" 
-			title="Devolver" onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen)">
-	
-		<input 	type="image" 
-			src="[% interface %]/[% themelang %]/images/renew.png" 
-			title="Renovar" onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen)">
-	</center>
-[% END %]
+    <p align="center">
+    [% IF prestamos_cant %] 
+        <input type="image" BORDER=0 
+        src="[% themelang %]/images/item-return.png" 
+        title="Devolver" 
+        onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
+    [% END %]   
+    
+    [% IF socio.esRegular %]
+        [% UNLESS socio.estaSancionado %]
+            <input type="image" 
+            src="[% themelang %]/images/renew.png" title="Renovar" 
+            onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">
+        [% END %]
+    [% END %]
+    </p>
 
 <br>
+[% END %]

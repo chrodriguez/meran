@@ -1,4 +1,4 @@
-[% IF sanctions %]
+[% IF SANCIONES %]
 	<br>
 	<table class="tablaSanciones" border=0  width="100%"  cellpadding='0' cellspacing='0'>
 	<tr valign=middle class="tablaresultadoTitle" width="100%">
@@ -17,15 +17,15 @@
 		<td height=25>&nbsp;</td>
 		<td class="inputFontNormal">
 		<ul><font class="fontmsg">
-			[% FOREACH sanctions %]
-				[% IF description %]
+			[% FOREACH sancion IN SANCIONES %]
 					<li>
-						[% description %] - 
-                                                    [% "Desde el" | i18n %] [% startdate %] 
-                                                    [% "hasta el" | i18n %] [% enddate %]
+					[% IF sancion.tipo_sancion %] [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %]* ts.getTipo_prestamo *[% END %]
+                    [% ELSE %]
+                    [% "Reserva no retirada" | i18n %]
+                    [% END %] - 
+                                                    [% "Desde el" | i18n %] [% sancion.getFecha_comienzo_formateada %] 
+                                                    [% "hasta el" | i18n %] [% sancion.getFecha_final_formateada %]
 					</li>
-
-				[% END %]
 			[% END %]
 			</font>
 		</ul>

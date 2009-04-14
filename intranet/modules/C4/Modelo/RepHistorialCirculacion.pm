@@ -17,9 +17,9 @@ __PACKAGE__->meta->setup(
         responsable    => { type => 'varchar', length => 20, not_null => 1 },
         id_ui	       => { type => 'varchar', length => 4 },
         timestamp      => { type => 'timestamp', not_null => 1 },
-        fecha           => { type => 'date', default => '0000-00-00', not_null => 1 },
+        fecha           => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         nota           => { type => 'varchar', length => 50 },
-        fecha_fin       => { type => 'date' },
+        fecha_fin       => { type => 'varchar' },
         tipo_prestamo      => { type => 'character', length => 2 },
     ],
 

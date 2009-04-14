@@ -470,6 +470,23 @@ sub getPersona{
     return ($persona);
 }
 
+sub estaSancionado {
+  #Esta funcion determina si un usuario ($nro_socio) tiene alguna sancion
+  my ($nro_socio)=@_;
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  
+  my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
+                                                                    query => [ 
+                                                                            nro_socio       => { eq => $nro_socio },
+                                                                            fecha_comienzo  => { le => $hoy },
+                                                                            fecha_final     => { ge => $hoy},
+                                                                        ],
+                                    );
+  return($sanciones_array_ref->[0] || undef);
+
+}
 
 1;
 

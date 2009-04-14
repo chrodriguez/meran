@@ -34,7 +34,7 @@
 		<tr class="inputFontNormal" align="center">
 			<td height=25 >&nbsp;</td>
 			<td>
-				<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.nivel3.getBarcode %]">
+				<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 			</td>
 			<td width="14%" >
 				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
@@ -112,7 +112,7 @@
 	[% END %]	
 	
 	[% IF socio.esRegular %]
-		[% UNLESS sanctions %]
+		[% UNLESS socio.estaSancionado %]
 			<input type="image" 
 			src="[% themelang %]/images/renew.png" title="Renovar" 
 			onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">

@@ -185,7 +185,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 
 	my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 
-print A "LOOP: $loop\n";
+    C4::AR::Debug::debug("LOOP --> $loop");
 	for(my $i=0;$i<$loop;$i++){
 		$id3= $array_ids3->[$i]->{'id3'};
 		$barcode= $array_ids3->[$i]->{'barcode'};
@@ -196,15 +196,16 @@ print A "LOOP: $loop\n";
         $params{'id_prestamo'}= $id_prestamo;
 		
 		if ($accion eq 'DEVOLUCION') {
-print A "Entra al if de dev\n";
+        C4::AR::Debug::debug("DEVOLUCION");
+        C4::AR::Debug::debug("ID3: $id3");
 			my ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
 
 			#guardo los errores
 			push (@infoMessages, $Message_arrayref);
 
 		}elsif($accion eq 'RENOVACION') {
-print A "Entra al if de ren\n";
-print A "ID3: $id3\n";
+        C4::AR::Debug::debug("RENOVACION");
+        C4::AR::Debug::debug("ID3: $id3");
 			my ($Message_arrayref) = C4::AR::Prestamos::t_renovar(\%params);
 
 			#guardo los errores

@@ -1144,12 +1144,16 @@ sub t_devolver {
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;
     eval {
+        C4::AR::Debug::debug("VA A DEVOLVER");
         ($msg_object)= $prestamo->devolver($params);
         $db->commit;
+        C4::AR::Debug::debug("DEVOLVIO!!!!");
     };
     if ($@){
         #Se loguea error de Base de Datos
 #       $codMsg= 'B406';
+        C4::AR::Debug::debug("ERROR");
+
         &C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
         eval {$db->rollback};
         #Se setea error para el usuario

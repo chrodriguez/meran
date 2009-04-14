@@ -395,7 +395,7 @@ function devolver_renovar(accion){
  */
 function updateInfoDevRen(responseText){
 	cancelarDiv();
-	clearMessages()
+// 	clearMessages()
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
