@@ -1537,7 +1537,7 @@ sub armarBuscoPor{
 	my $buscoPor="";
 	
 	if($params->{'keyword'} ne ""){
-		$buscoPor.="Busqueda combinada2: ".$params->{'keyword'}."&";
+		$buscoPor.="Busqueda combinada: ".$params->{'keyword'}."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){

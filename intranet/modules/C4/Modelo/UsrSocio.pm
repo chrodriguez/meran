@@ -152,10 +152,11 @@ sub modificar{
 }
 
 sub defaultSort{
-     my ($campo)=@_;
+    my ($campo)=@_;
 
-     my $personaTemp = C4::Modelo::UsrPersona->new();
-     return ($personaTemp->sortByString($campo));
+    my $personaTemp = C4::Modelo::UsrPersona->new();
+	C4::AR::Debug::debug("UsrSocio => defaultSort => return: ".$personaTemp->sortByString($campo));
+    return ($personaTemp->sortByString($campo));
 }
 
 

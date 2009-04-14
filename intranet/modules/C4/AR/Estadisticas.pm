@@ -1011,7 +1011,7 @@ sub historialReservas {
   $queryFrom .= " 	LEFT ";
 }
 
-sub historicoCirculacion(){
+sub historicoCirculacion{
 	my ($chkfecha,$fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
 	$tipoPrestamo,$tipoOperacion)=@_;
 	

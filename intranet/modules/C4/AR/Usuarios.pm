@@ -1096,6 +1096,7 @@ sub getPersonaLike {
     return (scalar(@$personas_array_ref_count), $personas_array_ref);
 }
 
+=item
 sub getSocioLike {
     
     use C4::Modelo::UsrSocio;
@@ -1131,6 +1132,80 @@ sub getSocioLike {
 
     return (scalar(@$socios_array_ref_count), $socios_array_ref);
 }
+=cut
+
+
+sub obtenerBusquedas{
+	my ($searchstring) = @_;
+
+	my @search_array;
+	my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
+
+	foreach my  $b (@busqueda){
+# 		C4::AR::Debug::debug('buscar por: '.$b);
+		if($b ne ' '){
+# 			C4::AR::Debug::debug('agrego: '.$b);
+			push(@search_array, $b);
+		}
+	}
+
+	return (@search_array);
+}
+
+=item
+Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
+=cut
+sub getSocioLike {
+    
+    use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrSocio::Manager;
+
+    my ($socio,$orden,$ini,$cantR,$habilitados) = @_;
+    
+    my @filtros;
+    my $socioTemp = C4::Modelo::UsrSocio->new();
+
+	my @searchstring_array= obtenerBusquedas($socio);
+    
+#     if($socio ne 'TODOS'){
+#         push (	@filtros, ( or   => [ apellido => { like => $socio.'%'}, 
+# 				nro_documento => { like => $socio.'%' }, 
+# 				legajo => { like => $socio.'%' }  ]) );
+#     }
+
+	 if($socio ne 'TODOS'){
+		foreach my $s (@searchstring_array){ 
+			push (	@filtros, ( or   => [ 	apellido => { like => '%'.$s.'%'}, 
+											nro_documento => { like => '%'.$s.'%' }, 
+											legajo => { like => '%'.$s.'%' }  
+										])
+								);
+		}
+    }
+
+	if (defined($habilitados)){
+        push(@filtros, ( activo=> { eq => $habilitados}) );
+    }
+
+	my $ordenAux= $socioTemp->sortByString($orden);
+    my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
+                                                                            sort_by => ( $ordenAux ),
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+                                                                            require_objects => [ 'persona' ]
+     ); 
+
+	C4::AR::Debug::debug("getSocioLike=> orden: ".$orden);
+	C4::AR::Debug::debug("getSocioLike=> sortByString: ".$ordenAux);
+
+    #Obtengo la cant total de socios para el paginador
+    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros,
+                                                                               require_objects => [ 'persona' ]
+                                                                     );
+
+    return (scalar(@$socios_array_ref_count), $socios_array_ref);
+}
+
 
 #Verifica si un usuario es regular, todos los usuarios que no son estudiantes (ES), son regulares por defecto
 sub esRegular {
