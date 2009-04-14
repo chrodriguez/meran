@@ -709,6 +709,9 @@ Busca los datos de la tabla nivel2 y nivel2_repetibles y los devuelve en formato
 =cut
 sub buscarNivel2EnMARC{
 	my ($id1)=@_;
+# open(A, ">>/tmp/debug.txt");
+# print A "\n";
+# print A "desde buscarNivel2EnMARC \n";
 	my $dbh = C4::Context->dbh;
 	my @nivel2=&buscarNivel2PorId1($id1);
 	my $mapeo=&buscarMapeo('cat_nivel2');
@@ -722,12 +725,18 @@ sub buscarNivel2EnMARC{
 		$id2=$row->{'id2'};
 		$itemtype=$row->{'itemtype'};
 		$nivel2Comp[$i]->{'id2'}=$id2;
+# print A "			fila: ".$i."\n";
+# print A "			id2: ".$id2."\n";
+# print A "			itemtype: ".$itemtype."\n";
 		$nivel2Comp[$i]->{'itemtype'}=$itemtype;
 		foreach my $llave (keys %$mapeo){
 			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
 			$nivel2Comp[$i]->{$llave}=$dato;
+# print A "llave ".$llave."\n";
+# print A "dato ".$dato."\n";
 			$nivel2Comp[$i]->{'campo'}= $mapeo->{$llave}->{'campo'};
 			$nivel2Comp[$i]->{'subcampo'}= $mapeo->{$llave}->{'subcampo'};
+# 			$i++;
 		}
 		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
 		my $sth=$dbh->prepare($query);
@@ -744,8 +753,12 @@ sub buscarNivel2EnMARC{
 			else{
 				$nivel2Comp[$i]->{$llave}.= " *?* ".$data->{'dato'};
 			}
+# 			$i++;
+# print A "llave ".$llave."\n";
+# print A "dato ".$data->{'dato'}."\n";
 		}
  		$i++;
+# print A "*****************************************Otra HASH********************************************** \n"
 	}
 	return \@nivel2Comp;
 }
@@ -1272,7 +1285,7 @@ sub getBranch{
 
 sub busquedaAvanzada_newTemp{
 
-   my ($ini,$cantR,$params_obj, $session) = @_;
+   my ($ini,$cantR,$params_obj,$session) = @_;
    
    my @filtros;
 
@@ -1313,133 +1326,226 @@ sub busquedaAvanzada_newTemp{
                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
                                                                      );
 
+   my @id1_array;
+   
+   foreach my $nivel3 (@$nivel3_result){
+      if (!C4::AR::Utilidades::existeInArray($nivel3->getId1,@id1_array)){
+         push(@id1_array,$nivel3->getId1);
+      }
+   }
 
-	my @id1_array;
-	
-	foreach my $nivel3 (@$nivel3_result){
-# FIXME no me funciona el disctinct
-			push(@id1_array,$nivel3->getId1);
-	}
+   $params_obj->{'cantidad'}= scalar(@id1_array);
 
-   	C4::AR::Busquedas::logBusqueda($params_obj, $session);
+   C4::AR::Busquedas::logBusqueda($params_obj, $session);
+
+
 
 	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
 }
 
-
 sub busquedaCombinada_newTemp{
 
    my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
+
    
-   my @filtros;
+   my $sql_string_c3 = "FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n
+                        WHERE (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) \n ";
 
-   my $nivel3_repetible = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
-                                                            query => [
-                                                                        or =>[
-                                                                              dato => {like => '%'.$string.'%'},
-                                                                              'cat_nivel3.barcode' => {like => '%'.$string.'%'},
-                                                                              'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
-                                                                        ],
-                                                                     ],
-                                                                     limit => $cantR,
-                                                                     offset => $ini,
-                                                                     select => ['cat_nivel3.id1'],
-                                                                     distinct => 1,
-                                                                     require_objects => ['cat_nivel3'],
-                                                            );
 
-   my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
-                                                               query => [
-                                                                           or =>[
-                                                                                 dato => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel3.barcode' => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
-                                                                           ],
-                                                                        ],
-                                                                        select => ['COUNT(DISTINCT(id1)) AS agregacion_temp'],
-                                                                        require_objects => ['cat_nivel3'],
-                                                               );
+   my $sql_string_c2 = "FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n
+                        WHERE (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                           OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) \n ";
 
-   my $nivel2_repetible = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
-                                                                  query => [
-                                                                              or => [
-                                                                                 dato => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel2.soporte' => {like => '%'.$string.'%'},
-                                                                                 'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
-                                                                              ],
-                                                                           ],
-                                                                           limit => $cantR,
-                                                                           offset => $ini,
-                                                                           select => ['cat_nivel2.id1'],
-                                                                           distinct => 1,
-                                                                           require_objects => ['cat_nivel2'],
-                                                                  );
 
-   my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
-                                                                     query => [
-                                                                                 or => [
-                                                                                    dato => {like => '%'.$string.'%'},
-                                                                                    'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
-                                                                                    'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
-                                                                                    'cat_nivel2.soporte' => {like => '%'.$string.'%'},
-                                                                                    'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
-                                                                                 ],
-                                                                              ],
-                                                                              select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-                                                                              require_objects => ['cat_nivel2'],
-                                                                     );
+   my $sql_string_c1 = "FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n
+                        WHERE (c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) \n";
 
-   my $nivel1_repetible = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
-                                                                              query => [
-                                                                                          or => [
-                                                                                             dato => {like => '%'.$string.'%'},
-                                                                                             'cat_nivel1.titulo' => {like => '%'.$string.'%'},
-                                                                                             'cat_nivel1.autor' => {like => '%'.$string.'%'},
-                                                                                          ],
-                                                                                       ],
-                                                                                       limit => $cantR,
-                                                                                       offset => $ini,
-                                                                                       select => ['cat_nivel1.id1'],
-                                                                                       distinct => 1,
-                                                                                       require_objects => ['cat_nivel1'],
-                                                                              );
 
-   my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
-                                                                              query => [
-                                                                                          or => [
-                                                                                             dato => {like => '%'.$string.'%'},
-                                                                                             'cat_nivel1.titulo' => {like => '%'.$string.'%'},
-                                                                                             'cat_nivel1.autor' => {like => '%'.$string.'%'},
-                                                                                          ],
-                                                                                       ],
-                                                                                       select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-                                                                                       require_objects => ['cat_nivel1'],
-                                                                              );
+
+
+
+   my $sql_options_string = "";
+
 
    my @id1_array;
-	#se sacan los repetidos
-   foreach my $nivel2 (@$nivel2_repetible){
-      if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
-        push(@id1_array,$nivel2->cat_nivel2->id1);
-      }
+
+   my $dbh = C4::Context->dbh;
+   
+   my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1)  \n ".$sql_string_c1.$sql_options_string);
+   
+   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
+
+
+   while(my $data = $sth->fetchrow){
+      push (@id1_array,$data);
    }
 
-	#se sacan los repetidos
-   foreach my $nivel3 (@$nivel3_repetible){
-      if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
-         push(@id1_array,$nivel3->cat_nivel3->id1);
-      }
+   $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_options_string);
+   
+   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%");
+
+
+   while(my $data = $sth->fetchrow){
+      push (@id1_array,$data);
    }
 
-   my $cant_total = 	$nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + 
-						$nivel3_repetible_count->[0]->agregacion_temp;
+   $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_options_string);
+   
+   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
+
+
+   while(my $data = $sth->fetchrow){
+      push (@id1_array,$data);
+   }
+
+
+
+   my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
+
+   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,@id1_array);
+
 
    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-   return ($cant_total,@id1_array);
+
+   return ($cant_total,$resultsarray);
+
+
 }
+
+
+
+
+# sub busquedaCombinada_newTemp{
+# 
+#    my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
+#    
+#    my @filtros;
+# 
+#    my $nivel3_repetible = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
+#                                                             query => [
+#                                                                         or =>[
+#                                                                               dato => {like => '%'.$string.'%'},
+#                                                                               'cat_nivel3.barcode' => {like => '%'.$string.'%'},
+#                                                                               'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
+#                                                                         ],
+#                                                                      ],
+#                                                                      limit => $cantR,
+#                                                                      offset => $ini,
+#                                                                      select => ['cat_nivel3.id1'],
+#                                                                      distinct => 1,
+#                                                                      require_objects => ['cat_nivel3'],
+#                                                             );
+# 
+#    my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
+#                                                                query => [
+#                                                                            or =>[
+#                                                                                  dato => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel3.barcode' => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
+#                                                                            ],
+#                                                                         ],
+#                                                                         select => ['COUNT(DISTINCT(id1)) AS agregacion_temp'],
+#                                                                         require_objects => ['cat_nivel3'],
+#                                                                );
+# 
+#    my $nivel2_repetible = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
+#                                                                   query => [
+#                                                                               or => [
+#                                                                                  dato => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel2.soporte' => {like => '%'.$string.'%'},
+#                                                                                  'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
+#                                                                               ],
+#                                                                            ],
+#                                                                            limit => $cantR,
+#                                                                            offset => $ini,
+#                                                                            select => ['cat_nivel2.id1'],
+#                                                                            distinct => 1,
+#                                                                            require_objects => ['cat_nivel2'],
+#                                                                   );
+# 
+#    my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
+#                                                                      query => [
+#                                                                                  or => [
+#                                                                                     dato => {like => '%'.$string.'%'},
+#                                                                                     'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
+#                                                                                     'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
+#                                                                                     'cat_nivel2.soporte' => {like => '%'.$string.'%'},
+#                                                                                     'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
+#                                                                                  ],
+#                                                                               ],
+#                                                                               select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
+#                                                                               require_objects => ['cat_nivel2'],
+#                                                                      );
+# 
+#    my $nivel1_repetible = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
+#                                                                               query => [
+#                                                                                           or => [
+#                                                                                              dato => {like => '%'.$string.'%'},
+#                                                                                              'cat_nivel1.titulo' => {like => '%'.$string.'%'},
+#                                                                                              'cat_nivel1.autor' => {like => '%'.$string.'%'},
+#                                                                                           ],
+#                                                                                        ],
+# 
+# # FIXME Y SI DIVIDIMOS POR 3???????????????????????
+#                                                                                        limit => $cantR,
+#                                                                                        offset => $ini,
+#                                                                                        select => ['cat_nivel1.id1'],
+#                                                                                        distinct => 1,
+#                                                                                        require_objects => ['cat_nivel1'],
+#                                                                               );
+# 
+#    my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
+#                                                                               query => [
+#                                                                                           or => [
+#                                                                                              dato => {like => '%'.$string.'%'},
+#                                                                                              'cat_nivel1.titulo' => {like => '%'.$string.'%'},
+#                                                                                              'cat_nivel1.autor' => {like => '%'.$string.'%'},
+#                                                                                           ],
+#                                                                                        ],
+#                                                                                        select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
+#                                                                                        require_objects => ['cat_nivel1'],
+#                                                                               );
+# 
+#    my @id1_array;
+# # 	#se sacan los repetidos
+#    foreach my $nivel1 (@$nivel1_repetible){
+#       if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
+#           push(@id1_array,$nivel1->cat_nivel1->id1);
+#       }
+#    }
+# 
+# 	#se sacan los repetidos
+#    foreach my $nivel2 (@$nivel2_repetible){
+#       if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
+#         push(@id1_array,$nivel2->cat_nivel2->id1);
+#       }
+#    }
+# 
+# 	#se sacan los repetidos
+#    foreach my $nivel3 (@$nivel3_repetible){
+#       if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
+#          push(@id1_array,$nivel3->cat_nivel3->id1);
+#       }
+#    }
+# 
+# 
+#    my $cant_total = 	scalar(@id1_array);
+# 
+#    my $cant_temp = $nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + $nivel3_repetible_count->[0]->agregacion_temp;
+# 
+#    $obj_for_log->{'cantidad'}= $cant_total;
+# 
+#    my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,@id1_array);
+# 
+#    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+# 
+# 
+# 
+#    return ($cant_temp,$resultsarray);
+# }
 
 
 
@@ -1525,7 +1631,7 @@ sub logBusqueda{
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 																			$params->{'loggedinuser'},
 																			$params->{'type'},
-                                                         					$session->param('browser'),
+                                                         $session->param('browser'),
 																			\@search_array
 														);
 }
@@ -1549,7 +1655,7 @@ sub armarBuscoPor{
 	}
 	
 	if( $params->{'autor'} ne "" ){
-		$buscoPor.="Titulo: ".$params->{'autor'}."&";
+		$buscoPor.="Autor: ".$params->{'autor'}."&";
 	}
 
 	if( $params->{'signatura'} ne "" ){
@@ -1588,10 +1694,10 @@ sub armarInfoNivel1{
 	my $i=0;
 
    
-	if($cantidad > 0){
+# 	if($cantidad > 0){
+      my $cont = 0;
 	#si busquedaCombianda devuelve algo se busca la info siguiente
 		foreach my $id1 (@resultId1) {
-	C4::AR::Debug::debug("procesando id1: ".$id1);
 			$result{$i}->{'id1'}= $id1;
 			$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
 			$result{$i}->{'titulo'}= $nivel1->getTitulo;
@@ -1609,13 +1715,12 @@ sub armarInfoNivel1{
 	
 			$i++;
 		}
-	}
+# 	}
    
 	#se ordenan los resultados
 	my @keys=keys %result;
 	@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
 	foreach my $row (@keys){
-C4::AR::Debug::debug("row: ".$result{$row});
 		push (@resultsarray, $result{$row});
 	}
 	

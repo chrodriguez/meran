@@ -27,6 +27,9 @@ if($obj ne ""){
 }
 
 my $ini= $obj->{'ini'};
+
+$obj->{'type'} = 'OPAC';
+
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cantidad, @resultId1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);

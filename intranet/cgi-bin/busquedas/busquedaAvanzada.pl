@@ -29,14 +29,15 @@ my $ini= ($obj->{'ini'}||'');
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
+$obj->{'type'} = 'INTRA';
+
 my ($cantidad, @resultsdata)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
-$obj->{'loggedinuser'}= $session->{'loggedinuser'};
+$obj->{'loggedinuser'}= $session->param('nro_socio');
 my $array_nivel1 = C4::AR::Busquedas::armarInfoNivel1($obj,@resultsdata);
 #se loguea la busqueda
-C4::AR::Busquedas::logBusqueda($obj, $session);
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'SEARCH_RESULTS'}= $array_nivel1;

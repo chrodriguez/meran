@@ -89,6 +89,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboDeSocios
     &generarComboTipoDeOperacion
     &existeInArray
+    &paginarArreglo
     
 
 );
@@ -1722,4 +1723,40 @@ print Z "PRINT HASH de logueo de busqueda: \n";
 	return $ok;
 }
 
+
+sub paginarArreglo{
+#La variable $ini, no es el numero de pagina, sino es la posicion ya calculada (la que devuelve InitPaginador)
+   my ($ini,$cantR,@array) = @_;
+
+   my $cant_total = scalar(@array);
+
+   my $division_temp  = floor ($cant_total / $cantR);
+
+   my $resto = $cant_total - ($division_temp * $cantR);
+   
+   my $numPagina = ceil($ini / $cantR) + 1;
+
+   if ( ($numPagina > $division_temp) ){
+       @array = @array[$ini..($ini + $resto-1)];
+       C4::AR::Debug::debug("ENTRO POR INI > CON: ".scalar(@array));
+   }else{
+      @array = @array[$ini..($ini + $cantR-1)];
+      C4::AR::Debug::debug("ENTRO POR INI MENORRRRRRRRRRRRRRRRRRRRRRRr CON: ".scalar(@array))
+   }
+
+   C4::AR::Debug::debug("CANT ULTIMA PAG: ".scalar(@array));
+
+   C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
+
+   C4::AR::Debug::debug("INIIIIII: ".$ini);
+
+   C4::AR::Debug::debug("numPAGINA: ".$numPagina);
+
+   C4::AR::Debug::debug("RESTO: ".$resto);
+
+   C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
+
+   return ($cant_total,@array);
+
+}
 1;
