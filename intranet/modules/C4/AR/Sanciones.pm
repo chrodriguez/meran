@@ -211,6 +211,7 @@ sub sanctionSelect {
 }
 
 sub insertSanction {
+   #DEPRECATED paso a CircSancion
   #Esta funcion da de alta una sancion
   my ($sanctiontypecode, $reservenumber, $borrowernumber, $startdate, $enddate, $delaydays)=@_;
 
@@ -253,6 +254,7 @@ sub insertSanction {
 
  #Esta funcion da de alta una sancion pendiente 
 sub insertPendingSanction {
+   #DEPRECATED paso a CircSancion
  my ($sanctiontypecode, $reservenumber, $borrowernumber, $delaydays)=@_;
  #Hay varios casos:
  #Si no existe una tupla con una posible sancion se crea una
@@ -305,6 +307,7 @@ sub getBorrowersSanctions {
   return(@results);
 }
 
+#DEPRECATED
 #Esta funcion es para guardar un log de sobre las sanciones
 sub logSanction{
 	my ($type,$borrowernumber,$responsable,$dateEnd,$issueType)=@_;
@@ -570,7 +573,7 @@ return($amountOfDays);
 }
 
 
-sub getSanctionTypeCode {
+sub getTipoSancion{
   #Esta funcion recupera el tipo de sancion a partir del tipo de prestamo y la categoria del usuario
     my ($tipo_prestamo, $categoria_socio)=@_;
 

@@ -434,8 +434,8 @@ sub sePuedeRenovar{
 
 
 
-=item  DEPRECATED paso a CircPrestamo
-la funcion devolver recibe una hash y actualiza la tabla de prestamos,la tabla de reservas y de historicissues. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail a el borrower correspondiente.
+=item 
+la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva y de RepHistorialCirculacion. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
 =cut 
 
 sub devolver {
@@ -503,28 +503,44 @@ sub devolver {
         my $sanction=0;
         my $fechaFinSancion;
 
-# Hay que ver si devolvio el biblio a termino para, en caso contrario, aplicarle una sancion    
+# Hay que ver si devolvio el ejemplar a termino para, en caso contrario, aplicarle una sancion    
         my $daysissue=$self->tipo->getDias_prestamo;
 
         my $diasSancion= C4::AR::Sanciones::DiasDeSancion($fechaHoy, $fechaVencimiento, $self->socio->getCod_categoria, $self->getTipo_prestamo);
 
-        if ($diasSancion gt 0) {
+        if ($diasSancion > 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
-            my $tipo_sancion = getSanctionTypeCode($self->getTipo_prestamo, $self->socio->getCod_categoria);
-            if (tieneLibroVencido($nro_socio)) {
-            # El usurio tiene libros vencidos en su poder (es moroso)
+           $self->debug("SANCION!!  DIAS: $diasSancion");
+            my $tipo_sancion = C4::AR::Sanciones::getTipoSancion($self->getTipo_prestamo, $self->socio->getCod_categoria);
+
+            if ( C4::AR::Sanciones::tieneLibroVencido($nro_socio)) {
+            # El usuario tiene libros vencidos en su poder (es moroso)
+                #SE INSERTA UNA SANCION PENDIENTE (se va a hacer efectiva al devolver el ultimo libro!!)
+                $self->debug("SE INSERTA UNA SANCION PENDIENTE");
+              use C4::Modelo::CircSancion;
+                my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
+                my %paramsSancion;
+                $paramsSancion{'loggedinuser'}= $loggedinuser;
+                $paramsSancion{'tipo_sancion'}= $tipo_sancion;
+                $paramsSancion{'id_reserva'}= undef;
+                $paramsSancion{'fecha_comienzo'}= undef;
+                $paramsSancion{'fecha_final'}= undef;
+                $paramsSancion{'nro_socio'}= $nro_socio;
+                $paramsSancion{'dias_sancion'}= $diasSancion;
+                $sancion->insertar_sancion_pendiente(\%paramsSancion);
                 $hasdebts = 1;
-                insertPendingSanction($tipo_sancion, undef, $nro_socio, $diasSancion);
             }
             else{
+                #SANCION EFECTIVA
+                $self->debug("SANCION EFECTIVA");
                 my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
                 $fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$diasSancion." days",\$err),$dateformat);
-#                 insertSanction($tipo_sancion, undef, $nro_socio, $fechaHoy, $fechaFinSancion, $diasSancion);
 
                 use C4::Modelo::CircSancion;
                 my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
                 my %paramsSancion;
+                $paramsSancion{'loggedinuser'}= $loggedinuser;
                 $paramsSancion{'tipo_sancion'}= $tipo_sancion;
                 $paramsSancion{'id_reserva'}= undef;
                 $paramsSancion{'nro_socio'}= $nro_socio;
@@ -532,14 +548,9 @@ sub devolver {
                 $paramsSancion{'fecha_final'}= $fechaFinSancion;
                 $paramsSancion{'dias_sancion'}= $diasSancion;
                 $sancion->insertar_sancion(\%paramsSancion);
-
                 $sanction = 1;
-#**********************************Se registra el movimiento en historicSanction***************************
-                my $responsable= $loggedinuser;
-                logSanction('Insert',$nro_socio,$responsable,$fechaFinSancion,$tipo_sancion);
-#**********************************Fin registra el movimiento en historicSanction***************************
 
-#Se borran las reservas del usuario sancionado
+                #Se borran las reservas del usuario sancionado
                 my $reserva=C4::Modelo::CircReserva->new(db=>$self->db);
                 $reserva->cancelar_reservas_socio($loggedinuser,$nro_socio);
             }

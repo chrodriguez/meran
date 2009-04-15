@@ -193,16 +193,73 @@ sub insertar_sancion {
 		$sancion_existente->setFecha_final($fecha_final_nueva);
 		$sancion_existente->setFecha_comienzo($data_hash->{'fecha_comienzo'});
 		$sancion_existente->save();
+        
+        #**********************************Se registra el movimiento en historicSanction***************************
+        use C4::Modelo::RepHistorialSancion;
+        my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+        $data_hash->{'tipo_operacion'}= 'Actualizacion';
+        $historial_sancion->agregar($data_hash);
+        #*******************************Fin***Se registra el movimiento en historicSanction*************************
 		}
 	}
 	else {
 	#No tiene sanciones pendientes
 	$self->agregar($data_hash);
+
+     #**********************************Se registra el movimiento en historicSanction***************************
+     use C4::Modelo::RepHistorialSancion;
+     my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+     $data_hash->{'tipo_operacion'}= 'Insercion';
+     $historial_sancion->agregar($data_hash);
+     #*******************************Fin***Se registra el movimiento en historicSanction*************************
 	}
 
 
 }
 
+
+#Esta funcion da de alta una sancion pendiente 
+sub insertar_sancion_pendiente {
+    my ($self)=shift;
+    my ($data_hash)=@_;
+ #Hay varios casos:
+ #Si no existe una tupla con una posible sancion se crea una
+ #Si ya existe una posible sancion se deja la mayor
+
+ #Busco si tiene una sancion pendiente
+    use C4::Modelo::CircSancion::Manager;
+    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( db=>$self->db,
+                            query => [ nro_socio => { eq => $data_hash->{'nro_socio'} },
+                                       fecha_comienzo => { eq => undef },
+                                       fecha_final => { eq => undef }] 
+                            );
+
+
+    if (my $sancion_existente=@$sanciones_array_ref[0]){
+    #Hay sancion pendiente
+
+        if ( $sancion_existente->getDias_sancion < $data_hash->{'dias_sancion'}) {
+        #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion
+            $sancion_existente->setTipo_sancion($data_hash->{'tipo_sancion'});
+            $sancion_existente->setDias_sancion($data_hash->{'dias_sancion'});
+            $sancion_existente->save();
+            #**********************************Se registra el movimiento en historicSanction***************************
+            use C4::Modelo::RepHistorialSancion;
+            my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+            $data_hash->{'tipo_operacion'}= 'Actualizacion Pendiente';
+            $historial_sancion->agregar($data_hash);
+            #*******************************Fin***Se registra el movimiento en historicSanction*************************
+            }
+    }else { #No tiene sanciones pendientes
+            $self->agregar($data_hash);
+            #**********************************Se registra el movimiento en historicSanction***************************
+            use C4::Modelo::RepHistorialSancion;
+            my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+            $data_hash->{'tipo_operacion'}= 'Insercion Pendiente';
+            $historial_sancion->agregar($data_hash);
+            #*******************************Fin***Se registra el movimiento en historicSanction*************************
+        }
+}
 
 
 sub actualizar_sancion {
@@ -215,11 +272,10 @@ sub actualizar_sancion {
 #**********************************Se registra el movimiento en historicSanction***************************
    use C4::Modelo::RepHistorialSancion;
    my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
-   $params->{'tipo'}= 'Update';
+   $params->{'tipo_operacion'}= 'Actualizacion';
    $historial_sancion->agregar($params);
 #*******************************Fin***Se registra el movimiento en historicSanction*************************
 }
-
 
 
 1;

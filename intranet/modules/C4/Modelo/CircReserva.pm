@@ -261,6 +261,7 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 		use C4::Modelo::CircSancion;
 		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
+        $paramsSancion{'loggedinuser'}= $params->{'loggedinuser'};
 		$paramsSancion{'tipo_sancion'}= undef;
 		$paramsSancion{'id_reserva'}= $self->getId_reserva;
 		$paramsSancion{'nro_socio'}= $params->{'nro_socio'};
@@ -378,10 +379,11 @@ sub actualizarDatosReservaEnEspera{
 	$paramsSancion{'fecha_comienzo'}= $startdate;
 	$paramsSancion{'fecha_final'}= $enddate;
 	$paramsSancion{'dias_sancion'}= undef;
+    $paramsSancion{'loggedinuser'}= $loggedinuser;
 	$sancion->insertar_sancion(\%paramsSancion);
 	# Se registra la actualizacion
 	$paramsSancion{'id3'}= $self->getId3;
-	$paramsSancion{'loggedinuser'}= $loggedinuser;
+
 	$sancion->actualizar_sancion(\%paramsSancion);
 	#
 
