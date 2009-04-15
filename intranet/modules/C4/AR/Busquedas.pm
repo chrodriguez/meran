@@ -1350,14 +1350,6 @@ sub getBranch{
 sub busquedaAvanzada_newTemp{
 
    my ($ini,$cantR,$params_obj,$session) = @_;
-<<<<<<< .mine
-
-	C4::AR::Debug::debug('busquedaAvanzada_newTemp=> ini: '.$ini);
-	C4::AR::Debug::debug('busquedaAvanzada_newTemp=> cantR: '.$cantR);
-   
-   my @filtros;
-=======
->>>>>>> .r1305
 
    my $dbh = C4::Context->dbh;
 
@@ -1428,72 +1420,97 @@ C4::AR::Debug::debug($body_string.$filtros);
 
 sub busquedaCombinada_newTemp{
 
-   my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
+	my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
+	
+	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
+	
+	
+	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
+	my $sql_string_c3_where = " WHERE ";
+	
+	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n ";
+	my $sql_string_c2_where = " WHERE ";
+	
+	my $sql_string_c1 = "		FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n ";
+	my $sql_string_c1_where = " WHERE ";
+	my @bind;
+ 	
+	foreach $string (@searchstring_array){
+		$sql_string_c3_where .= " ( (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
+		$sql_string_c2_where .= " ( (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+								OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
+		$sql_string_c1_where .= " (	(c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
+	}
+	
+	$sql_string_c3_where .= " TRUE ";
+	$sql_string_c2_where .= " TRUE ";
+	$sql_string_c1_where .= " TRUE ";
 
+   	my $sql_options_string = "";
+	my @id1_array;
+
+	my $dbh = C4::Context->dbh;
+	
+	my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1)  \n ".$sql_string_c1.$sql_string_c1_where);
    
-   my $sql_string_c3 = "FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n
-                        WHERE (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) \n ";
+	foreach $string (@searchstring_array){
 
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+	}
+# 	$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
+	$sth->execute(@bind);
+			
+	while(my $data = $sth->fetchrow){
+		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+ 			push (@id1_array,$data);
+		}
+	}
 
-   my $sql_string_c2 = "FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n
-                        WHERE (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-                           OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) \n ";
+	$sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
 
+	my @bind;
+	foreach $string (@searchstring_array){
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+# 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%");
+	}
+	
+	$sth->execute(@bind);
 
-   my $sql_string_c1 = "FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n
-                        WHERE (c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) \n";
+	while(my $data = $sth->fetchrow){
+		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+ 			push (@id1_array,$data);
+		}
+	}
 
+	$sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
+		
+	my @bind;
+	foreach $string (@searchstring_array){
+# 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+		push(@bind, "%".$string."%");
+	}
 
+	$sth->execute(@bind);
 
-
-
-   my $sql_options_string = "";
-
-
-   my @id1_array;
-
-   my $dbh = C4::Context->dbh;
-   
-   my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1)  \n ".$sql_string_c1.$sql_options_string);
-   
-   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
-
-
-   while(my $data = $sth->fetchrow){
-      push (@id1_array,$data);
-   }
-
-   $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_options_string);
-   
-   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%");
-
-
-   while(my $data = $sth->fetchrow){
-      push (@id1_array,$data);
-   }
-
-   $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_options_string);
-   
-   $sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
-
-
-   while(my $data = $sth->fetchrow){
-      push (@id1_array,$data);
-   }
-
-
+	while(my $data = $sth->fetchrow){
+		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+ 			push (@id1_array,$data);
+		}
+	}
 
    my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
-
    my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,@id1_array);
-
-
    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-
    return ($cant_total,$resultsarray);
-
-
 }
 
 

@@ -1759,4 +1759,26 @@ sub paginarArreglo{
    return ($cant_total,@array);
 
 }
+
+=item
+Esta funcion recibe un string separado por 1 o mas blancos, y devuelve un arreglo de las palabras que se ingresaron
+para realizar la busqueda
+=cut
+sub obtenerBusquedas{
+	my ($searchstring) = @_;
+
+	my @search_array;
+	my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
+
+	foreach my  $b (@busqueda){
+# 		C4::AR::Debug::debug('buscar por: '.$b);
+		if($b ne ' '){
+# 			C4::AR::Debug::debug('agrego: '.$b);
+			push(@search_array, $b);
+		}
+	}
+
+	return (@search_array);
+}
+
 1;

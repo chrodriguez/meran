@@ -1135,23 +1135,6 @@ sub getSocioLike {
 =cut
 
 
-sub obtenerBusquedas{
-	my ($searchstring) = @_;
-
-	my @search_array;
-	my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
-
-	foreach my  $b (@busqueda){
-# 		C4::AR::Debug::debug('buscar por: '.$b);
-		if($b ne ' '){
-# 			C4::AR::Debug::debug('agrego: '.$b);
-			push(@search_array, $b);
-		}
-	}
-
-	return (@search_array);
-}
-
 =item
 Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
 =cut
@@ -1165,7 +1148,7 @@ sub getSocioLike {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
-	my @searchstring_array= obtenerBusquedas($socio);
+	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
     
 #     if($socio ne 'TODOS'){
 #         push (	@filtros, ( or   => [ apellido => { like => $socio.'%'}, 
