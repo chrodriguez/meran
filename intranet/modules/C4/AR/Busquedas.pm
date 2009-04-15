@@ -1282,65 +1282,140 @@ sub getBranch{
 
 ########################################################## NUEVOS!!!!!!!!!!!!!!!!!!!!!!!!!! #################################################
 
+# sub busquedaAvanzada_newTemp{
+# 
+#    my ($ini,$cantR,$params_obj,$session) = @_;
+#    
+#    my @filtros;
+# 
+#    if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
+#       push(@filtros, ( 'nivel1.cat_autor.nombre' => { like => '%'.$params_obj->{'autor'}.'%' }) );
+#    }
+#    
+#    if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
+#       push(@filtros, ( 'signatura_topografica' => { like => '%'.$params_obj->{'signatura'}.'%' }) );
+#    }
+# 
+#    if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
+#       push(@filtros, ( 'nivel2.tipo_documento' => { eq => $params_obj->{'tipo_nivel3_name'} }) );
+#    }
+#    
+#    if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
+#       if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
+#          push(@filtros, ( 'nivel1.titulo' => { like => '%'.$params_obj->{'titulo'}.'%' }) );
+#       }else{
+#          push(@filtros, ( 'nivel1.titulo' => { eq => $params_obj->{'titulo'} }) );
+#       }
+#    }
+# 
+#    use C4::Modelo::CatNivel3::Manager;
+# 
+#    my $nivel3_result = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+#                                                                         query => \@filtros,
+#                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
+#                                                                         limit => $cantR,
+#                                                                         offset => $ini,
+#   						                  												select => ['cat_nivel3.id1'],
+#                                                                         distinct => 1,
+#                                                                      );
+# 
+#    my $nivel3_result_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+#                                                                         query => \@filtros,
+#                                                                         select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
+#                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
+#                                                                      );
+# 
+#    my @id1_array;
+#    
+#    foreach my $nivel3 (@$nivel3_result){
+#       if (!C4::AR::Utilidades::existeInArray($nivel3->getId1,@id1_array)){
+#          push(@id1_array,$nivel3->getId1);
+#       }
+#    }
+# 
+# 
+#    C4::AR::Debug::debug("INI: ".$ini);
+#    C4::AR::Debug::debug("CantR: ".$cantR);
+#    C4::AR::Debug::debug("Cant del arreglo filtrado: ".scalar(@id1_array));
+#    $params_obj->{'cantidad'}= scalar(@id1_array);
+# 
+#    C4::AR::Busquedas::logBusqueda($params_obj, $session);
+# 
+# 
+# 
+# 	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
+# }
+
 
 sub busquedaAvanzada_newTemp{
 
    my ($ini,$cantR,$params_obj,$session) = @_;
-   
-   my @filtros;
+
+   my $dbh = C4::Context->dbh;
+
+   my $body_string = 
+
+"\nSELECT DISTINCT (t1.id1) \n
+FROM cat_nivel3 t1 \n
+JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2)\n
+WHERE ";
+
+   my $filtros = "";
+
+   my @bind;
 
    if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-      push(@filtros, ( 'nivel1.cat_autor.nombre' => { like => '%'.$params_obj->{'autor'}.'%' }) );
+      $filtros.= "(t4.nombre LIKE ?) AND ";
+      push(@bind,"%".$params_obj->{'autor'}."%");
    }
-   
    if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
-      push(@filtros, ( 'signatura_topografica' => { like => '%'.$params_obj->{'signatura'}.'%' }) );
+      $filtros.= "(t1.signatura_topografica LIKE ?) AND ";
+      push(@bind,"%".$params_obj->{'signatura'}."%");
    }
 
    if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
-      push(@filtros, ( 'nivel2.tipo_documento' => { eq => $params_obj->{'tipo_nivel3_name'} }) );
+       $filtros.= "(t3.tipo_documento = ?) AND ";
+      push(@bind,"%".$params_obj->{'tipo_nivel3_name'}."%");
    }
    
    if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
       if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
-         push(@filtros, ( 'nivel1.titulo' => { like => '%'.$params_obj->{'titulo'}.'%' }) );
+         $filtros.= "(t2.titulo LIKE ?) AND ";
+         push(@bind,"%".$params_obj->{'titulo'}."%");
       }else{
-         push(@filtros, ( 'nivel1.titulo' => { eq => $params_obj->{'titulo'} }) );
+         $filtros.= "(t2.titulo = ?) AND ";
+         push(@bind,$params_obj->{'titulo'});
       }
    }
+   
+   $filtros.= " TRUE ";
 
-   use C4::Modelo::CatNivel3::Manager;
+C4::AR::Debug::debug("LONG DE BIND: ".scalar(@bind)." ".$bind[0]." ".$bind[1]);
 
-   my $nivel3_result = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                                        query => \@filtros,
-                                                                        require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
-                                                                        limit => $cantR,
-                                                                        offset => $ini,
-#   																		select => ['cat_nivel3.id1'],
-#                                                                         distinct => 1,
-                                                                     );
+C4::AR::Debug::debug($body_string.$filtros);
 
-   my $nivel3_result_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                                        query => \@filtros,
-                                                                        select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-                                                                        require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
-                                                                     );
+   my $sth = $dbh->prepare($body_string.$filtros);
+
+   $sth->execute(@bind);
 
    my @id1_array;
-   
-   foreach my $nivel3 (@$nivel3_result){
-      if (!C4::AR::Utilidades::existeInArray($nivel3->getId1,@id1_array)){
-         push(@id1_array,$nivel3->getId1);
-      }
+
+   while(my $data = $sth->fetchrow){
+      push (@id1_array,$data);
    }
 
-   $params_obj->{'cantidad'}= scalar(@id1_array);
+   C4::AR::Debug::debug("CANT DE Id1: ".scalar(@id1_array));
+
+   my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
+
+   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
+
 
    C4::AR::Busquedas::logBusqueda($params_obj, $session);
 
 
+   return ($cant_total,$resultsarray);
 
-	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
 }
 
 sub busquedaCombinada_newTemp{
