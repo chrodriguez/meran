@@ -1375,7 +1375,7 @@ WHERE ";
 
    if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
        $filtros.= "(t3.tipo_documento = ?) AND ";
-      push(@bind,"%".$params_obj->{'tipo_nivel3_name'}."%");
+      push(@bind,$params_obj->{'tipo_nivel3_name'});
    }
    
    if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
