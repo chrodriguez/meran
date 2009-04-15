@@ -135,3 +135,18 @@ function scrollTo(idObj){
 		var divOffset = $('#'+idObj).offset().top;
 		$('html,body').animate({scrollTop: divOffset}, 1000);
 }
+
+
+function highlight(classesArray,idKeywordsArray){
+
+    for (x = 0; x< idKeywordsArray.length; x++){
+        stringArray = ($('#'+idKeywordsArray[x]).val()).split(' ');
+        for (y = 0; y< stringArray.length; y++){
+            for (z = 0; z< classesArray.length; z++){
+                $('.'+classesArray[z]).highlight(stringArray[y]);
+             }
+        }
+    }
+
+}
+

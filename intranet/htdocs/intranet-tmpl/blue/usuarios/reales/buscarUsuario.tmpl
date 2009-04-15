@@ -1,5 +1,5 @@
 [% INCLUDE   'intranet-top.inc'  %]
-
+<script src="/intranet-tmpl/blue/includes/jquery-highlight.js"></script>
 <script language="javascript" type="text/javascript">
 
 var objAH;
@@ -58,6 +58,13 @@ function consultar(filtro){
 function updateInfo(responseText){
 	$('#result').html(responseText);
 	zebra('tablaResult');
+    var idArray = [];
+    var classes = [];
+    idArray[0] = 'socio';
+    classes[0] = 'nomCompleto';
+    classes[1] = 'documento';
+    classes[2] = 'legajo';
+    highlight(classes,idArray);
 }
 
 function Borrar(){

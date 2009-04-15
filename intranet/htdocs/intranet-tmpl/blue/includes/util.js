@@ -150,3 +150,16 @@ function getRadioButtonSelectedValue(ctrl)
         if(ctrl[i].checked) return ctrl[i].value;
 }
 
+
+function highlight(classesArray,idKeywordsArray){
+
+    for (x = 0; x< idKeywordsArray.length; x++){
+        stringArray = ($('#'+idKeywordsArray[x]).val()).split(' ');
+        for (y = 0; y< stringArray.length; y++){
+            for (z = 0; z< classesArray.length; z++){
+                $('.'+classesArray[z]).highlight(stringArray[y]);
+             }
+        }
+    }
+
+}

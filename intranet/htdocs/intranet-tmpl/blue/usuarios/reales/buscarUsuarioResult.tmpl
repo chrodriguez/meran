@@ -49,16 +49,16 @@
       		<td align='left'>
 			[% socio.getNro_socio %]
 		</td>
-     		<td width=250 align="left">
+     		<td width=250 align="left" class="nomCompleto">
 			<a class="inputFontNormal" 
 			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=[% socio.getId_socio %]">
 				[% socio.persona.getApellido %], [% socio.persona.getNombre %]
 			</a>
 		</td>
-      		<td align="left">
+      		<td align="left" class="documento">
 			[% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
 		</td>
-      		<td align="left">
+      		<td align="left" class="legajo">
 			[% socio.persona.getLegajo %]
 		</td>
       		<td align=center>

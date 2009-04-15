@@ -41,11 +41,13 @@ function updateInfo(responseText){
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
-    string = ( $('#autor').val() + $('#titulo').val()).split();
-    for (x = 0; x< string.length; x++){
-        $('.titulo_result').highlight(string[x]);
-        $('.autor_result').highlight(string[x]);
-    }
+    var string = [];
+    var classes = [];
+    string[0] = 'autor';
+    string[1] = 'titulo';
+    classes[0] = 'titulo_result';
+    classes[1] = 'autor_result';
+    highlight(classes,string);
 }
 
 
