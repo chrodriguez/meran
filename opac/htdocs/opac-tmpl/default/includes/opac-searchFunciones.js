@@ -29,7 +29,7 @@ function ordenarPor(ord){
 function changePage(ini){
 	objAH.changePage(ini);
 }
-
+var string;
 function updateInfo(responseText){
 	
 	//si estoy logueado, oculta la informacion del usuario
@@ -41,6 +41,11 @@ function updateInfo(responseText){
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
+    string = ( $('#autor').val() + $('#titulo').val()).split();
+    for (x = 0; x< string.length; x++){
+        $('.titulo_result').highlight(string[x]);
+        $('.autor_result').highlight(string[x]);
+    }
 }
 
 

@@ -3,6 +3,7 @@
 <script src="/opac-tmpl/default/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/opac-tmpl/default/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 <script src="/opac-tmpl/default/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<script src="/opac-tmpl/default/includes/jquery/jquery-highlight.js"></script>
 
 <script language=javascript>
 
@@ -21,7 +22,7 @@ $(document).ready(function(){
 <table id="filtros" border="0" align="center" width="100%" class="top" >
 <tr width=100%><td colspan="5"><h4>[% "B&uacute;squeda Avanzada" | i18n %] </h4><td></tr>
 <tr>
-        <td width=27% align="right">[% "Autor:" | i18n %]</td>
+        <td width=27% align="right" class = "autor_result">[% "Autor:" | i18n %]</td>
 	<td width=20%> <input id="autor" type="text" size="25" name="autor"></td>
 	<td width=16% align="right">[% "Diccionario:" | i18n %]</td>
 	<td width=37%> <input type="text" size="25" id="dictionary" name="dictionary"></td>
@@ -29,7 +30,7 @@ $(document).ready(function(){
 </tr>
 <tr>
  	<td align="right">[% "T&iacute;tulo:" | i18n %]</td>
-	<td> <input type="text"  size="25" id="titulo" name="titulo"></td>
+	<td class = "titulo_result"> <input type="text"  size="25" id="titulo" name="titulo"></td>
 	<td align="right">[% "Tema:" | i18n %]</td>
         <td><input type="text"  size="25" id="tema" name="tema"></td>
 </tr>
