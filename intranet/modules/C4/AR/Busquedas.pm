@@ -1350,6 +1350,14 @@ sub getBranch{
 sub busquedaAvanzada_newTemp{
 
    my ($ini,$cantR,$params_obj,$session) = @_;
+<<<<<<< .mine
+
+	C4::AR::Debug::debug('busquedaAvanzada_newTemp=> ini: '.$ini);
+	C4::AR::Debug::debug('busquedaAvanzada_newTemp=> cantR: '.$cantR);
+   
+   my @filtros;
+=======
+>>>>>>> .r1305
 
    my $dbh = C4::Context->dbh;
 

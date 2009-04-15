@@ -33,6 +33,7 @@ $obj->{'type'} = 'INTRA';
 
 my ($cantidad, $array_nivel1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 
+C4::AR::Debug::debug("cant: ".$cantidad);
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->param('nro_socio');
