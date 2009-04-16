@@ -1804,17 +1804,17 @@ sub armarInfoNivel1{
 		$cant= 0;
 		$result{$i}->{'id1'}= $id1;
 		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
-		$result{$i}->{'titulo'}= $nivel1->getTitulo;
-		$result{$i}->{'idAutor'}= $nivel1->getAutor;
-		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
+# 		$result{$i}->{'titulo'}= $nivel1->getTitulo;
+# 		$result{$i}->{'idAutor'}= $nivel1->getAutor;
+# 		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
 # 		getVolumenDesc()
 # FIXME falta pasar!!!!!
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
 		$result{$i}->{'grupos'}=$ediciones;
 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
 		$result{$i}->{'disponibilidad'}=\@disponibilidad;
-		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
-		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
+# 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
+# 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;
 #          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
 #          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
