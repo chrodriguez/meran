@@ -45,11 +45,14 @@
 		[% END %]
 		</td>
 		<td class="titulo_result">
-			<!--<a class="click" onClick="mostrarDetalle('[% id1 %]');" title="Mostrar Detalle">
-				[% titulo %]
-			</a>-->
+
 			<a href="/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl?id1=[% id1 %]" title="Mostrar Detalle" class="click" >
-				[% titulo %]
+				
+				[% IF hits > 0 %]
+					( [% hits %] ) - [% titulo %]
+				[% ELSE %]
+					( REP ) - [% titulo %]
+				[% END %]
 			</a>
 
 		</td>

@@ -1408,7 +1408,8 @@ C4::AR::Debug::debug($body_string.$filtros);
 
    my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
 
-   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
+	my @searchstring_array;
+   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array,@id1_array);
 
 
    C4::AR::Busquedas::logBusqueda($params_obj, $session);
@@ -1419,11 +1420,9 @@ C4::AR::Debug::debug($body_string.$filtros);
 }
 
 sub busquedaCombinada_newTemp{
-
 	my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
-	
+
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
-	
 	
 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
 	my $sql_string_c3_where = " WHERE ";
@@ -1506,11 +1505,16 @@ sub busquedaCombinada_newTemp{
 		}
 	}
 
-   my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
-   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,@id1_array);
+
+#    my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
+	#arma y ordena el arreglo para enviar al cliente
+   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+	#corta el arreglo segun lo que indica el paginador
+	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@$resultsarray);
+	#se loquea la busqueda
    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-   return ($cant_total,$resultsarray);
+   return ($cant_total,\@id1_array);
 }
 
 
@@ -1783,43 +1787,50 @@ sub armarBuscoPor{
 }
 
 sub armarInfoNivel1{
-	my ($params,@resultId1) = @_;
+	my ($params,$searchstring_array, @resultId1) = @_;
 	
 	my $cantidad= $params->{'cantidad'};
 	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-	my $orden= $params->{'orden'};
+	my $orden= $params->{'orden'}||'hits';
 	my @resultsarray;
 	my %result;
  	my $nivel1;
 	my $i=0;
 
-   
-# 	if($cantidad > 0){
-      my $cont = 0;
+    my $cont = 0;
+	my $cant;
 	#si busquedaCombianda devuelve algo se busca la info siguiente
-		foreach my $id1 (@resultId1) {
-			$result{$i}->{'id1'}= $id1;
-			$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
-			$result{$i}->{'titulo'}= $nivel1->getTitulo;
-			$result{$i}->{'idAutor'}= $nivel1->getAutor;
-			$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
-	# 		getVolumenDesc()
-	# FIXME falta pasar!!!!!
-			my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
-			$result{$i}->{'grupos'}=$ediciones;
-			my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
-			$result{$i}->{'disponibilidad'}=\@disponibilidad;
-	#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-	#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-	#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
-	
-			$i++;
-		}
-# 	}
+	foreach my $id1 (@resultId1) {
+		$cant= 0;
+		$result{$i}->{'id1'}= $id1;
+		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
+		$result{$i}->{'titulo'}= $nivel1->getTitulo;
+		$result{$i}->{'idAutor'}= $nivel1->getAutor;
+		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
+# 		getVolumenDesc()
+# FIXME falta pasar!!!!!
+		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
+		$result{$i}->{'grupos'}=$ediciones;
+		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
+		$result{$i}->{'disponibilidad'}=\@disponibilidad;
+		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
+		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
+		$result{$i}->{'hits'}= $cant;
+#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+
+		$i++;
+	}
    
+	C4::AR::Debug::debug("orden: ".$orden);
 	#se ordenan los resultados
 	my @keys=keys %result;
-	@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+	if($orden ne 'hits'){
+ 		@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+	}else{
+		@keys= sort{$result{$b}->{$orden} cmp $result{$a}->{$orden}} @keys;	
+	}
 	foreach my $row (@keys){
 		push (@resultsarray, $result{$row});
 	}
