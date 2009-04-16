@@ -1419,27 +1419,37 @@ C4::AR::Debug::debug($body_string.$filtros);
 
 }
 
+
+=item
+Realiza una busqueda combinada sobre nivel 1, 2 y 3
+=cut
 sub busquedaCombinada_newTemp{
 	my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
 
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
 	
-	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
+# 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
+	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 ) \n";
 	my $sql_string_c3_where = " WHERE ";
 	
-	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n ";
+# 	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n ";
+	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 ) \n ";
 	my $sql_string_c2_where = " WHERE ";
 	
-	my $sql_string_c1 = "		FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n ";
+# 	my $sql_string_c1 = "		FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n ";
+	my $sql_string_c1 = "		FROM cat_nivel1 c1 \n ";
 	$sql_string_c1 .=	" 		LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
 	my $sql_string_c1_where = " WHERE ";
 	my @bind;
  	
 	foreach $string (@searchstring_array){
-		$sql_string_c3_where .= " ( (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
-		$sql_string_c2_where .= " ( (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+# 		$sql_string_c3_where .= " ( (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
+# 		$sql_string_c2_where .= " ( (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+		$sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
+		$sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
 								OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
-		$sql_string_c1_where .= " (	(c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
+# 		$sql_string_c1_where .= " (	(c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
+		$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
 	}
 	
 	$sql_string_c3_where .= " TRUE ";
@@ -1457,7 +1467,7 @@ sub busquedaCombinada_newTemp{
 
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
+# 		push(@bind, "%".$string."%");
 	}
 # 	$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
 	$sth->execute(@bind);
@@ -1477,7 +1487,7 @@ sub busquedaCombinada_newTemp{
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
+# 		push(@bind, "%".$string."%");
 # 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%");
 	}
 	
@@ -1497,7 +1507,7 @@ sub busquedaCombinada_newTemp{
 # 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
+# 		push(@bind, "%".$string."%");
 	}
 
 	$sth->execute(@bind);
