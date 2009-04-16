@@ -1431,6 +1431,7 @@ sub busquedaCombinada_newTemp{
 	my $sql_string_c2_where = " WHERE ";
 	
 	my $sql_string_c1 = "		FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n ";
+	$sql_string_c1 .=	" 		LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
 	my $sql_string_c1_where = " WHERE ";
 	my @bind;
  	
@@ -1450,7 +1451,7 @@ sub busquedaCombinada_newTemp{
 
 	my $dbh = C4::Context->dbh;
 	
-	my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1)  \n ".$sql_string_c1.$sql_string_c1_where);
+	my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
    
 	foreach $string (@searchstring_array){
 
@@ -1461,7 +1462,8 @@ sub busquedaCombinada_newTemp{
 # 	$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
 	$sth->execute(@bind);
 			
-	while(my $data = $sth->fetchrow){
+# 	while(my $data = $sth->fetchrow){
+	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
 		}
@@ -1481,7 +1483,8 @@ sub busquedaCombinada_newTemp{
 	
 	$sth->execute(@bind);
 
-	while(my $data = $sth->fetchrow){
+# 	while(my $data = $sth->fetchrow){
+	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
 		}
@@ -1499,7 +1502,8 @@ sub busquedaCombinada_newTemp{
 
 	$sth->execute(@bind);
 
-	while(my $data = $sth->fetchrow){
+# 	while(my $data = $sth->fetchrow){
+	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
 		}
@@ -1800,31 +1804,36 @@ sub armarInfoNivel1{
     my $cont = 0;
 	my $cant;
 	#si busquedaCombianda devuelve algo se busca la info siguiente
-	foreach my $id1 (@resultId1) {
+# 	foreach my $id1 (@resultId1) {
+	my $i=0;
+	for($i=0;$i<scalar(@resultId1);$i++ ) {
 		$cant= 0;
-		$result{$i}->{'id1'}= $id1;
-=item
-		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
-		$result{$i}->{'titulo'}= $nivel1->getTitulo;
-		$result{$i}->{'idAutor'}= $nivel1->getAutor;
-		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($nivel1->getAutor);
+# 		$result{$i}->{'id1'}= $id1;
+
+#  		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
+#  		$result{$i}->{'titulo'}= $nivel1->getTitulo;
+		$result{$i}->{'id1'}= @resultId1[$i]->{'id1'};
+		$result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
+		$result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
+		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
+#  		$result{$i}->{'idAutor'}= $nivel1->getAutor;
+# 		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($result{$i}->{'idAutor'});
 # 		getVolumenDesc()
 # FIXME falta pasar!!!!!
-		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
-		$result{$i}->{'grupos'}=$ediciones;
-		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
-		$result{$i}->{'disponibilidad'}=\@disponibilidad;
+# 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
+# 		$result{$i}->{'grupos'}=$ediciones;
+# 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
+# 		$result{$i}->{'disponibilidad'}=\@disponibilidad;
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;
-=cut
 #          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
 #          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
 #          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
 
 		$i++;
 	}
-   
+
 	C4::AR::Debug::debug("orden: ".$orden);
 	#se ordenan los resultados
 	my @keys=keys %result;
@@ -1833,6 +1842,7 @@ sub armarInfoNivel1{
 	}else{
 		@keys= sort{$result{$b}->{$orden} cmp $result{$a}->{$orden}} @keys;	
 	}
+
 	foreach my $row (@keys){
 		push (@resultsarray, $result{$row});
 	}
