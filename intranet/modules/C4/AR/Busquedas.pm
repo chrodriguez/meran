@@ -1853,6 +1853,9 @@ sub armarInfoNivel1{
 		@keys= sort{$result{$b}->{$orden} cmp $result{$a}->{$orden}} @keys;	
 	}
 
+	#partir arreglo
+	#buscar disponibilidad, grupos, y otrs yerbas
+
 	foreach my $row (@keys){
 		push (@resultsarray, $result{$row});
 	}
