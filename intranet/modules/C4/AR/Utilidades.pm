@@ -1738,26 +1738,25 @@ sub paginarArreglo{
 
    if ( ($numPagina > $division_temp) ){
        @array = @array[$ini..($ini + $resto-1)];
-       C4::AR::Debug::debug("ENTRO POR INI > CON: ".scalar(@array));
+#        C4::AR::Debug::debug("ENTRO POR INI > CON: ".scalar(@array));
    }else{
       @array = @array[$ini..($ini + $cantR-1)];
-      C4::AR::Debug::debug("ENTRO POR INI MENORRRRRRRRRRRRRRRRRRRRRRRr CON: ".scalar(@array))
+#       C4::AR::Debug::debug("ENTRO POR INI MENORRRRRRRRRRRRRRRRRRRRRRRr CON: ".scalar(@array))
    }
 
-   C4::AR::Debug::debug("CANT ULTIMA PAG: ".scalar(@array));
-
-   C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
-
-   C4::AR::Debug::debug("INIIIIII: ".$ini);
-
-   C4::AR::Debug::debug("numPAGINA: ".$numPagina);
-
-   C4::AR::Debug::debug("RESTO: ".$resto);
-
-   C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
+#    C4::AR::Debug::debug("CANT ULTIMA PAG: ".scalar(@array));
+# 
+#    C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
+# 
+#    C4::AR::Debug::debug("INIIIIII: ".$ini);
+# 
+#    C4::AR::Debug::debug("numPAGINA: ".$numPagina);
+# 
+#    C4::AR::Debug::debug("RESTO: ".$resto);
+# 
+#    C4::AR::Debug::debug("DIVISION TEMP: ".$division_temp);
 
    return ($cant_total,@array);
-
 }
 
 =item
