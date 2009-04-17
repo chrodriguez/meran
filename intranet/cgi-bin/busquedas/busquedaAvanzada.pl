@@ -33,12 +33,8 @@ $obj->{'type'} = 'INTRA';
 
 my ($cantidad, $array_nivel1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 
-C4::AR::Debug::debug("cant: ".$cantidad);
-#se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->param('nro_socio');
-#se loguea la busqueda
-
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'SEARCH_RESULTS'}= $array_nivel1;
 $t_params->{'cantidad'}= $cantidad;

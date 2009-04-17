@@ -142,9 +142,12 @@ function highlight(classesArray,idKeywordsArray){
     for (x = 0; x< idKeywordsArray.length; x++){
         stringArray = ($('#'+idKeywordsArray[x]).val()).split(' ');
         for (y = 0; y< stringArray.length; y++){
-            for (z = 0; z< classesArray.length; z++){
-                $('.'+classesArray[z]).highlight(stringArray[y]);
-             }
+			if($.trim(stringArray[y]).length != 0){
+				for (z = 0; z< classesArray.length; z++){
+					$('.'+classesArray[z]).highlight(stringArray[y]);
+					window.console.log(	"stringArray[y] => " + stringArray[y] + "\n");
+				}
+			}//END if($.trim(stringArray[y]).length != 0){
         }
     }
 

@@ -1801,5 +1801,71 @@ C4::AR::Debug::debug("\n");
 	return $cont;
 }
 
+=item
+Esta funcion ordena una HASH de strings
+orden: es el orden por el que se va a ordenar la HASH
+DESC: 1 si es descendente, 0 = ascendente
+info: la informacion de la HASH a ordenar
+devuelve un arreglo de HASHES listo para enviar al template
+=cut
+sub sortHASHString{
+	my ($params) = @_;
+
+	my $desc= $params->{'DESC'};
+	my $orden= $params->{'orden'};
+	my $info= $params->{'info'};
+	my @keys=keys %$info;	
+	C4::AR::Debug::debug("orden: ".$orden);
+
+	if($desc){
+	#ordena la HASH de strings de manera DESC
+		@keys= sort{$info->{$a}->{$orden} cmp $info->{$b}->{$orden}} @keys;
+	}else{
+	#ordena la HASH de strings de manera ASC
+		@keys= sort{$info->{$b}->{$orden} cmp $info->{$a}->{$orden}} @keys;
+	}
+
+	my @resultsarray;
+	
+	foreach my $row (@keys){
+		push (@resultsarray, $info->{$row});
+	}
+
+	return @resultsarray;
+}
+
+=item
+Esta funcion ordena una HASH de numericos
+orden: es el orden por el que se va a ordenar la HASH
+DESC: 1 si es descendente, 0 = ascendente
+info: la informacion de la HASH a ordenar
+devuelve un arreglo de HASHES listo para enviar al template
+=cut
+sub sortHASHNumber{
+	my ($params) = @_;
+
+	my $desc= $params->{'DESC'};
+	my $orden= $params->{'orden'};
+	my $info= $params->{'info'};
+	my @keys=keys %$info;
+	C4::AR::Debug::debug("orden: ".$orden);
+
+	if($desc){
+	#ordena la HASH de strings de manera DESC
+		@keys= sort{$info->{$b}->{$orden} <=> $info->{$a}->{$orden}} @keys;
+	}else{
+	#ordena la HASH de strings de manera ASC
+		@keys= sort{$info->{$a}->{$orden} <=> $info->{$b}->{$orden}} @keys;
+	}
+
+	my @resultsarray;
+	
+	foreach my $row (@keys){
+		push (@resultsarray, $info->{$row});
+	}
+
+	return @resultsarray;
+}
+
 
 1;

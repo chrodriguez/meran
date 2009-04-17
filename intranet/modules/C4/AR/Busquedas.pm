@@ -1348,14 +1348,16 @@ sub getBranch{
 
 
 sub busquedaAvanzada_newTemp{
-
 	my ($ini,$cantR,$params_obj,$session) = @_;
 	
+	$params_obj->{'ini'}= $ini;
+	$params_obj->{'cantR'}= $cantR;
 	my $dbh = C4::Context->dbh;
+	my @searchstring_array;
 	
 	my $body_string = 
 	
-	"\nSELECT DISTINCT (t1.id1) \n
+	"\nSELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n
 	FROM cat_nivel3 t1 \n
 	JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2)\n
 	WHERE ";
@@ -1367,10 +1369,12 @@ sub busquedaAvanzada_newTemp{
 	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
 		$filtros.= "(t4.nombre LIKE ?) AND ";
 		push(@bind,"%".$params_obj->{'autor'}."%");
+		push(@searchstring_array, $params_obj->{'autor'});
 	}
 	if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
 		$filtros.= "(t1.signatura_topografica LIKE ?) AND ";
 		push(@bind,"%".$params_obj->{'signatura'}."%");
+		push(@searchstring_array, $params_obj->{'signatura'});
 	}
 	
 	if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
@@ -1382,9 +1386,11 @@ sub busquedaAvanzada_newTemp{
 		if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
 			$filtros.= "(t2.titulo LIKE ?) AND ";
 			push(@bind,"%".$params_obj->{'titulo'}."%");
+			push(@searchstring_array, $params_obj->{'titulo'});
 		}else{
 			$filtros.= "(t2.titulo = ?) AND ";
 			push(@bind,$params_obj->{'titulo'});
+			push(@searchstring_array, $params_obj->{'titulo'});
 		}
 	}
 	
@@ -1394,18 +1400,14 @@ sub busquedaAvanzada_newTemp{
 	
 	my @id1_array;
 	
-	while(my $data = $sth->fetchrow){
+	while(my $data = $sth->fetchrow_hashref){
 		push (@id1_array,$data);
 	}
-
-	C4::AR::Debug::debug("CANT DE Id1: ".scalar(@id1_array));
 	
-	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
-
-	my @searchstring_array;
-	my ($cant_total ,$resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array,@id1_array);
-
-	C4::AR::Busquedas::logBusqueda($params_obj, $session);
+	#arma y ordena el arreglo para enviar al cliente
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
+	#se loquea la busqueda
+   	C4::AR::Busquedas::logBusqueda($params_obj, $session);
 	
 	return ($cant_total,$resultsarray);
 }
@@ -1778,15 +1780,10 @@ sub armarBuscoPor{
 sub armarInfoNivel1{
 	my ($params,$searchstring_array, @resultId1) = @_;
 	
-	my $cantidad= $params->{'cantidad'};
 	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
 	my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
 	my @resultsarray;
 	my %result;
- 	my $nivel1;
-	my $i=0;
-
-    my $cont = 0;
 	my $cant;
 	#si busquedaCombianda devuelve algo se busca la info siguiente, solo se recupera la info necesaria para luego poder ordenar
 	#todos los resultados
@@ -1804,17 +1801,16 @@ sub armarInfoNivel1{
 		$i++;
 	}
 
-	C4::AR::Debug::debug("orden: ".$orden);
+	my @keys;
+	my $params_sort;
+	$params_sort->{'orden'}= $orden;
+	$params_sort->{'info'}= \%result;
+	$params_sort->{'DESC'}= 1;
 	#se ordenan los resultados
-	my @keys=keys %result;
 	if($orden ne 'hits'){
- 		@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
+		@resultsarray= C4::AR::Utilidades::sortHASHString($params_sort);
 	}else{
-		@keys= sort{$result{$b}->{$orden} <=> $result{$a}->{$orden}} @keys;	
-	}
-
-	foreach my $row (@keys){
-		push (@resultsarray, $result{$row});
+		@resultsarray= C4::AR::Utilidades::sortHASHNumber($params_sort);
 	}
 
 	#se corta el arreglo segun lo que indica el paginador
