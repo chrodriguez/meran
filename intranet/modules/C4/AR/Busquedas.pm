@@ -1810,7 +1810,7 @@ sub armarInfoNivel1{
 	if($orden ne 'hits'){
  		@keys= sort{$result{$a}->{$orden} cmp $result{$b}->{$orden}} @keys;
 	}else{
-		@keys= sort{$result{$b}->{$orden} cmp $result{$a}->{$orden}} @keys;	
+		@keys= sort{$result{$b}->{$orden} <=> $result{$a}->{$orden}} @keys;	
 	}
 
 	foreach my $row (@keys){
