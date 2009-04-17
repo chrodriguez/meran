@@ -1367,7 +1367,7 @@ sub busquedaAvanzada_newTemp{
 	my @bind;
 	
 	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-		$filtros.= "(t4.nombre LIKE ?) AND ";
+		$filtros.= "(t4.completo LIKE ?) AND ";
 		push(@bind,"%".$params_obj->{'autor'}."%");
 		push(@searchstring_array, $params_obj->{'autor'});
 	}

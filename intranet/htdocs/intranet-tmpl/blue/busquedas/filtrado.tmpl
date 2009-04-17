@@ -14,17 +14,26 @@ function updateInfo(responseText){
 	$('#resultBusqueda').html(responseText);
 	$("#resultBusqueda").slideDown("slow");
 	zebra('tablaResult');
-    var string = [];
+}
+
+function highlightBusquedaCombinable(){
+	var string = [];
     var classes = [];
-    string[0] = 'keyword';
-    classes[0] = 'titulo_result';
-    classes[1] = 'autor_result';
-    highlight(classes,string);
+	if($('#autor').val() != ''){
+		classes.push('autor_result');
+	}
+	
+	if($('#titulo').val() != ''){
+		classes.push('titulo_result');
+	}
+    
+	var combinables= ['titulo', 'autor', 'signatura'];
+    highlight(classes,combinables);
 }
 
 function busquedaCombinable(){
 
-	objAH=new AjaxHelper(updateInfo);
+	objAH=new AjaxHelper(updateBusquedaCombinable);
  	objAH.debug= true;
 
 	//para busquedas combinables
@@ -41,6 +50,11 @@ function busquedaCombinable(){
 	objAH.funcion= 'changePage';
 	//se envia la consulta
 	objAH.sendToServer();	
+}
+
+function updateBusquedaCombinable(responseText){
+	updateInfo(responseText);
+	highlightBusquedaCombinable();
 }
 
 function changePage(ini){
@@ -86,6 +100,15 @@ function buscarPorCodigoBarra(){
 	objAH.sendToServer();
 }
 
+function highlightbuscarPorCodigoBarra(){
+	var string = [];
+    var classes = [];
+    string[0] = $('#codBarra').val();
+    classes[0] = 'titulo_result';
+    classes[1] = 'autor_result';
+    highlight(classes,string);
+}
+
 function buscarPorTema(){
 	objAH=new AjaxHelper(updateInfo);
  	objAH.debug= true;
@@ -117,7 +140,7 @@ function buscarPorDiccionario(){
 
 function busquedaPorKeyword(){
 
-	objAH=new AjaxHelper(updateInfo);
+	objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/busquedas/busquedaCombinada.pl';
 	objAH.keyword= $('#keyword').val();
@@ -125,6 +148,21 @@ function busquedaPorKeyword(){
 	objAH.funcion= 'changePage';
 	objAH.sendToServer();
 }
+
+function updateBusquedaPorKeyword(responseText){
+	updateInfo(responseText);
+	highlightBusquedaPorKeyword();
+}
+
+function highlightBusquedaPorKeyword(){
+	var string = [];
+    var classes = [];
+    string[0] = 'keyword';
+    classes[0] = 'titulo_result';
+    classes[1] = 'autor_result';
+    highlight(classes,string);
+}
+
 
 function buscarEstante(){
 
