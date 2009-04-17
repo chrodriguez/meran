@@ -55,7 +55,7 @@ function openPopup() {
 function updateInfoDevRen(responseText){
 // 	alert("ejecuto updateInfoDevRen LOCAL!!!");
 	cancelarDiv();
-	clearMessages()
+// 	/*clearMessages*/()
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
@@ -67,18 +67,18 @@ function updateInfoDevRen(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detallePrestamos(usuario.ID);
+	detallePrestamos(usuario.nro_socio);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
-	detalleReservas(usuario.ID);
+	detalleReservas(usuario.nro_socio);
 	//puede que luego de devolver el usuario sea sancionado
-	detalleSanciones(usuario.ID);
+	detalleSanciones(usuario.nro_socio);
 }
 
 //REDEFINIDO, se encuentra en circulacion.js, se llama luego de realizar un prestamo
 function updateInfoPrestarReserva(responseText){
 // 	alert("ejecuto updateInfoPrestarReserva LOCAL!!!");
 	cancelarDiv();
-	clearMessages();
+// 	/*clearMessages*/();
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
@@ -89,8 +89,10 @@ function updateInfoPrestarReserva(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detalleReservas(usuario.ID);
-	detallePrestamos(usuario.ID);
+	detalleReservas(usuario.nro_socio);
+	detallePrestamos(usuario.nro_socio);
+    //puede que el usuario este sancionado
+    detalleSanciones(usuario.nro_socio);
 }
 
 
@@ -106,14 +108,14 @@ function detalleUsuario(){
 	objAH=new AjaxHelper(updateDetalleUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug= true;
-	objAH.id_socio= usuario.ID;
+	objAH.nro_socio= usuario.nro_socio;
 	objAH.sendToServer();
 }
 
 function updateDetalleUsuario(responseText){
 	$('#detalleUsuario').html(responseText);
 	createFileUploader();
-	detalleReservas(usuario.ID);
+	detalleReservas(usuario.nro_socio);
 }
 
 function createFileUploader(){
@@ -137,7 +139,7 @@ function detallePrestamos(socio){
 
 	objAH=new AjaxHelper(updateDetallePrestamos);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detallePrestamos.pl';
-	objAH.id_socio= socio;
+	objAH.nro_socio= socio;
 	objAH.sendToServer();
 }
 
@@ -145,14 +147,14 @@ function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');	
-	detalleSanciones(usuario.ID);
+	detalleSanciones(usuario.nro_socio);
 }
 
 function detalleReservas(socio){
 
 	objAH=new AjaxHelper(updateDetalleReservas);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleReservas.pl';
-	objAH.id_socio= socio;
+	objAH.nro_socio= socio;
 	objAH.sendToServer();
 }
 
@@ -162,10 +164,22 @@ function updateDetalleReservas(responseText){
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 	checkedAll('checkAllReservas','chkboxReservas');
-	detallePrestamos(usuario.ID);
+	detallePrestamos(usuario.nro_socio);
 }
 
 
+
+function detalleSanciones(socio){
+
+    objAH=new AjaxHelper(updateDetalleSanciones);
+    objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
+    objAH.nro_socio= socio;
+    objAH.sendToServer();
+}
+
+function updateDetalleSanciones(responseText){
+    $('#sanciones').html(responseText);
+}
 //**********************************Fin**Para manejar la circulacion********************************************
 
 

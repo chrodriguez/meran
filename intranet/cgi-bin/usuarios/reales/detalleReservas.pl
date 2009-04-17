@@ -23,10 +23,8 @@ my ($template, $session, $t_params) = get_template_and_user ({
 my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $id_socio= $obj->{'id_socio'};
-my $dateformat = C4::Date::get_date_format();
-my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
-my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($socio->getNro_socio);
+my $nro_socio= $obj->{'nro_socio'};
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
 my @reservas_asignadas;
 my $racount = 0;
@@ -45,7 +43,6 @@ foreach my $reserva (@$reservas) {
         $recount++;
     }
 }
-$t_params->{'socio'}= $socio;
 $t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
 $t_params->{'reservas_asignadas_count'}= $racount;
 $t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;

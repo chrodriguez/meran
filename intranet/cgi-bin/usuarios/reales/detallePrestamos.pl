@@ -23,13 +23,12 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $id_socio= $obj->{'id_socio'};
-my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
-my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($socio->getNro_socio);
+
+my $nro_socio= $obj->{'nro_socio'};
+my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
 
 $t_params->{'PRESTAMOS'}= $prestamos;
 $t_params->{'prestamos_cant'}= scalar(@$prestamos);
-$t_params->{'socio'}= $socio;
 
 my $vencidos=0;
 foreach my $prestamo (@$prestamos) {

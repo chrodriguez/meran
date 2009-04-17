@@ -26,8 +26,8 @@ function reservar(id1, id2){
 function updateInfoReserva(responseText){
 	
 	//si estoy logueado, oculta la informacion del usuario
-	$('#result').html(responseText);
-	$('#result').slideDown('slow');	
+	$('#resultadoReserva').html(responseText);
+	$('#resultadoReserva').slideDown('slow');	
 
 }
 

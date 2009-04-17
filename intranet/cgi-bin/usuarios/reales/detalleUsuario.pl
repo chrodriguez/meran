@@ -21,12 +21,12 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
     my $obj=$input->param('obj');
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
     my $msg_object= C4::AR::Mensajes::create();
-    my $id_socio= $obj->{'id_socio'};
+    my $nro_socio= $obj->{'nro_socio'};
 	
 # if ( (&C4::AR::Usuarios::existeUsuario($id_socio)) && (&C4::AR::Utilidades::validateString($bornum)) ) {
 		
-	my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
-	
+	my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
 	# Curso de usuarios#
 # 	if (C4::Context->preference("usercourse")){
 # 		$t_params->{'course'}=1;
@@ -57,7 +57,7 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 	my $msgError=$input->param('error');
 	($msgError) || ($msgError=0);
 	####error  => 0,
-	$t_params->{'id_socio'}= $id_socio;
+	$t_params->{'id_socio'}= $socio->getId_socio;
 	$t_params->{'foto_name'}= $foto;
 	$t_params->{'mensaje_error_foto'}= $msgFoto;
 	$t_params->{'mensaje_error_borrar'}= $msgError;

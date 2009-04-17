@@ -461,12 +461,7 @@ sub estaSancionado {
 																			nro_socio 		=> { eq => $nro_socio },
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
-																			tipo_prestamo 	=> { eq => $tipo_prestamo },
-																			or   => [
-																				tipo_prestamo => { eq => 0 },
-                                                                            ],
 																		],
-																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
 									);
   return($sanciones_array_ref->[0] || undef);
 

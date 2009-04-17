@@ -977,6 +977,7 @@ sub _verificarMaxTipoPrestamo{
 
 	#Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
 	my @filtros;
+    push(@filtros, ( fecha_devolucion => { eq => undef } ));
 	push(@filtros, ( nro_socio => { eq => $nro_socio}) );
 	push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo}) );
 	my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
