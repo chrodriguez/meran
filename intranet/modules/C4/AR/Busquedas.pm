@@ -1422,27 +1422,21 @@ sub busquedaCombinada_newTemp{
 	$obj_for_log->{'cantR'}= $cantR;
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
 	
-# 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 ) \n";
 	my $sql_string_c3_where = " WHERE ";
 	
-# 	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 LEFT  JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ) \n ";
 	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 ) \n ";
 	my $sql_string_c2_where = " WHERE ";
 	
-# 	my $sql_string_c1 = "		FROM ( cat_nivel1 c1 LEFT  JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ) \n ";
 	my $sql_string_c1 = "		FROM cat_nivel1 c1 \n ";
 	$sql_string_c1 .=	" 		LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
 	my $sql_string_c1_where = " WHERE ";
 	my @bind;
  	
 	foreach $string (@searchstring_array){
-# 		$sql_string_c3_where .= " ( (c3r.dato LIKE ?) OR (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
-# 		$sql_string_c2_where .= " ( (c2r.dato LIKE ?) OR (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
 		$sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
 		$sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-								OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
-# 		$sql_string_c1_where .= " (	(c1r.dato LIKE ?) OR (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
+									OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
 		$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
 	}
 	
@@ -1458,10 +1452,8 @@ sub busquedaCombinada_newTemp{
 	my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
    
 	foreach $string (@searchstring_array){
-
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-# 		push(@bind, "%".$string."%");
 	}
 
 	$sth->execute(@bind);
@@ -1480,7 +1472,6 @@ sub busquedaCombinada_newTemp{
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-# 		push(@bind, "%".$string."%");
 	}
 	
 	$sth->execute(@bind);
@@ -1497,7 +1488,6 @@ sub busquedaCombinada_newTemp{
 	foreach $string (@searchstring_array){
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
-# 		push(@bind, "%".$string."%");
 	}
 
 	$sth->execute(@bind);
@@ -1807,18 +1797,9 @@ sub armarInfoNivel1{
 		$result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
 		$result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
-# 		getVolumenDesc()
-# FIXME falta pasar!!!!!
-# 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
-# 		$result{$i}->{'grupos'}=$ediciones;
-# 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal($id1, $tipo_nivel3_name);
-# 		$result{$i}->{'disponibilidad'}=\@disponibilidad;
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;
-#          #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-#          my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-#          if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
 
 		$i++;
 	}
@@ -1837,9 +1818,18 @@ sub armarInfoNivel1{
 	}
 
 	#se corta el arreglo segun lo que indica el paginador
-# 	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
 	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
 	#buscar disponibilidad, grupos, y otrs yerbas
+	for($i=0;$i<scalar(@resultsarray);$i++ ) {
+		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+ 		@resultsarray[$i]->{'grupos'}=$ediciones;
+ 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name);
+ 		@resultsarray[$i]->{'disponibilidad'}=\@disponibilidad;
+#       #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
+#       my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
+#       if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
+	}
+
 
 	return ($cant_total, \@result_array);
 }
