@@ -286,21 +286,21 @@ $(document).ready(function() {
 // 						$("#resultBusqueda").slideUp("fast");
  	});
 
-// Vengo del detalle con el nombre del autor busca los documentos que escribio ese autor.
-//o del inicio para la busqueda combinada
-	var array = location.href.split('?');
-	if (array.length >1){
-		var array=array[1].split('&');
-		var origen=array[0].split('=')[1];
-		if(origen == "detalle"){
-			var idAutor=array[1].split('=')[1];
-			buscarPorAutor(idAutor);
-		}
-		else{
-			$('#keyword').val(array[1].split('=')[1]);
-			busquedaPorKeyword();
-		}
-	}
+// // Vengo del detalle con el nombre del autor busca los documentos que escribio ese autor.
+// //o del inicio para la busqueda combinada
+// 	var array = location.href.split('?');
+// 	if (array.length >1){
+// 		var array=array[1].split('&');
+// 		var origen=array[0].split('=')[1];
+// 		if(origen == "detalle"){
+// 			var idAutor=array[1].split('=')[1];
+// 			buscarPorAutor(idAutor);
+// 		}
+// 		else{
+// 			$('#keyword').val(array[1].split('=')[1]);
+// 			busquedaPorKeyword();
+// 		}
+// 	}
 });
 
 

@@ -1763,10 +1763,10 @@ sub obtenerBusquedas{
 	my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
 
 	foreach my  $b (@busqueda){
-# 		C4::AR::Debug::debug('buscar por: '.$b);
+ 		C4::AR::Debug::debug('buscar por: '.$b);
 		if($b ne ' '){
-# 			C4::AR::Debug::debug('agrego: '.$b);
-			push(@search_array, $b);
+ 			C4::AR::Debug::debug('agrego: '.$b);
+			push(@search_array, trim($b));
 		}
 	}
 
