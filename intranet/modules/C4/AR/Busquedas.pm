@@ -1349,83 +1349,77 @@ sub getBranch{
 
 sub busquedaAvanzada_newTemp{
 
-   my ($ini,$cantR,$params_obj,$session) = @_;
+	my ($ini,$cantR,$params_obj,$session) = @_;
+	
+	my $dbh = C4::Context->dbh;
+	
+	my $body_string = 
+	
+	"\nSELECT DISTINCT (t1.id1) \n
+	FROM cat_nivel3 t1 \n
+	JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2)\n
+	WHERE ";
+	
+	my $filtros = "";
+	
+	my @bind;
+	
+	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
+		$filtros.= "(t4.nombre LIKE ?) AND ";
+		push(@bind,"%".$params_obj->{'autor'}."%");
+	}
+	if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
+		$filtros.= "(t1.signatura_topografica LIKE ?) AND ";
+		push(@bind,"%".$params_obj->{'signatura'}."%");
+	}
+	
+	if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
+		$filtros.= "(t3.tipo_documento = ?) AND ";
+		push(@bind,$params_obj->{'tipo_nivel3_name'});
+	}
+	
+	if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
+		if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
+			$filtros.= "(t2.titulo LIKE ?) AND ";
+			push(@bind,"%".$params_obj->{'titulo'}."%");
+		}else{
+			$filtros.= "(t2.titulo = ?) AND ";
+			push(@bind,$params_obj->{'titulo'});
+		}
+	}
+	
+	$filtros.= " TRUE ";
+	my $sth = $dbh->prepare($body_string.$filtros);
+	$sth->execute(@bind);
+	
+	my @id1_array;
+	
+	while(my $data = $sth->fetchrow){
+		push (@id1_array,$data);
+	}
 
-   my $dbh = C4::Context->dbh;
-
-   my $body_string = 
-
-"\nSELECT DISTINCT (t1.id1) \n
-FROM cat_nivel3 t1 \n
-JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2)\n
-WHERE ";
-
-   my $filtros = "";
-
-   my @bind;
-
-   if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-      $filtros.= "(t4.nombre LIKE ?) AND ";
-      push(@bind,"%".$params_obj->{'autor'}."%");
-   }
-   if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
-      $filtros.= "(t1.signatura_topografica LIKE ?) AND ";
-      push(@bind,"%".$params_obj->{'signatura'}."%");
-   }
-
-   if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
-       $filtros.= "(t3.tipo_documento = ?) AND ";
-      push(@bind,$params_obj->{'tipo_nivel3_name'});
-   }
-   
-   if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
-      if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
-         $filtros.= "(t2.titulo LIKE ?) AND ";
-         push(@bind,"%".$params_obj->{'titulo'}."%");
-      }else{
-         $filtros.= "(t2.titulo = ?) AND ";
-         push(@bind,$params_obj->{'titulo'});
-      }
-   }
-   
-   $filtros.= " TRUE ";
-
-C4::AR::Debug::debug("LONG DE BIND: ".scalar(@bind)." ".$bind[0]." ".$bind[1]);
-
-C4::AR::Debug::debug($body_string.$filtros);
-
-   my $sth = $dbh->prepare($body_string.$filtros);
-
-   $sth->execute(@bind);
-
-   my @id1_array;
-
-   while(my $data = $sth->fetchrow){
-      push (@id1_array,$data);
-   }
-
-   C4::AR::Debug::debug("CANT DE Id1: ".scalar(@id1_array));
-
-   my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
+	C4::AR::Debug::debug("CANT DE Id1: ".scalar(@id1_array));
+	
+	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
 
 	my @searchstring_array;
-   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array,@id1_array);
+	my ($cant_total ,$resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array,@id1_array);
 
-
-   C4::AR::Busquedas::logBusqueda($params_obj, $session);
-
-
-   return ($cant_total,$resultsarray);
-
+	C4::AR::Busquedas::logBusqueda($params_obj, $session);
+	
+	return ($cant_total,$resultsarray);
 }
 
 
 =item
 Realiza una busqueda combinada sobre nivel 1, 2 y 3
+NO BUSCA EN REPETIBLES
 =cut
 sub busquedaCombinada_newTemp{
 	my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
 
+	$obj_for_log->{'ini'}= $ini;
+	$obj_for_log->{'cantR'}= $cantR;
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
 	
 # 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 LEFT  JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ) \n";
@@ -1469,10 +1463,9 @@ sub busquedaCombinada_newTemp{
 		push(@bind, "%".$string."%");
 # 		push(@bind, "%".$string."%");
 	}
-# 	$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
+
 	$sth->execute(@bind);
 			
-# 	while(my $data = $sth->fetchrow){
 	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
@@ -1488,12 +1481,10 @@ sub busquedaCombinada_newTemp{
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
 # 		push(@bind, "%".$string."%");
-# 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%", "%".$string."%");
 	}
 	
 	$sth->execute(@bind);
 
-# 	while(my $data = $sth->fetchrow){
 	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
@@ -1504,7 +1495,6 @@ sub busquedaCombinada_newTemp{
 		
 	my @bind;
 	foreach $string (@searchstring_array){
-# 		$sth->execute("%".$string."%", "%".$string."%", "%".$string."%");
 		push(@bind, "%".$string."%");
 		push(@bind, "%".$string."%");
 # 		push(@bind, "%".$string."%");
@@ -1512,23 +1502,18 @@ sub busquedaCombinada_newTemp{
 
 	$sth->execute(@bind);
 
-# 	while(my $data = $sth->fetchrow){
 	while(my $data = $sth->fetchrow_hashref){
 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
 		}
 	}
 
-
-#    my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@id1_array);
 	#arma y ordena el arreglo para enviar al cliente
-   my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
-	#corta el arreglo segun lo que indica el paginador
-	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($ini,$cantR,@$resultsarray);
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
 	#se loquea la busqueda
-   C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+   	C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-   return ($cant_total,\@id1_array);
+   	return ($cant_total, $resultsarray);
 }
 
 
@@ -1805,7 +1790,7 @@ sub armarInfoNivel1{
 	
 	my $cantidad= $params->{'cantidad'};
 	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-	my $orden= $params->{'orden'}||'hits';
+	my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
 	my @resultsarray;
 	my %result;
  	my $nivel1;
@@ -1813,21 +1798,15 @@ sub armarInfoNivel1{
 
     my $cont = 0;
 	my $cant;
-	#si busquedaCombianda devuelve algo se busca la info siguiente
-# 	foreach my $id1 (@resultId1) {
+	#si busquedaCombianda devuelve algo se busca la info siguiente, solo se recupera la info necesaria para luego poder ordenar
+	#todos los resultados
 	my $i=0;
 	for($i=0;$i<scalar(@resultId1);$i++ ) {
 		$cant= 0;
-# 		$result{$i}->{'id1'}= $id1;
-
-#  		$nivel1= C4::AR::Nivel1::getNivel1FromId1($id1);
-#  		$result{$i}->{'titulo'}= $nivel1->getTitulo;
 		$result{$i}->{'id1'}= @resultId1[$i]->{'id1'};
 		$result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
 		$result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
-#  		$result{$i}->{'idAutor'}= $nivel1->getAutor;
-# 		$result{$i}->{'nomCompleto'}= C4::AR::Referencias::getNombreAutor($result{$i}->{'idAutor'});
 # 		getVolumenDesc()
 # FIXME falta pasar!!!!!
 # 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos($id1, $tipo_nivel3_name,"INTRA");
@@ -1853,14 +1832,16 @@ sub armarInfoNivel1{
 		@keys= sort{$result{$b}->{$orden} cmp $result{$a}->{$orden}} @keys;	
 	}
 
-	#partir arreglo
-	#buscar disponibilidad, grupos, y otrs yerbas
-
 	foreach my $row (@keys){
 		push (@resultsarray, $result{$row});
 	}
-	
-	return (\@resultsarray);
+
+	#se corta el arreglo segun lo que indica el paginador
+# 	my ($cant_total,@id1_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
+	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
+	#buscar disponibilidad, grupos, y otrs yerbas
+
+	return ($cant_total, \@result_array);
 }
 
 
