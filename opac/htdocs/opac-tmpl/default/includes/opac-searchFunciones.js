@@ -41,13 +41,13 @@ function updateInfo(responseText){
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
-    var string = [];
-    var classes = [];
-    string[0] = 'autor';
-    string[1] = 'titulo';
-    classes[0] = 'titulo_result';
-    classes[1] = 'autor_result';
-    highlight(classes,string);
+//     var string = [];
+//     var classes = [];
+//     string[0] = 'autor';
+//     string[1] = 'titulo';
+//     classes[0] = 'titulo_result';
+//     classes[1] = 'autor_result';
+//     highlight(classes,string);
 }
 
 
@@ -60,7 +60,7 @@ function busquedaCombinable(){
 		tipo= $("#checkExacto").val();
 	}
 
-	objAH=new AjaxHelper(updateInfo);
+	objAH=new AjaxHelper(updateBusquedaCombinable);
    	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/busqueda.pl';
@@ -76,6 +76,26 @@ function busquedaCombinable(){
 	//se envia la consulta
 	objAH.sendToServer();
 
+}
+
+function updateBusquedaCombinable(responseText){
+	updateInfo(responseText);
+	highlightBusquedaCombinable();
+}
+
+function highlightBusquedaCombinable(){
+	var string = [];
+    var classes = [];
+	if($('#autor').val() != ''){
+		classes.push('autor_result');
+	}
+	
+	if($('#titulo').val() != ''){
+		classes.push('titulo_result');
+	}
+    
+	var combinables= ['titulo', 'autor'];
+    highlight(classes,combinables);
 }
 
 
