@@ -28,6 +28,12 @@ __PACKAGE__->meta->setup(
             column_map => { id_reserva => 'id_reserva' },
             type       => 'one to one',
         },
+        socio => {
+            class       => 'C4::Modelo::UsrSocio',
+            key_columns => { nro_socio => 'nro_socio' },
+            type        => 'one to one',
+        },
+
 	    ref_tipo_sancion => {
             class      => 'C4::Modelo::CircTipoSancion',
             column_map => { tipo_sancion => 'tipo_sancion' },
@@ -277,6 +283,26 @@ sub actualizar_sancion {
 #*******************************Fin***Se registra el movimiento en historicSanction*************************
 }
 
+sub eliminar_sancion {
+    my ($self)=shift;
+    my ($loggedinuser)=@_;
+
+
+#**********************************Se registra el movimiento en historicSanction***************************
+    my $data_hash;
+    $data_hash->{'nro_socio'}=$self->getNro_socio;
+    $data_hash->{'loggedinuser'}=$loggedinuser;
+    $data_hash->{'fecha_final'}=$self->getFecha_final;
+    $data_hash->{'tipo_sancion'}=$self->getTipo_sancion;
+   use C4::Modelo::RepHistorialSancion;
+   my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+   $data_hash->{'tipo_operacion'}= 'Actualizacion';
+   $historial_sancion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en historicSanction*************************
+
+
+    $self->delete();
+}
 
 1;
 

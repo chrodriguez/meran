@@ -23,35 +23,18 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::AR::Sanciones;
 
 my $input = new CGI;
 
-my ($template, $session, $params) =  get_template_and_user ({
-            template_name   => 'circ/sanctions.tmpl',
+my ($template, $session, $t_params) =  get_template_and_user ({
+            template_name   => 'circ/sanciones.tmpl',
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,
             flagsrequired   => { circulate => 1 },
     });
 
-my $orden=$input->param('orden')||'surname';
-my @sanctionsarray= &sanciones($orden); #Se cambio para que la consulta no este en el .pl	
-my $borrowernumber = $session->param('borrowernumber');
-# El usuario logueado es superlibrarian????????
-# if ($borrowernumber eq 0){#es el kohaadmin
-# 	$params->{'superlibrarian'}=1;
-# }
-# else{ #es superlibrarian o puede actualizar sanciones??
-# 	my $data=C4::AR::Usuarios::getBorrower($borrowernumber);
-# 	my $dbh = C4::Context->dbh;
-# 	my $flags= &getuserflags($data->{'cardnumber'} ,$dbh);
-# 	$params->{'superlibrarian'}= $flags->{'superlibrarian'}||$flags->{'updatesanctions'};
-# }
-#
+my $sanciones= C4::AR::Sanciones::sanciones();
+$t_params->{'SANCIONES'}= $sanciones;
 
-
-$params->{'sanctionsloop'}= \@sanctionsarray;
-$params->{'responsable'}= $borrowernumber;
-
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

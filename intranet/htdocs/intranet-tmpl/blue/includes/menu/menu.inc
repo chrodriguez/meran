@@ -77,7 +77,7 @@
                 <ul>
                   <li><a href="/cgi-bin/koha/circ/prestamos.pl">Pr&eacute;stamos</a></li>
                   <li><a href="/cgi-bin/koha/circ/devoluciones.pl">Devol. y Renov.</a></li>
-                  <li><a href="/cgi-bin/koha/circ/sanctions.pl">Sanciones</a></li>
+                  <li><a href="/cgi-bin/koha/circ/sanciones.pl">Sanciones</a></li>
                 </ul>
             </li>
 

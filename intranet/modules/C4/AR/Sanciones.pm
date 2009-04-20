@@ -330,36 +330,7 @@ sub delSanction {
 }          
 
 #DEPRECATED
-sub sanciones{
-	my ($orden)=@_;
- #Esta funcion muestra toda las sanciones que hay
-	my $linecolor1='par';
-	my $linecolor2='impar';
-	my $class='';
-	$orden=&C4::AR::Utilidades::verificarValor($orden);
-	my $dateformat = C4::Date::get_date_format();
-	my $dbh = C4::Context->dbh;
-	my $query = "select cardnumber, borrowers.borrowernumber, surname, firstname, documenttype, documentnumber, studentnumber, sanctionnumber ,startdate, enddate, categories.description as categorydescription, circ_ref_tipo_prestamo.descripcion as issuecodedescription 
-	from circ_sancion  
-	left  join borrowers on borrowers.borrowernumber = circ_sancion.borrowernumber 
-	left join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = borrowers.categorycode 
-	left join circ_tipo_sancion on circ_tipo_sancion.tipo_sancion = circ_sancion.tipo_sancion 
-	left join circ_ref_tipo_prestamo on circ_ref_tipo_prestamo.id_tipo_prestamo = circ_tipo_sancion.tipo_prestamo 
-	where (circ_sancion.fecha_inicio <= now()) AND (circ_sancion.fecha_comienzo >= now())  order by ".$orden;
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
-	my @sanctionsarray;
-	my $borrowernumber;
-	while (my $res = $sth->fetchrow_hashref) {
-        	($class eq $linecolor1) ? ($class=$linecolor2) : ($class=$linecolor1);
-		$res->{'enddate'}=  format_date($res->{'enddate'},$dateformat);
-		$res->{'startdate'}=  format_date($res->{'startdate'},$dateformat);
-		$res->{'clase'}= $class;
-		push (@sanctionsarray, $res);
-	}
-	$sth->finish;
-	return @sanctionsarray;
-}
+
 
 #DEPRECATED
 sub borrarSancionReserva{
@@ -515,7 +486,6 @@ sub DiasDeSancion {
 # Si retorna 0 (cero) entonces no corresponde una sancion
 # Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
     my ($devolucion, $fecha, $categoria, $tipo_prestamo)=@_;
-    my $dbh= C4::Context->dbh;
     my $late=0; #Se devuelve tarde
     if (Date_Cmp($fecha, $devolucion) >= 0) {
         #Si es un prestamo especial debe devolverlo antes de una determinada hora
@@ -536,7 +506,7 @@ sub DiasDeSancion {
         }#else ES
     }#if Date_Cmp
 
-
+    my $dbh = C4::Context->dbh; 
 #Corresponde una sancion
     my $sth = $dbh->prepare("select *,circ_ref_tipo_prestamo.descripcion as descissuetype, usr_ref_categoria_socio.description as desccategory from circ_tipo_sancion inner join circ_regla_tipo_sancion on circ_tipo_sancion.tipo_sancion = circ_regla_tipo_sancion.sanctiontypecode inner join circ_regla_sancion on circ_regla_tipo_sancion.sanctionrulecode = circ_regla_sancion.sanctionrulecode inner join circ_ref_tipo_prestamo on circ_tipo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo inner join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = circ_tipo_sancion.categoria_socio where circ_tipo_sancion.tipo_prestamo = ? and circ_tipo_sancion.categoria_socio = ? order by circ_regla_tipo_sancion.orden");
     $sth->execute($tipo_prestamo, $categoria);
@@ -585,4 +555,20 @@ sub getTipoSancion{
 
   return($tipo_sancion);
 
+}
+
+
+sub sanciones {
+ #Esta funcion muestra toda las sanciones que hay
+
+  my $dateformat = C4::Date::get_date_format();
+  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+  my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
+                                                                    query => [ 
+                                                                            fecha_comienzo  => { le => $hoy },
+                                                                            fecha_final     => { ge => $hoy},
+                                                                              ],
+                                    );
+    return $sanciones_array_ref;
 }
