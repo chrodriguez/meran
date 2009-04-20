@@ -1848,7 +1848,49 @@ sub filtrarPorAutor{
     }
     push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
 
+#*****************************************Soporte MARC************************************************************************
+sub getHeader{
+	my ($campo) = @_;
+	use C4::Modelo::PrefEstructuraCampoMarc;
+	use C4::Modelo::PrefEstructuraCampoMarc::Manager;
 
+	my ($pref_estructura_campo_marc_array) = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc( 
+																					query => [ tagfield => { eq => $campo } ]
+																	);
+
+	if(scalar(@$pref_estructura_campo_marc_array) > 0){
+		return $pref_estructura_campo_marc_array->[0]->getLiblibrarian;
+	}else{
+		return 0;
+	}
+}
+
+sub getLiblibrarian{
+	my ($campo, $subcampo)= @_;
+
+	use C4::Modelo::PrefEstructuraSubcampoMarc;
+	use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+	#primero busca en estructura_catalogacion
+	my $estructura_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+	if(scalar(@$estructura_array) > 0){
+		return $estructura_array->[0]->getLiblibrarian;
+	}else{
+		my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
+																					query => [ tagfield => { eq => $campo },
+																								tagsubfield => { eq => $subcampo }
+																							 ]
+																	);
+		#si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc
+		if(scalar(@$pref_estructura_sub_campo_marc_array) > 0){
+			return  $pref_estructura_sub_campo_marc_array->[0]->getLiblibrarian
+		}else{
+			return 0;
+		}
+	}
+}
+#***************************************Fin**Soporte MARC*********************************************************************
+
+=======
     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
@@ -1856,5 +1898,6 @@ sub filtrarPorAutor{
     return ($cant_total,$resultsarray);
 }
 
+>>>>>>> .r1332
 1;
 __END__

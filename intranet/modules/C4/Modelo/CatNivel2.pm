@@ -342,11 +342,14 @@ sub toMARC{
     my ($self) = shift;
 	my @marc_array;
 
+	my $campo= '910';
+	my $subcampo= 'a';
 	my %hash;
-	$hash{'campo'}= '910';
-	$hash{'subcampo'}= 'a';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('910', 'a');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 		$hash{'datoReferencia'}= $self->getTipo_documento
@@ -354,11 +357,14 @@ sub toMARC{
 
 	push (@marc_array, \%hash);
 
+	$campo= '043';
+	$subcampo= 'c';
 	my %hash;
-	$hash{'campo'}= '043';
-	$hash{'subcampo'}= 'c';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('043', 'c');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 		$hash{'datoReferencia'}= $self->getPais_publicacion;
@@ -366,20 +372,26 @@ sub toMARC{
 
 	push (@marc_array, \%hash);
 
+	$campo= '260';
+	$subcampo= 'c';
 	my %hash;
-	$hash{'campo'}= '260';
-	$hash{'subcampo'}= 'c';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= $self->getAnio_publicacion;
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('260', 'c');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 
 	push (@marc_array, \%hash);
 
+	$campo= '260';
+	$subcampo= 'a';
 	my %hash;
-	$hash{'campo'}= '260';
-	$hash{'subcampo'}= 'a';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
  	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('260', 'a');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 	#tiene referencia
@@ -388,11 +400,14 @@ sub toMARC{
 
 	push (@marc_array, \%hash);
 
+	$campo= '041';
+	$subcampo= 'h';
 	my %hash;
-	$hash{'campo'}= '041';
-	$hash{'subcampo'}= 'h';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('041', 'h');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 	#tiene referencia
@@ -401,11 +416,14 @@ sub toMARC{
 
 	push (@marc_array, \%hash);
 
+	$campo= '245';
+	$subcampo= 'h';
 	my %hash;
-	$hash{'campo'}= '245';
-	$hash{'subcampo'}= 'h';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('245', 'h');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 	#tiene referencia
@@ -414,11 +432,14 @@ sub toMARC{
 
 	push (@marc_array, \%hash);
 
+	$campo= '900';
+	$subcampo= 'b';
 	my %hash;
-	$hash{'campo'}= '900';
-	$hash{'subcampo'}= 'b';
+	$hash{'campo'}= $campo;
+	$hash{'subcampo'}= $subcampo;
+	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('900', 'b');
+	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 	if($estructura->[0]->getReferencia){
 	#tiene referencia
@@ -436,21 +457,41 @@ Esta funcion devuelve los campos de nivel 2 y nivel2Repetible mapeados en un arr
 sub nivel2CompletoToMARC{
     my ($self) = shift;
 
-	my (@marc_array)= $self->toMARC;
+	my ($marc_array)= $self->toMARC;
 	my ($nivel2Repetible_object_array) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( 
 																						query => [ id2 => { eq => $self->getId2 } ]
 																		);
-	
+
+C4::AR::Debug::debug("cant nivel2CompletoToMARC: ".scalar(@$marc_array));
+	my $campo;
+	my $subcampo;
+	my $dato;
+
 	foreach my $marc_object (@$nivel2Repetible_object_array){
+		$campo= $marc_object->getCampo;
+		$subcampo= $marc_object->getSubcampo;
+		$dato= $marc_object->getDato;
 		my %hash;
-		$hash{'campo'}= $marc_object->getCampo;
-		$hash{'subcampo'}= $marc_object->getSubcampo;
-		$hash{'dato'}= $marc_object->getDato;
-# FIXME faltan los headers
- 		push(@marc_array, \%hash);
+		$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+		$hash{'campo'}= $campo;
+		$hash{'subcampo'}= $subcampo;
+		$hash{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
+		$hash{'dato'}= $dato;
+		my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+# 		$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+		if(scalar(@$estructura) > 0 ){
+C4::AR::Debug::debug("estructura > 0: ".$campo.", ".$subcampo);
+			if($estructura->[0]->getReferencia){
+				$hash{'dato'}= "(".$marc_object->getDato.") es una referencia";
+			}
+		}else{
+C4::AR::Debug::debug("estructura == 0: ".$campo.", ".$subcampo."  ".$dato);
+		}
+
+ 		push(@$marc_array, \%hash);
 	}
 	
-	return (\@marc_array);
+	return ($marc_array);
 }
 
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================

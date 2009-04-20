@@ -37,5 +37,39 @@ __PACKAGE__->meta->setup(
     ]
 );
 
+
+sub getTagfield{
+    my ($self) = shift;
+    return ($self->tagfield);
+}
+
+sub setTagfield{
+    my ($self) = shift;
+    my ($tagfield) = @_;
+    $self->tagfield($tagfield);
+}
+
+sub getTagSubField{
+    my ($self) = shift;
+    return ($self->tagsubfield);
+}
+
+sub setTagSubField{
+    my ($self) = shift;
+    my ($tagsubfield) = @_;
+    $self->tagsubfield($tagsubfield);
+}
+
+sub getLiblibrarian{
+    my ($self) = shift;
+    return ($self->liblibrarian);
+}
+
+sub setLiblibrarian{
+    my ($self) = shift;
+    my ($liblibrarian) = @_;
+    $self->liblibrarian($liblibrarian);
+}
+
 1;
 

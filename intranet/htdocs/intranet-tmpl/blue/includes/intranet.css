@@ -633,21 +633,6 @@ div.detalle{
 }
 
 
-.detalleMARC {
-      list-style-type:none;
-      display:block;
-      padding:5px;
-      text-align: left;
-      width: 90%; 
-}
-
-.MARCheader {
-	margin:0;
-	padding:5px;
-	background-color:#FFFFFF;
-	width: 90%;
-	list-style-type:none;
-}
 /* color para fila seleccionada en una tabla, poner un color mejor */
 .selected {
 	background-color:#999999;
@@ -1145,3 +1130,38 @@ span.as120240l{float:left;margin:0 1.0em .2em 1.0em;}
 /* FIN MENU */
 
 .highlight { background-color: yellow }
+
+
+/* para MARC */
+
+.MARCResult li{
+		border-top:1px dotted #CCCCCC;
+		color:#000000;
+		font-family:'lucida console','courier new',monospace;
+		line-height:1.5em;
+/* 		margin:0; */
+		margin-left:32px;	
+		table-layout:fixed;
+}
+
+
+.detalleMARC {
+      list-style-type:none;
+      display:block;
+      padding:5px;
+      text-align: left;
+      width: 90%; 
+}
+
+li.MARCHeader{
+	margin:0;
+	padding:5px;
+	background-color:#FFFFFF;
+	width: 90%;
+	list-style-type:none;
+}
+/* FIN MARC */
+
+ul li {
+      list-style-type:none;
+}
