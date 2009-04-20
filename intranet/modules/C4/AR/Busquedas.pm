@@ -1831,23 +1831,6 @@ sub armarInfoNivel1{
 	return ($cant_total, \@result_array);
 }
 
-sub filtrarPorAutor{
-    my ($ini,$cantR,$params_obj)=@_;
-    my $dbh = C4::Context->dbh;
-    my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-                FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
-                WHERE c1.autor = ?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($params_obj->{'idAutor'});
-    my @id1_array;
-    my @searchstring_array;
-    my $autor = getautor($params_obj->{'idAutor'});
-    while(my $data=$sth->fetchrow_hashref){
-        $data->{'completo'} = $autor->{'completo'};
-        push(@id1_array,$data);
-    }
-    push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
-
 #*****************************************Soporte MARC************************************************************************
 sub getHeader{
 	my ($campo) = @_;
@@ -1890,14 +1873,5 @@ sub getLiblibrarian{
 }
 #***************************************Fin**Soporte MARC*********************************************************************
 
-=======
-    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
-    #se loquea la busqueda
-    C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
-
-    return ($cant_total,$resultsarray);
-}
-
->>>>>>> .r1332
 1;
 __END__
