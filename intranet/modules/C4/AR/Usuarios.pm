@@ -1143,7 +1143,7 @@ sub getSocioLike {
     use C4::Modelo::UsrSocio;
     use C4::Modelo::UsrSocio::Manager;
 
-    my ($socio,$orden,$ini,$cantR,$habilitados) = @_;
+    my ($socio,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
     
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
@@ -1157,13 +1157,21 @@ sub getSocioLike {
 #     }
 
 	 if($socio ne 'TODOS'){
-		foreach my $s (@searchstring_array){ 
-			push (	@filtros, ( or   => [ 	apellido => { like => '%'.$s.'%'}, 
-											nro_documento => { like => '%'.$s.'%' }, 
-											legajo => { like => '%'.$s.'%' }  
-										])
-								);
-		}
+        if (!($inicial)){
+		    foreach my $s (@searchstring_array){ 
+			    push (	@filtros, ( or   => [ 	apellido => { like => '%'.$s.'%'}, 
+											    nro_documento => { like => '%'.$s.'%' }, 
+											    legajo => { like => '%'.$s.'%' }  
+										    ])
+								    );
+		    }
+        }else{
+            foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, 
+                                            ])
+                                    );
+            }
+        }
     }
 
 	if (defined($habilitados)){
