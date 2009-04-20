@@ -33,12 +33,18 @@ my ($cantidad,$socios);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 
-my $habilitados = $obj->{'habilitados_filter'} || undef;
+my $habilitados = $obj->{'habilitados_filter'} || 0;
 
-if (defined($habilitados)){
-    ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,1);
-}else {
-    ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR);
+# if (defined($habilitados)){
+#     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,1);
+# }else {
+#     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR);
+# }
+
+if ($inicial){
+    ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,$habilitados,$inicial);
+}else{
+    ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,$habilitados,0);
 }
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);

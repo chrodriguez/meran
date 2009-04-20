@@ -1157,6 +1157,7 @@ sub getSocioLike {
 #     }
 
 	 if($socio ne 'TODOS'){
+    #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
 		    foreach my $s (@searchstring_array){ 
 			    push (	@filtros, ( or   => [ 	apellido => { like => '%'.$s.'%'}, 
