@@ -1781,22 +1781,22 @@ obtenerCoincidenciasDeBusqueda
 sub obtenerCoincidenciasDeBusqueda{
 	my ($string, $search_array) = @_;
 
-C4::AR::Debug::debug("\n");
-C4::AR::Debug::debug("string: ".$string);
+# C4::AR::Debug::debug("\n");
+# C4::AR::Debug::debug("string: ".$string);
 	my $cant= 0;
 	my $cont= 0;
 	$string= lc $string;
-C4::AR::Debug::debug("long: ".scalar(@$search_array));
+# C4::AR::Debug::debug("long: ".scalar(@$search_array));
 	foreach my $search (@$search_array){
-C4::AR::Debug::debug("search: ".$search);
+# C4::AR::Debug::debug("search: ".$search);
 		$cant= 0;
 		$search= lc $search;
  		while ($string =~ /$search/g) { $cant++ }
-C4::AR::Debug::debug("cant: ".$cant);
+# C4::AR::Debug::debug("cant: ".$cant);
 		$cont += $cant;
 	}
-C4::AR::Debug::debug("cants hits: ".$cont);
-C4::AR::Debug::debug("\n");
+# C4::AR::Debug::debug("cants hits: ".$cont);
+# C4::AR::Debug::debug("\n");
 
 	return $cont;
 }
