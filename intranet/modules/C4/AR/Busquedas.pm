@@ -1456,6 +1456,78 @@ sub busquedaCombinada_newTemp{
    	return ($cant_total, $resultsarray);
 }
 
+=item
+Realiza una busqueda simpel por autor sobre nivel 1
+=cut
+sub busquedaSimplePorAutor{
+	my ($ini,$cantR,$params,$session) = @_;
+
+	$params->{'ini'}= $ini;
+	$params->{'cantR'}= $cantR;
+	$params->{'nomCompleto'}= $params->{'autor'};
+	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'autor'});	
+	my @id1_array;
+
+	my $dbh = C4::Context->dbh;
+	my $sql_string_c1;
+	
+	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  FROM cat_nivel1 c1 \n ";
+	$sql_string_c1 .=" 	LEFT  JOIN cat_autor a ON (c1.autor = a.id) WHERE (a.completo LIKE ?)\n ";
+	my $sth = $dbh->prepare($sql_string_c1);
+	
+	C4::AR::Debug::debug("SQL: ".$sql_string_c1);
+
+	$sth->execute("%".$params->{'autor'}."%");
+			
+	while(my $data = $sth->fetchrow_hashref){
+# 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+ 			push (@id1_array,$data);
+# 		}
+	}
+
+	#arma y ordena el arreglo para enviar al cliente
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params,\@searchstring_array, @id1_array);
+	#se loquea la busqueda
+   	C4::AR::Busquedas::logBusqueda($params, $session);
+
+   	return ($cant_total, $resultsarray);
+}
+
+=item
+Realiza una busqueda simple por titulo sobre nivel 1
+=cut
+sub busquedaSimplePorTitulo{
+	my ($ini,$cantR,$params,$session) = @_;
+
+	$params->{'ini'}= $ini;
+	$params->{'cantR'}= $cantR;
+	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'titulo'});	
+	my @id1_array;
+
+	my $dbh = C4::Context->dbh;
+	my $sql_string_c1;
+	
+	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  FROM cat_nivel1 c1 \n ";
+	$sql_string_c1 .=" 	LEFT  JOIN cat_autor a ON (c1.autor = a.id) WHERE (c1.titulo LIKE ?)\n ";
+	my $sth = $dbh->prepare($sql_string_c1);
+	
+	$sth->execute("%".$params->{'titulo'}."%");
+
+	C4::AR::Debug::debug("SQL: ".$sql_string_c1);
+			
+	while(my $data = $sth->fetchrow_hashref){
+# 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+ 			push (@id1_array,$data);
+# 		}
+	}
+
+	#arma y ordena el arreglo para enviar al cliente
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params,\@searchstring_array, @id1_array);
+	#se loquea la busqueda
+   	C4::AR::Busquedas::logBusqueda($params, $session);
+
+   	return ($cant_total, $resultsarray);
+}
 
 
 
@@ -1764,11 +1836,21 @@ sub armarInfoNivel1{
 	#se corta el arreglo segun lo que indica el paginador
 	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
 	#buscar disponibilidad, grupos, y otrs yerbas
+C4::AR::Debug::debug("armarInfoNivel1=> cant_total :".$cant_total);
+C4::AR::Debug::debug("armarInfoNivel1=> cant :".scalar(@result_array) );
 	for($i=0;$i<scalar(@resultsarray);$i++ ) {
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
- 		@resultsarray[$i]->{'grupos'}=$ediciones;
- 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name);
- 		@resultsarray[$i]->{'disponibilidad'}=\@disponibilidad;
+		@resultsarray[$i]->{'grupos'}= 0;
+		if(scalar(@$ediciones) > 0){
+ 			@resultsarray[$i]->{'grupos'}=$ediciones;
+		}
+
+ 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name);	
+		@resultsarray[$i]->{'disponibilidad'}= 0;
+
+		if(scalar(@disponibilidad) > 0){
+			@resultsarray[$i]->{'disponibilidad'}=\@disponibilidad;
+		}
 #       #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
 #       my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
 #       if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}

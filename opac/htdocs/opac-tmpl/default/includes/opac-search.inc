@@ -9,7 +9,7 @@
 &nbsp;&nbsp;&nbsp;
 
 <input type="text" id="searchinc" size="25" name="searchinc">
-<input name="se" id="se" onClick="searchinc('',1);" type="image" value="Buscar"  src="[% themelang %]/images/menu-search.png" border="0" align="absbottom" >
+<input name="se" id="se" onClick="searchinc();" type="image" value="Buscar"  src="[% themelang %]/images/menu-search.png" border="0" align="absbottom" >
 
 <script language="javascript" type="text/javascript">
 

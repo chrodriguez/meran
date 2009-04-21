@@ -51,7 +51,7 @@
 		  [% ELSE %]&nbsp;[% END %]
 		</td>
 
-		<td class="autor_result" onClick="buscarPorAutor([% idAutor %])">
+		<td class="autor_result" onClick="filtrarPorAutor([% idAutor %])">
 		  [% IF nomCompleto %]
 
 			[% nomCompleto %]
@@ -87,11 +87,6 @@
 	</tbody>
 </table>
 <br>
-
-<!-- esto tampoco -->
- [% FOREACH forminputs %]
-	<input TYPE="hidden" VALUE="[% value %]" NAME="[% field %]">
-[% END %]
 
 [% IF loggedinusername %]
 <input type="hidden" value="" name="bookmarks" id="bookmarks">

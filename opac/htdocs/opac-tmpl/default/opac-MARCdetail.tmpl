@@ -11,22 +11,22 @@
 </table>
 
 <!--*****************************************MARC DETAIL*****************************************************  -->
-<ul>
+<ul class="MARCResult">
 [% FOREACH MARCDetail_array %]
 
-	[% IF campoMARC %]
-	<li class="MARCheader">
-	[% campoMARC %]&nbsp;[% nombreCampo %]
+	[% IF header %]
+	<li class="MARCHeader">
+		[% campo %]&nbsp;[% header %]
 	</li>
+		[% FOREACH info_campo_array %]
+			<li class="MARCDetalle">
+				[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+			</li>
+		[% END %]
 	[% END %]  
 
-	<li class="detalleMARC">
-	[% campo %],&nbsp;&nbsp;[% subcampo %]
-	&nbsp;[% librarian %]: &nbsp;<b>[% dato %]</b>
-	</li>
 [% END %]
 </ul>
-
 
 
 

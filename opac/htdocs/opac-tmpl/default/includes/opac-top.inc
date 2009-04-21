@@ -66,16 +66,6 @@ function cambiarIdioma() {
 [% END %]
 </tr>
 <tr>
-<!-- este esta funcionando pero se debe setear dinamicamente el lang seleccionado -->
-<!--<form id="formLang" action="/cgi-bin/koha/opac-language.pl" method="POST">
-	<input id="lang_server" name="lang_server" type="hidden" value="">
-	<input id="url" name="url" type="hidden" value="">
-	<select id="language" onChange="cambiarIdioma()">
-		<option value="nl_NL">NL</option>
-		<option value="es_ES">ES</option>
-		<option value="en_EN">EN</option>
-	</select>
-</form>-->
 <tr>
 <tr><td>&nbsp; </td></tr>
 <tr>

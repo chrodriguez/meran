@@ -20,23 +20,16 @@ sub i18n {
 
 	my ($text) = @_;
 	my $session = CGI::Session->load();#si esta definida
-# open(Z, ">>/tmp/debug.txt");
-# print Z "\n";
-## FIXME falta manejar cookie si el usuario no esta logueado
+## FIXME falta manejar cookie si el usuario no esta logueado????
 	my $type= $session->param('type') || 'opac';
 
  	my $locale = $session->param('locale')||C4::Context->config("defaultLang")||'es_ES';
-# print Z "type: ".$type."\n";
-# print Z "locale: ".$locale."\n";
-# print Z "default lang: ".C4::Context->config("defaultLang")."\n";
-# print Z "session locale: ".$session->param('locale')."\n";
 	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
-# print Z "path locale: ".C4::Context->config("locale")."\n";
+
 	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
 	Locale::Maketext::Gettext::Functions::textdomain($type);
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
-# print Z "\n";
-# close(Z);
+
  	return __($text);
 }
 
@@ -49,8 +42,6 @@ sub setComboLang {
 
     my ($type) = @_;
     my $session = CGI::Session->load();
-# open(A, ">>/tmp/debug.txt");
-# print A "desde putHTML: \n";
     my $html= '';
     my $lang_Selected= $session->param('locale');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
@@ -77,6 +68,6 @@ sub setComboLang {
 
     $html .="</select>";
     $html .="</form>";
-# close(A);
+
     return $html;
 }

@@ -6,17 +6,15 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
-use C4::AR::Utilidades;
-use C4::AR::Catalogacion;
 
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-								template_name => "busquedaResult.tmpl",
-								query => $input,
-								type => "opac",
-								authnotrequired => 1,
-								flagsrequired => {borrow => 1},
+																template_name => "busquedaResult.tmpl",
+																query => $input,
+																type => "opac",
+																authnotrequired => 1,
+																flagsrequired => {borrow => 1},
 			     });
 
 
@@ -27,8 +25,24 @@ if($obj ne ""){
 }
 
 my $ini= $obj->{'ini'};
-
 $obj->{'type'} = 'OPAC';
+
+
+#se esta realizando una busqueda desde la busqueda que solo filtra por titulo, autor o tema
+if($obj->{'criteria'} eq 'titulo'){
+	$obj->{'titulo'}= $obj->{'searchinc'};
+	$obj->{'tipo_nivel3_name'}= '';
+}
+
+if($obj->{'criteria'} eq 'autor'){
+	$obj->{'autor'}= $obj->{'searchinc'};
+	$obj->{'tipo_nivel3_name'}= '';
+}
+
+if($obj->{'criteria'} eq 'tema'){
+	$obj->{'tema'}= $obj->{'searchinc'};
+	$obj->{'tipo_nivel3_name'}= '';
+}
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
@@ -39,7 +53,6 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->param('nro_socio');
-
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}= $cantidad;

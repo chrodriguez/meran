@@ -8,11 +8,11 @@ table.top{
 
 td.number{
 
-	border-color= #FFFFFF; 
+	border-color: #FFFFFF; 
 }
 
 td.highnumber{
-	border-color= #FFFFFF;
+	border-color: #FFFFFF;
 	font-weight: bold;
 	text-decoration: underline;
 
@@ -191,21 +191,35 @@ ul li.sancionesOPAC {
       text-align: left;
 }
 
+/* para MARC */
+
+.MARCResult li{
+		border-top:1px dotted #CCCCCC;
+		color:#000000;
+		font-family:'lucida console','courier new',monospace;
+		line-height:1.5em;
+/* 		margin:0; */
+		margin-left:32px;	
+		table-layout:fixed;
+}
+
+
 .detalleMARC {
       list-style-type:none;
       display:block;
-/*       margin:0; */
       padding:5px;
       text-align: left;
       width: 90%; 
 }
 
-.MARCheader {
+li.MARCHeader{
 	margin:0;
 	padding:5px;
-	background-color:#FFFFFF;  
-	width: 90%; 
+	background-color:#FFFFFF;
+	width: 99%;
+	list-style-type:none;
 }
+/* FIN MARC */
 
 .Encabezados{
 	text-align: left;
