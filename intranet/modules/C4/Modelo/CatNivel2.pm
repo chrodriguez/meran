@@ -462,7 +462,6 @@ sub nivel2CompletoToMARC{
 																						query => [ id2 => { eq => $self->getId2 } ]
 																		);
 
-C4::AR::Debug::debug("cant nivel2CompletoToMARC: ".scalar(@$marc_array));
 	my $campo;
 	my $subcampo;
 	my $dato;
@@ -477,20 +476,13 @@ C4::AR::Debug::debug("cant nivel2CompletoToMARC: ".scalar(@$marc_array));
 		$hash{'subcampo'}= $subcampo;
 		$hash{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}= $dato;
-		my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-# 		$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-		if(scalar(@$estructura) > 0 ){
-C4::AR::Debug::debug("estructura > 0: ".$campo.", ".$subcampo);
-			if($estructura->[0]->getReferencia){
-				$hash{'dato'}= "(".$marc_object->getDato.") es una referencia";
-			}
-		}else{
-C4::AR::Debug::debug("estructura == 0: ".$campo.", ".$subcampo."  ".$dato);
-		}
+
+		C4::AR::Debug::debug("nivel2CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);	
 
  		push(@$marc_array, \%hash);
 	}
-	
+
+	C4::AR::Debug::debug("nivel2CompletoToMARC => ******************************* cant: ".scalar(@$marc_array));
 	return ($marc_array);
 }
 

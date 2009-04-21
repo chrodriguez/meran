@@ -1,7 +1,6 @@
 
 <p class="pagetitle">Detalle MARC</p>
 
-
 <!--*****************************************MARC DETAIL*****************************************************  -->
 <ul class="MARCResult">
 [% FOREACH MARCDetail_array %]
@@ -10,11 +9,13 @@
 	<li class="MARCHeader">
 		[% campo %]&nbsp;[% header %]
 	</li>
+		[% FOREACH info_campo_array %]
+			<li class="MARCDetalle">
+				[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+			</li>
+		[% END %]
 	[% END %]  
 
-	<li class="MARCDetalle">
-		[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
-	</li>
 [% END %]
 </ul>
 

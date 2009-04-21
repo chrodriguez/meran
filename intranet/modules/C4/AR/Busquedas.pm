@@ -511,59 +511,6 @@ sub obtenerDisponibilidadTotal{
 #****************************************************MARC DETAIL**************************************************
 
 
-#devuelve toda la info en MARC de un item (id3 de nivel 3)
-sub MARCDetail{
-
-	my ($id3,$tipo)= @_;
-
-	my @MARC_result;
-	my $marc_array_nivel1;
-	my $marc_array_nivel2;
-	my $marc_array_nivel3;
-
-	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
-	if($nivel3_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel3');
-		($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
-	}
-
-	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
-	
-	if($nivel2_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel2');
-		($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
-	}
-	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
-	if($nivel1_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel1');
-		($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
-	}
-
-	push(@$marc_array_nivel1, $marc_array_nivel2);
-	push(@$marc_array_nivel1, $marc_array_nivel3);
-=item
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM cat_nivel3 WHERE id3=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id3);
-
-	my $data=$sth->fetchrow_hashref;
-
-	my $id2= $data->{'id2'};
-	my $id1= $data->{'id1'};
-
- 	my $nivel1=&C4::AR::Catalogacion::buscarNivel1($id1); #C4::AR::Catalogacion;
- 	my @autor=&getautor($nivel1->{'autor'});
-
-	my @nivel1Loop= &C4::AR::Nivel1::detalleNivel1MARC($id1, $nivel1,$tipo);
-	my @nivel2Loop= &C4::AR::Nivel2::detalleNivel2MARC($id1,$id2,$id3,$tipo,\@nivel1Loop);
-
-	return @nivel2Loop;
-=cut
-	return ($marc_array_nivel1);
-}
-
-
 =item
 buscarCamposMARC
 Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de filtradoAvanzado.
@@ -1858,6 +1805,90 @@ sub filtrarPorAutor{
 
 
 #*****************************************Soporte MARC************************************************************************
+#devuelve toda la info en MARC de un item (id3 de nivel 3)
+sub MARCDetail{
+	my ($id3,$tipo)= @_;
+
+	my @MARC_result;
+	my $marc_array_nivel1;
+	my $marc_array_nivel2;
+	my $marc_array_nivel3;
+
+	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
+	if($nivel3_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel3');
+		($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
+	}
+
+	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
+	
+	if($nivel2_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel2');
+		($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
+		C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
+	}
+	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
+	if($nivel1_object ne 0){
+		C4::AR::Debug::debug('recupero el nivel1');
+		($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
+	}
+
+	my @result;
+	push(@result, @$marc_array_nivel1);
+	push(@result, @$marc_array_nivel2);
+	push(@result, @$marc_array_nivel3);
+	
+	my @MARC_result_array;
+# FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
+	
+	for(my $i=0; $i< scalar(@result); $i++){
+		my %hash;	
+		my $campo= @result[$i]->{'campo'};
+		my @info_campo_array;
+		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+		if(!_exsiteEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+			#proceso todos los subcampos del campo
+			for(my $j=$i;$j < scalar(@result);$j++){
+				my %hash_temp;
+				$hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
+				$hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
+				$hash_temp{'dato'}= @result[$j]->{'dato'};
+	
+				if(@result[$j]->{'campo'} eq $campo){
+					push(@info_campo_array, \%hash_temp);
+					C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+				}
+			}
+		
+			$hash{'campo'}= $campo;
+			$hash{'header'}= @result[$i]->{'header'};
+			$hash{'info_campo_array'}= \@info_campo_array;
+		
+			push(@MARC_result_array, \%hash);
+			C4::AR::Debug::debug("campo: ".$campo);
+			C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+		}
+	}
+
+	return (\@MARC_result_array);
+}
+
+=item
+Verifica si existe en el arreglo de campos el campo pasado por parametro
+=cut
+sub _exsiteEnArregloDeCampoMARC{
+	my ($array, $campo)= @_;
+
+	for(my $j=0;$j < scalar(@$array);$j++){
+
+		if(@$array->[$j]->{'campo'} eq $campo){
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 sub getHeader{
 	my ($campo) = @_;
 	use C4::Modelo::PrefEstructuraCampoMarc;

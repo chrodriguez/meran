@@ -16,27 +16,11 @@ __PACKAGE__->use_private_registry;
   
  if (defined($context)){
     $driverDB = 'mysql';
-    
     $database = $context->config('database');
-    
     $hostname = $context->config('hostname');
-    
     $user = $context->config('user');
-    
     $pass = $context->config('pass');
- }
- else
-    {
-        $driverDB = 'mysql';
-    
-        $database = "V3_NEW";
-        
-        $hostname = "localhost";
-        
-        $user = "remote";
-        
-        $pass = "remoteHOST";   
-    }
+}
         
 __PACKAGE__->register_db
 (

@@ -231,7 +231,6 @@ sub nivel1CompletoToMARC{
 																						query => [ id1 => { eq => $self->getId1 } ]
 																		);
 
-C4::AR::Debug::debug("cant nivel1CompletoToMARC: ".scalar(@$marc_array));
 	my $campo;
 	my $subcampo;
 	my $dato;	
@@ -246,9 +245,11 @@ C4::AR::Debug::debug("cant nivel1CompletoToMARC: ".scalar(@$marc_array));
 		$hash{'subcampo'}= $subcampo;
 		$hash{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}= $dato;
-# FIXME faltan los headers
+
  		push(@$marc_array, \%hash);
+C4::AR::Debug::debug("nivel1CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);	
 	}
+C4::AR::Debug::debug("nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
 	
 	return ($marc_array);
 }
