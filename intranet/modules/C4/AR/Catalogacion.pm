@@ -1647,25 +1647,25 @@ sub dameIdReptible{
 Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
 =cut
 sub subirOrden{
-    my ($id) = @_;
+    my ($id,$itemtype) = @_;
 
     my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catAModificar->load();
 
-    $catAModificar->subirOrden();
+    $catAModificar->subirOrden($itemtype);
 }
 
 =item
 Esta funcion baja el orden como se va a mostrar del campo, subcampo catalogado
 =cut
 sub bajarOrden{
-    my ($id) = @_;
+    my ($id,$itemtype) = @_;
 
     my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catAModificar->load();
 
     #verifico que no sea el ultimo en la lista, si es el ulitmo no puede bajar mas
-        $catAModificar->bajarOrden();
+        $catAModificar->bajarOrden($itemtype);
 }
 
 

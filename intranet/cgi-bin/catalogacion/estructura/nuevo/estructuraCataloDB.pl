@@ -164,8 +164,8 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 #Sube el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "SUBIR_ORDEN"){
     my $id=$obj->{'idMod'};
-
-    C4::AR::Catalogacion::subirOrden($id);
+    my $itemtype=$obj->{'itemtype_cliente'};
+    C4::AR::Catalogacion::subirOrden($id,$itemtype);
 
     print $input->header;
 }

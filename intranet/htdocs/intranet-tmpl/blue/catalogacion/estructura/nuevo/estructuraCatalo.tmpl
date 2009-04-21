@@ -63,6 +63,7 @@ function modificarOrden(id, accion){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
     objAH.idMod=id;
+    objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
     objAH.sendToServer();
 }

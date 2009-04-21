@@ -141,8 +141,17 @@ sub borrarYOrdenar{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { gt => $self->getIntranet_habilitado },
-                                                                    nivel => { eq => $self->getNivel },
-                                                                    itemtype => { eq => $self->getItemType},
+                                                                    or => [
+                                                                       and => [
+                                                                            itemtype=> { eq => $self->getItemType},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                       ],
+                                                                        and => [
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                            fijo => { eq => 1},
+                                                                        ],
+                                                                    ],
                                                             ],
                                                          );
 
@@ -170,15 +179,24 @@ sub tieneReferencia{
 sub bajarAnterior{
         
     my ($self)=shift;
-
+    my ($itemtype) = @_;
     my $catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
                                                             set => [
                                                                     intranet_habilitado=> $self->getIntranet_habilitado,
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado-1 },
-                                                                    nivel => { eq => $self->getNivel },
-                                                                    itemtype => { eq => $self->getItemType},
+                                                                    or => [
+                                                                       and => [
+                                                                            itemtype=> { eq => $itemtype},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                       ],
+                                                                        and => [
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                            fijo => { eq => 1},
+                                                                        ],
+                                                                    ],
                                                             ],
                                                          );
 }
@@ -186,15 +204,25 @@ sub bajarAnterior{
 sub subirSiguiente{
         
     my ($self)=shift;
-
+    my ($itemtype) = @_;
     my $catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
                                                             set => [
                                                                     intranet_habilitado=> $self->getIntranet_habilitado,
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado+1 },
-                                                                    nivel => { eq => $self->getNivel },
-                                                                    itemtype => { eq => $self->getItemType},
+                                                                    or => [
+                                                                       and => [
+                                                                            itemtype=> { eq => $itemtype},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                       ],
+                                                                        and => [
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                            fijo => { eq => 1},
+                                                                        ],
+                                                                    ],
+
                                                             ],
                                                          );
 }
@@ -204,9 +232,10 @@ sub subirSiguiente{
 subirOrden
 Sube el orden en la vista, del campo seleccionado.
 =cut
+
 sub subirOrden{
     my ($self)=shift;
-
+    my ($itemtype) = @_;
     if (!($self->soyElPrimero)){
         $self->bajarAnterior();
         $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
@@ -221,9 +250,9 @@ Baja el orden en la vista, del campo seleccionado.
 sub bajarOrden{
 
     my ($self)=shift;
-
-    if (!($self->soyElUltimo)){
-        $self->subirSiguiente();
+    my ($itemtype) = @_;
+    if (!($self->soyElUltimo($itemtype))){
+        $self->subirSiguiente($itemtype);
         $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
         $self->save();
     }
@@ -232,11 +261,21 @@ sub bajarOrden{
 sub getUltimoIntranetHabilitado{
 
     my ($self)=shift;
+    my ($itemtype) = @_;
     my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion_count( 
                                                             query => [
-                                                                    itemtype=> { eq => $self->getItemType},
-                                                                    nivel=> { eq => $self->getNivel},               
-                                                            ],
+                                                                    or => [
+                                                                       and => [
+                                                                            itemtype=> { eq => $itemtype},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                       ],
+                                                                        and => [
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                            fijo => { eq => 1},
+                                                                        ],
+                                                                    ],
+                                                                ],
                                                         );
 
     return ($catalogaciones_count);
@@ -246,7 +285,7 @@ Esta funcion retorna 1 si es el ultimo en el orden a mostrar segun intranet_habi
 =cut
 sub soyElUltimo{
     my ($self)=shift;
-
+    my ($itemtype) = @_;
     return ( $self->intranet_habilitado == $self->getUltimoIntranetHabilitado() );
 }
 
