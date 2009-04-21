@@ -135,14 +135,7 @@ sub borrarYOrdenar{
 
     my ($self)=shift;
 
-#     my $siguientes_catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-#                                                             query => [
-#                                                                     intranet_habilitado=> { gt => $self->getIntranet_habilitado },
-#                                                             ],
-#                                                              sort_by => 'intranet_habilitado ASC',
-#                                                          );
-
-      my $siguientes_catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
+    my $siguientes_catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
                                                             set => [
                                                                     intranet_habilitado=> { sql => 'intranet_habilitado -1'},
                                                             ],
@@ -236,34 +229,6 @@ sub bajarOrden{
     }
 }
 
-
-
-=item
-Esta funcion verifica si es el ultimo en orden de las catalogaciones segun el nivel e itemtype
-=cut
-# sub soyElUltimo{
-#     my ($self)=shift;
-# # FIXME OJO hace varias subconsultas, ver si queda asi
-# 
-#     my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-#                                                             query => [
-#                                                                     itemtype=> { eq => $self->getItemType},
-#                                                                     nivel=> { eq => $self->getNivel},               
-#                                                             ],
-# 															sort_by => 'intranet_habilitado DESC',
-# 
-#                                         );
-# 	
-# 	my $max= 1;
-# 	if( scalar(@$catalogaciones_array) > 0){
-# 		#obtengo el intranet_habilitado con el menor orden
-# 		$max= $catalogaciones_array->[0]->getIntranet_habilitado;
-# 	}
-# 
-#     return $max eq $self->getIntranet_habilitado;
-# }
-
-
 sub getUltimoIntranetHabilitado{
 
     my ($self)=shift;
@@ -276,35 +241,14 @@ sub getUltimoIntranetHabilitado{
 
     return ($catalogaciones_count);
 }
-
+=item
+Esta funcion retorna 1 si es el ultimo en el orden a mostrar segun intranet_habilitado
+=cut
 sub soyElUltimo{
     my ($self)=shift;
 
     return ( $self->intranet_habilitado == $self->getUltimoIntranetHabilitado() );
 }
-=item
-Esta funcion retorna 1 si es el primero en el orden a mostrar segun intranet_habilitado
-=cut
-# sub soyElPrimero{
-#     my ($self)=shift;
-# # FIXME OJO hace varias subconsultas, ver si queda asi
-# 	my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-# 														query => [
-# 																itemtype=> { eq => $self->getItemType},
-# 																nivel=> { eq => $self->getNivel},               
-# 														],
-# 														sort_by => 'intranet_habilitado',
-# 
-# 									);
-# 	
-# 	my $min= 1;
-# 	if( scalar(@$catalogaciones_array) > 0){
-# 		#obtengo el intranet_habilitado con el menor orden
-# 		$min= $catalogaciones_array->[0]->getIntranet_habilitado;
-# 	}
-# 
-#     return $min eq $self->getIntranet_habilitado;
-# }
 
 
 sub soyElPrimero{
