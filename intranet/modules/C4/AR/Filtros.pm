@@ -23,12 +23,7 @@ sub i18n {
 # open(Z, ">>/tmp/debug.txt");
 # print Z "\n";
 ## FIXME falta manejar cookie si el usuario no esta logueado
-	my $type= 'opac';
-
-	if ($session){
-	#si hay session seguro esta en INTRA
-		$type= $session->param('type');
-	}
+	my $type= $session->param('type') || 'opac';
 
  	my $locale = $session->param('locale')||C4::Context->config("defaultLang")||'es_ES';
 # print Z "type: ".$type."\n";
