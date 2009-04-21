@@ -119,7 +119,13 @@ sub agregar{
     my ($data_hash)=@_;
     
     $self->setId_persona($data_hash->{'id_persona'});
-    $self->setNro_socio($data_hash->{'nro_socio'});
+
+    if ($data_hash->{'auto_nro_socio'}){
+        $self->setNro_socio($self->nextNro_socio());
+    }else{
+        $self->setNro_socio($data_hash->{'nro_socio'});
+    }
+
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
     $self->setFecha_alta($data_hash->{'fecha_alta'});
@@ -136,6 +142,18 @@ sub agregar{
     }
     $self->save();
 
+}
+
+
+sub nextNro_socio{
+
+     my ($self)=shift;
+
+     my $nro_socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(
+                                                                   select => ['nro_socio'],
+                                                                   sort_by => ['nro_socio DESC'],
+                                                                    );
+    return ($nro_socio->[0]->nro_socio + 1);
 }
 
 sub modificar{

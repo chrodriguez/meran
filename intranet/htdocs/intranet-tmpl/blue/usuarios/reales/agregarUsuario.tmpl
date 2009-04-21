@@ -9,6 +9,21 @@
 
 <script language="javascript" type="text/javascript">
 
+function validateNro_socio(){
+    nro_socio = $('#nro_socio').val();
+    if ( (($.trim(nro_socio)).length == 0 ) || (isNaN(nro_socio)) ) {
+        $('#nro_socio').val('Auto-generar'); 
+        $('#nro_socio').attr("readonly","true"); 
+    } 
+}
+    
+
+function toggleNro_socio(){
+    if ($('#nro_socio').attr("readonly") == true){ 
+        $('#nro_socio').val(''); 
+        $('#nro_socio').removeAttr("readonly"); 
+    } 
+}
 $(document).ready(function() {
    [% IF addBorrower %]
       validateForm(agregarUsuario);
@@ -16,6 +31,9 @@ $(document).ready(function() {
       validateForm(guardarModificacioUsuario);
    [% END %]
 
+    validateNro_socio();
+    $('#nro_socio').click(function(){toggleNro_socio()});
+    $('#nro_socio').blur(function(){validateNro_socio()});
     $("#userDataForm").validate();
     CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
     CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
@@ -60,8 +78,12 @@ $(document).ready(function() {
     <tr valign=top width="100%">
         
         <td  width="50%" ALIGN=RIGHT>
-         [% "Tarjeta de identificaci&oacute;n" | i18n %] * 
-        <input id="nro_socio" type=text class="required" name=nro_socio size=10 value="[% socio.getNro_socio %]"><br>
+         [% "Tarjeta de identificaci&oacute;n" | i18n %] *  
+         [% IF addBorrower %]
+            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="[% socio.getNro_socio %]"><br>
+         [% ELSE %]
+            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar Nro. Socio"><br>
+         [% END %]
         </td>
     </tr>
 

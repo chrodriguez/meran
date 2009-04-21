@@ -242,7 +242,11 @@ function agregarUsuario(){
       objAH=new AjaxHelper(updateAgregarUsuario);
       objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
       objAH.debug= true;
-      objAH.nro_socio= $('#nro_socio').val();
+      if (!(isNaN($('#nro_socio').val())) ) { //SI ES UN NUMERO...
+        objAH.nro_socio= $('#nro_socio').val();
+      }else{
+        objAH.auto_nro_socio=1;
+      }
       objAH.sexo= $("input[@name=sexo]:checked").val();
       objAH.calle= $('#calle').val();
       objAH.nombre= $('#nombre').val();
@@ -254,7 +258,7 @@ function agregarUsuario(){
       objAH.alt_ciudad= $('#id_alt_ciudad').val();
       objAH.alt_telefono= $('#alt_telefono').val();
       objAH.apellido= $('#apellido').val();
-      objAH.id_ui= $('#ui_id').val();
+      objAH.id_ui= $('#id_ui').val();
       objAH.tipo_documento= $('#tipo_documento_id').val();
       objAH.nro_documento= $('#nro_documento').val();
       objAH.legajo= $('#legajo').val();

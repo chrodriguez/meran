@@ -644,3 +644,7 @@ ALTER TABLE `rep_historial_busqueda` CHANGE `HTTP_USER_AGENT` `agent` VARCHAR( 2
 ALTER TABLE `rep_busqueda` CHANGE `fecha` `fecha` VARCHAR( 12 ) NOT NULL ;
 
 --MIGUEL (14/04/09) hasta aca actualizada la 163.10.20.30
+
+
+--GASPAR
+ ALTER TABLE `usr_socio` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL  
