@@ -33,17 +33,14 @@
 		        </td>
 		        <td>
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
-				soyElPrimero: [% catalogacion.soyElPrimero %]
                 [% IF catalogacion.soyElPrimero != 1 %]  
-					([% catalogacion.getIntranet_habilitado - 1%])                          
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
                     onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> 
                 [% END %]
-                (Actual: [% catalogacion.getIntranet_habilitado %])
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
-                [% IF catalogacion.soyElUltimo != 1 %]                                    
+                [% IF catalogacion.soyElUltimo != 1 %]
 			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">     ([% catalogacion.getIntranet_habilitado + 1%])
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
                 [% END %]
 		        </td>
 		        <td>

@@ -1652,34 +1652,7 @@ sub subirOrden{
     my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catAModificar->load();
 
-    #verifico que no sea el primero en la lista, si es el primero no puede subir mas
-    if(!$catAModificar->soyElPrimero){
-        #obtengo todas las catalogaciones que tienen el mismo intranet_habilitado, nivel y itemtype
-#         my $otrasCatalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-#                                                                 query => [
-#                                                                         intranet_habilitado=> { eq => $catAModificar->getIntranet_habilitado - 1},
-#                                                                         itemtype=> { eq => $catAModificar->getItemType},
-#                                                                         nivel=> { eq => $catAModificar->getNivel},               
-#                                                                 ]
-#                                             ); 
-    
-        my $otrasCatalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-                                                        query => [
-                                                                intranet_habilitado=> { gt => $catAModificar->getIntranet_habilitado },
-                                                                itemtype=> { eq => $catAModificar->getItemType},
-                                                                nivel=> { eq => $catAModificar->getNivel},               
-                                                        ]
-                                    ); 
-
-        #actualizo el intranet_habilitado de las catalogaciones con el intranet_habilitado de la catalogacion que quiero modificar
-        foreach my $cat (@$otrasCatalogaciones){
-#             $cat->setIntranet_habilitado($catAModificar->getIntranet_habilitado);
-            $cat->setIntranet_habilitado($cat->getIntranet_habilitado + 1);
-            $cat->save();
-        }
-    
-        $catAModificar->subirOrden;
-    }
+    $catAModificar->subirOrden();
 }
 
 =item
@@ -1692,25 +1665,7 @@ sub bajarOrden{
     $catAModificar->load();
 
     #verifico que no sea el ultimo en la lista, si es el ulitmo no puede bajar mas
-    if (!$catAModificar->soyElUltimo){
-
-        #obtengo todas las catalogaciones que tienen el mismo intranet_habilitado, nivel y itemtype
-        my $otrasCatalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-                                                                query => [
-                                                                        intranet_habilitado=> { eq => $catAModificar->getIntranet_habilitado + 1},
-                                                                        itemtype=> { eq => $catAModificar->getItemType},
-                                                                        nivel=> { eq => $catAModificar->getNivel},               
-                                                                ]
-                                            ); 
-    
-        #actualizo el intranet_habilitado de las catalogaciones con el intranet_habilitado de la catalogacion que quiero modificar
-        foreach my $cat (@$otrasCatalogaciones){
-            $cat->setIntranet_habilitado($catAModificar->getIntranet_habilitado);
-            $cat->save();
-        }
-    
-        $catAModificar->bajarOrden;
-    }
+        $catAModificar->bajarOrden();
 }
 
 

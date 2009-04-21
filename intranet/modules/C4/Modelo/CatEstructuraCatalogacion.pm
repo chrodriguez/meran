@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
         referencia          => { type => 'integer', default => '0', not_null => 1 },
         nivel               => { type => 'integer', not_null => 1 },
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
-        intranet_habilitado => { type => 'integer', default => '0' },
+        intranet_habilitado => { type => 'integer', default => '1' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
         repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
@@ -124,9 +124,45 @@ sub delete{
     if ($self->soyFijo){
     #NO ESTA PERMITIDO ELIMINAR UNA TUPLA QUE SEA FIJA
     }else{
-        $self->SUPER::delete();
+        $self->borrarYOrdenar();
     }
 }
+
+
+
+sub borrarYOrdenar{
+
+    my ($self)=shift;
+
+#     my $siguientes_catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+#                                                             query => [
+#                                                                     intranet_habilitado=> { gt => $self->getIntranet_habilitado },
+#                                                             ],
+#                                                              sort_by => 'intranet_habilitado ASC',
+#                                                          );
+
+      my $siguientes_catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
+                                                            set => [
+                                                                    intranet_habilitado=> { sql => 'intranet_habilitado -1'},
+                                                            ],
+                                                            where => [
+                                                                    intranet_habilitado => { gt => $self->getIntranet_habilitado },
+                                                                    nivel => { eq => $self->getNivel },
+                                                                    itemtype => { eq => $self->getItemType},
+                                                            ],
+                                                         );
+
+    $self->realDelete();
+}
+
+sub realDelete{
+
+    my ($self)=shift;
+
+    $self->SUPER::delete();
+
+}
+
 
 =item
 indica si la estructura de catalogacion tiene (=1) o no (=0) informacion de referencia
@@ -137,6 +173,39 @@ sub tieneReferencia{
     return $self->getReferencia;
 }
 
+sub bajarAnterior{
+        
+    my ($self)=shift;
+
+    my $catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
+                                                            set => [
+                                                                    intranet_habilitado=> $self->getIntranet_habilitado,
+                                                            ],
+                                                            where => [
+                                                                    intranet_habilitado => { eq => $self->getIntranet_habilitado-1 },
+                                                                    nivel => { eq => $self->getNivel },
+                                                                    itemtype => { eq => $self->getItemType},
+                                                            ],
+                                                         );
+}
+
+sub subirSiguiente{
+        
+    my ($self)=shift;
+
+    my $catalogaciones = C4::Modelo::CatEstructuraCatalogacion::Manager->update_cat_estructura_catalogacion( 
+                                                            set => [
+                                                                    intranet_habilitado=> $self->getIntranet_habilitado,
+                                                            ],
+                                                            where => [
+                                                                    intranet_habilitado => { eq => $self->getIntranet_habilitado+1 },
+                                                                    nivel => { eq => $self->getNivel },
+                                                                    itemtype => { eq => $self->getItemType},
+                                                            ],
+                                                         );
+}
+
+
 =item
 subirOrden
 Sube el orden en la vista, del campo seleccionado.
@@ -144,8 +213,11 @@ Sube el orden en la vista, del campo seleccionado.
 sub subirOrden{
     my ($self)=shift;
 
-    $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
-    $self->save();
+    if (!($self->soyElPrimero)){
+        $self->bajarAnterior();
+        $self->setIntranet_habilitado($self->getIntranet_habilitado - 1);
+        $self->save();
+    }
 }
 
 =item
@@ -156,59 +228,80 @@ sub bajarOrden{
 
     my ($self)=shift;
 
-    $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
-    $self->save();
+    if (!($self->soyElUltimo)){
+        $self->subirSiguiente();
+        $self->setIntranet_habilitado($self->getIntranet_habilitado + 1);
+        $self->save();
+    }
 }
+
+
 
 =item
 Esta funcion verifica si es el ultimo en orden de las catalogaciones segun el nivel e itemtype
 =cut
+# sub soyElUltimo{
+#     my ($self)=shift;
+# # FIXME OJO hace varias subconsultas, ver si queda asi
+# 
+#     my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+#                                                             query => [
+#                                                                     itemtype=> { eq => $self->getItemType},
+#                                                                     nivel=> { eq => $self->getNivel},               
+#                                                             ],
+# 															sort_by => 'intranet_habilitado DESC',
+# 
+#                                         );
+# 	
+# 	my $max= 1;
+# 	if( scalar(@$catalogaciones_array) > 0){
+# 		#obtengo el intranet_habilitado con el menor orden
+# 		$max= $catalogaciones_array->[0]->getIntranet_habilitado;
+# 	}
+# 
+#     return $max eq $self->getIntranet_habilitado;
+# }
+
 sub soyElUltimo{
     my ($self)=shift;
-# FIXME OJO hace varias subconsultas, ver si queda asi
-
-    my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+    my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion_count( 
                                                             query => [
                                                                     itemtype=> { eq => $self->getItemType},
                                                                     nivel=> { eq => $self->getNivel},               
                                                             ],
-															sort_by => 'intranet_habilitado DESC',
+                                                        );
 
-                                        );
-	
-	my $max= 1;
-	if( scalar(@$catalogaciones_array) > 0){
-		#obtengo el intranet_habilitado con el menor orden
-		$max= $catalogaciones_array->[0]->getIntranet_habilitado;
-	}
-
-    return $max eq $self->getIntranet_habilitado;
+    return ($self->intranet_habilitado == $catalogaciones_count);
 }
-
 =item
 Esta funcion retorna 1 si es el primero en el orden a mostrar segun intranet_habilitado
 =cut
+# sub soyElPrimero{
+#     my ($self)=shift;
+# # FIXME OJO hace varias subconsultas, ver si queda asi
+# 	my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+# 														query => [
+# 																itemtype=> { eq => $self->getItemType},
+# 																nivel=> { eq => $self->getNivel},               
+# 														],
+# 														sort_by => 'intranet_habilitado',
+# 
+# 									);
+# 	
+# 	my $min= 1;
+# 	if( scalar(@$catalogaciones_array) > 0){
+# 		#obtengo el intranet_habilitado con el menor orden
+# 		$min= $catalogaciones_array->[0]->getIntranet_habilitado;
+# 	}
+# 
+#     return $min eq $self->getIntranet_habilitado;
+# }
+
+
 sub soyElPrimero{
     my ($self)=shift;
-# FIXME OJO hace varias subconsultas, ver si queda asi
-	my $catalogaciones_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
-														query => [
-																itemtype=> { eq => $self->getItemType},
-																nivel=> { eq => $self->getNivel},               
-														],
-														sort_by => 'intranet_habilitado',
-
-									);
-	
-	my $min= 1;
-	if( scalar(@$catalogaciones_array) > 0){
-		#obtengo el intranet_habilitado con el menor orden
-		$min= $catalogaciones_array->[0]->getIntranet_habilitado;
-	}
-
-    return $min eq $self->getIntranet_habilitado;
+    return ($self->intranet_habilitado == 1);
 }
-
 =item
 Esta funcion retorna 1 si la tupla es fija (no se puede modificar) 0  si no es fijo (se puede modificar)
 =cut
