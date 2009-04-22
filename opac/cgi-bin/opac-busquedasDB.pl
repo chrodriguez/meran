@@ -6,6 +6,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::AR::Busquedas;
+use Time::HiRes;
 
 my $input = new CGI;
 
@@ -25,12 +26,9 @@ if($obj ne ""){
 }
 
 my $ini= $obj->{'ini'};
-# my $timeIni= time();
-my ($secIni,$minIni,$hourIni)=localtime(time);
-# printf "%4d-%02d-%02d %02d:%02d:%02d\n",
-# $year+1900,$mon+1,$mday,$hour,$min,$sec;
+my $timeIni= time();
+my $start = [ Time::HiRes::gettimeofday( ) ];
 
-# # $timeIni= localtime($timeIni);
 my $cantidad;
 my $resultsarray;
 $obj->{'type'} = 'OPAC';
@@ -56,12 +54,6 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
 }
-# my $timeFin= time();
-# $timeFin= localtime($timeFin);
-
-
-# printf "%4d-%02d-%02d %02d:%02d:%02d\n",
-# $year+1900,$mon+1,$mday,$hour,$min,$sec;
 
 =item
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
@@ -78,9 +70,19 @@ $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}= $cantidad;
 
-my ($secFin,$minFin,$hourFin)=localtime(time);
-# $t_params->{'time'}= $hourFin - ;
-C4::AR::Debug::debug("Hora Ini h: ".$hourIni.", ".$minIni." ,".$secIni. " seg");
+my $timeFin= time();
+my ($secFin,$minFin,$hourFin)= localtime($timeFin - $timeIni);
+C4::AR::Debug::debug("Hora Ini Fin: ".$timeIni);
+C4::AR::Debug::debug("Hora Fin: ".$timeFin);
 C4::AR::Debug::debug("Hora Fin h: ".$hourFin.", ".$minFin." ,".$secFin. " seg");
+$t_params->{'timeMin'}= $minFin;
+$t_params->{'timeSeg'}= $secFin;
+
+
+
+
+my $elapsed = Time::HiRes::tv_interval( $start );
+print "Elapsed time: $elapsed seconds!\n";
+$t_params->{'timeSeg'}= $elapsed;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
