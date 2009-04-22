@@ -384,8 +384,12 @@ sub _new_dbh
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
 	my $db_passwd = $context->{"config"}{"pass"};
-	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
-			    $db_user, $db_passwd);
+
+	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
+# 	$dbh->do('SET NAMES utf8');
+
+	return $dbh;
+# 	return DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
 }
 
 =item dbh

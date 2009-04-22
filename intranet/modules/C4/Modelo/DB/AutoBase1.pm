@@ -30,6 +30,8 @@ __PACKAGE__->register_db
   dsn             => "dbi:mysql:dbname=".$database.";host=".$hostname,
   username        => $user,
   password        => $pass,
+  #mysql_enable_utf8 => 1,
+  post_connect_sql => ["SET NAMES utf8"], 
 );
 
 1;

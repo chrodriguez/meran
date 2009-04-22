@@ -1352,6 +1352,7 @@ sub busquedaAvanzada_newTemp{
 		push (@id1_array,$data);
 	}
 	
+	C4::AR::Debug::debug("busquedaAvanzada_newTemp => cant ".scalar(@id1_array));
 	#arma y ordena el arreglo para enviar al cliente
    	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
 	#se loquea la busqueda
@@ -1817,8 +1818,6 @@ sub armarInfoNivel1{
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;
-
-		$i++;
 	}
 
 	my @keys;
@@ -1836,8 +1835,9 @@ sub armarInfoNivel1{
 	#se corta el arreglo segun lo que indica el paginador
 	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
 	#buscar disponibilidad, grupos, y otrs yerbas
-C4::AR::Debug::debug("armarInfoNivel1=> cant_total :".$cant_total);
-C4::AR::Debug::debug("armarInfoNivel1=> cant :".scalar(@result_array) );
+	C4::AR::Debug::debug("armarInfoNivel1=> cant_total :".$cant_total);
+	C4::AR::Debug::debug("armarInfoNivel1=> cant :".scalar(@result_array) );
+
 	for($i=0;$i<scalar(@resultsarray);$i++ ) {
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
 		@resultsarray[$i]->{'grupos'}= 0;
