@@ -26,7 +26,7 @@ if($obj ne ""){
 }
 
 my $ini= $obj->{'ini'};
-my $timeIni= time();
+
 my $start = [ Time::HiRes::gettimeofday( ) ];
 
 my $cantidad;
@@ -70,19 +70,7 @@ $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}= $cantidad;
 
-my $timeFin= time();
-my ($secFin,$minFin,$hourFin)= localtime($timeFin - $timeIni);
-C4::AR::Debug::debug("Hora Ini Fin: ".$timeIni);
-C4::AR::Debug::debug("Hora Fin: ".$timeFin);
-C4::AR::Debug::debug("Hora Fin h: ".$hourFin.", ".$minFin." ,".$secFin. " seg");
-$t_params->{'timeMin'}= $minFin;
-$t_params->{'timeSeg'}= $secFin;
-
-
-
-
 my $elapsed = Time::HiRes::tv_interval( $start );
-print "Elapsed time: $elapsed seconds!\n";
 $t_params->{'timeSeg'}= $elapsed;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

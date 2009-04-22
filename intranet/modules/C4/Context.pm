@@ -386,7 +386,7 @@ sub _new_dbh
 	my $db_passwd = $context->{"config"}{"pass"};
 
 	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
-# 	$dbh->do('SET NAMES utf8');
+	$dbh->do('SET NAMES utf8');
 
 	return $dbh;
 # 	return DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);

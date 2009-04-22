@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--Doctype is not required - can be HTML or XHTML-->
 <html>
 
@@ -11,7 +10,6 @@
 
 <script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
 <script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
-<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery-include.js"></script> -->
 <script src="/intranet-tmpl/blue/includes/util.js"></script>
 <script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
 
@@ -27,43 +25,38 @@
 
 <script language="javascript" type="text/javascript">
 
-function swap(id,src){
-   document.getElementById(id).src=src;
-}
+	function swap(id,src){
+	document.getElementById(id).src=src;
+	}
+	
+	function cambiarIdioma() {
+	$('#lang_server').val($('#language').val());
+	$('#url').val(location.pathname);
+	$('#formLang').submit();
+	}
 
-function cambiarIdioma() {
-   $('#lang_server').val($('#language').val());
-   $('#url').val(location.pathname);
-   $('#formLang').submit();
-}
+
+	function mainmenu(){
+	
+	var options = {minWidth: 140};  
+	$('#menu').menu();  
+	}
+	
+	$(document).ready(function(){
+		mainmenu();
+	});
 
 </script>
-<!-- FIXME DEPRECATED -->
-<!--<link rel="stylesheet" href="[% themelang %]/includes/menu/menu.css">
-<script language="JavaScript" src="[% themelang %]/includes/menu/menu.js"></script>
-<script language="JavaScript" src="[% themelang %]/includes/menu/menu_items.js"></script>
-<script language="JavaScript" src="[% themelang %]/includes/menu/menu_tpl.js"></script>-->
-
-<!--<script language="JavaScript">
-//    new menu (MENU_ITEMS, MENU_TPL);
-</script>-->
 
 <body>
-<script type="text/javascript">
 
-      function mainmenu(){
-
-        var options = {minWidth: 140};  
-        $('#menu').menu();  
-     }
- 
-     $(document).ready(function(){
-         mainmenu();
-      });
-
-</script>
-
-            
+<noscript>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
+    </div>
+</noscript>
 
 <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 

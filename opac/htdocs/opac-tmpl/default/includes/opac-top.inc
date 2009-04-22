@@ -2,15 +2,6 @@
 <head>
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 
-<noscript>
-    <div class='tableMsgUser'>
-        <font class='fontMsgUser'>
-                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
-        </font>
-    </div>
-</noscript>
-
-
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 
 <script src="/opac-tmpl/default/includes/jquery/jquery.js"></script>
@@ -24,7 +15,7 @@
 <script src="/opac-tmpl/default/includes/favoritos.js"></script>
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
 <script language="javascript" type="text/javascript">
@@ -40,8 +31,15 @@ function cambiarIdioma() {
 }
 
 </script>
-
 <body>
+
+<noscript>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
+    </div>
+</noscript>
 
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
 <tr>
