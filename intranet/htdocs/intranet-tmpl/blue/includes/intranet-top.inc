@@ -22,7 +22,7 @@
 <head>
 <title>Koha::UNLP</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/intranet.css">
-<meta http-equiv="Content-Tipo" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
 <script language="javascript" type="text/javascript">

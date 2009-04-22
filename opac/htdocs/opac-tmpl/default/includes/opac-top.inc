@@ -24,6 +24,7 @@
 <script src="/opac-tmpl/default/includes/favoritos.js"></script>
 
 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
 <script language="javascript" type="text/javascript">
