@@ -97,6 +97,7 @@ function updateInfoActualizar(responseText){
 function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
+    objAH.cache = true;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";
 

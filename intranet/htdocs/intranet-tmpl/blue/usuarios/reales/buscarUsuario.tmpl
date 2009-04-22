@@ -14,6 +14,7 @@ function changePage(ini){
 
 function consultar(filtro){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.cache = true;
 	busqueda = jQuery.trim($('#socio').val());
 	inicial = '0';
 	if (filtro){

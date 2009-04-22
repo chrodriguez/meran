@@ -1,3 +1,4 @@
 El archivo intranet/cgi-bin/reports/estadistica_AnualResult.pl parece deprecated.
+Habria que hacer ofuscacion de javascript para TODOS LOS JS cuando MERAN este en produccion definitiva.
 
 

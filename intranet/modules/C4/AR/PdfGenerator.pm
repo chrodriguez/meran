@@ -407,7 +407,7 @@ sub datosBiblio(){
     my $dbh = C4::Context->dbh;
     my $biblio;
     my $sth=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, pref_categoria_unidad_informacion.categoryname as categ
-    FROM pref_unidad_informacion inner join pref_relacion_unidad_informacion on pref_unidad_informacion.branchcode=pref_relacion_unidad_informacion.branchcode inner join pref_categoria_unidad_informacion on pref_categoria_unidad_informacion.categorycode = pref_relacion_unidad_informacion.categorycode WHERE pref_unidad_informacion.branchcode=?");
+    FROM pref_unidad_informacion inner join pref_relacion_unidad_informacion on pref_unidad_informacion.branchcode=pref_relacion_unidad_informacion.branchcode inner join pref_categoria_unidad_informacion on pref_categoria_unidad_informacion.categorycode = pref_relacion_unidad_informacion.categorycode WHERE pref_unidad_informacion.id_ui=?");
     $sth->execute($branchcode);
     $biblio=$sth->fetchrow_hashref();
     $sth->finish;
@@ -418,7 +418,7 @@ sub datosBiblio(){
 libreDeuda
 Genera y muestar la ventana para imprimir el documento de libre deuda.
 =cut
-sub libreDeuda(){
+sub libreDeuda{
     my ($socio) = shift;
     my $tmpFileName= "libreDeuda_".$socio->getNro_socio.".pdf";
     open F,">>/tmp/debug.txt";
@@ -527,7 +527,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
     $pageheight, largo del documento;
     $titulo, Titulo del documento;
 =cut
-sub imprimirEncabezado(){
+sub imprimirEncabezado{
     my ($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,$titulo)=@_;
 #fecha
     my @datearr = localtime(time);
@@ -535,7 +535,8 @@ sub imprimirEncabezado(){
     my $mes=&C4::Date::mesString($datearr[4]+1);
     my $dia=$datearr[3];
 #fin fecha
-        $pdf->addImg( C4::AR::Preferencias->getValorPreferencia('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-uni.png', $x, $pageheight - 160);
+    C4::AR::Debug::debug(C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png');
+        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
     $pdf->setFont("Arial-Bold");
         $pdf->setSize(10);
     $pdf->addRawText(uc($categ), $x,$pageheight - 180);

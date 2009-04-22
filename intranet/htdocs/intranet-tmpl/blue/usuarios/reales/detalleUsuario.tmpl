@@ -11,10 +11,12 @@
     
     function updatePrestamosInterBibliotecarios(responseText){
     //se crea el objeto que maneja la ventana para modificar los datos del usuario
-        vPrestamoInterBibliotecario=new WindowHelper();
+        vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
         vPrestamoInterBibliotecario.html=responseText;
         vPrestamoInterBibliotecario.create();   
-        
+        vPrestamoInterBibliotecario.height('85%');
+        vPrestamoInterBibliotecario.width('85%');
+        vPrestamoInterBibliotecario.open();
     }
 
 
