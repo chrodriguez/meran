@@ -215,8 +215,8 @@ sub get_template_and_user {
 
 sub output_html_with_http_headers {
     my($query, $template, $params, $session, $cookie) = @_;
-	print $session->header();
 
+	print $session->header(charset => C4::Context->config("charset")|'utf-8');
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
@@ -794,11 +794,11 @@ sub _generarSession {
 	$session->param('loggedinusername', $params->{'userid'});
 	$session->param('password', $params->{'password'});
 	$session->param('nroRandom', $params->{'random_number'});
-# 	$session->param('borrowernumber', getborrowernumber($params->{'userid'}));
 	$session->param('type', $params->{'type'}); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
  	$session->param('browser', $params->{'browser'} );
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
+ 	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->expire(0); #para Desarrollar, luego pasar a 3m
 
 	return $session;

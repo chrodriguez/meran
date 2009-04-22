@@ -1800,7 +1800,6 @@ sub armarBuscoPor{
 
 sub armarInfoNivel1{
 	my ($params,$searchstring_array, @resultId1) = @_;
-	
 	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
 	my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
 	my @resultsarray;
