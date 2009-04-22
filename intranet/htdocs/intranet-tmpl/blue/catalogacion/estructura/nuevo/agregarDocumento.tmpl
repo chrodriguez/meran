@@ -782,7 +782,7 @@ function crearComponente(tipo,id,objeto,valor){
 	TAB_INDEX++;
 
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+">";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+" name=''>";
         break;
         case "combo": comp="<select id='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
@@ -817,6 +817,7 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObbligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
+    $("#"+idObj).attr('name','compoCheck');
     $("<b> * </b>").insertAfter($("#"+idObj));
 }
 
@@ -1100,6 +1101,14 @@ function validateForm(formID, func){
 
             var _message= "Llene el campo";
 //             validate signup form on keyup and submit
+             $().ready(function() {
+                $("#"+formID).validate({
+                       rules: { compoCheck: "required",},
+                       messages: {
+                        compoCheck: "Este campo es requerido, no lo deje en blanco",}
+                })});
+
+
             $("#"+formID).validate();
 }
 
