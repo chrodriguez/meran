@@ -252,10 +252,10 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
 		my $err= "Error con la fecha";
-		my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
+		my $startdate= C4::Date::proximoHabil(1,0,$hasta);
 		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
-		my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+		my $enddate= C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 		
 		use C4::Modelo::CircSancion;

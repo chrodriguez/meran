@@ -481,12 +481,16 @@ sub getSociosSancionados {
 }
 
 
-sub DiasDeSancion {
+sub diasDeSancion {
 # Retorna la cantidad de dias de sancion que corresponden a una devolucion
 # Si retorna 0 (cero) entonces no corresponde una sancion
 # Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
     my ($devolucion, $fecha, $categoria, $tipo_prestamo)=@_;
-    my $late=0; #Se devuelve tarde
+
+
+      C4::AR::Debug::debug("EN DiasDeSancion ?");
+
+
     if (Date_Cmp($fecha, $devolucion) >= 0) {
         #Si es un prestamo especial debe devolverlo antes de una determinada hora
         if ($tipo_prestamo ne 'ES'){return(0);}
@@ -506,35 +510,48 @@ sub DiasDeSancion {
         }#else ES
     }#if Date_Cmp
 
-    my $dbh = C4::Context->dbh; 
-#Corresponde una sancion
-    my $sth = $dbh->prepare("select *,circ_ref_tipo_prestamo.descripcion as descissuetype, usr_ref_categoria_socio.description as desccategory from circ_tipo_sancion inner join circ_regla_tipo_sancion on circ_tipo_sancion.tipo_sancion = circ_regla_tipo_sancion.sanctiontypecode inner join circ_regla_sancion on circ_regla_tipo_sancion.sanctionrulecode = circ_regla_sancion.sanctionrulecode inner join circ_ref_tipo_prestamo on circ_tipo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo inner join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = circ_tipo_sancion.categoria_socio where circ_tipo_sancion.tipo_prestamo = ? and circ_tipo_sancion.categoria_socio = ? order by circ_regla_tipo_sancion.orden");
-    $sth->execute($tipo_prestamo, $categoria);
-    my $err;
-    my $delta= &DateCalc($fecha,$devolucion,\$err);
-    my $days= &Delta_Format($delta,0,"%dh");
+#Corresponde una sancion vamos a calcular de cuantos dias!
+C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!");
+  use C4::Modelo::CircTipoSancion::Manager;
+  my $tipo_sancion_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion ( 
+                                                                    query => [ 
+                                                                            tipo_prestamo       => { eq => $tipo_prestamo },
+                                                                            categoria_socio  => { eq => $categoria },
+                                                                        ],
+                                    );
 
-    #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
-    if ($tipo_prestamo eq 'ES'){$days++;}
+C4::AR::Debug::debug("REGLAS? ");
+  my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
 
-    my $daysExceeded= $days;
-    my $amountOfDays= 0;
-    my $i;
-    my $sanctiondays;
-    #Este while busca el resultado de la consulta.
-    while ((my $res = $sth->fetchrow_hashref) && ($daysExceeded > 0)) {
-        my $amount= $res->{'amount'};
-            my $delaydays= $res->{'delaydays'};
-        $sanctiondays= $res->{'sanctiondays'};
-        #($amount==0) ===> INFINITO
-        for ($i=0; (($i < $amount) || ($amount==0)) && ($daysExceeded > 0); $i++) {
-            $daysExceeded-= $delaydays;
-            $amountOfDays+= $sanctiondays;  
+  my $err;
+  my $delta= &DateCalc($fecha,$devolucion,\$err);
+  my $dias= &Delta_Format($delta,0,"%dh");
+
+  #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
+  if ($tipo_prestamo eq 'ES'){$dias++;}
+C4::AR::Debug::debug("DIAS Excedido -->>> ".$dias);
+  my $diasExcedido= $dias;
+  my $cantidadDeDias= 0;
+    
+  foreach  my $regla_tipo (@$reglas_tipo_array_ref) {
+     C4::AR::Debug::debug("REGLAS DE SANCION -->>> Orden ".$regla_tipo->getOrden);
+
+        if($diasExcedido > 0){
+            #($regla_tipo->getCantidad == 0) ===> INFINITO
+            for (my $i=0; (($i < $regla_tipo->getCantidad) || ($regla_tipo->getCantidad == 0)) && ($diasExcedido > 0); $i++) {
+                $diasExcedido-= $regla_tipo->ref_regla->getDias_demora;    
+               C4::AR::Debug::debug("DIAS Excedido -->>> ".$diasExcedido);
+                $cantidadDeDias+= $regla_tipo->ref_regla->getDias_sancion;
+               C4::AR::Debug::debug("CANTIDAD DE DIAS -->>> ".$cantidadDeDias);
+                }
+            }
+        else {
+            return($cantidadDeDias);
         }
     }
-    $sth->finish;
 
-return($amountOfDays);
+return($cantidadDeDias);
+
 }
 
 

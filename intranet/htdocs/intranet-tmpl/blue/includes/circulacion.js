@@ -192,7 +192,7 @@ function realizarAccion(accion,chckbox,funcion){
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= accion;
 		objAH.datosArray= array;
-		objAH.nro_socio=usuario.nro_socio;
+		objAH.nro_socio=usuario.ID;
 		//se envia la consulta
 		objAH.sendToServer();
 	}
@@ -273,7 +273,7 @@ function prestar(){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
 	objAH.datosArray= infoPrestamos_array;
-	objAH.nro_socio= usuario.nro_socio;
+	objAH.nro_socio= usuario.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -297,7 +297,7 @@ function updateInfoPrestarReserva(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detalleReservas(usuario.nro_socio,updateInfoReservas);
+	detalleReservas(usuario.ID,updateInfoReservas);
 }
 
 /*
@@ -323,7 +323,7 @@ function cancelarReserva(reserveNumber){
 		objAH.debug= true;
 		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CANCELAR_RESERVA';
-		objAH.nro_socio= usuario.nro_socio;
+		objAH.nro_socio= usuario.ID;
 		objAH.reserveNumber=reserveNumber;
 		objAH.sendToServer();
         }
@@ -382,7 +382,7 @@ function devolver_renovar(accion){
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
 	objAH.datosArray= infoPrestamos_array;
-	objAH.nro_socio= usuario.nro_socio;
+	objAH.nro_socio= usuario.ID;
 	objAH.accion=accion;
 	//se envia la consulta
 	objAH.sendToServer();

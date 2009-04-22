@@ -505,8 +505,9 @@ sub devolver {
 
 # Hay que ver si devolvio el ejemplar a termino para, en caso contrario, aplicarle una sancion    
         my $daysissue=$self->tipo->getDias_prestamo;
-
-        my $diasSancion= C4::AR::Sanciones::DiasDeSancion($fechaHoy, $fechaVencimiento, $self->socio->getCod_categoria, $self->getTipo_prestamo);
+    
+        use C4::AR::Sanciones;
+        my $diasSancion= C4::AR::Sanciones::diasDeSancion($fechaHoy, $fechaVencimiento, $self->socio->getCod_categoria, $self->getTipo_prestamo);
 
         if ($diasSancion > 0) {
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
@@ -532,7 +533,7 @@ sub devolver {
             }
             else{
                 #SANCION EFECTIVA
-                $self->debug("SANCION EFECTIVA");
+                $self->debug("SANCION EFECTIVA a $nro_socio");
                 my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
                 $fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$diasSancion." days",\$err),$dateformat);

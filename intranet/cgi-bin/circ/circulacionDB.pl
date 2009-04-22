@@ -197,6 +197,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 		
 		if ($accion eq 'DEVOLUCION') {
         C4::AR::Debug::debug("DEVOLUCION");
+        C4::AR::Debug::debug("USUARIO $nro_socio");
         C4::AR::Debug::debug("ID3: $id3");
 			my ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
 

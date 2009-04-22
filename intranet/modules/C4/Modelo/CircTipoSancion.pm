@@ -29,6 +29,14 @@ __PACKAGE__->meta->setup(
             column_map => { tipo_prestamo => 'tipo_prestamo' },
             type       => 'one to many',
         },
+
+        ref_regla_tipo_sancion => {
+            class      => 'C4::Modelo::CircReglaTipoSancion',
+            column_map => { tipo_sancion => 'tipo_sancion' },
+            type       => 'one to many',
+            manager_args => { sort_by =>  'orden' },
+        },
+
 	    ref_categoria_socio => {
             class      => 'C4::Modelo::UsrRefCategoriasSocio',
             column_map => { categoria_socio => 'categorycode' },

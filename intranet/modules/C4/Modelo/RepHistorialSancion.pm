@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id                    => { type => 'serial', not_null => 1 },
-        tipo_operacion        => { type => 'varchar', default => '', length => 15, not_null => 1 },
+        tipo_operacion        => { type => 'varchar', default => '', length => 50, not_null => 1 },
         nro_socio		         => { type => 'varchar', length => 16, not_null => 1 },
         responsable           => { type => 'varchar', length => 16, not_null => 1 },
         timestamp             => { type => 'timestamp', not_null => 1 },
