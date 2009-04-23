@@ -151,7 +151,6 @@ Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
 my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
-    print $obj->{'nombre'};
 	my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj); #C4::AR::Usuarios::t_addBorrower($obj);
     
 	my $infoOperacionJSON=to_json $Message_arrayref;

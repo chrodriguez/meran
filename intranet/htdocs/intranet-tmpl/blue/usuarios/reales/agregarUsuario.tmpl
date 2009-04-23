@@ -11,9 +11,10 @@
 
 function validateNro_socio(){
     nro_socio = $('#nro_socio').val();
-    if ( (($.trim(nro_socio)).length == 0 ) || (isNaN(nro_socio)) ) {
+    if ( (($.trim(nro_socio)).length == 0 ) ) {
         $('#nro_socio').val('Auto-generar'); 
         $('#nro_socio').attr("readonly","true"); 
+        $('#nro_socio').attr("title","Solo sera numerico");
     } 
 }
     
@@ -22,6 +23,7 @@ function toggleNro_socio(){
     if ($('#nro_socio').attr("readonly") == true){ 
         $('#nro_socio').val(''); 
         $('#nro_socio').removeAttr("readonly"); 
+        $('#nro_socio').removeAttr("title"); 
     } 
 }
 $(document).ready(function() {
