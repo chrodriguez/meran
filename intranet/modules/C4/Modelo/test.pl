@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
-
+=item
 use strict;
-# use Data::Dumper;
+ use Data::Dumper;
 
 # use the Rose::DB classes that match your database 
 # use C4::Modelo::Ref_paises;
@@ -172,8 +172,8 @@ use C4::Modelo::CatTema;
 #       use C4::Circulation::Circ2;
 #       my $nene = C4::Circulation::Circ2::getmaxbarcode('DEO');
 #       print "\n HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAA ".$nene."\n";
-   use C4::AR::Prestamos;
-   print (&C4::AR::Prestamos::vencimiento(1));
+#   use C4::AR::Prestamos;
+#   print (&C4::AR::Prestamos::vencimiento(1));
 #     Usr_persona::Manager->delete_usr_persona(all => 1);
 #     Usr_socios::Manager->delete_usr_socios(all => 1);
 # 	my $new = &C4::AR::Usuarios::getSocioInfo(3);
@@ -250,16 +250,16 @@ use C4::Modelo::CatTema;
 
     
 
-=item
-print "\n###################### Tabla Usr_persona: #############################:\n\n\n";
-my $products = Usr_persona::Manager->get_usr_persona();
-foreach my $product (@$products) {
-    print  'NOMBRE: '.$product->getNombre."\n".
-           'APELLIDO: '.$product->getApellido."\n".
-           'CALLE: '.$product->getCalle . "\n".
-            '************** END TUPLA **********'."\n";
-            
-}
+
+#print "\n###################### Tabla Usr_persona: #############################:\n\n\n";
+#my $products = Usr_persona::Manager->get_usr_persona();
+#foreach my $product (@$products) {
+#    print  'NOMBRE: '.$product->getNombre."\n".
+#           'APELLIDO: '.$product->getApellido."\n".
+#           'CALLE: '.$product->getCalle . "\n".
+#            '************** END TUPLA **********'."\n";
+#            
+#}
 #   $product->save;
 # 
 #   $product = Ref_provincias->new(   PROVINCIA => 'BA',   );
@@ -278,3 +278,23 @@ foreach my $product (@$products) {
 # 
 # print "\n############################ FIN Ref_provincias. ##############################\n\n";
 =cut
+
+my $time = time();
+sleep(2);
+my $final = time() - $time;
+print "TARDASTE: ".$final."\n////////////////////////////////".$time."\n";
+
+
+
+
+use Time::HiRes;
+my $start = [ Time::HiRes::gettimeofday( ) ];
+
+sleep(1.1);
+## Your code goes here
+
+my $elapsed = Time::HiRes::tv_interval( $start );
+print "Elapsed time: $elapsed seconds!\n";
+
+
+

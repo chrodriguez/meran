@@ -150,6 +150,8 @@ sub nextNro_socio{
      my ($self)=shift;
 
      my $nro_socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(
+                                                                   query => [ nro_socio => { regexp => '[0-9]' },
+                                                                   ],
                                                                    select => ['nro_socio'],
                                                                    sort_by => ['nro_socio DESC'],
                                                                     );
