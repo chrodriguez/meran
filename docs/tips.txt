@@ -1,4 +1,5 @@
 El archivo intranet/cgi-bin/reports/estadistica_AnualResult.pl parece deprecated.
 Habria que hacer ofuscacion de javascript para TODOS LOS JS cuando MERAN este en produccion definitiva.
+Cuando se agrega un usuario, habria que capitalizar el nombre y apellido, entre otros procesamientos a los demas strings!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
