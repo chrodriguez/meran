@@ -757,34 +757,6 @@ sub enviar_recordatorios_prestamos {
 	}
 }
 
-# REHACER
-sub crearTicket {
-	my ($id3,$bornum,$loggedinuser)=@_;
-
-	my $dateformat = C4::Date::get_date_format();
-	my ($borrower, $flags, $hash) = C4::Circulation::Circ2::getpatroninformation($bornum,0);
-	my ($librarian, $flags2, $hash2) = C4::Circulation::Circ2::getpatroninformation($loggedinuser,0);
-	my $iteminfo= C4::Circulation::Circ2::getiteminformation($id3,"");
-	my $ticket_duedate = vencimiento($iteminfo->{'id3'});
-	my %ticket;
-
-	$ticket{'borrowerName'}=CGI::Util::escape($borrower->{'firstname'} . " " . $borrower->{'surname'});
-	$ticket{'borrowerNumber'}=CGI::Util::escape($borrower->{'cardnumber'});
-	$ticket{'documentType'}=CGI::Util::escape($borrower->{'documenttype'});
-	$ticket{'documentNumber'}=CGI::Util::escape($borrower->{'documentnumber'});
-	$ticket{'autor'}=CGI::Util::escape($iteminfo->{'autor'});
-	$ticket{'titulo'}=CGI::Util::escape($iteminfo->{'titulo'});
-	$ticket{'topoSign'}=CGI::Util::escape($iteminfo->{'signatura_topografica'});
-	$ticket{'barcode'}=CGI::Util::escape($iteminfo->{'barcode'});
-	$ticket{'volume'}=CGI::Util::escape(C4::AR::Nivel2::getVolume($iteminfo->{'id2'}));
-	$ticket{'borrowDate'}=CGI::Util::escape(format_date_hour(ParseDate("today"),$dateformat));
-	$ticket{'returnDate'}=CGI::Util::escape(format_date($ticket_duedate,$dateformat));
-	$ticket{'librarian'}=CGI::Util::escape($librarian->{'firstname'} . " " . $librarian->{'surname'});
-	$ticket{'issuedescription'}=CGI::Util::escape($iteminfo->{'issuedescription'});
-	$ticket{'librarianNumber'}=CGI::Util::escape($librarian->{'cardnumber'});
-
-	return(\%ticket);
-}
 #DEPRECATED paso a CircPrestamo
 sub estaVencido{
 	my($id3,$tipoPres)=@_;
@@ -1007,6 +979,27 @@ sub getCountPrestamosDeGrupo() {
 }
 
 =item
+getPrestamoDeId3
+Esta funcion retorna el prestamo a partir de un id3
+=cut
+sub getPrestamoDeId3 {
+    my ($id3)=@_;
+
+        use C4::Modelo::CircPrestamo;
+        use C4::Modelo::CircPrestamo::Manager;
+
+        my @filtros;
+        push(@filtros, ( fecha_devolucion => { eq => undef } ));
+        push(@filtros, ( id3 => { eq => $id3 } ));
+
+        my $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(query => \@filtros);
+
+
+        return ($prestamos__array_ref->[0] || 0);
+}
+
+
+=item
 getPrestamosDeSocio
 Esta funcion retorna los prestamos actuales de un socio
 =cut
@@ -1171,6 +1164,16 @@ sub t_devolver {
     return ($msg_object);
 }
 
+sub crearTicket {
+    my ($id3,$nro_socio,$loggedinuser)=@_;
 
+    my %ticket;
+
+    $ticket{'socio'}=$nro_socio;
+    $ticket{'responsable'}=$loggedinuser;
+    $ticket{'id3'}=$id3;
+
+    return(\%ticket);
+}
 
 

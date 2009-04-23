@@ -67,11 +67,11 @@ function updateInfoDevRen(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detallePrestamos(usuario.nro_socio);
+	detallePrestamos(usuario.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
-	detalleReservas(usuario.nro_socio);
+	detalleReservas(usuario.ID);
 	//puede que luego de devolver el usuario sea sancionado
-	detalleSanciones(usuario.nro_socio);
+	detalleSanciones(usuario.ID);
 }
 
 //REDEFINIDO, se encuentra en circulacion.js, se llama luego de realizar un prestamo
@@ -89,10 +89,10 @@ function updateInfoPrestarReserva(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detalleReservas(usuario.nro_socio);
-	detallePrestamos(usuario.nro_socio);
+	detalleReservas(usuario.ID);
+	detallePrestamos(usuario.ID);
     //puede que el usuario este sancionado
-    detalleSanciones(usuario.nro_socio);
+    detalleSanciones(usuario.ID);
 }
 
 
@@ -101,21 +101,21 @@ function updateInfoCancelacion(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-	detalleReservas(objAH.nro_socio);
+	detalleReservas(usuario.ID);
 }
 
 function detalleUsuario(){
 	objAH=new AjaxHelper(updateDetalleUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug= true;
-	objAH.nro_socio= usuario.nro_socio;
+	objAH.nro_socio= usuario.ID;
 	objAH.sendToServer();
 }
 
 function updateDetalleUsuario(responseText){
 	$('#detalleUsuario').html(responseText);
 	createFileUploader();
-	detalleReservas(usuario.nro_socio);
+	detalleReservas(usuario.ID);
 }
 
 function createFileUploader(){
@@ -126,7 +126,7 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "uploadPicture.pl",
-						nro_socio: usuario.nro_socio,
+						nro_socio: usuario.ID,
 						funcionOnComplete: function (){
 									detalleUsuario(usuario.ID);
 								}
@@ -147,7 +147,7 @@ function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');	
-	detalleSanciones(usuario.nro_socio);
+	detalleSanciones(usuario.ID);
 }
 
 function detalleReservas(socio){
@@ -164,7 +164,7 @@ function updateDetalleReservas(responseText){
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 	checkedAll('checkAllReservas','chkboxReservas');
-	detallePrestamos(usuario.nro_socio);
+	detallePrestamos(usuario.ID);
 }
 
 
@@ -190,8 +190,7 @@ $(document).ready(function() {
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
 	usuario.text= "[% socio.persona.getApellido %], [% socio.persona.getNombre %]";
-	usuario.ID= [% id_socio %];
-    usuario.nro_socio= '[% socio.getNro_socio %]';
+    usuario.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 // FIXME tarda mucho si se disparan todos al mismo tiempo, pruebo detalleUsuarioUsuario=> detalleReservas => detallePrestamos => detalleSanciones
 // 	detalleUsuario(usuario.ID);

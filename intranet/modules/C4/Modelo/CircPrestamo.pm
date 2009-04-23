@@ -110,6 +110,13 @@ sub getFecha_prestamo_formateada{
 	return C4::Date::format_date($self->getFecha_prestamo,$dateformat);
 }
 
+
+sub getFecha_prestamo_formateada_ticket {
+    my ($self)=shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date_hour($self->getFecha_prestamo,$dateformat);
+}
+
 sub setFecha_prestamo{
     my ($self) = shift;
     my ($fecha_prestamo) = @_;

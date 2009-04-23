@@ -363,6 +363,7 @@ function generaDivDevRen(responseText){
 		html= html + infoArray[i].titulo + ", ";
 		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
 		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
+        html= html + ". <br>"
 	}
 	html= html + "</p>";
 	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
@@ -420,7 +421,7 @@ function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket)
-		window.open ("../circ/receipt.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("/cgi-bin/koha/circ/ticket.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
 

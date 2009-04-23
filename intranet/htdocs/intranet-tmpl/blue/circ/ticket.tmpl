@@ -1,6 +1,6 @@
 <html>
 <head>
-  <meta http-equiv="Content-Tipo" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Tipo" content="text/html; charset=UTF-8">
 </head>
 <body onload="javascript:window.print();window.close();">
 <!-- LO QUE ESTA COMENTADO ES COMO ESTA ANTES!!!!!!! -->
@@ -16,7 +16,7 @@
         	C&oacute;digo de barras:
       	</TD>
       	<td>
-        	<h3><b>[% barcode %]</b></h3>
+        	<h3><b>[% prestamo.nivel3.getBarcode %]</b></h3>
       	</td>
     </tr>
     <tr>
@@ -24,7 +24,7 @@
         	Usuario:
       	</TD>
       	<td>
-       		<b>[% borrowerName %]</b>
+       		<b>[% socio.persona.getApellido %], [% socio.persona.getNombre %]</b>
       	</td>
     </tr>
     <tr>
@@ -32,7 +32,7 @@
         	Documento:
       	</TD>
       	<td>
-       		Tipo:<b>[% documentType %]</b> N&uacute;mero:<b>[% documentNumber %]</b>
+       		Tipo:<b>[% socio.persona.getTipo_documento  %]</b> N&uacute;mero:<b>[% socio.persona.getNro_documento %]</b>
       	</td>
     </tr>
     <tr>
@@ -40,7 +40,7 @@
         	Fecha de pr&eacute;stamo: 
       	</td>
       	<td>
-		<b> [% borrowDate %]</b>
+		<b> [% prestamo.getFecha_prestamo_formateada_ticket %]</b>
       	</td>
     </tr>
     <tr>
@@ -48,7 +48,7 @@
         	Fecha de devoluci&oacute;n:
       	</td>
       <td>
-        	<b>[% returnDate %]</b>
+        	<b>[% prestamo.getFecha_vencimiento_formateada %]</b>
       </td>
     </tr>
     <tr>
@@ -56,7 +56,7 @@
         	Tipo de pr&eacute;stamo:
       	</TD>
       	<td>
-        	<b>[% issuedescription %]</b>
+        	<b>[% prestamo.tipo.getDescripcion %]</b>
       	</td>
     </tr>
 
@@ -65,7 +65,7 @@
         	Autor:
       	</TD>
       	<td>
-        	<b>[% author %]</b>
+        	<b>[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]</b>
       	</td>
     </tr>
     <tr>
@@ -73,7 +73,7 @@
          	T&iacute;tulo:
   	</TD>
       	<td>
-        	<b>[% bookTitle" ESCAPE=HTML--></b>
+        	<b>[% prestamo.nivel3.nivel1.getTitulo %]</b>
         </td>
     </tr>
    <!-- <tr>
@@ -89,7 +89,7 @@
         	Tomo:
       </TD>
       <td>
-        <b>[% volume %]</b>
+        <b>[% IF prestamo.nivel3.nivel2.getVolumen %] [% prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
       </td>
     </tr>
 
@@ -106,7 +106,7 @@
         	Responsable:<!-- del pr&eacute;stamo: -->
       	</TD>
       	<td>
-        	<b>[% librarian %]</b>
+        	<b>[% responsable.persona.getApellido %], [% responsable.persona.getNombre %]</b>
       	</td>
     </tr>
     <tr>
