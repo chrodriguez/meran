@@ -45,7 +45,7 @@ function consultar(filtro){
 }
 
 function habilitar(){
-	var checks=$("input[@type='checkbox']:checked");
+	var checks=$("#result input[@type='checkbox']:checked");
 	var array=checks.get();
 	var theStatus="";
 	var personNumbers=new Array();
@@ -91,13 +91,17 @@ function updateInfoActualizar(responseText){
 
  	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-   	buscarUsuariosPotenciales();
+    objAH.cache = false;
+   	buscarUsuariosPotenciales(false);
 }
 
-function buscarUsuariosPotenciales(){
+function buscarUsuariosPotenciales(cachear){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
-    objAH.cache = true;
+    if (cachear)
+        objAH.cache = true;
+    else
+        objAH.cache = false;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";
 

@@ -279,7 +279,6 @@ sub deshabilitarPersona{
     my ($id_socios_array_ref)=@_;
     my $dbh = C4::Context->dbh;
     my $msg_object= C4::AR::Mensajes::create();
-    
     eval {
         foreach my $socio (@$id_socios_array_ref){
             my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);

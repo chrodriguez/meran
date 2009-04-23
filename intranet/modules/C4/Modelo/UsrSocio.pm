@@ -121,7 +121,7 @@ sub agregar{
     $self->setId_persona($data_hash->{'id_persona'});
 
     if ($data_hash->{'auto_nro_socio'}){
-        $self->setNro_socio($self->nextNro_socio());
+        $self->setNro_socio( $self->nextNro_socio() );
     }else{
         $self->setNro_socio($data_hash->{'nro_socio'});
     }
@@ -150,7 +150,8 @@ sub nextNro_socio{
      my ($self)=shift;
 
      my $nro_socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(
-                                                                   query => [ nro_socio => { regexp => '[0-9]' },
+                                                                   query => [ nro_socio => { regexp => '^(-|\\+){0,1}([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+|[0-9]+)$' },
+#                                                                               nro_socio => { 'NOT REGEXP' => '[A-z]' },
                                                                    ],
                                                                    select => ['nro_socio'],
                                                                    sort_by => ['nro_socio DESC'],

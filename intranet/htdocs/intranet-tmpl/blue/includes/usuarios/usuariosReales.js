@@ -242,10 +242,10 @@ function agregarUsuario(){
       objAH=new AjaxHelper(updateAgregarUsuario);
       objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
       objAH.debug= true;
-      if (!(isNaN($('#nro_socio').val())) ) { //SI ES UN NUMERO...
-        objAH.nro_socio= $('#nro_socio').val();
-      }else{
+      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
         objAH.auto_nro_socio=1;
+      }else{
+        objAH.nro_socio= $('#nro_socio').val();
       }
       objAH.sexo= $("input[@name=sexo]:checked").val();
       objAH.calle= $('#calle').val();
