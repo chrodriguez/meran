@@ -661,4 +661,3 @@ CHANGE `amount` `cantidad` INT( 11 ) NOT NULL DEFAULT '1';
 CHANGE `sanctiondays` `dias_sancion` INT( 11 ) NOT NULL DEFAULT '0',
 CHANGE `delaydays` `dias_demora` INT( 11 ) NOT NULL DEFAULT '0';
 
-ALTER TABLE `usr_persona` ADD es_socio INT( 1 ) UNSIGNED NOT NULL DEFAULT '0';
