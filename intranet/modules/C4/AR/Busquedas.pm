@@ -1865,22 +1865,22 @@ sub armarInfoNivel1{
 	}
 
 	#se corta el arreglo segun lo que indica el paginador
-	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
-
-	for($i=0;$i<scalar(@resultsarray);$i++ ) {
+	my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
+C4::AR::Debug::debug("desde armarInfoNivel1 porcensando cant: ".scalar(@result_array_paginado));
+	for($i=0;$i<scalar(@result_array_paginado);$i++ ) {
 		#se generan los grupos para mostrar en el resultado de la consulta
-		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
-		@resultsarray[$i]->{'grupos'}= 0;
+		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+		@result_array_paginado[$i]->{'grupos'}= 0;
 		if(scalar(@$ediciones) > 0){
- 			@resultsarray[$i]->{'grupos'}=$ediciones;
+ 			@result_array_paginado[$i]->{'grupos'}=$ediciones;
 		}
 
 		#se obtine la disponibilidad total 
- 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name);	
-		@resultsarray[$i]->{'disponibilidad'}= 0;
+ 		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);	
+		@result_array_paginado[$i]->{'disponibilidad'}= 0;
 
 		if(scalar(@disponibilidad) > 0){
-			@resultsarray[$i]->{'disponibilidad'}=\@disponibilidad;
+			@result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
 		}
 #       #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
 #       my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
@@ -1888,7 +1888,7 @@ sub armarInfoNivel1{
 	}
 
 
-	return ($cant_total, \@result_array);
+	return ($cant_total, \@result_array_paginado);
 }
 
 #*****************************************Soporte MARC************************************************************************
