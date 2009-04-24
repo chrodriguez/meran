@@ -914,18 +914,18 @@ Esta funcion devuelve la informacion de la reserva sobre un item
 #         return($result);
 # 
 # }
-# ## FIXME reservas por Nivel 1 ?????????????
-# sub cantReservasPorNivel1{
-# #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
-#    my ($id1)=@_;
-#    my $dbh = C4::Context->dbh;
-#    my $sth=$dbh->prepare("    SELECT  count(*) as reservas
-#                               FROM circ_reserva r INNER JOIN cat_nivel2 n2 ON (r.id2 = n2.id2)
-#                               WHERE n2.id1 =? AND estado <> 'P' ");
-#    $sth->execute($id1);
-# 
-#    return $sth->fetchrow;
-# }
+# ## FIXME reservas por Nivel 1 ?????????????, SE ESTA USANDO ARREGLAR O PASAR
+sub cantReservasPorNivel1{
+#Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
+   my ($id1)=@_;
+   my $dbh = C4::Context->dbh;
+   my $sth=$dbh->prepare("    SELECT  count(*) as reservas
+                              FROM circ_reserva r INNER JOIN cat_nivel2 n2 ON (r.id2 = n2.id2)
+                              WHERE n2.id1 =? AND estado <> 'P' ");
+   $sth->execute($id1);
+
+   return $sth->fetchrow;
+}
 
 ## FIXME esto viene mal de la V2, ver!!!!
 #PASA a CircReserve

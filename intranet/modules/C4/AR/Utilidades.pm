@@ -1097,15 +1097,15 @@ sub from_json_ISO{
         $data= UTF8toISO($data);
 		C4::AR::Debug::debug("from_json_ISO => ".$data);
         return from_json($data, {ascii => 0});
-    };
-#     or do {
-#         return "0";
-#    }
+    }
+    or do {
+        return "0";
+   }
 
-	if ($@){
-		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-	}
-        
+# 	if ($@){
+# 		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+# 	}
+#         
 }
 =item
 obtenerValoresAutorizados
