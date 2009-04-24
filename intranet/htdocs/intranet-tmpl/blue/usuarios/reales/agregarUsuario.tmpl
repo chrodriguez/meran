@@ -9,41 +9,41 @@
 
 <script language="javascript" type="text/javascript">
 
-function validateNro_socio(){
-    nro_socio = $('#nro_socio').val();
-    if ( (($.trim(nro_socio)).length == 0 ) ) {
-        $('#nro_socio').val('Auto-generar'); 
-        $('#nro_socio').attr("readonly","true"); 
-        $('#nro_socio').attr("title","[% Solo sera numerico | i18n %]");
-    } 
-}
-    
+    function validateNro_socio(){
+        nro_socio = $('#nro_socio').val();
+        if ( (($.trim(nro_socio)).length == 0 ) ) {
+            $('#nro_socio').val('Auto-generar'); 
+            $('#nro_socio').attr("readonly","true"); 
+            $('#nro_socio').attr("title","[% 'Solo sera numerico' | i18n %]");
+        } 
+    }
 
-function toggleNro_socio(){
-    if ($('#nro_socio').attr("readonly") == true){ 
-        $('#nro_socio').val(''); 
-        $('#nro_socio').removeAttr("readonly"); 
-        $('#nro_socio').removeAttr("title"); 
-    } 
-}
-$(document).ready(function() {
-   [% IF addBorrower %]
-      validateForm(agregarUsuario);
-   [% ELSE %]
-      validateForm(guardarModificacioUsuario);
-   [% END %]
 
-    validateNro_socio();
-    $('#nro_socio').click(function(){toggleNro_socio()});
-    $('#nro_socio').blur(function(){validateNro_socio()});
-    $("#userDataForm").validate();
-    CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
-    CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
-    $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
+    function toggleNro_socio(){
+        if ($('#nro_socio').attr("readonly") == true){ 
+            $('#nro_socio').val(''); 
+            $('#nro_socio').removeAttr("readonly"); 
+            $('#nro_socio').removeAttr("title"); 
+        }
+    }
 
-	$('#categoria_socio_id').addClass('required');
-    
-});
+    $(document).ready(function() {
+        [% IF addBorrower %]
+            validateForm(agregarUsuario);
+            validateNro_socio();
+            $('#nro_socio').click(function(){toggleNro_socio()});
+            $('#nro_socio').blur(function(){validateNro_socio()});
+        [% ELSE %]
+            validateForm(guardarModificacioUsuario);
+        [% END %]
+
+        $("#userDataForm").validate();
+        CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+        CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+        $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
+        $('#categoria_socio_id').addClass('required');
+
+    });
 
 </script>
 
@@ -80,11 +80,11 @@ $(document).ready(function() {
     <tr valign=top width="100%">
         
         <td  width="50%" ALIGN=RIGHT>
-         [% "Tarjeta de identificaci&oacute;n" | i18n %] *  
+         [% "Tarjeta de identificaci&oacute;n" | i18n %] *
          [% IF addBorrower %]
-            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="[% socio.getNro_socio %]"><br>
-         [% ELSE %]
             <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar Nro. Socio"><br>
+         [% ELSE %]
+            <label id="nro_socio" name="nro_socio" size=10 class="partnerNumberHighlight">[% socio.getNro_socio %]</label><br>
          [% END %]
         </td>
     </tr>

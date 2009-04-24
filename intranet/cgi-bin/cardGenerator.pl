@@ -28,9 +28,9 @@ use PDF::Report;
 use C4::AR::PdfGenerator;
 
 my $cgi= new CGI;
-my $id_socio = $cgi->param('id_socio');
-my $tmpFileName= $id_socio.".pdf";
-my $pdf = C4::AR::PdfGenerator::cardGenerator($id_socio);
+my $nro_socio = $cgi->param('nro_socio');
+my $tmpFileName= $nro_socio.".pdf";
+my $pdf = C4::AR::PdfGenerator::cardGenerator($nro_socio);
 print "Content-type: application/pdf\n";
 print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
 print $pdf->Finish();

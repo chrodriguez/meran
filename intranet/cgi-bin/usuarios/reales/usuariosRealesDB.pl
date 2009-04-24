@@ -10,6 +10,9 @@ use CGI;
 my $input = new CGI;
 
 my $authnotrequired= 0;
+open(A, ">>/tmp/debug.txt");
+print A "desde usuariosRealesDB=>\n";
+
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
@@ -45,7 +48,7 @@ Aca se maneja el cambio de permisos para el usuario
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
 my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
-	$params{'id_socio'}= $obj->{'usuario'};
+	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};
 	
  	my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
@@ -194,10 +197,10 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 									debug => 1,
 			    });
 
-	my $id_socio =$obj->{'id_socio'};
+	my $nro_socio =$obj->{'nro_socio'};
 
 	#Obtenemos los datos del borrower
-	my $socio= &C4::AR::Usuarios::getSocioInfo($id_socio);
+	my $socio= &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     my %params;
     $params{'default'}= $socio->cod_categoria;
@@ -306,7 +309,7 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
     my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
 
     my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
-
+C4::AR::Debug::debug("\nSOCIO DESDE DB: ".$socio->getNro_socio."\n");
     $t_params->{'comboDeUI'}= $comboDeUI;
     $t_params->{'nro_socio'}= $socio->getNro_socio;
     $t_params->{'id_socio'}= $obj->{'id_socio'};

@@ -31,8 +31,8 @@ use C4::AR::Prestamos;
 
 
 my $input= new CGI;
-my $id_socio = $input->param('id_socio');
-my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
+my $nro_socio = $input->param('nro_socio');
+my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 my ($loggedinuser, $cookie, $sessionID) = C4::Auth::checkauth($input, 0 ,{circulate=> 0},"intranet");
 
@@ -47,32 +47,32 @@ my $msj="";
 # SANSIONADO           4--------> flag 5; function C4::AR::Sanciones::hasSanctions($borum);
 
 if($array[0] eq "1"){
-	if(C4::AR::Reservas::cant_reservas($id_socio)){
+	if(C4::AR::Reservas::cant_reservas($nro_socio)){
 		$ok=0;
 		$msj="por tener reservas asignadas";
 	}
 }
 if($array[1] eq "1" && $ok){
-	if(C4::AR::Reservas::cant_waiting($id_socio)->{'cant'}){
+	if(C4::AR::Reservas::cant_waiting($nro_socio)->{'cant'}){
 		$ok=0;
 		$msj="por tener reservas en espera";
 	}
 }
 if($array[2] eq "1" && $ok){
-	if(&C4::AR::Sanciones::tieneLibroVencido($id_socio)){
+	if(&C4::AR::Sanciones::tieneLibroVencido($nro_socio)){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos vencidos";
 	}
 }
 if($array[3] eq "1" && $ok){
-	my($cant,$result)=C4::AR::Prestamos::DatosPrestamos($id_socio);
+	my($cant,$result)=C4::AR::Prestamos::DatosPrestamos($nro_socio);
 	if($cant){
 		$ok=0;
 		$msj="por tener pr&eacute;stamos en curso";
 	}
 }
 if($array[4] eq "1" && $ok){
-	my $result=C4::AR::Sanciones::hasSanctions($id_socio);
+	my $result=C4::AR::Sanciones::hasSanctions($nro_socio);
 	if(scalar(@$result) > 0){
 		$ok=0;
 		$msj="por estar sancionado";
@@ -83,6 +83,6 @@ if($ok){
 }
 else{
 	my $mensaje="<b>No se puede imprimir el certificado de libre deuda ".$msj." </b>";
-	print $input->redirect("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?id_socio=$id_socio&mensaje=$mensaje");
+	print $input->redirect("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=$nro_socio&mensaje=$mensaje");
 }
 

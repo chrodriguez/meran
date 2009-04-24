@@ -293,12 +293,12 @@ sub completeBorrowerNumber {
 
 
 sub cardGenerator {
-        my ($id_socio) = @_;
+    my ($nro_socio) = @_;
     my $pdf = newPdf();
-        $pdf->newpage(1);
-        $pdf->openpage(1);
+    $pdf->newpage(1);
+    $pdf->openpage(1);
     #Hoja A4 :  X diferencia 254 - Y diferencia 160 
-    generateCard($id_socio,14,14,$pdf);
+    generateCard($nro_socio,14,14,$pdf);
     return ($pdf);
     }   
 
@@ -337,11 +337,11 @@ sub batchCardsGenerator {
 
 #genera a partir de una coordenada
 sub generateCard {
-     my ($id_socio,$x,$y,$pdf) = @_;
+     my ($nro_socio,$x,$y,$pdf) = @_;
 
     my $phone;
     #Datos del usuario
-    my $socio = &C4::AR::Usuarios::getSocioInfo($id_socio);
+    my $socio = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     open A,">>/tmp/debug.txt";
     print A "ID_SOCIO:   ".$socio->persona->getApellido;
@@ -354,7 +354,7 @@ sub generateCard {
         my $picturesDir= C4::Context->config("picturesdir");
         my $foto= undef;
     if (opendir(DIR, $picturesDir)) {
-        my $pattern= $id_socio.".*";
+        my $pattern= $nro_socio.".*";
         my @file = grep { /$pattern/ } readdir(DIR);
         $foto= join("",@file) if scalar(@file);
         closedir DIR;
@@ -455,9 +455,9 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 sub prestInterBiblio(){
-	my ($id_socio, $socio, $biblioDestino, $director, $datos)=@_;
+	my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
 
-    my $tmpFileName= "prestInterBiblio".$id_socio.".pdf";
+    my $tmpFileName= "prestInterBiblio".$nro_socio.".pdf";
 	my $nombre = $socio->persona->getApellido.', '.$socio->persona->getNombre;
 	my $dni= $socio->persona->getNro_documento;
 	my $branchcode= $socio->getId_ui;

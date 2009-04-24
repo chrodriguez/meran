@@ -131,7 +131,7 @@ return($amountOfDays);
 #DEPRECATED
 sub hasSanctions {
   #Esta funcion retorna un arreglo con los tipos de prestamo para los que el usuario esta sancionado
-  my ($borrowernumber)=@_;
+  my ($nro_socio)=@_;
   my $dbh = C4::Context->dbh;
   my $dateformat = C4::Date::get_date_format();
   #Esta primera consulta es por la devolucion atrasada de libros
@@ -140,7 +140,7 @@ sub hasSanctions {
 	inner join circ_tipo_prestamo_sancion on circ_tipo_sancion.tipo_sancion = circ_tipo_prestamo_sancion.tipo_sancion 
 	inner join circ_ref_tipo_prestamo on circ_tipo_prestamo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
 	where nro_socio = ? and (now() between fecha_comienzo and fecha_final)");
-  $sth->execute($borrowernumber);
+  $sth->execute($nro_socio);
   my @results;
   while (my $res= $sth->fetchrow_hashref) {
 	$res->{'fecha_final'}=format_date($res->{'fecha_final'},$dateformat);
@@ -151,7 +151,7 @@ sub hasSanctions {
   #Esta segunda consulta es por las reservas que fueron retiradas
   my $sth = $dbh->prepare("select * from circ_sancion 
 	where nro_socio = ? and (fecha_comienzo <= now()  and fecha_final >= now()) and  tipo_sancion is null");
-  $sth->execute($borrowernumber);
+  $sth->execute($nro_socio);
   while (my $res= $sth->fetchrow_hashref) {
         $res->{'fecha_final'}=format_date($res->{'fecha_final'},$dateformat);
         $res->{'fecha_comienzo'}=format_date($res->{'fecha_comienzo'},$dateformat);
@@ -449,8 +449,8 @@ sub tieneLibroVencido {
   foreach my $prestamo (@$prestamos_array_ref) {
            C4::AR::Debug::debug("El prestamo de ".$prestamo->getId3." esta vencido? : ".$prestamo->estaVencido);
     		return(1) if ($prestamo->estaVencido);
-  	}
-  	return(0);
+  }
+  return(0);
 }
 
 sub getSociosSancionados {

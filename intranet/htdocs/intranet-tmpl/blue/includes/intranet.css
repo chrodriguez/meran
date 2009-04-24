@@ -1165,3 +1165,10 @@ li.MARCHeader{
 ul li {
       list-style-type:none;
 }
+
+
+.partnerNumberHighlight{
+    color: red;
+    font-weight:bold;
+    font-size: 125%;
+}

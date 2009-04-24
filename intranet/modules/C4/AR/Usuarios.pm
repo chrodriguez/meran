@@ -851,6 +851,7 @@ sub actualizarSocio {
         $dbh->{RaiseError} = 1;
     
         eval {
+#             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             my $socio = C4::Modelo::UsrSocio->new(nro_socio => $params->{'nro_socio'});
             $socio->load();
             $socio->modificar($params);

@@ -162,6 +162,10 @@ sub prestamosHabilitadosPorTipo {
 	return(\@tipos);
 }
 
+#
+# NUEVAS FUNCIONES
+#
+
 =item
 Esta funcion devuelve la informacion del tipo de prestamo, segun el issuecode
 =cut

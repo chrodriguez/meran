@@ -5,7 +5,7 @@
  * Fecha de creacion 22/10/2008
  *
  */
-
+var nro_socio_temp; //SOLO USADO PARA MODIFICAR_USUARIO
 
 //*********************************************Modificar Datos Usuario*********************************************
 function modificarDatosDeUsuario(){
@@ -14,7 +14,8 @@ function modificarDatosDeUsuario(){
 	objAH.cache= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
-	objAH.id_socio= usuario.ID;
+	objAH.nro_socio= usuario.ID;
+    nro_socio_temp = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
 	objAH.tipoAccion= 'MODIFICAR_USUARIO';
 	objAH.sendToServer();
 }
@@ -35,7 +36,7 @@ function guardarModificacioUsuario(){
 	objAH=new AjaxHelper(updateGuardarModificacioUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
-	objAH.nro_socio= $('#nro_socio').val();
+	objAH.nro_socio= nro_socio_temp; 
     objAH.sexo= $("input[@name=sexo]:checked").val();
     objAH.calle= $('#calle').val();
     objAH.nombre= $('#nombre').val();
@@ -47,7 +48,7 @@ function guardarModificacioUsuario(){
     objAH.alt_ciudad= $('#id_alt_ciudad').val();
     objAH.alt_telefono= $('#alt_telefono').val();
     objAH.apellido= $('#apellido').val();
-    objAH.id_ui= $('#ui_id').val();
+    objAH.id_ui= $('#id_ui').val();
     objAH.tipo_documento= $('#tipo_documento_id').val();
     objAH.nro_documento= $('#nro_documento').val();
     objAH.legajo= $('#legajo').val();
@@ -109,9 +110,9 @@ function guardarPermisos(){
 		//objAH.debug= true;
 		objAH.tipoAccion= 'GUARDAR_PERMISOS';
 		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.usuario= usuario.ID;
+		objAH.nro_socio= usuario.ID;
 		objAH.array_permisos= array;
-		objAH.sendToServer();usuario
+		objAH.sendToServer();
  	}
 }
 

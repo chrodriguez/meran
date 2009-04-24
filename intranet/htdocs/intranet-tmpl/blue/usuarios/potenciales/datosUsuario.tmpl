@@ -19,7 +19,7 @@ $(document).ready(function() {
 	//definido en circulacion.js
 	usuario= new objeto_usuario();
 	usuario.text= "[% socio.persona.getApellido %]" + ', ' + "[% socio.persona.getNombre %]";
-	usuario.ID= "[% socio.getId_socio %]";
+	usuario.ID= "[% socio.getNro_socio %]";
 
 	detalleUsuario(usuario.ID);
 

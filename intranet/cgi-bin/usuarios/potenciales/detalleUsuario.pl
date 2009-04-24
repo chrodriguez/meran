@@ -21,10 +21,10 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
     my $obj=$input->param('obj');
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
     my $msg_object= C4::AR::Mensajes::create();
-    my $id_socio= $obj->{'id_socio'};
-	my $socio=C4::AR::Usuarios::getSocioInfo($id_socio);
+    my $nro_socio= $obj->{'nro_socio'};
+	my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-	$t_params->{'id_socio'}= $id_socio;
+	$t_params->{'nro_socio'}= $nro_socio;
     $t_params->{'socio'}= $socio;
 
 

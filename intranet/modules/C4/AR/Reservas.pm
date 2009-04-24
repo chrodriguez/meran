@@ -188,12 +188,12 @@ sub _actualizarDatosReservaEnEspera{
 
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
-        my ($socio)=@_;
+        my ($nro_socio)=@_;
 	
     	use C4::Modelo::CircReserva;
     	use C4::Modelo::CircReserva::Manager;
     	my @filtros;
-    	push(@filtros, ( nro_socio 	=> { eq => $socio}));
+    	push(@filtros, ( nro_socio 	=> { eq => $nro_socio}));
     	push(@filtros, ( estado 	=> { ne => 'P'} ));
 
     	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 

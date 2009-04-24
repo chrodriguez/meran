@@ -1,19 +1,19 @@
 <script type="text/javascript">
 
-function imprimir(){
-	var autores="";
-	var titulos="";
-	var otros="";
-	for(i=1;i<=2;i++){
-		autores=autores+document.getElementById('autor'+i).value+"#";
-		titulos=titulos+document.getElementById('titulo'+i).value+"#";
-		otros=otros+document.getElementById('otro'+i).value+"#";
-	}
-	document.getElementById('autores').value=autores;
-	document.getElementById('titulos').value=titulos;
-	document.getElementById('otros').value=otros;
-	document.getElementById('info').submit();
-}
+    function imprimir(){
+	    var autores="";
+	    var titulos="";
+	    var otros="";
+	    for(i=1;i<=2;i++){
+		    autores=autores+document.getElementById('autor'+i).value+"#";
+		    titulos=titulos+document.getElementById('titulo'+i).value+"#";
+		    otros=otros+document.getElementById('otro'+i).value+"#";
+	    }
+	    document.getElementById('autores').value=autores;
+	    document.getElementById('titulos').value=titulos;
+	    document.getElementById('otros').value=otros;
+	    document.getElementById('info').submit();
+    }
 
 </script>
 
@@ -23,8 +23,8 @@ function imprimir(){
         <tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
 </table>
 
-	<form name="info" id="info" action="/cgi-bin/koha/usuarios/prestamoInterBiblio.pl">
-		<input type="hidden" name="id_socio" id="id_socio" value="[% id_socio %]">
+	<form name="info" id="info" action="/cgi-bin/koha/usuarios/prestamoInterBiblio.pl" method="POST">
+		<input type="hidden" name="nro_socio" id="nro_socio" value="[% nro_socio %]">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
 		<input type="hidden" name="autores" id="autores">
 		<input type="hidden" name="titulos" id="titulos" />

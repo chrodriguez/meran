@@ -14,7 +14,9 @@ my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO Y VERIFICO PERMISOS
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
-my $id_socio = $input->param('id_socio');
+my $nro_socio = $input->param('nro_socio');
+
+
 my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branchcode'));
 $biblioDestino = $biblioDestino->{'branchname'};
@@ -35,6 +37,8 @@ for(my $i=0;$i<scalar(@titulos);$i++){
 	$datos[$i]->{'titulo'}=$titulos[$i];
 }
 
-my $socio= C4::AR::Usuarios::getSocioInfo($id_socio);
-$socio->persona->getApellido;
-&C4::AR::PdfGenerator::prestInterBiblio($id_socio,$socio,$biblioDestino,$director,\@datos);
+
+
+my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+# $socio->persona->getApellido;
+&C4::AR::PdfGenerator::prestInterBiblio($nro_socio,$socio,$biblioDestino,$director,\@datos);
