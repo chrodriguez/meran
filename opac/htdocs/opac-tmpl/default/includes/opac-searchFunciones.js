@@ -52,7 +52,7 @@ function mostrarHistorialUpdate(responseText){
 function mostrarHistorialPrestamos(bornum){
 
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
-//  	objAH.debug= true;
+  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
 	objAH.bornum= bornum;
@@ -66,7 +66,7 @@ function mostrarHistorialPrestamos(bornum){
 function mostrarHistorialReservas(bornum){
 
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
-//  	objAH.debug= true;
+  	objAH.debug= true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
 	objAH.bornum= bornum;
@@ -96,7 +96,7 @@ function searchinc(){
 
 function buscarPorAutor(){
 	
-	objAH=new AjaxHelper(updateInfo);
+	objAH=new AjaxHelper(updateBuscarPorAutor);
   	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
 	objAH.searchinc= $('#searchinc').val();
@@ -108,9 +108,25 @@ function buscarPorAutor(){
 	objAH.sendToServer();
 }
 
+function highlightBuscarPorAutor(){
+	var string = [];
+    var classes = [];
+	
+	if($('#searchinc').val() != ''){
+		var combinables= ['searchinc'];
+		classes.push('autor_result');
+		highlight(classes,combinables);
+	}
+}
+
+function updateBuscarPorAutor(responseText){
+	updateInfo(responseText);
+	highlightBuscarPorAutor();
+}
+
 function buscarPorTitulo(){
 	
-	objAH=new AjaxHelper(updateInfo);
+	objAH=new AjaxHelper(updateBuscarPorTitulo);
   	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
 	objAH.searchinc= $('#searchinc').val();
@@ -122,12 +138,28 @@ function buscarPorTitulo(){
 	objAH.sendToServer();
 }
 
+function highlightBuscarPorTitulo(){
+	var string = [];
+    var classes = [];
+
+	if($('#searchinc').val() != ''){
+		classes.push('titulo_result');
+		var combinables= ['searchinc'];
+    	highlight(classes,combinables);
+	}
+}
+
+function updateBuscarPorTitulo(responseText){
+	updateInfo(responseText);
+	highlightBuscarPorTitulo();
+}
+
 function updateInfo(responseText){
 	//si estoy logueado, oculta la informacion del usuario
 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
-	zebra('tablaResult');
 	$('#result').slideDown('slow');
+	zebra('tablaResult');
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
@@ -203,6 +235,7 @@ function filtrarPorAutor(idAutor){
 	//se envia la consulta
 	objAH.sendToServer();
 }
+
 //**************************************Fin**Busqueda para usuario no logueado********************************
 
 

@@ -145,11 +145,10 @@ function highlight(classesArray,idKeywordsArray){
 			if($.trim(stringArray[y]).length != 0){
 				for (z = 0; z< classesArray.length; z++){
 					$('.'+classesArray[z]).highlight(stringArray[y]);
-					window.console.log(	"stringArray[y] => " + stringArray[y] + "\n");
+// 					window.console.log(	"stringArray[y] => " + stringArray[y] + "\n");
 				}
 			}//END if($.trim(stringArray[y]).length != 0){
         }
     }
-
 }
 

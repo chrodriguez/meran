@@ -1455,10 +1455,8 @@ sub busquedaCombinada_newTemp{
 Realiza una busqueda simpel por autor sobre nivel 1
 =cut
 sub busquedaSimplePorAutor{
-	my ($ini,$cantR,$params,$session) = @_;
+	my ($params,$session) = @_;
 
-	$params->{'ini'}= $ini;
-	$params->{'cantR'}= $cantR;
 	$params->{'nomCompleto'}= $params->{'autor'};
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'autor'});	
 	my @id1_array;

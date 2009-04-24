@@ -41,10 +41,10 @@
 			id="[% id1 %]">
 		</td>
 	[% END %]
-		<td class="titulo_result" title="Mostrar Detalle">	
+		<td class="titulo_result">	
 		  [% IF titulo %]
 
-			<a href="/cgi-bin/koha/opac-detail.pl?id1=[% id1 %]" title="Mostrar Detalle" class="click" >
+			<a href="/cgi-bin/koha/opac-detail.pl?id1=[% id1 %]"  title="[% 'Mostrar Detalle' | i18n %]" class="click" >
 				[% titulo %]
 			</a>
 
@@ -91,21 +91,10 @@
 [% IF loggedinusername %]
 <input type="hidden" value="" name="bookmarks" id="bookmarks">
 
-<a  	onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
+<a  onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
 	onMouseOver="swap('ps','[% themelang %]/images/favoritosbis.png')">
 
 	<input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
 	src="[% themelang %]/images/favoritos.png" border="0" title="Agregar a favoritos">
 </a>
 [% END %]
-
-[% IF MAIL %]
-<input TYPE="hidden" VALUE="[% MAIL %]" NAME="mail">
-<a  	onMouseOut="swap('mail','[% themelang %]/images/mail.png')" 
-	onMouseOver="swap('mail','[% themelang %]/images/mailbis.png')">
-
-<input onClick="printform.target='_self';printform.type.value='mail';submit();"  name="mail" id="mail" type="image" value="Mail"  
-	src="[% themelang %]/images/mail.png" border="0" title="Enviar Resultados por Mail">
-</a>
-[% END %]
-
