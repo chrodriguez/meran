@@ -28,18 +28,9 @@ my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
 my $activo;
-
 my ($cantidad,$socios);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
-
 my $habilitados = $obj->{'habilitados_filter'} || 0;
-
-# if (defined($habilitados)){
-#     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,1);
-# }else {
-#     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR);
-# }
 
 if ($inicial){
     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,$habilitados,$inicial);
@@ -49,31 +40,35 @@ if ($inicial){
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
-my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+if($socios){
 
-my @resultsdata; 
-my $i=0;
+	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+	
+	my @resultsdata; 
+	my $i=0;
+	
+	foreach my $socio (@$socios){
+		my $clase="";
+		if ($socio->getActivo == 0){
+			$activo = "NO";
+		}else{
+			$activo = "SI";
+		}
+		
+		my %row = (
+				clase=> $clase,
+				socio => $socio,
+				comboCategorias => $comboDeCategorias,
+				activo => $activo,
+		);
+	
+		push(@resultsdata, \%row);
+	}
+	
+	$t_params->{'resultsloop'}= \@resultsdata;
+	$t_params->{'cantidad'}= $cantidad;
+	$t_params->{'socio'}= $socioBuscado;
 
-foreach my $socio (@$socios){
-    my $clase="";
-     if ($socio->getActivo == 0){
-         $activo = "NO";
-      }else{
-         $activo = "SI";
-     }
-    
-     my %row = (
-            clase=> $clase,
-            socio => $socio,
-            comboCategorias => $comboDeCategorias,
-            activo => $activo,
-    );
-
-    push(@resultsdata, \%row);
-}
-
-$t_params->{'resultsloop'}= \@resultsdata;
-$t_params->{'cantidad'}= $cantidad;
-$t_params->{'socio'}= $socioBuscado;
+}#END if($socios)
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
