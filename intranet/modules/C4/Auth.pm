@@ -215,7 +215,6 @@ sub get_template_and_user {
 
 sub output_html_with_http_headers {
     my($query, $template, $params, $session, $cookie) = @_;
-# C4::AR::Utilidades::printHASH(\%ENV);
 	print $session->header(charset => C4::Context->config("charset")|'utf-8');
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
