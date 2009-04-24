@@ -72,8 +72,8 @@ sub agregar{
     my ($data_hash)=@_;
     #Asignando data...
     $self->setLegajo($data_hash->{'legajo'});
-    $self->setNombre($data_hash->{'nombre'});
-    $self->setApellido($data_hash->{'apellido'});
+    $self->setNombre(C4::AR::Utilidades::capitalizarString($data_hash->{'nombre'}));
+    $self->setApellido(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}));
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
     $self->setTipo_documento($data_hash->{'tipo_documento'});
