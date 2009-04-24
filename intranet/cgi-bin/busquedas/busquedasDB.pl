@@ -43,7 +43,7 @@ if($tipoAccion eq "POR_AUTOR"){
     $t_params->{'ini'} = $ini;
     $t_params->{'cantR'} = $cantR;
 
-    my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($ini,$cantR,$t_params);
+    my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
 
     $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 

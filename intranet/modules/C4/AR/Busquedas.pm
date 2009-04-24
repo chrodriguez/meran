@@ -739,7 +739,7 @@ sub buscarDatoDeCampoRepetible {
 	return $data->{'dato'};
 }
 
-
+# FIXME DEPRECATED
 sub getautor {
     my ($idAutor) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1472,18 +1472,15 @@ sub busquedaSimplePorAutor{
 	my $dbh = C4::Context->dbh;
 	my $sql_string_c1;
 	
-	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  FROM cat_nivel1 c1 \n ";
-	$sql_string_c1 .=" 	LEFT  JOIN cat_autor a ON (c1.autor = a.id) WHERE (a.completo LIKE ?)\n ";
+	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo \n";
+	$sql_string_c1 .= " FROM cat_nivel1 c1 LEFT JOIN cat_autor a ON (c1.autor = a.id) \n";
+	$sql_string_c1 .=" 	WHERE (a.completo LIKE ?) \n";
 	my $sth = $dbh->prepare($sql_string_c1);
-	
-	C4::AR::Debug::debug("SQL: ".$sql_string_c1);
 
 	$sth->execute("%".$params->{'autor'}."%");
 			
 	while(my $data = $sth->fetchrow_hashref){
-# 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
-# 		}
 	}
 
 	#arma y ordena el arreglo para enviar al cliente
@@ -1498,28 +1495,23 @@ sub busquedaSimplePorAutor{
 Realiza una busqueda simple por titulo sobre nivel 1
 =cut
 sub busquedaSimplePorTitulo{
-	my ($ini,$cantR,$params,$session) = @_;
+	my ($params,$session) = @_;
 
-	$params->{'ini'}= $ini;
-	$params->{'cantR'}= $cantR;
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'titulo'});	
 	my @id1_array;
 
 	my $dbh = C4::Context->dbh;
 	my $sql_string_c1;
 	
-	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  FROM cat_nivel1 c1 \n ";
-	$sql_string_c1 .=" 	LEFT  JOIN cat_autor a ON (c1.autor = a.id) WHERE (c1.titulo LIKE ?)\n ";
-	my $sth = $dbh->prepare($sql_string_c1);
-	
-	$sth->execute("%".$params->{'titulo'}."%");
+	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo \n";
+	$sql_string_c1 .= "	FROM cat_nivel1 c1 LEFT JOIN cat_autor a ON (c1.autor = a.id) \n";
+	$sql_string_c1 .= " WHERE (c1.titulo LIKE ?)\n ";
 
-	C4::AR::Debug::debug("SQL: ".$sql_string_c1);
+	my $sth = $dbh->prepare($sql_string_c1);
+	$sth->execute("%".$params->{'titulo'}."%");
 			
 	while(my $data = $sth->fetchrow_hashref){
-# 		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
  			push (@id1_array,$data);
-# 		}
 	}
 
 	#arma y ordena el arreglo para enviar al cliente
@@ -1530,7 +1522,42 @@ sub busquedaSimplePorTitulo{
    	return ($cant_total, $resultsarray);
 }
 
+sub filtrarPorAutor{
+    my ($params_obj)=@_;
 
+    my $dbh = C4::Context->dbh;
+# FIXME para que se hace el join con nivel 3??????
+=item
+    my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
+                FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
+                WHERE c1.autor = ?";
+=cut
+	my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
+				FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON (c1.id1 = c2.id1)
+				WHERE c1.autor = ? ";
+
+    my $sth=$dbh->prepare($query);
+    $sth->execute($params_obj->{'idAutor'});
+
+    my @id1_array;
+    my @searchstring_array;
+    my $autor = getautor($params_obj->{'idAutor'});
+# FIXME para que es esto?????????????
+    while(my $data=$sth->fetchrow_hashref){
+        $data->{'completo'} = $autor->{'completo'};
+        push(@id1_array,$data);
+    }
+
+	$params_obj->{'filtrarPorAutor'}= $autor->{'completo'};
+    push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
+
+
+    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
+    #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
+
+    return ($cant_total,$resultsarray);
+}
 
 # sub busquedaCombinada_newTemp{
 # 
@@ -1737,17 +1764,23 @@ sub logBusqueda{
 		}
 
       
-      if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
-         my $search;
-         $search->{'keyword'}= $params->{'keyword'};
-         push (@search_array, $search);
-      }
+		if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
+			my $search;
+			$search->{'keyword'}= $params->{'keyword'};
+			push (@search_array, $search);
+		}
+
+		if($params->{'filtrarPorAutor'} ne ""){
+			my $search;
+			$search->{'filtrarPorAutor'}= $params->{'filtrarPorAutor'};
+			push(@search_array, $search);
+		}
 	}
 
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
 																			$params->{'loggedinuser'},
 																			$params->{'type'},
-                                                         $session->param('browser'),
+                                                         					$session->param('browser'),
 																			\@search_array
 														);
 }
@@ -1833,17 +1866,16 @@ sub armarInfoNivel1{
 
 	#se corta el arreglo segun lo que indica el paginador
 	my ($cant_total,@result_array) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
-	#buscar disponibilidad, grupos, y otrs yerbas
-	C4::AR::Debug::debug("armarInfoNivel1=> cant_total :".$cant_total);
-	C4::AR::Debug::debug("armarInfoNivel1=> cant :".scalar(@result_array) );
 
 	for($i=0;$i<scalar(@resultsarray);$i++ ) {
+		#se generan los grupos para mostrar en el resultado de la consulta
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
 		@resultsarray[$i]->{'grupos'}= 0;
 		if(scalar(@$ediciones) > 0){
  			@resultsarray[$i]->{'grupos'}=$ediciones;
 		}
 
+		#se obtine la disponibilidad total 
  		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@resultsarray[$i]->{'id1'}, $tipo_nivel3_name);	
 		@resultsarray[$i]->{'disponibilidad'}= 0;
 
@@ -1858,32 +1890,6 @@ sub armarInfoNivel1{
 
 	return ($cant_total, \@result_array);
 }
-
-sub filtrarPorAutor{
-    my ($ini,$cantR,$params_obj)=@_;
-    my $dbh = C4::Context->dbh;
-    my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-                FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
-                WHERE c1.autor = ?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($params_obj->{'idAutor'});
-    my @id1_array;
-    my @searchstring_array;
-    my $autor = getautor($params_obj->{'idAutor'});
-    while(my $data=$sth->fetchrow_hashref){
-        $data->{'completo'} = $autor->{'completo'};
-        push(@id1_array,$data);
-    }
-    push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
-
-
-    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
-    #se loquea la busqueda
-    C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
-
-    return ($cant_total,$resultsarray);
-}
-
 
 #*****************************************Soporte MARC************************************************************************
 #devuelve toda la info en MARC de un item (id3 de nivel 3)

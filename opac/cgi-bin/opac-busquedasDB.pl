@@ -32,18 +32,24 @@ my $start = [ Time::HiRes::gettimeofday( ) ];
 my $cantidad;
 my $resultsarray;
 $obj->{'type'} = 'OPAC';
-
+$obj->{'session'}= $session;
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+$obj->{'ini'}= $ini;
+$obj->{'cantR'}= $cantR;
 
 if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 	$obj->{'autor'}= $obj->{'searchinc'};
-	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorAutor($ini,$cantR,$obj,$session);
+	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorAutor($obj,$session);
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TITULO'){
 
 	$obj->{'titulo'}= $obj->{'searchinc'};
-	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorTitulo($ini,$cantR,$obj,$session);
+	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorTitulo($obj,$session);
+
+}elsif($obj->{'tipoAccion'} eq 'FILTRAR_POR_AUTOR'){
+
+	($cantidad, $resultsarray)= C4::AR::Busquedas::filtrarPorAutor($obj);
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TEMA'){
 

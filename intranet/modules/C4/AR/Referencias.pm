@@ -414,5 +414,21 @@ sub getNombreAutor {
 	}
 }
 
+=item
+Retorna el objeto autor segun el id pasado por parametro, si no existe el autor retorna 0
+=cut
+sub getAutor {
+	my ($id)= @_;
+
+    my $autor_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
+																	query => [ id => $id ]
+														);
+
+	if(scalar(@$autor_array_ref) > 0){
+ 		return $autor_array_ref->[0];
+	}else{
+		return 0;
+	}
+}
 
 1;
