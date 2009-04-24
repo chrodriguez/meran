@@ -521,7 +521,7 @@ sub devolver {
            $self->debug("SANCION!!  DIAS: $diasSancion");
             my $tipo_sancion = C4::AR::Sanciones::getTipoSancion($self->getTipo_prestamo, $self->socio->getCod_categoria);
 
-            if ( C4::AR::Sanciones::tieneLibroVencido($nro_socio)) {
+            if ( C4::AR::Sanciones::tieneLibroVencido($nro_socio,$self->db)) {
             # El usuario tiene libros vencidos en su poder (es moroso)
                 #SE INSERTA UNA SANCION PENDIENTE (se va a hacer efectiva al devolver el ultimo libro!!)
                 $self->debug("SE INSERTA UNA SANCION PENDIENTE");

@@ -440,13 +440,14 @@ sub estaSancionado {
 
 sub tieneLibroVencido {
   #Esta funcion determina si un usuario ($nro_socio) tiene algun biblio vencido que no le permite realizar reservas o prestamos
-  my ($nro_socio)=@_;
+  my ($nro_socio,$db)=@_;
 
-  my $prestamos_array_ref=C4::AR::Prestamos::getPrestamosDeSocio($nro_socio);
+  my $prestamos_array_ref=C4::AR::Prestamos::getPrestamosDeSocio($nro_socio,$db);
 
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   foreach my $prestamo (@$prestamos_array_ref) {
+           C4::AR::Debug::debug("El prestamo de ".$prestamo->getId3." esta vencido? : ".$prestamo->estaVencido);
     		return(1) if ($prestamo->estaVencido);
   	}
   	return(0);
