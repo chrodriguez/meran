@@ -133,8 +133,8 @@ Se elimina el usuario
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
-	my $id_socio= $obj->{'id_socio'};
- 	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($id_socio);
+	my $nro_socio= $obj->{'nro_socio'};
+ 	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($nro_socio);
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
 	print $input->header;

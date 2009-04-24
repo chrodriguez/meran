@@ -427,9 +427,9 @@ sub resetPassword {
 #  borrowernumber y usuario.
 sub eliminarUsuario {
     
-    my($id_socio)=@_;
+    my($nro_socio)=@_;
     my $msg_object= C4::AR::Mensajes::create();
-    my $socio = getSocioInfo($id_socio);
+    my $socio = getSocioInfoPorNroSocio($nro_socio);
 # FIXME esa funcion debe cambiar, porque cambiaron los parametros
 #     $msg_object = _verficarEliminarUsuario($params,$msg_object);
 
@@ -1181,8 +1181,15 @@ sub getSocioLike {
     }
 
 	if (defined($habilitados)){
-        push(@filtros, ( activo=> { eq => $habilitados}) );
+        push(@filtros, ( activo => { eq => $habilitados}) );
+        if ($habilitados == 0){
+            push(@filtros, ( 'persona.es_socio'=> { eq => 0}) );
+        }
     }
+    else{
+          
+    }
+
 
 	my $ordenAux= $socioTemp->sortByString($orden);
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,

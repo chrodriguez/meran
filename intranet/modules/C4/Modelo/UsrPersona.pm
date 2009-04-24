@@ -35,6 +35,7 @@ __PACKAGE__->meta->setup(
         fecha_alta       => { type => 'varchar', length => 255},
         sexo             => { type => 'character', length => 1 },
         telefono_laboral => { type => 'varchar', length => 50 },
+        es_socio         => { type => 'integer', length => 1, default => 0 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
 #          activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
@@ -96,11 +97,12 @@ sub agregar{
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
     $self->setCumple_condicion($data_hash->{'cumple_condicion'});
+    $self->setEs_socio(0);
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
     
     $self->save();
-    $self->convertirEnSocio($data_hash);
+#     $self->convertirEnSocio($data_hash);
     
 
 }
@@ -175,6 +177,18 @@ sub sortByString{
         }
 }
 
+sub activar{
+    my ($self) = shift;
+    $self->setEs_socio(1);
+    $self->save();
+}
+
+sub desactivar{
+    my ($self) = shift;
+    $self->setEs_socio(0);
+    $self->save();
+}
+
 sub getLegajo{
     my ($self) = shift;
     return ($self->legajo);
@@ -195,6 +209,19 @@ sub setId_persona{
     my ($self) = shift;
     my ($id_persona) = @_;
     $self->id_persona($id_persona);
+}
+
+
+
+sub setEs_socio{
+    my ($self) = shift;
+    my ($status) = @_;
+    $self->es_socio($status);
+}
+
+sub getEs_socio{
+    my ($self) = shift;
+    return($self->es_socio);
 }
 
 sub getVersion_documento{

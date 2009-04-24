@@ -263,12 +263,14 @@ sub getPermisos{
 sub activar{
     my ($self) = shift;
     $self->setActivo(1);
+    $self->persona->activar();
     $self->save();
 }
 
 sub desactivar{
     my ($self) = shift;
     $self->setActivo(0);
+    $self->persona->desactivar();
     $self->save();
 }
 
