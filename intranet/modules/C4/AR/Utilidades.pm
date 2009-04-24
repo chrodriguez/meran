@@ -90,6 +90,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboTipoDeOperacion
     &existeInArray
     &paginarArreglo
+    &capitalizarString
     
 
 );
@@ -1801,6 +1802,15 @@ sub obtenerCoincidenciasDeBusqueda{
 	return $cont;
 }
 
+
+#CAPITALIZAR UN STRING (primer letra en mayuscula, el resto en minuscula
+
+sub capitalizarString{
+
+    my ($string) = @_;
+    $string = ucfirst(lc trim($string));
+    return ($string);
+}
 =item
 Esta funcion ordena una HASH de strings
 orden: es el orden por el que se va a ordenar la HASH

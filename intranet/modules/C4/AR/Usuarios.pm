@@ -256,8 +256,10 @@ sub habilitarPersona{
     eval {
         foreach my $socio (@$id_socios_array_ref){
             my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
-            $partner->load();
-            $partner->activar;
+            if ($partner){
+                $partner->load();
+                $partner->activar;
+            }
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$partner->getNro_socio]});
         }
      };
@@ -282,9 +284,11 @@ sub deshabilitarPersona{
     eval {
         foreach my $socio (@$id_socios_array_ref){
             my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
-            $partner->load();
-            $partner->desactivar;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U363', 'params' => [$partner->getNro_socio]});
+            if ($partner){
+                $partner->load();
+                $partner->desactivar;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U363', 'params' => [$partner->getNro_socio]});
+            }
         }
      };
     
@@ -1045,9 +1049,13 @@ sub getSocioInfo {
     my ($id_socio) = @_;
 
     my  $socio = C4::Modelo::UsrSocio->new(id_socio => $id_socio);
+    
+    if ($socio){
         $socio->load();
-
-    return ($socio);
+        return ($socio);
+    }else{
+        return (0);
+    }
 }
 
 =item
