@@ -80,7 +80,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.ini= '';		//para manejar el actual del paginador
 	this.funcion= '';	//nombre de funcion que tiene q conocer el paginador
-	this.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+	this.url= '';
 	this.orden= '';		//para ordenar los resultados
 	this.debug= false;	
 	this.onComplete= fncUpdateInfo;  //se ejecuta cuando se completa el ajax
