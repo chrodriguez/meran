@@ -1296,19 +1296,15 @@ sub getBranch{
 
 
 sub busquedaAvanzada_newTemp{
-	my ($ini,$cantR,$params_obj,$session) = @_;
-	
-	$params_obj->{'ini'}= $ini;
-	$params_obj->{'cantR'}= $cantR;
+	my ($params_obj,$session) = @_;
+
 	my $dbh = C4::Context->dbh;
 	my @searchstring_array;
 	
-	my $body_string = 
-	
-	"\nSELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n
-	FROM cat_nivel3 t1 \n
-	JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2)\n
-	WHERE ";
+	my $body_string = "	SELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n";
+	$body_string .=	"	FROM cat_nivel3 t1 JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  \n";
+	$body_string .=	"	JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2) \n";
+	$body_string .=	"	WHERE ";
 	
 	my $filtros = "";
 	
@@ -1367,10 +1363,8 @@ Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
 =cut
 sub busquedaCombinada_newTemp{
-	my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
+	my ($string,$session,$obj_for_log) = @_;
 
-	$obj_for_log->{'ini'}= $ini;
-	$obj_for_log->{'cantR'}= $cantR;
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
 	
 	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 ) \n";
@@ -1833,6 +1827,7 @@ sub armarBuscoPor{
 
 sub armarInfoNivel1{
 	my ($params,$searchstring_array, @resultId1) = @_;
+
 	my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
 	my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
 	my @resultsarray;
@@ -1849,6 +1844,7 @@ sub armarInfoNivel1{
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
+C4::AR::Debug::debug("cant hits: ".$cant);
 		$result{$i}->{'hits'}= $cant;
 	}
 
@@ -1866,7 +1862,7 @@ sub armarInfoNivel1{
 
 	#se corta el arreglo segun lo que indica el paginador
 	my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
-C4::AR::Debug::debug("desde armarInfoNivel1 porcensando cant: ".scalar(@result_array_paginado));
+;
 	for($i=0;$i<scalar(@result_array_paginado);$i++ ) {
 		#se generan los grupos para mostrar en el resultado de la consulta
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");

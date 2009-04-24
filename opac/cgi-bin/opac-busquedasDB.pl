@@ -11,7 +11,7 @@ use Time::HiRes;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-																template_name => "busquedaResult.tmpl",
+																template_name => "opac-busquedaResult.tmpl",
 																query => $input,
 																type => "opac",
 																authnotrequired => 1,
@@ -58,15 +58,9 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
 
-	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
+	($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 }
 
-=item
-my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
-my ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
-
-=cut
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 #se arma el arreglo con la info para mostrar en el template

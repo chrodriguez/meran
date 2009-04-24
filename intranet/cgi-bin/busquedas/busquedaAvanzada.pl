@@ -28,10 +28,11 @@ my $funcion= $obj->{'funcion'};
 my $ini= ($obj->{'ini'}||'');
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
+$obj->{'ini'}= $ini;
+$obj->{'cantR'}= $cantR;
 $obj->{'type'} = 'INTRA';
 
-my ($cantidad, $array_nivel1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($ini,$cantR,$obj,$session);
+my ($cantidad, $array_nivel1)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->param('nro_socio');

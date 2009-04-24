@@ -36,18 +36,17 @@ $search->{'class'}= $tipo_documento;
 
 my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
+$obj->{'ini'}= $ini;
+$obj->{'cantR'}= $cantR;
 $obj->{'type'} = 'INTRA';
 
-my ($cantidad, $resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($ini,$cantR,$search->{'keyword'},$session,$obj);
+my ($cantidad, $resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'},$session,$obj);
 
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-
-
 $obj->{'cantidad'}= $cantidad;  #????????
 $t_params->{'SEARCH_RESULTS'}= $resultId1;
-$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
+$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj); 
 $t_params->{'cantidad'}= $cantidad;
 
 if($outside) {
