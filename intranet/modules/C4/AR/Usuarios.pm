@@ -1206,7 +1206,11 @@ sub getSocioLike {
                                                                                require_objects => [ 'persona' ]
                                                                      );
 
-    return (scalar(@$socios_array_ref_count), $socios_array_ref);
+	if($socios_array_ref){
+		 return (scalar(@$socios_array_ref_count), $socios_array_ref);
+	}else{
+		 return (0,0);
+	}
 }
 
 
