@@ -1160,12 +1160,6 @@ sub getSocioLike {
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
 	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
-    
-#     if($socio ne 'TODOS'){
-#         push (	@filtros, ( or   => [ apellido => { like => $socio.'%'}, 
-# 				nro_documento => { like => $socio.'%' }, 
-# 				legajo => { like => $socio.'%' }  ]) );
-#     }
 
 	 if($socio ne 'TODOS'){
     #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
@@ -1206,7 +1200,7 @@ sub getSocioLike {
                                                                                require_objects => [ 'persona' ]
                                                                      );
 
-	if($socios_array_ref){
+	if(scalar(@$socios_array_ref) > 0){
 		 return (scalar(@$socios_array_ref_count), $socios_array_ref);
 	}else{
 		 return (0,0);
