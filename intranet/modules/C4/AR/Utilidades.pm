@@ -865,7 +865,7 @@ sub verificarValor(){
     
 #   $valor=~ s/'/\\'/g; 
     #$valor=~ s/-/\\-/g;
-    $valor=~ s/%|"|'|=|\*|-(<,>)//g;    
+    $valor=~ s/%|"|'|=|;|\*|-(<,>)//g;    
     $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
     $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
     return $valor;
@@ -1095,11 +1095,16 @@ sub from_json_ISO{
     eval {
         my ($data)=@_;
         $data= UTF8toISO($data);
+		C4::AR::Debug::debug("from_json_ISO => ".$data);
         return from_json($data, {ascii => 0});
-    }
-    or do {
-        return "0";
-   }
+    };
+#     or do {
+#         return "0";
+#    }
+
+	if ($@){
+		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+	}
         
 }
 =item
@@ -1689,15 +1694,7 @@ sub existeInArray{
 Esta funcion verifica si el user_agent es un browser
 =cut
 sub isBrowser {
-=item
-open(Z, ">>/tmp/debug.txt");
-print Z "\n";
-print Z "PRINT HASH de logueo de busqueda: \n";
 
-	while ( my ($key, $value) = each(%ENV) ) {
-        	print Z "key: $key => value: $value\n";
-    	}
-=cut
 	my $browser= $ENV{'HTTP_USER_AGENT'};
 	my $ok=1;
 

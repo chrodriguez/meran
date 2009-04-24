@@ -1784,31 +1784,31 @@ sub armarBuscoPor{
 	my $buscoPor="";
 	
 	if($params->{'keyword'} ne ""){
-		$buscoPor.="Busqueda combinada: ".$params->{'keyword'}."&";
+		$buscoPor.="Busqueda combinada: ".C4::AR::Utilidades::verificarValor($params->{'keyword'})."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
-		$buscoPor.="Tipo de documento: ".$params->{'tipo_nivel3_name'}."&";
+		$buscoPor.="Tipo de documento: ".C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
 	}
 
 	if( $params->{'titulo'} ne "" ){
-		$buscoPor.="Titulo: ".$params->{'titulo'}."&";
+		$buscoPor.="Titulo: ".C4::AR::Utilidades::verificarValor($params->{'titulo'})."&";
 	}
 	
 	if( $params->{'autor'} ne "" ){
-		$buscoPor.="Autor: ".$params->{'autor'}."&";
+		$buscoPor.="Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
 	}
 
 	if( $params->{'signatura'} ne "" ){
-		$buscoPor.="Signatura: ".$params->{'signatura'}."&";
+		$buscoPor.="Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
 	}
 
 	if( $params->{'isbm'} ne "" ){
-		$buscoPor.="ISBN: ".$params->{'isbn'}."&";
+		$buscoPor.="ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
 	}		
 
 	if( $params->{'codBarra'} ne "" ){
-		$buscoPor.="Código de Barra: ".$params->{'codBarra'}."&";
+		$buscoPor.="Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'})."&";
 	}		
 
 	my @busqueda=split(/&/,$buscoPor);
