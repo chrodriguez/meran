@@ -1061,7 +1061,11 @@ sub getSocioInfoPorNroSocio{
 
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ nro_socio => { eq => $nro_socio } ]);
 
-    return ($socio_array_ref->[0]);
+	if($socio_array_ref){
+		return ($socio_array_ref->[0]);
+	}else{
+		return 0;
+	}
 }
 
 # FIXME parece q no se usa???????????????????

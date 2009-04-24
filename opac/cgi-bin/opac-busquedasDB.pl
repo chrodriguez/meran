@@ -26,8 +26,7 @@ if($obj ne ""){
 }
 
 my $ini= $obj->{'ini'};
-
-my $start = [ Time::HiRes::gettimeofday( ) ];
+my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
 my $resultsarray;
