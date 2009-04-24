@@ -10,9 +10,6 @@ use CGI;
 my $input = new CGI;
 
 my $authnotrequired= 0;
-open(A, ">>/tmp/debug.txt");
-print A "desde usuariosRealesDB=>\n";
-
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
@@ -306,7 +303,7 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
 									debug => 1,
 			    });
 
-    my $socio= C4::AR::Usuarios::getSocioInfo($obj->{'id_socio'});
+    my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
 
     my $comboDeUI= &C4::AR::Utilidades::generarComboUI();
 

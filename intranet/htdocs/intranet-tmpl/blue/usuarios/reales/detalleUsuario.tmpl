@@ -4,7 +4,7 @@
         objAH=new AjaxHelper(updatePrestamosInterBibliotecarios);
         objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
         objAH.debug= true;
-        objAH.id_socio= usuario.ID;
+        objAH.nro_socio= usuario.ID;
         objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
         objAH.sendToServer();
     }
