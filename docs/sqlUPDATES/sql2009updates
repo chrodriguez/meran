@@ -661,3 +661,27 @@ CHANGE `amount` `cantidad` INT( 11 ) NOT NULL DEFAULT '1';
 CHANGE `sanctiondays` `dias_sancion` INT( 11 ) NOT NULL DEFAULT '0',
 CHANGE `delaydays` `dias_demora` INT( 11 ) NOT NULL DEFAULT '0';
 
+--Moficaciones
+
+Nueva Organizacion de las js
+
+usr/local/koha
+		=> /includes/  js comunes a los dos sitios OPAC e INTRA  (NUEVO)
+		=> /intranet-tmpl/blue/includes/ solo js utilizadas en la INTRA
+		=> /opac-tmpl/default/includes/  solo js utilizadas en el OPAC
+
+con esta nueva organizacion se evita tener que modificar dos helpers, por ej. AjaxHelper de ser necesario.
+
+Agregar esto en opac y ssl en /etc/apache2/sites-enabled/
+para q apache pueda leer las js comunes a los dos sitios
+
+
+Alias /includes/ "/usr/local/koha/includes/"
+<Directory /usr/local/koha/includes/ >
+ Options  -Indexes
+  Order allow,deny
+  Allow from all
+</Directory>
+
+--Fin Modificaciones
+
