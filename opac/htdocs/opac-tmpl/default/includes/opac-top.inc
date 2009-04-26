@@ -18,6 +18,7 @@
 <script src="/includes/MessageHelper.js"></script>
 <script src="/includes/json/jsonStringify.js"></script>
 <script src="/opac-tmpl/default/includes/navegador.js"></script>
+<script src="/includes/jquery/jquery-highlight.js"></script>
 <script src="/includes/util.js"></script>
 <script src="/opac-tmpl/default/includes/opac-searchFunciones.js"></script>
 <script src="/opac-tmpl/default/includes/circulacionOPAC.js"></script>
