@@ -1777,8 +1777,12 @@ sub logBusqueda{
 														);
 }
 
+
+=item
+Esta funcion arma el string para mostrar en el cliente lo que a buscado, 
+ademas escapa para evitar XSS
+=cut
 sub armarBuscoPor{
-# FIXME OJO aca filtrar bien todos los parametros de entrada que se van a reflejar en el cliente, posible XSS
 	my ($params) = @_;
 	
 	my $buscoPor="";
@@ -1842,7 +1846,6 @@ sub armarInfoNivel1{
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
-C4::AR::Debug::debug("cant hits: ".$cant);
 		$result{$i}->{'hits'}= $cant;
 	}
 

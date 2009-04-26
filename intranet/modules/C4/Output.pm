@@ -101,11 +101,6 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
-# open (A, ">>/tmp/debug.txt");
-# print A "desde gettemplate: \n";
-# print A "tmplbase: ".$tmplbase."\n";
-# print A "opac: ".$opac."\n";
-
 	my $htdocs;
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
@@ -113,19 +108,9 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-# print A "htdocs: ".$htdocs."\n";
 
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
-# print A "theme: ".$theme."\n";
-# print A "lang: ".$lang."\n";
 
-=item
-	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
-				   die_on_bad_params => 0,
-				   global_vars       => 1,
-				   path              => ["$htdocs/$theme/$lang/includes"]);
-=cut
-# print A "path: "."$htdocs/$theme/$lang/$tmplbase"."\n";
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n,
 								        'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #solo para probar
@@ -139,6 +124,7 @@ sub gettemplate {
 								"$htdocs/$theme/includes/",
                                 "$htdocs/$theme/includes/popups/",
 								"$htdocs/$theme/includes/menu",
+# 								"/includes/",
 							],
  					ABSOLUTE => 1,
 					EVAL_PERL => 1,
@@ -146,14 +132,6 @@ sub gettemplate {
 # 					RELATIVE => 1,
 					});	
 
-# print A "includes: "."$htdocs/$theme/$lang/$tmplbase/includes/ \n";
-
-	# XXX temporary patch for Bug 182 for themelang
-# 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
-# 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-# 							theme => $theme,
-# 	
-# 							lang => $lang);
 
 	#se inicializa la hash de los parametros para el template�
  	my %params=();
@@ -163,12 +141,9 @@ sub gettemplate {
 			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme",
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			theme => $theme,
-# 			lang => $lang,
 			template_name => "$htdocs/$theme/$tmplbase", #se setea el nombre del tmpl
 		);
 
-# print A "themelang: ".$params{'themelang'}."\n";
-# # # # close(A);
 
 	return ($template, \%params);
 }

@@ -85,7 +85,7 @@ function updateModificarPermisos(responseText){
 	vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
 	vModificarPermisos.debug= true;
 	vModificarPermisos.html=responseText;
-	vModificarPermisos.titulo= 'PERMISOS DE ACCESO';
+	vModificarPermisos.titulo= "[% 'Permisos de Acceso' | i18n %]";
 	vModificarPermisos.create();
 	vModificarPermisos.height('220px');
 	vModificarPermisos.width('550px');
@@ -107,7 +107,7 @@ function guardarPermisos(){
 		}
 
 		objAH=new AjaxHelper(updateGuardarPermisos);
-		//objAH.debug= true;
+		objAH.debug= true;
 		objAH.tipoAccion= 'GUARDAR_PERMISOS';
 		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 		objAH.nro_socio= usuario.ID;

@@ -17,10 +17,21 @@ JSONstring={
 	includeFunctions: false,
 	detectCirculars:true,
 	restoreCirculars:true,
+	debug: false,
 	make:function(arg,restore) {
 		this.restore=restore;
 		this.mem=[];this.pathMem=[];
 		return this.toJsonStringArray(arg).join('');
+	},
+	clearData:function(x){
+		x= (escape(x));
+		this.log("jsconStringify => clearData: "+x);
+		return x;
+	},
+	log: function(str){
+			if( (this.debug)&&(window.console) ){
+					window.console.log(str);
+			}
 	},
 	toObject:function(x){
 		eval("this.myObj="+x);
@@ -98,8 +109,7 @@ JSONstring={
 			var a=['\n','\\n','\r','\\r','"','\\"'];
 			arg+=""; for(var i=0;i<6;i+=2){arg=arg.split(a[i]).join(a[i+1])};
 // FIXME aca se puede filtrar XSS, falta verficar
- 			arg= (escape(arg));
-// 			window.console.log("jsonStringify =>  toJsonStringArray\n" + arg);
+ 			arg= this.clearData(arg);
 			out.push(arg);
 			out.push('"');
 			return out;

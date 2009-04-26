@@ -558,7 +558,7 @@ sub t_cambiarPermisos {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+		my $socio= getSocioInfoPorNroSocio($params->{'nro_socio'});
         $socio->load();
         my $db= $socio->db;
         # enable transactions, if possible

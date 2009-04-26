@@ -45,6 +45,7 @@ if($tipoAccion eq "POR_AUTOR"){
     $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 
     $t_params->{'SEARCH_RESULTS'}= $resultId1;
+	#se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
     $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
     $t_params->{'cantidad'}= $cantidad;
 
@@ -63,6 +64,7 @@ if($tipoAccion eq "POR_AUTOR"){
 	$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 	$obj->{'cantidad'}= $cantidad;  #????????
 	$t_params->{'SEARCH_RESULTS'}= $resultId1;
+	#se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 	$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj); 
 	$t_params->{'cantidad'}= $cantidad;
 
@@ -81,6 +83,7 @@ if($tipoAccion eq "POR_AUTOR"){
 	$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	$t_params->{'SEARCH_RESULTS'}= $array_nivel1;
 	$t_params->{'cantidad'}= $cantidad;
+	#se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 	$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 }
 

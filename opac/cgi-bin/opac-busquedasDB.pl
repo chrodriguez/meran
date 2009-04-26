@@ -66,6 +66,7 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 $obj->{'cantidad'}= $cantidad;
 $obj->{'loggedinuser'}= $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
+#se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}= $cantidad;
 

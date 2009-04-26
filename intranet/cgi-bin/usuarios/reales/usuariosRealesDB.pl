@@ -10,9 +10,6 @@ use CGI;
 my $input = new CGI;
 
 my $authnotrequired= 0;
-open(A, ">>/tmp/debug.txt");
-print A "desde usuariosRealesDB=>\n";
-
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
@@ -97,7 +94,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 									debug => 1,
 			    });
 
-    my ($socio)= C4::AR::Usuarios::getSocioInfo($obj->{'usuario'});
+    my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'usuario'});
     
     #Obtengo los permisos del socio
     my $flags_hashref= $socio->getPermisos;
@@ -316,4 +313,4 @@ C4::AR::Debug::debug("\nSOCIO DESDE DB: ".$socio->getNro_socio."\n");
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
-} #end if($tipoAccion eq "GUARDAR_PERMISOS")
+} 

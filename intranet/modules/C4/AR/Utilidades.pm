@@ -1095,16 +1095,20 @@ sub from_json_ISO{
     eval {
         my ($data)=@_;
         $data= UTF8toISO($data);
-		C4::AR::Debug::debug("from_json_ISO => ".$data);
+# 		C4::AR::Debug::debug("from_json_ISO => ".$data);
         return from_json($data, {ascii => 0});
-    }
-    or do {
-        return "0";
-   }
+	}
+#     }
+#     or do {
+#         return "0";
+#    }
 
 # 	if ($@){
-# 		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-# 	}
+	or do{ 
+# FIXME falta generar un codigo de error para error de sistema
+		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+		return "0";
+	}
 #         
 }
 =item
