@@ -128,6 +128,7 @@ function buscarPorTitulo(){
 	
 	objAH=new AjaxHelper(updateBuscarPorTitulo);
   	objAH.debug= true;
+// 	objAH.debugJSON= true;
 	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
 	objAH.searchinc= $('#searchinc').val();
 	objAH.tipo= 'normal';

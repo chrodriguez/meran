@@ -4,15 +4,6 @@
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 
-<!--<script src="/opac-tmpl/default/includes/jquery/jquery.js"></script>
-<script src="/opac-tmpl/default/includes/AjaxHelper.js"></script>
-<script src="/opac-tmpl/default/includes/MessageHelper.js"></script>
-<script src="/opac-tmpl/default/includes/json/jsonStringify.js"></script>
-<script src="/opac-tmpl/default/includes/navegador.js"></script>
-<script src="/opac-tmpl/default/includes/util.js"></script>
-<script src="/opac-tmpl/default/includes/opac-searchFunciones.js"></script>
-<script src="/opac-tmpl/default/includes/circulacionOPAC.js"></script>
-<script src="/opac-tmpl/default/includes/favoritos.js"> </script>-->
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>

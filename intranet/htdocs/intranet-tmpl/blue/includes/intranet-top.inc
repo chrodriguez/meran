@@ -2,27 +2,18 @@
 <!--Doctype is not required - can be HTML or XHTML-->
 <html>
 
-<!-- <script src="/intranet-tmpl/blue/includes/jquery/jquery.js"></script> -->
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/intranet-tmpl/blue/includes/jquery/jquery.menu.js"></script>
-<!-- para generar la hash de la cache -->
-<!--<script src="/intranet-tmpl/blue/includes/md5.js"></script> -->
 <script src="/includes/md5.js"></script> 
-<!--<script src="/intranet-tmpl/blue/includes/jquery/jquery.jCache.js"></script> --> 
+<!-- para generar la hash de la cache -->
 <script src="/includes/jquery/jquery.jCache.js"></script> 
-
-<!--<script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>-->
 <script src="/includes/json/jsonStringify.js"></script>
-<!--<script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>-->
 <script src="/includes/AjaxHelper.js"></script>
-<!--<script src="/intranet-tmpl/blue/includes/util.js"></script>-->
 <script src="/includes/util.js"></script>
-<!--<script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>-->
 <script src="/includes/MessageHelper.js"></script>
 
 [% INCLUDE   'AutocompleteHelper.inc'  %]
 [% INCLUDE   'WindowHelper.inc'  %]
-<!--<script src="/intranet-tmpl/blue/includes/WindowHelper.js"></script>-->
 <script src="/includes/WindowHelper.js"></script>
 
 <head>

@@ -67,14 +67,14 @@ sub debug{
 
 sub _printHASH {
     my ($hash_ref) = @_;
-print Z "\n";
-print Z "   PRINT HASH: \n";
+C4::AR::Debug::debug("\n");
+C4::AR::Debug::debug("PRINT HASH: \n");
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
-                print Z "       key: $key => value: $value\n";
-            }
+				C4::AR::Debug::debug("		key: $key => value: $value\n");
+		}
     }
-print Z "\n";
+C4::AR::Debug::debug("\n");
 }
 
 
