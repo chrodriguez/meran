@@ -132,7 +132,6 @@ sub gettemplate {
 # 					RELATIVE => 1,
 					});	
 
-C4::AR::Debug::debug("htdocs".$htdocs);
 	#se inicializa la hash de los parametros para el template�
  	my %params=();
 
