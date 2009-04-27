@@ -3,7 +3,7 @@
 <html>
 
 <script src="/includes/jquery/jquery.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.menu.js"></script>
+<script src="/includes/jquery/jquery.menu.js"></script>
 <script src="/includes/md5.js"></script> 
 <!-- para generar la hash de la cache -->
 <script src="/includes/jquery/jquery.jCache.js"></script> 
