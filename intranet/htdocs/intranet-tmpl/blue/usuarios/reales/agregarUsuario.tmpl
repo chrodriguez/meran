@@ -1,8 +1,9 @@
+
+
 [% IF addBorrower == 1 %]
     [% INCLUDE "intranet-top.inc" %] 
-	<script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
 [% END %]
-
+<script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
 <script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
 <link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
 <script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
@@ -82,7 +83,7 @@
         <td  width="50%" ALIGN=RIGHT>
          [% "Tarjeta de identificaci&oacute;n" | i18n %] *
          [% IF addBorrower %]
-            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar Nro. Socio"><br>
+            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar"><br>
          [% ELSE %]
             <label id="nro_socio" name="nro_socio" size=10 class="partnerNumberHighlight">[% socio.getNro_socio %]</label><br>
          [% END %]
@@ -250,8 +251,8 @@
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
-            <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" value="[% socio.persona.getAlt_ciudad %]" size='50'>
-            <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]"> 
+            <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
+            <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
         </td>
         </tr>
     <tr>

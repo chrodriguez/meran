@@ -27,7 +27,7 @@ __PACKAGE__->meta->setup(
         msg_texto        => { type => 'varchar', length => 255 },
         alt_calle        => { type => 'varchar', length => 255 },
         alt_barrio       => { type => 'varchar', length => 255 },
-        alt_ciudad       => { type => 'varchar', length => 255 },
+        alt_ciudad       => { type => 'varchar', length => 11 },
         alt_telefono     => { type => 'varchar', length => 255 },
 #         nacimiento       => { type => 'date' },
         nacimiento       => { type => 'varchar', length => 255},
@@ -46,6 +46,12 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::RefLocalidad',
         key_columns => { ciudad => 'LOCALIDAD' },
+        type        => 'one to one',
+      },
+      alt_ciudad_ref => 
+      {
+        class       => 'C4::Modelo::RefLocalidad',
+        key_columns => { alt_ciudad => 'LOCALIDAD' },
         type        => 'one to one',
       },
      documento => 
@@ -102,7 +108,7 @@ sub agregar{
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
     
     $self->save();
-#     $self->convertirEnSocio($data_hash);
+    $self->convertirEnSocio($data_hash);
     
 
 }

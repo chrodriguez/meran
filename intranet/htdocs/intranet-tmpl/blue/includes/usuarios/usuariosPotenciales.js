@@ -1,4 +1,7 @@
-//************************************************Eliminar Usuario**********************************************
+var objAH;
+
+// //************************************************Eliminar Usuario**********************************************
+
 function eliminarUsuario(){
 
     var is_confirmed = confirm('Confirma la baja ?');
@@ -17,7 +20,7 @@ function eliminarUsuario(){
 
 
 
-/// FIXME ver que cuando el usuario no haya borrado, no redireccione
+// FIXME ver que cuando el usuario no haya borrado, no redireccione
 function updateEliminarUsuario(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
@@ -26,10 +29,11 @@ function updateEliminarUsuario(responseText){
     }
 }
 
-//*
+
 //*********************************************Modificar Datos Usuario*********************************************
 
-var nro_socio_temp; //SOLO USADO PARA MODIFICAR_USUARIO
+nro_socio_temp = 0; //SOLO USADO PARA MODIFICAR_USUARIO
+
 function modificarDatosDeUsuario(){
     objAH=new AjaxHelper(updateModificarDatosDeUsuario);
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
@@ -95,7 +99,6 @@ function objeto_usuario(){
     this.ID;
 }
 
-var objAH;
 
 
 //*************************************Para manejar el historial de prestamos***********************************

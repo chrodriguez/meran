@@ -1181,16 +1181,7 @@ sub getSocioLike {
         }
     }
 
-	if (defined($habilitados)){
-        push(@filtros, ( activo => { eq => $habilitados}) );
-        if ($habilitados == 0){
-            push(@filtros, ( 'persona.es_socio'=> { eq => 0}) );
-        }
-    }
-    else{
-          
-    }
-
+    push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
