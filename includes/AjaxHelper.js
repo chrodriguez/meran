@@ -124,8 +124,10 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.ajaxCallback= function(helper){
 			
 			if(this.debugJSON) {JSONstring.debug= true;}
+			helper.token= token;
 			var params= "obj="+JSONstring.make(helper);
 			this.log("AjaxHelper => ajaxCallback \n" + params);
+			this.log("AjaxHelper => token: " + token);
 			
 			var _hash_key;
 			if(this.cache){

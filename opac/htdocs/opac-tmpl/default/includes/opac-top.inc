@@ -4,6 +4,10 @@
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
 
+<script language="javascript" type="text/javascript">
+token= '[% token %]';
+</script>
+
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>
@@ -41,7 +45,6 @@ function cambiarIdioma() {
         </font>
     </div>
 </noscript>
-
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
 <tr>
 [% IF loggedinusername %]

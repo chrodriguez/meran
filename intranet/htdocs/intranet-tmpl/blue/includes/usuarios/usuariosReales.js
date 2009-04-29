@@ -11,7 +11,6 @@ var nro_socio_temp; //SOLO USADO PARA MODIFICAR_USUARIO
 function modificarDatosDeUsuario(){
 	objAH=new AjaxHelper(updateModificarDatosDeUsuario);
 	objAH.debug= true;
-	objAH.cache= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
 	objAH.nro_socio= usuario.ID;

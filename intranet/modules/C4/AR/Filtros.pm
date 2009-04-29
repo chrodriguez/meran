@@ -13,8 +13,54 @@ use vars qw(@EXPORT @ISA);
 
 	&i18n
 	&setComboLang
+	&link_to
 );
 
+=item
+sub link_to {
+	my (@params) = @_;
+	my $url='';
+	$url= @params[0]; #obtengo la url
+	my $cant= scalar(@params);
+	if($cant > 1){$url .= "?";
+		for(my $i=1; $i < scalar(@params); $i++ ){
+			if($i > 1){
+				$url .= '&'.@params[$i]; #se procesa un parametro
+			}else{$url .= @params[$i];}
+		}
+	}
+
+	my $session = CGI::Session->load();
+	$url .= '&token='.$session->param('token'); #se agrega el token
+C4::AR::Debug::debug("url: ".$url);
+	$url= "href=".$url; 
+
+	return $url;
+}
+=cut
+
+sub link_to {
+# 	my ($self, @params) = @_;
+# 	my @params = shift;
+	my (@params) = @_;
+	my $url='';
+	$url= @params[0]; #obtengo la url
+	my $cant= scalar(@params);
+	if($cant > 1){$url .= "?";
+		for(my $i=1; $i < scalar(@params); $i++ ){
+			if($i > 1){
+				$url .= '&'.@params[$i]; #se procesa un parametro
+			}else{$url .= @params[$i];}
+		}
+	}
+
+	my $session = CGI::Session->load();
+	$url .= '&token='.$session->param('token'); #se agrega el token
+C4::AR::Debug::debug("url: ".$url);
+	$url= "href=".$url; 
+
+	return $url;
+}
 
 sub i18n {
 

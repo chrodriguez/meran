@@ -43,7 +43,7 @@
 <br><br>
 
 <div class="divDatosUsuario">
-
+<!-- FIXME y esto??????????????????? -->
 	[% IF error %]
 	    <h2>  [% error_msg %]  </h2>
 		<br>
@@ -126,32 +126,16 @@
             
             <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
             <ul class = "listaMenuBotones" >
-                    [% IF I %]
-                            <!-- NO SE SI SE USA -->
-                            <li>
-                                <form action=/cgi-bin/koha/members/imemberentry.pl method=post name="formCarac">
+					<li>
+<!-- 						<form name="formCarac2"> -->
+							<img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
+									src="[% themelang %]/images/botone.png" border="0"">
 
-                                        <img class="botonBehindText"  alt="Modificar Caracter&acutei;stica" 
-                                        src="[% themelang %]/images/botone.png" border="0">
-
-                                        <a class="textOverBoton" href="#" onClick="formCarac.submit()" > Modificar datos
-                                        </a>
-                                        <input type=hidden name=bornum value="[% bornum %]">
-                                </form>
-                            </li>
-                    [% ELSE %]
-                            <li>
-                                <form name="formCarac2">
-                                    <img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
-                                            src="[% themelang %]/images/botone.png" border="0"">
-
-                                    <a class="textOverBoton" onClick="modificarDatosDeUsuario()"> Modificar Datos
-                                    
-                                    </a>
-                                </form>
-                            </li>
-                    [% END %]
-
+							<a class="textOverBoton" onClick="modificarDatosDeUsuario()"> Modificar Datos
+							
+							</a>
+<!-- 						</form> -->
+					</li>
                     <li>
                            <img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
                             src="[% themelang %]/images/botone.png" border="0"">
@@ -161,25 +145,19 @@
                             </a>
                     </li>
 <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
-                    [% IF nroSocioLoggeado != loggedinusername%]
-                            <li>
-                                    <!--<a class="textOverBoton" onClick="resetPassword()">
-                                            <img alt='[% "Restablecimiento de Contrase&ntilde;a" | i18n %]'
-                                            src="[% themelang %]/images/cambiocontrasena.png" border=0 Title='[% "Reset Password" | i18n %]'>
-                                            <h2> FALTA CAMBIAR BOTONENENE </h2>
-                                    
-                                    </a>-->
-                                    <input type="button" value="Reset Password" onClick="resetPassword()">
-                            </li>
-                    [% ELSE %]
-                            <li>
-                                   <img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
-                                            src="[% themelang %]/images/botone.png" border=0>
+				[% IF nroSocioLoggeado != loggedinusername%]
+					<li>
+							<input type="button" value="Reset Password" onClick="resetPassword()">
+					</li>
+				[% ELSE %]
+					<li>
+							<img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
+									src="[% themelang %]/images/botone.png" border=0>
 
-                                    <a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password
-                                    </a>
-                            </li>
-                    [% END %]
+							<a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password
+							</a>
+					</li>
+				[% END %]
                     <li>
                             <img class="botonBehindText" alt='[% "Modificar Permisos" | i18n %]'
                                   src="[% themelang %]/images/botone.png" border="0"">
@@ -196,6 +174,7 @@
                                     </a>
             
                                     <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+									<input type=hidden name=token value="[% token %]" >
             
                             </form>
                     </li>
@@ -209,12 +188,13 @@
                                     </a>
             
                                     <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+									<input type=hidden name=token value="[% token %]" >
             
                             </form>
                     </li>
                     <li>
             
-                            <form action="#" method=post name="formInterBiblio">
+<!--                             <form action="#" method=post name="formInterBiblio"> -->
                                     <img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
                                     src="[% themelang %]/images/botone.png" border="0"">
                                     
@@ -222,7 +202,7 @@
                                     </a>
                                     <input type="hidden" name="bornum" value="[% bornum %]">
                                     <input type="hidden" name="accion" value="ingresarDatos">
-                            </form>
+<!--                             </form> -->
                     </li>             
     
                     [% IF mensaje_error_foto %]	
@@ -234,7 +214,7 @@
                     [% IF foto_name %]
                             <li>
                                 <input type=button class="button" value="Eliminar foto" 
-                                       align=center                                              onClick="eliminarFoto('[% foto_name %] ')">
+                                       align=center onClick="eliminarFoto('[% foto_name %] ')">
                             </li>
                     [% ELSE %]
                             <li>

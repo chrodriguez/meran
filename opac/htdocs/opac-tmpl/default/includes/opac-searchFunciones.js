@@ -217,7 +217,7 @@ function highlightBusquedaCombinable(){
 function buscarPorCodigoBarra(){
 	objAH=new AjaxHelper(updateInfo);
  	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/busqueda.pl';
+	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
 	objAH.codBarra= $('#codBarra').val();
 	objAH.sendToServer();
 }

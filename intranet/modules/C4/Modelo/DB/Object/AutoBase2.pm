@@ -126,18 +126,18 @@ sub sortByString{
     my ($self)=shift;
     my ($campo)=@_;
     my $fieldsString = $self->getCampos();
-	C4::AR::Debug::debug("AutoBase2 => campo: ".$campo);	
-	C4::AR::Debug::debug("AutoBase2 => fieldsString: ".$fieldsString);
+# 	C4::AR::Debug::debug("AutoBase2 => campo: ".$campo);	
+# 	C4::AR::Debug::debug("AutoBase2 => fieldsString: ".$fieldsString);
 
     my $index = rindex $fieldsString,$campo;
     if ($index != -1){
-		C4::AR::Debug::debug("AutoBase2 => sortByString=> retrun: ".$campo);
+# 		C4::AR::Debug::debug("AutoBase2 => sortByString=> retrun: ".$campo);
         return ($campo);
     }
     else
         {
-			C4::AR::Debug::debug("AutoBase2 => sortByString=> antes de self->defaultSort:");
-			C4::AR::Debug::debug("AutoBase2 => sortByString=> self->defaultSort: ".$self->defaultSort);
+# 			C4::AR::Debug::debug("AutoBase2 => sortByString=> antes de self->defaultSort:");
+# 			C4::AR::Debug::debug("AutoBase2 => sortByString=> self->defaultSort: ".$self->defaultSort);
             return ($self->defaultSort);
         }
 }

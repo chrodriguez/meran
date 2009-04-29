@@ -68,8 +68,6 @@ if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
 $t_params->{'updatedata'}= (!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
-
-
 #se verifica la preferencia showHistoricReserves, para mostrar o no el historico de las Reservas
 my $showHistoricReserves= C4::AR::Preferencias->getValorPreferencia("showHistoricReserves");
 $t_params->{'showHistoricReserves'}= $showHistoricReserves;

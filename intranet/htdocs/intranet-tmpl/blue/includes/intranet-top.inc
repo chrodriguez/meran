@@ -2,6 +2,10 @@
 <!--Doctype is not required - can be HTML or XHTML-->
 <html>
 
+<script language="javascript" type="text/javascript">
+token= '[% token %]';
+</script>
+
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/jquery/jquery.menu.js"></script>
 <script src="/includes/md5.js"></script> 
@@ -12,8 +16,9 @@
 <script src="/includes/util.js"></script>
 <script src="/includes/MessageHelper.js"></script>
 
-[% INCLUDE   'AutocompleteHelper.inc'  %]
-[% INCLUDE   'WindowHelper.inc'  %]
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+[% INCLUDE  'WindowHelper.inc'  %]
+
 <script src="/includes/WindowHelper.js"></script>
 
 <head>
@@ -56,7 +61,7 @@
         </font>
     </div>
 </noscript>
-
+tokennnnnnnnnnnnnn: [% token %]
 <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 
 <tr id="menu-container" class="main-header">

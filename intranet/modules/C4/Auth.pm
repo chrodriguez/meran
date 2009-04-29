@@ -38,6 +38,7 @@ use C4::AR::Prestamos;
 use CGI::Session;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
+use JSON;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -207,6 +208,7 @@ sub get_template_and_user {
 		my @bordat;
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
+		$params->{'token'}= $session->param('token');
 	}
 
 	return ($template, $session, $params);
@@ -215,7 +217,13 @@ sub get_template_and_user {
 
 sub output_html_with_http_headers {
     my($query, $template, $params, $session, $cookie) = @_;
-	print $session->header(charset => C4::Context->config("charset")|'utf-8');
+# 	$ENV{'QUERY_STRING'}= '?token='.$params->{'token'};
+#  	$ENV{'SCRIPT_NAME'}= $ENV{'SCRIPT_NAME'}.$ENV{'QUERY_STRING'};
+# 	$ENV{'REQUEST_URI'}= $ENV{'SCRIPT_NAME'};
+# 	$ENV{'SCRIPT_FILENAME'}= $ENV{'REQUEST_URI'};
+# C4::AR::Debug::debug("url: ".$ENV{'SCRIPT_NAME'});
+	print $session->header(	charset => C4::Context->config("charset")|'utf-8');
+C4::AR::Debug::debug("output_html_with_http_headers => token: ".$params->{'token'});
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
@@ -291,13 +299,24 @@ print A "desde checkauth========================================================
     my $dbh = C4::Context->dbh;
     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout');
     $timeout = 600 unless $timeout;
-
+# C4::AR::Debug::_printHASH(\%ENV);
     my $template_name;
     if ($type eq 'opac') {
         $template_name = "opac-auth.tmpl";
     } else {
         $template_name = "auth.tmpl";
     }
+
+	my $token;
+	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+		my $obj=$query->param('obj');
+		$obj=C4::AR::Utilidades::from_json_ISO($obj);
+		$token= $obj->{'token'};
+C4::AR::Debug::debug("Token desde Ajax: ".$token);
+	}else{
+		$token= $query->param('token');
+C4::AR::Debug::debug("Token desde perl: ".$token);
+	}
 
 print A "checkauth=> template_name: ".$template_name."\n";
 print A "checkauth=> authnotrequired: ".$authnotrequired."\n";
@@ -345,7 +364,8 @@ print A "checkauth=> sessionID en logout: ". $session->param('sessionID')."\n";
         }
 
         if ($userid) {
-#         if($sist_sesion->getUserid){ 
+# C4::AR::Debug::debug("checkauth=> sessionID: ".$session->id());
+# C4::AR::Debug::debug("checkauth=> token: ".$session->param('token'));
         #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
         #se verifican algunas condiciones de finalizacion de session
 print A "checkauth=> El usuario se encuentra logueado \n";
@@ -366,7 +386,16 @@ print A "checkauth=> caduco la session \n";
             redirectTo('/cgi-bin/koha/auth.pl');
             #EXIT
 
-             } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+#             } elsif ($query->param('token') ne $session->param('token')) {
+			  } elsif ($session->id() ne $token) {
+C4::AR::Debug::debug("Token <> o no existe");
+C4::AR::Debug::debug("sessionID: ".$session->id());
+C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
+				$session->param('codMsg', 'U354');
+				$session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+				redirectTo('/cgi-bin/koha/informacion.pl');
+				#EXIT
+			} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 #              } elsif ($ip ne '127.0.0.2') {
             # Different ip than originally logged in from
             $info{'oldip'} = $ip;
@@ -798,6 +827,7 @@ sub _generarSession {
  	$session->param('browser', $params->{'browser'} );
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
+	$session->param('token', $session->id()); #se genera el token
 	$session->expire(0); #para Desarrollar, luego pasar a 3m
 
 	return $session;
@@ -856,34 +886,33 @@ sub printSession {
 
 sub redirectTo {
 	my ($url) = @_;
-open(P, ">>/tmp/debug.txt");
-print P "\n";
-print P "redirectTo=> \n";
+C4::AR::Debug::debug("\n");
+C4::AR::Debug::debug("redirectTo=> \n");
 	#para saber si fue un llamado con AJAX
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
 		
-print P "redirectTo=> CLIENT_REDIRECT\n"; 		
+C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT\n"); 		
   		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
 #         $session->header();
-print P "redirectTo=> url: ".$url."\n";
+C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
      	print $session->header();
  		print 'CLIENT_REDIRECT';
 		exit;
 	}else{
 	#redirijo en el servidor
-print P "redirectTo=> SERVER_REDIRECT\n";       
+C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT\n");       
 		my $input = CGI->new(); 
 		print $input->redirect( 
 					-location => $url, 
 					-status => 301,
 		); 
+C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
 		exit;
 	}
-print P "\n";
-close(P);
+C4::AR::Debug::debug("\n");
 }
 
 
