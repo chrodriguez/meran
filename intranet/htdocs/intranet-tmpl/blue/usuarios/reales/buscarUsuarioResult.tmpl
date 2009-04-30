@@ -16,25 +16,28 @@
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<thead>
   	<tr>
-    		<th class="tablaresultadoTitle" width="1%" align="left" valign="top">
+    	<th class="tablaresultadoTitle" width="1%" align="left" valign="top">
 			<img src="[% themelang %]/images/izquierda.png">
 		</th>
 
 		<th class="tablaresultadoTitleClick" onclick="ordenar('nro_socio')" 
-		Title="Ordenar por tarjeta de Id." width="12%">[% "Tarjeta de Id." | i18n %]</th>
-    		<th class="tablaresultadoTitleClick" onclick="ordenar('apellido')" 
-		Title="Ordenar por apellido" align="left" width="30%">[% "Apellido y Nombres" | i18n %]</th>
-    		<th class="tablaresultadoTitleClick" onclick="ordenar('nro_documento')" 
-		Title="Ordenar por DNI" width="15%">[% "Documento" | i18n %]</th>
-    		<th class="tablaresultadoTitleClick" onclick="ordenar('legajo')" 
-		Title="Ordenar por legajo" align="left">[% "Legajo" | i18n %]</th>
-    		<th class="tablaresultadoTitleClick" onclick="ordenar('cod_categoria')" 
-		Title="Ordenar por categoria">[% "Cat." | i18n %]</th>
-    		<th class="tablaresultadoTitle">[% "Prest." | i18n %]</th>
-    		<th class="tablaresultadoTitle">[% "Ven." | i18n %]</th>
-    		<th class="tablaresultadoTitle">[% "Estado" | i18n %]</th>
-
-
+			Title="Ordenar por tarjeta de Id." width="12%">[% "Tarjeta de Id." | i18n %]
+		</th>
+    	<th class="tablaresultadoTitleClick" onclick="ordenar('apellido')" 
+			Title="Ordenar por apellido" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
+		</th>
+    	<th class="tablaresultadoTitleClick" onclick="ordenar('nro_documento')" 
+			Title="Ordenar por DNI" width="15%">[% "Documento" | i18n %]
+		</th>
+    	<th class="tablaresultadoTitleClick" onclick="ordenar('legajo')" 
+			Title="Ordenar por legajo" align="left">[% "Legajo" | i18n %]
+		</th>
+    	<th class="tablaresultadoTitleClick" onclick="ordenar('cod_categoria')" 
+			Title="Ordenar por categoria">[% "Cat." | i18n %]
+		</th>
+    	<th class="tablaresultadoTitle">[% "Prest." | i18n %]</th>
+    	<th class="tablaresultadoTitle">[% "Ven." | i18n %]</th>
+    	<th class="tablaresultadoTitle">[% "Estado" | i18n %]</th>
    		<th class="tablaresultadoTitle" width="1%" valign="top" align="right">
 			<img src="[% themelang %]/images/derecha.png">
 		</th>	
@@ -44,44 +47,41 @@
 
 [% FOREACH resultsloop %]	
   	<tr  align="center" class="inputFontNormal">
-     		<td height=25>&nbsp;</td>
+		<td height=25>&nbsp;</td>
 
-      		<td align='left'>
+		<td align='left'>
 			[% socio.getNro_socio %]
 		</td>
-     		<td width=250 align="left" class="nomCompleto">
-			<!--<a class="inputFontNormal" 
-			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% socio.getNro_socio %]">
-				[% socio.persona.getApellido %], [% socio.persona.getNombre %]
-			</a>-->
-			<a class="inputFontNormal" 
-				[% PERL %]
-   					print C4::AR::Filtros::link_to(("/cgi-bin/koha/usuarios/reales/datosUsuario.pl", "nro_socio=[% socio.getNro_socio %]")) ;
-				[% END %]>
-				[% socio.persona.getApellido %], [% socio.persona.getNombre %]
-			</a>
+		<td width=250 align="left" class="nomCompleto">
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+												url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+												params =>	("nro_socio=[% socio.getNro_socio %]"),
+												title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+											) ;
+			[% END %]
 		</td>
-      		<td align="left" class="documento">
+		<td align="left" class="documento">
 			[% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
 		</td>
-      		<td align="left" class="legajo">
+		<td align="left" class="legajo">
 			[% socio.persona.getLegajo %]
 		</td>
-      		<td align=center>
+		<td align=center>
 			[% socio.categoria.getDescription %]
 		</td>
-      		<td align=center>
+		<td align=center>
 			[% issue %]
 		</td>
-      		<td align=center>
+		<td align=center>
 			[% od %]
 		</td>
-      		<td align="center">
-			<span class="[% clase %]"><b>[% regular %]</b></span>
+		<td align="center">
+		<span class="[% clase %]"><b>[% regular %]</b></span>
 		</td>
 
  		<td height=25>&nbsp;</td>
-    	</tr>
+    </tr>
 
 [% END %]
 

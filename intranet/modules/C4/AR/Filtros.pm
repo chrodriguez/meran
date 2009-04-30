@@ -39,16 +39,47 @@ C4::AR::Debug::debug("url: ".$url);
 }
 =cut
 
+# sub link_to {
+# 	my (@params) = @_;
+# 
+# 	my $url='';
+# 	my $text= '';
+# 	$text= @params[0]; #obtengo el texto a mostrar
+# 	$url= @params[1]; #obtengo la url
+# 	my $cant= scalar(@params);
+# 	if($cant > 2){$url .= "?";
+# 		for(my $i=2; $i < scalar(@params); $i++ ){
+# 			if($i > 2){
+# 				$url .= '&'.@params[$i]; #se procesa un parametro
+# 			}else{$url .= @params[$i];}
+# 		}
+# 	}
+# 
+# 	my $session = CGI::Session->load();
+# 	$url .= '&token='.$session->param('token'); #se agrega el token
+# 	C4::AR::Debug::debug("url: ".$url);
+# 	$url= "<a href=".$url.">".$text."</a>"; 
+# 
+# 	return $url;
+# }
+
 sub link_to {
-# 	my ($self, @params) = @_;
-# 	my @params = shift;
-	my (@params) = @_;
+	my (%params_hash_ref) = @_;
+
 	my $url='';
-	$url= @params[0]; #obtengo la url
+	my $text= '';
+	my $title= '';
+	my @params;
+
+	@params= $params_hash_ref{'params'}; #obtengo los paraametros
+	$text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
+	$url= $params_hash_ref{'url'}; #obtengo la url
+	$title= $params_hash_ref{'title'}; #obtengo el title a mostrar
 	my $cant= scalar(@params);
-	if($cant > 1){$url .= "?";
-		for(my $i=1; $i < scalar(@params); $i++ ){
-			if($i > 1){
+
+	if($cant > 0){$url .= "?";
+		for(my $i=0; $i < scalar(@params); $i++ ){
+			if($i > 0){
 				$url .= '&'.@params[$i]; #se procesa un parametro
 			}else{$url .= @params[$i];}
 		}
@@ -56,11 +87,18 @@ sub link_to {
 
 	my $session = CGI::Session->load();
 	$url .= '&token='.$session->param('token'); #se agrega el token
-C4::AR::Debug::debug("url: ".$url);
-	$url= "href=".$url; 
+	$url= "<a href=".$url;
+	if($title ne ''){
+		$url .= " Title='".$title."'>";
+	}else{$url .= ">";}
+	$url .= $text."</a>"; 
+
+	C4::AR::Debug::debug("title: ".$title);
+	C4::AR::Debug::debug("url: ".$url);
 
 	return $url;
 }
+
 
 sub i18n {
 

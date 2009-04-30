@@ -59,10 +59,18 @@
 		[% END %]
     		</a>
 	</td>
-	<td>
+	<td><!--
  		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=[% HTML.escape(idautor) %]">
 		[% autor %]
-		</a>
+		</a>-->
+
+		[% PERL %]
+				print C4::AR::Filtros::link_to((	"[% autor %]",
+													"/cgi-bin/koha/busquedas/filtrado.pl", 
+													"origen=detalle"
+													"idAutor=[% HTML.escape(idautor) %]"
+												)) ;
+		[% END %]
 	</td>
 	<td>
         [% FOREACH grupos %]
