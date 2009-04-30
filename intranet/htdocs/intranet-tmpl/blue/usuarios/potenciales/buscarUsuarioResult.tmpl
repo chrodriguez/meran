@@ -57,9 +57,13 @@
 		</td>
 		
       	<td align="left" class="nomCompleto">
-			<a href="/cgi-bin/koha/usuarios/potenciales/datosUsuario.pl?nro_socio=[% socio.getNro_socio %]">
-                [% socio.persona.getApellido %], [% socio.persona.getNombre %]
-            </a>
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+                                                url =>      "/cgi-bin/koha/usuarios/potenciales/datosUsuario.pl", 
+                                                params =>   ("nro_socio=[% socio.getNro_socio %]"),
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            ) ;
+            [% END %]
 		</td>
 
       	<td align="left" class="documento">

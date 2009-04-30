@@ -6,4 +6,6 @@ Cuando se agrega un usuario, habria que capitalizar el nombre y apellido, entre 
 BAJAR, INSTALAR y PASAR TODO KOHA A http://search.cpan.org/dist/PDF-API2/lib/PDF/API2.pm (nuevo PDF), y hacer un PDFManager.pm como adapter por
 posibles cambios.
 
+Terrble BUG en https://163.10.10.116/cgi-bin/koha/busquedas/adminEjemplares.pl, anda mal el result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 

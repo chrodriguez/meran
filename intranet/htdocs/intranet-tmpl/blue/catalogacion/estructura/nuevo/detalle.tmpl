@@ -1,7 +1,7 @@
 [% INCLUDE  "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
-<script src="/intranet-tmpl/blue/includes/MessageHelper.js"></script>
+<script src="/includes/circulacion.js"></script>
+<script src="/includes/MessageHelper.js"></script>
 
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
@@ -16,7 +16,7 @@ ID_N2=0; //para saber el id del nivel 2
 ID_N3=0; //para saber el id del nivel 3
 
 function borrarN3(id2, id3){
-	if( window.confirm("[% 'Esta; seguro que desea borrarlo?' | i18n %]") ){
+	if( window.confirm("[% 'Esta seguro que desea borrarlo?' | i18n %]") ){
 		ID_N2= id2;
 		objAH=new AjaxHelper(updateBorrarN3);
 		objAH.debug= true;
@@ -313,7 +313,6 @@ function updateBorrarNivel1(responseText){
 	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1([% id1 %]);} else {return false;}" title="Borrar Nivel 1">
 	<br>
 	[% FOREACH nivel1 %]
-
 		[% IF liblibrarian %]
 			[% IF dato %]
 				[% liblibrarian %]: <b>[% dato %]</b><br>
@@ -354,14 +353,14 @@ function updateBorrarNivel1(responseText){
 	[% END %]
 
 	[% FOREACH nivel2_array %]
-		
 			[% IF liblibrarian %]
 				[% IF dato %]
 					[% liblibrarian %]: <b>[% dato %]</b><br>
 				[% END %]
 			[% END %]
 
-	[% END %]<!-- END FOREACH nivel2_array -->
+	[% END %]
+    <!-- END FOREACH nivel2_array -->
 
 	[% IF cantItems %]
 		Cantidad de Items: [% cantItems %]<br>
@@ -402,9 +401,16 @@ function updateBorrarNivel1(responseText){
 		<tr align="center">
 			<td width="10%" colspan="2" valign="middle" height="25">
 <!-- 			 IF sePuedeEditar  -->
-				<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
+			<!--	<a href="id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
 				<input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" title="Editar Ejemplar">
-				</a>
+				</a>-->
+            [% PERL %]
+                print C4::AR::Filtros::link_to( 
+                                                url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
+                                                params =>   ("id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"),
+                                                title =>    "[% 'Editar Document' | i18n %]"
+                                            ) ;
+            [% END %]
 <!-- 			END  -->
 			</td>
 			<td width="6%" valign="middle">
