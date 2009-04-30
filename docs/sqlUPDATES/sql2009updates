@@ -685,3 +685,25 @@ Alias /includes/ "/usr/local/koha/includes/"
 
 --Fin Modificaciones
 
+
+--
+-- Estructura de tabla para la tabla `cat_control_sinonimo_editorial`
+--
+
+CREATE TABLE IF NOT EXISTS `cat_control_sinonimo_editorial` (
+  `id` int(11) NOT NULL,
+  `editorial` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`,`editorial`),
+  KEY `editorial` (`editorial`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
+-- Estructura de tabla para la tabla `cat_editorial`
+--
+
+CREATE TABLE IF NOT EXISTS `cat_editorial`(
+  `id` int(11) NOT NULL auto_increment,
+  `editorial` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1448 

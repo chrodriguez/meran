@@ -1,7 +1,6 @@
 package C4::Modelo::UsrSocio;
 
 use strict;
-#  QUE PASA CON ACTIVO??????????????????????????????????????????????????????????????????????????????????? ACA O EN PERSONA?????
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -138,6 +137,7 @@ sub agregar{
     $self->setId_estado($data_hash->{'id_estado'});
 
     if (C4::AR::Preferencias->getValorPreferencia("autoActivarPersona")){
+        C4::AR::Debug::debug("Desde UsrSocio->agregar(), se tiene autoActivarPersona en 1, ojimetro");
         $self->activar();
     }
     $self->save();
@@ -151,7 +151,6 @@ sub nextNro_socio{
 
      my $nro_socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(
                                                                    query => [ nro_socio => { regexp => '^(-|\\+){0,1}([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+|[0-9]+)$' },
-#                                                                               nro_socio => { 'NOT REGEXP' => '[A-z]' },
                                                                    ],
                                                                    select => ['nro_socio'],
                                                                    sort_by => ['nro_socio DESC'],

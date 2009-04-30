@@ -477,7 +477,7 @@ sub prestInterBiblio(){
     $parrafo[1]="de la ".$biblioDestino;
     $parrafo[2]=$director;
     $parrafo[3]="S/D";
-    $parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en car�cter de pr�stamo"; 
+    $parrafo[4]="          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"; 
     $parrafo[5]="interbibliotecario los siguientes items:";
 
     ($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo);

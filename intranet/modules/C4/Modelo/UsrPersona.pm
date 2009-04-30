@@ -37,7 +37,6 @@ __PACKAGE__->meta->setup(
         telefono_laboral => { type => 'varchar', length => 50 },
         es_socio         => { type => 'integer', length => 1, default => 0 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
-#          activo           => { type => 'integer', default => 1, not_null => 1 },
     ],
 
      relationships =>

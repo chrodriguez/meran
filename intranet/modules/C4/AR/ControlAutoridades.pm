@@ -44,7 +44,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-
+# FIXME los search son para los auto_complete, PASAR A ROSE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #*************************************Sinonimos*************************************************
 
 sub search_temas(){
@@ -95,7 +95,7 @@ sub search_editoriales(){
 
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("	SELECT id, editorial
-			       	FROM `editoriales`
+			       	FROM cat_editorial
 				WHERE editorial like ?
 			       	ORDER BY editorial");
 
@@ -112,75 +112,55 @@ sub search_editoriales(){
 }
 
 #*************************************************************************************************
-sub traerSinonimosAutor(){
-	my ($autor)=@_;
-	my $dbh = C4::Context->dbh;
+sub traerSinonimosAutor{
+    my ($autor)=@_;
+    use C4::Modelo::CatControlSinonimoAutor::Manager;
+    my @filtros;
 
-	my $query="	SELECT id as idSinonimo, autor as sinonimo
-			FROM cat_control_sinonimo_autor
-			WHERE id= ?
-			ORDER BY autor";
+    push(@filtros, ( id => { eq => $autor}) );
+    
+    my $sinonimos_autor = C4::Modelo::CatControlSinonimoAutor::Manager->get_cat_control_sinonimo_autor(
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($autor);
+                                                                                    query => \@filtros,
 
-	my $cant= 0;
-	my @results;
-	while(my $data=$sth->fetchrow_hashref){
-		$data->{'nroSinonimo'}= $cant;
-		push (@results, $data);
-		$cant++;
-	}
+                                                                                    );
 
-	$sth->finish;
-	return ($cant, @results);	
+    return (scalar(@$sinonimos_autor), $sinonimos_autor);
 }
 
-sub traerSinonimosTemas(){
-	my ($tema)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="	SELECT id as idSinonimo, tema as sinonimo
-			FROM cat_control_sinonimo_tema
-			WHERE id= ?
-			ORDER BY tema";
+sub traerSinonimosTemas{
+    my ($autor)=@_;
+    use C4::Modelo::CatControlSinonimoTema::Manager;
+    my @filtros;
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tema);
+    push(@filtros, ( id => { eq => $autor}) );
+    
+    my $sinonimos_tema = C4::Modelo::CatControlSinonimoTema::Manager->get_cat_control_sinonimo_tema(
 
-	my $cant= 0;
-	my @results;
-	while(my $data=$sth->fetchrow_hashref){
-		$data->{'nroSinonimo'}= $cant;
-		push (@results, $data);
-		$cant++;
-	}
+                                                                                    query => \@filtros,
+                                                                                    sort_by => 'tema ASC',
 
-	$sth->finish;
-	return ($cant, @results);	
+                                                                                    );
+
+    return (scalar(@$sinonimos_tema), $sinonimos_tema);
 }
 
 
-sub traerSinonimosEditoriales(){
-	my ($autor)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="	SELECT id as idSinonimo, editorial as sinonimo
-			FROM `control_editoriales_sinonimos`
-			WHERE id= ?
-			ORDER BY editorial";
+sub traerSinonimosEditoriales{
+    my ($editorial)=@_;
+    use C4::Modelo::CatControlSinonimoEditorial::Manager;
+    my @filtros;
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($autor);
-	
-	my $cant= 0;
-	my @results;
-	while(my $data=$sth->fetchrow_hashref){
-		$data->{'nroSinonimo'}= $cant;
-		push (@results, $data);
-		$cant++;
-	}
+    push(@filtros, ( id => { eq => $editorial}) );
+    
+    my $sinonimos_editorial = C4::Modelo::CatControlSinonimoEditorial::Manager->get_cat_control_sinonimo_editorial(
 
-	$sth->finish;
-	return ($cant, @results);	
+                                                                                    query => \@filtros,
+                                                                                    sort_by => 'editorial ASC',
+
+                                                                                    );
+
+    return (scalar(@$sinonimos_editorial), $sinonimos_editorial);
 }
 
 #*************************************************************************************************
@@ -192,392 +172,204 @@ sub t_insertSinonimosAutor {
 
 	my ($error, $codMsg,$paraMens);
 	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSinonimosAutor($sinonimos_arrayref, $idAutor);	
-		$dbh->commit;
-
+    my $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
+    my $db = $sinonimo_dbo->db;
+	
+	eval{
+        foreach my $sinonimo (@$sinonimos_arrayref){
+            $sinonimo_dbo->agregar($sinonimo->{'text'},$idAutor);
+            $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
+		}
+        $db->commit;
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B400';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
+		eval {
+                $db->rollback
+        };
 		#Se setea error para el usuario
 		$error= 1;
 		$codMsg= 'CA601';
 	}
-	$dbh->{AutoCommit} = 1;
 		
 
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
 
-
-=item
-Esta funcion inserta el $sinonimo de Autores pasados por parametro
-=cut
-sub insertSinonimosAutor(){
-	my ($sinonimos_arrayref, $idAutor)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= @$sinonimos_arrayref;	
-	my $sinonimo;
-
-	for(my $i=0;$i<$cant;$i++){
-		$sinonimo= $sinonimos_arrayref->[$i]->{'text'};
-		#verifico la existencia del registro
-		my $queryExist="SELECT count(*) 
-				FROM cat_control_sinonimo_autor 
-				WHERE(id = ?)AND(autor = ?)";
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute($idAutor, $sinonimo);
-
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){		
-			my $query="INSERT INTO cat_control_sinonimo_autor (id, autor)
-				   VALUES(?,?)";
-			$sth=$dbh->prepare($query);
-			$sth->execute($idAutor, $sinonimo);
-        	}
-		$sth->finish;
-	}
-}
 
 sub t_insertSinonimosTemas {
-	
-	my($sinonimos_arrayref, $idTema)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSinonimosTemas($sinonimos_arrayref, $idTema);	
-		$dbh->commit;
+    my($sinonimos_arrayref, $idTema)=@_;
 
-	};
+    my ($error, $codMsg,$paraMens);
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA601';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    my $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
+    my $db = $sinonimo_dbo->db;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
+    eval{
+        foreach my $sinonimo (@$sinonimos_arrayref){
+            $sinonimo_dbo->agregar($sinonimo->{'text'},$idTema);
+            $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
+        }
+        $db->commit;
+    };
 
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B400';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        eval {
+                $db->rollback
+        };
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA601';
+    }
 
-=item
-Esta funcion inserta el $sinonimo de Temas pasados por parametro
-=cut
-sub insertSinonimosTemas(){
-	my ($sinonimos_arrayref, $idTema)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= @$sinonimos_arrayref;	
-	my $sinonimo;
-
-	for(my $i=0;$i<$cant;$i++){
-		$sinonimo= $sinonimos_arrayref->[$i]->{'text'};
-		#verifico la existencia del registro
-		my $queryExist="SELECT count(*) 
-				FROM cat_control_sinonimo_tema 
-				WHERE(id = ?)AND(tema = ?)";
-
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute($idTema, $sinonimo);
-
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){
-			my $query="INSERT INTO cat_control_sinonimo_tema (id, tema)
-				   VALUES(?,?)";
-			$sth=$dbh->prepare($query);
-			$sth->execute($idTema, $sinonimo);
-		}
-		$sth->finish;
-# 		return $Existe;
-	}
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
 sub t_insertSinonimosEditoriales {
-	
-	my($sinonimos_arrayref, $idEditorial)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSinonimosEditoriales($sinonimos_arrayref, $idEditorial);	
-		$dbh->commit;
+    my($sinonimos_arrayref, $idEditorial)=@_;
 
-	};
+    use C4::Modelo::CatControlSinonimoEditorial;
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA601';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    my ($error, $codMsg,$paraMens);
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+    my $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
+    my $db = $sinonimo_dbo->db;
+
+    eval{
+        foreach my $sinonimo (@$sinonimos_arrayref){
+            $sinonimo_dbo->agregar($sinonimo->{'text'},$idEditorial);
+            $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
+        }
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B400';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        eval {
+                $db->rollback
+        };
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA601';
+    }
+
+
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
-=item
-Esta funcion inserta $sinonimo de Editorial pasados por parametro
-=cut
-sub insertSinonimosEditoriales(){
-
-	my ($sinonimos_arrayref, $idEditorial)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= @$sinonimos_arrayref;	
-	my $sinonimo;
-	
-	for(my $i=0;$i<$cant;$i++){
-		$sinonimo= $sinonimos_arrayref->[$i]->{'text'};
-		#verifico la existencia del registro
-		my $queryExist="SELECT count(*) 
-				FROM `control_editoriales_sinonimos` 
-				WHERE(id = ?)AND(editorial = ?)";
-
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute($idEditorial, $sinonimo);
-
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){
-			my $query="INSERT INTO `control_editoriales_sinonimos`(id, editorial)
-				   VALUES(?,?)";
-			$sth=$dbh->prepare($query);
-			$sth->execute($idEditorial, $sinonimo);
-		}
-		$sth->finish;
-	}
-}
 #************************************************************************************************
 
 sub t_updateSinonimosAutores {
 	
 	my($idSinonimo, $nombre, $nombreViejo)=@_;
 
+    use C4::Modelo::CatControlSinonimoAutor;
+
 	my ($error, $codMsg,$paraMens);
 	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
 	eval {
-		updateSinonimosAutores($idSinonimo, $nombre, $nombreViejo);	
-		$dbh->commit;
+            my $sinonimo_autor = C4::Modelo::CatControlSinonimoAutor->new(id => $idSinonimo, autor => $nombreViejo);
+               $sinonimo_autor->load();
+               $sinonimo_autor->agregar($nombre,$idSinonimo);
 
 	};
-
 	if ($@){
 		#Se loguea error de Base de Datos
 		$codMsg= 'B400';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
 		#Se setea error para el usuario
 		$error= 1;
 		$codMsg= 'CA605';
 	}
-	$dbh->{AutoCommit} = 1;
-		
 
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
 
-sub updateSinonimosAutores{
-	my ($idSinonimo, $nombre, $nombreViejo)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $sth;
-
-	my $queryExist= " 	SELECT count(*) 
-				FROM cat_control_sinonimo_autor
-				WHERE(id = ?)AND(autor = ?) ";
-
-	$sth=$dbh->prepare($queryExist);
-	$sth->execute($idSinonimo, $nombre);
-
-	my $Existe = $sth->fetchrow;
-
-	#si no existe el registro
-	if($Existe eq 0){
-
-		my $query=	"UPDATE cat_control_sinonimo_autor 
-				SET autor = ?
-				WHERE(id = ?)AND(autor = ?)";
-
-		$sth=$dbh->prepare($query);
-		$sth->execute($nombre, $idSinonimo, $nombreViejo);
-		$sth->finish;
-	}
-}
 
 sub t_updateSinonimosTemas {
-	
-	my($idSinonimo, $nombre, $nombreViejo)=@_;
+    
+    my($idSinonimo, $nombre, $nombreViejo)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		updateSinonimosTemas($idSinonimo, $nombre, $nombreViejo);	
-		$dbh->commit;
+    use C4::Modelo::CatControlSinonimoTema;
 
-	};
+    my ($error, $codMsg,$paraMens);
+    
+    eval {
+            my $sinonimo_tema = C4::Modelo::CatControlSinonimoTema->new(id => $idSinonimo, tema => $nombreViejo);
+               $sinonimo_tema->load();
+               $sinonimo_tema->agregar($nombre,$idSinonimo);
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA605';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    };
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B400';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA605';
+    }
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
-
-sub updateSinonimosTemas{
-	my ($idSinonimo, $nombre, $nombreViejo)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $queryExist= " 	SELECT count(*) 
-				FROM cat_control_sinonimo_tema
-				WHERE(id = ?)AND(tema = ?) ";
-
-	$sth=$dbh->prepare($queryExist);
-	$sth->execute($idSinonimo, $nombre);
-
-	my $Existe = $sth->fetchrow;
-
-	#si no existe el registro
-	if($Existe eq 0){
-
-		my $query=	"UPDATE cat_control_sinonimo_tema 
-				SET tema = ?
-				WHERE(id = ?)AND(tema = ?)";
-
-		$sth=$dbh->prepare($query);
-		$sth->execute($nombre, $idSinonimo, $nombreViejo);
-		$sth->finish;
-	}
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
 sub t_updateSinonimosEditoriales {
-	
-	my($idSinonimo, $nombre, $nombreViejo)=@_;
+    
+    my($idSinonimo, $nombre, $nombreViejo)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		updateSinonimosEditoriales($idSinonimo, $nombre, $nombreViejo);	
-		$dbh->commit;
+    use C4::Modelo::CatControlSinonimoEditorial;
 
-	};
+    my ($error, $codMsg,$paraMens);
+    
+    eval {
+            my $sinonimo_editorial = C4::Modelo::CatControlSinonimoEditorial->new(id => $idSinonimo, editorial => $nombreViejo);
+               $sinonimo_editorial->load();
+               $sinonimo_editorial->agregar($nombre,$idSinonimo);
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA605';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    };
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B400';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA605';
+    }
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
-
-sub updateSinonimosEditoriales{
-	my ($idSinonimo, $nombre, $nombreViejo)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $sth;
-
-	my $queryExist= " 	SELECT count(*) 
-				FROM `control_editoriales_sinonimos`
-				WHERE(id = ?)AND(editorial = ?) ";
-
-	$sth=$dbh->prepare($queryExist);
-	$sth->execute($idSinonimo, $nombre);
-
-	my $Existe = $sth->fetchrow;
-
-	#si no existe el registro
-	if($Existe eq 0){
-
-		my $query=	"UPDATE cat_control_sinonimo_tema 
-				SET editorial = ?
-				WHERE(id = ?)AND(editorial = ?)";
-
-		$sth=$dbh->prepare($query);
-		$sth->execute($nombre, $idSinonimo, $nombreViejo);
-		$sth->finish;
-	}
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
 
 sub t_eliminarSinonimosAutor {
 	
+# FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
+
+
 	my($idAutor,$sinonimo)=@_;
 
 	my ($error, $codMsg,$paraMens);
 	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
 	eval {
-		eliminarSinonimosAutor($idAutor,$sinonimo);	
-		$dbh->commit;
+        use C4::Modelo::CatControlSinonimoAutor::Manager;
+        my @filtros;
+        push(@filtros, ( id => { eq => $idAutor}) );
+        push(@filtros, ( autor => { eq => $sinonimo}) );
+		C4::Modelo::CatControlSinonimoAutor::Manager->delete_cat_control_sinonimo_autor( where => \@filtros);
 		$codMsg= 'U310';
 
 	};
@@ -586,133 +378,83 @@ sub t_eliminarSinonimosAutor {
 		#Se loguea error de Base de Datos
 		$codMsg= 'B419';
 		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
 		#Se setea error para el usuario
 		$error= 1;
 		$codMsg= 'CA604';
 	}
-	$dbh->{AutoCommit} = 1;
 		
-
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
+# 
+# =item
+# Esta funcion elimina el sinonimo del autor pasados por parametro
+# =cut
 
-=item
-Esta funcion elimina el sinonimo del autor pasados por parametro
-=cut
-sub eliminarSinonimosAutor(){
-	my ($idAutor,$sinonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	
-	my $query="	DELETE FROM cat_control_sinonimo_autor 
-			WHERE(id = ?)AND(autor = ?)";
-	$sth=$dbh->prepare($query);
-	$sth->execute($idAutor, $sinonimo);
-
-	$sth->finish;
-}
 
 sub t_eliminarSinonimosTema {
-	
-	my($idTema,$sinonimo)=@_;
+    
+# FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		eliminarSinonimosTema($idTema,$sinonimo);	
-		$dbh->commit;
-		$codMsg= 'U310';
 
-	};
+    my($idTema,$sinonimo)=@_;
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA604';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    my ($error, $codMsg,$paraMens);
+    
+    eval {
+        use C4::Modelo::CatControlSinonimoTema::Manager;
+        my @filtros;
+        push(@filtros, ( id => { eq => $idTema}) );
+        push(@filtros, ( tema => { eq => $sinonimo}) );
+        C4::Modelo::CatControlSinonimoTema::Manager->delete_cat_control_sinonimo_tema( where => \@filtros);
+        $codMsg= 'U310';
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B419';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA604';
+    }
+
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
-=item
-Esta funcion elimina el sinonimo del tema pasados por parametro
-=cut
-sub eliminarSinonimosTema(){
-	my ($idTema,$sinonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	
-	my $query="	DELETE FROM cat_control_sinonimo_tema 
-			WHERE(id = ?)AND(tema = ?)";
-
-	$sth=$dbh->prepare($query);
-	$sth->execute($idTema, $sinonimo);
-
-	$sth->finish;
-}
 
 sub t_eliminarSinonimosEditorial {
 	
-	my($idEditorial,$sinonimo)=@_;
+    
+# FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		eliminarSinonimosEditorial($idEditorial,$sinonimo);	
-		$dbh->commit;
-		$codMsg= 'U310';
+    my($idEditorial,$sinonimo)=@_;
 
-	};
+    my ($error, $codMsg,$paraMens);
+    
+    eval {
+        use C4::Modelo::CatControlSinonimoEditorial::Manager;
+        my @filtros;
+        push(@filtros, ( id => { eq => $idEditorial}) );
+        push(@filtros, ( editorial => { eq => $sinonimo}) );
+        C4::Modelo::CatControlSinonimoEditorial::Manager->delete_cat_control_sinonimo_editorial( where => \@filtros);
+        $codMsg= 'U310';
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA604';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    };
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
+    if ($@){
+        #Se loguea error de Base de Datos
+        $codMsg= 'B419';
+        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        #Se setea error para el usuario
+        $error= 1;
+        $codMsg= 'CA604';
+    }
 
-=item
-Esta funcion elimina el sinonimo del editorial pasados por parametro
-=cut
-sub eliminarSinonimosEditorial(){
-
-	my ($idEditorial,$sinonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	
-	my $query="	DELETE FROM `control_editoriales_sinonimos` 
-			WHERE(id = ?)AND(editorial = ?)";
-
-	$sth=$dbh->prepare($query);
-	$sth->execute($idEditorial, $sinonimo);
-
-	$sth->finish;
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
+    return ($error, $codMsg, $message);
 }
 
 #*************************************Seudonimos*************************************************

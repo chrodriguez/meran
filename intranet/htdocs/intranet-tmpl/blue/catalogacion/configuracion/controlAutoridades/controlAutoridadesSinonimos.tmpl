@@ -1,17 +1,19 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
-<script src="/intranet-tmpl/blue/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/intranet-tmpl/blue/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.mouse.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
-<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
-
+<script src="[% themelang %]/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="[% themelang %]/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="[% themelang %]/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="[% themelang %]/includes/jquery/jquery.dimensions.js"></script>
+<script src="[% themelang %]/includes/jquery/ui.mouse.js"></script>
 
 <script language="javascript">
+
+var sinonimo_selected = "";
+
+
+
 
 function OnChangeComboTablasSinonimos(){
 	
@@ -44,14 +46,14 @@ function OnChangeComboTablasSinonimos(){
 
 function updateConsultarTablaSinonimos(responseText){
 	$('#resultSinonimos').html(responseText);
-	$('#tablaSinonimos').tablesorter({	
-						widgets: ['zebra'],
-						headers: { 0: { sorter: false},
-								2: { sorter: false},
-								3: { sorter: false},
-								4: { sorter: false}
-							}
-				});
+// 	$('#tablaSinonimos').tablesorter({	
+// 						widgets: ['zebra'],
+// 						headers: { 0: { sorter: false},
+// 								2: { sorter: false},
+// 								3: { sorter: false},
+// 								4: { sorter: false}
+// 							}
+// 				});
 }
 
 function consultarTablaSinonimos(sinonimo){
@@ -108,13 +110,14 @@ var objects_array= new Array();
 //******************************************TextArea************************************************************
 
 function pushSinonimo(){
-	var sinonimo= $('#sinonimo').val();
+	var sinonimo= $.trim($('#sinonimo').val());
 		
-	if (!exist(sinonimo, objects_array)){
+	if ( (!exist(sinonimo, objects_array)) && (sinonimo.length > 0) ){
 	
 		d= new object_sinonimo(sinonimo, null);
 		objects_array.push(d);
 		mapToTextArea('textAreaSinonimos', objects_array);
+        $('#sinonimo').val('');
 	}else{
 		alert("Ya existe el elmento");
 	}
@@ -130,7 +133,7 @@ function exist(text, vector){
 	var long= vector.length;
 	var i= 0;
 	while (!(found) && (i<long)){
-		if(vector[i].text == text){
+		if ($.trim((vector[i].text)) == $.trim(text)){
 			found= true;
 		}else{
 			i++;
@@ -216,7 +219,6 @@ function updateDeleteSinonimo(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-
 	updateGuadarDatos();
 }
 
@@ -342,11 +344,11 @@ $(document).ready(function(){
 	</li>
 
 	<li><hr></hr></li>
-	<li><input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Sinónimo" title="Guardar Sinónimo" onClick="guardarDatos()">
+	<li><input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Sinónimo" title="Guardar Sinónimo" onClick="guardarDatos()">
 	</li>
 	<li><div id="resultSinonimos"></div></li>
 </ul>
 </div>
 
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

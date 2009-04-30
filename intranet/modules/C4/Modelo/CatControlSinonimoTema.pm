@@ -15,5 +15,39 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id', 'tema' ],
 );
 
+
+sub agregar{
+
+    my ($self)=shift;
+    my ($sinonimo,$id_tema)=@_;
+
+    $self->setTema($sinonimo);
+    $self->setId($id_tema);
+
+    $self->save();
+}
+
+sub getId{
+    my ($self)=shift;
+    return ($self->id);
+}
+
+sub setId{
+    my ($self)=shift;
+    my ($id) = @_;
+    return ($self->id($id));
+}
+
+sub getTema{
+    my ($self)=shift;
+    return ($self->tema);
+}
+
+sub setTema{
+    my ($self)=shift;
+    my ($tema) = @_;
+    return ($self->tema($tema));
+}
+
 1;
 

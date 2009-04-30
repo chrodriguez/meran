@@ -3,3 +3,7 @@ Habria que hacer ofuscacion de javascript para TODOS LOS JS cuando MERAN este en
 Cuando se agrega un usuario, habria que capitalizar el nombre y apellido, entre otros procesamientos a los demas strings!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+BAJAR, INSTALAR y PASAR TODO KOHA A http://search.cpan.org/dist/PDF-API2/lib/PDF/API2.pm (nuevo PDF), y hacer un PDFManager.pm como adapter por
+posibles cambios.
+
+

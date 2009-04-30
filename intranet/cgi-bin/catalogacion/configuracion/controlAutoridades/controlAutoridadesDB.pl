@@ -81,6 +81,7 @@ if($tabla eq 'autores'){
 		print $infoRespuestaJSON;
 	}
 #******************************SINONIMOS**************************************
+
 	if($tipo eq 'eliminarSinonimos'){
 		my ($error, $codMsg, $message)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
 											$id,
@@ -335,10 +336,10 @@ if($tabla eq 'editoriales'){
 my $sinonimo= $obj->{'sinonimo'};
 #Para consultar los sinonimos de un Autor
 # if( (($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'autores')){
-if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'autores') ){
+if( ($tipo eq 'consultaTablasSinonimos') && ($tabla eq 'autores') ){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user(
-			{template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
+my ($template, $session, $t_params) = get_template_and_user({
+            template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
 			query => $input,
 			type => "intranet",
 			authnotrequired => 0,
@@ -346,36 +347,33 @@ my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user(
 			debug => 1,
 });
 
-	my ($cant, @results) = &traerSinonimosAutor($sinonimo);
+	my ($cant, $results) = C4::AR::ControlAutoridades::traerSinonimosAutor($sinonimo);
 
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
+$t_params->{'RESULTSLOOP'}= $results,
 
-print  $template->output;
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 #Para consultar los sinonimos de un Autor
 # if((($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'temas')){
 if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'temas') ){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
- 		template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
-		query => $input,
-		type => "intranet",
-		authnotrequired => 0,
-		flagsrequired => {borrowers => 1},
-		debug => 1,
+my ($template, $session, $t_params) = get_template_and_user({
+            template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
+            query => $input,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => {borrowers => 1},
+            debug => 1,
 });
 
 
-	my ($cant, @results) = &traerSinonimosTemas($sinonimo);
+my ($cant, $results) = C4::AR::ControlAutoridades::traerSinonimosTemas($sinonimo);
 
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
+$t_params->{'RESULTSLOOP'}= $results,
 
-print  $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 
@@ -384,24 +382,22 @@ print  $template->output;
 # if( (($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'editoriales')){
 if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'editoriales') ){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-		template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
-		query => $input,
-		type => "intranet",
-		authnotrequired => 0,
-		flagsrequired => {borrowers => 1},
-		debug => 1,
+my ($template, $session, $t_params) = get_template_and_user({
+            template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
+            query => $input,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => {borrowers => 1},
+            debug => 1,
 });
 
 
 	#Armo el combo para mostrar los sinonimos de los autores
-	my ($cant, @results) = &traerSinonimosEditoriales($sinonimo);
+	my ($cant, $results) = C4::AR::ControlAutoridades::traerSinonimosEditoriales($sinonimo);
 
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
-
-print  $template->output;
+    $t_params->{'RESULTSLOOP'}= $results,
+    
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #***********************************************************************************************
