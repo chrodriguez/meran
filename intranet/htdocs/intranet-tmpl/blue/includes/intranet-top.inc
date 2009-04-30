@@ -61,7 +61,7 @@ token= '[% token %]';
         </font>
     </div>
 </noscript>
-tokennnnnnnnnnnnnn: [% token %]
+
 <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 
 <tr id="menu-container" class="main-header">
@@ -73,10 +73,16 @@ tokennnnnnnnnnnnnn: [% token %]
   <td align="center" colspan="2">
   <table  width="100%"  border="0" cellspacing="0" cellpadding="0">
    <tr>
-    <td width="410" ><img src="[% themelang %]/images/back/backup.png" width="410" height="61" hspace="0" vspace="0" align="top" border="0"> </td>
-    <td height="61" ><img src="[% themelang %]/images/back/backupmidle.png" width="100%" height="61" hspace="0" vspace="0" align="top" border="0"></td>
-    <td width="20" ><img src="[% themelang %]/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top"></td>
-      </tr>
+    <td width="410" >
+		<img src="[% themelang %]/images/back/backup.png" width="410" height="61" hspace="0" vspace="0" align="top" border="0">
+	</td>
+    <td height="61" >
+		<img src="[% themelang %]/images/back/backupmidle.png" width="100%" height="61" hspace="0" vspace="0" align="top" border="0">
+	</td>
+    <td width="20" >
+		<img src="[% themelang %]/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top">
+	</td>
+  </tr>
 </table>
         <table width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
     <tr> <td width="9" class="includePNGizquierdo"></td>

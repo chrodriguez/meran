@@ -217,13 +217,8 @@ sub get_template_and_user {
 
 sub output_html_with_http_headers {
     my($query, $template, $params, $session, $cookie) = @_;
-# 	$ENV{'QUERY_STRING'}= '?token='.$params->{'token'};
-#  	$ENV{'SCRIPT_NAME'}= $ENV{'SCRIPT_NAME'}.$ENV{'QUERY_STRING'};
-# 	$ENV{'REQUEST_URI'}= $ENV{'SCRIPT_NAME'};
-# 	$ENV{'SCRIPT_FILENAME'}= $ENV{'REQUEST_URI'};
-# C4::AR::Debug::debug("url: ".$ENV{'SCRIPT_NAME'});
+
 	print $session->header(	charset => C4::Context->config("charset")|'utf-8');
-C4::AR::Debug::debug("output_html_with_http_headers => token: ".$params->{'token'});
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
@@ -764,11 +759,8 @@ Esta funcion inicializa la session para autenticar un usuario, se usa en OPAC e 
 sub inicializarAuth{
     my ($query, $t_params) = @_;
 
-open(F, ">>/tmp/debug.txt");
-print F "C4::Auth::inicializarAuth=> \n";
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $random_number= C4::Auth::_generarNroRandom();
-print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
     
     #genero una nueva session
     my $session = CGI::Session->load();
@@ -792,15 +784,12 @@ print F "C4::Auth::inicializarAuth=> numero random: ".$random_number."\n";
     undef($session);
     $session= C4::Auth::_generarSession(\%params);
     my $sessionID= $session->param('sessionID');
-print F "C4::Auth::inicializarAuth=> sessionID: ".$sessionID."\n";
-    
     my $userid= undef;
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number);
-
+# FIXME y esto para que se setea si no se pasa a ningun template
     $t_params->{'RANDOM_NUMBER'}= $random_number;
     
-close(F);
 
     return ($session);
 }
@@ -827,7 +816,7 @@ sub _generarSession {
  	$session->param('browser', $params->{'browser'} );
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
-	$session->param('token', $session->id()); #se genera el token
+ 	$session->param('token', $session->id()); #se genera el token
 	$session->expire(0); #para Desarrollar, luego pasar a 3m
 
 	return $session;

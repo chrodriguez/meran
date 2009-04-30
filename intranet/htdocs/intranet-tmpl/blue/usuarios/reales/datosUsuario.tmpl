@@ -1,8 +1,8 @@
 [% INCLUDE "intranet-top.inc" %] 
 <script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.fileUploader.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.livequery.min.js"></script>
+<script src="/includes/jquery/jquery.fileUploader.js"></script>
+<script src="/includes/jquery/jquery.livequery.min.js"></script>
 
 <script>
 
@@ -37,11 +37,6 @@ function updateMostrarHistorialDePrestamos(responseText){
 
 
 //************************************Para manejar la circulacion**********************************************
-
-// function openPopup() {
-// 	window.open('../prestamoInterBiblio.pl?accion=ingresarDatos&nro_socio=[% nro_socio %]','[% "Prestamos interbibliotecarios" | i18n %]','width=640,height=500,toolbar=yes,scrollbars=yes,status=yes');
-// }
-
 //REDEFINIDO, se encuentra en circulacion.js
 function updateInfoDevRen(responseText){
 // 	alert("ejecuto updateInfoDevRen LOCAL!!!");
