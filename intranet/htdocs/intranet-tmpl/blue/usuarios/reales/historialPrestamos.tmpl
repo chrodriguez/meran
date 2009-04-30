@@ -65,11 +65,11 @@
 		</a>-->
 
 		[% PERL %]
-				print C4::AR::Filtros::link_to((	"[% autor %]",
-													"/cgi-bin/koha/busquedas/filtrado.pl", 
-													"origen=detalle"
-													"idAutor=[% HTML.escape(idautor) %]"
-												)) ;
+				print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
+												url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
+												params =>	(	"origen=detalle", "idAutor=[% HTML.escape(idautor) %]"), 
+<!-- 												title =>	"[% "Detalle de disponibilidad" | i18n %]" -->
+											) ;
 		[% END %]
 	</td>
 	<td>
@@ -90,9 +90,17 @@
 	[% END %] <!-- ESTE FOREACH -->
         </td>
 	<td align="center" >
-		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=<[% id2 %]&id3= [% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' 
+<!--		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' 
                     title='[% "Detalle de disponibilidad" | i18n %]'>[% barcode %]
-                </a>&nbsp;
+                </a>&nbsp;-->
+		[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
+												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
+												params =>	(	"id1=[% id1 %]", "id2=[% id2 %]", "id3=[% id3 %]", "barcode=[% barcode %]", 
+																"signatura_topografica=[% signatura_topografica %]"),
+												title =>	"[% "Detalle de disponibilidad" | i18n %]"
+											) ;
+		[% END %]	
 	</td>
 	<td>
 		[% date_due %]&nbsp;

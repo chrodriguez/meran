@@ -1,13 +1,4 @@
 
-
-
-
-
-
-
-
-
-
 [% USE HTML %] 
 
 [% IF reservas_asignadas_count %]
@@ -46,13 +37,17 @@
 			</td>
 	
 			<td width="16%">
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
+				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
                     [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-<!--					[% IF runititle %]
-						:&nbsp;[% HTML.escape(runititle) %]
-					[% END %]-->
-				</a>
-			</td>
+				</a>-->
+				[% PERL %]
+					print C4::AR::Filtros::link_to(	text => 	" [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+													url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+													params =>	("id1=[% reserva.nivel3.nivel1.getId1 %]"),
+<!-- 													title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]" -->
+												) ;
+				[% END %]
+			</td>	
 			<td>
                 [% IF reserva.nivel3.nivel1.getAutor %]
                     [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
@@ -61,16 +56,26 @@
                 [% END %]
 			</td>
 			<td>
-                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% reserva.nivel3.nivel1.getId1 %]&id2=[% reserva.nivel3.nivel2.getId2 %]&id3=[% reserva.getId3 %]&barcode=[% reserva.nivel3.getBarcode %]&signatura_topografica=[% reserva.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
-                [% reserva.nivel3.getBarcode %]</a>
+<!--                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% reserva.nivel3.nivel1.getId1 %]&id2=[% reserva.nivel3.nivel2.getId2 %]&id3=[% reserva.getId3 %]&barcode=[% reserva.nivel3.getBarcode %]&signatura_topografica=[% reserva.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+                [% reserva.nivel3.getBarcode %]</a>-->
+
+				
 			</td>
 			<td>
-                [% IF reserva.nivel3.getSignatura_topografica %] 
-                    <a class="inputFontNormal" 
+			[% IF reserva.nivel3.getSignatura_topografica %] 
+                    <!--<a class="inputFontNormal" 
                         href="/cgi-bin/koha/detalle.pl?id1="[% reserva.nivel3.nivel1.getId1 %]">
                         [% reserva.nivel3.getSignatura_topografica %] 
-                    </a>
-                [% END %]
+                    </a>-->
+
+				[% PERL %]
+					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getSignatura_topografica %]",
+													url => 		"/cgi-bin/koha/detalle.pl", 
+													params =>	("id1="[% reserva.nivel3.nivel1.getId1 %]"),
+<!-- 													title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]" -->
+												) ;
+				[% END %]
+			[% END %]
 			</td>
             <td>  
             [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
@@ -141,9 +146,16 @@
 		<tr align="center" class="inputFontNormal">
 			<td height=25>&nbsp;</td>
 			<td width="16%"> 
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
+				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
 					[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-				</a>
+				</a>-->
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+												params =>	("id1=[% eserva.nivel3.nivel1.getId1 %]"),
+	<!-- 													title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]" -->
+											) ;
+			[% END %]
 			</td>
 			<td>
                 [% IF reserva.nivel3.nivel1.getAutor %]

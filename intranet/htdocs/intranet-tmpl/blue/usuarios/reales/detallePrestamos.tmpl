@@ -37,12 +37,16 @@
 				<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 			</td>
 			<td width="14%" >
-				<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
+				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
 					[% prestamo.nivel3.nivel1.getTitulo %]
-					<!--[% IF unititle %]
-						:&nbsp;[% HTML.escape(unititle) %]
-					[% END %]-->
-				</a>
+				</a>-->
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.nivel1.getTitulo %]",
+												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+												params =>	("id1=[% prestamo.nivel3.nivel1.getId1 %]"),
+	<!-- 													title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]" -->
+											) ;
+			[% END %]
 			</td>
 			<td>
 				[% IF prestamo.nivel3.nivel1.getAutor %]
@@ -53,16 +57,33 @@
 			</td>
 	
 			<td>
-				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
-				[% prestamo.nivel3.getBarcode %]</a>
+			<!--	<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+				[% prestamo.nivel3.getBarcode %]</a>-->
+
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
+												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
+												params =>	("id1=[% prestamo.nivel3.nivel1.getId1 %]", "id2=[% prestamo.nivel3.nivel2.getId2 %]", 
+																"id3=[% prestamo.getId3 %]","barcode=[% prestamo.nivel3.getBarcode %]",
+															"signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]"),
+												title =>	"[% 'Detalle de disponibilidad' | i18n %]"
+											) ;
+			[% END %]
 			</td>
 	
 			<td>
 				[% IF prestamo.nivel3.getSignatura_topografica %] 
-					<a class="inputFontNormal" 
+<!--					<a class="inputFontNormal" 
 						href="/cgi-bin/koha/detalle.pl?id1="[% prestamo.nivel3.nivel1.getId1 %]">
 						[% prestamo.nivel3.getSignatura_topografica %] 
-					</a>
+					</a>-->
+					[% PERL %]
+						print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
+														url => 		"/cgi-bin/koha/detalle.pl", 
+														params =>	("id1="[% prestamo.nivel3.nivel1.getId1 %]"),
+<!-- 														title =>	"[% 'Detalle de disponibilidad' | i18n %]" -->
+											) ;
+					[% END %]
 				[% END %]
 			</td>
 	

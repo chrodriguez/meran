@@ -11,10 +11,10 @@ use JSON;
 
 my $input = new CGI;
 
-
+my $authnotrequired= 0;
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-
+my ($user, $session, $flags)= checkauth($input, $authnotrequired, { editcatalogue => 1}, 'intra');
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 my $nivel=$obj->{'nivel'};
