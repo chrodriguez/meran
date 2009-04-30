@@ -7,10 +7,11 @@
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
 <!-- para validar -->
-<script src="/intranet-tmpl/blue/includes/jquery/validate/jquery.validate.js"></script>
+<script src="/includes/jquery/validate/jquery.validate.js"></script>
 <!-- para el calendario -->
-<script src="/intranet-tmpl/blue/includes/jquery/datetimepicker/ui.datepicker.js"></script>
-<link href="/intranet-tmpl/blue/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+
+<link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
 
 <script>
 
@@ -1187,6 +1188,8 @@ $(document).ready( function() {
 <form id="formNivel1" name="formNivel1" class="validateDataForm">
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
+    <input type="hidden" name="token" value="[% token %]" />
+
 </form>
     <br>
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
@@ -1215,6 +1218,7 @@ $(document).ready( function() {
 <form id="formNivel2" name="formNivel2" class="validateDataForm">
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
+    <input type="hidden" name="token" value="[% token %]" />
 </form>
     <br>
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
@@ -1250,6 +1254,8 @@ $(document).ready( function() {
 	</div>
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>
+    <input type="hidden" name="token" value="[% token %]" />
+
 </form>
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
