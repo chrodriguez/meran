@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         sessionID => { type => 'varchar', length => 255, not_null => 1 },
         userid    => { type => 'varchar', length => 255 },
         nroRandom    => { type => 'varchar', length => 255 },
+		token    => { type => 'varchar', length => 255 },
         ip        => { type => 'varchar', length => 16 },
         lasttime  => { type => 'integer', length => 11 },
         flag  => { type => 'varchar', length => 255 },
@@ -111,6 +112,17 @@ sub setNroRandom{
     my ($self) = shift;
     my ($nroRandom) = @_;
     $self->nroRandom($nroRandom);
+}
+
+sub getToken{
+    my ($self) = shift;
+    return ($self->token);
+}
+
+sub setToken{
+    my ($self) = shift;
+    my ($token) = @_;
+    $self->token($token);
 }
 
 sub getIp{

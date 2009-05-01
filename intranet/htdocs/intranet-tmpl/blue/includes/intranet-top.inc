@@ -3,7 +3,7 @@
 <html>
 
 <script language="javascript" type="text/javascript">
-token= '[% token %]';
+ token= '[% token %]';
 </script>
 
 <script src="/includes/jquery/jquery.js"></script>

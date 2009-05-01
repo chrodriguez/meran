@@ -707,3 +707,10 @@ CREATE TABLE IF NOT EXISTS `cat_editorial`(
   `editorial` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1448 
+
+
+--Se agrega el campo token en la tabla 
+
+ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;
+
+

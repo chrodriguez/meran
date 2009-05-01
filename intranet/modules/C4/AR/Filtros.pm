@@ -16,57 +16,24 @@ use vars qw(@EXPORT @ISA);
 	&link_to
 );
 
+
 =item
-sub link_to {
-	my (@params) = @_;
-	my $url='';
-	$url= @params[0]; #obtengo la url
-	my $cant= scalar(@params);
-	if($cant > 1){$url .= "?";
-		for(my $i=1; $i < scalar(@params); $i++ ){
-			if($i > 1){
-				$url .= '&'.@params[$i]; #se procesa un parametro
-			}else{$url .= @params[$i];}
-		}
-	}
+Esta funcion genera un link de la forma <a href="url?parametros" title="title">texto</a>, concatenando a los parametros
+el parametro "token" utilizado 
+@params
+$params_hash_ref{'params'}, arreglo con los parametros enviados por get a la url
+$params_hash_ref{'text'}, texto a mostrar en el link
+$params_hash_ref{'url'}, url 
+$params_hash_ref{'title'}, titulo a mostrar cuando se pone el puntero sobre el link
 
-	my $session = CGI::Session->load();
-	$url .= '&token='.$session->param('token'); #se agrega el token
-C4::AR::Debug::debug("url: ".$url);
-	$url= "href=".$url; 
-
-	return $url;
-}
+El objetivo principal de la funcion es la de evitar CSRF (Cross Site Request Forgery), esto es llevado a cabo con la inclusion del token
+en cada link.
 =cut
-
-# sub link_to {
-# 	my (@params) = @_;
-# 
-# 	my $url='';
-# 	my $text= '';
-# 	$text= @params[0]; #obtengo el texto a mostrar
-# 	$url= @params[1]; #obtengo la url
-# 	my $cant= scalar(@params);
-# 	if($cant > 2){$url .= "?";
-# 		for(my $i=2; $i < scalar(@params); $i++ ){
-# 			if($i > 2){
-# 				$url .= '&'.@params[$i]; #se procesa un parametro
-# 			}else{$url .= @params[$i];}
-# 		}
-# 	}
-# 
-# 	my $session = CGI::Session->load();
-# 	$url .= '&token='.$session->param('token'); #se agrega el token
-# 	C4::AR::Debug::debug("url: ".$url);
-# 	$url= "<a href=".$url.">".$text."</a>"; 
-# 
-# 	return $url;
-# }
-
 sub link_to {
 	my (%params_hash_ref) = @_;
 
 	my $url='';
+	my $link= '';
 	my $text= '';
 	my $title= '';
 	my @params;
@@ -78,33 +45,39 @@ sub link_to {
 	my $cant= scalar(@params);
 
 	if($cant > 0){$url .= "?";
+	#lleva parametros
 		for(my $i=0; $i < scalar(@params); $i++ ){
 			if($i > 0){
-				$url .= '&'.@params[$i]; #se procesa un parametro
-			}else{$url .= @params[$i];}
+			#se procesan el resto de los parametros
+				$url .= '&'.@params[$i]; 
+			}else{
+			#se procesa el primer parametro
+				$url .= @params[$i];
+			}
 		}
 	}
 
 	my $session = CGI::Session->load();
 	$url .= '&token='.$session->param('token'); #se agrega el token
-	$url= "<a href=".$url;
+	$link= "<a href=".$url;
 	if($title ne ''){
-		$url .= " Title='".$title."'>";
-	}else{$url .= ">";}
-	$url .= $text."</a>"; 
+		$link .= " Title='".$title."'>";
+	}else{$link .= ">";}
+	$link .= $text."</a>"; 
 
-	C4::AR::Debug::debug("title: ".$title);
 	C4::AR::Debug::debug("url: ".$url);
 
-	return $url;
+	return $link;
 }
 
-
+=item
+Esta funcion es utilizada para la Internacionalizacion, lo que hace es tomar el parametro "text" del template
+y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej. en_EN/LC_MESSAGES/intranet.mo
+=cut
 sub i18n {
 
 	my ($text) = @_;
 	my $session = CGI::Session->load();#si esta definida
-## FIXME falta manejar cookie si el usuario no esta logueado????
 	my $type= $session->param('type') || 'opac';
 
  	my $locale = $session->param('locale')||C4::Context->config("defaultLang")||'es_ES';
