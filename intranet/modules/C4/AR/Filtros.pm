@@ -32,16 +32,11 @@ en cada link.
 sub link_to {
 	my (%params_hash_ref) = @_;
 
-	my $url='';
 	my $link= '';
-	my $text= '';
-	my $title= '';
-	my @params;
-
-	@params= $params_hash_ref{'params'}; #obtengo los paraametros
-	$text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
-	$url= $params_hash_ref{'url'}; #obtengo la url
-	$title= $params_hash_ref{'title'}; #obtengo el title a mostrar
+	my @params= $params_hash_ref{'params'}; #obtengo los paraametros
+	my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
+	my $url= $params_hash_ref{'url'}; #obtengo la url
+	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar
 	my $class= $params_hash_ref{'class'}; #obtengo la clase
 	my $cant= scalar(@params);
 
@@ -60,6 +55,7 @@ sub link_to {
 
 	my $session = CGI::Session->load();
 	if(defined $session){
+	#si hay sesion se usa el token, sino no tiene sentido
 		$url .= '&token='.$session->param('token'); #se agrega el token
 	}
 
@@ -70,7 +66,9 @@ sub link_to {
 
 	if($title ne ''){
 		$link .= " Title='".$title."'>";
-	}else{$link .= ">";}
+	}
+
+	$link .= ">";
 	$link .= $text."</a>"; 
 
 	C4::AR::Debug::debug("url: ".$url);

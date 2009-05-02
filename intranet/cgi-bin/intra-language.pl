@@ -6,17 +6,15 @@ use C4::Auth;       # get_template_and_user
 
 my $input = new CGI;
 
-open(A,">>/tmp/debug.txt");
-print A "intr-language.pl \n";
+C4::AR::Debug::debug("intr-language.pl \n");
 my $session = CGI::Session->load();
-$session->param('locale', $input->param('lang_server') );
-print A "lang desde el parametro: ".$input->param('lang_server')."\n";
-print A "lang desde la session: ".$session->param('lang')."\n";
-print A "REQUEST_URI: ".$ENV{'REQUEST_URI'}."\n";
-print A "vengo desde: ".$input->param('url')."\n";
-close(A);
+$session->param('locale', $input->param('lang_server'));
+C4::AR::Debug::debug("lang desde el parametro: ".$input->param('lang_server')."\n");
+C4::AR::Debug::debug("lang desde la session: ".$session->param('lang')."\n");
+C4::AR::Debug::debug("REQUEST_URI: ".$ENV{'REQUEST_URI'}."\n");
+C4::AR::Debug::debug("vengo desde: ".$input->param('url')."\n");
 #regreso a la pagina en la que estaba
-C4::Auth::redirectTo($input->param('url'));
+C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
 
 
 

@@ -50,14 +50,14 @@
 				
 				( [% hits %] ) - [% titulo %]
 			</a>-->
-			[% PERL %]
-				print C4::AR::Filtros::link_to(	text => 	"( [% hits %] ) - [% titulo %]",
-												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
-												params =>	("id1=[% id1 %]"),
-												title =>	"[% 'Mostrar Detalle' | i18n %]",
-												class =>	"click"
-											) ;
-			[% END %]
+		[% PERL %]
+			print C4::AR::Filtros::link_to(	text => 	"( [% hits %] ) - [% titulo %]",
+											url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
+											params =>	("id1=[% id1 %]"),
+											title =>	"[% 'Mostrar Detalle' | i18n %]",
+											class =>	"click"
+										) ;
+		[% END %]
 
 		</td>
 

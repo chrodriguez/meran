@@ -10,7 +10,12 @@ my $input = new CGI;
 my $session = CGI::Session->load();
 $session->param('locale', $input->param('lang_server') );
 #regreso a la pagina en la que estaba
-C4::Auth::redirectTo($input->param('url'));
+if($session->param('token')){
+#si hay sesion se le agrega el token
+	C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
+}else{
+	C4::Auth::redirectTo($input->param('url'));
+}
 
 
 
