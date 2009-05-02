@@ -1009,6 +1009,8 @@ sub historialReservas {
   $queryFrom .= " 	LEFT JOIN cat_autor a ";
   $queryFrom .= " 	ON (a.id = n1.autor) ";
   $queryFrom .= " 	LEFT ";
+
+# FIXME que paso aca???????????
 }
 
 sub historicoCirculacion{

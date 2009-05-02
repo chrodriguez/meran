@@ -798,7 +798,9 @@ sub _generarNroRandom {
 
 sub _generarToken {
 	my $session = CGI::Session->load();
-	my $token= md5_base64($session->param('sessionID') + _generarNroRandom());
+# 	my $token= md5_base64($session->param('sessionID') + _generarNroRandom());
+# FIXME parece q md5 genera hashes con signo '+' y se rompen
+	my $token= $session->param('sessionID');
 
 C4::AR::Debug::debug("_generarToken => token: ".$token);	
 

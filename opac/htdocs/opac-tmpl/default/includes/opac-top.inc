@@ -52,7 +52,7 @@ function cambiarIdioma() {
   	[% "&nbsp;Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
 	[%  "OPAC" | setComboLang %]
 
-	<a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
+	<a href="/cgi-bin/koha/opac-user.pl?token=[% token %]"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
 		onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
 	 <img src="[% themelang %]/images/areamiembros.png"  id="mem" title="Miembros" hspace=0 cspace=0 border=0 name="mem" align="absmiddle">
 	</a>
@@ -126,11 +126,18 @@ src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 csp
 
 [% IF hiddesearch %]
 [% ELSE %]
-<a href="/cgi-bin/koha/opac-search.pl"  onMouseOut="swap('cat','[% themelang %]/images/menu-catalogo.png ')" 
+<!--<a href="/cgi-bin/koha/opac-search.pl"  onMouseOut="swap('cat','[% themelang %]/images/menu-catalogo.png ')" 
 	onMouseOver="swap('cat','[% themelang %]/images/menumenu.png ')" >
         <img src="[% themelang %]/images/menu-catalogo.png" name="cat" id="cat" title="Buscar" hspace=0 cspace=0 border=0 
 	name="menu-search" align="absbottom">
-</a>
+</a>-->
+
+[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
+															title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
+												url => 		"/cgi-bin/koha/opac-search.pl", 
+											) ;
+[% END %]
 [% END %]
 
 <!-- ********************se deshabilita hasta q se complete para la V3************************************ -->

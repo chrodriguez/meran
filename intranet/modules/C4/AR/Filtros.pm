@@ -42,6 +42,7 @@ sub link_to {
 	$text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
 	$url= $params_hash_ref{'url'}; #obtengo la url
 	$title= $params_hash_ref{'title'}; #obtengo el title a mostrar
+	my $class= $params_hash_ref{'class'}; #obtengo la clase
 	my $cant= scalar(@params);
 
 	if($cant > 0){$url .= "?";
@@ -58,8 +59,15 @@ sub link_to {
 	}
 
 	my $session = CGI::Session->load();
-	$url .= '&token='.$session->param('token'); #se agrega el token
+	if(defined $session){
+		$url .= '&token='.$session->param('token'); #se agrega el token
+	}
+
 	$link= "<a href=".$url;
+	if($class ne ''){
+		$link .= " class=".$class;
+	}
+
 	if($title ne ''){
 		$link .= " Title='".$title."'>";
 	}else{$link .= ">";}
