@@ -33,22 +33,23 @@ sub link_to {
 	my (%params_hash_ref) = @_;
 
 	my $link= '';
-	my @params= $params_hash_ref{'params'}; #obtengo los paraametros
+	my $params= $params_hash_ref{'params'}; #obtengo los paraametros
 	my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
 	my $url= $params_hash_ref{'url'}; #obtengo la url
 	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar
 	my $class= $params_hash_ref{'class'}; #obtengo la clase
-	my $cant= scalar(@params);
+	my $cant= scalar(@$params);
+C4::AR::Debug::debug("link_to => cant params: ".$cant);
 
 	if($cant > 0){$url .= "?";
 	#lleva parametros
-		for(my $i=0; $i < scalar(@params); $i++ ){
+		for(my $i=0; $i < $cant; $i++ ){
 			if($i > 0){
 			#se procesan el resto de los parametros
-				$url .= '&'.@params[$i]; 
+				$url .= '&'.@$params->[$i]; 
 			}else{
 			#se procesa el primer parametro
-				$url .= @params[$i];
+				$url .= @$params->[$i];
 			}
 		}
 	}
@@ -65,13 +66,14 @@ sub link_to {
 	}
 
 	if($title ne ''){
-		$link .= " Title='".$title."'>";
+		$link .= " Title='".$title."'";
 	}
 
 	$link .= ">";
 	$link .= $text."</a>"; 
 
-	C4::AR::Debug::debug("url: ".$url);
+ 	C4::AR::Debug::debug("url: ".$url);
+# 	C4::AR::Debug::debug("link: ".$link);
 
 	return $link;
 }

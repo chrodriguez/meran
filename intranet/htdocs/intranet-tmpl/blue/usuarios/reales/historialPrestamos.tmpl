@@ -52,12 +52,16 @@
 <tr valign=middle align="center" class="inputFontNormal">
 	<td height=25 >&nbsp;</td>
 	<td>
-		<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]'>
+		<!--<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]'>
  		[% HTML.escape($titulo) %]
-		[% IF unititle %]
-			&nbsp; [% HTML.escape(unititle) %]
+    		</a>-->
+
+		[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape($titulo) %]",
+												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+												params =>	[	"id1=[% HTML.escape(id1) %]"], 
+											) ;
 		[% END %]
-    		</a>
 	</td>
 	<td><!--
  		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=[% HTML.escape(idautor) %]">
@@ -67,8 +71,7 @@
 		[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
 												url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
-												params =>	(	"origen=detalle", "idAutor=[% HTML.escape(idautor) %]"), 
-<!-- 												title =>	"[% "Detalle de disponibilidad" | i18n %]" -->
+												params =>	[	"origen=detalle", "idAutor=[% HTML.escape(idautor) %]"], 
 											) ;
 		[% END %]
 	</td>
@@ -96,8 +99,8 @@
 		[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
 												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-												params =>	(	"id1=[% id1 %]", "id2=[% id2 %]", "id3=[% id3 %]", "barcode=[% barcode %]", 
-																"signatura_topografica=[% signatura_topografica %]"),
+												params =>	[	"id1=[% id1 %]", "id2=[% id2 %]", "id3=[% id3 %]", "barcode=[% barcode %]", 
+																"signatura_topografica=[% signatura_topografica %]"],
 												title =>	"[% "Detalle de disponibilidad" | i18n %]"
 											) ;
 		[% END %]	

@@ -1006,60 +1006,61 @@ Esta funcion devuelve la informacion del prestamo junto con el borrower
 # historialPrestamos
 # Devuelve el historial de prestamos de un usuario en particular.
 # =cut
-# sub historialPrestamos {
-#   my ($bornum,$ini,$cantR,$orden)=@_;
-#       my $dbh = C4::Context->dbh;
-#       my $dateformat = C4::Date::get_date_format();
-#       my $querySelectCount = " SELECT count(*) AS cant ";
-# 
-#       my $querySelect= "  SELECT n1.*, a.completo, iss.fecha_prestamo , iss.fecha_devolucion, n3.id3, 
-#               signatura_topografica, lastreneweddate, barcode, iss.renovaciones ,n2.*";
-# 
-#       my $queryFrom = " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2";
-#       $queryFrom .= " ON (n3.id2 = n2.id2) ";
-#       $queryFrom .= " INNER JOIN  circ_prestamo iss ";
-#       $queryFrom .= " ON (n3.id3 = iss.id3) ";
-#       $queryFrom .= " INNER JOIN cat_nivel1 n1 ";
-#       $queryFrom .= " ON (n3.id1 = n1.id1) ";
-#       $queryFrom .= " INNER JOIN cat_autor a ";
-#       $queryFrom .= " ON (a.id = n1.autor) ";
-# 
-#   my $queryWhere= " WHERE nro_socio= ? ";
-#       my $queryFinal= " ORDER BY $orden";
-#       $queryFinal .= " limit ?,? ";
-# 
-#       my $consulta = $querySelectCount.$queryFrom.$queryWhere;
-# 
-#   #obtengo la cantidad total para el paginador
-#       my $sth=$dbh->prepare($consulta);
-#       $sth->execute($bornum);
-#       my $data= $sth->fetchrow_hashref;
-#       my $count= $data->{'cant'};
-# 
-#   #se realiza la consulta
-#       $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
-#       my $sth=$dbh->prepare($consulta);
-#       $sth->execute($bornum,$ini,$cantR);
-# 
-#       my @result;
-#       my $i=0;
-# 
-#       while (my $data=$sth->fetchrow_hashref){
-#       my $df=C4::AR::Prestamos::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
-#       $data->{'date_fin'}=C4::Date::format_date($df,$dateformat);
-#       $data->{'date_due'}=  C4::Date::format_date($data->{'date_due'},$dateformat);
-#       $data->{'returndate'}=  C4::Date::format_date($data->{'returndate'},$dateformat);
-#       $data->{'lastreneweddate'}=C4::Date::format_date($data->{'lastreneweddate'},$dateformat);
-#       $data->{'id'} = $data->{'autor'};
-#           $data->{'autor'} = $data->{'completo'};
-# 
-#           $result[$i]=$data;
-#           $i++;
-#       }
-#       $sth->finish;
-# 
-#       return($count,\@result);
-# }
+# FIXME DEPRECATED
+sub historialPrestamos {
+  my ($bornum,$ini,$cantR,$orden)=@_;
+      my $dbh = C4::Context->dbh;
+      my $dateformat = C4::Date::get_date_format();
+      my $querySelectCount = " SELECT count(*) AS cant ";
+
+      my $querySelect= "  	SELECT n1.*, a.completo, iss.fecha_prestamo , iss.fecha_devolucion, n3.id3, 
+              				signatura_topografica, lastreneweddate, barcode, iss.renovaciones ,n2.*";
+
+      my $queryFrom = " FROM cat_nivel3 n3 INNER JOIN cat_nivel2 n2";
+      $queryFrom .= " ON (n3.id2 = n2.id2) ";
+      $queryFrom .= " INNER JOIN  circ_prestamo iss ";
+      $queryFrom .= " ON (n3.id3 = iss.id3) ";
+      $queryFrom .= " INNER JOIN cat_nivel1 n1 ";
+      $queryFrom .= " ON (n3.id1 = n1.id1) ";
+      $queryFrom .= " INNER JOIN cat_autor a ";
+      $queryFrom .= " ON (a.id = n1.autor) ";
+
+  my $queryWhere= " WHERE nro_socio= ? ";
+      my $queryFinal= " ORDER BY $orden";
+      $queryFinal .= " limit ?,? ";
+
+      my $consulta = $querySelectCount.$queryFrom.$queryWhere;
+
+  #obtengo la cantidad total para el paginador
+      my $sth=$dbh->prepare($consulta);
+      $sth->execute($bornum);
+      my $data= $sth->fetchrow_hashref;
+      my $count= $data->{'cant'};
+
+  #se realiza la consulta
+      $consulta= $querySelect.$queryFrom.$queryWhere.$queryFinal;
+      my $sth=$dbh->prepare($consulta);
+      $sth->execute($bornum,$ini,$cantR);
+
+      my @result;
+      my $i=0;
+
+      while (my $data=$sth->fetchrow_hashref){
+      my $df=C4::AR::Prestamos::fechaDeVencimiento($data->{'id3'},$data->{'date_due'});
+      $data->{'date_fin'}=C4::Date::format_date($df,$dateformat);
+      $data->{'date_due'}=  C4::Date::format_date($data->{'date_due'},$dateformat);
+      $data->{'returndate'}=  C4::Date::format_date($data->{'returndate'},$dateformat);
+      $data->{'lastreneweddate'}=C4::Date::format_date($data->{'lastreneweddate'},$dateformat);
+      $data->{'id'} = $data->{'autor'};
+          $data->{'autor'} = $data->{'completo'};
+
+          $result[$i]=$data;
+          $i++;
+      }
+      $sth->finish;
+
+      return($count,\@result);
+}
 
 =item DEPRECATED   REHACER
 renovar recibe dos parametros un id3 y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.

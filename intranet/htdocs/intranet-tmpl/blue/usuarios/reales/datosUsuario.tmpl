@@ -178,11 +178,6 @@ $(document).ready(function() {
 	usuario.text= "[% socio.persona.getApellido %], [% socio.persona.getNombre %]";
     usuario.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
-// FIXME tarda mucho si se disparan todos al mismo tiempo, pruebo detalleUsuarioUsuario=> detalleReservas => detallePrestamos => detalleSanciones
-// 	detalleUsuario(usuario.ID);
-// 	detallePrestamos(usuario.ID);
-// 	detalleReservas(usuario.ID);
-// 	detalleSanciones(usuario.ID);
 
 	$("#historialPrestamosToggle").toggle(	function(){
 							$('#historialPrestamos').slideUp('slow');

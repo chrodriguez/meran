@@ -127,22 +127,15 @@
             <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
             <ul class = "listaMenuBotones" >
 					<li>
-<!-- 						<form name="formCarac2"> -->
-							<img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
-									src="[% themelang %]/images/botone.png" border="0"">
-
-							<a class="textOverBoton" onClick="modificarDatosDeUsuario()"> Modificar Datos
-							
-							</a>
-<!-- 						</form> -->
+						<img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
+								src="[% themelang %]/images/botone.png" border="0"">
+						<a class="textOverBoton" onClick="modificarDatosDeUsuario()">Modificar Datos</a>
 					</li>
                     <li>
-                           <img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
-                            src="[% themelang %]/images/botone.png" border="0"">
- 
-                           <a class="textOverBoton" href="#" onClick="eliminarUsuario()" > Eliminar Usuario
-                            
-                            </a>
+						<img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
+						src="[% themelang %]/images/botone.png" border="0">
+
+						<a class="textOverBoton" href="#" onClick="eliminarUsuario()" >Eliminar Usuario</a>
                     </li>
 <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
 				[% IF nroSocioLoggeado != loggedinusername%]
@@ -154,54 +147,45 @@
 							<img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
 									src="[% themelang %]/images/botone.png" border=0>
 
-							<a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password
-							</a>
+							<a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password</a>
 					</li>
 				[% END %]
                     <li>
-                            <img class="botonBehindText" alt='[% "Modificar Permisos" | i18n %]'
-                                  src="[% themelang %]/images/botone.png" border="0"">
+						<img class="botonBehindText" alt='[% "Modificar Permisos" | i18n %]'
+								src="[% themelang %]/images/botone.png" border="0">
 
-                            <a class="textOverBoton" onClick="modificarPermisos()" > Modificar Permisos
-                            </a>
+						<a class="textOverBoton" onClick="modificarPermisos()" >Modificar Permisos</a>
                     </li>
                     <li>
-                            <form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
-                                     <img class="botonBehindText" alt='[% "Generar Carnet" | i18n %]'
-                                    src="[% themelang %]/images/botone.png" border="0""> 
-                                    
-                                    <a class="textOverBoton" href="#" onClick="formCarnet.submit()" >Generar Carnet
-                                    </a>
-            
-                                    <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-									<input type=hidden name=token value="[% token %]" >
-            
-                            </form>
+						<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
+									<img class="botonBehindText" alt='[% "Generar Carnet" | i18n %]'
+								src="[% themelang %]/images/botone.png" border="0""> 
+								
+								<a class="textOverBoton" href="#" onClick="formCarnet.submit()" >Generar Carnet</a>
+		
+								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+								<input type=hidden name=token value="[% token %]" >
+		
+						</form>
                     </li>
                     <li>
-                            <form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
-                                    <img class="botonBehindText" alt='[% "Generar Libre Deuda" | i18n %]' 
-                                    src="[% themelang %]/images/botone.png" border="0"">
-                                    
+						<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
+								<img class="botonBehindText" alt='[% "Generar Libre Deuda" | i18n %]' 
+								src="[% themelang %]/images/botone.png" border="0">
+								
 
-                                    <a class="textOverBoton" href="#" onClick="formLibre.submit()" > Lilbre Deuda
-                                    </a>
-            
-                                    <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-									<input type=hidden name=token value="[% token %]" >
-            
-                            </form>
+								<a class="textOverBoton" href="#" onClick="formLibre.submit()" >Libre Deuda</a>
+		
+								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+								<input type=hidden name=token value="[% token %]" >
+						</form>
                     </li>
                     <li>
             
-                                    <img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
-                                    src="[% themelang %]/images/botone.png" border="0"">
-                                    
-                                    <a class="textOverBoton" href="#" onClick="prestamosInterBibliotecarios()"> Prest. Interbibliotecario
-                                    </a>
-<!-- FIXME esto no se usa???? -->
-<!--                                    <input type="hidden" name="bornum" value="[% bornum %]">
-                                    <input type="hidden" name="accion" value="ingresarDatos">-->
+						<img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
+						src="[% themelang %]/images/botone.png" border="0">
+						
+						<a class="textOverBoton" href="#" onClick="prestamosInterBibliotecarios()">Prest. Interbibliotecario</a>
                     </li>             
     
                     [% IF mensaje_error_foto %]	

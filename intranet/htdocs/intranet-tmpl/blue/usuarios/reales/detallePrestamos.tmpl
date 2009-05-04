@@ -43,8 +43,7 @@
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.nivel1.getTitulo %]",
 												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
-												params =>	("id1=[% prestamo.nivel3.nivel1.getId1 %]"),
-	<!-- 													title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]" -->
+												params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
 											) ;
 			[% END %]
 			</td>
@@ -63,9 +62,9 @@
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
 												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-												params =>	("id1=[% prestamo.nivel3.nivel1.getId1 %]", "id2=[% prestamo.nivel3.nivel2.getId2 %]", 
+												params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]", "id2=[% prestamo.nivel3.nivel2.getId2 %]", 
 																"id3=[% prestamo.getId3 %]","barcode=[% prestamo.nivel3.getBarcode %]",
-															"signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]"),
+															"signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]"],
 												title =>	"[% 'Detalle de disponibilidad' | i18n %]"
 											) ;
 			[% END %]
@@ -80,8 +79,7 @@
 					[% PERL %]
 						print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
 														url => 		"/cgi-bin/koha/detalle.pl", 
-														params =>	("id1="[% prestamo.nivel3.nivel1.getId1 %]"),
-<!-- 														title =>	"[% 'Detalle de disponibilidad' | i18n %]" -->
+														params =>	["id1="[% prestamo.nivel3.nivel1.getId1 %]"],
 											) ;
 					[% END %]
 				[% END %]

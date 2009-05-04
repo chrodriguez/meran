@@ -306,9 +306,16 @@ function updateBorrarNivel1(responseText){
 </table>
 
 <div class="detalle">
-	<a href="agregarDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1">
+	<!--<a href="agregarDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1">
 	<input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" border=0 title="Editar Nivel 1">
-	</a>
+	</a>-->
+	[% PERL %]
+		print C4::AR::Filtros::link_to(	text => 	"<input type='image' border='0'  src='[% themelang %]/images/editar.png'>",
+										url => 		"agregarDocumento.pl", 
+										params =>	["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
+										title =>	"[% 'Editar Nivel 1' | i18n %]"
+									) ;
+	[% END %]
 
 	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1([% id1 %]);} else {return false;}" title="Borrar Nivel 1">
 	<br>
@@ -337,9 +344,16 @@ function updateBorrarNivel1(responseText){
 <!-- NIVEL 2 -->
 	<div id="[% id2 %]" style="position: relative; float:right;"></div>
 	
-	<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=MODIFICAR_NIVEL_2">
+<!--	<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=MODIFICAR_NIVEL_2">
 	<input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" title="Editar Nivel 2">	
-	</a>
+	</a>-->
+	[% PERL %]
+		print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+										url => 		"agregarDocumento.pl", 
+										params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
+										title =>	"[% 'Editar Nivel 2' | i18n %]"
+									) ;
+	[% END %]
 
 	<input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
 			onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo([% id1 %],[% id2 %]);} else {return false;}" 
@@ -383,9 +397,16 @@ function updateBorrarNivel1(responseText){
 				</td>
 				<td colspan="2" >
 					<b>Edici&oacute;n</b>
-					<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
+<!--					<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
 						<input TYPE="image" name="submit"  VALUE="modificar" src="[% themelang %]/images/editar.png" title="Editar Todos">
-					</a>
+					</a>-->
+				[% PERL %]
+					print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+													url => 		"agregarDocumento.pl", 
+													params =>	["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
+													title =>	"[% 'Editar Nivel 2' | i18n %]"
+												) ;
+				[% END %]
 				</td>
 				<td><b>Sig. Top.</b> </td>
 					<td><b>C&oacute;digo</b></td>
@@ -400,30 +421,39 @@ function updateBorrarNivel1(responseText){
 [% FOREACH nivel3 %]
 		<tr align="center">
 			<td width="10%" colspan="2" valign="middle" height="25">
-<!-- 			 IF sePuedeEditar  -->
+<!-- Si se puede Editar ??? -->
 			<!--	<a href="id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
 				<input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" title="Editar Ejemplar">
 				</a>-->
             [% PERL %]
-                print C4::AR::Filtros::link_to( 
+                print C4::AR::Filtros::link_to( text => "<input type='image' src='[% themelang %]/images/editar.png'",
                                                 url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
-                                                params =>   ("id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"),
-                                                title =>    "[% 'Editar Document' | i18n %]"
+                                                params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
+                                                title =>    "[% 'Editar Ejemplar' | i18n %]"
                                             ) ;
             [% END %]
 <!-- 			END  -->
 			</td>
 			<td width="6%" valign="middle">
-<!-- 			IF sePuedeBorrar -->
+<!-- Si se puede borrar ???-->
 				<input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
 				onClick="borrarN3('[% id2 %]','[% id3 %]')" title="Borrar Ejemplar">
 <!-- 			END  -->
 			</td>
 			<td>[% nivel3_obj.getSignatura_topografica %]</td>
 			<td>
-				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
+				<!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
 						[% nivel3_obj.getBarcode %]
-				</a>
+				</a>-->
+			[% PERL %]
+                print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
+                                                url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
+                                                params =>   [	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
+																"barcode=[% barcode %]","signatura_topografica=[% signatura_topografica %]"
+														],
+                                                title =>    "[% 'Detalle de disponibilidad' | i18n %]"
+                                            ) ;
+            [% END %]
 			</td>
 			<td>
 				<span class="[% clase %]">

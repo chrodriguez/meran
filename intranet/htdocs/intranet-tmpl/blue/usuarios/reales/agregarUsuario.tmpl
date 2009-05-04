@@ -137,7 +137,8 @@
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                     [% combo_tipo_documento %]
-            <input id="nro_documento" name="nro_documento" class="required" minlength="8" maxlength="12" type=text size=41 value="[% socio.persona.getNro_documento %]">
+            <input 	id="nro_documento" name="nro_documento" class="required" minlength="8" maxlength="12" type=text size=41 
+					value="[% socio.persona.getNro_documento %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Legajo" | i18n %]</b><br>
@@ -235,11 +236,12 @@
         </td>
     </tr>
     <tr>
-        <td height=25 class="[% clase %]>&nbsp;</td>
+        <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
-                <input class="inputFontNormal" type=text id="telefono_laboral" name="telefono_laboral" size=50 value="[% socio.persona.getTelefono_laboral %]">
+                <input 	class="inputFontNormal" type=text id="telefono_laboral" name="telefono_laboral" size=50 
+						value="[% socio.persona.getTelefono_laboral %]">
         </td>
     </tr>
     <tr>
@@ -250,7 +252,8 @@
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
-            <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
+            <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" 
+					value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
             <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
         </td>
         </tr>
@@ -286,7 +289,7 @@
         [% END %]
     
             
-                </td>
+		</td>
         <td  width="25%" align="left"> 
             <a href="#" onClick="form1.reset()" >
             <img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0">

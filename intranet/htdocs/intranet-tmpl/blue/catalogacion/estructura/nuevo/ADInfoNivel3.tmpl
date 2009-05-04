@@ -26,7 +26,18 @@
 			</td>
             <td>[% nivel3.getSignatura_topografica %]</td>
             <td>
-                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% nivel3.getBarcode %]&signatura_topografica=[% nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>[% nivel3.getBarcode %]</a>
+                <!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% nivel3.getBarcode %]&signatura_topografica=[% nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>[% nivel3.getBarcode %]</a>-->
+	
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
+												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
+												params =>	(	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
+																"barcode=[% nivel3.getBarcode %]",
+																"signatura_topografica=[% nivel3.getSignatura_topografica %]"
+															),
+												title =>	"[% 'Detalle de disponibilidad' | i18n %]"
+											) ;
+			[% END %]
             </td>
             <td>
                 [% nivel3.ref_disponibilidad.getNombre %]
