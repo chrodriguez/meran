@@ -312,10 +312,10 @@ sub obtenerPrestamosDeSocio {
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-    my ($socio)=@_;
+    my ($nro_socio)=@_;
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-							query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $socio }]
+							query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }]
      							); 
     return ($prestamos_array_ref);
 }
@@ -1001,6 +1001,34 @@ Esta funcion devuelve la informacion del prestamo junto con el borrower
 #   $sth->finish;
 #   return($data);
 # }
+
+
+
+sub getHistorialPrestamos {
+	my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+	use C4::Modelo::CircPrestamo;
+	use C4::Modelo::CircPrestamo::Manager;
+
+	my @filtros;
+# 	push(@filtros, ( fecha_devolucion => { eq => undef } ));
+# 	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+        
+    my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
+
+	my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+																					query => \@filtros,
+																					limit   => $cantR,
+                                                                            		offset  => $ini,
+# 																					sort_by => ( $socioTemp->sortByString($orden) ),
+																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
+																						'nivel3.nivel1.cat_autor','nivel3.nivel2' ]
+																			);
+
+
+    return ($prestamos_count_array_ref, $prestamos_array_ref);
+}
+
 
 # =item
 # historialPrestamos

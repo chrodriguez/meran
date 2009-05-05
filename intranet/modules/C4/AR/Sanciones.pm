@@ -348,16 +348,6 @@ sub isSanction {
   return($sth->fetchrow_hashref); 
 }
 
-# MIGUEL ESTOY PROBANDO LA FUNCION ACTUALIZARSANCION DE ABAJO, DESPUES BORRAR
-=item
-sub actualizarSancion{
-	my ($id3,$reservenumber)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare(" UPDATE sanctions SET id3 = ? WHERE reservenumber = ? ");
-	$sth->execute($id3,$reservenumber);
-}
-=cut
-
 sub actualizarSancion {
 	my ($params)=@_;
 
@@ -454,7 +444,8 @@ sub tieneLibroVencido {
 }
 
 sub getSociosSancionados {
-  #Esta funcion retorna los socios sancionados para un determinado tipo de prestamo o su tipo_prestamo es 0 (o sea es una sancion por no retirar una reserva)
+#Esta funcion retorna los socios sancionados para un determinado tipo de prestamo o su tipo_prestamo es 0 (o sea es una sancion por 
+#no retirar una reserva)
   my ($tipo_prestamo)=@_;
 
   my $dateformat = C4::Date::get_date_format();
