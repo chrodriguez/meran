@@ -53,7 +53,7 @@
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% titulo %]",
                                                 url =>      "/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
-                                                params =>   ("id1=[% id1 %]"),
+                                                params =>   ["id1=[% id1 %]"],
                                                 title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                             ) ;
             [% END %]

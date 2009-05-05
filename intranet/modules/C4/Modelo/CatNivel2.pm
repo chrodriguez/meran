@@ -350,8 +350,8 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
+    if ($estructura->[0]){
+	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 		$hash{'datoReferencia'}= $self->getTipo_documento
 	}
 
@@ -366,7 +366,7 @@ sub toMARC{
 	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
+	if($estructura->[0]){
 		$hash{'datoReferencia'}= $self->getPais_publicacion;
 	}
 
@@ -380,7 +380,9 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= $self->getAnio_publicacion;
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+    if($estructura->[0]){
+	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+    }
 
 	push (@marc_array, \%hash);
 
@@ -393,7 +395,7 @@ sub toMARC{
  	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
+	if($estructura->[0]){
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getCiudad_publicacion;
 	}

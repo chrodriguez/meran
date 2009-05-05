@@ -1180,7 +1180,8 @@ sub getSocioLike {
             }
         }
     }
-
+#POR SI NO VIENE POR PARAMETRO
+    $habilitados = $habilitados || 1;
     push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
