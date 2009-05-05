@@ -44,18 +44,12 @@ my %infoRespuesta;
 if($tabla eq 'autores'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor(
 												$id,
 												$seudonimoDelete
 							);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		#se convierte el arreglo de respuesta en JSON
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -64,18 +58,12 @@ if($tabla eq 'autores'){
 	if($tipo eq 'insertarSeudonimos'){
 		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
 										$seudonimos_arrayref, 
 										$id
 							);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		#se convierte el arreglo de respuesta en JSON
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -83,17 +71,12 @@ if($tabla eq 'autores'){
 #******************************SINONIMOS**************************************
 
 	if($tipo eq 'eliminarSinonimos'){
-		my ($error, $codMsg, $message)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
+		my ($msg_object)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
 											$id,
 											$sinonimoDelete_string
 								);
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
 		#se convierte el arreglo de respuesta en JSON
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+		my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -102,18 +85,12 @@ if($tabla eq 'autores'){
 	if($tipo eq 'insertarSinonimos'){
 		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		my ($error, $codMsg, $message)= &C4::AR::ControlAutoridades::t_insertSinonimosAutor(
+		my ($msg_object)= &C4::AR::ControlAutoridades::t_insertSinonimosAutor(
 											$sinonimos_arrayref, 
 											$id
 							);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		#se convierte el arreglo de respuesta en JSON
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -124,14 +101,14 @@ if($tabla eq 'autores'){
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
 
-		my ($error, $codMsg, $message)= &C4::AR::ControlAutoridades::t_updateSinonimosAutores(
+		my ($msg_object)= &C4::AR::ControlAutoridades::t_updateSinonimosAutores(
 											$idSinonimo, 
 											$nombre, 
 											$nombreViejo
 							);
 
 		#se convierte el arreglo de respuesta en JSON
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -142,18 +119,13 @@ if($tabla eq 'autores'){
 if($tabla eq 'temas'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosTema(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosTema(
 											$id,
 											$seudonimoDelete
 							);
 
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-	
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -162,34 +134,23 @@ if($tabla eq 'temas'){
 	if($tipo eq 'insertarSeudonimos'){
 		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_insertSeudonimosTemas(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosTemas(
 										$seudonimos_arrayref, 
 										$id
 								);
-
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_eliminarSinonimosTema(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosTema(
 											$id,
 											$sinonimoDelete_string
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -198,17 +159,12 @@ if($tabla eq 'temas'){
 	if($tipo eq 'insertarSinonimos'){
 		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_insertSinonimosTemas(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosTemas(
 											$sinonimos_arrayref, 
 											$id
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -217,18 +173,14 @@ if($tabla eq 'temas'){
 		my $idSinonimo= $obj->{'idSinonimo'}||" ";
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_updateSinonimosTemas(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosTemas(
 										$idSinonimo, 
 										$nombre, 
 										$nombreViejo
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
 
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -239,17 +191,13 @@ if($tabla eq 'temas'){
 if($tabla eq 'editoriales'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial(
 											$id,
 											$seudonimoDelete
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
 
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -258,34 +206,25 @@ if($tabla eq 'editoriales'){
 	if($tipo eq 'insertarSeudonimos'){
 		my $seudonimos= $obj->{'seudonimos'}||"";
 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales(
 										$seudonimos_arrayref, 
 										$id
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
-
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial(
 												$id,
 										$sinonimoDelete_string
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
 
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -293,17 +232,13 @@ if($tabla eq 'editoriales'){
 	if($tipo eq 'insertarSinonimos'){
 		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_insertSinonimosEditoriales(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosEditoriales(
 											$sinonimos_arrayref, 
 											$id
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
 
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -313,18 +248,14 @@ if($tabla eq 'editoriales'){
 		my $idSinonimo= $obj->{'idSinonimo'}||" ";
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
-		my ($error, $codMsg, $message)=&C4::AR::ControlAutoridades::t_updateSinonimosEditoriales(
+		my ($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosEditoriales(
 											$idSinonimo, 
 											$nombre, 
 											$nombreViejo
 								);
 
-		#se arma el mensaje
-		$infoRespuesta{'error'}= $error;
-		$infoRespuesta{'codMsg'}= $codMsg;
-		$infoRespuesta{'message'}= $message;
 
-		my $infoRespuestaJSON = to_json \%infoRespuesta;
+        my $infoRespuestaJSON = to_json $msg_object;
 		print $input->header;
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
@@ -410,45 +341,42 @@ my $idSeudonimo= $obj->{'seudonimo'};
 # if( (($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'autores')){
 if( ($tipo eq 'consultaTablasSeudonimos') && ($tabla eq 'autores') ){
 
-	my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user(
-			{template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
-			query => $input,
-			type => "intranet",
-			authnotrequired => 0,
-			flagsrequired => {borrowers => 1},
-			debug => 1,
-	});
-
-	my (@results) = &traerSeudonimosAutor($idSeudonimo);
-
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
-
-print  $template->output;
+    my ($template, $session, $t_params) = get_template_and_user({
+                template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {borrowers => 1},
+                debug => 1,
+    });
+    
+    my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosAutor($idSeudonimo);
+    
+    $t_params->{'RESULTSLOOP'}= $results,
+    
+    
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #Para consultar los seudonimos de un Tema
 # if((($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'temas')){
 if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-		template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
-		query => $input,
-		type => "intranet",
-		authnotrequired => 0,
-		flagsrequired => {borrowers => 1},
-		debug => 1,
-});
-
-
-	my (@results) = &traerSeudonimosTemas($idSeudonimo);
-
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
-
-print  $template->output;
+    my ($template, $session, $t_params) = get_template_and_user({
+                template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {borrowers => 1},
+                debug => 1,
+    });
+    
+    my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosTema($idSeudonimo);
+    
+    $t_params->{'RESULTSLOOP'}= $results,
+    
+    
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 
@@ -457,23 +385,21 @@ print  $template->output;
 # if( (($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'editoriales')){
 if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'editoriales') ){	
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-		template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
-		query => $input,
-		type => "intranet",
-		authnotrequired => 0,
-		flagsrequired => {borrowers => 1},
-		debug => 1,
-});
-
-	#Armo el combo para mostrar los sinonimos de los autores
-	my (@results) = &traerSeudonimosEditoriales($idSeudonimo);
-
-	$template->param( 	
-	  			RESULTSLOOP      => \@results,
-		);
-
-print  $template->output;
+    my ($template, $session, $t_params) = get_template_and_user({
+                template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {borrowers => 1},
+                debug => 1,
+    });
+    
+    my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosEditoriales($idSeudonimo);
+    
+    $t_params->{'RESULTSLOOP'}= $results,
+    
+    
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #***********************************************************************************************

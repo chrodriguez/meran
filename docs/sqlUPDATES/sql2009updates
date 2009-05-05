@@ -714,3 +714,15 @@ CREATE TABLE IF NOT EXISTS `cat_editorial`(
 ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;
 
 
+
+ALTER TABLE `cat_control_seudonimo_autor`
+CHANGE `id2` `id_autor_seudonimo` INT( 11 ) NOT NULL,
+CHANGE `id` `id_autor` INT( 11 ) NOT NULL;
+
+ ALTER TABLE `cat_control_seudonimo_tema` 
+CHANGE `id2` `id_tema_seudonimo` INT( 11 ) NOT NULL,
+ CHANGE `id` `id_tema` INT( 11 ) NOT NULL;
+
+ALTER TABLE `cat_control_seudonimo_editorial`
+CHANGE `id2` `id_editorial_seudonimo` INT( 11 ) NOT NULL,
+ CHANGE `id` `id_editorial` INT( 11 ) NOT NULL;

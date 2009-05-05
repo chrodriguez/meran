@@ -1,14 +1,14 @@
-<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+[% INCLUDE "intranet-top.inc" %]
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/epoch_styles.css ">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/epoch_styles.css ">
 
-<script src="/intranet-tmpl/blue/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/intranet-tmpl/blue/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.mouse.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
-<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
+<script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/includes/jquery/jquery.bgiframe.min.js"></script>
+<script src="/includes/jquery/jquery.dimensions.js"></script>
+<script src="/includes/jquery/ui.mouse.js"></script>
+<script src="/includes/jquery/jquery.autocomplete.js"></script>
+<link href="/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
 
 
 <script language="javascript">
@@ -114,10 +114,14 @@ var objects_array= new Array();
 //******************************************TextArea************************************************************
 
 function pushSeudonimo(){
-		
+    seudonimo.text = $.trim(seudonimo.text);
 	if (!exist(seudonimo.text, objects_array)){
 		objects_array.push(seudonimo);
 		mapToTextArea('textAreaSeudonimos', objects_array);
+        $('#search_autor_seudonimo').val('');
+        $('#search_tema_seudonimo').val('');
+        $('#search_editorial_seudonimo').val('');
+        $('#search_autor_seudonimo').focus;
 	}else{
 		alert("Ya existe el elmento");
 	}
@@ -173,7 +177,7 @@ function clearDataTextArea(){
 //****************************************************Fin TextArea******************************************
 
 //*********************************************ABM Seudonimos************************************************
-function updateGuradarDatos(){
+function updateGuardarDatos(){
 	consultarTablaSeudonimos(seudonimo_selected.ID);
 	clearDataTextArea();
 }
@@ -186,7 +190,7 @@ function guardarDatos(){
 	//pasa el arreglo a formato json
 	seudonimosJSON=JSONstring.make(objects_array);
 
-	objAH=new AjaxHelper(updateGuradarDatos);
+	objAH=new AjaxHelper(updateGuardarDatos);
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSeudonimos';
 	objAH.tabla= tabla;
@@ -219,6 +223,7 @@ function deleteSeudonimo(idDelete){
 function updateDeleteSeudonimo(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
+
 	setMessages(Messages);
 
 	consultarTablaSeudonimos(seudonimo_selected.ID);
@@ -271,7 +276,7 @@ $(document).ready(function(){
 </script>
 
 <div style="position: static;" id="tophelper">
-<img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">
+<img class="showhelp" src="[% themelang %]/images/help.gif" alt="Descricion de la Ventana">
     <div style="display: block;" id="topichelp">
         <p>Descripcion breve para lo q sirve la ventana....</p>
     </div>
@@ -328,10 +333,10 @@ $(document).ready(function(){
 	</li>
 
 	<li><hr></hr></li>
-	<li><input  src="<!-- TMPL_VAR NAME='themelang' -->/images/guardar.png" type="image"  value="Guardar Seudónimo" title="Guardar Seudónimo" onClick="guardarDatos()">
+	<li><input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Seudónimo" title="Guardar Seudónimo" onClick="guardarDatos()">
 	</li>
 	<li><div id="resultSeudonimos"></div></li>
 </ul>
 </div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

@@ -233,14 +233,17 @@ function updateInfoPrestarReserva(responseText){
 /************************************************FIN CIRCULACUION************************************************/
 
 function borrarGrupo(id1,id2){
-	objAH=new AjaxHelper(updateBorrarGrupo);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
-	objAH.id1= id1;
-	objAH.id2= id2;
-	objAH.accion="BORRAR_GRUPO";
-	//se envia la consulta
-	objAH.sendToServer();
+    confirmaBorrar = window.confirm('&#191;Est&aacute; seguro que desea borrarlo?');
+    if (confirmaBorrar) {
+	    objAH=new AjaxHelper(updateBorrarGrupo);
+	    objAH.debug= true;
+	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
+	    objAH.id1= id1;
+	    objAH.id2= id2;
+	    objAH.accion="BORRAR_GRUPO";
+	    //se envia la consulta
+	    objAH.sendToServer();
+    }
 }
 
 function updateBorrarGrupo(responseText){
@@ -255,13 +258,16 @@ function updateBorrarGrupo(responseText){
 
 
 function borrarNivel1(id1){
-	objAH=new AjaxHelper(updateBorrarNivel1);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
-	objAH.id1= id1;
-	objAH.accion="BORRAR_NIVEL1";
-	//se envia la consulta
-	objAH.sendToServer();
+    confirmaBorrar = window.confirm('&#191;Est&aacute; seguro que desea borrarlo?');
+    if (confirmaBorrar){
+	    objAH=new AjaxHelper(updateBorrarNivel1);
+	    objAH.debug= true;
+	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
+	    objAH.id1= id1;
+	    objAH.accion="BORRAR_NIVEL1";
+	    //se envia la consulta
+	    objAH.sendToServer();
+    }
 }
 
 function updateBorrarNivel1(responseText){
@@ -317,7 +323,7 @@ function updateBorrarNivel1(responseText){
 									) ;
 	[% END %]
 
-	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarNivel1([% id1 %]);} else {return false;}" title="Borrar Nivel 1">
+	<input TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   onClick="borrarNivel1([% id1 %])" title="Borrar Nivel 1">
 	<br>
 	[% FOREACH nivel1 %]
 		[% IF liblibrarian %]
@@ -356,7 +362,7 @@ function updateBorrarNivel1(responseText){
 	[% END %]
 
 	<input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
-			onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')) {borrarGrupo([% id1 %],[% id2 %]);} else {return false;}" 
+			onClick="borrarGrupo([% id1 %],[% id2 %])" 
 			title="Borrar Grupo">
 	<br>
 	[% IF amazon_cover %]

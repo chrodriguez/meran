@@ -90,7 +90,7 @@ sub search_autores(){
 	return ($cant, @results);
 }
 
-sub search_editoriales(){
+sub search_editoriales{
 	my ($editorial)=@_; 
 
 	my $dbh = C4::Context->dbh;
@@ -170,7 +170,8 @@ sub t_insertSinonimosAutor {
 	
 	my($sinonimos_arrayref, $idAutor)=@_;
 
-	my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
 	
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
     my $db = $sinonimo_dbo->db;
@@ -185,19 +186,14 @@ sub t_insertSinonimosAutor {
 
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} ) ;
+		
 		eval {
                 $db->rollback
         };
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA601';
 	}
 		
-
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+	return ($msg_object)
 }
 
 
@@ -205,7 +201,9 @@ sub t_insertSinonimosTemas {
 
     my($sinonimos_arrayref, $idTema)=@_;
 
-    my ($error, $codMsg,$paraMens);
+    my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+
 
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
     my $db = $sinonimo_dbo->db;
@@ -221,17 +219,15 @@ sub t_insertSinonimosTemas {
     if ($@){
         #Se loguea error de Base de Datos
         $codMsg= 'B400';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        
         eval {
                 $db->rollback
         };
         #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA601';
+
     }
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    return ($msg_object)
 }
 
 sub t_insertSinonimosEditoriales {
@@ -240,7 +236,8 @@ sub t_insertSinonimosEditoriales {
 
     use C4::Modelo::CatControlSinonimoEditorial;
 
-    my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
 
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
     my $db = $sinonimo_dbo->db;
@@ -256,18 +253,16 @@ sub t_insertSinonimosEditoriales {
     if ($@){
         #Se loguea error de Base de Datos
         $codMsg= 'B400';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
+        
         eval {
                 $db->rollback
         };
-        #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA601';
+
     }
 
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    
+    return ($msg_object)
 }
 
 #************************************************************************************************
@@ -278,7 +273,9 @@ sub t_updateSinonimosAutores {
 
     use C4::Modelo::CatControlSinonimoAutor;
 
-	my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+    my ($error,$codMsg,$message);
 	
 	eval {
             my $sinonimo_autor = C4::Modelo::CatControlSinonimoAutor->new(id => $idSinonimo, autor => $nombreViejo);
@@ -287,16 +284,11 @@ sub t_updateSinonimosAutores {
 
 	};
 	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA605';
+
 	}
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+	
+	return ($msg_object)
 }
 
 
@@ -306,7 +298,8 @@ sub t_updateSinonimosTemas {
 
     use C4::Modelo::CatControlSinonimoTema;
 
-    my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
     
     eval {
             my $sinonimo_tema = C4::Modelo::CatControlSinonimoTema->new(id => $idSinonimo, tema => $nombreViejo);
@@ -315,16 +308,11 @@ sub t_updateSinonimosTemas {
 
     };
     if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B400';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-        #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA605';
+
     }
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    
+    return ($msg_object)
 }
 
 sub t_updateSinonimosEditoriales {
@@ -333,7 +321,8 @@ sub t_updateSinonimosEditoriales {
 
     use C4::Modelo::CatControlSinonimoEditorial;
 
-    my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
     
     eval {
             my $sinonimo_editorial = C4::Modelo::CatControlSinonimoEditorial->new(id => $idSinonimo, editorial => $nombreViejo);
@@ -342,16 +331,10 @@ sub t_updateSinonimosEditoriales {
 
     };
     if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B400';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-        #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA605';
+
     }
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    return ($msg_object)
 }
 
 
@@ -362,7 +345,9 @@ sub t_eliminarSinonimosAutor {
 
 	my($idAutor,$sinonimo)=@_;
 
-	my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+    my ($error,$codMsg,$message);
 	
 	eval {
         use C4::Modelo::CatControlSinonimoAutor::Manager;
@@ -375,16 +360,11 @@ sub t_eliminarSinonimosAutor {
 	};
 
 	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B419';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA604';
+
 	}
 		
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+	
+	return ($msg_object)
 }
 # 
 # =item
@@ -399,7 +379,8 @@ sub t_eliminarSinonimosTema {
 
     my($idTema,$sinonimo)=@_;
 
-    my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
     
     eval {
         use C4::Modelo::CatControlSinonimoTema::Manager;
@@ -412,16 +393,10 @@ sub t_eliminarSinonimosTema {
     };
 
     if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B419';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-        #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA604';
-    }
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    }
+    
+    return ($msg_object)
 }
 
 
@@ -432,7 +407,8 @@ sub t_eliminarSinonimosEditorial {
 
     my($idEditorial,$sinonimo)=@_;
 
-    my ($error, $codMsg,$paraMens);
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
     
     eval {
         use C4::Modelo::CatControlSinonimoEditorial::Manager;
@@ -445,518 +421,252 @@ sub t_eliminarSinonimosEditorial {
     };
 
     if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B419';
-        &C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-        #Se setea error para el usuario
-        $error= 1;
-        $codMsg= 'CA604';
+
     }
 
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-    return ($error, $codMsg, $message);
+    
+    return ($msg_object)
 }
 
-#*************************************Seudonimos*************************************************
+sub traerSeudonimosAutor{
+    my ($autor)=@_;
+    use C4::Modelo::CatControlSeudonimoAutor::Manager;
+    my @filtros;
 
-sub traerSeudonimosAutor(){
-	my ($idAutor)=@_;
-	my $dbh = C4::Context->dbh;
+    push(@filtros, ( id_autor => { eq => $autor}) );
+    
+    my $sinonimos_autor = C4::Modelo::CatControlSeudonimoAutor::Manager->get_cat_control_seudonimo_autor(
 
-	my $query="	SELECT id, id2
-		   	FROM cat_control_seudonimo_autor 
-		   	WHERE id= ? or id2= ?";
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['seudonimo','autor'],
+                                                                                    );
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($idAutor, $idAutor);
-
-	$query="	SELECT completo
-			FROM cat_autor 
-			WHERE id= ?
-			ORDER BY completo";
-	
-	my $sth2=$dbh->prepare($query);
-
-	my $Autor;
-	my @results;
-
-	while (my $data = $sth->fetchrow_hashref) {
-		if($idAutor ne $data->{'id2'}){
-			$sth2->execute($data->{'id2'});
-			$Autor = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Autor->{'completo'};
-			push @results, $data; 
-		}	
-		if($idAutor ne $data->{'id'}){
-			$sth2->execute($data->{'id'});
-			$Autor = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Autor->{'completo'};
-			push @results, $data;
- 		}
-	}
-
-	$sth->finish;
-	return @results;
+    return (scalar(@$sinonimos_autor), $sinonimos_autor);
 }
 
-sub traerSeudonimosTemas(){
-	my ($idTema)=@_;
-	my $dbh = C4::Context->dbh;
+sub traerSeudonimosTema{
+  my ($idTema)=@_;
 
-	my $query="	SELECT id, id2
-		   	FROM cat_control_seudonimo_tema 
-		   	WHERE id= ? or id2= ?";
+    use C4::Modelo::CatControlSeudonimoTema::Manager;
+    my @filtros;
+    push(@filtros, ( id_tema => {eq => $idTema} ) );
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($idTema, $idTema);
+    my $seudonimos_tema = C4::Modelo::CatControlSeudonimoTema::Manager->get_cat_control_seudonimo_tema(
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['tema','seudonimo'],
+                                                                                   );
+    return (scalar(@$seudonimos_tema), $seudonimos_tema);
 
-	$query="	SELECT nombre 
-			FROM cat_tema 
-			WHERE id= ?
-			ORDER BY nombre";
-	
-	my $sth2=$dbh->prepare($query);
-
-	my $Tema;
-	my @results;
-
-	while (my $data = $sth->fetchrow_hashref) {
-		if($idTema ne $data->{'id2'}){
-			$sth2->execute($data->{'id2'});
-			$Tema = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Tema->{'nombre'};
-			push @results, $data;
-		}	
-		if($idTema ne $data->{'id'}){
-			$sth2->execute($data->{'id'});
-			$Tema = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Tema->{'nombre'};
-			push @results, $data;
- 		}
-	}
-
-	$sth->finish;
-	return @results;
 }
 
-sub traerSeudonimosEditoriales(){
-	my ($idEditorial)=@_;
-	my $dbh = C4::Context->dbh;
 
-	my $query="	SELECT id, id2
-		   	FROM cat_control_seudonimo_editorial 
-		   	WHERE id= ? OR id2= ?";
+sub traerSeudonimosEditoriales{
+  my ($idEditorial)=@_;
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($idEditorial, $idEditorial);
+    use C4::Modelo::CatControlSeudonimoEditorial::Manager;
+    my @filtros;
+    push(@filtros, ( id_editorial => {eq => $idEditorial} ) );
 
-	$query="	SELECT editorial 
-			FROM `editoriales` 
-			WHERE id= ?
-			ORDER BY editorial";
-	
-	my $sth2=$dbh->prepare($query);
+    my $seudonimos_editorial = C4::Modelo::CatControlSeudonimoEditorial::Manager->get_cat_control_seudonimo_editorial(
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['editorial','seudonimo'],
+                                                                                   );
+    return (scalar(@$seudonimos_editorial), $seudonimos_editorial);
 
-	my $Editorial;
-	my @results;
-
-	while (my $data = $sth->fetchrow_hashref) {
-		if($idEditorial ne $data->{'id2'}){
-			$sth2->execute($data->{'id2'});
-			$Editorial = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Editorial->{'editorial'};
-			push @results, $data;
-		}	
-		if($idEditorial ne $data->{'id'}){
-			$sth2->execute($data->{'id'});
-			$Editorial = $sth2->fetchrow_hashref;
-			$data->{'seudonimo'}= $Editorial->{'editorial'};
-			push @results, $data;			
- 		}
-	}
-
-	$sth->finish;
-	return @results;
 }
 
 
 sub t_insertSeudonimosAutor {
-	
-	my($seudonimos_arrayref, $idAutor)=@_;
+    
+    my($seudonimos_arrayref, $idAutor)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSeudonimosAutor($seudonimos_arrayref, $idAutor);	
-		$dbh->commit;
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+    
+    eval {
+        foreach my $seudonimo (@$seudonimos_arrayref){
+            my $seudonimo_temp = C4::Modelo::CatControlSeudonimoAutor->new();
+                my $id_autor_seudonimo = $seudonimo->{'ID'};
+                $seudonimo_temp->agregar($idAutor, $id_autor_seudonimo);
+        }
+    };
 
-	};
+    if ($@){
+        #Se loguea error de Base de Datos
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} ) ;
+        #Se setea error para el usuario
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA602';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    }
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+    return ($msg_object)
 }
 
-=item
-Esta funcion inserta los seudonimos pasados $seudonimos_arrayref al autor pasado por parametro
-=cut
-sub insertSeudonimosAutor(){
 
-	my ($seudonimos_arrayref, $idAutor)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= scalar(@$seudonimos_arrayref);
-	my $seudonimo;
-
-	for(my $i=0;$i<$cant;$i++){
-		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
-		#verifico la existencia del registro
-		my $queryExist="	SELECT count(*) 
-					FROM cat_control_seudonimo_autor 
-					WHERE((id = ?)AND(id2 = ?))
-					OR((id2 = ?)AND(id = ?))";
-
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute(
-				$seudonimo,
-				$idAutor,
-				$seudonimo,
-				$idAutor
-		);
-
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){		
-			my $query="	INSERT INTO cat_control_seudonimo_autor(id, id2)
-				   	VALUES(?,?)";
-			$sth=$dbh->prepare($query);
-			$sth->execute($idAutor, $seudonimo);
-        	}
-		$sth->finish;
-	}
-}
 
 
 sub t_eliminarSeudonimosAutor {
 	
 	my($idAutor,$seudonimo)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+    my ($error,$codMsg,$message);
+
+        my $msg_object= C4::AR::Mensajes::create();
+    my ($error,$codMsg,$message);
+    my ($error,$codMsg,$message);
+
 	eval {
-		eliminarSeudonimosAutor($idAutor,$seudonimo);	
-		$dbh->commit;
-		$codMsg= 'U309';
+		use C4::Modelo::CatControlSeudonimoAutor::Manager;
+        my @filtros;
+        push (@filtros,( id_autor => {eq => $idAutor} ) );
+        push (@filtros,( id_autor_seudonimo => {eq => $seudonimo}) );
+        C4::Modelo::CatControlSeudonimoAutor::Manager->delete_cat_control_seudonimo_autor( where => \@filtros,);
+
+		$msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U309', 'params' => []} ) ;
 
 	};
 
 	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B417';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
 		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA603';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA603', 'params' => []} ) ;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+	}
+    return ($msg_object);
 }
 
 =item
 Esta fucion elimina el $seudonimo del autor pasado por parametro
 =cut
-sub eliminarSeudonimosAutor(){
-
-	my ($idAutor,$seudonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	
-	my $queryExist="	DELETE FROM cat_control_seudonimo_autor 
-				WHERE((id = ?)AND(id2 = ?))
-				OR(id2 = ?)AND(id = ?)";
-
-	$sth=$dbh->prepare($queryExist);
-	$sth->execute(
-			$idAutor,
-			$seudonimo,
-			$idAutor,
-			$seudonimo
-	);
-
-	$sth->finish;
-}
 
 
 sub t_insertSeudonimosTemas {
-	
-	my($seudonimos_arrayref, $idTema)=@_;
+  
+  my($seudonimos_arrayref, $idTema)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSeudonimosTemas($seudonimos_arrayref, $idTema);	
-		$dbh->commit;
+  my $msg_object= C4::AR::Mensajes::create();
 
-	};
+  my ($error,$codMsg,$message);
+  
+  my $db = C4::Modelo::CatControlSeudonimoTema->new()->db;
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA602';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+  $db->{connect_options}->{AutoCommit} = 0;
+  $db->begin_work;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+  eval {
+
+      foreach my $seudonimo (@$seudonimos_arrayref){
+        my $seudonimo_temp = C4::Modelo::CatControlSeudonimoTema->new( db => $db );
+           $seudonimo_temp->agregar($idTema,$seudonimo->{'ID'});
+      }
+      $db->commit;
+
+  };
+
+  if ($@){
+      #Se loguea error de Base de Datos
+      
+      eval {$db->rollback};
+      #Se setea error para el usuario
+  }
+  $db->{AutoCommit} = 1;
+
+  return ($msg_object)
 }
 
-sub insertSeudonimosTemas(){
-#Inserto los seudonimos pasados $seudonimos_arrayref al tema pasado por parametro
-	my ($seudonimos_arrayref, $idTema)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= scalar(@$seudonimos_arrayref);
-	my $seudonimo;
-
-	for(my $i=0;$i<$cant;$i++){
-		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
-		#verifico la existencia del registro
-		my $queryExist="	SELECT count(*) 
-					FROM cat_control_seudonimo_tema 
-					WHERE((id = ?)AND(id2 = ?))
-					OR((id2 = ?)AND(id = ?))";
-
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute(
-				$seudonimo,
-				$idTema,
-				$seudonimo,
-				$idTema
-		);
-
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){		
-			my $query="	INSERT INTO cat_control_seudonimo_tema (id, id2)
-				   	VALUES(?,?)";
-
-			$sth=$dbh->prepare($query);
-			$sth->execute($idTema, $seudonimo);
-        	}
-		$sth->finish;
-	}
-}
 
 sub t_eliminarSeudonimosTema {
-	
-	my($idTema,$seudonimo)=@_;
+  
+  my($idTema,$seudonimo)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		eliminarSeudonimosTema($idTema,$seudonimo);	
-		$dbh->commit;
-		$codMsg= 'U309';
+  my $msg_object= C4::AR::Mensajes::create();
 
-	};
+  eval {
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B418';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA603';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    use C4::Modelo::CatControlSeudonimoTema::Manager;
+    my @filtros;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+    push (@filtros, (id_tema => {eq => $idTema}) );
+    push (@filtros, (id_tema_seudonimo => {eq => $seudonimo}) );
+
+    C4::Modelo::CatControlSeudonimoTema::Manager->delete_cat_control_seudonimo_tema( where => \@filtros);
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U309', 'params' => []} );
+  };
+
+  if ($@){
+      #Se loguea error de Base de Datos
+      $msg_object->{'error'} = 1;
+      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} );
+  }
+
+  
+  return ($msg_object)
 }
 
-
-sub eliminarSeudonimosTema(){
-#Elimino el $seudonimo del tema pasados por parametro
-	my ($idTema,$seudonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	
-	my $queryExist="	DELETE FROM cat_control_seudonimo_tema 
-				WHERE((id = ?)AND(id2 = ?))
-				OR((id2 = ?)AND(id = ?))";
-
-	$sth=$dbh->prepare($queryExist);
-	$sth->execute(
-			$idTema,
-			$seudonimo,
-			$idTema,
-			$seudonimo
-	);
-
-	$sth->finish;
-}
 
 sub t_insertSeudonimosEditoriales {
-	
-	my($seudonimos_arrayref, $idEditorial)=@_;
+  
+  my($seudonimos_arrayref, $idEditorial)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		insertSeudonimosEditoriales($seudonimos_arrayref, $idEditorial);	
-		$dbh->commit;
+  my $msg_object= C4::AR::Mensajes::create();
 
-	};
+  my $db = C4::Modelo::CatControlSeudonimoEditorial->new()->db;
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA602';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+  $db->{connect_options}->{AutoCommit} = 0;
+  $db->begin_work;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
+  eval {
 
-sub insertSeudonimosEditoriales(){
-#Inserto los seudonimos pasados $seudonimos_arrayref a la editorial pasado por parametro
-	my ($seudonimos_arrayref, $idEditorial)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
-	my $cant= scalar(@$seudonimos_arrayref);
-	my $seudonimo;
+      foreach my $seudonimo (@$seudonimos_arrayref){
+        my $seudonimo_temp = C4::Modelo::CatControlSeudonimoEditorial->new( db => $db );
+           $seudonimo_temp->agregar($idEditorial,$seudonimo->{'ID'});
+      }
+      $db->commit;
 
-	for(my $i=0;$i<$cant;$i++){
-		$seudonimo= $seudonimos_arrayref->[$i]->{'ID'};
-		#verifico la existencia del registro
-		my $queryExist="	SELECt count(*) 
-					FROM cat_control_seudonimo_editorial 
-					WHERE((id = ?)AND(id2 = ?))
-					OR((id2 = ?)AND(id = ?))";
+  };
 
-		$sth=$dbh->prepare($queryExist);
-		$sth->execute(
-				$seudonimo,
-				$idEditorial,
-				$seudonimo,
-				$idEditorial
-		);
+  if ($@){
+      #Se loguea error de Base de Datos
+      
+      eval {$db->rollback};
+      #Se setea error para el usuario
+  }
+  $db->{AutoCommit} = 1;
 
-		my $Existe = $sth->fetchrow;
-
-		#si no existe el registro
-		if($Existe eq 0){		
-			my $query="	INSERT INTO cat_control_seudonimo_editorial (id, id2)
-				   	VALUES(?,?)";
-
-			$sth=$dbh->prepare($query);
-			$sth->execute($idEditorial, $seudonimo);
-        	}
-		$sth->finish;
-	}
+  return ($msg_object)
 }
 
 sub t_eliminarSeudonimosEditorial {
-	
-	my($idEditorial,$seudonimo)=@_;
+  
+  my($idEditorial,$seudonimo)=@_;
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
-		eliminarSeudonimosEditorial($idEditorial,$seudonimo);	
-		$dbh->commit;
+  my $msg_object= C4::AR::Mensajes::create();
 
-	};
+  eval {
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B400';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'CA603';
-	}
-	$dbh->{AutoCommit} = 1;
-		
+    use C4::Modelo::CatControlSeudonimoEditorial::Manager;
+    my @filtros;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
-}
+    push (@filtros, (id_editorial => {eq => $idEditorial}) );
+    push (@filtros, (id_editorial_seudonimo => {eq => $seudonimo}) );
 
-sub eliminarSeudonimosEditorial(){
-#Elimino el seudonimo de la editorial pasados por parametro
-	my ($idEditorial,$seudonimo)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth;
+    C4::Modelo::CatControlSeudonimoEditorial::Manager->delete_cat_control_seudonimo_editorial( where => \@filtros);
 
-	my $query="	DELETE FROM cat_control_seudonimo_editorial 
-				WHERE((id = ?)AND(id2 = ?))
-				OR((id2 = ?)AND(id = ?))";
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U309', 'params' => []} );
+  };
 
-	$sth=$dbh->prepare($query);
-	$sth->execute(
-			$idEditorial,
-			$seudonimo,
-			$idEditorial,
-			$seudonimo
-	);
+  if ($@){
+      #Se loguea error de Base de Datos
+      $msg_object->{'error'} = 1;
+      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} );
+  }
 
-	$sth->finish;
+  
+  return ($msg_object)
 }
 
 1;

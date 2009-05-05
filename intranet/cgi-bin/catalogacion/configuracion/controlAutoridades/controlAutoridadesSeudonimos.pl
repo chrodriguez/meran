@@ -28,20 +28,16 @@ use HTML::Template;
 
 my $input = new CGI;
 
-my $theme = $input->param('theme') || "default";
+my $theme = $input->param('theme') || "blue";
 my $campoIso = $input->param('code') || ""; 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.tmpl",
+my ($template, $session, $t_params)
+    = get_template_and_user( {
+                                template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => {borrowers => 1},
+                                debug => 1,
+                              });
 
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
-
-$template->param( 
-
-		);
-
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
