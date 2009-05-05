@@ -417,11 +417,12 @@ function updateInfoDevRen(responseText){
  * @params: ticket, es el objeto que representa al ticket, o 0 si hubo algun error antes de generar el ticket.
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
+// FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket)
-		window.open ("/cgi-bin/koha/circ/ticket.pl?obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("/cgi-bin/koha/circ/ticket.pl?token"+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
 

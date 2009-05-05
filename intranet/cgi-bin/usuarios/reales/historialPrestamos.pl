@@ -27,35 +27,34 @@ my $funcion= $obj->{'funcion'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 # my ($cant,$issues)=C4::AR::Prestamos::historialPrestamos($bornum,$ini,$cantR,$orden);
-my ($cant,$issues)=C4::AR::Prestamos::getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
+my ($cant,$presmamos_array_ref)=C4::AR::Prestamos::getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
 
 $t_params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
 my @loop_reading;
-for (my $i=0;$i< $cantR;$i++){
-   if ($issues->[$i]->{'id1'}){
+# for (my $i=0;$i< 1;$i++){
+foreach my $prestamo (@$presmamos_array_ref){
  	my %line;
-	$line{titulo}=$issues->[$i]->{'titulo'};
-	$line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
-	$line{autor}=$issues->[$i]->{'autor'};
-	$line{idautor}=$issues->[$i]->{'id'};
-	$line{id1}=$issues->[$i]->{'id1'};
-	$line{id2}=$issues->[$i]->{'id2'};
-	$line{id3}=$issues->[$i]->{'id3'};
-	$line{signatura_topografica}=$issues->[$i]->{'signatura_topografica'};
-	$line{barcode}=$issues->[$i]->{'barcode'};
- 	$line{date_due}=$issues->[$i]->{'date_due'};
-    	$line{date_fin} = $issues->[$i]->{'date_fin'};
-	$line{date_renew}="-";
- 	if ($issues->[$i]->{'renewals'}){
-		$line{date_renew}=$issues->[$i]->{'lastreneweddate'};
-	}
-	$line{returndate}=$issues->[$i]->{'returndate'};
-	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-	($line{grupos}) = C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
+	$line{'titulo'}=$prestamo->nivel3->nivel2->nivel1->getTitulo;
+# 	$line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
+# 	$line{autor}=$issues->[$i]->{'autor'};
+# 	$line{idautor}=$issues->[$i]->{'id'};
+# 	$line{id1}=$issues->[$i]->{'id1'};
+# 	$line{id2}=$issues->[$i]->{'id2'};
+# 	$line{id3}=$issues->[$i]->{'id3'};
+# 	$line{signatura_topografica}=$issues->[$i]->{'signatura_topografica'};
+# 	$line{barcode}=$issues->[$i]->{'barcode'};
+#  	$line{date_due}=$issues->[$i]->{'date_due'};
+#     	$line{date_fin} = $issues->[$i]->{'date_fin'};
+# 	$line{date_renew}="-";
+#  	if ($issues->[$i]->{'renewals'}){
+# 		$line{date_renew}=$issues->[$i]->{'lastreneweddate'};
+# 	}
+# 	$line{returndate}=$issues->[$i]->{'returndate'};
+# 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
+# 	($line{grupos}) = C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
 
 	push(@loop_reading,\%line);
-   }
 }
 
 $t_params->{'cant'}= $cant;

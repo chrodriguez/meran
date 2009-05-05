@@ -439,8 +439,6 @@ sub sePuedeRenovar{
 }
 
 
-
-
 =item 
 la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva y de RepHistorialCirculacion. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
 =cut 

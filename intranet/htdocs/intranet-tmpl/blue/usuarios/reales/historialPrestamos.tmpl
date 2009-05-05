@@ -57,7 +57,7 @@
     		</a>-->
 
 		[% PERL %]
-				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape($titulo) %]",
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
 												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
 												params =>	[	"id1=[% HTML.escape(id1) %]"], 
 											) ;

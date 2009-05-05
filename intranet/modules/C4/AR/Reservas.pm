@@ -518,9 +518,15 @@ sub obtenerReservasDeSocio {
     my ($socio)=@_;
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-							query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}]
+													query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
+													require_objects => [ 'nivel3',  'nivel3.nivel2' ]
      							); 
-    return ($reservas_array_ref);
+
+	if(scalar(@$reservas_array_ref) > 0){
+		return ($reservas_array_ref);
+	}else{
+		return 0;
+	}
 }
 
 =item

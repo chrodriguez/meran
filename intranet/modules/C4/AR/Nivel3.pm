@@ -522,6 +522,13 @@ sub detalleDisponibilidadNivel3{
 			$hash_nivel3{'clase'}= "salaLectura";
 		}
 
+		my $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
+
+		if($socio){
+			$hash_nivel3{'nro_socio'}= $socio->getNro_socio;
+			$hash_nivel3{'usuarioNombre'}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
+		}
+	
  		$result[$i]= \%hash_nivel3;
 		$i++;
 

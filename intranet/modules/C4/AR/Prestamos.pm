@@ -393,6 +393,30 @@ sub crearTicket {
 }
 
 =item
+Esta funcion obtiene el socio del ejemplar prestado
+=cut
+# FIXME ver si la condicion de filtro es valida (id3, nro_socio, fecha_prestamo)
+sub getSocioFromPrestamo {
+	my ($id3)= @_;
+
+	my @filtros;
+ 	push(@filtros, ( id3 => { eq => $id3 } ));
+	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+	my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+																					query => \@filtros,
+																					require_objects => ['socio']
+																				);
+
+	if(scalar(@$prestamos_array_ref) > 0){
+		return ($prestamos_array_ref->[0]->socio);
+	}else{
+		return 0;
+	}
+}
+
+
+=item
 t_renovar
 Transaccion que renueva un prestamo.
 @params: $params-->Hash con los datos necesarios para poder renovar un prestamo.
@@ -1012,7 +1036,7 @@ sub getHistorialPrestamos {
 
 	my @filtros;
 # 	push(@filtros, ( fecha_devolucion => { eq => undef } ));
-# 	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+ 	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
         
     my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
 

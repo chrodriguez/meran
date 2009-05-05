@@ -80,7 +80,8 @@ function borrarSanciones(chck){
 	<tr align="center">
 		<td width="1%" >&nbsp;</td>
 			<td >
-             <input class="inputFontNormal" type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" id="[% sancion.getId_sancion %]">
+             <input class="inputFontNormal" type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
+					id="[% sancion.getId_sancion %]">
     		</td>
 	
 		<td>[% sancion.getNro_socio %]</td>
@@ -105,7 +106,8 @@ function borrarSanciones(chck){
 	<td colspan="12" >&nbsp;</td>
     </tr>
 	<tr><td colspan="12" align="center" >
-	<INPUT TYPE="image" name="Eliminar"  VALUE="Eliminar" BORDER=0 src="[% themelang %]/images/eliminar.png" onClick="borrarSanciones('chkboxSanciones')" title="Borrar Sanciones">
+	<INPUT 	TYPE="image" name="Eliminar"  VALUE="Eliminar" BORDER=0 src="[% themelang %]/images/eliminar.png" 
+			onClick="borrarSanciones('chkboxSanciones')" title="Borrar Sanciones">
 	</td></tr>
 	</form>
 </table>

@@ -39,12 +39,17 @@
 			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.getId3 %]">
 		</td>
             <td width="16%">
-                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
+               <!-- <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
                     [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-<!--                    [% IF runititle %]
-                        :&nbsp;[% HTML.escape(runititle) %]
-                    [% END %]-->
-                </a>
+                </a>-->
+
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
+												params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+											) ;
+			[% END %]
             </td>
             <td>
                 [% IF reserva.nivel3.nivel1.getAutor %]
@@ -119,12 +124,16 @@
 		<tr valign="top" class="inputFontNormal">
 			<td width="1%">&nbsp;</td>
 			<td>
-                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
+<!--                <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
                     [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-<!--                    [% IF runititle %]
-                        :&nbsp; [% runititle %]
-                    [% END %]-->
-                </a>
+                </a>-->
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
+												params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+											) ;
+			[% END %]
 			</td>
 			<td>
                 [% IF reserva.nivel3.nivel1.getAutor %]
