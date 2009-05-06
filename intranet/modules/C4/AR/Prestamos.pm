@@ -460,6 +460,26 @@ sub getSocioFromPrestamo {
 	}
 }
 
+=item
+Esta funcion obtiene el prestamo del ejemplar prestado
+=cut
+sub getPrestamoActivo {
+    my ($id3)= @_;
+
+    my @filtros;
+    push(@filtros, ( id3 => { eq => $id3 } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                    query => \@filtros,
+                                                                                );
+
+    if(scalar(@$prestamos_array_ref) > 0){
+        return ($prestamos_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
 
 sub getHistorialPrestamos {
 	my ($nro_socio,$ini,$cantR,$orden)=@_;

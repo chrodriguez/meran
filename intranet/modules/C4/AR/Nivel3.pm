@@ -314,7 +314,6 @@ sub detalleDisponibilidadNivel3{
         my %hash_nivel3;
 #         $nivel3_array_ref->[$i]->load();
         $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i];
-C4::AR::Debug::debug("NIVEL3 REALMENTE: ".$nivel3_array_ref->[$i]->getBarcode);
  
         $hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
         $hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
@@ -349,9 +348,11 @@ C4::AR::Debug::debug("NIVEL3 REALMENTE: ".$nivel3_array_ref->[$i]->getBarcode);
 
         my $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
 
-        if($socio){
+        if($socio){ 
+            $hash_nivel3{'id_prestamo'}= C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'})->getId_prestamo;
             $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
             $hash_nivel3{'usuarioNombre'}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
+            $hash_nivel3{'vencimiento'}= "VENCERA EN BREVE..."; #OBTENER LA FECHA D EVENCIMIENTO DEL PRESTAMO
         }
     
         $result[$i]= \%hash_nivel3;

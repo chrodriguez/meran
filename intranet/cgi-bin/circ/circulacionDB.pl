@@ -36,7 +36,8 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 	my @infoDevRen=();
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
-		my $id_prestamo=$array_ids->[$i];
+# 		my $id_prestamo=$array_ids->[$i];
+        my $id_prestamo = $obj->{'id_prestamo'};
         my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
         $prestamo->load();
 		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
@@ -46,6 +47,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
  		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
   		$infoDevRen[$i]->{'unititle'}="";
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
+        $infoDevRen[$i]->{'messages'} = "SAFNKDSNF";
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
 	print $input->header;

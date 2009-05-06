@@ -152,6 +152,7 @@ function renovar(accion,userId,userNom,id2,id3){
 	objAH.tipoAccion= 'RENOVACION';
 	objAH.datosArray= array;
 	objAH.nro_socio= usuario.ID;
+    objAH.id_prestamo = id3;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
@@ -166,12 +167,13 @@ function devolver(accion,userId,userNom,id2,id3){
 	usuario.ID=userId;
 	usuario.text=userNom;
 
-	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
+	objAH=new AjaxHelper(updateInfoDevRen); //llama a generar div de ciculacion.js
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= array;
 	objAH.nro_socio= usuario.ID;
+    objAH.id_prestamo = id3;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
@@ -179,22 +181,22 @@ function devolver(accion,userId,userNom,id2,id3){
 }
 
 //esta funcion esta REDEFINIDA, de la funcion que se encuentra en circulacion.js, invocada por la 
-function updateInfoDevRen(responseText){
-// 	alert("ejecuto updateInfoDevRen local!!!!!!!");
-	cancelarDiv();
-	clearMessages();
-
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	var mensajes= '';
-	for(i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
-
-	ejemplaresDelGrupo(grupo);
-}
+// function updateInfoDevRen(responseText){
+// // 	alert("ejecuto updateInfoDevRen local!!!!!!!");
+// 	cancelarDiv();
+// 	clearMessages();
+// 
+// 	var infoHash= JSONstring.toObject(responseText);
+// 	var messageArray= infoHash.messages;
+// 	var ticketsArray= infoHash.tickets;
+// 	var mensajes= '';
+// 	for(i=0; i<messageArray.length;i++){
+// 		imprimirTicket(ticketsArray[i].ticket,i);
+//   		setMessages(messageArray[i]);
+// 	}
+// 
+// 	ejemplaresDelGrupo(grupo);
+// }
 
 function confirmarPrestamo(){
 
@@ -481,10 +483,10 @@ function updateBorrarNivel1(responseText){
 			        [% IF paraPrestamo %]
         
 				        <input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
-					        onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+					        onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
 				        [% IF renew %]
 					        <input type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
-							        onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+							        onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
 				        [% END %]
 			        [% ELSE %]
 				        <input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 

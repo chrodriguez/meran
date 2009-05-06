@@ -402,7 +402,7 @@ function updateInfoDevRen(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	
-	var mensajes= '';
+// 	var mensajes= '';
 	for(i=0; i<messageArray.length;i++){
 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);
