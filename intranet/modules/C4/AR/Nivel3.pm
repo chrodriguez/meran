@@ -238,6 +238,7 @@ sub detalleNivel3{
 	for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
 		my %hash_nivel3;
 			$nivel3_array_ref->[$i]->load();
+			$hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
 			$hash_nivel3{'nivel3_array'}= $nivel3_array_ref->[$i];
 			$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
             $hash_nivel3{'id2'}= $id2;
