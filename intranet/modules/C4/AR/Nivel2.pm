@@ -401,9 +401,8 @@ sub getCantPrestados{
 	my ($id2)=@_;
 
 	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
-                                                               	query => [ 	id2 => { eq => $id2 },
-# FIXME #ojo no se si funciona el NULL
- 																			fecha_devolucion => { eq => 'NULL' }  
+                                                               	query => [ 	't2.id2' => { eq => $id2 },
+ 																			fecha_devolucion => { eq => undef }  
 																		 ],
 																require_objects => ['nivel3.nivel2'],
 																with_objects => ['nivel3'],

@@ -472,6 +472,7 @@ sub obtenerGrupos {
 
 sub obtenerDisponibilidadTotal{
 	my ($id1,$itemtype)=@_;
+
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
 	my $query="SELECT count(*) as cant, id_disponibilidad FROM cat_nivel3 WHERE id1=? ";
@@ -495,8 +496,7 @@ sub obtenerDisponibilidadTotal{
 		if($data->{'id_disponibilidad'} == 0){
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Domicilio:";
 			$disponibilidad[$i]->{'prestados'}="Prestados: ";
-C4::AR::Debug::debug("obrengo la cant de prestamos segun id1: ".$id1);
-			$disponibilidad[$i]->{'prestados'}.= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);#0;#VER MAS ADELANTE!!!!!!!!!
+			$disponibilidad[$i]->{'prestados'}.= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
 			$disponibilidad[$i]->{'reservados'}="Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
 		}
 		else{
