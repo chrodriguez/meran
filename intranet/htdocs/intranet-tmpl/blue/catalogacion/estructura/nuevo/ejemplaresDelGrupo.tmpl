@@ -1,4 +1,5 @@
-[% IF cantItems %]
+
+			[% IF cantItems %]
                 Cantidad de Items: [% cantItems %]<br>
             [% END %]
                 
@@ -41,6 +42,66 @@
                 </tr>
 							
 [% FOREACH nivel3 %]
+
+		<tr align="center">
+			<td width="10%" colspan="2" valign="middle" height="25">
+<!-- 			 IF sePuedeEditar  -->
+				<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
+				<input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" title="Editar Ejemplar">
+				</a>
+<!-- 			END  -->
+			</td>
+			<td width="6%" valign="middle">
+<!-- 			IF sePuedeBorrar -->
+				<input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
+				onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('[% id1 %]','[% id2 %]','[% id3 %]')} else {return false;}" title="Borrar Ejemplar">
+<!-- 			END  -->
+			</td>
+			<td>[% nivel3_obj.getSignatura_topografica %]</td>
+			<td>
+				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
+						[% nivel3_obj.getBarcode %]
+				</a>
+			</td>
+			<td>
+				<span class="[% clase %]">
+				[% nivel3_obj.ref_disponibilidad.getNombre %]
+			[% IF usuario %]
+				<b>[% usuario %]</b>
+			[% END %]
+				</span>
+			</td>
+			<td>
+				<span class="[% claseFecha %]">
+					[% IF vencimiento %]
+						[% vencimiento %]
+					[% ELSE %]
+						-------
+					[% END %]
+				</span>
+			</td>
+			<td valign="middle" colspan="2">
+			[% IF paraPrestamo %]
+
+				<input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
+					onClick="devolver('DEVOLUCION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+				[% IF renew %]
+					<input type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
+							onClick="renovar('RENOVACION','[% borrowernumber %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+				[% END %]
+			[% ELSE %]
+				<input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 
+						onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
+			[% END %]
+			</td>
+		
+			<td colspan="2">
+				<input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="Detalle MARC" 
+						onClick="detalleMARC('[% id3 %]')">
+			</td>
+		</tr>
+[% END %]<!-- END FOREACH NIVEL 3 -->
+
                 <tr align="center">
                     <td width="10%" colspan="2" valign="middle" height="25">
         <!-- Si se puede Editar ??? -->
