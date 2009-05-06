@@ -322,9 +322,6 @@ sub detalleDisponibilidadNivel3{
 
         my $UI_origen= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_origen'});
         $hash_nivel3{'UI_origen'}= $UI_origen;
-# FIXME falta esto no se para q es      
-#       my $wthdrawn=getAvail($data->{'wthdrawn'});
-#       $data->{'wthdrawnDescrip'}=$wthdrawn->{'description'};
 
         if($nivel3_array_ref->[$i]->estadoDisponible){
         #Disponible

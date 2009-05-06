@@ -380,16 +380,17 @@ function updateBorrarNivel1(responseText){
 				        [% END %]
 			        [% END %]
         
-	        [% END %]
-            <!-- END FOREACH nivel2_array -->
+	        [% END %] <!-- END FOREACH nivel2_array -->
+
+		<div id="ejemplaresDelGrupo[% id2 %]" >
         [% INCLUDE "estructura/nuevo/ejemplaresDelGrupo.tmpl" %]
 
-			        <br><hr class="lineagruesa"><br>
+		<br><hr class="lineagruesa"><br>
 			        
-		        </div> <!--end <div id="ejemplaresDelGrupo -->
-	        </div>
+		 </div> <!--end <div id="ejemplaresDelGrupo -->
+	    </div>
         
-        </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
+       </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 
 [% END %]<!-- END FOREACH Nivel 2-->
 
