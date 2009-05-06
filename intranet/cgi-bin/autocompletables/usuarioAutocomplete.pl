@@ -11,8 +11,10 @@ my $textout="";
 
 my ($cant, $usuarios_array_ref)= C4::AR::Usuarios::getSocioLike($usuarioStr);
 
-foreach my $usuario (@$usuarios_array_ref){
-	$textout.= $usuario->persona->getApellido.", ".$usuario->persona->getNombre."|".$usuario->getNro_socio."\n";
+if ($cant > 0){
+    foreach my $usuario (@$usuarios_array_ref){
+	    $textout.= $usuario->persona->getApellido.", ".$usuario->persona->getNombre."|".$usuario->getNro_socio."\n";
+    }
 }
 
 print $input->header;

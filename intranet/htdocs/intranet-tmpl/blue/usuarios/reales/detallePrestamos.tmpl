@@ -42,7 +42,7 @@
 				</a>-->
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.nivel1.getTitulo %]",
-												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
 												params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
 											) ;
 			[% END %]

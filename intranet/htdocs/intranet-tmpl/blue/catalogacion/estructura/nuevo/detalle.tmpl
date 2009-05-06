@@ -338,174 +338,174 @@ function updateBorrarNivel1(responseText){
 
 [% FOREACH nivel2 %]
 
-<div id="grupo[% id2 %]">
-	<div>
-		<p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
-				[% id2 %] GRUPO - [% tipo_documento %]
-			</p>
-	</div>
-
-<div class="detalle">
-<!-- NIVEL 2 -->
-	<div id="[% id2 %]" style="position: relative; float:right;"></div>
-	
-<!--	<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=MODIFICAR_NIVEL_2">
-	<input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" title="Editar Nivel 2">	
-	</a>-->
-	[% PERL %]
-		print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
-										url => 		"agregarDocumento.pl", 
-										params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
-										title =>	"[% 'Editar Nivel 2' | i18n %]"
-									) ;
-	[% END %]
-
-	<input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
-			onClick="borrarGrupo([% id1 %],[% id2 %])" 
-			title="Borrar Grupo">
-	<br>
-	[% IF amazon_cover %]
-		<div class='amazon_cover_detail' style="position: relative; float:right;">
-				<img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
-		</div>
-		<br>
-	[% END %]
-
-	[% FOREACH nivel2_array %]
-			[% IF liblibrarian %]
-				[% IF dato %]
-					[% liblibrarian %]: <b>[% dato %]</b><br>
-				[% END %]
-			[% END %]
-
-	[% END %]
-    <!-- END FOREACH nivel2_array -->
-
-	[% IF cantItems %]
-		Cantidad de Items: [% cantItems %]<br>
-	[% END %]
-		
-	<hr>
-		Ejemplares Disponibles:<b> [% disponibles %]</b><br>
-		Reservas Realizadas: <b> [% cantReservas %]</b><br>
-		Reservas en Espera: <b> [% cantReservasEnEspera %]</b><br>
-		Ejemplares Prestados:<b> [% cantPrestados %]</b><br>
-	<hr>
-
-	<div id="ejemplaresDelGrupo[% id2 %]" >
-		
-
-	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
-		<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
-
-				<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png">
-				</td>
-				<td colspan="2" >
-					<b>Edici&oacute;n</b>
-<!--					<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
-						<input TYPE="image" name="submit"  VALUE="modificar" src="[% themelang %]/images/editar.png" title="Editar Todos">
-					</a>-->
-				[% PERL %]
-					print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
-													url => 		"agregarDocumento.pl", 
-													params =>	["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
-													title =>	"[% 'Editar Nivel 2' | i18n %]"
-												) ;
-				[% END %]
-				</td>
-				<td><b>Sig. Top.</b> </td>
-					<td><b>C&oacute;digo</b></td>
-					<td><b>Disponibilidad</b></td>
-					<td><b>Vencimiento</b></td>
-				<td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
-				<td>MARC</td>
-				<td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
-			
-		</tr>
-							
-[% FOREACH nivel3 %]
-		<tr align="center">
-			<td width="10%" colspan="2" valign="middle" height="25">
-<!-- Si se puede Editar ??? -->
-			<!--	<a href="id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
-				<input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" title="Editar Ejemplar">
-				</a>-->
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text => "<input type='image' src='[% themelang %]/images/editar.png'",
-                                                url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
-                                                params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
-                                                title =>    "[% 'Editar Ejemplar' | i18n %]"
-                                            ) ;
-            [% END %]
-<!-- 			END  -->
-			</td>
-			<td width="6%" valign="middle">
-<!-- Si se puede borrar ???-->
-				<input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
-				onClick="borrarN3('[% id2 %]','[% id3 %]')" title="Borrar Ejemplar">
-<!-- 			END  -->
-			</td>
-			<td>[% nivel3_obj.getSignatura_topografica %]</td>
-			<td>
-				<!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
-						[% nivel3_obj.getBarcode %]
-				</a>-->
-			[% PERL %]
-                print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
-                                                url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
-                                                params =>   [	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
-																"barcode=[% barcode %]","signatura_topografica=[% signatura_topografica %]"
-														],
-                                                title =>    "[% 'Detalle de disponibilidad' | i18n %]"
-                                            ) ;
-            [% END %]
-			</td>
-			<td>
-				<span class="[% clase %]">
-				[% nivel3_obj.ref_disponibilidad.getNombre %]
-			[% IF usuario %]
-				<b>[% usuario %]</b>
-			[% END %]
-				</span>
-			</td>
-			<td>
-				<span class="[% claseFecha %]">
-					[% IF vencimiento %]
-						[% vencimiento %]
-					[% ELSE %]
-						-------
-					[% END %]
-				</span>
-			</td>
-			<td valign="middle" colspan="2">
-			[% IF paraPrestamo %]
-
-				<input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
-					onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
-				[% IF renew %]
-					<input type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
-							onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
-				[% END %]
-			[% ELSE %]
-				<input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 
-						onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
-			[% END %]
-			</td>
-		
-			<td colspan="2">
-				<input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="Detalle MARC" 
-						onClick="detalleMARC('[% id3 %]')">
-			</td>
-		</tr>
-[% END %]<!-- END FOREACH NIVEL 3 -->
-	
-	</table>
-			<br><hr class="lineagruesa"><br>
-			
-		</div> <!--end <div id="ejemplaresDelGrupo -->
-	</div>
-
-</div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
+        <div id="grupo[% id2 %]">
+	        <div>
+		        <p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
+				        [% id2 %] GRUPO - [% tipo_documento %]
+			        </p>
+	        </div>
+        
+        <div class="detalle">
+        <!-- NIVEL 2 -->
+	        <div id="[% id2 %]" style="position: relative; float:right;"></div>
+	        
+        <!--	<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=MODIFICAR_NIVEL_2">
+	        <input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" title="Editar Nivel 2">	
+	        </a>-->
+	        [% PERL %]
+		        print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+										        url => 		"agregarDocumento.pl", 
+										        params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
+										        title =>	"[% 'Editar Nivel 2' | i18n %]"
+									        ) ;
+	        [% END %]
+        
+	        <input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
+			        onClick="borrarGrupo([% id1 %],[% id2 %])" 
+			        title="Borrar Grupo">
+	        <br>
+	        [% IF amazon_cover %]
+		        <div class='amazon_cover_detail' style="position: relative; float:right;">
+				        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
+		        </div>
+		        <br>
+	        [% END %]
+        
+	        [% FOREACH nivel2_array %]
+			        [% IF liblibrarian %]
+				        [% IF dato %]
+					        [% liblibrarian %]: <b>[% dato %]</b><br>
+				        [% END %]
+			        [% END %]
+        
+	        [% END %]
+            <!-- END FOREACH nivel2_array -->
+        
+	        [% IF cantItems %]
+		        Cantidad de Items: [% cantItems %]<br>
+	        [% END %]
+		        
+	        <hr>
+		        Ejemplares Disponibles:<b> [% disponibles %]</b><br>
+		        Reservas Realizadas: <b> [% cantReservas %]</b><br>
+		        Reservas en Espera: <b> [% cantReservasEnEspera %]</b><br>
+		        Ejemplares Prestados:<b> [% cantPrestados %]</b><br>
+	        <hr>
+        
+	        <div id="ejemplaresDelGrupo[% id2 %]" >
+		        
+        
+	        <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+		        <tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
+        
+				        <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png">
+				        </td>
+				        <td colspan="2" >
+					        <b>Edici&oacute;n</b>
+        <!--					<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
+						        <input TYPE="image" name="submit"  VALUE="modificar" src="[% themelang %]/images/editar.png" title="Editar Todos">
+					        </a>-->
+				        [% PERL %]
+					        print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+													        url => 		"agregarDocumento.pl", 
+													        params =>	["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
+													        title =>	"[% 'Editar Nivel 2' | i18n %]"
+												        ) ;
+				        [% END %]
+				        </td>
+				        <td><b>Sig. Top.</b> </td>
+					        <td><b>C&oacute;digo</b></td>
+					        <td><b>Disponibilidad</b></td>
+					        <td><b>Vencimiento</b></td>
+				        <td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
+				        <td>MARC</td>
+				        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+			        
+		        </tr>
+							        
+        [% FOREACH nivel3 %]
+		        <tr align="center">
+			        <td width="10%" colspan="2" valign="middle" height="25">
+        <!-- Si se puede Editar ??? -->
+			        <!--	<a href="id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&tipoAccion=MODIFICAR_NIVEL_3">
+				        <input TYPE="image" name="submit"  VALUE="modify" src="[% themelang %]/images/editar.png" title="Editar Ejemplar">
+				        </a>-->
+                    [% PERL %]
+                        print C4::AR::Filtros::link_to( text => "<input type='image' src='[% themelang %]/images/editar.png'>",
+                                                        url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
+                                                        params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
+                                                        title =>    "[% 'Editar Ejemplar' | i18n %]"
+                                                    ) ;
+                    [% END %]
+        <!-- 			END  -->
+			        </td>
+			        <td width="6%" valign="middle">
+        <!-- Si se puede borrar ???-->
+				        <input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
+				        onClick="borrarN3('[% id2 %]','[% id3 %]')" title="Borrar Ejemplar">
+        <!-- 			END  -->
+			        </td>
+			        <td>[% nivel3_obj.getSignatura_topografica %]</td>
+			        <td>
+				        <!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
+						        [% nivel3_obj.getBarcode %]
+				        </a>-->
+			        [% PERL %]
+                        print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
+                                                        url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
+                                                        params =>   [	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
+																        "barcode=[% barcode %]","signatura_topografica=[% signatura_topografica %]"
+														        ],
+                                                        title =>    "[% 'Detalle de disponibilidad' | i18n %]"
+                                                    ) ;
+                    [% END %]
+			        </td>
+			        <td>
+				        <span class="[% clase %]">
+				        [% nivel3_obj.ref_disponibilidad.getNombre %]
+			        [% IF usuario %]
+				        <b>[% usuario %]</b>
+			        [% END %]
+				        </span>
+			        </td>
+			        <td>
+				        <span class="[% claseFecha %]">
+					        [% IF vencimiento %]
+						        [% vencimiento %]
+					        [% ELSE %]
+						        -------
+					        [% END %]
+				        </span>
+			        </td>
+			        <td valign="middle" colspan="2">
+			        [% IF paraPrestamo %]
+        
+				        <input type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
+					        onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+				        [% IF renew %]
+					        <input type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
+							        onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id3 %]')">
+				        [% END %]
+			        [% ELSE %]
+				        <input type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 
+						        onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
+			        [% END %]
+			        </td>
+		        
+			        <td colspan="2">
+				        <input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="Detalle MARC" 
+						        onClick="detalleMARC('[% id3 %]')">
+			        </td>
+		        </tr>
+        [% END %]<!-- END FOREACH NIVEL 3 -->
+	        
+	        </table>
+			        <br><hr class="lineagruesa"><br>
+			        
+		        </div> <!--end <div id="ejemplaresDelGrupo -->
+	        </div>
+        
+        </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 
 [% END %]<!-- END FOREACH Nivel 2-->
 
