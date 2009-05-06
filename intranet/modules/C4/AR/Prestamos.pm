@@ -205,7 +205,7 @@ sub _verificarMaxTipoPrestamo{
 	return $error;
 }
 
-sub getCountPrestamosDeGrupo() {
+sub getCountPrestamosDeGrupoPorUsuario {
 #devuelve la cantidad de prestamos de grupo del usuario
 	my ($nro_socio, $id2, $tipo_prestamo)=@_;
 
@@ -216,11 +216,36 @@ sub getCountPrestamosDeGrupo() {
     	push(@filtros, ( id2 	=> { eq => $id2 } ));
     	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
 		push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo } ));
+		push(@filtros, ( fecha_devolucion => { eq => undef } ));
 
-    	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
-											with_objects => [ 'nivel3' ]);
+    	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+																						query => \@filtros,
+																						with_objects => [ 'nivel3' ]
+															);
 
     	return ($prestamos_grupo_count);
+}
+
+
+=item
+Esta funcion devuelve la cantidad de prestamos por grupo
+=cut
+sub getCountPrestamosDelRegistro{
+	my ($id1)= @_;
+
+	use C4::Modelo::CircPrestamo;
+	use C4::Modelo::CircPrestamo::Manager;
+
+	my @filtros;
+	push(@filtros, ( id1 	=> { eq => $id1 } ));
+	push(@filtros, ( fecha_devolucion => { eq => undef } ));
+
+	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+																				query => \@filtros,
+																				with_objects => [ 'nivel3' ]
+															);
+
+	return ($prestamos_grupo_count);
 }
 
 =item
@@ -435,6 +460,31 @@ sub getSocioFromPrestamo {
 	}
 }
 
+
+sub getHistorialPrestamos {
+	my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+	use C4::Modelo::CircPrestamo;
+	use C4::Modelo::CircPrestamo::Manager;
+
+	my @filtros;
+# 	push(@filtros, ( fecha_devolucion => { eq => undef } ));
+ 	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+        
+    my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
+
+	my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+																					query => \@filtros,
+																					limit   => $cantR,
+                                                                            		offset  => $ini,
+# 																					sort_by => ( $socioTemp->sortByString($orden) ),
+																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
+																						'nivel3.nivel1.cat_autor','nivel3.nivel2' ]
+																			);
+
+
+    return ($prestamos_count_array_ref, $prestamos_array_ref);
+}
 
 =item
 t_renovar
@@ -1046,32 +1096,6 @@ Esta funcion devuelve la informacion del prestamo junto con el borrower
 #   return($data);
 # }
 
-
-
-sub getHistorialPrestamos {
-	my ($nro_socio,$ini,$cantR,$orden)=@_;
-
-	use C4::Modelo::CircPrestamo;
-	use C4::Modelo::CircPrestamo::Manager;
-
-	my @filtros;
-# 	push(@filtros, ( fecha_devolucion => { eq => undef } ));
- 	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
-        
-    my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
-
-	my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-																					query => \@filtros,
-																					limit   => $cantR,
-                                                                            		offset  => $ini,
-# 																					sort_by => ( $socioTemp->sortByString($orden) ),
-																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
-																						'nivel3.nivel1.cat_autor','nivel3.nivel2' ]
-																			);
-
-
-    return ($prestamos_count_array_ref, $prestamos_array_ref);
-}
 
 
 # =item

@@ -491,16 +491,19 @@ sub obtenerDisponibilidadTotal{
 	
 	my $i=0;
 	while(my $data=$sth->fetchrow_hashref){
-	#	if($data->{'notforloan'} eq 'DO'){
+	#DOMICILIO
 		if($data->{'id_disponibilidad'} == 0){
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Domicilio:";
 			$disponibilidad[$i]->{'prestados'}="Prestados: ";
-			$disponibilidad[$i]->{'prestados'}.=0;#VER MAS ADELANTE!!!!!!!!!
+C4::AR::Debug::debug("obrengo la cant de prestamos segun id1: ".$id1);
+			$disponibilidad[$i]->{'prestados'}.= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);#0;#VER MAS ADELANTE!!!!!!!!!
 			$disponibilidad[$i]->{'reservados'}="Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
 		}
 		else{
+	#PARA SALA
 			$disponibilidad[$i]->{'tipoPrestamo'}="Para Sala:";
 		}
+
 		$disponibilidad[$i]->{'cantTotal'}=$data->{'cant'};
 		$i++;
 	}

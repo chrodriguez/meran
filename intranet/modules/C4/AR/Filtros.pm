@@ -39,7 +39,7 @@ sub link_to {
 	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar
 	my $class= $params_hash_ref{'class'}; #obtengo la clase
 	my $cant= scalar(@$params);
-C4::AR::Debug::debug("link_to => cant params: ".$cant);
+# C4::AR::Debug::debug("link_to => cant params: ".$cant);
 
 	if($cant > 0){$url .= "?";
 	#lleva parametros
@@ -72,7 +72,7 @@ C4::AR::Debug::debug("link_to => cant params: ".$cant);
 	$link .= ">";
 	$link .= $text."</a>"; 
 
- 	C4::AR::Debug::debug("url: ".$url);
+#  	C4::AR::Debug::debug("url: ".$url);
 # 	C4::AR::Debug::debug("link: ".$link);
 
 	return $link;

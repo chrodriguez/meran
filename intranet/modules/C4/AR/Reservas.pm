@@ -661,7 +661,7 @@ print A "Entro al if de maximo de reservas desde OPAC";
 
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupo($nro_socio, $id2, $tipo_prestamo)) ){
+	if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
 print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
