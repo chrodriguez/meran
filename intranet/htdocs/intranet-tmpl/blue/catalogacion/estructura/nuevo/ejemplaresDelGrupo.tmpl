@@ -40,15 +40,15 @@
 				onClick="if (window.confirm('&#191;Est&aacute; seguro que desea borrarlo?')){borrarEjemplar('[% id1 %]','[% id2 %]','[% id3 %]')} else {return false;}" title="Borrar Ejemplar">
 <!-- 			END  -->
 			</td>
-			<td>[% nivel3_array.getSignatura_topografica %]</td>
+			<td>[% nivel3_obj.getSignatura_topografica %]</td>
 			<td>
 				<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle de disponibilidad'>
-						[% nivel3_array.getBarcode %]
+						[% nivel3_obj.getBarcode %]
 				</a>
 			</td>
 			<td>
 				<span class="[% clase %]">
-				[% nivel3_array.ref_disponibilidad.getNombre %]
+				[% nivel3_obj.ref_disponibilidad.getNombre %]
 			[% IF usuario %]
 				<b>[% usuario %]</b>
 			[% END %]

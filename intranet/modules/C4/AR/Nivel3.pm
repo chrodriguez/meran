@@ -231,25 +231,22 @@ $id2, id de nivel2
 sub detalleNivel3{
 	my ($id2)=@_;
 
-	my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
-	my @nivel3;
-	my %hash_nivel2;
-			
-	for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
-		my %hash_nivel3;
-			$nivel3_array_ref->[$i]->load();
-			$hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
-			$hash_nivel3{'nivel3_array'}= $nivel3_array_ref->[$i];
-			$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
-            $hash_nivel3{'id2'}= $id2;
-			push(@nivel3, \%hash_nivel3);
-	}
+	my %hash_nivel2;	
+	#recupero el nivel1 segun el id1 pasado por parametro
+	my $nivel2_object= C4::Modelo::CatNivel2->new(id2 => $id2);
+	$nivel2_object->load;
 
-	$hash_nivel2{'nivel3'}= \@nivel3;
-	$hash_nivel2{'disponibles'}= '0';
-	$hash_nivel2{'cantReservas'}= '0';
-	$hash_nivel2{'cantReservasEnEspera'}= '0';
-	$hash_nivel2{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
+	$hash_nivel2{'id2'}= $id2;
+	$hash_nivel2{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_object->getTipo_documento);
+	$hash_nivel2{'nivel2_array'}= $nivel2_object->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+	my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($id2);
+	$hash_nivel2{'nivel3'}= \@result;
+	$hash_nivel2{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
+	$hash_nivel2{'cantReservas'}= $totales_nivel3->{'cantReservas'};
+	$hash_nivel2{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
+	$hash_nivel2{'disponibles'}= $totales_nivel3->{'disponibles'};
+	$hash_nivel2{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
+	$hash_nivel2{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
 
 	return (\%hash_nivel2);
 }
@@ -268,19 +265,20 @@ sub detalleCompletoINTRA{
 	my @nivel2;
 	
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
-		my $hash_nivel2;
-		$nivel2_array_ref->[$i]->load();
-		$hash_nivel2->{'id2'}= $nivel2_array_ref->[$i]->getId2;
-		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipo_documento);
-		$hash_nivel2->{'nivel2_array'}= ($nivel2_array_ref->[$i])->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-		my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2);
-		$hash_nivel2->{'nivel3'}= \@result;
-		$hash_nivel2->{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
-		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
-		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
-		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
-		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
-		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
+# 		my $hash_nivel2;
+# 		$nivel2_array_ref->[$i]->load();
+# 		$hash_nivel2->{'id2'}= $nivel2_array_ref->[$i]->getId2;
+# 		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipo_documento);
+# 		$hash_nivel2->{'nivel2_array'}= ($nivel2_array_ref->[$i])->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+# 		my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2);
+# 		$hash_nivel2->{'nivel3'}= \@result;
+# 		$hash_nivel2->{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
+# 		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
+# 		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
+# 		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
+# 		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
+# 		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
+		my ($hash_nivel2)= detalleNivel3($nivel2_array_ref->[$i]->getId2);
 	
 		push(@nivel2, $hash_nivel2);
 	}

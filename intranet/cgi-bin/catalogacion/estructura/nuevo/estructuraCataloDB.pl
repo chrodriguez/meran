@@ -419,7 +419,7 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 	my $id2= $obj->{'id2'};
 	my($nivel2_hashref)=&C4::AR::Nivel3::detalleNivel3($id2);
 	
-	$t_params->{'nivel3'}= $nivel2_hashref->{'nivel3'},
+	$t_params->{'nivel3'}= $nivel2_hashref,
     
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
