@@ -62,7 +62,7 @@ function buscarUsuario(id2, id3){
 	objAH.sendToServer();
 
 	items_array[0]=id3;
- 	grupo= id2;
+ 	ID_N2= id2;
 }
 
 function updateBuscarUsuario(responseText){
@@ -156,7 +156,7 @@ function renovar(accion,userId,userNom,id2,id3){
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
-	grupo= id2;
+	ID_N2= id2;
 }
 
 function devolver(accion,userId,userNom,id2,id3){
@@ -177,7 +177,7 @@ function devolver(accion,userId,userNom,id2,id3){
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
-	grupo= id2;
+	ID_N2= id2;
 }
 
 //esta funcion esta REDEFINIDA, de la funcion que se encuentra en circulacion.js, invocada por la 
@@ -228,7 +228,7 @@ function updateInfoPrestarReserva(responseText){
 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);
 	}
-	ejemplaresDelGrupo(grupo);
+	ejemplaresDelGrupo(ID_N2);
 }
 
 /************************************************FIN CIRCULACUION************************************************/

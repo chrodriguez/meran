@@ -240,7 +240,7 @@ sub detalleNivel3{
 			$nivel3_array_ref->[$i]->load();
 			$hash_nivel3{'nivel3_array'}= $nivel3_array_ref->[$i];
 			$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
-
+            $hash_nivel3{'id2'}= $id2;
 			push(@nivel3, \%hash_nivel3);
 	}
 
@@ -300,8 +300,9 @@ sub detalleDisponibilidadNivel3{
     my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
     my @result;
     my %hash_nivel2;
-    my $i= 0;
-    my $cantDisponibles= 0;
+
+    my $i=0;
+    my $cantDisponibles=0;
     my %infoNivel3;
     $infoNivel3{'cantParaSala'}= 0;
     $infoNivel3{'cantParaPrestamo'}= 0;
@@ -311,9 +312,10 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
+#         $nivel3_array_ref->[$i]->load();
         $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i];
+ 
         $hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
-		#el ejemplar se encuentra prestado
         $hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
 
         my $UI_poseedora= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_poseedora'});
@@ -358,8 +360,6 @@ sub detalleDisponibilidadNivel3{
     }
 
     $infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
-
-
     return(\%infoNivel3,@result);
 }
 
@@ -430,7 +430,6 @@ sub disponibilidadItem{
 		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
 		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
 		$datosItem->{'disponibilidad'}="Prestado a ";
-# FIXME falta el token
 		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
      	#DEPRECATED REHACER
 # 		my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($data->{'id3'},$data->{'issuecode'});
@@ -452,8 +451,7 @@ sub disponibilidadItem{
 		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
 		$datosItem->{'vencimiento'}=$reminderdate;
 		$datosItem->{'disponibilidad'}="Reservado a ";
-# FIXME falta el token
-      	$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
+      		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
 	}
 }
 
