@@ -167,7 +167,7 @@ function devolver(accion,userId,userNom,id2,id3){
 	usuario.ID=userId;
 	usuario.text=userNom;
 
-	objAH=new AjaxHelper(updateInfoDevRen); //llama a generar div de ciculacion.js
+	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLUCION';

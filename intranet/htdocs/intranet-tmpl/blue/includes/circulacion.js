@@ -298,6 +298,7 @@ function updateInfoPrestarReserva(responseText){
 	}
 
 	detalleReservas(usuario.ID,updateInfoReservas);
+    ejemplaresDelGrupo(grupo);
 }
 
 /*
@@ -409,6 +410,7 @@ function updateInfoDevRen(responseText){
 	}
 
 	detallePrestamos(usuario.ID,updateInfoPrestamos);
+    ejemplaresDelGrupo(grupo);
 }
 
 /*

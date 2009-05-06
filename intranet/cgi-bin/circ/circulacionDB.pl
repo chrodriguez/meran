@@ -47,7 +47,6 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
  		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
   		$infoDevRen[$i]->{'unititle'}="";
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
-        $infoDevRen[$i]->{'messages'} = "SAFNKDSNF";
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
 	print $input->header;

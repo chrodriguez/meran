@@ -345,8 +345,9 @@ sub detalleDisponibilidadNivel3{
         }
 
         my $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
-
+        $hash_nivel3{'vencimiento'} = undef;
         if($socio){ 
+            C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
             $hash_nivel3{'id_prestamo'}= C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'})->getId_prestamo;
             $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
             $hash_nivel3{'usuarioNombre'}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
