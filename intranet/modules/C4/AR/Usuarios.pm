@@ -1108,44 +1108,6 @@ sub getPersonaLike {
     return ($personas_array_ref_count, $personas_array_ref);
 }
 
-=item
-sub getSocioLike {
-    
-    use C4::Modelo::UsrSocio;
-    use C4::Modelo::UsrSocio::Manager;
-
-    my ($socio,$orden,$ini,$cantR,$habilitados) = @_;
-    
-    my @filtros;
-    my $socioTemp = C4::Modelo::UsrSocio->new();
-    
-    if($socio ne 'TODOS'){
-        push (	@filtros, ( or   => [ apellido => { like => $socio.'%'}, 
-				nro_documento => { like => $socio.'%' }, 
-				legajo => { like => $socio.'%' }  ]) );
-    }
-
-	if (defined($habilitados)){
-        push(@filtros, ( activo=> { eq => $habilitados}) );
-    }
-
-
-    my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
-                                                                            sort_by => ( $socioTemp->sortByString($orden) ),
-                                                                            limit   => $cantR,
-                                                                            offset  => $ini,
-                                                                            require_objects => [ 'persona' ]
-     ); 
-
-    #Obtengo la cant total de socios para el paginador
-    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros,
-                                                                               require_objects => [ 'persona' ]
-                                                                     );
-
-    return (scalar(@$socios_array_ref_count), $socios_array_ref);
-}
-=cut
-
 
 =item
 Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
@@ -1192,8 +1154,8 @@ sub getSocioLike {
                                                                             require_objects => [ 'persona' ]
      ); 
 
-	C4::AR::Debug::debug("getSocioLike=> orden: ".$orden);
-	C4::AR::Debug::debug("getSocioLike=> sortByString: ".$ordenAux);
+# 	C4::AR::Debug::debug("getSocioLike=> orden: ".$orden);
+# 	C4::AR::Debug::debug("getSocioLike=> sortByString: ".$ordenAux);
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros,

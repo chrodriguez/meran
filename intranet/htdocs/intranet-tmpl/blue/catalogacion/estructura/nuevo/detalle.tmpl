@@ -97,12 +97,14 @@ function updateInfoMARC(responseText){
 	$('#detalleComun').slideUp("slow");
 	$('#detalleMARC').html(responseText);
 	$('#detalleMARC').show();
+	scrollTo('detalleMARC');
 }
 
 function verDivs(){
 	$('#detalleComun').slideDown("slow");
 	$('#detalleComun').show();
 	$('#detalleMARC').slideUp("slow");
+// 	scrollTo('ejemplaresDelGrupo'+ID_N2);
 }
 
 function filtroPorAutor(id){
