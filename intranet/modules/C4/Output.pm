@@ -123,11 +123,13 @@ sub gettemplate {
 					INCLUDE_PATH => [
 								"$htdocs/$theme/$tmplbase",
 								"$htdocs/$theme/includes/",
+                                "$htdocs/$theme/catalogacion/",
                                 "$htdocs/$theme/includes/popups/",
 								"$htdocs/$theme/includes/menu",
 								"/usr/local/koha/includes/",
 							],
  					ABSOLUTE => 1,
+                    RELATIVE => 1,
 					EVAL_PERL => 1,
 					LOAD_FILTERS => [ $filter ],
 # 					RELATIVE => 1,
