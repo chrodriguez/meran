@@ -259,7 +259,9 @@ Genera el detalle
 sub detalleCompletoINTRA{
 	my ($id1, $t_params)=@_;
 	
+	#recupero el nivel1 segun el id1 pasado por parametro
 	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1($id1);
+	#recupero todos los nivel2 segun el id1 pasado por parametro
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
@@ -293,7 +295,9 @@ Genera el detalle
 sub detalleCompletoOPAC{
 	my ($id1, $t_params)=@_;
 	
+	#recupero el nivel1 segun el id1 pasado por parametro
 	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1($id1);
+	#recupero todos los nivel2 segun el id1 pasado por parametro
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
@@ -473,6 +477,8 @@ Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
 sub detalleDisponibilidadNivel3{
 	my ($id2)=@_;
+	
+	#recupero todos los nivel3 segun el id2 pasado por parametro
 	my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
 	my @result;
 	my %hash_nivel2;
@@ -492,6 +498,7 @@ sub detalleDisponibilidadNivel3{
 		$nivel3_array_ref->[$i]->load();
 		$hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i];
 		$hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
+		$hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
 
 		my $UI_poseedora= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_poseedora'});
 		$hash_nivel3{'UI_poseedora'}= $UI_poseedora;
@@ -511,7 +518,6 @@ sub detalleDisponibilidadNivel3{
 		
 		if( ($nivel3_array_ref->[$i]->estadoDisponible) && (!$nivel3_array_ref->[$i]->esParaSala) ){
 		#esta DISPONIBLE y es PARA PRESTAMO
-			$hash_nivel3{'paraPrestamo'}= 1;
 			$hash_nivel3{'disponibilidad'}= "PRESTAMO";
 			$hash_nivel3{'clase'}= "prestamo";
 			$infoNivel3{'cantParaPrestamo'}++;
@@ -531,8 +537,6 @@ sub detalleDisponibilidadNivel3{
 	
  		$result[$i]= \%hash_nivel3;
 		$i++;
-
-# 		push(@result, \%infoNivel3);
 	}
 
  	$infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};

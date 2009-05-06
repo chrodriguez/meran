@@ -346,6 +346,13 @@ sub getEstado{
 	return (C4::AR::Referencias::getNombreEstado($self->getId_estado));
 }
 
+sub estaPrestado {
+  	my ($self) = shift;
+
+    return (C4::AR::Prestamos::estaPrestado($self->getId3));
+}
+
+
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 =item

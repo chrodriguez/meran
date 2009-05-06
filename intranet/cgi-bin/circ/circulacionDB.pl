@@ -113,7 +113,7 @@ C4::AR::Debug::debug("SE PRESTAN ".$loop." EJEMPLARES");
 #Presta 1 o mas al mismo tiempo
 		if($id3 ne ""){
 
-			C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON EL TIPO :".$array_ids3->[$i]->{'descripcionTipoPrestamo'}." Y BARCODE ".$array_ids3->[$i]->{'barcode'});
+C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON EL TIPO :".$array_ids3->[$i]->{'descripcionTipoPrestamo'}." Y BARCODE ".$array_ids3->[$i]->{'barcode'});
 
 			my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
 			my %params;

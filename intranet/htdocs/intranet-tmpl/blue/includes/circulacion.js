@@ -422,7 +422,7 @@ function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket)
-		window.open ("/cgi-bin/koha/circ/ticket.pl?token"+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open ("/cgi-bin/koha/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
 
