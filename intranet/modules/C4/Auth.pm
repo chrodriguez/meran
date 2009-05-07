@@ -583,6 +583,13 @@ C4::AR::Debug::debug("checkauth=> t_operacionesDeINTRA\n");
     
             }# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
 
+             if ($type eq 'opac') {
+                $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+                redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+             }else{
+                $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
+                redirectTo('/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
+            }
         } else {
         #usuario o password invalida
             if ($userid) {

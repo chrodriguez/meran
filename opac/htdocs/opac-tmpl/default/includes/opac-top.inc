@@ -149,11 +149,20 @@ src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 csp
 </a>
 <!--*******************************************************************************************************-->
 
-<a href="/cgi-bin/koha/opac-main.pl" onMouseOut="swap('home','[% themelang %]/images/menu-home.png ')" 
+<!--<a href="/cgi-bin/koha/opac-main.pl" onMouseOut="swap('home','[% themelang %]/images/menu-home.png ')" 
 	onMouseOver="swap('home','[% themelang %]/images/menu-homebis.png ')" >
-	<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
-	title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >
-</a></td>
+	
+</a>-->
+
+    [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
+                                                                 title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
+                                                    url =>      "/cgi-bin/koha/opac-main.pl", 
+
+                                                ) ;
+    [% END %]
+
+</td>
 	 <td>&nbsp; </td>
   </tr>
 </table>

@@ -499,13 +499,52 @@ sub getHistorialPrestamos {
                                                                             		offset  => $ini,
 # 																					sort_by => ( $socioTemp->sortByString($orden) ),
 																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
-																						'nivel3.nivel1.cat_autor','nivel3.nivel2' ]
+																						'nivel3.nivel2.nivel1.cat_autor','nivel3.nivel2' ]
 																			);
 
 
     return ($prestamos_count_array_ref, $prestamos_array_ref);
 }
 
+
+
+sub getHistorialPrestamosParaTemplate {
+
+    my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+    my ($cant,$presmamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
+    
+    my @loop_reading;
+    foreach my $prestamo (@$presmamos_array_ref){
+        my %line;
+        $line{'titulo'}=$prestamo->nivel3->nivel2->nivel1->getTitulo;
+    #   $line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
+        $line{'autor'}=$prestamo->nivel3->nivel2->nivel1->cat_autor->getApellido.", ".$prestamo->nivel3->nivel2->nivel1->cat_autor->getNombre;
+        $line{'idautor'}=$prestamo->nivel3->nivel2->nivel1->cat_autor->getId;
+        $line{'id1'}=$prestamo->nivel3->getId1;
+        $line{'id2'}=$prestamo->nivel3->getId2;
+        $line{'id3'}=$prestamo->nivel3->getId3;
+        $line{'signatura_topografica'}=$prestamo->nivel3->getSignatura_topografica;
+        $line{'barcode'}=$prestamo->nivel3->getBarcode;
+        $line{'date_due'}=$prestamo->getFecha_prestamo_formateada;
+        $line{'date_fin'} = $prestamo->getFecha_vencimiento_formateada; 
+        $line{'estaVencido'}= $prestamo->estaVencido;
+        $line{'date_renew'}=$prestamo->getFecha_devolucion_formateada;
+        if ($prestamo->getRenovaciones > 0){
+            $line{'date_renew'}=$prestamo->getFecha_ultima_renovacion_formateada;
+        }
+        $line{'returndate'}=$prestamo->getFecha_devolucion_formateada;
+        $line{'edicion'}= $prestamo->nivel3->nivel2->getEdicion;
+        $line{'volume'}= $prestamo->nivel3->nivel2->getVolumenDesc;
+    #   $line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
+    #   ($line{grupos}) = C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
+    
+        push(@loop_reading,\%line);
+    }
+
+    return ($cant,$presmamos_array_ref,\@loop_reading);
+
+}
 =item
 t_renovar
 Transaccion que renueva un prestamo.

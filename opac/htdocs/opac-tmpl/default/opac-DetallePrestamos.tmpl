@@ -47,13 +47,14 @@
 [% FOREACH prestamo IN PRESTAMOS %]
   <tr class="tope" bordercolor="#f2f2f2">
 	<td class="impar">
-		<a class="click" onClick="detalle([% prestamo.nivel3.nivel1.getId1 %])" title="[% 'Mostrar detalle' | i18n %]">
-			[% prestamo.nivel3.nivel1.getTitulo %]
 
-<!--			[% IF unititle %]
-				:&nbsp;[% unititle %]
-			[% END %]-->
-		</a>
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo | i18n %]",
+                                                url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
+                                            ) ;
+        [% END %]
+        
 	</td>
 	<td class="impar">
   	[% IF prestamo.nivel3.nivel1.getAutor %]

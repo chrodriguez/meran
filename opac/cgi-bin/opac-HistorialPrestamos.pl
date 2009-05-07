@@ -48,10 +48,10 @@ my $orden=$obj->{'orden'}||'date_due';
 my $ini= $obj->{'ini'}||'';
 
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
-my ($cantidad,$issues)=C4::AR::Prestamos::historialPrestamos(C4::Auth::getSessionBorrowerNumber($session),$ini,$cantR,$orden);
+my ($cantidad,$issues,$loop_reading)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate(C4::Auth::getSessionBorrowerNumber($session),$ini,$cantR,$orden);
 
 $t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
-$t_params->{'loop_reading'}= $issues;
+$t_params->{'loop_reading'}= $loop_reading;
 $t_params->{'cantidad'}= $cantidad;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

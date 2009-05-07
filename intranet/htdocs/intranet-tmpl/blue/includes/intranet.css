@@ -1172,3 +1172,23 @@ ul li {
     font-weight:bold;
     font-size: 125%;
 }
+
+.fecha_critica{
+
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
+
+/*.fecha_special{
+
+    color: orange;
+    font-weight: bold;
+    font-style: underline;
+}*/

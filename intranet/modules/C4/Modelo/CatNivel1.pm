@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
         cat_autor => {
             class      => 'C4::Modelo::CatAutor',
             column_map => { autor => 'id' },
-            type       => 'one to many',
+            type       => 'one to one',
         },
     ],
 

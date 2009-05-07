@@ -63,20 +63,24 @@
 <tr>
        <td  valign="top">
 <form action="/cgi-bin/koha/opac-searchresults.pl" name="catsearch" id="catsearch">
-<table cellpadding="0" cellspacing="0" >
-<tr><td><img src="[% themelang %]/images/front-arrow.gif" alt="" border="0" align="absbottom"></td>
-</td><td>&nbsp;B&uacute;squeda Simple </td></tr>
-<tr><td></td><td><input type="hidden" name="type" value="opac"></td></tr>
-<tr><td></td><td class="buscar"><input type="text" name="keyword" size="15" align="abstop">
-	<a onMouseOut="swap('go','[% themelang %]/images/go.png')" onMouseOver="swap('go','[% themelang %] -->/images/gobis.png')" >
-<input type="image" name="go" id="go" src="[% themelang %]/images/go.png" border="0"  value="Buscar" align="absbottom"> </a>
-</td></tr>
-<tr><td><br></td></tr>
-<tr><td><img src="[% themelang %]/images/front-arrow-small.gif" alt="-" hspace="0" vspace="0" border="0" align="middle"></td>
-<td><a href="/cgi-bin/koha/opac-search.pl">&nbsp;B&uacute;squeda Avanzada</a></td></tr>
-<tr><td><br></td></tr>
-</table>
-		</form>
+    <table cellpadding="0" cellspacing="0" >
+        <tr><td></td><td><input type="hidden" name="type" value="opac"></td></tr>
+        <tr><td></td></tr>
+        <tr><td><br></td></tr>
+        <tr><td><img src="[% themelang %]/images/front-arrow-small.gif" alt="-" hspace="0" vspace="0" border="0" align="middle"></td>
+        <td>
+<!--             <a href="/cgi-bin/koha/opac-search.pl">&nbsp;B&uacute;squeda Avanzada</a> -->
+
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% '&nbsp;B&uacute;squeda Avanzada' %]",
+                                                    url =>      "/cgi-bin/koha/opac-search.pl", 
+                                                ) ;
+                [% END %]
+
+        </td></tr>
+        <tr><td><br></td></tr>
+    </table>
+</form>
 	</td></tr></table>
 
 	</td>
@@ -90,7 +94,16 @@
 <table cellpadding="0" cellspacing="0">
 <tr><td valign="top">
         <img src="[% themelang %]/images/front-arrow.gif" alt="" border="0">
-Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [<a href=/cgi-bin/koha/opac-user.pl>Mi Cuenta</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Salir</a>]
+Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% 'Mi Cuenta' | i18n %]",
+                                                url =>      "/cgi-bin/koha/opac-user.pl", 
+                                            ) ;
+        [% END %]
+        
+                                                                                  ]
+
+                            [<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Salir</a>]
 </td></tr></table>
 [% ELSE %]
 <form method="post" name="datos">

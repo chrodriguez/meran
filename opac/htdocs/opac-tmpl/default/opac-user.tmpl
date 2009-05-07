@@ -136,7 +136,15 @@
 	[% "Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca." | i18n %]<br>
 	[% ELSE %]
 	[% "Alguno de nuestros registros es incorrecto? Para solucionarlo:" | i18n %]<br> 
-	<a href="/cgi-bin/koha/opac-userupdate.pl">[% "Actualizar Registro" | i18n %]</a>
+<!-- 	<a href="/cgi-bin/koha/opac-userupdate.pl">[% "Actualizar Registro" | i18n %]</a> -->
+
+
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% 'Actualizar Registro' | i18n %]",
+                                                url =>      "/cgi-bin/koha/opac-userupdate.pl", 
+                                            ) ;
+        [% END %]
+        
 	</br>
 	[% END %]
 

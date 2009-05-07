@@ -492,7 +492,7 @@ sub nivel2CompletoToMARC{
 
 
 =item
-Esta funcion retorna la edicion segun un id2
+Esta funcion retorna la edicion
 =cut
 sub getEdicion{
     my ($self) = shift;

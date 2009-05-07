@@ -76,7 +76,7 @@
 		[% END %]
 	</td>
 	<td>
-        [% FOREACH grupos %]
+<!--      [% FOREACH grupos %] -->
 
 		[% IF edicion %]
 			[% edicion %]
@@ -90,7 +90,8 @@
 			        t [% volume %]
 		[% END %]
 
-	[% END %] <!-- ESTE FOREACH -->
+<!-- 	[% END %]  -->
+    <!-- ESTE FOREACH -->
         </td>
 	<td align="center" >
 <!--		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' 
@@ -106,16 +107,28 @@
 		[% END %]	
 	</td>
 	<td>
-		[% date_due %]&nbsp;
+		&nbsp;[% date_due %]&nbsp;
 	</td>
 	<td>
-		[% date_renew %]&nbsp;
+        [% IF date_renew %]
+		    &nbsp;[% date_renew %]&nbsp;
+        [% ELSE %]
+            --------
+        [% END %]
 	</td>
 	<td>
-		[% date_fin %]&nbsp;
+        [% IF estaVencido %]
+		    &nbsp;<span class="fecha_critica">[% date_fin %]</span>&nbsp;
+        [% ELSE %]
+             &nbsp;<span class="fecha_cumple">[% date_fin %]</span>&nbsp;
+        [% END %]
 	</td>
 	<td>
-		[% returndate %]&nbsp;
+        [% IF returndate %]
+		    &nbsp;[% returndate %]&nbsp;
+        [% ELSE %]
+            --------
+        [% END %]
 	</td>
 
 	<td height=25>&nbsp;</td>

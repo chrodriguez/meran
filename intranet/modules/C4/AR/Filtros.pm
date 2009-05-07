@@ -57,7 +57,12 @@ sub link_to {
 	my $session = CGI::Session->load();
 	if(defined $session){
 	#si hay sesion se usa el token, sino no tiene sentido
-		$url .= '&token='.$session->param('token'); #se agrega el token
+         #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
+        if ($cant > 0){
+		    $url .= '&token='.$session->param('token'); #se agrega el token
+        }else{
+            $url .= '?token='.$session->param('token'); 
+        }
 	}
 
 	$link= "<a href=".$url;

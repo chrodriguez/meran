@@ -36,10 +36,15 @@
 	<tr border="1" bordercolor="#f2f2f2">
  		<td> 
 	[% IF id1 %]
-		<a class="click" onClick="detalle([% id1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+<!--		<a class="click" onClick="detalle([% id1 %])" title="[% 'Mostrar Detalle' | i18n %]">
 			[% HTML.escape(titulo) %]
-		[% IF unititle %]:&nbsp;[% HTML.escape(unititle) %][% END %]
-		</a> 
+       </a> -->
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% titulo | i18n %]",
+                                                url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                params => [ "id1=[% id1 %]", ],
+                                            ) ;
+        [% END %]
 	[% ELSE %]
 		&nbsp;
 	[% END %]
