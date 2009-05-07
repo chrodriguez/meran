@@ -41,7 +41,7 @@ function cambiarIdioma() {
 <noscript>
     <div class='tableMsgUser'>
         <font class='fontMsgUser'>
-                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+                <b>[% "Su navegador no soporta o no tiene habilidato Javascript" | i18n %]</b>
         </font>
     </div>
 </noscript>
@@ -92,7 +92,7 @@ function cambiarIdioma() {
 
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="100%"  border="0">
 <tr align="right">
-	<td> [% INCLUDE 'opac-search.inc' %]</td>
+	<td> [% INCLUDE "opac-search.inc" %]</td>
         <td >&nbsp;</td>
 </tr>
 </table>
@@ -132,12 +132,13 @@ src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 csp
 	name="menu-search" align="absbottom">
 </a>-->
 
-[% PERL %]
-				print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
-															title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
-												url => 		"/cgi-bin/koha/opac-search.pl", 
-											) ;
-[% END %]
+    [% PERL %]
+				    print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
+															    title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
+												    url => 		"/cgi-bin/koha/opac-search.pl", 
+
+											    ) ;
+    [% END %]
 [% END %]
 
 <!-- ********************se deshabilita hasta q se complete para la V3************************************ -->

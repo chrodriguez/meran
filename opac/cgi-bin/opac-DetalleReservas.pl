@@ -24,32 +24,32 @@ my ($template, $session, $t_params)= get_template_and_user({
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $dateformat = C4::Date::get_date_format();
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('nro_socio'));
 
-my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('userid'));
-
-my @reservas_asignadas;
-my $racount = 0;
-my @reservas_espera;
-my $recount = 0;
-
-
-foreach my $reserva (@$reservas) {
-	if ($reserva->getId3) {
-		#Reservas para retirar
-		push @reservas_asignadas, $reserva;
-		$racount++;
-   	}else{
-		#Reservas en espera
-		push @reservas_espera, $reserva;
-		$recount++;
-   	}
+if ($reservas){
+    my @reservas_asignadas;
+    my $racount = 0;
+    my @reservas_espera;
+    my $recount = 0;
+    
+    
+    foreach my $reserva (@$reservas) {
+	    if ($reserva->getId3) {
+		    #Reservas para retirar
+		    push @reservas_asignadas, $reserva;
+		    $racount++;
+        }else{
+		    #Reservas en espera
+		    push @reservas_espera, $reserva;
+		    $recount++;
+        }
+    }
+    
+    $t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+    $t_params->{'reservas_asignadas_count'}= $racount;
+    $t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+    $t_params->{'reservas_espera_count'}=$recount;
 }
-
-$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
-$t_params->{'reservas_asignadas_count'}= $racount;
-$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
-$t_params->{'reservas_espera_count'}=$recount;
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");

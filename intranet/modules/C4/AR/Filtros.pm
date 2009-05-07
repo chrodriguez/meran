@@ -33,7 +33,7 @@ sub link_to {
 	my (%params_hash_ref) = @_;
 
 	my $link= '';
-	my $params= $params_hash_ref{'params'}; #obtengo los paraametros
+	my $params= $params_hash_ref{'params'} || []; #obtengo los paraametros
 	my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
 	my $url= $params_hash_ref{'url'}; #obtengo la url
 	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar

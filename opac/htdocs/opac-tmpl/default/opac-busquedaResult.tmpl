@@ -44,9 +44,16 @@
 		<td class="titulo_result">	
 		  [% IF titulo %]
 
-			<a href="/cgi-bin/koha/opac-detail.pl?id1=[% id1 %]"  title="[% 'Mostrar Detalle' | i18n %]" class="click" >
+<!--			<a href="/cgi-bin/koha/opac-detail.pl?id1=[% id1 %]"  title="[% 'Mostrar Detalle' | i18n %]" class="click" >
 				[% titulo %]
-			</a>
+			</a>-->
+             [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% titulo %]",
+                                                url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                params =>   ["id1=[% id1 %]"],
+                                                title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                            ) ;
+            [% END %]
 
 		  [% ELSE %]&nbsp;[% END %]
 		</td>

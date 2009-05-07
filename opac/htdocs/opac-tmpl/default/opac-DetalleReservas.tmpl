@@ -37,59 +37,63 @@
 	<th>[% "Acci&oacute;n" | i18n %]</th>
   </tr>
 <!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
-[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
-  <tr bordercolor="#f2f2f2">
-	<td class="impar">
-		<b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-		[% reserva.nivel2.nivel1.getTitulo %]
-	<!--	[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
-		</a></b>
-	</td>
-	<td class="impar">
-  	[% IF reserva.nivel2.nivel1.getAutor %]
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
-		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
-		</a>
-  	[% ELSE %]
-		&nbsp;
- 	[% END %]
-	</td> 
-	<td align=center class="impar">  
-	[% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-<!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
-	[% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
-		[% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
-	[% END %]
-	</td>
-	<td class="impar" align="center">
-	[% IF reserva.getFecha_reserva_formateada %] 
-		[% reserva.getFecha_reserva_formateada %]
-	[% ELSE %]
-		- 
-	[% END %]
-	</td>
-	<td class="impar" align="center">
-	[% IF reserva.getFecha_recordatorio_formateada %]
-		<font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
-	[% ELSE %]
-		- 
-	[% END %]
-	</td>
-
-	<td class="impar">
-		<b>[% reserva.ui.getNombre %]</b>
-	</td>
-	<td class="impar" align="center"> 
-	[% IF CirculationEnabled %]
-		<a class="click"
-		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
-	[% ELSE %]
-		[% "No disponible" | i18n %]
-	[% END %]
-	</td>
-
-  </tr>
+[% IF reservas_asignadas_count > 0 %]
+    [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
+        <tr bordercolor="#f2f2f2">
+	        <td class="impar">
+		        <b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
+		        [% reserva.nivel2.nivel1.getTitulo %]
+	        <!--	[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
+		        </a></b>
+	        </td>
+	        <td class="impar">
+            [% IF reserva.nivel2.nivel1.getAutor %]
+		        <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+		        [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
+		        </a>
+            [% ELSE %]
+		        &nbsp;
+            [% END %]
+	        </td> 
+	        <td align=center class="impar">  
+	        [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+        <!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
+	        [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
+		        [% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
+	        [% END %]
+	        </td>
+	        <td class="impar" align="center">
+	        [% IF reserva.getFecha_reserva_formateada %] 
+		        [% reserva.getFecha_reserva_formateada %]
+	        [% ELSE %]
+		        - 
+	        [% END %]
+	        </td>
+	        <td class="impar" align="center">
+	        [% IF reserva.getFecha_recordatorio_formateada %]
+		        <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+	        [% ELSE %]
+		        - 
+	        [% END %]
+	        </td>
+        
+	        <td class="impar">
+		        <b>[% reserva.ui.getNombre %]</b>
+	        </td>
+	        <td class="impar" align="center"> 
+	        [% IF CirculationEnabled %]
+		        <a class="click"
+		        onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
+	        [% ELSE %]
+		        [% "No disponible" | i18n %]
+	        [% END %]
+	        </td>
+       </tr>
+    [% END %]
+[% ELSE %]
+    <h2> UD. NO TIENE NIGUNA RESERVA ASIGNADA </h2>
 [% END %]
+
 </table>
 <br>
 [% END %]
