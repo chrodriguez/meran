@@ -726,3 +726,11 @@ CHANGE `id2` `id_tema_seudonimo` INT( 11 ) NOT NULL,
 ALTER TABLE `cat_control_seudonimo_editorial`
 CHANGE `id2` `id_editorial_seudonimo` INT( 11 ) NOT NULL,
  CHANGE `id` `id_editorial` INT( 11 ) NOT NULL;
+
+--para al que le haga falta
+
+ ALTER TABLE `cat_nivel1_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
+ ALTER TABLE `cat_nivel2_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  ;
+ ALTER TABLE `cat_nivel3` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ 
+

@@ -802,10 +802,11 @@ sub t_modificarNivel3 {
 		my	$catNivel2= C4::Modelo::CatNivel2->new();
 		my	$db= $catNivel2->db;
 		$params->{'modificado'}=1;
-			# enable transactions, if possible
-			$db->{connect_options}->{AutoCommit} = 0;
+		# enable transactions, if possible
+		$db->{connect_options}->{AutoCommit} = 0;
 	
         eval {
+# FIXME no se verificar si se repiten los barcodes
 			my $id3_array= $params->{'ID3_ARRAY'}; 
 			my $cant= scalar(@$id3_array);
 C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);

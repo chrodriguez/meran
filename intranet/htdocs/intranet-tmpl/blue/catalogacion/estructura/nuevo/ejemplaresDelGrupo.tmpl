@@ -52,7 +52,7 @@
 			<td width="6%" valign="middle">
         <!-- Si se puede borrar ???-->
 				<input 	type="image" src="[% themelang %]/images/borrar.png" 
-                        onClick="borrarN3('[% id2 %]','[% id3 %]')" title="Borrar Ejemplar">
+                        onClick="borrarN3('[% id2 %]','[% id3 %]')" title="[% 'Borrar Ejemplar' | i18n %]">
         <!--            END  -->
 			</td>
 			<td>[% nivel3_obj.getSignatura_topografica %]</td>
@@ -87,20 +87,20 @@
 			<td valign="middle" colspan="2">
 			[% IF paraPrestamo %]
 
-				<input 	type="image" src="[% themelang %]/images/item-return.png" title="Devolver" 
+				<input 	type="image" src="[% themelang %]/images/item-return.png" title="[% 'Devolver' | i18n %]" 
 						onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
 				[% IF renew %]
-				<input 	type="image" src="[% themelang %]/images/renew.png" title="Renovar" 
+				<input 	type="image" src="[% themelang %]/images/renew.png" title="[% 'Renovar' | i18n %]" 
 						onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
 				[% END %]
 			[% ELSE %]
-				<input 	type="image" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" 
+				<input 	type="image" src="[% themelang %]/images/item-prestar.png" title="[% 'Realizar pr&eacute;stamo' | i18n %]" 
 						onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
 			[% END %]
 			</td>
                 
 			<td colspan="2">
-				<input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="Detalle MARC" 
+				<input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="[% 'Detalle MARC' | i18n %]" 
 						onClick="detalleMARC('[% id3 %]')">
 			</td>
 		</tr>

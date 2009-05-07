@@ -3,14 +3,15 @@
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para permitir la circulacion en el sistema
  * Las siguientes librerias son necesarias:
- *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
+ *	<script src="/includes/jquery/jquery.js"></script>
+ *	<script src="/includes/json/jsonStringify.js"></script>
+ *	<script src="/includes/AjaxHelper.js"></script>
  *	<script src="/intranet-tmpl/blue/includes/util.js"></script>
  *
  */
 
 //************************************************REVISADO******************************************************************
+
 ID_N1=0; //para saber el id del nivel 1
 ID_N2=0; //para saber el id del nivel 2
 ID_N3=0; //para saber el id del nivel 3
@@ -23,7 +24,7 @@ MODIFICAR = 0;
 ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 
-_message= "El campo no puede estar en blanco";
+_message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
 
 //objeto generico para enviar parametros a cualquier funcion, se le van creando dinamicamente los mismos
 function objeto_params(){
@@ -77,7 +78,7 @@ function verificarAgregarDocumentoN3(){
 		}
 	
 		if(existe){
-			alert('Hay barcodes repetidos');
+			alert(HAY_BARCODES_REPETIDOS);
 			return 0;
 		}
 	}
@@ -97,7 +98,7 @@ function _recuperarSeleccionados(chckbox){
 	var array= new Array;
 	var long=chck.length;
 	if ( long == 0){
-		alert("Elija al menos un ejemplar para realizar la acci&oacute;n");
+		alert(ELIJA_AL_MENOS_UN_EJEMPLAR);
 	}
 	else{
 
@@ -834,7 +835,7 @@ function crearDivLabel(label){
  * correspondiente a los otros niveles que hacen referencia al id1.
  */
 function borrarN1(id1){
-	if( window.confirm("[% 'Est&aacute; seguro que desea borrarlo?' | i18n %]") ){
+	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
 		objAH=new AjaxHelper(updateBorrarN1);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -859,7 +860,7 @@ function updateBorrarN1(responseText){
 }
 
 function borrarN2(id2){
-	if( window.confirm("[% 'Est&aacute; seguro que desea borrarlo?' | i18n %]") ){
+	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
 		objAH=new AjaxHelper(updateBorrarN2);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -882,7 +883,7 @@ function updateBorrarN2(responseText){
 }
 
 function borrarN3(id3){
-	if( window.confirm("[% 'Est&aacute; seguro que desea borrarlo?' | i18n %]") ){
+	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
 		objAH=new AjaxHelper(updateBorrarN3);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -904,7 +905,7 @@ function updateBorrarN3(responseText){
 }
 
 function borrarEjemplaresN3(id3){
-	if( window.confirm("[% 'Est&aacute; seguro que desea borrarlo?' | i18n %]") ){
+	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
 		objAH=new AjaxHelper(updateBorrarEjemplaresN3);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
@@ -1101,7 +1102,7 @@ function validateForm(formID, func){
                 $("#"+formID).validate({
                        rules: { compoCheck: "required",},
                        messages: {
-                        compoCheck: "Este campo es requerido, no lo deje en blanco",}
+                        compoCheck: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,}
                 })});
 
 

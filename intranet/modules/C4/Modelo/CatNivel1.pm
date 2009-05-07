@@ -28,16 +28,16 @@ __PACKAGE__->meta->setup(
 
 
 sub agregar{
-
     my ($self)=shift;
-    use C4::Modelo::CatNivel1Repetible;
+	
+	my ($data_hash)=@_;
 
-    my ($data_hash)=@_;
+    use C4::Modelo::CatNivel1Repetible;
 
     my @arrayNivel1;
     my @arrayNivel1Repetibles;
-
     my $infoArrayNivel1= $data_hash->{'infoArrayNivel1'};
+
 	#separo los datos del Nivel1 de los datos del Nivel1_repetible
     foreach my $infoNivel1 (@$infoArrayNivel1){
 

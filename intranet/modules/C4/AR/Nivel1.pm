@@ -268,7 +268,7 @@ sub t_guardarNivel1 {
 sub t_modificarNivel1 {
     my($params)=@_;
 
-## FIXME ver si falta verificar algo!!!!!!!!!!
+# FIXME falta verificar que no se agregue con barcode repetido
     my $msg_object= C4::AR::Mensajes::create();
     my $id1;
 
