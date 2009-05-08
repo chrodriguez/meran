@@ -48,14 +48,12 @@ function _createContentMessages(){
 	var contenedor = $('#mensajes')[0];
 
 	if(contenedor == null){
-
 		//console.log("MessageHelper: Se crea el div cotenedor");
 		$('#end_top').append("<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'></div></b></font></div>");
-
 	}
 	else{
 		_clearMessages();
-	     }
+	}
 }
 
 //luego de x segundos se ejecuta la funcion pasada por parametro

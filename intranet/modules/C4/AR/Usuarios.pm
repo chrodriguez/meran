@@ -1143,6 +1143,10 @@ sub getSocioLike {
         }
     }
 
+	if (!defined $habilitados){
+		$habilitados = 1;
+	}
+# C4::AR::Debug::debug('habilitado: '.$habilitados);
     push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
@@ -1152,6 +1156,9 @@ sub getSocioLike {
                                                                             offset  => $ini,
                                                                             require_objects => [ 'persona' ]
      ); 
+
+# 	C4::AR::Debug::debug("getSocioLike=> orden: ".$orden);
+# 	C4::AR::Debug::debug("getSocioLike=> sortByString: ".$ordenAux);
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,

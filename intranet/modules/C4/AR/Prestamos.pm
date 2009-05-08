@@ -389,9 +389,7 @@ Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
 =cut
 sub t_devolver {
     my($params)=@_;
-#   my $codMsg;
-#   my $error;
-#   my $paraMens;
+
     my $msg_object;
     my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $params->{'id_prestamo'});
     $prestamo->load();
@@ -399,29 +397,19 @@ sub t_devolver {
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;
     eval {
-        C4::AR::Debug::debug("VA A DEVOLVER");
         ($msg_object)= $prestamo->devolver($params);
         $db->commit;
-        C4::AR::Debug::debug("DEVOLVIO!!!!");
     };
     if ($@){
         #Se loguea error de Base de Datos
-#       $codMsg= 'B406';
-        C4::AR::Debug::debug("ERROR");
-
         &C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
         eval {$db->rollback};
         #Se setea error para el usuario
-#       $error= 1;
-#       $paraMens->[0]=$params->{'barcode'};
-#       $codMsg= 'P110';
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
     }
     $db->{connect_options}->{AutoCommit} = 1;
 
-#   my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-#   return ($error, $codMsg, $message);
     return ($msg_object);
 }
 

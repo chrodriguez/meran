@@ -95,9 +95,10 @@ function WindowHelper(options){
 	this.titulo= '';
 	this.html= '';		//respuesta del servidor, responseText
 	this.dimmer= '';	//oscurecimiento y bloqueo del fondo
-    	this.dimmer_On= true;  //muestra o no el dimmer
+    this.dimmer_On= true;  //muestra o no el dimmer
 	this.showState= true;   //muestra o no el gif animado
 	this.draggable= true;  //para configurar si se quiere que la ventana sea draggable o no
+	this.focus= ''; //para el auto_focus, recibe el id del input al que se le va hacer foco
 
  	if(options.draggable == false){
 		this.draggable= options.draggable;
@@ -108,7 +109,12 @@ function WindowHelper(options){
 	if(options.opacity == false){
 		this.opacity= options.opacity;
  	}	
-
+	
+	this.auto_focus= function(){
+		if(this.focus != ''){
+			$('#'+this.focus).focus();	
+		}
+	}//end auto_focus
 
 	this.close= function(){
 			//se oculta la ventana
@@ -138,6 +144,7 @@ function WindowHelper(options){
 			//se muestra la ventana
 			$('#ventana').centerObject();
 			$('#ventana').show();
+			this.auto_focus();
 			if(this.dimmer_On == true){$('#dimmer').show();}
 	}//end show
 

@@ -32,18 +32,16 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 	my $array_ids=$obj->{'datosArray'};
 	my $loop=scalar(@$array_ids);
 
-
 	my @infoDevRen=();
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
-# 		my $id_prestamo=$array_ids->[$i];
-        my $id_prestamo = $obj->{'id_prestamo'};
+ 		my $id_prestamo=$array_ids->[$i];
         my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
         $prestamo->load();
 		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
         $infoDevRen[$i]->{'id3'}=$prestamo->getId3;
  		$infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
-  		$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->[0]->getCompleto;
+  		$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->getCompleto;
  		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
   		$infoDevRen[$i]->{'unititle'}="";
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
@@ -244,8 +242,6 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 if($tipoAccion eq "CANCELAR_RESERVA"){
 
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
-	
-# 	$loggedinuser = $session->param('userid');#getborrowernumber($loggedinuser);
 		
 	my %params;
 	$params{'reservenumber'}= $obj->{'reserveNumber'};

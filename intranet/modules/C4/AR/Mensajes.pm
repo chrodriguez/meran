@@ -390,11 +390,11 @@ sub add {
 	my($Message_hashref, $msg_hashref)=@_;
 #@param $Message_hashref es el objeto mensaje contenedor de los mensajes
 #@param $msg_hashref es un mensaje
-# open(A,">>/tmp/debug.txt");
-# print A "Mensajes::add => \n";
 	#se obtiene el texto del mensaje
   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
 	$msg_hashref->{'message'}= $messageString;
+C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
+C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 # print A "Mensajes::add => message: ".$messageString."\n";
 # print A "Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n";
 

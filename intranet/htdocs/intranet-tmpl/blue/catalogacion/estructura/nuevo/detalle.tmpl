@@ -74,6 +74,7 @@ function updateBuscarUsuario(responseText){
 	vBuscarUsuario.titulo= 'Buscar Usuario';
 	vBuscarUsuario.height('30%');
 	vBuscarUsuario.width('40%');
+	vBuscarUsuario.focus= 'campoUsuario';
 	vBuscarUsuario.open();
 }
 
@@ -106,25 +107,6 @@ function verDivs(){
 	$('#detalleMARC').slideUp("slow");
 // 	scrollTo('ejemplaresDelGrupo'+ID_N2);
 }
-
-
-// FIXME parece q no se usa
-// function filtroPorAutor(id){
-// 	location.href="filtrado.pl?origen=detalle&idAutor="+id;
-// }
-
-// FIXME parece q no se usa
-// function editarEjemplares(id1,id2,itemtype){
-// 	var obj=new objeto_datos();
-// 	objAH.debug= true;
-// 	obj.itemtype=itemtype;
-// 	obj.id1=id1;
-// 	obj.id2=id2;
-// 	obj.json=0;
-// 	obj=JSONstring.make(obj);
-// 	location.href="../catalogacion/estructura/editarEjemplar.pl?obj="+obj;
-// }
-
 
 /*************************************************CIRCULACUION***************************************************/
 // ESTO PARECE QUE NO SE VA A USAR
@@ -163,10 +145,10 @@ function renovar(accion,userId,userNom,id2,id3){
 	ID_N2= id2;
 }
 
-function devolver(accion,userId,userNom,id2,id3){
+function devolver(accion,userId,userNom,id2,id_prestamo){
 
 	array=new Array;
-	array[0]= id3;
+	array[0]= id_prestamo;
 	usuario=new objeto_usuario();
 	usuario.ID=userId;
 	usuario.text=userNom;
@@ -177,7 +159,7 @@ function devolver(accion,userId,userNom,id2,id3){
 	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= array;
 	objAH.nro_socio= usuario.ID;
-    objAH.id_prestamo = id3;
+//     objAH.id_prestamo = id3;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!

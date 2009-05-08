@@ -76,7 +76,7 @@ $(document).ready(function() {
 		<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
 		</label><br>
 		<input 	type="text" id="campoUsuario" onClick="clearInput();" 
-			name="campoUsuario" style="width:90%;" tabindex="1">
+				id="campoUsuario" name="campoUsuario" style="width:90%;" tabindex="1">
 	</li>
 	<li>
 		<div id="detalleUsuario"></div>
