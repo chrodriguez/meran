@@ -11,7 +11,7 @@
 			</th>
 			<th>
 				<a class="click" id="checkAllReservas">
-					<img src="[% themelang %]/images/check.png" border="0" title="Invertir la selecci&oacute;n">
+					<img src="[% themelang %]/images/check.png" border="0" title="[% 'Invertir la selecci&oacute;n' | i18n %]">
 				</a>
 			</th>
 	
@@ -37,9 +37,6 @@
 			</td>
 	
 			<td width="16%">
-				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% reserva.nivel3.nivel1.getId1 %]">
-                    [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-				</a>-->
 				[% PERL %]
 					print C4::AR::Filtros::link_to(	text => 	" [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 													url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
@@ -55,8 +52,6 @@
                 [% END %]
 			</td>
 			<td>
-<!--                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% reserva.nivel3.nivel1.getId1 %]&id2=[% reserva.nivel3.nivel2.getId2 %]&id3=[% reserva.getId3 %]&barcode=[% reserva.nivel3.getBarcode %]&signatura_topografica=[% reserva.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
-                [% reserva.nivel3.getBarcode %]</a>-->
 				[% PERL %]
 					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
 													url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
@@ -73,11 +68,6 @@
 			</td>
 			<td>
 			[% IF reserva.nivel3.getSignatura_topografica %] 
-                    <!--<a class="inputFontNormal" 
-                        href="/cgi-bin/koha/detalle.pl?id1="[% reserva.nivel3.nivel1.getId1 %]">
-                        [% reserva.nivel3.getSignatura_topografica %] 
-                    </a>-->
-
 				[% PERL %]
 					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getSignatura_topografica %]",
 													url => 		"/cgi-bin/koha/detalle.pl", 
@@ -111,9 +101,9 @@
 			</td>
 	
 			<td>
-				<inpuT type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
-				src="[% themelang %]/images/borrar.png" 
-				onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
+				<inpuT 	type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
+						src="[% themelang %]/images/borrar.png" 
+						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
 			</td>
 			<td height=25>&nbsp;</td>
 	
@@ -122,10 +112,10 @@
 	</table>
 	
 	<p align=center>
-		<input type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
-		src="[% themelang %]/images/item-prestar.png" 
-		title="Realizar pr&eacute;stamo" 
-		onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+		<input 	type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
+				src="[% themelang %]/images/item-prestar.png" 
+				title="Realizar pr&eacute;stamo" 
+				onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 	</p>
 	
 
@@ -155,12 +145,9 @@
 		<tr align="center" class="inputFontNormal">
 			<td height=25>&nbsp;</td>
 			<td width="16%"> 
-				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% eserva.nivel3.nivel1.getId1 %]">
-					[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]
-				</a>-->
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
 												params =>	["id1=[% eserva.nivel3.nivel1.getId1 %]"],
 											) ;
 			[% END %]
@@ -183,8 +170,8 @@
             </td>
 			<td> 
 				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
-					src="[% themelang %]/images/borrar.png" 
-					onClick="confirm_cancelation('[% reserva.getId_reserva %]')" title="Cancelar">
+						src="[% themelang %]/images/borrar.png" 
+						onClick="confirm_cancelation('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
 			</td>
 			<td height=25>&nbsp;</td>
 		</tr>

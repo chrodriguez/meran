@@ -37,9 +37,6 @@
 				<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 			</td>
 			<td width="14%" >
-				<!--<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
-					[% prestamo.nivel3.nivel1.getTitulo %]
-				</a>-->
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.nivel1.getTitulo %]",
 												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
@@ -48,17 +45,14 @@
 			[% END %]
 			</td>
 			<td>
-				[% IF prestamo.nivel3.nivel1.getAutor %]
-					[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
-				[% ELSE %]
-					&nbsp;
-				[% END %]
+			[% IF prestamo.nivel3.nivel1.getAutor %]
+				[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
+			[% ELSE %]
+				&nbsp;
+			[% END %]
 			</td>
 	
 			<td>
-			<!--	<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
-				[% prestamo.nivel3.getBarcode %]</a>-->
-
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
 												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
@@ -72,10 +66,6 @@
 	
 			<td>
 				[% IF prestamo.nivel3.getSignatura_topografica %] 
-<!--					<a class="inputFontNormal" 
-						href="/cgi-bin/koha/detalle.pl?id1="[% prestamo.nivel3.nivel1.getId1 %]">
-						[% prestamo.nivel3.getSignatura_topografica %] 
-					</a>-->
 					[% PERL %]
 						print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
 														url => 		"/cgi-bin/koha/detalle.pl", 

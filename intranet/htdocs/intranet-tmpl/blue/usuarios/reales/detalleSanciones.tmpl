@@ -17,16 +17,17 @@
 		<td height=25>&nbsp;</td>
 		<td class="inputFontNormal">
 		<ul><font class="fontmsg">
-			[% FOREACH sancion IN SANCIONES %]
-					<li>
-					[% IF sancion.tipo_sancion %] [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %]* ts.getTipo_prestamo *[% END %]
-                    [% ELSE %]
-                    [% "Reserva no retirada" | i18n %]
-                    [% END %] - 
-                                                    [% "Desde el" | i18n %] [% sancion.getFecha_comienzo_formateada %] 
-                                                    [% "hasta el" | i18n %] [% sancion.getFecha_final_formateada %]
-					</li>
-			[% END %]
+		[% FOREACH sancion IN SANCIONES %]
+			<li>
+			[% IF sancion.tipo_sancion %] [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %]* ts.getTipo_prestamo *[% END %]
+			[% ELSE %]
+			[% "Reserva no retirada" | i18n %]
+			[% END %] - 
+
+			[% "Desde el" | i18n %] [% sancion.getFecha_comienzo_formateada %] 
+			[% "hasta el" | i18n %] [% sancion.getFecha_final_formateada %]
+			</li>
+		[% END %]
 			</font>
 		</ul>
 		</td>

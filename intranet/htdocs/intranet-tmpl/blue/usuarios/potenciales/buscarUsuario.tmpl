@@ -34,7 +34,6 @@ function consultar(filtro){
         busqueda_armed = busqueda;
         inicial_armed = inicial;
         flag_armed = true;
-//         buscarUsuariosPotenciales(busqueda, inicial);
 		buscarUsuariosPotenciales();
     }
     else{
@@ -92,18 +91,12 @@ function updateInfoActualizar(responseText){
  	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 //     objAH.cache = false;
-//    	buscarUsuariosPotenciales(false);
 	buscarUsuariosPotenciales();
 }
 
-// function buscarUsuariosPotenciales(cachear){
 function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
-//     if (cachear)
-//         objAH.cache = true;
-//     else
-//         objAH.cache = false;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";
 
@@ -114,7 +107,6 @@ function buscarUsuariosPotenciales(){
         var busqueda = $("#persona").val();
 	    if(busqueda != ""){
 		    objAH.persona= busqueda;
-// 			objAH.habilitados_filter = 0;
 	    }
 	    else{
 		    alert(INGRESE_UN_DATO);

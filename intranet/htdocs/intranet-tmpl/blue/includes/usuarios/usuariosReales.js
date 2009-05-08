@@ -208,7 +208,7 @@ function validateForm(func){
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
 
-	var is_confirmed = confirm('Confirma la baja ?');
+	var is_confirmed = confirm(CONFIRMA_LA_BAJA);
 
 	if (is_confirmed) {
 

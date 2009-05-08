@@ -9,11 +9,11 @@ use CGI;
 my $input=new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
-			template_name	=> 'usuarios/reales/historialPrestamos.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
+																	template_name	=> 'usuarios/reales/historialPrestamos.tmpl',
+																	query		=> $input,
+																	type		=> "intranet",
+																	authnotrequired	=> 0,
+																	flagsrequired	=> { circulate => 1 },
     });
 
 
@@ -26,7 +26,6 @@ my $funcion= $obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-# my ($cant,$issues)=C4::AR::Prestamos::historialPrestamos($bornum,$ini,$cantR,$orden);
 my ($cant,$presmamos_array_ref,$loop_reading)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR,$orden);
 
 $t_params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);

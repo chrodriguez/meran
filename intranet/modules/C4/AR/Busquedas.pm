@@ -429,6 +429,7 @@ sub obtenerEdiciones{
 obtenerGrupos
 Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un id1. Se puede filtrar por tipo de documento.
 =cut
+# FIXME falta pasar!!!!
 sub obtenerGrupos {
 	my ($id1,$itemtype,$type)=@_;
   	my $dbh = C4::Context->dbh;
@@ -453,6 +454,7 @@ sub obtenerGrupos {
 		if (($type ne 'intra')&&($opacUnavail eq 0)){
     			$query2.=" AND (id_estado=0 OR id_estado IS NULL  OR id_estado=2)"; #wthdrawn=2 es COMPARTIDO
   		}
+
 		my $sth2=$dbh->prepare($query2);
   		$sth2->execute($data->{'id2'});
 		my $cant=($sth2->fetchrow);
@@ -465,7 +467,8 @@ sub obtenerGrupos {
         		$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
         		$res++;
 		}
-        }
+	}
+
 	return (\@result);
 }
 

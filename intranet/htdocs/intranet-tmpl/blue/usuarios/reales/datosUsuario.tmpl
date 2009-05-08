@@ -20,6 +20,7 @@ function changePage(ini){
 
 function mostrarHistorialDePrestamos(){
 	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
+	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
 	objAH.nro_socio= usuario.ID;
 	objAH.funcion= 'changePage';

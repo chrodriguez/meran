@@ -53,13 +53,13 @@
 			[% socio.getNro_socio %]
 		</td>
 		<td width=250 align="left" class="nomCompleto">
-			[% PERL %]
-				print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
-												url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-												params =>	["nro_socio=[% socio.getNro_socio %]"],
-												title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
-											) ;
-			[% END %]
+		[% PERL %]
+			print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+											url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+											params =>	["nro_socio=[% socio.getNro_socio %]"],
+											title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+										) ;
+		[% END %]
 		</td>
 		<td align="left" class="documento">
 			[% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]

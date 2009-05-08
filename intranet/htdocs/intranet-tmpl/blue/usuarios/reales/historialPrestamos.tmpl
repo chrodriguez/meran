@@ -38,7 +38,7 @@
 	<td class="tablaresultadoTitle">
 		[% "Vencimiento" | i18n %]
 	</td>
-	<td class="tablaresultadoTitleClick" onclick="ordenar('returndate')" 
+	<td class="tablaresultadoTitleClick" onclick="ordenar('fecha_devolucion')" 
             Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
 		[% "Devoluci&oacute;n" | i18n %]
 	</td>
@@ -52,22 +52,14 @@
 <tr valign=middle align="center" class="inputFontNormal">
 	<td height=25 >&nbsp;</td>
 	<td>
-		<!--<a href='/cgi-bin/koha/busquedas/detalle.pl?id1=[% HTML.escape(id1) %]'>
- 		[% HTML.escape($titulo) %]
-    		</a>-->
-
 		[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
-												url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+ 												url => 		"/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl",
 												params =>	[	"id1=[% HTML.escape(id1) %]"], 
 											) ;
 		[% END %]
 	</td>
-	<td><!--
- 		<a href="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=[% HTML.escape(idautor) %]">
-		[% autor %]
-		</a>-->
-
+	<td>
 		[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
 												url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
@@ -76,7 +68,7 @@
 		[% END %]
 	</td>
 	<td>
-<!--      [% FOREACH grupos %] -->
+	[% FOREACH grupos %]
 
 		[% IF edicion %]
 			[% edicion %]
@@ -90,13 +82,9 @@
 			        t [% volume %]
 		[% END %]
 
-<!-- 	[% END %]  -->
-    <!-- ESTE FOREACH -->
-        </td>
+	[% END %]
+	</td>
 	<td align="center" >
-<!--		<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode= [% barcode %]&signatura_topografica=[% signatura_topografica %]' 
-                    title='[% "Detalle de disponibilidad" | i18n %]'>[% barcode %]
-                </a>&nbsp;-->
 		[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
 												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 

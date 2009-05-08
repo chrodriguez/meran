@@ -488,8 +488,17 @@ sub getHistorialPrestamos {
 	use C4::Modelo::CircPrestamo::Manager;
 
 	my @filtros;
-# 	push(@filtros, ( fecha_devolucion => { eq => undef } ));
  	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+
+	if($orden eq 'autor'){
+		$orden= 'cat_autor.apellido';
+	}elsif($orden eq 'titulo'){
+		$orden= 'cat_nivel1.titulo';
+	}elsif($orden eq 'barcode'){
+		$orden= 'cat_nivel3.barcode';
+	}elsif($orden eq 'fecha_devolucion'){
+		$orden= 'circ_prestamo.fecha_devolucion';
+	}else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
         
     my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
 
@@ -497,11 +506,10 @@ sub getHistorialPrestamos {
 																					query => \@filtros,
 																					limit   => $cantR,
                                                                             		offset  => $ini,
-# 																					sort_by => ( $socioTemp->sortByString($orden) ),
+ 																					sort_by => ( $orden ),
 																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
 																						'nivel3.nivel2.nivel1.cat_autor','nivel3.nivel2' ]
 																			);
-
 
     return ($prestamos_count_array_ref, $prestamos_array_ref);
 }
@@ -515,6 +523,7 @@ sub getHistorialPrestamosParaTemplate {
     my ($cant,$presmamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
     
     my @loop_reading;
+# FIXME tarda mucho!!!!
     foreach my $prestamo (@$presmamos_array_ref){
         my %line;
         $line{'titulo'}=$prestamo->nivel3->nivel2->nivel1->getTitulo;
@@ -537,7 +546,7 @@ sub getHistorialPrestamosParaTemplate {
         $line{'edicion'}= $prestamo->nivel3->nivel2->getEdicion;
         $line{'volume'}= $prestamo->nivel3->nivel2->getVolumenDesc;
     #   $line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-    #   ($line{grupos}) = C4::AR::Busquedas::obtenerGrupos($issues->[$i]->{'id1'},'','intra');
+       	$line{'grupos'}= C4::AR::Busquedas::obtenerGrupos($prestamo->nivel3->getId1,'','intra');
     
         push(@loop_reading,\%line);
     }

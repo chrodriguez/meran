@@ -21,7 +21,7 @@ function consultar(filtro){
 		inicial = filtro;
 		busqueda = jQuery.trim(filtro);
 		objAH.inicial= inicial;
-		$('#socio').val("filtro: "+filtro);
+		$('#socio').val(FILTRO_POR + filtro);
 	}
 	else
 	   {
@@ -50,7 +50,7 @@ function consultar(filtro){
 		objAH.sendToServer();
 	}
 	else{
-		alert("Ingrese un dato");
+		alert(INGRESE_UN_DATO);
 		$('#socio').focus();
 	}
 
