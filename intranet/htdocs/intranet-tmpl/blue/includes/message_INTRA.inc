@@ -10,7 +10,7 @@ HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
 
-======//===========================================Usuarios========================================================
+//================================================Usuarios========================================================
 INGRESE_UN_DATO= "[% 'Ingrese un dato' | i18n %]";
 NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No selecciono ningun usuario ' | i18n %]";
 // mensaje compuesto
