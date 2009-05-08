@@ -34,7 +34,8 @@ function consultar(filtro){
         busqueda_armed = busqueda;
         inicial_armed = inicial;
         flag_armed = true;
-        buscarUsuariosPotenciales(busqueda, inicial);
+//         buscarUsuariosPotenciales(busqueda, inicial);
+		buscarUsuariosPotenciales();
     }
     else{
         alert("Ingrese un dato");
@@ -90,40 +91,42 @@ function updateInfoActualizar(responseText){
 
  	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-    objAH.cache = false;
-   	buscarUsuariosPotenciales(false);
+//     objAH.cache = false;
+//    	buscarUsuariosPotenciales(false);
+	buscarUsuariosPotenciales();
 }
 
-function buscarUsuariosPotenciales(cachear){
+// function buscarUsuariosPotenciales(cachear){
+function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
-    if (cachear)
-        objAH.cache = true;
-    else
-        objAH.cache = false;
+//     if (cachear)
+//         objAH.cache = true;
+//     else
+//         objAH.cache = false;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";
 
     if (flag_armed){
         objAH.persona = busqueda_armed;
         objAH.inicial = inicial_armed;
-    }else
-      {   
+    }else{   
         var busqueda = $("#persona").val();
 	    if(busqueda != ""){
 		    objAH.persona= busqueda;
-            objAH.habilitados_filter = 0;
+// 			objAH.habilitados_filter = 0;
 	    }
 	    else{
 		    alert('[% "Ingrese un dato" | i18n %]');
             $("#persona").focus();
 	    }
     }
+
+	objAH.habilitados_filter = 0;
     if ($("#habilitados_filter").attr('checked'))  
         objAH.habilitados_filter = 1;
+
     objAH.sendToServer();
-
-
 }
 
 function updateInfo(responseText){
@@ -190,7 +193,7 @@ $(document).ready(function() {
                 onBlur="checkFilter('blur')">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales('');" 
+			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales();" 
                                src="[% themelang %]/images/boton-buscar.png" border='0'>
 
 			<input type="image" onClick="Borrar();" alt="Limpiar" 

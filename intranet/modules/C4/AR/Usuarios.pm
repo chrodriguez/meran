@@ -1143,7 +1143,9 @@ sub getSocioLike {
         }
     }
 #POR SI NO VIENE POR PARAMETRO
-    $habilitados = $habilitados || 1;
+# C4::AR::Debug::debug('habilitado: '.$habilitados);
+#     $habilitados = $habilitados || 1;
+# C4::AR::Debug::debug('habilitado: '.$habilitados);
     push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
@@ -1158,12 +1160,12 @@ sub getSocioLike {
 # 	C4::AR::Debug::debug("getSocioLike=> sortByString: ".$ordenAux);
 
     #Obtengo la cant total de socios para el paginador
-    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros,
+    my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
                                                                                require_objects => [ 'persona' ]
                                                                      );
 
 	if(scalar(@$socios_array_ref) > 0){
-		 return (scalar(@$socios_array_ref_count), $socios_array_ref);
+		 return ($socios_array_ref_count, $socios_array_ref);
 	}else{
 		 return (0,0);
 	}
