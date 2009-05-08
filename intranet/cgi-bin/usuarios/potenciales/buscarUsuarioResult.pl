@@ -30,8 +30,7 @@ my $inicial=$obj->{'inicial'};
 my $activo;
 my ($cantidad,$socios);
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-my $habilitados = $obj->{'habilitados_filter'} || 0;
-C4::AR::Debug::debug('habilitado: '.$habilitados);
+my $habilitados = $obj->{'habilitados_filter'} || 0; #se setea por defecto para mostrar los deshabilitados
 
 if ($inicial){
     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socioBuscado,$orden,$ini,$cantR,$habilitados,$inicial);

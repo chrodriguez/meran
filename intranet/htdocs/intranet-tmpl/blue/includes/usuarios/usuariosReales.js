@@ -84,7 +84,7 @@ function updateModificarPermisos(responseText){
 	vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
 	vModificarPermisos.debug= true;
 	vModificarPermisos.html=responseText;
-	vModificarPermisos.titulo= "[% 'Permisos de Acceso' | i18n %]";
+	vModificarPermisos.titulo= PERMISOS_DE_ACCESO;
 	vModificarPermisos.create();
 	vModificarPermisos.height('220px');
 	vModificarPermisos.width('550px');
@@ -97,7 +97,7 @@ function guardarPermisos(){
 	var array= new Array;
 	var long=chck.length;
  	if ( long == 0){
- 		alert("Elija al menos un permiso");
+ 		alert(ELIJA_AL_MENOS_UN_PERMISO);
  	}
  	else{
 
@@ -185,11 +185,11 @@ function validateForm(func){
                   },
                },
                messages: {
-				  categoria_socio_name: "Por favor, seleccione la categoría",
-                  apellido: "Por favor, ingrese su apellido",
-                  nombre: "Por favor, ingrese su/s nombre/s",
-                  nro_socio: "La tarjeta de id. es obligatoria",
-                  sexo: "El sexo es obligatorio",
+				  categoria_socio_name: POR_FAVOR_SELECCIONE_LA_CATEGORIA,
+                  apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
+                  nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
+                  nro_socio: LA_TARJETA_ES_OBLIGATORIA,
+                  sexo: EL_SEXO_ES_OBLIGATORIO,
                   calle: "La calle en donde vive es obligatoria",
                   ciudad: "La ciudad en donde vive es obligatoria",
                   nacimiento: "La fecha de nacimiento es obligatoria",
@@ -229,7 +229,8 @@ function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	if (!(hayError(Messages))){
-		window.location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl";
+// FIXME esta feo
+		window.location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl?token="+token;
 	}
 }
 

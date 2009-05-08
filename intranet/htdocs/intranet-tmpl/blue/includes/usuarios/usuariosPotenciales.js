@@ -1,5 +1,23 @@
 var objAH;
 
+//*
+/*
+ * objeto_usuario
+ * Representa al objeto que contendra la informacion del usuario seleccionado del autocomplete.
+ */
+function objeto_usuario(){
+    this.text;
+    this.ID;
+}
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
 // //************************************************Eliminar Usuario**********************************************
 
 function eliminarUsuario(){
@@ -25,10 +43,11 @@ function updateEliminarUsuario(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (!(hayError(Messages))){
-        window.location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl";
+        window.location.href = "/cgi-bin/koha/usuarios/potenciales/buscarUsuario.pl?token="+token;
     }
 }
 
+//*********************************************Fin***Eliminar Usuario**********************************************
 
 //*********************************************Modificar Datos Usuario*********************************************
 
@@ -88,30 +107,6 @@ function updateGuardarModificacioUsuario(responseText){
     vDatosUsuario.close();
     detalleUsuario();
 }
-
-//*
-/*
- * objeto_usuario
- * Representa al objeto que contendra la informacion del usuario seleccionado del autocomplete.
- */
-function objeto_usuario(){
-    this.text;
-    this.ID;
-}
-
-
-
-//*************************************Para manejar el historial de prestamos***********************************
-function ordenar(orden){
-    objAH.sort(orden);
-}
-
-function changePage(ini){
-    objAH.changePage(ini);
-}
-
-//*******************************Fin Para manejar el historial de prestamos************************************
-
 
 function detalleUsuario(){
     objAH=new AjaxHelper(updateDetalleUsuario);

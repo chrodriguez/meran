@@ -18,6 +18,8 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 [% INCLUDE  'WindowHelper.inc'  %]
+<!-- Se incluyen los mensajes para la catalogacion -->
+[% INCLUDE "message_INTRA.inc" %]
 
 <script src="/includes/WindowHelper.js"></script>
 

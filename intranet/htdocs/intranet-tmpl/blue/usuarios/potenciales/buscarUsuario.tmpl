@@ -38,7 +38,7 @@ function consultar(filtro){
 		buscarUsuariosPotenciales();
     }
     else{
-        alert("Ingrese un dato");
+        alert(INGRESE_UN_DATO);
         $('#persona').focus();
     }
 
@@ -52,19 +52,19 @@ function habilitar(){
 	var cant=checks.length;
 	var accion=$("#accion").val();
 	if (cant>0){
-		theStatus= "Usted esta a punto de "+accion+" a los propietarios de:\n"; 
+		theStatus= UD_ESTA_A_PUNTO + accion + A_LOS_PROPIETARIOS; 
 	
 		for(i=0;i<checks.length;i++){
-			theStatus=theStatus+" -  Tarjeta nro "+ array[i].value+"\n";
+			theStatus=theStatus+ TARJETA_NRO + array[i].value+"\n";
 			personNumbers[i]=array[i].name;
 		}
 
-		theStatus=theStatus + "\n\nEsta seguro?";
+		theStatus=theStatus + ESTA_SEGURO;
 		if (cant>0){
 			if (confirm (theStatus)){actualizarPersonas(cant,personNumbers);}
 		}
 	}
-	else{ alert ("No selecciono ningun usuario");}
+	else{ alert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
 }	
 
 var objAH;
@@ -117,7 +117,7 @@ function buscarUsuariosPotenciales(){
 // 			objAH.habilitados_filter = 0;
 	    }
 	    else{
-		    alert('[% "Ingrese un dato" | i18n %]');
+		    alert(INGRESE_UN_DATO);
             $("#persona").focus();
 	    }
     }
