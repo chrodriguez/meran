@@ -190,17 +190,17 @@ function validateForm(func){
                   nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
                   nro_socio: LA_TARJETA_ES_OBLIGATORIA,
                   sexo: EL_SEXO_ES_OBLIGATORIO,
-                  calle: "La calle en donde vive es obligatoria",
-                  ciudad: "La ciudad en donde vive es obligatoria",
-                  nacimiento: "La fecha de nacimiento es obligatoria",
-                  telefono: "El tel&eacute;fono es obligatorio",
+                  calle: LA_CALLE_DONDE_VIVE_ES_OBLIGATORIA,
+                  ciudad: LA_CIUDAD_EN_DONDE_VIVE_ES_OBLIGATORIA,
+                  nacimiento: LA_FECHA_DE_NACIMIENTO_ES_OBLIGATORIA,
+                  telefono: EL_TELEFONO_ES_OBLIGATORIO,
                   nro_documento: {
-                     required: "Por favor, ingrese su nro. de documento",
-                     number: "Por favor, ingrese s&oacute;lo d&iacute;gitos",
-                     minlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado menos)",
-                     maxlength: "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingersado m&aacute;s)",
+                     required: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
+                     number: POR_FAVOR_INGRESE_SOLO_DIGITOS,
+                     minlength: LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS,
+                     maxlength: LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MENOS,
                   },
-                  email: "Ingrese una dirección de email v&aacute;lida",
+                  email: INGRESO_UNA_DIR_DE_EMAIL_VALIDA,
                }
             });
          });
@@ -330,13 +330,13 @@ function verificarClaveUsuario(){
 	
 
 	if (claveUsuario == ''){
-		alert("Ingrese una contraseña.");
+		alert(INGRESE_UNA_CONTRASENIA);
 		clearInput();
 		$('#newpassword').focus();
 
 	}else{
 		if (claveUsuario != confirmeClave){
-			alert("Las claves son distintas.\nIngreselas nuevamente.");
+			alert(LAS_CLAVES_SON_DISTINTAS);
 			clearInput();
 			$('#newpassword').focus();
 	
@@ -363,7 +363,7 @@ function updateCambiarPassword(responseText){
 	vModificarPassword=new WindowHelper({draggable: true, opacity: true});
 	vModificarPassword.debug= true;
 	vModificarPassword.html=responseText;
- 	vModificarPassword.titulo= 'Cambio de Contrase&ntilde;a';
+ 	vModificarPassword.titulo= CAMBIO_DE_CONTRASENIA;
 	vModificarPassword.create();
 	vModificarPassword.height('220px');
 	vModificarPassword.width('550px');
