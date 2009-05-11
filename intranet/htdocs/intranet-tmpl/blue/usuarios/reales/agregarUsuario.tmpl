@@ -136,7 +136,7 @@
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                     [% combo_tipo_documento %]
-            <input 	id="nro_documento" name="nro_documento" class="required" minlength="8" maxlength="12" type=text size=41 
+            <input 	id="nro_documento" name="nro_documento" class="" minlength="8" maxlength="12" type=text size=41 
 					value="[% socio.persona.getNro_documento %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
@@ -261,7 +261,7 @@
             <td width="15%">&nbsp;</td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">
                 <b>E-Mail</b><br>
-                <input class="email" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
+                <input class="required" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>

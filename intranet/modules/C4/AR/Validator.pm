@@ -295,22 +295,21 @@ sub isValidDocument{
 	$docType = trim($docType);
 	
 	if ($docType eq "DNI"){
-		if (&countNumericChars($docNumber) == 8){
-			if (length($docNumber) == 8){
+		if ( countAlphaNumericChars($docNumber) ){
+			if (length(trim($docNumber)) > 0){
 			   $checkResult = 1;
 			}
 		}
 	}
 	else
 	 {
-		if ((&countNumericChars($docNumber) == (length($docNumber)) )){
+		if ((&countAlphaNumericChars($docNumber) == (length($docNumber)) )){
 
 			$checkResult = 1;
 		}
 	 }
 
 	return ($checkResult);
-
 }
 
 

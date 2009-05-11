@@ -176,10 +176,8 @@ function validateForm(func){
                   calle: "required",
                   ciudad: "required",
                   nacimiento: "required",
-   
-                  nro_documento: {
-                     required: true,
-                  },
+                  email: "required",
+                  
                   email: {
                      email: true
                   },
@@ -188,19 +186,16 @@ function validateForm(func){
 				  categoria_socio_name: POR_FAVOR_SELECCIONE_LA_CATEGORIA,
                   apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
                   nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
-                  nro_socio: LA_TARJETA_ES_OBLIGATORIA,
-                  sexo: EL_SEXO_ES_OBLIGATORIO,
-                  calle: LA_CALLE_DONDE_VIVE_ES_OBLIGATORIA,
-                  ciudad: LA_CIUDAD_EN_DONDE_VIVE_ES_OBLIGATORIA,
-                  nacimiento: LA_FECHA_DE_NACIMIENTO_ES_OBLIGATORIA,
-                  telefono: EL_TELEFONO_ES_OBLIGATORIO,
+                  nro_socio: POR_FAVOR_INGRESE_LA_TARJETA_DE_IDENTIFICACION,
+                  sexo: POR_FAVOR_INGRESE_EL_SEXO,
+                  calle: POR_FAVOR_INGRESE_LA_CALLE_DONDE_VIVE,
+                  ciudad: POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE,
+                  nacimiento: POR_FAVOR_INGRESE_LA_FECHA_DE_NACIMIENTO,
+                  telefono: POR_FAVOR_INGRESE_EL_TELEFONO,
                   nro_documento: {
                      required: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
-                     number: POR_FAVOR_INGRESE_SOLO_DIGITOS,
-                     minlength: LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS,
-                     maxlength: LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MENOS,
                   },
-                  email: INGRESO_UNA_DIR_DE_EMAIL_VALIDA,
+                  email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
                }
             });
          });
@@ -330,7 +325,7 @@ function verificarClaveUsuario(){
 	
 
 	if (claveUsuario == ''){
-		alert(INGRESE_UNA_CONTRASENIA);
+		alert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
 		clearInput();
 		$('#newpassword').focus();
 

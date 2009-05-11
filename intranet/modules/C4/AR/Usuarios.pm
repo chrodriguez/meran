@@ -222,26 +222,28 @@ sub agregarPersona{
     my $msg_object= C4::AR::Mensajes::create();
     my ($person) = C4::Modelo::UsrPersona->new();
     my $db = $person->db;
-  
-    $params->{'iniciales'} = "DGR";
-    #genero un estado de ALTA para la persona para una fuente de informacion
-    $db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
-
-    eval{
-        $person->agregar($params);
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-        $db->commit;
-    };
-
-    if ($@){
-         &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-         $msg_object->{'error'}= 1;
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-         $db->rollback;
+    _verificarDatosBorrower($params,$msg_object);
+    if (!($msg_object->{'error'})){
+        $params->{'iniciales'} = "DGR";
+        #genero un estado de ALTA para la persona para una fuente de informacion
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval{
+            $person->agregar($params);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+            $db->commit;
+        };
+    
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+            $db->rollback;
+        }
+    
+        $db->{connect_options}->{AutoCommit} = 1;
     }
-
-    $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
 
@@ -823,15 +825,17 @@ sub _verificarDatosBorrower{
 
     
     my $documentnumber = $data->{'nro_documento'};
-    $checkStatus = &C4::AR::Validator::isValidDocument($data->{'documenttype'},$documentnumber);
+    $checkStatus = &C4::AR::Validator::isValidDocument($data->{'tipo_documento'},$documentnumber);
     if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
+    }else{
+          if (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data->{'tipo_documento'}) ){
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
+          }
     }
 }
-    
-
-
 
 
 sub actualizarSocio {
@@ -1503,8 +1507,20 @@ sub updateOpacBorrower{
     $sth->finish;
 }
 
- 
+sub isUniqueDocument {
 
+    my ($nro_documento,$tipo_documento) = @_;
+    
+    use C4::Modelo::UsrPersona::Manager;
+    my @filtros;
+
+    push (@filtros, ( nro_documento => {eq => $nro_documento},
+                      tipo_documento => {eq => $tipo_documento} ) );
+
+    my $cant = C4::Modelo::UsrPersona::Manager::get_usr_persona_count( query => \@filtros,);
+    
+    return ($cant == 0);
+}
 
 1;
 

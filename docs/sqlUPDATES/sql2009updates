@@ -738,5 +738,23 @@ INSERT INTO `V3Econo`.`pref_preferencia_sistema` (`variable` ,`value` ,`explanat
 VALUES ('circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL , 'bool'), 
 ('circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL , 'bool');
 
- 
+ALTER TABLE `usr_persona` ADD UNIQUE (
+`nro_documento` ,
+`tipo_documento`
+);
 
+
+ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+ADD `dni_autorizado` VARCHAR( 16 ) NULL ,
+ADD `telefono_autorizado` VARCHAR( 255 ) NULL ;
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar "serial", sino sera el documento.', NULL , NULL );

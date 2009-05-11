@@ -62,6 +62,7 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id_persona' ],
+    unique_key => ['tipo_documento','nro_documento'],
 );
 
 sub getCategoria{

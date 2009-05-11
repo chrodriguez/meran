@@ -120,7 +120,11 @@ sub agregar{
     $self->setId_persona($data_hash->{'id_persona'});
 
     if ($data_hash->{'auto_nro_socio'}){
-        $self->setNro_socio( $self->nextNro_socio() );
+        if (C4::AR::Preferencias->getValorPreferencia("auto-nro_socio_from_dni")){
+            $self->setNro_socio( $self->setNro_socio($self->persona->getNro_documento) );
+        }else{
+             $self->setNro_socio( $self->nextNro_socio )
+        }
     }else{
         $self->setNro_socio($data_hash->{'nro_socio'});
     }
