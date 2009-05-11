@@ -262,18 +262,22 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
+	my $Message_arrayref;
 	my %params;
 	$params{'barcode'}= $obj->{'barcode'};
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'operacion'}= $obj->{'operacion'};
 	
-	if($param{'operacion'} eq "renovar"){	
+	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
+	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'barcode'});	
 	}
-	elsif($param{'operacion'} eq "devolver"){
- 		my ($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
+	elsif($params{'operacion'} eq "devolver"){
+	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => devolver barcode: ".$params{'barcode'});
+		($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
 	}
-	elsif($param{'operacion'} eq "prestamo"){
+	elsif($params{'operacion'} eq "prestar"){
+	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => prestar barcode: ".$params{'barcode'});
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_prestarPorBarcode(\%params);	
 	}
 	

@@ -1115,6 +1115,20 @@ sub getSocioInfoPorNroSocio{
 	}
 }
 
+=item
+Este funcion devuelve 1 si existe el socio y 0 si no existe
+=cut
+sub existeSocio{
+
+    use C4::Modelo::UsrSocio;
+
+    my ($nro_socio)= @_;
+
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
+
+	return $socio_array_ref;
+}
+
 # FIXME parece q no se usa???????????????????
 sub getPersonaLike {
     

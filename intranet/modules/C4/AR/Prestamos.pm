@@ -91,11 +91,6 @@ Se verifica que se cumplan las condiciones para poder renovar
 sub verificarParaRenovar{
 	my ($params)=@_;
 
-# 	my $error= 0;
-# 	my $codMsg= '000';
-# 	my @paraMens;
-	#se setea el barcode para informar al usuario en la renovacion	
-# 	@paraMens[0]= $params->{'barcode'};	
 	my $msg_object= C4::AR::Mensajes::create();
 
 	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation($params->{'borrowernumber'},"");
@@ -104,13 +99,10 @@ sub verificarParaRenovar{
 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
 	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::AR::Preferencias->getValorPreferencia("usercourse") 
 		&& ($params->{'usercourse'} == "NULL" ) ) ){
-# 		$error= 1;
-# 		$codMsg= 'P114';
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
 	}
 
-# 	return ($error, $codMsg,\@paraMens);
 	return ($msg_object);
 }
 
@@ -413,16 +405,71 @@ sub t_devolver {
     return ($msg_object);
 }
 
+
+sub getPrestamoPorBarcode {
+    
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+    my ($barcode)=@_;
+
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+																query => [ barcode  => { eq => $barcode }	],
+																require_objects => [ 'nivel3' ] #INNER JOIN
+     							); 
+
+	if(scalar(@$prestamo_array_ref) > 0){
+		return $prestamo_array_ref->[0]->getId_prestamo;
+	}else {	
+    	return 0;
+	}
+}
+
+
+sub verificarCirculacionRapida{
+	my ($params)=@_;
+
+	my $msg_object= C4::AR::Mensajes::create();
+
+	if( !($msg_object->{'error'}) &&  $params->{'operacion'} eq 'devolver'){
+	#se verifica si la operacion es una devolucion, que EXISTA el BARCODE
+		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
+		if($params->{'id_prestamo'} == 0){
+		#no existe el barcode
+			$msg_object->{'error'}= 1;
+			C4::AR::Debug::debug("verificarCirculacionRapida => no existe el barcode");
+        	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
+		}
+	}
+	
+	if( !($msg_object->{'error'}) &&  !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
+	#se verifica si la operacion es una devolucion, que EXISTA el USUARIO
+		$msg_object->{'error'}= 1;
+		C4::AR::Debug::debug("verificarCirculacionRapida => no existe el usuario");
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
+	}
+
+	return ($msg_object);
+}
+
 sub t_devolverPorBarcode {
 	my ($params)=@_;
 
-	#realizo las verificaciones necesarias
-# FIXME falta verificar
+#  	my $msg_object= C4::AR::Mensajes::create();
+	my $msg_object= verificarCirculacionRapida($params);
 	#obtengo el id_prestamo segun el barcode que se quiere devolver
-	$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
-	my ($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode($params);	
+# 	$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
+# 	if($params->{'id_prestamo'} == 0){
+# 		$msg_object->{'error'}= 1;
+# 		C4::AR::Debug::debug("t_devolverPorBarcode => no existe el barcode");
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
+	if(!$msg_object->{'error'}){
+		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
+		#se hace la devolucion del prestamo pasado por parametro
+		($msg_object) = C4::AR::Prestamos::t_devolver($params);	
+	}
 
-	return ($Message_arrayref);
+	return ($msg_object);
 }
 
 sub crearTicket {

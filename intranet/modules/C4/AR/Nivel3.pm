@@ -25,6 +25,29 @@ use vars qw(@EXPORT @ISA);
 );
 
 
+
+sub getBarcodesLike {
+    
+    use C4::Modelo::CatNivel3;
+    use C4::Modelo::CatNivel3::Manager;
+
+    my ($barcode) = @_;
+    my  $barcodes_array_ref;
+    my @filtros;
+    my $socioTemp = C4::Modelo::UsrSocio->new();
+ 
+	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+    
+    $barcodes_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros ); 
+	my $cant= scalar(@$barcodes_array_ref);
+
+	if($cant > 0){
+		return ($cant, $barcodes_array_ref);
+	}else{
+		return ($cant, 0);
+	}
+}
+
 =item
 
 =cut

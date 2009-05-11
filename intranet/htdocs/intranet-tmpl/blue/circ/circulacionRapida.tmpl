@@ -29,8 +29,8 @@ function realizarAccion(){
 
 	objAH=new AjaxHelper(updateRealizarAccion);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/cir/circulacionDB.pl";
-	objAH.nro_socio= $('#nro_socio').val();
+	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio= $('#nro_socio_hidden').val();
 	objAH.barcode= $('#barcode').val();
 	objAH.operacion= $('#operacion').val();
 	objAH.tipoAccion= "CIRCULACION_RAPIDA";
@@ -44,7 +44,8 @@ function updateRealizarAccion(responseText){
 }
 
 $(document).ready(function() {
-	AutocompleteUsuario('usuario');
+	CrearAutocompleteUsuarios('usuario','nro_socio_hidden');
+	CrearAutocompleteBarcodes('barcode','barcode_hidden');
 });
 
 </script>
@@ -60,24 +61,31 @@ $(document).ready(function() {
 	</tr>
 </table>
 
-<br>
-Operaci&oacute;n: 	<select id='operacion' tabindex='1'>	
-						<option value="prestamo">Pr&eacute;stamo</option>
-						<option value="devolucion">Devoluci&oacute;n</option>
-						<option value="renovacion">Renovaci&oacute;n</option>
-					</select>
-
-<br>
-<div id="divInfoEjemplar">
-C&oacute;digo de Barras: <input type="text" id="barcode" value="" tabindex='2'>
-</div>
-<br>
-<div id="divInfoUsuario">
-Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
-			<input type='hidden' id='nro_socio' value=''>
-</div>
-
-<input type="button" value="Aceptar" onClick="realizarAccion">
-
+<ul>
+	<li>
+		<div id="divInfoEjemplar">
+		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='1'>
+									<input type='hidden' id='barcode_hidden' value=''>
+		</div>
+	</li>
+	<li>
+		Operaci&oacute;n: 	<select id='operacion' tabindex='2'>	
+								<option value="prestar">Pr&eacute;stamo</option>
+								<option value="devolver">Devoluci&oacute;n</option>
+								<option value="renovar">Renovaci&oacute;n</option>
+							</select>
+		
+		Apoderado: <input type="checkbox" value="apoderado">
+	</li>
+	<li>
+		<div id="divInfoUsuario">
+		Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
+					<input type='hidden' id='nro_socio_hidden' value=''>
+		</div>
+	</li>
+	<li>
+		<input type="button" value="Aceptar" onClick="realizarAccion()" tabindex='4'>
+	</li>
+</ul>
 
 [% INCLUDE 'intranet-bottom.inc' %]

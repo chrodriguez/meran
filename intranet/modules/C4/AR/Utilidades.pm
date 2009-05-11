@@ -2118,7 +2118,22 @@ sub usuarioAutocomplete{
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){
-            $textout.= $usuario->persona->getApellido.", ".$usuario->persona->getNombre."|".$usuario->getNro_socio."\n";
+            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApellido.", ".$usuario->persona->getNombre."\n";
+        }
+    }
+    return $textout;
+}
+
+sub barcodeAutocomplete{
+
+    my ($barcodeStr)= @_;
+    my $textout="";
+
+    my ($cant, $cat_nivel3_array_ref)= C4::AR::Nivel3::getBarcodesLike($barcodeStr);
+
+    if ($cant > 0){
+        foreach my $nivel3 (@$cat_nivel3_array_ref){
+            $textout.= $nivel3->getBarcode."|".$nivel3->getBarcode."\n";
         }
     }
     return $textout;

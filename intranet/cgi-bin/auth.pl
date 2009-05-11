@@ -14,7 +14,7 @@ my $query = new CGI;
 my ($template, $t_params)= C4::Output::gettemplate("auth.tmpl", 'intranet');
 
 #se inicializa la session y demas parametros para autenticar
-$t_params->{'intra'};
+$t_params->{'intranet'};
 my ($session)= C4::Auth::inicializarAuth($query, $t_params);
 
 C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);

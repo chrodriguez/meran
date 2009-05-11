@@ -19,7 +19,7 @@ IdHidden= id del input hidden donde se guarda el id del resultado seleccionado
 url= url donde se realiza la consulta
 */
 
-function _CrearAutocomplete(Id, IdHidden, accion, param){
+function _CrearAutocomplete(Id, IdHidden, accion){
     url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+accion+"&token="+token;
     $("#"+Id).search();
     // q= valor de campoHelp
@@ -36,7 +36,7 @@ function _CrearAutocomplete(Id, IdHidden, accion, param){
     });//end autocomplete
     $("#"+Id).result(function(event, data, formatted) {
         $("#"+Id).val(data[1]);
-        _getId(IdHidden, data[0])
+        _getId(IdHidden, data[0]);
     });
 }
 
@@ -59,6 +59,14 @@ function CrearAutocompleteAutores(Id, IdHidden){
     _CrearAutocomplete(Id, IdHidden, 'autocomplete_autores');
 }
 
-function CrearAutocompleteSoportes(Id, IdHidden, url){
+function CrearAutocompleteSoportes(Id, IdHidden){
     _CrearAutocomplete(Id, IdHidden, 'autocomplete_soportes');
+}
+
+function CrearAutocompleteUsuarios(Id, IdHidden){
+    _CrearAutocomplete(Id, IdHidden, 'autocomplete_usuarios');
+}
+
+function CrearAutocompleteBarcodes(Id, IdHidden){
+    _CrearAutocomplete(Id, IdHidden, 'autocomplete_barcodes');
 }

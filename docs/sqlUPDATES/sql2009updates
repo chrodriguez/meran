@@ -758,3 +758,15 @@ INSERT INTO `pref_preferencia_sistema` (
 )
 VALUES (
 'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar "serial", sino sera el documento.', NULL , NULL );
+
+--En cat_nivel3 el barcode es unico
+ALTER TABLE `cat_nivel3` ADD UNIQUE( `barcode`)
+
+--index
+
+ALTER TABLE `usr_persona` ADD INDEX ( `apellido` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `nro_documento` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `legajo` )  ;
+
+
+

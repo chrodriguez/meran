@@ -23,7 +23,6 @@ my $result;
 if ($accion eq 'autocomplete_ciudades'){
 
     $result = C4::AR::Utilidades::ciudadesAutocomplete($string);
-
 }
 elsif ($accion eq 'autocomplete_paises'){
     
@@ -40,6 +39,14 @@ elsif ($accion eq 'autocomplete_autores'){
 elsif ($accion eq 'autocomplete_soportes'){
     
     $result = C4::AR::Utilidades::soportesAutocomplete($string);
+}
+elsif ($accion eq 'autocomplete_usuarios'){
+    
+    $result = C4::AR::Utilidades::usuarioAutocomplete($string);
+}
+elsif ($accion eq 'autocomplete_barcodes'){
+    
+    $result = C4::AR::Utilidades::barcodeAutocomplete($string);
 }
 
 print $session->header;

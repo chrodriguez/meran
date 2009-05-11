@@ -10,11 +10,11 @@ __PACKAGE__->meta->setup(
     columns => [
         id_prestamo              => { type => 'serial', not_null => 1 },
         id3                      => { type => 'integer' },
-        nro_socio	               => { type => 'integer', default => '0', not_null => 1 },
-	     tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
+        nro_socio	             => { type => 'integer', default => '0', not_null => 1 },
+	    tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', not_null => 1 },
         id_ui_origen             => { type => 'varchar', length => 4 },
-	     id_ui_prestamo	         => { type => 'varchar', length => 4 },
+	    id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
@@ -451,12 +451,8 @@ sub devolver {
     my $tipo= $params->{'tipo'};
     my $loggedinuser= $params->{'loggedinuser'};
     my $nro_socio= $params->{'nro_socio'};
-#   my $codMsg;
-#   my $error;
-#   my $paraMens;
     my $msg_object= C4::AR::Mensajes::create();
     #se setea el barcode para informar al usuario en la devolucion
-#   $paraMens->[0]= $params->{'barcode'};
 
     $self->debug("Actualizo la fecha de devolucion!!!!");
 
@@ -563,20 +559,15 @@ sub devolver {
         }
 ### Final del tema sanciones
         # Si la devolucion se pudo realizar
-#       $error= 0;
-#       $codMsg= 'P109';
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
     }
     else {
         # Si la devolucion dio error
-#       $error= 1;
-#       $codMsg= 'P110';
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
     }
 
-#   return ($error,$codMsg, $paraMens);
     return ($msg_object);
 }
 
