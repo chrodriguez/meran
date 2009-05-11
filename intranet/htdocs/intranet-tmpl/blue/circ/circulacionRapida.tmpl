@@ -1,0 +1,83 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
+
+<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
+[% INCLUDE "AutocompleteHelper.inc" %]
+
+<script language="javascript" type="text/javascript">
+
+
+function verificarBarcode(){
+
+	objAH=new AjaxHelper(updateVerificarBarcode);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/cir/circulacionDB.pl";
+	objAH.id1= id1;
+	objAH.id2= id2;
+	objAH.tipoAccion= "VERIFICAR_BARCODE";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateVerificarBarcode(responseText){
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
+}
+
+function realizarAccion(){
+
+	objAH=new AjaxHelper(updateRealizarAccion);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/cir/circulacionDB.pl";
+	objAH.nro_socio= $('#nro_socio').val();
+	objAH.barcode= $('#barcode').val();
+	objAH.operacion= $('#operacion').val();
+	objAH.tipoAccion= "CIRCULACION_RAPIDA";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateRealizarAccion(responseText){
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
+}
+
+$(document).ready(function() {
+	AutocompleteUsuario('usuario');
+});
+
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >
+			Circulaci&oacute;n R&aacute;pida
+		</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+Operaci&oacute;n: 	<select id='operacion' tabindex='1'>	
+						<option value="prestamo">Pr&eacute;stamo</option>
+						<option value="devolucion">Devoluci&oacute;n</option>
+						<option value="renovacion">Renovaci&oacute;n</option>
+					</select>
+
+<br>
+<div id="divInfoEjemplar">
+C&oacute;digo de Barras: <input type="text" id="barcode" value="" tabindex='2'>
+</div>
+<br>
+<div id="divInfoUsuario">
+Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
+			<input type='hidden' id='nro_socio' value=''>
+</div>
+
+<input type="button" value="Aceptar" onClick="realizarAccion">
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

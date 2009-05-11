@@ -36,7 +36,7 @@ dev = Desarrollador
 intra = usuario comun de la INTRA
 opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 =cut
-
+# FIXME cuando esten los permisos de la INTRA descomentar esto
 # 	$user = $context->config('userOPAC');
 # 	if($session->param('type') eq 'intranet'){
 # 	C4::AR::Debug::debug("AutoBase1 => type: ".$session->param('type'));

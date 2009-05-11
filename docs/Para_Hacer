@@ -1,6 +1,6 @@
 USUARIOS:
 
-    .- el DNI UNIQUE - GASPAR
+    .- el DNI y tipo UNIQUE - GASPAR
     .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante)
     .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR
     .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - GASPAR
@@ -10,8 +10,7 @@ USUARIOS:
 
 * Usuarios Potenciales:
 
-Elimnar potencila no hace nada, deberia pasarlo a borrado logicamente? - GASPAR 
-(ver si los eliminamos logicamente, pq sino no tiene sentido este eliminar, pq sigue mostrando al usuario potencial en potenciales, como deshabilitado)
+Elimnar potencila no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR 
 
 * Mesajes: (TODOS)
 
