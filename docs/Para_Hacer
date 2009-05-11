@@ -1,16 +1,16 @@
 USUARIOS:
 
-    .- el DNI y tipo UNIQUE - GASPAR
-    .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante)
-    .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR
+    .- el DNI y tipo UNIQUE - GASPAR    LISTO
+    .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante) LISTO
+    .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR LISTO
     .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - GASPAR
-    .- Mail OBLIGATORIO - GASPAR!!!!!!!!!!!!!!!!!!!!!!!!!
+    .- Mail OBLIGATORIO - GASPAR LISTO
 
 
 
 * Usuarios Potenciales:
 
-Elimnar potencila no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR 
+Elimnar potencila no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR  LISTO (de potenciales nomas, de reales se desactiva)
 
 * Mesajes: (TODOS)
 

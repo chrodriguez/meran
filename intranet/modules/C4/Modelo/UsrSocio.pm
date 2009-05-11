@@ -7,22 +7,26 @@ __PACKAGE__->meta->setup(
     table   => 'usr_socio',
 
     columns => [
-        id_persona         => { type => 'integer', not_null => 1 , length => 11},
-        id_socio           => { type => 'serial', not_null => 1 , length => 11},
-        nro_socio          => { type => 'varchar', length => 16, not_null => 1 },
-        id_ui              => { type => 'varchar', length => 4, not_null => 1 },
-        cod_categoria      => { type => 'character', length => 2, not_null => 1 },
-        fecha_alta         => { type => 'date' },
-        expira             => { type => 'date' },
-        flags              => { type => 'integer' },
-        password           => { type => 'varchar', length => 30 },
-        last_login          => { type => 'datetime' },
-        last_change_password => { type => 'date' },
-        change_password     => { type => 'integer', default => '0', not_null => 1 },
-        cumple_requisito   => { type => 'integer', not_null => 1, default => '0'},
-        id_estado          => { type => 'integer', not_null => 1 },
-        activo           => { type => 'integer', default => 0, not_null => 1 },
-        agregacion_temp  => { type => 'varchar', length => 255 },
+        id_persona                       => { type => 'integer', not_null => 1 , length => 11},
+        id_socio                         => { type => 'serial', not_null => 1 , length => 11},
+        nro_socio                        => { type => 'varchar', length => 16, not_null => 1 },
+        id_ui                            => { type => 'varchar', length => 4, not_null => 1 },
+        cod_categoria                    => { type => 'character', length => 2, not_null => 1 },
+        fecha_alta                       => { type => 'date' },
+        expira                           => { type => 'date' },
+        flags                            => { type => 'integer' },
+        password                         => { type => 'varchar', length => 30 },
+        last_login                       => { type => 'datetime' },
+        last_change_password             => { type => 'date' },
+        change_password                  => { type => 'integer', default => '0', not_null => 1 },
+        cumple_requisito                 => { type => 'integer', not_null => 1, default => '0'},
+        id_estado                        => { type => 'integer', not_null => 1 },
+        activo                           => { type => 'integer', default => 0, not_null => 1 },
+        agregacion_temp                  => { type => 'varchar', length => 255 },
+        nombre_apellido_autorizado       => { type => 'varchar', length => 255, not_null => 0 },
+        dni_autorizado                   => { type => 'varchar', length => 255, not_null => 0 },
+        telefono_autorizado              => { type => 'varchar', length => 255, not_null => 0 },
+
     ],
 
      relationships =>
@@ -148,6 +152,29 @@ sub agregar{
 
 }
 
+sub agregarAutorizado{
+
+    my ($self)=shift;
+    my ($params) = @_;
+
+    $self->setNombre_apellido_autorizado($params->{'nombre_apellido'});
+    $self->setDni_autorizado($params->{'dni_autorizado'});
+    $self->setTelefono_autorizado($params->{'telefono'});
+
+    $self->save();
+}
+
+sub tieneAutorizado{
+    
+    my ($self)=shift;
+    return (
+            C4::AR::Utilidades::validateString($self->getNombre_apellido_autorizado)
+                            &&
+            C4::AR::Utilidades::validateString($self->getDni_autorizado)
+                            && 
+            C4::AR::Utilidades::validateString($self->getTelefono_autorizado)
+            );
+}
 
 sub nextNro_socio{
 
@@ -511,5 +538,38 @@ sub estaSancionado {
 
 }
 
+
+sub getNombre_apellido_autorizado{
+    my ($self) = shift;
+    return ($self->nombre_apellido_autorizado);
+}
+
+sub setNombre_apellido_autorizado{
+    my ($self) = shift;
+    my ($nombre_apellido_autorizado) = @_;
+    $self->nombre_apellido_autorizado($nombre_apellido_autorizado);
+}
+
+sub getTelefono_autorizado{
+    my ($self) = shift;
+    return ($self->telefono_autorizado);
+}
+
+sub setTelefono_autorizado{
+    my ($self) = shift;
+    my ($telefono_autorizado) = @_;
+    $self->telefono_autorizado($telefono_autorizado);
+}
+
+sub getDni_autorizado{
+    my ($self) = shift;
+    return ($self->dni_autorizado);
+}
+
+sub setDni_autorizado{
+    my ($self) = shift;
+    my ($dni_autorizado) = @_;
+    $self->dni_autorizado($dni_autorizado);
+}
 1;
 

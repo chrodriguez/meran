@@ -384,3 +384,30 @@ function updateEliminarFoto(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 }
+
+
+function agregarAutorizado(){
+
+    var is_confirmed = confirm(CONFIRMAR_AFILIADO);
+
+    if (is_confirmed) {
+
+        objAH=new AjaxHelper(updateAgregarAutorizado);
+        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+        objAH.debug= true;
+        objAH.nro_socio= usuario.ID;
+        objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
+        objAH.sendToServer();
+
+    }
+}
+
+
+
+function updateAgregarAutorizado(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (!(hayError(Messages))){
+    }
+}
+}

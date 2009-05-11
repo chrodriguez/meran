@@ -78,6 +78,36 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 
 } #end if($tipoAccion eq "RESET_PASSWORD")
 
+
+elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
+my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my %params;
+
+    my ($Message_arrayref)= C4::AR::Usuarios::agregarAutorizado($obj);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    print $input->header;
+    print $infoOperacionJSON;
+
+} 
+
+elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
+    my $flagsrequired;
+    $flagsrequired->{permissions}=1;
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                    template_name => "includes/popups/agregarAutorizado.inc",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {borrowers => 1},
+                                    debug => 1,
+                });
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+
+} 
 =item
 Se buscan los permisos del usuario y se muestran por pantalla
 =cut

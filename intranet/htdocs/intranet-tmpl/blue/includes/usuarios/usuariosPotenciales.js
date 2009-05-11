@@ -18,26 +18,6 @@ function changePage(ini){
     objAH.changePage(ini);
 }
 
-// //************************************************Eliminar Usuario**********************************************
-
-function eliminarUsuario(){
-
-    var is_confirmed = confirm('Confirma la baja ?');
-
-    if (is_confirmed) {
-
-        objAH=new AjaxHelper(updateEliminarUsuario);
-        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-        objAH.debug= true;
-        objAH.nro_socio= usuario.ID;
-        objAH.tipoAccion= 'ELIMINAR_USUARIO';
-        objAH.sendToServer();
-
-    }
-}
-
-
-
 // FIXME ver que cuando el usuario no haya borrado, no redireccione
 function updateEliminarUsuario(responseText){
     var Messages=JSONstring.toObject(responseText);

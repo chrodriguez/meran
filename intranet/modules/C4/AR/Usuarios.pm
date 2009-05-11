@@ -216,6 +216,40 @@ sub t_addBorrower {
     return ($msg_object);
 }
 
+sub agregarAutorizado{
+    my ($params)=@_;
+    C4::AR::Debug::debug("NRO_SOCIO: ".$params->{'nro_socio'});
+    my $msg_object= C4::AR::Mensajes::create();
+    my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+    if ($socio){
+        my $db = $socio->db;
+        if (!($msg_object->{'error'})){
+            $db->{connect_options}->{AutoCommit} = 0;
+            $db->begin_work;
+        
+            eval{
+                $socio->agregarAutorizado($params);
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+                $db->commit;
+            };
+        
+            if ($@){
+                &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+                $db->rollback;
+            }
+        
+            $db->{connect_options}->{AutoCommit} = 1;
+        }
+    }
+    else{
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U353', 'params' => []} ) ;
+    }
+    return ($msg_object);
+}
+
 sub agregarPersona{
     my ($params)=@_;
     
@@ -1154,6 +1188,7 @@ sub getSocioLike {
     push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
+    C4::AR::Debug::debug("ORDEN: ".$ordenAux);
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $ordenAux ),
                                                                             limit   => $cantR,
