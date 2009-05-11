@@ -7,7 +7,6 @@
 <script language="javascript" type="text/javascript">
 token= '[% token %]';
 </script>
-
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>
@@ -18,7 +17,11 @@ token= '[% token %]';
 <script src="/opac-tmpl/default/includes/opac-searchFunciones.js"></script>
 <script src="/opac-tmpl/default/includes/circulacionOPAC.js"></script>
 <script src="/opac-tmpl/default/includes/favoritos.js"></script>
+<script src="/opac-tmpl/default/includes/message_OPAC.inc"></script>
+<script src="/includes/AutocompleteHelper.js"></script>
 
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 

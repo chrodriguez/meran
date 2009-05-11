@@ -91,7 +91,7 @@ use vars qw(@EXPORT @ISA);
     &existeInArray
     &paginarArreglo
     &capitalizarString
-    
+    &ciudadesAutocomplete
 
 );
 
@@ -371,7 +371,7 @@ sub obtenerTemas{
     return(@results);
 }
 
-sub obtenerTemas2(){
+sub obtenerTemas2{
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT nombre, id 
@@ -1878,5 +1878,266 @@ sub sortHASHNumber{
 	return @resultsarray;
 }
 
+
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+############################## Funciones para AUTOCOMPLETABLES #############################################################
+
+sub autorAutocomplete{
+
+    my ($autorStr) = @_;
+    my $textout;
+    my $autores_array_ref= C4::AR::Referencias::obtenerAutoresLike($autorStr);
+
+    foreach my $autor (@$autores_array_ref){
+        $textout.= $autor->getId."|".$autor->getCompleto."\n";
+    }
+    return $textout;
+}
+
+sub ayudaCampoMARK{
+
+    my ($campo)= @_;
+    my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoCampo($campo); 
+    my $i=0;
+    my $resultAyudaMARK="";
+    my $field;
+    my $data;
+
+    for ($i; $i<$cant; $i++){
+        $field=$results[$i]->{'tagfield'};
+        $data=$results[$i]->{'liblibrarian'};
+        $resultAyudaMARK .= $field."|".$data. "\n";
+    }
+
+    return ($resultAyudaMARK);
+}
+
+
+sub bibliosAutocomplete{
+
+
+    my ($biblioStr) = @_;
+
+    my $textout="";
+
+    my @result=C4::AR::UtilidadesobtenerBiblios($biblioStr);
+
+    foreach my $biblio (@result){
+        $textout.=$biblio->{'branchname'}."|".$biblio->{'id'}."\n";
+    }
+
+    return $textout;
+}
+
+sub autocompleteTemas{
+
+    my ($tema) = @_;
+
+    my ($cant, @results)= &C4::AR::ControlAutoridades::search_temas($tema);
+
+    my $i=0;
+    my $resultado="";
+    my $field;
+    my $data;
+
+    for ($i; $i<$cant; $i++){
+        $field=$results[$i]->{'id'};
+        $data=$results[$i]->{'nombre'};
+        $resultado .= $field."|".$data. "\n";
+    }
+
+    return $resultado;
+}
+
+sub autoresAutocomplete{
+
+    my ($autor) = @_;
+
+    my ($cant, @results)= &C4::AR::ControlAutoridades::search_autores($autor);
+
+    my $i=0;
+    my $resultado="";
+    my $field;
+    my $data;
+
+    for ($i; $i<$cant; $i++){
+        $field=$results[$i]->{'id'};
+        $data=$results[$i]->{'nombre'};
+        $resultado .= $field."|".$data. "\n";
+    }
+
+    return $resultado;
+}
+
+sub autocompleteEditoriales{
+    
+    my ($editorial) = @_;
+
+    my ($cant, @results)= &C4::AR::ControlAutoridades::search_editoriales($editorial);
+
+    my $i=0;
+    my $resultado="";
+    my $field;
+    my $data;
+
+    for ($i; $i<$cant; $i++){
+        $field=$results[$i]->{'id'};
+        $data=$results[$i]->{'editorial'};
+        $resultado .= $field."|".$data. "\n";
+    }
+
+    return $resultado;
+
+}
+
+sub lenguajesAutocomplete{
+
+    my ($lenguaje) = @_;
+    my $textout;
+    my @result;
+
+    if ($lenguaje){
+        my($cant, $result) = C4::AR::Utilidades::buscarLenguajes($lenguaje);# agregado sacar
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'idLanguage'}."|".$result->[$i]->{'description'}."\n";
+        }
+    }
+
+    return $textout;
+}
+
+sub nivelBibliograficoAutocomplete{
+    
+    my ($nivelBibliografico) = @_;
+
+    my $textout;
+    my @result;
+
+    if ($nivelBibliografico){
+        my($cant, $result) = C4::AR::Utilidades::buscarNivelesBibliograficos($nivelBibliografico);
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'code'}."|".$result->[$i]->{'description'}."\n";
+        }
+    }
+
+    return $textout;
+}
+
+sub paisesAutocomplete{
+
+    my ($autorStr)= @_;;
+
+    my $textout="";
+    my @result=C4::AR::Utilidades::obtenerPaises($autorStr);
+
+    foreach my $pais (@result){
+        $textout.=$pais->{'iso'}."|".$pais->{'nombre_largo'}."\n";
+    }
+
+    return $textout;
+}
+
+sub ciudadesAutocomplete{
+
+    my ($ciudad)= @_;
+    my $textout;
+    my @result;
+    if ($ciudad){
+        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'localidad'}."|".$result->[$i]->{'nombre'}."\n";
+        }
+    }
+    return $textout;
+}
+
+sub soportesAutocomplete{
+
+    my ($soporte) = @_;
+    my $textout;
+    my @result;
+
+    if ($soporte){
+        my($cant, $result) = C4::AR::Utilidades::buscarSoportes($soporte);# agregado sacar
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'idSupport'}."|".$result->[$i]->{'description'}."\n";
+        }
+    }
+    return $textout;
+}
+
+sub temasAutocomplete{
+
+    my ($temaStr,$campos,$separador) = @_;
+
+    my $textout="";
+
+    my @result=C4::AR::Utilidades::obtenerTemas2($temaStr);
+    my @arrayCampos=split(",",$campos);
+    my $texto="";
+    foreach my $tema (@result){
+        foreach my $valor(@arrayCampos){
+            if($texto eq ""){
+                $texto.=$tema->{$valor};
+            }
+            else{
+                $texto.=$separador.$tema->{$valor};
+            }
+        }
+    #   $textout.=$tema->{'nombre'}."|".$tema->{'id'}."\n";
+        $textout.=$texto."|".$tema->{'id'}."\n";
+        $texto="";
+    }
+    return $textout;
+}
+
+sub usuarioAutocomplete{
+
+    my ($usuarioStr)= @_;
+    my $textout="";
+
+    my ($cant, $usuarios_array_ref)= C4::AR::Usuarios::getSocioLike($usuarioStr);
+
+    if ($cant > 0){
+        foreach my $usuario (@$usuarios_array_ref){
+            $textout.= $usuario->persona->getApellido.", ".$usuario->persona->getNombre."|".$usuario->getNro_socio."\n";
+        }
+    }
+    return $textout;
+}
+
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
+############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
 
 1;

@@ -1,64 +1,90 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+[% INCLUDE "opac-top.inc" %]
+<script>
+ $(document).ready(function() {
+        CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+        CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+    });
+
+</script>
 
 <!-- el if fue agregado por Einar para validar que las Unidades que no pueden hacerlo cambien la info de los socios siempre con la variable Guarani -->
 
-<!-- TMPL_IF NAME="updatedata" --> 
-<p><i>Usted no tiene autorizaci&oacute;n para ver esta p&aacute;gina.<br>
-  <!-- TMPL_ELSE --> 
-
-<p><i>Por favor cambie lo que sea necesario. Un mail ser&aacute; enviado a la Unidad de Informaci&oacute;n<br>
+[% IF updatedata %] 
+    <p>
+        <i>Usted no tiene autorizaci&oacute;n para ver esta p&aacute;gina.</i><br>
+    </p>
+        
+[% ELSE %] 
+    <p>
+        <i>Por favor cambie lo que sea necesario. Un mail ser&aacute; enviado a la Unidad de Informaci&oacute;n. </i><br>
+    </p>
 <!-- Los cambios no aparecer&aacute;n hasta que la Unidad de Informaci&oacute;n los valide. -->
+    <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+        <table align="center">
+        
+            <tr>
+                <td>[% "Apellido" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getApellido %]" name="surname">
+                </td>
+            </tr>
+            
+            <tr> 
+            
+            <tr> 
+                <td>[% "Nombre" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getNombre %]"  name="firstname">
+                </td>
+            </tr>
+            
+            <tr> 
+                <td>[% "Calle" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getCalle %]"  name="streetaddress">
+                </td>
+            </tr>
+            
+            <tr> 
+                <td> [% "Ciudad" | i18n %]</td> 
+                <td>
+                    <input class="required" type=text id="ciudad" name="ciudad" value="[% socio.persona.ciudad_ref.getNombre %]" >
+                    <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]">
+                </td>
+            </tr>
+    
+            <tr> 
+                <td>[% "Tel&eacute;fono Personal" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getTelefono %]"  name="phone">
+                </td>
+            </tr>
+    
+            <tr> 
+                <td>[% "Tel&eacute;fono/Fax del trabajo" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getAlt_persona %]"  name="faxnumber">
+                </td>
+            </tr>
+    
+            <tr> 
+                <td>[% "Mail" | i18n %]</td> 
+                <td>
+                    <input type="text"  size="25" value="[% socio.persona.getEmail %]" name="emailaddress">
+                </td>
+            </tr>
+    
+            <tr>
+            <td colspan="2"><input type="submit" value="Enviar"></td>
+            </tr>
+        
+        </table>
+    </form>
+    
 
-</i></p>
+[% END %]
 
-<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
-
-<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
-<table align="center">
-
-<tr>
-<td>Apellido</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="surname" -->"  name="surname"></td></tr>
-
-<tr> 
-
-<tr> 
-<td>Nombre</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="firstname" -->"  name="firstname"></td></tr>
-
-<tr> 
-<td>Calle</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="streetaddress" -->"  name="streetaddress"></td></tr>
-
-<tr> 
-<td>Ciudad</td> <td>
-<input class="inputFontNormal" type=text readonly name="dcity" id="dcity" value="<!-- TMPL_IF NAME="cityname" --><!-- TMPL_VAR name="cityname" --> <!-- TMPL_ELSE --> ---- <!-- /TMPL_IF -->">
-          <input class="inputFontNormal" type="hidden" name="city" id="city" value="<!-- TMPL_VAR name="city" -->">
-
-           <a onClick="window.open('searchcity.pl','Seleccionar lugar','width=640,height=500,top=100,left=300,toolbar=no,scrollbars=auto');">
-           Modificar</a>
-</td></tr>
-
-
-<tr> 
-<td>Tel&eacute;fono Personal</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="phone" -->"  name="phone"></td></tr>
-
-<tr> 
-<td>Tel&eacute;fono/Fax  del trabajo</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="faxnumber" -->"  name="faxnumber"></td></tr>
-
-<tr> 
-<td>Mail</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="emailaddress" -->"  name="emailaddress"></td></tr>
-
-
-
-<tr>
-<td colspan="2"><input type="submit" value="Enviar"></td>
-</tr>
-
-</table>
-</form>
-
-<!-- /TMPL_LOOP -->
-
- <!-- /TMPL_IF --> 
 <!-- fin del if agregado por Einar -->
 
 
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+[% INCLUDE "opac-bottom.inc" %]

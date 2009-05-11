@@ -28,7 +28,6 @@ if(($tipoAccion eq "Select")&&($componente eq "ayudaCampoMARK")){
   		$resultAyudaMARK .= $field."|".$data. "\n";
 	}
 
-	print "Content-type: text/html\n\n";
  	print $resultAyudaMARK;
 }
 #**************************************************************************************************

@@ -58,9 +58,15 @@
 	</td>
 	<td class="impar">
   	[% IF prestamo.nivel3.nivel1.getAutor %]
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% prestamo.nivel3.nivel1.getAutor %]" >
+		<!--<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% prestamo.nivel3.nivel1.getAutor %]" >
 		[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
-		</a>
+		</a>-->
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.cat_autor.getCompleto | i18n %]",
+                                                url =>      "/cgi-bin/koha/opac-searchresults.pl", 
+                                                params => [ "authorid=[% prestamo.nivel3.nivel1.getAutor %]", ],
+                                            ) ;
+        [% END %]
   	[% ELSE %]
 		&nbsp;
  	[% END %]

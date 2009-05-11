@@ -305,7 +305,14 @@ C4::AR::Debug::debug("desde checkauth===========================================
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 		my $obj=$query->param('obj');
 		$obj=C4::AR::Utilidades::from_json_ISO($obj);
-		$token= $obj->{'token'};
+
+        if (defined($obj) && ($obj != 0)){
+            #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
+		    $token= $obj->{'token'};
+        }else{
+            #ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL)
+            $token=$query->param('token');
+        }
 C4::AR::Debug::debug("checkauth=> Token desde Ajax: ".$token);
 	}else{
 		$token= $query->param('token');

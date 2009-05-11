@@ -15,13 +15,15 @@
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/util.js"></script>
 <script src="/includes/MessageHelper.js"></script>
+<script src="/includes/WindowHelper.js"></script>
+<script src="/includes/AutocompleteHelper.js"></script>
+
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
+
 [% INCLUDE  'WindowHelper.inc'  %]
 <!-- Se incluyen los mensajes para la catalogacion -->
 [% INCLUDE "message_INTRA.inc" %]
-
-<script src="/includes/WindowHelper.js"></script>
 
 <head>
 <title>Koha::UNLP</title>
