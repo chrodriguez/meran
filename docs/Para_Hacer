@@ -1,0 +1,72 @@
+USUARIOS:
+
+    .- el DNI UNIQUE - GASPAR
+    .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante)
+    .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR
+    .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - GASPAR
+    .- Mail OBLIGATORIO - GASPAR
+
+
+
+* Usuarios Potenciales:
+
+Elimnar potencila no hace nada, deberia pasarlo a borrado logicamente? - GASPAR 
+(ver si los eliminamos logicamente, pq sino no tiene sentido este eliminar, pq sigue mostrando al usuario potencial en potenciales, como deshabilitado)
+
+* Mesajes: (TODOS)
+
+pasar TODOS los mensajes armados en el cliente con javascript a message_INTRA.inc, separalos por modulos, mas adelante
+se vera si es necesario separalos en .inc por modulos.
+El message_INTRA.inc ya se encuentra agregado en el intranet-top.inc asi que no es necesario agregarlo.
+
+* Links y TOKEN: (TODOS)
+
+ir pasando TODOS los links (tags A) a:
+
+[% PERL %]
+print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+				url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+				params =>	["nro_socio=[% socio.getNro_socio %]"],
+				title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+			) ;
+[% END %]
+
+tener en cuenta:
+
+- los redirects en javascript, window.location....
+- los formularios, agregar <input type='hidden' name='token' value=[% token %]>
+
+
+CIRCULACION: .
+
+- Preferencia para DONDE circular y donde no. (ventanita de nro_socio y barcode, y presta) - MIGUEL LISTO y TESTEADO
+- Circulacion Rapida - MIGUEL
+
+
+
+Catalogación:
+            Al agregar un campo en estructura de catalogacion, no se muestra en la carga :( - MIGUEL
+
+            Modificar ejemplar: DEO checkeo - MIGUEL
+
+            NIvel 2: ES SOLO EL AÑO - MIGUEL y GASPAR
+
+            El orden de visibilidad de los campos esta roto - GASPAR
+
+            Dejar modificar el nombre visible de los campos (fijos tambien) - GASPAR
+
+Preferencias:
+
+da error en tablesorter y no hace la zebra - MONO
+
+
+OPAC:
+
+Tratar de armar mas templates separados e incluirlos, quizas usar menos AJAX
+
+Luego de llegar a la cant. maximas de reservas, nos muestra las reservas y da la posibilidad de cancelar y reservar esto no funciona 
+
+No redirecciona a opac-user.pl luego de iniciar sesion desde opac-mail.pl y desde auth.pl
+
+REPORTES_
+
