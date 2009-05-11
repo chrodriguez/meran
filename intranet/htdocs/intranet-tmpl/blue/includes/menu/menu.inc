@@ -78,6 +78,7 @@
           <!-- Navigation item -->
             <li><h3>Circulaci&oacute;n</h3>
                 <ul>
+				  <li><a href="/cgi-bin/koha/circ/circulacionRapida.pl?token=[% token %]">Circulaci&oacute;n R&aacute;pida</a></li>	
                   <li><a href="/cgi-bin/koha/circ/prestamos.pl?token=[% token %]">Pr&eacute;stamos</a></li>
                   <li><a href="/cgi-bin/koha/circ/devoluciones.pl?token=[% token %]">Devol. y Renov.</a></li>
                   <li><a href="/cgi-bin/koha/circ/sanciones.pl?token=[% token %]">Sanciones</a></li>
@@ -100,6 +101,7 @@
                   <li><a href="/cgi-bin/koha/admin/feriados.pl?token=[% token %]">Feriados</a></li>
                   <li><a href="/cgi-bin/koha/admin/sanctions.pl?token=[% token %]">Sanciones</a></li>
                   <li><a href="/cgi-bin/koha/admin/thesaurus.pl?token=[% token %]">Thesaurus</a></li>
+				  <li><a href="/cgi-bin/koha/admin/permisosTablas.pl?token=[% token %]">Admin. Permisos Tablas</a></li>
                   <li><h3>MARC</h3>
                      <ul>
                         <li><a href="/cgi-bin/koha/admin/koha2marclinks.pl?token=[% token %]">Links KOHA - MARC DB</a></li>

@@ -1354,7 +1354,6 @@ sub busquedaAvanzada_newTemp{
 		push (@id1_array,$data);
 	}
 	
-	C4::AR::Debug::debug("busquedaAvanzada_newTemp => cant ".scalar(@id1_array));
 	#arma y ordena el arreglo para enviar al cliente
    	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
 	#se loquea la busqueda

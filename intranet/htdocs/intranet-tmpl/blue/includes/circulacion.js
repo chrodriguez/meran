@@ -286,7 +286,6 @@ function prestar(){
  */
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-// 	clearMessages();
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;

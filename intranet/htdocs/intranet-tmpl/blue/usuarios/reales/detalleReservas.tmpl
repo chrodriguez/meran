@@ -99,24 +99,30 @@
                 - 
             [% END %]
 			</td>
-	
+		[% IF circularDesdeDetalleUsuario %]
 			<td>
 				<inpuT 	type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
 						src="[% themelang %]/images/borrar.png" 
 						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
 			</td>
+		[% ELSE %]
+			[% 'NO DISPONIBLE' | i18n %]
+		[% END %] <!--END IF permiso_para_circular -->
 			<td height=25>&nbsp;</td>
 	
 		</tr>
 	[% END %]
 	</table>
-	
-	<p align=center>
-		<input 	type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
-				src="[% themelang %]/images/item-prestar.png" 
-				title="Realizar pr&eacute;stamo" 
-				onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
-	</p>
+	[% IF circularDesdeDetalleUsuario %]
+		<p align=center>
+			<input 	type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
+					src="[% themelang %]/images/item-prestar.png" 
+					title="Realizar pr&eacute;stamo" 
+					onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+		</p>
+	[% ELSE %]
+			[% 'NO DISPONIBLE' | i18n %]
+	[% END %] <!--END IF permiso_para_circular -->
 	
 
 [% END %]
@@ -168,11 +174,15 @@
                 [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
             [% END %]
             </td>
+		[% IF circularDesdeDetalleUsuario %]
 			<td> 
 				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
 						src="[% themelang %]/images/borrar.png" 
 						onClick="confirm_cancelation('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
 			</td>
+		[% ELSE %]
+			[% 'NO DISPONIBLE' | i18n %]
+		[% END %] <!--END IF permiso_para_circular -->
 			<td height=25>&nbsp;</td>
 		</tr>
 	[% END %]

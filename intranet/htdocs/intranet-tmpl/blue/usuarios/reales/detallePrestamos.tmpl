@@ -111,21 +111,25 @@
 	
 	</table>
 	
-	<p align="center">
-	
-	[% IF prestamos_cant %]	
-		<input type="image" BORDER=0 
-		src="[% themelang %]/images/item-return.png" 
-		title="Devolver" 
-		onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
-	[% END %]	
-	
-	[% IF socio.esRegular %]
-		[% UNLESS socio.estaSancionado %]
-			<input type="image" 
-			src="[% themelang %]/images/renew.png" title="Renovar" 
-			onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">
+		<p align="center">
+	[% IF circularDesdeDetalleUsuario %]	
+		[% IF prestamos_cant %]	
+			<input type="image" BORDER=0 
+			src="[% themelang %]/images/item-return.png" 
+			title="Devolver" 
+			onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
+		[% END %]	
+		
+		[% IF socio.esRegular %]
+			[% UNLESS socio.estaSancionado %]
+				<input type="image" 
+				src="[% themelang %]/images/renew.png" title="Renovar" 
+				onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">
+			[% END %]
 		[% END %]
-	[% END %]
-	</p>
+	[% ELSE %]
+			[% 'NO DISPONIBLE' | i18n %]
+	[% END %] <!--END IF permiso_para_circular -->
+		</p>
+
 [% END %]

@@ -322,14 +322,10 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
     my ($userid, $cookie, $sessionID, $flags);
     my $logout = $query->param('logout.x')||0;
 
-C4::AR::Debug::debug("checkauth=> info antes de verificar si hay session \n");
-C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n");
-C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n");
-
    if ($sessionID=$session->param('sessionID')) {
 C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
-C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n");
-C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n");
+# C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n");
+# C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
@@ -777,7 +773,8 @@ sub inicializarAuth{
 	$params{'token'}= '';
     $params{'nroRandom'}= '';
     $params{'borrowernumber'}= '';
-    $params{'type'}= 'opac'; #OPAC o INTRA
+#     $params{'type'}= 'opac'; #OPAC o INTRA
+	$params{'type'}= $t_params->{'type'};
     $params{'flagsrequired'}= '';
     $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
     

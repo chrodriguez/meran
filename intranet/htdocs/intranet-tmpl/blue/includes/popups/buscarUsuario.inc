@@ -1,16 +1,4 @@
 <!-- *********************************Window Help********************************************* -->
-<!--
-<link href="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
-
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.core.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.draggable.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js"></script>
-<script src="/intranet-tmpl/blue/includes/jquery/ui.mouse.js"></script>-->
-
-
 <script>
 
 function clearInput(){

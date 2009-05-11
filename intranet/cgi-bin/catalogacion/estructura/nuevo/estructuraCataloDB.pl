@@ -425,6 +425,8 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 	$t_params->{'cantPrestados'}= $nivel2_hashref->{'cantPrestados'};
 	$t_params->{'nivel3'}= $nivel2_hashref->{'nivel3'};
 	$t_params->{'id2'}= $id2;
+	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
+	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
     
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

@@ -17,7 +17,8 @@ my %params;
 $params{'id_reserva'}=$obj->{'id_reserva'};
 $params{'nro_socio'}=$userid;
 $params{'loggedinuser'}=$userid;
-$params{'tipo'}="OPAC";
+# $params{'tipo'}="OPAC";
+$params{'type'}= "opac";
 
 # my ($error,$codMsg,$message);
 my $msg_object;

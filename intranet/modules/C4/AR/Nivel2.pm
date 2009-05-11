@@ -408,7 +408,8 @@ sub getCantPrestados{
 																with_objects => ['nivel3'],
 										);
 
-	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+# 	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+
 
 	return $cantPrestamos_count;
 }

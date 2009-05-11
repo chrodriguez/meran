@@ -1738,18 +1738,18 @@ sub paginarArreglo{
 	my $division_temp  = floor ($cant_total / $fin);
 	my $resto = $cant_total - ($division_temp * $fin);
 	my $numPagina = ceil($ini / $fin) + 1;
-	C4::AR::Debug::debug("paginarArreglo => ini: ".$ini);
+# 	C4::AR::Debug::debug("paginarArreglo => ini: ".$ini);
 	
 	if ( ($numPagina > $division_temp) ){
 		@array = @array[$ini..($ini + $resto-1)];
-		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $resto-1));
+# 		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $resto-1));
 	}else{
 		@array = @array[$ini..($ini + $fin-1)];
-		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $fin-1));
+# 		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $fin-1));
 	}
 	
-	C4::AR::Debug::debug("paginarArreglo => cant_total: ".$cant_total);
-	C4::AR::Debug::debug("paginarArreglo => cant del arreglo: ".scalar(@array));
+# 	C4::AR::Debug::debug("paginarArreglo => cant_total: ".$cant_total);
+# 	C4::AR::Debug::debug("paginarArreglo => cant del arreglo: ".scalar(@array));
 
    	return ($cant_total,@array);
 }
@@ -1826,7 +1826,7 @@ sub sortHASHString{
 	my $orden= $params->{'orden'};
 	my $info= $params->{'info'};
 	my @keys=keys %$info;	
-	C4::AR::Debug::debug("orden: ".$orden);
+# 	C4::AR::Debug::debug("orden: ".$orden);
 
 	if($desc){
 	#ordena la HASH de strings de manera DESC
@@ -1859,7 +1859,7 @@ sub sortHASHNumber{
 	my $orden= $params->{'orden'};
 	my $info= $params->{'info'};
 	my @keys=keys %$info;
-	C4::AR::Debug::debug("orden: ".$orden);
+# 	C4::AR::Debug::debug("orden: ".$orden);
 
 	if($desc){
 	#ordena la HASH de strings de manera DESC

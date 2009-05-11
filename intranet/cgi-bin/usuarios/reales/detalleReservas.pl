@@ -13,11 +13,11 @@ use C4::AR::Sanciones;
 my $input=new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user ({
-								template_name	=> 'usuarios/reales/detalleReservas.tmpl',
-								query		=> $input,
-								type		=> "intranet",
-								authnotrequired	=> 0,
-								flagsrequired	=> { circulate => 1 },
+																	template_name	=> 'usuarios/reales/detalleReservas.tmpl',
+																	query		=> $input,
+																	type		=> "intranet",
+																	authnotrequired	=> 0,
+																	flagsrequired	=> { circulate => 1 },
     					});
 
 my $obj=$input->param('obj');
@@ -47,6 +47,8 @@ if($reservas){
 	$t_params->{'reservas_asignadas_count'}= $racount;
 	$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
 	$t_params->{'reservas_espera_count'}=$recount;
+	#se ferifica si la preferencia "circularDesdeDetalleUsuario" esta seteada
+	$t_params->{'circularDesdeDetalleUsuario'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleUsuario');
 }
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

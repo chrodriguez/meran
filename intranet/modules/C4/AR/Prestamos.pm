@@ -413,6 +413,18 @@ sub t_devolver {
     return ($msg_object);
 }
 
+sub t_devolverPorBarcode {
+	my ($params)=@_;
+
+	#realizo las verificaciones necesarias
+# FIXME falta verificar
+	#obtengo el id_prestamo segun el barcode que se quiere devolver
+	$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
+	my ($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode($params);	
+
+	return ($Message_arrayref);
+}
+
 sub crearTicket {
     my ($id3,$nro_socio,$loggedinuser)=@_;
 
@@ -554,26 +566,19 @@ sub t_renovar{
     $dbh->{RaiseError} = 1;
     my $tipo=$params->{'tipo'};
     my $msg_object;
-#   my ($error,$codMsg,$paraMens);
     eval{
-#       ($error,$codMsg,$paraMens)= renovar($params);
         ($msg_object)= renovar($params);
         $dbh->commit;
     };
     if ($@){
         #Se loguea error de Base de Datos
-#       $codMsg= 'B405';
         C4::AR::Mensajes::printErrorDB($@, 'B405',$tipo);
         eval {$dbh->rollback};
         #Se setea error para el usuario
-#       $error= 1;
-#       $codMsg= 'P113';
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P113', 'params' => []} ) ;
     }
     $dbh->{AutoCommit} = 1;
-#   my $message= &C4::AR::Mensajes::getMensaje($codMsg,$tipo,$paraMens);
-#   return($error,$codMsg,$message);
 
     return ($msg_object);
 }

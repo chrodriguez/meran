@@ -34,7 +34,8 @@ my $id2= $obj->{'id2'};
 my $socio= $session->param('userid');
 
 my %params;
-$params{'tipo'}= 'OPAC'; 
+# $params{'tipo'}= 'OPAC';
+$params{'type'}= 'opac';  
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
 $params{'nro_socio'}= $socio;
@@ -47,7 +48,7 @@ my $acciones;
 $acciones= C4::AR::Mensajes::getAccion($msg_object->{'messages'}->[0]->{'codMsg'});
 
 my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($socio);
-
+# FIXME esto esta feo!!!
 if($msg_object->{'error'}){
 #SE PRODUJO ALGUN ERROR
 	if($acciones->{'maximoReservas'}){
@@ -56,29 +57,31 @@ if($msg_object->{'error'}){
 	}
 }else{
 # SE REALIZO LA RESERVA CON EXITO
-
-	my @reservas_asignadas;
-	my $racount = 0;
-	my @reservas_espera;
-	my $recount = 0;
-
-
-	foreach my $reserva (@$reservas) {
-		if ($reserva->getId3) {
-			#Reservas para retirar
-			push @reservas_asignadas, $reserva;
-			$racount++;
-   		}else{
-			#Reservas en espera
-			push @reservas_espera, $reserva;
-			$recount++;
-   		}
-	}
-
-	$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
-	$t_params->{'reservas_asignadas_count'}= $racount;
-	$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
-	$t_params->{'reservas_espera_count'}=$recount;
+	if($reservas){
+	#si tiene reservas anteriores, las muestro
+		my @reservas_asignadas;
+		my $racount = 0;
+		my @reservas_espera;
+		my $recount = 0;
+	
+	
+		foreach my $reserva (@$reservas) {
+			if ($reserva->getId3) {
+				#Reservas para retirar
+				push @reservas_asignadas, $reserva;
+				$racount++;
+			}else{
+				#Reservas en espera
+				push @reservas_espera, $reserva;
+				$recount++;
+			}
+		}
+	
+		$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
+		$t_params->{'reservas_asignadas_count'}= $racount;
+		$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
+		$t_params->{'reservas_espera_count'}=$recount;
+	}# END if($reservas)
 }
 
 

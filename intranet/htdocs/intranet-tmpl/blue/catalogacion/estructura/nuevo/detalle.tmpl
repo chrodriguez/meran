@@ -280,9 +280,6 @@ function updateBorrarNivel1(responseText){
 </table>
 
 <div class="detalle">
-	<!--<a href="agregarDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1">
-	<input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" border=0 title="Editar Nivel 1">
-	</a>-->
 	[% PERL %]
 		print C4::AR::Filtros::link_to(	text => 	"<input type='image' border='0'  src='[% themelang %]/images/editar.png'>",
 										url => 		"agregarDocumento.pl", 
@@ -317,10 +314,6 @@ function updateBorrarNivel1(responseText){
         <div class="detalle">
         <!-- NIVEL 2 -->
 	        <div id="[% id2 %]" style="position: relative; float:right;"></div>
-	        
-        <!--	<a href="agregarDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=MODIFICAR_NIVEL_2">
-	        <input 	type="image" name="submit" value="modify" border="0"  src="[% themelang %]/images/editar.png" title="Editar Nivel 2">	
-	        </a>-->
 	        [% PERL %]
 		        print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
 										        url => 		"agregarDocumento.pl", 

@@ -544,6 +544,7 @@ sub getCantPrestados{
 	my ($self) = shift;
 	my ($id2)=@_;
 
+=item
 	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                	query => [ 	id2 => { eq => $self->getId2 },
 # FIXME #ojo no se si funciona el NULL
@@ -552,8 +553,10 @@ sub getCantPrestados{
 																require_objects => ['nivel3.nivel2'],
 																with_objects => ['nivel3'],
 										);
+=cut
+	my ($cantPrestamos_count)= C4::AR::Nivel2::getCantPrestados($id2);
 
-	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+# 	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
 
 	return $cantPrestamos_count;
 }

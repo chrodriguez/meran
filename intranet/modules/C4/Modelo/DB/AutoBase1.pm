@@ -14,11 +14,42 @@ __PACKAGE__->use_private_registry;
     my $user;
     my $pass;
   
+=item
  if (defined($context)){
     $driverDB = 'mysql';
     $database = $context->config('database');
     $hostname = $context->config('hostname');
     $user = $context->config('user');
+    $pass = $context->config('pass');
+}
+=cut
+ if (defined($context)){
+    $driverDB = 'mysql';
+	use CGI::Session;
+	use C4::AR::Debug;
+
+	my $session = CGI::Session->load();
+=item
+$context->config('userINTRA') y/o $context->config('userOPAC') pueden ser:
+admin = usuario Aministrador (TODOS los permisos sobre la base)
+dev = Desarrollador
+intra = usuario comun de la INTRA
+opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
+=cut
+
+# 	$user = $context->config('userOPAC');
+# 	if($session->param('type') eq 'intranet'){
+# 	C4::AR::Debug::debug("AutoBase1 => type: ".$session->param('type'));
+# 	C4::AR::Debug::debug("AutoBase1 => userINTRA");
+# 		$user = $context->config('userINTRA');
+# 	}else{
+# 	C4::AR::Debug::debug("AutoBase1 => userOPAC");	
+# 	}
+
+ $user = $context->config('user');
+
+    $database = $context->config('database');
+    $hostname = $context->config('hostname');
     $pass = $context->config('pass');
 }
         
@@ -33,5 +64,6 @@ __PACKAGE__->register_db
   #mysql_enable_utf8 => 1,
   post_connect_sql => ["SET NAMES utf8"], 
 );
+
 
 1;

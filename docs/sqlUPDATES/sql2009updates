@@ -732,5 +732,11 @@ CHANGE `id2` `id_editorial_seudonimo` INT( 11 ) NOT NULL,
  ALTER TABLE `cat_nivel1_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
  ALTER TABLE `cat_nivel2_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  ;
  ALTER TABLE `cat_nivel3` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+--nuevas preferencias, para permitir o no circulacion de otro lugar que no sea Circulacion
+INSERT INTO `V3Econo`.`pref_preferencia_sistema` (`variable` ,`value` ,`explanation` ,`options` ,`type`)
+VALUES ('circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL , 'bool'), 
+('circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL , 'bool');
+
  
 

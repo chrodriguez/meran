@@ -53,7 +53,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #*************************************************************************************************************
 
 #************************************************CONFIRMAR PRESTAMO*******************************************
-if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
+elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
 	my $array_ids3_a_prestar=$obj->{'datosArray'};
 	my $cant= scalar(@$array_ids3_a_prestar);
@@ -86,7 +86,7 @@ if($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #*************************************************************************************************************
 
 #***************************************************PRESTAMO*************************************************
-if($tipoAccion eq "PRESTAMO"){
+elsif($tipoAccion eq "PRESTAMO"){
 #se realizan los prestamos
 	my $array_ids3=$obj->{'datosArray'};
 	my $loop=scalar(@$array_ids3);
@@ -164,7 +164,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 
 #*********************************************DEVOLVER_RENOVAR***********************************************
 
-if($tipoAccion eq "DEVOLVER_RENOVAR"){
+elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my $array_ids3=$obj->{'datosArray'};
 	my $loop=scalar(@$array_ids3);
 
@@ -239,7 +239,7 @@ if($tipoAccion eq "DEVOLVER_RENOVAR"){
 
 
 #******************************************CANCELAR RESERVA***************************************************
-if($tipoAccion eq "CANCELAR_RESERVA"){
+elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
 	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
@@ -258,5 +258,27 @@ if($tipoAccion eq "CANCELAR_RESERVA"){
 }
 #******************************************FIN***CANCELAR RESERVA*********************************************
 
+elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
-close(A);
+	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+		
+	my %params;
+	$params{'barcode'}= $obj->{'barcode'};
+	$params{'nro_socio'}= $obj->{'nro_socio'};
+	$params{'operacion'}= $obj->{'operacion'};
+	
+	if($param{'operacion'} eq "renovar"){	
+# 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
+	}
+	elsif($param{'operacion'} eq "devolver"){
+ 		my ($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
+	}
+	elsif($param{'operacion'} eq "prestamo"){
+# 		my ($Message_arrayref) = C4::AR::Prestamos::t_prestarPorBarcode(\%params);	
+	}
+	
+	my $infoOperacionJSON=to_json $Message_arrayref;
+	
+	print $input->header;
+	print $infoOperacionJSON;
+}

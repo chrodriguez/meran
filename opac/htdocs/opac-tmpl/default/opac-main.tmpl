@@ -46,7 +46,7 @@
 
 </head>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/main.css">
-<body onload="document.catsearch.keyword.focus();" >
+<body>
 <table width="100%" height="100%">
 <tr>
 <td align="center" valign="middle">
@@ -69,13 +69,11 @@
         <tr><td><br></td></tr>
         <tr><td><img src="[% themelang %]/images/front-arrow-small.gif" alt="-" hspace="0" vspace="0" border="0" align="middle"></td>
         <td>
-<!--             <a href="/cgi-bin/koha/opac-search.pl">&nbsp;B&uacute;squeda Avanzada</a> -->
-
-                [% PERL %]
-                    print C4::AR::Filtros::link_to( text =>     "[% '&nbsp;B&uacute;squeda Avanzada' %]",
-                                                    url =>      "/cgi-bin/koha/opac-search.pl", 
-                                                ) ;
-                [% END %]
+			[% PERL %]
+				print C4::AR::Filtros::link_to( text =>     "[% '&nbsp;B&uacute;squeda Avanzada' %]",
+												url =>      "/cgi-bin/koha/opac-search.pl", 
+											) ;
+			[% END %]
 
         </td></tr>
         <tr><td><br></td></tr>
@@ -94,16 +92,16 @@
 <table cellpadding="0" cellspacing="0">
 <tr><td valign="top">
         <img src="[% themelang %]/images/front-arrow.gif" alt="" border="0">
-Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [
+	Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [
         [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[% 'Mi Cuenta' | i18n %]",
                                                 url =>      "/cgi-bin/koha/opac-user.pl", 
                                             ) ;
         [% END %]
         
-                                                                                  ]
+		]
 
-                            [<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Salir</a>]
+	[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Salir</a>]
 </td></tr></table>
 [% ELSE %]
 <form method="post" name="datos">
@@ -114,8 +112,11 @@ Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     <tr><td></td><td></td>
 	<td  align="left" class="login">
 
-<a href="#" onMouseOut="swap('enter','[% themelang %]/images/menu-entrar.png')" onMouseOver="swap('enter','[% themelang %]/images/menu-entrarbis.png')">
-<input type="image" name="enter" id="enter" src="[% themelang %]/images/menu-entrar.png" border="0"  value="Entrar" onClick="javascript:enviar();"> </a>
+<a 	href="#" onMouseOut="swap('enter','[% themelang %]/images/menu-entrar.png')" 
+	onMouseOver="swap('enter','[% themelang %]/images/menu-entrarbis.png')">
+	<input 	type="image" name="enter" id="enter" src="[% themelang %]/images/menu-entrar.png" border="0"  
+			value="Entrar" onClick="javascript:enviar();"> 
+</a>
 
 </td></tr>
    </table> 
@@ -124,9 +125,6 @@ Logueado como: [% loggedinusername %]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="datosAEnviar">
         <input type="hidden" name="userid">
         <input type="hidden" name="password">
-[% FOREACH INPUTS %]
-  <input type="hidden" name="[% name %]" value="[% value %]">
-[% END %]
 </form>
 [% END %]
 </td></tr>

@@ -85,6 +85,7 @@
 				</span>
 			</td>
 			<td valign="middle" colspan="2">
+	[% IF circularDesdeDetalleDelRegistro %]
 			[% IF paraPrestamo %]
 
 				<input 	type="image" src="[% themelang %]/images/item-return.png" title="[% 'Devolver' | i18n %]" 
@@ -97,6 +98,9 @@
 				<input 	type="image" src="[% themelang %]/images/item-prestar.png" title="[% 'Realizar pr&eacute;stamo' | i18n %]" 
 						onClick="buscarUsuario('[% id2 %]','[% id3 %]');">
 			[% END %]
+	[% ELSE %]
+		[% 'NO DISPONIBLE' | i18n %]
+	[% END %] <!--END IF permiso_para_circular -->
 			</td>
                 
 			<td colspan="2">
@@ -105,6 +109,6 @@
 			</td>
 		</tr>
 
-	[% END %]<!-- END FOREACH NIVEL 3 -->
+[% END %]<!-- END FOREACH NIVEL 3 -->
 	
 	</table>

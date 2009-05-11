@@ -126,18 +126,11 @@ src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 csp
 
 [% IF hiddesearch %]
 [% ELSE %]
-<!--<a href="/cgi-bin/koha/opac-search.pl"  onMouseOut="swap('cat','[% themelang %]/images/menu-catalogo.png ')" 
-	onMouseOver="swap('cat','[% themelang %]/images/menumenu.png ')" >
-        <img src="[% themelang %]/images/menu-catalogo.png" name="cat" id="cat" title="Buscar" hspace=0 cspace=0 border=0 
-	name="menu-search" align="absbottom">
-</a>-->
-
     [% PERL %]
-				    print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
-															    title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
-												    url => 		"/cgi-bin/koha/opac-search.pl", 
-
-											    ) ;
+		print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
+													title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
+										url => 		"/cgi-bin/koha/opac-search.pl", 
+								) ;
     [% END %]
 [% END %]
 
@@ -149,22 +142,19 @@ src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 csp
 </a>
 <!--*******************************************************************************************************-->
 
-<!--<a href="/cgi-bin/koha/opac-main.pl" onMouseOut="swap('home','[% themelang %]/images/menu-home.png ')" 
-	onMouseOver="swap('home','[% themelang %]/images/menu-homebis.png ')" >
-	
-</a>-->
-
     [% PERL %]
-                    print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
-                                                                 title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
-                                                    url =>      "/cgi-bin/koha/opac-main.pl", 
-
-                                                ) ;
+		print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
+														title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
+										url =>      "/cgi-bin/koha/opac-main.pl", 
+									) ;
     [% END %]
 
 </td>
 	 <td>&nbsp; </td>
   </tr>
 </table>
+
+<!-- usado como referencia por el MessageHelper     -->
+<div id="end_top"></div>
 	
 <!-------------------------MAIN BODY OF PAGE-------------------------->

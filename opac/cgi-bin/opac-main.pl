@@ -21,6 +21,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 if( $session->param('borrowernumber') ){
 }else{
     #se inicializa la session y demas parametros para autenticar
+	$t_params->{'opac'};
     ($session)= C4::Auth::inicializarAuth($input, $t_params);
 }
 

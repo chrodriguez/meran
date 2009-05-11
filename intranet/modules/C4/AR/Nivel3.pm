@@ -265,19 +265,7 @@ sub detalleCompletoINTRA{
 	my @nivel2;
 	
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
-# 		my $hash_nivel2;
-# 		$nivel2_array_ref->[$i]->load();
-# 		$hash_nivel2->{'id2'}= $nivel2_array_ref->[$i]->getId2;
-# 		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipo_documento);
-# 		$hash_nivel2->{'nivel2_array'}= ($nivel2_array_ref->[$i])->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-# 		my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2);
-# 		$hash_nivel2->{'nivel3'}= \@result;
-# 		$hash_nivel2->{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
-# 		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
-# 		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
-# 		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
-# 		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
-# 		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
+
 		my ($hash_nivel2)= detalleNivel3($nivel2_array_ref->[$i]->getId2);
 	
 		push(@nivel2, $hash_nivel2);
@@ -286,6 +274,8 @@ sub detalleCompletoINTRA{
 	$t_params->{'nivel1'}= $nivel1->toMARC,
 	$t_params->{'id1'}	  = $id1;
 	$t_params->{'nivel2'}= \@nivel2,
+	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
+	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
 }
 
 =item
