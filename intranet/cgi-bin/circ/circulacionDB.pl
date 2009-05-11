@@ -286,3 +286,22 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	print $input->header;
 	print $infoOperacionJSON;
 }
+elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
+
+	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+		
+	my $Message_arrayref;
+	my %params;
+	$params{'barcode'}= $obj->{'barcode'};
+	$params{'nro_socio'}= $obj->{'nro_socio'};
+	$params{'operacion'}= $obj->{'operacion'};
+	
+	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params{'nro_socio'});
+	my $flag=0;
+	if($socio){
+		$flag= $socio->tieneAutorizado;	
+	}
+	
+	print $input->header;
+	print $flag;
+}

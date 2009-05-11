@@ -1,6 +1,7 @@
 [% INCLUDE 'intranet-top.inc' %]
 
 <script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
+<script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
 
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
@@ -33,6 +34,7 @@ function realizarAccion(){
 	objAH.nro_socio= $('#nro_socio_hidden').val();
 	objAH.barcode= $('#barcode').val();
 	objAH.operacion= $('#operacion').val();
+// 	objAH.autorizado= $('#operacion').val();
 	objAH.tipoAccion= "CIRCULACION_RAPIDA";
 	//se envia la consulta
 	objAH.sendToServer();
@@ -43,7 +45,29 @@ function updateRealizarAccion(responseText){
 	setMessages(Messages);
 }
 
+function tieneApoderado(){
+	objAH=new AjaxHelper(updateTieneAutorizado);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio= $('#nro_socio_hidden').val();
+	objAH.tipoAccion= "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateTieneAutorizado(responseText){
+	if(responseText != '0'){
+		$('#divAutorizado').show();
+		$('#divAgregarAutorizado').hide();
+	}else{
+		$('#divAgregarAutorizado').show();
+		$('#divAutorizado').hide();
+	}
+}
+
 $(document).ready(function() {
+	$('#divAutorizado').hide();
+	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios('usuario','nro_socio_hidden');
 	CrearAutocompleteBarcodes('barcode','barcode_hidden');
 });
@@ -65,7 +89,7 @@ $(document).ready(function() {
 	<li>
 		<div id="divInfoEjemplar">
 		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='1'>
-									<input type='hidden' id='barcode_hidden' value=''>
+									<input type='hidden' id='barcode_hidden' value='' onChange="tieneApoderado()">
 		</div>
 	</li>
 	<li>
@@ -74,13 +98,16 @@ $(document).ready(function() {
 								<option value="devolver">Devoluci&oacute;n</option>
 								<option value="renovar">Renovaci&oacute;n</option>
 							</select>
-		
-		Apoderado: <input type="checkbox" value="apoderado">
 	</li>
 	<li>
 		<div id="divInfoUsuario">
 		Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
 					<input type='hidden' id='nro_socio_hidden' value=''>
+		</div>
+		<div style="width:100%">
+		<div id="divAutorizado" style="float:left">Autorizado: <input type="checkbox" value="autorizado"></div>
+		<div id="divAgregarAutorizado" style="float:left">
+			<input type="button" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" onClick="agregarAutorizado()">
 		</div>
 	</li>
 	<li>
