@@ -19,6 +19,7 @@ IdHidden= id del input hidden donde se guarda el id del resultado seleccionado
 url= url donde se realiza la consulta
 */
 
+/*
 function _CrearAutocomplete(Id, IdHidden, accion){
     url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+accion+"&token="+token;
     $("#"+Id).search();
@@ -39,34 +40,98 @@ function _CrearAutocomplete(Id, IdHidden, accion){
         _getId(IdHidden, data[0]);
     });
 }
+*/
+function _CrearAutocomplete(options){
+/*
+@params
+IdInput= parametro para la busqueda
+IdInputHidden= donde se guarda el ID de la busqueda
+accion= filtro para autocompletablesDB.pl
+function= funcion a ejecutar luego de traer la respuesta del servidor
+*/
+	if(!(options.IdInput)||!(options.IdInputHidden)){ 
+		alert("AutocompleteHelper=> _CrearAutocomplete=> Error en parametros");
+		return 0;
+	}
 
+    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+    $("#"+options.IdInput).search();
+    // q= valor de campoHelp
+    $("#"+options.IdInput).autocomplete(url,{
+        formatItem: function(row){
+            return row[1];
+        },
+        minChars:3,
+            matchSubset:1,
+            matchContains:1,
+        maxItemsToShow:10,
+            cacheLength:10,
+            selectOnly:1,
+    });//end autocomplete
+    $("#"+options.IdInput).result(function(event, data, formatted) {
+        $("#"+options.IdInput).val(data[1]);
+        _getId(options.IdInputHidden, data[0]);
+		if(options.callBackFunction){
+ 			options.callBackFunction();
+		}
+    });
+}
 
 //Funciones publicas
 
-function CrearAutocompleteCiudades(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_ciudades');
+function CrearAutocompleteCiudades(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_ciudades', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompletePaises(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden,'autocomplete_paises' );
+function CrearAutocompletePaises(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_paises', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompleteLenguajes(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_lenguajes');
+function CrearAutocompleteLenguajes(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_lenguajes', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompleteAutores(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_autores');
+function CrearAutocompleteAutores(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_autores', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompleteSoportes(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_soportes');
+function CrearAutocompleteSoportes(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_soportes', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompleteUsuarios(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_usuarios');
+function CrearAutocompleteUsuarios(options){
+	_CrearAutocomplete(	{	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_usuarios', 
+							callBackFunction: options.callBackFunction,
+					});
 }
 
-function CrearAutocompleteBarcodes(Id, IdHidden){
-    _CrearAutocomplete(Id, IdHidden, 'autocomplete_barcodes');
+function CrearAutocompleteBarcodes(options){
+    _CrearAutocomplete({
+							IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_barcodes', 
+							callBackFunction: options.callBackFunction
+					});	
 }

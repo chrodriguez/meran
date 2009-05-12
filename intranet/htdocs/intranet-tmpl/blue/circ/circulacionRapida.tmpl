@@ -68,8 +68,8 @@ function updateTieneAutorizado(responseText){
 $(document).ready(function() {
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
-	CrearAutocompleteUsuarios('usuario','nro_socio_hidden');
-	CrearAutocompleteBarcodes('barcode','barcode_hidden');
+	CrearAutocompleteUsuarios({IdInput: 'usuario', IdInputHidden: 'nro_socio_hidden', callBackFunction: tieneApoderado});
+  	CrearAutocompleteBarcodes('barcode','barcode_hidden');
 });
 
 </script>
@@ -89,7 +89,7 @@ $(document).ready(function() {
 	<li>
 		<div id="divInfoEjemplar">
 		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='1'>
-									<input type='hidden' id='barcode_hidden' value='' onChange="tieneApoderado()">
+									<input type='hidden' id='barcode_hidden' value='' >
 		</div>
 	</li>
 	<li>
@@ -100,14 +100,13 @@ $(document).ready(function() {
 							</select>
 	</li>
 	<li>
-		<div id="divInfoUsuario">
+		<div id="divInfoUsuario" style="width:40%">
 		Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
 					<input type='hidden' id='nro_socio_hidden' value=''>
-		</div>
-		<div style="width:100%">
-		<div id="divAutorizado" style="float:left">Autorizado: <input type="checkbox" value="autorizado"></div>
-		<div id="divAgregarAutorizado" style="float:left">
-			<input type="button" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" onClick="agregarAutorizado()">
+				<div id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></div>
+				<div id="divAgregarAutorizado" style="float:right">
+					<input type="button" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" onClick="agregarAutorizado()">
+				</div>
 		</div>
 	</li>
 	<li>
