@@ -7,7 +7,8 @@
 [% INCLUDE "AutocompleteHelper.inc" %]
 
 <script language="javascript" type="text/javascript">
-
+// para la ventana de Agregar Autorizado
+NRO_SOCIO_AUTH=0;
 
 function verificarBarcode(){
 
@@ -46,6 +47,9 @@ function updateRealizarAccion(responseText){
 }
 
 function tieneApoderado(){
+	//fijo el nro_socio global para la ventana de agregarAutorizado
+	NRO_SOCIO_AUTH=  $('#nro_socio_hidden').val();
+
 	objAH=new AjaxHelper(updateTieneAutorizado);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
@@ -69,7 +73,7 @@ $(document).ready(function() {
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios({IdInput: 'usuario', IdInputHidden: 'nro_socio_hidden', callBackFunction: tieneApoderado});
-  	CrearAutocompleteBarcodes('barcode','barcode_hidden');
+  	CrearAutocompleteBarcodes({IdInput: 'barcode', IdInputHidden: 'barcode_hidden'});
 });
 
 </script>

@@ -132,6 +132,6 @@ function CrearAutocompleteBarcodes(options){
 							IdInput: options.IdInput, 
 							IdInputHidden: options.IdInputHidden, 
 							accion: 'autocomplete_barcodes', 
-							callBackFunction: options.callBackFunction
+							callBackFunction: options.callBackFunction,
 					});	
 }

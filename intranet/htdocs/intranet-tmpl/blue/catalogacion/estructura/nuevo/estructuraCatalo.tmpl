@@ -160,6 +160,7 @@ function updateMostrarTablaRef(responseText){
 function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampoX);
+		objAH.debug= true;
         objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
         objAH.campoX=$('#campoX').val();
         objAH.nivel=$('#niveles_id').val();

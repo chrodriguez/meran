@@ -1,12 +1,18 @@
+
+
 <!-- *********************************Window Help********************************************* -->
 <script>
+/*
+@params
+se le debe asigna el nro de socio a nro_socio_auth
+*/
 
-function confirmarAgregarAutorizado(nro_socio){
+function confirmarAgregarAutorizado(){
 
     objAH=new AjaxHelper(updateConfirmarAgregarAutorizado);
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
-    objAH.nro_socio= nro_socio_auth; 
+    objAH.nro_socio= NRO_SOCIO_AUTH; 
     objAH.nombre_apellido = $('#nombreAutorizado').val();
     objAH.dni_autorizado = $('#dniAutorizado').val();
     objAH.telefono = $('#telefonoAutorizado').val();

@@ -1204,7 +1204,7 @@ sub getSocioLike {
 	my $ordenAux= $socioTemp->sortByString($orden);
     C4::AR::Debug::debug("ORDEN: ".$ordenAux);
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
-                                                                            sort_by => ( $ordenAux ),
+                                                                            sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             require_objects => [ 'persona' ]

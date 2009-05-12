@@ -411,7 +411,7 @@ function updateAgregarAutorizado(responseText){
     }
 }
 
-function agregarAutorizado(nro_socio){
+function agregarAutorizado(){
     objAH=new AjaxHelper(updateAgregarAutorizado);
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.tipoAccion = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
