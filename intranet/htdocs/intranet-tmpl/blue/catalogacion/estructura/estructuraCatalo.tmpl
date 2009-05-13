@@ -1,0 +1,426 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
+
+<script>
+//Arreglos globales de objetos
+//arreglo de objetos campo
+CAMPOS_ARRAY= new Array();
+//arreglo de objetos subcampo
+SUBCAMPOS_ARRAY= new Array();
+
+function inicializar(){
+    //arreglo de objetos campo
+    CAMPOS_ARRAY= new Array();
+    //arreglo de objetos subcampo
+    SUBCAMPOS_ARRAY= new Array();
+    $("#resultAgregarCampo").html('');
+    $("#resultModificarCampo").html('');
+}
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+//Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
+function eleccionDeNivel(){
+	var nivel=$("#niveles_id").val();
+	var ObjDiv = $("#divitemtype");
+	if((nivel == '1') || (nivel == 'Niveles')){
+        ObjDiv.hide();
+    }else{
+        ObjDiv.show();
+    }
+	
+	objAH=new AjaxHelper(updateEleccionDeNivel);
+    objAH.debug= true;
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+	objAH.nivel=nivel;
+    objAH.tipoAccion= 'MOSTRAR_CAMPOS';
+
+    if (nivel == 1){
+	   objAH.itemtype='ALL';
+    }else {
+      objAH.itemtype=$('#tipo_nivel3_id').val();
+    }
+
+	objAH.sendToServer();
+}
+
+function updateEleccionDeNivel(responseText){
+    inicializar();
+    $("#resultCatalogacion").html(responseText);
+    zebra("tablaResult");
+}
+
+function modificarOrden(id, accion){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.idMod=id;
+    objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
+    objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
+    objAH.sendToServer();
+}
+
+function visibilidad(id){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.id=id;
+    objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
+    objAH.sendToServer();
+}
+
+//Elimina el campo en la estructura inicial del catalogo
+function eliminarCampo(id){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.idMod=id;
+    objAH.tipoAccion= 'ELIMINAR_CAMPO';
+    objAH.sendToServer();
+}
+
+function mostrarAgregarCampo(id){
+    objAH=new AjaxHelper(updateMostrarAgregarCampo);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion="MOSTRAR_FORM_AGREGAR_CAMPOS";
+    objAH.sendToServer();
+}
+
+function updateMostrarAgregarCampo(responseText){
+    inicializar();
+    $("#resultAgregarCampo").show();
+    $("#resultAgregarCampo").html(responseText);
+    scrollTo('resultAgregarCampo');
+    enable_disableSelects();
+}
+
+
+function mostrarModificarCampo(id){
+    objAH=new AjaxHelper(updateMostrarModificarCampo);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tipoAccion="MOSTRAR_FORM_MODIFICAR_CAMPOS";
+    objAH.id= id;
+    objAH.sendToServer();
+}
+
+function updateMostrarModificarCampo(responseText){
+    inicializar();
+    $("#resultModificarCampo").show();
+    $("#resultModificarCampo").html(responseText);
+    scrollTo('resultModificarCampo');
+
+//     enable_disableSelects();
+    $("#campo").attr('disabled',true);
+    $("#subcampo").attr('disabled',true);
+    $("#tipoInput").removeAttr('disabled');
+}
+
+function cancelarEstructuraCatalogacion(){
+    $("#resultAgregarCampo").slideUp('slow');
+    //y borrar variables, objetos y arrays
+    inicializar();
+}   
+
+function mostrarTablaRef(){
+    objAH=new AjaxHelper(updateMostrarTablaRef);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/utils/utilsDB.pl";
+    objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
+    objAH.sendToServer();
+}
+
+function updateMostrarTablaRef(responseText){
+    var tablaRef_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#tablaRef").html('');
+    var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
+    
+    for (x=0;x < tablaRef_array.length;x++){
+            options+= "<option value=" + tablaRef_array[x] +" >" + tablaRef_array[x] + "</option>";
+    }
+    $("#tablaRef").append(options);
+    enable_disableSelects();
+}
+
+/*
+ * eleccionCampoX
+ * Funcion que se ejecuta cuando se selecciona un valor del combo campoX (ej. 1xx), y hace un llamado a la 
+ * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
+ */
+function eleccionCampoX(){
+    if ( $("#campoX").val() != -1){
+        objAH=new AjaxHelper(updateEleccionCampoX);
+		objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+        objAH.campoX=$('#campoX').val();
+        objAH.nivel=$('#niveles_id').val();
+        objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
+        objAH.sendToServer();
+    }
+    else
+        enable_disableSelects();
+
+}
+
+//se genera el combo en el cliente
+function updateEleccionCampoX(responseText){
+    //Arreglo de Objetos Global
+    var campos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#campo").html('')
+    var options = "<option value='-1'>Seleccionar CampoX</option>";
+    
+    for (x=0;x < campos_array.length;x++){
+         CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
+         options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
+    }
+    $("#campo").append(options);
+    //se agrega la info al combo
+    enable_disableSelects();
+
+}
+
+function eleccionCampo(){
+    if ($("#campo").val() != -1){
+        objAH=new AjaxHelper(updateEleccionCampo);
+        objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+        objAH.campo=$('#campo').val();
+        objAH.nivel=$('#niveles_id').val();
+        objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
+        objAH.sendToServer();
+    }
+    else
+        enable_disableSelects();
+
+}
+
+
+//se genera el combo en el cliente
+function updateEleccionCampo(responseText){
+    $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
+    //Arreglo de Objetos Global
+    var subcampos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#subcampo").html('');
+    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    
+    for (x=0;x < subcampos_array.length;x++){
+         SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].liblibrarian);
+         options+= "<option value=" + subcampos_array[x].tagsubfield +" >" + subcampos_array[x].tagsubfield + "</option>";
+    }
+    //se agrega la info al combo
+    $("#subcampo").append(options);
+    enable_disableSelects();
+}
+
+
+function enable_disableSelects(){
+    $("#campo").removeAttr('disabled');
+    $("#subcampo").removeAttr('disabled');
+    $("#tablaRef").removeAttr('disabled');
+    $("#tipoInput").removeAttr('disabled');
+    $("#divCamposRef").show();
+    if ( $('#campoX').val() == -1){
+         $("#campo").attr('disabled',true);
+         $("#subcampo").attr('disabled',true);
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+    }
+    else
+      if ( $('#campo').val() == -1){
+         $("#subcampo").attr('disabled',true);
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+      }
+    else
+       if ( $('#subcampo').val() == -1){
+         $("#tablaRef").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+        }
+    else
+      if ( $('#tablaRef').val() == -1){
+//          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+       }
+}
+
+//esta funcion genera el combo de los campos segun la tabla de referencia seleccionada
+function armarComboCampos(){
+    objAH=new AjaxHelper(updateArmarComboCampos);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.tableAlias=$('#tablaRef').val();
+    objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS_REFERENCIA";
+    objAH.sendToServer();
+}
+
+function updateArmarComboCampos(responseText){
+    //Arreglo de Objetos Global
+    var camposSelect_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#camposSelect").html('');
+    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var joinedFields = "";
+    for (x=0;x < camposSelect_array.length;x++){
+        if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
+         joinedFields+= camposSelect_array[x].campo;
+        else
+         joinedFields+= camposSelect_array[x].campo+", ";
+         options+= "<option value=" + camposSelect_array[x].campo +" >" + camposSelect_array[x].campo + "</option>";
+    }
+    //se agrega la info al combo
+    $("#camposSelect").append(options);
+    $("#camposRef").val(joinedFields);
+    $("#divCamposRef").show();
+    enable_disableSelects();
+}
+
+function eleccionTablaRef(){
+
+    armarComboCampos();
+    enable_disableSelects();
+
+}
+
+function eleccionSubCampo(){
+
+    if ($('#subcampo').val() != -1){
+        $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
+        mostrarTablaRef();
+    }
+    else 
+        enable_disableSelects();
+}
+
+
+/*
+ * agregarEstructuraCatalogacion
+ */
+function agregarEstructuraCatalogacion(){ 
+    objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.nivel= $('#niveles_id').val();
+    if (objAH.nivel == 1)
+      objAH.itemtype= 'ALL';
+    else
+      objAH.itemtype= $('#tipo_nivel3_id').val();
+    objAH.campo= $('#campo').val();
+    objAH.subcampo= $('#subcampo').val();
+    objAH.liblibrarian= $('#liblibrarian').val();
+    objAH.tipoInput= $('#tipoInput').val();
+    objAH.tabla= $('#tablaRef').val();
+    
+    if ($('#tablaRef').val() != -1){
+        objAH.referencia=1;
+        objAH.orden= $('#camposSelect').val();
+        objAH.campos= $('#camposRef').val();
+        objAH.separador= $('#separador').val();
+    }else{
+         objAH.referencia=0;
+    }
+    objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
+    objAH.sendToServer();
+}
+
+function updateAgregarEstructuraCatalogacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
+
+
+/*
+ * modificarEstructuraCatalogacion
+ */
+function modificarEstructuraCatalogacion(id){ 
+    objAH=new AjaxHelper(updateModificarEstructuraCatalogacion);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.nivel= $('#niveles_id').val();
+    objAH.id= id;
+    objAH.itemtype= $('#tipo_nivel3_id').val();
+    objAH.campo= $('#campo').val();
+    objAH.subcampo= $('#subcampo').val();
+    objAH.liblibrarian= $('#liblibrarian').val();
+    objAH.tipoInput= $('#tipoInput').val();
+    objAH.tabla= $('#tablaRef').val();
+    
+    if ($('#tablaRef').val() != -1){
+        objAH.referencia=1;
+        objAH.orden= $('#camposSelect').val();
+        objAH.campos= $('#camposRef').val();
+        objAH.separador= $('#separador').val();
+    }else{
+         objAH.referencia=0;
+    }
+    objAH.tipoAccion= "MODIFICAR_ESTRUCTURA_CATALOGACION";
+    objAH.sendToServer();
+}
+
+function updateModificarEstructuraCatalogacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
+
+
+</script>
+<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Estructura de Catalogaci&oacute;n</td>
+	</tr>
+	<tr>	
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+
+</table>
+
+<br><br>
+<label for="niveles_id" style="float: left; width:13%" >
+	Nivel:
+</label>
+[% selectNivel %]
+
+
+<div id="divitemtype" style="display:none;">
+
+    <p>
+    <label for="itemtype" style="float: left; width:13%;">
+	    Tipo de item: 
+    </label>
+    [% selectItemType %]
+    </p>
+
+</div>
+
+<!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
+<div id= "resultModificarCampo"></div>
+<!-- PARA MOSTRAR TEMPLATE PARA AGREGAR CAMPOS -->
+<div id= "resultAgregarCampo"></div>
+<!-- PARA MOSTRAR LO CATALOGADO -->
+<div id= "resultCatalogacion"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]
+

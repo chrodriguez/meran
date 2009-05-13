@@ -1,0 +1,359 @@
+[% INCLUDE  "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
+
+<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
+[% INCLUDE "AutocompleteHelper.inc" %]
+
+<script>
+
+/*=================================================================REVISADO===================================================================*/
+
+
+ID_N1=0; //para saber el id del nivel 1
+ID_N2=0; //para saber el id del nivel 2
+ID_N3=0; //para saber el id del nivel 3
+
+function borrarN3(id2, id3){
+	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
+		ID_N2= id2;
+		objAH=new AjaxHelper(updateBorrarN3);
+		objAH.debug= true;
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+ 		objAH.id3_array= [id3];
+		objAH.nivel=3;
+		objAH.itemtype=$("#id_tipo_doc").val();
+		objAH.tipoAccion="ELIMINAR_NIVEL";
+		objAH.sendToServer();
+	}
+}
+
+function updateBorrarN3(responseText){
+    var info=JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
+	ejemplaresDelGrupo(ID_N2);
+}
+
+//muestra los ejemplares del grupo
+function ejemplaresDelGrupo(id2){
+
+	objAH=new AjaxHelper(updateEjemplaresDelGrupo);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl';
+	objAH.id2= id2;
+	objAH.tipoAccion= 'MOSTRAR_DETALLE_NIVEL3';
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function updateEjemplaresDelGrupo(responseText){
+	$('#ejemplaresDelGrupo'+objAH.id2).html(responseText);
+	zebra('tablaResult');
+}
+
+
+function buscarUsuario(id2, id3){
+	objAH=new AjaxHelper(updateBuscarUsuario);
+	objAH.debug= true;
+	objAH.url='/intranet-tmpl/blue/includes/popups/buscarUsuario.inc';
+	objAH.debug= true;
+	objAH.sendToServer();
+
+	items_array[0]=id3;
+ 	ID_N2= id2;
+}
+
+function updateBuscarUsuario(responseText){
+
+	vBuscarUsuario=new WindowHelper({draggable: true, opacity: true});
+	vBuscarUsuario.debug= true;
+	vBuscarUsuario.html=responseText;
+	vBuscarUsuario.create();	
+	vBuscarUsuario.titulo= 'Buscar Usuario';
+	vBuscarUsuario.height('30%');
+	vBuscarUsuario.width('40%');
+	vBuscarUsuario.focus= 'campoUsuario';
+	vBuscarUsuario.open();
+}
+
+$(document).ready(function(){
+	zebra("tablaResult");	
+
+});
+
+/*=============================================================FIN====REVISADO================================================================*/
+
+function detalleMARC(id3){
+	objAH=new AjaxHelper(updateInfoMARC);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/busquedas/MARCDetalle.pl";
+	objAH.id3= id3;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfoMARC(responseText){
+	$('#detalleComun').slideUp("slow");
+	$('#detalleMARC').html(responseText);
+	$('#detalleMARC').show();
+	scrollTo('detalleMARC');
+}
+
+function verDivs(){
+	$('#detalleComun').slideDown("slow");
+	$('#detalleComun').show();
+	$('#detalleMARC').slideUp("slow");
+// 	scrollTo('ejemplaresDelGrupo'+ID_N2);
+}
+
+/*************************************************CIRCULACUION***************************************************/
+// ESTO PARECE QUE NO SE VA A USAR
+function objeto_datos(){
+	this.array_ids3;
+	this.usuario;
+	this.id3;
+	this.accion;
+}
+
+
+/******************************************CIRCULACUION DESDE EL DETALLE****************************************/
+var items_array = new Array();
+// parche, ver si se puede hacer mejor
+var grupo;
+
+
+function renovar(accion,userId,userNom,id2,id3){
+	
+	array=new Array;
+	array[0]= id3;
+	usuario=new objeto_usuario();
+	usuario.ID=userId;
+	usuario.text=userNom;
+
+	objAH=new AjaxHelper(generaDivDevRen);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'RENOVACION';
+	objAH.datosArray= array;
+	objAH.nro_socio= usuario.ID;
+    objAH.id_prestamo = id3;
+	//se envia la consulta
+	objAH.sendToServer();
+	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
+	ID_N2= id2;
+}
+
+function devolver(accion,userId,userNom,id2,id_prestamo){
+
+	array=new Array;
+	array[0]= id_prestamo;
+	usuario=new objeto_usuario();
+	usuario.ID=userId;
+	usuario.text=userNom;
+
+	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'DEVOLUCION';
+	objAH.datosArray= array;
+	objAH.nro_socio= usuario.ID;
+//     objAH.id_prestamo = id3;
+	//se envia la consulta
+	objAH.sendToServer();
+	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
+	ID_N2= id2;
+}
+
+function confirmarPrestamo(){
+
+ 	if(usuario.ID != ""){	
+
+		objAH=new AjaxHelper(generaDivPrestamo);
+		objAH.debug= true;
+		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
+		objAH.datosArray= items_array;
+		objAH.nro_socio=usuario.ID;
+		//se envia la consulta
+		objAH.sendToServer();
+		vBuscarUsuario.close();
+	}
+}
+
+
+//esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
+function updateInfoPrestarReserva(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	var mensajes= '';
+	for(var i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+	ejemplaresDelGrupo(ID_N2);
+}
+
+/************************************************FIN CIRCULACUION************************************************/
+
+function borrarGrupo(id1,id2){
+    confirmaBorrar = window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO);
+    if (confirmaBorrar) {
+	    objAH=new AjaxHelper(updateBorrarGrupo);
+	    objAH.debug= true;
+	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
+	    objAH.id1= id1;
+	    objAH.id2= id2;
+	    objAH.accion="BORRAR_GRUPO";
+	    //se envia la consulta
+	    objAH.sendToServer();
+    }
+}
+
+function updateBorrarGrupo(responseText){
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
+	//oculto todo el grupo con los items
+	$('#grupo'+objAH.id2).slideUp('slow');
+	//borro el contenido
+	$('#grupo'+objAH.id2).html('');
+}
+
+
+
+function borrarNivel1(id1){
+    confirmaBorrar = window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO);
+    if (confirmaBorrar){
+	    objAH=new AjaxHelper(updateBorrarNivel1);
+	    objAH.debug= true;
+	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
+	    objAH.id1= id1;
+	    objAH.accion="BORRAR_NIVEL1";
+	    //se envia la consulta
+	    objAH.sendToServer();
+    }
+}
+
+function updateBorrarNivel1(responseText){
+	var Messages= JSONstring.toObject(responseText);
+	setMessages(Messages);
+	//oculto todo el registro con los grupos y sus items
+	$('#detalleComun').slideUp('slow');
+	//borro el contenido
+	$('#detalleComun').html('');
+}
+
+
+
+</script>
+
+<div id="confirmar_div" class="pane"></div>
+<br>
+
+
+<!-- PARA PODER CREAR EL FORMULARIO -->
+<div id="formulario"></div>
+
+<div id="detalleMARC"></div>
+
+<div id="detalleComun">
+<div id="titulo">
+	<p class="pagetitle"> 
+		[% titulo %]
+		[% FOREACH datosautor %]
+			(<a class="click" onClick="filtroPorAutor([% id %])">[% completo %]</a>)
+		[% END %]
+	</p>
+</div>
+
+<!-- ---------------Registro de libro TABLE------- -->
+<table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado" width="100%">
+	<tr valign="top" height="24" class="tablaresultadoTitle">
+		  <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+		  <td  valign="middle" height="24"><b>Registro de Documento</b> [% id1 %]</td>
+		  <td width="1%" valign="top" align="right"><img src="[% themelang %]/images/derecha.png"></td>
+	</tr>
+</table>
+
+<div class="detalle">
+	[% PERL %]
+		print C4::AR::Filtros::link_to(	text => 	"<input type='image' border='0'  src='[% themelang %]/images/editar.png'>",
+										url => 		"agregarDocumento.pl", 
+										params =>	["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
+										title =>	"[% 'Editar Nivel 1' | i18n %]"
+									) ;
+	[% END %]
+
+	<input type="image" border=0 src="[% themelang %]/images/borrar.png" onClick="borrarNivel1([% id1 %])" title="[% 'Borrar Nivel 1' | i18n %]">
+	<br>
+	[% FOREACH nivel1 %]
+		[% IF liblibrarian %]
+			[% IF dato %]
+				[% liblibrarian %]: <b>[% dato %]</b><br>
+			[% END %]
+		[% END %]
+
+	[% END %]
+	<hr>
+	N&uacute;mero Total de Ejemplares:<b> [% cantItemN1 %]</b> 
+</div>
+
+[% FOREACH nivel2 %]
+
+        <div id="grupo[% id2 %]">
+	        <div>
+		        <p style="font-size: 11pt" align="center" class="tablaresultadoTitle">
+				        [% id2 %] GRUPO - [% tipo_documento %]
+			        </p>
+	        </div>
+        
+        <div class="detalle">
+        <!-- NIVEL 2 -->
+	        <div id="[% id2 %]" style="position: relative; float:right;"></div>
+	        [% PERL %]
+		        print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+										        url => 		"agregarDocumento.pl", 
+										        params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
+										        title =>	"[% 'Editar Nivel 2' | i18n %]"
+									        ) ;
+	        [% END %]
+        
+	        <input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
+			        onClick="borrarGrupo([% id1 %],[% id2 %])" 
+			        title="Borrar Grupo">
+	        <br>
+	        [% IF amazon_cover %]
+		        <div class='amazon_cover_detail' style="position: relative; float:right;">
+				        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
+		        </div>
+		        <br>
+	        [% END %]
+        
+	        [% FOREACH nivel2_array %]
+			        [% IF liblibrarian %]
+				        [% IF dato %]
+					        [% liblibrarian %]: <b>[% dato %]</b><br>
+				        [% END %]
+			        [% END %]
+        
+	        [% END %] <!-- END FOREACH nivel2_array -->
+
+		<div id="ejemplaresDelGrupo[% id2 %]" >
+        [% INCLUDE "estructura/nuevo/ejemplaresDelGrupo.tmpl" %]
+
+		<br><hr class="lineagruesa"><br>
+			        
+		 </div> <!--end <div id="ejemplaresDelGrupo -->
+	    </div>
+        
+       </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
+
+[% END %]<!-- END FOREACH Nivel 2-->
+
+</div> <!-- Fin DIV detalleComun -->
+
+[% INCLUDE "intranet-bottom.inc" %]

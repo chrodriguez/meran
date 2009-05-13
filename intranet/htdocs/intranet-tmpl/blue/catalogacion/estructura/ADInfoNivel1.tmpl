@@ -1,0 +1,14 @@
+<div id="infoLaterarNivel2" class="inputFontNormal">
+    <p class="pagetitle"> [% nivel1.getTitulo %] </p>
+    <b>Autor: </b>
+    [% nivel1.cat_autor.getCompleto %]
+    <br/>
+    Regitro de Nivel 1: [% nivel1.getId1 %]
+    <br/>
+    <input  type="image" border="0" onclick="modificarN1('[% nivel1.getId1 %]')" title="Modificar Nivel 1" 
+            src="/intranet-tmpl/blue/images/editar.png" value="modify" name="submit"/>
+    <input type="button" border="0" onclick="agregarN2()" title="Agregar Nivel 2" value="+" name="agregar"/>
+    <input  type="image" border="0" title="Borrar Nivel 1" onclick="borrarN1('[% nivel1.getId1 %]')" 
+			src="/intranet-tmpl/blue/images/borrar.png" value="delete" name="delete"/>
+</div>
+<!-- FIXME FALTA TERMINAR ESTE TMPL -->

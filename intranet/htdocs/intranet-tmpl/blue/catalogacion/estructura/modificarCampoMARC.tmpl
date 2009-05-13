@@ -1,0 +1,93 @@
+<script>
+
+$(document).ready(function() {
+ 
+    [% IF catalogacion.getReferencia == '1' %] 
+//         armarComboCampos();
+        mostrarTablaRef();
+        $("#tipoInput").removeAttr('disabled');
+    [% END %]
+    
+}); 
+
+</script>
+
+<!-- TEMPLATE DE CAMPOS TEMPORALES -->
+    <hr>
+DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %]
+        infoReferencia=> referencia: [% catalogacion.infoReferencia.getReferencia %] 
+<div width="100%">
+    <b>Modificar campo Marc para el nivel [% nivel %]:</b>
+<!--     <div id="div1"> -->
+    <p>
+    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
+    [% selectCampoX %]
+    </p>
+</div>
+<!--<div id="id2">-->
+<!--<div id="content">-->
+<div>
+    <p>
+    <label for="tagField" style="float:left; width:13%">Campo: </label>
+        <select name="campo" id="campo" onChange="eleccionCampo()">
+            <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
+        </select>
+        Nombre: <span id="nombre_campo"></span>
+    </p>
+<!--     </div> -->
+    <!--<div id="id3">-->
+    <div id="subcontent">
+        <p align="left">
+        <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
+        <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+                <option value='[% catalogacion.getSubCampo %]'>[% catalogacion.getSubCampo %]</option>
+         </select>
+
+        <input id="obligatorio" type="hidden" value="">
+        Liblibrarian: <input id="liblibrarian" type="text" value='[% catalogacion.getLiblibrarian %]' size="90"> 
+        </p>
+
+        <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
+        <p>
+            <select name="tipoInput" id="tipoInput">
+                <option value="-1">Seleccione tipo</option>
+                <option value="text" [% IF catalogacion.getTipo == 'text' %] selected [% END %]>Texto</option>
+                <option value="texta" [% IF catalogacion.getTipo == 'texta' %] selected [% END %]>Texto Area</option>
+                <option value="texa2" [% IF catalogacion.getTipo == 'texta2' %] selected [% END %]>Texto 1 por linea</option>
+                <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo Box</option>
+				<option value="auto" [% IF catalogacion.getTipo == 'auto' %] selected [% END %]>Autocompletable</option>
+				<option value="calendar" [% IF catalogacion.getTipo == 'calendar' %] selected [% END %]>Calendario</option>
+            </select>
+        </p>
+
+        <p>
+        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]">
+        </p>
+        
+        <div id="divCamposReferencia" valign="top">
+            <label for="orden" style="float:left; width:13%">Orden: </label>
+            <select name="camposSelect" id="camposSelect">
+                <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
+            </select>
+    
+            Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
+            separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
+            </p>
+            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+        </div>  <!--END divCamposReferencia-->
+    </div>  <!--END subcontent-->
+[% IF catalogacion.infoReferencia.getReferencia %]
+DEBUG=>     TIENE REFERENCIA
+[% ELSE %]
+DEBUG=>     NO TIENE REFERENCIA
+[% END %]
+</div> <!--END <div id="content">-->
+
+<br>
+<div align="center">
+    <input type="image" src="[% themelang %]/images/guardar.png" value="Guardar Campo temporal" title="Guardar Campo Temp"      
+            onClick="modificarEstructuraCatalogacion([% catalogacion.getId %])">
+    <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" 
+            onClick="cancelarEstructuraCatalogacion()">
+</div>

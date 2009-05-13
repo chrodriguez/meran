@@ -1,0 +1,70 @@
+
+<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+    <tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
+
+        <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
+		
+		<td>
+			<input type="image" id="checkAllEjemplares" src="[% themelang %]/images/check.png" title="Seleccionar todos">
+		</td>
+        <td><b>Sig. Top.</b></td>
+        <td><b>C&oacute;digo</b></td>
+        <td><b>Disponibilidad</b></td>
+        <td><b>Origen UI</b></td>
+        <td><b>Due&ntilde;o UI</b></td>
+        <td><b>Estado</b></td>
+        <td><b>Acci&oacute;n</b></td>
+
+        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
+
+    </tr>
+[% FOREACH nivel3 IN nivel3_array %]
+	<tr align="center">
+			<td></td>
+			<td>
+				<input type="checkbox" id="checkEjemplares" name="checkEjemplares" value="[% nivel3.getId3 %]">
+			</td>
+            <td>[% nivel3.getSignatura_topografica %]</td>
+            <td>
+                <!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% nivel3.getBarcode %]&signatura_topografica=[% nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>[% nivel3.getBarcode %]</a>-->
+	
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
+												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
+												params =>	[	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
+																"barcode=[% nivel3.getBarcode %]",
+																"signatura_topografica=[% nivel3.getSignatura_topografica %]"
+															],
+												title =>	"[% 'Detalle de disponibilidad' | i18n %]"
+											) ;
+			[% END %]
+            </td>
+            <td>
+                [% nivel3.ref_disponibilidad.getNombre %]
+            </td>
+            <td>
+                 [% nivel3.getId_ui_origen %] 
+            </td>
+            <td>
+                [% nivel3.getId_ui_poseedora %]
+            </td>
+            <td>
+                [% nivel3.ref_estado.getNombre %]
+            </td>
+            <td>
+                <input  type="image" value="modificar" src="[% themelang %]/images/editar.png" 
+                        onClick="modificarN3('[% nivel3.getId3 %]')" title="Editar Ejemplar">
+                <input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
+						onClick="borrarN3('[% nivel3.getId3 %]');" title="Borrar Ejemplar">
+            </td>
+    </tr>
+[% END %] <!-- END FOREACH nivel3 -->
+</table>
+
+<img class="selectallarrow" height="22" width="38" alt="Para los elementos que están marcados:" src="[% themelang %]/images/arrow_ltr.png"/>
+<i>[% "Para los elementos que est&acute;n marcados:" | i18n %]</i>
+<input  type="image" value="modificar" src="[% themelang %]/images/editar.png" 
+                        onClick="modificarEjemplaresN3('[% nivel3.getId3 %]')" title="Editar Ejemplares">
+<input TYPE="image" name="delete"  VALUE="delete" src="[% themelang %]/images/borrar.png" 
+						onClick="borrarEjemplaresN3('[% nivel3.getId3 %]');" title="Borrar Ejemplares">
+
