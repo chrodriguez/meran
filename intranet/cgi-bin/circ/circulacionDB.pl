@@ -47,7 +47,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoDevRenJSON;
 }
 #*************************************************************************************************************
@@ -80,7 +80,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 	my $infoPrestamoJSON = to_json \@infoPrestamo;
 
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoPrestamoJSON;
 }
 #*************************************************************************************************************
@@ -156,7 +156,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 	
 	my $infoOperacionJSON = to_json \%infoOperaciones;
 
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 }
@@ -232,7 +232,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 	
 	my $infoOperacionJSON = to_json \%infoOperaciones;
 
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
@@ -253,7 +253,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }
 #******************************************FIN***CANCELAR RESERVA*********************************************
@@ -283,8 +283,8 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	}
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
-	
-	print $input->header;
+
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
@@ -302,7 +302,6 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 	if($socio){
 		$flag= $socio->tieneAutorizado;	
 	}
-	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $flag;
 }

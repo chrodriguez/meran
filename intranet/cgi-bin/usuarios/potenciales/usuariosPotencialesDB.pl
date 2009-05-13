@@ -32,7 +32,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 }elsif($obj->{'tipoAccion'} eq "DESHABILITAR_PERSON"){
@@ -41,7 +41,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 }

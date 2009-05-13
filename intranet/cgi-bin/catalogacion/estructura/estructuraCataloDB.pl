@@ -41,6 +41,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
     $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
     $t_params->{'nivel'}= $nivel;
+    $t_params->{'itemType'}= $itemType;
     
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

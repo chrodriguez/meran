@@ -50,7 +50,7 @@ if($tabla eq 'autores'){
 							);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+         C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -64,7 +64,7 @@ if($tabla eq 'autores'){
 							);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -77,7 +77,7 @@ if($tabla eq 'autores'){
 								);
 		#se convierte el arreglo de respuesta en JSON
 		my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 
@@ -91,7 +91,7 @@ if($tabla eq 'autores'){
 							);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 
@@ -109,7 +109,7 @@ if($tabla eq 'autores'){
 
 		#se convierte el arreglo de respuesta en JSON
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -126,7 +126,7 @@ if($tabla eq 'temas'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -139,7 +139,7 @@ if($tabla eq 'temas'){
 										$id
 								);
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -151,7 +151,7 @@ if($tabla eq 'temas'){
 								);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -165,7 +165,7 @@ if($tabla eq 'temas'){
 								);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -181,7 +181,7 @@ if($tabla eq 'temas'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -198,7 +198,7 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -212,7 +212,7 @@ if($tabla eq 'editoriales'){
 								);
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -225,7 +225,7 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -239,7 +239,7 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 
@@ -256,7 +256,7 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-		print $input->header;
+    C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}

@@ -12,7 +12,7 @@
 	        </tr>
             
 	        <tr class="tablaresultadoTitle">
-		        <td width="1%" align="left" valign="top"><img src="[% themelang %]images/izquierda.png"></td>
+		        <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 		        <td width="21%">MARC</td>
 		        <td width="20%"> Vista en Intranet</td>
 		        <td>Orden</td>
@@ -29,16 +29,17 @@
 			        Campo: <b>[% catalogacion.getCampo %]</b>, Subcampo: <b>[% catalogacion.getSubcampo %]</b>
 		        </td>
 		        <td>
+                    [% catalogacion.getIntranet_habilitado %]
 			        [% catalogacion.getLiblibrarian %]
 		        </td>
 		        <td>
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
-                [% IF catalogacion.soyElPrimero != 1 %]  
+                [% IF ! catalogacion.primeroDelTipo(itemType) %]  
 			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
                     onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> 
                 [% END %]
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
-                [% IF catalogacion.soyElUltimo != 1 %]
+                [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
 			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
                     onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
                 [% END %]

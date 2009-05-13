@@ -160,15 +160,15 @@ ALTER TABLE usr_socio ADD FOREIGN KEY ( cod_categoria ) REFERENCES usr_ref_categ
 
 ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';
 
-ALTER TABLE `usr_estado` DROP `id_socio` 
+ALTER TABLE `usr_estado` DROP `id_socio` ;
 
-ALTER TABLE `usr_estado` DROP INDEX `id_persona` 
+ALTER TABLE `usr_estado` DROP INDEX `id_persona` ;
 
  ALTER TABLE `usr_estado`
   DROP `id_persona`;
 
 
-ALTER TABLE usr_socio ADD FOREIGN KEY ( id_estado ) REFERENCES usr_estado( id_estado ) 
+ALTER TABLE usr_socio ADD FOREIGN KEY ( id_estado ) REFERENCES usr_estado( id_estado ) ;
 
 
 ALTER TABLE `usr_socio` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' AFTER `id_estado` ;
@@ -647,7 +647,7 @@ ALTER TABLE `rep_busqueda` CHANGE `fecha` `fecha` VARCHAR( 12 ) NOT NULL ;
 
 
 --GASPAR
- ALTER TABLE `usr_socio` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL  
+ ALTER TABLE `usr_socio` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL  
 
 --Matias (22/04/2009 - 13:00)
 -- Reglas de sanciones !!!

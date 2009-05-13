@@ -58,7 +58,7 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 	
 	&modificarVisulizacion($idestcat, $visible);
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 }
 #**************************************************************************************************
 
@@ -98,7 +98,7 @@ if(($tipoAccion eq "INSERT")&&($tabla eq "ENCABEZADO")){
 	
 	my ($error, $codMsg, $message)= &t_insertEncabezado($encabezado, $nivel, $itemtypes_arrayref);
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	($error)?print $message:'';
 }
 #*******************FIN *** gurado el encabezado en la tabla encabezado_campo_opac*****************************
@@ -111,7 +111,7 @@ if( ($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO") ){
 	
 	&modificarNombreEncabezado($encabezado, $nombre);
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 }
 #****************FIN**** actualizo el nombre del encabezado en la tabla encabezado_campo_opac******************
 
@@ -123,7 +123,7 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
 	
 	&modificarLineaEncabezado($idencabezado, $linea);
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 }
 
 #*********************************se actualiza el campo linea del encabezado*********************************
@@ -141,7 +141,7 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 		&bajarOrden($idencabezado, $orden, $itemtype, $action);
 	}
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 }
 #**************************************************************************************************
 
@@ -170,7 +170,7 @@ if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 	#se convierte el arreglo de respuesta en JSON
 	my $infoRespuestaJSON = to_json \%infoRespuesta;
-	print $input->header;
+    C4::Output::printHeader($session);
 	#se envia en JSON al cliente
 	print $infoRespuestaJSON;
 }
@@ -186,7 +186,7 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 	
 	&UpdateCatalogacion($textoPred, $textoSucc, $separador, $idestcatopac);
 	
- 	print $input->header;
+    C4::Output::printHeader($session);
 }
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
@@ -203,7 +203,7 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 	#se convierte el arreglo de respuesta en JSON
 	my $infoRespuestaJSON = to_json \%infoRespuesta;
-	print $input->header;
+    C4::Output::printHeader($session);
 	#se envia en JSON al cliente
 	print $infoRespuestaJSON;
 
@@ -224,7 +224,7 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
 
 	#se convierte el arreglo de respuesta en JSON
 	my $infoRespuestaJSON = to_json \%infoRespuesta;
-	print $input->header;
+    C4::Output::printHeader($session);
 	#se envia en JSON al cliente
 	print $infoRespuestaJSON;
 }

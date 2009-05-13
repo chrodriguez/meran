@@ -141,17 +141,17 @@ sub borrarYOrdenar{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { gt => $self->getIntranet_habilitado },
-                                                                    or => [
-                                                                       and => [
-                                                                            itemtype=> { eq => $self->getItemType},
-                                                                            nivel=> { eq => $self->getNivel},
-                                                                       ],
-                                                                        and => [
-                                                                            itemtype=> { eq => 'ALL'},
+#                                                                     or => [
+#                                                                        and => [
+#                                                                             itemtype=> { eq => $self->getItemType},
+#                                                                             nivel=> { eq => $self->getNivel},
+#                                                                        ],
+#                                                                         and => [
+#                                                                             itemtype=> { eq => 'ALL'},
                                                                             nivel=> { eq => $self->getNivel},
                                                                             fijo => { eq => 1},
-                                                                        ],
-                                                                    ],
+#                                                                         ],
+#                                                                     ],
                                                             ],
                                                          );
 
@@ -186,17 +186,18 @@ sub bajarAnterior{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado-1 },
-                                                                    or => [
-                                                                       and => [
-                                                                            itemtype=> { eq => $itemtype},
-                                                                            nivel=> { eq => $self->getNivel},
-                                                                       ],
-                                                                        and => [
-                                                                            itemtype=> { eq => 'ALL'},
-                                                                            nivel=> { eq => $self->getNivel},
-#                                                                             fijo => { eq => 1},
-                                                                        ],
-                                                                    ],
+#                                                                     or => [
+#                                                                        and => [
+#                                                                             itemtype=> { eq => $itemtype},
+#                                                                             nivel=> { eq => $self->getNivel},
+#                                                                        ],
+#                                                                         and => [
+#                                                                             itemtype=> { eq => 'ALL'},
+#                                                                             nivel=> { eq => $self->getNivel},
+# #                                                                             fijo => { eq => 1},
+#                                                                         ],
+#                                                                     ],
+                                                                    nivel=> { eq => $self->getNivel},
                                                             ],
                                                          );
 }
@@ -211,17 +212,18 @@ sub subirSiguiente{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado+1 },
-                                                                    or => [
-                                                                       and => [
-                                                                            itemtype=> { eq => $itemtype},
-                                                                            nivel=> { eq => $self->getNivel},
-                                                                       ],
-                                                                        and => [
-                                                                            itemtype=> { eq => 'ALL'},
-                                                                            nivel=> { eq => $self->getNivel},
-#                                                                             fijo => { eq => 1},
-                                                                        ],
-                                                                    ],
+#                                                                     or => [
+#                                                                        and => [
+#                                                                             itemtype=> { eq => $itemtype},
+#                                                                             nivel=> { eq => $self->getNivel},
+#                                                                        ],
+#                                                                         and => [
+#                                                                             itemtype=> { eq => 'ALL'},
+#                                                                             nivel=> { eq => $self->getNivel},
+# #                                                                             fijo => { eq => 1},
+#                                                                         ],
+#                                                                     ],
+                                                                     nivel=> { eq => $self->getNivel},
 
                                                             ],
                                                          );
@@ -265,20 +267,53 @@ sub getUltimoIntranetHabilitado{
     my $catalogaciones_count = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion_count( 
                                                             query => [
                                                                     or => [
-                                                                       and => [
                                                                             itemtype=> { eq => $itemtype},
-                                                                            nivel=> { eq => $self->getNivel},
-                                                                       ],
-                                                                        and => [
                                                                             itemtype=> { eq => 'ALL'},
-                                                                            nivel=> { eq => $self->getNivel},
-                                                                            fijo => { eq => 1},
-                                                                        ],
                                                                     ],
+                                                                    nivel=> { eq => $self->getNivel},
                                                                 ],
                                                         );
 
     return ($catalogaciones_count);
+}
+
+
+
+sub ultimoDelTipo{
+
+    my ($self)=shift;
+    my ($itemType)=@_;
+       my $mismo_tipo = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+                                                            query => [
+                                                                    or => [
+                                                                            itemtype=> { eq => $itemType},
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                    ],
+                                                                    nivel=> { eq => $self->getNivel},
+                                                                   ],
+                                                            sort_by => ['intranet_habilitado DESC'],
+                                                            );
+
+    return ($self->getIntranet_habilitado == $mismo_tipo->[0]->getIntranet_habilitado);
+}
+
+
+sub primeroDelTipo{
+
+    my ($self)=shift;
+    my ($itemType)=@_;
+       my $mismo_tipo = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( 
+                                                            query => [or => [
+                                                                            itemtype=> { eq => $itemType},
+                                                                            itemtype=> { eq => 'ALL'},
+                                                                    ],
+                                                                           
+                                                                            nivel=> { eq => $self->getNivel},
+                                                                     ],
+                                                            sort_by => ['intranet_habilitado ASC'],
+                                                            );
+
+    return ($self->getIntranet_habilitado == $mismo_tipo->[0]->getIntranet_habilitado);
 }
 =item
 Esta funcion retorna 1 si es el ultimo en el orden a mostrar segun intranet_habilitado
@@ -286,13 +321,16 @@ Esta funcion retorna 1 si es el ultimo en el orden a mostrar segun intranet_habi
 sub soyElUltimo{
     my ($self)=shift;
     my ($itemtype) = @_;
-    return ( $self->intranet_habilitado == $self->getUltimoIntranetHabilitado($self->getItemType) );
+    return ( ($self->intranet_habilitado == $self->getUltimoIntranetHabilitado($self->getItemType)) 
+                                                        && 
+                                            ($self->ultimoDelTipo)
+            );
 }
 
 
 sub soyElPrimero{
     my ($self)=shift;
-    return ($self->intranet_habilitado == 1);
+    return (($self->intranet_habilitado == 1));
 }
 =item
 Esta funcion retorna 1 si la tupla es fija (no se puede modificar) 0  si no es fijo (se puede modificar)
@@ -300,7 +338,7 @@ Esta funcion retorna 1 si la tupla es fija (no se puede modificar) 0  si no es f
 sub soyFijo{
     my ($self)=shift;
 
-    return $self->getFijo eq 1;
+    return ($self->getFijo);
 }
 
 sub getFijo{

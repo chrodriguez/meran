@@ -35,7 +35,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 	
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
@@ -52,7 +52,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")
@@ -73,7 +73,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "RESET_PASSWORD")
@@ -87,7 +87,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 
 } 
@@ -167,7 +167,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
  	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($nro_socio);
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "ELIMINAR_USUARIO")
@@ -182,7 +182,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
     
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "AGREGAR_USUARIO")
@@ -197,14 +197,14 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 # 	
 # 	my $infoOperacionJSON=to_json $Message_arrayref;
 # 	
-# 	print $input->header;
+# 	    C4::Output::printHeader($session);
 # 	print $infoOperacionJSON;
 
     my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
@@ -317,7 +317,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-	print $input->header;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }	
 

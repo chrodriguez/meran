@@ -58,7 +58,8 @@ if($accion eq "BORRAR_GRUPO"){
 
 #se convierte el arreglo de respuesta en JSON
 my $infoRespuestaJSON = to_json \%infoRespuesta;
-print $input->header;
+C4::Output::printHeader($session);
+
 #se envia en JSON al cliente
 print $infoRespuestaJSON;
 
