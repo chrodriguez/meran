@@ -194,7 +194,7 @@ sub bajarAnterior{
                                                                         and => [
                                                                             itemtype=> { eq => 'ALL'},
                                                                             nivel=> { eq => $self->getNivel},
-                                                                            fijo => { eq => 1},
+#                                                                             fijo => { eq => 1},
                                                                         ],
                                                                     ],
                                                             ],
@@ -219,7 +219,7 @@ sub subirSiguiente{
                                                                         and => [
                                                                             itemtype=> { eq => 'ALL'},
                                                                             nivel=> { eq => $self->getNivel},
-                                                                            fijo => { eq => 1},
+#                                                                             fijo => { eq => 1},
                                                                         ],
                                                                     ],
 

@@ -1804,7 +1804,7 @@ sub getHashCatalogaciones{
 	my $orden= $params->{'orden'};
 	
 	#obtengo toda la informacion de la estructura de catalogacion
-    my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType,$orden);
+    my ($cant, $catalogaciones_array_ref)= getCatalogaciones($nivel,$itemType);
     
 
     my @result;
@@ -1990,7 +1990,7 @@ C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 Este funcion devuelve la informacion del usuario segun un nro_socio
 =cut
 sub getCatalogaciones{
-    my ($nivel,$itemType,$orden)=@_;
+    my ($nivel,$itemType)=@_;
 
     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
@@ -2011,7 +2011,8 @@ sub getCatalogaciones{
 
                                                                 with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
 
-                                                                sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                #sort_by => ( $catalogacionTemp->sortByString($orden) ),
+                                                                sort_by => ( 'intranet_habilitado' ),
                                                              );
 
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
