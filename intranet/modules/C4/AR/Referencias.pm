@@ -230,7 +230,7 @@ sub getCamposDeTablaRef{
     if ($db){
         return( $db->getCamposAsHash );
     }else{
-        return ($db);
+        return (0);
     }
 }
 

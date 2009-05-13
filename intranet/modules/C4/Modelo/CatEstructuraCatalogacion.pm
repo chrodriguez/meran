@@ -72,7 +72,7 @@ sub agregar{
     $self->setNivel($data_hash->{'nivel'});
     $self->setObligatorio($data_hash->{'obligatorio'});
 #     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
-    $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado() + 1);
+    $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado($self->getItemType)+1 );
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
     $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
@@ -286,7 +286,7 @@ Esta funcion retorna 1 si es el ultimo en el orden a mostrar segun intranet_habi
 sub soyElUltimo{
     my ($self)=shift;
     my ($itemtype) = @_;
-    return ( $self->intranet_habilitado == $self->getUltimoIntranetHabilitado() );
+    return ( $self->intranet_habilitado == $self->getUltimoIntranetHabilitado($self->getItemType) );
 }
 
 

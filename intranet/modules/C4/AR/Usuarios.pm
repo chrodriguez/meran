@@ -1202,7 +1202,11 @@ sub getSocioLike {
     push(@filtros, ( activo => { eq => $habilitados}));
 
 	my $ordenAux= $socioTemp->sortByString($orden);
-    C4::AR::Debug::debug("ORDEN: ".$ordenAux);
+
+# PATCH ADAMS, si queda con apellido solo se rompe porque quiere ordenar por t1.apellido, donde t1 es usr_socio
+    if ($ordenAux == "apellido"){
+        $ordenAux = "persona.apellido";
+    }
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
