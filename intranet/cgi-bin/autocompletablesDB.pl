@@ -49,7 +49,7 @@ elsif ($accion eq 'autocomplete_barcodes'){
     $result = C4::AR::Utilidades::barcodeAutocomplete($string);
 }
 
-print $session->header;
+C4::Output::printHeader($session);
 print $result;
 
 1;
