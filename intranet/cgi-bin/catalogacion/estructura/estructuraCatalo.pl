@@ -10,7 +10,7 @@ use C4::AR::Catalogacion;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                                template_name => "catalogacion/estructura/nuevo/estructuraCatalo.tmpl",
+                                                                template_name => "catalogacion/estructura/estructuraCatalo.tmpl",
 			                                                    query => $input,
 			                                                    type => "intranet",
 			                                                    authnotrequired => 0,

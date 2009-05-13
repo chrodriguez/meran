@@ -1,8 +1,8 @@
 [% INCLUDE "opac-top.inc" %]
 <script>
  $(document).ready(function() {
-        CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
-        CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+		CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+        CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
     });
 
 </script>

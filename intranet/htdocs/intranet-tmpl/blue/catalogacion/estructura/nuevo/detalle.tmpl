@@ -19,7 +19,7 @@ function borrarN3(id2, id3){
 		ID_N2= id2;
 		objAH=new AjaxHelper(updateBorrarN3);
 		objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
  		objAH.id3_array= [id3];
 		objAH.nivel=3;
 		objAH.itemtype=$("#id_tipo_doc").val();
@@ -40,7 +40,7 @@ function ejemplaresDelGrupo(id2){
 
 	objAH=new AjaxHelper(updateEjemplaresDelGrupo);
 	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl';
+	objAH.url= '/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl';
 	objAH.id2= id2;
 	objAH.tipoAccion= 'MOSTRAR_DETALLE_NIVEL3';
 	//se envia la consulta
@@ -343,7 +343,7 @@ function updateBorrarNivel1(responseText){
 	        [% END %] <!-- END FOREACH nivel2_array -->
 
 		<div id="ejemplaresDelGrupo[% id2 %]" >
-        [% INCLUDE "estructura/nuevo/ejemplaresDelGrupo.tmpl" %]
+        [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
 
 		<br><hr class="lineagruesa"><br>
 			        

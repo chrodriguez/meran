@@ -2,6 +2,9 @@
     [% INCLUDE "intranet-top.inc" %] 
 [% END %]
 
+<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
+[% INCLUDE "AutocompleteHelper.inc" %]
+
 <script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
 <script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
 <link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
@@ -38,8 +41,8 @@
         [% END %]
 
         $("#userDataForm").validate();
-        CrearAutocompleteCiudades('ciudad', 'id_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
-        CrearAutocompleteCiudades('alt_ciudad', 'id_alt_ciudad','/cgi-bin/koha/autocompletables/searchcity.pl');
+		CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+		CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
         $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
         $('#categoria_socio_id').addClass('required');
 

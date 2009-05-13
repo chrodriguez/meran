@@ -28,7 +28,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/mostrarCatalogacion.tmpl",
+                                                        template_name => "catalogacion/estructura/mostrarCatalogacion.tmpl",
 			                                            query => $input,
 			                                            type => "intranet",
 			                                            authnotrequired => 0,
@@ -102,7 +102,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/agregarCampoMARC.tmpl",
+                                                        template_name => "catalogacion/estructura/agregarCampoMARC.tmpl",
                                                         query => $input,
                                                         type => "intranet",
                                                         authnotrequired => 0,
@@ -120,7 +120,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/modificarCampoMARC.tmpl",
+                                                        template_name => "catalogacion/estructura/modificarCampoMARC.tmpl",
                                                         query => $input,
                                                         type => "intranet",
                                                         authnotrequired => 0,
@@ -237,7 +237,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel1.tmpl",
+                                                        template_name => "catalogacion/estructura/ADInfoNivel1.tmpl",
                                                         query => $input,
                                                         type => "intranet",
                                                         authnotrequired => 0,
@@ -259,7 +259,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel2.tmpl",
+                                                        template_name => "catalogacion/estructura/ADInfoNivel2.tmpl",
                                                         query => $input,
                                                         type => "intranet",
                                                         authnotrequired => 0,
@@ -286,7 +286,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/nuevo/ADInfoNivel3.tmpl",
+                                                        template_name => "catalogacion/estructura/ADInfoNivel3.tmpl",
                                                         query => $input,
                                                         type => "intranet",
                                                         authnotrequired => 0,
@@ -408,7 +408,7 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 
 	 my ($template, $session, $t_params)  = get_template_and_user({
-															template_name   => ('catalogacion/estructura/nuevo/ejemplaresDelGrupo.tmpl'),
+															template_name   => ('catalogacion/estructura/ejemplaresDelGrupo.tmpl'),
 															query           => $input,
 															type            => "intranet",
 															authnotrequired => 0,

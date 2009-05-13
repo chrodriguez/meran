@@ -27,6 +27,7 @@ use Date::Manip;
 use C4::Date;
 use C4::AR::Estadisticas;
 use C4::AR::Referencias;
+use C4::AR::ControlAutoridades;
 use CGI;
 use Encode;
 use JSON;

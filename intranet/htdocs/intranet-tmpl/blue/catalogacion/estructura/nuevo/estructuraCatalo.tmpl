@@ -39,7 +39,7 @@ function eleccionDeNivel(){
 	
 	objAH=new AjaxHelper(updateEleccionDeNivel);
     objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.nivel=nivel;
     objAH.tipoAccion= 'MOSTRAR_CAMPOS';
 
@@ -61,7 +61,7 @@ function updateEleccionDeNivel(responseText){
 function modificarOrden(id, accion){
     objAH=new AjaxHelper(eleccionDeNivel);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.idMod=id;
     objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
@@ -71,7 +71,7 @@ function modificarOrden(id, accion){
 function visibilidad(id){
     objAH=new AjaxHelper(eleccionDeNivel);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id=id;
     objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
     objAH.sendToServer();
@@ -81,7 +81,7 @@ function visibilidad(id){
 function eliminarCampo(id){
     objAH=new AjaxHelper(eleccionDeNivel);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.idMod=id;
     objAH.tipoAccion= 'ELIMINAR_CAMPO';
     objAH.sendToServer();
@@ -90,7 +90,7 @@ function eliminarCampo(id){
 function mostrarAgregarCampo(id){
     objAH=new AjaxHelper(updateMostrarAgregarCampo);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion="MOSTRAR_FORM_AGREGAR_CAMPOS";
     objAH.sendToServer();
 }
@@ -107,7 +107,7 @@ function updateMostrarAgregarCampo(responseText){
 function mostrarModificarCampo(id){
     objAH=new AjaxHelper(updateMostrarModificarCampo);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion="MOSTRAR_FORM_MODIFICAR_CAMPOS";
     objAH.id= id;
     objAH.sendToServer();
@@ -161,7 +161,7 @@ function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampoX);
 		objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campoX=$('#campoX').val();
         objAH.nivel=$('#niveles_id').val();
         objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
@@ -194,7 +194,7 @@ function eleccionCampo(){
     if ($("#campo").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampo);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campo=$('#campo').val();
         objAH.nivel=$('#niveles_id').val();
         objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
@@ -262,7 +262,7 @@ function enable_disableSelects(){
 function armarComboCampos(){
     objAH=new AjaxHelper(updateArmarComboCampos);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tableAlias=$('#tablaRef').val();
     objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS_REFERENCIA";
     objAH.sendToServer();
@@ -313,7 +313,7 @@ function eleccionSubCampo(){
 function agregarEstructuraCatalogacion(){ 
     objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel= $('#niveles_id').val();
     if (objAH.nivel == 1)
       objAH.itemtype= 'ALL';
@@ -353,7 +353,7 @@ function updateAgregarEstructuraCatalogacion(responseText){
 function modificarEstructuraCatalogacion(id){ 
     objAH=new AjaxHelper(updateModificarEstructuraCatalogacion);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCataloDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel= $('#niveles_id').val();
     objAH.id= id;
     objAH.itemtype= $('#tipo_nivel3_id').val();

@@ -46,13 +46,9 @@
 		</td>
 		<td class="titulo_result">
 
-<!--			<a href="/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl?id1=[% id1 %]" title="Mostrar Detalle" class="click" >
-				
-				( [% hits %] ) - [% titulo %]
-			</a>-->
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% titulo %]",
-                                                url =>      "/cgi-bin/koha/catalogacion/estructura/nuevo/detalle.pl", 
+                                                url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
                                                 params =>   ["id1=[% id1 %]"],
                                                 title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                             ) ;

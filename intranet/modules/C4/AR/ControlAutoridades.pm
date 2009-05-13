@@ -47,7 +47,7 @@ use vars qw(@EXPORT @ISA);
 # FIXME los search son para los auto_complete, PASAR A ROSE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #*************************************Sinonimos*************************************************
 
-sub search_temas(){
+sub search_temas{
 	my ($tema)=@_; 
 
 	my $dbh = C4::Context->dbh;
@@ -69,7 +69,7 @@ sub search_temas(){
 
 }
 
-sub search_autores(){
+sub search_autores{
 	my ($autor)=@_; 
 
 	my $dbh = C4::Context->dbh;

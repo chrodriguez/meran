@@ -33,7 +33,7 @@
                   </li>
                   <li><h3>Cat&aacute;logo</h3>
                      <ul>
-                        <li><a href="/cgi-bin/koha/catalogacion/estructura/nuevo/agregarDocumento.pl?token=[% token %]">Agregar Documento</a></li>
+                        <li><a href="/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl?token=[% token %]">Agregar Documento</a></li>
                         <li><a href="/cgi-bin/koha/busquedas/adminEjemplares.pl?token=[% token %]">B&uacute;squeda Ejemplar</a></li>
                         <li><a href="/cgi-bin/koha/busquedas/estante.pl?token=[% token %]">Estante Virtual</a></li>
                      </ul>
@@ -42,7 +42,7 @@
                      <ul>
                         <li><a href="/cgi-bin/koha/catalogacion/kohaToMARC.pl?token=[% token %]">Mapeo KOHA a MARC</a></li>
                         <li><a href="/cgi-bin/koha/admin/z3950servers.pl?token=[% token %]">Servidores Z39.50</a></li>
-                        <li><a href="/cgi-bin/koha/catalogacion/estructura/nuevo/estructuraCatalo.pl?token=[% token %]">
+                        <li><a href="/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl?token=[% token %]">
 											Creaci&oacute;n Cat&aacute;logo</a></li>
                         <li><a href="/cgi-bin/koha/admin/itemtypes.pl?token=[% token %]">Tipos de documento</a></li>
                         <li><a href="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl?token=[% token %]">Visualizaci&oacute;n del OPAC</a></li>
