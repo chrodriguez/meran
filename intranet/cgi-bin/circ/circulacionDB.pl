@@ -267,6 +267,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'barcode'}= $obj->{'barcode'};
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'operacion'}= $obj->{'operacion'};
+	$params{'loggedinuser'}= $loggedinuser;
 	
 	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);

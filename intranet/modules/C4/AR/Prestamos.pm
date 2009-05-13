@@ -385,6 +385,7 @@ sub t_devolver {
     my $msg_object;
     my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $params->{'id_prestamo'});
     $prestamo->load();
+	$params->{'id3'}= $prestamo->getId3;
     my $db = $prestamo->db;
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;

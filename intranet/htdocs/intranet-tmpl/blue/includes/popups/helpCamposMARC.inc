@@ -44,7 +44,7 @@ $.ajax({	type: "POST",
 }
 
 
-
+// FIXME esto no va a funcionar, le falta el token
 function CrearAutocompleteHelp(){
 	// q= valor de campoHelp
 	$("#campoHelp").search();

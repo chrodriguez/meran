@@ -485,15 +485,15 @@ sub devolver {
    $self->debug("Se loguea en historico de circulacion la devolucion");
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $data_hash;
-   $data_hash->{'id1'}=$self->nivel3->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}=$self->nivel3->nivel2->getId2;
-   $data_hash->{'id3'}=$self->getId3;
-   $data_hash->{'nro_socio'}=$self->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'hasta'}=undef;
-   $data_hash->{'tipo_prestamo'}=$self->getTipo_prestamo;
-   $data_hash->{'id_ui'}=$self->getId_ui_prestamo;
-   $data_hash->{'tipo'}='devolucion';
+   $data_hash->{'id1'}= $self->nivel3->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}= $self->nivel3->nivel2->getId2;
+   $data_hash->{'id3'}= $self->getId3;
+   $data_hash->{'nro_socio'}= $self->getNro_socio;
+   $data_hash->{'responsable'}= $loggedinuser;
+   $data_hash->{'hasta'}= undef;
+   $data_hash->{'tipo_prestamo'}= $self->getTipo_prestamo;
+   $data_hash->{'id_ui'}= $self->getId_ui_prestamo;
+   $data_hash->{'tipo'}= 'devolucion';
    use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
