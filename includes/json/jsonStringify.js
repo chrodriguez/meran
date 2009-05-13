@@ -34,10 +34,12 @@ JSONstring={
 			}
 	},
 	toObject:function(x){
+// alert('toObject antes del eval: '+x);
 		eval("this.myObj="+x);
 		if(!this.restoreCirculars || !alert){return this.myObj};
 		this.restoreCode=[];
 		this.make(this.myObj,true);
+// alert('toObject: '+x);
 		var r=this.restoreCode.join(";")+";";
 		eval('r=r.replace(/\\W([0-9]{1,})(\\W)/g,"[$1]$2").replace(/\\.\\;/g,";")');
 		eval(r);

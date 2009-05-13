@@ -53,7 +53,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my $info = to_json($campos_array);
     my $infoOperacionJSON= $info;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 
 }
@@ -68,7 +68,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 
      my $infoOperacionJSON= $info;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 
@@ -82,7 +82,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
 
     my $infoOperacionJSON= $info;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 
@@ -93,7 +93,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
     my ($infoOperacionJSON) = to_json($tablaRef_array);
 
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 
 }
@@ -146,7 +146,7 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 
@@ -158,7 +158,7 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 #Sube el orden en la vista del campo seleccionado
@@ -167,7 +167,7 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
     my $itemtype=$obj->{'itemtype_cliente'};
     C4::AR::Catalogacion::subirOrden($id,$itemtype);
 
-    print $input->header;
+    C4::Output::printHeader($session);
 }
 
 #Baja el orden en la vista del campo seleccionado
@@ -176,7 +176,7 @@ elsif($tipoAccion eq "BAJAR_ORDEN"){
 
     C4::AR::Catalogacion::bajarOrden($id);
 
-    print $input->header;
+    C4::Output::printHeader($session);
 }
 
 #Se cambia la visibilidad del campo.
@@ -187,7 +187,7 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
     $catalogacion->load();
 
     $catalogacion->cambiarVisibilidad;
-    print $input->header;
+    C4::Output::printHeader($session);
 }
 
 #Se deshabilita el campo seleccionado para la vista en intranet
@@ -197,7 +197,7 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
     $catalogacion->load();
     $catalogacion->delete();
 
-    print $input->header;
+    C4::Output::printHeader($session);
 }
 
 elsif($tipoAccion eq "AGREGAR_CAMPO"){
@@ -207,7 +207,7 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 # ***********************************************ABM CATALOGACION*****************************************************************
@@ -219,7 +219,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
-    print $input->header;
+	C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }
 
@@ -229,7 +229,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     
 	my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
-    print $input->header;
+    C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
 
@@ -318,7 +318,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
     $info{'Message_arrayref'}= $Message_arrayref;
     $info{'id1'}= $id1;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 
@@ -331,7 +331,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
     $info{'id1'}= $nivel2->getId1;
     $info{'id2'}= $nivel2->getId2;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 
@@ -342,7 +342,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 
@@ -354,7 +354,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
     $info{'Message_arrayref'}= $Message_arrayref;
     $info{'id1'}= $id1;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 
@@ -367,7 +367,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
     $info{'id1'}= $nivel2->getId1;
     $info{'id2'}= $nivel2->getId2;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 
@@ -378,7 +378,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
 
-    print $input->header;
+    C4::Output::printHeader($session);
     print to_json \%info;
 }
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
@@ -400,7 +400,7 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 	my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
     
-    print $input->header;
+    C4::Output::printHeader($session);
 	print to_json \%info;
 }
 #=============================================================FIN ABM Catalogo===============================================================

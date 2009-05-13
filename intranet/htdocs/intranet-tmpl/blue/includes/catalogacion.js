@@ -256,6 +256,7 @@ function mostrarDataNivel3(){
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
+//   alert('responseText: '+htmlentities(responseText,'ENT_NOQUOTES','UTF-8 '));
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(1);
     //proceso la info del servidor y se crean las componentes en el cliente
@@ -637,6 +638,7 @@ function updateMostrarInfoAltaNivel3(responseText){
 function procesarInfoJson(json){
 
     var objetos=JSONstring.toObject(json);
+// 	var objetos=JSON.parse(json);
 
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado

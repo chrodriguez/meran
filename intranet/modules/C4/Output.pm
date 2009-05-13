@@ -70,34 +70,22 @@ printable string.
 
 		&startpage &endpage
 	     	&mktablehdr &mktableft &mktablerow &mklink
-	     	&startmenu &endmenu &mkheadr
+	     	&endmenu &mkheadr
 	     	&center &endcenter
 	     	&mkform &mkform2 &bold
 	     	&gotopage &mkformnotable &mkform3
 	     	&getkeytableselectoptions
 	     	&pathtotemplate
 		&themelanguage &gettemplate
-		&gettemplateexpr
 	     );
 
+#==========================================================FUNCIONES NUEVAS=================================================
 
-sub printTemplateParams {
-	my ($params) = @_;
-	my $k;
-	my $v;
-
-	while ( ($k,$v) = each %$params ) {
-		print "$k => $v\n";
-	}
+sub printHeader {
+	my ($session) = @_;
+	print $session->header(	charset => C4::Context->config("charset")||'utf-8');
 }
 
-
-#FIXME: this is a quick fix to stop rc1 installing broken
-#Still trying to figure out the correct fix.
-my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
-
-#---------------------------------------------------------------------------------------------------------
-# FIXME - POD
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
@@ -150,31 +138,26 @@ sub gettemplate {
 	return ($template, \%params);
 }
 
-## FIXME deprecated, con Template::Toolkit esto no deberia ser necesario
-sub gettemplateexpr {
-        my ($tmplbase, $opac) = @_;
-    
-        my $htdocs;
-        if ($opac ne "intranet") {
-                $htdocs = C4::Context->config('opachtdocs');
-        } else { 
-                $htdocs = C4::Context->config('intrahtdocs');
-        }
-      
-        my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
-  
-        my $template = HTML::Template::Expr->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
-                                   die_on_bad_params => 0,
-                                   global_vars       => 1,
-                                   path              => ["$htdocs/$theme/$lang/includes"]);
 
-        # XXX temporary patch for Bug 182 for themelang
-        $template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
-                                                        interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-                                                        theme => $theme,
-                                                        lang => $lang);
-        return $template;
+#=====================================================Fin=====FUNCIONES NUEVAS===============================================
+
+sub printTemplateParams {
+	my ($params) = @_;
+	my $k;
+	my $v;
+
+	while ( ($k,$v) = each %$params ) {
+		print "$k => $v\n";
+	}
 }
+
+
+#FIXME: this is a quick fix to stop rc1 installing broken
+#Still trying to figure out the correct fix.
+my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
+
+#---------------------------------------------------------------------------------------------------------
+# FIXME - POD
 
 
 #---------------------------------------------------------------------------------------------------------
@@ -409,46 +392,6 @@ sub gotopage($) {
   return $string;
 }
 
-=item startmenu
-
-  @lines = &startmenu($type);
-  print join("", @lines);
-
-Given a page type, or category, returns a set of lines of HTML which,
-when concatenated, generate the menu at the top of the web page.
-
-C<$type> may be one of C<issue>, C<opac>, C<member>, C<acquisitions>,
-C<report>, C<circulation>, or something else, in which case the menu
-will be for the catalog pages.
-
-=cut
-#'
-sub startmenu($) {
-  # edit the paths in here
-  my ($type)=shift;
-  if ($type eq 'issue') {
-    open (FILE,"$path/issues-top.inc") || die "could not find : $path/issues-top.inc";
-  } elsif ($type eq 'opac') {
-    open (FILE,"$path/opac-top.inc") || die "could not find : $path/opac-top.inc";
-  } elsif ($type eq 'member') {
-    open (FILE,"$path/members-top.inc") || die "could not find : $path/members-top.inc";
-  } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/acquisitions-top.inc") || die "could not find : $path/acquisition-top.inc";
-  } elsif ($type eq 'report'){
-    open (FILE,"$path/reports-top.inc") || die "could not find : $path/reports-top.inc";
-  } elsif ($type eq 'circulation') {
-    open (FILE,"$path/circulation-top.inc") || die "could not find : $path/circulation-top.inc";
-  } elsif ($type eq 'admin') {
-    open (FILE,"$path/parameters-top.inc") || die "could not find : $path/parameters-top.inc";
-  } else {
-    open (FILE,"$path/cat-top.inc") || die "could not find : $path/cat-top.inc";
-  }
-  my @string=<FILE>;
-  close FILE;
-  # my $count=@string;
-  # $string[$count]="<BLOCKQUOTE>";
-  return @string;
-}
 
 =item endmenu
 
