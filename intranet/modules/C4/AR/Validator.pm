@@ -292,7 +292,7 @@ sub isValidDocument{
 	my($docType,$docNumber) = @_;
 	my($checkResult) = 0;
 	
-	$docType = trim($docType);
+	$docType = C4::AR::Utilidades::trim($docType);
 	
     C4::AR::Debug::debug("Doctype: ".$docType." Number: ".$docNumber);
 	if ($docType eq "DNI"){
