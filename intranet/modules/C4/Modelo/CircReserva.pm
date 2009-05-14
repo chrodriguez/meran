@@ -231,6 +231,7 @@ sub reservar {
 	$paramsReserva{'id3'}= $id3;
 	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
 	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
+	$paramsReserva{'responsable'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recordatorio'}= $hasta;
 	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");

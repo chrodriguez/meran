@@ -294,7 +294,14 @@ sub getTipoPrestamo {
 
 
 sub prestarYGenerarTicket{
-	my ($params, $nivel3aPrestar)=@_;
+	my ($params)=@_;
+
+# FIXME falta verificar
+
+	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
+
+	my @infoTickets;
+	my @infoMessages;
 
 	my $id3= $nivel3aPrestar->getId3;
 	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
@@ -313,15 +320,21 @@ sub prestarYGenerarTicket{
 		C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
 		$ticketObj=C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'});
 	}
-	#guardo los errores
-# 	push (@infoMessages, $msg_object);
-	
+
+ 	push (@infoMessages, $msg_object);
+
 	my %infoOperacion = (
 				ticket  => $ticketObj,
-				message => $msg_object,
 	);
+	
+	push (@infoTickets, \%infoOperacion);
 
-	return (\%infoOperacion);
+	my %infoOperaciones;
+	$infoOperaciones{'tickets'}= \@infoTickets;
+	$infoOperaciones{'messages'}= \@infoMessages;
+
+
+	return (\%infoOperaciones);
 }
 
 #funcion que realiza la transaccion del Prestamo

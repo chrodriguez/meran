@@ -320,6 +320,7 @@ sub prestar {
 	if(!$msg_object->{'error'}){
 	#No hay error, se realiza el pretamo
 		$self->debug("Se va a insertar el prestamo");
+C4::AR::Debug::debug("responsable desde CircPrestamo antes de insertarPrestamo: ".$params->{'responsable'});
 		$self->insertarPrestamo($params);
 
 		$self->debug("se realizan las verificacioines luego de realizar el prestamo");

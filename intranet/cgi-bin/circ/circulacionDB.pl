@@ -268,6 +268,8 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'operacion'}= $obj->{'operacion'};
 	$params{'loggedinuser'}= $loggedinuser;
+	$params{'responsable'}= $loggedinuser;
+C4::AR::Debug::debug("responsable: ".$loggedinuser);
 	$params{'tipo_prestamo'}= 'DO';
 	# 		$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 	
@@ -282,9 +284,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	}
 	elsif($params{'operacion'} eq "prestar"){
 	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => prestar barcode: ".$params{'barcode'});
-# 		my ($Message_arrayref) = C4::AR::Prestamos::t_prestarPorBarcode(\%params);
-		my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params{'barcode'});
-		my ($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params, $nivel3aPrestar)	
+		($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
 	}
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;

@@ -42,8 +42,19 @@ function realizarAccion(){
 }
 
 function updateRealizarAccion(responseText){
-	var Messages= JSONstring.toObject(responseText);
-	setMessages(Messages);
+	if(objAH.operacion == 'prestar'){
+		var infoHash= JSONstring.toObject(responseText);
+		var messageArray= infoHash.messages;
+		var ticketsArray= infoHash.tickets;
+		var mensajes= '';
+		for(var i=0; i<messageArray.length;i++){
+			imprimirTicket(ticketsArray[i].ticket,i);
+			setMessages(messageArray[i]);
+		}
+	}else{
+		var Messages= JSONstring.toObject(responseText);
+		setMessages(Messages);
+	}
 }
 
 function tieneApoderado(){
