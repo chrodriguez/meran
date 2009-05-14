@@ -298,6 +298,7 @@ sub cardGenerator {
     $pdf->newpage(1);
     $pdf->openpage(1);
     #Hoja A4 :  X diferencia 254 - Y diferencia 160 
+#     $nro_socio = C4::AR::Usuarios::getSocioInfo(id => $nro_socio);
     generateCard($nro_socio,14,14,$pdf);
     return ($pdf);
     }   
@@ -318,16 +319,16 @@ sub batchCardsGenerator {
         $pdf->openpage($pag);
     #Hoja A4 :  X diferencia 254 - Y diferencia 160 
     
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,14,14,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,14,174,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,14,334,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,14,494,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,14,654,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,270,14,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,270,174,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,270,334,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,270,494,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getId_socio,270,654,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,14,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,174,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,334,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,494,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,654,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,14,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,174,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,334,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,494,$pdf);$i++;}
+    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,654,$pdf);$i++;}
     $pag++;
     }
     my $tmpFileName= "carnets.pdf";
@@ -343,9 +344,9 @@ sub generateCard {
     #Datos del usuario
     my $socio = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-    open A,">>/tmp/debug.txt";
-    print A "ID_SOCIO:   ".$socio->persona->getApellido;
-    close A;
+#     open A,">>/tmp/debug.txt";
+#     print A "ID_SOCIO:   ".$socio->persona->getApellido;
+#     close A;
 
 
     my ($pagewidth, $pageheight) = $pdf->getPageDimensions();

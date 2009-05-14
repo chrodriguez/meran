@@ -1200,13 +1200,13 @@ sub getSocioLike {
 	}
 # C4::AR::Debug::debug('habilitado: '.$habilitados);
     push(@filtros, ( activo => { eq => $habilitados}));
-
+    push(@filtros, ( es_socio => { eq => $habilitados}));
 	my $ordenAux= $socioTemp->sortByString($orden);
 
 # PATCH ADAMS, si queda con apellido solo se rompe porque quiere ordenar por t1.apellido, donde t1 es usr_socio
-    if ($ordenAux == "apellido"){
-        $ordenAux = "persona.apellido";
-    }
+#     if ($ordenAux == "apellido"){
+#         $ordenAux = "persona.apellido";
+#     }
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
@@ -1483,6 +1483,8 @@ sub BornameSearchForCard{
         }
     }
 
+     push (@filtros, ('persona.'.es_socio => { eq => 1}) );
+     push (@filtros, (activo => { eq => 1}) );
      my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($orden) ),
                                                                             require_objects => [ 'persona' ]

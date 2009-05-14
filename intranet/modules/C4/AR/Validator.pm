@@ -115,9 +115,9 @@ sub countAlphaNumericChars{
 	for ($charCount = 0; $charCount < $stringLength; $charCount += 1) {
 		$fragment = substr $string,$charCount,1;
 		if (($fragment =~ tr/a-z//) 
-				and 
+				or 
 		    ($fragment =~ tr/A-Z//) 
-				and  
+				or 
 		    ($fragment =~ tr/0-9//)){
 				
 				$count++;
@@ -294,6 +294,7 @@ sub isValidDocument{
 	
 	$docType = trim($docType);
 	
+    C4::AR::Debug::debug("Doctype: ".$docType." Number: ".$docNumber);
 	if ($docType eq "DNI"){
 		if ( countAlphaNumericChars($docNumber) ){
 			if (length(trim($docNumber)) > 0){

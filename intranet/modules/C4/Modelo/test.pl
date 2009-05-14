@@ -279,22 +279,27 @@ use C4::Modelo::CatTema;
 # print "\n############################ FIN Ref_provincias. ##############################\n\n";
 =cut
 
-my $time = time();
-sleep(2);
-my $final = time() - $time;
-print "TARDASTE: ".$final."\n////////////////////////////////".$time."\n";
+# my $time = time();
+# sleep(2);
+# my $final = time() - $time;
+# print "TARDASTE: ".$final."\n////////////////////////////////".$time."\n";
+# 
+# 
+# 
+# 
+# use Time::HiRes;
+# my $start = [ Time::HiRes::gettimeofday( ) ];
+# 
+# sleep(1.1);
+# ## Your code goes here
+# 
+# my $elapsed = Time::HiRes::tv_interval( $start );
+# print "Elapsed time: $elapsed seconds!\n";
 
 
+use C4::Modelo::UsrSocio;
 
+my $s = C4::Modelo::UsrSocio->new();
 
-use Time::HiRes;
-my $start = [ Time::HiRes::gettimeofday( ) ];
-
-sleep(1.1);
-## Your code goes here
-
-my $elapsed = Time::HiRes::tv_interval( $start );
-print "Elapsed time: $elapsed seconds!\n";
-
-
+      print $s->getCampos;
 

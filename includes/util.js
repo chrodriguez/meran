@@ -52,7 +52,9 @@ function crearForm(url,params){
 		var valor=arrayParam[i].split("=")[1];
 		inputs=inputs + "<input type='hidden' name="+nombre+" value="+valor+"><br>";
 	}
+    inputs=inputs + "<input type='hidden' name='token' value="+token+"><br>";
 	formu.html("<form id='miForm' action="+url+" method='post'>"+inputs+"</form>");
+    
 	$("#miForm")[0].submit();
 }
 
