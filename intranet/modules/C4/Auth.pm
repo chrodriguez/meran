@@ -1031,9 +1031,9 @@ C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
         my $branchcode= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;
 
-C4::AR::Debug::debug("_checkpw=> password del cliente: ".$password."\n");
-C4::AR::Debug::debug("_checkpw=> md5password.random_number: ".$md5password.$random_number."\n");
-C4::AR::Debug::debug("_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n");
+# C4::AR::Debug::debug("_checkpw=> password del cliente: ".$password."\n");
+# C4::AR::Debug::debug("_checkpw=> md5password.random_number: ".$md5password.$random_number."\n");
+# C4::AR::Debug::debug("_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n");
 
         if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
             $md5password=md5_base64($dni);
