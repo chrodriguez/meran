@@ -1573,7 +1573,9 @@ sub isUniqueDocument {
     push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento},
                       'persona.tipo_documento' => {eq => $params->{'tipo_documento'} } ) );
 
-    push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );
+    if (C4::AR::Utilidades::validateString($params->{'nro_socio'}) {
+        push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );
+    }
 
     my $cant = C4::Modelo::UsrSocio::Manager::get_usr_socio_count( query => \@filtros,
                                                                        require_objects => ['persona'], );
