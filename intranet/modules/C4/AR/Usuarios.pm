@@ -1575,7 +1575,7 @@ sub isUniqueDocument {
 
     push (@filtros, (nro_socio => {ne $params->{'nro_socio'} }) );
 
-    my $cant = C4::Modelo::UsrPersona::Manager::get_usr_persona_count( query => \@filtros,
+    my $cant = C4::Modelo::UsrSocio::Manager::get_usr_socio_count( query => \@filtros,
                                                                        require_objects => ['persona'], );
     
     return ($cant); # SE USA 0 PARA SABER QUE NADIE TIENE ESE DOCUMENTO, Y 1 PARA SABER QUE LO TIENE UNO SOLO, SIRVE PARA MODIFICAR
