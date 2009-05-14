@@ -880,7 +880,7 @@ sub actualizarSocio {
 
     my $msg_object= C4::AR::Mensajes::create();
 
-    $paramas->{'modifica'} = 1;
+    $params->{'modifica'} = 1;
     _verificarDatosBorrower($params, $msg_object);
 
     if(!$msg_object->{'error'}){
