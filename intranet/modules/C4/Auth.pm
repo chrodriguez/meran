@@ -1031,6 +1031,10 @@ C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
         my $branchcode= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;
 
+C4::AR::Debug::debug("_checkpw=> password del cliente: ".$password."\n");
+C4::AR::Debug::debug("_checkpw=> md5password.random_number: ".$md5password.$random_number."\n");
+C4::AR::Debug::debug("_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n");
+
         if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
             $md5password=md5_base64($dni);
 C4::AR::Debug::debug("_checkpw=> es la 1era vez que se loguea, se usa el DNI\n");
@@ -1044,7 +1048,7 @@ C4::AR::Debug::debug("_checkpw=> md5password de la base: ".$md5password."\n");
 C4::AR::Debug::debug("_checkpw=> las pass son = todo OK\n");
             return 1,$userid,$branchcode;
         }
-     }
+     }# END  if ( ($socio->persona)&&($socio->getActivo) )
 
 C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
 
