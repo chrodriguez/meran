@@ -864,7 +864,7 @@ sub _verificarDatosBorrower{
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
     }else{
-          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) && ( !$data->{'modifica'} ) ) ){
+          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) && ( !$data->{'modifica'} ) ) {
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
           }
