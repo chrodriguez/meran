@@ -268,6 +268,8 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'operacion'}= $obj->{'operacion'};
 	$params{'loggedinuser'}= $loggedinuser;
+	$params{'tipo_prestamo'}= 'DO';
+	# 		$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 	
 	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
@@ -275,11 +277,14 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	}
 	elsif($params{'operacion'} eq "devolver"){
 	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => devolver barcode: ".$params{'barcode'});
+# FIXME falta verificar
 		($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
 	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => prestar barcode: ".$params{'barcode'});
-# 		my ($Message_arrayref) = C4::AR::Prestamos::t_prestarPorBarcode(\%params);	
+# 		my ($Message_arrayref) = C4::AR::Prestamos::t_prestarPorBarcode(\%params);
+		my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params{'barcode'});
+		my ($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params, $nivel3aPrestar)	
 	}
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;

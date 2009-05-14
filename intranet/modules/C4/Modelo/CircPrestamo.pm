@@ -327,7 +327,7 @@ sub prestar {
 		$self->_verificacionesPostPrestamo($params,$msg_object);
 	}
 
-	}
+}
 
 
 sub insertarPrestamo {

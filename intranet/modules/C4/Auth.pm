@@ -1019,14 +1019,13 @@ sub t_operacionesDeINTRA{
 
 sub _checkpw {
     my ($userid, $password, $random_number) = @_;
-open(Z, ">>/tmp/debug.txt");
-print Z "_checkpw=> \n";
+C4::AR::Debug::debug("_checkpw=> \n");
 
      my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
      $socio->load();
-
+C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
       if ( ($socio->persona)&&($socio->getActivo) ) {
-print Z "_checkpw=> tengo persona y socio\n";
+C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
         #existe el socio y se encuentra activo
         my $md5password= $socio->getPassword;
         my $branchcode= $socio->getId_ui;
@@ -1034,21 +1033,20 @@ print Z "_checkpw=> tengo persona y socio\n";
 
         if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
             $md5password=md5_base64($dni);
-print Z "_checkpw=> es la 1era vez que se loguea, se usa el DNI\n";
+C4::AR::Debug::debug("_checkpw=> es la 1era vez que se loguea, se usa el DNI\n");
         }
 
         if ($password eq md5_base64($md5password.$random_number)) {
-print Z "_checkpw=> password del cliente: ".$password."\n";
-print Z "_checkpw=> md5password.random_number: ".$md5password.$random_number."\n";
-print Z "_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n";
-print Z "_checkpw=> md5password de la base: ".$md5password."\n";
-print Z "_checkpw=> las pass son = todo OK\n";
+C4::AR::Debug::debug("_checkpw=> password del cliente: ".$password."\n");
+C4::AR::Debug::debug("_checkpw=> md5password.random_number: ".$md5password.$random_number."\n");
+C4::AR::Debug::debug("_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n");
+C4::AR::Debug::debug("_checkpw=> md5password de la base: ".$md5password."\n");
+C4::AR::Debug::debug("_checkpw=> las pass son = todo OK\n");
             return 1,$userid,$branchcode;
         }
      }
 
-print Z "_checkpw=> las pass son <> \n";
-close(Z);
+C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
 
     return 0;
 }

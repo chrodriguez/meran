@@ -292,6 +292,38 @@ sub getTipoPrestamo {
    return($circ_ref_tipo_prestamo);
 }
 
+
+sub prestarYGenerarTicket{
+	my ($params, $nivel3aPrestar)=@_;
+
+	my $id3= $nivel3aPrestar->getId3;
+	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
+	$params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
+	$params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
+	$params->{'id3'}= $id3;
+	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+	$params->{'tipo'}="INTRA";
+
+	my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
+	my $ticketObj=0;
+
+	if(!$msg_object->{'error'}){
+	#Se crean los ticket para imprimir.
+		C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
+		$ticketObj=C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'});
+	}
+	#guardo los errores
+# 	push (@infoMessages, $msg_object);
+	
+	my %infoOperacion = (
+				ticket  => $ticketObj,
+				message => $msg_object,
+	);
+
+	return (\%infoOperacion);
+}
+
 #funcion que realiza la transaccion del Prestamo
 sub t_realizarPrestamo{
 	my ($params)=@_;
@@ -304,7 +336,6 @@ sub t_realizarPrestamo{
 		   $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
 		eval{
-#			_chequeoParaPrestamo($params,$msg_object);
 			$prestamo->prestar($params,$msg_object);
 			if(!$msg_object->{'error'}){$db->commit;}
 				else {$db->rollback;}
@@ -456,14 +487,8 @@ sub verificarCirculacionRapida{
 sub t_devolverPorBarcode {
 	my ($params)=@_;
 
-#  	my $msg_object= C4::AR::Mensajes::create();
 	my $msg_object= verificarCirculacionRapida($params);
-	#obtengo el id_prestamo segun el barcode que se quiere devolver
-# 	$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
-# 	if($params->{'id_prestamo'} == 0){
-# 		$msg_object->{'error'}= 1;
-# 		C4::AR::Debug::debug("t_devolverPorBarcode => no existe el barcode");
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
+
 	if(!$msg_object->{'error'}){
 		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
 		#se hace la devolucion del prestamo pasado por parametro

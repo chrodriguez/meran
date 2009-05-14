@@ -34,7 +34,6 @@ sub getBarcodesLike {
     my ($barcode) = @_;
     my  $barcodes_array_ref;
     my @filtros;
-    my $socioTemp = C4::Modelo::UsrSocio->new();
  
 	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
     
@@ -45,6 +44,26 @@ sub getBarcodesLike {
 		return ($cant, $barcodes_array_ref);
 	}else{
 		return ($cant, 0);
+	}
+}
+
+sub getNivel3FromBarcode {
+    
+    use C4::Modelo::CatNivel3;
+    use C4::Modelo::CatNivel3::Manager;
+
+    my ($barcode) = @_;
+    my  $barcodes_array_ref;
+    my @filtros;
+ 
+	push(@filtros, ( barcode=> { eq => $barcode }) );
+    
+    $barcodes_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros ); 
+
+	if(scalar(@$barcodes_array_ref) > 0){
+		return ($barcodes_array_ref->[0]);
+	}else{
+		return (0);
 	}
 }
 
@@ -611,18 +630,18 @@ sub getNivel3FromId3{
 =item
 Recupero un nivel 3 a partir de un barcode
 =cut
-sub getNivel3FromBarcode{
-	my ($barcode) = @_;
-
-	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																							query => [ 
-																										barcode => { eq => $barcode
- },
-																								], 
-																);
-
-	return ($nivel3_array_ref);
-}
+# sub getNivel3FromBarcode{
+# 	my ($barcode) = @_;
+# 
+# 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
+# 																							query => [ 
+# 																										barcode => { eq => $barcode
+#  },
+# 																								], 
+# 																);
+# 
+# 	return ($nivel3_array_ref);
+# }
 
 =item
 Verifica si existe el barcode pasado por parametro
@@ -632,7 +651,7 @@ sub existeBarcode{
 
 	my $nivel_array_ref= C4::AR::Nivel3::getNivel3FromBarcode($barcode);
 	
-	return ( scalar(@$nivel_array_ref) > 0);
+	return ( $nivel_array_ref != 0);
 }
 #=======================================================================ABM Nivel 3======================================================
 
