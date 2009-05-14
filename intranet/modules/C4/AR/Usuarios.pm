@@ -864,7 +864,7 @@ sub _verificarDatosBorrower{
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
     }else{
-          if (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data->{'tipo_documento'}) ){
+          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data->{'tipo_documento'})) && ( !$data->{'modifica'} ) ) ){
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
           }
@@ -880,6 +880,7 @@ sub actualizarSocio {
 
     my $msg_object= C4::AR::Mensajes::create();
 
+    $paramas->{'modifica'} = 1;
     _verificarDatosBorrower($params, $msg_object);
 
     if(!$msg_object->{'error'}){
@@ -1574,7 +1575,7 @@ sub isUniqueDocument {
 
     my $cant = C4::Modelo::UsrPersona::Manager::get_usr_persona_count( query => \@filtros,);
     
-    return ($cant == 0);
+    return ($cant); # SE USA 0 PARA SABER QUE NADIE TIENE ESE DOCUMENTO, Y 1 PARA SABER QUE LO TIENE UNO SOLO, SIRVE PARA MODIFICAR
 }
 
 1;
