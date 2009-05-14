@@ -1573,7 +1573,7 @@ sub isUniqueDocument {
     push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento},
                       'persona.tipo_documento' => {eq => $params->{'tipo_documento'} } ) );
 
-    if (C4::AR::Utilidades::validateString($params->{'nro_socio'}) {
+    if (C4::AR::Utilidades::validateString($params->{'nro_socio'})) {
         push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );
     }
 
