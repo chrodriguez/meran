@@ -593,6 +593,7 @@ $.Autocompleter.Cache = function(options) {
 	setTimeout(populate, 25);
 	
 	function flush(){
+
 		data = {};
 		length = 0;
 	}

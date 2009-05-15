@@ -42,11 +42,11 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
             return row[1];
         },
         minChars:3,
-            matchSubset:1,
-            matchContains:1,
+		matchSubset:1,
+		matchContains:1,
         maxItemsToShow:10,
-            cacheLength:10,
-            selectOnly:1,
+		cacheLength:10,
+		selectOnly:1,
     });//end autocomplete
     $("#"+options.IdInput).result(function(event, data, formatted) {
         $("#"+options.IdInput).val(data[1]);

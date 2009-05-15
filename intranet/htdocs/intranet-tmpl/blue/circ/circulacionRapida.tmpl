@@ -27,6 +27,27 @@ function updateVerificarBarcode(responseText){
 	setMessages(Messages);
 }
 
+
+function obtenerTiposDePrestamos(){
+
+	objAH=new AjaxHelper(updateObtenerTiposDePrestamos);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio= NRO_SOCIO_AUTH;
+	objAH.barcode= $('#barcode_hidden').val();
+	objAH.tipoAccion= "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateObtenerTiposDePrestamos(responseText){
+	var infoHash= JSONstring.toObject(responseText);
+	var tipoPrestamo_array_hash_ref= infoHash.tipoPrestamo;
+	var comboTipoPrestamo_html= crearCombo(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+
+	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
+}
+
 function realizarAccion(){
 
 	objAH=new AjaxHelper(updateRealizarAccion);
@@ -35,6 +56,7 @@ function realizarAccion(){
 	objAH.nro_socio= $('#nro_socio_hidden').val();
 	objAH.barcode= $('#barcode_hidden').val();
 	objAH.operacion= $('#operacion').val();
+	objAH.tipoPrestamo= $('#comboTipoPrestamo').val();
 // 	objAH.autorizado= $('#operacion').val();
 	objAH.tipoAccion= "CIRCULACION_RAPIDA";
 	//se envia la consulta
@@ -86,6 +108,7 @@ function updateTieneAutorizado(responseText){
 	}
 
 	$('#aceptar').focus();
+	refreshTipoPrestamo();
 }
 
 function onChangeOperacion(){
@@ -97,6 +120,7 @@ function onChangeOperacion(){
 		$('#barcode').val('');
 		$('#barcode').focus();
 		$('#barcodePrestado').hide();
+		$('#spanComboTipoPrestamo').show();
 
 	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
 	//busco sobre el conj. de los barcodes prestados
@@ -104,15 +128,24 @@ function onChangeOperacion(){
 		$('#barcodePrestado').show();
 		$('#barcodePrestado').val('');
 		$('#barcodePrestado').focus();
+		$('#spanComboTipoPrestamo').hide();
 	}
 }
 
 function updateAutocompleteBarcodes(){
 	$('#usuario').focus();
+	refreshTipoPrestamo();
 }
 
 function updateAutocompleteBarcodesPrestados(){
 	$('#usuario').focus();
+	refreshTipoPrestamo();
+}
+
+function refreshTipoPrestamo(){
+	if( ($('#usuario').val() != '')&&($('#barcode').val() != '')){
+		obtenerTiposDePrestamos();
+	}
 }
 
 $(document).ready(function() {
@@ -152,11 +185,10 @@ $(document).ready(function() {
 <ul>
 	<li>
 		Operaci&oacute;n: 	<select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
-<!-- 								<option value="0">SIN SELECCIONAR</option> -->
 								<option value="prestar">Pr&eacute;stamo</option>
 								<option value="devolver">Devoluci&oacute;n</option>
 								<option value="renovar">Renovaci&oacute;n</option>
-							</select>
+							</select><span id="spanComboTipoPrestamo"></span>
 	</li>
 	<li>
 		<div id="divInfoEjemplar">

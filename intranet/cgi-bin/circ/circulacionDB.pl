@@ -269,9 +269,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'operacion'}= $obj->{'operacion'};
 	$params{'loggedinuser'}= $loggedinuser;
 	$params{'responsable'}= $loggedinuser;
-C4::AR::Debug::debug("responsable: ".$loggedinuser);
-	$params{'tipo_prestamo'}= 'DO';
-	# 		$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
+	$params{'tipo_prestamo'}= $obj->{'tipoPrestamo'};
 	
 	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
@@ -282,11 +280,27 @@ C4::AR::Debug::debug("responsable: ".$loggedinuser);
 		($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
-
 		($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
 	}
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::Output::printHeader($session);
+	print $infoOperacionJSON;
+}
+elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
+
+	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+
+	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
+	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
+	#obtengo los tipos de prestmos segun disponibilidad del ejemplar y el usuario
+	my ($tipoPrestamos_array_hash_ref)=&C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getId_disponibilidad,$obj->{'nro_socio'});
+
+	my %tiposPrestamos;
+	$tiposPrestamos{'tipoPrestamo'}= $tipoPrestamos_array_hash_ref;
+	
+	my $infoOperacionJSON=to_json \%tiposPrestamos;
 
     C4::Output::printHeader($session);
 	print $infoOperacionJSON;

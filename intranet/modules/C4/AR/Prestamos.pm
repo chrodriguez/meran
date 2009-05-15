@@ -302,7 +302,6 @@ sub prestarYGenerarTicket{
 
 	my @infoTickets;
 	my @infoMessages;
-
 	my $id3= $nivel3aPrestar->getId3;
 	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
 	$params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;

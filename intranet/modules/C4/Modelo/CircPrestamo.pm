@@ -236,6 +236,7 @@ sub prestar {
 	C4::AR::Debug::debug("_chequeoParaPrestamo=> id2: ".$id2);
 	C4::AR::Debug::debug("_chequeoParaPrestamo=> id3: ".$id3);
 	C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
+	C4::AR::Debug::debug("_chequeoParaPrestamo=> tipo_prestamo: ".$params->{'tipo_prestamo'});
 
 #Se verifica si ya se tiene la reserva sobre el grupo
 	my ($reservas, $cant)= C4::AR::Reservas::getReservasDeSocio($nro_socio, $id2);
