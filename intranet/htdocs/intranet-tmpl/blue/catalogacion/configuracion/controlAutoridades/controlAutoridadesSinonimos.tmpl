@@ -71,7 +71,7 @@ function consultarTablaSinonimos(sinonimo){
 function AutocompleteSinonimos(idInput, tipo){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
-	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/controlAutoridadesAutocomplete.pl',{
+	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletablesDB.pl?token='+token,{
  		formatItem: function(row){
 // 			return row[0]+" - "+row[1];
 			return row[1];
@@ -271,11 +271,11 @@ $(document).ready(function(){
 						$("#topichelp").slideToggle('fast');
 					});
 
-	AutocompleteSinonimos('search_temas','autocompleteTemas');
+	AutocompleteSinonimos('search_temas','autocomplete_temas');
 	$('#content_search_temas').hide();
-	AutocompleteSinonimos('search_autores','autocompleteAutores');
+	AutocompleteSinonimos('search_autores','autocomplete_autores');
 	$('#content_search_autores').hide();
-	AutocompleteSinonimos('search_editoriales','autocompleteEditoriales');
+	AutocompleteSinonimos('search_editoriales','autocomplete_editoriales');
 	$('#content_search_editoriales').hide();	
 
 	onEnter("sinonimo",pushSinonimo);
