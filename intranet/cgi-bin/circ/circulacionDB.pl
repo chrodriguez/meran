@@ -278,12 +278,11 @@ C4::AR::Debug::debug("responsable: ".$loggedinuser);
 	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'barcode'});	
 	}
 	elsif($params{'operacion'} eq "devolver"){
-	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => devolver barcode: ".$params{'barcode'});
-# FIXME falta verificar
+
 		($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
-	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => prestar barcode: ".$params{'barcode'});
+
 		($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
 	}
 	

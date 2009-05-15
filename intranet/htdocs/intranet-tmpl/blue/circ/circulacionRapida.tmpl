@@ -59,6 +59,8 @@ function updateRealizarAccion(responseText){
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
 	}
+	
+	$('#operacion').focus();
 }
 
 function tieneApoderado(){
@@ -82,6 +84,8 @@ function updateTieneAutorizado(responseText){
 		$('#divAgregarAutorizado').show();
 		$('#divAutorizado').hide();
 	}
+
+	$('#aceptar').focus();
 }
 
 function onChangeOperacion(){
@@ -90,21 +94,45 @@ function onChangeOperacion(){
 	if(operacion == 'prestar'){		
 	//busco sobre el conj. de todos los barcodes
 		$('#barcode').show();
+		$('#barcode').val('');
+		$('#barcode').focus();
 		$('#barcodePrestado').hide();
 
 	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
 	//busco sobre el conj. de los barcodes prestados
 		$('#barcode').hide();
 		$('#barcodePrestado').show();
+		$('#barcodePrestado').val('');
+		$('#barcodePrestado').focus();
 	}
 }
 
+function updateAutocompleteBarcodes(){
+	$('#usuario').focus();
+}
+
+function updateAutocompleteBarcodesPrestados(){
+	$('#usuario').focus();
+}
+
 $(document).ready(function() {
+	$('#operacion').focus();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
-	CrearAutocompleteUsuarios({IdInput: 'usuario', IdInputHidden: 'nro_socio_hidden', callBackFunction: tieneApoderado});
-	CrearAutocompleteBarcodes({IdInput: 'barcode', IdInputHidden: 'barcode_hidden'});
-	CrearAutocompleteBarcodesPrestados({IdInput: 'barcodePrestado', IdInputHidden: 'barcode_hidden'});
+	CrearAutocompleteUsuarios({	IdInput: 'usuario', 
+								IdInputHidden: 'nro_socio_hidden', 
+								callBackFunction: tieneApoderado
+						});
+
+	CrearAutocompleteBarcodes({	IdInput: 'barcode', 
+								IdInputHidden: 'barcode_hidden', 
+								callBackFunction: updateAutocompleteBarcodes
+						});
+
+	CrearAutocompleteBarcodesPrestados({	IdInput: 'barcodePrestado', 
+											IdInputHidden: 'barcode_hidden', 
+											callBackFunction: updateAutocompleteBarcodesPrestados
+									});
 	onChangeOperacion();
 });
 
@@ -133,22 +161,21 @@ $(document).ready(function() {
 	<li>
 		<div id="divInfoEjemplar">
 		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='2'>
-									<input type="text" id="barcodePrestado" value="" tabindex='2'>
+									<input type="text" id="barcodePrestado" value="" tabindex='3'>
 									<input type='hidden' id='barcode_hidden' value='' >
 		</div>
 	</li>
 	<li>
 		<div id="divInfoUsuario" style="width:40%">
-		Usuario: 	<input type='text' id='usuario' value='' tabindex='3'>
+		Usuario: 	<input type='text' id='usuario' value='' tabindex='4'>
 					<input type='hidden' id='nro_socio_hidden' value=''>
-				<div id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></div>
-				<div id="divAgregarAutorizado" style="float:right">
-					<input type="button" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" onClick="agregarAutorizado()">
-				</div>
+				<span id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></span>
+				<input 	type="button" id="divAgregarAutorizado" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" 
+						onClick="agregarAutorizado()">
 		</div>
 	</li>
 	<li>
-		<input type="button" value="Aceptar" onClick="realizarAccion()" tabindex='4'>
+		<input type="button" value="Aceptar" id="aceptar" onClick="realizarAccion()" tabindex='4'>
 	</li>
 </ul>
 

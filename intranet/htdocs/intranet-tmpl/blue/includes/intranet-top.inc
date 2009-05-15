@@ -10,7 +10,7 @@
 <script src="/includes/jquery/jquery.menu.js"></script>
 <script src="/includes/md5.js"></script> 
 <!-- para generar la hash de la cache -->
-<script src="/includes/jquery/jquery.jCache.js"></script> 
+<script src="/includes/jquery/jquery.jCache.js"></script>
 <script src="/includes/json/jsonStringify.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/util.js"></script>

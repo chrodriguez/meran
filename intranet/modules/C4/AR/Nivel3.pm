@@ -60,6 +60,7 @@ sub getBarcodesPrestadoLike {
     my @filtros;
  
 	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+	push(@filtros, ( fecha_devolucion => { eq => undef }) );
     
     $barcodes_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 	query => \@filtros, 
 																					require_objects => [ 'nivel3' ] #INNER JOIN
