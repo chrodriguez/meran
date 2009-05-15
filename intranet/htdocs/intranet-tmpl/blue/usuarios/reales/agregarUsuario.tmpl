@@ -43,7 +43,7 @@
         $("#userDataForm").validate();
 		CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
 		CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
-        $('#nacimiento').datepicker({ dateFormat: 'dd/mm/yy' });
+        crearDatePicker('nacimiento');
         $('#categoria_socio_id').addClass('required');
 
     });

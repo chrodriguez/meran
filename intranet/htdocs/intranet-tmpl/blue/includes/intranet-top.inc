@@ -4,8 +4,10 @@
 
 <script language="javascript" type="text/javascript">
  token= '[% token %]';
+
 </script>
 
+[% INCLUDE 'datePicker.inc' %]
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/jquery/jquery.menu.js"></script>
 <script src="/includes/md5.js"></script> 
