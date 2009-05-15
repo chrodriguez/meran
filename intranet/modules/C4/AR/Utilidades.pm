@@ -2125,6 +2125,9 @@ sub usuarioAutocomplete{
     return $textout;
 }
 
+=item
+busca barcodeStr sobre todos los barcodes
+=cut
 sub barcodeAutocomplete{
 
     my ($barcodeStr)= @_;
@@ -2139,6 +2142,24 @@ sub barcodeAutocomplete{
     }
     return $textout;
 }
+
+sub barcodePrestadoAutocomplete{
+
+    my ($barcodeStr)= @_;
+    my $textout="";
+
+	#busco el barcode en el conj. de los barcodes prestados
+    my ($cant, $circ_prestamo_array_ref)= C4::AR::Nivel3::getBarcodesPrestadoLike($barcodeStr);
+	#devuelve un arreglo de objetos prestamos con cat_nivel3
+
+    if ($cant > 0){
+        foreach my $prestamo (@$circ_prestamo_array_ref){
+            $textout.= $prestamo->nivel3->getBarcode."|".$prestamo->nivel3->getBarcode."\n";
+        }
+    }
+    return $textout;
+}
+
 
 ############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################
 ############################## FINNNNNNNNNNNNN Funciones para AUTOCOMPLETABLES #############################################################

@@ -14,6 +14,7 @@ my $type = $session->param('type') || "opac";
 
 my ($user, $session, $flags)= C4::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
 
+my $operacion= C4::AR::Utilidades::trim( $input->param('operacion') ) || '';
 my $accion= C4::AR::Utilidades::trim( $input->param('accion') );
 my $string= C4::AR::Utilidades::trim( $input->param('q') );
 C4::AR::Debug::debug("BUSCASTE: ".$string);
@@ -44,9 +45,13 @@ elsif ($accion eq 'autocomplete_usuarios'){
     
     $result = C4::AR::Utilidades::usuarioAutocomplete($string);
 }
+elsif ($accion eq 'autocomplete_barcodes_prestados'){
+    
+	$result = C4::AR::Utilidades::barcodePrestadoAutocomplete($string);
+}
 elsif ($accion eq 'autocomplete_barcodes'){
     
-    $result = C4::AR::Utilidades::barcodeAutocomplete($string);
+     $result = C4::AR::Utilidades::barcodeAutocomplete($string);
 }
 
 C4::Output::printHeader($session);

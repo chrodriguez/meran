@@ -34,6 +34,7 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
 	}
 
     url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+
     $("#"+options.IdInput).search();
     // q= valor de campoHelp
     $("#"+options.IdInput).autocomplete(url,{
@@ -114,3 +115,13 @@ function CrearAutocompleteBarcodes(options){
 							callBackFunction: options.callBackFunction,
 					});	
 }
+
+function CrearAutocompleteBarcodesPrestados(options){
+    _CrearAutocomplete({
+							IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_barcodes_prestados', 
+							callBackFunction: options.callBackFunction,
+					});	
+}
+

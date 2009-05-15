@@ -33,7 +33,7 @@ function realizarAccion(){
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio= $('#nro_socio_hidden').val();
-	objAH.barcode= $('#barcode').val();
+	objAH.barcode= $('#barcode_hidden').val();
 	objAH.operacion= $('#operacion').val();
 // 	objAH.autorizado= $('#operacion').val();
 	objAH.tipoAccion= "CIRCULACION_RAPIDA";
@@ -51,9 +51,13 @@ function updateRealizarAccion(responseText){
 			imprimirTicket(ticketsArray[i].ticket,i);
 			setMessages(messageArray[i]);
 		}
+		//borro la cache del autocomplete
+		$('#barcode').flushCache();
 	}else{
 		var Messages= JSONstring.toObject(responseText);
 		setMessages(Messages);
+		//borro la cache del autocomplete
+		$('#barcodePrestado').flushCache();
 	}
 }
 
@@ -80,11 +84,28 @@ function updateTieneAutorizado(responseText){
 	}
 }
 
+function onChangeOperacion(){
+	var operacion= $('#operacion').val();
+
+	if(operacion == 'prestar'){		
+	//busco sobre el conj. de todos los barcodes
+		$('#barcode').show();
+		$('#barcodePrestado').hide();
+
+	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
+	//busco sobre el conj. de los barcodes prestados
+		$('#barcode').hide();
+		$('#barcodePrestado').show();
+	}
+}
+
 $(document).ready(function() {
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios({IdInput: 'usuario', IdInputHidden: 'nro_socio_hidden', callBackFunction: tieneApoderado});
-  	CrearAutocompleteBarcodes({IdInput: 'barcode', IdInputHidden: 'barcode_hidden'});
+	CrearAutocompleteBarcodes({IdInput: 'barcode', IdInputHidden: 'barcode_hidden'});
+	CrearAutocompleteBarcodesPrestados({IdInput: 'barcodePrestado', IdInputHidden: 'barcode_hidden'});
+	onChangeOperacion();
 });
 
 </script>
@@ -102,17 +123,19 @@ $(document).ready(function() {
 
 <ul>
 	<li>
-		<div id="divInfoEjemplar">
-		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='1'>
-									<input type='hidden' id='barcode_hidden' value='' >
-		</div>
-	</li>
-	<li>
-		Operaci&oacute;n: 	<select id='operacion' tabindex='2'>	
+		Operaci&oacute;n: 	<select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
+<!-- 								<option value="0">SIN SELECCIONAR</option> -->
 								<option value="prestar">Pr&eacute;stamo</option>
 								<option value="devolver">Devoluci&oacute;n</option>
 								<option value="renovar">Renovaci&oacute;n</option>
 							</select>
+	</li>
+	<li>
+		<div id="divInfoEjemplar">
+		C&oacute;digo de Barras: 	<input type="text" id="barcode" value="" tabindex='2'>
+									<input type="text" id="barcodePrestado" value="" tabindex='2'>
+									<input type='hidden' id='barcode_hidden' value='' >
+		</div>
 	</li>
 	<li>
 		<div id="divInfoUsuario" style="width:40%">

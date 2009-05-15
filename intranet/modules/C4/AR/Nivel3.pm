@@ -47,6 +47,32 @@ sub getBarcodesLike {
 	}
 }
 
+=item
+busca un barcode segun barcode, sobre el conjunto de barcodes prestados
+=cut
+sub getBarcodesPrestadoLike {
+    
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+    my ($barcode) = @_;
+    my  $barcodes_array_ref;
+    my @filtros;
+ 
+	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+    
+    $barcodes_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 	query => \@filtros, 
+																					require_objects => [ 'nivel3' ] #INNER JOIN
+										); 
+	my $cant= scalar(@$barcodes_array_ref);
+
+	if($cant > 0){
+		return ($cant, $barcodes_array_ref);
+	}else{
+		return ($cant, 0);
+	}
+}
+
 sub getNivel3FromBarcode {
     
     use C4::Modelo::CatNivel3;
