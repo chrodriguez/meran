@@ -3,7 +3,7 @@ USUARIOS:
     .- el DNI y tipo UNIQUE - GASPAR    LISTO
     .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante) LISTO
     .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR LISTO
-    .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - GASPAR CASI LISTO
+    .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - (SOLO FALTA PRESTAR CON FLAG)
     .- Mail OBLIGATORIO - GASPAR LISTO
 	
 	En el detalle del usuario, si el usuario intanta devolver algo q ya esta devuelto (q se devolvio desde otra ventana y no se refresco la ventana del detalle del usuario) se rompe
@@ -12,7 +12,7 @@ USUARIOS:
 
 * Usuarios Potenciales:
 
-Elimnar potencila no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR  LISTO (de potenciales nomas, de reales se desactiva)
+Elimnar potencial no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR  LISTO (de potenciales nomas, de reales se desactiva)
 
 * Mesajes: (TODOS)
 

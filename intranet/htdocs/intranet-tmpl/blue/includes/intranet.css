@@ -851,6 +851,11 @@ p.nivel2Selected:hover{
     text-decoration: none;    
 }
 
+.activeLayer{
+    color: #BC3131;
+    border:2px solid #C3C0C0;
+    text-decoration: none;    
+}
 .nivel3Footer {
     width: 100%;
     float: left;

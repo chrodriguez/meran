@@ -1,5 +1,5 @@
 [% FOREACH nivel2 IN nivel2_array %]    
-    <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]')">
+    <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
     <b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
     <br/>
     <input  type="image" border="0" onclick="modificarN2('[% nivel2.getId2 %]')" title="Modificar Grupo" 

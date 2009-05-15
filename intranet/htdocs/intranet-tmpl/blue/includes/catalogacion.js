@@ -31,6 +31,18 @@ function objeto_params(){
 	
 }
 
+function inicializarSideLayers(){
+    arreglo = $('#nivel2>p');
+    for (x = 0; x<arreglo.length; x++){
+        $(arreglo[x]).removeClass('activeLayer');
+        $(arreglo[x]).addClass('nivel2Selected');
+    }
+}
+
+function toggleClass(layer){
+    inicializarSideLayers();
+    $(layer).addClass('activeLayer');
+}
 
 function inicializar(){
 
@@ -323,6 +335,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
 function agregarN2(){
 	MODIFICAR = 0;
 	mostrarEstructuraDelNivel2();
+    inicializarSideLayers();
 }
 
 function agregarN3(){
