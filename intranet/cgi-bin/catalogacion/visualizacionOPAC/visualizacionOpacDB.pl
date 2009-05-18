@@ -9,7 +9,7 @@ use C4::AR::Utilidades;
 use JSON;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ editcatalogue => 1});
 
 
 my $obj=$input->param('obj');

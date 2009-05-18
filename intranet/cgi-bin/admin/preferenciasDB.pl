@@ -17,12 +17,12 @@ my $tabla = $obj->{'tabla'};
 my $tipo = $obj->{'tipo'};
 my $accion = $obj->{'accion'};
 
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ parameters => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
+
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
-my ($template, $session, $t_params)
-  = get_template_and_user({template_name => "admin/preferenciasResults.tmpl",
+my ($template, $session, $t_params)  = get_template_and_user({template_name => "admin/preferenciasResults.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,

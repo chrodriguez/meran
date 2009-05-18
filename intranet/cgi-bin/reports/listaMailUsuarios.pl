@@ -26,7 +26,7 @@ use CGI;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrowers => 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, 0,{borrowers => 1},"intranet");
 
 my @results = mailDeUsuarios();
 

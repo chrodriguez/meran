@@ -43,7 +43,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 Aca se maneja el cambio de permisos para el usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};
@@ -65,7 +65,7 @@ Aca se maneja el resteo de password del usuario
 # resetPassword = [0 | 1]
 # autoGeneratePassword = [0 | 1]
 elsif($tipoAccion eq "RESET_PASSWORD"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
     my %params;
     $params{'id_socio'}= $obj->{'usuario'};
     
@@ -80,7 +80,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 
 
 elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
     my %params;
 
     my ($Message_arrayref)= C4::AR::Usuarios::agregarAutorizado($obj);
@@ -161,7 +161,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 Se elimina el usuario
 =cut
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
 	my $nro_socio= $obj->{'nro_socio'};
  	my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($nro_socio);
@@ -193,12 +193,6 @@ Se guarda la modificacion los datos del usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
 my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
-# 	my ($Message_arrayref)= C4::AR::Usuarios::t_updateBorrower($obj);
-# 	
-# 	my $infoOperacionJSON=to_json $Message_arrayref;
-# 	
-# 	    C4::Output::printHeader($session);
-# 	print $infoOperacionJSON;
 
     my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
     
@@ -311,7 +305,7 @@ elsif($tipoAccion eq "DATOS_USUARIO"){
 	
 
 elsif($tipoAccion eq "ELIMINAR_FOTO"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my $foto_name= $obj->{'foto_name'};
 	my ($Message_arrayref)= &C4::AR::UploadFile::deletePhoto($foto_name);
 	

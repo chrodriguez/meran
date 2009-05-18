@@ -7,8 +7,8 @@ use C4::Interface::CGI::Output;
 
 my $input=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
-my $borrowernumber=getborrowernumber($loggedinuser);
+my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
+my $borrowernumber=getborrowernumber($userid);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);

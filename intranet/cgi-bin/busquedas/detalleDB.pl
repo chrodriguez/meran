@@ -14,7 +14,7 @@ use JSON;
 my $input=new CGI;
 
 my $obj;
-my ($loggedinuser, $session) = checkauth($input, 0,{ catalogue => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ catalogue => 1});
 
 
 my %infoRespuesta;
@@ -29,7 +29,7 @@ my %params;
 $params{'id1'}= $id1;
 $params{'id2'}= $obj->{'id2'};
 $params{'id3'}= $obj->{'id3'};
-$params{'responsable'}= $loggedinuser;
+$params{'responsable'}= $userid;
 	
 if($accion eq "BORRAR_GRUPO"){
 

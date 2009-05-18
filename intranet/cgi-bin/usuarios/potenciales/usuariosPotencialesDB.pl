@@ -16,7 +16,7 @@ my $input = new CGI;
 my $flagsrequired;
 my $authnotrequired= 0;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired, $flagsrequired, "intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired, $flagsrequired, "intranet");
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 

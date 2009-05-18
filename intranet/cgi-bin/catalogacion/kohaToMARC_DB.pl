@@ -8,7 +8,7 @@ use C4::AR::VisualizacionOpac;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ editcatalogue => 1});
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $tabla= $obj->{'tabla'}||"";
@@ -18,14 +18,13 @@ my $action= $obj->{'action'}||"";
 #******* Se arma una tabla con la catalogacion de OPAC y se muestra con un tmpl********************
 if(($tabla ne "")&&($action eq "TABLARESULT")){
 
-my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "catalogacion/kohaToMARCResult.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-});
+my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({template_name => "catalogacion/kohaToMARCResult.tmpl",
+													query => $input,
+													type => "intranet",
+													authnotrequired => 0,
+													flagsrequired => {borrowers => 1},
+													debug => 1,
+										});
 
 my ($cant, @results)= &traerKohaToMARC($tabla);
 

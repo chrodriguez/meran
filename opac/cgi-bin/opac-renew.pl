@@ -7,7 +7,7 @@ use JSON;
 
 my $input = new CGI;
 
-my ($loggedinuser, $sessionID) = checkauth($input, 0,{borrow => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -16,10 +16,10 @@ my $id3= $obj->{'id3'};;
 my %params;
 
 
-my $borrowernumber= C4::Auth::getborrowernumber($loggedinuser);
+my $borrowernumber= C4::Auth::getborrowernumber($userid);
 $params{'borrowernumber'}= $borrowernumber;
 $params{'id3'}= $id3;
-$params{'loggedinuser'}= $loggedinuser;
+$params{'loggedinuser'}= $userid;
 $params{'tipo'}= 'OPAC';
 
 my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);

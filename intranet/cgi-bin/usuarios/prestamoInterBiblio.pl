@@ -12,7 +12,7 @@ use C4::AR::Busquedas;
 my $input= new CGI;
 my $authnotrequired= 0;
 # OBTENGO EL BORROWER LOGGEADO Y VERIFICO PERMISOS
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
+my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
 my $nro_socio = $input->param('nro_socio');
 

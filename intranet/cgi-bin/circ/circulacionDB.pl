@@ -241,12 +241,12 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 #******************************************CANCELAR RESERVA***************************************************
 elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
 	my %params;
 	$params{'reservenumber'}= $obj->{'reserveNumber'};
 	$params{'nro_socio'}= $obj->{'nro_socio'};
-	$params{'loggedinuser'}= $loggedinuser;
+	$params{'loggedinuser'}= $userid;
 	$params{'tipo'}="INTRA";
 	
 	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);
@@ -260,15 +260,15 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
 elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
 	my $Message_arrayref;
 	my %params;
 	$params{'barcode'}= $obj->{'barcode'};
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'operacion'}= $obj->{'operacion'};
-	$params{'loggedinuser'}= $loggedinuser;
-	$params{'responsable'}= $loggedinuser;
+	$params{'loggedinuser'}= $userid;
+	$params{'responsable'}= $userid;
 	$params{'tipo_prestamo'}= $obj->{'tipoPrestamo'};
 	
 	if($params{'operacion'} eq "renovar"){	
@@ -290,7 +290,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 
 	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
 	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
@@ -307,7 +307,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 
-	my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
 	my $Message_arrayref;
 	my %params;

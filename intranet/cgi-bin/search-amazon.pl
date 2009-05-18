@@ -11,7 +11,7 @@ use HTML::Template;
 use C4::AR::Amazon;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ catalogue => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ catalogue => 1});
 
 #tipo = primero (imagen de cualquier edicion) || grupo (el especifico de un grupo)
 my $tipo= $input->param('tipo')||"";

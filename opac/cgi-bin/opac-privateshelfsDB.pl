@@ -8,8 +8,8 @@ use C4::BookShelves;
 use C4::AR::Utilidades;
 
 my $input=new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{borrow => 1});
-my $borrowernumber=getborrowernumber($loggedinuser);
+my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
+my $borrowernumber=getborrowernumber($userid);
 
 
 my $obj=$input->param('obj');

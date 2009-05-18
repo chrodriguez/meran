@@ -12,7 +12,7 @@ use C4::AR::Utilidades;
 use JSON;
 
 my $input = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{ editcatalogue => 1});
+my ($userid, $session, $flags) = checkauth($input, 0,{ editcatalogue => 1});
 
 
 my $obj=$input->param('obj');
@@ -27,19 +27,6 @@ my $accion = $obj->{'accion'};
 my $sinonimoDelete_string = $obj->{'sinonimoDelete_string'};
 my %infoRespuesta;
 
-
-## FIXME Se repite mucho codigo!!!!!
-=item
-	#se arma el mensaje
-	$infoRespuesta{'error'}= $error;
-	$infoRespuesta{'codMsg'}= $codMsg;
-	$infoRespuesta{'message'}= $message;
-	
-	my $infoRespuestaJSON = to_json \%infoRespuesta;
-	print $input->header;
-	#se envia en JSON al cliente
-	print $infoRespuestaJSON;
-=cut
 
 if($tabla eq 'autores'){
 #****************************SEUDONIMOS***************************************

@@ -11,7 +11,7 @@ use C4::AR::Busquedas;
 my $input = new CGI;
 
 #se verifican los permisos
-&C4::Auth::checkauth($input,0,{borrowers => 1},"intranet");
+my ($userid, $session, $flags)= &C4::Auth::checkauth($input,0,{borrowers => 1},"intranet");
 my $op=$input->param('op');
 
 if ($op eq 'pdf') {

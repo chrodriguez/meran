@@ -9,7 +9,7 @@ use JSON;
 
 my $input=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0,{circulate=> 1},"intranet");
+my ($userid, $session, $flags) = checkauth($input, 0,{circulate=> 1},"intranet");
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
