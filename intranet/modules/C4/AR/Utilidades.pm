@@ -1107,7 +1107,7 @@ sub from_json_ISO{
 # 	if ($@){
 	or do{ 
 # FIXME falta generar un codigo de error para error de sistema
-		&C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+		&C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
 		return "0";
 	}
 #         
