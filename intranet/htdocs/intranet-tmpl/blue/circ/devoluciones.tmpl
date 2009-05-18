@@ -6,7 +6,10 @@
 
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
-	AutocompleteUsuario('usuarioAutocomplete',detallePrestamos,updateInfoPrestamos);
+	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
+								IdInputHidden: 'nro_socio_hidden', 
+								callBackFunction: detalleDelUsuario
+						});
 // FIXME lo de abajo va????
 /*
 	if('[% usuarioID %]' != ""){
@@ -23,6 +26,14 @@ $(document).ready(function() {
 */
 
 });
+
+function detalleDelUsuario(){
+	//detalleUsuario esta implementado en circulacion,js
+	var nro_socio= $('#nro_socio_hidden').val();
+	detalleUsuario(nro_socio);
+	detallePrestamos(nro_socio, updateInfoPrestamos);
+	detalleSanciones(nro_socio);
+}
 
 /*
  * updateInfoPrestamosConChck
@@ -81,6 +92,7 @@ function updateInfoPrestamosConChck(responseText){
 		<td width="1%">&nbsp;</td>
 		<td align="center">
 			<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
+			<input id="nro_socio_hidden" type="hidden">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>

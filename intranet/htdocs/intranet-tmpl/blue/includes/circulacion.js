@@ -40,38 +40,6 @@ function objeto_usuario(){
 }
 
 /*
- * AutocompleteUsuario
- * Funcion que asigna al input que busca el usuario la funcion de autocomplete.
- */
-// function AutocompleteUsuario(idInput,funcionDetalle,funcionUpdateInfo){
-// 	// q= valor de campoHelp
-// 	$("#"+idInput).search();
-// 	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/usuarioAutocomplete.pl',{
-//  		formatItem: function(row){
-// 			return row[0];
-// 		},
-// 		minChars:1,
-//         	matchSubset:1,
-//         	matchContains:1,
-// 		maxItemsToShow:10,
-//         	cacheLength:10,
-//         	selectOnly:1,
-// 	});//end autocomplete
-// 	$("#"+idInput).result(function(event, data, formatted) {
-// 		//muestro en el input el usuario seleccioinado
-// 		$("#"+idInput).val(data[0]);
-// 	
-//  		usuario= new objeto_usuario();
-// 		usuario.text= data[0];
-// 		usuario.ID= data[1];
-// 		
-// 		detalleUsuario(usuario.ID);
-// 		detalleSanciones(usuario.ID);
-// 		funcionDetalle(usuario.ID,funcionUpdateInfo);//Puede ser detallePrestamo o detalleReserva
-// 	});
-// }
-
-/*
  * detalleUsuario
  * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
  */
@@ -183,7 +151,6 @@ function realizarAccion(accion,chckbox,funcion){
 		alert("Elija al menos un documento para realizar la acci&oacute;n");
 	}
 	else{
-
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
