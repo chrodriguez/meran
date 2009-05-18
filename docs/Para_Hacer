@@ -58,7 +58,7 @@ Catalogación:
 
 Preferencias:
 
-da error en tablesorter y no hace la zebra - MONO
+da error en tablesorter y no hace la zebra - MIGUEL - LISTO
 
 
 OPAC:
@@ -70,4 +70,6 @@ Luego de llegar a la cant. maximas de reservas, nos muestra las reservas y da la
 No redirecciona a opac-user.pl luego de iniciar sesion desde opac-mail.pl y desde auth.pl
 
 REPORTES_
+
+Reservas: se reserva algo desde el OPAC y muestra un mensaje en negro
 
