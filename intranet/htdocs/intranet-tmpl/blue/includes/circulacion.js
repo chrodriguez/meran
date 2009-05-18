@@ -285,15 +285,15 @@ function cancelarDiv(){
 function cancelarReserva(reserveNumber){
 
 	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
-        if (is_confirmed) {
+	if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
 		objAH.debug= true;
 		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CANCELAR_RESERVA';
 		objAH.nro_socio= usuario.ID;
-		objAH.reserveNumber=reserveNumber;
+		objAH.id_reserva= reserveNumber;
 		objAH.sendToServer();
-        }
+	}
 }
 
 /*

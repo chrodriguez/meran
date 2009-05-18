@@ -43,7 +43,7 @@
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 												url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
-												params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+												params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
 												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
 											) ;
 			[% END %]
@@ -124,7 +124,7 @@
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 												url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
-												params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+												params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
 												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
 											) ;
 			[% END %]

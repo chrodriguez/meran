@@ -175,6 +175,7 @@ sub agregar {
     $self->setId2($data_hash->{'id2'}); 
     $self->setId3($data_hash->{'id3'});
     $self->setNro_socio($data_hash->{'nro_socio'});
+C4::AR::Debug::debug("responsable desde rep_historial_circulacion***************************: ".$data_hash->{'responsable'});
     $self->setResponsable($data_hash->{'responsable'});
     $self->setFecha(ParseDate("today"));
     $self->setFecha_fin($data_hash->{'hasta'});

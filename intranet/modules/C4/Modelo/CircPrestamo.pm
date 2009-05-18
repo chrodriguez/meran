@@ -218,6 +218,7 @@ sub agregar {
 
 	#**********************************Se registra el movimiento en rep_historial_circulacion***************************
    $self->debug("Se loguea en historico de circulacion el prestamo");
+	C4::AR::Debug::debug("CircPrestamo => agregar => responsable: ".$data_hash->{'responsable'});
    use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $data_hash->{'tipo'}='prestamo';
@@ -351,6 +352,7 @@ sub insertarPrestamo {
 	if ($sancion->[0]){$sancion->[0]->delete();}
 
 	$self->debug("Se realiza el prestamo del item");
+C4::AR::Debug::debug("CircPrestamo => insertarPrestamo => responsable ".$params->{'responsable'});
 #Se realiza el prestamo del item
 	$self->agregar($params);
 
@@ -492,6 +494,7 @@ sub devolver {
    $data_hash->{'id3'}= $self->getId3;
    $data_hash->{'nro_socio'}= $self->getNro_socio;
    $data_hash->{'responsable'}= $loggedinuser;
+C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
    $data_hash->{'hasta'}= undef;
    $data_hash->{'tipo_prestamo'}= $self->getTipo_prestamo;
    $data_hash->{'id_ui'}= $self->getId_ui_prestamo;

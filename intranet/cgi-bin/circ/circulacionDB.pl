@@ -124,6 +124,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'nro_socio'}=$nro_socio;
 			$params{'loggedinuser'}= $loggedinuser;
+			$params{'responsable'}= $loggedinuser;
 			$params{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 			$params{'tipo'}="INTRA";
