@@ -245,7 +245,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
 		
 	my %params;
-	$params{'reservenumber'}= $obj->{'reserveNumber'};
+	$params{'id_reserva'}= $obj->{'id_reserva'};
 	$params{'nro_socio'}= $obj->{'nro_socio'};
 	$params{'loggedinuser'}= $userid;
 	$params{'tipo'}="INTRA";

@@ -308,6 +308,7 @@ sub cancelar_reserva{
    $data_hash->{'id3'}=$self->getId3;
    $data_hash->{'nro_socio'}=$self->getNro_socio;
    $data_hash->{'loggedinuser'}=$loggedinuser;
+	 $data_hash->{'responsable'}=$loggedinuser;
    $data_hash->{'hasta'}=undef;
    $data_hash->{'tipo_prestamo'}='-';
    $data_hash->{'id_ui'}=$self->getId_ui;

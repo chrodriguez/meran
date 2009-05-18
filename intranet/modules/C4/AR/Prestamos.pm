@@ -349,14 +349,13 @@ sub t_realizarPrestamo{
            $db->begin_work;
 		eval{
 			$prestamo->prestar($params,$msg_object);
-			if(!$msg_object->{'error'}){$db->commit;}
-				else {$db->rollback;}
+			$db->commit;
 		};
 		if ($@){
 			C4::AR::Debug::debug("ERROR");
 			#Se loguea error de Base de Datos
 			C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
-			eval {$db->rollback};
+			$db->rollback;
 			#Se setea error para el usuario
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;

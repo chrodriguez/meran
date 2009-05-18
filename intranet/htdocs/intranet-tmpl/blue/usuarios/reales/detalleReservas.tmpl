@@ -106,7 +106,7 @@
 						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
 			</td>
 		[% ELSE %]
-			[% 'NO DISPONIBLE' | i18n %]
+			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 		[% END %] <!--END IF permiso_para_circular -->
 			<td height=25>&nbsp;</td>
 	
@@ -121,7 +121,7 @@
 					onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
 		</p>
 	[% ELSE %]
-			[% 'NO DISPONIBLE' | i18n %]
+			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
 	
 
@@ -131,7 +131,7 @@
 [% IF reservas_espera_count %]
 
 	<br>
-	<p align=center><b>[% "RESERVAS" | i18n %]</b></p>
+	<p align=center><b>[% "RESERVAS EN ESPERA" | i18n %]</b></p>
 	
 	<table class="reservasEnEsperaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr valign=middle class="tablaresultadoTitle">
@@ -178,10 +178,10 @@
 			<td> 
 				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
 						src="[% themelang %]/images/borrar.png" 
-						onClick="confirm_cancelation('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
+						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
 			</td>
 		[% ELSE %]
-			[% 'NO DISPONIBLE' | i18n %]
+			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 		[% END %] <!--END IF permiso_para_circular -->
 			<td height=25>&nbsp;</td>
 		</tr>
