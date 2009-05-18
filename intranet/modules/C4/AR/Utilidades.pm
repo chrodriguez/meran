@@ -1645,12 +1645,15 @@ Esta funcion convierte el arreglo de objetos (Rose::DB) a JSON
 sub arrayObjectsToJSONString {
     my ($objects_array) = @_;
     my @objects_array_JSON;
+	use utf8;
 
     for(my $i=0; $i<scalar(@$objects_array); $i++ ){
         push (@objects_array_JSON, $objects_array->[$i]->as_json);
     }
 
     my $infoJSON= '[' . join(',' ,@objects_array_JSON) . ']';
+
+	utf8::decode($infoJSON);
 
     return $infoJSON;
 }

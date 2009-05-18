@@ -24,7 +24,14 @@ JSONstring={
 		return this.toJsonStringArray(arg).join('');
 	},
 	clearData:function(x){
-		x= (escape(x));
+// 		x= (escape(x)); àèìòù
+		var temp = new String (x);
+		//acentos ES áéíóú
+		//acentos FR àèìòù
+// TODO faltarian otros acentos
+		//permite solo lo que indica el patron
+		x =  temp.replace(/[^a-zA-Z 0-9 /\-_.áéíóú àèìòù ' ?!¡¿ü]+/g,'');
+
 		this.log("jsconStringify => clearData: "+x);
 		return x;
 	},
@@ -34,12 +41,10 @@ JSONstring={
 			}
 	},
 	toObject:function(x){
-// alert('toObject antes del eval: '+x);
 		eval("this.myObj="+x);
 		if(!this.restoreCirculars || !alert){return this.myObj};
 		this.restoreCode=[];
 		this.make(this.myObj,true);
-// alert('toObject: '+x);
 		var r=this.restoreCode.join(";")+";";
 		eval('r=r.replace(/\\W([0-9]{1,})(\\W)/g,"[$1]$2").replace(/\\.\\;/g,";")');
 		eval(r);

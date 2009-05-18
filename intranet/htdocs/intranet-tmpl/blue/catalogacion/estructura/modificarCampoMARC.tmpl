@@ -12,42 +12,42 @@ $(document).ready(function() {
 
 </script>
 
+[% USE HTML %]
+
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
     <hr>
-DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %]
-        infoReferencia=> referencia: [% catalogacion.infoReferencia.getReferencia %] 
-<div width="100%">
+<!--DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %] infoReferencia=> referencia: [% catalogacion.infoReferencia.getReferencia %] -->
+<!--<div width="100%">
     <b>Modificar campo Marc para el nivel [% nivel %]:</b>
-<!--     <div id="div1"> -->
     <p>
     <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
     [% selectCampoX %]
     </p>
-</div>
-<!--<div id="id2">-->
-<!--<div id="content">-->
+</div>-->
+
 <div>
-    <p>
+<!-- TODO por el momento solo se permite modificar el liblibrarian -->
+   <!-- <p>
     <label for="tagField" style="float:left; width:13%">Campo: </label>
         <select name="campo" id="campo" onChange="eleccionCampo()">
             <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
         </select>
         Nombre: <span id="nombre_campo"></span>
-    </p>
-<!--     </div> -->
-    <!--<div id="id3">-->
+    </p>-->
+
     <div id="subcontent">
         <p align="left">
-        <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
+<!-- TODO por el momento solo se permite modificar el liblibrarian -->
+       <!-- <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
                 <option value='[% catalogacion.getSubCampo %]'>[% catalogacion.getSubCampo %]</option>
-         </select>
+         </select>-->
 
         <input id="obligatorio" type="hidden" value="">
-        Liblibrarian: <input id="liblibrarian" type="text" value='[% catalogacion.getLiblibrarian %]' size="90"> 
+        Liblibrarian: <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
         </p>
-
-        <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
+<!-- TODO por el momento solo se permite modificar el liblibrarian -->
+       <!-- <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
         <p>
             <select name="tipoInput" id="tipoInput">
                 <option value="-1">Seleccione tipo</option>
@@ -58,11 +58,13 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
 				<option value="auto" [% IF catalogacion.getTipo == 'auto' %] selected [% END %]>Autocompletable</option>
 				<option value="calendar" [% IF catalogacion.getTipo == 'calendar' %] selected [% END %]>Calendario</option>
             </select>
-        </p>
+        </p>-->
 
-        <p>
-        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
-            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]">
+	[% IF catalogacion.infoReferencia.tieneReferencia %]
+<!-- TODO por el momento solo se permite modificar el liblibrarian -->
+       <!--  <p>
+       <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]" readonly>
         </p>
         
         <div id="divCamposReferencia" valign="top">
@@ -75,13 +77,9 @@ DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% c
             separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
             </p>
             <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
-        </div>  <!--END divCamposReferencia-->
+        </div>  -->
+	[% END %]
     </div>  <!--END subcontent-->
-[% IF catalogacion.infoReferencia.getReferencia %]
-DEBUG=>     TIENE REFERENCIA
-[% ELSE %]
-DEBUG=>     NO TIENE REFERENCIA
-[% END %]
 </div> <!--END <div id="content">-->
 
 <br>

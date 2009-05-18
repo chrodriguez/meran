@@ -55,6 +55,7 @@ __PACKAGE__->meta->setup(
 
 );
 
+use utf8;
 
 sub agregar{
 
@@ -97,22 +98,26 @@ sub modificar{
     my ($data_hash)=@_;
 
     if (!$self->soyFijo){
-        $self->setCampo($data_hash->{'campo'});
-        $self->setSubcampo($data_hash->{'subcampo'});
-        $self->setItemType($data_hash->{'itemtype'});
+# TODO por ahora solo se permite modificar liblibrarian, visible y el orde
+#         $self->setCampo($data_hash->{'campo'});
+#         $self->setSubcampo($data_hash->{'subcampo'});
+#         $self->setItemType($data_hash->{'itemtype'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
-        $self->setTipo($data_hash->{'tipoInput'});
-        $self->setReferencia($data_hash->{'referencia'});
-        $self->setNivel($data_hash->{'nivel'});
-        $self->setObligatorio($data_hash->{'obligatorio'});
+#         $self->setTipo($data_hash->{'tipoInput'});
+# 		if( $self->getNivel == 1){
+# 			$self->setItemType('ALL');
+# 		}
+#         $self->setReferencia($data_hash->{'referencia'});
+#         $self->setNivel($data_hash->{'nivel'});
+#         $self->setObligatorio($data_hash->{'obligatorio'});
         $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
         $self->setVisible($data_hash->{'visible'});
     
-        if($self->tieneReferencia){
-            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
-            $pref_temp->load(); 
-            $pref_temp->modificar($data_hash);
-        }
+#         if($self->tieneReferencia){
+#             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
+#             $pref_temp->load(); 
+#             $pref_temp->modificar($data_hash);
+#         }
     
         $self->save();
     }
@@ -141,17 +146,8 @@ sub borrarYOrdenar{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { gt => $self->getIntranet_habilitado },
-#                                                                     or => [
-#                                                                        and => [
-#                                                                             itemtype=> { eq => $self->getItemType},
-#                                                                             nivel=> { eq => $self->getNivel},
-#                                                                        ],
-#                                                                         and => [
-#                                                                             itemtype=> { eq => 'ALL'},
                                                                             nivel=> { eq => $self->getNivel},
                                                                             fijo => { eq => 1},
-#                                                                         ],
-#                                                                     ],
                                                             ],
                                                          );
 
@@ -186,17 +182,6 @@ sub bajarAnterior{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado-1 },
-#                                                                     or => [
-#                                                                        and => [
-#                                                                             itemtype=> { eq => $itemtype},
-#                                                                             nivel=> { eq => $self->getNivel},
-#                                                                        ],
-#                                                                         and => [
-#                                                                             itemtype=> { eq => 'ALL'},
-#                                                                             nivel=> { eq => $self->getNivel},
-# #                                                                             fijo => { eq => 1},
-#                                                                         ],
-#                                                                     ],
                                                                     nivel=> { eq => $self->getNivel},
                                                             ],
                                                          );
@@ -212,17 +197,6 @@ sub subirSiguiente{
                                                             ],
                                                             where => [
                                                                     intranet_habilitado => { eq => $self->getIntranet_habilitado+1 },
-#                                                                     or => [
-#                                                                        and => [
-#                                                                             itemtype=> { eq => $itemtype},
-#                                                                             nivel=> { eq => $self->getNivel},
-#                                                                        ],
-#                                                                         and => [
-#                                                                             itemtype=> { eq => 'ALL'},
-#                                                                             nivel=> { eq => $self->getNivel},
-# #                                                                             fijo => { eq => 1},
-#                                                                         ],
-#                                                                     ],
                                                                      nivel=> { eq => $self->getNivel},
 
                                                             ],
@@ -459,7 +433,9 @@ sub getLiblibrarian{
 
 sub setLiblibrarian{
     my ($self) = shift;
+
     my ($liblibrarian) = @_;
+	utf8::encode($liblibrarian);
     $self->liblibrarian($liblibrarian);
 }
         

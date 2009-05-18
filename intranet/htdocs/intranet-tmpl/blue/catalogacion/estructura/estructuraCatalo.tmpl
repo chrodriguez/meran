@@ -363,7 +363,7 @@ function modificarEstructuraCatalogacion(id){
     objAH.tipoInput= $('#tipoInput').val();
     objAH.tabla= $('#tablaRef').val();
     
-    if ($('#tablaRef').val() != -1){
+    if( ( $('#tablaRef').val() != -1)&&($('#tablaRef').val()) ){
         objAH.referencia=1;
         objAH.orden= $('#camposSelect').val();
         objAH.campos= $('#camposRef').val();
