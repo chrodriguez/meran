@@ -4,36 +4,24 @@
 
 <script language="javascript" type="text/javascript">
 
+function detalleDelUsuario(){
+	var nro_socio= $('#nro_socio_hidden').val();
+	usuario= new objeto_usuario();
+	usuario.text= $('#usuarioAutocomplete').val();
+	usuario.ID= nro_socio;
+	//detalleUsuario esta implementado en circulacion,js
+	detalleUsuario(nro_socio);
+	detalleReservas(nro_socio, updateInfoReservas);
+	detalleSanciones(nro_socio);
+}
+
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
 							IdInputHidden: 'nro_socio_hidden', 
 							callBackFunction: detalleDelUsuario
 					});
-// FIXME lo de abajo va????
-/*
-	if('[% usuarioID  %] != ""){
-		usuario= new object_usuario();
-		usuario.text= '[% usuarioText  %];
-		usuario.ID= '[% usuarioID  %];
-		$('#usuarioAutocomplete').val('[% usuarioText  %]);
-		detalleUsuario(usuario.ID);
-		detalleReservas(usuario.ID,updateInfoReservaConChck);
-
-	}else{
-		$('#usuarioAutocomplete')[0].focus();
-	}
-*/
 });
-
-function detalleDelUsuario(){
-	//detalleUsuario esta implementado en circulacion,js
-	var nro_socio= $('#nro_socio_hidden').val();
-	detalleUsuario(nro_socio);
-	detalleReservas(nro_socio, updateInfoReservas);
-	detalleSanciones(nro_socio);
-}
-
 /*
  * updateInfoReservaConChck
  * Esta funcion se ejecuta cuando se viene desde moremember o el detalle, cuando se completa el ajax de la funcion
