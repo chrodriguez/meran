@@ -156,7 +156,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
+    my ($campo,$id)=@_;
+
 	use C4::Modelo::CircRefTipoPrestamo::Manager;
  	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
 						( select   => [$campo],

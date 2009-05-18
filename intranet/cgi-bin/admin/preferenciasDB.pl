@@ -22,12 +22,12 @@ my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
-my ($template, $session, $t_params)  = get_template_and_user({template_name => "admin/preferenciasResults.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
+my ($template, $session, $t_params)  = get_template_and_user({	template_name => "admin/preferenciasResults.tmpl",
+																query => $input,
+																type => "intranet",
+																authnotrequired => 0,
+																flagsrequired => {parameters => 1},
+																debug => 1,
 			     });
 
 	my $buscar=$obj->{'buscar'};

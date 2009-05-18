@@ -78,8 +78,6 @@ sub getPreferenciaLike {
      							); 
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
-
-
 }
 
 
