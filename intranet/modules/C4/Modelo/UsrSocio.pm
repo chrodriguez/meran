@@ -511,7 +511,7 @@ Retorna la persona que corresponde al socio
 =cut
 sub getPersona{
     my ($self) = shift;
-    
+
     use C4::Modelo::UsrPersona;
     use C4::Modelo::UsrPersona::Manager;
 
@@ -572,4 +572,3 @@ sub setDni_autorizado{
     $self->dni_autorizado($dni_autorizado);
 }
 1;
-
