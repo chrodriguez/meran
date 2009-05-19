@@ -1193,6 +1193,16 @@ ul li {
     font-weight: bold;
 }
 
+/*=====================================================Circulacion===============================================================*/
+
+.usuario_del_prestamo{
+	color:#000000;
+	font-family:"Trebuchet MS","Verdana","Arial";
+	font-weight: bold;
+}
+
+/*===================================================Fin==Circulacion============================================================*/
+
 /*.fecha_special{
 
     color: orange;

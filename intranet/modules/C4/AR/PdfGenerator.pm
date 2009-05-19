@@ -425,7 +425,7 @@ sub libreDeuda{
     open F,">>/tmp/debug.txt";
     print F "KJNKJ                   ".$socio->persona->getNombre;
     close F;
-    my $nombre = $socio->persona->getApellido.", ".$socio->persona->getNombre;
+    my $nombre = $socio->persona->getApeYNom;
     my $dni= $socio->persona->getNro_documento;
     
     my $categ=$socio->categoria->getDescription;
@@ -459,7 +459,7 @@ sub prestInterBiblio(){
 	my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
 
     my $tmpFileName= "prestInterBiblio".$nro_socio.".pdf";
-	my $nombre = $socio->persona->getApellido.', '.$socio->persona->getNombre;
+	my $nombre = $socio->persona->getApeYNom;
 	my $dni= $socio->persona->getNro_documento;
 	my $branchcode= $socio->getId_ui;
 	my $biblio=&datosBiblio($branchcode);

@@ -45,14 +45,14 @@
 		<td  class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
 				[% IF sancion.usr_nro_socio.getNro_socio %]
-               [% sancion.usr_nro_socio.getApellido %], [% sancion.usr_nro_socio.getNombre %]
+               [% sancion.usr_nro_socio.getApeYNom %]
             [% END %]
 			</a>
 		</td>
   		<td  class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
 				[% IF sancion.responsable %]
-               [% sancion.responsable.getApellido %], [% sancion.responsable.getNombre %]
+               [% sancion.responsable.getApeYNom %]
             [% END %]
 			</a>
 		</td>

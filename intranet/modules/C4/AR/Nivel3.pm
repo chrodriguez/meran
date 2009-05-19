@@ -369,10 +369,14 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservas'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
     $infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
-        my %hash_nivel3;
-#         $nivel3_array_ref->[$i]->load();
-        $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i];
- 
+        my %hash_nivel3= ();
+# 		%hash_nivel3;
+# 		$hash_nivel3{'nro_socio'}= 0;
+#    		C4::AR::Utilidades::initHASH(\%hash_nivel3);
+		my $socio;
+   		$hash_nivel3{'nro_socio'}= undef;
+
+        $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
         $hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
 
@@ -400,14 +404,15 @@ sub detalleDisponibilidadNivel3{
             $hash_nivel3{'disponibilidad'}= "SALA DE LECTURA";
             $hash_nivel3{'clase'}= "salaLectura";
         }
-
-        my $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
+		
+C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
+        $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
         $hash_nivel3{'vencimiento'} = undef;
         if($socio){ 
             C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
             $hash_nivel3{'id_prestamo'}= C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'})->getId_prestamo;
             $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
-            $hash_nivel3{'usuarioNombre'}= $socio->persona->getApellido.", ".$socio->persona->getNombre;
+            $hash_nivel3{'usuarioNombre'}= $socio->persona->getApeYNom;
             $hash_nivel3{'vencimiento'}= "VENCERA EN BREVE..."; #OBTENER LA FECHA D EVENCIMIENTO DEL PRESTAMO
         }
     

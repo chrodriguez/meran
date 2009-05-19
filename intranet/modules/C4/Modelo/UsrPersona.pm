@@ -286,6 +286,12 @@ sub setNombre{
     $self->nombre($nombre);
 }
 
+sub getApeYNom{
+    my ($self) = shift;
+
+    return ($self->getApellido.", ".$self->getNombre);
+}
+
 sub getTitulo{
     my ($self) = shift;
     return ($self->titulo);

@@ -177,7 +177,7 @@ sub mailDeUsuarios(){
     return(@results);
 }
 
-sub in_array() {
+sub in_array {
         my $val = shift @_ || return 0;
         my @array = @_;
         foreach (@array)
@@ -1485,7 +1485,7 @@ sub generarComboDeSocios {
 
     foreach my $socio (@$socios) {
         push(@select_socios, $socio->getId_socio);
-        $select_socios{$socio->getId_socio}= $socio->persona->getApellido.", ".$socio->persona->getNombre." (".$socio->getNro_socio.")" ;
+        $select_socios{$socio->getId_socio}= $socio->persona->getApeYNom." (".$socio->getNro_socio.")" ;
     }
 
     my %options_hash; 
@@ -1615,17 +1615,44 @@ sub getToday {
 
 sub printHASH {
     my ($hash_ref) = @_;
-    open(Z, ">>/tmp/debug.txt");
-    print Z "\n";
-    print Z "PRINT HASH: \n";
+	
+	C4::AR::Debug::debug("PRINT HASH: \n");
     
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
-                print Z "key: $key => value: $value\n";
+                C4::AR::Debug::debug("key: $key => value: $value\n");
             }
     }
-    print Z "\n";
-    close(Z);
+}
+
+=item
+sub initHASH {
+    my ($hash_ref) = @_;
+	
+	C4::AR::Debug::debug("INIT HASH: \n");
+    
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+				$hash_ref->{$key}= undef;
+                C4::AR::Debug::debug("key: $key => value: $value\n");
+            }
+    }
+}
+=cut
+
+sub initHASH {
+	my ($hash_ref) = @_;
+
+ 	my @keys = keys(%$hash_ref);
+# 	my @keys = keys(%hash_ref);
+	foreach my $key (@keys) {   # foreach does the trick
+ 		C4::AR::Debug::debug("key ".$key.": has the value ".$hash_ref->{$key}."\n");
+ 		$hash_ref->{$key}= undef;
+# 		delete $hash_ref{$key};
+	}
+# 	delete $hash_ref{'nro_socio'};	
+
+	$hash_ref= \{};
 }
 
 sub joinArrayOfString{
@@ -2122,7 +2149,7 @@ sub usuarioAutocomplete{
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){
-            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApellido.", ".$usuario->persona->getNombre."\n";
+            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom."\n";
         }
     }
     return $textout;

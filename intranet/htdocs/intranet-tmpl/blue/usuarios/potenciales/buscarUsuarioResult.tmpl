@@ -58,7 +58,7 @@
 		
       	<td align="left" class="nomCompleto">
             [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
                                                 url =>      "/cgi-bin/koha/usuarios/potenciales/datosUsuario.pl", 
                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
