@@ -1,7 +1,10 @@
 [% INCLUDE 'intranet-top.inc' %]
+<script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
+<script language="javascript" type="text/javascript" src="/includes/busquedasCatalogo.js"> </script>
+<script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
+<script language="javascript" type="text/javascript" src="/includes/busquedasUsuarios.js"></script>
 <br>
 <br>
-ESTA VENTANA NO ESTA TERMINADA, NO USAR
 <script language="javascript" type="text/javascript"> 
 	function swap(id,src){document.getElementById(id).src=src;}
 	
@@ -33,15 +36,18 @@ ESTA VENTANA NO ESTA TERMINADA, NO USAR
 		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 			[% "B&uacute;squeda combinada" | i18n %]
 			<input type="text" id="keyword" size="20" class="inputFontNormal">
-  			<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="busquedaCombinada()">
+  			<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="buscar()">
     		</td>
   	</tr>
   	<tr>
 		<td width="15%" >&nbsp;</td>
       		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-      			<a  href="/cgi-bin/koha/busquedas/filtrado.pl" >
-      				[% "B&uacute;squeda avanzada" | i18n %]
-      			</a>
+                        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda avanzada' | i18n %]",
+                                            url =>      "/cgi-bin/koha/busquedas/filtrado.pl", 
+                                            title =>    "[% 'B&uacute;squeda avanzada' | i18n %]"
+                                        ) ;
+                        [% END %]
       		</td>
 	</tr>
 </table>
@@ -55,37 +61,57 @@ ESTA VENTANA NO ESTA TERMINADA, NO USAR
 	<tr>
 		<td width="15%">&nbsp;</td>
 		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
-			<form action="/cgi-bin/koha/usuarios/reales/buscarUsuario.pl" method="post" name="form2">
 		    	B&uacute;squeda de usuarios &nbsp;
-		    	<input type="text" name="member" size="20" class="inputFontNormal">
-                    	<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="form2.submit()">
-	  	    	</form>
-		</td>
+                <input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
+                   onBlur="checkFilter('blur')" value="[% socio %]">		
+                <input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
+        </td>
  	 </tr>
 </table>
 
 <table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
 	<tr>
     		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    			<a href="/cgi-bin/koha/circ/prestamos.pl"><b>[% "Pr&eacute;stamos"| i18n %]</b></a><br>
+    			        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos' | i18n %]",
+                                            url =>      "/cgi-bin/koha/circ/prestamos.pl", 
+                                            title =>    "[% 'Pr&eacute;stamos' | i18n %]"
+                                        ) ;
+                        [% END %]
     		</td>
   	</tr>
   	<tr>
     		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    			<a href="/cgi-bin/koha/circ/devoluciones.pl" ><b>Devoluciones y Renovaciones</b></a><br>
+                        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
+                                            url =>      "/cgi-bin/koha/circ/devoluciones.pl", 
+                                            title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
+                                        ) ;
+                        [% END %]
     		</td>
   	</tr>
   	<tr>
   		<td   class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-  			<a href="/cgi-bin/koha/reports/reports-home.pl"><b>Reportes</b></a><br>
+                        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Reportes' | i18n %]",
+                                            url =>      "/cgi-bin/koha/reports/reports-home.pl", 
+                                            title =>    "[% 'Reportes' | i18n %]"
+                                        ) ;
+                        [% END %]
   		</td>
   	</tr>
   	<tr>
     		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-    			<a href="/cgi-bin/koha/admin-home.pl" ><b> Par&aacute;metros</b></a><br>
+                        [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     "[% 'Par&aacute;metros' | i18n %]",
+                                            url =>      "/cgi-bin/koha/admin-home.pl", 
+                                            title =>    "[% 'Par&aacute;metros' | i18n %]"
+                                        ) ;
+                        [% END %]
    		</td>
   	</tr>
 </table>
-
+<div id="resultBusqueda"></div>
+<div id="result"></div>
 [% INCLUDE 'intranet-bottom.inc' %]
 
