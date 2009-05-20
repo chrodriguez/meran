@@ -403,7 +403,7 @@ sub estaPrestado {
 cantidadDePrestamosPorUsuario
 Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro y la cantidad de vencidos.
 =cut
-sub cantidadDePrestamosPorUsuario{
+sub cantidadDePrestamosPorUsuario {
 	my ($nro_socio)=@_;
 
 	my $prestamos= obtenerPrestamosDeSocio($nro_socio);
@@ -438,7 +438,7 @@ sub t_devolver {
     if ($@){
         #Se loguea error de Base de Datos
         &C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
-        eval {$db->rollback};
+ 		$db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
@@ -450,14 +450,18 @@ sub t_devolver {
 
 
 sub getPrestamoPorBarcode {
+
+	my ($barcode)=@_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-    my ($barcode)=@_;
+	my @filtros;
+ 	push(@filtros, ( barcode => { eq => $barcode } ));
+	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => [ barcode  => { eq => $barcode }	],
+																query => \@filtros,
 																require_objects => [ 'nivel3' ] #INNER JOIN
      							); 
 
@@ -469,7 +473,7 @@ sub getPrestamoPorBarcode {
 }
 
 
-sub verificarCirculacionRapida{
+sub verificarCirculacionRapida {
 	my ($params)=@_;
 
 	my $msg_object= C4::AR::Mensajes::create();

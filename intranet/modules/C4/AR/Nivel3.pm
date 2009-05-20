@@ -370,10 +370,10 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3= ();
-# 		%hash_nivel3;
-# 		$hash_nivel3{'nro_socio'}= 0;
 #    		C4::AR::Utilidades::initHASH(\%hash_nivel3);
 		my $socio;
+# FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
+# un ejemplar del grupo
    		$hash_nivel3{'nro_socio'}= undef;
 
         $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i]; 
