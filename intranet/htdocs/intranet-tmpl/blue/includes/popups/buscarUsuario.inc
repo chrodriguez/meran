@@ -17,9 +17,9 @@ $(document).ready(function() {
 
 function detalleDelUsuario(){
 	var nro_socio= $('#nro_socio_hidden').val();
-	usuario= new objeto_usuario();
-	usuario.text= $('#campoUsuario').val();
-	usuario.ID= nro_socio;
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#campoUsuario').val();
+	USUARIO.ID= nro_socio;
 }
 
 </script>

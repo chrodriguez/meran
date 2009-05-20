@@ -373,8 +373,11 @@ sub detalleDisponibilidadNivel3{
 #    		C4::AR::Utilidades::initHASH(\%hash_nivel3);
 		my $socio;
 # FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
-# un ejemplar del grupo
+# un ejemplar del grupo.
+# con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
+# que van hacia el template.
    		$hash_nivel3{'nro_socio'}= undef;
+# C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
 
         $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
