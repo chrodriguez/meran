@@ -2,13 +2,13 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
-<script language="javascript" type="text/javascript" src="/includes/busquedasCatalogo.js"> </script>
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/blue/includes/busquedasCatalogo.js"> </script>
 
 <script language="javascript" type="text/javascript">
 
 $(document).ready(function() {
 
-	registrarEventos();
+	registrarKeypress('INPUT');
 
 	$("#volver").hide();
 

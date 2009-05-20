@@ -91,15 +91,19 @@ function tomarTiempo(){
  * primer click selecciona, segundo click deselecciona. 
  */
 function checkedAll(id,nombreCheckbox){
+	var result_array= $("#"+id);
+	//se verifica la existencia de la componente
+	if(result_array.length == 0)return alert('util.js=> checkedAll=> No existe la componte con ID: '+id);
+
 	$("#"+id).toggle(function(){
-			$("input[name="+nombreCheckbox+"]").each(function(){
+		$("input[name="+nombreCheckbox+"]").each(function(){
 			this.checked=true;})
-			},
-			function(){
+		},
+		function(){
 			$("input[name="+nombreCheckbox+"]").each(function(){
 			this.checked=false;})
-			}
-		);
+		}
+	);
 }
 
 /*
@@ -108,12 +112,38 @@ function checkedAll(id,nombreCheckbox){
  * que se pasa por paramentro.
  */
 function onEnter(idInput,funcion){
+	var result_array= $("#"+idInput);
+	//se verifica la existencia de la componente
+	if(result_array.length == 0)return alert('util.js=> onEnter => No existe la componte con ID: '+idInput);
+
 	$("#"+idInput).keypress(function (e) {
  		if(e.which == 13){
- 			funcion();
+			if(this.value != ''){
+			//si el campo es <> de blanco
+ 				funcion();
+			}
  		}
- 	});
+	});
+}
 
+/*
+Esta funcion registra el evento keypress en todas los tipos de componetes pasados por parametro
+tipos de componentes = [input, etc]
+*/
+function registrarKeypress(typeObject){
+	var componentes=["input", "INPUT"]; //se pueden agregar mas componetes
+	var result= componentes.indexOf(typeObject);
+
+	if(result == -1)return alert('util.js=> registrarKeypress => Componente Inválida');
+
+    $(typeObject).keypress(function (e) {
+        if(e.which == 13){
+			if(this.value != ''){
+			//si el campo es <> de blanco
+            	buscar();
+			}
+        }
+    });
 }
 
 /*
@@ -121,8 +151,12 @@ function onEnter(idInput,funcion){
 *
 */
 function scrollTo(idObj){
-		var divOffset = $('#'+idObj).offset().top;
-		$('html,body').animate({scrollTop: divOffset}, 1000);
+	var result_array= $("#"+idObj);
+	//se verifica la existencia de la componente
+	if(result_array.length == 0)return alert('util.js=> scrollTo => No existe la componte con ID: '+idObj);
+
+	var divOffset = $('#'+idObj).offset().top;
+	$('html,body').animate({scrollTop: divOffset}, 1000);
 }
 
 

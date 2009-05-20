@@ -1,25 +1,18 @@
 [% INCLUDE 'intranet-top.inc' %]
 <script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
-<script language="javascript" type="text/javascript" src="/includes/busquedasCatalogo.js"> </script>
-<script language="javascript" type="text/javascript" src="/includes/busquedasUsuarios.js"></script>
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/blue/includes/busquedasCatalogo.js"> </script>
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/blue/includes/busquedasUsuarios.js"></script>
 <br>
 <br>
 <script language="javascript" type="text/javascript"> 
 
-	// alert('Hola');
-	$(document).ready(function() {
-	//  netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserWrite");
-	    window.menubar.visible = false;
-	    window.locationbar.visible= false;
-	    window.personalbar.visible = false;
-	    window.statusbar.visible = false;
-	    window.toolbar.visible = false;
-        onEnter('keyword',buscar);
-        onEnter('socio',consultar);
-        $('#keyword').focus();
-	//   netscape.security.PrivilegeManager.revertPrivilege("UniversalBrowserWrite");
-	//   resizeTo(width,height);   //reemplaza por lo valores deseados
-	});
+$(document).ready(function() {
+
+	onEnter('keyword',buscar);
+	onEnter('socio',consultar);
+	$('#keyword').focus();
+});
+
 </script>
 
 <table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">

@@ -64,9 +64,9 @@ function ordenarPor(ord){
 function buscar(){
 
     //primero verifico las busquedas individuales
-    keyword = $('#keyword').val();
-    keyword = $.trim(keyword);
-    if (keyword.length > 0) {
+//     keyword = $('#keyword').val();
+//     keyword = $.trim(keyword);
+//     if (keyword.length > 0) {
         if ($('#keyword').val() != ''){
             busquedaPorKeyword();
         }else 
@@ -87,9 +87,9 @@ function buscar(){
         }else {
             busquedaCombinable();
         }
-    }else {
-        $('#keyword').val('');
-    }
+//     }else {
+//         $('#keyword').val('');
+//     }
 }
 
 function buscarPorCodigoBarra(){
@@ -284,14 +284,4 @@ function ordenar(ord){
 function mostrarDetalle(id1){
     var params="id1="+id1;
     crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
-}
-
-function registrarEventos(){
-//VER CON LA FUNCION onEnter DE Util.js!!!!!!!
-    $("input").keypress(function (e) {
-        if(e.which == 13){
-            buscar();
-        }
-    });
-
 }
