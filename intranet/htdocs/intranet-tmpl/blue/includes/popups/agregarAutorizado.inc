@@ -13,9 +13,9 @@ function confirmarAgregarAutorizado(){
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
     objAH.nro_socio= NRO_SOCIO_AUTH; 
-    objAH.nombre_apellido = $('#nombreAutorizado').val();
-    objAH.dni_autorizado = $('#dniAutorizado').val();
-    objAH.telefono = $('#telefonoAutorizado').val();
+    objAH.auth_nombre = $('#nombreAutorizado').val();
+    objAH.auth_dni = $('#dniAutorizado').val();
+    objAH.auth_telefono = $('#telefonoAutorizado').val();
     objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
     objAH.sendToServer();
 

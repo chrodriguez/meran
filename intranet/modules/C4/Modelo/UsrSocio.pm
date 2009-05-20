@@ -157,9 +157,9 @@ sub agregarAutorizado{
     my ($self)=shift;
     my ($params) = @_;
 
-    $self->setNombre_apellido_autorizado($params->{'nombre_apellido'});
-    $self->setDni_autorizado($params->{'dni_autorizado'});
-    $self->setTelefono_autorizado($params->{'telefono'});
+    $self->setNombre_apellido_autorizado($params->{'auth_nombre'});
+    $self->setDni_autorizado($params->{'auth_dni'});
+    $self->setTelefono_autorizado($params->{'auth_telefono'});
 
     $self->save();
 }
@@ -196,6 +196,7 @@ sub modificar{
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
     $self->persona->modificar($data_hash);
+    $self->agregarAutorizado($data_hash);
     $self->save();
 }
 

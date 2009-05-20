@@ -258,26 +258,53 @@
 					value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
             <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
         </td>
-        </tr>
-    <tr>
-            <td height=25 class="[% clase %]">&nbsp;</td>
-            <td width="15%">&nbsp;</td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <tr>
+
+                <td height=25 class="[% clase %]">&nbsp;</td>
+                <td width="15%">&nbsp;</td>
+                <td width="40%" class="inputFontNormal" align="left" valign="top">
                 <b>E-Mail</b><br>
                 <input class="required" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
         </td>
             <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
         </tr>
+
+[% IF socio.tieneAutorizado %]
+<table>
+<hr>
+    <tr colspan=2>
+                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                    <b>[% "Apellido y Nombre del autorizado" | i18n %]</b><br>
+                    <input  class="InputFontNormal" type=text id="auth_nombre" name="auth_nombre" 
+                            value="[% socio.getNombre_apellido_autorizado %]" size='50'>
+                </td>
+        
+        <br>
+                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                    <b>[% "DNI del autorizado" | i18n %]</b><br>
+                    <input  class="InputFontNormal" type=text id="auth_dni" name="auth_dni" 
+                            value="[% socio.getDni_autorizado %]" size='50'>
+                </td>
+    </tr>
+                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                    <b>[% "Tel&eacute;fono del autorizado" | i18n %]</b><br>
+                    <input  class="InputFontNormal" type=text id="auth_telefono" name="auth_telefono" 
+                            value="[% socio.getTelefono_autorizado %]" size='50'>
+                </td>
+    </tr>
+</table>
+        <br>
+<hr>
+[% END %]
+    <br>
     <tr>
         <td colspan="4">&nbsp;</td>
     </tr>
-
-    <br>
-
 <br>
 <br>
 <table width=100%>
     <tr>
+
         <td width="50%" align="right">
 
         [% IF addBorrower %]
@@ -304,6 +331,7 @@
         
     
     </tr>
+
 </table>
 </form>
 

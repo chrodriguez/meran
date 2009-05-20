@@ -120,6 +120,19 @@
                                 </b>
                             </center>
                     [% END %]
+                    [% IF socio.tieneAutorizado %]
+                    <hr>
+                            <span class="type">Nombre y Apellido del autorizado:</span>
+                                <b> [% socio.getNombre_apellido_autorizado%]</b>
+                            <br>
+                            <span class="type">DNI del autorizado:</span><b>
+                                <b> [% socio.getDni_autorizado %]</b>
+                            <br>
+                            <span class="type">Tel&eacute;fono del autorizado:</span><b>
+                                <b> [% socio.getTelefono_autorizado %]</b>
+                            <br>
+                    <hr>
+                    [% END %]
             
             </div>
             

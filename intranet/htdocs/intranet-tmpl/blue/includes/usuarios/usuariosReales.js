@@ -21,11 +21,11 @@ function modificarDatosDeUsuario(){
 
 function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
-	vDatosUsuario=new WindowHelper({draggable: true, opacity: true});
+	vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
 	vDatosUsuario.debug= true;
 	vDatosUsuario.html=responseText;
 	vDatosUsuario.create();	
-	vDatosUsuario.height('85%');
+	vDatosUsuario.height('75%');
 	vDatosUsuario.width('85%');
 	vDatosUsuario.open();
 }
