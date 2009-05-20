@@ -123,16 +123,16 @@ function renovar(accion,userId,userNom,id2,id3){
 	
 	array=new Array;
 	array[0]= id3;
-	usuario=new objeto_usuario();
-	usuario.ID=userId;
-	usuario.text=userNom;
+	USUARIO=new objeto_usuario();
+	USUARIO.ID=userId;
+	USUARIO.text=userNom;
 
 	objAH=new AjaxHelper(generaDivDevRen);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
 	objAH.datosArray= array;
-	objAH.nro_socio= usuario.ID;
+	objAH.nro_socio= USUARIO.ID;
     objAH.id_prestamo = id3;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -144,16 +144,16 @@ function devolver(accion,userId,userNom,id2,id_prestamo){
 
 	array=new Array;
 	array[0]= id_prestamo;
-	usuario=new objeto_usuario();
-	usuario.ID=userId;
-	usuario.text=userNom;
+	USUARIO=new objeto_usuario();
+	USUARIO.ID=userId;
+	USUARIO.text=userNom;
 
 	objAH=new AjaxHelper(generaDivDevRen); //llama a generar div de ciculacion.js
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= array;
-	objAH.nro_socio= usuario.ID;
+	objAH.nro_socio= USUARIO.ID;
 //     objAH.id_prestamo = id3;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -170,7 +170,7 @@ function confirmarPrestamo(){
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 		objAH.tipoAccion= 'CONFIRMAR_PRESTAMO';
 		objAH.datosArray= items_array;
-		objAH.nro_socio=usuario.ID;
+		objAH.nro_socio= USUARIO.ID;
 		//se envia la consulta
 		objAH.sendToServer();
 		vBuscarUsuario.close();
