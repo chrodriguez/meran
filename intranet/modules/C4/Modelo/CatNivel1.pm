@@ -118,7 +118,6 @@ sub setDato{
 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
 			$self->setTitulo($data_hash->{'datoReferencia'});
 		}else{
-			utf8::encode($data_hash->{'dato'});
 			$self->setTitulo($data_hash->{'dato'});
 		}
 	}
