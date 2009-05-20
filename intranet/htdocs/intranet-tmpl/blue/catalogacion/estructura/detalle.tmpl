@@ -163,8 +163,7 @@ function devolver(accion,userId,userNom,id2,id_prestamo){
 
 function confirmarPrestamo(){
 
- 	if(USUARIO){	
-
+	if( $('#campoUsuario').val() != ''){
 		objAH=new AjaxHelper(generaDivPrestamo);
 		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
@@ -174,6 +173,9 @@ function confirmarPrestamo(){
 		//se envia la consulta
 		objAH.sendToServer();
 		vBuscarUsuario.close();
+	}else{
+		alert(INGRESE_EL_USUARIO);
+		$('#campoUsuario').focus();
 	}
 }
 
