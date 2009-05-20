@@ -39,8 +39,10 @@
 }
 
 .ac_over {
-	background-color: #0A246A;
-	color: HighlightText;
+	/*background-color: #0A246A;*/
+	background-color: white;
+	/*color: HighlightText;*/
+	color: black;
 }
 
 .ac_moreItems {
