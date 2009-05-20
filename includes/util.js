@@ -91,9 +91,9 @@ function tomarTiempo(){
  * primer click selecciona, segundo click deselecciona. 
  */
 function checkedAll(id,nombreCheckbox){
-	var result_array= $("#"+id);
+// 	var result_array= $("#"+id);
 	//se verifica la existencia de la componente
-	if(result_array.length == 0)return alert('util.js=> checkedAll=> No existe la componte con ID: '+id);
+// 	if(result_array.length == 0)return alert('util.js=> checkedAll=> No existe la componte con ID: '+id);
 
 	$("#"+id).toggle(function(){
 		$("input[name="+nombreCheckbox+"]").each(function(){
