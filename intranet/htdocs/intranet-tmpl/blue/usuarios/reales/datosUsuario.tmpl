@@ -210,11 +210,15 @@ $(document).ready(function() {
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
 	
-	<p align="center"><span class="click" onClick="mostrarHistorialDePrestamos()">[% "Historial de Pr&eacute;stamos" | i18n %]</span></p>	
 	
 	<div id="historialPrestamosToggle" class="click" style="width: 10px; ">[-]</div>
 	<!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
 	<div id="historialPrestamos"></div>
+    <p align="center">
+        <div class="center click" onClick="mostrarHistorialDePrestamos()" >
+            [% "Historial de Pr&eacute;stamos" | i18n %]
+        </div>
+    </p>
 
 </div>
 

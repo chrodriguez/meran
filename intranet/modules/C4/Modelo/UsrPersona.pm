@@ -3,6 +3,7 @@ package C4::Modelo::UsrPersona;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use utf8;
 
 __PACKAGE__->meta->setup(
     table   => 'usr_persona',
@@ -272,6 +273,7 @@ sub getApellido{
 sub setApellido{
     my ($self) = shift;
     my ($apellido) = @_;
+    utf8::encode($apellido);
     $self->apellido($apellido);
 }
 
@@ -283,6 +285,7 @@ sub getNombre{
 sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
+    utf8::encode($nombre);
     $self->nombre($nombre);
 }
 
@@ -300,6 +303,7 @@ sub getTitulo{
 sub setTitulo{
     my ($self) = shift;
     my ($titulo) = @_;
+    utf8::encode($titulo);
     $self->titulo($titulo);
 }
 
@@ -312,6 +316,7 @@ sub getOtros_nombres{
 sub setOtros_nombres{
     my ($self) = shift;
     my ($otros_nombres) = @_;
+    utf8::encode($otros_nombres);
     $self->otros_nombres($otros_nombres);
 }
 
@@ -334,6 +339,7 @@ sub getCalle{
 sub setCalle{
     my ($self) = shift;
     my ($calle) = @_;
+    utf8::encode($calle);
     $self->calle($calle);
 }
 
@@ -400,6 +406,7 @@ sub getMsg_texto{
 sub setMsg_texto{
     my ($self) = shift;
     my ($msg_texto) = @_;
+    utf8::encode($msg_texto);
     $self->msg_texto($msg_texto);
 }
 

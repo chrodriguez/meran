@@ -2,6 +2,7 @@ package C4::Modelo::UsrSocio;
 
 use strict;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use utf8;
 
 __PACKAGE__->meta->setup(
     table   => 'usr_socio',
@@ -548,6 +549,7 @@ sub getNombre_apellido_autorizado{
 sub setNombre_apellido_autorizado{
     my ($self) = shift;
     my ($nombre_apellido_autorizado) = @_;
+    utf8::encode($nombre_apellido_autorizado);
     $self->nombre_apellido_autorizado($nombre_apellido_autorizado);
 }
 
@@ -559,6 +561,7 @@ sub getTelefono_autorizado{
 sub setTelefono_autorizado{
     my ($self) = shift;
     my ($telefono_autorizado) = @_;
+    utf8::encode($telefono_autorizado);
     $self->telefono_autorizado($telefono_autorizado);
 }
 
@@ -570,6 +573,7 @@ sub getDni_autorizado{
 sub setDni_autorizado{
     my ($self) = shift;
     my ($dni_autorizado) = @_;
+    utf8::encode($dni_autorizado);
     $self->dni_autorizado($dni_autorizado);
 }
 1;

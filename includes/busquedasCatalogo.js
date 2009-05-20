@@ -64,25 +64,31 @@ function ordenarPor(ord){
 function buscar(){
 
     //primero verifico las busquedas individuales
-    if ($('#keyword').val() != ''){
-        busquedaPorKeyword();
-    }else 
-    if ($('#estante').val() != ''){
-        buscarEstante();
-    }else 
-    if ($('#dictionary').val() != '') {
-        buscarPorDiccionario(ini);
-    }else 
-    if ($('#codBarra').val() != '') {
-        buscarPorCodigoBarra();
-    }else 
-    if ($('#isbn').val() != '') {
-        buscarPorISBN();
-    }else 
-    if ($('#tema').val() != '') {
-        buscarPorTema();
+    keyword = $('#keyword').val();
+    keyword = $.trim(keyword);
+    if (keyword.length > 0) {
+        if ($('#keyword').val() != ''){
+            busquedaPorKeyword();
+        }else 
+        if ($('#estante').val() != ''){
+            buscarEstante();
+        }else 
+        if ($('#dictionary').val() != '') {
+            buscarPorDiccionario(ini);
+        }else 
+        if ($('#codBarra').val() != '') {
+            buscarPorCodigoBarra();
+        }else 
+        if ($('#isbn').val() != '') {
+            buscarPorISBN();
+        }else 
+        if ($('#tema').val() != '') {
+            buscarPorTema();
+        }else {
+            busquedaCombinable();
+        }
     }else {
-        busquedaCombinable();
+        $('#keyword').val('');
     }
 }
 

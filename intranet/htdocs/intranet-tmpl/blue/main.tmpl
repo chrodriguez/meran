@@ -1,25 +1,22 @@
 [% INCLUDE 'intranet-top.inc' %]
 <script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
 <script language="javascript" type="text/javascript" src="/includes/busquedasCatalogo.js"> </script>
-<script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight.js"></script>
 <script language="javascript" type="text/javascript" src="/includes/busquedasUsuarios.js"></script>
 <br>
 <br>
 <script language="javascript" type="text/javascript"> 
-	function swap(id,src){document.getElementById(id).src=src;}
-	
-	function busquedaCombinada(){
-	location.href="/cgi-bin/koha/busquedas/filtrado.pl?origen=main&keyword="+document.getElementById("keyword").value;
-	}
-	
+
 	// alert('Hola');
 	$(document).ready(function() {
 	//  netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserWrite");
-	window.menubar.visible = false;
-	window.locationbar.visible= false;
-	window.personalbar.visible = false;
-	window.statusbar.visible = false;
-	window.toolbar.visible = false;
+	    window.menubar.visible = false;
+	    window.locationbar.visible= false;
+	    window.personalbar.visible = false;
+	    window.statusbar.visible = false;
+	    window.toolbar.visible = false;
+        onEnter('keyword',buscar);
+        onEnter('socio',consultar);
+        $('#keyword').focus();
 	//   netscape.security.PrivilegeManager.revertPrivilege("UniversalBrowserWrite");
 	//   resizeTo(width,height);   //reemplaza por lo valores deseados
 	});
@@ -35,7 +32,7 @@
 		<td width="15%" >&nbsp;</td>
 		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 			[% "B&uacute;squeda combinada" | i18n %]
-			<input type="text" id="keyword" size="20" class="inputFontNormal">
+			<input type="text" id="keyword" size="20" class="inputFontNormal" tabindex=1>
   			<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="buscar()">
     		</td>
   	</tr>
@@ -44,7 +41,7 @@
       		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
                         [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda avanzada' | i18n %]",
-                                            url =>      "/cgi-bin/koha/busquedas/filtrado.pl", 
+                                            url =>      "/cgi-bin/koha/busquedas/filtrado.pl",
                                             title =>    "[% 'B&uacute;squeda avanzada' | i18n %]"
                                         ) ;
                         [% END %]
@@ -63,7 +60,7 @@
 		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 		    	B&uacute;squeda de usuarios &nbsp;
                 <input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
-                   onBlur="checkFilter('blur')" value="[% socio %]">		
+                   onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
                 <input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
         </td>
  	 </tr>
@@ -108,7 +105,7 @@
                                             title =>    "[% 'Par&aacute;metros' | i18n %]"
                                         ) ;
                         [% END %]
-   		</td>
+   		   </td>
   	</tr>
 </table>
 <div id="resultBusqueda"></div>
