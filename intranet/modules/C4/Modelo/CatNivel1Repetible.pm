@@ -48,7 +48,6 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setCampo($data_hash->{'campo'});
     $self->setSubcampo($data_hash->{'subcampo'});
-	utf8::encode($data_hash->{'dato'});
     $self->setDato($data_hash->{'dato'});
     $self->save();
 }
@@ -116,6 +115,7 @@ sub getDato{
 sub setDato{
     my ($self) = shift;
     my ($dato) = @_;
+	utf8::encode($dato);
     $self->dato($dato);
 }
 
