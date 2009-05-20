@@ -22,7 +22,7 @@ function mostrarHistorialDePrestamos(){
 	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
 	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
-	objAH.nro_socio= usuario.ID;
+	objAH.nro_socio= USUARIO.ID;
 	objAH.funcion= 'changePage';
 	objAH.sendToServer();
 }
@@ -54,11 +54,11 @@ function updateInfoDevRen(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detallePrestamos(usuario.ID);
+	detallePrestamos(USUARIO.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
-	detalleReservas(usuario.ID);
+	detalleReservas(USUARIO.ID);
 	//puede que luego de devolver el usuario sea sancionado
-	detalleSanciones(usuario.ID);
+	detalleSanciones(USUARIO.ID);
 }
 
 //REDEFINIDO, se encuentra en circulacion.js, se llama luego de realizar un prestamo
@@ -76,10 +76,10 @@ function updateInfoPrestarReserva(responseText){
   		setMessages(messageArray[i]);
 	}
 
-	detalleReservas(usuario.ID);
-	detallePrestamos(usuario.ID);
+	detalleReservas(USUARIO.ID);
+	detallePrestamos(USUARIO.ID);
     //puede que el usuario este sancionado
-    detalleSanciones(usuario.ID);
+    detalleSanciones(USUARIO.ID);
 }
 
 
@@ -88,21 +88,21 @@ function updateInfoCancelacion(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-	detalleReservas(usuario.ID);
+	detalleReservas(USUARIO.ID);
 }
 
 function detalleUsuario(){
 	objAH=new AjaxHelper(updateDetalleUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug= true;
-	objAH.nro_socio= usuario.ID;
+	objAH.nro_socio= USUARIO.ID;
 	objAH.sendToServer();
 }
 
 function updateDetalleUsuario(responseText){
 	$('#detalleUsuario').html(responseText);
 	createFileUploader();
-	detalleReservas(usuario.ID);
+	detalleReservas(USUARIO.ID);
 }
 
 function createFileUploader(){
@@ -113,9 +113,9 @@ function createFileUploader(){
 		$("#uploader").fileUploader({
 						// perl script
 						ajaxFile: "uploadPicture.pl",
-						nro_socio: usuario.ID,
+						nro_socio: USUARIO.ID,
 						funcionOnComplete: function (){
-									detalleUsuario(usuario.ID);
+									detalleUsuario(USUARIO.ID);
 								}
 		});
 
@@ -134,7 +134,7 @@ function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
 	checkedAll('checkAllPrestamos','chkboxPrestamos');	
-	detalleSanciones(usuario.ID);
+	detalleSanciones(USUARIO.ID);
 }
 
 function detalleReservas(socio){
@@ -151,7 +151,7 @@ function updateDetalleReservas(responseText){
 	zebra('reseravsAsignadasResult');
 	zebra('reservasEnEsperaResult');
 	checkedAll('checkAllReservas','chkboxReservas');
-	detallePrestamos(usuario.ID);
+	detallePrestamos(USUARIO.ID);
 }
 
 
@@ -175,9 +175,9 @@ $(document).ready(function() {
 // 	zebra("tablaResult");
 	
 	//definido en circulacion.js
-	usuario= new objeto_usuario();
-	usuario.text= "[% socio.persona.getApeYNom %]";
-    usuario.ID= '[% socio.getNro_socio %]';
+	USUARIO= new objeto_usuario();
+	USUARIO.text= "[% socio.persona.getApeYNom %]";
+    USUARIO.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 
 	$("#historialPrestamosToggle").toggle(	function(){
