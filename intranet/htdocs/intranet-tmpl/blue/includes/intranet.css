@@ -1,3 +1,8 @@
+
+
+
+ 
+/* FIXME que es la URL */
 body {
 	margin : 25px;
 	background-color: #FFFFFF;	
@@ -14,9 +19,17 @@ body {
    width: 70%;
 }
 
-input:focus{
+/* FIXME setea el estilo a TODOS los input (button e inputs) */
+/*input:focus{
+    background-color:infoBackground;
+}*/
+
+/* TODO no se si es compatible con IE */
+input[type=text]:focus{
     background-color:infoBackground;
 }
+
+
 #login
 {	
    display:inline;
