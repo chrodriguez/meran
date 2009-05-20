@@ -3,6 +3,7 @@ package C4::Modelo::CatNivel1Repetible;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use utf8;
 
 __PACKAGE__->meta->setup(
     table   => 'cat_nivel1_repetible',
@@ -47,6 +48,7 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setCampo($data_hash->{'campo'});
     $self->setSubcampo($data_hash->{'subcampo'});
+	utf8::encode($data_hash->{'dato'});
     $self->setDato($data_hash->{'dato'});
     $self->save();
 }
