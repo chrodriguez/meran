@@ -13,7 +13,7 @@ function modificarDatosDeUsuario(){
 	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
-	objAH.nro_socio= usuario.ID;
+	objAH.nro_socio= USUARIO.ID;
     nro_socio_temp = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
 	objAH.tipoAccion= 'MODIFICAR_USUARIO';
 	objAH.sendToServer();
@@ -74,7 +74,7 @@ function modificarPermisos(){
 	objAH=new AjaxHelper(updateModificarPermisos);
 	objAH.debug= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.usuario= usuario.ID;
+	objAH.usuario= USUARIO.ID;
 	objAH.tipoAccion= 'MOSTRAR_PERMISOS';
 	objAH.sendToServer();
 }
@@ -109,7 +109,7 @@ function guardarPermisos(){
 		objAH.debug= true;
 		objAH.tipoAccion= 'GUARDAR_PERMISOS';
 		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.nro_socio= usuario.ID;
+		objAH.nro_socio= USUARIO.ID;
 		objAH.array_permisos= array;
 		objAH.sendToServer();
  	}
@@ -210,7 +210,7 @@ function eliminarUsuario(){
 		objAH=new AjaxHelper(updateEliminarUsuario);
 		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 		objAH.debug= true;
-		objAH.nro_socio= usuario.ID;
+		objAH.nro_socio= USUARIO.ID;
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
 
@@ -287,7 +287,7 @@ function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 	objAH.newpassword= claveUsuario;
 	objAH.newpassword1= confirmeClave;
     objAH.actualPassword= actualPassword;
-	objAH.usuario= usuario.ID;
+	objAH.usuario= USUARIO.ID;
 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
 	//se envia la consulta
 	objAH.sendToServer();
@@ -307,7 +307,7 @@ function resetPassword(claveUsuario, confirmeClave){
     objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.newpassword= claveUsuario;
     objAH.newpassword1= confirmeClave;
-    objAH.usuario= usuario.ID;
+    objAH.usuario= USUARIO.ID;
     objAH.tipoAccion= 'RESET_PASSWORD';
     //se envia la consulta
     objAH.sendToServer();
@@ -395,7 +395,7 @@ function agregarAutorizado(){
         objAH=new AjaxHelper(updateAgregarAutorizado);
         objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
         objAH.debug= true;
-        objAH.nro_socio= usuario.ID;
+        objAH.nro_socio= USUARIO.ID;
         objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
         objAH.sendToServer();
 
