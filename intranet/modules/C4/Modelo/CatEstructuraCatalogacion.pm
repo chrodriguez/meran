@@ -110,8 +110,6 @@ sub modificar{
 #         $self->setReferencia($data_hash->{'referencia'});
 #         $self->setNivel($data_hash->{'nivel'});
 #         $self->setObligatorio($data_hash->{'obligatorio'});
-        $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
-        $self->setVisible($data_hash->{'visible'});
     
 #         if($self->tieneReferencia){
 #             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
