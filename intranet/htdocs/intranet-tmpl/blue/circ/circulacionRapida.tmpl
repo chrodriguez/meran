@@ -199,8 +199,8 @@ $(document).ready(function() {
 				C&oacute;digo de Barras:
 			</label>
 		 	<input type="text" id="barcode" value="" tabindex='2'>
-			<input type="text" id="barcodePrestado" value="" tabindex='3'>
-			<input type='hidden' id='barcode_hidden' value='' >
+			<input type="text" id="barcodePrestado" value="" tabindex='2'>
+			<input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
 		</div>
 	</li>
 	<li>
@@ -208,7 +208,7 @@ $(document).ready(function() {
 			<label for="usuario" style="float: left; width:37%" >
 				Usuario:
 			</label>
-		 	<input type='text' id='usuario' value='' tabindex='4' style="float: left">
+		 	<input type='text' id='usuario' value='' tabindex='3' style="float: left">
 			<input type='hidden' id='nro_socio_hidden' value=''>
 			<span id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></span>
 			<input 	type="button" id="divAgregarAutorizado" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" 
