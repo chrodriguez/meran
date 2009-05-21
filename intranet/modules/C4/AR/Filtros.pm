@@ -75,7 +75,7 @@ sub link_to {
 		$link .= " Title='".$title."'";
 	}
 
-	$link .= ">";
+	$link .= " tabindex='-1'>";
 	$link .= $text."</a>"; 
 
 #  	C4::AR::Debug::debug("url: ".$url);
@@ -127,7 +127,7 @@ sub setComboLang {
 
     $html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";   
     $html .="<input id='url' name='url' type='hidden' value=''>";
-    $html .="<select id='language' onChange='cambiarIdioma()'>";
+    $html .="<select id='language' onChange='cambiarIdioma()' tabindex='-1'>";
 
     for($i=0;$i<scalar(@array_lang);$i++){
         if($session->param('locale') eq @array_lang[$i]){

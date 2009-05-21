@@ -593,22 +593,27 @@ sub _verificaciones {
 	$msg_object->{'tipo'}=$tipo;
 
 	my $dateformat=C4::Date::get_date_format();
+    my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-
-open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
-print A "tipo: $tipo\n";
-print A "id2: $id2\n";
-print A "id3: $id3\n";
-print A "socio: $nro_socio\n";
-print A "tipo_prestamo: $tipo_prestamo\n";
-
-#Se verifica que el usuario sea Regular
-	if( !$socio->esRegular ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
-	print A "Entro al if de regularidad\n";
-	}
+    if ($socio){
+    
+        open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
+        print A "tipo: $tipo\n";
+        print A "id2: $id2\n";
+        print A "id3: $id3\n";
+        print A "socio: $nro_socio\n";
+        print A "tipo_prestamo: $tipo_prestamo\n";
+        
+    #Se verifica que el usuario sea Regular
+	    if( !$socio->esRegular ){
+		    $msg_object->{'error'}= 1;
+		    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
+	    print A "Entro al if de regularidad\n";
+	    }
+    }else{
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$nro_socio]} ) ;
+    }
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && (!$socio->getCumple_requisito) ){

@@ -4,7 +4,7 @@
         <div class="tdRight">
             [% IF loggedinusername %]
                   <h2 class="login" id="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> 
-                           [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1>Salir</a>]
+                           [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
                   </h2>
             [% ELSE %]
                <p class="login">
@@ -16,7 +16,7 @@
 
 
 
-      <ul id="menu">
+      <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
             <li>
                 [% PERL %]

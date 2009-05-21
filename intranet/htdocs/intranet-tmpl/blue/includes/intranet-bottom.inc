@@ -19,7 +19,7 @@
 	
 </table>
 
-<a class="inputFontNormal" href="#">Ir Arriba...</a>
+<a class="inputFontNormal" href="#" tabindex='-1'>Ir Arriba...</a>
 </td>
 </tr></table>
 </body>

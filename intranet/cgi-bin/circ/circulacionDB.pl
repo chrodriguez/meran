@@ -18,8 +18,8 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $loggedinuser= $userid;
 
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
-my $tipoAccion= $obj->{'tipoAccion'}||"";
-my $nro_socio= $obj->{'nro_socio'};
+my $tipoAccion= C4::AR::Utilidades::trim($obj->{'tipoAccion'})||"";
+my $nro_socio= C4::AR::Utilidades::trim($obj->{'nro_socio'});
 C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
 C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
