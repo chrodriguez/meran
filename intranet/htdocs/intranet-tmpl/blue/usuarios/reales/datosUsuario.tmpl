@@ -30,7 +30,7 @@ function mostrarHistorialDePrestamos(){
 function updateMostrarHistorialDePrestamos(responseText){
 	$('#historialPrestamos').html(responseText);
 	zebra('tablaHistorialPrestamos');
-	$('#historialPrestamos').show();
+
 }
 
 
@@ -168,9 +168,28 @@ function updateDetalleSanciones(responseText){
     $('#sanciones').html(responseText);
 }
 //**********************************Fin**Para manejar la circulacion********************************************
+    function makeToggle(container_class,trigger,afterToggleFunction){
+
+        $("."+container_class).hide();
+        $("h2."+trigger).toggle(function(){
+            if (afterToggleFunction != null)
+                afterToggleFunction();
+            $(this).addClass("active"); 
+            }, function(){
+                $(this).removeClass("active");
+        });
 
 
-$(document).ready(function() {
+        $("h2."+trigger).click(function(){
+
+            $(this).next("."+container_class).slideToggle("fast");
+// SI ACA NO HAY ERROR, SE ROMPE :( en historial de prestamos, muestra y oculta de nuevo
+            $.scrollTo($(this).next("."+container_class));
+        });
+
+    }
+
+$(document).ready(function(){
 
 // 	zebra("tablaResult");
 	
@@ -180,13 +199,8 @@ $(document).ready(function() {
     USUARIO.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 
-	$("#historialPrestamosToggle").toggle(	function(){
-							$('#historialPrestamos').slideUp('slow');
-						},
-						function(){
-							$('#historialPrestamos').slideDown('slow');
-						}
-	);
+    makeToggle('toggle_container','trigger',mostrarHistorialDePrestamos);
+
 
 });
 
@@ -196,8 +210,7 @@ $(document).ready(function() {
 <div id="confirmar_div"></div>
 <br>
 
-<div style="clear:both">
-
+<div>
 	<!-- 	DETALLE USUARIO -->
 	<div id="detalleUsuario"></div>
 		
@@ -210,15 +223,17 @@ $(document).ready(function() {
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
 	
-	
-	<div id="historialPrestamosToggle" class="click" style="width: 10px; ">[-]</div>
-	<!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
-	<div id="historialPrestamos"></div>
-    <p align="center">
-        <div class="center click" onClick="mostrarHistorialDePrestamos()" >
-            [% "Historial de Pr&eacute;stamos" | i18n %]
+    <div>
+        <h2 class="trigger">
+            <a href="#">
+                    [% "Historial de Pr&eacute;stamos" | i18n %]
+            </a>
+        </h2>
+	    <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
+	    <div class="toggle_container" style="display:none" >
+            <div id="historialPrestamos" class="block"></div>
         </div>
-    </p>
+    </div>
 
 </div>
 

@@ -64,7 +64,7 @@ function consultar(){
 	<tr>
 	  	<td  class=inputFontNormal>[% "Seleccione una fecha de inicio:" | i18n %]</td>
 	  	<td  class=inputFontNormal>
-                    <input id="fechaIni" class="inputFontNormal"> 
+                    <input type="text" id="fechaIni" class="inputFontNormal"> 
 	  	</td>
 	 	<td></td>
 	<tr>
@@ -72,7 +72,7 @@ function consultar(){
 	<tr>
 	  	<td  class=inputFontNormal>[% "Seleccione una fecha de Fin:" | i18n %] </td>	
 	  	<td  class=inputFontNormal>
-			<input id="fechaFin" class="inputFontNormal"> 
+			<input id="fechaFin" class="inputFontNormal" type="text" > 
 		</td>
           	<td colspan=2 align="center">
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">

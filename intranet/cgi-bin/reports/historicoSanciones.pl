@@ -44,7 +44,7 @@ my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
 #$template->param( todaydate => format_date($today,$dateformat));
-$t_params->{'todaydate'}=format_date($today,$dateformat);
+$t_params->{'todaydate'}=C4::AR::Date::format_date($today,$dateformat);
 
 #Select de usuarios
 my $CGIuser=C4::AR::Utilidades::generarComboDeSocios();

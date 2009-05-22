@@ -21,6 +21,11 @@
     }
 
 
+$(document).ready(function(){
+
+        makeToggle('toggle_container','trigger',null);
+
+});
 
 
 </script>
@@ -66,11 +71,35 @@
 
                     [% "Documento:" | i18n %]
                             <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+
+                    [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+                        [% "Tarjeta de identificaci&oacute;n :" | i18n %]
+                                <b> [% socio.getNro_socio %]</b><br>
+                    [% END %]
+            [% IF socio.tieneAutorizado %]
+                <br><br>
+                <div class="authorizedBack">
+                            <span class="type">Nombre y Apellido del autorizado:</span>
+                                <b> [% socio.getNombre_apellido_autorizado%]</b>
+                            <br>
+                            <span class="type">DNI del autorizado:</span>
+                                <b> [% socio.getDni_autorizado %]</b>
+                            <br>
+                            <span class="type">Tel&eacute;fono del autorizado:</span>
+                                <b> [% socio.getTelefono_autorizado %]</b>
+                            <br>
+                </div>
+            [% END %]
+                    <br><br><br>
+        <h2 class="trigger">
+            <a href="#">[% "Datos secundarios" | i18n %]</a>
+        </h2>
+
+        <div class="toggle_container block" style="display:none">
                     [% "Fecha de nacimiento:" | i18n %]
                             <b> [% socio.persona.getNacimiento %]</b><br>
                     [% "Sexo:" | i18n %]    
-                            <b> [% socio.persona.getSexo %]</b><br>
-                                                
+                            <b> [% socio.persona.getSexo %]</b>
                     [% IF socio.persona.getEelefono %]
                             <div class="tel">
                                     <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
@@ -90,10 +119,7 @@
                                     <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
                     [% END %]
                     <br>
-            
-                    [% "Tarjeta de identificaci&oacute;n :" | i18n %]
-                                    <b> [% socio.getNro_socio %]</b><br>
-            
+
                     [% "Legajo :" | i18n %]
                                     <b> [%  socio.persona.getNro_documento %]</b><br>
 
@@ -120,24 +146,11 @@
                                 </b>
                             </center>
                     [% END %]
-                    [% IF socio.tieneAutorizado %]
-                    <div class="authorizedBack">
-                                <span class="type">Nombre y Apellido del autorizado:</span>
-                                    <b> [% socio.getNombre_apellido_autorizado%]</b>
-                                <br>
-                                <span class="type">DNI del autorizado:</span><b>
-                                    <b> [% socio.getDni_autorizado %]</b>
-                                <br>
-                                <span class="type">Tel&eacute;fono del autorizado:</span><b>
-                                    <b> [% socio.getTelefono_autorizado %]</b>
-                                <br>
-                    </div>
-                    [% END %]
-            
-            </div>
-            
-            </div>  <!--end vcard-->
-            
+       </div>
+
+      </div> <!-- end nonTrivialInfo -->
+
+</div> 
             <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
             <ul class = "listaMenuBotones" >
 					<li>

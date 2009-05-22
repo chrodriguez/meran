@@ -61,14 +61,14 @@ function consultar(){
 			</td>
 
 			<td valign= "top" class=inputFontNormal><br><br>
-				<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="
+				<input type="text" id="fechaIni" class="inputFontNormal" name="fechaIni" value="
 			             [% IF fechaIni %]
                                         [% fechaIni  %]
                                      [% ELSE %]
                                         [% todaydate %]
                                      [% END %]">
 				<br><br>
-				<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="
+				<input type="text" id="fechaFin" class="inputFontNormal" name="fechaFin" value="
                                     [% IF fechaIni %]
                                         [% fechaIni  %]
                                     [% ELSE %]
