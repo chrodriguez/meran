@@ -39,9 +39,6 @@
                 <td>
                 <a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
                     [% prestamo.nivel3.nivel1.getTitulo %]
-                    <!--[% IF unititle %]
-                        :&nbsp;[% HTML.escape(unititle) %]
-                    [% END %]-->
                 </a>
 		</td>
             	<td>
@@ -56,7 +53,7 @@
                 [% prestamo.nivel3.getBarcode %]</a>
                 </td>
           	<td align="center">
-			            [% IF prestamo.getFecha_prestamo %] 
+			[% IF prestamo.getFecha_prestamo %] 
                 [% prestamo.getFecha_prestamo_formateada %]
             [% ELSE %]
                 - 

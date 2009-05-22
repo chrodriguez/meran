@@ -125,3 +125,21 @@ function CrearAutocompleteBarcodesPrestados(options){
 					});	
 }
 
+function CrearAutocompleteTemas(options){
+    _CrearAutocomplete({
+							IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_temas', 
+							callBackFunction: options.callBackFunction,
+					});	
+}
+
+function CrearAutocompleteEditoriales(options){
+    _CrearAutocomplete({
+							IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_editoriales', 
+							callBackFunction: options.callBackFunction,
+					});	
+}
+

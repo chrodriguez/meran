@@ -6,9 +6,9 @@
 
 function detalleDelUsuario(){
 	var nro_socio= $('#nro_socio_hidden').val();
-	usuario= new objeto_usuario();
-	usuario.text= $('#usuarioAutocomplete').val();
-	usuario.ID= nro_socio;
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#usuarioAutocomplete').val();
+	USUARIO.ID= nro_socio;
 	//detalleUsuario esta implementado en circulacion,js
 	detalleUsuario(nro_socio);
 	detallePrestamos(nro_socio, updateInfoPrestamos);
@@ -21,6 +21,12 @@ $(document).ready(function() {
 								IdInputHidden: 'nro_socio_hidden', 
 								callBackFunction: detalleDelUsuario
 						});
+
+	//se crea el autocomplete para buscar por codigo de barras
+	CrearAutocompleteBarcodesPrestados({	IdInput: 'barcode', 
+											IdInputHidden: 'nro_socio_hidden', 
+											callBackFunction: detalleDelUsuario
+										});
 });
 
 /*
@@ -81,6 +87,31 @@ function updateInfoPrestamosConChck(responseText){
 		<td align="center">
 			<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
 			<input id="nro_socio_hidden" type="hidden">
+		</td>
+		<td width="1%">&nbsp;</td>
+	</tr>
+</table>
+</div>
+
+<div id="buscarCodigoDeBarras">
+<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
+	<tr class="tablaresultadoTitle">
+		<td align="left" valign="top">
+		<img src="[% themelang %]/images/izquierda.png">
+		</td>
+		<td>
+			<b>Ingrese el código de barras</b>
+		</td>
+		<td valign="top" align="right">
+		<img src="[% themelang %]/images/derecha.png">
+		</td>
+	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
+	<tr>
+		<td width="1%">&nbsp;</td>
+		<td align="center">
+			<input id="barcode" type="text" class="inputFontNormal" size="40">
+			<input id="barcode_hidden" type="hidden">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>

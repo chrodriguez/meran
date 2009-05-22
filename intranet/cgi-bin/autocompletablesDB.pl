@@ -61,6 +61,7 @@ elsif ($accion eq 'autocomplete_editoriales'){
 
      $result = C4::AR::Utilidades::autocompleteEditoriales($string);
 }
+
 C4::Output::printHeader($session);
 print $result;
 

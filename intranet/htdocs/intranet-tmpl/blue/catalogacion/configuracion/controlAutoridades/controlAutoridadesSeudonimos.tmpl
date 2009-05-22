@@ -10,7 +10,6 @@
 <script src="/includes/jquery/jquery.autocomplete.js"></script>
 <link href="/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">-->
 
-
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
 
@@ -51,6 +50,7 @@ function consultarTablaSeudonimos(seudonimo){
 	var tabla= $("#tabla").val();
 
 	objAH=new AjaxHelper(updateConsultarTablaSeudonimos);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'consultaTablasSeudonimos';
 	objAH.tabla= tabla;
@@ -71,7 +71,7 @@ function updateConsultarTablaSeudonimos(responseText){
 				});
 }
 
-
+/*
 function AutocompleteSeudonimos(idInput, tipo, flag){
 	// q= valor de campoHelp
 	$("#"+idInput).search();
@@ -102,7 +102,7 @@ function AutocompleteSeudonimos(idInput, tipo, flag){
 		}
 	});
 }
-
+*/
 
 //*********************************************Objeto Sinonimo*************************************************
 
@@ -162,7 +162,6 @@ function mapToTextArea(idTextArea, vector){
 
 function popSeudonimo(){
 	var obj= objects_array.pop();
-// 	alert('tipoItem: ' + obj.text + ' ID: ' + obj.ID);
 	mapToTextArea('textAreaSeudonimos', objects_array);
 	//si se vacia, deshabilito el boton pop
 	if(objects_array.length == 0){
@@ -189,16 +188,17 @@ function guardarDatos(){
 	//validar datos
 	var tabla= $('#tabla').val();
 	
-	var seudonimosJSON;
+ 	var seudonimosJSON;
 	//pasa el arreglo a formato json
-	seudonimosJSON=JSONstring.make(objects_array);
+ 	seudonimosJSON=JSONstring.make(objects_array);
 
 	objAH=new AjaxHelper(updateGuardarDatos);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSeudonimos';
 	objAH.tabla= tabla;
 	objAH.id= seudonimo_selected.ID;
-	objAH.seudonimos= seudonimosJSON;
+ 	objAH.seudonimos= seudonimosJSON;
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -212,6 +212,7 @@ function deleteSeudonimo(idDelete){
 	if (is_confirmed) {
 	
 		objAH=new AjaxHelper(updateDeleteSeudonimo);
+		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSeudonimos';
 		objAH.tabla= tabla;
@@ -234,6 +235,45 @@ function updateDeleteSeudonimo(responseText){
 
 //****************************************Fin****ABM Seudonimos************************************************
 
+function crearObjeto(idInput, idInputHidden, flag){
+/*@params idInput, idInputHidden, flag
+*/
+	var id= $('#'+idInputHidden).val();
+	var text= $('#'+idInput).val();
+	//creo un objeto para la autoridad con la q se va a trabajar
+	seudonimo= new object_seudonimo(text, id);
+
+	if(flag != 'seudonimo'){
+		//creo un objeto para la autoridad con la q se va a trabajar
+		seudonimo_selected= new object_seudonimo(text, id);
+		//traigo info de seudonimos de la autoridad con la que se esta trabajando
+		consultarTablaSeudonimos(id);
+	}
+}
+
+function onCompleteTemas(){
+	crearObjeto('search_temas', 'search_temas_hidden', 'NULL');
+}
+
+function onCompleteTemasSeudonimo(){
+	crearObjeto('search_tema_seudonimo', 'search_tema_seudonimo_hidden', 'seudonimo');
+}
+
+function onCompleteAutores(){
+	crearObjeto('search_autores', 'search_autores_hidden', 'NULL');
+}
+
+function onCompleteAutoresSeudonimo(){
+	crearObjeto('search_autor_seudonimo', 'search_autor_seudonimo_hidden', 'seudonimo');
+}
+
+function onCompleteEditoriales(){
+	crearObjeto('search_editoriales', 'search_editoriales_hidden', 'NULL');
+}
+
+function onCompleteEditorialesSeudonimo(){
+	crearObjeto('search_editorial_seudonimo', 'search_editorial_seudonimo_hidden', 'seudonimo');
+}
 
 $(document).ready(function(){
 	// Help
@@ -242,14 +282,48 @@ $(document).ready(function(){
 						$("#topichelp").slideToggle('fast');
 					});
 
-	AutocompleteSeudonimos('search_temas','autocompleteTemas','');
-	AutocompleteSeudonimos('search_tema_seudonimo','autocompleteTemas','seudonimo');
+// 	AutocompleteSeudonimos('search_temas','autocompleteTemas','');
+	CrearAutocompleteTemas({	IdInput: 'search_temas', 
+								IdInputHidden: 'search_temas_hidden', 
+								callBackFunction: onCompleteTemas,
+						});
+
+// 	AutocompleteSeudonimos('search_tema_seudonimo','autocompleteTemas','seudonimo');
+
+	CrearAutocompleteTemas({	IdInput: 'search_tema_seudonimo', 
+								IdInputHidden: 'search_tema_seudonimo_hidden', 
+								callBackFunction: onCompleteTemasSeudonimo,
+						});
+
  	$('#content_search_temas').hide();
-	AutocompleteSeudonimos('search_autores','autocompleteAutores','');
-	AutocompleteSeudonimos('search_autor_seudonimo','autocompleteAutores','seudonimo');
+
+
+// 	AutocompleteSeudonimos('search_autores','autocompleteAutores','');
+	CrearAutocompleteAutores({	IdInput: 'search_autores', 
+								IdInputHidden: 'search_autores_hidden', 
+								callBackFunction: onCompleteAutores,
+							});
+
+// 	AutocompleteSeudonimos('search_autor_seudonimo','autocompleteAutores','seudonimo');
+	CrearAutocompleteAutores({	IdInput: 'search_autor_seudonimo', 
+								IdInputHidden: 'search_autor_seudonimo_hidden', 
+								callBackFunction: onCompleteAutoresSeudonimo,
+						});
+
  	$('#content_search_autores').hide();
-	AutocompleteSeudonimos('search_editoriales','autocompleteEditoriales','');
-	AutocompleteSeudonimos('search_editorial_seudonimo','autocompleteEditoriales','seudonimo');
+
+// 	AutocompleteSeudonimos('search_editoriales','autocompleteEditoriales','');
+	CrearAutocompleteEditoriales({	IdInput: 'search_editoriales', 
+									IdInputHidden: 'search_editoriales_hidden', 
+									callBackFunction: onCompleteEditoriales,
+					});
+
+// 	AutocompleteSeudonimos('search_editorial_seudonimo','autocompleteEditoriales','seudonimo');
+	CrearAutocompleteEditoriales({	IdInput: 'search_editorial_seudonimo', 
+									IdInputHidden: 'search_editorial_seudonimo_hidden', 
+									callBackFunction: onCompleteEditorialesSeudonimo,
+					});
+
  	$('#content_search_editoriales').hide();	
 
 
@@ -311,21 +385,39 @@ $(document).ready(function(){
 
 	<div id="content_search_autores">
 		<li>Autores:</li>
-		<li><input id="search_autores" type="text" size="50"></li>
+		<li>
+				<input id="search_autores" type="text" size="50">
+				<input id="search_autores_hidden" type="hidden">
+		</li>
 		<li>Autor Seud&oacute;nimo:</li>
-		<li><input id="search_autor_seudonimo" type="text" size="50"></li>
+		<li>	
+				<input id="search_autor_seudonimo" type="text" size="50">
+				<input id="search_autor_seudonimo_hidden" type="hidden">
+		</li>
 	</div>
 	<div id="content_search_temas">
 		<li>Temas:</li>
-		<li><input id="search_temas" type="text" size="50"></li>
+		<li>
+				<input id="search_temas" type="text" size="50">
+				<input id="search_temas_hidden" type="hidden">
+		</li>
 		<li>Tema Seud&oacute;nimo:</li>
-		<li><input id="search_tema_seudonimo" type="text" size="50"></li>
+		<li>
+				<input id="search_tema_seudonimo" type="text" size="50">
+				<input id="search_tema_seudonimo_hidden" type="hidden">
+		</li>
 	</div>
 	<div id="content_search_editoriales">
 		<li>Editoriales:</li>
-		<li><input id="search_editoriales" type="text" size="50"></li>
+		<li>
+				<input id="search_editoriales" type="text" size="50">
+				<input id="search_editoriales_hidden" type="hidden">
+		</li>
 		<li>Editorial Seud&oacute;nimo:</li>
-		<li><input id="search_editorial_seudonimo" type="text" size="50"></li>
+		<li>
+				<input id="search_editorial_seudonimo" type="text" size="50">
+				<input id="search_editorial_seudonimo_hidden" type="hidden">
+		</li>
 	</div>
 	<li>
 		<input id="push" type="button" onClick="pushSeudonimo();" value=">>" title="Agregar Seud&oacute;nimo"> 

@@ -38,6 +38,7 @@
 	background : Window url('indicator.gif') right center no-repeat;
 }
 
+/*para configuar el colo de fondo del item seleccionado en la lista del Autocomplete*/
 .ac_over {
 	/*background-color: #0A246A;*/
 	background-color: white;

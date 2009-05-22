@@ -7,6 +7,14 @@ function clearInput(){
 
 var objAH;//Objeto AjaxHelper.
 
+
+function detalleDelUsuario(){
+	var nro_socio= $('#nro_socio_hidden').val();
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#campoUsuario').val();
+	USUARIO.ID= nro_socio;
+}
+
 $(document).ready(function() {
 	
 	CrearAutocompleteUsuarios({	IdInput: 'campoUsuario', 
@@ -15,12 +23,6 @@ $(document).ready(function() {
 						});
 });
 
-function detalleDelUsuario(){
-	var nro_socio= $('#nro_socio_hidden').val();
-	USUARIO= new objeto_usuario();
-	USUARIO.text= $('#campoUsuario').val();
-	USUARIO.ID= nro_socio;
-}
 
 </script>
 

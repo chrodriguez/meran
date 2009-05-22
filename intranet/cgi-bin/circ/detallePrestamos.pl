@@ -11,11 +11,11 @@ use Date::Manip;
 my $input=new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
-			template_name	=> 'circ/detallePrestamos.tmpl',
-			query		=> $input,
-			type		=> "intranet",
-			authnotrequired	=> 0,
-			flagsrequired	=> { circulate => 1 },
+																	template_name	=> 'circ/detallePrestamos.tmpl',
+																	query		=> $input,
+																	type		=> "intranet",
+																	authnotrequired	=> 0,
+																	flagsrequired	=> { circulate => 1 },
     });
 
 my $obj=$input->param('obj');
@@ -24,8 +24,10 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $nro_socio= $obj->{'nro_socio'};
 my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
-
+C4::AR::Debug::debug("detallePrestamos.pl => nro_socio: ".$nro_socio);
 $t_params->{'PRESTAMOS'}= $prestamos;
+C4::AR::Debug::debug("detallePrestamos.pl => prestamos: ".$prestamos);
+C4::AR::Debug::debug("detallePrestamos.pl => cant_prestamos: ".scalar(@$prestamos));
 $t_params->{'prestamos_cant'}= scalar(@$prestamos);
 
 my $vencidos=0;

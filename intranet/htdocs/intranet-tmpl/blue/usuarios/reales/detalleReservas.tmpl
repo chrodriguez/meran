@@ -31,9 +31,12 @@
 	[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 		<tr class="inputFontNormal" align="center">
 			<td height=25>&nbsp;</td>
-	
 			<td>
-				<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
+		[% IF circularDesdeDetalleUsuario %]
+			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
+		[% ELSE %]
+			[% 'NO SE PERMITE CIRCULAR' | i18n %]
+		[% END %] <!--END IF permiso_para_circular -->
 			</td>
 	
 			<td width="16%">

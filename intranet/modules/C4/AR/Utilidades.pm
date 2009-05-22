@@ -2133,7 +2133,6 @@ sub temasAutocomplete{
                 $texto.=$separador.$tema->{$valor};
             }
         }
-    #   $textout.=$tema->{'nombre'}."|".$tema->{'id'}."\n";
         $textout.=$texto."|".$tema->{'id'}."\n";
         $texto="";
     }
@@ -2184,7 +2183,8 @@ sub barcodePrestadoAutocomplete{
 
     if ($cant > 0){
         foreach my $prestamo (@$circ_prestamo_array_ref){
-            $textout.= $prestamo->nivel3->getBarcode."|".$prestamo->nivel3->getBarcode."\n";
+			#se muestra el barcode, pero en el hidden queda el usuario al que se le realizo el prestamo
+            $textout.= $prestamo->getNro_socio."|".$prestamo->nivel3->getBarcode."\n";
         }
     }
     return $textout;

@@ -48,16 +48,18 @@ function updateObtenerTiposDePrestamos(responseText){
 	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
 }
 
-function realizarAccion(){
+function realizarAccionCircRapida(){
 
 	objAH=new AjaxHelper(updateRealizarAccion);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio= $('#nro_socio_hidden').val();
-	objAH.barcode= $('#barcode_hidden').val();
+	objAH.barcode= $('#barcode').val();
+	if($('#operacion').val() == 'devolver'){
+		$('#barcodePrestado').val();
+	}
 	objAH.operacion= $('#operacion').val();
 	objAH.tipoPrestamo= $('#comboTipoPrestamo').val();
-// 	objAH.autorizado= $('#operacion').val();
 	objAH.tipoAccion= "CIRCULACION_RAPIDA";
 	//se envia la consulta
 	objAH.sendToServer();
@@ -87,7 +89,12 @@ function updateRealizarAccion(responseText){
 
 function tieneApoderado(){
 	//fijo el nro_socio global para la ventana de agregarAutorizado
-	NRO_SOCIO_AUTH=  $('#nro_socio_hidden').val();
+// FIXME y esto?
+	NRO_SOCIO_AUTH=  $('#nro_socio_hidden').val(); 
+	var nro_socio= $('#nro_socio_hidden').val();
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#usuarioAutocomplete').val();
+	USUARIO.ID= nro_socio;
 
 	objAH=new AjaxHelper(updateTieneAutorizado);
 	objAH.debug= true;
@@ -109,6 +116,7 @@ function updateTieneAutorizado(responseText){
 
 	$('#aceptar').focus();
 	refreshTipoPrestamo();
+	detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 }
 
 function onChangeOperacion(){
@@ -182,6 +190,10 @@ $(document).ready(function() {
 	</tr>
 </table>
 
+<br>
+<div id="confirmar_div"></div>
+<br>
+
 <ul>
 	<li>
 		<label for="operacion" style="float: left; width:15%" >
@@ -199,8 +211,10 @@ $(document).ready(function() {
 				C&oacute;digo de Barras:
 			</label>
 		 	<input type="text" id="barcode" value="" tabindex='2'>
-			<input type="text" id="barcodePrestado" value="" tabindex='2'>
 			<input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+			<input type="text" id="barcodePrestado" value="" tabindex='2'>
+			<!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+			<input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
 		</div>
 	</li>
 	<li>
@@ -217,6 +231,10 @@ $(document).ready(function() {
 	</li>
 </ul>
 
-<center><input type="button" value="Aceptar" id="aceptar" onClick="realizarAccion()" tabindex='4'></center>
+<br>
+<!-- DETALLE DE PRESTAMOS -->
+<div id="tablaPrestamos"></div>
+
+<center><input type="button" value="Aceptar" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'></center>
 
 [% INCLUDE 'intranet-bottom.inc' %]

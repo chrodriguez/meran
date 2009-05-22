@@ -30,8 +30,7 @@ my $input = new CGI;
 
 my $theme = $input->param('theme') || "blue";
 my $campoIso = $input->param('code') || ""; 
-my ($template, $session, $t_params)
-    = get_template_and_user( {
+my ($template, $session, $t_params)= get_template_and_user( {
                                 template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.tmpl",
                                 query => $input,
                                 type => "intranet",

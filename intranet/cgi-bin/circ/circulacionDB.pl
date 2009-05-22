@@ -40,7 +40,10 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
         $infoDevRen[$i]->{'id3'}=$prestamo->getId3;
  		$infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
-  		$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->getCompleto;
+		if($prestamo->nivel3->nivel1->getAutor){
+			#si tengo el ID del autor lo busco, sino se rompe
+  			$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->getCompleto;
+		}
  		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
   		$infoDevRen[$i]->{'unititle'}="";
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;

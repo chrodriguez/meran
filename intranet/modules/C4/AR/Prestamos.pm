@@ -299,6 +299,7 @@ sub prestarYGenerarTicket{
 # FIXME falta verificar
 
 	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
+C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});
 
 	my @infoTickets;
 	my @infoMessages;
@@ -306,6 +307,9 @@ sub prestarYGenerarTicket{
 	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
 	$params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
 	$params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
+C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
+C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
+C4::AR::Debug::debug("id3: ".$id3);
 	$params->{'id3'}= $id3;
 	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
@@ -489,8 +493,9 @@ sub verificarCirculacionRapida {
 		}
 	}
 	
-	if( !($msg_object->{'error'}) &&  !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
-	#se verifica si la operacion es una devolucion, que EXISTA el USUARIO
+	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
+	#se verifica si la operacion es un prestamo, que EXISTA el USUARIO
+	#si es una devolucion  no importa el usuario ya que lo tengo en el prestamo
 		$msg_object->{'error'}= 1;
 		C4::AR::Debug::debug("verificarCirculacionRapida => no existe el usuario");
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
