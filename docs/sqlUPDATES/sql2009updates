@@ -713,6 +713,9 @@ CREATE TABLE IF NOT EXISTS `cat_editorial`(
 
 ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;
 
+-- Preferencias
+
+UPDATE pref_preferencia_sistema SET `options` = 'tipo_prestamo|descripcion' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultissuetype' LIMIT 1 ;
 
 
 ALTER TABLE `cat_control_seudonimo_autor`
@@ -725,7 +728,7 @@ CHANGE `id2` `id_tema_seudonimo` INT( 11 ) NOT NULL,
 
 ALTER TABLE `cat_control_seudonimo_editorial`
 CHANGE `id2` `id_editorial_seudonimo` INT( 11 ) NOT NULL,
- CHANGE `id` `id_editorial` INT( 11 ) NOT NULL;
+CHANGE `id` `id_editorial` INT( 11 ) NOT NULL;
 
 --para al que le haga falta
 
