@@ -53,6 +53,21 @@ $(document).ready(function() {
 // 	}
 });
 
+function limpiarCampos(side){
+
+    if (side == 'izquierda'){
+        $('#keyword').val('');
+        $('#isbn').val('');
+        $('#dictionary').val('');
+        $('#codBarra').val('');
+        $('#tema').val('');
+        $('#estante').val('');
+    }else{
+        $('#titulo').val('');
+        $('#autor').val('');
+        $('#signatura').val('');
+    }
+}
 
 </script>
 
@@ -70,89 +85,97 @@ $(document).ready(function() {
 		<table width="70%" height="88%" valign="top"  border="0" align="center" cellpadding="0" cellspacing="0" >
 		<tr>
 		<td  valign="top"  align="right"  width="30%">
+    <fieldset>
+        <legend>[% "Busqueda combinada" | i18n %]</legend>
 		<ul id="simple">
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "B&uacute;squeda combinada" | i18n %]</b><br>
-                	<input type="text" id="keyword" size="25" class="inputFontNormal">
+                	<input type="text" id="keyword" size="25" class="inputFontNormal" onkeypress="limpiarCampos('derecha')">
 			<p valign="top" align="right">&nbsp;</p>
 			</li>
-
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+    </fieldset>
+    <br><br>
+    <fieldset>
+        <legend>[% "Busqueda simple" | i18n %]</legend>
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';" >
 			<b>ISBN</b><br>
-                	<input type="text" id="isbn" size="25" class="inputFontNormal" readonly>
+                	<input type="text" id="isbn" size="25" class="inputFontNormal" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 			
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
     			<b>[% "B&uacute;squeda por diccionario" | i18n %]</b><br>
-         		<input class="inputFontNormal" type="text" size="25" id="dictionary" readonly>
+         		<input class="inputFontNormal" type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
 			</li>		
 
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "C&oacute;digo de barras" | i18n %]</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="codBarra" readonly>
+			<input class="inputFontNormal" type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>Tema</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="tema" readonly>
+			<input class="inputFontNormal" type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
+			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "Estantes Virtuales" | i18n %]</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="estante" readonly>
+			<input class="inputFontNormal" type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
 		</ul>
+    </fieldset>
 		</td>
 		<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
   		<td  valign="top" align="right" width="30%">
-		<ul id="combinada">
-			
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-        		<b>[% "Tipo de documento" | i18n %]</b> <br>
-        			[% comboTipoDocumento %]
-			</li>
-
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>T&iacute;tulo</b><br>
-			<input class="inputFontNormal" type="text"  size="25" id="titulo">
-			<p valign="top" align="right">
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="normal" checked>
-                                [% "Normal" | i18n %]
-			<input class="inputFontNormal" name="tipo" type=radio id=tipo value="exacto">
-                                [% "Exacto" | i18n %]
-			</p>
-			</li>
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>Autor</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="autor">
-			</li>
-
-			<li class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
-			<b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="signatura">
-			</li>
-	         	
-		</ul>
-		<td>
-		<tr>
-		</table>
-		<div align ="center">
-
-		<ul>
-			<li>
-			<input type="hidden" name="type" value="intra">
-			<input type="image" alt="Buscar"  src="[% themelang %]/images/boton-buscar.png" onClick="buscar();">
-
-			<input type="image"   src="[% themelang %]/images/vertodos.png" onClick="mostrarEstantes();" >
-		
-			</li>
-		</ul>
-		</div>
-
-	</div>
-</div>
-
+    <fieldset>
+            <legend>[% "Busqueda espec&iacute;fica" | i18n %]</legend>
+		    <ul id="combinada">
+			    
+			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+                    <b>[% "Tipo de documento" | i18n %]</b> <br>
+                        [% comboTipoDocumento %]
+			    </li>
+    
+			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			    <b>T&iacute;tulo</b><br>
+			    <input class="inputFontNormal" type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
+			    <p valign="top" align="right">
+			    <input class="inputFontNormal" name="tipo" type=radio id=tipo value="normal" checked>
+                                    [% "Normal" | i18n %]
+			    <input class="inputFontNormal" name="tipo" type=radio id=tipo value="exacto">
+                                    [% "Exacto" | i18n %]
+			    </p>
+			    </li>
+			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			    <b>Autor</b><br>
+			    <input class="inputFontNormal" type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
+			    </li>
+    
+			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			    <b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
+			    <input class="inputFontNormal" type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
+			    </li>
+	                
+		    </ul>
+		    <td>
+		    <tr>
+		    </table>
+		    <div align ="center">
+    
+		    <ul>
+			    <li>
+			    <input type="hidden" name="type" value="intra">
+			    <input type="image" alt="Buscar"  src="[% themelang %]/images/boton-buscar.png" onClick="buscar();">
+    
+			    <input type="image"   src="[% themelang %]/images/vertodos.png" onClick="mostrarEstantes();" >
+		    
+			    </li>
+		    </ul>
+		    </div>
+    
+	    </div>
+    </div>
+</fieldset> <!-- countournDiv -->
 <div id="resultBusqueda"></div>
 
 <div style="text-align: center; cursor:pointer;">

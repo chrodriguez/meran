@@ -256,36 +256,25 @@ td.abc{
   color: #999999;
 	}	
 
-.tdout{
+.itemLI{
 background-color: #F4F4F4;
 font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
+font-size: 9pt;
 color: #000000;
 font-weight: normal;
-border: #333333; 
-   border-style: dotted; 
+border: #000000; 
+   border-style: none; 
    border-top-width: 0px; 
    border-right-width: 0px; 
-   border-bottom-width: 1px; 
+   border-bottom-width: 0px; 
    border-left-width: 0px;
-   padding: 2px;
+   padding: 0px;
 }
 
 
-
+/* tdhover */
 .tdhover{
-background-color: #EBEAEA;
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
-color: #000000;
-font-weight: normal;
-border: #333333; 
-   border-style: dotted; 
-   border-top-width: 0px; 
-   border-right-width: 0px; 
-   border-bottom-width: 1px; 
-   border-left-width: 0px;
-   padding: 2px;
+background-color: #F4F4E5;
 }
 
 /*.tdout a {display:block;background:#F4F4F4;}*/
