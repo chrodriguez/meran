@@ -3,9 +3,6 @@
 <script src="/intranet-tmpl/blue/includes/circulacion.js"></script>
 <script src="/intranet-tmpl/blue/includes/usuarios/usuariosReales.js"></script>
 
-<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
-[% INCLUDE "AutocompleteHelper.inc" %]
-
 <script language="javascript" type="text/javascript">
 // para la ventana de Agregar Autorizado
 NRO_SOCIO_AUTH=0;
@@ -116,7 +113,6 @@ function updateTieneAutorizado(responseText){
 
 	$('#aceptar').focus();
 	refreshTipoPrestamo();
-	detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 }
 
 function onChangeOperacion(){
@@ -137,6 +133,11 @@ function onChangeOperacion(){
 		$('#barcodePrestado').val('');
 		$('#barcodePrestado').focus();
 		$('#spanComboTipoPrestamo').hide();
+
+		if( $('#usuario').val() !='' ){
+			//se va a devolver algo, se muestra la info de los prestamos del usuario
+			detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+		}
 	}
 }
 
@@ -156,13 +157,39 @@ function refreshTipoPrestamo(){
 	}
 }
 
+/*
+FUNCION REDEFINIDA, se encuentra en circulacion.js 
+*/
+function updateInfoDevRen(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+	
+	for(i=0; i<messageArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+  		setMessages(messageArray[i]);
+	}
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+}
+
+function onCompleteUsuarios(){
+	tieneApoderado();
+	if($('#operacion').val() == 'devolver'){
+	//se va a devolver algo, se muestra la info de los prestamos del usuario
+		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+	}
+}
+
 $(document).ready(function() {
 	$('#operacion').focus();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios({	IdInput: 'usuario', 
 								IdInputHidden: 'nro_socio_hidden', 
-								callBackFunction: tieneApoderado
+								callBackFunction: onCompleteUsuarios,
 						});
 
 	CrearAutocompleteBarcodes({	IdInput: 'barcode', 
