@@ -31,7 +31,7 @@ function mostrarHistorialDePrestamos(){
 function updateMostrarHistorialDePrestamos(responseText){
 	$('#historialPrestamos').html(responseText);
 	zebra('tablaHistorialPrestamos');
-
+	$.scrollTo('#historialPrestamos');
 }
 
 
@@ -43,7 +43,6 @@ function updateMostrarHistorialDePrestamos(responseText){
 function updateInfoDevRen(responseText){
 // 	alert("ejecuto updateInfoDevRen LOCAL!!!");
 	cancelarDiv();
-// 	/*clearMessages*/()
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
@@ -183,8 +182,6 @@ function updateDetalleSanciones(responseText){
 
         $("h2."+trigger).click(function(){
             $(this).next("."+container_class).slideToggle("fast");
-// SI ACA NO HAY ERROR, SE ROMPE :( en historial de prestamos, muestra y oculta de nuevo
-            $.scrollTo($(this).next("."+container_class));
         });
 
     }
@@ -199,7 +196,7 @@ $(document).ready(function(){
     USUARIO.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 
-    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos);
+    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos');
 
 
 });
