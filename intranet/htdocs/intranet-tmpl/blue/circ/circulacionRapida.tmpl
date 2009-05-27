@@ -180,7 +180,30 @@ function onCompleteUsuarios(){
 	if($('#operacion').val() == 'devolver'){
 	//se va a devolver algo, se muestra la info de los prestamos del usuario
 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+		
+	}else if($('#operacion').val() == 'prestar'){
+		esRegular(NRO_SOCIO_AUTH);
 	}
+}
+
+function esRegular(NRO_SOCIO_AUTH){
+	objAH=new AjaxHelper(updateEsRegular);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio= NRO_SOCIO_AUTH;
+	objAH.tipoAccion= "CIRCULACION_RAPIDA_ES_REGULAR";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateEsRegular(responseText){
+	var esRegular= "REGULAR";
+
+	if(responseText == '0'){
+		esRegular= "IRREGULAR";
+	}
+	
+	$('#estadoUsuario').html(esRegular);
 }
 
 $(document).ready(function() {
@@ -250,6 +273,7 @@ $(document).ready(function() {
 				Usuario:
 			</label>
 		 	<input type='text' id='usuario' value='' tabindex='3' style="float: left">
+			<div id="estadoUsuario"></div>
 			<input type='hidden' id='nro_socio_hidden' value=''>
 			<span id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></span>
 			<input 	type="button" id="divAgregarAutorizado" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" 

@@ -216,6 +216,7 @@ sub get_template_and_user {
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
 		$params->{'token'}= $session->param('token');
+		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
 	}
 

@@ -597,18 +597,17 @@ sub _verificaciones {
 
     if ($socio){
     
-        open(A,">>/tmp/debugVerif.txt");#Para debagear en futuras pruebas para saber por donde entra y que hace.
-        print A "tipo: $tipo\n";
-        print A "id2: $id2\n";
-        print A "id3: $id3\n";
-        print A "socio: $nro_socio\n";
-        print A "tipo_prestamo: $tipo_prestamo\n";
+C4::AR::Debug::debug("tipo: $tipo\n");
+C4::AR::Debug::debug("id2: $id2\n");
+C4::AR::Debug::debug("id3: $id3\n");
+C4::AR::Debug::debug("socio: $nro_socio\n");
+C4::AR::Debug::debug("tipo_prestamo: $tipo_prestamo\n");
         
     #Se verifica que el usuario sea Regular
 	    if( !$socio->esRegular ){
 		    $msg_object->{'error'}= 1;
 		    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
-	    print A "Entro al if de regularidad\n";
+C4::AR::Debug::debug("Entro al if de regularidad\n");
 	    }
     }else{
             $msg_object->{'error'}= 1;
@@ -616,10 +615,11 @@ sub _verificaciones {
     }
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && (!$socio->getCumple_requisito) ){
+	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && 
+		(!$socio->getCumple_requisito) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
-	print A "Entro al if de si cumple o no requisito\n";
+C4::AR::Debug::debug("Entro al if de si cumple o no requisito\n");
 	}
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
@@ -627,7 +627,7 @@ sub _verificaciones {
 	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::_verificarMaxTipoPrestamo($nro_socio, $tipo_prestamo) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
-print A "Entro al if que verifica la cantidad de prestamos";
+C4::AR::Debug::debug("Entro al if que verifica la cantidad de prestamos");
 	}
 
 #Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
@@ -635,35 +635,35 @@ print A "Entro al if que verifica la cantidad de prestamos";
 	if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' && _verificarHorario()){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
-print A "Entro al if de prestamos especiales";
+C4::AR::Debug::debug("Entro al if de prestamos especiales");
 	}
 #Se verfica si el usuario esta sancionado
 	my ($sancionado,$fechaFin)= C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
-print A "sancionado: $sancionado ------ fechaFin: $fechaFin\n";
+C4::AR::Debug::debug("sancionado: $sancionado ------ fechaFin: $fechaFin\n");
 	if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
-print A "Entro al if de sanciones";
+C4::AR::Debug::debug("Entro al if de sanciones");
 	}
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
 	if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
-print A "Entro al if de prestamos de sala";
+C4::AR::Debug::debug("Entro al if de prestamos de sala");
 	}
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
-print A "Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo";
+C4::AR::Debug::debug("Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo");
 	}
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
 	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($nro_socio))){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
-print A "Entro al if de maximo de reservas desde OPAC";
+C4::AR::Debug::debug("Entro al if de maximo de reservas desde OPAC");
 	}
 
 
@@ -671,13 +671,11 @@ print A "Entro al if de maximo de reservas desde OPAC";
 	if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
-print A "Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo";
+C4::AR::Debug::debug("Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
 	}
 
-print A "FIN ".$msg_object->{'error'}." !!!\n\n";
-print A "FIN VERIFICACION !!!\n\n";
-# print A "error: $error ---- codMsg: $codMsg\n\n\n\n";
-close(A);
+C4::AR::Debug::debug("FIN ".$msg_object->{'error'}." !!!\n\n");
+C4::AR::Debug::debug("FIN VERIFICACION !!!\n\n");
 
 	return ($msg_object);
 }

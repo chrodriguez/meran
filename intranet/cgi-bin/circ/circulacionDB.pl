@@ -326,3 +326,18 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
     C4::Output::printHeader($session);
 	print $flag;
 }
+elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
+
+	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+
+	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
+
+	my $regular= 1;
+    if ($socio){
+		$regular= $socio->esRegular;
+	}
+		
+	
+    C4::Output::printHeader($session);
+	print $regular;
+}
