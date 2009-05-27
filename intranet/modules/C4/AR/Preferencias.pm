@@ -76,7 +76,6 @@ sub getMenuPreferences{
 }
 
 
-}
 sub getPreferenciaLike {
 
     use C4::Modelo::PrefPreferenciaSistema;
