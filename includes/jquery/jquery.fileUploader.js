@@ -20,7 +20,7 @@
             .append(
 	    $('<input type="hidden" name="nro_socio" value="' + opt.nro_socio + '" />'),	
             $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
-            $('<div class="select" title="upload new picture"></div>').append($('<input id="myUploadFile" class="myUploadFile file" type="file" value="" name="picture"/>')), 
+            $('<div class="select" title="Subir una foto"></div>').append($('<input id="myUploadFile" class="myUploadFile file" type="file" value="" name="picture"/> Subir foto')), 
             $('<ul id="ul_files"></ul>'))
 	);
         init();
