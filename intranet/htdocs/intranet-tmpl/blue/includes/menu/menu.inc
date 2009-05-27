@@ -1,5 +1,4 @@
 <!-- A.3 HEADER BOTTOM -->
-
       <div class="header-bottom">
         <div class="tdRight">
             [% IF loggedinusername %]
