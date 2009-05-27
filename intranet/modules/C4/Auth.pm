@@ -105,6 +105,7 @@ C4::Auth - Authenticates Koha users
 		&getSessionBorrowerNumber
 		&getSessionFlagsRequired
 		&getSessionBrowser
+        &getSessionNroSocio
 		&_generarNroRandom
 		
 );
@@ -126,6 +127,12 @@ sub getSessionIdSocio {
     my ($session) = @_;
 
     return $session->param('id_socio');
+}
+
+sub getSessionNroSocio {
+    my ($session) = @_;
+
+    return $session->param('nro_socio');
 }
 
 sub getSessionPassword {

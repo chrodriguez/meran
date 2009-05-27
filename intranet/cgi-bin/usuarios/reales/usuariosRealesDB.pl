@@ -25,7 +25,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
     my $session = CGI::Session->load();
 
 	my %params;
-	$params{'id_socio'}= $obj->{'usuario'};
+	$params{'nro_socio'}= $obj->{'usuario'};
     $params{'actualPassword'}= $obj->{'actualPassword'};
 	$params{'newpassword'}= $obj->{'newpassword'};
 	$params{'newpassword1'}= $obj->{'newpassword1'};
@@ -67,7 +67,7 @@ Aca se maneja el resteo de password del usuario
 elsif($tipoAccion eq "RESET_PASSWORD"){
 my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
     my %params;
-    $params{'id_socio'}= $obj->{'usuario'};
+    $params{'nro_socio'}= $obj->{'usuario'};
     
     my ($Message_arrayref)= C4::AR::Usuarios::resetPassword(\%params);
     

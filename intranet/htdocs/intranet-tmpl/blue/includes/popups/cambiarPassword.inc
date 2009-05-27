@@ -1,5 +1,5 @@
 <script language="javascript">
-   $.getScript("/intranet-tmpl/blue/includes/md5.js");
+   $.getScript("/includes/md5.js");
 </script>
 
 <!-- ************************************Window Cambiar Password***************************************** -->

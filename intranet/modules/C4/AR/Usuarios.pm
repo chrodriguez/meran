@@ -198,9 +198,9 @@ sub deshabilitarPersona{
 sub resetPassword {
     
     my($params)=@_;
-    my $id_socio = $params->{'id_socio'};
+    my $nro_socio = $params->{'nro_socio'};
     my $msg_object= C4::AR::Mensajes::create();
-    my $socio = getSocioInfo($id_socio);
+    my $socio = getSocioInfoPorNroSocio($nro_socio);
     
 # FIXME esa funcion debe cambiar, porque cambiaron los parametros
 #     $msg_object = _verficarEliminarUsuario($params,$msg_object);
@@ -340,7 +340,7 @@ sub _verificarPassword {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
     }
 
-    if ( !($msg_object->{'error'}) && ( C4::Auth::getSessionIdSocio($params->{'session'}) != $params->{'id_socio'} ) ){
+    if ( !($msg_object->{'error'}) && ( C4::Auth::getSessionNroSocio($params->{'session'}) != $params->{'nro_socio'} ) ){
     #no coincide el usuario logueado con el usuario al que se le va a cambiar la password
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
@@ -356,7 +356,7 @@ sub cambiarPassword {
    
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $socio = C4::Modelo::UsrSocio->new(id_socio => $params->{'id_socio'});
+        my  $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
         if ($socio->load()){
             my $actualPassword = $socio->getPassword;
             my $cambioDePasswordForzado= 1;

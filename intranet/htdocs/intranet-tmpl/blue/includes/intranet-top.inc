@@ -8,8 +8,8 @@
 </script>
 
 [% INCLUDE 'datePicker.inc' %]
-<script src="/includes/jquery/jquery.scrollTo-min.js"></script>
 <script src="/includes/jquery/jquery.js"></script>
+<script src="/includes/jquery/jquery.scrollTo-min.js"></script>
 <script src="/includes/jquery/jquery.menu.js"></script>
 <script src="/includes/md5.js"></script> 
 <!-- para generar la hash de la cache -->

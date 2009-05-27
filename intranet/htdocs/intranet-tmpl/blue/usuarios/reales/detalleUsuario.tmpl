@@ -31,212 +31,213 @@ $(document).ready(function(){
 </script>
 <div class="vcard">
 
-<div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<p class="pagetitle" ><span class="fn">[% firstname %] [% surname %]</span></p>
-</div>
+    <div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	    <p class="pagetitle" >
+            <span class="fn">[% firstname %] [% surname %]</span>
+        </p>
+    </div>
 
-
-<table  cellspacing=0  cellpadding=0 border=0 align=left width="100%" >
-	<tr VALIGN=middle class="tablaresultadoTitle">
-		<td width="1%" align="left" valing="top">
-			<img src="[% themelang %]/images/izquierda.png">
-		</td>
-		<td colspan=3>[% "REGISTRO DEL USUARIO" | i18n %]</td>
-		<td width="1%" valing="top" align="right">
-			<img src="[% themelang %]/images/derecha.png">
-		</td>
-	</tr>
-</table>
-<br><br>
-
-<div class="divDatosUsuario">
-<!-- FIXME y esto??????????????????? -->
-	[% IF error %]
-	    <h2>  [% error_msg %]  </h2>
-		<br>
-	    <a href="/cgi-bin/koha/usuarios/reales/buscarUsuario.pl"> 
-                    [% "Por favor, repita la b&uacute;squeda" | i18n %]
-            </a>	
-	[% ELSE %]
-
-                    [% IF foto_name %]
-                            <img width="96px" height="96px" border="0" src="  [% themelang %]/pictures/[% foto_name %]"><br>
-                    [% END %]
-        
-                    [% "Apellido:" | i18n %]
-                            <b> [% socio.persona.getApellido %] </b><br>
-
-                    [% "Nombre:" | i18n %]
-                            <b> [% socio.persona.getNombre %] </b><br>
-
-                    [% "Documento:" | i18n %]
-                            <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
-
-                    [% IF !(socio.getNro_socio == socio.getNro_documento) %]
-                        [% "Tarjeta de identificaci&oacute;n :" | i18n %]
-                                <b> [% socio.getNro_socio %]</b><br>
-                    [% END %]
-            [% IF socio.tieneAutorizado %]
-                <br><br>
-                <div class="authorizedBack">
-                            <span class="type">Nombre y Apellido del autorizado:</span>
-                                <b> [% socio.getNombre_apellido_autorizado%]</b>
-                            <br>
-                            <span class="type">DNI del autorizado:</span>
-                                <b> [% socio.getDni_autorizado %]</b>
-                            <br>
-                            <span class="type">Tel&eacute;fono del autorizado:</span>
-                                <b> [% socio.getTelefono_autorizado %]</b>
-                            <br>
-                </div>
-            [% END %]
-                    <br><br><br>
-        <h2 class="trigger">
-            <a href="#">[% "Datos secundarios" | i18n %]</a>
-        </h2>
-
-        <div class="toggle_container block" style="display:none">
-                    [% "Fecha de nacimiento:" | i18n %]
-                            <b> [% socio.persona.getNacimiento %]</b><br>
-                    [% "Sexo:" | i18n %]    
-                            <b> [% socio.persona.getSexo %]</b>
-                    [% IF socio.persona.getEelefono %]
-                            <div class="tel">
-                                    <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                            <b>[% socio.persona.getTelefono %]</b><br>
-                            </div>	
-                    [% END %]
-            
-                    [% IF socio.persona.getAlt_telefono %]
-                    <div class="tel">
-                            <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                                        <b>[% socio.persona.getAlt_telefono %]</b><br>
-                    </div>	
-                    [% END %]
-                    
-                    [% IF socio.persona.getEmail %]
-                            E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
-                                    <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
-                    [% END %]
-                    <br>
-
-                    [% "Legajo :" | i18n %]
-                                    <b> [%  socio.persona.getNro_documento %]</b><br>
-
-                    [% "Ciudad :" | i18n %]
-                                    <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-                    [% "Calle :" | i18n %]
-                                    <b> [%  socio.persona.getCalle %]</b><br>
-                    
-                    [% "ID de usuario:" | i18n %]
-                                    <b> [%  socio.nro_socio %]</b><br>
-            
-                    [% "Categor&iacute;a del usuario:" | i18n %]
-                                    <b> [%  socio.categoria.getDescription %]</b><br>
-            
-                    [% "Incorporaci&oacute;n a Biblioteca:" | i18n %]
-                                    <b> [%  socio.ui.getNombre %]</b><br>
-
-
-                    [% IF usercourse %]
-                            <center>
-                                <b>
-                                    [% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]
-                                     [% usercourse %]
-                                </b>
-                            </center>
-                    [% END %]
-       </div>
-
-      </div> <!-- end nonTrivialInfo -->
-
-</div> 
-            <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
-            <ul class = "listaMenuBotones" >
-					<li>
-						<img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
-								src="[% themelang %]/images/botone.png" border="0"">
-						<a class="textOverBoton" onClick="modificarDatosDeUsuario()">Modificar Datos</a>
-					</li>
-                    <li>
-						<img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
-						src="[% themelang %]/images/botone.png" border="0">
-
-						<a class="textOverBoton" href="#" onClick="eliminarUsuario()" >Eliminar Usuario</a>
-                    </li>
-                    <li>
-                        <img  class="botonBehindText"  alt="Agregar Autorizado" 
-                                src="[% themelang %]/images/botone.png" border="0"">
-                        <a class="textOverBoton" onClick="agregarAutorizado()">Agregar Autorizado</a>
-                    </li>
-<!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
-				[% IF nroSocioLoggeado != loggedinusername%]
-					<li>
-							<input type="button" value="Reset Password" onClick="resetPassword()">
-					</li>
-				[% ELSE %]
-					<li>
-							<img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
-									src="[% themelang %]/images/botone.png" border=0>
-
-							<a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password</a>
-					</li>
-				[% END %]
-                    <li>
-						<img class="botonBehindText" alt='[% "Modificar Permisos" | i18n %]'
-								src="[% themelang %]/images/botone.png" border="0">
-
-						<a class="textOverBoton" onClick="modificarPermisos()" >Modificar Permisos</a>
-                    </li>
-                    <li>
-						<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
-									<img class="botonBehindText" alt='[% "Generar Carnet" | i18n %]'
-								src="[% themelang %]/images/botone.png" border="0""> 
-								
-								<a class="textOverBoton" href="#" onClick="formCarnet.submit()" >Generar Carnet</a>
-		
-								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-								<input type=hidden name=token value="[% token %]" >
-		
-						</form>
-                    </li>
-                    <li>
-						<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
-								<img class="botonBehindText" alt='[% "Generar Libre Deuda" | i18n %]' 
-								src="[% themelang %]/images/botone.png" border="0">
-								
-
-								<a class="textOverBoton" href="#" onClick="formLibre.submit()" >Libre Deuda</a>
-		
-								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-								<input type=hidden name=token value="[% token %]" >
-						</form>
-                    </li>
-                    <li>
-            
-						<img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
-						src="[% themelang %]/images/botone.png" border="0">
-						
-						<a class="textOverBoton" href="#" onClick="prestamosInterBibliotecarios()">Prest. Interbibliotecario</a>
-                    </li>             
+    <table  cellspacing=0  cellpadding=0 border=0 align=left width="100%" >
+	    <tr VALIGN=middle class="tablaresultadoTitle">
+		    <td width="1%" align="left" valing="top">
+			    <img src="[% themelang %]/images/izquierda.png">
+		    </td>
+		    <td colspan=3>[% "REGISTRO DEL USUARIO" | i18n %]</td>
+		    <td width="1%" valing="top" align="right">
+			    <img src="[% themelang %]/images/derecha.png">
+		    </td>
+	    </tr>
+    </table>
+    <br><br>
     
-                    [% IF mensaje_error_foto %]	
-                            <li>
-                                    <font color="red">[% mensaje_error_foto %]</font>
-                            </li>
-                    [% END %]
-            
-                    [% IF foto_name %]
-                            <li>
-                                <input type=button class="button" value="Eliminar foto" 
-                                       align=center onClick="eliminarFoto('[% foto_name %] ')">
-                            </li>
-                    [% ELSE %]
-                            <li>
-                                    <div id="uploader"></div>
-                            </li>
-                    [% END %]
-            </ul>
-            </div>
-            <br>
-	[% END %]
+    <div class="divDatosUsuario">
+    <!-- FIXME y esto??????????????????? -->
+	    [% IF error %]
+	        <h2>  [% error_msg %]  </h2>
+		    <br>
+	        <a href="/cgi-bin/koha/usuarios/reales/buscarUsuario.pl"> 
+                        [% "Por favor, repita la b&uacute;squeda" | i18n %]
+            </a>	
+	    [% ELSE %]
+    
+                [% IF foto_name %]
+                        <img width="96px" height="96px" border="0" src="  [% themelang %]/pictures/[% foto_name %]"><br>
+                [% END %]
+    
+                [% "Apellido:" | i18n %]
+                        <b> [% socio.persona.getApellido %] </b><br>
+
+                [% "Nombre:" | i18n %]
+                        <b> [% socio.persona.getNombre %] </b><br>
+
+                [% "Documento:" | i18n %]
+                        <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+
+                [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+                    [% "Tarjeta de identificaci&oacute;n :" | i18n %]
+                            <b> [% socio.getNro_socio %]</b><br>
+                [% END %]
+                [% IF socio.tieneAutorizado %]
+                    <br><br>
+                    <div class="authorizedBack">
+                                <span class="type">Nombre y Apellido del autorizado:</span>
+                                    <b> [% socio.getNombre_apellido_autorizado%]</b>
+                                <br>
+                                <span class="type">DNI del autorizado:</span>
+                                    <b> [% socio.getDni_autorizado %]</b>
+                                <br>
+                                <span class="type">Tel&eacute;fono del autorizado:</span>
+                                    <b> [% socio.getTelefono_autorizado %]</b>
+                                <br>
+                    </div>
+                [% END %]
+        
+            <br><br><br>
+            <h2 class="trigger">
+                <a href="#">[% "Datos secundarios" | i18n %]</a>
+            </h2>
+    
+            <div class="toggle_container">
+                        [% "Fecha de nacimiento:" | i18n %]
+                                <b> [% socio.persona.getNacimiento %]</b><br>
+                        [% "Sexo:" | i18n %]    
+                                <b> [% socio.persona.getSexo %]</b>
+                        [% IF socio.persona.getEelefono %]
+                                <div class="tel">
+                                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                                                <b>[% socio.persona.getTelefono %]</b><br>
+                                </div>	
+                        [% END %]
+                
+                        [% IF socio.persona.getAlt_telefono %]
+                        <div class="tel">
+                                <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
+                                            <b>[% socio.persona.getAlt_telefono %]</b><br>
+                        </div>	
+                        [% END %]
+                        
+                        [% IF socio.persona.getEmail %]
+                                E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
+                                        <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
+                        [% END %]
+                        <br>
+    
+                        [% "Legajo :" | i18n %]
+                                        <b> [%  socio.persona.getNro_documento %]</b><br>
+    
+                        [% "Ciudad :" | i18n %]
+                                        <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
+                        [% "Calle :" | i18n %]
+                                        <b> [%  socio.persona.getCalle %]</b><br>
+                        
+                        [% "ID de usuario:" | i18n %]
+                                        <b> [%  socio.nro_socio %]</b><br>
+                
+                        [% "Categor&iacute;a del usuario:" | i18n %]
+                                        <b> [%  socio.categoria.getDescription %]</b><br>
+                
+                        [% "Incorporaci&oacute;n a Biblioteca:" | i18n %]
+                                        <b> [%  socio.ui.getNombre %]</b><br>
+    
+    
+                        [% IF usercourse %]
+                                <center>
+                                    <b>
+                                        [% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]
+                                        [% usercourse %]
+                                    </b>
+                                </center>
+                        [% END %]
+             
+        </div>
+   </div>
+        <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
+                <ul class = "listaMenuBotones" >
+					    <li>
+						    <img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
+								    src="[% themelang %]/images/botone.png" border="0"">
+						    <a class="textOverBoton" onClick="modificarDatosDeUsuario()">Modificar Datos</a>
+					    </li>
+                        <li>
+						    <img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
+						    src="[% themelang %]/images/botone.png" border="0">
+    
+						    <a class="textOverBoton" href="#" onClick="eliminarUsuario()" >Eliminar Usuario</a>
+                        </li>
+                        <li>
+                            <img  class="botonBehindText"  alt="Agregar Autorizado" 
+                                    src="[% themelang %]/images/botone.png" border="0"">
+                            <a class="textOverBoton" onClick="agregarAutorizado()">Agregar Autorizado</a>
+                        </li>
+    <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
+				    [% IF nroSocioLoggeado != loggedinusername%]
+					    <li>
+							    <input type="button" value="Reset Password" onClick="resetPassword()">
+					    </li>
+				    [% ELSE %]
+					    <li>
+							    <img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
+									    src="[% themelang %]/images/botone.png" border=0>
+    
+							    <a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password</a>
+					    </li>
+				    [% END %]
+                        <li>
+						    <img class="botonBehindText" alt='[% "Modificar Permisos" | i18n %]'
+								    src="[% themelang %]/images/botone.png" border="0">
+    
+						    <a class="textOverBoton" onClick="modificarPermisos()" >Modificar Permisos</a>
+                        </li>
+                        <li>
+						    <form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
+									    <img class="botonBehindText" alt='[% "Generar Carnet" | i18n %]'
+								    src="[% themelang %]/images/botone.png" border="0""> 
+								    
+								    <a class="textOverBoton" href="#" onClick="formCarnet.submit()" >Generar Carnet</a>
+		    
+								    <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+								    <input type=hidden name=token value="[% token %]" >
+		    
+						    </form>
+                        </li>
+                        <li>
+						    <form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
+								    <img class="botonBehindText" alt='[% "Generar Libre Deuda" | i18n %]' 
+								    src="[% themelang %]/images/botone.png" border="0">
+								    
+    
+								    <a class="textOverBoton" href="#" onClick="formLibre.submit()" >Libre Deuda</a>
+		    
+								    <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+								    <input type=hidden name=token value="[% token %]" >
+						    </form>
+                        </li>
+                        <li>
+                
+						    <img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
+						    src="[% themelang %]/images/botone.png" border="0">
+						    
+						    <a class="textOverBoton" href="#" onClick="prestamosInterBibliotecarios()">Prest. Interbibliotecario</a>
+                        </li>             
+        
+                        [% IF mensaje_error_foto %]	
+                                <li>
+                                        <font color="red">[% mensaje_error_foto %]</font>
+                                </li>
+                        [% END %]
+                
+                        [% IF foto_name %]
+                                <li>
+                                    <input type=button class="button" value="Eliminar foto" 
+                                        align=center onClick="eliminarFoto('[% foto_name %] ')">
+                                </li>
+                        [% ELSE %]
+                                <li>
+                                        <div id="uploader"></div>
+                                </li>
+                        [% END %]
+                    </ul>
+                </div>
+                <br>
+	    [% END %]
+</div>

@@ -21,6 +21,7 @@ function changePage(ini){
 function mostrarHistorialDePrestamos(){
 	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
 	objAH.debug= true;
+    objAH.cache= true;
 	objAH.url='/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
 	objAH.nro_socio= USUARIO.ID;
 	objAH.funcion= 'changePage';
@@ -181,7 +182,6 @@ function updateDetalleSanciones(responseText){
 
 
         $("h2."+trigger).click(function(){
-
             $(this).next("."+container_class).slideToggle("fast");
 // SI ACA NO HAY ERROR, SE ROMPE :( en historial de prestamos, muestra y oculta de nuevo
             $.scrollTo($(this).next("."+container_class));
@@ -199,7 +199,7 @@ $(document).ready(function(){
     USUARIO.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 
-    makeToggle('toggle_container','trigger',mostrarHistorialDePrestamos);
+    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos);
 
 
 });
@@ -207,7 +207,7 @@ $(document).ready(function(){
 </script>
 
 <br>
-<div id="confirmar_div"></div>
+    <div id="confirmar_div"></div>
 <br>
 
 <div>
@@ -222,7 +222,7 @@ $(document).ready(function(){
 	
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
-	
+
     <div>
         <h2 class="trigger">
             <a href="#">
@@ -230,9 +230,7 @@ $(document).ready(function(){
             </a>
         </h2>
 	    <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
-	    <div class="toggle_container" style="display:none" >
-            <div id="historialPrestamos" class="block"></div>
-        </div>
+	    <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
     </div>
 
 </div>

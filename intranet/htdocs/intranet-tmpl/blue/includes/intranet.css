@@ -1316,11 +1316,21 @@ h2.active {
     background-position:left bottom;
     height: 20px;
 }
-.toggle_container {
+.toggle_container{
     background:#F0F0F0 url(../images/toggle_block_stretch.gif) repeat-y scroll left top;
     border-top:1px solid #D6D6D6;
     clear:both;
-    font-size:1.2em;
+    font-size:1.1em;
+    margin:0 0 5px;
+    overflow:hidden;
+    padding:0;
+    width:800px;
+}
+.toggle_container_block{
+    background:#F0F0F0 url(../images/toggle_block_stretch.gif) repeat-y scroll left top;
+    border-top:1px solid #D6D6D6;
+    clear:both;
+    font-size:1.1em;
     margin:0 0 5px;
     overflow:hidden;
     padding:0;
