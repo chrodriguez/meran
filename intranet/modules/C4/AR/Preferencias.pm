@@ -69,7 +69,7 @@ sub getMenuPreferences{
     use C4::Modelo::PrefPreferenciaSistema;
     use C4::Modelo::PrefPreferenciaSistema::Manager;
 
-    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                     query => [ variable=> { like => '%showMenuItem_%' }],
                             );
     return ($preferencias_array_ref);
