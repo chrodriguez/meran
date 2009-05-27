@@ -216,6 +216,7 @@ sub get_template_and_user {
 		$bordat[0] = $borr;
 		$session->param('USER_INFO', \@bordat);	
 		$params->{'token'}= $session->param('token');
+ 		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
 	}
 
 	return ($template, $session, $params);
@@ -225,10 +226,10 @@ sub get_template_and_user {
 sub output_html_with_http_headers {
     my($query, $template, $params, $session, $cookie) = @_;
 
-# 	print $session->header(	charset => C4::Context->config("charset")||'utf-8');
-	print $session->header(	charset => C4::Context->config("charset")||'utf-8',
-							HttpOnly => 1,
-						);
+ 	print $session->header(	charset => C4::Context->config("charset")||'utf-8');
+# 	print $session->header(	charset => C4::Context->config("charset")||'utf-8',
+# 							HttpOnly => 1,
+# 						);
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }

@@ -206,6 +206,7 @@
                                                             ) ;
                             [% END %]
                   </li>	
+			[% IF menu_preferences.showMenuItem_circ_prestamos %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos' | i18n %]",
@@ -214,6 +215,8 @@
                                                             ) ;
                             [% END %]
                   </li>
+			[% END %]
+			[% IF menu_preferences.showMenuItem_circ_devolucion_renovacion %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Devol. y Renov.' | i18n %]",
@@ -222,6 +225,7 @@
                                                             ) ;
                             [% END %]
                   </li>
+			[% END %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",
