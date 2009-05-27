@@ -255,26 +255,44 @@ td.abc{
   font-weight: bold;
   color: #999999;
 	}	
-
+/* itemLI y tdout son IGUALES, las dupliqué para que siga andando bien, pero la idea es que quede solamente itemLI */
 .itemLI{
-background-color: #F4F4F4;
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 9pt;
-color: #000000;
-font-weight: normal;
-border: #000000; 
-   border-style: none; 
-   border-top-width: 0px; 
-   border-right-width: 0px; 
-   border-bottom-width: 0px; 
-   border-left-width: 0px;
-   padding: 0px;
+    background-color: #F4F4F4;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 9pt;
+    color: #000000;
+    list-style: none;
+    font-weight: normal;
+    border: #000000; 
+    border-style: none; 
+    border-top-width: 0px; 
+    border-right-width: 0px; 
+    border-bottom-width: 0px; 
+    border-left-width: 0px;
+    padding: 0px;
+    margin: 2px;
 }
 
-
+.tdout{
+    background-color: #F4F4F4;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 9pt;
+    color: #000000;
+    list-style: none;
+    font-weight: normal;
+    border: #000000; 
+    border-style: none; 
+    border-top-width: 0px; 
+    border-right-width: 0px; 
+    border-bottom-width: 0px; 
+    border-left-width: 0px;
+    padding: 0px;
+    margin: 2px;
+}
 /* tdhover */
 .tdhover{
-background-color: #F4F4E5;
+    background-color: #F4F4E5;
+    list-style: none;
 }
 
 /*.tdout a {display:block;background:#F4F4F4;}*/
