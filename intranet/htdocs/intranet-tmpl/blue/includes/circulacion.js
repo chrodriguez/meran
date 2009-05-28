@@ -365,7 +365,7 @@ function updateInfoDevRen(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
+	var messageArray= infoHash.messages.messages;
 	var ticketsArray= infoHash.tickets;
 	
 	for(i=0; i<messageArray.length;i++){

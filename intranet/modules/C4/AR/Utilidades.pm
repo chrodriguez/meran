@@ -2148,7 +2148,7 @@ sub usuarioAutocomplete{
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){
-            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom."\n";
+            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")\n";
         }
     }
     return $textout;

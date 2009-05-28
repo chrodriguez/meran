@@ -269,11 +269,11 @@ $(document).ready(function() {
 		</div>
 	</li>
 	<li>
-		<div id="divInfoUsuario" style="width:40%">
-			<label for="usuario" style="float: left; width:37%" >
+		<div id="divInfoUsuario" style="width:55%">
+			<label for="usuario" style="float: left; width:27%" >
 				Usuario:
 			</label>
-		 	<input type='text' id='usuario' value='' tabindex='3' style="float: left">
+		 	<input type='text' id='usuario' value='' size=32 tabindex='3' style="float: left">
 			<div id="estadoUsuario"></div>
 			<input type='hidden' id='nro_socio_hidden' value=''>
 			<span id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></span>
@@ -287,6 +287,6 @@ $(document).ready(function() {
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos"></div>
 
-<center><input type="button" value="Aceptar" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'></center>
+<div style="float: left; width: 47.4%"><input style="float: right;" type="button" value="Aceptar" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'></div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

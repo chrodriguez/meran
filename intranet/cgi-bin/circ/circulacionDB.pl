@@ -168,75 +168,73 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 #*********************************************DEVOLVER_RENOVAR***********************************************
 
 elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
-	my $array_ids3=$obj->{'datosArray'};
-	my $loop=scalar(@$array_ids3);
-
-	
-	my $accion=$obj->{'accion'};
-	my $id3;
-	my $barcode;
+	    my $array_ids3=$obj->{'datosArray'};
+    my $loop=scalar(@$array_ids3);
+    my $accion=$obj->{'accion'};
+    my $id3;
+    my $barcode;
     my $id_prestamo;
-	my $ticketObj;
-	my @infoTickets;
-	my @infoMessages;
-	my %params;
-	my %messageObj;
-	$params{'loggedinuser'}= $loggedinuser;
-	$params{'nro_socio'}= $nro_socio;
-	$params{'tipo'}= 'INTRA';
-
-	my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
+    my $ticketObj;
+    my @infoTickets;
+    my @infoMessages;
+    my %params;
+    my %messageObj;
+    $params{'loggedinuser'}= $loggedinuser;
+    $params{'nro_socio'}= $nro_socio;
+    $params{'tipo'}= 'INTRA';
+    my $Message_arrayref;
+    my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 
     C4::AR::Debug::debug("LOOP --> $loop");
-	for(my $i=0;$i<$loop;$i++){
-		$id3= $array_ids3->[$i]->{'id3'};
-		$barcode= $array_ids3->[$i]->{'barcode'};
+    for(my $i=0;$i<$loop;$i++){
+        $id3= $array_ids3->[$i]->{'id3'};
+        $barcode= $array_ids3->[$i]->{'barcode'};
         $id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
-		$ticketObj=0;
-		$params{'id3'}= $id3;
-		$params{'barcode'}= $barcode;
+        $ticketObj=0;
+        $params{'id3'}= $id3;
+        $params{'barcode'}= $barcode;
         $params{'id_prestamo'}= $id_prestamo;
-		
-		if ($accion eq 'DEVOLUCION') {
+        
+        if ($accion eq 'DEVOLUCION') {
         C4::AR::Debug::debug("DEVOLUCION");
         C4::AR::Debug::debug("USUARIO $nro_socio");
         C4::AR::Debug::debug("ID3: $id3");
-			my ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
+            $Message_arrayref = C4::AR::Prestamos::t_devolver(\%params);
 
-			#guardo los errores
-			push (@infoMessages, $Message_arrayref);
+            #guardo los errores
+#           push (@infoMessages, $Message_arrayref);
 
-		}elsif($accion eq 'RENOVACION') {
+        }elsif($accion eq 'RENOVACION') {
         C4::AR::Debug::debug("RENOVACION");
         C4::AR::Debug::debug("ID3: $id3");
-			my ($Message_arrayref) = C4::AR::Prestamos::t_renovar(\%params);
+            $Message_arrayref = C4::AR::Prestamos::t_renovar(\%params);
 
-			#guardo los errores
-			push (@infoMessages, $Message_arrayref);
+            #guardo los errores
+#           push (@infoMessages, $Message_arrayref);
 
 
-			if($print_renew && !$Message_arrayref->{'error'}){
-			#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$loggedinuser);
-			}
-		}# end elsif($accion eq 'RENOVACION')
+            if($print_renew && !$Message_arrayref->{'error'}){
+            #IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
+                $ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$loggedinuser);
+            }
+        }# end elsif($accion eq 'RENOVACION')
 
-		#se genera info para enviar al cliente	
-		my %infoOperacion = (
-				  	ticket  => $ticketObj,
-		);
+        #se genera info para enviar al cliente  
+        my %infoOperacion = (
+                    ticket  => $ticketObj,
+        );
 
-		push (@infoTickets, \%infoOperacion);
-	}
+        push (@infoTickets, \%infoOperacion);
+    }
 
-	my %infoOperaciones;
-	$infoOperaciones{'tickets'}= \@infoTickets;
-	$infoOperaciones{'messages'}= \@infoMessages;
-	
-	my $infoOperacionJSON = to_json \%infoOperaciones;
+    my %infoOperaciones;
+    $infoOperaciones{'tickets'}= \@infoTickets;
+    $infoOperaciones{'messages'}= $Message_arrayref;
+    
+    my $infoOperacionJSON = to_json \%infoOperaciones;
 
     C4::Output::printHeader($session);
-	print $infoOperacionJSON;
+    print $infoOperacionJSON;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
 
