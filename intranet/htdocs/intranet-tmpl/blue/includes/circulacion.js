@@ -334,7 +334,7 @@ function generaDivDevRen(responseText){
         html= html + ". <br>"
 	}
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'><input type='button' value='DEVOLVER NUEVO' onClick=devolver()></center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=devolver()><input type='button' value='Cancelar' onClick='cancelarDiv();'>   <!--<input type='button' value='DEVOLVER NUEVO' onClick=devolver()>-->    </center><br>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
