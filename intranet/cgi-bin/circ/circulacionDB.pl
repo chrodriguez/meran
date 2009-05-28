@@ -229,7 +229,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 
     my %infoOperaciones;
     $infoOperaciones{'tickets'}= \@infoTickets;
-    $infoOperaciones{'messages'}= @infoMessages;
+    $infoOperaciones{'messages'}= \@infoMessages;
     
     my $infoOperacionJSON = to_json \%infoOperaciones;
 
