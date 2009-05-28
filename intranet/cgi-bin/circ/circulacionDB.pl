@@ -211,7 +211,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
             $Message_arrayref = C4::AR::Prestamos::t_renovar(\%params);
 
             #guardo los errores
-             push (@infoMessages, $Message_arrayref);
+#             push (@infoMessages, $Message_arrayref);
 
 
             if($print_renew && !$Message_arrayref->{'error'}){
@@ -244,6 +244,17 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
     
    	my %info;
      $info{'Messages_arrayref'}= $Message_arrayref;
+
+    C4::Output::printHeader($session);
+    print to_json \%info;
+}
+
+
+elsif($tipoAccion eq "REALIZAR_RENOVACION"){
+    my ($Message_arrayref) = C4::AR::Prestamos::t_renovar($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
 
     C4::Output::printHeader($session);
     print to_json \%info;

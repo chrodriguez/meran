@@ -87,24 +87,25 @@ sub chequeoDeFechas(){
 }
 =item
 Se verifica que se cumplan las condiciones para poder renovar
+DEPRECATED?????????????????????????????????????????????????????????????????????????
 =cut
-sub verificarParaRenovar{
-	my ($params)=@_;
-
-	my $msg_object= C4::AR::Mensajes::create();
-
-	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation($params->{'borrowernumber'},"");
-	$params->{'usercourse'}= $borrower->{'usercourse'};
-
-	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
-	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::AR::Preferencias->getValorPreferencia("usercourse") 
-		&& ($params->{'usercourse'} == "NULL" ) ) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
-	}
-
-	return ($msg_object);
-}
+# sub verificarParaRenovar{
+# 	my ($params)=@_;
+# 
+# 	my $msg_object= C4::AR::Mensajes::create();
+# 
+# 	my ($borrower, $flags) = C4::Circulation::Circ2::getpatroninformation($params->{'nro_socio'},"");
+# 	$params->{'usercourse'}= $borrower->{'usercourse'};
+# 
+# 	#Se verifica que el usuario haya realizado el curso, simpre y cuando esta preferencia este seteada
+# 	if( !($msg_object->{'error'}) && $params->{'tipo'} eq "OPAC" && (C4::AR::Preferencias->getValorPreferencia("usercourse") 
+# 		&& ($params->{'usercourse'} == "NULL" ) ) ){
+# 		$msg_object->{'error'}= 1;
+# 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
+# 	}
+# 
+# 	return ($msg_object);
+# }
 
 
 =item
@@ -428,7 +429,6 @@ Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
 sub t_devolver {
     my($params)=@_;
 
-#     my $msg_object;
  	my $msg_object= C4::AR::Mensajes::create();
 
 
@@ -486,13 +486,42 @@ sub t_devolver {
 
 	}
 
-
     $db->{connect_options}->{AutoCommit} = 1;
-	
 
     return ($msg_object);
 }
 
+sub t_renovar {
+  my ($params)=@_;
+#   my $id3= $params->{'id3'};
+#   my $tipo= $params->{'tipo'};
+  my ($msg_object)= C4::AR::Mensajes::create();
+  my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
+  my $db = $prestamoTEMP->db;
+      $db->{connect_options}->{AutoCommit} = 0;
+      $db->begin_work;
+  foreach my $data ($params->{'datosArray'}) {
+        my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $data->{'id_prestamo'}, db => $db);
+        my $renovacion= $prestamo->sePuedeRenovar;
+        if( ($renovacion) && (!$msg_object->{'error'}) ){
+                eval{
+                    $prestamo->renovar;
+                    $db->commit;
+                };
+                if ($@){
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => []} ) ;
+                }
+                $msg_object->{'error'}= 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$params->{'barcode'}]} ) ;
+        }else{
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => []} ) ;
+        }
+  }
+  $db->{connect_options}->{AutoCommit} = 1;
+  return ($msg_object);
+}
 
 sub getPrestamoPorBarcode {
 
@@ -1357,73 +1386,7 @@ Esta funcion devuelve la informacion del prestamo junto con el borrower
 =item DEPRECATED   REHACER
 renovar recibe dos parametros un id3 y un borrowernumber, lo que hace es si el usario no tiene problemas de multas/sanciones, las fechas del prestamo estan en orden y no hay ninguna reserva pendiente se renueva el prestamo de ese ejmemplar para el usuario que actualmente lo tiene.
 =cut
-# sub renovar {
-#   my ($params)=@_;
-#   my $borrowernumber= $params->{'borrowernumber'};
-#   my $id3= $params->{'id3'};
-#   my $tipo= $params->{'tipo'};
-#   my $loggedinuser= $params->{'loggedinuser'};
-# #     my $paraMens;
-# #     my $codMsg;
-# #     my $error= 0;
-# 
-#   my $renovacion= &sepuederenovar($borrowernumber,$id3);
-# #     my ($error, $codMsg,$paraMens)= verificarParaRenovar($params);
-#   my ($msg_object)= verificarParaRenovar($params);
-# 
-#   if( ($renovacion) && (!$msg_object->{'error'}) ){
-#   #Esto quiere decir que se puede renovar el prestamo, por lo tanto lo renuevo
-# 
-#       my $dbh = C4::Context->dbh;
-#       my $sth=$dbh->prepare(" UPDATE  circ_prestamo 
-#                   SET renovaciones= IFNULL(renovaciones,0) + 1, fecha_ultima_renovacion = now() 
-#                   WHERE id3 = ? AND nro_socio = ?");
-#       $sth->execute($id3, $borrowernumber);
-# 
-# #**********************************Se registra el movimiento en historicCirculation***************************
-# #esto se podria cruzar con la lo trae getDataItms para hacer una sola funcion
-#       my $dbh = C4::Context->dbh;
-#       my $sth=$dbh->prepare(" SELECT tipo_prestamo
-#                   FROM  circ_prestamo
-#                   WHERE(id3 = ? AND nro_socio = ?) ");
-#       $sth->execute($id3, $borrowernumber);
-#       my $data = $sth->fetchrow_hashref;
-# 
-#       my $issuetype= $data->{'issuecode'};
-#       my $dataItems= C4::AR::Nivel3::getDataNivel3($id3);
-#       my $id1= $dataItems->{'id1'};
-#       my $id2= $dataItems->{'id2'};
-#       my $branchcode= $dataItems->{'homebranch'};
-#       my $end_date= C4::AR::Prestamos::vencimiento($id3); 
-# 
-#       C4::Circulation::Circ2::insertHistoricCirculation(  'renew',
-#                                   $borrowernumber,
-#                                   $loggedinuser,
-#                                   $id1,
-#                                   $id2,
-#                                   $id3,
-#                                   $branchcode,
-#                                   $issuetype,
-#                                   $end_date
-#                               );
-# #****************************Fin******Se registra el movimiento en historicCirculation*************************
-# #         $codMsg= 'P111';
-# #         $error= 0;  
-#       $msg_object->{'error'}= 0;
-#       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$params->{'barcode'}]} ) ;
-#   
-#   }else{
-#       #el prestamo no se puede renovar
-# #         $codMsg= 'P112';
-# #         $error= 1;
-#       $msg_object->{'error'}= 1;
-#       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => []} ) ;
-# 
-#   }
-# #     return ($error,$codMsg, $paraMens);
-# 
-#   return ($msg_object);
-# }
+
 
 # sub verificarTipoPrestamo {
 # #retorna verdadero si se puede hacer un determinado tipo de prestamo

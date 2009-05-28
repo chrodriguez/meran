@@ -184,9 +184,9 @@ function updateInfoDevRen(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
+	var messageArray= infoHash.Messages_arrayref;
 // 	var ticketsArray= infoHash.tickets;
-	setMessages(infoHash);	
+	setMessages(messageArray);
 
 // 	for(i=0; i<messageArray.length;i++){
 // 		imprimirTicket(ticketsArray[i].ticket,i);

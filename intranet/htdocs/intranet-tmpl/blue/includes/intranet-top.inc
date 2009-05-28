@@ -49,12 +49,13 @@
 
 	function mainmenu(){
 	
-	var options = {minWidth: 140};  
-	$('#menu').menu();  
+	    var options = {minWidth: 140};  
+	    $('#menu').menu();
 	}
 	
 	$(document).ready(function(){
 		mainmenu();
+   
 	});
 
 </script>
