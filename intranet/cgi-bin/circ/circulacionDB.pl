@@ -202,7 +202,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
             $Message_arrayref = C4::AR::Prestamos::t_devolver(\%params);
 
             #guardo los errores
-#           push (@infoMessages, $Message_arrayref);
+          push (@infoMessages, $Message_arrayref);
 
         }elsif($accion eq 'RENOVACION') {
         C4::AR::Debug::debug("RENOVACION");
@@ -229,7 +229,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 
     my %infoOperaciones;
     $infoOperaciones{'tickets'}= \@infoTickets;
-    $infoOperaciones{'messages'}= $Message_arrayref;
+    $infoOperaciones{'messages'}= @infoMessages;
     
     my $infoOperacionJSON = to_json \%infoOperaciones;
 
