@@ -210,7 +210,7 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
             $Message_arrayref = C4::AR::Prestamos::t_renovar(\%params);
 
             #guardo los errores
-#           push (@infoMessages, $Message_arrayref);
+             push (@infoMessages, $Message_arrayref);
 
 
             if($print_renew && !$Message_arrayref->{'error'}){
