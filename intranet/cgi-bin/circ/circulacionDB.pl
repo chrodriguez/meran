@@ -239,10 +239,11 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 }
 
 elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
+	$obj->{'loggedinuser'}= $userid;
 	my ($Message_arrayref) = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
+     $info{'Messages_arrayref'}= $Message_arrayref;
 
     C4::Output::printHeader($session);
     print to_json \%info;

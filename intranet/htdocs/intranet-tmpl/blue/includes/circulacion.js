@@ -357,17 +357,6 @@ function devolver_renovar(accion){
 	objAH.sendToServer();
 }
 
-function devolver(){
-	objAH=new AjaxHelper(updateInfoDevRen);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'DEVOLVER';
-	objAH.datosArray= infoPrestamos_array;
-	objAH.nro_socio= USUARIO.ID;
-// 	objAH.accion=accion;
-	//se envia la consulta
-	objAH.sendToServer();
-}
 
 /*
  * updateInfoDevRen

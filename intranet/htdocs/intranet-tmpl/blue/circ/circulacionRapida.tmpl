@@ -126,6 +126,8 @@ function onChangeOperacion(){
 		$('#barcodePrestado').hide();
 		$('#spanComboTipoPrestamo').html('');
 		$('#spanComboTipoPrestamo').show();
+		$('#tablaPrestamos').hide();
+		$('#aceptar').show();
 
 	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
 	//busco sobre el conj. de los barcodes prestados
@@ -134,6 +136,9 @@ function onChangeOperacion(){
 		$('#barcodePrestado').val('');
 		$('#barcodePrestado').focus();
 		$('#spanComboTipoPrestamo').hide();
+		$('#tablaPrestamos').show();
+		$('#aceptar').hide();
+		
 
 		if( $('#usuario').val() !='' ){
 			//se va a devolver algo, se muestra la info de los prestamos del usuario
@@ -158,6 +163,20 @@ function refreshTipoPrestamo(){
 	}
 }
 
+
+// FIXME test MIGUEL
+function devolver(){
+	objAH=new AjaxHelper(updateInfoDevRen);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'REALIZAR_DEVOLUCION';
+	objAH.datosArray= infoPrestamos_array;
+	objAH.nro_socio= USUARIO.ID;
+// 	objAH.accion=accion;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
 /*
 FUNCION REDEFINIDA, se encuentra en circulacion.js 
 */
@@ -166,12 +185,13 @@ function updateInfoDevRen(responseText){
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	
-	for(i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
+// 	var ticketsArray= infoHash.tickets;
+	setMessages(infoHash);	
+
+// 	for(i=0; i<messageArray.length;i++){
+// 		imprimirTicket(ticketsArray[i].ticket,i);
+//   		setMessages(messageArray[i]);
+// 	}
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
 }

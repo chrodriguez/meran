@@ -429,7 +429,7 @@ sub t_devolver {
     my($params)=@_;
 
 #     my $msg_object;
-# 	my $msg_object= C4::AR::Mensajes::create();
+ 	my $msg_object= C4::AR::Mensajes::create();
 
 
 	my $array_ids3= $params->{'datosArray'};
@@ -443,15 +443,10 @@ sub t_devolver {
     my @infoMessages;
     my %params;
     my %messageObj;
-#     $params{'loggedinuser'}= $loggedinuser;
-#     $params{'nro_socio'}= $nro_socio;
-#     $params{'tipo'}= 'INTRA';
     my $Message_arrayref;
 	my $msg_object;
     my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 	my $prestamo = C4::Modelo::CircPrestamo->new();
-# 	$prestamo->load();
-# 	$params->{'id3'}= $prestamo->getId3;
 	my $db = $prestamo->db;
 	$db->{connect_options}->{AutoCommit} = 0;
 	$db->begin_work;
@@ -461,15 +456,14 @@ sub t_devolver {
 		$id3= $array_ids3->[$i]->{'id3'};
 		$barcode= $array_ids3->[$i]->{'barcode'};
 		$id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
-# 		$params{'id3'}= $id3;
 		$params{'barcode'}= $barcode;
 		$params{'id_prestamo'}= $id_prestamo;
 		
-		my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
+		my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo, db => $db);
 		$prestamo->load();
 		$params->{'id3'}= $prestamo->getId3;
 
-		$msg_object= verificarCirculacionRapida($params);
+		verificarCirculacionRapida($params, $msg_object);
 
 		if(!$msg_object->{'error'}){
 
@@ -478,7 +472,7 @@ sub t_devolver {
 				$db->commit;
 				# Si la devolucion se pudo realizar
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$prestamo->nivel3->getBarcode]} ) ;
 			};
 			if ($@){
 				#Se loguea error de Base de Datos
@@ -525,9 +519,9 @@ sub getPrestamoPorBarcode {
 
 
 sub verificarCirculacionRapida {
-	my ($params)=@_;
+	my ($params, $msg_object)=@_;
 
-	my $msg_object= C4::AR::Mensajes::create();
+# # 	my $msg_object= C4::AR::Mensajes::create();
 
 	if( !($msg_object->{'error'}) &&  $params->{'operacion'} eq 'devolver'){
 	#se verifica si la operacion es una devolucion, que EXISTA el BARCODE
@@ -548,13 +542,14 @@ sub verificarCirculacionRapida {
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
 	}
 
-	return ($msg_object);
+# 	return ($msg_object);
 }
 
 sub t_devolverPorBarcode {
 	my ($params)=@_;
 
-	my $msg_object= verificarCirculacionRapida($params);
+	my $msg_object= C4::AR::Mensajes::create();
+	verificarCirculacionRapida($params, $msg_object);
 
 	if(!$msg_object->{'error'}){
 		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
