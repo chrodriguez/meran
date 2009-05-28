@@ -428,26 +428,73 @@ Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
 sub t_devolver {
     my($params)=@_;
 
-    my $msg_object;
-    my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $params->{'id_prestamo'});
-    $prestamo->load();
-	$params->{'id3'}= $prestamo->getId3;
-    my $db = $prestamo->db;
-       $db->{connect_options}->{AutoCommit} = 0;
-       $db->begin_work;
-    eval {
-        ($msg_object)= $prestamo->devolver($params);
-        $db->commit;
-    };
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
- 		$db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
-    }
+#     my $msg_object;
+# 	my $msg_object= C4::AR::Mensajes::create();
+
+
+	my $array_ids3= $params->{'datosArray'};
+    my $loop=scalar(@$array_ids3);
+#     my $accion= $params->{'accion'};
+    my $id3;
+    my $barcode;
+    my $id_prestamo;
+    my $ticketObj;
+    my @infoTickets;
+    my @infoMessages;
+    my %params;
+    my %messageObj;
+#     $params{'loggedinuser'}= $loggedinuser;
+#     $params{'nro_socio'}= $nro_socio;
+#     $params{'tipo'}= 'INTRA';
+    my $Message_arrayref;
+	my $msg_object;
+    my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
+	my $prestamo = C4::Modelo::CircPrestamo->new();
+# 	$prestamo->load();
+# 	$params->{'id3'}= $prestamo->getId3;
+	my $db = $prestamo->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+
+    C4::AR::Debug::debug("LOOP --> $loop");
+    for(my $i=0;$i<$loop;$i++){
+		$id3= $array_ids3->[$i]->{'id3'};
+		$barcode= $array_ids3->[$i]->{'barcode'};
+		$id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
+# 		$params{'id3'}= $id3;
+		$params{'barcode'}= $barcode;
+		$params{'id_prestamo'}= $id_prestamo;
+		
+		my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
+		$prestamo->load();
+		$params->{'id3'}= $prestamo->getId3;
+
+		$msg_object= verificarCirculacionRapida($params);
+
+		if(!$msg_object->{'error'}){
+
+			eval {
+				$prestamo->devolver($params);
+				$db->commit;
+				# Si la devolucion se pudo realizar
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
+			};
+			if ($@){
+				#Se loguea error de Base de Datos
+				&C4::AR::Mensajes::printErrorDB($@, 'B406',"INTRA");
+				$db->rollback;
+				#Se setea error para el usuario
+				$msg_object->{'error'}= 1;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
+			}
+		}# END if(!$msg_object->{'error'})
+
+	}
+
+
     $db->{connect_options}->{AutoCommit} = 1;
+	
 
     return ($msg_object);
 }

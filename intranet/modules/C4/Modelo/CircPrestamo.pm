@@ -455,7 +455,7 @@ sub devolver {
     my $tipo= $params->{'tipo'};
     my $loggedinuser= $params->{'loggedinuser'};
     my $nro_socio= $params->{'nro_socio'};
-    my $msg_object= C4::AR::Mensajes::create();
+#     my $msg_object= C4::AR::Mensajes::create();
     #se setea el barcode para informar al usuario en la devolucion
 
     $self->debug("Actualizo la fecha de devolucion!!!!");
@@ -563,17 +563,17 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
             }
         }
 ### Final del tema sanciones
-        # Si la devolucion se pudo realizar
-        $msg_object->{'error'}= 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
+#         # Si la devolucion se pudo realizar
+#         $msg_object->{'error'}= 0;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
     }
     else {
-        # Si la devolucion dio error
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
+#         # Si la devolucion dio error
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
     }
 
-    return ($msg_object);
+#     return ($msg_object);
 }
 
 

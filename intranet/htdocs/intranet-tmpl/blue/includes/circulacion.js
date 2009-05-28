@@ -296,6 +296,7 @@ function cancelarReserva(reserveNumber){
 	}
 }
 
+
 /*
  * updateInfoCancelacion
  * Funcion que se ejecuta cuando se cancela una reserva, muestra el mensaje si hay algun error y actualiza la
@@ -333,7 +334,7 @@ function generaDivDevRen(responseText){
         html= html + ". <br>"
 	}
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=devolver_renovar('"+accion+"')><input type='button' value='Cancelar' onClick='cancelarDiv();'><input type='button' value='DEVOLVER NUEVO' onClick=devolver()></center><br>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
@@ -352,6 +353,18 @@ function devolver_renovar(accion){
 	objAH.datosArray= infoPrestamos_array;
 	objAH.nro_socio= USUARIO.ID;
 	objAH.accion=accion;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function devolver(){
+	objAH=new AjaxHelper(updateInfoDevRen);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'DEVOLVER';
+	objAH.datosArray= infoPrestamos_array;
+	objAH.nro_socio= USUARIO.ID;
+// 	objAH.accion=accion;
 	//se envia la consulta
 	objAH.sendToServer();
 }

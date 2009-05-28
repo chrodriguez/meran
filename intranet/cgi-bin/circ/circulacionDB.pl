@@ -168,7 +168,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 #*********************************************DEVOLVER_RENOVAR***********************************************
 
 elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
-	    my $array_ids3=$obj->{'datosArray'};
+	my $array_ids3=$obj->{'datosArray'};
     my $loop=scalar(@$array_ids3);
     my $accion=$obj->{'accion'};
     my $id3;
@@ -199,7 +199,8 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
         C4::AR::Debug::debug("DEVOLUCION");
         C4::AR::Debug::debug("USUARIO $nro_socio");
         C4::AR::Debug::debug("ID3: $id3");
-            $Message_arrayref = C4::AR::Prestamos::t_devolver(\%params);
+
+            ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
 
             #guardo los errores
           push (@infoMessages, $Message_arrayref);
@@ -235,6 +236,16 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 
     C4::Output::printHeader($session);
     print $infoOperacionJSON;
+}
+
+elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
+	my ($Message_arrayref) = C4::AR::Prestamos::t_devolver($obj);
+    
+   	my %info;
+    $info{'Message_arrayref'}= $Message_arrayref;
+
+    C4::Output::printHeader($session);
+    print to_json \%info;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
 
