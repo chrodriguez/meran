@@ -9,15 +9,15 @@ if [ ! -z $1 ] && [ -f $1 ]; then
 echo "Recuerde que debe cambiar los permisos de los usuarios en el archivo permisos.xls y Guardar como csv separado por punto y coma. Presione Enter para continuar";
 read; 
 echo "Ingrese el nombre de la base de datos que va a configurar";
-read base;
-if [ -z $base ]; then  
+read basededatos;
+if [ -z $basededatos ]; then  
 	echo "ERROR: debe introducir el nombre de la bdd";
 
 else
-		echo 'use $base ;' > permisos$userOPAC.sql;
-		echo 'use $base ;' > permisos$userINTRA.sql;
-		echo 'use $base ;' > permisos$userDevelop.sql;
-		echo 'use $base ;' > permisos$userAdmin.sql;
+		echo 'use $basededatos ;' > permisos$userOPAC.sql;
+		echo 'use $basededatos ;' > permisos$userINTRA.sql;
+		echo 'use $basededatos ;' > permisos$userDevelop.sql;
+		echo 'use $basededatos ;' > permisos$userAdmin.sql;
 echo "Ingrese el usuario para el opac [userOPAC]";
 read userOPAC;
 if [ -z $userOPAC ]; then  
@@ -61,10 +61,10 @@ if [ $crear = S ]; then
 		if [ -z $passuserAdmin ]; then  
 			passuserAdmin="userAdmin";
 		       fi		
-    		 echo "GRANT SELECT on nivel3 to '$userOPAC@localhost' identified by password($passuserOPAC); "  >> permisos$userOPAC.sql
-    		 echo "GRANT SELECT on nivel3 to '$userINTRA@localhost' identified by password($passuserINTRA); "  >> permisos$userINTRA.sql
-    		 echo "GRANT SELECT on nivel3 to '$userDevelop@localhost' identified by password($passuserDevelop); " >> permisos$userDevelop.sql
-    		 echo "GRANT SELECT on nivel3 to '$userAdmin@localhost' identified by password($passuserAdmin); "  >> permisos$userAdmin.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userOPAC@localhost identified by password($passuserOPAC); "  >> permisos$userOPAC.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userINTRA@localhost identified by password($passuserINTRA); "  >> permisos$userINTRA.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userDevelop@localhost identified by password($passuserDevelop); " >> permisos$userDevelop.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userAdmin@localhost identified by password($passuserAdmin); "  >> permisos$userAdmin.sql
 		 fi
 IFS=$'\n'
 j=0
@@ -82,8 +82,6 @@ for i in $(cat $1);
     done;
 echo "Ahora viene la parte de ejecutar las sentencias mysql. ¿Quiere hacerlo automaticamente (S/N)? ";
 read automatico;
-echo "Ingrese el nombre de la base de datos";
-read basededato;
 if [ $automatico = S ] || [ $automatico = s ] ; then 
 			echo "Ejecutandose automaticamente ";
 			echo "Para agregar permisos de usuario userOpac ejecutar:  mysql $basededato -p < permisos$userOPAC.sql ";
