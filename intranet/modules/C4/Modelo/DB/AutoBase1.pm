@@ -38,10 +38,12 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 =cut
 # FIXME cuando esten los permisos de la INTRA descomentar esto
 	$user = $context->config('userOPAC');
+	$pass = $context->config('passOPAC');
 	if($session->param('type') eq 'intranet'){
 	C4::AR::Debug::debug("AutoBase1 => type: ".$session->param('type'));
 	C4::AR::Debug::debug("AutoBase1 => userINTRA");
 		$user = $context->config('userINTRA');
+		$pass = $context->config('passINTRA');
 	}else{
 	C4::AR::Debug::debug("AutoBase1 => userOPAC");	
 	}
@@ -50,7 +52,6 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 
     $database = $context->config('database');
     $hostname = $context->config('hostname');
-    $pass = $context->config('pass');
 }
         
 __PACKAGE__->register_db
