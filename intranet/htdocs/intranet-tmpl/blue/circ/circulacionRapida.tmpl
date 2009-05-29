@@ -127,7 +127,9 @@ function onChangeOperacion(){
 		$('#spanComboTipoPrestamo').html('');
 		$('#spanComboTipoPrestamo').show();
 		$('#tablaPrestamos').hide();
-		$('#aceptar').show();
+		if( ($('#barcode').val() != '')&&($('#usuario').val() != '') ){
+			$('#aceptar').show();
+		}
 
 	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
 	//busco sobre el conj. de los barcodes prestados
@@ -204,6 +206,9 @@ function onCompleteUsuarios(){
 		
 	}else if($('#operacion').val() == 'prestar'){
 		esRegular(NRO_SOCIO_AUTH);
+		if( ($('#barcode').val() != '')&&($('#usuario').val() != '') ){
+			$('#aceptar').show();
+		}	
 	}
 }
 
@@ -229,6 +234,7 @@ function updateEsRegular(responseText){
 
 $(document).ready(function() {
 	$('#operacion').focus();
+	$('#aceptar').hide();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios({	IdInput: 'usuario', 
