@@ -61,10 +61,10 @@ if [ $crear = S ]; then
 		echo "use $basededatos ;" > permisos$userINTRA.sql;
 		echo "use $basededatos ;" > permisos$userDevelop.sql;
 		echo "use $basededatos ;" > permisos$userAdmin.sql;
-    		 echo "GRANT SELECT on cat_nivel3 to $userOPAC@localhost identified by password('$passuserOPAC'); "  >> permisos$userOPAC.sql
-    		 echo "GRANT SELECT on cat_nivel3 to $userINTRA@localhost identified by password('$passuserINTRA'); "  >> permisos$userINTRA.sql
-    		 echo "GRANT SELECT on cat_nivel3 to $userDevelop@localhost identified by password('$passuserDevelop'); " >> permisos$userDevelop.sql
-    		 echo "GRANT SELECT on cat_nivel3 to $userAdmin@localhost identified by password('$passuserAdmin'); "  >> permisos$userAdmin.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userOPAC@localhost identified by'$passuserOPAC'; "  >> permisos$userOPAC.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userINTRA@localhost identified by '$passuserINTRA'; "  >> permisos$userINTRA.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userDevelop@localhost identified by '$passuserDevelop'; " >> permisos$userDevelop.sql
+    		 echo "GRANT SELECT on cat_nivel3 to $userAdmin@localhost identified by '$passuserAdmin'; "  >> permisos$userAdmin.sql
 		 fi
 IFS=$'\n'
 j=0
