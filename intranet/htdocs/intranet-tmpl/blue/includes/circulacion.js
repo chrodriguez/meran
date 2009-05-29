@@ -7,7 +7,7 @@
  *	<script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
  *	<script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
  *	<script src="/intranet-tmpl/blue/includes/util.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js"></script>
+ *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.js"></script>
  *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
  * @author Carbone Miguel, Di Costanzo Damian
  * Fecha de creacion 19/06/2008

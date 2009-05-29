@@ -5,7 +5,7 @@
 // ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
 // if (!$.ui.draggable){
 
-//  	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.min.js");
+//  	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.js");
 // 	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
 // 	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.mouse.js");
 // 	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.js");
