@@ -212,9 +212,7 @@ function onCompleteUsuarios(){
 		
 	}else if($('#operacion').val() == 'prestar'){
 		esRegular(NRO_SOCIO_AUTH);
-		if( ($('#barcode').val() != '')&&($('#usuario').val() != '') ){
-			$('#aceptar').show();
-		}	
+		mostrarBotonAceptar();
 	}
 }
 
