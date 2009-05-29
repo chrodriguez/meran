@@ -1,7 +1,7 @@
 .ac_results {
 	padding: 0px;
 	border: 1px solid black;
-	background-color: Window;
+	background-color: white;
 	overflow: hidden;
 	z-index: 99999;
 }
@@ -35,28 +35,14 @@
 }
 
 .ac_loading {
-	background : Window url('indicator.gif') right center no-repeat;
+	background: white url('indicator.gif') right center no-repeat;
 }
 
-/*para configuar el colo de fondo del item seleccionado en la lista del Autocomplete*/
+.ac_odd {
+	background-color: #eee;
+}
+
 .ac_over {
-	/*background-color: #0A246A;*/
-	background-color: white;
-	/*color: HighlightText;*/
-	color: black;
-}
-
-.ac_moreItems {
-	text-align: center;
-	background-color: InactiveCaption;
-	color: InactiveCaptionText;
-	margin: 0px;
-	padding: 0px 5px;
-	cursor: default;
-	display: block;
-	width: 100%;
-	font: bold menu 12px;
-	overflow: hidden;
-	-moz-user-select: none;
-	-khtml-user-select: none;
+	background-color: #0A246A;
+	color: white;
 }
