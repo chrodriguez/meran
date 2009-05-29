@@ -1,7 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--Doctype is not required - can be HTML or XHTML-->
 <html>
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
 <script language="javascript" type="text/javascript">
  token= '[% token %]';
 
@@ -32,6 +31,7 @@
 <title>Koha::UNLP</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/includes/intranet.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
 </head>
 
 <script language="javascript" type="text/javascript">
