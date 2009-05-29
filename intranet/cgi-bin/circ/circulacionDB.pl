@@ -25,6 +25,7 @@ C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
 
@@ -56,6 +57,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 
 #************************************************CONFIRMAR PRESTAMO*******************************************
 elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
 	my $array_ids3_a_prestar=$obj->{'datosArray'};
 	my $cant= scalar(@$array_ids3_a_prestar);
@@ -89,6 +91,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 #***************************************************PRESTAMO*************************************************
 elsif($tipoAccion eq "PRESTAMO"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 #se realizan los prestamos
 	my $array_ids3=$obj->{'datosArray'};
 	my $loop=scalar(@$array_ids3);
@@ -168,6 +171,8 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 #*********************************************DEVOLVER_RENOVAR***********************************************
 
 elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
+	
 	my $array_ids3=$obj->{'datosArray'};
     my $loop=scalar(@$array_ids3);
     my $accion=$obj->{'accion'};
@@ -239,6 +244,8 @@ elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 }
 
 elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
+
 	$obj->{'loggedinuser'}= $userid;
 	my ($Message_arrayref) = C4::AR::Prestamos::t_devolver($obj);
     
@@ -251,6 +258,8 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
 
 
 elsif($tipoAccion eq "REALIZAR_RENOVACION"){
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
+
     my ($Message_arrayref) = C4::AR::Prestamos::t_renovar($obj);
     
     my %info;
@@ -265,7 +274,7 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
 #******************************************CANCELAR RESERVA***************************************************
 elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
-	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 		
 	my %params;
 	$params{'id_reserva'}= $obj->{'id_reserva'};
@@ -284,7 +293,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
 elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
-	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 		
 	my $Message_arrayref;
 	my %params;
@@ -314,7 +323,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 
-	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 
 	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
 	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
@@ -331,7 +340,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 
-	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 		
 	my $Message_arrayref;
 	my %params;
@@ -349,7 +358,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
 
-	my ($userid, $session, $flags) = checkauth($input, 0,{superlibrarian => 1},"intranet");
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 
 	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
 

@@ -74,6 +74,7 @@ function updateRealizarAccion(responseText){
 		}
 		//borro la cache del autocomplete
 		$('#barcode').flushCache();
+		$('#aceptar').hide();
 	}else{
 		var Messages= JSONstring.toObject(responseText);
 		setMessages(Messages);
