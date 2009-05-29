@@ -11,4 +11,4 @@ Terrble BUG en https://163.10.10.116/cgi-bin/koha/busquedas/adminEjemplares.pl, 
 
 Cuando funcionalmente este todo terminado, tener en cuenta la insuficiencia de datos, para que no haya un error 500 (hacer algo si lo buscado no existe en la base)
 
-
+Filtro en Historial de prestamos de usuario
