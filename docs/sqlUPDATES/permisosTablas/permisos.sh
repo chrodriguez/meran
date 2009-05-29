@@ -14,10 +14,6 @@ if [ -z $basededatos ]; then
 	echo "ERROR: debe introducir el nombre de la bdd";
 
 else
-		echo 'use $basededatos ;' > permisos$userOPAC.sql;
-		echo 'use $basededatos ;' > permisos$userINTRA.sql;
-		echo 'use $basededatos ;' > permisos$userDevelop.sql;
-		echo 'use $basededatos ;' > permisos$userAdmin.sql;
 echo "Ingrese el usuario para el opac [userOPAC]";
 read userOPAC;
 if [ -z $userOPAC ]; then  
@@ -61,6 +57,10 @@ if [ $crear = S ]; then
 		if [ -z $passuserAdmin ]; then  
 			passuserAdmin="userAdmin";
 		       fi		
+		echo "use $basededatos ;" > permisos$userOPAC.sql;
+		echo "use $basededatos ;" > permisos$userINTRA.sql;
+		echo "use $basededatos ;" > permisos$userDevelop.sql;
+		echo "use $basededatos ;" > permisos$userAdmin.sql;
     		 echo "GRANT SELECT on cat_nivel3 to $userOPAC@localhost identified by password($passuserOPAC); "  >> permisos$userOPAC.sql
     		 echo "GRANT SELECT on cat_nivel3 to $userINTRA@localhost identified by password($passuserINTRA); "  >> permisos$userINTRA.sql
     		 echo "GRANT SELECT on cat_nivel3 to $userDevelop@localhost identified by password($passuserDevelop); " >> permisos$userDevelop.sql
