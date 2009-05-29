@@ -43,6 +43,7 @@ function updateObtenerTiposDePrestamos(responseText){
 	var comboTipoPrestamo_html= crearCombo(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
 
 	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
+	mostrarBotonAceptar();
 }
 
 function realizarAccionCircRapida(){
@@ -128,9 +129,7 @@ function onChangeOperacion(){
 		$('#spanComboTipoPrestamo').html('');
 		$('#spanComboTipoPrestamo').show();
 		$('#tablaPrestamos').hide();
-		if( ($('#barcode').val() != '')&&($('#usuario').val() != '') ){
-			$('#aceptar').show();
-		}
+		mostrarBotonAceptar();
 
 	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
 	//busco sobre el conj. de los barcodes prestados
@@ -166,6 +165,12 @@ function refreshTipoPrestamo(){
 	}
 }
 
+function mostrarBotonAceptar(){
+	//se muestra el boton si se cumplen las tres condiciones
+	if( ($('#barcode').val() != '')&&($('#usuario').val() != '')&&($('#comboTipoPrestamo').val() != '') ){
+		$('#aceptar').show();
+	}
+}
 
 // FIXME test MIGUEL
 function devolver(){
