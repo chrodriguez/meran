@@ -8,6 +8,16 @@ if [ ! -z $1 ] && [ -f $1 ]; then
 	      fi 
 echo "Recuerde que debe cambiar los permisos de los usuarios en el archivo permisos.xls y Guardar como csv separado por punto y coma. Presione Enter para continuar";
 read; 
+echo "Ingrese el nombre de la base de datos que va a configurar";
+read base;
+if [ -z $base ]; then  
+	echo "ERROR: debe introducir el nombre de la bdd";
+
+else
+		echo 'use $base ;' > permisos$userOPAC.sql;
+		echo 'use $base ;' > permisos$userINTRA.sql;
+		echo 'use $base ;' > permisos$userDevelop.sql;
+		echo 'use $base ;' > permisos$userAdmin.sql;
 echo "Ingrese el usuario para el opac [userOPAC]";
 read userOPAC;
 if [ -z $userOPAC ]; then  
@@ -31,16 +41,30 @@ if [ -z $userAdmin ]; then
 echo "Agregar info para crear los usuarios?(S/N)";
 read crear;
 if [ $crear = S ]; then 
-		echo "Ahora crearemos los usuarios $userOPAC,$userINTRA,$userDevelop y $userAdmin";
-		echo "INSERT INTO \`user\` (\`Host\`, \`User\`, \`Password\`, \`Select_priv\`, \`Insert_priv\`, \`Update_priv\`, \`Delete_priv\`, \`Create_priv\`, \`Drop_priv\`, \`Reload_priv\`, \`Shutdown_priv\`, \`Process_priv\`, \`File_priv\`, \`Grant_priv\`, \`References_priv\`, \`Index_priv\`, \`Alter_priv\`, \`Show_db_priv\`, \`Super_priv\`, \`Create_tmp_table_priv\`, \`Lock_tables_priv\`, \`Execute_priv\`, \`Repl_slave_priv\`, \`Repl_client_priv\`, \`Create_view_priv\`, \`Show_view_priv\`, \`Create_routine_priv\`, \`Alter_routine_priv\`, \`Create_user_priv\`, \`ssl_type\`, \`ssl_cipher\`, \`x509_issuer\`, \`x509_subject\`, \`max_questions\`, \`max_updates\`, \`max_connections\`, \`max_user_connections\`) VALUES ('localhost', '$userOPAC', '*27AEDA0D3A56422C3F1D20DAFF0C8109058134F3', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '', '', '', 0, 0, 0, 0);" > permisos$userOPAC.sql;
-		echo "INSERT INTO \`user\` (\`Host\`, \`User\`, \`Password\`, \`Select_priv\`, \`Insert_priv\`, \`Update_priv\`, \`Delete_priv\`, \`Create_priv\`, \`Drop_priv\`, \`Reload_priv\`, \`Shutdown_priv\`, \`Process_priv\`, \`File_priv\`, \`Grant_priv\`, \`References_priv\`, \`Index_priv\`, \`Alter_priv\`, \`Show_db_priv\`, \`Super_priv\`, \`Create_tmp_table_priv\`, \`Lock_tables_priv\`, \`Execute_priv\`, \`Repl_slave_priv\`, \`Repl_client_priv\`, \`Create_view_priv\`, \`Show_view_priv\`, \`Create_routine_priv\`, \`Alter_routine_priv\`, \`Create_user_priv\`, \`ssl_type\`, \`ssl_cipher\`, \`x509_issuer\`, \`x509_subject\`, \`max_questions\`, \`max_updates\`, \`max_connections\`, \`max_user_connections\`) VALUES ('localhost', '$userINTRA', '*27AEDA0D3A56422C3F1D20DAFF0C8109058134F3', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '', '', '', 0, 0, 0, 0);" > permisos$userINTRA.sql;
-		echo "INSERT INTO \`user\` (\`Host\`, \`User\`, \`Password\`, \`Select_priv\`, \`Insert_priv\`, \`Update_priv\`, \`Delete_priv\`, \`Create_priv\`, \`Drop_priv\`, \`Reload_priv\`, \`Shutdown_priv\`, \`Process_priv\`, \`File_priv\`, \`Grant_priv\`, \`References_priv\`, \`Index_priv\`, \`Alter_priv\`, \`Show_db_priv\`, \`Super_priv\`, \`Create_tmp_table_priv\`, \`Lock_tables_priv\`, \`Execute_priv\`, \`Repl_slave_priv\`, \`Repl_client_priv\`, \`Create_view_priv\`, \`Show_view_priv\`, \`Create_routine_priv\`, \`Alter_routine_priv\`, \`Create_user_priv\`, \`ssl_type\`, \`ssl_cipher\`, \`x509_issuer\`, \`x509_subject\`, \`max_questions\`, \`max_updates\`, \`max_connections\`, \`max_user_connections\`) VALUES ('localhost', '$userDevelop', '*27AEDA0D3A56422C3F1D20DAFF0C8109058134F3', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '', '', '', 0, 0, 0, 0);" > permisos$userDevelop.sql;
-		echo "INSERT INTO \`user\` (\`Host\`, \`User\`, \`Password\`, \`Select_priv\`, \`Insert_priv\`, \`Update_priv\`, \`Delete_priv\`, \`Create_priv\`, \`Drop_priv\`, \`Reload_priv\`, \`Shutdown_priv\`, \`Process_priv\`, \`File_priv\`, \`Grant_priv\`, \`References_priv\`, \`Index_priv\`, \`Alter_priv\`, \`Show_db_priv\`, \`Super_priv\`, \`Create_tmp_table_priv\`, \`Lock_tables_priv\`, \`Execute_priv\`, \`Repl_slave_priv\`, \`Repl_client_priv\`, \`Create_view_priv\`, \`Show_view_priv\`, \`Create_routine_priv\`, \`Alter_routine_priv\`, \`Create_user_priv\`, \`ssl_type\`, \`ssl_cipher\`, \`x509_issuer\`, \`x509_subject\`, \`max_questions\`, \`max_updates\`, \`max_connections\`, \`max_user_connections\`) VALUES ('localhost', '$userAdmin', '*27AEDA0D3A56422C3F1D20DAFF0C8109058134F3', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '', '', '', 0, 0, 0, 0);" > permisos$userAdmin.sql;
-		 else
-		echo '' > permisos$userOPAC.sql;
-		echo '' > permisos$userINTRA.sql;
-		echo '' > permisos$userDevelop.sql;
-		echo '' > permisos$userAdmin.sql;
+		echo "Ingrese el password para el usuario $userOPAC[userOPAC]";
+		read passuserOPAC;
+		if [ -z $passuserOPAC ]; then  
+			passuserOPAC="userOPAC";
+		fi	
+		echo "Ingrese el password para el usuario $userDevelop [userDevelop]";
+		read passuserDevelop;
+		if [ -z $passuserDevelop ]; then  
+			passuserDevelop="userDevelop";
+		fi	
+		echo "Ingrese el password usuario para el usuario $userINTRA [userINTRA]";
+		read passuserINTRA;
+		if [ -z $passuserINTRA ]; then  
+			passuserINTRA="userINTRA";
+		       fi	
+		echo "Ingrese el password para el usuario $userAdmin [userAdmin]";
+		read passuserAdmin;
+		if [ -z $passuserAdmin ]; then  
+			passuserAdmin="userAdmin";
+		       fi		
+    		 echo "GRANT SELECT on nivel3 to '$userOPAC@localhost' identified by password($passuserOPAC); "  >> permisos$userOPAC.sql
+    		 echo "GRANT SELECT on nivel3 to '$userINTRA@localhost' identified by password($passuserINTRA); "  >> permisos$userINTRA.sql
+    		 echo "GRANT SELECT on nivel3 to '$userDevelop@localhost' identified by password($passuserDevelop); " >> permisos$userDevelop.sql
+    		 echo "GRANT SELECT on nivel3 to '$userAdmin@localhost' identified by password($passuserAdmin); "  >> permisos$userAdmin.sql
 		 fi
 IFS=$'\n'
 j=0
@@ -77,3 +101,4 @@ if [ $automatico = S ] || [ $automatico = s ] ; then
 			echo "Para agregar permisos de usuario $userDevelop ejecutar:  mysql $basededato -p < permisos$userDevelop.sql ";
 			echo "Para agregar permisos de usuario $userAdmin ejecutar:  mysql $basededato -p < permisos$userAdmin.sql ";
 		       fi;
+fi;
