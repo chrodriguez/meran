@@ -783,3 +783,25 @@ VALUES
 ('showMenuItem_circ_devolucion_renovacion', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL , 'bool' );
 
 
+--Agregamos la tabla de permisos sobre catalogo---
+
+ CREATE TABLE `V3Econo`.`perm_catalogo` (
+`id_persona` INT( 11 ) NOT NULL ,
+`ui` VARCHAR( 4 ) NOT NULL ,
+`tipo_documento` VARCHAR( 4 ) NOT NULL ,
+`datos_nivel1` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`datos_nivel2` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`datos_nivel3` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estantes_virtuales` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n1` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n2` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n3` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`tablas_de_refencia` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`control_de_autoridades` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+UNIQUE (
+`id_persona` ,
+`ui` ,
+`tipo_documento`
+)
+) ENGINE = InnoDB; 
