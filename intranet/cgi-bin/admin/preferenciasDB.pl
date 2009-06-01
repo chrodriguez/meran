@@ -102,7 +102,8 @@ my ($template, $session, $t_params) =
 
 	}
 	elsif($tipo eq "referencia"){
-		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
+		my $orden= $campo;
+		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo,$orden);
 		foreach my $val(@$valores){
 			$labels{$val->{"clave"}}=$val->{"valor"};	
 			push(@values,$val->{"clave"});
@@ -215,7 +216,8 @@ my ($template, $session, $t_params) =
 	}
 	elsif($tipo eq "referencia"){
 		my $campo=$obj->{'campo'}||$op;
-		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo);
+		my $orden= $campo;
+		my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo,$orden);
 		foreach my $val(@$valores){
 			$labels{$val->{"clave"}}=$val->{"valor"};	
 			push(@values,$val->{"clave"});

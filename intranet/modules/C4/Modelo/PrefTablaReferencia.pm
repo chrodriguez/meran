@@ -83,11 +83,11 @@ sub setAlias_tabla{
 
 sub obtenerValoresTablaRef{
 	my ($self) = shift;
-	my ($alias_tabla, $campo) = @_;
+	my ($alias_tabla, $campo, $orden) = @_;
 	
 	my $ref=$self->createFromAlias($alias_tabla);
 	if ($ref){
-		my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo);
+		my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo, $orden);
 		return ($cantidad,$valores);
 		}
 	else {

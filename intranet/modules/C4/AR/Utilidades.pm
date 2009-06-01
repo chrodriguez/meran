@@ -553,37 +553,38 @@ return @results2;
 obtenerValoresTablaRef
 Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
 =cut
-sub obtenerValoresTablaRef{
-    my ($tabla,$ident,$campos,$orden)=@_;
-
-    my $dbh = C4::Context->dbh;
-    my $query=" SELECT ".$ident." as id,".$campos." 
-            FROM ".$tabla. " 
-            ORDER BY ".$orden;
-    my $sth=$dbh->prepare($query);
-    $sth->execute();
-    my $strjson="";
-    my $labels;
-    my @campos=split(/,/,$campos);
-    my $long=scalar(@campos);
-    my $data;
-    my %result;
-
-    while($data=$sth->fetchrow_hashref()){
-        $result{$data->{'id'}}=$data->{$campos[0]};
-        $strjson.=",{'clave':'".$data->{'id'}."','valor':";
-        $labels="'".$data->{$campos[0]};
-        for(my $i=1;$i<$long;$i++){
-            $labels.="|".$data->{$campos[$i]};
-            $result{$data->{'id'}}.=",".$data->{$campos[$i]};
-        }
-        $strjson.=$labels."'}";
-    }
-    $strjson=substr($strjson,1,length($strjson));
-    $strjson="[".$strjson."]";
-
-    return($strjson,\%result);
-}
+# FIXME DEPRECATEDDDDDDDDDDDD
+# sub obtenerValoresTablaRef{
+#     my ($tabla,$ident,$campos,$orden)=@_;
+# 
+#     my $dbh = C4::Context->dbh;
+#     my $query=" SELECT ".$ident." as id,".$campos." 
+#             FROM ".$tabla. " 
+#             ORDER BY ".$orden;
+#     my $sth=$dbh->prepare($query);
+#     $sth->execute();
+#     my $strjson="";
+#     my $labels;
+#     my @campos=split(/,/,$campos);
+#     my $long=scalar(@campos);
+#     my $data;
+#     my %result;
+# 
+#     while($data=$sth->fetchrow_hashref()){
+#         $result{$data->{'id'}}=$data->{$campos[0]};
+#         $strjson.=",{'clave':'".$data->{'id'}."','valor':";
+#         $labels="'".$data->{$campos[0]};
+#         for(my $i=1;$i<$long;$i++){
+#             $labels.="|".$data->{$campos[$i]};
+#             $result{$data->{'id'}}.=",".$data->{$campos[$i]};
+#         }
+#         $strjson.=$labels."'}";
+#     }
+#     $strjson=substr($strjson,1,length($strjson));
+#     $strjson="[".$strjson."]";
+# 
+#     return($strjson,\%result);
+# }
 
 #devuelve todos los registros relacionados con un elemento de referencia, dependiendo de los valores en tablasDeReferencias, por ej: para el autor id 10 devolvera que tiene asignados 35 biblios
 

@@ -240,11 +240,11 @@ obtenerValoresTablaRef
 Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta haciendo referencia. Devuelve un string json y una hash.
 =cut
 sub obtenerValoresTablaRef{
-    my ($tableAlias,$campo)=@_;
+    my ($tableAlias,$campo, $orden)=@_;
 
     use C4::Modelo::PrefTablaReferencia;
     my $ref = C4::Modelo::PrefTablaReferencia->new();
-	my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo);
+	my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
     return($cantidad,$valores);
 

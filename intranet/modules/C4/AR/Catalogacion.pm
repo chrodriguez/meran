@@ -1830,9 +1830,11 @@ sub getHashCatalogaciones{
         #tiene una referencia, y no es un autocomplete			
 			C4::AR::Debug::debug('tiene referencia y es un combo');
             $cat->{'infoReferencia'}->{'campos'}; 
+			my $orden= $cat->infoReferencia->getCampos;
             my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
 																						$cat->infoReferencia->getReferencia,  #tabla  
-                                                                                        $cat->infoReferencia->getCampos  #campo
+                                                                                        $cat->infoReferencia->getCampos,  #campo
+																						$orden
                                                                                 );
             $hash_temp{'opciones'}= $valores;
         }
@@ -1891,9 +1893,11 @@ sub getHashCatalogacionesConDatos{
 			#tiene una referencia, y no es un autocomplete			
 				C4::AR::Debug::debug('tiene referencia y no es auto');
 				$cat->{'infoReferencia'}->{'campos'}; 
+				my $orden= $cat_estruct_array->[0]->infoReferencia->getCampos;
 				my ($cantidad,$valores)=&C4::AR::Referencias::obtenerValoresTablaRef(   
 																	$cat_estruct_array->[0]->infoReferencia->getReferencia,  #tabla  
-																	$cat_estruct_array->[0]->infoReferencia->getCampos  #campo
+																	$cat_estruct_array->[0]->infoReferencia->getCampos,  #campo
+																	$orden
 																					);
 				$hash_temp{'opciones'}= $valores;
 			}
