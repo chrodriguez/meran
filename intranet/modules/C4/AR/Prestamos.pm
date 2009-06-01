@@ -673,7 +673,7 @@ sub getHistorialPrestamos {
  																					sort_by => ( $orden ),
 																require_objects => [ 	'nivel3', 'nivel3.nivel1', 
 																						'nivel3.nivel2.nivel1.cat_autor','nivel3.nivel2' ]
-																			);
+																		);
 
     return ($prestamos_count_array_ref, $prestamos_array_ref);
 }
@@ -688,7 +688,10 @@ sub getHistorialPrestamosParaTemplate {
     
     my @loop_reading;
 # FIXME tarda mucho!!!!
+        my $count= 0;
+
     foreach my $prestamo (@$presmamos_array_ref){
+        $count++; C4::AR::Debug::debug("COUNT HIST. PRESTAMOS: ".$count);
         my %line;
         $line{'titulo'}=$prestamo->nivel3->nivel2->nivel1->getTitulo;
     #   $line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
