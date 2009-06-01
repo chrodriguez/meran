@@ -8,6 +8,7 @@ ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en
 ESTA_SEGURO_QUE_DESEA_BORRAROLO= "[% 'Está seguro que desea borrarlo?' | i18n %]";
 HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
+FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta parámetro para referencia' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================
@@ -51,5 +52,6 @@ SOLO_SERA_NUMERICO= "[% 'Solo sera numerico' | i18n %]";
 //================================================Catalogo=======================================================
 INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
 //================================================Fin==Catalogo==================================================
+
 
 </script>

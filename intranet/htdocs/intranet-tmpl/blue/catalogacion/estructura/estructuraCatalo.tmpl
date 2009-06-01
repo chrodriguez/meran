@@ -280,20 +280,31 @@ function updateArmarComboCampos(responseText){
          joinedFields+= camposSelect_array[x].campo;
         else
          joinedFields+= camposSelect_array[x].campo+", ";
-         options+= "<option value=" + camposSelect_array[x].campo +" >" + camposSelect_array[x].campo + "</option>";
+         options+= "<option value=" + camposSelect_array[x].campo +" selected>" + camposSelect_array[x].campo + "</option>";
     }
+
     //se agrega la info al combo
     $("#camposSelect").append(options);
-    $("#camposRef").val(joinedFields);
+	$("#camposRef").append(options);
+
+	if( camposSelect_array.length > 0){
+	//si los combos tienen opciones dejo seleccionado el primero
+		$('#camposSelect')[0].selectedIndex = 2;
+		$('#camposRef')[0].selectedIndex = 2;
+	}
+//     $("#camposRef").val(joinedFields);
     $("#divCamposRef").show();
     enable_disableSelects();
 }
 
 function eleccionTablaRef(){
 
-    armarComboCampos();
-    enable_disableSelects();
+	if($('#tablaRef').val() != '-1'){
 
+    	armarComboCampos();
+	}
+	
+	enable_disableSelects();
 }
 
 function eleccionSubCampo(){
@@ -307,10 +318,22 @@ function eleccionSubCampo(){
 }
 
 
+function verificarCamposParaReferencia(){
+	var ok= 1;
+	if($('#camposSelect').val() == '-1' || $('#camposRef').val() == '-1'){
+		alert(FALTA_PARAMETRO_PARA_REFERENCIA);
+		ok= 0;
+	}
+
+	return ok;
+}
+
 /*
  * agregarEstructuraCatalogacion
  */
 function agregarEstructuraCatalogacion(){ 
+	var ok= 0;
+
     objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -319,6 +342,7 @@ function agregarEstructuraCatalogacion(){
       objAH.itemtype= 'ALL';
     else
       objAH.itemtype= $('#tipo_nivel3_id').val();
+
     objAH.campo= $('#campo').val();
     objAH.subcampo= $('#subcampo').val();
     objAH.liblibrarian= $('#liblibrarian').val();
@@ -330,11 +354,16 @@ function agregarEstructuraCatalogacion(){
         objAH.orden= $('#camposSelect').val();
         objAH.campos= $('#camposRef').val();
         objAH.separador= $('#separador').val();
+		ok= verificarCamposParaReferencia();
     }else{
+		
          objAH.referencia=0;
     }
-    objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
-    objAH.sendToServer();
+
+	if(ok){
+    	objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
+    	objAH.sendToServer();
+	}
 }
 
 function updateAgregarEstructuraCatalogacion(responseText){
