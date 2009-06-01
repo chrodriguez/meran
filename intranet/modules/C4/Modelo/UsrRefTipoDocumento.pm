@@ -41,11 +41,12 @@ sub setNombre{
 
 sub obtenerValoresCampo {
 	my ($self)=shift;
-    	my ($campo)=@_;
+    my ($campo, $orden)=@_;
+
 	use C4::Modelo::UsrRefTipoDocumento::Manager;
  	my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento
-						( select   => [$self->meta->primary_key , $campo],
-						  sort_by => ($campo) );
+						( select   => [$campo],
+						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
