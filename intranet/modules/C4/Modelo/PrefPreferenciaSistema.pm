@@ -55,9 +55,8 @@ sub getShowValue{
 		use C4::AR::Utilidades;
     		my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
 										query => [ category => { eq => $self->getOptions} , 
-										authorised_value => { eq => $self->getValue}]
+										           authorised_value => { eq => $self->getValue}]
 								);
-
 			if(scalar(@$valAuto_array_ref) > 0){
 				$show=$valAuto_array_ref->[0]->getLib;
 			}

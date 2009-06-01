@@ -148,7 +148,7 @@ function realizarAccion(accion,chckbox,funcion){
 	var array= new Array;
 	var long=chck.length;
 	if ( long == 0){
-		alert("Elija al menos un documento para realizar la acci&oacute;n");
+		alert(ELIJA_AL_MENOS_UN_EJEMPLAR);
 	}
 	else{
 		for(var i=0; i< long; i++){
