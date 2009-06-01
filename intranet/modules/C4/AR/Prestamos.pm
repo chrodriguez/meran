@@ -713,7 +713,7 @@ sub getHistorialPrestamosParaTemplate {
         $line{'edicion'}= $prestamo->nivel3->nivel2->getEdicion;
         $line{'volume'}= $prestamo->nivel3->nivel2->getVolumenDesc;
     #   $line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-       	$line{'grupos'}= C4::AR::Busquedas::obtenerGrupos($prestamo->nivel3->getId1,'','intra');
+#        	$line{'grupos'}= C4::AR::Busquedas::obtenerGrupos($prestamo->nivel3->getId1,'','intra');
     
         push(@loop_reading,\%line);
     }
