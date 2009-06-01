@@ -42,12 +42,12 @@ sub setNombre{
 }
 
 sub obtenerValoresCampo {
-	my ($self)=shift;
-    my ($campo)=@_;
+    my ($self)=shift;
+    my ($campo,$orden)=@_;
 	use C4::Modelo::RefEstado::Manager;
  	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
-						( select   => [$self->meta->primary_key , $campo],
-						  sort_by => ($campo) );
+						( select   => [ $self->meta->primary_key , $campo],
+						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){

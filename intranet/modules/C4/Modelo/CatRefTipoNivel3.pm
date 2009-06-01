@@ -45,12 +45,12 @@ sub nextMember{
 
 
 sub obtenerValoresCampo {
-	my ($self)=shift;
-    my ($campo)=@_;
+    my ($self)=shift;
+    my ($campo,$orden)=@_;
 	
  	my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
 						( select   => [$self->meta->primary_key , $campo],
-						  sort_by => ($campo) );
+						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){

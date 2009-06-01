@@ -91,11 +91,25 @@ sub obtenerValoresTablaRef{
 		return ($cantidad,$valores);
 		}
 	else {
-	return 0;
+	    return 0;
 	}
 	
 }
 
+sub obtenerValoresTablaRef{
+    my ($self) = shift;
+    my ($alias_tabla, $campo, $orden) = @_;
+    
+    my $ref=$self->createFromAlias($alias_tabla);
+    if ($ref){
+        my ($cantidad,$valores)=$ref->obtenerValoresCampo($campo,$orden);
+        return ($cantidad,$valores);
+        }
+    else {
+        return 0;
+    }
+
+}
 
 sub obtenerValorDeReferencia{
 	my ($self) = shift;

@@ -23,7 +23,6 @@ $(document).ready( function() {
 	_showAndHiddeEstructuraDelNivel(0);
 
 	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
-
 		params= new objeto_params();
 		params.id1= [% id1 %];
 		params.id2= [% id2 %];
@@ -32,7 +31,6 @@ $(document).ready( function() {
 		cargarNivel1(params);
 	[% ELSE %]
 		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
-	
 			params= new objeto_params();
 			params.id1= [% id1 %];
 			params.id2= [% id2 %];
@@ -41,7 +39,6 @@ $(document).ready( function() {
 			cargarNivel1(params);
 		[% ELSE %]	
 			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
-		
 				params= new objeto_params();
 				params.id1= [% id1 %];
 				params.id2= [% id2 %];

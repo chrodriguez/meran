@@ -1911,6 +1911,14 @@ sub sortHASHNumber{
 }
 
 
+
+sub stringToArray{
+
+    my ($string);
+
+    return( split(/\b/,$string) );
+}
+
 ############################## Funciones para AUTOCOMPLETABLES #############################################################
 ############################## Funciones para AUTOCOMPLETABLES #############################################################
 ############################## Funciones para AUTOCOMPLETABLES #############################################################

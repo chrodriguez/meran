@@ -60,12 +60,12 @@ sub setEditorial{
 }
 
 sub obtenerValoresCampo {
-	my ($self)=shift;
-    my ($campo)=@_;
+    my ($self)=shift;
+    my ($campo,$orden)=@_;
 	use C4::Modelo::CatTema::Manager;
  	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
 						( select   => [$self->meta->primary_key , $campo],
-						  sort_by => ($campo) );
+						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){

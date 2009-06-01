@@ -177,7 +177,7 @@ sub obtenerValoresCampo {
 
 	use C4::Modelo::UsrRefCategoriasSocio::Manager;
  	my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio
-						( select   => [$campo],
+						( select   => [$self->meta->primary_key ,$campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
