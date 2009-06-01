@@ -1948,22 +1948,32 @@ sub autorAutocomplete{
     return $textout;
 }
 
-sub ayudaCampoMARK{
+sub obtenerDescripcionDeSubCampos{
+	my ($campo)= @_;
+
+    my ($sub_campos_marc_array_ref) = &C4::AR::Referencias::obtenerSubCamposDeCampo($campo);
+	my $textout;
+	
+	foreach my $sub_campo_marc (@$sub_campos_marc_array_ref) {
+# SELECT tagsubfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) as subcampo
+# 		$textout .= $sub_campo_marc->getTagSubField."/".$sub_campo_marc->getLiblibrarian."#";
+		$textout .= $sub_campo_marc->getTagSubField."/".$sub_campo_marc->getTagSubField." - ".$sub_campo_marc->getLiblibrarian."#";
+# 		$results[$i]->{'tagsubfield'}."/".$results[$i]->{'subcampo'}."#";
+	}
+
+	return $textout;
+}
+
+sub ayudaCampoMARCAutocomplete{
 
     my ($campo)= @_;
-    my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarInfoCampo($campo); 
-    my $i=0;
-    my $resultAyudaMARK="";
-    my $field;
-    my $data;
+    my $campos_marc_array_ref= &C4::AR::Referencias::obtenerCamposLike($campo); 
+	my $textout;
 
-    for ($i; $i<$cant; $i++){
-        $field=$results[$i]->{'tagfield'};
-        $data=$results[$i]->{'liblibrarian'};
-        $resultAyudaMARK .= $field."|".$data. "\n";
+    foreach my $campo_marc (@$campos_marc_array_ref){
+        $textout.= $campo_marc->getTagfield."|".$campo_marc->getLiblibrarian."\n";
     }
-
-    return ($resultAyudaMARK);
+    return $textout;
 }
 
 
@@ -2037,6 +2047,27 @@ sub autocompleteEditoriales{
     for ($i; $i<$cant; $i++){
         $field=$results[$i]->{'id'};
         $data=$results[$i]->{'editorial'};
+        $resultado .= $field."|".$data. "\n";
+    }
+
+    return $resultado;
+
+}
+
+sub autocompleteAyudaMarc{
+    
+    my ($editorial) = @_;
+
+    my ($cant, @results)= &C4::AR::ControlAutoridades::search_editoriales($editorial);
+
+    my $i=0;
+    my $resultado="";
+    my $field;
+    my $data;
+
+    for ($i; $i<$cant; $i++){
+        $field=$results[$i]->{'tagfield'};
+        $data=$results[$i]->{'liblibrarian'};
         $resultado .= $field."|".$data. "\n";
     }
 

@@ -6,60 +6,30 @@ function clearInput(){
 	$('#subcampos').val("");
 }
 
-function getTagId(id){
-//muestra los subcampos del campo seleccionado
-$('#campoHelpId').val(id);
-$('#subcampos').val("");
-
-var campo= $('#campoHelpId').val();
-var params= 'tipoAccion=Select&componente=ayudaCampoMARKsubcampo&campo=' + campo;
-
-$.ajax({	type: "POST", 
-		url: '/cgi-bin/koha/autocompletables/ayudaMARKAutocomplete.pl',
-		data: params,
-		complete: function parsearSubCampos(ajax){
- 			var response = ajax.responseText || "no response text";	
- 			var arreglo=response.split("#");
- 			var datos;
-     			var textArea = $("#subcampos");	
- 	
-  				for(var i=0; i<arreglo.length - 1;i++){
- 				  datos= arreglo[i].split("/");
-				  textArea.val(textArea.val() + datos[1] + "\n");
-  				}
- 			}
-	});
-
+function obtenerSubCampos(){
+	objAH=new AjaxHelper(updateObtenerSubCampos);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.campo = $('#campoHelpId').val();
+    objAH.tipoAccion= 'MOSTRAR_SUBCAMPOS_DE_CAMPO';
+    objAH.sendToServer();
 }
 
+function updateObtenerSubCampos(responseText){
+	var response = responseText || "no response text";	
+	var arreglo=response.split("#");
+	var datos;
+	var textArea = $("#subcampos");	
 
-// FIXME esto no va a funcionar, le falta el token
-function CrearAutocompleteHelp(){
-	// q= valor de campoHelp
-	$("#campoHelp").search();
-	$("#campoHelp").autocomplete('/cgi-bin/koha/autocompletables/ayudaMARKAutocomplete.pl',{
- 		formatItem: function(row){
-			return row[0]+" - "+row[1];
-		},
-		minChars:1,
-        	matchSubset:1,
-        	matchContains:1,
-		maxItemsToShow:10,
-        	cacheLength:10,
-        	selectOnly:1,
-		extraParams:{	tipoAccion:"Select", 
-				componente:"ayudaCampoMARK"
-			}	
-	});//end autocomplete
-	$("#campoHelp").result(function(event, data, formatted) {
-		getTagId(data[0]);
-		$("#campoHelp").val(data[0] + " - " + data[1]);
-	});
+	for(var i=0; i<arreglo.length - 1;i++){
+		datos= arreglo[i].split("/");
+		textArea.val(textArea.val() + $.trim(datos[1]) + "\n");
+	}
 }
 
 $(document).ready(function() {
 	
-	CrearAutocompleteHelp();
+	CrearAutocompleteAyudaMARC({IdInput: 'campoHelp', IdInputHidden: 'campoHelpId', callBackFunction: obtenerSubCampos})
 });
 
 </script>

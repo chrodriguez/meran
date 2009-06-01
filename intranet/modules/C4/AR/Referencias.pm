@@ -280,6 +280,43 @@ sub getNombrePais {
 	}
 }
 
+=item
+Devuelve un arreglo de objetos PrefEstructuraCampoMarc
+=cut
+sub obtenerCamposLike {
+	my ($campo) = @_;
+
+    my $campos_marc_array_ref = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+																query => [ tagfield => { like => '%'.$campo.'%' } ]
+											);
+    my @results;
+
+    foreach my $objeto_campo_marc (@$campos_marc_array_ref) {
+        push (@results, $objeto_campo_marc);
+    }
+
+    return(\@results);
+}
+
+=item
+Devuelve un arreglo de objetos PrefEstructuraCampoMarc
+=cut
+sub obtenerSubCamposDeCampo {
+	my ($campo) = @_;
+	use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+	use C4::Modelo::PrefEstructuraSubcampoMarc;
+
+    my $campos_marc_array_ref = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+																query => [ tagfield => { eq => $campo } ]
+											);
+    my @results;
+
+    foreach my $objeto_campo_marc (@$campos_marc_array_ref) {
+        push (@results, $objeto_campo_marc);
+    }
+
+    return(\@results);
+}
 
 =item
 Devuelve el nombre del del tipo de documento segun el id_tipo_doc pasado por paramentro, si no existe devuelve 0

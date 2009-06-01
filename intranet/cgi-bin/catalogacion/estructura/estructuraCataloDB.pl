@@ -234,6 +234,14 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
+elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
+#Se muestran la estructura de catalogacion segun el nivel pasado por parametro
+
+    my ($sub_campos_string) = &C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
+    
+	C4::Output::printHeader($session);
+	print $sub_campos_string;
+}
 
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 #Se muestran las catalogaciones

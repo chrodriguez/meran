@@ -143,3 +143,12 @@ function CrearAutocompleteEditoriales(options){
 					});	
 }
 
+function CrearAutocompleteAyudaMARC(options){
+    _CrearAutocomplete({
+							IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_ayuda_marc', 
+							callBackFunction: options.callBackFunction,
+					});	
+}
+
