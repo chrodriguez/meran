@@ -1,4 +1,5 @@
-
+use EconoV3 ;
+GRANT SELECT on cat_nivel3 to intra@localhost identified by 'dev'; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_analitica                      to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_autor                          to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_autor_analitica                to intra@localhost; 
@@ -29,7 +30,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE on  cat_ref_tipo_nivel3                to i
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_tapa_amazon                    to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_tema                           to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  cat_tema_analitica                 to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  categories                         to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  circ_prestamo                      to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  circ_ref_tipo_prestamo             to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  circ_regla_sancion                 to intra@localhost; 
@@ -54,14 +54,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE on  pref_unidad_informacion            to i
 GRANT SELECT, INSERT, UPDATE, DELETE on  pref_valor_autorizado              to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_disponibilidad                 to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_dpto_partido                   to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  ref_dptos_partidos                 to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_estado                         to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_idioma                         to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_localidad                      to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_nivel_bibliografico            to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_pais                           to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_provincia                      to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  ref_provincias                     to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_soporte                        to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  ref_tipo_operacion                 to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  rep_busqueda                       to intra@localhost; 
@@ -70,10 +68,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE on  rep_historial_circulacion          to i
 GRANT SELECT, INSERT, UPDATE, DELETE on  rep_historial_prestamo             to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  rep_historial_sancion              to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  rep_registro_modificacion          to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  sessionqueries                     to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  sist_sesion                        to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  unavailable                        to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  uploadedmarc                       to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_estado                         to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_permiso                        to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_persona                        to intra@localhost; 
@@ -82,5 +77,3 @@ GRANT SELECT, INSERT, UPDATE, DELETE on  usr_ref_estado                     to i
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_ref_tipo_documento             to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_socio                          to intra@localhost; 
 GRANT SELECT, INSERT, UPDATE, DELETE on  usr_socio_relacionado              to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  z3950queue                         to intra@localhost; 
-GRANT SELECT, INSERT, UPDATE, DELETE on  z3950results                       to intra@localhost; 

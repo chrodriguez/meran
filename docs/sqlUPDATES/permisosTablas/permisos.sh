@@ -36,7 +36,7 @@ if [ -z $userAdmin ]; then
 		       fi	
 echo "Agregar info para crear los usuarios?(S/N)";
 read crear;
-if [ $crear = S ]; then 
+if [ $crear = S ] || [ $crear = s ]; then 
 		echo "Ingrese el password para el usuario $userOPAC[userOPAC]";
 		read passuserOPAC;
 		if [ -z $passuserOPAC ]; then  
@@ -65,7 +65,13 @@ if [ $crear = S ]; then
     		 echo "GRANT SELECT on cat_nivel3 to $userINTRA@localhost identified by '$passuserINTRA'; "  >> permisos$userINTRA.sql
     		 echo "GRANT SELECT on cat_nivel3 to $userDevelop@localhost identified by '$passuserDevelop'; " >> permisos$userDevelop.sql
     		 echo "GRANT SELECT on cat_nivel3 to $userAdmin@localhost identified by '$passuserAdmin'; "  >> permisos$userAdmin.sql
-		 fi
+		 
+else
+	echo "use $basededatos ;" > permisos$userOPAC.sql;
+		echo "use $basededatos ;" > permisos$userINTRA.sql;
+		echo "use $basededatos ;" > permisos$userDevelop.sql;
+		echo "use $basededatos ;" > permisos$userAdmin.sql;
+fi
 IFS=$'\n'
 j=0
 echo "Procesando el archivo ..... Aguarde";

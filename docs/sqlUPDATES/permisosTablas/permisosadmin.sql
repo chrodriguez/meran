@@ -1,4 +1,5 @@
-
+use EconoV3 ;
+GRANT SELECT on cat_nivel3 to admin@localhost identified by 'dev'; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_analitica                      to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_autor                          to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_autor_analitica                to admin@localhost; 
@@ -29,7 +30,6 @@ GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_ref_tipo_nivel3         
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_tapa_amazon                    to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_tema                           to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  cat_tema_analitica                 to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  categories                         to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  circ_prestamo                      to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  circ_ref_tipo_prestamo             to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  circ_regla_sancion                 to admin@localhost; 
@@ -54,14 +54,12 @@ GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  pref_unidad_informacion     
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  pref_valor_autorizado              to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_disponibilidad                 to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_dpto_partido                   to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_dptos_partidos                 to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_estado                         to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_idioma                         to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_localidad                      to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_nivel_bibliografico            to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_pais                           to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_provincia                      to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_provincias                     to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_soporte                        to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  ref_tipo_operacion                 to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  rep_busqueda                       to admin@localhost; 
@@ -70,10 +68,7 @@ GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  rep_historial_circulacion   
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  rep_historial_prestamo             to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  rep_historial_sancion              to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  rep_registro_modificacion          to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  sessionqueries                     to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  sist_sesion                        to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  unavailable                        to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  uploadedmarc                       to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_estado                         to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_permiso                        to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_persona                        to admin@localhost; 
@@ -82,5 +77,3 @@ GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_ref_estado              
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_ref_tipo_documento             to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_socio                          to admin@localhost; 
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  usr_socio_relacionado              to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  z3950queue                         to admin@localhost; 
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  z3950results                       to admin@localhost; 
