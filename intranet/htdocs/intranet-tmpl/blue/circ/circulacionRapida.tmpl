@@ -172,37 +172,6 @@ function mostrarBotonAceptar(){
 	}
 }
 
-// FIXME test MIGUEL
-function devolver(){
-	objAH=new AjaxHelper(updateInfoDevRen);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'REALIZAR_DEVOLUCION';
-	objAH.datosArray= infoPrestamos_array;
-	objAH.nro_socio= USUARIO.ID;
-// 	objAH.accion=accion;
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-/*
-FUNCION REDEFINIDA, se encuentra en circulacion.js 
-*/
-function updateInfoDevRen(responseText){
-	cancelarDiv();
-
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.Messages_arrayref;
-// 	var ticketsArray= infoHash.tickets;
-	setMessages(messageArray);
-
-// 	for(i=0; i<messageArray.length;i++){
-// 		imprimirTicket(ticketsArray[i].ticket,i);
-//   		setMessages(messageArray[i]);
-// 	}
-
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
-}
 
 function onCompleteUsuarios(){
 	tieneApoderado();

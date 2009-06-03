@@ -10,20 +10,29 @@ use CGI::Session;
 
 my $input = new CGI;
 
+
 my ($template, $session, $t_params)= get_template_and_user({
 									                                    template_name => "opac-main.tmpl",
 									                                    type => "opac",
 									                                    query => $input,
-									                                    authnotrequired => 1,
+# 									                                    authnotrequired => 1,
+# FIXME no esta funcionando el loggin desde aca!!!!
+																		authnotrequired => 0, 
 									                                    flagsrequired => {borrow => 1},
 			                                                  });
 
-if( $session->param('borrowernumber') ){
-}else{
-    #se inicializa la session y demas parametros para autenticar
-	$t_params->{'opac'};
-    ($session)= C4::Auth::inicializarAuth($input, $t_params);
-}
+# if( $session->param('nro_socio') ){
+# }else{
+#     #se inicializa la session y demas parametros para autenticar
+# 	$t_params->{'opac'};
+#     ($session)= C4::Auth::inicializarAuth($input, $t_params);
+# }
+
+# my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
+
+#se inicializa la session y demas parametros para autenticar
+$t_params->{'opac'};
+my ($session)= C4::Auth::inicializarAuth($input, $t_params);
 
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 

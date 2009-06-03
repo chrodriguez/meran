@@ -169,7 +169,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 #**********************************************FIN*****PRESTAMO**********************************************
 
 #*********************************************DEVOLVER_RENOVAR***********************************************
-
+# FIXME DEPRECATEDDDDDDDD
 elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
 	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
 	

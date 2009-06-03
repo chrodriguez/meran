@@ -14,7 +14,7 @@
 </script>
 <script language="javascript"> 
 
-    	function enviar(){
+    function enviar(){
 		document.datosAEnviar.action= '/cgi-bin/koha/opac-user.pl';
 		nroRandom= [% RANDOM_NUMBER %];
 		hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);

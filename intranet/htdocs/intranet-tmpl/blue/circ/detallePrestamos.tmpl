@@ -81,14 +81,14 @@
         <input type="image" BORDER=0 
         src="[% themelang %]/images/item-return.png" 
         title="Devolver" 
-        onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevRen);">
+        onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);">
     [% END %]   
     
     [% IF socio.esRegular %]
         [% UNLESS socio.estaSancionado %]
             <input type="image" 
             src="[% themelang %]/images/renew.png" title="Renovar" 
-            onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivDevRen);">
+            onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);">
         [% END %]
     [% END %]
     </p>

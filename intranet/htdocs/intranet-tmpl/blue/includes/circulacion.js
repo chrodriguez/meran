@@ -195,7 +195,8 @@ function generaDivPrestamo(responseText){
 	}
 
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'><input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'>";
+	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
@@ -308,11 +309,12 @@ function updateInfoCancelacion(responseText){
 	detalleReservas(USUARIO.ID,updateInfoReservas);
 }
 
+
 /*
  * generaDivDevRen
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
-function generaDivDevRen(responseText){
+function generaDivDevolucion(responseText){
 	infoArray= new Array;
 	infoPrestamos_array= new Array();
 	infoArray= JSONstring.toObject(responseText);
@@ -334,7 +336,41 @@ function generaDivDevRen(responseText){
         html= html + ". <br>"
 	}
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=devolver()><input type='button' value='Cancelar' onClick='cancelarDiv();'>   <!--<input type='button' value='DEVOLVER NUEVO' onClick=devolver()>-->    </center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=devolver()>";
+	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "</div>";
+
+	$('#confirmar_div').html(html);
+	scrollTo('confirmar_div');
+}
+
+/*
+ * generaDivDevRen
+ * Genera el div con los datos de los items que se van a devolver o renovar.
+ */
+function generaDivRenovacion(responseText){
+	infoArray= new Array;
+	infoPrestamos_array= new Array();
+	infoArray= JSONstring.toObject(responseText);
+	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var accion=infoArray[0].accion;
+	html=html + infoArray[0].accion +":<br>";
+	for(var i=0; i<infoArray.length;i++){
+	
+		var infoDevRenObj= new infoPrestamo();
+        infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
+		infoDevRenObj.id3= infoArray[i].id3;
+		infoDevRenObj.barcode=infoArray[i].barcode;
+		infoPrestamos_array[i]= infoDevRenObj;
+ 
+		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
+		html= html + infoArray[i].titulo + ", ";
+		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
+		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
+        html= html + ". <br>"
+	}
+	html= html + "</p>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()><input type='button' value='Cancelar' onClick='cancelarDiv();'>   <!--<input type='button' value='DEVOLVER NUEVO' onClick=devolver()>-->    </center><br>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
@@ -345,14 +381,14 @@ function generaDivDevRen(responseText){
  * devolver_renovar
  * Devuelve o renueva el o los items seleccionados.
  */
-function devolver_renovar(accion){
-	objAH=new AjaxHelper(updateInfoDevRen);
+// function devolver_renovar(accion){
+function renovar(){
+	objAH=new AjaxHelper(updateInfoRenovar);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'DEVOLVER_RENOVAR';
+	objAH.tipoAccion= 'REALIZAR_RENOVACION';
 	objAH.datosArray= infoPrestamos_array;
 	objAH.nro_socio= USUARIO.ID;
-	objAH.accion=accion;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -363,7 +399,7 @@ function devolver_renovar(accion){
  * Funcion que se ejecuta cuando se realiza devoluviones o renovaciones y actualiza la tabla de prestamos.
  * IGUAL A updateInfoPrestarReserva SALVO POR EL LLAMADO A LOS DETALLES.
  */
-function updateInfoDevRen(responseText){
+function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
@@ -379,6 +415,35 @@ function updateInfoDevRen(responseText){
     ejemplaresDelGrupo(ID_N2);
 }
 
+
+/* devolver
+* realiza la devolucion de 1 a n ejemplares segun infoPrestamos_array
+*/
+function devolver(){
+	objAH=new AjaxHelper(updateInfoDevolver);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= 'REALIZAR_DEVOLUCION';
+	objAH.datosArray= infoPrestamos_array;
+	objAH.nro_socio= USUARIO.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+/*
+FUNCION REDEFINIDA, se encuentra en circulacion.js 
+*/
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+}
+
+
 /*
  * imprimirTicket
  * Abre la ventana para poder imprimir el ticket del prestamo o renovacion.
@@ -393,5 +458,3 @@ function imprimirTicket(ticket,num){
 		window.open ("/cgi-bin/koha/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }
-
-

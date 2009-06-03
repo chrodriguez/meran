@@ -29,27 +29,6 @@ $(document).ready(function() {
 										});
 });
 
-/*
- * updateInfoPrestamosConChck
- * Esta funcion se ejecuta cuando se viene desde moremember o el detalle, cuando se completa el ajax de la funcion
- * detalleReservas.
- * Tiene que estar en el template, porque recibe variables desde el pl.
- * Despues realiza la funcion realizarAccion que es la que genera el div para el prestamo.
- */
-
-/*
-function updateInfoPrestamosConChck(responseText){
-	$('#tablaPrestamos').slideDown('slow');
-	$('#tablaPrestamos').html(responseText);
- 	zebra('tablaPrestamos');
-	checkedAll('checkAllPrestamos','chkboxPrestamos');
-	[% FOREACH array %]
-		var chk=$("#"+[% id3 %])[0];
-		chk.checked=true;
-	[% END %]
-	realizarAccion('[% accion %]','chkboxPrestamos',generaDivDevRen);
-}
-*/
 
 </script>
 
