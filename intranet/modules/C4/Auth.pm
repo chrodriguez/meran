@@ -558,7 +558,7 @@ C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID.
                 $info{'nopermission'} = 0;
                 $loggedin = 1;
                 #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
-                my $sth=$dbh->prepare("SELECT MAX(lastlogin) AS lastlogin FROM borrowers");
+                my $sth=$dbh->prepare("SELECT MAX(lastlogin) AS lastlogin FROM usr_socio");
                 $sth->execute();
                 my $lastlogin= $sth->fetchrow;
                 my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1));
@@ -602,13 +602,13 @@ C4::AR::Debug::debug("checkauth=> t_operacionesDeINTRA\n");
     
             }# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
 
-#              if ($type eq 'opac') {
-#                 $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
-#                 redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
-#              }else{
-#                 $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
-#                 redirectTo('/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
-#             }
+             if ($type eq 'opac') {
+                $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+                redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+             }else{
+                $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
+                redirectTo('/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
+            }
         } else {
         #usuario o password invalida
             if ($userid) {
@@ -629,8 +629,8 @@ C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
  
     }# end unless ($userid) 
 
-C4::AR::Debug::debug("checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n");
-    return ($userid, $session, $flags);
+# C4::AR::Debug::debug("checkauth=> 2do EXIT => userid: ".$userid." cookie=> sessionID: ".$session->param('sessionID')." sessionID: ".$sessionID."\n");
+#     return ($userid, $session, $flags);
 
 }# end checkauth
 
