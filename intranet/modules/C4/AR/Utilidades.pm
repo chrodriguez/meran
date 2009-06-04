@@ -2224,7 +2224,7 @@ sub barcodePrestadoAutocomplete{
     if ($cant > 0){
         foreach my $prestamo (@$circ_prestamo_array_ref){
 			#se muestra el barcode, pero en el hidden queda el usuario al que se le realizo el prestamo
-            $textout.= $prestamo->getNro_socio."|".$prestamo->nivel3->getBarcode."\n";
+            $textout.= $prestamo->getId_prestamo."|".$prestamo->nivel3->getBarcode."\n";
         }
     }
     return $textout;

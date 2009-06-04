@@ -4,7 +4,15 @@
 
 <script language="javascript" type="text/javascript">
 
-function detalleDelUsuario(){
+function inicializar(){
+	USUARIO= new objeto_usuario();
+	USUARIO.ID = 0;
+	USUARIO.text = '';
+
+	$('#nro_socio_hidden').val('')
+}
+
+function onCompleteAutocompleteUsuarios(){
 	var nro_socio= $('#nro_socio_hidden').val();
 	USUARIO= new objeto_usuario();
 	USUARIO.text= $('#usuarioAutocomplete').val();
@@ -15,17 +23,57 @@ function detalleDelUsuario(){
 	detalleSanciones(nro_socio);
 }
 
+function onCompleteAutocompleteBarcodesPrestados(){
+	var prestamo= $('#prestamo_hidden').val();
+	//detalleUsuario esta implementado en circulacion,js
+	getSocioFromPrestamo(prestamo);
+}
+
+function getSocioFromPrestamo(prestamo){
+
+	objAH=new AjaxHelper(updateGetSocioFromPrestamo);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.prestamo= prestamo;
+	objAH.tipoAccion= "CIRCULACION_RAPIDA_OBTENER_SOCIO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateGetSocioFromPrestamo(responseText){
+	var socio= JSONstring.toObject(responseText);
+
+	USUARIO= new objeto_usuario();
+	USUARIO.text= socio.apeYNom;
+	USUARIO.ID= socio.nro_socio;
+
+	detalleUsuario(USUARIO.ID);
+	detalleSanciones(USUARIO.ID);
+}
+
+function devolverPrestamo(accion,funcion){
+
+	objAH=new AjaxHelper(funcion);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion= accion;
+	objAH.datosArray= [$('#prestamo_hidden').val()];
+	objAH.nro_socio= USUARIO.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
 $(document).ready(function() {
 	//se crea el autocomplete para buscar el usuario
 	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
 								IdInputHidden: 'nro_socio_hidden', 
-								callBackFunction: detalleDelUsuario
+								callBackFunction: onCompleteAutocompleteUsuarios
 						});
 
 	//se crea el autocomplete para buscar por codigo de barras
 	CrearAutocompleteBarcodesPrestados({	IdInput: 'barcode', 
-											IdInputHidden: 'nro_socio_hidden', 
-											callBackFunction: detalleDelUsuario
+											IdInputHidden: 'prestamo_hidden', 
+											callBackFunction: onCompleteAutocompleteBarcodesPrestados
 										});
 });
 
@@ -91,10 +139,24 @@ $(document).ready(function() {
 		<td align="center">
 			<input id="barcode" type="text" class="inputFontNormal" size="40">
 			<input id="barcode_hidden" type="hidden">
+			<input id="prestamo_hidden" type="hidden">
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
 </table>
+</div>
+
+<div id="botonDevolver">
+	 <p align="center">
+        <input type="image" BORDER=0 
+        src="[% themelang %]/images/item-return.png" 
+        title="Devolver" 
+        onClick="devolverPrestamo('DEVOLUCION',generaDivDevolucion);">
+    
+		<!--<input type="image" 
+		src="[% themelang %]/images/renew.png" title="Renovar" 
+		onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);">-->
+    </p>
 </div>
 
 <!-- DELTALLE DEL USUARIO -->

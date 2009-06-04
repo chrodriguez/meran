@@ -54,7 +54,9 @@ function realizarAccionCircRapida(){
 	objAH.nro_socio= $('#nro_socio_hidden').val();
 	objAH.barcode= $('#barcode').val();
 	if($('#operacion').val() == 'devolver'){
-		$('#barcodePrestado').val();
+		var prestamos_array=new Array();
+		prestamos_array=  $('#barcode_hidden').val();
+		objAH.datosArray= prestamos_array;
 	}
 	objAH.operacion= $('#operacion').val();
 	objAH.tipoPrestamo= $('#comboTipoPrestamo').val();
@@ -155,8 +157,8 @@ function updateAutocompleteBarcodes(){
 }
 
 function updateAutocompleteBarcodesPrestados(){
-	$('#usuario').focus();
-	refreshTipoPrestamo();
+	
+	mostrarBotonAceptar();
 }
 
 function refreshTipoPrestamo(){
@@ -166,8 +168,12 @@ function refreshTipoPrestamo(){
 }
 
 function mostrarBotonAceptar(){
-	//se muestra el boton si se cumplen las tres condiciones
-	if( ($('#barcode').val() != '')&&($('#usuario').val() != '')&&($('#comboTipoPrestamo').val() != '') ){
+	//si se va a devolver y tengo el barcode, muetro el boton para devolver
+	if( $('#operacion').val() == 'devolver' && $('#barcodeprestado').val() != '' ){
+		$('#aceptar').show();
+	}
+
+	if( $('#operacion').val() == 'prestar' && $('#barcode').val() != '' && $('#usuario').val() != '' && $('#comboTipoPrestamo').val() != '' ){
 		$('#aceptar').show();
 	}
 }

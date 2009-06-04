@@ -303,6 +303,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'loggedinuser'}= $userid;
 	$params{'responsable'}= $userid;
 	$params{'tipo_prestamo'}= $obj->{'tipoPrestamo'};
+	$params{'datosArray'}= $obj->{'datosArray'};
 	
 	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
@@ -310,7 +311,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	}
 	elsif($params{'operacion'} eq "devolver"){
 
-		($Message_arrayref) = C4::AR::Prestamos::t_devolverPorBarcode(\%params);	
+		($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
 		($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
@@ -334,6 +335,24 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 	$tiposPrestamos{'tipoPrestamo'}= $tipoPrestamos_array_hash_ref;
 	
 	my $infoOperacionJSON=to_json \%tiposPrestamos;
+
+    C4::Output::printHeader($session);
+	print $infoOperacionJSON;
+}
+elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
+
+	my ($userid, $session, $flags) = checkauth($input, 0,{circulate => 1},"intranet");
+
+	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
+	my ($socio)= C4::AR::Prestamos::getSocioFromID_Prestamo($obj->{'prestamo'});
+	
+	my %infoSocio;
+	if($socio){
+ 		$infoSocio{'apeYNom'}= $socio->persona->getApeYNom;
+		$infoSocio{'nro_socio'}= $socio->getNro_socio;
+	}
+
+	my $infoOperacionJSON=to_json \%infoSocio;
 
     C4::Output::printHeader($session);
 	print $infoOperacionJSON;

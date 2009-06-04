@@ -558,7 +558,7 @@ C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID.
                 $info{'nopermission'} = 0;
                 $loggedin = 1;
                 #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
-                my $sth=$dbh->prepare("SELECT MAX(lastlogin) AS lastlogin FROM usr_socio");
+                my $sth=$dbh->prepare("SELECT MAX(last_login) AS lastlogin FROM usr_socio");
                 $sth->execute();
                 my $lastlogin= $sth->fetchrow;
                 my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1));

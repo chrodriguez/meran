@@ -323,11 +323,7 @@ function generaDivDevolucion(responseText){
 	html=html + infoArray[0].accion +":<br>";
 	for(var i=0; i<infoArray.length;i++){
 	
-		var infoDevRenObj= new infoPrestamo();
-        infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
-		infoDevRenObj.id3= infoArray[i].id3;
-		infoDevRenObj.barcode=infoArray[i].barcode;
-		infoPrestamos_array[i]= infoDevRenObj;
+		infoPrestamos_array[i]= infoArray[i].id_prestamo;
  
 		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
 		html= html + infoArray[i].titulo + ", ";

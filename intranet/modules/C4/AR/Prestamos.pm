@@ -431,10 +431,8 @@ sub t_devolver {
 
  	my $msg_object= C4::AR::Mensajes::create();
 
-
-	my $array_ids3= $params->{'datosArray'};
-    my $loop=scalar(@$array_ids3);
-#     my $accion= $params->{'accion'};
+	my $array_id_prestamos= $params->{'datosArray'};
+    my $loop=scalar(@$array_id_prestamos);
     my $id3;
     my $barcode;
     my $id_prestamo;
@@ -453,15 +451,19 @@ sub t_devolver {
 
     C4::AR::Debug::debug("LOOP --> $loop");
     for(my $i=0;$i<$loop;$i++){
-		$id3= $array_ids3->[$i]->{'id3'};
-		$barcode= $array_ids3->[$i]->{'barcode'};
-		$id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
-		$params{'barcode'}= $barcode;
+# 		$id3= $array_ids3->[$i]->{'id3'};
+# 		$barcode= $array_ids3->[$i]->{'barcode'};
+# 		$id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
+		$id_prestamo= $array_id_prestamos->[$i]
+;
+# 		$params{'barcode'}= $barcode;
 		$params{'id_prestamo'}= $id_prestamo;
+		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
 		
 		my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo, db => $db);
 		$prestamo->load();
 		$params->{'id3'}= $prestamo->getId3;
+		$params{'barcode'}= $prestamo->nivel3->getBarcode;
 
 		verificarCirculacionRapida($params, $msg_object);
 
@@ -472,7 +474,7 @@ sub t_devolver {
 				$db->commit;
 				# Si la devolucion se pudo realizar
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$prestamo->nivel3->getBarcode]} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params{'barcode'}]} ) ;
 			};
 			if ($@){
 				#Se loguea error de Base de Datos
@@ -546,12 +548,36 @@ sub getPrestamoPorBarcode {
 	}
 }
 
+sub getSocioFromID_Prestamo {
+	my ($prestamo)=@_;
+    
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+	my @filtros;
+ 	push(@filtros, ( id_prestamo => { eq => $prestamo } ));
+	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+																query => \@filtros,
+																require_objects => [ 'socio' ] #INNER JOIN
+     							); 
+
+	if(scalar(@$prestamo_array_ref) > 0){
+		return $prestamo_array_ref->[0]->socio;
+	}else {	
+    	return 0;
+	}
+}
 
 sub verificarCirculacionRapida {
 	my ($params, $msg_object)=@_;
 
-# # 	my $msg_object= C4::AR::Mensajes::create();
 
+# FIXME ahora no se mandan los barcodes, se mandan los id_prestamo, faltaria verificar esto!!!!!!!!!!
+# verificar q el id_prestmo exista y que no se haya devuelto
+
+=item
 	if( !($msg_object->{'error'}) &&  $params->{'operacion'} eq 'devolver'){
 	#se verifica si la operacion es una devolucion, que EXISTA el BARCODE
 		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
@@ -562,6 +588,7 @@ sub verificarCirculacionRapida {
         	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
 		}
 	}
+=cut
 	
 	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
 	#se verifica si la operacion es un prestamo, que EXISTA el USUARIO
@@ -571,23 +598,8 @@ sub verificarCirculacionRapida {
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
 	}
 
-# 	return ($msg_object);
 }
 
-sub t_devolverPorBarcode {
-	my ($params)=@_;
-
-	my $msg_object= C4::AR::Mensajes::create();
-	verificarCirculacionRapida($params, $msg_object);
-
-	if(!$msg_object->{'error'}){
-		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
-		#se hace la devolucion del prestamo pasado por parametro
-		($msg_object) = C4::AR::Prestamos::t_devolver($params);	
-	}
-
-	return ($msg_object);
-}
 
 sub crearTicket {
     my ($id3,$nro_socio,$loggedinuser)=@_;
