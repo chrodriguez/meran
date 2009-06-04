@@ -105,7 +105,7 @@ $values los valores o que puede devolver el componente (combo, radiobotton y che
 $labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
 $valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
-sub crearComponentes(){
+sub crearComponentes {
     my ($tipoInput,$id,$values,$labels,$valor)=@_;
     my $inputCampos;
     if ($tipoInput eq 'combo'){
@@ -161,7 +161,7 @@ sub crearComponentes(){
 
 
 #Obtiene los mail de todos los usuarios
-sub mailDeUsuarios(){
+sub mailDeUsuarios {
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT emailaddress 
                 FROM  borrowers 
@@ -185,7 +185,7 @@ sub in_array {
         return 0;
 }
 
-sub array_diff{
+sub array_diff {
 # A $array1 le resta $array2
     my ($array1_ref,@array2) = @_;
     my @array_res;
@@ -195,7 +195,7 @@ sub array_diff{
     return(@array_res);
 }
 
-sub saveholidays{   
+sub saveholidays {
     my ($hol) = @_;
     if ($hol){ # FIXME falla si borro todos los feriados
         my @feriados = split(/,/, $hol);
@@ -223,7 +223,7 @@ sub saveholidays{
     }
 }
 
-sub obtenerTiposDeColaboradores{
+sub obtenerTiposDeColaboradores {
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare(" SELECT codigo,descripcion 
             FROM cat_ref_colaborador 
