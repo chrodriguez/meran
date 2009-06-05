@@ -30,7 +30,6 @@ function onCompleteAutocompleteUsuarios(){
 }
 
 function onCompleteAutocompleteBarcodesPrestados(){
-	inicializar();
 	var prestamo= $('#prestamo_hidden').val();
 	$('#botonDevolver').show();
 	//detalleUsuario esta implementado en circulacion,js
@@ -103,6 +102,7 @@ $(document).ready(function() {
 											IdInputHidden: 'prestamo_hidden', 
 											callBackFunction: onCompleteAutocompleteBarcodesPrestados
 										});
+
 });
 
 
@@ -165,7 +165,7 @@ $(document).ready(function() {
 	<tr>
 		<td width="1%">&nbsp;</td>
 		<td align="center">
-			<input id="barcode" type="text" class="inputFontNormal" size="40">
+			<input id="barcode" type="text" class="inputFontNormal" size="40" onClick="inicializar();">
 			<input id="barcode_hidden" type="hidden">
 			<input id="prestamo_hidden" type="hidden">
 		</td>
