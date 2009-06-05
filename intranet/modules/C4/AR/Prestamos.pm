@@ -439,7 +439,7 @@ sub t_devolver {
     my $ticketObj;
     my @infoTickets;
     my @infoMessages;
-    my %params;
+#     my %params;
     my %messageObj;
     my $Message_arrayref;
 	my $msg_object;
@@ -452,13 +452,13 @@ sub t_devolver {
     C4::AR::Debug::debug("LOOP --> $loop");
     for(my $i=0;$i<$loop;$i++){
 		$id_prestamo= $array_id_prestamos->[$i];
-		$params{'id_prestamo'}= $id_prestamo;
+		$params->{'id_prestamo'}= $id_prestamo;
 		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
 		
 		my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo, db => $db);
 		$prestamo->load();
 		$params->{'id3'}= $prestamo->getId3;
-		$params{'barcode'}= $prestamo->nivel3->getBarcode;
+		$params->{'barcode'}= $prestamo->nivel3->getBarcode;
 
 		#se realizan las verificaciones necesarias para el prestamo que se intenta devolver
 		verificarCirculacionRapida($params, $msg_object);
@@ -470,7 +470,7 @@ sub t_devolver {
 				$db->commit;
 				# Si la devolucion se pudo realizar
 				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params{'barcode'}]} ) ;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
 			};
 			if ($@){
 				#Se loguea error de Base de Datos
