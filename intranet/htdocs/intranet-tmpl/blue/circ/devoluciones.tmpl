@@ -33,9 +33,15 @@ function onCompleteAutocompleteUsuarios(){
 	USUARIO.ID= nro_socio;
 	//detalleUsuario esta implementado en circulacion,js
 	detalleUsuario(nro_socio);
-	detallePrestamos(nro_socio, updateInfoPrestamos);
-	detalleSanciones(nro_socio);
+	detallePrestamos(nro_socio, updateDetallePrestamos);
+// 	detalleSanciones(nro_socio);
 	$('#botonDevolver').hide();
+}
+
+function updateDetallePrestamos(responseText){
+	//implementado en circulacion.js
+	updateInfoPrestamos(responseText);
+	detalleSanciones(USUARIO.ID);
 }
 
 function onCompleteAutocompleteBarcodesPrestados(){

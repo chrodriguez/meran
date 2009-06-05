@@ -447,7 +447,6 @@ sub t_devolver {
 	$db->{connect_options}->{AutoCommit} = 0;
 	$db->begin_work;
 
-    C4::AR::Debug::debug("LOOP --> $loop");
     for(my $i=0;$i<$loop;$i++){
 		$id_prestamo= $array_id_prestamos->[$i];
 		$params->{'id_prestamo'}= $id_prestamo;
@@ -480,7 +479,7 @@ sub t_devolver {
 			}
 		}# END if(!$msg_object->{'error'})
 
-	}
+	}# END for(my $i=0;$i<$loop;$i++)
 
     $db->{connect_options}->{AutoCommit} = 1;
 
