@@ -222,6 +222,7 @@ my %mensajesINTRA = (
 	'U386' => 'Ya existe el el Nivel 3 ( *?* )',
 	'U387' => 'El C&oacute;digo de Barras es obligatorio y no puede ser blanco',
     'U388' => 'El n&uacute;mero de documento pertenece a otro socio.',
+    'U389' => 'Faltan par&aacute;metros necesarios para el funcionamiento de este m&oacute;dulo.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',

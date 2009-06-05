@@ -29,6 +29,7 @@ use vars qw(@EXPORT @ISA);
     &countSymbolChars,
     &isValidMail,
     &isValidDocument
+    &validateParams
 );
 
 
@@ -283,7 +284,7 @@ sub isValidMail{
     Funcion que valida que un numero de documento sea valido; recibe por parametro el tipo y el numero (en ese orden).
     para los que no son de tipo dni, se comprueba solo que la longitud en caracteres numericos sea igual a la longitud total.
 =cut
-sub isValidDocument{
+sub isValidDocument {
 
     my($docType,$docNumber) = @_;
     my($checkResult) = 0;
@@ -305,6 +306,18 @@ sub isValidDocument{
     return ($checkResult);
 }
 
+=item
+    Funcion para validar que la hash de parametros pasada contenga, en todas las key que indique array_params_name, un string valido
+    Parametros:
+                HASH (1): conteniendo la hash con los parametros y sus valores
+                ARRAY (2): conteniendo solo las keys que hay que checkear
+=cut
+sub validateParams {
 
-
-
+    my ($params_hash_ref,$array_params_name) = @_;
+    my $flag = 1;
+    foreach my $nombreParam (@$array_params_name){
+        $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+    }
+    return $flag;
+}
