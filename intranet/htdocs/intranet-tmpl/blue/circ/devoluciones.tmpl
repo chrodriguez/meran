@@ -9,9 +9,13 @@ function inicializar(){
 	USUARIO.ID = 0;
 	USUARIO.text = '';
 
+	//input para buscar el usuario
+	$('#usuarioAutocomplete').val('');
 	$('#nro_socio_hidden').val('');
+	//input para buscar el barcode
 	$('#barcode_hidden').val('');
 	$('#barcode').val('');
+
 	$('#botonDevolver').hide();
 	//oculto la tabla de prestamos
 	$('#tablaPrestamos').hide();
@@ -140,7 +144,7 @@ $(document).ready(function() {
 	<tr>
 		<td width="1%">&nbsp;</td>
 		<td align="center">
-			<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40">
+			<input id="usuarioAutocomplete" type="text" class="inputFontNormal" size="40" onClick="inicializar();">
 			<input id="nro_socio_hidden" type="hidden">
 		</td>
 		<td width="1%">&nbsp;</td>
