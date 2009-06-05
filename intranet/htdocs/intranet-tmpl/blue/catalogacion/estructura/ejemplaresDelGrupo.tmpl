@@ -97,7 +97,7 @@
 			[% IF paraPrestamo %]
 
 				<input 	type="image" src="[% themelang %]/images/item-return.png" title="[% 'Devolver' | i18n %]" 
-						onClick="devolver('DEVOLUCION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
+						onClick="devolverPrestamo('[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
 				[% IF renew %]
 				<input 	type="image" src="[% themelang %]/images/renew.png" title="[% 'Renovar' | i18n %]" 
 						onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">

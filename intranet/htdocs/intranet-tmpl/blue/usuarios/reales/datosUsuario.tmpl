@@ -154,6 +154,15 @@ function updateDetalleReservas(responseText){
 	detallePrestamos(USUARIO.ID);
 }
 
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+}
 
 
 function detalleSanciones(socio){

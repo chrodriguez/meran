@@ -9,7 +9,12 @@ function inicializar(){
 	USUARIO.ID = 0;
 	USUARIO.text = '';
 
-	$('#nro_socio_hidden').val('')
+	$('#nro_socio_hidden').val('');
+	$('#barcode_hidden').val('');
+	$('#barcode').val('');
+	$('#botonDevolver').hide();
+	//oculto la tabla de prestamos
+	$('#tablaPrestamos').hide();
 }
 
 function onCompleteAutocompleteUsuarios(){
@@ -21,10 +26,13 @@ function onCompleteAutocompleteUsuarios(){
 	detalleUsuario(nro_socio);
 	detallePrestamos(nro_socio, updateInfoPrestamos);
 	detalleSanciones(nro_socio);
+	$('#botonDevolver').hide();
 }
 
 function onCompleteAutocompleteBarcodesPrestados(){
+	inicializar();
 	var prestamo= $('#prestamo_hidden').val();
+	$('#botonDevolver').show();
 	//detalleUsuario esta implementado en circulacion,js
 	getSocioFromPrestamo(prestamo);
 }
@@ -51,19 +59,39 @@ function updateGetSocioFromPrestamo(responseText){
 	detalleSanciones(USUARIO.ID);
 }
 
-function devolverPrestamo(accion,funcion){
+function devolverPrestamo(){
 
-	objAH=new AjaxHelper(funcion);
+	objAH=new AjaxHelper(updateDevolverPrestamo);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= accion;
+	objAH.tipoAccion= 'DEVOLUCION';
 	objAH.datosArray= [$('#prestamo_hidden').val()];
 	objAH.nro_socio= USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
+function updateDevolverPrestamo(responseText){
+	//implementado en circulacion.js
+	generaDivDevolucion(responseText);
+}
+
+/*
+* REDEFINIDA, se encuentra definida en circulacion.js
+*/
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+}
+
 $(document).ready(function() {
+	inicializar();
+
 	//se crea el autocomplete para buscar el usuario
 	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
 								IdInputHidden: 'nro_socio_hidden', 
@@ -151,7 +179,7 @@ $(document).ready(function() {
         <input type="image" BORDER=0 
         src="[% themelang %]/images/item-return.png" 
         title="Devolver" 
-        onClick="devolverPrestamo('DEVOLUCION',generaDivDevolucion);">
+        onClick="devolverPrestamo();">
     
 		<!--<input type="image" 
 		src="[% themelang %]/images/renew.png" title="Renovar" 

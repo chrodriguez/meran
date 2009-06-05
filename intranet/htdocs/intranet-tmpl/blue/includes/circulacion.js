@@ -59,7 +59,6 @@ function detalleUsuario(nro_socio){
 function updateInfoUsuario(responseText){
 	$('#detalleUsuario').slideDown('slow');
 	//se borran los mensajes de error/informacion del usuario
-// 	clearMessages();
 	$('#detalleUsuario').html(responseText);
 }
 
@@ -311,7 +310,7 @@ function updateInfoCancelacion(responseText){
 
 
 /*
- * generaDivDevRen
+ * generaDivDevolucion
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
@@ -341,7 +340,7 @@ function generaDivDevolucion(responseText){
 }
 
 /*
- * generaDivDevRen
+ * generaDivRenovacion
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivRenovacion(responseText){
@@ -366,7 +365,8 @@ function generaDivRenovacion(responseText){
         html= html + ". <br>"
 	}
 	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()><input type='button' value='Cancelar' onClick='cancelarDiv();'>   <!--<input type='button' value='DEVOLVER NUEVO' onClick=devolver()>-->    </center><br>";
+	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()>";
+	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
@@ -427,16 +427,17 @@ function devolver(){
 }
 
 /*
-FUNCION REDEFINIDA, se encuentra en circulacion.js 
+* Esta funcion debe estar implementada en los templates devoluciones.tmpl
+* si no se implementa ahi, hereda esta funcion, debe ser redefinida para cada template en particular
 */
 function updateInfoDevolver(responseText){
-	cancelarDiv();
-
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.Messages_arrayref;
-	setMessages(messageArray);
-
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+// 	cancelarDiv();
+// 
+// 	var infoHash= JSONstring.toObject(responseText);
+// 	var messageArray= infoHash.Messages_arrayref;
+// 	setMessages(messageArray);
+// 
+// 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
 }
 
 

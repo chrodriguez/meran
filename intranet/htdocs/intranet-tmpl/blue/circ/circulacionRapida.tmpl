@@ -200,6 +200,16 @@ function esRegular(NRO_SOCIO_AUTH){
 	objAH.sendToServer();
 }
 
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+}
+
 function updateEsRegular(responseText){
 	var esRegular= "REGULAR";
 

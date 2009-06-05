@@ -348,7 +348,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 	
 	my %infoSocio;
 	if($socio){
- 		$infoSocio{'apeYNom'}= $socio->persona->getApeYNom;
+		$infoSocio{'apeYNom'}= $socio->persona->getApeYNom;
 		$infoSocio{'nro_socio'}= $socio->getNro_socio;
 	}
 
