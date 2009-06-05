@@ -451,12 +451,7 @@ sub t_devolver {
 
     C4::AR::Debug::debug("LOOP --> $loop");
     for(my $i=0;$i<$loop;$i++){
-# 		$id3= $array_ids3->[$i]->{'id3'};
-# 		$barcode= $array_ids3->[$i]->{'barcode'};
-# 		$id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
 		$id_prestamo= $array_id_prestamos->[$i]
-;
-# 		$params{'barcode'}= $barcode;
 		$params{'id_prestamo'}= $id_prestamo;
 		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
 		
@@ -465,6 +460,7 @@ sub t_devolver {
 		$params->{'id3'}= $prestamo->getId3;
 		$params{'barcode'}= $prestamo->nivel3->getBarcode;
 
+		#se realizan las verificaciones necesarias para el prestamo que se intenta devolver
 		verificarCirculacionRapida($params, $msg_object);
 
 		if(!$msg_object->{'error'}){
@@ -548,6 +544,34 @@ sub getPrestamoPorBarcode {
 	}
 }
 
+
+=item
+Esta funcion verifica que el id_prestamo que se pasa por parametro exista y que ademas sea un prestamo, o sea q no se haya devuelto aún
+=cut
+sub esUnPrestamo {
+
+	my ($id_prestamo)=@_;
+    
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+	my @filtros;
+ 	push(@filtros, ( id_prestamo => { eq => $id_prestamo } ));
+	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+																query => \@filtros,
+# 																require_objects => [ 'nivel3' ] #INNER JOIN
+     							); 
+
+	if(scalar(@$prestamo_array_ref) > 0){
+# 		return $prestamo_array_ref->[0]->getId_prestamo;
+		return 1;
+	}else {	
+    	return 0;
+	}
+}
+
 sub getSocioFromID_Prestamo {
 	my ($prestamo)=@_;
     
@@ -589,6 +613,12 @@ sub verificarCirculacionRapida {
 		}
 	}
 =cut
+	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !esUnPrestamo($params->{'id_prestamo'})){
+	#si la operacion es una devolucion, se verifica que exista el id_prestamo y que ademas ya no se haya devuelto
+		$msg_object->{'error'}= 1;
+		C4::AR::Debug::debug("verificarCirculacionRapida => no existe el prestamo o ya se devolvió anteriormente");
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
+	}
 	
 	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
 	#se verifica si la operacion es un prestamo, que EXISTA el USUARIO

@@ -431,13 +431,7 @@ function devolver(){
 * si no se implementa ahi, hereda esta funcion, debe ser redefinida para cada template en particular
 */
 function updateInfoDevolver(responseText){
-// 	cancelarDiv();
-// 
-// 	var infoHash= JSONstring.toObject(responseText);
-// 	var messageArray= infoHash.Messages_arrayref;
-// 	setMessages(messageArray);
-// 
-// 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+//implementado en cada template en particular
 }
 
 

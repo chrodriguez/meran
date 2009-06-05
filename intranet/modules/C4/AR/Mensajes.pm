@@ -130,6 +130,7 @@ my %mensajesINTRA = (
 	'P114' => 'Disculpe, no puede efectuar renovaciones porque usted no ha realizado a&uacute;n el curso para usuarios.',
 	'P115' => 'El ejemplar con c&oacute;digo de barras *?* no existe o no se encuentra prestado',
 	'P116' => 'El usuario ingresado no existe',
+	'P117' => 'El ejemplar que intenta devolver no existe o fue devuelto anteriormente',
 	'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
 	'S201' => 'El usuario no puede reservar porque tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
