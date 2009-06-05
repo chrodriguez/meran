@@ -451,7 +451,7 @@ sub t_devolver {
 
     C4::AR::Debug::debug("LOOP --> $loop");
     for(my $i=0;$i<$loop;$i++){
-		$id_prestamo= $array_id_prestamos->[$i]
+		$id_prestamo= $array_id_prestamos->[$i];
 		$params{'id_prestamo'}= $id_prestamo;
 		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
 		
