@@ -439,10 +439,8 @@ sub t_devolver {
     my $ticketObj;
     my @infoTickets;
     my @infoMessages;
-#     my %params;
     my %messageObj;
     my $Message_arrayref;
-	my $msg_object;
     my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 	my $prestamo = C4::Modelo::CircPrestamo->new();
 	my $db = $prestamo->db;
