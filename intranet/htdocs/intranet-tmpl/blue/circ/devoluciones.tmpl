@@ -16,9 +16,14 @@ function inicializar(){
 	$('#barcode_hidden').val('');
 	$('#barcode').val('');
 
+	//oculto el detalle del usuario
+	$('#detalleUsuario').hide();
+	$('#detalleUsuario').html('');
+
 	$('#botonDevolver').hide();
 	//oculto la tabla de prestamos
 	$('#tablaPrestamos').hide();
+	$('#tablaPrestamos').html('');
 }
 
 function onCompleteAutocompleteUsuarios(){
