@@ -373,7 +373,7 @@ sub cambiarPassword {
         my  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
         if ($socio->load()){
             my $actualPassword = $socio->getPassword;
-#             my $cambioDePasswordForzado= 1;
+            my $cambioDePasswordForzado;
             if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
                 $cambioDePasswordForzado= 1;
             }
