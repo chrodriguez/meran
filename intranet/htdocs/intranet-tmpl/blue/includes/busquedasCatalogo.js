@@ -281,7 +281,8 @@ function ordenar(ord){
     objAH.sort(ord);
 }
 
-function mostrarDetalle(id1){
-    var params="id1="+id1;
-    crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
-}
+// FIXME DEPRECATEDDDDDDDDd
+// function mostrarDetalle(id1){
+//     var params="id1="+id1;
+//     crearForm("/cgi-bin/koha/busquedas/detalle.pl",params);
+// }

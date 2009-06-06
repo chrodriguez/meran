@@ -1,3 +1,7 @@
+
+<script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+<link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+
 <script>
     /* VARIABLES PARA EL DatePicker */
     

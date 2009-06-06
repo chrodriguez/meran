@@ -15,13 +15,13 @@
  */
 
 
-var infoPrestamos_array= new Array();//Arreglo que contendra los objetos, con info que pertenece a los prestamos.
+var INFO_PRESTAMOS_ARRAY= new Array();//Arreglo que contendra los objetos, con info que pertenece a los prestamos.
 var objAH;//Objeto AjaxHelper.
 
 /*
  * infoPrestamo
  * Representa al objeto que contendra la informacion para poder prestar el item. 
- * Que se pasara con json al servidor, en un arreglo (infoPrestamos_array).
+ * Que se pasara con json al servidor, en un arreglo (INFO_PRESTAMOS_ARRAY).
  * prestamos.tmpl
  */
 function infoPrestamo(){
@@ -172,7 +172,7 @@ function realizarAccion(accion,chckbox,funcion){
  * prestamos.tmpl---> crea el div para los prestamos
  */
 function generaDivPrestamo(responseText){
-	infoArray= new Array;
+	var infoArray= new Array;
 	infoArray= JSONstring.toObject(responseText);
 	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var i;
@@ -181,7 +181,7 @@ function generaDivPrestamo(responseText){
 	
 		var infoPrestamoObj= new infoPrestamo();
 		infoPrestamoObj.id3Old= infoArray[i].id3Old;
-		infoPrestamos_array[i]= infoPrestamoObj;
+		INFO_PRESTAMOS_ARRAY[i]= infoPrestamoObj;
  
 		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
 		var comboTipoPrestamo =crearCombo(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
@@ -227,19 +227,19 @@ function crearCombo(items_array, idSelect){
  */
 function prestar(){
 
-	for(var i=0; i< infoPrestamos_array.length; i++){
+	for(var i=0; i< INFO_PRESTAMOS_ARRAY.length; i++){
 		//se setea el id3 que se va a prestar
-		infoPrestamos_array[i].id3= $('#comboItems' + i).val();
-		infoPrestamos_array[i].barcode= $("#comboItems" + i + " option:selected").text();
-		infoPrestamos_array[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
-		infoPrestamos_array[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
+		INFO_PRESTAMOS_ARRAY[i].id3= $('#comboItems' + i).val();
+		INFO_PRESTAMOS_ARRAY[i].barcode= $("#comboItems" + i + " option:selected").text();
+		INFO_PRESTAMOS_ARRAY[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
+		INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
 	}
 	
 	objAH=new AjaxHelper(updateInfoPrestarReserva);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'PRESTAMO';
-	objAH.datosArray= infoPrestamos_array;
+	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio= USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -284,7 +284,7 @@ function cancelarDiv(){
  */
 function cancelarReserva(reserveNumber){
 
-	var is_confirmed = confirm('Esta seguro que desea cancelar la reserva?');
+	var is_confirmed = confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA);
 	if (is_confirmed) {
 		objAH=new AjaxHelper(updateInfoCancelacion);
 		objAH.debug= true;
@@ -314,15 +314,15 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
-	infoArray= new Array;
-	infoPrestamos_array= new Array();
+	var infoArray= new Array;
+	INFO_PRESTAMOS_ARRAY= new Array();
 	infoArray= JSONstring.toObject(responseText);
 	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var accion=infoArray[0].accion;
 	html=html + infoArray[0].accion +":<br>";
 	for(var i=0; i<infoArray.length;i++){
 	
-		infoPrestamos_array[i]= infoArray[i].id_prestamo;
+		INFO_PRESTAMOS_ARRAY[i]= infoArray[i].id_prestamo;
  
 		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
 		html= html + infoArray[i].titulo + ", ";
@@ -344,8 +344,8 @@ function generaDivDevolucion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivRenovacion(responseText){
-	infoArray= new Array;
-	infoPrestamos_array= new Array();
+	var infoArray= new Array;
+	INFO_PRESTAMOS_ARRAY= new Array();
 	infoArray= JSONstring.toObject(responseText);
 	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var accion=infoArray[0].accion;
@@ -356,7 +356,7 @@ function generaDivRenovacion(responseText){
         infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
 		infoDevRenObj.id3= infoArray[i].id3;
 		infoDevRenObj.barcode=infoArray[i].barcode;
-		infoPrestamos_array[i]= infoDevRenObj;
+		INFO_PRESTAMOS_ARRAY[i]= infoDevRenObj;
  
 		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
 		html= html + infoArray[i].titulo + ", ";
@@ -383,7 +383,7 @@ function renovar(){
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'REALIZAR_RENOVACION';
-	objAH.datosArray= infoPrestamos_array;
+	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio= USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -413,14 +413,14 @@ function updateInfoRenovar(responseText){
 
 
 /* devolver
-* realiza la devolucion de 1 a n ejemplares segun infoPrestamos_array
+* realiza la devolucion de 1 a n ejemplares segun INFO_PRESTAMOS_ARRAY
 */
 function devolver(){
 	objAH=new AjaxHelper(updateInfoDevolver);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'REALIZAR_DEVOLUCION';
-	objAH.datosArray= infoPrestamos_array;
+	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio= USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
