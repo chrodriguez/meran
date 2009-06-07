@@ -2,13 +2,11 @@
 
 <script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-<script src="/includes/jquery/jquery.bgiframe.js"></script>
+<!--<script src="/includes/jquery/jquery.bgiframe.js"></script>
 <script src="/includes/jquery/jquery.dimensions.js"></script>
-<script src="/includes/jquery/ui.mouse.js"></script>
+<script src="/includes/jquery/ui.mouse.js"></script>-->
 
 <script language="javascript">
-
-var sinonimo_selected = "";
 
 function OnChangeComboTablasSinonimos(){
 	
@@ -41,14 +39,15 @@ function OnChangeComboTablasSinonimos(){
 
 function updateConsultarTablaSinonimos(responseText){
 	$('#resultSinonimos').html(responseText);
-// 	$('#tablaSinonimos').tablesorter({	
-// 						widgets: ['zebra'],
-// 						headers: { 0: { sorter: false},
-// 								2: { sorter: false},
-// 								3: { sorter: false},
-// 								4: { sorter: false}
-// 							}
-// 				});
+	zebra('tablaSinonimos');
+	$('#tablaSinonimos').tablesorter({	
+						widgets: ['zebra'],
+						headers: { 0: { sorter: false},
+								2: { sorter: false},
+								3: { sorter: false},
+								4: { sorter: false}
+							}
+				});
 }
 
 function consultarTablaSinonimos(sinonimo){
@@ -57,6 +56,7 @@ function consultarTablaSinonimos(sinonimo){
 	var tabla= $("#tabla").val();
 
 	objAH=new AjaxHelper(updateConsultarTablaSinonimos);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'consultaTablasSinonimos';
 	objAH.tabla= tabla;
@@ -66,32 +66,6 @@ function consultarTablaSinonimos(sinonimo){
 
 }
 
-function AutocompleteSinonimos(idInput, tipo){
-	// q= valor de campoHelp
-	$("#"+idInput).search();
-	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletablesDB.pl?token='+token,{
- 		formatItem: function(row){
-// 			return row[0]+" - "+row[1];
-			return row[1];
-		},
-		minChars:1,
-        	matchSubset:1,
-        	matchContains:1,
-		maxItemsToShow:10,
-        	cacheLength:10,
-        	selectOnly:1,
-		extraParams:{accion: tipo}	
-	});//end autocomplete
-	$("#"+idInput).result(function(event, data, formatted) {
-		$("#"+idInput).val(data[1]);
-
-		//ver si es necesario
-		sinonimo_selected= new object_sinonimo(data[1], data[0]);
-
- 		consultarTablaSinonimos(data[0]);
-	});
-}
-
 //*********************************************Objeto Sinonimo*************************************************
 
 function object_sinonimo(text, ID){
@@ -99,7 +73,9 @@ function object_sinonimo(text, ID){
 	this.ID= ID;
 }
 
-var objects_array= new Array();
+OBJECTS_ARRAY= new Array();
+SINONIMO_SELECTED= 0;
+SINONIMO= 0;
 //******************************************Fin***Objeto Sinonimo***********************************************
 
 //******************************************TextArea************************************************************
@@ -107,18 +83,18 @@ var objects_array= new Array();
 function pushSinonimo(){
 	var sinonimo= $.trim($('#sinonimo').val());
 		
-	if ( (!exist(sinonimo, objects_array)) && (sinonimo.length > 0) ){
+	if ( (!exist(sinonimo, OBJECTS_ARRAY)) && (sinonimo.length > 0) ){
 	
 		d= new object_sinonimo(sinonimo, null);
-		objects_array.push(d);
-		mapToTextArea('textAreaSinonimos', objects_array);
+		OBJECTS_ARRAY.push(d);
+		mapToTextArea('textAreaSinonimos', OBJECTS_ARRAY);
         $('#sinonimo').val('');
 	}else{
-		alert("Ya existe el elmento");
+		alert(YA_EXISTE_EL_ELEMENTO);
 	}
 
 	//si hay elementos habilito el boton pop
-	if(objects_array.length > 0){
+	if(OBJECTS_ARRAY.length > 0){
 		$('#pop').attr('disabled', false);
 	}
 }
@@ -150,10 +126,10 @@ function mapToTextArea(idTextArea, vector){
 }
 
 function popSinonimo(){
-	var obj= objects_array.pop();
-	mapToTextArea('textAreaSinonimos', objects_array);
+	var obj= OBJECTS_ARRAY.pop();
+	mapToTextArea('textAreaSinonimos', OBJECTS_ARRAY);
 	//si se vacia, deshabilito el boton pop
-	if(objects_array.length == 0){
+	if(OBJECTS_ARRAY.length == 0){
 		$('#pop').attr('disabled', true);
 	}
 }
@@ -162,9 +138,9 @@ function clearDataTextArea(){
 	//clear inputs
 	$('#sinonimo').val('');
 	//clear data
-	objects_array= new Array();
+	OBJECTS_ARRAY= new Array();
 	//actualizo el textarea
-	mapToTextArea('textAreaSinonimos', objects_array);
+	mapToTextArea('textAreaSinonimos', OBJECTS_ARRAY);
 }
 
 //****************************************************Fin TextArea******************************************
@@ -173,33 +149,34 @@ function clearDataTextArea(){
 function guardarDatos(){
 
 	var tabla= $('#tabla').val();
-	var sinonimosJSON;
-	//pasa el arreglo a formato json
-	sinonimosJSON=JSONstring.make(objects_array);
 
 	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSinonimos';
 	objAH.tabla= tabla;
-	objAH.sinonimos= sinonimosJSON;
-	objAH.id= sinonimo_selected.ID;
+	objAH.sinonimos= OBJECTS_ARRAY;
+	objAH.id= SINONIMO_SELECTED.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-function updateGuadarDatos(){
-	consultarTablaSinonimos(sinonimo_selected.ID);
+function updateGuadarDatos(responseText){
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	consultarTablaSinonimos(SINONIMO_SELECTED.ID);
 	clearDataTextArea();
 }
 
 function deleteSinonimo(idDelete, sinonimo_string){
 	var tabla= $('#tabla').val();
 
-	var is_confirmed = confirm('Confirma la baja del sinonimo?');
+	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SINONIMO);
 
 	if (is_confirmed) {
 
 		objAH=new AjaxHelper(updateDeleteSinonimo);
+		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSinonimos';
 		objAH.tabla= tabla;
@@ -223,6 +200,7 @@ function updateNombreSinonimo(idSinonimo, nombre, nombreViejo){
 	var tabla= $('#tabla').val();
 
 	objAH=new AjaxHelper(updateGuadarDatos);
+	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'UpdateSinonimo';
 	objAH.tabla= tabla;
@@ -258,7 +236,33 @@ function modificarSinonimo(idSinonimo, nroSinonimo, nombreViejo){
 
 //****************************************Fin****ABM Sinonimos************************************************
 
+function crearObjeto(idInput, idInputHidden, flag){
+/*@params idInput, idInputHidden, flag
+*/
+	var id= $('#'+idInputHidden).val();
+	var text= $('#'+idInput).val();
+	//creo un objeto para la autoridad con la q se va a trabajar
+	SINONIMO= new object_sinonimo(text, id);
 
+	if(flag != 'sinonimo'){
+		//creo un objeto para la autoridad con la q se va a trabajar
+		SINONIMO_SELECTED= new object_sinonimo(text, id);
+		//traigo info de sinonimos de la autoridad con la que se esta trabajando
+		consultarTablaSinonimos(id);
+	}
+}
+
+function onCompleteTemas(){
+	crearObjeto('search_temas', 'search_temas_hidden', 'NULL');
+}
+
+function onCompleteAutores(){
+	crearObjeto('search_autores', 'search_autores_hidden', 'NULL');
+}
+
+function onCompleteEditoriales(){
+	crearObjeto('search_editoriales', 'search_editoriales_hidden', 'NULL');
+}
 
 
 $(document).ready(function(){
@@ -269,11 +273,24 @@ $(document).ready(function(){
 						$("#topichelp").slideToggle('fast');
 					});
 
-	AutocompleteSinonimos('search_temas','autocomplete_temas');
+	CrearAutocompleteAutores({	IdInput: 'search_autores', 
+								IdInputHidden: 'search_autores_hidden', 
+								callBackFunction: onCompleteAutores,
+							});
+
 	$('#content_search_temas').hide();
-	AutocompleteSinonimos('search_autores','autocomplete_autores');
+
+	CrearAutocompleteTemas({	IdInput: 'search_temas', 
+								IdInputHidden: 'search_temas_hidden', 
+								callBackFunction: onCompleteTemas,
+						});
 	$('#content_search_autores').hide();
-	AutocompleteSinonimos('search_editoriales','autocomplete_editoriales');
+
+	CrearAutocompleteEditoriales({	IdInput: 'search_editoriales', 
+									IdInputHidden: 'search_editoriales_hidden', 
+									callBackFunction: onCompleteEditoriales,
+					});
+
 	$('#content_search_editoriales').hide();	
 
 	onEnter("sinonimo",pushSinonimo);
@@ -317,14 +334,17 @@ $(document).ready(function(){
 	<div id="content_search_autores">
 		<li>Autores:</li>
 		<li><input id="search_autores" type="text" size="50"></li>
+			<input id="search_autores_hidden" type="hidden">
 	</div>
 	<div id="content_search_temas">
 		<li>Temas:</li>
 		<li><input id="search_temas" type="text" size="50"></li>
+			<input id="search_temas_hidden" type="hidden">
 	</div>
 	<div id="content_search_editoriales">
 		<li>Editoriales:</li>
 		<li><input id="search_editoriales" type="text" size="50"></li>
+			<input id="search_editoriales_hidden" type="hidden">
 	</div>
 
 	<li>Ingrese Sin&oacute;nimo:</li>

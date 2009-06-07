@@ -55,5 +55,10 @@ INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
 //================================================Circulacion===================================================
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "[% 'Esta seguro que desea cancelar la reserva?' | i18n %]";
 //=============================================Fin===Circulacion=================================================
+//================================================Control Autoridades==============================================
+YA_EXISTE_EL_ELEMENTO= "[% 'Ya existe el elemento' | i18n %]";
+CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "[% 'Confirma la baja del seudonimo?' | i18n %]";
+CONFIRMA_LA_BAJA_DEL_SINONIMO= "[% 'Confirma la baja del sinonimo?' | i18n %]";
+//=============================================Fin===Control Autoridades===========================================
 
 </script>

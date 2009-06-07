@@ -3,9 +3,6 @@
 <script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
 <link href="/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
 
-<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
-[% INCLUDE "AutocompleteHelper.inc" %]
-
 <script language="javascript">
 
 function OnChangeComboTablasSeudonimos(){
@@ -64,39 +61,6 @@ function updateConsultarTablaSeudonimos(responseText){
 				});
 }
 
-/*
-function AutocompleteSeudonimos(idInput, tipo, flag){
-	// q= valor de campoHelp
-	$("#"+idInput).search();
-	$("#"+idInput).autocomplete('/cgi-bin/koha/autocompletables/controlAutoridadesAutocomplete.pl',{
- 		formatItem: function(row){
-// 			return row[0]+" - "+row[1];
-			return row[1];
-		},
-		minChars:1,
-        	matchSubset:1,
-        	matchContains:1,
-		maxItemsToShow:10,
-        	cacheLength:10,
-        	selectOnly:1,
-		extraParams:{accion: tipo}	
-	});//end autocomplete
-	$("#"+idInput).result(function(event, data, formatted) {
-		$("#"+idInput).val(data[1]);
-
-//  		//creo un objeto para la autoridad con la q se va a trabajar
- 		seudonimo= new object_seudonimo(data[1], data[0]);
-
-		if(flag != 'seudonimo'){
-			//creo un objeto para la autoridad con la q se va a trabajar
- 			seudonimo_selected= new object_seudonimo(data[1], data[0]);
-			//traigo info de seudonimos de la autoridad con la que se esta trabajando
- 			consultarTablaSeudonimos(data[0]);
-		}
-	});
-}
-*/
-
 //*********************************************Objeto Sinonimo*************************************************
 
 function object_seudonimo(text, ID){
@@ -104,25 +68,27 @@ function object_seudonimo(text, ID){
 	this.ID= ID;
 }
 
-var objects_array= new Array();
+OBJECTS_ARRAY= new Array();
+SEUDONIMO= 0;
+SEUDONIMO_SELECTED= 0;
 //******************************************Fin***Objeto Sinonimo***********************************************
 
 //******************************************TextArea************************************************************
 
 function pushSeudonimo(){
-    seudonimo.text = $.trim(seudonimo.text);
-	if (!exist(seudonimo.text, objects_array)){
-		objects_array.push(seudonimo);
-		mapToTextArea('textAreaSeudonimos', objects_array);
+    SEUDONIMO.text = $.trim(SEUDONIMO.text);
+	if (!exist(SEUDONIMO.text, OBJECTS_ARRAY)){
+		OBJECTS_ARRAY.push(SEUDONIMO);
+		mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
         $('#search_autor_seudonimo').val('');
         $('#search_tema_seudonimo').val('');
         $('#search_editorial_seudonimo').val('');
         $('#search_autor_seudonimo').focus;
 	}else{
-		alert("Ya existe el elmento");
+		alert(YA_EXISTE_EL_ELEMENTO);
 	}
 	//si hay elementos habilito el boton pop
-	if(objects_array.length > 0){
+	if(OBJECTS_ARRAY.length > 0){
 		$('#pop').attr('disabled', false);
 	}
 }
@@ -154,44 +120,42 @@ function mapToTextArea(idTextArea, vector){
 }
 
 function popSeudonimo(){
-	var obj= objects_array.pop();
-	mapToTextArea('textAreaSeudonimos', objects_array);
+	var obj= OBJECTS_ARRAY.pop();
+	mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
 	//si se vacia, deshabilito el boton pop
-	if(objects_array.length == 0){
+	if(OBJECTS_ARRAY.length == 0){
 		$('#pop').attr('disabled', true);
 	}
 }
 
 function clearDataTextArea(){
 	//clear data
-	objects_array= new Array();
+	OBJECTS_ARRAY= new Array();
 	//actualizo el textarea
-	mapToTextArea('textAreaSeudonimos', objects_array);
+	mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
 }
 
 //****************************************************Fin TextArea******************************************
 
 //*********************************************ABM Seudonimos************************************************
-function updateGuardarDatos(){
-	consultarTablaSeudonimos(seudonimo_selected.ID);
+function updateGuardarDatos(responseText){
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	consultarTablaSeudonimos(SEUDONIMO_SELECTED.ID);
 	clearDataTextArea();
 }
 
 function guardarDatos(){
 	//validar datos
-	var tabla= $('#tabla').val();
-	
- 	var seudonimosJSON;
-	//pasa el arreglo a formato json
- 	seudonimosJSON=JSONstring.make(objects_array);
+	var tabla= $('#tabla').val();	
 
 	objAH=new AjaxHelper(updateGuardarDatos);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSeudonimos';
 	objAH.tabla= tabla;
-	objAH.id= seudonimo_selected.ID;
- 	objAH.seudonimos= seudonimosJSON;
+	objAH.id= SEUDONIMO_SELECTED.ID;
+	objAH.seudonimos= OBJECTS_ARRAY;
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -200,7 +164,7 @@ function guardarDatos(){
 function deleteSeudonimo(idDelete){
 	var tabla= $('#tabla').val();
 
-	var is_confirmed = confirm('Confirma la baja del seudonimo?');
+	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SEUDONIMO);
 
 	if (is_confirmed) {
 	
@@ -209,7 +173,7 @@ function deleteSeudonimo(idDelete){
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSeudonimos';
 		objAH.tabla= tabla;
-		objAH.id= seudonimo_selected.ID;
+		objAH.id= SEUDONIMO_SELECTED.ID;
 		objAH.idDelete= idDelete;
 		//se envia la consulta
 		objAH.sendToServer();
@@ -223,7 +187,7 @@ function updateDeleteSeudonimo(responseText){
 
 	setMessages(Messages);
 
-	consultarTablaSeudonimos(seudonimo_selected.ID);
+	consultarTablaSeudonimos(SEUDONIMO_SELECTED.ID);
 }
 
 //****************************************Fin****ABM Seudonimos************************************************
@@ -234,11 +198,11 @@ function crearObjeto(idInput, idInputHidden, flag){
 	var id= $('#'+idInputHidden).val();
 	var text= $('#'+idInput).val();
 	//creo un objeto para la autoridad con la q se va a trabajar
-	seudonimo= new object_seudonimo(text, id);
+	SEUDONIMO= new object_seudonimo(text, id);
 
 	if(flag != 'seudonimo'){
 		//creo un objeto para la autoridad con la q se va a trabajar
-		seudonimo_selected= new object_seudonimo(text, id);
+		SEUDONIMO_SELECTED= new object_seudonimo(text, id);
 		//traigo info de seudonimos de la autoridad con la que se esta trabajando
 		consultarTablaSeudonimos(id);
 	}
@@ -275,13 +239,10 @@ $(document).ready(function(){
 						$("#topichelp").slideToggle('fast');
 					});
 
-// 	AutocompleteSeudonimos('search_temas','autocompleteTemas','');
 	CrearAutocompleteTemas({	IdInput: 'search_temas', 
 								IdInputHidden: 'search_temas_hidden', 
 								callBackFunction: onCompleteTemas,
 						});
-
-// 	AutocompleteSeudonimos('search_tema_seudonimo','autocompleteTemas','seudonimo');
 
 	CrearAutocompleteTemas({	IdInput: 'search_tema_seudonimo', 
 								IdInputHidden: 'search_tema_seudonimo_hidden', 
@@ -290,14 +251,11 @@ $(document).ready(function(){
 
  	$('#content_search_temas').hide();
 
-
-// 	AutocompleteSeudonimos('search_autores','autocompleteAutores','');
 	CrearAutocompleteAutores({	IdInput: 'search_autores', 
 								IdInputHidden: 'search_autores_hidden', 
 								callBackFunction: onCompleteAutores,
 							});
 
-// 	AutocompleteSeudonimos('search_autor_seudonimo','autocompleteAutores','seudonimo');
 	CrearAutocompleteAutores({	IdInput: 'search_autor_seudonimo', 
 								IdInputHidden: 'search_autor_seudonimo_hidden', 
 								callBackFunction: onCompleteAutoresSeudonimo,
@@ -305,13 +263,11 @@ $(document).ready(function(){
 
  	$('#content_search_autores').hide();
 
-// 	AutocompleteSeudonimos('search_editoriales','autocompleteEditoriales','');
 	CrearAutocompleteEditoriales({	IdInput: 'search_editoriales', 
 									IdInputHidden: 'search_editoriales_hidden', 
 									callBackFunction: onCompleteEditoriales,
 					});
 
-// 	AutocompleteSeudonimos('search_editorial_seudonimo','autocompleteEditoriales','seudonimo');
 	CrearAutocompleteEditoriales({	IdInput: 'search_editorial_seudonimo', 
 									IdInputHidden: 'search_editorial_seudonimo_hidden', 
 									callBackFunction: onCompleteEditorialesSeudonimo,
@@ -421,7 +377,8 @@ $(document).ready(function(){
 	</li>
 
 	<li><hr></hr></li>
-	<li><input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Seudónimo" title="Guardar Seudónimo" onClick="guardarDatos()">
+	<li><input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Seudónimo" 
+				title="Guardar Seudónimo" onClick="guardarDatos()">
 	</li>
 	<li><div id="resultSeudonimos"></div></li>
 </ul>

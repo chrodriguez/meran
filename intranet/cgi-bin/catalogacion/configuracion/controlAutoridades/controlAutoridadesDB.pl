@@ -43,15 +43,17 @@ if($tabla eq 'autores'){
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $obj->{'seudonimos'}||"";
-		my $seudonimos_arrayref= from_json_ISO($seudonimos);
+# 		my $seudonimos= $obj->{'seudonimos'}||"";
+# 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
+		my $id=  $obj->{'id'};
+		my $seudonimos_arrayref=  $obj->{'seudonimos'};
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
 										$seudonimos_arrayref, 
 										$id
 							);
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -70,15 +72,16 @@ if($tabla eq 'autores'){
 
 	}
 	if($tipo eq 'insertarSinonimos'){
-		my $sinonimos= $obj->{'sinonimos'}||" ";
-		my $sinonimos_arrayref= from_json_ISO($sinonimos);
+		my $sinonimos_arrayref= $obj->{'sinonimos'};
+		my $id= $obj->{'id'};
+
 		my ($msg_object)= &C4::AR::ControlAutoridades::t_insertSinonimosAutor(
 											$sinonimos_arrayref, 
 											$id
 							);
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 
@@ -119,14 +122,14 @@ if($tabla eq 'temas'){
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $obj->{'seudonimos'}||"";
-		my $seudonimos_arrayref= from_json_ISO($seudonimos);
+		my $id=  $obj->{'id'};
+		my $seudonimos_arrayref=  $obj->{'seudonimos'};
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosTemas(
 										$seudonimos_arrayref, 
 										$id
 								);
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -144,15 +147,15 @@ if($tabla eq 'temas'){
 	}
 
 	if($tipo eq 'insertarSinonimos'){
-		my $sinonimos= $obj->{'sinonimos'}||" ";
-		my $sinonimos_arrayref= from_json_ISO($sinonimos);
+		my $id= $obj->{'id'};
+		my $sinonimos_arrayref= $obj->{'sinonimos'};
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosTemas(
 											$sinonimos_arrayref, 
 											$id
 								);
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -168,7 +171,7 @@ if($tabla eq 'temas'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -185,34 +188,34 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-		my $seudonimos= $obj->{'seudonimos'}||"";
-		my $seudonimos_arrayref= from_json_ISO($seudonimos);
+		my $id=  $obj->{'id'};
+		my $seudonimos_arrayref=  $obj->{'seudonimos'};
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales(
 										$seudonimos_arrayref, 
 										$id
 								);
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial(
-												$id,
-										$sinonimoDelete_string
-								);
+																						$id,
+																						$sinonimoDelete_string
+										);
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+		C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
@@ -243,7 +246,7 @@ if($tabla eq 'editoriales'){
 
 
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}

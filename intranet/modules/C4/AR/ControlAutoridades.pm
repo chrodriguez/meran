@@ -167,99 +167,100 @@ sub traerSinonimosEditoriales{
 
 
 sub t_insertSinonimosAutor {
-	
 	my($sinonimos_arrayref, $idAutor)=@_;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
-	
+	my $msg_object= C4::AR::Mensajes::create();
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
     my $db = $sinonimo_dbo->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+  	$db->begin_work;
 	
 	eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
-            $sinonimo_dbo->agregar($sinonimo->{'text'},$idAutor);
-            $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
+			my $sinonimo_temp = C4::Modelo::CatControlSinonimoAutor->new(db => $db);
+            $sinonimo_temp->agregar($sinonimo->{'text'},$idAutor);
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U393', 'params' => []} ) ;
 		}
         $db->commit;
 	};
 
 	if ($@){
 		#Se loguea error de Base de Datos
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} ) ;
-		
-		eval {
-                $db->rollback
-        };
+		&C4::AR::Mensajes::printErrorDB($@, 'B437',"INTRA");
+		$msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
+		$db->rollback;
 	}
+  
+	$db->{connect_options}->{AutoCommit} = 1;
+
 		
 	return ($msg_object)
 }
 
 
 sub t_insertSinonimosTemas {
-
     my($sinonimos_arrayref, $idTema)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
-
-
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
     my $db = $sinonimo_dbo->db;
+ 	$db->begin_work;
 
     eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
-            $sinonimo_dbo->agregar($sinonimo->{'text'},$idTema);
-            $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
+			my $sinonimo_temp = C4::Modelo::CatControlSinonimoTema->new(db => $db);
+            $sinonimo_temp->agregar($sinonimo->{'text'},$idTema);
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U393', 'params' => []});
         }
         $db->commit;
     };
 
-    if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B400';
-        
-        eval {
-                $db->rollback
-        };
-        #Se setea error para el usuario
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B438',"INTRA");
+		$msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
+		$db->rollback;
+	}
+  
+	$db->{connect_options}->{AutoCommit} = 1;
 
-    }
 
     return ($msg_object)
 }
 
 sub t_insertSinonimosEditoriales {
-
     my($sinonimos_arrayref, $idEditorial)=@_;
 
     use C4::Modelo::CatControlSinonimoEditorial;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
-
+    my $msg_object= C4::AR::Mensajes::create();
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
     my $db = $sinonimo_dbo->db;
+ 	$db->begin_work;
 
     eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
+			$sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new(db => $db);
             $sinonimo_dbo->agregar($sinonimo->{'text'},$idEditorial);
-            $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U393', 'params' => [$sinonimo->{'text'}]});
         }
         $db->commit;
     };
 
-    if ($@){
-        #Se loguea error de Base de Datos
-        $codMsg= 'B400';
-        
-        eval {
-                $db->rollback
-        };
-
-    }
-
+   if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B439',"INTRA");
+		$msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
+		$db->rollback;
+	}
+  
+	$db->{connect_options}->{AutoCommit} = 1;
 
     
     return ($msg_object)
@@ -273,7 +274,7 @@ sub t_updateSinonimosAutores {
 
     use C4::Modelo::CatControlSinonimoAutor;
 
-        my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object= C4::AR::Mensajes::create();
     my ($error,$codMsg,$message);
     my ($error,$codMsg,$message);
 	
@@ -477,27 +478,34 @@ sub traerSeudonimosEditoriales{
 
 
 sub t_insertSeudonimosAutor {
-    
     my($seudonimos_arrayref, $idAutor)=@_;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
+    my $msg_object= C4::AR::Mensajes::create();
+	my $seudonimo = C4::Modelo::CatControlSeudonimoAutor->new();
+	my $db= $seudonimo->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+ 	$db->begin_work;
     
     eval {
         foreach my $seudonimo (@$seudonimos_arrayref){
-            my $seudonimo_temp = C4::Modelo::CatControlSeudonimoAutor->new();
-                my $id_autor_seudonimo = $seudonimo->{'ID'};
-                $seudonimo_temp->agregar($idAutor, $id_autor_seudonimo);
+            my $seudonimo_temp = C4::Modelo::CatControlSeudonimoAutor->new(db => $db);
+			my $id_autor_seudonimo = $seudonimo->{'ID'};
+			$seudonimo_temp->agregar($idAutor, $id_autor_seudonimo);
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U392', 'params' => []});
         }
+		$db->commit;
     };
 
     if ($@){
         #Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B437',"INTRA");
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} ) ;
-        #Se setea error para el usuario
-
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U390', 'params' => []} ) ;
+		$db->rollback;
     }
+
+	 $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object)
 }
@@ -544,37 +552,38 @@ Esta fucion elimina el $seudonimo del autor pasado por parametro
 
 
 sub t_insertSeudonimosTemas {
+  	my($seudonimos_arrayref, $idTema)=@_;
+
+ 	my $msg_object= C4::AR::Mensajes::create();
+
+	my $seudonimo = C4::Modelo::CatControlSeudonimoTema->new();
+	my $db= $seudonimo->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+ 	$db->begin_work;
+
+	eval {
+	
+		foreach my $seudonimo (@$seudonimos_arrayref){
+			my $seudonimo_temp = C4::Modelo::CatControlSeudonimoTema->new( db => $db );
+			$seudonimo_temp->agregar($idTema,$seudonimo->{'ID'});
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U392', 'params' => []});
+		}
+		$db->commit;
+	
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B438',"INTRA");
+		$msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U390', 'params' => []} ) ;
+		$db->rollback;
+	}
   
-  my($seudonimos_arrayref, $idTema)=@_;
-
-  my $msg_object= C4::AR::Mensajes::create();
-
-  my ($error,$codMsg,$message);
-  
-  my $db = C4::Modelo::CatControlSeudonimoTema->new()->db;
-
-  $db->{connect_options}->{AutoCommit} = 0;
-  $db->begin_work;
-
-  eval {
-
-      foreach my $seudonimo (@$seudonimos_arrayref){
-        my $seudonimo_temp = C4::Modelo::CatControlSeudonimoTema->new( db => $db );
-           $seudonimo_temp->agregar($idTema,$seudonimo->{'ID'});
-      }
-      $db->commit;
-
-  };
-
-  if ($@){
-      #Se loguea error de Base de Datos
-      
-      eval {$db->rollback};
-      #Se setea error para el usuario
-  }
-  $db->{AutoCommit} = 1;
-
-  return ($msg_object)
+	$db->{connect_options}->{AutoCommit} = 1;
+	 
+	return ($msg_object)
 }
 
 
@@ -609,35 +618,38 @@ sub t_eliminarSeudonimosTema {
 
 
 sub t_insertSeudonimosEditoriales {
+  	my($seudonimos_arrayref, $idEditorial)=@_;
+	
+	my $msg_object= C4::AR::Mensajes::create();
+	
+	my $db = C4::Modelo::CatControlSeudonimoEditorial->new()->db;
+	
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+
+	eval {
+	
+		foreach my $seudonimo (@$seudonimos_arrayref){
+			my $seudonimo_temp = C4::Modelo::CatControlSeudonimoEditorial->new( db => $db );
+			$seudonimo_temp->agregar($idEditorial,$seudonimo->{'ID'});
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U392', 'params' => []} );
+		}
+		$db->commit;
+	
+	};
+
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B439',"INTRA");
+		$msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U390', 'params' => []} ) ;
+		$db->rollback;
+	}
   
-  my($seudonimos_arrayref, $idEditorial)=@_;
+	$db->{connect_options}->{AutoCommit} = 1;
 
-  my $msg_object= C4::AR::Mensajes::create();
-
-  my $db = C4::Modelo::CatControlSeudonimoEditorial->new()->db;
-
-  $db->{connect_options}->{AutoCommit} = 0;
-  $db->begin_work;
-
-  eval {
-
-      foreach my $seudonimo (@$seudonimos_arrayref){
-        my $seudonimo_temp = C4::Modelo::CatControlSeudonimoEditorial->new( db => $db );
-           $seudonimo_temp->agregar($idEditorial,$seudonimo->{'ID'});
-      }
-      $db->commit;
-
-  };
-
-  if ($@){
-      #Se loguea error de Base de Datos
-      
-      eval {$db->rollback};
-      #Se setea error para el usuario
-  }
-  $db->{AutoCommit} = 1;
-
-  return ($msg_object)
+ 	return ($msg_object)
 }
 
 sub t_eliminarSeudonimosEditorial {
