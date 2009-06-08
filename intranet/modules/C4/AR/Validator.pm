@@ -14,6 +14,7 @@ Synopsis:   Este PM tiene como fin contener todas las funciones que estén dedic
 use strict;
 use C4::AR::Utilidades;
 use C4::AR::Address;
+use CGI::Session;
 
 use vars qw(@EXPORT @ISA);
 
@@ -30,6 +31,7 @@ use vars qw(@EXPORT @ISA);
     &isValidMail,
     &isValidDocument
     &validateParams
+    &validateObjectInstance
 );
 
 
@@ -314,10 +316,27 @@ sub isValidDocument {
 =cut
 sub validateParams {
 
-    my ($params_hash_ref,$array_params_name) = @_;
+    my ($cod_msg,$params_hash_ref,$array_params_name) = @_;
+    my $session = CGI::Session->new();
     my $flag = 1;
     foreach my $nombreParam (@$array_params_name){
         $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
     }
-    return $flag;
+    if (!$flag){
+        $session->param('codMsg', $cod_msg);
+        $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+        C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+    }
+}
+
+sub validateObjectInstance{
+
+    my ($object) = @_;
+    my $session = CGI::Session->new();
+
+    if (!$object){
+        C4::Output::printHeader($session);
+        print 0;
+        exit;
+    }
 }

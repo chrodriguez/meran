@@ -22,7 +22,7 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-
+C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $nro_socio= $obj->{'nro_socio'};
 my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);

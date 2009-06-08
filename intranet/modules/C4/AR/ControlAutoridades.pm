@@ -281,11 +281,12 @@ sub t_updateSinonimosAutores {
 	$db->{connect_options}->{AutoCommit} = 0;
 	
 	eval {
-		my $sinonimo_autor= getSinonimoAutor($idSinonimo, $nombreViejo);
-		$sinonimo_autor->load(db => $db);
+		my $sinonimo_autor= C4::Modelo::CatControlSinonimoAutor->new(id=>$idSinonimo , autor=> $nombreViejo, db=>$db);#getSinonimoAutor($idSinonimo, $nombreViejo);
+        $sinonimo_autor->load();
+# 		$sinonimo_autor->load(db => $db);
 		$sinonimo_autor->agregar($nombre,$idSinonimo);
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
-		$db->commit;
+# 		$db->commit;
 	};
 
 	if ($@){

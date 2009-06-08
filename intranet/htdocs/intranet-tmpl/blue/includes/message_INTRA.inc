@@ -17,6 +17,7 @@ NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No selecciono ningun usuario ' | i18n %]";
 // mensaje compuesto
 ESTA_SEGURO= "[% '\n\nEsta seguro?' | i18n %]";
 TARJETA_NRO= "[% ' -  Tarjeta nro ' | i18n %]";
+DATOS_ENVIADOS_INCORRECTOS= "[% 'No se recibieron datos del servidor, posiblemente debido a que se ha enviado informacion incorrecta.' | i18n %]";
 // fin mensaje compuesto
 
 // mensaje compuesto

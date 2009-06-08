@@ -1,34 +1,11 @@
 <script type="text/javascript">
 
-	 function prestamosInterBibliotecarios(){
-        objAH=new AjaxHelper(updatePrestamosInterBibliotecarios);
-        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-        objAH.debug= true;
-        objAH.nro_socio= usuario.ID;
-        objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
-        objAH.sendToServer();
-    }
-    
-    function updatePrestamosInterBibliotecarios(responseText){
-    //se crea el objeto que maneja la ventana para modificar los datos del usuario
-        vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
-        vPrestamoInterBibliotecario.html=responseText;
-		vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
-        vPrestamoInterBibliotecario.create();   
-        vPrestamoInterBibliotecario.height('420px');
-        vPrestamoInterBibliotecario.width('650px');
-        vPrestamoInterBibliotecario.open();
-    }
-
-
-$(document).ready(function(){
-
-        makeToggle('toggle_container','trigger',null);
-
-});
-
+    $(document).ready(function(){
+            makeToggle('toggle_container','trigger',null);
+    });
 
 </script>
+
 <div class="vcard">
 
     <div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">

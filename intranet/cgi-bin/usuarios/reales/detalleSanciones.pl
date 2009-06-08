@@ -23,6 +23,7 @@ my $obj=$input->param('obj');
 
 my $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $nro_socio= $obj->{'nro_socio'};
+C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $sanciones = C4::AR::Sanciones::tieneSanciones($nro_socio);
 

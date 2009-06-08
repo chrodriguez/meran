@@ -1,5 +1,17 @@
 [% INCLUDE "intranet-top.inc" %] 
 
-<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'>[% mensaje %]</div></b></font></div>
+<div class='tableMsgUser'>
+    <font class='fontMsgUser'>
+        <b>
+            <div id='mensajes'>
+                [% mensaje %]
+            </div>
+        </b>
+    </font>
+</div>
+    <h2>
+        <a href="#" onClick="history.back()"> Volver a intentar </a>
+    </h2>
+
 
 [% INCLUDE "intranet-bottom.inc" %]

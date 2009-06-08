@@ -21,13 +21,15 @@ function modificarDatosDeUsuario(){
 
 function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
-	vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
-	vDatosUsuario.debug= true;
-	vDatosUsuario.html=responseText;
-	vDatosUsuario.create();	
-	vDatosUsuario.height('75%');
-	vDatosUsuario.width('85%');
-	vDatosUsuario.open();
+        if (!verificarRespuesta(responseText))
+            return(0);
+        vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
+	    vDatosUsuario.debug= true;
+	    vDatosUsuario.html=responseText;
+	    vDatosUsuario.create();	
+	    vDatosUsuario.height('75%');
+	    vDatosUsuario.width('85%');
+	    vDatosUsuario.open();
 }
 
 function guardarModificacioUsuario(){
@@ -81,14 +83,16 @@ function modificarPermisos(){
 
 function updateModificarPermisos(responseText){
 //se crea el objeto que maneja la ventana para modificar los permisos
-	vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
-	vModificarPermisos.debug= true;
-	vModificarPermisos.html=responseText;
-	vModificarPermisos.titulo= PERMISOS_DE_ACCESO;
-	vModificarPermisos.create();
-	vModificarPermisos.height('220px');
-	vModificarPermisos.width('550px');
-	vModificarPermisos.open();
+        if (!verificarRespuesta(responseText))
+            return(0);
+	    vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
+	    vModificarPermisos.debug= true;
+	    vModificarPermisos.html=responseText;
+	    vModificarPermisos.titulo= PERMISOS_DE_ACCESO;
+	    vModificarPermisos.create();
+	    vModificarPermisos.height('220px');
+	    vModificarPermisos.width('550px');
+	    vModificarPermisos.open();
 }
 
 function guardarPermisos(){
@@ -307,7 +311,7 @@ function resetPassword(claveUsuario, confirmeClave){
     objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.newpassword= claveUsuario;
     objAH.newpassword1= confirmeClave;
-    objAH.usuario= USUARIO.ID;
+    objAH.nro_socio= USUARIO.ID;
     objAH.tipoAccion= 'RESET_PASSWORD';
     //se envia la consulta
     objAH.sendToServer();

@@ -20,6 +20,14 @@ function _clearMessages(){
 	$('#mensajes').html('');
 }
 
+function verificarRespuesta(responseText){
+    if (responseText == 0){
+        alert(DATOS_ENVIADOS_INCORRECTOS);
+        return(0);
+    }else{
+        return (1);
+    }
+}
 //Esta funcion setea varios mensajes enviados desde el servidor
 function setMessages(Messages_hashref){
 //@params
