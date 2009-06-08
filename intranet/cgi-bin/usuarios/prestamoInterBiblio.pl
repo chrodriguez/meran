@@ -15,7 +15,9 @@ my $authnotrequired= 0;
 my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{circulate=> 0},"intranet");
 
 my $nro_socio = $input->param('nro_socio');
-
+my %t_params;
+   $t_params{'nro_socio'} = $nro_socio;
+C4::AR::Validator::validateParams('U389',\%t_params,['nro_socio'] );
 
 my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branchcode'));
@@ -36,8 +38,6 @@ for(my $i=0;$i<scalar(@titulos);$i++){
 	else{$datos[$i]->{'otros'}="";}
 	$datos[$i]->{'titulo'}=$titulos[$i];
 }
-
-
 
 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 # $socio->persona->getApellido;
