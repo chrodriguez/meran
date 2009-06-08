@@ -207,6 +207,7 @@ sub t_insertSinonimosTemas {
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoTema->new();
     my $db = $sinonimo_dbo->db;
  	$db->begin_work;
+	$db->{connect_options}->{AutoCommit} = 0;
 
     eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
@@ -241,6 +242,7 @@ sub t_insertSinonimosEditoriales {
     my $sinonimo_dbo = C4::Modelo::CatControlSinonimoEditorial->new();
     my $db = $sinonimo_dbo->db;
  	$db->begin_work;
+	$db->{connect_options}->{AutoCommit} = 0;
 
     eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
@@ -272,26 +274,90 @@ sub t_updateSinonimosAutores {
 	
 	my($idSinonimo, $nombre, $nombreViejo)=@_;
 
-    use C4::Modelo::CatControlSinonimoAutor;
-
     my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
-    my ($error,$codMsg,$message);
+	my $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
+    my $db = $sinonimo_dbo->db;
+ 	$db->begin_work;
+	$db->{connect_options}->{AutoCommit} = 0;
 	
 	eval {
-            my $sinonimo_autor = C4::Modelo::CatControlSinonimoAutor->new(id => $idSinonimo, autor => $nombreViejo);
-               $sinonimo_autor->load();
-               $sinonimo_autor->agregar($nombre,$idSinonimo);
-
+		my $sinonimo_autor= getSinonimoAutor($idSinonimo, $nombreViejo);
+		$sinonimo_autor->load(db => $db);
+		$sinonimo_autor->agregar($nombre,$idSinonimo);
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
+		$db->commit;
 	};
+
 	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B443',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
+		$db->rollback;
+    }
 
-	}
-
+	$db->{connect_options}->{AutoCommit} = 0;
 	
 	return ($msg_object)
 }
 
+sub getSinonimoAutor{
+	my($idSinonimo, $autor)=@_;
+	
+	my @filtros;
+
+    push(@filtros, ( id => { eq => $idSinonimo}) );
+	push(@filtros, ( autor => { eq => $autor}) );
+    
+    my $sinonimos_autores = C4::Modelo::CatControlSinonimoAutor::Manager->get_cat_control_sinonimo_autor(
+                                                                                    query => \@filtros,
+                                                                         );
+
+	if(scalar(@$sinonimos_autores) > 0){
+		return $sinonimos_autores->[0];
+	}else{
+		return 0;
+	}
+}
+
+sub getSinonimoTema{
+	my($idSinonimo, $tema)=@_;
+	
+	my @filtros;
+
+    push(@filtros, ( id => { eq => $idSinonimo}) );
+	push(@filtros, ( tema => { eq => $tema}) );
+    
+    my $sinonimos_temas = C4::Modelo::CatControlSinonimoTema::Manager->get_cat_control_sinonimo_tema(
+                                                                                    query => \@filtros,
+                                                                         );
+
+	if(scalar(@$sinonimos_temas) > 0){
+		return $sinonimos_temas->[0];
+	}else{
+		return 0;
+	}
+}
+
+sub getSinonimoEditorial{
+	my($idSinonimo, $editorial)=@_;
+	
+	my @filtros;
+
+    push(@filtros, ( id => { eq => $idSinonimo}) );
+	push(@filtros, ( editorial => { eq => $editorial}) );
+    
+    my $sinonimos_editoriales = C4::Modelo::CatControlSinonimoEditorial::Manager->get_cat_control_sinonimo_editorial(
+                                                                                    query => \@filtros,
+                                                                         );
+
+	if(scalar(@$sinonimos_editoriales) > 0){
+		return $sinonimos_editoriales->[0];
+	}else{
+		return 0;
+	}
+}
 
 sub t_updateSinonimosTemas {
     
@@ -303,13 +369,18 @@ sub t_updateSinonimosTemas {
     my ($error,$codMsg,$message);
     
     eval {
-            my $sinonimo_tema = C4::Modelo::CatControlSinonimoTema->new(id => $idSinonimo, tema => $nombreViejo);
-               $sinonimo_tema->load();
-               $sinonimo_tema->agregar($nombre,$idSinonimo);
-
+		my $sinonimo_tema = C4::Modelo::CatControlSinonimoTema->new(id => $idSinonimo, tema => $nombreViejo);
+		$sinonimo_tema->load();
+		$sinonimo_tema->agregar($nombre,$idSinonimo);
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
     };
-    if ($@){
-
+   
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B444',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
     }
 
     
@@ -326,13 +397,17 @@ sub t_updateSinonimosEditoriales {
     my ($error,$codMsg,$message);
     
     eval {
-            my $sinonimo_editorial = C4::Modelo::CatControlSinonimoEditorial->new(id => $idSinonimo, editorial => $nombreViejo);
-               $sinonimo_editorial->load();
-               $sinonimo_editorial->agregar($nombre,$idSinonimo);
-
+		my $sinonimo_editorial = C4::Modelo::CatControlSinonimoEditorial->new(id => $idSinonimo, editorial => $nombreViejo);
+		$sinonimo_editorial->load();
+		$sinonimo_editorial->agregar($nombre,$idSinonimo);
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
     };
-    if ($@){
-
+	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B444',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
     }
 
     return ($msg_object)
@@ -346,9 +421,7 @@ sub t_eliminarSinonimosAutor {
 
 	my($idAutor,$sinonimo)=@_;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
-    my ($error,$codMsg,$message);
+	my $msg_object= C4::AR::Mensajes::create();
 	
 	eval {
         use C4::Modelo::CatControlSinonimoAutor::Manager;
@@ -356,23 +429,24 @@ sub t_eliminarSinonimosAutor {
         push(@filtros, ( id => { eq => $idAutor}) );
         push(@filtros, ( autor => { eq => $sinonimo}) );
 		C4::Modelo::CatControlSinonimoAutor::Manager->delete_cat_control_sinonimo_autor( where => \@filtros);
-		$codMsg= 'U310';
-
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U310', 'params' => [$sinonimo]});
 	};
 
-	if ($@){
+ 	if ($@){
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B440',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA604', 'params' => [$sinonimo]} ) ;
+    }
 
-	}
-		
-	
 	return ($msg_object)
 }
-# 
+
+
 # =item
 # Esta funcion elimina el sinonimo del autor pasados por parametro
 # =cut
-
-
 sub t_eliminarSinonimosTema {
     
 # FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
@@ -380,8 +454,7 @@ sub t_eliminarSinonimosTema {
 
     my($idTema,$sinonimo)=@_;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
+    my $msg_object= C4::AR::Mensajes::create();
     
     eval {
         use C4::Modelo::CatControlSinonimoTema::Manager;
@@ -389,14 +462,17 @@ sub t_eliminarSinonimosTema {
         push(@filtros, ( id => { eq => $idTema}) );
         push(@filtros, ( tema => { eq => $sinonimo}) );
         C4::Modelo::CatControlSinonimoTema::Manager->delete_cat_control_sinonimo_tema( where => \@filtros);
-        $codMsg= 'U310';
-
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U310', 'params' => [$sinonimo]});
     };
 
     if ($@){
-
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B441',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA604', 'params' => [$sinonimo]} ) ;
     }
-    
+	
     return ($msg_object)
 }
 
@@ -408,8 +484,7 @@ sub t_eliminarSinonimosEditorial {
 
     my($idEditorial,$sinonimo)=@_;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
+	my $msg_object= C4::AR::Mensajes::create();
     
     eval {
         use C4::Modelo::CatControlSinonimoEditorial::Manager;
@@ -417,14 +492,16 @@ sub t_eliminarSinonimosEditorial {
         push(@filtros, ( id => { eq => $idEditorial}) );
         push(@filtros, ( editorial => { eq => $sinonimo}) );
         C4::Modelo::CatControlSinonimoEditorial::Manager->delete_cat_control_sinonimo_editorial( where => \@filtros);
-        $codMsg= 'U310';
-
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U310', 'params' => [$sinonimo]});
     };
 
     if ($@){
-
+		#Se loguea error de Base de Datos
+		&C4::AR::Mensajes::printErrorDB($@, 'B442',"INTRA");
+        $msg_object->{'error'} = 1;
+		#Se setea error para el usuario
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA604', 'params' => [$sinonimo]} ) ;
     }
-
     
     return ($msg_object)
 }

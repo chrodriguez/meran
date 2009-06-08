@@ -17,12 +17,14 @@ __PACKAGE__->meta->setup(
 
 
 sub agregar{
-
     my ($self)=shift;
+
     my ($sinonimo,$id_autor)=@_;
 
     $self->setAutor($sinonimo);
     $self->setId($id_autor);
+C4::AR::Debug::debug("CatControlSinonimoAutor => agregar => sinonimo: ".$sinonimo);
+C4::AR::Debug::debug("CatControlSinonimoAutor => agregar => id_autor: ".$id_autor);
 
     $self->save();
 }

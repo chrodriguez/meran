@@ -148,13 +148,11 @@ function clearDataTextArea(){
 //*********************************************ABM Sinonimos************************************************
 function guardarDatos(){
 
-	var tabla= $('#tabla').val();
-
 	objAH=new AjaxHelper(updateGuadarDatos);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSinonimos';
-	objAH.tabla= tabla;
+	objAH.tabla= $('#tabla').val();
 	objAH.sinonimos= OBJECTS_ARRAY;
 	objAH.id= SINONIMO_SELECTED.ID;
 	//se envia la consulta
@@ -169,7 +167,6 @@ function updateGuadarDatos(responseText){
 }
 
 function deleteSinonimo(idDelete, sinonimo_string){
-	var tabla= $('#tabla').val();
 
 	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SINONIMO);
 
@@ -179,7 +176,7 @@ function deleteSinonimo(idDelete, sinonimo_string){
 		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSinonimos';
-		objAH.tabla= tabla;
+		objAH.tabla= $('#tabla').val();
 		objAH.sinonimoDelete_string= sinonimo_string;
 		objAH.id= idDelete;
 		//se envia la consulta
@@ -190,20 +187,19 @@ function deleteSinonimo(idDelete, sinonimo_string){
 function updateDeleteSinonimo(responseText){
 
 	var Messages=JSONstring.toObject(responseText);
-	setMessages(Messages);
-	updateGuadarDatos();
+	setMessages(Messages);	
+	consultarTablaSinonimos(SINONIMO_SELECTED.ID);
+	clearDataTextArea();
 }
 
 
 function updateNombreSinonimo(idSinonimo, nombre, nombreViejo){
-	
-	var tabla= $('#tabla').val();
 
 	objAH=new AjaxHelper(updateGuadarDatos);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'UpdateSinonimo';
-	objAH.tabla= tabla;
+	objAH.tabla= $('#tabla').val();
 	objAH.idSinonimo= idSinonimo;
 	objAH.nombre= nombre;
 	objAH.nombreViejo= nombreViejo;

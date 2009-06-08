@@ -43,8 +43,6 @@ if($tabla eq 'autores'){
 	}
 
 	if($tipo eq 'insertarSeudonimos'){
-# 		my $seudonimos= $obj->{'seudonimos'}||"";
-# 		my $seudonimos_arrayref= from_json_ISO($seudonimos);
 		my $id=  $obj->{'id'};
 		my $seudonimos_arrayref=  $obj->{'seudonimos'};
 		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
@@ -60,13 +58,15 @@ if($tabla eq 'autores'){
 #******************************SINONIMOS**************************************
 
 	if($tipo eq 'eliminarSinonimos'){
+		my $id=  $obj->{'id'};
+		my $sinonimoDelete_string=  $obj->{'sinonimoDelete_string'};
 		my ($msg_object)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
 											$id,
 											$sinonimoDelete_string
 								);
 		#se convierte el arreglo de respuesta en JSON
 		my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 
@@ -99,7 +99,7 @@ if($tabla eq 'autores'){
 
 		#se convierte el arreglo de respuesta en JSON
         my $infoRespuestaJSON = to_json $msg_object;
-    C4::Output::printHeader($session);
+    	C4::Output::printHeader($session);
 		#se envia en JSON al cliente
 		print $infoRespuestaJSON;
 	}
