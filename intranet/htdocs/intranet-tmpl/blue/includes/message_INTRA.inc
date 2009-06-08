@@ -62,4 +62,9 @@ CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "[% 'Confirma la baja del seudonimo?' | i18n %]"
 CONFIRMA_LA_BAJA_DEL_SINONIMO= "[% 'Confirma la baja del sinonimo?' | i18n %]";
 //=============================================Fin===Control Autoridades===========================================
 
+//================================================Visualizacion Opac==============================================
+AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
+//=============================================Fin===Visualizacion Opac===========================================
+
+
 </script>

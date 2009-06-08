@@ -11,13 +11,13 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_templateexpr_and_user({template_name => "catalogacion/visualizacionOPAC/visualizacionOpacResults.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+															template_name => "catalogacion/visualizacionOPAC/visualizacionOpacResults.tmpl",
+															query => $input,
+															type => "intranet",
+															authnotrequired => 0,
+															flagsrequired => {editcatalogue => 1},
+															debug => 1,
 			     });
 
 
@@ -45,14 +45,14 @@ if( ($tipoAccion eq "SELECT")&&($componente eq "CONF_CAMPO_SUBCAMPO") ){
 	my $textsucc= $result[0]->{'textsucc'};
 	my $separador= $result[0]->{'separador'};
 	
-	$template->param(	textpred   => "textopred",
-				textsucc   => "textsucc",
-				separador  => "separador",
-	);
+	$t_params->{'textpred'}= "textopred";
+	$t_params->{'textsucc'}= "textsucc";
+	$t_params->{'separador'}= "separador";
 }
 #****************************Fin**Mostrar configuracion de campo, subcampo***************************
 
 #***********************Filtro de numero de campo*******************************************
+=item
 my %camposX;
 my @values;
 push (@values, -1);
@@ -76,10 +76,13 @@ my $selectCampoX=CGI::scrolling_list( 	-name      => 'campoX',
 
 
 $template->param(selectCampoX	  => $selectCampoX);
+=cut
+$t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 #***********************FIN filtro de numero de campo********************************************
 
 if( ($accion eq "SELECCION_CAMPO") || ($accion eq "SELECCION_SUB_CAMPO") ){
 
+=item
 	my @campos;
 	if($campoX != -1){
 # 	traigo todos los campos que estan catalogados en MARC, segun el campo por ej 1xx
@@ -97,8 +100,20 @@ if( ($accion eq "SELECCION_CAMPO") || ($accion eq "SELECCION_SUB_CAMPO") ){
 						-onChange  => 'eleccionCampo()',
                                  );
  
- 	$template->param(selecttagField    => $selecttagField,);
+  	$template->param(selecttagField    => $selecttagField,);
+# 	$t_params->{'selecttagField'}= $selecttagField;
+=cut
+	my $nivel = $obj->{'nivel'};
+    my $campoX = $obj->{'campoX'};
 
+    my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
+
+    my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+	my $infoOperacionJSON= $info;
+
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
 # Fin Combo numeros de campo
 }
 
@@ -120,12 +135,10 @@ if($accion eq "SELECCION_SUB_CAMPO" ){
 							-size      => 1,
                                  	);
 
-	$template->param(
-			selecttagsubField    => $selecttagsubField,
-			nombreCampo	      => $nombretagCampo,
-			);
+	$t_params->{'selecttagsubField'}= $selecttagsubField;
+	$t_params->{'nombreCampo'}= $nombretagCampo;
 #FIN combo subcampos
 }
 
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

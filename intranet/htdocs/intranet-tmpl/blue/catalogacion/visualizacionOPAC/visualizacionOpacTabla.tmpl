@@ -4,7 +4,7 @@
 	<thead>
  	<tr class="tablaresultadoTitle">
 		<th width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png">
+			<img src="[%themelang %]/images/izquierda.png">
 		</th>
 	
 		<th>Campo</th>
@@ -17,42 +17,40 @@
 		<th>Editar</th>
 	
 		<th width="1%" align="rigth" valign="top">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png">
+			<img src="[%themelang %]/images/derecha.png">
 		</th>
 	</tr>
 	</thead>
 	<tbody>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+[% FOREACH RESULTSLOOP %]
 	<tr align='center' class="inputFontNormal">
 		<td height=25>&nbsp;</td>
 
-		<td><!-- TMPL_VAR NAME=campo --></td>
-		<td><!-- TMPL_VAR NAME=subcampo --></td>
-		<td><!-- TMPL_VAR NAME=textpred --></td>
-		<td><!-- TMPL_VAR NAME=textsucc --></td>
-		<td><!-- TMPL_VAR NAME=separador --></td>
+		<td>[% campo %]</td>
+		<td>[% subcampo %]</td>
+		<td>[% textpred %]</td>
+		<td>[% textsucc %]</td>
+		<td>[% separador %]</td>
 		<td> 
-			<input type='checkbox' id="<!-- TMPL_VAR name='idestcatopac' -->"
-			value="<!-- TMPL_VAR NAME='visible' -->" 
-			onChange="cambiarVisibilidad('<!-- TMPL_VAR name='idestcatopac' -->');" 
-			value="<!-- TMPL_VAR NAME='visible' -->"
-			<!-- TMPL_IF NAME='visible' -->	checked	<!-- /TMPL_IF --> >
+			<input type='checkbox' id="[% idestcatopac %]" value="[% visible %]" onChange="cambiarVisibilidad('[% idestcatopac %]');" 
+			value="[% visible %]"
+			[% IF visible %] checked	[% END %] >
 		</td>
 		<td class="click" align="center">
-			<a onClick="deleteRowVisualizacion('eliminar',<!-- TMPL_VAR name='idestcatopac' -->);">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png"
+			<a onClick="deleteRowVisualizacion('eliminar',[% idestcatopac %]);">
+			<img src="[% themelang %]/images/borrar.png"
 			Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 		<td class="click" align="center">
-			<a onClick="modificarVisualizacion('<!-- TMPL_VAR NAME=textpred -->','<!-- TMPL_VAR NAME=textsucc -->', '<!-- TMPL_VAR NAME=separador -->',<!-- TMPL_VAR name='idestcatopac' -->);">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
+			<a onClick="modificarVisualizacion('[% textpred %]','[% textsucc %]', '[% separador %]',[% idestcatopac %]);">
+			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 
 		<td height=25>&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 	</tbody>
 
 	<tr valign=bottom>

@@ -4,7 +4,7 @@
 
  	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/izquierda.png">
+			<img src="[%themelang %]/images/izquierda.png">
 		</td>
 	
 		<td>Encabezado</td>
@@ -15,70 +15,58 @@
 		<td>Editar</td>
 	
 		<td width="1%" align="rigth" valign="top">
-			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/derecha.png">
+			<img src="[%themelang %]/images/derecha.png">
 		</td>
 	</tr>
 
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-<!-- Miguel lo saco para probar el editcell -->
-	<!--<tr class="" align='center' 
-onClick="seleccionarEncabezado(<!-- TMPL_VAR name='idencabezado' -->);">-->
+[% FOREACH RESULTSLOOP %]
 	<tr class="inputFontNormal" align='center' >
 		<td height=25>&nbsp;</td>
 
-		<td id="encabezado<!-- TMPL_VAR name='idencabezado' -->" class="click" 	
-			onClick="seleccionarEncabezado('<!-- TMPL_VAR name='idencabezado' -->');"> 
-<!-- 			Miguel version anterior ver -->
-			<!--<div id="divEncabezado<!-- TMPL_VAR name='idencabezado' -->"  onDblClick="EditCell('encabezado<!-- TMPL_VAR name='idencabezado' -->', '<!-- TMPL_VAR name='idencabezado' -->');" selected="off">-->
+		<td id="encabezado[% idencabezado %]" class="click" 	
+			onClick="seleccionarEncabezado('[% idencabezado %]');"> 
 
-			<div id="divEncabezado<!-- TMPL_VAR name='idencabezado' -->" selected="off">
-				<!-- TMPL_VAR NAME=nombre -->
+			<div id="divEncabezado[% idencabezado %]" selected="off">
+				[% nombre %]
 			</div>
 		</td>
 		<td> 
 
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" onClick="modificarOrden(<!-- TMPL_VAR name='idencabezado' -->, <!-- TMPL_VAR NAME=orden -->, 'up')">
+			<input  src="[%themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
+					onClick="modificarOrden([% idencabezado %], [% orden %], 'up')">
 			
-			<input  src="<!-- TMPL_VAR NAME='themelang' -->/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" onClick="modificarOrden(<!-- TMPL_VAR name='idencabezado' -->, <!-- TMPL_VAR NAME=orden -->, 'down')">
+			<input  src="[%themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
+					onClick="modificarOrden([% idencabezado %], [% orden %], 'down')">
 
 		</td>
 <!-- falta el check -->
 		<td> 
-			<!-- TMPL_VAR NAME=textpred -->
+			[% textpred %]
 		</td>
 		<td> 
-			<input id="checkbox<!-- TMPL_VAR NAME='idencabezado' -->" type="checkbox" onClick="cambiarLineaEncabezado(<!-- TMPL_VAR name='idencabezado' -->);" title="para indicar si la salida es en linea" value="<!-- TMPL_VAR NAME=linea -->"
-			<!-- TMPL_IF NAME="linea" -->
+			<input 	id="checkbox[% idencabezado %]" type="checkbox" 
+					onClick="cambiarLineaEncabezado([% idencabezado %]);" 
+					title="para indicar si la salida es en linea" value="[% linea %]"
+			[% IF linea %]
 				checked
-			<!-- /TMPL_IF --> >
+			[% END %] >
 		</td>
 		<td class="click" align="center">
-			<a onClick="deleteEncabezado(<!-- TMPL_VAR name='idencabezado' -->);">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'>
+			<a onClick="deleteEncabezado([% idencabezado %]);">
+			<img src="[%themelang %]/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 		<td class="click" align="center">
-<!-- 			Miguel version anterior ver -->
-			<!--<a class="inputFontNormal" 
-			onClick="modificarEncabezado('<!-- TMPL_VAR name='idencabezado' -->');">
-			
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
-			</a>-->
-	
-			<a onClick="EditCell('encabezado<!-- TMPL_VAR name='idencabezado' -->', '<!-- TMPL_VAR name='idencabezado' -->');">
-			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name='theme' -->/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
+			<a onClick="EditCell('encabezado[% idencabezado %]', '[% idencabezado %]');">
+			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 
 		<td height=25>&nbsp;</td>
 	</tr>
-<!-- /TMPL_LOOP -->
+[% END %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
         </tr>
 
 </table>
-<!--
-<div id="updateEncabezado" style="display:none">
-	<input class="focus" type="text" id="nombreNuevo" >
-</div>-->

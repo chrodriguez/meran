@@ -27,13 +27,13 @@ my %infoRespuesta;
 #************************* para cargar la tabla de encabezados*************************************
 if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 
-	my ($template, $loggedinuser, $cookie) = get_templateexpr_and_user({
-				template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
+	my ($template, $session, $t_params) = get_template_and_user({
+										template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
+										query => $input,
+										type => "intranet",
+										authnotrequired => 0,
+										flagsrequired => {borrowers => 1},
+										debug => 1,
 	});
 
 	my $nivel =$obj->{'nivel'};
@@ -41,11 +41,9 @@ if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 
 	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarEncabezados($nivel, $itemtype);
 
-	$template->param( 	
-				RESULTSLOOP      => \@results,
-			);
+	$t_params->{'RESULTSLOOP'}= \@results;
 
-	print  $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 #**************************************************************************************************
@@ -65,13 +63,13 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 #******* Se arma una tabla con la Visualizacion de OPAC y se muestra con un tmpl********************
 if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMBO_ENCABEZADO")){
 	
-	my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
-				template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
+	my ($template, $session, $t_params)= get_template_and_user({
+												template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
+												query => $input,
+												type => "intranet",
+												authnotrequired => 0,
+												flagsrequired => {borrowers => 1},
+												debug => 1,
 	});
 	
 	my $idencabezado =$obj->{'encabezados'};
@@ -79,11 +77,9 @@ if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMB
 
 	my ($cant, @resultsCatalogacion)= &traerVisualizacion($idencabezado);
 	
-	$template->param( 	
-				RESULTSLOOP      => \@resultsCatalogacion,
-			);
+	$t_params->{'RESULTSLOOP'}= \@resultsCatalogacion;	
 	
-	print  $template->output;
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 #**********************************************************************************************************
 

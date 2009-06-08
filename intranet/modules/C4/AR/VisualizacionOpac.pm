@@ -626,6 +626,7 @@ sub t_deleteEncabezado {
 }
 
 sub traerCampos{
+=item
 	my ($idencabezado, $campo, $nivel) =@_;
 	my $dbh = C4::Context->dbh;
 
@@ -642,6 +643,28 @@ sub traerCampos{
 
 	$sth->finish;
 	return (@results);	
+=cut
+	use C4::Modelo::CatEstructuraCatalogacion::Manager;
+    use C4::Modelo::CatEstructuraCatalogacion;
+    my ($nivel,$campo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo => { like => $campo.'%'} ) );
+    push(@filtros, ( nivel => { eq => $nivel } ) );
+
+    my $db_campos_array_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => ('campo'),
+                                                                                        select   => [ 'campo', 'liblibrarian'],
+                                                                                        group_by => [ 'campo'],
+                                                                       );
+#     return($db_campos_MARC);
+	if(scalar(@$db_campos_array_MARC) > 0){
+		return ($db_campos_array_MARC->[0]);
+	}else{
+		return 0;
+	}
 }
 
 

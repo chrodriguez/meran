@@ -522,8 +522,8 @@ sub getSocioInfo {
     Este funcion devuelve la informacion del usuario segun un nro_socio
 =cut
 sub getSocioInfoPorNroSocio {
-
     my ($nro_socio)= @_;
+
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ nro_socio => { eq => $nro_socio } ]);
     use C4::Modelo::UsrSocio;
 

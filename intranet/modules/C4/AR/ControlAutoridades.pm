@@ -271,22 +271,17 @@ sub t_insertSinonimosEditoriales {
 #************************************************************************************************
 
 sub t_updateSinonimosAutores {
-	
 	my($idSinonimo, $nombre, $nombreViejo)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();
-	my $sinonimo_dbo = C4::Modelo::CatControlSinonimoAutor->new();
-    my $db = $sinonimo_dbo->db;
- 	$db->begin_work;
-	$db->{connect_options}->{AutoCommit} = 0;
-	
+
+
 	eval {
-		my $sinonimo_autor= C4::Modelo::CatControlSinonimoAutor->new(id=>$idSinonimo , autor=> $nombreViejo, db=>$db);#getSinonimoAutor($idSinonimo, $nombreViejo);
+# FIXME no actualiza ver!!!!!!!!!!
+		my $sinonimo_autor= getSinonimoAutor($idSinonimo, $nombreViejo);
         $sinonimo_autor->load();
-# 		$sinonimo_autor->load(db => $db);
 		$sinonimo_autor->agregar($nombre,$idSinonimo);
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
-# 		$db->commit;
 	};
 
 	if ($@){
@@ -295,10 +290,7 @@ sub t_updateSinonimosAutores {
         $msg_object->{'error'} = 1;
 		#Se setea error para el usuario
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
-		$db->rollback;
     }
-
-	$db->{connect_options}->{AutoCommit} = 0;
 	
 	return ($msg_object)
 }
@@ -316,7 +308,7 @@ sub getSinonimoAutor{
                                                                          );
 
 	if(scalar(@$sinonimos_autores) > 0){
-		return $sinonimos_autores->[0];
+		return ($sinonimos_autores->[0]);
 	}else{
 		return 0;
 	}
@@ -335,7 +327,7 @@ sub getSinonimoTema{
                                                                          );
 
 	if(scalar(@$sinonimos_temas) > 0){
-		return $sinonimos_temas->[0];
+		return ($sinonimos_temas->[0]);
 	}else{
 		return 0;
 	}
@@ -354,7 +346,7 @@ sub getSinonimoEditorial{
                                                                          );
 
 	if(scalar(@$sinonimos_editoriales) > 0){
-		return $sinonimos_editoriales->[0];
+		return ($sinonimos_editoriales->[0]);
 	}else{
 		return 0;
 	}
@@ -366,11 +358,11 @@ sub t_updateSinonimosTemas {
 
     use C4::Modelo::CatControlSinonimoTema;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
+    my $msg_object= C4::AR::Mensajes::create();
     
+# FIXME no actualiza ver!!!!!!!!!!
     eval {
-		my $sinonimo_tema = C4::Modelo::CatControlSinonimoTema->new(id => $idSinonimo, tema => $nombreViejo);
+		my $sinonimo_tema = getSinonimoTema($idSinonimo, $nombreViejo);
 		$sinonimo_tema->load();
 		$sinonimo_tema->agregar($nombre,$idSinonimo);
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
@@ -394,11 +386,11 @@ sub t_updateSinonimosEditoriales {
 
     use C4::Modelo::CatControlSinonimoEditorial;
 
-        my $msg_object= C4::AR::Mensajes::create();
-    my ($error,$codMsg,$message);
+    my $msg_object= C4::AR::Mensajes::create();
+# FIXME no actualiza ver!!!!!!!!!!
     
     eval {
-		my $sinonimo_editorial = C4::Modelo::CatControlSinonimoEditorial->new(id => $idSinonimo, editorial => $nombreViejo);
+		my $sinonimo_editorial = getSinonimoEditorial($idSinonimo, $nombreViejo);
 		$sinonimo_editorial->load();
 		$sinonimo_editorial->agregar($nombre,$idSinonimo);
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});

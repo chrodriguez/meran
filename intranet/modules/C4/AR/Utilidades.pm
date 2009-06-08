@@ -1770,19 +1770,13 @@ sub paginarArreglo{
 	my $division_temp  = floor ($cant_total / $fin);
 	my $resto = $cant_total - ($division_temp * $fin);
 	my $numPagina = ceil($ini / $fin) + 1;
-# 	C4::AR::Debug::debug("paginarArreglo => ini: ".$ini);
 	
 	if ( ($numPagina > $division_temp) ){
 		@array = @array[$ini..($ini + $resto-1)];
-# 		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $resto-1));
 	}else{
 		@array = @array[$ini..($ini + $fin-1)];
-# 		C4::AR::Debug::debug("paginarArreglo => fin: ".($ini + $fin-1));
 	}
 	
-# 	C4::AR::Debug::debug("paginarArreglo => cant_total: ".$cant_total);
-# 	C4::AR::Debug::debug("paginarArreglo => cant del arreglo: ".scalar(@array));
-
    	return ($cant_total,@array);
 }
 
@@ -1815,22 +1809,16 @@ obtenerCoincidenciasDeBusqueda
 sub obtenerCoincidenciasDeBusqueda{
 	my ($string, $search_array) = @_;
 
-# C4::AR::Debug::debug("\n");
-# C4::AR::Debug::debug("string: ".$string);
 	my $cant= 0;
 	my $cont= 0;
 	$string= lc $string;
-# C4::AR::Debug::debug("long: ".scalar(@$search_array));
+
 	foreach my $search (@$search_array){
-# C4::AR::Debug::debug("search: ".$search);
 		$cant= 0;
 		$search= lc $search;
  		while ($string =~ /$search/g) { $cant++ }
-# C4::AR::Debug::debug("cant: ".$cant);
 		$cont += $cant;
 	}
-# C4::AR::Debug::debug("cants hits: ".$cont);
-# C4::AR::Debug::debug("\n");
 
 	return $cont;
 }
@@ -1955,10 +1943,7 @@ sub obtenerDescripcionDeSubCampos{
 	my $textout;
 	
 	foreach my $sub_campo_marc (@$sub_campos_marc_array_ref) {
-# SELECT tagsubfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) as subcampo
-# 		$textout .= $sub_campo_marc->getTagSubField."/".$sub_campo_marc->getLiblibrarian."#";
 		$textout .= $sub_campo_marc->getTagSubField."/".$sub_campo_marc->getTagSubField." - ".$sub_campo_marc->getLiblibrarian."#";
-# 		$results[$i]->{'tagsubfield'}."/".$results[$i]->{'subcampo'}."#";
 	}
 
 	return $textout;

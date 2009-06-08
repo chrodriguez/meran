@@ -2,29 +2,18 @@
 
 <script>
 
-// ## FIXME NO FUNCIONA, DEBERIA CARGAR DE MANERA CONDICIONAL
-// if (!$.ui.draggable){
-
-//  	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.js");
-// 	$.getScript("/intranet-tmpl/blue/includes/jquery/jquery.dimensions.js");
-// 	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.mouse.js");
-// 	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.js");
-// 	$.getScript("/intranet-tmpl/blue/includes/jquery/ui.draggable.ext.js");
-// 	alert("se cargo desde agregar encabezado");
+// function openWindow(){
+// 	$('.windowBlur').show();
+// 	$('#window').draggable({opacity: 0.7777});
+//  	$('#window').show();
+// 	
 // }
 
-function openWindow(){
-	$('.windowBlur').show();
-	$('#window').draggable({opacity: 0.7777});
- 	$('#window').show();
-	
-}
-
-function closeWindow(){
-	$('.windowBlur').hide();
-	$('#window').hide();
-	clearDataTextArea();
-}
+// function closeWindow(){
+// 	$('.windowBlur').hide();
+// 	$('#window').hide();
+// 	clearDataTextArea();
+// }
 
 /******************************************Manejador para TextArea*********************************************/
 
@@ -125,12 +114,12 @@ function updateSaveEncabezado(responseText){
 
 </script>
 
-<div id=window class=window style="display:none; height:270px; width:350px;">
+<!--<div id=window class=window style="display:none; height:270px; width:350px;">
   <div class="windowBlur" style="display:none; height:270px; width:350px;"></div>
 	<div id="headerWindow" class="headerWindow">
 		<span class="click" onClick="closeWindow();">Cerrar</span>
 	</div>
-	<div id="title" class="title">Titulo</div>	
+	<div id="title" class="title">Titulo</div>	-->
 	<div id="contentWindow" class="contentWindow">
 	  <ul>
 	  	<li>
@@ -140,7 +129,7 @@ function updateSaveEncabezado(responseText){
 			<input type="text" id="nomEncabezadoAlta">
 		</li>
 		<li>
-			Tipo de item: <!-- TMPL_VAR NAME="selectItemTypeAltaEncabezado" -->
+			Tipo de item: [% selectItemTypeAltaEncabezado %]
 		</li>
 		<li>
 			<input 	id="push" type="button" onClick="pushEncabezadoTipoItem();" value=">>" 
@@ -151,17 +140,17 @@ function updateSaveEncabezado(responseText){
 		<li>
 			<textarea id="textArearTiposItems" style="height:60px; width:230px;" readonly></textarea>
 		</li>
-	</div> <!--end div contentWindow-->
+<!-- 	</div> <!--end div contentWindow--> -->
 
-	<div class="controls" id="controls">
+<!-- 	<div class="controls" id="controls"> -->
 		<p>
 		   <a onClick="validarDatosEncabezado();">
 			<img 	id="save" border="0" src="/intranet-tmpl/blue/images/guardar.png" 
-				alt="Guardar" name="save" title="Guardar Encabezado"/>
+					alt="Guardar" name="save" title="Guardar Encabezado"/>
 		   </a>
 		</p>
-	</div>
-</div> <!--end div window-->
+<!-- 	</div> -->
+<!--</div> <!--end div window-->-->
 
 
 <!-- *******************************Fin**Window Agregar Encabezado**************************************** -->

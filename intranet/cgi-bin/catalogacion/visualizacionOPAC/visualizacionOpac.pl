@@ -9,17 +9,18 @@ use C4::AR::VisualizacionOpac;
 
 my $input = new CGI;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "catalogacion/visualizacionOPAC/visualizacionOpac.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
+my ($template, $session, $t_params)= get_template_and_user({
+																template_name => "catalogacion/visualizacionOPAC/visualizacionOpac.tmpl",
+																query => $input,
+																type => "intranet",
+																authnotrequired => 0,
+																flagsrequired => {editcatalogue => 1},
+																debug => 1,
 			     });
 
 
 #***********************************************item type*********************************
+=item
  my ($cant,@results)= C4::AR::Busquedas::getItemTypes();
  my @valuesItemtypes;
  my %labelsItemtypes;
@@ -48,12 +49,20 @@ my ($template, $loggedinuser, $cookie)
 								-defaults  => 'LIB',
 								-size      => 1,
                                   	);
+=cut
 #*********************************************fin item type*********************************
 
+my %params_combo;
+$params_combo{'onChange'}= 'changeTipoItem()';
+$params_combo{'default'}= 'LIB';
+$params_combo{'id'}= 'comboTiposItems';
+my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'selectItemType'}= $comboTiposNivel3;
 
-$template->param(
-			selectItemType  => $selectItemType,
-			selectItemTypeAltaEncabezado  => $selectItemTypeAltaEncabezado,
-);
+# $t_param->{'selectItemType'}= $selectItemType;
+$params_combo{'default'}= 'LIB';
+$params_combo{'id'}= 'comboTiposItemsAltaEncabezado';
+my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'selectItemTypeAltaEncabezado'}= $comboTiposNivel3;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
