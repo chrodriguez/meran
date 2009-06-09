@@ -65,4 +65,6 @@ $params_combo{'id'}= 'comboTiposItemsAltaEncabezado';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemTypeAltaEncabezado'}= $comboTiposNivel3;
 
+$t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -114,45 +114,33 @@ function updateSaveEncabezado(responseText){
 
 </script>
 
-<!--<div id=window class=window style="display:none; height:270px; width:350px;">
-  <div class="windowBlur" style="display:none; height:270px; width:350px;"></div>
-	<div id="headerWindow" class="headerWindow">
-		<span class="click" onClick="closeWindow();">Cerrar</span>
-	</div>
-	<div id="title" class="title">Titulo</div>	-->
-	<div id="contentWindow" class="contentWindow">
-	  <ul>
-	  	<li>
-			<label for="textoMod" style="float: left; width:25%" >
-			Encabezado:
-			</label>
-			<input type="text" id="nomEncabezadoAlta">
-		</li>
-		<li>
-			Tipo de item: [% selectItemTypeAltaEncabezado %]
-		</li>
-		<li>
-			<input 	id="push" type="button" onClick="pushEncabezadoTipoItem();" value=">>" 
-				title="Agregar Tipo de Item" > 
-			<input 	id="pop" type="button" onClick="popEncabezadoTipoItem();" value="<<" 
-				title="Sacar Tipo de Item" disabled=true>
-		</li>
-		<li>
-			<textarea id="textArearTiposItems" style="height:60px; width:230px;" readonly></textarea>
-		</li>
-<!-- 	</div> <!--end div contentWindow--> -->
+<ul>
+	<li>
+		<label for="textoMod" style="float: left; width:25%" >
+		Encabezado:
+		</label>
+		<input type="text" id="nomEncabezadoAlta">
+	</li>
+	<li>
+		Tipo de item: [% selectItemTypeAltaEncabezado %]
+	</li>
+	<li>
+		<input 	id="push" type="button" onClick="pushEncabezadoTipoItem();" value=">>" 
+			title="Agregar Tipo de Item" > 
+		<input 	id="pop" type="button" onClick="popEncabezadoTipoItem();" value="<<" 
+			title="Sacar Tipo de Item" disabled=true>
+	</li>
+	<li>
+		<textarea id="textArearTiposItems" style="height:60px; width:230px;" readonly></textarea>
+	</li>
 
-<!-- 	<div class="controls" id="controls"> -->
-		<p>
-		   <a onClick="validarDatosEncabezado();">
-			<img 	id="save" border="0" src="/intranet-tmpl/blue/images/guardar.png" 
-					alt="Guardar" name="save" title="Guardar Encabezado"/>
-		   </a>
-		</p>
-<!-- 	</div> -->
-<!--</div> <!--end div window-->-->
-
-
+	<li>
+		<a onClick="validarDatosEncabezado();">
+		<img 	id="save" border="0" src="/intranet-tmpl/blue/images/guardar.png" 
+				alt="Guardar" name="save" title="Guardar Encabezado"/>
+		</a>
+	</li>
+</ul>
 <!-- *******************************Fin**Window Agregar Encabezado**************************************** -->
 
 

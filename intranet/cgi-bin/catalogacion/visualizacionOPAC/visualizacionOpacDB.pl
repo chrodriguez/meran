@@ -143,32 +143,13 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 
 #**************** gurado la configuracion de la visualizacion en estructura_catalogacion_opac******************
 if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
-
-	my $textoPred =$obj->{'textoPredecesor'};
-	my $textoSucc =$obj->{'textoSucesor'};
-	my $campo =$obj->{'campo'};
-	my $subcampo =$obj->{'subCampo'};
-	my $separador =$obj->{'separador'};
-	my $idencabezado =$obj->{'encabezados'};
 	
-	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_insertConfVisualizacion(	$campo, 
-												$subcampo, 
-												$textoPred, 
-												$textoSucc, 
-												$separador, 
-												$idencabezado
-					);
+	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_insertConfVisualizacion($obj);
 	
-	#se arma el mensaje
-	$infoRespuesta{'error'}= $error;
-	$infoRespuesta{'codMsg'}= $codMsg;
-	$infoRespuesta{'message'}= $message;
-
-	#se convierte el arreglo de respuesta en JSON
-	my $infoRespuestaJSON = to_json \%infoRespuesta;
+	my $infoOperacionJSON=to_json $Message_arrayref;
+    
     C4::Output::printHeader($session);
-	#se envia en JSON al cliente
-	print $infoRespuestaJSON;
+    print $infoOperacionJSON;
 }
 #**************************************************************************************************
 

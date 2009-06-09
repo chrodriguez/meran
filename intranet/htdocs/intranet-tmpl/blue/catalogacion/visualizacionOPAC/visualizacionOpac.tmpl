@@ -9,6 +9,106 @@
 
 <script>
 
+//arreglo de objetos campo
+CAMPOS_ARRAY= new Array();
+//arreglo de objetos subcampo
+SUBCAMPOS_ARRAY= new Array();
+
+
+/*
+ * eleccionCampoX
+ * Funcion que se ejecuta cuando se selecciona un valor del combo campoX (ej. 1xx), y hace un llamado a la 
+ * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
+ */
+function eleccionCampoX(){
+//     if ( $("#campoX").val() != -1){
+        objAH=new AjaxHelper(updateEleccionCampoX);
+		objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.campoX=$('#campoX').val();
+        objAH.nivel=$('#niveles_id').val();
+        objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
+        objAH.sendToServer();
+//     }
+}
+
+//se genera el combo en el cliente
+function updateEleccionCampoX(responseText){
+    //Arreglo de Objetos Global
+    var campos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#campo").html('')
+    var options = "<option value='-1'>Seleccionar Campo</option>";
+    
+    for (x=0;x < campos_array.length;x++){
+         CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
+         options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
+    }
+    $("#campo").append(options);
+    //se agrega la info al combo
+//     enable_disableSelects();
+}
+
+
+
+function eleccionCampo(){
+//     if ($("#campo").val() != -1){
+        objAH=new AjaxHelper(updateEleccionCampo);
+        objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.campo=$('#campo').val();
+        objAH.nivel=$('#niveles_id').val();
+        objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
+        objAH.sendToServer();
+//     }
+//     else
+//         enable_disableSelects();
+
+}
+
+
+//se genera el combo en el cliente
+function updateEleccionCampo(responseText){
+//     $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
+    //Arreglo de Objetos Global
+    var subcampos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#subcampo").html('');
+    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    
+    for (x=0;x < subcampos_array.length;x++){
+         SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].liblibrarian);
+         options+= "<option value=" + subcampos_array[x].tagsubfield +" >" + subcampos_array[x].tagsubfield + "</option>";
+    }
+    //se agrega la info al combo
+    $("#subcampo").append(options);
+//     enable_disableSelects();
+}
+
+
+
+function eleccionSubCampo(){
+
+// 	objAH=new AjaxHelper(updateEleccionSubCampo);
+// 	objAH.debug= true;
+// 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
+// 	objAH.campoX= $('#campoX').val();
+// 	objAH.encabezados= $('#encabezados').val();
+// 	objAH.campo= $('#campo').val();
+// 	objAH.accion= 'SELECCION_SUB_CAMPO';
+// 	objAH.nivel= $('#nivel').val();
+// 	objAH.itemtype= $('#comboTiposItems').val();
+// 	//se envia la consulta
+// 	objAH.sendToServer();
+}
+
+// function updateEleccionSubCampo(responseText){
+// 	$('#result').html(responseText);
+// 	$('#guardar')[0].disabled = false;
+// }
+
+
+
 function agregarEncabezado(){
 	objAH=new AjaxHelper(updateAgregarEncabezado);
 	objAH.debug= true;
@@ -40,7 +140,7 @@ function cambiarVisibilidad(idEstCat){
 	objAH.sendToServer();
 }
 
-
+/*
 function eleccionCampoX(accion){
 
 	objAH=new AjaxHelper(updateEleccionCampoX);
@@ -57,27 +157,28 @@ function eleccionCampoX(accion){
 function updateEleccionCampoX(responseText){
 	$('#result').show();
 	$('#result').html(responseText);
-}
+}*/
 
-function eleccionCampo(accion){
+// function eleccionCampo(accion){
+// 
+// 	objAH=new AjaxHelper(updateEleccionCampo);
+// 	objAH.debug= true;
+// 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
+// 	objAH.campoX= $('#campoX').val();
+// 	objAH.encabezados= $('#encabezados').val();
+// 	objAH.campo= $('#campo').val();
+// 	objAH.accion= 'SELECCION_SUB_CAMPO';
+// 	objAH.nivel= $('#nivel').val();
+// 	objAH.itemtype= $('#comboTiposItems').val();
+// 	//se envia la consulta
+// 	objAH.sendToServer();
+// }
+// 
+// function updateEleccionCampo(responseText){
+// 	$('#result').html(responseText);
+// 	$('#guardar')[0].disabled = false;
+// }
 
-	objAH=new AjaxHelper(updateEleccionCampo);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-	objAH.campoX= $('#campoX').val();
-	objAH.encabezados= $('#encabezados').val();
-	objAH.campo= $('#campo').val();
-	objAH.accion= 'SELECCION_SUB_CAMPO';
-	objAH.nivel= $('#nivel').val();
-	objAH.itemtype= $('#comboTiposItems').val();
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateEleccionCampo(responseText){
-	$('#result').html(responseText);
-	$('#guardar')[0].disabled = false;
-}
 
 function seleccionarEncabezado(id){
 	
@@ -177,8 +278,8 @@ function saveConfVisualizacion(){
 	objAH.textoSucesor= $('#textoSucesor').val();
 	objAH.separador= $('#separador').val();
 	objAH.campo= $('#campo').val();
-	objAH.subCampo= $('#subCampo').val();
-	objAH.encabezados= $('#idEncabezado').val();
+	objAH.subcampo= $('#subcampo').val();
+	objAH.idencabezado= $('#idEncabezado').val();
 	objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
  	objAH.tipoAccion= 'INSERT';
 	//se envia la consulta
@@ -187,7 +288,6 @@ function saveConfVisualizacion(){
 
 function updateSaveConfVisualizacion(responseText){
 
-	clearMessages();
 	var Mensaje= JSONstring.toObject(responseText);
   	setMessages(Mensaje);
 
@@ -397,7 +497,7 @@ function cargarTablaEncabezados(){
 	objAH=new AjaxHelper(updateCargarTablaEncabezados);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-	objAH.nivel= $('#nivel').val();
+	objAH.nivel= $('#niveles_id').val();
 	objAH.itemtype= $('#comboTiposItems').val();
 	objAH.tipoAccion= 'SELECT';
 	objAH.componente= 'CARGAR_TABLA_ENCABEZADOS';
@@ -528,7 +628,7 @@ $(document).ready(function() {
 <!-- contenedor superior -->
 	<ul>
 	<li>
-		<select id="nivel" onChange="changeNivel();">
+		<select id="niveles_id" onChange="changeNivel();">
 		<option value="1">Nivel1</option>
 		<option value="2">Nivel2</option>
 		<option value="3">Nivel3</option>
@@ -545,8 +645,43 @@ $(document).ready(function() {
 <br>
 <ul>
 <li>
+	<p>
+    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
+    [% selectCampoX %]
+    </p>
+</li>
+<li>
 	<div id="result"></div>
-<br>
+</li>
+<li>
+	<label for="campo" style="float:left; width:13%">Campo: </label>
+		<select name="campo" id="campo" onChange="eleccionCampo()">
+			<option value="-1">Seleccionar Campo</option>
+		</select>
+</li>
+<li>
+	<label for="subcampo" style="float:left; width:13%">Subcampo: </label>
+		<select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+			<option value="-1">Seleccionar SubCampo</option>
+		</select>
+</li>
+<li>
+	<label for="textoPredecesor" style="float: left; width:13%" >
+	Texto predecesor:
+	</label> 
+	<input id="textoPredecesor" name="textoPredecesor" type="text" value="" size="30">
+</li>
+<li>
+	<label for="textoSucesor" style="float: left; width:13%" >
+	Texto sucesor:
+	</label> 
+	<input id="textoSucesor" type="text" value="" size="30">
+</li>
+<li>
+	<label for="separador" style="float: left; width:13%" >
+	Separador:
+	</label> 
+	<input id="separador" type="text" value="" size="30">
 </li>
 <li>
 	<center>

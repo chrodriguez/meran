@@ -302,60 +302,64 @@ sub insertarEncabezadoItem{
 }
 
 
-sub insertConfVisualizacion{
-	my ($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
+# FIXME DEPRECATEDDDDDDDDD
+# 
+# sub insertConfVisualizacion{
+# 	my ($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
+# 
+# 	my $dbh = C4::Context->dbh;
+# 	my $query="	INSERT INTO cat_estructura_catalogacion_opac
+# 			(campo, subcampo, textpred, textsucc, separador, idencabezado)
+# 			VALUES (?,?,?,?,?,?) ";
+# 
+# 	my $sth=$dbh->prepare($query);
+#         $sth->execute($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
+# }
 
-	my $dbh = C4::Context->dbh;
-	my $query="	INSERT INTO cat_estructura_catalogacion_opac
-			(campo, subcampo, textpred, textsucc, separador, idencabezado)
-			VALUES (?,?,?,?,?,?) ";
+sub t_insertConfVisualizacion {	
+	my($params)=@_;
 
-	my $sth=$dbh->prepare($query);
-        $sth->execute($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado);
-}
+# 	$campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado
+# 	my ($error, $codMsg,$paraMens);
+	my $msg_object= C4::AR::Mensajes::create();
 
-sub t_insertConfVisualizacion {
-	
-	my($campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado)=@_;
+# FIXME falta verificar, entre otras cosas verificarExistenciaConfVisualizacion
+# 		$cant= &verificarExistenciaConfVisualizacion($idencabezado, $campo, $subcampo);
+	use C4::Modelo::CatEstructuraCatalogacionOpac;
+	use C4::Modelo::CatEstructuraCatalogacionOpac::Manager;	
 
-	my ($error, $codMsg,$paraMens);
-	
-	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
+	my  $estrCatalogacionOpac_temp = C4::Modelo::CatEstructuraCatalogacionOpac->new();
+	my $db= $estrCatalogacionOpac_temp->db;
 
-		my $cant= 0;
-		$cant= &verificarExistenciaConfVisualizacion($idencabezado, $campo, $subcampo);
-	
-		if($cant eq 0){
+    if(!$msg_object->{'error'}){
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
 
-			insertConfVisualizacion(	$campo, 
-							$subcampo, 
-							$textoPred, 
-							$textoSucc, 
-							$separador, 
-							$idencabezado
-			);	
-			$dbh->commit;
-			$codMsg= 'VO806';
+		eval {
+			my  $estrCatalogacionOpac = C4::Modelo::CatEstructuraCatalogacionOpac->new();
+			
+				$estrCatalogacionOpac->agregar($params);
+				#se cambio el permiso con exito
+				$msg_object->{'error'}= 0;
+				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO806', 'params' => []} ) ;
+				$db->commit;
+		};
+
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B410',"INTRA");
+			eval {$db->rollback};
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO807', 'params' => []} ) ;
 		}
-	};
 
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B410';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'VO807';
 	}
-	$dbh->{AutoCommit} = 1;
 
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+
+	$db->{connect_options}->{AutoCommit} = 0;
+
+	return ($msg_object);
 }
 
 sub UpdateCatalogacion{
@@ -496,7 +500,7 @@ sub t_insertEncabezado {
 	my ($error, $codMsg,$paraMens);
 	
 	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
+
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
@@ -545,7 +549,7 @@ sub t_deleteConfVisualizacion {
 	my ($error, $codMsg,$paraMens);
 	
 	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
+
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {
@@ -600,7 +604,7 @@ sub t_deleteEncabezado {
 	my ($error, $codMsg,$paraMens);
 	
 	my $dbh = C4::Context->dbh;
-	my ($paramsReserva);
+
 	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
 	$dbh->{RaiseError} = 1;
 	eval {

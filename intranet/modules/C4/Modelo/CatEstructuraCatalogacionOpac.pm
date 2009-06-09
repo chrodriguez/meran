@@ -21,5 +21,116 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'idestcatopac' ],
 );
 
+use utf8;
+
+
+sub getVisible{
+    my ($self)=shift;
+
+    return $self->visible;
+}
+
+sub setVisible{
+    my ($self) = shift;
+    my ($visible) = @_;
+    $self->visible($visible);
+}
+
+sub getIdEncabezado{
+    my ($self)=shift;
+
+    return $self->idencabezado;
+}
+
+sub setIdEncabezado{
+    my ($self) = shift;
+    my ($idencabezado) = @_;
+    $self->idencabezado($idencabezado);
+}
+
+sub getSeparador{
+    my ($self)=shift;
+
+    return $self->separador;
+}
+
+sub setSeparador{
+    my ($self) = shift;
+    my ($separador) = @_;
+    $self->separador($separador);
+}
+
+sub getTextoPred{
+    my ($self)=shift;
+
+    return $self->textpred;
+}
+
+sub setTextoPred{
+    my ($self) = shift;
+    my ($textpred) = @_;
+	utf8::encode($textpred);
+    $self->textpred($textpred);
+}
+
+sub getTextoSucc{
+    my ($self)=shift;
+
+    return $self->textsucc;
+}
+
+sub setTextoSucc{
+    my ($self) = shift;
+    my ($textsucc) = @_;
+	utf8::encode($textsucc);
+    $self->textsucc($textsucc);
+}
+
+sub getSuCampo{
+    my ($self)=shift;
+
+    return $self->subcampo;
+}
+
+sub setSubCampo{
+    my ($self) = shift;
+    my ($subcampo) = @_;
+    $self->subcampo($subcampo);
+}
+
+sub getCampo{
+    my ($self)=shift;
+
+    return $self->campo;
+}
+
+sub setCampo{
+    my ($self) = shift;
+    my ($campo) = @_;
+    $self->campo($campo);
+}
+
+sub getIdEstCatOpac{
+    my ($self)=shift;
+
+    return $self->idestcatopac;
+}
+
+
+sub agregar{
+    my ($self)=shift;
+
+    my ($data_hash)=@_;
+ 	
+	$self->setVisible($data_hash->{'visible'});
+	$self->setIdEncabezado($data_hash->{'idencabezado'});
+	$self->setSeparador($data_hash->{'separador'});
+	$self->setTextoPred($data_hash->{'textoPredecesor'});
+	$self->setTextoSucc($data_hash->{'textoSucesor'});
+   	$self->setCampo($data_hash->{'campo'});
+	$self->setSubCampo($data_hash->{'subcampo'});
+    $self->save();
+} 
+
 1;
 
