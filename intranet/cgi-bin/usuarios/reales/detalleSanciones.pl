@@ -17,17 +17,18 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 			type		=> "intranet",
 			authnotrequired	=> 0,
 			flagsrequired	=> { circulate => 1 },
-    });
+});
 
 my $obj=$input->param('obj');
 
 my $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $nro_socio= $obj->{'nro_socio'};
+
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $sanciones = C4::AR::Sanciones::tieneSanciones($nro_socio);
 
-if (@$sanciones > 0){
+if ($sanciones){
 	$t_params->{'SANCIONES'}= $sanciones;
 }
 

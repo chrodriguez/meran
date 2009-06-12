@@ -309,7 +309,7 @@ sub isValidDocument {
 }
 
 =item
-    Funcion para validar que la hash de parametros pasada contenga, en todas las key que indique array_params_name, un string valido
+    Funcion para validar que la hash de parametros (formato ISO) pasada contenga, en todas las key que indique array_params_name, un string valido
     Parametros:
                 HASH (1): conteniendo la hash con los parametros y sus valores
                 ARRAY (2): conteniendo solo las keys que hay que checkear
@@ -317,16 +317,16 @@ sub isValidDocument {
 sub validateParams {
 
     my ($cod_msg,$params_hash_ref,$array_params_name) = @_;
-    my $session = CGI::Session->new();
-    my $flag = 1;
-    foreach my $nombreParam (@$array_params_name){
-        $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+    my $flag = ($params_hash_ref != 0);
+    if ($flag){
+        foreach my $nombreParam (@$array_params_name){
+            $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+        }
     }
     if (!$flag){
-        $session->param('codMsg', $cod_msg);
-        $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-        C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+        C4::AR::Utilidades::redirectAndAdvice($cod_msg);
     }
+
 }
 
 sub validateObjectInstance{
@@ -334,7 +334,7 @@ sub validateObjectInstance{
     my ($object) = @_;
     my $session = CGI::Session->new();
 
-    if (!$object){
+    if ( (!$object) || ($object == 0) ){
         C4::Output::printHeader($session);
         print 0;
         exit;

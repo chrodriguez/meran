@@ -27,7 +27,6 @@ my $nro_socio= $obj->{'nro_socio'};
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
-
 my @reservas_asignadas;
 my $racount = 0;
 my @reservas_espera;

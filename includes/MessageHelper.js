@@ -6,7 +6,6 @@
  * Fecha de creacion 09/09/2008
  *
  */
-
 /*
 * En esta libreria se denerian manejar todos los mensajes de respuesta desde el servidor al cliente,
 * ya sean de error, informacion, warnings, etc

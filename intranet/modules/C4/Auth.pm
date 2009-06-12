@@ -35,7 +35,7 @@ use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
 use C4::AR::Prestamos;
-use CGI::Session;
+use CGI::Session qw/-ip-match/;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use JSON;
@@ -912,7 +912,6 @@ C4::AR::Debug::debug("redirectTo=> \n");
 	#para saber si fue un llamado con AJAX
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 	#redirijo en el cliente
-		
 C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT\n"); 		
   		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:

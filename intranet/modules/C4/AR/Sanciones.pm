@@ -388,8 +388,11 @@ sub tieneSanciones {
 																			fecha_final    	=> { ge => $hoy},
 																		],
 									);
-
-  return(\@$sanciones_array_ref);
+  if (scalar(@$sanciones_array_ref) == 0){
+        return 0;
+  }else{
+    return(\@$sanciones_array_ref);
+  }
 }
 
 

@@ -26,7 +26,7 @@ C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $nro_socio= $obj->{'nro_socio'};
 my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
-
+C4::AR::Validator::validateObjectInstance($prestamos);
 $t_params->{'PRESTAMOS'}= $prestamos;
 $t_params->{'prestamos_cant'}= scalar(@$prestamos);
 

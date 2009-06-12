@@ -18,46 +18,49 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 			                                                        flagsrequired	=> { circulate => 1 },
     });
 
-    my $obj=$input->param('obj');
-    $obj=C4::AR::Utilidades::from_json_ISO($obj);
-    my $msg_object= C4::AR::Mensajes::create();
-    my $nro_socio= $obj->{'nro_socio'};
-    
-    C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
-	my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+my $obj=$input->param('obj');
 
-	if($socio){
-	
-		#### Verifica si la foto ya esta cargada
-		my $picturesDir= C4::Context->config("picturesdir");
-		my $foto;
-		if (opendir(DIR, $picturesDir)) {
-			my $pattern= $socio->getNro_socio."[.].";
-			my @file = grep { /$pattern/ } readdir(DIR);
-			$foto= join("",@file);
-			closedir DIR;
-		} else {
-			$foto= 0;
-		}
-		
-		####
-		#### Verifica si hay problemas para subir la foto
-		my $msgFoto=$input->param('msg');
-		($msgFoto) || ($msgFoto=0);
-		####
-		
-		#### Verifica si hay problemas para borrar un usuario
-		my $msgError=$input->param('error');
-		($msgError) || ($msgError=0);
-		####error  => 0,
-		$t_params->{'id_socio'}= $socio->getId_socio;
-		$t_params->{'foto_name'}= $foto;
-		$t_params->{'mensaje_error_foto'}= $msgFoto;
-		$t_params->{'mensaje_error_borrar'}= $msgError;
-		$t_params->{'error'}=0;
-		$t_params->{'nroSocioLoggeado'} = $socio->getNro_socio;	
-		$t_params->{'socio'}= $socio;
-		$t_params->{'relativePicturesDir'}= C4::Context->config("relativePicturesDir");
-	}
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+my $msg_object= C4::AR::Mensajes::create();
+my $nro_socio= $obj->{'nro_socio'};
+
+C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+
+my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+C4::AR::Validator::validateObjectInstance($socio);
+
+#### Verifica si la foto ya esta cargada
+my $picturesDir= C4::Context->config("picturesdir");
+my $foto;
+
+if (opendir(DIR, $picturesDir)) {
+    my $pattern= $socio->getNro_socio."[.].";
+	my @file = grep { /$pattern/ } readdir(DIR);
+    $foto= join("",@file);
+    closedir DIR;
+} else {
+        $foto= 0;
+}
+
+
+#### Verifica si hay problemas para subir la foto
+my $msgFoto=$input->param('msg');
+($msgFoto) || ($msgFoto=0);
+####
+
+#### Verifica si hay problemas para borrar un usuario
+my $msgError=$input->param('error');
+($msgError) || ($msgError=0);
+$t_params->{'id_socio'}= $socio->getId_socio;
+$t_params->{'foto_name'}= $foto;
+$t_params->{'mensaje_error_foto'}= $msgFoto;
+$t_params->{'mensaje_error_borrar'}= $msgError;
+$t_params->{'error'}=0;
+$t_params->{'nroSocioLoggeado'} = $socio->getNro_socio;	
+$t_params->{'socio'}= $socio;
+$t_params->{'relativePicturesDir'}= C4::Context->config("relativePicturesDir");
+
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -22,12 +22,15 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
 my $orden=$obj->{'orden'}||'apellido';
 my $socio=$obj->{'socio'};
+$obj->{'ini'} = $obj->{'ini'} || 1;
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
 my $env;
+C4::AR::Validator::validateParams('U389',$obj,['socio','ini','funcion'] );
 
 
 my ($cantidad,$socios);

@@ -100,6 +100,9 @@ function detalleUsuario(){
 }
 
 function updateDetalleUsuario(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
 	$('#detalleUsuario').html(responseText);
 	createFileUploader();
 	detalleReservas(USUARIO.ID);
@@ -116,15 +119,15 @@ function prestamosInterBibliotecarios(){
 
 function updatePrestamosInterBibliotecarios(responseText){
 //se crea el objeto que maneja la ventana para modificar los datos del usuario
-        if (!verificarRespuesta(responseText))
-            return(0);
-        vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
-        vPrestamoInterBibliotecario.html=responseText;
-        vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
-        vPrestamoInterBibliotecario.create();   
-        vPrestamoInterBibliotecario.height('420px');
-        vPrestamoInterBibliotecario.width('650px');
-        vPrestamoInterBibliotecario.open();
+    if (!verificarRespuesta(responseText))
+        return(0);
+    vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
+    vPrestamoInterBibliotecario.html=responseText;
+    vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
+    vPrestamoInterBibliotecario.create();   
+    vPrestamoInterBibliotecario.height('420px');
+    vPrestamoInterBibliotecario.width('650px');
+    vPrestamoInterBibliotecario.open();
 }
 
 function createFileUploader(){
@@ -178,6 +181,8 @@ function updateDetalleReservas(responseText){
 
 function updateInfoDevolver(responseText){
 	cancelarDiv();
+    if (!verificarRespuesta(responseText))
+        return(0);
 
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.Messages_arrayref;

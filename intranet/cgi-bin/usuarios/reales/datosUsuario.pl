@@ -18,10 +18,8 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 my $nro_socio= $input->param('nro_socio');
 $t_params->{'nro_socio'}= $nro_socio;
 
-C4::AR::Validator::validateParams('U389',$t_params,['nro_socio'] );
-
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 
-$t_params->{'socio'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+$t_params->{'socio'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

@@ -225,6 +225,8 @@ function eliminarUsuario(){
 
 /// FIXME ver que cuando el usuario no haya borrado, no redireccione
 function updateEliminarUsuario(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	if (!(hayError(Messages))){
@@ -274,6 +276,8 @@ function checkUserData(){
 }
 
 function updateAgregarUsuario(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 }
@@ -298,6 +302,9 @@ function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 }
 
 function updateGuardarCambiarPassword(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
 	clearInput();
 	vModificarPassword.close();
 	var Messages= JSONstring.toObject(responseText);
@@ -318,6 +325,9 @@ function resetPassword(claveUsuario, confirmeClave){
 }
 
 function updateResetPassword(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
     var Messages= JSONstring.toObject(responseText);
     setMessages(Messages);
 }
@@ -358,6 +368,8 @@ function cambiarPassword(){
 }
 
 function updateCambiarPassword(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
 
 	vModificarPassword=new WindowHelper({draggable: true, opacity: true});
 	vModificarPassword.debug= true;
@@ -384,6 +396,9 @@ function eliminarFoto(foto){
 function updateEliminarFoto(responseText){
 	//se muestran mensajes
 	//se resfresca la info de usuario
+    if (!verificarRespuesta(responseText))
+            return(0);
+
 	detalleUsuario();
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
@@ -409,6 +424,9 @@ function agregarAutorizado(){
 
 
 function updateAgregarAutorizado(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (!(hayError(Messages))){
@@ -424,6 +442,8 @@ function agregarAutorizado(){
 }
 
 function updateAgregarAutorizado(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
 
     vAgregarAutorizado=new WindowHelper({draggable: true, opacity: true});
     vAgregarAutorizado.debug= true;
