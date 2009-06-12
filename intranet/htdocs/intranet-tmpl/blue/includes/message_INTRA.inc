@@ -48,6 +48,7 @@ PRESTAMO_INTER_BIBLIO= "[% 'Prestamo Interbibliotecario' | i18n %]";
 CONFIRMA_LA_BAJA= "[% 'Confirma la baja ?' | i18n %]";
 FILTRO_POR= "[% 'filtro: ' | i18n %]";
 SOLO_SERA_NUMERICO= "[% 'Solo sera numerico' | i18n %]";
+CONFIRMAR_ELIMINAR_AFILIADO= "[% 'Desea eliminar el autorizado para este usuario?' | i18n %]";
 //================================================Fin==Usuarios==================================================
 
 //================================================Catalogo=======================================================

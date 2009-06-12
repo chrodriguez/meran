@@ -493,6 +493,8 @@ C4::AR::Debug::debug("checkauth=> changePassword \n");
             #EXIT
         }#end if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid))))
 
+        C4::AR::Debug::debug("desde CHECKAUTH SESSION URL: ".$session->param('redirectTo'));
+
 C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n");
         return ($userid, $session, $flags);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
@@ -606,6 +608,7 @@ C4::AR::Debug::debug("checkauth=> t_operacionesDeINTRA\n");
                 $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
                 redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
              }else{
+                C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
                 $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
                 redirectTo('/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
             }
@@ -916,6 +919,8 @@ C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT\n");
   		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
+    C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
+
 #         $session->header();
 C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
      	print $session->header();

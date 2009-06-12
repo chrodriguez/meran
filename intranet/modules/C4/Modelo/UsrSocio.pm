@@ -165,6 +165,18 @@ sub agregarAutorizado{
     $self->save();
 }
 
+sub desautorizarTercero{
+
+    my ($self)=shift;
+    my ($params) = @_;
+
+    $self->setNombre_apellido_autorizado('');
+    $self->setDni_autorizado('');
+    $self->setTelefono_autorizado('');
+
+    $self->save();
+}
+
 sub tieneAutorizado{
     
     my ($self)=shift;

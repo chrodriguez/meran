@@ -9,15 +9,15 @@ se le debe asigna el nro de socio a nro_socio_auth
 
 function confirmarAgregarAutorizado(){
 
-    objAH=new AjaxHelper(updateConfirmarAgregarAutorizado);
-    objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-    objAH.debug= true;
-    objAH.nro_socio= NRO_SOCIO_AUTH; 
-    objAH.auth_nombre = $('#nombreAutorizado').val();
-    objAH.auth_dni = $('#dniAutorizado').val();
-    objAH.auth_telefono = $('#telefonoAutorizado').val();
-    objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
-    objAH.sendToServer();
+        objAH=new AjaxHelper(updateConfirmarAgregarAutorizado);
+        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+        objAH.debug= true;
+        objAH.nro_socio= NRO_SOCIO_AUTH; 
+        objAH.auth_nombre = $('#nombreAutorizado').val();
+        objAH.auth_dni = $('#dniAutorizado').val();
+        objAH.auth_telefono = $('#telefonoAutorizado').val();
+        objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
+        objAH.sendToServer();
 
 }
 

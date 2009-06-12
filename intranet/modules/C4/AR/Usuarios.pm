@@ -198,6 +198,35 @@ sub deshabilitarPersona {
     Parametros: 
                 HASH: {nro_socio}
 =cut 
+sub desautorizarTercero {
+
+    my ($params)=@_;
+    my $nro_socio = $params->{'nro_socio'};
+    my $msg_object= C4::AR::Mensajes::create();
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+        eval {
+            $socio->desautorizarTercero;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [$socio->getNro_socio]} ) ;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [$socio->getNro_socio]} ) ;
+        }
+
+    return ($msg_object);
+}
+
+=item
+    Este modulo resetea (deja en blanco) el password de acceso de un usuario, que será su nro_documento.
+    Parametros: 
+                HASH: {nro_socio}
+=cut 
 sub resetPassword {
 
     my ($params)=@_;

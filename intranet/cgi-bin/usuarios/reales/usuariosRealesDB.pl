@@ -31,7 +31,7 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
     $params{'newpassword1'}= $obj->{'newpassword1'};
     $params{'session'}= $session;
 
-    C4::AR::Validator::validateParams('U389',$obj,['nro_socio','actualPassword','newpassword','newpassword1']);
+    C4::AR::Validator::validateParams('U389',\%params,['nro_socio','actualPassword','newpassword','newpassword1']);
 
     my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 
@@ -112,6 +112,22 @@ elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
                 });
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+
+} 
+
+elsif($tipoAccion eq "ELIMINAR_AUTORIZADO"){
+    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+
+    my %params;
+    $params{'nro_socio'}= $obj->{'nro_socio'};
+
+    C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+
+    my ($Message_arrayref)= C4::AR::Usuarios::desautorizarTercero(\%params);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
 
 } 
 =item

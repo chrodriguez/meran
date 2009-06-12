@@ -102,10 +102,9 @@ function detalleUsuario(){
 function updateDetalleUsuario(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
-
-	$('#detalleUsuario').html(responseText);
-	createFileUploader();
-	detalleReservas(USUARIO.ID);
+    $('#detalleUsuario').html(responseText);
+    createFileUploader();
+    detalleReservas(USUARIO.ID);
 }
 
 function prestamosInterBibliotecarios(){
@@ -124,7 +123,7 @@ function updatePrestamosInterBibliotecarios(responseText){
     vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
     vPrestamoInterBibliotecario.html=responseText;
     vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
-    vPrestamoInterBibliotecario.create();   
+    vPrestamoInterBibliotecario.create();
     vPrestamoInterBibliotecario.height('420px');
     vPrestamoInterBibliotecario.width('650px');
     vPrestamoInterBibliotecario.open();

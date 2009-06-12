@@ -141,11 +141,20 @@
     
 						    <a class="textOverBoton" href="#" onClick="eliminarUsuario()" >Eliminar Usuario</a>
                         </li>
+                    [% IF !socio.tieneAutorizado %]
                         <li>
                             <img  class="botonBehindText"  alt="Agregar Autorizado" 
                                     src="[% themelang %]/images/botone.png" border="0"">
                             <a class="textOverBoton" onClick="agregarAutorizado()">Agregar Autorizado</a>
                         </li>
+                    [% ELSE %]
+                        <li>
+                            <img  class="botonBehindText"  alt="Eliminar Autorizado" 
+                                    src="[% themelang %]/images/botone.png" border="0"">
+                            <a class="textOverBoton" onClick="desautorizarTercero()">Eliminar Autorizado</a>
+                        </li>
+                    [% END %]
+
     <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
 				    [% IF nroSocioLoggeado != loggedinusername%]
 					    <li>

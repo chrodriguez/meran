@@ -28,7 +28,6 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
     &aplicarParches 
     &obtenerParches
-
     &obtenerTiposDeColaboradores 
     &obtenerReferencia 
     &obtenerTemas 
@@ -97,6 +96,7 @@ $labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
 $valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
 sub crearComponentes{
+
     my ($tipoInput,$id,$values,$labels,$valor)=@_;
     my $inputCampos;
     if ($tipoInput eq 'combo'){
@@ -171,6 +171,7 @@ sub mailDeUsuarios {
 }
 =cut
 sub in_array{
+
     my $val = shift @_ || return 0;
     my @array = @_;
     foreach (@array)
@@ -179,16 +180,18 @@ sub in_array{
 }
 
 sub array_diff{
+
 # A $array1 le resta $array2
     my ($array1_ref,@array2) = @_;
     my @array_res;
     foreach (@$array1_ref) {
         push(@array_res, $_) unless (&in_array($_,@array2));
-    } 
+    }
     return(@array_res);
 }
 
 sub saveholidays{
+
     my ($hol) = @_;
     if ($hol){ # FIXME falla si borro todos los feriados
         my @feriados = split(/,/, $hol);
@@ -217,6 +220,7 @@ sub saveholidays{
 }
 
 sub obtenerTiposDeColaboradores{
+
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT codigo,descripcion 
                             FROM cat_ref_colaborador 
@@ -235,6 +239,7 @@ sub obtenerTiposDeColaboradores{
 la funcion obtenerParches devuelve toda la informacion sobre los parches de actualizacion que hay que aplpicar, con esto se logra cambiar de la version 2 a las versiones futuras sin problemas, via web
 =cut
 sub obtenerParches{
+
     my ($version)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT * 
@@ -256,6 +261,7 @@ la funcion aplicarParches aplica el parche que le llega por parametro.
 Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones mysql que corresponden con ese parche 
 =cut
 sub aplicarParches{
+
     my ($parche)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT * 
@@ -285,8 +291,8 @@ sub aplicarParches{
 }
 
 
-
 sub getholidays{
+
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT * 
                             FROM pref_feriado");
@@ -304,6 +310,7 @@ sub getholidays{
 #27/03/07 Miguel - Cuando agregaba un autor en Colaboradores
 #obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
 sub obtenerReferencia{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
@@ -324,6 +331,7 @@ sub obtenerReferencia{
 
 #obtenerReferencia devuelve los autores cuyos apellidos sean like el parametro
 sub obtenerAutores{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT completo, id 
@@ -342,12 +350,14 @@ sub obtenerAutores{
 }
 
 sub obtenerPaises{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT nombre_largo, iso 
                             FROM ref_pais 
                             WHERE nombre_largo LIKE ? 
                             ORDER BY (nombre_largo)");
+
     $sth->execute($dato.'%');
 
     my @results;
@@ -361,6 +371,7 @@ sub obtenerPaises{
 
 #obtenerTemas devuelve los temas que sean like el parametro
 sub obtenerTemas{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
 #   my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
@@ -369,6 +380,7 @@ sub obtenerTemas{
                             WHERE nombre LIKE ? 
                             ORDER BY nombre 
                             LIMIT 0,15");
+
     $sth->execute($dato.'%');
 
     my @results;
@@ -381,12 +393,14 @@ sub obtenerTemas{
 }
 
 sub obtenerTemas2{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT nombre, id 
                             FROM cat_tema 
                             WHERE nombre LIKE ? 
                             ORDER BY nombre");
+
     $sth->execute($dato.'%');
 
     my @results;
@@ -400,6 +414,7 @@ sub obtenerTemas2{
 
 #obtenerEditores devuelve los editores que sean like el parametro
 sub obtenerEditores{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
@@ -407,6 +422,7 @@ sub obtenerEditores{
                             WHERE apellido LIKE ? 
                             ORDER BY (apellido) 
                             LIMIT 0,15");
+
     $sth->execute($dato.'%');
 
     my @results;
@@ -419,12 +435,14 @@ sub obtenerEditores{
 }
 
 sub obtenerBiblios{
+
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT branchname, branchcode AS id 
                             FROM pref_unidad_informacion 
                             WHERE branchname LIKE ? 
                             ORDER BY branchname");
+
     $sth->execute($dato.'%');
 
     my @results;
@@ -437,6 +455,7 @@ sub obtenerBiblios{
 }
 
 sub noaccents{
+
     my $word = @_[0];
     my @chars = split(//,$word);
     my $newstr = ""; 
@@ -452,6 +471,7 @@ sub noaccents{
 }
 
 sub savedatemanip{
+
     my @feriados= @_;
 #Actualizo el archivo de configuracion de DateManip
     open (F,'>/var/www/.DateManip.cnf'); #FIXME hay que sacar /var/www/ y poner algo asi como $ENV{HOME}
@@ -467,6 +487,7 @@ sub savedatemanip{
 
 
 sub listadoTabla{
+
     my($tabla,$ind,$cant,$id,$orden,$search,$bloqueIni,$bloqueFin)=@_;
     #$cant=$cant+$ind;
     ($id||($id=0));
@@ -533,6 +554,7 @@ sub listadoTabla{
 #recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
 #estos tres parametros se obtienen anteriorimente de la tabla tablasDeReferencias
 sub valoresTabla{
+
     my ($tabla,$indice,$valor)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("SHOW FIELDS FROM $tabla");
@@ -569,6 +591,7 @@ sub valoresTabla{
 
 
 sub tablasRelacionadas{
+
     my ($tabla,$indice,$valor)=@_;
 
     my $dbh = C4::Context->dbh;
@@ -615,7 +638,7 @@ sub tablasRelacionadas{
 #recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
 #estos tres parametros se obtienen anteriorimente de la tabla tablasDeReferencias
 sub valoresSimilares{
-    
+
     my($tabla,$camporeferencia,$id)=@_;
     ($id||($id=0));
     my $dbh = C4::Context->dbh;
@@ -675,14 +698,15 @@ sub valoresSimilares{
 
 #Busca todas las tablas relacionadas con $tabla y actualiza la referencia a el nuevo valor que esta en valorNuevo. Ej: actualiza todos los libros para que hayan sido escritos por autor id=58 y le pone que fueron esvcritos por autor id=60 
 sub asignar{
+
     my ($tabla,$indice,$identificador,$valorNuevo,$borrar)=@_;
     #ACa hay q hacer q sea una transaccion
     my $dbh = C4::Context->dbh;
     my $asignar;
     my $sthT=$dbh->prepare("START TRANSACTION");
-    
+
     $sthT->execute();
-    
+
     my $sth=$dbh->prepare(" SELECT * 
                             FROM pref_tabla_referencia 
                             WHERE referencia= ?");
@@ -717,6 +741,7 @@ sub asignar{
 }
 
 sub obtenerValores{
+
     my ($tabla,$indice,$valor)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("SHOW FIELDS FROM ?");
@@ -741,6 +766,7 @@ sub obtenerValores{
 
 #Esta funcion recibe tres parametros, el nombre de la tabla que se esta editando, el campo identificador de la tabla y un hash de los campos y valores que se van a actualizar en esa tabla   
 sub actualizarCampos{
+
     my ($tabla,$id,%valores)=@_;
     my $dbh = C4::Context->dbh;
     my $sql='';
@@ -759,7 +785,7 @@ sub actualizarCampos{
 
 #obtenerTemas devuelve los temas que sean like el parametro
 sub obtenerDefaults{
-    
+
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" SELECT * 
                 FROM defaultbiblioitem");
@@ -774,6 +800,7 @@ sub obtenerDefaults{
     return(@results);
 }
 sub guardarDefaults{
+
     my ($biblioitem)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare(" UDPATE defaultbiblioitem 
@@ -808,6 +835,7 @@ verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
 sub verificarValor{
+
     my ($valor)=@_;
     my @array=split(/;/,$valor);
 
@@ -826,6 +854,7 @@ sub verificarValor{
 #
 
 sub InitPaginador{
+
     my ($iniParam)=@_;
     my $pageNumber;
     my $ini;
@@ -933,6 +962,7 @@ guarda el nuevo valor de la variable libreDeuda de la tabla de las preferencias
 NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sistema, esta funcion se utiliza en los archivos adminLibreDeuda.pl y libreDeuda.pl
 =cut
 sub cambiarLibreDeuda{
+
     my ($valor)=@_;
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("	UPDATE pref_preferencia_sistema 
@@ -952,6 +982,7 @@ C<$env> is ignored.
 VIENE DEL PM INPUT QUE FUE ELIMINADO
 =cut
 sub checkdigit{
+
     my ($env,$infl, $nounique) =  @_;
     $infl = uc $infl;
     #Check to make sure the cardnumber is unique
@@ -1011,6 +1042,7 @@ VIENE DEL PM INPUT QUE FUE ELIMINADO
 #   of 10 digits and valid checksum
 # VIENE DEL PM INPUT QUE FUE ELIMINADO
 sub checkvalidisbn{
+
     my ($q)=@_ ;    # Input: ISBN number
     my $isbngood = 0; # Return: true or false
 
@@ -1044,6 +1076,7 @@ quitarduplicados
 simplemente devuelve el arreglo que recibe sin elementos duplicados
 =cut
 sub quitarduplicados{
+
     my (@arreglo)=@_;
     my @arreglosin=();
 
@@ -1065,6 +1098,7 @@ sub quitarduplicados{
 
 #pasa de codificacion UTF8 a ISO-8859-1,
 sub UTF8toISO {
+
     my ($data)=@_;
 
     return $data= Encode::decode('utf8', $data);
@@ -1098,7 +1132,7 @@ sub obtenerValoresAutorizados{
     my $valTemp = C4::Modelo::PrefValorAutorizado->new();
 
     $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
-                                        select => ['category'],                                                                       
+                                        select => ['category'],
                                         group_by => ['category'],
                                     ); 
 
@@ -1111,6 +1145,7 @@ obtenerDatosValorAutorizado
 Obtiene todos los valores de una categoria.
 =cut
 sub obtenerDatosValorAutorizado{
+
     my ($categoria)= @_;
 
     use C4::Modelo::PrefValorAutorizado;
@@ -1128,6 +1163,7 @@ buscarCiudades
 Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
 =cut
 sub buscarCiudades{
+
     my ($ciudad) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "   SELECT  ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
@@ -1161,6 +1197,7 @@ sub buscarCiudades{
 buscarLenguajes
 =cut
 sub buscarLenguajes{
+
       my ($lenguaje) = @_;
 
       my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(query => [ description => { like => '%'.$lenguaje.'%' } ]);
@@ -1172,6 +1209,7 @@ sub buscarLenguajes{
 buscarSoportes
 =cut
 sub buscarSoportes{
+
       my ($soporte) = @_;
 
       my $soportes = C4::Modelo::RefSoporte::Manager->get_ref_soporte(query => [ description => { like => '%'.$soporte.'%' } ]);
@@ -1183,6 +1221,7 @@ sub buscarSoportes{
 buscarSoportes
 =cut
 sub buscarNivelesBibliograficos{
+
       my ($nivelBibliografico) = @_;
 
       my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
@@ -1193,8 +1232,8 @@ sub buscarNivelesBibliograficos{
 }
 
 # Esta funcioin remueve los blancos del principio y el final del string
-sub trim($)
-{
+sub trim($){
+
     my $string = shift;
     $string =~ s/^\s+//;
     $string =~ s/\s+$//;
@@ -1433,6 +1472,7 @@ sub generarComboTipoPrestamo{
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI{
+
     my ($params) = @_;
     my @select_ui;
     my %select_ui;
@@ -1472,6 +1512,7 @@ sub generarComboUI{
 }
 
 sub generarComboDeSocios{
+
     my ($params) = @_;
     my @select_socios;
     my %select_socios;
@@ -1614,6 +1655,7 @@ sub generarComboNiveles{
 
 #****************************************************Fin****Generacion de Combos**************************************************
 sub getToday{
+
     my @datearr = localtime(time);
     my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
     my $dateformat = C4::Date::get_date_format();
@@ -1622,6 +1664,7 @@ sub getToday{
 }
 
 sub printHASH{
+
     my ($hash_ref) = @_;
 
     C4::AR::Debug::debug("PRINT HASH: \n");
@@ -1634,6 +1677,7 @@ sub printHASH{
 }
 
 sub initHASH{
+
     my ($hash_ref) = @_;
     my @keys = keys(%$hash_ref);
 
@@ -1661,6 +1705,7 @@ sub joinArrayOfString{
 Esta funcion convierte el arreglo de objetos (Rose::DB) a JSON
 =cut
 sub arrayObjectsToJSONString{
+
     my ($objects_array) = @_;
     my @objects_array_JSON;
 
@@ -1681,6 +1726,7 @@ sub arrayObjectsToJSONString{
 Esta funcion convierte el arreglo de valores a JSON {campo->campo}
 =cut
 sub arrayToJSONString{
+
     my ($array) = @_;
     my @array_JSON;
 
@@ -1697,6 +1743,7 @@ sub arrayToJSONString{
 Esta funcion convierte el arreglo de los pares clave/valor a JSON {clave->clave,valor->valor}
 =cut
 sub arrayClaveValorToJSONString{
+
     my ($array) = @_;
     my @array_JSON;
 
@@ -1710,6 +1757,7 @@ sub arrayClaveValorToJSONString{
 }
 
 sub existeInArray{
+
    my ($string,@array) = @_;
 
    if (grep {$_ eq $string} @array) {
@@ -1753,6 +1801,7 @@ se la utiliza cuando se realiza una consulta a la base, se recupera la info y de
 o sea cuando no se puede limitar con MYSQL
 =cut
 sub paginarArreglo{
+
     #La variable $ini, no es el numero de pagina, sino es la posicion ya calculada (la que devuelve InitPaginador)
     my ($ini,$fin,@array) = @_;
     my $cant_total = scalar(@array);
@@ -1774,6 +1823,7 @@ Esta funcion recibe un string separado por 1 o mas blancos, y devuelve un arregl
 para realizar la busqueda
 =cut
 sub obtenerBusquedas{
+
     my ($searchstring) = @_;
     my @search_array;
     my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
@@ -1795,6 +1845,7 @@ sub obtenerBusquedas{
 obtenerCoincidenciasDeBusqueda
 =cut
 sub obtenerCoincidenciasDeBusqueda{
+
     my ($string, $search_array) = @_;
     my $cant= 0;
     my $cont= 0;
@@ -1831,6 +1882,7 @@ info: la informacion de la HASH a ordenar
 devuelve un arreglo de HASHES listo para enviar al template
 =cut
 sub sortHASHString{
+
     my ($params) = @_;
     my $desc= $params->{'DESC'};
     my $orden= $params->{'orden'};
@@ -1861,6 +1913,7 @@ info: la informacion de la HASH a ordenar
 devuelve un arreglo de HASHES listo para enviar al template
 =cut
 sub sortHASHNumber{
+
     my ($params) = @_;
     my $desc= $params->{'DESC'};
     my $orden= $params->{'orden'};
@@ -1890,21 +1943,6 @@ sub stringToArray{
     return( split(/\b/,$string) );
 }
 
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
-############################## Funciones para AUTOCOMPLETABLES #############################################################
 ############################## Funciones para AUTOCOMPLETABLES #############################################################
 
 sub autorAutocomplete{
@@ -2184,23 +2222,8 @@ sub barcodePrestadoAutocomplete{
 
     return $textout;
 }
+############################## Fin funciones para AUTOCOMPLETABLES #############################################################
 
-
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
-############################## FIN Funciones para AUTOCOMPLETABLES #############################################################
 
 sub redirectAndAdvice{
 
@@ -2208,7 +2231,7 @@ sub redirectAndAdvice{
     my ($session) = CGI::Session->load();
 
     $session->param('codMsg',$cod_msg);
-    $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+#     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
     C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
 #     exit;
 }

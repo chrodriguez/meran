@@ -321,6 +321,7 @@ sub validateParams {
     if ($flag){
         foreach my $nombreParam (@$array_params_name){
             $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+            C4::AR::Debug::debug("Analizando ".$nombreParam.", con resultado ".$flag);
         }
     }
     if (!$flag){

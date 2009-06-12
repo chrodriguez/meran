@@ -14,3 +14,7 @@ Cuando funcionalmente este todo terminado, tener en cuenta la insuficiencia de d
 Filtro en Historial de prestamos de usuario
 
 Los pedidos por AJAX, que se hacen siempre, que sean informativos si hubo o no resultados. Por ejemplo, en circulacion rapida, cuando se pone devolucion y el usuario no tiene nada prestado, que diga abajo: "Este usuario no tiene ejemplares en su poder", por ejemplo.
+
+El chat sera como este???? http://anantgarg.com/2009/05/13/gmail-facebook-style-jquery-chat/
+
+

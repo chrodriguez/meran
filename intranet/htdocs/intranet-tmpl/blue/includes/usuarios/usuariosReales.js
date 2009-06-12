@@ -311,6 +311,31 @@ function updateGuardarCambiarPassword(responseText){
 	setMessages(Messages);
 }
 
+function desautorizarTercero(claveUsuario, confirmeClave){
+
+    var is_confirmed = confirm(CONFIRMAR_ELIMINAR_AFILIADO);
+
+    if (is_confirmed) {
+        objAH=new AjaxHelper(updateDesautorizarTercero);
+        //objAH.debug= true;
+        objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+        objAH.nro_socio= USUARIO.ID;
+        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
+        //se envia la consulta
+        objAH.sendToServer();
+    }
+}
+
+function updateDesautorizarTercero(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
+    var Messages= JSONstring.toObject(responseText);
+    setMessages(Messages);
+    detalleUsuario();
+}
+
+
 function resetPassword(claveUsuario, confirmeClave){
 
     objAH=new AjaxHelper(updateResetPassword);
@@ -404,7 +429,7 @@ function updateEliminarFoto(responseText){
 	setMessages(Messages);
 }
 
-
+/*
 function agregarAutorizado(){
 
     var is_confirmed = confirm(CONFIRMAR_AFILIADO);
@@ -415,23 +440,24 @@ function agregarAutorizado(){
         objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
         objAH.debug= true;
         objAH.nro_socio= USUARIO.ID;
+        alert(nro_socio);
         objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
         objAH.sendToServer();
 
     }
 }
+*/
 
 
-
-function updateAgregarAutorizado(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-    if (!(hayError(Messages))){
-    }
-}
+// function updateAgregarAutorizado(responseText){
+//     if (!verificarRespuesta(responseText))
+//             return(0);
+// 
+//     var Messages=JSONstring.toObject(responseText);
+//     setMessages(Messages);
+//     if (!(hayError(Messages))){
+//     }
+// }
 
 function agregarAutorizado(){
     objAH=new AjaxHelper(updateAgregarAutorizado);
