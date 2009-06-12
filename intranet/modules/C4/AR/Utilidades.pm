@@ -27,9 +27,8 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
     &aplicarParches 
-    &obtenerParches my ($string, $search_array) = @_;
+    &obtenerParches
 
-    m
     &obtenerTiposDeColaboradores 
     &obtenerReferencia 
     &obtenerTemas 
