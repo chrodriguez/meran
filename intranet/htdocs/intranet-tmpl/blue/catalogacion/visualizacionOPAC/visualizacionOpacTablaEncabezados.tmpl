@@ -7,58 +7,82 @@
 			<img src="[%themelang %]/images/izquierda.png">
 		</td>
 	
-		<td>Encabezado</td>
-		<td>Orden</td>
-		<td>Visible</td>
-		<td>En Linea</td>
-		<td>Eliminar</td>
-		<td>Editar</td>
+		<th>[% 'Encabezado' | i18n %]</th>
+		<th>[% 'Orden' | i18n %]</th>
+		<th>[% 'Visible' | i18n %]</th>
+		<th>[% 'En Linea' | i18n %]</th>
+		<th>[% 'Agregar' | i18n %]</th>
+		<th>[% 'Editar' | i18n %]</th>
+		<th>[% 'Eliminar' | i18n %]</th>
+		<th>[% 'Mostrar' | i18n %]</th>
 	
 		<td width="1%" align="rigth" valign="top">
 			<img src="[%themelang %]/images/derecha.png">
 		</td>
 	</tr>
 
-[% FOREACH RESULTSLOOP %]
+[% FOREACH encabezado IN RESULTSLOOP %]
 	<tr class="inputFontNormal" align='center' >
 		<td height=25>&nbsp;</td>
 
-		<td id="encabezado[% idencabezado %]" class="click" 	
-			onClick="seleccionarEncabezado('[% idencabezado %]');"> 
+<!--		<td id="encabezado[% idencabezado %]" class="click" 	
+			onClick="seleccionarEncabezado('[% idencabezado %]');"> -->
 
-			<div id="divEncabezado[% idencabezado %]" selected="off">
-				[% nombre %]
+		<td id="encabezado[% encabezado.getIdEncabezado %]"> 
+
+			<div id="divEncabezado[% encabezado.getIdEncabezado %]" selected="off">
+				[% encabezado.getNombre %]
 			</div>
 		</td>
 		<td> 
 
-			<input  src="[%themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
-					onClick="modificarOrden([% idencabezado %], [% orden %], 'up')">
+			<input  src="[%themelang %]/images/1uparrow.png" type="image"  value="[% 'Subir en el Orden' | i18n %]" 
+					title="[% 'Subir Orden' | i18n %]" 
+					onClick="modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up')">
 			
-			<input  src="[%themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
-					onClick="modificarOrden([% idencabezado %], [% orden %], 'down')">
+			<input  src="[%themelang %]/images/1downarrow.png" type="image"  value="[% 'Bajar en el Orden' | i18n %]" 
+					title="[% 'Bajar Orden' | i18n %]" 
+					onClick="modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'down')">
 
 		</td>
 <!-- falta el check -->
 		<td> 
-			[% textpred %]
+			<input 	type='checkbox' value="[% encabezado.getVisible %]" 
+					onChange="cambiarVisibilidadEncabezado('[% encabezado.getIdEncabezado %]');" 
+			title="[% 'Cambiar la visibilidad del Encabezado' | i18n %]"
+			[% IF encabezado.getVisible %] 
+				checked	
+			[% END %] >
 		</td>
 		<td> 
-			<input 	id="checkbox[% idencabezado %]" type="checkbox" 
-					onClick="cambiarLineaEncabezado([% idencabezado %]);" 
-					title="para indicar si la salida es en linea" value="[% linea %]"
-			[% IF linea %]
+			<input 	id="checkbox[% encabezado.getIdEncabezado %]" type="checkbox" 
+					onClick="cambiarLineaEncabezado([% encabezado.getIdEncabezado %]);" 
+					title="[% 'para indicar si la salida es en linea' | i18n %]" value="[% encabezado.getLinea %]"
+			[% IF encabezado.getLinea %]
 				checked
 			[% END %] >
 		</td>
 		<td class="click" align="center">
-			<a onClick="deleteEncabezado([% idencabezado %]);">
-			<img src="[%themelang %]/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'>
+			<a onClick="agregarConfVisualizacion();">
+			<img 	src="[%themelang %]/images/agregar_mas.png" Title="[% 'Agregar' | i18n %]" alt="[% 'Agregar' | i18n %]" 
+					hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 		<td class="click" align="center">
-			<a onClick="EditCell('encabezado[% idencabezado %]', '[% idencabezado %]');">
-			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
+			<a onClick="EditCell('encabezado[% encabezado.getIdEncabezado %]', '[% encabezado.getIdEncabezado %]');">
+			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT="[% 'Editar' | i18n %]" hspace='0' vspace='0' border='0'>
+			</a>
+		</td>
+		<td class="click" align="center">
+			<a onClick="deleteEncabezado([% encabezado.getIdEncabezado %]);">
+			<img src="[%themelang %]/images/borrar.png" Title="Eliminar" ALT="[% 'Eliminar' | i18n %]" hspace='0' vspace='0' border='0'>
+			</a>
+		</td>
+		<td class="click" align="center">
+			<a onClick="seleccionarEncabezado([% encabezado.getIdEncabezado %]);">
+			<img 	src="[%themelang %]/images/filefind.png" Title="[% 'Mostrar informaci&oacute;n' | i18n %]" 
+					alt="[% 'Mostrar informaci&oacute;n' | i18n %]" 
+					hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 

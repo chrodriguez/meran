@@ -132,5 +132,36 @@ sub agregar{
     $self->save();
 } 
 
+
+sub modificar{
+    my ($self)=shift;
+
+    my ($data_hash)=@_;
+ 	
+	$self->setVisible($data_hash->{'visible'});
+	$self->setIdEncabezado($data_hash->{'idencabezado'});
+	$self->setSeparador($data_hash->{'separador'});
+	$self->setTextoPred($data_hash->{'textoPredecesor'});
+	$self->setTextoSucc($data_hash->{'textoSucesor'});
+   	$self->setCampo($data_hash->{'campo'});
+	$self->setSubCampo($data_hash->{'subcampo'});
+
+    $self->save();
+} 
+
+sub cambiarVisibilidad{
+    my ($self)=shift;
+
+    $self->setVisible(!$self->getVisible);
+    $self->save();
+}
+
+sub eliminar{
+    my ($self)=shift;
+
+    $self->delete();
+}
+
+
 1;
 

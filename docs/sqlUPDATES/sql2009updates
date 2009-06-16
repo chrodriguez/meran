@@ -804,7 +804,13 @@ UNIQUE (
 `ui` ,
 `tipo_documento`
 )
-) ENGINE = InnoDB;
+
+) ENGINE = InnoDB; 
+
+
+ALTER TABLE `cat_encabezado_campo_opac` ADD `visible` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `nivel` ;
+
+
  ALTER TABLE `perm_catalogo` CHANGE `datos_nivel1` `datos_nivel1` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
  CHANGE `datos_nivel2` `datos_nivel2` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
  CHANGE `datos_nivel3` `datos_nivel3` VARBINARY( 8 ) NOT NULL DEFAULT '00000',

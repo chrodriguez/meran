@@ -315,8 +315,8 @@ sub isValidDocument {
                 ARRAY (2): conteniendo solo las keys que hay que checkear
 =cut
 sub validateParams {
+	my ($cod_msg,$params_hash_ref,$array_params_name) = @_;
 
-    my ($cod_msg,$params_hash_ref,$array_params_name) = @_;
     my $flag = ($params_hash_ref != 0);
     if ($flag){
         foreach my $nombreParam (@$array_params_name){
@@ -324,6 +324,7 @@ sub validateParams {
             C4::AR::Debug::debug("Analizando ".$nombreParam.", con resultado ".$flag);
         }
     }
+
     if (!$flag){
         C4::AR::Utilidades::redirectAndAdvice($cod_msg);
     }

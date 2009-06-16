@@ -15,5 +15,42 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'idencabezado', 'itemtype' ],
 );
 
+sub agregar{
+	my ($self)=shift;
+
+	my ($data_hash) = @_;
+
+	$self->setTipoDocumento($data_hash->{'tipo_documento'});
+	$self->setIdEncabezado($data_hash->{'idencabezado'});
+	
+	$self->save();
+}
+
+sub getIdEncabezado{
+    my ($self)=shift;
+
+    return $self->idencabezado;
+}
+
+sub setIdEncabezado{
+    my ($self) = shift;
+    my ($idencabezado) = @_;
+
+    $self->idencabezado($idencabezado);
+}
+
+sub getTipoDocumento{
+    my ($self)=shift;
+
+    return $self->itemtype;
+}
+
+sub setTipoDocumento{
+    my ($self) = shift;
+    my ($tipo_documento) = @_;
+
+    $self->itemtype($tipo_documento);
+}
+
 1;
 

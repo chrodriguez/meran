@@ -7,14 +7,14 @@
 			<img src="[%themelang %]/images/izquierda.png">
 		</th>
 	
-		<th>Campo</th>
-		<th>Subcampo</th>
-		<th>Texto Pred</th>
-		<th>Texto Succ</th>
-		<th>Separador</th>
-		<th>Visible</th>
-		<th>Eliminar</th>
-		<th>Editar</th>
+		<th>[% 'Campo' | i18n %]</th>
+		<th>[% 'Subcampo' | i18n %]</th>
+		<th>[% 'Texto Pred' | i18n %]</th>
+		<th>[% 'Texto Succ' | i18n %]</th>
+		<th>[% 'Separador' | i18n %]</th>
+		<th>[% 'Visible' | i18n %]</th>
+		<th>[% 'Editar' | i18n %]</th>
+		<th>[% 'Eliminar' | i18n %]</th>
 	
 		<th width="1%" align="rigth" valign="top">
 			<img src="[%themelang %]/images/derecha.png">
@@ -33,18 +33,20 @@
 		<td>[% separador %]</td>
 		<td> 
 			<input type='checkbox' id="[% idestcatopac %]" value="[% visible %]" onChange="cambiarVisibilidad('[% idestcatopac %]');" 
-			value="[% visible %]"
-			[% IF visible %] checked	[% END %] >
+			title="[% 'Cambiar la visibilidad' | i18n %]"
+			[% IF visible %] 
+				checked	
+			[% END %] >
 		</td>
 		<td class="click" align="center">
-			<a onClick="deleteRowVisualizacion('eliminar',[% idestcatopac %]);">
-			<img src="[% themelang %]/images/borrar.png"
-			Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'>
+			<a onClick="modificarVisualizacion([% idestcatopac %]);">
+			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT="[% 'Editar' | i18n %]" hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 		<td class="click" align="center">
-			<a onClick="modificarVisualizacion('[% textpred %]','[% textsucc %]', '[% separador %]',[% idestcatopac %]);">
-			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'>
+			<a onClick="deleteRowVisualizacion([% idestcatopac %]);">
+			<img src="[% themelang %]/images/borrar.png"
+			Title="[% 'Eliminar' | i18n %]" alt="[% 'Eliminar' | i18n %]" hspace='0' vspace='0' border='0'>
 			</a>
 		</td>
 

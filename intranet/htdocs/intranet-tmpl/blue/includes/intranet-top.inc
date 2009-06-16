@@ -81,13 +81,13 @@
   <table  width="100%"  border="0" cellspacing="0" cellpadding="0">
    <tr>
     <td width="410" >
-		<img src="[% themelang %]/images/back/backup.png" width="410" height="61" hspace="0" vspace="0" align="top" border="0">
+		<img src="[% themelang %]/images/back/backup.png" width="412" height="61" hspace="0" vspace="0" align="top" border="0">
 	</td>
     <td height="61" >
 		<img src="[% themelang %]/images/back/backupmidle.png" width="100%" height="61" hspace="0" vspace="0" align="top" border="0">
 	</td>
     <td width="20" >
-		<img src="[% themelang %]/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top">
+		<img src="[% themelang %]/images/back/backupright.png" width="24" height="61" hspace="0" vspace="0" border="0" align="top">
 	</td>
   </tr>
 </table>

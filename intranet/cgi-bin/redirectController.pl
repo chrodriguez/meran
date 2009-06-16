@@ -11,8 +11,7 @@ use CGI::Session;
 
 my $query = new CGI;
 
-open(F, ">>/tmp/debug.txt");
-print F "desde redirectController: \n";
+C4::AR::Debug::debug("desde redirectController:");
 
 #recupero la session
 my $session = CGI::Session->load();
@@ -20,8 +19,7 @@ my $session = CGI::Session->load();
 #esta indireccion es pq een el cliente esta fija la url cuando es un CLIENT_REDIRECT
 ##entonces se fijaria el redirectContrller.pl en el AjaxxHelper y este redirige segun
 #lo indicado en el session->param('redirectTo')
-print F "redirectContrller->redirect: ".$session->param('redirectTo')."\n";
-close(F);
+C4::AR::Debug::debug("redirectContrller->redirect: ".$session->param('redirectTo'));
 
 my $input = CGI->new(); 
 print $input->redirect( 

@@ -1,11 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
-<link href="/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
-
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/blue/includes/popups/helpCamposMARC.js"></script>
-
 
 <script>
 
@@ -13,6 +9,8 @@
 CAMPOS_ARRAY= new Array();
 //arreglo de objetos subcampo
 SUBCAMPOS_ARRAY= new Array();
+//para mantener el encabezado
+ENCABEZADO= 0;
 
 
 /*
@@ -108,11 +106,14 @@ function eleccionSubCampo(){
 // }
 
 
-
+/*
+* Esta funcion abre una ventan para agregar el encabezado
+*/
 function agregarEncabezado(){
 	objAH=new AjaxHelper(updateAgregarEncabezado);
 	objAH.debug= true;
-	objAH.url='/intranet-tmpl/blue/includes/popups/agregarEncabezado.inc';
+	objAH.url='/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+	objAH.tipoAccion= 'AGREGAR_ENCABEZADO_VISUALIZACION_OPAC';
 	objAH.sendToServer();
 }
 
@@ -134,130 +135,59 @@ function cambiarVisibilidad(idEstCat){
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.id= idEstCat;
-	objAH.visible= $('#' + idEstCat).val();
 	objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-/*
-function eleccionCampoX(accion){
+function cambiarVisibilidadEncabezado(id){
 
-	objAH=new AjaxHelper(updateEleccionCampoX);
+	objAH=new AjaxHelper(updateCambiarVisibilidadEncabezado);
 	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-	objAH.accion= 'SELECCION_CAMPO';
-	objAH.campoX= $('#campoX').val();
-	objAH.encabezados= $('#encabezados').val();
-	objAH.nivel= $('#nivel').val();
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+	objAH.encabezado= id;
+	objAH.tipoAccion= 'CAMBIAR_VISIBILIDAD_ENCABEZADO';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-function updateEleccionCampoX(responseText){
-	$('#result').show();
-	$('#result').html(responseText);
-}*/
-
-// function eleccionCampo(accion){
-// 
-// 	objAH=new AjaxHelper(updateEleccionCampo);
-// 	objAH.debug= true;
-// 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-// 	objAH.campoX= $('#campoX').val();
-// 	objAH.encabezados= $('#encabezados').val();
-// 	objAH.campo= $('#campo').val();
-// 	objAH.accion= 'SELECCION_SUB_CAMPO';
-// 	objAH.nivel= $('#nivel').val();
-// 	objAH.itemtype= $('#comboTiposItems').val();
-// 	//se envia la consulta
-// 	objAH.sendToServer();
-// }
-// 
-// function updateEleccionCampo(responseText){
-// 	$('#result').html(responseText);
-// 	$('#guardar')[0].disabled = false;
-// }
-
+function updateCambiarVisibilidadEncabezado(){
+	cargarTablaEncabezados();
+}
 
 function seleccionarEncabezado(id){
 	
+	ENCABEZADO= id;
 	//oculto el boton de guardar
 	$('#guardar').show();
 	//oculto el boton de modificar
 	$('#modificar').hide();
 	$('#idEncabezado').val(id);
-	eleccionCampoX();
+// 	eleccionCampoX();
 	//muestro la tabla con resultados catalogados
 	armarTablaVisualizacion();
 }
 
-function modificarDatos(){
-
-	objAH=new AjaxHelper(updateModificarDatos);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-	objAH.textoPredecesor= $('#textoPredecesor').val();
-	objAH.textoSucesor= $('#textoSucesor').val(); 
-	objAH.separador= $('#separador').val();
-	objAH.idestcatopac= idestcatopac;
-	objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
-	objAH.tipoAccion= 'UPDATE';
-	//se envia la consulta
-	objAH.sendToServer();
-
-}
-
-function updateModificarDatos(){
-	//arma la tabla de configuracion de visualizacion 
-	armarTablaVisualizacion();
-	//eleccionCampoX();
-	$('#result').slideUp('slow');
-	$('#modificar').hide();
-}
 
 //para guardar el id de la fila seleccionada
 var idestcatopac;
 
-function modificarVisualizacion(textpred, textsucc, separador, id){
+function modificarVisualizacion(id){
 
 	objAH=new AjaxHelper(updateModificarVisualizacion);
 	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-	objAH.idestcatopac= id;
-	objAH.tipoAccion= 'SELECT';
-	objAH.componente= 'CONF_CAMPO_SUBCAMPO';
-
-	idestcatopac= id;
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+	objAH.id= id;
+	objAH.tipoAccion= 'MODIFICAR_CONFIGURACION_VISUALIZACION';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-function updateModificarVisualizacion(responseText, textpred, textsucc, separador, tipo){
-// como paso los parametros textsucc, separador, etc!!!!!!!!!!
-	$('#result').html(responseText);	
-	$('#textoPredecesor').val(textpred);
-	$('#textoSucesor').val(textsucc);
-	$('#separador').val(separador);
-
-	$('#seleccionCampos').hide();
-	$('#guardar').hide();
-	$('#modificar').show();
-	$('#textoPredecesor').focus();
+function updateModificarVisualizacion(responseText){
+	$('#divAgregarModificarVisualizacion').html(responseText);
+	$('#divAgregarModificarVisualizacion').slideDown('slow');
 }
 
-function seleccionarCampos(){
-
-	objAH=new AjaxHelper(updateSeleccionarCampos);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateSeleccionarCampos(responseText){
-	$('#result').html(responseText);
-}
 
 function validarDatosEncabezado(){
 	if($('#nomEncabezadoAlta')[0].value == ""){
@@ -265,13 +195,30 @@ function validarDatosEncabezado(){
 		$('#nomEncabezadoAlta')[0].focus();
 	}else {
 		saveEncabezado();
-		closeWindow();
+		vAgregarEncabezado.close();
+		//refresh info, muestro el nuevo encabezado
+		changeNivel();
 	};
 }
 
-function saveConfVisualizacion(){
+function agregarConfVisualizacion(){
 
-	objAH=new AjaxHelper(updateSaveConfVisualizacion);
+	objAH=new AjaxHelper(updateAgregarConfVisualizacion);
+	objAH.debug= true;
+	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+	objAH.tipoAccion= 'AGREGAR_CONFIGURACION_VISUALIZACION';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateAgregarConfVisualizacion(responseText){
+	$('#divAgregarModificarVisualizacion').html(responseText);	
+	$('#divAgregarModificarVisualizacion').slideDown('slow');
+}
+
+function guardarConfVisualizacion(){
+
+	objAH=new AjaxHelper(updateGuardarConfVisualizacion);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.textoPredecesor= $('#textoPredecesor').val();
@@ -280,25 +227,24 @@ function saveConfVisualizacion(){
 	objAH.campo= $('#campo').val();
 	objAH.subcampo= $('#subcampo').val();
 	objAH.idencabezado= $('#idEncabezado').val();
-	objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
- 	objAH.tipoAccion= 'INSERT';
+ 	objAH.tipoAccion= 'ESTRUCTURA_VISUALIZACION';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
-function updateSaveConfVisualizacion(responseText){
+function updateGuardarConfVisualizacion(responseText){
 
 	var Mensaje= JSONstring.toObject(responseText);
   	setMessages(Mensaje);
 
 	//arma la tabla de configuracion de visualizacion 
 	armarTablaVisualizacion();
-	eleccionCampoX();
+// 	eleccionCampoX();
 }
 
-function deleteRowVisualizacion(OP,ID){
+function deleteRowVisualizacion(id){
 
-	var is_confirmed = confirm('Confirma la baja?');
+	var is_confirmed = confirm(CONFIRMA_LA_BAJA);
 
 	if (is_confirmed) {
 
@@ -307,7 +253,7 @@ function deleteRowVisualizacion(OP,ID){
 		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 		objAH.tipoAccion= 'DELETE';
 		objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
-		objAH.idestcatopac= ID;
+		objAH.idestcatopac= id;
 		//se envia la consulta
 		objAH.sendToServer();
 	}
@@ -316,7 +262,6 @@ function deleteRowVisualizacion(OP,ID){
 
 function updateDeleteRowVisualizacion(responseText){
 
-	clearMessages();
 	var Mensaje= JSONstring.toObject(responseText);
   	setMessages(Mensaje);
 
@@ -330,21 +275,14 @@ function armarTablaVisualizacion(){
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezados= $('#idEncabezado').val();
 	objAH.tipoAccion= 'MOSTAR_TABLA_VISUALIZACION';
-	objAH.componente= 'CLOSE_UP_COMBO_ENCABEZADO';
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
 function updateArmarTablaVisualizacion(responseText){
 	$('#divTablaVisualizacion').html(responseText);
-	zebra('tablaVisualizacion');
-	$('#tablaVisualizacion').tablesorter({	
-					widgets: ['zebra'],
-					headers: { 0: { sorter: false},
-							7: { sorter: false},
-							8: { sorter: false},
-							9: { sorter: false}}
-				});
+	$('#divTablaVisualizacion').slideDown('slow');
+	zebra('tablesorter');
 }
 
 function validarDatos(){
@@ -389,14 +327,14 @@ function validarDatos(){
 	
 	if(ok){
 	//se guarda la configuracion de visualizacion
-		saveConfVisualizacion();
+		guardarConfVisualizacion();
 	}
 }
 
 function changeNivel(){
-	cargarTablaEncabezados();
 	$('#divTablaVisualizacion').html('');
-	$('#result').html('');
+	cargarTablaEncabezados();
+// 	$('#result').html('');
 }
 
 function updateNombreEncabezado(idEncabezado, nombre){
@@ -406,8 +344,7 @@ function updateNombreEncabezado(idEncabezado, nombre){
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= idEncabezado;
 	objAH.nombre= nombre;
-	objAH.tipoAccion= 'UPDATE';
-	objAH.tabla= 'ENCABEZADO';
+	objAH.tipoAccion= 'CAMBIAR_NOMBRE_ENCABEZADO';
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -498,9 +435,8 @@ function cargarTablaEncabezados(){
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.nivel= $('#niveles_id').val();
-	objAH.itemtype= $('#comboTiposItems').val();
-	objAH.tipoAccion= 'SELECT';
-	objAH.componente= 'CARGAR_TABLA_ENCABEZADOS';
+	objAH.tipo_documento= $('#comboTiposItems').val();
+	objAH.tipoAccion= 'CARGAR_TABLA_ENCABEZADOS';
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -509,7 +445,7 @@ function cargarTablaEncabezados(){
 function updateCargarTablaEncabezados(responseText){
 	$('#divTablaEncabezados').html(responseText);	
 	zebra('tablaEncabezados');
-	seleccionarFilaEncabezado();
+// 	seleccionarFilaEncabezado();
 }
 
 
@@ -561,32 +497,37 @@ function modificarOrden(encabezado, antOrden, action){
 
 function cambiarLineaEncabezado(id){
 		
-	linea= 0;
-	if($("#checkbox"+id).val() == 0){linea= 1;}//encabezado en linea
-
-	objAH=new AjaxHelper();
+	objAH=new AjaxHelper(updateCambiarLineaEncabezado);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= id;
-	objAH.linea= linea;
-	objAH.tipoAccion= 'UPDATE';
-	objAH.tabla= 'ENCABEZADO';
+	objAH.tipoAccion= 'CAMBIAR_LINEA_ENCABEZADO';
 	//se envia la consulta
 	objAH.sendToServer();
+}
 
+function updateCambiarLineaEncabezado(){
+	cargarTablaEncabezados();
 }
 
 
 //al seleccionar una fila se cambia el estilo para que se vea cual es la que se selecciona
-function seleccionarFilaEncabezado(){
-	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").click(
-				function () {
-					zebra('tablaEncabezados');
-				}
-    	);
-}
+// function seleccionarFilaEncabezado(){
+// 	$("#tablaEncabezados tr:not([tr.tablaresultadoTitle])").click(
+// 				function () {
+// 					zebra('tablaEncabezados');
+// 				}
+//     	);
+// }
 
 //*************************************Fin**Encabezados********************************************************
+
+function inicializar(){
+// 	$('#divTablaEncabezados').hide();
+	ENCABEZADO= 0;
+	$('#divAgregarModificarVisualizacion').hide();
+	$('#divTablaVisualizacion').hide();
+}
 
 //Init Form
 $(document).ready(function() {
@@ -597,6 +538,7 @@ $(document).ready(function() {
 	$("#tophelper img.showhelp ").click(function(){
 						$("#topichelp").slideToggle('fast');
 					});
+
 });
 
 </script>
@@ -606,7 +548,7 @@ $(document).ready(function() {
 <div style="position: static;" id="tophelper">
 <img class="showhelp" src="/intranet-tmpl/blue/images/help.gif" alt="Descricion de la Ventana">
     <div style="display: block;" id="topichelp">
-        <p>Descripcion breve para lo q sirve la ventana....</p>
+        <p>[% 'Descripcion breve para lo q sirve la ventana....' | i18n %]</p>
     </div>
 </div>
 
@@ -614,7 +556,7 @@ $(document).ready(function() {
 
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
-		<td class="pagetitle" >Visualizaci&oacute;n de campos MARC en OPAC</td>
+		<td class="pagetitle" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</td>
 	</tr>
 	<tr>	
 		<td class="lineagruesa"  align="left" colspan="3"></td>
@@ -626,7 +568,7 @@ $(document).ready(function() {
 <div class="formElemets">
   <div>
 <!-- contenedor superior -->
-	<ul>
+<ul>
 	<li>
 		<select id="niveles_id" onChange="changeNivel();">
 		<option value="1">Nivel1</option>
@@ -634,67 +576,20 @@ $(document).ready(function() {
 		<option value="3">Nivel3</option>
 		</select>
 		Tipo de item: [% selectItemType %]
-		<input type="button" Title="Agregar Encabezado" onClick="agregarEncabezado()" value="Agregar" Title="Agregar un Encabezado">
+		<input 	type="button" Title="[% 'Agregar Encabezado' | i18n %]" onClick="agregarEncabezado()" value="[% 'Agregar' | i18n %]"
+				 Title="[% 'Agregar un Encabezado' | i18n %]">
 	</li>
 	<li>
 		<div id="divTablaEncabezados">
 		</div>
 	</li>
-	</ul>
-  </div>
-<br>
-<ul>
-<li>
-	<p>
-    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
-    [% selectCampoX %]
-    </p>
-</li>
-<li>
-	<div id="result"></div>
-</li>
-<li>
-	<label for="campo" style="float:left; width:13%">Campo: </label>
-		<select name="campo" id="campo" onChange="eleccionCampo()">
-			<option value="-1">Seleccionar Campo</option>
-		</select>
-</li>
-<li>
-	<label for="subcampo" style="float:left; width:13%">Subcampo: </label>
-		<select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-			<option value="-1">Seleccionar SubCampo</option>
-		</select>
-</li>
-<li>
-	<label for="textoPredecesor" style="float: left; width:13%" >
-	Texto predecesor:
-	</label> 
-	<input id="textoPredecesor" name="textoPredecesor" type="text" value="" size="30">
-</li>
-<li>
-	<label for="textoSucesor" style="float: left; width:13%" >
-	Texto sucesor:
-	</label> 
-	<input id="textoSucesor" type="text" value="" size="30">
-</li>
-<li>
-	<label for="separador" style="float: left; width:13%" >
-	Separador:
-	</label> 
-	<input id="separador" type="text" value="" size="30">
-</li>
-<li>
-	<center>
-	  <input id="guardar" type="button" value="Guardar" onClick="validarDatos();" disabled=true>
-	  <input id="modificar" type="button" value="Modificar" style="display:none;"
-		onClick="modificarDatos();">	
-	</center>
-</li>
-<li>
-	<div id="divTablaVisualizacion"></div>
-	<br>
-</li>
-<ul>
+	<li>
+		<div id="divAgregarModificarVisualizacion"></div>
+	</li>
+	<li>
+		<div id="divTablaVisualizacion"></div>
+	</li>
+</ul>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]

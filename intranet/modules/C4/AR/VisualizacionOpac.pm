@@ -8,6 +8,10 @@ package C4::AR::VisualizacionOpac;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Modelo::CatEstructuraCatalogacionOpac;
+use C4::Modelo::CatEstructuraCatalogacionOpac::Manager;
+use C4::Modelo::CatEncabezadoCampoOpac::Manager;
+use C4::Modelo::CatEncabezadoCampoOpac;
 
 use vars qw($VERSION @EXPORT @ISA);
 
@@ -42,10 +46,8 @@ $VERSION = 0.01;
 	&deleteMapeoKohaToMARC
 	&deleteEncabezado
 
-	&modificarVisulizacion
 	&modificarLineaEncabezado
 	&modificarNombreEncabezado
-	&UpdateCatalogacion
 
 	&subirOrden
 	&bajarOrden
@@ -168,12 +170,14 @@ sub buscarInfoSubCampo{
 	return ($cant, @results);
 }
 
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub buscarEncabezados{
 
 	my ($nivel, $itemtype)=@_;
 	
 	my $dbh = C4::Context->dbh;
-	my $query = "	SELECT eco.idencabezado, eco.nombre, eco.orden, eco.linea
+	my $query = "	SELECT eco.idencabezado, eco.nombre, eco.orden, eco.linea, eco.visible
 			FROM cat_encabezado_campo_opac eco INNER JOIN cat_encabezado_item_opac eio
 			ON (eco.idencabezado = eio.idencabezado)
 			WHERE nivel = ? and eio.itemtype = ?
@@ -191,7 +195,41 @@ sub buscarEncabezados{
 	$sth->finish;
 	return ($cant, @results);
 }
+=cut
 
+# sub getEncabezadosOpac{
+# 	my ($params)=@_;
+# 
+# 	my $encabezadosOPAC_array_ref= getEncabezadosOpac($params);
+# 
+# 	my @results;
+# 	my $cant= 0;	
+# 	foreach my $encabezado (@$encabezadosOPAC_array_ref){
+# 		push (@results, $encabezado);
+# 		$cant++;
+# 	}
+# 
+# 	return ($cant, @results);
+# }
+
+sub getEncabezadosOpac{
+	my ($params)=@_;
+
+
+	my  $encabezadosOPAC_array_ref = C4::Modelo::CatEncabezadoCampoOpac::Manager->get_cat_encabezado_campo_opac(
+																			query => [ 
+                                                                                nivel => { eq => $params->{'nivel'} },
+																				itemtype => { eq => $params->{'tipo_documento'} }
+																			],
+																			require_objects => [ 'cat_encabezado_item_opac' ]
+																);
+
+	if(scalar(@$encabezadosOPAC_array_ref) > 0){
+		return $encabezadosOPAC_array_ref->[0];
+	}else{
+		return 0;
+	}
+}
 
 sub encabezadoEnLinea{
 
@@ -290,6 +328,8 @@ sub verificarExistenciaEncabezado{
 }
 
 #insertar iditemtype, idencabezado en tabla encabezado_item_opac
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub insertarEncabezadoItem{
 	my ($idencabezado, $iditemtype)=@_;
 
@@ -300,7 +340,7 @@ sub insertarEncabezadoItem{
 	my $sth=$dbh->prepare($query);
         $sth->execute($idencabezado, $iditemtype);
 }
-
+=cut
 
 # FIXME DEPRECATEDDDDDDDDD
 # 
@@ -319,8 +359,6 @@ sub insertarEncabezadoItem{
 sub t_insertConfVisualizacion {	
 	my($params)=@_;
 
-# 	$campo, $subcampo, $textoPred, $textoSucc, $separador, $idencabezado
-# 	my ($error, $codMsg,$paraMens);
 	my $msg_object= C4::AR::Mensajes::create();
 
 # FIXME falta verificar, entre otras cosas verificarExistenciaConfVisualizacion
@@ -336,7 +374,7 @@ sub t_insertConfVisualizacion {
         $db->{connect_options}->{AutoCommit} = 0;
 
 		eval {
-			my  $estrCatalogacionOpac = C4::Modelo::CatEstructuraCatalogacionOpac->new();
+			my  $estrCatalogacionOpac = C4::Modelo::CatEstructuraCatalogacionOpac->new( db => $db);
 			
 				$estrCatalogacionOpac->agregar($params);
 				#se cambio el permiso con exito
@@ -362,19 +400,40 @@ sub t_insertConfVisualizacion {
 	return ($msg_object);
 }
 
-sub UpdateCatalogacion{
-	my ($textoPred, $textoSucc, $separador, $idestcatopac) = @_;
+sub getEncabezadoOpac{
+	my ($params)=@_;
+																					  
+	my  $encabezadoOPAC_array_ref = C4::Modelo::CatEncabezadoCampoOpac::Manager->get_cat_encabezado_campo_opac(
+																			query => [ 
+                                                                                idencabezado => { eq => $params->{'encabezado'} },
+																			]
+																);
 
-	my $dbh = C4::Context->dbh;
-	my $query="	UPDATE cat_estructura_catalogacion_opac
-			SET textpred = ?, textsucc = ?, separador = ?
-			WHERE idestcatopac = ? ";
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute($textoPred, $textoSucc, $separador, $idestcatopac);
-
+	if(scalar(@$encabezadoOPAC_array_ref) > 0){
+		return $encabezadoOPAC_array_ref->[0];
+	}else{
+		return 0;
+	}
 }
 
+sub getVisualizacionOpac{
+	my ($params)=@_;
+																					  
+	my  $visualizacionOPAC_array_ref = C4::Modelo::CatEstructuraCatalogacionOpac::Manager->get_cat_estructura_catalogacion_opac(
+																			query => [ 
+                                                                                idestcatopac => { eq => $params->{'id'} },
+																			]
+																);
+
+	if(scalar(@$visualizacionOPAC_array_ref) > 0){
+		return $visualizacionOPAC_array_ref->[0];
+	}else{
+		return 0;
+	}
+}
+
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub modificarVisulizacion{
 	my ($idestcat, $visible)=@_;
 
@@ -386,6 +445,7 @@ sub modificarVisulizacion{
 	my $sth=$dbh->prepare($query);
         $sth->execute($visible, $idestcat);
 }
+=cut
 
 sub modificarLineaEncabezado{
 	my ($idencabezado, $linea)=@_;
@@ -397,6 +457,8 @@ sub modificarLineaEncabezado{
         $sth->execute($linea, $idencabezado);
 }
 
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub modificarNombreEncabezado{
 	my ($idencabezado, $nombre)=@_;
 
@@ -406,6 +468,7 @@ sub modificarNombreEncabezado{
 	my $sth=$dbh->prepare($query);
         $sth->execute($nombre, $idencabezado);
 }
+=cut
 
 
 =item
@@ -467,6 +530,8 @@ sub modificarOrdenEncabezado{
 	}
 }
 
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub insertEncabezado{
 	my ($encabezado, $nivel, $itemtypes_arrayref)=@_;
 
@@ -492,7 +557,9 @@ sub insertEncabezado{
  		&insertarEncabezadoItem($idencabezado, $itemtype);
  	}
 }
+=cut
 
+=item
 sub t_insertEncabezado {
 	
 	my($encabezado, $nivel, $itemtypes_arrayref)=@_;
@@ -530,7 +597,47 @@ sub t_insertEncabezado {
 	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
 	return ($error, $codMsg, $message);
 }
+=cut
 
+sub t_insertEncabezado {
+	my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+	my  $cat_encabezado_visualizacion_opac_temp = C4::Modelo::CatEncabezadoCampoOpac->new();
+# 	$cat_encabezado_visualizacion_opac_temp->load();
+	my $db= $cat_encabezado_visualizacion_opac_temp->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+    if(!$msg_object->{'error'}){
+		eval {
+			my  $cat_encabezado_visualizacion_opac= C4::Modelo::CatEncabezadoCampoOpac->new(db => $db);
+			$params->{'db'}= $db;
+			$cat_encabezado_visualizacion_opac->agregar($params);
+			$db->commit;
+			#se cambio el permiso con exito
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO800', 'params' => []} ) ;
+		};
+	
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B410',"INTRA");
+			$db->rollback;
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO801', 'params' => []} ) ;
+		}
+	}# END if(!$msg_object->{'error'})
+
+	$db->{connect_options}->{AutoCommit} = 1;
+
+	return ($msg_object);
+}
+
+# FIXME DEPRECATEDDDDDDDDD
+=item
 sub deleteConfVisualizacion{
 	my ($idestcatopac)=@_;
 
@@ -541,37 +648,81 @@ sub deleteConfVisualizacion{
 	my $sth=$dbh->prepare($query);
         $sth->execute($idestcatopac);
 }
+=cut
 
 sub t_deleteConfVisualizacion {
+	my($params)=@_;
+
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+	my  $cat_visualizacion_opac = C4::Modelo::CatEstructuraCatalogacionOpac->new(idestcatopac => $params->{'idestcatopac'});
+	$cat_visualizacion_opac->load();
+	my $db= $cat_visualizacion_opac->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+
+    if(!$msg_object->{'error'}){
+		eval {
+			$cat_visualizacion_opac->eliminar();
+			$db->commit;
+			#se cambio el permiso con exito
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO804', 'params' => []} ) ;
+		};
 	
-	my($idestcatopac)=@_;
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B415',"INTRA");
+			$db->rollback;
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO805', 'params' => []} ) ;
+		}
+	}# END if(!$msg_object->{'error'})
 
-	my ($error, $codMsg,$paraMens);
+	$db->{connect_options}->{AutoCommit} = 1;
+
+	return ($msg_object);
+}
+
+
+sub t_updateConfVisualizacion {
+	my($params)=@_;
+
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+	my  $cat_visualizacion_opac = C4::Modelo::CatEstructuraCatalogacionOpac->new(idestcatopac => $params->{'idestcatopac'});
+	$cat_visualizacion_opac->load();
+	my $db= $cat_visualizacion_opac->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+
+    if(!$msg_object->{'error'}){
+		eval {
+			$cat_visualizacion_opac->modificar($params);
+			$db->commit;
+			#se cambio el permiso con exito
+			$msg_object->{'error'}= 0;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO808', 'params' => []} ) ;
+		};
 	
-	my $dbh = C4::Context->dbh;
+		if ($@){
+			#Se loguea error de Base de Datos
+			&C4::AR::Mensajes::printErrorDB($@, 'B446',"INTRA");
+			$db->rollback;
+			#Se setea error para el usuario
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'VO809', 'params' => []} ) ;
+		}
+	}# END if(!$msg_object->{'error'})
 
-	$dbh->{AutoCommit} = 0;  # enable transactions, if possible
-	$dbh->{RaiseError} = 1;
-	eval {
+	$db->{connect_options}->{AutoCommit} = 1;
 
-		deleteConfVisualizacion($idestcatopac);	
-		$dbh->commit;
-		$codMsg= 'VO804';
-	};
-
-	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B415';
-		&C4::AR::Mensajes::printErrorDB($@, $codMsg,"INTRA");
-		eval {$dbh->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'VO805';
-	}
-	$dbh->{AutoCommit} = 1;
-
-	my $message= &C4::AR::Mensajes::getMensaje($codMsg,"INTRA",$paraMens);
-	return ($error, $codMsg, $message);
+	return ($msg_object);
 }
 
 sub deleteEncabezado{

@@ -25,7 +25,7 @@ my %infoRespuesta;
 
 
 #************************* para cargar la tabla de encabezados*************************************
-if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
+if($tipoAccion eq "CARGAR_TABLA_ENCABEZADOS"){
 
 	my ($template, $session, $t_params) = get_template_and_user({
 										template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
@@ -36,12 +36,9 @@ if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 										debug => 1,
 	});
 
-	my $nivel =$obj->{'nivel'};
-	my $itemtype =$obj->{'itemtype'};
+	my ($encabezados_opac_array_ref)= &C4::AR::VisualizacionOpac::getEncabezadosOpac($obj);
 
-	my ($cant,@results)= &C4::AR::VisualizacionOpac::buscarEncabezados($nivel, $itemtype);
-
-	$t_params->{'RESULTSLOOP'}= \@results;
+	$t_params->{'RESULTSLOOP'}= $encabezados_opac_array_ref;
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
@@ -50,18 +47,18 @@ if(($tipoAccion eq "SELECT")&&($componente eq "CARGAR_TABLA_ENCABEZADOS")){
 
 #***********************************Cambio Visibilidad en OPAC**********************************
 if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
-
-	my $idestcat =$obj->{'id'};
-	my $visible =$obj->{'visible'};
 	
-	&modificarVisulizacion($idestcat, $visible);
+	C4::AR::Validator::validateParams('U389',$obj,['id']);
+	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getVisualizacionOpac($obj);
+
+	$visualizacionOPAC->cambiarVisibilidad();
 	
     C4::Output::printHeader($session);
 }
 #**************************************************************************************************
 
 #******* Se arma una tabla con la Visualizacion de OPAC y se muestra con un tmpl********************
-if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMBO_ENCABEZADO")){
+if($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION"){
 	
 	my ($template, $session, $t_params)= get_template_and_user({
 												template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
@@ -81,35 +78,34 @@ if(($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION")&&($componente eq "CLOSE_UP_COMB
 	
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
-#**********************************************************************************************************
 
-#********************** gurado el encabezado en la tabla encabezado_campo_opac*****************************
-if(($tipoAccion eq "INSERT")&&($tabla eq "ENCABEZADO")){
 
-	my $encabezado= $obj->{'encabezado'};
-# 	my $nivel= $obj->{'nivel2'};	#para probar los mensajes de error
-	my $nivel= $obj->{'nivel'};
-	my $itemtypes= $obj->{'itemtypes'};
-	my $itemtypes_arrayref= from_json_ISO($itemtypes);
-	
-	my ($error, $codMsg, $message)= &t_insertEncabezado($encabezado, $nivel, $itemtypes_arrayref);
-	
-    C4::Output::printHeader($session);
-	($error)?print $message:'';
-}
-#*******************FIN *** gurado el encabezado en la tabla encabezado_campo_opac*****************************
-
-#******************** actualizo el nombre del encabezado en la tabla encabezado_campo_opac***********************
-if( ($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO") ){
-			
-	my $encabezado= $obj->{'encabezado'};
-	my $nombre= $obj->{'nombre'};
-	
-	&modificarNombreEncabezado($encabezado, $nombre);
+if($tipoAccion eq "CAMBIAR_LINEA_ENCABEZADO"){
+				
+	C4::AR::Validator::validateParams('U389',$obj,['encabezado']);
+	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
+	$visualizacionOPAC->cambiarLinea();
 	
     C4::Output::printHeader($session);
 }
-#****************FIN**** actualizo el nombre del encabezado en la tabla encabezado_campo_opac******************
+
+if($tipoAccion eq "CAMBIAR_NOMBRE_ENCABEZADO"){
+				
+	C4::AR::Validator::validateParams('U389',$obj,['encabezado', 'nombre']);
+	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
+	$visualizacionOPAC->cambiarNombre($obj->{'nombre'});
+	
+    C4::Output::printHeader($session);
+}
+
+if($tipoAccion eq "CAMBIAR_VISIBILIDAD_ENCABEZADO"){
+				
+	C4::AR::Validator::validateParams('U389',$obj,['encabezado']);
+	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
+	$visualizacionOPAC->cambiarVisibilidad();
+	
+    C4::Output::printHeader($session);
+}
 
 #*********************************se actualiza el campo linea del encabezado*********************************
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
@@ -139,10 +135,8 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 	
     C4::Output::printHeader($session);
 }
-#**************************************************************************************************
 
-#**************** gurado la configuracion de la visualizacion en estructura_catalogacion_opac******************
-if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
+if($tipoAccion eq "ESTRUCTURA_VISUALIZACION"){
 	
 	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_insertConfVisualizacion($obj);
 	
@@ -151,8 +145,80 @@ if(($tipoAccion eq "INSERT")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
     C4::Output::printHeader($session);
     print $infoOperacionJSON;
 }
-#**************************************************************************************************
 
+if($tipoAccion eq "GUARDAR_ENCABEZADO_VISUALIZACION_OPAC"){
+	
+	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_insertEncabezado($obj);
+	
+	my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
+if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
+	
+	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_updateConfVisualizacion($obj);
+	
+	my $infoOperacionJSON=to_json $Message_arrayref;
+    
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
+if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
+
+	my ($template, $session, $t_params)= get_template_and_user({
+												template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
+												query => $input,
+												type => "intranet",
+												authnotrequired => 0,
+												flagsrequired => {borrowers => 1},
+												debug => 1,
+	});
+	
+	
+	$t_params->{'agregar'}= 1; #seteo flag para indicar que se va a agregar una configuracion
+	$t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+    
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+
+if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
+
+	my ($template, $session, $t_params)= get_template_and_user({
+												template_name => "catalogacion/visualizacionOPAC/agregarEncabezado.tmpl",
+												query => $input,
+												type => "intranet",
+												authnotrequired => 0,
+												flagsrequired => {borrowers => 1},
+												debug => 1,
+	});
+	
+	
+	my %params_combo;
+	$params_combo{'default'}= 'LIB';
+	$params_combo{'id'}= 'tipo_documento';
+	my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+	$t_params->{'tipo_documento'}= $comboTiposNivel3;
+    
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+
+if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
+
+	my ($template, $session, $t_params)= get_template_and_user({
+												template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
+												query => $input,
+												type => "intranet",
+												authnotrequired => 0,
+												flagsrequired => {borrowers => 1},
+												debug => 1,
+	});
+	
+	
+	$t_params->{'visualizacion'}= C4::AR::VisualizacionOpac::getVisualizacionOpac($obj);
+    
+	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
 #**************** gurado la catalogacion en estructura_catalogacion_opac**************************
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
@@ -168,21 +234,14 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
 if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
-
-	my $idestcatopac =$obj->{'idestcatopac'};
 	
-	my ($error, $codMsg, $message)= &C4::AR::VisualizacionOpac::t_deleteConfVisualizacion($idestcatopac);
-	
-	#se arma el mensaje
-	$infoRespuesta{'error'}= $error;
-	$infoRespuesta{'codMsg'}= $codMsg;
-	$infoRespuesta{'message'}= $message;
-
-	#se convierte el arreglo de respuesta en JSON
-	my $infoRespuestaJSON = to_json \%infoRespuesta;
+	C4::AR::Validator::validateParams('U389',$obj,['idestcatopac']);
+	my ($Message_arrayref)= &C4::AR::VisualizacionOpac::t_deleteConfVisualizacion($obj);
+    
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    
     C4::Output::printHeader($session);
-	#se envia en JSON al cliente
-	print $infoRespuestaJSON;
+    print $infoOperacionJSON;
 
 }
 #**************************************************************************************************
