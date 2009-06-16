@@ -190,6 +190,15 @@
                                                             ) ;
                             [% END %]
                   </li>
+                  <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Permisos' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/admin/permisosDB.pl", 
+                                                                title =>    "[% 'Permisos' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                  </li>
+
                 </ul>
            
             </li>

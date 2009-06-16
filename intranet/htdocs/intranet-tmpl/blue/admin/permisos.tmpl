@@ -1,22 +1,50 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#usuario').focus();
+        CrearAutocompleteUsuarios({ IdInput: 'usuario', 
+                                    IdInputHidden: 'nro_socio_hidden', 
+                            });
+
+    });
+</script>
 <div class="permisos">
-
-    <div class="selector">
+    <br><br>
+    <div class="permisos_selector">
+        <label for="usuario"> Usuario: </label>
         <input type="text" name="usuario" id="usuario" />
-
-        <select name="ui" id="ui" >
-            <option ></option>
-        </select>
-
-        <select name="tipo_documento" id="tipo_documento" >
-            <option ></option>
-        </select>
-
-        <select name="permiso" id="permiso" >
-            <option ></option>
-        </select>
+        <input type="hidden" name="nro_socio_hidden" id="nro_socio_hidden" />
+        <label for="tipo_documento_id"> Tipo de Documento: </label>
+        [% combo_tipoDoc %]
+        <label for="id_ui"> Unid. Info.: </label>
+        [% combo_UI %]
+        <div style="float:right;margin-right: 10%;">
+            <label for="permiso"> Permiso: </label>
+            [% combo_permisos %]
+            <input type="button" value="Obtener" onClick="obtenerPermisos();" />
+        </div>
     </div>
-
-    <div class="assign_permisos_chk">
+    <br>
+    <br>
+    <br>
+    <div class="permisos_assign_chk">
+        [% FOREACH permiso IN permisos%] 
+            <label for="permission_5"> TODOS </label>
+            <input type="checkbox" name="permission_5" [% IF permiso.todos %] "checked" [% END %]/>
+            <label for="permission_1"> Alta </label>
+            <input type="checkbox" name="permission_1" [% IF permiso.alta %] "checked" [% END %] /> /
+            <label for="permission_2"> Baja </label>
+            <input type="checkbox" name="permission_2" [% IF permiso.baja %] "checked" [% END %]/> /
+            <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" name="permission_3" [% IF permiso.modif %] "checked" [% END %]/> /
+            <label for="permission_4"> Consulta </label>
+            <input type="checkbox" name="permission_4" [% IF permiso.consulta %] "checked" [% END %]/>
+        [% END %]
     </div>
-
 </div>
+
+[% FOREACH campo IN campos %]
+    [% campo %]
+[% END %]
+
+[% INCLUDE "intranet-bottom.inc" %]

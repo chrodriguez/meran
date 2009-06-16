@@ -1511,6 +1511,47 @@ sub generarComboUI{
     return $CGIunidadDeInformacion; 
 }
 
+sub generarComboPermisos{
+
+    my ($params) = @_;
+    my @select_ui;
+    my %select_ui;
+
+    my $unidades_de_informacion= C4::AR::Referencias::obtenerUnidadesDeInformacion();
+
+    foreach my $ui (@$unidades_de_informacion) {
+        push(@select_ui, $ui->id_ui);
+        $select_ui{$ui->id_ui}= $ui->nombre;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'id_ui';
+    $options_hash{'id'}= $params->{'id'}||'id_ui';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+
+    push (@select_ui, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_ui;
+    $options_hash{'labels'}= \%select_ui;
+
+    my $CGIunidadDeInformacion= CGI::scrolling_list(\%options_hash);
+
+    return $CGIunidadDeInformacion; 
+}
+
+
 sub generarComboDeSocios{
 
     my ($params) = @_;
