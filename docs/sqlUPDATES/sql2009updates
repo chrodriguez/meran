@@ -785,7 +785,7 @@ VALUES
 
 --Agregamos la tabla de permisos sobre catalogo---
 
- CREATE TABLE `V3Econo`.`perm_catalogo` (
+ CREATE TABLE `perm_catalogo` (
 `id_persona` INT( 11 ) NOT NULL ,
 `ui` VARCHAR( 4 ) NOT NULL ,
 `tipo_documento` VARCHAR( 4 ) NOT NULL ,
@@ -804,4 +804,14 @@ UNIQUE (
 `ui` ,
 `tipo_documento`
 )
-) ENGINE = InnoDB; 
+) ENGINE = InnoDB;
+ ALTER TABLE `perm_catalogo` CHANGE `datos_nivel1` `datos_nivel1` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `datos_nivel2` `datos_nivel2` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `datos_nivel3` `datos_nivel3` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estantes_virtuales` `estantes_virtuales` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n1` `estructura_catalogacion_n1` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n2` `estructura_catalogacion_n2` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n3` `estructura_catalogacion_n3` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `tablas_de_refencia` `tablas_de_refencia` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `control_de_autoridades` `control_de_autoridades` VARBINARY( 8 ) NOT NULL DEFAULT '00000';
+
