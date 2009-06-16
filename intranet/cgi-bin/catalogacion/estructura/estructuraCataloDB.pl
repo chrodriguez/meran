@@ -321,7 +321,8 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 
 #============================================================= ABM Catalogo==============================================================
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
-#Se guarda informacion del NIVEL 1
+
+	#Se guarda informacion del NIVEL 1
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_guardarNivel1($obj);
     
     my %info;
@@ -346,7 +347,27 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
-#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+
+# getPermisosDatosN3('ALTA', $tipo_documento);
+=item
+  { 
+        ui => 'DEO', 
+        tipo_documento => $tipo_documento,  
+        accion => 'ALTA',   
+        nivel => 3 
+    } 
+=cut
+
+	my ($user, $session, $flags)= checkauth(
+												$input, 	
+												$authnotrequired,	
+                                                {   tipo_documento => $tipo_documento,	
+												    accion => 'ALTA',	
+												    nivel => 'datos_nivel3' }, 
+												'intranet'
+											);
+                
+	#Se muestran la estructura de catalogacion para que el usuario agregue un documento
     my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
     
     my %info;
