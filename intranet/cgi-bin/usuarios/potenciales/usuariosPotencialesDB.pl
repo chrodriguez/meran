@@ -22,12 +22,13 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 my $id_personas_array_ref= $obj->{'id_personas'};
 my $Messages_arrayref;
-
+C4::AR::Validator::validateParams('U389',$obj,['categoria_socio_id','id_personas'] );
 
 if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
     my %hash_data;
     $hash_data{'categoria_socio_id'}=$obj->{'categoria_socio_id'};
+    
 	($Messages_arrayref)= &C4::AR::Usuarios::habilitarPersona($id_personas_array_ref);
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;

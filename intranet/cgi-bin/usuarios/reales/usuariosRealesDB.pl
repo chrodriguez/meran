@@ -211,7 +211,7 @@ elsif($tipoAccion eq "AGREGAR_USUARIO"){
 
     C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
 
-    my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj); #C4::AR::Usuarios::t_addBorrower($obj);
+    my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
     C4::Output::printHeader($session);

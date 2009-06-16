@@ -70,14 +70,14 @@ sub agregarAutorizado {
 
             eval{
                 $socio->agregarAutorizado($params);
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U397', 'params' => []});
                 $db->commit;
             };
 
             if ($@){
                 &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
                 $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U398', 'params' => []} ) ;
                 $db->rollback;
             }
 
@@ -208,7 +208,7 @@ sub desautorizarTercero {
         eval {
             $socio->desautorizarTercero;
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U396', 'params' => [$socio->getNro_socio]} ) ;
         };
 
         if ($@){
@@ -216,7 +216,7 @@ sub desautorizarTercero {
             &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U398', 'params' => [$socio->getNro_socio]} ) ;
         }
 
     return ($msg_object);
