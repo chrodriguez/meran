@@ -1374,23 +1374,6 @@ h2.active {
 	text-align:center;
 }
 
-.permisos{
-    height:25%;
-    width: 100%;
-    float:right;
-}
-
-.permisos_selector{
-    height:25%;
-    background-color:buttonhighlight;
-    border: medium none red;
-
-}
-
-.permisos_assign_chk{
-    background:InfoBackground;
-}
-
 /*.fecha_special{
 
     color: orange;

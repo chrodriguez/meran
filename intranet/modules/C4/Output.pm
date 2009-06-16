@@ -96,7 +96,10 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-
+	my $tema = C4::Context->config('tema');
+	my $temas = C4::Context->config('temas');
+	C4::AR::Debug::debug($tema);
+	C4::AR::Debug::debug($temas);
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
 
 	my $filter= Template::Filters->new({
@@ -130,7 +133,8 @@ sub gettemplate {
 	%params= (
 			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme",
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-			theme => $theme,
+			tema => $tema,
+			temas => $temas,
 			template_name => "$htdocs/$theme/$tmplbase", #se setea el nombre del tmpl
 		);
 

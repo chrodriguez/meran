@@ -28,8 +28,7 @@
 
 <head>
 <title>Meran::UNLP</title>
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/intranet.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
 </head>
@@ -75,6 +74,7 @@
 <div id="menu-container" class="main-header">
 
     [% INCLUDE   'menu.inc'  %]
+
 </div>
 
 <div id="marco_principal">

@@ -1374,37 +1374,9 @@ h2.active {
 	text-align:center;
 }
 
-.permisos{
-    height:25%;
-    width: 100%;
-    float:right;
-}
-
-.permisos_selector{
-    height:25%;
-    background-color:buttonhighlight;
-    border: medium none red;
-
-}
-
-.permisos_assign_chk{
-    background:InfoBackground;
-}
-
 /*.fecha_special{
 
     color: orange;
     font-weight: bold;
     font-style: underline;
 }*/
-
-/*para los cambios nuevo introducidos con los divs */
-
-#marco_arriba_izq {float:left;
-		   }
-#marco_arriba_med {float:left;
-		 background: url(//c.fsdn.com/sd/cs_i2_gradients.png?T_2_5_0_260a) repeat-x scroll center top;
-			}
-#marco_arriba_der {float:right;}
-#marco_arriba { width: 90%;
-			float:left;}

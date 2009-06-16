@@ -28,8 +28,7 @@
 
 <head>
 <title>Meran::UNLP</title>
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/intranet.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
 </head>
@@ -72,21 +71,24 @@
 
 <div id="marco_contenedor">
 
+<!-- <table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center"> -->
+
 <div id="menu-container" class="main-header">
 
     [% INCLUDE   'menu.inc'  %]
+
 </div>
 
 <div id="marco_principal">
    <div id="marco_arriba">
-    <div id="marco_arriba_izq" >
-		<img src="[% themelang %]/images/back/backup.png" >
+    <div width="410" >
+		<img src="[% themelang %]/images/back/backup.png" width="410" height="61" hspace="0" vspace="0" align="top" border="0">
 	</div>
-    <div id="marco_arriba_med" >
-		<img src="[% themelang %]/images/back/backupmidle.png" >
+    <div height="61" >
+		<img src="[% themelang %]/images/back/backupmidle.png" width="100%" height="61" hspace="0" vspace="0" align="top" border="0">
 	</div>
-    <div id="marco_arriba_der" >
-		<img src="[% themelang %]/images/back/backupright.png" >
+    <div width="20" >
+		<img src="[% themelang %]/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top">
 	</div>
   </div>
 <div id="marco_contenido" width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
