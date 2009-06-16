@@ -503,7 +503,7 @@ sub tienePermisos {
 
     $self->log($flagsrequired,'tienePermisos => permisos requeridos');
     #Obtengo los permisos del socio
-=item
+
     my $flags= $self->getPermisos;
 
     if($flagsrequired){
@@ -519,7 +519,7 @@ sub tienePermisos {
 
 
     return 0;
-=cut
+
 
 =item
      {   tipo_documento => $tipo_documento, 
@@ -531,17 +531,17 @@ sub tienePermisos {
 #     00000000 8bits los primeros 4 esta para uso futuro
 #     000TABMC TODOS, ALTA, BAJA,MODIFICACION, CONSULTA 
 
-    my $flags= $self->getPermisos;
-
-    $flagsrequired->{'tipo_documento'}
-    $flagsrequired->{'accion'}
-    $flagsrequired->{'ui'}
-    $flagsrequired->{'nivel'} #datos_nivel3 | datos_nivel2 | datos_nivel1
-    get_permiso({   nivel => $flagsrequired->{'nivel'}, 
-                    ui => $flagsrequired->{'ui'}, 
-                    tipo_documento => $flagsrequired->{'tipo_documento'}, 
-                    id_persona => $self->getId_persona }
-                );
+#     my $flags= $self->getPermisos;
+# 
+#     $flagsrequired->{'tipo_documento'}
+#     $flagsrequired->{'accion'}
+#     $flagsrequired->{'ui'}
+#     $flagsrequired->{'nivel'} #datos_nivel3 | datos_nivel2 | datos_nivel1
+#     get_permiso({   nivel => $flagsrequired->{'nivel'}, 
+#                     ui => $flagsrequired->{'ui'}, 
+#                     tipo_documento => $flagsrequired->{'tipo_documento'}, 
+#                     id_persona => $self->getId_persona }
+#                 );
 
     
 
