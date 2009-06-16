@@ -8,6 +8,7 @@ body {
 	font-style: normal;
 	color: #000000;
 	behavior: url("http://www.xs4all.nl/~peterned/htc/csshover3.htc");
+	width:95%;
 }
 
 .header{
@@ -1122,7 +1123,7 @@ background:#eee url(/images/expand3.gif) no-repeat 100% 100%;
 
 .main-header{
 
-   width:1024px;
+   width:100%;
    float:left;
 }
 
@@ -1383,11 +1384,51 @@ h2.active {
 
 /*para los cambios nuevo introducidos con los divs */
 
-#marco_arriba_izq {float:left;
+#marco_arriba_izq {
+	background: transparent  url(../imagenes/arriba_izq.png) no-repeat ;
+	height:61px;
+	position:absolute;
+	width:410px;
+	z-index:1;
+	float:left;
 		   }
-#marco_arriba_med {float:left;
-		 background: url(//c.fsdn.com/sd/cs_i2_gradients.png?T_2_5_0_260a) repeat-x scroll center top;
+#marco_arriba_der {
+	float:right;
+	background: transparent url(../imagenes/arriba_der.png) no-repeat;
+	height:61px;
+	position:relative;
+	width:20px;
+	z-index:1;
+	float:right;
 			}
-#marco_arriba_der {float:right;}
-#marco_arriba { width: 90%;
-			float:left;}
+#marco_arriba { 
+	background:#FFFFFF url(../imagenes/arriba_med.png) repeat-x scroll center ;
+	height:61px;
+	position:relative;
+	z-index:2;
+}
+
+#marco_abajo_izq {
+	background: transparent  url(../imagenes/abajo_izq.png) no-repeat ;
+	height:23px;
+	position:absolute;
+	width:410px;
+	z-index:1;
+	float:left;
+		   }
+#marco_abajo_der {
+	float:right;
+	background: transparent url(../imagenes/abajo_der.png) no-repeat;
+	height:23px;
+	position:relative;
+	width:20px;
+	z-index:1;
+	float:right;
+			}
+#marco_abajo { 
+	background:#FFFFFF url(../imagenes/abajo_med.png) repeat-x scroll center ;
+	height:23px;
+	position:relative;
+	z-index:2;
+}
+

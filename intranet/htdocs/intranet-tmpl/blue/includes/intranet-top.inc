@@ -75,18 +75,14 @@
 <div id="menu-container" class="main-header">
 
     [% INCLUDE   'menu.inc'  %]
+
 </div>
 
 <div id="marco_principal">
    <div id="marco_arriba">
     <div id="marco_arriba_izq" >
-		<img src="[% themelang %]/images/back/backup.png" >
-	</div>
-    <div id="marco_arriba_med" >
-		<img src="[% themelang %]/images/back/backupmidle.png" >
 	</div>
     <div id="marco_arriba_der" >
-		<img src="[% themelang %]/images/back/backupright.png" >
 	</div>
   </div>
 <div id="marco_contenido" width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
