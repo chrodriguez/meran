@@ -300,7 +300,7 @@
                 <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Pr&eacute;stamo' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/issuetypes.pl",
+                                                                url =>      "/cgi-bin/koha/admin/tipos_de_prestamos.pl",
                                                                 title =>    "[% 'Tipos de Pr&acute;stamo' | i18n %]"
                                                             ) ;
                             [% END %]

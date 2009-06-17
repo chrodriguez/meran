@@ -159,21 +159,8 @@ sub prestamosHabilitadosPorTipo {
 # NUEVAS FUNCIONES
 #
 
-=item
-Esta funcion devuelve la informacion del tipo de prestamo, segun el issuecode
-=cut
-sub getTipoPrestamo {
-    
-    use C4::Modelo::CircRefTipoPrestamo;
-    use C4::Modelo::CircRefTipoPrestamo::Manager;
 
-    my ($tipo_prestamo) = @_;
 
-    my  $tipo = C4::Modelo::CircRefTipoPrestamo->new(id_tipo_prestamo => $tipo_prestamo);
-        $tipo->load();
-
-    return ($tipo);
-}
 
 sub _verificarMaxTipoPrestamo{
 	my ($nro_socio,$tipo_prestamo)=@_;
@@ -287,12 +274,20 @@ sub getPrestamosDeSocio {
 
 sub getTipoPrestamo {
 #retorna los datos del tipo de prestamo
+use C4::Modelo::CircRefTipoPrestamo;
    my ($tipo_prestamo)=@_;
    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( id_tipo_prestamo => $tipo_prestamo );
    $circ_ref_tipo_prestamo->load();
    return($circ_ref_tipo_prestamo);
 }
 
+sub getTiposDePrestamos {
+#retorna los datos de TODOS los tipos de prestamos
+use C4::Modelo::CircRefTipoPrestamo::Manager;
+   my @filtros;
+   my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros);
+   return($circ_ref_tipo_prestamo);
+}
 
 sub prestarYGenerarTicket{
 	my ($params)=@_;

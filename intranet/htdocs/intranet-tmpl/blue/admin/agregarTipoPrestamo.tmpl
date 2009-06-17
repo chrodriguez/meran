@@ -1,0 +1,176 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+function swap(id,src){
+document.getElementById(id).src=src;
+}
+
+
+function _(s) { return s } // dummy function for gettext
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new N&uacute;mero(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Fecha.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "\n- " + _("Tipo de documento perdido");
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "\n- " + _("Descripci&oacute;n perdida");
+	}
+	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
+		_alertString += "\n- " + _("Duraci&oacute;n del pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "\n- " + _("Costo de pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Problemas");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</script>
+
+            <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
+                    <tr>
+                            <td>
+                        [% IF tipo_prestamo %]
+                            [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
+                        [% ELSE %]
+                            [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
+                        [% END %]
+                            </td>
+                    </tr>
+                    <tr>
+                            <td class="lineagruesa"  align="left" colspan="3"></td>
+                    </tr>
+            </table>
+
+            <table class="tablaresultado" width="95%">
+                [% IF tipo_prestamo %]
+                        <tr>
+                                <td class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td class="inputFontNormal"><input type=hidden name=issuetype value=[% issuetype %]>[% issuetype %]</td>
+                        </tr>
+                [% ELSE %]
+                        <tr>
+                                <td  class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td><input type=text name=issuetype size=6 maxlength=4 onBlur="toUC(this)"></td>
+                        </tr>
+                [% END %]
+                <tr>
+                        <td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
+                        <td><input  class="inputFontNormal"type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
+                </tr>
+
+                <tr>
+                        <td  class="inputFontNormal">[% "Para Sala" | i18n %]</td>
+                        <td  class="inputFontNormal">
+                                [% IF notforloan %]
+                                    <input  class="inputFontNormal" type=checkbox name=notforloan checked value=1>
+                                [% ELSE %]
+                                    <input  class="inputFontNormal" type=checkbox name=notforloan value=1>
+                                [% END %]
+                        </td>
+                </tr>
+                <tr>
+                        <td  class="inputFontNormal">[% "Habilitado" | i18n %]</td>
+                        <td  class="inputFontNormal">
+                                [% IF enabled %]
+                                    <input  class="inputFontNormal" type=checkbox name=enabled checked value=1>
+                                [% ELSE %]
+                                  <input  class="inputFontNormal" type=checkbox name=enabled value=1>
+                                [% END %]
+                        </td>
+                </tr>
+                <tr>
+                        <td  class="inputFontNormal">
+                                [% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
+                        </td>
+                        <td  class="inputFontNormal">
+                                <input type=text  class="inputFontNormal" name=maxissues size=10 value='[% maxissues %]'>
+                        </td>
+                </tr>
+        
+                
+                <tr>
+                        <td  class="inputFontNormal">
+                                [% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]
+                        </td>
+                        <td>
+                                <input  class="inputFontNormal"type=text name=daysissues size=40 maxlength=80 value='[% HTML.escape(daysissues) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td  class="inputFontNormal">
+                                [% "Renovaciones" | i18n %]
+                        </td>
+                        <td>
+                                <input  class="inputFontNormal"type=text name=renew size=40 maxlength=80 value='[% HTML.escape(renew) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td  class="inputFontNormal">
+                                [% "D&iacute;as de Renovaci&oacute;n" | i18n %]
+                        </td>
+                        <td>
+                                <input  class="inputFontNormal"type=text name=renewdays size=40 maxlength=80 value='[% HTML.escape(renewdays) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td  class="inputFontNormal">
+                                [% "Cuantos d&iacute;as antes se puede renovar" | i18n %]
+                        </td>
+                        <td>
+                                <input  class="inputFontNormal"type=text name=dayscanrenew size=40 maxlength=80 value='[% HTML.escape(dayscanrenew) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td  class="inputFontNormal">&nbsp;</td>
+                        <td>
+                                <input type="image" alt="Guardar Cambios"  src="/images/guardar.png" onclick="Aform.submit">
+
+                        </td>
+                </tr>
+                </table>
+
+[% INCLUDE "intranet-bottom.inc" %]
