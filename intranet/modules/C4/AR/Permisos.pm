@@ -91,7 +91,7 @@ sub armarByte{
 
     $byte.= $permiso->{'todos'}.$permiso->{'baja'}.$permiso->{'modif'}.$permiso->{'alta'}.$permiso->{'consulta'};
 
-    return ($permiso);
+    return ($byte);
 }
 
 sub procesarPermisos{
@@ -102,7 +102,7 @@ sub procesarPermisos{
 
     foreach my $permiso (@$permisos_array){
 
-        $hash_permisos{$permiso->{'nombre'}} = C4::AR::Permisos::armarByte($permiso);C4::AR::Debug::debug("NOMRBRE PERMISO: ".$permiso->{'nombre'});
+        $hash_permisos{$permiso->{'nombre'}} = C4::AR::Permisos::armarByte($permiso);
     }
 
     return (\%hash_permisos);
@@ -118,9 +118,14 @@ sub actualizarPermisos{
 
     my $permisos = C4::Modelo::PermCatalogo->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
        $permisos->load();
+    $hash_permisos->{'tipo_documento'} = $tipo_documento;
+    $hash_permisos->{'nro_socio'} = $nro_socio;
+    $hash_permisos->{'id_ui'} = $id_ui;
 
     $permisos->agregar($hash_permisos);
+
     $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+
     return ($permisos);
 
 }

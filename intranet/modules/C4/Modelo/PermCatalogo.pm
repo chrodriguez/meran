@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'perm_catalogo',
 
     columns => [
-        ui  => { type => 'varchar', length => 4, not_null => 1 },
-        nro_socio  => { type => 'varchar', length => 16, not_null => 1 },  
+        nro_socio => { type => 'varchar', length => 16, not_null => 1 },
+        ui  => { type => 'varchar', length => 4, not_null => 1 }, 
         tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
         datos_nivel1 => { type => 'varchar', length => 8, not_null => 1 },
         datos_nivel2 => { type => 'varchar', length => 8, not_null => 1 },
@@ -32,7 +32,6 @@ sub agregar{
     my ($self) = shift;
     my ($permisos_hash) = @_;
 
-    C4::AR::Utilidades::printHASH($permisos_hash);
     $self->setNro_socio($permisos_hash->{'nro_socio'});
     $self->setUI($permisos_hash->{'id_ui'});
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});

@@ -78,7 +78,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
                                                                     debug => 1,
                     });
 
-    C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento);
+    C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento,$permisos);
 
 
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
