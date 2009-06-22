@@ -99,7 +99,7 @@ sub gettemplate {
 	my $tema = C4::Context->config('tema');
 	my $temas = C4::Context->config('temas');
 	C4::AR::Debug::debug($htdocs);
-	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
+	#my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
 
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
@@ -130,7 +130,7 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
 	%params= (
-			themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme",
+			themelang => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			tema => $tema,
 			temas => $temas,
