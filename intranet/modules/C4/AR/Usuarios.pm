@@ -749,14 +749,10 @@ sub esRegular {
 }
 
 sub get_permisos_catalogo {
-
     my ($params) = @_;
+
     my @filtros;
     use C4::Modelo::PermCatalogo::Manager;
-
-    
-#     $params->{'accion'}
-#     $params->{'nivel'} #dato
 
     push (@filtros, ( 'tipo_documento' => {eq => $params->{'tipo_documento'}} ) );
     push (@filtros, ( 'ui' => {eq => $params->{'ui'}} ) );

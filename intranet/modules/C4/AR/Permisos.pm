@@ -127,8 +127,8 @@ sub actualizarPermisos{
 
 
 sub permisos_str_to_bin {
-
     my ($permisos) = @_;
+
     my $flag;
 
     $flag= '00000000';
@@ -147,5 +147,36 @@ sub permisos_str_to_bin {
 
     return $flag;
 }
+
+sub tiene_permiso_consulta{
+    my ($permiso) = @_;
+
+    return $permiso eq '00000001';
+}
+
+sub tiene_permiso_alta{
+    my ($permiso) = @_;
+
+    return $permiso eq '00000010';
+}
+
+sub tiene_permiso_modificacion{
+    my ($permiso) = @_;
+
+    return $permiso eq '00000100';
+}
+
+sub tiene_permiso_baja{
+    my ($permiso) = @_;
+
+    return $permiso eq '00001000';
+}
+
+sub tiene_permiso_todos{
+    my ($permiso) = @_;
+
+    return $permiso eq '00010000';
+}
+
 
 1;

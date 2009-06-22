@@ -3,6 +3,7 @@ package C4::Modelo::UsrSocio;
 use strict;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 use utf8;
+use C4::AR::Permisos;
 
 __PACKAGE__->meta->setup(
     table   => 'usr_socio',
@@ -519,95 +520,6 @@ sub read_grants {
     return $flag;
 }
 
-sub permisos_str_to_bin {
-    my ($permisos) = @_;
-    my $flag;
-    $flag= '00000000';
-
-    if($permisos eq 'TODOS'){
-        $flag= '00010000';
-    }elsif($permisos eq 'BAJA'){
-        $flag= '00001000';
-    }elsif($permisos eq 'MODIFICACION'){
-        $flag= '00000100';
-    }elsif($permisos eq 'ALTA'){
-        $flag= '00000010';
-    }elsif($permisos eq 'CONSULTA'){
-        $flag= '00000001';
-    }
-
-    return $flag;
-}
-
-sub tiene_permiso_consulta{
-    my ($permiso) = @_;
-
-    return $permiso eq '00000001';
-}
-
-sub tiene_permiso_alta{
-    my ($permiso) = @_;
-
-    return $permiso eq '00000010';
-}
-
-sub tiene_permiso_modificacion{
-    my ($permiso) = @_;
-
-    return $permiso eq '00000100';
-}
-
-sub tiene_permiso_baja{
-    my ($permiso) = @_;
-
-    return $permiso eq '00001000';
-}
-
-sub tiene_permiso_todos{
-    my ($permiso) = @_;
-
-    return $permiso eq '00010000';
-}
-
-# 
-# sub strBinToDec{
-#     my ($numero) = @_;
-# 
-#     if($numero eq '00010000'){
-#         $num_dec= 32;
-#     }elsif($numero eq 'BAJA'){
-#         $flag= '00001000';
-#     }elsif($permisos eq 'MODIFICACION'){
-#         $flag= '00000100';
-#     }elsif($permisos eq 'ALTA'){
-#         $flag= '00000010';
-#     }elsif($permisos eq 'CONSULTA'){
-#         $flag= '00000001';
-#     }
-# 
-#     return $flag;    
-# }
-=item
-Recibe un permiso por ej '00001000' y se chequea si existe el permiso
-=cut
-# sub tiene_permiso{
-#     my ($permiso_requirido, $permiso_usuario) = @_;
-#     my @array_permisos;
-# 
-#     if('TODOS' eq $permiso_requirido){
-#             return 1;
-#     }
-# 
-#     my $num = bin2dec($permisos_array_ref_level1->[0]->{$flagsrequired->{'entorno'}});
-#     C4::AR::Debug::debug("=================bin2dec: ".$num);
-# 
-#     foreach my $permiso (@array_permisos){
-#         if($permiso eq $permiso_requirido){
-#             return 1;
-#         }
-#     }
-#     
-# }
 
 sub bin2dec {
     return unpack("N", pack("B32", substr("0" x 32 . shift, -32)));
@@ -623,7 +535,8 @@ sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
 
 # FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
-
+    C4::AR::Debug::debug("");
+    C4::AR::Debug::debug("verificar_permisos_por_nivel => datos del usuario");
     C4::AR::Debug::debug("verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
@@ -640,7 +553,7 @@ sub verificar_permisos_por_nivel{
     
         my $permiso_dec_del_usuario = bin2dec($permisos_hash_ref->{$flagsrequired->{'entorno'}});
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin2dec: ".$permiso_dec_del_usuario);
-        my $permiso_dec_requerido = bin2dec($flagsrequired->{'accion'});
+        my $permiso_dec_requerido = bin2dec(C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'}));
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin2dec: ".$permiso_dec_requerido);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
     
@@ -648,6 +561,7 @@ sub verificar_permisos_por_nivel{
             return 1;
         }
     }
+    C4::AR::Debug::debug("");
 
     return 0;
 }
@@ -679,92 +593,19 @@ sub tienePermisos {
    
 #========TEST
 
-    my $permisos_hash_ref_level1;
-    my $permisos_hash_ref_level2;
-    my $permisos_hash_ref_level3;
-    my $grants_level1= 0;
-    my $grants_level2= 0;
-    my $grants_level3= 0;
-=item
-    # Obtengo los permisos del usuario
-    $permisos_hash_ref_level1= C4::AR::Usuarios::get_permisos_catalogo({
-                                                        ui => $flagsrequired->{'ui'}, 
-                                                        tipo_documento => $flagsrequired->{'tipo_documento'}, 
-                                                        nro_socio => $self->getNro_socio 
-                                            });
-
-
-    if($permisos_hash_ref_level1 ne 0){
-        C4::AR::Debug::debug("=====================================INTENTO level1");
-        #se encontraron permisos level1
-
-        my $num = bin2dec($permisos_hash_ref_level1->{$flagsrequired->{'entorno'}});
-        C4::AR::Debug::debug("PERMISOS DEL USUARIO=================bin2dec: ".$num);
-        $num = bin2dec($flagsrequired->{'accion'});
-        C4::AR::Debug::debug("PERMISOS REQUERIDOS=================bin2dec: ".$num);
-
-        if( bin2dec($permisos_hash_ref_level1->{$flagsrequired->{'entorno'}}) >= bin2dec($flagsrequired->{'accion'}) ){
-            C4::AR::Debug::debug("(level1) TIENE EL PERMISO PARA EL ENTORNO: ".$flagsrequired->{'entorno'}." ACCION: ".$flagsrequired->{'accion'});
-            $grants_level1= 1;
-            return 1;
-        }
-    }
-
-    if(($permisos_hash_ref_level1 eq 0)||(!$grants_level1)){
-        C4::AR::Debug::debug("=====================================NO TIENE PERMITOS level1, INTENTO level2");
-        #if($permisos_array_ref_level1 eq 0)
-        #no se encontraron permisos level1, se intenta con tipo_documento = 'ALL'
-        $permisos_hash_ref_level2= C4::AR::Usuarios::get_permisos_catalogo({
-                                                        ui => $flagsrequired->{'ui'}, 
-                                                        tipo_documento => 'ALL', 
-                                                        nro_socio => $self->getNro_socio 
-                                            });
-    }
-
-
-
-    if($permisos_hash_ref_level2 ne 0){
-        C4::AR::Debug::debug("=====================================INTENTO level2");
-        #se encontraron permisos level2
-        if( bin2dec($permisos_hash_ref_level2->{$flagsrequired->{'entorno'}}) >= bin2dec($flagsrequired->{'accion'}) ){
-            C4::AR::Debug::debug("(level2) TIENE EL PERMISO PARA EL ENTORNO: ".$flagsrequired->{'entorno'}." ACCION: ".$flagsrequired->{'accion'});
-            $grants_level2= 1;
-            return 1;
-        }
-    }
-    
-    if(($permisos_hash_ref_level2 eq 0)||(!$grants_level2)){
-        C4::AR::Debug::debug("=====================================NO TIENE PERMITOS level2, INTENTO level3");
-        #if($permisos_array_ref_level2 eq 0){
-        #no se encontraron permisos level2, se intenta con tipo_documento = 'ALL' y ui = 'ALL' 
-        $permisos_hash_ref_level3= C4::AR::Usuarios::get_permisos_catalogo({
-                                                        ui => 'ALL', 
-                                                        tipo_documento => 'ALL', 
-                                                        nro_socio => $self->getNro_socio 
-                                            });
-    }
-
-    if($permisos_hash_ref_level3 ne 0){
-        C4::AR::Debug::debug("=====================================INTENTO level3");
-        #se encontraron permisos level3
-        if( bin2dec($permisos_hash_ref_level3->{$flagsrequired->{'entorno'}}) >= bin2dec($flagsrequired->{'accion'}) ){
-            C4::AR::Debug::debug("(level3) TIENE EL PERMISO PARA EL ENTORNO: ".$flagsrequired->{'entorno'}." ACCION: ".$flagsrequired->{'accion'});
-            $grants_level3= 1;
-            return 1;
-        }
-    }
-=cut
-
     #se verifican permisos level1
+    C4::AR::Debug::debug("tienePermisos => intento level1");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
     $flagsrequired->{'tipo_documento'}= 'ALL';
     #se verifican permisos level2
+    C4::AR::Debug::debug("tienePermisos => intento level2");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
     
     $flagsrequired->{'tipo_documento'}= 'ALL';
     $flagsrequired->{'ui'}= 'ALL';
     #se verifican permisos level3
+    C4::AR::Debug::debug("tienePermisos => intento level3");
     if(verificar_permisos_por_nivel($flagsrequired)){
         return 1;
     }else{

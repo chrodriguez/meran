@@ -72,7 +72,13 @@
 
 
 <div id="menu-container" class="main-header">
+<<<<<<< .mine
+
+[% INCLUDE   'menu.inc'  %]
+
+=======
   [% INCLUDE   'menu.inc'  %] 
+>>>>>>> .r1631
 </div>
 
 <div id="marco_contenedor">
