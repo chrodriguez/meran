@@ -603,9 +603,9 @@ sub tienePermisos {
     $flagsrequired->{'ui'}= $self->getId_ui;
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
 
-#     $flagsrequired->{'tipo_documento'}= 'LIB';
-#     $flagsrequired->{'entorno'}= 'datos_nivel3';
-#     $flagsrequired->{'accion'}= 'ALTA';
+    $flagsrequired->{'tipo_documento'}= 'LIB';
+    $flagsrequired->{'entorno'}= 'datos_nivel3';
+    $flagsrequired->{'accion'}= 'ALTA';
    
 #========TEST
 
