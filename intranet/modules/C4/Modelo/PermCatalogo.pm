@@ -8,9 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'perm_catalogo',
 
     columns => [
-        id_persona => { type => 'integer', length => 11, not_null => 1 }, 
-        nro_socio => { type => 'varchar', length => 16, not_null => 1 },
-        ui  => { type => 'varchar', length => 4, not_null => 1 }, 
+        ui  => { type => 'varchar', length => 4, not_null => 1 },
+        nro_socio  => { type => 'varchar', length => 16, not_null => 1 },  
         tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
         datos_nivel1 => { type => 'varchar', length => 8, not_null => 1 },
         datos_nivel2 => { type => 'varchar', length => 8, not_null => 1 },
@@ -63,13 +62,13 @@ sub setNro_socio{
 
 sub getId_persona{
     my ($self) = shift;
-    return ($self->id_persona);
+    return ($self->nro_socio);
 }
 
-sub setId_persona{
+sub setNro_socio{
     my ($self) = shift;
-    my ($id_persona) = @_;
-    $self->id_persona($id_persona);
+    my ($nro_socio) = @_;
+    $self->nro_socio($nro_socio);
 }
 
 sub getUI{
