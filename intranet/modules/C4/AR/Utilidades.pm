@@ -77,6 +77,7 @@ use vars qw(@EXPORT @ISA);
     &buscarNivelesBibliograficos
     &generarComboTipoPrestamo
     &generarComboDeSocios
+    &generarComboPermisos
     &generarComboTipoDeOperacion
     &existeInArray
     &paginarArreglo
@@ -1256,6 +1257,44 @@ sub validateString{
 
 
 #********************************************************Generacion de Combos****************************************************
+sub generarComboPermisos{
+
+    my (@label,$values);
+    use C4::Modelo::PermCatalogo;
+    push (@label,"Unidad De Informaci&oacute;n");
+    push (@label,"Tipo de Documento");
+    push (@label,"Datos Nivel 1");
+    push (@label,"Datos Nivel 2");
+    push (@label,"Datos Nivel 3");
+    push (@label,"Estantes Virtuales");
+    push (@label,"Estructura de Catalogaci&oacute;n Nivel 1");
+    push (@label,"Estructura de Catalogaci&oacute;n Nivel 2");
+    push (@label,"Estructura de Catalogaci&oacute;n Nivel 3");
+    push (@label,"Tablas de Referencia");
+    push (@label,"Control de Autoridades");
+
+    $values = C4::Modelo::PermCatalogo->new()->meta->columns;
+    
+    my %labels;
+    
+    my %options_hash; 
+    foreach my $permiso (@$values) {
+        $labels{$permiso}= $permiso;
+    }
+
+    $options_hash{'values'}= $values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= "ui";
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'permisos';
+    $options_hash{'id'}= 'permisos';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
+
 
 sub generarComboDeDisponibilidad{
 
@@ -1472,46 +1511,6 @@ sub generarComboTipoPrestamo{
 
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI{
-
-    my ($params) = @_;
-    my @select_ui;
-    my %select_ui;
-
-    my $unidades_de_informacion= C4::AR::Referencias::obtenerUnidadesDeInformacion();
-
-    foreach my $ui (@$unidades_de_informacion) {
-        push(@select_ui, $ui->id_ui);
-        $select_ui{$ui->id_ui}= $ui->nombre;
-    }
-
-    my %options_hash; 
-
-    if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
-    }
-    if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
-    }
-    if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
-    }
-
-    $options_hash{'name'}= $params->{'name'}||'id_ui';
-    $options_hash{'id'}= $params->{'id'}||'id_ui';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
-
-    push (@select_ui, 'SIN SELECCIONAR');
-    $options_hash{'values'}= \@select_ui;
-    $options_hash{'labels'}= \%select_ui;
-
-    my $CGIunidadDeInformacion= CGI::scrolling_list(\%options_hash);
-
-    return $CGIunidadDeInformacion; 
-}
-
-sub generarComboPermisos{
 
     my ($params) = @_;
     my @select_ui;

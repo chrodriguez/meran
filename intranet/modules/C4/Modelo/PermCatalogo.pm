@@ -9,6 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_persona => { type => 'integer', length => 11, not_null => 1 }, 
+        nro_socio => { type => 'varchar', length => 16, not_null => 1 },
         ui  => { type => 'varchar', length => 4, not_null => 1 }, 
         tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
         datos_nivel1 => { type => 'varchar', length => 8, not_null => 1 },
@@ -23,11 +24,42 @@ __PACKAGE__->meta->setup(
         id => { type => 'integer', length => 11, not_null => 1 }
     ],
 
-    primary_key_columns => [ 'id' ],
+    primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],
 
     unique_key => [ 'id' ],
 );
 
+sub agregar{
+    my ($self) = shift;
+    my ($permisos_hash) = @_;
+
+    C4::AR::Utilidades::printHASH($permisos_hash);
+    $self->setNro_socio($permisos_hash->{'nro_socio'});
+    $self->setUI($permisos_hash->{'id_ui'});
+    $self->setTipo_documento($permisos_hash->{'tipo_documento'});
+    $self->setDatos_nivel1($permisos_hash->{'datos_nivel1'});
+    $self->setDatos_nivel2($permisos_hash->{'datos_nivel2'});
+    $self->setDatos_nivel3($permisos_hash->{'datos_nivel3'});
+    $self->setEstantes_virtuales($permisos_hash->{'estantes_virtuales'});
+    $self->setEstructura_catalogacion_n1($permisos_hash->{'estructura_catalogacion_n1'});
+    $self->setEstructura_catalogacion_n2($permisos_hash->{'estructura_catalogacion_n2'});
+    $self->setEstructura_catalogacion_n3($permisos_hash->{'estructura_catalogacion_n3'});
+    $self->setTablas_de_referencia($permisos_hash->{'tablas_de_refencia'});
+    $self->setControl_de_autoridades($permisos_hash->{'control_de_autoridades'});
+
+    $self->save();
+}
+
+sub getNro_socio{
+    my ($self) = shift;
+    return ($self->nro_socio);
+}
+
+sub setNro_socio{
+    my ($self) = shift;
+    my ($nro_socio) = @_;
+    $self->nro_socio($nro_socio);
+}
 
 sub getId_persona{
     my ($self) = shift;

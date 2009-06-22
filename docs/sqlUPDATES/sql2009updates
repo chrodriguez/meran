@@ -822,3 +822,12 @@ ALTER TABLE `cat_encabezado_campo_opac` ADD `visible` TINYINT( 1 ) NOT NULL DEFA
  CHANGE `tablas_de_refencia` `tablas_de_refencia` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
  CHANGE `control_de_autoridades` `control_de_autoridades` VARBINARY( 8 ) NOT NULL DEFAULT '00000';
 
+ALTER TABLE `perm_catalogo` DROP `id_persona`;
+
+ALTER TABLE `perm_catalogo` ADD `id_persona` INT( 11 ) UNSIGNED NOT NULL ;
+
+ALTER TABLE `perm_catalogo` ADD `nro_socio` VARCHAR( 16 ) NOT NULL ;
+
+ALTER TABLE `perm_catalogo` DROP INDEX `id_persona` ,
+ADD UNIQUE `id_persona` ( `ui` , `tipo_documento` , `nro_socio` );
+

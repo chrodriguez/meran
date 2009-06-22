@@ -1380,8 +1380,15 @@ h2.active {
     float:right;
 }
 
+.permisos h2{
+    width: 300px;
+    margin: 0px;
+    float:left;
+}
+
 .permisos_selector{
     height:25%;
+    width: 75%;
     background-color:buttonhighlight;
     border: medium none red;
 
@@ -1389,6 +1396,13 @@ h2.active {
 
 .permisos_assign_chk{
     background:InfoBackground;
+}
+
+.permission_grant{
+    background:LightSteelBlue;
+    height:26px;
+    float:left;
+
 }
 
 /*.fecha_special{
