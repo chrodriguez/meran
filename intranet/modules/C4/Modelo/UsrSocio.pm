@@ -551,16 +551,31 @@ sub verificar_permisos_por_nivel{
         C4::AR::Debug::debug("verificar_permisos_por_nivel");
         #se encontraron permisos level1
     
-        my $permiso_dec_del_usuario = bin2dec($permisos_hash_ref->{$flagsrequired->{'entorno'}});
+        my $permiso_bin_del_usuario= $permisos_hash_ref->{$flagsrequired->{'entorno'}};
+        my $permiso_bin_requerido= C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'});
+        my $permiso_dec_del_usuario= bin2dec($permiso_bin_del_usuario);
+        my $permiso_dec_requerido = bin2dec($permiso_bin_requerido);
+
+        if( ($permiso_bin_del_usuario & '00010000') > 0){
+            #tiene todos los permisos
+            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
+            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
+            return 1;
+        }
+    
+        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin2dec: ".$permiso_dec_del_usuario);
-        my $permiso_dec_requerido = bin2dec(C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'}));
+        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin2dec: ".$permiso_dec_requerido);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
-    
-        if( $permiso_dec_del_usuario >= $permiso_dec_requerido ){
+        my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
+        C4::AR::Debug::debug("verificar_permisos_por_nivel => result AND=================: ".$resultado);
+        C4::AR::Debug::debug("verificar_permisos_por_nivel => AND=================bin2dec: ".(bin2dec($resultado)));    
+        if( bin2dec($resultado) > 0 ){
             return 1;
         }
     }
+
     C4::AR::Debug::debug("");
 
     return 0;
@@ -613,15 +628,6 @@ sub tienePermisos {
         C4::AR::Debug::debug("NO TIENE EL PERMISO");
         return 0
     }
-
-=item
-    if(($permisos_hash_ref_level3 eq 0)||(!$grants_level3)){
-        #no se encontraron permisos level3
-        #if($permisos_array_ref_level3 eq 0){
-        C4::AR::Debug::debug("NO TIENE EL PERMISO");
-        return 0
-    }
-=cut
 
 =item
     if($flagsrequired){
