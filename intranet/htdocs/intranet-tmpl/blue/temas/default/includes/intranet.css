@@ -1435,22 +1435,26 @@ h2.active {
 }
 #marco_contenido_izquierdo{
 	position:absolute;
-	background:transparent url(../imagenes/medio_izq.png) repeat-y;
+	background:#f7f6f6 url(../imagenes/medio_izq.png) repeat-y;
 	float:left;
 	width:9px;
-	height:100%
+	height:100%;
+	z-index:1;
 	}
 #marco_contenido_derecho{
-	background:transparent url(../imagenes/medio_der.png) repeat-y;
+	background:#f7f6f6 url(../imagenes/medio_der.png) repeat-y;
 	float:right;
 	position:relative;
 	width:20px;
-	height:100%
-	padding:0 12px 0 0;
+	z-index:1;
+	height:100%;
 	}
 #marco_contenido_datos{
 	background:#f7f6f6;
-	width:90%;
 	position:relative;
+	z-index:2;
+/*	margin-right:20px;
+	margin-left:9px;*/
 	}
-
+#marco_contenedor
+{clear:both;}
