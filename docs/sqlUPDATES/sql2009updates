@@ -831,3 +831,10 @@ ALTER TABLE `perm_catalogo` ADD `nro_socio` VARCHAR( 16 ) NOT NULL ;
 ALTER TABLE `perm_catalogo` DROP INDEX `id_persona` ,
 ADD UNIQUE `id_persona` ( `ui` , `tipo_documento` , `nro_socio` );
 
+
+--para testear
+
+INSERT INTO `perm_catalogo` (`ui`, `tipo_documento`, `datos_nivel1`, `datos_nivel2`, `datos_nivel3`, `estantes_virtuales`, `estructura_catalogacion_n1`, `estructura_catalogacion_n2`, `estructura_catalogacion_n3`, `tablas_de_refencia`, `control_de_autoridades`, `id`, `nro_socio`) VALUES
+('CD', 'LIB', '00000', '00000', '00010000', '00000', '00000', '00000', '00000', '00000', '00000', 1, '26320');
+
+
