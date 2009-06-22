@@ -281,6 +281,7 @@ sub cambiarPermisos{
 =item
 Retorna los permisos del socio
 =cut
+# FIXME DEPRECATED
 sub getPermisos{
     my ($self) = shift;
     
@@ -595,16 +596,16 @@ sub tienePermisos {
 
 #     $self->log($flagsrequired,'tienePermisos => permisos requeridos');
     #Obtengo los permisos del socio
-    my $flags= $self->getPermisos;
+#     my $flags= $self->getPermisos;
 
 
     # Se setean los flags requeridos
     $flagsrequired->{'ui'}= $self->getId_ui;
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
 
-    $flagsrequired->{'tipo_documento'}= 'LIB';
-    $flagsrequired->{'entorno'}= 'datos_nivel3';
-    $flagsrequired->{'accion'}= 'ALTA';
+#     $flagsrequired->{'tipo_documento'}= 'LIB';
+#     $flagsrequired->{'entorno'}= 'datos_nivel3';
+#     $flagsrequired->{'accion'}= 'ALTA';
    
 #========TEST
 

@@ -48,6 +48,26 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+    my ($self) = shift;
+    my ($permisos_hash) = @_;
+# 
+#     $self->setNro_socio($permisos_hash->{'nro_socio'});
+#     $self->setUI($permisos_hash->{'id_ui'});
+#     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
+    $self->setDatos_nivel1($permisos_hash->{'datos_nivel1'});
+    $self->setDatos_nivel2($permisos_hash->{'datos_nivel2'});
+    $self->setDatos_nivel3($permisos_hash->{'datos_nivel3'});
+    $self->setEstantes_virtuales($permisos_hash->{'estantes_virtuales'});
+    $self->setEstructura_catalogacion_n1($permisos_hash->{'estructura_catalogacion_n1'});
+    $self->setEstructura_catalogacion_n2($permisos_hash->{'estructura_catalogacion_n2'});
+    $self->setEstructura_catalogacion_n3($permisos_hash->{'estructura_catalogacion_n3'});
+    $self->setTablas_de_referencia($permisos_hash->{'tablas_de_refencia'});
+    $self->setControl_de_autoridades($permisos_hash->{'control_de_autoridades'});
+
+    $self->save();
+}
+
 sub getNro_socio{
     my ($self) = shift;
     return ($self->nro_socio);
