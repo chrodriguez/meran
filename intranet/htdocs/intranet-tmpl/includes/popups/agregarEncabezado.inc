@@ -136,7 +136,7 @@ function updateSaveEncabezado(responseText){
 
 	<li>
 		<a onClick="validarDatosEncabezado();">
-		<img 	id="save" border="0" src="/intranet-tmpl/blue/images/guardar.png" 
+		<img 	id="save" border="0" src="/intranet-tmpl/images/guardar.png" 
 				alt="Guardar" name="save" title="Guardar Encabezado"/>
 		</a>
 	</li>
