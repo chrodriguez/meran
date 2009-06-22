@@ -1041,7 +1041,7 @@ padding:0 5px;
 
 h3{
 color:#fff;
-background:#000 url(/imagenes/expand3.gif) no-repeat 100% 100%;
+background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
 text-transform:uppercase
 }
 
@@ -1097,7 +1097,7 @@ improves IE's performance speed to use the older
 file and this method */
 
 div#menu h3:hover{
-background:#000 url(/imagenes/expand3.gif) no-repeat -999px -9999px;
+background:#000 url(../imagenes/expand3.gif) no-repeat -999px -9999px;
 }
 
 
@@ -1108,7 +1108,7 @@ background:#000 url(/imagenes/expand3.gif) no-repeat -999px -9999px;
 #menu a.x, #menu a.x:visited{
 font-weight:normal;
 color:#000;
-background:#eee url(/imagenes/expand3.gif) no-repeat 100% 100%;
+background:#eee url(../imagenes/expand3.gif) no-repeat 100% 100%;
 }
 
 /* FIXME esto esta rompiendo todo */
