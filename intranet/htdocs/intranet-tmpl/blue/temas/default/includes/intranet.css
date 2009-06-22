@@ -1417,7 +1417,6 @@ h2.active {
 	float:left;
 		   }
 #marco_abajo_der {
-	float:right;
 	background: transparent url(../imagenes/abajo_der.png) no-repeat;
 	height:23px;
 	position:relative;
@@ -1431,4 +1430,27 @@ h2.active {
 	position:relative;
 	z-index:2;
 }
+#marco_contenido{
+	background:#f7f6f6;
+}
+#marco_contenido_izquierdo{
+	position:absolute;
+	background:transparent url(../imagenes/medio_izq.png) repeat-y;
+	float:left;
+	width:9px;
+	height:100%
+	}
+#marco_contenido_derecho{
+	background:transparent url(../imagenes/medio_der.png) repeat-y;
+	float:right;
+	position:relative;
+	width:20px;
+	height:100%
+	padding:0 12px 0 0;
+	}
+#marco_contenido_datos{
+	background:#f7f6f6;
+	width:90%;
+	position:relative;
+	}
 
