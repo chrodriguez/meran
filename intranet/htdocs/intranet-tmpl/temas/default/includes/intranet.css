@@ -330,7 +330,7 @@ td.abc{
 
 .subtitle {
 	   font-weight: bold;	
-	   background : url(../images/pixelceleste.png) repeat-x 100%;
+	   background : url(../imagenes/pixelceleste.png) repeat-x 100%;
 	   font-Family : normal Trebuchet MS, Verdana;
 	   font-size: 13pt;
 	   color: #ffffff;
@@ -350,7 +350,7 @@ td.abc{
 	font-Family : "Trebuchet MS", "Verdana";
         color: #ffffff;
         font-size: 9pt;
-	background: url(../images/medio.png) repeat-x ;
+	background: url(../imagenes/tablaresultado.png) repeat-x ;
 	background-color:#3c9eb4;
 	/*background-color:#D9E6F6;*/
 	text-align: center;
@@ -478,7 +478,7 @@ font-size: 12px;
 			
 	
 .state {
-background:#3C9EB4 url(../images/medio.png) repeat-x scroll 0%;
+background:#3C9EB4 url(../imagenes/tablaresultado.png) repeat-x scroll 0%;
 color:#FFFFFF;
 font-family:"Trebuchet MS","Verdana";
 font-size:9pt;
@@ -614,7 +614,7 @@ img.showhelp {
 	font-Family : "Trebuchet MS", "Verdana";
         color: #ffffff;
         font-size: 9pt;
-	background: url(../images/medio.png) repeat-x ;
+	background: url(../imagenes/tablaresultado.png) repeat-x ;
 	background-color:#3c9eb4;
 	cursor: pointer;
 	text-align: center;
@@ -1041,7 +1041,7 @@ padding:0 5px;
 
 h3{
 color:#fff;
-background:#000 url(/images/expand3.gif) no-repeat 100% 100%;
+background:#000 url(/imagenes/expand3.gif) no-repeat 100% 100%;
 text-transform:uppercase
 }
 
@@ -1097,7 +1097,7 @@ improves IE's performance speed to use the older
 file and this method */
 
 div#menu h3:hover{
-background:#000 url(/images/expand3.gif) no-repeat -999px -9999px;
+background:#000 url(/imagenes/expand3.gif) no-repeat -999px -9999px;
 }
 
 
@@ -1108,7 +1108,7 @@ background:#000 url(/images/expand3.gif) no-repeat -999px -9999px;
 #menu a.x, #menu a.x:visited{
 font-weight:normal;
 color:#000;
-background:#eee url(/images/expand3.gif) no-repeat 100% 100%;
+background:#eee url(/imagenes/expand3.gif) no-repeat 100% 100%;
 }
 
 /* FIXME esto esta rompiendo todo */
@@ -1238,7 +1238,7 @@ ul li {
 }
 
 h2.trigger{
-    background:transparent url(../images/h2_trigger_a.gif) no-repeat scroll 0 0;
+    background:transparent url(../imagenes/h2_trigger_a.gif) no-repeat scroll 0 0;
     float:left;
     font-size:2em;
     font-weight:normal;
@@ -1296,7 +1296,7 @@ h1 small {
     text-transform:uppercase;
 }
 h2.trigger {
-    background:transparent url(../images/h2_trigger_a.gif) no-repeat scroll 0 0;
+    background:transparent url(../imagenes/h2_trigger_a.gif) no-repeat scroll 0 0;
     float:left;
     font-size:2em;
     font-weight:normal;
