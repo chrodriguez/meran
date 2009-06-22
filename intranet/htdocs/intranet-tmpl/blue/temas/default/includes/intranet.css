@@ -1389,7 +1389,7 @@ h2.active {
 	height:61px;
 	position:absolute;
 	width:410px;
-	z-index:1;
+	/*z-index:1;*/
 	float:left;
 		   }
 #marco_arriba_der {
@@ -1398,14 +1398,14 @@ h2.active {
 	height:61px;
 	position:relative;
 	width:20px;
-	z-index:1;
+/*	z-index:1;*/
 	float:right;
 			}
 #marco_arriba { 
 	background:#f7f6f6 url(../imagenes/arriba_med.png) repeat-x scroll center ;
 	height:61px;
 	position:relative;
-	z-index:2;
+/*	z-index:2;*/
 }
 
 #marco_abajo_izq {
@@ -1413,7 +1413,7 @@ h2.active {
 	height:23px;
 	position:absolute;
 	width:410px;
-	z-index:1;
+/*	z-index:1;*/
 	float:left;
 		   }
 #marco_abajo_der {
@@ -1421,14 +1421,14 @@ h2.active {
 	height:23px;
 	position:relative;
 	width:20px;
-	z-index:1;
+/*	z-index:1;*/
 	float:right;
 			}
 #marco_abajo { 
 	background:#f7f6f6 url(../imagenes/abajo_med.png) repeat-x scroll center ;
 	height:23px;
 	position:relative;
-	z-index:2;
+/*	z-index:2;*/
 }
 #marco_contenido{
 	background:#f7f6f6;
@@ -1439,20 +1439,20 @@ h2.active {
 	float:left;
 	width:9px;
 	height:100%;
-	z-index:1;
+/*	z-index:1;*/
 	}
 #marco_contenido_derecho{
 	background:#f7f6f6 url(../imagenes/medio_der.png) repeat-y;
 	float:right;
 	position:relative;
 	width:20px;
-	z-index:1;
+/*	z-index:1;*/
 	height:100%;
 	}
 #marco_contenido_datos{
 	background:#f7f6f6;
 	position:relative;
-	z-index:2;
+/*	z-index:2;*/
 /*	margin-right:20px;
 	margin-left:9px;*/
 	}
