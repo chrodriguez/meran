@@ -297,7 +297,7 @@ sub getPermisos{
         }
     }
 
-    $self->log($accessFlagsHash,'getPermisos => permisos del socio');
+#     $self->log($accessFlagsHash,'getPermisos => permisos del socio');
     
     return ($accessFlagsHash);
 }
@@ -593,7 +593,7 @@ sub tienePermisos {
     my ($self) = shift;
     my ($flagsrequired) = @_;
 
-    $self->log($flagsrequired,'tienePermisos => permisos requeridos');
+#     $self->log($flagsrequired,'tienePermisos => permisos requeridos');
     #Obtengo los permisos del socio
     my $flags= $self->getPermisos;
 

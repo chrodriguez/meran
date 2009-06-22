@@ -10,14 +10,21 @@ use CGI;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
+use constant {
+        TODOS           => '00010000',
+        ALTA            => '00001000',
+        BAJA            => '00000100',
+        MODIFICACION    => '00000010',
+        CONSULTA        => '00000001'
+};
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT @ISA @EXPORT_OK);
 @ISA=qw(Exporter);
 @EXPORT=qw(
     &obtenerPermisos
-    
-
 );
+
+our @EXPORT_OK= ('TODOS', 'ALTA', 'BAJA', 'MODIFICACION', 'CONSULTA');
 
 sub checkTipoPermiso{
 
@@ -25,19 +32,19 @@ sub checkTipoPermiso{
     my $flag;
     my $result;
     if($tipo_permiso eq 'TODOS'){
-        $flag= '00010000';
+        $flag= TODOS;
         $result = substr($entorno_byte,3,1);
     }elsif($tipo_permiso eq 'ALTA'){
-        $flag= '00001000';
+        $flag= ALTA;
         $result = substr($entorno_byte,4,1);
     }elsif($tipo_permiso eq 'BAJA'){
-        $flag= '00000100';
+        $flag= BAJA;
         $result = substr($entorno_byte,5,1);
     }elsif($tipo_permiso eq 'MODIFICACION'){
-        $flag= '00000010';
+        $flag= MODIFICACION;
         $result = substr($entorno_byte,6,1);
     }elsif($tipo_permiso eq 'CONSULTA'){
-        $flag= '00000001';
+        $flag= CONSULTA;
         $result = substr($entorno_byte,7,1);
     }
     return ($result);
@@ -53,7 +60,6 @@ sub parsearPermisos{
     foreach my $entorno (@$entornos){
         foreach my $flag (@tipo_permiso){
             $hash_permisos{$entorno}{$flag} = C4::AR::Permisos::checkTipoPermiso($permiso->{$entorno},$flag);
-#             $permiso->{$entorno}->{$flag} = C4::AR::Permisos::checkTipoPermiso($permiso->{$entorno},$flag);
         }
     }
     return (\%hash_permisos);
@@ -139,15 +145,15 @@ sub permisos_str_to_bin {
     $flag= '00000000';
 
     if($permisos eq 'TODOS'){
-        $flag= '00010000';
+        $flag= TODOS;
     }elsif($permisos eq 'ALTA'){
-        $flag= '00001000';
+        $flag= ALTA;
     }elsif($permisos eq 'BAJA'){
-        $flag= '00000100';
+        $flag= BAJA;
     }elsif($permisos eq 'MODIFICACION'){
-        $flag= '00000010';
+        $flag= MODIFICACION;
     }elsif($permisos eq 'CONSULTA'){
-        $flag= '00000001';
+        $flag= CONSULTA;
     }
 
     return $flag;
