@@ -98,8 +98,7 @@ sub gettemplate {
 
 	my $tema = C4::Context->config('tema');
 	my $temas = C4::Context->config('temas');
-	C4::AR::Debug::debug($tema);
-	C4::AR::Debug::debug($temas);
+	C4::AR::Debug::debug($htdocs);
 	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
 
 	my $filter= Template::Filters->new({
@@ -112,11 +111,11 @@ sub gettemplate {
 
 	my $template = Template->new({
 					INCLUDE_PATH => [
-								"$htdocs/$theme/$tmplbase",
-								"$htdocs/$theme/includes/",
-                                "$htdocs/$theme/catalogacion/",
-                                "$htdocs/$theme/includes/popups/",
-								"$htdocs/$theme/includes/menu",
+								"$htdocs",
+								"$htdocs/includes/",
+                                "$htdocs/catalogacion/",
+                                "$htdocs/includes/popups/",
+								"$htdocs/includes/menu",
 								"/usr/local/koha/includes/",
 							],
  					ABSOLUTE => 1,
@@ -135,7 +134,7 @@ sub gettemplate {
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			tema => $tema,
 			temas => $temas,
-			template_name => "$htdocs/$theme/$tmplbase", #se setea el nombre del tmpl
+			template_name => "$htdocs/$tmplbase", #se setea el nombre del tmpl
 		);
 
 
