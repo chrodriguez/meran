@@ -1423,4 +1423,7 @@ h2.active {
 	 text-align:center;
 	 padding:1%;
 	 margin-top:1%;
-	}	
+	}
+#menu li {
+	display: none;
+}
