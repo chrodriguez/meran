@@ -1384,97 +1384,43 @@ h2.active {
 
 /*para los cambios nuevo introducidos con los divs */
 
-#marco_arriba_izq {
+#marco_superior {
 	background: transparent  url(../imagenes/arriba_izq.gif) no-repeat top left;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-/*	height:61px;
-	position:absolute;
-	width:410px;
-	/*z-index:1;
-	float:left;*/
 		   }
-#marco_arriba_der {
+#marco_superior div {
 	background: transparent url(../imagenes/arriba_der.gif) no-repeat top right;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-	/*float:right;
-	height:61px;
-	position:relative;
-	width:20px;
-/*	z-index:1;
-	float:right;*/
-			}
-/*#marco_arriba { 
-	background:#f7f6f6 url(../imagenes/medio.gif) repeat-x scroll center ;
-	height:61px;
-	position:relative;
-/*	z-index:2;
-}*/
+	}
 
-#marco_abajo_izq {
+#marco_inferior {
 	background: transparent  url(../imagenes/abajo_izq.gif) no-repeat bottom left;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-/*	z-index:1;
-	height:23px;
-	position:absolute;
-	width:410px;
-	float:left;*/
 		   }
-#marco_abajo_der {
+#marco_inferior div {
 	background: transparent url(../imagenes/abajo_der.gif) no-repeat bottom right;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-/*	height:23px;
-	position:relative;
-	width:20px;
-	z-index:1;
-	float:right;*/
-			}
-/*#marco_abajo { 
-	background:#f7f6f6 url(../imagenes/abajo_med.gif) repeat-x scroll center ;
-	height:23px;
-	position:relative;
-/*	z-index:2;
-}*/
+		}
 #marco_contenido{
 	clear:both;
 	margin-bottom:3%;
 }
-/*#marco_contenido_izquierdo{
-	background:#f7f6f6 url(../imagenes/medio_izq.gif) repeat-y;
-	float:left;
-	width:9px;
-	height:100%;
-	position:absolute;
-	z-index:1;
+#marco_principal{
+	clear:both;
+	background:#f7f6f6 url(../imagenes/medio.gif) repeat ;
 	}
-#marco_contenido_derecho{
-	background:#f7f6f6 url(../imagenes/medio_der.gif) repeat-y;
-	float:left;
-	position:relative;
-	width:20px;
-	height:100%;
-	}*/
-#marco_contenido_datos{
-
-/*background:#f7f6f6;
-	z-index:2;
-	float:left;
-	margin-right:20px;
-	margin-left:9px;
-	*/}
-#marco_principal
-{clear:both;
-	background:#f7f6f6 url(../imagenes/medio.gif) repeat ;}
-#marca
-{clear:both;
-background:#f7f6f6;
- text-align:center;
- padding:1%;
-}
+#marca{
+	clear:both;
+	background:#f7f6f6;
+	 text-align:center;
+	 padding:1%;
+	 margin-top:1%;
+	}	

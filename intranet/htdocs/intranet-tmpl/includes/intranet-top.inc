@@ -78,19 +78,9 @@
 </div>
 
 <div id="marco_principal">
-    <div id="marco_arriba_izq" class="marco_superior">
-    <div id="marco_arriba_der" class="marco_superior">
-	</div>
-  </div>
+    <div id="marco_superior"> <div></div></div>
+
 <div id="marco_contenido" class="contenido">
-<!--
-width="99%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6"-->
-<!--
-    <div id="marco_contenido_izquierdo" class="contenido">
-    </div>
-<div id="marco_contenido_derecho" class="contenido">
-</div>
--->
 
 
 <div id="marco_contenido_datos" class="contenido">
