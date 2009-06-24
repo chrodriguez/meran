@@ -1419,7 +1419,8 @@ h2.active {
 	}
 #marca{
 	clear:both;
-	background:#f7f6f6;
+	background-image:  url(../imagenes/logo_meran.gif)
+	background-color:#f7f6f6;
 	 text-align:center;
 	 padding:1%;
 	 margin-top:1%;
@@ -1427,3 +1428,10 @@ h2.active {
 #menu li ul li{
 	display: none;
 }
+.logo_Superior{
+   background-image:  url(../imagenes/logo.jpeg);
+    width: 88px;
+   float: left;
+   margin-bottom:12px;
+   height:104px;
+   }
