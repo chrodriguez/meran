@@ -4,7 +4,7 @@
          
 	 </div>
 
- <div class="tdRight">
+ <div class="idioma_y_login">
             [% IF loggedinusername %]
                   <h2 class="login" id="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> 
                            [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
@@ -21,7 +21,7 @@
 
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
-            <li>
+            <li> <h3 class="menu_superior">
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
                                                     url =>      "/cgi-bin/koha/mainpage.pl", 
@@ -29,12 +29,13 @@
                                                     title =>    "[% 'Ir al Inicio' | i18n %]"
                                                 ) ;
                 [% END %]
+		</h3>
            </li>
           <!-- Navigation item -->
 
-            <li><h3>Cat&aacute;logo</h3>
+            <li><h3 class="menu_superior">[% 'Cat&aacute;logo' | i18n %]</h3>
                 <ul>
-                  <li><h3>B&uacute;squedas</h3>
+                  <li><h3 class="menu_intermedio">[% 'B&uacute;squedas' | i18n %]</h3>
                      <ul>
                         <li>
                             [% PERL %]
@@ -54,7 +55,7 @@
                         </li>
                      </ul>
                   </li>
-                  <li><h3>Cat&aacute;logo</h3>
+                  <li><h3 class="menu_intermedio">[% 'Cat&aacute;logo' | i18n %]</h3>
                      <ul>
                         <li>
                             [% PERL %]
@@ -80,7 +81,7 @@
                         </li>
                      </ul>
                   </li>
-                  <li><h3>MARC</h3>
+                  <li><h3 class="menu_intermedio">[% 'MARC' | i18n %]</h3>
                      <ul>
                         <li>
                             [% PERL %]
@@ -132,7 +133,7 @@
                                                             ) ;
                             [% END %]
                   </li>
-                  <li><h3>Control de autoridades</h3>
+                  <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>
 					<ul>
 						<li>
                             [% PERL %]
@@ -159,7 +160,7 @@
             </li>
 
           <!-- Navigation item -->
-            <li><h3>Usuarios</h3>
+            <li><h3 class="menu_superior">[% 'Usuarios' | i18n %]</h3>
 
                 <ul>
                   <li>
@@ -208,7 +209,7 @@
             </li>
 
           <!-- Navigation item -->
-            <li><h3>Circulaci&oacute;n</h3>
+            <li><h3 class="menu_superior">[% 'Circulaci&oacute;n' | i18n %]</h3>
                 <ul>
 				  <li>
                             [% PERL %]
@@ -251,7 +252,7 @@
 
 
           <!-- Navigation item -->
-            <li><h3>Preferencias</h3>
+            <li><h3 class="menu_superior">[% 'Preferencias' | i18n %]</h3>
                 <ul>
                 <li>
                             [% PERL %]
@@ -357,7 +358,7 @@
                                                             ) ;
                             [% END %]
                 </li>
-                <li><h3>MARC</h3>
+                <li><h3 class="menu_intermedio">[% 'MARC' | i18n %]</h3>
                     <ul>
                         <li>
                             [% PERL %]
@@ -393,7 +394,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><h3>Herramientas</h3>
+                <li><h3 class="menu_intermedio">[% 'Herramientas' | i18n %]</h3>
                     <ul>
                         <li>
                             [% PERL %]
@@ -417,7 +418,7 @@
         </li>
 
           <!-- Navigation item -->
-            <li><h3>Reportes</h3>
+            <li><h3 class="menu_superior">[% 'Reportes' | i18n %]</h3>
                 <ul>
                   <li>
                             [% PERL %]
@@ -519,7 +520,7 @@
             </li>
 
           <!-- Navigation item -->
-              <li><h3>Estad&iacute;sticas</h3>
+              <li><h3 class="menu_superior">[% 'Estad&iacute;sticas' | i18n %]</h3>
                   <ul>
                         <li>
                             [% PERL %]
@@ -597,7 +598,7 @@
             </li>
 
           <!-- Navigation item -->
-              <li><h3>Ayuda</h3>
+              <li><h3 class="menu_superior">[% 'Ayuda' | i18n %]</h3>
               <ul>
                   <li>
                             [% PERL %]

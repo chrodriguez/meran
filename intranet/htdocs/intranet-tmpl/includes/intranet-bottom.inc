@@ -6,6 +6,6 @@
 	
 </div>
 </div>
-<div id="marca"> Aca deberia ir el link de Meran!!!!</div>
+<div id="marca"> </div>
 </body>
 </html>

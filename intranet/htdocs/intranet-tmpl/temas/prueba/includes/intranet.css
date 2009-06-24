@@ -2,16 +2,16 @@ body {
 	}
 
 #marco_superior {
-	background: transparent  url(../imagenes/arriba_izq.gif) no-repeat top left;
+	background: transparent  url(../imagenes/arriba_izq.png) no-repeat top left;
 		   }
 #marco_superior div {
-	background: transparent url(../imagenes/arriba_der.gif) no-repeat top right;
+	background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
 			}
 #marco_inferior {
-	background: transparent  url(../imagenes/abajo_izq.gif) no-repeat bottom left;
+	background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
 		   }
 #marco_inferior div {
-	background: transparent url(../imagenes/abajo_der.gif) no-repeat bottom right;
+	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
 			}
 #marco_contenido{
 	clear:both;
@@ -20,3 +20,55 @@ body {
 #marco_principal{
 	background:#f7f6f6 url(../imagenes/medio.gif) repeat ;
 	}
+	
+-->menu<--	
+	
+h3{
+color:#fff;
+background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
+text-transform:uppercase
+}
+
+#menu a{
+background:#eee;
+text-decoration:none;
+}
+
+#menu a, #menu a:visited{
+color:#000;
+background:#a9b61d;
+}
+
+
+#menu ul{
+margin:0;
+padding:0;
+float:left;
+width:11.5em;
+}
+
+#menu li{
+position:relative;
+list-style-type:none;
+float:left;
+width:112px;
+}
+
+#menu ul ul{
+position:absolute;
+list-style-type:none;
+z-index:500;
+/* top:auto; */
+display:none;
+}
+
+#menu ul ul ul{
+top:0;
+
+}
+
+#menu ul li{
+   float:left;
+   width:100px;   
+}
+-->menu<--
