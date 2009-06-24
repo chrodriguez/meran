@@ -18,13 +18,14 @@ my $action= $obj->{'action'}||"";
 #******* Se arma una tabla con la catalogacion de OPAC y se muestra con un tmpl********************
 if(($tabla ne "")&&($action eq "TABLARESULT")){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({template_name => "catalogacion/kohaToMARCResult.tmpl",
-													query => $input,
-													type => "intranet",
-													authnotrequired => 0,
-													flagsrequired => {borrowers => 1},
-													debug => 1,
-										});
+my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
+                        template_name => "catalogacion/kohaToMARCResult.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},,
+						debug => 1,
+            });
 
 my ($cant, @results)= &traerKohaToMARC($tabla);
 

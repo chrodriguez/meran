@@ -22,12 +22,13 @@ my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
-my ($template, $session, $t_params)  = get_template_and_user({	template_name => "admin/preferenciasResults.tmpl",
-																query => $input,
-																type => "intranet",
-																authnotrequired => 0,
-																flagsrequired => {parameters => 1},
-																debug => 1,
+my ($template, $session, $t_params)  = get_template_and_user({
+                        	template_name => "admin/preferenciasResults.tmpl",
+							query => $input,
+							type => "intranet",
+							authnotrequired => 0,
+							flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+							debug => 1,
 			     });
 
 	my $buscar=$obj->{'buscar'};
@@ -48,7 +49,7 @@ my ($template, $session, $t_params) =
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
+				flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 				debug => 1,
 				});
 
@@ -185,7 +186,7 @@ my ($template, $session, $t_params) =
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
+				flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 				debug => 1,
 				});
 

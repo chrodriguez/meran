@@ -10,13 +10,14 @@ use C4::AR::DictionarySearch;
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "searchdicshelf.tmpl",
+= get_template_and_user({
+                                template_name => "searchdicshelf.tmpl",
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => {permissions => 1},
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                                 debug => 1,
-                                });
+                    });
 
 
 my $dictionary = $input->param("dictionary");

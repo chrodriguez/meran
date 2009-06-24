@@ -20,7 +20,7 @@ if($tipo eq "VER_ESTANTE"){
 									query => $input,
 									type => "opac",
 									authnotrequired => 0,
-                                    flagsrequired => {borrow => 1},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					# 				debug => 1,
 					});
 	

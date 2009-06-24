@@ -12,14 +12,14 @@ my $input = new CGI;
 
 
 my ($template, $session, $t_params)= get_template_and_user({
-									                                    template_name => "opac-main.tmpl",
-									                                    type => "opac",
-									                                    query => $input,
+									template_name => "opac-main.tmpl",
+									type => "opac",
+									query => $input,
 # 									                                    authnotrequired => 1,
 # FIXME no esta funcionando el loggin desde aca!!!!
-																		authnotrequired => 0, 
-									                                    flagsrequired => {borrow => 1},
-			                                                  });
+									authnotrequired => 0, 
+									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
 
 # if( $session->param('nro_socio') ){
 # }else{

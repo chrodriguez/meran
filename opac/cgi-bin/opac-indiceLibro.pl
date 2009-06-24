@@ -44,7 +44,7 @@ my ($template, $borrowernumber, $cookie)
 			     query => $input,
 			     type => "opac",
 			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+			     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			     });
 
 my ($resultsdata)=&C4::AR::Nivel2::getIndice($id2);

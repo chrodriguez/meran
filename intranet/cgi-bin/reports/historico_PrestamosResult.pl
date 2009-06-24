@@ -13,13 +13,13 @@ use C4::AR::Utilidades;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/historico_PrestamosResult.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
-                                          });
+                                template_name => "reports/historico_PrestamosResult.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                debug => 1,
+            });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $tipoItem = $obj->{'tiposItems'};

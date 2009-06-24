@@ -28,12 +28,12 @@ my %infoRespuesta;
 if($tipoAccion eq "CARGAR_TABLA_ENCABEZADOS"){
 
 	my ($template, $session, $t_params) = get_template_and_user({
-										template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
-										query => $input,
-										type => "intranet",
-										authnotrequired => 0,
-										flagsrequired => {borrowers => 1},
-										debug => 1,
+		                template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl",
+		                query => $input,
+		                type => "intranet",
+		                authnotrequired => 0,
+		                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+		                debug => 1,
 	});
 
 	my ($encabezados_opac_array_ref)= &C4::AR::VisualizacionOpac::getEncabezadosOpac($obj);
@@ -61,12 +61,12 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 if($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION"){
 	
 	my ($template, $session, $t_params)= get_template_and_user({
-												template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
-												query => $input,
-												type => "intranet",
-												authnotrequired => 0,
-												flagsrequired => {borrowers => 1},
-												debug => 1,
+						template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+						debug => 1,
 	});
 	
 	my $idencabezado =$obj->{'encabezados'};
@@ -167,12 +167,12 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
 
 	my ($template, $session, $t_params)= get_template_and_user({
-												template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
-												query => $input,
-												type => "intranet",
-												authnotrequired => 0,
-												flagsrequired => {borrowers => 1},
-												debug => 1,
+						template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+						debug => 1,
 	});
 	
 	
@@ -185,12 +185,12 @@ if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
 if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 
 	my ($template, $session, $t_params)= get_template_and_user({
-												template_name => "catalogacion/visualizacionOPAC/agregarEncabezado.tmpl",
-												query => $input,
-												type => "intranet",
-												authnotrequired => 0,
-												flagsrequired => {borrowers => 1},
-												debug => 1,
+					template_name => "catalogacion/visualizacionOPAC/agregarEncabezado.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+					debug => 1,
 	});
 	
 	
@@ -206,12 +206,12 @@ if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
 
 	my ($template, $session, $t_params)= get_template_and_user({
-												template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
-												query => $input,
-												type => "intranet",
-												authnotrequired => 0,
-												flagsrequired => {borrowers => 1},
-												debug => 1,
+						template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+						debug => 1,
 	});
 	
 	

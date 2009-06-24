@@ -51,12 +51,12 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
                 ($startfrom) || ($startfrom=0);
         
         my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/generic_result.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
+                                    template_name => "reports/generic_result.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    debug => 1,
                             });
 
         my ($results,$campos,$count,$filename) = reportSearch(\@fieldlist,\@value, \@operator, \@excluding , \@and_or , $startfrom , $loggedinuser );
@@ -146,12 +146,12 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
 } else {
            my $fieldarray = C4::AR::Generic_Report::getFieldsArray();
            my ($template, $session, $t_params) = get_template_and_user({
-                                               template_name => "reports/generic_reports.tmpl",
-                                               query => $input,
-                                               type => "intranet",
-                                               authnotrequired => 0,
-                                               flagsrequired => {borrowers => 1},
-                                               debug => 1,
+                                template_name => "reports/generic_reports.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                debug => 1,
                            });
 	 my %labels;
 	 my @values;

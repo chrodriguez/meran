@@ -40,14 +40,14 @@ $search->{'dictionary'}=$dictionary;
 $search->{'dicdetail'}=$dicdetail;
 
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "busquedas/diccionario.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $loggedinuser, $cookie)= get_template_and_user({
+                template_name => "busquedas/diccionario.tmpl",
+			    query => $query,
+			    type => "intranet",
+			    authnotrequired => 0,
+			    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+			    debug => 1,
+        });
 
 my $ini= $obj->{'ini'};#($query->param('ini'));
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);

@@ -11,11 +11,11 @@ use C4::Date;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                                                    template_name => "opac-userupdate.tmpl",
-                                                                    query => $query,
-                                                                    type => "opac",
-                                                                    authnotrequired => 1,
-                                                                    flagsrequired => {borrow => 1},
+                                    template_name => "opac-userupdate.tmpl",
+                                    query => $query,
+                                    type => "opac",
+                                    authnotrequired => 1,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
              });
 
 
@@ -33,11 +33,11 @@ my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmai
 if ($updateemailaddress eq '') {
     warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $socio->persona->getApellido, $socio->persona->getNombre (#$nro_socio)\n";
     my ($template, $session, $t_params)= get_template_and_user({
-                                                                        template_name => "kohaerror.tmpl",
-                                                                        query => $query,
-                                                                        type => "opac",
-                                                                        authnotrequired => 1,
-                                                                        flagsrequired => {borrow => 1},
+                                            template_name => "kohaerror.tmpl",
+                                            query => $query,
+                                            type => "opac",
+                                            authnotrequired => 1,
+                                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 });
 
     $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';

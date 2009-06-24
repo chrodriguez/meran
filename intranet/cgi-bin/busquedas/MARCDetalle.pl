@@ -10,11 +10,11 @@ use C4::AR::Busquedas;
 my $input=new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-																template_name   => ('busquedas/MARCDetalle.tmpl'),
-																query           => $input,
-																type            => "intranet",
-																authnotrequired => 0,
-																flagsrequired   => {catalogue => 1},
+				template_name   => ('busquedas/MARCDetalle.tmpl'),
+				query           => $input,
+				type            => "intranet",
+				authnotrequired => 0,
+				flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));

@@ -38,14 +38,14 @@ if ($action eq 'delete') {
         $sth->execute($delaydays, $sanctiondays);
 }
 
-my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "admin/sanctionrules.tmpl",
-                             query => $input,
-                             type => "intranet",
-			     flagsrequired => {parameters => 1},
-			     authnotrequired => 0,
-                             debug => 1,
-                             });
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+                            template_name => "admin/sanctionrules.tmpl",
+                            query => $input,
+                            type => "intranet",
+			                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+			                authnotrequired => 0,
+                            debug => 1,
+                });
 
 
 my $sth = $dbh->prepare("select * from sanctionrules order by delaydays, sanctiondays");

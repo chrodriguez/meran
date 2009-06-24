@@ -19,15 +19,14 @@ my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
 
 if ($op eq 'MODIFICAR_TIPO_PRESTAMO') {
 
-my ($template, $session, $t_params) = 
-    get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
                 template_name => "admin/agregarTipoPrestamo.tmpl",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
-                });
+          });
 
 	if ($id_tipo_prestamo) {
         my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
@@ -39,15 +38,14 @@ C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 } 
 elsif ($op eq 'NUEVO_TIPO_PRESTAMO') {
 
-my ($template, $session, $t_params) = 
-    get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
                 template_name => "admin/agregarTipoPrestamo.tmpl",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
-                });
+            });
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
@@ -68,15 +66,14 @@ elsif (($op eq 'MODIFICAR') or ($op eq 'AGREGAR')){
 } 
 elsif ($op eq 'CONFIRMAR_BORRADO') {
 
-my ($template, $session, $t_params) = 
-    get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
                 template_name => "admin/confirmarBorradoTipoPrestamo.tmpl",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
-                });
+         });
     my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
     $t_params->{'tipo_prestamo'}= $tipo_prestamo;
 } 
@@ -86,12 +83,12 @@ elsif ($op eq 'BORRAR') {
 }
 elsif ($op eq 'TIPOS_PRESTAMOS') {
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "admin/tipos_de_prestamos.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
+                            template_name => "admin/tipos_de_prestamos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            debug => 1,
                 });
 
 my $tipos_de_prestamos=C4::AR::Prestamos::getTiposDePrestamos();

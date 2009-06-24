@@ -40,7 +40,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
+			     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			     debug => 1,
 			     });
 
@@ -106,7 +106,7 @@ foreach my $branch (keys %$branches) {
         $select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 
-#Miguel - 03-04-07 - Le agrego una opcion para que le indique al usuario que no se ha seleccionado nada aùn, ver si queda
+#Miguel - 03-04-07 - Le agrego una opcion para que le indique al usuario que no se ha seleccionado nada aï¿½n, ver si queda
 push @select_branch, 'SIN SELECCIONAR';
 
 #agregado por Einar para que quede el branch por defecto

@@ -20,7 +20,7 @@ if($tipo eq "VER_ESTANTE"){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {catalogue => 1},
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					});
 
 	
@@ -50,7 +50,7 @@ if($tipo eq "VER_SUBESTANTE"){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {catalogue => 1},
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					});
 	
 	my $shelves= $obj->{'shelves'};

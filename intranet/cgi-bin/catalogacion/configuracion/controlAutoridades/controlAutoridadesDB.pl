@@ -264,7 +264,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			query => $input,
 			type => "intranet",
 			authnotrequired => 0,
-			flagsrequired => {borrowers => 1},
+			flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			debug => 1,
 });
 
@@ -285,7 +285,7 @@ my ($template, $session, $t_params) = get_template_and_user({
             query => $input,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => {borrowers => 1},
+            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
             debug => 1,
 });
 
@@ -308,7 +308,7 @@ my ($template, $session, $t_params) = get_template_and_user({
             query => $input,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => {borrowers => 1},
+            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
             debug => 1,
 });
 
@@ -336,7 +336,7 @@ if( ($tipo eq 'consultaTablasSeudonimos') && ($tabla eq 'autores') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
     });
     
@@ -357,7 +357,7 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
     });
     
@@ -380,7 +380,7 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'editoriales') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {borrowers => 1},
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                 debug => 1,
     });
     

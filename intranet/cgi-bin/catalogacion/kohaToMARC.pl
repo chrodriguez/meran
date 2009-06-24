@@ -11,14 +11,14 @@ my $input = new CGI;
 
 my $mensajeError = $input->param('mensajeError')||"";
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "catalogacion/kohaToMARC.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
+my ($template, $loggedinuser, $cookie)= get_template_and_user({
+                    template_name => "catalogacion/kohaToMARC.tmpl",
+			        query => $input,
+			        type => "intranet",
+			        authnotrequired => 0,
+			        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+			        debug => 1,
+			 });
 
 
  my @tablas = ['biblio','biblioitems','items','bibliosubject','bibliosubtitle','additionalauthors','publisher','isbns', 'nivel1', 'nivel2', 'nivel3'];

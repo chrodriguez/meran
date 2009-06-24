@@ -33,13 +33,13 @@ my $bornum = $input->param('bornum');
 my $accion = $input->param('accion');
 
 if($accion eq "ingresarDatos"){
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "printPrestInterBiblio.tmpl",
+	my  ($template, $borrowernumber, $cookie)= get_template_and_user({
+                            template_name => "printPrestInterBiblio.tmpl",
                              query => $input,
                              type => "intranet",
                              authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
-                             });
+                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
 	
 	
 	#Por los branches

@@ -55,7 +55,7 @@ my ($template, $loggedinuser, $cookie)
 							query => $query,
 							type => "opac",
 							authnotrequired => 1,
-							flagsrequired => {borrow => 1},
+							flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 						});
 
 # my $obj=$input->param('obj');

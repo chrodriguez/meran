@@ -34,14 +34,14 @@ if ($op eq "export") {
 		if ($record){print $record->as_usmarc();}
 	}
 } else {
-	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "export/marc-time.tmpl",
+	my ($template, $loggedinuser, $cookie)= get_template_and_user({
+                    template_name => "export/marc-time.tmpl",
 					query => $query,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {parameters => 1, management => 1, tools => 1},
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					debug => 1,
-					});
+			});
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 

@@ -17,7 +17,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	query           => $input,
 	type            => "intranet",
 	authnotrequired => 0,
-	flagsrequired   => {catalogue => 1},
+	flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 });
 
 #Cuando viene desde otra pagina que llama al detalle.

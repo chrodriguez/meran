@@ -86,12 +86,12 @@ my $accion= $obj->{'accion'};
 
 if($accion eq "buscar"){
                 my ($template, $session, $t_params) = get_template_and_user ({
-                                                                template_name	=> 'busquedas/busquedaResult.tmpl',
-                                                                query		=> $input,
-                                                                type		=> "intranet",
-                                                                authnotrequired	=> 0,
-                                                                flagsrequired	=> { circulate => 1 },
-                                                });
+                                template_name	=> 'busquedas/busquedaResult.tmpl',
+                                query		=> $input,
+                                type		=> "intranet",
+                                authnotrequired	=> 0,
+                                flagsrequired	=> { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        });
         
                 my $nivel1=parsearString($obj->{'nivel1'},0);
                 my $nivel2=parsearString($obj->{'nivel2'},0);

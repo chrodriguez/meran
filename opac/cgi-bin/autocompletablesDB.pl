@@ -6,7 +6,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my $authnotrequired = 0;
-my $flagsrequired = {borrow => 1};
+my $flagsrequired = { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 
 my $session = CGI::Session->load();
 

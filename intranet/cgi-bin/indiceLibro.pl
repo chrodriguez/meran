@@ -20,7 +20,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	query           => $input,
 	type            => "intranet",
 	authnotrequired => 0,
-	flagsrequired   => {circulate => 1},
+	flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
 

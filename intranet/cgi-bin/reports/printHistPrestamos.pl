@@ -39,12 +39,12 @@ if (($ini) and ($fin)){$msg.=' entre las fechas: <b>'.C4::Date::format_date($ini
 #Si se quiere crear el PDF
 if ($input->param('type') eq 'pdf') {&hitoricoPrestamosPdfGenerator($msg,@results);}
 else{ #Para imprimir los resultados
-	my  ($template, $borrowernumber, $cookie)
-                = get_template_and_user({template_name => "reports/printHistPrestamos.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
+	my  ($template, $borrowernumber, $cookie)= get_template_and_user({
+                                template_name => "reports/printHistPrestamos.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 1,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                              });
 
 my $resultsarray=\@results;

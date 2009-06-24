@@ -15,12 +15,12 @@ my $sigtop= $obj->{'sigtop'};
 my $orden= $obj->{'orden'} || 'barcode';
 
 my ($template, $session, $t_params) = get_template_and_user({
-                                                template_name => "reports/inventory-sig-topResult.tmpl",
-                                                query => $input,
-                                                type => "intranet",
-                                                authnotrequired => 0,
-                                                flagsrequired => {borrowers => 1},
-                                                debug => 1,
+                        template_name => "reports/inventory-sig-topResult.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        debug => 1,
              });
 
 #Buscar

@@ -143,7 +143,7 @@ if ($from eq 'shelfsContents') #Contenido del estante
                              query => $query,
                              type => "opac",
                              authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
+                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                              });
 
 
@@ -164,7 +164,7 @@ else { #Resultado de Busqueda
                              query => $query,
                              type => "opac",
                              authnotrequired => 1,
-                             flagsrequired => {borrow => 1}
+                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                              });
 
 

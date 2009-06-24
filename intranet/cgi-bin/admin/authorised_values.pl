@@ -51,12 +51,12 @@ my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
 my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
-                                                        template_name => "admin/authorised_values.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {borrowers => 1},
-                                                        debug => 1,
+                                    template_name => "admin/authorised_values.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    debug => 1,
 			    });
 my $pagesize=20;
 my $op = $input->param('op');

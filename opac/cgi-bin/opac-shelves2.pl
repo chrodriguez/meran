@@ -55,7 +55,7 @@ my ($template, $loggedinuser, $cookie)
 							query => $query,
 							type => "opac",
 							authnotrequired => 0,
-							flagsrequired => {catalogue => 1},
+							flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 						});
 
 if (C4::AR::Preferencias->getValorPreferencia('marc')) {

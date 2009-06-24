@@ -16,7 +16,7 @@ my ($template, $borrowernumber, $cookie)
 			     query => $query,
 			     type => "opac",
 			     authnotrequired => 0,
-			     flagsrequired => {borrow => 1},
+			     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			     debug => 1,
 			     });
 

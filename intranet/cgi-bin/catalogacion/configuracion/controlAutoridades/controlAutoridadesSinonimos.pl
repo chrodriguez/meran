@@ -30,14 +30,13 @@ my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || ""; 
-my ($template, $session, $t_params)
-    = get_template_and_user( {
-                                template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.tmpl",
-			                    query => $input,
-			                    type => "intranet",
-			                    authnotrequired => 0,
-			                    flagsrequired => {borrowers => 1},
-			                    debug => 1,
-			                  });
+my ($template, $session, $t_params)= get_template_and_user( {
+                        template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.tmpl",
+			            query => $input,
+			            type => "intranet",
+			            authnotrequired => 0,
+			            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},,
+			            debug => 1,
+            });
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
