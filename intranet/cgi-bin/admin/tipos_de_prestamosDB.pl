@@ -12,12 +12,11 @@ my $input = new CGI;
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $op = $obj->{'op'};
+my $tipoAccion = $obj->{'tipoAccion'};
 my $id_tipo_prestamo = $obj->{'tipo_prestamo'};
+$obj->{'id_tipo_prestamo'}=$obj->{'tipo_prestamo'};
 
-my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
-
-if ($op eq 'MODIFICAR_TIPO_PRESTAMO') {
+if ($tipoAccion eq 'MODIFICAR_TIPO_PRESTAMO') {
 
 my ($template, $session, $t_params) = get_template_and_user({
                 template_name => "admin/agregarTipoPrestamo.tmpl",
@@ -36,7 +35,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 } 
-elsif ($op eq 'NUEVO_TIPO_PRESTAMO') {
+elsif ($tipoAccion eq 'NUEVO_TIPO_PRESTAMO') {
 
 my ($template, $session, $t_params) = get_template_and_user({
                 template_name => "admin/agregarTipoPrestamo.tmpl",
@@ -50,38 +49,59 @@ my ($template, $session, $t_params) = get_template_and_user({
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 } 
-elsif (($op eq 'MODIFICAR') or ($op eq 'AGREGAR')){
-    my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
-    
-    $tipo_prestamo->setId_tipo_prestamo($input->param('id_tipo_prestamo'));
-    $tipo_prestamo->setDescripcion($input->param('descripcion'));
-    $tipo_prestamo->setId_disponibilidad($input->param('descripcion'));
-    $tipo_prestamo->setPrestamos($input->param('prestamos'));
-    $tipo_prestamo->setDias_prestamo($input->param('dias_prestamo'));
-    $tipo_prestamo->setRenovaciones($input->param('renovaciones'));
-    $tipo_prestamo->setDias_renovacion($input->param('dias_renovacion'));
-    $tipo_prestamo->setDias_antes_renovacion($input->param('dias_antes_renovacion'));
-    $tipo_prestamo->setHabilitado($input->param('habilitado'));
-    $tipo_prestamo->save();
-} 
-elsif ($op eq 'CONFIRMAR_BORRADO') {
+elsif ($tipoAccion eq 'GUARDAR_MODIFICACION_TIPO_PRESTAMO'){
 
-my ($template, $session, $t_params) = get_template_and_user({
-                template_name => "admin/confirmarBorradoTipoPrestamo.tmpl",
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                debug => 1,
-         });
-    my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
-    $t_params->{'tipo_prestamo'}= $tipo_prestamo;
-} 
-elsif ($op eq 'BORRAR') {
-    my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
-    $tipo_prestamo->delete();
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+    my $Message_arrayref = &C4::AR::Prestamos::t_modificarTipoPrestamo($obj);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
 }
-elsif ($op eq 'TIPOS_PRESTAMOS') {
+elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+    my $Message_arrayref = &C4::AR::Prestamos::t_agregarTipoPrestamo($obj);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+
+}
+elsif ($tipoAccion eq 'BORRAR') {
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+    my $Message_arrayref = &C4::AR::Prestamos::t_eliminarTipoPrestamo($id_tipo_prestamo);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
+
+
+if ($tipoAccion eq 'TIPOS_PRESTAMOS') {
+
 my ($template, $session, $t_params) = get_template_and_user({
                             template_name => "admin/tipos_de_prestamos.tmpl",
                             query => $input,

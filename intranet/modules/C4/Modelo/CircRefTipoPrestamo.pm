@@ -110,7 +110,7 @@ sub getDias_renovacion{
 sub setDias_renovacion{
     my ($self) = shift;
     my ($dias_renovacion) = @_;
-    $self->renew($dias_renovacion);
+    $self->dias_renovacion($dias_renovacion);
 }
 
 sub getDias_antes_renovacion{
@@ -186,6 +186,30 @@ sub getCampo{
 sub nextMember{
     use C4::Modelo::RefSoporte;
     return(C4::Modelo::RefSoporte->new());
+}
+
+
+=item
+modificar
+Funcion que modificar un tipo de prestamo
+=cut
+
+sub modificar {
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+
+    $self->setId_tipo_prestamo($data_hash->{'id_tipo_prestamo'});
+    $self->setDescripcion($data_hash->{'descripcion'});
+    $self->setId_disponibilidad($data_hash->{'disponibilidad'});
+    $self->setPrestamos($data_hash->{'prestamos'});
+    $self->setDias_prestamo($data_hash->{'dias_prestamo'});
+    $self->setRenovaciones($data_hash->{'renovaciones'});
+    $self->setDias_renovacion($data_hash->{'dias_renovacion'});
+    $self->setDias_antes_renovacion($data_hash->{'dias_antes_renovacion'});
+    $self->setHabilitado($data_hash->{'habilitado'});
+    $self->save();
+
 }
 
 1;

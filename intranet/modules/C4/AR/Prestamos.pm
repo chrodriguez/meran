@@ -58,7 +58,11 @@ $VERSION = 3;
     &obtenerPrestamosDeSocio
 	&cantidadDePrestamosPorUsuario
 	&crearTicket
-
+    
+    &t_eliminarTipoPrestamo
+    &t_agregarTipoPrestamo
+    &t_modificarTipoPrestamo
+    &cantidadDeUsoTipoPrestamo
 );
 
 sub chequeoDeFechas(){
@@ -871,4 +875,110 @@ sub t_renovar{
     return ($msg_object);
 }
 
+
+sub t_agregarTipoPrestamo {
+    my ($params)=@_;
+
+    my $msg_object = C4::AR::Mensajes::create();
+    my $tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new();
+    my $db = $tipo_prestamo->db;
+
+C4::AR::Debug::debug("AGREGAR TIPO DE PRESTAMO ".$params->{'id_tipo_prestamo'});
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    eval {
+        $tipo_prestamo->modificar($params);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP011', 'params' => []} ) ;
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'SP009','INTRA');
+        eval{$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP009', 'params' => []} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+    return ($msg_object);
+}
+
+sub t_modificarTipoPrestamo {
+    my ($params)=@_;
+
+    my $msg_object = C4::AR::Mensajes::create();
+C4::AR::Debug::debug("MODIFICAR TIPO DE PRESTAMO ".$params->{'id_tipo_prestamo'});
+
+    my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($params->{'id_tipo_prestamo'});
+    my $db = $tipo_prestamo->db;  
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    eval {
+        $tipo_prestamo->modificar($params);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP010', 'params' => []} ) ;
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'SP008','INTRA');
+        eval{$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP008', 'params' => []} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+    return ($msg_object);
+}
+
+sub t_eliminarTipoPrestamo {
+    my ($id_tipo_prestamo)=@_;
+
+    my $msg_object = C4::AR::Mensajes::create();
+    my $cantidad_prestamos=C4::AR::Prestamos::cantidadDeUsoTipoPrestamo($id_tipo_prestamo);
+    if($cantidad_prestamos == 0) {
+
+    C4::AR::Debug::debug("ELIMINAR TIPO DE PRESTAMO ".$id_tipo_prestamo);
+    my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
+    my $db = $tipo_prestamo->db;  
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    eval {
+        $tipo_prestamo->delete();
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'SP007','INTRA');
+        eval{$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP007', 'params' => []} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+    }
+    else{
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP012', 'params' => [$cantidad_prestamos]} ) ;
+    }
+    return ($msg_object);
+}
+
+
+
+sub cantidadDeUsoTipoPrestamo {
+    my ($id_tipo_prestamo)=@_;
+    my @filtros;
+    push(@filtros, (tipo_prestamo => { eq => $id_tipo_prestamo}));
+    my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
+    return $cantidad_prestamos;
+    }
 1;

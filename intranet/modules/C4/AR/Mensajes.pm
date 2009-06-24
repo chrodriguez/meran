@@ -305,7 +305,13 @@ my %mensajesINTRA = (
 	'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
 	'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.',
 	'SP005' => 'La preferencia ya existe, no puede ser agregada.',
-	'SP006' => 'La preferencia no existe.',
+	'SP006' => 'El tipo de pr&eacute;stamo se elimin&oacute; con &eacute;xito.',
+    'SP007' => 'El tipo de pr&eacute;stamo no pudo ser eliminado.',
+    'SP008' => 'Se produjo un error al actualizar el tipo de pr&eacute;stamo.',
+    'SP009' => 'Se produjo un error al guardar el tipo de pr&eacute;stamo.',
+    'SP010' => 'El tipo de pr&eacute;stamo ha sido modificado con &eacute;xito.',
+    'SP011' => 'El tipo de pr&eacute;stamo ha sido agregado al sistema con &eacute;xito.',
+    'SP012' => 'El tipo de pr&eacute;stamo no pudo ser eliminado ya que se encuentra en uso por *?* pr&eacute;stamos.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
 	
 );
