@@ -21,7 +21,7 @@
 
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
-            <li> <h3 class="menu_superior">
+            <li> <h3 class="menu_superior_sin_sub">
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
                                                     url =>      "/cgi-bin/koha/mainpage.pl", 

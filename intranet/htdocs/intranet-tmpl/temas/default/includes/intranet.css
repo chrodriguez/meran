@@ -57,6 +57,8 @@ body {
 	background-repeat: no-repeat;
 	height:40px;
 	}
+
+/*PARTE SUPERIOR*/
 .logo_Superior{
    background-image:  url(../imagenes/logo.jpeg);
     width: 88px;
@@ -69,10 +71,50 @@ body {
 	float: right;
 	margin-bottom:12px;
    }
+
+/* MENU*/ 
 #menu li ul li{
 	display: none;
 }
+.menu_superior_sin_sub{
+color:#fff;
+background:#000;
+text-transform:uppercase;
+cursor: pointer;
+display:block;
+border-width:1px;
+border-style:solid;
+border-color:#ccc #888 #555 #bbb;
+white-space:nowrap;
+margin:0;
+padding:0 5px;
+
+}
+
 .menu_superior{
+color:#fff;
+background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
+text-transform:uppercase;
+cursor: pointer;
+display:block;
+border-width:1px;
+border-style:solid;
+border-color:#ccc #888 #555 #bbb;
+white-space:nowrap;
+margin:0;
+padding:0 5px;
+
 }
 .menu_intermedio{
+color:#fff;
+background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
+text-transform:uppercase;
+cursor: pointer;
+display:block;
+border-width:1px;
+border-style:solid;
+border-color:#ccc #888 #555 #bbb;
+white-space:nowrap;
+margin:0;
+padding:0 5px;
 }

@@ -29,6 +29,7 @@
 <head>
 <title>Meran::UNLP</title>
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
