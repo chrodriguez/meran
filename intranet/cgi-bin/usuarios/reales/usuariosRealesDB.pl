@@ -21,6 +21,14 @@ my $dateformat = C4::Date::get_date_format();
 Aca se maneja el cambio de la password para el usuario
 =cut
 if($tipoAccion eq "CAMBIAR_PASSWORD"){
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'usuarios'},
+                                            "intranet"
+                                );
 
     my $session = CGI::Session->load();
 
@@ -45,7 +53,14 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
 Aca se maneja el cambio de permisos para el usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'MODIFICACION', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     my %params;
     $params{'nro_socio'}= $obj->{'nro_socio'};
@@ -69,7 +84,14 @@ Aca se maneja el resteo de password del usuario
 # resetPassword = [0 | 1]
 # autoGeneratePassword = [0 | 1]
 elsif($tipoAccion eq "RESET_PASSWORD"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'MODIFICACION', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     my %params;
     $params{'nro_socio'}= $obj->{'nro_socio'};
@@ -86,7 +108,14 @@ elsif($tipoAccion eq "RESET_PASSWORD"){
 
 
 elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'MODIFICACION', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
@@ -107,7 +136,7 @@ elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {borrowers => 1},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
                                     debug => 1,
                 });
 
@@ -116,7 +145,14 @@ elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
 } 
 
 elsif($tipoAccion eq "ELIMINAR_AUTORIZADO"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'BAJA', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     my %params;
     $params{'nro_socio'}= $obj->{'nro_socio'};
@@ -142,7 +178,7 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {borrowers => 1},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
                                     debug => 1,
     });
     C4::AR::Validator::validateParams('U389',$obj,['usuario'] );
@@ -187,7 +223,14 @@ elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
 Se elimina el usuario
 =cut
 elsif($tipoAccion eq "ELIMINAR_USUARIO"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'BAJA', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     my %params;
     my $nro_socio= $obj->{'nro_socio'};
@@ -207,7 +250,14 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
 Se elimina el usuario
 =cut
 elsif($tipoAccion eq "AGREGAR_USUARIO"){
-    my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
+    my ($loggedinuser, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'ALTA', 
+                                            entorno => 'usuarios'},
+                                        "intranet"
+                            );
 
     C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
 
@@ -224,7 +274,15 @@ elsif($tipoAccion eq "AGREGAR_USUARIO"){
 Se guarda la modificacion los datos del usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
-    my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");	
+    my ($loggedinuser, $session, $flags) = checkauth( 
+                                                            $input, 
+                                                            $authnotrequired,
+                                                            {   ui => 'ANY', 
+                                                                tipo_documento => 'ANY', 
+                                                                accion => 'MODIFICACION', 
+                                                                entorno => 'usuarios'},
+                                                            "intranet"
+                            );	
 
     C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
 
@@ -247,7 +305,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {borrowers => 1},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'usuarios'},
                                     debug => 1,
     });
 
@@ -279,7 +337,15 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 elsif($tipoAccion eq "ELIMINAR_FOTO"){
-    my ($userid, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+    my ($loggedinuser, $session, $flags) = checkauth( 
+                                                            $input, 
+                                                            $authnotrequired,
+                                                            {   ui => 'ANY', 
+                                                                tipo_documento => 'ANY', 
+                                                                accion => 'MODIFICACION', 
+                                                                entorno => 'usuarios'},
+                                                            "intranet"
+                            );  
 
     my $foto_name= $obj->{'foto_name'};
 
@@ -300,7 +366,7 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {borrowers => 1},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                                     debug => 1,
     });
     C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );

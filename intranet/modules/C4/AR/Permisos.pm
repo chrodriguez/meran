@@ -159,4 +159,33 @@ sub permisos_str_to_bin {
     return $flag;
 }
 
+
+sub get_permisos_catalogo {
+    my ($params) = @_;
+
+    my @filtros;
+
+    if($params->{'ui'} ne 'ANY'){
+        #interesa la UI
+        push (@filtros, ( 'ui' => { eq => $params->{'ui'} }) );
+    }
+
+    if($params->{'tipo_documento'} ne 'ANY'){
+        #interesa el tipo_documento
+        push (@filtros, ( 'tipo_documento' => { eq => $params->{'tipo_documento'} }) );
+    }
+    
+    push (@filtros, ( 'nro_socio' => { eq => $params->{'nro_socio'} }) );
+
+
+    my $permisos_catalogo_array_ref = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo( 
+                                                                                            query => \@filtros,
+                                                                     );
+    if(scalar(@$permisos_catalogo_array_ref) > 0){
+        return $permisos_catalogo_array_ref->[0];
+    }else{
+        return 0;
+    }
+}
+
 1;

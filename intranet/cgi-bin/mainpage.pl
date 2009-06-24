@@ -14,17 +14,14 @@ my ($template, $session, $params)= get_template_and_user({
 									query => $query,
 									type => "intranet",
 									authnotrequired => 0,
-									flagsrequired => {catalogue => 1, circulate => 1,
-									parameters => 1, borrowers => 1,
-									permissions =>1, reserveforothers=>1,
-									borrow => 1, reserveforself => 1,
-									editcatalogue => 1, updatesanctions => 1, },
+# 									flagsrequired => {catalogue => 1, circulate => 1,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+# 									parameters => 1, borrowers => 1,
+# 									permissions =>1, reserveforothers=>1,
+# 									borrow => 1, reserveforself => 1,
+# 									editcatalogue => 1, updatesanctions => 1, },
 									debug => 1,
 			});
 
-## FIXME para q es???????????????
-my $marc_p = C4::AR::Preferencias->getValorPreferencia("marc");
-
-$params->{'NOTMARC'} = !$marc_p;
 
 C4::Auth::output_html_with_http_headers($query, $template, $params,$session);

@@ -28,7 +28,7 @@ function _WinAddDiv(objWin){
  	}
     
     //se crea la ventana 
-        $('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='/intranet-tmpl/blue/images/cerrar.gif'/><span width=100px>" + objWin.titulo + "</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");
+        $('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='/intranet-tmpl/images/cerrar.gif'/><span width=100px>" + objWin.titulo + "</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");
 
 
 	$('#ventanaContenido').html(objWin.html);	

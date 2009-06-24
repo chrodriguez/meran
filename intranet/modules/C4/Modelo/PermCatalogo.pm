@@ -20,6 +20,9 @@ __PACKAGE__->meta->setup(
         estructura_catalogacion_n3 => { type => 'varchar', length => 8, not_null => 1 },
         tablas_de_refencia => { type => 'varchar', length => 8, not_null => 1 },
         control_de_autoridades => { type => 'varchar', length => 8, not_null => 1 },
+        usuarios => { type => 'varchar', length => 8, not_null => 1 },
+        sistema => { type => 'varchar', length => 8, not_null => 1 },
+        undefined => { type => 'varchar', length => 8, not_null => 1 },
         id => { type => 'integer', length => 11, not_null => 1 }
     ],
 

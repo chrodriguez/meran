@@ -3,12 +3,12 @@
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para permitir la circulacion en el sistema
  * Las siguientes librerias son necesarias:
- *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/json/jsonStringify.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/AjaxHelper.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/util.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.bgiframe.js"></script>
- *	<script src="/intranet-tmpl/blue/includes/jquery/jquery.autocomplete.js"></script>
+ *	<script src="/intranet-tmpl/includes/jquery/jquery.js"></script>
+ *	<script src="/intranet-tmpl/includes/json/jsonStringify.js"></script>
+ *	<script src="/intranet-tmpl/includes/AjaxHelper.js"></script>
+ *	<script src="/intranet-tmpl/includes/util.js"></script>
+ *	<script src="/intranet-tmpl/includes/jquery/jquery.bgiframe.js"></script>
+ *	<script src="/intranet-tmpl/includes/jquery/jquery.autocomplete.js"></script>
  * @author Carbone Miguel, Di Costanzo Damian
  * Fecha de creacion 19/06/2008
  *

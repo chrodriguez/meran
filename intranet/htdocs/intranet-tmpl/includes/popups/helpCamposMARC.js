@@ -9,7 +9,7 @@
 function abrirVentanaHelperMARC(){
     objAH=new AjaxHelper(updateAbrirVentanaHelperMARC);
 // FIXME parametrizar /blue/
-    objAH.url='/intranet-tmpl/blue/includes/popups/helpCamposMARC.inc';
+    objAH.url='/intranet-tmpl/includes/popups/helpCamposMARC.inc';
     objAH.debug= true;
     objAH.sendToServer();
 }

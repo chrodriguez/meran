@@ -109,6 +109,7 @@ C4::AR::Debug::debug("test_permisos => test 4");
 $flagsrequired->{'accion'}= 'BAJA';
 $flagsrequired->{'entorno'}= 'datos_nivel1';
 $flagsrequired->{'tipo_documento'}= 'LIB';
+$flagsrequired->{'ui'}= 'DEO';
 C4::AR::Debug::debug("test_permisos => permisos requeridos: ".$flagsrequired->{'accion'});
 C4::AR::Debug::debug("test_permisos => entorno: ".$flagsrequired->{'entorno'});
 # resultado esperado: el usuario tiene permisos

@@ -6,7 +6,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my $authnotrequired = 0;
-my $flagsrequired = {borrow => 1};
+my $flagsrequired = { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'};
 
 my $session = CGI::Session->load();
 
@@ -17,7 +17,7 @@ my ($user, $session, $flags)= C4::Auth::checkauth($input, $authnotrequired, $fla
 my $operacion= C4::AR::Utilidades::trim( $input->param('operacion') ) || '';
 my $accion= C4::AR::Utilidades::trim( $input->param('accion') );
 my $string= C4::AR::Utilidades::trim( $input->param('q') );
-C4::AR::Debug::debug("BUSCASTE: ".$string);
+# C4::AR::Debug::debug("BUSCASTE: ".$string);
 #Variable para luego hacerle el print
 my $result;
 

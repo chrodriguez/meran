@@ -10,19 +10,19 @@
             <b>Contrase&ntilde;a actual:</b>
         </li>
         <li>
-            <input id=actualPassword class="/intranet-tmpl/blue/" size=20 type=password>
+            <input id=actualPassword size=20 type=password>
         </li>
 	    <li>
 		    <b>Nueva Contrase&ntilde;a:</b>
 	    </li>
 	    <li>
-		    <input id=newpassword class="/intranet-tmpl/blue/" size=20 type=password>
+		    <input id=newpassword size=20 type=password>
 	    </li>
 	    <li>
 		    <b>Repetir Contrase&ntilde;a: </b>
 	    <li>
 	    </li>
-		    <input id=newpassword1  class="/intranet-tmpl/blue/" size=20 type=password>
+		    <input id=newpassword1  size=20 type=password>
 	    </li>	
 	    <li>
 		    <input type=button onClick="verificarClaveUsuario();" 

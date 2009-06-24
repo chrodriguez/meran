@@ -14,7 +14,7 @@ my $input = new CGI;
 my $authnotrequired= 0;
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-my ($user, $session, $flags)= checkauth($input, $authnotrequired, { editcatalogue => 1}, 'intranet');
+
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 my $nivel=$obj->{'nivel'};
@@ -28,12 +28,12 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/mostrarCatalogacion.tmpl",
-			                                            query => $input,
-			                                            type => "intranet",
-			                                            authnotrequired => 0,
-			                                            flagsrequired => {editcatalogue => 1},
-			                                            debug => 1,
+                            template_name => "catalogacion/estructura/mostrarCatalogacion.tmpl",
+			                query => $input,
+			                type => "intranet",
+			                authnotrequired => 0,
+			                flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+			                debug => 1,
 			        });
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
@@ -47,6 +47,14 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $tableAlias= $obj->{'tableAlias'};
     
     my ($campos_array) = C4::AR::Referencias::getCamposDeTablaRef($tableAlias);
@@ -60,6 +68,14 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $nivel = $obj->{'nivel'};
     my $campoX = $obj->{'campoX'};
 
@@ -74,6 +90,14 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
@@ -88,6 +112,14 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
 
     my ($tablaRef_array) = C4::AR::Referencias::obtenerTablasDeReferenciaAsString();
     
@@ -103,12 +135,12 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/agregarCampoMARC.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {editcatalogue => 1},
-                                                        debug => 1,
+                        template_name => "catalogacion/estructura/agregarCampoMARC.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        debug => 1,
                     });
 
 
@@ -121,12 +153,12 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/modificarCampoMARC.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {editcatalogue => 1},
-                                                        debug => 1,
+                        template_name => "catalogacion/estructura/modificarCampoMARC.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        debug => 1,
                     });
 
     my $id=$obj->{'id'};
@@ -140,6 +172,14 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     # Se guardan los datos en estructura de catalogacion    
     #estan todos habilidatos
     $obj->{'intranet_habilitado'}= 1;
@@ -152,6 +192,14 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
 }
 
 elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     # Se guardan los datos en estructura de catalogacion    
     #estan todos habilidatos
     $obj->{'intranet_habilitado'}= 1;
@@ -165,6 +213,14 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 }
 #Sube el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "SUBIR_ORDEN"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $id=$obj->{'idMod'};
     my $itemtype=$obj->{'itemtype_cliente'};
     C4::AR::Catalogacion::subirOrden($id,$itemtype);
@@ -174,6 +230,14 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
 
 #Baja el orden en la vista del campo seleccionado
 elsif($tipoAccion eq "BAJAR_ORDEN"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $id=$obj->{'idMod'};
 
     C4::AR::Catalogacion::bajarOrden($id);
@@ -183,6 +247,14 @@ elsif($tipoAccion eq "BAJAR_ORDEN"){
 
 #Se cambia la visibilidad del campo.
 elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $idestcat=$obj->{'id'};
 
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $idestcat);
@@ -194,6 +266,14 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 
 #Se deshabilita el campo seleccionado para la vista en intranet
 elsif($tipoAccion eq "ELIMINAR_CAMPO"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $id=$obj->{'idMod'};
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catalogacion->load();
@@ -203,6 +283,14 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
 }
 
 elsif($tipoAccion eq "AGREGAR_CAMPO"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
     my $id=$obj->{'idMod'};
 
     my ($Message_arrayref)= C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
@@ -215,6 +303,18 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
 # ***********************************************ABM CATALOGACION*****************************************************************
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
+    my $entorno= 'estructura_catalogacion_n1';
+    if($obj->{'nivel'} eq '2'){$entorno= 'estructura_catalogacion_n2'};
+    if($obj->{'nivel'} eq '3'){$entorno= 'estructura_catalogacion_n3'};
+
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => $entorno}, 
+                                                'intranet'
+                                    );
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($obj);
@@ -226,6 +326,14 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 }
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
 	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogacionesConDatos($obj);
     
@@ -235,6 +343,14 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
 #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
 
     my ($sub_campos_string) = &C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
@@ -247,12 +363,12 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/ADInfoNivel1.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {editcatalogue => 1},
-                                                        debug => 1,
+                            template_name => "catalogacion/estructura/ADInfoNivel1.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            debug => 1,
                     });
 
     my $id1=$obj->{'id1'};
@@ -269,12 +385,12 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/ADInfoNivel2.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {editcatalogue => 1},
-                                                        debug => 1,
+                            template_name => "catalogacion/estructura/ADInfoNivel2.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            debug => 1,
                     });
 
     my $id1=$obj->{'id1'};
@@ -296,12 +412,12 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                                        template_name => "catalogacion/estructura/ADInfoNivel3.tmpl",
-                                                        query => $input,
-                                                        type => "intranet",
-                                                        authnotrequired => 0,
-                                                        flagsrequired => {editcatalogue => 1},
-                                                        debug => 1,
+                            template_name => "catalogacion/estructura/ADInfoNivel3.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            debug => 1,
                     });
 
     my $id1= $obj->{'id1'};
@@ -321,6 +437,14 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 
 #============================================================= ABM Catalogo==============================================================
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
+     my ($user, $session, $flags)= checkauth(   $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
 
 	#Se guarda informacion del NIVEL 1
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_guardarNivel1($obj);
@@ -334,6 +458,14 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
+     my ($user, $session, $flags)= checkauth(   $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'datos_nivel2'}, 
+                                                'intranet'
+                                    );
     #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
     my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_guardarNivel2($obj);
     
@@ -348,22 +480,10 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 
-# getPermisosDatosN3('ALTA', $tipo_documento);
-=item
-  { 
-        ui => 'DEO', 
-        tipo_documento => $tipo_documento,  
-        accion => 'ALTA',   
-        nivel => 3 
-    } 
-=cut
-
 	my ($user, $session, $flags)= checkauth(
 												$input, 	
 												$authnotrequired,	
-                                                {   tipo_documento => $tipo_documento,	
-												    accion => 'ALTA',	
-												    nivel => 'datos_nivel3' }, 
+                                                { ui => 'CD', tipo_documento => 'ALL', accion => 'ALTA', entorno => 'datos_nivel3'}, 
 												'intranet'
 											);
                 
@@ -378,6 +498,14 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 }
 
 elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
 
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_modificarNivel1($obj);
     
@@ -390,6 +518,14 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
 }
 
 elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'datos_nivel2'}, 
+                                                'intranet'
+                                    );
 
     my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_modificarNivel2($obj);
     
@@ -403,6 +539,14 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
 }
 
 elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'datos_nivel3'}, 
+                                                'intranet'
+                                    );
 
     my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_modificarNivel3($obj);
     
@@ -413,6 +557,18 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     print to_json \%info;
 }
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
+    my $entorno= 'datos_nivel1';
+    if($obj->{'nivel'} eq '2'){$entorno= 'datos_nivel2'};
+    if($obj->{'nivel'} eq '3'){$entorno= 'datos_nivel3'};
+    
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ALL', 
+                                                    tipo_documento => 'ALL', 
+                                                    accion => 'BAJA', 
+                                                    entorno => $entorno}, 
+                                                'intranet'
+                                    );
 
     my $nivel= $obj->{'nivel'};
 	my $id= $obj->{'id1'} || $obj->{'id2'};
@@ -435,16 +591,15 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 	print to_json \%info;
 }
 #=============================================================FIN ABM Catalogo===============================================================
-
 elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 
 	 my ($template, $session, $t_params)  = get_template_and_user({
-															template_name   => ('catalogacion/estructura/ejemplaresDelGrupo.tmpl'),
-															query           => $input,
-															type            => "intranet",
-															authnotrequired => 0,
-															flagsrequired   => {catalogue => 1},
-	});
+							template_name   => ('catalogacion/estructura/ejemplaresDelGrupo.tmpl'),
+							query           => $input,
+							type            => "intranet",
+							authnotrequired => 0,
+							flagsrequired   => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+});
 
 	#Cuando viene desde otra pagina que llama al detalle.
 	my $id2= $obj->{'id2'};

@@ -25,13 +25,15 @@ if ($obj != 0){
 if(!$accion){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
-    my ($template, $session, $t_params)  = get_template_and_user({	template_name => "admin/permisos.tmpl",
-																    query => $input,
-																    type => "intranet",
-																    authnotrequired => 0,
-																    flagsrequired => {parameters => 1},
-																    debug => 1,
+    my ($template, $session, $t_params)  = get_template_and_user({	
+                        template_name => "admin/permisos.tmpl",
+						query => $input,
+						type => "intranet",
+						authnotrequired => 0,
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+						debug => 1,
 			        });
+# FIXME no se ui poner
 
     my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
     $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
@@ -48,17 +50,17 @@ elsif ($accion eq "OBTENER_PERMISOS"){
     my $id_ui = $obj->{'id_ui'};
     my $tipo_documento = $obj->{'tipo_documento'};
 
-    my ($template, $session, $t_params)  = get_template_and_user({  template_name => "admin/detalle_permisos.tmpl",
-                                                                    query => $input,
-                                                                    type => "intranet",
-                                                                    authnotrequired => 0,
-                                                                    flagsrequired => {parameters => 1},
-                                                                    debug => 1,
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/detalle_permisos.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                        debug => 1,
                     });
+
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
-
     $t_params->{'permisos'}=$permisos;
-
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
@@ -70,22 +72,18 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
     my $tipo_documento = $obj->{'tipo_documento'};
     my $permisos = $obj->{'permisos'};
 
-    my ($template, $session, $t_params)  = get_template_and_user({  template_name => "admin/detalle_permisos.tmpl",
-                                                                    query => $input,
-                                                                    type => "intranet",
-                                                                    authnotrequired => 0,
-                                                                    flagsrequired => {parameters => 1},
-                                                                    debug => 1,
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
                     });
 
     C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento,$permisos);
-
-
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
-
     $t_params->{'permisos'}=$permisos;
 
-
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
 }

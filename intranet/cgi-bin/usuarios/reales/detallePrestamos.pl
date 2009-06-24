@@ -13,11 +13,11 @@ use C4::AR::Sanciones;
 my $input=new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
-																	template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
-																	query		=> $input,
-																	type		=> "intranet",
-																	authnotrequired	=> 0,
-																	flagsrequired	=> { circulate => 1 },
+							template_name	=> 'usuarios/reales/detallePrestamos.tmpl',
+							query		=> $input,
+							type		=> "intranet",
+							authnotrequired	=> 0,
+							flagsrequired	=> { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
 my $obj=$input->param('obj');

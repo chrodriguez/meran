@@ -532,22 +532,58 @@ sub dec2bin {
     return $str;
 }
 
+
+=item
+Esta funcion se encarga de verificar los permisos para un entorno dado
+Entorno de datos de nivel, para ABM de datos de nivel 1, 2 y 3
+@entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
+Entorno de estructura de catalogacion, para ABM de estructura de catalogacion
+@entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
+Entorno de usuarios, para ABM de usuarios
+@entornos_manejo_usuario = ('usuarios');
+
+La funcion recibe entre otros parametros el entorno donde se van a verificar los permisos, los arreglos sirven como indices, para saber
+si el entorno existe y ademas para buscar el permiso en el entorno (TABLA) correspondiente, ya que catalogo, usuarios, circulacion, datos de nivel, etc cada uno tendra su tabla de permisos.
+cualquier entorno ingresado a la funcion que no exista en alguno de los arreglos de entornos será descartado e inmediatamente se
+retornará SIN PERMISOS.
+=cut
 sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
+    use C4::Modelo::PermCatalogo::Manager;
+
+    my @filtros;
+    my $permisos_hash_ref;
+#     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
+#     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
+    my @entornos_perm_catalogo= (   'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
+                                    'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
+    my @entornos_manejo_usuario = ('usuarios');
+#     my @entornos_circulacion = ('');
 
 # FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
     C4::AR::Debug::debug("");
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => datos del usuario");
+    C4::AR::Debug::debug("verificar_permisos_por_nivel => permisos requeridos");
     C4::AR::Debug::debug("verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
+    C4::AR::Debug::debug("verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
+    C4::AR::Debug::debug("verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
-    my $permisos_hash_ref= C4::AR::Usuarios::get_permisos_catalogo({
-                                                        ui => $flagsrequired->{'ui'}, 
-                                                        tipo_documento => $flagsrequired->{'tipo_documento'}, 
-                                                        nro_socio => $flagsrequired->{'nro_socio'},
-                                            });
+    if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @entornos_perm_catalogo)) ){
+   
+        $permisos_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
+                                                            ui => $flagsrequired->{'ui'}, 
+                                                            tipo_documento => $flagsrequired->{'tipo_documento'}, 
+                                                            nro_socio => $flagsrequired->{'nro_socio'},
+                                                });
+    }else{
+     #el entorno pasado por parametro no existe, NO TIENE PERMISOS
+        C4::AR::Debug::debug("verificar_permisos_por_nivel => NO EXISTE EL ENTORNO: ".$flagsrequired->{'entorno'});
+        return 0;
+    }
 
+#     my $permisos_hash_ref= C4::Modelo::PermCatalogo::Manager::get_permisos_catalogo( query => \@filtros );
+# FIXME aca faltaria iterar sobre un conjunto de premisos
     if($permisos_hash_ref ne 0){
         C4::AR::Debug::debug("verificar_permisos_por_nivel");
         #se encontraron permisos level1
@@ -558,20 +594,20 @@ sub verificar_permisos_por_nivel{
         my $permiso_dec_requerido = bin2dec($permiso_bin_requerido);
 
         if( ($permiso_bin_del_usuario & '00010000') > 0){
-            #tiene todos los permisos
+            #tiene TODOS los permisos
             C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
             C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
             return 1;
         }
     
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin2dec: ".$permiso_dec_del_usuario);
+#         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin2dec: ".$permiso_dec_del_usuario);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin2dec: ".$permiso_dec_requerido);
+#         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin2dec: ".$permiso_dec_requerido);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
         my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => result AND=================: ".$resultado);
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => AND=================bin2dec: ".(bin2dec($resultado)));    
+#         C4::AR::Debug::debug("verificar_permisos_por_nivel => result AND=================: ".$resultado);
+#         C4::AR::Debug::debug("verificar_permisos_por_nivel => AND=================bin2dec: ".(bin2dec($resultado)));    
         if( bin2dec($resultado) > 0 ){
             return 1;
         }
@@ -600,34 +636,38 @@ sub tienePermisos {
 
 
     # Se setean los flags requeridos
-    $flagsrequired->{'ui'}= $self->getId_ui;
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
-
-    $flagsrequired->{'tipo_documento'}= 'LIB';
-    $flagsrequired->{'entorno'}= 'datos_nivel3';
-    $flagsrequired->{'accion'}= 'ALTA';
+# 
+#     $flagsrequired->{'tipo_documento'}= 'LIB';
+#     $flagsrequired->{'entorno'}= 'datos_nivel3';
+#     $flagsrequired->{'accion'}= 'ALTA';
    
 #========TEST
 
     #se verifican permisos level1
-    C4::AR::Debug::debug("tienePermisos => intento level1");
+    C4::AR::Debug::debug("tienePermisos??? => intento level1");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
     $flagsrequired->{'tipo_documento'}= 'ALL';
     #se verifican permisos level2
-    C4::AR::Debug::debug("tienePermisos => intento level2");
+    C4::AR::Debug::debug("tienePermisos??? => intento level2");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
     
-    $flagsrequired->{'tipo_documento'}= 'ALL';
     $flagsrequired->{'ui'}= 'ALL';
     #se verifican permisos level3
-    C4::AR::Debug::debug("tienePermisos => intento level3");
+    C4::AR::Debug::debug("tienePermisos??? => intento level3");
+    if(verificar_permisos_por_nivel($flagsrequired)){return 1}
+
+    $flagsrequired->{'tipo_documento'}= 'ALL';
+    $flagsrequired->{'ui'}= 'ALL';
+    #se verifican permisos level4
+    C4::AR::Debug::debug("tienePermisos??? => intento level4");
     if(verificar_permisos_por_nivel($flagsrequired)){
         return 1;
     }else{
         #el usuario no tiene permisos
         C4::AR::Debug::debug("NO TIENE EL PERMISO");
-        return 0
+        return 0;
     }
 
 =item

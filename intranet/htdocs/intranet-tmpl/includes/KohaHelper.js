@@ -20,7 +20,6 @@ function _AddDiv(){
 	var contenedor = $('#state')[0];
 	if(contenedor == null){
 		$('body').append("<div id='stateUsers' class='loading' style='position:absolute'></div>");
-// 		$('#state').html("<img src='/intranet-tmpl/blue/images/indicator.gif' />");
 		$('#state').css('top', '0px');
 		$('#state').css('left', '0px');
 
