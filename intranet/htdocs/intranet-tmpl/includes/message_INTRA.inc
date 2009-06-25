@@ -34,6 +34,9 @@ TARJETA_NRO= "[% ' -  Tarjeta nro ' | i18n %]";
 DATOS_ENVIADOS_INCORRECTOS= "[% 'No se recibieron datos del servidor, posiblemente debido a que se ha enviado informacion incorrecta.' | i18n %]";
 // fin mensaje compuesto
 
+SUPER_USER_GRANTED = "[% 'Ha concedido algunos permisos de super usuario, esta seguro que quiere continuar?' | i18n %]";
+
+NEW_GRANT = "[% 'ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION ' | i18n %]";
 // mensaje compuesto
 UD_ESTA_A_PUNTO= "[% 'Usted esta a punto de ' | i18n %]";
 A_LOS_PROPIETARIOS= "[% ' a los propietarios de:\n' | i18n %]";

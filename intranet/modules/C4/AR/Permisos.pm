@@ -73,6 +73,7 @@ sub obtenerPermisos{
     my @filtros;
 
     push (@filtros, (nro_socio => {eq => $nro_socio}));
+    $id_ui = $id_ui || 'ANY';
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
 
@@ -126,6 +127,8 @@ sub actualizarPermisos{
        $permisos->load();
     $hash_permisos->{'tipo_documento'} = $tipo_documento;
     $hash_permisos->{'nro_socio'} = $nro_socio;
+
+    $id_ui = $id_ui || 'ANY';
     $hash_permisos->{'id_ui'} = $id_ui;
 
     $permisos->agregar($hash_permisos);
@@ -136,6 +139,25 @@ sub actualizarPermisos{
 
 }
 
+sub nuevoPermiso{
+
+    my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
+
+    my @filtros;
+
+    my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
+
+    my $permisos = C4::Modelo::PermCatalogo->new();
+    $hash_permisos->{'tipo_documento'} = $tipo_documento;
+    $hash_permisos->{'nro_socio'} = $nro_socio;
+    $hash_permisos->{'id_ui'} = $id_ui || 'ANY';
+
+    $permisos->agregar($hash_permisos);
+
+    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+
+    return ($permisos);
+}
 
 sub permisos_str_to_bin {
 

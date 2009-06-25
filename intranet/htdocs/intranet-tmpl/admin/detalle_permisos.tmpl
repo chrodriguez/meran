@@ -1,211 +1,279 @@
-[% IF permisos %]
-    <hr>
-    <div style="height:50px;">
-        <h2> Entorno Nivel 1</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel1_todos" name="datos_nivel1_todos" [% IF permisos.datos_nivel1.TODOS %] "checked" [% END %] />
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel1_alta" name="datos_nivel1_alta" [% IF permisos.datos_nivel1.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel1_baja" name="datos_nivel1_baja" [% IF permisos.datos_nivel1.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel1_modif" name="datos_nivel1_modif" [% IF permisos.datos_nivel1.MODIFICACION %] "checked" [% END %] /> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel1_consulta" name="datos_nivel1_consulta" [% IF permisos.datos_nivel1.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Entorno Nivel 2</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel2_todos" name="datos_nivel2_todos" [% IF permisos.datos_nivel2.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel2_alta" name="datos_nivel2_alta" [% IF permisos.datos_nivel2.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel2_baja" name="datos_nivel2_baja" [% IF permisos.datos_nivel2.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel2_modif" name="datos_nivel2_modif" [% IF permisos.datos_nivel2.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel2_consulta" name="datos_nivel2_consulta" [% IF permisos.datos_nivel2.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Entorno Nivel 3</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel3_todos" name="datos_nivel3_todos" [% IF permisos.datos_nivel3.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel3_alta" name="datos_nivel3_alta" [% IF permisos.datos_nivel3.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel3_baja" name="datos_nivel3_baja" [% IF permisos.datos_nivel3.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel3_modif" name="datos_nivel3_modif" [% IF permisos.datos_nivel3.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel3_consulta" name="datos_nivel3_consulta" [% IF permisos.datos_nivel3.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Estantes Virtuales</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales_todos" [% IF permisos.estantes_virtuales.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estantes_virtuales_alta" name="estantes_virtuales_alta" [% IF permisos.estantes_virtuales.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estantes_virtuales_baja" name="estantes_virtuales_baja" [% IF permisos.estantes_virtuales.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estantes_virtuales_modif" name="estantes_virtuales_modif" [% IF permisos.estantes_virtuales.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estantes_virtuales_consulta" name="estantes_virtuales_consulta" [% IF permisos.estantes_virtuales.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Estructura del Cat&aacute;logo Nuvel 1</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_todos" name="estructura_catalogacion_n1_todos" [% IF permisos.estructura_catalogacion_n1.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_alta" name="estructura_catalogacion_n1_alta" [% IF permisos.estructura_catalogacion_n1.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_baja" name="estructura_catalogacion_n1_baja" [% IF permisos.estructura_catalogacion_n1.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_modif" name="estructura_catalogacion_n1_modif" [% IF permisos.estructura_catalogacion_n1.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_consulta" name="estructura_catalogacion_n1_consulta" [% IF permisos.estructura_catalogacion_n1.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Estructura del Cat&aacute;logo Nuvel 2</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_todos" name="estructura_catalogacion_n2_todos" [% IF permisos.estructura_catalogacion_n2.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_alta" name="estructura_catalogacion_n2_alta" [% IF permisos.estructura_catalogacion_n2.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_baja" name="estructura_catalogacion_n2_baja" [% IF permisos.estructura_catalogacion_n2.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_modif" name="estructura_catalogacion_n2_modif" [% IF permisos.estructura_catalogacion_n2.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_consulta" name="estructura_catalogacion_n2_consulta" [% IF permisos.estructura_catalogacion_n2.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Estructura del Cat&aacute;logo Nuvel 3</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_todos" name="estructura_catalogacion_n3_todos" [% IF permisos.estructura_catalogacion_n3.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_alta" name="estructura_catalogacion_n3_alta" [% IF permisos.estructura_catalogacion_n3.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_baja" name="estructura_catalogacion_n3_baja" [% IF permisos.estructura_catalogacion_n3.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3_modif" [% IF permisos.estructura_catalogacion_n3.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_consulta" name="estructura_catalogacion_n3_consulta" [% IF permisos.estructura_catalogacion_n3.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Tablas De Referencia</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="tablas_de_refencia_todos" name="tablas_de_refencia_todos" [% IF permisos.tablas_de_refencia.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="tablas_de_refencia_alta" name="tablas_de_refencia_alta" [% IF permisos.tablas_de_refencia.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="tablas_de_refencia_baja" name="tablas_de_refencia_baja" [% IF permisos.tablas_de_refencia.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="tablas_de_refencia_modif" name="tablas_de_refencia_modif" [% IF permisos.tablas_de_refencia.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="tablas_de_refencia_consulta" name="tablas_de_refencia_consulta" [% IF permisos.tablas_de_refencia.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Control de Autoridades</h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="control_de_autoridades_todos" name="control_de_autoridades_todos" [% IF permisos.control_de_autoridades.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="control_de_autoridades_alta" name="control_de_autoridades_alta" [% IF permisos.control_de_autoridades.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="control_de_autoridades_baja" name="control_de_autoridades_baja" [% IF permisos.control_de_autoridades.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="control_de_autoridades_modif" name="control_de_autoridades_modif" [% IF permisos.control_de_autoridades.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="control_de_autoridades_consulta" name="control_de_autoridades_consulta" [% IF permisos.control_de_autoridades.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Administraci&oacute;n de Usuarios </h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="usuarios_todos" name="usuarios_todos" [% IF permisos.usuarios.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="usuarios_alta" name="usuarios_alta" [% IF permisos.usuarios.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="usuarios_baja" name="usuarios_baja" [% IF permisos.usuarios.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="usuarios_modif" name="usuarios_modif" [% IF permisos.usuarios.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="usuarios_consulta" name="usuarios_consulta" [% IF permisos.usuarios.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Administraci&oacute;n del Sistema </h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="sistema_todos" name="sistema_todos" [% IF permisos.sistema.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="sistema_alta" name="sistema_alta" [% IF permisos.sistema.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="sistema_baja" name="sistema_baja" [% IF permisos.sistema.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="sistema_modif" name="sistema_modif" [% IF permisos.sistema.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="sistema_consulta" name="sistema_consulta" [% IF permisos.sistema.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-    <hr>
-    <div style="height:50px;">
-        <h2> Undefined </h2>
-        <span class="permission_grant" id="permission_grant">
-            <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="undefined_todos" name="undefined_todos" [% IF permisos.undefined.TODOS %] "checked" [% END %]/>
-            <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="undefined_alta" name="undefined_alta" [% IF permisos.undefined.ALTA %] "checked" [% END %] /> /
-            <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="undefined_baja" name="undefined_baja" [% IF permisos.undefined.BAJA %] "checked" [% END %]/> /
-            <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="undefined_modif" name="undefined_modif" [% IF permisos.undefined.MODIFICACION %] "checked" [% END %]/> /
-            <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="undefined_consulta" name="undefined_consulta" [% IF permisos.undefined.CONSULTA %] "checked" [% END %]/>
-        </span>
-    </div>
-
-<br>
-<br>
-    <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="actualizarPermisos();"/>
+<script type="text/javascript">
 
 
+
+</script>
+[% IF nuevoPermiso %]
+    <h5 style="font-size: 20px; color:red;"> [% "ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION " | i18n %] </h5>
 [% END %]
+<hr>
+<div style="height:50px;" id="datos_nivel1">
+    <h2> Entorno Nivel 1</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="datos_nivel1_todos" name="datos_nivel1_todos" onChange="adviceGrant(this,'datos_nivel1','high');"
+                [% IF permisos.datos_nivel1.TODOS %] "checked" [% END %] />
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="datos_nivel1_baja" name="datos_nivel1_baja" onChange="adviceGrant(this,'datos_nivel1','high');"
+                [% IF permisos.datos_nivel1.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="datos_nivel1_modif" name="datos_nivel1_modif" onChange="adviceGrant(this,'datos_nivel1','high');"
+                [% IF permisos.datos_nivel1.MODIFICACION %] "checked" [% END %] /> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="datos_nivel1_alta" name="datos_nivel1_alta" onChange="adviceGrant(this,'datos_nivel1','medium');"
+                [% IF permisos.datos_nivel1.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="datos_nivel1_consulta" name="datos_nivel1_consulta" onChange="adviceGrant(this,'datos_nivel1','low');"
+                [% IF permisos.datos_nivel1.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="datos_nivel2">
+    <h2> Entorno Nivel 2</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="datos_nivel2_todos" name="datos_nivel2_todos" onChange="adviceGrant(this,'datos_nivel2','high');"
+                [% IF permisos.datos_nivel2.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="datos_nivel2_baja" name="datos_nivel2_baja" onChange="adviceGrant(this,'datos_nivel2','high');"
+                [% IF permisos.datos_nivel2.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="datos_nivel2_modif" name="datos_nivel2_modif" onChange="adviceGrant(this,'datos_nivel2','high');"
+                [% IF permisos.datos_nivel2.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="datos_nivel2_alta" name="datos_nivel2_alta" onChange="adviceGrant(this,'datos_nivel2','medium');"
+                [% IF permisos.datos_nivel2.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="datos_nivel2_consulta" name="datos_nivel2_consulta" onChange="adviceGrant(this,'datos_nivel2','low');"
+                [% IF permisos.datos_nivel2.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="datos_nivel3">
+    <h2> Entorno Nivel 3</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="datos_nivel3_todos" name="datos_nivel3_todos" onChange="adviceGrant(this,'datos_nivel3','high');"
+                [% IF permisos.datos_nivel3.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="datos_nivel3_baja" name="datos_nivel3_baja" onChange="adviceGrant(this,'datos_nivel3','high');"
+                [% IF permisos.datos_nivel3.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="datos_nivel3_modif" name="datos_nivel3_modif" onChange="adviceGrant(this,'datos_nivel3','high');"
+                [% IF permisos.datos_nivel3.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="datos_nivel3_alta" name="datos_nivel3_alta" onChange="adviceGrant(this,'datos_nivel3','medium');"
+                [% IF permisos.datos_nivel3.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+             <input type="checkbox" id="datos_nivel3_consulta" name="datos_nivel3_consulta" onChange="adviceGrant(this,'datos_nivel3','low');"
+                [% IF permisos.datos_nivel3.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="estantes_virtuales">
+    <h2> Estantes Virtuales</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales_todos" onChange="adviceGrant(this,'estantes_virtuales','high');"
+                [% IF permisos.estantes_virtuales.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="estantes_virtuales_baja" name="estantes_virtuales_baja" onChange="adviceGrant(this,'estantes_virtuales','high');"
+                [% IF permisos.estantes_virtuales.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="estantes_virtuales_modif" name="estantes_virtuales_modif" onChange="adviceGrant(this,'estantes_virtuales','high');"
+                [% IF permisos.estantes_virtuales.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="estantes_virtuales_alta" name="estantes_virtuales_alta" onChange="adviceGrant(this,'estantes_virtuales','medium');"
+                [% IF permisos.estantes_virtuales.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="estantes_virtuales_consulta" name="estantes_virtuales_consulta" onChange="adviceGrant(this,'estantes_virtuales','low');"
+                [% IF permisos.estantes_virtuales.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="estructura_catalogacion_n1">
+    <h2> Estructura del Cat&aacute;logo Nuvel 1</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="estructura_catalogacion_n1_todos" name="estructura_catalogacion_n1_todos" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+                [% IF permisos.estructura_catalogacion_n1.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="estructura_catalogacion_n1_baja" name="estructura_catalogacion_n1_baja" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+                [% IF permisos.estructura_catalogacion_n1.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="estructura_catalogacion_n1_modif" name="estructura_catalogacion_n1_modif" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+                [% IF permisos.estructura_catalogacion_n1.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="estructura_catalogacion_n1_alta" name="estructura_catalogacion_n1_alta" onChange="adviceGrant(this,'estructura_catalogacion_n1','medium');"
+                [% IF permisos.estructura_catalogacion_n1.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="estructura_catalogacion_n1_consulta" name="estructura_catalogacion_n1_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n1','low');"
+                [% IF permisos.estructura_catalogacion_n1.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="estructura_catalogacion_n2">
+    <h2> Estructura del Cat&aacute;logo Nuvel 2</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="estructura_catalogacion_n2_todos" name="estructura_catalogacion_n2_todos" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+                [% IF permisos.estructura_catalogacion_n2.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="estructura_catalogacion_n2_baja" name="estructura_catalogacion_n2_baja" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+                [% IF permisos.estructura_catalogacion_n2.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="estructura_catalogacion_n2_modif" name="estructura_catalogacion_n2_modif" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+                [% IF permisos.estructura_catalogacion_n2.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="estructura_catalogacion_n2_alta" name="estructura_catalogacion_n2_alta" onChange="adviceGrant(this,'estructura_catalogacion_n2','medium');"
+                [% IF permisos.estructura_catalogacion_n2.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="estructura_catalogacion_n2_consulta" name="estructura_catalogacion_n2_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n2','low');"    
+                [% IF permisos.estructura_catalogacion_n2.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="estructura_catalogacion_n3">
+    <h2> Estructura del Cat&aacute;logo Nuvel 3</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="estructura_catalogacion_n3_todos" name="estructura_catalogacion_n3_todos" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+                [% IF permisos.estructura_catalogacion_n3.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="estructura_catalogacion_n3_baja" name="estructura_catalogacion_n3_baja" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+                [% IF permisos.estructura_catalogacion_n3.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3_modif" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+                [% IF permisos.estructura_catalogacion_n3.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="estructura_catalogacion_n3_alta" name="estructura_catalogacion_n3_alta" onChange="adviceGrant(this,'estructura_catalogacion_n3','medium');"
+                [% IF permisos.estructura_catalogacion_n3.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="estructura_catalogacion_n3_consulta" name="estructura_catalogacion_n3_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n3','low');"
+                [% IF permisos.estructura_catalogacion_n3.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="tablas_de_refencia">
+    <h2> Tablas De Referencia</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="tablas_de_refencia_todos" name="tablas_de_refencia_todos" onChange="adviceGrant(this,'tablas_de_refencias','high');"
+                [% IF permisos.tablas_de_refencia.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="tablas_de_refencia_baja" name="tablas_de_refencia_baja" onChange="adviceGrant(this,'tablas_de_refencias','high');"
+                [% IF permisos.tablas_de_refencia.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="tablas_de_refencia_modif" name="tablas_de_refencia_modif" onChange="adviceGrant(this,'tablas_de_refencias','high');"
+                [% IF permisos.tablas_de_refencia.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="tablas_de_refencia_alta" name="tablas_de_refencia_alta" onChange="adviceGrant(this,'tablas_de_refencias','medium');"
+                [% IF permisos.tablas_de_refencia.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="tablas_de_refencia_consulta" name="tablas_de_refencia_consulta" onChange="adviceGrant(this,'tablas_de_refencias','low');"
+                [% IF permisos.tablas_de_refencia.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="control_de_autoridades">
+    <h2> Control de Autoridades</h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="control_de_autoridades_todos" name="control_de_autoridades_todos" onChange="adviceGrant(this,'control_de_autoridades','high');"
+                [% IF permisos.control_de_autoridades.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="control_de_autoridades_baja" name="control_de_autoridades_baja" onChange="adviceGrant(this,'control_de_autoridades','high');"
+                [% IF permisos.control_de_autoridades.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="control_de_autoridades_modif" name="control_de_autoridades_modif" onChange="adviceGrant(this,'control_de_autoridades','high');"
+                    [% IF permisos.control_de_autoridades.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="control_de_autoridades_alta" name="control_de_autoridades_alta" onChange="adviceGrant(this,'control_de_autoridades','medium');"
+                [% IF permisos.control_de_autoridades.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="control_de_autoridades_consulta" name="control_de_autoridades_consulta" onChange="adviceGrant(this,'control_de_autoridades','low');"
+                    [% IF permisos.control_de_autoridades.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="usuarios">
+    <h2> Administraci&oacute;n de Usuarios </h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="usuarios_todos" name="usuarios_todos" onChange="adviceGrant(this,'usuarios','high');"
+                [% IF permisos.usuarios.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="usuarios_baja" name="usuarios_baja" onChange="adviceGrant(this,'usuarios','high');"
+                [% IF permisos.usuarios.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="usuarios_modif" name="usuarios_modif" onChange="adviceGrant(this,'usuarios','high');"
+                [% IF permisos.usuarios.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="usuarios_alta" name="usuarios_alta" onChange="adviceGrant(this,'usuarios','medium');"
+                [% IF permisos.usuarios.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="usuarios_consulta" name="usuarios_consulta" onChange="adviceGrant(this,'usuarios','low');"
+                [% IF permisos.usuarios.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="sistema">
+    <h2> Administraci&oacute;n del Sistema </h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="sistema_todos" name="sistema_todos" onChange="adviceGrant(this,'sistema','high');"
+                [% IF permisos.sistema.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="sistema_baja" name="sistema_baja" onChange="adviceGrant(this,'sistema','high');"
+                [% IF permisos.sistema.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="sistema_modif" name="sistema_modif" onChange="adviceGrant(this,'sistema','high');"
+                [% IF permisos.sistema.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="sistema_alta" name="sistema_alta" onChange="adviceGrant(this,'sistema','medium');"
+                [% IF permisos.sistema.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="sistema_consulta" name="sistema_consulta" onChange="adviceGrant(this,'sistema','low');"
+                [% IF permisos.sistema.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<hr>
+<div style="height:50px;" id="undefined">
+    <h2> Undefined </h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="undefined_todos" name="undefined_todos" onChange="adviceGrant(this,'undefined','high');"
+                [% IF permisos.undefined.TODOS %] "checked" [% END %]/>
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="undefined_baja" name="undefined_baja" onChange="adviceGrant(this,'undefined','high');"
+                [% IF permisos.undefined.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="undefined_modif" name="undefined_modif" onChange="adviceGrant(this,'undefined','high');"
+                [% IF permisos.undefined.MODIFICACION %] "checked" [% END %]/> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="undefined_alta" name="undefined_alta" onChange="adviceGrant(this,'undefined','medium');"
+                [% IF permisos.undefined.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="undefined_consulta" name="undefined_consulta" onChange="adviceGrant(this,'undefined','low');"
+                [% IF permisos.undefined.CONSULTA %] "checked" [% END %]/>
+    </span>
+</div>
+
+<br>
+<br>
+    [% IF nuevoPermiso != 1%]
+        <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="actualizarPermisos();"/>
+    [% ELSE %]
+        <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="nuevoPermiso();"/>
+    [% END %]

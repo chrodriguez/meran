@@ -61,7 +61,9 @@ elsif ($accion eq "OBTENER_PERMISOS"){
 
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-
+    if (!$permisos){
+        $t_params->{'nuevoPermiso'}=1;
+    }
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
@@ -85,5 +87,41 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
 
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "NUEVO_PERMISO"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+    my $permisos = $obj->{'permisos'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    C4::AR::Permisos::nuevoPermiso($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
+    $t_params->{'permisos'}=$permisos;
+
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "SHOW_NUEVO_PERMISO"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    $t_params->{'nuevoPermiso'}=1;
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
