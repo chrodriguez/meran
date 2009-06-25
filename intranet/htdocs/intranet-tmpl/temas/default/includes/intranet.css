@@ -128,8 +128,7 @@ body {
 }
 .menu_intermedio{
 	color:#fff;
-	background:#416ca5 repeat-x;
-	background-image:url(../imagenes/expand3.gif);
+	background:#416ca5 url(../imagenes/expand3.gif) no-repeat right;
 	text-transform:uppercase;
 	cursor: pointer;
 	display:block;
