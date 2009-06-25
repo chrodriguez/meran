@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 div.dimmer {
 	background-color:grey;
 	font-family:verdana;
@@ -42,5 +50,7 @@ div.dimming {
 	overflow: auto;
 }
 
-
+li {
+    list-style-type:none;
+}
 

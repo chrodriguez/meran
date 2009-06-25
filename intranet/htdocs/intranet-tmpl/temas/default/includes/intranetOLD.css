@@ -17,17 +17,6 @@ body {
    width: 70%;
 }
 
-/* FIXME setea el estilo a TODOS los input (button e inputs) */
-/*input:focus{
-    background-color:infoBackground;
-}*/
-
-/* TODO no se si es compatible con IE */
-input[type=text]:focus{
-    background-color:infoBackground;
-}
-
-
 #login
 {	
    display:inline;
@@ -535,77 +524,6 @@ div.headerWindowHelp{
 /********************************************************************************************/
 
 
-/***************************************Estilo para pop ups**********************************/
-div.window{
-	position:absolute;
-      	background-color:white;
-	/*border:0px solid #888;*/
-	border:medium solid #888;
-      	margin:0px;
-      	padding:0px;
-	z-index: 0;
-}
-
-.windowBlur{
-   position:absolute;
-   background-color: #ccc; /*shadow color*/
-   color: inherit;
-   margin-left: 4px;
-   margin-top: 4px;
-   z-index:-1;
-}
-
-div.headerWindow{
-	text-decoration: none;
-        font-size:8pt;
-        font-family:verdana;
-        color:#55C5D0;
-	background-color: #666666;
-	font-weight: bold;
-	text-align: right;
-	border:1px solid #888;
-
-	width: 100%; 
-	height: 10%;
-}
-
-
-div.title{
-	position:center;
-	text-align: center;
-	text-decoration: none;
-        font-size:12pt;
-        font-family:verdana;
-        color:#55C5D0;
-      	background-color:white;
-	width: 100%; 
-	height: 20%;
-}
-
-.contentWindow ul li{
-	list-style-type:none;
-	padding-left:1em;
-	width: 100%; 
-	height: 50%;
-}
-
-
-.controls{
- 	text-align: center;
-/* 	float: center; */
-	width: 100%; 
-	height: 15;
-}
-
-div.formElemets ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-      padding:2px;
-}
-
-/**************************************Fin Estilo para pop ups********************************************/
-
 img.showhelp {
 	cursor: pointer;
 }
@@ -870,37 +788,6 @@ p.nivel2Selected:hover{
 /* fin para agregar documento */
 
 
-
-/* ESTILOS PARA FORMS DE VALIDACION */
-/* estilo generico para todos los forms validables */
-.validateDataForm label { width: 250px; }
-.validateDataForm label.error, .validateDataForm input.submit { 
-                                                         margin-left: 253px;
-                                                         color:red;
-                                                         font-weight:bold; 
-                                                      }
-
-/* estilo generico para todos los forms validables */
-.validateDataForm label.error {
-         margin-left: 10px;
-         width: auto;
-         display: block;
-         color:red;
-         font:bold; 
-}
-/*
-label.error {
-         margin-left: 10px;
-         width: auto;
-         display: inline;
-         color:red;
-         font:bold; 
-         float:left;
-}*/
-
-.click{
-    cursor: pointer;
-}
 
 /* MENUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU */
 

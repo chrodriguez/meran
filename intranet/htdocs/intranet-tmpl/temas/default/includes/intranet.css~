@@ -168,5 +168,10 @@ body {
 }
 
 
+/* TODO no se si es compatible con IE */
+/* cambia el color de fondo cuando se para en un input */
+input[type=text]:focus{
+    background-color:infoBackground;
+}
 
 
