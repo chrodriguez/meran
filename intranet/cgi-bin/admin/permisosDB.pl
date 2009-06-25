@@ -37,7 +37,9 @@ if(!$accion){
 
     my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
     $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
-    my $combo_UI = C4::AR::Utilidades::generarComboUI();
+    my %params_options;
+    $params_options{'optionALL'} = 1;
+    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
     $t_params->{'combo_UI'}=$combo_UI;
     my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
     $t_params->{'combo_permisos'}= $combo_permisos;

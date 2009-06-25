@@ -1541,7 +1541,12 @@ sub generarComboUI{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
-    push (@select_ui, 'SIN SELECCIONAR');
+    if ($params->{'optionALL'}){
+        push (@select_ui, 'ALL');
+        $select_ui{'ALL'}='TODOS';
+    }else{
+        push (@select_ui, 'SIN SELECCIONAR');
+    }
     $options_hash{'values'}= \@select_ui;
     $options_hash{'labels'}= \%select_ui;
 

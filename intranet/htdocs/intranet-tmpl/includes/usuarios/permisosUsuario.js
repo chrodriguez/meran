@@ -181,6 +181,8 @@ function nuevoPermiso(){
         }
     }else{
         alert(NO_SE_SELECCIONO_NINGUN_USUARIO);
+        $('#usuario').focus();
+        $.scrollTo('#usuario');
     }
 }
 
