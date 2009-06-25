@@ -61,7 +61,7 @@ body {
 /*PARTE SUPERIOR*/
 .logo_Superior{
    background-image:  url(../imagenes/logo.jpeg);
-    width: 88px;
+    width: 142px;
    float: left;
    margin-bottom:12px;
    height:104px;
@@ -73,48 +73,97 @@ body {
    }
 
 /* MENU*/ 
+
+#menu{
+   width:1024px;
+   float:left;
+   margin:0px;
+}
+.main-header{
+
+   width:100%;
+   float:left;
+   margin-bottom:0px;
+   padding-bottom:-10px;
+
+}
 #menu li ul li{
 	display: none;
 }
 .menu_superior_sin_sub{
-color:#fff;
-background:#000;
-text-transform:uppercase;
-cursor: pointer;
-display:block;
-border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;
-white-space:nowrap;
-margin:0;
-padding:0 5px;
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   color:#fff;
+   background:#4b6192 url(../imagenes/menu.png);
+   text-transform:uppercase;
+   cursor: pointer;
+   display:block;
+   white-space:nowrap;
+   margin:0;
+   padding:0 5px;
+   height:20px;
+   -moz-border-radius-topleft:5px;
+   -webkit-border-top-left-radius:5px;
+   -moz-border-radius-topright:5px;
+   -webkit-border-top-right-radius:5px;
 
 }
 
 .menu_superior{
-color:#fff;
-background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
-text-transform:uppercase;
-cursor: pointer;
-display:block;
-border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;
-white-space:nowrap;
-margin:0;
-padding:0 5px;
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   color:#fff;
+   background: url(../imagenes/menu.png) repeat 100% 100%;
+   text-transform:uppercase;
+   text-align:center;
+   cursor: pointer;
+   display:block;
+   white-space:nowrap;
+   margin:0;
+   -moz-border-radius-topleft:8px;
+   -webkit-border-top-left-radius:8px;
+   -moz-border-radius-topright:8px;
+   -webkit-border-top-right-radius:8px;
+
+
 
 }
 .menu_intermedio{
-color:#fff;
-background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
-text-transform:uppercase;
-cursor: pointer;
-display:block;
-border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;
-white-space:nowrap;
-margin:0;
-padding:0 5px;
+	color:#fff;
+	background:#416ca5 repeat-x;
+	background-image:url(../imagenes/expand3.gif);
+	text-transform:uppercase;
+	cursor: pointer;
+	display:block;
+	white-space:nowrap;
+	margin:0;
+	padding:0 5px;
+	width:auto;
+	font-size: 10px;
+
+}
+.menu-item {
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   background: #999999;
+   width:auto;
+   text-transform:uppercase;
+   border-bottom:#ccc solid 1px;
+   
+}
+
+.menu-item a:hover{
+   background: #ccc;
+}
+.menu-item a{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   text-transform:uppercase;
+   color:#fff;
+   background:#999999 repeat-x;
+   text-transform:uppercase;
+   cursor: pointer;
+   white-space:nowrap;
+   margin:0;
+   padding:0 5px;
+   width:auto;
+   
 }
