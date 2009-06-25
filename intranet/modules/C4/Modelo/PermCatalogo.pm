@@ -47,6 +47,9 @@ sub agregar{
     $self->setEstructura_catalogacion_n3($permisos_hash->{'estructura_catalogacion_n3'});
     $self->setTablas_de_referencia($permisos_hash->{'tablas_de_refencia'});
     $self->setControl_de_autoridades($permisos_hash->{'control_de_autoridades'});
+    $self->setUsuarios($permisos_hash->{'usuarios'});
+    $self->setSistema($permisos_hash->{'sistema'});
+    $self->setUndefined($permisos_hash->{'undefined'});
 
     $self->save();
 }
@@ -80,6 +83,39 @@ sub setNro_socio{
     my ($self) = shift;
     my ($nro_socio) = @_;
     $self->nro_socio($nro_socio);
+}
+
+sub getUsuarios{
+    my ($self) = shift;
+    return ($self->usuarios);
+}
+
+sub setUsuarios{
+    my ($self) = shift;
+    my ($usuarios) = @_;
+    $self->usuarios($usuarios);
+}
+
+sub getSistema{
+    my ($self) = shift;
+    return ($self->sistema);
+}
+
+sub setSistema{
+    my ($self) = shift;
+    my ($sistema) = @_;
+    $self->sistema($sistema);
+}
+
+sub getUndefined{
+    my ($self) = shift;
+    return ($self->undefined);
+}
+
+sub setUndefined{
+    my ($self) = shift;
+    my ($undefined) = @_;
+    $self->undefined($undefined);
 }
 
 sub getId_persona{

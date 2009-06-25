@@ -152,6 +152,57 @@
         </span>
     </div>
 
+    <hr>
+    <div style="height:50px;">
+        <h2> Administraci&oacute;n de Usuarios </h2>
+        <span class="permission_grant" id="permission_grant">
+            <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="usuarios_todos" name="usuarios_todos" [% IF permisos.usuarios.TODOS %] "checked" [% END %]/>
+            <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="usuarios_alta" name="usuarios_alta" [% IF permisos.usuarios.ALTA %] "checked" [% END %] /> /
+            <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="usuarios_baja" name="usuarios_baja" [% IF permisos.usuarios.BAJA %] "checked" [% END %]/> /
+            <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="usuarios_modif" name="usuarios_modif" [% IF permisos.usuarios.MODIFICACION %] "checked" [% END %]/> /
+            <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="usuarios_consulta" name="usuarios_consulta" [% IF permisos.usuarios.CONSULTA %] "checked" [% END %]/>
+        </span>
+    </div>
+
+    <hr>
+    <div style="height:50px;">
+        <h2> Administraci&oacute;n del Sistema </h2>
+        <span class="permission_grant" id="permission_grant">
+            <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="sistema_todos" name="sistema_todos" [% IF permisos.sistema.TODOS %] "checked" [% END %]/>
+            <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="sistema_alta" name="sistema_alta" [% IF permisos.sistema.ALTA %] "checked" [% END %] /> /
+            <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="sistema_baja" name="sistema_baja" [% IF permisos.sistema.BAJA %] "checked" [% END %]/> /
+            <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="sistema_modif" name="sistema_modif" [% IF permisos.sistema.MODIFICACION %] "checked" [% END %]/> /
+            <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="sistema_consulta" name="sistema_consulta" [% IF permisos.sistema.CONSULTA %] "checked" [% END %]/>
+        </span>
+    </div>
+
+    <hr>
+    <div style="height:50px;">
+        <h2> Undefined </h2>
+        <span class="permission_grant" id="permission_grant">
+            <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="undefined_todos" name="undefined_todos" [% IF permisos.undefined.TODOS %] "checked" [% END %]/>
+            <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="undefined_alta" name="undefined_alta" [% IF permisos.undefined.ALTA %] "checked" [% END %] /> /
+            <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="undefined_baja" name="undefined_baja" [% IF permisos.undefined.BAJA %] "checked" [% END %]/> /
+            <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="undefined_modif" name="undefined_modif" [% IF permisos.undefined.MODIFICACION %] "checked" [% END %]/> /
+            <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="undefined_consulta" name="undefined_consulta" [% IF permisos.undefined.CONSULTA %] "checked" [% END %]/>
+        </span>
+    </div>
+
 <br>
 <br>
     <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="actualizarPermisos();"/>

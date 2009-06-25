@@ -38,6 +38,10 @@ function armarArregloDePermisos(){
     arreglo[6] = new permiso('estructura_catalogacion_n3');
     arreglo[7] = new permiso('tablas_de_refencia');
     arreglo[8] = new permiso('control_de_autoridades');
+    arreglo[9] = new permiso('usuarios');
+    arreglo[10] = new permiso('sistema');
+    arreglo[11] = new permiso('undefined');
+
     return(arreglo);
 }
 
@@ -55,6 +59,6 @@ function actualizarPermisos(){
 }
 
 function updateActualizarPermisos(responseText){
-    alert(responseText);
+    obtenerPermisos();
 }
 
