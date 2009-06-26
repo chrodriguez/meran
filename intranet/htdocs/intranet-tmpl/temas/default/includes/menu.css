@@ -58,7 +58,7 @@ white-space:nowrap;
 margin:0;
 padding:0 5px;
 /* width: 104px; */
-}
+
 
 h3{
 color:#fff;
@@ -66,14 +66,9 @@ background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
 text-transform:uppercase
 }
 
-#menu a{
 
-text-decoration:none;
-}
 
-#menu a, #menu a:visited{
-color:#fff;
-}
+
 
 
 #menu ul{

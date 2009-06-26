@@ -81,12 +81,32 @@ body {
    margin:0px;
 }
 .main-header{
-
    width:100%;
    float:left;
    margin-bottom:0px;
    padding-bottom:-10px;
-
+}
+#menu a, #menu a:visited{
+	font:bold normal 100%/205% tahoma, arial, helvetica, sans-serif;
+	color:#fff;
+	border:0px;
+	text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
 }
 #menu li ul li{
 	display: none;
@@ -147,11 +167,12 @@ body {
    width:auto;
    text-transform:uppercase;
    border-bottom:#ccc solid 1px;
-   
+   text-decoration:none;
 }
 
 .menu-item a:hover{
    background: #ccc;
+   text-decoration:none;
 }
 .menu-item a{
    font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
@@ -165,6 +186,7 @@ body {
    margin:0;
    padding:0 5px;
    width:auto;
+   text-decoration:none;
    
 }
 
