@@ -1,4 +1,7 @@
 //Para saber si se dio algun TODOS
+
+// NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD
+
 superUserGranted = 0;
 
 function seleccionoPerfil(combo){
