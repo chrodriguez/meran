@@ -180,7 +180,7 @@ function actualizarPermisos(){
     confirmMessage = "\n\n";
         if (superUserGranted == 1)
             confirmMessage += SUPER_USER_GRANTED;
-        var is_confirmed = confirm(confirmMessage);
+        var is_confirmed = jConfirm(confirmMessage,'Advertencia de cesión de Permisos');
     if (is_confirmed) {
         objAH.sendToServer();
     }
@@ -210,12 +210,12 @@ function nuevoPermiso(){
         confirmMessage = NEW_GRANT+"\n\n";
         if (superUserGranted == 1)
             confirmMessage += SUPER_USER_GRANTED;
-        var is_confirmed = confirm(confirmMessage);
+        var is_confirmed = jConfirm(confirmMessage,'Advertencia de cesión de Permisos');
         if (is_confirmed) {
             objAH.sendToServer();
         }
     }else{
-        alert(NO_SE_SELECCIONO_NINGUN_USUARIO);
+        jAlert(NO_SE_SELECCIONO_NINGUN_USUARIO, 'Error');
         $('#usuario').focus();
         $.scrollTo('#usuario');
     }
